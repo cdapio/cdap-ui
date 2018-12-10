@@ -29,7 +29,6 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.twill.filesystem.Location;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -50,13 +49,8 @@ public abstract class AbstractHttpServiceResponder implements HttpServiceRespond
 
   @Override
   public final void sendJson(int status, Object object) {
-    sendJson(status, object, object.getClass(), new Gson());
-  }
-
-  @Override
-  public final void sendJson(int status, Object object, Type type, Gson gson) {
     doSend(status, "application/json",
-           Unpooled.copiedBuffer(gson.toJson(object, type), StandardCharsets.UTF_8), null, null);
+           Unpooled.copiedBuffer(new Gson().toJson(object, object.getClass()), StandardCharsets.UTF_8), null, null);
   }
 
   @Override

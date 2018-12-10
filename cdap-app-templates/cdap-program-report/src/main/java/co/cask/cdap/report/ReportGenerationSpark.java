@@ -142,8 +142,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
       }
       Properties properties = new Properties();
       properties.load(inputStream);
-      String version = properties.getProperty("version");
-      return version;
+      return properties.getProperty("version");
     } catch (IOException e) {
       return null;
     }
@@ -170,10 +169,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
       return false;
     }
     int minorVersion = Integer.parseInt(versionSplits.next());
-    if (minorVersion < 1) {
-      return false;
-    }
-    return true;
+    return minorVersion >= 1;
   }
 
   /**
@@ -270,7 +266,8 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
     }
 
     private String getUserName(Map<String, List<String>> headers) {
-      return headers.getOrDefault(USER_ID, Collections.singletonList(DEFAULT_USER_ID)).stream().findFirst().get();
+      return headers.getOrDefault(USER_ID, Collections.singletonList(DEFAULT_USER_ID))
+        .stream().findFirst().orElse(DEFAULT_USER_ID);
     }
 
     /**
@@ -328,12 +325,11 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
           return;
         }
         String shareId = encodeShareId(new ReportIdentifier(userName, reportId));
-        responder.sendJson(200, new ShareId(shareId), ShareId.class, GSON);
+        responder.sendString(200, GSON.toJson(new ShareId(shareId), ShareId.class), StandardCharsets.UTF_8);
       } catch (IOException | GeneralSecurityException e) {
         LOG.error("Failed to read report with id {}", reportId, e);
         responder.sendError(500, String.format("Failed to read report with id %s because of error: %s",
                                                reportId, e.getMessage()));
-        return;
       }
     }
 
@@ -370,7 +366,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
         return;
       } catch (GeneralSecurityException | IOException e) {
         responder.sendError(500, String.format(
-          "Error while decoding shareId %s, due to exception : ", shareId, e.getMessage()));
+          "Error while decoding shareId %s, due to exception: %s", shareId, e.getMessage()));
         return;
       }
 
@@ -420,10 +416,9 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
      * @param reportId the id of the report
      * @param reportIdDir the location of the directory containing files with the report generation information
      * @return the report generation information of the given report id
-     * @throws Exception
+     * @throws Exception if failed to get the report generation information
      */
-    private ReportGenerationInfo getReportGenerationInfo(String reportId, Location reportIdDir)
-      throws Exception {
+    private ReportGenerationInfo getReportGenerationInfo(String reportId, Location reportIdDir) throws Exception {
       ReportGenerationRequest reportRequest = getReportRequest(reportIdDir);
       ReportMetaInfo metaInfo = getReportMetaInfo(reportId, reportIdDir, reportRequest);
       // if the report generation completed, read the summary from _SUMMARY file and include the summary
@@ -444,7 +439,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
 
     /**
      * Read report summary for the report if it exists, return null otherwise
-     * @param reportIdDir
+     * @param reportIdDir the directory that stores the report information
      * @return {@link ReportSummary}
      * @throws IOException if failed to read the summary content
      */
@@ -728,7 +723,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
         return;
       } catch (UnsupportedEncodingException | GeneralSecurityException e) {
         responder.sendError(500, String.format(
-          "Error while decoding shareId %s, due to exception : ", shareId, e.getMessage()));
+          "Error while decoding shareId %s, due to exception: %s", shareId, e.getMessage()));
         return;
       }
       Location reportIdDir;
@@ -854,9 +849,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
       }
       LOG.debug("Wrote to startFile {}", startFile.toURI());
       // Generate the report asynchronously
-      REPORT_EXECUTOR.execute(() -> {
-        tryGenerateReport(reportRequest, reportIdDir, reportId);
-      });
+      REPORT_EXECUTOR.execute(() -> tryGenerateReport(reportRequest, reportIdDir, reportId));
       responder.sendJson(200, ImmutableMap.of("id", reportId));
     }
 
@@ -955,6 +948,7 @@ public class ReportGenerationSpark extends AbstractExtendedSpark {
           if (ReportField.NAMESPACE.getFieldName().equals(filter.getFieldName())) {
             // ReportGenerationRequest is validated to contain only one filter for namespace field
             LOG.debug("Found namespace filter {}", filter);
+            //noinspection unchecked
             return (ValueFilter<String>) filter;
           }
         }

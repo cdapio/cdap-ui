@@ -130,7 +130,7 @@ public class SparkServiceProgram extends AbstractExtendedSpark implements JavaSp
               .mapToPair((PairFunction<String, String, Integer>) s -> new Tuple2<>(s, 1))
               .reduceByKey((Function2<Integer, Integer, Integer>) (v1, v2) -> v1 + v2)
               .collectAsMap();
-            responder.sendJson(200, result, new TypeToken<Map<String, Integer>>() { }.getType(), new Gson());
+            responder.sendJson(result);
           } finally {
             tmpLocation.delete();
           }
@@ -179,7 +179,7 @@ public class SparkServiceProgram extends AbstractExtendedSpark implements JavaSp
           .reduceByKey((v1, v2) -> v1 + v2)
           .collectAsMap();
 
-        responder.sendJson(200, counts, new TypeToken<Map<String, Integer>>() { }.getType(), new Gson());
+        responder.sendJson(counts);
       }
     }
 
@@ -216,7 +216,7 @@ public class SparkServiceProgram extends AbstractExtendedSpark implements JavaSp
           .reduceByKey((v1, v2) -> v1 + v2)
           .collectAsMap();
 
-        responder.sendJson(200, counts, new TypeToken<Map<String, Integer>>() { }.getType(), new Gson());
+        responder.sendJson(counts);
       } catch (Exception e) {
         e.printStackTrace();
         throw e;
