@@ -71,6 +71,7 @@ import io.cdap.cdap.proto.RunCountResult;
 import io.cdap.cdap.proto.RunRecord;
 import io.cdap.cdap.proto.id.ApplicationId;
 import io.cdap.cdap.proto.id.EntityId;
+import io.cdap.cdap.proto.id.KerberosPrincipalId;
 import io.cdap.cdap.proto.id.NamespaceId;
 import io.cdap.cdap.proto.id.ProfileId;
 import io.cdap.cdap.proto.id.ProgramId;
@@ -85,6 +86,7 @@ import io.cdap.cdap.security.spi.authentication.AuthenticationContext;
 import io.cdap.cdap.security.spi.authentication.SecurityRequestContext;
 import io.cdap.cdap.security.spi.authorization.AuthorizationEnforcer;
 import io.cdap.cdap.security.spi.authorization.UnauthorizedException;
+
 import org.apache.twill.api.RunId;
 import org.apache.twill.api.logging.LogEntry;
 import org.slf4j.Logger;
@@ -107,6 +109,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
+import javax.security.auth.kerberos.KerberosPrincipal;
 
 /**
  * Service that manages lifecycle of Programs.
@@ -130,6 +133,8 @@ public class ProgramLifecycleService {
   private final ProvisioningService provisioningService;
   private final ProgramStateWriter programStateWriter;
   private final int maxConcurrentRuns;
+  private static final String RUNTIME_ARG_KEYTAB = "pipeline.keytab.path";
+  private static final String RUNTIME_ARG_PRINCIPAL = "pipeline.principal.name";
 
   @Inject
   ProgramLifecycleService(CConfiguration cConf,
@@ -385,6 +390,16 @@ public class ProgramLifecycleService {
     if (overrides != null) {
       userArgs.putAll(overrides);
     }
+
+    if ((userArgs.containsKey(RUNTIME_ARG_KEYTAB)) &&
+            (userArgs.containsKey(RUNTIME_ARG_PRINCIPAL))) {
+        String principal = userArgs.get(RUNTIME_ARG_PRINCIPAL);
+        LOG.debug("Checking authorisation for user: " + authenticationContext.getPrincipal() +
+                " , using runtime config principal: " + principal);
+        KerberosPrincipalId kid = new KerberosPrincipalId(principal);
+        authorizationEnforcer.enforce(kid, authenticationContext.getPrincipal(), Action.ADMIN);
+    }
+
     return runInternal(programId, userArgs, sysArgs, debug);
   }
 
@@ -491,6 +506,15 @@ public class ProgramLifecycleService {
     Map<String, String> userArgs = propertiesResolver.getUserProperties(Id.Program.fromEntityId(programId));
     if (overrides != null) {
       userArgs.putAll(overrides);
+    }
+
+    if ((userArgs.containsKey(RUNTIME_ARG_KEYTAB)) &&
+            (userArgs.containsKey(RUNTIME_ARG_PRINCIPAL))) {
+        String principal = userArgs.get(RUNTIME_ARG_PRINCIPAL);
+        LOG.debug("Checking authorisation for user: " + authenticationContext.getPrincipal() +
+                " , using runtime config principal: " + principal);
+        KerberosPrincipalId kid = new KerberosPrincipalId(principal);
+        authorizationEnforcer.enforce(kid, authenticationContext.getPrincipal(), Action.ADMIN);
     }
 
     BasicArguments systemArguments = new BasicArguments(sysArgs);

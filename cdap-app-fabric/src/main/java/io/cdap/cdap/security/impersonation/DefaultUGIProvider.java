@@ -16,15 +16,24 @@
 
 package io.cdap.cdap.security.impersonation;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import com.google.inject.Inject;
+
+import io.cdap.cdap.app.store.Store;
 import io.cdap.cdap.common.FeatureDisabledException;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
 import io.cdap.cdap.common.namespace.NamespaceQueryAdmin;
 import io.cdap.cdap.common.utils.DirUtils;
 import io.cdap.cdap.common.utils.FileUtils;
+import io.cdap.cdap.internal.app.store.RunRecordMeta;
 import io.cdap.cdap.proto.NamespaceConfig;
 import io.cdap.cdap.proto.element.EntityType;
+import io.cdap.cdap.proto.id.NamespacedEntityId;
+import io.cdap.cdap.proto.id.ProgramRunId;
+
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.security.authentication.util.KerberosName;
 import org.apache.twill.filesystem.Location;
@@ -35,10 +44,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Provides a UGI by logging in with a keytab file for that user.
@@ -50,15 +62,19 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
   private final LocationFactory locationFactory;
   private final File tempDir;
   private final NamespaceQueryAdmin namespaceQueryAdmin;
+  protected final Store store;
+  private static final String RUNTIME_ARG_KEYTAB = "pipeline.keytab.path";
+  private static final String RUNTIME_ARG_PRINCIPAL = "pipeline.principal.name";
 
   @Inject
   DefaultUGIProvider(CConfiguration cConf, LocationFactory locationFactory, OwnerAdmin ownerAdmin,
-                     NamespaceQueryAdmin namespaceQueryAdmin) {
+                     NamespaceQueryAdmin namespaceQueryAdmin, Store store) {
     super(cConf, ownerAdmin);
     this.locationFactory = locationFactory;
     this.tempDir = new File(cConf.get(Constants.CFG_LOCAL_DATA_DIR),
                             cConf.get(Constants.AppFabric.TEMP_DIR)).getAbsoluteFile();
     this.namespaceQueryAdmin = namespaceQueryAdmin;
+    this.store = store;
   }
 
   /**
@@ -103,6 +119,18 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
    */
   @Override
   protected UGIWithPrincipal createUGI(ImpersonationRequest impersonationRequest) throws IOException {
+
+    // Get impersonation keytab and principal from runtime arguments if present
+    Map<String, String> properties = getRuntimeImpersonationProperties(impersonationRequest.getEntityId());
+    if (properties != null) {
+        String keytab = properties.get(RUNTIME_ARG_KEYTAB);
+        String principal = properties.get(RUNTIME_ARG_PRINCIPAL);
+        LOG.debug("Using runtime config principal: " + principal + ", keytab = " + keytab);
+        UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(
+                principal, keytab);
+        return new UGIWithPrincipal(principal, ugi);
+
+    }
 
     // no need to get a UGI if the current UGI is the one we're requesting; simply return it
     String configuredPrincipalShortName = new KerberosName(impersonationRequest.getPrincipal()).getShortName();
@@ -171,5 +199,53 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
     }
 
     return localKeytabFile.toFile();
+  }
+
+  private Map<String, String> getRuntimeImpersonationProperties(NamespacedEntityId programId) {
+      if (programId instanceof ProgramRunId) {
+          ProgramRunId runId = ((ProgramRunId) programId);
+          RunRecordMeta runRecord = null;
+
+          long sleepDelayMs = TimeUnit.MILLISECONDS.toMillis(100);
+          long startTime = System.currentTimeMillis();
+          long timeoutMs = TimeUnit.SECONDS.toMillis(10);
+          while (System.currentTimeMillis() - startTime < timeoutMs) {
+            try {
+                runRecord = this.store.getRun(runId);
+                if (runRecord != null) {
+                  break;
+                }
+                Thread.sleep(sleepDelayMs);
+            } catch (Exception e) {
+                LOG.info("Exception while trying to fecth RunRecord : " + e.getMessage());
+                return null;
+            }
+          }
+
+          if (runRecord != null) {
+              Gson gson = new Gson();
+              Type stringStringMap = new TypeToken<Map<String, String>>() { }.getType();
+
+              Map<String, String> properties = runRecord.getProperties();
+              String runtimeArgsJson = properties.get("runtimeArgs");
+              if (runtimeArgsJson != null) {
+                  properties = gson.fromJson(runtimeArgsJson, stringStringMap);
+                  if ((properties.containsKey(RUNTIME_ARG_KEYTAB)) &&
+                          (properties.containsKey(RUNTIME_ARG_PRINCIPAL))) {
+                      LOG.debug("Found impersonation info from runtime arguments");
+                      return properties;
+                  } else {
+                      LOG.debug("Could not find keytab, principal in runtime args");
+                  }
+              } else {
+                  LOG.debug("Could not find any runtime args");
+              }
+          } else {
+              LOG.debug("Could not obtain program's meta run record");
+          }
+      } else {
+          LOG.debug("Entity Id not of type ProgramRunId, skippinh checking of runtime args");
+      }
+      return null;
   }
 }
