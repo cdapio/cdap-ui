@@ -26,8 +26,11 @@ import io.cdap.cdap.common.FeatureDisabledException;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
 import io.cdap.cdap.common.namespace.NamespaceQueryAdmin;
+import io.cdap.cdap.common.service.Retries;
+import io.cdap.cdap.common.service.RetryStrategies;
 import io.cdap.cdap.common.utils.DirUtils;
 import io.cdap.cdap.common.utils.FileUtils;
+import io.cdap.cdap.internal.app.runtime.ProgramOptionConstants;
 import io.cdap.cdap.internal.app.store.RunRecordMeta;
 import io.cdap.cdap.proto.NamespaceConfig;
 import io.cdap.cdap.proto.element.EntityType;
@@ -49,6 +52,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -62,9 +66,7 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
   private final LocationFactory locationFactory;
   private final File tempDir;
   private final NamespaceQueryAdmin namespaceQueryAdmin;
-  protected final Store store;
-  private static final String RUNTIME_ARG_KEYTAB = "pipeline.keytab.path";
-  private static final String RUNTIME_ARG_PRINCIPAL = "pipeline.principal.name";
+  private final Store store;
 
   @Inject
   DefaultUGIProvider(CConfiguration cConf, LocationFactory locationFactory, OwnerAdmin ownerAdmin,
@@ -121,15 +123,15 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
   protected UGIWithPrincipal createUGI(ImpersonationRequest impersonationRequest) throws IOException {
 
     // Get impersonation keytab and principal from runtime arguments if present
-    Map<String, String> properties = getRuntimeImpersonationProperties(impersonationRequest.getEntityId());
-    if (properties != null) {
-        String keytab = properties.get(RUNTIME_ARG_KEYTAB);
-        String principal = properties.get(RUNTIME_ARG_PRINCIPAL);
-        LOG.debug("Using runtime config principal: " + principal + ", keytab = " + keytab);
-        UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(
-                principal, keytab);
-        return new UGIWithPrincipal(principal, ugi);
-
+    Map<String, String> properties = getRuntimeProperties(impersonationRequest.getEntityId());
+    if ((properties != null) && (properties.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_KEYTAB))
+          && (properties.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL))) {
+      String keytab = properties.get(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_KEYTAB);
+      String principal = properties.get(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL);
+      LOG.debug("Using runtime config principal: %s, keytab: %s", principal, keytab);
+      UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(
+              principal, keytab);
+      return new UGIWithPrincipal(principal, ugi);
     }
 
     // no need to get a UGI if the current UGI is the one we're requesting; simply return it
@@ -201,51 +203,58 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
     return localKeytabFile.toFile();
   }
 
-  private Map<String, String> getRuntimeImpersonationProperties(NamespacedEntityId programId) {
-      if (programId instanceof ProgramRunId) {
-          ProgramRunId runId = ((ProgramRunId) programId);
-          RunRecordMeta runRecord = null;
+  /**
+   * Returns the runtime user supplied arguments to a program if entity is of type ProgramRun
+   *
+   * @param programId the entity id
+   * @return properties map
+   */
+  private Map<String, String> getRuntimeProperties(NamespacedEntityId programId) {
+    if (programId instanceof ProgramRunId) {
+      ProgramRunId runId = ((ProgramRunId) programId);
+      RunRecordMeta runRecord = null;
 
-          long sleepDelayMs = TimeUnit.MILLISECONDS.toMillis(100);
-          long startTime = System.currentTimeMillis();
-          long timeoutMs = TimeUnit.SECONDS.toMillis(10);
-          while (System.currentTimeMillis() - startTime < timeoutMs) {
-            try {
-                runRecord = this.store.getRun(runId);
-                if (runRecord != null) {
-                  break;
-                }
-                Thread.sleep(sleepDelayMs);
-            } catch (Exception e) {
-                LOG.info("Exception while trying to fecth RunRecord : " + e.getMessage());
-                return null;
+      long sleepDelayMs = TimeUnit.MILLISECONDS.toMillis(100);
+      long timeoutMs = TimeUnit.SECONDS.toMillis(10);
+
+      try {
+        runRecord = Retries.callWithRetries(() -> {
+          try {
+            RunRecordMeta rec = store.getRun(runId);
+            if (rec != null) {
+              return rec;
             }
+          } catch (Exception e) {
+            LOG.debug("Exception while trying to fecth RunRecord %s, retrying again: ", e.getMessage());
           }
-
-          if (runRecord != null) {
-              Gson gson = new Gson();
-              Type stringStringMap = new TypeToken<Map<String, String>>() { }.getType();
-
-              Map<String, String> properties = runRecord.getProperties();
-              String runtimeArgsJson = properties.get("runtimeArgs");
-              if (runtimeArgsJson != null) {
-                  properties = gson.fromJson(runtimeArgsJson, stringStringMap);
-                  if ((properties.containsKey(RUNTIME_ARG_KEYTAB)) &&
-                          (properties.containsKey(RUNTIME_ARG_PRINCIPAL))) {
-                      LOG.debug("Found impersonation info from runtime arguments");
-                      return properties;
-                  } else {
-                      LOG.debug("Could not find keytab, principal in runtime args");
-                  }
-              } else {
-                  LOG.debug("Could not find any runtime args");
-              }
-          } else {
-              LOG.debug("Could not obtain program's meta run record");
-          }
-      } else {
-          LOG.debug("Entity Id not of type ProgramRunId, skippinh checking of runtime args");
+          throw new Exception("Retrying again to fetch run record");
+        }, RetryStrategies.timeLimit(timeoutMs, TimeUnit.MILLISECONDS,
+                  RetryStrategies.fixDelay(sleepDelayMs, TimeUnit.MILLISECONDS)),
+                  Exception.class::isInstance);
+      } catch (Exception e1) {
       }
-      return null;
+
+      if (runRecord == null) {
+        LOG.debug("Could not obtain program's meta run record");
+        return Collections.emptyMap();
+      }
+
+      Gson gson = new Gson();
+      Type stringStringMap = new TypeToken<Map<String, String>>() { }.getType();
+
+      Map<String, String> properties = runRecord.getProperties();
+      String runtimeArgsJson = properties.get("runtimeArgs");
+      if (runtimeArgsJson == null) {
+        LOG.debug("Could not find any runtime args");
+        return Collections.emptyMap();
+      }
+
+      properties = gson.fromJson(runtimeArgsJson, stringStringMap);
+      return properties;
+   } else {
+      LOG.debug("Entity Id not of type ProgramRunId, skipping checking of runtime args");
+   }
+
+   return Collections.emptyMap();
   }
 }

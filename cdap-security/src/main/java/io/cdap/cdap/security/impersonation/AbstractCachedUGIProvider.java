@@ -74,7 +74,6 @@ public abstract class AbstractCachedUGIProvider implements UGIProvider {
       boolean isCache = checkExploreAndDetermineCache(impersonationRequest);
       ImpersonationRequest tmpRequest = impersonationRequest;
       if (impersonationRequest.getEntityId() instanceof ProgramRunId) {
-
           ProgramId progId = ((ProgramRunId) impersonationRequest.getEntityId()).getParent();
           tmpRequest = new ImpersonationRequest(progId, impersonationRequest.getImpersonatedOpType());
       }
