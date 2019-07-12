@@ -1083,9 +1083,9 @@ public class ProgramLifecycleService {
   }
 
   private void authorizePipelineRuntimeImpersonation(Map<String, String> userArgs) throws Exception {
-    if ((userArgs.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL)) &&
-            (userArgs.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_KEYTAB))) {
-        String principal = userArgs.get(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL);
+    if ((userArgs.containsKey(ProgramOptionConstants.RUNTIME_ARG_PRINCIPAL)) &&
+            (userArgs.containsKey(ProgramOptionConstants.RUNTIME_ARG_KEYTAB))) {
+        String principal = userArgs.get(ProgramOptionConstants.RUNTIME_ARG_PRINCIPAL);
         LOG.debug("Checking authorisation for user: %s, using runtime config principal: %s",
             authenticationContext.getPrincipal(), principal);
         KerberosPrincipalId kid = new KerberosPrincipalId(principal);

@@ -124,10 +124,10 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
 
     // Get impersonation keytab and principal from runtime arguments if present
     Map<String, String> properties = getRuntimeProperties(impersonationRequest.getEntityId());
-    if ((properties != null) && (properties.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_KEYTAB))
-          && (properties.containsKey(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL))) {
-      String keytab = properties.get(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_KEYTAB);
-      String principal = properties.get(ProgramOptionConstants.PIPELINE_RUNTIME_ARG_PRINCIPAL);
+    if ((properties != null) && (properties.containsKey(ProgramOptionConstants.RUNTIME_ARG_KEYTAB))
+          && (properties.containsKey(ProgramOptionConstants.RUNTIME_ARG_PRINCIPAL))) {
+      String keytab = properties.get(ProgramOptionConstants.RUNTIME_ARG_KEYTAB);
+      String principal = properties.get(ProgramOptionConstants.RUNTIME_ARG_PRINCIPAL);
       LOG.debug("Using runtime config principal: %s, keytab: %s", principal, keytab);
       UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(
               principal, keytab);

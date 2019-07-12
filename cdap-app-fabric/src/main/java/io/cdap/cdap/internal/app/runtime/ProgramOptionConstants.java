@@ -137,8 +137,8 @@ public final class ProgramOptionConstants {
   public static final String PLUGIN_REQUIREMENTS = "pluginRequirements";
 
   /**
-   * Runtime arguments for pipeline impersonation
+   * Runtime arguments for program impersonation
    */
-  public static final String PIPELINE_RUNTIME_ARG_KEYTAB = "pipeline.keytab.path";
-  public static final String PIPELINE_RUNTIME_ARG_PRINCIPAL = "pipeline.principal.name";
+  public static final String RUNTIME_ARG_KEYTAB = "runtime.keytab.path";
+  public static final String RUNTIME_ARG_PRINCIPAL = "runtime.principal.name";
 }
