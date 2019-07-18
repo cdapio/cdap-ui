@@ -135,10 +135,4 @@ public final class ProgramOptionConstants {
    * Option for requirements of various plugins present in the program
    */
   public static final String PLUGIN_REQUIREMENTS = "pluginRequirements";
-
-  /**
-   * Runtime arguments for program impersonation
-   */
-  public static final String RUNTIME_ARG_KEYTAB = "runtime.keytab.path";
-  public static final String RUNTIME_ARG_PRINCIPAL = "runtime.principal.name";
 }
