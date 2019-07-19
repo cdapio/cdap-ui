@@ -126,10 +126,10 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
 
     // Get impersonation keytab and principal from runtime arguments if present
     Map<String, String> properties = getRuntimeProperties(impersonationRequest.getEntityId());
-    if ((properties != null) && (properties.containsKey(SystemArguments.RUNTIME_ARG_KEYTAB))
-          && (properties.containsKey(SystemArguments.RUNTIME_ARG_PRINCIPAL))) {
-      String keytab = properties.get(SystemArguments.RUNTIME_ARG_KEYTAB);
-      String principal = properties.get(SystemArguments.RUNTIME_ARG_PRINCIPAL);
+    if ((properties != null) && (properties.containsKey(SystemArguments.RUNTIME_KEYTAB_PATH))
+          && (properties.containsKey(SystemArguments.RUNTIME_PRINCIPAL_NAME))) {
+      String keytab = properties.get(SystemArguments.RUNTIME_KEYTAB_PATH);
+      String principal = properties.get(SystemArguments.RUNTIME_PRINCIPAL_NAME);
       LOG.debug("Using runtime config principal: %s, keytab: %s", principal, keytab);
       UserGroupInformation ugi = UserGroupInformation.loginUserFromKeytabAndReturnUGI(
               principal, keytab);
@@ -233,8 +233,9 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
       }, RetryStrategies.timeLimit(timeoutMs, TimeUnit.MILLISECONDS,
                   RetryStrategies.fixDelay(sleepDelayMs, TimeUnit.MILLISECONDS)),
                   Exception.class::isInstance);
-    } catch (Exception e1) {
-      LOG.debug("Exception while trying to fecth RunRecord %s ", e1.getMessage());
+    } catch (Exception e) {
+      LOG.warn("Failed to fetch run record for {} due to {}", runId, e.getMessage(), e);
+      return Collections.emptyMap();
     }
 
     if (runRecord == null) {

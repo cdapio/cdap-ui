@@ -89,8 +89,8 @@ public final class SystemArguments {
   /**
    * Runtime arguments for program impersonation
    */
-  public static final String RUNTIME_ARG_KEYTAB = "system.runtime.keytab.path";
-  public static final String RUNTIME_ARG_PRINCIPAL = "system.runtime.principal.name";
+  public static final String RUNTIME_KEYTAB_PATH = "system.runtime.keytab.path";
+  public static final String RUNTIME_PRINCIPAL_NAME = "system.runtime.principal.name";
 
   /**
    * Extracts log level settings from the given arguments. It extracts arguments prefixed with key
