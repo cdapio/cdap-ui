@@ -238,11 +238,6 @@ public class DefaultUGIProvider extends AbstractCachedUGIProvider {
       return Collections.emptyMap();
     }
 
-    if (runRecord == null) {
-      LOG.debug("Could not obtain program's meta run record");
-      return Collections.emptyMap();
-    }
-
     Type stringStringMap = new TypeToken<Map<String, String>>() { }.getType();
 
     Map<String, String> properties = runRecord.getProperties();
