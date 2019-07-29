@@ -1085,11 +1085,11 @@ public class ProgramLifecycleService {
   private void authorizePipelineRuntimeImpersonation(Map<String, String> userArgs) throws Exception {
     if ((userArgs.containsKey(SystemArguments.RUNTIME_PRINCIPAL_NAME)) &&
             (userArgs.containsKey(SystemArguments.RUNTIME_KEYTAB_PATH))) {
-        String principal = userArgs.get(SystemArguments.RUNTIME_PRINCIPAL_NAME);
-        LOG.debug("Checking authorisation for user: %s, using runtime config principal: %s",
-            authenticationContext.getPrincipal(), principal);
-        KerberosPrincipalId kid = new KerberosPrincipalId(principal);
-        authorizationEnforcer.enforce(kid, authenticationContext.getPrincipal(), Action.ADMIN);
+      String principal = userArgs.get(SystemArguments.RUNTIME_PRINCIPAL_NAME);
+      LOG.debug("Checking authorisation for user: %s, using runtime config principal: %s",
+                authenticationContext.getPrincipal(), principal);
+      KerberosPrincipalId kid = new KerberosPrincipalId(principal);
+      authorizationEnforcer.enforce(kid, authenticationContext.getPrincipal(), Action.ADMIN);
     }
   }
 }
