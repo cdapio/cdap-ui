@@ -41,7 +41,7 @@ import io.cdap.cdap.data.hbase.HBaseTestFactory;
 import io.cdap.cdap.data2.dataset2.lib.table.BufferingTable;
 import io.cdap.cdap.data2.dataset2.lib.table.BufferingTableTest;
 import io.cdap.cdap.data2.increment.hbase.IncrementHandlerState;
-import io.cdap.cdap.data2.increment.hbase98.IncrementHandler;
+import io.cdap.cdap.data2.increment.hbase10.IncrementHandler;
 import io.cdap.cdap.data2.util.TableId;
 import io.cdap.cdap.data2.util.hbase.HBaseDDLExecutorFactory;
 import io.cdap.cdap.data2.util.hbase.HBaseTableUtil;
@@ -61,7 +61,6 @@ import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.client.ScannerTimeoutException;
 import org.apache.hadoop.hbase.regionserver.HRegion;
@@ -85,7 +84,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -676,7 +674,8 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
   class MinimalDelegatingHTable extends HTable {
     private final HTable delegate;
 
-    MinimalDelegatingHTable(HTable delegate) {
+    MinimalDelegatingHTable(HTable delegate) throws IOException {
+      super(delegate.getName(), delegate.getConnection());
       this.delegate = delegate;
     }
 
@@ -686,7 +685,7 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     }
 
     @Override
-    public void flushCommits() throws InterruptedIOException, RetriesExhaustedWithDetailsException {
+    public void flushCommits() throws IOException {
       delegate.flushCommits();
     }
 

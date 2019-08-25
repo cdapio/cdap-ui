@@ -139,8 +139,6 @@
     <hbase10cdh550.version>1.0.0-cdh5.5.0</hbase10cdh550.version>
     <hbase11.version>1.1.1</hbase11.version>
     <hbase12cdh570.version>1.2.0-cdh5.7.0</hbase12cdh570.version>
-    <hbase96.version>0.96.2-hadoop2</hbase96.version>
-    <hbase98.version>0.98.6.1-hadoop2</hbase98.version>
     <hive.version>1.2.1</hive.version>
     <hsql.version>2.2.4</hsql.version>
     <javamail.version>1.4.1</javamail.version>
@@ -880,7 +878,7 @@
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-common</artifactId>
-        <version>${hbase98.version}</version>
+        <version>${hbase10.version}</version>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -891,7 +889,7 @@
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-client</artifactId>
-        <version>${hbase98.version}</version>
+        <version>${hbase10.version}</version>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -910,7 +908,7 @@
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-protocol</artifactId>
-        <version>${hbase98.version}</version>
+        <version>${hbase10.version}</version>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -921,7 +919,7 @@
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-server</artifactId>
-        <version>${hbase98.version}</version>
+        <version>${hbase10.version}</version>
         <exclusions>
           <exclusion>
             <groupId>commons-logging</groupId>
@@ -1330,7 +1328,7 @@
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-testing-util</artifactId>
-        <version>${hbase98.version}</version>
+        <version>${hbase10.version}</version>
         <scope>test</scope>
         <exclusions>
           <exclusion>
@@ -2666,8 +2664,6 @@
         <module>cdap-formats</module>
         <module>cdap-elastic</module>
         <module>cdap-hbase-compat-base</module>
-        <module>cdap-hbase-compat-0.96</module>
-        <module>cdap-hbase-compat-0.98</module>
         <module>cdap-hbase-compat-1.0-cdh5.5.0</module>
         <module>cdap-hbase-compat-1.0-cdh</module>
         <module>cdap-hbase-compat-1.0</module>
