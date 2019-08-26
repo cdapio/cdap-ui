@@ -99,11 +99,14 @@ public class MessageTableRegionObserver implements RegionObserver, RegionCoproce
         Constants.MessagingSystem.HBASE_MESSAGING_TABLE_PREFIX_NUM_BYTES));
 
       String tablePrefix = tableDesc.getValue(Constants.Dataset.TABLE_PREFIX);
-      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env, tablePrefix);
-      txStateCacheSupplier = new DefaultTransactionStateCacheSupplier(tablePrefix, env);
+      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(n -> env.getConnection().getTable(n),
+                                                                             tablePrefix);
+      txStateCacheSupplier = new DefaultTransactionStateCacheSupplier(n -> env.getConnection().getTable(n),
+                                                                      env.getConfiguration(), tablePrefix);
       txStateCache = txStateCacheSupplier.get();
       topicMetadataCacheSupplier = new TopicMetadataCacheSupplier(
-        env, cConfReader, tablePrefix, metadataTableNamespace, new HBase20ScanBuilder());
+        n -> env.getConnection().getTable(n), cConfReader, tablePrefix,
+        metadataTableNamespace, new HBase20ScanBuilder());
       topicMetadataCache = topicMetadataCacheSupplier.get();
     }
   }

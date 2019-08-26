@@ -16,10 +16,14 @@
 
 package io.cdap.cdap.data2.transaction.coprocessor;
 
-import com.google.common.base.Supplier;
-import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import io.cdap.cdap.common.lang.ThrowingFunction;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.tephra.coprocessor.TransactionStateCache;
 import org.apache.tephra.coprocessor.TransactionStateCacheSupplier;
+
+import java.io.IOException;
 
 /**
  * Provides a single shared instance of
@@ -27,15 +31,12 @@ import org.apache.tephra.coprocessor.TransactionStateCacheSupplier;
  * coprocessors.
  */
 public class DefaultTransactionStateCacheSupplier extends TransactionStateCacheSupplier {
-  public DefaultTransactionStateCacheSupplier(final String tablePrefix,
-                                              final CoprocessorEnvironment env) {
-    super(new Supplier<TransactionStateCache>() {
-      @Override
-      public TransactionStateCache get() {
-        TransactionStateCache cache = new DefaultTransactionStateCache(tablePrefix, env);
-        cache.setConf(env.getConfiguration());
-        return cache;
-      }
+  public DefaultTransactionStateCacheSupplier(ThrowingFunction<TableName, Table, IOException> tableFunc,
+                                              Configuration conf, String tablePrefix) {
+    super(() -> {
+      TransactionStateCache cache = new DefaultTransactionStateCache(tableFunc, tablePrefix);
+      cache.setConf(conf);
+      return cache;
     });
   }
 }

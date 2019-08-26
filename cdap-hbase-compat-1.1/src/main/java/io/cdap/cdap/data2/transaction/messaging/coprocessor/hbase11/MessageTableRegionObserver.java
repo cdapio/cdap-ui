@@ -86,7 +86,7 @@ public class MessageTableRegionObserver extends BaseRegionObserver {
   private Boolean pruneEnable;
 
   @Override
-  public void start(CoprocessorEnvironment e) throws IOException {
+  public void start(CoprocessorEnvironment e) {
     if (e instanceof RegionCoprocessorEnvironment) {
       RegionCoprocessorEnvironment env = (RegionCoprocessorEnvironment) e;
       HTableDescriptor tableDesc = env.getRegion().getTableDesc();
@@ -95,11 +95,12 @@ public class MessageTableRegionObserver extends BaseRegionObserver {
         Constants.MessagingSystem.HBASE_MESSAGING_TABLE_PREFIX_NUM_BYTES));
 
       String tablePrefix = tableDesc.getValue(Constants.Dataset.TABLE_PREFIX);
-      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env, tablePrefix);
-      txStateCacheSupplier = new DefaultTransactionStateCacheSupplier(tablePrefix, env);
+      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env::getTable, tablePrefix);
+      txStateCacheSupplier = new DefaultTransactionStateCacheSupplier(env::getTable, env.getConfiguration(),
+                                                                      tablePrefix);
       txStateCache = txStateCacheSupplier.get();
       topicMetadataCacheSupplier = new TopicMetadataCacheSupplier(
-        env, cConfReader, tablePrefix, metadataTableNamespace, new HBase11ScanBuilder());
+        env::getTable, cConfReader, tablePrefix, metadataTableNamespace, new HBase11ScanBuilder());
       topicMetadataCache = topicMetadataCacheSupplier.get();
     }
   }

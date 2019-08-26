@@ -18,11 +18,12 @@ package io.cdap.cdap.data2.util.hbase;
 
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
-import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import io.cdap.cdap.common.lang.ThrowingFunction;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Table;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 /**
  * This class implements the reading of the {@link CConfiguration} from HBase, when inside a coprocessor.
@@ -35,10 +36,11 @@ public final class CoprocessorCConfigurationReader extends ConfigurationReader i
    * as well as an attribute for the HBase tables created by CDAP; in both cases with the key
    * {@link Constants.Dataset#TABLE_PREFIX}.
    *
-   * @param env the coprocessor environment
+   * @param tableFunc a {@link Function} to provide a {@link Table} based on {@link TableName}.
    * @param tablePrefix the namespace prefix used for CDAP tables
    */
-  public CoprocessorCConfigurationReader(final CoprocessorEnvironment env, final String tablePrefix) {
+  public CoprocessorCConfigurationReader(ThrowingFunction<TableName, Table, IOException> tableFunc,
+                                         String tablePrefix) {
     super(new ConfigurationTableProvider() {
 
       private final TableName tableName =
@@ -46,7 +48,7 @@ public final class CoprocessorCConfigurationReader extends ConfigurationReader i
 
       @Override
       public Table get() throws IOException {
-        return env.getTable(tableName);
+        return tableFunc.apply(tableName);
       }
 
       @Override

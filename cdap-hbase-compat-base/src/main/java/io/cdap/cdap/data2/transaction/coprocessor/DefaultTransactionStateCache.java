@@ -19,12 +19,14 @@ package io.cdap.cdap.data2.transaction.coprocessor;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.CConfigurationUtil;
 import io.cdap.cdap.common.conf.Constants;
+import io.cdap.cdap.common.lang.ThrowingFunction;
 import io.cdap.cdap.data2.util.hbase.CConfigurationReader;
 import io.cdap.cdap.data2.util.hbase.ConfigurationReader;
 import io.cdap.cdap.data2.util.hbase.CoprocessorCConfigurationReader;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.tephra.coprocessor.TransactionStateCache;
 import org.apache.tephra.snapshot.SnapshotCodecV3;
 
@@ -42,19 +44,19 @@ public class DefaultTransactionStateCache extends TransactionStateCache {
   @SuppressWarnings("unused")
   private static final SnapshotCodecV3 codecV3 = null;
 
-  private String tablePrefix;
+  private final ThrowingFunction<TableName, Table, IOException> tableFunc;
+  private final String tablePrefix;
   private CConfigurationReader configReader;
-  private final CoprocessorEnvironment env;
 
-  public DefaultTransactionStateCache(String tablePrefix, CoprocessorEnvironment env) {
+  public DefaultTransactionStateCache(ThrowingFunction<TableName, Table, IOException> tableFunc, String tablePrefix) {
     this.tablePrefix = tablePrefix;
-    this.env = env;
+    this.tableFunc = tableFunc;
   }
 
   @Override
   public void setConf(Configuration conf) {
     super.setConf(conf);
-    this.configReader = new CoprocessorCConfigurationReader(env, tablePrefix);
+    this.configReader = new CoprocessorCConfigurationReader(tableFunc, tablePrefix);
   }
 
   @Override

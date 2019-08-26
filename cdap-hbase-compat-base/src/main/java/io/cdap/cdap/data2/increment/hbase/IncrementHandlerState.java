@@ -20,18 +20,22 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.cdap.cdap.common.conf.Constants;
+import io.cdap.cdap.common.lang.ThrowingFunction;
 import io.cdap.cdap.data2.transaction.coprocessor.DefaultTransactionStateCacheSupplier;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.tephra.TxConstants;
 import org.apache.tephra.coprocessor.CacheSupplier;
 import org.apache.tephra.coprocessor.TransactionStateCache;
 import org.apache.tephra.persist.TransactionVisibilityState;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,8 +59,10 @@ public class IncrementHandlerState {
   public static final int BATCH_UNLIMITED = -1;
 
   public static final Log LOG = LogFactory.getLog(IncrementHandlerState.class);
+
   private final String tablePrefix;
-  private final CoprocessorEnvironment env;
+  private final ThrowingFunction<TableName, Table, IOException> tableFunc;
+  private final Configuration configuration;
 
   protected final Set<byte[]> txnlFamilies = Sets.newTreeSet(Bytes.BYTES_COMPARATOR);
   protected Map<byte[], Long> ttlByFamily = Maps.newTreeMap(Bytes.BYTES_COMPARATOR);
@@ -66,12 +72,15 @@ public class IncrementHandlerState {
 
   private TimestampOracle timeOracle = new TimestampOracle();
 
-  public IncrementHandlerState(CoprocessorEnvironment env, HTableDescriptor descriptor) {
-    this(env, descriptor.getValue(Constants.Dataset.TABLE_PREFIX));
+  public IncrementHandlerState(ThrowingFunction<TableName, Table, IOException> tableFunc,
+                               Configuration conf, HTableDescriptor descriptor) {
+    this(tableFunc, conf, descriptor.getValue(Constants.Dataset.TABLE_PREFIX));
   }
 
-  public IncrementHandlerState(CoprocessorEnvironment env, String tablePrefix) {
-    this.env = env;
+  public IncrementHandlerState(ThrowingFunction<TableName, Table, IOException> tableFunc,
+                               Configuration conf, String tablePrefix) {
+    this.tableFunc = tableFunc;
+    this.configuration = conf;
     this.tablePrefix = tablePrefix;
   }
 
@@ -87,7 +96,7 @@ public class IncrementHandlerState {
   }
 
   private CacheSupplier<TransactionStateCache> getTransactionStateCacheSupplier() {
-    return new DefaultTransactionStateCacheSupplier(tablePrefix, env);
+    return new DefaultTransactionStateCacheSupplier(tableFunc, configuration, tablePrefix);
   }
 
   public void initFamily(byte[] familyName, Map<byte[], byte[]> familyValues) {

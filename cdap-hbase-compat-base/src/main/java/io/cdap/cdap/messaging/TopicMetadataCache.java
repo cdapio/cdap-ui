@@ -23,18 +23,19 @@ import com.google.gson.reflect.TypeToken;
 import io.cdap.cdap.api.common.Bytes;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
+import io.cdap.cdap.common.lang.ThrowingFunction;
 import io.cdap.cdap.data2.util.TableId;
 import io.cdap.cdap.data2.util.hbase.CConfigurationReader;
 import io.cdap.cdap.data2.util.hbase.HTableNameConverter;
 import io.cdap.cdap.data2.util.hbase.ScanBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotFoundException;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
-import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -56,7 +57,7 @@ public class TopicMetadataCache extends AbstractIdleService {
   private static final byte[] COL_FAMILY = MessagingUtils.Constants.COLUMN_FAMILY;
   private static final byte[] COL = MessagingUtils.Constants.METADATA_COLUMN;
 
-  private final RegionCoprocessorEnvironment env;
+  private final ThrowingFunction<TableName, Table, IOException> tableFunc;
   private final CConfigurationReader cConfReader;
   private final String hbaseNamespacePrefix;
   private final String metadataTableNamespace;
@@ -71,9 +72,9 @@ public class TopicMetadataCache extends AbstractIdleService {
   private long metadataCacheUpdateFreqInMillis = TimeUnit.SECONDS.toMillis(
     MessagingUtils.Constants.METADATA_CACHE_UPDATE_FREQUENCY_SECS);
 
-  public TopicMetadataCache(RegionCoprocessorEnvironment env, CConfigurationReader cConfReader,
+  public TopicMetadataCache(ThrowingFunction<TableName, Table, IOException> tableFunc, CConfigurationReader cConfReader,
                             String hbaseNamespacePrefix, String metadataTableNamespace, ScanBuilder scanBuilder) {
-    this.env = env;
+    this.tableFunc = tableFunc;
     this.cConfReader = cConfReader;
     this.hbaseNamespacePrefix = hbaseNamespacePrefix;
     this.metadataTableNamespace = metadataTableNamespace;
@@ -168,8 +169,8 @@ public class TopicMetadataCache extends AbstractIdleService {
   }
 
   private Table getMetadataTable(String tableName) throws IOException {
-    return env.getTable(HTableNameConverter.toTableName(hbaseNamespacePrefix,
-                                                        TableId.from(metadataTableNamespace, tableName)));
+    return tableFunc.apply(HTableNameConverter.toTableName(hbaseNamespacePrefix,
+                                                           TableId.from(metadataTableNamespace, tableName)));
   }
 
   private void startRefreshThread() {

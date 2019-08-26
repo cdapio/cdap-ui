@@ -17,8 +17,12 @@
 package io.cdap.cdap.data2.transaction.coprocessor;
 
 import com.google.common.base.Supplier;
-import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import io.cdap.cdap.common.lang.ThrowingFunction;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.tephra.coprocessor.ReferenceCountedSupplier;
+
+import java.io.IOException;
 
 /**
  * Supplies instances of {@link CConfigurationCache} implementations.
@@ -29,14 +33,9 @@ public class CConfigurationCacheSupplier implements CacheSupplier<CConfiguration
 
   private final Supplier<CConfigurationCache> supplier;
 
-  public CConfigurationCacheSupplier(final CoprocessorEnvironment env, final String tablePrefix,
+  public CConfigurationCacheSupplier(ThrowingFunction<TableName, Table, IOException> tableFunc, String tablePrefix,
                                      final String maxLifetimeProperty, final int defaultMaxLifetime) {
-    this.supplier = new Supplier<CConfigurationCache>() {
-      @Override
-      public CConfigurationCache get() {
-        return new CConfigurationCache(env, tablePrefix, maxLifetimeProperty, defaultMaxLifetime);
-      }
-    };
+    this.supplier = () -> new CConfigurationCache(tableFunc, tablePrefix, maxLifetimeProperty, defaultMaxLifetime);
   }
 
   @Override

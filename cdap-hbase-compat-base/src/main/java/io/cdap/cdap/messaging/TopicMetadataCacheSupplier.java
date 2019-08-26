@@ -17,11 +17,15 @@
 package io.cdap.cdap.messaging;
 
 import com.google.common.base.Supplier;
+import io.cdap.cdap.common.lang.ThrowingFunction;
 import io.cdap.cdap.data2.transaction.coprocessor.CacheSupplier;
 import io.cdap.cdap.data2.util.hbase.CConfigurationReader;
 import io.cdap.cdap.data2.util.hbase.ScanBuilder;
-import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.tephra.coprocessor.ReferenceCountedSupplier;
+
+import java.io.IOException;
 
 /**
  * Supplies instances of {@link TopicMetadataCache} implementations.
@@ -32,15 +36,12 @@ public class TopicMetadataCacheSupplier implements CacheSupplier<TopicMetadataCa
 
   private final Supplier<TopicMetadataCache> supplier;
 
-  public TopicMetadataCacheSupplier(final RegionCoprocessorEnvironment env, final CConfigurationReader cConfReader,
+  public TopicMetadataCacheSupplier(ThrowingFunction<TableName, Table, IOException> tableFunc,
+                                    CConfigurationReader cConfReader,
                                     final String hbaseNamespacePrefix, final String metadataTableNamespace,
                                     final ScanBuilder scanBuilder) {
-    this.supplier = new Supplier<TopicMetadataCache>() {
-      @Override
-      public TopicMetadataCache get() {
-        return new TopicMetadataCache(env, cConfReader, hbaseNamespacePrefix, metadataTableNamespace, scanBuilder);
-      }
-    };
+    this.supplier = () -> new TopicMetadataCache(tableFunc, cConfReader, hbaseNamespacePrefix,
+                                                 metadataTableNamespace, scanBuilder);
   }
 
   @Override

@@ -68,6 +68,9 @@ public abstract class HBaseVersionSpecificFactory<T> implements Provider<T> {
         case HBASE_12_CDH57:
           instance = createInstance(getHBase12CHD570ClassName());
           break;
+        case HBASE_20:
+          instance = createInstance(getHBase20ClassName());
+          break;
         case UNKNOWN_CDH:
           if (useLatestVersionForUnsupported) {
             instance = createInstance(getLatestHBaseCDHClassName());
@@ -104,6 +107,7 @@ public abstract class HBaseVersionSpecificFactory<T> implements Provider<T> {
   protected abstract String getHBase11Classname();
   protected abstract String getHBase10CHD550ClassName();
   protected abstract String getHBase12CHD570ClassName();
+  protected abstract String getHBase20ClassName();
 
   /**
    * Return the latest HBase CDH class name. Must be updated when adding new HBase CDH version.
@@ -116,6 +120,6 @@ public abstract class HBaseVersionSpecificFactory<T> implements Provider<T> {
    * Return the latest HBase class name. Must be updated when adding new HBase version.
    */
   String getLatestHBaseClassName() {
-    return getHBase11Classname();
+    return getHBase20ClassName();
   }
 }

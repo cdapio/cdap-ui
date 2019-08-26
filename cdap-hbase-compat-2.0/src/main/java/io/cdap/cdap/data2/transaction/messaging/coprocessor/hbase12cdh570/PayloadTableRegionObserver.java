@@ -79,9 +79,11 @@ public class PayloadTableRegionObserver implements RegionObserver, RegionCoproce
       prefixLength = Integer.valueOf(tableDesc.getValue(
         Constants.MessagingSystem.HBASE_MESSAGING_TABLE_PREFIX_NUM_BYTES));
 
-      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env, tablePrefix);
+      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(n -> env.getConnection().getTable(n),
+                                                                             tablePrefix);
       topicMetadataCacheSupplier = new TopicMetadataCacheSupplier(
-        env, cConfReader, tablePrefix, metadataTableNamespace, new HBase20ScanBuilder());
+        n -> env.getConnection().getTable(n), cConfReader, tablePrefix,
+        metadataTableNamespace, new HBase20ScanBuilder());
       topicMetadataCache = topicMetadataCacheSupplier.get();
     }
   }

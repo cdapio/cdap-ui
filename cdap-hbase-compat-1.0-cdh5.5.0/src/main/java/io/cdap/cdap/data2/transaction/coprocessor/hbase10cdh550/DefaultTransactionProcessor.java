@@ -69,7 +69,7 @@ public class DefaultTransactionProcessor extends TransactionProcessor {
       RegionCoprocessorEnvironment env = (RegionCoprocessorEnvironment) e;
       HTableDescriptor tableDesc = env.getRegion().getTableDesc();
       this.tablePrefix = tableDesc.getValue(Constants.Dataset.TABLE_PREFIX);
-      this.cConfCacheSupplier = new CConfigurationCacheSupplier(env, tablePrefix,
+      this.cConfCacheSupplier = new CConfigurationCacheSupplier(env::getTable, tablePrefix,
                                                                 TxConstants.Manager.CFG_TX_MAX_LIFETIME,
                                                                 TxConstants.Manager.DEFAULT_TX_MAX_LIFETIME);
       this.cConfCache = cConfCacheSupplier.get();
@@ -175,7 +175,7 @@ public class DefaultTransactionProcessor extends TransactionProcessor {
 
   @Override
   protected CacheSupplier<TransactionStateCache> getTransactionStateCacheSupplier(RegionCoprocessorEnvironment env) {
-    return new DefaultTransactionStateCacheSupplier(tablePrefix, env);
+    return new DefaultTransactionStateCacheSupplier(env::getTable, env.getConfiguration(), tablePrefix);
   }
 
   @Override

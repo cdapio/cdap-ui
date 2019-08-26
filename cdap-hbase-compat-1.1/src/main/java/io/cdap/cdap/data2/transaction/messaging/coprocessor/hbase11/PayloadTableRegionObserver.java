@@ -68,7 +68,7 @@ public class PayloadTableRegionObserver extends BaseRegionObserver {
   private TopicMetadataCache topicMetadataCache;
 
   @Override
-  public void start(CoprocessorEnvironment e) throws IOException {
+  public void start(CoprocessorEnvironment e) {
     if (e instanceof RegionCoprocessorEnvironment) {
       RegionCoprocessorEnvironment env = (RegionCoprocessorEnvironment) e;
       HTableDescriptor tableDesc = env.getRegion().getTableDesc();
@@ -77,9 +77,9 @@ public class PayloadTableRegionObserver extends BaseRegionObserver {
       prefixLength = Integer.valueOf(tableDesc.getValue(
         Constants.MessagingSystem.HBASE_MESSAGING_TABLE_PREFIX_NUM_BYTES));
 
-      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env, tablePrefix);
+      CConfigurationReader cConfReader = new CoprocessorCConfigurationReader(env::getTable, tablePrefix);
       topicMetadataCacheSupplier = new TopicMetadataCacheSupplier(
-        env, cConfReader, tablePrefix, metadataTableNamespace, new HBase11ScanBuilder());
+        env::getTable, cConfReader, tablePrefix, metadataTableNamespace, new HBase11ScanBuilder());
       topicMetadataCache = topicMetadataCacheSupplier.get();
     }
   }
