@@ -173,58 +173,59 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     DatasetSpecification ttlTableSpec = DatasetSpecification.builder(ttlTable, HBaseTable.class.getName())
       .properties(props.getProperties())
       .build();
-    HBaseTable table = new HBaseTable(CONTEXT1, ttlTableSpec, Collections.<String, String>emptyMap(),
-                                      cConf, TEST_HBASE.getConfiguration(), hBaseTableUtil);
+    try (HBaseTable table = new HBaseTable(CONTEXT1, ttlTableSpec, Collections.<String, String>emptyMap(),
+                                           cConf, TEST_HBASE.getConfiguration(), hBaseTableUtil)) {
 
-    DetachedTxSystemClient txSystemClient = new DetachedTxSystemClient();
-    Transaction tx = txSystemClient.startShort();
-    table.startTx(tx);
-    table.put(b("row1"), b("col1"), b("val1"));
-    table.commitTx();
+      DetachedTxSystemClient txSystemClient = new DetachedTxSystemClient();
+      Transaction tx = txSystemClient.startShort();
+      table.startTx(tx);
+      table.put(b("row1"), b("col1"), b("val1"));
+      table.commitTx();
 
-    TimeUnit.MILLISECONDS.sleep(1010);
+      TimeUnit.MILLISECONDS.sleep(1010);
 
-    tx = txSystemClient.startShort();
-    table.startTx(tx);
-    table.put(b("row2"), b("col2"), b("val2"));
-    table.commitTx();
+      tx = txSystemClient.startShort();
+      table.startTx(tx);
+      table.put(b("row2"), b("col2"), b("val2"));
+      table.commitTx();
 
-    // now, we should not see first as it should have expired, but see the last one
-    tx = txSystemClient.startShort();
-    table.startTx(tx);
-    byte[] val = table.get(b("row1"), b("col1"));
-    if (val != null) {
-      LOG.info("Unexpected value " + Bytes.toStringBinary(val));
+      // now, we should not see first as it should have expired, but see the last one
+      tx = txSystemClient.startShort();
+      table.startTx(tx);
+      byte[] val = table.get(b("row1"), b("col1"));
+      if (val != null) {
+        LOG.info("Unexpected value " + Bytes.toStringBinary(val));
+      }
+      Assert.assertNull(val);
+      Assert.assertArrayEquals(b("val2"), table.get(b("row2"), b("col2")));
+
+      // test a table with no TTL
+      DatasetProperties props2 = TableProperties.builder().setTTL(Tables.NO_TTL).build();
+      getTableAdmin(CONTEXT1, noTtlTable, props2).create();
+      DatasetSpecification noTtlTableSpec = DatasetSpecification.builder(noTtlTable, HBaseTable.class.getName())
+        .properties(props2.getProperties())
+        .build();
+      HBaseTable table2 = new HBaseTable(CONTEXT1, noTtlTableSpec, Collections.<String, String>emptyMap(),
+                                         cConf, TEST_HBASE.getConfiguration(), hBaseTableUtil);
+
+      tx = txSystemClient.startShort();
+      table2.startTx(tx);
+      table2.put(b("row1"), b("col1"), b("val1"));
+      table2.commitTx();
+
+      TimeUnit.SECONDS.sleep(2);
+
+      tx = txSystemClient.startShort();
+      table2.startTx(tx);
+      table2.put(b("row2"), b("col2"), b("val2"));
+      table2.commitTx();
+
+      // if ttl is -1 (unlimited), it should see both
+      tx = txSystemClient.startShort();
+      table2.startTx(tx);
+      Assert.assertArrayEquals(b("val1"), table2.get(b("row1"), b("col1")));
+      Assert.assertArrayEquals(b("val2"), table2.get(b("row2"), b("col2")));
     }
-    Assert.assertNull(val);
-    Assert.assertArrayEquals(b("val2"), table.get(b("row2"), b("col2")));
-
-    // test a table with no TTL
-    DatasetProperties props2 = TableProperties.builder().setTTL(Tables.NO_TTL).build();
-    getTableAdmin(CONTEXT1, noTtlTable, props2).create();
-    DatasetSpecification noTtlTableSpec = DatasetSpecification.builder(noTtlTable, HBaseTable.class.getName())
-      .properties(props2.getProperties())
-      .build();
-    HBaseTable table2 = new HBaseTable(CONTEXT1, noTtlTableSpec, Collections.<String, String>emptyMap(),
-                                       cConf, TEST_HBASE.getConfiguration(), hBaseTableUtil);
-
-    tx = txSystemClient.startShort();
-    table2.startTx(tx);
-    table2.put(b("row1"), b("col1"), b("val1"));
-    table2.commitTx();
-
-    TimeUnit.SECONDS.sleep(2);
-
-    tx = txSystemClient.startShort();
-    table2.startTx(tx);
-    table2.put(b("row2"), b("col2"), b("val2"));
-    table2.commitTx();
-
-    // if ttl is -1 (unlimited), it should see both
-    tx = txSystemClient.startShort();
-    table2.startTx(tx);
-    Assert.assertArrayEquals(b("val1"), table2.get(b("row1"), b("col1")));
-    Assert.assertArrayEquals(b("val2"), table2.get(b("row2"), b("col2")));
   }
 
   @Test
@@ -282,42 +283,43 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
         admin.close();
       }
 
-      BufferingTable table = getTable(CONTEXT1, enabledTableName, propsEnabled);
-      byte[] row = Bytes.toBytes("row1");
-      byte[] col = Bytes.toBytes("col1");
-      DetachedTxSystemClient txSystemClient = new DetachedTxSystemClient();
-      Transaction tx = txSystemClient.startShort();
-      table.startTx(tx);
-      table.increment(row, col, 10);
-      table.commitTx();
-      // verify that value was written as a delta value
-      final byte[] expectedValue = Bytes.add(IncrementHandlerState.DELTA_MAGIC_PREFIX, Bytes.toBytes(10L));
-      final AtomicBoolean foundValue = new AtomicBoolean();
-      byte [] enabledTableNameBytes = hBaseTableUtil.getHTableDescriptor(admin, enabledTableId).getName();
-      TEST_HBASE.forEachRegion(enabledTableNameBytes, new Function<HRegion, Object>() {
-        @Override
-        public Object apply(HRegion hRegion) {
-          org.apache.hadoop.hbase.client.Scan scan = hBaseTableUtil.buildScan().build();
-          try {
-            RegionScanner scanner = hRegion.getScanner(scan);
-            List<Cell> results = Lists.newArrayList();
-            boolean hasMore;
-            do {
-              hasMore = scanner.next(results);
-              for (Cell cell : results) {
-                if (CellUtil.matchingValue(cell, expectedValue)) {
-                  foundValue.set(true);
+      try (BufferingTable table = getTable(CONTEXT1, enabledTableName, propsEnabled)) {
+        byte[] row = Bytes.toBytes("row1");
+        byte[] col = Bytes.toBytes("col1");
+        DetachedTxSystemClient txSystemClient = new DetachedTxSystemClient();
+        Transaction tx = txSystemClient.startShort();
+        table.startTx(tx);
+        table.increment(row, col, 10);
+        table.commitTx();
+        // verify that value was written as a delta value
+        final byte[] expectedValue = Bytes.add(IncrementHandlerState.DELTA_MAGIC_PREFIX, Bytes.toBytes(10L));
+        final AtomicBoolean foundValue = new AtomicBoolean();
+        byte[] enabledTableNameBytes = hBaseTableUtil.getHTableDescriptor(admin, enabledTableId).getName();
+        TEST_HBASE.forEachRegion(enabledTableNameBytes, new Function<HRegion, Object>() {
+          @Override
+          public Object apply(HRegion hRegion) {
+            org.apache.hadoop.hbase.client.Scan scan = hBaseTableUtil.buildScan().build();
+            try {
+              RegionScanner scanner = hRegion.getScanner(scan);
+              List<Cell> results = Lists.newArrayList();
+              boolean hasMore;
+              do {
+                hasMore = scanner.next(results);
+                for (Cell cell : results) {
+                  if (CellUtil.matchingValue(cell, expectedValue)) {
+                    foundValue.set(true);
+                  }
                 }
-              }
-            } while (hasMore);
-          } catch (IOException ioe) {
-            fail("IOException scanning region: " + ioe.getMessage());
+              } while (hasMore);
+            } catch (IOException ioe) {
+              fail("IOException scanning region: " + ioe.getMessage());
+            }
+            return null;
           }
-          return null;
-        }
-      });
-      assertTrue("Should have seen the expected encoded delta value in the " + enabledTableName + " table region",
-                 foundValue.get());
+        });
+        assertTrue("Should have seen the expected encoded delta value in the " + enabledTableName + " table region",
+                   foundValue.get());
+      }
     } finally {
       disabledAdmin.drop();
       enabledAdmin.drop();
@@ -330,32 +332,31 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     String tableName = "testcf";
     DatasetAdmin admin = getTableAdmin(CONTEXT1, tableName, props);
     admin.create();
-    final BufferingTable table = getTable(CONTEXT1, tableName, props);
+    try (BufferingTable table = getTable(CONTEXT1, tableName, props);
+         BufferingTable table2 = getTable(CONTEXT1, tableName, props)) {
+      TransactionSystemClient txClient = new DetachedTxSystemClient();
+      TransactionExecutor executor = new DefaultTransactionExecutor(txClient, table);
+      executor.execute(new TransactionExecutor.Subroutine() {
+        @Override
+        public void apply() throws Exception {
+          table.put(new Put("row", "column", "testValue"));
+        }
+      });
+      executor = new DefaultTransactionExecutor(txClient, table2);
+      executor.execute(new TransactionExecutor.Subroutine() {
+        @Override
+        public void apply() throws Exception {
+          Assert.assertEquals("testValue", table2.get(new Get("row", "column")).getString("column"));
+        }
+      });
 
-    TransactionSystemClient txClient = new DetachedTxSystemClient();
-    TransactionExecutor executor = new DefaultTransactionExecutor(txClient, table);
-    executor.execute(new TransactionExecutor.Subroutine() {
-      @Override
-      public void apply() throws Exception {
-        table.put(new Put("row", "column", "testValue"));
-      }
-    });
-
-    final BufferingTable table2 = getTable(CONTEXT1, tableName, props);
-    executor = new DefaultTransactionExecutor(txClient, table2);
-    executor.execute(new TransactionExecutor.Subroutine() {
-      @Override
-      public void apply() throws Exception {
-        Assert.assertEquals("testValue", table2.get(new Get("row", "column")).getString("column"));
-      }
-    });
-
-    // Verify the column family name
-    TableId hTableId = hBaseTableUtil.createHTableId(new NamespaceId(CONTEXT1.getNamespaceId()), tableName);
-    HTableDescriptor htd = hBaseTableUtil.getHTableDescriptor(TEST_HBASE.getHBaseAdmin(), hTableId);
-    HColumnDescriptor hcd = htd.getFamily(Bytes.toBytes("t"));
-    Assert.assertNotNull(hcd);
-    Assert.assertEquals("t", hcd.getNameAsString());
+      // Verify the column family name
+      TableId hTableId = hBaseTableUtil.createHTableId(new NamespaceId(CONTEXT1.getNamespaceId()), tableName);
+      HTableDescriptor htd = hBaseTableUtil.getHTableDescriptor(TEST_HBASE.getHBaseAdmin(), hTableId);
+      HColumnDescriptor hcd = htd.getFamily(Bytes.toBytes("t"));
+      Assert.assertNotNull(hcd);
+      Assert.assertEquals("t", hcd.getNameAsString());
+    }
   }
 
   @Test
@@ -386,10 +387,9 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     int numRows = 1200;
     DatasetAdmin admin = getTableAdmin(CONTEXT1, tableName);
     admin.create();
-    try {
+    try (Table myTable1 = getTable(CONTEXT1, tableName)) {
       // write some rows and commit
       Transaction tx1 = txClient.startShort();
-      Table myTable1 = getTable(CONTEXT1, tableName);
       ((TransactionAware) myTable1).startTx(tx1);
       for (int i = 0; i < numRows; i++) {
         myTable1.put(new Put("" + i, "x", "y"));
@@ -431,22 +431,23 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     if (scanArgument != null) {
       scan.setProperty(HConstants.HBASE_CLIENT_SCANNER_CACHING, scanArgument);
     }
-    Table table = getTable(CONTEXT1, tableName, props, arguments);
-    ((TransactionAware) table).startTx(tx);
+    try (Table table = getTable(CONTEXT1, tableName, props, arguments)) {
+      ((TransactionAware) table).startTx(tx);
 
-    Scanner scanner = table.scan(scan);
-    int scanCount = 0;
-    try {
-      while (scanner.next() != null) {
-        scanCount++;
-        TimeUnit.MILLISECONDS.sleep(10);
+      Scanner scanner = table.scan(scan);
+      int scanCount = 0;
+      try {
+        while (scanner.next() != null) {
+          scanCount++;
+          TimeUnit.MILLISECONDS.sleep(10);
+        }
+        scanner.close();
+      } finally {
+        LOG.info("Scanned {} rows.", scanCount);
+        txClient.abort(tx);
       }
-      scanner.close();
-    } finally {
-      LOG.info("Scanned {} rows.", scanCount);
-      txClient.abort(tx);
+      Assert.assertEquals(rowsExpected, scanCount);
     }
-    Assert.assertEquals(rowsExpected, scanCount);
   }
 
   @Test
