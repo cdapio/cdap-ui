@@ -55,7 +55,7 @@ public class IncrementHandlerState {
   public static final int BATCH_UNLIMITED = -1;
 
   public static final Log LOG = LogFactory.getLog(IncrementHandlerState.class);
-  private final HTableDescriptor hTableDescriptor;
+  private final String tablePrefix;
   private final CoprocessorEnvironment env;
 
   protected final Set<byte[]> txnlFamilies = Sets.newTreeSet(Bytes.BYTES_COMPARATOR);
@@ -66,9 +66,13 @@ public class IncrementHandlerState {
 
   private TimestampOracle timeOracle = new TimestampOracle();
 
-  public IncrementHandlerState(CoprocessorEnvironment env, HTableDescriptor hTableDescriptor) {
+  public IncrementHandlerState(CoprocessorEnvironment env, HTableDescriptor descriptor) {
+    this(env, descriptor.getValue(Constants.Dataset.TABLE_PREFIX));
+  }
+
+  public IncrementHandlerState(CoprocessorEnvironment env, String tablePrefix) {
     this.env = env;
-    this.hTableDescriptor = hTableDescriptor;
+    this.tablePrefix = tablePrefix;
   }
 
   public void stop() {
@@ -83,7 +87,6 @@ public class IncrementHandlerState {
   }
 
   private CacheSupplier<TransactionStateCache> getTransactionStateCacheSupplier() {
-    String tablePrefix = hTableDescriptor.getValue(Constants.Dataset.TABLE_PREFIX);
     return new DefaultTransactionStateCacheSupplier(tablePrefix, env);
   }
 

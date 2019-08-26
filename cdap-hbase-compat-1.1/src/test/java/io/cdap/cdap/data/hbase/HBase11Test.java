@@ -19,13 +19,7 @@ package io.cdap.cdap.data.hbase;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HConstants;
-import org.apache.hadoop.hbase.HRegionInfo;
-import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.MiniHBaseCluster;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.regionserver.HRegion;
@@ -71,29 +65,6 @@ public class HBase11Test extends HBaseTestBase {
   @Override
   public MiniHBaseCluster getHBaseCluster() {
     return testUtil.getHBaseCluster();
-  }
-
-  @Override
-  public HRegion createHRegion(byte[] tableName, byte[] startKey,
-                               byte[] stopKey, String callingMethod, Configuration conf,
-                               byte[]... families)
-      throws IOException {
-    if (conf == null) {
-      conf = new Configuration();
-    }
-    HTableDescriptor htd = new HTableDescriptor(tableName);
-    for (byte [] family : families) {
-      htd.addFamily(new HColumnDescriptor(family));
-    }
-    HRegionInfo info = new HRegionInfo(htd.getTableName(), startKey, stopKey, false);
-    Path path = new Path(conf.get(HConstants.HBASE_DIR), callingMethod);
-    FileSystem fs = FileSystem.get(conf);
-    if (fs.exists(path)) {
-      if (!fs.delete(path, true)) {
-        throw new IOException("Failed delete of " + path);
-      }
-    }
-    return HRegion.createHRegion(info, path, conf, htd);
   }
 
   @Override

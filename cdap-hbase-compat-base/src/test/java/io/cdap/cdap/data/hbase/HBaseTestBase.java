@@ -105,11 +105,6 @@ public abstract class HBaseTestBase extends ExternalResource {
 
   // HRegion-level testing
 
-  public abstract HRegion createHRegion(byte[] tableName, byte[] startKey,
-                               byte[] stopKey, String callingMethod, Configuration conf,
-                               byte[]... families)
-    throws IOException;
-
   /**
    * Force and block on a flush to occur on all regions of table {@code tableName}.
    * @param tableName The table whose regions should be flushed.

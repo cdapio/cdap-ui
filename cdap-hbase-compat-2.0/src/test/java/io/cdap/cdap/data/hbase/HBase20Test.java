@@ -22,23 +22,19 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.hadoop.hbase.MiniHBaseCluster;
 import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.regionserver.FlushLifeCycleTracker;
 import org.apache.hadoop.hbase.regionserver.HRegion;
-import org.apache.hadoop.hbase.regionserver.Region;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.JVMClusterUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * {@link HBaseTestBase} implementation supporting HBase 1.1.
  */
-public class HBase12CDH570Test extends HBaseTestBase {
-  private static final Logger LOG = LoggerFactory.getLogger(HBase12CDH570Test.class);
+public class HBase20Test extends HBaseTestBase {
 
   protected HBaseTestingUtility testUtil = new HBaseTestingUtility();
 
@@ -70,12 +66,14 @@ public class HBase12CDH570Test extends HBaseTestBase {
   @Override
   public <T> Map<byte[], T> forEachRegion(byte[] tableName, Function<HRegion, T> function) {
     MiniHBaseCluster hbaseCluster = getHBaseCluster();
+    TableName hbaseTableName = TableName.valueOf(tableName);
     Map<byte[], T> results = new TreeMap<>(Bytes.BYTES_COMPARATOR);
     // make sure consumer config cache is updated
     for (JVMClusterUtil.RegionServerThread t : hbaseCluster.getRegionServerThreads()) {
-      List<Region> serverRegions = t.getRegionServer().getOnlineRegions(TableName.valueOf(tableName));
-      for (Region region : serverRegions) {
-        results.put(region.getRegionInfo().getRegionName(), function.apply((HRegion) region));
+      for (HRegion region : t.getRegionServer().getOnlineRegionsLocalContext()) {
+        if (region.getTableDescriptor().getTableName().equals(hbaseTableName)) {
+          results.put(region.getRegionInfo().getRegionName(), function.apply(region));
+        }
       }
     }
     return results;
@@ -94,7 +92,7 @@ public class HBase12CDH570Test extends HBaseTestBase {
       @Override
       public void run() {
         try {
-          region.flushcache(true, false);
+          region.flushcache(true, false, new FlushLifeCycleTracker() { });
         } catch (IOException e) {
           throw Throwables.propagate(e);
         }
