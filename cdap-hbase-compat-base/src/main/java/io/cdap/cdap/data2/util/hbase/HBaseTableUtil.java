@@ -46,12 +46,16 @@ import org.apache.hadoop.hbase.RegionLoad;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotFoundException;
+import org.apache.hadoop.hbase.client.BufferedMutator;
+import org.apache.hadoop.hbase.client.BufferedMutatorParams;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +94,6 @@ public abstract class HBaseTableUtil {
   // 4Mb
   public static final int DEFAULT_WRITE_BUFFER_SIZE = 4 * 1024 * 1024;
 
-  private static final int COPY_BUFFER_SIZE = 0x1000;    // 4K
   public static final CompressionType DEFAULT_COMPRESSION_TYPE = CompressionType.SNAPPY;
 
   /**
@@ -364,13 +367,53 @@ public abstract class HBaseTableUtil {
   }
 
   /**
-   * Creates a new {@link HTable} which may contain an HBase namespace depending on the HBase version
+   * Creates a new {@link Table} which may contain an HBase namespace depending on the HBase version
    *
    * @param conf the hadoop configuration
-   * @param tableId the {@link TableId} to create an {@link HTable} for
-   * @return an {@link HTable} for the tableName in the namespace
+   * @param tableId the {@link TableId} to create a {@link Table} for
+   * @return an {@link Table} for the tableName in the namespace
    */
-  public abstract HTable createHTable(Configuration conf, TableId tableId) throws IOException;
+  public Table createTable(Configuration conf, TableId tableId) throws IOException {
+    Preconditions.checkArgument(tableId != null, "Table id should not be null");
+    Connection connection = ConnectionFactory.createConnection(conf);
+    return new DelegatingTable(connection.getTable(HTableNameConverter.toTableName(tablePrefix, tableId))) {
+      @Override
+      public void close() throws IOException {
+        try {
+          super.close();
+        } finally {
+          connection.close();
+        }
+      }
+    };
+  }
+
+  /**
+   * Creates a new {@link BufferedMutator} for batch mutation operations.
+   *
+   * @param conf the hadoop configuration
+   * @param tableId the {@link TableId} to create a {@link Table} for
+   * @param writeBufferSize the write buffer size for the buffering
+   * @return a {@link BufferedMutator}
+   * @throws IOException if failed to create connection to HBase
+   */
+  public BufferedMutator createBufferedMutator(Configuration conf, TableId tableId,
+                                               long writeBufferSize) throws IOException {
+    Preconditions.checkArgument(tableId != null, "Table id should not be null");
+    BufferedMutatorParams params = new BufferedMutatorParams(HTableNameConverter.toTableName(tablePrefix, tableId))
+      .writeBufferSize(writeBufferSize);
+    Connection connection = ConnectionFactory.createConnection(conf);
+    return new DelegatingBufferedMutator(connection.getBufferedMutator(params)) {
+      @Override
+      public void close() throws IOException {
+        try {
+          super.close();
+        } finally {
+          connection.close();
+        }
+      }
+    };
+  }
 
   /**
    * Creates a new {@link HTableDescriptorBuilder} which may contain an HBase namespace depending on the HBase version

@@ -43,6 +43,7 @@ import io.cdap.cdap.data2.dataset2.lib.table.BufferingTableTest;
 import io.cdap.cdap.data2.increment.hbase.IncrementHandlerState;
 import io.cdap.cdap.data2.increment.hbase10.IncrementHandler;
 import io.cdap.cdap.data2.util.TableId;
+import io.cdap.cdap.data2.util.hbase.DelegatingTable;
 import io.cdap.cdap.data2.util.hbase.HBaseDDLExecutorFactory;
 import io.cdap.cdap.data2.util.hbase.HBaseTableUtil;
 import io.cdap.cdap.data2.util.hbase.HBaseTableUtilFactory;
@@ -56,12 +57,9 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
-import org.apache.hadoop.hbase.client.Row;
 import org.apache.hadoop.hbase.client.ScannerTimeoutException;
 import org.apache.hadoop.hbase.regionserver.HRegion;
 import org.apache.hadoop.hbase.regionserver.RegionScanner;
@@ -474,9 +472,9 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     final AtomicReference<Transaction> txRef = new AtomicReference<>();
     HBaseTableUtil util = new DelegatingHBaseTableUtil(hBaseTableUtil) {
       @Override
-      public HTable createHTable(Configuration conf, TableId tableId) throws IOException {
-        HTable htable = super.createHTable(conf, tableId);
-        return new MinimalDelegatingHTable(htable) {
+      public org.apache.hadoop.hbase.client.Table createTable(Configuration conf, TableId tableId) throws IOException {
+        org.apache.hadoop.hbase.client.Table table = super.createTable(conf, tableId);
+        return new DelegatingTable(table) {
           @Override
           public Result get(org.apache.hadoop.hbase.client.Get get) throws IOException {
             Assert.assertEquals(txRef.get().getTransactionId(),
@@ -665,58 +663,6 @@ public class HBaseTableTest extends BufferingTableTest<BufferingTable> {
     } catch (IOException e) {
       // Expected to fail due to tx max lifetime check
       table.rollbackTx();
-    }
-  }
-
-  /**
-   * Only overrides (and delegates) the methods used by HTable.
-   */
-  class MinimalDelegatingHTable extends HTable {
-    private final HTable delegate;
-
-    MinimalDelegatingHTable(HTable delegate) throws IOException {
-      super(delegate.getName(), delegate.getConnection());
-      this.delegate = delegate;
-    }
-
-    @Override
-    public byte[] getTableName() {
-      return delegate.getTableName();
-    }
-
-    @Override
-    public void flushCommits() throws IOException {
-      delegate.flushCommits();
-    }
-
-    @Override
-    public void close() throws IOException {
-      delegate.close();
-    }
-
-    @Override
-    public Result get(org.apache.hadoop.hbase.client.Get get) throws IOException {
-      return delegate.get(get);
-    }
-
-    @Override
-    public Result[] get(List<org.apache.hadoop.hbase.client.Get> gets) throws IOException {
-      return delegate.get(gets);
-    }
-
-    @Override
-    public void batch(List<? extends Row> actions, Object[] results) throws InterruptedException, IOException {
-      delegate.batch(actions, results);
-    }
-
-    @Override
-    public ResultScanner getScanner(org.apache.hadoop.hbase.client.Scan scan) throws IOException {
-      return delegate.getScanner(scan);
-    }
-
-    @Override
-    public void delete(Delete delete) throws IOException {
-      delegate.delete(delete);
     }
   }
 
