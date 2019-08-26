@@ -37,12 +37,13 @@ import io.cdap.cdap.proto.id.NamespaceId;
 import io.cdap.cdap.spi.hbase.HBaseDDLExecutor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.constraint.ConstraintException;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -67,7 +68,6 @@ public abstract class AbstractHBaseTableUtilTest {
   public static final HBaseTestBase TEST_HBASE = new HBaseTestFactory().get();
 
   protected static CConfiguration cConf;
-  private static HBaseAdmin hAdmin;
   private static HBaseDDLExecutor ddlExecutor;
 
   private static final String CDAP_NS = "ns1";
@@ -75,15 +75,21 @@ public abstract class AbstractHBaseTableUtilTest {
   private static final Map<String, NamespaceMeta> customMap =
     ImmutableMap.of(CDAP_NS, new NamespaceMeta.Builder().setName(CDAP_NS).setHBaseNamespace(HBASE_NS).build());
 
+  private Admin hAdmin;
+
   @BeforeClass
   public static void beforeClass() throws Exception {
-    hAdmin = new HBaseAdmin(TEST_HBASE.getConfiguration());
     cConf = CConfiguration.create();
     ddlExecutor = new HBaseDDLExecutorFactory(cConf, TEST_HBASE.getConfiguration()).get();
   }
 
-  @AfterClass
-  public static void afterClass() throws Exception {
+  @Before
+  public void beforeTest() throws Exception {
+    hAdmin = getTableUtil().createAdmin(TEST_HBASE.getConfiguration());
+  }
+
+  @After
+  public void afterTest() throws Exception {
     hAdmin.close();
   }
 
@@ -432,12 +438,7 @@ public abstract class AbstractHBaseTableUtilTest {
     Assert.assertEquals(4, hAdmin.listTables().length);
     tableUtil.deleteAllInNamespace(ddlExecutor, tableUtil.getHBaseNamespace(new NamespaceId("foonamespace")),
                                    hAdmin.getConfiguration(),
-                                   new Predicate<TableId>() {
-      @Override
-      public boolean apply(TableId input) {
-        return input.getTableName().startsWith("some");
-      }
-    });
+                                   input -> input.getTableName().startsWith("some"));
     Assert.assertEquals(2, hAdmin.listTables().length);
 
     Futures.allAsList(

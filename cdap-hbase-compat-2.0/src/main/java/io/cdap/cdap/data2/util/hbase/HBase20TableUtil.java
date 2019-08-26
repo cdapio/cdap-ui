@@ -32,15 +32,13 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceNotFoundException;
 import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
-import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.io.compress.Compression;
 import org.apache.hadoop.hbase.security.access.AccessControlClient;
 import org.slf4j.Logger;
@@ -69,14 +67,14 @@ public class HBase20TableUtil extends HBaseTableUtil {
   }
 
   @Override
-  public HTableDescriptor getHTableDescriptor(HBaseAdmin admin, TableId tableId) throws IOException {
+  public HTableDescriptor getHTableDescriptor(Admin admin, TableId tableId) throws IOException {
     Preconditions.checkArgument(admin != null, "HBaseAdmin should not be null");
     Preconditions.checkArgument(tableId != null, "Table Id should not be null.");
     return admin.getTableDescriptor(HTableNameConverter.toTableName(tablePrefix, tableId));
   }
 
   @Override
-  public boolean hasNamespace(HBaseAdmin admin, String namespace) throws IOException {
+  public boolean hasNamespace(Admin admin, String namespace) throws IOException {
     Preconditions.checkArgument(admin != null, "HBaseAdmin should not be null");
     Preconditions.checkArgument(namespace != null, "Namespace should not be null.");
     try {
@@ -88,7 +86,7 @@ public class HBase20TableUtil extends HBaseTableUtil {
   }
 
   @Override
-  public boolean tableExists(HBaseAdmin admin, TableId tableId) throws IOException {
+  public boolean tableExists(Admin admin, TableId tableId) throws IOException {
     Preconditions.checkArgument(admin != null, "HBaseAdmin should not be null");
     Preconditions.checkArgument(tableId != null, "Table Id should not be null.");
     return admin.tableExists(HTableNameConverter.toTableName(tablePrefix, tableId));
@@ -112,14 +110,14 @@ public class HBase20TableUtil extends HBaseTableUtil {
   }
 
   @Override
-  public List<HRegionInfo> getTableRegions(HBaseAdmin admin, TableId tableId) throws IOException {
+  public List<HRegionInfo> getTableRegions(Admin admin, TableId tableId) throws IOException {
     Preconditions.checkArgument(admin != null, "HBaseAdmin should not be null");
     Preconditions.checkArgument(tableId != null, "Table Id should not be null.");
     return admin.getTableRegions(HTableNameConverter.toTableName(tablePrefix, tableId));
   }
 
   @Override
-  public List<TableId> listTablesInNamespace(HBaseAdmin admin, String namespaceId) throws IOException {
+  public List<TableId> listTablesInNamespace(Admin admin, String namespaceId) throws IOException {
     List<TableId> tableIds = Lists.newArrayList();
     HTableDescriptor[] hTableDescriptors =
       admin.listTableDescriptorsByNamespace(HTableNameConverter.encodeHBaseEntity(namespaceId));
@@ -132,7 +130,7 @@ public class HBase20TableUtil extends HBaseTableUtil {
   }
 
   @Override
-  public List<TableId> listTables(HBaseAdmin admin) throws IOException {
+  public List<TableId> listTables(Admin admin) throws IOException {
     List<TableId> tableIds = Lists.newArrayList();
     HTableDescriptor[] hTableDescriptors = admin.listTables();
     for (HTableDescriptor hTableDescriptor : hTableDescriptors) {

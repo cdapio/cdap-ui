@@ -22,7 +22,6 @@ import io.cdap.cdap.api.common.Bytes;
 import io.cdap.cdap.spi.hbase.HBaseDDLExecutor;
 import io.cdap.cdap.spi.hbase.HBaseDDLExecutorContext;
 import io.cdap.cdap.spi.hbase.TableDescriptor;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.NamespaceNotFoundException;
@@ -30,7 +29,9 @@ import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotDisabledException;
 import org.apache.hadoop.hbase.TableNotEnabledException;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.Admin;
+import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.security.access.Permission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +52,22 @@ public abstract class DefaultHBaseDDLExecutor implements HBaseDDLExecutor {
   private static final Logger LOG = LoggerFactory.getLogger(DefaultHBaseDDLExecutor.class);
   private static final long MAX_CREATE_TABLE_WAIT = 5000L;    // Maximum wait of 5 seconds for table creation.
 
-  protected HBaseAdmin admin;
+  protected Admin admin;
 
   @Override
   public void initialize(HBaseDDLExecutorContext context) {
     try {
-      this.admin = new HBaseAdmin((Configuration) context.getConfiguration());
+      Connection connection = ConnectionFactory.createConnection(context.getConfiguration());
+      this.admin = new DelegatingAdmin(connection.getAdmin()) {
+        @Override
+        public void close() throws IOException {
+          try {
+            super.close();
+          } finally {
+            connection.close();
+          }
+        }
+      };
     } catch (Exception e) {
       throw new RuntimeException("Failed to create HBaseAdmin.", e);
     }
@@ -116,18 +127,18 @@ public abstract class DefaultHBaseDDLExecutor implements HBaseDDLExecutor {
   public void createTableIfNotExists(TableDescriptor descriptor, @Nullable byte[][] splitKeys)
     throws IOException {
     HTableDescriptor htd = getHTableDescriptor(descriptor);
-    if (admin.tableExists(htd.getName())) {
+    if (admin.tableExists(htd.getTableName())) {
       return;
     }
 
     boolean tableExistsFailure = false;
     try {
-      LOG.debug("Attempting to create table '{}' if it does not exist", Bytes.toString(htd.getName()));
+      LOG.debug("Attempting to create table '{}' if it does not exist", htd.getTableName());
       admin.createTable(htd, splitKeys);
     } catch (TableExistsException e) {
       // table may exist because someone else is creating it at the same
       // time. But it may not be available yet, and opening it might fail.
-      LOG.debug("Table '{}' already exists.", Bytes.toString(htd.getName()), e);
+      LOG.debug("Table '{}' already exists.", htd.getTableName(), e);
       tableExistsFailure = true;
     }
 
@@ -138,12 +149,12 @@ public abstract class DefaultHBaseDDLExecutor implements HBaseDDLExecutor {
       long sleepTime = TimeUnit.MILLISECONDS.toNanos(5000L) / 10;
       sleepTime = sleepTime <= 0 ? 1 : sleepTime;
       do {
-        if (admin.tableExists(htd.getName())) {
+        if (admin.tableExists(htd.getTableName())) {
           if (tableExistsFailure) {
             LOG.info("Table '{}' exists now. Assuming that another process concurrently created it.",
-                     Bytes.toString(htd.getName()));
+                     htd.getTableName());
           } else {
-            LOG.info("Table '{}' created.", Bytes.toString(htd.getName()));
+            LOG.info("Table '{}' created.", htd.getTableName());
           }
           return;
         } else {
@@ -153,8 +164,7 @@ public abstract class DefaultHBaseDDLExecutor implements HBaseDDLExecutor {
     } catch (InterruptedException e) {
       LOG.warn("Sleeping thread interrupted.");
     }
-    LOG.error("Table '{}' does not exist after waiting {} ms. Giving up.", Bytes.toString(htd.getName()),
-              MAX_CREATE_TABLE_WAIT);
+    LOG.error("Table '{}' does not exist after waiting {} ms. Giving up.", htd.getTableName(), MAX_CREATE_TABLE_WAIT);
   }
 
   @Override

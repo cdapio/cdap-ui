@@ -46,13 +46,13 @@ import org.apache.hadoop.hbase.RegionLoad;
 import org.apache.hadoop.hbase.ServerName;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotFoundException;
+import org.apache.hadoop.hbase.client.Admin;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.BufferedMutatorParams;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
@@ -342,6 +342,27 @@ public abstract class HBaseTableUtil {
   }
 
   /**
+   * Creates a new {@link Admin}.
+   *
+   * @param conf the hadoop configuration
+   * @return a new {@link Admin}
+   * @throws IOException if failed to connect to HBase
+   */
+  public Admin createAdmin(Configuration conf) throws IOException {
+    Connection connection = ConnectionFactory.createConnection(conf);
+    return new DelegatingAdmin(connection.getAdmin()) {
+      @Override
+      public void close() throws IOException {
+        try {
+          super.close();
+        } finally {
+          connection.close();
+        }
+      }
+    };
+  }
+
+  /**
    * Creates a new {@link BufferedMutator} for batch mutation operations.
    *
    * @param table the {@link Table} to have the {@link BufferedMutator} to create on
@@ -404,30 +425,30 @@ public abstract class HBaseTableUtil {
 
   /**
    * Constructs a {@link HTableDescriptor} which may contain an HBase namespace for an existing table
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   * @param admin the {@link Admin} to use to communicate with HBase
    * @param tableId the {@link TableId} to construct an {@link HTableDescriptor} for
    * @return an {@link HTableDescriptor} for the table
    * @throws IOException if failed to get the table descriptor
    */
-  public abstract HTableDescriptor getHTableDescriptor(HBaseAdmin admin, TableId tableId) throws IOException;
+  public abstract HTableDescriptor getHTableDescriptor(Admin admin, TableId tableId) throws IOException;
 
   /**
    * Checks if an HBase namespace already exists
    *
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   * @param admin the {@link Admin} to use to communicate with HBase
    * @param namespace the namespace to check for existence
    * @throws IOException if an I/O error occurs during the operation
    */
-  public abstract boolean hasNamespace(HBaseAdmin admin, String namespace) throws IOException;
+  public abstract boolean hasNamespace(Admin admin, String namespace) throws IOException;
 
   /**
    * Check if an HBase table exists
    *
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   * @param admin the {@link Admin} to use to communicate with HBase
    * @param tableId {@link TableId} for the specified table
    * @throws IOException if failed to connect to HBase
    */
-  public abstract boolean tableExists(HBaseAdmin admin, TableId tableId) throws IOException;
+  public abstract boolean tableExists(Admin admin, TableId tableId) throws IOException;
 
   /**
    * Delete an HBase table
@@ -450,17 +471,17 @@ public abstract class HBaseTableUtil {
   /**
    * Returns a list of {@link HRegionInfo} for the specified {@link TableId}
    *
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   * @param admin the {@link Admin} to use to communicate with HBase
    * @param tableId {@link TableId} for the specified table
    * @return a list of {@link HRegionInfo} for the specified {@link TableId}
    * @throws IOException if failed to connect to HBase
    */
-  public abstract List<HRegionInfo> getTableRegions(HBaseAdmin admin, TableId tableId) throws IOException;
+  public abstract List<HRegionInfo> getTableRegions(Admin admin, TableId tableId) throws IOException;
 
   /**
    * Deletes all tables in the specified namespace that satisfy the given {@link Predicate}.
    *
-   * @param ddlExecutor the {@link HBaseAdmin} to use to communicate with HBase
+   * @param ddlExecutor the {@link HBaseDDLExecutor} to use to communicate with HBase
    * @param namespaceId namespace for which the tables are being deleted
    * @param hConf The {@link Configuration} instance
    * @param predicate The {@link Predicate} to decide whether to drop a table or not
@@ -468,7 +489,7 @@ public abstract class HBaseTableUtil {
    */
   public void deleteAllInNamespace(HBaseDDLExecutor ddlExecutor, String namespaceId,
                                    Configuration hConf, Predicate<TableId> predicate) throws IOException {
-    try (HBaseAdmin admin = new HBaseAdmin(hConf)) {
+    try (Admin admin = createAdmin(hConf)) {
       for (TableId tableId : listTablesInNamespace(admin, namespaceId)) {
         if (predicate.apply(tableId)) {
           dropTable(ddlExecutor, tableId);
@@ -492,17 +513,16 @@ public abstract class HBaseTableUtil {
 
   /**
    * Lists all tables in the specified namespace
-   *
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   *  @param admin the {@link Admin} to use to communicate with HBase
    * @param namespaceId HBase namespace for which the tables are being requested
    */
-  public abstract List<TableId> listTablesInNamespace(HBaseAdmin admin, String namespaceId) throws IOException;
+  public abstract List<TableId> listTablesInNamespace(Admin admin, String namespaceId) throws IOException;
 
   /**
    * Lists all tables
-   * @param admin the {@link HBaseAdmin} to use to communicate with HBase
+   * @param admin the {@link Admin} to use to communicate with HBase
    */
-  public abstract List<TableId> listTables(HBaseAdmin admin) throws IOException;
+  public abstract List<TableId> listTables(Admin admin) throws IOException;
 
   /**
    * Disables and deletes a table.
@@ -623,11 +643,11 @@ public abstract class HBaseTableUtil {
   /**
    * Collects HBase table stats
    * //TODO: Explore the possiblitity of returning a {@code Map<TableId, TableStats>}
-   * @param admin instance of {@link HBaseAdmin} to communicate with HBase
+   * @param admin instance of {@link Admin} to communicate with HBase
    * @return map of table name -> table stats
    * @throws IOException if failed to connect to HBase
    */
-  public Map<TableId, TableStats> getTableStats(HBaseAdmin admin) throws IOException {
+  public Map<TableId, TableStats> getTableStats(Admin admin) throws IOException {
     // The idea is to walk thru live region servers, collect table region stats and aggregate them towards table total
     // metrics.
     Map<TableId, TableStats> datasetStat = Maps.newHashMap();
