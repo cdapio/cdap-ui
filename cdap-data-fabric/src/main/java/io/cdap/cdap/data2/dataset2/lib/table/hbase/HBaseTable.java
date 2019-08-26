@@ -53,6 +53,7 @@ import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Increment;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.OperationWithAttributes;
 import org.apache.hadoop.hbase.client.Result;
@@ -261,6 +262,7 @@ public class HBaseTable extends BufferingTable {
     byte [] txId = tx == null ? null : Bytes.toBytes(tx.getTransactionId());
     byte [] txWritePointer = tx == null ? null : Bytes.toBytes(tx.getWritePointer());
     List<Mutation> mutations = new ArrayList<>();
+    List<Increment> increments = new ArrayList<>();
     for (Map.Entry<byte[], NavigableMap<byte[], Update>> row : updates.entrySet()) {
       // create these only when they are needed
       PutBuilder put = null;
@@ -303,14 +305,17 @@ public class HBaseTable extends BufferingTable {
         mutations.add(incrementPut.build());
       }
       if (increment != null) {
-        mutations.add(increment.build());
+        increments.add(increment.build());
       }
       if (put != null) {
         mutations.add(put.build());
       }
     }
-    if (!hbaseFlush(mutations)) {
+    if (!hbaseFlush(mutations) && increments.isEmpty()) {
       LOG.info("No writes to persist!");
+    }
+    if (!increments.isEmpty()) {
+      table.batch(increments, new Object[increments.size()]);
     }
   }
 
