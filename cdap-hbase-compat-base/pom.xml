@@ -29,6 +29,10 @@
   <name>CDAP HBase Compactability Base</name>
   <packaging>jar</packaging>
 
+  <properties>
+    <hadoop26.version>2.6.0</hadoop26.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.cdap.cdap</groupId>
@@ -48,6 +52,13 @@
     <dependency>
       <groupId>org.apache.tephra</groupId>
       <artifactId>tephra-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>${hadoop26.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -86,11 +97,34 @@
           <groupId>asm</groupId>
           <artifactId>asm</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-hdfs</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.hbase</groupId>
       <artifactId>hbase-testing-util</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-hdfs</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop26.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>${hadoop26.version}</version>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
