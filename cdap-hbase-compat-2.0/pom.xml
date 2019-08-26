@@ -71,7 +71,6 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
       <version>${hadoop28.version}</version>
-      <scope>provider</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.hbase</groupId>
