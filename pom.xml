@@ -134,6 +134,7 @@
     <guava.version>13.0.1</guava.version>
     <guice.version>4.0</guice.version>
     <hadoop.version>2.3.0</hadoop.version>
+    <hadoop26.version>2.6.0</hadoop26.version>
     <hbase10.version>1.0.1.1</hbase10.version>
     <hbase10cdh.version>1.0.0-cdh5.4.4</hbase10cdh.version>
     <hbase10cdh550.version>1.0.0-cdh5.5.0</hbase10cdh550.version>
@@ -277,7 +278,7 @@
       </dependency>
       <dependency>
         <groupId>org.apache.tephra</groupId>
-        <artifactId>tephra-hbase-compat-0.98</artifactId>
+        <artifactId>tephra-hbase-compat-1.0</artifactId>
         <version>${tephra.version}</version>
         <exclusions>
           <exclusion>

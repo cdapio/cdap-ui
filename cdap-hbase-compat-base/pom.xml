@@ -29,10 +29,6 @@
   <name>CDAP HBase Compactability Base</name>
   <packaging>jar</packaging>
 
-  <properties>
-    <hadoop26.version>2.6.0</hadoop26.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>io.cdap.cdap</groupId>

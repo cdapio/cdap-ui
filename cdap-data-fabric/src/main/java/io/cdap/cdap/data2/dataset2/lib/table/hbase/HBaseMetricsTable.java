@@ -78,7 +78,7 @@ public class HBaseMetricsTable implements MetricsTable {
   private final HBaseTableUtil tableUtil;
   private final TableId tableId;
   private final Table table;
-  private final BufferedMutator bufferedMutator;
+  private final BufferedMutator mutator;
   private final byte[] columnFamily;
   private AbstractRowKeyDistributor rowKeyDistributor;
   private ExecutorService scanExecutor;
@@ -92,7 +92,7 @@ public class HBaseMetricsTable implements MetricsTable {
 
     this.table = tableUtil.createTable(hConf, tableId);
     // todo: make configurable
-    this.bufferedMutator = tableUtil.createBufferedMutator(hConf, tableId, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE);
+    this.mutator = tableUtil.createBufferedMutator(table, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE);
     this.columnFamily = TableProperties.getColumnFamilyBytes(spec.getProperties());
   }
 
@@ -156,8 +156,8 @@ public class HBaseMetricsTable implements MetricsTable {
       puts.add(put.build());
     }
     try {
-      bufferedMutator.mutate(puts);
-      bufferedMutator.flush();
+      mutator.mutate(puts);
+      mutator.flush();
     } catch (IOException e) {
       throw new DataSetException("Put failed on table " + tableId, e);
     }
@@ -175,8 +175,8 @@ public class HBaseMetricsTable implements MetricsTable {
       puts.add(put.build());
     }
     try {
-      bufferedMutator.mutate(puts);
-      bufferedMutator.flush();
+      mutator.mutate(puts);
+      mutator.flush();
     } catch (IOException e) {
       throw new DataSetException("Put failed on table " + tableId, e);
     }
@@ -208,8 +208,8 @@ public class HBaseMetricsTable implements MetricsTable {
     byte[] distributedKey = createDistributedRowKey(row);
     Put increment = getIncrementalPut(distributedKey, increments);
     try {
-      bufferedMutator.mutate(increment);
-      bufferedMutator.flush();
+      mutator.mutate(increment);
+      mutator.flush();
     } catch (IOException e) {
       // figure out whether this is an illegal increment
       // currently there is not other way to extract that from the HBase exception than string match
@@ -252,8 +252,8 @@ public class HBaseMetricsTable implements MetricsTable {
     }
 
     try {
-      bufferedMutator.mutate(puts);
-      bufferedMutator.flush();
+      mutator.mutate(puts);
+      mutator.flush();
     } catch (IOException e) {
       // figure out whether this is an illegal increment
       // currently there is not other way to extract that from the HBase exception than string match
@@ -346,9 +346,9 @@ public class HBaseMetricsTable implements MetricsTable {
   @Override
   public void close() throws IOException {
     try {
-      table.close();
+      mutator.close();
     } finally {
-      bufferedMutator.close();
+      table.close();
     }
   }
 }

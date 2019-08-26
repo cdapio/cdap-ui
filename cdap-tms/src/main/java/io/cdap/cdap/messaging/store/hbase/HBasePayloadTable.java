@@ -54,12 +54,12 @@ final class HBasePayloadTable extends AbstractPayloadTable {
   private final int scanCacheRows;
   private final HBaseExceptionHandler exceptionHandler;
 
-  HBasePayloadTable(HBaseTableUtil tableUtil, Table table, BufferedMutator mutator, byte[] columnFamily,
+  HBasePayloadTable(HBaseTableUtil tableUtil, Table table, byte[] columnFamily,
                     AbstractRowKeyDistributor rowKeyDistributor, ExecutorService scanExecutor,
-                    int scanCacheRows, HBaseExceptionHandler exceptionHandler) {
+                    int scanCacheRows, HBaseExceptionHandler exceptionHandler) throws IOException {
     this.tableUtil = tableUtil;
     this.table = table;
-    this.mutator = mutator;
+    this.mutator = tableUtil.createBufferedMutator(table, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE);
     this.columnFamily = Arrays.copyOf(columnFamily, columnFamily.length);
     this.rowKeyDistributor = rowKeyDistributor;
     this.scanExecutor = scanExecutor;
@@ -137,9 +137,9 @@ final class HBasePayloadTable extends AbstractPayloadTable {
   @Override
   public void close() throws IOException {
     try {
-      table.close();
-    } finally {
       mutator.close();
+    } finally {
+      table.close();
     }
   }
 }

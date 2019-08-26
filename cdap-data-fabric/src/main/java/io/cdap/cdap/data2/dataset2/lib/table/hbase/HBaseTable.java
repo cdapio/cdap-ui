@@ -128,7 +128,7 @@ public class HBaseTable extends BufferingTable {
     TableId hBaseTableId = tableUtil.createHTableId(new NamespaceId(datasetContext.getNamespaceId()), spec.getName());
     this.table = tableUtil.createTable(hConf, hBaseTableId);
     // todo: make configurable
-    this.mutator = tableUtil.createBufferedMutator(hConf, hBaseTableId, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE);
+    this.mutator = tableUtil.createBufferedMutator(table, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE);
     this.tableUtil = tableUtil;
     this.hTableName = Bytes.toStringBinary(table.getTableDescriptor().getTableName().getName());
     this.columnFamily = TableProperties.getColumnFamilyBytes(spec.getProperties());
@@ -245,9 +245,9 @@ public class HBaseTable extends BufferingTable {
       super.close();
     } finally {
       try {
-        table.close();
-      } finally {
         mutator.close();
+      } finally {
+        table.close();
       }
     }
   }

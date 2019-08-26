@@ -177,9 +177,8 @@ public final class HBaseTableFactory implements TableFactory {
       tableId, cConf.getInt(Constants.MessagingSystem.MESSAGE_TABLE_HBASE_SPLITS), tableCoprocessor
     );
     return new HBaseMessageTable(
-      tableUtil, tableWithRowKeyDistributor.getTable(),
-      tableUtil.createBufferedMutator(hConf, tableId, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE),
-      COLUMN_FAMILY, tableWithRowKeyDistributor.getRowKeyDistributor(),
+      tableUtil, tableWithRowKeyDistributor.getTable(), COLUMN_FAMILY,
+      tableWithRowKeyDistributor.getRowKeyDistributor(),
       scanExecutor, cConf.getInt(Constants.MessagingSystem.HBASE_SCAN_CACHE_ROWS),
       createExceptionHandler(tableId)
     );
@@ -193,9 +192,8 @@ public final class HBaseTableFactory implements TableFactory {
       tableId, cConf.getInt(Constants.MessagingSystem.PAYLOAD_TABLE_HBASE_SPLITS), tableCoprocessor
     );
     return new HBasePayloadTable(
-      tableUtil, tableWithRowKeyDistributor.getTable(),
-      tableUtil.createBufferedMutator(hConf, tableId, HBaseTableUtil.DEFAULT_WRITE_BUFFER_SIZE),
-      COLUMN_FAMILY, tableWithRowKeyDistributor.getRowKeyDistributor(),
+      tableUtil, tableWithRowKeyDistributor.getTable(), COLUMN_FAMILY,
+      tableWithRowKeyDistributor.getRowKeyDistributor(),
       scanExecutor, cConf.getInt(Constants.MessagingSystem.HBASE_SCAN_CACHE_ROWS),
       createExceptionHandler(tableId)
     );
