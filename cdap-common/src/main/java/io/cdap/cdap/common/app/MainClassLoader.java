@@ -16,7 +16,6 @@
 
 package io.cdap.cdap.common.app;
 
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
 import io.cdap.cdap.api.dataset.Dataset;
@@ -41,6 +40,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 
 /**
@@ -110,7 +110,7 @@ public class MainClassLoader extends InterceptableClassLoader {
 
     ClassLoader filtered = new FilterClassLoader(classLoader, filter);
     ClassLoader parent = new CombineClassLoader(classLoader.getParent(), filtered);
-    return new MainClassLoader(classpath.toArray(new URL[classpath.size()]), parent);
+    return new MainClassLoader(classpath.toArray(new URL[0]), parent);
   }
 
   /**

@@ -112,23 +112,18 @@ final class ArtifactClassLoaderFactory {
    * @param artifactLocation the location of the artifact to create the classloader from
    * @return a closeable classloader based off the specified artifact; on closing the returned {@link ClassLoader},
    *         all temporary resources created for the classloader will be removed
-   * @throws IOException if there was an error copying or unpacking the artifact
    * @see #createClassLoader(File)
    */
   private CloseableClassLoader createClassLoader(final Location artifactLocation,
-                                                 EntityImpersonator entityImpersonator) throws IOException {
+                                                 EntityImpersonator entityImpersonator) {
     try {
-      final File unpackDir = entityImpersonator.impersonate(new Callable<File>() {
-        @Override
-        public File call() throws IOException {
-          return BundleJarUtil.unJar(artifactLocation, DirUtils.createTempDir(tmpDir));
-        }
-      });
+      final File unpackDir = entityImpersonator.impersonate(
+        () -> BundleJarUtil.unJar(artifactLocation, DirUtils.createTempDir(tmpDir)));
 
       final CloseableClassLoader classLoader = createClassLoader(unpackDir);
       return new CloseableClassLoader(classLoader, new Closeable() {
         @Override
-        public void close() throws IOException {
+        public void close() {
           try {
             Closeables.closeQuietly(classLoader);
             if (unpackDir.exists()) {
@@ -176,7 +171,7 @@ final class ArtifactClassLoaderFactory {
       final CloseableClassLoader parentClassLoader = createClassLoader(artifactLocations, entityImpersonator);
       return new CloseableClassLoader(new DirectoryClassLoader(unpackDir, parentClassLoader, "lib"), new Closeable() {
         @Override
-        public void close() throws IOException {
+        public void close() {
           try {
             Closeables.closeQuietly(parentClassLoader);
             if (unpackDir.exists()) {

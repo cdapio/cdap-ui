@@ -17,7 +17,6 @@
 package io.cdap.cdap.gateway.router;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
 import io.cdap.cdap.common.internal.guava.ClassPath;
 import io.cdap.cdap.common.lang.ClassLoaders;
 import io.cdap.cdap.common.logging.AuditLogConfig;
@@ -39,6 +38,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javax.annotation.Nullable;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
@@ -68,7 +68,7 @@ public final class RouterAuditLookUp {
   }
 
   @Nullable
-  public AuditLogConfig getAuditLogContent(String path, HttpMethod httpMethod) throws Exception {
+  public AuditLogConfig getAuditLogContent(String path, HttpMethod httpMethod) {
     List<PatternPathRouterWithGroups.RoutableDestination<AuditLogConfig>> destinations =
       patternMatcher.getDestinations(path);
     for (PatternPathRouterWithGroups.RoutableDestination<AuditLogConfig> entry : destinations) {
@@ -85,7 +85,7 @@ public final class RouterAuditLookUp {
     try {
       handlerClasses = getAllHandlerClasses();
     } catch (IOException e) {
-      LOG.error("Failed to get all handler classes for audit logging: {}", e.getCause());
+      LOG.error("Failed to get all handler classes for audit logging", e);
       return -1;
     }
 

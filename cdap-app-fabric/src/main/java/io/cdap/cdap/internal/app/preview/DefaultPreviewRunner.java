@@ -233,7 +233,7 @@ public class DefaultPreviewRunner extends AbstractIdleService implements Preview
 
       @Override
       public void error(Throwable cause) {
-        terminated(PreviewStatus.Status.RUN_FAILED, cause);;
+        terminated(PreviewStatus.Status.RUN_FAILED, cause);
       }
 
       /**

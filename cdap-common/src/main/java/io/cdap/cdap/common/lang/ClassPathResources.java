@@ -16,10 +16,8 @@
 
 package io.cdap.cdap.common.lang;
 
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import io.cdap.cdap.common.internal.guava.ClassPath;
 import io.cdap.cdap.common.internal.guava.ClassPath.ResourceInfo;
@@ -36,26 +34,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Utility methods for {@link ClassPath} {@link ResourceInfo resources}.
  */
 public final class ClassPathResources {
-
-  public static final Function<ClassPath.ClassInfo, String> CLASS_INFO_TO_CLASS_NAME =
-    new Function<ClassPath.ClassInfo, String>() {
-      @Override
-      public String apply(ClassPath.ClassInfo input) {
-        return input.getName();
-      }
-    };
-  public static final Function<ClassPath.ResourceInfo, String> RESOURCE_INFO_TO_RESOURCE_NAME =
-    new Function<ClassPath.ResourceInfo, String>() {
-      @Override
-      public String apply(ClassPath.ResourceInfo input) {
-        return input.getResourceName();
-      }
-    };
 
   /**
    * Returns the base set of resources needed to load the specified {@link Class} using the
@@ -64,19 +48,21 @@ public final class ClassPathResources {
    * @param classLoader the {@link ClassLoader} to use to generate the set of resources
    * @param classz the {@link Class} to generate the set of resources for
    * @return the set of resources needed to load the specified {@link Class} using the specified {@link ClassLoader}
-   * @throws IOException
+   * @throws IOException if failed to load resources information
    */
   public static Set<String> getResourcesWithDependencies(ClassLoader classLoader, Class<?> classz) throws IOException {
     ClassPath classPath = getClassPath(classLoader, classz);
 
     // Add everything in the classpath as visible resources
-    Set<String> result = Sets.newHashSet(Iterables.transform(classPath.getResources(),
-                                                             RESOURCE_INFO_TO_RESOURCE_NAME));
-    // Trace dependencies for all classes in the classpath
-    findClassDependencies(
-      classLoader, Iterables.transform(classPath.getAllClasses(), CLASS_INFO_TO_CLASS_NAME), result);
+    Set<String> result = classPath.getResources().stream()
+      .map(ResourceInfo::getResourceName)
+      .collect(Collectors.toSet());
 
-    return result;
+    // Trace dependencies for all classes in the classpath
+    Set<String> classes = classPath.getAllClasses().stream()
+      .map(ClassPath.ClassInfo::getName)
+      .collect(Collectors.toSet());
+    return findClassDependencies(classLoader, classes, result);
   }
 
   /**
@@ -97,7 +83,7 @@ public final class ClassPathResources {
   /**
    * Returns a Set containing all bootstrap classpaths as defined in the {@code sun.boot.class.path} property.
    */
-  public static Set<String> getBootstrapClassPaths() {
+  private static Set<String> getBootstrapClassPaths() {
     // Get the bootstrap classpath. This is for exclusion while tracing class dependencies.
     Set<String> bootstrapPaths = new HashSet<>();
     for (String classpath : Splitter.on(File.pathSeparatorChar).split(System.getProperty("sun.boot.class.path"))) {

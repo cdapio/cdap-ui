@@ -16,11 +16,9 @@
 
 package io.cdap.cdap.common.lang;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import io.cdap.cdap.api.app.Application;
 import io.cdap.cdap.api.service.SystemServiceConfigurer;
 import io.cdap.cdap.common.internal.guava.ClassPath;
@@ -35,6 +33,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import javax.ws.rs.Path;
 
 /**
@@ -90,14 +89,14 @@ public final class ProgramResources {
     result.addAll(ClassPathResources.getResourcesWithDependencies(classLoader, SystemServiceConfigurer.class));
 
     // Gather resources for javax.ws.rs classes. They are not traceable from the api classes.
-    Iterables.addAll(result, Iterables.transform(ClassPathResources.getClassPathResources(classLoader, Path.class),
-                                                 ClassPathResources.RESOURCE_INFO_TO_RESOURCE_NAME));
+    ClassPathResources.getClassPathResources(classLoader, Path.class).stream()
+      .map(ClassPath.ResourceInfo::getResourceName)
+      .forEach(result::add);
 
     // Gather Hadoop classes and resources
-    getResources(ClassPath.from(classLoader, JAR_ONLY_URI),
-                 HADOOP_PACKAGES, EXCLUDE_PACKAGES, ClassPathResources.RESOURCE_INFO_TO_RESOURCE_NAME, result);
-
-    return Collections.unmodifiableSet(result);
+    return Collections.unmodifiableSet(
+      getResources(ClassPath.from(classLoader, JAR_ONLY_URI),
+                   HADOOP_PACKAGES, EXCLUDE_PACKAGES, ClassPath.ResourceInfo::getResourceName, result));
   }
 
   /**
@@ -112,7 +111,7 @@ public final class ProgramResources {
                                                              Iterable<String> includePackagePrefixes,
                                                              Iterable<String> excludePackagePrefixes,
                                                              Function<ClassPath.ResourceInfo, V> resultTransform,
-                                                             final T result) throws IOException {
+                                                             T result) {
     Set<URL> resourcesBaseURLs = new HashSet<>();
     // Adds all .class resources that should be included
     // Also record the base URL of those resources

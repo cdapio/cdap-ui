@@ -16,7 +16,6 @@
 
 package io.cdap.cdap.internal.asm;
 
-import com.google.common.base.Function;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -32,6 +31,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * A util class to help on class inspections and manipulations through bytecode.
@@ -51,8 +51,8 @@ public final class Classes {
    * @throws IOException if failed to read class information
    */
   public static boolean isSubTypeOf(String className, final String superTypeName,
-                                    final Function<String, URL> resourceProvider,
-                                    final Map<String, Boolean> cache) throws IOException {
+                                    Function<String, URL> resourceProvider,
+                                    Map<String, Boolean> cache) throws IOException {
     // Base case
     if (superTypeName.equals(className)) {
       cache.put(className, true);

@@ -126,7 +126,7 @@ public final class FilterClassLoader extends ClassLoader {
         packages.add(pkg);
       }
     }
-    return packages.toArray(new Package[packages.size()]);
+    return packages.toArray(new Package[0]);
   }
 
   @Override
@@ -150,7 +150,7 @@ public final class FilterClassLoader extends ClassLoader {
     if (resources.hasMoreElements()) {
       return resources;
     }
-    return filter.acceptResource(name) ? super.getResources(name) : Collections.<URL>emptyEnumeration();
+    return filter.acceptResource(name) ? super.getResources(name) : Collections.emptyEnumeration();
   }
 
   @Override
