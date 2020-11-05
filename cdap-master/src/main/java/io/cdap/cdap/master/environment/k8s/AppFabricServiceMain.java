@@ -52,6 +52,7 @@ import io.cdap.cdap.internal.app.services.AppFabricServer;
 import io.cdap.cdap.master.spi.environment.MasterEnvironment;
 import io.cdap.cdap.master.spi.environment.MasterEnvironmentContext;
 import io.cdap.cdap.messaging.guice.MessagingClientModule;
+import io.cdap.cdap.metadata.MetadataServiceModule;
 import io.cdap.cdap.metrics.guice.MetricsStoreModule;
 import io.cdap.cdap.operations.OperationalStatsService;
 import io.cdap.cdap.operations.guice.OperationalStatsModule;
@@ -118,7 +119,8 @@ public class AppFabricServiceMain extends AbstractServiceMain<EnvironmentOptions
           bind(MetadataPublisher.class).to(MessagingMetadataPublisher.class);
           bind(MetadataServiceClient.class).to(DefaultMetadataServiceClient.class);
         }
-      }
+      },
+      new MetadataServiceModule()
     );
   }
 

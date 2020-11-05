@@ -70,6 +70,7 @@ import io.cdap.cdap.internal.app.store.DefaultStore;
 import io.cdap.cdap.logging.guice.KafkaLogAppenderModule;
 import io.cdap.cdap.messaging.guice.MessagingClientModule;
 import io.cdap.cdap.messaging.store.hbase.HBaseTableFactory;
+import io.cdap.cdap.metadata.MetadataServiceModule;
 import io.cdap.cdap.security.auth.context.AuthenticationContextModules;
 import io.cdap.cdap.security.authorization.AuthorizationEnforcementModule;
 import io.cdap.cdap.security.guice.SecureStoreServerModule;
@@ -204,6 +205,7 @@ public class UpgradeTool {
       new DataFabricModules(UpgradeTool.class.getName()).getDistributedModules(),
       new AppFabricServiceRuntimeModule().getDistributedModules(),
       new KafkaLogAppenderModule(),
+      new MetadataServiceModule(),
       // the DataFabricDistributedModule needs MetricsCollectionService binding
       new AbstractModule() {
         @Override

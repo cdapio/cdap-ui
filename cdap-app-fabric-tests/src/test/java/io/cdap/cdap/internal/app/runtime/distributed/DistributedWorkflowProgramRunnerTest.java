@@ -56,6 +56,7 @@ import io.cdap.cdap.internal.app.runtime.SimpleProgramOptions;
 import io.cdap.cdap.internal.app.runtime.SystemArguments;
 import io.cdap.cdap.logging.guice.LocalLogAppenderModule;
 import io.cdap.cdap.messaging.guice.MessagingClientModule;
+import io.cdap.cdap.metadata.MetadataServiceModule;
 import io.cdap.cdap.metrics.guice.MetricsClientRuntimeModule;
 import io.cdap.cdap.metrics.guice.MetricsStoreModule;
 import io.cdap.cdap.operations.guice.OperationalStatsModule;
@@ -287,6 +288,7 @@ public class DistributedWorkflowProgramRunnerTest {
       new ProgramRunnerRuntimeModule().getDistributedModules(),
       new SecureStoreServerModule(),
       new OperationalStatsModule(),
+      new MetadataServiceModule(),
       new AbstractModule() {
         @Override
         protected void configure() {

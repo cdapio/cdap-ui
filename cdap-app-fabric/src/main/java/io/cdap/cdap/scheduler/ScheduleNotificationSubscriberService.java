@@ -28,6 +28,7 @@ import io.cdap.cdap.common.NotFoundException;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
 import io.cdap.cdap.common.utils.ImmutablePair;
+import io.cdap.cdap.internal.accelerator.AcceleratorManager;
 import io.cdap.cdap.internal.app.runtime.ProgramOptionConstants;
 import io.cdap.cdap.internal.app.runtime.schedule.ProgramScheduleRecord;
 import io.cdap.cdap.internal.app.runtime.schedule.queue.JobQueueTable;
@@ -69,18 +70,20 @@ public class ScheduleNotificationSubscriberService extends AbstractIdleService {
   private final MessagingService messagingService;
   private final MetricsCollectionService metricsCollectionService;
   private final List<Service> subscriberServices;
+  private final AcceleratorManager acceleratorManager;
   private ScheduledExecutorService subscriberExecutor;
 
   @Inject
   ScheduleNotificationSubscriberService(CConfiguration cConf, MessagingService messagingService,
                                         MetricsCollectionService metricsCollectionService,
-                                        TransactionRunner transactionRunner) {
+                                        TransactionRunner transactionRunner, AcceleratorManager acceleratorManager) {
     this.cConf = cConf;
     this.messagingService = messagingService;
     this.metricsCollectionService = metricsCollectionService;
     this.subscriberServices = Arrays.asList(new SchedulerEventSubscriberService(transactionRunner),
                                             new DataEventSubscriberService(transactionRunner),
                                             new ProgramStatusEventSubscriberService(transactionRunner));
+    this.acceleratorManager = acceleratorManager;
   }
 
   @Override
@@ -199,6 +202,12 @@ public class ScheduleNotificationSubscriberService extends AbstractIdleService {
         scheduleId = ScheduleId.fromString(scheduleIdString);
       }
 
+      if (isApplicationDisabled(scheduleId.getNamespace(), scheduleId.getApplication())) {
+        LOG.debug("Application {}.{} is disabled, ignoring the schedule {}.", scheduleId.getNamespace(),
+                  scheduleId.getApplication(), scheduleId.getSchedule());
+        return;
+      }
+
       ProgramScheduleRecord record;
       try {
         record = scheduleStore.getScheduleRecord(scheduleId);
@@ -267,12 +276,27 @@ public class ScheduleNotificationSubscriberService extends AbstractIdleService {
       }
 
       ProgramRunId programRunId = GSON.fromJson(programRunIdString, ProgramRunId.class);
+      if (isApplicationDisabled(programRunId.getNamespaceId().getNamespace(), programRunId.getApplication())) {
+        LOG.debug("Application {}.{} is disabled, ignoring the schedule for program {}.",
+                  programRunId.getNamespaceId().getNamespace(),
+                  programRunId.getApplication(), programRunId.getProgram());
+        return;
+      }
+
       ProgramId programId = programRunId.getParent();
       String triggerKeyForProgramStatus = Schedulers.triggerKeyForProgramStatus(programId, programStatus);
 
       for (ProgramScheduleRecord schedule : scheduleStore.findSchedules(triggerKeyForProgramStatus)) {
         jobQueue.addNotification(schedule, notification);
       }
+    }
+  }
+
+  private boolean isApplicationDisabled(String namespace, String application) throws IOException {
+    try {
+      return acceleratorManager.isApplicationDisabled(namespace, application);
+    } catch (Exception e) {
+      throw new IOException("Unable to detect if application is disabled", e);
     }
   }
 }
