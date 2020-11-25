@@ -14,13 +14,11 @@
  * the License.
  */
 
-package io.cdap.cdap.internal.accelerator;
+package io.cdap.cdap.internal.capability;
 
 import com.google.inject.Inject;
 import io.cdap.cdap.api.metadata.MetadataEntity;
 import io.cdap.cdap.api.metadata.MetadataScope;
-import io.cdap.cdap.common.conf.CConfiguration;
-import io.cdap.cdap.common.conf.Constants;
 import io.cdap.cdap.proto.id.ApplicationId;
 import io.cdap.cdap.proto.id.NamespaceId;
 import io.cdap.cdap.proto.metadata.MetadataSearchResponse;
@@ -29,47 +27,47 @@ import io.cdap.cdap.spi.metadata.SearchRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 /**
- * Class with helpful methods for dynamic accelerator framework
+ * Class with helpful methods for managing capabilities
  */
-public class AcceleratorManager {
+public class CapabilityManager {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AcceleratorManager.class);
-  private static final String ACCELERATOR_TAG = "accelerator:%s";
+  private static final Logger LOG = LoggerFactory.getLogger(CapabilityManager.class);
+  private static final String CAPABILITY = "capability:%s";
   private static final String APPLICATION_TAG = "application:%s";
-  private static final String ACCELERATOR_KEY = "accelerator";
+  private static final String CAPABILITY_KEY = "capability";
   private static final String APPLICATION = "application";
   private final MetadataSearchClient metadataClient;
-  private final CConfiguration cConf;
+  private final CapabilityStore capabilityStore;
 
   @Inject
-  AcceleratorManager(MetadataSearchClient metadataClient, CConfiguration cConf) {
+  CapabilityManager(MetadataSearchClient metadataClient, CapabilityStore capabilityStore) {
     this.metadataClient = metadataClient;
-    this.cConf = cConf;
+    this.capabilityStore = capabilityStore;
   }
 
   /**
-   * Returns the list of applications that are having metadata tagged with the accelerator
+   * Returns the list of applications that are having metadata tagged with the capability
    *
-   * @param namespace   Namespace for which applications should be listed
-   * @param accelerator Accelerator by which to filter
-   * @param cursor      Optional cursor from a previous response
-   * @param offset      Offset from where to start
-   * @param limit       Limit of records to fetch
+   * @param namespace  Namespace for which applications should be listed
+   * @param capability Capability by which to filter
+   * @param cursor     Optional cursor from a previous response
+   * @param offset     Offset from where to start
+   * @param limit      Limit of records to fetch
    * @return
    * @throws Exception - Exception from meta data search if any
    */
-  public AcceleratorApplications getAppsForAccelerator(NamespaceId namespace, String accelerator,
-                                                       @Nullable String cursor, int offset,
-                                                       int limit) throws Exception {
-    String acceleratorTag = String.format(ACCELERATOR_TAG, accelerator);
-    SearchRequest searchRequest = SearchRequest.of(acceleratorTag)
+  public CapabilityApplications getAppsForCapability(NamespaceId namespace, String capability,
+                                                     @Nullable String cursor, int offset,
+                                                     int limit) throws Exception {
+    String capabilityTag = String.format(CAPABILITY, capability);
+    SearchRequest searchRequest = SearchRequest.of(capabilityTag)
       .addNamespace(namespace.getNamespace())
       .addType(APPLICATION)
       .setScope(MetadataScope.SYSTEM)
@@ -82,8 +80,8 @@ public class AcceleratorManager {
       .map(MetadataSearchResultRecord::getMetadataEntity)
       .map(this::getApplicationId)
       .collect(Collectors.toSet());
-    return new AcceleratorApplications(applicationIds, getCursorResponse(searchResponse), searchResponse.getOffset(),
-                                       searchResponse.getLimit(), searchResponse.getTotal());
+    return new CapabilityApplications(applicationIds, getCursorResponse(searchResponse), searchResponse.getOffset(),
+                                      searchResponse.getLimit(), searchResponse.getTotal());
   }
 
   @Nullable
@@ -96,15 +94,15 @@ public class AcceleratorManager {
   }
 
   /**
-   * Returns boolean indicating whether application is disabled due to a disabled accelerator
+   * Returns boolean indicating whether application is disabled due to a disabled capability
    *
    * @param namespace
-   * @param applicationName
+   * @param capabilityName
    * @return
    * @throws Exception
    */
-  public boolean isApplicationDisabled(String namespace, String applicationName) throws Exception {
-    String applicationQuery = String.format(APPLICATION_TAG, applicationName);
+  public boolean isApplicationDisabled(String namespace, String capabilityName) throws IOException {
+    String applicationQuery = String.format(APPLICATION_TAG, capabilityName);
     SearchRequest searchRequest = SearchRequest.of(applicationQuery)
       .addNamespace(namespace)
       .addType(APPLICATION)
@@ -112,19 +110,19 @@ public class AcceleratorManager {
       .build();
     return metadataClient.search(searchRequest)
       .getResults().stream()
-      .filter(this::hasAcceleratorTagValue)
-      .map(this::getAcceleratorTagValue)
-      .anyMatch(this::isAcceleratorDisabled);
+      .filter(this::hasCapabilityTagValue)
+      .map(this::getCapabilityTagValue)
+      .anyMatch(this::isCapabilityDisabledWrapped);
   }
 
   @Nullable
-  private String getAcceleratorTagValue(MetadataSearchResultRecord metadataRecord) {
+  private String getCapabilityTagValue(MetadataSearchResultRecord metadataRecord) {
     return metadataRecord.getMetadata().get(MetadataScope.SYSTEM).getProperties()
-      .get(ACCELERATOR_KEY);
+      .get(CAPABILITY_KEY);
   }
 
-  private boolean hasAcceleratorTagValue(MetadataSearchResultRecord metadataRecord) {
-    return getAcceleratorTagValue(metadataRecord) != null;
+  private boolean hasCapabilityTagValue(MetadataSearchResultRecord metadataRecord) {
+    return getCapabilityTagValue(metadataRecord) != null;
   }
 
   private boolean isApplicationType(MetadataEntity metadataEntity) {
@@ -137,16 +135,22 @@ public class AcceleratorManager {
                              metadataEntity.getValue(MetadataEntity.VERSION));
   }
 
-  private boolean isAcceleratorDisabled(@Nullable String accelerator) {
-    if (accelerator == null || accelerator.isEmpty()) {
+  private boolean isCapabilityDisabledWrapped(@Nullable String capability) {
+    try {
+      return isCapabilityDisabled(capability);
+    } catch (IOException exception) {
+      throw new RuntimeException(exception);
+    }
+  }
+
+  private boolean isCapabilityDisabled(@Nullable String capability) throws IOException {
+    if (capability == null || capability.isEmpty()) {
       return false;
     }
-    Collection<String> enabledAcceleratorCollection = cConf
-      .getTrimmedStringCollection(Constants.AppFabric.ENABLED_ACCELERATORS_LIST);
-    if (enabledAcceleratorCollection.isEmpty()) {
+    String capabilityStatus = capabilityStore.readCapabilityStatus(capability);
+    if (capabilityStatus == null) {
       return true;
     }
-    return enabledAcceleratorCollection.stream()
-      .noneMatch(enabledAccelerator -> enabledAccelerator.equalsIgnoreCase(accelerator));
+    return capabilityStatus.equalsIgnoreCase(CapabilityStatus.DISABLED.name());
   }
 }

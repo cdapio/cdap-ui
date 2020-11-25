@@ -14,7 +14,7 @@
  * the License.
  */
 
-package io.cdap.cdap.internal.accelerator;
+package io.cdap.cdap.internal.capability;
 
 import io.cdap.cdap.proto.id.ApplicationId;
 
@@ -22,9 +22,9 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
- * Class for holding search results of a search for applications annotated with accelerators
+ * Class for holding search results of a search for applications annotated with capabilities
  */
-public class AcceleratorApplications {
+public class CapabilityApplications {
 
   private final Set<ApplicationId> applicationIds;
   private final String cursor;
@@ -32,8 +32,8 @@ public class AcceleratorApplications {
   private final int limit;
   private final int totalResults;
 
-  public AcceleratorApplications(Set<ApplicationId> applicationIds, @Nullable String cursor,
-                                 int offset, int limit, int totalResults) {
+  public CapabilityApplications(Set<ApplicationId> applicationIds, @Nullable String cursor,
+                                int offset, int limit, int totalResults) {
     this.applicationIds = applicationIds;
     this.cursor = cursor;
     this.offset = offset;

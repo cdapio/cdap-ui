@@ -14,7 +14,7 @@
  * the License.
  */
 
-package io.cdap.cdap.internal.accelerator;
+package io.cdap.cdap.internal.capability;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

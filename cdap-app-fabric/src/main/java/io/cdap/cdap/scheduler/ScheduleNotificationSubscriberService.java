@@ -28,13 +28,13 @@ import io.cdap.cdap.common.NotFoundException;
 import io.cdap.cdap.common.conf.CConfiguration;
 import io.cdap.cdap.common.conf.Constants;
 import io.cdap.cdap.common.utils.ImmutablePair;
-import io.cdap.cdap.internal.accelerator.AcceleratorManager;
 import io.cdap.cdap.internal.app.runtime.ProgramOptionConstants;
 import io.cdap.cdap.internal.app.runtime.schedule.ProgramScheduleRecord;
 import io.cdap.cdap.internal.app.runtime.schedule.queue.JobQueueTable;
 import io.cdap.cdap.internal.app.runtime.schedule.store.ProgramScheduleStoreDataset;
 import io.cdap.cdap.internal.app.runtime.schedule.store.Schedulers;
 import io.cdap.cdap.internal.app.services.AbstractNotificationSubscriberService;
+import io.cdap.cdap.internal.capability.CapabilityManager;
 import io.cdap.cdap.messaging.MessagingService;
 import io.cdap.cdap.proto.Notification;
 import io.cdap.cdap.proto.ProgramRunStatus;
@@ -70,20 +70,20 @@ public class ScheduleNotificationSubscriberService extends AbstractIdleService {
   private final MessagingService messagingService;
   private final MetricsCollectionService metricsCollectionService;
   private final List<Service> subscriberServices;
-  private final AcceleratorManager acceleratorManager;
+  private final CapabilityManager capabilityManager;
   private ScheduledExecutorService subscriberExecutor;
 
   @Inject
   ScheduleNotificationSubscriberService(CConfiguration cConf, MessagingService messagingService,
                                         MetricsCollectionService metricsCollectionService,
-                                        TransactionRunner transactionRunner, AcceleratorManager acceleratorManager) {
+                                        TransactionRunner transactionRunner, CapabilityManager capabilityManager) {
     this.cConf = cConf;
     this.messagingService = messagingService;
     this.metricsCollectionService = metricsCollectionService;
     this.subscriberServices = Arrays.asList(new SchedulerEventSubscriberService(transactionRunner),
                                             new DataEventSubscriberService(transactionRunner),
                                             new ProgramStatusEventSubscriberService(transactionRunner));
-    this.acceleratorManager = acceleratorManager;
+    this.capabilityManager = capabilityManager;
   }
 
   @Override
@@ -294,7 +294,7 @@ public class ScheduleNotificationSubscriberService extends AbstractIdleService {
 
   private boolean isApplicationDisabled(String namespace, String application) throws IOException {
     try {
-      return acceleratorManager.isApplicationDisabled(namespace, application);
+      return capabilityManager.isApplicationDisabled(namespace, application);
     } catch (Exception e) {
       throw new IOException("Unable to detect if application is disabled", e);
     }

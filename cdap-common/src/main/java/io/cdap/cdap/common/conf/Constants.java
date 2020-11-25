@@ -298,9 +298,6 @@ public final class Constants {
      */
     public static final String PROGRAM_STATUS_RECORD_EVENT_TOPIC = "program.status.record.event.topic";
 
-    //Holds a comma separated list of enabled accelerators
-    public static final String ENABLED_ACCELERATORS_LIST = "accelerators.enabled.list";
-
     /**
      * Annotation for binding remote execution twill service
      */
