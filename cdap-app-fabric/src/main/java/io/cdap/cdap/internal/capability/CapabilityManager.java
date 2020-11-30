@@ -97,12 +97,12 @@ public class CapabilityManager {
    * Returns boolean indicating whether application is disabled due to a disabled capability
    *
    * @param namespace
-   * @param capabilityName
+   * @param applicationName
    * @return
    * @throws Exception
    */
-  public boolean isApplicationDisabled(String namespace, String capabilityName) throws IOException {
-    String applicationQuery = String.format(APPLICATION_TAG, capabilityName);
+  public boolean isApplicationDisabled(String namespace, String applicationName) throws IOException {
+    String applicationQuery = String.format(APPLICATION_TAG, applicationName);
     SearchRequest searchRequest = SearchRequest.of(applicationQuery)
       .addNamespace(namespace)
       .addType(APPLICATION)
@@ -112,7 +112,7 @@ public class CapabilityManager {
       .getResults().stream()
       .filter(this::hasCapabilityTagValue)
       .map(this::getCapabilityTagValue)
-      .anyMatch(this::isCapabilityDisabledWrapped);
+      .anyMatch(this::isCapabilityDisabled);
   }
 
   @Nullable
@@ -135,22 +135,15 @@ public class CapabilityManager {
                              metadataEntity.getValue(MetadataEntity.VERSION));
   }
 
-  private boolean isCapabilityDisabledWrapped(@Nullable String capability) {
-    try {
-      return isCapabilityDisabled(capability);
-    } catch (IOException exception) {
-      throw new RuntimeException(exception);
-    }
-  }
-
-  private boolean isCapabilityDisabled(@Nullable String capability) throws IOException {
+  private boolean isCapabilityDisabled(@Nullable String capability) {
     if (capability == null || capability.isEmpty()) {
       return false;
     }
-    String capabilityStatus = capabilityStore.readCapabilityStatus(capability);
-    if (capabilityStatus == null) {
-      return true;
+    try {
+      String status = capabilityStore.readCapabilityStatus(capability);
+      return !CapabilityStatus.ENABLED.name().equalsIgnoreCase(status);
+    } catch (IOException exception) {
+      throw new RuntimeException(exception);
     }
-    return capabilityStatus.equalsIgnoreCase(CapabilityStatus.DISABLED.name());
   }
 }

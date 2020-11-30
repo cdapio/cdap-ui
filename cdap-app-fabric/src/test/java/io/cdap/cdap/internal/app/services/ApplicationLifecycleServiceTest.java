@@ -22,6 +22,7 @@ import io.cdap.cdap.AllProgramsApp;
 import io.cdap.cdap.AppWithProgramsUsingGuava;
 import io.cdap.cdap.AppWithWorkflow;
 import io.cdap.cdap.MissingMapReduceWorkflowApp;
+import io.cdap.cdap.WorkflowAppWithFork;
 import io.cdap.cdap.api.annotation.Requirements;
 import io.cdap.cdap.api.app.ApplicationSpecification;
 import io.cdap.cdap.api.metadata.MetadataScope;
@@ -39,6 +40,8 @@ import io.cdap.cdap.internal.app.deploy.ProgramTerminator;
 import io.cdap.cdap.internal.app.deploy.Specifications;
 import io.cdap.cdap.internal.app.runtime.artifact.ArtifactRepository;
 import io.cdap.cdap.internal.app.services.http.AppFabricTestBase;
+import io.cdap.cdap.internal.capability.CapabilityStatus;
+import io.cdap.cdap.internal.capability.CapabilityStore;
 import io.cdap.cdap.metadata.MetadataSubscriberService;
 import io.cdap.cdap.proto.ApplicationDetail;
 import io.cdap.cdap.proto.NamespaceMeta;
@@ -68,9 +71,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
@@ -84,6 +89,7 @@ public class ApplicationLifecycleServiceTest extends AppFabricTestBase {
   private static ArtifactRepository artifactRepository;
   private static MetadataStorage metadataStorage;
   private static MetadataSubscriberService metadataSubscriber;
+  private static CapabilityStore capabilityStore;
 
   @BeforeClass
   public static void setup() throws Exception {
@@ -92,6 +98,7 @@ public class ApplicationLifecycleServiceTest extends AppFabricTestBase {
     artifactRepository = getInjector().getInstance(ArtifactRepository.class);
     metadataStorage = getInjector().getInstance(MetadataStorage.class);
     metadataSubscriber = getInjector().getInstance(MetadataSubscriberService.class);
+    capabilityStore = getInjector().getInstance(CapabilityStore.class);
   }
 
   @AfterClass
@@ -337,6 +344,86 @@ public class ApplicationLifecycleServiceTest extends AppFabricTestBase {
         Assert.assertTrue(appSpec.getProgramsByType(record.getType().getApiProgramType()).contains(record.getName()));
       }
     }
+  }
+
+  @Test
+  public void testGetAppsWithCapability() throws Exception {
+    Class<AppWithWorkflow> appWithWorkflowClass = AppWithWorkflow.class;
+    Requirements declaredAnnotation = appWithWorkflowClass.getDeclaredAnnotation(Requirements.class);
+    Set<String> expected = Arrays.stream(declaredAnnotation.capabilities()).collect(Collectors.toSet());
+    Id.Artifact artifactId = Id.Artifact
+      .from(Id.Namespace.DEFAULT, appWithWorkflowClass.getSimpleName(), "1.0.0-SNAPSHOT");
+    Location appJar = AppJarHelper.createDeploymentJar(locationFactory, appWithWorkflowClass);
+    File appJarFile = new File(tmpFolder.newFolder(),
+                               String.format("%s-%s.jar", artifactId.getName(), artifactId.getVersion().getVersion()));
+    Files.copy(Locations.newInputSupplier(appJar), appJarFile);
+    appJar.delete();
+    //deploy app
+    applicationLifecycleService
+      .deployAppAndArtifact(NamespaceId.DEFAULT, appWithWorkflowClass.getSimpleName(), artifactId, appJarFile, null,
+                            null, programId -> {
+        }, true);
+    //Check for the capability metadata
+    ApplicationId appId = NamespaceId.DEFAULT.app(appWithWorkflowClass.getSimpleName());
+
+    //capability is disabled, list should not return this app
+    List<ApplicationDetail> apps = applicationLifecycleService
+      .getApps(NamespaceId.DEFAULT, new Predicate<ApplicationDetail>() {
+        @Override
+        public boolean test(ApplicationDetail applicationDetail) {
+          return applicationDetail.getName().equals(appWithWorkflowClass.getSimpleName());
+        }
+      });
+    Assert.assertTrue(apps.isEmpty());
+    //enable all capabilities associated with the app
+    expected.forEach(capability -> {
+      try {
+        capabilityStore.upsertCapabilityStatus(capability, CapabilityStatus.ENABLED);
+      } catch (IOException exception) {
+        throw new RuntimeException(exception);
+      }
+    });
+    //apps should show up since all capabilities are enabled
+    apps = applicationLifecycleService
+      .getApps(NamespaceId.DEFAULT, new Predicate<ApplicationDetail>() {
+        @Override
+        public boolean test(ApplicationDetail applicationDetail) {
+          return applicationDetail.getName().equals(appWithWorkflowClass.getSimpleName());
+        }
+      });
+    Assert.assertFalse(apps.isEmpty());
+    applicationLifecycleService.removeApplication(appId);
+  }
+
+  @Test
+  public void testGetAppsWithoutCapability() throws Exception {
+    Class<WorkflowAppWithFork> appNoCapabilityClass = WorkflowAppWithFork.class;
+    Requirements declaredAnnotation = appNoCapabilityClass.getDeclaredAnnotation(Requirements.class);
+    //verify this app has no capabilities
+    Assert.assertTrue(declaredAnnotation == null);
+    Id.Artifact artifactId = Id.Artifact
+      .from(Id.Namespace.DEFAULT, appNoCapabilityClass.getSimpleName(), "1.0.0-SNAPSHOT");
+    Location appJar = AppJarHelper.createDeploymentJar(locationFactory, appNoCapabilityClass);
+    File appJarFile = new File(tmpFolder.newFolder(),
+                               String.format("%s-%s.jar", artifactId.getName(), artifactId.getVersion().getVersion()));
+    Files.copy(Locations.newInputSupplier(appJar), appJarFile);
+    appJar.delete();
+    //deploy app
+    applicationLifecycleService
+      .deployAppAndArtifact(NamespaceId.DEFAULT, appNoCapabilityClass.getSimpleName(), artifactId, appJarFile, null,
+                            null, programId -> {
+        }, true);
+    ApplicationId appId = NamespaceId.DEFAULT.app(appNoCapabilityClass.getSimpleName());
+    //There is no capability, so app should show up
+    List<ApplicationDetail> apps = applicationLifecycleService
+      .getApps(NamespaceId.DEFAULT, new Predicate<ApplicationDetail>() {
+        @Override
+        public boolean test(ApplicationDetail applicationDetail) {
+          return applicationDetail.getName().equals(appNoCapabilityClass.getSimpleName());
+        }
+      });
+    Assert.assertFalse(apps.isEmpty());
+    applicationLifecycleService.removeApplication(appId);
   }
 
   private void waitForRuns(int expected, final ProgramId programId, final ProgramRunStatus status) throws Exception {

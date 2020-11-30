@@ -67,6 +67,7 @@ import io.cdap.cdap.internal.app.runtime.artifact.ArtifactDetail;
 import io.cdap.cdap.internal.app.runtime.artifact.ArtifactRepository;
 import io.cdap.cdap.internal.app.runtime.artifact.Artifacts;
 import io.cdap.cdap.internal.app.store.RunRecordDetail;
+import io.cdap.cdap.internal.capability.CapabilityManager;
 import io.cdap.cdap.internal.profile.AdminEventPublisher;
 import io.cdap.cdap.messaging.MessagingService;
 import io.cdap.cdap.messaging.context.MultiThreadMessagingContext;
@@ -148,6 +149,7 @@ public class ApplicationLifecycleService extends AbstractIdleService {
   private final boolean appUpdateSchedules;
   private final AdminEventPublisher adminEventPublisher;
   private final Impersonator impersonator;
+  private final CapabilityManager capabilityManager;
 
   @Inject
   ApplicationLifecycleService(CConfiguration cConf,
@@ -157,7 +159,8 @@ public class ApplicationLifecycleService extends AbstractIdleService {
                               ManagerFactory<AppDeploymentInfo, ApplicationWithPrograms> managerFactory,
                               MetadataServiceClient metadataServiceClient,
                               AuthorizationEnforcer authorizationEnforcer, AuthenticationContext authenticationContext,
-                              MessagingService messagingService, Impersonator impersonator) {
+                              MessagingService messagingService, Impersonator impersonator,
+                              CapabilityManager capabilityManager) {
     this.cConf = cConf;
     this.appUpdateSchedules = cConf.getBoolean(Constants.AppFabric.APP_UPDATE_SCHEDULES,
                                                Constants.AppFabric.DEFAULT_APP_UPDATE_SCHEDULES);
@@ -174,6 +177,7 @@ public class ApplicationLifecycleService extends AbstractIdleService {
     this.authenticationContext = authenticationContext;
     this.impersonator = impersonator;
     this.adminEventPublisher = new AdminEventPublisher(cConf, new MultiThreadMessagingContext(messagingService));
+    this.capabilityManager = capabilityManager;
   }
 
   @Override
@@ -219,16 +223,32 @@ public class ApplicationLifecycleService extends AbstractIdleService {
     Set<? extends EntityId> visible = authorizationEnforcer.isVisible(appSpecs.keySet(),
                                                                       authenticationContext.getPrincipal());
     appSpecs.keySet().removeIf(id -> !visible.contains(id));
+    Map<ApplicationId, ApplicationSpecification> enabledAppSpecs = removeDisabledApps(appSpecs);
+    return getAppDetails(predicate, enabledAppSpecs);
+  }
 
-    Map<ApplicationId, String> owners = ownerAdmin.getOwnerPrincipals(appSpecs.keySet());
+  private List<ApplicationDetail> getAppDetails(Predicate<ApplicationDetail> predicate,
+                                                Map<ApplicationId, ApplicationSpecification> specs) throws Exception {
+    Map<ApplicationId, String> owners = ownerAdmin.getOwnerPrincipals(specs.keySet());
     List<ApplicationDetail> result = new ArrayList<>();
-    for (Map.Entry<ApplicationId, ApplicationSpecification> entry : appSpecs.entrySet()) {
+    for (Map.Entry<ApplicationId, ApplicationSpecification> entry : specs.entrySet()) {
       ApplicationDetail applicationDetail = ApplicationDetail.fromSpec(entry.getValue(), owners.get(entry.getKey()));
       if (predicate.test(applicationDetail)) {
         result.add(filterApplicationDetail(entry.getKey(), applicationDetail));
       }
     }
     return result;
+  }
+
+  private Map<ApplicationId, ApplicationSpecification> removeDisabledApps(Map<ApplicationId,
+    ApplicationSpecification> appSpecs) {
+    return appSpecs.entrySet().stream().filter(appId -> {
+      try {
+        return !capabilityManager.isApplicationDisabled(appId.getKey().getNamespace(), appId.getKey().getApplication());
+      } catch (IOException exception) {
+        throw new RuntimeException(exception);
+      }
+    }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   /**

@@ -160,7 +160,7 @@ public class CapabilityManagerTest extends AppFabricTestBase {
 
     //set the capabilities for the application in the enabled list
     String[] capabilities = declaredAnnotation.capabilities();
-    for(String capability : capabilities){
+    for (String capability : capabilities) {
       capabilityStore.upsertCapabilityStatus(capability, CapabilityStatus.ENABLED);
     }
 
