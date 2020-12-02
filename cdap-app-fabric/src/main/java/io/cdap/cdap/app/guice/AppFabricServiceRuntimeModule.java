@@ -103,6 +103,7 @@ import io.cdap.cdap.internal.capability.MetadataSearchClient;
 import io.cdap.cdap.internal.pipeline.SynchronousPipelineFactory;
 import io.cdap.cdap.internal.profile.ProfileService;
 import io.cdap.cdap.internal.provision.ProvisionerModule;
+import io.cdap.cdap.internal.sysapp.CapabilityManagementService;
 import io.cdap.cdap.internal.sysapp.SystemAppManagementService;
 import io.cdap.cdap.metadata.LocalPreferencesFetcherInternal;
 import io.cdap.cdap.metadata.PreferencesFetcher;
@@ -303,6 +304,7 @@ public final class AppFabricServiceRuntimeModule extends RuntimeModule {
       bind(ProfileService.class).in(Scopes.SINGLETON);
       bind(ProgramLifecycleService.class).in(Scopes.SINGLETON);
       bind(SystemAppManagementService.class).in(Scopes.SINGLETON);
+      bind(CapabilityManagementService.class).in(Scopes.SINGLETON);
       bind(OwnerAdmin.class).to(DefaultOwnerAdmin.class);
       bind(CapabilityStore.class).in(Scopes.SINGLETON);
       bind(MetadataSearchClient.class).in(Scopes.SINGLETON);

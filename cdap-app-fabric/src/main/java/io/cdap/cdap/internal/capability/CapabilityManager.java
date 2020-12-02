@@ -146,4 +146,8 @@ public class CapabilityManager {
       throw new RuntimeException(exception);
     }
   }
+
+  public CapabilityStatus getCapabilityStatus(String capability) throws IOException {
+    return CapabilityStatus.valueOf(capabilityStore.readCapabilityStatus(capability));
+  }
 }
