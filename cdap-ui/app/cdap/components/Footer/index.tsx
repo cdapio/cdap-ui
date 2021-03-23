@@ -21,18 +21,19 @@ import { objectQuery } from 'services/helpers';
 import NamespaceStore, { getCurrentNamespace } from 'services/NamespaceStore';
 import { makeStyles } from '@material-ui/core/styles';
 import PageTitleStore, { getCurrentPageTitle } from 'services/PageTitleStore/PageTitleStore';
+import ThemeWrapper from 'components/ThemeWrapper';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: 'white',
-    color: '#cccccc',
+    color: theme.palette.grey[400],
     fontSize: '11px',
     fontWeight: 600,
     zIndex: 0,
     position: 'absolute',
     width: '100%',
     bottom: '0',
-    borderTop: 'solid 1px #cdcdcd',
+    borderTop: 'solid 1px ' + theme.palette.grey[300],
   },
   footerText: {
     height: '53px',
@@ -47,7 +48,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     top: '0',
     right: '10px',
-    color: '#cccccc',
+    color: theme.palette.grey[400],
     height: '53px',
     lineHeight: '53px',
     margin: '0',
@@ -56,7 +57,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     top: '0',
     left: '10px',
-    color: '#cccccc',
+    color: theme.palette.grey[400],
     height: '53px',
     lineHeight: '53px',
     margin: '0',
@@ -88,16 +89,23 @@ export default function Footer(props) {
     };
   }, []);
   return (
-    <footer className={classes.root}>
-      <p className={classes.selectedNamespace}>Namespace: {selectedNamespace}</p>
-      <p className={classes.footerText}>
-        <a href={footerUrl} target="_blank" rel="noopener noreferrer" className={classes.footerUrl}>
-          {footerText}
-        </a>
-      </p>
-      <If condition={instanceMetadataId}>
-        <p className={classes.instanceMetadataId}>Instance Id: {instanceMetadataId}</p>
-      </If>
-    </footer>
+    <ThemeWrapper>
+      <footer className={classes.root}>
+        <p className={classes.selectedNamespace}>Namespace: {selectedNamespace}</p>
+        <p className={classes.footerText}>
+          <a
+            href={footerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.footerUrl}
+          >
+            {footerText}
+          </a>
+        </p>
+        <If condition={instanceMetadataId}>
+          <p className={classes.instanceMetadataId}>Instance Id: {instanceMetadataId}</p>
+        </If>
+      </footer>
+    </ThemeWrapper>
   );
 }
