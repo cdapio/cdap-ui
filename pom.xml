@@ -183,6 +183,9 @@
                   <exclude>**/*.rst</exclude>
                   <exclude>**/cypress/fixtures/**</exclude>
                   <exclude>**/gitpod/**</exclude>
+                  <exclude>**/*.md</exclude>
+                  <exclude>**/*.yml</exclude>
+                  <exclude>**/*.Dockerfile</exclude>
                 </excludes>
               </configuration>
             </execution>

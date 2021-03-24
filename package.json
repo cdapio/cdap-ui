@@ -12,6 +12,7 @@
     "reload-dev-w": "NODE_ENV=reload node --max-old-space-size=8192 ./node_modules/.bin/webpack-dev-server --mode development --progress --config=./webpack.config.cdap.dev.js",
     "hmr-dev-w": "NODE_ENV=hmr node --max-old-space-size=8192 ./node_modules/.bin/webpack-dev-server --mode development --progress --config=./webpack.config.cdap.dev.js",
     "cdap-full-build": "run-p cdap-prod-build distribute",
+    "cdap-full-build-more-memory": "NODE_OPTIONS=\"--max_old_space_size=8192\" run-p cdap-prod-build distribute",
     "cdap-non-optimized-full-build": "NODE_ENV=non-optimized-production webpack --config=webpack.config.js",
     "clean-node-modules": "modclean -P -r --patterns=\"default:safe\" --additional-patterns=\"*.xls?x,*.ppt?x,*.rtf,*.png,*.jpg,*.jpeg,*.txt\" --ignore=\"validate-npm-license,readme*\"",
     "distribute": "node ./node_modules/gulp/bin/gulp.js distribute",

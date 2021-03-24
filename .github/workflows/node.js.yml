@@ -1,0 +1,45 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: CDAP UI Build and Unit Test
+
+on:
+  push:
+    branches: [ develop, release/** ]
+  pull_request:
+    branches: [ develop, release/** ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.16]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - uses: actions/cache@v2
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Install Yarn dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Install Bower dependencies
+      run: ./node_modules/bower/bin/bower install
+
+    - name: Build UI
+      run: yarn run cdap-full-build-more-memory
+
+    - name: Run Unit Tests
+      run: yarn run jest
