@@ -1,158 +1,320 @@
-.. meta::
-    :author: Cask Data, Inc.
-    :copyright: Copyright © 2015-2019 Cask Data, Inc.
+==============
+CDAP UI Pack 5
+==============
 
-.. image:: https://cdap-users.herokuapp.com/badge.svg?t=1
-    :target: https://cdap-users.herokuapp.com
+The CDAP UI Pack is a UI-only release that can be applied on top of an existing CDAP installation.
+The CDAP UI Pack 5 applies on CDAP 4.2.0.
 
-.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
-    :target: https://opensource.org/licenses/Apache-2.0
+Details
+=======
+- Release Date: 07/07/2017
+- Base CDAP Version: 4.2.0
+- Release branch: release/4.2
 
-.. image:: https://travis-ci.org/cdapio/cdap.svg
-    :target: https://travis-ci.org/cdapio/cdap
-
-
-Introduction
+Installation
 ============
 
-CDAP is an integrated, open source application
-development platform for the Hadoop ecosystem that provides developers with data and
-application abstractions to simplify and accelerate application development, address a
-broader range of real-time and batch use cases, and deploy applications into production
-while satisfying enterprise requirements.
+*Note:* The CDAP UI (and the steps below) requires node version 4.5.0 and above.
 
-CDAP is a layer of software running on top of Apache Hadoop® platforms such as the
-Cloudera Enterprise Data Hub or the Hortonworks® Data Platform. CDAP provides these
-essential capabilities:
+UNIX/Linux Flavors
+------------------
+**CDAP Sandbox**
+::
 
-- Abstraction of data in the Hadoop environment through logical representations of underlying data;
-- Portability of applications through decoupling underlying infrastructures;
-- Services and tools that enable faster application creation in development;
-- Integration of the components of the Hadoop ecosystem into a single platform;
-- Metadata management that automatically captures metadata and lineage;
-- CDAP pipelines with an integrated UI for click-and-drag development; and
-- Higher degrees of operational control in production through enterprise best-practices.
-
-CDAP exposes developer APIs (Application Programming Interfaces) for creating applications
-and accessing core CDAP services. CDAP defines and implements a diverse collection of
-services that land applications and data on existing Hadoop infrastructure such as HBase,
-HDFS, YARN, MapReduce, Hive, and Spark.
-
-You can run applications ranging from simple MapReduce Jobs and complete ETL (extract,
-transform, and load) pipelines all the way up to complex, enterprise-scale data-intensive
-applications.
-
-Developers can build and test their applications end-to-end in a full-stack, single-node
-installation. CDAP can be run either as a Sandbox, deployed within the Enterprise 
-on-premises or hosted in the Cloud.
-
-For more information, see our collection of `Developers' Manual and other documentation
-<http://docs.cask.co/cdap/current/en/developers-manual/index.html>`__.
+  $ cd <CDAP_HOME>
+  $ ./bin/cdap sandbox stop
+  $ ./bin/cdap apply-pack /path/to/download/cdap-ui-pack-4.2.0_p5.zip
+  $ ./bin/cdap sandbox start
 
 
-Getting Started
-===============
+**Distributed CDAP**
 
-Prerequisites
--------------
+*Note:* In the instructions below, ``<CDAP_HOME>`` is either:
 
-To install and use CDAP, there are a few simple prerequisites:
+- ``/opt/cdap`` on RPM (manual or Apache Ambari) installations; or
+- the *CDAP* sub-directory of the *Parcel Directory* on Cloudera Manager installations (e.g. ``/opt/cloudera/parcels/CDAP``)
 
-1. JDK 8+ (required to run CDAP; note that $JAVA_HOME should be set)
-#. `Node.js <https://nodejs.org/>`__ (required to run the CDAP UI; we recommend any version greater than v4.5.0)
-#. Apache Maven 3.0+ (required to build the example applications; 3.1+ to build CDAP itself)
+::
 
-Build
------
-
-You can get started with CDAP by building directly from the latest source code::
-
-  git clone https://github.com/caskdata/cdap.git
-  cd cdap
-  mvn clean package
-
-After the build completes, you will have built all modules for CDAP.
-
-For more build options, please refer to the `build instructions <BUILD.rst>`__.
+  $ cd <CDAP_HOME>
+  $ /etc/init.d/cdap-ui stop
+  $ cdap apply-pack /path/to/download/cdap-ui-pack-4.2.0_p5.zip
+  $ /etc/init.d/cdap-ui start
 
 
-Introductory Tutorial
-=====================
 
-Visit our web site for an `introductory tutorial for developers
-<http://docs.cask.co/cdap/current/en/developers-manual/getting-started/index.html>`__ that
-will guide you through installing CDAP and running an example application.
+Windows
+-------
 
+::
 
-Where to Go Next
-================
-
-Now that you've had a look at the CDAP Sandbox, take a look at:
-
-- Developers' Manual, located in the source distribution in ``cdap-docs/developers-manual/source``
-  or `online <http://docs.cask.co/cdap/current/en/developers-manual/index.html>`__.
-- `CDAP Releases and timeline <http://docs.cask.co/cdap/index.html>`__
+  > cd <CDAP_HOME>
+  > bin\cdap sandbox stop
+  > bin\cdap apply-pack \path\to\download\cdap-ui-pack-4.2.0_p5.zip
+  > bin\cdap sandbox start
 
 
-How to Contribute
-=================
-
-Interested in helping to improve CDAP? We welcome all contributions, whether in filing
-detailed bug reports, submitting pull requests for code changes and improvements, or by
-asking questions and assisting others on the mailing list.
-
-For quick guide to getting your system setup to contribute to CDAP, take a look at our
-`Contributor Quickstart Guide <DEVELOPERS.rst>`__.
-
-Filing Issues: Bug Reports & Feature Requests
----------------------------------------------
-Bugs and suggestions should be made by `filing an issue <https://issues.cask.co/browse/cdap>`__.
-
-Existing issues can be browsed at `the CDAP project issues
-<https://issues.cask.co/browse/CDAP-8373?jql=project%20%3D%20CDAP>`__.
-
-Pull Requests
--------------
-
-We have a simple pull-based development model with a consensus-building phase, similar to
-Apache's voting process. If you’d like to help make CDAP better by adding new features,
-enhancing existing features, or fixing bugs, here's how to do it:
-
-1. If you are planning a large change or contribution, discuss your plans on the
-   `cdap-dev@googlegroups.com <https://groups.google.com/d/forum/cdap-dev>`__ mailing list first.
-   This will help us understand your needs and best guide your solution in a way that fits the project.
-2. Fork CDAP into your own GitHub repository.
-3. Create a topic branch with an appropriate name.
-4. Work on the code to your heart's content.
-5. Once you’re satisfied, create a pull request from your GitHub repo (it’s helpful if you fill in
-   all of the description fields).
-6. After we review and accept your request, we’ll commit your code to the caskdata/cdap repository.
-
-Thanks for helping to improve CDAP!
-
-Mailing Lists
--------------
-
-CDAP User Group and Development Discussions:
-
-- `cdap-user@googlegroups.com <https://groups.google.com/d/forum/cdap-user>`__
-
-The *cdap-user* mailing list is primarily for users using the product to develop
-applications. You can expect questions from users, release announcements, and any other
-discussions that we think will be helpful to the users.
-
-- `cdap-dev@googlegroups.com <https://groups.google.com/d/forum/cdap-dev>`__
-
-The *cdap-dev* mailing list is essentially for developers actively working
-on the product, and should be used for all our design, architecture and technical
-discussions moving forward. This mailing list will also receive all JIRA and GitHub
-notifications.
+Upgrading Data Preparation and Kafka Plugins
+============================================
+This UI Pack also requires newer versions of Data Preparation and Kafka Plugins to support the newer UI features. To
+upgrade these, please follow the Data Preparation Solution v2.1.0, and also install Kafka Plugins v1.7.3 from the Cask
+Market.
 
 
+Release Notes
+=============
+
+New Features
+------------
+
+* `CDAP-11977 <https://issues.cask.co/browse/CDAP-11977>`__ - Added point and click interaction for replacing patterns in column names
+* `CDAP-11940 <https://issues.cask.co/browse/CDAP-11940>`__ - Added support for microservices in CDAP
+* `CDAP-11869 <https://issues.cask.co/browse/CDAP-11869>`__ - Added point and click interaction for parsing as Avro File and Excel File
+* `CDAP-11618 <https://issues.cask.co/browse/CDAP-11618>`__ - Added the ability to connect to your existing Apache Kafka through Data Preparation
+* `CDAP-11621 <https://issues.cask.co/browse/CDAP-11621>`__ - Added the ability to browse your existing Kafka topics in Data Preparation
+* `CDAP-9507 <https://issues.cask.co/browse/CDAP-9507>`__ - Added point-and-click interaction for Encoding, Decoding and Specifying Character Encoding
+* `CDAP-9530 <https://issues.cask.co/browse/CDAP-9530>`__ - Added point-and-click interaction for Masking
+* `CDAP-9323 <https://issues.cask.co/browse/CDAP-9323>`__ - Added a way to add a driver from Cask Market while adding a Database connection in Data Preparation
+* `CDAP-9107 <https://issues.cask.co/browse/CDAP-9107>`__ - Added support for undoing/redoing actions while building pipelines in the Pipeline Studio
+
+Improvements
+------------
+* `CDAP-11636 <https://issues.cask.co/browse/CDAP-11636>`__ - Added row numbers to the data prep table
+* `CDAP-9090 <https://issues.cask.co/browse/CDAP-9090>`__ - Improved the handling of schemas of existing datasets as sinks while building pipelines
+
+Bug Fixes
+---------
+* `CDAP-11964 <https://issues.cask.co/browse/CDAP-11964>`__ - On a deployed pipeline, if arguments are not specified, fixed the arguments dropdown to pop down after clicking run
+* `CDAP-11992 <https://issues.cask.co/browse/CDAP-11992>`__ - Handled errors correctly in the Data Prep UI
+* `CDAP-11827 <https://issues.cask.co/browse/CDAP-11886>`__ - Added scrolling to the data prep dropdown menu
+* `CDAP-11627 <https://issues.cask.co/browse/CDAP-11627>`__ - Fixed the extract fields dropdown in data prep to scroll when it doesn't fit the screen size
+* `CDAP-11438 <https://issues.cask.co/browse/CDAP-11438>`__ - Selected the entire column name when the user wants to rename it
+* `CDAP-8419 <https://issues.cask.co/browse/CDAP-8419>`__ - Fixed the height calculation for the add new entity modal
+
+Known Issues
+------------
+* `CDAP-11943 <https://issues.cask.co/browse/CDAP-11943>`__ - Due to a known issue, even after upgrading the Data Preparation version that ships with CDAP 4.2,
+after restarting CDAP, CDAP may use the older version of Data Preparation. As a workaround, click the Upgrade button that shows up on the main page of Data Preparation
+when this happens. Alternatively, you can also replace the existing data preparation (wrangler) artifacts from the system artifacts directory with newer artifacts and
+restart CDAP.
+* `CDAP-12028 <https://issues.cask.co/browse/CDAP-12028>`__ - Currently, the Kafka connection in Data Preparation only supports text data. Support for binary data will be added in a later release
+* `CDAP-12079 <https://issues.cask.co/browse/CDAP-12079>`__ - Testing a Kafka connection does not return if a wrong port is specified.
+
+
+==============
+CDAP UI Pack 3
+==============
+
+The CDAP UI Pack is a UI-only release that can be applied on top of an existing CDAP installation.
+The CDAP UI Pack 3 applies on CDAP 4.1.1.
+
+Details
+=======
+- Release Date: 05/08/2017
+- Base CDAP Version: 4.1.1
+- Release branch: release/4.1
+
+Installation
+============
+
+UNIX/Linux Flavors
+------------------
+**CDAP Sandbox**
+::
+
+  $ cd <CDAP_HOME>
+  $ ./bin/cdap sandbox stop
+  $ ./bin/cdap apply-pack /path/to/download/cdap-ui-pack-4.1.1_p3.zip
+  $ ./bin/cdap sandbox start
+
+
+**Distributed CDAP**
+
+*Note:* In the instructions below, ``<CDAP_HOME>`` is either:
+
+- ``/opt/cdap`` on RPM (manual or Apache Ambari) installations; or
+- the *CDAP* sub-directory of the *Parcel Directory* on Cloudera Manager installations (e.g. ``/opt/cloudera/parcels/CDAP``)
+
+::
+
+  $ cd <CDAP_HOME>
+  $ /etc/init.d/cdap-ui stop
+  $ cdap apply-pack /path/to/download/cdap-ui-pack-4.1.1_p3.zip
+  $ /etc/init.d/cdap-ui start
+
+
+
+Windows
+-------
+
+::
+
+  > cd <CDAP_HOME>
+  > bin\cdap sandbox stop
+  > bin\cdap apply-pack \path\to\download\cdap-ui-pack-4.1.1_p3.zip
+  > bin\cdap sandbox start
+
+
+Release Notes
+=============
+
+New Features
+------------
+* `CDAP-9523 <https://issues.cask.co/browse/CDAP-9523>`__ - Added point-and-click interaction for extracting text from a column using Regex Groups
+* `CDAP-9515 <https://issues.cask.co/browse/CDAP-9515>`__ - Added point-and-click interaction for exploding data in a row into multiple rows
+* `CDAP-9514 <https://issues.cask.co/browse/CDAP-9514>`__ - Added point-and-click interaction for swapping and merging columns
+* `CDAP-9510 <https://issues.cask.co/browse/CDAP-9510>`__ - Added point-and-click interaction for changing column name
+* `CDAP-9507 <https://issues.cask.co/browse/CDAP-9507>`__ - Added point-and-click interaction for formatting data
+
+Improvements
+------------
+* `CDAP-9541 <https://issues.cask.co/browse/CDAP-9541>`__ - Improved styling of column directive dropdown icon
+* `CDAP-9441 <https://issues.cask.co/browse/CDAP-9441>`__ - Rephrased message when a user is not authorized to access any namespace
+* `CDAP-9415 <https://issues.cask.co/browse/CDAP-9415>`__ - Switched from font icons to SVGs on the home page for better loading of images
+* `CDAP-9394 <https://issues.cask.co/browse/CDAP-9394>`__ - Added an exact/whole world match option for find and replace
+* `CDAP-9255 <https://issues.cask.co/browse/CDAP-9255>`__ - When there are no nodes on the studio, disabled certain actions
+
+Bug Fixes
+---------
+* `CDAP-10488 <https://issues.cask.co/browse/CDAP-10488>`__ - Made it easier to delete an action plugin easily from Studio
+* `CDAP-10312 <https://issues.cask.co/browse/CDAP-10312>`__ - Fixed an issue where users could open multiple popovers in dataprep modal in Pipeline studio
+* `CDAP-9596 <https://issues.cask.co/browse/CDAP-9596>`__ - Fixed the parsing of search results in the metadata view
+* `CDAP-9445 <https://issues.cask.co/browse/CDAP-9445>`__ - Renaming a column to an existing column should show a warning to users
+* `CDAP-9175 <https://issues.cask.co/browse/CDAP-9175>`__ - Fixed the realtime stream source to have a view details button
+* `CDAP-9051 <https://issues.cask.co/browse/CDAP-9051>`__ - Fixed the help for parse-as-json
+* `CDAP-8963 <https://issues.cask.co/browse/CDAP-8963>`__ - Handled boolean values correctly while previewing explore results
+
+
+
+
+
+==============
+CDAP UI Pack 2
+==============
+CDAP UI Pack 2 was not released separately. The features in CDAP UI Pack 2 were released as part of CDAP 4.1.1. Please refer to the
+release notes of CDAP 4.1.1 for details about these features.
+
+
+
+==============
+CDAP UI Pack 1
+==============
+
+The CDAP UI Pack is a UI-only release that can be applied on top of an existing CDAP installation.
+
+Details
+=======
+- Release Date: 03/23/2017
+- Base CDAP Version: 4.1
+- Release branch: release/4.1
+
+Installation
+============
+Currently, the following manual steps need to be performed to install the CDAP UI Pack.
+These steps will be automated in a later CDAP release.
+
+UNIX/Linux Flavors
+------------------
+**CDAP Sandbox**
+::
+
+  $ cd <CDAP_HOME>
+  $ ./bin/cdap sandbox stop
+  $ zip -m -r ui-backup.zip ui
+  $ unzip /path/to/download/cdap-ui-pack.zip
+  $ ./bin/cdap sandbox start
+
+
+**Distributed CDAP**
+
+*Note:* In the instructions below, ``<CDAP_HOME>`` is either:
+
+- ``/opt/cdap`` on RPM (manual or Apache Ambari) installations; or
+- the *CDAP* sub-directory of the *Parcel Directory* on Cloudera Manager installations (e.g. ``/opt/cloudera/parcels/CDAP``)
+
+::
+
+  $ cd <CDAP_HOME>
+  $ /etc/init.d/cdap-ui stop
+  $ zip -m -r ui-backup.zip ui
+  $ unzip /path/to/download/cdap-ui-pack-4.1.0_p1.zip
+  $ /etc/init.d/cdap-ui start
+
+
+
+Windows
+-------
+1. Using the command prompt, stop the CDAP Sandbox::
+
+    > cd <CDAP_HOME>
+    > bin\cdap sandbox stop
+
+2. Open the ``<CDAP_HOME>`` directory in Explorer
+3. Compress the ``ui`` to save a backup, by right-clicking on the ``ui`` directory and
+   choosing *Send To* -> Compressed (zipped) folder*
+4. Delete the ``ui`` directory after the backup is completed
+5. Extract the UI pack (cdap-ui-pack-4.1.0_p1.zip) in the ``<CDAP_HOME>`` directory, by right-clicking on the file,
+   choosing *Extract All*, and specifying the path to the ``<CDAP_HOME>`` directory
+6. A new ``ui`` directory should be created
+7. Using the command prompt, start the CDAP Sandbox::
+
+    > cd <CDAP_HOME>
+    > bin\cdap sandbox start
+
+
+Steps to Update Data Preparation Capability
+===========================================
+1. After installing the CDAP UI Pack and restarting CDAP, from within the CDAP UI go to the Cask Market
+2. From the *Solutions* category, follow the steps for the *Data Preparation* solution
+3. Go to *Data Preparation* by clicking on the CDAP menu and then choosing *Data Preparation*
+4. If a newer version of the *Data Preparation* libraries has been installed, the UI will show an *Update* button
+5. Click the *Update* button to update to the newer version of *Data Preparation*
+
+
+Release Notes
+=============
+
+New Features
+------------
+* `HYDRATOR-163 <https://issues.cask.co/browse/HYDRATOR-163>`__ - Add Placeholders to input boxes in node configuration
+* `WRANGLER-77 <https://issues.cask.co/browse/WRANGLER-77>`__ - Added a dropdown on each column to provide click-through experience for directives in Data Preparation
+* `WRANGLER-49 <https://issues.cask.co/browse/WRANGLER-49>`__ - Added click-through experience for split column directive in Data Preparation
+* `WRANGLER-54 <https://issues.cask.co/browse/WRANGLER-54>`__ - Added click-through experience for filling null or empty cells in Data Preparation
+
+Improvements
+------------
+* `CDAP-8501 <https://issues.cask.co/browse/CDAP-8501>`__ - Disabled preview button on clusters since preview is not supported in distributed env
+* `CDAP-8861 <https://issues.cask.co/browse/CDAP-8861>`__ - Removed CDAP Version Range in market entities display
+* `CDAP-8430 <https://issues.cask.co/browse/CDAP-8430>`__ - Improved "No Entities Found" message in the Overview to show Call(s) to Action
+* `CDAP-8403 <https://issues.cask.co/browse/CDAP-8403>`__ - Added labels to CDAP Studio actions
+* `CDAP-8900 <https://issues.cask.co/browse/CDAP-8900>`__ - Added the ability to update to a newer version of data preparation libraries if available
+* `CDAP-7352 <https://issues.cask.co/browse/CDAP-7352>`__ - Made logviewer header row sticky
+* `CDAP-4798 <https://issues.cask.co/browse/CDAP-4798>`__ - Improved user experience in explore page
+* `CDAP-8964 <https://issues.cask.co/browse/CDAP-8964>`__ - Made Output Schema for sinks macro enabled
+* `HYDRATOR-1364 <https://issues.cask.co/browse/HYDRATOR-1364>`__ - Removed most of the "__ui__" field
+* `CDAP-8494 <https://issues.cask.co/browse/CDAP-8494>`__ - Fixed browser back button after switching to classic UI
+* `CDAP-8828 <https://issues.cask.co/browse/CDAP-8828>`__ - Removed dialog to select pipeline type upon pipeline creation
+* `CDAP-8396 <https://issues.cask.co/browse/CDAP-8396>`__ - Added call to action for namespace creation
+
+Bug Fixes
+---------
+* `CDAP-8554 <https://issues.cask.co/browse/CDAP-8554>`__ - Fixed styling issues while showing Call(s) to actions in Application create wizard
+* `CDAP-8412 <https://issues.cask.co/browse/CDAP-8412>`__ - Fixed overflow in namespace creation confirmation modal
+* `CDAP-8433 <https://issues.cask.co/browse/CDAP-8433>`__ - Added units for memory for YARN stats on management page
+* `CDAP-8950 <https://issues.cask.co/browse/CDAP-8950>`__ - Fixed link from stream overview to stream deatils
+* `CDAP-8933 <https://issues.cask.co/browse/CDAP-8933>`__ - Added namespace name to the No entities found message
+* `CDAP-8461 <https://issues.cask.co/browse/CDAP-8461>`__ - Clicking back from the Detail page view now opens the overview page with the overview pane opened
+* `CDAP-8638 <https://issues.cask.co/browse/CDAP-8638>`__ - Opened each log in a new tab
+* `CDAP-8668 <https://issues.cask.co/browse/CDAP-8668>`__ - Fixed UI to show ERROR, WARN and INFO logs by default
+* `CDAP-8965 <https://issues.cask.co/browse/CDAP-8965>`__ - Removed Wrangle button from Wrangler Transform. Please use the Data Preparation UI for wrangling.
+* `HYDRATOR-1419 <https://issues.cask.co/browse/HYDRATOR-1419>`__ - Fixed browser back button behavior after switching namespace
+
+
+======================
 License and Trademarks
 ======================
 
-Copyright © 2014-2017 Cask Data, Inc.
+Copyright © 2017 Cask Data, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
 in compliance with the License. You may obtain a copy of the License at

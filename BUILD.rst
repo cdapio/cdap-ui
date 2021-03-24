@@ -1,134 +1,121 @@
-=====================================
-Cask Data Application Platform - CDAP
-=====================================
+=======
+CDAP UI
+=======
+
+CDAP is built part using React and part Angular. We are on the process migrating the entire app to react.
+Until then the UI webserver (nodejs proxy) will serve three different applications to browser, two Angular and one React app.
+
+Building the UI
+===============
 
 Prerequisites
-=============
+-------------
+- NodeJS Version: 10.16.2
 
-- Java 8+ SDK
-- Maven 3.1+
-- Git
+  CDAP UI requires  NodeJS version 10.16.2.
+  You could either download from the nodejs.org website or use a version manager.
 
-CDAP Sandbox and Distributed CDAP
-=================================
+  - `v10.16.2 Download <https://nodejs.org/download/release/v10.16.2/>`__
 
-**Building CDAP with Maven**
+  - `nvm <https://github.com/creationix/nvm#install-script>`__ or
 
-- Clean all modules::
+  - `n <https://github.com/tj/n>`__ from github.
 
-    mvn clean
+  The node version managers help switching between node version quite seamlessly.
 
-- Run all tests, fail at the end::
+- Build tools: ``yarn``, ``gulp``, ``webpack``, and ``bower``
 
-    MAVEN_OPTS="-Xmx2048m" mvn test -fae
+  For CDAP UI development we use ``yarn`` as node build tool.
+  For installing yarn please follow `yarn installation docs <https://yarnpkg.com/lang/en/docs/install/>`__
 
-- Run tests skipping repeated compat module tests::
-    MAVEN_OPTS="-Xmx2048m" mvn test -Pskip-hbase-compat-tests -fae
+  CDAP UI extensively uses ``bower``, ``gulp``, and ``webpack`` during its build process.
+  Even though it's not necessary, it will be useful if they are installed globally::
 
-- Build all modules::
+    $ yarn global add gulp bower webpack -g
 
-    mvn clean package
+Install Dependencies
+--------------------
+::
 
-- Run checkstyle, skipping tests::
+  $ yarn
+  $ bower install
 
-    mvn clean package -DskipTests
 
-- Build a particular module::
+Building CDAP in React
+======================
+::
 
-    mvn clean package -pl [module] -am
+  $ yarn cdap-dev-build ## build version
+  $ yarn cdap-dev-build-w ## watch version
 
-- Run selected test::
+Building CDAP in React to be shared in Angular code
+===================================================
+::
 
-    MAVEN_OPTS="-Xmx2048m" mvn -Dtest=TestClass,TestMore*Class,TestClassMethod#methodName \
-    -DfailIfNoTests=false test
+  $ yarn build-dev-common ## build version
+  $ yarn build-dev-common-w ## watch version
 
-- Run App-Template tests::
+Building Hydrator and Tracker in Angular
+========================================
+::
 
-    MAVEN_OPTS="-Xmx2048m" mvn test -fae -am -amd -P templates -pl cdap-app-templates/cdap-etl
+  $ yarn build ## build version
+  $ yarn build-w ## watch version
 
-  See `Surefire doc <http://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html>`__ for details
+Building entire UI
+==================
+::
 
-- Build CDAP Sandbox distribution ZIP::
+  $ yarn cdap-full-build ## builds both angular and react code.
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean package \
-    -pl cdap-standalone,cdap-app-templates/cdap-etl,cdap-app-templates/cdap-program-report \
-    -am -amd -DskipTests -P templates,dist,release,unit-tests
 
-- Build CDAP Sandbox distribution ZIP with additional system artifacts::
+Building DLLs for updating pre-built libraries used by CDAP
+===========================================================
+::
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean package \
-    -pl cdap-standalone,cdap-app-templates/cdap-etl,cdap-app-templates/cdap-program-report \
-    -am -amd -DskipTests -P templates,dist,release,unit-tests \
-    -Dadditional.artifacts.dir=</path/to/additional/artifacts>
+  $ yarn build-dlls
 
-  This will copy any .jar and .json files in any 'target' directories under the specified path to the artifacts directory.
+This will build the pre-built library dlls that we use in CDAP
 
-- Build the limited set of Javadocs used in distribution ZIP::
 
-    mvn clean package javadoc:javadoc -pl cdap-api -am -DskipTests -P release
+Building a Running Backend
+==========================
+UI work generally requires having a running CDAP Sandbox instance. To build an instance::
 
-- Build the limited set of Javadocs, including the ETL Application Templates, included in the CDAP documentation::
+    $ git clone git@github.com:caskdata/cdap.git
+    $ cd cdap
+    $ mvn package -pl cdap-standalone -am -DskipTests -P dist,release
+    $ cd cdap-standalone/target
+    $ unzip cdap-sandbox-{version}.zip
+    $ cd <cdap-sandbox-folder>
+    $ bin/cdap sandbox start
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean install -P templates,release -DskipTests \
-    -Dgpg.skip=true && mvn clean site -DskipTests -P templates -DisOffline=false
+Once you have started the CDAP Sandbox, it starts the UI node server as part of its init script.
 
-- Build the complete set of Javadocs, for all modules::
+To work on UI Code
+------------------
+If you want to develop and test the UI against the CDAP Sandbox that was just built as above,
+you need to first kill the node server started by the CDAP Sandbox and follow this process:
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean install -P templates,release -DskipTests \
-    -Dgpg.skip=true && mvn clean javadoc:aggregate -DskipTests -P templates -DisOffline=false
+Start these processes, each in their own terminal tab or browser window:
 
-- Build distributions (rpm, deb, tgz)::
+- ``$ gulp watch`` (autobuild + livereload of angular app)
+- ``$ npm run cdap-dev-build-w`` (autobuild + livereload of react app)
+- ``$ npm start`` (http-server)
+- ``$ open http://localhost:11011``
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean package -DskipTests \
-    -P templates,dist,release,rpm-prepare,rpm,deb-prepare,deb,tgz,unit-tests
+If you are working on common components shared between all the apps (for instance, the Header)
+then you need to build an additional ``common`` library that is used across all:
 
-- Build Cloudera Manager parcel::
+- ``$ webpack --config webpack.config.common.js -d ## build version``
+- ``$ webpack --config webpack.config.common.js --watch -d ## watch version``
 
-    MAVEN_OPTS="-Xmx2048m" mvn clean package -DskipTests \
-    -P templates,dist,tgz && ./cdap-distributions/bin/build_parcel.sh
 
-- Show dependency tree::
-
-    mvn package dependency:tree -DskipTests
-
-- Show dependency tree for a particular module::
-
-    mvn package dependency:tree -DskipTests -pl [module] -am
-
-- Show test output to stdout::
-
-    mvn -Dsurefire.redirectTestOutputToFile=false ...
-
-- Generates findbugs report::
-
-    mvn process-test-classes -P findbugs
-
-- Offline mode::
-
-    mvn -o ....
-
-- Change version::
-
-    mvn versions:set -DnewVersion=[new_version] -DgenerateBackupPoms=false -P templates
-
-- Running from IDE (Intellij and Eclipse)::
-
-    mvn clean package -pl cdap-ui -am -DskipTests -P dist
-
-  (Whenever there is a change in the UI packages.)
-
-  Then, run CDAP Sandbox from IDE.
-
-- If your IDE build has Spark errors, try generating the sources for the Spark1 and Spark2 modules::
-
-    mvn clean generate-test-sources -P templates,spark1-dev,spark2-dev
-
-  After this, the IDE build should pass.
-
+======================
 License and Trademarks
 ======================
 
-Copyright © 2014-2018 Cask Data, Inc.
+Copyright © 2019 Cask Data, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
 in compliance with the License. You may obtain a copy of the License at
@@ -141,3 +128,6 @@ either express or implied. See the License for the specific language governing p
 and limitations under the License.
 
 Cask is a trademark of Cask Data, Inc. All rights reserved.
+
+Apache, Apache HBase, and HBase are trademarks of The Apache Software Foundation. Used with
+permission. No endorsement by The Apache Software Foundation is implied by the use of these marks.
