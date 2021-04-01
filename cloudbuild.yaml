@@ -1,0 +1,50 @@
+# Copyright © 2021 Cask Data, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License. You may obtain a copy of
+# the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under
+# the License.
+
+steps:
+- name: node
+  entrypoint: 'yarn'
+  args: ['install', '--ignore-optional', '--frozen-lockfile']
+- name: node
+  entrypoint: 'yarn'
+  args: ['run', 'bower-root']
+- name: node
+  entrypoint: 'yarn'
+  args: ['run', 'cdap-full-build-more-memory']
+- name: node
+  entrypoint: 'yarn'
+  dir: 'sandboxjs'
+  args: ['install', '--frozen-lockfile']
+- name: node
+  entrypoint: 'yarn'
+  dir: 'sandboxjs'
+  args: ['run', 'setup-cloudbuild']
+- name: node
+  entrypoint: 'bash'
+  args: ['-c', 'echo $$KEY_FILE > ./key_file.json']
+  secretEnv: ['KEY_FILE']
+- name: 'gcr.io/cdap-gcp-project/cypress-java'
+  entrypoint: 'bash'
+  args: ['-c', './cloudbuild/cloudbuildrun.sh $$CYPRESS_KEY']
+  secretEnv: ['CYPRESS_KEY']
+availableSecrets:
+  secretManager:
+  - versionName: projects/cdap-gcp-project/secrets/cdap-e2e-tester-key-file/versions/latest
+    env: 'KEY_FILE'
+  - versionName: projects/cdap-gcp-project/secrets/cdap-e2e-cypress-key/versions/latest
+    env: 'CYPRESS_KEY'
+options:
+  machineType: E2_HIGHCPU_8
+  
+timeout: 10800s
