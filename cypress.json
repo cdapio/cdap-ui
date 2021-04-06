@@ -14,5 +14,6 @@
   "viewportWidth": 1280,
   "viewportHeight": 780,
   "screenshotsFolder": "cypress/snapshots/actual",
-  "trashAssetsBeforeRuns": true
+  "trashAssetsBeforeRuns": true,
+  "projectId": "ihjv34"
 }
