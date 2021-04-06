@@ -1,0 +1,16 @@
+{
+  "name": "sandboxjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "setup-cloudbuild": "node setup_cloudbuild.js ../sandbox",
+    "setup-gitpod": "node setup_gitpod.js /workspace"
+  },
+  "dependencies": {
+    "fs-extra": "^9.1.0",
+    "node-fetch": "^2.6.1",
+    "xml2js": "^0.4.23",
+    "yauzl": "^2.10.0"
+  }
+}
