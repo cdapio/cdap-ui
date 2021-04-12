@@ -158,4 +158,4 @@ class Login extends Component {
   }
 }
 ReactDOM.render(<Login />, document.getElementById('login-form'));
-ReactDOM.render(<Footer />, document.getElementById('footer-container'));
+ReactDOM.render(<Footer showNamespace={false} />, document.getElementById('footer-container'));
