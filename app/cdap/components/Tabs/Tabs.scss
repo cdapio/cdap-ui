@@ -35,6 +35,14 @@
       width: calc(100% - 140px);
       display: flex;
     }
+    &.size1-5x {
+      > div {
+        &:first-child {
+          width: 210px;
+        }
+        width: calc(100% - 210px);
+      }
+    }
   }
   &.horizontal {
     > div {
