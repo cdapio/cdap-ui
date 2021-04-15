@@ -36,7 +36,8 @@ import T from 'i18n-react';
 import MyDataPrepApi from 'api/dataprep';
 import DataPrepServiceControl from 'components/DataPrep/DataPrepServiceControl';
 import ConnectionsUpload from 'components/DataPrepConnections/UploadFile';
-import AddConnection from 'components/DataPrepConnections/AddConnection';
+import { CreateConnectionBtn } from 'components/DataPrepConnections/CreateConnectionBtn';
+import { CreateConnection } from 'components/Connections/Create';
 import isNil from 'lodash/isNil';
 import ExpandableMenu from 'components/UncontrolledComponents/ExpandableMenu';
 import ConnectionPopover from 'components/DataPrepConnections/ConnectionPopover';
@@ -868,12 +869,7 @@ export default class DataPrepConnections extends Component {
           </If>
         </div>
 
-        <AddConnection
-          onAdd={this.fetchConnectionsList}
-          validConnectionTypes={this.state.connectionTypes}
-          showPopover={this.state.showAddConnectionPopover}
-          onPopoverClose={this.toggleAddConnectionPopover.bind(this, false)}
-        />
+        <CreateConnectionBtn enableRouting={this.props.enableRouting} />
       </div>
     );
   }
@@ -885,6 +881,26 @@ export default class DataPrepConnections extends Component {
     }
     return (
       <Switch>
+        <Route
+          path="/ns/:namespace/connections/create"
+          render={() => {
+            return (
+              <CreateConnection
+                onRender={() => {
+                  this.setState({
+                    sidePanelExpanded: false,
+                  });
+                }}
+                onUnmount={() => {
+                  this.setState({
+                    sidePanelExpanded: true,
+                  });
+                }}
+                enableRouting={this.props.enableRouting}
+              />
+            );
+          }}
+        />
         <Route
           path={`${BASEPATH}/file`}
           render={({ match }) => {
@@ -1265,14 +1281,14 @@ export default class DataPrepConnections extends Component {
     }
     return (
       <div className="dataprep-connections-container">
-        {this.props.enableRouting ? (
+        <If condition={this.props.enableRouting}>
           <Helmet
             title={T.translate(`${PREFIX}.pageTitle`, {
               productName: Theme.productName,
             })}
           />
-        ) : null}
-        {this.props.singleWorkspaceMode || this.props.enableRouting ? null : pageTitle}
+        </If>
+        <If condition={this.props.singleWorkspaceMode || this.props.enableRouting}>{pageTitle}</If>
         {this.renderPanel()}
 
         <div
