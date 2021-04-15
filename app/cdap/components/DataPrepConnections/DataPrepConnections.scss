@@ -35,10 +35,11 @@ $expanded-menu-icon-width: 40px;
   }
 
   .connections-panel {
+    display: grid;
+    grid-template-rows: 50px 1fr 60px;
     width: 250px;
     background-color: $connections-panel-bg-color;
     border-right: 1px solid $connections-panel-border-color;
-    position: relative;
 
     .panel-title {
       margin: 15px 0;
@@ -61,11 +62,6 @@ $expanded-menu-icon-width: 40px;
     }
 
     .connections-menu {
-      position: absolute;
-      top: 45px;
-      left: 0;
-      right: 0;
-      bottom: 55px;
       border-bottom: 1px solid $connections-panel-border-color;
       overflow-y: auto;
 
@@ -134,13 +130,6 @@ $expanded-menu-icon-width: 40px;
           }
         }
       }
-    }
-
-    .add-connection-container {
-      position: absolute;
-      bottom: 15px;
-      left: 0;
-      right: 0;
     }
   }
 
