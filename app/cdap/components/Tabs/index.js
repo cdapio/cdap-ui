@@ -21,10 +21,11 @@ var classnames = require('classnames');
 
 require('./Tabs.scss');
 
-export default function Tabs({ layout, children }) {
-  return <div className={classnames('cask-tabs', layout)}>{children}</div>;
+export default function Tabs({ layout, children, className }) {
+  return <div className={classnames('cask-tabs', layout, className)}>{children}</div>;
 }
 Tabs.propTypes = {
   layout: PropTypes.string,
   children: PropTypes.node.isRequired,
+  className: PropTypes.string,
 };
