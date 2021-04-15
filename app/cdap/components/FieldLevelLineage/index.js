@@ -21,7 +21,7 @@ import { Provider } from 'react-redux';
 import Store, { Actions } from 'components/FieldLevelLineage/store/Store';
 import Lineage from 'components/FieldLevelLineage/Lineage';
 import { objectQuery } from 'services/helpers';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import TopPanel from 'components/FieldLevelLineage/TopPanel';
 import T from 'i18n-react';
 import Helmet from 'react-helmet';
