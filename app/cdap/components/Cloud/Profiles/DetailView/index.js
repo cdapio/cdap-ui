@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { MyCloudApi } from 'api/cloud';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import { objectQuery } from 'services/helpers';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import ProfileDetailViewContent from 'components/Cloud/Profiles/DetailView/Content';
 import { ADMIN_CONFIG_ACCORDIONS } from 'components/Administration/AdminConfigTabContent';
 import { getCurrentNamespace } from 'services/NamespaceStore';
