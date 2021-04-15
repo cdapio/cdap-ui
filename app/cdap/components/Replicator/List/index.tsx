@@ -21,7 +21,7 @@ import { basepath } from 'components/Replicator';
 import Deployed from 'components/Replicator/List/Deployed';
 import Drafts from 'components/Replicator/List/Drafts';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import ReplicationPlusButton from './ReplicationPlusButton';
 
 const styles = (theme): StyleRules => {
