@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
 import { IPreference } from 'components/NamespaceAdmin/store';
@@ -22,16 +22,11 @@ import Button from '@material-ui/core/Button';
 import SetPreferenceModal, {
   PREFERENCES_LEVEL,
 } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
-import ee from 'event-emitter';
-import globalEvents from 'services/global-events';
-import { getPreferences } from 'components/NamespaceAdmin/store/ActionCreator';
 import Table from 'components/Table';
 import TableHeader from 'components/Table/TableHeader';
 import TableRow from 'components/Table/TableRow';
 import TableCell from 'components/Table/TableCell';
 import TableBody from 'components/Table/TableBody';
-
-const eventEmitter = ee(ee);
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -48,14 +43,6 @@ interface IPreferencesProps {
 const PreferencesView: React.FC<IPreferencesProps> = ({ preferences }) => {
   const classes = useStyle();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
-
-    return () => {
-      eventEmitter.off(globalEvents.NSPREFERENCESSAVED, getPreferences);
-    };
-  }, []);
 
   function toggleModal() {
     setIsModalOpen(!isModalOpen);
