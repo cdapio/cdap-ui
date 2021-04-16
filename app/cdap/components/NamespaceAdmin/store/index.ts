@@ -23,6 +23,7 @@ export const NamespaceAdminActions = {
   setDatasetsCount: 'SET_DATASETS_COUNT',
   setProfilesCount: 'SET_PROFILES_COUNT',
   setPreferences: 'SET_PREFERENCES',
+  setDrivers: 'SET_DRIVERS',
   reset: 'NAMESPACE_ADMIN_RESET',
 };
 
@@ -30,6 +31,19 @@ export interface IPreference {
   key: string;
   value: string;
   scope: string;
+}
+
+export interface IDriver {
+  name: string;
+  type: string;
+  description: string;
+  className: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+  creationTime: number;
 }
 
 interface INamespaceAdmin {
@@ -42,6 +56,7 @@ interface INamespaceAdmin {
   datasetsCount: number;
   profilesCount: number;
   preferences: IPreference[];
+  drivers: IDriver[];
 }
 
 type INamespaceAdminState = Partial<INamespaceAdmin>;
@@ -56,6 +71,7 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   datasetsCount: 0,
   profilesCount: 0,
   preferences: [],
+  drivers: [],
 };
 
 const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
@@ -84,6 +100,11 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
       return {
         ...state,
         preferences: action.payload.preferences,
+      };
+    case NamespaceAdminActions.setDrivers:
+      return {
+        ...state,
+        drivers: action.payload.drivers,
       };
     case NamespaceAdminActions.reset:
       return {

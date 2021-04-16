@@ -23,12 +23,17 @@ import {
   getComputeProfiles,
   reset,
   getPreferences,
+  getDrivers,
 } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Provider } from 'react-redux';
 import Store from 'components/NamespaceAdmin/store';
 import Description from 'components/NamespaceAdmin/Description';
 import Metrics from 'components/NamespaceAdmin/Metrics';
 import Tabs from 'components/NamespaceAdmin/Tabs';
+import ee from 'event-emitter';
+import globalEvents from 'services/global-events';
+
+const eventEmitter = ee(ee);
 
 const useStyle = makeStyle(() => {
   return {
@@ -46,8 +51,14 @@ const NamespaceAdmin: React.FC = () => {
     getNamespaceDetail(namespace);
     getComputeProfiles(namespace);
     getPreferences(namespace);
+    getDrivers(namespace);
+
+    eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
+    eventEmitter.on(globalEvents.ARTIFACTUPLOAD, getDrivers);
 
     return () => {
+      eventEmitter.off(globalEvents.NSPREFERENCESSAVED, getPreferences);
+      eventEmitter.off(globalEvents.ARTIFACTUPLOAD, getDrivers);
       reset();
     };
   }, []);
