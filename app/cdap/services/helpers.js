@@ -723,6 +723,11 @@ function santizeStringForHTMLID(str) {
   return str.replace(/[ \/]/g, '-');
 }
 
+const PIPELINE_ARTIFACTS = [
+  'cdap-data-pipeline',
+  'cdap-data-streams',
+];
+
 export {
   objectQuery,
   convertBytesToHumanReadable,
@@ -776,4 +781,5 @@ export {
   isAuthSetToProxyMode,
   isAuthSetToManagedMode,
   santizeStringForHTMLID,
+  PIPELINE_ARTIFACTS,
 };

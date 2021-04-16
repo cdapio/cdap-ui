@@ -58,6 +58,10 @@ const NamespaceDetails = Loadable({
   loader: () => import(/* webpackChunkName: "NamespaceDetails" */ 'components/NamespaceDetails'),
   loading: LoadingSVGCentered,
 });
+const NamespaceAdmin = Loadable({
+  loader: () => import(/* webpackChunkName: "NamespaceAdmin" */ 'components/NamespaceAdmin'),
+  loading: LoadingSVGCentered,
+});
 const ProfileCreateView = Loadable({
   loader: () =>
     import(/* webpackChunkName: "ProfileCreateView" */ 'components/Cloud/Profiles/CreateView'),
@@ -152,6 +156,7 @@ export default class Home extends Component {
           <Route path="/ns/:namespace/experiments" component={Experiments} />
           <Route exact path="/ns/:namespace/operations" component={Operations} />
           <Route exact path="/ns/:namespace/details" component={NamespaceDetails} />
+          <Route path="/ns/:namespace/admin" component={NamespaceAdmin} />
           <Route path="/ns/:namespace/reports" component={Reports} />
           <Route
             exact
