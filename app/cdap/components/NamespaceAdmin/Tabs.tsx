@@ -20,6 +20,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import ComputeProfiles from 'components/NamespaceAdmin/ComputeProfiles';
 import Preferences from 'components/NamespaceAdmin/Preferences';
+import Drivers from 'components/NamespaceAdmin/Drivers';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -104,7 +105,7 @@ const Tabs: React.FC = () => {
             path={`${basepath}/connections`}
             component={() => <div> Connections </div>}
           />
-          <Route exact path={`${basepath}/drivers`} component={() => <div> Drivers </div>} />
+          <Route exact path={`${basepath}/drivers`} component={Drivers} />
         </Switch>
       </div>
     </div>
