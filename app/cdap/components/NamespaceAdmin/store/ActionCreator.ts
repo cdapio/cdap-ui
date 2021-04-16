@@ -18,11 +18,16 @@ import { MyNamespaceApi } from 'api/namespace';
 import { MyPipelineApi } from 'api/pipeline';
 import { MyDatasetApi } from 'api/dataset';
 import { MyPreferenceApi } from 'api/preference';
-import Store, { NamespaceAdminActions } from 'components/NamespaceAdmin/store';
-import { PIPELINE_ARTIFACTS } from 'services/helpers';
+import { MyMetadataApi } from 'api/metadata';
+import { MyArtifactApi } from 'api/artifact';
+import MyCDAPVersionApi from 'api/version';
+import Store, { IDriver, NamespaceAdminActions } from 'components/NamespaceAdmin/store';
+import { objectQuery, PIPELINE_ARTIFACTS } from 'services/helpers';
 import { MyCloudApi } from 'api/cloud';
 import { Theme } from 'services/ThemeHelper';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { GLOBALS, SCOPES } from 'services/global-constants';
+import { Observable } from 'rxjs/Observable';
 
 export function getNamespaceDetail(namespace) {
   MyNamespaceApi.get({ namespace }).subscribe((res) => {
@@ -104,6 +109,74 @@ export function getPreferences(namespace) {
         },
       });
     });
+}
+
+export function getDrivers(namespace) {
+  const requestNamespace = namespace ? namespace : getCurrentNamespace();
+
+  MyCDAPVersionApi.get()
+    .flatMap(({ version }) => {
+      const params = {
+        namespace: requestNamespace,
+        parentArtifact: GLOBALS.etlDataPipeline,
+        version,
+        extension: 'jdbc',
+        scope: SCOPES.SYSTEM,
+      };
+
+      return MyPipelineApi.getExtensions(params);
+    })
+    .subscribe((plugins) => {
+      const requestMetadata = [];
+
+      if (!plugins || plugins.length === 0) {
+        Store.dispatch({
+          type: NamespaceAdminActions.setDrivers,
+          payload: {
+            drivers: [],
+          },
+        });
+        return;
+      }
+
+      plugins.forEach((plugin) => {
+        const metadataParams = {
+          namespace: requestNamespace,
+          artifactName: objectQuery(plugin, 'artifact', 'name'),
+          artifactVersion: objectQuery(plugin, 'artifact', 'version'),
+        };
+
+        requestMetadata.push(MyMetadataApi.getArtifactProperties(metadataParams));
+      });
+
+      Observable.combineLatest(requestMetadata).subscribe((metadata) => {
+        const drivers = plugins.map((plugin, i) => {
+          return {
+            ...plugin,
+            creationTime: parseInt(objectQuery(metadata, i, 'creation-time'), 10),
+          };
+        });
+
+        Store.dispatch({
+          type: NamespaceAdminActions.setDrivers,
+          payload: {
+            drivers,
+          },
+        });
+      });
+    });
+}
+
+export function deleteDriver(driver: IDriver) {
+  const params = {
+    namespace: getCurrentNamespace(),
+    artifactId: driver.artifact.name,
+    version: driver.artifact.version,
+  };
+
+  MyArtifactApi.delete(params).subscribe(() => {
+    getDrivers(getCurrentNamespace());
+  });
 }
 
 export function reset() {
