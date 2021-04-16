@@ -13,49 +13,61 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Tabs from '../Tabs';
 import TabHeaders from 'components/Tabs/TabHeaders';
 import TabHead from 'components/Tabs/TabHead';
 import TabGroup from 'components/Tabs/TabGroup';
 import classnames from 'classnames';
-import TabIcon from 'components/ConfigurableTab/TabIcon';
+import TabIcon, { IIcon } from 'components/ConfigurableTab/TabIcon';
 
 require('./ConfigurableTab.scss');
-const TabConfig = PropTypes.shape({
-  name: PropTypes.string,
-  content: PropTypes.node,
-  contentClassName: PropTypes.string,
-  paneClassName: PropTypes.string,
-});
 
-export default class ConfigurableTab extends Component {
-  static propTypes = {
-    onTabClick: PropTypes.func,
-    activeTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    tabConfig: PropTypes.shape({
-      tabs: PropTypes.arrayOf(TabConfig),
-      layout: PropTypes.string,
-      defaultTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
-  };
+export enum TabLayoutEnum {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
 
-  componentWillReceiveProps(nextProps) {
-    const newState = { tabs: nextProps.tabConfig.tabs };
+export interface ITabConfig {
+  id?: string | number;
+  name: string;
+  content: React.ReactNode;
+  contentClassName?: string;
+  paneClassName?: string;
+  type?: string;
+  icon?: IIcon;
+  subtabs?: ITabConfig[];
+}
+
+export interface ITabConfigObj {
+  tabs: ITabConfig[];
+  layout: TabLayoutEnum;
+  defaultTab: string | number;
+}
+
+interface IConfigurableTabProps {
+  onTabClick?: (tabId: string) => void;
+  activeTab?: string | number;
+  tabConfig: ITabConfigObj;
+  tabClassName?: string;
+  className?: string;
+}
+export default class ConfigurableTab extends Component<IConfigurableTabProps> {
+  public componentWillReceiveProps(nextProps) {
+    const newState = { tabs: nextProps.tabConfig.tabs, activeTab: this.state.activeTab };
     if (nextProps.activeTab && nextProps.activeTab !== this.state.activeTab) {
       newState.activeTab = nextProps.activeTab;
     }
     this.setState(newState);
   }
 
-  state = {
+  public state = {
     tabs: this.props.tabConfig.tabs,
     layout: this.props.tabConfig.layout,
     activeTab: this.props.activeTab || this.props.tabConfig.defaultTab,
   };
 
-  setTab = (tabId) => {
+  public setTab = (tabId) => {
     this.setState({ activeTab: tabId });
     document.querySelector('.tab-content').scrollTop = 0;
 
@@ -64,11 +76,11 @@ export default class ConfigurableTab extends Component {
     }
   };
 
-  isActiveTab = (tabId) => {
+  public isActiveTab = (tabId) => {
     return this.state.activeTab === tabId;
   };
 
-  render() {
+  public render() {
     let tabs = [];
     this.state.tabs.forEach((tab) => {
       if (tab.type === 'tab-group') {
@@ -77,10 +89,10 @@ export default class ConfigurableTab extends Component {
       }
       tabs.push(tab);
     });
-    let activeTab = tabs.find((tab) => this.state.activeTab === tab.id);
+    const activeTab = tabs.find((tab) => this.state.activeTab === tab.id);
     return (
-      <div className="cask-configurable-tab">
-        <Tabs layout={this.state.layout}>
+      <div className={classnames('cask-configurable-tab', this.props.className)}>
+        <Tabs layout={this.state.layout} className={this.props.tabClassName}>
           <TabHeaders>
             {this.state.tabs.map((tab, index) => {
               if (tab.type === 'tab-group') {
@@ -117,7 +129,6 @@ export default class ConfigurableTab extends Component {
               className={`tab-pane active ${
                 activeTab.paneClassName ? activeTab.paneClassName : ''
               }`}
-              tabid={activeTab.id}
             >
               {activeTab.content}
             </div>

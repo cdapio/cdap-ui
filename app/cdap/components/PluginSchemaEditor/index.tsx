@@ -26,7 +26,11 @@ import LoadingSVG from 'components/LoadingSVG';
 import If from 'components/If';
 import Textbox from 'components/AbstractWidget/FormInputs/TextBox';
 import { RefreshableSchemaEditor } from 'components/PluginSchemaEditor/RefreshableSchemaEditor';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab, {
+  ITabConfig,
+  ITabConfigObj,
+  TabLayoutEnum,
+} from 'components/ConfigurableTab';
 import classnames from 'classnames';
 import { objectQuery, isNilOrEmptyString } from 'services/helpers';
 import Alert from 'components/Alert';
@@ -481,21 +485,23 @@ class PluginSchemaEditorBase extends React.PureComponent<
       if (typeof s.schema === 'string') {
         content = s.schema;
       }
-      return {
+      const tab: ITabConfig = {
         id: i,
         name: s.name,
         content,
         contentClassName: this.props.classes.tabContent,
         paneClassName: this.props.classes.tabContent,
       };
+      return tab;
     });
+    const tabConfig: ITabConfigObj = {
+      tabs,
+      layout: TabLayoutEnum.HORIZONTAL,
+      defaultTab: 0,
+    };
     const tabProps = {
       activeTab: 0,
-      tabConfig: {
-        tabs,
-        layout: 'horizontal',
-        defaultTab: 0,
-      },
+      tabConfig,
     };
     return <ConfigurableTab activeTab={tabProps.activeTab} tabConfig={tabProps.tabConfig} />;
   };
