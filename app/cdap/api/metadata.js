@@ -29,6 +29,12 @@ export const MyMetadataApi = {
   getTags: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/tags?responseFormat=v6`),
   addTags: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/tags`),
   deleteTags: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/tags/:key`),
+  getArtifactProperties: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    '/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/metadata/properties'
+  ),
 
   // Field Level Lineage
   getFields: apiCreator(dataSrc, 'GET', 'REQUEST', lineagePath),
