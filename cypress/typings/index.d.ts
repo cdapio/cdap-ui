@@ -118,21 +118,22 @@ declare global {
        *
        * @nodeObj - NodeIdentifier object to identify the node in the canvas
        */
-      open_node_property: (nodeObj: INodeIdentifier) => Chainable<JQuery<HTMLElement>>;
+      open_node_property: (nodeObj: INodeIdentifier, options?: Partial<
+        Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Forceable>) => Chainable<JQuery<HTMLElement>>;
 
       /**
        * Close node property modal
        */
       close_node_property: () => Chainable<JQuery<HTMLElement>>;
-      
-      /** 
+
+      /**
        * Uploads a pipeline json from fixtures to input file element.
        *
        * @headers - Any request headers to be passed.
        * @pipelineJson - pipeline draft that needs to be uploaded.
       */
-      upload_draft_via_api: (headers: any, pipelineJson: any) => Chainable<Request>; 
-      
+      upload_draft_via_api: (headers: any, pipelineJson: any) => Chainable<Request>;
+
       /**
        * Cleans up pipelines once expecuting a specific test. This is to remove state
        *  from individual tests.
@@ -249,6 +250,7 @@ declare global {
       onbeforeunload: any;
       CDAP_CONFIG: any;
       ace: any;
+      localStorage: any;
     }
   }
 }
