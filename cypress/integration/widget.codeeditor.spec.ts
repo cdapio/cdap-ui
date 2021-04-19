@@ -19,23 +19,23 @@ import { INodeInfo, INodeIdentifier } from '../typings';
 
 let headers = {};
 
-describe('Code editor widget', () => { 
+describe('Code editor widget', () => {
   const js: INodeInfo = { nodeName: 'JavaScript', nodeType: 'transform' };
   const jsId: INodeIdentifier = { ...js, nodeId: '0' };
   const defaultJsEditorVal = `
   /**
    * @summary Transforms the provided input record into zero or more output records or errors.
-  
-   * Input records are available in JavaScript code as JSON objects. 
-  
+
+   * Input records are available in JavaScript code as JSON objects.
+
    * @param input an object that contains the input record as a JSON.   e.g. to access a field called 'total' from the input record, use input.total.
-   * @param emitter an object that can be used to emit zero or more records (using the emitter.emit() method) or errors (using the emitter.emitError() method) 
+   * @param emitter an object that can be used to emit zero or more records (using the emitter.emit() method) or errors (using the emitter.emitError() method)
    * @param context an object that provides access to:
    *            1. CDAP Metrics - context.getMetrics().count('output', 1);
    *            2. CDAP Logs - context.getLogger().debug('Received a record');
    *            3. Lookups - context.getLookup('blacklist').lookup(input.id); or
-   *            4. Runtime Arguments - context.getArguments().get('priceThreshold') 
-   */ 
+   *            4. Runtime Arguments - context.getArguments().get('priceThreshold')
+   */
   function transform(input, emitter, context) {
     emitter.emit(input);
   }
@@ -68,7 +68,7 @@ describe('Code editor widget', () => {
     });
   });
 
-  it.only('Should not jump the cursor position on selecting text and replacing them', () => {
+  it('Should not jump the cursor position on selecting text and replacing them', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.open_transform_panel();
     cy.add_node_to_canvas(js);
@@ -93,6 +93,6 @@ describe('Code editor widget', () => {
         });
       });
     });
-    
+
   });
 });

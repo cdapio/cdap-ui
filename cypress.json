@@ -2,8 +2,7 @@
   "baseUrl": "http://localhost:11011",
   "env": {
     "host": "localhost",
-    "port": "11011",
-    "RETRIES": 3
+    "port": "11011"
   },
   "video": false,
   "pluginsFile": "cypress/plugins/index.js",
@@ -15,5 +14,9 @@
   "viewportHeight": 780,
   "screenshotsFolder": "cypress/snapshots/actual",
   "trashAssetsBeforeRuns": true,
+  "retries": {
+    "runMode": 3,
+    "openMode": 3
+  },
   "projectId": "ihjv34"
 }
