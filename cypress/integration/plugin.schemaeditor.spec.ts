@@ -742,17 +742,14 @@ describe('Plugin Schema Editor', () => {
   });
 
   describe('Should show disabled schema in detailed view', () => {
-    const testPipeline = `test_pipeline_${Date.now()}`;
-    before((done) => {
-      // Deploy a pipeline to have a pipeline and some datasets to see
-      return Helpers.deployAndTestPipeline('fll_wrangler-test-pipeline.json', testPipeline).then(
-        () => {
-          done();
-          cy.wrap(1);
-        }
-      );
-    });
     it('Should be disabled in deployed pipeline', () => {
+      const testPipeline = `test_pipeline_${Date.now()}`;
+      Helpers.deployAndTestPipeline('fll_wrangler-test-pipeline.json', testPipeline);
+
+      // this wait is a bit arbitrary since cypress needs the UI to settle down in the detail page before
+      // attempting to open wrangler node
+      cy.wait(2000);
+
       const wrangler: INodeInfo = { nodeName: 'Wrangler', nodeType: 'transform' };
       const wranglerId: INodeIdentifier = { ...wrangler, nodeId: '1' };
       /**
