@@ -64,7 +64,10 @@ export default class Alert extends Component {
   }
 
   resetTimeout = () => {
-    if (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) {
+    if (
+      (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) &&
+      this.alertTimeout
+    ) {
       clearTimeout(this.alertTimeout);
       this.alertTimeout = setTimeout(this.onClose, CLOSE_TIMEOUT);
     }

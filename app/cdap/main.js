@@ -203,6 +203,7 @@ class CDAP extends Component {
       });
     });
     if (!VersionStore.getState().version) {
+      this.setState({ loading: true });
       MyCDAPVersionApi.get().subscribe((res) => {
         VersionStore.dispatch({
           type: VersionActions.updateVersion,
@@ -210,6 +211,7 @@ class CDAP extends Component {
             version: res.version,
           },
         });
+        this.setState({ loading: false });
       });
     }
   };

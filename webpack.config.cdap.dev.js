@@ -75,6 +75,7 @@ var plugins = [
     shorthands: true,
     collections: true,
     caching: true,
+    flattening: true,
   }),
   new CopyWebpackPlugin(
     [
