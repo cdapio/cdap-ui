@@ -43,11 +43,12 @@ angular.module(PKG.name + '.commons')
         },
       },
       'connection-browser': {
-        element: '<connection-browser></connection-browser>',
+        element: '<connections-browser></connections-browser>',
         attributes: {
           'node': 'node',
           'on-browse-complete': 'onComplete',
           'fn-config': 'fnConfig',
+          'enable-routing': '"false"',
         }
       }
     };

@@ -36,16 +36,14 @@ interface ITableCellProps extends WithStyles<typeof styles> {
   textAlign?: TextAlignProperty;
 }
 
-const TableCellView: React.FC<React.PropsWithChildren<ITableCellProps>> = ({
-  classes,
-  children,
-  textAlign = 'left',
-}) => {
+const TableCellView: React.FC<React.PropsWithChildren<
+  ITableCellProps & React.HTMLAttributes<HTMLDivElement>
+>> = ({ classes, children, textAlign = 'left', ...rest }) => {
   const style: React.CSSProperties = {
     textAlign,
   };
   return (
-    <div className={classes.gridCell} style={style}>
+    <div className={classes.gridCell} style={style} {...rest}>
       {children}
     </div>
   );
