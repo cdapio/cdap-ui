@@ -36,7 +36,7 @@ import T from 'i18n-react';
 import MyDataPrepApi from 'api/dataprep';
 import DataPrepServiceControl from 'components/DataPrep/DataPrepServiceControl';
 import ConnectionsUpload from 'components/DataPrepConnections/UploadFile';
-import { CreateConnectionBtn } from 'components/DataPrepConnections/CreateConnectionBtn';
+import { CreateConnectionBtn } from 'components/Connections/CreateConnectionBtn';
 import { CreateConnection } from 'components/Connections/Create';
 import isNil from 'lodash/isNil';
 import ExpandableMenu from 'components/UncontrolledComponents/ExpandableMenu';

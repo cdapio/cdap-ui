@@ -100,9 +100,6 @@ angular
   .directive('multipleValuesWidget', function(reactDirective) {
     return reactDirective(window.CaskCommon.MultipleValuesWidget);
   })
-  .directive('connectionBrowser', function(reactDirective) {
-    return reactDirective(window.CaskCommon.PluginConnectionBrowser);
-  })
   .directive('functionDropdownAliasWidget', function(reactDirective) {
     return reactDirective(window.CaskCommon.FunctionDropdownAlias);
   })
@@ -183,4 +180,7 @@ angular
   })
   .directive('pipelineCommentsActionBtn', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineCommentsActionBtn);
+  })
+  .directive('connectionsBrowser', function (reactDirective) {
+    return reactDirective(window.CaskCommon.Connections);
   });

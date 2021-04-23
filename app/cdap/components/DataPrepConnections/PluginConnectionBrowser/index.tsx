@@ -30,6 +30,8 @@ import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
+import Connections from 'components/Connections';
+import { ConnectionsApi } from 'api/connections';
 
 const styles = (theme) => {
   return {
@@ -73,7 +75,7 @@ class PluginConnectionBrowser extends React.PureComponent<
   public state = {
     showBrowserModal: false,
     error: null,
-    loading: true,
+    loading: false,
     defaultConnectionId: null,
     defaultConnectionType: null,
   };
@@ -83,7 +85,7 @@ class PluginConnectionBrowser extends React.PureComponent<
   public async openDefaultConnection() {
     let connections;
     try {
-      connections = await MyDataPrepApi.listConnections({
+      connections = await ConnectionsApi.listConnections({
         context: getCurrentNamespace(),
       }).toPromise();
     } catch (e) {
@@ -344,15 +346,7 @@ class PluginConnectionBrowser extends React.PureComponent<
           </div>
           <ModalBody>
             <If condition={!this.state.loading}>
-              <DataPrepConnection
-                enableRouting={false}
-                singleWorkspaceMode={true}
-                sidePanelExpanded={true}
-                scope="plugin-browser-source"
-                onWorkspaceCreate={this.onWorkspaceCreate}
-                defaultConnectionId={this.state.defaultConnectionId}
-                defaultConnectionType={this.state.defaultConnectionType}
-              />
+              <Connections enableRouting={false} singleWorkspaceMode={true} />
             </If>
             <If condition={this.state.loading}>
               <LoadingSVGCentered />

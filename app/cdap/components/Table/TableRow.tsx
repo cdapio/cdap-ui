@@ -51,7 +51,9 @@ interface ITableRowProps extends WithStyles<typeof styles> {
   nativeLink?: boolean;
 }
 
-const TableRowView: React.FC<React.PropsWithChildren<ITableRowProps>> = ({
+const TableRowView: React.FC<React.PropsWithChildren<
+  ITableRowProps & React.HTMLAttributes<HTMLDivElement>
+>> = ({
   classes,
   children,
   columnTemplate,
@@ -59,6 +61,7 @@ const TableRowView: React.FC<React.PropsWithChildren<ITableRowProps>> = ({
   hover = true,
   to,
   nativeLink = false,
+  ...rest
 }) => {
   const style = {
     gridTemplateColumns: columnTemplate,
@@ -69,14 +72,24 @@ const TableRowView: React.FC<React.PropsWithChildren<ITableRowProps>> = ({
 
   if (to) {
     return (
-      <NavLinkWrapper to={to} isNativeLink={nativeLink} className={linkClassName} style={style}>
+      <NavLinkWrapper
+        to={to}
+        isNativeLink={nativeLink}
+        className={linkClassName}
+        style={style}
+        {...rest}
+      >
         {children}
       </NavLinkWrapper>
     );
   }
 
   return (
-    <div className={classnames(classes.gridRow, { [classes.hover]: hover })} style={style}>
+    <div
+      className={classnames(classes.gridRow, { [classes.hover]: hover })}
+      style={style}
+      {...rest}
+    >
       {children}
     </div>
   );
