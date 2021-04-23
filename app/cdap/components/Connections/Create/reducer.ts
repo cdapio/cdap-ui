@@ -165,7 +165,7 @@ export function fetchAllConnectorPluginProperties(connectors) {
   ).toPromise();
 }
 
-export function getCategoriesToConnectionsMap(connectionTypes = []) {
+export function getCategoriesToConnectorsMap(connectionTypes = []) {
   const categoryToConnectionsMap = new Map();
   if (!connectionTypes.length) {
     return categoryToConnectionsMap;
@@ -196,7 +196,7 @@ export async function fetchConnectionDetails({
   };
   const {
     name: artifactname = 'google-cloud',
-    version: artifactversion = '0.17.0-SNAPSHOT',
+    version: artifactversion = '0.18.0-SNAPSHOT',
     scope: artifactscope = 'SYSTEM',
   } = artifactObj || {};
   const cdapVersion = VersionStore.getState().version;
@@ -237,6 +237,7 @@ export async function fetchConnectionDetails({
     connDetails.connectorWidgetJSON = JSON.parse(connectionWidgetJSON[widgetJSONKey]);
     connDetails.connectorDoc = connectionDoc[docKey];
   } catch (e) {
+    // tslint:disable-next-line: no-console
     console.log('Error fetching widget json or parsing: ', e);
   }
   return connDetails;
@@ -273,7 +274,7 @@ export async function initStore(dispatch: Dispatch<IAction<ICreateConnectionActi
     const mapOfConnectorPluginProperties = getMapOfConnectorToPluginProperties(
       allConnectorsPluginProperties
     );
-    const categoriesToConnectorsMap = getCategoriesToConnectionsMap(connectors as any);
+    const categoriesToConnectorsMap = getCategoriesToConnectorsMap(connectors as any);
     const categories = Array.from(new Set(connectors.map((conn) => conn.category)));
     dispatch({
       type: ICreateConnectionActions.INIT,
