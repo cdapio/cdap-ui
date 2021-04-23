@@ -33,7 +33,7 @@ const connectionWidgetJSONPath =
 const allConnectorWidgetJSONAndDocPath = '/namespaces/:namespace/artifactproperties';
 
 const pipelineV1AppBasePath =
-  '/namespaces/system/apps/pipeline/services/connection/methods/v1/contexts/:context';
+  '/namespaces/system/apps/pipeline/services/studio/methods/v1/contexts/:context';
 
 export const ConnectionsApi = {
   listConnectors: apiCreator(dataSrc, 'GET', 'REQUEST', connectionsTypePath),
@@ -55,5 +55,12 @@ export const ConnectionsApi = {
     'PUT',
     'REQUEST',
     `${pipelineV1AppBasePath}/connections/:connectionid`
+  ),
+  listConnections: apiCreator(dataSrc, 'GET', 'REQUEST', `${pipelineV1AppBasePath}/connections`),
+  exploreConnection: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${pipelineV1AppBasePath}/connections/:connectionid/browse`
   ),
 };

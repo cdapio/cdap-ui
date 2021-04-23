@@ -18,6 +18,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const useStyle = makeStyle(() => {
   return {
@@ -26,7 +27,7 @@ const useStyle = makeStyle(() => {
       display: 'flex',
       justifyContent: 'center',
       alignContent: 'center',
-      padding: '5px',
+      padding: '10px',
     },
     link: {
       width: '100%',
@@ -38,7 +39,7 @@ const useStyle = makeStyle(() => {
       },
     },
     button: {
-      width: '80%',
+      width: '100%',
     },
   };
 });
@@ -47,7 +48,7 @@ export function CreateConnectionBtn({ enableRouting }) {
   if (enableRouting) {
     return (
       <div className={classes.root}>
-        <Link to="create" className={classes.link}>
+        <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
           <Button className={classes.button} variant="contained">
             Add Connection
           </Button>

@@ -29,7 +29,6 @@ import {
   IConnectorDetails,
   fetchConnectionDetails,
   createConnection,
-  ICreateConnectionState,
 } from 'components/Connections/Create/reducer';
 import If from 'components/If';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
@@ -49,7 +48,7 @@ const useStyle = makeStyle(() => {
     },
   };
 });
-export function CreateConnection({ enableRouting, onRender, onUnmount }) {
+export function CreateConnection({ enableRouting }) {
   const classes = useStyle();
   const [loading, setLoading] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -60,7 +59,6 @@ export function CreateConnection({ enableRouting, onRender, onUnmount }) {
     connectorDoc: null,
   });
   const init = async () => {
-    onRender();
     try {
       await initStore(dispatch);
       setLoading(false);
@@ -70,9 +68,6 @@ export function CreateConnection({ enableRouting, onRender, onUnmount }) {
   };
   React.useEffect(() => {
     init();
-    return () => {
-      onUnmount();
-    };
   }, []);
 
   if (state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST) {
@@ -94,6 +89,7 @@ export function CreateConnection({ enableRouting, onRender, onUnmount }) {
     const { selectedConnector } = state;
     const connectionConfiguration = {
       description,
+      category: state.selectedConnector.category,
       plugin: {
         ...selectedConnector,
         properties,
@@ -103,6 +99,7 @@ export function CreateConnection({ enableRouting, onRender, onUnmount }) {
       await createConnection(name, connectionConfiguration);
       navigateToConnectionList(dispatch);
     } catch (e) {
+      // tslint:disable-next-line: no-console
       console.log('TODO: surface error: ', e);
     }
   };
