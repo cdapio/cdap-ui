@@ -24,6 +24,7 @@ import {
   reset,
   getPreferences,
   getDrivers,
+  getConnections,
 } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Provider } from 'react-redux';
 import Store from 'components/NamespaceAdmin/store';
@@ -52,6 +53,7 @@ const NamespaceAdmin: React.FC = () => {
     getComputeProfiles(namespace);
     getPreferences(namespace);
     getDrivers(namespace);
+    getConnections(namespace);
 
     eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
     eventEmitter.on(globalEvents.ARTIFACTUPLOAD, getDrivers);

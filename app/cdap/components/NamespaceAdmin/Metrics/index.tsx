@@ -50,6 +50,7 @@ interface IMetricsProps {
   profilesCount: number;
   preferencesCount: number;
   driversCount: number;
+  connectionsCount: number;
 }
 
 const MetricsView: React.FC<IMetricsProps> = ({
@@ -58,6 +59,7 @@ const MetricsView: React.FC<IMetricsProps> = ({
   profilesCount,
   preferencesCount,
   driversCount,
+  connectionsCount,
 }) => {
   const classes = useStyle();
 
@@ -70,7 +72,7 @@ const MetricsView: React.FC<IMetricsProps> = ({
         </div>
         <MetricColumn title="profiles" metric={profilesCount} />
         <MetricColumn title="preferences" metric={preferencesCount} />
-        <MetricColumn title="connections" metric={15} />
+        <MetricColumn title="connections" metric={connectionsCount} />
         <MetricColumn title="drivers" metric={driversCount} />
       </div>
     </div>
@@ -84,6 +86,7 @@ const mapStateToProps = (state) => {
     profilesCount: state.profilesCount,
     preferencesCount: state.preferences.length,
     driversCount: state.drivers.length,
+    connectionsCount: state.connections.length,
   };
 };
 
