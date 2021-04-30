@@ -24,6 +24,7 @@ export const NamespaceAdminActions = {
   setProfilesCount: 'SET_PROFILES_COUNT',
   setPreferences: 'SET_PREFERENCES',
   setDrivers: 'SET_DRIVERS',
+  setConnections: 'SET_CONNECTIONS',
   reset: 'NAMESPACE_ADMIN_RESET',
 };
 
@@ -46,6 +47,29 @@ export interface IDriver {
   creationTime: number;
 }
 
+interface IPlugin {
+  name: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+  category: string;
+  properties: Map<string, string>;
+  type: string;
+}
+
+// TODO: this should probably be under the Connections component
+export interface IConnection {
+  connectionType: string;
+  createdTimeMillis: number;
+  description: string;
+  name: string;
+  preConfigured: boolean;
+  updatedTimeMillis: number;
+  plugin: IPlugin;
+}
+
 interface INamespaceAdmin {
   namespace: string;
   generation: number;
@@ -57,6 +81,7 @@ interface INamespaceAdmin {
   profilesCount: number;
   preferences: IPreference[];
   drivers: IDriver[];
+  connections: IConnection[];
 }
 
 type INamespaceAdminState = Partial<INamespaceAdmin>;
@@ -72,6 +97,7 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   profilesCount: 0,
   preferences: [],
   drivers: [],
+  connections: [],
 };
 
 const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
@@ -105,6 +131,11 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
       return {
         ...state,
         drivers: action.payload.drivers,
+      };
+    case NamespaceAdminActions.setConnections:
+      return {
+        ...state,
+        connections: action.payload.connections,
       };
     case NamespaceAdminActions.reset:
       return {

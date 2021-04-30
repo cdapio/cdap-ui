@@ -63,4 +63,10 @@ export const ConnectionsApi = {
     'REQUEST',
     `${pipelineV1AppBasePath}/connections/:connectionid/browse`
   ),
+  deleteConnection: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${pipelineV1AppBasePath}/connections/:connectionId`
+  ),
 };
