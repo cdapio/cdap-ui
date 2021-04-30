@@ -21,6 +21,7 @@ import { Route, Switch, NavLink } from 'react-router-dom';
 import ComputeProfiles from 'components/NamespaceAdmin/ComputeProfiles';
 import Preferences from 'components/NamespaceAdmin/Preferences';
 import Drivers from 'components/NamespaceAdmin/Drivers';
+import Connections from 'components/NamespaceAdmin/Connections';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -100,11 +101,7 @@ const Tabs: React.FC = () => {
         <Switch>
           <Route exact path={basepath} component={ComputeProfiles} />
           <Route exact path={`${basepath}/preferences`} component={Preferences} />
-          <Route
-            exact
-            path={`${basepath}/connections`}
-            component={() => <div> Connections </div>}
-          />
+          <Route exact path={`${basepath}/connections`} component={Connections} />
           <Route exact path={`${basepath}/drivers`} component={Drivers} />
         </Switch>
       </div>
