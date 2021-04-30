@@ -21,13 +21,18 @@ import { MyPreferenceApi } from 'api/preference';
 import { MyMetadataApi } from 'api/metadata';
 import { MyArtifactApi } from 'api/artifact';
 import MyCDAPVersionApi from 'api/version';
-import Store, { IDriver, NamespaceAdminActions } from 'components/NamespaceAdmin/store';
+import Store, {
+  IConnection,
+  IDriver,
+  NamespaceAdminActions,
+} from 'components/NamespaceAdmin/store';
 import { objectQuery, PIPELINE_ARTIFACTS } from 'services/helpers';
 import { MyCloudApi } from 'api/cloud';
 import { Theme } from 'services/ThemeHelper';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS, SCOPES } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
+import { ConnectionsApi } from 'api/connections';
 
 export function getNamespaceDetail(namespace) {
   MyNamespaceApi.get({ namespace }).subscribe((res) => {
@@ -176,6 +181,27 @@ export function deleteDriver(driver: IDriver) {
 
   MyArtifactApi.delete(params).subscribe(() => {
     getDrivers(getCurrentNamespace());
+  });
+}
+export function getConnections(namespace) {
+  ConnectionsApi.listConnections({ context: namespace }).subscribe((res) => {
+    Store.dispatch({
+      type: NamespaceAdminActions.setConnections,
+      payload: {
+        connections: res,
+      },
+    });
+  });
+}
+
+export function deleteConnection(conn: IConnection) {
+  const params = {
+    context: getCurrentNamespace(),
+    connectionId: conn.name,
+  };
+
+  ConnectionsApi.deleteConnection(params).subscribe(() => {
+    getConnections(getCurrentNamespace());
   });
 }
 
