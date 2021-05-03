@@ -134,6 +134,7 @@
     "react-hot-loader": "4.12.21",
     "regenerator-runtime": "^0.13.7",
     "sass-loader": "8.0.0",
+    "storybook-addon-material-ui": "^0.9.0-alpha.24",
     "style-loader": "1.1.2",
     "stylelint": "12.0.1",
     "stylelint-webpack-plugin": "1.1.2",

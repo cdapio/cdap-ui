@@ -15,48 +15,36 @@
  */
 
 import React from 'react';
-import {Button} from '@material-ui/core';
+import Tab from '@material-ui/core/Tab';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+interface ITabProps {
+  disabled?: boolean;
+  label: string;
+  value: any;
+}
 const useStyle = makeStyles((theme) => {
   // TODO Get from theme
   return {
-    containedPrimary: {
-      backgroundColor: theme.palette.primary.main,
-      borderColor: 'transparent',
+    root: {
+      color: 'rgba(0, 0, 0, .54)',
       fontSize: theme.typography.fontSize,
-      letterSpacing: 'normal',
-      lineHeight: '32px',
-      padding: '0 12px',
-      '&$disabled': {
-        backgroundColor: '#ffffff',
-        color: 'rgba(0, 0, 0, .54)'
-      },
-      '&:hover': {
-        backgroundColor: theme.palette.primary.main,
+      opacity: 1.0,
+      '&$selected': {
+        color: theme.palette.primary.main,
       }
     },
-    disabled: {},
+    selected: {},
   };
 });
 
-interface IPrimaryButtonProps {
-  disabled: boolean;
-  onClick: () => any;
-  startIcon?: any;
-}
-
-const RaisedPrimaryButton: React.FC<IPrimaryButtonProps> = (props) => {
+const MuiTab: React.FC<ITabProps> = (props) => {
   const classes = useStyle();
-  return <Button
-    classes={classes}
-    disabled={props.disabled}
-    onClick={props.onClick}
-    startIcon={props.startIcon}
-    variant="contained"
-    color="primary">
-    {props.children}
-  </Button>;
-}
+  const { label, ...others } = props;
+  
+  // Material-ui can pass additional props to children
+  // In this case, selection status is passed down from Tabs
+  return <Tab classes={classes} label={label} {...others} />
+};
 
-export default RaisedPrimaryButton;
+export default MuiTab;

@@ -22,9 +22,12 @@ import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
 import RaisedNeutralButton from './index';
 import { withKnobs, boolean, text } from '@storybook/addon-knobs';
+import {muiTheme} from 'storybook-addon-material-ui';
+import newTheme from 'components/Mui/Theme';
 
 storiesOf('Mui Raised Neutral Button', module)
   .addDecorator(withKnobs)
+  .addDecorator(muiTheme([newTheme]))
   .add(
     'Show',
     withInfo({

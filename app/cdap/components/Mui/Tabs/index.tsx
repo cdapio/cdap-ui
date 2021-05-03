@@ -15,47 +15,30 @@
  */
 
 import React from 'react';
-import {Button} from '@material-ui/core';
+import Tabs from '@material-ui/core/Tabs';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+interface ITabsProps {
+  value: any;
+  onChange: (event: any, newValue: any) => any;
+}
 const useStyle = makeStyles((theme) => {
   // TODO Get from theme
   return {
-    contained: {
-      backgroundColor: '#ffffff',
-      color: theme.palette.primary.main,
-      fontSize: theme.typography.fontSize,
-      letterSpacing: 'normal',
-      lineHeight: '32px',
-      padding: '0 12px',
-      '&$disabled': {
-        backgroundColor: '#ffffff',
-        color: 'rgba(0, 0, 0, .54)'
-      },
-      '&:hover': {
-        backgroundColor: '#ffffff',
-      }
+    root: {
+      borderBottom: '1px solid rgba(0, 0, 0, .24)',
     },
-    disabled: {},
+    indicator: {
+      backgroundColor: theme.palette.primary.main,
+    }
   };
 });
 
-interface IRaisedNeutralButtonProps {
-  disabled: boolean;
-  onClick: () => any;
-  startIcon?: any;
-}
-
-const RaisedNeutralButton: React.FC<IRaisedNeutralButtonProps> = (props) => {
+const MuiTabs: React.FC<ITabsProps> = (props) => {
   const classes = useStyle();
-  return <Button
-    classes={classes}
-    disabled={props.disabled}
-    onClick={props.onClick}
-    startIcon={props.startIcon}
-    variant="contained">
+  return <Tabs value={props.value} onChange={props.onChange} classes={classes}>
     {props.children}
-  </Button>;
-}
+  </Tabs>
+};
 
-export default RaisedNeutralButton;
+export default MuiTabs;
