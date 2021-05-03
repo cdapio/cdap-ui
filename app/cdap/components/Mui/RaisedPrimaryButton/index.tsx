@@ -41,8 +41,8 @@ const useStyle = makeStyles((theme) => {
 });
 
 interface IPrimaryButtonProps {
-  disabled: boolean;
-  onClick: () => any;
+  disabled?: boolean;
+  onClick: (event: any) => any;
   startIcon?: any;
 }
 

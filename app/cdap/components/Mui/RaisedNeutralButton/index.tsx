@@ -42,7 +42,7 @@ const useStyle = makeStyles((theme) => {
 
 interface IRaisedNeutralButtonProps {
   disabled: boolean;
-  onClick: () => any;
+  onClick: (event: any) => any;
   startIcon?: any;
 }
 
