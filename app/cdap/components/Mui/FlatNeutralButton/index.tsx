@@ -21,20 +21,17 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 const useStyle = makeStyles((theme) => {
   // TODO Get from theme
   return {
-    contained: {
-      backgroundColor: '#ffffff',
-      color: theme.palette.primary.main,
+    root: {
       fontSize: theme.typography.fontSize,
       letterSpacing: 'normal',
       lineHeight: '32px',
       padding: '0 12px',
       '&$disabled': {
-        backgroundColor: '#ffffff',
         color: 'rgba(0, 0, 0, .54)'
       },
       '&:hover': {
-        backgroundColor: '#ffffff',
-      }
+        backgroundColor: 'rgba(0, 0, 0, .1)'
+      },
     },
     disabled: {},
   };
@@ -46,16 +43,15 @@ interface IRaisedNeutralButtonProps {
   startIcon?: any;
 }
 
-const RaisedNeutralButton: React.FC<IRaisedNeutralButtonProps> = (props) => {
+const FlatNeutralButton: React.FC<IRaisedNeutralButtonProps> = (props) => {
   const classes = useStyle();
   return <Button
     classes={classes}
     disabled={props.disabled}
     onClick={props.onClick}
-    startIcon={props.startIcon}
-    variant="contained">
+    startIcon={props.startIcon}>
     {props.children}
   </Button>;
 }
 
-export default RaisedNeutralButton;
+export default FlatNeutralButton;

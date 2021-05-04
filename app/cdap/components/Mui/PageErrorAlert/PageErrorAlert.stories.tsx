@@ -19,12 +19,12 @@ import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { withInfo } from '@storybook/addon-info';
-import ErrorAlert from './index';
+import PageErrorAlert from './index';
 import { withKnobs, boolean, number, text } from '@storybook/addon-knobs';
 import {muiTheme} from 'storybook-addon-material-ui';
 import newTheme from 'components/Mui/Theme';
 
-storiesOf('Mui Error Alert', module)
+storiesOf('Mui Page Error Alert', module)
   .addDecorator(withKnobs)
   .addDecorator(muiTheme([newTheme]))
   .add(
@@ -32,11 +32,11 @@ storiesOf('Mui Error Alert', module)
     withInfo({
       text: 'Show error alert within snackbar',
     })(() => (
-      <ErrorAlert
+      <PageErrorAlert
         duration={ number('Duration', 3000) }
         onClose={ action('closed') }
         open={ boolean('Open', true) }>
         { text('Label', "Great scott! How do you get 1.21GW of electricty!") }
-      </ErrorAlert>
+      </PageErrorAlert>
     ))
   );

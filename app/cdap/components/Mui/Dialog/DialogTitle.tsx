@@ -15,38 +15,24 @@
  */
 
 import * as React from 'react';
-import MuiAlert from '@material-ui/lab/Alert';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import ErrorIcon from '@material-ui/icons/Error';
 
-interface IAlertProps {
-  elevation?: number,
-  onClose?: () => any,
- }
+interface ITabProps {
+}
 
- const useStyle = makeStyles((theme) => {
+const useStyle = makeStyles((theme) => {
   // TODO Get from theme
   return {
     root: {
-      fontSize: theme.typography.fontSize,
-    },
+      fontSize: '20px',
+    }
   };
 });
 
-const ErrorAlert: React.FC<IAlertProps> = (props) => {
-  const {
-    children,
-    onClose,
-  } = props;
+const MuiDialogTitle: React.FC<ITabProps> = (props) => {
   const classes = useStyle();
-  return <MuiAlert 
-      icon={ <ErrorIcon /> }
-      onClose={ onClose }
-      severity="error" 
-      classes={classes}
-      elevation={props.elevation}>
-      { children }
-    </MuiAlert>
-}
+  return <DialogTitle disableTypography={true} classes={classes}>{props.children}</DialogTitle>
+};
 
-export default ErrorAlert;
+export default MuiDialogTitle;

@@ -16,12 +16,15 @@
 
 import * as React from 'react';
 import MuiAlert from '@material-ui/lab/Alert';
+import { Snackbar } from '@material-ui/core';
+import Slide from '@material-ui/core/Slide';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ErrorIcon from '@material-ui/icons/Error';
 
 interface IAlertProps {
-  elevation?: number,
-  onClose?: () => any,
+  duration: number,
+  open: boolean,
+  onClose: () => any,
  }
 
  const useStyle = makeStyles((theme) => {
@@ -33,20 +36,32 @@ interface IAlertProps {
   };
 });
 
-const ErrorAlert: React.FC<IAlertProps> = (props) => {
+const PageErrorAlert: React.FC<IAlertProps> = (props) => {
   const {
     children,
+    duration,
     onClose,
+    open,
   } = props;
   const classes = useStyle();
-  return <MuiAlert 
+  // TODO We should use our ErrorAlert component,
+  // but it looks like Snackbar/transition requires
+  // some ref forwarding logic
+  return <Snackbar 
+    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
+    autoHideDuration={ duration }
+    onClose={ onClose }
+    open={ open } 
+    TransitionComponent={Slide}>
+    <MuiAlert 
       icon={ <ErrorIcon /> }
+      elevation={6} 
       onClose={ onClose }
       severity="error" 
-      classes={classes}
-      elevation={props.elevation}>
+      classes={classes}>
       { children }
     </MuiAlert>
+  </Snackbar>
 }
 
-export default ErrorAlert;
+export default PageErrorAlert;
