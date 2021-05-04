@@ -13,24 +13,24 @@
 # the License.
 
 steps:
-- name: node
+- name: node:12
   entrypoint: 'yarn'
   args: ['install', '--ignore-optional', '--frozen-lockfile']
-- name: node
+- name: node:12
   entrypoint: 'yarn'
   args: ['run', 'bower-root']
-- name: node
+- name: node:12
   entrypoint: 'yarn'
   args: ['run', 'cdap-full-build-more-memory']
-- name: node
+- name: node:12
   entrypoint: 'yarn'
   dir: 'sandboxjs'
   args: ['install', '--frozen-lockfile']
-- name: node
+- name: node:12
   entrypoint: 'yarn'
   dir: 'sandboxjs'
   args: ['run', 'setup-cloudbuild']
-- name: node
+- name: node:12
   entrypoint: 'bash'
   args: ['-c', 'echo $$KEY_FILE > ./key_file.json']
   secretEnv: ['KEY_FILE']
