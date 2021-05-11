@@ -42,4 +42,3 @@ const ListboxComponent = React.forwardRef<HTMLDivElement>((props, ref) => {
 });
 
 export default ListboxComponent;
-
