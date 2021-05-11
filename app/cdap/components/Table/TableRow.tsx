@@ -17,7 +17,6 @@
 import React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import classnames from 'classnames';
-import { Link } from 'react-router-dom';
 import NavLinkWrapper from 'components/NavLinkWrapper';
 
 const styles = (theme): StyleRules => {
@@ -49,6 +48,7 @@ interface ITableRowProps extends WithStyles<typeof styles> {
   alignItems?: string;
   to?: string;
   nativeLink?: boolean;
+  className?: string;
 }
 
 const TableRowView: React.FC<React.PropsWithChildren<
@@ -61,6 +61,7 @@ const TableRowView: React.FC<React.PropsWithChildren<
   hover = true,
   to,
   nativeLink = false,
+  className,
   ...rest
 }) => {
   const style = {
@@ -68,14 +69,12 @@ const TableRowView: React.FC<React.PropsWithChildren<
     alignItems,
   };
 
-  const linkClassName = `${classes.gridRow} ${classes.hover} ${classes.link}`;
-
   if (to) {
     return (
       <NavLinkWrapper
         to={to}
         isNativeLink={nativeLink}
-        className={linkClassName}
+        className={classnames(classes.gridRow, classes.hover, classes.link, className)}
         style={style}
         {...rest}
       >
@@ -86,7 +85,7 @@ const TableRowView: React.FC<React.PropsWithChildren<
 
   return (
     <div
-      className={classnames(classes.gridRow, { [classes.hover]: hover })}
+      className={classnames(classes.gridRow, className, { [classes.hover]: hover })}
       style={style}
       {...rest}
     >
