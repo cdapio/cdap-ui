@@ -16,8 +16,9 @@
 
 import * as React from 'react';
 
-import CSVWidget from 'components/AbstractWidget/CSVWidget';
 import CodeEditorWidget from 'components/AbstractWidget/CodeEditorWidget';
+import ConnectionsWidget from 'components/AbstractWidget/ConnectionsWidget';
+import CSVWidget from 'components/AbstractWidget/CSVWidget';
 import DLPCustomWidget from 'components/AbstractWidget/DLPCustomWidget';
 import DatasetSelector from 'components/AbstractWidget/DatasetSelectorWidget';
 import DateRangeWidget from 'components/AbstractWidget/DateRangeWidget';
@@ -127,6 +128,7 @@ function SQLEditor(props) {
  */
 export const WIDGET_FACTORY = {
   'connection-browser': PluginConnectionBrowser,
+  'connection-select': ConnectionsWidget,
   csv: CSVWidget,
   'dataset-selector': DatasetSelector,
   daterange: DateRangeWidget,
@@ -135,15 +137,14 @@ export const WIDGET_FACTORY = {
   dsv: CSVWidget,
   'function-dropdown-with-alias': FunctionDropdownAliasWidget,
   'function-dropdown-with-arguments': FunctionDropdownArgumentsWidget,
-  dlp: DLPCustomWidget,
   'get-schema': GetSchemaWidget,
+  hierarchy: HierarchyWidget,
   'input-field-selector': InputFieldDropdown,
   'input-field-keyvalue-dropdown': InputFieldKeyValueDropdown,
   'multiple-input-stage-selector': MultiStageSelector,
   'keyvalue-dropdown': KeyValueDropdownWidget,
   'keyvalue-encoded': KeyValueEncodedWidget,
   keyvalue: KeyValueWidget,
-  hierarchy: HierarchyWidget,
   'memory-dropdown': MemorySelectWidget,
   'memory-textbox': MemoryTextbox,
   'multi-select': MultiSelect,
@@ -166,6 +167,9 @@ export const WIDGET_FACTORY = {
   'scala-editor': ScalaEditor,
   'sql-editor': SQLEditor,
   textarea: Textarea,
+
+  // DLP
+  dlp: DLPCustomWidget,
 
   // JOINS
   'join-types': JoinTypeWidget,
