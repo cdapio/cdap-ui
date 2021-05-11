@@ -27,18 +27,18 @@ const ConfigurationGroupKitchenSync: React.FC = () => {
   const [widgetJson, setWidgetJson] = React.useState();
   const [values, setValues] = React.useState<Record<string, string>>({});
 
-  const pluginName = 'Database';
-  const pluginType = 'batchsource';
-  const artifactName = 'database-plugins';
+  const pluginName = 'Projection';
+  const pluginType = 'transform';
+  const artifactName = 'core-plugins';
   const artifactScope = 'SYSTEM';
-  const artifactVersion = '2.3.0-SNAPSHOT';
+  const artifactVersion = '2.7.0-SNAPSHOT';
 
   React.useEffect(() => {
     // Fetch plugin properties and widget json
     const pluginParams = {
       namespace: getCurrentNamespace(),
       parentArtifact: 'cdap-data-pipeline',
-      version: '6.2.0',
+      version: '6.5.0-SNAPSHOT',
       extension: pluginType,
       pluginName,
       scope: 'SYSTEM',
