@@ -30,6 +30,7 @@ import TableCell from 'components/Table/TableCell';
 import TableBody from 'components/Table/TableBody';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useLocation } from 'react-router-dom';
+import Breadcrumb from './Breadcrumb';
 
 const useStyle = makeStyle(() => {
   return {
@@ -39,13 +40,15 @@ const useStyle = makeStyle(() => {
     },
     grid: {
       height: '100%',
-      marginTop: '15px',
     },
     loadingContainer: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       height: '100%',
+    },
+    topBar: {
+      margin: '8px 0 8px 10px',
     },
   };
 });
@@ -120,41 +123,49 @@ export function GenericBrowser({ selectedConnection }) {
   const columnTemplate = headers.map(() => '1fr').join(' ');
   const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
   return (
-    <Table columnTemplate={columnTemplate} classes={{ grid: classes.grid }}>
-      <TableHeader>
-        <TableRow>
-          {headers.map((header) => {
-            return <TableCell key={header}>{header}</TableCell>;
+    <React.Fragment>
+      <div className={classes.topBar}>
+        <Breadcrumb
+          path={path}
+          baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=`}
+        />
+      </div>
+      <Table columnTemplate={columnTemplate} classes={{ grid: classes.grid }}>
+        <TableHeader>
+          <TableRow>
+            {headers.map((header) => {
+              return <TableCell key={header}>{header}</TableCell>;
+            })}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {entities.map((entity, i) => {
+            return (
+              <TableRow
+                key={i}
+                to={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
+                  entity.name
+                )}`}
+                onClick={() => onExplore(entity.name)}
+              >
+                <TableCell>
+                  <div className={classes.nameWrapper}>
+                    <If condition={ICON_MAP[entity.type]}>{ICON_MAP[entity.type]}</If>
+                    <div>{entity.name}</div>
+                  </div>
+                </TableCell>
+                <TableCell>{entity.type}</TableCell>
+                {entity.properties.map((prop) => {
+                  if (prop.type === 'Timestamp') {
+                    return <TableCell key={prop.value}>{humanReadableDate(prop.value)}</TableCell>;
+                  }
+                  return <TableCell key={prop.value}>{prop.value}</TableCell>;
+                })}
+              </TableRow>
+            );
           })}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {entities.map((entity, i) => {
-          return (
-            <TableRow
-              key={i}
-              to={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
-                entity.name
-              )}`}
-              onClick={() => onExplore(entity.name)}
-            >
-              <TableCell>
-                <div className={classes.nameWrapper}>
-                  <If condition={ICON_MAP[entity.type]}>{ICON_MAP[entity.type]}</If>
-                  <div>{entity.name}</div>
-                </div>
-              </TableCell>
-              <TableCell>{entity.type}</TableCell>
-              {entity.properties.map((prop) => {
-                if (prop.type === 'Timestamp') {
-                  return <TableCell key={prop.value}>{humanReadableDate(prop.value)}</TableCell>;
-                }
-                return <TableCell key={prop.value}>{prop.value}</TableCell>;
-              })}
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+        </TableBody>
+      </Table>
+    </React.Fragment>
   );
 }
