@@ -42,13 +42,13 @@ export default function Breadcrumb({ path, baseLinkPath }) {
   const pathElements = path.split('/').filter((pathElement) => pathElement.length > 0);
   const classes = useStyle();
 
-  function createCrumb(title, path, isLast) {
+  function createCrumb(title, pathFragment, isLast) {
     return isLast ? (
-      <Typography key={path} className={classes.lastCrumb}>
+      <Typography key={pathFragment} className={classes.lastCrumb}>
         {title}
       </Typography>
     ) : (
-      <Link to={`${baseLinkPath}${path}`} key={path} component={RouterLink}>
+      <Link to={`${baseLinkPath}${pathFragment}`} key={pathFragment} component={RouterLink}>
         <Typography className={classes.crumb}>{title}</Typography>
       </Link>
     );

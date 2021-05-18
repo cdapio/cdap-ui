@@ -19,6 +19,7 @@ import { humanReadableDate, isNilOrEmptyString, objectQuery } from 'services/hel
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import * as React from 'react';
 import capitalize from 'lodash/capitalize';
+import debounce from 'lodash/debounce';
 import If from 'components/If';
 import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -31,6 +32,7 @@ import TableBody from 'components/Table/TableBody';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useLocation } from 'react-router-dom';
 import Breadcrumb from './Breadcrumb';
+import SearchField from './SearchField';
 
 const useStyle = makeStyle(() => {
   return {
@@ -49,6 +51,17 @@ const useStyle = makeStyle(() => {
     },
     topBar: {
       margin: '8px 0 8px 10px',
+      display: 'flex',
+      alignItems: 'center',
+    },
+    topBarBreadcrumb: {
+      flex: '0.5',
+    },
+    topBarSearch: {
+      flex: '0.5',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      marginRight: '8px',
     },
   };
 });
@@ -66,6 +79,8 @@ export function GenericBrowser({ selectedConnection }) {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   const [path, setPath] = React.useState(pathFromUrl);
+  const [searchString, setSearchString] = React.useState('');
+  const [searchStringDisplay, setSearchStringDisplay] = React.useState('');
   const classes = useStyle();
 
   const fetchEntities = async () => {
@@ -81,6 +96,16 @@ export function GenericBrowser({ selectedConnection }) {
       setLoading(false);
     }
   };
+  const debouncedSetSearchString = debounce(setSearchString, 300);
+  const handleSearchChange = (newSearchString) => {
+    setSearchStringDisplay(newSearchString);
+    debouncedSetSearchString(newSearchString);
+  };
+  const clearSearchString = () => {
+    debouncedSetSearchString.cancel();
+    setSearchStringDisplay('');
+    setSearchString('');
+  };
   const onExplore = (entityName) => {
     if (path === '/') {
       setPath(`/${entityName}`);
@@ -88,6 +113,7 @@ export function GenericBrowser({ selectedConnection }) {
       setPath(`${path}/${entityName}`);
     }
     setLoading(true);
+    clearSearchString();
   };
   React.useEffect(() => {
     if (isNilOrEmptyString(selectedConnection)) {
@@ -101,6 +127,7 @@ export function GenericBrowser({ selectedConnection }) {
     const urlPath = query.get('path') || '/';
     if (path !== urlPath) {
       setPath(urlPath);
+      clearSearchString();
     }
   }, [loc]);
   if (loading) {
@@ -122,13 +149,23 @@ export function GenericBrowser({ selectedConnection }) {
   headers = [...headers, ...properties.map((prop) => capitalize(prop.key))];
   const columnTemplate = headers.map(() => '1fr').join(' ');
   const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
+
+  const filteredEnitities = searchString.length
+    ? entities.filter((e) => e.name.includes(searchString))
+    : entities;
+
   return (
     <React.Fragment>
       <div className={classes.topBar}>
-        <Breadcrumb
-          path={path}
-          baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=`}
-        />
+        <div className={classes.topBarBreadcrumb}>
+          <Breadcrumb
+            path={path}
+            baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=`}
+          />
+        </div>
+        <div className={classes.topBarSearch}>
+          <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
+        </div>
       </div>
       <Table columnTemplate={columnTemplate} classes={{ grid: classes.grid }}>
         <TableHeader>
@@ -139,7 +176,7 @@ export function GenericBrowser({ selectedConnection }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {entities.map((entity, i) => {
+          {filteredEnitities.map((entity, i) => {
             return (
               <TableRow
                 key={i}
