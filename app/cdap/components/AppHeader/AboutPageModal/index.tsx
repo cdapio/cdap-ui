@@ -77,7 +77,7 @@ const AboutPageModal: React.SFC<IAboutPageModalProps> = ({ cdapVersion, isOpen, 
             </span>
           </div>
         </div>
-        <Footer />
+        <Footer showNamespace={false} />
       </ModalBody>
     </Modal>
   );
