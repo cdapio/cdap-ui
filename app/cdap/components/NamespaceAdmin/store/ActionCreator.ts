@@ -179,7 +179,7 @@ export function deleteDriver(driver: IDriver) {
     version: driver.artifact.version,
   };
 
-  MyArtifactApi.delete(params).subscribe(() => {
+  return MyArtifactApi.delete(params).map(() => {
     getDrivers(getCurrentNamespace());
   });
 }
@@ -200,7 +200,7 @@ export function deleteConnection(conn: IConnection) {
     connectionId: conn.name,
   };
 
-  ConnectionsApi.deleteConnection(params).subscribe(() => {
+  return ConnectionsApi.deleteConnection(params).map(() => {
     getConnections(getCurrentNamespace());
   });
 }

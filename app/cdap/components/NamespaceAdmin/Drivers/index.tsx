@@ -29,6 +29,7 @@ import { deleteDriver } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Button } from '@material-ui/core';
 import If from 'components/If';
 import ArtifactUploadWizard from 'components/CaskWizards/ArtifactUpload';
+import ConfirmationModal from 'components/ConfirmationModal';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -48,9 +49,35 @@ interface IDriversProps {
 const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
   const classes = useStyle();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [driverToDelete, setDriverToDelete] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   function toggleUploadArtifact() {
     setIsUploadOpen(!isUploadOpen);
+  }
+
+  function handleDelete() {
+    deleteDriver(driverToDelete).subscribe(handleConfirmationClose, (err) => {
+      setDeleteError(err);
+    });
+  }
+
+  function handleConfirmationClose() {
+    setDriverToDelete(null);
+    setDeleteError(null);
+  }
+
+  let confirmDeleteElem;
+  if (driverToDelete) {
+    confirmDeleteElem = (
+      <div>
+        Are you sure you want to delete{' '}
+        <strong>
+          <em>{driverToDelete.name}</em>
+        </strong>
+        ?
+      </div>
+    );
   }
 
   return (
@@ -77,7 +104,7 @@ const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
               const actions: IAction[] = [
                 {
                   label: 'Delete',
-                  actionFn: () => deleteDriver(driver),
+                  actionFn: () => setDriverToDelete(driver),
                   className: classes.delete,
                 },
               ];
@@ -106,6 +133,18 @@ const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
           hideUploadHelper={true}
         />
       </If>
+
+      <ConfirmationModal
+        headerTitle="Delete driver"
+        toggleModal={handleConfirmationClose}
+        confirmationElem={confirmDeleteElem}
+        confirmButtonText="Delete"
+        confirmFn={handleDelete}
+        cancelFn={handleConfirmationClose}
+        isOpen={!!driverToDelete}
+        errorMessage={!deleteError ? '' : 'Failed to delete driver'}
+        extendedMessage={deleteError}
+      />
     </div>
   );
 };
