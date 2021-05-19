@@ -26,7 +26,7 @@ import { connect, Provider } from 'react-redux';
 import ProvisionerInfoStore from 'components/Cloud/Store';
 import { fetchProvisionerSpec } from 'components/Cloud/Store/ActionCreator';
 import { ADMIN_CONFIG_ACCORDIONS } from 'components/Administration/AdminConfigTabContent';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import PropertyLock from 'components/Cloud/Profiles/CreateView/PropertyLock';
 import {
   ConnectedProfileName,

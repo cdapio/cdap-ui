@@ -16,7 +16,7 @@
 
 import { Action } from 'redux';
 
-export interface IAction extends Action {
-  type: string;
+export interface IAction<T = string> extends Action {
+  type: T;
   payload?: any;
 }

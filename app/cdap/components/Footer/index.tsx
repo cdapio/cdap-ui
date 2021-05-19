@@ -114,6 +114,6 @@ const Footer: React.FC<IFooterProps> = ({ showNamespace }) => {
       </footer>
     </ThemeWrapper>
   );
-}
+};
 
 export default Footer;
