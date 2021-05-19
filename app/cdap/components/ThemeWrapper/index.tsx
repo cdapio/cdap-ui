@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme, { ThemeOptions, Theme } from '@material-ui/core/styles/createMuiTheme';
+import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 import {
   blue,
   grey,
@@ -28,6 +28,12 @@ import {
   white,
   primary,
 } from 'components/ThemeWrapper/colors';
+import {
+  PaletteColor,
+  PaletteColorOptions,
+  Palette,
+  PaletteOptions,
+} from '@material-ui/core/styles/createPalette';
 
 interface IThemeWraperProps {
   render?: () => React.ReactNode;
@@ -35,56 +41,81 @@ interface IThemeWraperProps {
   children?: any;
 }
 
+declare module '@material-ui/core/styles/createPalette' {
+  // tslint:disable-next-line:interface-name
+  interface Palette {
+    blue: PaletteColor;
+    green: PaletteColor;
+    red: PaletteColor;
+    bluegrey: PaletteColor;
+    orange: PaletteColor;
+    yellow: PaletteColor;
+    white: PaletteColor;
+  }
+
+  // tslint:disable-next-line:interface-name
+  interface PaletteOptions {
+    blue?: PaletteColorOptions;
+    green?: PaletteColorOptions;
+    red?: PaletteColorOptions;
+    bluegrey?: PaletteColorOptions;
+    orange?: PaletteColorOptions;
+    yellow?: PaletteColorOptions;
+    white?: PaletteColorOptions;
+  }
+}
+
+const Theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: primary,
+    },
+    blue,
+    grey,
+    green,
+    red,
+    bluegrey,
+    orange,
+    yellow,
+    white,
+  },
+  navbarBgColor: 'var(--navbar-color)',
+  buttonLink: {
+    '&:hover': {
+      color: 'inherit',
+      backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    },
+    fontSize: '1rem',
+    color: 'white',
+  },
+  iconButtonFocus: {
+    '&:focus': {
+      outline: 'none',
+      backgroundColor: 'rgba(255, 255, 255, 0.10)',
+    },
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  typography: {
+    fontSize: 13,
+    fontFamily: 'var(--font-family)',
+    useNextVariants: true,
+  },
+  zIndex: {
+    drawer: 1300, // Must be < z-index of NUX in services/GuidedTour/GuidedTour.scss
+  },
+  overrides: {
+    MuiTypography: {
+      caption: {
+        fontSize: '0.92rem',
+      },
+    },
+  },
+  Spacing: (factor) => [0, 4, 8, 16, 24, 32, 40, 48, 56, 64][factor],
+} as ThemeOptions);
+
 export default class ThemeWrapper extends React.PureComponent<IThemeWraperProps> {
-  private baseTheme: Theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: primary,
-      },
-      blue,
-      grey,
-      green,
-      red,
-      bluegrey,
-      orange,
-      yellow,
-      white,
-    },
-    navbarBgColor: 'var(--navbar-color)',
-    buttonLink: {
-      '&:hover': {
-        color: 'inherit',
-        backgroundColor: 'rgba(255, 255, 255, 0.10)',
-      },
-      fontSize: '1rem',
-      color: 'white',
-    },
-    iconButtonFocus: {
-      '&:focus': {
-        outline: 'none',
-        backgroundColor: 'rgba(255, 255, 255, 0.10)',
-      },
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    typography: {
-      fontSize: 13,
-      fontFamily: 'var(--font-family)',
-      useNextVariants: true,
-    },
-    zIndex: {
-      drawer: 1300, // Must be < z-index of NUX in services/GuidedTour/GuidedTour.scss
-    },
-    overrides: {
-      MuiTypography: {
-        caption: {
-          fontSize: '0.92rem',
-        },
-      },
-    },
-    Spacing: (factor) => [0, 4, 8, 16, 24, 32, 40, 48, 56, 64][factor],
-  } as ThemeOptions);
   public render() {
     let Component;
     if (this.props.component) {
@@ -94,13 +125,13 @@ export default class ThemeWrapper extends React.PureComponent<IThemeWraperProps>
       return null;
     }
     if (this.props.children) {
-      return <MuiThemeProvider theme={this.baseTheme}>{this.props.children}</MuiThemeProvider>;
+      return <MuiThemeProvider theme={Theme}>{this.props.children}</MuiThemeProvider>;
     }
     if (this.props.render) {
-      return <MuiThemeProvider theme={this.baseTheme}>{this.props.render()}</MuiThemeProvider>;
+      return <MuiThemeProvider theme={Theme}>{this.props.render()}</MuiThemeProvider>;
     }
     return (
-      <MuiThemeProvider theme={this.baseTheme}>
+      <MuiThemeProvider theme={Theme}>
         <Component />
       </MuiThemeProvider>
     );
