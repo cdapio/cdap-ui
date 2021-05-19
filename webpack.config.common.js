@@ -34,6 +34,7 @@ var plugins = [
     shorthands: true,
     collections: true,
     caching: true,
+    flattening: true,
   }),
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),

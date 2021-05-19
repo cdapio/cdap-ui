@@ -18,7 +18,7 @@ import * as React from 'react';
 import { objectQuery } from 'services/helpers';
 import IconSVG from 'components/IconSVG';
 
-interface IIcon {
+export interface IIcon {
   type: 'font-icon' | 'link' | 'inline';
   arguments: {
     data?: string;

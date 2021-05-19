@@ -32,9 +32,8 @@ const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
 });
-const DataPrepConnections = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "DataPrepConnections" */ 'components/DataPrepConnections'),
+const Connections = Loadable({
+  loader: () => import(/* webpackChunkName: "Connections" */ 'components/Connections'),
   loading: LoadingSVGCentered,
 });
 const DataPrepHome = Loadable({
@@ -56,6 +55,10 @@ const Experiments = Loadable({
 });
 const NamespaceDetails = Loadable({
   loader: () => import(/* webpackChunkName: "NamespaceDetails" */ 'components/NamespaceDetails'),
+  loading: LoadingSVGCentered,
+});
+const NamespaceAdmin = Loadable({
+  loader: () => import(/* webpackChunkName: "NamespaceAdmin" */ 'components/NamespaceAdmin'),
   loading: LoadingSVGCentered,
 });
 const ProfileCreateView = Loadable({
@@ -148,10 +151,11 @@ export default class Home extends Component {
           <Route exact path="/ns/:namespace/rulesengine" component={RulesEngineHome} />
           <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
           <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
-          <Route path="/ns/:namespace/connections" component={DataPrepConnections} />
+          <Route path="/ns/:namespace/connections" component={Connections} />
           <Route path="/ns/:namespace/experiments" component={Experiments} />
           <Route exact path="/ns/:namespace/operations" component={Operations} />
           <Route exact path="/ns/:namespace/details" component={NamespaceDetails} />
+          <Route path="/ns/:namespace/admin" component={NamespaceAdmin} />
           <Route path="/ns/:namespace/reports" component={Reports} />
           <Route
             exact

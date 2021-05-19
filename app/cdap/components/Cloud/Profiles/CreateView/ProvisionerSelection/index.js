@@ -24,7 +24,7 @@ import { connect, Provider } from 'react-redux';
 import ProvisionerInfoStore from 'components/Cloud/Store';
 import { fetchProvisioners } from 'components/Cloud/Store/ActionCreator';
 import { ADMIN_CONFIG_ACCORDIONS } from 'components/Administration/AdminConfigTabContent';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import ExperimentalBanner from 'components/ExperimentalBanner';
 import IconSVG from 'components/IconSVG';
 import { SYSTEM_NAMESPACE } from 'services/global-constants';

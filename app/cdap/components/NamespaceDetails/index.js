@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import NamespaceDetailsStore, { NamespaceDetailsActions } from 'components/NamespaceDetails/store';
 import { getData } from 'components/NamespaceDetails/store/ActionCreator';
-import EntityTopPanel from 'components/EntityTopPanel';
+import { EntityTopPanel } from 'components/EntityTopPanel';
 import Description from 'components/NamespaceDetails/Description';
 import EntityCounts from 'components/NamespaceDetails/EntityCounts';
 import ComputeProfiles from 'components/NamespaceDetails/ComputeProfiles';

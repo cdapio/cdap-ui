@@ -131,6 +131,7 @@ var ALERT_STATUS = require('../cdap/services/AlertStatus').ALERT_STATUS;
 var Comment = require('../cdap/components/AbstractWidget/Comment').default;
 var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
+var Connections = require('../cdap/components/Connections').default;
 export {
   Store,
   NameSpaceStoreActions,
@@ -234,4 +235,5 @@ export {
   ALERT_STATUS,
   Comment,
   PipelineCommentsActionBtn,
+  Connections,
 };

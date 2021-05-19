@@ -35,7 +35,7 @@ import jexl from 'jexl';
 import difference from 'lodash/difference';
 import flatten from 'lodash/flatten';
 import isPlainObject from 'lodash/isPlainObject';
-import { isMacro, objectQuery, removeEmptyJsonValues } from 'services/helpers';
+import { isMacro, objectQuery } from 'services/helpers';
 
 export interface IFilteredWidgetProperty extends IWidgetProperty {
   show?: boolean;
@@ -220,10 +220,12 @@ export function filterByCondition(
                     }))
                 );
             }
-            return {
-              property: showConfig.name,
-              filterName: f.name,
-            };
+            return [
+              {
+                property: showConfig.name,
+                filterName: f.name,
+              },
+            ];
           })
         );
       };

@@ -11,6 +11,7 @@
     "sourceMap": true,
     "importHelpers": false,
     "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
     "lib": [
       "es2015",
       "dom",
