@@ -79,7 +79,7 @@ maybeDescribe('Secure Key Manager Page', () => {
           .type(key.data);
 
         cy.get(dataCy('save-secure-key')).click();
-        cy.wait(6000); // wait for success alert component to disappear
+        cy.get(dataCy('alert-close')).click();
       });
     });
 
@@ -102,7 +102,7 @@ maybeDescribe('Secure Key Manager Page', () => {
       cy.get(dataCy('cancel')).click();
 
       cy.contains('Error: Duplicate key name');
-      cy.wait(6000); // wait for failure alert component to disappear
+      cy.get(dataCy('alert-close')).click();
     });
 
     it('should edit a secure key', () => {
@@ -124,7 +124,7 @@ maybeDescribe('Secure Key Manager Page', () => {
         .type('random data');
 
       cy.get(dataCy('save-secure-key')).click();
-      cy.wait(6000); // wait for success alert component to disappear
+      cy.get(dataCy('alert-close')).click();
 
       // Open edit dialog again
       cy.get(dataCy(`secure-key-row-${keyToEdit.name}`)).click();

@@ -26,7 +26,7 @@ import {
 
 let headers;
 
-describe('Wrangler SPANNER tests', () => {
+describe.skip('Wrangler SPANNER tests', () => {
   before(() => {
     Helpers.loginIfRequired()
       .then(() => {
