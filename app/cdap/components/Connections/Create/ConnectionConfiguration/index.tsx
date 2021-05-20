@@ -37,6 +37,11 @@ const useStyle = makeStyle(() => {
 
 interface IConnectionConfigurationProps extends IConnectorDetails {
   onConnectionCreate: (values: Record<string, string>) => void;
+  initValues?: {
+    initName?: string;
+    initDescription?: string;
+    initProperties?: Record<string, string>;
+  };
 }
 
 export function ConnectionConfiguration({
@@ -44,6 +49,7 @@ export function ConnectionConfiguration({
   connectorWidgetJSON,
   connectorDoc,
   onConnectionCreate,
+  initValues = {},
 }: IConnectionConfigurationProps) {
   if (!connectorProperties) {
     return null;
@@ -62,6 +68,9 @@ export function ConnectionConfiguration({
             connectorProperties={connectorProperties}
             connectorWidgetJSON={connectorWidgetJSON}
             onConnectionCreate={onConnectionCreate}
+            initName={initValues.initName}
+            initDescription={initValues.initDescription}
+            initProperties={initValues.initProperties}
           />
         ),
         paneClassName: classes.activeTabPane,

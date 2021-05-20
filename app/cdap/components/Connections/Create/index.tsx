@@ -35,6 +35,7 @@ import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
+import { objectQuery } from 'services/helpers';
 
 const useStyle = makeStyle(() => {
   return {
@@ -48,7 +49,12 @@ const useStyle = makeStyle(() => {
     },
   };
 });
-export function CreateConnection({ enableRouting }) {
+export function CreateConnection({
+  enableRouting,
+  onToggle = null,
+  initialConfig = {},
+  onCreate = null,
+}) {
   const classes = useStyle();
   const [loading, setLoading] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -58,6 +64,8 @@ export function CreateConnection({ enableRouting }) {
     connectorProperties: null,
     connectorDoc: null,
   });
+  const [initValues, setInitValues] = React.useState({});
+
   const init = async () => {
     try {
       await initStore(dispatch);
@@ -68,9 +76,26 @@ export function CreateConnection({ enableRouting }) {
   };
   React.useEffect(() => {
     init();
+
+    if (initialConfig && Object.keys(initialConfig).length > 0) {
+      const plugin = objectQuery(initialConfig, 'plugin') || {};
+      const selectedConnector = {
+        artifact: plugin.artifact,
+        category: plugin.category,
+        name: plugin.name,
+        type: plugin.type,
+      };
+
+      setInitValues({
+        initName: objectQuery(initialConfig, 'name'),
+        initDescription: objectQuery(initialConfig, 'description'),
+        initProperties: objectQuery(plugin, 'properties'),
+      });
+      onConnectorSelection(selectedConnector);
+    }
   }, []);
 
-  if (state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST) {
+  if (enableRouting && state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/connections`} />;
   }
 
@@ -95,12 +120,32 @@ export function CreateConnection({ enableRouting }) {
     };
     try {
       await createConnection(name, connectionConfiguration);
-      navigateToConnectionList(dispatch);
+
+      if (typeof onCreate === 'function') {
+        onCreate();
+      }
+
+      if (enableRouting) {
+        navigateToConnectionList(dispatch);
+      }
+
+      if (typeof onToggle === 'function') {
+        onToggle();
+      }
     } catch (e) {
       // tslint:disable-next-line: no-console
       console.log('TODO: surface error: ', e);
     }
   };
+
+  function onClose() {
+    if (enableRouting) {
+      navigateToConnectionList(dispatch);
+      return;
+    }
+
+    onToggle();
+  }
 
   return (
     <div className={classes.root}>
@@ -110,14 +155,14 @@ export function CreateConnection({ enableRouting }) {
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
           title="Create a connection"
-          closeBtnAnchorLink={() => navigateToConnectionList(dispatch)}
+          closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
       </If>
       <If condition={state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION}>
         <EntityTopPanel
           title="Add a connection"
-          closeBtnAnchorLink={() => navigateToConnectionList(dispatch)}
+          closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
       </If>
@@ -137,6 +182,7 @@ export function CreateConnection({ enableRouting }) {
           connectorWidgetJSON={connectionDetails.connectorWidgetJSON}
           connectorDoc={connectionDetails.connectorDoc}
           onConnectionCreate={onConnectionCreate}
+          initValues={initValues}
         />
       </If>
     </div>

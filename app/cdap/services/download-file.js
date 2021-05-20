@@ -14,13 +14,16 @@
  * the License.
  */
 
+import { objectQuery } from "services/helpers";
+
  // TODO: CDAP-17106 - Need to refactor this function to make it generic for usage across CDAP UI.
- function DownloadFile(fileConfig, postExportCb) {
+ function DownloadFile(fileConfig, postExportCb, exportName) {
   const blob = new Blob([JSON.stringify(fileConfig, null, 4)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const exportFileName = `${fileConfig.name ? fileConfig.name : 'noname'}-${
-    fileConfig.artifact.name
-  }`;
+
+  const artifact = objectQuery(fileConfig, 'artifact') || {};
+  const defaultFileName = `${fileConfig.name ? fileConfig.name : 'noname'}-${artifact.name}`;
+  const exportFileName = exportName ? exportName : defaultFileName;
 
   const a = document.createElement('a');
   a.href = url;
