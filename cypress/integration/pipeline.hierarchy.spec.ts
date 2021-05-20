@@ -18,7 +18,7 @@ import { loginIfRequired, getArtifactsPoll, dataCy, getGenericEndpoint } from '.
 import { INodeInfo, INodeIdentifier } from '../typings';
 let headers = {};
 
-describe('Hierarchy Widgets', () => {
+describe.skip('Hierarchy Widgets', () => {
   const property = 'fieldMapping';
   const createRecord: INodeInfo = { nodeName: 'CreateRecord', nodeType: 'transform' };
   const createRecordId: INodeIdentifier = { ...createRecord, nodeId: '1' };

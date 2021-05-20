@@ -64,10 +64,7 @@ export default class Alert extends Component {
   }
 
   resetTimeout = () => {
-    if (
-      (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) &&
-      this.alertTimeout
-    ) {
+    if (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) {
       clearTimeout(this.alertTimeout);
       this.alertTimeout = setTimeout(this.onClose, CLOSE_TIMEOUT);
     }
@@ -112,7 +109,7 @@ export default class Alert extends Component {
       >
         <div className={this.state.type} data-cy="alert">
           {msgElem}
-          <IconSVG name="icon-close" onClick={this.onClose} />
+          <IconSVG name="icon-close" onClick={this.onClose} dataCy="alert-close" />
         </div>
       </Modal>
     );
