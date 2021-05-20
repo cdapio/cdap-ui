@@ -14,13 +14,11 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { IConnection } from 'components/NamespaceAdmin/store';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Link } from 'react-router-dom';
 import Table from 'components/Table';
 import TableHeader from 'components/Table/TableHeader';
 import TableRow from 'components/Table/TableRow';
@@ -30,11 +28,20 @@ import { humanReadableDate, objectQuery } from 'services/helpers';
 import ActionsPopover, { IAction } from 'components/ActionsPopover';
 import { deleteConnection } from 'components/NamespaceAdmin/store/ActionCreator';
 import ConfirmationModal from 'components/ConfirmationModal';
+import DownloadFile from 'services/download-file';
+import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
+import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
+import If from 'components/If';
+import Alert from 'components/Alert';
 
 const useStyle = makeStyles((theme) => {
   return {
     subtitleSection: {
       marginBottom: '15px',
+
+      '& > *': {
+        marginRight: '10px',
+      },
     },
     delete: {
       color: objectQuery(theme, 'palette', 'red', 100),
@@ -48,9 +55,12 @@ interface IConnectionsProps {
 
 const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   const classes = useStyle();
-
+  const [isCreateConnectionOpen, setIsCreateConnectionOpen] = useState(false);
+  const [initConnConfig, setInitConnConfig] = useState(null);
+  const [parseError, setParseError] = useState(null);
   const [connectionToDelete, setConnectionToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+  const fileInputRef = useRef<HTMLInputElement>();
 
   let confirmDeleteElem;
   if (connectionToDelete) {
@@ -80,14 +90,81 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
     setDeleteError(null);
   }
 
+  function toggleConnectionCreate() {
+    const newState = !isCreateConnectionOpen;
+
+    setIsCreateConnectionOpen(newState);
+
+    if (!newState) {
+      setInitConnConfig(null);
+    }
+  }
+
+  function getConnectionConfig(conn) {
+    const connectionConfig = {
+      name: conn.name,
+      description: conn.description,
+      category: conn.plugin.category,
+      plugin: conn.plugin,
+    };
+
+    return connectionConfig;
+  }
+
+  function exportConnection(conn) {
+    const connectionConfig = getConnectionConfig(conn);
+    const artifact = objectQuery(conn, 'plugin', 'artifact') || {};
+    DownloadFile(
+      connectionConfig,
+      null,
+      `${conn.name}-connector-${artifact.name}-${artifact.version}`
+    );
+  }
+
+  function cloneConnection(conn) {
+    const config = getConnectionConfig(conn);
+    delete config.name;
+
+    openConnectionConfig(config);
+  }
+
+  function handleFile(event) {
+    if (!objectQuery(event, 'target', 'files', 0)) {
+      return;
+    }
+    const uploadedFile = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsText(uploadedFile, 'UTF-8');
+
+    reader.onload = (evt) => {
+      try {
+        const config = JSON.parse(evt.target.result.toString());
+        openConnectionConfig(config);
+      } catch (e) {
+        setParseError(`Error parsing imported file: ${e.message}`);
+        if (fileInputRef && fileInputRef.current) {
+          fileInputRef.current.value = null;
+        }
+      }
+    };
+  }
+
+  function openConnectionConfig(config) {
+    setInitConnConfig(config);
+    toggleConnectionCreate();
+  }
+
   return (
     <div>
       <div className={classes.subtitleSection}>
-        <Link to={`/ns/${getCurrentNamespace()}/connections/create`}>
-          <Button variant="contained" color="primary">
-            Add Connection
-          </Button>
-        </Link>
+        <Button variant="contained" color="primary" onClick={toggleConnectionCreate}>
+          Add Connection
+        </Button>
+        <Button color="primary" component="label">
+          Import
+          <input type="file" accept=".json" onChange={handleFile} ref={fileInputRef} hidden />
+        </Button>
       </div>
 
       <Table columnTemplate="2fr 1fr 1fr 100px">
@@ -103,6 +180,17 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         <TableBody>
           {connections.map((conn) => {
             const actions: IAction[] = [
+              {
+                label: 'Export',
+                actionFn: () => exportConnection(conn),
+              },
+              {
+                label: 'Duplicate',
+                actionFn: () => cloneConnection(conn),
+              },
+              {
+                label: 'separator',
+              },
               {
                 label: 'Delete',
                 actionFn: () => setConnectionToDelete(conn),
@@ -135,6 +223,22 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         errorMessage={!deleteError ? '' : 'Failed to delete connection'}
         extendedMessage={deleteError}
       />
+
+      <CreateConnectionModal
+        isOpen={isCreateConnectionOpen}
+        onToggle={toggleConnectionCreate}
+        initialConfig={initConnConfig}
+        onCreate={getConnections}
+      />
+
+      <If condition={!!parseError}>
+        <Alert
+          message={parseError}
+          type="error"
+          showAlert={true}
+          onClose={() => setParseError(null)}
+        />
+      </If>
     </div>
   );
 };
