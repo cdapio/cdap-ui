@@ -99,7 +99,7 @@ describe('Hierarchy Widgets', () => {
   });
 
   it('Should get the schema', () => {
-    cy.get('[data-cy=plugin-undefined] > [data-cy=widget-wrapper-container] > .WidgetWrapperView-widgetContainer-607 > .abstract-widget-wrapper > div').click()
+    cy.get('.ConfigurationGroupView-group-585 > :nth-child(2) > :nth-child(2)').click()
     cy.get(`${dataCy('get-schema-btn')}`).click();
   });
 });
