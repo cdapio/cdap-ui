@@ -77,9 +77,7 @@ export function CreateConnection({ enableRouting }) {
   const onConnectorSelection = async (selectedConnector) => {
     navigateToConfigStep(dispatch, selectedConnector);
     setLoading(true);
-    const connDetails = await fetchConnectionDetails({
-      selectedConnectionType: selectedConnector.name,
-    });
+    const connDetails = await fetchConnectionDetails(selectedConnector);
     setConnectionDetails(connDetails);
     setLoading(false);
   };

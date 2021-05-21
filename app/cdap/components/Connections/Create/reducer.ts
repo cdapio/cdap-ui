@@ -182,13 +182,7 @@ export function getCategoriesToConnectorsMap(connectionTypes = []) {
   return categoryToConnectionsMap;
 }
 
-export async function fetchConnectionDetails({
-  selectedConnectionType,
-  artifactObj,
-}: {
-  selectedConnectionType: string;
-  artifactObj?: IArtifactObj;
-}) {
+export async function fetchConnectionDetails(connection) {
   const connDetails: IConnectorDetails = {
     connectorProperties: null,
     connectorWidgetJSON: null,
@@ -198,18 +192,21 @@ export async function fetchConnectionDetails({
     name: artifactname = 'google-cloud',
     version: artifactversion = '0.18.0-SNAPSHOT',
     scope: artifactscope = 'SYSTEM',
-  } = artifactObj || {};
+  } = connection.artifact || {};
   const cdapVersion = VersionStore.getState().version;
   const connectionProperties$ = ConnectionsApi.fetchConnectorPluginProperties({
     namespace: getCurrentNamespace(),
     datapipelineArtifactVersion: cdapVersion,
-    connectionTypeName: 'BigQueryTable', // selectedConnectionType,
+    connectionTypeName: connection.name,
     artifactname,
     artifactversion,
     artifactscope,
   });
-  const widgetJSONKey = 'widgets.BigQueryTable-batchsource';
-  const docKey = 'doc.BigQueryTable-batchsource';
+
+  const pluginKey = `${connection.name}-connector`;
+
+  const widgetJSONKey = `widgets.${pluginKey}`;
+  const docKey = `doc.${pluginKey}`;
   const connectionArtifactObj = {
     namespace: getCurrentNamespace(),
     artifactname,
