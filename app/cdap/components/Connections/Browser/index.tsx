@@ -31,6 +31,7 @@ const useStyle = makeStyles((theme) => {
       display: 'grid',
       gridTemplateRows: '50px 1fr',
       gridTemplateColumns: '100%',
+      height: '100%',
     },
     header: {
       padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
@@ -45,6 +46,8 @@ const useStyle = makeStyles((theme) => {
     },
     browserContainer: {
       borderTop: '1px solid rgba(0, 0, 0, .125)',
+      height: '100%',
+      overflow: 'hidden',
     },
   };
 });

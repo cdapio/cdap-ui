@@ -18,9 +18,16 @@ import { ConnectionsApi } from 'api/connections';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export function exploreConnection({ connectionid, path = '/' }) {
-  return ConnectionsApi.exploreConnection({
-    context: getCurrentNamespace(),
-    connectionid,
+  const body = {
     path,
-  }).toPromise();
+    limit: 1000,
+  };
+
+  return ConnectionsApi.exploreConnection(
+    {
+      context: getCurrentNamespace(),
+      connectionid,
+    },
+    body
+  ).toPromise();
 }

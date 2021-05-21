@@ -41,7 +41,7 @@ const useStyle = makeStyle(() => {
       gap: '5px',
     },
     grid: {
-      height: '100%',
+      height: 'calc(100% - 50px)',
     },
     loadingContainer: {
       display: 'flex',
@@ -89,6 +89,7 @@ export function GenericBrowser({ selectedConnection }) {
         connectionid: selectedConnection,
         path,
       });
+
       setEntities(res.entities);
     } catch (e) {
       setError(`Failed to explore connection : "${e.message}"`);
