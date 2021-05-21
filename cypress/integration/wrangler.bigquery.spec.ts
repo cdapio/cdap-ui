@@ -24,7 +24,7 @@ import {
 
 let headers;
 
-describe('Wrangler BigQuery tests', () => {
+describe.skip('Wrangler BigQuery tests', () => {
   before(() => {
     return Helpers.loginIfRequired()
       .then(() => {
