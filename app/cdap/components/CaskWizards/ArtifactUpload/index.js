@@ -165,7 +165,7 @@ ArtifactUploadWizard.propTypes = {
   isOpen: PropTypes.bool,
   input: PropTypes.any,
   onClose: PropTypes.func,
-  buildSuccessInfo: PropTypes.func,
+  buildSuccessInfo: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   hideUploadHelper: PropTypes.bool,
   displayCTA: PropTypes.bool,
 };

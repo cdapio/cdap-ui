@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { IConnection } from 'components/NamespaceAdmin/store';
 import { connect } from 'react-redux';
@@ -29,6 +29,7 @@ import TableBody from 'components/Table/TableBody';
 import { humanReadableDate, objectQuery } from 'services/helpers';
 import ActionsPopover, { IAction } from 'components/ActionsPopover';
 import { deleteConnection } from 'components/NamespaceAdmin/store/ActionCreator';
+import ConfirmationModal from 'components/ConfirmationModal';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -47,6 +48,37 @@ interface IConnectionsProps {
 
 const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   const classes = useStyle();
+
+  const [connectionToDelete, setConnectionToDelete] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+
+  let confirmDeleteElem;
+  if (connectionToDelete) {
+    confirmDeleteElem = (
+      <div>
+        Are you sure you want to delete{' '}
+        <strong>
+          <em>{connectionToDelete.name}</em>
+        </strong>
+        ?
+      </div>
+    );
+  }
+
+  function handleDelete() {
+    if (!connectionToDelete) {
+      return;
+    }
+
+    deleteConnection(connectionToDelete).subscribe(handleConfirmationClose, (err) => {
+      setDeleteError(err);
+    });
+  }
+
+  function handleConfirmationClose() {
+    setConnectionToDelete(null);
+    setDeleteError(null);
+  }
 
   return (
     <div>
@@ -73,7 +105,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
             const actions: IAction[] = [
               {
                 label: 'Delete',
-                actionFn: () => deleteConnection(conn),
+                actionFn: () => setConnectionToDelete(conn),
                 className: classes.delete,
               },
             ];
@@ -91,6 +123,18 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
           })}
         </TableBody>
       </Table>
+
+      <ConfirmationModal
+        headerTitle="Delete connection"
+        toggleModal={handleConfirmationClose}
+        confirmationElem={confirmDeleteElem}
+        confirmButtonText="Delete"
+        confirmFn={handleDelete}
+        cancelFn={handleConfirmationClose}
+        isOpen={!!connectionToDelete}
+        errorMessage={!deleteError ? '' : 'Failed to delete connection'}
+        extendedMessage={deleteError}
+      />
     </div>
   );
 };
