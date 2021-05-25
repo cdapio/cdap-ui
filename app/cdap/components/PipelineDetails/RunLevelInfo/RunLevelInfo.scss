@@ -197,7 +197,7 @@ $border-color: $grey-05;
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    padding: 0 30px 30px;
+    padding: 0 15px 15px;
     h4 {
       height: 100%;
       display: flex;
@@ -212,10 +212,7 @@ $border-color: $grey-05;
       margin-bottom: 10px;
 
       > div {
-        display: grid;
         padding: 5px 0;
-        grid-gap: 10px;
-        grid-template-columns: repeat(2, 1fr);
         &:first-child {
           color: gray;
           font-weight: 500;
