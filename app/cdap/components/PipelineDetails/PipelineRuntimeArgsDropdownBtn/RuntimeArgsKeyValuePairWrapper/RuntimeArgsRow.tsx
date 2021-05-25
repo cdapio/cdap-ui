@@ -16,16 +16,20 @@
 
 import * as React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { KeyValueRow } from 'components/AbstractWidget/KeyValueWidget/KeyValueRow';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 import AbstractRow, {
   IAbstractRowProps,
   AbstractRowStyles,
 } from 'components/AbstractWidget/AbstractMultiRowWidget/AbstractRow';
 import classnames from 'classnames';
+import { KEY_CODE } from 'services/global-constants';
 const styles = (theme): StyleRules => {
   return {
     ...AbstractRowStyles(theme),
+    root: {
+      ...AbstractRowStyles(theme).root,
+      height: 'unset',
+    },
     inputContainer: {
       display: 'grid',
       gridTemplateColumns: '50% 50%',
@@ -40,9 +44,6 @@ const styles = (theme): StyleRules => {
         cursor: 'not-allowed',
         color: `${theme.palette.grey['50']}`,
       },
-      '& .MuiInputBase-inputMarginDense': {
-        padding: '10.5px 14px 10.5px 14px',
-      },
     },
     label: {
       '& .MuiInputLabel-marginDense': {
@@ -50,11 +51,6 @@ const styles = (theme): StyleRules => {
       },
       '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
         transform: 'translate(14px, -6px) scale(0.75)',
-      },
-    },
-    input: {
-      '& .MuiInputBase-inputMarginDense': {
-        padding: '10.5px 14px 10.5px 14px',
       },
     },
   };
@@ -111,6 +107,12 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
     );
   };
 
+  private decoratedKeyPress = (e) => {
+    if (e.shiftKey && e.nativeEvent.keyCode === KEY_CODE.Enter) {
+      return;
+    }
+    return this.handleKeyPress(e);
+  };
   public renderInput = () => {
     const keyDisabled = this.props.disabled || this.props.value.notDeletable;
 
@@ -141,7 +143,7 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
           label={this.props.valuePlaceholder}
           onChange={this.handleChange.bind(this, 'value')}
           value={this.state.value}
-          onKeyPress={this.handleKeyPress}
+          onKeyPress={this.decoratedKeyPress}
           onKeyDown={this.handleKeyDown}
           disabled={this.props.disabled}
           variant="outlined"
@@ -154,6 +156,7 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
             this.props.classes.label,
             this.props.classes.fieldset
           )}
+          multiline
         />
       </div>
     );

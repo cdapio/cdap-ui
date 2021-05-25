@@ -36,6 +36,7 @@ import findIndex from 'lodash/findIndex';
 import CopyableID from 'components/CopyableID';
 import PipelineRunTimeArgsCounter from 'components/PipelineDetails/PipelineRuntimeArgsCounter';
 import { getFilteredRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
+import RuntimeArgsPairs from 'components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsPairsMaterial';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
 
@@ -142,18 +143,15 @@ export default class RunConfigs extends Component {
   renderRuntimeArgs = () => {
     return (
       <div className="historical-runtimeargs-keyvalues">
-        <div>
-          <div>Name</div>
-          <div>Value</div>
-        </div>
-        {this.state.runtimeArgs.pairs.map((arg) => {
-          return (
-            <div>
-              <input className="form-control" value={arg.key} disabled />
-              <input className="form-control" value={arg.value} disabled />
-            </div>
-          );
-        })}
+        <RuntimeArgsPairs
+          widgetProps={{
+            'key-placeholder': 'Key',
+            'value-placeholder': 'Value',
+          }}
+          value={this.state.runtimeArgs.pairs}
+          dataCy="runlevel-runtimeargs-deployed"
+          disabled={true}
+        />
       </div>
     );
   };
