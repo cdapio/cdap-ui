@@ -48,6 +48,9 @@ const useStyle = makeStyles((theme) => {
       borderTop: '1px solid rgba(0, 0, 0, .125)',
       height: '100%',
       overflow: 'hidden',
+      position: 'relative',
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
     },
   };
 });
