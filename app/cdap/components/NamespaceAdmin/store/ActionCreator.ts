@@ -184,7 +184,9 @@ export function deleteDriver(driver: IDriver) {
   });
 }
 export function getConnections(namespace) {
-  ConnectionsApi.listConnections({ context: namespace }).subscribe((res) => {
+  const requestNamespace = namespace ? namespace : getCurrentNamespace();
+
+  ConnectionsApi.listConnections({ context: requestNamespace }).subscribe((res) => {
     Store.dispatch({
       type: NamespaceAdminActions.setConnections,
       payload: {

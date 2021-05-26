@@ -34,10 +34,13 @@ export function ConnectionConfigForm({
   connectorWidgetJSON,
   connectorProperties,
   onConnectionCreate,
+  initProperties = {},
+  initName = '',
+  initDescription = '',
 }) {
-  const [values, setValues] = React.useState<Record<string, string>>({});
-  const [name, setName] = React.useState('');
-  const [description, setDescription] = React.useState('');
+  const [values, setValues] = React.useState<Record<string, string>>(initProperties);
+  const [name, setName] = React.useState(initName);
+  const [description, setDescription] = React.useState(initDescription);
   const classes = useStyle();
 
   return (
