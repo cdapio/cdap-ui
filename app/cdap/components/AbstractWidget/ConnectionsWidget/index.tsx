@@ -28,11 +28,20 @@ import TableRow from 'components/Table/TableRow';
 import TableCell from 'components/Table/TableCell';
 import TableBody from 'components/Table/TableBody';
 import PipelineModal from 'components/PipelineModal';
+import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
+import ImportConnectionBtn from 'components/Connections/ImportConnectionBtn';
 
 const useStyle = makeStyles((theme) => {
   return {
     tableRow: {
       cursor: 'pointer',
+    },
+    btnContainer: {
+      marginBottom: '10px',
+      textAlign: 'right',
+    },
+    btn: {
+      marginRight: '10px',
     },
   };
 });
@@ -63,13 +72,14 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
 
     if (newState) {
       fetchConnectionsList();
-      setLoading(true);
     }
 
     setIsModalOpen(!isModalOpen);
   }
 
   function fetchConnectionsList() {
+    setLoading(true);
+
     ConnectionsApi.listConnections({ context: getCurrentNamespace() }).subscribe((res) => {
       let connectionsList = res;
 
@@ -113,6 +123,10 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
         header="Browse Connections"
         loading={loading}
       >
+        <div className={classes.btnContainer}>
+          <AddConnectionBtnModal className={classes.btn} onCreate={fetchConnectionsList} />
+          <ImportConnectionBtn className={classes.btn} onCreate={fetchConnectionsList} />
+        </div>
         <Table columnTemplate="2fr 1fr 1fr">
           <TableHeader>
             <TableRow>

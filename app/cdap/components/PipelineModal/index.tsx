@@ -32,7 +32,9 @@ const useStyle = makeStyles((theme) => {
     modalDialog: {
       height: 'calc(100vh - 50px)',
       maxWidth: '100vw',
+      width: '100vw',
       marginTop: 0,
+      marginBottom: 0,
     },
     modalContent: {
       height: '100%',
