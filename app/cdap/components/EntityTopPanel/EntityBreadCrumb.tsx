@@ -53,7 +53,7 @@ export function EntityBreadCrumb({
 }: IEntityBreadCrumbProps) {
   const classes = useStyle();
   let Tag = Link;
-  if (historyBack) {
+  if (historyBack || typeof onBreadCrumbClick === 'function') {
     Tag = 'span';
   }
   const onClickHandler = () => {
@@ -70,7 +70,7 @@ export function EntityBreadCrumb({
   }
   return (
     <div className={classes.root}>
-      <Tag to={breadCrumbAnchorLink} onClick={onClickHandler} className={classes.linkCOntainer}>
+      <Tag to={breadCrumbAnchorLink} onClick={onClickHandler} className={classes.linkContainer}>
         <span className={classes.arrowLeft}>&laquo;</span>
         <span>{breadCrumbAnchorLabel}</span>
       </Tag>
