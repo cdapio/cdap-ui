@@ -14,11 +14,10 @@
  * the License.
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { IConnection } from 'components/NamespaceAdmin/store';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
 import Table from 'components/Table';
 import TableHeader from 'components/Table/TableHeader';
 import TableRow from 'components/Table/TableRow';
@@ -31,8 +30,8 @@ import ConfirmationModal from 'components/ConfirmationModal';
 import DownloadFile from 'services/download-file';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
 import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
-import If from 'components/If';
-import Alert from 'components/Alert';
+import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
+import ImportConnectionBtn from 'components/Connections/ImportConnectionBtn';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -57,10 +56,8 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   const classes = useStyle();
   const [isCreateConnectionOpen, setIsCreateConnectionOpen] = useState(false);
   const [initConnConfig, setInitConnConfig] = useState(null);
-  const [parseError, setParseError] = useState(null);
   const [connectionToDelete, setConnectionToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
-  const fileInputRef = useRef<HTMLInputElement>();
 
   let confirmDeleteElem;
   if (connectionToDelete) {
@@ -128,28 +125,6 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
     openConnectionConfig(config);
   }
 
-  function handleFile(event) {
-    if (!objectQuery(event, 'target', 'files', 0)) {
-      return;
-    }
-    const uploadedFile = event.target.files[0];
-
-    const reader = new FileReader();
-    reader.readAsText(uploadedFile, 'UTF-8');
-
-    reader.onload = (evt) => {
-      try {
-        const config = JSON.parse(evt.target.result.toString());
-        openConnectionConfig(config);
-      } catch (e) {
-        setParseError(`Error parsing imported file: ${e.message}`);
-        if (fileInputRef && fileInputRef.current) {
-          fileInputRef.current.value = null;
-        }
-      }
-    };
-  }
-
   function openConnectionConfig(config) {
     setInitConnConfig(config);
     toggleConnectionCreate();
@@ -158,13 +133,8 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   return (
     <div>
       <div className={classes.subtitleSection}>
-        <Button variant="contained" color="primary" onClick={toggleConnectionCreate}>
-          Add Connection
-        </Button>
-        <Button color="primary" component="label">
-          Import
-          <input type="file" accept=".json" onChange={handleFile} ref={fileInputRef} hidden />
-        </Button>
+        <AddConnectionBtnModal onCreate={getConnections} />
+        <ImportConnectionBtn onCreate={getConnections} />
       </div>
 
       <Table columnTemplate="2fr 1fr 1fr 100px">
@@ -230,15 +200,6 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         initialConfig={initConnConfig}
         onCreate={getConnections}
       />
-
-      <If condition={!!parseError}>
-        <Alert
-          message={parseError}
-          type="error"
-          showAlert={true}
-          onClose={() => setParseError(null)}
-        />
-      </If>
     </div>
   );
 };

@@ -17,35 +17,59 @@
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { CreateConnection } from 'components/Connections/Create';
+import { createPortal } from 'react-dom';
+import If from 'components/If';
 
 const useStyle = makeStyles((theme) => {
   return {
     root: {
       position: 'absolute',
       top: '50px',
-      bottom: '54px',
+      bottom: 0,
       left: 0,
       right: 0,
       backgroundColor: theme.palette.white[50],
+      zIndex: 1062,
+      textAlign: 'left',
     },
   };
 });
 
-export default function CreateConnectionModal({ isOpen, onToggle, initialConfig, onCreate }) {
+export default function CreateConnectionModal({
+  isOpen,
+  onToggle,
+  initialConfig = null,
+  onCreate,
+}) {
   const classes = useStyle();
 
-  if (!isOpen) {
-    return null;
-  }
+  const body = document.body;
+  const [el] = React.useState(document.createElement('div'));
 
-  return (
+  React.useEffect(() => {
+    if (isOpen) {
+      body.appendChild(el);
+    }
+    return () => {
+      try {
+        body.removeChild(el);
+      } catch (e) {
+        // no-op
+      }
+    };
+  }, [isOpen]);
+
+  return createPortal(
     <div className={classes.root}>
-      <CreateConnection
-        enableRouting={false}
-        onToggle={onToggle}
-        initialConfig={initialConfig}
-        onCreate={onCreate}
-      />
-    </div>
+      <If condition={isOpen}>
+        <CreateConnection
+          enableRouting={false}
+          onToggle={onToggle}
+          initialConfig={initialConfig}
+          onCreate={onCreate}
+        />
+      </If>
+    </div>,
+    el
   );
 }

@@ -23,7 +23,8 @@ import Heading, { HeadingTypes } from 'components/Heading';
 const useStyle = makeStyle<Theme, { multiline: boolean }>((theme) => {
   return {
     overviewHeading: {
-      marginBottom: '0',
+      marginBottom: 0,
+      marginTop: 0,
       fontWeight: ({ multiline }) => (multiline ? 'bold' : 'normal'),
     },
     multilineEntityType: {
