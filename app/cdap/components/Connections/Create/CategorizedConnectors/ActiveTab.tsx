@@ -17,6 +17,13 @@ import * as React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { isNilOrEmptyString } from 'services/helpers';
 import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import Table from 'components/Table';
+import TableHeader from 'components/Table/TableHeader';
+import TableRow from 'components/Table/TableRow';
+import TableCell from 'components/Table/TableCell';
+import TableBody from 'components/Table/TableBody';
+import TableColumnGroup from 'components/Table/TableColumnGroup';
+import ColumnGroup from 'components/Table/ColumnGroup';
 
 const useStyle = makeStyle((theme) => {
   return {
@@ -27,29 +34,15 @@ const useStyle = makeStyle((theme) => {
       padding: '10px',
       height: '100%',
     },
-    gridWrapper: {
-      '& .grid.grid-container.grid-compact': {
-        maxHeight: '100%',
-        '& .grid-row': {
-          cursor: 'pointer',
-          gridTemplateColumns: '1fr 1fr 1fr 0.8fr 0.5fr',
-        },
-        '& .grid-row.sub-header': {
-          gridTemplateColumns: '1fr 1fr 2.3fr 0fr 0fr',
-          borderBottom: 0,
-          '& .sub-title': {
-            textAlign: 'center',
-            borderBottom: `1px solid ${theme.palette.grey[400]}`,
-            color: theme.palette.grey[400],
-          },
-        },
-      },
+    tableRow: {
+      cursor: 'pointer',
     },
   };
 });
 
 export function ActiveConnectionTab({ connector, onConnectorSelection, search, onSearchChange }) {
   const classes = useStyle();
+
   return (
     <div className={classes.root}>
       <WidgetWrapper
@@ -69,47 +62,50 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
         value={search}
         onChange={onSearchChange}
       />
-      <div className={`grid-wrapper ${classes.gridWrapper}`}>
-        <div className="grid grid-container grid-compact">
-          <div className="grid-header">
-            <div className="grid-row sub-header">
-              <div />
-              <div />
-              <div className="sub-title">Artifact Information</div>
-            </div>
-            <div className="grid-row">
-              <div>Name</div>
-              <div>Description</div>
-              <div>Artifact</div>
-              <div>Version</div>
-              <div>Scope</div>
-            </div>
-          </div>
-          <div className="grid-body">
-            {connector
-              .filter((conn) => {
-                if (isNilOrEmptyString(search)) {
-                  return conn;
-                }
-                if (conn.name.toLowerCase().indexOf(search.toLowerCase()) >= 0) {
-                  return conn;
-                }
-                return false;
-              })
-              .map((conn, i) => {
-                return (
-                  <div key={i} className="grid-row" onClick={() => onConnectorSelection(conn)}>
-                    <div>{conn.name}</div>
-                    <div>{conn.description}</div>
-                    <div>{conn.artifact.name}</div>
-                    <div>{conn.artifact.version}</div>
-                    <div>{conn.artifact.scope}</div>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      </div>
+
+      <Table columnTemplate="1fr 1fr 1fr 0.8fr 0.5fr">
+        <TableHeader>
+          <TableColumnGroup>
+            <ColumnGroup gridColumn="3 / span 3">Artifact Information</ColumnGroup>
+          </TableColumnGroup>
+
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Artifact</TableCell>
+            <TableCell>Version</TableCell>
+            <TableCell>Scope</TableCell>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {connector
+            .filter((conn) => {
+              if (isNilOrEmptyString(search)) {
+                return conn;
+              }
+              if (conn.name.toLowerCase().indexOf(search.toLowerCase()) >= 0) {
+                return conn;
+              }
+              return false;
+            })
+            .map((conn, i) => {
+              return (
+                <TableRow
+                  key={i}
+                  className={classes.tableRow}
+                  onClick={() => onConnectorSelection(conn)}
+                >
+                  <TableCell>{conn.name}</TableCell>
+                  <TableCell>{conn.description}</TableCell>
+                  <TableCell>{conn.artifact.name}</TableCell>
+                  <TableCell>{conn.artifact.version}</TableCell>
+                  <TableCell>{conn.artifact.scope}</TableCell>
+                </TableRow>
+              );
+            })}
+        </TableBody>
+      </Table>
     </div>
   );
 }
