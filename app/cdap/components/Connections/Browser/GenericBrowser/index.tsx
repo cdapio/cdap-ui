@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import MuiAlert from '@material-ui/lab/Alert';
 import { isNilOrEmptyString } from 'services/helpers';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import debounce from 'lodash/debounce';
@@ -24,6 +25,7 @@ import { useLocation } from 'react-router-dom';
 import Breadcrumb from 'components/Connections/Browser/GenericBrowser/Breadcrumb';
 import SearchField from 'components/Connections/Browser/GenericBrowser/SearchField';
 import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/BrowserTable';
+import If from 'components/If';
 
 const useStyle = makeStyle(() => {
   return {
@@ -40,6 +42,9 @@ const useStyle = makeStyle(() => {
       display: 'flex',
       justifyContent: 'flex-end',
       marginRight: '8px',
+    },
+    alert: {
+      maxHeight: '4em',
     },
   };
 });
@@ -65,8 +70,9 @@ export function GenericBrowser({ selectedConnection }) {
       });
 
       setEntities(res.entities);
+      setError(null);
     } catch (e) {
-      setError(`Failed to explore connection : "${e.message}"`);
+      setError(`Failed to explore connection : "${e.response}"`);
     } finally {
       setLoading(false);
     }
@@ -106,12 +112,11 @@ export function GenericBrowser({ selectedConnection }) {
     }
   }, [loc]);
 
-  if (error) {
-    throw error;
-  }
+  const isEmpty = !Array.isArray(entities) || (Array.isArray(entities) && !entities.length);
 
-  const filteredEnitities = searchString.length
-    ? entities.filter((e) => e.name.toLowerCase().includes(searchString.toLocaleLowerCase()))
+  const lowerSearchString = searchString.trim().toLocaleLowerCase();
+  const filteredEntities = lowerSearchString.length
+    ? entities.filter((e) => e.name.toLocaleLowerCase().includes(lowerSearchString))
     : entities;
 
   return (
@@ -127,13 +132,25 @@ export function GenericBrowser({ selectedConnection }) {
           <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
         </div>
       </div>
-      <BrowserTable
-        entities={filteredEnitities}
-        selectedConnection={selectedConnection}
-        path={path}
-        onExplore={onExplore}
-        loading={loading}
-      />
+      <If condition={!isEmpty && !error}>
+        <BrowserTable
+          entities={filteredEntities}
+          selectedConnection={selectedConnection}
+          path={path}
+          onExplore={onExplore}
+          loading={loading}
+        />
+      </If>
+      <If condition={isEmpty && !error}>
+        <MuiAlert severity="info" className={classes.alert}>
+          No entities available
+        </MuiAlert>
+      </If>
+      <If condition={error}>
+        <MuiAlert severity="error" className={classes.alert}>
+          {error}
+        </MuiAlert>
+      </If>
     </React.Fragment>
   );
 }
