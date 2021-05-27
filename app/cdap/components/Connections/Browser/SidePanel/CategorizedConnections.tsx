@@ -66,15 +66,14 @@ const CustomAccordionSummary = withStyles((theme) => ({
   expanded: {},
 }))(AccordionSummary);
 
-const CustomAccordionDetails = withStyles({
+const CustomAccordionDetails = withStyles((theme) => ({
   root: {
     padding: 0,
     gap: '10px',
     display: 'grid',
-    gridAutoRows: '30px',
-    paddingBottom: '10px',
+    gridAutoRows: `${theme.spacing(4)}px`,
   },
-})(AccordionDetails);
+}))(AccordionDetails);
 
 const useStyle = makeStyles<Theme>(
   (theme): StyleRules => {
