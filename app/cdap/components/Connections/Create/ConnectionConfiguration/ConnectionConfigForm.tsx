@@ -37,6 +37,7 @@ export function ConnectionConfigForm({
   initProperties = {},
   initName = '',
   initDescription = '',
+  isEdit,
 }) {
   const [values, setValues] = React.useState<Record<string, string>>(initProperties);
   const [name, setName] = React.useState(initName);
@@ -104,7 +105,7 @@ export function ConnectionConfigForm({
             })
           }
         >
-          Create
+          {isEdit ? 'Save' : 'Create'}
         </Button>
       </div>
     </div>

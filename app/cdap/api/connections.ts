@@ -57,6 +57,12 @@ export const ConnectionsApi = {
     `${pipelineV1AppBasePath}/connections/:connectionid`
   ),
   listConnections: apiCreator(dataSrc, 'GET', 'REQUEST', `${pipelineV1AppBasePath}/connections`),
+  getConnection: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${pipelineV1AppBasePath}/connections/:connectionId`
+  ),
   exploreConnection: apiCreator(
     dataSrc,
     'POST',

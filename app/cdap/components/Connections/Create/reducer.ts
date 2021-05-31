@@ -21,6 +21,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
 import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
 import { Observable } from 'rxjs/Observable';
+import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
 
 interface ICategories {
   name: string;
@@ -299,4 +300,11 @@ export async function createConnection(name, connectionConfiguration) {
     },
     connectionConfiguration
   ).toPromise();
+}
+
+export function getConnection(name) {
+  return ConnectionsApi.getConnection({
+    context: getCurrentNamespace(),
+    connectionId: name,
+  }).toPromise();
 }
