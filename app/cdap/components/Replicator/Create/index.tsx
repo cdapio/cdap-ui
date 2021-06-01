@@ -22,11 +22,8 @@ import Content from 'components/Replicator/Create/Content';
 import { Redirect } from 'react-router-dom';
 import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import {
-  fetchPluginInfo,
-  fetchPluginWidget,
-  constructTablesSelection,
-} from 'components/Replicator/utilities';
+import { fetchPluginInfo, constructTablesSelection } from 'components/Replicator/utilities';
+
 import { PluginType } from 'components/Replicator/constants';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import uuidV4 from 'uuid/v4';

@@ -139,6 +139,9 @@ angular
   .directive('configurationGroup', function(reactDirective) {
     return reactDirective(window.CaskCommon.ConfigurationGroup);
   })
+  .directive('pushdownConfig', function(reactDirective) {
+    return reactDirective(window.CaskCommon.PushdownConfig);
+  })
   .directive('widgetWrapper', function(reactDirective) {
     return reactDirective(window.CaskCommon.WidgetWrapper);
   })
