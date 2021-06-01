@@ -463,6 +463,11 @@ features:
             truncatedContentsTooltip: The GCS account you are viewing contains more directories and files we can currently display.
             truncatedLabel: "{dirsCount} directories and {fileCount} files of many"
           selectData: Select data
+      GenericBrowser:
+        EmptyMessageContainer:
+          title: No entities available
+          suggestion1: your search
+          suggestion2: Browse to another location
       KafkaBrowser:
         EmptyMessage:
           clearLabel: Clear
