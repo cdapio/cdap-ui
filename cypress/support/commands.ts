@@ -611,8 +611,8 @@ Cypress.Commands.add(
     cy.get(
       `${dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)} ${dataCy(row)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
-    ).type(value);
+      )} textarea`
+    ).first().type(value);
   }
 );
 
@@ -642,13 +642,13 @@ Cypress.Commands.add(
     cy.get(
       `${dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)} ${dataCy(row)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
+      )} textarea`
     ).should('exist');
     cy.get(
       `${dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)} ${dataCy(row)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
-    ).clear();
+      )} textarea`
+    ).clear({ force: true });
     cy.get(
       `${dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)} ${dataCy(row)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
@@ -688,8 +688,8 @@ Cypress.Commands.add(
     cy.get(
       `${dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)} ${dataCy(row)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
-    ).should('have.value', value);
+      )} textarea`
+    ).first().should('have.value', value);
   }
 );
 

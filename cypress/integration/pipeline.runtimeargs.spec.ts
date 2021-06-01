@@ -91,7 +91,7 @@ describe('Creating pipeline with macros ', () => {
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(0)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
+      )} textarea`
     ).should('have.value', '');
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(0)} ${dataCy(RUNTIME_ARGS_VALUE_SELECTOR)}`
@@ -168,13 +168,13 @@ describe('Creating pipeline with macros ', () => {
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(0)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
+      )} textarea`
     ).should('have.value', 'random value1');
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(0)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
-    ).clear();
+      )} textarea`
+    ).clear({ force: true });
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(0)} ${dataCy(RUNTIME_ARGS_VALUE_SELECTOR)}`
     ).type(SOURCE_PATH_VAL);
@@ -192,8 +192,8 @@ describe('Creating pipeline with macros ', () => {
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(1)} ${dataCy(
         RUNTIME_ARGS_VALUE_SELECTOR
-      )} input`
-    ).clear();
+      )} textarea`
+    ).clear({ force: true });
     cy.get(
       `${dataCy(RUNTIME_ARGS_PREVIEW_SELECTOR)} ${dataCy(1)} ${dataCy(RUNTIME_ARGS_VALUE_SELECTOR)}`
     ).type(SINK_PATH_VAL);
@@ -249,11 +249,15 @@ describe('Deploying pipeline with temporary runtime arguments', () => {
 
   it('and running it should succeed.', () => {
     cy.get('.arrow-btn-container').click();
+    const randomValueWithNewLine = `Random value{shift}{enter}1{shift}{enter}unknown`;
+    const randomValueWithNewLine1 = `Random value
+1
+unknown`;
     cy.get(dataCy(RUNTIME_ARGS_MODELESS_LOADING_SELECTOR)).should('not.exist');
     cy.get(dataCy(RUNTIME_ARGS_DEPLOYED_SELECTOR)).should('exist');
-    cy.update_runtime_args_row(0, 'source_path', 'random value 1', true);
+    cy.update_runtime_args_row(0, 'source_path', randomValueWithNewLine, true);
     cy.update_runtime_args_row(1, 'sink_path', 'random value 2', true);
-    cy.assert_runtime_args_row(0, 'source_path', 'random value 1');
+    cy.assert_runtime_args_row(0, 'source_path',randomValueWithNewLine1);
     cy.assert_runtime_args_row(1, 'sink_path', 'random value 2');
     cy.add_runtime_args_row_with_value(2, 'test key 3', 'test value 3');
     cy.assert_runtime_args_row(2, 'test key 3', 'test value 3', false);

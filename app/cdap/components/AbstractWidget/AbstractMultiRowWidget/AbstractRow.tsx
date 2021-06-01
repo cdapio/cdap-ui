@@ -22,6 +22,7 @@ import { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import If from 'components/If';
 import { KEY_CODE } from 'services/global-constants';
 import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import classnames from 'classnames';
 
 export const AbstractRowStyles = (theme): StyleRules => {
   return {
@@ -33,6 +34,9 @@ export const AbstractRowStyles = (theme): StyleRules => {
       '& > *:first-child': {
         marginRight: '10px',
       },
+    },
+    disabledRoot: {
+      gridTemplateColumns: '1fr',
     },
     errorText: {
       color: theme.palette.red[50],
@@ -101,7 +105,12 @@ export default class AbstractRow<
 
     return (
       <React.Fragment>
-        <div className={this.props.classes.root} data-cy={`${index}`}>
+        <div
+          className={classnames(this.props.classes.root, {
+            [this.props.classes.disabledRoot]: this.props.disabled,
+          })}
+          data-cy={`${index}`}
+        >
           {this.renderInput()}
 
           <If condition={!this.props.disabled}>
