@@ -42,6 +42,7 @@ interface IConnectionConfigurationProps extends IConnectorDetails {
     initDescription?: string;
     initProperties?: Record<string, string>;
   };
+  isEdit: boolean;
 }
 
 export function ConnectionConfiguration({
@@ -50,6 +51,7 @@ export function ConnectionConfiguration({
   connectorDoc,
   onConnectionCreate,
   initValues = {},
+  isEdit,
 }: IConnectionConfigurationProps) {
   if (!connectorProperties) {
     return null;
@@ -71,6 +73,7 @@ export function ConnectionConfiguration({
             initName={initValues.initName}
             initDescription={initValues.initDescription}
             initProperties={initValues.initProperties}
+            isEdit={isEdit}
           />
         ),
         paneClassName: classes.activeTabPane,
