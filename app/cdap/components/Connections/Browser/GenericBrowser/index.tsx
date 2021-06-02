@@ -16,7 +16,10 @@
 
 import * as React from 'react';
 import { isNilOrEmptyString } from 'services/helpers';
-import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import {
+  exploreConnection,
+  createWorkspace,
+} from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import T from 'i18n-react';
@@ -30,6 +33,8 @@ import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import ErrorBanner from 'components/ErrorBanner';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
+import { Redirect } from 'react-router';
+import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyle(() => {
   return {
@@ -60,7 +65,9 @@ export function GenericBrowser({ selectedConnection }) {
   const [path, setPath] = React.useState(pathFromUrl);
   const [searchString, setSearchString] = React.useState('');
   const [searchStringDisplay, setSearchStringDisplay] = React.useState('');
+  const [workspaceId, setWorkspaceId] = React.useState(null);
   const classes = useStyle();
+  const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
 
   const fetchEntities = async () => {
     setLoading(true);
@@ -78,17 +85,26 @@ export function GenericBrowser({ selectedConnection }) {
       setLoading(false);
     }
   };
+
   const debouncedSetSearchString = debounce(setSearchString, 300);
+
   const handleSearchChange = (newSearchString) => {
     setSearchStringDisplay(newSearchString);
     debouncedSetSearchString(newSearchString);
   };
+
   const clearSearchString = () => {
     debouncedSetSearchString.cancel();
     setSearchStringDisplay('');
     setSearchString('');
   };
-  const onExplore = (entityName) => {
+
+  const onExplore = (entity) => {
+    const { name: entityName, canBrowse } = entity;
+    if (!canBrowse) {
+      setLoading(true);
+      return onCreateWorkspace(entity);
+    }
     if (path === '/') {
       setPath(`/${entityName}`);
     } else {
@@ -97,6 +113,22 @@ export function GenericBrowser({ selectedConnection }) {
     setLoading(true);
     clearSearchString();
   };
+
+  const onCreateWorkspace = async (entity) => {
+    try {
+      const wid = await createWorkspace({
+        entity,
+        connection: selectedConnection,
+      });
+      if (onWorkspaceCreate) {
+        return onWorkspaceCreate(wid);
+      }
+      setWorkspaceId(wid);
+    } catch (e) {
+      setError(e && e.message ? e.message : e);
+    }
+  };
+
   React.useEffect(() => {
     if (isNilOrEmptyString(selectedConnection)) {
       return setLoading(false);
@@ -107,7 +139,7 @@ export function GenericBrowser({ selectedConnection }) {
   React.useEffect(() => {
     const query = new URLSearchParams(loc.search);
     const urlPath = query.get('path') || '/';
-    if (path !== urlPath) {
+    if (path !== urlPath && !loading) {
       setPath(urlPath);
       clearSearchString();
     }
@@ -122,6 +154,9 @@ export function GenericBrowser({ selectedConnection }) {
     !Array.isArray(filteredEntities) ||
     (Array.isArray(filteredEntities) && !filteredEntities.length);
 
+  if (workspaceId) {
+    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler/${workspaceId}`} />;
+  }
   return (
     <React.Fragment>
       <div className={classes.topBar}>

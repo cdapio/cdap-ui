@@ -19,17 +19,17 @@ import { Route, Switch } from 'react-router-dom';
 import { CreateConnection } from 'components/Connections/Create';
 import { ConnectionsHome } from 'components/Connections/Home';
 
-export function ConnectionRoutes({ enableRouting }) {
+export function ConnectionRoutes() {
   return (
     <Switch>
       <Route exact path="/ns/:namespace/connections/create">
-        <CreateConnection enableRouting={enableRouting} />
+        <CreateConnection />
       </Route>
       <Route path="/ns/:namespace/connections/:connectionid">
-        <ConnectionsHome enableRouting={enableRouting} />
+        <ConnectionsHome />
       </Route>
       <Route path="/ns/:namespace/connections">
-        <ConnectionsHome enableRouting={enableRouting} />
+        <ConnectionsHome />
       </Route>
     </Switch>
   );

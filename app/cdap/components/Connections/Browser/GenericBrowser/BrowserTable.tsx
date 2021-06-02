@@ -59,11 +59,18 @@ const useStyle = makeStyle(() => {
     },
   };
 });
+interface IBrowseEntity {
+  canBrowse: boolean;
+  canSample: boolean;
+  name: string;
+  type: string;
+  path: string;
+}
 interface IBrowserTable {
   selectedConnection: string;
   path: string;
   entities: any;
-  onExplore: (entityName: string) => void;
+  onExplore: (entityName: IBrowseEntity) => void;
   loading: boolean;
 }
 
@@ -111,7 +118,7 @@ export function BrowserTable({
                 to={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
                   entity.name
                 )}`}
-                onClick={() => onExplore(entity.name)}
+                onClick={() => onExplore(entity)}
               >
                 <TableCell>
                   <div className={classes.nameWrapper}>
