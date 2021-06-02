@@ -64,7 +64,6 @@ export default function CreateConnectionModal({
     <div className={classes.root}>
       <If condition={isOpen}>
         <CreateConnection
-          enableRouting={false}
           onToggle={onToggle}
           initialConfig={initialConfig}
           onCreate={onCreate}

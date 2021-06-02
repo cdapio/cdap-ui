@@ -19,7 +19,6 @@ import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
-import DataPrepConnection from 'components/DataPrepConnections';
 import ErrorBanner from 'components/ErrorBanner';
 import { IWidgetProps } from 'components/AbstractWidget';
 import If from 'components/If';
@@ -31,6 +30,7 @@ import ee from 'event-emitter';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
 import Connections from 'components/Connections';
+import { IConnectionMode } from 'components/Connections/ConnectionsContext';
 import { ConnectionsApi } from 'api/connections';
 
 const styles = (theme) => {
@@ -346,7 +346,7 @@ class PluginConnectionBrowser extends React.PureComponent<
           </div>
           <ModalBody>
             <If condition={!this.state.loading}>
-              <Connections enableRouting={false} singleWorkspaceMode={true} />
+              <Connections mode={IConnectionMode.ROUTED_WORKSPACE} />
             </If>
             <If condition={this.state.loading}>
               <LoadingSVGCentered />

@@ -14,20 +14,16 @@
  * the License.
 */
 
+.dataprep-home-container {
+  height: inherit;
+  overflow-y: hidden;
+}
 .dataprephome-wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 100%;
   height: 100%;
-  > div {
-    &:only-child {
-      flex: 1;
-    }
-    &:not(:only-child) {
-      &:first-child {
-        flex: 0.5;
-      }
-      &:nth-child(2) {
-        flex: 0.5;
-      }
-    }
+
+  &.connections-toggle {
+    grid-template-columns: 50% 50%;
   }
 }

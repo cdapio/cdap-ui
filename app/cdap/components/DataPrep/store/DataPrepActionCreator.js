@@ -72,13 +72,13 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
           type: DataPrepActions.setDirectives,
           payload: {
             data: res.values,
-            headers: res.header,
-            directives: res.directives,
+            headers: res.headers,
+            directives: updatedDirectives,
             types: res.types,
           },
         });
 
-        fetchColumnsInformation(params, requestBody, res.header);
+        fetchColumnsInformation(res);
       },
       (err) => {
         observer.error(err);
@@ -105,13 +105,18 @@ function setWorkspaceRetry(params, observer, workspaceId) {
       if (dataprep.workspaceId !== workspaceId) {
         return;
       }
-      let directives = objectQuery(res, 'values', '0', 'recipe', 'directives') || [];
+      let directives = objectQuery(res, 'directives') || [];
       let requestBody = directiveRequestBodyCreator(directives);
-      let properties = objectQuery(res, 'values', 0, 'properties');
+      let sampleSpec = objectQuery(res, 'sampleSpec');
+      let properties = {
+        name: sampleSpec.connectionName,
+      };
       requestBody.properties = properties;
 
-      let workspaceUri = objectQuery(res, 'values', '0', 'properties', 'path');
-      let workspaceInfo = objectQuery(res, 'values', '0');
+      let workspaceUri = objectQuery(res, 'sampleSpec', 'path');
+      let workspaceInfo = {
+        properties,
+      };
 
       MyDataPrepApi.execute(params, requestBody).subscribe(
         (response) => {
@@ -119,7 +124,7 @@ function setWorkspaceRetry(params, observer, workspaceId) {
             type: DataPrepActions.setWorkspace,
             payload: {
               data: response.values,
-              headers: response.header,
+              headers: response.headers,
               types: response.types,
               directives,
               workspaceId,
@@ -130,7 +135,7 @@ function setWorkspaceRetry(params, observer, workspaceId) {
           });
 
           observer.next(response);
-          fetchColumnsInformation(params, requestBody, response.header);
+          fetchColumnsInformation(response);
         },
         (err) => {
           // Backend returned an exception. Show default error message for now able to show data.
@@ -214,30 +219,24 @@ export function setWorkspace(workspaceId) {
   });
 }
 
-function fetchColumnsInformation(params, requestBody, headers) {
-  MyDataPrepApi.summary(params, requestBody).subscribe(
-    (summaryRes) => {
-      let columns = {};
+function fetchColumnsInformation(response) {
+  const { headers, summary: summaryRes } = response;
+  let columns = {};
 
-      headers.forEach((head) => {
-        columns[head] = {
-          general: objectQuery(summaryRes, 'values', 'statistics', head, 'general'),
-          types: objectQuery(summaryRes, 'values', 'statistics', head, 'types'),
-          isValid: objectQuery(summaryRes, 'values', 'validation', head, 'valid'),
-        };
-      });
+  headers.forEach((head) => {
+    columns[head] = {
+      general: objectQuery(summaryRes, 'statistics', head, 'general'),
+      types: objectQuery(summaryRes, 'statistics', head, 'types'),
+      isValid: objectQuery(summaryRes, 'validation', head, 'valid'),
+    };
+  });
 
-      DataPrepStore.dispatch({
-        type: DataPrepActions.setColumnsInformation,
-        payload: {
-          columns,
-        },
-      });
+  DataPrepStore.dispatch({
+    type: DataPrepActions.setColumnsInformation,
+    payload: {
+      columns,
     },
-    (err) => {
-      console.log('error fetching summary', err);
-    }
-  );
+  });
 }
 
 export function getWorkspaceList(workspaceId) {
@@ -260,7 +259,7 @@ export function getWorkspaceList(workspaceId) {
 
     let workspaceList = orderBy(
       res.values,
-      [(workspace) => (workspace.name || '').toLowerCase()],
+      [(workspace) => (workspace.workspaceName || '').toLowerCase()],
       ['asc']
     );
 
@@ -280,7 +279,7 @@ export function getWorkspaceList(workspaceId) {
       if (workspaceObj) {
         workspaceObservable$ = setWorkspace(workspaceId);
       } else {
-        workspaceObservable$ = setWorkspace(workspaceList[0].id);
+        workspaceObservable$ = setWorkspace(workspaceList[0].workspaceId);
       }
 
       workspaceObservable$.subscribe();

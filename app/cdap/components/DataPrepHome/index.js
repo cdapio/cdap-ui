@@ -27,7 +27,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Redirect } from 'react-router-dom';
 import orderBy from 'lodash/orderBy';
 import DataPrepServiceControl from 'components/DataPrep/DataPrepServiceControl';
-import DataPrepConnections from 'components/DataPrepConnections';
+import Connections from 'components/Connections';
 import { objectQuery } from 'services/helpers';
 import isNil from 'lodash/isNil';
 import ee from 'event-emitter';
@@ -35,6 +35,7 @@ import Version from 'services/VersionRange/Version';
 import { Theme } from 'services/ThemeHelper';
 import { setWorkspace } from 'components/DataPrep/store/DataPrepActionCreator';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import classnames from 'classnames';
 
 require('./DataPrepHome.scss');
 /**
@@ -52,7 +53,7 @@ export default class DataPrepHome extends Component {
       backendCheck: true,
       isMinVersionMet: false,
       toggleConnectionsViewFlag:
-        isNil(this.props.workspaceId) && this.props.singleWorkspaceMode ? true : false,
+        isNil(this.props.workspaceId) && this.props.mode === 'ROUTED_WORKSPACE' ? true : false,
       currentWorkspaceId:
         objectQuery(this.props, 'match', 'params', 'workspaceId') || this.props.workspaceId || '',
     };
@@ -175,7 +176,7 @@ export default class DataPrepHome extends Component {
         }
         let sortedWorkspace = orderBy(
           res.values,
-          [(workspace) => workspace.name.toLowerCase()],
+          [(workspace) => workspace.workspaceName.toLowerCase()],
           ['asc']
         );
         DataPrepStore.dispatch({
@@ -186,7 +187,7 @@ export default class DataPrepHome extends Component {
         });
 
         let isCurrentWorkspaceIdValid = sortedWorkspace.find(
-          (ws) => ws.id === this.props.match.params.workspaceId
+          (ws) => ws.workspaceId === this.props.match.params.workspaceId
         );
         if (this.props.match.params.workspaceId && !isCurrentWorkspaceIdValid) {
           let url = this.props.match.url.slice(
@@ -195,13 +196,13 @@ export default class DataPrepHome extends Component {
           );
           this.props.history.replace(url);
         } else {
-          setWorkspace(sortedWorkspace[0].id).subscribe();
+          setWorkspace(sortedWorkspace[0].workspaceId).subscribe();
         }
         this.setState({
-          rerouteTo: sortedWorkspace[0].id,
+          rerouteTo: sortedWorkspace[0].workspaceId,
           backendDown: false,
           backendCheck: false,
-          currentWorkspaceId: sortedWorkspace[0].id,
+          currentWorkspaceId: sortedWorkspace[0].workspaceId,
         });
         DataPrepStore.dispatch({
           type: DataPrepActions.disableLoading,
@@ -282,24 +283,30 @@ export default class DataPrepHome extends Component {
 
   renderContents() {
     let workspaceId = this.state.currentWorkspaceId;
-    let { enableRouting = false, ...attributes } = this.props;
+    let { mode, ...attributes } = this.props;
+    const { toggleConnectionsViewFlag } = this.state;
     return (
-      <div className="dataprephome-wrapper">
-        {this.state.toggleConnectionsViewFlag ? (
-          <DataPrepConnections
-            enableRouting={enableRouting}
-            onWorkspaceCreate={enableRouting ? null : this.onWorkspaceCreate}
-            singleWorkspaceMode={this.props.singleWorkspaceMode}
+      <div
+        className={classnames('dataprephome-wrapper', {
+          ['connections-toggle']: workspaceId && toggleConnectionsViewFlag === true,
+        })}
+      >
+        {toggleConnectionsViewFlag ? (
+          <Connections
+            mode={mode || 'ROUTED_WORKSPACE'}
+            onWorkspaceCreate={mode === 'INMEMORY' ? null : this.onWorkspaceCreate}
             {...attributes}
           />
         ) : null}
-        {!workspaceId && this.props.singleWorkspaceMode ? null : (
+        {!workspaceId && mode === 'ROUTED_WORKSPACE' ? null : (
           <DataPrep
             workspaceId={workspaceId}
             onConnectionsToggle={this.toggleConnectionsView}
-            onWorkspaceDelete={this.props.singleWorkspaceMode ? null : this.updateWorkspaceList}
+            onWorkspaceDelete={
+              this.props.mode === 'ROUTED_WORKSPACE' ? null : this.updateWorkspaceList
+            }
             onSubmit={this.props.onSubmit}
-            singleWorkspaceMode={this.props.singleWorkspaceMode}
+            mode={mode}
             disabled={this.props.disabled}
           />
         )}
@@ -316,7 +323,7 @@ export default class DataPrepHome extends Component {
       />
     );
     const renderPageTitle = () => {
-      return !this.props.singleWorkspaceMode ? pageTitle : null;
+      return this.props.mode !== 'ROUTED_WORKSPACE' ? pageTitle : null;
     };
 
     if (this.state.backendCheck) {
@@ -337,12 +344,12 @@ export default class DataPrepHome extends Component {
       );
     }
 
-    if (!this.props.singleWorkspaceMode && this.state.isEmpty) {
+    if (this.props.mode !== 'ROUTED_WORKSPACE' && this.state.isEmpty) {
       return <Redirect to={`/ns/${this.namespace}/connections`} />;
     }
 
     return (
-      <div>
+      <div className="dataprep-home-container">
         {renderPageTitle()}
         {this.renderContents()}
       </div>
@@ -360,23 +367,7 @@ DataPrepHome.propTypes = {
   location: PropTypes.object,
   history: PropTypes.object,
 
-  /*
-    The following 4 are used when coming from pipeline studio
-    1. 'enableRouting' is used when toggling connections side-by-side with dataprep
-       - When set to 'true' treats all anchors as it is. Navigation happens on click of any anchor tag and the url
-         is updated. This is for DataPrepConnections when navigating from '/connections' url
-       - When set to 'false' suppresses all anchor navigations.
-          The final click on a file (or eventually a database table) should navigate to dataprep via a url update
-          - User goes to go /wrangler
-          - Toggles connections arrow to choose another file
-          - Navigates through differnet connection and folders
-          - Chooses a file which then navigates to a workspaceId (using url)
-    2. 'singleWorkspaceMode`
-       - When set to 'true' will suppress all anchor navigations. Everything is in-memory and needs to update based
-         on store. This is used when user wrangles data from pipeline studio.
-  */
-  enableRouting: PropTypes.bool,
-  singleWorkspaceMode: PropTypes.bool,
+  mode: PropTypes.oneOf(['ROUTED', 'ROUTED_WORKSPACE', 'INMEMORY']),
   workspaceId: PropTypes.string,
   onSubmit: PropTypes.func,
   disabled: PropTypes.bool,

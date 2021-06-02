@@ -30,8 +30,11 @@ export default class DropColumnDirective extends Component {
   }
 
   applyDirective() {
-    let column = this.props.column.toString();
-    let directive = `drop :${column}`;
+    let column = `:${this.props.column.toString()}`;
+    if (Array.isArray(this.props.column) && this.props.column.length > 1) {
+      column = this.props.column.map(c => `:${c}`).join(',');
+    }
+    let directive = `drop ${column}`;
 
     execute([directive]).subscribe(
       () => {

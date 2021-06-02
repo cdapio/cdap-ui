@@ -53,14 +53,12 @@ interface IConnectionsBrowserSidePanelState {
 }
 
 interface IConnectionBrowserSidePanelProps {
-  enableRouting?: boolean;
   onSidePanelToggle: () => void;
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
 }
 
 export function ConnectionsBrowserSidePanel({
-  enableRouting,
   onSidePanelToggle,
   onConnectionSelection,
   selectedConnection,
@@ -96,7 +94,7 @@ export function ConnectionsBrowserSidePanel({
         onConnectionSelection={onConnectionSelection}
         selectedConnection={selectedConnection}
       />
-      <CreateConnectionBtn enableRouting={true} />
+      <CreateConnectionBtn />
     </Paper>
   );
 }

@@ -172,7 +172,10 @@ export function getCategoriesToConnectorsMap(connectionTypes = []) {
     return categoryToConnectionsMap;
   }
   for (const connectionType of connectionTypes) {
-    const { category } = connectionType;
+    let { category } = connectionType;
+    if (!category) {
+      category = connectionType.artifact.name;
+    }
     if (!categoryToConnectionsMap.has(category)) {
       categoryToConnectionsMap.set(category, [connectionType]);
       continue;
