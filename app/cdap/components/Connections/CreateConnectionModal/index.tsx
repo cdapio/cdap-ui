@@ -40,6 +40,7 @@ export default function CreateConnectionModal({
   onToggle,
   initialConfig = null,
   onCreate,
+  isEdit = false,
 }) {
   const classes = useStyle();
 
@@ -67,6 +68,7 @@ export default function CreateConnectionModal({
           onToggle={onToggle}
           initialConfig={initialConfig}
           onCreate={onCreate}
+          isEdit={isEdit}
         />
       </If>
     </div>,

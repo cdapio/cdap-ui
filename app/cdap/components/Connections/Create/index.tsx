@@ -29,13 +29,16 @@ import {
   IConnectorDetails,
   fetchConnectionDetails,
   createConnection,
+  getConnection,
 } from 'components/Connections/Create/reducer';
 import If from 'components/If';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
-import { objectQuery } from 'services/helpers';
+import { extractErrorMessage, objectQuery } from 'services/helpers';
+import { ConnectionsApi } from 'api/connections';
+import Alert from 'components/Alert';
 
 const useStyle = makeStyle(() => {
   return {
@@ -54,6 +57,7 @@ export function CreateConnection({
   onToggle = null,
   initialConfig = {},
   onCreate = null,
+  isEdit = false,
 }) {
   const classes = useStyle();
   const [loading, setLoading] = React.useState(true);
@@ -65,6 +69,7 @@ export function CreateConnection({
     connectorDoc: null,
   });
   const [initValues, setInitValues] = React.useState({});
+  const [error, setError] = React.useState(null);
 
   const init = async () => {
     try {
@@ -109,6 +114,18 @@ export function CreateConnection({
 
   const onConnectionCreate = async (connectionFormData) => {
     const { description, properties, name } = connectionFormData;
+
+    if (!isEdit) {
+      // validate existing connection name
+      try {
+        await getConnection(name);
+        setError(`Connection '${name}' already exists.`);
+        return;
+      } catch (e) {
+        // no-op. We want the connection to be not found.
+      }
+    }
+
     const { selectedConnector } = state;
     const connectionConfiguration = {
       description,
@@ -133,8 +150,8 @@ export function CreateConnection({
         onToggle();
       }
     } catch (e) {
-      // tslint:disable-next-line: no-console
-      console.log('TODO: surface error: ', e);
+      const errorMsg = extractErrorMessage(e);
+      setError(errorMsg);
     }
   };
 
@@ -183,7 +200,12 @@ export function CreateConnection({
           connectorDoc={connectionDetails.connectorDoc}
           onConnectionCreate={onConnectionCreate}
           initValues={initValues}
+          isEdit={isEdit}
         />
+      </If>
+
+      <If condition={!!error}>
+        <Alert message={error} type="error" showAlert={true} onClose={() => setError(null)} />
       </If>
     </div>
   );

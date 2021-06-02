@@ -105,7 +105,7 @@ export default class Alert extends Component {
         backdrop={false}
         keyboard={true}
         className="global-alert"
-        zIndex={1061 /* This is required for showing error in angular side*/}
+        zIndex={1062 /* This is required for showing error in angular side*/}
       >
         <div className={this.state.type} data-cy="alert">
           {msgElem}
