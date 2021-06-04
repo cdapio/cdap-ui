@@ -24,12 +24,20 @@ import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import If from 'components/If';
 import classnames from 'classnames';
+import ActionsPopover, { IAction } from 'components/ActionsPopover';
+import { objectQuery } from 'services/helpers';
+import DownloadFile from 'services/download-file';
+import ConfirmationModal from 'components/ConfirmationModal';
+import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
+import { ConnectionsApi } from 'api/connections';
 
 interface ICategorizedConnectionsProps {
   categorizedConnections: Map<string, any[]>;
   categories: string[];
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
+  boundaryElement: any;
+  fetchConnections: () => void;
 }
 const Accordion = withStyles({
   root: {
@@ -84,9 +92,11 @@ const useStyle = makeStyles<Theme>(
         display: 'flex',
         alignItems: 'center',
         '&:hover': {
-          color: 'black',
           textDecoration: 'none',
+        },
+        '&:hover > span': {
           fontWeight: 600,
+          color: 'black',
         },
       },
       selectedConnection: {
@@ -96,6 +106,16 @@ const useStyle = makeStyles<Theme>(
           color: theme.palette.primary.main,
           fontWeight: 'normal',
         },
+      },
+      actionPopover: {
+        marginLeft: 'auto',
+
+        '&:hover': {
+          fontWeight: 'normal',
+        },
+      },
+      delete: {
+        color: theme.palette.red[100],
       },
     };
   }
@@ -114,11 +134,24 @@ function getActiveCategory(selectedConnection: string, categorizedConnections: M
   return null;
 }
 
+function getConnectionConfig(conn) {
+  const connectionConfig = {
+    name: conn.name,
+    description: conn.description,
+    category: conn.plugin.category,
+    plugin: conn.plugin,
+  };
+
+  return connectionConfig;
+}
+
 export function CategorizedConnections({
   categorizedConnections = new Map(),
   categories = [],
   onConnectionSelection,
   selectedConnection,
+  boundaryElement,
+  fetchConnections,
 }: ICategorizedConnectionsProps) {
   const classes = useStyle();
   const activeCategory = selectedConnection
@@ -126,6 +159,11 @@ export function CategorizedConnections({
     : null;
   const [currentActiveAccordion, setCurrentActiveAccordion] = React.useState(activeCategory);
   const [localSelectedConnection, setLocalSelectedConnection] = React.useState(selectedConnection);
+  const [isCreateConnectionOpen, setIsCreateConnectionOpen] = React.useState(false);
+  const [initConnConfig, setInitConnConfig] = React.useState(null);
+  const [connectionToDelete, setConnectionToDelete] = React.useState(null);
+  const [deleteError, setDeleteError] = React.useState(null);
+  const [isEdit, setIsEdit] = React.useState(false);
 
   const combinedCategorizedConnections = new Map();
   for (const category of categories) {
@@ -156,6 +194,95 @@ export function CategorizedConnections({
     }
   };
 
+  function exportConnection(conn) {
+    const connectionConfig = getConnectionConfig(conn);
+    const artifact = conn?.plugin?.artifact || {};
+
+    DownloadFile(
+      connectionConfig,
+      null,
+      `${conn.name}-connector-${artifact.name}-${artifact.version}`
+    );
+  }
+
+  function cloneConnection(conn) {
+    const config = getConnectionConfig(conn);
+    delete config.name;
+
+    openConnectionConfig(config);
+  }
+
+  function openConnectionConfig(config) {
+    setInitConnConfig(config);
+    toggleConnectionCreate();
+  }
+
+  function editConnection(conn) {
+    const config = getConnectionConfig(conn);
+    setIsEdit(true);
+    openConnectionConfig(config);
+  }
+
+  function handleConfirmationClose() {
+    setConnectionToDelete(null);
+    setDeleteError(null);
+  }
+
+  function toggleConnectionCreate() {
+    const newState = !isCreateConnectionOpen;
+
+    setIsCreateConnectionOpen(newState);
+
+    if (!newState) {
+      setInitConnConfig(null);
+      setIsEdit(false);
+    }
+  }
+
+  function handleDelete() {
+    if (!connectionToDelete) {
+      return;
+    }
+
+    const params = {
+      context: getCurrentNamespace(),
+      connectionId: connectionToDelete.name,
+    };
+
+    return ConnectionsApi.deleteConnection(params).subscribe(
+      () => {
+        handleConfirmationClose();
+        fetchConnections();
+      },
+      (err) => {
+        setDeleteError(err);
+      }
+    );
+  }
+
+  const popperModifiers = {
+    preventOverflow: {
+      enabled: true,
+      boundariesElement: objectQuery(boundaryElement, 'current'),
+    },
+    hide: {
+      enabled: false,
+    },
+  };
+
+  let confirmDeleteElem;
+  if (connectionToDelete) {
+    confirmDeleteElem = (
+      <div>
+        Are you sure you want to delete{' '}
+        <strong>
+          <em>{connectionToDelete.name}</em>
+        </strong>
+        ?
+      </div>
+    );
+  }
+
   return (
     <div>
       {Array.from(combinedCategorizedConnections.entries()).map(([key, connections]) => {
@@ -171,6 +298,29 @@ export function CategorizedConnections({
             </CustomAccordionSummary>
             <CustomAccordionDetails>
               {connections.map((connection) => {
+                const actions: IAction[] = [
+                  {
+                    label: 'Edit',
+                    actionFn: () => editConnection(connection),
+                  },
+                  {
+                    label: 'Export',
+                    actionFn: () => exportConnection(connection),
+                  },
+                  {
+                    label: 'Duplicate',
+                    actionFn: () => cloneConnection(connection),
+                  },
+                  {
+                    label: 'separator',
+                  },
+                  {
+                    label: 'Delete',
+                    actionFn: () => setConnectionToDelete(connection),
+                    className: classes.delete,
+                  },
+                ];
+
                 return (
                   <Link
                     to={`/ns/${getCurrentNamespace()}/connections/${connection.name}?path=/`}
@@ -184,11 +334,37 @@ export function CategorizedConnections({
                       <strong>{connection.name}</strong>
                     </If>
                     <If condition={localSelectedConnection !== connection.name}>
-                      {connection.name}
+                      <span>{connection.name}</span>
                     </If>
+
+                    <ActionsPopover
+                      className={classes.actionPopover}
+                      actions={actions}
+                      modifiers={popperModifiers}
+                    />
                   </Link>
                 );
               })}
+
+              <ConfirmationModal
+                headerTitle="Delete connection"
+                toggleModal={handleConfirmationClose}
+                confirmationElem={confirmDeleteElem}
+                confirmButtonText="Delete"
+                confirmFn={handleDelete}
+                cancelFn={handleConfirmationClose}
+                isOpen={!!connectionToDelete}
+                errorMessage={!deleteError ? '' : 'Failed to delete connection'}
+                extendedMessage={deleteError}
+              />
+
+              <CreateConnectionModal
+                isOpen={isCreateConnectionOpen}
+                onToggle={toggleConnectionCreate}
+                initialConfig={initConnConfig}
+                onCreate={fetchConnections}
+                isEdit={isEdit}
+              />
             </CustomAccordionDetails>
           </Accordion>
         );
