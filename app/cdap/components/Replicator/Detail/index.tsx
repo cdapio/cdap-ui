@@ -25,11 +25,8 @@ import { objectQuery } from 'services/helpers';
 import { PROGRAM_STATUSES } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
 import { PluginType } from 'components/Replicator/constants';
-import {
-  fetchPluginInfo,
-  fetchPluginWidget,
-  generateTableKey,
-} from 'components/Replicator/utilities';
+import { fetchPluginInfo, generateTableKey } from 'components/Replicator/utilities';
+import { fetchPluginWidget } from 'services/PluginUtilities';
 import DetailContent from 'components/Replicator/Detail/DetailContent';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import ContentHeading from 'components/Replicator/Detail/ContentHeading';
