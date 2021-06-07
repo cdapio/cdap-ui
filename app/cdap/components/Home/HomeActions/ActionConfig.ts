@@ -43,7 +43,7 @@ export const ActionConfig: IAction[] = [
         url: `/cdap/ns/:namespace/ingestion`,
       },
     ],
-    experiment: 'data-ingestion',
+    // experiment: 'data-ingestion',
   },
   {
     img: '/cdap_assets/img/cleanse_data.svg',

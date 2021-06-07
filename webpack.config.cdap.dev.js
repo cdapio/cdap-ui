@@ -261,7 +261,7 @@ var webpackConfig = {
     index: 'cdap.html',
     contentBase: path.join(__dirname, '/packaged/public/cdap_dist/cdap_assets/'),
     port: 8080,
-    open: 'chrome',
+    open: 'google-chrome',
     writeToDisk: true,
     publicPath: '/cdap_assets/',
     watchContentBase: devMode === 'reload',
