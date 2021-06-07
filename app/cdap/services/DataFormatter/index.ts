@@ -24,7 +24,7 @@ export const TYPES = {
   FILE_SIZE: 'file_size',
 };
 
-// TODO format options here need TS 4.1+
+// TODO some format options here need TS 4.1+
 
 const numberFormatter = Intl.NumberFormat();
 const conciseNumberFormatter = Intl.NumberFormat(undefined, {
@@ -74,7 +74,7 @@ function formatConciseByteSize(value) {
   return conciseByteSizeFormatters[exponent].format(decimal);
 }
 
-export function format(value, type, options) {
+export function format(value, type, options: { concise?: boolean } = {}) {
   switch (type) {
     case TYPES.STRING:
       return value;
