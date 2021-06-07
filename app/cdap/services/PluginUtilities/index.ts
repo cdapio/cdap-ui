@@ -14,7 +14,9 @@
  * the License.
  */
 
+import { MyPipelineApi } from 'api/pipeline';
 import groupBy from 'lodash/groupBy';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 import Version from 'services/VersionRange/Version';
 
 enum LOCATION {
@@ -64,4 +66,34 @@ export function bucketPlugins(plugins: IPlugin[]): Record<string, IPlugin[]> {
   });
 
   return bucket;
+}
+
+export function fetchPluginWidget(
+  artifactName,
+  artifactVersion,
+  artifactScope,
+  pluginName,
+  pluginType
+) {
+  const widgetKey = `widgets.${pluginName}-${pluginType}`;
+  const params = {
+    namespace: getCurrentNamespace(),
+    artifactName,
+    artifactVersion,
+    scope: artifactScope,
+    keys: widgetKey,
+  };
+
+  return MyPipelineApi.fetchWidgetJson(params).map((res) => {
+    if (!res || !res[widgetKey]) {
+      return {};
+    }
+
+    try {
+      const widgetContent = JSON.parse(res[widgetKey]);
+      return widgetContent;
+    } catch (parseError) {
+      throw new Error(parseError);
+    }
+  });
 }

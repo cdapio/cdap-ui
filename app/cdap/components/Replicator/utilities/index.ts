@@ -29,10 +29,12 @@ import {
   IDMLStore,
   ITable,
 } from 'components/Replicator/types';
+import { fetchPluginWidget } from 'services/PluginUtilities';
 import { ICreateState } from 'components/Replicator/Create';
 import { objectQuery, truncateNumber } from 'services/helpers';
 import { PluginType } from 'components/Replicator/constants';
 
+// TODO: can more of these functions move & generalize into PluginUtilities without adding complexity?
 export function fetchPluginInfo(
   parentArtifact,
   artifactName,
@@ -55,36 +57,6 @@ export function fetchPluginInfo(
 
   return MyPipelineApi.getPluginProperties(pluginParams).map(([res]) => {
     return res;
-  });
-}
-
-export function fetchPluginWidget(
-  artifactName,
-  artifactVersion,
-  artifactScope,
-  pluginName,
-  pluginType
-) {
-  const widgetKey = `widgets.${pluginName}-${pluginType}`;
-  const params = {
-    namespace: getCurrentNamespace(),
-    artifactName,
-    artifactVersion,
-    scope: artifactScope,
-    keys: widgetKey,
-  };
-
-  return MyPipelineApi.fetchWidgetJson(params).map((res) => {
-    if (!res || !res[widgetKey]) {
-      return {};
-    }
-
-    try {
-      const widgetContent = JSON.parse(res[widgetKey]);
-      return widgetContent;
-    } catch (parseError) {
-      throw new Error(parseError);
-    }
   });
 }
 
