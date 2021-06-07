@@ -15,17 +15,21 @@
  */
 
 import * as React from 'react';
-import MuiAlert from '@material-ui/lab/Alert';
 import { isNilOrEmptyString } from 'services/helpers';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
+import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useLocation } from 'react-router-dom';
 import Breadcrumb from 'components/Connections/Browser/GenericBrowser/Breadcrumb';
 import SearchField from 'components/Connections/Browser/GenericBrowser/SearchField';
 import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/BrowserTable';
 import If from 'components/If';
+import EmptyMessageContainer from 'components/EmptyMessageContainer';
+import ErrorBanner from 'components/ErrorBanner';
+
+const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 
 const useStyle = makeStyle(() => {
   return {
@@ -42,9 +46,6 @@ const useStyle = makeStyle(() => {
       display: 'flex',
       justifyContent: 'flex-end',
       marginRight: '8px',
-    },
-    alert: {
-      maxHeight: '4em',
     },
   };
 });
@@ -112,12 +113,14 @@ export function GenericBrowser({ selectedConnection }) {
     }
   }, [loc]);
 
-  const isEmpty = !Array.isArray(entities) || (Array.isArray(entities) && !entities.length);
-
   const lowerSearchString = searchString.trim().toLocaleLowerCase();
   const filteredEntities = lowerSearchString.length
     ? entities.filter((e) => e.name.toLocaleLowerCase().includes(lowerSearchString))
     : entities;
+
+  const isEmpty =
+    !Array.isArray(filteredEntities) ||
+    (Array.isArray(filteredEntities) && !filteredEntities.length);
 
   return (
     <React.Fragment>
@@ -132,7 +135,7 @@ export function GenericBrowser({ selectedConnection }) {
           <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
         </div>
       </div>
-      <If condition={!isEmpty && !error}>
+      <If condition={loading || (!isEmpty && !error)}>
         <BrowserTable
           entities={filteredEntities}
           selectedConnection={selectedConnection}
@@ -141,15 +144,23 @@ export function GenericBrowser({ selectedConnection }) {
           loading={loading}
         />
       </If>
-      <If condition={isEmpty && !error}>
-        <MuiAlert severity="info" className={classes.alert}>
-          No entities available
-        </MuiAlert>
+      <If condition={isEmpty && !loading}>
+        <EmptyMessageContainer title={T.translate(`${PREFIX}.EmptyMessageContainer.title`)}>
+          <ul>
+            <li>
+              <span className="link-text" onClick={clearSearchString}>
+                {T.translate(`features.EmptyMessageContainer.clearLabel`)}
+              </span>
+              <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion1`)}</span>
+            </li>
+            <li>
+              <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion2`)}</span>
+            </li>
+          </ul>
+        </EmptyMessageContainer>
       </If>
-      <If condition={error}>
-        <MuiAlert severity="error" className={classes.alert}>
-          {error}
-        </MuiAlert>
+      <If condition={error && !loading}>
+        <ErrorBanner error={error} />
       </If>
     </React.Fragment>
   );
