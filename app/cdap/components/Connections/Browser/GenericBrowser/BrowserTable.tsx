@@ -29,6 +29,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionIcon from '@material-ui/icons/Description';
 import Heading, { HeadingTypes } from 'components/Heading';
 import LoadingSVG from 'components/LoadingSVG';
+import { format } from 'services/DataFormatter';
 
 const ICON_MAP = {
   directory: <FolderIcon />,
@@ -123,7 +124,7 @@ export function BrowserTable({
                 {entity.properties.map((prop) => {
                   return (
                     <TableCell key={prop.value}>
-                      {prop.type === 'Timestamp' ? humanReadableDate(prop.value) : prop.value}
+                      {format(prop.value, prop.type, { concise: true })}
                     </TableCell>
                   );
                 })}
