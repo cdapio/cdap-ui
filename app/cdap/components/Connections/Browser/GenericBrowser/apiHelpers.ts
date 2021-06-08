@@ -15,6 +15,7 @@
  */
 
 import { ConnectionsApi } from 'api/connections';
+import DataprepApi from 'api/dataprep';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export function exploreConnection({ connectionid, path = '/' }) {
@@ -27,6 +28,24 @@ export function exploreConnection({ connectionid, path = '/' }) {
     {
       context: getCurrentNamespace(),
       connectionid,
+    },
+    body
+  ).toPromise();
+}
+
+export function createWorkspace({ entity, connection, limit = 1000 }) {
+  const { path } = entity;
+  const body = {
+    connection,
+    sampleRequest: {
+      path,
+      properties: {}, // For 6.5 this will always be empty. Once we add support to set file encoding and other properties this will get dynamic.
+      limit,
+    },
+  };
+  return DataprepApi.createWorkspace(
+    {
+      context: getCurrentNamespace(),
     },
     body
   ).toPromise();

@@ -20,6 +20,7 @@ import { ConnectionsBrowserSidePanel } from 'components/Connections/Browser/Side
 import { ConnectionsBrowser } from 'components/Connections/Browser/index';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { useParams } from 'react-router';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 interface IConnectionsHomeStyleProps {
   sidePanelCollapsed: boolean;
@@ -36,7 +37,8 @@ const useStyle = makeStyles<Theme, IConnectionsHomeStyleProps>((theme) => {
   };
 });
 
-export function ConnectionsHome({ enableRouting }) {
+export function ConnectionsHome() {
+  const { mode } = React.useContext(ConnectionsContext);
   const params = useParams();
   const [sidePanelCollapsed, setSidePanelCollapsed] = React.useState(false);
   const [selectedConnection, setSelectedConnection] = React.useState(
@@ -53,14 +55,12 @@ export function ConnectionsHome({ enableRouting }) {
   return (
     <div className={classes.root}>
       <ConnectionsBrowserSidePanel
-        enableRouting={enableRouting}
         onSidePanelToggle={() => setSidePanelCollapsed(true)}
         onConnectionSelection={(conn) => setSelectedConnection(conn)}
         selectedConnection={selectedConnection}
       />
       <ConnectionsBrowser
         selectedConnection={selectedConnection}
-        enableRouting={enableRouting}
         expanded={sidePanelCollapsed}
         onCollapse={() => setSidePanelCollapsed(false)}
       />

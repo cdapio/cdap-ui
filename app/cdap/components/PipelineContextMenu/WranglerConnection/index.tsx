@@ -122,7 +122,7 @@ function WranglerConnection({
       </div>
       <div className="modal-body">
         <If condition={showModal}>
-          <DataPrepHome singleWorkspaceMode={true} onSubmit={onWranglerConnectionSubmit} />
+          <DataPrepHome mode="ROUTED_WORKSPACE" onSubmit={onWranglerConnectionSubmit} />
         </If>
       </div>
     </Modal>

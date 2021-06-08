@@ -20,7 +20,6 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import IconButton from '@material-ui/core/IconButton';
 import { GenericBrowser } from 'components/Connections/Browser/GenericBrowser';
-
 import If from 'components/If';
 import Heading, { HeadingTypes } from 'components/Heading';
 
@@ -55,7 +54,16 @@ const useStyle = makeStyles((theme) => {
   };
 });
 
-export function ConnectionsBrowser({ enableRouting, expanded, onCollapse, selectedConnection }) {
+interface IConnectionsBrowser {
+  expanded: boolean;
+  onCollapse: () => void;
+  selectedConnection: string;
+}
+export function ConnectionsBrowser({
+  expanded,
+  onCollapse,
+  selectedConnection,
+}: IConnectionsBrowser) {
   const classes = useStyle();
   return (
     <Paper className={classes.root}>

@@ -52,8 +52,8 @@ export default class DataPrepTable extends Component {
     let storeState = DataPrepStore.getState();
     let workspaceId = storeState.dataprep.workspaceId;
     let currentWorkspace =
-      storeState.workspaces.list.find((workspace) => workspace.id === workspaceId) || {};
-    let currentWorkspaceName = currentWorkspace.name;
+      storeState.workspaces.list.find((workspace) => workspace.workspaceId === workspaceId) || {};
+    let currentWorkspaceName = currentWorkspace.workspaceName;
     this.state = {
       headers: storeState.dataprep.headers.map((header) => ({ name: header, edit: false })),
       data: storeState.dataprep.data.map((d, i) =>

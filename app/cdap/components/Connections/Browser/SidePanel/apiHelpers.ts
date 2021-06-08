@@ -29,7 +29,10 @@ export async function getCategorizedConnections() {
   try {
     connections = await getConnections();
     for (const connection of connections) {
-      const { category } = connection.plugin;
+      let { category } = connection.plugin;
+      if (!category) {
+        category = connection.plugin.artifact.name;
+      }
       let existingConnections = categorizedConnectionsMap.get(category);
       if (!existingConnections) {
         existingConnections = [];

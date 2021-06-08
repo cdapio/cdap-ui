@@ -37,8 +37,8 @@ import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
 import { extractErrorMessage, objectQuery } from 'services/helpers';
-import { ConnectionsApi } from 'api/connections';
 import Alert from 'components/Alert';
+import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyle(() => {
   return {
@@ -53,12 +53,12 @@ const useStyle = makeStyle(() => {
   };
 });
 export function CreateConnection({
-  enableRouting,
   onToggle = null,
   initialConfig = {},
   onCreate = null,
   isEdit = false,
 }) {
+  const { mode } = React.useContext(ConnectionsContext);
   const classes = useStyle();
   const [loading, setLoading] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -100,7 +100,10 @@ export function CreateConnection({
     }
   }, []);
 
-  if (enableRouting && state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST) {
+  if (
+    mode === IConnectionMode.ROUTED &&
+    state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST
+  ) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/connections`} />;
   }
 
@@ -142,7 +145,7 @@ export function CreateConnection({
         onCreate();
       }
 
-      if (enableRouting) {
+      if (mode === IConnectionMode.ROUTED) {
         navigateToConnectionList(dispatch);
       }
 
@@ -156,7 +159,7 @@ export function CreateConnection({
   };
 
   function onClose() {
-    if (enableRouting) {
+    if (mode === IConnectionMode.ROUTED) {
       navigateToConnectionList(dispatch);
       return;
     }

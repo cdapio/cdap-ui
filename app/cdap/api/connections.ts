@@ -25,7 +25,7 @@ const connectionsTypePath =
 
 // The assumption is UI will get all its connection types from a single plugin.
 const connectionsTypePropertiesPath =
-  '/namespaces/:namespace/artifacts/cdap-data-pipeline/versions/:datapipelineArtifactVersion/extensions/batchsource';
+  '/namespaces/:namespace/artifacts/cdap-data-pipeline/versions/:datapipelineArtifactVersion/extensions/connector';
 
 const connectionWidgetJSONPath =
   '/namespaces/:namespace/artifacts/:artifactname/versions/:artifactversion/properties';

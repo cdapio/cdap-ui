@@ -82,7 +82,7 @@ export default class WorkspaceTabs extends Component {
     this.calculateMaxTabs();
     MouseTrap.bind('enter', () => {
       if (this.state.deleteWorkspace) {
-        this.handleDeleteWorkspace(this.state.deleteWorkspace.id);
+        this.handleDeleteWorkspace(this.state.deleteWorkspace.workspaceId);
       }
     });
 
@@ -193,14 +193,14 @@ export default class WorkspaceTabs extends Component {
         <UncontrolledPopover popperClassName="workspace-list-popover">
           {list.map((workspace) => {
             return (
-              <div key={workspace.id} className="workspace-list-dropdown-item">
+              <div key={workspace.workspaceId} className="workspace-list-dropdown-item">
                 <Link
-                  to={`/ns/${this.namespace}/wrangler/${workspace.id}`}
+                  to={`/ns/${this.namespace}/wrangler/${workspace.workspaceId}`}
                   className={classnames('workspace-link', {
-                    active: this.state.activeWorkspace === workspace.id,
+                    active: this.state.activeWorkspace === workspace.workspaceId,
                   })}
                 >
-                  {workspace.name}
+                  {workspace.workspaceName}
                 </Link>
 
                 <span
@@ -226,9 +226,9 @@ export default class WorkspaceTabs extends Component {
           return (
             <WorkspaceTab
               workspace={workspace}
-              active={this.state.activeWorkspace === workspace.id}
+              active={this.state.activeWorkspace === workspace.workspaceId}
               onDelete={this.toggleDeleteWorkspace.bind(this, workspace)}
-              key={workspace.id}
+              key={workspace.workspaceId}
             />
           );
         })}
@@ -246,7 +246,7 @@ export default class WorkspaceTabs extends Component {
       <React.Fragment>
         <h5>
           {T.translate(`${PREFIX}.DeleteModal.mainMessage`, {
-            workspace: this.state.deleteWorkspace.name,
+            workspace: this.state.deleteWorkspace.workspaceName,
           })}
         </h5>
         <div>{T.translate(`${PREFIX}.DeleteModal.helperMessage`)}</div>
@@ -258,7 +258,7 @@ export default class WorkspaceTabs extends Component {
         confirmationElem={ConfirmationElement}
         confirmButtonText={T.translate(`${PREFIX}.DeleteModal.confirmButton`)}
         cancelButtonText={T.translate(`${PREFIX}.DeleteModal.cancelButton`)}
-        confirmFn={this.handleDeleteWorkspace.bind(this, this.state.deleteWorkspace.id)}
+        confirmFn={this.handleDeleteWorkspace.bind(this, this.state.deleteWorkspace.workspaceId)}
         cancelFn={this.toggleDeleteWorkspace.bind(this, null)}
         isOpen={true}
         headerTitle={T.translate(`${PREFIX}.DeleteModal.header`)}
