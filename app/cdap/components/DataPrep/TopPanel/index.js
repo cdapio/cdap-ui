@@ -20,8 +20,6 @@ import Loadable from 'react-loadable';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import DataPrepStore from 'components/DataPrep/store';
 import { objectQuery, preventPropagation } from 'services/helpers';
-import cdapavsc from 'services/cdapavscwrapper';
-import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 import T from 'i18n-react';
@@ -139,32 +137,18 @@ export default class DataPrepTopPanel extends Component {
         context: namespace,
         workspaceId,
       };
-      let requestBody = directiveRequestBodyCreator(directives);
       this.setState({
         onSubmitLoading: true,
         onSubmitError: null,
       });
-      MyDataPrepApi.getSchema(requestObj, requestBody).subscribe(
+      MyDataPrepApi.getSpecification(requestObj).subscribe(
         (res) => {
-          let schema = {
-            name: 'avroSchema',
-            type: 'record',
-            fields: res,
-          };
-          try {
-            cdapavsc.parse(schema, { wrapUnions: true });
-          } catch (e) {
-            this.setState({
-              onSubmitError: e.message,
-              onSubmitLoading: false,
-            });
-            return;
-          }
+          const wranglerSchema = res.wrangler.schema;
           if (this.props.onSubmit) {
             this.props.onSubmit({
               workspaceId,
               directives,
-              schema: JSON.stringify(schema),
+              schema: JSON.stringify(wranglerSchema),
             });
           }
         },
@@ -183,7 +167,7 @@ export default class DataPrepTopPanel extends Component {
       label: T.translate(`${PREFIX}.copyToCDAPDatasetBtn.btnLabel`),
       component: IngestDataFromDataPrep,
       iconName: 'icon-upload',
-      shouldRender: () => !this.props.singleWorkspaceMode && Theme.showIngestData,
+      shouldRender: () => this.props.mode !== 'ROUTED_WORKSPACE' && Theme.showIngestData,
       disabled: () =>
         isNil(this.state.workspaceInfo) ||
         objectQuery(this.state, 'workspaceInfo', 'properties', 'connection') === 'upload',
@@ -198,7 +182,7 @@ export default class DataPrepTopPanel extends Component {
 
   renderTopPanelDisplay() {
     let info = this.state.workspaceInfo;
-
+    // TODO - CDAP-18042: Currently this information is not shown temporarily.
     if (info) {
       if (info.properties.connection === 'file') {
         return (
@@ -382,14 +366,14 @@ export default class DataPrepTopPanel extends Component {
             <span className="text-danger">{this.state.onSubmitError}</span>
           ) : null}
           {this.state.higherVersion ? this.renderUpgradeBtn() : null}
-          {this.props.singleWorkspaceMode ? this.renderApplyBtn() : null}
-          {!this.props.singleWorkspaceMode ? (
+          {this.props.mode === 'ROUTED_WORKSPACE' ? this.renderApplyBtn() : null}
+          {this.props.mode !== 'ROUTED_WORKSPACE' ? (
             <button className="btn btn-primary" onClick={this.toggleAddToPipelineModal}>
               {T.translate(`${PREFIX}.addToPipelineBtnLabel`)}
             </button>
           ) : null}
           {this.renderMenu()}
-          {!this.props.singleWorkspaceMode ? <DataPrepPlusButton /> : null}
+          {!this.props.mode === 'ROUTED_WORKSPACE' ? <DataPrepPlusButton /> : null}
           {this.renderAddToPipelineModal()}
           {this.renderSchemaModal()}
         </div>
@@ -399,7 +383,7 @@ export default class DataPrepTopPanel extends Component {
 }
 
 DataPrepTopPanel.propTypes = {
-  singleWorkspaceMode: PropTypes.bool,
+  mode: PropTypes.oneOf(['ROUTED', 'ROUTED_WORKSPACE', 'INMEMORY']),
   onSubmit: PropTypes.func,
   disabled: PropTypes.bool,
 };

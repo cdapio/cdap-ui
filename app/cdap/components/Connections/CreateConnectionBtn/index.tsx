@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyle(() => {
   return {
@@ -43,9 +44,10 @@ const useStyle = makeStyle(() => {
     },
   };
 });
-export function CreateConnectionBtn({ enableRouting }) {
+export function CreateConnectionBtn() {
+  const { mode } = React.useContext(ConnectionsContext);
   const classes = useStyle();
-  if (enableRouting) {
+  if (mode === IConnectionMode.ROUTED) {
     return (
       <div className={classes.root}>
         <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>

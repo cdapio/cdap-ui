@@ -22,10 +22,34 @@ import { Theme } from 'services/ThemeHelper';
 import { ConnectionRoutes } from 'components/Connections/Routes';
 import { MemoryRouter } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-const PREFIX = 'features.DataPrepConnections';
 const DATAPREP_I18N_PREFIX = 'features.DataPrep.pageTitle';
+import {
+  IConnectionMode,
+  IConnections,
+  ConnectionsContext,
+} from 'components/Connections/ConnectionsContext';
+import makeStyle from '@material-ui/core/styles/makeStyles';
+const useStyle = makeStyle(() => {
+  return {
+    container: {
+      height: 'inherit',
+    },
+  };
+});
 
-export default function Connections({ enableRouting = true, singleWorkspaceMode }) {
+export default function Connections({
+  mode = IConnectionMode.ROUTED,
+  path,
+  workspaceId,
+  onWorkspaceCreate,
+}: IConnections) {
+  const [state] = React.useState({
+    mode,
+    path,
+    workspaceId,
+    onWorkspaceCreate,
+  });
+  const classes = useStyle();
   const featureName = Theme.featureNames.dataPrep;
   const pageTitle = (
     <Helmet
@@ -35,17 +59,23 @@ export default function Connections({ enableRouting = true, singleWorkspaceMode 
       })}
     />
   );
+  const shouldUpdatePageTitle =
+    mode === IConnectionMode.ROUTED || mode === IConnectionMode.ROUTED_WORKSPACE;
   return (
-    <React.Fragment>
-      <If condition={singleWorkspaceMode || enableRouting}>{pageTitle}</If>
-      <If condition={enableRouting}>
-        <ConnectionRoutes enableRouting={enableRouting} />
-      </If>
-      <If condition={!enableRouting}>
-        <MemoryRouter initialEntries={[`/ns/${getCurrentNamespace()}/connections`]}>
-          <ConnectionRoutes enableRouting={enableRouting} />
-        </MemoryRouter>
-      </If>
-    </React.Fragment>
+    <ConnectionsContext.Provider value={state}>
+      <div className={classes.container}>
+        <If condition={shouldUpdatePageTitle}>{pageTitle}</If>
+        <If condition={mode === IConnectionMode.ROUTED}>
+          <ConnectionRoutes />
+        </If>
+        <If
+          condition={mode === IConnectionMode.INMEMORY || mode === IConnectionMode.ROUTED_WORKSPACE}
+        >
+          <MemoryRouter initialEntries={[`/ns/${getCurrentNamespace()}/connections`]}>
+            <ConnectionRoutes />
+          </MemoryRouter>
+        </If>
+      </div>
+    </ConnectionsContext.Provider>
   );
 }

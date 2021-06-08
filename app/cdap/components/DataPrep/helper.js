@@ -22,22 +22,10 @@ import Version from 'services/VersionRange/Version';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import NamespaceStore from 'services/NamespaceStore';
 
-export function directiveRequestBodyCreator(directivesArray, wsId) {
-  let workspaceId = wsId || DataPrepStore.getState().dataprep.workspaceId;
-
+export function directiveRequestBodyCreator(directivesArray) {
   return {
-    version: 1.0,
-    workspace: {
-      name: workspaceId,
-      results: 1000,
-    },
-    recipe: {
-      directives: directivesArray,
-    },
-    sampling: {
-      method: 'FIRST',
-      limit: 1000,
-    },
+    directives: directivesArray,
+    limit: 1000,
   };
 }
 

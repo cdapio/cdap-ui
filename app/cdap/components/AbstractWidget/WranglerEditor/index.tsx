@@ -186,11 +186,10 @@ class WranglerEditor extends React.PureComponent<IWranglerEditorProps, IWrangler
             </div>
             <ModalBody>
               <DataPrepHome
-                singleWorkspaceMode={true}
                 workspaceId={properties.workspaceId}
                 onSubmit={this.updateDirectivesAndCloseModal}
-                enableRouting={false}
                 disabled={disabled}
+                mode="ROUTED_WORKSPACE"
               />
             </ModalBody>
           </Modal>

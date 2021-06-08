@@ -37,7 +37,7 @@ export default class WorkspaceTab extends Component {
   }
 
   componentDidUpdate() {
-    let workspaceElem = document.getElementById(this.props.workspace.id);
+    let workspaceElem = document.getElementById(this.props.workspace.workspaceId);
     if (!workspaceElem) {
       return;
     }
@@ -55,11 +55,11 @@ export default class WorkspaceTab extends Component {
   }
 
   renderName() {
-    return <span className="original-name">{this.props.workspace.name}</span>;
+    return <span className="original-name">{this.props.workspace.workspaceName}</span>;
   }
 
   renderOverflow() {
-    let name = this.props.workspace.name;
+    let name = this.props.workspace.workspaceName;
 
     return (
       <span className="display-name">
@@ -74,7 +74,11 @@ export default class WorkspaceTab extends Component {
     let workspace = this.props.workspace;
 
     return (
-      <div id={workspace.id} className="workspace-tab active clearfix" title={workspace.name}>
+      <div
+        id={workspace.id}
+        className="workspace-tab active clearfix"
+        title={workspace.workspaceName}
+      >
         <span className="display-name-container float-left">
           {this.state.overflow ? this.renderOverflow() : this.renderName()}
         </span>
@@ -90,9 +94,9 @@ export default class WorkspaceTab extends Component {
     let workspace = this.props.workspace;
 
     return (
-      <div id={workspace.id} className="workspace-tab clearfix" title={workspace.name}>
+      <div id={workspace.id} className="workspace-tab clearfix" title={workspace.workspaceName}>
         <span className="display-name-container float-left">
-          <Link to={`/ns/${this.namespace}/wrangler/${workspace.id}`}>
+          <Link to={`/ns/${this.namespace}/wrangler/${workspace.workspaceId}`}>
             {this.state.overflow ? this.renderOverflow() : this.renderName()}
           </Link>
         </span>
