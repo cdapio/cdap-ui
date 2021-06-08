@@ -203,15 +203,16 @@ export default class Home extends Component {
           />
           <Route
             path="/ns/:namespace/ingestion"
-            render={(props) => {
-              return (
-                <ToggleExperiment
-                  experimentId="data-ingestion"
-                  defaultComponent={<Page404 {...props} />}
-                  experimentalComponent={<Ingestion />}
-                />
-              );
-            }}
+            component={Ingestion}
+            // render={(props) => {
+            //   return (
+            //     <ToggleExperiment
+            //       experimentId="data-ingestion"
+            //       defaultComponent={<Page404 {...props} />}
+            //       experimentalComponent={<Ingestion />}
+            //     />
+            //   );
+            // }}
           />
           <Route path="/ns/:namespace/plugincreation" component={PluginJSONCreator} />
           <Route component={Page404} />
