@@ -64,9 +64,9 @@ export default class AddToHydratorModal extends Component {
   }
 
   generateLinks() {
-    let state = DataPrepStore.getState().dataprep;
-    let workspaceId = state.workspaceId;
-    let namespace = getCurrentNamespace();
+    const state = DataPrepStore.getState().dataprep;
+    const workspaceId = state.workspaceId;
+    const namespace = getCurrentNamespace();
 
     getPipelineConfig().subscribe(
       (res) => {
