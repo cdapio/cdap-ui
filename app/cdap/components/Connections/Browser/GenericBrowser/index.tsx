@@ -20,6 +20,8 @@ import {
   exploreConnection,
   createWorkspace,
 } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import capitalize from 'lodash/capitalize';
+import countBy from 'lodash/countBy';
 import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import T from 'i18n-react';
@@ -35,6 +37,9 @@ import ErrorBanner from 'components/ErrorBanner';
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
+import EntityCount from './EntityCount';
+
+const ENTITY_TRUNCATION_LIMIT = 1000;
 
 const useStyle = makeStyle(() => {
   return {
@@ -52,6 +57,11 @@ const useStyle = makeStyle(() => {
       justifyContent: 'flex-end',
       marginRight: '8px',
     },
+    entityCount: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      margin: '0 10px',
+    },
   };
 });
 
@@ -60,6 +70,7 @@ export function GenericBrowser({ selectedConnection }) {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [entities, setEntities] = React.useState([]);
+  const [totalCount, setTotalCount] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   const [path, setPath] = React.useState(pathFromUrl);
@@ -78,9 +89,11 @@ export function GenericBrowser({ selectedConnection }) {
       });
 
       setEntities(res.entities);
+      setTotalCount(res.totalCount);
       setError(null);
     } catch (e) {
       setError(`Failed to explore connection : "${e.response}"`);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
@@ -157,6 +170,9 @@ export function GenericBrowser({ selectedConnection }) {
   if (workspaceId) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler/${workspaceId}`} />;
   }
+
+  const entityCounts = countBy(filteredEntities, 'type');
+
   return (
     <React.Fragment>
       <div className={classes.topBar}>
@@ -167,6 +183,17 @@ export function GenericBrowser({ selectedConnection }) {
           />
         </div>
         <div className={classes.topBarSearch}>
+          <If condition={totalCount > 0}>
+            <div className={classes.entityCount}>
+              <EntityCount
+                entityCounts={entityCounts}
+                isFiltered={lowerSearchString.length}
+                isTruncated={entities.length < totalCount}
+                totalUnfilteredCount={entities.length}
+                truncationLimit={entities.length}
+              />
+            </div>
+          </If>
           <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
         </div>
       </div>
