@@ -20,8 +20,6 @@ import TableHeader from 'components/Table/TableHeader';
 import TableRow from 'components/Table/TableRow';
 import TableCell from 'components/Table/TableCell';
 import TableBody from 'components/Table/TableBody';
-import { humanReadableDate, objectQuery } from 'services/helpers';
-import capitalize from 'lodash/capitalize';
 import If from 'components/If';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import makeStyle from '@material-ui/core/styles/makeStyles';
@@ -29,10 +27,16 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionIcon from '@material-ui/icons/Description';
 import Heading, { HeadingTypes } from 'components/Heading';
 import LoadingSVG from 'components/LoadingSVG';
+import { format } from 'services/DataFormatter';
 
 const ICON_MAP = {
   directory: <FolderIcon />,
   file: <DescriptionIcon />,
+};
+
+const RIGHT_ALIGN_PROP_TYPES = {
+  NUMBER: true,
+  SIZE_BYTES: true,
 };
 
 const useStyle = makeStyle(() => {
@@ -79,14 +83,17 @@ export function BrowserTable({
   loading,
   selectedConnection,
   path,
+  propertyHeaders,
   entities,
   onExplore,
-  propertyHeaders,
 }: IBrowserTable) {
   const classes = useStyle();
 
   const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
   const columnTemplate = `repeat(${propertyHeaders.length + 2}, 1fr)`;
+
+  let headers = ['Name', 'Type'];
+  headers = [...headers, ...propertyHeaders];
 
   if (!loading && (!Array.isArray(entities) || (Array.isArray(entities) && !entities.length))) {
     return (
@@ -106,7 +113,7 @@ export function BrowserTable({
             <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
             {propertyHeaders.map((header) => {
-              return <TableCell key={header}>{capitalize(header)}</TableCell>;
+              return <TableCell key={header}>{header}</TableCell>;
             })}
           </TableRow>
         </TableHeader>
@@ -127,14 +134,14 @@ export function BrowserTable({
                   </div>
                 </TableCell>
                 <TableCell>{entity.type}</TableCell>
-                {propertyHeaders.map((prop) => {
-                  const property = entity.properties?.[prop];
-                  const type = property?.type;
-                  const value = property?.value;
-
+                {propertyHeaders.map((header) => {
+                  const prop = entity.properties[header];
                   return (
-                    <TableCell key={value}>
-                      {type === 'Timestamp' ? humanReadableDate(value) : value}
+                    <TableCell
+                      key={header}
+                      textAlign={prop && RIGHT_ALIGN_PROP_TYPES[prop.type] ? 'right' : 'left'}
+                    >
+                      {prop && format(prop.value, prop.type, { concise: true })}
                     </TableCell>
                   );
                 })}
