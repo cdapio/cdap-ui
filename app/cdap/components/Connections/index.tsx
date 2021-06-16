@@ -44,6 +44,7 @@ export default function Connections({
   onWorkspaceCreate,
   connectionId,
   onEntitySelect,
+  initPath,
 }: IConnections) {
   const [state] = React.useState({
     mode,
@@ -70,6 +71,10 @@ export default function Connections({
 
   if (connectionId) {
     initialEntry += `/${connectionId}`;
+
+    if (initPath) {
+      initialEntry += `?path=${initPath}`;
+    }
   }
 
   return (

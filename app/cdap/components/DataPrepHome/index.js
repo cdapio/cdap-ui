@@ -282,8 +282,13 @@ export default class DataPrepHome extends Component {
   }
 
   renderContents() {
-    let workspaceId = this.state.currentWorkspaceId;
-    let { mode, ...attributes } = this.props;
+    const workspaceId = this.state.currentWorkspaceId;
+    const { mode, ...attributes } = this.props;
+    const workspaceProperties = DataPrepStore.getState().dataprep.properties;
+
+    const connectionId = workspaceProperties.name;
+    const path = getContainerPath(workspaceProperties.path || '');
+
     const { toggleConnectionsViewFlag } = this.state;
     return (
       <div
@@ -295,6 +300,8 @@ export default class DataPrepHome extends Component {
           <Connections
             mode={mode || 'ROUTED_WORKSPACE'}
             onWorkspaceCreate={mode === 'INMEMORY' ? null : this.onWorkspaceCreate}
+            connectionId={connectionId}
+            initPath={path}
             {...attributes}
           />
         ) : null}
@@ -355,6 +362,11 @@ export default class DataPrepHome extends Component {
       </div>
     );
   }
+}
+
+function getContainerPath(path) {
+  const lastIndex = path.lastIndexOf('/');
+  return path.slice(0, lastIndex);
 }
 
 DataPrepHome.propTypes = {
