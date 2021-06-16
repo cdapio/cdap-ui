@@ -18,6 +18,7 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { ITable } from 'components/Replicator/Create/Content/Assessment/TablesAssessment';
 import If from 'components/If';
+import { getTableDisplayName } from 'components/Replicator/utilities';
 import Table from 'components/Table';
 import TableHeader from 'components/Table/TableHeader';
 import TableRow from 'components/Table/TableRow';
@@ -75,9 +76,10 @@ const WithIssuesTableView: React.FC<IIssuesTableProps> = ({ classes, tables, set
 
         <TableBody>
           {tables.map((row: ITable) => {
+            const tableDisplayName = getTableDisplayName(row);
             return (
               <TableRow key={`${row.database}-${row.table}`} classes={borderClass}>
-                <TableCell>{row.table}</TableCell>
+                <TableCell>{tableDisplayName}</TableCell>
                 <TableCell textAlign="right">{row.numColumns}</TableCell>
                 <TableCell />
                 <TableCell textAlign="right">
