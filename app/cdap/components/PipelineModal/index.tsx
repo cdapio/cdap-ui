@@ -64,6 +64,7 @@ interface IPipelineModalProps {
   toggle: () => void;
   header: string;
   loading: boolean;
+  modalBodyClassName?: string;
 }
 
 const PipelineModal: React.FC<React.PropsWithChildren<IPipelineModalProps>> = ({
@@ -72,6 +73,7 @@ const PipelineModal: React.FC<React.PropsWithChildren<IPipelineModalProps>> = ({
   header,
   loading,
   children,
+  modalBodyClassName,
 }) => {
   const classes = useStyle();
 
@@ -93,7 +95,7 @@ const PipelineModal: React.FC<React.PropsWithChildren<IPipelineModalProps>> = ({
           <CloseIcon />
         </IconButton>
       </div>
-      <ModalBody>
+      <ModalBody className={modalBodyClassName}>
         <If condition={loading}>
           <LoadingSVGCentered />
         </If>

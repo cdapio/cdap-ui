@@ -72,6 +72,7 @@ interface IBrowserTable {
   entities: any;
   onExplore: (entityName: IBrowseEntity) => void;
   loading: boolean;
+  propertyHeaders: string[];
 }
 
 export function BrowserTable({
@@ -80,15 +81,12 @@ export function BrowserTable({
   path,
   entities,
   onExplore,
+  propertyHeaders,
 }: IBrowserTable) {
   const classes = useStyle();
 
   const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
-  const properties = objectQuery(entities, 0, 'properties') || [];
-
-  let headers = ['Name', 'Type'];
-  headers = [...headers, ...properties.map((prop) => capitalize(prop.key))];
-  const columnTemplate = headers.map(() => '1fr').join(' ');
+  const columnTemplate = `repeat(${propertyHeaders.length + 2}, 1fr)`;
 
   if (!loading && (!Array.isArray(entities) || (Array.isArray(entities) && !entities.length))) {
     return (
@@ -105,8 +103,10 @@ export function BrowserTable({
       <Table columnTemplate={columnTemplate}>
         <TableHeader>
           <TableRow>
-            {headers.map((header) => {
-              return <TableCell key={header}>{header}</TableCell>;
+            <TableCell>Name</TableCell>
+            <TableCell>Type</TableCell>
+            {propertyHeaders.map((header) => {
+              return <TableCell key={header}>{capitalize(header)}</TableCell>;
             })}
           </TableRow>
         </TableHeader>
@@ -127,10 +127,14 @@ export function BrowserTable({
                   </div>
                 </TableCell>
                 <TableCell>{entity.type}</TableCell>
-                {entity.properties.map((prop) => {
+                {propertyHeaders.map((prop) => {
+                  const property = entity.properties?.[prop];
+                  const type = property?.type;
+                  const value = property?.value;
+
                   return (
-                    <TableCell key={prop.value}>
-                      {prop.type === 'Timestamp' ? humanReadableDate(prop.value) : prop.value}
+                    <TableCell key={value}>
+                      {type === 'Timestamp' ? humanReadableDate(value) : value}
                     </TableCell>
                   );
                 })}

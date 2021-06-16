@@ -75,4 +75,10 @@ export const ConnectionsApi = {
     'REQUEST',
     `${pipelineV1AppBasePath}/connections/:connectionId`
   ),
+  getSpecification: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${pipelineV1AppBasePath}/connections/:connectionId/specification`
+  ),
 };
