@@ -201,7 +201,7 @@ export function filterByCondition(
   }
   // Iterate through all filters and hide those properties whose filter
   // condition is not true.
-  let propertiesToHide = flatten(
+  const propertiesToHide = flatten(
     filters.map((filter) => {
       const { expression } = filter.condition;
       const mapPropertyToShow = (f: IPropertyFilter) => {
@@ -249,10 +249,6 @@ export function filterByCondition(
       }
       return [];
     })
-  );
-  // If the property is a required property then don't hide it.
-  propertiesToHide = propertiesToHide.filter(
-    (property) => !objectQuery(propertiesFromBackend, property.property, 'required')
   );
   propertiesToShow = difference(
     propertiesToShow,
