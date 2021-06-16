@@ -204,7 +204,8 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     let filteredTables = tables;
     if (search && search.length > 0) {
       filteredTables = filteredTables.filter((row) => {
-        const normalizedTable = row.table.toLowerCase();
+        const tableName = getTableDisplayName(row);
+        const normalizedTable = tableName.toLowerCase();
         const normalizedSearch = search.toLowerCase();
 
         return normalizedTable.indexOf(normalizedSearch) !== -1;
