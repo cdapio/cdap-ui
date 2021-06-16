@@ -50,3 +50,18 @@ export function createWorkspace({ entity, connection, limit = 1000 }) {
     body
   ).toPromise();
 }
+
+export function getPluginSpec(entity, connection) {
+  const { path } = entity;
+  const params = {
+    context: getCurrentNamespace(),
+    connectionId: connection,
+  };
+
+  const body = {
+    path,
+    properties: {},
+  };
+
+  return ConnectionsApi.getSpecification(params, body).toPromise();
+}

@@ -32,7 +32,7 @@ import makeStyle from '@material-ui/core/styles/makeStyles';
 const useStyle = makeStyle(() => {
   return {
     container: {
-      height: 'inherit',
+      height: '100%',
     },
   };
 });
@@ -42,12 +42,16 @@ export default function Connections({
   path,
   workspaceId,
   onWorkspaceCreate,
+  connectionId,
+  onEntitySelect,
 }: IConnections) {
   const [state] = React.useState({
     mode,
     path,
     workspaceId,
     onWorkspaceCreate,
+    connectionId,
+    onEntitySelect,
   });
   const classes = useStyle();
   const featureName = Theme.featureNames.dataPrep;
@@ -61,6 +65,13 @@ export default function Connections({
   );
   const shouldUpdatePageTitle =
     mode === IConnectionMode.ROUTED || mode === IConnectionMode.ROUTED_WORKSPACE;
+
+  let initialEntry = `/ns/${getCurrentNamespace()}/connections`;
+
+  if (connectionId) {
+    initialEntry += `/${connectionId}`;
+  }
+
   return (
     <ConnectionsContext.Provider value={state}>
       <div className={classes.container}>
@@ -71,7 +82,7 @@ export default function Connections({
         <If
           condition={mode === IConnectionMode.INMEMORY || mode === IConnectionMode.ROUTED_WORKSPACE}
         >
-          <MemoryRouter initialEntries={[`/ns/${getCurrentNamespace()}/connections`]}>
+          <MemoryRouter initialEntries={[initialEntry]}>
             <ConnectionRoutes />
           </MemoryRouter>
         </If>
