@@ -32,22 +32,15 @@ import { objectQuery } from 'services/helpers';
 import Connections from 'components/Connections';
 import { IConnectionMode } from 'components/Connections/ConnectionsContext';
 import { ConnectionsApi } from 'api/connections';
+import PipelineModal from 'components/PipelineModal';
+import { extractConnectionName } from 'components/AbstractWidget/ConnectionsWidget';
 
 const styles = (theme) => {
   return {
-    modalBtnClose: {
-      height: '50px',
-      width: '50px',
-      boxShadow: 'none',
-      border: 0,
-      background: 'transparent',
-      borderLeft: `1px solid ${theme.palette.grey['300']}`,
-      fontWeight: 'bold' as 'bold',
-      fontSize: '1.5rem',
-      '&:hover': {
-        background: theme.palette.blue['40'],
-        color: 'white',
-      },
+    modalBody: {
+      padding: 0,
+      height: 'calc(100% - 50px)',
+      maxHeight: '100% !important', // overwrite reactstrap specificity
     },
   };
 };
@@ -55,13 +48,13 @@ interface IPluginConnectionState {
   showBrowserModal: boolean;
   error: string | null;
   loading: boolean;
-  defaultConnectionId: string | null;
-  defaultConnectionType: string | null;
+  connectionName?: string;
 }
 
 interface IConnectionBrowserWidgetProps {
   connectionType: string;
   label: string;
+  connectionProperty?: string;
 }
 
 interface IPluginConnectionBrowserProps
@@ -76,250 +69,39 @@ class PluginConnectionBrowser extends React.PureComponent<
     showBrowserModal: false,
     error: null,
     loading: false,
-    defaultConnectionId: null,
-    defaultConnectionType: null,
+    connectionName: null,
   };
 
-  private ee = ee(ee);
+  public eventEmitter = ee(ee);
 
-  public async openDefaultConnection() {
-    let connections;
-    try {
-      connections = await ConnectionsApi.listConnections({
-        context: getCurrentNamespace(),
-      }).toPromise();
-    } catch (e) {
-      this.setState({
-        error: 'Unable to fetch connections list to browse',
-      });
-      return;
-    }
-    let { connectionType } = this.props.widgetProps;
-    connectionType = connectionType && (connectionType.toUpperCase() as ConnectionType);
-    const defaultConnection = connections.values.find(
-      (connection) => connection.type === connectionType
-    );
-    if (defaultConnection) {
-      const { id, type } = defaultConnection;
-      this.setState({
-        defaultConnectionId: id,
-        defaultConnectionType: type,
-        loading: false,
-      });
-    } else {
-      this.setState(
-        {
-          loading: false,
-        },
-        () => {
-          // ugh.. This delay is to load the DataPrepConnection
-          // component so that AddConnection component loads and starts to listen to
-          // this event.
-          setTimeout(() => {
-            this.ee.emit('CREATE_WRANGLER_CONNECTION', connectionType);
-          }, 1000);
-        }
-      );
-      return;
-    }
-  }
   private toggleConnectionBrowser = () => {
-    this.setState(
-      {
-        showBrowserModal: !this.state.showBrowserModal,
-        defaultConnectionId: !this.state.showBrowserModal ? null : this.state.defaultConnectionId,
-        defaultConnectionType: !this.state.showBrowserModal
-          ? null
-          : this.state.defaultConnectionType,
-      },
-      () => {
-        if (this.state.showBrowserModal) {
-          this.openDefaultConnection();
-        }
-      }
-    );
-  };
+    const connectionProperty = this.props?.widgetProps?.connectionProperty || 'connection';
+    const connection = objectQuery(this.props, 'extraConfig', 'properties', connectionProperty);
+    const connectionName = extractConnectionName(connection);
 
-  private getDatabaseSourceProperties = async (workspaceInfo) => {
-    const namespace = getCurrentNamespace();
-    const connectionId = objectQuery(workspaceInfo, 'properties', 'connectionid');
-    let dbInfo;
-    try {
-      dbInfo = await MyDataPrepApi.getDatabaseSpecification({
-        context: namespace,
-        connectionId,
-        tableId: workspaceInfo.properties.id,
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    return objectQuery(dbInfo, 'values', 0, 'Database', 'properties');
-  };
-
-  private getGCSSourceProperties = async (workspaceId: string, workspaceInfo) => {
-    const namespace = getCurrentNamespace();
-    const connectionId = objectQuery(workspaceInfo, 'properties', 'connectionid');
-    let gcsInfo;
-    try {
-      gcsInfo = await MyDataPrepApi.getGCSSpecification({
-        context: namespace,
-        connectionId,
-        wid: workspaceId,
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    let plugin = objectQuery(gcsInfo, 'values', 0);
-    const pluginName = Object.keys(plugin)[0]; // this is because the plugin can be GCSFile or GCSFileBlob
-    plugin = plugin[pluginName];
-    return plugin.properties;
-  };
-
-  private getBigQuerySourceProperties = async (workspaceId: string, workspaceInfo) => {
-    const namespace = getCurrentNamespace();
-    const connectionId = objectQuery(workspaceInfo, 'properties', 'connectionid');
-    let bigQueryInfo;
-    try {
-      bigQueryInfo = await MyDataPrepApi.getBigQuerySpecification({
-        context: namespace,
-        connectionId,
-        wid: workspaceId,
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    let plugin = objectQuery(bigQueryInfo, 'values', 0);
-    const pluginName = Object.keys(plugin)[0];
-    plugin = plugin[pluginName];
-    return plugin.properties;
-  };
-
-  private getS3SourceProperties = async (workspaceId: string, workspaceInfo) => {
-    const namespace = getCurrentNamespace();
-    const connectionId = objectQuery(workspaceInfo, 'properties', 'connectionid');
-    let s3Info;
-    try {
-      s3Info = await MyDataPrepApi.getS3Specification({
-        context: namespace,
-        connectionId,
-        activeBucket: objectQuery(workspaceInfo, 'properties', 'bucket-name'),
-        key: objectQuery(workspaceInfo, 'properties', 'key'),
-        wid: workspaceId,
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    return objectQuery(s3Info, 'values', 0, 'S3', 'properties');
-  };
-
-  private getSpannerSourceProperties = async (workspaceId: string) => {
-    const namespace = getCurrentNamespace();
-    let spannerInfo;
-    try {
-      spannerInfo = await MyDataPrepApi.getSpannerSpecification({
-        context: namespace,
-        workspaceId,
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    let plugin = objectQuery(spannerInfo, 'values', 0);
-    const pluginName = Object.keys(plugin)[0];
-    plugin = plugin[pluginName];
-    return plugin.properties;
-  };
-
-  private getKafkaSourceProperties = async (workspaceInfo) => {
-    const namespace = getCurrentNamespace();
-    const connectionId = objectQuery(workspaceInfo, 'properties', 'connectionid');
-    let kafkaInfo;
-    try {
-      kafkaInfo = await MyDataPrepApi.getKafkaSpecification({
-        context: namespace,
-        connectionId,
-        topic: objectQuery(workspaceInfo, 'properties', 'topic'),
-      }).toPromise();
-    } catch (e) {
-      return Promise.reject(e);
-    }
-    let plugin = objectQuery(kafkaInfo, 'values', '0');
-    const pluginName = Object.keys(plugin)[0];
-    plugin = plugin[pluginName];
-    return plugin.properties;
-  };
-
-  private getSpecification = async (workspaceId: string, workspaceInfo) => {
-    let connectionType = this.props.widgetProps.connectionType;
-    if (connectionType) {
-      connectionType = connectionType.toUpperCase() as ConnectionType;
-    }
-    let properties;
-    switch (connectionType) {
-      case ConnectionType.GCS:
-        properties = await this.getGCSSourceProperties(workspaceId, workspaceInfo);
-        break;
-      case ConnectionType.BIGQUERY:
-        properties = await this.getBigQuerySourceProperties(workspaceId, workspaceInfo);
-        break;
-      case ConnectionType.DATABASE:
-        properties = await this.getDatabaseSourceProperties(workspaceInfo);
-        break;
-      case ConnectionType.S3:
-        properties = await this.getS3SourceProperties(workspaceId, workspaceInfo);
-        break;
-      case ConnectionType.SPANNER:
-        properties = await this.getSpannerSourceProperties(workspaceId);
-        break;
-      case ConnectionType.KAFKA:
-        properties = await this.getKafkaSourceProperties(workspaceInfo);
-        break;
-      default:
-        return null;
-    }
-    return properties;
+    this.setState({
+      showBrowserModal: !this.state.showBrowserModal,
+      connectionName,
+    });
   };
 
   private resetError = () => {
     this.setState({ error: null });
   };
 
-  private onWorkspaceCreate = async (workspaceId: string) => {
-    const namespace = getCurrentNamespace();
-    let workspaceInfo;
-    try {
-      workspaceInfo = await MyDataPrepApi.getWorkspace({
-        context: namespace,
-        workspaceId,
-      }).toPromise();
-    } catch (e) {
-      this.setState({
-        error:
-          objectQuery(e, 'response', 'message') || objectQuery(e, 'message') || JSON.stringify(e),
-      });
-      return;
-    }
-    workspaceInfo = workspaceInfo.values[0];
-    let properties;
-    try {
-      properties = await this.getSpecification(workspaceId, workspaceInfo);
-      this.toggleConnectionBrowser();
-    } catch (e) {
-      this.setState({
-        error:
-          objectQuery(e, 'response', 'message') || objectQuery(e, 'message') || JSON.stringify(e),
-      });
-    }
-    try {
-      await MyDataPrepApi.delete({
-        context: namespace,
-        workspaceId,
-      }).toPromise();
-    } catch (e) {
-      // tslint:disable-next-line:no-console
-      console.error('Unable to clean up workspace post browse: ', workspaceId, e);
-    }
+  private handleEntitySelect = ({ properties, schema }) => {
+    const schemaStr = JSON.stringify(schema);
+    this.props.updateAllProperties({
+      ...properties,
+      schema: schemaStr,
+    });
 
-    this.props.updateAllProperties(properties);
+    this.eventEmitter.emit('schema.import', schema);
+
+    this.setState({
+      showBrowserModal: false,
+      connectionName: null,
+    });
   };
 
   public render() {
@@ -330,29 +112,21 @@ class PluginConnectionBrowser extends React.PureComponent<
         <Button variant="contained" color="primary" onClick={this.toggleConnectionBrowser}>
           {label}
         </Button>
-        <Modal
+
+        <PipelineModal
           isOpen={this.state.showBrowserModal}
           toggle={this.toggleConnectionBrowser}
-          size="lg"
-          modalClassName="wrangler-modal"
-          backdrop="static"
-          zIndex="1061"
+          header={label}
+          loading={this.state.loading}
+          modalBodyClassName={classes.modalBody}
         >
-          <div className="modal-header">
-            <h5 className="modal-title">{label}</h5>
-            <button className={classes.modalBtnClose} onClick={this.toggleConnectionBrowser}>
-              <span>{String.fromCharCode(215)}</span>
-            </button>
-          </div>
-          <ModalBody>
-            <If condition={!this.state.loading}>
-              <Connections mode={IConnectionMode.ROUTED_WORKSPACE} />
-            </If>
-            <If condition={this.state.loading}>
-              <LoadingSVGCentered />
-            </If>
-          </ModalBody>
-        </Modal>
+          <Connections
+            mode={IConnectionMode.ROUTED_WORKSPACE}
+            connectionId={this.state.connectionName}
+            onEntitySelect={this.handleEntitySelect}
+          />
+        </PipelineModal>
+
         <ErrorBanner error={this.state.error} onClose={this.resetError} />
       </React.Fragment>
     );

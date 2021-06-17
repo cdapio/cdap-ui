@@ -52,6 +52,9 @@ interface IConnectionWidgetProps {
 
 interface IConnectionProps extends IWidgetProps<IConnectionWidgetProps> {}
 
+const PREFIX = '${conn(';
+const SUFFIX = ')}';
+
 const ConnectionsWidget: React.FC<IConnectionProps> = ({
   value,
   onChange,
@@ -93,8 +96,6 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
   }
 
   function handleClick(connection) {
-    const PREFIX = '${conn(';
-    const SUFFIX = ')}';
     const connectionName = `${PREFIX}${connection.name}${SUFFIX}`;
 
     onChange(connectionName);
@@ -156,5 +157,20 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
     </React.Fragment>
   );
 };
+
+export function extractConnectionName(connection) {
+  if (!connection) {
+    return null;
+  }
+
+  const startIndex = connection.indexOf(PREFIX);
+  const endIndex = connection.lastIndexOf(SUFFIX);
+
+  if (startIndex === -1 || endIndex === -1) {
+    return null;
+  }
+
+  return connection.slice(startIndex, endIndex);
+}
 
 export default ConnectionsWidget;
