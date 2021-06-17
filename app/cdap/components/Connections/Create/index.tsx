@@ -30,6 +30,7 @@ import {
   fetchConnectionDetails,
   createConnection,
   getConnection,
+  testConnection,
 } from 'components/Connections/Create/reducer';
 import If from 'components/If';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
@@ -70,6 +71,9 @@ export function CreateConnection({
   });
   const [initValues, setInitValues] = React.useState({});
   const [error, setError] = React.useState(null);
+  const [testSucceeded, setTestSucceeded] = React.useState(false);
+  const [testInProgress, setTestInProgress] = React.useState(false);
+  const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
 
   const init = async () => {
     try {
@@ -158,6 +162,35 @@ export function CreateConnection({
     }
   };
 
+  const onConnectionTest = async (connectionFormData) => {
+    const { properties } = connectionFormData;
+    const { selectedConnector } = state;
+    const connectionConfiguration = {
+      category: state.selectedConnector.category,
+      plugin: {
+        ...selectedConnector,
+        properties,
+      },
+    };
+
+    // Clear all test messages
+    setTestResponseMessages(undefined);
+    setTestSucceeded(false);
+    setError(null);
+    setTestInProgress(true);
+
+    try {
+      const testResult = await testConnection(connectionConfiguration);
+      setTestResponseMessages(testResult);
+      setTestSucceeded(!testResult);
+    } catch (e) {
+      const errorMsg = extractErrorMessage(e);
+      setError(errorMsg);
+    } finally {
+      setTestInProgress(false);
+    }
+  };
+
   function onClose() {
     if (mode === IConnectionMode.ROUTED) {
       navigateToConnectionList(dispatch);
@@ -202,8 +235,14 @@ export function CreateConnection({
           connectorWidgetJSON={connectionDetails.connectorWidgetJSON}
           connectorDoc={connectionDetails.connectorDoc}
           onConnectionCreate={onConnectionCreate}
+          onConnectionTest={onConnectionTest}
           initValues={initValues}
           isEdit={isEdit}
+          testResults={{
+            succeeded: testSucceeded,
+            messages: testResponseMessages,
+            inProgress: testInProgress,
+          }}
         />
       </If>
 
