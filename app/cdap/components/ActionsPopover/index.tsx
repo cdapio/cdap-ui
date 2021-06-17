@@ -34,6 +34,8 @@ interface IActionsPopoverProps {
   targetElem?: (props) => React.ReactElement;
   showPopover?: boolean;
   togglePopover?: () => void;
+  className?: string;
+  modifiers?: any; // Popper modifier
 }
 
 const POPPER_MODIFIERS = {
@@ -50,6 +52,8 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
   targetElem,
   showPopover,
   togglePopover,
+  className,
+  modifiers,
 }) => {
   let target = (props) => (
     <IconSVG
@@ -63,14 +67,16 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
     target = targetElem;
   }
 
+  const popperModifiers = modifiers ? modifiers : POPPER_MODIFIERS;
+
   return (
     <Popover
       target={target}
-      className="actions-popover"
+      className={classnames('actions-popover', className)}
       placement="bottom"
       bubbleEvent={false}
       enableInteractionInPopover={true}
-      modifiers={POPPER_MODIFIERS}
+      modifiers={popperModifiers}
       showPopover={showPopover}
     >
       <ul>
