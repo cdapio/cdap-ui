@@ -21,10 +21,9 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import MyDataPrepApi from 'api/dataprep';
 import DataPrepStore from 'components/DataPrep/store';
 import fileDownload from 'js-file-download';
-import NamespaceStore from 'services/NamespaceStore';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery, isNilOrEmpty } from 'services/helpers';
 import T from 'i18n-react';
-import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import CardActionFeedback from 'components/CardActionFeedback';
@@ -63,30 +62,20 @@ export default class SchemaModal extends Component {
   }
 
   getSchema() {
-    let state = DataPrepStore.getState().dataprep;
-    let workspaceId = state.workspaceId;
+    const state = DataPrepStore.getState().dataprep;
+    const workspaceId = state.workspaceId;
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
-
-    let requestObj = {
-      context: namespace,
+    const params = {
+      context: getCurrentNamespace(),
       workspaceId,
     };
 
-    let directives = state.directives;
-    let requestBody = directiveRequestBodyCreator(directives);
-
-    MyDataPrepApi.getSchema(requestObj, requestBody).subscribe(
+    MyDataPrepApi.getSpecification(params).subscribe(
       (res) => {
-        const schema = {
-          name: 'etlSchemaBody',
-          type: 'record',
-          fields: res,
-        };
-        const workspaceSchema = { name: 'etlSchemaBody', schema };
+        const wranglerPlugin = res.wrangler;
 
         try {
-          cdapavsc.parse(schema);
+          cdapavsc.parse(wranglerPlugin.schema);
         } catch (e) {
           const { remedies, error } = mapErrorToMessage(e);
           return this.setState({
@@ -95,9 +84,13 @@ export default class SchemaModal extends Component {
             remedies,
           });
         }
+
         this.setState({
           loading: false,
-          schema: workspaceSchema,
+          schema: {
+            name: 'etlSchemaBody',
+            schema: wranglerPlugin.schema,
+          },
         });
       },
       (err) => {

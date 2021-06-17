@@ -73,6 +73,9 @@ export default class DataPrepTopPanel extends Component {
       onSubmitError: null,
       onSubmitLoading: false,
       workspaceInfo: initialState.workspaceInfo,
+      path: null,
+      connectionName: null,
+      workspacename: null,
     };
 
     this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
@@ -80,10 +83,14 @@ export default class DataPrepTopPanel extends Component {
     this.toggleUpgradeModal = this.toggleUpgradeModal.bind(this);
 
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState().dataprep;
+      const state = DataPrepStore.getState().dataprep;
+
       this.setState({
         higherVersion: state.higherVersion,
         workspaceInfo: state.workspaceInfo,
+        connectionName: objectQuery(state, 'properties', 'name'),
+        path: state.workspaceUri,
+        workspaceName: objectQuery(state, 'properties', 'workspaceName'),
       });
     });
   }
@@ -181,74 +188,18 @@ export default class DataPrepTopPanel extends Component {
   ];
 
   renderTopPanelDisplay() {
-    let info = this.state.workspaceInfo;
-    // TODO - CDAP-18042: Currently this information is not shown temporarily.
-    if (info) {
-      if (info.properties.connection === 'file') {
-        return (
-          <div className="data-prep-name">
-            <div className="connection-type truncate" title={T.translate(`${PREFIX}.file`)}>
-              {T.translate(`${PREFIX}.file`)}
-            </div>
-            <div className="title" title={info.properties.file}>
-              {info.properties.file}
-            </div>
-          </div>
-        );
-      } else if (info.properties.connection === 'database') {
-        return (
-          <div className="data-prep-name">
-            <div
-              className="connection-type truncate"
-              title={`${T.translate(`${PREFIX}.database`)} - ${info.properties.connectionid}`}
-            >
-              {T.translate(`${PREFIX}.database`)}
-              <span className="connection-name">{`- ${info.properties.connectionid}`}</span>
-            </div>
-            <div className="title" title={info.properties.name}>
-              {T.translate(`${PREFIX}.databaseTitle`, { name: info.properties.name })}
-            </div>
-          </div>
-        );
-      } else if (info.properties.connection === 'upload') {
-        return (
-          <div className="data-prep-name">
-            <div className="connection-type truncate" title={T.translate(`${PREFIX}.upload`)}>
-              {T.translate(`${PREFIX}.upload`)}
-              <span className="connection-name">{info.properties.connectionid}</span>
-            </div>
-            <div className="title" title={info.properties.name}>
-              {info.properties.name}
-            </div>
-          </div>
-        );
-      } else if (
-        ['kafka', 's3', 'gcs', 'bigquery', 'spanner', 'adls'].indexOf(
-          info.properties.connection
-        ) !== -1
-      ) {
-        return (
-          <div className="data-prep-name">
-            <div
-              className="connection-type truncate"
-              title={`${T.translate(`${PREFIX}.${info.properties.connection}`)} - ${
-                info.properties.connectionid
-              }`}
-            >
-              {T.translate(`${PREFIX}.${info.properties.connection}`)}
-              <span className="connection-name">{`- ${info.properties.connectionid}`}</span>
-            </div>
-            <div className="title" title={info.properties.name}>
-              {info.properties.name}
-            </div>
-          </div>
-        );
-      }
-    }
+    const { connectionName, path, workspaceName } = this.state;
+    const connectionInfo = `${connectionName} - ${path}`;
 
     return (
       <div className="data-prep-name">
-        <strong>{T.translate(`${PREFIX}.title`)}</strong>
+        <div className="connection-type truncate" title={connectionInfo}>
+          {connectionInfo}
+        </div>
+
+        <div className="title" title={workspaceName}>
+          {workspaceName}
+        </div>
       </div>
     );
   }

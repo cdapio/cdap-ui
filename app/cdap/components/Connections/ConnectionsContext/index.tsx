@@ -46,6 +46,7 @@ export interface IConnections {
   onWorkspaceCreate?: (workspaceId: string) => void;
   connectionId?: string;
   onEntitySelect?: (entitySpec) => void;
+  initPath?: string;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,
