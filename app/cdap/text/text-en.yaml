@@ -2510,6 +2510,11 @@ features:
     user: Business
     value: Value
 
+  Replication:
+    Create:
+      Content:
+        SelectColumns:
+          primaryKeyDescription: Must include primary key
   Reports:
     Customizer:
       clear: Clear Selection
