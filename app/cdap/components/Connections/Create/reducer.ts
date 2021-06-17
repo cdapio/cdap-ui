@@ -311,3 +311,10 @@ export function getConnection(name) {
     connectionId: name,
   }).toPromise();
 }
+
+export async function testConnection(connectionConfiguration) {
+  return await ConnectionsApi.testConnection(
+    { context: getCurrentNamespace() },
+    connectionConfiguration
+  ).toPromise();
+}
