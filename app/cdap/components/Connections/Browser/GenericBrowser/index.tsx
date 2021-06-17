@@ -19,6 +19,7 @@ import { isNilOrEmptyString } from 'services/helpers';
 import {
   exploreConnection,
   createWorkspace,
+  getPluginSpec,
 } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import capitalize from 'lodash/capitalize';
 import countBy from 'lodash/countBy';
@@ -77,8 +78,9 @@ export function GenericBrowser({ selectedConnection }) {
   const [searchString, setSearchString] = React.useState('');
   const [searchStringDisplay, setSearchStringDisplay] = React.useState('');
   const [workspaceId, setWorkspaceId] = React.useState(null);
+  const [propertyHeaders, setPropertyHeaders] = React.useState([]);
   const classes = useStyle();
-  const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
+  const { onWorkspaceCreate, onEntitySelect } = React.useContext(ConnectionsContext);
 
   const fetchEntities = async () => {
     setLoading(true);
@@ -90,6 +92,7 @@ export function GenericBrowser({ selectedConnection }) {
 
       setEntities(res.entities);
       setTotalCount(res.totalCount);
+      setPropertyHeaders(res.propertyHeaders || []);
       setError(null);
     } catch (e) {
       setError(`Failed to explore connection : "${e.response}"`);
@@ -116,7 +119,14 @@ export function GenericBrowser({ selectedConnection }) {
     const { name: entityName, canBrowse } = entity;
     if (!canBrowse) {
       setLoading(true);
-      return onCreateWorkspace(entity);
+
+      if (typeof onEntitySelect === 'function') {
+        loadEntitySpec(entity);
+      } else {
+        onCreateWorkspace(entity);
+      }
+
+      return;
     }
     if (path === '/') {
       setPath(`/${entityName}`);
@@ -137,6 +147,23 @@ export function GenericBrowser({ selectedConnection }) {
         return onWorkspaceCreate(wid);
       }
       setWorkspaceId(wid);
+    } catch (e) {
+      setError(e && e.message ? e.message : e);
+    }
+  };
+
+  const loadEntitySpec = async (entity) => {
+    try {
+      const spec = await getPluginSpec(entity, selectedConnection);
+      const plugin = spec?.relatedPlugins?.[0];
+
+      const properties = plugin?.properties;
+      const schema = plugin?.schema;
+
+      onEntitySelect({
+        properties,
+        schema,
+      });
     } catch (e) {
       setError(e && e.message ? e.message : e);
     }
@@ -204,6 +231,7 @@ export function GenericBrowser({ selectedConnection }) {
           path={path}
           onExplore={onExplore}
           loading={loading}
+          propertyHeaders={propertyHeaders}
         />
       </If>
       <If condition={isEmpty && !loading}>

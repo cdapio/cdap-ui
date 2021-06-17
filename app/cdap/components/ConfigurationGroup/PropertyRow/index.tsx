@@ -96,7 +96,8 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
   public shouldComponentUpdate(nextProps) {
     const rule =
       nextProps.value !== this.props.value ||
-      nextProps.widgetProperty[WIDGET_TYPE] !== this.props.widgetProperty[WIDGET_TYPE];
+      nextProps.widgetProperty[WIDGET_TYPE] !== this.props.widgetProperty[WIDGET_TYPE] ||
+      this.props.extraConfig.properties !== nextProps.extraConfig.properties;
     // Comparison of array of objects
     const isArrayEqual = (x: IErrorObj[], y: IErrorObj[]) => isEmpty(xorWith(x, y, isEqual));
     const errorChange = isArrayEqual(nextProps.errors, this.props.errors);

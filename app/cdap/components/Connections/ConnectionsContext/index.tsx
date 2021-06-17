@@ -44,6 +44,8 @@ export interface IConnections {
   // Ideally connections should not require workspaceId. Path should be sufficient but because of old usage this is still here.
   workspaceId?: string;
   onWorkspaceCreate?: (workspaceId: string) => void;
+  connectionId?: string;
+  onEntitySelect?: (entitySpec) => void;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,
