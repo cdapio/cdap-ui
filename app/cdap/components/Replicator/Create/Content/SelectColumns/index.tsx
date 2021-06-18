@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import T from 'i18n-react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect } from 'components/Replicator/Create';
 import { Map } from 'immutable';
@@ -34,6 +35,8 @@ import If from 'components/If';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import debounce from 'lodash/debounce';
 import { IColumnsList, IColumnImmutable, ITableInfo } from 'components/Replicator/types';
+
+const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
 const styles = (theme): StyleRules => {
   return {
@@ -138,6 +141,7 @@ interface IColumn {
   type: string;
   nullable: boolean;
 }
+
 enum ReplicateSelect {
   all = 'ALL',
   individual = 'INDIVIDUAL',
@@ -297,9 +301,17 @@ class SelectColumnsView extends React.PureComponent<ISelectColumnsProps, ISelect
   };
 
   private toggleSelectAll = () => {
-    if (this.state.selectedColumns.size > 0) {
+    if (this.state.selectedColumns.size > this.state.primaryKeys.length) {
+      // primary keys are required so don't remove them from the selected columns
+      const primaryKeyMap = {};
+      this.state.columns.forEach((row) => {
+        if (this.state.primaryKeys.indexOf(row.name) !== -1) {
+          primaryKeyMap[row.name] = Map({ name: row.name, type: row.type });
+        }
+      });
+
       this.setState({
-        selectedColumns: this.state.selectedColumns.clear(),
+        selectedColumns: Map(primaryKeyMap),
       });
       return;
     }
@@ -378,13 +390,21 @@ class SelectColumnsView extends React.PureComponent<ISelectColumnsProps, ISelect
 
             <div className="grid-body">
               {this.state.filteredColumns.map((row, i) => {
+                const isPrimaryKey = this.state.primaryKeys.indexOf(row.name) !== -1;
                 return (
                   <div key={row.name} className="grid-row">
-                    <div>
+                    <div
+                      title={
+                        isPrimaryKey
+                          ? T.translate(`${I18N_PREFIX}.primaryKeyDescription`).toString()
+                          : ''
+                      }
+                    >
                       <Checkbox
                         color="primary"
                         className={classes.radio}
                         checked={!!this.state.selectedColumns.get(row.name)}
+                        disabled={isPrimaryKey}
                         onChange={this.toggleSelected.bind(this, row)}
                       />
                     </div>
@@ -394,7 +414,7 @@ class SelectColumnsView extends React.PureComponent<ISelectColumnsProps, ISelect
                     <div>
                       <Checkbox className={classes.radio} checked={row.nullable} disabled={true} />
                     </div>
-                    <div>{this.state.primaryKeys.indexOf(row.name) !== -1 ? 'Primary' : '--'}</div>
+                    <div>{isPrimaryKey ? 'Primary' : '--'}</div>
                   </div>
                 );
               })}
