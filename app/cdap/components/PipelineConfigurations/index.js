@@ -24,14 +24,65 @@ import ConfigModelessActionButtons from 'components/PipelineConfigurations/Confi
 import IconSVG from 'components/IconSVG';
 import T from 'i18n-react';
 import ConfigurableTab from 'components/ConfigurableTab';
-import TabConfig from 'components/PipelineConfigurations/TabConfig';
 import { GLOBALS } from 'services/global-constants';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
+
+import PipelineConfigTabContent from 'components/PipelineConfigurations/ConfigurationsContent/PipelineConfigTabContent';
+import EngineConfigTabContent from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent';
+import ResourcesTabContent from 'components/PipelineConfigurations/ConfigurationsContent/ResourcesTabContent';
+import AlertsTabContent from 'components/PipelineConfigurations/ConfigurationsContent/AlertsTabContent';
+import ComputeTabContent from 'components/PipelineConfigurations/ConfigurationsContent/ComputeTabContent';
+import PushdownTabContent from './ConfigurationsContent/PushdownTabContent';
 
 require('./PipelineConfigurations.scss');
 require('./ConfigurationsContent/ConfigurationsContent.scss');
 
 const PREFIX = 'features.PipelineConfigurations';
+
+const TABS = {
+  computeConfig: {
+    id: 1,
+    name: T.translate(`${PREFIX}.ComputeConfig.title`),
+    content: <ComputeTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  pipelineConfig: {
+    id: 2,
+    name: T.translate(`${PREFIX}.PipelineConfig.title`),
+    content: <PipelineConfigTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  engineConfig: {
+    id: 3,
+    name: T.translate(`${PREFIX}.EngineConfig.title`),
+    content: <EngineConfigTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  resources: {
+    id: 4,
+    name: T.translate(`${PREFIX}.Resources.title`),
+    content: <ResourcesTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  alerts: {
+    id: 5,
+    name: T.translate(`${PREFIX}.Alerts.title`),
+    content: <AlertsTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  pushdown: {
+    id: 6,
+    name: T.translate(`${PREFIX}.Pushdown.title`),
+    content: <PushdownTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+};
 
 export default class PipelineConfigurations extends Component {
   static propTypes = {
@@ -126,28 +177,33 @@ export default class PipelineConfigurations extends Component {
   }
 
   render() {
-    let tabConfig;
+    let tabs;
     if (GLOBALS.etlBatchPipelines.includes(this.props.pipelineType)) {
-      tabConfig = TabConfig;
-    } else if (this.props.pipelineType === GLOBALS.etlDataStreams) {
-      tabConfig = { ...TabConfig };
-      // Don't show Alerts tab for realtime pipelines
-      const alertsTabName = T.translate(`${PREFIX}.Alerts.title`);
-      tabConfig.tabs = TabConfig.tabs.filter((tab) => {
-        return tab.name !== alertsTabName;
-      });
-    } else if (this.props.pipelineType === GLOBALS.eltSqlPipeline) {
-      tabConfig = { ...TabConfig };
-      // Only show pipeline config, compute config, and resource config for now
-      let allowed = [
-        T.translate(`${PREFIX}.ComputeConfig.title`),
-        T.translate(`${PREFIX}.PipelineConfig.title`),
-        T.translate(`${PREFIX}.Resources.title`),
+      tabs = [
+        TABS.computeConfig,
+        TABS.pipelineConfig,
+        TABS.engineConfig,
+        TABS.resources,
+        TABS.alerts,
+        TABS.pushdown,
       ];
-      tabConfig.tabs = TabConfig.tabs.filter((tab) => {
-        return allowed.indexOf(tab.name) !== -1;
-      });
+    } else if (this.props.pipelineType === GLOBALS.etlDataStreams) {
+      tabs = [
+        TABS.computeConfig,
+        TABS.pipelineConfig,
+        TABS.engineConfig,
+        TABS.resources,
+        // no alerts tab for realtime pipelines
+      ];
+    } else if (this.props.pipelineType === GLOBALS.eltSqlPipeline) {
+      // Only show pipeline config, compute config, and resource config for now
+      tabs = [TABS.computeConfig, TABS.pipelineConfig, TABS.engineConfig];
     }
+    const tabConfig = {
+      tabs,
+      layout: 'vertical',
+      defaultTab: 1,
+    };
     return (
       <PipelineModeless
         open={this.props.open}

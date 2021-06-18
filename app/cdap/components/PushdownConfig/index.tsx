@@ -32,40 +32,35 @@ const useStyles = makeStyles({
     maxWidth: '100%',
     width: '100%',
     height: '100%',
-    paddingBottom: '50px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'stretch',
     justifyContent: 'stretch',
   },
-  toggleContainer: {
-    maxWidth: '25%',
-    paddingTop: '10px',
-    paddingBottom: '10px',
-  },
   inner: {
     overflowY: 'scroll',
+    overflowX: 'hidden',
   },
 });
 
-function defaultPushdown(version) {
+function defaultPushdown(cloudArtifact?: ICloudArtifact) {
+  const artifact = cloudArtifact || {
+    name: 'google-cloud',
+    version: null,
+    scope: 'SYSTEM',
+  };
   return {
-    // TODO(lahwran): when more pushdown plugins are supported, will need to allow user to select which one to use and use its info here
     plugin: {
       name: 'BigQueryPushdownEngine',
       label: 'BigQueryPushdown',
       type: 'sqlengine',
-      artifact: {
-        name: 'google-cloud',
-        version,
-        scope: 'SYSTEM',
-      },
+      artifact,
       properties: {},
     },
   };
 }
 
-function fetchPluginInfo() {
+function fetchPluginInfo(cloudArtifact?: ICloudArtifact) {
   const version = VersionStore.getState().version;
   const defaults = defaultPushdown(null);
   const pluginParams = {
@@ -85,8 +80,13 @@ function fetchPluginInfo() {
     return res;
   });
 }
+interface ICloudArtifact {
+  name: string;
+  version: string;
+  scope: string;
+}
 interface IPushdownConfig {
-  enabled: boolean;
+  pushdownEnabled: boolean;
   transformationPushdown?: {
     plugin?: {
       name: string;
@@ -105,14 +105,15 @@ interface IPushdownConfig {
 interface IPushdownProps {
   value: IPushdownConfig;
   onValueChange: (value: IPushdownConfig) => void;
+  cloudArtifact?: ICloudArtifact
 }
 
-export default function PushdownConfig({ value, onValueChange }: IPushdownProps) {
+export default function PushdownConfig({ value, onValueChange, cloudArtifact }: IPushdownProps) {
   const [loading, setLoading] = useState(true);
   const [pluginInfo, setPluginInfo] = useState(null);
   const [pluginWidget, setPluginWidget] = useState(null);
   const pluginProperties = objectQuery(pluginInfo, 'properties') || {};
-  const { enabled, transformationPushdown } = value;
+  const { pushdownEnabled, transformationPushdown } = value;
 
   const plugin = transformationPushdown?.plugin;
   const valueProperties = plugin?.properties || {};
@@ -125,28 +126,28 @@ export default function PushdownConfig({ value, onValueChange }: IPushdownProps)
         properties,
       },
     };
-    onValueChange({ enabled, transformationPushdown: newTransformationPushdown });
+    onValueChange({ pushdownEnabled, transformationPushdown: newTransformationPushdown });
   };
 
   const toggleEnabled = () => {
-    onValueChange({ enabled: !enabled, transformationPushdown });
+    onValueChange({ pushdownEnabled: !pushdownEnabled, transformationPushdown });
   };
 
   useEffect(() => {
-    fetchPluginInfo().subscribe(
+    fetchPluginInfo(cloudArtifact).subscribe(
       (res) => {
-        const defaults = defaultPushdown(res.artifact.version);
+        const defaults = defaultPushdown(cloudArtifact || res.artifact);
         fetchPluginWidget(
           defaults.plugin.artifact.name,
-          res.artifact.version,
-          res.artifact.scope,
+          defaults.plugin.artifact.version,
+          defaults.plugin.artifact.scope,
           defaults.plugin.name,
           defaults.plugin.type
         ).subscribe(
           (widget) => {
             if (plugin === null || plugin === undefined) {
               onValueChange({
-                enabled,
+                pushdownEnabled,
                 transformationPushdown: defaults,
               });
             }
@@ -167,7 +168,7 @@ export default function PushdownConfig({ value, onValueChange }: IPushdownProps)
       }
     );
     // pass etc
-  }, []);
+  }, [cloudArtifact]);
 
   if (loading) {
     return <LoadingSVG />;
@@ -181,7 +182,7 @@ export default function PushdownConfig({ value, onValueChange }: IPushdownProps)
         <div className="label-with-toggle row">
           <span className="toggle-label col-xs-4">Enable ELT Pushdown</span>
           <div className="col-xs-7 toggle-container">
-            <ToggleSwitch isOn={enabled} onToggle={toggleEnabled} />
+            <ToggleSwitch isOn={pushdownEnabled} onToggle={toggleEnabled} />
           </div>
         </div>
         <ConfigurationGroup
@@ -196,6 +197,7 @@ export default function PushdownConfig({ value, onValueChange }: IPushdownProps)
 }
 
 PushdownConfig.propTypes = {
-  value: PropTypes.object,
-  onValueChange: PropTypes.func,
+  value: PropTypes.object.isRequired,
+  onValueChange: PropTypes.func.isRequired,
+  cloudArtifact: PropTypes.object
 };
