@@ -28,18 +28,42 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import Heading, { HeadingTypes } from 'components/Heading';
 import LoadingSVG from 'components/LoadingSVG';
 import { format } from 'services/DataFormatter';
+import IconSVG from 'components/IconSVG';
 
-const ICON_MAP = {
-  directory: <FolderIcon />,
-  file: <DescriptionIcon />,
-};
+function getIcon(entity, classes) {
+  const type = entity.type.toLowerCase();
+
+  switch (type) {
+    case 'bucket':
+      return <IconSVG name="icon-S3_bucket" className={classes.icon} />;
+    case 'directory':
+      return <FolderIcon />;
+    case 'file':
+      return <DescriptionIcon />;
+    case 'dataset': // fall-through
+    case 'instance': // fall-through
+    case 'database':
+      return <IconSVG name="icon-database" className={classes.icon} />;
+    case 'schema':
+      return <IconSVG name="icon-schemaedge" className={classes.icon} />;
+    case 'table':
+      return <IconSVG name="icon-table" className={classes.icon} />;
+    case 'topic':
+      return <IconSVG name="icon-kafka" className={classes.icon} />;
+  }
+
+  if (entity.canBrowse) {
+    return <FolderIcon />;
+  }
+  return <DescriptionIcon />;
+}
 
 const RIGHT_ALIGN_PROP_TYPES = {
   NUMBER: true,
   SIZE_BYTES: true,
 };
 
-const useStyle = makeStyle(() => {
+const useStyle = makeStyle((theme) => {
   return {
     loadingContainer: {
       display: 'flex',
@@ -56,10 +80,21 @@ const useStyle = makeStyle(() => {
       display: 'flex',
       gap: '5px',
     },
+    nameElement: {
+      overflowX: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
     emptyMessageContainer: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    disabled: {
+      color: theme.palette.grey[200],
+    },
+    icon: {
+      height: '1.25rem',
     },
   };
 });
@@ -79,6 +114,32 @@ interface IBrowserTable {
   propertyHeaders: string[];
 }
 
+function getTypesByHeader(headers, entities) {
+  const typeMap = {};
+  if (!entities || entities.length === 0) {
+    return typeMap;
+  }
+
+  let foundTypes = 0;
+  for (let i = 0; foundTypes < headers.length && i < entities.length; i++) {
+    const props = entities[i].properties;
+    headers.forEach((h) => {
+      if (!typeMap[h] && props[h]) {
+        typeMap[h] = props[h].type;
+        foundTypes++;
+      }
+    });
+  }
+  return typeMap;
+}
+
+function getPropertyColumnWidth(type) {
+  if (type === 'NUMBER' || type === 'SIZE_BYTES') {
+    return '6rem';
+  }
+  return '1fr';
+}
+
 export function BrowserTable({
   loading,
   selectedConnection,
@@ -90,7 +151,11 @@ export function BrowserTable({
   const classes = useStyle();
 
   const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
-  const columnTemplate = `repeat(${propertyHeaders.length + 2}, 1fr)`;
+  const headerTypeMap = getTypesByHeader(propertyHeaders, entities);
+  const columnTemplate =
+    propertyHeaders && propertyHeaders.length > 0
+      ? `2fr 1fr ${propertyHeaders.map((h) => getPropertyColumnWidth(headerTypeMap[h])).join(' ')}`
+      : '2fr 1fr';
 
   let headers = ['Name', 'Type'];
   headers = [...headers, ...propertyHeaders];
@@ -119,18 +184,25 @@ export function BrowserTable({
         </TableHeader>
         <TableBody>
           {entities.map((entity, i) => {
+            const canInteract = entity.canBrowse || entity.canSample;
+            const onClickHandler = canInteract ? () => onExplore(entity) : undefined;
+            const toLink = canInteract
+              ? `/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
+                  entity.name
+                )}`
+              : undefined;
             return (
               <TableRow
                 key={i}
-                to={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
-                  entity.name
-                )}`}
-                onClick={() => onExplore(entity)}
+                to={toLink}
+                onClick={onClickHandler}
+                hover={canInteract}
+                className={canInteract ? undefined : classes.disabled}
               >
                 <TableCell>
                   <div className={classes.nameWrapper}>
-                    <If condition={ICON_MAP[entity.type]}>{ICON_MAP[entity.type]}</If>
-                    <div>{entity.name}</div>
+                    {getIcon(entity, classes)}
+                    <div className={classes.nameElement}>{entity.name}</div>
                   </div>
                 </TableCell>
                 <TableCell>{entity.type}</TableCell>
@@ -139,9 +211,9 @@ export function BrowserTable({
                   return (
                     <TableCell
                       key={header}
-                      textAlign={prop && RIGHT_ALIGN_PROP_TYPES[prop.type] ? 'right' : 'left'}
+                      textAlign={RIGHT_ALIGN_PROP_TYPES[headerTypeMap[header]] ? 'right' : 'left'}
                     >
-                      {prop && format(prop.value, prop.type, { concise: true })}
+                      {prop ? format(prop.value, prop.type, { concise: true }) : '--'}
                     </TableCell>
                   );
                 })}

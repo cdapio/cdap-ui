@@ -25,7 +25,7 @@ const styles = (): StyleRules => {
       borderBottom: 0,
       padding: '5px 7px',
       maxWidth: '100%',
-      overfllow: 'hidden',
+      overflow: 'hidden',
       wordBreak: 'inherit',
       textOverflow: 'ellipsis',
     },
