@@ -170,7 +170,7 @@ export function extractConnectionName(connection) {
     return null;
   }
 
-  return connection.slice(startIndex, endIndex);
+  return connection.slice(startIndex + PREFIX.length, endIndex);
 }
 
 export default ConnectionsWidget;

@@ -28,6 +28,7 @@ const styles = (): StyleRules => {
       overflow: 'hidden',
       wordBreak: 'inherit',
       textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
     },
   };
 };

@@ -53,10 +53,6 @@ const Experiments = Loadable({
   loader: () => import(/* webpackChunkName: "Experiments" */ 'components/Experiments'),
   loading: LoadingSVGCentered,
 });
-const NamespaceDetails = Loadable({
-  loader: () => import(/* webpackChunkName: "NamespaceDetails" */ 'components/NamespaceDetails'),
-  loading: LoadingSVGCentered,
-});
 const NamespaceAdmin = Loadable({
   loader: () => import(/* webpackChunkName: "NamespaceAdmin" */ 'components/NamespaceAdmin'),
   loading: LoadingSVGCentered,
@@ -154,8 +150,7 @@ export default class Home extends Component {
           <Route path="/ns/:namespace/connections" component={Connections} />
           <Route path="/ns/:namespace/experiments" component={Experiments} />
           <Route exact path="/ns/:namespace/operations" component={Operations} />
-          <Route exact path="/ns/:namespace/details" component={NamespaceDetails} />
-          <Route path="/ns/:namespace/admin" component={NamespaceAdmin} />
+          <Route path="/ns/:namespace/details" component={NamespaceAdmin} />
           <Route path="/ns/:namespace/reports" component={Reports} />
           <Route
             exact
