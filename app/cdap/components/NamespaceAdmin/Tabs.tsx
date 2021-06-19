@@ -55,8 +55,8 @@ const Tabs: React.FC = () => {
   const classes = useStyle();
   const namespace = getCurrentNamespace();
 
-  const baseNSPath = `/ns/${namespace}/admin`;
-  const basepath = '/ns/:namespace/admin';
+  const baseNSPath = `/ns/${namespace}/details`;
+  const basepath = '/ns/:namespace/details';
 
   return (
     <div>

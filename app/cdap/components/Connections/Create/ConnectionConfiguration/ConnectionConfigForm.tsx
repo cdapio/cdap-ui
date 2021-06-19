@@ -62,25 +62,28 @@ export function ConnectionConfigForm({
   return (
     <div>
       <div>
-        <PropertyRow
-          widgetProperty={{
-            'widget-type': 'textbox',
-            'widget-attributes': {
-              placeholder: 'Specify a name to identify the connection',
-            },
-            label: 'Name',
-            name: 'name',
-          }}
-          pluginProperty={{
-            name: 'name',
-            macroSupported: false,
-            required: false,
-          }}
-          value={name}
-          onChange={(v) => setName(v.name)}
-          disabled={false}
-          extraConfig={{ properties: {} }}
-        />
+        <If condition={!isEdit}>
+          <PropertyRow
+            widgetProperty={{
+              'widget-type': 'textbox',
+              'widget-attributes': {
+                placeholder: 'Specify a name to identify the connection',
+              },
+              label: 'Name',
+              name: 'name',
+            }}
+            pluginProperty={{
+              name: 'name',
+              macroSupported: false,
+              required: false,
+            }}
+            value={name}
+            onChange={(v) => setName(v.name)}
+            disabled={false}
+            extraConfig={{ properties: {} }}
+          />
+        </If>
+
         <PropertyRow
           widgetProperty={{
             'widget-type': 'textarea',
