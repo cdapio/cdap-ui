@@ -119,6 +119,7 @@ export function GenericBrowser({ selectedConnection }) {
 
   const onExplore = (entity) => {
     const { name: entityName, canBrowse } = entity;
+
     if (!canBrowse) {
       setLoading(true);
 
@@ -151,6 +152,7 @@ export function GenericBrowser({ selectedConnection }) {
       setWorkspaceId(wid);
     } catch (e) {
       setError(e && e.message ? e.message : e);
+      setLoading(false);
     }
   };
 
@@ -168,6 +170,7 @@ export function GenericBrowser({ selectedConnection }) {
       });
     } catch (e) {
       setError(e && e.message ? e.message : e);
+      setLoading(false);
     }
   };
 
@@ -226,7 +229,7 @@ export function GenericBrowser({ selectedConnection }) {
           <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
         </div>
       </div>
-      <If condition={loading || (!isEmpty && !error)}>
+      <If condition={loading || !isEmpty}>
         <BrowserTable
           entities={filteredEntities}
           propertyHeaders={propertyHeaders}
