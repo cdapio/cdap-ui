@@ -224,7 +224,7 @@ const TablesListView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
     <div className={classes.root}>
       <div className={classes.subtitle}>
         <div>
-          Replicating <strong>{tables.size}</strong> tables
+          Replicating <strong>{tables.size}</strong> {tables.size > 1 ? "tables" : "table"}
         </div>
         <div>
           <TextField
