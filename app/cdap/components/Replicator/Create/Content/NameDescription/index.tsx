@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
@@ -92,20 +92,55 @@ const Description = ({ setDescription, value }) => {
   );
 };
 
+const Author = ({ setAuthor, value }) => {
+  const widget = {
+    label: 'Author',
+    name: 'author',
+    'widget-type': 'textbox',
+    'widget-attributes': {
+      placeholder: 'Enter an author',
+    },
+  };
+
+  const property = {
+    required: false,
+    name: 'author',
+  };
+
+  return (
+    <WidgetWrapper
+      widgetProperty={widget}
+      pluginProperty={property}
+      value={value}
+      onChange={setAuthor}
+    />
+  );
+};
+
 type INameDescriptionProps = ICreateContext & WithStyles<typeof styles>;
 
 const NameDescriptionView: React.FC<INameDescriptionProps> = ({
   classes,
   name,
   description,
+  author,
   setNameDescription,
+  setAuthor,
 }) => {
   const [localName, setLocalName] = React.useState(name);
   const [nameError, setNameError] = React.useState(null);
   const [localDescription, setLocalDescription] = React.useState(description);
+  const [localAuthor, setLocalAuthor] = useState(author);
+
+  useEffect(() => {
+    if (author !== localAuthor) {
+      setLocalAuthor(author);
+    }
+  }, [author]);
 
   function handleNext() {
     setNameDescription(localName, localDescription);
+    setAuthor(localAuthor);
   }
 
   function handleNameChange(value) {
@@ -144,6 +179,7 @@ const NameDescriptionView: React.FC<INameDescriptionProps> = ({
         <br />
         <br />
         <Description value={localDescription} setDescription={setLocalDescription} />
+        <Author value={localAuthor} setAuthor={setLocalAuthor} />
       </div>
 
       <StepButtons nextDisabled={nameError || localName.length === 0} onNext={handleNext} />

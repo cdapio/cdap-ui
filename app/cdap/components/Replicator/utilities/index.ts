@@ -209,6 +209,7 @@ export async function convertConfigToState(rawConfig, parentArtifact) {
     loading: false,
     name: rawConfig.label || rawConfig.name || '',
     description: objectQuery(rawConfig, 'config', 'description') || '',
+    author: objectQuery(rawConfig, 'config', 'author') || '',
     activeStep: 1,
     offsetBasePath: objectQuery(rawConfig, 'config', 'offsetBasePath') || '',
     numInstances: objectQuery(rawConfig, 'config', 'parallelism', 'numInstances') || 1,

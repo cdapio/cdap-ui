@@ -77,6 +77,7 @@ interface ICreateProps extends WithStyles<typeof styles> {
 export interface ICreateState {
   name: string;
   description: string;
+  author: string;
   sourcePluginInfo: IPluginInfo;
   sourcePluginWidget: IWidgetJson;
   targetPluginInfo: IPluginInfo;
@@ -97,6 +98,7 @@ export interface ICreateState {
   isInvalidSource: boolean;
   loading: boolean;
   activeStep: number;
+  setAuthor: (author: string) => void;
   setActiveStep: (step: number) => void;
   setNameDescription: (name: string, description?: string) => void;
   setSourcePluginInfo: (sourcePluginInfo: IPluginInfo) => void;
@@ -138,6 +140,10 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
   public setNameDescription = (name, description) => {
     this.setState({ name, description });
+  };
+
+  public setAuthor = (author) => {
+    this.setState({ author });
   };
 
   public setSourcePluginWidget = (sourcePluginWidget) => {
@@ -226,6 +232,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     const config = {
       description: this.state.description,
       connections,
+      author: this.state.author,
       stages,
       tables: constructTablesSelection(
         this.state.tables,
@@ -259,6 +266,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
   public state = {
     name: '',
     description: '',
+    author: '',
     sourcePluginInfo: null,
     sourcePluginWidget: null,
     targetPluginInfo: null,
@@ -278,6 +286,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
     activeStep: 0,
 
+    setAuthor: this.setAuthor,
     setActiveStep: this.setActiveStep,
     setNameDescription: this.setNameDescription,
     setSourcePluginWidget: this.setSourcePluginWidget,
@@ -319,6 +328,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
   private initCreate = () => {
     this.setState({ draftId: uuidV4(), loading: false });
+    this.initAuthor();
   };
 
   private initClone = async (cloneId) => {
@@ -357,6 +367,16 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       };
 
       this.setState(newState);
+    });
+  };
+
+  private initAuthor = () => {
+    const params = {
+      namespace: getCurrentNamespace(),
+    };
+
+    MyReplicatorApi.getAuthor(params).subscribe(async (res) => {
+      this.setAuthor(res);
     });
   };
 

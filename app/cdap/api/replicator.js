@@ -27,6 +27,7 @@ const servicePath = `${deltaAppPath}/services/assessor/methods/v1/contexts/:name
 const draftPath = `${servicePath}/drafts/:draftId`;
 const workerPath = `${appPath}/workers/DeltaWorker`;
 const artifactBasePath = `/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties`;
+const authorPath = `${servicePath}/author`;
 
 export const MyReplicatorApi = {
   getDeltaApp: apiCreator(dataSrc, 'GET', 'REQUEST', deltaAppPath),
@@ -60,4 +61,6 @@ export const MyReplicatorApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', '/namespaces/:namespace/apps?artifactName=delta-app'),
   batchStatus: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/status'),
   batchAppDetail: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/appdetail'),
+
+  getAuthor: apiCreator(dataSrc, 'GET', 'REQUEST', authorPath),
 };
