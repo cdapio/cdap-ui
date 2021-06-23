@@ -33,6 +33,7 @@ export const green = {
   200: colors.green03,
   300: colors.green04,
   400: colors.green05,
+  500: colors.green06,
 };
 
 export const red = {

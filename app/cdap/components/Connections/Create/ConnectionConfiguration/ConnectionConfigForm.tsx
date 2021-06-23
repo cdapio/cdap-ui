@@ -19,13 +19,26 @@ import ConfigurationGroup from 'components/ConfigurationGroup';
 import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import PropertyRow from 'components/ConfigurationGroup/PropertyRow';
+import If from 'components/If';
+import LoadingSVG from 'components/LoadingSVG';
 
-const useStyle = makeStyle(() => {
+const useStyle = makeStyle((theme) => {
   return {
     formStyles: {
       display: 'flex',
       gap: '10px',
       paddingLeft: '10px',
+    },
+    connectionTestMessage: {
+      display: 'flex',
+      height: '2rem',
+      padding: '0 10px',
+    },
+    connectionTestSuccess: {
+      color: theme.palette.green[500],
+    },
+    connectionTestFailure: {
+      color: theme.palette.red[200],
     },
   };
 });
@@ -34,10 +47,12 @@ export function ConnectionConfigForm({
   connectorWidgetJSON,
   connectorProperties,
   onConnectionCreate,
+  onConnectionTest,
   initProperties = {},
   initName = '',
   initDescription = '',
   isEdit,
+  testResults,
 }) {
   const [values, setValues] = React.useState<Record<string, string>>(initProperties);
   const [name, setName] = React.useState(initName);
@@ -92,8 +107,30 @@ export function ConnectionConfigForm({
         values={values}
         onChange={setValues}
       />
+      <div className={classes.connectionTestMessage}>
+        <If condition={testResults.inProgress}>
+          <LoadingSVG height="1rem" />
+        </If>
+
+        <If condition={testResults.succeeded}>
+          <div className={classes.connectionTestSuccess}>Successfuly connected.</div>
+        </If>
+        {!testResults.succeeded &&
+          testResults.messages &&
+          testResults.messages.map((message, i) => (
+            <div key={i} className={classes.connectionTestFailure}>
+              {message.message} {message.correctiveAction}
+            </div>
+          ))}
+      </div>
       <div className={classes.formStyles}>
-        <Button variant="contained">Test Connection</Button>
+        <Button
+          variant="contained"
+          onClick={() => onConnectionTest({ properties: values })}
+          disabled={testResults.inProgress}
+        >
+          Test Connection
+        </Button>
         <Button
           variant="contained"
           color="primary"
