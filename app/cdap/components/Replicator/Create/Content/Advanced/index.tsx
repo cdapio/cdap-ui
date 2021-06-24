@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
@@ -23,6 +23,7 @@ import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import { useDebounce } from 'components/Replicator/utilities';
 import If from 'components/If';
 
 const styles = (): StyleRules => {
@@ -141,14 +142,21 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   numInstances,
   setAdvanced,
 }) => {
-  const [localNumInstances, setLocalNumInstances] = React.useState(numInstances || 1);
-  const [taskSelection, setTaskSelection] = React.useState(TASK_OPTIONS.calculate);
-  const [dataAmount, setDataAmount] = React.useState(1);
+  const [localNumInstances, setLocalNumInstances] = useState(numInstances || 1);
+  const [taskSelection, setTaskSelection] = useState(TASK_OPTIONS.calculate);
+  const [dataAmount, setDataAmount] = useState(1);
+  const debounce = useDebounce(100);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const initialSelection = getInitialTaskSelection();
     setTaskSelection(initialSelection);
   }, []);
+
+  useEffect(() => {
+    debounce(() => {
+      handleNext();
+    });
+  }, [localNumInstances, dataAmount, taskSelection]);
 
   function getInitialTaskSelection() {
     const initialNumInstances = numInstances || 1;
@@ -214,7 +222,7 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
         </If>
       </div>
 
-      <StepButtons onNext={handleNext} />
+      <StepButtons />
     </div>
   );
 };
