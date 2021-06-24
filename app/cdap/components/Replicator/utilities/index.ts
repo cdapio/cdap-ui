@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import { useCallback } from 'react';
+import debounce from 'lodash/debounce';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Observable } from 'rxjs/Observable';
 import { MyPipelineApi } from 'api/pipeline';
@@ -383,3 +384,23 @@ export function getTableDisplayName(row) {
 
   return displayName;
 }
+
+/**
+ * useDebounce returns a debounced function
+ * @example
+ *  const debounce = useDebounce(100);
+ *
+ *  debounce(() => {
+ *   functionToExecute();
+ *  });
+ * @param ms time in ms
+ * @returns function that takes a function as its argument and executes after the debouncea
+ * eg
+ */
+export const useDebounce = (ms: number) =>
+  useCallback(
+    debounce((fn) => {
+      fn();
+    }, ms),
+    []
+  );
