@@ -103,7 +103,6 @@ var SqlSelectorWidget = require('../cdap/components/AbstractWidget/SqlSelectorWi
 var KeyValueEncodedWidget = require('../cdap/components/AbstractWidget/KeyValueWidget/KeyValueEncodedWidget')
   .default;
 var SessionTokenStore = require('../cdap/services/SessionTokenStore');
-var PushdownConfig = require('../cdap/components/PushdownConfig').default;
 var ConfigurationGroup = require('../cdap/components/ConfigurationGroup').default;
 var WidgetWrapper = require('../cdap/components/ConfigurationGroup/WidgetWrapper')
   .WrappedWidgetWrapper;
@@ -208,7 +207,6 @@ export {
   SqlSelectorWidget,
   KeyValueEncodedWidget,
   SessionTokenStore,
-  PushdownConfig,
   ConfigurationGroup,
   WidgetWrapper,
   ConfigurationGroupUtilities,

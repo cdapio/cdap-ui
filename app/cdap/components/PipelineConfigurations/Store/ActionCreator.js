@@ -151,6 +151,8 @@ const updatePipeline = () => {
     schedule,
     maxConcurrentRuns,
     serviceAccountPath,
+    pushdownEnabled,
+    transformationPushdown,
   } = PipelineConfigurationsStore.getState();
 
   properties = Object.keys(properties).reduce(
@@ -174,6 +176,8 @@ const updatePipeline = () => {
     engine,
     schedule,
     maxConcurrentRuns,
+    pushdownEnabled,
+    transformationPushdown,
   };
 
   let realtimeOnlyConfig = {

@@ -69,6 +69,7 @@ const ACTIONS = {
   SET_MODELESS_OPEN_STATUS: 'SET_MODELESS_OPEN_STATUS',
   SET_PIPELINE_VISUAL_CONFIGURATION: 'SET_PIPELINE_VISUAL_CONFIGURATION',
   SET_SERVICE_ACCOUNT_PATH: 'SET_SERVICE_ACCOUNT_PATH',
+  SET_PUSHDOWN_CONFIG: 'SET_PUSHDOWN_CONFIG',
   RESET: 'RESET',
 };
 
@@ -428,6 +429,12 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
       return {
         ...state,
         serviceAccountPath: action.payload.serviceAccountPath,
+      };
+    case ACTIONS.SET_PUSHDOWN_CONFIG:
+      return {
+        ...state,
+        transformationPushdown: action.payload.transformationPushdown,
+        pushdownEnabled: action.payload.pushdownEnabled,
       };
     case ACTIONS.RESET:
       return cloneDeep(DEFAULT_CONFIGURE_OPTIONS);

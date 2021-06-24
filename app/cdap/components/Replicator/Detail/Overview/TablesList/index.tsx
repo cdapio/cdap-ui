@@ -119,7 +119,8 @@ const TablesListView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
 
     const filteredList = tables
       .filter((row) => {
-        const normalizedTable = row.get('table').toLowerCase();
+        const tableName = getTableDisplayName(row);
+        const normalizedTable = tableName.toLowerCase();
         const normalizedSearch = search.toLowerCase();
 
         return normalizedTable.indexOf(normalizedSearch) !== -1;
