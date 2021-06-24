@@ -21,7 +21,6 @@ import {
   createWorkspace,
   getPluginSpec,
 } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import capitalize from 'lodash/capitalize';
 import countBy from 'lodash/countBy';
 import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
@@ -37,7 +36,7 @@ import ErrorBanner from 'components/ErrorBanner';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
-import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import EntityCount from './EntityCount';
 
 const ENTITY_TRUNCATION_LIMIT = 1000;
@@ -71,6 +70,7 @@ export function GenericBrowser({ selectedConnection }) {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [entities, setEntities] = React.useState([]);
+  const [propertyHeaders, setPropertyHeaders] = React.useState([]);
   const [totalCount, setTotalCount] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
@@ -78,7 +78,6 @@ export function GenericBrowser({ selectedConnection }) {
   const [searchString, setSearchString] = React.useState('');
   const [searchStringDisplay, setSearchStringDisplay] = React.useState('');
   const [workspaceId, setWorkspaceId] = React.useState(null);
-  const [propertyHeaders, setPropertyHeaders] = React.useState([]);
   const classes = useStyle();
   const { onWorkspaceCreate, onEntitySelect } = React.useContext(ConnectionsContext);
 
@@ -227,11 +226,11 @@ export function GenericBrowser({ selectedConnection }) {
       <If condition={loading || (!isEmpty && !error)}>
         <BrowserTable
           entities={filteredEntities}
+          propertyHeaders={propertyHeaders}
           selectedConnection={selectedConnection}
           path={path}
           onExplore={onExplore}
           loading={loading}
-          propertyHeaders={propertyHeaders}
         />
       </If>
       <If condition={isEmpty && !loading}>

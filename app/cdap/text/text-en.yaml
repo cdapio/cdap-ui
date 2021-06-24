@@ -2059,6 +2059,8 @@ features:
     Alerts:
       contentHeading: Set alerts for your batch pipeline
       title: Pipeline alert
+    Pushdown:
+      title: ELT Pushdown
     ComputeConfig:
       title: Compute config
     EngineConfig:
@@ -2510,6 +2512,11 @@ features:
     user: Business
     value: Value
 
+  Replication:
+    Create:
+      Content:
+        SelectColumns:
+          primaryKeyDescription: Must include primary key
   Reports:
     Customizer:
       clear: Clear Selection
