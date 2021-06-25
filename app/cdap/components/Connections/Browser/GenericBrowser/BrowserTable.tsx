@@ -96,6 +96,9 @@ const useStyle = makeStyle((theme) => {
     icon: {
       height: '1.25rem',
     },
+    pointer: {
+      cursor: 'pointer',
+    },
   };
 });
 interface IBrowseEntity {
@@ -186,7 +189,7 @@ export function BrowserTable({
           {entities.map((entity, i) => {
             const canInteract = entity.canBrowse || entity.canSample;
             const onClickHandler = canInteract ? () => onExplore(entity) : undefined;
-            const toLink = canInteract
+            const toLink = entity.canBrowse
               ? `/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
                   entity.name
                 )}`
@@ -197,7 +200,7 @@ export function BrowserTable({
                 to={toLink}
                 onClick={onClickHandler}
                 hover={canInteract}
-                className={canInteract ? undefined : classes.disabled}
+                className={canInteract ? classes.pointer : classes.disabled}
               >
                 <TableCell>
                   <div className={classes.nameWrapper}>
