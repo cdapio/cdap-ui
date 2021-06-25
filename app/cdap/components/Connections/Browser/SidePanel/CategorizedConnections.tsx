@@ -30,10 +30,11 @@ import DownloadFile from 'services/download-file';
 import ConfirmationModal from 'components/ConfirmationModal';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
 import { ConnectionsApi } from 'api/connections';
+import { IConnectorType } from 'components/Connections/Browser/SidePanel';
 
 interface ICategorizedConnectionsProps {
   categorizedConnections: Map<string, any[]>;
-  categories: string[];
+  connectorTypes: IConnectorType[];
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
   boundaryElement: any;
@@ -147,7 +148,7 @@ function getConnectionConfig(conn) {
 
 export function CategorizedConnections({
   categorizedConnections = new Map(),
-  categories = [],
+  connectorTypes = [],
   onConnectionSelection,
   selectedConnection,
   boundaryElement,
@@ -164,16 +165,6 @@ export function CategorizedConnections({
   const [connectionToDelete, setConnectionToDelete] = React.useState(null);
   const [deleteError, setDeleteError] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-
-  const combinedCategorizedConnections = new Map();
-  for (const category of categories) {
-    const connectionExistsInThisCategory = categorizedConnections.has(category);
-    if (connectionExistsInThisCategory) {
-      combinedCategorizedConnections.set(category, categorizedConnections.get(category));
-    } else {
-      combinedCategorizedConnections.set(category, []);
-    }
-  }
 
   React.useEffect(() => {
     const currentCategory = selectedConnection
@@ -285,7 +276,10 @@ export function CategorizedConnections({
 
   return (
     <div>
-      {Array.from(combinedCategorizedConnections.entries()).map(([key, connections]) => {
+      {connectorTypes.map((connectorType) => {
+        const key = connectorType.name;
+        const connections = categorizedConnections.get(key) || [];
+
         return (
           <Accordion
             square
