@@ -41,6 +41,7 @@ const useStyle = makeStyle(() => {
     },
     button: {
       width: '100%',
+      backgroundColor: 'white',
     },
   };
 });
@@ -51,7 +52,7 @@ export function CreateConnectionBtn() {
     return (
       <div className={classes.root}>
         <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
-          <Button className={classes.button} variant="contained">
+          <Button className={classes.button} variant="outlined" color="primary">
             Add Connection
           </Button>
         </Link>
@@ -61,7 +62,7 @@ export function CreateConnectionBtn() {
 
   return (
     <div className={classes.root}>
-      <Button className={classes.button} variant="contained">
+      <Button className={classes.button} variant="outlined" color="primary">
         Add Connection
       </Button>
     </div>
