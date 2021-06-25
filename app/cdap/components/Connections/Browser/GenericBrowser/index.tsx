@@ -89,7 +89,10 @@ export function GenericBrowser({ selectedConnection }) {
         path,
       });
 
-      setEntities(res.entities);
+      const newEntities = [...res.entities];
+      newEntities.sort((a, b) => a.name.localeCompare(b.name));
+
+      setEntities(newEntities);
       setTotalCount(res.totalCount);
       setPropertyHeaders(res.propertyHeaders || []);
       setError(null);
