@@ -20,14 +20,12 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { CategorizedConnections } from 'components/Connections/Browser/SidePanel/CategorizedConnections';
-import {
-  getCategoriesToConnectorsMap,
-  fetchConnectors,
-} from 'components/Connections/Create/reducer';
+import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { CreateConnectionBtn } from 'components/Connections/CreateConnectionBtn';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import IconButton from '@material-ui/core/IconButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { orderBy } from 'natural-orderby';
 
 const useStyle = makeStyles<Theme>((theme) => {
   return {
@@ -48,9 +46,21 @@ const useStyle = makeStyles<Theme>((theme) => {
   };
 });
 
+export interface IConnectorType {
+  name: string;
+  type: string;
+  category: string;
+  description: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+}
+
 interface IConnectionsBrowserSidePanelState {
   categorizedConnections: Map<string, any[]>;
-  categories: string[];
+  connectorTypes: IConnectorType[];
 }
 
 interface IConnectionBrowserSidePanelProps {
@@ -68,15 +78,15 @@ export function ConnectionsBrowserSidePanel({
   const boundaryElement = React.useRef(null);
   const [state, setState] = React.useState<IConnectionsBrowserSidePanelState>({
     categorizedConnections: new Map(),
-    categories: [],
+    connectorTypes: [],
   });
   const initState = async () => {
     const categorizedConnections = await getCategorizedConnections();
-    const connectors = await fetchConnectors();
-    const categories = getCategoriesToConnectorsMap(connectors);
+    const connectorTypes = await fetchConnectors();
+
     setState({
       categorizedConnections,
-      categories: Array.from(categories.keys()),
+      connectorTypes: orderBy(connectorTypes, ['name'], ['asc']),
     });
   };
   React.useEffect(() => {
@@ -91,7 +101,7 @@ export function ConnectionsBrowserSidePanel({
         <span> Connections in "{getCurrentNamespace()}" </span>
       </div>
       <CategorizedConnections
-        categories={state.categories}
+        connectorTypes={state.connectorTypes}
         categorizedConnections={state.categorizedConnections}
         onConnectionSelection={onConnectionSelection}
         selectedConnection={selectedConnection}
