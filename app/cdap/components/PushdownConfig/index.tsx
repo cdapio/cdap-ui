@@ -105,7 +105,7 @@ interface IPushdownConfig {
 interface IPushdownProps {
   value: IPushdownConfig;
   onValueChange: (value: IPushdownConfig) => void;
-  cloudArtifact?: ICloudArtifact
+  cloudArtifact?: ICloudArtifact;
 }
 
 export default function PushdownConfig({ value, onValueChange, cloudArtifact }: IPushdownProps) {
@@ -199,5 +199,5 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
 PushdownConfig.propTypes = {
   value: PropTypes.object.isRequired,
   onValueChange: PropTypes.func.isRequired,
-  cloudArtifact: PropTypes.object
+  cloudArtifact: PropTypes.object,
 };

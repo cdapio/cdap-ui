@@ -21,8 +21,7 @@ import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineCon
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import PushdownConfig from 'components/PushdownConfig';
 
-
-export default function PushdownTabContent({ }) {
+export default function PushdownTabContent({}) {
   const value = useSelector(
     (state) => ({
       pushdownEnabled: state.pushdownEnabled,
@@ -30,10 +29,11 @@ export default function PushdownTabContent({ }) {
     }),
     shallowEquals
   );
-  const stages = useSelector(state => state.stages);
-  const cloudArtifact = useMemo(() =>
-    stages.map(x => x.plugin.artifact).find(artifact => artifact.name === "google-cloud"),
-    [stages]);
+  const stages = useSelector((state) => state.stages);
+  const cloudArtifact = useMemo(
+    () => stages.map((x) => x.plugin.artifact).find((artifact) => artifact.name === 'google-cloud'),
+    [stages]
+  );
   const dispatch = useDispatch();
   const onChange = useCallback(
     ({ pushdownEnabled, transformationPushdown }) => {

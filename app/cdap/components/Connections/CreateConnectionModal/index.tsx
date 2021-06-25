@@ -68,6 +68,7 @@ export default function CreateConnectionModal({
           initialConfig={initialConfig}
           onCreate={onCreate}
           isEdit={isEdit}
+          enableRouting={false}
         />
       </If>
     </div>,

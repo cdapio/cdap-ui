@@ -58,6 +58,7 @@ export function CreateConnection({
   initialConfig = {},
   onCreate = null,
   isEdit = false,
+  enableRouting = true,
 }) {
   const { mode } = React.useContext(ConnectionsContext);
   const classes = useStyle();
@@ -106,7 +107,8 @@ export function CreateConnection({
 
   if (
     mode === IConnectionMode.ROUTED &&
-    state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST
+    state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST &&
+    enableRouting
   ) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/connections`} />;
   }
@@ -192,7 +194,7 @@ export function CreateConnection({
   };
 
   function onClose() {
-    if (mode === IConnectionMode.ROUTED) {
+    if (mode === IConnectionMode.ROUTED && enableRouting) {
       navigateToConnectionList(dispatch);
       return;
     }
