@@ -655,8 +655,10 @@ describe('Plugin Schema Editor', () => {
     const createWorkspace = () => {
       return cy.fixture('airports.csv').then((fileContents) => {
         cy.request({
-          url:
-            '/namespaces/system/apps/dataprep/services/service/methods/contexts/default/workspaces',
+
+          url: `http://${Cypress.env(
+              'host'
+            )}:11015/v3/namespaces/system/apps/dataprep/services/service/methods/v2/contexts/default/workspaces/upload`,
           method: 'POST',
           headers: {
             'content-type': 'application/data-prep',
@@ -666,10 +668,9 @@ describe('Plugin Schema Editor', () => {
             'x-requested-with': 'XMLHttpRequest',
             ...headers,
           },
-          body: fileContents,
+          body: fileContents
         }).then((response) => {
-          const res = JSON.parse(response.allRequestResponses[0]['Response Body']);
-          const workspace = res.values[0].id;
+          const workspace = response.body;
           return workspace;
         });
       });
@@ -679,18 +680,17 @@ describe('Plugin Schema Editor', () => {
         .request({
           url: `http://${Cypress.env(
             'host'
-          )}:11015/v3/namespaces/system/apps/dataprep/services/service/methods/contexts/default/workspaces/${workspace}`,
+          )}:11015/v3/namespaces/system/apps/dataprep/services/service/methods/v2/contexts/default/workspaces/${workspace}`,
           headers,
         })
         .then((response) => {
-          const res = JSON.parse(response.allRequestResponses[0]['Response Body']);
-          const workspaceInfo = res.values[0];
-          if (workspaceInfo.recipe && workspaceInfo.recipe.directives.length > 0) {
-            workspaceInfo.recipe.directives = [];
+          const workspaceInfo = JSON.parse(response.body);
+          if (workspaceInfo.recipe && workspaceInfo.directives.length > 0) {
+            workspaceInfo.directives = [];
             return cy.request({
               url: `http://${Cypress.env(
                 'host'
-              )}:11015/v3/namespaces/system/apps/dataprep/services/service/methods/contexts/default/workspaces/${workspace}/execute`,
+              )}:11015/v3/namespaces/system/apps/dataprep/services/service/methods/v2/contexts/default/workspaces/${workspace}/execute`,
               method: 'POST',
               body: workspaceInfo,
               headers,
