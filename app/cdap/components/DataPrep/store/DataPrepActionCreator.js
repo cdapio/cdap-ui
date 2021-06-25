@@ -107,11 +107,12 @@ function setWorkspaceRetry(params, observer, workspaceId) {
       }
       let directives = objectQuery(res, 'directives') || [];
       let requestBody = directiveRequestBodyCreator(directives);
-      let sampleSpec = objectQuery(res, 'sampleSpec');
+      let sampleSpec = objectQuery(res, 'sampleSpec') || {};
+
       let properties = {
         name: sampleSpec.connectionName,
         workspaceName: res.workspaceName,
-        path: res.sampleSpec.path,
+        path: sampleSpec.path,
       };
       requestBody.properties = properties;
 
