@@ -128,7 +128,8 @@ export function ConnectionConfigForm({
       </div>
       <div className={classes.formStyles}>
         <Button
-          variant="contained"
+          variant="outlined"
+          color="primary"
           onClick={() => onConnectionTest({ properties: values })}
           disabled={testResults.inProgress}
         >
