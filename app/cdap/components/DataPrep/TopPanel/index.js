@@ -189,7 +189,11 @@ export default class DataPrepTopPanel extends Component {
 
   renderTopPanelDisplay() {
     const { connectionName, path, workspaceName } = this.state;
-    const connectionInfo = `${connectionName} - ${path}`;
+    let connectionInfo = `${connectionName} - ${path}`;
+
+    if (!connectionName || !path) {
+      connectionInfo = 'File Upload';
+    }
 
     return (
       <div className="data-prep-name">
