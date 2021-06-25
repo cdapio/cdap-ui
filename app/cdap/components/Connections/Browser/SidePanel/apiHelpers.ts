@@ -29,15 +29,15 @@ export async function getCategorizedConnections() {
   try {
     connections = await getConnections();
     for (const connection of connections) {
-      let { category } = connection.plugin;
-      if (!category) {
-        category = connection.plugin.artifact.name;
+      let { connectionType } = connection;
+      if (!connectionType) {
+        connectionType = connection.plugin.artifact.name;
       }
-      let existingConnections = categorizedConnectionsMap.get(category);
+      let existingConnections = categorizedConnectionsMap.get(connectionType);
       if (!existingConnections) {
         existingConnections = [];
       }
-      categorizedConnectionsMap.set(category, existingConnections.concat(connection));
+      categorizedConnectionsMap.set(connectionType, existingConnections.concat(connection));
     }
   } catch (e) {
     // tslint:disable-next-line: no-console
