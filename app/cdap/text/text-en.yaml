@@ -468,6 +468,37 @@ features:
           title: No entities available
           suggestion1: your search
           suggestion2: Browse to another location
+        EntityCount:
+          bucket:
+            1: 1 bucket
+            _: "{context} buckets"
+          database:
+            1: 1 database
+            _: "{context} databases"
+          dataset:
+            1: 1 dataset
+            _: "{context} datasets"
+          directory:
+            1: 1 directory
+            _: "{context} directories"
+          file:
+            1: 1 file
+            _: "{context} files"
+          instance:
+            1: 1 instance
+            _: "{context} instances"
+          schema:
+            1: 1 schema
+            _: "{context} schemas"
+          table:
+            1: 1 table
+            _: "{context} tables"
+          topic:
+            1: 1 topic
+            _: "{context} topics"
+          generic: "{type}: {count}"
+          empty: No results
+          filtered: "{countString} shown of {total} total"
       KafkaBrowser:
         EmptyMessage:
           clearLabel: Clear
