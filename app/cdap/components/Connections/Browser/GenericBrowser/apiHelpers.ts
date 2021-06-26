@@ -18,10 +18,12 @@ import { ConnectionsApi } from 'api/connections';
 import DataprepApi from 'api/dataprep';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
+export const ENTITY_TRUNCATION_LIMIT = 1000;
+
 export function exploreConnection({ connectionid, path = '/' }) {
   const body = {
     path,
-    limit: 1000,
+    limit: ENTITY_TRUNCATION_LIMIT,
   };
 
   return ConnectionsApi.exploreConnection(
