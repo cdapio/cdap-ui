@@ -20,6 +20,7 @@ import {
   exploreConnection,
   createWorkspace,
   getPluginSpec,
+  ENTITY_TRUNCATION_LIMIT,
 } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import countBy from 'lodash/countBy';
 import debounce from 'lodash/debounce';
@@ -38,8 +39,6 @@ const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import EntityCount from './EntityCount';
-
-const ENTITY_TRUNCATION_LIMIT = 1000;
 
 const useStyle = makeStyle(() => {
   return {
@@ -203,7 +202,7 @@ export function GenericBrowser({ selectedConnection }) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler/${workspaceId}`} />;
   }
 
-  const entityCounts = countBy(filteredEntities, 'type');
+  const entityCounts = countBy(filteredEntities, (entity) => entity.type.toLowerCase());
 
   return (
     <React.Fragment>
@@ -220,9 +219,9 @@ export function GenericBrowser({ selectedConnection }) {
               <EntityCount
                 entityCounts={entityCounts}
                 isFiltered={lowerSearchString.length}
-                isTruncated={entities.length < totalCount}
+                isTruncated={entities.length === ENTITY_TRUNCATION_LIMIT}
                 totalUnfilteredCount={entities.length}
-                truncationLimit={entities.length}
+                truncationLimit={ENTITY_TRUNCATION_LIMIT}
               />
             </div>
           </If>
