@@ -125,7 +125,7 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
   }, []);
 
   function handleSave() {
-    setPluginConfig(returnFilteredValues());
+    setPluginConfig(filteredValues());
   }
   // Fetch Target
   function handlePluginSelect(plugin) {
@@ -183,7 +183,7 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
     return isPropertyFilled.filter((propertyValue) => !propertyValue).length > 0;
   }
 
-  function returnFilteredValues() {
+  function filteredValues() {
     // Remove filtered out values
     const widgetConfigurationGroup = objectQuery(pluginWidget, 'configuration-groups');
     const widgetOutputs = objectQuery(pluginWidget, 'outputs');

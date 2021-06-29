@@ -384,23 +384,3 @@ export function getTableDisplayName(row) {
 
   return displayName;
 }
-
-/**
- * useDebounce returns a debounced function
- * @example
- *  const debounce = useDebounce(100);
- *
- *  debounce(() => {
- *   functionToExecute();
- *  });
- * @param ms time in ms
- * @returns function that takes a function as its argument and executes after the debouncea
- * eg
- */
-export const useDebounce = (ms: number) =>
-  useCallback(
-    debounce((fn) => {
-      fn();
-    }, ms),
-    []
-  );
