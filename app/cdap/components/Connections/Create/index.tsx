@@ -40,6 +40,7 @@ import { ConnectionConfiguration } from 'components/Connections/Create/Connectio
 import { extractErrorMessage, objectQuery } from 'services/helpers';
 import Alert from 'components/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
+import { constructErrors } from 'components/ConfigurationGroup/utilities';
 
 const useStyle = makeStyle(() => {
   return {
@@ -72,6 +73,7 @@ export function CreateConnection({
   });
   const [initValues, setInitValues] = React.useState({});
   const [error, setError] = React.useState(null);
+  const [configurationErrors, setConfigurationErrors] = React.useState(null);
   const [testSucceeded, setTestSucceeded] = React.useState(false);
   const [testInProgress, setTestInProgress] = React.useState(false);
   const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
@@ -119,6 +121,10 @@ export function CreateConnection({
     const connDetails = await fetchConnectionDetails(selectedConnector);
     setConnectionDetails(connDetails);
     setLoading(false);
+    setTestResponseMessages(undefined);
+    setTestSucceeded(false);
+    setError(null);
+    setConfigurationErrors(null);
   };
 
   const onConnectionCreate = async (connectionFormData) => {
@@ -179,12 +185,20 @@ export function CreateConnection({
     setTestResponseMessages(undefined);
     setTestSucceeded(false);
     setError(null);
+    setConfigurationErrors(null);
     setTestInProgress(true);
 
     try {
       const testResult = await testConnection(connectionConfiguration);
       setTestResponseMessages(testResult);
       setTestSucceeded(!testResult);
+
+      if (testResult) {
+        const configErrors = constructErrors(testResult);
+        setConfigurationErrors(configErrors.propertyErrors);
+      } else {
+        setConfigurationErrors(null);
+      }
     } catch (e) {
       const errorMsg = extractErrorMessage(e);
       setError(errorMsg);
@@ -244,6 +258,7 @@ export function CreateConnection({
             succeeded: testSucceeded,
             messages: testResponseMessages,
             inProgress: testInProgress,
+            configurationErrors,
           }}
         />
       </If>
