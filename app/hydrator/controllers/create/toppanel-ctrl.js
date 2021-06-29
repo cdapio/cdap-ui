@@ -204,7 +204,8 @@ class HydratorPlusPlusTopPanelCtrl {
     this.state = {
       metadata: {
         name: this.HydratorPlusPlusConfigStore.getName(),
-        description: this.HydratorPlusPlusConfigStore.getDescription()
+        description: this.HydratorPlusPlusConfigStore.getDescription(),
+        author: this.HydratorPlusPlusConfigStore.getAuthor()
       },
       viewSettings: this.myHelpers.objectQuery(this.state, 'viewSettings') || false,
       artifact: this.HydratorPlusPlusConfigStore.getArtifact()
@@ -231,7 +232,7 @@ class HydratorPlusPlusTopPanelCtrl {
     event.stopPropagation();
   }
   saveMetadata(event) {
-    this.HydratorPlusPlusConfigActions.setMetadataInfo(this.state.metadata.name, this.state.metadata.description);
+    this.HydratorPlusPlusConfigActions.setMetadataInfo(this.state.metadata.name, this.state.metadata.description, this.state.metadata.author);
     if (this.state.metadata.description) {
       this.parsedDescription = this.state.metadata.description.replace(/\n/g, ' ');
       this.tooltipDescription = this.state.metadata.description.replace(/\n/g, '<br />');

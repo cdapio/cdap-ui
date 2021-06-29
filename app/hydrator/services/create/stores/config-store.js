@@ -84,6 +84,7 @@ class HydratorPlusPlusConfigStore {
       },
       description: '',
       name: '',
+      author: ''
     };
     Object.assign(this.state, { config: this.getDefaultConfig() });
 
@@ -300,6 +301,10 @@ class HydratorPlusPlusConfigStore {
     if (this.state.description) {
       config.description = this.state.description;
     }
+
+    if (this.state.author) {
+      config.author = this.state.author;
+    }
     // Removing UUID from postactions name
     let postActions = this.getPostActions();
     postActions = _.sortBy(postActions, (action) => {
@@ -381,6 +386,9 @@ class HydratorPlusPlusConfigStore {
   getName() {
     return this.getState().name;
   }
+  getAuthor() {
+    return this.getState().author;
+  }
   getIsStateDirty() {
     let defaults = this.getDefaults();
     let state = this.getState();
@@ -394,9 +402,14 @@ class HydratorPlusPlusConfigStore {
     this.state.description = description;
     this.emitChange();
   }
-  setMetadataInformation(name, description) {
+  setAuthor(author) {
+    this.state.author = author;
+    this.emitChange();
+  }
+  setMetadataInformation(name, description, author) {
     this.state.name = name;
     this.state.description = description;
+    this.state.author = author;
     this.emitChange();
   }
   setConfig(config, type) {

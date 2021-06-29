@@ -97,6 +97,11 @@ const configure = (state = defaultConfigureState, action = defaultAction) => {
         description: action.payload.description,
       });
       break;
+    case ArtifactUploadActions.setAuthor:
+        stateCopy = Object.assign({}, state, {
+          description: action.payload.author,
+        });
+        break;
     case ArtifactUploadActions.setClassname:
       stateCopy = Object.assign({}, state, {
         classname: action.payload.classname,

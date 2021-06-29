@@ -1,0 +1,9 @@
+<div class="dag-list">
+    <div ng-repeat="node in nodes">
+        <p ng-class="{'ugly-red': selectedNames.indexOf(node.name) !== -1}">Node: {{node.name}}</p>
+    </div>
+
+    <div ng-repeat="select in selected">
+        <p>selected: {{select.name}}</p>
+    </div>
+</div>

@@ -321,6 +321,13 @@
             ></plugin-context-menu>
           </div>
         </div>
+        <div class="my-dag-list">
+          <my-dag-plus-list
+            nodes="nodes"
+            selected="DAGPlusPlusCtrl.selectedNode"
+            selectedNames="[]"
+          ></my-dag-plus-list>
+        </div>
       </div>
       <div ng-if="!DAGPlusPlusCtrl.isDisabled">
         <pipeline-context-menu
