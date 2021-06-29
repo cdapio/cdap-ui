@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
@@ -22,7 +22,6 @@ import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import Heading, { HeadingTypes } from 'components/Heading';
 import { isValidEntityName, objectQuery } from 'services/helpers';
-import { useDebounce } from 'components/Replicator/utilities';
 import If from 'components/If';
 
 const styles = (theme): StyleRules => {
@@ -105,13 +104,26 @@ const NameDescriptionView: React.FC<INameDescriptionProps> = ({
   const [localName, setLocalName] = useState(name);
   const [nameError, setNameError] = useState(null);
   const [localDescription, setLocalDescription] = useState(description);
-  const debounce = useDebounce(100);
+  const nameRef = useRef(localName);
+  const descRef = useRef(localDescription);
 
   useEffect(() => {
-    debounce(() => {
-      setNameDescription(localName, localDescription);
-    });
-  }, [localName, localDescription]);
+    nameRef.current = localName;
+  }, [localName]);
+
+  useEffect(() => {
+    descRef.current = localDescription;
+  }, [localDescription]);
+
+  useEffect(() => {
+    return () => {
+      handleSave();
+    };
+  }, []);
+
+  const handleSave = () => {
+    setNameDescription(nameRef.current, descRef.current);
+  };
 
   function handleNameChange(value) {
     setLocalName(value);
@@ -151,7 +163,7 @@ const NameDescriptionView: React.FC<INameDescriptionProps> = ({
         <Description value={localDescription} setDescription={setLocalDescription} />
       </div>
 
-      <StepButtons nextDisabled={nameError || localName.length === 0} />
+      <StepButtons onNext={handleSave} nextDisabled={nameError || localName.length === 0} />
     </div>
   );
 };

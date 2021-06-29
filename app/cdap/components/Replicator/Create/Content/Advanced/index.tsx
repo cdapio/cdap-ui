@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
@@ -23,7 +23,6 @@ import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { useDebounce } from 'components/Replicator/utilities';
 import If from 'components/If';
 
 const styles = (): StyleRules => {
@@ -145,7 +144,7 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   const [localNumInstances, setLocalNumInstances] = useState(numInstances || 1);
   const [taskSelection, setTaskSelection] = useState(TASK_OPTIONS.calculate);
   const [dataAmount, setDataAmount] = useState(1);
-  const debounce = useDebounce(100);
+  const saveRef = useRef(localNumInstances);
 
   useEffect(() => {
     const initialSelection = getInitialTaskSelection();
@@ -153,10 +152,14 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   }, []);
 
   useEffect(() => {
-    debounce(() => {
-      handleNext();
-    });
-  }, [localNumInstances, dataAmount, taskSelection]);
+    saveRef.current = createSaveRef();
+  }, [localNumInstances, taskSelection, dataAmount]);
+
+  useEffect(() => {
+    return () => {
+      handleSave();
+    };
+  }, []);
 
   function getInitialTaskSelection() {
     const initialNumInstances = numInstances || 1;
@@ -169,13 +172,17 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
     return TASK_OPTIONS.manual;
   }
 
-  function handleNext() {
+  function handleSave() {
+    setAdvanced(saveRef.current);
+  }
+
+  function createSaveRef() {
     let selectedNumInstance = localNumInstances;
     if (taskSelection === TASK_OPTIONS.calculate) {
       selectedNumInstance = dataAmount;
     }
 
-    setAdvanced(selectedNumInstance);
+    return selectedNumInstance;
   }
 
   function handleSelectTask(e) {
@@ -222,7 +229,7 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
         </If>
       </div>
 
-      <StepButtons />
+      <StepButtons onPrevious={handleSave} onNext={handleSave} />
     </div>
   );
 };
