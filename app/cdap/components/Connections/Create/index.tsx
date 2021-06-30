@@ -166,7 +166,7 @@ export function CreateConnection({
       }
     } catch (e) {
       const errorMsg = extractErrorMessage(e);
-      setError(errorMsg);
+      setError(`A server error occurred when creating this connection. Error: ${errorMsg}`);
     }
   };
 
@@ -201,7 +201,7 @@ export function CreateConnection({
       }
     } catch (e) {
       const errorMsg = extractErrorMessage(e);
-      setError(errorMsg);
+      setError(`A server error occurred when testing the connection. Error: ${errorMsg}`);
     } finally {
       setTestInProgress(false);
     }
