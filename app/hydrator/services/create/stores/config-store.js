@@ -83,6 +83,7 @@ class HydratorPlusPlusConfigStore {
         nodes: [],
       },
       description: '',
+      author: '',
       name: '',
     };
     Object.assign(this.state, { config: this.getDefaultConfig() });
@@ -375,6 +376,9 @@ class HydratorPlusPlusConfigStore {
 
     return stateCopy;
   }
+  getAuthor() {
+    return this.getState().author;
+  }
   getDescription() {
     return this.getState().description;
   }
@@ -394,9 +398,14 @@ class HydratorPlusPlusConfigStore {
     this.state.description = description;
     this.emitChange();
   }
-  setMetadataInformation(name, description) {
+  setAuthor(author) {
+    this.state.author = author;
+    this.emitChange();
+  }
+  setMetadataInformation(name, description, author) {
     this.state.name = name;
     this.state.description = description;
+    this.state.author = author;
     this.emitChange();
   }
   setConfig(config, type) {

@@ -60,6 +60,9 @@
            tooltip-append-to-body="true"
            tooltip-class="toppanel-tooltip"
            ></div>
+      <input type="text" id="pipeline-author-input" ng-if="HydratorPlusPlusTopPanelCtrl.metadataExpanded"
+        ng-model="HydratorPlusPlusTopPanelCtrl.state.metadata['author']" placeholder="Pipeline author"
+        ng-keyup="HydratorPlusPlusTopPanelCtrl.onEnterOnMetadata($event)" />
       <textarea ng-model="HydratorPlusPlusTopPanelCtrl.state.metadata['description']"
                 placeholder="Enter a description for your pipeline."
                 ng-if="HydratorPlusPlusTopPanelCtrl.metadataExpanded"

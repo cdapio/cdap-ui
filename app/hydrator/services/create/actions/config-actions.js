@@ -22,8 +22,8 @@ class HydratorPlusPlusConfigActions {
   initializeConfigStore(config) {
     this.dispatcher.dispatch('onInitialize', config);
   }
-  setMetadataInfo(name, description) {
-    this.dispatcher.dispatch('onMetadataInfoSave', name, description);
+  setMetadataInfo(name, description, author) {
+    this.dispatcher.dispatch('onMetadataInfoSave', name, description, author);
   }
   setDescription(description) {
     this.dispatcher.dispatch('onDescriptionSave', description);
