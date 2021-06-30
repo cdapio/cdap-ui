@@ -96,7 +96,7 @@ export function GenericBrowser({ selectedConnection }) {
       setPropertyHeaders(res.propertyHeaders || []);
       setError(null);
     } catch (e) {
-      setError(`Failed to explore connection : "${e.response}"`);
+      setError(`Failed to explore connection. Error: "${e.response}"`);
       setTotalCount(0);
     } finally {
       setLoading(false);
@@ -150,7 +150,7 @@ export function GenericBrowser({ selectedConnection }) {
       }
       setWorkspaceId(wid);
     } catch (e) {
-      setError(e && e.message ? e.message : e);
+      setError(`Failed to create workspace. Error: ${e && e.message ? e.message : e}`);
       setLoading(false);
     }
   };
@@ -168,7 +168,7 @@ export function GenericBrowser({ selectedConnection }) {
         schema,
       });
     } catch (e) {
-      setError(e && e.message ? e.message : e);
+      setError(`Failed to get plugin information. Error: ${e && e.message ? e.message : e}`);
       setLoading(false);
     }
   };
