@@ -526,24 +526,38 @@ function categorizeGraphQlErrors(error) {
   if (graphQLErrors.length === 0 && networkErrors.length === 0 && error) {
     errorsByOrigin[GENERIC_ERROR_ORIGIN] = error.message;
   }
+  /* 
+    TODO: These array checks are guarding against the page crashing when graphQL errors
+    or network errors aren't an array - we haven't been able to repro this locally so
+    we don't know how to handle it properly. When are these not an array?
+  */ 
+  if (Array.isArray(graphQLErrors)) {
+    graphQLErrors.forEach(error => {
+      const errorOrigin = objectQuery(error, 'extensions', 'exception', 'errorOrigin') || GENERIC_ERROR_ORIGIN;
+      if (errorsByOrigin.hasOwnProperty(errorOrigin)) {
+        errorsByOrigin[errorOrigin].push(error.message);
+      }
+      else {
+        errorsByOrigin[errorOrigin] = [error.message];
+      }
+    });
+  } else {
+    console.log(graphQLErrors);
+  }
 
-  graphQLErrors.forEach(error => {
-    const errorOrigin = objectQuery(error, 'extensions', 'exception', 'errorOrigin') || GENERIC_ERROR_ORIGIN;
-    if (errorsByOrigin.hasOwnProperty(errorOrigin)) {
-      errorsByOrigin[errorOrigin].push(error.message);
-    }
-    else {
-      errorsByOrigin[errorOrigin] = [error.message];
-    }
-  });
   // Categorize all graphQL network errors with type 'network'
-  networkErrors.forEach(error => {
-    if (errorsByOrigin.hasOwnProperty('network')) {
-      errorsByOrigin['network'].push(error.message);
-    } else {
-      errorsByOrigin['network'] = [error.message];
-    }
-  });
+  if (Array.isArray(networkErrors)) {
+    networkErrors.forEach(error => {
+      if (errorsByOrigin.hasOwnProperty('network')) {
+        errorsByOrigin['network'].push(error.message);
+      } else {
+        errorsByOrigin['network'] = [error.message];
+      }
+    });
+  } else {
+    console.log(networkErrors);
+  }
+
   return errorsByOrigin;
 }
 
