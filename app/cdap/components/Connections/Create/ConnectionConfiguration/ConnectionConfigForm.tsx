@@ -21,6 +21,7 @@ import makeStyle from '@material-ui/core/styles/makeStyles';
 import PropertyRow from 'components/ConfigurationGroup/PropertyRow';
 import If from 'components/If';
 import LoadingSVG from 'components/LoadingSVG';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyle = makeStyle((theme) => {
   return {
@@ -31,14 +32,11 @@ const useStyle = makeStyle((theme) => {
     },
     connectionTestMessage: {
       display: 'flex',
-      height: '2rem',
       padding: '0 10px',
+      marginBottom: '1rem',
     },
-    connectionTestSuccess: {
-      color: theme.palette.green[500],
-    },
-    connectionTestFailure: {
-      color: theme.palette.red[200],
+    alert: {
+      fontSize: 'inherit',
     },
   };
 });
@@ -109,6 +107,7 @@ export function ConnectionConfigForm({
         pluginProperties={connectorProperties}
         values={values}
         onChange={setValues}
+        errors={testResults.configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
         <If condition={testResults.inProgress}>
@@ -116,19 +115,22 @@ export function ConnectionConfigForm({
         </If>
 
         <If condition={testResults.succeeded}>
-          <div className={classes.connectionTestSuccess}>Successfuly connected.</div>
+          <Alert severity="success" className={classes.alert}>
+            Successfuly connected.
+          </Alert>
         </If>
         {!testResults.succeeded &&
           testResults.messages &&
           testResults.messages.map((message, i) => (
-            <div key={i} className={classes.connectionTestFailure}>
+            <Alert severity="error" key={i} className={classes.alert}>
               {message.message} {message.correctiveAction}
-            </div>
+            </Alert>
           ))}
       </div>
       <div className={classes.formStyles}>
         <Button
-          variant="contained"
+          variant="outlined"
+          color="primary"
           onClick={() => onConnectionTest({ properties: values })}
           disabled={testResults.inProgress}
         >

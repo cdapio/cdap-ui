@@ -47,6 +47,7 @@ interface IConnectionConfigurationProps extends IConnectorDetails {
     succeeded: boolean;
     inProgress: boolean;
     messages?: any;
+    configurationErrors?: any;
   };
   isEdit: boolean;
 }

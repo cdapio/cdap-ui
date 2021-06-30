@@ -128,10 +128,11 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
           <AddConnectionBtnModal className={classes.btn} onCreate={fetchConnectionsList} />
           <ImportConnectionBtn className={classes.btn} onCreate={fetchConnectionsList} />
         </div>
-        <Table columnTemplate="2fr 1fr 1fr">
+        <Table columnTemplate="2fr 2fr 1fr 1fr">
           <TableHeader>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Installed on</TableCell>
             </TableRow>
@@ -146,6 +147,7 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
                   className={classes.tableRow}
                 >
                   <TableCell>{conn.name}</TableCell>
+                  <TableCell>{conn.description}</TableCell>
                   <TableCell>{conn.connectionType}</TableCell>
                   <TableCell>{humanReadableDate(conn.createdTimeMillis, true)}</TableCell>
                 </TableRow>
