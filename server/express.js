@@ -211,6 +211,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     res.send('window.CDAP_CONFIG = ' + data + ';');
   });
 
+  app.get('/hello-world', function (req, res) {
+    res.send('hello world!');
+  })
+
   app.get('/ui-config.js', function(req, res) {
     // var path = __dirname + '/config/cdap-ui-config.json';
     var path = CONFIG_PATH + '/cdap-ui-config.json';

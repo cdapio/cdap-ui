@@ -16,12 +16,14 @@
 
 import { queryTypeStatusResolver } from 'gql/Query/statusResolver';
 import { queryTypePipelinesResolver } from 'gql/Query/pipelinesResolver';
+import { versionResolver } from 'gql/Query/versionResolver';
 import { PipelineRecord } from 'gql/types/PipelineRecord/resolvers';
 
 export const resolvers = {
   Query: {
     status: queryTypeStatusResolver,
     pipelines: queryTypePipelinesResolver,
+    version: versionResolver,
   },
   ...PipelineRecord,
 };

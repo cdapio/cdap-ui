@@ -18,5 +18,6 @@
 
 type Query {
   status: String!
-  pipelines(namespace: String = "default"): [PipelineRecord]!
+  pipelines(namespace: String = "default"): [PipelineRecord]!,
+  version: String!
 }
