@@ -223,7 +223,7 @@ export function CreateConnection({
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
-          title={`Create a ${state.selectedConnector.name} connection`}
+          title={`Create a ${state?.selectedConnector?.name} connection`}
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
