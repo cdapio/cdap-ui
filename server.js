@@ -131,10 +131,11 @@ getCDAPConfig()
           app
         );
       } catch (e) {
-        log.debug(
+        log.error(
           'SSL key/cert files read failed. Please fix the key/ssl certificate files and restart node server -  ',
           e
         );
+        process.exit(1);
       }
       port = cdapConfig['dashboard.ssl.bind.port'];
     } else {
