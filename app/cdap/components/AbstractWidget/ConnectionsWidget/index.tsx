@@ -30,6 +30,7 @@ import TableBody from 'components/Table/TableBody';
 import PipelineModal from 'components/PipelineModal';
 import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
 import ImportConnectionBtn from 'components/Connections/ImportConnectionBtn';
+import classnames from 'classnames';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -42,6 +43,14 @@ const useStyle = makeStyles((theme) => {
     },
     btn: {
       marginRight: '10px',
+    },
+    displayBox: {
+      border: `1px solid ${theme.palette.grey[300]}`,
+      padding: '3px 7px',
+      marginTop: '5px',
+    },
+    disabled: {
+      padding: '5px 0',
     },
   };
 });
@@ -102,11 +111,18 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
     toggleModal();
   }
 
+  const displayValue = extractConnectionName(value);
+
   return (
     <React.Fragment>
       <div>
-        <div>
-          <strong data-cy={dataCy}>{value}</strong>
+        <div
+          className={classnames({
+            [classes.displayBox]: !disabled && !!value,
+            [classes.disabled]: disabled,
+          })}
+        >
+          <strong data-cy={dataCy}>{displayValue}</strong>
         </div>
         <If condition={!disabled && !!value}>
           <br />
@@ -173,6 +189,14 @@ export function extractConnectionName(connection) {
   }
 
   return connection.slice(startIndex + PREFIX.length, endIndex);
+}
+
+export function isConnection(connection) {
+  if (!connection) {
+    return false;
+  }
+
+  return connection.startsWith(PREFIX) && connection.endsWith(SUFFIX);
 }
 
 export default ConnectionsWidget;
