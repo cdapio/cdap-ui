@@ -86,7 +86,7 @@ export function ConnectionConfigForm({
 
         <PropertyRow
           widgetProperty={{
-            'widget-type': 'textarea',
+            'widget-type': 'textbox',
             'widget-attributes': {
               placeholder: 'Specify a description to identify the connection',
             },
