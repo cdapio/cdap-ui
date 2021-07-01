@@ -35,17 +35,28 @@ export default function getPipelineConfig() {
       scope: SCOPES.SYSTEM,
     };
 
-    // TODO: Realtime artifact
+    const realtimeArtifact = {
+      ...batchArtifact,
+      name: 'cdap-data-streams',
+    };
 
-    const stages = [];
-    const connections = [];
+    const batchStages = [];
+    const realtimeStages = [];
+    const batchConnections = [];
+    const realtimeConnections = [];
 
     const wranglerStage = formatPluginSpec(res.wrangler);
-    stages.push(wranglerStage);
+    batchStages.push(wranglerStage);
+    realtimeStages.push(wranglerStage);
 
     const wranglerName = wranglerStage.name;
 
     res.sources.forEach((plugin) => {
+      const pluginType = plugin.plugin.type;
+
+      const connections = pluginType === 'batchsource' ? batchConnections : realtimeConnections;
+      const stages = pluginType === 'batchsource' ? batchStages : realtimeStages;
+
       const pluginStage = formatPluginSpec(plugin);
       const pluginName = pluginStage.name;
 
@@ -61,8 +72,8 @@ export default function getPipelineConfig() {
     const batchConfig = {
       artifact: batchArtifact,
       config: {
-        stages,
-        connections,
+        stages: batchStages,
+        connections: batchConnections,
         resources: {
           memoryMB: HYDRATOR_DEFAULT_VALUES.resources.memoryMB,
           virtualCores: HYDRATOR_DEFAULT_VALUES.resources.virtualCores,
@@ -74,9 +85,29 @@ export default function getPipelineConfig() {
       },
     };
 
-    return {
+    const responseObj = {
       batchConfig,
     };
+
+    if (realtimeStages.length > 1) {
+      responseObj.realtimeConfig = {
+        artifact: realtimeArtifact,
+        config: {
+          stages: realtimeStages,
+          connections: realtimeConnections,
+          resources: {
+            memoryMB: HYDRATOR_DEFAULT_VALUES.resources.memoryMB,
+            virtualCores: HYDRATOR_DEFAULT_VALUES.resources.virtualCores,
+          },
+          driverResources: {
+            memoryMB: HYDRATOR_DEFAULT_VALUES.resources.memoryMB,
+            virtualCores: HYDRATOR_DEFAULT_VALUES.resources.virtualCores,
+          },
+        },
+      };
+    }
+
+    return responseObj;
   });
 }
 

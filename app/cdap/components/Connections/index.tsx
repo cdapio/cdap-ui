@@ -33,6 +33,7 @@ const useStyle = makeStyle(() => {
   return {
     container: {
       height: '100%',
+      overflow: 'hidden',
     },
   };
 });
