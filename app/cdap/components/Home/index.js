@@ -148,6 +148,7 @@ export default class Home extends Component {
           <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
           <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
           <Route path="/ns/:namespace/connections" component={Connections} />
+          <Route path="/ns/:namespace/connection-upload" component={Connections} />
           <Route path="/ns/:namespace/experiments" component={Experiments} />
           <Route exact path="/ns/:namespace/operations" component={Operations} />
           <Route path="/ns/:namespace/details" component={NamespaceAdmin} />

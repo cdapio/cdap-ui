@@ -22,6 +22,8 @@ import IconButton from '@material-ui/core/IconButton';
 import { GenericBrowser } from 'components/Connections/Browser/GenericBrowser';
 import If from 'components/If';
 import Heading, { HeadingTypes } from 'components/Heading';
+import { Route, Switch } from 'react-router-dom';
+import Upload from 'components/Connections/Upload';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -73,11 +75,25 @@ export function ConnectionsBrowser({
             <ArrowForwardIosIcon fontSize="inherit" />
           </IconButton>
         </If>
-        <Heading type={HeadingTypes.h5} label="Select Data" className={classes.heading} />
+        <Switch>
+          <Route path="/ns/:namespace/connection-upload">
+            <Heading type={HeadingTypes.h5} label="Upload Data" className={classes.heading} />
+          </Route>
+          <Route>
+            <Heading type={HeadingTypes.h5} label="Select Data" className={classes.heading} />
+          </Route>
+        </Switch>
       </div>
-      <div className={classes.browserContainer}>
-        <GenericBrowser selectedConnection={selectedConnection} />
-      </div>
+      <Switch>
+        <Route path="/ns/:namespace/connection-upload">
+          <Upload />
+        </Route>
+        <Route>
+          <div className={classes.browserContainer}>
+            <GenericBrowser selectedConnection={selectedConnection} />
+          </div>
+        </Route>
+      </Switch>
     </Paper>
   );
 }
