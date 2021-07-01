@@ -27,7 +27,7 @@ export default class StatusAlertMessage extends Component {
     };
   }
   componentWillMount() {
-    StatusAlertMessageStore.subscribe(() => {
+    this.sub = StatusAlertMessageStore.subscribe(() => {
       let showMessage = StatusAlertMessageStore.getState().view;
       this.setState({
         showMessage,
@@ -45,6 +45,7 @@ export default class StatusAlertMessage extends Component {
     });
   }
   componentWillUnmount() {
+    this.sub();
     StatusAlertMessageStore.dispatch({
       type: 'VIEWUPDATE',
       payload: {

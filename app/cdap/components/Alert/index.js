@@ -63,6 +63,10 @@ export default class Alert extends Component {
     this.resetTimeout();
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.alertTimeout);
+  }
+
   resetTimeout = () => {
     if (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) {
       clearTimeout(this.alertTimeout);
