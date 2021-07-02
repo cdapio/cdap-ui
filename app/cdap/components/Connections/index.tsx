@@ -29,6 +29,9 @@ import {
   ConnectionsContext,
 } from 'components/Connections/ConnectionsContext';
 import makeStyle from '@material-ui/core/styles/makeStyles';
+import { useEffect, useState } from 'react';
+import { ConnectionsApi } from 'api/connections';
+import LoadingSVGCentered from 'components/LoadingSVGCentered';
 const useStyle = makeStyle(() => {
   return {
     container: {
@@ -47,15 +50,17 @@ export default function Connections({
   onEntitySelect,
   initPath,
 }: IConnections) {
-  const [state] = React.useState({
+  const [state, setState] = React.useState({
     mode,
     path,
     workspaceId,
     onWorkspaceCreate,
     connectionId,
     onEntitySelect,
+    disabledTypes: {},
   });
   const classes = useStyle();
+  const [loading, setLoading] = useState(true);
   const featureName = Theme.featureNames.dataPrep;
   const pageTitle = (
     <Helmet
@@ -76,6 +81,30 @@ export default function Connections({
     if (initPath) {
       initialEntry += `?path=${initPath}`;
     }
+  }
+
+  useEffect(() => {
+    ConnectionsApi.getSystemApp().subscribe((appInfo) => {
+      try {
+        const config = JSON.parse(appInfo.configuration);
+
+        if (config.disabledTypes) {
+          const disabledTypes = {};
+          config.disabledTypes.forEach((type) => {
+            disabledTypes[type] = true;
+          });
+          setState({ ...state, disabledTypes });
+        }
+      } catch (e) {
+        // no-op. If app doesn't exist, it will get handled at the top layer
+      }
+
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <LoadingSVGCentered />;
   }
 
   return (

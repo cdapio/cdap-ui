@@ -47,7 +47,9 @@ export interface IConnections {
   connectionId?: string;
   onEntitySelect?: (entitySpec) => void;
   initPath?: string;
+  disabledTypes?: Record<string, boolean>;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,
+  disabledTypes: {},
 });
