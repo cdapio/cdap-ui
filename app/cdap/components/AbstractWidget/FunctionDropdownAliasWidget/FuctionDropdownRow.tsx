@@ -121,14 +121,15 @@ class FunctionDropdownRow extends AbstractRow<IFunctionDropdownRowProps, IKeyVal
 
     const fnOpenBracketIndex = fn.indexOf('(');
     const fnCloseBracketIndex = fn.indexOf(')');
-    const conditionOpenBracketIndex = conditionValue.indexOf('(');
-    const conditionCloseBracketIndex = conditionValue.indexOf(')');
 
     if (fnOpenBracketIndex === -1 || fnCloseBracketIndex === -1) {
       return defaultResponse;
     }
 
     if (conditionValue) {
+      const conditionOpenBracketIndex = conditionValue.indexOf('(');
+      const conditionCloseBracketIndex = conditionValue.indexOf(')');
+
       return {
         func: fn.substring(0, fnOpenBracketIndex),
         field: fn.substring(fnOpenBracketIndex + 1, fnCloseBracketIndex),
