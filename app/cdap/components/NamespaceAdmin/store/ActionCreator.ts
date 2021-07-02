@@ -67,24 +67,6 @@ export function getNamespaceDetail(namespace) {
   });
 }
 
-export function getComputeProfiles(namespace) {
-  MyCloudApi.getSystemProfiles()
-    .combineLatest(MyCloudApi.list({ namespace }))
-    .subscribe(([systemProfiles = [], namepaceProfiles = []]) => {
-      let filteredSystemProfiles = systemProfiles;
-      if (Theme.showNativeProfile === false) {
-        filteredSystemProfiles = systemProfiles.filter((profile) => profile.name !== 'native');
-      }
-
-      Store.dispatch({
-        type: NamespaceAdminActions.setProfilesCount,
-        payload: {
-          profilesCount: systemProfiles.length + namepaceProfiles.length,
-        },
-      });
-    });
-}
-
 export function getPreferences(namespace) {
   const requestNamespace = namespace ? namespace : getCurrentNamespace();
 
