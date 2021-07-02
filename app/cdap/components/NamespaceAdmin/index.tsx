@@ -20,7 +20,6 @@ import { EntityTopPanel } from 'components/EntityTopPanel';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import {
   getNamespaceDetail,
-  getComputeProfiles,
   reset,
   getPreferences,
   getDrivers,
@@ -33,6 +32,7 @@ import Metrics from 'components/NamespaceAdmin/Metrics';
 import Tabs from 'components/NamespaceAdmin/Tabs';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
+import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
 
 const eventEmitter = ee(ee);
 
@@ -50,10 +50,10 @@ const NamespaceAdmin: React.FC = () => {
 
   useEffect(() => {
     getNamespaceDetail(namespace);
-    getComputeProfiles(namespace);
     getPreferences(namespace);
     getDrivers(namespace);
     getConnections(namespace);
+    getProfiles(namespace);
 
     eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
     eventEmitter.on(globalEvents.ARTIFACTUPLOAD, getDrivers);
@@ -62,6 +62,7 @@ const NamespaceAdmin: React.FC = () => {
       eventEmitter.off(globalEvents.NSPREFERENCESSAVED, getPreferences);
       eventEmitter.off(globalEvents.ARTIFACTUPLOAD, getDrivers);
       reset();
+      resetProfiles();
     };
   }, []);
 
