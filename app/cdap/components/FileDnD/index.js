@@ -22,7 +22,14 @@ require('./FileDnD.scss');
 import classnames from 'classnames';
 import T from 'i18n-react';
 
-export default function FileDnD({ file, onDropHandler, error, uploadLabel, clickLabel }) {
+export default function FileDnD({
+  file,
+  onDropHandler,
+  error,
+  uploadLabel,
+  clickLabel,
+  className,
+}) {
   const onDrop = useCallback((acceptedFiles) => {
     onDropHandler(acceptedFiles);
   }, []);
@@ -31,14 +38,14 @@ export default function FileDnD({ file, onDropHandler, error, uploadLabel, click
   return (
     <div
       {...getRootProps({ 'data-cy': 'file-drop-zone' })}
-      className={classnames('file-drop-container', {
+      className={classnames('file-drop-container', className, {
         'file-drag-container': isDragActive,
       })}
     >
       <input {...getInputProps()} />
       <div className="file-metadata-container text-center">
         <i className="fa fa-upload fa-3x" />
-        {file.name && file.name.length ? (
+        {file && file.name && file.name.length ? (
           <span>{file.name}</span>
         ) : (
           <span>
@@ -60,4 +67,5 @@ FileDnD.propTypes = {
   clickLabel: PropTypes.string,
   error: PropTypes.any,
   onDropHandler: PropTypes.func,
+  className: PropTypes.string,
 };

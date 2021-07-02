@@ -94,10 +94,27 @@ const useStyle = makeStyles<Theme>(
         alignItems: 'center',
         '&:hover': {
           textDecoration: 'none',
+          color: 'inherit',
         },
         '&:hover > span': {
           fontWeight: 600,
           color: 'black',
+        },
+      },
+      upload: {
+        display: 'block',
+        padding: '10px 15px',
+        color: theme.palette.grey[50],
+        '&:hover': {
+          textDecoration: 'none',
+          color: theme.palette.grey[50],
+          fontWeight: 600,
+        },
+        '&$selectedConnection': {
+          fontWeight: 600,
+          '&:hover': {
+            fontWeight: 600,
+          },
         },
       },
       selectedConnection: {
@@ -276,6 +293,14 @@ export function CategorizedConnections({
 
   return (
     <div>
+      <Link
+        to={`/ns/${getCurrentNamespace()}/connection-upload`}
+        className={classnames(classes.upload, {
+          [classes.selectedConnection]: !localSelectedConnection,
+        })}
+      >
+        Upload
+      </Link>
       {connectorTypes.map((connectorType) => {
         const key = connectorType.name;
         const connections = categorizedConnections.get(key) || [];
