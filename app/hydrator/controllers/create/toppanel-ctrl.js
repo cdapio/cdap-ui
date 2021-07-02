@@ -395,6 +395,7 @@ class HydratorPlusPlusTopPanelCtrl {
             macroString.indexOf('}') !== -1 &&
             macroString.indexOf('${logicalStartTime(') === -1 &&
             macroString.indexOf('${secure(') === -1 &&
+            macroString.indexOf('${conn(') === -1 &&
             macroString.indexOf('${oauth(') === -1
           ) {
             let macroKeys = [];
