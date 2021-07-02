@@ -18,6 +18,7 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import MetricColumn from 'components/NamespaceAdmin/Metrics/MetricColumn';
 import { connect } from 'react-redux';
+import ProfileMetric from 'components/NamespaceAdmin/Metrics/ProfileMetric';
 
 const useStyle = makeStyles((theme) => {
   const border = `1px solid ${theme.palette.grey[100]}`;
@@ -47,7 +48,6 @@ const useStyle = makeStyles((theme) => {
 interface IMetricsProps {
   pipelinesCount: number;
   datasetsCount: number;
-  profilesCount: number;
   preferencesCount: number;
   driversCount: number;
   connectionsCount: number;
@@ -56,7 +56,6 @@ interface IMetricsProps {
 const MetricsView: React.FC<IMetricsProps> = ({
   pipelinesCount,
   datasetsCount,
-  profilesCount,
   preferencesCount,
   driversCount,
   connectionsCount,
@@ -70,7 +69,7 @@ const MetricsView: React.FC<IMetricsProps> = ({
           <MetricColumn title="pipelines" metric={pipelinesCount} />
           <MetricColumn title="datasets" metric={datasetsCount} />
         </div>
-        <MetricColumn title="profiles" metric={profilesCount} />
+        <ProfileMetric />
         <MetricColumn title="preferences" metric={preferencesCount} />
         <MetricColumn title="connections" metric={connectionsCount} />
         <MetricColumn title="drivers" metric={driversCount} />
@@ -83,7 +82,6 @@ const mapStateToProps = (state) => {
   return {
     pipelinesCount: state.pipelinesCount,
     datasetsCount: state.datasetsCount,
-    profilesCount: state.profilesCount,
     preferencesCount: state.preferences.length,
     driversCount: state.drivers.length,
     connectionsCount: state.connections.length,

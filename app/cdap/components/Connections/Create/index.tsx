@@ -61,7 +61,7 @@ export function CreateConnection({
   isEdit = false,
   enableRouting = true,
 }) {
-  const { mode } = React.useContext(ConnectionsContext);
+  const { mode, disabledTypes } = React.useContext(ConnectionsContext);
   const classes = useStyle();
   const [loading, setLoading] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -80,7 +80,7 @@ export function CreateConnection({
 
   const init = async () => {
     try {
-      await initStore(dispatch);
+      await initStore(dispatch, disabledTypes);
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -223,7 +223,7 @@ export function CreateConnection({
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
-          title={`Create a ${state.selectedConnector.name} connection`}
+          title={`Create a ${state?.selectedConnector?.name} connection`}
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />

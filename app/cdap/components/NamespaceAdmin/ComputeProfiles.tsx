@@ -22,6 +22,8 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { Label, Input } from 'reactstrap';
+import { Theme } from 'services/ThemeHelper';
+import If from 'components/If';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -46,26 +48,28 @@ const ComputeProfiles: React.FC = () => {
   return (
     <div>
       <div className={classes.subtitleSection}>
-        <Link to={`/ns/${getCurrentNamespace()}/profiles/create`}>
-          <Button variant="contained" color="primary">
-            Create Profile
-          </Button>
-        </Link>
-        <Button color="primary">
-          <Label for="import-profile" className={classes.inputLabel}>
-            Import
-            {/* The onClick here is to clear the file, so if the user uploads the same file
+        <If condition={Theme.showCreateProfile !== false}>
+          <Link to={`/ns/${getCurrentNamespace()}/profiles/create`}>
+            <Button variant="contained" color="primary">
+              Create Profile
+            </Button>
+          </Link>
+          <Button color="primary">
+            <Label for="import-profile" className={classes.inputLabel}>
+              Import
+              {/* The onClick here is to clear the file, so if the user uploads the same file
             twice then we can show the error, instead of showing nothing */}
-            <Input
-              type="file"
-              accept=".json"
-              id="import-profile"
-              className={classes.fileInput}
-              onChange={importProfile.bind(this, getCurrentNamespace())}
-              onClick={(e) => (e.target.value = null)}
-            />
-          </Label>
-        </Button>
+              <Input
+                type="file"
+                accept=".json"
+                id="import-profile"
+                className={classes.fileInput}
+                onChange={importProfile.bind(this, getCurrentNamespace())}
+                onClick={(e) => (e.target.value = null)}
+              />
+            </Label>
+          </Button>
+        </If>
       </div>
       <ProfilesListView namespace={getCurrentNamespace()} />
     </div>

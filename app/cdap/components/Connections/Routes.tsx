@@ -31,6 +31,9 @@ export function ConnectionRoutes() {
       <Route path="/ns/:namespace/connections">
         <ConnectionsHome />
       </Route>
+      <Route path="/ns/:namespace/connection-upload">
+        <ConnectionsHome />
+      </Route>
     </Switch>
   );
 }
