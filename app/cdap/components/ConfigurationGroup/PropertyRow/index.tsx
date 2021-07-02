@@ -25,6 +25,7 @@ import { isMacro } from 'services/helpers';
 import MacroIndicator from 'components/ConfigurationGroup/MacroIndicator';
 import { isEmpty, isEqual, xorWith } from 'lodash';
 import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import { isConnection } from 'components/AbstractWidget/ConnectionsWidget';
 
 const styles = (theme): StyleRules => {
   return {
@@ -109,6 +110,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
     return (
       this.props.widgetProperty[WIDGET_CATEGORY] !== PLUGIN &&
       isMacro(this.props.value) &&
+      !isConnection(this.props.value) &&
       objectQuery(this.props.pluginProperty, 'macroSupported')
     );
   }
