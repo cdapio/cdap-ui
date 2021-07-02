@@ -87,4 +87,5 @@ export const ConnectionsApi = {
     'REQUEST',
     `${pipelineV1AppBasePath}/connections/test`
   ),
+  getSystemApp: apiCreator(dataSrc, 'GET', 'REQUEST', '/namespaces/system/apps/pipeline'),
 };

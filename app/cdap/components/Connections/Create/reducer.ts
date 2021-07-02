@@ -268,9 +268,15 @@ function getMapOfConnectorToPluginProperties(allConnectors) {
   return mapOfConnectorPluginProperties;
 }
 
-export async function initStore(dispatch: Dispatch<IAction<ICreateConnectionActions>>) {
+export async function initStore(
+  dispatch: Dispatch<IAction<ICreateConnectionActions>>,
+  disabledTypes = {}
+) {
   try {
-    const connectors = await fetchConnectors();
+    let connectors = await fetchConnectors();
+    connectors = connectors.filter((conn) => {
+      return !disabledTypes[conn.name];
+    });
     const allConnectorsPluginProperties = await fetchAllConnectorPluginProperties(connectors);
     const mapOfConnectorPluginProperties = getMapOfConnectorToPluginProperties(
       allConnectorsPluginProperties
