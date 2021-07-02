@@ -26,6 +26,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import IconButton from '@material-ui/core/IconButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { orderBy } from 'natural-orderby';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyles<Theme>((theme) => {
   return {
@@ -80,9 +81,13 @@ export function ConnectionsBrowserSidePanel({
     categorizedConnections: new Map(),
     connectorTypes: [],
   });
+  const { disabledTypes } = React.useContext(ConnectionsContext);
   const initState = async () => {
     const categorizedConnections = await getCategorizedConnections();
-    const connectorTypes = await fetchConnectors();
+    let connectorTypes = await fetchConnectors();
+    connectorTypes = connectorTypes.filter((conn) => {
+      return !disabledTypes[conn.name];
+    });
 
     setState({
       categorizedConnections,
