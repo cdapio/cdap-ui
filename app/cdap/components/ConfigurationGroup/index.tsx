@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { IWidgetJson, PluginProperties } from './types';
 import { processConfigurationGroups, removeFilteredProperties } from './utilities';
-import { objectQuery } from 'services/helpers';
+import { objectQuery, useOnUnmount } from 'services/helpers';
 import defaults from 'lodash/defaults';
 import If from 'components/If';
 import PropertyRow from './PropertyRow';
@@ -149,18 +149,6 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     updateFilteredConfigurationGroup(configurationGroups, values);
   }, [values]);
 
-  // This onUnMount is to make sure we clear out all properties that are hidden.
-  React.useEffect(() => {
-    return () => {
-      const newValues = referenceValueForUnMount.current.values;
-      const configGroups = referenceValueForUnMount.current.configurationGroups;
-      const updatedFilteredValues = removeFilteredProperties(newValues, configGroups);
-      changeParentHandler(updatedFilteredValues);
-    };
-  }, []);
-
-  React.useEffect(getOrphanedErrors, [errors]);
-
   function changeParentHandler(updatedValues) {
     if (!onChange || typeof onChange !== 'function') {
       return;
@@ -168,6 +156,16 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
     onChange(updatedValues);
   }
+
+  // This onUnMount is to make sure we clear out all properties that are hidden.
+  useOnUnmount(() => {
+    const newValues = referenceValueForUnMount.current.values;
+    const configGroups = referenceValueForUnMount.current.configurationGroups;
+    const updatedFilteredValues = removeFilteredProperties(newValues, configGroups);
+    changeParentHandler(updatedFilteredValues);
+  });
+
+  React.useEffect(getOrphanedErrors, [errors]);
 
   const extraConfig = {
     namespace: getCurrentNamespace(),
