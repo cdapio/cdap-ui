@@ -15,7 +15,6 @@
  */
 
 import * as Helpers from '../helpers';
-import { ConnectionType } from '../../app/cdap/components/DataPrepConnections/ConnectionType';
 import {
   DEFAULT_GCS_FILE,
   DEFAULT_GCS_FOLDER,
@@ -24,7 +23,9 @@ import {
 
 let headers;
 
-describe.skip('Wrangler GCS tests', () => {
+const GCS_CONNECTION_TYPE = 'GCS';
+
+describe('Wrangler GCS tests', () => {
   before(() => {
     return Helpers.loginIfRequired()
       .then(() => {
@@ -45,27 +46,27 @@ describe.skip('Wrangler GCS tests', () => {
   });
 
   it('Should successfully test GCS connection', () => {
-    cy.test_GCS_connection(DEFAULT_GCS_CONNECTION_NAME);
-    cy.get('.card-action-feedback.SUCCESS');
-    cy.contains('Test connection successful');
+    cy.test_gcp_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.get(Helpers.dataCy('connection-test-success'), {
+      timeout: 60000,
+    }).contains('Successfully connected.');
   });
 
   it('Should show appropriate message when test connection fails', () => {
-    cy.test_GCS_connection('unknown_gcs_connection', 'unknown_project', 'unknown_path');
-    cy.get('.card-action-feedback.DANGER');
-    cy.contains('Test connection failed');
+    cy.test_gcp_connection(GCS_CONNECTION_TYPE, 'unknown_gcs_connection', 'unknown_project', 'unknown_path');
+    cy.get(Helpers.dataCy('connection-test-failure'), {
+      timeout: 60000,
+    }).contains('Service account provided is not valid');
   });
 
   it('Should create GCS connection', () => {
-    cy.create_GCS_connection(DEFAULT_GCS_CONNECTION_NAME);
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-connection-${DEFAULT_GCS_CONNECTION_NAME}"]`);
+    cy.create_gcp_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.select_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
   });
 
   it('Should show proper error message when trying to create existing connection', () => {
-    cy.create_GCS_connection(DEFAULT_GCS_CONNECTION_NAME);
-    cy.get('.card-action-feedback.DANGER');
-    cy.get('.card-action-feedback.DANGER .main-message .expand-icon').click();
-    cy.get('.card-action-feedback.DANGER .stack-trace').should(
+    cy.create_gcp_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.get('.modal-content .error').should(
       'contain',
       `'${DEFAULT_GCS_CONNECTION_NAME}' already exists.`
     );
@@ -73,32 +74,27 @@ describe.skip('Wrangler GCS tests', () => {
 
   it('Should be able navigate inside GCS connection & create workspace', () => {
     cy.visit('/cdap/ns/default/connections');
-    cy.get(
-      `[data-cy="wrangler-${ConnectionType.GCS}-connection-${DEFAULT_GCS_CONNECTION_NAME}"]`
-    ).click();
-    cy.get(Helpers.dataCy('gcs-search-box')).type(DEFAULT_GCS_FOLDER);
-    cy.contains(DEFAULT_GCS_FOLDER).click();
-    cy.contains(DEFAULT_GCS_FILE).click();
+    cy.select_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.get(Helpers.dataCy('connection-browser-search')).type(DEFAULT_GCS_FOLDER);
+    cy.contains(DEFAULT_GCS_FOLDER, {
+      timeout: 60000,
+    }).click();
+    cy.contains(DEFAULT_GCS_FILE, {
+      timeout: 60000,
+    }).click();
     cy.url().should('contain', '/ns/default/wrangler');
   });
 
   it('Should show appropriate error when navigating to incorrect GCS connection', () => {
     const connName = 'gcs_unknown_connection';
-    cy.visit(`/cdap/ns/default/connections/gcs/${connName}`);
-    cy.contains(`Connection '${connName}' does not exist`);
-    cy.contains('No files or directories found in this bucket');
+    cy.visit(`/cdap/ns/default/connections/${connName}`);
+    cy.contains(`Connection '${connName}' in namespace 'default' not found`);
+    cy.contains('No entities available');
   });
 
   it('Should delete an existing connection', () => {
     cy.visit('/cdap/ns/default/connections');
-    cy.get(
-      `[data-cy="connection-action-popover-toggle-${ConnectionType.GCS}-${DEFAULT_GCS_CONNECTION_NAME}"`
-    ).click();
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-connection-delete"]`).click();
-    cy.contains('Are you sure you want to delete connection');
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-delete-confirmation-btn"]`).click();
-    cy.get(
-      `[data-cy="wrangler-${ConnectionType.GCS}-connection-${DEFAULT_GCS_CONNECTION_NAME}"]`
-    ).should('not.exist');
+    cy.delete_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.connection_does_not_exist(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
   });
 });
