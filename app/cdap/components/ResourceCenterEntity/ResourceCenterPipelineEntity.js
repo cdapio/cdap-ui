@@ -24,6 +24,7 @@ import IconSVG from 'components/IconSVG';
 import { Input, Label } from 'reactstrap';
 import T from 'i18n-react';
 import uuidV4 from 'uuid/v4';
+import CheckoutPipelineModal from 'components/PipelineList/CheckoutPipeline';
 
 require('./ResourceCenterPipelineEntity.scss');
 
@@ -131,6 +132,7 @@ export default function ResourceCenterPipelineEntity({ onError }) {
             onChange={importBtnHandler}
           />
         </Label>
+        <CheckoutPipelineModal></CheckoutPipelineModal>
       </div>
     </div>
   );

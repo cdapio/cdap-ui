@@ -22,6 +22,7 @@ import ActionsPopover, { IAction } from 'components/ActionsPopover';
 import PipelineExportModal from 'components/PipelineExportModal';
 import ConfirmationModal from 'components/ConfirmationModal';
 import downloadFile from 'services/download-file';
+import CheckInPipelineModal from 'components/PipelineList/CheckInPipeline';
 
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
 
@@ -153,6 +154,8 @@ class DraftActions extends React.PureComponent<IProps, IState> {
           pipelineConfig={this.pipelineConfig}
           onExport={this.handlePipelineExport}
         />
+
+        {/* <CheckInPipelineModal pipeline={this.props.pipeline}></CheckInPipelineModal> */}
 
         {this.renderDeleteConfirmation()}
       </div>

@@ -73,7 +73,7 @@ class HydratorPlusPlusStudioCtrl {
       };
 
       DAGPlusPlusNodesActionsFactory.createGraphFromConfig(configJson.__ui__.nodes, configJson.config.connections, configJson.config.comments);
-    } else {
+    } else {  
       let config = {};
       config.artifact = artifact;
       HydratorPlusPlusConfigActions.initializeConfigStore(config);
@@ -81,13 +81,11 @@ class HydratorPlusPlusStudioCtrl {
         HydratorUpgradeService.openUpgradeModal(rConfig.config, false);
       }
     }
-
     if ($stateParams.resourceCenterId) {
-      let jsonData = $window.localStorage.getItem($stateParams.resourceCenterId);
-      if (!jsonData) {
+      let jsonData = $window.localStorage.getItem($stateParams.resourceCenterId);  
+      if (!jsonData) { 
         return;
       }
-
       HydratorUpgradeService.openUpgradeModal(jsonData);
       $window.localStorage.removeItem($stateParams.resourceCenterId);
     }
