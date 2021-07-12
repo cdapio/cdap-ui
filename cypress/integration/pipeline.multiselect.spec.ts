@@ -51,10 +51,10 @@ describe('Pipeline multi-select nodes + context menu for plugins & canvas', () =
   it('Should select connection(s)', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.create_simple_pipeline().then(({ sourceNodeId, transformNodeId, sinkNodeId }) => {
-      cy.select_connection(sourceNodeId, transformNodeId).then((element) => {
+      cy.select_node_connection(sourceNodeId, transformNodeId).then((element) => {
         expect(element[0].children[1].getAttribute('stroke')).to.eq('#58b7f6');
       });
-      cy.select_connection(transformNodeId, sinkNodeId).then((element) => {
+      cy.select_node_connection(transformNodeId, sinkNodeId).then((element) => {
         expect(element[0].children[1].getAttribute('stroke')).to.eq('#58b7f6');
       });
       cy.get('body').type('{del}');

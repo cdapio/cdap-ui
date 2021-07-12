@@ -331,7 +331,10 @@ export function CategorizedConnections({
             onChange={() => handleChange(key)}
             key={key}
           >
-            <CustomAccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <CustomAccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              data-cy={`categorized-connection-type-${key}`}
+            >
               {key}({connections.length})
             </CustomAccordionSummary>
             <CustomAccordionDetails>
@@ -372,10 +375,20 @@ export function CategorizedConnections({
                       className={classes.connection}
                     >
                       <If condition={localSelectedConnection === connection.name}>
-                        <strong className="connection-name">{connection.name}</strong>
+                        <strong
+                          className="connection-name"
+                          data-cy={`connection-${key}-${connection.name}`}
+                        >
+                          {connection.name}
+                        </strong>
                       </If>
                       <If condition={localSelectedConnection !== connection.name}>
-                        <span className="connection-name">{connection.name}</span>
+                        <span
+                          className="connection-name"
+                          data-cy={`connection-${key}-${connection.name}`}
+                        >
+                          {connection.name}
+                        </span>
                       </If>
                     </Link>
 
@@ -387,30 +400,29 @@ export function CategorizedConnections({
                   </div>
                 );
               })}
-
-              <ConfirmationModal
-                headerTitle="Delete connection"
-                toggleModal={handleConfirmationClose}
-                confirmationElem={confirmDeleteElem}
-                confirmButtonText="Delete"
-                confirmFn={handleDelete}
-                cancelFn={handleConfirmationClose}
-                isOpen={!!connectionToDelete}
-                errorMessage={!deleteError ? '' : 'Failed to delete connection'}
-                extendedMessage={deleteError}
-              />
-
-              <CreateConnectionModal
-                isOpen={isCreateConnectionOpen}
-                onToggle={toggleConnectionCreate}
-                initialConfig={initConnConfig}
-                onCreate={fetchConnections}
-                isEdit={isEdit}
-              />
             </CustomAccordionDetails>
           </Accordion>
         );
       })}
+      <ConfirmationModal
+        headerTitle="Delete connection"
+        toggleModal={handleConfirmationClose}
+        confirmationElem={confirmDeleteElem}
+        confirmButtonText="Delete"
+        confirmFn={handleDelete}
+        cancelFn={handleConfirmationClose}
+        isOpen={!!connectionToDelete}
+        errorMessage={!deleteError ? '' : 'Failed to delete connection'}
+        extendedMessage={deleteError}
+      />
+
+      <CreateConnectionModal
+        isOpen={isCreateConnectionOpen}
+        onToggle={toggleConnectionCreate}
+        initialConfig={initConnConfig}
+        onCreate={fetchConnections}
+        isEdit={isEdit}
+      />
     </div>
   );
 }
