@@ -75,7 +75,7 @@ declare global {
       /**
        * Select a specific connection give source and target node
        */
-      select_connection: (from: INodeIdentifier, to: INodeIdentifier) => Chainable<JQuery<any>>;
+      select_node_connection: (from: INodeIdentifier, to: INodeIdentifier) => Chainable<JQuery<any>>;
       /**
        * Creates a simple BQ source -> Wrangler Transform -> BQ Sink pipeline.
        *
@@ -150,51 +150,34 @@ declare global {
       start_wrangler: (headers: any) => Chainable<any>;
 
       /**
-       * Fills up the create connection form for GCS
-       */
-      fill_GCS_connection_create_form: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
-
-      /**
-       * Test GCS connection
-       */
-      test_GCS_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
-
-      /**
-       * Creates a GCS connection
-       */
-      create_GCS_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
-
-
-      /**
       * Fills up the create connection form for BIGQUERY
       */
-      fill_BIGQUERY_connection_create_form: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+       fill_gcp_connection_create_form: (connectionType: string, connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+
+       /**
+        * Test BIGQUERY connection
+        */
+       test_gcp_connection: (connectionType: string, connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+
+       /**
+        * Creates a BigQuery connection
+        */
+       create_gcp_connection: (connectionType: string, connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
 
       /**
-       * Test BIGQUERY connection
+       * Select a connection in the Wrangler/connection management UI
        */
-      test_BIGQUERY_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+      select_connection: (connectionType: string, connectionName: string) => void;
 
       /**
-       * Creates a BigQuery connection
+       * Delete a connection in the Wrangler/connection management UI
        */
-      create_BIGQUERY_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
-
-
-      /**
-      * Fills up the create connection form for SPANNER
-      */
-      fill_SPANNER_connection_create_form: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+      delete_connection: (connectionType: string, connectionName: string) => void;
 
       /**
-       * Test SPANNER connection
+       * Verify that a connection does not exist
        */
-      test_SPANNER_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
-
-      /**
-       * Creates a SPANNER connection
-       */
-      create_SPANNER_connection: (connectionId: string, projectId?: string, serviceAccountPath?: string) => void;
+      connection_does_not_exist: (connectionType: string, connectionName: string) => void;
 
       /**
        * Utility to add runtime arguments at specific key

@@ -22,7 +22,9 @@ const DEFAULT_GCP_SERVICEACCOUNT_PATH = Cypress.env('gcp_service_account_path');
 const DEFAULT_GCP_PROJECTID = Cypress.env('gcp_projectid');
 
 const DEFAULT_GCS_CONNECTION_NAME = `gcs_${getRandomArbitrary()}`;
-const DEFAULT_GCS_FOLDER = 'cdap-gcp-ui-test';
+// 000 to keep this bucket in the first 1000 entries
+// TODO Change back when we support > 1000 entries
+const DEFAULT_GCS_FOLDER = '000cdap-gcp-ui-test';
 const DEFAULT_GCS_FILE = 'purchase_bad.csv';
 
 const DEFAULT_BIGQUERY_CONNECTION_NAME = `bigquery_${getRandomArbitrary()}`;

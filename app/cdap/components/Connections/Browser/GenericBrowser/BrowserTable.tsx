@@ -175,7 +175,7 @@ export function BrowserTable({
 
   return (
     <>
-      <Table columnTemplate={columnTemplate}>
+      <Table columnTemplate={columnTemplate} dataCy="connection-browser">
         <TableHeader>
           <TableRow>
             <TableCell>Name</TableCell>
