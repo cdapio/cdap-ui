@@ -25,6 +25,7 @@ import { objectQuery } from 'services/helpers';
 import ToggleSwitch from 'components/ToggleSwitch';
 import LoadingSVG from 'components/LoadingSVG';
 import VersionStore from 'services/VersionStore';
+import { catchError } from 'rxjs/operators';
 
 const useStyles = makeStyles({
   container: {
@@ -43,35 +44,25 @@ const useStyles = makeStyles({
   },
 });
 
-function defaultPushdown(cloudArtifact?: ICloudArtifact) {
-  const artifact = cloudArtifact || {
-    name: 'google-cloud',
-    version: null,
-    scope: 'SYSTEM',
-  };
-  return {
-    plugin: {
-      name: 'BigQueryPushdownEngine',
-      label: 'BigQueryPushdown',
-      type: 'sqlengine',
-      artifact,
-      properties: {},
-    },
-  };
-}
+const PLUGIN_NAME = 'BigQueryPushdownEngine';
+const PLUGIN_TYPE = 'sqlengine';
+const PLUGIN_LABEL = 'BigQueryPushdown';
+const ARTIFACT_DEFAULT = {
+  name: 'google-cloud',
+  version: null,
+};
 
-function fetchPluginInfo(cloudArtifact?: ICloudArtifact) {
+function fetchPluginInfo(artifact: ICloudArtifact) {
   const version = VersionStore.getState().version;
-  const defaults = defaultPushdown(null);
   const pluginParams = {
     namespace: getCurrentNamespace(),
     parentArtifact: 'cdap-data-pipeline',
     version,
-    extension: defaults.plugin.type,
-    pluginName: defaults.plugin.name,
+    extension: PLUGIN_TYPE,
+    pluginName: PLUGIN_NAME,
     scope: 'SYSTEM',
-    artifactName: defaults.plugin.artifact.name,
-    artifactScope: defaults.plugin.artifact.scope,
+    artifactName: artifact.name,
+    artifactScope: artifact.scope,
     limit: 1,
     order: 'DESC',
   };
@@ -85,20 +76,17 @@ interface ICloudArtifact {
   version: string;
   scope: string;
 }
+interface IPushdownPlugin {
+  name: string;
+  label: string;
+  type: string;
+  artifact: ICloudArtifact;
+  properties: object;
+}
 interface IPushdownConfig {
   pushdownEnabled: boolean;
   transformationPushdown?: {
-    plugin?: {
-      name: string;
-      label: string;
-      type: string;
-      artifact: {
-        name: string;
-        version: string;
-        scope: string;
-      };
-      properties: object;
-    };
+    plugin?: IPushdownPlugin;
   };
 }
 
@@ -134,39 +122,54 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
   };
 
   useEffect(() => {
-    fetchPluginInfo(cloudArtifact).subscribe(
-      (res) => {
-        const defaults = defaultPushdown(cloudArtifact || res.artifact);
-        fetchPluginWidget(
-          defaults.plugin.artifact.name,
-          defaults.plugin.artifact.version,
-          defaults.plugin.artifact.scope,
-          defaults.plugin.name,
-          defaults.plugin.type
-        ).subscribe(
-          (widget) => {
-            if (plugin === null || plugin === undefined) {
+    fetchPluginInfo(cloudArtifact || { ...ARTIFACT_DEFAULT, scope: 'USER' })
+      .pipe(
+        catchError((err) => {
+          if (err?.statusCode !== 404 || cloudArtifact) {
+            throw err;
+          }
+          return fetchPluginInfo({ ...ARTIFACT_DEFAULT, scope: 'SYSTEM' });
+        })
+      )
+      .subscribe(
+        (res) => {
+          const artifact = res.artifact;
+          fetchPluginWidget(
+            artifact.name,
+            artifact.version,
+            artifact.scope,
+            PLUGIN_NAME,
+            PLUGIN_TYPE
+          ).subscribe(
+            (widget) => {
               onValueChange({
                 pushdownEnabled,
-                transformationPushdown: defaults,
+                transformationPushdown: {
+                  plugin: {
+                    name: PLUGIN_NAME,
+                    label: PLUGIN_LABEL,
+                    type: PLUGIN_TYPE,
+                    artifact,
+                    properties: valueProperties,
+                  },
+                },
               });
+              setPluginInfo(res);
+              setPluginWidget(widget);
+            },
+            null,
+            () => {
+              setLoading(false);
             }
-            setPluginInfo(res);
-            setPluginWidget(widget);
-          },
-          null,
-          () => {
-            setLoading(false);
-          }
-        );
-      },
-      (err) => {
-        // tslint:disable-next-line: no-console
-        console.error('Error fetching plugin', err);
+          );
+        },
+        (err) => {
+          // tslint:disable-next-line: no-console
+          console.error('Error fetching plugin', err);
 
-        // TODO: error handling
-      }
-    );
+          // TODO: error handling
+        }
+      );
     // pass etc
   }, [cloudArtifact]);
 
