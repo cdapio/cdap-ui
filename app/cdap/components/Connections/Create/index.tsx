@@ -130,6 +130,14 @@ export function CreateConnection({
   const onConnectionCreate = async (connectionFormData) => {
     const { description, properties, name } = connectionFormData;
 
+    if (name.trim() === '') {
+      setError('Connection name must not be empty.');
+      return;
+    } else if (name.trim().match(/ /)) {
+      setError('Connection name must not contain spaces.');
+      return;
+    }
+
     if (!isEdit) {
       // validate existing connection name
       try {
