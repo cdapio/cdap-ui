@@ -52,7 +52,12 @@ export function CreateConnectionBtn() {
     return (
       <div className={classes.root}>
         <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
-          <Button className={classes.button} variant="outlined" color="primary">
+          <Button
+            className={classes.button}
+            variant="outlined"
+            color="primary"
+            data-cy="add-connection-button"
+          >
             Add Connection
           </Button>
         </Link>
@@ -62,7 +67,12 @@ export function CreateConnectionBtn() {
 
   return (
     <div className={classes.root}>
-      <Button className={classes.button} variant="outlined" color="primary">
+      <Button
+        className={classes.button}
+        variant="outlined"
+        color="primary"
+        data-cy="add-connection-button"
+      >
         Add Connection
       </Button>
     </div>
