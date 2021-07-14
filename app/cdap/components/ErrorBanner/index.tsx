@@ -21,9 +21,10 @@ import Alert from 'components/Alert';
 interface IErrorProps {
   error: object | string | null;
   onClose?: () => void;
+  canEditPageWhileOpen?: boolean;
 }
 
-const ErrorBanner: React.SFC<IErrorProps> = ({ error, onClose }) => {
+const ErrorBanner: React.SFC<IErrorProps> = ({ error, onClose, canEditPageWhileOpen }) => {
   if (!error) {
     return null;
   }
@@ -31,7 +32,15 @@ const ErrorBanner: React.SFC<IErrorProps> = ({ error, onClose }) => {
   const errorMessage: string =
     objectQuery(error, 'response', 'message') || objectQuery(error, 'response') || error;
 
-  return <Alert message={errorMessage} type="error" showAlert={true} onClose={onClose} />;
+  return (
+    <Alert
+      message={errorMessage}
+      type="error"
+      showAlert={true}
+      onClose={onClose}
+      canEditPageWhileOpen={canEditPageWhileOpen}
+    />
+  );
 };
 
 export default ErrorBanner;
