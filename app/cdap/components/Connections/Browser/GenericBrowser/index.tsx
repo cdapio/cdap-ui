@@ -168,7 +168,8 @@ export function GenericBrowser({ selectedConnection }) {
         schema,
       });
     } catch (e) {
-      setError(`Failed to get plugin information. Error: ${e && e.message ? e.message : e}`);
+      const message = e?.message || e?.statusCode || 'Unknown error';
+      setError(`Failed to get plugin information. Error: ${message}`);
       setLoading(false);
     }
   };
