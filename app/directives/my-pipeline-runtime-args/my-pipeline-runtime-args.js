@@ -62,22 +62,23 @@ class MyPipelineRuntimeArgsCtrl {
 
   checkForReset(runtimeArguments) {
     let runtimeArgumentsPairs = runtimeArguments.pairs;
-    for (let i = 0; i < runtimeArgumentsPairs.length; i++) {
-      if (runtimeArgumentsPairs[i].notDeletable) {
-        if (runtimeArgumentsPairs[i].provided) {
-          runtimeArgumentsPairs[i].showReset = false;
+    runtimeArgumentsPairs.forEach(item => {
+      item.value = item.value.trim();
+      if (item.notDeletable) {
+        if (item.provided) {
+          item.showReset = false;
         } else {
-          let runtimeArgKey = runtimeArgumentsPairs[i].key;
+          let runtimeArgKey = item.key;
           if (this.resolvedMacros.hasOwnProperty(runtimeArgKey)) {
-            if (this.resolvedMacros[runtimeArgKey] !== runtimeArgumentsPairs[i].value) {
-              runtimeArgumentsPairs[i].showReset = true;
+            if (this.resolvedMacros[runtimeArgKey] !== item.value) {
+              item.showReset = true;
             } else {
-              runtimeArgumentsPairs[i].showReset = false;
+              item.showReset = false;
             }
           }
         }
       }
-    }
+    });
     return runtimeArguments;
   }
 }
