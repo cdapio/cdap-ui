@@ -30,6 +30,11 @@ $secondary-btn-color: $brand-primary;
     font-size: $regular-font;
     position: relative;
 
+    .num-records-input {
+      margin-left: 5px;
+      width: auto;
+    }
+
     .configuration-content-container {
       /* 50px: height from bottom of buttons to horizontal line */
       height: calc(100% - 50px);

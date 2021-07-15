@@ -15,7 +15,6 @@
 */
 
 import * as Helpers from '../helpers';
-import { ConnectionType } from '../../app/cdap/components/DataPrepConnections/ConnectionType';
 import {
   DEFAULT_BIGQUERY_CONNECTION_NAME,
   DEFAULT_BIGQUERY_DATASET,
@@ -24,7 +23,9 @@ import {
 
 let headers;
 
-describe.skip('Wrangler BigQuery tests', () => {
+const BIGQUERY_CONNECTION_TYPE = 'BigQuery';
+
+describe('Wrangler BigQuery tests', () => {
   before(() => {
     return Helpers.loginIfRequired()
       .then(() => {
@@ -46,34 +47,28 @@ describe.skip('Wrangler BigQuery tests', () => {
       .then(() => cy.start_wrangler(headers));
   });
   it('Should successfully test BigQuery connection', () => {
-    cy.test_BIGQUERY_connection(DEFAULT_BIGQUERY_CONNECTION_NAME);
-    cy.get('.card-action-feedback.SUCCESS');
-    cy.contains('Test connection successful');
+    cy.test_gcp_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
+    cy.get(Helpers.dataCy('connection-test-success')).contains('Successfully connected.');
   });
 
   it('Should show appropriate message when test connection fails', () => {
-    cy.test_BIGQUERY_connection(
+    cy.test_gcp_connection(
+      BIGQUERY_CONNECTION_TYPE,
       'invalid_connection',
       'invalid_projectid',
       'invalid_serviceaccount_path'
     );
-    cy.get('.card-action-feedback.DANGER');
-    cy.contains('Test connection failed');
+    cy.get(Helpers.dataCy('connection-test-failure')).contains('Service account key provided is not valid');
   });
 
   it('Should create BigQuery connection', () => {
-    cy.create_BIGQUERY_connection(DEFAULT_BIGQUERY_CONNECTION_NAME);
-    cy.get(
-      `[data-cy="wrangler-${
-      ConnectionType.BIGQUERY
-      }-connection-${DEFAULT_BIGQUERY_CONNECTION_NAME}"]`
-    );
+    cy.create_gcp_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
+    cy.select_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
   });
+
   it('Should show proper error message when trying to create existing connection', () => {
-    cy.create_BIGQUERY_connection(DEFAULT_BIGQUERY_CONNECTION_NAME);
-    cy.get('.card-action-feedback.DANGER');
-    cy.get('.card-action-feedback.DANGER .main-message .expand-icon').click();
-    cy.get('.card-action-feedback.DANGER .stack-trace').should(
+    cy.create_gcp_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
+    cy.get('.modal-content .error').should(
       'contain',
       `'${DEFAULT_BIGQUERY_CONNECTION_NAME}' already exists.`
     );
@@ -81,11 +76,7 @@ describe.skip('Wrangler BigQuery tests', () => {
 
   it('Should be able to navigate inside BigQuery and create a workspace', () => {
     cy.visit('/cdap/ns/default/connections');
-    cy.get(
-      `[data-cy="wrangler-${
-      ConnectionType.BIGQUERY
-      }-connection-${DEFAULT_BIGQUERY_CONNECTION_NAME}"]`
-    ).click();
+    cy.select_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
     cy.contains(DEFAULT_BIGQUERY_DATASET).click();
     cy.contains(DEFAULT_BIGQUERY_TABLE).click();
     cy.url().should('contain', '/ns/default/wrangler');
@@ -93,25 +84,14 @@ describe.skip('Wrangler BigQuery tests', () => {
 
   it('Should show appropriate error when navigating to incorrect BigQuery connection', () => {
     const connName = 'bigquery_unknown_connection';
-    cy.visit(`/cdap/ns/default/connections/bigquery/${connName}`);
-    cy.contains(`Connection '${connName}' does not exist`);
-    cy.contains('No datasets in connection');
+    cy.visit(`/cdap/ns/default/connections/${connName}`);
+    cy.contains(`Connection '${connName}' in namespace 'default' not found`);
+    cy.contains('No entities available');
   });
 
   it('Should delete an existing connection', () => {
     cy.visit('/cdap/ns/default/connections');
-    cy.get(
-      `[data-cy="connection-action-popover-toggle-${
-      ConnectionType.BIGQUERY
-      }-${DEFAULT_BIGQUERY_CONNECTION_NAME}"`
-    ).click();
-    cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-connection-delete"]`).click();
-    cy.contains('Are you sure you want to delete connection');
-    cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-delete-confirmation-btn"]`).click();
-    cy.get(
-      `[data-cy="wrangler-${
-      ConnectionType.BIGQUERY
-      }-connection-${DEFAULT_BIGQUERY_CONNECTION_NAME}"]`
-    ).should('not.exist');
+    cy.delete_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
+    cy.connection_does_not_exist(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
   });
 });

@@ -106,100 +106,59 @@ Cypress.Commands.add('cleanup_pipelines', (headers, pipelineName) => {
     });
 });
 
-Cypress.Commands.add(
-  'fill_GCS_connection_create_form',
-  (
-    connectionId,
-    projectId = DEFAULT_GCP_PROJECTID,
-    serviceAccountPath = DEFAULT_GCP_SERVICEACCOUNT_PATH
-  ) => {
+Cypress.Commands.add('fill_gcp_connection_create_form', (
+  connectionType,
+  connectionId,
+  projectId = DEFAULT_GCP_PROJECTID,
+  serviceAccountPath = DEFAULT_GCP_SERVICEACCOUNT_PATH) => {
     cy.visit('/cdap/ns/default/connections');
-    cy.get('[data-cy="wrangler-add-connection-button"]', { timeout: 60000 }).click();
-    cy.get(`[data-cy="wrangler-connection-${ConnectionType.GCS}`).click();
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-connection-name"]`).type(connectionId);
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-connection-projectid"]`).type(projectId);
-    cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-connection-serviceaccount-filepath"]`).type(
-      serviceAccountPath
-    );
-  }
-);
-
-Cypress.Commands.add('create_GCS_connection', (connectionId) => {
-  cy.fill_GCS_connection_create_form(connectionId);
-  cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-add-connection-button"]`).click({
-    timeout: 60000,
-  });
-});
-
-Cypress.Commands.add('test_GCS_connection', (connectionId, projectId, serviceAccountPath) => {
-  cy.fill_GCS_connection_create_form(connectionId, projectId, serviceAccountPath);
-  cy.get(`[data-cy="wrangler-${ConnectionType.GCS}-test-connection-button"]`).click({
-    timeout: 60000,
-  });
-});
-
-Cypress.Commands.add(
-  'fill_BIGQUERY_connection_create_form',
-  (
-    connectionId,
-    projectId = DEFAULT_GCP_PROJECTID,
-    serviceAccountPath = DEFAULT_GCP_SERVICEACCOUNT_PATH
-  ) => {
-    cy.visit('/cdap/ns/default/connections');
-    cy.get('[data-cy="wrangler-add-connection-button"]', { timeout: 30000 }).click();
-    cy.get(`[data-cy="wrangler-connection-${ConnectionType.BIGQUERY}`).click();
-    cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-connection-name"]`).type(connectionId);
-    cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-connection-projectid"]`).type(projectId);
+    cy.get('[data-cy="add-connection-button"]', { timeout: 30000 }).click();
+    cy.get(`[data-cy="connector-${connectionType}`).click();
+    cy.get(`input[data-cy="name"]`).type(connectionId);
+    cy.get(`input[data-cy="project"]`).clear().type(projectId);
     cy.get(
-      `[data-cy="wrangler-${ConnectionType.BIGQUERY}-connection-serviceaccount-filepath"]`
-    ).type(serviceAccountPath);
+      `input[data-cy="serviceFilePath"]`
+    ).clear().type(serviceAccountPath);
   }
 );
 
-Cypress.Commands.add('create_BIGQUERY_connection', (connectionId) => {
-  cy.fill_BIGQUERY_connection_create_form(connectionId);
-  cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-add-connection-button"]`).click({
+Cypress.Commands.add('create_gcp_connection', (connectionType, connectionId) => {
+  cy.fill_gcp_connection_create_form(connectionType, connectionId);
+  cy.get(`[data-cy="connection-submit-button"]`).click({
     timeout: 60000,
   });
 });
 
-Cypress.Commands.add('test_BIGQUERY_connection', (connectionId, projectId, serviceAccountPath) => {
-  cy.fill_BIGQUERY_connection_create_form(connectionId, projectId, serviceAccountPath);
-  cy.get(`[data-cy="wrangler-${ConnectionType.BIGQUERY}-test-connection-button"]`).click({
-    timeout: 60000,
-  });
-});
-
-Cypress.Commands.add(
-  'fill_SPANNER_connection_create_form',
-  (
-    connectionId,
-    projectId = DEFAULT_GCP_PROJECTID,
-    serviceAccountPath = DEFAULT_GCP_SERVICEACCOUNT_PATH
-  ) => {
-    cy.visit('/cdap/ns/default/connections');
-    cy.get('[data-cy="wrangler-add-connection-button"]', { timeout: 30000 }).click();
-    cy.get(`[data-cy="wrangler-connection-${ConnectionType.SPANNER}`).click();
-    cy.get(`[data-cy="wrangler-${ConnectionType.SPANNER}-connection-name"]`).type(connectionId);
-    cy.get(`[data-cy="wrangler-${ConnectionType.SPANNER}-connection-projectid"]`).type(projectId);
-    cy.get(
-      `[data-cy="wrangler-${ConnectionType.SPANNER}-connection-serviceaccount-filepath"]`
-    ).type(serviceAccountPath);
+Cypress.Commands.add('test_gcp_connection', (
+  connectionType,
+  connectionId,
+  projectId,
+  serviceAccountPath) => {
+    cy.fill_gcp_connection_create_form(connectionType, connectionId, projectId, serviceAccountPath);
+    cy.get(`[data-cy="connection-test-button"]`).click({
+      timeout: 60000,
+    });
   }
 );
 
-Cypress.Commands.add('create_SPANNER_connection', (connectionId) => {
-  cy.fill_SPANNER_connection_create_form(connectionId);
-  cy.get(`[data-cy="wrangler-${ConnectionType.SPANNER}-add-connection-button"]`).click({
-    timeout: 60000,
-  });
+Cypress.Commands.add('select_connection', (connectionType, connectionId) => {
+  cy.get(dataCy(`categorized-connection-type-${connectionType}`)).click();
+  cy.get(dataCy(`connection-${connectionType}-${connectionId}`)).click();
 });
 
-Cypress.Commands.add('test_SPANNER_connection', (connectionId, projectId, serviceAccountPath) => {
-  cy.fill_SPANNER_connection_create_form(connectionId, projectId, serviceAccountPath);
-  cy.get(`[data-cy="wrangler-${ConnectionType.SPANNER}-test-connection-button"]`).click({
-    timeout: 60000,
-  });
+Cypress.Commands.add('delete_connection', (connectionType, connectionId) => {
+  cy.get(dataCy(`categorized-connection-type-${connectionType}`)).click();
+  cy.get(dataCy(`connection-${connectionType}-${connectionId}`))
+    .parent().find('.actions-popover').click();
+  cy.get(dataCy(`connection-${connectionType}-${connectionId}`))
+    .parent().find('.actions-popover').contains('Delete').click();
+  cy.contains(`Are you sure you want to delete ${connectionId}`);
+  cy.get('.modal .confirmation-button-options').contains('Delete').click();
+});
+
+Cypress.Commands.add('connection_does_not_exist', (connectionType, connectionId) => {
+  cy.get(dataCy(`categorized-connection-type-${connectionType}`)).click();
+  cy.get(dataCy(`connection-${connectionType}-${connectionId}`)).should('not.exist');
 });
 
 let wranglerStartIteration = 1;
@@ -384,7 +343,7 @@ Cypress.Commands.add('select_from_to', (from: INodeIdentifier, to: INodeIdentifi
   });
 });
 
-Cypress.Commands.add('select_connection', (from: INodeIdentifier, to: INodeIdentifier) => {
+Cypress.Commands.add('select_node_connection', (from: INodeIdentifier, to: INodeIdentifier) => {
   let fromNodeElement;
   let toNodeElement;
   cy.get_node(from).then((sElement) => {

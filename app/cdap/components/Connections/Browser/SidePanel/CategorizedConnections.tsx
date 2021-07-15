@@ -79,14 +79,27 @@ const CustomAccordionDetails = withStyles((theme) => ({
   root: {
     padding: 0,
     gap: '10px',
-    display: 'grid',
-    gridAutoRows: `${theme.spacing(4)}px`,
+    display: 'flex',
+    flexDirection: 'column',
   },
 }))(AccordionDetails);
 
 const useStyle = makeStyles<Theme>(
   (theme): StyleRules => {
     return {
+      connectionGroup: {
+        '& a': {
+          maxWidth: `249px`,
+          overflowX: 'hidden',
+          '& .connection-name': {
+            overflowX: 'hidden',
+            textOverflow: 'ellipsis',
+          },
+        },
+        display: 'flex',
+        flexDirection: 'row',
+        minHeight: `${theme.spacing(4)}px`,
+      },
       connection: {
         color: 'black',
         paddingLeft: `${theme.spacing(4)}px`,
@@ -119,17 +132,23 @@ const useStyle = makeStyles<Theme>(
       },
       selectedConnection: {
         background: 'white',
-        color: theme.palette.primary.main,
         '&:hover': {
           color: theme.palette.primary.main,
           fontWeight: 'normal',
         },
+        '& a': {
+          color: theme.palette.primary.main,
+        },
       },
       actionPopover: {
-        marginLeft: 'auto',
-
+        // display table to vertically align popoover buttons in the middle
+        display: 'table',
         '&:hover': {
           fontWeight: 'normal',
+        },
+        '& [tag=span]': {
+          display: 'table-cell',
+          verticalAlign: 'middle',
         },
       },
       delete: {
@@ -312,7 +331,10 @@ export function CategorizedConnections({
             onChange={() => handleChange(key)}
             key={key}
           >
-            <CustomAccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <CustomAccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              data-cy={`categorized-connection-type-${key}`}
+            >
               {key}({connections.length})
             </CustomAccordionSummary>
             <CustomAccordionDetails>
@@ -341,53 +363,66 @@ export function CategorizedConnections({
                 ];
 
                 return (
-                  <Link
-                    to={`/ns/${getCurrentNamespace()}/connections/${connection.name}?path=/`}
-                    key={connection.name}
-                    onClick={() => onConnectionSelection(connection.name)}
-                    className={classnames(classes.connection, {
+                  <div
+                    className={classnames(classes.connectionGroup, {
                       [classes.selectedConnection]: localSelectedConnection === connection.name,
                     })}
                   >
-                    <If condition={localSelectedConnection === connection.name}>
-                      <strong>{connection.name}</strong>
-                    </If>
-                    <If condition={localSelectedConnection !== connection.name}>
-                      <span>{connection.name}</span>
-                    </If>
+                    <Link
+                      to={`/ns/${getCurrentNamespace()}/connections/${connection.name}?path=/`}
+                      key={connection.name}
+                      onClick={() => onConnectionSelection(connection.name)}
+                      className={classes.connection}
+                    >
+                      <If condition={localSelectedConnection === connection.name}>
+                        <strong
+                          className="connection-name"
+                          data-cy={`connection-${key}-${connection.name}`}
+                        >
+                          {connection.name}
+                        </strong>
+                      </If>
+                      <If condition={localSelectedConnection !== connection.name}>
+                        <span
+                          className="connection-name"
+                          data-cy={`connection-${key}-${connection.name}`}
+                        >
+                          {connection.name}
+                        </span>
+                      </If>
+                    </Link>
 
                     <ActionsPopover
                       className={classes.actionPopover}
                       actions={actions}
                       modifiers={popperModifiers}
                     />
-                  </Link>
+                  </div>
                 );
               })}
-
-              <ConfirmationModal
-                headerTitle="Delete connection"
-                toggleModal={handleConfirmationClose}
-                confirmationElem={confirmDeleteElem}
-                confirmButtonText="Delete"
-                confirmFn={handleDelete}
-                cancelFn={handleConfirmationClose}
-                isOpen={!!connectionToDelete}
-                errorMessage={!deleteError ? '' : 'Failed to delete connection'}
-                extendedMessage={deleteError}
-              />
-
-              <CreateConnectionModal
-                isOpen={isCreateConnectionOpen}
-                onToggle={toggleConnectionCreate}
-                initialConfig={initConnConfig}
-                onCreate={fetchConnections}
-                isEdit={isEdit}
-              />
             </CustomAccordionDetails>
           </Accordion>
         );
       })}
+      <ConfirmationModal
+        headerTitle="Delete connection"
+        toggleModal={handleConfirmationClose}
+        confirmationElem={confirmDeleteElem}
+        confirmButtonText="Delete"
+        confirmFn={handleDelete}
+        cancelFn={handleConfirmationClose}
+        isOpen={!!connectionToDelete}
+        errorMessage={!deleteError ? '' : 'Failed to delete connection'}
+        extendedMessage={deleteError}
+      />
+
+      <CreateConnectionModal
+        isOpen={isCreateConnectionOpen}
+        onToggle={toggleConnectionCreate}
+        initialConfig={initConnConfig}
+        onCreate={fetchConnections}
+        isEdit={isEdit}
+      />
     </div>
   );
 }
