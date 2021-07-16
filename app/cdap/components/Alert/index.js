@@ -38,6 +38,7 @@ export default class Alert extends Component {
     element: PropTypes.node,
     onClose: PropTypes.func,
     type: PropTypes.oneOf(['success', 'error', 'info']),
+    canEditPageWhileOpen: PropTypes.bool,
   };
 
   alertTimeout = null;
@@ -103,7 +104,15 @@ export default class Alert extends Component {
       );
     }
     return (
+      /**
+       * TODO: This should be a toast, not a modal at least in some scenarios
+       * - In some scenarios (eg cdap/components/ErrorBanner) this is being used as a toast, which means
+       * its an error message at the top of the page. This makes the rest of the page uninteractable, which
+       * is not intended. To fix this bug https://cdap.atlassian.net/browse/CDAP-18193 I had to disable
+       * the height: 100% overlay with the canEditPageWhileOpen prop. The long term fix should be using a toast.
+       */
       <Modal
+        modalClassName={this.props.canEditPageWhileOpen ? 'can-edit-page-while-open' : ''}
         isOpen={this.state.showAlert}
         toggle={() => {}}
         backdrop={false}
