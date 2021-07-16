@@ -121,6 +121,7 @@ class PluginConnectionBrowser extends React.PureComponent<
           modalBodyClassName={classes.modalBody}
         >
           <Connections
+            hideSidePanel={true}
             mode={IConnectionMode.ROUTED_WORKSPACE}
             connectionId={this.state.connectionName}
             onEntitySelect={this.handleEntitySelect}

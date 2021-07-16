@@ -48,6 +48,7 @@ export interface IConnections {
   onEntitySelect?: (entitySpec) => void;
   initPath?: string;
   disabledTypes?: Record<string, boolean>;
+  hideSidePanel?: boolean;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,

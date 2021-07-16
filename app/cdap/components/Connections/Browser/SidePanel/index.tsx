@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
@@ -77,8 +77,8 @@ export function ConnectionsBrowserSidePanel({
   selectedConnection,
 }: IConnectionBrowserSidePanelProps) {
   const classes = useStyle();
-  const boundaryElement = React.useRef(null);
-  const [state, setState] = React.useState<IConnectionsBrowserSidePanelState>({
+  const boundaryElement = useRef(null);
+  const [state, setState] = useState<IConnectionsBrowserSidePanelState>({
     categorizedConnections: new Map(),
     connectorTypes: [],
   });
@@ -97,7 +97,7 @@ export function ConnectionsBrowserSidePanel({
       connectorTypes,
     });
   };
-  React.useEffect(() => {
+  useEffect(() => {
     initState();
   }, []);
   return (
