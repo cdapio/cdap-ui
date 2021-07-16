@@ -255,7 +255,7 @@ export function GenericBrowser({ selectedConnection }) {
         </EmptyMessageContainer>
       </If>
       <If condition={error && !loading}>
-        <ErrorBanner error={error} />
+        <ErrorBanner error={error} canEditPageWhileOpen={true} />
       </If>
     </React.Fragment>
   );

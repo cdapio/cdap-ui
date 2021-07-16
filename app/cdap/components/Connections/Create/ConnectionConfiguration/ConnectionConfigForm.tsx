@@ -115,14 +115,19 @@ export function ConnectionConfigForm({
         </If>
 
         <If condition={testResults.succeeded}>
-          <Alert severity="success" className={classes.alert}>
-            Successfuly connected.
+          <Alert severity="success" className={classes.alert} data-cy="connection-test-success">
+            Successfully connected.
           </Alert>
         </If>
         {!testResults.succeeded &&
           testResults.messages &&
           testResults.messages.map((message, i) => (
-            <Alert severity="error" key={i} className={classes.alert}>
+            <Alert
+              severity="error"
+              key={i}
+              className={classes.alert}
+              data-cy="connection-test-failure"
+            >
               {message.message} {message.correctiveAction}
             </Alert>
           ))}
@@ -133,6 +138,7 @@ export function ConnectionConfigForm({
           color="primary"
           onClick={() => onConnectionTest({ properties: values })}
           disabled={testResults.inProgress}
+          data-cy="connection-test-button"
         >
           Test Connection
         </Button>
@@ -146,6 +152,7 @@ export function ConnectionConfigForm({
               properties: values,
             })
           }
+          data-cy="connection-submit-button"
         >
           {isEdit ? 'Save' : 'Create'}
         </Button>

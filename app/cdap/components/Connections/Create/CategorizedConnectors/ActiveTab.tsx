@@ -95,6 +95,7 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                   key={i}
                   className={classes.tableRow}
                   onClick={() => onConnectorSelection(conn)}
+                  data-cy={`connector-${conn.name}`}
                 >
                   <TableCell>{conn.name}</TableCell>
                   <TableCell>{conn.description}</TableCell>
