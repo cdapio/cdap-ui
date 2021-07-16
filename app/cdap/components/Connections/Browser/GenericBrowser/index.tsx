@@ -64,6 +64,10 @@ const useStyle = makeStyle(() => {
   };
 });
 
+function getErrorMessage(e) {
+  return e?.message || e?.statusCode || 'Unknown error';
+}
+
 export function GenericBrowser({ selectedConnection }) {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
@@ -150,7 +154,7 @@ export function GenericBrowser({ selectedConnection }) {
       }
       setWorkspaceId(wid);
     } catch (e) {
-      setError(`Failed to create workspace. Error: ${e && e.message ? e.message : e}`);
+      setError(`Failed to create workspace. Error: ${getErrorMessage(e)}`);
       setLoading(false);
     }
   };
@@ -168,8 +172,7 @@ export function GenericBrowser({ selectedConnection }) {
         schema,
       });
     } catch (e) {
-      const message = e?.message || e?.statusCode || 'Unknown error';
-      setError(`Failed to get plugin information. Error: ${message}`);
+      setError(`Failed to get plugin information. Error: ${getErrorMessage(e)}`);
       setLoading(false);
     }
   };
