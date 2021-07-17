@@ -23,13 +23,6 @@ import { ConnectionsContext, IConnectionMode } from 'components/Connections/Conn
 
 const useStyle = makeStyle(() => {
   return {
-    root: {
-      textAlign: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-      alignContent: 'center',
-      padding: '10px',
-    },
     link: {
       width: '100%',
       display: 'flex',
@@ -48,33 +41,11 @@ const useStyle = makeStyle(() => {
 export function CreateConnectionBtn() {
   const { mode } = React.useContext(ConnectionsContext);
   const classes = useStyle();
-  if (mode === IConnectionMode.ROUTED) {
-    return (
-      <div className={classes.root}>
-        <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
-          <Button
-            className={classes.button}
-            variant="outlined"
-            color="primary"
-            data-cy="add-connection-button"
-          >
-            Add Connection
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className={classes.root}>
-      <Button
-        className={classes.button}
-        variant="outlined"
-        color="primary"
-        data-cy="add-connection-button"
-      >
+    <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
+      <Button className={classes.button} variant="outlined" color="primary">
         Add Connection
       </Button>
-    </div>
+    </Link>
   );
 }
