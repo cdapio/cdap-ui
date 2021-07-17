@@ -89,7 +89,7 @@ const useStyle = makeStyles<Theme>(
     return {
       connectionGroup: {
         '& a': {
-          maxWidth: `249px`,
+          width: '249px',
           overflowX: 'hidden',
           '& .connection-name': {
             overflowX: 'hidden',
