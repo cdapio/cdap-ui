@@ -132,12 +132,6 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
     toggleConnectionCreate();
   }
 
-  function editConnection(conn) {
-    const config = getConnectionConfig(conn);
-    setIsEdit(true);
-    openConnectionConfig(config);
-  }
-
   return (
     <div>
       <div className={classes.subtitleSection}>
@@ -158,10 +152,6 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         <TableBody>
           {connections.map((conn) => {
             const actions: IAction[] = [
-              {
-                label: 'Edit',
-                actionFn: () => editConnection(conn),
-              },
               {
                 label: 'Export',
                 actionFn: () => exportConnection(conn),
