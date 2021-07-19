@@ -70,7 +70,7 @@
                     },
                     "properties": {
                         "schema": "{\"type\":\"record\",\"name\":\"fileRecord\",\"fields\":[{\"name\":\"offset\",\"type\":\"long\"},{\"name\":\"body\",\"type\":\"string\"}]}",
-                        "suffix": "yyyy-MM-dd-HH-mm",
+                        "suffix": "yyyy-MM-dd-HH-mm-ss",
                         "format": "json",
                         "referenceName": "Filesink",
                         "path": "/tmp/cdap-ui-integration-fixtures/airports1.csv"
