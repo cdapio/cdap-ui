@@ -61,24 +61,24 @@ const TABS = {
     contentClassName: 'pipeline-configurations-body',
     paneClassName: 'configuration-content',
   },
-  resources: {
+  pushdown: {
     id: 4,
+    name: T.translate(`${PREFIX}.Pushdown.title`),
+    content: <PushdownTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  resources: {
+    id: 5,
     name: T.translate(`${PREFIX}.Resources.title`),
     content: <ResourcesTabContent />,
     contentClassName: 'pipeline-configurations-body',
     paneClassName: 'configuration-content',
   },
   alerts: {
-    id: 5,
+    id: 6,
     name: T.translate(`${PREFIX}.Alerts.title`),
     content: <AlertsTabContent />,
-    contentClassName: 'pipeline-configurations-body',
-    paneClassName: 'configuration-content',
-  },
-  pushdown: {
-    id: 6,
-    name: T.translate(`${PREFIX}.Pushdown.title`),
-    content: <PushdownTabContent />,
     contentClassName: 'pipeline-configurations-body',
     paneClassName: 'configuration-content',
   },
@@ -183,9 +183,9 @@ export default class PipelineConfigurations extends Component {
         TABS.computeConfig,
         TABS.pipelineConfig,
         TABS.engineConfig,
+        TABS.pushdown,
         TABS.resources,
         TABS.alerts,
-        TABS.pushdown,
       ];
     } else if (this.props.pipelineType === GLOBALS.etlDataStreams) {
       tabs = [

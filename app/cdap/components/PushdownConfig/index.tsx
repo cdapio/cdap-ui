@@ -26,8 +26,14 @@ import ToggleSwitch from 'components/ToggleSwitch';
 import LoadingSVG from 'components/LoadingSVG';
 import VersionStore from 'services/VersionStore';
 import { catchError } from 'rxjs/operators';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = makeStyles({
+  toggleRow: {
+    marginTop: '20px',
+    marginBottom: '20px',
+  },
   container: {
     left: 0,
     maxWidth: '100%',
@@ -41,6 +47,10 @@ const useStyles = makeStyles({
   inner: {
     overflowY: 'scroll',
     overflowX: 'hidden',
+  },
+  blockShown: {},
+  blockHidden: {
+    display: 'none',
   },
 });
 
@@ -180,20 +190,26 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
   return (
     <div className={classes.container}>
       <div className={classes.inner}>
-        ELT Pushdown lets you push transformations to an SQL-compatible engine, enabling an ELT
-        pattern.
-        <div className="label-with-toggle row">
-          <span className="toggle-label col-xs-4">Enable ELT Pushdown</span>
-          <div className="col-xs-7 toggle-container">
-            <ToggleSwitch isOn={pushdownEnabled} onToggle={toggleEnabled} />
-          </div>
+        <strong>
+          Transformation Pushdown lets you push down compatible transformations to BigQuery. It
+          currently only supports Join transformations.
+        </strong>
+        <div className={classes.toggleRow}>
+          <FormControlLabel
+            control={
+              <Checkbox checked={pushdownEnabled} onChange={toggleEnabled} color="primary" />
+            }
+            label="Enable Transformation Pushdown"
+          />
         </div>
-        <ConfigurationGroup
-          widgetJson={pluginWidget}
-          pluginProperties={pluginProperties}
-          values={valueProperties}
-          onChange={onChange}
-        />
+        <div className={pushdownEnabled ? classes.blockShown : classes.blockHidden}>
+          <ConfigurationGroup
+            widgetJson={pluginWidget}
+            pluginProperties={pluginProperties}
+            values={valueProperties}
+            onChange={onChange}
+          />
+        </div>
       </div>
     </div>
   );
