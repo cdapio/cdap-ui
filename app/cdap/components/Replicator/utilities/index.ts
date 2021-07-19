@@ -131,15 +131,28 @@ export function fetchPluginsAndWidgets(parentArtifact, pluginType) {
   return observable$;
 }
 
+/**
+ * Generates a unique column key for each table based on
+ * database, schema and table names.
+ * @param row
+ * @returns {String} unique table string
+ */
+
 export function generateTableKey(row) {
   let database = row.database;
   let table = row.table;
+  let schema = row.schema;
   if (Map.isMap(row)) {
     database = row.get('database');
     table = row.get('table');
+    schema = row.get('schema');
   }
 
-  return `db-${database}-table-${table}`;
+  if (schema) {
+    return `db-${database}-schema-${schema}-table-${table}`;
+  } else {
+    return `db-${database}-table-${table}`;
+  }
 }
 
 export function constructTablesSelection(tables, columns, dmlBlacklist) {
