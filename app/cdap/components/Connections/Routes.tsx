@@ -19,20 +19,20 @@ import { Route, Switch } from 'react-router-dom';
 import { CreateConnection } from 'components/Connections/Create';
 import { ConnectionsHome } from 'components/Connections/Home';
 
-export function ConnectionRoutes() {
+export function ConnectionRoutes({ hideSidePanel }: { hideSidePanel?: boolean }) {
   return (
     <Switch>
       <Route exact path="/ns/:namespace/connections/create">
         <CreateConnection />
       </Route>
       <Route path="/ns/:namespace/connections/:connectionid">
-        <ConnectionsHome />
+        <ConnectionsHome hideSidePanel={hideSidePanel} />
       </Route>
       <Route path="/ns/:namespace/connections">
-        <ConnectionsHome />
+        <ConnectionsHome hideSidePanel={hideSidePanel} />
       </Route>
       <Route path="/ns/:namespace/connection-upload">
-        <ConnectionsHome />
+        <ConnectionsHome hideSidePanel={hideSidePanel} />
       </Route>
     </Switch>
   );
