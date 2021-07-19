@@ -18,7 +18,6 @@ import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEquals } from 'react-redux';
 import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
 
-import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import PushdownConfig from 'components/PushdownConfig';
 
 export default function PushdownTabContent({}) {
