@@ -68,7 +68,7 @@
             "scope": "SYSTEM"
           },
           "properties": {
-            "suffix": "yyyy-MM-dd-HH-mm",
+            "suffix": "yyyy-MM-dd-HH-mm-ss",
             "format": "json",
             "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"offset\",\"type\":\"long\"},{\"name\":\"body\",\"type\":\"string\"}]}",
             "referenceName": "file2",

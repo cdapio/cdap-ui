@@ -63,7 +63,7 @@ class MyPipelineRuntimeArgsCtrl {
   checkForReset(runtimeArguments) {
     let runtimeArgumentsPairs = runtimeArguments.pairs;
     runtimeArgumentsPairs.forEach(item => {
-      item.value = item.value.trim();
+      item.value = item.value && item.value.trim();
       if (item.notDeletable) {
         if (item.provided) {
           item.showReset = false;
