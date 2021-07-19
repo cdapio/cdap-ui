@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
@@ -141,13 +141,24 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   numInstances,
   setAdvanced,
 }) => {
-  const [localNumInstances, setLocalNumInstances] = React.useState(numInstances || 1);
-  const [taskSelection, setTaskSelection] = React.useState(TASK_OPTIONS.calculate);
-  const [dataAmount, setDataAmount] = React.useState(1);
+  const [localNumInstances, setLocalNumInstances] = useState(numInstances || 1);
+  const [taskSelection, setTaskSelection] = useState(TASK_OPTIONS.calculate);
+  const [dataAmount, setDataAmount] = useState(1);
+  const saveRef = useRef(localNumInstances);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const initialSelection = getInitialTaskSelection();
     setTaskSelection(initialSelection);
+  }, []);
+
+  useEffect(() => {
+    saveRef.current = createSaveRef();
+  }, [localNumInstances, taskSelection, dataAmount]);
+
+  useEffect(() => {
+    return () => {
+      handleSave();
+    };
   }, []);
 
   function getInitialTaskSelection() {
@@ -161,13 +172,17 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
     return TASK_OPTIONS.manual;
   }
 
-  function handleNext() {
+  function handleSave() {
+    setAdvanced(saveRef.current);
+  }
+
+  function createSaveRef() {
     let selectedNumInstance = localNumInstances;
     if (taskSelection === TASK_OPTIONS.calculate) {
       selectedNumInstance = dataAmount;
     }
 
-    setAdvanced(selectedNumInstance);
+    return selectedNumInstance;
   }
 
   function handleSelectTask(e) {
@@ -214,7 +229,7 @@ const AdvancedView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
         </If>
       </div>
 
-      <StepButtons onNext={handleNext} />
+      <StepButtons onPrevious={handleSave} onNext={handleSave} />
     </div>
   );
 };
