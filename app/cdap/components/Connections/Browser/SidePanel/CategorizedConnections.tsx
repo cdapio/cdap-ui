@@ -244,12 +244,6 @@ export function CategorizedConnections({
     toggleConnectionCreate();
   }
 
-  function editConnection(conn) {
-    const config = getConnectionConfig(conn);
-    setIsEdit(true);
-    openConnectionConfig(config);
-  }
-
   function handleConfirmationClose() {
     setConnectionToDelete(null);
     setDeleteError(null);
@@ -340,10 +334,6 @@ export function CategorizedConnections({
             <CustomAccordionDetails>
               {connections.map((connection) => {
                 const actions: IAction[] = [
-                  {
-                    label: 'Edit',
-                    actionFn: () => editConnection(connection),
-                  },
                   {
                     label: 'Export',
                     actionFn: () => exportConnection(connection),
