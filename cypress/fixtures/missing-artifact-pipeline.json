@@ -123,7 +123,7 @@
                         "scope": "SYSTEM"
                     },
                     "properties": {
-                        "suffix": "yyyy-MM-dd-HH-mm",
+                        "suffix": "yyyy-MM-dd-HH-mm-ss",
                         "format": "json",
                         "schema": "{\"type\":\"record\",\"name\":\"etlSchemaBody\",\"fields\":[{\"name\":\"raw_pdf_data\",\"type\":[\"bytes\",\"null\"]},{\"name\":\"text\",\"type\":[\"string\",\"null\"]},{\"name\":\"page_count\",\"type\":[\"int\",\"null\"]},{\"name\":\"title\",\"type\":[\"string\",\"null\"]},{\"name\":\"author\",\"type\":[\"string\",\"null\"]},{\"name\":\"subject\",\"type\":[\"string\",\"null\"]},{\"name\":\"keywords\",\"type\":[\"string\",\"null\"]},{\"name\":\"creator\",\"type\":[\"string\",\"null\"]},{\"name\":\"producer\",\"type\":[\"string\",\"null\"]},{\"name\":\"creation_date\",\"type\":[\"long\",\"null\"]},{\"name\":\"modification_date\",\"type\":[\"long\",\"null\"]},{\"name\":\"trapped\",\"type\":[\"string\",\"null\"]}]}",
                         "referenceName": "test_name_ref",
