@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
@@ -27,7 +27,9 @@ import IconButton from '@material-ui/core/IconButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { orderBy } from 'natural-orderby';
 import { sortedUniqBy } from 'lodash';
-import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
+import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
+import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
+import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
 
 const useStyle = makeStyles<Theme>((theme) => {
   return {
@@ -44,6 +46,17 @@ const useStyle = makeStyles<Theme>((theme) => {
       padding: `${theme.spacing(2)}px ${theme.spacing(1)}px`,
       fontWeight: 'bold',
       cursor: 'pointer',
+    },
+    buttonContainer: {
+      textAlign: 'center',
+      display: 'flex',
+      justifyContent: 'center',
+      alignContent: 'center',
+      padding: '10px',
+    },
+    addConnectionBtn: {
+      width: '100%',
+      backgroundColor: 'white',
     },
   };
 });
@@ -76,13 +89,17 @@ export function ConnectionsBrowserSidePanel({
   onConnectionSelection,
   selectedConnection,
 }: IConnectionBrowserSidePanelProps) {
+  const { mode } = useContext(ConnectionsContext);
+
   const classes = useStyle();
   const boundaryElement = useRef(null);
   const [state, setState] = useState<IConnectionsBrowserSidePanelState>({
     categorizedConnections: new Map(),
     connectorTypes: [],
   });
-  const { disabledTypes } = React.useContext(ConnectionsContext);
+  const { disabledTypes } = useContext(ConnectionsContext);
+  const [createConnOpen, setCreateConnOpen] = useState(false);
+
   const initState = async () => {
     const categorizedConnections = await getCategorizedConnections();
     let connectorTypes = await fetchConnectors();
@@ -97,9 +114,18 @@ export function ConnectionsBrowserSidePanel({
       connectorTypes,
     });
   };
+
   useEffect(() => {
     initState();
   }, []);
+  let connectionBtn;
+  if (mode === IConnectionMode.ROUTED) {
+    connectionBtn = <CreateConnectionBtn />;
+  } else {
+    connectionBtn = (
+      <AddConnectionBtnModal className={classes.addConnectionBtn} onCreate={initState} />
+    );
+  }
   return (
     <Paper className={classes.root} ref={boundaryElement}>
       <div className={classes.toggleContainer} onClick={onSidePanelToggle}>
@@ -116,7 +142,16 @@ export function ConnectionsBrowserSidePanel({
         boundaryElement={boundaryElement}
         fetchConnections={initState}
       />
-      <CreateConnectionBtn />
+
+      <CreateConnectionModal
+        isOpen={createConnOpen}
+        onToggle={() => setCreateConnOpen(!createConnOpen)}
+        initialConfig={null}
+        onCreate={initState}
+        isEdit={false}
+      />
+
+      <div className={classes.buttonContainer}>{connectionBtn}</div>
     </Paper>
   );
 }
