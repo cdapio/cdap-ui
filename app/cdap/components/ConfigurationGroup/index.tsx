@@ -149,6 +149,11 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     updateFilteredConfigurationGroup(configurationGroups, values);
   }, [values]);
 
+  function handleValueChanges(values) {
+    const updatedFilteredValues = removeFilteredProperties(values, filteredConfigurationGroups);
+    changeParentHandler(updatedFilteredValues);
+  }
+
   function changeParentHandler(updatedValues) {
     if (!onChange || typeof onChange !== 'function') {
       return;
@@ -263,7 +268,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
                     widgetProperty={property}
                     pluginProperty={pluginProperties[property.name]}
                     value={values[property.name]}
-                    onChange={changeParentHandler}
+                    onChange={handleValueChanges}
                     extraConfig={extraConfig}
                     disabled={disabled}
                     errors={errorObjs}
