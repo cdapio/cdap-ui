@@ -2091,7 +2091,7 @@ features:
       contentHeading: Set alerts for your batch pipeline
       title: Pipeline alert
     Pushdown:
-      title: ELT Pushdown
+      title: Transformation Pushdown
     ComputeConfig:
       title: Compute config
     EngineConfig:
