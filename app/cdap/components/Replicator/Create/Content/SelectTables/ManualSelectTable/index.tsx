@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
@@ -80,11 +80,11 @@ const ManualSelectTableView: React.FC<IManualSelectTableProps> = ({
   columns,
   setTables,
 }) => {
-  const [database, setDatabase] = React.useState('');
-  const [values, setValues] = React.useState([]);
-  const [isInitFinished, setIsInitFinished] = React.useState(false);
+  const [database, setDatabase] = useState('');
+  const [values, setValues] = useState([]);
+  const [isInitFinished, setIsInitFinished] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const formattedValues = [];
     let initDatabase = '';
     tables.toList().forEach((tableInfo) => {
@@ -160,7 +160,7 @@ const ManualSelectTableView: React.FC<IManualSelectTableProps> = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       <div className={classes.root}>
         <div>
           <Database value={database} setDatabase={setDatabase} />
@@ -179,7 +179,7 @@ const ManualSelectTableView: React.FC<IManualSelectTableProps> = ({
       </div>
 
       <StepButtons onNext={handleNext} nextDisabled={nextDisabled} />
-    </React.Fragment>
+    </>
   );
 };
 
