@@ -14,8 +14,9 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
@@ -100,13 +101,29 @@ const NameDescriptionView: React.FC<INameDescriptionProps> = ({
   description,
   setNameDescription,
 }) => {
-  const [localName, setLocalName] = React.useState(name);
-  const [nameError, setNameError] = React.useState(null);
-  const [localDescription, setLocalDescription] = React.useState(description);
+  const [localName, setLocalName] = useState(name);
+  const [nameError, setNameError] = useState(null);
+  const [localDescription, setLocalDescription] = useState(description);
+  const nameRef = useRef(localName);
+  const descRef = useRef(localDescription);
 
-  function handleNext() {
-    setNameDescription(localName, localDescription);
-  }
+  useEffect(() => {
+    nameRef.current = localName;
+  }, [localName]);
+
+  useEffect(() => {
+    descRef.current = localDescription;
+  }, [localDescription]);
+
+  useEffect(() => {
+    return () => {
+      handleSave();
+    };
+  }, []);
+
+  const handleSave = () => {
+    setNameDescription(nameRef.current, descRef.current);
+  };
 
   function handleNameChange(value) {
     setLocalName(value);
@@ -146,7 +163,7 @@ const NameDescriptionView: React.FC<INameDescriptionProps> = ({
         <Description value={localDescription} setDescription={setLocalDescription} />
       </div>
 
-      <StepButtons nextDisabled={nameError || localName.length === 0} onNext={handleNext} />
+      <StepButtons onNext={handleSave} nextDisabled={nameError || localName.length === 0} />
     </div>
   );
 };
