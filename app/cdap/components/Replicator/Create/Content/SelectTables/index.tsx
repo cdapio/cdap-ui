@@ -195,6 +195,10 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     this.fetchTables();
   }
 
+  public componentWillUnmount() {
+    this.handleSave();
+  }
+
   private handleSearchChange = (search) => {
     this.setState({ search });
     this.setFilteredTables(search);
@@ -450,7 +454,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     );
   };
 
-  public handleNext = () => {
+  public handleSave = () => {
     this.props.setTables(this.state.selectedTables, this.state.columns, this.state.dmlBlacklist);
   };
 
@@ -636,7 +640,11 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
             </div>
           </div>
         </div>
-        <StepButtons onNext={this.handleNext} nextDisabled={this.isNextDisabled()} />
+        <StepButtons
+          onNext={this.handleSave}
+          onPrevious={this.handleSave}
+          nextDisabled={this.isNextDisabled()}
+        />
       </React.Fragment>
     );
   };

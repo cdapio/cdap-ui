@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
@@ -91,11 +91,12 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
   parentArtifact,
   pluginType,
 }) => {
-  const [view, setView] = React.useState(VIEW.configuration);
-  const [values, setValues] = React.useState(pluginConfig || {});
-  const [loading, setLoading] = React.useState(false);
+  const [view, setView] = useState(VIEW.configuration);
+  const [values, setValues] = useState(pluginConfig || {});
+  const valuesRef = useRef(pluginConfig || {});
+  const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (pluginWidget || !pluginInfo) {
       return;
     }
@@ -113,6 +114,19 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
     });
   }, []);
 
+  useEffect(() => {
+    valuesRef.current = values;
+  }, [values]);
+
+  useEffect(() => {
+    return () => {
+      handleSave();
+    };
+  }, []);
+
+  function handleSave() {
+    setPluginConfig(filteredValues());
+  }
   // Fetch Target
   function handlePluginSelect(plugin) {
     setLoading(true);
@@ -169,7 +183,7 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
     return isPropertyFilled.filter((propertyValue) => !propertyValue).length > 0;
   }
 
-  function handleNext() {
+  function filteredValues() {
     // Remove filtered out values
     const widgetConfigurationGroup = objectQuery(pluginWidget, 'configuration-groups');
     const widgetOutputs = objectQuery(pluginWidget, 'outputs');
@@ -182,11 +196,10 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
       processedConfigurationGroup.configurationGroups,
       pluginWidget,
       pluginProperties,
-      values
+      valuesRef.current
     );
-    const filteredValues = removeFilteredProperties(values, filteredConfigurationGroup);
 
-    setPluginConfig(filteredValues);
+    return removeFilteredProperties(valuesRef.current, filteredConfigurationGroup);
   }
 
   return (
@@ -236,7 +249,7 @@ const PluginConfigView: React.FC<IPluginConfigProps> = ({
         <LoadingSVG />
       </If>
 
-      <StepButtons onNext={handleNext} nextDisabled={isNextDisabled()} />
+      <StepButtons onNext={handleSave} onPrevious={handleSave} nextDisabled={isNextDisabled()} />
     </div>
   );
 };
