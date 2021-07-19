@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Theme } from '@material-ui/core';
 import { ConnectionsBrowserSidePanel } from 'components/Connections/Browser/SidePanel';
 import { ConnectionsBrowser } from 'components/Connections/Browser/index';
@@ -23,13 +23,13 @@ import { useParams } from 'react-router';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 interface IConnectionsHomeStyleProps {
-  sidePanelCollapsed: boolean;
+  showSidePanel: boolean;
 }
 const useStyle = makeStyles<Theme, IConnectionsHomeStyleProps>((theme) => {
   return {
     root: {
       display: 'grid',
-      gridTemplateColumns: ({ sidePanelCollapsed }) => (sidePanelCollapsed ? '0 1fr' : '250px 1fr'),
+      gridTemplateColumns: ({ showSidePanel }) => (showSidePanel ? '0 1fr' : '250px 1fr'),
       gridTemplateRows: '100%',
       overflowY: 'hidden',
       height: '100%',
@@ -37,21 +37,23 @@ const useStyle = makeStyles<Theme, IConnectionsHomeStyleProps>((theme) => {
   };
 });
 
-export function ConnectionsHome() {
-  const { mode } = React.useContext(ConnectionsContext);
+export function ConnectionsHome({ hideSidePanel }: { hideSidePanel?: boolean }) {
+  const { mode } = useContext(ConnectionsContext);
   const params = useParams();
-  const [sidePanelCollapsed, setSidePanelCollapsed] = React.useState(false);
-  const [selectedConnection, setSelectedConnection] = React.useState(
+  const [sidePanelCollapsed, setSidePanelCollapsed] = useState(false);
+  const [selectedConnection, setSelectedConnection] = useState(
     (params as any).connectionid || null
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if ((params as any).connectionid !== selectedConnection) {
       setSelectedConnection((params as any).connectionid);
     }
   }, [params]);
 
-  const classes = useStyle({ sidePanelCollapsed });
+  const showSidePanel = hideSidePanel || sidePanelCollapsed;
+
+  const classes = useStyle({ showSidePanel });
   return (
     <div className={classes.root}>
       <ConnectionsBrowserSidePanel

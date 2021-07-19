@@ -94,7 +94,7 @@
             "scope": "SYSTEM"
           },
           "properties": {
-            "suffix": "yyyy-MM-dd-HH-mm",
+            "suffix": "yyyy-MM-dd-HH-mm-ss",
             "format": "csv",
             "referenceName": "logs_data_sink",
             "path": "/tmp/cdap-ui-integration-fixtures",
