@@ -149,9 +149,9 @@ Cypress.Commands.add('select_connection', (connectionType, connectionId) => {
 Cypress.Commands.add('delete_connection', (connectionType, connectionId) => {
   cy.get(dataCy(`categorized-connection-type-${connectionType}`)).click();
   cy.get(dataCy(`connection-${connectionType}-${connectionId}`))
-    .parent().find('.actions-popover').click();
+    .parent().parent().find('.actions-popover').click();
   cy.get(dataCy(`connection-${connectionType}-${connectionId}`))
-    .parent().find('.actions-popover').contains('Delete').click();
+    .parent().parent().find('.actions-popover').contains('Delete').click();
   cy.contains(`Are you sure you want to delete ${connectionId}`);
   cy.get('.modal .confirmation-button-options').contains('Delete').click();
 });
