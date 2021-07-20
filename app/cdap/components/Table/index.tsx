@@ -27,7 +27,7 @@ const styles = (): StyleRules => {
 
 interface ITableProps extends WithStyles<typeof styles> {
   columnTemplate: string;
-  dataCy: string;
+  dataCy?: string;
 }
 
 const TableView: React.FC<React.PropsWithChildren<ITableProps>> = ({
