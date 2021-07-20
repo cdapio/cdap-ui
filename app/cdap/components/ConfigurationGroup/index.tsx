@@ -149,8 +149,11 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     updateFilteredConfigurationGroup(configurationGroups, values);
   }, [values]);
 
-  function handleValueChanges(values) {
-    const updatedFilteredValues = removeFilteredProperties(values, filteredConfigurationGroups);
+  function handleValueChanges(changedValues) {
+    const updatedFilteredValues = removeFilteredProperties(
+      changedValues,
+      filteredConfigurationGroups
+    );
     changeParentHandler(updatedFilteredValues);
   }
 
