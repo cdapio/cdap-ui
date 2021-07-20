@@ -65,7 +65,7 @@ const useStyle = makeStyle(() => {
 });
 
 function getErrorMessage(e) {
-  return e?.message || e?.statusCode || 'Unknown error';
+  return e?.message || e?.response?.message || e?.statusCode || 'Unknown error';
 }
 
 export function GenericBrowser({ selectedConnection }) {
