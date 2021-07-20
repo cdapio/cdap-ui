@@ -29,7 +29,7 @@ const useStyle = makeStyles((theme) => {
       left: 0,
       right: 0,
       backgroundColor: theme.palette.white[50],
-      zIndex: 1062,
+      zIndex: 1061,
       textAlign: 'left',
     },
   };
