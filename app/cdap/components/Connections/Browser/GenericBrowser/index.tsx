@@ -95,6 +95,7 @@ export function GenericBrowser({ selectedConnection }) {
       const newEntities = [...res.entities];
       newEntities.sort((a, b) => a.name.localeCompare(b.name));
 
+      clearSearchString();
       setEntities(newEntities);
       setTotalCount(res.totalCount);
       setPropertyHeaders(res.propertyHeaders || []);
