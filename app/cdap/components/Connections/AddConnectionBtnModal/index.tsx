@@ -17,9 +17,20 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import clsx from 'clsx';
+
+const useStyle = makeStyles<Theme>((theme) => {
+  return {
+    root: {
+      backgroundColor: 'white',
+    },
+  };
+});
 
 export default function AddConnectionBtnModal({ onCreate, className = null }) {
   const [isOpen, setIsOpen] = useState(false);
+  const classes = useStyle();
 
   function toggleConnectionCreate() {
     setIsOpen(!isOpen);
@@ -35,9 +46,9 @@ export default function AddConnectionBtnModal({ onCreate, className = null }) {
   return (
     <>
       <Button
-        variant="contained"
+        variant="outlined"
         color="primary"
-        className={className}
+        className={clsx(className, classes.root)}
         onClick={toggleConnectionCreate}
       >
         Add Connection
