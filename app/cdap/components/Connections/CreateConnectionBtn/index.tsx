@@ -43,7 +43,12 @@ export function CreateConnectionBtn() {
   const classes = useStyle();
   return (
     <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
-      <Button className={classes.button} variant="outlined" color="primary">
+      <Button
+        className={classes.button}
+        variant="outlined"
+        color="primary"
+        data-cy="add-connection-button"
+      >
         Add Connection
       </Button>
     </Link>
