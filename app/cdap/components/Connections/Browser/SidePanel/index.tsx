@@ -56,7 +56,6 @@ const useStyle = makeStyles<Theme>((theme) => {
     },
     addConnectionBtn: {
       width: '100%',
-      backgroundColor: 'white',
     },
   };
 });
