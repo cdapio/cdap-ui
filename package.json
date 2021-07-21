@@ -4,6 +4,7 @@
   "description": "Front-end for CDAP",
   "license": "Apache-2.0",
   "scripts": {
+    "dev": "concurrently \"yarn start\" \"gulp watch\" \"yarn cdap-dev-build-w\" \"yarn build-dev-common-w\"",
     "prestart": "yarn run build-server",
     "start": "NODE_ENV=development node ./packaged/server_dist/index.js",
     "cdap-prod-build": "NODE_ENV=production parallel-webpack",
@@ -84,6 +85,7 @@
     "bower": "1.8.8",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "clean-webpack-plugin": "3.0.0",
+    "concurrently": "^6.2.0",
     "copy-webpack-plugin": "5.0.5",
     "css-loader": "3.4.0",
     "cypress": "5.6.0",
