@@ -284,7 +284,7 @@ export default class DataPrepHome extends Component {
   renderContents() {
     const workspaceId = this.state.currentWorkspaceId;
     const { mode, ...attributes } = this.props;
-    const workspaceProperties = DataPrepStore.getState().dataprep.properties;
+    const workspaceProperties = DataPrepStore.getState().dataprep.insights;
 
     const connectionId = workspaceProperties.name;
     const path = getContainerPath(workspaceProperties.path || '');

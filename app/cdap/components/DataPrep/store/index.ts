@@ -72,7 +72,7 @@ export interface IDataPrepState {
   loading?: boolean;
   singleWorkspaceMode?: boolean;
   workspaceInfo?: any;
-  properties?: any;
+  insights?: any;
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
@@ -97,7 +97,7 @@ const defaultInitialState: IDataPrepState = {
   loading: false,
   singleWorkspaceMode: false,
   workspaceInfo: null,
-  properties: {},
+  insights: {},
   dataModelList: null,
   targetDataModel: null,
   targetModel: null,
@@ -170,14 +170,14 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
         newHeaders: findNewHeaders(state.headers, action.payload.headers),
       });
       break;
-    case DataPrepActions.setProperties: {
-      const properties = {
-        ...state.properties,
-        ...action.payload.properties,
+    case DataPrepActions.setInsights: {
+      const insights = {
+        ...state.insights,
+        ...action.payload.insights,
       };
       return {
         ...state,
-        properties,
+        insights,
       };
     }
     case DataPrepActions.setWorkspaceId:
@@ -195,7 +195,7 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
         data: action.payload.data || [],
         types: action.payload.types || {},
         typesCheck: getTypesCheck(action.payload.types, action.payload.headers),
-        properties: action.payload.properties || {},
+        insights: action.payload.insights || {},
         initialized: true,
         loading: false,
         selectedHeaders: [],
