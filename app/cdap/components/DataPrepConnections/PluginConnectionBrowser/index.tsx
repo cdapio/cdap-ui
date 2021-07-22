@@ -14,24 +14,17 @@
  * the License.
  */
 
-import { Modal, ModalBody } from 'reactstrap';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
-import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
 import ErrorBanner from 'components/ErrorBanner';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/If';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import MyDataPrepApi from 'api/dataprep';
 import React from 'react';
 import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
 import Connections from 'components/Connections';
 import { IConnectionMode } from 'components/Connections/ConnectionsContext';
-import { ConnectionsApi } from 'api/connections';
 import PipelineModal from 'components/PipelineModal';
 import { extractConnectionName } from 'components/AbstractWidget/ConnectionsWidget';
 
@@ -121,9 +114,11 @@ class PluginConnectionBrowser extends React.PureComponent<
           modalBodyClassName={classes.modalBody}
         >
           <Connections
-            hideSidePanel={true}
+            hideSidePanel={!!this.state.connectionName}
+            hideAddConnection={true}
             mode={IConnectionMode.ROUTED_WORKSPACE}
             connectionId={this.state.connectionName}
+            connectorType={this.props.widgetProps.connectionType}
             onEntitySelect={this.handleEntitySelect}
           />
         </PipelineModal>
