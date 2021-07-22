@@ -139,10 +139,11 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         <ImportConnectionBtn onCreate={getConnections} />
       </div>
 
-      <Table columnTemplate="2fr 1fr 1fr 100px">
+      <Table columnTemplate="minmax(20rem, 1fr) 2fr 1fr 1fr 100px">
         <TableHeader>
           <TableRow>
             <TableCell>Name</TableCell>
+            <TableCell>Description</TableCell>
             <TableCell>Type</TableCell>
             <TableCell>Installed on</TableCell>
             <TableCell />
@@ -173,6 +174,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
             return (
               <TableRow key={conn.name}>
                 <TableCell>{conn.name}</TableCell>
+                <TableCell>{conn.description}</TableCell>
                 <TableCell>{conn.connectionType}</TableCell>
                 <TableCell>{humanReadableDate(conn.createdTimeMillis, true)}</TableCell>
                 <TableCell>
