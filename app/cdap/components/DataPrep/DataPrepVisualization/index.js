@@ -73,8 +73,8 @@ export default class DataPrepVisualization extends Component {
   };
 
   renderVoyager = () => {
-    let { properties, data } = DataPrepStore.getState().dataprep;
-    let visualization = properties.visualization || {};
+    let { insights, data } = DataPrepStore.getState().dataprep;
+    let visualization = insights.visualization || {};
     this.voyagerInstance = CreateVoyager(
       this.containerRef,
       {
@@ -110,8 +110,8 @@ export default class DataPrepVisualization extends Component {
     let localData = [...DataPrepStore.getState().dataprep.data];
     this.datapreSubscription = DataPrepStore.subscribe(() => {
       let { dataprep } = DataPrepStore.getState();
-      let properties = dataprep.properties || {};
-      let visualization = properties.visualization || {};
+      let insights = dataprep.insights || {};
+      let visualization = insights.visualization || {};
       if (
         !localData ||
         dataprep.data.length !== localData.length ||
