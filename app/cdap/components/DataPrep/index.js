@@ -98,7 +98,7 @@ export default class DataPrep extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.currentWorkspace !== nextProps.workspaceId) {
+    if (this.props.workspaceId !== nextProps.workspaceId || this.props.mode !== nextProps.mode) {
       this.init(nextProps);
     }
   }
