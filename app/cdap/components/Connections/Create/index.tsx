@@ -203,7 +203,10 @@ export function CreateConnection({
 
       if (testResult) {
         const configErrors = constructErrors(testResult);
-        setConfigurationErrors(configErrors.propertyErrors);
+        // All test errors will be shown next to the test button,
+        // so don't repeat orphaned errors
+        const { orphanErrors, ...assignedErrors } = configErrors.propertyErrors;
+        setConfigurationErrors(assignedErrors);
       } else {
         setConfigurationErrors(null);
       }

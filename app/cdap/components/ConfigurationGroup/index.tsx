@@ -188,6 +188,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   function getOrphanedErrors() {
     if (!errors) {
+      setOrphanErrors([]);
       return;
     }
 
