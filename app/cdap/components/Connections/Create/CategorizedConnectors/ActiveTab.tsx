@@ -24,6 +24,7 @@ import TableCell from 'components/Table/TableCell';
 import TableBody from 'components/Table/TableBody';
 import TableColumnGroup from 'components/Table/TableColumnGroup';
 import ColumnGroup from 'components/Table/ColumnGroup';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyle = makeStyle((theme) => {
   return {
@@ -36,6 +37,10 @@ const useStyle = makeStyle((theme) => {
     },
     tableRow: {
       cursor: 'pointer',
+    },
+    tooltip: {
+      fontSize: '0.9rem',
+      backgroundColor: theme.palette.grey[100],
     },
   };
 });
@@ -63,7 +68,7 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
         onChange={onSearchChange}
       />
 
-      <Table columnTemplate="1fr 1fr 1fr 0.8fr 0.5fr">
+      <Table columnTemplate="minmax(10rem, 1fr) 6fr 2fr 1.5fr 1fr">
         <TableHeader>
           <TableColumnGroup>
             <ColumnGroup gridColumn="3 / span 3">Artifact Information</ColumnGroup>
@@ -98,7 +103,11 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                   data-cy={`connector-${conn.name}`}
                 >
                   <TableCell>{conn.name}</TableCell>
-                  <TableCell>{conn.description}</TableCell>
+                  <TableCell>
+                    <Tooltip title={conn.description} classes={classes}>
+                      <span>{conn.description}</span>
+                    </Tooltip>
+                  </TableCell>
                   <TableCell>{conn.artifact.name}</TableCell>
                   <TableCell>{conn.artifact.version}</TableCell>
                   <TableCell>{conn.artifact.scope}</TableCell>
