@@ -50,6 +50,8 @@ export default function Connections({
   onEntitySelect,
   hideSidePanel,
   initPath,
+  connectorType,
+  hideAddConnection,
 }: IConnections) {
   const [state, setState] = React.useState({
     mode,
@@ -59,6 +61,9 @@ export default function Connections({
     connectionId,
     onEntitySelect,
     disabledTypes: {},
+    connectorType,
+    hideSidePanel,
+    hideAddConnection,
   });
   const classes = useStyle();
   const [loading, setLoading] = useState(true);
@@ -113,13 +118,13 @@ export default function Connections({
       <div className={classes.container}>
         <If condition={shouldUpdatePageTitle}>{pageTitle}</If>
         <If condition={mode === IConnectionMode.ROUTED}>
-          <ConnectionRoutes hideSidePanel={hideSidePanel} />
+          <ConnectionRoutes />
         </If>
         <If
           condition={mode === IConnectionMode.INMEMORY || mode === IConnectionMode.ROUTED_WORKSPACE}
         >
           <MemoryRouter initialEntries={[initialEntry]}>
-            <ConnectionRoutes hideSidePanel={hideSidePanel} />
+            <ConnectionRoutes />
           </MemoryRouter>
         </If>
       </div>

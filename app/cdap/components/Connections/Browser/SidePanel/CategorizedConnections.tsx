@@ -39,6 +39,7 @@ interface ICategorizedConnectionsProps {
   selectedConnection: string;
   boundaryElement: any;
   fetchConnections: () => void;
+  hideAddConnection?: boolean;
 }
 const Accordion = withStyles({
   root: {
@@ -189,6 +190,7 @@ export function CategorizedConnections({
   selectedConnection,
   boundaryElement,
   fetchConnections,
+  hideAddConnection,
 }: ICategorizedConnectionsProps) {
   const classes = useStyle();
   const activeCategory = selectedConnection
@@ -306,14 +308,16 @@ export function CategorizedConnections({
 
   return (
     <div>
-      <Link
-        to={`/ns/${getCurrentNamespace()}/connection-upload`}
-        className={classnames(classes.upload, {
-          [classes.selectedConnection]: !localSelectedConnection,
-        })}
-      >
-        Upload
-      </Link>
+      <If condition={!hideAddConnection}>
+        <Link
+          to={`/ns/${getCurrentNamespace()}/connection-upload`}
+          className={classnames(classes.upload, {
+            [classes.selectedConnection]: !localSelectedConnection,
+          })}
+        >
+          Upload
+        </Link>
+      </If>
       {connectorTypes.map((connectorType) => {
         const key = connectorType.name;
         const connections = categorizedConnections.get(key) || [];
@@ -382,11 +386,13 @@ export function CategorizedConnections({
                       </If>
                     </Link>
 
-                    <ActionsPopover
-                      className={classes.actionPopover}
-                      actions={actions}
-                      modifiers={popperModifiers}
-                    />
+                    <If condition={!hideAddConnection}>
+                      <ActionsPopover
+                        className={classes.actionPopover}
+                        actions={actions}
+                        modifiers={popperModifiers}
+                      />
+                    </If>
                   </div>
                 );
               })}

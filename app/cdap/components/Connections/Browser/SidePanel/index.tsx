@@ -30,6 +30,7 @@ import { sortedUniqBy } from 'lodash';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
+import If from 'components/If';
 
 const useStyle = makeStyles<Theme>((theme) => {
   return {
@@ -81,12 +82,16 @@ interface IConnectionBrowserSidePanelProps {
   onSidePanelToggle: () => void;
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
+  selectedConnectorType?: string;
+  hideAddConnection?: boolean;
 }
 
 export function ConnectionsBrowserSidePanel({
   onSidePanelToggle,
   onConnectionSelection,
   selectedConnection,
+  selectedConnectorType,
+  hideAddConnection,
 }: IConnectionBrowserSidePanelProps) {
   const { mode } = useContext(ConnectionsContext);
 
@@ -105,6 +110,15 @@ export function ConnectionsBrowserSidePanel({
     connectorTypes = connectorTypes.filter((conn) => {
       return !disabledTypes[conn.name];
     });
+    if (selectedConnectorType) {
+      const connectionTypeLower = selectedConnectorType.toLowerCase();
+      const filteredConnectorTypes = connectorTypes.filter((conn) => {
+        return connectionTypeLower === conn.name.toLowerCase();
+      });
+      if (filteredConnectorTypes.length > 0) {
+        connectorTypes = filteredConnectorTypes;
+      }
+    }
     connectorTypes = orderBy(connectorTypes, ['name'], ['asc']);
     connectorTypes = sortedUniqBy(connectorTypes, (ct) => ct.name);
 
@@ -140,6 +154,7 @@ export function ConnectionsBrowserSidePanel({
         selectedConnection={selectedConnection}
         boundaryElement={boundaryElement}
         fetchConnections={initState}
+        hideAddConnection={hideAddConnection}
       />
 
       <CreateConnectionModal
@@ -150,7 +165,9 @@ export function ConnectionsBrowserSidePanel({
         isEdit={false}
       />
 
-      <div className={classes.buttonContainer}>{connectionBtn}</div>
+      <If condition={!hideAddConnection}>
+        <div className={classes.buttonContainer}>{connectionBtn}</div>
+      </If>
     </Paper>
   );
 }
