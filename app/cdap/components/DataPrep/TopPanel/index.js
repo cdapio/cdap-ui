@@ -88,9 +88,9 @@ export default class DataPrepTopPanel extends Component {
       this.setState({
         higherVersion: state.higherVersion,
         workspaceInfo: state.workspaceInfo,
-        connectionName: objectQuery(state, 'properties', 'name'),
+        connectionName: objectQuery(state, 'insights', 'name'),
         path: state.workspaceUri,
-        workspaceName: objectQuery(state, 'properties', 'workspaceName'),
+        workspaceName: objectQuery(state, 'insights', 'workspaceName'),
       });
     });
   }

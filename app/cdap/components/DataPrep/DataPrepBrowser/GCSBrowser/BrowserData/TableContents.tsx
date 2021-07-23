@@ -153,7 +153,7 @@ export default class TableContents extends React.PureComponent<
     const ContainerElement = enableRouting ? Link : 'div';
     const pathname = window.location.pathname.replace(/\/cdap/, '');
 
-    const { connectionid, uri } = DataPrepStore.getState().dataprep.properties;
+    const { connectionid, uri } = DataPrepStore.getState().dataprep.insights;
     const selectedPath = uri ? uri.substring(4) : '';
 
     if (enableRouting) {

@@ -39,6 +39,7 @@ const MyDataPrepApi = {
   getSpecification: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepathV2}/specification`),
   getUsage: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/usage`),
   getInfo: apiCreator(dataSrc, 'GET', 'REQUEST', `${baseServicePath}/methods/info`),
+  setWorkspace: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepathV2}`),
   getWorkspace: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepathV2}`),
   getWorkspaceList: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPathV2}/workspaces`),
 
