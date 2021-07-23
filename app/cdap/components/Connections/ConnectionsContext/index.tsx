@@ -49,6 +49,8 @@ export interface IConnections {
   initPath?: string;
   disabledTypes?: Record<string, boolean>;
   hideSidePanel?: boolean;
+  hideAddConnection?: boolean;
+  connectorType?: string;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,

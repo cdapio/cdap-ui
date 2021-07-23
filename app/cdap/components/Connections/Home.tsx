@@ -37,8 +37,8 @@ const useStyle = makeStyles<Theme, IConnectionsHomeStyleProps>((theme) => {
   };
 });
 
-export function ConnectionsHome({ hideSidePanel }: { hideSidePanel?: boolean }) {
-  const { mode } = useContext(ConnectionsContext);
+export function ConnectionsHome() {
+  const { hideSidePanel, connectorType, hideAddConnection } = useContext(ConnectionsContext);
   const params = useParams();
   const [sidePanelCollapsed, setSidePanelCollapsed] = useState(false);
   const [selectedConnection, setSelectedConnection] = useState(
@@ -60,6 +60,8 @@ export function ConnectionsHome({ hideSidePanel }: { hideSidePanel?: boolean }) 
         onSidePanelToggle={() => setSidePanelCollapsed(true)}
         onConnectionSelection={(conn) => setSelectedConnection(conn)}
         selectedConnection={selectedConnection}
+        selectedConnectorType={connectorType}
+        hideAddConnection={hideAddConnection}
       />
       <ConnectionsBrowser
         selectedConnection={selectedConnection}
