@@ -20,7 +20,8 @@ import Helmet from 'react-helmet';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 import { ConnectionRoutes } from 'components/Connections/Routes';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, Redirect } from 'react-router';
+import { Route } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 const DATAPREP_I18N_PREFIX = 'features.DataPrep.pageTitle';
 import {
@@ -29,9 +30,10 @@ import {
   ConnectionsContext,
 } from 'components/Connections/ConnectionsContext';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ConnectionsApi } from 'api/connections';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
+
 const useStyle = makeStyle(() => {
   return {
     container: {
@@ -40,6 +42,25 @@ const useStyle = makeStyle(() => {
     },
   };
 });
+
+function RedirectIfDefaultConnection({ path, connectionId, initialConnectionId }) {
+  // useRef instead of useState to avoid risk of feedback loop
+  const redirected = useRef(false);
+
+  if (
+    // nothing provided by parent of <Connections/>
+    !connectionId &&
+    // but we have a default
+    initialConnectionId &&
+    // and we've never redirected before
+    !redirected.current
+  ) {
+    redirected.current = true;
+    return <Redirect to={path} />;
+  } else {
+    return <></>;
+  }
+}
 
 export default function Connections({
   mode = IConnectionMode.ROUTED,
@@ -53,6 +74,7 @@ export default function Connections({
   connectorType,
   hideAddConnection,
 }: IConnections) {
+  const [initialConnectionId, setInitialConnectionId] = useState(connectionId);
   const [state, setState] = React.useState({
     mode,
     path,
@@ -81,8 +103,8 @@ export default function Connections({
 
   let initialEntry = `/ns/${getCurrentNamespace()}/connections`;
 
-  if (connectionId) {
-    initialEntry += `/${connectionId}`;
+  if (initialConnectionId) {
+    initialEntry += `/${initialConnectionId}`;
 
     if (initPath) {
       initialEntry += `?path=${initPath}`;
@@ -92,15 +114,26 @@ export default function Connections({
   useEffect(() => {
     ConnectionsApi.getSystemApp().subscribe((appInfo) => {
       try {
+        let updatedState = { ...state };
+
         const config = JSON.parse(appInfo.configuration);
+        const def = config?.connectionConfig?.defaultConnection;
+        if (def && !connectionId && !hideSidePanel) {
+          updatedState = {
+            ...updatedState,
+            connectionId: def,
+          };
+          setInitialConnectionId(def);
+        }
 
         if (config.disabledTypes) {
           const disabledTypes = {};
           config.disabledTypes.forEach((type) => {
             disabledTypes[type] = true;
           });
-          setState({ ...state, disabledTypes });
+          updatedState = { ...updatedState, disabledTypes };
         }
+        setState(updatedState);
       } catch (e) {
         // no-op. If app doesn't exist, it will get handled at the top layer
       }
@@ -118,6 +151,13 @@ export default function Connections({
       <div className={classes.container}>
         <If condition={shouldUpdatePageTitle}>{pageTitle}</If>
         <If condition={mode === IConnectionMode.ROUTED}>
+          <Route exact path="/ns/:namespace/connections">
+            <RedirectIfDefaultConnection
+              path={initialEntry}
+              initialConnectionId={initialConnectionId}
+              connectionId={connectionId}
+            />
+          </Route>
           <ConnectionRoutes />
         </If>
         <If
