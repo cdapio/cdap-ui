@@ -45,14 +45,14 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
   }
 
   let workspaceId = store.workspaceId;
-  let properties = store.properties;
+  let insights = store.insights;
   /*
       This is because everytime we change the data there is a possibility that we
       change the schema and with schema change the visualization is not guaranteed
       to be correct. For now we just clear it. We should become smart enough to say if the
       visualization is still good enough (with just data change)
   */
-  properties.visualization = {};
+  insights.visualization = {};
   let namespace = NamespaceStore.getState().selectedNamespace;
 
   let params = {
@@ -61,7 +61,7 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
   };
 
   let requestBody = directiveRequestBodyCreator(updatedDirectives);
-  requestBody.properties = properties;
+  requestBody.insights = insights;
 
   return Observable.create((observer) => {
     MyDataPrepApi.execute(params, requestBody).subscribe(
@@ -108,17 +108,19 @@ function setWorkspaceRetry(params, observer, workspaceId) {
       let directives = objectQuery(res, 'directives') || [];
       let requestBody = directiveRequestBodyCreator(directives);
       let sampleSpec = objectQuery(res, 'sampleSpec') || {};
+      let visualization = objectQuery(res, 'insights', 'visualization') || {};
 
-      let properties = {
+      let insights = {
         name: sampleSpec.connectionName,
         workspaceName: res.workspaceName,
         path: sampleSpec.path,
+        visualization,
       };
-      requestBody.properties = properties;
+      requestBody.insights = insights;
 
       let workspaceUri = objectQuery(res, 'sampleSpec', 'path');
       let workspaceInfo = {
-        properties,
+        properties: insights,
       };
 
       MyDataPrepApi.execute(params, requestBody).subscribe(
@@ -133,7 +135,7 @@ function setWorkspaceRetry(params, observer, workspaceId) {
               workspaceId,
               workspaceUri,
               workspaceInfo,
-              properties,
+              insights,
             },
           });
 
@@ -178,15 +180,15 @@ function setWorkspaceRetry(params, observer, workspaceId) {
 }
 
 export function updateWorkspaceProperties() {
-  let { directives, workspaceId, properties } = DataPrepStore.getState().dataprep;
+  let { directives, workspaceId, insights } = DataPrepStore.getState().dataprep;
   let namespace = NamespaceStore.getState().selectedNamespace;
   let params = {
     context: namespace,
     workspaceId,
   };
   let requestBody = directiveRequestBodyCreator(directives);
-  requestBody.properties = properties;
-  MyDataPrepApi.execute(params, requestBody).subscribe(
+  requestBody.insights = insights;
+  MyDataPrepApi.setWorkspace(params, requestBody).subscribe(
     () => {},
     (err) => console.log('Error updating workspace visualization: ', err)
   );
@@ -292,9 +294,9 @@ export function getWorkspaceList(workspaceId) {
 
 export function setVisualizationState(state) {
   DataPrepStore.dispatch({
-    type: DataPrepActions.setProperties,
+    type: DataPrepActions.setInsights,
     payload: {
-      properties: {
+      insights: {
         visualization: state,
       },
     },
@@ -329,7 +331,7 @@ export async function loadTargetDataModelStates() {
     dataModel,
     dataModelRevision,
     dataModelModel,
-  } = DataPrepStore.getState().dataprep.properties;
+  } = DataPrepStore.getState().dataprep.insights;
 
   let { dataModelList } = DataPrepStore.getState().dataprep;
   if (!Array.isArray(dataModelList)) {
@@ -362,7 +364,7 @@ export async function saveTargetDataModelStates() {
     dataModel,
     dataModelRevision,
     dataModelModel,
-  } = DataPrepStore.getState().dataprep.properties;
+  } = DataPrepStore.getState().dataprep.insights;
   const oldDataModelId = dataModel || null;
   const oldDataModelRevision = isFinite(dataModelRevision) ? Number(dataModelRevision) : null;
   const oldModelId = dataModelModel || null;
@@ -398,9 +400,9 @@ export async function saveTargetDataModelStates() {
   }
 
   DataPrepStore.dispatch({
-    type: DataPrepActions.setProperties,
+    type: DataPrepActions.setInsights,
     payload: {
-      properties: {
+      insights: {
         dataModel: newDataModelId,
         dataModelRevision: newDataModelRevision,
         dataModelModel: newModelId,
