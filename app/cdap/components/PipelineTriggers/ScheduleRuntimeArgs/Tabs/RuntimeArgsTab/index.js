@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ScheduleRuntimeArgsStore, {
   DEFAULTFIELDDELIMITER,
 } from 'components/PipelineTriggers/ScheduleRuntimeArgs/ScheduleRuntimeArgsStore';
@@ -22,10 +23,26 @@ import { Row, Col } from 'reactstrap';
 import RuntimeArgRow from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/RuntimeArgsTab/RuntimeArgRow';
 import T from 'i18n-react';
 import classnames from 'classnames';
+import { withStyles } from '@material-ui/core';
 
 const PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.Tabs.RuntimeArgs';
 
-export default class RuntimArgsTab extends Component {
+const styles = () => ({
+  runTimeArgsTab: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  runTimeRowContainer: {
+    overflowY: 'scroll',
+    height: 'inherit',
+  },
+});
+
+class RuntimArgsTab extends Component {
+  propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+
   getRuntimeArgMapping = () => {
     let { argsMapping } = ScheduleRuntimeArgsStore.getState().args;
     let runTimeArgMapping = argsMapping.filter((arg) => {
@@ -86,7 +103,6 @@ export default class RuntimArgsTab extends Component {
   renderContent() {
     let { triggeredPipelineInfo, disabled, argsMapping } = ScheduleRuntimeArgsStore.getState().args;
     let list = triggeredPipelineInfo.macros;
-
     if (disabled) {
       list = argsMapping.filter((arg) => arg.type === 'runtime');
     }
@@ -112,7 +128,7 @@ export default class RuntimArgsTab extends Component {
     }
 
     return (
-      <div>
+      <div className={this.props.classes.runTimeRowContainer}>
         <Row className="header">
           <Col xs={6}> {T.translate(`${PREFIX}.TableHeaders.t_runtimeargs`)} </Col>
           <Col xs={1} />
@@ -130,7 +146,7 @@ export default class RuntimArgsTab extends Component {
       disabled,
     } = ScheduleRuntimeArgsStore.getState().args;
     return (
-      <div className="run-time-args-tab">
+      <div className={this.props.classes.runTimeArgsTab}>
         {disabled ? null : (
           <h4>
             {T.translate(`${PREFIX}.tab_message`, {
@@ -146,3 +162,5 @@ export default class RuntimArgsTab extends Component {
     );
   }
 }
+
+export default withStyles(styles)(RuntimArgsTab);
