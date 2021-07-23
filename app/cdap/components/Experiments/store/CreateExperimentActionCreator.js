@@ -448,7 +448,7 @@ function applyDirectives(workspaceId, directives) {
       namespace: getCurrentNamespace(),
     };
     let requestBody = directiveRequestBodyCreator(directives);
-    requestBody.properties = workspaceInfo.properties;
+    requestBody.insights = workspaceInfo.properties;
     return MyDataPrepApi.execute(params, requestBody);
   });
 }

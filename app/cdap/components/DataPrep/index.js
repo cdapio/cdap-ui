@@ -186,8 +186,8 @@ export default class DataPrep extends Component {
     }
     setWorkspace(workspaceId).subscribe(
       () => {
-        let { properties } = DataPrepStore.getState().dataprep;
-        let workspaceName = properties.name;
+        let { insights } = DataPrepStore.getState().dataprep;
+        let workspaceName = insights.name;
         if (this._isMounted) {
           this.setState({
             loading: false,
