@@ -163,7 +163,7 @@ export default class TableContents extends React.PureComponent<
       connectionid,
       key,
       'bucket-name': bucketName,
-    } = DataPrepStore.getState().dataprep.properties;
+    } = DataPrepStore.getState().dataprep.insights;
     const selectedPath = `/${bucketName}/${key}/`;
 
     if (enableRouting) {

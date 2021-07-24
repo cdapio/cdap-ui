@@ -98,7 +98,7 @@ export default class DataPrep extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.currentWorkspace !== nextProps.workspaceId) {
+    if (this.props.workspaceId !== nextProps.workspaceId || this.props.mode !== nextProps.mode) {
       this.init(nextProps);
     }
   }
@@ -186,8 +186,8 @@ export default class DataPrep extends Component {
     }
     setWorkspace(workspaceId).subscribe(
       () => {
-        let { properties } = DataPrepStore.getState().dataprep;
-        let workspaceName = properties.name;
+        let { insights } = DataPrepStore.getState().dataprep;
+        let workspaceName = insights.name;
         if (this._isMounted) {
           this.setState({
             loading: false,
