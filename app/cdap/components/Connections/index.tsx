@@ -117,7 +117,9 @@ export default function Connections({
         let updatedState = { ...state };
 
         const config = JSON.parse(appInfo.configuration);
+        const disabledTypes = config?.connectionConfig?.disabledTypes;
         const def = config?.connectionConfig?.defaultConnection;
+
         if (def && !connectionId && !hideSidePanel) {
           updatedState = {
             ...updatedState,
@@ -126,12 +128,12 @@ export default function Connections({
           setInitialConnectionId(def);
         }
 
-        if (config.disabledTypes) {
-          const disabledTypes = {};
-          config.disabledTypes.forEach((type) => {
-            disabledTypes[type] = true;
+        if (disabledTypes) {
+          const disabledTypesMap = {};
+          disabledTypes.forEach((type) => {
+            disabledTypesMap[type] = true;
           });
-          updatedState = { ...updatedState, disabledTypes };
+          updatedState = { ...updatedState, disabledTypes: disabledTypesMap };
         }
         setState(updatedState);
       } catch (e) {
