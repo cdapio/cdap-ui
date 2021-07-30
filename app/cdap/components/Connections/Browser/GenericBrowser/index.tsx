@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 import { isNilOrEmptyString } from 'services/helpers';
 import {
   exploreConnection,
@@ -72,17 +72,17 @@ export function GenericBrowser({ selectedConnection }) {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
-  const [entities, setEntities] = useState([]);
-  const [propertyHeaders, setPropertyHeaders] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [path, setPath] = useState(pathFromUrl);
-  const [searchString, setSearchString] = useState('');
-  const [searchStringDisplay, setSearchStringDisplay] = useState('');
-  const [workspaceId, setWorkspaceId] = useState(null);
+  const [entities, setEntities] = React.useState([]);
+  const [propertyHeaders, setPropertyHeaders] = React.useState([]);
+  const [totalCount, setTotalCount] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+  const [path, setPath] = React.useState(pathFromUrl);
+  const [searchString, setSearchString] = React.useState('');
+  const [searchStringDisplay, setSearchStringDisplay] = React.useState('');
+  const [workspaceId, setWorkspaceId] = React.useState(null);
   const classes = useStyle();
-  const { onWorkspaceCreate, onEntitySelect } = useContext(ConnectionsContext);
+  const { onWorkspaceCreate, onEntitySelect } = React.useContext(ConnectionsContext);
 
   const fetchEntities = async () => {
     setLoading(true);
@@ -164,13 +164,9 @@ export function GenericBrowser({ selectedConnection }) {
     try {
       const spec = await getPluginSpec(entity, selectedConnection);
       const plugin = spec?.relatedPlugins?.[0];
+
       const properties = plugin?.properties;
       const schema = plugin?.schema;
-
-      // if reference name is already set, don't set default.
-      if (!properties.referenceName) {
-        properties.referenceName = plugin?.name;
-      }
 
       onEntitySelect({
         properties,
@@ -182,14 +178,14 @@ export function GenericBrowser({ selectedConnection }) {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isNilOrEmptyString(selectedConnection)) {
       return setLoading(false);
     }
     fetchEntities();
   }, [selectedConnection, path]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const query = new URLSearchParams(loc.search);
     const urlPath = query.get('path') || '/';
     if (path !== urlPath && !loading) {
@@ -214,7 +210,7 @@ export function GenericBrowser({ selectedConnection }) {
   const entityCounts = countBy(filteredEntities, (entity) => entity.type.toLowerCase());
 
   return (
-    <>
+    <React.Fragment>
       <div className={classes.topBar}>
         <div className={classes.topBarBreadcrumb}>
           <Breadcrumb
@@ -265,6 +261,6 @@ export function GenericBrowser({ selectedConnection }) {
       <If condition={error && !loading}>
         <ErrorBanner error={error} canEditPageWhileOpen={true} />
       </If>
-    </>
+    </React.Fragment>
   );
 }
