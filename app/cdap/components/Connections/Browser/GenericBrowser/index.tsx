@@ -167,11 +167,6 @@ export function GenericBrowser({ selectedConnection }) {
       const properties = plugin?.properties;
       const schema = plugin?.schema;
 
-      // if reference name is already set, don't set default.
-      if (!properties.referenceName) {
-        properties.referenceName = plugin?.name;
-      }
-
       onEntitySelect({
         properties,
         schema,
