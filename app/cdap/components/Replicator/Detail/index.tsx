@@ -379,7 +379,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
         offsetBasePath: config.offsetBasePath,
         loading: false,
         lastUpdated: Date.now(),
-        numInstances: objectQuery(config, 'config', 'parallelism', 'numInstances') || 1,
+        numInstances: objectQuery(config, 'parallelism', 'numInstances') || 1,
       });
     });
 
