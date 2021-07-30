@@ -174,6 +174,12 @@ class HydratorUpgradeService {
 
   _checkErrorStages(stages, pluginsMap) {
     let transformedStages = [];
+    if (!stages || !stages.forEach) {
+      // stages has been known to be missing in a pipeline json:
+      // https://cdap.atlassian.net/browse/CDAP-17629
+      // specifically this err was _checkErrorStages(postConfigActions, ...)
+      return [];
+    }
 
     stages.forEach((stage) => {
       let stageKey = `${stage.plugin.name}-${stage.plugin.type}-${stage.plugin.artifact.name}`;
