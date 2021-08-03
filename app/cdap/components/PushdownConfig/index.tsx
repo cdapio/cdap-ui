@@ -191,8 +191,8 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
     <div className={classes.container}>
       <div className={classes.inner}>
         <strong>
-          Transformation Pushdown lets you push down compatible transformations to BigQuery. It
-          currently only supports Join transformations.
+          Choose to have BigQuery execute transformations. Currently Joiner transformations are
+          supported.
         </strong>
         <div className={classes.toggleRow}>
           <FormControlLabel
