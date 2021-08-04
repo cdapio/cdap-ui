@@ -48,7 +48,10 @@ export interface IWidgetProps<T = any> {
   onChange?: (value) => void | React.Dispatch<any>;
   onBlur?: (value) => void | React.Dispatch<any>;
   onKeyPress?: (event: React.KeyboardEvent) => void;
-  updateAllProperties?: (values: Record<string, string>) => void | React.Dispatch<any>;
+  updateAllProperties?: (
+    values: Record<string, string>,
+    params?: { [key: string]: any }
+  ) => void | React.Dispatch<any>;
   extraConfig?: IWidgetExtraConfig;
   disabled?: boolean;
   errors?: IErrorObj[];

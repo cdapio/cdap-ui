@@ -84,11 +84,13 @@ class PluginConnectionBrowser extends React.PureComponent<
 
   private handleEntitySelect = ({ properties, schema }) => {
     const schemaStr = JSON.stringify(schema);
-    this.props.updateAllProperties({
-      ...properties,
-      schema: schemaStr,
-    });
-
+    this.props.updateAllProperties(
+      {
+        ...properties,
+        schema: schemaStr,
+      },
+      { updateFilteredConfigurationGroups: true }
+    );
     this.eventEmitter.emit('schema.import', schema);
 
     this.setState({
@@ -101,7 +103,7 @@ class PluginConnectionBrowser extends React.PureComponent<
     const { widgetProps, classes } = this.props;
     const { label = 'Browse' } = widgetProps;
     return (
-      <React.Fragment>
+      <>
         <Button variant="contained" color="primary" onClick={this.toggleConnectionBrowser}>
           {label}
         </Button>
@@ -124,7 +126,7 @@ class PluginConnectionBrowser extends React.PureComponent<
         </PipelineModal>
 
         <ErrorBanner error={this.state.error} onClose={this.resetError} />
-      </React.Fragment>
+      </>
     );
   }
 }
