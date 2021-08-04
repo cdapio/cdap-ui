@@ -191,8 +191,8 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
     <div className={classes.container}>
       <div className={classes.inner}>
         <strong>
-          Choose to have BigQuery execute transformations. Currently Joiner transformations are
-          supported.
+          Choose to push down compatible transformations to BigQuery. Currently Joiner
+          transformations are supported.
         </strong>
         <div className={classes.toggleRow}>
           <FormControlLabel
