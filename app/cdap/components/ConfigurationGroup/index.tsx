@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { IWidgetJson, PluginProperties } from './types';
@@ -76,16 +76,16 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   errors,
   validateProperties,
 }) => {
-  const [configurationGroups, setConfigurationGroups] = React.useState([]);
-  const referenceValueForUnMount = React.useRef<{
+  const [configurationGroups, setConfigurationGroups] = useState([]);
+  const referenceValueForUnMount = useRef<{
     configurationGroups?: IFilteredConfigurationGroup[];
     values?: Record<string, string>;
   }>({});
-  const [filteredConfigurationGroups, setFilteredConfigurationGroups] = React.useState([]);
-  const [orphanErrors, setOrphanErrors] = React.useState([]);
+  const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState([]);
+  const [orphanErrors, setOrphanErrors] = useState([]);
 
   // Initialize the configurationGroups based on widgetJson and pluginProperties obtained from backend
-  React.useEffect(() => {
+  useEffect(() => {
     if (!pluginProperties) {
       return;
     }
@@ -109,7 +109,6 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       initialValues = defaults(values, processedConfigurationGroup.defaultValues);
       changeParentHandler(initialValues);
     }
-
     updateFilteredConfigurationGroup(
       processedConfigurationGroup.configurationGroups,
       initialValues
@@ -142,18 +141,20 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   }
 
   // Watch for changes in values to determine dynamic widget
-  React.useEffect(() => {
+  useEffect(() => {
     if (!configurationGroups || configurationGroups.length === 0) {
       return;
     }
     updateFilteredConfigurationGroup(configurationGroups, values);
   }, [values]);
 
-  function handleValueChanges(changedValues) {
-    const updatedFilteredValues = removeFilteredProperties(
-      changedValues,
-      filteredConfigurationGroups
-    );
+  function handleValueChanges(changedValues, params: { [key: string]: boolean } = {}) {
+    let fcg = filteredConfigurationGroups;
+    if (params.updateFilteredConfigurationGroups) {
+      fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
+    }
+
+    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
     changeParentHandler(updatedFilteredValues);
   }
 
@@ -173,7 +174,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     changeParentHandler(updatedFilteredValues);
   });
 
-  React.useEffect(getOrphanedErrors, [errors]);
+  useEffect(getOrphanedErrors, [errors]);
 
   const extraConfig = {
     namespace: getCurrentNamespace(),
