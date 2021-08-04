@@ -61,7 +61,7 @@ interface IPropertyRowProps extends WithStyles<typeof styles> {
   widgetProperty: IWidgetProperty;
   pluginProperty: IPluginProperty;
   value: string;
-  onChange: (values) => void;
+  onChange: (values, params?: { [key: string]: any }) => void;
   extraConfig: any;
   disabled: boolean;
   errors?: IErrorObj[];
@@ -139,13 +139,13 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
     this.props.onChange(newValues);
   };
 
-  private updateAllProperties = (values) => {
+  private updateAllProperties = (values, params: { [key: string]: any } = {}) => {
     const newValues = {
       ...this.props.extraConfig.properties,
       ...values,
     };
 
-    this.props.onChange(newValues);
+    this.props.onChange(newValues, params);
   };
 
   public render() {
