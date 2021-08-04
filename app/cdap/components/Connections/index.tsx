@@ -73,6 +73,7 @@ export default function Connections({
   initPath,
   connectorType,
   hideAddConnection,
+  allowDefaultConnection = true,
 }: IConnections) {
   const [initialConnectionId, setInitialConnectionId] = useState(connectionId);
   const [state, setState] = React.useState({
@@ -120,7 +121,7 @@ export default function Connections({
         const disabledTypes = config?.connectionConfig?.disabledTypes;
         const def = config?.connectionConfig?.defaultConnection;
 
-        if (def && !connectionId && !hideSidePanel) {
+        if (def && allowDefaultConnection && !connectionId) {
           updatedState = {
             ...updatedState,
             connectionId: def,

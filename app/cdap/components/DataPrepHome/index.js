@@ -300,6 +300,7 @@ export default class DataPrepHome extends Component {
           <Connections
             mode={mode || 'ROUTED_WORKSPACE'}
             onWorkspaceCreate={mode === 'INMEMORY' ? null : this.onWorkspaceCreate}
+            allowDefaultConnection={true}
             connectionId={connectionId}
             initPath={path}
             {...attributes}
