@@ -118,6 +118,7 @@ class PluginConnectionBrowser extends React.PureComponent<
           <Connections
             hideSidePanel={!!this.state.connectionName}
             hideAddConnection={true}
+            allowDefaultConnection={false}
             mode={IConnectionMode.ROUTED_WORKSPACE}
             connectionId={this.state.connectionName}
             connectorType={this.props.widgetProps.connectionType}
