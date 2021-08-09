@@ -30,6 +30,7 @@ require('./ProfileCustomizeContent.scss');
 
 export default class ProfileCustomizeContent extends PureComponent {
   static propTypes = {
+    editablePropertiesFromProfile: PropTypes.array,
     profileName: PropTypes.string,
     profileLabel: PropTypes.string,
     customizations: PropTypes.object,
@@ -94,6 +95,7 @@ export default class ProfileCustomizeContent extends PureComponent {
   };
 
   render() {
+    const editablePropertiesFromProfile = this.props.editablePropertiesFromProfile;
     if (this.state.loading) {
       return (
         <div className="profile-customize-content">
@@ -102,9 +104,6 @@ export default class ProfileCustomizeContent extends PureComponent {
       );
     }
     let groups = this.state.provisionerspec['configuration-groups'];
-    let editablePropertiesFromProfile = this.props.provisioner.properties.filter(
-      (property) => property.isEditable !== false
-    );
 
     const propertiesFromProfileMap = {};
     this.props.provisioner.properties.forEach((property) => {
