@@ -15,7 +15,11 @@
  */
 
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import React, { PureComponent } from 'react';
+
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 import Popover from '@material-ui/core/Popover';
 import ProfileCustomizeContent from 'components/PipelineDetails/ProfilesListView/ProfileCustomizePopover/ProfileCustomizeContent';
 import { getProfileNameWithScope } from 'components/Cloud/Profiles/Store/ActionCreator';
@@ -28,12 +32,37 @@ const CustomizedPopover = withStyles({
   },
 })(Popover);
 
-export default class ProfileCustomizePopover extends PureComponent {
+const styles = () => ({
+  buttonLink: {
+    '&:hover': {
+      backgroundColor: 'inherit',
+      color: '#007bff',
+    },
+    fontWeight: 400,
+    '& span': {
+      color: '#007bff',
+    },
+    '&.Mui-disabled': {
+      color: 'inherit',
+      '& span': {
+        color: 'rgba(0, 0, 0, 0.26)',
+      },
+    },
+    fontFamily: 'var(--font-family)',
+    textTransform: 'none',
+    fontSize: '13px',
+    marginBottom: '2px',
+    paddingLeft: 0,
+  },
+});
+
+class ProfileCustomizePopover extends PureComponent {
   static propTypes = {
     profile: PropTypes.object,
     onProfileSelect: PropTypes.func,
     customizations: PropTypes.object,
     disabled: PropTypes.bool,
+    classes: PropTypes.object,
   };
 
   static defaultProps = {
@@ -59,13 +88,30 @@ export default class ProfileCustomizePopover extends PureComponent {
   };
 
   render() {
-    let { name, provisioner, scope, label: profileLabel } = this.props.profile;
-    let profileName = getProfileNameWithScope(name, scope);
+    const { name, provisioner, scope, label: profileLabel } = this.props.profile;
+    const profileName = getProfileNameWithScope(name, scope);
+    const editablePropertiesFromProfile = provisioner.properties.filter(
+      (property) => property.isEditable !== false
+    );
+
     return (
-      <div className="profile-customize-popover">
-        <div className="btn-link" onClick={this.onTogglePopover}>
+      <div id="profile-customize-popover" className="profile-customize-popover">
+        <Button
+          disableFocusRipple
+          disableRipple
+          disableElevation
+          disableTouchRipple
+          variant="text"
+          disabled={editablePropertiesFromProfile.length === 0}
+          component={Link}
+          style={{
+            textDecorationColor: '#007bff',
+          }}
+          onClick={this.onTogglePopover}
+          className={classnames(this.props.classes.buttonLink)}
+        >
           Customize
-        </div>
+        </Button>
         <CustomizedPopover
           open={this.state.showPopover}
           anchorEl={this.state.anchorEl}
@@ -89,6 +135,7 @@ export default class ProfileCustomizePopover extends PureComponent {
             profileLabel={profileLabel}
             customizations={this.props.customizations}
             provisioner={provisioner}
+            editablePropertiesFromProfile={editablePropertiesFromProfile}
             onSave={this.onProfileSelect.bind(this, profileName)}
             disabled={this.props.disabled}
             onClose={this.onTogglePopover}
@@ -98,3 +145,5 @@ export default class ProfileCustomizePopover extends PureComponent {
     );
   }
 }
+
+export default withStyles(styles)(ProfileCustomizePopover);
