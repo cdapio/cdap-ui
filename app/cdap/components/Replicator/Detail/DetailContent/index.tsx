@@ -24,6 +24,7 @@ import Overview from 'components/Replicator/Detail/Overview';
 import Monitoring from 'components/Replicator/Detail/Monitoring';
 import { humanReadableDate } from 'services/helpers';
 import Heading, { HeadingTypes } from 'components/Heading';
+import { createReplicatorDetailUrl } from '../../utilities';
 
 const styles = (theme): StyleRules => {
   return {
@@ -66,7 +67,7 @@ const styles = (theme): StyleRules => {
 const DetailContentView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   const { name, lastUpdated } = useContext(DetailContext);
 
-  const linkBase = `/ns/${getCurrentNamespace()}/replication/detail/${name}`;
+  const linkBase = createReplicatorDetailUrl(name);
   const routeBase = `${basepath}/detail/:replicatorId`;
 
   return (
