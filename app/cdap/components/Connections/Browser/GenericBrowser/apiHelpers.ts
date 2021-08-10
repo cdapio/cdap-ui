@@ -57,7 +57,7 @@ export function createWorkspace({ entity, connection, limit = 1000 }) {
   )
     .toPromise()
     .catch((e) => {
-      return getApiErrorMessage(e);
+      throw getApiErrorMessage(e);
     });
 }
 
