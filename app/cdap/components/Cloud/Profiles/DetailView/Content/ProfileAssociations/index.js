@@ -28,6 +28,10 @@ import {
   getNodeHours,
 } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { Observable } from 'rxjs/Observable';
+import {
+  createReplicatorDetailUrl,
+  identifyReplicatorEntityFromMetadata,
+} from 'components/Replicator/utilities';
 require('./ProfileAssociations.scss');
 
 const PREFIX = 'features.Cloud.Profiles.DetailView';
@@ -223,22 +227,28 @@ export default class ProfileAssociations extends Component {
   };
 
   renderGridBody = () => {
-    let { associationsMap } = this.state;
+    const { associationsMap } = this.state;
     return (
       <div className="grid-body">
         {Object.keys(associationsMap).map((app) => {
-          let appObj = associationsMap[app];
-          let onedayMetrics = objectQuery(appObj, 'metadata', ONEDAYMETRICKEY) || {};
-          let overallMetrics = objectQuery(appObj, 'metadata', OVERALLMETRICKEY) || {};
-          let pipelineUrl = window.getHydratorUrl({
+          const appObj = associationsMap[app];
+          const isReplicator = identifyReplicatorEntityFromMetadata(appObj.metadata);
+          const onedayMetrics = objectQuery(appObj, 'metadata', ONEDAYMETRICKEY) || {};
+          const overallMetrics = objectQuery(appObj, 'metadata', OVERALLMETRICKEY) || {};
+          const pipelineUrl = window.getHydratorUrl({
             stateName: 'hydrator.detail',
             stateParams: {
               namespace: appObj.namespace,
               pipelineId: appObj.name,
             },
           });
+
           return (
-            <a className="grid-row" href={pipelineUrl} key={app}>
+            <a
+              className="grid-row"
+              href={isReplicator ? createReplicatorDetailUrl(appObj.name) : pipelineUrl}
+              key={app}
+            >
               <div>{appObj.name}</div>
               <div>{appObj.namespace}</div>
               <div>
