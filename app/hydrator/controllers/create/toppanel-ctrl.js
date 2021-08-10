@@ -825,6 +825,9 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 
   togglePreviewMode() {
+    if (this.previewRunning && this.previewMode) {
+      this.stopPreview(true);
+    }
     this.previewStore.dispatch(
       this.previewActions.togglePreviewMode(!this.previewMode)
     );
