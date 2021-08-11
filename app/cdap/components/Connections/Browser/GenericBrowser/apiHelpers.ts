@@ -35,6 +35,10 @@ export function exploreConnection({ connectionid, path = '/' }) {
   ).toPromise();
 }
 
+export function getApiErrorMessage(e) {
+  return e?.message || e?.response?.message || e?.statusCode || 'Unknown error';
+}
+
 export function createWorkspace({ entity, connection, limit = 1000 }) {
   const { path } = entity;
   const body = {
@@ -50,7 +54,11 @@ export function createWorkspace({ entity, connection, limit = 1000 }) {
       context: getCurrentNamespace(),
     },
     body
-  ).toPromise();
+  )
+    .toPromise()
+    .catch((e) => {
+      throw getApiErrorMessage(e);
+    });
 }
 
 export function getPluginSpec(entity, connection) {

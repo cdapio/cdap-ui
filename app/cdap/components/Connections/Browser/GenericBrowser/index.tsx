@@ -34,6 +34,7 @@ import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/Brow
 import If from 'components/If';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import ErrorBanner from 'components/ErrorBanner';
+import { getApiErrorMessage } from './apiHelpers';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
@@ -63,10 +64,6 @@ const useStyle = makeStyle(() => {
     },
   };
 });
-
-function getErrorMessage(e) {
-  return e?.message || e?.response?.message || e?.statusCode || 'Unknown error';
-}
 
 export function GenericBrowser({ selectedConnection }) {
   const loc = useLocation();
@@ -155,7 +152,7 @@ export function GenericBrowser({ selectedConnection }) {
       }
       setWorkspaceId(wid);
     } catch (e) {
-      setError(`Failed to create workspace. Error: ${getErrorMessage(e)}`);
+      setError(`Failed to create workspace. Error: ${e}`);
       setLoading(false);
     }
   };
@@ -173,7 +170,7 @@ export function GenericBrowser({ selectedConnection }) {
         schema,
       });
     } catch (e) {
-      setError(`Failed to get plugin information. Error: ${getErrorMessage(e)}`);
+      setError(`Failed to get plugin information. Error: ${getApiErrorMessage(e)}`);
       setLoading(false);
     }
   };
