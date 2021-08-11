@@ -52,6 +52,8 @@ const ToggleSwitchWidgetView: React.FC<IToggleToggleSwitchProps> = ({
   disabled,
   classes,
   dataCy,
+  updateAllProperties,
+  extraConfig,
 }) => {
   const onValue = objectQuery(widgetProps, 'on', 'value') || 'on';
   const offValue = objectQuery(widgetProps, 'off', 'value') || 'off';
@@ -60,8 +62,22 @@ const ToggleSwitchWidgetView: React.FC<IToggleToggleSwitchProps> = ({
   const isOn = value === onValue;
 
   function toggleSwitch() {
-    onChange(isOn ? offValue : onValue);
+    // if connection toggle
+    if (isOn && extraConfig.properties.hasOwnProperty('useConnection')) {
+      updateAllProperties(
+        {
+          connection: '',
+          useConnection: false,
+          serviceAccountType: 'filePath',
+          serviceFilePath: 'auto-detect',
+        },
+        { updateFilteredConfigurationGroups: true }
+      );
+    } else {
+      onChange(isOn ? offValue : onValue);
+    }
   }
+
   return (
     <div className={classes.root}>
       <ToggleSwitch
