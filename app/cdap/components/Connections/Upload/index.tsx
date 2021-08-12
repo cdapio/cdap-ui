@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import UploadFile from 'services/upload-file';
 import FileDnD from 'components/FileDnD';
@@ -27,6 +27,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Redirect } from 'react-router';
 import Alert from '@material-ui/lab/Alert';
 import If from 'components/If';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -57,6 +58,7 @@ export default function Upload() {
   const [recordDelimiter, setRecordDelimiter] = useState('\\n');
   const [error, setError] = useState(null);
   const [workspaceId, setWorkspaceId] = useState(null);
+  const { onWorkspaceCreate } = useContext(ConnectionsContext);
 
   function fileHandler(e) {
     const isJSONOrXML = e[0].type === 'application/json' || e[0].type === 'text/xml';
@@ -101,6 +103,9 @@ export default function Upload() {
       (res) => {
         try {
           const workspace = JSON.parse(res);
+          if (onWorkspaceCreate) {
+            return onWorkspaceCreate(workspace);
+          }
           setWorkspaceId(workspace);
         } catch (e) {
           setError(e);
