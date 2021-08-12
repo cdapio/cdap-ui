@@ -26,6 +26,7 @@ import ActionsPopover, { IAction } from 'components/ActionsPopover';
 import DeleteConfirmation, { InstanceType } from 'components/Replicator/DeleteConfirmation';
 import DownloadFile from 'services/download-file';
 import { Redirect } from 'react-router-dom';
+import { createReplicatorDetailUrl } from '../../utilities';
 
 const styles = (theme): StyleRules => {
   return {
@@ -214,7 +215,7 @@ const DeployedView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
 
               return (
                 <Link
-                  to={`/ns/${getCurrentNamespace()}/replication/detail/${replicator.name}`}
+                  to={createReplicatorDetailUrl(replicator.name)}
                   className={`grid-row ${classes.row}`}
                   key={replicator.name}
                 >
