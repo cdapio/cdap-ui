@@ -71,10 +71,12 @@ class PluginConnectionBrowser extends React.PureComponent<
     const connectionProperty = this.props?.widgetProps?.connectionProperty || 'connection';
     const connection = objectQuery(this.props, 'extraConfig', 'properties', connectionProperty);
     const connectionName = extractConnectionName(connection);
+    const useConnection =
+      objectQuery(this.props, 'extraConfig', 'properties', 'useConnection') !== 'false';
 
     this.setState({
       showBrowserModal: !this.state.showBrowserModal,
-      connectionName,
+      connectionName: useConnection ? connectionName : null,
     });
   };
 
