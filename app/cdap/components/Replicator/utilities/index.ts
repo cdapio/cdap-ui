@@ -396,3 +396,24 @@ export function getTableDisplayName(row) {
 
   return displayName;
 }
+
+/**
+ * Returns detail url for replicator
+ * @param name name of the replicator
+ * @returns URL
+ */
+export function createReplicatorDetailUrl(name: string): string {
+  return `/ns/${getCurrentNamespace()}/replication/detail/${name}`;
+}
+
+/**
+ * Identifes the entity as a replicator instance
+ * @param metadata metadata about the entity
+ * @returns boolean
+ */
+export function identifyReplicatorEntityFromMetadata(metadata: {
+  type?: string;
+  program?: string;
+}): boolean {
+  return metadata.type === 'Worker' && metadata.program === 'DeltaWorker';
+}
