@@ -62,6 +62,7 @@ const ToggleSwitchWidgetView: React.FC<IToggleToggleSwitchProps> = ({
   function toggleSwitch() {
     onChange(isOn ? offValue : onValue);
   }
+
   return (
     <div className={classes.root}>
       <ToggleSwitch
