@@ -133,9 +133,6 @@ export function CreateConnection({
     if (name.trim() === '') {
       setError('Connection name must not be empty.');
       return;
-    } else if (name.trim().match(/ /)) {
-      setError('Connection name must not contain spaces.');
-      return;
     }
 
     if (!isEdit) {
