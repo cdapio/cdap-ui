@@ -24,6 +24,7 @@ import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';
 import Alert from 'components/Alert';
 import './EmptyList.scss';
+import CheckoutPipelineModal from 'components/PipelineList/CheckoutPipeline';
 
 const PREFIX = 'features.PipelineList.EmptyList';
 const PIPELINE_STUDIO_STATE = 'hydrator.create';
@@ -142,6 +143,9 @@ class EmptyList extends React.PureComponent<IProps, IState> {
                 />
               </Label>
               <span className="message">{T.translate(`${PREFIX}.aPipeline`)}</span>
+            </div>
+            <div className="action-row">
+              <CheckoutPipelineModal></CheckoutPipelineModal>
             </div>
           </div>
         </div>

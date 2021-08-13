@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import Github from 'components/Github';
 import { hot } from 'react-hot-loader/root';
 import 'react-hot-loader/patch';
 import './globals';
@@ -316,6 +316,13 @@ class CDAP extends Component {
               }}
             />
             <Route path="/lab" component={Lab} />
+            <Route path="/github" component={Github} />
+            <Route
+              path="/test-me"
+              render={(props) => {
+                return <div>Hello, world</div>;
+              }}
+            />
             <Route
               exact
               path="/lab-experiment-test"

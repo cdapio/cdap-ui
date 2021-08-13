@@ -28,6 +28,8 @@ import { MyScheduleApi } from 'api/schedule';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
 import downloadFile from 'services/download-file';
+import CheckInPipelineModal from 'components/PipelineList/CheckInPipeline';
+import If from 'components/If';
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
 
 interface IProps {
@@ -46,6 +48,7 @@ interface IState {
   showDeleteConfirmation: boolean;
   triggeredPipelines: ITriggeredPipeline[];
   showPopover?: boolean;
+  openCheckInModal?: boolean;
 }
 
 class DeployedActionsView extends React.PureComponent<IProps, IState> {
@@ -54,6 +57,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     showDeleteConfirmation: false,
     triggeredPipelines: [],
     showPopover: false,
+    openCheckInModal: false,
   };
 
   private pipelineConfig = {};
@@ -64,6 +68,10 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
 
   private togglePopover = () => {
     this.setState({ showPopover: !this.state.showPopover });
+  };
+
+  private handleCheckin = () => {
+    this.setState({ openCheckInModal: !this.state.openCheckInModal });
   };
 
   private handlePipelineExport = () => {
@@ -221,6 +229,10 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
       actionFn: this.showDeleteConfirmation,
       className: 'delete',
     },
+    {
+      label: 'Checkin',
+      actionFn: this.handleCheckin,
+    },
   ];
 
   public render() {
@@ -240,6 +252,15 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
           pipelineConfig={this.pipelineConfig}
           onExport={this.handlePipelineExport}
         />
+
+        <If condition={this.state.openCheckInModal}>
+          <CheckInPipelineModal
+            getNamespace={getCurrentNamespace}
+            pipeline={this.props.pipeline}
+            open={this.state.openCheckInModal}
+            openModal={this.handleCheckin}
+          ></CheckInPipelineModal>
+        </If>
 
         {this.renderDeleteConfirmation()}
       </div>
