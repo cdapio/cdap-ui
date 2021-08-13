@@ -76,9 +76,11 @@ export default function CheckInPipelineModal({ getNamespace, pipeline, open, ope
       message,
       content,
     }))(updateContentsJson);
-
     try {
-      await GithubApi.checkInPipeline({ repo: updateContentsJson.nickname }, parsedContents);
+      const response = await GithubApi.checkInPipeline(
+        { repo: updateContentsJson.nickname },
+        parsedContents
+      ).toPromise();
       openModal();
       setContents(removeContents);
     } catch (e) {

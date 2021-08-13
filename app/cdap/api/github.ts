@@ -13,6 +13,6 @@ export const GithubApi = {
   deleteGithubCredentials: apiCreator(dataSrc, 'DELETE', 'REQUEST', githubRepoPath),
   viewSavedGithubCredentials: apiCreator(dataSrc, 'GET', 'REQUEST', '/repos/githt'),
   testGithubConnection: apiCreator(dataSrc, 'POST', 'REQUEST', githubConnectionPath),
-  checkoutPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', '/repos/github/import/:repo'),
-  checkInPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', '/repos/github/export/:repo'),
+  checkoutPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', '/repos/github/:repo/checkout'),
+  checkInPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', '/repos/github/:repot/checkin'),
 };
