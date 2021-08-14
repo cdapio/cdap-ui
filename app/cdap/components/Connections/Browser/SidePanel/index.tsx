@@ -162,7 +162,7 @@ export function ConnectionsBrowserSidePanel({
         onToggle={() => setCreateConnOpen(!createConnOpen)}
         initialConfig={null}
         onCreate={initState}
-        isEdit={false}
+        isView={false}
       />
 
       <If condition={!hideAddConnection}>
