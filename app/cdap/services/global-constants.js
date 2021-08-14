@@ -298,7 +298,7 @@ const GLOBALS = {
 const HYDRATOR_DEFAULT_VALUES = {
   instance: 1,
   batchInterval: '10s',
-  schedule: '0 * * * *',
+  schedule: '0 1 */1 * *',
   resources: {
     virtualCores: 1,
     memoryMB: 2048,
