@@ -58,7 +58,7 @@ export function CreateConnection({
   onToggle = null,
   initialConfig = {},
   onCreate = null,
-  isEdit = false,
+  isView = false,
   enableRouting = true,
 }) {
   const { mode, disabledTypes } = React.useContext(ConnectionsContext);
@@ -77,6 +77,7 @@ export function CreateConnection({
   const [testSucceeded, setTestSucceeded] = React.useState(false);
   const [testInProgress, setTestInProgress] = React.useState(false);
   const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
+  const [hadInitial, setHadInitial] = React.useState(false);
 
   const init = async () => {
     try {
@@ -98,6 +99,7 @@ export function CreateConnection({
         type: plugin.type,
       };
 
+      setHadInitial(true);
       setInitValues({
         initName: objectQuery(initialConfig, 'name'),
         initDescription: objectQuery(initialConfig, 'description'),
@@ -135,7 +137,7 @@ export function CreateConnection({
       return;
     }
 
-    if (!isEdit) {
+    if (!isView) {
       // validate existing connection name
       try {
         await getConnection(name);
@@ -226,12 +228,22 @@ export function CreateConnection({
 
   return (
     <div className={classes.root}>
-      <If condition={state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
+      <If condition={!hadInitial && state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
         <EntityTopPanel
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
           title={`Create a ${state?.selectedConnector?.name} connection`}
+          closeBtnAnchorLink={onClose}
+          className={classes.topPanel}
+        />
+      </If>
+      <If condition={hadInitial && state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
+        <EntityTopPanel
+          historyBack={false}
+          breadCrumbAnchorLabel="Back"
+          onBreadCrumbClick={onClose}
+          title={isView ? 'View Connection' : 'Duplicate Connection'}
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
@@ -261,7 +273,7 @@ export function CreateConnection({
           onConnectionCreate={onConnectionCreate}
           onConnectionTest={onConnectionTest}
           initValues={initValues}
-          isEdit={isEdit}
+          isView={isView}
           testResults={{
             succeeded: testSucceeded,
             messages: testResponseMessages,
