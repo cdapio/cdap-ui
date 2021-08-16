@@ -202,7 +202,7 @@ export function CategorizedConnections({
   const [initConnConfig, setInitConnConfig] = React.useState(null);
   const [connectionToDelete, setConnectionToDelete] = React.useState(null);
   const [deleteError, setDeleteError] = React.useState(null);
-  const [isEdit, setIsEdit] = React.useState(false);
+  const [isView, setIsView] = React.useState(false);
 
   React.useEffect(() => {
     const currentCategory = selectedConnection
@@ -246,6 +246,12 @@ export function CategorizedConnections({
     toggleConnectionCreate();
   }
 
+  function viewConnection(conn) {
+    const config = getConnectionConfig(conn);
+    setIsView(true);
+    openConnectionConfig(config);
+  }
+
   function handleConfirmationClose() {
     setConnectionToDelete(null);
     setDeleteError(null);
@@ -258,7 +264,7 @@ export function CategorizedConnections({
 
     if (!newState) {
       setInitConnConfig(null);
-      setIsEdit(false);
+      setIsView(false);
     }
   }
 
@@ -339,6 +345,10 @@ export function CategorizedConnections({
               {connections.map((connection) => {
                 const actions: IAction[] = [
                   {
+                    label: 'View',
+                    actionFn: () => viewConnection(connection),
+                  },
+                  {
                     label: 'Export',
                     actionFn: () => exportConnection(connection),
                   },
@@ -417,7 +427,7 @@ export function CategorizedConnections({
         onToggle={toggleConnectionCreate}
         initialConfig={initConnConfig}
         onCreate={fetchConnections}
-        isEdit={isEdit}
+        isView={isView}
       />
     </div>
   );
