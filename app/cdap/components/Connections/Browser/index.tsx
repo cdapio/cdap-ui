@@ -59,12 +59,12 @@ const useStyle = makeStyles((theme) => {
 interface IConnectionsBrowser {
   expanded: boolean;
   onCollapse: () => void;
-  selectedConnection: string;
+  initialConnectionId: string;
 }
 export function ConnectionsBrowser({
   expanded,
   onCollapse,
-  selectedConnection,
+  initialConnectionId,
 }: IConnectionsBrowser) {
   const classes = useStyle();
   return (
@@ -90,7 +90,7 @@ export function ConnectionsBrowser({
         </Route>
         <Route>
           <div className={classes.browserContainer}>
-            <GenericBrowser selectedConnection={selectedConnection} />
+            <GenericBrowser initialConnectionId={initialConnectionId} />
           </div>
         </Route>
       </Switch>
