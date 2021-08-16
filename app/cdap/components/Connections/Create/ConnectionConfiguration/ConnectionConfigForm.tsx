@@ -49,7 +49,7 @@ export function ConnectionConfigForm({
   initProperties = {},
   initName = '',
   initDescription = '',
-  isEdit,
+  isView,
   testResults,
 }) {
   const [values, setValues] = React.useState<Record<string, string>>(initProperties);
@@ -60,33 +60,35 @@ export function ConnectionConfigForm({
   return (
     <div>
       <div>
-        <If condition={!isEdit}>
-          <PropertyRow
-            widgetProperty={{
-              'widget-type': 'textbox',
-              'widget-attributes': {
-                placeholder: 'Specify a name to identify the connection',
-              },
-              label: 'Name',
-              name: 'name',
-            }}
-            pluginProperty={{
-              name: 'name',
-              macroSupported: false,
-              required: false,
-            }}
-            value={name}
-            onChange={(v) => setName(v.name)}
-            disabled={false}
-            extraConfig={{ properties: {} }}
-          />
-        </If>
+        <PropertyRow
+          widgetProperty={{
+            'widget-type': 'textbox',
+            'widget-attributes': {
+              placeholder: 'Specify a name to identify the connection',
+            },
+            label: 'Name',
+            name: 'name',
+          }}
+          pluginProperty={{
+            name: 'name',
+            macroSupported: false,
+            required: false,
+          }}
+          value={name}
+          onChange={(v) => {
+            if (!isView) {
+              setName(v.name);
+            }
+          }}
+          disabled={isView}
+          extraConfig={{ properties: {} }}
+        />
 
         <PropertyRow
           widgetProperty={{
             'widget-type': 'textbox',
             'widget-attributes': {
-              placeholder: 'Specify a description to identify the connection',
+              placeholder: isView ? '' : 'Specify a description to identify the connection',
             },
             label: 'Description',
             name: 'description',
@@ -97,8 +99,12 @@ export function ConnectionConfigForm({
             required: false,
           }}
           value={description}
-          onChange={(v) => setDescription(v.description)}
-          disabled={false}
+          onChange={(v) => {
+            if (!isView) {
+              setDescription(v.description);
+            }
+          }}
+          disabled={isView}
           extraConfig={{ properties: {} }}
         />
       </div>
@@ -106,7 +112,8 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
-        onChange={setValues}
+        onChange={!isView ? setValues : (_val) => {}}
+        disabled={isView}
         errors={testResults.configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
@@ -142,20 +149,22 @@ export function ConnectionConfigForm({
         >
           Test Connection
         </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() =>
-            onConnectionCreate({
-              name,
-              description,
-              properties: values,
-            })
-          }
-          data-cy="connection-submit-button"
-        >
-          {isEdit ? 'Save' : 'Create'}
-        </Button>
+        <If condition={!isView}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() =>
+              onConnectionCreate({
+                name,
+                description,
+                properties: values,
+              })
+            }
+            data-cy="connection-submit-button"
+          >
+            Create
+          </Button>
+        </If>
       </div>
     </div>
   );
