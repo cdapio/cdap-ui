@@ -69,6 +69,7 @@ export function GenericBrowser({ selectedConnection }) {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
+  const [currentConnection, setCurrentConnection] = React.useState(selectedConnection);
   const [entities, setEntities] = React.useState([]);
   const [propertyHeaders, setPropertyHeaders] = React.useState([]);
   const [totalCount, setTotalCount] = React.useState(0);
@@ -85,7 +86,7 @@ export function GenericBrowser({ selectedConnection }) {
     setLoading(true);
     try {
       const res = await exploreConnection({
-        connectionid: selectedConnection,
+        connectionid: currentConnection,
         path,
       });
 
@@ -180,11 +181,16 @@ export function GenericBrowser({ selectedConnection }) {
       return setLoading(false);
     }
     fetchEntities();
-  }, [selectedConnection, path]);
+  }, [currentConnection, path]);
 
   React.useEffect(() => {
     const query = new URLSearchParams(loc.search);
+    const newConnection = loc.pathname.substring(loc.pathname.lastIndexOf('/') + 1);
     const urlPath = query.get('path') || '/';
+    if (newConnection !== currentConnection) {
+      setCurrentConnection(newConnection);
+      clearSearchString();
+    }
     if (path !== urlPath && !loading) {
       setPath(urlPath);
       clearSearchString();
