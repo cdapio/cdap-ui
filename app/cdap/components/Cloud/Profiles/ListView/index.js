@@ -443,12 +443,6 @@ class ProfilesListView extends Component {
     }
     return (
       <div className="profiles-list-view">
-        <ViewAllLabel
-          arrayToLimit={this.state.profiles}
-          limit={NUM_PROFILES_TO_SHOW}
-          viewAllState={this.state.viewAll}
-          toggleViewAll={this.toggleViewAll}
-        />
         {this.renderProfilesTable()}
         <ViewAllLabel
           arrayToLimit={this.state.profiles}
