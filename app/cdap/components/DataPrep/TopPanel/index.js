@@ -190,7 +190,7 @@ export default class DataPrepTopPanel extends Component {
   renderTopPanelDisplay() {
     const { connectionName, path, workspaceName } = this.state;
     let connectionInfo = `${connectionName} - ${path}`;
-    let state = DataPrepStore.getState().dataprep;
+    const { dataprep } = DataPrepStore.getState();
 
     if (!connectionName || !path) {
       connectionInfo = 'File Upload';
@@ -207,8 +207,8 @@ export default class DataPrepTopPanel extends Component {
             {workspaceName}
           </div>
           <div className="row_column_count">
-            {T.translate('features.DataPrep.TopPanel.columns')}: {state.headers.length} |{' '}
-            {T.translate('features.DataPrep.TopPanel.rows')}: {state.data.length}
+            {T.translate('features.DataPrep.TopPanel.columns')}: {dataprep.headers.length} |{' '}
+            {T.translate('features.DataPrep.TopPanel.rows')}: {dataprep.data.length}
           </div>
         </div>
       </div>
