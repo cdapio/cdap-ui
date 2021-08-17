@@ -39,7 +39,7 @@ const FllTopPanel = ({ datasetId, classes }) => {
     <div className={classes.root}>
       <div>
         <EntityTopPanel
-          breadCrumbAnchorLabel="Results"
+          breadCrumbAnchorLabel="Back"
           title={datasetId}
           entityType={T.translate(`commons.entity.dataset.singular`).toString()}
           entityIcon="icon-datasets"
