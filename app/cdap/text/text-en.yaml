@@ -1179,6 +1179,8 @@ features:
       invalidFieldNameRemedies3: column names.
       kafka: Kafka
       more: More
+      columns: Columns
+      rows: Rows
       PlusButton:
         addDirective: Add directive
         successMessage: You successfully added a custom directive. Apply that directive by typing it into the power mode input area.
