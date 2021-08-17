@@ -22,6 +22,7 @@ $dropdown_menu_color: $link-color;
 $dropdown_item_font_color: black;
 $success_alert_color: white;
 $success_alert_bg_color: $brand-success;
+$row_column_count_color: #6b6767;
 
 .dataprep-container {
   .top-panel {
@@ -62,10 +63,23 @@ $success_alert_bg_color: $brand-success;
         padding: 0 10px;
         width: 100%;
 
-        .title {
+        .title_bar {
+          white-space: nowrap;
+          text-align: center;
           overflow: hidden;
           text-overflow: ellipsis;
-          white-space: nowrap;
+
+          .title,
+          .row_column_count {
+            display: inline-block;
+            padding-right: 10px;
+          }
+
+          .row_column_count {
+            padding-left: 10px;
+            font-size: 13px;
+            color: $row_column_count_color;
+          }
         }
 
         .connection-type {
