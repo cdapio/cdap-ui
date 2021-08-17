@@ -64,7 +64,7 @@ export function ConnectionsHome() {
         hideAddConnection={hideAddConnection}
       />
       <ConnectionsBrowser
-        selectedConnection={selectedConnection}
+        initialConnectionId={selectedConnection}
         expanded={sidePanelCollapsed}
         onCollapse={() => setSidePanelCollapsed(false)}
       />

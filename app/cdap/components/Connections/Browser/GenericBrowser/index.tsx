@@ -65,10 +65,11 @@ const useStyle = makeStyle(() => {
   };
 });
 
-export function GenericBrowser({ selectedConnection }) {
+export function GenericBrowser({ initialConnectionId }) {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
+  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
   const [entities, setEntities] = React.useState([]);
   const [propertyHeaders, setPropertyHeaders] = React.useState([]);
   const [totalCount, setTotalCount] = React.useState(0);
@@ -85,7 +86,7 @@ export function GenericBrowser({ selectedConnection }) {
     setLoading(true);
     try {
       const res = await exploreConnection({
-        connectionid: selectedConnection,
+        connectionid: currentConnection,
         path,
       });
 
@@ -145,7 +146,7 @@ export function GenericBrowser({ selectedConnection }) {
     try {
       const wid = await createWorkspace({
         entity,
-        connection: selectedConnection,
+        connection: currentConnection,
       });
       if (onWorkspaceCreate) {
         return onWorkspaceCreate(wid);
@@ -159,7 +160,7 @@ export function GenericBrowser({ selectedConnection }) {
 
   const loadEntitySpec = async (entity) => {
     try {
-      const spec = await getPluginSpec(entity, selectedConnection);
+      const spec = await getPluginSpec(entity, currentConnection);
       const plugin = spec?.relatedPlugins?.[0];
 
       const properties = plugin?.properties;
@@ -176,15 +177,20 @@ export function GenericBrowser({ selectedConnection }) {
   };
 
   React.useEffect(() => {
-    if (isNilOrEmptyString(selectedConnection)) {
+    if (isNilOrEmptyString(currentConnection)) {
       return setLoading(false);
     }
     fetchEntities();
-  }, [selectedConnection, path]);
+  }, [currentConnection, path]);
 
   React.useEffect(() => {
     const query = new URLSearchParams(loc.search);
+    const newConnection = loc.pathname.substring(loc.pathname.lastIndexOf('/') + 1);
     const urlPath = query.get('path') || '/';
+    if (newConnection !== currentConnection) {
+      setCurrentConnection(newConnection);
+      clearSearchString();
+    }
     if (path !== urlPath && !loading) {
       setPath(urlPath);
       clearSearchString();
@@ -212,7 +218,7 @@ export function GenericBrowser({ selectedConnection }) {
         <div className={classes.topBarBreadcrumb}>
           <Breadcrumb
             path={path}
-            baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=`}
+            baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${currentConnection}?path=`}
           />
         </div>
         <div className={classes.topBarSearch}>
@@ -234,7 +240,7 @@ export function GenericBrowser({ selectedConnection }) {
         <BrowserTable
           entities={filteredEntities}
           propertyHeaders={propertyHeaders}
-          selectedConnection={selectedConnection}
+          selectedConnection={currentConnection}
           path={path}
           onExplore={onExplore}
           loading={loading}
