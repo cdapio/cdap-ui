@@ -27,7 +27,7 @@ import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useRouteMatch, useParams } from 'react-router-dom';
 import Breadcrumb from 'components/Connections/Browser/GenericBrowser/Breadcrumb';
 import SearchField from 'components/Connections/Browser/GenericBrowser/SearchField';
 import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/BrowserTable';
@@ -67,6 +67,7 @@ const useStyle = makeStyle(() => {
 
 export function GenericBrowser({ initialConnectionId }) {
   const loc = useLocation();
+  const rmatch = useRouteMatch({ path: '/ns/:namespace/connections/:connectionid' });
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
@@ -185,7 +186,7 @@ export function GenericBrowser({ initialConnectionId }) {
 
   React.useEffect(() => {
     const query = new URLSearchParams(loc.search);
-    const newConnection = loc.pathname.substring(loc.pathname.lastIndexOf('/') + 1);
+    const newConnection = rmatch?.params?.connectionid;
     const urlPath = query.get('path') || '/';
     if (newConnection !== currentConnection) {
       setCurrentConnection(newConnection);
@@ -195,7 +196,7 @@ export function GenericBrowser({ initialConnectionId }) {
       setPath(urlPath);
       clearSearchString();
     }
-  }, [loc]);
+  }, [loc, rmatch]);
 
   const lowerSearchString = searchString.trim().toLocaleLowerCase();
   const filteredEntities = lowerSearchString.length
