@@ -69,6 +69,7 @@ describe('Pipeline Studio', () => {
             .type(PIPELINE_NAME)
             .type('{enter}');
         cy.get(dataCy('pipeline-schedule-modeless-btn')).click();
+        cy.get(dataCy('switch-view-basic')).click();
         cy.get(dataCy('schedule-run-repeats')).click();
         cy.get(`${dataCy('schedule-run-repeats')} select`).select(SCHEDULE_REPEAT_HOURLY);
         cy.get(`${dataCy('schedule-repeats-every-hourly')} select`).select(SCHEDULE_REPEAT_HOURS);
@@ -112,9 +113,9 @@ describe('Pipeline Studio', () => {
         cy.get(dataCy('save-schedule-btn-studio')).click();
     
         cy.get_pipeline_json().then((pipelineConfig) => {
-          expect(pipelineConfig.config.schedule).eq('0 * * * *');
+            expect(pipelineConfig.config.schedule).eq('0 1 */1 * *');
         });
-      });
+    });
     
       it('should save an updated basic schedule', () => {
         cy.visit('/pipelines/ns/default/studio');
@@ -148,7 +149,7 @@ describe('Pipeline Studio', () => {
         cy.get(dataCy('save-schedule-btn-studio')).click();
     
         cy.get_pipeline_json().then((pipelineConfig) => {
-          expect(pipelineConfig.config.schedule).eq('030 04,16 * * *');
+            expect(pipelineConfig.config.schedule).eq('030 04,16 */1 * *');
         });
       });
     
