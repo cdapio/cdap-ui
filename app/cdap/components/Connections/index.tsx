@@ -121,7 +121,7 @@ export default function Connections({
         const disabledTypes = config?.connectionConfig?.disabledTypes;
         const def = config?.connectionConfig?.defaultConnection;
 
-        if (def && allowDefaultConnection && !connectionId) {
+        if (def && getCurrentNamespace() === 'default' && allowDefaultConnection && !connectionId) {
           updatedState = {
             ...updatedState,
             connectionId: def,
