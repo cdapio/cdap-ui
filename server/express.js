@@ -77,6 +77,9 @@ export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
 }
 function makeApp(authAddress, cdapConfig, uiSettings) {
   var app = express();
+  const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
+  const cookieSettings = { secure: isSecure, httpOnly: true, sameSite: 'strict' };
+
   /**
    * Express template setup
    */
@@ -201,7 +204,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       sandboxMode: process.env.NODE_ENV,
       authRefreshURL: cdapConfig['dashboard.auth.refresh.path'] || false,
       instanceMetadataId: cdapConfig['instance.metadata.id'],
-      sslEnabled: cdapConfig['ssl.external.enabled'] || false,
+      sslEnabled: isSecure,
     });
 
     res.header({
@@ -499,13 +502,13 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   app.get('/backendstatus', [
     function(req, res) {
       var protocol, port;
-      if (cdapConfig['ssl.external.enabled'] === 'true') {
+      if (isSecure) {
         protocol = 'https://';
       } else {
         protocol = 'http://';
       }
 
-      if (cdapConfig['ssl.external.enabled'] === 'true') {
+      if (isSecure) {
         port = cdapConfig['router.ssl.server.port'];
       } else {
         port = cdapConfig['router.server.port'];
@@ -593,9 +596,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         var date = new Date();
         date.setDate(date.getDate() + 365); // Expires after a year.
         if (!req.cookies.bcookie) {
-          res.cookie('bcookie', uuidV4(), { expires: date });
+          res.cookie('bcookie', uuidV4(), { ...cookieSettings, expires: date } );
         } else {
-          res.cookie('bcookie', req.cookies.bcookie, { expires: date });
+          res.cookie('bcookie', req.cookies.bcookie, { ...cookieSettings, expires: date });
         }
         res.render('hydrator', { nonceVal: res.locals.nonce });
       },
@@ -611,9 +614,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         var date = new Date();
         date.setDate(date.getDate() + 365); // Expires after a year.
         if (!req.cookies.bcookie) {
-          res.cookie('bcookie', uuidV4(), { expires: date });
+          res.cookie('bcookie', uuidV4(), { ...cookieSettings, expires: date });
         } else {
-          res.cookie('bcookie', req.cookies.bcookie, { expires: date });
+          res.cookie('bcookie', req.cookies.bcookie, { ...cookieSettings, expires: date });
         }
         res.render('tracker', { nonceVal: res.locals.nonce });
       },

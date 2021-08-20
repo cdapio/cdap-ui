@@ -186,7 +186,12 @@ class CDAP extends Component {
   setUIState = () => {
     StatusFactory.startPollingForBackendStatus();
     applyTheme();
-    cookie.set('DEFAULT_UI', 'NEW', { path: '/' });
+    cookie.set('DEFAULT_UI', 'NEW', {
+      path: '/',
+      secure: window.CDAP_CONFIG.sslEnabled,
+      httpOnly: true,
+      sameSite: 'strict',
+    });
     if (window.CDAP_CONFIG.securityEnabled) {
       NamespaceStore.dispatch({
         type: NamespaceActions.updateUsername,
