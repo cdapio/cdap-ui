@@ -730,6 +730,7 @@ features:
         title: Explode
         filtersSubmenuTitle: Delimited text
         flatteningSubmenuTitle: Array (by flattening)
+        recordFlatteningSubmenuTitle: Record (by flattening)
       ExtractFields:
         delimitersSubmenuTitle: Using delimiters
         extractBtnLabel: Extract
