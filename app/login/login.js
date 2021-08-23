@@ -67,8 +67,9 @@ class Login extends Component {
         }
       })
       .then((res) => {
-        cookie.set('CDAP_Auth_Token', res.access_token, { path: '/' });
-        cookie.set('CDAP_Auth_User', this.state.username);
+        const isSecure = window.CDAP_CONFIG.sslEnabled;
+        cookie.set('CDAP_Auth_Token', res.access_token, { path: '/', secure: isSecure, sameSite: 'strict' });
+        cookie.set('CDAP_Auth_User', this.state.username, { secure: isSecure, sameSite: 'strict' });
         var queryObj = util.getQueryParams(location.search);
         queryObj.redirectUrl = queryObj.redirectUrl || '/';
         window.location.href = queryObj.redirectUrl;
