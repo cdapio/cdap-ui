@@ -217,7 +217,6 @@ if (mode === 'development') {
 
 var webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
-  devtool: 'eval-source-map',
   context: __dirname + '/app/cdap',
   entry: {
     cdap: ['@babel/polyfill', './cdap.js'],
