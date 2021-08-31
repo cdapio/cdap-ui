@@ -112,7 +112,8 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
-        onChange={!isView ? setValues : (_val) => {}}
+        // tslint:disable-next-line:no-empty
+        onChange={!isView ? setValues : (val) => {}}
         disabled={isView}
         errors={testResults.configurationErrors}
       />
