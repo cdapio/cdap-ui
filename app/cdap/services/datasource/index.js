@@ -37,6 +37,7 @@ import { objectQuery } from 'services/helpers';
 import ifvisible from 'ifvisible.js';
 import SystemDelayStore from 'services/SystemDelayStore';
 import SystemDelayActions from 'services/SystemDelayStore/SystemDelayActions';
+import globalEvents from 'services/global-events';
 
 const CDAP_API_VERSION = 'v3';
 // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
@@ -44,7 +45,7 @@ const REQUEST_ORIGIN_ROUTER = 'ROUTER';
 
 export default class Datasource {
   constructor(genericResponseHandlers = [() => true]) {
-  this.eventEmitter = ee(ee);
+    this.eventEmitter = ee(ee);
     let socketData = Socket.getObservable();
     this.bindings = {};
     this.socketSubscription = socketData.subscribe((data) => {
@@ -54,7 +55,10 @@ export default class Datasource {
       }
 
       genericResponseHandlers.forEach((handler) => handler(data));
-
+      const errorCode = objectQuery(data.response, 'errorCode') || null;
+      if (errorCode !== null) {
+        this.eventEmitter.emit(globalEvents.API_ERROR, true);
+      }
       if (data.statusCode > 299 || data.warning) {
         /**
          * There is an issue here. When backend goes down we stop all the poll
