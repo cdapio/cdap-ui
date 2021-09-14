@@ -38,6 +38,8 @@ steps:
   entrypoint: 'bash'
   args: ['-c', './cloudbuild/cloudbuildrun.sh $$CYPRESS_KEY']
   secretEnv: ['CYPRESS_KEY']
+  env:
+  - 'COMMIT_INFO_BRANCH=$BRANCH_NAME'
 availableSecrets:
   secretManager:
   - versionName: projects/cdap-gcp-project/secrets/cdap-e2e-tester-key-file/versions/latest
