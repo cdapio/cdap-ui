@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { objectQuery } from 'services/helpers';
 import difference from 'lodash/difference';
@@ -60,9 +60,9 @@ const PluginConfigDisplayView: React.FC<IPluginConfigProps> = ({
   pluginWidget,
   pluginConfig,
 }) => {
-  const [config, setConfig] = React.useState([]);
+  const [config, setConfig] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const finalConfig = [];
     // get order and label name from widget
     // fill in values from config
