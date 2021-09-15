@@ -128,7 +128,7 @@ class PluginConnectionBrowser extends React.PureComponent<
           />
         </PipelineModal>
 
-        <ErrorBanner error={this.state.error} onClose={this.resetError} />
+        <ErrorBanner canEditPageWhileOpen error={this.state.error} onClose={this.resetError} />
       </>
     );
   }
