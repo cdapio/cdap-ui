@@ -111,7 +111,7 @@ const DeployedPipeline: React.FC = () => {
         </div>
 
         <If condition={!!error && !!bannerMessage}>
-          <ErrorBanner error={bannerMessage} />
+          <ErrorBanner canEditPageWhileOpen error={bannerMessage} />
         </If>
         <PipelineTable refetch={refetch} />
       </div>
