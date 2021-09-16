@@ -117,6 +117,11 @@ const LogViewerPage = Loadable({
   loading: LoadingSVGCentered,
 });
 
+const Metadata = Loadable({
+  loader: () => import(/* webpackChunkMame: "Metadata" */ 'components/Metadata'),
+  loading: LoadingSVGCentered,
+});
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -210,6 +215,7 @@ export default class Home extends Component {
             }}
           />
           <Route path="/ns/:namespace/plugincreation" component={PluginJSONCreator} />
+          <Route path="/ns/:namespace/metadata" component={Metadata} />
           <Route component={Page404} />
         </Switch>
       </div>
