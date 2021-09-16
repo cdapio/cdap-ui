@@ -16,6 +16,9 @@
 
 angular.module(PKG.name + '.feature.tracker')
   .config(function($stateProvider, $urlRouterProvider, MYAUTH_ROLE) {
+    const reactAppUrl = {
+      home: `/cdap/ns/<namespace>/metadata`,
+    };
     const productName = window.CaskCommon.ThemeHelper.Theme.productName;
 
     $urlRouterProvider.otherwise(() => {
@@ -80,8 +83,13 @@ angular.module(PKG.name + '.feature.tracker')
         },
         templateUrl: '/assets/features/tracker/templates/main.html',
         controller: 'TrackerMainController',
-        onEnter: function() {
-          document.title = `${productName} | Search`;
+        onEnter: function($stateParams) {
+          // Redirect to react page when the feature is turned on
+          if (window.CaskCommon.ThemeHelper.Theme.isMetadataInReact) {
+            window.location.href = reactAppUrl.home.replace('<namespace>', $stateParams.namespace);
+          } else {
+            document.title = `${productName} | Search`;
+          }
         },
         controllerAs: 'MainController'
       })
