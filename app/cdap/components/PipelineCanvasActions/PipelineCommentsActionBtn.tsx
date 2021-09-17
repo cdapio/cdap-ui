@@ -22,7 +22,7 @@ import CommentRounded from '@material-ui/icons/CommentRounded';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import If from 'components/If';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import { Theme } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
 import { PipelineComments } from 'components/PipelineCanvasActions/PipelineComments';
 import { IPipelineComment } from 'components/PipelineCanvasActions/PipelineCommentsConstants';
