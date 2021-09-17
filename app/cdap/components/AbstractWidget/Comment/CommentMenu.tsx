@@ -22,7 +22,7 @@ import MenuList from '@material-ui/core/MenuList';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import { Theme } from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { preventPropagation, defaultEventObject } from 'services/helpers';
 const useStyles = makeStyle<Theme>(() => {

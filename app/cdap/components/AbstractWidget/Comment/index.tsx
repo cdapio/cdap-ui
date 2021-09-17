@@ -23,7 +23,7 @@ import { IComment } from 'components/AbstractWidget/Comment/CommentConstants';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { preventPropagation } from 'services/helpers';
 import DynamicAnchoredComment from 'components/AbstractWidget/Comment/DynamicAnchoredComment';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import { Theme } from '@material-ui/core/styles';
 import { createStyles } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
 
