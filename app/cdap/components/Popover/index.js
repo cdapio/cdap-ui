@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { Manager, Target, Popper, Arrow } from 'react-popper';
-import { Observable } from 'rxjs/Observable';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Mousetrap from 'mousetrap';
 import classnames from 'classnames';
 import { preventPropagation, isDescendant } from 'services/helpers';
@@ -26,6 +26,7 @@ import ee from 'event-emitter';
 import debounce from 'lodash/debounce';
 require('./Popover.scss');
 
+// TODO Rewrite this component completely in Material-ui
 export default class Popover extends PureComponent {
   static propTypes = {
     children: PropTypes.node,
@@ -71,13 +72,17 @@ export default class Popover extends PureComponent {
       !isDescendant(document.getElementById(this.id), document.getElementById(popoverId)) &&
       this.state.showPopover
     ) {
-      this.setState(
-        {
-          showPopover: false,
-        },
-        this.updateParentOnToggle
-      );
+      this.hidePopover();
     }
+  };
+
+  hidePopover = () => {
+    this.setState(
+      {
+        showPopover: false,
+      },
+      this.updateParentOnToggle
+    );
   };
 
   componentDidMount() {
@@ -105,11 +110,9 @@ export default class Popover extends PureComponent {
   };
 
   cleanUpDocumentClickEventHandler = () => {
-    if (this.documentClick$) {
-      this.documentClick$.unsubscribe();
-    }
     Mousetrap.unbind('esc');
   };
+
   togglePopover = (e) => {
     let newState = !this.state.showPopover;
 
@@ -124,23 +127,6 @@ export default class Popover extends PureComponent {
       if (this.props.showOn !== 'Hover') {
         this.eventEmitter.emit('POPOVER_OPEN', this.id);
       }
-      this.documentClick$ = Observable.fromEvent(document, 'click').subscribe((e) => {
-        let parent = document.getElementById(this.id);
-        let child = e.target;
-        if (this.props.enableInteractionInPopover && isDescendant(parent, child)) {
-          // Just return instead of stopping propagation.
-          // This will allow to nest popovers and close the inner popover
-          // while clicking on the outer one.
-          return;
-        }
-        this.cleanUpDocumentClickEventHandler();
-        this.setState(
-          {
-            showPopover: false,
-          },
-          this.updateParentOnToggle
-        );
-      });
 
       Mousetrap.bind('esc', this.togglePopover);
     } else {
@@ -188,23 +174,27 @@ export default class Popover extends PureComponent {
             })}
           />
         </Target>
-        <Popper
-          id={this.id}
-          placement={this.props.placement || 'auto'}
-          className={classnames('popper', {
-            hide: !this.state.showPopover,
-            tooltip: this.props.showOn === 'Hover',
-          })}
-          modifiers={this.props.modifiers}
-          onClick={this.handleBubbleEvent}
-        >
-          {this.props.injectOnToggle
-            ? this.state.showPopover
-              ? this.props.children
-              : null
-            : this.props.children}
-          <Arrow className="popper__arrow" />
-        </Popper>
+        {this.state.showPopover && (
+          <ClickAwayListener onClickAway={this.hidePopover}>
+            <Popper
+              id={this.id}
+              placement={this.props.placement || 'auto'}
+              className={classnames('popper', {
+                hide: !this.state.showPopover,
+                tooltip: this.props.showOn === 'Hover',
+              })}
+              modifiers={this.props.modifiers}
+              onClick={this.handleBubbleEvent}
+            >
+              {this.props.injectOnToggle
+                ? this.state.showPopover
+                  ? this.props.children
+                  : null
+                : this.props.children}
+              <Arrow className="popper__arrow" />
+            </Popper>
+          </ClickAwayListener>
+        )}
       </Manager>
     );
   }

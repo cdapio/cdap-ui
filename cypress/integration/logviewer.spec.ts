@@ -61,7 +61,7 @@ maybeDescribe('LogViewer ', () => {
   });
 
   it('should have log level popover', () => {
-    cy.get(LOG_LEVEL_POPOVER).should('exist');
+    cy.get(LOG_LEVEL_TOGGLE).should('exist');
     cy.get(LOG_LEVEL_TOGGLE).click();
 
     cy.get(LOG_LEVEL_POPOVER)
