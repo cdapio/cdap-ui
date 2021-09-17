@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import { createTheme, ThemeOptions } from '@material-ui/core/styles';
 import {
   blue,
   grey,
@@ -60,7 +60,7 @@ declare module '@material-ui/core/styles/createPalette' {
   }
 }
 
-const Theme = createMuiTheme({
+const Theme = createTheme({
   palette: {
     primary: {
       main: primary,
