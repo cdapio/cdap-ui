@@ -103,6 +103,7 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     'reload-system-artifacts'?: boolean;
     'sql-pipeline'?: boolean;
     cdc?: boolean;
+    'metadata-in-react'?: boolean;
   };
 }
 
@@ -223,6 +224,7 @@ interface IThemeObj {
   featureNames?: IFeatureNames;
   showSqlPipeline?: boolean;
   showCDC?: boolean;
+  isMetadataInReact?: boolean;
 }
 
 function getTheme(): IThemeObj {
@@ -399,6 +401,7 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     return content;
   }
 
+  // TODO Move these flags to context provider.
   function getFeatures(): IThemeObj {
     const featuresJson = themeJSON.features;
     const features: IThemeObj = {
@@ -427,6 +430,7 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showReloadSystemArtifacts: true,
       showSqlPipeline: true,
       showCDC: false,
+      isMetadataInReact: true,
     };
     if (isNilOrEmpty(featuresJson)) {
       return features;
@@ -524,6 +528,9 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     }
     if ('cdc' in featuresJson && isBoolean(featuresJson.cdc)) {
       features.showCDC = featuresJson.cdc;
+    }
+    if ('metadata-in-react' in featuresJson && isBoolean(featuresJson['metadata-in-react'])) {
+      features.isMetadataInReact = featuresJson['metadata-in-react'];
     }
     return features;
   }
