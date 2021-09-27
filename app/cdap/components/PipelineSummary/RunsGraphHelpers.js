@@ -178,7 +178,7 @@ export function getGapFilledAccumulatedData(data, numOfDataPoints) {
   let maxx = data[data.length - 1].x;
   let numberOfEntries = maxx - minx;
   let lasty = miny;
-  let finalData = Array.apply(null, { length: numberOfEntries + 1 }).map((i, index) => {
+  let finalData = Array(numberOfEntries + 1).map((i, index) => {
     let matchInActualData = data.find((d) => d.x === minx + index);
     if (!isNil(matchInActualData)) {
       lasty = matchInActualData.y;
