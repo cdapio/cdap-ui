@@ -153,7 +153,6 @@ export function BrowserTable({
 }: IBrowserTable) {
   const classes = useStyle();
 
-  const getPath = (suffix) => (path === '/' ? `/${suffix}` : `${path}/${suffix}`);
   const headerTypeMap = getTypesByHeader(propertyHeaders, entities);
   const columnTemplate =
     propertyHeaders && propertyHeaders.length > 0
@@ -190,9 +189,7 @@ export function BrowserTable({
             const canInteract = entity.canBrowse || entity.canSample;
             const onClickHandler = canInteract ? () => onExplore(entity) : undefined;
             const toLink = entity.canBrowse
-              ? `/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${getPath(
-                  entity.name
-                )}`
+              ? `/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${entity.path}`
               : undefined;
             return (
               <TableRow

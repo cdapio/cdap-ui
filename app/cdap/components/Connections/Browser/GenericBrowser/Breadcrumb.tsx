@@ -58,7 +58,7 @@ export default function Breadcrumb({ path, baseLinkPath }) {
     <Breadcrumbs maxItems={3} itemsAfterCollapse={2} itemsBeforeCollapse={0}>
       {createCrumb(ROOT_ELEMENT, '/', pathElements.length === 0)}
       {pathElements.map((pathEntry, i) => {
-        const fullPath = `/${pathElements.slice(0, i + 1).join('/')}`;
+        const fullPath = `/${pathElements.slice(0, i + 1).join('/')}/`;
         return createCrumb(pathEntry, fullPath, i === pathElements.length - 1);
       })}
     </Breadcrumbs>
