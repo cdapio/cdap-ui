@@ -18,7 +18,7 @@ import * as React from 'react';
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
 import NamespaceDropdown from 'components/NamespaceDropdown';
-import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import { withContext, INamespaceLinkContext } from 'components/AppHeader/NamespaceLinkContext';
 import DrawerFeatureLink from 'components/AppHeader/AppDrawer/DrawerFeatureLink';
@@ -42,7 +42,7 @@ export const appDrawerListItemStyles = (theme) => ({
     color: theme.palette.grey['100'],
   },
 });
-const styles = (theme) => {
+const styles = (theme): StyleRules => {
   return {
     drawer: {
       zIndex: theme.zIndex.drawer,
@@ -56,6 +56,12 @@ const styles = (theme) => {
     toolbar: {
       minHeight: '48px',
     },
+    navWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      justifyContent: 'space-between',
+    },
     mainMenu: {
       borderTop: `1px solid ${theme.palette.grey['500']}`,
       paddingTop: theme.Spacing(1),
@@ -63,8 +69,6 @@ const styles = (theme) => {
     },
     namespaceAdminMenu: {
       // WUT TS?
-      position: 'absolute' as 'absolute',
-      bottom: '0px',
       width: '100%',
       borderTop: `1px solid ${theme.palette.grey['500']}`,
     },
@@ -130,134 +134,136 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
           onNamespaceChange={onClose}
           tag={isNativeLink ? 'a' : Link}
         />
-        <List component="nav" dense={true} className={classes.mainMenu}>
-          <DrawerFeatureLink
-            featureName="Home"
-            featureSVGIconName="icon-home"
-            featureUrl={`/${nsurl}`}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-home-link"
-            id="navbar-home"
-            isActive={location.pathname === `/cdap/${nsurl}`}
-          />
-          <ExperimentalFeature experimentId="data-ingestion">
+        <div className={classes.navWrapper}>
+          <List component="nav" dense={true} className={classes.mainMenu}>
             <DrawerFeatureLink
-              featureName="Ingest"
-              featureUrl={`/${nsurl}/ingestion`}
-              featureSVGIconName="icon-ingest"
+              featureName="Home"
+              featureSVGIconName="icon-home"
+              featureUrl={`/${nsurl}`}
               componentDidNavigate={componentDidNavigate}
-              data-cy="navbar-ingestion-link"
-              id="navbar-ingestion"
+              data-cy="navbar-home-link"
+              id="navbar-home"
+              isActive={location.pathname === `/cdap/${nsurl}`}
             />
-          </ExperimentalFeature>
-          <DrawerFeatureLink
-            featureName={Theme.featureNames.pipelines}
-            featureSVGIconName="icon-pipeline_hollow"
-            subMenu={[
-              {
-                featureName: Theme.featureNames.pipelinesList,
-                featureFlag: Theme.showPipelines,
-                featureUrl: `/${nsurl}/pipelines`,
-                id: 'navbar-pipelines',
-                componentDidNavigate,
-                featureSVGIconName: 'icon-list',
-                'data-cy': 'navbar-pipelines-link',
-              },
-              {
-                featureName: Theme.featureNames.pipelineStudio,
-                featureFlag: Theme.showPipelineStudio,
-                featureUrl: `/pipelines/${nsurl}/studio`,
-                id: 'navbar-pipeline-studio',
-                featureSVGIconName: 'icon-pipeline_filled',
-                componentDidNavigate,
-                isAngular: true,
-                'data-cy': 'navbar-pipeline-studio-link',
-              },
-            ]}
-          />
-          <DrawerFeatureLink
-            featureName={Theme.featureNames.dataPrep}
-            featureFlag={Theme.showDataPrep}
-            featureSVGIconName="icon-transform"
-            featureUrl={`/${nsurl}/wrangler`}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-dataprep-link"
-            id="navbar-preparation"
-            isActive={
-              location.pathname.startsWith(`/cdap/${nsurl}/wrangler`) ||
-              location.pathname.startsWith(`/cdap/${nsurl}/connections`)
-            }
-          />
-          <DrawerFeatureLink
-            featureName="Replication"
-            featureFlag={Theme.showCDC}
-            featureSVGIconName="icon-CDC"
-            featureUrl={`/${nsurl}/replication`}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-replication-link"
-            id="navbar-replication"
-          />
-          <DrawerFeatureLink
-            featureUrl={`/${nsurl}/experiments`}
-            featureSVGIconName="icon-analytics"
-            featureFlag={Theme.showAnalytics}
-            featureName={Theme.featureNames.analytics}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-experiments-link"
-          />
-          <DrawerFeatureLink
-            featureUrl={`/${nsurl}/rulesengine`}
-            featureSVGIconName="icon-rules"
-            featureFlag={Theme.showRulesEngine}
-            featureName={Theme.featureNames.rulesEngine}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-rulesengine-link"
-          />
-          {Theme.isMetadataInReact ? (
+            <ExperimentalFeature experimentId="data-ingestion">
+              <DrawerFeatureLink
+                featureName="Ingest"
+                featureUrl={`/${nsurl}/ingestion`}
+                featureSVGIconName="icon-ingest"
+                componentDidNavigate={componentDidNavigate}
+                data-cy="navbar-ingestion-link"
+                id="navbar-ingestion"
+              />
+            </ExperimentalFeature>
             <DrawerFeatureLink
-              featureUrl={`/${nsurl}/metadata`}
-              featureSVGIconName="icon-metadata"
-              featureFlag={Theme.showMetadata}
-              featureName={Theme.featureNames.metadata}
+              featureName={Theme.featureNames.pipelines}
+              featureSVGIconName="icon-pipeline_hollow"
+              subMenu={[
+                {
+                  featureName: Theme.featureNames.pipelinesList,
+                  featureFlag: Theme.showPipelines,
+                  featureUrl: `/${nsurl}/pipelines`,
+                  id: 'navbar-pipelines',
+                  componentDidNavigate,
+                  featureSVGIconName: 'icon-list',
+                  'data-cy': 'navbar-pipelines-link',
+                },
+                {
+                  featureName: Theme.featureNames.pipelineStudio,
+                  featureFlag: Theme.showPipelineStudio,
+                  featureUrl: `/pipelines/${nsurl}/studio`,
+                  id: 'navbar-pipeline-studio',
+                  featureSVGIconName: 'icon-pipeline_filled',
+                  componentDidNavigate,
+                  isAngular: true,
+                  'data-cy': 'navbar-pipeline-studio-link',
+                },
+              ]}
+            />
+            <DrawerFeatureLink
+              featureName={Theme.featureNames.dataPrep}
+              featureFlag={Theme.showDataPrep}
+              featureSVGIconName="icon-transform"
+              featureUrl={`/${nsurl}/wrangler`}
               componentDidNavigate={componentDidNavigate}
-              id="navbar-metadata"
-              data-cy="navbar-metadata-link"
-              isActive={location.pathname === `/cdap/${nsurl}/metadata`}
+              data-cy="navbar-dataprep-link"
+              id="navbar-preparation"
+              isActive={
+                location.pathname.startsWith(`/cdap/${nsurl}/wrangler`) ||
+                location.pathname.startsWith(`/cdap/${nsurl}/connections`)
+              }
             />
-          ) : (
             <DrawerFeatureLink
-              featureUrl={`/metadata/${nsurl}`}
-              featureSVGIconName="icon-metadata"
-              featureFlag={Theme.showMetadata}
-              featureName={Theme.featureNames.metadata}
-              isAngular={true}
-              id="navbar-metadata"
-              data-cy="navbar-metadata-link"
+              featureName="Replication"
+              featureFlag={Theme.showCDC}
+              featureSVGIconName="icon-CDC"
+              featureUrl={`/${nsurl}/replication`}
+              componentDidNavigate={componentDidNavigate}
+              data-cy="navbar-replication-link"
+              id="navbar-replication"
             />
-          )}
-        </List>
-        <List component="nav" dense={true} className={classes.namespaceAdminMenu}>
-          <DrawerFeatureLink
-            featureName={Theme.featureNames.controlCenter}
-            featureFlag={true}
-            featureUrl={`/${nsurl}/control`}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-control-center-link"
-            id="navbar-control-center"
-            isActive={
-              location.pathname === `/cdap/${nsurl}/control` ||
-              location.pathname.startsWith(`/cdap/${nsurl}/dataset`) ||
-              location.pathname.startsWith(`/cdap/${nsurl}/apps`)
-            }
-          />
-          <DrawerFeatureLink
-            featureUrl={`/${nsurl}/details`}
-            featureName={Theme.featureNames.projectAdmin}
-            featureFlag={true}
-            componentDidNavigate={componentDidNavigate}
-            data-cy="navbar-project-admin-link"
-          />
-        </List>
+            <DrawerFeatureLink
+              featureUrl={`/${nsurl}/experiments`}
+              featureSVGIconName="icon-analytics"
+              featureFlag={Theme.showAnalytics}
+              featureName={Theme.featureNames.analytics}
+              componentDidNavigate={componentDidNavigate}
+              data-cy="navbar-experiments-link"
+            />
+            <DrawerFeatureLink
+              featureUrl={`/${nsurl}/rulesengine`}
+              featureSVGIconName="icon-rules"
+              featureFlag={Theme.showRulesEngine}
+              featureName={Theme.featureNames.rulesEngine}
+              componentDidNavigate={componentDidNavigate}
+              data-cy="navbar-rulesengine-link"
+            />
+            {Theme.isMetadataInReact ? (
+              <DrawerFeatureLink
+                featureUrl={`/${nsurl}/metadata`}
+                featureSVGIconName="icon-metadata"
+                featureFlag={Theme.showMetadata}
+                featureName={Theme.featureNames.metadata}
+                componentDidNavigate={componentDidNavigate}
+                id="navbar-metadata"
+                data-cy="navbar-metadata-link"
+                isActive={location.pathname === `/cdap/${nsurl}/metadata`}
+              />
+            ) : (
+              <DrawerFeatureLink
+                featureUrl={`/metadata/${nsurl}`}
+                featureSVGIconName="icon-metadata"
+                featureFlag={Theme.showMetadata}
+                featureName={Theme.featureNames.metadata}
+                isAngular={true}
+                id="navbar-metadata"
+                data-cy="navbar-metadata-link"
+              />
+            )}
+          </List>
+          <List component="nav" dense={true} className={classes.namespaceAdminMenu}>
+            <DrawerFeatureLink
+              featureName={Theme.featureNames.controlCenter}
+              featureFlag={true}
+              featureUrl={`/${nsurl}/control`}
+              componentDidNavigate={componentDidNavigate}
+              data-cy="navbar-control-center-link"
+              id="navbar-control-center"
+              isActive={
+                location.pathname === `/cdap/${nsurl}/control` ||
+                location.pathname.startsWith(`/cdap/${nsurl}/dataset`) ||
+                location.pathname.startsWith(`/cdap/${nsurl}/apps`)
+              }
+            />
+            <DrawerFeatureLink
+              featureUrl={`/${nsurl}/details`}
+              featureName={Theme.featureNames.projectAdmin}
+              featureFlag={true}
+              componentDidNavigate={componentDidNavigate}
+              data-cy="navbar-project-admin-link"
+            />
+          </List>
+        </div>
       </Drawer>
     );
   }
