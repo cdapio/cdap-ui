@@ -32,6 +32,17 @@ to never re/define a CSS variable in any local scope
   --page-name-color: #{$grey-04};
   --welcome-banner-image: #{$welcome_banner_image};
   --plugin-reference-heading-bg-color: #{$grey-03};
+  --grey01: #{$grey-01};
+  --grey02: #{$grey-02};
+  --grey03: #{$grey-03};
+  --grey04: #{$grey-04};
+  --grey05: #{$grey-05};
+  --grey06: #{$grey-06};
+  --grey07: #{$grey-07};
+  --grey08: #{$grey-08};
+  --grey09: #{$grey-09};
+  --grey10: #{$grey-10};
+  --grey11: #{$grey-11};
 }
 
 html {

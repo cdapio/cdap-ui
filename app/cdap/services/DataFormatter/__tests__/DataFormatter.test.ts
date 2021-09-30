@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { format, TYPES } from '../index';
+import { format, TYPES, dateTimeFormat } from '../index';
 
 describe('DataFormatter', () => {
   describe('string type', () => {
@@ -78,6 +78,38 @@ describe('DataFormatter', () => {
     it('should use toString if available', () => {
       const obj = { a: 'foo', toString: () => 'output of toString' };
       expect(format(obj, 'UNKNOWN')).toBe('output of toString');
+    });
+  });
+
+  describe('dateTimeFormat', () => {
+    it('should handle invalid date', () => {
+      expect(dateTimeFormat('2021-30-13')).toBe('Invalid date');
+    });
+
+    it('should format a date for given date string', () => {
+      expect(dateTimeFormat('2021-09-16')).toBe('Sep 16, 2021');
+    });
+
+    it('should format a date for given milliseconds', () => {
+      expect(dateTimeFormat(1631803807712)).toBe('Sep 16, 2021');
+    });
+
+    it('should format a date for given date object', () => {
+      expect(dateTimeFormat(new Date(2021, 8, 16))).toBe('Sep 16, 2021');
+    });
+
+    it('should format based on given format options', () => {
+      expect(
+        dateTimeFormat(new Date(2021, 8, 16, 10, 33, 30), {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+        })
+      ).toBe('Thursday, September 16, 2021, 10:33:30 AM');
     });
   });
 });
