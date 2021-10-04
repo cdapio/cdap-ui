@@ -27,6 +27,47 @@ export const TYPES = {
 
 const EMPTY_DATE = '--';
 
+interface IDateTimeFormatOptions {
+  localeMatcher?: 'lookup' | 'best fit';
+  weekday?: 'long' | 'short' | 'narrow';
+  era?: 'long' | 'short' | 'narrow';
+  year?: 'numeric' | '2-digit';
+  month?: 'numeric' | '2-digit' | 'long' | 'short' | 'narrow';
+  day?: 'numeric' | '2-digit';
+  hour?: 'numeric' | '2-digit';
+  minute?: 'numeric' | '2-digit';
+  second?: 'numeric' | '2-digit';
+  timeZoneName?: 'long' | 'short';
+  formatMatcher?: 'basic' | 'best fit';
+  hour12?: boolean;
+  timeZone?: string;
+}
+
+/**
+ * Method to format date & time.
+ *
+ * @param date - Input date object or date string or milliseconds.
+ * @param options - Date time format options.
+ * @returns Formatted date string.
+ */
+export function dateTimeFormat(
+  date: string | number | Date,
+  options: IDateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }
+) {
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
+  if (date.toString() !== 'Invalid Date') {
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+  } else {
+    return 'Invalid date';
+  }
+}
+
 // TODO Replace moment.format with Intl.DateTimeFormat
 function formatDate(momentInstance) {
   return momentInstance.format('MM-DD-YYYY');

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,6 +15,7 @@
  */
 
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import T from 'i18n-react';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -64,15 +65,20 @@ const Highlight = styled.span`
 const MetadataHome: React.FC = () => {
   const searchQueryRegex = new RegExp('^(?![*]).*$');
   const [error, setError] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState(null);
 
   const handleSearch = (event) => {
     const searchQuery = event.target.value;
     const isValid = searchQueryRegex.test(searchQuery);
     setError(!isValid);
     if (event.key === 'Enter' && searchQuery.trim() !== '' && isValid) {
-      window.location.href = `/metadata/ns/${getCurrentNamespace()}/search/${searchQuery.trim()}/result`;
+      setRedirectUrl(`/ns/${getCurrentNamespace()}/metadata/search/${searchQuery.trim()}/result`);
     }
   };
+
+  if (redirectUrl) {
+    return <Redirect to={redirectUrl} />;
+  }
 
   return (
     <Container>

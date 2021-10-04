@@ -2104,6 +2104,28 @@ features:
       highlight: "*"
       description1: "to the end of the search term"
       example: "(example: user* or tags:b*)"
+  MetadataSearch:
+    filters:
+      metadata: Metadata
+      entities: Entities
+    searchPlaceholder: Search datasets
+    noResults: No results match your filter settings
+    loading: "Searching for \"{query}\""
+    emptyResults: "No results found for \"{query}\""
+    noDescription: No description provided for this Dataset.
+    resultCount:
+      1: "{page} of {total} result"
+      _: "{page} of {total} results"
+    created: "Created:"
+    filterBy: Filter by
+    showAll: show all
+    only: only
+    sortBy: Sort by
+    sortOptions:
+      oldest: Oldest First
+      newest: Newset First
+      ascending: A → Z
+      descending: Z → A
   Pagination:
     dropdown-label: Page
 
