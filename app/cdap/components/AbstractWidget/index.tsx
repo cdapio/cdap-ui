@@ -59,37 +59,29 @@ export interface IWidgetProps<T = any> {
 }
 
 interface IAbstractWidgetProps extends IWidgetProps {
-  type?: string;
+  type: string;
 }
 
-const AbstractWidget = ({
-  dataCy,
-  disabled,
-  errors,
-  extraConfig,
-  onChange,
-  type,
-  updateAllProperties,
-  value,
-  widgetProps,
-}: IAbstractWidgetProps = DEFAULT_WIDGET_PROPS) => {
-  const Comp = AbstractWidgetFactory[type];
+export default class AbstractWidget extends React.PureComponent<IAbstractWidgetProps> {
+  public static defaultProps = DEFAULT_WIDGET_PROPS;
 
-  return (
-    <div className="abstract-widget-wrapper">
-      <StateWrapper
-        comp={Comp}
-        onChange={onChange}
-        updateAllProperties={updateAllProperties}
-        value={value}
-        widgetProps={widgetProps}
-        extraConfig={extraConfig}
-        disabled={disabled}
-        errors={errors}
-        dataCy={dataCy}
-      />
-    </div>
-  );
-};
+  public render() {
+    const Comp = AbstractWidgetFactory[this.props.type];
 
-export default AbstractWidget;
+    return (
+      <div className={`abstract-widget-wrapper`}>
+        <StateWrapper
+          comp={Comp}
+          onChange={this.props.onChange}
+          updateAllProperties={this.props.updateAllProperties}
+          value={this.props.value}
+          widgetProps={this.props.widgetProps}
+          extraConfig={this.props.extraConfig}
+          disabled={this.props.disabled}
+          errors={this.props.errors}
+          dataCy={this.props.dataCy}
+        />
+      </div>
+    );
+  }
+}
