@@ -22,12 +22,11 @@ import Content from 'components/Replicator/Create/Content';
 import { Redirect } from 'react-router-dom';
 import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { constructTablesSelection } from 'components/Replicator/utilities';
+import { constructTablesSelection, convertConfigToState } from 'components/Replicator/utilities';
 
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import uuidV4 from 'uuid/v4';
 import { MyReplicatorApi } from 'api/replicator';
-import { convertConfigToState } from 'components/Replicator/utilities';
 import { Map } from 'immutable';
 import { Observable } from 'rxjs/Observable';
 import {
@@ -254,6 +253,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
   };
 
   public state = {
+    name: '',
     description: '',
     sourcePluginInfo: null,
     sourcePluginWidget: null,
