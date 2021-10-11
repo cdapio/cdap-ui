@@ -20,7 +20,7 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { IWidgetJson, PluginProperties } from './types';
 import { processConfigurationGroups, removeFilteredProperties } from './utilities';
 import { objectQuery } from 'services/helpers';
-import { useOnUnmount } from 'services/helpers-2';
+import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import defaults from 'lodash/defaults';
 import If from 'components/If';
 import PropertyRow from './PropertyRow';

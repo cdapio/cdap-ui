@@ -16,220 +16,36 @@
 
 import React, { useEffect, useReducer } from 'react';
 import T from 'i18n-react';
-import styled from 'styled-components';
 import { createContextConnect } from 'components/Replicator/Create';
 import { Map } from 'immutable';
 import Button from '@material-ui/core/Button';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
-import Checkbox from '@material-ui/core/Checkbox';
 import LoadingSVG from 'components/LoadingSVG';
 import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
-import { IColumnsList, IColumnImmutable, ITableInfo } from 'components/Replicator/types';
-import { useDebounce } from 'services/helpers-2';
+import { IColumnImmutable, ITableInfo } from 'components/Replicator/types';
+import { useDebounce } from 'services/react/customHooks/useDebounce';
+
+import { ISelectColumnsProps, ReplicateSelect } from './types';
+import { reducer, initialState } from './reducer';
+import {
+  ActionButtons,
+  Backdrop,
+  ButtonWithMarginRight,
+  GridWrapper,
+  Header,
+  LoadingContainer,
+  Root,
+  RadioContainer,
+  StyledCheckbox,
+  StyledRadio,
+  StyledRadioGroup,
+  SubtitleContainer,
+} from './styledComponents';
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
-
-const Backdrop = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  z-index: 5;
-`;
-
-const Root = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 0 30px;
-  background-color: ${(props) => props.theme.palette.white[50]};
-  border: 1px solid ${(props) => props.theme.palette.white[50]};
-`;
-
-const Header = styled.div`
-  display: grid;
-  grid-template-columns: 75% 25%;
-  background-color: #f5f5f5;
-  padding: 64px 30px 15px;
-  border: 0;
-`;
-
-const ActionButtons = styled.div`
-  text-align: right;
-  & > button:not(:last-child): {
-    margin-right: 25px;
-  }
-`;
-
-const GridWrapper = styled.div`
-  height: calc(100% - 100px - 40px);
-  & .grid.grid-container.grid-compact: {
-    maxHeight: 100%;
-
-  & .grid-header: {
-    z-index: 5;
-  }
-
-  & .grid-row: {
-    grid-template-columns: 40px 40px 1fr 200px 55px 100px;
-    align-items: center;
-  }
-
-  & > div[class^="grid-"] .grid-row > div: {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-`;
-
-const radioStyles = 'padding: 0;';
-
-const StyledRadio = styled(Radio)`
-  ${radioStyles}
-  margin-right: 10px;
-`;
-
-const StyledCheckbox = styled(Checkbox)`
-  ${radioStyles}
-`;
-
-const SubtitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  justify-content: space-between;
-  & > div: {
-    margin-right: 25px;
-  }
-`;
-
-const RadioContainer = styled.div`
-  padding-left: 10px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-`;
-
-const ButtonWithMarginRight = styled(Button)`
-  margin-right: 25px;
-`;
-
-const StyledRadioGroup = styled(RadioGroup)`
-  align-items: flex-start;
-`;
-
-// const Overlay = styled.div`
-//   background-color: ${(props) => props.theme.palette.white[50]};
-//   opacity: 0.7;
-//   top: 160px;
-//   bottom: 0;
-//   left: 0;
-//   right: 0;
-//   position: absolute;
-//   z-index: 6;
-// `;
-
-const LoadingContainer = styled.div`
-  text-align: center;
-  margin-top: 100px;
-`;
-
-interface ISelectColumnsProps {
-  tableInfo?: ITableInfo;
-  onSave: (tableInfo: ITableInfo, columns: IColumnsList) => void;
-  initialSelected: IColumnsList;
-  toggle: () => void;
-  draftId: string;
-}
-
-interface IColumn {
-  name: string;
-  type: string;
-  nullable: boolean;
-}
-
-enum ReplicateSelect {
-  all = 'ALL',
-  individual = 'INDIVIDUAL',
-}
-
-interface ISelectColumnsState {
-  columns: IColumn[];
-  filteredColumns: IColumn[];
-  primaryKeys: string[];
-  selectedReplication: ReplicateSelect;
-  selectedColumns: Map<string, IColumnImmutable>;
-  loading: boolean;
-  error: any;
-  search: string;
-}
-
-function reducer(state: ISelectColumnsState, action) {
-  console.log(state, action);
-  switch (action.type) {
-    case 'setTableInfo':
-      return {
-        ...state,
-        columns: action.payload.columns,
-        primaryKeys: action.payload.primaryKeys,
-        selectedColumns: action.payload.selectedColumns,
-        filteredColumns: action.payload.filteredColumns,
-        selectedReplication:
-          action.payload.selectedColumns.size === 0
-            ? ReplicateSelect.all
-            : ReplicateSelect.individual,
-      };
-    case 'setLoading':
-      return {
-        ...state,
-        loading: action.payload,
-      };
-    case 'setError':
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case 'setSearch':
-      return {
-        ...state,
-        search: action.payload,
-      };
-    case 'setSelectedColumns':
-      return {
-        ...state,
-        selectedColumns: action.payload,
-      };
-    case 'setSelectedReplication':
-      return {
-        ...state,
-        selectedReplication: action.payload,
-      };
-    case 'setFilteredColumns':
-      return {
-        ...state,
-        filteredColumns: action.payload,
-      };
-    default:
-      return state;
-  }
-}
-
-const initialState = {
-  columns: [],
-  filteredColumns: [],
-  primaryKeys: [],
-  selectedReplication: ReplicateSelect.all,
-  selectedColumns: Map<string, IColumnImmutable>(),
-  loading: true,
-  error: null,
-  search: '',
-};
 
 const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -427,7 +243,6 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
           </div>
         </SubtitleContainer>
         <GridWrapper className="grid-wrapper">
-          {/* {this.state.selectedReplication === ReplicateSelect.all && <Overlay />} */}
           <div className="grid grid-container grid-compact">
             <div className="grid-header">
               <div className="grid-row">

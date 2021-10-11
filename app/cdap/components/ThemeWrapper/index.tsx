@@ -29,13 +29,6 @@ import {
   primary,
 } from 'components/ThemeWrapper/colors';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-// this isn't used?
-// import {
-//   PaletteColor,
-//   PaletteColorOptions,
-//   Palette,
-//   PaletteOptions,
-// } from '@material-ui/core/styles/createPalette';
 
 interface IThemeWraperProps {
   render?: () => React.ReactNode;

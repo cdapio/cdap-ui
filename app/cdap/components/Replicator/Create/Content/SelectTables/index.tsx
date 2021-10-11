@@ -25,7 +25,7 @@ import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import orderBy from 'lodash/orderBy';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import SelectColumns from 'components/Replicator/Create/Content/SelectColumns';
-import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms/SelectColumnsWithTransforms';
+import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms';
 import { extractErrorMessage } from 'services/helpers';
 import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -481,7 +481,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
 
   public renderColumns = () => {
     let Columns = SelectColumns;
-    if (false) {
+    if (true) {
       // this will eventually be a feature flag but just leaving it as a boolean
       // for now as a convenience
       Columns = SelectColumnsWithTransforms;

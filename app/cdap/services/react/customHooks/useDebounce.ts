@@ -14,21 +14,7 @@
  * the License.
  */
 
-import { useEffect, useRef, useState } from 'react';
-
-/**
- * Wrapper for useEffect that ensures the latest version of the callback will be used, unlike useEffect
- * @param unmountHandler function to call before "unmounting"
- */
-export function useOnUnmount(unmountHandler: () => any): void {
-  const unmountRef = useRef(unmountHandler);
-  unmountRef.current = unmountHandler;
-  useEffect(() => {
-    return () => {
-      unmountRef.current();
-    };
-  }, [unmountRef]);
-}
+import { useEffect, useState } from 'react';
 
 /**
  * Custom hook to return a debounced value
