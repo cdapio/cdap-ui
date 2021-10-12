@@ -13,12 +13,12 @@
 * License for the specific language governing permissions and limitations under
 * the License.
 */
-
 class MyBatchPipelineConfigCtrl {
-  constructor(uuid, HydratorPlusPlusHydratorService, HYDRATOR_DEFAULT_VALUES, myPipelineApi, $state, myAlertOnValium) {
+  constructor(uuid, HydratorPlusPlusHydratorService, HYDRATOR_DEFAULT_VALUES, myPipelineApi, $state, myAlertOnValium, GLOBALS) {
     this.uuid = uuid;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
     this.myAlertOnValium = myAlertOnValium;
+    this.GLOBALS = GLOBALS;
 
     this.engine = this.store.getEngine();
     this.engineForDisplay = this.engine === 'mapreduce' ? 'MapReduce' : 'Apache Spark';
@@ -44,6 +44,11 @@ class MyBatchPipelineConfigCtrl {
         convertToInteger: true
       }
     };
+    this.allowForceDynamicExecution = window.CDAP_UI_THEME.features['allow-force-dynamic-execution'];
+    this.forceDynamicExecution = this.store.getForceDynamicExecution();
+    this.showNumOfExecutors = this.getShowNumOfExecutors();
+    this.numExecutorsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    this.numExecutors = this.store.getNumExecutors();
 
     this.customEngineConfig = {
       'pairs': HydratorPlusPlusHydratorService.convertMapToKeyValuePairs(this.store.getCustomConfigForDisplay())
@@ -89,6 +94,18 @@ class MyBatchPipelineConfigCtrl {
     this.engineForDisplay = this.engine === 'mapreduce' ? 'MapReduce' : 'Apache Spark';
   }
 
+  onForceDynamicEngineChange() {
+    this.showNumOfExecutors = this.getShowNumOfExecutors();
+  }
+
+  getShowNumOfExecutors() {
+    return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff;
+  }
+
+  getShowShuffleTrackingTimeout() {
+    return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn;
+  }
+
   applyConfig() {
     this.applyRuntimeArguments();
     this.store.setEngine(this.engine);
@@ -100,6 +117,10 @@ class MyBatchPipelineConfigCtrl {
     this.store.setDriverMemoryMB(this.driverResources.memoryMB);
     this.store.setMemoryMB(this.executorResources.memoryMB);
     this.store.setVirtualCores(this.executorResources.virtualCores);
+    this.store.setForceDynamicExecution(this.forceDynamicExecution);
+    if (this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff) {
+      this.store.setNumExecutors(this.numExecutors);
+    }
   }
 
   applyAndClose() {
@@ -235,6 +256,6 @@ class MyBatchPipelineConfigCtrl {
   }
 }
 
-MyBatchPipelineConfigCtrl.$inject = ['uuid', 'HydratorPlusPlusHydratorService', 'HYDRATOR_DEFAULT_VALUES', 'myPipelineApi', '$state', 'myAlertOnValium'];
+MyBatchPipelineConfigCtrl.$inject = ['uuid', 'HydratorPlusPlusHydratorService', 'HYDRATOR_DEFAULT_VALUES', 'myPipelineApi', '$state', 'myAlertOnValium', 'GLOBALS'];
 angular.module(PKG.name + '.commons')
   .controller('MyBatchPipelineConfigCtrl', MyBatchPipelineConfigCtrl);

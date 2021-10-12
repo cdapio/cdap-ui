@@ -2164,6 +2164,11 @@ features:
         1: "{context} custom config"
         _: "{context} custom configs"
       customConfigTooltip: Enter key-value pairs of configuration parameters that will be passed to the underlying {engineDisplayLabel} program.
+      dynamicExecution:
+        contentHeading: Dynamic Execution
+        default: Cluster Default
+        forceOff: Force Off
+        forceOn: Force On
       numExecutors: Number of Executors
       numExecutorsTooltip: The number of executors to allocate for this pipeline on Apache Yarn.
       showCustomConfig: Show custom config
