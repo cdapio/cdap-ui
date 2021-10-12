@@ -456,16 +456,28 @@ class HydratorPlusPlusConfigStore {
       );
   }
   getCustomConfig() {
-    let customConfig = {};
+    const customConfig = {};
     // We hide these two properties from showing up in key value pairs in realtime pipeline
     // In batch if the engine is spark we should not hide these properties. We should show
     // the custom properties
-    let backendProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
-    if (this.state.artifact.name !== this.GLOBALS.etlDataStreams) {
-      backendProperties = [];
+    let managedProperties = [];
+    if (this.state.artifact.name === this.GLOBALS.etlDataStreams) {
+      managedProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
+    } else if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution'] && this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
+      if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
+        managedProperties = [
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        ];
+      } else {
+        managedProperties = [
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+          window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
+        ];
+      }
     }
     for (let key in this.state.config.properties) {
-      if (this.state.config.properties.hasOwnProperty(key) && backendProperties.indexOf(key) === -1) {
+      if (this.state.config.properties.hasOwnProperty(key) && managedProperties.indexOf(key) === -1) {
         customConfig[key] = this.state.config.properties[key];
       }
     }
@@ -1055,6 +1067,39 @@ class HydratorPlusPlusConfigStore {
     return this.getState().config.serviceAccountPath;
   }
 
+  setForceDynamicExecution(forceDynamicExecution) {
+    const keysToClear = [
+      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+      window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
+    ];
+    for (const key of keysToClear) {
+      if (this.state.config.properties.hasOwnProperty(key)) {
+        delete this.state.config.properties[key];
+      }
+    }
+    const newCustomConfig = {};
+    if (forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'true';
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING] = 'true';
+    } else if (forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'false';
+    }
+    angular.extend(this.state.config.properties, newCustomConfig);
+  }
+  getForceDynamicExecution() {
+    if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution']) {
+      if (this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
+        if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
+          return this.GLOBALS.dynamicExecutionForceOn;
+        } else {
+          return this.GLOBALS.dynamicExecutionForceOff;
+        }
+      }
+    }
+    return '';
+  }
+
   saveAsDraft() {
     this.HydratorPlusPlusConsoleActions.resetMessages();
     let name = this.getName();
@@ -1094,7 +1139,9 @@ class HydratorPlusPlusConfigStore {
             return this.mySettings.set('hydratorDrafts', res);
           }
         })
-        .then(() => this.myPipelineApi.saveDraft(params, config).$promise)
+        .then(() => {
+          return this.myPipelineApi.saveDraft(params, config).$promise;
+        })
         .then(() => {
           this.$stateParams.draftId = draftId;
           this.$state.go('hydrator.create', this.$stateParams, {notify: false});
