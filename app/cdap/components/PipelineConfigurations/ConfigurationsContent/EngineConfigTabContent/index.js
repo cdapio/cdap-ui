@@ -16,8 +16,11 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ENGINE_OPTIONS } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import EngineRadioInput from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/EngineRadioInput';
+import {
+  ENGINE_OPTIONS,
+  SPARK_DYNAMIC_ALLOCATION,
+} from 'components/PipelineConfigurations/PipelineConfigConstants';
+import EngineRadioInput from './EngineRadioInput';
 import Backpressure from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/Backpressure';
 import NumExecutors from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/NumExecutors';
 import CustomConfig from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/CustomConfig';
@@ -25,14 +28,33 @@ import { connect } from 'react-redux';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import { GLOBALS } from 'services/global-constants';
+import { Theme } from 'services/ThemeHelper';
+import SelectWithOptions from 'components/SelectWithOptions';
+
 require('./EngineConfigTabContent.scss');
 
 const PREFIX = 'features.PipelineConfigurations.EngineConfig';
+
+const FORCE_DYNAMIC_EXECUTION_OPTIONS = [
+  {
+    id: '',
+    value: T.translate(`${PREFIX}.dynamicExecution.default`),
+  },
+  {
+    id: GLOBALS.dynamicExecutionForceOn,
+    value: T.translate(`${PREFIX}.dynamicExecution.forceOn`),
+  },
+  {
+    id: GLOBALS.dynamicExecutionForceOff,
+    value: T.translate(`${PREFIX}.dynamicExecution.forceOff`),
+  },
+];
 
 class EngineConfigTabContent extends Component {
   static propTypes = {
     pipelineType: PropTypes.string,
     isDetailView: PropTypes.bool,
+    forceDynamicExecution: PropTypes.string,
   };
 
   state = {
@@ -45,19 +67,32 @@ class EngineConfigTabContent extends Component {
     });
   };
 
-  renderBatchEngineConfig() {
-    return (
-      <div className="engine-config-radio">
-        <label className="radio-inline radio-spark">
-          <EngineRadioInput value={ENGINE_OPTIONS.SPARK} />
-          {T.translate('commons.entity.spark.singular')}
-        </label>
-        <label className="radio-inline radio-mapReduce">
-          <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
-          {T.translate('commons.entity.mapreduce.singular')}
-        </label>
-      </div>
-    );
+  renderBatchEngineConfig(forceDynamicExecution) {
+    if (!Theme.allowForceDynamicExecution) {
+      return (
+        <div className="engine-config-radio">
+          <label className="radio-inline radio-spark">
+            <EngineRadioInput value={ENGINE_OPTIONS.SPARK} />
+            {T.translate('commons.entity.spark.singular')}
+          </label>
+          <label className="radio-inline radio-mapReduce">
+            <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
+            {T.translate('commons.entity.mapreduce.singular')}
+          </label>
+        </div>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <SelectWithOptions
+            value={forceDynamicExecution}
+            options={FORCE_DYNAMIC_EXECUTION_OPTIONS}
+            className="dynamic-execution-select"
+          />
+          {forceDynamicExecution === GLOBALS.dynamicExecutionForceOff && <NumExecutors />}
+        </React.Fragment>
+      );
+    }
   }
 
   renderRealtimeEngineConfig(disabled) {
@@ -70,7 +105,14 @@ class EngineConfigTabContent extends Component {
   }
 
   render() {
-    const pipelineTypeLabel = GLOBALS.programLabel[this.props.pipelineType];
+    let heading;
+    if (!Theme.allowForceDynamicExecution) {
+      const pipelineTypeLabel = GLOBALS.programLabel[this.props.pipelineType];
+      heading = T.translate(`${PREFIX}.contentHeading`, { pipelineTypeLabel });
+    } else {
+      heading = T.translate(`${PREFIX}.dynamicExecution.contentHeading`);
+    }
+
     const isBatch = GLOBALS.etlBatchPipelines.includes(this.props.pipelineType);
     return (
       <div
@@ -78,14 +120,13 @@ class EngineConfigTabContent extends Component {
         className={classnames('configuration-step-content configuration-content-container', {
           'batch-content': isBatch,
           'realtime-content': !isBatch,
+          'allow-force-dynamic-execution': Theme.allowForceDynamicExecution,
         })}
       >
         <fieldset disabled={this.props.isDetailView}>
-          <div className="step-content-heading">
-            {T.translate(`${PREFIX}.contentHeading`, { pipelineTypeLabel })}
-          </div>
+          <div className="step-content-heading">{heading}</div>
           {isBatch
-            ? this.renderBatchEngineConfig()
+            ? this.renderBatchEngineConfig(this.props.forceDynamicExecution)
             : this.renderRealtimeEngineConfig(this.props.isDetailView)}
         </fieldset>
         <CustomConfig
@@ -100,9 +141,18 @@ class EngineConfigTabContent extends Component {
 }
 
 const mapStateToProps = (state) => {
+  let forceDynamicExecution = '';
+  if (Object.prototype.hasOwnProperty.call(state.properties, SPARK_DYNAMIC_ALLOCATION)) {
+    if (state.properties[SPARK_DYNAMIC_ALLOCATION] === 'true') {
+      forceDynamicExecution = GLOBALS.dynamicExecutionForceOn;
+    } else if (state.properties[SPARK_DYNAMIC_ALLOCATION] === 'false') {
+      forceDynamicExecution = GLOBALS.dynamicExecutionForceOff;
+    }
+  }
   return {
     pipelineType: state.pipelineVisualConfiguration.pipelineType,
     isDetailView: state.pipelineVisualConfiguration.isDetailView,
+    forceDynamicExecution,
   };
 };
 
