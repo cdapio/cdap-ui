@@ -13,12 +13,12 @@
 * License for the specific language governing permissions and limitations under
 * the License.
 */
-
 class MyBatchPipelineConfigCtrl {
-  constructor(uuid, HydratorPlusPlusHydratorService, HYDRATOR_DEFAULT_VALUES, myPipelineApi, $state, myAlertOnValium) {
+  constructor(uuid, HydratorPlusPlusHydratorService, HYDRATOR_DEFAULT_VALUES, myPipelineApi, $state, myAlertOnValium, GLOBALS) {
     this.uuid = uuid;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
     this.myAlertOnValium = myAlertOnValium;
+    this.GLOBALS = GLOBALS;
 
     this.engine = this.store.getEngine();
     this.engineForDisplay = this.engine === 'mapreduce' ? 'MapReduce' : 'Apache Spark';
@@ -44,6 +44,10 @@ class MyBatchPipelineConfigCtrl {
         convertToInteger: true
       }
     };
+    this.allowForceDynamicExecution = window.CDAP_UI_THEME.features['allow-force-dynamic-execution'];
+    this.forceDynamicExecution = this.store.getForceDynamicExecution();
+    this.showNumOfExecutors = this.getShowNumOfExecutors();
+    this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
 
     this.customEngineConfig = {
       'pairs': HydratorPlusPlusHydratorService.convertMapToKeyValuePairs(this.store.getCustomConfigForDisplay())
@@ -89,6 +93,23 @@ class MyBatchPipelineConfigCtrl {
     this.engineForDisplay = this.engine === 'mapreduce' ? 'MapReduce' : 'Apache Spark';
   }
 
+  onForceDynamicEngineChange() {
+    console.log('onForceDynamicEngineChange');
+    this.showNumOfExecutors = this.getShowNumOfExecutors();
+    this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
+    console.log(`showNumOfExecutors: ${this.showNumOfExecutors}`);
+  }
+
+  getShowNumOfExecutors() {
+    console.log(`Internal value: ${this.forceDynamicExecution}`);
+    console.log(`Global value: ${this.GLOBALS.forceDynamicExecutionOff}`);
+    return this.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff;
+  }
+
+  getShowShuffleTrackingTimeout() {
+    return this.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn;
+  }
+
   applyConfig() {
     this.applyRuntimeArguments();
     this.store.setEngine(this.engine);
@@ -100,6 +121,7 @@ class MyBatchPipelineConfigCtrl {
     this.store.setDriverMemoryMB(this.driverResources.memoryMB);
     this.store.setMemoryMB(this.executorResources.memoryMB);
     this.store.setVirtualCores(this.executorResources.virtualCores);
+    this.store.setForceDynamicExecution(this.forceDynamicExecution);
   }
 
   applyAndClose() {
@@ -235,6 +257,6 @@ class MyBatchPipelineConfigCtrl {
   }
 }
 
-MyBatchPipelineConfigCtrl.$inject = ['uuid', 'HydratorPlusPlusHydratorService', 'HYDRATOR_DEFAULT_VALUES', 'myPipelineApi', '$state', 'myAlertOnValium'];
+MyBatchPipelineConfigCtrl.$inject = ['uuid', 'HydratorPlusPlusHydratorService', 'HYDRATOR_DEFAULT_VALUES', 'myPipelineApi', '$state', 'myAlertOnValium', 'GLOBALS'];
 angular.module(PKG.name + '.commons')
   .controller('MyBatchPipelineConfigCtrl', MyBatchPipelineConfigCtrl);

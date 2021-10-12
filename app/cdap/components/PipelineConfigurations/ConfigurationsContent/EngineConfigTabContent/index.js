@@ -16,8 +16,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { ENGINE_OPTIONS } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import EngineRadioInput from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/EngineRadioInput';
 import Backpressure from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/Backpressure';
 import NumExecutors from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/NumExecutors';
 import CustomConfig from 'components/PipelineConfigurations/ConfigurationsContent/EngineConfigTabContent/CustomConfig';
@@ -25,6 +27,7 @@ import { connect } from 'react-redux';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import { GLOBALS } from 'services/global-constants';
+import { Theme } from 'services/ThemeHelper';
 require('./EngineConfigTabContent.scss');
 
 const PREFIX = 'features.PipelineConfigurations.EngineConfig';
@@ -46,7 +49,7 @@ class EngineConfigTabContent extends Component {
   };
 
   renderBatchEngineConfig() {
-    return (
+    /* return (
       <div className="engine-config-radio">
         <label className="radio-inline radio-spark">
           <EngineRadioInput value={ENGINE_OPTIONS.SPARK} />
@@ -56,6 +59,26 @@ class EngineConfigTabContent extends Component {
           <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
           {T.translate('commons.entity.mapreduce.singular')}
         </label>
+      </div>
+    );*/
+    return (
+      <div>
+        <div className="engine-config-radio">
+          <RadioGroup>
+            <FormControlLabel
+              value={ENGINE_OPTIONS.SPARK}
+              position="right"
+              label={T.translate('commons.entity.spark.singular')}
+              control={<Radio color="primary" />}
+            />
+            <FormControlLabel
+              value={ENGINE_OPTIONS.MAPREDUCE}
+              position="right"
+              label={T.translate('commons.entity.mapreduce.singular')}
+              control={<Radio color="primary" />}
+            />
+          </RadioGroup>
+        </div>
       </div>
     );
   }

@@ -95,7 +95,7 @@ export default class ResourceCenter extends Component {
       wizardId: 'createApplicationWizard',
     };
 
-    if (Theme.showApplicationUpload !== false) {
+    if (Theme.showApplicationUpload !== false && !window.CDAP_CONFIG.sparkOnK8s) {
       entities.unshift(application);
     }
 

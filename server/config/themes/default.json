@@ -50,6 +50,7 @@
     "namespace-security": true,
     "create-profile": true,
     "reload-system-artifacts": true,
-    "cdc": true
+    "cdc": true,
+    "allow-force-dynamic-execution": true
   }
 }

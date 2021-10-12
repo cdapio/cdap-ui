@@ -17,6 +17,7 @@
 
   <select class="form-control"
           ng-change="HydratorPlusPlusLeftPanelCtrl.onArtifactChange()"
+          ng-disabled="HydratorPlusPlusLeftPanelCtrl.isArtifactSelectDisabled"
           ng-model="HydratorPlusPlusLeftPanelCtrl.selectedArtifact"
           ng-options="artifact as artifact.label for artifact in HydratorPlusPlusLeftPanelCtrl.artifacts">
   </select>

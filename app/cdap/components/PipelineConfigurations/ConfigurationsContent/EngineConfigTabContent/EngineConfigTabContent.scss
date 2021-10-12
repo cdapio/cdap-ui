@@ -22,7 +22,6 @@ $input-label-color: $grey-03;
 .configuration-content {
   #engine-config-tab-content {
     .engine-config-radio {
-      padding-top: 10px;
 
       .radio-spark {
         margin-right: 80px;
@@ -132,6 +131,13 @@ $input-label-color: $grey-03;
           margin-top: 0;
         }
       }
+    }
+    .force-dynamic-execution-section {
+      margin-top: 32px;
+    }
+    .force-dynamic-execution {
+      width: 50%;
+      min-width: 100px;
     }
   }
 }

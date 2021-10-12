@@ -48,6 +48,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.selectedArtifact = rArtifacts.filter( ar => ar.name === configStoreArtifact.name)[0];
     this.artifactToRevert = this.selectedArtifact;
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
+    this.isArtifactSelectDisabled = window.CDAP_CONFIG.sparkOnK8s;
 
     this.init();
 

@@ -110,6 +110,7 @@ class HydratorPlusPlusConfigStore {
         this.setEngine(this.state.config.engine);
         this.setNumRecordsPreview(this.state.config.numOfRecordsPreview);
         this.setMaxConcurrentRuns(this.state.config.maxConcurrentRuns);
+        this.setForceDynamicExecution(this.state.config.forceDynamicExecution);
       }
     }
     this.__defaultState = angular.copy(this.state);
@@ -270,6 +271,8 @@ class HydratorPlusPlusConfigStore {
       config.stageLoggingEnabled = this.getStageLogging();
       config.processTimingEnabled = this.getInstrumentation();
       config.numOfRecordsPreview = this.getNumRecordsPreview();
+      // Read forceDynamicExecution directly to avoid string conversion
+      config.forceDynamicExecution = this.state.config.forceDynamicExecution;
     } else if (appType === this.GLOBALS.etlRealtime) {
       config.instances = this.getInstance();
     } else if (appType === this.GLOBALS.etlDataStreams) {
@@ -456,16 +459,30 @@ class HydratorPlusPlusConfigStore {
       );
   }
   getCustomConfig() {
-    let customConfig = {};
+    const customConfig = {};
     // We hide these two properties from showing up in key value pairs in realtime pipeline
     // In batch if the engine is spark we should not hide these properties. We should show
     // the custom properties
-    let backendProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
-    if (this.state.artifact.name !== this.GLOBALS.etlDataStreams) {
-      backendProperties = [];
+    let managedProperties = [];
+    if (this.state.artifact.name === this.GLOBALS.etlDataStreams) {
+      managedProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
+    }
+    else if (this.state.config.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn) {
+      managedProperties = [
+        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
+      ];
+    }
+    else if (this.state.config.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff) {
+      managedProperties = [
+        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
+      ];
     }
     for (let key in this.state.config.properties) {
-      if (this.state.config.properties.hasOwnProperty(key) && backendProperties.indexOf(key) === -1) {
+      if (this.state.config.properties.hasOwnProperty(key) && managedProperties.indexOf(key) === -1) {
         customConfig[key] = this.state.config.properties[key];
       }
     }
@@ -1053,6 +1070,37 @@ class HydratorPlusPlusConfigStore {
   }
   getServiceAccountPath() {
     return this.getState().config.serviceAccountPath;
+  }
+
+  setForceDynamicExecution(forceDynamicExecution) {
+    // If the new value is an empty string, force it to undefined
+    this.state.config.forceDynamicExecution = forceDynamicExecution || undefined;
+
+    // have to do this because oldCustomConfig is already part of this.state.config.properties
+    const oldCustomConfig = this.getCustomConfig();
+    const keysToClear = [
+      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
+      window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
+    ];
+    for (const key in keysToClear) {
+      if (oldCustomConfig.hasOwnProperty(key)) {
+          delete this.state.config.properties[key];
+      }
+    }
+    const newCustomConfig = {};
+    if (forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = true;
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING] = true;
+    } else if (forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = false;
+    }
+    angular.extend(this.state.config.properties, newCustomConfig);
+  }
+  getForceDynamicExecution() {
+    // If the value is undefined, force it to an empty string
+    return this.getState().config.forceDynamicExecution || '';
   }
 
   saveAsDraft() {

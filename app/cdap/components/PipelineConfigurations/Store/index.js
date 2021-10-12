@@ -39,6 +39,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import {
   SPARK_EXECUTOR_INSTANCES,
   SPARK_BACKPRESSURE_ENABLED,
+  SPARK_DYNAMIC_ALLOCATION,
+  SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+  SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
   ENGINE_OPTIONS,
 } from 'components/PipelineConfigurations/PipelineConfigConstants';
 import { GLOBALS } from 'services/global-constants';
@@ -71,6 +74,7 @@ const ACTIONS = {
   SET_SERVICE_ACCOUNT_PATH: 'SET_SERVICE_ACCOUNT_PATH',
   SET_PUSHDOWN_CONFIG: 'SET_PUSHDOWN_CONFIG',
   RESET: 'RESET',
+  SET_DYNAMIC_EXECUTION: 'SET_DYNAMIC_EXECUTION',
 };
 
 const BATCH_INTERVAL_RANGE = range(1, 61);
@@ -98,6 +102,7 @@ const DEFAULT_CONFIGURE_OPTIONS = {
   postRunActions: [],
   properties: {},
   engine: HYDRATOR_DEFAULT_VALUES.engine,
+  dynamicExecution: undefined,
   resources: { ...HYDRATOR_DEFAULT_VALUES.resources },
   driverResources: { ...HYDRATOR_DEFAULT_VALUES.resources },
   clientResources: { ...HYDRATOR_DEFAULT_VALUES.resources },
@@ -125,22 +130,53 @@ const DEFAULT_CONFIGURE_OPTIONS = {
   },
 };
 
-const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
-  let backendProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
+const getCustomConfigFromProperties = (
+  properties = {},
+  pipelineType,
+  dynamicExecution = undefined
+) => {
+  /* let backendProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
   if (GLOBALS.etlBatchPipelines.includes(pipelineType)) {
     backendProperties = [];
+  }*/
+  let managedProperties = [];
+  if (GLOBALS.etlRealtime === pipelineType) {
+    managedProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
+  } else if (GLOBALS.etlBatchPipelines.includes(pipelineType)) {
+    if (dynamicExecution === GLOBALS.dynamicExecutionForceOn) {
+      managedProperties = [
+        SPARK_DYNAMIC_ALLOCATION,
+        SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        SPARK_EXECUTOR_INSTANCES,
+      ];
+    } else if (dynamicExecution === GLOBALS.dynamicExecutionForceOff) {
+      managedProperties = [
+        SPARK_DYNAMIC_ALLOCATION,
+        SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
+      ];
+    }
   }
-  let customConfig = {};
+  const customConfig = {};
   Object.keys(properties).forEach((key) => {
-    if (backendProperties.indexOf(key) === -1) {
+    if (managedProperties.indexOf(key) === -1) {
       customConfig[key] = properties[key];
     }
   });
   return customConfig;
 };
 
-const getCustomConfigForDisplay = (properties, engine, pipelineType) => {
-  let currentCustomConfig = getCustomConfigFromProperties(properties, pipelineType);
+const getCustomConfigForDisplay = (
+  properties,
+  engine,
+  pipelineType,
+  dynamicExecution = undefined
+) => {
+  let currentCustomConfig = getCustomConfigFromProperties(
+    properties,
+    pipelineType,
+    dynamicExecution
+  );
   let customConfigForDisplay = {};
   for (let key in currentCustomConfig) {
     if (Object.prototype.hasOwnProperty.call(currentCustomConfig, key)) {
@@ -239,7 +275,8 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
         customConfigKeyValuePairs: getCustomConfigForDisplay(
           action.payload.properties,
           action.payload.engine,
-          state.pipelineVisualConfiguration.pipelineType
+          state.pipelineVisualConfiguration.pipelineType,
+          state.dynamicExecution
         ),
       };
     case ACTIONS.SET_RUNTIME_ARGS:
@@ -446,6 +483,43 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
           ...action.payload.pipelineVisualConfiguration,
         },
       };
+    case ACTIONS.SET_DYNAMIC_EXECUTION:
+      if (action.payload.value === GLOBALS.dynamicExecutionForceOn) {
+        return {
+          ...state,
+          dynamicExecution: GLOBALS.dynamicExecutionForceOn,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: true,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: true,
+            SPARK_EXECUTOR_INSTANCES: undefined,
+          },
+        };
+      } else if (action.payload.value === GLOBALS.dynamicExecutionForceOff) {
+        return {
+          ...state,
+          dynamicExecution: GLOBALS.dynamicExecutionForceOff,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: false,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: undefined,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT: undefined,
+          },
+        };
+      } else {
+        // Treat any other value as setting to Cluster Default
+        return {
+          ...state,
+          dynamicExecution: undefined,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: undefined,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: undefined,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT: undefined,
+            SPARK_EXECUTOR_INSTANCES: undefined,
+          },
+        };
+      }
     default:
       return state;
   }
