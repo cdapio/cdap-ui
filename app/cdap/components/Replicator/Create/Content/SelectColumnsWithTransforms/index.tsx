@@ -43,7 +43,7 @@ import {
   StyledRadio,
   StyledRadioGroup,
   SubtitleContainer,
-} from './styledComponents';
+} from './styles';
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
