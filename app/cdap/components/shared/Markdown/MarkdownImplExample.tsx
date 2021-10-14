@@ -15,7 +15,7 @@
  */
 import ThemeWrapper from 'components/ThemeWrapper';
 import React from 'react';
-import Markdown from 'components/Markdown';
+import Markdown from 'components/shared/Markdown';
 
 export default function MarkdownImpl() {
   const markdown =
