@@ -59,7 +59,7 @@ export interface IWidgetProps<T = any> {
 }
 
 interface IAbstractWidgetProps extends IWidgetProps {
-  type: string;
+  type?: string;
 }
 
 export default class AbstractWidget extends React.PureComponent<IAbstractWidgetProps> {

@@ -170,6 +170,10 @@ $col_type_font_color: gray;
         &.selected {
           background-color: $border-and-selected-color;
         }
+
+        .data-statistics {
+          height: 160px;
+        }
       }
     }
   }

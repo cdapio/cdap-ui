@@ -33,6 +33,7 @@ import DataQuality from 'components/DataPrep/DataPrepTable/DataQuality';
 import DataType from 'components/DataPrep/DataPrepTable/DataType';
 import Page500 from 'components/500';
 import Page404 from 'components/404';
+import DataPrepStatistics from './DataPrepStatistics';
 // Lazy load polyfill in safari as InteresectionObservers are not implemented there yet.
 (async function() {
   typeof IntersectionObserver === 'undefined'
@@ -89,6 +90,7 @@ export default class DataPrepTable extends Component {
         selectedHeaders: state.dataprep.selectedHeaders,
         columns: state.columnsInformation.columns,
         error: state.error.dataError,
+        types: state.dataprep.types,
       });
     });
   }
@@ -271,8 +273,9 @@ export default class DataPrepTable extends Component {
   );
 
   renderDataprepTable() {
-    let headers = [...this.state.headers];
-    let data = this.state.data;
+    const headers = [...this.state.headers];
+    const data = this.state.data;
+    const types = this.state.types;
     return (
       <table className="table table-bordered" id="dataprep-table">
         <thead className="thead-inverse">
@@ -348,6 +351,13 @@ export default class DataPrepTable extends Component {
                         })}
                       />
                     </div>
+                  </div>
+                  <div className="data-statistics">
+                    <DataPrepStatistics
+                      fieldName={head.name}
+                      dataType={types && types[head.name]}
+                      values={data}
+                    />
                   </div>
                 </th>
               );
