@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,14 +18,18 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import MetadataHome from 'components/Metadata/Home';
+import SearchResults from 'components/Metadata/SearchResults';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
+import { useParams } from 'react-router';
 
 export const basepath = '/ns/:namespace/metadata';
 
 const Metadata: React.FC = () => {
   const pageTitle = `${Theme.productName} | Search`;
   const namespace = getCurrentNamespace();
+  const params = useParams();
+  const query = (params as any).query;
 
   function checkFeatureFlag(componentToRender: JSX.Element, urlToRedirect: string) {
     if (!Theme.isMetadataInReact) {
@@ -43,6 +47,12 @@ const Metadata: React.FC = () => {
           exact
           path={basepath}
           render={() => checkFeatureFlag(<MetadataHome />, `/metadata/ns/${namespace}`)}
+        />
+        <Route
+          path={`${basepath}/search/:query/result`}
+          render={() =>
+            checkFeatureFlag(<SearchResults />, `/metadata/ns/${namespace}/search/${query}/result`)
+          }
         />
         <Route
           render={() => {

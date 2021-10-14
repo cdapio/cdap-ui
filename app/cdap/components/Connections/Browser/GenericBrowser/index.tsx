@@ -121,7 +121,7 @@ export function GenericBrowser({ initialConnectionId }) {
   };
 
   const onExplore = (entity) => {
-    const { name: entityName, canBrowse } = entity;
+    const { canBrowse } = entity;
 
     if (!canBrowse) {
       setLoading(true);
@@ -134,11 +134,8 @@ export function GenericBrowser({ initialConnectionId }) {
 
       return;
     }
-    if (path === '/') {
-      setPath(`/${entityName}`);
-    } else {
-      setPath(`${path}/${entityName}`);
-    }
+
+    setPath(entity.path);
     setLoading(true);
     clearSearchString();
   };
