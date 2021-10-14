@@ -23,7 +23,7 @@ import RedirectToLogin from 'services/redirect-to-login';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const cookie = new Cookies();
 

@@ -21,7 +21,7 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import If from 'components/If';
+import If from 'components/shared/If';
 import WidgetPanel from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetPanel';
 import { useWidgetState } from 'components/PluginJSONCreator/Create';
 import uuidV4 from 'uuid/v4';

@@ -20,7 +20,7 @@ import Box from '@material-ui/core/Box';
 import { AddRowButton } from 'components/AbstractWidget/SchemaEditor/RowButtons/AddRowButton';
 import { RemoveRowButton } from 'components/AbstractWidget/SchemaEditor/RowButtons/RemoveRowButton';
 import { FieldPropertiesPopoverButton } from 'components/AbstractWidget/SchemaEditor/RowButtons/FieldAttributes/FieldAttributesPopoverButton';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Nullable } from 'components/AbstractWidget/SchemaEditor/RowButtons/Nullable';
 import { IOnchangeHandler } from 'components/AbstractWidget/SchemaEditor/EditorTypes';
 import {

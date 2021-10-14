@@ -25,8 +25,8 @@ import {
 } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
-import IconSVG from 'components/IconSVG';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import IconSVG from 'components/shared/IconSVG';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Link } from 'react-router-dom';
 import T from 'i18n-react';
 import { objectQuery } from 'services/helpers';

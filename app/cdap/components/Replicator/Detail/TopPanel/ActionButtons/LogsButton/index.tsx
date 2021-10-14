@@ -17,7 +17,7 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { PROGRAM_INFO } from 'components/Replicator/constants';
 import { getLogViewerPageUrl } from 'components/LogViewer/LogViewerPage';

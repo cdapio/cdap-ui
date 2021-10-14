@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import { exportProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import T from 'i18n-react';
 import classnames from 'classnames';

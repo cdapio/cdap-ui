@@ -17,7 +17,7 @@
 import * as React from 'react';
 
 import AbstractWidgetFactory from 'components/AbstractWidget/AbstractWidgetFactory';
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import StateWrapper from 'components/AbstractWidget/StateWrapper';
 require('./AbstractWidget.scss');
 

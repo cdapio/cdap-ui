@@ -22,11 +22,11 @@ import Button from '@material-ui/core/Button';
 import SetPreferenceModal, {
   PREFERENCES_LEVEL,
 } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
-import Table from 'components/Table';
-import TableHeader from 'components/Table/TableHeader';
-import TableRow from 'components/Table/TableRow';
-import TableCell from 'components/Table/TableCell';
-import TableBody from 'components/Table/TableBody';
+import Table from 'components/shared/Table';
+import TableHeader from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
 
 const useStyle = makeStyles((theme) => {
   return {

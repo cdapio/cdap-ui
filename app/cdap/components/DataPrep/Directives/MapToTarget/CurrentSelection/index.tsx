@@ -18,9 +18,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import T from 'i18n-react';
 import { UncontrolledTooltip } from 'reactstrap';
-import If from 'components/If';
-import IconSVG from 'components/IconSVG';
-import Heading, { HeadingTypes } from 'components/Heading';
+import If from 'components/shared/If';
+import IconSVG from 'components/shared/IconSVG';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { IDataModel, IModel } from 'components/DataPrep/store';
 
 const PREFIX = 'features.DataPrep.Directives.MapToTarget.CurrentSelection';

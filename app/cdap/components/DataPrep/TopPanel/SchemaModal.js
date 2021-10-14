@@ -26,8 +26,8 @@ import { objectQuery, isNilOrEmpty } from 'services/helpers';
 import T from 'i18n-react';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import CardActionFeedback from 'components/CardActionFeedback';
-import If from 'components/If';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
+import If from 'components/shared/If';
 import cdapavsc from 'services/cdapavscwrapper';
 import { SchemaEditor } from 'components/AbstractWidget/SchemaEditor';
 

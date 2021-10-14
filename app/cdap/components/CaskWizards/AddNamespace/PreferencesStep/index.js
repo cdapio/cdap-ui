@@ -14,7 +14,7 @@
  * the License.
  */
 import React from 'react';
-import KeyValuePairs from 'components/KeyValuePairs';
+import KeyValuePairs from 'components/shared/KeyValuePairs';
 import AddNamespaceActions from 'services/WizardStores/AddNamespace/AddNamespaceActions';
 import AddNamespaceStore from 'services/WizardStores/AddNamespace/AddNamespaceStore';
 import { Provider, connect } from 'react-redux';

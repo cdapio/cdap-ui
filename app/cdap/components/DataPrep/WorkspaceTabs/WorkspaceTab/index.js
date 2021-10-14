@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import NamespaceStore from 'services/NamespaceStore';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 require('./WorkspaceTab.scss');
 

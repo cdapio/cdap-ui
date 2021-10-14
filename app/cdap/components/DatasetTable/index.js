@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import NamespaceStore from 'services/NamespaceStore';
-import SortableTable from 'components/SortableTable';
+import SortableTable from 'components/shared/SortableTable';
 import { Link } from 'react-router-dom';
 import { convertEntityTypeToApi } from 'services/entity-type-api-converter';
 import classnames from 'classnames';

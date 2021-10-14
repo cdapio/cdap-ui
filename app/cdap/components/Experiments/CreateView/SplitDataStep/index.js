@@ -27,8 +27,8 @@ import {
 } from 'components/Experiments/store/CreateExperimentActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import SplitInfo from 'components/Experiments/CreateView/SplitDataStep/SplitInfo';
-import IconSVG from 'components/IconSVG';
-import Alert from 'components/Alert';
+import IconSVG from 'components/shared/IconSVG';
+import Alert from 'components/shared/Alert';
 import isEmpty from 'lodash/isEmpty';
 import classnames from 'classnames';
 import T from 'i18n-react';

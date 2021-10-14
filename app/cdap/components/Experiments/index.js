@@ -19,7 +19,7 @@ import { myExperimentsApi } from 'api/experiments';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import Loadable from 'react-loadable';
 import { Route, Switch } from 'react-router-dom';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import ExperimentsServiceControl from 'components/Experiments/ExperimentsServiceControl';
 import ExperimentsList from 'components/Experiments/ListView';
 

@@ -21,7 +21,7 @@ import {
   updateProfileLabel,
   updateProfileDescription,
 } from 'components/Cloud/Profiles/CreateView/CreateProfileActionCreator';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import T from 'i18n-react';
 
 require('./CreateProfileMetadata.scss');

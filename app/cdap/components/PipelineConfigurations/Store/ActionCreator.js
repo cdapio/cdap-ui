@@ -27,10 +27,12 @@ import {
   setScheduleError,
   fetchScheduleStatus,
 } from 'components/PipelineDetails/store/ActionCreator';
-import KeyValueStore, { getDefaultKeyValuePair } from 'components/KeyValuePairs/KeyValueStore';
+import KeyValueStore, {
+  getDefaultKeyValuePair,
+} from 'components/shared/KeyValuePairs/KeyValueStore';
 import KeyValueStoreActions, {
   convertKeyValuePairsObjToMap,
-} from 'components/KeyValuePairs/KeyValueStoreActions';
+} from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import { GLOBALS } from 'services/global-constants';
 import { MyPipelineApi } from 'api/pipeline';
 import { MyProgramApi } from 'api/program';

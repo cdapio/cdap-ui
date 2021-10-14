@@ -23,7 +23,7 @@ import {
 import { FieldRow } from 'components/AbstractWidget/SchemaEditor/FieldsList/FieldRow';
 import { SiblingCommunicationProvider } from 'components/AbstractWidget/SchemaEditor/FieldWrapper/SiblingCommunicationContext';
 import { IOnChangeReturnType } from 'components/AbstractWidget/SchemaEditor/Context/SchemaManager';
-import VirtualScroll from 'components/VirtualScroll';
+import VirtualScroll from 'components/shared/VirtualScroll';
 import { SchemaValidatorConsumer } from 'components/AbstractWidget/SchemaEditor/SchemaValidator';
 import withstyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 const styles = (): StyleRules => {

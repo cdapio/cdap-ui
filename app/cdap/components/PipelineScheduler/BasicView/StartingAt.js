@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import {
   INTERVAL_OPTIONS,
   MINUTE_OPTIONS,

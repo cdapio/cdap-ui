@@ -16,8 +16,8 @@
 
 import * as React from 'react';
 import { SchemaEditor } from 'components/AbstractWidget/SchemaEditor';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 

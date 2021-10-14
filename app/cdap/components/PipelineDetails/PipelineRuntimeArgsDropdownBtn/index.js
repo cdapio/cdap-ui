@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import classnames from 'classnames';
 import { Provider } from 'react-redux';

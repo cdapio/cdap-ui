@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ProfilesListView from 'components/Cloud/Profiles/ListView';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import ProfilesStore from 'components/Cloud/Profiles/Store';
 import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
@@ -28,7 +28,7 @@ import { Label, Input } from 'reactstrap';
 import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 require('./SystemProfilesAccordion.scss');
 
 const PREFIX = 'features.Administration.Accordions.SystemProfiles';

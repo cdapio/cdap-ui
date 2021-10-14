@@ -18,9 +18,9 @@ import * as React from 'react';
 import T from 'i18n-react';
 import { deleteDraft } from 'components/PipelineList/DraftPipelineView/store/ActionCreator';
 import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
-import ActionsPopover, { IAction } from 'components/ActionsPopover';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import PipelineExportModal from 'components/PipelineExportModal';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import downloadFile from 'services/download-file';
 
 const PREFIX = 'features.PipelineList.DeleteConfirmation';

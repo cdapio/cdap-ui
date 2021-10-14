@@ -16,8 +16,8 @@
 
 import classnames from 'classnames';
 import * as React from 'react';
-import IconSVG from 'components/IconSVG';
-import If from 'components/If';
+import IconSVG from 'components/shared/IconSVG';
+import If from 'components/shared/If';
 
 require('./DataPrepBrowserTopPanel.scss');
 

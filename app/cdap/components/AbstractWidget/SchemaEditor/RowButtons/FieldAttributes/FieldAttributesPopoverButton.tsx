@@ -20,7 +20,7 @@ import { IconWrapper } from 'components/AbstractWidget/SchemaEditor/RowButtons/I
 import Popover from '@material-ui/core/Popover';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { DecimalTypeAttributes } from 'components/AbstractWidget/SchemaEditor/RowButtons/FieldAttributes/DecimalAttributes';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { ITypeProperties } from 'components/AbstractWidget/SchemaEditor/Context/SchemaParser';
 import { IOnchangeHandler } from 'components/AbstractWidget/SchemaEditor/EditorTypes';
 import {

@@ -16,8 +16,8 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import InformationalWizardConfig from 'services/WizardConfigs/InformationalWizardConfig';
 import InformationalWizardStore from 'services/WizardStores/Informational/InformationalStore';
 import InformationalActions from 'services/WizardStores/Informational/InformationalActions';

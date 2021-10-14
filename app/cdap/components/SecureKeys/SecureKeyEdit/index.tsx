@@ -26,7 +26,7 @@ import { Map } from 'immutable';
 import { MySecureKeyApi } from 'api/securekey';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import isNil from 'lodash/isNil';
 

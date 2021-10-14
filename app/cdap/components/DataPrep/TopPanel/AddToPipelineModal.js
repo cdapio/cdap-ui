@@ -25,10 +25,10 @@ import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
-import CardActionFeedback from 'components/CardActionFeedback';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
 import isString from 'lodash/isString';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Theme } from 'services/ThemeHelper';
 
 const mapErrorToMessage = (message) => {

@@ -19,9 +19,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Actions } from 'components/FieldLevelLineage/store/Store';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import ModalContent from 'components/FieldLevelLineage/OperationsModal/ModalContent';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 
 const PREFIX = 'features.FieldLevelLineage.OperationsModal';

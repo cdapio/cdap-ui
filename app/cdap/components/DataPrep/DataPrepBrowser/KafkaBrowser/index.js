@@ -20,7 +20,7 @@ import React, { Component } from 'react';
 import DataPrepBrowserStore from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';
 import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Input } from 'reactstrap';
 import T from 'i18n-react';
 import {
@@ -32,7 +32,7 @@ import DataPrepBrowserPageTitle from 'components/DataPrep/DataPrepBrowser/PageTi
 import { Provider } from 'react-redux';
 import DataprepBrowserTopPanel from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserTopPanel';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
-import If from 'components/If';
+import If from 'components/shared/If';
 import history from 'services/history';
 
 const PREFIX = `features.DataPrep.DataPrepBrowser.KafkaBrowser`;

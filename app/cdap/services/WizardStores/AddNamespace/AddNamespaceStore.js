@@ -17,7 +17,7 @@
 import { combineReducers, createStore, compose } from 'redux';
 import AddNamespaceActions from 'services/WizardStores/AddNamespace/AddNamespaceActions';
 import AddNamespaceWizardConfig from 'services/WizardConfigs/AddNamespaceWizardConfig';
-import { convertMapToKeyValuePairsObj } from 'components/KeyValuePairs/KeyValueStoreActions';
+import { convertMapToKeyValuePairsObj } from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import head from 'lodash/head';
 import uuidV4 from 'uuid/v4';
 

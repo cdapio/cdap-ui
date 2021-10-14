@@ -31,7 +31,7 @@ import {
   getGapFilledAccumulatedData,
   getResolution,
 } from 'components/PipelineSummary/RunsGraphHelpers';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import CopyableID from 'components/CopyableID';
 import { humanReadableDuration, isPluginSource, isPluginSink } from 'services/helpers';
 import NodeMetricsSingleDatapoint from 'components/PipelineNodeGraphs/NodeMetricsSingleDatapoint';

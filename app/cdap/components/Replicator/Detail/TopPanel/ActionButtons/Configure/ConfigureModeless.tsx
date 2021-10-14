@@ -18,13 +18,13 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
 import ProfilesListViewInPipeline from 'components/PipelineDetails/ProfilesListView';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyPreferenceApi } from 'api/preference';
 import pickBy from 'lodash/pickBy';
 import mapKeys from 'lodash/mapKeys';
 import Button from '@material-ui/core/Button';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import isEqual from 'lodash/isEqual';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 

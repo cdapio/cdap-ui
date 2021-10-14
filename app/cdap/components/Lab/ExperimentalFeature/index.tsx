@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 interface IExperimentWrapperProps {
   children: React.ReactNode;

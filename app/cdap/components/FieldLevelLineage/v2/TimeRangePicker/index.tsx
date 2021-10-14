@@ -20,7 +20,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import T from 'i18n-react';
 import { TIME_OPTIONS } from 'components/FieldLevelLineage/store/Store';
-import ExpandableTimeRange from 'components/TimeRangePicker/ExpandableTimeRange';
+import ExpandableTimeRange from 'components/shared/TimeRangePicker/ExpandableTimeRange';
 import { IContextState, FllContext } from 'components/FieldLevelLineage/v2/Context/FllContext';
 
 const PREFIX = 'features.FieldLevelLineage.v2.TimeRangePicker';

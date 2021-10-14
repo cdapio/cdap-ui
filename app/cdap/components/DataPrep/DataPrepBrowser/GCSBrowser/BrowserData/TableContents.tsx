@@ -32,7 +32,7 @@ import {
   convertBytesToHumanReadable,
   HUMANREADABLESTORAGE_NODECIMAL,
 } from 'services/helpers';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import { setGCSPrefix } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
 import DataPrepStore from 'components/DataPrep/store';

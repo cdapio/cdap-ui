@@ -16,12 +16,12 @@
 
 import * as React from 'react';
 
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { List, Map } from 'immutable';
 
 import Button from '@material-ui/core/Button';
 import FilterPanel from 'components/PluginJSONCreator/Create/Content/FilterPage/FilterPanel';
-import If from 'components/If';
+import If from 'components/shared/If';
 import StepButtons from 'components/PluginJSONCreator/Create/Content/StepButtons';
 import { useFilterState } from 'components/PluginJSONCreator/Create';
 import uuidV4 from 'uuid/v4';

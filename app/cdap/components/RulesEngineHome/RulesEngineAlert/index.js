@@ -15,7 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import RulesEngineStore from 'components/RulesEngineHome/RulesEngineStore';
 import { resetError } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
 

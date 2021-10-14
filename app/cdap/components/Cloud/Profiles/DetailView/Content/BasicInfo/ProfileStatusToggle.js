@@ -16,9 +16,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ConfirmationModal from 'components/ConfirmationModal';
-import ToggleSwitch from 'components/ToggleSwitch';
-import Alert from 'components/Alert';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
+import ToggleSwitch from 'components/shared/ToggleSwitch';
+import Alert from 'components/shared/Alert';
 import { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
 import { extractProfileName } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { MyCloudApi } from 'api/cloud';

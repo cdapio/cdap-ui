@@ -18,12 +18,12 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { Col, Form, FormGroup, Label, Row } from 'reactstrap';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import moment from 'moment';
 import classnames from 'classnames';
 import MyRulesEngineApi from 'api/rulesengine';
 import NamespaceStore from 'services/NamespaceStore';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import DSVEditor from 'components/DSVEditor';
 import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
 import uuidV4 from 'uuid/v4';
@@ -34,7 +34,7 @@ import {
   setError,
 } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
 import { DragSource } from 'react-dnd';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { getRules } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
 import T from 'i18n-react';
 

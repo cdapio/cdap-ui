@@ -21,14 +21,14 @@ import {
   runPipeline,
   fetchAndUpdateRuntimeArgs,
 } from 'components/PipelineConfigurations/Store/ActionCreator';
-import BtnWithLoading from 'components/BtnWithLoading';
+import BtnWithLoading from 'components/shared/BtnWithLoading';
 import PipelineRunTimeArgsCounter from 'components/PipelineDetails/PipelineRuntimeArgsCounter';
 import { connect } from 'react-redux';
 import { convertKeyValuePairsToMap, preventPropagation } from 'services/helpers';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import T from 'i18n-react';
-import If from 'components/If';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import If from 'components/shared/If';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/styles/withStyles';
 
 const styles = (theme): StyleRules => {

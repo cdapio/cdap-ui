@@ -18,9 +18,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import MyRuleEngineApi from 'api/rulesengine';
 import enableSystemApp from 'services/ServiceEnablerUtilities';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import T from 'i18n-react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import isObject from 'lodash/isObject';
 import { Theme } from 'services/ThemeHelper';
 

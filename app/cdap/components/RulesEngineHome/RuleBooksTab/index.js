@@ -21,9 +21,9 @@ import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome
 import Fuse from 'fuse.js';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import ImportRulebookWizard from 'components/RulesEngineHome/ImportRulebookWizard';
 import T from 'i18n-react';
 

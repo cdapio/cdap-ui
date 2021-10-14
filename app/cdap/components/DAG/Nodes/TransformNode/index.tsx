@@ -18,7 +18,7 @@ import * as React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { IAbstractNodeProps, AbstractNode } from 'components/DAG/Nodes/AbstractNode';
 import { genericNodeStyles } from 'components/DAG/Nodes/utilities';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ButtonBase from '@material-ui/core/ButtonBase';
 const styles = genericNodeStyles({
   border: `1px solid #4586f3`,

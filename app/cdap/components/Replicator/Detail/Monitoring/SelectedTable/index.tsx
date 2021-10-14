@@ -17,8 +17,8 @@
 import React, { useContext } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { DetailContext } from 'components/Replicator/Detail';
-import Heading, { HeadingTypes } from 'components/Heading';
-import If from 'components/If';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
+import If from 'components/shared/If';
 import { getTableDisplayName } from 'components/Replicator/utilities';
 
 const styles = (theme): StyleRules => {

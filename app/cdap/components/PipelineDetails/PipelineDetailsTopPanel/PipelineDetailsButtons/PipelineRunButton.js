@@ -16,8 +16,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
-import Alert from 'components/Alert';
+import IconSVG from 'components/shared/IconSVG';
+import Alert from 'components/shared/Alert';
 import { runPipeline } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { setRunError } from 'components/PipelineDetails/store/ActionCreator';
 import PipelineRuntimeArgsDropdownBtn from 'components/PipelineDetails/PipelineRuntimeArgsDropdownBtn';

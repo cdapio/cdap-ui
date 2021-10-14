@@ -17,10 +17,10 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import capitalize from 'lodash/capitalize';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
 import { objectQuery } from 'services/helpers';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 
 const styles = (theme): StyleRules => {
   return {

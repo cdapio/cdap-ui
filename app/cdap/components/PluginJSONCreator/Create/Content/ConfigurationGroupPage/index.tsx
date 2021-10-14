@@ -16,13 +16,13 @@
 
 import * as React from 'react';
 
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { List, Map } from 'immutable';
 import { useConfigurationGroupState, useWidgetState } from 'components/PluginJSONCreator/Create';
 
 import Button from '@material-ui/core/Button';
 import GroupPanel from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel';
-import If from 'components/If';
+import If from 'components/shared/If';
 import StepButtons from 'components/PluginJSONCreator/Create/Content/StepButtons';
 import uuidV4 from 'uuid/v4';
 

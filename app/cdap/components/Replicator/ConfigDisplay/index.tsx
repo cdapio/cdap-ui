@@ -17,9 +17,9 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import PluginConfigDisplay from 'components/Replicator/ConfigDisplay/PluginConfigDisplay';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { IPluginInfo, IPluginConfig } from 'components/Replicator/types';
-import { IWidgetJson } from 'components/ConfigurationGroup/types';
+import { IWidgetJson } from 'components/shared/ConfigurationGroup/types';
 
 const styles = (theme): StyleRules => {
   return {

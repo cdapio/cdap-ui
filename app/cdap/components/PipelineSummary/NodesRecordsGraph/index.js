@@ -34,7 +34,7 @@ import {
   getYAxisProps,
   xTickFormat,
 } from 'components/PipelineSummary/RunsGraphHelpers';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import moment from 'moment';
 import ee from 'event-emitter';

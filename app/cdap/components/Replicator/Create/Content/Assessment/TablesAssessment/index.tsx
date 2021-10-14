@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 import Mappings from './Mappings';
 import WithIssuesTables from 'components/Replicator/Create/Content/Assessment/TablesAssessment/WithIssuesTables';
 import NoIssuesTables from 'components/Replicator/Create/Content/Assessment/TablesAssessment/NoIssuesTables';

@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import isObject from 'lodash/isObject';
 import withStyles from '@material-ui/core/styles/withStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { SiblingCommunicationConsumer } from 'components/AbstractWidget/SchemaEditor/FieldWrapper/SiblingCommunicationContext';
 import { SchemaValidatorConsumer } from '../SchemaValidator';
 import isNil from 'lodash/isNil';

@@ -27,7 +27,7 @@ import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome
 import RulesEngineAlert from 'components/RulesEngineHome/RulesEngineAlert';
 import NamespaceStore from 'services/NamespaceStore';
 import MyRulesEngineApi from 'api/rulesengine';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import RulesEngineServiceControl from 'components/RulesEngineHome/RulesEngineServiceControl';
 import Helmet from 'react-helmet';
 import T from 'i18n-react';

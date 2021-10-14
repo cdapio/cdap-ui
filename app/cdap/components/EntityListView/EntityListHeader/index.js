@@ -16,10 +16,10 @@
 
 import React, { Component } from 'react';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
-import CustomDropdownMenu from 'components/CustomDropdownMenu';
+import CustomDropdownMenu from 'components/shared/CustomDropdownMenu';
 import T from 'i18n-react';
 import debounce from 'lodash/debounce';
-import PlusButton from 'components/PlusButton';
+import PlusButton from 'components/shared/PlusButton';
 import { isDescendant } from 'services/helpers';
 import { Observable } from 'rxjs/Observable';
 import SearchStore from 'components/EntityListView/SearchStore';
@@ -29,7 +29,7 @@ import {
   DEFAULT_SEARCH_QUERY,
 } from 'components/EntityListView/SearchStore/SearchConstants';
 import { search, updateQueryString } from 'components/EntityListView/SearchStore/ActionCreator';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 require('./EntityListHeader.scss');
 

@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import MyDataPrepApi from 'api/dataprep';
 import NamespaceStore from 'services/NamespaceStore';
 import classnames from 'classnames';
@@ -25,11 +25,11 @@ import T from 'i18n-react';
 import replace from 'lodash/replace';
 import ee from 'event-emitter';
 import { objectQuery } from 'services/helpers';
-import CardActionFeedback from 'components/CardActionFeedback';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 import uuidV4 from 'uuid/v4';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
-import { WrappedWidgetWrapper } from 'components/ConfigurationGroup/WidgetWrapper';
+import { WrappedWidgetWrapper } from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 const CONN_TYPE = {
   basic: 'BASIC',

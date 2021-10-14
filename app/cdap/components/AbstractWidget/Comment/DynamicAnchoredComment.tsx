@@ -21,7 +21,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { COMMENT_WIDTH, IComment } from 'components/AbstractWidget/Comment/CommentConstants';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import cloneDeep from 'lodash/cloneDeep';
-import If from 'components/If';
+import If from 'components/shared/If';
 import isNil from 'lodash/isNil';
 
 const useStyles = makeStyles(() => {

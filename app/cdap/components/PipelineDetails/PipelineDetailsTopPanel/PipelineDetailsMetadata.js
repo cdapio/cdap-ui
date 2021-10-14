@@ -18,9 +18,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
 import PipelineDetailStore from 'components/PipelineDetails/store';
-import Tags from 'components/Tags';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
+import Tags from 'components/shared/Tags';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
 

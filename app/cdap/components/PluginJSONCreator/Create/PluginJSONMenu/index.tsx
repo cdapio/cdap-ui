@@ -31,9 +31,9 @@ import {
 } from 'components/PluginJSONCreator/Create';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import Drawer from '@material-ui/core/Drawer';
-import If from 'components/If';
+import If from 'components/shared/If';
 import JSONActionButtons from 'components/PluginJSONCreator/Create/PluginJSONMenu/JSONActionButtons';
 import { JSONStatusMessage } from 'components/PluginJSONCreator/constants';
 import LiveView from 'components/PluginJSONCreator/Create/PluginJSONMenu/LiveView';

@@ -19,10 +19,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import ScheduleRuntimeArgs from 'components/PipelineTriggers/ScheduleRuntimeArgs';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/CardActionFeedback';
-import If from 'components/If';
+import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import If from 'components/shared/If';
 
 require('./PayloadConfigModal.scss');
 

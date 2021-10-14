@@ -21,9 +21,9 @@ import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
 import ConfigModelessActionButtons from 'components/PipelineConfigurations/ConfigurationsContent/ConfigModelessActionButtons';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab from 'components/shared/ConfigurableTab';
 import { GLOBALS } from 'services/global-constants';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 

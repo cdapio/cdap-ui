@@ -17,14 +17,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { objectQuery } from 'services/helpers';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import T from 'i18n-react';
 import ThemeWrapper from 'components/ThemeWrapper';
 import LogsPortal from 'components/PipelineDetails/RunLevelInfo/PipelineLogViewer/LogsPortal';
 import PipelineLogViewer from 'components/PipelineDetails/RunLevelInfo/PipelineLogViewer';
-import If from 'components/If';
+import If from 'components/shared/If';
 import classnames from 'classnames';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';

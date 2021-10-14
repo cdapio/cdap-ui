@@ -20,14 +20,14 @@ import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import NamespaceStore from 'services/NamespaceStore';
 import T from 'i18n-react';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import MyDataPrepApi from 'api/dataprep';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/CardActionFeedback';
+import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
 import { objectQuery } from 'services/helpers';
-import BtnWithLoading from 'components/BtnWithLoading';
+import BtnWithLoading from 'components/shared/BtnWithLoading';
 import ee from 'event-emitter';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
-import { WrappedWidgetWrapper } from 'components/ConfigurationGroup/WidgetWrapper';
+import { WrappedWidgetWrapper } from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 const PREFIX = 'features.DataPrepConnections.AddConnections.S3';
 const ADDCONN_PREFIX = 'features.DataPrepConnections.AddConnections';

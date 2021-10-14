@@ -18,7 +18,7 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { objectQuery } from 'services/helpers';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { getIcon } from 'components/Ingestion/helpers';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';

@@ -17,14 +17,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
-import KeyValuePairs from 'components/KeyValuePairs';
-import Popover from 'components/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import KeyValuePairs from 'components/shared/KeyValuePairs';
+import Popover from 'components/shared/Popover';
 import {
   getEngineDisplayLabel,
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
-import { convertKeyValuePairsObjToMap } from 'components/KeyValuePairs/KeyValueStoreActions';
+import { convertKeyValuePairsObjToMap } from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import T from 'i18n-react';
 import isEmpty from 'lodash/isEmpty';
 

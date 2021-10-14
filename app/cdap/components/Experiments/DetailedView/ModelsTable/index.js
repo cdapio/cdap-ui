@@ -16,8 +16,8 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import PaginationWithTitle from 'components/PaginationWithTitle';
-import IconSVG from 'components/IconSVG';
+import PaginationWithTitle from 'components/shared/PaginationWithTitle';
+import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
 import {
   handleModelsPageChange,
@@ -30,7 +30,7 @@ import { getAlgorithmLabel } from 'components/Experiments/store/SharedActionCrea
 import { humanReadableDate, roundDecimalToNDigits } from 'services/helpers';
 import { NUMBER_TYPES } from 'services/global-constants';
 import classnames from 'classnames';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { objectQuery, humanReadableNumber, HUMANREADABLE_DECIMAL } from 'services/helpers';
 import isEmpty from 'lodash/isEmpty';
 import ModelStatusIndicator from 'components/Experiments/DetailedView/ModelStatusIndicator';
@@ -43,9 +43,9 @@ import isNumber from 'lodash/isNumber';
 import isString from 'lodash/isString';
 import uuidV4 from 'uuid/v4';
 import CopyableID from 'components/CopyableID';
-import CollapsibleWrapper from 'components/CollapsibleWrapper';
-import LoadingSVG from 'components/LoadingSVG';
-import Alert from 'components/Alert';
+import CollapsibleWrapper from 'components/shared/CollapsibleWrapper';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import Alert from 'components/shared/Alert';
 import { MODEL_STATUS } from 'components/Experiments/store/ModelStatus';
 import PredictionDatasetExploreModal from 'components/Experiments/DetailedView/PredictionDatasetExploreModal';
 import AddModelToPipelineBtn from 'components/Experiments/DetailedView/AddModelToPipelineBtn';

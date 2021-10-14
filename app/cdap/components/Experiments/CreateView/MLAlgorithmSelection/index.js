@@ -34,7 +34,7 @@ import { objectQuery } from 'services/helpers';
 import HyperParamWidget from 'components/Experiments/CreateView/MLAlgorithmSelection/HyperParamWidget';
 import startCase from 'lodash/startCase';
 import classnames from 'classnames';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import T from 'i18n-react';
 
 const PREFIX = 'features.Experiments.CreateView';

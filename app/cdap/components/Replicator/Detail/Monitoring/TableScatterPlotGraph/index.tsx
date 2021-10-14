@@ -26,8 +26,8 @@ import {
   COLOR_MAP,
   renderScatterPlot,
 } from 'components/Replicator/Detail/Monitoring/TableScatterPlotGraph/scatterPlot';
-import ChartContainer from 'components/ChartContainer';
-import Heading, { HeadingTypes } from 'components/Heading';
+import ChartContainer from 'components/shared/ChartContainer';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ChartTableSwitcher from 'components/Replicator/Detail/ChartTableSwitcher';
 import ScatterPlotTable from 'components/Replicator/Detail/Monitoring/TableScatterPlotGraph/ScatterPlotTable';
 import ScatterPlotTooltip from 'components/Replicator/Detail/Monitoring/TableScatterPlotGraph/ScatterPlotTooltip';

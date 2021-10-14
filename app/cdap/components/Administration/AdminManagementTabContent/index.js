@@ -21,7 +21,7 @@ import PlatformsDetails from 'components/Administration/AdminManagementTabConten
 import ServicesTable from 'components/Administration/AdminManagementTabContent/ServicesTable';
 import Helmet from 'react-helmet';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 import classnames from 'classnames';
 
 const PREFIX = 'features.Administration';

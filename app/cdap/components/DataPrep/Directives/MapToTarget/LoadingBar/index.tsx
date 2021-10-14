@@ -16,7 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 interface ILoadingBarProps {
   loadingText: string;

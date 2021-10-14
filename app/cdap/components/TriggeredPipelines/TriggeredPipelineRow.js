@@ -17,8 +17,8 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import LoadingSVG from 'components/LoadingSVG';
-import IconSVG from 'components/IconSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 
 const PREFIX = `features.TriggeredPipelines`;

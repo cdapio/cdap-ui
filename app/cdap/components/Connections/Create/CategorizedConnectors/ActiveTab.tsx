@@ -16,14 +16,14 @@
 import * as React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { isNilOrEmptyString } from 'services/helpers';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
-import Table from 'components/Table';
-import TableHeader from 'components/Table/TableHeader';
-import TableRow from 'components/Table/TableRow';
-import TableCell from 'components/Table/TableCell';
-import TableBody from 'components/Table/TableBody';
-import TableColumnGroup from 'components/Table/TableColumnGroup';
-import ColumnGroup from 'components/Table/ColumnGroup';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import Table from 'components/shared/Table';
+import TableHeader from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
+import TableColumnGroup from 'components/shared/Table/TableColumnGroup';
+import ColumnGroup from 'components/shared/Table/ColumnGroup';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyle = makeStyle((theme) => {

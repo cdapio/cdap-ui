@@ -16,8 +16,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
-import { convertMapToKeyValuePairsObj } from 'components/KeyValuePairs/KeyValueStoreActions';
+import IconSVG from 'components/shared/IconSVG';
+import { convertMapToKeyValuePairsObj } from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
@@ -28,7 +28,7 @@ import {
   preventPropagation,
 } from 'services/helpers';
 import classnames from 'classnames';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import T from 'i18n-react';
 import { Provider } from 'react-redux';

@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { defaultAction } from 'services/helpers';
 import { Provider } from 'react-redux';
 import Loadable from 'react-loadable';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import DataPrepSidePanel from 'components/DataPrep/DataPrepSidePanel';
 import classnames from 'classnames';
 import T from 'i18n-react';

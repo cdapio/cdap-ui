@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TopPanel from 'components/Experiments/TopPanel';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import DataPrepConnections from 'components/DataPrepConnections';
 import DataPrepHome from 'components/DataPrepHome';
 import { Prompt, Link, Redirect } from 'react-router-dom';
@@ -25,7 +25,7 @@ import createExperimentStore, {
   CREATION_STEPS,
 } from 'components/Experiments/store/createExperimentStore';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import ExperimentPopovers from 'components/Experiments/CreateView/Popovers';
 import DataPrepStore from 'components/DataPrep/store';
 import {
@@ -47,11 +47,11 @@ import SplitDataStep from 'components/Experiments/CreateView/SplitDataStep';
 import ExperimentMetadata from 'components/Experiments/CreateView/ExperimentMetadata';
 import Helmet from 'react-helmet';
 import queryString from 'query-string';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import MyDataPrepApi from 'api/dataprep';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import { isNilOrEmpty } from 'services/helpers';

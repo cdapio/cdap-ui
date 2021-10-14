@@ -17,13 +17,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import PipelineSummary from 'components/PipelineSummary';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

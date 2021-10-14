@@ -21,7 +21,7 @@ import { MyReplicatorApi } from 'api/replicator';
 import { humanReadableDate, objectQuery } from 'services/helpers';
 import { PluginType } from 'components/Replicator/constants';
 import { Link } from 'react-router-dom';
-import ActionsPopover, { IAction } from 'components/ActionsPopover';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import DeleteConfirmation, { InstanceType } from 'components/Replicator/DeleteConfirmation';
 import DownloadFile from 'services/download-file';
 

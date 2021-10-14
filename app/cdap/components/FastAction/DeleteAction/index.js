@@ -22,7 +22,7 @@ import { MyAppApi } from 'api/app';
 import { MyArtifactApi } from 'api/artifact';
 import { MyDatasetApi } from 'api/dataset';
 import FastActionButton from '../FastActionButton';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { Tooltip } from 'reactstrap';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';

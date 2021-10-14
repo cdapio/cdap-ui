@@ -20,7 +20,7 @@ import { IAbstractNodeProps, AbstractNode } from 'components/DAG/Nodes/AbstractN
 import withStyles from '@material-ui/core/styles/withStyles';
 import { MyContext, IDagStore, INodeConfig } from 'components/DAG/DAGProvider';
 import { PortPopover } from 'components/DAG/Nodes/SplitterNode/PortPopover';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Map, List } from 'immutable';
 import { getPortEndpointId } from 'components/DAG/Nodes/SplitterNode/PortPopover';
 

@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { MyMetadataApi } from 'api/metadata';
 import NamespaceStore from 'services/NamespaceStore';
 import T from 'i18n-react';

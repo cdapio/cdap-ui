@@ -33,7 +33,7 @@ import {
 } from 'reactstrap';
 import { UncontrolledTooltip } from 'components/UncontrolledComponents';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { preventPropagation } from 'services/helpers';
 import DataPrepStore from 'components/DataPrep/store/';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
@@ -48,7 +48,7 @@ import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
 import { Observable } from 'rxjs/Observable';
-import CardActionFeedback from 'components/CardActionFeedback';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 
 require('./IngestDataFromDataPrep.scss');
 

@@ -18,7 +18,7 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
 import ActionButton from 'components/Replicator/Detail/TopPanel/ActionButtons/ActionButton';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import VerticalDivider from 'components/Replicator/Detail/TopPanel/VerticalDivider';
 import LogsButton from 'components/Replicator/Detail/TopPanel/ActionButtons/LogsButton';
 import StatusIndicator from 'components/Replicator/Detail/TopPanel/ActionButtons/StatusIndicator';

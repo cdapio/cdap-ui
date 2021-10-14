@@ -20,13 +20,13 @@ import { createContextConnect, ICreateContext } from 'components/Replicator/Crea
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import TablesAssessment from 'components/Replicator/Create/Content/Assessment/TablesAssessment';
-import If from 'components/If';
+import If from 'components/shared/If';
 import classnames from 'classnames';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import ConnectivityAssessment from 'components/Replicator/Create/Content/Assessment/ConnectivityAssessment';
 import FeaturesAssessment from 'components/Replicator/Create/Content/Assessment//FeaturesAssessment';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { extractErrorMessage } from 'services/helpers';
 import Button from '@material-ui/core/Button';
 import Refresh from '@material-ui/icons/Refresh';

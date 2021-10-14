@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
 import { DashboardActions } from 'components/OpsDashboard/store/DashboardStore';
 import T from 'i18n-react';

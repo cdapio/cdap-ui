@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import CollapsibleSidebar from 'components/CollapsibleSidebar';
+import CollapsibleSidebar from 'components/shared/CollapsibleSidebar';
 import NamespaceStore from 'services/NamespaceStore';
 import TriggeredPipelineRow from 'components/TriggeredPipelines/TriggeredPipelineRow';
 import {

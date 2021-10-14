@@ -20,7 +20,7 @@ import React, { Component } from 'react';
 import T from 'i18n-react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import enableSystemApp from 'services/ServiceEnablerUtilities';
-import CardActionFeedback from 'components/CardActionFeedback';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 import ee from 'event-emitter';
 import { i18nPrefix, MIN_DATAPREP_VERSION, artifactName } from 'components/DataPrep';
 import MyDataPrepApi from 'api/dataprep';

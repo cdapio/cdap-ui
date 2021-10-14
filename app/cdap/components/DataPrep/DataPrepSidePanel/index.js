@@ -22,7 +22,7 @@ import ColumnsTab from 'components/DataPrep/DataPrepSidePanel/ColumnsTab';
 import TargetTab from 'components/DataPrep/DataPrepSidePanel/TargetTab';
 import DirectivesTab from 'components/DataPrep/DataPrepSidePanel/DirectivesTab';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 require('./DataPrepSidePanel.scss');
 const PREFIX = 'features.DataPrep.DataPrepSidePanel';
