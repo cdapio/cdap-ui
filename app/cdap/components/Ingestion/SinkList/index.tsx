@@ -20,8 +20,8 @@ import ThemeWrapper from 'components/ThemeWrapper';
 import Card from '@material-ui/core/Card';
 import { objectQuery } from 'services/helpers';
 import { getIcon } from 'components/Ingestion/helpers';
-import If from 'components/If';
-import HorizontalCarousel from 'components/HorizontalCarousel';
+import If from 'components/shared/If';
+import HorizontalCarousel from 'components/shared/HorizontalCarousel';
 
 const styles = (theme): StyleRules => {
   return {

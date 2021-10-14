@@ -20,8 +20,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import IconButton from '@material-ui/core/IconButton';
 import { GenericBrowser } from 'components/Connections/Browser/GenericBrowser';
-import If from 'components/If';
-import Heading, { HeadingTypes } from 'components/Heading';
+import If from 'components/shared/If';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { Route, Switch } from 'react-router-dom';
 import Upload from 'components/Connections/Upload';
 

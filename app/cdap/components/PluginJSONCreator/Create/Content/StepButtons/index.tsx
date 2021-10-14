@@ -19,7 +19,7 @@ import * as React from 'react';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { STEPS } from 'components/PluginJSONCreator/Create/Content';
 import { useAppInternalState } from 'components/PluginJSONCreator/Create';
 

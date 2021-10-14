@@ -19,7 +19,7 @@ import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Conte
 import { humanReadableDate, objectQuery, isNilOrEmptyString } from 'services/helpers';
 import Navigation from 'components/FieldLevelLineage/v2/OperationsModal/Navigation';
 import OperationsTable from 'components/FieldLevelLineage/v2/OperationsModal/OperationsTable';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import T from 'i18n-react';
 
 const PREFIX = 'features.FieldLevelLineage.OperationsModal';

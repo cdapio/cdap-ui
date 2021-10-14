@@ -19,9 +19,9 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
 import ActionButton from 'components/Replicator/Detail/TopPanel/ActionButtons/ActionButton';
 import { PROGRAM_STATUSES } from 'services/global-constants';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import ConfigureModeless from 'components/Replicator/Detail/TopPanel/ActionButtons/Configure/ConfigureModeless';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { START_DISABLED_STATUS } from 'components/Replicator/Detail/TopPanel/ActionButtons';
 
 const styles = (theme): StyleRules => {

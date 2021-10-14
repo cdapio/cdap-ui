@@ -23,7 +23,7 @@ import PipelineDetailStore from 'components/PipelineDetails/store';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
-import PlusButton from 'components/PlusButton';
+import PlusButton from 'components/shared/PlusButton';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
 
 require('./PipelineDetailsTopPanel.scss');

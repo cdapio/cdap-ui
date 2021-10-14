@@ -16,8 +16,8 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import LibraryUploadWizardConfig from 'services/WizardConfigs/LibraryUploadWizardConfig';
 import ArtifactUploadStore from 'services/WizardStores/ArtifactUpload/ArtifactUploadStore';
 import ArtifactUploadActions from 'services/WizardStores/ArtifactUpload/ArtifactUploadActions';

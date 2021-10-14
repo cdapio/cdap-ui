@@ -21,11 +21,11 @@ import {
   listSpannerDatabases,
   listSpannerTables,
 } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { Link, match } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import T from 'i18n-react';
 
 const PREFIX = `features.DataPrep.DataPrepBrowser.SpannerBrowser`;

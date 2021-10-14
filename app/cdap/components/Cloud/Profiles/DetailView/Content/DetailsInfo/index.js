@@ -16,9 +16,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import { SECURE_KEY_PREFIX, SECURE_KEY_SUFFIX } from 'services/global-constants';
 
 require('./DetailsInfo.scss');

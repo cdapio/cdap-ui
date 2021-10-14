@@ -23,7 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { IFieldSchema } from 'components/AbstractWidget/SqlSelectorWidget';
 import TextField from '@material-ui/core/TextField';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const styles = (theme): StyleRules => {
   return {

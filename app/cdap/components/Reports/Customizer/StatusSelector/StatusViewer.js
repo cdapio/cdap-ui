@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { STATUS_OPTIONS } from 'components/Reports/store/ReportsStore';
 import { getStatusSelectionsLabels } from 'components/Reports/store/ActionCreator';
 import T from 'i18n-react';

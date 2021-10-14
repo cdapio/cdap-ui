@@ -18,7 +18,7 @@ import * as React from 'react';
 import { IWidgetProps } from 'components/AbstractWidget';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import PropTypes from 'prop-types';
-import JSONEditor from 'components/CodeEditor/JSONEditor';
+import JSONEditor from 'components/shared/CodeEditor/JSONEditor';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
 

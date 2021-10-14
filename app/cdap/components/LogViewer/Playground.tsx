@@ -21,7 +21,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyProgramApi } from 'api/program';
-import If from 'components/If';
+import If from 'components/shared/If';
 import LogViewer from 'components/LogViewer';
 
 const styles = (): StyleRules => {

@@ -17,8 +17,8 @@
 import React, { Component } from 'react';
 import DirectiveUploadWizard from 'components/CaskWizards/PluginArtifactUpload/DirectiveUploadWizard';
 import T from 'i18n-react';
-import PlusButton from 'components/PlusButton';
-import Alert from 'components/Alert';
+import PlusButton from 'components/shared/PlusButton';
+import Alert from 'components/shared/Alert';
 
 export default class DataPrepPlusButton extends Component {
   constructor(props) {

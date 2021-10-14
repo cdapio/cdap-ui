@@ -16,9 +16,9 @@
 
 import * as React from 'react';
 import MyUserStoreApi from 'api/userstore';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import Tour from 'components/Home/Tour';
 import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';

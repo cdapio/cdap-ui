@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 const PluginInput = ({
   widgetType,

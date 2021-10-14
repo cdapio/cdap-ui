@@ -16,9 +16,9 @@
 
 import * as React from 'react';
 
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Map } from 'immutable';
 import ShowPropertyRow from 'components/PluginJSONCreator/Create/Content/FilterPage/FilterPanel/FilterShowlistInput/ShowPropertyRow';
 import { useFilterState } from 'components/PluginJSONCreator/Create';

@@ -15,7 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { MyArtifactApi } from 'api/artifact';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';

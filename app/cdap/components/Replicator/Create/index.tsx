@@ -25,7 +25,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { fetchPluginInfo, constructTablesSelection } from 'components/Replicator/utilities';
 
 import { PluginType } from 'components/Replicator/constants';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import uuidV4 from 'uuid/v4';
 import { MyReplicatorApi } from 'api/replicator';
 import { generateTableKey, convertConfigToState } from 'components/Replicator/utilities';
@@ -40,7 +40,7 @@ import {
   IColumnsStore,
   IDMLStore,
 } from 'components/Replicator/types';
-import { IWidgetJson } from 'components/ConfigurationGroup/types';
+import { IWidgetJson } from 'components/shared/ConfigurationGroup/types';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;

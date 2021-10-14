@@ -15,7 +15,7 @@
  */
 
 import React, { useContext } from 'react';
-import SortableStickyGrid from 'components/SortableStickyGrid/index.js';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid/index.js';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import T from 'i18n-react';
@@ -24,7 +24,7 @@ import { IField, ITableInfo } from 'components/FieldLevelLineage/v2/Context/FllC
 import FllField from 'components/FieldLevelLineage/v2/FllTable/FllField';
 import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
 import ExpandableField from 'components/FieldLevelLineage/v2/FllTable/FllExpandableField';
-import If from 'components/If';
+import If from 'components/shared/If';
 import FllTableHeader from 'components/FieldLevelLineage/v2/FllTable/FllTableHeader';
 
 // TO DO: Consolidate different fontsizes in ThemeWrapper

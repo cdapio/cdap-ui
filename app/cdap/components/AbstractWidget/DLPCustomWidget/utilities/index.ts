@@ -1,7 +1,7 @@
 import { ITransformProp, IErrorConfig, IDLPRowState, IDLPRowProps } from '../DLPRow';
-import { PluginProperties, IPluginProperty } from 'components/ConfigurationGroup/types';
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
-import { IConfigurationGroupProps } from 'components/ConfigurationGroup';
+import { PluginProperties, IPluginProperty } from 'components/shared/ConfigurationGroup/types';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
+import { IConfigurationGroupProps } from 'components/shared/ConfigurationGroup';
 
 export function parseTransformOptions(transform: ITransformProp) {
   if (transform == null) {

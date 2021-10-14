@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { PluginProperties } from 'components/ConfigurationGroup/types';
+import { PluginProperties } from 'components/shared/ConfigurationGroup/types';
 import { List, Map, Set } from 'immutable';
 
 export interface IColumn {

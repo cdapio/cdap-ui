@@ -18,11 +18,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { isValidEntityName, objectQuery } from 'services/helpers';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const styles = (theme): StyleRules => {
   return {

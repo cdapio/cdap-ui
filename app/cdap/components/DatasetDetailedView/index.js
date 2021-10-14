@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import OverviewMetaSection from 'components/Overview/OverviewMetaSection';
+import OverviewMetaSection from 'components/shared/Overview/OverviewMetaSection';
 import ExploreTablesStore from 'services/ExploreTables/ExploreTablesStore';
 import { fetchTables } from 'services/ExploreTables/ActionCreator';
 import { objectQuery } from 'services/helpers';
@@ -30,8 +30,8 @@ import FastActionToMessage from 'services/fast-action-message-helper';
 import { Redirect } from 'react-router-dom';
 import capitalize from 'lodash/capitalize';
 import Page404 from 'components/404';
-import BreadCrumb from 'components/BreadCrumb';
-import PlusButton from 'components/PlusButton';
+import BreadCrumb from 'components/shared/BreadCrumb';
+import PlusButton from 'components/shared/PlusButton';
 import Helmet from 'react-helmet';
 import queryString from 'query-string';
 import { Route } from 'react-router-dom';

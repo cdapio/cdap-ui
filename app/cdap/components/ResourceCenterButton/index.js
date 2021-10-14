@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import PlusButtonStore from 'services/PlusButtonStore';
-import PlusButtonModal from 'components/PlusButtonModal';
+import PlusButtonModal from 'components/shared/PlusButtonModal';
 import classnames from 'classnames';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';

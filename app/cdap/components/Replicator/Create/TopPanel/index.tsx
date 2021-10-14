@@ -21,12 +21,12 @@ import {
   ICreateContext,
   LEFT_PANEL_WIDTH,
 } from 'components/Replicator/Create';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import PluginInfo from 'components/Replicator/Create/TopPanel/PluginInfo';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { STEPS } from 'components/Replicator/Create/steps';
 
 const styles = (theme): StyleRules => {

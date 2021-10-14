@@ -30,7 +30,7 @@ import {
 } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
 import T from 'i18n-react';
 import orderBy from 'lodash/orderBy';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import isEmpty from 'lodash/isEmpty';
 import DataPrepStore from 'components/DataPrep/store';
 import lastIndexOf from 'lodash/lastIndexOf';

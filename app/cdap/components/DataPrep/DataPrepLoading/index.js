@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import DataPrepStore from 'components/DataPrep/store';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 
 require('./DataPrepLoading.scss');
 

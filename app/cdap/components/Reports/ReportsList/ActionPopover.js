@@ -16,10 +16,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import { MyReportsApi } from 'api/reports';
 import { listReports } from 'components/Reports/store/ActionCreator';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { DefaultSelection } from 'components/Reports/store/ActionCreator';
 import difference from 'lodash/difference';
 import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsStore';

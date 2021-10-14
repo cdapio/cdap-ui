@@ -14,7 +14,7 @@
  * the License.
  */
 import React from 'react';
-import KeyValuePairs from 'components/KeyValuePairs';
+import KeyValuePairs from 'components/shared/KeyValuePairs';
 import MicroserviceUploadActions from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadActions';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
 import {Provider, connect} from 'react-redux';

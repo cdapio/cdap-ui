@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Duration from 'components/Duration';
+import Duration from 'components/shared/Duration';
 import { humanReadableDuration } from 'services/helpers';
 import T from 'i18n-react';
 

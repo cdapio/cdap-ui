@@ -18,7 +18,7 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/If';
+import If from 'components/shared/If';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import React from 'react';

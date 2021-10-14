@@ -16,10 +16,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { Input } from 'reactstrap';
 import { NUMBER_TYPES } from 'services/global-constants';
-import SortableTable from 'components/SortableTable';
+import SortableTable from 'components/shared/SortableTable';
 import { objectQuery, roundDecimalToNDigits } from 'services/helpers';
 import findLast from 'lodash/findLast';
 import classnames from 'classnames';

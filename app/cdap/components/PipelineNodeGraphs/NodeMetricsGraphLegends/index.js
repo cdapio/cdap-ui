@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import T from 'i18n-react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import NodeMetricsGraphLegend from 'components/PipelineNodeGraphs/NodeMetricsGraphLegends/NodeMetricsGraphLegend';
 require('./NodeMetricsGraphLegends.scss');
 

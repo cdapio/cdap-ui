@@ -36,7 +36,7 @@ import ModelsTableWrapper from 'components/Experiments/DetailedView/ModelsTable'
 import Mousetrap from 'mousetrap';
 import isNil from 'lodash/isNil';
 import queryString from 'query-string';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import ExperimentDetailPageTitle from 'components/Experiments/DetailedView/ExperimentDetailPageTitle';
 
 require('./DetailedView.scss');

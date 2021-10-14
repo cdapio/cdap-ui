@@ -24,9 +24,9 @@ import { getWorkspaceList } from 'components/DataPrep/store/DataPrepActionCreato
 import WorkspaceTab from 'components/DataPrep/WorkspaceTabs/WorkspaceTab';
 import UncontrolledPopover from 'components/UncontrolledComponents/Popover';
 import { Link } from 'react-router-dom';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import T from 'i18n-react';
 import findIndex from 'lodash/findIndex';
 import debounce from 'lodash/debounce';

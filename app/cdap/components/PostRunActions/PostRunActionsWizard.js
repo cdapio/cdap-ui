@@ -16,13 +16,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyArtifactApi } from 'api/artifact';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import { preventPropagation } from 'services/helpers';
 import { MyPipelineApi } from 'api/pipeline';
-import ConfigurationGroup from 'components/ConfigurationGroup';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 
 const MATERIAL_UI_Z_INDEX = 1300;
 

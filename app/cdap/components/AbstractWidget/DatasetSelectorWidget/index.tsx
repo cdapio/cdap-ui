@@ -21,7 +21,7 @@ import { MyDatasetApi } from 'api/dataset';
 import classnames from 'classnames';
 import { IWidgetProps } from 'components/AbstractWidget';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';
 import * as React from 'react';

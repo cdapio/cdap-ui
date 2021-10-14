@@ -20,10 +20,10 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import DataFetcher from 'components/LogViewer/DataFetcher';
-import IconSVG from 'components/IconSVG';
-import If from 'components/If';
+import IconSVG from 'components/shared/IconSVG';
+import If from 'components/shared/If';
 import { LogLevel as LogLevelEnum } from 'components/LogViewer/types';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 
 const styles = (theme): StyleRules => {
   return {

@@ -16,8 +16,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
-import AbsLinkTo from 'components/AbsLinkTo';
+import IconSVG from 'components/shared/IconSVG';
+import AbsLinkTo from 'components/shared/AbsLinkTo';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
 

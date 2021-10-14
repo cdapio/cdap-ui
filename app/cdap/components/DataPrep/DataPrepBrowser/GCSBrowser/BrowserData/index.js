@@ -18,10 +18,10 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import { connect } from 'react-redux';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { setGCSSearch } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import TableContents from 'components/DataPrep/DataPrepBrowser/GCSBrowser/BrowserData/TableContents';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GCSBrowser.BrowserData';

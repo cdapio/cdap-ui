@@ -16,7 +16,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
 import { ViewByOptions } from 'components/OpsDashboard/store/DashboardStore';
 import ViewByOptionSelector from 'components/OpsDashboard/RunsGraph/Legends/ViewByOptionSelector';

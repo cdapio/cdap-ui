@@ -19,7 +19,7 @@ import Input from '@material-ui/core/Input';
 import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import If from 'components/If';
+import If from 'components/shared/If';
 import AbstractRow, {
   IAbstractRowProps,
   AbstractRowStyles,

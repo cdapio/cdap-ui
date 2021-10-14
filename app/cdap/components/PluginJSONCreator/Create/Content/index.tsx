@@ -28,9 +28,9 @@ import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 
 import ConfigurationGroupPage from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage';
 import FilterPage from 'components/PluginJSONCreator/Create/Content/FilterPage';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { JSONStatusMessage } from 'components/PluginJSONCreator/constants';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import OutputPage from 'components/PluginJSONCreator/Create/Content/OutputPage';
 import PluginInfoPage from 'components/PluginJSONCreator/Create/Content/PluginInfoPage';
 

@@ -17,10 +17,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { isNilOrEmpty } from 'services/helpers';
-import { DEFAULT_ERROR_MESSAGE } from 'components/ErrorBoundary';
+import { DEFAULT_ERROR_MESSAGE } from 'components/shared/ErrorBoundary';
 import Page500ErrorStack from 'components/500/Page500ErrorStack';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 require('./500.scss');
 const I18N_PREFIX = 'features.Page500';

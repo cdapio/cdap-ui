@@ -21,8 +21,8 @@ import NamespaceStore from 'services/NamespaceStore';
 import { MyProgramApi } from 'api/program';
 import FastActionButton from '../FastActionButton';
 import { convertProgramToApi } from 'services/program-api-converter';
-import ConfirmationModal from 'components/ConfirmationModal';
-import IconSVG from 'components/IconSVG';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
+import IconSVG from 'components/shared/IconSVG';
 import { Tooltip } from 'reactstrap';
 import T from 'i18n-react';
 

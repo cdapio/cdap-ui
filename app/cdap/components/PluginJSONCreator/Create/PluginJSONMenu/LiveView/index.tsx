@@ -19,11 +19,11 @@ import * as React from 'react';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import CollapseLiveViewButton from 'components/PluginJSONCreator/Create/PluginJSONMenu/JSONActionButtons/CollapseLiveViewButton';
-import If from 'components/If';
+import If from 'components/shared/If';
 import LiveConfigurationGroup from 'components/PluginJSONCreator/Create/PluginJSONMenu/LiveView/LiveConfigurationGroup';
 import LiveJSON from 'components/PluginJSONCreator/Create/PluginJSONMenu/LiveView/LiveJSON';
 import { LiveViewMode } from 'components/PluginJSONCreator/Create/PluginJSONMenu';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import debounce from 'lodash/debounce';
 
 const styles = (theme): StyleRules => {

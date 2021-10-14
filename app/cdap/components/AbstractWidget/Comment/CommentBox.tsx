@@ -27,11 +27,11 @@ import { COMMENT_WIDTH, IComment } from 'components/AbstractWidget/Comment/Comme
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import CommentMenu from 'components/AbstractWidget/Comment/CommentMenu';
 import { humanReadableDate } from 'services/helpers';
-import Markdown from 'components/Markdown';
+import Markdown from 'components/shared/Markdown';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import isObject from 'lodash/isObject';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const useStyles = makeStyle<Theme, ICommentStyleProps>((theme) => {
   return {

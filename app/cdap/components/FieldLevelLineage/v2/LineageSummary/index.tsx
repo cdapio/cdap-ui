@@ -29,10 +29,10 @@ import { Consumer, FllContext } from 'components/FieldLevelLineage/v2/Context/Fl
 import * as d3 from 'd3';
 import debounce from 'lodash/debounce';
 import { grey, orange } from 'components/ThemeWrapper/colors';
-import If from 'components/If';
+import If from 'components/shared/If';
 import TopPanel from 'components/FieldLevelLineage/v2/TopPanel';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import Heading, { HeadingTypes } from 'components/Heading';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import T from 'i18n-react';
 
 const PREFIX = 'features.FieldLevelLineage';

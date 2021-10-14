@@ -22,12 +22,12 @@ import { objectQuery } from 'services/helpers';
 import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 import T from 'i18n-react';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import HostPortEditor from 'components/DataPrepConnections/KafkaConnection/HostPortEditor';
 import uuidV4 from 'uuid/v4';
 import ee from 'event-emitter';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/CardActionFeedback';
-import BtnWithLoading from 'components/BtnWithLoading';
+import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import BtnWithLoading from 'components/shared/BtnWithLoading';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
 
 const PREFIX = 'features.DataPrepConnections.AddConnections.Kafka';

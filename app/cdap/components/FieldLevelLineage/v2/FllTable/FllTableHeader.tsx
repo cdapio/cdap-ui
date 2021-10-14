@@ -24,7 +24,7 @@ import {
 } from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
 import { Link } from 'react-router-dom';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
 
 const styles = (theme): StyleRules => {

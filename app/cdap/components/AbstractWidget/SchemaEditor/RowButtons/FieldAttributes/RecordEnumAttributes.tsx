@@ -15,11 +15,11 @@
  */
 
 import * as React from 'react';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import Button from '@material-ui/core/Button';
 import { IAttributesComponentProps } from 'components/AbstractWidget/SchemaEditor/EditorTypes';
 import { useAttributePopoverStyles } from 'components/AbstractWidget/SchemaEditor/RowButtons/FieldAttributes/FieldAttributesPopoverButton';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 function RecordEnumTypeAttributes({
   typeProperties,

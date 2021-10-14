@@ -32,14 +32,14 @@ import moment from 'moment';
 import { convertProgramToApi } from 'services/program-api-converter';
 import classnames from 'classnames';
 import T from 'i18n-react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import {
   getTicksTotal,
   xTickFormat,
   getXDomain,
 } from 'components/PipelineSummary/RunsGraphHelpers';
 import CopyableID from 'components/CopyableID';
-import SortableStickyTable from 'components/SortableStickyTable';
+import SortableStickyTable from 'components/shared/SortableStickyTable';
 import { getYAxisProps } from 'components/PipelineSummary/RunsGraphHelpers';
 import ee from 'event-emitter';
 import EmptyMessageContainer from 'components/PipelineSummary/EmptyMessageContainer';

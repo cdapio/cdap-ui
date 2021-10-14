@@ -19,9 +19,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { KEY_CODE } from 'services/global-constants';
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import classnames from 'classnames';
 
 export const AbstractRowStyles = (theme): StyleRules => {

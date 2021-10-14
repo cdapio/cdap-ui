@@ -20,12 +20,12 @@ import { WithStyles, withStyles } from '@material-ui/styles';
 import { objectQuery, preventPropagation } from 'services/helpers';
 
 import Button from '@material-ui/core/Button';
-import CodeEditor from 'components/CodeEditor';
+import CodeEditor from 'components/shared/CodeEditor';
 import DataPrepHome from 'components/DataPrepHome';
 import { IWidgetProps } from 'components/AbstractWidget';
-import IconSVG from 'components/IconSVG';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
+import IconSVG from 'components/shared/IconSVG';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import PropTypes from 'prop-types';
 import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';

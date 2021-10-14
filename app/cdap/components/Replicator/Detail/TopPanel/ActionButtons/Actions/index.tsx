@@ -17,11 +17,11 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
-import ActionsPopover, { IAction } from 'components/ActionsPopover';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import DeleteConfirmation, { InstanceType } from 'components/Replicator/DeleteConfirmation';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Redirect } from 'react-router-dom';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 const styles = (theme): StyleRules => {
   return {

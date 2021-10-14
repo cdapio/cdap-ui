@@ -17,11 +17,11 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import UncontrolledPopover from 'components/UncontrolledComponents/Popover';
+import UncontrolledPopover from 'components/shared/Popover';
 import MyDataPrepApi from 'api/dataprep';
 import NamespaceStore from 'services/NamespaceStore';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import DatabaseConnection from 'components/DataPrepConnections/DatabaseConnection';
 import KafkaConnection from 'components/DataPrepConnections/KafkaConnection';
 import S3Connection from 'components/DataPrepConnections/S3Connection';
@@ -32,8 +32,8 @@ import ADLSConnection from 'components/DataPrepConnections/ADLSConnection';
 import T from 'i18n-react';
 import { objectQuery } from 'services/helpers';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
-import CardActionFeedback from 'components/CardActionFeedback';
-import If from 'components/If';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
+import If from 'components/shared/If';
 import Mousetrap from 'mousetrap';
 require('./ConnectionPopover.scss');
 

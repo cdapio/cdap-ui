@@ -20,7 +20,7 @@ import PlusButtonStore from 'services/PlusButtonStore';
 import NamespaceStore from 'services/NamespaceStore';
 import { validateImportJSON } from 'services/PipelineErrorFactory';
 import { objectQuery } from 'services/helpers';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { Input, Label } from 'reactstrap';
 import T from 'i18n-react';
 import uuidV4 from 'uuid/v4';

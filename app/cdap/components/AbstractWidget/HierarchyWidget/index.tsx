@@ -22,7 +22,7 @@ import HierarchyTree from './HierarchyTree';
 import uuidV4 from 'uuid/v4';
 import { objectQuery } from 'services/helpers';
 import { flatToTree, toJsonHandler, jsonToFlat, getFields, inputSchemaToFlat } from './dataHandler';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 
 export const IconWrapper = withStyles(() => {
   return {

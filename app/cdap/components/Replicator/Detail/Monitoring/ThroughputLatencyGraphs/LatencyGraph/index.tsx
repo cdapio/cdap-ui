@@ -16,13 +16,13 @@
 
 import React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import {
   COLOR_MAP,
   renderLatencyGraph,
 } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/LatencyGraph/latency';
 import { IThroughputLatencyData } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/parser';
-import ChartContainer from 'components/ChartContainer';
+import ChartContainer from 'components/shared/ChartContainer';
 import ChartTableSwitcher from 'components/Replicator/Detail/ChartTableSwitcher';
 import LatencyTable from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/LatencyGraph/LatencyTable';
 import LatencyTooltip from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/LatencyGraph/LatencyTooltip';

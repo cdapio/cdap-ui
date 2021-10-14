@@ -18,7 +18,7 @@ import * as React from 'react';
 
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
-import CodeEditor from 'components/CodeEditor';
+import CodeEditor from 'components/shared/CodeEditor';
 import { IWidgetProps } from 'components/AbstractWidget';
 import PropTypes from 'prop-types';
 import ThemeWrapper from 'components/ThemeWrapper';

@@ -18,11 +18,11 @@ import * as React from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import { SchemaEditor } from 'components/AbstractWidget/SchemaEditor';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 import FileDnD from 'components/FileDnD';
 import { Button } from '@material-ui/core';
 import { getDefaultEmptyAvroSchema } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const emptySchema = getDefaultEmptyAvroSchema();
 

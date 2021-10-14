@@ -15,10 +15,10 @@
  */
 
 import React from 'react';
-import { ContextMenu, IContextMenuOption } from 'components/ContextMenu';
+import { ContextMenu, IContextMenuOption } from 'components/shared/ContextMenu';
 import PropTypes from 'prop-types';
 import { copyToClipBoard } from 'services/Clipboard';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import CommentIcon from 'components/AbstractWidget/Comment/CommentIcon';
 
 export default function PluginContextMenu({

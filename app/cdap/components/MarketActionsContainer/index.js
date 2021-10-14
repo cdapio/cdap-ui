@@ -21,7 +21,7 @@ import getIcon from 'services/market-action-icon-map';
 import uuidV4 from 'uuid/v4';
 import classnames from 'classnames';
 import AbstractWizard from 'components/AbstractWizard';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import MarketStore from 'components/Market/store/market-store';
 
 require('./MarketActionsContainer.scss');

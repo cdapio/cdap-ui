@@ -17,8 +17,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
 import PipelineResources from 'components/PipelineResources';
 import { ENGINE_OPTIONS } from 'components/PipelineConfigurations/PipelineConfigConstants';
 import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';

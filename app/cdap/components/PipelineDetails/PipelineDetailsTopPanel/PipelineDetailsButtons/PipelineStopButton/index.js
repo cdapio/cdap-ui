@@ -17,8 +17,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { MyProgramApi } from 'api/program';
-import IconSVG from 'components/IconSVG';
-import Alert from 'components/Alert';
+import IconSVG from 'components/shared/IconSVG';
+import Alert from 'components/shared/Alert';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS } from 'services/global-constants';
 import PipelineStopPopover from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineStopButton/PipelineStopPopover';

@@ -25,13 +25,13 @@ import SearchBox from 'components/PipelineList/DeployedPipelineView/SearchBox';
 import Pagination from 'components/PipelineList/DeployedPipelineView/Pagination';
 import { Provider } from 'react-redux';
 import Store from 'components/PipelineList/DeployedPipelineView/store';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { categorizeGraphQlErrors } from 'services/helpers';
-import ErrorBanner from 'components/ErrorBanner';
+import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
 
 import './DeployedPipelineView.scss';

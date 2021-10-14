@@ -19,7 +19,7 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import ConfigDisplay from 'components/Replicator/ConfigDisplay';
 import TableList from 'components/Replicator/Create/Content/Summary/TableList';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ActionButtons from 'components/Replicator/Create/Content/Summary/ActionButtons';
 
 const styles = (theme): StyleRules => {

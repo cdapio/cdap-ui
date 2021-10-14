@@ -22,10 +22,10 @@ import { Modal, ModalBody } from 'reactstrap';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
-import CodeEditor from 'components/CodeEditor';
+import CodeEditor from 'components/shared/CodeEditor';
 import { IWidgetProps } from '..';
-import IconSVG from 'components/IconSVG';
-import If from 'components/If';
+import IconSVG from 'components/shared/IconSVG';
+import If from 'components/shared/If';
 import RulesEngineHome from 'components/RulesEngineHome';
 import { objectQuery } from 'services/helpers';
 

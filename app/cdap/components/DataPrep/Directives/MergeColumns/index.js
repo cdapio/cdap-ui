@@ -23,7 +23,7 @@ import { isCustomOption } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { columnNameAlreadyExists } from 'components/DataPrep/helper';
-import WarningContainer from 'components/WarningContainer';
+import WarningContainer from 'components/shared/WarningContainer';
 import { setPopoverOffset } from 'components/DataPrep/helper';
 
 import T from 'i18n-react';

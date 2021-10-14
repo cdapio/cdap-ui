@@ -18,8 +18,8 @@ import PropTypes from 'prop-types';
 import T from 'i18n-react';
 import React from 'react';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
 require('./ListingInfo.scss');
 
 const ListingInfo = ({ bucketData, loading, truncated }) => {

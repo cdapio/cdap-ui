@@ -15,10 +15,10 @@
  */
 
 import * as React from 'react';
-import Duration from 'components/Duration';
+import Duration from 'components/shared/Duration';
 import { GLOBALS } from 'services/global-constants';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 interface IProps {
   pipeline: IPipeline;

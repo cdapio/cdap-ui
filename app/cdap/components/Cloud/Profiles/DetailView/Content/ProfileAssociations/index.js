@@ -19,7 +19,7 @@ import React, { Component } from 'react';
 import { MySearchApi } from 'api/search';
 import { isNilOrEmpty, objectQuery, timeSinceCreated } from 'services/helpers';
 import { GLOBALS, SYSTEM_NAMESPACE } from 'services/global-constants';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import {
   ONEDAYMETRICKEY,

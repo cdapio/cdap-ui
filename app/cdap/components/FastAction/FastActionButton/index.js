@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { preventPropagation } from 'services/helpers';
 
 export default function FastActionButton({ icon, action, disabled, id, iconClasses }) {

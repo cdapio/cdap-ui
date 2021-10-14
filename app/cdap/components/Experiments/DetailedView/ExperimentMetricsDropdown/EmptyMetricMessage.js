@@ -16,8 +16,8 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Popover from 'components/Popover';
-import IconSVG from 'components/IconSVG';
+import Popover from 'components/shared/Popover';
+import IconSVG from 'components/shared/IconSVG';
 
 const POPOVER_ICON_DIMENSION = 20;
 

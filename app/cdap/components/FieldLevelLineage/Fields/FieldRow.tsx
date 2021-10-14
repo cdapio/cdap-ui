@@ -18,7 +18,7 @@ import * as React from 'react';
 import { getLineageSummary, getOperations } from 'components/FieldLevelLineage/store/ActionCreator';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import If from 'components/If';
+import If from 'components/shared/If';
 import T from 'i18n-react';
 import { Directions } from 'components/FieldLevelLineage/LineageSummary/Directions';
 

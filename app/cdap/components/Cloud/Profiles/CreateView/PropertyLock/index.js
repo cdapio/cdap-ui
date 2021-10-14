@@ -16,11 +16,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { togglePropertyLock } from 'components/Cloud/Profiles/CreateView/CreateProfileActionCreator';
 import { objectQuery } from 'services/helpers';
 import { connect } from 'react-redux';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 require('./PropertyLock.scss');
 
 function PropertyLock({ isEditable, propertyName }) {

@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 
 require('./HyperParamWidget.scss');
 const BoolWidget = ({ options, value, onChange }) => {

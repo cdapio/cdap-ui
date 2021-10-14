@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import PlusButton from 'components/PlusButton';
+import PlusButton from 'components/shared/PlusButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
 import { Redirect } from 'react-router-dom';

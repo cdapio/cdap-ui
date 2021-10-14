@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Actions } from 'components/FieldLevelLineage/store/Store';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 function NavigationView({ activeIndex, limit, prev, next }) {
   const prevDisabled = activeIndex === 0;

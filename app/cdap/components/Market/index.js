@@ -15,7 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab from 'components/shared/ConfigurableTab';
 import { MyMarketApi } from 'api/market';
 import MarketAction from './action/market-action.js';
 import find from 'lodash/find';

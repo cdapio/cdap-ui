@@ -28,7 +28,7 @@ import {
 } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
 import moment from 'moment';
 import RulesList from 'components/RulesEngineHome/RuleBookDetails/RulesList';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import CreateRulebook from 'components/RulesEngineHome/CreateRulebook';
 import MyRulesEngineApi from 'api/rulesengine';
 import RulebookMenu from 'components/RulesEngineHome/RuleBookDetails/RulebookMenu';

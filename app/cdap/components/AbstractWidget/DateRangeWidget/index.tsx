@@ -17,7 +17,7 @@
 import React, { useState } from 'react';
 
 import { DatePickerStyles } from 'components/AbstractWidget/DateTimeWidget';
-import ExpandableTimeRange from 'components/TimeRangePicker/ExpandableTimeRange';
+import ExpandableTimeRange from 'components/shared/TimeRangePicker/ExpandableTimeRange';
 import { IWidgetProps } from 'components/AbstractWidget';
 import { WithStyles } from '@material-ui/core/styles/withStyles';
 

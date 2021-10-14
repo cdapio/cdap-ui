@@ -34,7 +34,7 @@ import ee from 'event-emitter';
 import Version from 'services/VersionRange/Version';
 import { Theme } from 'services/ThemeHelper';
 import { setWorkspace } from 'components/DataPrep/store/DataPrepActionCreator';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import classnames from 'classnames';
 
 require('./DataPrepHome.scss');

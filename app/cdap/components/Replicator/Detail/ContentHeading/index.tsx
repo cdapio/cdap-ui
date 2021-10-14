@@ -19,7 +19,7 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { DetailContext } from 'components/Replicator/Detail';
 import { objectQuery } from 'services/helpers';
 import ConfigDisplay from 'components/Replicator/ConfigDisplay';
-import If from 'components/If';
+import If from 'components/shared/If';
 import RunInfo from 'components/Replicator/Detail/ContentHeading/RunInfo';
 
 const styles = (theme): StyleRules => {
