@@ -737,19 +737,6 @@ function santizeStringForHTMLID(str) {
   return str.replace(/[ \/]/g, '-');
 }
 
-/**
- * Wrapper for useEffect that ensures the latest version of the callback will be used, unlike useEffect
- */
-function useOnUnmount(unmountHandler) {
-  const unmountRef = React.useRef(unmountHandler);
-  unmountRef.current = unmountHandler;
-  React.useEffect(() => {
-    return () => {
-      unmountRef.current();
-    };
-  }, [unmountRef]);
-}
-
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
   'cdap-data-streams',
@@ -808,6 +795,5 @@ export {
   isAuthSetToProxyMode,
   isAuthSetToManagedMode,
   santizeStringForHTMLID,
-  useOnUnmount,
   PIPELINE_ARTIFACTS,
 };
