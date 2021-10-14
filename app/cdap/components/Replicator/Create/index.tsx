@@ -22,18 +22,14 @@ import Content from 'components/Replicator/Create/Content';
 import { Redirect } from 'react-router-dom';
 import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { fetchPluginInfo, constructTablesSelection } from 'components/Replicator/utilities';
+import { constructTablesSelection, convertConfigToState } from 'components/Replicator/utilities';
 
-import { PluginType } from 'components/Replicator/constants';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import uuidV4 from 'uuid/v4';
 import { MyReplicatorApi } from 'api/replicator';
-import { generateTableKey, convertConfigToState } from 'components/Replicator/utilities';
-import { Map, Set, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import { Observable } from 'rxjs/Observable';
 import {
-  DML,
-  ITable,
   IPluginConfig,
   IPluginInfo,
   ITablesStore,
