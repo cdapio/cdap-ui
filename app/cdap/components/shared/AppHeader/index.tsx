@@ -90,6 +90,9 @@ class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderSta
         }
       },
       (err) => {
+        this.setState({
+          showGlobalLoadingIcon: false,
+        });
         // tslint:disable-next-line: no-console
         console.log('Error retrieving list of namespaces', err);
       }

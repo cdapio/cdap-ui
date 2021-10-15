@@ -2126,6 +2126,13 @@ features:
       newest: Newset First
       ascending: A → Z
       descending: Z → A
+  ApiError:    
+    CmekError:
+      mainTitle: CMEK Key Revoked
+      secondaryTitle: Instance is unusable because the CMEK key for this instance has been revoked.
+      suggestionPart1: View the  
+      suggestionPart2: troubleshooting
+      suggestionPart3: page
   Pagination:
     dropdown-label: Page
 

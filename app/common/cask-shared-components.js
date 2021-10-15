@@ -73,6 +73,7 @@ var IconSVG = require('../cdap/components/shared/IconSVG').default;
 var PipelineConfigConstants = require('../cdap/components/PipelineConfigurations/PipelineConfigConstants');
 var AuthRefresher = require('../cdap/components/AuthRefresher').default;
 var ToggleSwitch = require('../cdap/components/shared/ToggleSwitch').default;
+var ApiErrorDialog = require('../cdap/components/sharedApiErrorDialog').default;
 var PipelineList = require('../cdap/components/PipelineList').default;
 var AppHeader = require('../cdap/components/shared/AppHeader').default;
 var Markdown = require('../cdap/components/shared/Markdown').default;
@@ -182,6 +183,7 @@ export {
   IconSVG,
   PipelineConfigConstants,
   AuthRefresher,
+  ApiErrorDialog,
   ToggleSwitch,
   PipelineList,
   AppHeader,
