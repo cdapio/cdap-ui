@@ -18,6 +18,8 @@ class MyBatchPipelineConfigCtrl {
     this.uuid = uuid;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
     this.myAlertOnValium = myAlertOnValium;
+    //console.log(`constructor val: ${GLOBALS.forceDynamicExecutionOff}`);
+    console.log(GLOBALS);
     this.GLOBALS = GLOBALS;
 
     this.engine = this.store.getEngine();
@@ -48,6 +50,9 @@ class MyBatchPipelineConfigCtrl {
     this.forceDynamicExecution = this.store.getForceDynamicExecution();
     this.showNumOfExecutors = this.getShowNumOfExecutors();
     this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
+    this.numExecutorsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    this.numExecutors = this.store.getNumExecutors();
+    this.shuffleTrackingTimeout = this.store.getShufflteTrackingTimeout();
 
     this.customEngineConfig = {
       'pairs': HydratorPlusPlusHydratorService.convertMapToKeyValuePairs(this.store.getCustomConfigForDisplay())
@@ -94,20 +99,22 @@ class MyBatchPipelineConfigCtrl {
   }
 
   onForceDynamicEngineChange() {
-    console.log('onForceDynamicEngineChange');
+    //console.log('onForceDynamicEngineChange');
     this.showNumOfExecutors = this.getShowNumOfExecutors();
     this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
-    console.log(`showNumOfExecutors: ${this.showNumOfExecutors}`);
+    //console.log(`showNumOfExecutors: ${this.showNumOfExecutors}`);
   }
 
   getShowNumOfExecutors() {
-    console.log(`Internal value: ${this.forceDynamicExecution}`);
-    console.log(`Global value: ${this.GLOBALS.forceDynamicExecutionOff}`);
-    return this.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff;
+    //console.log(`Internal value: ${this.forceDynamicExecution}`);
+    //console.log(`Global value: ${this.GLOBALS.dynamicExecutionForceOff}`);
+    return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff;
+    //return this.forceDynamicExecution === 'forceOff';
   }
 
   getShowShuffleTrackingTimeout() {
-    return this.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn;
+    return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn;
+    //return this.forceDynamicExecution === 'forceOn';
   }
 
   applyConfig() {
@@ -122,6 +129,12 @@ class MyBatchPipelineConfigCtrl {
     this.store.setMemoryMB(this.executorResources.memoryMB);
     this.store.setVirtualCores(this.executorResources.virtualCores);
     this.store.setForceDynamicExecution(this.forceDynamicExecution);
+    if (this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff) {
+      this.store.setNumExecutors(this.numExecutors);
+    }
+    if (this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn) {
+      this.store.setShuffleTrackingTimeout(this.shuffleTrackingTimeout);
+    }
   }
 
   applyAndClose() {

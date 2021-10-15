@@ -240,7 +240,7 @@
             <option value="forceOn">Force On</option>
             <option value="forceOff">Force Off</option>
           </select>
-          <div ng-if="BatchPiplineConfigCtrl.showNumOfExecutors" class="label-with-toggle numExecutors form-group row">
+          <div ng-if="BatchPipelineConfigCtrl.showNumOfExecutors" class="label-with-toggle numExecutors form-group row dynamic-execution-option">
             <span class="toggle-label col-xs-4">Number of executors</span>
             <div class="col-xs-7">
               <select class="form-control small-dropdown"
@@ -249,6 +249,19 @@
               </select>
               <i class="fa fa-info-circle"
                  uib-tooltip="The number of executors to allocate for this pipeline on Apache Yarn."
+                 tooltip-placement="right">
+              </i>
+            </div>
+          </div>
+          <div ng-if="BatchPipelineConfigCtrl.showShuffleTrackingTimeout" class="label-with-toggle form-group row dynamic-execution-option">
+            <span class="toggle-label col-xs-4">Shuffle tracking timeout</span>
+            <div class="col-xs-7">
+              <select class="form-control small-dropdown"
+                  ng-model="BatchPiplineConfigCtrl.shuffleTrackingTimeout"
+                  ng-options="option as option for option in BatchPiplineConfigCtrl.numExecutorsOptions">
+              </select>
+              <i class="fa fa-info-circle"
+                 uib-tooltip="The shuffle tracking timeout."
                  tooltip-placement="right">
               </i>
             </div>
