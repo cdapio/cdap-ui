@@ -51,6 +51,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import RouteToNamespace from 'components/RouteToNamespace';
 import StatusAlertMessage from 'components/StatusAlertMessage';
+import ApiErrorDialog from 'components/ApiErrorDialog';
 import StatusFactory from 'services/StatusFactory';
 // Initialize i18n
 import T from 'i18n-react';
@@ -128,6 +129,7 @@ class CDAP extends Component {
       loading: true,
       pageLevelError: false,
       isNamespaceFetchInFlight: false,
+      apiError: false,
     };
     this.eventEmitter = ee(ee);
     this.eventEmitter.on(WINDOW_ON_FOCUS, this.onWindowFocus);
@@ -144,11 +146,17 @@ class CDAP extends Component {
         this.setState({ pageLevelError: handlePageLevelError(err), loading: false });
       }
     });
+    this.eventEmitter.on(globalEvents.API_ERROR, (apiError) => {
+      if (this.state.apiError !== apiError) {
+        this.setState({ apiError: true });
+      }
+    });
   }
 
   componentWillUnmount() {
     this.eventEmitter.off(WINDOW_ON_FOCUS, this.onWindowFocus);
     this.eventEmitter.off(WINDOW_ON_BLUR, this.onWindowBlur);
+    this.eventEmitter.off(globalEvents.API_ERROR);
     if (this.namespaceSub) {
       this.namespaceSub.unsubscribe();
     }
@@ -209,15 +217,20 @@ class CDAP extends Component {
     });
     if (!VersionStore.getState().version) {
       this.setState({ loading: true });
-      MyCDAPVersionApi.get().subscribe((res) => {
-        VersionStore.dispatch({
-          type: VersionActions.updateVersion,
-          payload: {
-            version: res.version,
-          },
-        });
-        this.setState({ loading: false });
-      });
+      MyCDAPVersionApi.get().subscribe(
+        (res) => {
+          VersionStore.dispatch({
+            type: VersionActions.updateVersion,
+            payload: {
+              version: res.version,
+            },
+          });
+          this.setState({ loading: false });
+        },
+        () => {
+          this.setState({ loading: false });
+        }
+      );
     }
   };
 
@@ -357,6 +370,7 @@ class CDAP extends Component {
             <AppHeader />
             <LoadingIndicator />
             <StatusAlertMessage />
+            {this.state.apiError && <ApiErrorDialog />}
             <If condition={this.state.isNamespaceFetchInFlight}>
               <div className="loading-svg">
                 <LoadingSVG />
