@@ -135,6 +135,9 @@ export function CreateConnection({
     if (name.trim() === '') {
       setError('Connection name must not be empty.');
       return;
+    } else if (!new RegExp('^[\\w\\s-]+$').test(name)) {
+      setError('Connection name can only include letters, numbers, hypen and underscore.');
+      return;
     }
 
     if (!isView) {
