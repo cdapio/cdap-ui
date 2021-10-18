@@ -546,15 +546,6 @@ class HydratorPlusPlusConfigStore {
   setNumExecutors(num) {
     this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES] = num;
   }
-  getShuffleTrackingTimeout() {
-    if (this.myHelpers.objectQuery(this.state, 'config', 'properties', window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT)) {
-      return this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT].toString();
-    }
-    return '1';
-  }
-  setShuffleTrackingTimeout(num) {
-    this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT] = num;
-  }
   getInstrumentation() {
     return this.getConfig().processTimingEnabled;
   }

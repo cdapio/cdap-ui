@@ -49,10 +49,8 @@ class MyBatchPipelineConfigCtrl {
     this.allowForceDynamicExecution = window.CDAP_UI_THEME.features['allow-force-dynamic-execution'];
     this.forceDynamicExecution = this.store.getForceDynamicExecution();
     this.showNumOfExecutors = this.getShowNumOfExecutors();
-    this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
     this.numExecutorsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     this.numExecutors = this.store.getNumExecutors();
-    this.shuffleTrackingTimeout = this.store.getShufflteTrackingTimeout();
 
     this.customEngineConfig = {
       'pairs': HydratorPlusPlusHydratorService.convertMapToKeyValuePairs(this.store.getCustomConfigForDisplay())
@@ -131,9 +129,6 @@ class MyBatchPipelineConfigCtrl {
     this.store.setForceDynamicExecution(this.forceDynamicExecution);
     if (this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff) {
       this.store.setNumExecutors(this.numExecutors);
-    }
-    if (this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn) {
-      this.store.setShuffleTrackingTimeout(this.shuffleTrackingTimeout);
     }
   }
 
