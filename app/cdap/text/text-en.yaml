@@ -2072,58 +2072,6 @@ features:
     suggestion1Part2: refresh
     suggestion1Part3: the page
     suggestion2: If you entered the url by hand, double check if that is correct
-  MetadataHome:
-    searchPlaceholder: Search
-    searchTipsTitle: Search Tips
-    searchTipsSubTitle: Search datasets by
-    searchTips1:
-      query: The name
-      description: "- Input the dataset name by using the format"
-      highlight: "entity-name:<dataset-name>"
-      example: "(example: entity-name:userprofiles)"
-    searchTips2:
-      query: A field in the dataset schema
-      description: "- Input the field name of a schema using the format"
-      highlight: "schema:<field-name>"
-      example: "(example: schema:zipcode)"
-    searchTips3:
-      query: A property annotated on the dataset
-      description: "- Input a property as a query, using the format"
-      highlight: "<key>:<value>"
-      example: "(example: env:production)"
-    searchTips4:
-      query: A tag annotated on the dataset
-      description: "- Input a name of a tag as a query, using the format"
-      highlight: "tags:<tag-name>"
-      example: "(example: tags:batch)"
-    searchTips5:
-      query: Wild card
-      description: "- Append "
-      highlight: "*"
-      description1: "to the end of the search term"
-      example: "(example: user* or tags:b*)"
-  MetadataSearch:
-    filters:
-      metadata: Metadata
-      entities: Entities
-    searchPlaceholder: Search datasets
-    noResults: No results match your filter settings
-    loading: "Searching for \"{query}\""
-    emptyResults: "No results found for \"{query}\""
-    noDescription: No description provided for this Dataset.
-    resultCount:
-      1: "{page} of {total} result"
-      _: "{page} of {total} results"
-    created: "Created:"
-    filterBy: Filter by
-    showAll: show all
-    only: only
-    sortBy: Sort by
-    sortOptions:
-      oldest: Oldest First
-      newest: Newset First
-      ascending: A → Z
-      descending: Z → A
   ApiError:    
     CmekError:
       mainTitle: CMEK Key Revoked
