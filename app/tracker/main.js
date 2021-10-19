@@ -261,6 +261,7 @@ angular
     getVersion();
     this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
     this.pageLevelError = null;
+    this.apiError = false;
     const {globalEvents} = window.CaskCommon;
 
     this.eventEmitter.on(globalEvents.NONAMESPACE, () => {
@@ -283,7 +284,11 @@ angular
         this.pageLevelError = myHelpers.handlePageLevelError(error);
       }
     });
-
+    this.eventEmitter.on(globalEvents.API_ERROR, (hasError) => {
+      if (this.apiError !== hasError) {
+        this.apiError = true;
+      }
+    });
 
     $scope.copyrightYear = new Date().getFullYear();
 

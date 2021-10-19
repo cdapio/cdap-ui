@@ -67,6 +67,9 @@ angular
   .directive('authRefresher', function(reactDirective) {
     return reactDirective(window.CaskCommon.AuthRefresher);
   })
+  .directive('apiErrorDialog', function(reactDirective) {
+    return reactDirective(window.CaskCommon.ApiErrorDialog);
+  })
   .directive('toggleSwitch', function(reactDirective) {
     return reactDirective(window.CaskCommon.ToggleSwitch);
   })

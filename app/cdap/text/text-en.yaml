@@ -2072,6 +2072,13 @@ features:
     suggestion1Part2: refresh
     suggestion1Part3: the page
     suggestion2: If you entered the url by hand, double check if that is correct
+  ApiError:    
+    CmekError:
+      mainTitle: CMEK Key Revoked
+      secondaryTitle: Instance is unusable because the CMEK key for this instance has been revoked.
+      suggestionPart1: View the  
+      suggestionPart2: troubleshooting
+      suggestionPart3: page
   Pagination:
     dropdown-label: Page
 
