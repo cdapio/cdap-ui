@@ -198,6 +198,7 @@ export default class Datasource {
         excludeFromHealthCheck,
       };
     }
+    console.log('sending');
 
     this.socketSend('request', generatedResource);
 

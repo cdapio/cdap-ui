@@ -1126,6 +1126,8 @@ class HydratorPlusPlusConfigStore {
       context: this.$stateParams.namespace,
       draftId,
     };
+    console.log('saveAsDraft');
+    console.log(config);
     /**
      * If the user is editing draft that is using old user store, then we
      * remove it from old user store and save it in the new drafts API.
@@ -1144,6 +1146,7 @@ class HydratorPlusPlusConfigStore {
         })
         .then(() => this.myPipelineApi.saveDraft(params, config).$promise)
         .then(() => {
+          console.log('save complete');
           this.$stateParams.draftId = draftId;
           this.$state.go('hydrator.create', this.$stateParams, {notify: false});
           this.HydratorPlusPlusConsoleActions.addMessage([{
