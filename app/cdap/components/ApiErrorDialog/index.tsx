@@ -15,25 +15,28 @@
  */
 
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import T from 'i18n-react';
+import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 
 const I18N_PREFIX = 'features.ApiError.CmekError';
 
-const ErrorMsg = styled(DialogContent)`
-  font-size: 1.1rem;
-`;
+const styles = (): StyleRules => {
+  return {
+    errorMsg: {
+      fontSize: '1.1rem',
+    },
+    suggestion: {
+      fontSize: '1.1rem !important',
+    },
+  };
+};
 
-const Suggestion = styled(Button)`
-  font-size: 1.1rem !important;
-`;
-
-const ApiErrorDialog: React.FC = () => {
+const ApiErrorDialogView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   function redirect() {
     window.open('https://cloud.google.com/data-fusion/docs/support/troubleshooting', '_blank');
   }
@@ -41,16 +44,16 @@ const ApiErrorDialog: React.FC = () => {
   return (
     <Dialog open={true}>
       <DialogTitle>{T.translate(`${I18N_PREFIX}.mainTitle`)}</DialogTitle>
-      <ErrorMsg>{T.translate(`${I18N_PREFIX}.secondaryTitle`)}</ErrorMsg>
+      <DialogContent className={classes.errorMsg}>{T.translate(`${I18N_PREFIX}.secondaryTitle`)}</DialogContent>
       <DialogActions>
-        <Suggestion onClick={redirect} color="primary">
+        <Button className={classes.suggestion} onClick={redirect} color="primary">
           {T.translate(`${I18N_PREFIX}.suggestionPart1`)}
           &nbsp;{T.translate(`${I18N_PREFIX}.suggestionPart2`)}&nbsp;
           {T.translate(`${I18N_PREFIX}.suggestionPart3`)}
-        </Suggestion>
+        </Button>
       </DialogActions>
     </Dialog>
   );
 };
-
+const ApiErrorDialog = withStyles(styles)(ApiErrorDialogView);
 export default ApiErrorDialog;
