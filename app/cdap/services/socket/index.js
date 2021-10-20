@@ -97,6 +97,7 @@ class Socket {
   }
 
   _doSend(obj) {
+    console.log(`in _doSend: ${obj.resource.url}`);
     if (window.CDAP_CONFIG.cdap.uiDebugEnabled) {
       console.groupCollapsed('request: ' + obj.resource.url);
       console.log(obj.resource);

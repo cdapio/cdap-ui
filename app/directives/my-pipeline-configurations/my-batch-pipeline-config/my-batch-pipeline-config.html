@@ -206,7 +206,7 @@
       <div class="configuration-step-content configuration-content-container batch-content"
             id="engine-config-tab-content"
             ng-if="BatchPipelineConfigCtrl.activeTab === 'engineConfig'">
-        <fieldset ng-disabled="BatchPipelineConfigCtrl.isDeployed">
+        <fieldset ng-if="!BatchPipelineConfigCtrl.allowForceDynamicExecution" ng-disabled="BatchPipelineConfigCtrl.isDeployed">
           <div class="step-content-heading">
             Select the type of engine running your batch pipeline
           </div>

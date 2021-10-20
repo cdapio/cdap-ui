@@ -156,13 +156,18 @@ angular.module(PKG.name + '.feature.hydrator')
                 return defer.promise;
               }
               if ($stateParams.draftId) {
+                console.log(`getting draft ID ${$stateParams.draftId}`);
                 const params = {
                   context: $stateParams.namespace,
                   draftId: $stateParams.draftId,
                 };
                 myPipelineApi.getDraft(params)
                   .$promise
-                  .then(processDraft, () => {
+                  .then((res) => {
+                    console.log('draft response');
+                    console.log(res);
+                      return processDraft(res);
+                  }, () => {
                     mySettings.get('hydratorDrafts', true)
                       .then(function(res) {
                         processDraft(myHelpers.objectQuery(res, $stateParams.namespace, $stateParams.draftId));

@@ -1144,7 +1144,10 @@ class HydratorPlusPlusConfigStore {
             return this.mySettings.set('hydratorDrafts', res);
           }
         })
-        .then(() => this.myPipelineApi.saveDraft(params, config).$promise)
+        .then(() => {
+          console.log('saveDraft api call');
+          return this.myPipelineApi.saveDraft(params, config).$promise;
+        })
         .then(() => {
           console.log('save complete');
           this.$stateParams.draftId = draftId;
