@@ -20,19 +20,6 @@ import StatusButton from './index';
 export default {
   component: StatusButton,
   title: 'StatusButton',
-  backgrounds: {
-    default: 'twitter',
-    values: [
-      {
-        name: 'twitter',
-        value: '#00aced',
-      },
-      {
-        name: 'facebook',
-        value: '#3b5998',
-      },
-    ],
-  },
 };
 
 export const Success = () => <StatusButton status="success" />;
