@@ -15,7 +15,6 @@
  */
 
 import React from 'react';
-
 import StatusButton from './index';
 
 export default {
@@ -37,12 +36,14 @@ export default {
 };
 
 export const Success = () => <StatusButton status="success" />;
+
 export const Error = () => (
   <StatusButton
     status="error"
     message="The precision will be reduced to microseconds from nanoseconds"
   />
 );
+
 export const Partial = () => (
   <StatusButton status="partial" message="This is only partially supported" />
 );

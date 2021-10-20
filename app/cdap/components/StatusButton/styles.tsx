@@ -16,7 +16,6 @@
 
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-
 import styled from 'styled-components';
 import { Box, Button, IconButton, Popper, SvgIcon } from '@material-ui/core';
 
@@ -60,6 +59,7 @@ export const YellowIconWarning = (props) => (
     />
   </SvgIcon>
 );
+
 export const GreenIconSuccess = (props) => (
   <SvgIcon {...props}>
     <path
@@ -69,6 +69,7 @@ export const GreenIconSuccess = (props) => (
     />
   </SvgIcon>
 );
+
 export const RedIconError = (props) => (
   <SvgIcon {...props}>
     <path
