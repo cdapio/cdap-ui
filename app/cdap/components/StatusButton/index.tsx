@@ -21,9 +21,6 @@ import uuid from 'uuid';
 
 import {
   PositionedIconButton,
-  GreenIconSuccess,
-  RedIconError,
-  YellowIconWarning,
   CloseIconScaled,
   StyledButton,
   StyledPopper,
@@ -31,6 +28,8 @@ import {
   BoldP,
   StyledP,
 } from './styles';
+
+import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 
 interface IStatusButtonProps {
   status: 'success' | 'error' | 'partial';

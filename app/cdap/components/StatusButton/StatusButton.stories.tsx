@@ -22,6 +22,7 @@ export default {
   title: 'StatusButton',
 };
 
+// TODO - sean: use more storybook functionality: withknobs, actions etc
 export const Success = () => <StatusButton status="success" />;
 
 export const Error = () => (
