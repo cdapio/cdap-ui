@@ -112,7 +112,7 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
-        onChange={!isView ? setValues : (_val) => {}}
+        onChange={!isView ? setValues : () => {}}
         disabled={isView}
         errors={testResults.configurationErrors}
       />
