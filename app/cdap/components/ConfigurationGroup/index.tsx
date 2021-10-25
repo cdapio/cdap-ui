@@ -21,7 +21,6 @@ import { IWidgetJson, PluginProperties } from './types';
 import { processConfigurationGroups, removeFilteredProperties } from './utilities';
 import { objectQuery, useOnUnmount } from 'services/helpers';
 import defaults from 'lodash/defaults';
-import If from 'components/If';
 import PropertyRow from './PropertyRow';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import ThemeWrapper from 'components/ThemeWrapper';
@@ -227,7 +226,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   return (
     <div data-cy="configuration-group">
-      <If condition={orphanErrors.length > 0}>
+      {orphanErrors.length > 0 && (
         <div>
           <h2>Errors</h2>
           <div className="text-danger">
@@ -236,7 +235,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
             ))}
           </div>
         </div>
-      </If>
+      )}
       {filteredConfigurationGroups.map((group, i) => {
         if (group.show === false) {
           return null;
@@ -246,9 +245,9 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
           <div key={`${group.label}-${i}`} className={classes.group}>
             <div className={classes.groupTitle}>
               <h2 className={classes.h2Title}>{group.label}</h2>
-              <If condition={group.description && group.description.length > 0}>
+              {group.description && group.description.length > 0 && (
                 <small className={classes.groupSubTitle}>{group.description}</small>
-              </If>
+              )}
             </div>
 
             <div>
