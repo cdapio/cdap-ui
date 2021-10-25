@@ -110,7 +110,6 @@ class HydratorPlusPlusConfigStore {
         this.setEngine(this.state.config.engine);
         this.setNumRecordsPreview(this.state.config.numOfRecordsPreview);
         this.setMaxConcurrentRuns(this.state.config.maxConcurrentRuns);
-        this.setForceDynamicExecution(this.state.config.forceDynamicExecution);
       }
     }
     this.__defaultState = angular.copy(this.state);
@@ -467,19 +466,19 @@ class HydratorPlusPlusConfigStore {
     if (this.state.artifact.name === this.GLOBALS.etlDataStreams) {
       managedProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
     }
-    else if (this.state.config.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn) {
-      managedProperties = [
-        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
-        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
-        window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
-      ];
-    }
-    else if (this.state.config.forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff) {
-      managedProperties = [
-        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
-        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
-        window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
-      ];
+    else if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution'] && this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
+      if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
+        managedProperties = [
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+        ];
+      }
+      else {
+        managedProperties = [
+          window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
+          window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
+        ];
+      }
     }
     for (let key in this.state.config.properties) {
       if (this.state.config.properties.hasOwnProperty(key) && managedProperties.indexOf(key) === -1) {
@@ -1074,33 +1073,51 @@ class HydratorPlusPlusConfigStore {
 
   setForceDynamicExecution(forceDynamicExecution) {
     // If the new value is an empty string, force it to undefined
-    this.state.config.forceDynamicExecution = forceDynamicExecution || undefined;
+    //this.state.config.forceDynamicExecution = forceDynamicExecution || undefined;
 
-    // have to do this because oldCustomConfig is already part of this.state.config.properties
-    const oldCustomConfig = this.getCustomConfig();
     const keysToClear = [
       window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
       window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
-      window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING_TIMEOUT,
       window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
     ];
-    for (const key in keysToClear) {
-      if (oldCustomConfig.hasOwnProperty(key)) {
+    for (const key of keysToClear) {
+      console.log(`Looking for key: ${key}`);
+      if (this.state.config.properties.hasOwnProperty(key)) {
+        console.log(`Deleting key: ${key}`)
           delete this.state.config.properties[key];
       }
     }
+    console.log(`setForceDynamcExecution: ${forceDynamicExecution}`);
+    console.log('after clearing');
+    console.log(this.state.config.properties);
     const newCustomConfig = {};
-    if (forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOn) {
-      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = true;
-      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING] = true;
-    } else if (forceDynamicExecution === this.GLOBALS.forceDynamicExecutionOff) {
-      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = false;
+    if (forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'true';
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING] = 'true';
+    } else if (forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff) {
+      newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'false';
     }
     angular.extend(this.state.config.properties, newCustomConfig);
+    console.log(this.state.config.properties);
   }
   getForceDynamicExecution() {
     // If the value is undefined, force it to an empty string
-    return this.getState().config.forceDynamicExecution || '';
+    //return this.getState().config.forceDynamicExecution || '';
+    console.log('getForceDynamicExecution');
+    if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution']) {
+      console.log('allow enabled');
+      if (this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
+        console.log('dynamic allocation has value');
+        if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
+          console.log('force dynamic execution on');
+          return this.GLOBALS.dynamicExecutionForceOn;
+        } else {
+          console.log('force dynamic execution off');
+          return this.GLOBALS.dynamicExecutionForceOff;
+        }
+      }
+    }
+    return '';
   }
 
   saveAsDraft() {

@@ -48,6 +48,7 @@ class MyBatchPipelineConfigCtrl {
     };
     this.allowForceDynamicExecution = window.CDAP_UI_THEME.features['allow-force-dynamic-execution'];
     this.forceDynamicExecution = this.store.getForceDynamicExecution();
+    console.log(`forceDynamicExection: ${this.forceDynamicExecution}`);
     this.showNumOfExecutors = this.getShowNumOfExecutors();
     this.numExecutorsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     this.numExecutors = this.store.getNumExecutors();
@@ -99,7 +100,7 @@ class MyBatchPipelineConfigCtrl {
   onForceDynamicEngineChange() {
     //console.log('onForceDynamicEngineChange');
     this.showNumOfExecutors = this.getShowNumOfExecutors();
-    this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
+    //this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
     //console.log(`showNumOfExecutors: ${this.showNumOfExecutors}`);
   }
 
