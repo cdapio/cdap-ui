@@ -38,15 +38,15 @@ const PREFIX = 'features.PipelineConfigurations.EngineConfig';
 const FORCE_DYNAMIC_EXECUTION_OPTIONS = [
   {
     id: '',
-    value: 'Cluster Default',
+    value: T.translate(`${PREFIX}.dynamicExecution.default`),
   },
   {
     id: GLOBALS.dynamicExecutionForceOn,
-    value: 'Force On',
+    value: T.translate(`${PREFIX}.dynamicExecution.forceOn`),
   },
   {
     id: GLOBALS.dynamicExecutionForceOff,
-    value: 'Force Off',
+    value: T.translate(`${PREFIX}.dynamicExecution.forceOff`),
   },
 ];
 
@@ -112,8 +112,7 @@ class EngineConfigTabContent extends Component {
       const pipelineTypeLabel = GLOBALS.programLabel[this.props.pipelineType];
       heading = T.translate(`${PREFIX}.contentHeading`, { pipelineTypeLabel });
     } else {
-      // TODO
-      heading = 'Dynamic execution';
+      heading = T.translate(`${PREFIX}.dynamicExecution.contentHeading`);
     }
 
     const isBatch = GLOBALS.etlBatchPipelines.includes(this.props.pipelineType);
