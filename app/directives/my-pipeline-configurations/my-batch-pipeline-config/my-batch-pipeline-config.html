@@ -203,7 +203,7 @@
         </my-post-run-actions>
       </div>
 
-      <div class="configuration-step-content configuration-content-container batch-content"
+      <div ng-class="['configuration-step-content',  'configuration-content-container',  'batch-content', {'allow-force-dynamic-execution': BatchPipelineConfigCtrl.allowForceDynamicExecution}]"
             id="engine-config-tab-content"
             ng-if="BatchPipelineConfigCtrl.activeTab === 'engineConfig'">
         <fieldset ng-if="!BatchPipelineConfigCtrl.allowForceDynamicExecution" ng-disabled="BatchPipelineConfigCtrl.isDeployed">
@@ -229,11 +229,11 @@
             </label>
           </div>
         </fieldset>
-        <div ng-if="BatchPipelineConfigCtrl.allowForceDynamicExecution" class="force-dynamic-execution-section">
+        <div ng-if="BatchPipelineConfigCtrl.allowForceDynamicExecution">
           <label for="force-dynamic-execution" class="step-content-heading">Dynamic Execution</label>
           <select name="force-dynamic-execution" 
               id="force-dynamic-execution" 
-              class="form-control force-dynamic-execution"
+              class="form-control dynamic-execution-select"
               ng-model="BatchPipelineConfigCtrl.forceDynamicExecution"
               ng-change="BatchPipelineConfigCtrl.onForceDynamicEngineChange()">
             <option value="">Cluster Default</option>

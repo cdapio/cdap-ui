@@ -89,7 +89,8 @@ $input-label-color: $grey-03;
       }
     }
 
-    &.realtime-content {
+    &.realtime-content,
+    &.allow-force-dynamic-execution {
       .label-with-toggle {
         margin-bottom: 12px;
 
@@ -131,13 +132,11 @@ $input-label-color: $grey-03;
           margin-top: 0;
         }
       }
-    }
-    .force-dynamic-execution {
-      width: 50%;
-      min-width: 100px;
-    }
-    .dynamic-execution-option {
-      margin-top: 16px;
+
+      .dynamic-execution-select {
+        width: 50%;
+        margin-bottom: 16px;
+      }
     }
   }
 }

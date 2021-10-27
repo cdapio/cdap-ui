@@ -172,7 +172,7 @@ export default class AddToHydratorModal extends Component {
   }
 
   render() {
-    const disableRealtime = Theme.showRealtimePipeline === false || window.CDAP_CONFIG.sparkOnK8s;
+    const disableRealtime = Theme.showRealtimePipeline === false;
 
     let content;
 
