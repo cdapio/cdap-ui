@@ -205,7 +205,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       authRefreshURL: cdapConfig['dashboard.auth.refresh.path'] || false,
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
-      sparkOnK8s: cdapConfig['spark.k8s'] === 'true',
     });
 
     res.header({

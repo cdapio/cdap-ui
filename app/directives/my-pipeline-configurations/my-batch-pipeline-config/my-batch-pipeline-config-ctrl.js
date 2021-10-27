@@ -18,8 +18,6 @@ class MyBatchPipelineConfigCtrl {
     this.uuid = uuid;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
     this.myAlertOnValium = myAlertOnValium;
-    //console.log(`constructor val: ${GLOBALS.forceDynamicExecutionOff}`);
-    console.log(GLOBALS);
     this.GLOBALS = GLOBALS;
 
     this.engine = this.store.getEngine();
@@ -48,7 +46,6 @@ class MyBatchPipelineConfigCtrl {
     };
     this.allowForceDynamicExecution = window.CDAP_UI_THEME.features['allow-force-dynamic-execution'];
     this.forceDynamicExecution = this.store.getForceDynamicExecution();
-    console.log(`forceDynamicExection: ${this.forceDynamicExecution}`);
     this.showNumOfExecutors = this.getShowNumOfExecutors();
     this.numExecutorsOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
     this.numExecutors = this.store.getNumExecutors();
@@ -98,22 +95,15 @@ class MyBatchPipelineConfigCtrl {
   }
 
   onForceDynamicEngineChange() {
-    //console.log('onForceDynamicEngineChange');
     this.showNumOfExecutors = this.getShowNumOfExecutors();
-    //this.showShuffleTrackingTimeout = this.getShowShuffleTrackingTimeout();
-    //console.log(`showNumOfExecutors: ${this.showNumOfExecutors}`);
   }
 
   getShowNumOfExecutors() {
-    //console.log(`Internal value: ${this.forceDynamicExecution}`);
-    //console.log(`Global value: ${this.GLOBALS.dynamicExecutionForceOff}`);
     return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOff;
-    //return this.forceDynamicExecution === 'forceOff';
   }
 
   getShowShuffleTrackingTimeout() {
     return this.forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn;
-    //return this.forceDynamicExecution === 'forceOn';
   }
 
   applyConfig() {

@@ -130,13 +130,6 @@ const DEFAULT_CONFIGURE_OPTIONS = {
 };
 
 const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
-  /* let backendProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
-  if (GLOBALS.etlBatchPipelines.includes(pipelineType)) {
-    backendProperties = [];
-  }*/
-  console.log('getCustomConfigFromProperties');
-  console.log(`Theme: ${Theme.allowForceDynamicExecution}`);
-  console.log(`Pipeline type: ${pipelineType}`);
   let managedProperties = [];
   if (GLOBALS.etlRealtime === pipelineType) {
     managedProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
@@ -144,13 +137,11 @@ const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
     Theme.allowForceDynamicExecution &&
     Object.prototype.hasOwnProperty.call(properties, SPARK_DYNAMIC_ALLOCATION)
   ) {
-    console.log('allowForceDynamicExecution is on');
     if (properties[SPARK_DYNAMIC_ALLOCATION] === 'true') {
       managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING];
     } else if (properties[SPARK_DYNAMIC_ALLOCATION] === 'false') {
       managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_EXECUTOR_INSTANCES];
     }
-    console.log(managedProperties);
   }
   const customConfig = {};
   Object.keys(properties).forEach((key) => {
@@ -163,9 +154,6 @@ const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
 
 const getCustomConfigForDisplay = (properties, engine, pipelineType) => {
   let currentCustomConfig = getCustomConfigFromProperties(properties, pipelineType);
-  console.log('getCustomConfigForDisplay');
-  console.log(properties);
-  console.log(currentCustomConfig);
   let customConfigForDisplay = {};
   for (let key in currentCustomConfig) {
     if (Object.prototype.hasOwnProperty.call(currentCustomConfig, key)) {

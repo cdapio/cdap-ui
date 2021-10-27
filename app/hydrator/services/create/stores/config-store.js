@@ -270,8 +270,6 @@ class HydratorPlusPlusConfigStore {
       config.stageLoggingEnabled = this.getStageLogging();
       config.processTimingEnabled = this.getInstrumentation();
       config.numOfRecordsPreview = this.getNumRecordsPreview();
-      // Read forceDynamicExecution directly to avoid string conversion
-      config.forceDynamicExecution = this.state.config.forceDynamicExecution;
     } else if (appType === this.GLOBALS.etlRealtime) {
       config.instances = this.getInstance();
     } else if (appType === this.GLOBALS.etlDataStreams) {
@@ -1072,24 +1070,16 @@ class HydratorPlusPlusConfigStore {
   }
 
   setForceDynamicExecution(forceDynamicExecution) {
-    // If the new value is an empty string, force it to undefined
-    //this.state.config.forceDynamicExecution = forceDynamicExecution || undefined;
-
     const keysToClear = [
       window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
       window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
       window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
     ];
     for (const key of keysToClear) {
-      console.log(`Looking for key: ${key}`);
       if (this.state.config.properties.hasOwnProperty(key)) {
-        console.log(`Deleting key: ${key}`)
-          delete this.state.config.properties[key];
+        delete this.state.config.properties[key];
       }
     }
-    console.log(`setForceDynamcExecution: ${forceDynamicExecution}`);
-    console.log('after clearing');
-    console.log(this.state.config.properties);
     const newCustomConfig = {};
     if (forceDynamicExecution === this.GLOBALS.dynamicExecutionForceOn) {
       newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'true';
@@ -1098,21 +1088,13 @@ class HydratorPlusPlusConfigStore {
       newCustomConfig[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] = 'false';
     }
     angular.extend(this.state.config.properties, newCustomConfig);
-    console.log(this.state.config.properties);
   }
   getForceDynamicExecution() {
-    // If the value is undefined, force it to an empty string
-    //return this.getState().config.forceDynamicExecution || '';
-    console.log('getForceDynamicExecution');
     if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution']) {
-      console.log('allow enabled');
       if (this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
-        console.log('dynamic allocation has value');
         if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
-          console.log('force dynamic execution on');
           return this.GLOBALS.dynamicExecutionForceOn;
         } else {
-          console.log('force dynamic execution off');
           return this.GLOBALS.dynamicExecutionForceOff;
         }
       }
@@ -1143,8 +1125,6 @@ class HydratorPlusPlusConfigStore {
       context: this.$stateParams.namespace,
       draftId,
     };
-    console.log('saveAsDraft');
-    console.log(config);
     /**
      * If the user is editing draft that is using old user store, then we
      * remove it from old user store and save it in the new drafts API.
@@ -1162,11 +1142,9 @@ class HydratorPlusPlusConfigStore {
           }
         })
         .then(() => {
-          console.log('saveDraft api call');
           return this.myPipelineApi.saveDraft(params, config).$promise;
         })
         .then(() => {
-          console.log('save complete');
           this.$stateParams.draftId = draftId;
           this.$state.go('hydrator.create', this.$stateParams, {notify: false});
           this.HydratorPlusPlusConsoleActions.addMessage([{
