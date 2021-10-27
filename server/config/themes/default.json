@@ -41,9 +41,9 @@
     "schedules": true,
     "triggers": true,
     "lineage": true,
-    "realtime-pipeline": false,
+    "realtime-pipeline": true,
     "native-profile": true,
-    "application-upload": false,
+    "application-upload": true,
     "system-services-instance": true,
     "system-metrics": true,
     "namespace-mapping": true,
@@ -51,6 +51,6 @@
     "create-profile": true,
     "reload-system-artifacts": true,
     "cdc": true,
-    "allow-force-dynamic-execution": true
+    "allow-force-dynamic-execution": false
   }
 }
