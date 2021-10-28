@@ -21,20 +21,20 @@ import { ISelectColumnsState } from './types';
 
 import {
   ArrowRight,
-  GridVertCentered,
-  GridInputVertCentered,
+  GridCell,
+  GridButtonCell,
   HeaderGrid,
   StyledCheckbox,
   SubtitleContainer,
   HeaderWithLineThrough,
   NoPaddingP,
   CenteredTextSpan,
-  GridPadLeft,
-  GridPadLeftBorderRight,
+  GridCellContainer,
   GridBorderBottom,
-  KeyboardArrowDownIconWithStyle,
+  KeyboardArrowDownIconTransformGrid,
   SmallButton,
-  RedSpan,
+  WarningMessage,
+  GridDividerCell,
 } from './styles';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import StatusButton from 'components/StatusButton';
@@ -58,7 +58,7 @@ export const renderTable = ({
     supportedError = (
       <>
         {' - '}
-        <RedSpan>{numNotSupported} not or partially supported</RedSpan>
+        <WarningMessage>{numNotSupported} not or partially supported</WarningMessage>
         <SmallButton variant="text" color="primary">
           SHOW
         </SmallButton>
@@ -105,8 +105,8 @@ export const renderTable = ({
           </Grid>
         </Grid>
         <HeaderGrid container direction="row">
-          <GridPadLeft item xs={1} container direction="row">
-            <GridInputVertCentered item xs={6}>
+          <GridCellContainer item xs={1} container direction="row">
+            <GridButtonCell item xs={6}>
               <StyledCheckbox
                 color="primary"
                 checked={state.selectedColumns.size === state.columns.length}
@@ -116,57 +116,57 @@ export const renderTable = ({
                 }
                 onChange={toggleSelectAll}
               />
-            </GridInputVertCentered>
-            <GridVertCentered item xs={6}>
+            </GridButtonCell>
+            <GridCell item xs={6}>
               <span>#</span>
-            </GridVertCentered>
-          </GridPadLeft>
-          <GridPadLeft item xs={3} container direction="row">
-            <GridVertCentered item xs={3}>
+            </GridCell>
+          </GridCellContainer>
+          <GridCellContainer item xs={3} container direction="row">
+            <GridCell item xs={3}>
               <NoPaddingP>Source</NoPaddingP>
-            </GridVertCentered>
-            <GridVertCentered item xs={5}>
+            </GridCell>
+            <GridCell item xs={5}>
               <ArrowRight />
-            </GridVertCentered>
-            <GridVertCentered item xs={4}>
+            </GridCell>
+            <GridCell item xs={4}>
               <NoPaddingP>Target</NoPaddingP>
-            </GridVertCentered>
-          </GridPadLeft>
-          <GridPadLeft item xs={2} container direction="row">
-            <GridVertCentered item xs={3}>
+            </GridCell>
+          </GridCellContainer>
+          <GridCellContainer item xs={2} container direction="row">
+            <GridCell item xs={3}>
               <NoPaddingP>Source</NoPaddingP>
-            </GridVertCentered>
-            <GridVertCentered item xs={5}>
+            </GridCell>
+            <GridCell item xs={5}>
               <ArrowRight />
-            </GridVertCentered>
-            <GridVertCentered item xs={4}>
+            </GridCell>
+            <GridCell item xs={4}>
               <NoPaddingP>Target</NoPaddingP>
-            </GridVertCentered>
-          </GridPadLeft>
-          <GridPadLeftBorderRight item xs={2} container direction="row">
-            <GridVertCentered item xs={6}>
+            </GridCell>
+          </GridCellContainer>
+          <GridDividerCell item xs={2} container direction="row">
+            <GridCell item xs={6}>
               <CenteredTextSpan>Null</CenteredTextSpan>
-            </GridVertCentered>
-            <GridVertCentered item xs={6}>
+            </GridCell>
+            <GridCell item xs={6}>
               <CenteredTextSpan>Key</CenteredTextSpan>
-            </GridVertCentered>
-          </GridPadLeftBorderRight>
-          <GridPadLeft item xs={4} container direction="row">
-            <GridInputVertCentered item xs={6}>
+            </GridCell>
+          </GridDividerCell>
+          <GridCellContainer item xs={4} container direction="row">
+            <GridButtonCell item xs={6}>
               <StatusButton status="success" />
-            </GridInputVertCentered>
-            <GridVertCentered item xs={6}>
+            </GridButtonCell>
+            <GridCell item xs={6}>
               <span>Transformations Applied</span>
-            </GridVertCentered>
-          </GridPadLeft>
+            </GridCell>
+          </GridCellContainer>
         </HeaderGrid>
 
         {state.filteredColumns.map((row, i) => {
           const isPrimaryKey = state.primaryKeys.indexOf(row.name) !== -1;
           return (
             <GridBorderBottom key={row.name} container direction="row">
-              <GridPadLeft item xs={1} container direction="row">
-                <GridInputVertCentered
+              <GridCellContainer item xs={1} container direction="row">
+                <GridButtonCell
                   item
                   xs={6}
                   title={
@@ -181,57 +181,57 @@ export const renderTable = ({
                     disabled={isPrimaryKey}
                     onChange={toggleSelected.bind(this, row)}
                   />
-                </GridInputVertCentered>
-                <GridVertCentered item xs={6}>
+                </GridButtonCell>
+                <GridCell item xs={6}>
                   <span>{i + 1}</span>
-                </GridVertCentered>
-              </GridPadLeft>
-              <GridPadLeft item xs={3} container direction="row">
-                <GridVertCentered item xs={3}>
+                </GridCell>
+              </GridCellContainer>
+              <GridCellContainer item xs={3} container direction="row">
+                <GridCell item xs={3}>
                   <NoPaddingP>{row.name}</NoPaddingP>
-                </GridVertCentered>
+                </GridCell>
                 <Grid item xs={5}>
                   <span></span>
                 </Grid>
-                <GridVertCentered item xs={4}>
+                <GridCell item xs={4}>
                   <NoPaddingP>{row.name}</NoPaddingP>
-                </GridVertCentered>
-              </GridPadLeft>
-              <GridPadLeft item xs={2} container direction="row">
-                <GridVertCentered item xs={3}>
+                </GridCell>
+              </GridCellContainer>
+              <GridCellContainer item xs={2} container direction="row">
+                <GridCell item xs={3}>
                   <NoPaddingP> {row.type.toLowerCase()}</NoPaddingP>
-                </GridVertCentered>
+                </GridCell>
                 <Grid item xs={5}>
                   <span></span>
                 </Grid>
-                <GridVertCentered item xs={4}>
+                <GridCell item xs={4}>
                   <NoPaddingP>{row.type.toLowerCase()}</NoPaddingP>
-                </GridVertCentered>
-              </GridPadLeft>
-              <GridPadLeftBorderRight item xs={2} container direction="row">
-                <GridVertCentered item xs={6}>
+                </GridCell>
+              </GridCellContainer>
+              <GridDividerCell item xs={2} container direction="row">
+                <GridCell item xs={6}>
                   <CenteredTextSpan>
                     <StyledCheckbox checked={row.nullable} disabled={true} />
                   </CenteredTextSpan>
-                </GridVertCentered>
-                <GridVertCentered item xs={6}>
+                </GridCell>
+                <GridCell item xs={6}>
                   <CenteredTextSpan>{isPrimaryKey ? 'Primary' : '--'}</CenteredTextSpan>
-                </GridVertCentered>
-              </GridPadLeftBorderRight>
-              <GridPadLeft item xs={4} container direction="row">
-                <GridInputVertCentered item xs={2}>
+                </GridCell>
+              </GridDividerCell>
+              <GridCellContainer item xs={4} container direction="row">
+                <GridButtonCell item xs={2}>
                   <StatusButton status="success" />
-                </GridInputVertCentered>
-                <GridVertCentered item xs={4}>
+                </GridButtonCell>
+                <GridCell item xs={4}>
                   <SmallButton color="primary">
                     Transform
-                    <KeyboardArrowDownIconWithStyle />
+                    <KeyboardArrowDownIconTransformGrid />
                   </SmallButton>
-                </GridVertCentered>
-                <GridVertCentered item xs={6}>
+                </GridCell>
+                <GridCell item xs={6}>
                   <span>--</span>
-                </GridVertCentered>
-              </GridPadLeft>
+                </GridCell>
+              </GridCellContainer>
             </GridBorderBottom>
           );
         })}
