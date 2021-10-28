@@ -134,13 +134,13 @@ export const NoPaddingP = styled.span`
   text-align: center;
 `;
 
-export const GridVertCentered = styled(Grid)`
+export const GridCell = styled(Grid)`
   display: flex;
   justify-content: center;
   flex-direction: column;
 `;
 
-export const GridInputVertCentered = styled(Grid)`
+export const GridButtonCell = styled(Grid)`
   display: flex;
   vertical-align: middle;
 `;
@@ -173,7 +173,7 @@ export const HeaderWithLineThrough = styled.p`
   }
 `;
 
-export const GridPadLeft = styled(Grid)`
+export const GridCellContainer = styled(Grid)`
   padding-left: 20px;
 `;
 
@@ -185,7 +185,7 @@ export const HeaderGrid = styled(Grid)`
   height: 100%;
 `;
 
-export const GridPadLeftBorderRight = styled(GridPadLeft)`
+export const GridDividerCell = styled(GridCellContainer)`
   border-right: 1px solid #d7d7d7;
 `;
 
@@ -193,12 +193,12 @@ export const GridBorderBottom = styled(Grid)`
   border-bottom: 1px solid #d7d7d7;
 `;
 
-export const KeyboardArrowDownIconWithStyle = styled(KeyboardArrowDownIcon)`
+export const KeyboardArrowDownIconTransformGrid = styled(KeyboardArrowDownIcon)`
   color: #acacac;
   font-size: 24px;
 `;
 
-export const RedSpan = styled.span`
+export const WarningMessage = styled.span`
   color: ${(props) => props.theme.palette.red[50]};
 `;
 
