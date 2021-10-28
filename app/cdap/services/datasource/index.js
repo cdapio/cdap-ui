@@ -56,9 +56,7 @@ export default class Datasource {
 
       genericResponseHandlers.forEach((handler) => handler(data));
       const errorCode = objectQuery(data.response, 'errorCode') || null;
-      if (errorCode !== null) {
-        this.eventEmitter.emit(globalEvents.API_ERROR, true);
-      }
+      this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
       if (data.statusCode > 299 || data.warning) {
         /**
          * There is an issue here. When backend goes down we stop all the poll
