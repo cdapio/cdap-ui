@@ -203,10 +203,10 @@
         </my-post-run-actions>
       </div>
 
-      <div class="configuration-step-content configuration-content-container batch-content"
+      <div ng-class="['configuration-step-content',  'configuration-content-container',  'batch-content', {'allow-force-dynamic-execution': BatchPipelineConfigCtrl.allowForceDynamicExecution}]"
             id="engine-config-tab-content"
             ng-if="BatchPipelineConfigCtrl.activeTab === 'engineConfig'">
-        <fieldset ng-disabled="BatchPipelineConfigCtrl.isDeployed">
+        <fieldset ng-if="!BatchPipelineConfigCtrl.allowForceDynamicExecution" ng-disabled="BatchPipelineConfigCtrl.isDeployed">
           <div class="step-content-heading">
             Select the type of engine running your batch pipeline
           </div>
@@ -229,6 +229,31 @@
             </label>
           </div>
         </fieldset>
+        <div ng-if="BatchPipelineConfigCtrl.allowForceDynamicExecution">
+          <label for="force-dynamic-execution" class="step-content-heading">Dynamic Execution</label>
+          <select name="force-dynamic-execution" 
+              id="force-dynamic-execution" 
+              class="form-control dynamic-execution-select"
+              ng-model="BatchPipelineConfigCtrl.forceDynamicExecution"
+              ng-change="BatchPipelineConfigCtrl.onForceDynamicEngineChange()">
+            <option value="">Cluster Default</option>
+            <option value="forceOn">Force On</option>
+            <option value="forceOff">Force Off</option>
+          </select>
+          <div ng-if="BatchPipelineConfigCtrl.showNumOfExecutors" class="label-with-toggle numExecutors form-group row dynamic-execution-option">
+            <span class="toggle-label col-xs-4">Number of executors</span>
+            <div class="col-xs-7">
+              <select class="form-control small-dropdown"
+                  ng-model="BatchPipelineConfigCtrl.numExecutors"
+                  ng-options="option as option for option in BatchPipelineConfigCtrl.numExecutorsOptions">
+              </select>
+              <i class="fa fa-info-circle"
+                 uib-tooltip="The number of executors to allocate for this pipeline on Apache Yarn."
+                 tooltip-placement="right">
+              </i>
+            </div>
+          </div>
+        </div>
         <div class="add-custom-config">
           <span ng-if="!BatchPipelineConfigCtrl.isDeployed">
             <a class="add-custom-config-label"
