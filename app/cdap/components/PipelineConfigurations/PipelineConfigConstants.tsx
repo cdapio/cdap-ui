@@ -17,6 +17,8 @@
 const SPARK_EXECUTOR_INSTANCES = 'system.spark.spark.executor.instances';
 const DEPRECATED_SPARK_MASTER = 'system.spark.spark.master';
 const SPARK_BACKPRESSURE_ENABLED = 'system.spark.spark.streaming.backpressure.enabled';
+const SPARK_DYNAMIC_ALLOCATION = 'spark.dynamicAllocation.enabled';
+const SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING = 'spark.dynamicAllocation.shuffleTracking.enabled';
 
 const ENGINE_OPTIONS = {
   MAPREDUCE: 'mapreduce',
@@ -28,4 +30,6 @@ export {
   DEPRECATED_SPARK_MASTER,
   SPARK_BACKPRESSURE_ENABLED,
   ENGINE_OPTIONS,
+  SPARK_DYNAMIC_ALLOCATION,
+  SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
 };
