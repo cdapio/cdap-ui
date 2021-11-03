@@ -13,10 +13,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import React from 'react';
 import styled from 'styled-components';
 
-import { Button, Checkbox, Radio, RadioGroup } from '@material-ui/core';
+import { Button, Checkbox, Grid, Radio, RadioGroup } from '@material-ui/core';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 export const Backdrop = styled.div`
   position: absolute;
@@ -48,26 +50,6 @@ export const ActionButtons = styled.div`
   text-align: right;
   & > button:not(:last-child): {
     margin-right: 25px;
-  }
-`;
-
-export const GridWrapper = styled.div`
-  height: calc(100% - 100px - 40px);
-  & .grid.grid-container.grid-compact: {
-    maxHeight: 100%;
-
-  & .grid-header: {
-    z-index: 5;
-  }
-
-  & .grid-row: {
-    grid-template-columns: 40px 40px 1fr 200px 55px 100px;
-    align-items: center;
-  }
-
-  & > div[class^="grid-"] .grid-row > div: {
-    padding-top: 0;
-    padding-bottom: 0;
   }
 `;
 
@@ -109,4 +91,124 @@ export const StyledRadioGroup = styled(RadioGroup)`
 export const LoadingContainer = styled.div`
   text-align: center;
   margin-top: 100px;
+`;
+
+const LineForArrow = styled.span`
+  min-width: 90%;
+  margin-right: -9px;
+  &:before {
+    background-color: #d7d7d7;
+    content: '';
+    display: inline-block;
+    height: 2px;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+  }
+`;
+
+const ChevWithStyles = styled(ChevronRight)`
+  font-size: 22px;
+  color: #d7d7d7;
+`;
+
+const PointerContainer = styled.div`
+  display: flex;
+  margin-left: 5px;
+`;
+
+export const CenteredTextSpan = styled.span`
+  text-align: center;
+`;
+
+export const ArrowRight = () => (
+  <PointerContainer>
+    <LineForArrow />
+    <ChevWithStyles />
+  </PointerContainer>
+);
+
+export const NoPaddingP = styled.span`
+  padding-bottom: 0;
+  margin-bottom: 0;
+  text-align: center;
+`;
+
+export const GridCell = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+export const GridButtonCell = styled(Grid)`
+  display: flex;
+  vertical-align: middle;
+`;
+
+export const HeaderWithLineThrough = styled.p`
+  margin: 0 20px;
+  overflow: hidden;
+  text-align: center;
+  color: #676767;
+
+  &:before,
+  &:after {
+    background-color: #676767;
+    content: '';
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 25%;
+  }
+
+  &:before {
+    right: 0.5em;
+    margin-left: -50%;
+  }
+
+  &:after {
+    left: 0.5em;
+    margin-right: -50%;
+  }
+`;
+
+export const GridCellContainer = styled(Grid)`
+  padding-left: 20px;
+`;
+
+export const HeaderGrid = styled(Grid)`
+  background: #f5f5f5;
+  color: #666666;
+  fontweight: 700;
+  padding: 5px 0;
+  height: 100%;
+`;
+
+export const GridDividerCell = styled(GridCellContainer)`
+  border-right: 1px solid #d7d7d7;
+`;
+
+export const GridBorderBottom = styled(Grid)`
+  border-bottom: 1px solid #d7d7d7;
+`;
+
+export const KeyboardArrowDownIconTransformGrid = styled(KeyboardArrowDownIcon)`
+  color: #acacac;
+  font-size: 24px;
+`;
+
+export const WarningMessage = styled.span`
+  color: ${(props) => props.theme.palette.red[50]};
+`;
+
+export const SmallButton = styled(Button)`
+  font-size: 12px;
+`;
+
+export const RefreshContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: auto;
 `;
