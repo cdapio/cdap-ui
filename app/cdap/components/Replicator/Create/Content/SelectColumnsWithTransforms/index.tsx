@@ -291,7 +291,17 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
         )}
         {state.loading
           ? renderLoading()
-          : renderTable({ state, toggleSelectAll, toggleSelected, I18N_PREFIX, handleSearch })}
+          : renderTable({
+              state,
+              toggleSelectAll,
+              toggleSelected,
+              I18N_PREFIX,
+              handleSearch,
+              addColumnsToTransforms: props.addColumnsToTransforms,
+              deleteColumnsFromTransforms: props.deleteColumnsFromTransforms,
+              transforms: props.transformations[props.tableInfo.table],
+              tableInfo: props.tableInfo,
+            })}
       </Root>
     </Backdrop>
   );
