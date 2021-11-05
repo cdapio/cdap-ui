@@ -307,10 +307,10 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               </StyledRadioGroup>
             </RadioContainer>
             <RefreshContainer>
-              {/**
-               * Unsure if we should leave this in because we can't currently
-               * assign an error from refresh table to the correct column -
-               * can only do it when you add to column
+              {/*
+                Unsure if we should leave this in because we can't currently
+                assign an error from refresh table to the correct column -
+                can only do it when you add to column
                <Button
                 variant="outlined"
                 color="primary"
