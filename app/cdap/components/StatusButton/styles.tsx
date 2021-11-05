@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import { Box, Button, IconButton, Popper, SvgIcon } from '@material-ui/core';
 
 export const StyledPopper = styled(Popper)`
+  z-index: 1000000000;
   overflow-x: unset;
   overflow-y: unset;
   &::before {

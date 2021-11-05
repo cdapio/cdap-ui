@@ -20,7 +20,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ITransformAddProps } from './types';
 import { SmallButton, KeyboardArrowDownIconTransformGrid } from './styles';
-import { Popover, TextField } from '@material-ui/core';
+import { Grid, Popover, TextField } from '@material-ui/core';
 import { addRenameToTransforms } from './addToTransforms';
 import { ITransformInformation } from 'components/Replicator/types';
 
@@ -86,13 +86,19 @@ export default function TransformAddButton({
           vertical: 'bottom',
           horizontal: 'right',
         }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
         onClose={handleClose}
+        style={{ paddingTop: 0, paddingBottom: 0 }}
         MenuListProps={{
           'aria-labelledby': `transform-menu-${row.name}-button`,
+          dense: true,
         }}
       >
         <MenuItem onClick={handleMenuClick}>
-          TINK <ArrowRight />
+          Rename Column <ArrowRight />
         </MenuItem>
       </Menu>
 
@@ -101,25 +107,51 @@ export default function TransformAddButton({
         anchorEl={subMenuAnchorEl}
         open={open && subMenuOpen}
         anchorOrigin={{
-          vertical: 'center',
+          vertical: 'top',
           horizontal: 'right',
         }}
         onClose={handleClose}
       >
-        <TextField
-          id={`${row.name}-outlined-multiline-flexible-directive-text`}
-          label="Multiline"
-          multiline
-          maxRows={4}
-          value={directiveText}
-          onChange={handleDirectiveChange}
-        />
-        <SmallButton color="primary" variant="text" onClick={handleAddToTransforms}>
-          Save
-        </SmallButton>
-        <SmallButton color="primary" variant="text" onClick={handleClose}>
-          Cancel
-        </SmallButton>
+        <Grid
+          container
+          direction="row"
+          spacing={0}
+          justifyContent="center"
+          style={{ alignSelf: 'center', minWidth: '200px', padding: '8px' }}
+        >
+          <TextField
+            size="small"
+            id={`${row.name}-outlined-multiline-flexible-directive-text`}
+            label="Rename column"
+            variant="outlined"
+            value={directiveText}
+            onChange={handleDirectiveChange}
+          />
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          spacing={0}
+          justifyContent="center"
+          alignItems="center"
+          style={{
+            minWidth: '200px',
+            padding: '8px',
+            textAlign: 'center',
+            borderTop: '1px solid #d7d7d7',
+          }}
+        >
+          <Grid item xs={6}>
+            <SmallButton color="primary" variant="contained" onClick={handleAddToTransforms}>
+              Apply
+            </SmallButton>
+          </Grid>
+          <Grid item xs={6}>
+            <SmallButton color="primary" variant="text" onClick={handleClose}>
+              Cancel
+            </SmallButton>
+          </Grid>
+        </Grid>
       </Popover>
     </>
   );

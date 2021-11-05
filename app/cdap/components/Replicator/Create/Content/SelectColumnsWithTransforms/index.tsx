@@ -20,6 +20,7 @@ import { Map } from 'immutable';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import CachedIcon from '@material-ui/icons/Cached';
+import ClearIcon from '@material-ui/icons/Clear';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import LoadingSVG from 'components/LoadingSVG';
@@ -36,7 +37,6 @@ import { renderTable } from './table';
 import {
   ActionButtons,
   Backdrop,
-  ButtonWithMarginRight,
   Header,
   LoadingContainer,
   StyledRadio,
@@ -45,6 +45,7 @@ import {
   StyledRadioGroup,
   RefreshContainer,
 } from './styles';
+import { IconButton } from '@material-ui/core';
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
@@ -138,21 +139,36 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     dispatch({ type: 'setSearch', payload: search });
   };
 
+  const handleFilterErrors = (errs: string[]) => {
+    dispatch({ type: 'filterErrs', payload: errs });
+  };
+
   const debouncedSearch = useDebounce(state.search);
 
   useEffect(() => {
     let filteredColumns = state.columns;
-    if (debouncedSearch !== '') {
+    if (debouncedSearch !== '' || state.filterErrs.length > 0) {
       filteredColumns = filteredColumns.filter((row) => {
         const normalizedColumn = row.name.toLowerCase();
         const normalizedSearch = debouncedSearch.toLowerCase();
+        const matchedColumns = state.filterErrs.indexOf(normalizedColumn) !== -1;
+        const matchedSearch = normalizedColumn.indexOf(normalizedSearch) !== -1;
+
+        // if search and show only errors, match both
+        if (state.filterErrs.length && debouncedSearch !== '') {
+          return matchedColumns && matchedSearch;
+        }
+
+        if (state.filterErrs.length) {
+          return matchedColumns;
+        }
 
         return normalizedColumn.indexOf(normalizedSearch) !== -1;
       });
     }
 
     dispatch({ type: 'setFilteredColumns', payload: filteredColumns });
-  }, [debouncedSearch]);
+  }, [debouncedSearch, state.filterErrs]);
 
   const handleSave = () => {
     const selectedList =
@@ -218,6 +234,12 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     });
   };
 
+  useEffect(() => {
+    const selectedList =
+      state.selectedReplication === ReplicateSelect.all ? null : state.selectedColumns.toList();
+    props.onSave(props.tableInfo, selectedList);
+  }, [state.selectedColumns, state.selectedReplication]);
+
   const isSaveDisabled = () => {
     if (
       state.selectedReplication === ReplicateSelect.individual &&
@@ -249,17 +271,19 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
           label={`${props.tableInfo.table} - Mappings, assessments and transformations`}
         />
         <ActionButtons>
+          {/* 
+            Will need to add this back for the 6.6 version
           <ButtonWithMarginRight variant="text" color="primary" onClick={props.toggle}>
             Cancel
-          </ButtonWithMarginRight>
-          <Button
-            variant="contained"
-            color="primary"
+          </ButtonWithMarginRight> */}
+          <IconButton
+            // variant="contained"
+            // color="primary"
             onClick={handleSave}
-            disabled={isSaveDisabled()}
+            // disabled={isSaveDisabled()}
           >
-            Save
-          </Button>
+            <ClearIcon />
+          </IconButton>
         </ActionButtons>
       </Header>
       <Root>
@@ -283,9 +307,18 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               </StyledRadioGroup>
             </RadioContainer>
             <RefreshContainer>
-              <Button variant="outlined" color="primary">
-                <CachedIcon /> REFRESH
+              {/**
+               * Unsure if we should leave this in because we can't currently
+               * assign an error from refresh table to the correct column -
+               * can only do it when you add to column
+               <Button
+                variant="outlined"
+                color="primary"
+                // onClick={handleAssessTable}
+              >
+                              <CachedIcon /> REFRESH
               </Button>
+               */}
             </RefreshContainer>
           </Box>
         )}
@@ -301,6 +334,9 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               deleteColumnsFromTransforms: props.deleteColumnsFromTransforms,
               transforms: props.transformations[props.tableInfo.table],
               tableInfo: props.tableInfo,
+              tableAssessments: props.tableAssessments,
+              handleFilterErrors,
+              filterErrs: state.filterErrs,
             })}
       </Root>
     </Backdrop>

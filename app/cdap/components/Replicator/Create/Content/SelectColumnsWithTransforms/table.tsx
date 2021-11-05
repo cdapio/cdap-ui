@@ -40,6 +40,7 @@ import StatusButton from 'components/StatusButton';
 import TransformAddButton from './TransformAdd';
 import { IAddColumnsToTransforms, ITableInfo, ITransformation } from 'components/Replicator/types';
 import TransformDelete from './TransformDelete';
+import { SUPPORT } from '../Assessment/TablesAssessment/Mappings/Supported';
 
 export const renderTable = ({
   state,
@@ -51,6 +52,9 @@ export const renderTable = ({
   addColumnsToTransforms,
   deleteColumnsFromTransforms,
   transforms,
+  tableAssessments,
+  handleFilterErrors,
+  filterErrs,
 }: {
   state: ISelectColumnsState;
   addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
@@ -61,16 +65,38 @@ export const renderTable = ({
   transforms: ITransformation;
   I18N_PREFIX: string;
   tableInfo: ITableInfo;
+  tableAssessments: undefined | { [colName: string]: any };
+  handleFilterErrors: (errs: string[]) => void;
+  filterErrs: string[];
 }) => {
-  const numNotSupported = 3;
+  const hasTableAssessments = Boolean(tableAssessments);
+  const errNames = [];
+  let errs;
+
+  if (hasTableAssessments) {
+    errs = Object.values(tableAssessments).filter((a) => {
+      if (a.support !== SUPPORT.yes) {
+        errNames.push(a.sourceName);
+        return true;
+      }
+    });
+  }
+
+  const handleShowErrClick = () => {
+    handleFilterErrors(!filterErrs.length ? errNames : []);
+  };
+
+  const numNotSupported = errs && errs.length;
   let supportedError;
   if (numNotSupported > 0) {
     supportedError = (
       <>
         {' - '}
-        <WarningMessage>{numNotSupported} not or partially supported</WarningMessage>
-        <SmallButton variant="text" color="primary">
-          SHOW
+        <WarningMessage>
+          {numNotSupported} not or partially supported {'  '}
+        </WarningMessage>
+        <SmallButton variant="text" color="primary" onClick={() => handleShowErrClick()}>
+          {filterErrs.length ? 'HIDE' : 'SHOW'}
         </SmallButton>
       </>
     );
@@ -163,7 +189,9 @@ export const renderTable = ({
           </GridDividerCell>
           <GridCellContainer item xs={4} container direction="row">
             <GridButtonCell item xs={6}>
-              <StatusButton status="success" />
+              {hasTableAssessments && (
+                <StatusButton status={Boolean(numNotSupported) ? SUPPORT.no : SUPPORT.yes} />
+              )}
             </GridButtonCell>
             <GridCell item xs={6}>
               <span>Transformations Applied</span>
@@ -173,6 +201,11 @@ export const renderTable = ({
 
         {state.filteredColumns.map((row, i) => {
           const isPrimaryKey = state.primaryKeys.indexOf(row.name) !== -1;
+          let assessmentForCol;
+          if (hasTableAssessments) {
+            assessmentForCol = tableAssessments[row.name];
+          }
+
           return (
             <GridBorderBottom key={row.name} container direction="row">
               <GridCellContainer item xs={1} container direction="row">
@@ -230,7 +263,12 @@ export const renderTable = ({
               </GridDividerCell>
               <GridCellContainer item xs={4} container direction="row">
                 <GridButtonCell item xs={2}>
-                  <StatusButton status="success" />
+                  {Boolean(assessmentForCol) && (
+                    <StatusButton
+                      status={assessmentForCol.support}
+                      message={assessmentForCol.suggestion}
+                    />
+                  )}
                 </GridButtonCell>
                 <GridCell item xs={4}>
                   <TransformAddButton
