@@ -20,17 +20,21 @@ import {
   ITableInfo,
   IAddColumnsToTransforms,
   ITransformation,
+  ITableAssessmentColumn,
 } from 'components/Replicator/types';
+import { Observable } from 'rxjs/Observable';
 
 export interface ISelectColumnsProps {
   tableInfo?: ITableInfo;
   onSave: (tableInfo: ITableInfo, columns: IColumnsList) => void;
   initialSelected: IColumnsList;
   toggle: () => void;
+  saveDraft: () => Observable<any>;
   draftId: string;
   addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
   deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
   transformations: ITransformation;
+  tableAssessments: undefined | { [colName: string]: ITableAssessmentColumn };
 }
 
 interface IColumn {
@@ -52,6 +56,7 @@ export interface ISelectColumnsState {
   selectedColumns: Map<string, IColumnImmutable>;
   loading: boolean;
   error: any;
+  filterErrs: string[];
   search: string;
 }
 
