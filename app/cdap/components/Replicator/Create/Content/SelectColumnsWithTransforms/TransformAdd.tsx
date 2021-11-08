@@ -32,8 +32,8 @@ export default function TransformAddButton({
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
   const [directiveText, setDirectiveText] = useState('');
-  const open = Boolean(anchorEl);
-  const subMenuOpen = Boolean(subMenuAnchorEl);
+  const open = !!anchorEl;
+  const subMenuOpen = !!subMenuAnchorEl;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

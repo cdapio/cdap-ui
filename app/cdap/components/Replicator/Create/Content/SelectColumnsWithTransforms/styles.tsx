@@ -27,7 +27,7 @@ export const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.1);
-  z-index: 5;
+  z-index: 4;
 `;
 
 export const Root = styled.div`

@@ -34,7 +34,7 @@ export default function TransformMenuButton({
 
   const numTransformsInColumn = transformsInColumn.length;
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const open = !!anchorEl;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
