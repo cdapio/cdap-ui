@@ -16,9 +16,10 @@
 
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
-import { Box, Button, IconButton, Popper, SvgIcon } from '@material-ui/core';
+import { Box, Button, IconButton, Popper } from '@material-ui/core';
 
 export const StyledPopper = styled(Popper)`
+  z-index: 5;
   overflow-x: unset;
   overflow-y: unset;
   &::before {
