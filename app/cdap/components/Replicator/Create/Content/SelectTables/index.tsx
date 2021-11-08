@@ -479,6 +479,24 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     return dmlBlacklist && dmlBlacklist.size === 3;
   };
 
+  public renderColumns = () => {
+    let Columns = SelectColumns;
+    if (false) {
+      // this will eventually be a feature flag but just leaving it as a boolean
+      // for now as a convenience
+      Columns = SelectColumnsWithTransforms;
+    }
+
+    return (
+      <Columns
+        tableInfo={this.state.openTable}
+        initialSelected={this.getInitialSelected()}
+        toggle={this.openTable.bind(this, null)}
+        onSave={this.onColumnsSelection}
+      />
+    );
+  };
+
   private renderContent = () => {
     if (this.state.error) {
       return null;

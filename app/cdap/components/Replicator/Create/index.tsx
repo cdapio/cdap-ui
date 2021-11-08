@@ -39,6 +39,8 @@ import {
   ITablesStore,
   IColumnsStore,
   IDMLStore,
+  ITransformation,
+  IAddColumnsToTransforms,
 } from 'components/Replicator/types';
 import { IWidgetJson } from 'components/ConfigurationGroup/types';
 
@@ -111,6 +113,9 @@ export interface ICreateState {
   saveDraft: () => Observable<any>;
   setColumns: (columns, callback) => void;
   isStateFilled: (stateKeys: string[]) => boolean;
+  transformations: { [tableName: string]: ITransformation };
+  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
 }
 
 export type ICreateContext = Partial<ICreateState>;
@@ -170,6 +175,51 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
   public setTables = (tables, columns, dmlBlacklist) => {
     this.setState({ tables, columns, dmlBlacklist });
+  };
+
+  public deleteColumnsFromTransforms = (tableName: string, colTransIndex: number) => {
+    if (colTransIndex === 0) {
+      this.setState({
+        transformations: {
+          ...this.state.transformations,
+          [tableName]: undefined,
+        },
+      });
+    } else {
+      const transformationTable = this.state.transformations[tableName];
+      const newTransformations = transformationTable.columnTransformations.splice(0, colTransIndex);
+      transformationTable.columnTransformations = newTransformations;
+      this.setState({
+        transformations: {
+          ...this.state.transformations,
+          [tableName]: transformationTable,
+        },
+      });
+    }
+  };
+
+  public addColumnsToTransforms = (opts: IAddColumnsToTransforms) => {
+    const { tableName, columnTransformation } = opts;
+    const transformationTable = this.state.transformations[tableName];
+    if (!transformationTable) {
+      this.setState({
+        transformations: {
+          ...this.state.transformations,
+          [tableName]: {
+            tableName,
+            columnTransformations: [columnTransformation],
+          },
+        },
+      });
+    } else {
+      transformationTable.columnTransformations.push(columnTransformation);
+      this.setState({
+        transformations: {
+          ...this.state.transformations,
+          [tableName]: transformationTable,
+        },
+      });
+    }
   };
 
   public setAdvanced = (numInstances) => {
@@ -236,6 +286,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       parallelism: {
         numInstances: this.state.numInstances,
       },
+      tableTransformations: Object.values(this.state.transformations),
     };
 
     return config;
@@ -275,6 +326,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     draftId: null,
     isInvalidSource: false,
     loading: true,
+    transformations: {},
 
     activeStep: 0,
 
@@ -292,6 +344,8 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     saveDraft: this.saveDraft,
     setColumns: this.setColumns,
     isStateFilled: this.isStateFilled,
+    addColumnsToTransforms: this.addColumnsToTransforms,
+    deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
   };
 
   public componentDidMount() {
