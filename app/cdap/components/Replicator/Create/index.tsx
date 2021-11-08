@@ -115,6 +115,7 @@ export interface ICreateState {
   transformations: { [tableName: string]: ITransformation };
   addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
   deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  handleAssessTable: (tableName: string, columnAltered?: string) => void;
   tableAssessments: {
     [tableName: string]: {
       [colName: string]: ITableAssessmentColumn;
@@ -419,6 +420,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     addColumnsToTransforms: this.addColumnsToTransforms,
     deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
     tableAssessments: {},
+    handleAssessTable: this.handleAssessTable,
   };
 
   public componentDidMount() {

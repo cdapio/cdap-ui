@@ -35,6 +35,7 @@ export interface ISelectColumnsProps {
   deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
   transformations: ITransformation;
   tableAssessments: undefined | { [colName: string]: ITableAssessmentColumn };
+  handleAssessTable: (tableName: string, columnAltered?: string) => void;
 }
 
 interface IColumn {
