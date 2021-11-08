@@ -204,6 +204,7 @@ export const WarningMessage = styled.span`
 
 export const SmallButton = styled(Button)`
   font-size: 12px;
+  align-self: center;
 `;
 
 export const RefreshContainer = styled.div`

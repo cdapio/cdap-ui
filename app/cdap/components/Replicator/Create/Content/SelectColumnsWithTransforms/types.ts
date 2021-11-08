@@ -14,7 +14,13 @@
  * the License.
  */
 
-import { IColumnsList, IColumnImmutable, ITableInfo } from 'components/Replicator/types';
+import {
+  IColumnsList,
+  IColumnImmutable,
+  ITableInfo,
+  IAddColumnsToTransforms,
+  ITransformation,
+} from 'components/Replicator/types';
 
 export interface ISelectColumnsProps {
   tableInfo?: ITableInfo;
@@ -22,6 +28,9 @@ export interface ISelectColumnsProps {
   initialSelected: IColumnsList;
   toggle: () => void;
   draftId: string;
+  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  transformations: ITransformation;
 }
 
 interface IColumn {
@@ -44,4 +53,17 @@ export interface ISelectColumnsState {
   loading: boolean;
   error: any;
   search: string;
+}
+
+export interface ITransformAddProps {
+  row: IColumn;
+  tableInfo: ITableInfo;
+  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+}
+
+export interface ITransformDeleteProps {
+  row: IColumn;
+  tableInfo: ITableInfo;
+  transforms: ITransformation;
+  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
 }
