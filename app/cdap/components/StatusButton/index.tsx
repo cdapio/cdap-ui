@@ -14,10 +14,11 @@
  * the License.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, ClickAwayListener } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import uuid from 'uuid';
+import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
 import {
   PositionedIconButton,
@@ -32,7 +33,7 @@ import {
 import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 
 interface IStatusButtonProps {
-  status: 'success' | 'error' | 'partial';
+  status: SUPPORT;
   message?: string;
 }
 
@@ -52,17 +53,16 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
   let a11yMessage;
   let allyId;
   let mouseOverDelayTimeoutId;
-  const statusButtonRef = useRef();
+  const [anchorEl, setAnchorEl] = useState(undefined);
   const [actionState, setActionState] = useState<'hover' | 'click' | undefined>();
-
   useEffect(() => {
     allyId = uuid();
   }, []);
 
-  if (props.status === 'success') {
+  if (props.status === SUPPORT.yes) {
     icon = <GreenIconSuccess />;
     a11yMessage = 'Success - no errors';
-  } else if (props.status === 'error') {
+  } else if (props.status === SUPPORT.no) {
     icon = <RedIconError />;
     a11yMessage = 'Error';
   } else {
@@ -70,17 +70,17 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
     a11yMessage = 'Warning';
   }
 
-  const handleClick = () => {
-    if (props.status === 'success') {
+  const handleClick = (event) => {
+    if (props.status === SUPPORT.yes) {
       return;
     }
-
     const newActionState = actionState === 'click' ? undefined : 'click';
+    setAnchorEl(newActionState !== undefined ? event.target : undefined);
     setActionState(newActionState);
   };
 
-  const handleMouseOver = ({ currentTarget }) => {
-    if (props.status === 'success') {
+  const handleMouseOver = (event) => {
+    if (props.status === SUPPORT.yes) {
       return;
     }
 
@@ -89,25 +89,33 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
     }
 
     if (actionState !== 'click') {
+      if (!anchorEl) {
+        setAnchorEl(event.target);
+      }
       setActionState('hover');
     }
   };
 
-  const handleMouseLeave = ({ currentTarget }) => {
+  const handleMouseLeave = () => {
     if (actionState === 'click') {
       return;
     }
 
     mouseOverDelayTimeoutId = setTimeout(() => {
       mouseOverDelayTimeoutId = undefined;
-      setActionState(null);
+      setActionState(undefined);
+      setAnchorEl(undefined);
     }, 200);
+  };
+
+  const handleClose = () => {
+    setActionState(undefined);
+    setAnchorEl(undefined);
   };
 
   return (
     <>
       <StyledButton
-        ref={statusButtonRef}
         aria-label={a11yMessage}
         aria-describedby={allyId}
         style={{
@@ -115,7 +123,7 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         }}
         onKeyPress={(event) => {
           if (event.key === 'Enter') {
-            handleClick();
+            handleClick(event);
           }
         }}
         onClick={() => handleClick}
@@ -123,19 +131,19 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         onMouseLeave={handleMouseLeave}
       >
         {icon}
-        {!!props.message && <ChevronRight />}
+        {Boolean(props.message) && <ChevronRight />}
       </StyledButton>
       <StyledPopper
         id={allyId}
-        open={!!actionState}
-        placement="right"
-        anchorEl={statusButtonRef.current}
+        open={Boolean(props.message) && Boolean(actionState)}
+        placement="right-start"
+        anchorEl={anchorEl}
         transition
       >
         <div onMouseEnter={handleMouseOver} onMouseLeave={handleMouseLeave}>
           <ClickAwayListener onClickAway={handleClick}>
             <StyledBox>
-              {actionState === 'click' && <CloseButton handleClick={handleClick} />}
+              {actionState === 'click' && <CloseButton handleClick={handleClose} />}
               <Box>
                 <span>{icon} The column is not supported</span>
               </Box>

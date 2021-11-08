@@ -27,7 +27,7 @@ export const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.1);
-  z-index: 5;
+  z-index: 4;
 `;
 
 export const Root = styled.div`
@@ -121,18 +121,49 @@ export const CenteredTextSpan = styled.span`
   text-align: center;
 `;
 
+export const NoPaddingSpanLeft = styled.span`
+  padding-bottom: 0;
+  margin-bottom: 0;
+  text-align: left;
+`;
+
+export const PrimaryKeySpan = styled(NoPaddingSpanLeft)`
+  padding-left: 40%;
+`;
+
+export const NoPaddingSpan = styled(CenteredTextSpan)`
+  padding-bottom: 0;
+  margin-bottom: 0;
+`;
+
+export const SubHeaderSpanNoPad = styled(NoPaddingSpan)`
+  font-family: roboto;
+  font-size: 13px;
+  font-weight: 800;
+  color: #666666;
+`;
+
+export const SubHeaderSpanNoPadLeft = styled(SubHeaderSpanNoPad)`
+  text-align: left;
+`;
+
+export const KeySubHeaderSpan = styled(SubHeaderSpanNoPadLeft)`
+  padding-left: 40%;
+`;
+
+export const SubHeaderSpan = styled(CenteredTextSpan)`
+  font-family: roboto;
+  font-size: 13px;
+  font-weight: 800;
+  color: #666666;
+`;
+
 export const ArrowRight = () => (
   <PointerContainer>
     <LineForArrow />
     <ChevWithStyles />
   </PointerContainer>
 );
-
-export const NoPaddingP = styled.span`
-  padding-bottom: 0;
-  margin-bottom: 0;
-  text-align: center;
-`;
 
 export const GridCell = styled(Grid)`
   display: flex;
@@ -148,18 +179,48 @@ export const GridButtonCell = styled(Grid)`
 export const HeaderWithLineThrough = styled.p`
   margin: 0 20px;
   overflow: hidden;
+  font-size: 12px;
   text-align: center;
-  color: #676767;
+  color: #666666;
 
   &:before,
   &:after {
-    background-color: #676767;
+    background-color: #666666;
     content: '';
     display: inline-block;
     height: 1px;
     position: relative;
     vertical-align: middle;
-    width: 25%;
+    width: 40%;
+  }
+
+  &:before {
+    right: 0.5em;
+    margin-left: -50%;
+  }
+
+  &:after {
+    left: 0.5em;
+    margin-right: -50%;
+  }
+`;
+
+export const SchemaPropertiesHeader = styled.p`
+  margin: 0 20px;
+  overflow: hidden;
+  font-size: 12px;
+  text-align: center;
+  color: #666666;
+
+  &:before,
+  &:after {
+    background-color: #666666;
+    content: '';
+    display: inline-block;
+    height: 1px;
+    position: relative;
+    vertical-align: middle;
+    width: 5%;
   }
 
   &:before {
@@ -212,4 +273,16 @@ export const RefreshContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   margin-left: auto;
+`;
+
+export const Circle = styled.div`
+  width: 15px;
+  height: 15px;
+  margin: 3px;
+  background: #666666;
+  border-radius: 50%;
+`;
+
+export const NumSpan = styled.span`
+  text-align: right;
 `;
