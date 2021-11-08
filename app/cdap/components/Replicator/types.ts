@@ -94,3 +94,22 @@ export interface IRawMetricData {
   resolution: string;
   series: IMetricSeries[];
 }
+
+export interface ITransformInformation extends IColumnTransformation {
+  tableName: string;
+}
+
+export interface IColumnTransformation {
+  columnName: string;
+  directive: string;
+}
+
+export interface ITransformation {
+  tableName: string;
+  columnTransformations: IColumnTransformation[];
+}
+
+export interface IAddColumnsToTransforms {
+  tableName: string;
+  columnTransformation: IColumnTransformation;
+}
