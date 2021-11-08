@@ -38,6 +38,9 @@ const GLOBALS = {
   etlPipelineTypes: ['cdap-data-streams', 'cdap-data-pipeline'],
   eltSqlPipeline: 'cdap-sql-pipeline',
 
+  dynamicExecutionForceOn: 'forceOn',
+  dynamicExecutionForceOff: 'forceOff',
+
   // program types for etl app
   programInfo: {
     'cdap-data-pipeline': {
@@ -252,7 +255,6 @@ const GLOBALS = {
             'INVALID-CONFIG': "Missing 'config' property in pipeline specification.",
             'INVALID-SOURCE': 'Pipeline configuration should have a valid source specification.',
             'INVALID-SINKS': 'Pipeline configuration should have a valid sink specification.',
-            'INVALID-SCHEDULE': 'Batch pipeline should have a valid schedule specification.',
             'INVALID-INSTANCE': 'Realtime pipeline should have a valid instance specification.',
             'INVALID-NODES-CONNECTIONS':
               "Unknown node(s) in 'connections' property in pipeline specification.",
