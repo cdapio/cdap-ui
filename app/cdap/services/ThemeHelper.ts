@@ -104,6 +104,7 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     'sql-pipeline'?: boolean;
     cdc?: boolean;
     'metadata-in-react'?: boolean;
+    'allow-force-dynamic-execution'?: boolean;
   };
 }
 
@@ -225,6 +226,7 @@ interface IThemeObj {
   showSqlPipeline?: boolean;
   showCDC?: boolean;
   isMetadataInReact?: boolean;
+  allowForceDynamicExecution?: boolean;
 }
 
 function getTheme(): IThemeObj {
@@ -531,6 +533,12 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     }
     if ('metadata-in-react' in featuresJson && isBoolean(featuresJson['metadata-in-react'])) {
       features.isMetadataInReact = featuresJson['metadata-in-react'];
+    }
+    if (
+      'allow-force-dynamic-execution' in featuresJson &&
+      isBoolean(featuresJson['allow-force-dynamic-execution'])
+    ) {
+      features.allowForceDynamicExecution = featuresJson['allow-force-dynamic-execution'];
     }
     return features;
   }
