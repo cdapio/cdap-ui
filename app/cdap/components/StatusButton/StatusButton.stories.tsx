@@ -16,6 +16,7 @@
 
 import React from 'react';
 import StatusButton from './index';
+import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
 export default {
   component: StatusButton,
@@ -23,15 +24,15 @@ export default {
 };
 
 // TODO - sean: use more storybook functionality: withknobs, actions etc
-export const Success = () => <StatusButton status="success" />;
+export const Success = () => <StatusButton status={SUPPORT.yes} />;
 
 export const Error = () => (
   <StatusButton
-    status="error"
+    status={SUPPORT.no}
     message="The precision will be reduced to microseconds from nanoseconds"
   />
 );
 
 export const Partial = () => (
-  <StatusButton status="partial" message="This is only partially supported" />
+  <StatusButton status={SUPPORT.partial} message="This is only partially supported" />
 );

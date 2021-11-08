@@ -490,9 +490,11 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     return (
       <Columns
         tableInfo={this.state.openTable}
+        tableAssessments={this.props.tableAssessments[this.state.openTable.table]}
         initialSelected={this.getInitialSelected()}
         toggle={this.openTable.bind(this, null)}
         onSave={this.onColumnsSelection}
+        assessTable={this.props.handleAssessTable}
       />
     );
   };
