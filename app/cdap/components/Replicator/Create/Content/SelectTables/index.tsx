@@ -494,6 +494,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
         initialSelected={this.getInitialSelected()}
         toggle={this.openTable.bind(this, null)}
         onSave={this.onColumnsSelection}
+        assessTable={this.props.handleAssessTable}
       />
     );
   };

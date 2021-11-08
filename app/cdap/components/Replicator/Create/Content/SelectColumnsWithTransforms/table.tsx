@@ -27,13 +27,20 @@ import {
   StyledCheckbox,
   SubtitleContainer,
   HeaderWithLineThrough,
-  NoPaddingP,
+  NoPaddingSpanLeft,
   CenteredTextSpan,
   GridCellContainer,
   GridBorderBottom,
   SmallButton,
   WarningMessage,
   GridDividerCell,
+  Circle,
+  SubHeaderSpanNoPadLeft,
+  SubHeaderSpan,
+  NumSpan,
+  SchemaPropertiesHeader,
+  KeySubHeaderSpan,
+  PrimaryKeySpan,
 } from './styles';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import StatusButton from 'components/StatusButton';
@@ -134,7 +141,7 @@ export const renderTable = ({
             <HeaderWithLineThrough> Data Types </HeaderWithLineThrough>
           </Grid>
           <Grid item xs={2}>
-            <HeaderWithLineThrough> Schema properties </HeaderWithLineThrough>
+            <SchemaPropertiesHeader> Schema properties </SchemaPropertiesHeader>
           </Grid>
           <Grid item xs={4}>
             <HeaderWithLineThrough> Assessments and transformations </HeaderWithLineThrough>
@@ -153,45 +160,46 @@ export const renderTable = ({
                 onChange={toggleSelectAll}
               />
             </GridButtonCell>
-            <GridCell item xs={6}>
-              <span>#</span>
+            <GridCell item xs={6} alignItems="center">
+              <NumSpan>#</NumSpan>
             </GridCell>
           </GridCellContainer>
           <GridCellContainer item xs={3} container direction="row">
             <GridCell item xs={3}>
-              <NoPaddingP>Source</NoPaddingP>
+              <SubHeaderSpanNoPadLeft>Source</SubHeaderSpanNoPadLeft>
             </GridCell>
             <GridCell item xs={5}>
               <ArrowRight />
             </GridCell>
             <GridCell item xs={4}>
-              <NoPaddingP>Target</NoPaddingP>
+              <SubHeaderSpanNoPadLeft>Target</SubHeaderSpanNoPadLeft>
             </GridCell>
           </GridCellContainer>
           <GridCellContainer item xs={2} container direction="row">
             <GridCell item xs={3}>
-              <NoPaddingP>Source</NoPaddingP>
+              <SubHeaderSpanNoPadLeft>Source</SubHeaderSpanNoPadLeft>
             </GridCell>
             <GridCell item xs={5}>
               <ArrowRight />
             </GridCell>
             <GridCell item xs={4}>
-              <NoPaddingP>Target</NoPaddingP>
+              <SubHeaderSpanNoPadLeft>Target</SubHeaderSpanNoPadLeft>
             </GridCell>
           </GridCellContainer>
           <GridDividerCell item xs={2} container direction="row">
             <GridCell item xs={6}>
-              <CenteredTextSpan>Null</CenteredTextSpan>
+              <SubHeaderSpan>Null</SubHeaderSpan>
             </GridCell>
             <GridCell item xs={6}>
-              <CenteredTextSpan>Key</CenteredTextSpan>
+              <KeySubHeaderSpan>Key</KeySubHeaderSpan>
             </GridCell>
           </GridDividerCell>
           <GridCellContainer item xs={4} container direction="row">
             <GridButtonCell item xs={6}>
-              {hasTableAssessments && (
+              <Circle />
+              {/* {hasTableAssessments && (
                 <StatusButton status={Boolean(numNotSupported) ? SUPPORT.no : SUPPORT.yes} />
-              )}
+              )} */}
             </GridButtonCell>
             <GridCell item xs={6}>
               <span>Transformations Applied</span>
@@ -225,30 +233,30 @@ export const renderTable = ({
                     onChange={toggleSelected.bind(this, row)}
                   />
                 </GridButtonCell>
-                <GridCell item xs={6}>
-                  <span>{i + 1}</span>
+                <GridCell item xs={6} alignItems="center">
+                  <NumSpan>{i + 1}</NumSpan>
                 </GridCell>
               </GridCellContainer>
               <GridCellContainer item xs={3} container direction="row">
                 <GridCell item xs={3}>
-                  <NoPaddingP>{row.name}</NoPaddingP>
+                  <NoPaddingSpanLeft>{row.name}</NoPaddingSpanLeft>
                 </GridCell>
                 <Grid item xs={5}>
                   <span></span>
                 </Grid>
                 <GridCell item xs={4}>
-                  <NoPaddingP>{row.name}</NoPaddingP>
+                  <NoPaddingSpanLeft>{row.name}</NoPaddingSpanLeft>
                 </GridCell>
               </GridCellContainer>
               <GridCellContainer item xs={2} container direction="row">
                 <GridCell item xs={3}>
-                  <NoPaddingP> {row.type.toLowerCase()}</NoPaddingP>
+                  <NoPaddingSpanLeft> {row.type.toLowerCase()}</NoPaddingSpanLeft>
                 </GridCell>
                 <Grid item xs={5}>
                   <span></span>
                 </Grid>
                 <GridCell item xs={4}>
-                  <NoPaddingP>{row.type.toLowerCase()}</NoPaddingP>
+                  <NoPaddingSpanLeft>{row.type.toLowerCase()}</NoPaddingSpanLeft>
                 </GridCell>
               </GridCellContainer>
               <GridDividerCell item xs={2} container direction="row">
@@ -258,7 +266,7 @@ export const renderTable = ({
                   </CenteredTextSpan>
                 </GridCell>
                 <GridCell item xs={6}>
-                  <CenteredTextSpan>{isPrimaryKey ? 'Primary' : '--'}</CenteredTextSpan>
+                  <PrimaryKeySpan>{isPrimaryKey ? 'Primary' : '--'}</PrimaryKeySpan>
                 </GridCell>
               </GridDividerCell>
               <GridCellContainer item xs={4} container direction="row">

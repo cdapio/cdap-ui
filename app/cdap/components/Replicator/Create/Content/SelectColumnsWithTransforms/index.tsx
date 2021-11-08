@@ -307,18 +307,13 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               </StyledRadioGroup>
             </RadioContainer>
             <RefreshContainer>
-              {/*
-                Unsure if we should leave this in because we can't currently
-                assign an error from refresh table to the correct column -
-                can only do it when you add to column
-               <Button
+              <Button
                 variant="outlined"
                 color="primary"
-                // onClick={handleAssessTable}
+                onClick={() => props.handleAssessTable(props.tableInfo.table)}
               >
-                              <CachedIcon /> REFRESH
+                <CachedIcon /> REFRESH
               </Button>
-               */}
             </RefreshContainer>
           </Box>
         )}

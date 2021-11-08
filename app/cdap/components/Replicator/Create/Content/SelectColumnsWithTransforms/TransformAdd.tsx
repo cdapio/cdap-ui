@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { ITransformAddProps } from './types';
 import { SmallButton, KeyboardArrowDownIconTransformGrid } from './styles';
 import { Grid, Popover, TextField } from '@material-ui/core';
-import { addRenameToTransforms } from './addToTransforms';
+import { addTinkToTransforms } from './addToTransforms';
 import { ITransformInformation } from 'components/Replicator/types';
 
 export default function TransformAddButton({
@@ -54,12 +54,12 @@ export default function TransformAddButton({
   };
 
   const handleAddToTransforms = () => {
-    const transformInfo: ITransformInformation = {
-      tableName: tableInfo.table,
-      columnName: row.name,
-      directive: directiveText,
-    };
-    addRenameToTransforms({ transformInfo, addColumnsToTransforms });
+    // const transformInfo: ITransformInformation = {
+    //   tableName: tableInfo.table,
+    //   columnName: row.name,
+    //   directive: directiveText,
+    // };
+    // addTinkToTransforms({ transformInfo, addColumnsToTransforms });
     handleClose();
   };
 
@@ -98,7 +98,7 @@ export default function TransformAddButton({
         }}
       >
         <MenuItem onClick={handleMenuClick}>
-          Rename Column <ArrowRight />
+          TINK <ArrowRight />
         </MenuItem>
       </Menu>
 
@@ -122,7 +122,7 @@ export default function TransformAddButton({
           <TextField
             size="small"
             id={`${row.name}-outlined-multiline-flexible-directive-text`}
-            label="Rename column"
+            label="TINK"
             variant="outlined"
             value={directiveText}
             onChange={handleDirectiveChange}
