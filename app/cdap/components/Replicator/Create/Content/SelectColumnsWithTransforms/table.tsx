@@ -76,7 +76,7 @@ export const renderTable = ({
   handleFilterErrors: (errs: string[]) => void;
   filterErrs: string[];
 }) => {
-  const hasTableAssessments = Boolean(tableAssessments);
+  const hasTableAssessments = !!tableAssessments;
   const errNames = [];
   let errs;
 
@@ -103,7 +103,7 @@ export const renderTable = ({
           {numNotSupported} not or partially supported {'  '}
         </WarningMessage>
         <SmallButton variant="text" color="primary" onClick={() => handleShowErrClick()}>
-          {filterErrs.length ? 'HIDE' : 'SHOW'}
+          {filterErrs.length ? 'hide' : 'show'}
         </SmallButton>
       </>
     );
@@ -197,9 +197,6 @@ export const renderTable = ({
           <GridCellContainer item xs={4} container direction="row">
             <GridButtonCell item xs={6}>
               <Circle />
-              {/* {hasTableAssessments && (
-                <StatusButton status={Boolean(numNotSupported) ? SUPPORT.no : SUPPORT.yes} />
-              )} */}
             </GridButtonCell>
             <GridCell item xs={6}>
               <span>Transformations Applied</span>
@@ -271,7 +268,7 @@ export const renderTable = ({
               </GridDividerCell>
               <GridCellContainer item xs={4} container direction="row">
                 <GridButtonCell item xs={2}>
-                  {Boolean(assessmentForCol) && (
+                  {!!assessmentForCol && (
                     <StatusButton
                       status={assessmentForCol.support}
                       message={assessmentForCol.suggestion}

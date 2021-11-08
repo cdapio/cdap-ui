@@ -272,7 +272,7 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
         />
         <ActionButtons>
           {/* 
-            Will need to add this back for the 6.6 version
+            Will need to add this back for the 6.6 version https://cdap.atlassian.net/browse/CDAP-18593
           <ButtonWithMarginRight variant="text" color="primary" onClick={props.toggle}>
             Cancel
           </ButtonWithMarginRight> */}
