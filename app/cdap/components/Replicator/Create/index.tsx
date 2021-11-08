@@ -41,8 +41,11 @@ import {
   IDMLStore,
   ITransformation,
   IAddColumnsToTransforms,
+  ITableInfo,
+  ITableAssessmentColumn,
 } from 'components/Replicator/types';
 import { IWidgetJson } from 'components/ConfigurationGroup/types';
+import { SUPPORT } from './Content/Assessment/TablesAssessment/Mappings/Supported';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;
@@ -116,6 +119,12 @@ export interface ICreateState {
   transformations: { [tableName: string]: ITransformation };
   addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
   deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  handleAssessTable: (tableName: string, columnAltered?: string) => void;
+  tableAssessments: {
+    [tableName: string]: {
+      [colName: string]: ITableAssessmentColumn;
+    };
+  };
 }
 
 export type ICreateContext = Partial<ICreateState>;
@@ -179,46 +188,114 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
   public deleteColumnsFromTransforms = (tableName: string, colTransIndex: number) => {
     if (colTransIndex === 0) {
-      this.setState({
-        transformations: {
-          ...this.state.transformations,
-          [tableName]: undefined,
+      const transf = this.state.transformations;
+      delete transf[tableName];
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+          },
         },
-      });
+        () => {
+          this.handleAssessTable(tableName);
+        }
+      );
     } else {
       const transformationTable = this.state.transformations[tableName];
       const newTransformations = transformationTable.columnTransformations.splice(0, colTransIndex);
       transformationTable.columnTransformations = newTransformations;
-      this.setState({
-        transformations: {
-          ...this.state.transformations,
-          [tableName]: transformationTable,
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: transformationTable,
+          },
         },
-      });
+        () => {
+          this.handleAssessTable(tableName);
+        }
+      );
     }
+  };
+
+  public handleAssessTable = (tableName: string, columnAltered?: string) => {
+    const draftId = this.state.draftId;
+    const assessTable = (updatedColumns?) => {
+      const params = {
+        namespace: getCurrentNamespace(),
+        draftId,
+      };
+
+      const body: ITableInfo = {
+        database: this.state.sourceConfig.database,
+        table: tableName,
+      };
+
+      MyReplicatorApi.assessTable(params, body).subscribe(
+        (res) => {
+          const assessments = {};
+          res.columns.forEach((col) => {
+            assessments[col.sourceName] = col;
+          });
+
+          this.setState({
+            tableAssessments: {
+              [tableName]: assessments,
+            },
+          });
+        },
+        (err) => {
+          if (columnAltered) {
+            this.setState({
+              tableAssessments: {
+                [tableName]: {
+                  [columnAltered]: {
+                    support: SUPPORT.no,
+                    suggestion: err.response,
+                    sourceName: columnAltered,
+                  },
+                },
+              },
+            });
+          }
+        }
+      );
+    };
+
+    this.saveDraft().subscribe(assessTable);
   };
 
   public addColumnsToTransforms = (opts: IAddColumnsToTransforms) => {
     const { tableName, columnTransformation } = opts;
     const transformationTable = this.state.transformations[tableName];
     if (!transformationTable) {
-      this.setState({
-        transformations: {
-          ...this.state.transformations,
-          [tableName]: {
-            tableName,
-            columnTransformations: [columnTransformation],
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: {
+              tableName,
+              columnTransformations: [columnTransformation],
+            },
           },
         },
-      });
+        () => {
+          this.handleAssessTable(tableName, columnTransformation.columnName);
+        }
+      );
     } else {
       transformationTable.columnTransformations.push(columnTransformation);
-      this.setState({
-        transformations: {
-          ...this.state.transformations,
-          [tableName]: transformationTable,
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: transformationTable,
+          },
         },
-      });
+        () => {
+          this.handleAssessTable(tableName, columnTransformation.columnName);
+        }
+      );
     }
   };
 
@@ -346,6 +423,8 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     isStateFilled: this.isStateFilled,
     addColumnsToTransforms: this.addColumnsToTransforms,
     deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
+    tableAssessments: {},
+    handleAssessTable: this.handleAssessTable,
   };
 
   public componentDidMount() {
