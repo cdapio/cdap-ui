@@ -38,9 +38,6 @@ const GLOBALS = {
   etlPipelineTypes: ['cdap-data-streams', 'cdap-data-pipeline'],
   eltSqlPipeline: 'cdap-sql-pipeline',
 
-  dynamicExecutionForceOn: 'forceOn',
-  dynamicExecutionForceOff: 'forceOff',
-
   // program types for etl app
   programInfo: {
     'cdap-data-pipeline': {

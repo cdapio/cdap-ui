@@ -90,8 +90,7 @@ $input-label-color: $grey-03;
       }
     }
 
-    &.realtime-content,
-    &.allow-force-dynamic-execution {
+    &.realtime-content {
       .label-with-toggle {
         margin-bottom: 12px;
 
@@ -132,11 +131,6 @@ $input-label-color: $grey-03;
         &.key-value-pair-values {
           margin-top: 0;
         }
-      }
-
-      .dynamic-execution-select {
-        width: 50%;
-        margin-bottom: 16px;
       }
     }
   }
