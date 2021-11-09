@@ -31,26 +31,36 @@ import {
   CenteredTextSpan,
   GridCellContainer,
   GridBorderBottom,
-  KeyboardArrowDownIconTransformGrid,
   SmallButton,
   WarningMessage,
   GridDividerCell,
 } from './styles';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import StatusButton from 'components/StatusButton';
+import TransformAddButton from './TransformAdd';
+import { IAddColumnsToTransforms, ITableInfo, ITransformation } from 'components/Replicator/types';
+import TransformDelete from './TransformDelete';
 
 export const renderTable = ({
   state,
+  tableInfo,
   handleSearch,
   toggleSelectAll,
   toggleSelected,
   I18N_PREFIX,
+  addColumnsToTransforms,
+  deleteColumnsFromTransforms,
+  transforms,
 }: {
   state: ISelectColumnsState;
+  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
   handleSearch: (search: any) => void;
   toggleSelectAll: () => void;
   toggleSelected: (row: any) => void;
+  transforms: ITransformation;
   I18N_PREFIX: string;
+  tableInfo: ITableInfo;
 }) => {
   const numNotSupported = 3;
   let supportedError;
@@ -223,13 +233,19 @@ export const renderTable = ({
                   <StatusButton status="success" />
                 </GridButtonCell>
                 <GridCell item xs={4}>
-                  <SmallButton color="primary">
-                    Transform
-                    <KeyboardArrowDownIconTransformGrid />
-                  </SmallButton>
+                  <TransformAddButton
+                    row={row}
+                    addColumnsToTransforms={addColumnsToTransforms}
+                    tableInfo={tableInfo}
+                  />
                 </GridCell>
                 <GridCell item xs={6}>
-                  <span>--</span>
+                  <TransformDelete
+                    row={row}
+                    tableInfo={tableInfo}
+                    transforms={transforms}
+                    deleteColumnsFromTransforms={deleteColumnsFromTransforms}
+                  />
                 </GridCell>
               </GridCellContainer>
             </GridBorderBottom>
