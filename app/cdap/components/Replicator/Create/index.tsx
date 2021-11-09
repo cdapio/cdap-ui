@@ -41,7 +41,7 @@ import {
   ITableAssessmentColumn,
 } from 'components/Replicator/types';
 import { IWidgetJson } from 'components/ConfigurationGroup/types';
-import { SUPPORT } from './Content/Assessment/TablesAssessment/Mappings/Supported';
+import ErrorBanner from 'components/ErrorBanner';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;
@@ -121,6 +121,7 @@ export interface ICreateState {
       [colName: string]: ITableAssessmentColumn;
     };
   };
+  error: object | string | null;
 }
 
 export type ICreateContext = Partial<ICreateState>;
@@ -214,6 +215,12 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     }
   };
 
+  public handleError = (err: object | string | null) => {
+    this.setState({
+      error: err,
+    });
+  };
+
   public handleAssessTable = (tableName: string, columnAltered?: string) => {
     const draftId = this.state.draftId;
     const assessTable = (updatedColumns?) => {
@@ -241,19 +248,23 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
           });
         },
         (err) => {
-          if (columnAltered) {
-            this.setState({
-              tableAssessments: {
-                [tableName]: {
-                  [columnAltered]: {
-                    support: SUPPORT.no,
-                    suggestion: err.response,
-                    sourceName: columnAltered,
-                  },
-                },
-              },
-            });
-          }
+          this.handleError({
+            error: err,
+          });
+          // commented until assessTable route is built
+          // if (columnAltered) {
+          //   this.setState({
+          //     tableAssessments: {
+          //       [tableName]: {
+          //         [columnAltered]: {
+          //           support: SUPPORT.no,
+          //           suggestion: err.response,
+          //           sourceName: columnAltered,
+          //         },
+          //       },
+          //     },
+          //   });
+          // }
         }
       );
     };
@@ -421,6 +432,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
     tableAssessments: {},
     handleAssessTable: this.handleAssessTable,
+    error: null,
   };
 
   public componentDidMount() {
@@ -543,6 +555,13 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
             <LeftPanel />
             <Content />
           </div>
+          {!!this.state.error && (
+            <ErrorBanner
+              error={this.state.error.error.response}
+              canEditPageWhileOpen={true}
+              onClose={() => this.handleError(null)}
+            />
+          )}
         </div>
       </CreateContext.Provider>
     );
