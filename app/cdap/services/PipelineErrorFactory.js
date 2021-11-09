@@ -265,6 +265,10 @@ let hasValidArtifact = (importConfig) => {
 let hasValidConfig = (importConfig) => {
   return importConfig.config;
 };
+let hasValidSchedule = (importConfig) => {
+  let isSchedulable = GLOBALS.programType[importConfig.artifact.name] === 'workflows';
+  return isSchedulable ? importConfig.config.schedule : true;
+};
 let hasValidInstance = (importConfig) => {
   let isRealtimePipeline = importConfig.artifact.name === GLOBALS.etlRealtime;
   return !isRealtimePipeline ? true : importConfig.config.instances;
@@ -344,6 +348,7 @@ let validateImportJSON = (configString) => {
   let validations = [
     { fn: hasValidArtifact, messagePath: errorPath.concat(['INVALID-ARTIFACT']) },
     { fn: hasValidConfig, messagePath: errorPath.concat(['INVALID-CONFIG']) },
+    { fn: hasValidSchedule, messagePath: errorPath.concat(['INVALID-SCHEDULE']) },
     { fn: hasValidInstance, messagePath: errorPath.concat(['INVALID-INSTANCE']) },
     { fn: hasValidNodesConnections, messagePath: errorPath.concat(['INVALID-NODES-CONNECTIONS']) },
     { fn: hasValidConnections, messagePath: errorPath.concat(['INVALID-CONNECTIONS']) },
