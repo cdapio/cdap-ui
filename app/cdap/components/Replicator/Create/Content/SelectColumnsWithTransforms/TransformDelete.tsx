@@ -15,30 +15,26 @@
  */
 
 import React, { useState } from 'react';
-import Delete from '@material-ui/icons/Delete';
+import ClearIcon from '@material-ui/icons/Clear';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { ITransformDeleteProps } from './types';
 import { SmallButton, KeyboardArrowDownIconTransformGrid } from './styles';
+import { Grid } from '@material-ui/core';
 
 export default function TransformMenuButton({
   row,
   deleteColumnsFromTransforms,
   transforms,
 }: ITransformDeleteProps) {
-  if (transforms === undefined) {
-    return <>--</>;
-  }
-
-  const cols = transforms.columnTransformations;
+  const cols = (transforms && transforms.columnTransformations) ?? [];
   const transformsInColumn = cols.filter(({ columnName }) => {
     return columnName === row.name;
   });
 
   const numTransformsInColumn = transformsInColumn.length;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const open = !!anchorEl;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,7 +47,6 @@ export default function TransformMenuButton({
 
   const handleClose = () => {
     setAnchorEl(null);
-    setSubMenuAnchorEl(null);
   };
 
   return (
@@ -65,9 +60,10 @@ export default function TransformMenuButton({
         disabled={numTransformsInColumn === 0}
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        style={{ alignSelf: 'start' }}
       >
-        {`${numTransformsInColumn}`}
-        <KeyboardArrowDownIconTransformGrid />
+        {`${numTransformsInColumn === 0 ? '--' : numTransformsInColumn}`}
+        {numTransformsInColumn !== 0 && <KeyboardArrowDownIconTransformGrid />}
       </SmallButton>
       <Menu
         getContentAnchorEl={null}
@@ -78,23 +74,54 @@ export default function TransformMenuButton({
           vertical: 'bottom',
           horizontal: 'right',
         }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': `transform-menu-${row.name}-button`,
         }}
       >
+        <Grid
+          container
+          direction="row"
+          spacing={0}
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          style={{ minWidth: '400px', padding: '16px 12px 16px 16px' }}
+        >
+          <Grid item xs={1}>
+            <span> # </span>
+          </Grid>
+          <Grid item xs={11}>
+            <span> Transformations </span>
+          </Grid>
+        </Grid>
+
         {cols.map((col, i) => {
           const name = col.columnName;
           const dir = col.directive;
           const thisCol = name === row.name;
           return (
-            <MenuItem
-              onClick={() => handleDeleteClick(i)}
-              disabled={!thisCol}
-              style={{ background: thisCol ? 'blue' : '' }}
-            >
-              {dir} <Delete />
-            </MenuItem>
+            <Grid container direction="row">
+              <MenuItem
+                style={{
+                  minWidth: '400px',
+                  background: thisCol ? '#f5f5f5' : '',
+                  borderTop: '1px solid #d7d7d7',
+                }}
+                onClick={() => handleDeleteClick(i)}
+                disabled={!thisCol}
+              >
+                <Grid item xs={1}>
+                  {`${i + 1}`}
+                </Grid>
+                <Grid item xs={11}>
+                  {dir} <ClearIcon style={{ float: 'right' }} />
+                </Grid>
+              </MenuItem>
+            </Grid>
           );
         })}
       </Menu>
