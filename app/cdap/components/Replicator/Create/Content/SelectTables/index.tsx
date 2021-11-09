@@ -481,7 +481,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
 
   public renderColumns = () => {
     let Columns = SelectColumns;
-    if (false) {
+    if (true) {
       // this will eventually be a feature flag but just leaving it as a boolean
       // for now as a convenience
       Columns = SelectColumnsWithTransforms;
