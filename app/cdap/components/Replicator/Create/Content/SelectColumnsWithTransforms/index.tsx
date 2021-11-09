@@ -15,35 +15,37 @@
  */
 
 import React, { useEffect, useReducer } from 'react';
-import T from 'i18n-react';
 import { createContextConnect } from 'components/Replicator/Create';
 import { Map } from 'immutable';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import CachedIcon from '@material-ui/icons/Cached';
+import ClearIcon from '@material-ui/icons/Clear';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import LoadingSVG from 'components/LoadingSVG';
 import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import { IColumnImmutable, ITableInfo } from 'components/Replicator/types';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import { ISelectColumnsProps, ReplicateSelect } from './types';
 import { reducer, initialState } from './reducer';
+
+import { renderTable } from './table';
+
 import {
   ActionButtons,
   Backdrop,
-  ButtonWithMarginRight,
-  GridWrapper,
   Header,
   LoadingContainer,
+  StyledRadio,
   Root,
   RadioContainer,
-  StyledCheckbox,
-  StyledRadio,
   StyledRadioGroup,
-  SubtitleContainer,
+  RefreshContainer,
 } from './styles';
+import { IconButton } from '@material-ui/core';
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
@@ -137,21 +139,36 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     dispatch({ type: 'setSearch', payload: search });
   };
 
+  const handleFilterErrors = (errs: string[]) => {
+    dispatch({ type: 'filterErrs', payload: errs });
+  };
+
   const debouncedSearch = useDebounce(state.search);
 
   useEffect(() => {
     let filteredColumns = state.columns;
-    if (debouncedSearch !== '') {
+    if (debouncedSearch !== '' || state.filterErrs.length > 0) {
       filteredColumns = filteredColumns.filter((row) => {
         const normalizedColumn = row.name.toLowerCase();
         const normalizedSearch = debouncedSearch.toLowerCase();
+        const matchedColumns = state.filterErrs.indexOf(normalizedColumn) !== -1;
+        const matchedSearch = normalizedColumn.indexOf(normalizedSearch) !== -1;
+
+        // if search and show only errors, match both
+        if (state.filterErrs.length && debouncedSearch !== '') {
+          return matchedColumns && matchedSearch;
+        }
+
+        if (state.filterErrs.length) {
+          return matchedColumns;
+        }
 
         return normalizedColumn.indexOf(normalizedSearch) !== -1;
       });
     }
 
     dispatch({ type: 'setFilteredColumns', payload: filteredColumns });
-  }, [debouncedSearch]);
+  }, [debouncedSearch, state.filterErrs]);
 
   const handleSave = () => {
     const selectedList =
@@ -217,6 +234,12 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     });
   };
 
+  useEffect(() => {
+    const selectedList =
+      state.selectedReplication === ReplicateSelect.all ? null : state.selectedColumns.toList();
+    props.onSave(props.tableInfo, selectedList);
+  }, [state.selectedColumns, state.selectedReplication]);
+
   const isSaveDisabled = () => {
     if (
       state.selectedReplication === ReplicateSelect.individual &&
@@ -226,79 +249,6 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     }
 
     return state.loading;
-  };
-
-  const renderContent = () => {
-    return (
-      <>
-        <SubtitleContainer>
-          <div>{`Columns - ${state.selectedColumns.size} of ${state.columns.length} selected`}</div>
-
-          <div>
-            <SearchBox
-              value={state.search}
-              onChange={handleSearch}
-              placeholder="Search by column name"
-            />
-          </div>
-        </SubtitleContainer>
-        <GridWrapper className="grid-wrapper">
-          <div className="grid grid-container grid-compact">
-            <div className="grid-header">
-              <div className="grid-row">
-                <div>
-                  <StyledCheckbox
-                    color="primary"
-                    checked={state.selectedColumns.size === state.columns.length}
-                    indeterminate={
-                      state.selectedColumns.size < state.columns.length &&
-                      state.selectedColumns.size > 0
-                    }
-                    onChange={toggleSelectAll}
-                  />
-                </div>
-                <div>#</div>
-                <div>Column name</div>
-                <div>Type</div>
-                <div>Null</div>
-                <div>Key</div>
-              </div>
-            </div>
-
-            <div className="grid-body">
-              {state.filteredColumns.map((row, i) => {
-                const isPrimaryKey = state.primaryKeys.indexOf(row.name) !== -1;
-                return (
-                  <div key={row.name} className="grid-row">
-                    <div
-                      title={
-                        isPrimaryKey
-                          ? T.translate(`${I18N_PREFIX}.primaryKeyDescription`).toString()
-                          : ''
-                      }
-                    >
-                      <StyledCheckbox
-                        color="primary"
-                        checked={!!state.selectedColumns.get(row.name)}
-                        disabled={isPrimaryKey}
-                        onChange={toggleSelected.bind(this, row)}
-                      />
-                    </div>
-                    <div>{i + 1}</div>
-                    <div>{row.name}</div>
-                    <div>{row.type}</div>
-                    <div>
-                      <StyledCheckbox checked={row.nullable} disabled={true} />
-                    </div>
-                    <div>{isPrimaryKey ? 'Primary' : '--'}</div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </GridWrapper>
-      </>
-    );
   };
 
   const renderLoading = () => {
@@ -321,40 +271,68 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
           label={`${props.tableInfo.table} - Mappings, assessments and transformations`}
         />
         <ActionButtons>
+          {/* 
+            Will need to add this back for the 6.6 version https://cdap.atlassian.net/browse/CDAP-18593
           <ButtonWithMarginRight variant="text" color="primary" onClick={props.toggle}>
             Cancel
-          </ButtonWithMarginRight>
-          <Button
-            variant="contained"
-            color="primary"
+          </ButtonWithMarginRight> */}
+          <IconButton
+            // variant="contained"
+            // color="primary"
             onClick={handleSave}
-            disabled={isSaveDisabled()}
+            // disabled={isSaveDisabled()}
           >
-            Save
-          </Button>
+            <ClearIcon />
+          </IconButton>
         </ActionButtons>
       </Header>
       <Root>
         {!state.loading && (
-          <RadioContainer>
-            <StyledRadioGroup
-              value={state.selectedReplication}
-              onChange={handleReplicationSelection}
-            >
-              <FormControlLabel
-                value={ReplicateSelect.all}
-                control={<StyledRadio color="primary" />}
-                label="Replicate all available columns"
-              />
-              <FormControlLabel
-                value={ReplicateSelect.individual}
-                control={<StyledRadio color="primary" />}
-                label="Select the columns to replicate"
-              />
-            </StyledRadioGroup>
-          </RadioContainer>
+          <Box sx={{ display: 'flex' }}>
+            <RadioContainer>
+              <StyledRadioGroup
+                value={state.selectedReplication}
+                onChange={handleReplicationSelection}
+              >
+                <FormControlLabel
+                  value={ReplicateSelect.all}
+                  control={<StyledRadio color="primary" />}
+                  label="Replicate all available columns"
+                />
+                <FormControlLabel
+                  value={ReplicateSelect.individual}
+                  control={<StyledRadio color="primary" />}
+                  label="Select the columns to replicate"
+                />
+              </StyledRadioGroup>
+            </RadioContainer>
+            <RefreshContainer>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => props.handleAssessTable(props.tableInfo.table)}
+              >
+                <CachedIcon /> REFRESH
+              </Button>
+            </RefreshContainer>
+          </Box>
         )}
-        {state.loading ? renderLoading() : renderContent()}
+        {state.loading
+          ? renderLoading()
+          : renderTable({
+              state,
+              toggleSelectAll,
+              toggleSelected,
+              I18N_PREFIX,
+              handleSearch,
+              addColumnsToTransforms: props.addColumnsToTransforms,
+              deleteColumnsFromTransforms: props.deleteColumnsFromTransforms,
+              transforms: props.transformations[props.tableInfo.table],
+              tableInfo: props.tableInfo,
+              tableAssessments: props.tableAssessments,
+              handleFilterErrors,
+              filterErrs: state.filterErrs,
+            })}
       </Root>
     </Backdrop>
   );

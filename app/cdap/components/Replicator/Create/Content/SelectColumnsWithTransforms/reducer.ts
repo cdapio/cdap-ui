@@ -62,6 +62,11 @@ export const reducer = (state: ISelectColumnsState, action) => {
         ...state,
         filteredColumns: action.payload,
       };
+    case 'filterErrs':
+      return {
+        ...state,
+        filterErrs: action.payload,
+      };
     default:
       return state;
   }
@@ -70,10 +75,12 @@ export const reducer = (state: ISelectColumnsState, action) => {
 export const initialState = {
   columns: [],
   filteredColumns: [],
+  filterErrs: [],
   primaryKeys: [],
   selectedReplication: ReplicateSelect.all,
   selectedColumns: Map<string, IColumnImmutable>(),
   loading: true,
   error: null,
   search: '',
+  columnsWithErrors: '',
 };

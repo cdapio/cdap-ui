@@ -35,8 +35,13 @@ import {
   ITablesStore,
   IColumnsStore,
   IDMLStore,
+  ITransformation,
+  IAddColumnsToTransforms,
+  ITableInfo,
+  ITableAssessmentColumn,
 } from 'components/Replicator/types';
 import { IWidgetJson } from 'components/ConfigurationGroup/types';
+import ErrorBanner from 'components/ErrorBanner';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;
@@ -107,6 +112,16 @@ export interface ICreateState {
   saveDraft: () => Observable<any>;
   setColumns: (columns, callback) => void;
   isStateFilled: (stateKeys: string[]) => boolean;
+  transformations: { [tableName: string]: ITransformation };
+  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  handleAssessTable: (tableName: string, columnAltered?: string) => void;
+  tableAssessments: {
+    [tableName: string]: {
+      [colName: string]: ITableAssessmentColumn;
+    };
+  };
+  error: object | string | null;
 }
 
 export type ICreateContext = Partial<ICreateState>;
@@ -166,6 +181,129 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
   public setTables = (tables, columns, dmlBlacklist) => {
     this.setState({ tables, columns, dmlBlacklist });
+  };
+
+  public deleteColumnsFromTransforms = (tableName: string, colTransIndex: number) => {
+    if (colTransIndex === 0) {
+      const transf = this.state.transformations;
+      delete transf[tableName];
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+          },
+        },
+        () => {
+          this.handleAssessTable(tableName);
+        }
+      );
+    } else {
+      const transformationTable = this.state.transformations[tableName];
+      const newTransformations = transformationTable.columnTransformations.splice(0, colTransIndex);
+      transformationTable.columnTransformations = newTransformations;
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: transformationTable,
+          },
+        },
+        () => {
+          this.handleAssessTable(tableName);
+        }
+      );
+    }
+  };
+
+  public handleError = (err: object | string | null) => {
+    this.setState({
+      error: err,
+    });
+  };
+
+  public handleAssessTable = (tableName: string, columnAltered?: string) => {
+    const draftId = this.state.draftId;
+    const assessTable = (updatedColumns?) => {
+      const params = {
+        namespace: getCurrentNamespace(),
+        draftId,
+      };
+
+      const body: ITableInfo = {
+        database: this.state.sourceConfig.database,
+        table: tableName,
+      };
+
+      MyReplicatorApi.assessTable(params, body).subscribe(
+        (res) => {
+          const assessments = {};
+          res.columns.forEach((col) => {
+            assessments[col.sourceName] = col;
+          });
+
+          this.setState({
+            tableAssessments: {
+              [tableName]: assessments,
+            },
+          });
+        },
+        (err) => {
+          this.handleError({
+            error: err,
+          });
+          // commented until assessTable route is built
+          // if (columnAltered) {
+          //   this.setState({
+          //     tableAssessments: {
+          //       [tableName]: {
+          //         [columnAltered]: {
+          //           support: SUPPORT.no,
+          //           suggestion: err.response,
+          //           sourceName: columnAltered,
+          //         },
+          //       },
+          //     },
+          //   });
+          // }
+        }
+      );
+    };
+
+    this.saveDraft().subscribe(assessTable);
+  };
+
+  public addColumnsToTransforms = (opts: IAddColumnsToTransforms) => {
+    const { tableName, columnTransformation } = opts;
+    const transformationTable = this.state.transformations[tableName];
+    if (!transformationTable) {
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: {
+              tableName,
+              columnTransformations: [columnTransformation],
+            },
+          },
+        },
+        () => {
+          this.handleAssessTable(tableName, columnTransformation.columnName);
+        }
+      );
+    } else {
+      transformationTable.columnTransformations.push(columnTransformation);
+      this.setState(
+        {
+          transformations: {
+            ...this.state.transformations,
+            [tableName]: transformationTable,
+          },
+        },
+        () => {
+          this.handleAssessTable(tableName, columnTransformation.columnName);
+        }
+      );
+    }
   };
 
   public setAdvanced = (numInstances) => {
@@ -232,6 +370,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       parallelism: {
         numInstances: this.state.numInstances,
       },
+      tableTransformations: Object.values(this.state.transformations),
     };
 
     return config;
@@ -271,6 +410,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     draftId: null,
     isInvalidSource: false,
     loading: true,
+    transformations: {},
 
     activeStep: 0,
 
@@ -288,6 +428,11 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     saveDraft: this.saveDraft,
     setColumns: this.setColumns,
     isStateFilled: this.isStateFilled,
+    addColumnsToTransforms: this.addColumnsToTransforms,
+    deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
+    tableAssessments: {},
+    handleAssessTable: this.handleAssessTable,
+    error: null,
   };
 
   public componentDidMount() {
@@ -410,6 +555,13 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
             <LeftPanel />
             <Content />
           </div>
+          {!!this.state.error && (
+            <ErrorBanner
+              error={this.state.error.error.response}
+              canEditPageWhileOpen={true}
+              onClose={() => this.handleError(null)}
+            />
+          )}
         </div>
       </CreateContext.Provider>
     );

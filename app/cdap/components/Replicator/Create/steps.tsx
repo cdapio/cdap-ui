@@ -41,7 +41,7 @@ export const STEPS: IStep[] = [
     required: ['sourceConfig'],
   },
   {
-    label: 'Select tables',
+    label: 'Select tables and transformations',
     component: SelectTables,
     required: ['tables'],
   },

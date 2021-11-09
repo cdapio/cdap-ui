@@ -16,6 +16,7 @@
 
 import { PluginProperties } from 'components/ConfigurationGroup/types';
 import { List, Map, Set } from 'immutable';
+import { SUPPORT } from './Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
 export interface IColumn {
   name: string;
@@ -93,4 +94,32 @@ export interface IRawMetricData {
   endTime: number;
   resolution: string;
   series: IMetricSeries[];
+}
+
+export interface ITransformInformation extends IColumnTransformation {
+  tableName: string;
+}
+
+export interface IColumnTransformation {
+  columnName: string;
+  directive: string;
+}
+
+export interface ITransformation {
+  tableName: string;
+  columnTransformations: IColumnTransformation[];
+}
+
+export interface IAddColumnsToTransforms {
+  tableName: string;
+  columnTransformation: IColumnTransformation;
+}
+
+export interface ITableAssessmentColumn {
+  support: SUPPORT;
+  sourceName: string;
+  sourceType?: string;
+  targetName?: string;
+  targetType?: string;
+  suggestion?: string;
 }
