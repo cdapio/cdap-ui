@@ -70,27 +70,29 @@ class EngineConfigTabContent extends Component {
   renderBatchEngineConfig(forceDynamicExecution) {
     if (!Theme.allowForceDynamicExecution) {
       return (
-        <div className="engine-config-radio">
-          <label className="radio-inline radio-spark">
-            <EngineRadioInput value={ENGINE_OPTIONS.SPARK} />
-            {T.translate('commons.entity.spark.singular')}
-          </label>
-          <label className="radio-inline radio-mapReduce">
-            <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
-            {T.translate('commons.entity.mapreduce.singular')}
-          </label>
+        <div>
+          <div className="engine-config-radio">
+            <label className="radio-inline radio-spark">
+              <EngineRadioInput value={ENGINE_OPTIONS.SPARK} />
+              {T.translate('commons.entity.spark.singular')}
+            </label>
+            <label className="radio-inline radio-mapReduce">
+              <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
+              {T.translate('commons.entity.mapreduce.singular')}
+            </label>
+          </div>
         </div>
       );
     } else {
       return (
-        <React.Fragment>
+        <div>
           <SelectWithOptions
             value={forceDynamicExecution}
             options={FORCE_DYNAMIC_EXECUTION_OPTIONS}
             className="dynamic-execution-select"
           />
           {forceDynamicExecution === GLOBALS.dynamicExecutionForceOff && <NumExecutors />}
-        </React.Fragment>
+        </div>
       );
     }
   }

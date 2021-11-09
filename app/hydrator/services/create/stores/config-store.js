@@ -463,13 +463,15 @@ class HydratorPlusPlusConfigStore {
     let managedProperties = [];
     if (this.state.artifact.name === this.GLOBALS.etlDataStreams) {
       managedProperties = [window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES, window.CaskCommon.PipelineConfigConstants.SPARK_BACKPRESSURE_ENABLED];
-    } else if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution'] && this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
+    }
+    else if (window.CDAP_UI_THEME.features['allow-force-dynamic-execution'] && this.state.config.properties.hasOwnProperty(window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION)) {
       if (this.state.config.properties[window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION] === 'true') {
         managedProperties = [
           window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
           window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
         ];
-      } else {
+      }
+      else {
         managedProperties = [
           window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
           window.CaskCommon.PipelineConfigConstants.SPARK_EXECUTOR_INSTANCES,
