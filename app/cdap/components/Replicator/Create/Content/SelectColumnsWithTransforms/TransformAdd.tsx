@@ -54,12 +54,12 @@ export default function TransformAddButton({
   };
 
   const handleAddToTransforms = () => {
-    // const transformInfo: ITransformInformation = {
-    //   tableName: tableInfo.table,
-    //   columnName: row.name,
-    //   directive: directiveText,
-    // };
-    // addTinkToTransforms({ transformInfo, addColumnsToTransforms });
+    const transformInfo: ITransformInformation = {
+      tableName: tableInfo.table,
+      columnName: row.name,
+      directive: directiveText,
+    };
+    addTinkToTransforms({ transformInfo, addColumnsToTransforms });
     handleClose();
   };
 
