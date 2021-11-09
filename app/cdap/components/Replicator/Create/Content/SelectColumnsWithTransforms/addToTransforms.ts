@@ -21,6 +21,7 @@ export interface IAddToTransforms {
   addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
 }
 
+// this will eventually be generic
 export const addTinkToTransforms = (transform: IAddToTransforms): void => {
   const { tableName, columnName, directive } = transform.transformInfo;
   const actualDirective = `TINK ${columnName} ${directive}`;
