@@ -2126,6 +2126,37 @@ features:
       newest: Newset First
       ascending: A → Z
       descending: Z → A
+  MetadataSummary:
+    loading: Loading metadata
+    businessTags: Business tags
+    systemTags: System tags
+    enterTagPlaceholder: Enter a tag
+    invalidTag: No special characters allowed.
+    addTag: Add tag
+    duplicateTag: Tag already exists.
+    noTags: There are no tags.
+    schema: Schema
+    noSchema: There is no schema.
+    emptySchema: No Schema Available.
+    summary: Summary
+    lineage: Lineage
+    entityTypeTabAriaLabel: Tabs for summary and lineage
+    propertiesTabAriaLabel: Tabs for business and system property tags
+    noSystemProperties: There are no system properties
+    schemaName: Name
+    schemaType: Type
+    schemaNull: "Null"
+    fieldName: Field name
+    fieldActions: Actions
+    derivedDataset: "The dataset '{derivedDatasetId}' already exists. It's schema cannot be modified."
+    inputSchema: This input schema has been derived from the output schema of the previous node(s) and cannot be changed.
+    business: Business
+    system: System
+    deleteProperty: Delete property
+    enterPropertyKey: Enter a key
+    enterPropertyValue: Enter a value
+    propertyKey: Key
+    propertyValue: Value
   ApiError:    
     CmekError:
       mainTitle: CMEK Key Revoked
