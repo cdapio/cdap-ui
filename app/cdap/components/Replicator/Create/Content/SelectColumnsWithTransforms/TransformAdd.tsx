@@ -22,12 +22,12 @@ import { ITransformAddProps } from './types';
 import { SmallButton, KeyboardArrowDownIconTransformGrid } from './styles';
 import { Grid, Popover, TextField } from '@material-ui/core';
 import { addTinkToTransforms } from './addToTransforms';
-import { ITransformInformation } from 'components/Replicator/types';
 
 export default function TransformAddButton({
   row,
   addColumnsToTransforms,
   tableInfo,
+  columns,
 }: ITransformAddProps) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
@@ -54,12 +54,19 @@ export default function TransformAddButton({
   };
 
   const handleAddToTransforms = () => {
-    const transformInfo: ITransformInformation = {
-      tableName: tableInfo.table,
+    const transformInfo = {
       columnName: row.name,
       directive: directiveText,
     };
-    addTinkToTransforms({ transformInfo, addColumnsToTransforms });
+    const tinkDirective = addTinkToTransforms(transformInfo);
+    addColumnsToTransforms(
+      {
+        columnName: row.name,
+        directive: tinkDirective,
+      },
+      tableInfo,
+      columns()
+    );
     handleClose();
   };
 
