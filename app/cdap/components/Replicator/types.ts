@@ -24,6 +24,8 @@ export interface IColumn {
   suppressWarning?: boolean;
 }
 
+export type ISelectedList = null | IColumnsList;
+
 /**
  * IColumnImmutable is the immutable form of IColumn
  */
@@ -96,10 +98,6 @@ export interface IRawMetricData {
   series: IMetricSeries[];
 }
 
-export interface ITransformInformation extends IColumnTransformation {
-  tableName: string;
-}
-
 export interface IColumnTransformation {
   columnName: string;
   directive: string;
@@ -108,11 +106,6 @@ export interface IColumnTransformation {
 export interface ITransformation {
   tableName: string;
   columnTransformations: IColumnTransformation[];
-}
-
-export interface IAddColumnsToTransforms {
-  tableName: string;
-  columnTransformation: IColumnTransformation;
 }
 
 export interface ITableAssessmentColumn {
