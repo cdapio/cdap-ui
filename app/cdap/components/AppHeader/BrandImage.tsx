@@ -20,6 +20,8 @@ import { withContext, INamespaceLinkContext } from 'components/AppHeader/Namespa
 import { Theme } from 'services/ThemeHelper';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import globalEvents from 'services/global-events';
+import ee from 'event-emitter';
 
 interface IBrandImageProps extends WithStyles<typeof imageStyle> {
   context: INamespaceLinkContext;
@@ -30,9 +32,15 @@ const BrandImage: React.SFC<IBrandImageProps> = ({ classes, context }) => {
   const { isNativeLink } = context;
   const namespace = getCurrentNamespace();
   const LinkEl = isNativeLink ? 'a' : Link;
+  const eventEmitter = ee(ee);
+
   return (
     <LinkEl to={`/ns/${namespace}`} href={`/cdap/ns/${namespace}`}>
-      <img className={classes.img} src={brandLogoSrc} />
+      <img
+        className={classes.img}
+        src={brandLogoSrc}
+        onClick={() => eventEmitter.emit(globalEvents.CLOSEMARKET)}
+      />
     </LinkEl>
   );
 };
