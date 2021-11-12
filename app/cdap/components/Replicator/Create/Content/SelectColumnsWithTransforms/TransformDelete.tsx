@@ -26,6 +26,8 @@ export default function TransformMenuButton({
   row,
   deleteColumnsFromTransforms,
   transforms,
+  tableInfo,
+  columns,
 }: ITransformDeleteProps) {
   const cols = (transforms && transforms.columnTransformations) ?? [];
   const transformsInColumn = cols.filter(({ columnName }) => {
@@ -41,7 +43,7 @@ export default function TransformMenuButton({
   };
 
   const handleDeleteClick = (index) => {
-    deleteColumnsFromTransforms(transforms.tableName, index);
+    deleteColumnsFromTransforms(tableInfo, index, columns());
     handleClose();
   };
 

@@ -18,24 +18,33 @@ import {
   IColumnsList,
   IColumnImmutable,
   ITableInfo,
-  IAddColumnsToTransforms,
+  IColumnTransformation,
   ITransformation,
+  ISelectedList,
   ITableAssessmentColumn,
 } from 'components/Replicator/types';
 import { Observable } from 'rxjs/Observable';
 
 export interface ISelectColumnsProps {
   tableInfo?: ITableInfo;
-  onSave: (tableInfo: ITableInfo, columns: IColumnsList) => void;
+  onSave: (tableInfo: ITableInfo, columns: ISelectedList) => void;
   initialSelected: IColumnsList;
   toggle: () => void;
   saveDraft: () => Observable<any>;
   draftId: string;
-  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
-  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  addColumnsToTransforms: (
+    opts: IColumnTransformation,
+    table: ITableInfo,
+    columns: ISelectedList
+  ) => void;
+  deleteColumnsFromTransforms: (
+    table: ITableInfo,
+    colTransIndex: number,
+    columns: ISelectedList
+  ) => void;
   transformations: ITransformation;
   tableAssessments: undefined | { [colName: string]: ITableAssessmentColumn };
-  handleAssessTable: (tableName: string, columnAltered?: string) => void;
+  handleAssessTable: (table: ITableInfo, columns: IColumnsList) => void;
 }
 
 interface IColumn {
@@ -64,12 +73,22 @@ export interface ISelectColumnsState {
 export interface ITransformAddProps {
   row: IColumn;
   tableInfo: ITableInfo;
-  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
+  columns: () => ISelectedList;
+  addColumnsToTransforms: (
+    opts: IColumnTransformation,
+    table: ITableInfo,
+    columns: ISelectedList
+  ) => void;
 }
 
 export interface ITransformDeleteProps {
   row: IColumn;
   tableInfo: ITableInfo;
   transforms: ITransformation;
-  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  columns: () => ISelectedList;
+  deleteColumnsFromTransforms: (
+    table: ITableInfo,
+    colTransIndex: number,
+    columns: ISelectedList
+  ) => void;
 }

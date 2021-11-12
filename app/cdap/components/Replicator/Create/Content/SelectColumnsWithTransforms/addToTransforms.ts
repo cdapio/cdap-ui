@@ -14,30 +14,15 @@
  * the License.
  */
 
-import { IAddColumnsToTransforms, ITransformInformation } from 'components/Replicator/types';
-
-export interface IAddToTransforms {
-  transformInfo: ITransformInformation;
-  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
-}
+import { IColumnTransformation } from 'components/Replicator/types';
 
 // this will eventually be generic
-export const addTinkToTransforms = (transform: IAddToTransforms): void => {
-  const { tableName, columnName, directive } = transform.transformInfo;
-  const actualDirective = `TINK ${columnName} ${directive}`;
-  const columnTransformation = {
-    directive: actualDirective,
-    columnName,
-  };
-  transform.addColumnsToTransforms({ tableName, columnTransformation });
+export const addTinkToTransforms = (transform: IColumnTransformation): string => {
+  const { columnName, directive } = transform;
+  return `TINK ${columnName} ${directive}`;
 };
 
-export const addRenameToTransforms = (transform: IAddToTransforms): void => {
-  const { tableName, columnName, directive } = transform.transformInfo;
-  const actualDirective = `rename ${columnName} ${directive}`;
-  const columnTransformation = {
-    directive: actualDirective,
-    columnName,
-  };
-  transform.addColumnsToTransforms({ tableName, columnTransformation });
+export const addRenameToTransforms = (transform: IColumnTransformation): string => {
+  const { columnName, directive } = transform;
+  return `rename ${columnName} ${directive}`;
 };

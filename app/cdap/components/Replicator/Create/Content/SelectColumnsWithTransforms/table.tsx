@@ -45,7 +45,13 @@ import {
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
 import StatusButton from 'components/StatusButton';
 import TransformAddButton from './TransformAdd';
-import { IAddColumnsToTransforms, ITableInfo, ITransformation } from 'components/Replicator/types';
+import {
+  ISelectedList,
+  ITableInfo,
+  ITransformation,
+  IColumnTransformation,
+} from 'components/Replicator/types';
+
 import TransformDelete from './TransformDelete';
 import { SUPPORT } from '../Assessment/TablesAssessment/Mappings/Supported';
 
@@ -62,10 +68,19 @@ export const renderTable = ({
   tableAssessments,
   handleFilterErrors,
   filterErrs,
+  selectedList,
 }: {
   state: ISelectColumnsState;
-  addColumnsToTransforms: (opts: IAddColumnsToTransforms) => void;
-  deleteColumnsFromTransforms: (tableName: string, colTransIndex: number) => void;
+  addColumnsToTransforms: (
+    opts: IColumnTransformation,
+    table: ITableInfo,
+    columns: ISelectedList
+  ) => void;
+  deleteColumnsFromTransforms: (
+    table: ITableInfo,
+    colTransIndex: number,
+    columns: ISelectedList
+  ) => void;
   handleSearch: (search: any) => void;
   toggleSelectAll: () => void;
   toggleSelected: (row: any) => void;
@@ -75,6 +90,7 @@ export const renderTable = ({
   tableAssessments: undefined | { [colName: string]: any };
   handleFilterErrors: (errs: string[]) => void;
   filterErrs: string[];
+  selectedList: () => ISelectedList;
 }) => {
   const hasTableAssessments = !!tableAssessments;
   const errNames = [];
@@ -280,6 +296,7 @@ export const renderTable = ({
                     row={row}
                     addColumnsToTransforms={addColumnsToTransforms}
                     tableInfo={tableInfo}
+                    columns={selectedList}
                   />
                 </GridCell>
                 <GridCell item xs={6}>
@@ -288,6 +305,7 @@ export const renderTable = ({
                     tableInfo={tableInfo}
                     transforms={transforms}
                     deleteColumnsFromTransforms={deleteColumnsFromTransforms}
+                    columns={selectedList}
                   />
                 </GridCell>
               </GridCellContainer>
