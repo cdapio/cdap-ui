@@ -26,7 +26,7 @@ import { MyReplicatorApi } from 'api/replicator';
 import LoadingSVG from 'components/LoadingSVG';
 import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { IColumnImmutable, ITableInfo } from 'components/Replicator/types';
+import { IColumnImmutable, ITableInfo, ISelectedList } from 'components/Replicator/types';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import { ISelectColumnsProps, ReplicateSelect } from './types';
@@ -79,6 +79,12 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
     }
 
     return response;
+  };
+
+  const returnSelectedList = (): ISelectedList => {
+    return state.selectedReplication === ReplicateSelect.all
+      ? null
+      : state.selectedColumns.toList();
   };
 
   useEffect(() => {
@@ -171,10 +177,7 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
   }, [debouncedSearch, state.filterErrs]);
 
   const handleSave = () => {
-    const selectedList =
-      state.selectedReplication === ReplicateSelect.all ? null : state.selectedColumns.toList();
-
-    props.onSave(props.tableInfo, selectedList);
+    props.onSave(props.tableInfo, returnSelectedList());
     props.toggle();
   };
 
@@ -235,9 +238,7 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
   };
 
   useEffect(() => {
-    const selectedList =
-      state.selectedReplication === ReplicateSelect.all ? null : state.selectedColumns.toList();
-    props.onSave(props.tableInfo, selectedList);
+    props.onSave(props.tableInfo, returnSelectedList());
   }, [state.selectedColumns, state.selectedReplication]);
 
   const isSaveDisabled = () => {
@@ -310,7 +311,7 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => props.handleAssessTable(props.tableInfo.table)}
+                onClick={() => props.handleAssessTable(props.tableInfo, returnSelectedList())}
               >
                 <CachedIcon /> REFRESH
               </Button>
@@ -332,6 +333,7 @@ const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
               tableAssessments: props.tableAssessments,
               handleFilterErrors,
               filterErrs: state.filterErrs,
+              selectedList: returnSelectedList,
             })}
       </Root>
     </Backdrop>
