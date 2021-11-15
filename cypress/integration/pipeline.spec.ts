@@ -22,6 +22,7 @@ const TEST_SENDER = '__UI_test_sender';
 const TEST_RECIPIENT = '__UI_test@test.com';
 const TEST_SUBJECT = '__UI_test_subject';
 const PREVIEW_FAILED_BANNER_MSG = 'Please add a source and sink to the pipeline';
+const TEST_EMAIL_MACRO = '${email}';
 
 let headers = {};
 
@@ -125,10 +126,10 @@ describe('Creating a pipeline', () => {
     cy.get('[data-cy="validate-btn"]').click({ timeout: 60000 });
 
     cy.contains('error found').should('exist');
-
     // Fix missing field to resolve error
-    cy.get('[data-cy="message"]').within(() => {
-      cy.get('button').click();
+    cy.get('[data-cy="message"] textarea').type(TEST_EMAIL_MACRO, {
+      parseSpecialCharSequences: false,
+      force: true,
     });
     // validate
     cy.get('[data-cy="validate-btn"]').click();
