@@ -110,7 +110,7 @@ class EngineConfigTabContent extends Component {
       const pipelineTypeLabel = GLOBALS.programLabel[this.props.pipelineType];
       heading = T.translate(`${PREFIX}.contentHeading`, { pipelineTypeLabel });
     } else {
-      heading = T.translate(`${PREFIX}.dynamicExecution.contentHeading`);
+      heading = 'TEST CHANGE';
     }
 
     const isBatch = GLOBALS.etlBatchPipelines.includes(this.props.pipelineType);
