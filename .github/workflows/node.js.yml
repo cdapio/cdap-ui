@@ -5,9 +5,9 @@ name: CDAP UI Build and Unit Test
 
 on:
   push:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, feature/odf ]
   pull_request:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, feature/odf ]
 
 jobs:
   build:
