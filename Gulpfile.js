@@ -22,7 +22,6 @@ var gulp = require('gulp'),
   autoprefixer = require('autoprefixer');
 
 function getEs6Directives(isNegate) {
-  
   var es6directives = [
     'dag-plus',
     'plugin-templates',
