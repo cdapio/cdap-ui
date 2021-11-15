@@ -34,7 +34,7 @@
     "precypress-open": "node cypress/pre-startup.js",
     "precypress": "node cypress/pre-startup.js",
     "cypress": "cypress run",
-    "cypress-open": "cypress open",
+    "cypress-open": "node -e \"console.log('**DISABLE BEYOND CORP EXTENSION OR THIS WONT WORK**')\" && cypress open",
     "test": "run-p jest cypress",
     "ncc": "rm -rf server_dist && ncc build server.js -o server_dist",
     "build-graphql-fragment": "node ./graphql/schemaQuery.js",
