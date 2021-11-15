@@ -87,11 +87,13 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
             featureFlag={Theme.showDashboard}
             featureName={Theme.featureNames.dashboard}
             featureUrl={`/ns/${namespace}/operations`}
+            onClick={() => this.eventEmitter.emit(globalEvents.CLOSEMARKET)}
           />
           <ToolBarFeatureLink
             featureFlag={Theme.showReports}
             featureName={Theme.featureNames.reports}
             featureUrl={`/ns/${namespace}/reports`}
+            onClick={() => this.eventEmitter.emit(globalEvents.CLOSEMARKET)}
           />
           <HubButton />
           <ToolBarFeatureLink
@@ -100,7 +102,10 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
             featureUrl={`/administration`}
             // This is needed here when Authorization fails for all namespaces.
             // In this case navigating to Admin section doesn't have restriction (yet).
-            onClick={() => this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, { reset: true })}
+            onClick={() => {
+              this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, { reset: true });
+              this.eventEmitter.emit(globalEvents.CLOSEMARKET);
+            }}
           />
         </div>
         <AppToolbarMenu />
