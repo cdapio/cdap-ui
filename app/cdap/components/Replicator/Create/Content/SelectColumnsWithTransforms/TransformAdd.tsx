@@ -67,6 +67,7 @@ export default function TransformAddButton({
       tableInfo,
       columns()
     );
+    
     handleClose();
   };
 
