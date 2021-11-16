@@ -72,7 +72,7 @@ export default class Explode extends Component {
   }
 
   handleUsingFilters(delimiter) {
-    let directive = `split-to-rows ${this.props.column} ${delimiter}`;
+    const directive = `split-to-rows ${this.props.column} ${delimiter}`;
     this.execute([directive]);
   }
 
@@ -89,12 +89,12 @@ export default class Explode extends Component {
   }
 
   explodeByFlattening() {
-    let directive = `flatten ${this.props.column.toString()}`;
+    const directive = `flatten ${this.props.column.toString()}`;
     this.execute([directive]);
   }
 
   explodeRecordByFlattening() {
-    let directive = `explode-record :${this.props.column.toString()}`;
+    const directive = `explode-record :${this.props.column.toString()}`;
     this.execute([directive]);
   }
 
