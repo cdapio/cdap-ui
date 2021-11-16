@@ -17,6 +17,8 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
 
 const styles = (): StyleRules => {
   return {
@@ -35,9 +37,16 @@ interface ISearchBoxProps extends WithStyles<typeof styles> {
   value: string;
   placeholder?: string;
   onChange: (value: string) => void;
+  withAdornment?: boolean;
 }
 
-const SearchBoxView: React.FC<ISearchBoxProps> = ({ classes, value, onChange, placeholder }) => {
+const SearchBoxView: React.FC<ISearchBoxProps> = ({
+  classes,
+  value,
+  onChange,
+  placeholder,
+  withAdornment,
+}) => {
   function handleChange(e) {
     onChange(e.target.value);
   }
@@ -49,6 +58,28 @@ const SearchBoxView: React.FC<ISearchBoxProps> = ({ classes, value, onChange, pl
       onChange={handleChange}
       placeholder={placeholder}
       variant="outlined"
+      InputProps={
+        withAdornment
+          ? {
+              startAdornment: (
+                <InputAdornment
+                  position="start"
+                  style={{ marginLeft: '-14px', borderRadius: '3px 0 0 3px' }}
+                >
+                  <SearchIcon
+                    style={{
+                      background: '#EEEEEE',
+                      height: '28px',
+                      width: '24px',
+                      color: '#979797',
+                      borderRadius: '4px 0 0 4px',
+                    }}
+                  />
+                </InputAdornment>
+              ),
+            }
+          : null
+      }
     />
   );
 };

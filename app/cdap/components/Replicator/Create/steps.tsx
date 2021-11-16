@@ -41,14 +41,14 @@ export const STEPS: IStep[] = [
     required: ['sourceConfig'],
   },
   {
-    label: 'Select tables',
-    component: SelectTables,
-    required: ['tables'],
-  },
-  {
     label: 'Configure target',
     component: TargetConfig,
     required: ['targetConfig'],
+  },
+  {
+    label: 'Select tables and transformations',
+    component: SelectTables,
+    required: ['tables'],
   },
   {
     label: 'Configure advanced properties',
