@@ -39,9 +39,12 @@ import cloneDeep from 'lodash/cloneDeep';
 import {
   SPARK_EXECUTOR_INSTANCES,
   SPARK_BACKPRESSURE_ENABLED,
+  SPARK_DYNAMIC_ALLOCATION,
+  SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
   ENGINE_OPTIONS,
 } from 'components/PipelineConfigurations/PipelineConfigConstants';
 import { GLOBALS } from 'services/global-constants';
+import { Theme } from 'services/ThemeHelper';
 
 const ACTIONS = {
   INITIALIZE_CONFIG: 'INITIALIZE_CONFIG',
@@ -71,6 +74,7 @@ const ACTIONS = {
   SET_SERVICE_ACCOUNT_PATH: 'SET_SERVICE_ACCOUNT_PATH',
   SET_PUSHDOWN_CONFIG: 'SET_PUSHDOWN_CONFIG',
   RESET: 'RESET',
+  SET_DYNAMIC_EXECUTION: 'SET_DYNAMIC_EXECUTION',
 };
 
 const BATCH_INTERVAL_RANGE = range(1, 61);
@@ -126,13 +130,22 @@ const DEFAULT_CONFIGURE_OPTIONS = {
 };
 
 const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
-  let backendProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
-  if (GLOBALS.etlBatchPipelines.includes(pipelineType)) {
-    backendProperties = [];
+  let managedProperties = [];
+  if (GLOBALS.etlRealtime === pipelineType) {
+    managedProperties = [SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES];
+  } else if (
+    Theme.allowForceDynamicExecution &&
+    Object.prototype.hasOwnProperty.call(properties, SPARK_DYNAMIC_ALLOCATION)
+  ) {
+    if (properties[SPARK_DYNAMIC_ALLOCATION] === 'true') {
+      managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING];
+    } else if (properties[SPARK_DYNAMIC_ALLOCATION] === 'false') {
+      managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_EXECUTOR_INSTANCES];
+    }
   }
-  let customConfig = {};
+  const customConfig = {};
   Object.keys(properties).forEach((key) => {
-    if (backendProperties.indexOf(key) === -1) {
+    if (managedProperties.indexOf(key) === -1) {
       customConfig[key] = properties[key];
     }
   });
@@ -446,6 +459,39 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
           ...action.payload.pipelineVisualConfiguration,
         },
       };
+    case ACTIONS.SET_DYNAMIC_EXECUTION:
+      if (action.payload.value === GLOBALS.dynamicExecutionForceOn) {
+        return {
+          ...state,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: true,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: true,
+            SPARK_EXECUTOR_INSTANCES: undefined,
+          },
+        };
+      } else if (action.payload.value === GLOBALS.dynamicExecutionForceOff) {
+        return {
+          ...state,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: false,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: undefined,
+          },
+        };
+      } else {
+        // Treat any other value as setting to Cluster Default
+        return {
+          ...state,
+          dynamicExecution: undefined,
+          properties: {
+            ...state.properties,
+            SPARK_DYNAMIC_ALLOCATION: undefined,
+            SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING: undefined,
+            SPARK_EXECUTOR_INSTANCES: undefined,
+          },
+        };
+      }
     default:
       return state;
   }

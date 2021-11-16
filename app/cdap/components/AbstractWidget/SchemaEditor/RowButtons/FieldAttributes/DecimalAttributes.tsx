@@ -31,10 +31,12 @@ function DecimalTypeAttributes({
   onChange,
   handleClose,
 }: IAttributesComponentProps) {
-  const [scale, setScale] = React.useState(objectQuery(typeProperties, 'scale') || defaultScale);
-  const [precision, setPrecision] = React.useState(
-    objectQuery(typeProperties, 'precision') || defaultPrecision
-  );
+  let derivedScale = objectQuery(typeProperties, 'scale');
+  let derivedPrecision = objectQuery(typeProperties, 'precision');
+  derivedScale = typeof derivedScale === 'number' ? derivedScale : defaultScale;
+  derivedPrecision = typeof derivedPrecision === 'number' ? derivedPrecision : defaultPrecision;
+  const [scale, setScale] = React.useState(derivedScale);
+  const [precision, setPrecision] = React.useState(derivedPrecision);
   const classes = useAttributePopoverStyles();
 
   const onChangeHandler = () => {

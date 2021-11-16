@@ -536,7 +536,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         function(err, response) {
           if (err) {
             log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
-            res.status(500).send(err);
+            res.status(response.statusCode || 500).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }
