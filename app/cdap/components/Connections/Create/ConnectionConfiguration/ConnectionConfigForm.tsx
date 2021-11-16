@@ -112,6 +112,7 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
+        /* tslint:disable:no-empty */
         onChange={!isView ? setValues : () => {}}
         disabled={isView}
         errors={testResults.configurationErrors}

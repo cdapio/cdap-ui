@@ -298,7 +298,9 @@ class CDAP extends Component {
                 }
                 const MarkdownImpl = Loadable({
                   loader: () =>
-                    import(/* webpackChunkName: "MarkdownImplExample" */ 'components/Markdown'),
+                    import(
+                      /* webpackChunkName: "MarkdownImplExample" */ 'components/shared/Markdown'
+                    ),
                   loading: LoadingSVGCentered,
                 });
                 return <MarkdownImpl {...props} />;
