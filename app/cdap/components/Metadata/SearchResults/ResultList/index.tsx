@@ -64,9 +64,9 @@ const ResultList: React.FC<IResultListProps> = ({ results, currentPage, pageSize
         <List key={result.name}>
           <Title>
             <a
-              href={`/metadata/ns/${getCurrentNamespace()}/entity/${result.entityTypeState}/${
+              href={`/cdap/ns/${getCurrentNamespace()}/metadata/${result.entityTypeState}/${
                 result.name
-              }/summary?searchTerm=${query}`}
+              }/summary/search/${query}`}
             >
               {result.name}
             </a>

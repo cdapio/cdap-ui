@@ -223,8 +223,8 @@ const SearchResults: React.FC = () => {
     setCurrentPage(++selected);
   }
 
-  function onSearch(query: string) {
-    window.location.href = `/ns/${getCurrentNamespace()}/metadata/search/${query}/result`;
+  function onSearch(searchQuery: string) {
+    window.location.href = `/ns/${getCurrentNamespace()}/metadata/search/${searchQuery}/result`;
   }
 
   const page = getResultCount(currentPage, searchResults.length, PAGE_SIZE);

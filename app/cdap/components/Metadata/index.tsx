@@ -19,6 +19,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import MetadataHome from 'components/Metadata/Home';
 import SearchResults from 'components/Metadata/SearchResults';
+import SearchSummary from 'components/Metadata/SearchSummary';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
 import { useParams } from 'react-router';
@@ -28,8 +29,9 @@ export const basepath = '/ns/:namespace/metadata';
 const Metadata: React.FC = () => {
   const pageTitle = `${Theme.productName} | Search`;
   const namespace = getCurrentNamespace();
-  const params = useParams();
-  const query = (params as any).query;
+  const params = useParams() as any;
+  const query = params.query || '';
+  const entity = params.entity || '';
 
   function checkFeatureFlag(componentToRender: JSX.Element, urlToRedirect: string) {
     if (!Theme.isMetadataInReact) {
@@ -52,6 +54,15 @@ const Metadata: React.FC = () => {
           path={`${basepath}/search/:query/result`}
           render={() =>
             checkFeatureFlag(<SearchResults />, `/metadata/ns/${namespace}/search/${query}/result`)
+          }
+        />
+        <Route
+          path={`${basepath}/:entityType/:entityId/summary/search/:query`}
+          render={() =>
+            checkFeatureFlag(
+              <SearchSummary />,
+              `/metadata/ns/${namespace}/entity/datasets/${entity}/summary?searchTerm=${query}`
+            )
           }
         />
         <Route
