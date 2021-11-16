@@ -83,6 +83,8 @@ const WIDGET_CATEGORY = 'widget-category';
 
 interface IState {
   isMacroTextbox: boolean;
+  prevValue: string;
+  prevMacroValue: string;
 }
 
 class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
@@ -92,6 +94,8 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
 
   public state = {
     isMacroTextbox: this.isMacroTextbox(),
+    prevValue: '',
+    prevMacroValue: '${}',
   };
 
   public shouldComponentUpdate(nextProps) {
@@ -122,9 +126,11 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
     const newValue = !this.state.isMacroTextbox;
 
     if (newValue) {
-      this.handleChange('${}');
+      this.setState({ prevValue: this.props.value });
+      this.handleChange(this.state.prevMacroValue);
     } else {
-      this.handleChange('');
+      this.setState({ prevMacroValue: this.props.value });
+      this.handleChange(this.state.prevValue);
     }
 
     this.setState({ isMacroTextbox: newValue });
