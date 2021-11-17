@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import {
   MAX_CONCURRENT_RUNS_OPTIONS,
   ACTIONS as PipelineSchedulerActions,

@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import PaginationStepper from 'components/PaginationStepper';
+import PaginationStepper from 'components/shared/PaginationStepper';
 import './Pagination.scss';
 
 interface IPaginationProps {

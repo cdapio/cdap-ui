@@ -22,7 +22,7 @@ import classnames from 'classnames';
 import { UncontrolledDropdown } from 'components/UncontrolledComponents';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { preventPropagation } from 'services/helpers';
-import NavLinkWrapper from 'components/NavLinkWrapper';
+import NavLinkWrapper from 'components/shared/NavLinkWrapper';
 
 require('./FilePath.scss');
 

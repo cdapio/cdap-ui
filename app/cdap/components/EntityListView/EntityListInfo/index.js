@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import T from 'i18n-react';
-import PaginationStepper from 'components/PaginationStepper';
+import PaginationStepper from 'components/shared/PaginationStepper';
 import Typography from '@material-ui/core/Typography';
 import NamespaceStore from 'services/NamespaceStore';
 import SearchStore from 'components/EntityListView/SearchStore';

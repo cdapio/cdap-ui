@@ -30,7 +30,7 @@ import HierarchyPopoverButton from 'components/AbstractWidget/HierarchyWidget/Hi
 import InputFieldWrapper from 'components/AbstractWidget/HierarchyWidget/HierarchyTreeNode/InputFieldWrapper';
 import ListboxComponent from 'components/AbstractWidget/HierarchyWidget/HierarchyTreeNode/ListBoxComponent';
 import HierarchyTree from 'components/AbstractWidget/HierarchyWidget/HierarchyTree';
-import If from 'components/If';
+import If from 'components/shared/If';
 import uuidV4 from 'uuid/v4';
 
 const RowInputContainer = withStyles(() => {

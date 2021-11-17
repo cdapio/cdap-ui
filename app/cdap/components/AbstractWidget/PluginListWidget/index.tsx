@@ -24,7 +24,7 @@ import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
 import uniqBy from 'lodash/uniqBy';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import ee from 'event-emitter';
 import GLOBAL_EVENTS from 'services/global-events';
 

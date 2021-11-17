@@ -16,7 +16,7 @@
 import Proptypes from 'prop-types';
 import React from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import uuidV4 from 'uuid/v4';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';

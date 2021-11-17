@@ -24,8 +24,8 @@ import DataPrepStore from 'components/DataPrep/store';
 import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
 import { preventPropagation } from 'services/helpers';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/CardActionFeedback';
-import If from 'components/If';
+import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import If from 'components/shared/If';
 
 require('./Bulkset.scss');
 

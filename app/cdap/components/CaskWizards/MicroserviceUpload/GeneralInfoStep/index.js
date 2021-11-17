@@ -23,7 +23,7 @@ import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/Mi
 import MicroserviceUploadActionCreator from 'services/WizardStores/MicroserviceUpload/ActionCreator';
 import { Label, Form, FormGroup, Col, Input } from 'reactstrap';
 import InputWithValidations from 'components/InputWithValidations';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { preventPropagation } from 'services/helpers';
 import T from 'i18n-react';
 

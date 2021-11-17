@@ -30,7 +30,7 @@ import { sortedUniqBy } from 'lodash';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const useStyle = makeStyles<Theme>((theme) => {
   return {

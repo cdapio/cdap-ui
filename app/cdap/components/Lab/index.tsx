@@ -27,7 +27,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Typography, TextField } from '@material-ui/core';
 import NewReleasesRoundedIcon from '@material-ui/icons/NewReleasesRounded';
 import experimentsList from './experiment-list';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { getExperimentValue, setupExperiments } from 'services/helpers';
 import { IExperiment, ILabState } from 'components/Lab/types';
 

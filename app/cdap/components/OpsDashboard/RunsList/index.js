@@ -18,10 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { humanReadableDuration, humanReadableDate } from 'services/helpers';
-import SortableStickyGrid from 'components/SortableStickyGrid';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid';
 import capitalize from 'lodash/capitalize';
 import StatusMapper from 'services/StatusMapper';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import TopPanel from 'components/OpsDashboard/RunsList/TopPanel';
 

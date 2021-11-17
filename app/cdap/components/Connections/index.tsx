@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import Helmet from 'react-helmet';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
@@ -32,7 +32,7 @@ import {
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectionsApi } from 'api/connections';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 
 const useStyle = makeStyle(() => {
   return {

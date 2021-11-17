@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import T from 'i18n-react';
-import PaginationDropdown from 'components/Pagination/PaginationDropdown';
+import PaginationDropdown from 'components/shared/Pagination/PaginationDropdown';
 import { ModalHeader } from 'reactstrap';
 
 require('./SpotlightModal.scss');

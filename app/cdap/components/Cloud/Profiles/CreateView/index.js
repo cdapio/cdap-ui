@@ -21,7 +21,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link, Redirect } from 'react-router-dom';
 import { MyCloudApi } from 'api/cloud';
 import { objectQuery, preventPropagation, isNilOrEmpty } from 'services/helpers';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { connect, Provider } from 'react-redux';
 import ProvisionerInfoStore from 'components/Cloud/Store';
 import { fetchProvisionerSpec } from 'components/Cloud/Store/ActionCreator';
@@ -46,8 +46,8 @@ import Helmet from 'react-helmet';
 import T from 'i18n-react';
 import { SCOPES, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
-import If from 'components/If';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import If from 'components/shared/If';
 
 const PREFIX = 'features.Cloud.Profiles.CreateView';
 

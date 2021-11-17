@@ -16,7 +16,7 @@
 
 import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import React from 'react';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 require('./MemorySelectWidget.scss');

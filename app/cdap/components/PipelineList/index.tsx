@@ -23,7 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import Helmet from 'react-helmet';
 import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
-import ErrorBoundary from 'components/ErrorBoundary';
+import ErrorBoundary from 'components/shared/ErrorBoundary';
 
 import './PipelineList.scss';
 

@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import './PipelineExportModal.scss';
 

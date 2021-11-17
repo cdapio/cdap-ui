@@ -17,9 +17,9 @@
 import * as React from 'react';
 
 import { IConnectorDetails } from 'components/Connections/Create/reducer';
-import ConfigurableTab, { ITabConfigObj, TabLayoutEnum } from 'components/ConfigurableTab';
+import ConfigurableTab, { ITabConfigObj, TabLayoutEnum } from 'components/shared/ConfigurableTab';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import Markdown from 'components/Markdown';
+import Markdown from 'components/shared/Markdown';
 import { ConnectionConfigForm } from 'components/Connections/Create/ConnectionConfiguration/ConnectionConfigForm';
 
 const useStyle = makeStyle(() => {

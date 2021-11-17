@@ -30,7 +30,7 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import MyRulesEngine from 'api/rulesengine';
 import classnames from 'classnames';
 import T from 'i18n-react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 require('./AddRulesEngineToPipelineModal.scss');
 const PREFIX = 'features.RulesEngine.AddRulesEngineToPipelineModal';

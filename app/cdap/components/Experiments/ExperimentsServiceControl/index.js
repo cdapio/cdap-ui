@@ -17,9 +17,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import enableSystemApp from 'services/ServiceEnablerUtilities';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import T from 'i18n-react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import isObject from 'lodash/isObject';
 import { myExperimentsApi } from 'api/experiments';
 import { isSpark2Available } from 'services/CDAPComponentsVersions';

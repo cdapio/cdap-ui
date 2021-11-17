@@ -16,8 +16,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import AddNamespaceStore from 'services/WizardStores/AddNamespace/AddNamespaceStore';
 import AddNamespaceActions from 'services/WizardStores/AddNamespace/AddNamespaceActions';
 import AddNamespaceWizardConfig from 'services/WizardConfigs/AddNamespaceWizardConfig';

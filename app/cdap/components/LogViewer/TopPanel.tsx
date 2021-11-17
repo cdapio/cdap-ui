@@ -22,11 +22,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import classnames from 'classnames';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import Popover from 'components/Popover';
-import IconSVG from 'components/IconSVG';
-import LoadingSVG from 'components/LoadingSVG';
+import Popover from 'components/shared/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 export const TOP_PANEL_HEIGHT = '50px';
 

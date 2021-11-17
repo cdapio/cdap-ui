@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import Tags from 'components/Tags';
+import Tags from 'components/shared/Tags';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 
 import './PipelineTags.scss';

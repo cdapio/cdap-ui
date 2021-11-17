@@ -22,11 +22,11 @@ import Cookies from 'universal-cookie';
 import isNil from 'lodash/isNil';
 import T from 'i18n-react';
 import Button from '@material-ui/core/Button';
-import PropertyRow from 'components/ConfigurationGroup/PropertyRow';
+import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Redirect } from 'react-router';
 import Alert from '@material-ui/lab/Alert';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyles((theme) => {

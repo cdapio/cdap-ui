@@ -23,7 +23,7 @@ import { DetailContext } from 'components/Replicator/Detail';
 import Overview from 'components/Replicator/Detail/Overview';
 import Monitoring from 'components/Replicator/Detail/Monitoring';
 import { humanReadableDate } from 'services/helpers';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { createReplicatorDetailUrl } from '../../utilities';
 
 const styles = (theme): StyleRules => {

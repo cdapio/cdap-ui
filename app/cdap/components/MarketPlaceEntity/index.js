@@ -16,7 +16,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import Card from '../Card';
+import Card from 'components/shared/Card';
 import { MyMarketApi } from 'api/market';
 import classnames from 'classnames';
 import MarketActionsContainer from 'components/MarketActionsContainer';
@@ -24,9 +24,9 @@ import AbstractWizard from 'components/AbstractWizard';
 import MarketStore from 'components/Market/store/market-store';
 import ExperimentalBanner from 'components/ExperimentalBanner';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import LicenseRow from 'components/MarketPlaceEntity/LicenseRow';
-import PaidBanner from 'components/PaidBanner';
+import PaidBanner from 'components/shared/PaidBanner';
 
 require('./MarketPlaceEntity.scss');
 export default class MarketPlaceEntity extends Component {

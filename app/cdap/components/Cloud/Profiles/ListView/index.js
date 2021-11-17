@@ -20,11 +20,11 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
-import LoadingSVG from 'components/LoadingSVG';
+import IconSVG from 'components/shared/IconSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import orderBy from 'lodash/orderBy';
-import ViewAllLabel from 'components/ViewAllLabel';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ViewAllLabel from 'components/shared/ViewAllLabel';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
 import {
   getProfiles,
@@ -37,7 +37,7 @@ import {
   getNodeHours,
 } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { connect, Provider } from 'react-redux';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import uuidV4 from 'uuid/v4';
 import ActionsPopover from 'components/Cloud/Profiles/ActionsPopover';
 import isEqual from 'lodash/isEqual';

@@ -16,7 +16,7 @@
 
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 
 const useStyle = makeStyles((theme) => {
   return {

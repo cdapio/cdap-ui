@@ -17,7 +17,7 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
-import Status from 'components/Status';
+import Status from 'components/shared/Status';
 
 const styles = (theme): StyleRules => {
   return {

@@ -22,7 +22,7 @@ import Fuse from 'fuse.js';
 import isEmpty from 'lodash/isEmpty';
 import CreateRule from 'components/RulesEngineHome/CreateRule';
 import isNil from 'lodash/isNil';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import T from 'i18n-react';
 
 require('./RulesTab.scss');

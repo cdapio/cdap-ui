@@ -32,8 +32,8 @@ import range from 'lodash/range';
 import {
   convertMapToKeyValuePairsObj,
   keyValuePairsHaveMissingValues,
-} from 'components/KeyValuePairs/KeyValueStoreActions';
-import { getDefaultKeyValuePair } from 'components/KeyValuePairs/KeyValueStore';
+} from 'components/shared/KeyValuePairs/KeyValueStoreActions';
+import { getDefaultKeyValuePair } from 'components/shared/KeyValuePairs/KeyValueStore';
 import uuidV4 from 'uuid/v4';
 import cloneDeep from 'lodash/cloneDeep';
 import {

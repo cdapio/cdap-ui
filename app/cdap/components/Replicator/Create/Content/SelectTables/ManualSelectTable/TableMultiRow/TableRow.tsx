@@ -27,10 +27,10 @@ import { Set } from 'immutable';
 import { DML } from 'components/Replicator/types';
 import { objectQuery } from 'services/helpers';
 import ColumnsMultiRow from '../ColumnsMultiRow';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import If from 'components/If';
+import If from 'components/shared/If';
 import classnames from 'classnames';
 
 const styles = (theme): StyleRules => {

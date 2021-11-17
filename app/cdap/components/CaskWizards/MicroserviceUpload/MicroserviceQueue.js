@@ -20,8 +20,8 @@ import React, { Component } from 'react';
 import {Col, FormGroup, Label, Form, Input} from 'reactstrap';
 import {defaultQueueTypes} from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueStore';
 import NamespaceStore from 'services/NamespaceStore';
-import SelectWithOptions from 'components/SelectWithOptions';
-import IconSVG from 'components/IconSVG';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 require('./MicroserviceQueue.scss');
 

@@ -25,7 +25,7 @@ import classnames from 'classnames';
 import Mousetrap from 'mousetrap';
 import isEqual from 'lodash/isEqual';
 import DataPrepStore from 'components/DataPrep/store';
-import ScrollableList from 'components/ScrollableList';
+import ScrollableList from 'components/shared/ScrollableList';
 import { Theme } from 'services/ThemeHelper';
 
 // Directives List

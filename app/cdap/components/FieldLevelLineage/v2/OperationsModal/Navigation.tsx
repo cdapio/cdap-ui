@@ -16,7 +16,7 @@
 
 import React, { useContext } from 'react';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
 
 const NavigationView: React.FC = () => {

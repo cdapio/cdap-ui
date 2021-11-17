@@ -17,10 +17,10 @@
 import React, { useEffect, useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import TableMultiRow from 'components/Replicator/Create/Content/SelectTables/ManualSelectTable/TableMultiRow';
 import { generateTableKey } from 'components/Replicator/utilities';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import { List, Map } from 'immutable';
 import {

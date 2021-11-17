@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
 import EmptyList, { VIEW_TYPES } from 'components/PipelineList/EmptyList';
 import SortableHeader from 'components/PipelineList/DraftPipelineView/DraftTable/SortableHeader';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 interface IProps {
   drafts: IDraft[];

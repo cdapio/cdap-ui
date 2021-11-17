@@ -18,14 +18,14 @@ import * as React from 'react';
 import { ILogResponse, LogLevel as LogLevelEnum } from 'components/LogViewer/types';
 import TopPanel, { TOP_PANEL_HEIGHT } from 'components/LogViewer/TopPanel';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import DataFetcher from 'components/LogViewer/DataFetcher';
 import LogLevel from 'components/LogViewer/LogLevel';
 import LogRow from 'components/LogViewer/LogRow';
 import debounce from 'lodash/debounce';
 import { extractErrorMessage } from 'services/helpers';
-import LoadingSVG from 'components/LoadingSVG';
-import Heading, { HeadingTypes } from 'components/Heading';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import T from 'i18n-react';
 
 export function logsTableGridStyle(theme): StyleRules {

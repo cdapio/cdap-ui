@@ -22,7 +22,7 @@ import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 import AttributeKeyvalueRowsInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetAttributesPanel/WidgetAttributeInput/MultipleAttributesInput/AttributeKeyvalueRowsInput';
 import AttributeRowsInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetAttributesPanel/WidgetAttributeInput/MultipleAttributesInput/AttributeRowsInput';
 import FormControl from '@material-ui/core/FormControl';
-import If from 'components/If';
+import If from 'components/shared/If';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';

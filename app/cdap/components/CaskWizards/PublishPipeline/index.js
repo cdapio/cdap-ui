@@ -17,8 +17,8 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import MarketStore from 'components/Market/store/market-store';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import PublishPipelineWizardStore from 'services/WizardStores/PublishPipeline/PublishPipelineStore';
 import PublishPipelineWizardConfig from 'services/WizardConfigs/PublishPipelineWizardConfig';
 import PublishPipelineAction from 'services/WizardStores/PublishPipeline/PublishPipelineActions.js';

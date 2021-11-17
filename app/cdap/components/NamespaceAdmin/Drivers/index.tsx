@@ -18,18 +18,18 @@ import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
 import { IDriver } from 'components/NamespaceAdmin/store';
-import Table from 'components/Table';
-import TableHeader from 'components/Table/TableHeader';
-import TableRow from 'components/Table/TableRow';
-import TableCell from 'components/Table/TableCell';
-import TableBody from 'components/Table/TableBody';
+import Table from 'components/shared/Table';
+import TableHeader from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
 import { humanReadableDate, objectQuery } from 'services/helpers';
-import ActionsPopover, { IAction } from 'components/ActionsPopover';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import { deleteDriver } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Button } from '@material-ui/core';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ArtifactUploadWizard from 'components/CaskWizards/ArtifactUpload';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 
 const useStyle = makeStyles((theme) => {
   return {

@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { setSelectedProfile } from 'components/PipelineScheduler/Store/ActionCreator';
 import { connect } from 'react-redux';

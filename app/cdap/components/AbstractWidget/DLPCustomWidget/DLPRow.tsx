@@ -27,14 +27,14 @@ import {
   IPropertyFilter,
   IWidgetJson,
   PluginProperties,
-} from 'components/ConfigurationGroup/types';
+} from 'components/shared/ConfigurationGroup/types';
 import InputFieldDropdown from 'components/AbstractWidget/InputFieldDropdown';
 import { IconButton } from '@material-ui/core';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ConfigurationGroup from 'components/ConfigurationGroup';
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import {
   extractAndSplitMatchingErrors,
   parseNestedErrors,

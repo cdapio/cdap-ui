@@ -20,7 +20,7 @@ import { detailContextConnect, IDetailContext } from 'components/Replicator/Deta
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import ActionButtons from 'components/Replicator/Detail/TopPanel/ActionButtons';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 
 const styles = (theme): StyleRules => {
   return {

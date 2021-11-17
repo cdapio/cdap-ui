@@ -26,7 +26,7 @@ import {
 } from 'components/Experiments/store/CreateExperimentActionCreator';
 import { POPOVER_TYPES } from 'components/Experiments/store/createExperimentStore';
 
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 
 const PREFIX = 'features.Experiments.CreateView';

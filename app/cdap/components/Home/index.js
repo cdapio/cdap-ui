@@ -21,8 +21,8 @@ import Page404 from 'components/404';
 import Loadable from 'react-loadable';
 import NamespaceStore, { validateNamespace } from 'services/NamespaceStore';
 import NamespaceActions from 'services/NamespaceStore/NamespaceActions';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import ConfigurationGroupKitchenSync from 'components/ConfigurationGroup/KitchenSync';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
+import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/KitchenSync';
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
@@ -184,7 +184,7 @@ export default class Home extends Component {
               const VirtualScrollDemo = Loadable({
                 loader: () =>
                   import(
-                    /* webpackChunkName: "VirtualScrollDemo" */ 'components/VirtualScroll/demo'
+                    /* webpackChunkName: "VirtualScrollDemo" */ 'components/shared/VirtualScroll/demo'
                   ),
                 loading: LoadingSVGCentered,
               });

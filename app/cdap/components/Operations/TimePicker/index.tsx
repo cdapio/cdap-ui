@@ -16,7 +16,7 @@
 
 import React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { DURATION_SECONDS } from 'components/Operations';
 import classnames from 'classnames';
 import moment from 'moment';

@@ -15,12 +15,12 @@
  */
 
 import React, { useState } from 'react';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab from 'components/shared/ConfigurableTab';
 import { ITableData } from 'components/PreviewData';
 import RecordNavigator from 'components/PreviewData/RecordView/Navigator';
 import RecordTable from 'components/PreviewData/RecordView/RecordTable';
 import { INode } from 'components/PreviewData/utilities';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { styles as tableStyles } from 'components/PreviewData/DataView/TableContainer';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import T from 'i18n-react';

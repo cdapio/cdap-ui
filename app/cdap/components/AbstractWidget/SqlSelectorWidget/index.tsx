@@ -18,7 +18,7 @@ import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/If';
+import If from 'components/shared/If';
 import React from 'react';
 import SchemaContainer from 'components/AbstractWidget/SqlSelectorWidget/SchemaContainer';
 import T from 'i18n-react';

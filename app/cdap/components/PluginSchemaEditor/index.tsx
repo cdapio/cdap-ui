@@ -22,18 +22,18 @@ import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';
 import { getDefaultEmptyAvroSchema } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
 import PropTypes from 'prop-types';
-import LoadingSVG from 'components/LoadingSVG';
-import If from 'components/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import If from 'components/shared/If';
 import Textbox from 'components/AbstractWidget/FormInputs/TextBox';
 import { RefreshableSchemaEditor } from 'components/PluginSchemaEditor/RefreshableSchemaEditor';
 import ConfigurableTab, {
   ITabConfig,
   ITabConfigObj,
   TabLayoutEnum,
-} from 'components/ConfigurableTab';
+} from 'components/shared/ConfigurableTab';
 import classnames from 'classnames';
 import { objectQuery, isNilOrEmptyString } from 'services/helpers';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import { isObject } from 'vega-lite/build/src/util';
 import { isMacro } from 'services/helpers';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';

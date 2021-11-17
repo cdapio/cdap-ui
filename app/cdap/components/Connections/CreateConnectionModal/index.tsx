@@ -18,7 +18,7 @@ import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { CreateConnection } from 'components/Connections/Create';
 import { createPortal } from 'react-dom';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const useStyle = makeStyles((theme) => {
   return {

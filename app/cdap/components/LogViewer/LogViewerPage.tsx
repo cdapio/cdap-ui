@@ -16,14 +16,14 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { match as RouterMatch } from 'react-router';
 import { MyProgramApi } from 'api/program';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { humanReadableDate } from 'services/helpers';
 import ProgramDataFetcher from 'components/LogViewer/DataFetcher/ProgramDataFetcher';
 import LogViewer from 'components/LogViewer';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { PROGRAM_STATUSES } from 'services/global-constants';
 
 const HEADER_HEIGHT = '60px';

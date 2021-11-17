@@ -22,7 +22,7 @@ import {
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import classnames from 'classnames';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Link } from 'react-router-dom';
 import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
 import FllMenu from 'components/FieldLevelLineage/v2/FllTable/FllMenu';

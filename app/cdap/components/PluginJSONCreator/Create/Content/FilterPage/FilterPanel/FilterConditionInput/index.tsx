@@ -16,13 +16,13 @@
 
 import * as React from 'react';
 
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { List, Map } from 'immutable';
 import { StyleRules, WithStyles, withStyles } from '@material-ui/core/styles';
 import { useFilterState, useWidgetState } from 'components/PluginJSONCreator/Create';
 
-import { CustomOperator } from 'components/ConfigurationGroup/types';
-import If from 'components/If';
+import { CustomOperator } from 'components/shared/ConfigurationGroup/types';
+import If from 'components/shared/If';
 import { OPERATOR_VALUES } from 'components/PluginJSONCreator/constants';
 import PluginInput from 'components/PluginJSONCreator/Create/Content/PluginInput';
 import isNil from 'lodash/isNil';

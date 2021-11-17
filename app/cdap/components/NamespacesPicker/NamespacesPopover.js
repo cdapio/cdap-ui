@@ -16,9 +16,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import NamespaceStore, { getCurrentNamespace } from 'services/NamespaceStore';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { UncontrolledDropdown } from 'components/UncontrolledComponents';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import T from 'i18n-react';

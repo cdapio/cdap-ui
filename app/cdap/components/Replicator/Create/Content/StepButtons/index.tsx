@@ -19,8 +19,8 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import { STEPS } from 'components/Replicator/Create/steps';
 import Button from '@material-ui/core/Button';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const styles = (theme): StyleRules => {
   return {

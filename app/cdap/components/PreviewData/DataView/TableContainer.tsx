@@ -15,9 +15,9 @@
  */
 
 import React, { useState } from 'react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import DataTable from 'components/PreviewData/DataView/Table';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab from 'components/shared/ConfigurableTab';
 import { ITableData } from 'components/PreviewData';
 import { INode } from 'components/PreviewData/utilities';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';

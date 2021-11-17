@@ -18,11 +18,11 @@ import React from 'react';
 import { Modal, ModalBody } from 'reactstrap';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import PropTypes from 'prop-types';
 import DataPrepHome from 'components/DataPrepHome';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 import {
   IArtifactObj,
   PluginTypes,

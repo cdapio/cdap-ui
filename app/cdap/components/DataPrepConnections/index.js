@@ -15,7 +15,7 @@
  */
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
 import DataPrepBrowser from 'components/DataPrep/DataPrepBrowser';
 import {
@@ -44,14 +44,14 @@ import ConnectionPopover from 'components/DataPrepConnections/ConnectionPopover'
 import DataPrepStore from 'components/DataPrep/store';
 import { objectQuery, preventPropagation, isNilOrEmpty } from 'services/helpers';
 import Helmet from 'react-helmet';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import queryString from 'query-string';
 import Version from 'services/VersionRange/Version';
 import { MIN_DATAPREP_VERSION } from 'components/DataPrep';
-import NavLinkWrapper from 'components/NavLinkWrapper';
+import NavLinkWrapper from 'components/shared/NavLinkWrapper';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
 import find from 'lodash/find';
-import If from 'components/If';
+import If from 'components/shared/If';
 import NoDefaultConnection from 'components/DataPrepConnections/NoDefaultConnection';
 import isObject from 'lodash/isObject';
 import DataPrepBrowserStore from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';

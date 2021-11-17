@@ -24,7 +24,7 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import GroupActionButtons from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/GroupActionButtons';
 import GroupInfoInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/GroupInfoInput';
-import If from 'components/If';
+import If from 'components/shared/If';
 import Typography from '@material-ui/core/Typography';
 import WidgetCollection from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection';
 import { useConfigurationGroupState } from 'components/PluginJSONCreator/Create';

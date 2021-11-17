@@ -16,11 +16,11 @@
 
 import * as React from 'react';
 
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import ExplicitSchemaDefiner from 'components/PluginJSONCreator/Create/Content/OutputPage/ExplicitSchemaDefiner';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ImplicitSchemaDefiner from 'components/PluginJSONCreator/Create/Content/OutputPage/ImplicitSchemaDefiner';
 import PluginInput from 'components/PluginJSONCreator/Create/Content/PluginInput';
 import { SchemaType } from 'components/PluginJSONCreator/constants';

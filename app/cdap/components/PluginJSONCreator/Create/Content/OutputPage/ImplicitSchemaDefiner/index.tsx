@@ -16,9 +16,9 @@
 
 import * as React from 'react';
 
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import Button from '@material-ui/core/Button';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import { useOutputState } from 'components/PluginJSONCreator/Create';
 
 export enum SchemaStatus {

@@ -18,7 +18,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { MyCloudApi } from 'api/cloud';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import {
   getProvisionerLabel,
   getNodeHours,

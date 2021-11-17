@@ -22,10 +22,10 @@ import T from 'i18n-react';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import MouseTrap from 'mousetrap';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/CardActionFeedback';
-import If from 'components/If';
+import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import If from 'components/shared/If';
 
 require('./ReplaceColumns.scss');
 

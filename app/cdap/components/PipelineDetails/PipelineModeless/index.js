@@ -16,11 +16,11 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import If from 'components/If';
+import If from 'components/shared/If';
 import classnames from 'classnames';
 import Grow from '@material-ui/core/Grow';
 

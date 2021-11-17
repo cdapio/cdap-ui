@@ -16,8 +16,8 @@
 import 'whatwg-fetch';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
-} from 'components/LoadingIndicator/LoadingIndicatorStore';
-import StatusAlertMessageStore from 'components/StatusAlertMessage/StatusAlertMessageStore';
+} from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
+import StatusAlertMessageStore from 'components/shared/StatusAlertMessage/StatusAlertMessageStore';
 import Cookies from 'universal-cookie';
 import isNil from 'lodash/isNil';
 import { Observable } from 'rxjs/Observable';

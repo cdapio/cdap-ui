@@ -18,7 +18,7 @@ import React, { Component } from 'react';
 import { CreateVoyager } from 'cask-datavoyager';
 import DataPrepStore from 'components/DataPrep/store';
 import { setVisualizationState } from 'components/DataPrep/store/DataPrepActionCreator';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { updateWorkspaceProperties } from 'components/DataPrep/store/DataPrepActionCreator';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';

@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { DashboardActions, ViewByOptions } from 'components/OpsDashboard/store/DashboardStore';
 import T from 'i18n-react';
 

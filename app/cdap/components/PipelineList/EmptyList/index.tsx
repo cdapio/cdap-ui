@@ -22,7 +22,7 @@ import { Input, Label } from 'reactstrap';
 import uuidV4 from 'uuid/v4';
 import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import './EmptyList.scss';
 
 const PREFIX = 'features.PipelineList.EmptyList';

@@ -20,7 +20,7 @@ import React, { Component } from 'react';
 import NamespaceStore from 'services/NamespaceStore';
 import { MyDatasetApi } from 'api/dataset';
 import FastActionButton from '../FastActionButton';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { Tooltip } from 'reactstrap';
 import T from 'i18n-react';
 import classnames from 'classnames';

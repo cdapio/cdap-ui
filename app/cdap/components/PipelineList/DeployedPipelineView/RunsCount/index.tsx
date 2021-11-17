@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 interface IProps {
   pipeline: IPipeline;

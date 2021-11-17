@@ -20,7 +20,7 @@ import React from 'react';
 import NamespaceStore, { getValidNamespace } from 'services/NamespaceStore';
 import isEmpty from 'lodash/isEmpty';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 require('./404.scss');
 

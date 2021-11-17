@@ -16,9 +16,9 @@
 
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import If from 'components/If';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
+import If from 'components/shared/If';
 import { Modal, ModalBody } from 'reactstrap';
 import { objectQuery } from 'services/helpers';
 import CloseIcon from '@material-ui/icons/Close';

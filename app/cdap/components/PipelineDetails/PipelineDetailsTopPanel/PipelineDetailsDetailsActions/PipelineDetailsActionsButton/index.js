@@ -16,9 +16,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
-import ConfirmationModal from 'components/ConfirmationModal';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyAppApi } from 'api/app';
 import PipelineExportModal from 'components/PipelineExportModal';

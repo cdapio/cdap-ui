@@ -14,7 +14,10 @@
  * the License.
  */
 
-import { CustomOperator, PropertyShowConfigTypeEnums } from 'components/ConfigurationGroup/types';
+import {
+  CustomOperator,
+  PropertyShowConfigTypeEnums,
+} from 'components/shared/ConfigurationGroup/types';
 
 import { GLOBALS } from 'services/global-constants';
 import { WIDGET_FACTORY } from 'components/AbstractWidget/AbstractWidgetFactory';

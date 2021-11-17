@@ -27,7 +27,7 @@ import ee from 'event-emitter';
 import T from 'i18n-react';
 import { preventPropagation } from 'services/helpers';
 import { UncontrolledTooltip } from 'components/UncontrolledComponents';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const PREFIX = 'features.DataPrep.Directives.ChangeDataType';
 

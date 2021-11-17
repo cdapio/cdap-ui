@@ -20,7 +20,7 @@ import * as vl from 'vega-lite';
 import * as vega from 'vega';
 import * as vegaTooltip from 'vega-tooltip';
 import uuidV4 from 'uuid/v4';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import debounce from 'lodash/debounce';
 require('./VegaLiteChart.scss');
 export default class VegaLiteChart extends Component {

@@ -15,12 +15,12 @@
  */
 
 import * as React from 'react';
-import ConfigurationGroup from 'components/ConfigurationGroup';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import PropertyRow from 'components/ConfigurationGroup/PropertyRow';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
+import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import Alert from '@material-ui/lab/Alert';
 
 const useStyle = makeStyle((theme) => {
@@ -112,6 +112,7 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
+        /* tslint:disable:no-empty */
         onChange={!isView ? setValues : () => {}}
         disabled={isView}
         errors={testResults.configurationErrors}

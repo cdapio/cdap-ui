@@ -19,14 +19,14 @@ import * as React from 'react';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
-import If from 'components/If';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import StandardModal from 'components/StandardModal';
+import If from 'components/shared/If';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
+import StandardModal from 'components/shared/StandardModal';
 import { WIDGET_FACTORY } from 'components/AbstractWidget/AbstractWidgetFactory';
 import WidgetAttributeInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetAttributesPanel/WidgetAttributeInput';
 import WidgetInfoInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetPanel/WidgetInfoInput';
 import debounce from 'lodash/debounce';
-import { h2Styles } from 'components/Markdown/MarkdownHeading';
+import { h2Styles } from 'components/shared/Markdown/MarkdownHeading';
 import { useWidgetState } from 'components/PluginJSONCreator/Create';
 
 const styles = (theme): StyleRules => {

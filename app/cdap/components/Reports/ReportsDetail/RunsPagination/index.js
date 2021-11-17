@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { handleRunsPageChange } from 'components/Reports/store/ActionCreator';
-import PaginationWithTitle from 'components/PaginationWithTitle';
+import PaginationWithTitle from 'components/shared/PaginationWithTitle';
 import T from 'i18n-react';
 
 const PREFIX = 'features.Reports.ReportsDetail';

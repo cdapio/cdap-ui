@@ -15,16 +15,16 @@
  */
 
 import React from 'react';
-import { ContextMenu, IContextMenuOption } from 'components/ContextMenu';
+import { ContextMenu, IContextMenuOption } from 'components/shared/ContextMenu';
 import WranglerConnection from 'components/PipelineContextMenu/WranglerConnection';
-import If from 'components/If';
+import If from 'components/shared/If';
 import PropTypes from 'prop-types';
 import { getValueFromClipboard } from 'services/Clipboard';
 import { objectQuery } from 'services/helpers';
 import { INode, IConnection } from 'components/PipelineContextMenu/PipelineTypes';
 import { INewWranglerConnection } from 'components/PipelineContextMenu/WranglerConnection';
 import { GLOBALS } from 'services/global-constants';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 export interface IStage {
   nodes: INode[];

@@ -21,7 +21,7 @@ import { setPrefix } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserSt
 import { preventPropagation } from 'services/helpers';
 import classnames from 'classnames';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import DataPrepStore from 'components/DataPrep/store';
 const PREFIX = 'features.DataPrep.DataPrepBrowser.S3Browser.BucketData';

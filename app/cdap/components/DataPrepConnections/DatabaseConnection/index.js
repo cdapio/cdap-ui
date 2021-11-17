@@ -24,7 +24,7 @@ import NamespaceStore from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
 import MyDataPrepApi from 'api/dataprep';
 import find from 'lodash/find';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import T from 'i18n-react';
 
 require('./DatabaseConnection.scss');

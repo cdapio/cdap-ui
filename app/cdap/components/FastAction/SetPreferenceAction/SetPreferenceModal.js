@@ -25,14 +25,14 @@ import uuidV4 from 'uuid/v4';
 import { Modal, ModalHeader, ModalBody, Tooltip } from 'reactstrap';
 import { MyPreferenceApi } from 'api/preference';
 import { convertProgramToApi } from 'services/program-api-converter';
-import KeyValuePairs from 'components/KeyValuePairs';
-import KeyValueStore from 'components/KeyValuePairs/KeyValueStore';
-import KeyValueStoreActions from 'components/KeyValuePairs/KeyValueStoreActions';
+import KeyValuePairs from 'components/shared/KeyValuePairs';
+import KeyValueStore from 'components/shared/KeyValuePairs/KeyValueStore';
+import KeyValueStoreActions from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import NamespaceStore from 'services/NamespaceStore';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import { SCOPES } from 'services/global-constants';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 export const PREFERENCES_LEVEL = {
   SYSTEM: SCOPES.SYSTEM,

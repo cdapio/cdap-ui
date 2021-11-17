@@ -30,7 +30,7 @@ import {
 } from 'react-vis';
 import moment from 'moment';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import {
   getTicksTotal,
@@ -42,7 +42,7 @@ import {
 } from 'components/PipelineSummary/RunsGraphHelpers';
 import { humanReadableDuration, preventPropagation, objectQuery } from 'services/helpers';
 import CopyableID from 'components/CopyableID';
-import SortableStickyTable from 'components/SortableStickyTable';
+import SortableStickyTable from 'components/shared/SortableStickyTable';
 import ee from 'event-emitter';
 import EmptyMessageContainer from 'components/PipelineSummary/EmptyMessageContainer';
 import isEqual from 'lodash/isEqual';

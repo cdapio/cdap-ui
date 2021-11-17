@@ -18,7 +18,7 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
 import WidgetRenderer from 'components/Ingestion/PluginWidgetRenderer';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const styles = (theme): StyleRules => {
   return {

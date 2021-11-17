@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 
 export default class DataPrepErrorAlert extends Component {
   constructor(props) {

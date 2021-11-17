@@ -15,20 +15,20 @@
  */
 
 import * as React from 'react';
-import Table from 'components/Table';
-import TableHeader from 'components/Table/TableHeader';
-import TableRow from 'components/Table/TableRow';
-import TableCell from 'components/Table/TableCell';
-import TableBody from 'components/Table/TableBody';
-import If from 'components/If';
+import Table from 'components/shared/Table';
+import TableHeader from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
+import If from 'components/shared/If';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionIcon from '@material-ui/icons/Description';
-import Heading, { HeadingTypes } from 'components/Heading';
-import LoadingSVG from 'components/LoadingSVG';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import { format } from 'services/DataFormatter';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 function getIcon(entity, classes) {
   const type = entity.type.toLowerCase();

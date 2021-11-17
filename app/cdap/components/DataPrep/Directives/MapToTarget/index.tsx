@@ -24,7 +24,7 @@ import { CurrentSelection } from 'components/DataPrep/Directives/MapToTarget/Cur
 import { LoadingBar } from 'components/DataPrep/Directives/MapToTarget/LoadingBar';
 import { OptionFilter } from 'components/DataPrep/Directives/MapToTarget/OptionFilter';
 import { OptionList } from 'components/DataPrep/Directives/MapToTarget/OptionList';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import DataPrepStore, { IDataModel, IModel, IModelField } from 'components/DataPrep/store';
 import {
   execute,

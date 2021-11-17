@@ -32,15 +32,15 @@ import {
   getConnection,
   testConnection,
 } from 'components/Connections/Create/reducer';
-import If from 'components/If';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import If from 'components/shared/If';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
 import { extractErrorMessage, objectQuery } from 'services/helpers';
-import Alert from 'components/Alert';
+import Alert from 'components/shared/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
-import { constructErrors } from 'components/ConfigurationGroup/utilities';
+import { constructErrors } from 'components/shared/ConfigurationGroup/utilities';
 
 const useStyle = makeStyle(() => {
   return {

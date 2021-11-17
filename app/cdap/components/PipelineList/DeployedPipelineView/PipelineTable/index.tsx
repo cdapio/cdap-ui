@@ -23,7 +23,7 @@ import EmptyList, { VIEW_TYPES } from 'components/PipelineList/EmptyList';
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from 'components/PipelineList/DeployedPipelineView/PipelineTable/SortableHeader';
-import If from 'components/If';
+import If from 'components/shared/If';
 import './PipelineTable.scss';
 
 interface IProps {

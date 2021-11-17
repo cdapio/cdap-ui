@@ -17,7 +17,7 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
-import HorizontalCarousel from 'components/HorizontalCarousel';
+import HorizontalCarousel from 'components/shared/HorizontalCarousel';
 import { fetchPluginsAndWidgets } from 'components/Replicator/utilities';
 import { objectQuery } from 'services/helpers';
 import TextField from '@material-ui/core/TextField';
@@ -28,7 +28,7 @@ import PluginCard, {
   PluginCardHeight,
 } from 'components/Replicator/Create/Content/PluginConfig/PluginCard';
 import classnames from 'classnames';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { PluginType } from 'components/Replicator/constants';
 
 const styles = (theme): StyleRules => {

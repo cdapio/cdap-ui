@@ -34,7 +34,7 @@ import {
   setOptionalProperty,
   setRunError,
 } from 'components/PipelineDetails/store/ActionCreator';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import StatusMapper from 'services/StatusMapper';
 import { objectQuery } from 'services/helpers';

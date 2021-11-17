@@ -28,7 +28,7 @@ import {
   generateTableKey,
 } from 'components/Replicator/utilities';
 
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import uuidV4 from 'uuid/v4';
 import { MyReplicatorApi } from 'api/replicator';
 import { Map } from 'immutable';
@@ -46,8 +46,8 @@ import {
   IColumnTransformation,
   IColumnsList,
 } from 'components/Replicator/types';
-import { IWidgetJson } from 'components/ConfigurationGroup/types';
-import ErrorBanner from 'components/ErrorBanner';
+import { IWidgetJson } from 'components/shared/ConfigurationGroup/types';
+import ErrorBanner from 'components/shared/ErrorBanner';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;

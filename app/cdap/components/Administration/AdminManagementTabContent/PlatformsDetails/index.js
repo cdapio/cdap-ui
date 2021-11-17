@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import T from 'i18n-react';
 import GenericDetails from 'components/Administration/AdminManagementTabContent/PlatformsDetails/Genericdetails';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 require('./PlatformDetails.scss');
 

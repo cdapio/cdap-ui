@@ -26,7 +26,7 @@ import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsSt
 import { fetchRuns } from 'components/Reports/store/ActionCreator';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
 import { humanReadableDate } from 'services/helpers';
 import T from 'i18n-react';

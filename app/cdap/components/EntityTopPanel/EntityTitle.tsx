@@ -17,8 +17,8 @@
 import * as React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
-import IconSVG from 'components/IconSVG';
-import Heading, { HeadingTypes } from 'components/Heading';
+import IconSVG from 'components/shared/IconSVG';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 
 const useStyle = makeStyle<Theme, { multiline: boolean }>((theme) => {
   return {

@@ -20,21 +20,21 @@ import { createContextConnect, ICreateContext } from 'components/Replicator/Crea
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import { fetchPluginInfo } from 'components/Replicator/utilities';
 import { fetchPluginWidget } from 'services/PluginUtilities';
-import ConfigurationGroup from 'components/ConfigurationGroup';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 import { objectQuery } from 'services/helpers';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import classnames from 'classnames';
 import Documentation from 'components/Replicator/Create/Content/Documentation';
 import PluginList from 'components/Replicator/Create/Content/PluginConfig/PluginList';
 import { PluginType } from 'components/Replicator/constants';
 import { IPluginConfig, IPluginInfo } from 'components/Replicator/types';
-import { IWidgetJson } from 'components/ConfigurationGroup/types';
+import { IWidgetJson } from 'components/shared/ConfigurationGroup/types';
 import {
   processConfigurationGroups,
   removeFilteredProperties,
-} from 'components/ConfigurationGroup/utilities';
-import { filterByCondition } from 'components/ConfigurationGroup/utilities/DynamicPluginFilters';
+} from 'components/shared/ConfigurationGroup/utilities';
+import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
 
 const styles = (theme): StyleRules => {
   return {

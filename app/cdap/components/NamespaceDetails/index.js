@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import NamespaceDetailsStore, { NamespaceDetailsActions } from 'components/NamespaceDetails/store';
 import { getData } from 'components/NamespaceDetails/store/ActionCreator';
 import { EntityTopPanel } from 'components/EntityTopPanel';

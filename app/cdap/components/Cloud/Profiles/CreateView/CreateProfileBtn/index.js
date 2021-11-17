@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import BtnWithLoading from 'components/BtnWithLoading';
+import BtnWithLoading from 'components/shared/BtnWithLoading';
 import { isNilOrEmpty } from 'services/helpers';
 
 function CreateProfileBtn({ onClick, loading, disabled }) {

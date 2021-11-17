@@ -17,7 +17,7 @@
 import * as d3 from 'd3';
 import numeral from 'numeral';
 import { IThroughputLatencyData } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/parser';
-import { timeFormatMonthDate, timeFormatHourMinute } from 'components/ChartContainer';
+import { timeFormatMonthDate, timeFormatHourMinute } from 'components/shared/ChartContainer';
 import { tooltipWidth } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/ThroughputGraph/ThroughputTooltip';
 
 export const COLOR_MAP = {

@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import { Input } from 'reactstrap';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 
 require('./FieldRow.scss');
 const defaultFieldTypes = ['', 'boolean', 'bytes', 'double', 'float', 'int', 'long', 'string'];

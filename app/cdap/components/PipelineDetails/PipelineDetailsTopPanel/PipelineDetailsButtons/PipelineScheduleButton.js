@@ -22,8 +22,8 @@ import {
 } from 'components/PipelineDetails/store/ActionCreator';
 import PipelineScheduler from 'components/PipelineScheduler';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
-import Alert from 'components/Alert';
+import IconSVG from 'components/shared/IconSVG';
+import Alert from 'components/shared/Alert';
 import StatusMapper from 'services/StatusMapper';
 import {
   schedulePipeline,

@@ -18,7 +18,7 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 import { IWidgetProps } from 'components/AbstractWidget';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import ThemeWrapper from 'components/ThemeWrapper';
-import ToggleSwitch from 'components/ToggleSwitch';
+import ToggleSwitch from 'components/shared/ToggleSwitch';
 import React from 'react';
 import { objectQuery } from 'services/helpers';
 

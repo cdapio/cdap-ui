@@ -20,7 +20,7 @@ import T from 'i18n-react';
 import MarketStore from 'components/Market/store/market-store.js';
 import Fuse from 'fuse.js';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 require('./AllTabContents.scss');
 

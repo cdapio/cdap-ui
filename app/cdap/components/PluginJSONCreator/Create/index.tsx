@@ -22,7 +22,7 @@ import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 
 import Content from 'components/PluginJSONCreator/Create/Content';
 import Dropzone from 'react-dropzone';
-import If from 'components/If';
+import If from 'components/shared/If';
 import PluginJSONMenu from 'components/PluginJSONCreator/Create/PluginJSONMenu';
 import StepsGuidelineMenu from 'components/PluginJSONCreator/Create/StepsGuidelineMenu';
 import classnames from 'classnames';

@@ -16,9 +16,9 @@
 
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/If';
+import If from 'components/shared/If';
 import React from 'react';
 import Rule from 'components/AbstractWidget/SqlConditionsWidget/Rule';
 import ThemeWrapper from 'components/ThemeWrapper';

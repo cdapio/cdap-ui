@@ -25,7 +25,7 @@ import ColumnActionsDropdown from 'components/DataPrep/ColumnActionsDropdown';
 require('./DataPrepTable.scss');
 import { execute, setWorkspace } from 'components/DataPrep/store/DataPrepActionCreator';
 import TextboxOnValium from 'components/TextboxOnValium';
-import WarningContainer from 'components/WarningContainer';
+import WarningContainer from 'components/shared/WarningContainer';
 import ColumnHighlighter from 'components/DataPrep/ColumnHighlighter';
 import isNil from 'lodash/isNil';
 import T from 'i18n-react';

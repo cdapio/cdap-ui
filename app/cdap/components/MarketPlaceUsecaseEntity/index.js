@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { MyMarketApi } from 'api/market';
-import Card from 'components/Card';
+import Card from 'components/shared/Card';
 import moment from 'moment';
 require('./MarketPlaceUsecaseEntity.scss');
 import MarketActionsContainer from 'components/MarketActionsContainer';

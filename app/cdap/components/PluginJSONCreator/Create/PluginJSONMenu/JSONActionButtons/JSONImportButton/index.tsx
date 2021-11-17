@@ -17,7 +17,7 @@
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import IconButton from '@material-ui/core/IconButton';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import React from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 

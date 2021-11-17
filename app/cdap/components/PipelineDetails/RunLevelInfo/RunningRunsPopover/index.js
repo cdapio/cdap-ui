@@ -16,9 +16,9 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
-import Duration from 'components/Duration';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
+import Duration from 'components/shared/Duration';
 import moment from 'moment';
 import classnames from 'classnames';
 import { getCurrentNamespace } from 'services/NamespaceStore';

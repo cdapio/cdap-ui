@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 require('./ExpandableMenu.scss');
 
 export default class ExpandableMenu extends Component {

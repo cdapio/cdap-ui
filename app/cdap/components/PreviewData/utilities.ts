@@ -18,7 +18,7 @@ import { MyPreviewApi } from 'api/preview';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Map, List } from 'immutable';
 import { IStageSchema } from 'components/AbstractWidget';
-import { IPluginProperty } from 'components/ConfigurationGroup/types';
+import { IPluginProperty } from 'components/shared/ConfigurationGroup/types';
 import capitalize from 'lodash/capitalize';
 import isEmpty from 'lodash/isEmpty';
 import { objectQuery } from 'services/helpers';
