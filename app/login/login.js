@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import Cookies from 'universal-cookie';
 
-import Card from 'components/Card';
+import Card from 'components/shared/Card';
 import CardActionFeedback from 'components/shared/CardActionFeedback';
 
 import * as util from './utils';
