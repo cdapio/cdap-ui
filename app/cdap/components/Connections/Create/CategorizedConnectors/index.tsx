@@ -18,7 +18,7 @@ import ConfigurableTab, {
   ITabConfigObj,
   TabLayoutEnum,
   ITabConfig,
-} from 'components/ConfigurableTab';
+} from 'components/shared/ConfigurableTab';
 import { ActiveConnectionTab } from 'components/Connections/Create/CategorizedConnectors/ActiveTab';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';

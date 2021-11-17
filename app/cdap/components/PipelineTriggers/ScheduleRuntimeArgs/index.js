@@ -26,7 +26,7 @@ import {
 import ScheduleRuntimeArgsStore, {
   SCHEDULERUNTIMEARGSACTIONS,
 } from 'components/PipelineTriggers/ScheduleRuntimeArgs/ScheduleRuntimeArgsStore';
-import ConfigurableTab from 'components/ConfigurableTab';
+import ConfigurableTab from 'components/shared/ConfigurableTab';
 import TabConfig from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import T from 'i18n-react';
 import classnames from 'classnames';

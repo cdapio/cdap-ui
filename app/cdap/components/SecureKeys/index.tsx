@@ -19,9 +19,9 @@ import * as React from 'react';
 import { List, fromJS } from 'immutable';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
-import Alert from 'components/Alert';
-import If from 'components/If';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import Alert from 'components/shared/Alert';
+import If from 'components/shared/If';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { MySecureKeyApi } from 'api/securekey';
 import SecureKeyDelete from 'components/SecureKeys/SecureKeyDelete';
 import SecureKeyEdit from 'components/SecureKeys/SecureKeyEdit';

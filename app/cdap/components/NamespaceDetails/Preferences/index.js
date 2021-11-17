@@ -18,7 +18,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import T from 'i18n-react';
-import SortableTable from 'components/SortableTable';
+import SortableTable from 'components/shared/SortableTable';
 import SetPreferenceModal, {
   PREFERENCES_LEVEL,
 } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
@@ -26,7 +26,7 @@ import { getNamespacePrefs } from 'components/NamespaceDetails/store/ActionCreat
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import classnames from 'classnames';
-import ViewAllLabel from 'components/ViewAllLabel';
+import ViewAllLabel from 'components/shared/ViewAllLabel';
 require('./Preferences.scss');
 
 const PREFIX = 'features.NamespaceDetails.preferences';

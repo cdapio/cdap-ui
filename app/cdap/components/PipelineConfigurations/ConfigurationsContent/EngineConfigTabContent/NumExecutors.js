@@ -17,9 +17,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
-import SelectWithOptions from 'components/SelectWithOptions';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import {
   NUM_EXECUTORS_OPTIONS,
   ACTIONS as PipelineConfigurationsActions,

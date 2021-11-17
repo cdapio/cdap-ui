@@ -17,7 +17,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { reverseArrayWithoutMutating, objectQuery } from 'services/helpers';
 import findIndex from 'lodash/findIndex';
 import { setCurrentRunId } from 'components/PipelineDetails/store/ActionCreator';

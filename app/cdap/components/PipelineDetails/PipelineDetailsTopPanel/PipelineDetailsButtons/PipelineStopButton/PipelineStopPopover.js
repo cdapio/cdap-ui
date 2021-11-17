@@ -16,9 +16,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
-import Popover from 'components/Popover';
-import Duration from 'components/Duration';
+import IconSVG from 'components/shared/IconSVG';
+import Popover from 'components/shared/Popover';
+import Duration from 'components/shared/Duration';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { setStopError } from 'components/PipelineDetails/store/ActionCreator';

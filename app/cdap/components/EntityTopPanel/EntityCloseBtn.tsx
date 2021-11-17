@@ -16,7 +16,7 @@
 
 import React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';

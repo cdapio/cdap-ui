@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { setSearch } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import T from 'i18n-react';
 

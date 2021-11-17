@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import T from 'i18n-react';
-import Timer from 'components/Timer';
+import Timer from 'components/shared/Timer';
 
 export default class HomeErrorMessage extends Component {
   constructor(props) {

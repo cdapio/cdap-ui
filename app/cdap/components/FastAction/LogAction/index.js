@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { MyProgramApi } from 'api/program';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { convertProgramToApi } from 'services/program-api-converter';

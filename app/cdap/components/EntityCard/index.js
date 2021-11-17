@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import Card from '../Card';
+import Card from 'components/shared/Card';
 import EntityCardHeader from './EntityCardHeader';
 import ApplicationMetrics from './ApplicationMetrics';
 import ArtifactMetrics from './ArtifactMetrics';

@@ -16,8 +16,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'components/Popover';
-import IconSVG from 'components/IconSVG';
+import Popover from 'components/shared/Popover';
+import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
 import { ReportsActions, STATUS_OPTIONS } from 'components/Reports/store/ReportsStore';
 import StatusViewer from 'components/Reports/Customizer/StatusSelector/StatusViewer';

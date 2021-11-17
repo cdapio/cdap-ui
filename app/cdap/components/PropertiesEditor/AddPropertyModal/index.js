@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import CardActionFeedback from 'components/CardActionFeedback';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 import { MyMetadataApi } from 'api/metadata';
 import NamespaceStore from 'services/NamespaceStore';
 import T from 'i18n-react';

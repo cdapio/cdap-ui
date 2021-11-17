@@ -16,9 +16,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popover from 'components/Popover';
-import IconSVG from 'components/IconSVG';
-import TimeRangePicker from 'components/TimeRangePicker';
+import Popover from 'components/shared/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import TimeRangePicker from 'components/shared/TimeRangePicker';
 import { connect } from 'react-redux';
 import { ReportsActions } from 'components/Reports/store/ReportsStore';
 import T from 'i18n-react';

@@ -17,9 +17,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import IconSVG from 'components/IconSVG';
-import ToggleSwitch from 'components/ToggleSwitch';
-import Popover from 'components/Popover';
+import IconSVG from 'components/shared/IconSVG';
+import ToggleSwitch from 'components/shared/ToggleSwitch';
+import Popover from 'components/shared/Popover';
 import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 

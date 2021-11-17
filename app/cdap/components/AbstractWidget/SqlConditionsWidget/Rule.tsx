@@ -20,9 +20,9 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/AddBox';
 import CancelIcon from '@material-ui/icons/Cancel';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { IInputSchema, IRule } from 'components/AbstractWidget/SqlConditionsWidget';
-import OutlinedSelect from 'components/OutlinedSelect';
+import OutlinedSelect from 'components/shared/OutlinedSelect';
 
 const styles = (theme): StyleRules => {
   return {

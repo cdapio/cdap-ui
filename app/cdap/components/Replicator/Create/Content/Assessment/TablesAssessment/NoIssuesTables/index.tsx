@@ -18,11 +18,11 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { ITable } from 'components/Replicator/Create/Content/Assessment/TablesAssessment';
 import { getTableDisplayName } from 'components/Replicator/utilities';
-import Table from 'components/Table';
-import TableHeader from 'components/Table/TableHeader';
-import TableRow from 'components/Table/TableRow';
-import TableCell from 'components/Table/TableCell';
-import TableBody from 'components/Table/TableBody';
+import Table from 'components/shared/Table';
+import TableHeader from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
 import ViewMappingButton from 'components/Replicator/Create/Content/Assessment/TablesAssessment/ViewMappingButton';
 
 const styles = (theme): StyleRules => {

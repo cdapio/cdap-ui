@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { updateRunTimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
 import RuntimeArgsPairs from 'components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsPairsMaterial';
 import { connect } from 'react-redux';
-import { getDefaultKeyValuePair } from 'components/KeyValuePairs/KeyValueStore';
+import { getDefaultKeyValuePair } from 'components/shared/KeyValuePairs/KeyValueStore';
 import { preventPropagation } from 'services/helpers';
 
 require('./RuntimeArgsKeyValuePairWrapper.scss');

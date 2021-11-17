@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 require('./EntityCounts.scss');
 
 const PREFIX = 'features.NamespaceDetails.entityCounts';

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import HttpExecutorActions from 'components/HttpExecutor/store/HttpExecutorActions';
 import React from 'react';
 import { connect } from 'react-redux';

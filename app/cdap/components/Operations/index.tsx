@@ -16,7 +16,7 @@
 
 import React, { useState, useEffect } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import T from 'i18n-react';
 import Helmet from 'react-helmet';
 import { Theme } from 'services/ThemeHelper';

@@ -18,8 +18,8 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import MarketStore from 'components/Market/store/market-store';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import MarketPluginArtifactUploadWizardConfig from 'services/WizardConfigs/MarketPluginArtifactUploadWizardConfig';
 import PluginArtifactUploadStore from 'services/WizardStores/PluginArtifactUpload/PluginArtifactUploadStore';
 import PluginArtifactUploadActions from 'services/WizardStores/PluginArtifactUpload/PluginArtifactUploadActions';

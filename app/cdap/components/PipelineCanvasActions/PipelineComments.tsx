@@ -19,7 +19,7 @@ import Popper from '@material-ui/core/Popper';
 import CommentBox from 'components/AbstractWidget/Comment/CommentBox';
 import { COMMENT_WIDTH } from 'components/AbstractWidget/Comment/CommentConstants';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 import isNil from 'lodash/isNil';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';

@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import VirtualScroll from 'components/VirtualScroll';
+import VirtualScroll from 'components/shared/VirtualScroll';
 
 const ListboxComponent = React.forwardRef<HTMLDivElement>((props, ref) => {
   const { children } = props;

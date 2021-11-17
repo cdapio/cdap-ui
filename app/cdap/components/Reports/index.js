@@ -21,7 +21,7 @@ import ReportsStore from 'components/Reports/store/ReportsStore';
 import ReportsList from 'components/Reports/ReportsList';
 import ReportsDetail from 'components/Reports/ReportsDetail';
 import { MyReportsApi } from 'api/reports';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import ReportsServiceControl from 'components/Reports/ReportsServiceControl';
 import ReportsAppDelete from 'components/Reports/ReportsAppDelete';
 import T from 'i18n-react';

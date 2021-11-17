@@ -15,7 +15,7 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector, shallowEquals } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
 
 import PushdownConfig from 'components/PushdownConfig';
@@ -26,7 +26,7 @@ export default function PushdownTabContent({}) {
       pushdownEnabled: state.pushdownEnabled,
       transformationPushdown: state.transformationPushdown,
     }),
-    shallowEquals
+    shallowEqual
   );
   const stages = useSelector((state) => state.stages);
   const cloudArtifact = useMemo(

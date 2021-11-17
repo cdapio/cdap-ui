@@ -25,7 +25,7 @@ import ColumnsTabDetail from 'components/DataPrep/DataPrepSidePanel/ColumnsTab/C
 import findIndex from 'lodash/findIndex';
 import T from 'i18n-react';
 import ColumnActions from 'components/DataPrep/Directives/ColumnActions';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 const PREFIX = 'features.DataPrep.DataPrepSidePanel.ColumnsTab';
 
 require('./ColumnsTab.scss');

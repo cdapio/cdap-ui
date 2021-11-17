@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import T from 'i18n-react';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const GRAPHPREFIX = `features.PipelineSummary.graphs`;
 

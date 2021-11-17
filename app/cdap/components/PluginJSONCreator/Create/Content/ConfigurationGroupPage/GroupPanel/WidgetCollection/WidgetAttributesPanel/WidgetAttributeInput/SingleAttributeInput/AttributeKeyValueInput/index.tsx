@@ -19,7 +19,7 @@ import * as React from 'react';
 import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 
 import { Map } from 'immutable';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 const styles = (theme): StyleRules => {
   return {

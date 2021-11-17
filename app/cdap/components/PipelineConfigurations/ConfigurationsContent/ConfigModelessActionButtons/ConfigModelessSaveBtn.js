@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import BtnWithLoading from 'components/BtnWithLoading';
+import BtnWithLoading from 'components/shared/BtnWithLoading';
 import T from 'i18n-react';
 
 const PREFIX = 'features.PipelineConfigurations.ActionButtons';

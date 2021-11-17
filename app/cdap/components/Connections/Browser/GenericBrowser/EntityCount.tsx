@@ -18,7 +18,7 @@ import * as React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import capitalize from 'lodash/capitalize';
-import If from 'components/If';
+import If from 'components/shared/If';
 import T from 'i18n-react';
 
 const useStyle = makeStyle((theme) => {

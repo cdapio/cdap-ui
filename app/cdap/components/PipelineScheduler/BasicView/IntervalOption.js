@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 import {
   INTERVAL_OPTIONS,
   ACTIONS as PipelineSchedulerActions,

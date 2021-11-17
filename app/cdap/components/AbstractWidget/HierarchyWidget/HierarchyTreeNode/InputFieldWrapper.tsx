@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Box, IconButton, Input, makeStyles, withStyles } from '@material-ui/core';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 

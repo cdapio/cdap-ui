@@ -30,7 +30,7 @@ import { EnumType } from 'components/AbstractWidget/SchemaEditor/EnumType';
 import { ArrayType } from 'components/AbstractWidget/SchemaEditor/ArrayType';
 import { FieldWrapper } from 'components/AbstractWidget/SchemaEditor/FieldWrapper';
 import { SchemaValidatorConsumer } from 'components/AbstractWidget/SchemaEditor/SchemaValidator';
-import If from 'components/If';
+import If from 'components/shared/If';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import classnames from 'classnames';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';

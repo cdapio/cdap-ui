@@ -56,6 +56,7 @@ const EntitySchema: React.FC<IEntitySchemaProps> = ({ properties }) => {
               recordName: null,
               isRecordSchema: false,
               typeIndex: null,
+              /* tslint:disable:no-empty */
               parentFormatOutput: () => {},
               isDisabled: true,
               schemaPrefix: null,

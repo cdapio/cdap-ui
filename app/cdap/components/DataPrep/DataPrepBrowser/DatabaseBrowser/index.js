@@ -21,7 +21,7 @@ import DataPrepBrowserStore from 'components/DataPrep/DataPrepBrowser/DataPrepBr
 import DataPrepApi from 'api/dataprep';
 import NamespaceStore from 'services/NamespaceStore';
 import T from 'i18n-react';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Input } from 'reactstrap';
 import ee from 'event-emitter';
 import { objectQuery } from 'services/helpers';

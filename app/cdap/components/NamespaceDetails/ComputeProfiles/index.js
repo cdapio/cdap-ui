@@ -25,7 +25,7 @@ import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { connect, Provider } from 'react-redux';
 import { Label, Input } from 'reactstrap';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 require('./ComputeProfiles.scss');
 

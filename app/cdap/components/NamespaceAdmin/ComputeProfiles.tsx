@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { Label, Input } from 'reactstrap';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const useStyle = makeStyles((theme) => {
   return {

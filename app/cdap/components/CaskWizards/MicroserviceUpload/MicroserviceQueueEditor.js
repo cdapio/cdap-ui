@@ -21,7 +21,7 @@ import { connect, Provider } from 'react-redux';
 import MicroserviceQueueActions from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueActions';
 import {createMicroserviceQueueStore} from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueStore';
 import MicroserviceQueue from 'components/CaskWizards/MicroserviceUpload/MicroserviceQueue';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import uuidV4 from 'uuid/v4';
 import classnames from 'classnames';
 

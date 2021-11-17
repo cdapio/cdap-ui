@@ -14,7 +14,7 @@
  * the License.
  */
 
-import KeyValuePairs from 'components/KeyValuePairs';
+import KeyValuePairs from 'components/shared/KeyValuePairs';
 import { connect } from 'react-redux';
 import HttpExecutorActions from 'components/HttpExecutor/store/HttpExecutorActions';
 

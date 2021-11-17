@@ -31,7 +31,7 @@ import ExploreTablesStore from 'services/ExploreTables/ExploreTablesStore';
 import { fetchTables } from 'services/ExploreTables/ActionCreator';
 import PageErrorMessage from 'components/EntityListView/ErrorMessage/PageErrorMessage';
 import HomeErrorMessage from 'components/EntityListView/ErrorMessage';
-import Overview from 'components/Overview';
+import Overview from 'components/shared/Overview';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import intersection from 'lodash/intersection';

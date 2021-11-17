@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NUMBER_TYPES } from 'services/global-constants';
-import StyledSelectTag from 'components/StyledSelectTag';
+import StyledSelectTag from 'components/shared/StyledSelectTag';
 import AlgorithmDistribution from 'components/Experiments/DetailedView/ExperimentMetricsDropdown/AlgorithmDistribution';
 import ModelStatusesDistribution from 'components/Experiments/DetailedView/ExperimentMetricsDropdown/ModelStatusesDistribution';
 import MetricChartWithLegend from 'components/Experiments/DetailedView/MetricChartWithLegend';

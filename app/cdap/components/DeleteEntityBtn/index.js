@@ -16,8 +16,8 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
-import ConfirmationModal from 'components/ConfirmationModal';
+import IconSVG from 'components/shared/IconSVG';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { preventPropagation } from 'services/helpers';
 
 export default class DeleteEntityBtn extends Component {

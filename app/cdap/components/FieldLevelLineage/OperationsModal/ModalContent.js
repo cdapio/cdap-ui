@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { humanReadableDate, objectQuery } from 'services/helpers';
 import Navigation from 'components/FieldLevelLineage/OperationsModal/Navigation';
 import OperationsTable from 'components/FieldLevelLineage/OperationsModal/OperationsTable';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import T from 'i18n-react';
 
 const PREFIX = 'features.FieldLevelLineage.OperationsModal';

@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import StatusMapper from 'services/StatusMapper';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { PROGRAM_STATUSES } from 'services/global-constants';

@@ -21,7 +21,7 @@ import { renderGraph } from 'components/OpsDashboard/RunsGraph/graphRenderer';
 import Legends from 'components/OpsDashboard/RunsGraph/Legends';
 import TypeSelector from 'components/OpsDashboard/RunsGraph/TypeSelector';
 import { Observable } from 'rxjs/Observable';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { next, prev } from 'components/OpsDashboard/store/ActionCreator';
 import RunsTable from 'components/OpsDashboard/RunsGraph/RunsTable';
 import { DashboardActions } from 'components/OpsDashboard/store/DashboardStore';

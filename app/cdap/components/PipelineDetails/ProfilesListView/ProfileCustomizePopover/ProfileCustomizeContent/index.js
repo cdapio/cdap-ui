@@ -16,15 +16,19 @@
 
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import LoadingSVG from 'components/LoadingSVG';
-import Accordion, { AccordionContent, AccordionTitle, AccordionPane } from 'components/Accordion';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import Accordion, {
+  AccordionContent,
+  AccordionTitle,
+  AccordionPane,
+} from 'components/shared/Accordion';
 import { MyCloudApi } from 'api/cloud';
 import uuidV4 from 'uuid/v4';
 import { extractProfileName } from 'components/Cloud/Profiles/Store/ActionCreator';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import cloneDeep from 'lodash/cloneDeep';
 import classnames from 'classnames';
-import { WrappedWidgetWrapper } from 'components/ConfigurationGroup/WidgetWrapper';
+import { WrappedWidgetWrapper } from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 require('./ProfileCustomizeContent.scss');
 

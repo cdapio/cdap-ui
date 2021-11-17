@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import RenderObjectAsTable from 'components/RenderObjectAsTable';
+import RenderObjectAsTable from 'components/shared/RenderObjectAsTable';
 import capitalize from 'lodash/capitalize';
 import classnames from 'classnames';
 

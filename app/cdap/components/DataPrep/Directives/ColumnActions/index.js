@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import { DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { UncontrolledDropdown } from 'components/UncontrolledComponents';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';

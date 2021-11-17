@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import { MySecureKeyApi } from 'api/securekey';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import { objectQuery } from 'services/helpers';

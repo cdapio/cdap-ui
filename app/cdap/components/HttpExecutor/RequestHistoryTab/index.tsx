@@ -31,7 +31,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import HttpExecutorActions from 'components/HttpExecutor/store/HttpExecutorActions';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { RequestMethod } from 'components/HttpExecutor';
 import RequestRow from 'components/HttpExecutor/RequestHistoryTab/RequestRow';
 import RequestSearch from 'components/HttpExecutor/RequestHistoryTab/RequestSearch';

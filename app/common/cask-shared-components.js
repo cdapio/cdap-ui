@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2020 Cask Data, Inc.
+ * Copyright © 2016-2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -29,11 +29,12 @@ var VersionActions = require('../cdap/services/VersionStore/VersionActions').def
 var Version = require('../cdap/services/VersionRange/Version').default;
 var VersionRange = require('../cdap/services/VersionRange').default;
 var VersionUtilities = require('../cdap/services/VersionRange/VersionUtilities');
-var KeyValuePairs = require('../cdap/components/KeyValuePairs').default;
+var KeyValuePairs = require('../cdap/components/shared/KeyValuePairs').default;
 var KeyValuePairsMaterial = require('../cdap/components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsPairsMaterial.tsx')
   .default;
-var KeyValueStore = require('../cdap/components/KeyValuePairs/KeyValueStore').default;
-var KeyValueStoreActions = require('../cdap/components/KeyValuePairs/KeyValueStoreActions').default;
+var KeyValueStore = require('../cdap/components/shared/KeyValuePairs/KeyValueStore').default;
+var KeyValueStoreActions = require('../cdap/components/shared/KeyValuePairs/KeyValueStoreActions')
+  .default;
 var PipelineSummary = require('../cdap/components/PipelineSummary').default;
 var PipelineNodeMetricsGraph = require('../cdap/components/PipelineNodeGraphs/PipelineNodeMetricsGraph')
   .default;
@@ -41,8 +42,8 @@ var CDAPHelpers = require('../cdap/services/helpers');
 var RulesEngineHome = require('../cdap/components/RulesEngineHome').default;
 var Mousetrap = require('mousetrap');
 var StatusFactory = require('../cdap/services/StatusFactory').default;
-var LoadingIndicator = require('../cdap/components/LoadingIndicator').default;
-var StatusAlertMessage = require('../cdap/components/StatusAlertMessage').default;
+var LoadingIndicator = require('../cdap/components/shared/LoadingIndicator').default;
+var StatusAlertMessage = require('../cdap/components/shared/StatusAlertMessage').default;
 var PipelineTriggersSidebars = require('../cdap/components/PipelineTriggersSidebars').default;
 var TriggeredPipelineStore = require('../cdap/components/TriggeredPipelines/store/TriggeredPipelineStore')
   .default;
@@ -66,18 +67,18 @@ var PipelineMetricsStore = require('../cdap/services/PipelineMetricsStore').defa
 var PipelineMetricsActionCreator = require('../cdap/services/PipelineMetricsStore/ActionCreator');
 var PipelineConfigurationsActionCreator = require('../cdap/components/PipelineConfigurations/Store/ActionCreator');
 var ThemeHelper = require('../cdap/services/ThemeHelper');
-var Footer = require('../cdap/components/Footer').default;
+var Footer = require('../cdap/components/shared/Footer').default;
 var cdapavscwrapper = require('../cdap/services/cdapavscwrapper').default;
-var IconSVG = require('../cdap/components/IconSVG').default;
+var IconSVG = require('../cdap/components/shared/IconSVG').default;
 var PipelineConfigConstants = require('../cdap/components/PipelineConfigurations/PipelineConfigConstants');
 var AuthRefresher = require('../cdap/components/AuthRefresher').default;
-var ApiErrorDialog = require('../cdap/components/ApiErrorDialog').default;
-var ToggleSwitch = require('../cdap/components/ToggleSwitch').default;
+var ToggleSwitch = require('../cdap/components/shared/ToggleSwitch').default;
+var ApiErrorDialog = require('../cdap/components/shared/ApiErrorDialog').default;
 var PipelineList = require('../cdap/components/PipelineList').default;
-var AppHeader = require('../cdap/components/AppHeader').default;
-var Markdown = require('../cdap/components/Markdown').default;
+var AppHeader = require('../cdap/components/shared/AppHeader').default;
+var Markdown = require('../cdap/components/shared/Markdown').default;
 var CodeEditor = require('../cdap/components/AbstractWidget/CodeEditorWidget').default;
-var JSONEditor = require('../cdap/components/CodeEditor/JSONEditor').default;
+var JSONEditor = require('../cdap/components/shared/CodeEditor/JSONEditor').default;
 var TextBox = require('../cdap/components/AbstractWidget/FormInputs/TextBox').default;
 var Number = require('../cdap/components/AbstractWidget/FormInputs/Number').default;
 var CSVWidget = require('../cdap/components/AbstractWidget/CSVWidget').default;
@@ -104,17 +105,17 @@ var SqlSelectorWidget = require('../cdap/components/AbstractWidget/SqlSelectorWi
 var KeyValueEncodedWidget = require('../cdap/components/AbstractWidget/KeyValueWidget/KeyValueEncodedWidget')
   .default;
 var SessionTokenStore = require('../cdap/services/SessionTokenStore');
-var ConfigurationGroup = require('../cdap/components/ConfigurationGroup').default;
-var WidgetWrapper = require('../cdap/components/ConfigurationGroup/WidgetWrapper')
+var ConfigurationGroup = require('../cdap/components/shared/ConfigurationGroup').default;
+var WidgetWrapper = require('../cdap/components/shared/ConfigurationGroup/WidgetWrapper')
   .WrappedWidgetWrapper;
-var ConfigurationGroupUtilities = require('../cdap/components/ConfigurationGroup/utilities');
-var DynamicFiltersUtilities = require('../cdap/components/ConfigurationGroup/utilities/DynamicPluginFilters');
-var LoadingSVG = require('../cdap/components/LoadingSVG').default;
+var ConfigurationGroupUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities');
+var DynamicFiltersUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities/DynamicPluginFilters');
+var LoadingSVG = require('../cdap/components/shared/LoadingSVG').default;
 var DateTimeWidget = require('../cdap/components/AbstractWidget/DateTimeWidget').default;
 var DateRangeWidget = require('../cdap/components/AbstractWidget/DateRangeWidget').default;
 var PipelineContextMenu = require('../cdap/components/PipelineContextMenu').default;
 var PluginContextMenu = require('../cdap/components/PluginContextMenu').default;
-var SelectionBox = require('../cdap/components/SelectionBox').default;
+var SelectionBox = require('../cdap/components/shared/SelectionBox').default;
 var Clipboard = require('../cdap/services/Clipboard');
 var Page404 = require('../cdap/components/404').default;
 var Page500 = require('../cdap/components/500').default;

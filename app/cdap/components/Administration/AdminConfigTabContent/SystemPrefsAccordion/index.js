@@ -16,14 +16,14 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import SetPreferenceModal from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
 import classnames from 'classnames';
 import { convertMapToKeyValuePairs, convertKeyValuePairsToMap } from 'services/helpers';
 import { MyPreferenceApi } from 'api/preference';
-import ViewAllLabel from 'components/ViewAllLabel';
+import ViewAllLabel from 'components/shared/ViewAllLabel';
 import T from 'i18n-react';
-import SortableStickyGrid from 'components/SortableStickyGrid';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid';
 import { PREFERENCES_LEVEL } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
 
 const PREFIX = 'features.Administration.Accordions.SystemPrefs';

@@ -35,11 +35,11 @@ import Typography from '@material-ui/core/Typography';
 import uuidV4 from 'uuid/v4';
 
 import FieldRow from 'components/AbstractWidget/SqlSelectorWidget/FieldRow';
-import If from 'components/If';
-import IconSVG from 'components/IconSVG';
+import If from 'components/shared/If';
+import IconSVG from 'components/shared/IconSVG';
 
 import { IParsedInputSchema } from 'components/AbstractWidget/SqlSelectorWidget';
-import { IErrorObj } from 'components/ConfigurationGroup/utilities';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
 const I18N_PREFIX_TABLE = 'features.AbstractWidget.SqlSelectorWidget.table';
 const DEFAULT_FIELD_WINDOW_SIZE = 50;

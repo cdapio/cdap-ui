@@ -17,9 +17,9 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import Popover from 'components/Popover';
+import Popover from 'components/shared/Popover';
 import Clipboard from 'clipboard';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import uuidV4 from 'uuid/v4';
 import classnames from 'classnames';

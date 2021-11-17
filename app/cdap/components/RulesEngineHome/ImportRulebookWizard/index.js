@@ -17,8 +17,8 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import UploadFile from 'services/upload-file';
 import NamespaceStore from 'services/NamespaceStore';
 import {

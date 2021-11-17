@@ -16,7 +16,7 @@
 
 import { connect } from 'react-redux';
 import { setError } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/Actions/commons';
-import ErrorBanner from 'components/ErrorBanner';
+import ErrorBanner from 'components/shared/ErrorBanner';
 
 const mapStateToProps = (state) => {
   return {

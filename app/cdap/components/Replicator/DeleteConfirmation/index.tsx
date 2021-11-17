@@ -16,10 +16,10 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const styles = (): StyleRules => {
   return {

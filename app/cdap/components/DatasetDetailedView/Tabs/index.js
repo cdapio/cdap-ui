@@ -20,12 +20,12 @@ import React, { Component } from 'react';
 import { Nav, NavItem, TabContent } from 'reactstrap';
 import isNil from 'lodash/isNil';
 import { Route, Switch, NavLink as RouterNavLink } from 'react-router-dom';
-import ProgramTab from 'components/Overview/Tabs/ProgramTab';
-import SchemaTab from 'components/Overview/Tabs/SchemaTab/index.tsx';
+import ProgramTab from 'components/shared/Overview/Tabs/ProgramTab';
+import SchemaTab from 'components/shared/Overview/Tabs/SchemaTab/index.tsx';
 import LineageTab from 'components/DatasetDetailedView/Tabs/LineageTab';
 import PropertiesTab from 'components/DatasetDetailedView/Tabs/PropertiesTab';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 import T from 'i18n-react';
 
 const PREFIX = 'features.DatasetDetailedView.Tabs';

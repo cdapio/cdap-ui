@@ -24,7 +24,7 @@ import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import MouseTrap from 'mousetrap';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import { setPopoverOffset } from 'components/DataPrep/helper';
 
 require('./FilterDirective.scss');

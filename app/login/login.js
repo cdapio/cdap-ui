@@ -19,11 +19,11 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import Cookies from 'universal-cookie';
 
-import Card from 'components/Card';
-import CardActionFeedback from 'components/CardActionFeedback';
+import Card from 'components/shared/Card';
+import CardActionFeedback from 'components/shared/CardActionFeedback';
 
 import * as util from './utils';
-import Footer from '../cdap/components/Footer';
+import Footer from '../cdap/components/shared/Footer';
 
 require('./styles/lib-styles.scss');
 require('./login.scss');

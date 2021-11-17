@@ -20,8 +20,8 @@ import React, { Component } from 'react';
 import OneStepDeployAppConfig from 'services/WizardConfigs/OneStepDeployAppConfig';
 import OneStepDeployPluginConfig from 'services/WizardConfigs/OneStepDeployPluginConfig';
 import OneStepDeployStore from 'services/WizardStores/OneStepDeploy/OneStepDeployStore';
-import WizardModal from 'components/WizardModal';
-import Wizard from 'components/Wizard';
+import WizardModal from 'components/shared/WizardModal';
+import Wizard from 'components/shared/Wizard';
 import T from 'i18n-react';
 import LicenseStep from 'components/CaskWizards/LicenseStep';
 

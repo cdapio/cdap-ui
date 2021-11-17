@@ -19,19 +19,19 @@ import PropTypes from 'prop-types';
 import { MySearchApi } from 'api/search';
 import { MyNamespaceApi } from 'api/namespace';
 import { getCustomAppPipelineDatasetCounts } from 'services/metadata-parser';
-import IconSVG from 'components/IconSVG';
-import LoadingSVG from 'components/LoadingSVG';
+import IconSVG from 'components/shared/IconSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import AddNamespaceWizard from 'components/CaskWizards/AddNamespace';
 import classnames from 'classnames';
 import globalEvents from 'services/global-events';
 import ee from 'event-emitter';
-import ViewAllLabel from 'components/ViewAllLabel';
+import ViewAllLabel from 'components/shared/ViewAllLabel';
 import T from 'i18n-react';
-import SortableStickyGrid from 'components/SortableStickyGrid';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid';
 import { Link } from 'react-router-dom';
 import uuidV4 from 'uuid/v4';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 require('./NamespacesAccordion.scss');
 

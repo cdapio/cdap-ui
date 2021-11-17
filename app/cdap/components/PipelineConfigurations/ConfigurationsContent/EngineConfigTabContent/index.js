@@ -29,7 +29,7 @@ import T from 'i18n-react';
 import classnames from 'classnames';
 import { GLOBALS } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
-import SelectWithOptions from 'components/SelectWithOptions';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 
 require('./EngineConfigTabContent.scss');
 

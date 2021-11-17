@@ -17,9 +17,9 @@
 import React, { useContext } from 'react';
 import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import ModalContent from 'components/FieldLevelLineage/v2/OperationsModal/ModalContent';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import withStyles from '@material-ui/core/styles/withStyles';
 import T from 'i18n-react';
 

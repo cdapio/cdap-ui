@@ -14,7 +14,7 @@
  * the License.
  */
 
-import ConfirmationModal from 'components/ConfirmationModal';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { MySecureKeyApi } from 'api/securekey';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';

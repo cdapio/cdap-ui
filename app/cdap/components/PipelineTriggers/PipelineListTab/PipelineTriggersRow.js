@@ -17,12 +17,12 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import PipelineTriggersStore from 'components/PipelineTriggers/store/PipelineTriggersStore';
 import { enableSchedule } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
 import PayloadConfigModal from 'components/PipelineTriggers/PayloadConfigModal';
 import T from 'i18n-react';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;

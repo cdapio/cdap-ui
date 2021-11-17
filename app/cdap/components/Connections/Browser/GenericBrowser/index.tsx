@@ -31,9 +31,9 @@ import { useLocation, useRouteMatch, useParams } from 'react-router-dom';
 import Breadcrumb from 'components/Connections/Browser/GenericBrowser/Breadcrumb';
 import SearchField from 'components/Connections/Browser/GenericBrowser/SearchField';
 import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/BrowserTable';
-import If from 'components/If';
+import If from 'components/shared/If';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
-import ErrorBanner from 'components/ErrorBanner';
+import ErrorBanner from 'components/shared/ErrorBanner';
 import { getApiErrorMessage } from './apiHelpers';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';

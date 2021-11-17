@@ -20,8 +20,8 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/If';
-import OutlinedSelect from 'components/OutlinedSelect';
+import If from 'components/shared/If';
+import OutlinedSelect from 'components/shared/OutlinedSelect';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import isEqual from 'lodash/isEqual';

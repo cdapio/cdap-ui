@@ -16,7 +16,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import PieChartWithLegends from 'components/PieChartWithLegend';
+import PieChartWithLegends from 'components/shared/PieChartWithLegend';
 import EmptyMetricMessage from 'components/Experiments/DetailedView/ExperimentMetricsDropdown/EmptyMetricMessage';
 import { MODEL_STATUS } from 'components/Experiments/store/ModelStatus';
 import colorVariables from 'styles/variables.scss';

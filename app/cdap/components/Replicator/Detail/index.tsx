@@ -28,7 +28,7 @@ import { PluginType } from 'components/Replicator/constants';
 import { fetchPluginInfo, generateTableKey } from 'components/Replicator/utilities';
 import { fetchPluginWidget } from 'services/PluginUtilities';
 import DetailContent from 'components/Replicator/Detail/DetailContent';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import ContentHeading from 'components/Replicator/Detail/ContentHeading';
 import { ITableInfo, IArtifactInfo } from '../types';
 import DownloadFile from 'services/download-file';

@@ -18,8 +18,8 @@ import React, { useState, useRef } from 'react';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
 import Button from '@material-ui/core/Button';
 import { objectQuery } from 'services/helpers';
-import Alert from 'components/Alert';
-import If from 'components/If';
+import Alert from 'components/shared/Alert';
+import If from 'components/shared/If';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyle = makeStyles(() => {

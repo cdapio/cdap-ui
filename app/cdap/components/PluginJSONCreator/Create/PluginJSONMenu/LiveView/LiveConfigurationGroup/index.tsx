@@ -18,7 +18,7 @@ import * as React from 'react';
 
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
-import ConfigurationGroup from 'components/ConfigurationGroup';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 
 const styles = (): StyleRules => {
   return {

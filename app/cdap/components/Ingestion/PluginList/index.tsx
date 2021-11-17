@@ -21,9 +21,9 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import { objectQuery } from 'services/helpers';
 import Popover from '@material-ui/core/Popover';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { getIcon } from 'components/Ingestion/helpers';
-import HorizontalCarousel from 'components/HorizontalCarousel';
+import HorizontalCarousel from 'components/shared/HorizontalCarousel';
 import SinkList from 'components/Ingestion/SinkList';
 import { getPluginDisplayName } from 'components/Ingestion/helpers';
 

@@ -24,7 +24,7 @@ import { preventPropagation } from 'services/helpers';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import MouseTrap from 'mousetrap';
 
 require('./MarkAsError.scss');

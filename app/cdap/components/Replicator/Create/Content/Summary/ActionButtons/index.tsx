@@ -18,12 +18,12 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import Button from '@material-ui/core/Button';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyAppApi } from 'api/app';
 import { MyReplicatorApi } from 'api/replicator';
 import { Redirect } from 'react-router-dom';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { extractErrorMessage } from 'services/helpers';
 
 const styles = (theme): StyleRules => {

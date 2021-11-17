@@ -22,7 +22,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import flow from 'lodash/flow';
 import classnames from 'classnames';
 import { Sparklines, SparklinesLine, SparklinesBars } from 'react-sparklines';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import isNil from 'lodash/isNil';
 import T from 'i18n-react';
 

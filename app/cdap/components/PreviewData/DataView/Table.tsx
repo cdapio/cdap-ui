@@ -20,9 +20,9 @@ import Grid from '@material-ui/core/Grid';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import isEmpty from 'lodash/isEmpty';
 import { PREVIEW_STATUS } from 'services/PreviewStatus';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ThemeWrapper from 'components/ThemeWrapper';
-import VirtualScroll from 'components/VirtualScroll';
+import VirtualScroll from 'components/shared/VirtualScroll';
 import T from 'i18n-react';
 import classnames from 'classnames';
 

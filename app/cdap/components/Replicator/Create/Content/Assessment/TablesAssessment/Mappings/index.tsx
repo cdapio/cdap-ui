@@ -19,9 +19,9 @@ import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/wit
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import { MyReplicatorApi } from 'api/replicator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import If from 'components/If';
-import LoadingSVG from 'components/LoadingSVG';
-import Heading, { HeadingTypes } from 'components/Heading';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { objectQuery } from 'services/helpers';
 import Supported, {
   SUPPORT,

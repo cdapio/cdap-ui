@@ -17,13 +17,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import TopPanel from 'components/Experiments/TopPanel';
-import PieChart from 'components/PieChart';
-import PaginationWithTitle from 'components/PaginationWithTitle';
+import PieChart from 'components/shared/PieChart';
+import PaginationWithTitle from 'components/shared/PaginationWithTitle';
 import * as d3Lib from 'd3';
 import ExperimentsListBarChart from 'components/Experiments/ListView/ExperimentsListBarChart';
-import PlusButton from 'components/PlusButton';
+import PlusButton from 'components/shared/PlusButton';
 import InvalidPageView from 'components/Experiments/ListView/InvalidPageView';
 import EmptyListView from 'components/Experiments/ListView/EmptyListView';
 import NamespaceStore, { getCurrentNamespace } from 'services/NamespaceStore';
@@ -33,8 +33,8 @@ import {
   handleExperimentsSort,
   setExperimentsListError,
 } from 'components/Experiments/store/ExperimentsListActionCreator';
-import IconSVG from 'components/IconSVG';
-import Alert from 'components/Alert';
+import IconSVG from 'components/shared/IconSVG';
+import Alert from 'components/shared/Alert';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 

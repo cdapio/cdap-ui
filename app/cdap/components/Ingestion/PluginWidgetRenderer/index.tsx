@@ -16,8 +16,8 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import ConfigurationGroup from 'components/ConfigurationGroup';
-import If from 'components/If';
+import ConfigurationGroup from 'components/shared/ConfigurationGroup';
+import If from 'components/shared/If';
 import { Card, TextField } from '@material-ui/core';
 import { objectQuery } from 'services/helpers';
 import { getIcon, getPluginDisplayName } from 'components/Ingestion/helpers';

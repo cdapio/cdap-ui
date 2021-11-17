@@ -25,7 +25,7 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import withStyles from '@material-ui/core/styles/withStyles';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const styles = (theme) => {
   return {

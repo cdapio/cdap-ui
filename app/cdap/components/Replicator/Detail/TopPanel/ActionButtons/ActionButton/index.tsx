@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import classnames from 'classnames';
 
 const styles = (theme): StyleRules => {

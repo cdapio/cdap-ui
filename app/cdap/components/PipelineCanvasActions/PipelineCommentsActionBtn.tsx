@@ -21,7 +21,7 @@ import ThemeWrapper from 'components/ThemeWrapper';
 import CommentRounded from '@material-ui/icons/CommentRounded';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { Theme } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
 import { PipelineComments } from 'components/PipelineCanvasActions/PipelineComments';

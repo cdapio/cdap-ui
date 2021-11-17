@@ -26,7 +26,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import orderBy from 'lodash/orderBy';
-import PaginationWithTitle from 'components/PaginationWithTitle';
+import PaginationWithTitle from 'components/shared/PaginationWithTitle';
 import { useParams } from 'react-router';
 
 import {

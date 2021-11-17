@@ -26,7 +26,7 @@ import AbstractRow, {
 } from 'components/AbstractWidget/AbstractMultiRowWidget/AbstractRow';
 import { parse, serialize } from 'components/AbstractWidget/FunctionDropdownArgumentsWidget/parser';
 import InputFieldDropdown from 'components/AbstractWidget/InputFieldDropdown';
-import If from 'components/If';
+import If from 'components/shared/If';
 import { IWidgetExtraConfig } from 'components/AbstractWidget';
 
 const styles = (theme): StyleRules => {

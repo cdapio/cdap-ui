@@ -19,7 +19,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SplitInfoTable from 'components/Experiments/CreateView/SplitDataStep/SplitInfoTable';
 import SplitInfoGraph from 'components/Experiments/CreateView/SplitDataStep/SplitInfoGraph';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 
 const PREFIX = 'features.Experiments.CreateView';

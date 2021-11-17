@@ -17,7 +17,7 @@
 import { createStore, Reducer } from 'redux';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
-} from 'components/LoadingIndicator/LoadingIndicatorStore';
+} from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
 import { IAction } from 'services/redux-helpers';
 import { composeEnhancers } from 'services/helpers';
 import Cookies from 'universal-cookie';

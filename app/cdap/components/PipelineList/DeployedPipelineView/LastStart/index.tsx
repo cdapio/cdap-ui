@@ -18,7 +18,7 @@ import * as React from 'react';
 import { humanReadableDate } from 'services/helpers';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { objectQuery } from 'services/helpers';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 
 interface ILastStartViewProps {
   pipeline: IPipeline;

@@ -17,9 +17,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { INode, fetchPreview, IRecords, IPreviewData } from 'components/PreviewData/utilities';
-import If from 'components/If';
+import If from 'components/shared/If';
 import isEmpty from 'lodash/isEmpty';
-import Heading, { HeadingTypes } from 'components/Heading';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { messageTextStyle } from 'components/PreviewData/DataView/Table';
 import PreviewTableContainer from 'components/PreviewData/DataView/TableContainer';
 import RecordContainer from 'components/PreviewData/RecordView/RecordContainer';
@@ -29,7 +29,7 @@ import T from 'i18n-react';
 import { extractErrorMessage } from 'services/helpers';
 import ToggleSwitchWidget from 'components/AbstractWidget/ToggleSwitchWidget';
 import classnames from 'classnames';
-import LoadingSVG from 'components/LoadingSVG';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const I18N_PREFIX = 'features.PreviewData';
 // If number of schema fields > maxSchemaSize, show Record view by default

@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 
-import WidgetWrapper, { Size } from 'components/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper, { Size } from 'components/shared/ConfigurationGroup/WidgetWrapper';
 
 import AttributeKeyValueInput from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel/WidgetCollection/WidgetAttributesPanel/WidgetAttributeInput/SingleAttributeInput/AttributeKeyValueInput';
 import { CODE_EDITORS } from 'components/PluginJSONCreator/constants';

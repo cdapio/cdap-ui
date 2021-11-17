@@ -28,7 +28,7 @@ import FilterConditionInput from 'components/PluginJSONCreator/Create/Content/Fi
 import FilterNameInput from 'components/PluginJSONCreator/Create/Content/FilterPage/FilterPanel/FilerNameInput';
 import FilterShowlistInput from 'components/PluginJSONCreator/Create/Content/FilterPage/FilterPanel/FilterShowlistInput';
 import IconButton from '@material-ui/core/IconButton';
-import If from 'components/If';
+import If from 'components/shared/If';
 import Typography from '@material-ui/core/Typography';
 import { useFilterState } from 'components/PluginJSONCreator/Create';
 

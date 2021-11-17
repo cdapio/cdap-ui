@@ -15,7 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import IconSVG from 'components/IconSVG';
+import IconSVG from 'components/shared/IconSVG';
 import ColumnsSelector from 'components/Reports/Customizer/ColumnsSelector';
 import TimeRangeSelector from 'components/Reports/Customizer/TimeRangeSelector';
 import AppTypeSelector from 'components/Reports/Customizer/AppTypeSelector';

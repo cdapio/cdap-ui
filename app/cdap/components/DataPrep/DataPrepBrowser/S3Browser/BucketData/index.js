@@ -17,11 +17,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { setS3Search } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore/ActionCreator';
 import T from 'i18n-react';
 import TableContents from 'components/DataPrep/DataPrepBrowser/S3Browser/BucketData/TableContents';
-import If from 'components/If';
+import If from 'components/shared/If';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.S3Browser.BucketData';
 const props = {

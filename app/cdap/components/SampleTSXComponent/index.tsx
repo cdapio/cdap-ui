@@ -16,8 +16,8 @@
 
 import * as React from 'react';
 import * as Loadable from 'react-loadable';
-import LoadingSVGCentered from 'components/LoadingSVGCentered';
-import CodeEditor from 'components/CodeEditor';
+import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
+import CodeEditor from 'components/shared/CodeEditor';
 const SubTSXComponent = Loadable({
   loader: () =>
     import(

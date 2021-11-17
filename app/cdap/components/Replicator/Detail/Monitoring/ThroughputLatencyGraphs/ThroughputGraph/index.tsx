@@ -20,8 +20,8 @@ import {
   COLOR_MAP,
   renderThroughputGraph,
 } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/ThroughputGraph/throughput';
-import Heading, { HeadingTypes } from 'components/Heading';
-import ChartContainer from 'components/ChartContainer';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
+import ChartContainer from 'components/shared/ChartContainer';
 import { IThroughputLatencyData } from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/parser';
 import ChartTableSwitcher from 'components/Replicator/Detail/ChartTableSwitcher';
 import ThroughputTable from 'components/Replicator/Detail/Monitoring/ThroughputLatencyGraphs/ThroughputGraph/ThroughputTable';
