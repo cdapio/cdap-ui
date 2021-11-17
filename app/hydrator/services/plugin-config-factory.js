@@ -21,6 +21,7 @@ class HydratorPlusPlusPluginConfigFactory {
     this.myAlertOnValium = myAlertOnValium;
     this.$state = $state;
     this.configurationGroupUtilities = window.CaskCommon.ConfigurationGroupUtilities;
+    this.dynamicFiltersUtilities = window.CaskCommon.DynamicFiltersUtilities;
     this.data = {};
     this.validatePluginProperties = this.validatePluginProperties.bind(this);
     this.HydratorPlusPlusNodeService = HydratorPlusPlusNodeService;
