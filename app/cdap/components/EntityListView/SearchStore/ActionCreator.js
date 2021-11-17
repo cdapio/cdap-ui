@@ -28,7 +28,7 @@ import { Theme } from 'services/ThemeHelper';
 
 const search = () => {
   const namespace = getCurrentNamespace();
-  let { offset, limit, activeFilters, activeSort, query, cursor } = SearchStore.getState().search;
+  let { offset, limit, activeFilters, activeSort, query } = SearchStore.getState().search;
 
   let params = {
     namespace: namespace,
@@ -39,7 +39,6 @@ const search = () => {
     query,
     responseFormat: 'v6',
     cursorRequested: true,
-    cursor,
   };
   if (query !== DEFAULT_SEARCH_QUERY) {
     delete params.sort;
