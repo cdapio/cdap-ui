@@ -26,6 +26,7 @@ const styles = (theme): StyleRules => {
       color: theme.palette.grey[100],
       fontWeight: 600,
       lineHeight: 1.2,
+      zIndex: 1,
     },
   };
 };
