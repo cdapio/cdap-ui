@@ -94,7 +94,7 @@ export default class Explode extends Component {
   }
 
   explodeRecordByFlattening() {
-    const directive = `explode-record :${this.props.column.toString()}`;
+    const directive = `flatten-record :${this.props.column.toString()}`;
     this.execute([directive]);
   }
 
