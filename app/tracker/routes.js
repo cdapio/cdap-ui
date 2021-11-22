@@ -19,6 +19,8 @@ angular.module(PKG.name + '.feature.tracker')
     const reactAppUrl = {
       home: `/cdap/ns/<namespace>/metadata`,
       search: `/cdap/ns/<namespace>/metadata/search/<query>/result`,
+      summary: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/summary/search/<query>/result`,
+      lineage: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/lineage/search/<query>/result`,
     };
     const productName = window.CaskCommon.ThemeHelper.Theme.productName;
 
@@ -145,7 +147,15 @@ angular.module(PKG.name + '.feature.tracker')
             controller: 'TrackerMetadataController',
             controllerAs: 'MetadataController',
             onEnter: function($stateParams) {
-              document.title = `${productName} | Search | ${$stateParams.entityId} | Summary`;
+              // Redirect to react page when the feature is turned on
+              if (window.CaskCommon.ThemeHelper.Theme.isMetadataInReact) {
+                let searchUrl = reactAppUrl.summary.replace('<namespace>', $stateParams.namespace);
+                searchUrl = searchUrl.replace('<entityType>', $stateParams.entityType);
+                searchUrl = searchUrl.replace('<entityId>', $stateParams.entityId);
+                window.location.href = searchUrl.replace('<query>', $stateParams.searchTerm);
+              } else {
+                document.title = `${productName} | Search | ${$stateParams.entityId} | Summary`;
+              }
             },
             data: {
               authorizedRoles: MYAUTH_ROLE.all,

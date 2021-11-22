@@ -22,8 +22,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Search from '@material-ui/icons/Search';
 import FilledInput from '@material-ui/core/FilledInput';
+import Helmet from 'react-helmet';
 import styled, { css } from 'styled-components';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Theme } from 'services/ThemeHelper';
 
 const I18N_PREFIX = 'features.MetadataHome';
 
@@ -82,6 +84,11 @@ const MetadataHome: React.FC = () => {
 
   return (
     <Container>
+      <Helmet
+        title={T.translate(`${I18N_PREFIX}.pageTitle`, {
+          productName: Theme.productName,
+        })}
+      />
       <StyledFormControl fullWidth variant="filled">
         <InputLabel htmlFor="search-query">
           {T.translate(`${I18N_PREFIX}.searchPlaceholder`)}
