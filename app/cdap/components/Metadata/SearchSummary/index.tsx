@@ -18,6 +18,7 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import T from 'i18n-react';
 import styled from 'styled-components';
+import Helmet from 'react-helmet';
 import { MySearchApi } from 'api/search';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import SearchBar from 'components/Metadata/SearchBar';
@@ -28,6 +29,7 @@ import EntityTags from 'components/Metadata/SearchSummary/EntityTags';
 import EntitySchema from 'components/Metadata/SearchSummary/EntitySchema';
 import EntityProperties from 'components/Metadata/SearchSummary/EntityProperties';
 import { ISearchMetadata, IPropertiesResponse } from 'components/Metadata/SearchSummary/helper';
+import { Theme } from 'services/ThemeHelper';
 
 const I18N_PREFIX = 'features.MetadataSummary';
 
@@ -138,6 +140,12 @@ const SearchSummary: React.FC = () => {
 
   return (
     <>
+      <Helmet
+        title={T.translate(`${I18N_PREFIX}.pageTitle`, {
+          productName: Theme.productName,
+          entityId,
+        })}
+      />
       <SearchBar query={query} onSearch={onSearch} />
       <Container>
         {loading && (
@@ -148,7 +156,13 @@ const SearchSummary: React.FC = () => {
         )}
         {!loading && (
           <>
-            <EntityTopBar entityType={entityType} entityId={entityId} goBack={goBack} />
+            <EntityTopBar
+              query={query}
+              defaultTab={0}
+              entityType={entityType}
+              entityId={entityId}
+              goBack={goBack}
+            />
             <Columns>
               <Column>
                 <EntityTags
