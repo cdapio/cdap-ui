@@ -31,6 +31,7 @@ import ConfirmationModal from 'components/shared/ConfirmationModal';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
 import { ConnectionsApi } from 'api/connections';
 import { IConnectorType } from 'components/Connections/Browser/SidePanel';
+import { getConnectionPath } from 'components/Connections/helper';
 
 interface ICategorizedConnectionsProps {
   categorizedConnections: Map<string, any[]>;
@@ -373,7 +374,7 @@ export function CategorizedConnections({
                     })}
                   >
                     <Link
-                      to={`/ns/${getCurrentNamespace()}/connections/${connection.name}?path=/`}
+                      to={getConnectionPath(connection.name)}
                       key={connection.name}
                       onClick={() => onConnectionSelection(connection.name)}
                       className={classes.connection}
