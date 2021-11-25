@@ -21,7 +21,6 @@ import TableRow from 'components/shared/Table/TableRow';
 import TableCell from 'components/shared/Table/TableCell';
 import TableBody from 'components/shared/Table/TableBody';
 import If from 'components/shared/If';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -29,6 +28,7 @@ import Heading, { HeadingTypes } from 'components/shared/Heading';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { format } from 'services/DataFormatter';
 import IconSVG from 'components/shared/IconSVG';
+import { getConnectionPath } from 'components/Connections/helper';
 
 function getIcon(entity, classes) {
   const type = entity.type.toLowerCase();
@@ -189,7 +189,7 @@ export function BrowserTable({
             const canInteract = entity.canBrowse || entity.canSample;
             const onClickHandler = canInteract ? () => onExplore(entity) : undefined;
             const toLink = entity.canBrowse
-              ? `/ns/${getCurrentNamespace()}/connections/${selectedConnection}?path=${entity.path}`
+              ? getConnectionPath(selectedConnection, entity.path)
               : undefined;
             return (
               <TableRow
