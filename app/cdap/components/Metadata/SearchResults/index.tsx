@@ -27,7 +27,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import orderBy from 'lodash/orderBy';
 import PaginationWithTitle from 'components/shared/PaginationWithTitle';
+import Helmet from 'react-helmet';
 import { useParams } from 'react-router';
+import { Theme } from 'services/ThemeHelper';
 
 import {
   parseResult,
@@ -231,6 +233,11 @@ const SearchResults: React.FC = () => {
 
   return (
     <>
+      <Helmet
+        title={T.translate(`${I18N_PREFIX}.pageTitle`, {
+          productName: Theme.productName,
+        })}
+      />
       <SearchBar query={query} onSearch={onSearch} />
       <Container>
         {loading && (

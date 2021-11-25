@@ -37,6 +37,7 @@ import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
+import { getConnectionPath } from 'components/Connections/helper';
 import { extractErrorMessage, objectQuery } from 'services/helpers';
 import Alert from 'components/shared/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
@@ -78,6 +79,7 @@ export function CreateConnection({
   const [testInProgress, setTestInProgress] = React.useState(false);
   const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
   const [hadInitial, setHadInitial] = React.useState(false);
+  const [redirectUrl, setRedirectUrl] = React.useState(null);
 
   const init = async () => {
     try {
@@ -108,6 +110,10 @@ export function CreateConnection({
       onConnectorSelection(selectedConnector);
     }
   }, []);
+
+  if (redirectUrl !== null) {
+    return <Redirect to={redirectUrl} />;
+  }
 
   if (
     mode === IConnectionMode.ROUTED &&
@@ -168,7 +174,7 @@ export function CreateConnection({
       }
 
       if (mode === IConnectionMode.ROUTED) {
-        navigateToConnectionList(dispatch);
+        setRedirectUrl(`${getConnectionPath(name)}`);
       }
 
       if (typeof onToggle === 'function') {

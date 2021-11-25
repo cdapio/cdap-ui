@@ -228,7 +228,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp</arguments>
+                  <arguments>global add node-gyp@8.3.0</arguments>
                 </configuration>
               </execution>
               <execution>

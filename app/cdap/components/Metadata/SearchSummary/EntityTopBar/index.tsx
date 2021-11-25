@@ -15,6 +15,7 @@
  */
 
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import T from 'i18n-react';
 import styled from 'styled-components';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,6 +23,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import { Theme } from 'services/ThemeHelper';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const I18N_PREFIX = 'features.MetadataSummary';
 
@@ -55,16 +57,35 @@ const EntityTab = styled(Tab)`
 
 interface IEntityTopBarProps {
   goBack: () => void;
-  entityType: string;
+  defaultTab: number;
   entityId: string;
+  entityType: string;
+  query: string;
 }
 
-const EntityTopBar: React.FC<IEntityTopBarProps> = ({ goBack, entityType, entityId }) => {
+const EntityTopBar: React.FC<IEntityTopBarProps> = ({
+  goBack,
+  defaultTab,
+  entityType,
+  entityId,
+  query,
+}) => {
   const entityTypeTabAriaLabel = T.translate(`${I18N_PREFIX}.entityTypeTabAriaLabel`);
-  const [entityTypeTab, setEntityTypeTab] = useState(0);
+  const [redirectUrl, setRedirectUrl] = useState(null);
 
-  function handleTabChange(event, newValue: string) {
-    setEntityTypeTab(Number(newValue));
+  if (redirectUrl) {
+    return <Redirect to={redirectUrl} />;
+  }
+
+  function handleTabChange(event, newValue: number) {
+    if (defaultTab !== newValue) {
+      const baseUrl = `/ns/${getCurrentNamespace()}/metadata/${entityType}/${entityId}/`;
+      if (newValue === 1) {
+        window.location.href = `/metadata/ns/${getCurrentNamespace()}/entity/${entityType}/${entityId}/lineage?searchTerm=${query}`;
+      } else {
+        setRedirectUrl(`${baseUrl}/summary/search/${query}`);
+      }
+    }
   }
 
   return (
@@ -80,11 +101,7 @@ const EntityTopBar: React.FC<IEntityTopBarProps> = ({ goBack, entityType, entity
           <span className="icon-datasets"></span> <span>Dataset</span>
         </EntityType>
       </EntityDetail>
-      <Tabs
-        value={entityTypeTab}
-        onChange={handleTabChange}
-        aria-label={`${entityTypeTabAriaLabel}`}
-      >
+      <Tabs value={defaultTab} onChange={handleTabChange} aria-label={`${entityTypeTabAriaLabel}`}>
         <EntityTab
           label={T.translate(`${I18N_PREFIX}.summary`)}
           id={'0'}
