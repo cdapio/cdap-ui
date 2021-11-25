@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 import Paper from '@material-ui/core/Paper';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -24,6 +24,8 @@ import If from 'components/shared/If';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { Route, Switch } from 'react-router-dom';
 import Upload from 'components/Connections/Upload';
+import Button from '@material-ui/core/Button';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -40,6 +42,12 @@ const useStyle = makeStyles((theme) => {
       display: 'flex',
       alignItems: 'center',
       gap: `${theme.spacing(1)}px`,
+    },
+    headerInner: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
     },
     heading: {
       fontWeight: 'bold',
@@ -66,7 +74,16 @@ export function ConnectionsBrowser({
   onCollapse,
   initialConnectionId,
 }: IConnectionsBrowser) {
+  const { onEntitySelect } = useContext(ConnectionsContext);
+  const isSelectMode = typeof onEntitySelect === 'function';
+  const [selectableParent, setSelectableParent] = useState(null);
+  const [selectedParent, setSelectedParent] = useState(null);
   const classes = useStyle();
+
+  function onEntityChange(entity = null) {
+    setSelectableParent(entity);
+  }
+
   return (
     <Paper className={classes.root}>
       <div className={classes.header}>
@@ -80,7 +97,27 @@ export function ConnectionsBrowser({
             <Heading type={HeadingTypes.h5} label="Upload Data" className={classes.heading} />
           </Route>
           <Route>
-            <Heading type={HeadingTypes.h5} label="Select Data" className={classes.heading} />
+            {!selectableParent && (
+              <Heading type={HeadingTypes.h5} label="Select Data" className={classes.heading} />
+            )}
+            {isSelectMode && selectableParent && (
+              <div className={classes.headerInner}>
+                <Heading
+                  type={HeadingTypes.h5}
+                  label={`Contents of '${selectableParent.name}'`}
+                  className={classes.heading}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setSelectedParent(selectableParent);
+                  }}
+                >
+                  Select '{selectableParent.name}'
+                </Button>
+              </div>
+            )}
           </Route>
         </Switch>
       </div>
@@ -90,7 +127,11 @@ export function ConnectionsBrowser({
         </Route>
         <Route>
           <div className={classes.browserContainer}>
-            <GenericBrowser initialConnectionId={initialConnectionId} />
+            <GenericBrowser
+              initialConnectionId={initialConnectionId}
+              onEntityChange={onEntityChange}
+              selectedParent={selectedParent}
+            />
           </div>
         </Route>
       </Switch>

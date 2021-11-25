@@ -28,6 +28,7 @@ import Heading, { HeadingTypes } from 'components/shared/Heading';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { format } from 'services/DataFormatter';
 import IconSVG from 'components/shared/IconSVG';
+import Button from '@material-ui/core/Button';
 import { getConnectionPath } from 'components/Connections/helper';
 
 function getIcon(entity, classes) {
@@ -115,6 +116,8 @@ interface IBrowserTable {
   onExplore: (entityName: IBrowseEntity) => void;
   loading: boolean;
   propertyHeaders: string[];
+  isSelectMode: boolean;
+  loadEntitySpec: (entityName: IBrowseEntity) => void;
 }
 
 function getTypesByHeader(headers, entities) {
@@ -150,14 +153,20 @@ export function BrowserTable({
   propertyHeaders,
   entities,
   onExplore,
+  isSelectMode,
+  loadEntitySpec,
 }: IBrowserTable) {
   const classes = useStyle();
-
+  // Allow partial selection only in studio's browse mode and not in wrangler.
+  const hasSelectable = isSelectMode && entities.some((entity: IBrowseEntity) => entity.canBrowse);
+  const actionColumnWidth = hasSelectable ? ' 0.5fr' : '';
   const headerTypeMap = getTypesByHeader(propertyHeaders, entities);
   const columnTemplate =
     propertyHeaders && propertyHeaders.length > 0
-      ? `2fr 1fr ${propertyHeaders.map((h) => getPropertyColumnWidth(headerTypeMap[h])).join(' ')}`
-      : '2fr 1fr';
+      ? `2fr 1fr ${propertyHeaders
+          .map((h) => getPropertyColumnWidth(headerTypeMap[h]))
+          .join(' ')}${actionColumnWidth}`
+      : `2fr 1fr${actionColumnWidth}`;
 
   let headers = ['Name', 'Type'];
   headers = [...headers, ...propertyHeaders];
@@ -182,6 +191,7 @@ export function BrowserTable({
             {propertyHeaders.map((header) => {
               return <TableCell key={header}>{header}</TableCell>;
             })}
+            {hasSelectable && <TableCell>Actions</TableCell>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -217,6 +227,13 @@ export function BrowserTable({
                     </TableCell>
                   );
                 })}
+                {hasSelectable && entity.canBrowse && (
+                  <TableCell>
+                    <Button variant="contained" onClick={loadEntitySpec.bind(null, entity)}>
+                      Select
+                    </Button>
+                  </TableCell>
+                )}
               </TableRow>
             );
           })}

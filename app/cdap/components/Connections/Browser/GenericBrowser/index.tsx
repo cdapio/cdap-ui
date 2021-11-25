@@ -66,7 +66,7 @@ const useStyle = makeStyle(() => {
   };
 });
 
-export function GenericBrowser({ initialConnectionId }) {
+export function GenericBrowser({ initialConnectionId, onEntityChange, selectedParent }) {
   const loc = useLocation();
   const rmatch = useRouteMatch({ path: '/ns/:namespace/connections/:connectionid' });
   const queryParams = new URLSearchParams(loc.search);
@@ -83,7 +83,7 @@ export function GenericBrowser({ initialConnectionId }) {
   const [workspaceId, setWorkspaceId] = useState(null);
   const classes = useStyle();
   const { onWorkspaceCreate, onEntitySelect } = useContext(ConnectionsContext);
-
+  const isSelectMode = typeof onEntitySelect === 'function';
   const fetchEntities = async () => {
     setLoading(true);
     try {
@@ -91,7 +91,6 @@ export function GenericBrowser({ initialConnectionId }) {
         connectionid: currentConnection,
         path,
       });
-
       const newEntities = [...res.entities];
       newEntities.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -100,6 +99,9 @@ export function GenericBrowser({ initialConnectionId }) {
       setTotalCount(res.totalCount);
       setPropertyHeaders(res.propertyHeaders || []);
       setError(null);
+      if (isSelectMode && path === '/') {
+        onEntityChange(null);
+      }
     } catch (e) {
       setError(`Failed to explore connection. Error: "${e.response}"`);
       setTotalCount(0);
@@ -121,13 +123,17 @@ export function GenericBrowser({ initialConnectionId }) {
     setSearchString('');
   };
 
+  const isSelectable = (entityType: string) => {
+    return ['bucket', 'dataset', 'instance', 'database'].includes(entityType.toLowerCase());
+  };
+
   const onExplore = (entity) => {
     const { canBrowse } = entity;
 
     if (!canBrowse) {
       setLoading(true);
 
-      if (typeof onEntitySelect === 'function') {
+      if (isSelectMode) {
         loadEntitySpec(entity);
       } else {
         onCreateWorkspace(entity);
@@ -135,7 +141,9 @@ export function GenericBrowser({ initialConnectionId }) {
 
       return;
     }
-
+    if (isSelectMode && isSelectable(entity.type)) {
+      onEntityChange(entity);
+    }
     setPath(entity.path);
     setLoading(true);
     clearSearchString();
@@ -173,6 +181,12 @@ export function GenericBrowser({ initialConnectionId }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectedParent) {
+      loadEntitySpec(selectedParent);
+    }
+  }, [selectedParent]);
 
   useEffect(() => {
     if (isNilOrEmptyString(currentConnection)) {
@@ -239,6 +253,8 @@ export function GenericBrowser({ initialConnectionId }) {
           path={path}
           onExplore={onExplore}
           loading={loading}
+          isSelectMode={isSelectMode}
+          loadEntitySpec={loadEntitySpec}
         />
       </If>
       <If condition={isEmpty && !loading}>
