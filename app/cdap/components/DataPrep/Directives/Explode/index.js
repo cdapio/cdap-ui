@@ -36,6 +36,7 @@ export default class Explode extends Component {
     this.explodeUsingFilters = this.explodeUsingFilters.bind(this);
     this.preventPropagation = this.preventPropagation.bind(this);
     this.explodeByFlattening = this.explodeByFlattening.bind(this);
+    this.explodeRecordByFlattening = this.explodeRecordByFlattening.bind(this);
     this.handleUsingFilters = this.handleUsingFilters.bind(this);
   }
   componentDidMount() {
@@ -71,7 +72,7 @@ export default class Explode extends Component {
   }
 
   handleUsingFilters(delimiter) {
-    let directive = `split-to-rows ${this.props.column} ${delimiter}`;
+    const directive = `split-to-rows ${this.props.column} ${delimiter}`;
     this.execute([directive]);
   }
 
@@ -88,7 +89,12 @@ export default class Explode extends Component {
   }
 
   explodeByFlattening() {
-    let directive = `flatten ${this.props.column.toString()}`;
+    const directive = `flatten ${this.props.column.toString()}`;
+    this.execute([directive]);
+  }
+
+  explodeRecordByFlattening() {
+    const directive = `flatten-record :${this.props.column.toString()}`;
     this.execute([directive]);
   }
 
@@ -121,6 +127,11 @@ export default class Explode extends Component {
         <div className="explode-field-options">
           <div onClick={this.explodeByFlattening} className="option">
             {T.translate(`${PREFIX}.flatteningSubmenuTitle`)}
+          </div>
+        </div>
+        <div className="explode-field-options">
+          <div onClick={this.explodeRecordByFlattening} className="option">
+            {T.translate(`${PREFIX}.recordFlatteningSubmenuTitle`)}
           </div>
         </div>
       </div>

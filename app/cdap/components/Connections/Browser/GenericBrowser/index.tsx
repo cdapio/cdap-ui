@@ -35,6 +35,7 @@ import If from 'components/shared/If';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import { getApiErrorMessage } from './apiHelpers';
+import { getConnectionPath } from 'components/Connections/helper';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
@@ -227,10 +228,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
     <>
       <div className={classes.topBar}>
         <div className={classes.topBarBreadcrumb}>
-          <Breadcrumb
-            path={path}
-            baseLinkPath={`/ns/${getCurrentNamespace()}/connections/${currentConnection}?path=`}
-          />
+          <Breadcrumb path={path} baseLinkPath={getConnectionPath(currentConnection, '')} />
         </div>
         <div className={classes.topBarSearch}>
           <If condition={totalCount > 0}>

@@ -730,6 +730,7 @@ features:
         title: Explode
         filtersSubmenuTitle: Delimited text
         flatteningSubmenuTitle: Array (by flattening)
+        recordFlatteningSubmenuTitle: Record (by flattening)
       ExtractFields:
         delimitersSubmenuTitle: Using delimiters
         extractBtnLabel: Extract
@@ -2075,6 +2076,7 @@ features:
     suggestion1Part3: the page
     suggestion2: If you entered the url by hand, double check if that is correct
   MetadataHome:
+    pageTitle: "{productName} | Search"
     searchPlaceholder: Search
     searchTipsTitle: Search Tips
     searchTipsSubTitle: Search datasets by
@@ -2105,6 +2107,7 @@ features:
       description1: "to the end of the search term"
       example: "(example: user* or tags:b*)"
   MetadataSearch:
+    pageTitle: "{productName} | Search | Results"
     filters:
       metadata: Metadata
       entities: Entities
@@ -2127,6 +2130,7 @@ features:
       ascending: A → Z
       descending: Z → A
   MetadataSummary:
+    pageTitle: "{productName} | Search | {entityId} | Summary"
     loading: Loading metadata
     businessTags: Business tags
     systemTags: System tags
