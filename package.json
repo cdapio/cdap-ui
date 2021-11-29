@@ -132,6 +132,7 @@
     "main-bower-files": "2.13.3",
     "merge-stream": "2.0.0",
     "node-dir": "0.1.17",
+    "node-gyp": "^8.4.1",
     "node-sass": "6.0.1",
     "npm-run-all": "4.1.5",
     "parallel-webpack": "2.4.0",
