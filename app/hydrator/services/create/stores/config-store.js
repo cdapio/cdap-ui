@@ -621,9 +621,6 @@ class HydratorPlusPlusConfigStore {
         node.outputSchema = JSON.stringify(nodeConfig.outputSchema.schemaProperties['default-schema']);
         node.plugin.properties[node.outputSchemaProperty] = node.outputSchema;
       }
-      node.configGroups = res['configuration-groups'];
-      node.outputs = res['outputs'];
-      node.filters = res['filters'];
     };
 
     if (this.state.__ui__.nodes && this.state.__ui__.nodes.length) {
@@ -677,7 +674,6 @@ class HydratorPlusPlusConfigStore {
                     // no-op
                   }
                 });
-                this.validateState();
               });
           },
           (err) => {
@@ -882,26 +878,6 @@ class HydratorPlusPlusConfigStore {
           }
         });
       }
-    });
-    // compute field visibility so that required field validation will be done accordingly.
-    nodes.forEach((node) => {
-      let visibilityMap = {};
-      if (node.configGroups && node._backendProperties && node.plugin.properties) {
-        const filteredConfigGroups = this.HydratorPlusPlusPluginConfigFactory.dynamicFiltersUtilities.filterByCondition(
-          node.configGroups,
-          node,
-          node._backendProperties,
-          node.plugin.properties,
-        );
-        visibilityMap = filteredConfigGroups.reduce((fieldsMap, group) => {
-          group.properties.forEach((property) => {
-            fieldsMap[property.name] = property.show;
-          });
-          return fieldsMap;
-        }, {});
-        node._backendProperties.connection.required = node.plugin.properties.useConnection === 'true';
-      }
-      node.visibilityMap = visibilityMap;
     });
     errorFactory.isRequiredFieldsFilled(nodes, (err, node, unFilledRequiredFields) => {
       if (err) {
