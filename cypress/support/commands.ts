@@ -146,6 +146,10 @@ Cypress.Commands.add('select_connection', (connectionType, connectionId) => {
   cy.get(dataCy(`connection-${connectionType}-${connectionId}`)).click();
 });
 
+Cypress.Commands.add('test_connection_navigation', (connectionId, path) => {
+  cy.url().should('include', `/connections/${connectionId}?path=${path}`);
+});
+
 Cypress.Commands.add('delete_connection', (connectionType, connectionId) => {
   cy.get(dataCy(`categorized-connection-type-${connectionType}`)).click();
   cy.get(dataCy(`connection-${connectionType}-${connectionId}`))
