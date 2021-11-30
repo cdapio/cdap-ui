@@ -23,6 +23,7 @@ const systemSearchPath = '/metadata/search';
 const basePath = '/namespaces/:namespace/:entityType/:entityId';
 const tagsPath = `${basePath}/metadata/tags`;
 const propertyPath = `${basePath}/metadata/properties`;
+const programPath = '/namespaces/:namespace/apps/:appId/:programType/:programId/runs/:runId';
 
 export const MySearchApi = {
   search: apiCreator(dataSrc, 'GET', 'REQUEST', searchpath),
@@ -37,6 +38,14 @@ export const MySearchApi = {
   getUserTags: apiCreator(dataSrc, 'GET', 'REQUEST', `${tagsPath}?scope=USER&responseFormat=v6`),
   deleteTag: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${tagsPath}/:tag`),
   addTag: apiCreator(dataSrc, 'POST', 'REQUEST', tagsPath),
+  getDatasetProperties: apiCreator(dataSrc, 'GET', 'REQUEST', `${propertyPath}?&responseFormat=v6`),
   deleteEntityProperty: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${propertyPath}/:key`),
   addEntityProperty: apiCreator(dataSrc, 'POST', 'REQUEST', propertyPath),
+  getLineage: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/lineage?collapse=access&collapse=run&collapse=component`
+  ),
+  getProgramRunStatus: apiCreator(dataSrc, 'GET', 'REQUEST', programPath),
 };

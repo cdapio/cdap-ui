@@ -20,6 +20,7 @@ import Helmet from 'react-helmet';
 import MetadataHome from 'components/Metadata/Home';
 import SearchResults from 'components/Metadata/SearchResults';
 import SearchSummary from 'components/Metadata/SearchSummary';
+import Lineage from 'components/Metadata/Lineage';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
 import { useParams } from 'react-router';
@@ -62,6 +63,15 @@ const Metadata: React.FC = () => {
             checkFeatureFlag(
               <SearchSummary />,
               `/metadata/ns/${namespace}/entity/datasets/${entity}/summary?searchTerm=${query}`
+            )
+          }
+        />
+        <Route
+          path={`${basepath}/:entityType/:entityId/lineage/search/:query`}
+          render={() =>
+            checkFeatureFlag(
+              <Lineage />,
+              `/metadata/ns/${namespace}/entity/datasets/${entity}/lineage?searchTerm=${query}`
             )
           }
         />
