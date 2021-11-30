@@ -19,8 +19,8 @@ angular.module(PKG.name + '.feature.tracker')
     const reactAppUrl = {
       home: `/cdap/ns/<namespace>/metadata`,
       search: `/cdap/ns/<namespace>/metadata/search/<query>/result`,
-      summary: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/summary/search/<query>/result`,
-      lineage: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/lineage/search/<query>/result`,
+      summary: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/summary/search/<query>`,
+      lineage: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/lineage/search/<query>`,
     };
     const productName = window.CaskCommon.ThemeHelper.Theme.productName;
 

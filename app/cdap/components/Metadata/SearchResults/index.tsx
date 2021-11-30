@@ -30,6 +30,7 @@ import PaginationWithTitle from 'components/shared/PaginationWithTitle';
 import Helmet from 'react-helmet';
 import { useParams } from 'react-router';
 import { Theme } from 'services/ThemeHelper';
+import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
 import {
   parseResult,
@@ -226,7 +227,7 @@ const SearchResults: React.FC = () => {
   }
 
   function onSearch(searchQuery: string) {
-    window.location.href = `/ns/${getCurrentNamespace()}/metadata/search/${searchQuery}/result`;
+    window.location.href = getMetadataPageUrl('search', { query: searchQuery });
   }
 
   const page = getResultCount(currentPage, searchResults.length, PAGE_SIZE);
