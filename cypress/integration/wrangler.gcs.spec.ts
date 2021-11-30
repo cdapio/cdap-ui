@@ -61,7 +61,7 @@ describe('Wrangler GCS tests', () => {
 
   it('Should create GCS connection', () => {
     cy.create_gcp_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
-    cy.select_connection(GCS_CONNECTION_TYPE, DEFAULT_GCS_CONNECTION_NAME);
+    cy.test_connection_navigation(DEFAULT_GCS_CONNECTION_NAME, '/');
   });
 
   it('Should show proper error message when trying to create existing connection', () => {

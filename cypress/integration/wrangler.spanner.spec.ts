@@ -58,7 +58,7 @@ describe('Wrangler SPANNER tests', () => {
 
   it('Should create SPANNER connection', () => {
     cy.create_gcp_connection(SPANNER_CONNECTION_TYPE, DEFAULT_SPANNER_CONNECTION_NAME);
-    cy.select_connection(SPANNER_CONNECTION_TYPE, DEFAULT_SPANNER_CONNECTION_NAME);
+    cy.test_connection_navigation(DEFAULT_SPANNER_CONNECTION_NAME, '/');
   });
 
   it('Should show proper error message when trying to create existing connection', () => {

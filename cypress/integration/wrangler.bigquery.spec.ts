@@ -63,7 +63,7 @@ describe('Wrangler BigQuery tests', () => {
 
   it('Should create BigQuery connection', () => {
     cy.create_gcp_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
-    cy.select_connection(BIGQUERY_CONNECTION_TYPE, DEFAULT_BIGQUERY_CONNECTION_NAME);
+    cy.test_connection_navigation(DEFAULT_BIGQUERY_CONNECTION_NAME, '/');
   });
 
   it('Should show proper error message when trying to create existing connection', () => {

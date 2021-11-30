@@ -170,6 +170,11 @@ declare global {
       select_connection: (connectionType: string, connectionName: string) => void;
 
       /**
+       * Test connection path in the Wrangler/connection management UI
+       */
+      test_connection_navigation: (connectionId: string, path: string) => void;
+
+      /**
        * Delete a connection in the Wrangler/connection management UI
        */
       delete_connection: (connectionType: string, connectionName: string) => void;
