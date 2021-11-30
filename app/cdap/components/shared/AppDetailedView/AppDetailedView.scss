@@ -16,7 +16,7 @@
 
 @import "../../../styles/variables.scss";
 @import "../../DatasetDetailedView/DetailedViewStyling.scss";
- 
+
 .app-detailed-view {
   height: calc(100vh - (#{$height-of-footer} + #{$height-of-header}));
   background: rgba(238, 238, 238, 1);
