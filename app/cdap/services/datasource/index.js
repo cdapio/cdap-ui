@@ -19,7 +19,7 @@ import uuidV4 from 'uuid/v4';
 import ee from 'event-emitter';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/dom/ajax';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/fromEvent';
@@ -32,6 +32,7 @@ import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
+import {map} from 'rxjs/operators';
 import WindowManager, { WINDOW_ON_BLUR, WINDOW_ON_FOCUS } from 'services/WindowManager';
 import { objectQuery } from 'services/helpers';
 import ifvisible from 'ifvisible.js';
@@ -48,6 +49,7 @@ export default class Datasource {
     this.eventEmitter = ee(ee);
     let socketData = Socket.getObservable();
     this.bindings = {};
+    this.genericResponseHandlers = genericResponseHandlers;
     this.socketSubscription = socketData.subscribe((data) => {
       let hash = data.resource.id;
       if (!this.bindings[hash]) {
@@ -150,6 +152,47 @@ export default class Datasource {
     });
   }
 
+  handleResponse(ajaxResponse) {
+    console.log(ajaxResponse);
+    //const data = JSON.parse(resp);
+
+    // TODO We don't seem to be using genericResponseHandlers at all
+    // Does this need to be updated?
+    //genericResponseHandlers.forEach((handler) => handler(data));
+    const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
+    this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+    if (ajaxResponse.status > 299/* || data.warning*/) {
+      /**
+       * There is an issue here. When backend goes down we stop all the poll
+       * and inspite of stopping all polling calls and unsubscribing all subscribers
+       * we still get the rx.error call which tries to set the observers length to 0
+       * and errors out. This doesn't harm us today as when system comes up we refresh
+       * the UI and everything loads.
+       *
+       * This is being wrapped in a try catch block in case the subscriber do not define
+       * an error callback. Without this, the error will bubble up as an uncaught error
+       * and terminate the socketData subscriber.
+       */
+      /*try {
+        this.bindings[hash].rx.error({
+          statusCode: data.statusCode,
+          response: data.response || data.body || data.error,
+        });
+      } catch (e) {
+        console.groupCollapsed('Error: ' + data.resource.url);
+        console.log('Resource', data.resource);
+        console.log('Error', e);
+        console.groupEnd();
+      }*/
+      throw {
+        statusCode: ajaxResponse.status,
+        response: ajaxResponse.response,
+      }
+    } else {
+      return ajaxResponse.response;
+    }
+  }
+
   request(resource = {}) {
     const excludeFromHealthCheck = !!resource.excludeFromHealthCheck;
     let generatedResource = {
@@ -160,7 +203,7 @@ export default class Datasource {
     };
 
     if (resource.body) {
-      generatedResource.body = resource.body;
+      generatedResource.body = JSON.stringify(resource.body);
     }
     if (resource.data) {
       generatedResource.body = resource.data;
@@ -179,7 +222,8 @@ export default class Datasource {
     if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
       resource.url = `/${apiVersion}${resource.url}`;
     }
-    generatedResource.url = this.buildUrl(resource.url, resource.params);
+    // TODO Make URL construction cleaner
+    generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
 
     if (resource.requestOrigin) {
       generatedResource.requestOrigin = resource.requestOrigin;
@@ -201,9 +245,11 @@ export default class Datasource {
       };
     }
 
-    this.socketSend('request', generatedResource);
+    //this.socketSend('request', generatedResource);
 
-    return subject;
+    //return subject;
+
+    return Observable.ajax(generatedResource).pipe(map((resp) => this.handleResponse(resp)));
   }
 
   poll(resource = {}) {
