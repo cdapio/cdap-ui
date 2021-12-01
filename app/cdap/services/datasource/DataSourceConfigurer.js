@@ -13,13 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import Datasource from 'services/datasource';
+import DataSourceWebsockets from 'services/datasource/DataSourceWebsockets';
+import DataSourceHttp from 'services/datasource/DataSourceHttp';
 import RedirectToLogin from 'services/redirect-to-login';
+import { objectQuery } from 'services/helpers';
 
-let DatasourceConfigurer = {
+export function isHttpEnabled() {
+  const featureFlags = objectQuery(window, 'CDAP_CONFIG', 'featureFlags');
+  return featureFlags && featureFlags['network.client.useHttp'] === 'true';
+}
+
+const DatasourceConfigurer = {
   getInstance(handlers = []) {
     if (Array.isArray(handlers)) {
-      return new Datasource([...handlers, RedirectToLogin]);
+      let dataSource;
+      if (isHttpEnabled()) {
+        dataSource = new DataSourceHttp([...handlers, RedirectToLogin]);
+      } else {
+        dataSource = new DataSourceWebsockets(([...handlers, RedirectToLogin]));
+      }
+      return dataSource;
     } else {
       console.trace();
       throw "'handlers' for Datasource should be an array";

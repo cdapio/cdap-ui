@@ -23,16 +23,12 @@ import Button from '@material-ui/core/Button';
 import ee from 'event-emitter';
 import { WINDOW_ON_FOCUS, WINDOW_ON_BLUR } from 'services/WindowManager';
 import { getExperimentValue, isExperimentEnabled, ONE_HOUR_SECONDS } from 'services/helpers';
-import DataSource from 'services/datasource';
+import { IDataSource } from 'services/datasource/IDataSource';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
-
-interface IHealthCheckBindings {
-  [key: string]: number | null;
-}
 
 interface ISystemDelayProps extends WithStyles<StyleRules> {
   showDelay: boolean;
-  activeDataSources: DataSource[];
+  activeDataSources: IDataSource[];
 }
 
 interface ISystemDelayState {
@@ -107,8 +103,8 @@ class SystemServicesDelayView extends React.Component<ISystemDelayProps> {
       ? parseInt(delayedTimeFromExperiment, 10) * 1000
       : DEFAULT_DELAY_TIME;
     const currentTime = Date.now();
-    const hasDelayedBinding = this.props.activeDataSources.some((dataSource: DataSource) => {
-      const bindings = dataSource.getBindingsForHealthCheck() as IHealthCheckBindings;
+    const hasDelayedBinding = this.props.activeDataSources.some((dataSource: IDataSource) => {
+      const bindings = dataSource.getBindingsForHealthCheck();
       return Object.keys(bindings).some((id) => {
         const requestTime = bindings[id];
         return requestTime && currentTime - requestTime > SERVICES_DELAYED_TIME;

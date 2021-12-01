@@ -18,10 +18,10 @@ import { combineReducers, createStore, Store as InterfaceStore } from 'redux';
 import SystemDelayActions from './SystemDelayActions';
 import { composeEnhancers } from 'services/helpers';
 import { IAction } from 'services/redux-helpers';
-import DataSource from 'services/datasource';
+import { IDataSource } from 'services/datasource/IDataSource';
 
 interface ISystemDelayStoreState {
-  activeDataSources: DataSource[];
+  activeDataSources: IDataSource[];
   showDelay: boolean;
 }
 
