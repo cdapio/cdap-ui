@@ -110,6 +110,7 @@ export default class HostPortEditor extends Component {
     if (this.sub) {
       this.sub();
     }
+    
     HostPortStore.dispatch({
       type: HostPortActions.onReset,
     });
