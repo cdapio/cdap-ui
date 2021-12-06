@@ -22,7 +22,8 @@ let countUnFilledRequiredFields = (node) => {
   var requiredFieldCount = 0;
   if (typeof node._backendProperties === 'object' && Object.keys(node._backendProperties).length) {
     for (let key in node._backendProperties) {
-      if (node._backendProperties.hasOwnProperty(key) && node._backendProperties[key].required) {
+      const isVisible = !node.visibilityMap || !node.visibilityMap.hasOwnProperty(key) || node.visibilityMap[key];
+      if (node._backendProperties.hasOwnProperty(key) && node._backendProperties[key].required && isVisible) {
         if (!node.plugin.properties || !node.plugin.properties[key]) {
           requiredFieldCount++;
         }
