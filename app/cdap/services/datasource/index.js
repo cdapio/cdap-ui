@@ -39,6 +39,9 @@ import ifvisible from 'ifvisible.js';
 import SystemDelayStore from 'services/SystemDelayStore';
 import SystemDelayActions from 'services/SystemDelayStore/SystemDelayActions';
 import globalEvents from 'services/global-events';
+import Cookies from 'universal-cookie';
+
+const cookie = new Cookies();
 
 const CDAP_API_VERSION = 'v3';
 // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
@@ -49,6 +52,7 @@ export default class Datasource {
     this.eventEmitter = ee(ee);
     let socketData = Socket.getObservable();
     this.bindings = {};
+    this.polling = {};
     this.genericResponseHandlers = genericResponseHandlers;
     this.socketSubscription = socketData.subscribe((data) => {
       let hash = data.resource.id;
@@ -153,7 +157,7 @@ export default class Datasource {
   }
 
   handleResponse(ajaxResponse) {
-    console.log(ajaxResponse);
+    //console.log(ajaxResponse);
     //const data = JSON.parse(resp);
 
     // TODO We don't seem to be using genericResponseHandlers at all
@@ -193,6 +197,46 @@ export default class Datasource {
     }
   }
 
+  createResponseHandler(bindingInfo) {
+    return (ajaxResponse) => {
+      const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
+      this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+      if (ajaxResponse.status > 299/* || data.warning*/) {
+        /**
+         * There is an issue here. When backend goes down we stop all the poll
+         * and inspite of stopping all polling calls and unsubscribing all subscribers
+         * we still get the rx.error call which tries to set the observers length to 0
+         * and errors out. This doesn't harm us today as when system comes up we refresh
+         * the UI and everything loads.
+         *
+         * This is being wrapped in a try catch block in case the subscriber do not define
+         * an error callback. Without this, the error will bubble up as an uncaught error
+         * and terminate the socketData subscriber.
+         */
+        try {
+          bindingInfo.rx.error({
+            statusCode: data.statusCode,
+            response: data.response || data.body || data.error,
+          });
+        } catch (e) {
+          console.groupCollapsed('Error: ' + data.resource.url);
+          console.log('Resource', data.resource);
+          console.log('Error', e);
+          console.groupEnd();
+        }
+      } else {
+        bindingInfo.rx.next(ajaxResponse.response);
+
+        if (bindingInfo.type === 'POLL') {
+          this.startClientPoll(bindingInfo.resource.id);
+        } else {
+          bindingInfo.rx.complete();
+          bindingInfo.rx.unsubscribe();
+        }
+      }
+    }
+  }
+
   request(resource = {}) {
     const excludeFromHealthCheck = !!resource.excludeFromHealthCheck;
     let generatedResource = {
@@ -210,7 +254,10 @@ export default class Datasource {
     }
     if (resource.headers) {
       generatedResource.headers = resource.headers;
+    } else {
+      generatedResource.headers = {};
     }
+
     if (resource.contentType) {
       generatedResource.headers['Content-Type'] = resource.contentType;
     }
@@ -222,7 +269,7 @@ export default class Datasource {
     if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
       resource.url = `/${apiVersion}${resource.url}`;
     }
-    // TODO Make URL construction cleaner
+    // TODO Make URL construction cleaner - move to buildUrl
     generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
 
     if (resource.requestOrigin) {
@@ -231,25 +278,43 @@ export default class Datasource {
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
 
+    if (window.CDAP_CONFIG.securityEnabled) {
+      let token = cookie.get('CDAP_Auth_Token');
+      if (!isNil(token)) {
+        generatedResource.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
     let subject = new Subject();
 
     // We are calling the same request from the polling function as well.
     // It is essentially requests every 10 seconds or so. So for those calls
     // the id is already added to the bindings.
-    if (!this.bindings[generatedResource.id]) {
+    /*if (!this.bindings[generatedResource.id]) {
       this.bindings[generatedResource.id] = {
         rx: subject,
         resource: generatedResource,
         type: 'REQUEST',
         excludeFromHealthCheck,
       };
-    }
+    }*/
+    const bindingInfo = {
+      rx: subject,
+      resource: generatedResource,
+      type: 'REQUEST',
+      excludeFromHealthCheck,
+    };
 
     //this.socketSend('request', generatedResource);
 
     //return subject;
 
-    return Observable.ajax(generatedResource).pipe(map((resp) => this.handleResponse(resp)));
+    //return Observable.ajax(generatedResource).pipe(map((resp) => this.handleResponse(resp)));
+
+    const responseHandler = this.createResponseHandler(bindingInfo);
+    // TODO Handle network errors
+    Observable.ajax(generatedResource).subscribe(responseHandler);
+    return subject;
   }
 
   poll(resource = {}) {
@@ -266,13 +331,15 @@ export default class Datasource {
     };
 
     if (resource.body) {
-      generatedResource.body = resource.body;
+      generatedResource.body = JSON.stringify(resource.body);
     }
     if (resource.data) {
       generatedResource.body = resource.data;
     }
     if (resource.headers) {
       generatedResource.headers = resource.headers;
+    } else {
+      generatedResource.headers = {};
     }
 
     if (!resource.url) {
@@ -280,21 +347,29 @@ export default class Datasource {
       delete resource._cdapPath;
     }
 
-    let apiVersion = resource.apiVersion || CDAP_API_VERSION;
+    const apiVersion = resource.apiVersion || CDAP_API_VERSION;
     if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
       resource.url = `/${apiVersion}${resource.url}`;
     }
 
-    generatedResource.url = this.buildUrl(resource.url, resource.params);
+    generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
+
+    if (window.CDAP_CONFIG.securityEnabled) {
+      let token = cookie.get('CDAP_Auth_Token');
+      if (!isNil(token)) {
+        generatedResource.headers.Authorization = `Bearer ${token}`;
+      }
+    }
 
     if (resource.requestOrigin) {
       generatedResource.requestOrigin = resource.requestOrigin;
     } else {
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
-    let subject = new Subject();
+    const subject = new Subject();
 
-    let observable = Observable.create((obs) => {
+    // Wrap subject in an Observable for teardown
+    const observable = Observable.create((obs) => {
       subject.subscribe(
         (data) => {
           obs.next(data);
@@ -317,27 +392,38 @@ export default class Datasource {
       };
     });
 
-    this.bindings[generatedResource.id] = {
+    const bindingInfo = {
       rx: subject,
       resource: generatedResource,
       type: 'POLL',
       excludeFromHealthCheck,
     };
+    this.polling[generatedResource.id] = bindingInfo;
 
-    this.socketSend('request', generatedResource);
+    console.log(`Polling requested for ${generatedResource.id} URL ${generatedResource.url}`);
+
+    //this.socketSend('request', generatedResource);
+    const responseHandler = this.createResponseHandler(bindingInfo);
+    Observable.ajax(generatedResource).subscribe(responseHandler);
 
     return observable;
   }
 
   startClientPoll = (resourceId) => {
-    const interval = objectQuery(this.bindings, resourceId, 'resource', 'intervalTime' );
+    const interval = objectQuery(this.polling, resourceId, 'resource', 'intervalTime' );
+    console.log(`Setting timeout for ${resourceId} with interval ${interval}`);
     const intervalTimer = setTimeout(() => {
-      const resource = objectQuery(this.bindings, resourceId, 'resource');
+      const bindingInfo = this.polling[resourceId];
+      //const resource = objectQuery(this.bindings, resourceId, 'resource');
+      const resource = objectQuery(bindingInfo, 'resource');
       if (!resource || !WindowManager.isWindowActive()) {
         clearTimeout(intervalTimer);
         return;
       }
-      this.socketSend('request', resource);
+      //this.socketSend('request', resource);
+      console.log(`Polling ${resourceId} URL ${bindingInfo.resource.url}`);
+      const responseHandler = this.createResponseHandler(bindingInfo);
+      Observable.ajax(resource).subscribe(responseHandler);
     }, interval);
     return intervalTimer;
   }
@@ -350,27 +436,27 @@ export default class Datasource {
       id = resourceId;
     }
 
-    if (this.bindings[id]) {
-      clearTimeout(this.bindings[id].resource.interval);
-      this.bindings[id].rx.unsubscribe();
-      delete this.bindings[id];
+    if (this.polling[id]) {
+      clearTimeout(this.polling[id].resource.interval);
+      this.polling[id].rx.unsubscribe();
+      delete this.polling[id];
     }
   }
 
   pausePoll = () => {
-    Object.keys(this.bindings)
-      .filter(subscriptionID => this.bindings[subscriptionID].type === 'POLL')
+    Object.keys(this.polling)
+      .filter(subscriptionID => this.polling[subscriptionID].type === 'POLL')
       .forEach(subscriptionID => {
-        clearTimeout(this.bindings[subscriptionID].resource.interval);
-        this.bindings[subscriptionID].resource.interval = null;
+        clearTimeout(this.polling[subscriptionID].resource.interval);
+        this.polling[subscriptionID].resource.interval = null;
       });
   }
 
   resumePoll = () => {
-    Object.keys(this.bindings)
-      .filter(subscriptionID => this.bindings[subscriptionID].type === 'POLL')
+    Object.keys(this.polling)
+      .filter(subscriptionID => this.polling[subscriptionID].type === 'POLL')
       .forEach(subscriptionID => {
-        this.bindings[subscriptionID].resource.interval = this.startClientPoll(subscriptionID);
+        this.polling[subscriptionID].resource.interval = this.startClientPoll(subscriptionID);
       });
   }
 
@@ -378,12 +464,12 @@ export default class Datasource {
     this.socketSubscription.unsubscribe();
 
     // stopping existing polls
-    for (let key in this.bindings) {
-      if (this.bindings[key].type === 'POLL') {
-        this.stopPoll(this.bindings[key].resource.id);
+    for (let key in this.polling) {
+      if (this.polling[key].type === 'POLL') {
+        this.stopPoll(this.polling[key].resource.id);
       }
     }
-    this.bindings = {};
+    this.polling = {};
   }
 
   buildUrl(url, params = {}) {
