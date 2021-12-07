@@ -105,6 +105,9 @@ function DynamicAnchor({
     if (!isOpen) {
       return;
     }
+    if (!confirm('Discard comment?')) {
+      return;
+    }
     if (typeof onClose === 'function') {
       onClose();
     }
