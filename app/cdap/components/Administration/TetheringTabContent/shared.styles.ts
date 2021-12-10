@@ -21,7 +21,7 @@ export const BodyContainer = styled.div`
 `;
 
 export const NoDataText = styled.span`
-  margin-top: 15px;
+  margin: 15px 0;
   font-weight: bold;
   font-size: 1rem;
 `;
