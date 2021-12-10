@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2018 Cask Data, Inc.
+ * Copyright © 2018 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -12,10 +12,20 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-.administration {
-  height: 100%;
-  padding: 20px 20px 0 20px;
-  overflow: auto;
-}
+import React from 'react';
+import styled from 'styled-components';
+
+const TableContainer = styled.div``;
+
+const ConnectionsTable = (): JSX.Element => {
+  return (
+    <TableContainer>
+      {/* TODO: Add table here*/}
+      <span> Table Goes Here </span>
+    </TableContainer>
+  );
+};
+
+export default ConnectionsTable;
