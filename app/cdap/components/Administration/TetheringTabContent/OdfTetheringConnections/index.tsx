@@ -26,7 +26,7 @@ const PREFIX = 'features.Administration.Tethering';
 const OdfTetheringContainer = styled.div``;
 
 const NewRequestBtn = styled(Button)`
-  margin: 5px 0 20px 30px;
+  margin: 0 0 20px 30px;
   background-color: ${(props) => props.theme.palette.white[50]};
   color: ${(props) => props.theme.palette.primary.main};
   height: 30px;

@@ -52,7 +52,7 @@
     "reload-system-artifacts": true,
     "cdc": true,
     "allow-force-dynamic-execution": false,
-    "tethering": true,
-    "odf": true
+    "tethering": false,
+    "odf": false
   }
 }

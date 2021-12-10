@@ -15,21 +15,23 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import T from 'i18n-react';
-import Helmet from 'react-helmet';
-import { Theme } from 'services/ThemeHelper';
-import If from 'components/shared/If';
-import classnames from 'classnames';
+import NewRequests from './NewRequests';
+import Connections from './Connections';
 
 const PREFIX = 'features.Administration';
 const I18NPREFIX = `${PREFIX}.Tethering`;
-// require('./CdfTetheringConnections.scss');
 
-interface ICdfProps {}
+const CdfTetheringContainer = styled.div``;
 
-const CdfTetheringConnections = ({ propsType }: ICdfProps): JSX.Element => {
-  return <span> CDF Tethering Connections</span>;
+const CdfTetheringConnections = (): JSX.Element => {
+  return (
+    <CdfTetheringContainer>
+      <NewRequests />
+      <Connections />
+    </CdfTetheringContainer>
+  );
 };
 
 export default CdfTetheringConnections;
