@@ -14,35 +14,22 @@
  * the License.
  */
 
-@import '../../../styles/variables.scss';
-$grey-theme-color: $grey-08;
+import React from 'react';
+import PropTypes from 'prop-types';
+import T from 'i18n-react';
+import Helmet from 'react-helmet';
+import { Theme } from 'services/ThemeHelper';
+import If from 'components/shared/If';
+import classnames from 'classnames';
 
-.admin-management-tab-content {
-  margin: 10px;
-  .services-details {
-    display: flex;
-    width: 100%;
-    background: $grey-theme-color;
-    padding: 10px;
+const PREFIX = 'features.Administration';
+const I18NPREFIX = `${PREFIX}.Tethering`;
+// require('./CdfTetheringConnections.scss');
 
-    > div {
-      width: calc(50% - 20px);
-      margin: 10px;
-    }
-    .services-table-section {
-      &.full-width {
-        width: 100%;
+interface ICdfProps {}
 
-        .services-table {
-          height: inherit;
-        }
-      }
+const CdfTetheringConnections = ({ propsType }: ICdfProps): JSX.Element => {
+  return <span> CDF Tethering Connections</span>;
+};
 
-      strong {
-        font-size: 18px;
-        display: block;
-        color: $grey-01;
-      }
-    }
-  }
-}
+export default CdfTetheringConnections;

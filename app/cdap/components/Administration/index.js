@@ -20,6 +20,7 @@ import { MyServiceProviderApi } from 'api/serviceproviders';
 import { humanReadableNumber, objectQuery } from 'services/helpers';
 import AdminManagementTabContent from 'components/Administration/AdminManagementTabContent';
 import AdminConfigTabContent from 'components/Administration/AdminConfigTabContent';
+import TetheringTabContent from 'components/Administration/TetheringTabContent';
 import AdminTabSwitch from 'components/Administration/AdminTabSwitch';
 import { Route, Switch } from 'react-router-dom';
 
@@ -121,6 +122,13 @@ class Administration extends Component {
             path="/administration/configuration"
             render={() => {
               return <AdminConfigTabContent accordionToExpand={this.state.accordionToExpand} />;
+            }}
+          />
+          <Route
+            exact
+            path="/administration/tethering"
+            render={() => {
+              return <TetheringTabContent />;
             }}
           />
         </Switch>

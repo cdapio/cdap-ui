@@ -180,6 +180,16 @@ features:
       pageTitle: '{productName} | Administration | Configuration'
     Management:
       pageTitle: '{productName} | Administration | Management'
+    Tethering:
+      PendingRequests:
+        pendingRequestHeader: Pending requests
+        pendingRequestHistory: VIEW REQUEST HISTORY
+        noPendingRequests: There are no requests pending
+      Connections:
+        connectionsHeader: Connections
+        noConnections: There are no connections
+      createRequest: CREATE NEW REQUEST  
+      pageTitle: '{productName} | Administration | Tethering Connections'
     Services:
       title: Services
       headers:
@@ -205,6 +215,7 @@ features:
     Tabs:
       config: Configuration
       management: Management
+      tethering: Tethering Connections
     Top:
       primaryLabelOne: DAY
       primaryLabelTwo: HR

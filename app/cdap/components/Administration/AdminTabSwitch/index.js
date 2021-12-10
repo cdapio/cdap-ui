@@ -24,9 +24,16 @@ import MyCDAPVersionApi from 'api/version';
 import isNil from 'lodash/isNil';
 import classnames from 'classnames';
 import T from 'i18n-react';
+import { Theme } from 'services/ThemeHelper';
+import If from 'components/shared/If';
 require('./AdminTabSwitch.scss');
 
 const PREFIX = 'features.Administration';
+const TAB_LABELS = {
+  MANAGEMENT: 'management',
+  CONFIGURATION: 'configuration',
+  TETHERING: 'tethering',
+};
 
 export default class AdminTabSwitch extends Component {
   state = {
@@ -57,16 +64,24 @@ export default class AdminTabSwitch extends Component {
     });
   }
 
-  renderTabTitle(isManagement = true) {
+  renderTabTitle(activeTab) {
+    const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
+
     return (
       <span className="tab-title">
-        <h5 className={classnames({ active: isManagement })}>
+        <h5 className={classnames({ active: activeTab === MANAGEMENT })}>
           <Link to="/administration">{T.translate(`${PREFIX}.Tabs.management`)}</Link>
         </h5>
         <span className="divider"> | </span>
-        <h5 className={classnames({ active: !isManagement })}>
+        <h5 className={classnames({ active: activeTab === CONFIGURATION })}>
           <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
         </h5>
+        <If condition={Theme.tethering === true}>
+          <span className="divider"> | </span>
+          <h5 className={classnames({ active: activeTab === TETHERING })}>
+            <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
+          </h5>
+        </If>
       </span>
     );
   }
@@ -91,6 +106,8 @@ export default class AdminTabSwitch extends Component {
   }
 
   render() {
+    const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
+
     return (
       <Switch>
         <Route
@@ -99,7 +116,7 @@ export default class AdminTabSwitch extends Component {
           render={() => {
             return (
               <div className="tab-title-and-version">
-                {this.renderTabTitle()}
+                {this.renderTabTitle(MANAGEMENT)}
                 {this.renderUptimeVersion()}
               </div>
             );
@@ -109,7 +126,16 @@ export default class AdminTabSwitch extends Component {
           exact
           path="/administration/configuration"
           render={() => {
-            return <div className="tab-title-and-version">{this.renderTabTitle(false)}</div>;
+            return (
+              <div className="tab-title-and-version">{this.renderTabTitle(CONFIGURATION)}</div>
+            );
+          }}
+        />
+        <Route
+          exact
+          path="/administration/tethering"
+          render={() => {
+            return <div className="tab-title-and-version">{this.renderTabTitle(TETHERING)}</div>;
           }}
         />
       </Switch>
