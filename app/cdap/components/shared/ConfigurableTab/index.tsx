@@ -51,6 +51,7 @@ interface IConfigurableTabProps {
   tabConfig: ITabConfigObj;
   tabClassName?: string;
   className?: string;
+  renderAllTabs?: boolean;
 }
 export default class ConfigurableTab extends Component<IConfigurableTabProps> {
   public componentWillReceiveProps(nextProps) {
@@ -80,6 +81,27 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
     return this.state.activeTab === tabId;
   };
 
+  public renderTab = (tab: ITabConfig, isActive: boolean) => {
+    return (
+      <div
+        className={classnames('tab-content', {
+          [tab.contentClassName || '']: true,
+          active: isActive,
+        })}
+        data-cy={`tab-content-${tab.name}`}
+        key={tab.name}
+      >
+        <div
+          className={classnames(`tab-pane ${tab.paneClassName ? tab.paneClassName : ''}`, {
+            active: isActive,
+          })}
+        >
+          {tab.content}
+        </div>
+      </div>
+    );
+  };
+
   public render() {
     let tabs = [];
     this.state.tabs.forEach((tab) => {
@@ -89,7 +111,6 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
       }
       tabs.push(tab);
     });
-    const activeTab = tabs.find((tab) => this.state.activeTab === tab.id);
     return (
       <div className={classnames('cask-configurable-tab', this.props.className)}>
         <Tabs layout={this.state.layout} className={this.props.tabClassName}>
@@ -119,20 +140,13 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
               );
             })}
           </TabHeaders>
-          <div
-            className={classnames('tab-content active', {
-              [activeTab.contentClassName || '']: true,
-            })}
-            data-cy={`tab-content-${activeTab.name}`}
-          >
-            <div
-              className={`tab-pane active ${
-                activeTab.paneClassName ? activeTab.paneClassName : ''
-              }`}
-            >
-              {activeTab.content}
-            </div>
-          </div>
+          {this.state.tabs.map((tab) => {
+            if (this.state.activeTab === tab.id) {
+              return this.renderTab(tab, true);
+            } else if (this.props.renderAllTabs) {
+              return this.renderTab(tab, false);
+            }
+          })}
         </Tabs>
       </div>
     );

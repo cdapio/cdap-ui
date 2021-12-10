@@ -98,5 +98,5 @@ export function ConnectionConfiguration({
     ],
     layout: TabLayoutEnum.HORIZONTAL,
   };
-  return <ConfigurableTab tabConfig={tabConfig} />;
+  return <ConfigurableTab tabConfig={tabConfig} renderAllTabs={true} />;
 }
