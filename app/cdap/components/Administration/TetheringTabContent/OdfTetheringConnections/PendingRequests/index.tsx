@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,8 +24,6 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../s
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
 
-const PendingRequestsContainer = styled.div``;
-
 const PendingRequestsHeader = styled(HeaderContainer)`
   background-color: ${(props) => props.theme.palette.grey[700]};
 `;
@@ -35,13 +33,11 @@ const PendingRequestHistory = styled(Link)`
   font-size: 1rem;
 `;
 
-interface IPendingReqsProps {}
-
 const PendingRequests = (): JSX.Element => {
   const [pendingRequests, setPendingRequests] = useState([]);
 
   return (
-    <PendingRequestsContainer>
+    <>
       <PendingRequestsHeader>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.pendingRequestHeader`)}</HeaderTitle>
         <PendingRequestHistory to="/administration/tethering/newRequest">
@@ -55,7 +51,7 @@ const PendingRequests = (): JSX.Element => {
           <NoDataText>{T.translate(`${I18NPREFIX}.noPendingRequests`)}</NoDataText>
         )}
       </BodyContainer>
-    </PendingRequestsContainer>
+    </>
   );
 };
 

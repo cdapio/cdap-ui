@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,8 +22,6 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.NewRequests`;
 
-const NewRequestsContainer = styled.div``;
-
 const NewRequestsHeader = styled(HeaderContainer)`
   background-color: ${(props) => props.theme.palette.grey[700]};
 `;
@@ -32,7 +30,7 @@ const NewRequests = (): JSX.Element => {
   const [NewRequests, setNewRequests] = useState([]);
 
   return (
-    <NewRequestsContainer>
+    <>
       <NewRequestsHeader>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.newRequestsHeader`)}</HeaderTitle>
       </NewRequestsHeader>
@@ -43,7 +41,7 @@ const NewRequests = (): JSX.Element => {
           <NoDataText>{T.translate(`${I18NPREFIX}.noNewRequests`)}</NoDataText>
         )}
       </BodyContainer>
-    </NewRequestsContainer>
+    </>
   );
 };
 

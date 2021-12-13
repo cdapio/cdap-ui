@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,22 +15,15 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
-import T from 'i18n-react';
 import NewRequests from './NewRequests';
 import Connections from './Connections';
 
-const PREFIX = 'features.Administration';
-const I18NPREFIX = `${PREFIX}.Tethering`;
-
-const CdfTetheringContainer = styled.div``;
-
 const CdfTetheringConnections = (): JSX.Element => {
   return (
-    <CdfTetheringContainer>
+    <>
       <NewRequests />
       <Connections />
-    </CdfTetheringContainer>
+    </>
   );
 };
 

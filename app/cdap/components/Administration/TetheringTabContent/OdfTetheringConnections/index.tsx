@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,8 +23,6 @@ import Connections from './Connections';
 
 const PREFIX = 'features.Administration.Tethering';
 
-const OdfTetheringContainer = styled.div``;
-
 const NewRequestBtn = styled(Button)`
   margin: 0 0 20px 30px;
   background-color: ${(props) => props.theme.palette.white[50]};
@@ -45,13 +43,13 @@ const OdfTetheringConnections = (): JSX.Element => {
   };
 
   return (
-    <OdfTetheringContainer>
+    <>
       <PendingRequests />
       <NewRequestBtn variant="contained" onClick={handleCreateButtonClick}>
         {T.translate(`${PREFIX}.createRequest`)}
       </NewRequestBtn>
       <Connections />
-    </OdfTetheringContainer>
+    </>
   );
 };
 
