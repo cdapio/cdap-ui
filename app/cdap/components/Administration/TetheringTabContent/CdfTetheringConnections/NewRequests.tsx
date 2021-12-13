@@ -27,7 +27,7 @@ const NewRequestsHeader = styled(HeaderContainer)`
 `;
 
 const NewRequests = (): JSX.Element => {
-  const [NewRequests, setNewRequests] = useState([]);
+  const [newRequests, setNewRequests] = useState([]);
 
   return (
     <>
@@ -35,7 +35,7 @@ const NewRequests = (): JSX.Element => {
         <HeaderTitle>{T.translate(`${I18NPREFIX}.newRequestsHeader`)}</HeaderTitle>
       </NewRequestsHeader>
       <BodyContainer>
-        {NewRequests.length > 0 ? (
+        {newRequests.length > 0 ? (
           <span>NewRequests Table goes here</span>
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noNewRequests`)}</NoDataText>

@@ -27,7 +27,7 @@ const ConnectionsHeader = styled(HeaderContainer)`
 `;
 
 const Connections = (): JSX.Element => {
-  const [Connections, setConnections] = useState([]);
+  const [connections, setConnections] = useState([]);
 
   return (
     <>
@@ -35,7 +35,7 @@ const Connections = (): JSX.Element => {
         <HeaderTitle>{T.translate(`${I18NPREFIX}.connectionsHeader`)}</HeaderTitle>
       </ConnectionsHeader>
       <BodyContainer>
-        {Connections.length > 0 ? (
+        {connections.length > 0 ? (
           <span>Connections Table goes here</span>
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noConnections`)}</NoDataText>
