@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2021 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -35,21 +35,16 @@ const AdminTetheringTabContainer = styled.div`
 
 const AdminTetheringTabContent = (): JSX.Element => {
   return (
-    <React.Fragment>
+    <>
       <Helmet
         title={T.translate(`${I18NPREFIX}.pageTitle`, {
           productName: Theme.productName,
         })}
       />
       <AdminTetheringTabContainer>
-        <If condition={Theme.odf === true}>
-          <OdfTetheringConnections />
-        </If>
-        <If condition={Theme.odf === false}>
-          <CdfTetheringConnections />
-        </If>
+        {Theme.odf === true ? <OdfTetheringConnections /> : <CdfTetheringConnections />}
       </AdminTetheringTabContainer>
-    </React.Fragment>
+    </>
   );
 };
 

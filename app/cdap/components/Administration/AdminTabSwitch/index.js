@@ -25,7 +25,6 @@ import isNil from 'lodash/isNil';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/shared/If';
 require('./AdminTabSwitch.scss');
 
 const PREFIX = 'features.Administration';
@@ -76,12 +75,14 @@ export default class AdminTabSwitch extends Component {
         <h5 className={classnames({ active: activeTab === CONFIGURATION })}>
           <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
         </h5>
-        <If condition={Theme.tethering === true}>
-          <span className="divider"> | </span>
-          <h5 className={classnames({ active: activeTab === TETHERING })}>
-            <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
-          </h5>
-        </If>
+        {Theme.tethering && (
+          <React.Fragment>
+            <span className="divider"> | </span>
+            <h5 className={classnames({ active: activeTab === TETHERING })}>
+              <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
+            </h5>
+          </React.Fragment>
+        )}
       </span>
     );
   }
