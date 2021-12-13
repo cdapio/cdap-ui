@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, Switch } from 'react-router-dom';
 import { humanReadableDuration } from 'services/helpers';
@@ -34,16 +34,20 @@ const TAB_LABELS = {
   TETHERING: 'tethering',
 };
 
-export default class AdminTabSwitch extends Component {
-  state = {
+interface IAdminTabSwitchProps {
+  uptime: number;
+}
+
+export default class AdminTabSwitch extends React.PureComponent<IAdminTabSwitchProps> {
+  public state = {
     version: null,
   };
 
-  static propTypes = {
+  public static propTypes = {
     uptime: PropTypes.number,
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     if (!VersionStore.getState().version) {
       this.getCDAPVersion();
     } else {
@@ -51,7 +55,7 @@ export default class AdminTabSwitch extends Component {
     }
   }
 
-  getCDAPVersion() {
+  public getCDAPVersion() {
     MyCDAPVersionApi.get().subscribe((res) => {
       this.setState({ version: res.version });
       VersionStore.dispatch({
@@ -63,7 +67,7 @@ export default class AdminTabSwitch extends Component {
     });
   }
 
-  renderTabTitle(activeTab) {
+  public renderTabTitle(activeTab) {
     const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
 
     return (
@@ -76,18 +80,18 @@ export default class AdminTabSwitch extends Component {
           <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
         </h5>
         {Theme.tethering && (
-          <React.Fragment>
+          <>
             <span className="divider"> | </span>
             <h5 className={classnames({ active: activeTab === TETHERING })}>
               <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
             </h5>
-          </React.Fragment>
+          </>
         )}
       </span>
     );
   }
 
-  renderUptimeVersion() {
+  public renderUptimeVersion() {
     return (
       <span className="uptime-version-container">
         <span>
@@ -106,7 +110,7 @@ export default class AdminTabSwitch extends Component {
     );
   }
 
-  render() {
+  public render() {
     const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
 
     return (
