@@ -568,7 +568,7 @@ class HydratorPlusPlusConfigStore {
   getNumRecordsPreview() {
     return this.getConfig().numOfRecordsPreview;
   }
-  setNumRecordsPreview(val=100) {
+  setNumRecordsPreview(val = this.HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview) {
     if (this.GLOBALS.etlBatchPipelines.includes(this.state.artifact.name)) {
       this.state.config.numOfRecordsPreview = val;
     }
