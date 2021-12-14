@@ -38,7 +38,8 @@ class MyBatchPipelineConfigCtrl {
     this.enablePipelineUpdate = false;
     this.numberConfig = {
       'widget-attributes': {
-        min: 0,
+        min: HYDRATOR_DEFAULT_VALUES.minNumOfRecordsPreview,
+        max: HYDRATOR_DEFAULT_VALUES.maxNumOfRecordsPreview,
         default: HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview,
         showErrorMessage: false,
         convertToInteger: true
