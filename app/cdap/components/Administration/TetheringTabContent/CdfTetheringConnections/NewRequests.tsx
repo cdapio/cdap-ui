@@ -26,7 +26,7 @@ const NewRequestsHeader = styled(HeaderContainer)`
   background-color: ${(props) => props.theme.palette.grey[700]};
 `;
 
-const NewRequests = (): JSX.Element => {
+const NewRequests = () => {
   const [newRequests, setNewRequests] = useState([]);
 
   return (

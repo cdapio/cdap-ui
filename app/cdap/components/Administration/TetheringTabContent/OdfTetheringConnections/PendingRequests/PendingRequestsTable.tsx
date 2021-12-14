@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-const PendingRequestsTable = (): JSX.Element => {
+const PendingRequestsTable = () => {
   return (
     <>
       {/* TODO: Add table here*/}

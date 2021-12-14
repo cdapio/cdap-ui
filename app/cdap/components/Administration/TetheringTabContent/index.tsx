@@ -33,7 +33,7 @@ const AdminTetheringTabContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-const AdminTetheringTabContent = (): JSX.Element => {
+const AdminTetheringTabContent = () => {
   return (
     <>
       <Helmet
