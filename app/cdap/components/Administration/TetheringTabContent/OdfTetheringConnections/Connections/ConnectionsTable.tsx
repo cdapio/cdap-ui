@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-const ConnectionsTable = (): JSX.Element => {
+const ConnectionsTable = () => {
   return (
     <>
       {/* TODO: Add table here*/}

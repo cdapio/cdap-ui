@@ -33,7 +33,7 @@ const PendingRequestHistory = styled(Link)`
   font-size: 1rem;
 `;
 
-const PendingRequests = (): JSX.Element => {
+const PendingRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
 
   return (

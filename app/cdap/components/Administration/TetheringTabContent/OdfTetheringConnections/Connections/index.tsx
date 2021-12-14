@@ -27,7 +27,7 @@ const ConnectionsHeader = styled(HeaderContainer)`
   background-color: ${(props) => props.theme.palette.grey[700]};
 `;
 
-const Connections = (): JSX.Element => {
+const Connections = () => {
   const [connections, setConnections] = useState([]);
 
   return (

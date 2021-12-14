@@ -18,7 +18,7 @@ import React from 'react';
 import NewRequests from './NewRequests';
 import Connections from './Connections';
 
-const CdfTetheringConnections = (): JSX.Element => {
+const CdfTetheringConnections = () => {
   return (
     <>
       <NewRequests />
