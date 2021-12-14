@@ -25,6 +25,7 @@ class MyBatchPipelineConfigCtrl {
     this.instrumentation = this.store.getInstrumentation();
     this.stageLogging = this.store.getStageLogging();
     this.numRecordsPreview = this.store.getNumRecordsPreview();
+    const rangeRecordsPreview = this.store.getRangeRecordsPreview();
     this.startingPipeline = false;
     this.updatingPipeline = false;
     this.driverResources = {
@@ -38,7 +39,8 @@ class MyBatchPipelineConfigCtrl {
     this.enablePipelineUpdate = false;
     this.numberConfig = {
       'widget-attributes': {
-        min: 0,
+        min: rangeRecordsPreview.min,
+        max: rangeRecordsPreview.max,
         default: HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview,
         showErrorMessage: false,
         convertToInteger: true

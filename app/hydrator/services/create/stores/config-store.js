@@ -109,6 +109,7 @@ class HydratorPlusPlusConfigStore {
       } else {
         this.setEngine(this.state.config.engine);
         this.setNumRecordsPreview(this.state.config.numOfRecordsPreview);
+        this.setRangeRecordsPreview(this.state.artifact.config || {});
         this.setMaxConcurrentRuns(this.state.config.maxConcurrentRuns);
       }
     }
@@ -270,6 +271,7 @@ class HydratorPlusPlusConfigStore {
       config.stageLoggingEnabled = this.getStageLogging();
       config.processTimingEnabled = this.getInstrumentation();
       config.numOfRecordsPreview = this.getNumRecordsPreview();
+      config.rangeRecordsPreview = this.getRangeRecordsPreview();
     } else if (appType === this.GLOBALS.etlRealtime) {
       config.instances = this.getInstance();
     } else if (appType === this.GLOBALS.etlDataStreams) {
@@ -569,6 +571,17 @@ class HydratorPlusPlusConfigStore {
   setNumRecordsPreview(val=100) {
     if (this.GLOBALS.etlBatchPipelines.includes(this.state.artifact.name)) {
       this.state.config.numOfRecordsPreview = val;
+    }
+  }
+  getRangeRecordsPreview() {
+    return this.getConfig().rangeRecordsPreview;
+  }
+  setRangeRecordsPreview({minRecordsPreview = this.HYDRATOR_DEFAULT_VALUES.minRecordsPreview, maxRecordsPreview = this.HYDRATOR_DEFAULT_VALUES.maxRecordsPreview}) {
+    if (this.GLOBALS.etlBatchPipelines.includes(this.state.artifact.name)) {
+      this.state.config.rangeRecordsPreview = {
+        min: minRecordsPreview,
+        max: maxRecordsPreview,
+      };
     }
   }
   setArtifact(artifact) {
