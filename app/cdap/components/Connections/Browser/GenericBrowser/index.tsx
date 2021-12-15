@@ -36,6 +36,8 @@ import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import { getApiErrorMessage } from './apiHelpers';
 import { getConnectionPath } from 'components/Connections/helper';
+import ParsingConfigModal from 'components/Connections/Browser/ParsingConfigModal';
+import keyBy from 'lodash/keyBy';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
 import { Redirect } from 'react-router';
@@ -74,6 +76,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
   const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
   const [entities, setEntities] = useState([]);
   const [propertyHeaders, setPropertyHeaders] = useState([]);
+  const [sampleProperties, setSampleProperties] = useState({});
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -81,8 +84,13 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
   const [searchString, setSearchString] = useState('');
   const [searchStringDisplay, setSearchStringDisplay] = useState('');
   const [workspaceId, setWorkspaceId] = useState(null);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState(null);
+  const [parsingConfigErrorMessage, setParsingConfigErrorMessage] = useState(null);
   const classes = useStyle();
-  const { onWorkspaceCreate, onEntitySelect, selectedPlugin } = useContext(ConnectionsContext);
+  const { onWorkspaceCreate, onEntitySelect, selectedPlugin, showParsingConfig } = useContext(
+    ConnectionsContext
+  );
   const isSelectMode = typeof onEntitySelect === 'function';
   const fetchEntities = async () => {
     setLoading(true);
@@ -98,6 +106,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
       setEntities(newEntities);
       setTotalCount(res.totalCount);
       setPropertyHeaders(res.propertyHeaders || []);
+      setSampleProperties(keyBy(res.sampleProperties, (sp) => sp.type));
       setError(null);
       if (isSelectMode && path === '/') {
         onEntityChange(null);
@@ -129,14 +138,24 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
 
   const onExplore = (entity) => {
     const { canBrowse } = entity;
+    const requireConfigModal =
+      showParsingConfig &&
+      sampleProperties[entity.type] &&
+      sampleProperties[entity.type].properties.length > 0;
 
     if (!canBrowse) {
-      setLoading(true);
-
-      if (isSelectMode) {
-        loadEntitySpec(entity);
+      if (requireConfigModal) {
+        setShowConfigModal(true);
+        setSelectedEntity(entity);
+        return;
       } else {
-        onCreateWorkspace(entity);
+        setLoading(true);
+
+        if (isSelectMode) {
+          loadEntitySpec(entity);
+        } else {
+          onCreateWorkspace(entity);
+        }
       }
 
       return;
@@ -149,20 +168,45 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
     clearSearchString();
   };
 
-  const onCreateWorkspace = async (entity) => {
+  const onCreateWorkspace = async (entity, parseConfig = {}) => {
     try {
-      const wid = await createWorkspace({
-        entity,
-        connection: currentConnection,
-      });
-      if (onWorkspaceCreate) {
-        return onWorkspaceCreate(wid);
-      }
-      setWorkspaceId(wid);
+      createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
       setError(`Failed to create workspace. Error: ${e}`);
       setLoading(false);
     }
+  };
+
+  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
+    const wid = await createWorkspace({
+      entity,
+      connection: currentConnection,
+      properties: parseConfig,
+    });
+    if (onWorkspaceCreate) {
+      return onWorkspaceCreate(wid);
+    }
+    setWorkspaceId(wid);
+  };
+
+  const onConfirmParsingConfig = async (parseConfig) => {
+    setParsingConfigErrorMessage(null);
+
+    if (isSelectMode) {
+      loadEntitySpec(selectedEntity);
+    } else {
+      try {
+        await createWorkspaceInternal(selectedEntity, parseConfig);
+        setShowConfigModal(false);
+      } catch (e) {
+        setParsingConfigErrorMessage(e);
+      }
+    }
+  };
+
+  const onCancelParsingConfig = () => {
+    setShowConfigModal(false);
+    setSelectedEntity(null);
   };
 
   const loadEntitySpec = async (entity) => {
@@ -245,7 +289,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
           <SearchField onChange={handleSearchChange} value={searchStringDisplay} />
         </div>
       </div>
-      <If condition={loading || !isEmpty}>
+      {(loading || !isEmpty) && (
         <BrowserTable
           entities={filteredEntities}
           propertyHeaders={propertyHeaders}
@@ -256,8 +300,8 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
           isSelectMode={isSelectMode}
           loadEntitySpec={loadEntitySpec}
         />
-      </If>
-      <If condition={isEmpty && !loading}>
+      )}
+      {isEmpty && !loading && (
         <EmptyMessageContainer title={T.translate(`${PREFIX}.EmptyMessageContainer.title`)}>
           <ul>
             {currentConnection && searchString.length > 0 && (
@@ -285,10 +329,22 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
             )}
           </ul>
         </EmptyMessageContainer>
-      </If>
-      <If condition={error && !loading}>
-        <ErrorBanner error={error} canEditPageWhileOpen={true} />
-      </If>
+      )}
+      {error && !loading && <ErrorBanner error={error} canEditPageWhileOpen={true} />}
+      {showConfigModal && (
+        <ParsingConfigModal
+          connection={currentConnection}
+          entity={selectedEntity}
+          onConfirm={onConfirmParsingConfig}
+          onCancel={onCancelParsingConfig}
+          errorMessage={parsingConfigErrorMessage}
+          sampleProperties={
+            sampleProperties[selectedEntity.type]
+              ? sampleProperties[selectedEntity.type].properties
+              : []
+          }
+        />
+      )}
     </>
   );
 }
