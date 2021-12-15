@@ -20,6 +20,7 @@ $border-color: $grey-03;
 $hover-active-color: $grey-08;
 
 .admin-config-tab-content {
+  margin: 10px;
   .btn.btn-secondary {
     color: $btn-color;
     border-color: $border-color;
