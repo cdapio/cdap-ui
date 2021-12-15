@@ -51,6 +51,8 @@
     "create-profile": true,
     "reload-system-artifacts": true,
     "cdc": true,
-    "allow-force-dynamic-execution": false
+    "allow-force-dynamic-execution": false,
+    "tethering": false,
+    "odf": false
   }
 }

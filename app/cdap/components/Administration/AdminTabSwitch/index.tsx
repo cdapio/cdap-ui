@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, Route, Switch } from 'react-router-dom';
 import { humanReadableDuration } from 'services/helpers';
@@ -24,20 +24,30 @@ import MyCDAPVersionApi from 'api/version';
 import isNil from 'lodash/isNil';
 import classnames from 'classnames';
 import T from 'i18n-react';
+import { Theme } from 'services/ThemeHelper';
 require('./AdminTabSwitch.scss');
 
 const PREFIX = 'features.Administration';
+const TAB_LABELS = {
+  MANAGEMENT: 'management',
+  CONFIGURATION: 'configuration',
+  TETHERING: 'tethering',
+};
 
-export default class AdminTabSwitch extends Component {
-  state = {
+interface IAdminTabSwitchProps {
+  uptime: number;
+}
+
+export default class AdminTabSwitch extends React.PureComponent<IAdminTabSwitchProps> {
+  public state = {
     version: null,
   };
 
-  static propTypes = {
+  public static propTypes = {
     uptime: PropTypes.number,
   };
 
-  componentDidMount() {
+  public componentDidMount() {
     if (!VersionStore.getState().version) {
       this.getCDAPVersion();
     } else {
@@ -45,7 +55,7 @@ export default class AdminTabSwitch extends Component {
     }
   }
 
-  getCDAPVersion() {
+  public getCDAPVersion() {
     MyCDAPVersionApi.get().subscribe((res) => {
       this.setState({ version: res.version });
       VersionStore.dispatch({
@@ -57,21 +67,31 @@ export default class AdminTabSwitch extends Component {
     });
   }
 
-  renderTabTitle(isManagement = true) {
+  public renderTabTitle(activeTab) {
+    const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
+
     return (
       <span className="tab-title">
-        <h5 className={classnames({ active: isManagement })}>
+        <h5 className={classnames({ active: activeTab === MANAGEMENT })}>
           <Link to="/administration">{T.translate(`${PREFIX}.Tabs.management`)}</Link>
         </h5>
         <span className="divider"> | </span>
-        <h5 className={classnames({ active: !isManagement })}>
+        <h5 className={classnames({ active: activeTab === CONFIGURATION })}>
           <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
         </h5>
+        {Theme.tethering && (
+          <>
+            <span className="divider"> | </span>
+            <h5 className={classnames({ active: activeTab === TETHERING })}>
+              <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
+            </h5>
+          </>
+        )}
       </span>
     );
   }
 
-  renderUptimeVersion() {
+  public renderUptimeVersion() {
     return (
       <span className="uptime-version-container">
         <span>
@@ -90,7 +110,9 @@ export default class AdminTabSwitch extends Component {
     );
   }
 
-  render() {
+  public render() {
+    const { MANAGEMENT, CONFIGURATION, TETHERING } = TAB_LABELS;
+
     return (
       <Switch>
         <Route
@@ -99,7 +121,7 @@ export default class AdminTabSwitch extends Component {
           render={() => {
             return (
               <div className="tab-title-and-version">
-                {this.renderTabTitle()}
+                {this.renderTabTitle(MANAGEMENT)}
                 {this.renderUptimeVersion()}
               </div>
             );
@@ -109,7 +131,16 @@ export default class AdminTabSwitch extends Component {
           exact
           path="/administration/configuration"
           render={() => {
-            return <div className="tab-title-and-version">{this.renderTabTitle(false)}</div>;
+            return (
+              <div className="tab-title-and-version">{this.renderTabTitle(CONFIGURATION)}</div>
+            );
+          }}
+        />
+        <Route
+          exact
+          path="/administration/tethering"
+          render={() => {
+            return <div className="tab-title-and-version">{this.renderTabTitle(TETHERING)}</div>;
           }}
         />
       </Switch>

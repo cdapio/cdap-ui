@@ -105,6 +105,8 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     cdc?: boolean;
     'metadata-in-react'?: boolean;
     'allow-force-dynamic-execution'?: boolean;
+    tethering?: boolean;
+    odf?: boolean;
   };
 }
 
@@ -227,6 +229,8 @@ interface IThemeObj {
   showCDC?: boolean;
   isMetadataInReact?: boolean;
   allowForceDynamicExecution?: boolean;
+  tethering?: boolean;
+  odf?: boolean;
 }
 
 function getTheme(): IThemeObj {
@@ -539,6 +543,12 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       isBoolean(featuresJson['allow-force-dynamic-execution'])
     ) {
       features.allowForceDynamicExecution = featuresJson['allow-force-dynamic-execution'];
+    }
+    if ('tethering' in featuresJson && isBoolean(featuresJson.tethering)) {
+      features.tethering = featuresJson.tethering;
+    }
+    if ('odf' in featuresJson && isBoolean(featuresJson.odf)) {
+      features.odf = featuresJson.odf;
     }
     return features;
   }
