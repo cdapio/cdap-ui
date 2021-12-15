@@ -76,6 +76,7 @@ export default function Connections({
   connectorType,
   hideAddConnection,
   allowDefaultConnection = true,
+  showParsingConfig = true,
 }: IConnections) {
   const [initialConnectionId, setInitialConnectionId] = useState(connectionId);
   const [state, setState] = React.useState({
@@ -90,6 +91,7 @@ export default function Connections({
     hideSidePanel,
     hideAddConnection,
     selectedPlugin: PipelineMetricsStore.getState().plugin,
+    showParsingConfig,
   });
   const classes = useStyle();
   const [loading, setLoading] = useState(true);

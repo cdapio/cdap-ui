@@ -82,6 +82,7 @@ describe('Wrangler GCS tests', () => {
     cy.contains(DEFAULT_GCS_FILE, {
       timeout: 60000,
     }).click();
+    cy.get(Helpers.dataCy('parsing-config-confirm')).click();
     cy.url().should('contain', '/ns/default/wrangler');
   });
 

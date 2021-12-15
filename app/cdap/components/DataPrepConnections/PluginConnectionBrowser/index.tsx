@@ -125,6 +125,7 @@ class PluginConnectionBrowser extends React.PureComponent<
             connectionId={this.state.connectionName}
             connectorType={this.props.widgetProps.connectionType}
             onEntitySelect={this.handleEntitySelect}
+            showParsingConfig={false}
           />
         </PipelineModal>
 

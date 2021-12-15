@@ -39,13 +39,13 @@ export function getApiErrorMessage(e) {
   return e?.message || e?.response?.message || e?.statusCode || 'Unknown error';
 }
 
-export function createWorkspace({ entity, connection, limit = 1000 }) {
+export function createWorkspace({ entity, connection, limit = 1000, properties = {} }) {
   const { path } = entity;
   const body = {
     connection,
     sampleRequest: {
       path,
-      properties: {}, // For 6.5 this will always be empty. Once we add support to set file encoding and other properties this will get dynamic.
+      properties,
       limit,
     },
   };
