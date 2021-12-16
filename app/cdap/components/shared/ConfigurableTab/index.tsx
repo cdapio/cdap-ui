@@ -140,7 +140,7 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
               );
             })}
           </TabHeaders>
-          {this.state.tabs.map((tab) => {
+          {tabs.map((tab) => {
             if (this.state.activeTab === tab.id) {
               return this.renderTab(tab, true);
             } else if (this.props.renderAllTabs) {
