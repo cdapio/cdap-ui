@@ -8,6 +8,7 @@ Summary of changes
 - [ ] Feature
 - [ ] Build Fix
 - [ ] Testing
+- [ ] General Improvement
 
 ## Links
 Jira: [Jira issue #](fill-in.org)
