@@ -16,7 +16,6 @@
 
 import { IColumnTransformation } from 'components/Replicator/types';
 
-// this will eventually be generic
 export const addTinkToTransforms = (transform: IColumnTransformation): string => {
   const { columnName, directive } = transform;
   return `TINK ${columnName} ${directive}`;
@@ -25,4 +24,9 @@ export const addTinkToTransforms = (transform: IColumnTransformation): string =>
 export const addRenameToTransforms = (transform: IColumnTransformation): string => {
   const { columnName, directive } = transform;
   return `rename ${columnName} ${directive}`;
+};
+
+export const addMaskToTransforms = (transform: IColumnTransformation): string => {
+  const { columnName, directive } = transform;
+  return `mask ${columnName} ${directive}`;
 };

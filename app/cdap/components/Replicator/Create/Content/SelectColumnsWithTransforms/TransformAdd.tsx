@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { ITransformAddProps } from './types';
 import { SmallButton, KeyboardArrowDownIconTransformGrid } from './styles';
 import { Grid, Popover, TextField } from '@material-ui/core';
-import { addTinkToTransforms } from './addToTransforms';
+import { addTinkToTransforms, addRenameToTransforms, addMaskToTransforms } from './addToTransforms';
 
 export default function TransformAddButton({
   row,
@@ -31,6 +31,7 @@ export default function TransformAddButton({
 }: ITransformAddProps) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
+  const [directive, setDirective] = useState(null);
   const [directiveText, setDirectiveText] = useState('');
   const open = !!anchorEl;
   const subMenuOpen = !!subMenuAnchorEl;
@@ -40,11 +41,13 @@ export default function TransformAddButton({
   };
 
   const handleMenuClick = (event) => {
+    setDirective(event.currentTarget.innerText);
     setSubMenuAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setDirective(null);
     setSubMenuAnchorEl(null);
     setDirectiveText('');
   };
@@ -54,15 +57,24 @@ export default function TransformAddButton({
   };
 
   const handleAddToTransforms = () => {
+    let fullDirective: string;
     const transformInfo = {
       columnName: row.name,
       directive: directiveText,
     };
-    const tinkDirective = addTinkToTransforms(transformInfo);
+
+    if (directive === 'TINK') {
+      fullDirective = addTinkToTransforms(transformInfo);
+    } else if (directive === 'Rename') {
+      fullDirective = addRenameToTransforms(transformInfo);
+    } else {
+      fullDirective = addMaskToTransforms(transformInfo);
+    }
+
     addColumnsToTransforms(
       {
         columnName: row.name,
-        directive: tinkDirective,
+        directive: fullDirective,
       },
       tableInfo,
       columns()
@@ -105,6 +117,12 @@ export default function TransformAddButton({
         }}
       >
         <MenuItem onClick={handleMenuClick}>
+          Rename <ArrowRight />
+        </MenuItem>
+        <MenuItem onClick={handleMenuClick}>
+          Mask <ArrowRight />
+        </MenuItem>
+        <MenuItem onClick={handleMenuClick}>
           TINK <ArrowRight />
         </MenuItem>
       </Menu>
@@ -129,7 +147,7 @@ export default function TransformAddButton({
           <TextField
             size="small"
             id={`${row.name}-outlined-multiline-flexible-directive-text`}
-            label="TINK"
+            label={directive}
             variant="outlined"
             value={directiveText}
             onChange={handleDirectiveChange}
