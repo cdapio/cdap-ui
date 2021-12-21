@@ -83,6 +83,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   }>({});
   const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState([]);
   const [orphanErrors, setOrphanErrors] = useState([]);
+  const [propertyValues, setPropertyValues] = useState({ ...values });
 
   // Initialize the configurationGroups based on widgetJson and pluginProperties obtained from backend
   useEffect(() => {
@@ -135,7 +136,12 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       configurationGroups: newFilteredConfigurationGroup,
       values: newValues,
     };
-
+    const updatedFilteredValues = removeFilteredProperties(
+      newValues,
+      newFilteredConfigurationGroup,
+      true
+    );
+    setPropertyValues(updatedFilteredValues);
     setFilteredConfigurationGroups(newFilteredConfigurationGroup);
     getOrphanedErrors();
   }
@@ -154,7 +160,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
 
-    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
+    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg, true);
     changeParentHandler(updatedFilteredValues);
   }
 
@@ -272,7 +278,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
                     key={`${property.name}-${j}`}
                     widgetProperty={property}
                     pluginProperty={pluginProperties[property.name]}
-                    value={values[property.name]}
+                    value={propertyValues[property.name]}
                     onChange={handleValueChanges}
                     extraConfig={extraConfig}
                     disabled={disabled}
