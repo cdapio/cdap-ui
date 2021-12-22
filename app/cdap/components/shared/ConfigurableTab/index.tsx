@@ -90,6 +90,7 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
         })}
         data-cy={`tab-content-${tab.name}`}
         key={tab.name}
+        hidden={!isActive}
       >
         <div
           className={classnames(`tab-pane ${tab.paneClassName ? tab.paneClassName : ''}`, {
