@@ -223,6 +223,15 @@
                 </configuration>
               </execution>
               <execution>
+                <id>install-npmcli-fs</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>global add @npmcli/fs@1.0.0 --exact</arguments>
+                </configuration>
+              </execution>
+              <execution>
                 <id>install-node-gyp</id>
                 <goals>
                   <goal>yarn</goal>
