@@ -19,7 +19,6 @@ import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Alert from '@material-ui/lab/Alert';
 
@@ -49,7 +48,7 @@ export function ConnectionConfigForm({
   initProperties = {},
   initName = '',
   initDescription = '',
-  isView,
+  isEdit,
   testResults,
 }) {
   const [values, setValues] = React.useState<Record<string, string>>(initProperties);
@@ -60,35 +59,33 @@ export function ConnectionConfigForm({
   return (
     <div>
       <div>
-        <PropertyRow
-          widgetProperty={{
-            'widget-type': 'textbox',
-            'widget-attributes': {
-              placeholder: 'Specify a name to identify the connection',
-            },
-            label: 'Name',
-            name: 'name',
-          }}
-          pluginProperty={{
-            name: 'name',
-            macroSupported: false,
-            required: false,
-          }}
-          value={name}
-          onChange={(v) => {
-            if (!isView) {
-              setName(v.name);
-            }
-          }}
-          disabled={isView}
-          extraConfig={{ properties: {} }}
-        />
+        {!isEdit && (
+          <PropertyRow
+            widgetProperty={{
+              'widget-type': 'textbox',
+              'widget-attributes': {
+                placeholder: 'Specify a name to identify the connection',
+              },
+              label: 'Name',
+              name: 'name',
+            }}
+            pluginProperty={{
+              name: 'name',
+              macroSupported: false,
+              required: false,
+            }}
+            value={name}
+            onChange={(v) => setName(v.name)}
+            disabled={false}
+            extraConfig={{ properties: {} }}
+          />
+        )}
 
         <PropertyRow
           widgetProperty={{
             'widget-type': 'textbox',
             'widget-attributes': {
-              placeholder: isView ? '' : 'Specify a description to identify the connection',
+              placeholder: 'Specify a description to identify the connection',
             },
             label: 'Description',
             name: 'description',
@@ -99,12 +96,8 @@ export function ConnectionConfigForm({
             required: false,
           }}
           value={description}
-          onChange={(v) => {
-            if (!isView) {
-              setDescription(v.description);
-            }
-          }}
-          disabled={isView}
+          onChange={(v) => setDescription(v.description)}
+          disabled={false}
           extraConfig={{ properties: {} }}
         />
       </div>
@@ -112,21 +105,17 @@ export function ConnectionConfigForm({
         widgetJson={connectorWidgetJSON}
         pluginProperties={connectorProperties}
         values={values}
-        /* tslint:disable:no-empty */
-        onChange={!isView ? setValues : () => {}}
-        disabled={isView}
+        onChange={setValues}
         errors={testResults.configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
-        <If condition={testResults.inProgress}>
-          <LoadingSVG height="1rem" />
-        </If>
+        {testResults.inProgress && <LoadingSVG height="1rem" />}
 
-        <If condition={testResults.succeeded}>
+        {testResults.succeeded && (
           <Alert severity="success" className={classes.alert} data-cy="connection-test-success">
             Successfully connected.
           </Alert>
-        </If>
+        )}
         {!testResults.succeeded &&
           testResults.messages &&
           testResults.messages.map((message, i) => (
@@ -150,22 +139,20 @@ export function ConnectionConfigForm({
         >
           Test Connection
         </Button>
-        <If condition={!isView}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              onConnectionCreate({
-                name,
-                description,
-                properties: values,
-              })
-            }
-            data-cy="connection-submit-button"
-          >
-            Create
-          </Button>
-        </If>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            onConnectionCreate({
+              name,
+              description,
+              properties: values,
+            })
+          }
+          data-cy="connection-submit-button"
+        >
+          {isEdit ? 'Save' : 'Create'}
+        </Button>
       </div>
     </div>
   );
