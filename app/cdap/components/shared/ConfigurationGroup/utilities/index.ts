@@ -377,13 +377,22 @@ export function countErrors(
   return messages.size;
 }
 
-export function removeFilteredProperties(values, filteredConfigurationGroups) {
+/**
+ * Removes values of hidden properties.
+ *
+ * @param values latest field values
+ * @param filteredConfigurationGroups configuration-groups from Widget JSON
+ * @param addDefaults add default values for visible fields that are empty
+ */
+export function removeFilteredProperties(values, filteredConfigurationGroups, addDefaults = false) {
   const newValues = { ...values };
   if (filteredConfigurationGroups) {
     filteredConfigurationGroups.forEach((group) => {
       group.properties.forEach((property) => {
         if (property.show === false) {
           delete newValues[property.name];
+        } else if (addDefaults && !newValues[property.name]) {
+          newValues[property.name] = property.defaultValue;
         }
       });
     });
