@@ -49,7 +49,7 @@ interface IConnectionConfigurationProps extends IConnectorDetails {
     messages?: any;
     configurationErrors?: any;
   };
-  isView: boolean;
+  isEdit: boolean;
 }
 
 export function ConnectionConfiguration({
@@ -59,7 +59,7 @@ export function ConnectionConfiguration({
   onConnectionCreate,
   onConnectionTest,
   initValues = {},
-  isView,
+  isEdit,
   testResults,
 }: IConnectionConfigurationProps) {
   if (!connectorProperties) {
@@ -83,7 +83,7 @@ export function ConnectionConfiguration({
             initName={initValues.initName}
             initDescription={initValues.initDescription}
             initProperties={initValues.initProperties}
-            isView={isView}
+            isEdit={isEdit}
             testResults={testResults}
           />
         ),

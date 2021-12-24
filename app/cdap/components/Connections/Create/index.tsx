@@ -32,7 +32,6 @@ import {
   getConnection,
   testConnection,
 } from 'components/Connections/Create/reducer';
-import If from 'components/shared/If';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -59,7 +58,7 @@ export function CreateConnection({
   onToggle = null,
   initialConfig = {},
   onCreate = null,
-  isView = false,
+  isEdit = false,
   enableRouting = true,
 }) {
   const { mode, disabledTypes } = React.useContext(ConnectionsContext);
@@ -78,7 +77,6 @@ export function CreateConnection({
   const [testSucceeded, setTestSucceeded] = React.useState(false);
   const [testInProgress, setTestInProgress] = React.useState(false);
   const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
-  const [hadInitial, setHadInitial] = React.useState(false);
   const [redirectUrl, setRedirectUrl] = React.useState(null);
 
   const init = async () => {
@@ -101,7 +99,6 @@ export function CreateConnection({
         type: plugin.type,
       };
 
-      setHadInitial(true);
       setInitValues({
         initName: objectQuery(initialConfig, 'name'),
         initDescription: objectQuery(initialConfig, 'description'),
@@ -146,7 +143,7 @@ export function CreateConnection({
       return;
     }
 
-    if (!isView) {
+    if (!isEdit) {
       // validate existing connection name
       try {
         await getConnection(name);
@@ -237,7 +234,7 @@ export function CreateConnection({
 
   return (
     <div className={classes.root}>
-      <If condition={!hadInitial && state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
+      {state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG && (
         <EntityTopPanel
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
@@ -246,35 +243,23 @@ export function CreateConnection({
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
-      </If>
-      <If condition={hadInitial && state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
-        <EntityTopPanel
-          historyBack={false}
-          breadCrumbAnchorLabel="Back"
-          onBreadCrumbClick={onClose}
-          title={isView ? 'View Connection' : 'Duplicate Connection'}
-          closeBtnAnchorLink={onClose}
-          className={classes.topPanel}
-        />
-      </If>
-      <If condition={state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION}>
+      )}
+      {state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION && (
         <EntityTopPanel
           title="Add a connection"
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
         />
-      </If>
-      <If condition={loading}>
-        <LoadingSVGCentered />
-      </If>
-      <If condition={state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION}>
+      )}
+      {loading && <LoadingSVGCentered />}
+      {state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION && (
         <CategorizedConnectors
           onActiveCategory={(active) => (activeCategory.current = active)}
           connectorsMap={state.categoriesToConnectorsMap}
           onConnectorSelection={onConnectorSelection}
         />
-      </If>
-      <If condition={state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG}>
+      )}
+      {state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG && (
         <ConnectionConfiguration
           connectorProperties={connectionDetails.connectorProperties}
           connectorWidgetJSON={connectionDetails.connectorWidgetJSON}
@@ -282,7 +267,7 @@ export function CreateConnection({
           onConnectionCreate={onConnectionCreate}
           onConnectionTest={onConnectionTest}
           initValues={initValues}
-          isView={isView}
+          isEdit={isEdit}
           testResults={{
             succeeded: testSucceeded,
             messages: testResponseMessages,
@@ -290,11 +275,11 @@ export function CreateConnection({
             configurationErrors,
           }}
         />
-      </If>
+      )}
 
-      <If condition={!!error}>
+      {!!error && (
         <Alert message={error} type="error" showAlert={true} onClose={() => setError(null)} />
-      </If>
+      )}
     </div>
   );
 }
