@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import MuiAccordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -197,22 +197,22 @@ export function CategorizedConnections({
   const activeCategory = selectedConnection
     ? getActiveCategory(selectedConnection, categorizedConnections)
     : null;
-  const [currentActiveAccordion, setCurrentActiveAccordion] = React.useState(activeCategory);
-  const [localSelectedConnection, setLocalSelectedConnection] = React.useState(selectedConnection);
-  const [isCreateConnectionOpen, setIsCreateConnectionOpen] = React.useState(false);
-  const [initConnConfig, setInitConnConfig] = React.useState(null);
-  const [connectionToDelete, setConnectionToDelete] = React.useState(null);
-  const [deleteError, setDeleteError] = React.useState(null);
-  const [isView, setIsView] = React.useState(false);
+  const [currentActiveAccordion, setCurrentActiveAccordion] = useState(activeCategory);
+  const [localSelectedConnection, setLocalSelectedConnection] = useState(selectedConnection);
+  const [isCreateConnectionOpen, setIsCreateConnectionOpen] = useState(false);
+  const [initConnConfig, setInitConnConfig] = useState(null);
+  const [connectionToDelete, setConnectionToDelete] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const currentCategory = selectedConnection
       ? getActiveCategory(selectedConnection, categorizedConnections)
       : null;
     setCurrentActiveAccordion(currentCategory);
   }, [categorizedConnections]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalSelectedConnection(selectedConnection);
   }, [selectedConnection]);
 
@@ -247,9 +247,9 @@ export function CategorizedConnections({
     toggleConnectionCreate();
   }
 
-  function viewConnection(conn) {
+  function editConnection(conn) {
     const config = getConnectionConfig(conn);
-    setIsView(true);
+    setIsEdit(true);
     openConnectionConfig(config);
   }
 
@@ -265,7 +265,7 @@ export function CategorizedConnections({
 
     if (!newState) {
       setInitConnConfig(null);
-      setIsView(false);
+      setIsEdit(false);
     }
   }
 
@@ -346,8 +346,8 @@ export function CategorizedConnections({
               {connections.map((connection) => {
                 const actions: IAction[] = [
                   {
-                    label: 'View',
-                    actionFn: () => viewConnection(connection),
+                    label: 'Edit',
+                    actionFn: () => editConnection(connection),
                   },
                   {
                     label: 'Export',
@@ -428,7 +428,7 @@ export function CategorizedConnections({
         onToggle={toggleConnectionCreate}
         initialConfig={initConnConfig}
         onCreate={fetchConnections}
-        isView={isView}
+        isEdit={isEdit}
       />
     </div>
   );

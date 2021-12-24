@@ -58,7 +58,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   const [initConnConfig, setInitConnConfig] = useState(null);
   const [connectionToDelete, setConnectionToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
-  const [isView, setIsView] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   let confirmDeleteElem;
   if (connectionToDelete) {
@@ -95,7 +95,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
 
     if (!newState) {
       setInitConnConfig(null);
-      setIsView(false);
+      setIsEdit(false);
     }
   }
 
@@ -132,9 +132,9 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
     toggleConnectionCreate();
   }
 
-  function viewConnection(conn) {
+  function editConnection(conn) {
     const config = getConnectionConfig(conn);
-    setIsView(true);
+    setIsEdit(true);
     openConnectionConfig(config);
   }
 
@@ -160,8 +160,8 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
           {connections.map((conn) => {
             const actions: IAction[] = [
               {
-                label: 'View',
-                actionFn: () => viewConnection(conn),
+                label: 'Edit',
+                actionFn: () => editConnection(conn),
               },
               {
                 label: 'Export',
@@ -213,7 +213,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         onToggle={toggleConnectionCreate}
         initialConfig={initConnConfig}
         onCreate={getConnections}
-        isView={isView}
+        isEdit={isEdit}
       />
     </div>
   );
