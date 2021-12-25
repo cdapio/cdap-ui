@@ -51,8 +51,8 @@
       &:first-child {
         height: 50px;
       }
-      &:nth-child(2) {
-        height: calc(100% - 35px);
+      &.active {
+        height: calc(100% - 50px);
       }
     }
   }
