@@ -22,6 +22,10 @@ $top-panel-height: 54px;
 $right-position: -360px;
 $sidepanel-width: 170px;
 
+.pipeline-config-modal {
+  z-index: 1060; // overriding default 1300 to make nested modals (1061) visible.
+}
+
 .pipeline-configurations-content {
   width: $modeless-width;
   height: $modeless-height;
