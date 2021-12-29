@@ -265,6 +265,7 @@
   },
   "resolutions": {
     "**/@npmcli/fs": "1.0.0",
-    "**/cypress": "5.6.0"
+    "**/cypress": "5.6.0",
+    "**/npmlog": "4.1.2"
   }
 }
