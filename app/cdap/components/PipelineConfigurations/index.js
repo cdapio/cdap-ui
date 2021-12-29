@@ -210,6 +210,7 @@ export default class PipelineConfigurations extends Component {
         anchorEl={this.props.anchorEl}
         onClose={this.props.onClose}
         title={this.getHeaderLabel()}
+        popoverClassName="pipeline-config-modal"
       >
         <Provider store={PipelineConfigurationsStore}>
           <div
