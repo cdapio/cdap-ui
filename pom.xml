@@ -331,6 +331,15 @@
                 </configuration>
               </execution>
               <execution>
+                <id>install-node-gyp</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>global add node-gyp</arguments>
+                </configuration>
+              </execution>
+              <execution>
                 <id>yarn-install</id>
                 <goals>
                   <goal>yarn</goal>
