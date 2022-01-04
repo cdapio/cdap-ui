@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import ConnectionsTable from './ConnectionsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
+import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
@@ -27,9 +28,11 @@ const ConnectionsHeader = styled(HeaderContainer)`
   background-color: ${(props) => props.theme.palette.grey[700]};
 `;
 
-const Connections = () => {
-  const [connections, setConnections] = useState([]);
+interface IConnectionsProps {
+  connections: IConnection[];
+}
 
+const Connections = ({ connections }: IConnectionsProps) => {
   return (
     <>
       <ConnectionsHeader>
@@ -37,7 +40,7 @@ const Connections = () => {
       </ConnectionsHeader>
       <BodyContainer>
         {connections.length > 0 ? (
-          <ConnectionsTable />
+          <ConnectionsTable tableData={connections} />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noConnections`)}</NoDataText>
         )}

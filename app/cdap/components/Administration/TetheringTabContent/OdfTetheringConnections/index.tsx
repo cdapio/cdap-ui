@@ -14,14 +14,17 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Button from '@material-ui/core/Button';
 import PendingRequests from './PendingRequests';
 import Connections from './Connections';
+import { TetheringApi } from 'api/tethering';
+import { IConnection } from './types';
 
 const PREFIX = 'features.Administration.Tethering';
+const PENDING_STATUS = 'PENDING';
 
 const NewRequestBtn = styled(Button)`
   margin: 0 0 20px 30px;
@@ -42,13 +45,51 @@ const OdfTetheringConnections = (): JSX.Element => {
     // TODO: navigate to create request page
   };
 
+  const [connections, setConnections] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
+
+  const fetchConnectionsList = async () => {
+    // const connectionInfo = {
+    //   peer: 'cdfTest',
+    //   endpoint: 'http://www.google.com',
+    //   namespaceAllocations: [{ namespace: 's1', cpuLimit: '60', memoryLimit: '80' }],
+    //   metadata: {
+    //     project: 'gcs1',
+    //     location: 'us-west-1b',
+    //   },
+    // };
+    // const create = await TetheringApi.createTethering({}, connectionInfo).toPromise();
+
+    try {
+      const list = await TetheringApi.getTetheringStatusForAll().toPromise();
+      const establishedConnections = [];
+      const pendingConnections = [];
+
+      list.map((conn: IConnection) =>
+        conn.tetheringStatus === PENDING_STATUS
+          ? pendingConnections.push(conn)
+          : establishedConnections.push(conn)
+      );
+
+      setConnections(establishedConnections);
+      setPendingRequests(pendingConnections);
+    } catch (e) {
+      setConnections([]);
+      setPendingRequests([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchConnectionsList();
+  }, []);
+
   return (
     <>
-      <PendingRequests />
+      <PendingRequests pendingRequests={pendingRequests} />
       <NewRequestBtn variant="contained" onClick={handleCreateButtonClick}>
         {T.translate(`${PREFIX}.createRequest`)}
       </NewRequestBtn>
-      <Connections />
+      <Connections connections={connections} />
     </>
   );
 };

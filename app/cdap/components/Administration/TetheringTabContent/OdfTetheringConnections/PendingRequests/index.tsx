@@ -20,6 +20,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequestsTable from './PendingRequestsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
+import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
@@ -33,9 +34,11 @@ const PendingRequestHistory = styled(Link)`
   font-size: 1rem;
 `;
 
-const PendingRequests = () => {
-  const [pendingRequests, setPendingRequests] = useState([]);
+interface IPendingRequestsProps {
+  pendingRequests: IConnection[];
+}
 
+const PendingRequests = ({ pendingRequests }: IPendingRequestsProps) => {
   return (
     <>
       <PendingRequestsHeader>
@@ -46,7 +49,7 @@ const PendingRequests = () => {
       </PendingRequestsHeader>
       <BodyContainer>
         {pendingRequests.length > 0 ? (
-          <PendingRequestsTable />
+          <PendingRequestsTable tableData={pendingRequests} />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noPendingRequests`)}</NoDataText>
         )}
