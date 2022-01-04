@@ -21,7 +21,6 @@ import styled from 'styled-components';
 import { Theme } from 'services/ThemeHelper';
 import OdfTetheringConnections from './OdfTetheringConnections';
 import CdfTetheringConnections from './CdfTetheringConnections';
-import If from 'components/shared/If';
 
 const PREFIX = 'features.Administration';
 const I18NPREFIX = `${PREFIX}.Tethering`;

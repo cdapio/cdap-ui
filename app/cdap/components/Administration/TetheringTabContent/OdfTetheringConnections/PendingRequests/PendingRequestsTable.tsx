@@ -15,12 +15,26 @@
  */
 
 import React from 'react';
+import { IConnection } from '../types';
 
-const PendingRequestsTable = () => {
+interface IPendingReqsTableProps {
+  tableData: IConnection[];
+}
+
+const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
+  const transformedTableData = tableData.map((req) => ({
+    requestTime: '00:00:00',
+    gcloudProject: req.metadata.metadata.project,
+    instanceName: req.name,
+    region: req.metadata.metadata.location,
+    requestedResources: req.metadata.namespaceAllocations,
+  }));
+
   return (
     <>
-      {/* TODO: Add table here*/}
-      <span> Table Goes Here </span>
+      {transformedTableData.map((row) => {
+        return <span> {row.gcloudProject} </span>;
+      })}
     </>
   );
 };
