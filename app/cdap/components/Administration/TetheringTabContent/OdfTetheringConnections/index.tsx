@@ -49,17 +49,6 @@ const OdfTetheringConnections = (): JSX.Element => {
   const [pendingRequests, setPendingRequests] = useState([]);
 
   const fetchConnectionsList = async () => {
-    // const connectionInfo = {
-    //   peer: 'cdfTest',
-    //   endpoint: 'http://www.google.com',
-    //   namespaceAllocations: [{ namespace: 's1', cpuLimit: '60', memoryLimit: '80' }],
-    //   metadata: {
-    //     project: 'gcs1',
-    //     location: 'us-west-1b',
-    //   },
-    // };
-    // const create = await TetheringApi.createTethering({}, connectionInfo).toPromise();
-
     try {
       const list = await TetheringApi.getTetheringStatusForAll().toPromise();
       const establishedConnections = [];

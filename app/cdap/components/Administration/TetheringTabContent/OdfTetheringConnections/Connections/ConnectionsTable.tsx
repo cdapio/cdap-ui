@@ -32,6 +32,7 @@ const ConnectionsTable = ({ tableData }: IConnectionsTableProps) => {
 
   return (
     <>
+      {/* TODO: Will be completed after pending requests and new request creation*/}
       {transformedTableData.map((row) => {
         return <span> {row.gcloudProject} </span>;
       })}
