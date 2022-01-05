@@ -63,6 +63,34 @@ const schemaWithMap = {
   },
 };
 
+const schemaWithNestedRecordName = {
+  name: 'etlSchemaBody',
+  schema: {
+    name: 'etlSchemaBody',
+    type: 'record',
+    fields: [
+      {
+        name: 'Record1',
+        type: {
+          type: 'record',
+          name: 'Record1',
+          fields: [{
+            name: 'Record1',
+            type: {
+              type: 'record',
+              name: 'Record1.Record1',
+              fields: [{
+                name: 'stringfield',
+                type: 'string'
+              }]
+            }
+          }]
+        }
+      }
+    ]
+  }
+}
+
 export {
   schemaWithMap,
   schemaWithName,
@@ -71,4 +99,5 @@ export {
   simpleSchema2,
   largeSchema,
   largeSchema2,
+  schemaWithNestedRecordName,
 };

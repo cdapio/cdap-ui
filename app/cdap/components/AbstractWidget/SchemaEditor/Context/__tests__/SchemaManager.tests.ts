@@ -31,8 +31,10 @@ import {
   simpleSchema2,
   largeSchema,
   largeSchema2,
+  schemaWithNestedRecordName,
 } from './schemas';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
+import cdapavsc from 'services/cdapavscwrapper';
 
 const childCountInTree = (tree) => {
   if (!tree || (tree && !tree.children)) {
@@ -205,6 +207,13 @@ describe('Unit tests for Schema Manager', () => {
       const { fieldId } = getNthFieldIdInFlatSchema(schema, 1);
       schema.onChange(fieldId, { type: OperationTypesEnum.REMOVE });
       expect(childCountInTree(schema.getSchemaTree())).toBe(3);
+    });
+
+    it('should parse a record whith a child record of the same name', () => {
+      const schema = SchemaManager(schemaWithNestedRecordName as ISchemaType).getInstance();
+      expect(() =>
+        cdapavsc.parse(schema.getAvroSchema().schema, { wrapUnions: true })
+      ).not.toThrow();
     });
   });
 
