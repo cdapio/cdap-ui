@@ -36,7 +36,7 @@ export interface IConnection {
 export interface ITableData {
   requestTime: string;
   gcloudProject: string;
-  instanceName: IMetadata;
+  instanceName: string;
   region: string;
 }
 

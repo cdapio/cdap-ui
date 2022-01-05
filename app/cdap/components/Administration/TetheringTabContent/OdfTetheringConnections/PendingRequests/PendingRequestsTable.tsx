@@ -15,7 +15,87 @@
  */
 
 import React from 'react';
-import { IConnection } from '../types';
+import T from 'i18n-react';
+import styled, { css } from 'styled-components';
+import { IConnection, IPendingReqsTableData } from '../types';
+import { addPercentSign } from 'services/helpers';
+
+const PREFIX = 'features.Administration.Tethering';
+
+const PENDING_REQS_TABLE_HEADERS = [
+  {
+    property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
+    label: T.translate(`${PREFIX}.ColumnHeaders.requestTime`),
+  },
+  {
+    property: 'gcp',
+    label: T.translate(`${PREFIX}.ColumnHeaders.gcp`),
+  },
+  {
+    property: 'instanceName',
+    label: T.translate(`${PREFIX}.ColumnHeaders.instanceName`),
+  },
+  {
+    property: 'region',
+    label: T.translate(`${PREFIX}.ColumnHeaders.region`),
+  },
+  {
+    property: 'omniNamespace',
+    label: T.translate(`${PREFIX}.ColumnHeaders.omniNamespace`),
+  },
+  {
+    property: 'cpu',
+    label: T.translate(`${PREFIX}.ColumnHeaders.cpu`),
+  },
+  {
+    property: 'memory',
+    label: T.translate(`${PREFIX}.ColumnHeaders.memory`),
+  },
+  {
+    label: '',
+  },
+];
+
+const GridContainer = styled.div`
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  padding: 0 30px;
+  max-height: none;
+`;
+
+const GridRow = styled.div`
+  display: grid;
+  height: 30px;
+  padding: 5px 5px 5px 20px;
+  grid-template-columns: 1.5fr 1.5fr 2fr 1fr 2fr 1fr 0.5fr 1fr;
+
+  ${(props) =>
+    props.border &&
+    css`
+      border-bottom: 1px solid ${(props) => props.theme.palette.grey[1000]};
+    `}
+
+  ${(props) =>
+    props.header &&
+    css`
+      background-color: ${(props) => props.theme.palette.grey[700]};
+    `}
+`;
+
+const GridCell = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+
+  ${(props) =>
+    props.border &&
+    css`
+      margin-bottom: -5px;
+      border-bottom: 1px solid ${(props) => props.theme.palette.grey[1000]};
+    `}
+`;
 
 interface IPendingReqsTableProps {
   tableData: IConnection[];
@@ -23,20 +103,57 @@ interface IPendingReqsTableProps {
 
 const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
   const transformedTableData = tableData.map((req) => ({
-    requestTime: '00:00:00',
+    requestTime: '00/00/00 - 00:00 AM', // will be updated once backend server captures request time upon creation
     gcloudProject: req.metadata.metadata.project,
     instanceName: req.name,
     region: req.metadata.metadata.location,
     requestedResources: req.metadata.namespaceAllocations,
   }));
 
-  return (
-    <>
-      {transformedTableData.map((row) => {
-        return <span> {row.gcloudProject} </span>;
-      })}
-    </>
-  );
+  const renderTable = (data: IPendingReqsTableData[]) => {
+    return (
+      <GridContainer>
+        {renderTableHeader()}
+        {renderTableBody(data)}
+      </GridContainer>
+    );
+  };
+
+  const renderTableHeader = () => {
+    return (
+      <GridRow header={true}>
+        {PENDING_REQS_TABLE_HEADERS.map((header, i) => {
+          return <strong key={i}>{header.label}</strong>;
+        })}
+      </GridRow>
+    );
+  };
+
+  const renderTableBody = (data: IPendingReqsTableData[]) => {
+    return <div>{data.map((req: IPendingReqsTableData) => renderRow(req))}</div>;
+  };
+
+  const renderRow = (req: IPendingReqsTableData) => {
+    const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
+    return requestedResources.map((resource, i) => {
+      const { namespace, cpuLimit, memoryLimit } = resource;
+      const isFirst = i === 0;
+      const isLast = requestedResources.length === i + 1;
+      return (
+        <GridRow border={isLast} key={i}>
+          <GridCell>{isFirst ? requestTime : ''}</GridCell>
+          <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
+          <GridCell>{isFirst ? instanceName : ''}</GridCell>
+          <GridCell>{isFirst ? region : ''}</GridCell>
+          <GridCell border={!isLast}>{namespace}</GridCell>
+          <GridCell border={!isLast}>{addPercentSign(cpuLimit)}</GridCell>
+          <GridCell border={!isLast}>{addPercentSign(memoryLimit)}</GridCell>
+        </GridRow>
+      );
+    });
+  };
+
+  return <>{renderTable(transformedTableData)}</>;
 };
 
 export default PendingRequestsTable;
