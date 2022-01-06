@@ -1,0 +1,38 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
+import { apiCreator } from 'services/resource-helper';
+
+const dataSrc = DataSourceConfigurer.getInstance();
+const basePath = '/tethering';
+const connectionsBasePath = `${basePath}/connections`;
+const connectionPeerPath = `${connectionsBasePath}/:peer`;
+
+export const TetheringApi = {
+  createTethering: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basePath}/create`),
+  acceptOrRejectTethering: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionPeerPath}`),
+  deleteTethering: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${connectionPeerPath}`),
+  getTetheringStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionPeerPath}`),
+  getTetheringStatusForAll: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsBasePath}`),
+  getOdfInstanceNames: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsBasePath}/peers`), // TODO: update with new endpoints when ready
+  getOdfInstanceName: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${connectionsBasePath}/peers/:peer/namespaces`
+  ), // TODO: updtae with new endpoints when ready
+};
