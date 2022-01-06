@@ -19,8 +19,10 @@ import T from 'i18n-react';
 import styled, { css } from 'styled-components';
 import { IConnection, IPendingReqsTableData } from '../types';
 import { formatAsPercentage } from 'services/DataFormatter';
+import { humanReadableDate } from 'services/helpers';
 
 const PREFIX = 'features.Administration.Tethering';
+const REQUEST_DATE_FORMAT = 'MM/DD/YYYY - hh:mm A';
 
 const PENDING_REQS_TABLE_HEADERS = [
   {
@@ -103,7 +105,7 @@ interface IPendingReqsTableProps {
 
 const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
   const transformedTableData = tableData.map((req) => ({
-    requestTime: '00/00/00 - 00:00 AM', // will be updated once backend server captures request time upon creation
+    requestTime: humanReadableDate(Date.now(), true, false, REQUEST_DATE_FORMAT), // will be updated once backend server captures request time upon creation
     gcloudProject: req.metadata.metadata.project,
     instanceName: req.name,
     region: req.metadata.metadata.location,
