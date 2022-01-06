@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,7 @@ import React from 'react';
 import T from 'i18n-react';
 import styled, { css } from 'styled-components';
 import { IConnection, IPendingReqsTableData } from '../types';
-import { addPercentSign } from 'services/helpers';
+import { formatAsPercentage } from 'services/DataFormatter';
 
 const PREFIX = 'features.Administration.Tethering';
 
@@ -73,13 +73,13 @@ const GridRow = styled.div`
   ${(props) =>
     props.border &&
     css`
-      border-bottom: 1px solid ${(props) => props.theme.palette.grey[1000]};
+      border-bottom: 1px solid ${(properties) => properties.theme.palette.grey[1000]};
     `}
 
   ${(props) =>
     props.header &&
     css`
-      background-color: ${(props) => props.theme.palette.grey[700]};
+      background-color: ${(properties) => properties.theme.palette.grey[700]};
     `}
 `;
 
@@ -93,7 +93,7 @@ const GridCell = styled.div`
     props.border &&
     css`
       margin-bottom: -5px;
-      border-bottom: 1px solid ${(props) => props.theme.palette.grey[1000]};
+      border-bottom: 1px solid ${(properties) => properties.theme.palette.grey[1000]};
     `}
 `;
 
@@ -146,14 +146,14 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
           <GridCell>{isFirst ? region : ''}</GridCell>
           <GridCell border={!isLast}>{namespace}</GridCell>
-          <GridCell border={!isLast}>{addPercentSign(cpuLimit)}</GridCell>
-          <GridCell border={!isLast}>{addPercentSign(memoryLimit)}</GridCell>
+          <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
+          <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
         </GridRow>
       );
     });
   };
 
-  return <>{renderTable(transformedTableData)}</>;
+  return renderTable(transformedTableData);
 };
 
 export default PendingRequestsTable;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,7 @@ const ConnectionsTable = ({ tableData }: IConnectionsTableProps) => {
     <>
       {/* TODO: Will be completed after pending requests and new request creation*/}
       {transformedTableData.map((row) => {
-        return <span> {row.gcloudProject} </span>;
+        row.gcloudProject;
       })}
     </>
   );

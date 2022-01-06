@@ -737,10 +737,6 @@ function santizeStringForHTMLID(str) {
   return str.replace(/[ \/]/g, '-');
 }
 
-function addPercentSign(str) {
-  return `${str}%`;
-};
-
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
   'cdap-data-streams',
@@ -799,6 +795,5 @@ export {
   isAuthSetToProxyMode,
   isAuthSetToManagedMode,
   santizeStringForHTMLID,
-  addPercentSign,
   PIPELINE_ARTIFACTS,
 };
