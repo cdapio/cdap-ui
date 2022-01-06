@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -54,7 +54,7 @@ const OdfTetheringConnections = (): JSX.Element => {
       const establishedConnections = [];
       const pendingConnections = [];
 
-      list.map((conn: IConnection) =>
+      list.forEach((conn: IConnection) =>
         conn.tetheringStatus === PENDING_STATUS
           ? pendingConnections.push(conn)
           : establishedConnections.push(conn)
@@ -63,6 +63,7 @@ const OdfTetheringConnections = (): JSX.Element => {
       setConnections(establishedConnections);
       setPendingRequests(pendingConnections);
     } catch (e) {
+      // TODO: Add proper error messaging here
       setConnections([]);
       setPendingRequests([]);
     }
