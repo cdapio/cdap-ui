@@ -25,10 +25,6 @@ import { IConnection } from '../types';
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
 
-const PendingRequestsHeader = styled(HeaderContainer)`
-  background-color: ${(props) => props.theme.palette.grey[700]};
-`;
-
 const PendingRequestHistory = styled(Link)`
   margin-left: 40px;
   font-size: 1rem;
@@ -41,12 +37,12 @@ interface IPendingRequestsProps {
 const PendingRequests = ({ pendingRequests }: IPendingRequestsProps) => {
   return (
     <>
-      <PendingRequestsHeader>
+      <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.pendingRequestHeader`)}</HeaderTitle>
         <PendingRequestHistory to="/administration/tethering/newRequest">
           {T.translate(`${I18NPREFIX}.pendingRequestHistory`)}
         </PendingRequestHistory>
-      </PendingRequestsHeader>
+      </HeaderContainer>
       <BodyContainer>
         {pendingRequests.length > 0 ? (
           <PendingRequestsTable tableData={pendingRequests} />
