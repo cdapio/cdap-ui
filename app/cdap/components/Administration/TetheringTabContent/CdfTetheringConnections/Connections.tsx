@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,18 +22,14 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
 
-const ConnectionsHeader = styled(HeaderContainer)`
-  background-color: ${(props) => props.theme.palette.grey[700]};
-`;
-
 const Connections = () => {
   const [connections, setConnections] = useState([]);
 
   return (
     <>
-      <ConnectionsHeader>
+      <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.connectionsHeader`)}</HeaderTitle>
-      </ConnectionsHeader>
+      </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
           <span>Connections Table goes here</span>

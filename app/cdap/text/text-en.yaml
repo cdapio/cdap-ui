@@ -191,7 +191,16 @@ features:
       NewRequests:
         newRequestsHeader: New requests
         noNewRequests: There are no new requests
-      createRequest: CREATE NEW REQUEST  
+      createRequest: CREATE NEW REQUEST 
+      ColumnHeaders:
+         requestTime: Request Time
+         gcp: Google cloud project
+         instanceName: Instance name
+         region: Region
+         omniNamespace: Omni namespace
+         cpu: CPU
+         memory: Memory
+         pods: Pods
       pageTitle: '{productName} | Administration | Tethering Connections'
     Services:
       title: Services

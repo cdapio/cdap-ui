@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,7 +21,6 @@ import styled from 'styled-components';
 import { Theme } from 'services/ThemeHelper';
 import OdfTetheringConnections from './OdfTetheringConnections';
 import CdfTetheringConnections from './CdfTetheringConnections';
-import If from 'components/shared/If';
 
 const PREFIX = 'features.Administration';
 const I18NPREFIX = `${PREFIX}.Tethering`;

@@ -110,3 +110,7 @@ export function format(value, type, options: { concise?: boolean } = {}) {
       return value.toString ? value.toString() : JSON.stringify(value);
   }
 }
+
+export function formatAsPercentage(str: string) {
+  return `${str}%`;
+}
