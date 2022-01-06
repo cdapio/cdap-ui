@@ -21,6 +21,7 @@ export const HeaderContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 60px;
+  background-color: var(--grey08);
 `;
 
 export const HeaderTitle = styled.h5`

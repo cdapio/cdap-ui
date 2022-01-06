@@ -28,15 +28,15 @@ const PENDING_STATUS = 'PENDING';
 
 const NewRequestBtn = styled(Button)`
   margin: 0 0 20px 30px;
-  background-color: ${(props) => props.theme.palette.white[50]};
-  color: ${(props) => props.theme.palette.primary.main};
+  background-color: var(--white01);
+  color: var(--primary);
   height: 30px;
   width: 190px;
   font-size: 1rem;
 
   &:hover {
-    background-color: ${(props) => props.theme.palette.primary.main};
-    color: ${(props) => props.theme.palette.white[50]};
+    background-color: var(--primary);
+    color: var(--white01);
   }
 `;
 

@@ -24,10 +24,6 @@ import { IConnection } from '../types';
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
 
-const ConnectionsHeader = styled(HeaderContainer)`
-  background-color: ${(props) => props.theme.palette.grey[700]};
-`;
-
 interface IConnectionsProps {
   connections: IConnection[];
 }
@@ -35,9 +31,9 @@ interface IConnectionsProps {
 const Connections = ({ connections }: IConnectionsProps) => {
   return (
     <>
-      <ConnectionsHeader>
+      <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.connectionsHeader`)}</HeaderTitle>
-      </ConnectionsHeader>
+      </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
           <ConnectionsTable tableData={connections} />

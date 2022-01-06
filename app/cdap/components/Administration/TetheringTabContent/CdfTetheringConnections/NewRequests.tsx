@@ -22,18 +22,14 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.NewRequests`;
 
-const NewRequestsHeader = styled(HeaderContainer)`
-  background-color: ${(props) => props.theme.palette.grey[700]};
-`;
-
 const NewRequests = () => {
   const [newRequests, setNewRequests] = useState([]);
 
   return (
     <>
-      <NewRequestsHeader>
+      <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.newRequestsHeader`)}</HeaderTitle>
-      </NewRequestsHeader>
+      </HeaderContainer>
       <BodyContainer>
         {newRequests.length > 0 ? (
           <span>NewRequests Table goes here</span>

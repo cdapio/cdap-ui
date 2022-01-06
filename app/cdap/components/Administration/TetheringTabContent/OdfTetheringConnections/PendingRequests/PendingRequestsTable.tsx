@@ -73,13 +73,13 @@ const GridRow = styled.div`
   ${(props) =>
     props.border &&
     css`
-      border-bottom: 1px solid ${(properties) => properties.theme.palette.grey[1000]};
+      border-bottom: 1px solid var(--grey11);
     `}
 
   ${(props) =>
     props.header &&
     css`
-      background-color: ${(properties) => properties.theme.palette.grey[700]};
+      background-color: var(--grey08);
     `}
 `;
 
@@ -93,7 +93,7 @@ const GridCell = styled.div`
     props.border &&
     css`
       margin-bottom: -5px;
-      border-bottom: 1px solid ${(properties) => properties.theme.palette.grey[1000]};
+      border-bottom: 1px solid 1px solid var(--grey11);
     `}
 `;
 
