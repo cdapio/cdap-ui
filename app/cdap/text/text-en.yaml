@@ -2153,7 +2153,7 @@ features:
       ascending: A → Z
       descending: Z → A
   MetadataSummary:
-    pageTitle: "{productName} | Search | {entityId} | Summary"
+    pageTitle: "{productName} | Search | {entityId} | Results"
     loading: Loading metadata
     businessTags: Business tags
     systemTags: System tags
@@ -2184,6 +2184,28 @@ features:
     enterPropertyValue: Enter a value
     propertyKey: Key
     propertyValue: Value
+  MetadataLineage:
+    pageTitle: "{productName} | Search | {entityId} | Lineage"
+    loading: Obtaining lineage information
+    dateRange:
+      label: Date range
+      options:
+        custom: Custom
+        last7Days: Last 7 days
+        last14Days: Last 14 days
+        lastMonth: Last month
+        last6Months: Last 6 months
+        last12Months: Last 12 months
+    fieldLevelLineage: Field Level Lineage
+    noLineageMsg: No lineage data for the selected time period.
+    programRunInfo:
+      runId: Run ID
+      runs: Runs
+      duration: Duration
+      started: Started
+      status: Status
+      close: Close
+      loading: Loading
   ApiError:    
     CmekError:
       mainTitle: CMEK Key Revoked
