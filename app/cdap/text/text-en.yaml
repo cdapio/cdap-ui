@@ -1444,6 +1444,8 @@ features:
       delete: Delete
       duplicate: Duplicate
       edit: Edit
+      editConnection: 'Edit {connector} connection - "{connectionName}"'
+      createConnection: "Create a {connector} connection"
     database: Database ({count})
     gcs: Google Cloud Storage ({count})
     hdfs: File System
