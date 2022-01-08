@@ -16,14 +16,17 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import styled, { css } from 'styled-components';
+import IconSVG from 'components/shared/IconSVG';
+import ActionsPopover from '../../ActionPopover';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
+import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../../shared.styles';
 import { IConnection, IPendingReqsTableData } from '../types';
 import { formatAsPercentage } from 'services/DataFormatter';
 import { humanReadableDate } from 'services/helpers';
 
 const PREFIX = 'features.Administration.Tethering';
 const REQUEST_DATE_FORMAT = 'MM/DD/YYYY - hh:mm A';
-
+const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
 const PENDING_REQS_TABLE_HEADERS = [
   {
     property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
@@ -58,47 +61,6 @@ const PENDING_REQS_TABLE_HEADERS = [
   },
 ];
 
-const GridContainer = styled.div`
-  width: 100%;
-  margin-top: 30px;
-  margin-bottom: 15px;
-  padding: 0 30px;
-  max-height: none;
-`;
-
-const GridRow = styled.div`
-  display: grid;
-  height: 30px;
-  padding: 5px 5px 5px 20px;
-  grid-template-columns: 1.5fr 1.5fr 2fr 1fr 2fr 1fr 0.5fr 1fr;
-
-  ${(props) =>
-    props.border &&
-    css`
-      border-bottom: 1px solid var(--grey11);
-    `}
-
-  ${(props) =>
-    props.header &&
-    css`
-      background-color: var(--grey08);
-    `}
-`;
-
-const GridCell = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 20px;
-
-  ${(props) =>
-    props.border &&
-    css`
-      margin-bottom: -5px;
-      border-bottom: 1px solid 1px solid var(--grey11);
-    `}
-`;
-
 interface IPendingReqsTableProps {
   tableData: IConnection[];
 }
@@ -112,50 +74,62 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
     requestedResources: req.metadata.namespaceAllocations,
   }));
 
-  const renderTable = (data: IPendingReqsTableData[]) => {
-    return (
-      <GridContainer>
-        {renderTableHeader()}
-        {renderTableBody(data)}
-      </GridContainer>
-    );
+  const handleEditClick = () => {
+    // TODO: Complete this function when edit functionality is added
   };
 
-  const renderTableHeader = () => {
-    return (
-      <GridRow header={true}>
-        {PENDING_REQS_TABLE_HEADERS.map((header, i) => {
-          return <strong key={i}>{header.label}</strong>;
-        })}
-      </GridRow>
-    );
+  const toggleDeleteConfirmationModal = () => {
+    console.log('clicked me!');
   };
+
+  const renderTableHeader = () => (
+    <GridRow columnTemplate={COLUMN_TEMPLATE}>
+      {PENDING_REQS_TABLE_HEADERS.map((header, i) => {
+        return <GridCell key={i}>{header.label}</GridCell>;
+      })}
+    </GridRow>
+  );
 
   const renderTableBody = (data: IPendingReqsTableData[]) => {
-    return <div>{data.map((req: IPendingReqsTableData) => renderRow(req))}</div>;
-  };
-
-  const renderRow = (req: IPendingReqsTableData) => {
-    const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
-    return requestedResources.map((resource, i) => {
-      const { namespace, cpuLimit, memoryLimit } = resource;
-      const isFirst = i === 0;
-      const isLast = requestedResources.length === i + 1;
-      return (
-        <GridRow border={isLast} key={i}>
-          <GridCell>{isFirst ? requestTime : ''}</GridCell>
-          <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
-          <GridCell>{isFirst ? instanceName : ''}</GridCell>
-          <GridCell>{isFirst ? region : ''}</GridCell>
-          <GridCell border={!isLast}>{namespace}</GridCell>
-          <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
-          <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
-        </GridRow>
-      );
+    const actionsElem = () => {
+      return <IconSVG name="icon-more" />;
+    };
+    return data.map((req: IPendingReqsTableData) => {
+      const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
+      return requestedResources.map((resource, i) => {
+        const { namespace, cpuLimit, memoryLimit } = resource;
+        const isFirst = i === 0;
+        const isLast = requestedResources.length === i + 1;
+        return (
+          <GridRow columnTemplate={COLUMN_TEMPLATE} border={isLast} key={i}>
+            <GridCell>{isFirst ? requestTime : ''}</GridCell>
+            <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
+            <GridCell>{isFirst ? instanceName : ''}</GridCell>
+            <GridCell>{isFirst ? region : ''}</GridCell>
+            <GridCell border={!isLast}>{namespace}</GridCell>
+            <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
+            <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
+            {isFirst && (
+              <GridCell lastCol={true}>
+                <ActionsPopover
+                  target={actionsElem}
+                  onDeleteClick={toggleDeleteConfirmationModal}
+                  onEditClick={handleEditClick}
+                />
+              </GridCell>
+            )}
+          </GridRow>
+        );
+      });
     });
   };
 
-  return renderTable(transformedTableData);
+  return (
+    <Grid>
+      <GridHeader>{renderTableHeader()}</GridHeader>
+      <GridBody>{renderTableBody(transformedTableData)}</GridBody>
+    </Grid>
+  );
 };
 
 export default PendingRequestsTable;
