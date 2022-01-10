@@ -59,7 +59,9 @@ export const GridHeader = styled.div`
   border-bottom: 1px solid var(--grey11);
 `;
 
-export const GridBody = styled.div``;
+export const GridBody = styled.div`
+  background-color: var(--white01);
+`;
 
 export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {...props} />)`
   display: grid;

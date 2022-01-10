@@ -18,7 +18,6 @@ import React from 'react';
 import T from 'i18n-react';
 import IconSVG from 'components/shared/IconSVG';
 import ActionsPopover from '../../ActionPopover';
-import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../../shared.styles';
 import { IConnection, IPendingReqsTableData } from '../types';
 import { formatAsPercentage } from 'services/DataFormatter';
@@ -78,56 +77,61 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
     // TODO: Complete this function when edit functionality is added
   };
 
-  const toggleDeleteConfirmationModal = () => {
-    console.log('clicked me!');
+  const handleDeleteClick = () => {
+    // TODO: Complete this function when delete functionality is added
   };
 
   const renderTableHeader = () => (
-    <GridRow columnTemplate={COLUMN_TEMPLATE}>
-      {PENDING_REQS_TABLE_HEADERS.map((header, i) => {
-        return <GridCell key={i}>{header.label}</GridCell>;
-      })}
-    </GridRow>
+    <GridHeader>
+      <GridRow columnTemplate={COLUMN_TEMPLATE}>
+        {PENDING_REQS_TABLE_HEADERS.map((header, i) => {
+          return <GridCell key={i}>{header.label}</GridCell>;
+        })}
+      </GridRow>
+    </GridHeader>
   );
 
   const renderTableBody = (data: IPendingReqsTableData[]) => {
+    return <GridBody>{data.map((req: IPendingReqsTableData) => renderRow(req))}</GridBody>;
+  };
+
+  const renderRow = (req: IPendingReqsTableData) => {
     const actionsElem = () => {
       return <IconSVG name="icon-more" />;
     };
-    return data.map((req: IPendingReqsTableData) => {
-      const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
-      return requestedResources.map((resource, i) => {
-        const { namespace, cpuLimit, memoryLimit } = resource;
-        const isFirst = i === 0;
-        const isLast = requestedResources.length === i + 1;
-        return (
-          <GridRow columnTemplate={COLUMN_TEMPLATE} border={isLast} key={i}>
-            <GridCell>{isFirst ? requestTime : ''}</GridCell>
-            <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
-            <GridCell>{isFirst ? instanceName : ''}</GridCell>
-            <GridCell>{isFirst ? region : ''}</GridCell>
-            <GridCell border={!isLast}>{namespace}</GridCell>
-            <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
-            <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
-            {isFirst && (
-              <GridCell lastCol={true}>
-                <ActionsPopover
-                  target={actionsElem}
-                  onDeleteClick={toggleDeleteConfirmationModal}
-                  onEditClick={handleEditClick}
-                />
-              </GridCell>
-            )}
-          </GridRow>
-        );
-      });
+    const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
+
+    return requestedResources.map((resource, i) => {
+      const { namespace, cpuLimit, memoryLimit } = resource;
+      const isFirst = i === 0;
+      const isLast = requestedResources.length === i + 1;
+      return (
+        <GridRow columnTemplate={COLUMN_TEMPLATE} border={isLast} key={i}>
+          <GridCell>{isFirst ? requestTime : ''}</GridCell>
+          <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
+          <GridCell>{isFirst ? instanceName : ''}</GridCell>
+          <GridCell>{isFirst ? region : ''}</GridCell>
+          <GridCell border={!isLast}>{namespace}</GridCell>
+          <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
+          <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
+          {isFirst && (
+            <GridCell lastCol={true}>
+              <ActionsPopover
+                target={actionsElem}
+                onDeleteClick={handleDeleteClick}
+                onEditClick={handleEditClick}
+              />
+            </GridCell>
+          )}
+        </GridRow>
+      );
     });
   };
 
   return (
     <Grid>
-      <GridHeader>{renderTableHeader()}</GridHeader>
-      <GridBody>{renderTableBody(transformedTableData)}</GridBody>
+      {renderTableHeader()}
+      {renderTableBody(transformedTableData)}
     </Grid>
   );
 };
