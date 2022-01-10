@@ -91,9 +91,9 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
     </GridHeader>
   );
 
-  const renderTableBody = (data: IPendingReqsTableData[]) => {
-    return <GridBody>{data.map((req: IPendingReqsTableData) => renderRow(req))}</GridBody>;
-  };
+  const renderTableBody = (data: IPendingReqsTableData[]) => (
+    <GridBody>{data.map((req: IPendingReqsTableData) => renderRow(req))}</GridBody>
+  );
 
   const renderRow = (req: IPendingReqsTableData) => {
     const actionsElem = () => {
