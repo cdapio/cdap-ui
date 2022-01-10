@@ -77,6 +77,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   validateProperties,
 }) => {
   const [configurationGroups, setConfigurationGroups] = useState([]);
+  const [defaultValues, setDefaultValues] = useState({ ...values });
   const referenceValueForUnMount = useRef<{
     configurationGroups?: IFilteredConfigurationGroup[];
     values?: Record<string, string>;
@@ -110,6 +111,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       initialValues = defaults(values, processedConfigurationGroup.defaultValues);
       changeParentHandler(initialValues);
     }
+    setDefaultValues(initialValues);
     updateFilteredConfigurationGroup(
       processedConfigurationGroup.configurationGroups,
       initialValues
@@ -139,7 +141,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     const updatedFilteredValues = removeFilteredProperties(
       newValues,
       newFilteredConfigurationGroup,
-      true
+      defaultValues
     );
     setPropertyValues(updatedFilteredValues);
     setFilteredConfigurationGroups(newFilteredConfigurationGroup);
@@ -160,7 +162,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
 
-    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg, true);
+    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg, defaultValues);
     changeParentHandler(updatedFilteredValues);
   }
 
