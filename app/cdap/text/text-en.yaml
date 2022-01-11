@@ -201,6 +201,9 @@ features:
          cpu: CPU
          memory: Memory
          pods: Pods
+      Actions:
+        edit: Edit
+        delete: Delete
       pageTitle: '{productName} | Administration | Tethering Connections'
     Services:
       title: Services
