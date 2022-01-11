@@ -203,11 +203,11 @@ features:
           Name: 
             name: name
             label: Name
-          CPU:
-            name: cpu
+          CpuLimit:
+            name: cpuLimit
             label: CPU
-          Memory:
-            name: memory
+          MemoryLimit:
+            name: memoryLimit
             label: Memory
         CDFInformation:
           title: CDF Information

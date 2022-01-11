@@ -16,8 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import styled from 'styled-components';
-import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import Textbox from './Textbox';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
@@ -25,7 +24,7 @@ const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
 
 const WIDGET_TYPE = 'widget-type';
 
-const WIDGET_ITEMS = [
+const ITEMS = [
   {
     properties: {
       label: `${T.translate(`${I18N_OMNI_PREFIX}.Name.label`)}`,
@@ -35,34 +34,35 @@ const WIDGET_ITEMS = [
   },
   {
     properties: {
-      label: `${T.translate(`${I18N_OMNI_PREFIX}.CPU.label`)}`,
-      name: `${T.translate(`${I18N_OMNI_PREFIX}.CPU.name`)}`,
+      label: `${T.translate(`${I18N_OMNI_PREFIX}.CpuLimit.label`)}`,
+      name: `${T.translate(`${I18N_OMNI_PREFIX}.CpuLimit.name`)}`,
       [WIDGET_TYPE]: 'textbox',
     },
   },
   {
     properties: {
-      label: `${T.translate(`${I18N_OMNI_PREFIX}.Memory.label`)}`,
-      name: `${T.translate(`${I18N_OMNI_PREFIX}.Memory.name`)}`,
+      label: `${T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.label`)}`,
+      name: `${T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.name`)}`,
       [WIDGET_TYPE]: 'textbox',
     },
   },
 ];
 
-const WidgetContainer = styled.div`
-  margin-top: 40px;
-`;
-
-/* 
+/*
  * Most of the code in this component will change once the backend server provides resources info
  * about available namespaces when creating new requests. The temp solution is to have users manually
  * enter that information
  */
 
-const OmniNamespaces = () => {
-  const handleChange = () => {
-    // TODO: handle change here
-  };
+interface IOmniNamespacesProps {
+  name?: string;
+  cpuLimit?: string;
+  memoryLimit?: string;
+  broadcastChange: (target: string, value: string) => void;
+}
+
+const OmniNamespaces = ({ name, cpuLimit, memoryLimit, broadcastChange }: IOmniNamespacesProps) => {
+  const values = [name, cpuLimit, memoryLimit];
 
   return (
     <>
@@ -70,23 +70,9 @@ const OmniNamespaces = () => {
         <HeaderTitle>{T.translate(`${I18N_OMNI_PREFIX}.title`)}</HeaderTitle>
         <hr />
         <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
-        {WIDGET_ITEMS.map((item, idx) => {
-          return (
-            <WidgetContainer key={idx}>
-              <WidgetWrapper
-                key={idx}
-                widgetProperty={item.properties}
-                value={''}
-                onChange={handleChange}
-                // updateAllProperties={this.updateAllProperties}
-                // extraConfig={extraConfig}
-                // classes={widgetClasses}
-                // disabled={disabled}
-                // errors={errors}
-              />
-            </WidgetContainer>
-          );
-        })}
+        {ITEMS.map((item, idx) => (
+            <Textbox key={idx} properties={item.properties} value={values[idx]} broadcastChange={broadcastChange}/>
+        ))}
       </NewReqContainer>
     </>
   );

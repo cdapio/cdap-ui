@@ -16,8 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import styled from 'styled-components';
-import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import Textbox from './Textbox';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
@@ -25,7 +24,7 @@ const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
 
 const WIDGET_TYPE = 'widget-type';
 
-const WIDGET_ITEMS = [
+const ITEMS = [
   {
     properties: {
       label: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.label`)}`,
@@ -58,37 +57,23 @@ const WIDGET_ITEMS = [
   },
 ];
 
-const WidgetContainer = styled.div`
-  margin-top: 40px;
-`;
+interface ICdfInfoProps {
+  projectName?: string;
+  region?: string;
+  instanceName?: string;
+  broadcastChange: (target: string, value: string) => void;
+}
 
-const CdfInfo = () => {
-  const handleChange = () => {
-    // TODO: handle change here
-  };
+const CdfInfo = ({ projectName, region, instanceName, broadcastChange }: ICdfInfoProps) => {
+  const values = [projectName, region, instanceName]
 
   return (
     <NewReqContainer>
       <HeaderTitle>{T.translate(`${I18N_CDF_PREFIX}.title`)}</HeaderTitle>
       <hr />
-
-      {WIDGET_ITEMS.map((item, idx) => {
-        return (
-          <WidgetContainer key={idx}>
-            <WidgetWrapper
-              key={idx}
-              widgetProperty={item.properties}
-              value={''}
-              onChange={handleChange}
-              // updateAllProperties={this.updateAllProperties}
-              // extraConfig={extraConfig}
-              // classes={widgetClasses}
-              // disabled={disabled}
-              // errors={errors}
-            />
-          </WidgetContainer>
-        );
-      })}
+      {ITEMS.map((item, idx) => (
+            <Textbox key={idx} properties={item.properties} value={values[idx]} broadcastChange={broadcastChange}/>
+      ))}
     </NewReqContainer>
   );
 };
