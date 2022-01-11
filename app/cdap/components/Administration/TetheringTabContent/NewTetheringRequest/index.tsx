@@ -14,16 +14,16 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import T from 'i18n-react';
 import styled from 'styled-components';
 import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
 import { HeaderContainer, HeaderTitle, BodyContainer, StyledButton } from '../shared.styles';
+import { memoryTextbox } from 'components/AbstractWidget/Widgets.stories';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
-const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
 
 const Container = styled.div`
   width: 100vw;
@@ -52,11 +52,30 @@ const StyledBodyContainer = styled(BodyContainer)`
 `;
 
 const ButtonsContainer = styled.div`
-  display: flex;
   margin-left: -30px;
 `;
 
 const NewTetheringRequest = () => {
+  const [name, setName] = useState('');
+  const [cpuLimit, setCpuLimit] = useState('');
+  const [memoryLimit, setMemoryLimit] = useState('');
+  const [projectName, setProjectName] = useState('');
+  const [region, setRegion] = useState('');
+  const [instanceName, setInstanceName] = useState('');
+
+  const stateUpdater = {
+    name: setName,
+    cpuLimit: setCpuLimit,
+    memoryLimit: setMemoryLimit,
+    projectName: setProjectName,
+    region: setRegion,
+    instanceName: setInstanceName
+  }
+
+  const handleChange = (target, updatedVal) => {
+    stateUpdater[target](updatedVal);
+  }
+
   return (
     <Container>
       <HeaderContainer>
@@ -67,8 +86,8 @@ const NewTetheringRequest = () => {
         <HeaderTitle>{T.translate(`${I18NPREFIX}.headerTitle`)}</HeaderTitle>
       </HeaderContainer>
       <StyledBodyContainer>
-        <OmniNamespaces />
-        <CdfInfo />
+        <OmniNamespaces name={name} cpuLimit={cpuLimit} memoryLimit={memoryLimit} broadcastChange={handleChange}/>
+        <CdfInfo projectName={projectName} region={region} instanceName={instanceName} broadcastChange={handleChange}/>
         <ButtonsContainer>
           <StyledButton>{T.translate(`${I18NPREFIX}.sendButton`)}</StyledButton>
           <StyledButton>{T.translate(`${I18NPREFIX}.cancelButton`)}</StyledButton>
