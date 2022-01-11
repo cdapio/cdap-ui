@@ -191,7 +191,38 @@ features:
       NewRequests:
         newRequestsHeader: New requests
         noNewRequests: There are no new requests
-      createRequest: CREATE NEW REQUEST 
+      createRequestButton: CREATE NEW REQUEST 
+      CreateRequest:
+        headerTitle: Create new tethering request
+        backButton: Back
+        sendButton: Send Request
+        cancelButton: Cancel
+        OmniNamespaces:
+          title: Omni Namespaces
+          description: Select the namespaces that will be tethered to the cloud instance
+          Name: 
+            name: name
+            label: Name
+          CPU:
+            name: cpu
+            label: CPU
+          Memory:
+            name: memory
+            label: Memory
+        CDFInformation:
+          title: CDF Information
+          ProjectName: 
+            name: projectName
+            label: Project Name
+            placeholder: Specify the Google Cloud project name
+          Region:
+            name: region
+            label: Region
+            placeholder: Specify the region
+          InstanceName:
+            name: instanceName
+            label: Instance Name
+            placeholder: Specify the Cloud Data Fusion instance name
       ColumnHeaders:
          requestTime: Request Time
          gcp: Google cloud project
