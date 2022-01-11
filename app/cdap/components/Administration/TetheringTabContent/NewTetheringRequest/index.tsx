@@ -15,13 +15,15 @@
  */
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import T from 'i18n-react';
+import { TetheringApi } from 'api/tethering';
+import { IApiError } from '../types';
+import Alert from 'components/shared/Alert';
 import styled from 'styled-components';
 import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
 import { HeaderContainer, HeaderTitle, BodyContainer, StyledButton } from '../shared.styles';
-import { memoryTextbox } from 'components/AbstractWidget/Widgets.stories';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 
@@ -56,24 +58,74 @@ const ButtonsContainer = styled.div`
 `;
 
 const NewTetheringRequest = () => {
-  const [name, setName] = useState('');
+  const [namespace, setNamespace] = useState('');
   const [cpuLimit, setCpuLimit] = useState('');
   const [memoryLimit, setMemoryLimit] = useState('');
   const [projectName, setProjectName] = useState('');
   const [region, setRegion] = useState('');
   const [instanceName, setInstanceName] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [error, setError] = useState({} as IApiError);
+  const history = useHistory();
 
   const stateUpdater = {
-    name: setName,
+    name: setNamespace,
     cpuLimit: setCpuLimit,
     memoryLimit: setMemoryLimit,
     projectName: setProjectName,
     region: setRegion,
-    instanceName: setInstanceName
-  }
+    instanceName: setInstanceName,
+  };
+
+  const resetValues = () => {
+    setNamespace('');
+    setCpuLimit('');
+    setMemoryLimit('');
+    setProjectName('');
+    setRegion('');
+    setInstanceName('');
+    setShowAlert(false);
+    setError({} as IApiError);
+  };
 
   const handleChange = (target, updatedVal) => {
     stateUpdater[target](updatedVal);
+  };
+
+  const handleSend = async () => {
+    const connectionInfo = {
+      peer: instanceName,
+      endpoint: 'http://www.google.com', //TODO: needs clarification on how to obtain
+      namespaceAllocations: [{ namespace, cpuLimit, memoryLimit }],
+      metadata: {
+        project: projectName,
+        location: region,
+      },
+    };
+
+    try {
+      await TetheringApi.createTethering({}, connectionInfo).toPromise();
+    } catch(err) {
+      setError(err);
+    }
+    setShowAlert(true);
+  };
+
+  const handleCancel = () => {
+    history.push("/administration/tethering");
+  }
+
+  const handleCloseAlert = () => {
+    resetValues();
+  };
+
+  const renderAlert = () => {
+    const hasError = Boolean(Object.keys(error).length);
+    const message = hasError ? `${T.translate(`${I18NPREFIX}.failure`)}: ${error.response}` : T.translate(`${I18NPREFIX}.success`);
+    const type = hasError  ? "error" : "success";
+    return (
+      <Alert message={message} type={type} showAlert={showAlert} onClose={handleCloseAlert} />
+    );
   }
 
   return (
@@ -86,13 +138,24 @@ const NewTetheringRequest = () => {
         <HeaderTitle>{T.translate(`${I18NPREFIX}.headerTitle`)}</HeaderTitle>
       </HeaderContainer>
       <StyledBodyContainer>
-        <OmniNamespaces name={name} cpuLimit={cpuLimit} memoryLimit={memoryLimit} broadcastChange={handleChange}/>
-        <CdfInfo projectName={projectName} region={region} instanceName={instanceName} broadcastChange={handleChange}/>
+        <OmniNamespaces
+          name={namespace}
+          cpuLimit={cpuLimit}
+          memoryLimit={memoryLimit}
+          broadcastChange={handleChange}
+        />
+        <CdfInfo
+          projectName={projectName}
+          region={region}
+          instanceName={instanceName}
+          broadcastChange={handleChange}
+        />
         <ButtonsContainer>
-          <StyledButton>{T.translate(`${I18NPREFIX}.sendButton`)}</StyledButton>
-          <StyledButton>{T.translate(`${I18NPREFIX}.cancelButton`)}</StyledButton>
+          <StyledButton onClick={handleSend}>{T.translate(`${I18NPREFIX}.sendButton`)}</StyledButton>
+          <StyledButton onClick={handleCancel}>{T.translate(`${I18NPREFIX}.cancelButton`)}</StyledButton>
         </ButtonsContainer>
       </StyledBodyContainer>
+      {renderAlert()}
     </Container>
   );
 };

@@ -65,14 +65,19 @@ interface ICdfInfoProps {
 }
 
 const CdfInfo = ({ projectName, region, instanceName, broadcastChange }: ICdfInfoProps) => {
-  const values = [projectName, region, instanceName]
+  const values = [projectName, region, instanceName];
 
   return (
     <NewReqContainer>
       <HeaderTitle>{T.translate(`${I18N_CDF_PREFIX}.title`)}</HeaderTitle>
       <hr />
       {ITEMS.map((item, idx) => (
-            <Textbox key={idx} properties={item.properties} value={values[idx]} broadcastChange={broadcastChange}/>
+        <Textbox
+          key={idx}
+          properties={item.properties}
+          value={values[idx]}
+          broadcastChange={broadcastChange}
+        />
       ))}
     </NewReqContainer>
   );

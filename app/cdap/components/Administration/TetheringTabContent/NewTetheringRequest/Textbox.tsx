@@ -23,23 +23,19 @@ const WidgetContainer = styled.div`
 `;
 
 interface ITextboxProps {
-  properties?: any,
-  value?: string,
+  properties?: any;
+  value?: string;
   broadcastChange: (target: string, value: string) => void;
 }
 
-const Textbox = ({ properties, value, broadcastChange }: ITextboxProps) => { 
+const Textbox = ({ properties, value, broadcastChange }: ITextboxProps) => {
   const handleChange = (val) => {
-    broadcastChange(properties.name, val)
+    broadcastChange(properties.name, val);
   };
 
   return (
     <WidgetContainer>
-      <WidgetWrapper
-        widgetProperty={properties}
-        value={value}
-        onChange={handleChange}
-      />
+      <WidgetWrapper widgetProperty={properties} value={value} onChange={handleChange} />
     </WidgetContainer>
   );
 };

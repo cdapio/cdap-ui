@@ -71,7 +71,12 @@ const OmniNamespaces = ({ name, cpuLimit, memoryLimit, broadcastChange }: IOmniN
         <hr />
         <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
         {ITEMS.map((item, idx) => (
-            <Textbox key={idx} properties={item.properties} value={values[idx]} broadcastChange={broadcastChange}/>
+          <Textbox
+            key={idx}
+            properties={item.properties}
+            value={values[idx]}
+            broadcastChange={broadcastChange}
+          />
         ))}
       </NewReqContainer>
     </>
