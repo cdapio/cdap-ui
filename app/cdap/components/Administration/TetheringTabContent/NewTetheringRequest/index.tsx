@@ -14,87 +14,31 @@
  * the License.
  */
 
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import T from 'i18n-react';
-import { TetheringApi } from 'api/tethering';
-import { IApiError } from '../types';
-import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
+import {
+  reducer,
+  initialState,
+  updateInputField,
+  updateError,
+  updateAlertState,
+  reset,
+  createTethering,
+} from './reducer';
 import Alert from 'components/shared/Alert';
-import styled from 'styled-components';
 import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
-import { HeaderContainer, HeaderTitle, BodyContainer, StyledButton } from '../shared.styles';
+import { HeaderContainer, HeaderTitle, StyledButton } from '../shared.styles';
+import { Container, BackButton, Divider, StyledBodyContainer, ButtonsContainer } from './styles';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 
-const Container = styled.div`
-  width: 100vw;
-  margin-top: -20px;
-  margin-left: calc(-50vw + 50%);
-`;
-
-const BackButton = styled(Link)`
-  margin-top: 1px;
-  font-size: 1rem;
-
-  &:hover {
-    text-decoration: none;
-  }
-`;
-
-const Divider = styled.span`
-  font-size: 1.25rem;
-  padding: 0 5px;
-`;
-
-const StyledBodyContainer = styled(BodyContainer)`
-  padding: 30px;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const ButtonsContainer = styled.div`
-  margin-left: -30px;
-`;
-
-interface IValidationErrors {
-  instanceName?: IErrorObj;
-  projectName?: IErrorObj;
-  region?: IErrorObj;
-}
-
 const NewTetheringRequest = () => {
-  const [namespace, setNamespace] = useState('');
-  const [cpuLimit, setCpuLimit] = useState('');
-  const [memoryLimit, setMemoryLimit] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [region, setRegion] = useState('');
-  const [instanceName, setInstanceName] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [apiErr, setApiErr] = useState({} as IApiError);
-  const [validationErrors, setValidationErrors] = useState({} as IValidationErrors);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { inputFields, showAlert, apiError, validationErrors } = state;
+  const { projectName, region, instanceName, namespace, cpuLimit, memoryLimit } = inputFields;
   const history = useHistory();
-
-  const stateUpdater = {
-    name: setNamespace,
-    cpuLimit: setCpuLimit,
-    memoryLimit: setMemoryLimit,
-    projectName: setProjectName,
-    region: setRegion,
-    instanceName: setInstanceName,
-  };
-
-  const resetValues = () => {
-    setNamespace('');
-    setCpuLimit('');
-    setMemoryLimit('');
-    setProjectName('');
-    setRegion('');
-    setInstanceName('');
-    setShowAlert(false);
-    setApiErr({} as IApiError);
-  };
 
   const areInputsValid = (): boolean => {
     const requiredFields = [
@@ -115,17 +59,12 @@ const NewTetheringRequest = () => {
       }
       errors[field.name] = errObj;
     });
-
-    setValidationErrors((prevValidationErrors) => ({
-      ...prevValidationErrors,
-      ...errors,
-    }));
-
+    updateError(dispatch, { errType: 'validationErrors', errVal: errors });
     return allValid;
   };
 
   const handleChange = (target: string, updatedVal: string | number) => {
-    stateUpdater[target](updatedVal);
+    updateInputField(dispatch, { [target]: updatedVal });
   };
 
   const handleSend = async () => {
@@ -139,13 +78,12 @@ const NewTetheringRequest = () => {
           location: region,
         },
       };
-
       try {
-        await TetheringApi.createTethering({}, connectionInfo).toPromise();
+        await createTethering(connectionInfo);
       } catch (err) {
-        setApiErr(err);
+        updateError(dispatch, { errType: 'apiError', errVal: err });
       }
-      setShowAlert(true);
+      updateAlertState(dispatch, true);
     }
   };
 
@@ -153,17 +91,17 @@ const NewTetheringRequest = () => {
     history.push('/administration/tethering');
   };
 
-  const handleCloseAlert = () => {
-    resetValues();
+  const handleOnClose = () => {
+    reset(dispatch);
   };
 
   const renderAlert = () => {
-    const hasError = Boolean(Object.keys(apiErr).length);
+    const hasError = Boolean(Object.keys(apiError).length);
     const message = hasError
-      ? `${T.translate(`${I18NPREFIX}.failure`)}: ${apiErr.response}`
+      ? `${T.translate(`${I18NPREFIX}.failure`)}: ${apiError.response}`
       : T.translate(`${I18NPREFIX}.success`);
     const type = hasError ? 'error' : 'success';
-    return <Alert message={message} type={type} showAlert={showAlert} onClose={handleCloseAlert} />;
+    return <Alert message={message} type={type} showAlert={showAlert} onClose={handleOnClose} />;
   };
 
   return (

@@ -32,16 +32,16 @@ const ButtonContainer = styled.div`
 
 const NewRequestBtn = styled(Link)`
   padding: 5px 20px;
-  background-color: var(--white01);
+  background-color: var(--white);
   color: var(--primary);
   height: 30px;
   font-size: 1rem;
   border-radius: 4px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 
   &:hover {
     background-color: var(--primary);
-    color: white;
+    color: var(--white);
     text-decoration: none;
   }
 `;

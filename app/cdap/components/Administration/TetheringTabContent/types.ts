@@ -14,7 +14,15 @@
  * the License.
  */
 
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
+
 export interface IApiError {
-  statusCode: string;
-  response: string;
+  statusCode?: string;
+  response?: string;
+}
+
+export interface IValidationErrors {
+  instanceName?: IErrorObj;
+  projectName?: IErrorObj;
+  region?: IErrorObj;
 }

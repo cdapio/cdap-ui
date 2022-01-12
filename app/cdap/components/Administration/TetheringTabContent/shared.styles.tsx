@@ -61,7 +61,7 @@ export const GridHeader = styled.div`
 `;
 
 export const GridBody = styled.div`
-  background-color: var(--white01);
+  background-color: var(--white);
 `;
 
 export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {...props} />)`
@@ -101,17 +101,17 @@ export const GridCell = styled(({ border, lastCol, ...props }) => <div {...props
 
 export const StyledButton = styled(Button)`
   margin: 0 0 20px 30px;
-  background-color: var(--white01);
+  background-color: var(--white);
   color: var(--primary);
   height: 30px;
   width: 190px;
   font-size: 1rem;
   border-radius: 4px;
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 
   &:hover {
     background-color: var(--primary);
-    color: white;
+    color: var(--white);
   }
 `;
 
