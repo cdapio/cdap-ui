@@ -16,7 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import Textbox from './Textbox';
+import NewReqTextField from './NewReqTextField';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
@@ -78,21 +78,19 @@ const OmniNamespaces = ({ name, cpuLimit, memoryLimit, broadcastChange }: IOmniN
   const values = [name, cpuLimit, memoryLimit];
 
   return (
-    <>
-      <NewReqContainer>
-        <HeaderTitle>{T.translate(`${I18N_OMNI_PREFIX}.title`)}</HeaderTitle>
-        <hr />
-        <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
-        {ITEMS.map((item, idx) => (
-          <Textbox
-            key={idx}
-            widgetProperty={item.widgetProperty}
-            value={values[idx]}
-            broadcastChange={broadcastChange}
-          />
-        ))}
-      </NewReqContainer>
-    </>
+    <NewReqContainer>
+      <HeaderTitle>{T.translate(`${I18N_OMNI_PREFIX}.title`)}</HeaderTitle>
+      <hr />
+      <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
+      {ITEMS.map((item, idx) => (
+        <NewReqTextField
+          key={idx}
+          widgetProperty={item.widgetProperty}
+          value={values[idx]}
+          broadcastChange={broadcastChange}
+        />
+      ))}
+    </NewReqContainer>
   );
 };
 

@@ -16,7 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import Textbox from './Textbox';
+import NewReqTextField from './NewReqTextField';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
@@ -105,7 +105,7 @@ const CdfInfo = ({
         }
 
         return (
-          <Textbox
+          <NewReqTextField
             key={idx}
             widgetProperty={item.widgetProperty}
             pluginProperty={item.pluginProperty}
