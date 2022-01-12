@@ -32,9 +32,11 @@ const PendingRequestHistory = styled(Link)`
 
 interface IPendingRequestsProps {
   pendingRequests: IConnection[];
+  handleEdit: (reqType: string, peer: string) => void;
+  handleDelete: (reqType: string, peer: string) => void;
 }
 
-const PendingRequests = ({ pendingRequests }: IPendingRequestsProps) => {
+const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {
   return (
     <>
       <HeaderContainer>
@@ -45,7 +47,11 @@ const PendingRequests = ({ pendingRequests }: IPendingRequestsProps) => {
       </HeaderContainer>
       <BodyContainer>
         {pendingRequests.length > 0 ? (
-          <PendingRequestsTable tableData={pendingRequests} />
+          <PendingRequestsTable
+            tableData={pendingRequests}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noPendingRequests`)}</NoDataText>
         )}

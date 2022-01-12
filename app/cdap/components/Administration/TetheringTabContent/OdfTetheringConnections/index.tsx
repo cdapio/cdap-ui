@@ -14,14 +14,15 @@
  * the License.
  */
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequests from './PendingRequests';
 import Connections from './Connections';
 import { TetheringApi } from 'api/tethering';
 import { IConnection } from './types';
+import { StyledLinkBtn } from '../shared.styles';
+import Alert from 'components/shared/Alert';
 
 const PREFIX = 'features.Administration.Tethering';
 const PENDING_STATUS = 'PENDING';
@@ -30,44 +31,79 @@ const ButtonContainer = styled.div`
   margin: 5px 0 25px 30px;
 `;
 
-const NewRequestBtn = styled(Link)`
-  padding: 5px 20px;
-  background-color: var(--white);
-  color: var(--primary);
-  height: 30px;
-  font-size: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+interface IConnectionsState {
+  pendingRequests: IConnection[];
+  establishedConnections: IConnection[];
+}
 
-  &:hover {
-    background-color: var(--primary);
-    color: var(--white);
-    text-decoration: none;
+const initialConnectionsState = {
+  pendingRequests: [],
+  establishedConnections: [],
+};
+
+const reducer = (state: IConnectionsState, action) => {
+  switch (action.type) {
+    case 'SET_CONNECTIONS':
+      return {
+        ...state,
+        establishedConnections: action.payload.establishedConnections,
+        pendingRequests: action.payload.pendingRequests,
+      };
+    case 'DELETE_ESTABLISHED_CONNECTION':
+      return {
+        ...state,
+        establishedConnections: state.establishedConnections.filter(
+          (conn) => conn.name !== action.peer
+        ),
+      };
+    case 'DELETE_PENDING_REQUEST':
+      return {
+        ...state,
+        pendingRequests: state.pendingRequests.filter((req) => req.name !== action.peer),
+      };
+    case 'RESET':
+      return initialConnectionsState;
+    default:
+      return state;
   }
-`;
+};
 
 const OdfTetheringConnections = (): JSX.Element => {
-  const [connections, setConnections] = useState([]);
-  const [pendingRequests, setPendingRequests] = useState([]);
+  const [connections, dispatch] = useReducer(reducer, initialConnectionsState);
+  const [error, setError] = useState(null);
 
   const fetchConnectionsList = async () => {
     try {
       const list = await TetheringApi.getTetheringStatusForAll().toPromise();
       const establishedConnections = [];
-      const pendingConnections = [];
+      const pendingRequests = [];
 
       list.forEach((conn: IConnection) =>
         conn.tetheringStatus === PENDING_STATUS
-          ? pendingConnections.push(conn)
+          ? pendingRequests.push(conn)
           : establishedConnections.push(conn)
       );
+      dispatch({ type: 'SET_CONNECTIONS', payload: { establishedConnections, pendingRequests } });
+    } catch (err) {
+      setError(`Unable to fetch connections data: ${err.response}`);
+      dispatch({ type: 'RESET' });
+    }
+  };
 
-      setConnections(establishedConnections);
-      setPendingRequests(pendingConnections);
-    } catch (e) {
-      // TODO: Add proper error messaging here
-      setConnections([]);
-      setPendingRequests([]);
+  const handleEdit = (reqType: string, peer: string) => {
+    // TODO: Complete this function when edit functionality is added
+  };
+
+  const handleDelete = async (reqType: string, peer: string) => {
+    try {
+      await TetheringApi.deleteTethering({ peer }).toPromise();
+      if (reqType === PENDING_STATUS) {
+        dispatch({ type: 'DELETE_PENDING_REQUEST', peer });
+      } else {
+        dispatch({ type: 'DELETE_ESTABLISHED_CONNECTION', peer });
+      }
+    } catch (err) {
+      setError(`Unable to delete request/connection: ${err.response}`);
     }
   };
 
@@ -77,13 +113,29 @@ const OdfTetheringConnections = (): JSX.Element => {
 
   return (
     <>
-      <PendingRequests pendingRequests={pendingRequests} />
+      <PendingRequests
+        pendingRequests={connections.pendingRequests}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
       <ButtonContainer>
-        <NewRequestBtn to="/administration/tethering/newTetheringRequest">
+        <StyledLinkBtn to="/administration/tethering/newTetheringRequest">
           {T.translate(`${PREFIX}.CreateRequest.createRequestButton`)}
-        </NewRequestBtn>
+        </StyledLinkBtn>
       </ButtonContainer>
-      <Connections connections={connections} />
+      <Connections
+        connections={connections.establishedConnections}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
+      {error && (
+        <Alert
+          message={error}
+          type={'error'}
+          showAlert={Boolean(error)}
+          onClose={() => setError(null)}
+        />
+      )}
     </>
   );
 };
