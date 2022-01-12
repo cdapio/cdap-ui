@@ -20,7 +20,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequestsTable from './PendingRequestsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
-import { IConnection } from '../types';
+import { IConnection } from '../../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
