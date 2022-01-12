@@ -190,15 +190,16 @@ features:
         noConnections: There are no connections
       NewRequests:
         newRequestsHeader: New requests
-        noNewRequests: There are no new requests
-      createRequestButton: CREATE NEW REQUEST 
+        noNewRequests: There are no new requests 
       CreateRequest:
+        createRequestButton: CREATE NEW REQUEST
         headerTitle: Create new tethering request
         backButton: Back
         sendButton: Send Request
         cancelButton: Cancel
         success: Your request was created successfully
         failure: Failed to create request
+        validationError: Required field {fieldName} has no value
         OmniNamespaces:
           title: Omni Namespaces
           description: Select the namespaces that will be tethered to the cloud instance

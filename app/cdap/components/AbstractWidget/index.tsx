@@ -28,6 +28,7 @@ export const DEFAULT_WIDGET_PROPS: IAbstractWidgetProps = {
   // tslint:disable:no-empty
   onChange: () => {},
   updateAllProperties: () => {},
+  type: 'textbox',
   // tslint:enable:no-empty
 };
 

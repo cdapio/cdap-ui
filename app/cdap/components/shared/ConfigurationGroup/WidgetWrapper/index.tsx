@@ -137,7 +137,7 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
       className={classnames(classes.widgetWrapper, {
         [classes.focus]: isFocused && !disabled,
         [classes.noWrapper]: hideWrapper,
-        [classes.errorBorder]: errors,
+        [classes.errorBorder]: errors && Boolean(errors.length),
         [classes[size]]: size,
       })}
       onFocus={onFocus}

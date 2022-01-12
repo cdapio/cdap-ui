@@ -17,25 +17,46 @@
 import React from 'react';
 import styled from 'styled-components';
 import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
 const WidgetContainer = styled.div`
   margin-top: 40px;
 `;
 
+const ErrorText = styled.span`
+  color: ${(props) => props.theme.palette.red[50]};
+`;
+
 interface ITextboxProps {
-  properties?: any;
+  widgetProperty?: any;
+  pluginProperty?: any;
   value?: string;
+  errors?: IErrorObj[];
   broadcastChange: (target: string, value: string) => void;
 }
 
-const Textbox = ({ properties, value, broadcastChange }: ITextboxProps) => {
+const Textbox = ({
+  widgetProperty,
+  pluginProperty,
+  value,
+  errors,
+  broadcastChange,
+}: ITextboxProps) => {
   const handleChange = (val) => {
-    broadcastChange(properties.name, val);
+    broadcastChange(widgetProperty.name, val);
   };
+  const hasErrors = errors && Boolean(errors.length) && errors[0];
 
   return (
     <WidgetContainer>
-      <WidgetWrapper widgetProperty={properties} value={value} onChange={handleChange} />
+      <WidgetWrapper
+        widgetProperty={widgetProperty}
+        pluginProperty={pluginProperty}
+        value={value}
+        errors={errors}
+        onChange={handleChange}
+      />
+      {hasErrors && <ErrorText>{errors[0].msg}</ErrorText>}
     </WidgetContainer>
   );
 };

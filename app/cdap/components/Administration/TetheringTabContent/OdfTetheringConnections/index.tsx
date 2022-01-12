@@ -80,7 +80,7 @@ const OdfTetheringConnections = (): JSX.Element => {
       <PendingRequests pendingRequests={pendingRequests} />
       <ButtonContainer>
         <NewRequestBtn to="/administration/tethering/newTetheringRequest">
-          {T.translate(`${PREFIX}.createRequestButton`)}
+          {T.translate(`${PREFIX}.CreateRequest.createRequestButton`)}
         </NewRequestBtn>
       </ButtonContainer>
       <Connections connections={connections} />
