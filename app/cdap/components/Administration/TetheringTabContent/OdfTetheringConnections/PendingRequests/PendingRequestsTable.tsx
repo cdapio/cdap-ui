@@ -26,6 +26,7 @@ import { humanReadableDate } from 'services/helpers';
 const PREFIX = 'features.Administration.Tethering';
 const REQUEST_DATE_FORMAT = 'MM/DD/YYYY - hh:mm A';
 const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
+const REQ_TYPE = 'PENDING';
 const PENDING_REQS_TABLE_HEADERS = [
   {
     property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
@@ -62,9 +63,11 @@ const PENDING_REQS_TABLE_HEADERS = [
 
 interface IPendingReqsTableProps {
   tableData: IConnection[];
+  handleEdit: (reqType: string, peer: string) => void;
+  handleDelete: (reqType: string, peer: string) => void;
 }
 
-const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
+const PendingRequestsTable = ({ tableData, handleEdit, handleDelete }: IPendingReqsTableProps) => {
   const transformedTableData = tableData.map((req) => ({
     requestTime: humanReadableDate(Date.now(), true, false, REQUEST_DATE_FORMAT), // will be updated once backend server captures request time upon creation
     gcloudProject: req.metadata.metadata.project,
@@ -72,14 +75,6 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
     region: req.metadata.metadata.location,
     requestedResources: req.metadata.namespaceAllocations,
   }));
-
-  const handleEditClick = () => {
-    // TODO: Complete this function when edit functionality is added
-  };
-
-  const handleDeleteClick = () => {
-    // TODO: Complete this function when delete functionality is added
-  };
 
   const renderTableHeader = () => (
     <GridHeader>
@@ -112,14 +107,14 @@ const PendingRequestsTable = ({ tableData }: IPendingReqsTableProps) => {
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
           <GridCell>{isFirst ? region : ''}</GridCell>
           <GridCell border={!isLast}>{namespace}</GridCell>
-          <GridCell border={!isLast}>{formatAsPercentage(cpuLimit)}</GridCell>
-          <GridCell border={!isLast}>{formatAsPercentage(memoryLimit)}</GridCell>
+          <GridCell border={!isLast}>{cpuLimit && formatAsPercentage(cpuLimit)}</GridCell>
+          <GridCell border={!isLast}>{memoryLimit && formatAsPercentage(memoryLimit)}</GridCell>
           {isFirst && (
             <GridCell lastCol={true}>
               <ActionsPopover
                 target={actionsElem}
-                onDeleteClick={handleDeleteClick}
-                onEditClick={handleEditClick}
+                onDeleteClick={() => handleDelete(REQ_TYPE, instanceName)}
+                onEditClick={() => handleEdit(REQ_TYPE, instanceName)}
               />
             </GridCell>
           )}

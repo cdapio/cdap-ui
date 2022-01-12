@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
 
@@ -112,6 +113,22 @@ export const StyledButton = styled(Button)`
   &:hover {
     background-color: var(--primary);
     color: var(--white);
+  }
+`;
+
+export const StyledLinkBtn = styled(Link)`
+  padding: 5px 20px;
+  background-color: var(--white);
+  color: var(--primary);
+  height: 30px;
+  font-size: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    text-decoration: none;
   }
 `;
 

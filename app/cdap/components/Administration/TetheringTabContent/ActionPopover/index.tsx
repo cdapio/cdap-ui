@@ -83,6 +83,7 @@ const ActionsPopover = ({ target, onDeleteClick, onEditClick }: IActionsPopoverP
       placement="bottom"
       bubbleEvent={false}
       enableInteractionInPopover={true}
+      showPopover={false}
     >
       <ul>
         <ListItem disabled={!canEdit} onClick={onEditClick}>

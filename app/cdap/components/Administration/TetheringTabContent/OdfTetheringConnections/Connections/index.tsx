@@ -14,8 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import T from 'i18n-react';
 import ConnectionsTable from './ConnectionsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
@@ -26,6 +25,8 @@ const I18NPREFIX = `${PREFIX}.Connections`;
 
 interface IConnectionsProps {
   connections: IConnection[];
+  handleEdit: (reqType: string, peer: string) => void;
+  handleDelete: (reqType: string, peer: string) => void;
 }
 
 const Connections = ({ connections }: IConnectionsProps) => {
