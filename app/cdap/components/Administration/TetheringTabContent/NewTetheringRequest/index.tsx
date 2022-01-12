@@ -19,6 +19,7 @@ import { Link, useHistory } from 'react-router-dom';
 import T from 'i18n-react';
 import { TetheringApi } from 'api/tethering';
 import { IApiError } from '../types';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import Alert from 'components/shared/Alert';
 import styled from 'styled-components';
 import OmniNamespaces from './OmniNamespaces';
@@ -57,6 +58,12 @@ const ButtonsContainer = styled.div`
   margin-left: -30px;
 `;
 
+interface IValidationErrors {
+  instanceName?: IErrorObj;
+  projectName?: IErrorObj;
+  region?: IErrorObj;
+}
+
 const NewTetheringRequest = () => {
   const [namespace, setNamespace] = useState('');
   const [cpuLimit, setCpuLimit] = useState('');
@@ -65,7 +72,8 @@ const NewTetheringRequest = () => {
   const [region, setRegion] = useState('');
   const [instanceName, setInstanceName] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [error, setError] = useState({} as IApiError);
+  const [apiErr, setApiErr] = useState({} as IApiError);
+  const [validationErrors, setValidationErrors] = useState({} as IValidationErrors);
   const history = useHistory();
 
   const stateUpdater = {
@@ -85,48 +93,78 @@ const NewTetheringRequest = () => {
     setRegion('');
     setInstanceName('');
     setShowAlert(false);
-    setError({} as IApiError);
+    setApiErr({} as IApiError);
   };
 
-  const handleChange = (target, updatedVal) => {
+  const areInputsValid = (): boolean => {
+    const requiredFields = [
+      { name: 'projectName', val: projectName },
+      { name: 'region', val: region },
+      { name: 'instanceName', val: instanceName },
+    ];
+    let allValid = true;
+    const errors = {};
+
+    requiredFields.forEach((field) => {
+      let errObj = {};
+      if (!field.val) {
+        errObj = {
+          msg: T.translate(`${I18NPREFIX}.validationError`, { fieldName: field.name }),
+        };
+        allValid = false;
+      }
+      errors[field.name] = errObj;
+    });
+
+    setValidationErrors((prevValidationErrors) => ({
+      ...prevValidationErrors,
+      ...errors,
+    }));
+
+    return allValid;
+  };
+
+  const handleChange = (target: string, updatedVal: string | number) => {
     stateUpdater[target](updatedVal);
   };
 
   const handleSend = async () => {
-    const connectionInfo = {
-      peer: instanceName,
-      endpoint: 'http://www.google.com', //TODO: needs clarification on how to obtain
-      namespaceAllocations: [{ namespace, cpuLimit, memoryLimit }],
-      metadata: {
-        project: projectName,
-        location: region,
-      },
-    };
+    if (areInputsValid()) {
+      const connectionInfo = {
+        peer: instanceName,
+        endpoint: 'http://www.google.com', // TODO: needs clarification on how to obtain
+        namespaceAllocations: [{ namespace, cpuLimit, memoryLimit }],
+        metadata: {
+          project: projectName,
+          location: region,
+        },
+      };
 
-    try {
-      await TetheringApi.createTethering({}, connectionInfo).toPromise();
-    } catch(err) {
-      setError(err);
+      try {
+        await TetheringApi.createTethering({}, connectionInfo).toPromise();
+      } catch (err) {
+        setApiErr(err);
+      }
+      setShowAlert(true);
     }
-    setShowAlert(true);
   };
 
   const handleCancel = () => {
-    history.push("/administration/tethering");
-  }
+    history.push('/administration/tethering');
+  };
 
   const handleCloseAlert = () => {
     resetValues();
   };
 
   const renderAlert = () => {
-    const hasError = Boolean(Object.keys(error).length);
-    const message = hasError ? `${T.translate(`${I18NPREFIX}.failure`)}: ${error.response}` : T.translate(`${I18NPREFIX}.success`);
-    const type = hasError  ? "error" : "success";
-    return (
-      <Alert message={message} type={type} showAlert={showAlert} onClose={handleCloseAlert} />
-    );
-  }
+    const hasError = Boolean(Object.keys(apiErr).length);
+    const message = hasError
+      ? `${T.translate(`${I18NPREFIX}.failure`)}: ${apiErr.response}`
+      : T.translate(`${I18NPREFIX}.success`);
+    const type = hasError ? 'error' : 'success';
+    return <Alert message={message} type={type} showAlert={showAlert} onClose={handleCloseAlert} />;
+  };
 
   return (
     <Container>
@@ -149,13 +187,18 @@ const NewTetheringRequest = () => {
           region={region}
           instanceName={instanceName}
           broadcastChange={handleChange}
+          validationErrors={validationErrors}
         />
         <ButtonsContainer>
-          <StyledButton onClick={handleSend}>{T.translate(`${I18NPREFIX}.sendButton`)}</StyledButton>
-          <StyledButton onClick={handleCancel}>{T.translate(`${I18NPREFIX}.cancelButton`)}</StyledButton>
+          <StyledButton onClick={handleSend}>
+            {T.translate(`${I18NPREFIX}.sendButton`)}
+          </StyledButton>
+          <StyledButton onClick={handleCancel}>
+            {T.translate(`${I18NPREFIX}.cancelButton`)}
+          </StyledButton>
         </ButtonsContainer>
       </StyledBodyContainer>
-      {renderAlert()}
+      {showAlert && renderAlert()}
     </Container>
   );
 };

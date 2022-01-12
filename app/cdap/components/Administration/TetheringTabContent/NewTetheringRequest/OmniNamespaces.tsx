@@ -23,27 +23,40 @@ const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
 
 const WIDGET_TYPE = 'widget-type';
+const WIDGET_ATTRIBUTES = 'widget-attributes';
 
 const ITEMS = [
   {
-    properties: {
+    widgetProperty: {
       label: `${T.translate(`${I18N_OMNI_PREFIX}.Name.label`)}`,
       name: `${T.translate(`${I18N_OMNI_PREFIX}.Name.name`)}`,
       [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        min: 1,
+        max: 100,
+      },
     },
   },
   {
-    properties: {
+    widgetProperty: {
       label: `${T.translate(`${I18N_OMNI_PREFIX}.CpuLimit.label`)}`,
       name: `${T.translate(`${I18N_OMNI_PREFIX}.CpuLimit.name`)}`,
-      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_TYPE]: 'number',
+      [WIDGET_ATTRIBUTES]: {
+        min: 1,
+        max: 100,
+      },
     },
   },
   {
-    properties: {
+    widgetProperty: {
       label: `${T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.label`)}`,
       name: `${T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.name`)}`,
-      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_TYPE]: 'number',
+      [WIDGET_ATTRIBUTES]: {
+        min: 1,
+        max: 100,
+      },
     },
   },
 ];
@@ -73,7 +86,7 @@ const OmniNamespaces = ({ name, cpuLimit, memoryLimit, broadcastChange }: IOmniN
         {ITEMS.map((item, idx) => (
           <Textbox
             key={idx}
-            properties={item.properties}
+            widgetProperty={item.widgetProperty}
             value={values[idx]}
             broadcastChange={broadcastChange}
           />
