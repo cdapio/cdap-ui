@@ -19,7 +19,7 @@ import T from 'i18n-react';
 import IconSVG from 'components/shared/IconSVG';
 import ActionsPopover from '../../ActionPopover';
 import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../../shared.styles';
-import { IConnection, IPendingReqsTableData } from '../types';
+import { IConnection, IPendingReqsTableData } from '../../types';
 import { formatAsPercentage } from 'services/DataFormatter';
 import { humanReadableDate } from 'services/helpers';
 
