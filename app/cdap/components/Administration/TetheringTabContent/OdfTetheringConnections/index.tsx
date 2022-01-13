@@ -103,7 +103,7 @@ const OdfTetheringConnections = (): JSX.Element => {
         dispatch({ type: 'DELETE_ESTABLISHED_CONNECTION', peer });
       }
     } catch (err) {
-      setError(`Unable to delete request/connection: ${err.response}`);
+      setError(`Unable to delete connection: ${err.response}`);
     }
   };
 

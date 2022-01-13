@@ -32,8 +32,8 @@ const PendingRequestHistory = styled(Link)`
 
 interface IPendingRequestsProps {
   pendingRequests: IConnection[];
-  handleEdit: (reqType: string, peer: string) => void;
-  handleDelete: (reqType: string, peer: string) => void;
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
 }
 
 const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {

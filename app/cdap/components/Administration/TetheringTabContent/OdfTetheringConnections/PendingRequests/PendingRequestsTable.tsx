@@ -26,7 +26,7 @@ import { humanReadableDate } from 'services/helpers';
 const PREFIX = 'features.Administration.Tethering';
 const REQUEST_DATE_FORMAT = 'MM/DD/YYYY - hh:mm A';
 const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
-const REQ_TYPE = 'PENDING';
+const CONN_TYPE = 'PENDING';
 const PENDING_REQS_TABLE_HEADERS = [
   {
     property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
@@ -63,8 +63,8 @@ const PENDING_REQS_TABLE_HEADERS = [
 
 interface IPendingReqsTableProps {
   tableData: IConnection[];
-  handleEdit: (reqType: string, peer: string) => void;
-  handleDelete: (reqType: string, peer: string) => void;
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
 }
 
 const PendingRequestsTable = ({ tableData, handleEdit, handleDelete }: IPendingReqsTableProps) => {
@@ -113,8 +113,8 @@ const PendingRequestsTable = ({ tableData, handleEdit, handleDelete }: IPendingR
             <GridCell lastCol={true}>
               <ActionsPopover
                 target={actionsElem}
-                onDeleteClick={() => handleDelete(REQ_TYPE, instanceName)}
-                onEditClick={() => handleEdit(REQ_TYPE, instanceName)}
+                onDeleteClick={() => handleDelete(CONN_TYPE, instanceName)}
+                onEditClick={() => handleEdit(CONN_TYPE, instanceName)}
               />
             </GridCell>
           )}
