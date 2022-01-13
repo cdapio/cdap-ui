@@ -25,8 +25,8 @@ const I18NPREFIX = `${PREFIX}.Connections`;
 
 interface IConnectionsProps {
   connections: IConnection[];
-  handleEdit: (reqType: string, peer: string) => void;
-  handleDelete: (reqType: string, peer: string) => void;
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
 }
 
 const Connections = ({ connections }: IConnectionsProps) => {
