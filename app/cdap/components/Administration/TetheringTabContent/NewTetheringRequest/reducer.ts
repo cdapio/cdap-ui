@@ -33,7 +33,6 @@ export interface INewTetheringReqState {
 }
 
 enum INewTetheringReqActions {
-  INIT,
   SET_INPUT_VALUES,
   SET_ERR,
   SET_ALERT,
