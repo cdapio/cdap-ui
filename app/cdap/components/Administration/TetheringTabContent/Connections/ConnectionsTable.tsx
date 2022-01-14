@@ -16,15 +16,41 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledButton } from '../shared.styles';
+import styled from 'styled-components';
+import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../shared.styles';
 import { IConnection, IConnectionsTableData } from '../types';
+import IconSVG from 'components/shared/IconSVG';
 import { formatAsPercentage } from 'services/DataFormatter';
 
 const PREFIX = 'features.Administration.Tethering';
 
+const StyledIcon = styled(IconSVG)`
+  fill: ${(props) => props.color};
+  font-size: 17px;
+`;
+
+const ICONS = {
+  active: {
+    name: 'icon-check-circle',
+    color: 'var(--green)',
+  },
+  inactive: {
+    name: 'icon-times-circle',
+    color: 'var(--red)',
+  },
+  header: {
+    name: 'icon-circle',
+    color: 'var(--grey05)',
+  },
+  default: {
+    name: 'icon-circle',
+    color: 'black',
+  },
+};
+
 const CONNECTIONS_TABLE_HEADERS = [
   {
-    label: '',
+    label: <StyledIcon name={ICONS.header.name} color={ICONS.header.color} />,
   },
   {
     property: 'gcp',
@@ -59,6 +85,17 @@ const CONNECTIONS_TABLE_HEADERS = [
   },
 ];
 
+const getIconForStatus = (status: string) => {
+  switch (status) {
+    case 'ACTIVE':
+      return <StyledIcon name={ICONS.active.name} color={ICONS.active.color} />;
+    case 'INACTIVE':
+      return <StyledIcon name={ICONS.inactive.name} color={ICONS.inactive.color} />;
+    default:
+      return <StyledIcon name={ICONS.default.name} color={ICONS.default.color} />;
+  }
+};
+
 interface IConnectionsTableProps {
   tableData: IConnection[];
   columnTemplate: string;
@@ -75,7 +112,7 @@ const ConnectionsTable = ({
     instanceName: conn.name,
     region: conn.metadata.metadata.location,
     allocationData: conn.metadata.namespaceAllocations,
-    status: conn.tetheringStatus,
+    status: conn.connectionStatus,
   }));
 
   const renderTableHeader = () => (
@@ -94,6 +131,7 @@ const ConnectionsTable = ({
 
   const renderRow = (req: IConnectionsTableData) => {
     const { status, allocationData, gcloudProject, instanceName, region } = req;
+    const icon = getIconForStatus(status);
 
     return allocationData.map((resource, i) => {
       const { namespace, cpuLimit, memoryLimit, pods } = resource;
@@ -101,7 +139,7 @@ const ConnectionsTable = ({
       const isLast = allocationData.length === i + 1;
       return (
         <GridRow columnTemplate={columnTemplate} border={isLast} key={i}>
-          <GridCell>{isFirst ? status : ''}</GridCell>
+          <GridCell>{isFirst ? icon : ''}</GridCell>
           <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
           <GridCell>{isFirst ? region : ''}</GridCell>

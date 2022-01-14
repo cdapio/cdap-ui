@@ -18,12 +18,13 @@ import React from 'react';
 import { IConnection } from '../types';
 import T from 'i18n-react';
 import ConnectionsTable from './ConnectionsTable';
-import GenericLastColumn from '../LastTableColumn/GenericLastColumn';
+import IconSVG from 'components/shared/IconSVG';
+import ActionsPopover from '../ActionPopover';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
-const COLUMN_TEMPLATE = '1fr 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
+const COLUMN_TEMPLATE = '50px 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
 
 interface IConnectionsProps {
   connections: IConnection[];
@@ -33,10 +34,10 @@ interface IConnectionsProps {
 
 const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProps) => {
   const renderLastColumn = (instanceName: string) => (
-    <GenericLastColumn
-      instanceName={instanceName}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
+    <ActionsPopover
+      target={() => <IconSVG name="icon-more" />}
+      onDeleteClick={() => handleDelete(null, instanceName)}
+      onEditClick={() => handleEdit(null, instanceName)}
     />
   );
 
