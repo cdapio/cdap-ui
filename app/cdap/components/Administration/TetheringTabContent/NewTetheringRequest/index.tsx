@@ -91,17 +91,20 @@ const NewTetheringRequest = () => {
     history.push('/administration/tethering');
   };
 
-  const handleOnClose = () => {
-    reset(dispatch);
-  };
-
   const renderAlert = () => {
     const hasError = Boolean(Object.keys(apiError).length);
     const message = hasError
       ? `${T.translate(`${I18NPREFIX}.failure`)}: ${apiError.response}`
       : T.translate(`${I18NPREFIX}.success`);
     const type = hasError ? 'error' : 'success';
-    return <Alert message={message} type={type} showAlert={showAlert} onClose={handleOnClose} />;
+    return (
+      <Alert
+        message={message}
+        type={type}
+        showAlert={showAlert}
+        onClose={() => reset(dispatch, hasError)}
+      />
+    );
   };
 
   return (
