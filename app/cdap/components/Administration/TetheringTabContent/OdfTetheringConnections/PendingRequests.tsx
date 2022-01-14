@@ -18,7 +18,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import T from 'i18n-react';
-import GenericLastColumn from '../LastTableColumn/GenericLastColumn';
+import IconSVG from 'components/shared/IconSVG';
+import ActionsPopover from '../ActionPopover';
 import RequestsTable from '../RequestsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 import { IConnection } from '../types';
@@ -41,11 +42,10 @@ interface IPendingRequestsProps {
 
 const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {
   const renderLastColumn = (instanceName: string) => (
-    <GenericLastColumn
-      instanceName={instanceName}
-      handleEdit={handleEdit}
-      handleDelete={handleDelete}
-      connType={PENDING}
+    <ActionsPopover
+      target={() => <IconSVG name="icon-more" />}
+      onDeleteClick={() => handleDelete(PENDING, instanceName)}
+      onEditClick={() => handleEdit(PENDING, instanceName)}
     />
   );
 

@@ -18,7 +18,7 @@ import React from 'react';
 import RequestsTable from '../RequestsTable';
 import T from 'i18n-react';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
-import NewReqLastColumn from '../LastTableColumn/NewReqLastColumn';
+import NewReqLastColumn from './NewReqLastColumn';
 import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
