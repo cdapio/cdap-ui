@@ -49,7 +49,7 @@ export const NoDataText = styled.span`
 export const Grid = styled.div`
   width: 100%;
   margin-top: 30px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   padding: 0 30px;
   max-height: none;
 `;

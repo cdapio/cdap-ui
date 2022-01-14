@@ -185,6 +185,8 @@ features:
         pendingRequestHeader: Pending requests
         pendingRequestHistory: VIEW REQUEST HISTORY
         noPendingRequests: There are no requests pending
+        acceptButton: Accept
+        rejectButton: reject
       Connections:
         connectionsHeader: Connections
         noConnections: There are no connections

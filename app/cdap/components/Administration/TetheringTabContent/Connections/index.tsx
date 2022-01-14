@@ -15,13 +15,15 @@
  */
 
 import React from 'react';
+import { IConnection } from '../types';
 import T from 'i18n-react';
 import ConnectionsTable from './ConnectionsTable';
-import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
-import { IConnection } from '../../types';
+import GenericLastColumn from '../LastTableColumn/GenericLastColumn';
+import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
+const COLUMN_TEMPLATE = '1fr 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
 
 interface IConnectionsProps {
   connections: IConnection[];
@@ -29,7 +31,15 @@ interface IConnectionsProps {
   handleDelete: (connType: string, peer: string) => void;
 }
 
-const Connections = ({ connections }: IConnectionsProps) => {
+const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProps) => {
+  const renderLastColumn = (instanceName: string) => (
+    <GenericLastColumn
+      instanceName={instanceName}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
+    />
+  );
+
   return (
     <>
       <HeaderContainer>
@@ -37,7 +47,11 @@ const Connections = ({ connections }: IConnectionsProps) => {
       </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
-          <ConnectionsTable tableData={connections} />
+          <ConnectionsTable
+            tableData={connections}
+            columnTemplate={COLUMN_TEMPLATE}
+            renderLastColumn={renderLastColumn}
+          />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noConnections`)}</NoDataText>
         )}
