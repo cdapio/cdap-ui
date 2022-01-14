@@ -20,6 +20,7 @@ export interface INamespaceAllocations {
   namespace: string;
   cpuLimit: string;
   memoryLimit: string;
+  pods?: number;
 }
 
 export interface IMetadata {
@@ -36,23 +37,19 @@ export interface IConnection {
 }
 
 export interface ITableData {
-  requestTime: string;
+  requestTime?: string;
   gcloudProject: string;
   instanceName: string;
   region: string;
 }
 
-export interface IAllocationData extends INamespaceAllocations {
-  pods: number;
-}
-
-export interface IPendingReqsTableData extends ITableData {
+export interface IReqsTableData extends ITableData {
   requestedResources: INamespaceAllocations[];
 }
 
 export interface IConnectionsTableData extends ITableData {
   status: string;
-  allocationData: IAllocationData[];
+  allocationData: INamespaceAllocations[];
 }
 
 export interface IConnectionsProps {
@@ -67,6 +64,7 @@ export interface IOdfConnectionsProps extends IConnectionsProps {
 
 export interface ICdfConnectionsProps extends IConnectionsProps {
   newRequests: IConnection[];
+  handleAcceptOrReject: (action: string, peer: string) => void;
 }
 
 export interface IApiError {

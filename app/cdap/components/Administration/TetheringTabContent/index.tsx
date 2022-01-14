@@ -21,6 +21,7 @@ import {
   reset,
   fetchConnections,
   deleteTetheringConnection,
+  acceptOrRejectTetheringConnectionReq,
 } from './reducer';
 import T from 'i18n-react';
 import Helmet from 'react-helmet';
@@ -66,6 +67,14 @@ const AdminTetheringTabContent = () => {
     }
   };
 
+  const handleAcceptOrReject = async (action: string, peer: string) => {
+    try {
+      await acceptOrRejectTetheringConnectionReq(dispatch, { action, peer });
+    } catch (err) {
+      setError(`Unable to ${action} connection: ${err.response}`);
+    }
+  };
+
   useEffect(() => {
     fetchConnectionsList();
   }, []);
@@ -91,6 +100,7 @@ const AdminTetheringTabContent = () => {
             newRequests={pendingRequests}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
+            handleAcceptOrReject={handleAcceptOrReject}
           />
         )}
         {error && (

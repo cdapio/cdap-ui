@@ -82,11 +82,23 @@ export const fetchConnections = async (dispatch: Dispatch<IAction<IConnectionsAc
   });
 };
 
+export const acceptOrRejectTetheringConnectionReq = async (
+  dispatch: Dispatch<IAction<IConnectionsActions>>,
+  { action, peer }
+) => {
+  await TetheringApi.acceptOrRejectTethering({ peer }, { action }).toPromise();
+
+  dispatch({
+    type: IConnectionsActions.DELETE_CONNECTION,
+    payload: { connGroup: 'pendingRequests', peer },
+  });
+};
+
 export const deleteTetheringConnection = async (
   dispatch: Dispatch<IAction<IConnectionsActions>>,
-  { connType, peer }
+  { connType = null, peer }
 ) => {
   await TetheringApi.deleteTethering({ peer }).toPromise();
-  const connGroup = connType === PENDING_STATUS ? 'pendingRequests' : 'establishedConnections';
+  const connGroup = Boolean(connType) ? 'pendingRequests' : 'establishedConnections';
   dispatch({ type: IConnectionsActions.DELETE_CONNECTION, payload: { connGroup, peer } });
 };

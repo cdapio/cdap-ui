@@ -15,27 +15,32 @@
  */
 
 import React from 'react';
-import NewRequests from './NewRequests';
-import Connections from '../Connections';
-import { ICdfConnectionsProps } from '../types';
+import IconSVG from 'components/shared/IconSVG';
+import ActionsPopover from '../ActionPopover';
 
-const CdfTetheringConnections = ({
-  newRequests,
-  establishedConnections,
+interface IGenericLastColumnProps {
+  instanceName: string;
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
+  connType?: string;
+}
+
+const GenericLastColumn = ({
+  instanceName,
   handleEdit,
   handleDelete,
-  handleAcceptOrReject,
-}: ICdfConnectionsProps) => {
+  connType,
+}: IGenericLastColumnProps) => {
+  const actionsElem = () => {
+    return <IconSVG name="icon-more" />;
+  };
   return (
-    <>
-      <NewRequests newRequests={newRequests} handleAcceptOrReject={handleAcceptOrReject} />
-      <Connections
-        connections={establishedConnections}
-        handleEdit={handleEdit}
-        handleDelete={handleDelete}
-      />
-    </>
+    <ActionsPopover
+      target={actionsElem}
+      onDeleteClick={() => handleDelete(connType, instanceName)}
+      onEditClick={() => handleEdit(connType, instanceName)}
+    />
   );
 };
 
-export default CdfTetheringConnections;
+export default GenericLastColumn;

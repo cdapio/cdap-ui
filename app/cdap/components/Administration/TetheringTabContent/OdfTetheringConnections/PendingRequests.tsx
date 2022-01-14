@@ -18,12 +18,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import T from 'i18n-react';
-import PendingRequestsTable from './PendingRequestsTable';
-import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
-import { IConnection } from '../../types';
+import GenericLastColumn from '../LastTableColumn/GenericLastColumn';
+import RequestsTable from '../RequestsTable';
+import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
+import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
+const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
+const PENDING = 'PENDING';
 
 const PendingRequestHistory = styled(Link)`
   margin-left: 40px;
@@ -37,6 +40,15 @@ interface IPendingRequestsProps {
 }
 
 const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {
+  const renderLastColumn = (instanceName: string) => (
+    <GenericLastColumn
+      instanceName={instanceName}
+      handleEdit={handleEdit}
+      handleDelete={handleDelete}
+      connType={PENDING}
+    />
+  );
+
   return (
     <>
       <HeaderContainer>
@@ -47,10 +59,10 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
       </HeaderContainer>
       <BodyContainer>
         {pendingRequests.length > 0 ? (
-          <PendingRequestsTable
+          <RequestsTable
             tableData={pendingRequests}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
+            columnTemplate={COLUMN_TEMPLATE}
+            renderLastColumn={renderLastColumn}
           />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noPendingRequests`)}</NoDataText>
