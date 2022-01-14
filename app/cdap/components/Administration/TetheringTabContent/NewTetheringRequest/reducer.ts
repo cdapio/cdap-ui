@@ -37,6 +37,7 @@ enum INewTetheringReqActions {
   SET_ERR,
   SET_ALERT,
   RESET,
+  RESET_ERRORS,
 }
 
 export const initialState: INewTetheringReqState = {
@@ -73,6 +74,13 @@ export const reducer = (state: INewTetheringReqState, action: IAction<INewTether
         ...state,
         showAlert: action.payload.val,
       };
+    case INewTetheringReqActions.RESET_ERRORS:
+      return {
+        ...state,
+        showAlert: false,
+        apiError: {},
+        validationErrors: {},
+      };
     case INewTetheringReqActions.RESET:
       return initialState;
     default:
@@ -106,9 +114,9 @@ export const updateAlertState = (dispatch, val: boolean) => {
   });
 };
 
-export const reset = (dispatch) => {
+export const reset = (dispatch, hasApiErr) => {
   dispatch({
-    type: INewTetheringReqActions.RESET,
+    type: hasApiErr ? INewTetheringReqActions.RESET_ERRORS : INewTetheringReqActions.RESET,
   });
 };
 
