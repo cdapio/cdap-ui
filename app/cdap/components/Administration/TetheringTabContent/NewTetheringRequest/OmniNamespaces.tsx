@@ -31,10 +31,6 @@ const ITEMS = [
       label: `${T.translate(`${I18N_OMNI_PREFIX}.Name.label`)}`,
       name: `${T.translate(`${I18N_OMNI_PREFIX}.Name.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      [WIDGET_ATTRIBUTES]: {
-        min: 1,
-        max: 100,
-      },
     },
   },
   {

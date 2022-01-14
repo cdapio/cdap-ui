@@ -24,6 +24,7 @@ const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
 
 const WIDGET_TYPE = 'widget-type';
+const WIDGET_ATTRIBUTES = 'widget-attributes';
 
 const ITEMS = [
   {
@@ -31,7 +32,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      'widget-attributes': {
+      WIDGET_ATTRIBUTES: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.ProjectName.placeholder`),
       },
     },
@@ -45,7 +46,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.Region.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.Region.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      'widget-attributes': {
+      WIDGET_ATTRIBUTES: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.Region.placeholder`),
       },
     },
@@ -59,7 +60,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      'widget-attributes': {
+      WIDGET_ATTRIBUTES: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.InstanceName.placeholder`),
       },
     },

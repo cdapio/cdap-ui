@@ -204,7 +204,7 @@ features:
           title: Omni Namespaces
           description: Select the namespaces that will be tethered to the cloud instance
           Name: 
-            name: name
+            name: namespace
             label: Name
           CpuLimit:
             name: cpuLimit
