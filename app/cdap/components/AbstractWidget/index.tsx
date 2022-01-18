@@ -25,6 +25,7 @@ export const DEFAULT_WIDGET_PROPS: IAbstractWidgetProps = {
   widgetProps: {},
   value: '',
   disabled: false,
+  type: 'textbox',
   // tslint:disable:no-empty
   onChange: () => {},
   updateAllProperties: () => {},

@@ -28,7 +28,7 @@ export default class StateWrapper extends PureComponent {
     widgetProps: PropTypes.object,
     extraConfig: PropTypes.object,
     disabled: PropTypes.bool,
-    errors: PropTypes.object,
+    errors: PropTypes.array,
     dataCy: PropTypes.string,
   };
 

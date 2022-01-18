@@ -16,17 +16,18 @@
 
 import React from 'react';
 import styled, { css } from 'styled-components';
+import Button from '@material-ui/core/Button';
 
 export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
   height: 60px;
+  padding: 0 30px;
   background-color: var(--grey08);
 `;
 
 export const HeaderTitle = styled.h5`
-  margin-left: 30px;
   margin-top: 5px;
   font-weight: bold;
 `;
@@ -60,7 +61,7 @@ export const GridHeader = styled.div`
 `;
 
 export const GridBody = styled.div`
-  background-color: var(--white01);
+  background-color: var(--white);
 `;
 
 export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {...props} />)`
@@ -96,4 +97,34 @@ export const GridCell = styled(({ border, lastCol, ...props }) => <div {...props
       justify-content: flex-end;
       padding-right: 0;
     `}
+`;
+
+export const StyledButton = styled(Button)`
+  margin: 0 0 20px 30px;
+  background-color: var(--white);
+  color: var(--primary);
+  height: 30px;
+  width: 190px;
+  font-size: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: var(--primary);
+    color: var(--white);
+  }
+`;
+
+export const NewReqContainer = styled.div`
+  width: 50vw;
+  max-width: 800px;
+  min-width: 500px;
+  margin-bottom: 40px;
+
+  hr {
+    border-width: 0;
+    color: var(--grey07);
+    background-color: var(--grey07);
+    height: 2px;
+  }
 `;
