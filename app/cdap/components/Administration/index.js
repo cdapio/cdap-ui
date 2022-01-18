@@ -21,6 +21,7 @@ import { humanReadableNumber, objectQuery } from 'services/helpers';
 import AdminManagementTabContent from 'components/Administration/AdminManagementTabContent';
 import AdminConfigTabContent from 'components/Administration/AdminConfigTabContent';
 import TetheringTabContent from 'components/Administration/TetheringTabContent';
+import NewTetheringRequest from 'components/Administration/TetheringTabContent/NewTetheringRequest';
 import AdminTabSwitch from 'components/Administration/AdminTabSwitch';
 import { Route, Switch } from 'react-router-dom';
 
@@ -129,6 +130,13 @@ class Administration extends Component {
             path="/administration/tethering"
             render={() => {
               return <TetheringTabContent />;
+            }}
+          />
+          <Route
+            exact
+            path="/administration/tethering/newTetheringRequest"
+            render={() => {
+              return <NewTetheringRequest />;
             }}
           />
         </Switch>

@@ -190,8 +190,42 @@ features:
         noConnections: There are no connections
       NewRequests:
         newRequestsHeader: New requests
-        noNewRequests: There are no new requests
-      createRequest: CREATE NEW REQUEST 
+        noNewRequests: There are no new requests 
+      CreateRequest:
+        createRequestButton: CREATE NEW REQUEST
+        headerTitle: Create new tethering request
+        backButton: Back
+        sendButton: Send Request
+        cancelButton: Cancel
+        success: Your request was created successfully
+        failure: Failed to create request
+        validationError: Required field {fieldName} has no value
+        OmniNamespaces:
+          title: Omni Namespaces
+          description: Select the namespaces that will be tethered to the cloud instance
+          Name: 
+            name: namespace
+            label: Name
+          CpuLimit:
+            name: cpuLimit
+            label: CPU
+          MemoryLimit:
+            name: memoryLimit
+            label: Memory
+        CDFInformation:
+          title: CDF Information
+          ProjectName: 
+            name: projectName
+            label: Project Name
+            placeholder: Specify the Google Cloud project name
+          Region:
+            name: region
+            label: Region
+            placeholder: Specify the region
+          InstanceName:
+            name: instanceName
+            label: Instance Name
+            placeholder: Specify the Cloud Data Fusion instance name
       ColumnHeaders:
          requestTime: Request Time
          gcp: Google cloud project

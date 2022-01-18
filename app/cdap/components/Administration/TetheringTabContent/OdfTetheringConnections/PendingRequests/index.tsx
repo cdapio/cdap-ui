@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import T from 'i18n-react';
@@ -39,7 +39,7 @@ const PendingRequests = ({ pendingRequests }: IPendingRequestsProps) => {
     <>
       <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.pendingRequestHeader`)}</HeaderTitle>
-        <PendingRequestHistory to="/administration/tethering/newRequest">
+        <PendingRequestHistory to="/administration/tethering/requestHistory">
           {T.translate(`${I18NPREFIX}.pendingRequestHistory`)}
         </PendingRequestHistory>
       </HeaderContainer>

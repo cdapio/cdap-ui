@@ -15,9 +15,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import T from 'i18n-react';
-import Button from '@material-ui/core/Button';
 import PendingRequests from './PendingRequests';
 import Connections from './Connections';
 import { TetheringApi } from 'api/tethering';
@@ -26,25 +26,27 @@ import { IConnection } from './types';
 const PREFIX = 'features.Administration.Tethering';
 const PENDING_STATUS = 'PENDING';
 
-const NewRequestBtn = styled(Button)`
-  margin: 0 0 20px 30px;
-  background-color: var(--white01);
+const ButtonContainer = styled.div`
+  margin: 5px 0 25px 30px;
+`;
+
+const NewRequestBtn = styled(Link)`
+  padding: 5px 20px;
+  background-color: var(--white);
   color: var(--primary);
   height: 30px;
-  width: 190px;
   font-size: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
 
   &:hover {
     background-color: var(--primary);
-    color: var(--white01);
+    color: var(--white);
+    text-decoration: none;
   }
 `;
 
 const OdfTetheringConnections = (): JSX.Element => {
-  const handleCreateButtonClick = () => {
-    // TODO: navigate to create request page
-  };
-
   const [connections, setConnections] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
 
@@ -76,9 +78,11 @@ const OdfTetheringConnections = (): JSX.Element => {
   return (
     <>
       <PendingRequests pendingRequests={pendingRequests} />
-      <NewRequestBtn variant="contained" onClick={handleCreateButtonClick}>
-        {T.translate(`${PREFIX}.createRequest`)}
-      </NewRequestBtn>
+      <ButtonContainer>
+        <NewRequestBtn to="/administration/tethering/newTetheringRequest">
+          {T.translate(`${PREFIX}.CreateRequest.createRequestButton`)}
+        </NewRequestBtn>
+      </ButtonContainer>
       <Connections connections={connections} />
     </>
   );
