@@ -19,6 +19,8 @@ import {
   IFieldType,
   IFieldTypeNullable,
   ILogicalTypeBase,
+  IComplexType,
+  IRecordField,
 } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import {
   getComplexTypeName,
@@ -85,7 +87,7 @@ function parseUnionType(type): IOrderedChildren {
         type: typeName,
         internalType: InternalTypesEnum.UNION_COMPLEX_TYPE_ROOT,
         children: parseComplexType(subType),
-        ...checkForLogicalType(subType),
+        ...getAdditionalTypeProperties(subType),
       };
     } else {
       result[id] = {
@@ -93,7 +95,7 @@ function parseUnionType(type): IOrderedChildren {
         type: getSimpleType(subType),
         nullable: false,
         internalType: InternalTypesEnum.UNION_SIMPLE_TYPE,
-        ...checkForLogicalType({ type: subType }),
+        ...getAdditionalTypeProperties({ type: subType }),
       };
     }
   }
@@ -124,7 +126,7 @@ function parseArrayType(type): IOrderedChildren {
         id,
         nullable: isNullable(t.items),
         type: getSimpleType(getNonNullableType(t.items)),
-        ...checkForLogicalType({ type: t.items }),
+        ...getAdditionalTypeProperties({ type: t.items }),
       },
     };
   }
@@ -135,7 +137,7 @@ function parseArrayType(type): IOrderedChildren {
       nullable,
       type: getComplexTypeName(t.items),
       children: parseComplexType(t.items),
-      ...checkForLogicalType(t.items),
+      ...getAdditionalTypeProperties(t.items),
     },
   };
 }
@@ -194,7 +196,7 @@ function getMapSubType(type, internalTypeName): INode {
       internalType: internalTypeName.simpleType,
       nullable: isNullable(type),
       type: getSimpleType(getNonNullableType(type)),
-      ...checkForLogicalType({ type }),
+      ...getAdditionalTypeProperties({ type }),
     };
   } else {
     const complexType = getComplexTypeName(type);
@@ -205,7 +207,7 @@ function getMapSubType(type, internalTypeName): INode {
       internalType: internalTypeName.complexType,
       type: complexType,
       nullable,
-      ...checkForLogicalType(type),
+      ...getAdditionalTypeProperties(type),
     };
   }
 }
@@ -314,12 +316,27 @@ function parseComplexType(type): IOrderedChildren {
  *  children and will have type properties that map the logical property to underlying type.
  * @param field - field in the schema.
  */
-function checkForLogicalType(field: Partial<IFieldType | IFieldTypeNullable>) {
-  let type = field.type;
-  type = getNonNullableType(type) as ILogicalTypeBase;
+function getAdditionalTypeProperties(field: Partial<IFieldType | IFieldTypeNullable>) {
+  const fieldType = field.type;
+  if (!fieldType) {
+    return;
+  }
+
+  if (isComplexType(fieldType) && (fieldType as IComplexType).type === AvroSchemaTypesEnum.RECORD) {
+    return {
+      typeProperties: {
+        doc: field.doc,
+        aliases: field.aliases,
+        typeName: fieldType && (fieldType as IRecordField).name,
+      },
+    };
+  }
+
+  const type = getNonNullableType(fieldType) as ILogicalTypeBase;
   if (!type) {
     return;
   }
+
   switch (type.logicalType) {
     case AvroSchemaTypesEnum.DECIMAL:
       return {
@@ -384,7 +401,7 @@ function parseSubTree(field: IFieldType | IFieldTypeNullable): INode {
       internalType: InternalTypesEnum.RECORD_SIMPLE_TYPE,
       nullable,
       type: getSimpleType(t),
-      ...checkForLogicalType(field),
+      ...getAdditionalTypeProperties(field),
     };
   }
   return {
@@ -394,7 +411,7 @@ function parseSubTree(field: IFieldType | IFieldTypeNullable): INode {
     internalType: InternalTypesEnum.RECORD_COMPLEX_TYPE_ROOT,
     nullable,
     type: getComplexTypeName(t),
-    ...checkForLogicalType(field),
+    ...getAdditionalTypeProperties(field),
   };
 }
 
@@ -453,5 +470,5 @@ export {
   parseArrayType,
   parseEnumType,
   parseMapType,
-  checkForLogicalType,
+  getAdditionalTypeProperties,
 };

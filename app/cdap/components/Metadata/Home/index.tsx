@@ -23,9 +23,9 @@ import FormControl from '@material-ui/core/FormControl';
 import Search from '@material-ui/icons/Search';
 import FilledInput from '@material-ui/core/FilledInput';
 import Helmet from 'react-helmet';
-import styled, { css } from 'styled-components';
-import { getCurrentNamespace } from 'services/NamespaceStore';
+import styled from 'styled-components';
 import { Theme } from 'services/ThemeHelper';
+import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
 const I18N_PREFIX = 'features.MetadataHome';
 
@@ -74,7 +74,7 @@ const MetadataHome: React.FC = () => {
     const isValid = searchQueryRegex.test(searchQuery);
     setError(!isValid);
     if (event.key === 'Enter' && searchQuery.trim() !== '' && isValid) {
-      setRedirectUrl(`/ns/${getCurrentNamespace()}/metadata/search/${searchQuery.trim()}/result`);
+      setRedirectUrl(getMetadataPageUrl('search', { query: searchQuery.trim() }));
     }
   };
 

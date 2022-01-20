@@ -18,8 +18,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ISearchResult } from 'components/Metadata/SearchResults/helper';
 import T from 'i18n-react';
-import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 import { dateTimeFormat } from 'services/DataFormatter';
+import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
 const I18N_PREFIX = 'features.MetadataSearch';
 
@@ -63,13 +64,15 @@ const ResultList: React.FC<IResultListProps> = ({ results, currentPage, pageSize
       {pageResults.map((result) => (
         <List key={result.name}>
           <Title>
-            <a
-              href={`/cdap/ns/${getCurrentNamespace()}/metadata/${result.entityTypeState}/${
-                result.name
-              }/summary/search/${query}`}
+            <Link
+              to={getMetadataPageUrl('summary', {
+                query,
+                entityType: result.entityTypeState,
+                entityId: result.name,
+              })}
             >
               {result.name}
-            </a>
+            </Link>
           </Title>
           <Description>
             <span className={result.icon}></span> {result.type}

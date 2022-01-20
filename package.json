@@ -181,6 +181,7 @@
     "cookie-parser": "1.4.4",
     "css-vars-ponyfill": "2.1.2",
     "d3": "5.15.0",
+    "dagre": "^0.8.5",
     "dataloader": "2.0.0",
     "ejs": "3.0.1",
     "event-emitter": "0.3.5",

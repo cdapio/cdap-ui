@@ -30,6 +30,7 @@ import EntitySchema from 'components/Metadata/SearchSummary/EntitySchema';
 import EntityProperties from 'components/Metadata/SearchSummary/EntityProperties';
 import { ISearchMetadata, IPropertiesResponse } from 'components/Metadata/SearchSummary/helper';
 import { Theme } from 'services/ThemeHelper';
+import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
 const I18N_PREFIX = 'features.MetadataSummary';
 
@@ -123,7 +124,7 @@ const SearchSummary: React.FC = () => {
   }
 
   function onSearch(searchQuery: string) {
-    setRedirectUrl(`/ns/${getCurrentNamespace()}/metadata/search/${searchQuery.trim()}/result`);
+    setRedirectUrl(getMetadataPageUrl('search', { query: searchQuery.trim() }));
   }
 
   if (redirectUrl) {

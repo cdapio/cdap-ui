@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,25 +19,24 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import ConnectionsTable from './ConnectionsTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../../shared.styles';
+import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
 
-const ConnectionsHeader = styled(HeaderContainer)`
-  background-color: ${(props) => props.theme.palette.grey[700]};
-`;
+interface IConnectionsProps {
+  connections: IConnection[];
+}
 
-const Connections = () => {
-  const [connections, setConnections] = useState([]);
-
+const Connections = ({ connections }: IConnectionsProps) => {
   return (
     <>
-      <ConnectionsHeader>
+      <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.connectionsHeader`)}</HeaderTitle>
-      </ConnectionsHeader>
+      </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
-          <ConnectionsTable />
+          <ConnectionsTable tableData={connections} />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noConnections`)}</NoDataText>
         )}

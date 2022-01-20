@@ -23,7 +23,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import { Theme } from 'services/ThemeHelper';
-import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
 const I18N_PREFIX = 'features.MetadataSummary';
 
@@ -79,12 +79,13 @@ const EntityTopBar: React.FC<IEntityTopBarProps> = ({
 
   function handleTabChange(event, newValue: number) {
     if (defaultTab !== newValue) {
-      const baseUrl = `/ns/${getCurrentNamespace()}/metadata/${entityType}/${entityId}/`;
-      if (newValue === 1) {
-        window.location.href = `/metadata/ns/${getCurrentNamespace()}/entity/${entityType}/${entityId}/lineage?searchTerm=${query}`;
-      } else {
-        setRedirectUrl(`${baseUrl}/summary/search/${query}`);
-      }
+      setRedirectUrl(
+        getMetadataPageUrl(newValue === 1 ? 'lineage' : 'summary', {
+          query,
+          entityType,
+          entityId,
+        })
+      );
     }
   }
 

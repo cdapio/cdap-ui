@@ -33,6 +33,7 @@ interface IEntityTopPanelProps {
   historyBack?: boolean;
   inheritBackground?: boolean;
   className?: string;
+  showBreadcrumb?: boolean;
 }
 
 const useStyle = makeStyle<Theme>((theme) => {
@@ -65,6 +66,7 @@ export function EntityTopPanel({
   historyBack,
   inheritBackground,
   className,
+  showBreadcrumb = true,
 }: IEntityTopPanelProps) {
   const multilineTitle = typeof entityIcon === 'string' && typeof entityType === 'string';
   const classes = useStyle({ multiline: multilineTitle });
@@ -77,12 +79,14 @@ export function EntityTopPanel({
       })}
     >
       <div className={classes.titleContainer}>
-        <EntityBreadCrumb
-          breadCrumbAnchorLabel={breadCrumbAnchorLabel}
-          breadCrumbAnchorLink={breadCrumbAnchorLink}
-          historyBack={historyBack}
-          onBreadCrumbClick={onBreadCrumbClick}
-        />
+        {showBreadcrumb && (
+          <EntityBreadCrumb
+            breadCrumbAnchorLabel={breadCrumbAnchorLabel}
+            breadCrumbAnchorLink={breadCrumbAnchorLink}
+            historyBack={historyBack}
+            onBreadCrumbClick={onBreadCrumbClick}
+          />
+        )}
         <EntityTitle title={title} entityIcon={entityIcon} entityType={entityType} />
       </div>
       <EntityCloseBtn closeBtnAnchorLink={closeBtnAnchorLink} />
