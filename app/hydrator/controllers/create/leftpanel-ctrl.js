@@ -48,6 +48,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.selectedArtifact = rArtifacts.filter( ar => ar.name === configStoreArtifact.name)[0];
     this.artifactToRevert = this.selectedArtifact;
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
+    this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
 
     this.init();
 
@@ -224,6 +225,25 @@ class HydratorPlusPlusLeftPanelCtrl {
       return this.$q.when(goTonextStep);
     }
   }
+
+  /**
+   * This is a copy of onLeftSidePanelItemClicked
+   * with the scope bound to the function -- copied
+   * so we don't break original functionality
+   */
+  onV2ItemClicked(event, node) {
+    event.stopPropagation();
+    if (node.action === 'createTemplate') {
+      this.createPluginTemplate(node.contentData, 'create');
+    } else if(node.action === 'deleteTemplate') {
+      this.deletePluginTemplate(node.contentData);
+    } else if(node.action === 'editTemplate') {
+      this.createPluginTemplate(node.contentData, 'edit');
+    } else {
+      this.addPluginToCanvas(event, node);
+    }
+  }
+
   onLeftSidePanelItemClicked(event, node) {
     event.stopPropagation();
     if (node.action === 'createTemplate') {
