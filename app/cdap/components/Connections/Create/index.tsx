@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import T from 'i18n-react';
 import { CategorizedConnectors } from 'components/Connections/Create/CategorizedConnectors';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { EntityTopPanel } from 'components/EntityTopPanel';
@@ -41,6 +42,8 @@ import { extractErrorMessage, objectQuery } from 'services/helpers';
 import Alert from 'components/shared/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 import { constructErrors } from 'components/shared/ConfigurationGroup/utilities';
+
+const PREFIX = 'features.DataPrepConnections.ConnectionManagement';
 
 const useStyle = makeStyle(() => {
   return {
@@ -231,7 +234,13 @@ export function CreateConnection({
 
     onToggle();
   }
-
+  const editPanelTitle = T.translate(`${PREFIX}.editConnection`, {
+    connector: state?.selectedConnector?.name,
+    connectionName: objectQuery(initValues, 'initName'),
+  });
+  const createPanelTitle = T.translate(`${PREFIX}.createConnection`, {
+    connector: state?.selectedConnector?.name,
+  });
   return (
     <div className={classes.root}>
       {state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG && (
@@ -239,9 +248,10 @@ export function CreateConnection({
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
-          title={`Create a ${state?.selectedConnector?.name} connection`}
+          title={`${isEdit ? editPanelTitle : createPanelTitle}`}
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
+          showBreadcrumb={!isEdit}
         />
       )}
       {state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION && (

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,12 +15,25 @@
  */
 
 import React from 'react';
+import { IConnection } from '../types';
 
-const ConnectionsTable = () => {
+interface IConnectionsTableProps {
+  tableData: IConnection[];
+}
+
+const ConnectionsTable = ({ tableData }: IConnectionsTableProps) => {
+  const transformedTableData = tableData.map((req) => ({
+    requestTime: '00:00:00',
+    gcloudProject: req.metadata.metadata.project,
+    instanceName: req.name,
+    region: req.metadata.metadata.location,
+    requestedResources: req.metadata.namespaceAllocations,
+  }));
+
   return (
     <>
-      {/* TODO: Add table here*/}
-      <span> Table Goes Here </span>
+      {/* TODO: Will be completed after pending requests and new request creation*/}
+      {transformedTableData.map((row) => row.gcloudProject)}
     </>
   );
 };

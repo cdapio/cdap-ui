@@ -190,8 +190,54 @@ features:
         noConnections: There are no connections
       NewRequests:
         newRequestsHeader: New requests
-        noNewRequests: There are no new requests
-      createRequest: CREATE NEW REQUEST  
+        noNewRequests: There are no new requests 
+      CreateRequest:
+        createRequestButton: CREATE NEW REQUEST
+        headerTitle: Create new tethering request
+        backButton: Back
+        sendButton: Send Request
+        cancelButton: Cancel
+        success: Your request was created successfully
+        failure: Failed to create request
+        validationError: Required field {fieldName} has no value
+        OmniNamespaces:
+          title: Omni Namespaces
+          description: Select the namespaces that will be tethered to the cloud instance
+          Name: 
+            name: namespace
+            label: Name
+          CpuLimit:
+            name: cpuLimit
+            label: CPU
+          MemoryLimit:
+            name: memoryLimit
+            label: Memory
+        CDFInformation:
+          title: CDF Information
+          ProjectName: 
+            name: projectName
+            label: Project Name
+            placeholder: Specify the Google Cloud project name
+          Region:
+            name: region
+            label: Region
+            placeholder: Specify the region
+          InstanceName:
+            name: instanceName
+            label: Instance Name
+            placeholder: Specify the Cloud Data Fusion instance name
+      ColumnHeaders:
+         requestTime: Request Time
+         gcp: Google cloud project
+         instanceName: Instance name
+         region: Region
+         omniNamespace: Omni namespace
+         cpu: CPU
+         memory: Memory
+         pods: Pods
+      Actions:
+        edit: Edit
+        delete: Delete
       pageTitle: '{productName} | Administration | Tethering Connections'
     Services:
       title: Services
@@ -1435,6 +1481,8 @@ features:
       delete: Delete
       duplicate: Duplicate
       edit: Edit
+      editConnection: 'Edit {connector} connection - "{connectionName}"'
+      createConnection: "Create a {connector} connection"
     database: Database ({count})
     gcs: Google Cloud Storage ({count})
     hdfs: File System
@@ -2144,7 +2192,7 @@ features:
       ascending: A → Z
       descending: Z → A
   MetadataSummary:
-    pageTitle: "{productName} | Search | {entityId} | Summary"
+    pageTitle: "{productName} | Search | {entityId} | Results"
     loading: Loading metadata
     businessTags: Business tags
     systemTags: System tags
@@ -2175,6 +2223,28 @@ features:
     enterPropertyValue: Enter a value
     propertyKey: Key
     propertyValue: Value
+  MetadataLineage:
+    pageTitle: "{productName} | Search | {entityId} | Lineage"
+    loading: Obtaining lineage information
+    dateRange:
+      label: Date range
+      options:
+        custom: Custom
+        last7Days: Last 7 days
+        last14Days: Last 14 days
+        lastMonth: Last month
+        last6Months: Last 6 months
+        last12Months: Last 12 months
+    fieldLevelLineage: Field Level Lineage
+    noLineageMsg: No lineage data for the selected time period.
+    programRunInfo:
+      runId: Run ID
+      runs: Runs
+      duration: Duration
+      started: Started
+      status: Status
+      close: Close
+      loading: Loading
   ApiError:    
     CmekError:
       mainTitle: CMEK Key Revoked

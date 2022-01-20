@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,30 +14,15 @@
  * the License.
  */
 
-import styled from 'styled-components';
+import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
-export const HeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 60px;
-`;
+export interface IApiError {
+  statusCode?: string;
+  response?: string;
+}
 
-export const HeaderTitle = styled.h5`
-  margin-left: 30px;
-  margin-top: 5px;
-  font-weight: bold;
-`;
-
-export const BodyContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-
-export const NoDataText = styled.span`
-  margin: 15px 0;
-  font-weight: bold;
-  font-size: 1rem;
-`;
+export interface IValidationErrors {
+  instanceName?: IErrorObj;
+  projectName?: IErrorObj;
+  region?: IErrorObj;
+}

@@ -23,6 +23,7 @@ import {
   getRequestsByDate,
 } from 'components/HttpExecutor/utilities';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import moment from 'moment';
 
 import Button from '@material-ui/core/Button';
 import ClearAllDialog from 'components/HttpExecutor/RequestHistoryTab/RequestActionDialogs/ClearAllDialog';
@@ -171,7 +172,7 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
             compareByTimestamp(a.timestamp, b.timestamp)
           )
           .forEach((req: IRequestHistory) => {
-            const timestamp = new Date(req.timestamp);
+            const timestamp = moment(req.timestamp, 'MM/DD/YYYY').toDate();
             const dateID: string = getDateID(timestamp);
             const requestsGroup = getRequestsByDate(newRequestLog, dateID);
             newRequestLog = newRequestLog.set(dateID, requestsGroup.push(req));
