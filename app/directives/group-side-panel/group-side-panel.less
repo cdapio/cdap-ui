@@ -18,8 +18,15 @@
 @import "../../../bower_components/bootstrap/less/mixins.less";
 @import "../../styles/themes/cdap/mixins.less";
 
-my-side-panel {
+my-side-panel, .my-side-panel {
   height: 100%;
+  .icon-container {
+    img {
+      height: 32px;
+      width: 32px;
+      vertical-align: top;
+    }
+  }
   .side-panel {
     height: 100%;
     * {
