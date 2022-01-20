@@ -25,6 +25,7 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
 const COLUMN_TEMPLATE = '50px 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
+const CONNECTION_STATUS = 'ACCEPTED';
 
 interface IConnectionsProps {
   connections: IConnection[];
@@ -36,8 +37,8 @@ const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProp
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
       target={() => <IconSVG name="icon-more" />}
-      onDeleteClick={() => handleDelete(null, instanceName)}
-      onEditClick={() => handleEdit(null, instanceName)}
+      onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
+      onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
     />
   );
 

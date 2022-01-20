@@ -27,7 +27,7 @@ import { IConnection } from '../types';
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
 const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
-const PENDING = 'PENDING';
+const CONNECTION_STATUS = 'PENDING';
 
 const PendingRequestHistory = styled(Link)`
   margin-left: 40px;
@@ -44,8 +44,8 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
       target={() => <IconSVG name="icon-more" />}
-      onDeleteClick={() => handleDelete(PENDING, instanceName)}
-      onEditClick={() => handleEdit(PENDING, instanceName)}
+      onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
+      onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
     />
   );
 
