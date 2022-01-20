@@ -304,6 +304,8 @@ const HYDRATOR_DEFAULT_VALUES = {
     memoryMB: 2048,
   },
   numOfRecordsPreview: 100,
+  minRecordsPreview: 1,
+  maxRecordsPreview: 5000,
   previewTimeoutInMin: 2,
   engine: 'spark',
   processTimingEnabled: true,
