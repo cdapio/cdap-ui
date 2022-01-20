@@ -99,14 +99,21 @@
         </div>
         <div class="label-with-toggle num-records-preview row">
           <span class="toggle-label col-xs-5">Number of records to preview</span>
-          <my-number-widget
-            class="num-records-input"
-            ng-model="BatchPipelineConfigCtrl.numRecordsPreview"
-            config="BatchPipelineConfigCtrl.numberConfig"
-          ></my-number-widget>
-          <i class="fa fa-info-circle"
-             uib-tooltip="The number of records to be read during the pipeline preview. For MapReduce, this translates to the number of records that are read by each map task."
-             tooltip-placement="right">
+          <div class="col-xs-7 num-preview-input-col">
+            <div class="toggle-container">
+                <my-number-widget
+                class="num-records-input"
+                ng-model="BatchPipelineConfigCtrl.numRecordsPreview"
+                config="BatchPipelineConfigCtrl.numberConfig"
+              ></my-number-widget>
+              <i class="fa fa-info-circle"
+                uib-tooltip="The number of records to be read during the pipeline preview. For MapReduce, this translates to the number of records that are read by each map task."
+                tooltip-placement="right"></i>
+            </div>
+            <span class="num-preview-info">
+              Max up to {{BatchPipelineConfigCtrl.numberConfig['widget-attributes'].max}} records
+            </span>
+          </div>
         </div>
       </div>
 
