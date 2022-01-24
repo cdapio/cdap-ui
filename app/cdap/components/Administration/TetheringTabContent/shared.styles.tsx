@@ -18,6 +18,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
+import IconSVG from 'components/shared/IconSVG';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -143,5 +144,32 @@ export const NewReqContainer = styled.div`
     color: var(--grey07);
     background-color: var(--grey07);
     height: 2px;
+  }
+`;
+
+export const StyledIcon = styled(IconSVG)`
+  fill: ${(props) => props.color};
+  font-size: ${(props) => props.size};
+`;
+
+export const LinedSpan = styled.span`
+  display: flex;
+  flex-direction: row;
+  margin-right: -20px;
+
+  &:before,
+  &:after {
+    content: '';
+    flex: 1 1;
+    border-bottom: 2px solid var(--grey11);
+    margin: auto;
+  }
+
+  &:before {
+    margin-right: 15px;
+  }
+
+  &:after {
+    margin-left: 15px;
   }
 `;

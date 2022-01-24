@@ -190,6 +190,7 @@ features:
       Connections:
         connectionsHeader: Connections
         noConnections: There are no connections
+        allocation: Allocation
       NewRequests:
         newRequestsHeader: New requests
         noNewRequests: There are no new requests 

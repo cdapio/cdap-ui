@@ -16,74 +16,18 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import styled from 'styled-components';
-import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../shared.styles';
+import {
+  Grid,
+  GridHeader,
+  GridBody,
+  GridRow,
+  GridCell,
+  StyledIcon,
+  LinedSpan,
+} from '../shared.styles';
+import { ICONS, CONNECTIONS_TABLE_HEADERS, PREFIX, DESC_COLUMN_TEMPLATE } from './constants';
 import { IConnection, IConnectionsTableData } from '../types';
-import IconSVG from 'components/shared/IconSVG';
 import { formatAsPercentage } from 'services/DataFormatter';
-
-const PREFIX = 'features.Administration.Tethering';
-
-const StyledIcon = styled(IconSVG)`
-  fill: ${(props) => props.color};
-  font-size: 17px;
-`;
-
-const ICONS = {
-  active: {
-    name: 'icon-check-circle',
-    color: 'var(--green)',
-  },
-  inactive: {
-    name: 'icon-times-circle',
-    color: 'var(--red)',
-  },
-  header: {
-    name: 'icon-circle',
-    color: 'var(--grey05)',
-  },
-  default: {
-    name: 'icon-circle',
-    color: 'black',
-  },
-};
-
-const CONNECTIONS_TABLE_HEADERS = [
-  {
-    label: <StyledIcon name={ICONS.header.name} color={ICONS.header.color} />,
-  },
-  {
-    property: 'gcp',
-    label: T.translate(`${PREFIX}.ColumnHeaders.gcp`),
-  },
-  {
-    property: 'instanceName',
-    label: T.translate(`${PREFIX}.ColumnHeaders.instanceName`),
-  },
-  {
-    property: 'region',
-    label: T.translate(`${PREFIX}.ColumnHeaders.region`),
-  },
-  {
-    property: 'omniNamespace',
-    label: T.translate(`${PREFIX}.ColumnHeaders.omniNamespace`),
-  },
-  {
-    property: 'pods',
-    label: T.translate(`${PREFIX}.ColumnHeaders.pods`),
-  },
-  {
-    property: 'cpu',
-    label: T.translate(`${PREFIX}.ColumnHeaders.cpu`),
-  },
-  {
-    property: 'memory',
-    label: T.translate(`${PREFIX}.ColumnHeaders.memory`),
-  },
-  {
-    label: '',
-  },
-];
 
 const getIconForStatus = (status: string) => {
   switch (status) {
@@ -116,13 +60,23 @@ const ConnectionsTable = ({
   }));
 
   const renderTableHeader = () => (
-    <GridHeader>
-      <GridRow columnTemplate={columnTemplate}>
-        {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
-          return <GridCell key={i}>{header.label}</GridCell>;
-        })}
+    <>
+      <GridRow columnTemplate={DESC_COLUMN_TEMPLATE}>
+        <GridCell />
+        <GridCell />
+        <GridCell>
+          <LinedSpan>{T.translate(`${PREFIX}.Connections.allocation`)}</LinedSpan>
+        </GridCell>
+        <GridCell />
       </GridRow>
-    </GridHeader>
+      <GridHeader>
+        <GridRow columnTemplate={columnTemplate}>
+          {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
+            return <GridCell key={i}>{header.label}</GridCell>;
+          })}
+        </GridRow>
+      </GridHeader>
+    </>
   );
 
   const renderTableBody = (data: IConnectionsTableData[]) => (
