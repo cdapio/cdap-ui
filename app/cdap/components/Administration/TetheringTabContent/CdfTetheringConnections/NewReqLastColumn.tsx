@@ -27,7 +27,7 @@ const ButtonsContainer = styled.div`
   height: 30px;
 `;
 
-const GridCellButtons = styled(StyledButton)`
+const GridCellButton = styled(StyledButton)`
   font-size: 0.9rem;
   width: 90px;
   height: 18px;
@@ -41,12 +41,12 @@ interface INewReqLastColumnProps {
 const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastColumnProps) => {
   return (
     <ButtonsContainer>
-      <GridCellButtons onClick={() => handleAcceptOrReject('accept', instanceName)}>
+      <GridCellButton onClick={() => handleAcceptOrReject('accept', instanceName)}>
         {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
-      </GridCellButtons>
-      <GridCellButtons onClick={() => handleAcceptOrReject('reject', instanceName)}>
+      </GridCellButton>
+      <GridCellButton onClick={() => handleAcceptOrReject('reject', instanceName)}>
         {T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
-      </GridCellButtons>
+      </GridCellButton>
     </ButtonsContainer>
   );
 };
