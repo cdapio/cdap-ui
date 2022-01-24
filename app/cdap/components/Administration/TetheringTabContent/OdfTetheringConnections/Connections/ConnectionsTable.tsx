@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { IConnection } from '../types';
+import { IConnection } from '../../types';
 
 interface IConnectionsTableProps {
   tableData: IConnection[];

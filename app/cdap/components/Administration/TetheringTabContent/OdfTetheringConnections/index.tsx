@@ -14,76 +14,43 @@
  * the License.
  */
 
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequests from './PendingRequests';
 import Connections from './Connections';
-import { TetheringApi } from 'api/tethering';
-import { IConnection } from './types';
+import { IOdfConnectionsProps } from '../types';
+import { StyledLinkBtn } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
-const PENDING_STATUS = 'PENDING';
 
 const ButtonContainer = styled.div`
   margin: 5px 0 25px 30px;
 `;
 
-const NewRequestBtn = styled(Link)`
-  padding: 5px 20px;
-  background-color: var(--white);
-  color: var(--primary);
-  height: 30px;
-  font-size: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
-
-  &:hover {
-    background-color: var(--primary);
-    color: var(--white);
-    text-decoration: none;
-  }
-`;
-
-const OdfTetheringConnections = (): JSX.Element => {
-  const [connections, setConnections] = useState([]);
-  const [pendingRequests, setPendingRequests] = useState([]);
-
-  const fetchConnectionsList = async () => {
-    try {
-      const list = await TetheringApi.getTetheringStatusForAll().toPromise();
-      const establishedConnections = [];
-      const pendingConnections = [];
-
-      list.forEach((conn: IConnection) =>
-        conn.tetheringStatus === PENDING_STATUS
-          ? pendingConnections.push(conn)
-          : establishedConnections.push(conn)
-      );
-
-      setConnections(establishedConnections);
-      setPendingRequests(pendingConnections);
-    } catch (e) {
-      // TODO: Add proper error messaging here
-      setConnections([]);
-      setPendingRequests([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchConnectionsList();
-  }, []);
-
+const OdfTetheringConnections = ({
+  pendingRequests,
+  establishedConnections,
+  handleEdit,
+  handleDelete,
+}: IOdfConnectionsProps) => {
   return (
     <>
-      <PendingRequests pendingRequests={pendingRequests} />
+      <PendingRequests
+        pendingRequests={pendingRequests}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
       <ButtonContainer>
-        <NewRequestBtn to="/administration/tethering/newTetheringRequest">
+        <StyledLinkBtn to="/administration/tethering/newTetheringRequest">
           {T.translate(`${PREFIX}.CreateRequest.createRequestButton`)}
-        </NewRequestBtn>
+        </StyledLinkBtn>
       </ButtonContainer>
-      <Connections connections={connections} />
+      <Connections
+        connections={establishedConnections}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
     </>
   );
 };

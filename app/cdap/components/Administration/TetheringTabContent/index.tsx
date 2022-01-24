@@ -14,13 +14,21 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
+import {
+  reducer,
+  initialConnectionsState,
+  reset,
+  fetchConnections,
+  deleteTetheringConnection,
+} from './reducer';
 import T from 'i18n-react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { Theme } from 'services/ThemeHelper';
 import OdfTetheringConnections from './OdfTetheringConnections';
 import CdfTetheringConnections from './CdfTetheringConnections';
+import Alert from 'components/shared/Alert';
 
 const PREFIX = 'features.Administration';
 const I18NPREFIX = `${PREFIX}.Tethering`;
@@ -33,6 +41,35 @@ const AdminTetheringTabContainer = styled.div`
 `;
 
 const AdminTetheringTabContent = () => {
+  const [connections, dispatch] = useReducer(reducer, initialConnectionsState);
+  const [error, setError] = useState(null);
+  const { establishedConnections, pendingRequests } = connections;
+
+  const fetchConnectionsList = async () => {
+    try {
+      await fetchConnections(dispatch);
+    } catch (err) {
+      setError(`Unable to fetch connections data: ${err.response}`);
+      reset(dispatch);
+    }
+  };
+
+  const handleEdit = (connType: string, peer: string) => {
+    // TODO: Complete this function when edit functionality is added
+  };
+
+  const handleDelete = async (connType: string, peer: string) => {
+    try {
+      await deleteTetheringConnection(dispatch, { connType, peer });
+    } catch (err) {
+      setError(`Unable to delete connection: ${err.response}`);
+    }
+  };
+
+  useEffect(() => {
+    fetchConnectionsList();
+  }, []);
+
   return (
     <>
       <Helmet
@@ -41,7 +78,29 @@ const AdminTetheringTabContent = () => {
         })}
       />
       <AdminTetheringTabContainer>
-        {Theme.odf === true ? <OdfTetheringConnections /> : <CdfTetheringConnections />}
+        {Theme.odf ? (
+          <OdfTetheringConnections
+            establishedConnections={establishedConnections}
+            pendingRequests={pendingRequests}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
+        ) : (
+          <CdfTetheringConnections
+            establishedConnections={establishedConnections}
+            newRequests={pendingRequests}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
+        )}
+        {error && (
+          <Alert
+            message={error}
+            type={'error'}
+            showAlert={Boolean(error)}
+            onClose={() => setError(null)}
+          />
+        )}
       </AdminTetheringTabContainer>
     </>
   );

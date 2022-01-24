@@ -17,8 +17,14 @@
 import React from 'react';
 import NewRequests from './NewRequests';
 import Connections from './Connections';
+import { ICdfConnectionsProps } from '../types';
 
-const CdfTetheringConnections = () => {
+const CdfTetheringConnections = ({
+  newRequests,
+  establishedConnections,
+  handleEdit,
+  handleDelete,
+}: ICdfConnectionsProps) => {
   return (
     <>
       <NewRequests />
