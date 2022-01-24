@@ -44,7 +44,7 @@ const TABS = {
     id: 1,
     name: T.translate(`${PREFIX}.ComputeConfig.title`),
     content: <ComputeTabContent />,
-    contentClassName: 'pipeline-configurations-body',
+    contentClassName: 'pipeline-configurations-body compute-profile-tab',
     paneClassName: 'configuration-content',
   },
   pipelineConfig: {
