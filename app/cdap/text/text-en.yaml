@@ -306,6 +306,9 @@ features:
         provisioner: Provisioner
         totalNodeHr: Total node hours
         totalRuns: Total runs
+        totalWorkerCores: Total worker cores
+        autoScaleBadge: Auto
+        autoScaleTooltip: AutoScaling of worker nodes is enabled.
       CreateView:
         ProvisionerSelection:
           pageTitle: '{productName} | Profiles | Create'
