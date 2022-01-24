@@ -78,7 +78,7 @@ const AdminTetheringTabContent = () => {
         })}
       />
       <AdminTetheringTabContainer>
-        {Theme.odf === true ? (
+        {Theme.odf ? (
           <OdfTetheringConnections
             establishedConnections={establishedConnections}
             pendingRequests={pendingRequests}
