@@ -382,18 +382,14 @@ export function countErrors(
  *
  * @param values latest field values
  * @param filteredConfigurationGroups configuration-groups from Widget JSON
- * @param defaultValues default field values
  */
-export function removeFilteredProperties(values, filteredConfigurationGroups, defaultValues = {}) {
+export function removeFilteredProperties(values, filteredConfigurationGroups) {
   const newValues = { ...values };
   if (filteredConfigurationGroups) {
     filteredConfigurationGroups.forEach((group) => {
       group.properties.forEach((property) => {
         if (property.show === false) {
           delete newValues[property.name];
-        } else if (defaultValues[property.name] && !newValues[property.name]) {
-          // Restore default values for visible fields that are empty
-          newValues[property.name] = defaultValues[property.name];
         }
       });
     });
