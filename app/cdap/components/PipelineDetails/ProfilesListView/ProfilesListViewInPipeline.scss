@@ -49,8 +49,9 @@ $enabled-color: $green-02;
     max-height: calc(100% - 50px); // 100% - 17px (title) - 30px (profile count)
 
     .grid-row {
-      grid-template-columns: 30px 1.5fr 1.5fr 1fr 70px 1fr 50px;
-      align-items: start;
+      grid-template-columns: 30px 1.3fr 1fr 1.3fr 0.8fr 70px 1fr 50px;
+      align-items: center;
+      white-space: nowrap;
 
       &.enabled {
         .profile-status {

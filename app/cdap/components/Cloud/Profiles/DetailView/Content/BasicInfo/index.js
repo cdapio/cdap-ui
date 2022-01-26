@@ -31,6 +31,7 @@ import {
   deleteProfile,
 } from 'components/Cloud/Profiles/Store/ActionCreator';
 import ProfileStatusToggle from 'components/Cloud/Profiles/DetailView/Content/BasicInfo/ProfileStatusToggle';
+import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import { CLOUD, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { humanReadableDate } from 'services/helpers';
 import CopyableId from 'components/CopyableID';
@@ -150,6 +151,7 @@ export default class ProfileDetailViewBasicInfo extends Component {
           <div className="grid-header">
             <div className="grid-row">
               <strong>{T.translate(`${PREFIX}.common.provisioner`)}</strong>
+              <strong>{T.translate(`${PREFIX}.common.totalWorkerCores`)}</strong>
               <strong>{T.translate('commons.scope')}</strong>
               <strong>{T.translate(`${PREFIX}.common.last24HrRuns`)}</strong>
               <strong>{T.translate(`${PREFIX}.common.totalRuns`)}</strong>
@@ -163,6 +165,10 @@ export default class ProfileDetailViewBasicInfo extends Component {
               <div>
                 <IconSVG name="icon-cloud" />
                 <span>{this.state.provisionerLabel}</span>
+              </div>
+              <div>
+                {profile.totalWorkerCores || '--'}
+                <AutoScaleBadge profile={profile} />
               </div>
               <div>{profile.scope}</div>
               <div>{this.state.oneDayMetrics.runs}</div>
