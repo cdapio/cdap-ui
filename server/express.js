@@ -205,6 +205,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       authRefreshURL: cdapConfig['dashboard.auth.refresh.path'] || false,
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
+      featureFlags: cdapConfig.featureFlags,
     });
 
     res.header({
