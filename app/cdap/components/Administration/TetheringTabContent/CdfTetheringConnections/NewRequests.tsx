@@ -14,16 +14,26 @@
  * the License.
  */
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import RequestsTable from '../RequestsTable';
 import T from 'i18n-react';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
+import NewReqLastColumn from './NewReqLastColumn';
+import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.NewRequests`;
+const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1.5fr';
 
-const NewRequests = () => {
-  const [newRequests, setNewRequests] = useState([]);
+interface INewRequestsProps {
+  newRequests: IConnection[];
+  handleAcceptOrReject: (action: string, peer: string) => void;
+}
+
+const NewRequests = ({ newRequests, handleAcceptOrReject }: INewRequestsProps) => {
+  const renderLastColumn = (instanceName: string) => (
+    <NewReqLastColumn instanceName={instanceName} handleAcceptOrReject={handleAcceptOrReject} />
+  );
 
   return (
     <>
@@ -32,7 +42,11 @@ const NewRequests = () => {
       </HeaderContainer>
       <BodyContainer>
         {newRequests.length > 0 ? (
-          <span>NewRequests Table goes here</span>
+          <RequestsTable
+            tableData={newRequests}
+            columnTemplate={COLUMN_TEMPLATE}
+            renderLastColumn={renderLastColumn}
+          />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noNewRequests`)}</NoDataText>
         )}

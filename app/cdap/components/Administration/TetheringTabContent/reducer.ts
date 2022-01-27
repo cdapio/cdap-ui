@@ -19,7 +19,11 @@ import { IAction } from 'services/redux-helpers';
 import { TetheringApi } from 'api/tethering';
 import { IConnection } from './types';
 
-const PENDING_STATUS = 'PENDING';
+const CONNECTION_GROUPS = {
+  PENDING: 'pendingRequests',
+  REJECTED: 'rejectedRequests',
+  ACCEPTED: 'establishedConnections',
+};
 
 export interface IConnectionsState {
   pendingRequests: IConnection[];
@@ -28,6 +32,7 @@ export interface IConnectionsState {
 
 export const initialConnectionsState = {
   pendingRequests: [],
+  rejectedRequests: [],
   establishedConnections: [],
 };
 
@@ -44,6 +49,7 @@ export const reducer = (state: IConnectionsState, action: IAction<IConnectionsAc
         ...state,
         establishedConnections: action.payload.establishedConnections,
         pendingRequests: action.payload.pendingRequests,
+        rejectedRequests: action.payload.rejectedRequests,
       };
     case IConnectionsActions.DELETE_CONNECTION:
       return {
@@ -67,26 +73,36 @@ export const reset = (dispatch) => {
 
 export const fetchConnections = async (dispatch: Dispatch<IAction<IConnectionsActions>>) => {
   const list = await TetheringApi.getTetheringStatusForAll().toPromise();
-  const establishedConnections = [];
-  const pendingRequests = [];
+  const connections = {
+    establishedConnections: [],
+    pendingRequests: [],
+    rejectedRequests: [],
+  };
 
   list.forEach((conn: IConnection) =>
-    conn.tetheringStatus === PENDING_STATUS
-      ? pendingRequests.push(conn)
-      : establishedConnections.push(conn)
+    connections[CONNECTION_GROUPS[conn.tetheringStatus]].push(conn)
   );
+  const { establishedConnections, pendingRequests, rejectedRequests } = connections;
 
   dispatch({
     type: IConnectionsActions.SET_CONNECTIONS,
-    payload: { establishedConnections, pendingRequests },
+    payload: { establishedConnections, pendingRequests, rejectedRequests },
   });
+};
+
+export const acceptOrRejectTetheringConnectionReq = async (
+  dispatch: Dispatch<IAction<IConnectionsActions>>,
+  { action, peer }
+) => {
+  await TetheringApi.acceptOrRejectTethering({ peer }, { action }).toPromise();
+  await fetchConnections(dispatch);
 };
 
 export const deleteTetheringConnection = async (
   dispatch: Dispatch<IAction<IConnectionsActions>>,
-  { connType, peer }
+  { connType = null, peer }
 ) => {
   await TetheringApi.deleteTethering({ peer }).toPromise();
-  const connGroup = connType === PENDING_STATUS ? 'pendingRequests' : 'establishedConnections';
+  const connGroup = CONNECTION_GROUPS[connType];
   dispatch({ type: IConnectionsActions.DELETE_CONNECTION, payload: { connGroup, peer } });
 };

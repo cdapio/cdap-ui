@@ -18,7 +18,7 @@ import React from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequests from './PendingRequests';
-import Connections from './Connections';
+import Connections from '../Connections';
 import { IOdfConnectionsProps } from '../types';
 import { StyledLinkBtn } from '../shared.styles';
 
