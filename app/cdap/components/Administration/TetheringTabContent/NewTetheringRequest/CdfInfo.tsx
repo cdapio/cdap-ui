@@ -32,7 +32,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      WIDGET_ATTRIBUTES: {
+      [WIDGET_ATTRIBUTES]: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.ProjectName.placeholder`),
       },
     },
@@ -46,7 +46,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.Region.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.Region.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      WIDGET_ATTRIBUTES: {
+      [WIDGET_ATTRIBUTES]: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.Region.placeholder`),
       },
     },
@@ -60,7 +60,7 @@ const ITEMS = [
       label: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.label`)}`,
       name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.name`)}`,
       [WIDGET_TYPE]: 'textbox',
-      WIDGET_ATTRIBUTES: {
+      [WIDGET_ATTRIBUTES]: {
         placeholder: T.translate(`${I18N_CDF_PREFIX}.InstanceName.placeholder`),
       },
     },
