@@ -25,7 +25,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import Checkbox from '@material-ui/core/Checkbox';
-import { generateTableKey } from 'components/Replicator/utilities';
 import LoadingSVG from 'components/LoadingSVG';
 import Heading, { HeadingTypes } from 'components/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -347,7 +346,7 @@ class SelectColumnsView extends React.PureComponent<ISelectColumnsProps, ISelect
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <If condition={this.state.selectedReplication === ReplicateSelect.all}>
           <div className={classes.overlay} />
         </If>
@@ -421,7 +420,7 @@ class SelectColumnsView extends React.PureComponent<ISelectColumnsProps, ISelect
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   };
 

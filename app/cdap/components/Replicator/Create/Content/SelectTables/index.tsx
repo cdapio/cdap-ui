@@ -25,7 +25,7 @@ import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import orderBy from 'lodash/orderBy';
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import SelectColumns from 'components/Replicator/Create/Content/SelectColumns';
-import If from 'components/If';
+import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms';
 import { extractErrorMessage } from 'services/helpers';
 import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -443,14 +443,14 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     }
 
     return (
-      <React.Fragment>
+      <>
         <br />
         <div className="text-danger">
           <Heading type={HeadingTypes.h5} label="Error" />
           <span>{this.state.error}</span>
         </div>
         <ManualSelectTable />
-      </React.Fragment>
+      </>
     );
   };
 
@@ -479,6 +479,26 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     return dmlBlacklist && dmlBlacklist.size === 3;
   };
 
+  public renderColumns = () => {
+    let Columns = SelectColumns;
+    if (true) {
+      // this will eventually be a feature flag but just leaving it as a boolean
+      // for now as a convenience
+      Columns = SelectColumnsWithTransforms;
+    }
+
+    return (
+      <Columns
+        tableInfo={this.state.openTable}
+        tableAssessments={this.props.tableAssessments[this.state.openTable.table]}
+        initialSelected={this.getInitialSelected()}
+        toggle={this.openTable.bind(this, null)}
+        onSave={this.onColumnsSelection}
+        assessTable={this.props.handleAssessTable}
+      />
+    );
+  };
+
   private renderContent = () => {
     if (this.state.error) {
       return null;
@@ -487,7 +507,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <div className={`grid-wrapper ${classes.gridWrapper}`}>
           <div className={`grid grid-container grid-compact`}>
             <div className="grid-header">
@@ -645,7 +665,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
           onPrevious={this.handleSave}
           nextDisabled={this.isNextDisabled()}
         />
-      </React.Fragment>
+      </>
     );
   };
 
@@ -657,7 +677,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <div className={classes.root}>
           <Heading type={HeadingTypes.h3} label="Select tables, columns, and events to replicate" />
           <div className={classes.subHeadingContainer}>
@@ -678,15 +698,8 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
           {this.renderContent()}
         </div>
 
-        <If condition={this.state.openTable}>
-          <SelectColumns
-            tableInfo={this.state.openTable}
-            initialSelected={this.getInitialSelected()}
-            toggle={this.openTable.bind(this, null)}
-            onSave={this.onColumnsSelection}
-          />
-        </If>
-      </React.Fragment>
+        {!!this.state.openTable && this.renderColumns()}
+      </>
     );
   }
 }

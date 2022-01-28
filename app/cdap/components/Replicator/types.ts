@@ -16,12 +16,15 @@
 
 import { PluginProperties } from 'components/ConfigurationGroup/types';
 import { List, Map, Set } from 'immutable';
+import { SUPPORT } from './Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
 export interface IColumn {
   name: string;
   type: string;
   suppressWarning?: boolean;
 }
+
+export type ISelectedList = null | IColumnsList;
 
 /**
  * IColumnImmutable is the immutable form of IColumn
@@ -93,4 +96,23 @@ export interface IRawMetricData {
   endTime: number;
   resolution: string;
   series: IMetricSeries[];
+}
+
+export interface IColumnTransformation {
+  columnName: string;
+  directive: string;
+}
+
+export interface ITransformation {
+  tableName: string;
+  columnTransformations: IColumnTransformation[];
+}
+
+export interface ITableAssessmentColumn {
+  support: SUPPORT;
+  sourceName: string;
+  sourceType?: string;
+  targetName?: string;
+  targetType?: string;
+  suggestion?: string;
 }

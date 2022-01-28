@@ -44,7 +44,9 @@ const ApiErrorDialogView: React.FC<WithStyles<typeof styles>> = ({ classes }) =>
   return (
     <Dialog open={true}>
       <DialogTitle>{T.translate(`${I18N_PREFIX}.mainTitle`)}</DialogTitle>
-      <DialogContent className={classes.errorMsg}>{T.translate(`${I18N_PREFIX}.secondaryTitle`)}</DialogContent>
+      <DialogContent className={classes.errorMsg}>
+        {T.translate(`${I18N_PREFIX}.secondaryTitle`)}
+      </DialogContent>
       <DialogActions>
         <Button className={classes.suggestion} onClick={redirect} color="primary">
           {T.translate(`${I18N_PREFIX}.suggestionPart1`)}

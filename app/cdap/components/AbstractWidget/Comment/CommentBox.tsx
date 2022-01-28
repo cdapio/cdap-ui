@@ -22,7 +22,7 @@ import makeStyle from '@material-ui/core/styles/makeStyles';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import { Theme } from '@material-ui/core/styles';
 import { COMMENT_WIDTH, IComment } from 'components/AbstractWidget/Comment/CommentConstants';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import CommentMenu from 'components/AbstractWidget/Comment/CommentMenu';

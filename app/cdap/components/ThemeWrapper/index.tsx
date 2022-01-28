@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme, { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import { createTheme, ThemeOptions } from '@material-ui/core/styles';
 import {
   blue,
   grey,
@@ -28,12 +28,7 @@ import {
   white,
   primary,
 } from 'components/ThemeWrapper/colors';
-import {
-  PaletteColor,
-  PaletteColorOptions,
-  Palette,
-  PaletteOptions,
-} from '@material-ui/core/styles/createPalette';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 interface IThemeWraperProps {
   render?: () => React.ReactNode;
@@ -65,7 +60,7 @@ declare module '@material-ui/core/styles/createPalette' {
   }
 }
 
-const Theme = createMuiTheme({
+const Theme = createTheme({
   palette: {
     primary: {
       main: primary,
@@ -125,14 +120,24 @@ export default class ThemeWrapper extends React.PureComponent<IThemeWraperProps>
       return null;
     }
     if (this.props.children) {
-      return <MuiThemeProvider theme={Theme}>{this.props.children}</MuiThemeProvider>;
+      return (
+        <MuiThemeProvider theme={Theme}>
+          <StyledThemeProvider theme={Theme}>{this.props.children}</StyledThemeProvider>
+        </MuiThemeProvider>
+      );
     }
     if (this.props.render) {
-      return <MuiThemeProvider theme={Theme}>{this.props.render()}</MuiThemeProvider>;
+      return (
+        <MuiThemeProvider theme={Theme}>
+          <StyledThemeProvider theme={Theme}>{this.props.render()}</StyledThemeProvider>
+        </MuiThemeProvider>
+      );
     }
     return (
       <MuiThemeProvider theme={Theme}>
-        <Component />
+        <StyledThemeProvider theme={Theme}>
+          <Component />
+        </StyledThemeProvider>
       </MuiThemeProvider>
     );
   }
