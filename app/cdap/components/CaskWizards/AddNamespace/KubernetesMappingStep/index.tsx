@@ -26,7 +26,9 @@ const mapStateToK8sNamespaceNameProps = (state) => {
   return {
     value: state.mapping.k8sNamespace,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-name-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-name-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('k8sNamespace') === -1,
   };
 };
@@ -47,7 +49,9 @@ const mapStateToK8sCpuLimitProps = (state) => {
     value: state.mapping.k8sNamespaceCpuLimit,
     type: 'number',
     min: 0,
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-cpu-limit-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-cpu-limit-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('k8sNamespaceCpuLimit') === -1,
   };
 };
@@ -68,7 +72,9 @@ const mapStateToK8sMemoryLimitProps = (state) => {
     value: state.mapping.k8sNamespaceMemoryLimit,
     type: 'number',
     min: 0,
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-memory-limit-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-memory-limit-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('k8sNamespaceMemoryLimit') === -1,
   };
 };
@@ -112,7 +118,7 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-name-label')}
+              {T.translate('features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-name-label')}
             </Label>
           </Col>
           <Col xs="7">
@@ -122,7 +128,9 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-cpu-limit-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-cpu-limit-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">
@@ -132,7 +140,9 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step2.k8s-nm-memory-limit-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-memory-limit-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">

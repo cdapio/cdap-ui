@@ -26,7 +26,9 @@ const mapStateToHDFSRootDirectoryProps = (state) => {
   return {
     value: state.mapping.hdfsDirectory,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step4.hdfs-root-directory-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.HadoopMappingStep.hdfs-root-directory-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('hdfsDirectory') === -1,
   };
 };
@@ -47,7 +49,9 @@ const mapStateToHiveDatabaseNameProps = (state) => {
   return {
     value: state.mapping.hiveDatabaseName,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step4.hive-db-name-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.HadoopMappingStep.hive-db-name-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('hiveDatabaseName') === -1,
   };
 };
@@ -68,7 +72,9 @@ const mapStateToHBASENamespaceNameProps = (state) => {
   return {
     value: state.mapping.hbaseNamespace,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step4.hbase-nm-name-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.HadoopMappingStep.hbase-nm-name-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('hbaseNamespace') === -1,
   };
 };
@@ -88,7 +94,9 @@ const mapStateToSchedulerQueueNameProps = (state) => {
   return {
     value: state.mapping.schedulerQueueName,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.Step4.scheduler-queue-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.HadoopMappingStep.scheduler-queue-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('schedulerQueueName') === -1,
   };
 };
@@ -135,7 +143,9 @@ export default function MappingStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step4.hdfs-root-directory-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.HadoopMappingStep.hdfs-root-directory-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">
@@ -145,7 +155,7 @@ export default function MappingStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step4.hive-db-name-label')}
+              {T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.hive-db-name-label')}
             </Label>
           </Col>
           <Col xs="7">
@@ -155,7 +165,7 @@ export default function MappingStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step4.hbase-nm-name-label')}
+              {T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.hbase-nm-name-label')}
             </Label>
           </Col>
           <Col xs="7">
@@ -165,7 +175,7 @@ export default function MappingStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.Step4.scheduler-queue-name')}
+              {T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.scheduler-queue-name')}
             </Label>
           </Col>
           <Col xs="7">
