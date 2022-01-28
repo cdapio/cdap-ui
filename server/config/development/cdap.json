@@ -13,5 +13,5 @@
   "market.base.url": "https://hub.cdap.io/dev/v2",
   "ui.theme.file": "config/themes/default.json",
   "session.secret.key": "sample-secret-key-for-encryption",
-  "feature.ui.replication.transformations.enabled": "true"
+  "feature.ui.replication.transformations.enabled": "false"
 }

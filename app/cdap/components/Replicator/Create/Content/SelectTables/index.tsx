@@ -32,7 +32,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ManualSelectTable from 'components/Replicator/Create/Content/SelectTables/ManualSelectTable';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
-import { useFeatureFlag } from 'services/react/customHooks/useFeatureFlag';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import {
@@ -709,6 +709,14 @@ const SelectTables = createContextConnect(StyledSelectTables);
 
 // Higher Order Component wrapping class component so we can use useFeatureFlag hook
 export default ({ children, ...props }) => {
-  props.useReplicationTransformation = useFeatureFlag('replication.transformations.enabled');
-  return <SelectTables {...props} />;
+  return (
+    <SelectTables
+      {...{
+        useReplicationTransformation: useFeatureFlagDefaultFalse(
+          'replication.transformations.enabled'
+        ),
+        ...props,
+      }}
+    />
+  );
 };

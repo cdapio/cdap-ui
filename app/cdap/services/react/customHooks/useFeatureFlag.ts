@@ -17,6 +17,20 @@
 import { useContext } from 'react';
 import { FeatureFlagsContext, IFeatureFlags } from '../providers/featureFlagProvider';
 
+const useFeatureFlag = (name: keyof IFeatureFlags | string, defaultResult: boolean): boolean => {
+  const features = useContext(FeatureFlagsContext);
+  if (features === null) {
+    throw new Error('Components must be wrapped in services/react/providers/featureFlagProvider');
+  }
+
+  // returns default result if flag doesn't exist
+  if (features[name] === undefined) {
+    return defaultResult;
+  }
+
+  return features[name] === 'true';
+};
+
 /**
  * Returns true if feature if enabled, false if the flag
  * does not exist or disabled
@@ -25,15 +39,15 @@ import { FeatureFlagsContext, IFeatureFlags } from '../providers/featureFlagProv
  * @returns boolean
  */
 
-export function useFeatureFlag(name: keyof IFeatureFlags | string): boolean {
-  const features = useContext(FeatureFlagsContext);
-  if (features === null) {
-    throw new Error('Components must be wrapped in services/react/providers/featureFlagProvider');
-  }
-  // if name is not in features explicitly return false
-  if (features[name] === undefined) {
-    return false;
-  }
+export const useFeatureFlagDefaultFalse = (name: keyof IFeatureFlags | string): boolean =>
+  useFeatureFlag(name, false);
 
-  return features[name] === 'true';
-}
+/**
+ * Returns true if feature if enabled or does not exist,
+ * false if feature flag is disabled
+ * Must wrap parent component with services/react/providers/featureFlagProvider
+ * @param name feature flag name
+ * @returns boolean
+ */
+export const useFeatureFlagDefaultTrue = (name: keyof IFeatureFlags | string): boolean =>
+  useFeatureFlag(name, true);
