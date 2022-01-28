@@ -3027,7 +3027,7 @@ features:
       Status:
         creation-error-desc: "Failed to create the namespace '%s'."
         creation-success-desc: Successfully created the namespace '{namespaceId}'.
-      Step1:
+      GeneralInfoStep:
         description-label: "Description"
         description-placeholder: "Namespace description"
         name-label: "Name"
@@ -3035,7 +3035,7 @@ features:
         scheduler-queue-label: "Scheduler queue"
         sld-desc:  "Specify the name and the description of the namespace."
         ssd-label: "General information"
-      Step2:
+      KubernetesMappingStep:
         k8s-nm-name-label: "Kubernetes namespace name"
         k8s-nm-name-placeholder: "Kubernetes namespace where jobs in this namespace will run"
         k8s-nm-cpu-limit-label: "Kubernetes namespace cpu limit"
@@ -3044,14 +3044,14 @@ features:
         k8s-nm-memory-limit-placeholder: "Memory limit in this namespace (in GB)"
         sld-label: "Specify the Kubernetes resources where jobs in this namespace will run."
         ssd-label: "Kubernetes mapping"
-      Step3:
+      PreferencesStep:
         name-label: "Name"
         name-placeholder: "Preference name"
         sld-label: "Specify preferences to be applied at the namespace level."
         ssd-label: "Preferences"
         value-label: "Value"
         value-placeholder: "Preference value"
-      Step4:
+      HadoopMappingStep:
         hbase-nm-name-label: "HBase namespace name"
         hbase-nm-name-placeholder: "Namespace in HBase for datasets in this namespace"
         hdfs-root-directory-label: "HDFS root directory"
@@ -3062,7 +3062,7 @@ features:
         scheduler-queue-placeholder: "Yarn queue name to be used to submit programs in this namespace"
         sld-label: "Specify mapping of namespace resources to underlying Hadoop resources (Only used when deployed on Apache Hadoop)."
         ssd-label: "Hadoop mapping"
-      Step5:
+      SecurityStep:
         keytab-uri-label: "Keytab URI"
         keytab-uri-placeholder: "Location of keytab file associated with the principal"
         principal-label: "Principal"
