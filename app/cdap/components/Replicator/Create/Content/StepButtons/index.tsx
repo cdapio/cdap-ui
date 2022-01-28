@@ -17,10 +17,11 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
-import { STEPS } from 'components/Replicator/Create/steps';
+import { returnSteps } from 'components/Replicator/Create/steps';
 import Button from '@material-ui/core/Button';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const styles = (theme): StyleRules => {
   return {
@@ -51,6 +52,8 @@ const StepButtonsView: React.FC<IStepButtonProps> = ({
   onComplete,
   completeLoading,
 }) => {
+  const transformationsEnabled = useFeatureFlagDefaultFalse('replication.transformations.enabled');
+  const STEPS = returnSteps(transformationsEnabled);
   function handleNextClick() {
     if (activeStep === STEPS.length - 1) {
       return;
