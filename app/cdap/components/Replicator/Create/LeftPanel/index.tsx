@@ -18,9 +18,10 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect } from 'components/Replicator/Create';
 import Chip from '@material-ui/core/Chip';
-import { STEPS } from 'components/Replicator/Create/steps';
+import { returnSteps } from 'components/Replicator/Create/steps';
 import classnames from 'classnames';
 import Check from '@material-ui/icons/Check';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const styles = (theme): StyleRules => {
   return {
@@ -75,6 +76,8 @@ const LeftPanelView: React.FC<ILeftPanelProps> = ({
   activeStep,
   isStateFilled,
 }) => {
+  const transformationsEnabled = useFeatureFlagDefaultFalse('replication.transformations.enabled');
+  const STEPS = returnSteps(transformationsEnabled);
   function handleStepClick(step) {
     if (!isRowFinished(step)) {
       return;
