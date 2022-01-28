@@ -62,6 +62,18 @@ const createOrEditNamespace = (api) => {
     putParams['config']['scheduler.queue.name'] = state.mapping.schedulerQueueName;
   }
 
+  if (state.mapping.k8sNamespace) {
+    putParams['config']['k8s.namespace'] = state.mapping.k8sNamespace;
+  }
+
+  if (state.mapping.k8sNamespaceCpuLimit) {
+    putParams['config']['k8s.namespace.cpu.limits'] = state.mapping.k8sNamespaceCpuLimit;
+  }
+
+  if (state.mapping.k8sNamespaceMemoryLimit) {
+    putParams['config']['k8s.namespace.memory.limits'] = state.mapping.k8sNamespaceMemoryLimit;
+  }
+
   return api(urlParams, putParams);
 };
 
