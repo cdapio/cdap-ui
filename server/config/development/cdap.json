@@ -12,5 +12,6 @@
   "dashboard.router.check.timeout.secs": "0",
   "market.base.url": "https://hub.cdap.io/dev/v2",
   "ui.theme.file": "config/themes/default.json",
-  "session.secret.key": "sample-secret-key-for-encryption"
+  "session.secret.key": "sample-secret-key-for-encryption",
+  "feature.ui.replication.transformations.enabled": "true"
 }
