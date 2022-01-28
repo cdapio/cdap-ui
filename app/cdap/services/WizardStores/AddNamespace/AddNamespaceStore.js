@@ -48,6 +48,9 @@ const defaultMappingState = Object.assign(
     hiveDatabaseName: '',
     hbaseNamespace: '',
     schedulerQueueName: '',
+    k8sNamespace: '',
+    k8sNamespaceCpuLimit: '',
+    k8sNamespaceMemoryLimit: '',
   },
   skippableDefaultState
 );
@@ -190,6 +193,21 @@ const mapping = (state = defaultMappingState, action = defaultAction) => {
     case AddNamespaceActions.setSchedulerQueueName:
       stateCopy = Object.assign({}, state, {
         schedulerQueueName: action.payload.schedulerQueueName,
+      });
+      break;
+    case AddNamespaceActions.setK8sNamespace:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespace: action.payload.k8sNamespace,
+      });
+      break;
+    case AddNamespaceActions.setK8sNamespaceCpuLimit:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespaceCpuLimit: action.payload.k8sNamespaceCpuLimit,
+      });
+      break;
+    case AddNamespaceActions.setK8sNamespaceMemoryLimit:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespaceMemoryLimit: action.payload.k8sNamespaceMemoryLimit,
       });
       break;
     case AddNamespaceActions.setProperties:
