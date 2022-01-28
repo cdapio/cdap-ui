@@ -96,7 +96,20 @@ async function setAllowedOrigin() {
 log.info('Starting CDAP UI ...');
 getCDAPConfig()
   .then(function(c) {
+    // extract feature flags from the config with shorter keys to make it easier
+    // to consume
+    const featureFlags = {};
+    for (const [key, value] of Object.entries(c)) {
+      if (key.match(/^feature.ui/)) {
+        // feature.ui. is 11 characters and we only want to include
+        // ui feature flags
+        featureFlags[key.substring(11)] = value;
+        delete c[key];
+      }
+    }
+
     cdapConfig = c;
+    cdapConfig.featureFlags = featureFlags;
     if (cdapConfig['security.enabled'] === 'true') {
       log.debug('CDAP Security has been enabled');
       return extractConfig('security');

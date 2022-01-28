@@ -48,6 +48,7 @@ import {
 } from 'components/Replicator/types';
 import { IWidgetJson } from 'components/ConfigurationGroup/types';
 import ErrorBanner from 'components/ErrorBanner';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;
@@ -638,7 +639,11 @@ export function createContextConnect(Comp) {
             ...extraProps,
           };
 
-          return <Comp {...finalProps} />;
+          return (
+            <FeatureProvider>
+              <Comp {...finalProps} />
+            </FeatureProvider>
+          );
         }}
       </CreateContext.Consumer>
     );

@@ -202,6 +202,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       authRefreshURL: cdapConfig['dashboard.auth.refresh.path'] || false,
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: cdapConfig['ssl.external.enabled'] || false,
+      featureFlags: cdapConfig.featureFlags,
     });
 
     res.header({
@@ -339,7 +340,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             } else {
               responseHeaders['Content-Type'] = 'text/plain';
             }
-            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, { headers: responseHeaders });
+            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, {
+              headers: responseHeaders,
+            });
             responseHeaders = strippedResponse.headers;
             res.set(responseHeaders);
           }
