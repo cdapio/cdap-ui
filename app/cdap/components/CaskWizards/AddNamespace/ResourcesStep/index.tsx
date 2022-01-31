@@ -24,11 +24,9 @@ import { Provider, connect } from 'react-redux';
 // K8S Namespace
 const mapStateToK8sNamespaceNameProps = (state) => {
   return {
-    value: state.mapping.k8sNamespace,
+    value: state.resources.k8sNamespace,
     type: 'text',
-    placeholder: T.translate(
-      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-name-placeholder'
-    ),
+    placeholder: T.translate('features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-name-placeholder'),
     disabled: state.editableFields.fields.indexOf('k8sNamespace') === -1,
   };
 };
@@ -46,11 +44,11 @@ const mapDispatchToK8sNamespaceNameProps = (dispatch) => {
 
 const mapStateToK8sCpuLimitProps = (state) => {
   return {
-    value: state.mapping.k8sNamespaceCpuLimit,
+    value: state.resources.k8sNamespaceCpuLimit,
     type: 'number',
     min: 0,
     placeholder: T.translate(
-      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-cpu-limit-placeholder'
+      'features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-cpu-limit-placeholder'
     ),
     disabled: state.editableFields.fields.indexOf('k8sNamespaceCpuLimit') === -1,
   };
@@ -69,11 +67,11 @@ const mapDispatchToK8sCpuLimitProps = (dispatch) => {
 
 const mapStateToK8sMemoryLimitProps = (state) => {
   return {
-    value: state.mapping.k8sNamespaceMemoryLimit,
+    value: state.resources.k8sNamespaceMemoryLimit,
     type: 'number',
     min: 0,
     placeholder: T.translate(
-      'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-memory-limit-placeholder'
+      'features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-memory-limit-placeholder'
     ),
     disabled: state.editableFields.fields.indexOf('k8sNamespaceMemoryLimit') === -1,
   };
@@ -85,6 +83,28 @@ const mapDispatchToK8sMemoryLimitProps = (dispatch) => {
       dispatch({
         type: AddNamespaceActions.setK8sNamespaceMemoryLimit,
         payload: { k8sNamespaceMemoryLimit: e.target.value },
+      });
+    },
+  };
+};
+
+const mapStateToServiceAccountEmailProps = (state) => {
+  return {
+    value: state.resources.serviceAccountEmail,
+    type: 'text',
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.ResourcesStep.service-account-email-placeholder'
+    ),
+    disabled: state.editableFields.fields.indexOf('serviceAccountEmail') === -1,
+  };
+};
+
+const mapDispatchToServiceAccountEmailProps = (dispatch) => {
+  return {
+    onChange: (e) => {
+      dispatch({
+        type: AddNamespaceActions.setServiceAccountEmail,
+        payload: { k8sNamespace: e.target.value },
       });
     },
   };
@@ -105,7 +125,12 @@ const InputK8sMemoryLimit = connect(
   mapDispatchToK8sMemoryLimitProps
 )(InputWithValidations);
 
-export default function KubernetesMappingStep() {
+const InputK8sServiceAccountEmail = connect(
+  mapStateToServiceAccountEmailProps,
+  mapDispatchToServiceAccountEmailProps
+)(InputWithValidations);
+
+export default function ResourcesStep() {
   return (
     <Provider store={AddNamespaceStore}>
       <Form
@@ -118,7 +143,7 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-name-label')}
+              {T.translate('features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-name-label')}
             </Label>
           </Col>
           <Col xs="7">
@@ -128,9 +153,7 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate(
-                'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-cpu-limit-label'
-              )}
+              {T.translate('features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-cpu-limit-label')}
             </Label>
           </Col>
           <Col xs="7">
@@ -140,13 +163,23 @@ export default function KubernetesMappingStep() {
         <FormGroup row>
           <Col xs="4">
             <Label className="control-label">
-              {T.translate(
-                'features.Wizard.Add-Namespace.KubernetesMappingStep.k8s-nm-memory-limit-label'
-              )}
+              {T.translate('features.Wizard.Add-Namespace.ResourcesStep.k8s-nm-memory-limit-label')}
             </Label>
           </Col>
           <Col xs="7">
             <InputK8sMemoryLimit />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Col xs="4">
+            <Label className="control-label">
+              {T.translate(
+                'features.Wizard.Add-Namespace.ResourcesStep.service-account-email-label'
+              )}
+            </Label>
+          </Col>
+          <Col xs="7">
+            <InputK8sServiceAccountEmail />
           </Col>
         </FormGroup>
       </Form>

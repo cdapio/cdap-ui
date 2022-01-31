@@ -74,6 +74,10 @@ const createOrEditNamespace = (api) => {
     putParams['config']['k8s.namespace.memory.limits'] = state.mapping.k8sNamespaceMemoryLimit;
   }
 
+  if (state.mapping.serviceAccountEmail) {
+    putParams['config']['workload.identity.gcp.service.account.email'] = state.mapping.serviceAccountEmail;
+  }
+
   return api(urlParams, putParams);
 };
 

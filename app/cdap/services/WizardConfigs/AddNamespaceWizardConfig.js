@@ -17,7 +17,7 @@
 import React from 'react';
 import GeneralInfoStep from 'components/CaskWizards/AddNamespace/GeneralInfoStep';
 import HadoopMappingStep from 'components/CaskWizards/AddNamespace/HadoopMappingStep';
-import KubernetesMappingStep from 'components/CaskWizards/AddNamespace/KubernetesMappingStep';
+import ResourcesStep from 'components/CaskWizards/AddNamespace/ResourcesStep';
 import SecurityStep from 'components/CaskWizards/AddNamespace/SecurityStep';
 import PreferencesStep from 'components/CaskWizards/AddNamespace/PreferencesStep';
 import T from 'i18n-react';
@@ -35,11 +35,11 @@ const AddNamespaceWizardConfig = {
       requiredFields: ['name'],
     },
     {
-      id: 'kubernetesMapping',
-      shorttitle: T.translate('features.Wizard.Add-Namespace.KubernetesMappingStep.ssd-label'),
-      title: T.translate('features.Wizard.Add-Namespace.KubernetesMappingStep.ssd-label'),
-      description: T.translate('features.Wizard.Add-Namespace.KubernetesMappingStep.sld-label'),
-      content: <KubernetesMappingStep />,
+      id: 'resources',
+      shorttitle: T.translate('features.Wizard.Add-Namespace.ResourcesStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.ResourcesStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.ResourcesStep.sld-label'),
+      content: <ResourcesStep />,
     },
     {
       id: 'preferences',
@@ -66,9 +66,6 @@ const AddNamespaceWizardConfig = {
 };
 
 if (Theme.showNamespaceMapping === false) {
-  const KubernetesMappingIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'kubernetesMapping' });
-  AddNamespaceWizardConfig.steps.splice(KubernetesMappingIndex, 1);
-
   const HadoopMappingIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'hadoopMapping' });
   AddNamespaceWizardConfig.steps.splice(HadoopMappingIndex, 1);
 }
@@ -76,6 +73,11 @@ if (Theme.showNamespaceMapping === false) {
 if (Theme.showNamespaceSecurity === false) {
   const securityIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'security' });
   AddNamespaceWizardConfig.steps.splice(securityIndex, 1);
+}
+
+if (Theme.odf === false) {
+  const ResourcesIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'resources' });
+  AddNamespaceWizardConfig.steps.splice(ResourcesIndex, 1);
 }
 
 export default AddNamespaceWizardConfig;

@@ -3035,15 +3035,17 @@ features:
         scheduler-queue-label: "Scheduler queue"
         sld-desc:  "Specify the name and the description of the namespace."
         ssd-label: "General information"
-      KubernetesMappingStep:
+      ResourcesStep:
         k8s-nm-name-label: "Kubernetes namespace name"
         k8s-nm-name-placeholder: "Kubernetes namespace where jobs in this namespace will run"
         k8s-nm-cpu-limit-label: "Kubernetes namespace cpu limit"
         k8s-nm-cpu-limit-placeholder: "CPU limit in this namespace (in number of cores)"
         k8s-nm-memory-limit-label: "Kubernetes namespace memory limit"
         k8s-nm-memory-limit-placeholder: "Memory limit in this namespace (in GB)"
-        sld-label: "Specify the Kubernetes resources where jobs in this namespace will run."
-        ssd-label: "Kubernetes mapping"
+        service-account-email-label: "GCP Service Account Email"
+        service-account-email-placeholder: "GCP service account to use when running workloads in this namespace"
+        sld-label: "Specify the resources that jobs in this namespace will use."
+        ssd-label: "Resources"
       PreferencesStep:
         name-label: "Name"
         name-placeholder: "Preference name"

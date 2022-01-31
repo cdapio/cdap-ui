@@ -42,15 +42,22 @@ const defaultGeneralState = Object.assign(
   nonSkippableDefaultState
 );
 
-const defaultMappingState = Object.assign(
+const defaultResourcesState = Object.assign(
+  {
+    k8sNamespace: '',
+    k8sNamespaceCpuLimit: '',
+    k8sNamespaceMemoryLimit: '',
+    serviceAccountEmail: '',
+  },
+  skippableDefaultState
+);
+
+const defaultHadoopMappingState = Object.assign(
   {
     hdfsDirectory: '',
     hiveDatabaseName: '',
     hbaseNamespace: '',
     schedulerQueueName: '',
-    k8sNamespace: '',
-    k8sNamespaceCpuLimit: '',
-    k8sNamespaceMemoryLimit: '',
   },
   skippableDefaultState
 );
@@ -82,7 +89,8 @@ const defaultEditableFieldsState = Object.assign(
   {
     fields: Object.keys({
       ...defaultGeneralState,
-      ...defaultMappingState,
+      ...defaultResourcesState,
+      ...defaultHadoopMappingState,
       ...defaultSecurityState,
       ...defaultPreferencesState,
     }),
@@ -98,7 +106,8 @@ const defaultAction = {
 
 const defaultInitialState = {
   general: defaultGeneralState,
-  mapping: defaultMappingState,
+  resources: defaultResourcesState,
+  hadoopMapping: defaultHadoopMappingState,
   security: defaultSecurityState,
   preferences: defaultPreferencesState,
   editableFields: defaultEditableFieldsState,
@@ -172,7 +181,54 @@ const general = (state = defaultGeneralState, action = defaultAction) => {
   });
 };
 
-const mapping = (state = defaultMappingState, action = defaultAction) => {
+const resources = (state = defaultResourcesState, action = defaultAction) => {
+  let stateCopy;
+  switch (action.type) {
+    case AddNamespaceActions.setK8sNamespace:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespace: action.payload.k8sNamespace,
+      });
+      break;
+    case AddNamespaceActions.setK8sNamespaceCpuLimit:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespaceCpuLimit: action.payload.k8sNamespaceCpuLimit,
+      });
+      break;
+    case AddNamespaceActions.setK8sNamespaceMemoryLimit:
+      stateCopy = Object.assign({}, state, {
+        k8sNamespaceMemoryLimit: action.payload.k8sNamespaceMemoryLimit,
+      });
+      break;
+    case AddNamespaceActions.setServiceAccountEmail:
+      stateCopy = Object.assign({}, state, {
+        serviceAccountEmail: action.payload.serviceAccountEmail,
+      });
+      break;
+    case AddNamespaceActions.setProperties:
+      stateCopy = {
+        ...state,
+        k8sNamespace: action.payload.k8sNamespace,
+        k8sNamespaceCpuLimit: action.payload.k8sNamespaceCpuLimit,
+        k8sNamespaceMemoryLimit: action.payload.k8sNamespaceMemoryLimit,
+        serviceAccountEmail: action.payload.serviceAccountEmail,
+      };
+      break;
+    case AddNamespaceActions.onError:
+      return onErrorHandler('resources', Object.assign({}, state), action);
+    case AddNamespaceActions.onSuccess:
+      return onSuccessHandler('resources', Object.assign({}, state), action);
+    case AddNamespaceActions.onReset:
+      return defaultResourcesState;
+    default:
+      return state;
+  }
+  return Object.assign({}, stateCopy, {
+    __skipped: false,
+    __error: action.payload.error || false,
+  });
+};
+
+const hadoopMapping = (state = defaultHadoopMappingState, action = defaultAction) => {
   let stateCopy;
   switch (action.type) {
     case AddNamespaceActions.setHDFSDirectory:
@@ -195,21 +251,6 @@ const mapping = (state = defaultMappingState, action = defaultAction) => {
         schedulerQueueName: action.payload.schedulerQueueName,
       });
       break;
-    case AddNamespaceActions.setK8sNamespace:
-      stateCopy = Object.assign({}, state, {
-        k8sNamespace: action.payload.k8sNamespace,
-      });
-      break;
-    case AddNamespaceActions.setK8sNamespaceCpuLimit:
-      stateCopy = Object.assign({}, state, {
-        k8sNamespaceCpuLimit: action.payload.k8sNamespaceCpuLimit,
-      });
-      break;
-    case AddNamespaceActions.setK8sNamespaceMemoryLimit:
-      stateCopy = Object.assign({}, state, {
-        k8sNamespaceMemoryLimit: action.payload.k8sNamespaceMemoryLimit,
-      });
-      break;
     case AddNamespaceActions.setProperties:
       stateCopy = {
         ...state,
@@ -220,11 +261,11 @@ const mapping = (state = defaultMappingState, action = defaultAction) => {
       };
       break;
     case AddNamespaceActions.onError:
-      return onErrorHandler('mapping', Object.assign({}, state), action);
+      return onErrorHandler('hadoopMapping', Object.assign({}, state), action);
     case AddNamespaceActions.onSuccess:
-      return onSuccessHandler('mapping', Object.assign({}, state), action);
+      return onSuccessHandler('hadoopMapping', Object.assign({}, state), action);
     case AddNamespaceActions.onReset:
-      return defaultMappingState;
+      return defaultHadoopMappingState;
     default:
       return state;
   }
@@ -320,7 +361,8 @@ const createAddNamespaceStore = () => {
   return createStore(
     combineReducers({
       general,
-      mapping,
+      resources,
+      hadoopMapping,
       security,
       preferences,
       editableFields,

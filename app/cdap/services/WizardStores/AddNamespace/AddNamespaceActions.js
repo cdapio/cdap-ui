@@ -24,6 +24,7 @@ const AddNamespaceActions = {
   setK8sNamespace: 'SET-K8S-NS-NAME',
   setK8sNamespaceCpuLimit: 'SET-K8S-NS-CPU-LIMIT',
   setK8sNamespaceMemoryLimit: 'SET-K8S-NS-MEMORY-LIMIT',
+  setServiceAccountEmail: 'SET-K8S-NS-SERVICE-ACCOUNT-EMAIL',
   setSchedulerQueueName: 'SET_SCHEDULER_QUEUE_NAME',
   setPrincipal: 'SET-PRINCIPAL',
   setKeytab: 'SET-KEYTAB',
