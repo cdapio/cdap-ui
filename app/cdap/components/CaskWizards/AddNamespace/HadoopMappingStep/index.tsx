@@ -24,7 +24,7 @@ import { Provider, connect } from 'react-redux';
 // HDFS Root Directory
 const mapStateToHDFSRootDirectoryProps = (state) => {
   return {
-    value: state.mapping.hdfsDirectory,
+    value: state.hadoopMapping.hdfsDirectory,
     type: 'text',
     placeholder: T.translate(
       'features.Wizard.Add-Namespace.HadoopMappingStep.hdfs-root-directory-placeholder'
@@ -47,7 +47,7 @@ const mapDispatchToHDFSRootDirectoryProps = (dispatch) => {
 // Hive Database Name
 const mapStateToHiveDatabaseNameProps = (state) => {
   return {
-    value: state.mapping.hiveDatabaseName,
+    value: state.hadoopMapping.hiveDatabaseName,
     type: 'text',
     placeholder: T.translate(
       'features.Wizard.Add-Namespace.HadoopMappingStep.hive-db-name-placeholder'
@@ -70,7 +70,7 @@ const mapDispatchToHiveDatabaseNameProps = (dispatch) => {
 // HBASE Namespace Name
 const mapStateToHBASENamespaceNameProps = (state) => {
   return {
-    value: state.mapping.hbaseNamespace,
+    value: state.hadoopMapping.hbaseNamespace,
     type: 'text',
     placeholder: T.translate(
       'features.Wizard.Add-Namespace.HadoopMappingStep.hbase-nm-name-placeholder'
@@ -92,7 +92,7 @@ const mapDispatchToHBASENamespaceNameProps = (dispatch) => {
 
 const mapStateToSchedulerQueueNameProps = (state) => {
   return {
-    value: state.mapping.schedulerQueueName,
+    value: state.hadoopMapping.schedulerQueueName,
     type: 'text',
     placeholder: T.translate(
       'features.Wizard.Add-Namespace.HadoopMappingStep.scheduler-queue-placeholder'
