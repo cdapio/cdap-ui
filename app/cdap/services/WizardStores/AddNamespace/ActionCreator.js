@@ -50,16 +50,16 @@ const createOrEditNamespace = (api) => {
     putParams['config']['root.directory'] = state.hadoopMapping.hdfsDirectory;
   }
 
+  if (state.hadoopMapping.schedulerQueueName) {
+    putParams['config']['scheduler.queue.name'] = state.hadoopMapping.schedulerQueueName;
+  }
+
   if (state.security.keyTab) {
     putParams['config']['keytabURI'] = state.security.keyTab;
   }
 
   if (state.security.principal) {
     putParams['config']['principal'] = state.security.principal;
-  }
-
-  if (state.resources.schedulerQueueName) {
-    putParams['config']['scheduler.queue.name'] = state.resources.schedulerQueueName;
   }
 
   if (state.resources.k8sNamespace) {
