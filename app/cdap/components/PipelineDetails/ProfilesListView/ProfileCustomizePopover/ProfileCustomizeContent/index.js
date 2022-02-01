@@ -23,12 +23,13 @@ import Accordion, {
   AccordionPane,
 } from 'components/shared/Accordion';
 import { MyCloudApi } from 'api/cloud';
-import uuidV4 from 'uuid/v4';
 import { extractProfileName } from 'components/Cloud/Profiles/Store/ActionCreator';
 import IconSVG from 'components/shared/IconSVG';
 import cloneDeep from 'lodash/cloneDeep';
 import classnames from 'classnames';
-import { WrappedWidgetWrapper } from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import ProfilePropertyRow from 'components/PipelineDetails/ProfilesListView/ProfileCustomizePopover/ProfilePropertyRow';
+import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
+import { objectQuery } from 'services/helpers';
 
 require('./ProfileCustomizeContent.scss');
 
@@ -50,18 +51,21 @@ export default class ProfileCustomizeContent extends PureComponent {
 
   state = {
     loading: true,
-    provisionerspec: null,
+    provisionerSpec: null,
+    filteredConfigurationGroup: [],
   };
 
   customization = cloneDeep(this.props.customizations);
+  latestValues = this.getDefaultValues();
 
   componentDidMount() {
     MyCloudApi.getProvisionerDetailSpec({
       provisioner: this.props.provisioner.name,
     }).subscribe(
-      (provisionerspec) => {
+      (provisionerSpec) => {
         this.setState({
-          provisionerspec,
+          provisionerSpec,
+          filteredConfigurationGroup: this.getFilteredConfigurationGroup(provisionerSpec),
           loading: false,
         });
       },
@@ -76,11 +80,60 @@ export default class ProfileCustomizeContent extends PureComponent {
 
   componentWillUnmount() {
     this.customization = {};
+    this.latestValues = {};
+  }
+
+  getDefaultValues() {
+    const { editablePropertiesFromProfile } = this.props;
+    const values = {};
+    editablePropertiesFromProfile.forEach((property) => {
+      if (property.name in this.props.customizations) {
+        values[property.name] = this.props.customizations[property.name];
+      } else {
+        values[property.name] = property.value;
+      }
+    });
+    return values;
+  }
+
+  getFilteredConfigurationGroup(provisionerSpec) {
+    const configurationGroups = provisionerSpec['configuration-groups'];
+    const filters = provisionerSpec.filters;
+    if (filters) {
+      return filterByCondition(
+        configurationGroups,
+        {
+          'configuration-groups': configurationGroups,
+          filters,
+        },
+        {},
+        this.latestValues
+      );
+    } else {
+      return configurationGroups;
+    }
   }
 
   onPropertyUpdate = (propertyName, value) => {
     this.customization[propertyName] = value.toString();
+    this.latestValues[propertyName] = value.toString();
+    // Re-render only when the updated property is part of the filters.
+    if (this.isFilteredProperty(propertyName)) {
+      const filteredConfigurationGroup = this.getFilteredConfigurationGroup(
+        this.state.provisionerSpec
+      );
+      this.setState({
+        filteredConfigurationGroup,
+      });
+    }
   };
+
+  isFilteredProperty(propertyName) {
+    const { provisionerSpec } = this.state;
+    return (provisionerSpec.filters || []).some(
+      (filter) => objectQuery(filter, 'condition', 'property') === propertyName
+    );
+  }
 
   onSave = () => {
     if (this.props.onSave) {
@@ -94,12 +147,8 @@ export default class ProfileCustomizeContent extends PureComponent {
     }
   };
 
-  getProfilePropValue = (property) => {
-    return this.customization[property.name] || property.value;
-  };
-
   render() {
-    const editablePropertiesFromProfile = this.props.editablePropertiesFromProfile;
+    const { editablePropertiesFromProfile } = this.props;
     if (this.state.loading) {
       return (
         <div className="profile-customize-content">
@@ -107,21 +156,13 @@ export default class ProfileCustomizeContent extends PureComponent {
         </div>
       );
     }
-    let groups = this.state.provisionerspec['configuration-groups'];
+    let groups = this.state.filteredConfigurationGroup;
 
     const propertiesFromProfileMap = {};
     this.props.provisioner.properties.forEach((property) => {
       propertiesFromProfileMap[property.name] = property;
     });
 
-    let editablePropertiesMap = {};
-    editablePropertiesFromProfile.forEach((property) => {
-      if (property.name in this.props.customizations) {
-        editablePropertiesMap[property.name] = this.props.customizations[property.name];
-      } else {
-        editablePropertiesMap[property.name] = property.value;
-      }
-    });
     let profileName = this.props.profileLabel || extractProfileName(this.props.profileName);
 
     return (
@@ -138,17 +179,21 @@ export default class ProfileCustomizeContent extends PureComponent {
           </div>
           <Accordion size="small" active="0">
             {groups.map((group, i) => {
+              if (group.show === false) {
+                return null;
+              }
               const editableProperties = group.properties
-                .filter(
-                  (property) =>
+                .filter((property) => {
+                  const isEditable =
                     !propertiesFromProfileMap[property.name] ||
-                    propertiesFromProfileMap[property.name].isEditable !== false
-                )
+                    propertiesFromProfileMap[property.name].isEditable !== false;
+                  return isEditable && property.show !== false;
+                })
                 .map((property) => {
                   if (property['widget-type'] === 'select') {
                     return {
                       ...property,
-                      value: editablePropertiesMap[property.name],
+                      value: this.latestValues[property.name],
                       ['widget-attributes']: {
                         ...(property['widget-attributes'] || {}),
                         MenuProps: {
@@ -159,11 +204,11 @@ export default class ProfileCustomizeContent extends PureComponent {
                   }
                   return {
                     ...property,
-                    value: editablePropertiesMap[property.name],
+                    value: this.latestValues[property.name],
                   };
                 });
               return (
-                <AccordionPane id={i}>
+                <AccordionPane id={i} key={i}>
                   <AccordionTitle>
                     <strong>
                       {group.label} ({group.properties.length})
@@ -171,22 +216,13 @@ export default class ProfileCustomizeContent extends PureComponent {
                   </AccordionTitle>
                   <AccordionContent>
                     {editableProperties.map((property) => {
-                      let uniqueId = `provisioner-${uuidV4()}`;
                       return (
-                        <div key={uniqueId} className="profile-group-content">
-                          <div>
-                            <WrappedWidgetWrapper
-                              pluginProperty={{
-                                name: property.name,
-                                description: property.description,
-                                required: property.required,
-                              }}
-                              widgetProperty={property}
-                              value={this.getProfilePropValue.bind(this, property)}
-                              onChange={this.onPropertyUpdate.bind(this, property.name)}
-                            />
-                          </div>
-                        </div>
+                        <ProfilePropertyRow
+                          key={property.name}
+                          property={property}
+                          value={property.value}
+                          onChange={this.onPropertyUpdate.bind(this, property.name)}
+                        />
                       );
                     })}
                     {!editableProperties.length ? (
