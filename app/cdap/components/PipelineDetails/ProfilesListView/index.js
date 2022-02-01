@@ -246,7 +246,7 @@ export default class ProfilesListViewInPipeline extends Component {
         </div>
         <div onClick={onProfileSelectHandler}>{provisionerLabel}</div>
         <div onClick={onProfileSelectHandler}>
-          {profile.totalWorkerCores || '--'}
+          {profile.provisioner.totalProcessingCpusLabel || '--'}
           <AutoScaleBadge profile={profile} />
         </div>
         <div onClick={onProfileSelectHandler}>{profile.scope}</div>
