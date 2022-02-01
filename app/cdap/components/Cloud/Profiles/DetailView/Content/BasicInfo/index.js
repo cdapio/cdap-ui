@@ -167,7 +167,7 @@ export default class ProfileDetailViewBasicInfo extends Component {
                 <span>{this.state.provisionerLabel}</span>
               </div>
               <div>
-                {profile.totalWorkerCores || '--'}
+                {profile.provisioner.totalProcessingCpusLabel || '--'}
                 <AutoScaleBadge profile={profile} />
               </div>
               <div>{profile.scope}</div>

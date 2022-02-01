@@ -64,7 +64,7 @@ const PROFILES_TABLE_HEADERS = [
     label: T.translate(`${PREFIX}.common.provisioner`),
   },
   {
-    property: 'totalWorkerCores',
+    property: (profile) => profile.provisioner.totalProcessingCpusLabel,
     label: T.translate(`${PREFIX}.common.totalWorkerCores`),
   },
   {
@@ -363,7 +363,7 @@ class ProfilesListView extends Component {
         </div>
         <div>{profile.provisioner.label}</div>
         <div>
-          {profile.totalWorkerCores || '--'}
+          {profile.provisioner.totalProcessingCpusLabel || '--'}
           <AutoScaleBadge profile={profile} />
         </div>
         <div>{profile.scope}</div>

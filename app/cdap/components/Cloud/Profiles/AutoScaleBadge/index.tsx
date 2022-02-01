@@ -44,7 +44,7 @@ const BadgeTooltip = withStyles(() => {
 
 interface IProfile {
   autoScalingPolicy: string;
-  enableCdfAutoScaling: boolean;
+  enablePredefinedAutoScaling: boolean;
 }
 
 interface IAutoScaleBadgeProps {
@@ -53,7 +53,8 @@ interface IAutoScaleBadgeProps {
 
 const AutoScaleBadge = ({ profile }: IAutoScaleBadgeProps) => {
   const hasAutoScaling =
-    (profile.autoScalingPolicy && profile.autoScalingPolicy !== '') || profile.enableCdfAutoScaling;
+    (profile.autoScalingPolicy && profile.autoScalingPolicy !== '') ||
+    profile.enablePredefinedAutoScaling;
   if (!hasAutoScaling) {
     return null;
   }
