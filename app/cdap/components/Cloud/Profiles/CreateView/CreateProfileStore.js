@@ -30,6 +30,7 @@ const STORE_DEFAULT = {
   name: '',
   description: '',
   properties: {},
+  values: {},
 };
 const createProfileStore = (state = STORE_DEFAULT, action = defaultAction) => {
   switch (action.type) {
@@ -50,6 +51,7 @@ const createProfileStore = (state = STORE_DEFAULT, action = defaultAction) => {
       return {
         ...state,
         properties: action.payload.properties,
+        values: action.payload.values,
       };
     case ACTIONS.updateProperty:
       return {
@@ -60,6 +62,10 @@ const createProfileStore = (state = STORE_DEFAULT, action = defaultAction) => {
             ...state.properties[action.payload.propName],
             value: action.payload.propValue,
           },
+        },
+        values: {
+          ...state.values,
+          [action.payload.propName]: action.payload.propValue,
         },
       };
     case ACTIONS.togglePropertyLock:
