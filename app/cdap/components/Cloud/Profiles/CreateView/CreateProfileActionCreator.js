@@ -40,19 +40,22 @@ function initializeProperties(provisionerJson = {}) {
   }
   let configs = provisionerJson['configuration-groups'] || [];
   let properties = {};
+  const values = {};
   configs.forEach((config) => {
     config.properties.forEach((prop) => {
       let widgetAttributes = prop['widget-attributes'] || {};
+      const value = widgetAttributes.default || '';
       properties[prop.name] = {
-        value: widgetAttributes.default || '',
+        value,
         isEditable: true,
         required: prop.required || false,
       };
+      values[prop.name] = value;
     });
   });
   CreateProfileStore.dispatch({
     type: ACTIONS.initializeProperties,
-    payload: { properties },
+    payload: { properties, values },
   });
 }
 
