@@ -185,9 +185,12 @@ features:
         pendingRequestHeader: Pending requests
         pendingRequestHistory: VIEW REQUEST HISTORY
         noPendingRequests: There are no requests pending
+        acceptButton: Accept
+        rejectButton: reject
       Connections:
         connectionsHeader: Connections
         noConnections: There are no connections
+        allocation: Allocation
       NewRequests:
         newRequestsHeader: New requests
         noNewRequests: There are no new requests 
@@ -306,6 +309,9 @@ features:
         provisioner: Provisioner
         totalNodeHr: Total node hours
         totalRuns: Total runs
+        totalWorkerCores: Total worker cores
+        autoScaleBadge: Auto
+        autoScaleTooltip: AutoScaling of worker nodes is enabled.
       CreateView:
         ProvisionerSelection:
           pageTitle: '{productName} | Profiles | Create'

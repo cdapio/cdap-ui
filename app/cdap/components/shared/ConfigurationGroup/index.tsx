@@ -77,14 +77,12 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   validateProperties,
 }) => {
   const [configurationGroups, setConfigurationGroups] = useState([]);
-  const [defaultValues, setDefaultValues] = useState({ ...values });
   const referenceValueForUnMount = useRef<{
     configurationGroups?: IFilteredConfigurationGroup[];
     values?: Record<string, string>;
   }>({});
   const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState([]);
   const [orphanErrors, setOrphanErrors] = useState([]);
-  const [propertyValues, setPropertyValues] = useState({ ...values });
 
   // Initialize the configurationGroups based on widgetJson and pluginProperties obtained from backend
   useEffect(() => {
@@ -111,7 +109,6 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       initialValues = defaults(values, processedConfigurationGroup.defaultValues);
       changeParentHandler(initialValues);
     }
-    setDefaultValues(initialValues);
     updateFilteredConfigurationGroup(
       processedConfigurationGroup.configurationGroups,
       initialValues
@@ -138,12 +135,6 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       configurationGroups: newFilteredConfigurationGroup,
       values: newValues,
     };
-    const updatedFilteredValues = removeFilteredProperties(
-      newValues,
-      newFilteredConfigurationGroup,
-      defaultValues
-    );
-    setPropertyValues(updatedFilteredValues);
     setFilteredConfigurationGroups(newFilteredConfigurationGroup);
     getOrphanedErrors();
   }
@@ -162,7 +153,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
 
-    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg, defaultValues);
+    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
     changeParentHandler(updatedFilteredValues);
   }
 
@@ -280,7 +271,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
                     key={`${property.name}-${j}`}
                     widgetProperty={property}
                     pluginProperty={pluginProperties[property.name]}
-                    value={propertyValues[property.name]}
+                    value={values[property.name]}
                     onChange={handleValueChanges}
                     extraConfig={extraConfig}
                     disabled={disabled}

@@ -22,6 +22,7 @@ describe('Unit tests for Utilities', () => {
       const values = {
         project: 'test',
         tempTableTTLHours: '72',
+        location: 'US-default',
       };
       const filteredConfigurationGroups = [
         {
@@ -47,14 +48,7 @@ describe('Unit tests for Utilities', () => {
           ],
         },
       ];
-      const defaultValues = {
-        location: 'US-default',
-        project: 'test-default',
-        tempTableTTLHours: '72-default',
-      };
-      expect(
-        removeFilteredProperties(values, filteredConfigurationGroups, defaultValues)
-      ).toStrictEqual({
+      expect(removeFilteredProperties(values, filteredConfigurationGroups)).toStrictEqual({
         location: 'US-default',
         project: 'test',
       });

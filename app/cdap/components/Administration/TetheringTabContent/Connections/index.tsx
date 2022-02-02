@@ -14,16 +14,33 @@
  * the License.
  */
 
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
+import { IConnection } from '../types';
 import T from 'i18n-react';
+import ConnectionsTable from './ConnectionsTable';
+import IconSVG from 'components/shared/IconSVG';
+import ActionsPopover from '../ActionPopover';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
+const COLUMN_TEMPLATE = '50px 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
+const CONNECTION_STATUS = 'ACCEPTED';
 
-const Connections = () => {
-  const [connections, setConnections] = useState([]);
+interface IConnectionsProps {
+  connections: IConnection[];
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
+}
+
+const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProps) => {
+  const renderLastColumn = (instanceName: string) => (
+    <ActionsPopover
+      target={() => <IconSVG name="icon-more" />}
+      onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
+      onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
+    />
+  );
 
   return (
     <>
@@ -32,7 +49,11 @@ const Connections = () => {
       </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
-          <span>Connections Table goes here</span>
+          <ConnectionsTable
+            tableData={connections}
+            columnTemplate={COLUMN_TEMPLATE}
+            renderLastColumn={renderLastColumn}
+          />
         ) : (
           <NoDataText>{T.translate(`${I18NPREFIX}.noConnections`)}</NoDataText>
         )}
