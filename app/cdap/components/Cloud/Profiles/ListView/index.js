@@ -23,8 +23,8 @@ import classnames from 'classnames';
 import IconSVG from 'components/IconSVG';
 import LoadingSVG from 'components/LoadingSVG';
 import orderBy from 'lodash/orderBy';
-import ViewAllLabel from 'components/shared/ViewAllLabel';
-import ConfirmationModal from 'components/shared/ConfirmationModal';
+import ViewAllLabel from 'components/ViewAllLabel';
+import ConfirmationModal from 'components/ConfirmationModal';
 import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
 import {

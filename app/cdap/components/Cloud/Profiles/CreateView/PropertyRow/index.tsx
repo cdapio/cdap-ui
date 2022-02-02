@@ -16,11 +16,11 @@
 
 import React from 'react';
 import PropertyLock from 'components/Cloud/Profiles/CreateView/PropertyLock';
-import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
+import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
 import { isEmpty, isEqual, xorWith } from 'lodash';
 import { objectQuery } from 'services/helpers';
-import { IPluginProperty } from 'components/shared/ConfigurationGroup/types';
-import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
+import { IPluginProperty } from 'components/ConfigurationGroup/types';
+import { IErrorObj } from 'components/ConfigurationGroup/utilities';
 
 interface IPropertyRowProps {
   properties: { [key: string]: any };

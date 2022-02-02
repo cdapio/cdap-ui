@@ -45,8 +45,8 @@ import Helmet from 'react-helmet';
 import T from 'i18n-react';
 import { SCOPES, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/shared/If';
-import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
+import If from 'components/If';
+import { filterByCondition } from 'components/ConfigurationGroup/utilities/DynamicPluginFilters';
 
 const PREFIX = 'features.Cloud.Profiles.CreateView';
 

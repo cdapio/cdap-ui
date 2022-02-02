@@ -15,8 +15,8 @@
  */
 
 import React from 'react';
-import { WrappedWidgetWrapper } from 'components/shared/ConfigurationGroup/WidgetWrapper';
-import { IPluginProperty } from 'components/shared/ConfigurationGroup/types';
+import { WrappedWidgetWrapper } from 'components/ConfigurationGroup/WidgetWrapper';
+import { IPluginProperty } from 'components/ConfigurationGroup/types';
 
 interface IPropertyRowProps {
   value: any;

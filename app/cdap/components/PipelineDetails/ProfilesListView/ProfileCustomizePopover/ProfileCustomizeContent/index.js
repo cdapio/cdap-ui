@@ -24,7 +24,7 @@ import IconSVG from 'components/IconSVG';
 import cloneDeep from 'lodash/cloneDeep';
 import classnames from 'classnames';
 import ProfilePropertyRow from 'components/PipelineDetails/ProfilesListView/ProfileCustomizePopover/ProfilePropertyRow';
-import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
+import { filterByCondition } from 'components/ConfigurationGroup/utilities/DynamicPluginFilters';
 import { objectQuery } from 'services/helpers';
 
 require('./ProfileCustomizeContent.scss');
@@ -79,15 +79,16 @@ export default class ProfileCustomizeContent extends PureComponent {
   }
 
   getDefaultValues() {
-    const { editablePropertiesFromProfile } = this.props;
     const values = {};
-    editablePropertiesFromProfile.forEach((property) => {
-      if (property.name in this.props.customizations) {
-        values[property.name] = this.props.customizations[property.name];
-      } else {
-        values[property.name] = property.value;
-      }
-    });
+    this.props.provisioner.properties
+      .filter((property) => property.isEditable !== false)
+      .forEach((property) => {
+        if (property.name in this.props.customizations) {
+          values[property.name] = this.props.customizations[property.name];
+        } else {
+          values[property.name] = property.value;
+        }
+      });
     return values;
   }
 
@@ -143,7 +144,6 @@ export default class ProfileCustomizeContent extends PureComponent {
   };
 
   render() {
-    const { editablePropertiesFromProfile } = this.props;
     if (this.state.loading) {
       return (
         <div className="profile-customize-content">
@@ -151,7 +151,10 @@ export default class ProfileCustomizeContent extends PureComponent {
         </div>
       );
     }
-    let groups = this.state.filteredConfigurationGroup;
+    const groups = this.state.filteredConfigurationGroup;
+    const editablePropertiesFromProfile = this.props.provisioner.properties.filter(
+      (property) => property.isEditable !== false
+    );
 
     const propertiesFromProfileMap = {};
     this.props.provisioner.properties.forEach((property) => {
