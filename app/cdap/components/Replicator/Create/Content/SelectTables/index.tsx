@@ -32,7 +32,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ManualSelectTable from 'components/Replicator/Create/Content/SelectTables/ManualSelectTable';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import {
@@ -712,7 +712,7 @@ export default ({ children, ...props }) => {
   return (
     <SelectTables
       {...{
-        useReplicationTransformation: useFeatureFlagDefaultFalse(
+        useReplicationTransformation: useFeatureFlagDefaultTrue(
           'replication.transformations.enabled'
         ),
         ...props,
