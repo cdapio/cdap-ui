@@ -23,8 +23,9 @@ import classnames from 'classnames';
 import IconSVG from 'components/IconSVG';
 import LoadingSVG from 'components/LoadingSVG';
 import orderBy from 'lodash/orderBy';
-import ViewAllLabel from 'components/ViewAllLabel';
-import ConfirmationModal from 'components/ConfirmationModal';
+import ViewAllLabel from 'components/shared/ViewAllLabel';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
+import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
 import {
   getProfiles,
@@ -61,6 +62,10 @@ const PROFILES_TABLE_HEADERS = [
   {
     property: (profile) => profile.provisioner.label,
     label: T.translate(`${PREFIX}.common.provisioner`),
+  },
+  {
+    property: (profile) => profile.provisioner.totalProcessingCpusLabel,
+    label: T.translate(`${PREFIX}.common.totalWorkerCores`),
   },
   {
     property: 'scope',
@@ -357,6 +362,10 @@ class ProfilesListView extends Component {
           {profile.label || profile.name}
         </div>
         <div>{profile.provisioner.label}</div>
+        <div>
+          {profile.provisioner.totalProcessingCpusLabel || '--'}
+          <AutoScaleBadge profile={profile} />
+        </div>
         <div>{profile.scope}</div>
         {/*
           We should set the defaults in the metrics call but since it is not certain that we get metrics

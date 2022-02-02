@@ -25,6 +25,7 @@ import { MyPreferenceApi } from 'api/preference';
 import { Observable } from 'rxjs/Observable';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import ProfileCustomizePopover from 'components/PipelineDetails/ProfilesListView/ProfileCustomizePopover';
+import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import { isNilOrEmpty } from 'services/helpers';
 import isEqual from 'lodash/isEqual';
 import { getCustomizationMap } from 'components/PipelineConfigurations/Store/ActionCreator';
@@ -174,6 +175,7 @@ export default class ProfilesListViewInPipeline extends Component {
           <div />
           <strong>{T.translate('features.Cloud.Profiles.ListView.profileName')}</strong>
           <strong>{T.translate('features.Cloud.Profiles.common.provisioner')}</strong>
+          <strong>{T.translate('features.Cloud.Profiles.common.totalWorkerCores')}</strong>
           <strong>{T.translate('commons.scope')}</strong>
           <strong>{T.translate('commons.status')}</strong>
           <strong />
@@ -243,6 +245,10 @@ export default class ProfilesListViewInPipeline extends Component {
           {profileLabel}
         </div>
         <div onClick={onProfileSelectHandler}>{provisionerLabel}</div>
+        <div onClick={onProfileSelectHandler}>
+          {profile.provisioner.totalProcessingCpusLabel || '--'}
+          <AutoScaleBadge profile={profile} />
+        </div>
         <div onClick={onProfileSelectHandler}>{profile.scope}</div>
         <div className="profile-status" onClick={onProfileSelectHandler}>
           {T.translate(`features.Cloud.Profiles.common.${profileStatus}`)}
