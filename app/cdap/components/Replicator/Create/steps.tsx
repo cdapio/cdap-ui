@@ -29,39 +29,47 @@ interface IStep {
   required?: string[];
 }
 
-export const STEPS: IStep[] = [
-  {
-    label: 'Specify basic information',
-    component: NameDescription,
-    required: ['name'],
-  },
-  {
-    label: 'Configure source',
-    component: SourceConfig,
-    required: ['sourceConfig'],
-  },
-  {
-    label: 'Configure target',
-    component: TargetConfig,
-    required: ['targetConfig'],
-  },
-  {
-    label: 'Select tables and transformations',
+export const returnSteps = (transformationsEnabled: boolean): IStep[] => {
+  const tableIndex = transformationsEnabled ? 3 : 2;
+  const tables = {
+    label: transformationsEnabled ? 'Select tables and transformations' : 'Select tables',
     component: SelectTables,
     required: ['tables'],
-  },
-  {
-    label: 'Configure advanced properties',
-    component: Advanced,
-    required: ['numInstances'],
-  },
-  {
-    label: 'Review assessment',
-    component: Assessment,
-    required: ['name', 'sourceConfig', 'tables', 'targetConfig', 'numInstances'],
-  },
-  {
-    label: 'View summary',
-    component: Summary,
-  },
-];
+  };
+
+  const steps = [
+    {
+      label: 'Specify basic information',
+      component: NameDescription,
+      required: ['name'],
+    },
+    {
+      label: 'Configure source',
+      component: SourceConfig,
+      required: ['sourceConfig'],
+    },
+    {
+      label: 'Configure target',
+      component: TargetConfig,
+      required: ['targetConfig'],
+    },
+    {
+      label: 'Configure advanced properties',
+      component: Advanced,
+      required: ['numInstances'],
+    },
+    {
+      label: 'Review assessment',
+      component: Assessment,
+      required: ['name', 'sourceConfig', 'tables', 'targetConfig', 'numInstances'],
+    },
+    {
+      label: 'View summary',
+      component: Summary,
+    },
+  ];
+
+  steps.splice(tableIndex, 0, tables);
+
+  return steps;
+};

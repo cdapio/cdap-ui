@@ -16,7 +16,7 @@
 
 @import '../../../styles/variables.scss';
 
-$modeless-width: 730px;
+$modeless-width: 880px;
 $sidepanel-width: 170px;
 $modeless-header-height: 60px;
 $header-close-icon-size: 16px;
@@ -148,6 +148,13 @@ $header-close-icon-size: 16px;
               font-size: 14px;
               position: relative;
               text-align: left;
+            }
+          }
+          &.tab-content {
+            &.compute-profile-tab {
+              .tab-pane {
+                margin: 10px;
+              }
             }
           }
         }

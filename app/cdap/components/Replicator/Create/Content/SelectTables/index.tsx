@@ -32,6 +32,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import ManualSelectTable from 'components/Replicator/Create/Content/SelectTables/ManualSelectTable';
 import SearchBox from 'components/Replicator/Create/Content/SearchBox';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import {
@@ -164,7 +165,8 @@ const styles = (theme): StyleRules => {
   };
 };
 
-type ISelectTablesProps = ICreateContext & WithStyles<typeof styles>;
+type ISelectTablesProps = ICreateContext &
+  WithStyles<typeof styles> & { useReplicationTransformation: boolean };
 
 interface ISelectTablesState {
   tables: ITable[];
@@ -481,9 +483,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
 
   public renderColumns = () => {
     let Columns = SelectColumns;
-    if (true) {
-      // this will eventually be a feature flag but just leaving it as a boolean
-      // for now as a convenience
+    if (this.props.useReplicationTransformation) {
       Columns = SelectColumnsWithTransforms;
     }
 
@@ -706,4 +706,17 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
 
 const StyledSelectTables = withStyles(styles)(SelectTablesView);
 const SelectTables = createContextConnect(StyledSelectTables);
-export default SelectTables;
+
+// Higher Order Component wrapping class component so we can use useFeatureFlag hook
+export default ({ children, ...props }) => {
+  return (
+    <SelectTables
+      {...{
+        useReplicationTransformation: useFeatureFlagDefaultTrue(
+          'replication.transformations.enabled'
+        ),
+        ...props,
+      }}
+    />
+  );
+};

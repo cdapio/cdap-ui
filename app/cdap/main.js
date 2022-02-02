@@ -36,7 +36,6 @@ import Footer from 'components/shared/Footer';
 import Helmet from 'react-helmet';
 import Home from 'components/Home';
 import HttpExecutor from 'components/HttpExecutor';
-import If from 'components/shared/If';
 import Loadable from 'react-loadable';
 import LoadingIndicator from 'components/shared/LoadingIndicator';
 import LoadingSVG from 'components/shared/LoadingSVG';
@@ -373,43 +372,39 @@ class CDAP extends Component {
             <LoadingIndicator />
             <StatusAlertMessage />
             {this.state.apiError && <ApiErrorDialog />}
-            <If condition={this.state.isNamespaceFetchInFlight}>
+            {this.state.isNamespaceFetchInFlight && (
               <div className="loading-svg">
                 <LoadingSVG />
               </div>
-            </If>
-            <If condition={!this.state.isNamespaceFetchInFlight}>
-              <If condition={isNamespaceNotFound}>
-                <Page404 message={this.state.pageLevelError.message} />
-              </If>
-              {/** We show authorization failure message when the specific namespace API returns 403 */}
-              <If condition={isUserUnAuthorizedForNamespace}>
-                <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
-              </If>
-              <If
-                condition={
-                  !isUserUnAuthorizedForNamespace &&
-                  !isNamespaceNotFound &&
-                  this.state.pageLevelError
-                }
-              >
-                <Page500
-                  message={this.state.pageLevelError.message}
-                  refreshFn={this.retrieveNamespace}
-                />
-              </If>
-              {/**
-               * We show authorization failure message when the backend return empty
-               * namespace. This indicates the user has access to no namespace.
-               */}
-              <If condition={!this.state.pageLevelError}>
-                {this.state.authorizationFailed ? (
+            )}
+            {!this.state.isNamespaceFetchInFlight && (
+              <div>
+                {isNamespaceNotFound && <Page404 message={this.state.pageLevelError.message} />}
+                {/** We show authorization failure message when the specific namespace API returns 403 */}
+                {isUserUnAuthorizedForNamespace && (
                   <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
-                ) : (
-                  container
                 )}
-              </If>
-            </If>
+
+                {!isUserUnAuthorizedForNamespace &&
+                  !isNamespaceNotFound &&
+                  this.state.pageLevelError && (
+                    <Page500
+                      message={this.state.pageLevelError.message}
+                      refreshFn={this.retrieveNamespace}
+                    />
+                  )}
+                {/**
+                 * We show authorization failure message when the backend return empty
+                 * namespace. This indicates the user has access to no namespace.
+                 */}
+                {!this.state.pageLevelError &&
+                  (this.state.authorizationFailed ? (
+                    <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
+                  ) : (
+                    container
+                  ))}
+              </div>
+            )}
             <Footer />
             <AuthRefresher />
           </div>

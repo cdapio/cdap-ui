@@ -16,6 +16,57 @@
 
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
+export interface INamespaceAllocations {
+  namespace: string;
+  cpuLimit: string;
+  memoryLimit: string;
+  pods?: number;
+}
+
+export interface IMetadata {
+  metadata: { project: string; location: string };
+  namespaceAllocations: INamespaceAllocations[];
+}
+
+export interface IConnection {
+  connectionStatus: string;
+  endpoint: string;
+  metadata: IMetadata;
+  name: string;
+  tetheringStatus: string;
+}
+
+export interface ITableData {
+  requestTime?: string;
+  gcloudProject: string;
+  instanceName: string;
+  region: string;
+}
+
+export interface IReqsTableData extends ITableData {
+  requestedResources: INamespaceAllocations[];
+}
+
+export interface IConnectionsTableData extends ITableData {
+  status: string;
+  allocationData: INamespaceAllocations[];
+}
+
+export interface IConnectionsProps {
+  establishedConnections: IConnection[];
+  handleEdit: (connType: string, peer: string) => void;
+  handleDelete: (connType: string, peer: string) => void;
+}
+
+export interface IOdfConnectionsProps extends IConnectionsProps {
+  pendingRequests: IConnection[];
+}
+
+export interface ICdfConnectionsProps extends IConnectionsProps {
+  newRequests: IConnection[];
+  handleAcceptOrReject: (action: string, peer: string) => void;
+}
+
 export interface IApiError {
   statusCode?: string;
   response?: string;

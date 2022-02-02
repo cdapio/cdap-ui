@@ -83,12 +83,17 @@ const ActionsPopover = ({ target, onDeleteClick, onEditClick }: IActionsPopoverP
       placement="bottom"
       bubbleEvent={false}
       enableInteractionInPopover={true}
+      showPopover={false}
     >
       <ul>
-        <ListItem disabled={!canEdit} onClick={onEditClick}>
-          {T.translate(`${PREFIX}.Actions.edit`)}
-        </ListItem>
-        <hr />
+        {canEdit && (
+          <>
+            <ListItem disabled={!canEdit} onClick={onEditClick}>
+              {T.translate(`${PREFIX}.Actions.edit`)}
+            </ListItem>
+            <hr />
+          </>
+        )}
         <ListItem red={true} onClick={onDeleteClick}>
           {T.translate(`${PREFIX}.Actions.delete`)}
         </ListItem>

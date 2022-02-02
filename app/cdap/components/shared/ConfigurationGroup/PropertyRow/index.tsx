@@ -27,8 +27,6 @@ import { isEmpty, isEqual, xorWith } from 'lodash';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { isConnection } from 'components/AbstractWidget/ConnectionsWidget';
 
-const PropertiesWithFilterGroupUpdate = ['useConnection'];
-
 const styles = (theme): StyleRules => {
   return {
     root: {
@@ -141,13 +139,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       ...this.props.extraConfig.properties,
       [this.props.widgetProperty.name]: value,
     };
-    // Update filter group while toggling connection.
-    const params = {
-      updateFilteredConfigurationGroups: PropertiesWithFilterGroupUpdate.includes(
-        this.props.widgetProperty.name
-      ),
-    };
-    this.props.onChange(newValues, params);
+    this.props.onChange(newValues);
   };
 
   private updateAllProperties = (values, params: { [key: string]: any } = {}) => {

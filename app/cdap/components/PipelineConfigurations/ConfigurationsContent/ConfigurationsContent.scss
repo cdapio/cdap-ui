@@ -35,6 +35,16 @@ $secondary-btn-color: $brand-primary;
       width: auto;
     }
 
+    .num-preview-input-col {
+      display: flex;
+      flex-direction: column;
+
+      .num-preview-info {
+        padding: 3px 0 0 5px;
+        font-size: 11px;
+      }
+    }
+
     .configuration-content-container {
       /* 50px: height from bottom of buttons to horizontal line */
       height: calc(100% - 50px);
@@ -80,6 +90,10 @@ $secondary-btn-color: $brand-primary;
           width: 65px;
           display: inline-block;
         }
+      }
+
+      .num-records-preview {
+        align-items: baseline;
       }
 
       .key-value-pair-labels {

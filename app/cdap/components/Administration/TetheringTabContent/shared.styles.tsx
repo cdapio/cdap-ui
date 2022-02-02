@@ -15,8 +15,10 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Button from '@material-ui/core/Button';
+import IconSVG from 'components/shared/IconSVG';
 
 export const HeaderContainer = styled.div`
   display: flex;
@@ -48,7 +50,7 @@ export const NoDataText = styled.span`
 export const Grid = styled.div`
   width: 100%;
   margin-top: 30px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   padding: 0 30px;
   max-height: none;
 `;
@@ -115,6 +117,22 @@ export const StyledButton = styled(Button)`
   }
 `;
 
+export const StyledLinkBtn = styled(Link)`
+  padding: 5px 20px;
+  background-color: var(--white);
+  color: var(--primary);
+  height: 30px;
+  font-size: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: var(--primary);
+    color: var(--white);
+    text-decoration: none;
+  }
+`;
+
 export const NewReqContainer = styled.div`
   width: 50vw;
   max-width: 800px;
@@ -126,5 +144,32 @@ export const NewReqContainer = styled.div`
     color: var(--grey07);
     background-color: var(--grey07);
     height: 2px;
+  }
+`;
+
+export const StyledIcon = styled(IconSVG)`
+  fill: ${(props) => props.color};
+  font-size: ${(props) => props.size};
+`;
+
+export const LinedSpan = styled.span`
+  display: flex;
+  flex-direction: row;
+  margin-right: -20px;
+
+  &:before,
+  &:after {
+    content: '';
+    flex: 1 1;
+    border-bottom: 2px solid var(--grey11);
+    margin: auto;
+  }
+
+  &:before {
+    margin-right: 15px;
+  }
+
+  &:after {
+    margin-left: 15px;
   }
 `;
