@@ -582,7 +582,11 @@ class HydratorPlusPlusConfigStore {
   }
   setNumRecordsPreview(val = this.HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview) {
     if (this.GLOBALS.etlBatchPipelines.includes(this.state.artifact.name)) {
-      this.state.config.numOfRecordsPreview = val;
+      // Cap preview at configured max, if there is one
+      this.state.config.numOfRecordsPreview = Math.min(
+        window.CDAP_CONFIG.cdap.maxRecordsPreview || Infinity,
+        val
+      );
     }
   }
   getRangeRecordsPreview() {
@@ -592,7 +596,11 @@ class HydratorPlusPlusConfigStore {
     if (this.GLOBALS.etlBatchPipelines.includes(this.state.artifact.name)) {
       this.state.config.rangeRecordsPreview = {
         min: minRecordsPreview,
-        max: maxRecordsPreview,
+        // Cap range max at configured max, if there is one
+        max: Math.min(
+          window.CDAP_CONFIG.cdap.maxRecordsPreview || Infinity,
+          maxRecordsPreview
+        ),
       };
     }
   }
