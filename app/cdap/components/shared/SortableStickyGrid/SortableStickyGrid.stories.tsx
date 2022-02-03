@@ -49,7 +49,7 @@ const entities = [
   },
 ];
 
-storiesOf('Table', module)
+storiesOf('SortableStickyGrid', module)
   .add(
     'Simple Table',
     withInfo({
