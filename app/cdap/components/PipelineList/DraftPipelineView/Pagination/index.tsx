@@ -14,9 +14,67 @@
  * the License.
  */
 
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { Actions } from 'components/PipelineList/DraftPipelineView/store';
-import PaginationView from 'components/PipelineList/PaginationView';
+import PaginationStepper from 'components/shared/PaginationStepper';
+import styled from 'styled-components';
+
+interface IPaginationProps {
+  setPage: (page: number) => void;
+  currentPage: number;
+  numPipelines: number;
+  pageLimit: number;
+  shouldDisplay: boolean;
+}
+
+const PaginationContainer = styled.div`
+  margin-right: 50px;
+`;
+
+const PaginationView: React.SFC<IPaginationProps> = ({
+  setPage,
+  currentPage,
+  numPipelines,
+  pageLimit,
+  shouldDisplay = true,
+}) => {
+  const numPages = Math.ceil(numPipelines / pageLimit);
+
+  if (!shouldDisplay || numPages <= 1) {
+    return null;
+  }
+
+  const prevDisabled = currentPage === 1;
+  const nextDisabled = currentPage === numPages;
+
+  function handleNext() {
+    if (nextDisabled) {
+      return;
+    }
+
+    setPage(currentPage + 1);
+  }
+
+  function handlePrev() {
+    if (prevDisabled) {
+      return;
+    }
+
+    setPage(currentPage - 1);
+  }
+
+  return (
+    <PaginationContainer className="pagination-container float-right">
+      <PaginationStepper
+        onNext={handleNext}
+        onPrev={handlePrev}
+        nextDisabled={nextDisabled}
+        prevDisabled={prevDisabled}
+      />
+    </PaginationContainer>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

@@ -32,7 +32,7 @@ const styles = () => {
 interface IProps extends WithStyles<typeof styles> {
   pipelines: IPipeline[];
   pipelinesLoading: boolean;
-  filteredPipelines: IPipeline[];
+  hasMultiple: boolean;
 }
 
 const PREFIX = 'features.PipelineList';
@@ -40,13 +40,14 @@ const PREFIX = 'features.PipelineList';
 const PipelineCountView: React.SFC<IProps> = ({
   pipelines = [],
   pipelinesLoading,
-  filteredPipelines,
   classes,
+  hasMultiple = false,
 }) => {
-  if (pipelinesLoading) {
+  if (pipelinesLoading || !pipelines) {
     return null;
   }
-  let count = `Showing ${filteredPipelines.length} of ${pipelines.length}`;
+  const total = hasMultiple ? 'many' : pipelines.length;
+  let count = `Showing ${pipelines.length} of ${total}`;
   if (!pipelines.length) {
     count = '0';
   }
@@ -61,7 +62,7 @@ const PipelineCountView: React.SFC<IProps> = ({
 
 const mapStateToProps = (state) => ({
   pipelines: state.deployed.pipelines,
-  filteredPipelines: state.deployed.filteredPipelines,
+  hasMultiple: state.deployed.hasMultiple,
 });
 
 const PipelineCount = PipelineCountView;

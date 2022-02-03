@@ -19,7 +19,6 @@ import PipelineTableRow from 'components/PipelineList/DeployedPipelineView/Pipel
 import { connect } from 'react-redux';
 import T from 'i18n-react';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
-import EmptyList, { VIEW_TYPES } from 'components/PipelineList/EmptyList';
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from 'components/PipelineList/DeployedPipelineView/PipelineTable/SortableHeader';
@@ -28,7 +27,6 @@ import './PipelineTable.scss';
 
 interface IProps {
   pipelines: IPipeline[];
-  filteredPipelines: IPipeline[];
   search: string;
   onClear: () => void;
   refetch: () => void;
@@ -36,19 +34,9 @@ interface IProps {
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineTableView: React.SFC<IProps> = ({
-  pipelines,
-  filteredPipelines: filteredList,
-  search,
-  onClear,
-  refetch,
-}) => {
+const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refetch }) => {
   function renderBody() {
     if (!pipelines || (Array.isArray(pipelines) && pipelines.length === 0)) {
-      return <EmptyList type={VIEW_TYPES.deployed} />;
-    }
-
-    if (!filteredList || (Array.isArray(filteredList) && filteredList.length === 0)) {
       return (
         <EmptyMessageContainer
           title={T.translate(`${PREFIX}.EmptyList.EmptySearch.heading`, { search }).toString()}
@@ -67,7 +55,7 @@ const PipelineTableView: React.SFC<IProps> = ({
 
     return (
       <div className="grid-body">
-        {filteredList.map((pipeline) => {
+        {pipelines.map((pipeline) => {
           return <PipelineTableRow key={pipeline.name} pipeline={pipeline} refetch={refetch} />;
         })}
       </div>
@@ -77,7 +65,7 @@ const PipelineTableView: React.SFC<IProps> = ({
   return (
     <div className="grid-wrapper pipeline-list-table">
       <div className="grid grid-container">
-        <If condition={pipelines && filteredList && filteredList.length > 0}>
+        <If condition={pipelines && pipelines.length > 0}>
           <div className="grid-header">
             <div className="grid-row">
               <SortableHeader columnName="name" />
@@ -105,7 +93,6 @@ const mapStateToProps = (state) => {
     sortOrder: state.deployed.sortOrder,
     sortColumn: state.deployed.sortColumn,
     pipelines: state.deployed.pipelines,
-    filteredPipelines: state.deployed.filteredPipelines,
   };
 };
 
@@ -113,7 +100,7 @@ const mapDispatch = (dispatch) => {
   return {
     onClear: () => {
       dispatch({
-        type: Actions.setSearch,
+        type: Actions.setSearchInput,
         payload: {
           search: '',
         },
