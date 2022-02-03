@@ -22,37 +22,9 @@ import Store, {
   IStore,
 } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
-import { orderBy } from 'natural-orderby';
 import { objectQuery } from 'services/helpers';
 import { PROGRAM_STATUSES, GLOBALS } from 'services/global-constants';
 import debounce from 'lodash/debounce';
-const debounceFilteredPipelineRunsFetch = debounce(getRunsForFilteredPipelines, 500);
-
-function getOrderColumnFunction(sortColumn, sortOrder) {
-  switch (sortColumn) {
-    case 'name':
-      return (pipeline) => pipeline.name.toLowerCase();
-    case 'type':
-      return (pipeline) => pipeline.artifact.name;
-    case 'status':
-      return (pipeline) => {
-        return objectQuery(pipeline, 'runs', 0, 'status') || PROGRAM_STATUSES.DEPLOYED;
-      };
-    case 'lastStartTime':
-      return (pipeline) => {
-        const lastStarting = objectQuery(pipeline, 'runs', 0, 'starting');
-
-        if (!lastStarting) {
-          return sortOrder === SORT_ORDER.asc ? Infinity : -1;
-        }
-        return lastStarting;
-      };
-    case 'runs':
-      return (pipeline) => {
-        return pipeline.totalRuns || 0;
-      };
-  }
-}
 
 export function deletePipeline(pipeline: IPipeline, refetch: () => void) {
   const namespace = getCurrentNamespace();
@@ -84,12 +56,12 @@ export function reset() {
   });
 }
 
-function getRunsForFilteredPipelines() {
-  const { filteredPipelines, pipelines } = Store.getState().deployed;
-  if (!filteredPipelines || !pipelines) {
+function getRunsForPipelines() {
+  const { pipelines } = Store.getState().deployed;
+  if (!pipelines) {
     return;
   }
-  const pipelinesWithoutRuns = filteredPipelines.filter(
+  const pipelinesWithoutRuns = pipelines.filter(
     (pipeline) => pipeline.runs === null || pipeline.totalRuns === null
   );
   if (!pipelinesWithoutRuns.length) {
@@ -135,14 +107,6 @@ function getRunsForFilteredPipelines() {
         }
         return nrMap[pipeline.name] || pipeline.nextRuntime;
       };
-      const filteredPipelinesWithRuns = filteredPipelines.map((pipeline) => {
-        return {
-          ...pipeline,
-          runs: runsMap[pipeline.name] || pipeline.runs,
-          totalRuns: runsCountMap[pipeline.name] || pipeline.totalRuns,
-          nextRuntime: getNextrunTime(nextRuntimeMap, pipeline),
-        };
-      });
       const pipelinesWithRuns = pipelines.map((pipeline) => {
         return {
           ...pipeline,
@@ -152,93 +116,61 @@ function getRunsForFilteredPipelines() {
         };
       });
       Store.dispatch({
-        type: Actions.updateFilteredPipelines,
+        type: Actions.updatePipelines,
         payload: {
-          filteredPipelines: filteredPipelinesWithRuns,
           pipelines: pipelinesWithRuns,
         },
       });
     });
 }
 
-function getFilteredPipelines({
-  pipelines,
-  search,
-  sortOrder,
-  sortColumn,
-  currentPage,
-  pageLimit,
-}: IStore['deployed']): IPipeline[] {
-  if (!pipelines) {
-    return;
-  }
-  let filteredPipelines = pipelines;
-  if (search.length > 0) {
-    filteredPipelines = pipelines.filter((pipeline) => {
-      const name = pipeline.name.toLowerCase();
-      const searchFilter = search.toLowerCase();
-
-      return name.indexOf(searchFilter) !== -1;
-    });
-  }
-  filteredPipelines = orderBy(
-    filteredPipelines,
-    [getOrderColumnFunction(sortColumn, sortOrder)],
-    [sortOrder]
-  );
-
-  const startIndex = (currentPage - 1) * pageLimit;
-  const endIndex = startIndex + pageLimit;
-  filteredPipelines = filteredPipelines.slice(startIndex, endIndex);
-  return filteredPipelines;
-}
-
-export function setFilteredPipelines(pipelines = Store.getState().deployed.pipelines) {
-  const filteredPipelines = getFilteredPipelines({ ...Store.getState().deployed, pipelines });
-
+export function setPipelines({ pipelines, nextPageToken }) {
   Store.dispatch({
     type: Actions.setPipelines,
     payload: {
       pipelines,
-      filteredPipelines,
+      nextPageToken,
     },
   });
-  getRunsForFilteredPipelines();
+  getRunsForPipelines();
 }
 
-export function setPage(currentPage) {
-  const { currentPage: currentPageFromStore } = Store.getState().deployed;
-  if (!currentPage) {
-    currentPage = currentPageFromStore;
+export function prevPage() {
+  const { previousTokens } = Store.getState().deployed;
+  if (!previousTokens.length) {
+    return;
   }
-  const filteredPipelines = getFilteredPipelines({ ...Store.getState().deployed, currentPage });
   Store.dispatch({
-    type: Actions.setPage,
-    payload: {
-      currentPage,
-      filteredPipelines,
-    },
+    type: Actions.prevPage,
   });
-  getRunsForFilteredPipelines();
+  getRunsForPipelines();
 }
 
-export function setSearch(searchText: string) {
-  const newState = {
-    ...Store.getState().deployed,
-    search: searchText,
-  };
-  if (!searchText) {
-    newState.currentPage = 1;
+export function nextPage() {
+  const { nextPageToken } = Store.getState().deployed;
+  if (!nextPageToken) {
+    return;
   }
-  const filteredPipelines = getFilteredPipelines(newState);
   Store.dispatch({
-    type: Actions.setSearch,
+    type: Actions.nextPage,
+  });
+  getRunsForPipelines();
+}
+
+export function applySearch() {
+  Store.dispatch({
+    type: Actions.applySearch,
+  });
+}
+const debouncedApplySearch = debounce(applySearch, 1000);
+export function setSearchInput(searchText: string) {
+  Store.dispatch({
+    type: Actions.setSearchInput,
     payload: {
       search: searchText,
-      filteredPipelines,
     },
   });
-  debounceFilteredPipelineRunsFetch();
+  debouncedApplySearch();
 }
 
 export function setSort(columnName: string) {
@@ -251,20 +183,12 @@ export function setSort(columnName: string) {
     sortOrder = SORT_ORDER.desc;
   }
 
-  const filteredPipelines = getFilteredPipelines({
-    ...Store.getState().deployed,
-    sortColumn: columnName,
-    sortOrder,
-    currentPage: 1,
-  });
-
   Store.dispatch({
     type: Actions.setSort,
     payload: {
       sortColumn: columnName,
       sortOrder,
-      filteredPipelines,
     },
   });
-  getRunsForFilteredPipelines();
+  getRunsForPipelines();
 }

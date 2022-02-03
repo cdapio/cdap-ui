@@ -16,7 +16,13 @@
 
 # import PipelineRecord from "pipelineRecordSchema.graphql"
 
+type PipelinesResponse {
+  applications: [PipelineRecord]!
+  nextPageToken: String
+}
+
 type Query {
   status: String!
-  pipelines(namespace: String = "default"): [PipelineRecord]!
+  pipelines(namespace: String = "default", pageToken: String,
+    pageSize: Int = 25, orderBy: String, nameFilter: String): PipelinesResponse!
 }
