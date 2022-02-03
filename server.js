@@ -100,10 +100,10 @@ getCDAPConfig()
     // to consume
     const featureFlags = {};
     for (const [key, value] of Object.entries(c)) {
-      if (key.match(/^feature.ui/)) {
-        // feature.ui. is 11 characters and we only want to include
-        // ui feature flags
-        featureFlags[key.substring(11)] = value;
+      if (key.match(/^feature/)) {
+        // feature. is 8 characters and we only want to include
+        // feature flags
+        featureFlags[key.substring(8)] = value;
         delete c[key];
       }
     }
