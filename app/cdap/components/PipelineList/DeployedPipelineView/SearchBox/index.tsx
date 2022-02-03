@@ -17,7 +17,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import IconSVG from 'components/IconSVG';
-import { setSearch } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
+import { setSearchInput } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import T from 'i18n-react';
 
 interface ISearchBoxProps {
@@ -26,7 +26,7 @@ interface ISearchBoxProps {
 }
 const PREFIX = 'features.PipelineList';
 
-const SearchBoxView: React.SFC<ISearchBoxProps> = ({ value, onChange }) => {
+const SearchBoxView: React.FC<ISearchBoxProps> = ({ value, onChange }) => {
   return (
     <div className="search-box">
       <div className="input-group">
@@ -49,14 +49,14 @@ const SearchBoxView: React.SFC<ISearchBoxProps> = ({ value, onChange }) => {
 
 const mapStateToProps = (state) => {
   return {
-    value: state.deployed.search,
+    value: state.deployed.searchInput,
   };
 };
 
 const mapDispatch = () => {
   return {
     onChange: (e) => {
-      setSearch(e.target.value);
+      setSearchInput(e.target.value);
     },
   };
 };

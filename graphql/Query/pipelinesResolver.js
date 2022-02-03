@@ -31,15 +31,28 @@ export async function queryTypePipelinesResolver(parent, args, context) {
 
   const pipelineArtifacts = ['cdap-data-pipeline', 'cdap-data-streams', 'cdap-sql-pipeline'];
 
-  let path = `/v3/namespaces/${namespace}/apps?artifactName=${pipelineArtifacts.join(',')}`;
+  const params = {
+    artifactName: pipelineArtifacts.join(','),
+    pageToken: args.pageToken,
+    pageSize: args.pageSize,
+    orderBy: args.orderBy,
+    nameFilter: args.nameFilter,
+  };
+  for (let key in params) {
+    if (params[key] === undefined) {
+      delete params[key];
+    }
+  }
+
+  let path = `/v3/namespaces/${namespace}/apps?${new URLSearchParams(params)}`;
 
   options.url = constructUrl(cdapConfig, path);
   context.namespace = namespace;
 
   const errorModifiersFn = (error, statusCode) => {
     return new ApolloError(error, statusCode, { errorOrigin: 'pipelines' });
-  }
+  };
 
   const apps = await requestPromiseWrapper(options, context, null, errorModifiersFn);
-  return orderBy(apps, [(app) => app.name], ['asc']);
+  return apps;
 }
