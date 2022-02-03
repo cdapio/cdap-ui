@@ -48,14 +48,17 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
       onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
     />
   );
+  const canSeeReqHistory = false; // Will remove after request history page is ready
 
   return (
     <>
       <HeaderContainer>
         <HeaderTitle>{T.translate(`${I18NPREFIX}.pendingRequestHeader`)}</HeaderTitle>
-        <PendingRequestHistory to="/administration/tethering/requestHistory">
-          {T.translate(`${I18NPREFIX}.pendingRequestHistory`)}
-        </PendingRequestHistory>
+        {canSeeReqHistory && (
+          <PendingRequestHistory to="/administration/tethering/requestHistory">
+            {T.translate(`${I18NPREFIX}.pendingRequestHistory`)}
+          </PendingRequestHistory>
+        )}
       </HeaderContainer>
       <BodyContainer>
         {pendingRequests.length > 0 ? (

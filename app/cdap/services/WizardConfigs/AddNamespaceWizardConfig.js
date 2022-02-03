@@ -16,7 +16,8 @@
 
 import React from 'react';
 import GeneralInfoStep from 'components/CaskWizards/AddNamespace/GeneralInfoStep';
-import MappingStep from 'components/CaskWizards/AddNamespace/MappingStep';
+import HadoopMappingStep from 'components/CaskWizards/AddNamespace/HadoopMappingStep';
+import ResourcesStep from 'components/CaskWizards/AddNamespace/ResourcesStep';
 import SecurityStep from 'components/CaskWizards/AddNamespace/SecurityStep';
 import PreferencesStep from 'components/CaskWizards/AddNamespace/PreferencesStep';
 import T from 'i18n-react';
@@ -27,44 +28,56 @@ const AddNamespaceWizardConfig = {
   steps: [
     {
       id: 'general',
-      shorttitle: T.translate('features.Wizard.Add-Namespace.Step1.ssd-label'),
-      title: T.translate('features.Wizard.Add-Namespace.Step1.ssd-label'),
-      description: T.translate('features.Wizard.Add-Namespace.Step1.sld-desc'),
+      shorttitle: T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.sld-desc'),
       content: <GeneralInfoStep />,
       requiredFields: ['name'],
     },
     {
-      id: 'mapping',
-      shorttitle: T.translate('features.Wizard.Add-Namespace.Step2.ssd-label'),
-      title: T.translate('features.Wizard.Add-Namespace.Step2.ssd-label'),
-      description: T.translate('features.Wizard.Add-Namespace.Step2.sld-label'),
-      content: <MappingStep />,
-    },
-    {
-      id: 'security',
-      shorttitle: T.translate('features.Wizard.Add-Namespace.Step3.ssd-label'),
-      title: T.translate('features.Wizard.Add-Namespace.Step3.ssd-label'),
-      description: T.translate('features.Wizard.Add-Namespace.Step3.sld-label'),
-      content: <SecurityStep />,
+      id: 'resources',
+      shorttitle: T.translate('features.Wizard.Add-Namespace.ResourcesStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.ResourcesStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.ResourcesStep.sld-label'),
+      content: <ResourcesStep />,
     },
     {
       id: 'preferences',
-      shorttitle: T.translate('features.Wizard.Add-Namespace.Step4.ssd-label'),
-      title: T.translate('features.Wizard.Add-Namespace.Step4.ssd-label'),
-      description: T.translate('features.Wizard.Add-Namespace.Step4.sld-label'),
+      shorttitle: T.translate('features.Wizard.Add-Namespace.PreferencesStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.PreferencesStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.PreferencesStep.sld-label'),
       content: <PreferencesStep />,
+    },
+    {
+      id: 'hadoopMapping',
+      shorttitle: T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.HadoopMappingStep.sld-label'),
+      content: <HadoopMappingStep />,
+    },
+    {
+      id: 'security',
+      shorttitle: T.translate('features.Wizard.Add-Namespace.SecurityStep.ssd-label'),
+      title: T.translate('features.Wizard.Add-Namespace.SecurityStep.ssd-label'),
+      description: T.translate('features.Wizard.Add-Namespace.SecurityStep.sld-label'),
+      content: <SecurityStep />,
     },
   ],
 };
 
 if (Theme.showNamespaceMapping === false) {
-  const mappingIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'mapping' });
-  AddNamespaceWizardConfig.steps.splice(mappingIndex, 1);
+  const HadoopMappingIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'hadoopMapping' });
+  AddNamespaceWizardConfig.steps.splice(HadoopMappingIndex, 1);
 }
 
 if (Theme.showNamespaceSecurity === false) {
   const securityIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'security' });
   AddNamespaceWizardConfig.steps.splice(securityIndex, 1);
+}
+
+if (Theme.odf === false) {
+  const ResourcesIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'resources' });
+  AddNamespaceWizardConfig.steps.splice(ResourcesIndex, 1);
 }
 
 export default AddNamespaceWizardConfig;
