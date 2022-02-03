@@ -15,66 +15,63 @@
  */
 
 import * as React from 'react';
+import { useEffect, useReducer } from 'react';
 import PipelineTable from 'components/PipelineList/DeployedPipelineView/PipelineTable';
 import {
   reset,
-  setFilteredPipelines,
+  setPipelines,
+  nextPage,
+  prevPage,
 } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import PipelineCount from 'components/PipelineList/DeployedPipelineView/PipelineCount';
 import SearchBox from 'components/PipelineList/DeployedPipelineView/SearchBox';
-import Pagination from 'components/PipelineList/DeployedPipelineView/Pagination';
 import { Provider } from 'react-redux';
 import Store from 'components/PipelineList/DeployedPipelineView/store';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
+import { useSelector } from 'react-redux';
 import If from 'components/shared/If';
 import { categorizeGraphQlErrors } from 'services/helpers';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
+import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import './DeployedPipelineView.scss';
 const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 
-const DeployedPipeline: React.FC = () => {
-  const QUERY = gql`
-    {
-      pipelines(namespace: "${getCurrentNamespace()}") {
-        name,
-        artifact {
-          name
-        },
-        runs {
-          status,
-          starting
-        },
-        totalRuns,
-        nextRuntime {
-          id,
-          time
-        }
-      }
-    }
-  `;
+import PaginationStepper from 'components/shared/PaginationStepper';
+import styled from 'styled-components';
 
-  // on unmount
-  React.useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, []);
-  let bannerMessage = '';
-  const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
-    errorPolicy: 'all',
-    fetchPolicy: 'no-cache',
-    notifyOnNetworkStatusChange: true,
-  });
+const PaginationContainer = styled.div`
+  margin-right: 50px;
+`;
 
-  if (loading || networkStatus === 4) {
-    return <LoadingSVGCentered />;
+const Pagination = ({}) => {
+  const { prevDisabled, nextDisabled, shouldDisplay } = useSelector(({ deployed }) => ({
+    prevDisabled: !deployed.previousTokens.length,
+    nextDisabled: !deployed.nextPageToken,
+    shouldDisplay: deployed.hasMultiple,
+  }));
+
+  if (!shouldDisplay) {
+    return null;
   }
 
+  return (
+    <PaginationContainer className="float-right">
+      <PaginationStepper
+        onNext={nextPage}
+        onPrev={prevPage}
+        nextDisabled={nextDisabled}
+        prevDisabled={prevDisabled}
+      />
+    </PaginationContainer>
+  );
+};
+
+const checkError = (error) => {
   if (error) {
     const errorMap = categorizeGraphQlErrors(error);
     // Errors thrown here will be caught by error boundary
@@ -94,15 +91,91 @@ const DeployedPipeline: React.FC = () => {
         throw new Error(message);
       } else {
         // Pick one of the leftover errors to show in the banner;
-        bannerMessage = Object.values(errorMap)[0][0];
+        const errs = Object.values(errorMap);
+        return errs ? errs[0][0] : 'Unknown error';
       }
     }
   }
+  // no error, no message
+  return '';
+};
 
-  setFilteredPipelines(data.pipelines);
+const DeployedPipeline: React.FC = () => {
+  const QUERY = gql`
+    query Query(
+      $namespace: String
+      $pageSize: Int
+      $token: String
+      $nameFilter: String
+      $orderBy: String
+    ) {
+      pipelines(
+        namespace: $namespace
+        pageSize: $pageSize
+        pageToken: $token
+        nameFilter: $nameFilter
+        orderBy: $orderBy
+      ) {
+        applications {
+          name
+          artifact {
+            name
+          }
+          runs {
+            status
+            starting
+          }
+          totalRuns
+          nextRuntime {
+            id
+            time
+          }
+        }
+        nextPageToken
+      }
+    }
+  `;
+
+  // on unmount
+  React.useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, []);
+  const { ready, search, pageToken, sortOrder, pageLimit } = useSelector(
+    ({ deployed }) => deployed
+  );
+  const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
+    errorPolicy: 'all',
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      nameFilter: search || undefined,
+      orderBy: sortOrder.toUpperCase(),
+      token: pageToken || undefined,
+      pageSize: pageLimit,
+      namespace: getCurrentNamespace(),
+    },
+  });
+  const bannerMessage = checkError(error);
+
+  useEffect(() => {
+    if (loading || networkStatus === 4) {
+      return;
+    }
+    setPipelines({
+      pipelines: data.pipelines.applications,
+      nextPageToken: data.pipelines.nextPageToken,
+    });
+  }, [loading, networkStatus, data]);
+
+  if (!data && (loading || networkStatus === 4)) {
+    return <LoadingSVGCentered />;
+  }
 
   return (
-    <Provider store={Store}>
+    <>
+      {!ready && <LoadingSVGCentered />}
       <div className="pipeline-deployed-view pipeline-list-content">
         <div className="deployed-header">
           <SearchBox />
@@ -113,10 +186,16 @@ const DeployedPipeline: React.FC = () => {
         <If condition={!!error && !!bannerMessage}>
           <ErrorBanner canEditPageWhileOpen error={bannerMessage} />
         </If>
-        <PipelineTable refetch={refetch} />
+        {ready && <PipelineTable refetch={refetch} />}
       </div>
-    </Provider>
+    </>
   );
 };
 
-export default DeployedPipeline;
+const DeployedPipelineOuter = () => (
+  <Provider store={Store}>
+    <DeployedPipeline />
+  </Provider>
+);
+
+export default DeployedPipelineOuter;

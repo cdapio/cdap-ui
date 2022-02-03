@@ -30,10 +30,14 @@ interface IState {
   sortColumn: string;
   sortOrder: SORT_ORDER;
   search: string;
-  currentPage: number;
+  searchInput: string;
+  previousTokens: string[];
+  nextPageToken: string;
+  pageToken: string;
+  hasMultiple: boolean;
   pageLimit: number;
   pipelines: IPipeline[];
-  filteredPipelines: IPipeline[];
+  ready: boolean;
 }
 
 interface IStore {
@@ -41,14 +45,16 @@ interface IStore {
 }
 
 const Actions = {
-  setSearch: 'DEPLOYED_SET_SEARCH',
+  setSearchInput: 'DEPLOYED_SET_SEARCH',
+  applySearch: 'DEPLOYED_APPLY_SEARCH',
   setDeleteError: 'DEPLOYED_PIPELINE_SET_DELETE_ERROR',
   clearDeleteError: 'DEPLOYED_PIPELINE_CLEAR_DELETE_ERROR',
   setSort: 'DEPLOYED_PIPELINE_SET_SORT',
-  setPage: 'DEPLOYED_PIPELINE_SET_PAGE',
+  prevPage: 'DEPLOYED_PIPELINE_PREV_PAGE',
+  nextPage: 'DEPLOYED_PIPELINE_NEXT_PAGE',
   reset: 'DEPLOYED_PIPELINE_RESET',
   setPipelines: 'DEPLOYED_PIPELINE_SET_PIPELINES',
-  updateFilteredPipelines: 'DEPLOYED_PIPELINE_UPDATE_FILTERED_PIPELINES',
+  updatePipelines: 'DEPLOYED_PIPELINE_UPDATE_PIPELINES',
 };
 
 const defaultInitialState: IState = {
@@ -56,10 +62,14 @@ const defaultInitialState: IState = {
   sortColumn: 'name',
   sortOrder: SORT_ORDER.asc,
   search: '',
-  currentPage: 1,
+  searchInput: '',
+  nextPageToken: null,
+  previousTokens: [],
+  pageToken: null,
   pageLimit: 25,
   pipelines: null,
-  filteredPipelines: null,
+  hasMultiple: false,
+  ready: false,
 };
 
 const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
@@ -74,38 +84,64 @@ const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction)
         ...state,
         deleteError: null,
       };
-    case Actions.setSearch:
+    case Actions.setSearchInput:
       return {
         ...state,
-        search: action.payload.search,
-        filteredPipelines: action.payload.filteredPipelines,
-        currentPage: 1,
+        searchInput: action.payload.search,
+      };
+    case Actions.applySearch:
+      return {
+        ...state,
+        search: state.searchInput,
+        pageToken: null,
+        previousTokens: [],
+        nextPageToken: null,
+        hasMultiple: false,
+        ready: false,
       };
     case Actions.setSort:
       return {
         ...state,
         sortColumn: action.payload.sortColumn,
         sortOrder: action.payload.sortOrder,
-        filteredPipelines: action.payload.filteredPipelines,
-        currentPage: 1,
+        pageToken: null,
+        previousTokens: [],
+        nextPageToken: null,
+        hasMultiple: false,
+        ready: false,
       };
-    case Actions.setPage:
+    case Actions.prevPage:
+      const lastTokenIdx = state.previousTokens.length - 1;
+      const lastToken = state.previousTokens[lastTokenIdx];
       return {
         ...state,
-        currentPage: action.payload.currentPage,
-        filteredPipelines: action.payload.filteredPipelines,
+        previousTokens: state.previousTokens.slice(0, lastTokenIdx),
+        nextPageToken: state.pageToken,
+        pageToken: lastToken,
+        hasMultiple: true,
+        ready: false,
+      };
+    case Actions.nextPage:
+      return {
+        ...state,
+        previousTokens: [...state.previousTokens, state.pageToken],
+        nextPageToken: null,
+        pageToken: state.nextPageToken,
+        hasMultiple: true,
+        ready: false,
       };
     case Actions.setPipelines:
       return {
         ...state,
         pipelines: action.payload.pipelines,
-        filteredPipelines: action.payload.filteredPipelines,
+        nextPageToken: action.payload.nextPageToken,
+        hasMultiple: !!action.payload.nextPageToken || !!state.previousTokens.length,
+        ready: true,
       };
-    case Actions.updateFilteredPipelines:
+    case Actions.updatePipelines:
       return {
         ...state,
         pipelines: action.payload.pipelines,
-        filteredPipelines: action.payload.filteredPipelines,
       };
     case Actions.reset:
       return defaultInitialState;
