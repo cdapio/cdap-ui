@@ -27,7 +27,6 @@ import ProvisionerInfoStore from 'components/Cloud/Store';
 import { fetchProvisionerSpec } from 'components/Cloud/Store/ActionCreator';
 import { ADMIN_CONFIG_ACCORDIONS } from 'components/Administration/AdminConfigTabContent';
 import { EntityTopPanel } from 'components/EntityTopPanel';
-import PropertyLock from 'components/Cloud/Profiles/CreateView/PropertyLock';
 import {
   ConnectedProfileName,
   ConnectedProfileDescription,
@@ -39,15 +38,15 @@ import {
   resetCreateProfileStore,
 } from 'components/Cloud/Profiles/CreateView/CreateProfileActionCreator';
 import CreateProfileBtn from 'components/Cloud/Profiles/CreateView/CreateProfileBtn';
-import uuidV4 from 'uuid/v4';
 import CreateProfileStore from 'components/Cloud/Profiles/CreateView/CreateProfileStore';
+import PropertyRow from 'components/Cloud/Profiles/CreateView/PropertyRow';
 import { highlightNewProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import Helmet from 'react-helmet';
 import T from 'i18n-react';
 import { SCOPES, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
-import WidgetWrapper from 'components/ConfigurationGroup/WidgetWrapper';
 import If from 'components/If';
+import { filterByCondition } from 'components/ConfigurationGroup/utilities/DynamicPluginFilters';
 
 const PREFIX = 'features.Cloud.Profiles.CreateView';
 
@@ -70,11 +69,13 @@ class ProfileCreateView extends Component {
     creatingProfile: false,
     isSystem: objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
     selectedProvisioner: objectQuery(this.props.match, 'params', 'provisionerId'),
+    filteredConfigurationGroup: [],
   };
 
   componentWillReceiveProps(nextProps) {
     let { selectedProvisioner } = this.state;
     initializeProperties(nextProps.provisionerJsonSpecMap[selectedProvisioner]);
+    this.setFilteredConfigurationGroup(nextProps);
   }
 
   componentDidMount() {
@@ -109,18 +110,27 @@ class ProfileCreateView extends Component {
     if (properties['projectId'] && properties['projectId'].value === '') {
       delete properties['projectId'];
     }
+    // Add only fields that are shown to the users.
+    const visibilityMap = {};
+    for (const groupInfo of this.state.filteredConfigurationGroup) {
+      for (const propertyInfo of groupInfo.properties) {
+        visibilityMap[propertyInfo.name] = propertyInfo.show !== false;
+      }
+    }
     let jsonBody = {
       description,
       label,
       provisioner: {
         name: this.state.selectedProvisioner,
-        properties: Object.entries(properties).map(([property, propObj]) => {
-          return {
-            name: property,
-            value: propObj.value,
-            isEditable: propObj.isEditable,
-          };
-        }),
+        properties: Object.entries(properties)
+          .filter(([property]) => visibilityMap[property])
+          .map(([property, propObj]) => {
+            return {
+              name: property,
+              value: propObj.value,
+              isEditable: propObj.isEditable,
+            };
+          }),
       },
     };
     let apiObservable$ = MyCloudApi.create;
@@ -157,6 +167,44 @@ class ProfileCreateView extends Component {
     );
   };
 
+  setFilteredConfigurationGroup(props) {
+    const { selectedProvisioner } = this.state;
+    const { values } = CreateProfileStore.getState();
+    const configurationGroups = objectQuery(
+      props,
+      'provisionerJsonSpecMap',
+      selectedProvisioner,
+      'configuration-groups'
+    );
+    const filters = objectQuery(props, 'provisionerJsonSpecMap', selectedProvisioner, 'filters');
+    if (!configurationGroups) {
+      this.setState({
+        filteredConfigurationGroup: [],
+      });
+    } else {
+      let filteredConfigurationGroup = configurationGroups;
+      if (filters && filters.length > 0) {
+        filteredConfigurationGroup = filterByCondition(
+          configurationGroups,
+          {
+            'configuration-groups': configurationGroups,
+            filters,
+          },
+          {},
+          values
+        );
+      }
+      this.setState({
+        filteredConfigurationGroup,
+      });
+    }
+  }
+
+  onUpdateProperty(property, value) {
+    updateProperty(property, value);
+    this.setFilteredConfigurationGroup(this.props);
+  }
+
   renderProfileName = () => {
     return (
       <div className="property-row">
@@ -182,6 +230,9 @@ class ProfileCreateView extends Component {
   };
 
   renderGroup = (group) => {
+    if (group.show === false) {
+      return null;
+    }
     let { properties } = CreateProfileStore.getState();
     const extraConfig = {
       namespace: this.state.isSystem ? SYSTEM_NAMESPACE : getCurrentNamespace(),
@@ -194,24 +245,17 @@ class ProfileCreateView extends Component {
         <div className="group-description">{group.description}</div>
         <div className="fields-container">
           {group.properties.map((property) => {
-            let uniqueId = `provisioner-${uuidV4()}`;
-
+            if (property.show === false) {
+              return null;
+            }
             return (
-              <div key={uniqueId} className="property-row">
-                <WidgetWrapper
-                  pluginProperty={{
-                    name: property.name,
-                    required: !!property.required,
-                    description: property.description,
-                  }}
-                  widgetProperty={property}
-                  value={objectQuery(properties, property.name, 'value')}
-                  onChange={updateProperty.bind(null, property.name)}
-                  extraConfig={extraConfig}
-                  size={objectQuery(property, 'widget-attributes', 'size')}
-                />
-                <PropertyLock propertyName={property.name} />
-              </div>
+              <PropertyRow
+                key={property.name}
+                property={property}
+                properties={properties}
+                onChange={this.onUpdateProperty.bind(this, property.name)}
+                extraConfig={extraConfig}
+              />
             );
           })}
         </div>
@@ -220,17 +264,10 @@ class ProfileCreateView extends Component {
   };
 
   renderGroups = () => {
-    let { selectedProvisioner } = this.state;
-    let configurationGroups = objectQuery(
-      this.props,
-      'provisionerJsonSpecMap',
-      selectedProvisioner,
-      'configuration-groups'
-    );
-    if (!configurationGroups) {
+    if (this.state.filteredConfigurationGroup.length === 0) {
       return null;
     }
-    return configurationGroups.map((group) => this.renderGroup(group));
+    return this.state.filteredConfigurationGroup.map((group) => this.renderGroup(group));
   };
 
   render() {
