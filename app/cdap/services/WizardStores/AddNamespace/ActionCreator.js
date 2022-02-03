@@ -38,16 +38,20 @@ const createOrEditNamespace = (api) => {
     putParams['description'] = state.general.description;
   }
 
-  if (state.mapping.hbaseNamespace) {
-    putParams['config']['hbase.namespace'] = state.mapping.hbaseNamespace;
+  if (state.hadoopMapping.hbaseNamespace) {
+    putParams['config']['hbase.namespace'] = state.hadoopMapping.hbaseNamespace;
   }
 
-  if (state.mapping.hiveDatabaseName) {
-    putParams['config']['hive.database'] = state.mapping.hiveDatabaseName;
+  if (state.hadoopMapping.hiveDatabaseName) {
+    putParams['config']['hive.database'] = state.hadoopMapping.hiveDatabaseName;
   }
 
-  if (state.mapping.hdfsDirectory) {
-    putParams['config']['root.directory'] = state.mapping.hdfsDirectory;
+  if (state.hadoopMapping.hdfsDirectory) {
+    putParams['config']['root.directory'] = state.hadoopMapping.hdfsDirectory;
+  }
+
+  if (state.hadoopMapping.schedulerQueueName) {
+    putParams['config']['scheduler.queue.name'] = state.hadoopMapping.schedulerQueueName;
   }
 
   if (state.security.keyTab) {
@@ -58,8 +62,20 @@ const createOrEditNamespace = (api) => {
     putParams['config']['principal'] = state.security.principal;
   }
 
-  if (state.mapping.schedulerQueueName) {
-    putParams['config']['scheduler.queue.name'] = state.mapping.schedulerQueueName;
+  if (state.resources.k8sNamespace) {
+    putParams['config']['k8s.namespace'] = state.resources.k8sNamespace;
+  }
+
+  if (state.resources.k8sNamespaceCpuLimit) {
+    putParams['config']['k8s.namespace.cpu.limits'] = state.resources.k8sNamespaceCpuLimit;
+  }
+
+  if (state.resources.k8sNamespaceMemoryLimit) {
+    putParams['config']['k8s.namespace.memory.limits'] = state.resources.k8sNamespaceMemoryLimit;
+  }
+
+  if (state.resources.serviceAccountEmail) {
+    putParams['config']['workload.identity.gcp.service.account.email'] = state.resources.serviceAccountEmail;
   }
 
   return api(urlParams, putParams);

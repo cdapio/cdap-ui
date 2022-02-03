@@ -3027,7 +3027,7 @@ features:
       Status:
         creation-error-desc: "Failed to create the namespace '%s'."
         creation-success-desc: Successfully created the namespace '{namespaceId}'.
-      Step1:
+      GeneralInfoStep:
         description-label: "Description"
         description-placeholder: "Namespace description"
         name-label: "Name"
@@ -3035,7 +3035,25 @@ features:
         scheduler-queue-label: "Scheduler queue"
         sld-desc:  "Specify the name and the description of the namespace."
         ssd-label: "General information"
-      Step2:
+      ResourcesStep:
+        k8s-nm-name-label: "Kubernetes namespace name"
+        k8s-nm-name-placeholder: "Kubernetes namespace where jobs in this namespace will run"
+        k8s-nm-cpu-limit-label: "Kubernetes namespace cpu limit"
+        k8s-nm-cpu-limit-placeholder: "CPU limit in this namespace (in number of cores)"
+        k8s-nm-memory-limit-label: "Kubernetes namespace memory limit"
+        k8s-nm-memory-limit-placeholder: "Memory limit in this namespace (in GB)"
+        service-account-email-label: "GCP Service Account Email"
+        service-account-email-placeholder: "GCP service account to use when running workloads in this namespace"
+        sld-label: "Specify the resources that jobs in this namespace will use."
+        ssd-label: "Resources"
+      PreferencesStep:
+        name-label: "Name"
+        name-placeholder: "Preference name"
+        sld-label: "Specify preferences to be applied at the namespace level."
+        ssd-label: "Preferences"
+        value-label: "Value"
+        value-placeholder: "Preference value"
+      HadoopMappingStep:
         hbase-nm-name-label: "HBase namespace name"
         hbase-nm-name-placeholder: "Namespace in HBase for datasets in this namespace"
         hdfs-root-directory-label: "HDFS root directory"
@@ -3044,22 +3062,15 @@ features:
         hive-db-name-placeholder: "Hive database for this namespace"
         scheduler-queue-name: "Scheduler queue name"
         scheduler-queue-placeholder: "Yarn queue name to be used to submit programs in this namespace"
-        sld-label: "Specify mapping of namespace resources to the existing underlying storage resources."
-        ssd-label: "Namespace mapping"
-      Step3:
+        sld-label: "Specify mapping of namespace resources to underlying Hadoop resources (Only used when deployed on Apache Hadoop)."
+        ssd-label: "Hadoop mapping"
+      SecurityStep:
         keytab-uri-label: "Keytab URI"
         keytab-uri-placeholder: "Location of keytab file associated with the principal"
         principal-label: "Principal"
         principal-placeholder: "Kerberos principal of the user to run programs as"
         sld-label: "Specify credentials for securely impersonating programs in this namespace."
         ssd-label: "Security"
-      Step4:
-        name-label: "Name"
-        name-placeholder: "Preference name"
-        sld-label: "Specify preferences to be applied at the namespace level."
-        ssd-label: "Preferences"
-        value-label: "Value"
-        value-placeholder: "Preference value"
     ApplicationUpload:
       headerlabel: Upload application
       Step1:
