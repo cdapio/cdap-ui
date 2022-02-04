@@ -21,19 +21,19 @@ import AvailablePluginsStore from 'services/AvailablePluginsStore';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { shouldShowCustomIcon, getCustomIconSrc, filterPlugins, generateLabel } from './helpers';
 
-interface IMySidePanelProps {
+interface ISidePanelProps {
   itemGenericName: string;
   groups: any;
   groupGenericName: string;
   onPanelItemClick: any;
 }
 
-export const MySidePanel = ({
+export const SidePanel = ({
   itemGenericName,
   groups,
   groupGenericName,
   onPanelItemClick,
-}: IMySidePanelProps) => {
+}: ISidePanelProps) => {
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
   const [openedGroup, setOpenedGroup] = useState(groups[0].name);
@@ -212,4 +212,4 @@ export const MySidePanel = ({
   );
 };
 
-export default MySidePanel;
+export default SidePanel;

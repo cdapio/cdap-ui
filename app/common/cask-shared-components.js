@@ -134,11 +134,10 @@ var Comment = require('../cdap/components/AbstractWidget/Comment').default;
 var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
 var Connections = require('../cdap/components/Connections').default;
-var MySidePanel = require('../cdap/components/hydrator/components/MySidePanel/MySidePanel')
-  .MySidePanel;
+var SidePanel = require('../cdap/components/hydrator/components/SidePanel/SidePanel').SidePanel;
 
 export {
-  MySidePanel,
+  SidePanel,
   Store,
   NameSpaceStoreActions,
   DataPrepHome,
