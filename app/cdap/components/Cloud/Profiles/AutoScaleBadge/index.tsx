@@ -42,19 +42,22 @@ const BadgeTooltip = withStyles(() => {
   };
 })(Tooltip);
 
-interface IProfile {
-  autoScalingPolicy: string;
-  enablePredefinedAutoScaling: boolean;
+interface IProperty {
+  name: string;
+  value: string;
+  isEditable: boolean;
 }
 
 interface IAutoScaleBadgeProps {
-  profile: IProfile;
+  properties: IProperty[];
 }
 
-const AutoScaleBadge = ({ profile }: IAutoScaleBadgeProps) => {
-  const hasAutoScaling =
-    (profile.autoScalingPolicy && profile.autoScalingPolicy !== '') ||
-    profile.enablePredefinedAutoScaling;
+const AutoScaleBadge = ({ properties = [] }: IAutoScaleBadgeProps) => {
+  const hasAutoScaling = properties.some(
+    (property) =>
+      (property.name === 'autoScalingPolicy' && property.value !== '') ||
+      (property.name === 'enablePredefinedAutoScaling' && property.value === 'true')
+  );
   if (!hasAutoScaling) {
     return null;
   }

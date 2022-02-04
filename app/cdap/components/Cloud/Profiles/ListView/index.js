@@ -364,7 +364,7 @@ class ProfilesListView extends Component {
         <div>{profile.provisioner.label}</div>
         <div>
           {profile.provisioner.totalProcessingCpusLabel || '--'}
-          <AutoScaleBadge profile={profile} />
+          <AutoScaleBadge properties={profile.provisioner.properties} />
         </div>
         <div>{profile.scope}</div>
         {/*
