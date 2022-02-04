@@ -187,6 +187,6 @@ angular
   .directive('connectionsBrowser', function (reactDirective) {
     return reactDirective(window.CaskCommon.Connections);
   })
-  .directive('v2MySidePanel', function (reactDirective) {
-    return reactDirective(window.CaskCommon.MySidePanel);
+  .directive('sidePanel', function (reactDirective) {
+    return reactDirective(window.CaskCommon.SidePanel);
   })
