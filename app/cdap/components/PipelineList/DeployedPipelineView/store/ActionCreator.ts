@@ -172,6 +172,15 @@ export function setSearchInput(searchText: string) {
   });
   debouncedApplySearch();
 }
+export function clearSearch() {
+  Store.dispatch({
+    type: Actions.setSearchInput,
+    payload: {
+      search: '',
+    },
+  });
+  applySearch();
+}
 
 export function setSort(columnName: string) {
   const state = Store.getState().deployed;
