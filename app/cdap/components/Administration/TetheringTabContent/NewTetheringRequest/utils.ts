@@ -1,0 +1,55 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import T from 'i18n-react';
+const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
+
+/**
+ * Function to ensure all user provided inputs are valid before submitting new thethering request
+ *
+ * @param selectedNamespaces - list of selected namespaces by user (at least one is required)
+ * @param projectName - Project Name of the CDF Instance (required)
+ * @param region - Region of the CDF Instance (required)
+ * @param instanceName - Instance Name of the CDF Instance (required)
+ * @returns { [{object}], boolean } - list of error objects to update UI with errors and whether all checks passed
+ */
+export const areInputsValid = ({ selectedNamespaces, projectName, region, instanceName }) => {
+  const requiredFields = [
+    { name: 'namespaces', val: selectedNamespaces.length },
+    { name: 'projectName', val: projectName },
+    { name: 'region', val: region },
+    { name: 'instanceName', val: instanceName },
+  ];
+  let allValid = true;
+  const errors = {};
+
+  requiredFields.forEach((field) => {
+    let errObj = {};
+    if (!field.val) {
+      const msg =
+        field.name === 'namespaces'
+          ? T.translate(`${I18NPREFIX}.nsValidationError`)
+          : T.translate(`${I18NPREFIX}.inputValidationError`, { fieldName: field.name });
+      errObj = {
+        msg,
+      };
+      allValid = false;
+    }
+    errors[field.name] = errObj;
+  });
+
+  return { errors, allValid };
+};

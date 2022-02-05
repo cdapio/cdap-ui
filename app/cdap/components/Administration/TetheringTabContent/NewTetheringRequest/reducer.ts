@@ -16,13 +16,14 @@
 
 import { IAction } from 'services/redux-helpers';
 import { TetheringApi } from 'api/tethering';
-import { IApiError, IValidationErrors } from '../types';
+import { MyNamespaceApi } from 'api/namespace';
+import { IApiError, IValidationErrors, INamespace } from '../types';
+import { K8S_NS_NAME, K8S_NS_CPU_LIMITS, K8S_NS_MEMORY_LIMITS, DEFAULT_NS } from './constants';
 
 export interface INewTetheringReqState {
+  namespaces: INamespace[];
+  selectedNamespaces: string[];
   inputFields: {
-    namespace: string;
-    cpuLimit: string;
-    memoryLimit: string;
     projectName: string;
     region: string;
     instanceName: string;
@@ -33,18 +34,20 @@ export interface INewTetheringReqState {
 }
 
 enum INewTetheringReqActions {
+  SET_NAMESPACES,
   SET_INPUT_VALUES,
   SET_ERR,
   SET_ALERT,
+  ADD_SELECTED_NAMESPACES,
+  REMOVE_SELECTED_NAMESPACES,
   RESET,
   RESET_ERRORS,
 }
 
 export const initialState: INewTetheringReqState = {
+  namespaces: [],
+  selectedNamespaces: [],
   inputFields: {
-    namespace: '',
-    cpuLimit: '',
-    memoryLimit: '',
     projectName: '',
     region: '',
     instanceName: '',
@@ -56,6 +59,11 @@ export const initialState: INewTetheringReqState = {
 
 export const reducer = (state: INewTetheringReqState, action: IAction<INewTetheringReqActions>) => {
   switch (action.type) {
+    case INewTetheringReqActions.SET_NAMESPACES:
+      return {
+        ...state,
+        namespaces: [...action.payload.namespaces],
+      };
     case INewTetheringReqActions.SET_INPUT_VALUES:
       return {
         ...state,
@@ -74,6 +82,16 @@ export const reducer = (state: INewTetheringReqState, action: IAction<INewTether
         ...state,
         showAlert: action.payload.val,
       };
+    case INewTetheringReqActions.ADD_SELECTED_NAMESPACES:
+      return {
+        ...state,
+        selectedNamespaces: [...state.selectedNamespaces, action.payload.ns],
+      };
+    case INewTetheringReqActions.REMOVE_SELECTED_NAMESPACES:
+      return {
+        ...state,
+        selectedNamespaces: state.selectedNamespaces.filter((ns) => ns !== action.payload.ns),
+      };
     case INewTetheringReqActions.RESET_ERRORS:
       return {
         ...state,
@@ -82,7 +100,10 @@ export const reducer = (state: INewTetheringReqState, action: IAction<INewTether
         validationErrors: {},
       };
     case INewTetheringReqActions.RESET:
-      return initialState;
+      return {
+        ...initialState,
+        namespaces: state.namespaces,
+      };
     default:
       return state;
   }
@@ -95,6 +116,22 @@ export const updateInputField = (dispatch, updatedField) => {
       ...updatedField,
     },
   });
+};
+
+export const updateSelectedNamespaces = (dispatch, ns: string, selectedNamespaces: string[]) => {
+  const remove = selectedNamespaces.includes(ns);
+
+  if (remove) {
+    dispatch({
+      type: INewTetheringReqActions.REMOVE_SELECTED_NAMESPACES,
+      payload: { ns },
+    });
+  } else {
+    dispatch({
+      type: INewTetheringReqActions.ADD_SELECTED_NAMESPACES,
+      payload: { ns },
+    });
+  }
 };
 
 export const updateError = (dispatch, { errType, errVal }) => {
@@ -117,6 +154,28 @@ export const updateAlertState = (dispatch, val: boolean) => {
 export const reset = (dispatch, hasApiErr) => {
   dispatch({
     type: hasApiErr ? INewTetheringReqActions.RESET_ERRORS : INewTetheringReqActions.RESET,
+  });
+};
+
+export const fetchNamespaceList = async (dispatch) => {
+  const namespaceList = await MyNamespaceApi.list().toPromise();
+  const namespaces = [];
+
+  namespaceList.forEach((ns) => {
+    if (ns.name !== DEFAULT_NS) {
+      namespaces.push({
+        namespace: ns.config[K8S_NS_NAME],
+        cpuLimit: ns.config[K8S_NS_CPU_LIMITS],
+        memoryLimit: ns.config[K8S_NS_MEMORY_LIMITS],
+      });
+    }
+  });
+
+  dispatch({
+    type: INewTetheringReqActions.SET_NAMESPACES,
+    payload: {
+      namespaces,
+    },
   });
 };
 
