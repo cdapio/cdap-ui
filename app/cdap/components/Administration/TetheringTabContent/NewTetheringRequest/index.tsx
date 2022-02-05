@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import T from 'i18n-react';
 import {
@@ -23,56 +23,67 @@ import {
   updateInputField,
   updateError,
   updateAlertState,
+  updateSelectedNamespaces,
   reset,
   createTethering,
+  fetchNamespaceList,
 } from './reducer';
 import Alert from 'components/shared/Alert';
 import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
 import { HeaderContainer, HeaderTitle, StyledButton } from '../shared.styles';
 import { Container, BackButton, Divider, StyledBodyContainer, ButtonsContainer } from './styles';
+import { areInputsValid } from './utils';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 
 const NewTetheringRequest = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { inputFields, showAlert, apiError, validationErrors } = state;
-  const { projectName, region, instanceName, namespace, cpuLimit, memoryLimit } = inputFields;
+  const {
+    namespaces,
+    selectedNamespaces,
+    inputFields,
+    showAlert,
+    apiError,
+    validationErrors,
+  } = state;
+  const { projectName, region, instanceName } = inputFields;
   const history = useHistory();
 
-  const areInputsValid = (): boolean => {
-    const requiredFields = [
-      { name: 'projectName', val: projectName },
-      { name: 'region', val: region },
-      { name: 'instanceName', val: instanceName },
-    ];
-    let allValid = true;
-    const errors = {};
-
-    requiredFields.forEach((field) => {
-      let errObj = {};
-      if (!field.val) {
-        errObj = {
-          msg: T.translate(`${I18NPREFIX}.validationError`, { fieldName: field.name }),
-        };
-        allValid = false;
-      }
-      errors[field.name] = errObj;
-    });
-    updateError(dispatch, { errType: 'validationErrors', errVal: errors });
-    return allValid;
+  const fetchNamespaces = async () => {
+    try {
+      await fetchNamespaceList(dispatch);
+    } catch (err) {
+      updateError(dispatch, { errType: 'apiError', errVal: err });
+      reset(dispatch, true);
+    }
   };
 
-  const handleChange = (target: string, updatedVal: string | number) => {
+  useEffect(() => {
+    fetchNamespaces();
+  }, []);
+
+  const handleInputChange = (target: string, updatedVal: string | number) => {
     updateInputField(dispatch, { [target]: updatedVal });
   };
 
+  const handleNamespaceChange = (ns: string) => {
+    updateSelectedNamespaces(dispatch, ns, selectedNamespaces);
+  };
+
   const handleSend = async () => {
-    if (areInputsValid()) {
+    const { errors, allValid: inputsAreValid } = areInputsValid({
+      selectedNamespaces,
+      projectName,
+      region,
+      instanceName,
+    });
+    updateError(dispatch, { errType: 'validationErrors', errVal: errors });
+    if (inputsAreValid) {
       const connectionInfo = {
         peer: instanceName,
-        endpoint: 'http://www.google.com', // TODO: needs clarification on how to obtain
-        namespaceAllocations: [{ namespace, cpuLimit, memoryLimit }],
+        endpoint: `${instanceName}-${projectName}-${region}.datafusion.googleusercontent.com`, // TODO: needs clarification on how to obtain
+        namespaceAllocations: namespaces.filter((ns) => selectedNamespaces.includes(ns.namespace)),
         metadata: {
           project: projectName,
           location: region,
@@ -118,16 +129,16 @@ const NewTetheringRequest = () => {
       </HeaderContainer>
       <StyledBodyContainer>
         <OmniNamespaces
-          name={namespace}
-          cpuLimit={cpuLimit}
-          memoryLimit={memoryLimit}
-          broadcastChange={handleChange}
+          namespaces={namespaces}
+          selectedNamespaces={selectedNamespaces}
+          validationError={validationErrors.namespaces}
+          broadcastChange={handleNamespaceChange}
         />
         <CdfInfo
           projectName={projectName}
           region={region}
           instanceName={instanceName}
-          broadcastChange={handleChange}
+          broadcastChange={handleInputChange}
           validationErrors={validationErrors}
         />
         <ButtonsContainer>

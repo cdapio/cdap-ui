@@ -17,7 +17,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import Button from '@material-ui/core/Button';
+import { Button, Checkbox } from '@material-ui/core';
 import IconSVG from 'components/shared/IconSVG';
 
 export const HeaderContainer = styled.div`
@@ -172,4 +172,13 @@ export const LinedSpan = styled.span`
   &:after {
     margin-left: 15px;
   }
+`;
+
+export const StyledCheckbox = styled(Checkbox)`
+  padding: 0;
+  margin-top: -2px;
+`;
+
+export const ErrorText = styled.span`
+  color: ${(props) => props.theme.palette.red[50]};
 `;

@@ -16,15 +16,12 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import { ErrorText } from '../shared.styles';
 import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 
 const WidgetContainer = styled.div`
   margin-top: 40px;
-`;
-
-const ErrorText = styled.span`
-  color: ${(props) => props.theme.palette.red[50]};
 `;
 
 interface ITextboxProps {
