@@ -49,7 +49,7 @@ import { IconButton } from '@material-ui/core';
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
-const SelectColumnsView: React.FC<ISelectColumnsProps> = (props) => {
+const SelectColumnsView = (props: ISelectColumnsProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const getInitialSelectedColumns = (columns): Map<string, IColumnImmutable> => {
