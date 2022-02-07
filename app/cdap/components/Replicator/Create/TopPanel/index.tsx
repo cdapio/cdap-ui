@@ -28,7 +28,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import PluginInfo from 'components/Replicator/Create/TopPanel/PluginInfo';
 import If from 'components/shared/If';
 import { returnSteps } from 'components/Replicator/Create/steps';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
 
 const styles = (theme): StyleRules => {
   return {
@@ -87,7 +87,7 @@ const TopPanelView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   targetPluginWidget,
   activeStep,
 }) => {
-  const transformationsEnabled = useFeatureFlagDefaultFalse('replication.transformations.enabled');
+  const transformationsEnabled = useFeatureFlagDefaultTrue('replication.transformations.enabled');
   const STEPS = returnSteps(transformationsEnabled);
   const reviewDisplayCondition = activeStep === STEPS.length - 1;
 
