@@ -23,12 +23,14 @@ import { generateTableKey } from 'components/Replicator/utilities';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import StepButtons from 'components/Replicator/Create/Content/StepButtons';
 import { List, Map } from 'immutable';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
 import {
   IDMLStore,
   IColumnsStore,
   ITableImmutable,
   ITablesStore,
 } from 'components/Replicator/types';
+import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 
 const styles = (): StyleRules => {
   return {
@@ -83,6 +85,15 @@ const ManualSelectTableView: React.FC<IManualSelectTableProps> = ({
   const [database, setDatabase] = useState('');
   const [values, setValues] = useState([]);
   const [isInitFinished, setIsInitFinished] = useState(false);
+  const useReplicationTransformation = useFeatureFlagDefaultTrue(
+    'replication.transformations.enabled'
+  );
+
+  useOnUnmount(() => {
+    if (useReplicationTransformation) {
+      handleNext();
+    }
+  });
 
   useEffect(() => {
     const formattedValues = [];

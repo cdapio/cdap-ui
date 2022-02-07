@@ -28,6 +28,8 @@ import {
   IColumnsStore,
   IDMLStore,
   ITable,
+  ITableImmutable,
+  ITableInfo,
 } from 'components/Replicator/types';
 import { fetchPluginWidget } from 'services/PluginUtilities';
 import { ICreateState } from 'components/Replicator/Create';
@@ -154,6 +156,22 @@ export function generateTableKey(row) {
     return `db-${database}-table-${table}`;
   }
 }
+
+/**
+ * Gets the table Info from the immutable table row
+ * @param row
+ * @returns tableInfo
+ */
+export const getTableInfoFromImmutable = (row: ITableImmutable): ITableInfo => {
+  const database = row.get('database');
+  const table = row.get('table');
+  const schema = row.get('schema');
+  return {
+    database,
+    table,
+    schema,
+  };
+};
 
 export function constructTablesSelection(tables, columns, dmlBlacklist) {
   if (!tables) {

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import If from 'components/shared/If';
 import Mappings from './Mappings';
@@ -55,7 +55,7 @@ const TablesAssessmentView: React.FC<ITablesAssessmentProps> = ({
   const [tablesNoIssues, setTablesNoIssues] = React.useState([]);
   const [haveMissingTables, setHaveMissingTables] = React.useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const updatedTablesWithIssues = [];
     const updatedTablesNoIssues = [];
 
