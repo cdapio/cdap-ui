@@ -17,14 +17,14 @@
 import * as React from 'react';
 import { returnSteps } from 'components/Replicator/Create/steps';
 import { createContextConnect } from 'components/Replicator/Create';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
 
 interface IContentProps {
   activeStep: number;
 }
 
 const ContentView: React.FC<IContentProps> = ({ activeStep }) => {
-  const transformationsEnabled = useFeatureFlagDefaultFalse('replication.transformations.enabled');
+  const transformationsEnabled = useFeatureFlagDefaultTrue('replication.transformations.enabled');
   const STEPS = returnSteps(transformationsEnabled);
   if (!STEPS[activeStep] || !STEPS[activeStep].component) {
     return null;
