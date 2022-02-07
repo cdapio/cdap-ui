@@ -26,6 +26,7 @@ import {
   constructTablesSelection,
   convertConfigToState,
   generateTableKey,
+  getTableInfoFromImmutable,
 } from 'components/Replicator/utilities';
 
 import LoadingSVGCentered from 'components/LoadingSVGCentered';
@@ -113,7 +114,12 @@ export interface ICreateState {
   setTargetPluginInfo: (targetPluginInfo: IPluginInfo) => void;
   setTargetPluginWidget: (targetPluginWidget: IWidgetJson) => void;
   setTargetConfig: (targetConfig: IPluginConfig) => void;
-  setTables: (tables: ITablesStore, columns: IColumnsStore, dmlBlacklist: IDMLStore) => void;
+  setTables: (
+    tables: ITablesStore,
+    columns: IColumnsStore,
+    dmlBlacklist: IDMLStore,
+    checkTransformations?: boolean
+  ) => void;
   setAdvanced: (numInstances) => void;
   getReplicatorConfig: () => any;
   saveDraft: () => Observable<any>;
@@ -194,8 +200,21 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     this.setState({ targetConfig });
   };
 
-  public setTables = (tables, columns, dmlBlacklist) => {
-    this.setState({ tables, columns, dmlBlacklist });
+  public setTables = (tables, columns, dmlBlacklist, checkTransformations = false) => {
+    if (checkTransformations) {
+      // if you remove a table from the selected tables, also remove its transformations
+      const transformations = {};
+      tables.forEach((table) => {
+        const tableInfo = getTableInfoFromImmutable(table);
+        if (this.state.transformations[tableInfo.table]) {
+          transformations[tableInfo.table] = this.state.transformations[tableInfo.table];
+        }
+      });
+
+      this.setState({ tables, columns, dmlBlacklist, transformations });
+    } else {
+      this.setState({ tables, columns, dmlBlacklist });
+    }
   };
 
   public setTable = (table, cb) => {

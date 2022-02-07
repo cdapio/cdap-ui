@@ -27,7 +27,10 @@ import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import SelectColumns from 'components/Replicator/Create/Content/SelectColumns';
 import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms';
 import { extractErrorMessage } from 'services/helpers';
-import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
+import {
+  generateTableKey,
+  getTableDisplayName,
+} from 'components/Replicator/utilities';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Heading, { HeadingTypes } from 'components/Heading';
 import ManualSelectTable from 'components/Replicator/Create/Content/SelectTables/ManualSelectTable';
@@ -457,7 +460,12 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
   };
 
   public handleSave = () => {
-    this.props.setTables(this.state.selectedTables, this.state.columns, this.state.dmlBlacklist);
+    this.props.setTables(
+      this.state.selectedTables,
+      this.state.columns,
+      this.state.dmlBlacklist,
+      this.props.useReplicationTransformation
+    );
   };
 
   private isTableSelected = (row) => {
