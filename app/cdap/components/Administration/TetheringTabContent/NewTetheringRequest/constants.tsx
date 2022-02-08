@@ -25,8 +25,13 @@ export const K8S_NS_MEMORY_LIMITS = 'k8s.namespace.memory.limits';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 export const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
+export const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
+
 export const OMNI_NS_COLUMN_TEMPLATE = '50px 4fr 2fr 3fr';
 export const OMNI_NS_COLUMN_TEMPLATE_SCROLLABLE = '50px 4fr 2fr 3fr 16px';
+
+const WIDGET_TYPE = 'widget-type';
+const WIDGET_ATTRIBUTES = 'widget-attributes';
 
 export const OMNI_NS_TABLE_HEADERS = [
   {
@@ -43,5 +48,78 @@ export const OMNI_NS_TABLE_HEADERS = [
   {
     property: 'memoryLimit',
     label: T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.label`),
+  },
+];
+
+export const CDF_ITEMS = [
+  {
+    widgetProperty: {
+      label: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.label`)}`,
+      name: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.name`)}`,
+      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        placeholder: T.translate(`${I18N_CDF_PREFIX}.ProjectName.placeholder`),
+      },
+    },
+    pluginProperty: {
+      type: 'string',
+      required: true,
+    },
+  },
+  {
+    widgetProperty: {
+      label: `${T.translate(`${I18N_CDF_PREFIX}.Region.label`)}`,
+      name: `${T.translate(`${I18N_CDF_PREFIX}.Region.name`)}`,
+      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        placeholder: T.translate(`${I18N_CDF_PREFIX}.Region.placeholder`),
+      },
+    },
+    pluginProperty: {
+      type: 'string',
+      required: true,
+    },
+  },
+  {
+    widgetProperty: {
+      label: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.label`)}`,
+      name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.name`)}`,
+      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        placeholder: T.translate(`${I18N_CDF_PREFIX}.InstanceName.placeholder`),
+      },
+    },
+    pluginProperty: {
+      type: 'string',
+      required: true,
+    },
+  },
+  {
+    widgetProperty: {
+      label: `${T.translate(`${I18N_CDF_PREFIX}.InstanceUrl.label`)}`,
+      name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceUrl.name`)}`,
+      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        placeholder: T.translate(`${I18N_CDF_PREFIX}.InstanceUrl.placeholder`),
+      },
+    },
+    pluginProperty: {
+      type: 'string',
+      required: true,
+    },
+  },
+  {
+    widgetProperty: {
+      label: `${T.translate(`${I18N_CDF_PREFIX}.Description.label`)}`,
+      name: `${T.translate(`${I18N_CDF_PREFIX}.Description.name`)}`,
+      [WIDGET_TYPE]: 'textbox',
+      [WIDGET_ATTRIBUTES]: {
+        placeholder: T.translate(`${I18N_CDF_PREFIX}.Description.placeholder`),
+        multiline: true,
+      },
+    },
+    pluginProperty: {
+      type: 'string',
+    },
   },
 ];

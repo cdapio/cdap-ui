@@ -230,6 +230,14 @@ features:
             name: instanceName
             label: Instance Name
             placeholder: Specify the Cloud Data Fusion instance name
+          InstanceUrl:
+            name: instanceUrl
+            label: Instance Url
+            placeholder: Specify the Cloud Data Fusion instance url
+          Description:
+            name: description
+            label: Description
+            placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
          requestTime: Request Time
          gcp: Google cloud project

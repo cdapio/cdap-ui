@@ -45,6 +45,11 @@ const TextBoxComponent: React.FC<ITextBoxProps> = ({
   onKeyPress,
   className,
 }) => {
+  const defaultProps = {
+    maxRows: 5,
+    minRows: 5,
+  };
+
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const v = event.target.value;
     if (typeof onChange === 'function') {
@@ -60,6 +65,9 @@ const TextBoxComponent: React.FC<ITextBoxProps> = ({
 
   const placeholder = objectQuery(widgetProps, 'placeholder');
   const enableUnderline = objectQuery(widgetProps, 'enableUnderline');
+  const multiline = objectQuery(widgetProps, 'multiline');
+  const customMaxRows = objectQuery(widgetProps, 'maxRows');
+  const customMinRows = objectQuery(widgetProps, 'minRows');
 
   const InputComponent = enableUnderline ? Input : InputBase;
 
@@ -72,6 +80,9 @@ const TextBoxComponent: React.FC<ITextBoxProps> = ({
       onKeyPress={onKeyPress}
       placeholder={placeholder}
       readOnly={disabled}
+      multiline={multiline}
+      minRows={customMinRows ? customMinRows : defaultProps.minRows}
+      maxRows={customMaxRows ? customMaxRows : defaultProps.maxRows}
       inputProps={{
         'data-cy': dataCy,
       }}
