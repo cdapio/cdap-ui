@@ -17,7 +17,6 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { objectQuery } from 'services/helpers';
-import If from 'components/shared/If';
 import { IPluginProperty, IWidgetProperty } from 'components/shared/ConfigurationGroup/types';
 import classnames from 'classnames';
 import WidgetWrapper from 'components/shared/ConfigurationGroup/WidgetWrapper';
@@ -26,6 +25,7 @@ import MacroIndicator from 'components/shared/ConfigurationGroup/MacroIndicator'
 import { isEmpty, isEqual, xorWith } from 'lodash';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { isConnection } from 'components/AbstractWidget/ConnectionsWidget';
+import LockedTooltip from './LockedTooltip';
 
 const styles = (theme): StyleRules => {
   return {
@@ -65,6 +65,7 @@ interface IPropertyRowProps extends WithStyles<typeof styles> {
   extraConfig: any;
   disabled: boolean;
   errors?: IErrorObj[];
+  locked?: boolean;
 }
 
 const EditorTypeWidgets = [
@@ -160,6 +161,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       extraConfig,
       widgetProperty,
       errors,
+      locked,
     } = this.props;
 
     if (widgetProperty[WIDGET_TYPE] === 'hidden') {
@@ -208,25 +210,26 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
             updateAllProperties={this.updateAllProperties}
             extraConfig={extraConfig}
             classes={widgetClasses}
-            disabled={disabled}
+            disabled={disabled || locked}
             errors={errors}
           />
-          <If condition={pluginProperty.macroSupported && widgetCategory !== PLUGIN}>
+          {pluginProperty.macroSupported && widgetCategory !== PLUGIN && !locked && (
             <MacroIndicator
               onClick={this.toggleMacro}
               disabled={disabled}
               isActive={this.state.isMacroTextbox}
             />
-          </If>
+          )}
+          {locked && <LockedTooltip />}
         </div>
-        <If condition={propertyLevelErrorMsg !== '' && widgetCategory !== PLUGIN}>
+        {propertyLevelErrorMsg !== '' && widgetCategory !== PLUGIN && (
           <div
             className={classnames(classes.errorText, classes.errorRow, 'propertyError')}
             data-cy="property-row-error"
           >
             {propertyLevelErrorMsg}
           </div>
-        </If>
+        )}
       </div>
     );
   }
