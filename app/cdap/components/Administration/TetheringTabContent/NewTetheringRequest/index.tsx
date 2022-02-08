@@ -47,7 +47,6 @@ const NewTetheringRequest = () => {
     apiError,
     validationErrors,
   } = state;
-  const { projectName, region, instanceName } = inputFields;
   const history = useHistory();
 
   const fetchNamespaces = async () => {
@@ -74,16 +73,16 @@ const NewTetheringRequest = () => {
   const handleSend = async () => {
     const { errors, allValid: inputsAreValid } = areInputsValid({
       selectedNamespaces,
-      projectName,
-      region,
-      instanceName,
+      inputFields,
     });
     updateError(dispatch, { errType: 'validationErrors', errVal: errors });
     if (inputsAreValid) {
+      const { projectName, region, instanceName, instanceUrl, description } = inputFields;
       const connectionInfo = {
         peer: instanceName,
-        endpoint: `${instanceName}-${projectName}-${region}.datafusion.googleusercontent.com`, // TODO: needs clarification on how to obtain
+        endpoint: instanceUrl,
         namespaceAllocations: namespaces.filter((ns) => selectedNamespaces.includes(ns.namespace)),
+        description,
         metadata: {
           project: projectName,
           location: region,
@@ -135,9 +134,7 @@ const NewTetheringRequest = () => {
           broadcastChange={handleNamespaceChange}
         />
         <CdfInfo
-          projectName={projectName}
-          region={region}
-          instanceName={instanceName}
+          inputFields={inputFields}
           broadcastChange={handleInputChange}
           validationErrors={validationErrors}
         />

@@ -84,3 +84,11 @@ export interface INamespace {
   cpuLimit: number;
   memoryLimit: number;
 }
+
+export interface INewReqInputFields {
+  projectName: string;
+  region: string;
+  instanceName: string;
+  instanceUrl: string;
+  description: string;
+}
