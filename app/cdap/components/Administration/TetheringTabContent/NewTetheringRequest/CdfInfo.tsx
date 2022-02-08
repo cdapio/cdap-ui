@@ -18,7 +18,7 @@ import React from 'react';
 import T from 'i18n-react';
 import NewReqTextField from './NewReqTextField';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
-import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
+import { IValidationErrors } from '../types';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
@@ -76,11 +76,7 @@ interface ICdfInfoProps {
   region?: string;
   instanceName?: string;
   broadcastChange: (target: string, value: string) => void;
-  validationErrors?: {
-    instanceName?: IErrorObj;
-    projectName?: IErrorObj;
-    region?: IErrorObj;
-  };
+  validationErrors?: IValidationErrors;
 }
 
 const CdfInfo = ({
