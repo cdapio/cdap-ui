@@ -27,7 +27,6 @@ import {
 } from '../shared.styles';
 import { ICONS, CONNECTIONS_TABLE_HEADERS, PREFIX, DESC_COLUMN_TEMPLATE } from './constants';
 import { IConnection, IConnectionsTableData } from '../types';
-import { formatAsPercentage } from 'services/DataFormatter';
 
 const getIconForStatus = (status: string) => {
   switch (status) {
@@ -99,8 +98,8 @@ const ConnectionsTable = ({
           <GridCell>{isFirst ? region : ''}</GridCell>
           <GridCell border={!isLast}>{namespace}</GridCell>
           <GridCell border={!isLast}>{pods}</GridCell>
-          <GridCell border={!isLast}>{cpuLimit && formatAsPercentage(cpuLimit)}</GridCell>
-          <GridCell border={!isLast}>{memoryLimit && formatAsPercentage(memoryLimit)}</GridCell>
+          <GridCell border={!isLast}>{cpuLimit}</GridCell>
+          <GridCell border={!isLast}>{memoryLimit}</GridCell>
           {isFirst && <GridCell lastCol={true}>{renderLastColumn(instanceName)}</GridCell>}
         </GridRow>
       );

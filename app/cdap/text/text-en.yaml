@@ -202,7 +202,8 @@ features:
         cancelButton: Cancel
         success: Your request was created successfully
         failure: Failed to create request
-        validationError: Required field {fieldName} has no value
+        inputValidationError: Required field {fieldName} has no value
+        nsValidationError: At least one namespace must be selected
         OmniNamespaces:
           title: Omni Namespaces
           description: Select the namespaces that will be tethered to the cloud instance

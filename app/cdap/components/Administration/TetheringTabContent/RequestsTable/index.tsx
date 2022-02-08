@@ -18,7 +18,6 @@ import React from 'react';
 import T from 'i18n-react';
 import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledButton } from '../shared.styles';
 import { IConnection, IReqsTableData } from '../types';
-import { formatAsPercentage } from 'services/DataFormatter';
 import { humanReadableDate } from 'services/helpers';
 
 const PREFIX = 'features.Administration.Tethering';
@@ -101,8 +100,8 @@ const RequestsTable = ({ tableData, columnTemplate, renderLastColumn }: IReqsTab
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
           <GridCell>{isFirst ? region : ''}</GridCell>
           <GridCell border={!isLast}>{namespace}</GridCell>
-          <GridCell border={!isLast}>{cpuLimit && formatAsPercentage(cpuLimit)}</GridCell>
-          <GridCell border={!isLast}>{memoryLimit && formatAsPercentage(memoryLimit)}</GridCell>
+          <GridCell border={!isLast}>{cpuLimit}</GridCell>
+          <GridCell border={!isLast}>{memoryLimit}</GridCell>
           {isFirst && <GridCell lastCol={true}>{renderLastColumn(instanceName)}</GridCell>}
         </GridRow>
       );

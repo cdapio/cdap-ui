@@ -73,7 +73,14 @@ export interface IApiError {
 }
 
 export interface IValidationErrors {
+  namespaces?: IErrorObj;
   instanceName?: IErrorObj;
   projectName?: IErrorObj;
   region?: IErrorObj;
+}
+
+export interface INamespace {
+  namespace: string;
+  cpuLimit: number;
+  memoryLimit: number;
 }
