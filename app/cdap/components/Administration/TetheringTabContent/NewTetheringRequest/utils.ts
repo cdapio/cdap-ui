@@ -21,17 +21,16 @@ const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
  * Function to ensure all user provided inputs are valid before submitting new thethering request
  *
  * @param selectedNamespaces - list of selected namespaces by user (at least one is required)
- * @param projectName - Project Name of the CDF Instance (required)
- * @param region - Region of the CDF Instance (required)
- * @param instanceName - Instance Name of the CDF Instance (required)
+ * @param inputFields - user provided values for cdf information
  * @returns { [{object}], boolean } - list of error objects to update UI with errors and whether all checks passed
  */
-export const areInputsValid = ({ selectedNamespaces, projectName, region, instanceName }) => {
+export const areInputsValid = ({ selectedNamespaces, inputFields }) => {
   const requiredFields = [
     { name: 'namespaces', val: selectedNamespaces.length },
-    { name: 'projectName', val: projectName },
-    { name: 'region', val: region },
-    { name: 'instanceName', val: instanceName },
+    { name: 'projectName', val: inputFields.projectName },
+    { name: 'region', val: inputFields.region },
+    { name: 'instanceName', val: inputFields.instanceName },
+    { name: 'instanceUrl', val: inputFields.instanceUrl },
   ];
   let allValid = true;
   const errors = {};

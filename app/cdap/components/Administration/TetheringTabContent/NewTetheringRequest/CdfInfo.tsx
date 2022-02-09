@@ -18,81 +18,24 @@ import React from 'react';
 import T from 'i18n-react';
 import NewReqTextField from './NewReqTextField';
 import { NewReqContainer, HeaderTitle } from '../shared.styles';
-import { IValidationErrors } from '../types';
-
-const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
-const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
-
-const WIDGET_TYPE = 'widget-type';
-const WIDGET_ATTRIBUTES = 'widget-attributes';
-
-const ITEMS = [
-  {
-    widgetProperty: {
-      label: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.label`)}`,
-      name: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.name`)}`,
-      [WIDGET_TYPE]: 'textbox',
-      [WIDGET_ATTRIBUTES]: {
-        placeholder: T.translate(`${I18N_CDF_PREFIX}.ProjectName.placeholder`),
-      },
-    },
-    pluginProperty: {
-      type: 'string',
-      required: true,
-    },
-  },
-  {
-    widgetProperty: {
-      label: `${T.translate(`${I18N_CDF_PREFIX}.Region.label`)}`,
-      name: `${T.translate(`${I18N_CDF_PREFIX}.Region.name`)}`,
-      [WIDGET_TYPE]: 'textbox',
-      [WIDGET_ATTRIBUTES]: {
-        placeholder: T.translate(`${I18N_CDF_PREFIX}.Region.placeholder`),
-      },
-    },
-    pluginProperty: {
-      type: 'string',
-      required: true,
-    },
-  },
-  {
-    widgetProperty: {
-      label: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.label`)}`,
-      name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.name`)}`,
-      [WIDGET_TYPE]: 'textbox',
-      [WIDGET_ATTRIBUTES]: {
-        placeholder: T.translate(`${I18N_CDF_PREFIX}.InstanceName.placeholder`),
-      },
-    },
-    pluginProperty: {
-      type: 'string',
-      required: true,
-    },
-  },
-];
+import { IValidationErrors, INewReqInputFields } from '../types';
+import { I18N_CDF_PREFIX, CDF_ITEMS } from './constants';
 
 interface ICdfInfoProps {
-  projectName?: string;
-  region?: string;
-  instanceName?: string;
+  inputFields: INewReqInputFields;
   broadcastChange: (target: string, value: string) => void;
   validationErrors?: IValidationErrors;
 }
 
-const CdfInfo = ({
-  projectName,
-  region,
-  instanceName,
-  broadcastChange,
-  validationErrors,
-}: ICdfInfoProps) => {
-  const values = [projectName, region, instanceName];
+const CdfInfo = ({ inputFields, broadcastChange, validationErrors }: ICdfInfoProps) => {
+  const { projectName, region, instanceName, instanceUrl, description } = inputFields;
+  const values = [projectName, region, instanceName, instanceUrl, description];
 
   return (
     <NewReqContainer>
       <HeaderTitle>{T.translate(`${I18N_CDF_PREFIX}.title`)}</HeaderTitle>
       <hr />
-      {ITEMS.map((item, idx) => {
+      {CDF_ITEMS.map((item, idx) => {
         const errArr = [];
         if (
           validationErrors.hasOwnProperty(item.widgetProperty.name) &&

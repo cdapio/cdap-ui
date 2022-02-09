@@ -27,6 +27,8 @@ export interface INewTetheringReqState {
     projectName: string;
     region: string;
     instanceName: string;
+    instanceUrl: string;
+    description: string;
   };
   showAlert: boolean;
   apiError: IApiError;
@@ -51,6 +53,8 @@ export const initialState: INewTetheringReqState = {
     projectName: '',
     region: '',
     instanceName: '',
+    instanceUrl: '',
+    description: '',
   },
   showAlert: false,
   apiError: {},
