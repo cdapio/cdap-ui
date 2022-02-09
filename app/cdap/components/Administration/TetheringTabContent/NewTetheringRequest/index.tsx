@@ -33,7 +33,7 @@ import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
 import { HeaderContainer, HeaderTitle, StyledButton } from '../shared.styles';
 import { Container, BackButton, Divider, StyledBodyContainer, ButtonsContainer } from './styles';
-import { areInputsValid } from './utils';
+import { areInputsValid } from '../utils';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 
@@ -112,6 +112,7 @@ const NewTetheringRequest = () => {
         message={message}
         type={type}
         showAlert={showAlert}
+        canEditPageWhileOpen={true}
         onClose={() => reset(dispatch, hasError)}
       />
     );
