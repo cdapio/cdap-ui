@@ -66,13 +66,14 @@ const NameSpacesTable = ({
 }: INameSpacesTableProps) => {
   const renderRow = (req: INamespace, idx: number) => {
     const { namespace, cpuLimit, memoryLimit } = req;
+    const isLast = idx === tableData.length - 1;
 
     const handleCheckboxChange = (event) => {
       broadcastChange(event.target.value);
     };
 
     return (
-      <GridRow columnTemplate={OMNI_NS_COLUMN_TEMPLATE} border={true} key={idx}>
+      <GridRow columnTemplate={OMNI_NS_COLUMN_TEMPLATE} border={!isLast} key={idx}>
         <GridCell>
           <StyledCheckbox
             checked={selectedNamespaces.includes(namespace)}

@@ -29,6 +29,7 @@ export interface IMetadata {
 }
 
 export interface IConnection {
+  requestTime: number;
   connectionStatus: string;
   endpoint: string;
   metadata: IMetadata;

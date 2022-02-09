@@ -18,6 +18,7 @@ import React from 'react';
 import T from 'i18n-react';
 import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledButton } from '../shared.styles';
 import { IConnection, IReqsTableData } from '../types';
+import { getScrollableColTemplate, getTotalTableRows } from '../utils';
 import { humanReadableDate } from 'services/helpers';
 
 const PREFIX = 'features.Administration.Tethering';
@@ -63,38 +64,45 @@ interface IReqsTableProps {
   renderLastColumn: (instanceName: string) => JSX.Element;
 }
 
-const RequestsTable = ({ tableData, columnTemplate, renderLastColumn }: IReqsTableProps) => {
-  const transformedTableData = tableData.map((req) => ({
-    requestTime: humanReadableDate(Date.now(), true, false, REQUEST_DATE_FORMAT), // will be updated once backend server captures request time upon creation
-    gcloudProject: req.metadata.metadata.project,
-    instanceName: req.name,
-    region: req.metadata.metadata.location,
-    requestedResources: req.metadata.namespaceAllocations,
-  }));
-
-  const renderTableHeader = () => (
+const renderTableHeader = (tableData: IConnection[], columnTemplate: string) => {
+  const headerColumnTemplate =
+    getTotalTableRows(tableData) > 10 ? getScrollableColTemplate(columnTemplate) : columnTemplate;
+  return (
     <GridHeader>
-      <GridRow columnTemplate={columnTemplate}>
+      <GridRow columnTemplate={headerColumnTemplate}>
         {REQS_TABLE_HEADERS.map((header, i) => {
           return <GridCell key={i}>{header.label}</GridCell>;
         })}
       </GridRow>
     </GridHeader>
   );
+};
 
-  const renderTableBody = (data: IReqsTableData[]) => (
-    <GridBody>{data.map((req: IReqsTableData) => renderRow(req))}</GridBody>
-  );
+const renderTableBody = (
+  data: IReqsTableData[],
+  renderRowFn: (req: IReqsTableData, idx: number) => React.ReactNode
+) => <GridBody>{data.map((req, idx) => renderRowFn(req, idx))}</GridBody>;
 
-  const renderRow = (req: IReqsTableData) => {
+const RequestsTable = ({ tableData, columnTemplate, renderLastColumn }: IReqsTableProps) => {
+  const transformedTableData = tableData.map((req) => ({
+    requestTime: humanReadableDate(req.requestTime, true, false, REQUEST_DATE_FORMAT),
+    gcloudProject: req.metadata.metadata.project,
+    instanceName: req.name,
+    region: req.metadata.metadata.location,
+    requestedResources: req.metadata.namespaceAllocations,
+  }));
+
+  const renderRow = (req: IReqsTableData, idx: number) => {
     const { requestedResources, requestTime, gcloudProject, instanceName, region } = req;
 
     return requestedResources.map((resource, i) => {
       const { namespace, cpuLimit, memoryLimit } = resource;
       const isFirst = i === 0;
       const isLast = requestedResources.length === i + 1;
+      const isLastReq = idx === transformedTableData.length - 1;
+
       return (
-        <GridRow columnTemplate={columnTemplate} border={isLast} key={i}>
+        <GridRow columnTemplate={columnTemplate} border={isLast && !isLastReq} key={i}>
           <GridCell>{isFirst ? requestTime : ''}</GridCell>
           <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
@@ -110,8 +118,8 @@ const RequestsTable = ({ tableData, columnTemplate, renderLastColumn }: IReqsTab
 
   return (
     <Grid>
-      {renderTableHeader()}
-      {renderTableBody(transformedTableData)}
+      {renderTableHeader(tableData, columnTemplate)}
+      {renderTableBody(transformedTableData, renderRow)}
     </Grid>
   );
 };
