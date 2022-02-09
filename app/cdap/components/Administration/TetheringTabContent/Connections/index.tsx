@@ -37,6 +37,8 @@ const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProp
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
       target={() => <IconSVG name="icon-more" />}
+      confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionHeader`)}
+      confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionCopy`)}
       onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
       onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
     />

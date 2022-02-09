@@ -44,6 +44,8 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
       target={() => <IconSVG name="icon-more" />}
+      confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestHeader`)}
+      confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestCopy`)}
       onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
       onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
     />
