@@ -14,8 +14,9 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import Popover from 'components/shared/Popover';
 import T from 'i18n-react';
 
@@ -70,35 +71,65 @@ const ListItem = styled.li`
 
 interface IActionsPopoverProps {
   target: React.ReactNode | (() => void);
+  confirmationTitle: React.ReactNode;
+  confirmationText: React.ReactNode;
   onEditClick: () => void;
   onDeleteClick: () => void;
 }
 
-const ActionsPopover = ({ target, onDeleteClick, onEditClick }: IActionsPopoverProps) => {
+const ActionsPopover = ({
+  target,
+  confirmationTitle,
+  confirmationText,
+  onDeleteClick,
+  onEditClick,
+}: IActionsPopoverProps) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const canEdit = false; // TODO: should update when edit functionality is enabled
 
+  const toggleModalOpen = () => {
+    setModalOpen((prevState) => !prevState);
+  };
+
+  const confirmDelete = () => {
+    toggleModalOpen();
+    onDeleteClick();
+  };
+
+  const confirmDeleteElem = <div>{confirmationText}</div>;
+
   return (
-    <StyledPopover
-      target={target}
-      placement="bottom"
-      bubbleEvent={false}
-      enableInteractionInPopover={true}
-      showPopover={false}
-    >
-      <ul>
-        {canEdit && (
-          <>
-            <ListItem disabled={!canEdit} onClick={onEditClick}>
-              {T.translate(`${PREFIX}.Actions.edit`)}
-            </ListItem>
-            <hr />
-          </>
-        )}
-        <ListItem red={true} onClick={onDeleteClick}>
-          {T.translate(`${PREFIX}.Actions.delete`)}
-        </ListItem>
-      </ul>
-    </StyledPopover>
+    <>
+      <StyledPopover
+        target={target}
+        placement="bottom"
+        bubbleEvent={false}
+        enableInteractionInPopover={true}
+        showPopover={false}
+      >
+        <ul>
+          {canEdit && (
+            <>
+              <ListItem disabled={!canEdit} onClick={onEditClick}>
+                {T.translate(`${PREFIX}.Actions.edit`)}
+              </ListItem>
+              <hr />
+            </>
+          )}
+          <ListItem red={true} onClick={toggleModalOpen}>
+            {T.translate(`${PREFIX}.Actions.delete`)}
+          </ListItem>
+        </ul>
+      </StyledPopover>
+      <ConfirmationModal
+        isOpen={modalOpen}
+        headerTitle={confirmationTitle}
+        confirmationElem={confirmDeleteElem}
+        confirmButtonText={T.translate(`${PREFIX}.Actions.delete`)}
+        confirmFn={confirmDelete}
+        cancelFn={toggleModalOpen}
+      />
+    </>
   );
 };
 
