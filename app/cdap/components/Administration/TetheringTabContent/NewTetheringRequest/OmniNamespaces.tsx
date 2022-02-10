@@ -17,7 +17,13 @@
 import React from 'react';
 import T from 'i18n-react';
 import { INamespace } from '../types';
-import { NewReqContainer, HeaderTitle, ErrorText } from '../shared.styles';
+import {
+  NewReqContainer,
+  HeaderTitle,
+  BodyContainer,
+  ErrorText,
+  NoDataText,
+} from '../shared.styles';
 import { I18N_OMNI_PREFIX } from './constants';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import NamespacesTable from './NamespacesTable';
@@ -40,11 +46,17 @@ const OmniNamespaces = ({
       <HeaderTitle>{T.translate(`${I18N_OMNI_PREFIX}.title`)}</HeaderTitle>
       <hr />
       <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
-      <NamespacesTable
-        tableData={namespaces}
-        selectedNamespaces={selectedNamespaces}
-        broadcastChange={broadcastChange}
-      />
+      <BodyContainer>
+        {namespaces.length > 0 ? (
+          <NamespacesTable
+            tableData={namespaces}
+            selectedNamespaces={selectedNamespaces}
+            broadcastChange={broadcastChange}
+          />
+        ) : (
+          <NoDataText>{T.translate(`${I18N_OMNI_PREFIX}.noNamespaces`)}</NoDataText>
+        )}
+      </BodyContainer>
       {validationError && <ErrorText>{validationError.msg}</ErrorText>}
     </NewReqContainer>
   );
