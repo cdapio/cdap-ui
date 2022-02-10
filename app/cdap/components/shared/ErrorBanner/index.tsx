@@ -24,7 +24,7 @@ interface IErrorProps {
   canEditPageWhileOpen?: boolean;
 }
 
-const ErrorBanner: React.SFC<IErrorProps> = ({ error, onClose, canEditPageWhileOpen }) => {
+const ErrorBanner = ({ error, onClose, canEditPageWhileOpen }: IErrorProps) => {
   if (!error) {
     return null;
   }
