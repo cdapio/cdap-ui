@@ -32,7 +32,7 @@ import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import ContentHeading from 'components/Replicator/Detail/ContentHeading';
 import { ITableInfo, IArtifactInfo } from '../types';
 import DownloadFile from 'services/download-file';
-import ErrorBanner from 'components/shared/ErrorBanner';
+import ErrorBanner from 'components/ErrorBanner';
 
 export const DetailContext = React.createContext<Partial<IDetailState>>({});
 
