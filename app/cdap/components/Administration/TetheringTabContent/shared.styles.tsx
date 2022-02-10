@@ -63,7 +63,9 @@ export const GridHeader = styled.div`
 `;
 
 export const GridBody = styled.div`
-  background-color: var(--white);
+  max-height: 300px;
+  overflow: auto;
+  border-bottom: 1px solid var(--grey11);
 `;
 
 export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {...props} />)`

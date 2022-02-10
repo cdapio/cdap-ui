@@ -27,6 +27,7 @@ import {
 } from '../shared.styles';
 import { ICONS, CONNECTIONS_TABLE_HEADERS, PREFIX, DESC_COLUMN_TEMPLATE } from './constants';
 import { IConnection, IConnectionsTableData } from '../types';
+import { getScrollableColTemplate, getTotalTableRows } from '../utils';
 
 const getIconForStatus = (status: string) => {
   switch (status) {
@@ -45,6 +46,40 @@ interface IConnectionsTableProps {
   renderLastColumn: (instanceName: string) => JSX.Element;
 }
 
+const renderTableHeader = (tableData: IConnection[], columnTemplate: string) => {
+  const hasScroller = getTotalTableRows(tableData) > 10;
+  const headerColumnTemplate = hasScroller
+    ? getScrollableColTemplate(columnTemplate)
+    : columnTemplate;
+  const descColumnTemplate = hasScroller
+    ? getScrollableColTemplate(DESC_COLUMN_TEMPLATE)
+    : DESC_COLUMN_TEMPLATE;
+  return (
+    <>
+      <GridRow columnTemplate={descColumnTemplate}>
+        <GridCell />
+        <GridCell />
+        <GridCell>
+          <LinedSpan>{T.translate(`${PREFIX}.Connections.allocation`)}</LinedSpan>
+        </GridCell>
+        <GridCell />
+      </GridRow>
+      <GridHeader>
+        <GridRow columnTemplate={headerColumnTemplate}>
+          {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
+            return <GridCell key={i}>{header.label}</GridCell>;
+          })}
+        </GridRow>
+      </GridHeader>
+    </>
+  );
+};
+
+const renderTableBody = (
+  data: IConnectionsTableData[],
+  renderRowFn: (conn: IConnectionsTableData, idx: number) => React.ReactNode
+) => <GridBody>{data.map((conn, idx) => renderRowFn(conn, idx))}</GridBody>;
+
 const ConnectionsTable = ({
   tableData,
   columnTemplate,
@@ -58,40 +93,18 @@ const ConnectionsTable = ({
     status: conn.connectionStatus,
   }));
 
-  const renderTableHeader = () => (
-    <>
-      <GridRow columnTemplate={DESC_COLUMN_TEMPLATE}>
-        <GridCell />
-        <GridCell />
-        <GridCell>
-          <LinedSpan>{T.translate(`${PREFIX}.Connections.allocation`)}</LinedSpan>
-        </GridCell>
-        <GridCell />
-      </GridRow>
-      <GridHeader>
-        <GridRow columnTemplate={columnTemplate}>
-          {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
-            return <GridCell key={i}>{header.label}</GridCell>;
-          })}
-        </GridRow>
-      </GridHeader>
-    </>
-  );
-
-  const renderTableBody = (data: IConnectionsTableData[]) => (
-    <GridBody>{data.map((req: IConnectionsTableData) => renderRow(req))}</GridBody>
-  );
-
-  const renderRow = (req: IConnectionsTableData) => {
-    const { status, allocationData, gcloudProject, instanceName, region } = req;
+  const renderRow = (conn: IConnectionsTableData, idx: number) => {
+    const { status, allocationData, gcloudProject, instanceName, region } = conn;
     const icon = getIconForStatus(status);
 
     return allocationData.map((resource, i) => {
       const { namespace, cpuLimit, memoryLimit, pods } = resource;
       const isFirst = i === 0;
       const isLast = allocationData.length === i + 1;
+      const isLastConn = idx === transformedTableData.length - 1;
+
       return (
-        <GridRow columnTemplate={columnTemplate} border={isLast} key={i}>
+        <GridRow columnTemplate={columnTemplate} border={isLast && !isLastConn} key={i}>
           <GridCell>{isFirst ? icon : ''}</GridCell>
           <GridCell>{isFirst ? gcloudProject : ''}</GridCell>
           <GridCell>{isFirst ? instanceName : ''}</GridCell>
@@ -108,8 +121,8 @@ const ConnectionsTable = ({
 
   return (
     <Grid>
-      {renderTableHeader()}
-      {renderTableBody(transformedTableData)}
+      {renderTableHeader(tableData, columnTemplate)}
+      {renderTableBody(transformedTableData, renderRow)}
     </Grid>
   );
 };
