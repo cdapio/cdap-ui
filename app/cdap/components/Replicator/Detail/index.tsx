@@ -32,6 +32,7 @@ import LoadingSVGCentered from 'components/LoadingSVGCentered';
 import ContentHeading from 'components/Replicator/Detail/ContentHeading';
 import { ITableInfo, IArtifactInfo } from '../types';
 import DownloadFile from 'services/download-file';
+import ErrorBanner from 'components/ErrorBanner';
 
 export const DetailContext = React.createContext<Partial<IDetailState>>({});
 
@@ -104,6 +105,7 @@ interface IDetailState {
   setTimeRange: (timeRange: string) => void;
   exportPipeline: () => void;
   duplicatePipeline: () => void;
+  error: object | string | null;
 }
 
 export type IDetailContext = Partial<IDetailState>;
@@ -126,8 +128,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
         });
       },
       (err) => {
-        // tslint:disable-next-line: no-console
-        console.log('error', err);
+        this.handleError(err);
       }
     );
   };
@@ -152,7 +153,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
       },
       (err) => {
         // tslint:disable-next-line: no-console
-        console.log('error', err);
+        this.handleError(err);
         this.setState({
           status: currentStatus,
         });
@@ -168,7 +169,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
       },
       (err) => {
         // tslint:disable-next-line: no-console
-        console.log('error', err);
+        this.handleError(err);
       }
     );
   };
@@ -238,6 +239,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
     lastUpdated: Date.now(),
     startTime: null,
     end: null,
+    error: null,
     numInstances: null,
 
     start: this.start,
@@ -268,8 +270,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
       try {
         config = JSON.parse(app.configuration);
       } catch (e) {
-        // tslint:disable-next-line: no-console
-        console.log('error parsing app config', e);
+        this.handleError(`error parsing app config ${e}`);
       }
 
       let sourcePlugin$;
@@ -340,8 +341,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
           });
         },
         (err) => {
-          // tslint:disable-next-line: no-console
-          console.log('error fetching plugins', err);
+          this.handleError(`error fetching plugins ${err}`);
         }
       );
 
@@ -417,6 +417,12 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
     return <Redirect to={this.state.redirect} />;
   };
 
+  public handleError = (err: string | object | null) => {
+    this.setState({
+      error: err,
+    });
+  };
+
   public render() {
     if (this.state.redirect) {
       return this.redirect();
@@ -437,6 +443,14 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
             <ContentHeading />
             <DetailContent />
           </div>
+
+          {!!this.state.error && (
+            <ErrorBanner
+              error={this.state.error}
+              canEditPageWhileOpen={true}
+              onClose={() => this.handleError(null)}
+            />
+          )}
         </div>
       </DetailContext.Provider>
     );
