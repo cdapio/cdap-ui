@@ -82,7 +82,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
   const [searchStringDisplay, setSearchStringDisplay] = useState('');
   const [workspaceId, setWorkspaceId] = useState(null);
   const classes = useStyle();
-  const { onWorkspaceCreate, onEntitySelect } = useContext(ConnectionsContext);
+  const { onWorkspaceCreate, onEntitySelect, selectedPlugin } = useContext(ConnectionsContext);
   const isSelectMode = typeof onEntitySelect === 'function';
   const fetchEntities = async () => {
     setLoading(true);
@@ -167,7 +167,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
 
   const loadEntitySpec = async (entity) => {
     try {
-      const spec = await getPluginSpec(entity, currentConnection);
+      const spec = await getPluginSpec(entity, currentConnection, selectedPlugin);
       const plugin = spec?.relatedPlugins?.[0];
       const properties = plugin?.properties;
       const schema = plugin?.schema;

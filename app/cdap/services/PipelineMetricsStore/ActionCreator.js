@@ -139,10 +139,20 @@ const setMetricsTabActive = (metricsTabActive, portsToShow) => {
   });
 };
 
+const setSelectedPlugin = (pluginType, pluginName) => {
+  PipelineMetricsStore.dispatch({
+    type: PipelineMetricsActions.SET_SELECTED_PLUGIN,
+    payload: {
+      pluginType,
+      pluginName,
+    },
+  });
+};
+
 const reset = () => {
   PipelineMetricsStore.dispatch({
     type: PipelineMetricsActions.RESET,
   });
 };
 
-export { getMetrics, pollForMetrics, setMetricsTabActive, reset };
+export { getMetrics, pollForMetrics, setMetricsTabActive, reset, setSelectedPlugin };
