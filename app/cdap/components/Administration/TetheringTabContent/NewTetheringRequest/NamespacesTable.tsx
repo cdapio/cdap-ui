@@ -17,12 +17,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledCheckbox } from '../shared.styles';
+import { getScrollableColTemplate } from '../utils';
 import { INamespace } from '../types';
-import {
-  OMNI_NS_COLUMN_TEMPLATE,
-  OMNI_NS_COLUMN_TEMPLATE_SCROLLABLE,
-  OMNI_NS_TABLE_HEADERS,
-} from './constants';
+import { OMNI_NS_COLUMN_TEMPLATE, OMNI_NS_TABLE_HEADERS } from './constants';
 
 interface INameSpacesTableProps {
   tableData: INamespace[];
@@ -42,7 +39,9 @@ const StyledGridBody = styled(GridBody)`
 
 const renderTableHeader = (tableData: INamespace[]) => {
   const columnTemplate =
-    tableData.length > 5 ? OMNI_NS_COLUMN_TEMPLATE_SCROLLABLE : OMNI_NS_COLUMN_TEMPLATE;
+    tableData.length > 5
+      ? getScrollableColTemplate(OMNI_NS_COLUMN_TEMPLATE)
+      : OMNI_NS_COLUMN_TEMPLATE;
   return (
     <GridHeader>
       <GridRow columnTemplate={columnTemplate}>

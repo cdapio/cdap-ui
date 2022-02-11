@@ -17,14 +17,13 @@
 import React from 'react';
 import { IConnection } from '../types';
 import T from 'i18n-react';
-import ConnectionsTable from './ConnectionsTable';
+import TetheringTable from '../TetheringTable';
 import IconSVG from 'components/shared/IconSVG';
 import ActionsPopover from '../ActionPopover';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
-const COLUMN_TEMPLATE = '50px 1.5fr 2fr 1.5fr 2fr 1fr 1fr 1fr 1fr';
 const CONNECTION_STATUS = 'ACCEPTED';
 
 interface IConnectionsProps {
@@ -51,9 +50,9 @@ const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProp
       </HeaderContainer>
       <BodyContainer>
         {connections.length > 0 ? (
-          <ConnectionsTable
+          <TetheringTable
             tableData={connections}
-            columnTemplate={COLUMN_TEMPLATE}
+            showAllocationHeader={true}
             renderLastColumn={renderLastColumn}
           />
         ) : (

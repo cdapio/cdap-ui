@@ -19,16 +19,19 @@ import T from 'i18n-react';
 import { StyledIcon } from '../shared.styles';
 
 export const PREFIX = 'features.Administration.Tethering';
-export const DESC_COLUMN_TEMPLATE = '50px 7fr 3fr 1fr';
+export const DESC_COLUMN_TEMPLATE = '50px 200px 5fr 200px 1.5fr 240px 225px';
 
 export const ICONS = {
   active: {
     name: 'icon-check-circle',
     color: 'var(--green)',
+    tooltip: 'Active',
   },
   inactive: {
     name: 'icon-times-circle',
     color: 'var(--red)',
+    tooltip: 'Inactive',
+    pendingReqTooltip: 'Inactive (Could possibly be due to incorrect parameters)',
   },
   header: {
     name: 'icon-circle',
@@ -45,6 +48,14 @@ export const CONNECTIONS_TABLE_HEADERS = [
     label: <StyledIcon name={ICONS.header.name} color={ICONS.header.color} />,
   },
   {
+    property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
+    label: T.translate(`${PREFIX}.ColumnHeaders.requestTime`),
+  },
+  {
+    property: 'description',
+    label: T.translate(`${PREFIX}.ColumnHeaders.description`),
+  },
+  {
     property: 'gcp',
     label: T.translate(`${PREFIX}.ColumnHeaders.gcp`),
   },
@@ -57,12 +68,8 @@ export const CONNECTIONS_TABLE_HEADERS = [
     label: T.translate(`${PREFIX}.ColumnHeaders.region`),
   },
   {
-    property: 'omniNamespace',
-    label: T.translate(`${PREFIX}.ColumnHeaders.omniNamespace`),
-  },
-  {
-    property: 'pods',
-    label: T.translate(`${PREFIX}.ColumnHeaders.pods`),
+    property: 'tetheredNamespace',
+    label: T.translate(`${PREFIX}.ColumnHeaders.tetheredNamespace`),
   },
   {
     property: 'cpu',

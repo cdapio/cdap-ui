@@ -241,13 +241,13 @@ features:
             placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
          requestTime: Request Time
+         description: Description
          gcp: Google cloud project
          instanceName: Instance name
          region: Region
-         omniNamespace: Omni namespace
+         tetheredNamespace: Tethered namespace
          cpu: CPU
          memory: Memory
-         pods: Pods
       Actions:
         edit: Edit
         delete: Delete
