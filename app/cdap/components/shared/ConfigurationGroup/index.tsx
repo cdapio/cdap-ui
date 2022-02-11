@@ -63,6 +63,7 @@ export interface IConfigurationGroupProps extends WithStyles<typeof styles> {
     [property: string]: IErrorObj[];
   };
   validateProperties?: () => void;
+  lockedProperties?: Record<string, boolean>;
 }
 
 const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
@@ -75,6 +76,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   classes,
   errors,
   validateProperties,
+  lockedProperties,
 }) => {
   const [configurationGroups, setConfigurationGroups] = useState([]);
   const referenceValueForUnMount = useRef<{
@@ -275,6 +277,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
                     onChange={handleValueChanges}
                     extraConfig={extraConfig}
                     disabled={disabled}
+                    locked={lockedProperties && lockedProperties[property.name]}
                     errors={errorObjs}
                   />
                 );
@@ -307,4 +310,5 @@ export default ConfigurationGroup;
   onChange: PropTypes.func,
   errors: PropTypes.object,
   validateProperties: PropTypes.func,
+  lockedProperties: PropTypes.object,
 };
