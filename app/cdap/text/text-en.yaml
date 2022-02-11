@@ -186,7 +186,8 @@ features:
         pendingRequestHistory: VIEW REQUEST HISTORY
         noPendingRequests: There are no requests pending
         acceptButton: Accept
-        rejectButton: reject
+        rejectButton: Reject
+        acceptSuccess: Request has been accepted.
       Connections:
         connectionsHeader: Connections
         noConnections: There are no connections
@@ -256,6 +257,8 @@ features:
         deleteRequestCopy: Are you sure you want to delete this request?
         deleteConnectionHeader: Delete Tethering Connection
         deleteConnectionCopy: Are you sure you want to delete this connection?
+        rejectRequestHeader: Reject Tethering Request
+        rejectRequestCopy: Are you sure you want to reject this request?
       pageTitle: '{productName} | Administration | Tethering Connections'
     Services:
       title: Services

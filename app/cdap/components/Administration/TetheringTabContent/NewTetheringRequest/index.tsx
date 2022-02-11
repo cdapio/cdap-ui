@@ -28,10 +28,9 @@ import {
   createTethering,
   fetchNamespaceList,
 } from './reducer';
-import Alert from 'components/shared/Alert';
 import OmniNamespaces from './OmniNamespaces';
 import CdfInfo from './CdfInfo';
-import { HeaderContainer, HeaderTitle, StyledButton } from '../shared.styles';
+import { HeaderContainer, HeaderTitle, StyledButton, StyledAlert } from '../shared.styles';
 import { Container, BackButton, Divider, StyledBodyContainer, ButtonsContainer } from './styles';
 import { areInputsValid } from '../utils';
 
@@ -71,6 +70,7 @@ const NewTetheringRequest = () => {
   };
 
   const handleSend = async () => {
+    reset(dispatch, true);
     const { errors, allValid: inputsAreValid } = areInputsValid({
       selectedNamespaces,
       inputFields,
@@ -108,13 +108,9 @@ const NewTetheringRequest = () => {
       : T.translate(`${I18NPREFIX}.success`);
     const type = hasError ? 'error' : 'success';
     return (
-      <Alert
-        message={message}
-        type={type}
-        showAlert={showAlert}
-        canEditPageWhileOpen={true}
-        onClose={() => reset(dispatch, hasError)}
-      />
+      <StyledAlert severity={type} onClose={() => reset(dispatch, hasError)}>
+        {message}
+      </StyledAlert>
     );
   };
 
@@ -139,6 +135,7 @@ const NewTetheringRequest = () => {
           broadcastChange={handleInputChange}
           validationErrors={validationErrors}
         />
+        {showAlert && renderAlert()}
         <ButtonsContainer>
           <StyledButton onClick={handleSend}>
             {T.translate(`${I18NPREFIX}.sendButton`)}
@@ -148,7 +145,6 @@ const NewTetheringRequest = () => {
           </StyledButton>
         </ButtonsContainer>
       </StyledBodyContainer>
-      {showAlert && renderAlert()}
     </Container>
   );
 };
