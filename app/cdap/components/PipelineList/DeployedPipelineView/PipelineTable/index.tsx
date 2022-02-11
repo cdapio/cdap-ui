@@ -24,6 +24,7 @@ import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from 'components/PipelineList/DeployedPipelineView/PipelineTable/SortableHeader';
 import If from 'components/If';
 import './PipelineTable.scss';
+import { clearSearch } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 
 interface IProps {
   pipelines: IPipeline[];
@@ -98,14 +99,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    onClear: () => {
-      dispatch({
-        type: Actions.setSearchInput,
-        payload: {
-          search: '',
-        },
-      });
-    },
+    onClear: clearSearch,
   };
 };
 
