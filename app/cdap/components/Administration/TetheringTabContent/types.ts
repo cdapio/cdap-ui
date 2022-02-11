@@ -20,10 +20,10 @@ export interface INamespaceAllocations {
   namespace: string;
   cpuLimit: string;
   memoryLimit: string;
-  pods?: number;
 }
 
 export interface IMetadata {
+  description: string;
   metadata: { project: string; location: string };
   namespaceAllocations: INamespaceAllocations[];
 }
@@ -38,17 +38,11 @@ export interface IConnection {
 }
 
 export interface ITableData {
-  requestTime?: string;
+  requestTime: string;
+  description: string;
   gcloudProject: string;
   instanceName: string;
   region: string;
-}
-
-export interface IReqsTableData extends ITableData {
-  requestedResources: INamespaceAllocations[];
-}
-
-export interface IConnectionsTableData extends ITableData {
   status: string;
   allocationData: INamespaceAllocations[];
 }
