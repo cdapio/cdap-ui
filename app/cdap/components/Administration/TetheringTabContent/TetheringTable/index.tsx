@@ -14,45 +14,13 @@
  * the License.
  */
 
-import React from 'react';
-import T from 'i18n-react';
-import {
-  Grid,
-  GridHeader,
-  GridBody,
-  GridRow,
-  GridCell,
-  StyledIcon,
-  LinedSpan,
-} from '../shared.styles';
-import { ICONS, CONNECTIONS_TABLE_HEADERS, PREFIX, DESC_COLUMN_TEMPLATE } from './constants';
+import React, { useState, useEffect } from 'react';
+import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../shared.styles';
+import { CONNECTIONS_TABLE_HEADERS } from './constants';
 import { IConnection, ITableData } from '../types';
-import { dateTimeFormat } from 'services/DataFormatter';
+import { getIconForStatus, renderAllocationsHeader, getTransformedTableData } from './utils';
 
 const COLUMN_TEMPLATE = '50px 200px 2fr 1.5fr 1.5fr 200px 1.5fr 120px 120px 225px';
-
-const getIconForStatus = (status: string, isForPendingReqs: boolean) => {
-  switch (status) {
-    case 'ACTIVE':
-      return (
-        <StyledIcon
-          name={ICONS.active.name}
-          color={ICONS.active.color}
-          tooltip={ICONS.active.tooltip}
-        />
-      );
-    case 'INACTIVE':
-      return (
-        <StyledIcon
-          name={ICONS.inactive.name}
-          color={ICONS.inactive.color}
-          tooltip={isForPendingReqs ? ICONS.inactive.pendingReqTooltip : ICONS.inactive.tooltip}
-        />
-      );
-    default:
-      return <StyledIcon name={ICONS.default.name} color={ICONS.default.color} />;
-  }
-};
 
 interface ITetheringTableProps {
   tableData: IConnection[];
@@ -63,19 +31,7 @@ interface ITetheringTableProps {
 
 const renderTableHeader = (showAllocationHeader: boolean) => (
   <>
-    {showAllocationHeader && (
-      <GridRow columnTemplate={DESC_COLUMN_TEMPLATE}>
-        <GridCell />
-        <GridCell />
-        <GridCell />
-        <GridCell />
-        <GridCell />
-        <GridCell>
-          <LinedSpan>{T.translate(`${PREFIX}.Connections.allocation`)}</LinedSpan>
-        </GridCell>
-        <GridCell />
-      </GridRow>
-    )}
+    {showAllocationHeader && renderAllocationsHeader()}
     <GridHeader>
       <GridRow columnTemplate={COLUMN_TEMPLATE}>
         {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
@@ -97,21 +53,43 @@ const TetheringTable = ({
   isForPendingReqs,
   renderLastColumn,
 }: ITetheringTableProps) => {
-  const transformedTableData = tableData.map((conn) => ({
-    requestTime: dateTimeFormat(conn.requestTime, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    }),
-    description: conn.metadata.description,
-    gcloudProject: conn.metadata.metadata.project,
-    instanceName: conn.name,
-    region: conn.metadata.metadata.location,
-    allocationData: conn.metadata.namespaceAllocations,
-    status: conn.connectionStatus,
-  }));
+  const [gridData, setGridData] = useState([]);
+
+  useEffect(() => {
+    let timer;
+    const transformedTableData = getTransformedTableData(tableData);
+
+    setGridData((prevState) => {
+      if (!isForPendingReqs && prevState.length && prevState.length < transformedTableData.length) {
+        let index = -1;
+        // Check if a new connection has been added to established connections
+        transformedTableData.some((conn, idx) => {
+          const alreadyExists = prevState.find((prevConn) => {
+            return prevConn.instanceName === conn.instanceName;
+          });
+          if (!alreadyExists) {
+            index = idx;
+          }
+          return !alreadyExists;
+        });
+
+        // Move the newly added connection to the top of the Connections Table and highlight it for three seconds
+        if (index !== -1) {
+          const tempConn = { ...transformedTableData[index] };
+          tempConn.highlighted = true;
+          transformedTableData.splice(index, 1);
+          transformedTableData.unshift(tempConn);
+          timer = setTimeout(() => {
+            tempConn.highlighted = false;
+            setGridData([...transformedTableData]);
+          }, 3000);
+        }
+      }
+      return transformedTableData;
+    });
+
+    return () => clearTimeout(timer);
+  }, [tableData]);
 
   const renderRow = (conn: ITableData, idx: number) => {
     const {
@@ -122,6 +100,7 @@ const TetheringTable = ({
       description,
       instanceName,
       region,
+      highlighted,
     } = conn;
     const icon = getIconForStatus(status, isForPendingReqs);
 
@@ -129,10 +108,15 @@ const TetheringTable = ({
       const { namespace, cpuLimit, memoryLimit } = resource;
       const isFirst = i === 0;
       const isLast = allocationData.length === i + 1;
-      const isLastConn = idx === transformedTableData.length - 1;
+      const isLastConn = idx === gridData.length - 1;
 
       return (
-        <GridRow columnTemplate={COLUMN_TEMPLATE} border={isLast && !isLastConn} key={i}>
+        <GridRow
+          highlighted={highlighted}
+          columnTemplate={COLUMN_TEMPLATE}
+          border={isLast && !isLastConn}
+          key={i}
+        >
           <GridCell>{isFirst ? icon : ''}</GridCell>
           <GridCell>{isFirst ? requestTime : ''}</GridCell>
           <GridCell title={description}>{isFirst ? description : ''}</GridCell>
@@ -153,7 +137,7 @@ const TetheringTable = ({
   return (
     <Grid>
       {renderTableHeader(showAllocationHeader)}
-      {renderTableBody(transformedTableData, renderRow)}
+      {renderTableBody(gridData, renderRow)}
     </Grid>
   );
 };

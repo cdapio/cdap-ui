@@ -14,15 +14,29 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import TetheringTable from '../TetheringTable';
 import T from 'i18n-react';
-import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
+import styled from 'styled-components';
+import {
+  HeaderContainer,
+  HeaderTitle,
+  BodyContainer,
+  NoDataText,
+  StyledAlert,
+} from '../shared.styles';
 import NewReqLastColumn from './NewReqLastColumn';
 import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.NewRequests`;
+const ACCEPT_ACTION = 'accept';
+
+const CustomAlert = styled(StyledAlert)`
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: -20px;
+`;
 
 interface INewRequestsProps {
   newRequests: IConnection[];
@@ -30,9 +44,23 @@ interface INewRequestsProps {
 }
 
 const NewRequests = ({ newRequests, handleAcceptOrReject }: INewRequestsProps) => {
+  const [showAlert, setShowAlert] = useState(false);
   const renderLastColumn = (instanceName: string) => (
-    <NewReqLastColumn instanceName={instanceName} handleAcceptOrReject={handleAcceptOrReject} />
+    <NewReqLastColumn
+      instanceName={instanceName}
+      handleAcceptOrReject={handleChangeRequestStatus}
+    />
   );
+
+  const handleChangeRequestStatus = (action: string, peer: string) => {
+    if (action === ACCEPT_ACTION) {
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 3000);
+    }
+    handleAcceptOrReject(action, peer);
+  };
 
   return (
     <>
@@ -40,6 +68,11 @@ const NewRequests = ({ newRequests, handleAcceptOrReject }: INewRequestsProps) =
         <HeaderTitle>{T.translate(`${I18NPREFIX}.newRequestsHeader`)}</HeaderTitle>
       </HeaderContainer>
       <BodyContainer>
+        {showAlert && (
+          <CustomAlert severity="success">
+            {T.translate(`${PREFIX}.PendingRequests.acceptSuccess`)}
+          </CustomAlert>
+        )}
         {newRequests.length > 0 ? (
           <TetheringTable tableData={newRequests} renderLastColumn={renderLastColumn} />
         ) : (

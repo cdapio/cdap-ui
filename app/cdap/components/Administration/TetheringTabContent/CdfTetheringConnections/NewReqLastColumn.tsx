@@ -14,7 +14,8 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { StyledButton } from '../shared.styles';
 import T from 'i18n-react';
 import styled from 'styled-components';
@@ -39,15 +40,39 @@ interface INewReqLastColumnProps {
 }
 
 const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastColumnProps) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toggleModalOpen = () => {
+    setModalOpen((prevState) => !prevState);
+  };
+
+  const confirmReject = () => {
+    toggleModalOpen();
+    handleAcceptOrReject('reject', instanceName);
+  };
+  const confirmRejectElem = (
+    <div>{T.translate(`${PREFIX}.ConfirmationModal.rejectRequestCopy`)}</div>
+  );
+
   return (
-    <ButtonsContainer>
-      <GridCellButton onClick={() => handleAcceptOrReject('accept', instanceName)}>
-        {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
-      </GridCellButton>
-      <GridCellButton onClick={() => handleAcceptOrReject('reject', instanceName)}>
-        {T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
-      </GridCellButton>
-    </ButtonsContainer>
+    <>
+      <ButtonsContainer>
+        <GridCellButton onClick={() => handleAcceptOrReject('accept', instanceName)}>
+          {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
+        </GridCellButton>
+        <GridCellButton onClick={confirmReject}>
+          {T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
+        </GridCellButton>
+      </ButtonsContainer>
+      <ConfirmationModal
+        isOpen={modalOpen}
+        headerTitle={T.translate(`${PREFIX}.ConfirmationModal.rejectRequestHeader`)}
+        confirmationElem={confirmRejectElem}
+        confirmButtonText={T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
+        confirmFn={confirmReject}
+        cancelFn={toggleModalOpen}
+      />
+    </>
   );
 };
 
