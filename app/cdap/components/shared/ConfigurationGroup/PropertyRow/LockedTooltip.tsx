@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,27 +16,20 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import Help from '@material-ui/icons/Help';
+import LockIcon from '@material-ui/icons/Lock';
 import PropertyRowTooltip from './PropertyRowTooltip';
 
-const StyledHelpIcon = styled(Help)`
+const StyledLockIcon = styled(LockIcon)`
+  margin-left: 10px;
   color: ${(props) => props.theme.palette.grey[200]};
 `;
 
-interface IDescriptionTooltipProps {
-  description?: string;
-}
-
-const DescriptionTooltip: React.FC<IDescriptionTooltipProps> = ({ description }) => {
-  if (!description) {
-    return null;
-  }
-
+const LockedTooltip: React.FC = () => {
   return (
-    <PropertyRowTooltip title={description} placement="left">
-      <StyledHelpIcon />
+    <PropertyRowTooltip title="This property is locked." placement="left">
+      <StyledLockIcon />
     </PropertyRowTooltip>
   );
 };
 
-export default DescriptionTooltip;
+export default LockedTooltip;
