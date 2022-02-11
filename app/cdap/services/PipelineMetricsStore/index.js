@@ -24,12 +24,14 @@ const DEFAULT_METRICS_STATE = {
   // for now as the old metrics store had these info. Can come back and move these later
   metricsTabActive: false,
   portsToShow: [],
+  plugin: null,
 };
 
 const PipelineMetricsActions = {
   SET_METRICS: 'SET_METRICS',
   SET_LOGS_METRICS: 'SET_LOGS_METRICS',
   SET_ACTIVE_TAB: 'SET_ACTIVE_TAB',
+  SET_SELECTED_PLUGIN: 'SET_SELECTED_PLUGIN',
   RESET: 'RESET',
 };
 
@@ -50,6 +52,14 @@ const metrics = (state = DEFAULT_METRICS_STATE, action = defaultAction) => {
         ...state,
         metricsTabActive: action.payload.metricsTabActive,
         portsToShow: action.payload.portsToShow ? [action.payload.portsToShow] : state.portsToShow,
+      };
+    case PipelineMetricsActions.SET_SELECTED_PLUGIN:
+      return {
+        ...state,
+        plugin: {
+          type: action.payload.pluginType,
+          name: action.payload.pluginName,
+        },
       };
     case PipelineMetricsActions.RESET:
       return DEFAULT_METRICS_STATE;
