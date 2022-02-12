@@ -61,7 +61,7 @@ export function createWorkspace({ entity, connection, limit = 1000 }) {
     });
 }
 
-export function getPluginSpec(entity, connection) {
+export function getPluginSpec(entity, connection, plugin = null) {
   const { path } = entity;
   const params = {
     context: getCurrentNamespace(),
@@ -72,6 +72,10 @@ export function getPluginSpec(entity, connection) {
     path,
     properties: {},
   };
+
+  if (plugin) {
+    Object.assign(body, { pluginName: plugin.name, pluginType: plugin.type });
+  }
 
   return ConnectionsApi.getSpecification(params, body).toPromise();
 }

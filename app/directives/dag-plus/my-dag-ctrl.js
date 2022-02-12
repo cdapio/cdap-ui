@@ -1344,6 +1344,7 @@ angular.module(PKG.name + '.commons')
       closeMetricsPopover(node);
 
       window.CaskCommon.PipelineMetricsActionCreator.setMetricsTabActive(false);
+      window.CaskCommon.PipelineMetricsActionCreator.setSelectedPlugin(node.type, node.plugin.name);
       DAGPlusPlusNodesActionsFactory.selectNode(node.name);
     };
 

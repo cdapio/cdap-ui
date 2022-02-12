@@ -52,8 +52,10 @@ export interface IConnections {
   hideAddConnection?: boolean;
   connectorType?: string;
   allowDefaultConnection?: boolean;
+  selectedPlugin?: Record<string, string>;
 }
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,
   disabledTypes: {},
+  selectedPlugin: null,
 });

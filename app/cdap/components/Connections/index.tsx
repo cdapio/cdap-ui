@@ -23,6 +23,8 @@ import { ConnectionRoutes } from 'components/Connections/Routes';
 import { MemoryRouter, Redirect } from 'react-router';
 import { Route } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import PipelineMetricsStore from 'services/PipelineMetricsStore';
+
 const DATAPREP_I18N_PREFIX = 'features.DataPrep.pageTitle';
 import {
   IConnectionMode,
@@ -87,6 +89,7 @@ export default function Connections({
     connectorType,
     hideSidePanel,
     hideAddConnection,
+    selectedPlugin: PipelineMetricsStore.getState().plugin,
   });
   const classes = useStyle();
   const [loading, setLoading] = useState(true);
