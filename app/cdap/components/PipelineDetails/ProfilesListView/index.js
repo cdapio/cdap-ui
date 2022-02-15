@@ -21,6 +21,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import classnames from 'classnames';
 import IconSVG from 'components/shared/IconSVG';
+import intersection from 'lodash/intersection';
 import { MyPreferenceApi } from 'api/preference';
 import { Observable } from 'rxjs/Observable';
 import PipelineDetailStore from 'components/PipelineDetails/store';
@@ -42,6 +43,16 @@ import { Theme } from 'services/ThemeHelper';
 const PREFIX = 'features.PipelineDetails.ProfilesListView';
 
 require('./ProfilesListViewInPipeline.scss');
+
+const customCoreFields = [
+  'enablePredefinedAutoScaling',
+  'workerNumNodes',
+  'secondaryWorkerNumNodes',
+  'autoScalingPolicy',
+  'masterNumNodes',
+  'masterCPUs',
+  'workerCPUs',
+];
 
 export default class ProfilesListViewInPipeline extends Component {
   static propTypes = {
@@ -224,6 +235,15 @@ export default class ProfilesListViewInPipeline extends Component {
       return <IconSVG name="icon-star" />;
     };
 
+    // TODO: CDAP-18859. 'totalProcessingCpusLabel' has to be updated from the API.
+    let totalCoresLabel = profile.provisioner.totalProcessingCpusLabel || '--';
+    if (
+      profile.name === selectedProfile &&
+      intersection(customCoreFields, Object.keys(this.state.profileCustomizations)).length > 0
+    ) {
+      totalCoresLabel = 'Custom';
+    }
+
     // Override with pipeline level profile customizations.
     const profileProperties = profile.provisioner.properties;
     if (profile.name === selectedProfile) {
@@ -257,7 +277,7 @@ export default class ProfilesListViewInPipeline extends Component {
         </div>
         <div onClick={onProfileSelectHandler}>{provisionerLabel}</div>
         <div onClick={onProfileSelectHandler}>
-          {profile.provisioner.totalProcessingCpusLabel || '--'}
+          {totalCoresLabel}
           <AutoScaleBadge properties={profileProperties} />
         </div>
         <div onClick={onProfileSelectHandler}>{profile.scope}</div>
