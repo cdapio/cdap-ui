@@ -20,7 +20,7 @@ import { MyCloudApi } from 'api/cloud';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import LoadingSVG from 'components/LoadingSVG';
 import classnames from 'classnames';
-import IconSVG from 'components/shared/IconSVG';
+import IconSVG from 'components/IconSVG';
 import intersection from 'lodash/intersection';
 import { MyPreferenceApi } from 'api/preference';
 import { Observable } from 'rxjs/Observable';
