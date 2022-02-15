@@ -23,7 +23,7 @@ require('../../../styles/fonts/symbol-defs.svg');
 require('../../../styles/fonts/symbol-defs_new.svg');
 
 export default function IconSVG(props) {
-  const { name, className, dataCy, ...moreProps } = props;
+  const { name, className, dataCy, tooltip, ...moreProps } = props;
   const iconClassName = classnames('icon-svg', name, className);
   const path = `${window.location.href}#symbol-defs_${name}`;
   const newPath = `${window.location.href}#symbol-defs_new_${name}`;
@@ -31,6 +31,7 @@ export default function IconSVG(props) {
     <svg className={iconClassName} data-cy={dataCy} {...moreProps}>
       <use xlinkHref={path} />
       <use xlinkHref={newPath} />
+      {tooltip && <title>{tooltip}</title>}
     </svg>
   );
 }
@@ -42,4 +43,5 @@ IconSVG.propTypes = {
   style: PropTypes.object,
   onClick: PropTypes.func,
   dataCy: PropTypes.string,
+  tooltip: PropTypes.string,
 };

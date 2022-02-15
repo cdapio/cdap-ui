@@ -28,7 +28,6 @@ export const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
 export const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
 
 export const OMNI_NS_COLUMN_TEMPLATE = '50px 4fr 2fr 3fr';
-export const OMNI_NS_COLUMN_TEMPLATE_SCROLLABLE = '50px 4fr 2fr 3fr 16px';
 
 const WIDGET_TYPE = 'widget-type';
 const WIDGET_ATTRIBUTES = 'widget-attributes';

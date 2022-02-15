@@ -63,8 +63,6 @@ export const GridHeader = styled.div`
 `;
 
 export const GridBody = styled.div`
-  max-height: 300px;
-  overflow: auto;
   border-bottom: 1px solid var(--grey11);
 `;
 

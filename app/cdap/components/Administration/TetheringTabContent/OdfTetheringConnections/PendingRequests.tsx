@@ -20,13 +20,12 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import IconSVG from 'components/shared/IconSVG';
 import ActionsPopover from '../ActionPopover';
-import RequestsTable from '../RequestsTable';
+import TetheringTable from '../TetheringTable';
 import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shared.styles';
 import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.PendingRequests`;
-const COLUMN_TEMPLATE = '1.5fr 1.5fr 2fr 1fr 2fr 1fr 1fr 1fr';
 const CONNECTION_STATUS = 'PENDING';
 
 const PendingRequestHistory = styled(Link)`
@@ -64,9 +63,9 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
       </HeaderContainer>
       <BodyContainer>
         {pendingRequests.length > 0 ? (
-          <RequestsTable
+          <TetheringTable
             tableData={pendingRequests}
-            columnTemplate={COLUMN_TEMPLATE}
+            isForPendingReqs={true}
             renderLastColumn={renderLastColumn}
           />
         ) : (
