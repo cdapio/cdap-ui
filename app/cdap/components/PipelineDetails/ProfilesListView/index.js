@@ -224,6 +224,17 @@ export default class ProfilesListViewInPipeline extends Component {
       return <IconSVG name="icon-star" />;
     };
 
+    // Override with pipeline level profile customizations.
+    const profileProperties = profile.provisioner.properties;
+    if (profile.name === selectedProfile) {
+      for (const [property, value] of Object.entries(this.state.profileCustomizations)) {
+        const matchedIdx = profileProperties.findIndex((prop) => prop.name === property);
+        if (matchedIdx > -1) {
+          profileProperties[matchedIdx].value = value;
+        }
+      }
+    }
+
     return (
       <div
         key={profileName}
@@ -247,7 +258,7 @@ export default class ProfilesListViewInPipeline extends Component {
         <div onClick={onProfileSelectHandler}>{provisionerLabel}</div>
         <div onClick={onProfileSelectHandler}>
           {profile.provisioner.totalProcessingCpusLabel || '--'}
-          <AutoScaleBadge properties={profile.provisioner.properties} />
+          <AutoScaleBadge properties={profileProperties} />
         </div>
         <div onClick={onProfileSelectHandler}>{profile.scope}</div>
         <div className="profile-status" onClick={onProfileSelectHandler}>
