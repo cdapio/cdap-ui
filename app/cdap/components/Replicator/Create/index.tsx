@@ -221,6 +221,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     const key = generateTableKey(table);
 
     if (this.state.tables.get(key)) {
+      cb();
       return;
     }
 
