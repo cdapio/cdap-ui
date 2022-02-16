@@ -45,6 +45,7 @@ export interface ITableData {
   region: string;
   status: string;
   allocationData: INamespaceAllocations[];
+  highlighted?: boolean;
 }
 
 export interface IConnectionsProps {
