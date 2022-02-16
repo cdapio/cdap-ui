@@ -15,7 +15,6 @@
  */
 
 import T from 'i18n-react';
-import { IConnection } from './types';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const SCROLLER_WIDTH = '16px';
@@ -56,9 +55,3 @@ export const areInputsValid = ({ selectedNamespaces, inputFields }) => {
 };
 
 export const getScrollableColTemplate = (template: string) => `${template} ${SCROLLER_WIDTH}`;
-
-export const getTotalTableRows = (tableData: IConnection[]) =>
-  tableData.reduce((acc, row) => {
-    acc += row.metadata.namespaceAllocations.length;
-    return acc;
-  }, 0);

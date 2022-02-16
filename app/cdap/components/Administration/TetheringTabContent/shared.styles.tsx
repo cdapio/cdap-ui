@@ -18,6 +18,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Button, Checkbox } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import IconSVG from 'components/shared/IconSVG';
 
 export const HeaderContainer = styled.div`
@@ -36,8 +37,10 @@ export const HeaderTitle = styled.h5`
 
 export const BodyContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 30px;
   width: 100%;
 `;
 
@@ -51,7 +54,6 @@ export const Grid = styled.div`
   width: 100%;
   margin-top: 30px;
   margin-bottom: 30px;
-  padding: 0 30px;
   max-height: none;
 `;
 
@@ -66,7 +68,9 @@ export const GridBody = styled.div`
   border-bottom: 1px solid var(--grey11);
 `;
 
-export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {...props} />)`
+export const GridRow = styled(({ border, highlighted, columnTemplate, ...props }) => (
+  <div {...props} />
+))`
   display: grid;
   height: 30px;
   padding: 5px 5px 5px 20px;
@@ -76,6 +80,13 @@ export const GridRow = styled(({ border, columnTemplate, ...props }) => <div {..
     props.border &&
     css`
       border-bottom: 1px solid var(--grey11);
+    `}
+
+  ${(props) =>
+    props.highlighted &&
+    css`
+      border: 1px solid ${(p) => p.theme.palette.green[200]};
+      background-color: rgba(138, 243, 2, 0.1);
     `}
 `;
 
@@ -181,4 +192,9 @@ export const StyledCheckbox = styled(Checkbox)`
 
 export const ErrorText = styled.span`
   color: ${(props) => props.theme.palette.red[50]};
+`;
+
+export const StyledAlert = styled(Alert)`
+  font-size: inherit;
+  margin-bottom: 20px;
 `;
