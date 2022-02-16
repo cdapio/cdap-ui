@@ -378,7 +378,9 @@ class CDAP extends Component {
               </div>
             )}
             {!this.state.isNamespaceFetchInFlight && (
-              <div>
+              // normally I would use the shorthand for this but since this file is .js there is an
+              // unexpected token
+              <React.Fragment>
                 {isNamespaceNotFound && <Page404 message={this.state.pageLevelError.message} />}
                 {/** We show authorization failure message when the specific namespace API returns 403 */}
                 {isUserUnAuthorizedForNamespace && (
@@ -403,7 +405,7 @@ class CDAP extends Component {
                   ) : (
                     container
                   ))}
-              </div>
+              </React.Fragment>
             )}
             <Footer />
             <AuthRefresher />
