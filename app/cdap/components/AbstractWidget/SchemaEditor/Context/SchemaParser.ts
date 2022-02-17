@@ -116,8 +116,8 @@ function parseUnionType(type): IOrderedChildren {
  * }
  */
 function parseArrayType(type): IOrderedChildren {
-  const nullable = isNullable(type);
   const t = getNonNullableType(type);
+  const nullable = isNullable(t.items);
   const id = uuidV4();
   if (t.items && !isComplexType(t.items)) {
     return {
@@ -406,7 +406,7 @@ function parseSubTree(field: IFieldType | IFieldTypeNullable): INode {
   }
   return {
     name,
-    children: parseComplexType(type),
+    children: parseComplexType(t),
     id: uuidV4(),
     internalType: InternalTypesEnum.RECORD_COMPLEX_TYPE_ROOT,
     nullable,

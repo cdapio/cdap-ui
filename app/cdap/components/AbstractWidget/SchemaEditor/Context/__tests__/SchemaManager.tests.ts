@@ -29,6 +29,7 @@ import {
   schemaWithModifiedType,
   simpleSchema,
   simpleSchema2,
+  simpleSchema3,
   largeSchema,
   largeSchema2,
   schemaWithNestedRecordName,
@@ -171,6 +172,17 @@ describe('Unit tests for Schema Manager', () => {
       const schema = SchemaManager(simpleSchema2 as ISchemaType).getInstance();
       expect(schema.getFlatSchema().length).toBe(5);
       expect(childCountInTree(schema.getSchemaTree())).toBe(4);
+    });
+
+    it('Should parse and manage simple schema (3) and correctly pasrse the array type', () => {
+      const schema = SchemaManager(simpleSchema3 as ISchemaType).getInstance();
+      expect(schema.getFlatSchema().length).toBe(4);
+      expect(childCountInTree(schema.getSchemaTree())).toBe(1);
+
+      const flatTree = schema.getFlatSchema();
+      expect(flatTree[1].nullable).toBe(true);
+      expect(flatTree[2].nullable).toBe(false);
+      expect(flatTree[3].nullable).toBe(false);
     });
 
     it('Should change type in simple schema', () => {
