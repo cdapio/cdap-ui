@@ -1,0 +1,28 @@
+{
+    "name": "etlSchemaBody",
+    "schema": {
+        "name": "etlSchemaBody",
+        "type": "record",
+        "fields": [
+            {
+                "name": "arrayfield",
+                "type": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "record",
+                            "name": "name-3d970465-f7b4-4ead-843d-16fb092e4e62",
+                            "fields": [
+                                {
+                                    "name": "recordfield",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "null"
+                ]
+            }
+        ]
+    }
+}
