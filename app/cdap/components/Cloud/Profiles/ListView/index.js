@@ -325,7 +325,7 @@ class ProfilesListView extends Component {
       if (isNativeProfile) {
         return (
           <IconSVG
-            name="icon-cog-empty"
+            name="icon-more"
             onClick={(e) => {
               preventPropagation(e);
               return false;
@@ -333,7 +333,7 @@ class ProfilesListView extends Component {
           />
         );
       }
-      return <IconSVG name="icon-cog-empty" />;
+      return <IconSVG name="icon-more" />;
     };
     if (isNativeProfile) {
       Tag = 'div';
