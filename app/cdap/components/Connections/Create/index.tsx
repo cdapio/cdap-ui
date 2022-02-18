@@ -124,10 +124,10 @@ export function CreateConnection({
   }
 
   const onConnectorSelection = async (selectedConnector) => {
-    navigateToConfigStep(dispatch, selectedConnector);
     setLoading(true);
     const connDetails = await fetchConnectionDetails(selectedConnector);
     setConnectionDetails(connDetails);
+    navigateToConfigStep(dispatch, selectedConnector);
     setLoading(false);
     setTestResponseMessages(undefined);
     setTestSucceeded(false);
