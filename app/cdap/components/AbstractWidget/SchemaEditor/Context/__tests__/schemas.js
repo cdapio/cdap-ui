@@ -15,6 +15,7 @@
  */
 const simpleSchema = require('./data/simple-schema.json');
 const simpleSchema2 = require('./data/simpleSchema.json');
+const simpleSchema3 = require('./data/simpleSchema3.json');
 const largeSchema = require('./data/large-schema.json');
 const largeSchema2 = require('./data/schema-10k.json');
 
@@ -97,6 +98,7 @@ export {
   schemaWithModifiedType,
   simpleSchema,
   simpleSchema2,
+  simpleSchema3,
   largeSchema,
   largeSchema2,
   schemaWithNestedRecordName,
