@@ -1490,6 +1490,17 @@ features:
       TestConnectionLabels:
         danger: Test connection failed
         success: Test connection successful
+      ConnectionList:
+        Columns:
+          name: Name
+          description: Description
+          artifact: Artifact
+          version: Version
+          scope: Scope
+        searchPlaceholder: Search connection type
+        searchLabel: Search
+        showOlderVersions: Show older versions
+        hideOlderVersions: Hide older versions
     bigquery: Google BigQuery ({count})
 
     ConnectionManagement:
