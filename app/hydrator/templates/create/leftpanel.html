@@ -22,7 +22,7 @@
   </select>
 </div>
 <!-- remove the && false to get this to render -->
-<div ng-if="HydratorPlusPlusLeftPanelCtrl.pluginsMap && HydratorPlusPlusLeftPanelCtrl.pluginsMap.length">
+<div ng-if="HydratorPlusPlusLeftPanelCtrl.pluginsMap && HydratorPlusPlusLeftPanelCtrl.pluginsMap.length && false">
 <side-panel
   groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
   item-generic-name="plugins"
@@ -32,7 +32,7 @@
   ></side-panel>
 </div>
 <!-- comment this out or add ng-if="false" for the react version -->
-<!-- <my-side-panel
+<my-side-panel
   data-panel-groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
 
   data-placement="left"
@@ -43,7 +43,7 @@
 
   data-on-panel-item-click-context="HydratorPlusPlusLeftPanelCtrl"
   data-on-panel-item-click="HydratorPlusPlusLeftPanelCtrl.onLeftSidePanelItemClicked">
-</my-side-panel> -->
+</my-side-panel>
 
 <div class="btn btn-default btn-left-panel-toggle btn-sm pull-right" ng-click="HydratorPlusPlusStudioCtrl.toggleSidebar();">
   <span
