@@ -35,10 +35,10 @@ const PREFIX = 'features.Administration';
 const I18NPREFIX = `${PREFIX}.Tethering`;
 
 const AdminTetheringTabContainer = styled.div`
-  width: 100vw;
   margin-left: calc(-50vw + 50%);
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-right: -20px;
 `;
 
 const AdminTetheringTabContent = () => {
