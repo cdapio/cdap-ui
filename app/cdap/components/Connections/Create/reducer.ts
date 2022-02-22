@@ -19,9 +19,9 @@ import { IAction } from 'services/redux-helpers';
 import { ConnectionsApi } from 'api/connections';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
-import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
 import { Observable } from 'rxjs/Observable';
-import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
+import { findHighestVersion } from 'services/VersionRange/VersionUtilities';
+import reject from 'lodash/reject';
 
 interface ICategories {
   name: string;
@@ -168,6 +168,7 @@ export function fetchAllConnectorPluginProperties(connectors) {
 
 export function getCategoriesToConnectorsMap(connectionTypes = []) {
   const categoryToConnectionsMap = new Map();
+  const connectionToVersionsMap = new Map();
   if (!connectionTypes.length) {
     return categoryToConnectionsMap;
   }
@@ -176,14 +177,47 @@ export function getCategoriesToConnectorsMap(connectionTypes = []) {
     if (!category) {
       category = connectionType.artifact.name;
     }
+    let isDuplicate = false;
+    const connectionName = `${category}-${connectionType.name}`;
+    if (!connectionToVersionsMap.has(connectionName)) {
+      connectionToVersionsMap.set(connectionName, [connectionType.artifact]);
+    } else {
+      isDuplicate = true;
+      const existingVersions = connectionToVersionsMap.get(connectionName);
+      connectionToVersionsMap.set(connectionName, [...existingVersions, connectionType.artifact]);
+    }
     if (!categoryToConnectionsMap.has(category)) {
       categoryToConnectionsMap.set(category, [connectionType]);
       continue;
     }
-    const existingConnections = categoryToConnectionsMap.get(category);
-    categoryToConnectionsMap.set(category, [...existingConnections, connectionType]);
+    if (!isDuplicate) {
+      const existingConnections = categoryToConnectionsMap.get(category);
+      categoryToConnectionsMap.set(category, [...existingConnections, connectionType]);
+    }
   }
-  return categoryToConnectionsMap;
+  return addVersionInfo(categoryToConnectionsMap, connectionToVersionsMap);
+}
+
+function addVersionInfo(categoryToConnectionsMap, versionsMap) {
+  const updatedConnectionsMap = new Map();
+  for (const [category, connections] of categoryToConnectionsMap.entries()) {
+    for (const connection of connections) {
+      const allVersions = versionsMap.get(`${category}-${connection.name}`) || [];
+      if (allVersions.length < 2) {
+        connection.olderVersions = [];
+        continue;
+      }
+      const highestVersion = findHighestVersion(
+        allVersions.map((plugin) => plugin.version),
+        true
+      );
+      const latestVersion = allVersions.find((plugin) => plugin.version === highestVersion);
+      connection.artifact = latestVersion;
+      connection.olderVersions = reject(allVersions, latestVersion);
+    }
+    updatedConnectionsMap.set(category, connections);
+  }
+  return updatedConnectionsMap;
 }
 
 export async function fetchConnectionDetails(connection) {
