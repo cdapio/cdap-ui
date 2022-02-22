@@ -260,15 +260,29 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
       <If condition={isEmpty && !loading}>
         <EmptyMessageContainer title={T.translate(`${PREFIX}.EmptyMessageContainer.title`)}>
           <ul>
-            <li>
-              <span className="link-text" onClick={clearSearchString}>
-                {T.translate(`features.EmptyMessageContainer.clearLabel`)}
-              </span>
-              <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion1`)}</span>
-            </li>
-            <li>
-              <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion2`)}</span>
-            </li>
+            {currentConnection && searchString.length > 0 && (
+              <li>
+                <span className="link-text" onClick={clearSearchString}>
+                  {T.translate(`features.EmptyMessageContainer.clearLabel`)}
+                </span>
+                <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion1`)}</span>
+              </li>
+            )}
+            {currentConnection && (
+              <>
+                <li>
+                  <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion2`)}</span>
+                </li>
+                <li>
+                  <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion3`)}</span>
+                </li>
+              </>
+            )}
+            {!currentConnection && (
+              <li>
+                <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion4`)}</span>
+              </li>
+            )}
           </ul>
         </EmptyMessageContainer>
       </If>

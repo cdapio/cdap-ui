@@ -549,9 +549,11 @@ features:
           selectData: Select data
       GenericBrowser:
         EmptyMessageContainer:
-          title: No entities available
+          title: No entities found
           suggestion1: your search
           suggestion2: Browse to another location
+          suggestion3: Choose a different connection
+          suggestion4: Choose a connection from left panel
         EntityCount:
           bucket:
             1: 1 bucket
