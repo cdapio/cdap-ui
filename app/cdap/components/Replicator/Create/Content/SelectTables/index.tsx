@@ -26,7 +26,7 @@ import orderBy from 'lodash/orderBy';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import SelectColumns from 'components/Replicator/Create/Content/SelectColumns';
 import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms';
-import { extractErrorMessage } from 'services/helpers';
+import { extractErrorMessage, isUnknownDatabaseError } from 'services/helpers';
 import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
@@ -450,6 +450,14 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
         <div className="text-danger">
           <Heading type={HeadingTypes.h5} label="Error" />
           <span>{this.state.error}</span>
+          {isUnknownDatabaseError(this.state.error) && (
+            <div>
+              <span>
+                Please manually put in the correct database name and table name below, or go back to
+                "Configure source" tab and put in the correct "Database Name".
+              </span>
+            </div>
+          )}
         </div>
         <ManualSelectTable />
       </>
