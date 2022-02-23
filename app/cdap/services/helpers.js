@@ -506,6 +506,15 @@ function extractErrorMessage(errObj) {
   return objectQuery(errObj, 'response', 'message') || objectQuery(errObj, 'response');
 }
 
+/**
+ * Returns true if the error message indicates unknown database error
+ * @param err the error message
+ * @returns boolean
+ */
+function isUnknownDatabaseError(err) {
+  return typeof err === 'string' && err.toLowerCase().startsWith('unknown database');
+}
+
 function connectWithStore(store, WrappedComponent, ...args) {
   const ConnectedWrappedComponent = connect(...args)(WrappedComponent);
   // eslint-disable-next-line react/display-name
@@ -783,6 +792,7 @@ export {
   removeEmptyJsonValues,
   handlePageLevelError,
   extractErrorMessage,
+  isUnknownDatabaseError,
   connectWithStore,
   dumbestClone,
   categorizeGraphQlErrors,
