@@ -14,13 +14,12 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import TablesAssessment from 'components/Replicator/Create/Content/Assessment/TablesAssessment';
-import If from 'components/shared/If';
 import classnames from 'classnames';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import ConnectivityAssessment from 'components/Replicator/Create/Content/Assessment/ConnectivityAssessment';
@@ -89,15 +88,21 @@ enum VIEWS {
   connectivity = 'connectivity',
 }
 
+enum SEVERITY {
+  error = 'ERROR',
+  warning = 'WARNING',
+}
+
 const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   classes,
   draftId,
 }) => {
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-  const [schemaErrorCount, setSchemaErrorCount] = React.useState(0);
-  const [view, setView] = React.useState(VIEWS.tables);
-  const [assessment, setAssessment] = React.useState({
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [schemaErrorCount, setSchemaErrorCount] = useState(0);
+  const [errorFeaturesCount, setErrorFeaturesCount] = useState(0);
+  const [view, setView] = useState(VIEWS.tables);
+  const [assessment, setAssessment] = useState({
     tables: [],
     features: [],
     connectivity: [],
@@ -120,6 +125,11 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
             schemaError++;
           }
         });
+
+        // Calculate the ERROR type features
+        const errorFeatures = res.features.filter((feature) => feature.severity === SEVERITY.error)
+          .length;
+        setErrorFeaturesCount(errorFeatures);
 
         setSchemaErrorCount(schemaError);
         setAssessment(res);
@@ -153,7 +163,7 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
         </div>
       </div>
 
-      <If condition={error}>
+      {error && (
         <React.Fragment>
           <br />
           <div className="text-danger">
@@ -161,9 +171,9 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
             <span>{error}</span>
           </div>
         </React.Fragment>
-      </If>
+      )}
 
-      <If condition={!loading && !error}>
+      {!loading && !error && (
         <React.Fragment>
           <div className={classes.headerLinks}>
             <span
@@ -194,29 +204,26 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
               [classes.schemaContentContainer]: view === VIEWS.tables,
             })}
           >
-            <If condition={view === VIEWS.tables}>
+            {view === VIEWS.tables && (
               <TablesAssessment
                 assessmentTables={assessment.tables}
                 runAssessment={runAssessment}
               />
-            </If>
+            )}
 
-            <If condition={view === VIEWS.features}>
-              <FeaturesAssessment features={assessment.features} />
-            </If>
+            {view === VIEWS.features && <FeaturesAssessment features={assessment.features} />}
 
-            <If condition={view === VIEWS.connectivity}>
+            {view === VIEWS.connectivity && (
               <ConnectivityAssessment connectivity={assessment.connectivity} />
-            </If>
+            )}
           </div>
         </React.Fragment>
-      </If>
+      )}
 
       <StepButtons
-        // only block proceeding if assessment API did not return an error and if assessment has issues
+        // only block proceeding if assessment API did not return an error and if assessment has error issues
         nextDisabled={
-          !error &&
-          schemaErrorCount + assessment.features.length + assessment.connectivity.length !== 0
+          !error && schemaErrorCount + errorFeaturesCount + assessment.connectivity.length !== 0
         }
       />
     </div>
