@@ -89,7 +89,7 @@ describe('Wrangler GCS tests', () => {
     const connName = 'gcs_unknown_connection';
     cy.visit(`/cdap/ns/default/connections/${connName}`);
     cy.contains(`Connection '${connName}' in namespace 'default' not found`);
-    cy.contains('No entities available');
+    cy.contains('No entities found');
   });
 
   it('Should delete an existing connection', () => {
