@@ -89,6 +89,11 @@ enum VIEWS {
   connectivity = 'connectivity',
 }
 
+enum SEVERITY {
+  error = 'ERROR',
+  warning = 'WARNING',
+}
+
 const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   classes,
   draftId,
@@ -97,6 +102,7 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   const [error, setError] = React.useState(null);
   const [schemaErrorCount, setSchemaErrorCount] = React.useState(0);
   const [view, setView] = React.useState(VIEWS.tables);
+  const [errorFeaturesCount, setErrorFeaturesCount] = React.useState(0);
   const [assessment, setAssessment] = React.useState({
     tables: [],
     features: [],
@@ -120,6 +126,11 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
             schemaError++;
           }
         });
+
+        // Calculate the ERROR type features
+        const errorFeatures = res.features.filter((feature) => feature.severity === SEVERITY.error)
+          .length;
+        setErrorFeaturesCount(errorFeatures);
 
         setSchemaErrorCount(schemaError);
         setAssessment(res);
@@ -213,10 +224,9 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
       </If>
 
       <StepButtons
-        // only block proceeding if assessment API did not return an error and if assessment has issues
+        // only block proceeding if assessment API did not return an error and if assessment has error issues
         nextDisabled={
-          !error &&
-          schemaErrorCount + assessment.features.length + assessment.connectivity.length !== 0
+          !error && schemaErrorCount + errorFeaturesCount + assessment.connectivity.length !== 0
         }
       />
     </div>
