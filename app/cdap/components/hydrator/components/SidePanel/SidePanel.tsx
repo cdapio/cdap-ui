@@ -35,11 +35,65 @@ import ListIcon from '@material-ui/icons/List';
 import styled, { css } from 'styled-components';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+// the old styling was pretty specific and we can't get rid of the classname
+// otherwise the rest of the styling won't work so the && > && > && is a way
+// to make this styling more specific without using !important
+const GroupsContainer = styled.div`
+  && {
+    && {
+      && {
+        height: auto;
+        overflow: scroll;
+        position: absolute;
+        right: 1px;
+      }
+    }
+  }
+`;
+
+const ItemBodyWrapper = styled.div`
+  width: 100%;
+  background: white;
+`;
+
+const StyledGroupName = styled(Typography)`
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const StyledAccordion = styled(Accordion)`
+  background: #eeeeee;
+  &.Mui-expanded {
+    margin: 0px;
+    overflow: scroll;
+  }
+`;
+
+const StyledAccordionSummary = styled(AccordionSummary)`
+  &.Mui-expanded {
+    min-height: 0px;
+  }
+  ${css`
+    .MuiAccordionSummary-content.Mui-expanded {
+      margin: 12px 0;
+    }
+  `}
+`;
+const ListOrIconsButton = styled(Button)`
+  min-width: 20px;
+  padding: 5px;
+  margin-left: 5px;
+  box-shadow: 0;
+  background: white;
+`;
+
 interface ISidePanelProps {
   itemGenericName: string;
-  groups: any;
+  groups: Array<any>;
   groupGenericName: string;
-  onPanelItemClick: any;
+  onPanelItemClick: (event: any, plugin: any) => void;
 }
 
 export const SidePanel = ({
@@ -134,25 +188,6 @@ export const SidePanel = ({
     });
   };
 
-  const StyledAccordion = styled(Accordion)`
-    background: #eeeeee;
-    &.Mui-expanded {
-      margin: 0px;
-      overflow: scroll;
-    }
-  `;
-
-  const StyledAccordionSummary = styled(AccordionSummary)`
-    &.Mui-expanded {
-      min-height: 0px;
-    }
-    ${css`
-      .MuiAccordionSummary-content.Mui-expanded {
-        margin: 12px 0;
-      }
-    `}
-  `;
-
   const renderAccGroups = () => {
     return groups.map((group, i) => {
       return (
@@ -164,19 +199,10 @@ export const SidePanel = ({
             data-cy={`plugin-${group.name}-group`}
           >
             <Chip label={group.plugins.length} size="small" />
-            <Typography
-              style={{
-                marginLeft: '5px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}
-            >
-              {group.name}
-            </Typography>
+            <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
           <AccordionDetails className="item">
-            <div className="item-body-wrapper" style={{ width: '100%', background: 'white' }}>
+            <ItemBodyWrapper className="item-body-wrapper">
               <div
                 className={`item-body ${sidePanelViewType === 'icon' ? 'view-icon' : 'view-list'}`}
                 style={{ overflow: 'scroll' }}
@@ -188,20 +214,12 @@ export const SidePanel = ({
                   </div>
                 )}
               </div>
-            </div>
+            </ItemBodyWrapper>
           </AccordionDetails>
         </StyledAccordion>
       );
     });
   };
-
-  const ListOrIconsButton = styled(Button)`
-    min-width: 20px;
-    padding: 5px;
-    margin-left: 5px;
-    box-shadow: 0;
-    background: white;
-  `;
 
   return (
     <div className="side-panel text-center left">
@@ -232,15 +250,7 @@ export const SidePanel = ({
         </div>
       </div>
 
-      <div
-        className="groups-container"
-        style={{
-          height: 'auto',
-          overflow: 'scroll',
-          position: 'absolute',
-          right: '1px',
-        }}
-      >
+      <GroupsContainer className="groups-container">
         {renderAccGroups()}
 
         {groups.length === 0 && (
@@ -248,7 +258,7 @@ export const SidePanel = ({
             <h4>No {groupGenericName} found.</h4>
           </div>
         )}
-      </div>
+      </GroupsContainer>
     </div>
   );
 };
