@@ -186,4 +186,7 @@ angular
   })
   .directive('connectionsBrowser', function (reactDirective) {
     return reactDirective(window.CaskCommon.Connections);
-  });
+  })
+  .directive('sidePanel', function (reactDirective) {
+    return reactDirective(window.CaskCommon.SidePanel);
+  })
