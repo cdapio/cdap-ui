@@ -93,8 +93,9 @@ class PluginConnectionBrowser extends React.PureComponent<
       },
       { updateFilteredConfigurationGroups: true }
     );
-    this.eventEmitter.emit('schema.import', schema);
-
+    if (schema) {
+      this.eventEmitter.emit('schema.import', schema);
+    }
     this.setState({
       showBrowserModal: false,
       connectionName: null,

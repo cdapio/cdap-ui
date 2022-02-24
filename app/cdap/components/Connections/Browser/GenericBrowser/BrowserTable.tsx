@@ -171,6 +171,12 @@ export function BrowserTable({
   let headers = ['Name', 'Type'];
   headers = [...headers, ...propertyHeaders];
 
+  const onEntitySelect = (entity: IBrowseEntity, event: React.SyntheticEvent) => {
+    loadEntitySpec(entity);
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   if (!loading && (!Array.isArray(entities) || (Array.isArray(entities) && !entities.length))) {
     return (
       <Heading
@@ -229,7 +235,7 @@ export function BrowserTable({
                 })}
                 {hasSelectable && entity.canBrowse && (
                   <TableCell>
-                    <Button variant="contained" onClick={loadEntitySpec.bind(null, entity)}>
+                    <Button variant="contained" onClick={onEntitySelect.bind(null, entity)}>
                       Select
                     </Button>
                   </TableCell>
