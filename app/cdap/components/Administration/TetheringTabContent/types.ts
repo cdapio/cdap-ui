@@ -73,6 +73,7 @@ export interface IValidationErrors {
   instanceName?: IErrorObj;
   projectName?: IErrorObj;
   region?: IErrorObj;
+  instanceUrl?: IErrorObj;
 }
 
 export interface INamespace {
