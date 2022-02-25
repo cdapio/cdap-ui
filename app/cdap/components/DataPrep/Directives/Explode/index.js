@@ -72,7 +72,7 @@ export default class Explode extends Component {
   }
 
   handleUsingFilters(delimiter) {
-    const directive = `split-to-rows ${this.props.column} ${delimiter}`;
+    const directive = `split-to-rows :${this.props.column} ${delimiter}`;
     this.execute([directive]);
   }
 

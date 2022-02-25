@@ -74,52 +74,52 @@ export default class Calculate extends Component {
       {
         name: 'ADD',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `${this.props.column} + ${this.state.operationInput}`,
+        expression: () => `:${this.props.column} + ${this.state.operationInput}`,
       },
       {
         name: 'SUBTRACT',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `${this.props.column} - ${this.state.operationInput}`,
+        expression: () => `:${this.props.column} - ${this.state.operationInput}`,
       },
       {
         name: 'MULTIPLY',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `${this.props.column} * ${this.state.operationInput}`,
+        expression: () => `:${this.props.column} * ${this.state.operationInput}`,
       },
       {
         name: 'DIVIDE',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `${this.props.column} / ${this.state.operationInput}`,
+        expression: () => `:${this.props.column} / ${this.state.operationInput}`,
       },
       {
         name: 'MODULO',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `${this.props.column} % ${this.state.operationInput}`,
+        expression: () => `:${this.props.column} % ${this.state.operationInput}`,
       },
       {
         name: 'DECIMALADD',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:add(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:add(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALSUBTRACT',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:subtract(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:subtract(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALMULTIPLY',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:multiply(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:multiply(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALDIVIDEQ',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:divideq(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:divideq(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALDIVIDER',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:divider(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:divider(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'divider',
@@ -128,37 +128,37 @@ export default class Calculate extends Component {
       {
         name: 'POWEROF',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:pow(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `math:pow(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'SQUARE',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:pow(${this.props.column}, 2)`,
+        expression: () => `math:pow(:${this.props.column}, 2)`,
       },
       {
         name: 'SQUAREROOT',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:sqrt(${this.props.column})`,
+        expression: () => `math:sqrt(:${this.props.column})`,
       },
       {
         name: 'CUBE',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:pow(${this.props.column}, 3)`,
+        expression: () => `math:pow(:${this.props.column}, 3)`,
       },
       {
         name: 'CUBEROOT',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:cbrt(${this.props.column})`,
+        expression: () => `math:cbrt(:${this.props.column})`,
       },
       {
         name: 'LOG',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:log10(${this.props.column})`,
+        expression: () => `math:log10(:${this.props.column})`,
       },
       {
         name: 'NATURALLOG',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:log(${this.props.column})`,
+        expression: () => `math:log(:${this.props.column})`,
       },
       {
         name: 'divider',
@@ -167,17 +167,17 @@ export default class Calculate extends Component {
       {
         name: 'ABSVALUE',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:abs(${this.props.column})`,
+        expression: () => `math:abs(:${this.props.column})`,
       },
       {
         name: 'CEIL',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:ceil(${this.props.column})`,
+        expression: () => `math:ceil(:${this.props.column})`,
       },
       {
         name: 'FLOOR',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:floor(${this.props.column})`,
+        expression: () => `math:floor(:${this.props.column})`,
       },
       {
         name: 'divider',
@@ -186,32 +186,32 @@ export default class Calculate extends Component {
       {
         name: 'SIN',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:sin(${this.props.column})`,
+        expression: () => `math:sin(:${this.props.column})`,
       },
       {
         name: 'COS',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:cos(${this.props.column})`,
+        expression: () => `math:cos(:${this.props.column})`,
       },
       {
         name: 'TAN',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:tan(${this.props.column})`,
+        expression: () => `math:tan(:${this.props.column})`,
       },
       {
         name: 'ARCCOS',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:acos(${this.props.column})`,
+        expression: () => `math:acos(:${this.props.column})`,
       },
       {
         name: 'ARCSIN',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:asin(${this.props.column})`,
+        expression: () => `math:asin(:${this.props.column})`,
       },
       {
         name: 'ARCTAN',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:atan(${this.props.column})`,
+        expression: () => `math:atan(:${this.props.column})`,
       },
       {
         name: 'divider',
@@ -220,7 +220,7 @@ export default class Calculate extends Component {
       {
         name: 'ROUND',
         validColTypes: NATIVE_NUMBER_TYPES,
-        expression: () => `math:round(${this.props.column})`,
+        expression: () => `math:round(:${this.props.column})`,
       },
       {
         name: 'RANDOM',
@@ -230,67 +230,67 @@ export default class Calculate extends Component {
       {
         name: 'CHARCOUNT',
         validColTypes: ['string'],
-        expression: () => `string:length(${this.props.column})`,
+        expression: () => `string:length(:${this.props.column})`,
       },
       {
         name: 'PRECISION',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:precision(${this.props.column})`,
+        expression: () => `decimal:precision(:${this.props.column})`,
       },
       {
         name: 'SCALE',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:scale(${this.props.column})`,
+        expression: () => `decimal:scale(:${this.props.column})`,
       },
       {
         name: 'UNSCALED',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:unscaled(${this.props.column})`,
+        expression: () => `decimal:unscaled(:${this.props.column})`,
       },
       {
         name: 'DECIMALLEFT',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:decimal_left(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:decimal_left(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALRIGHT',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:decimal_right(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:decimal_right(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALABSVALUE',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:abs(${this.props.column})`,
+        expression: () => `decimal:abs(:${this.props.column})`,
       },
       {
         name: 'DECIMALPOWEROF',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:pow(${this.props.column}, ${this.state.operationInput})`,
+        expression: () => `decimal:pow(:${this.props.column}, ${this.state.operationInput})`,
       },
       {
         name: 'DECIMALSQUARE',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:pow(${this.props.column}, 2)`,
+        expression: () => `decimal:pow(:${this.props.column}, 2)`,
       },
       {
         name: 'DECIMALCUBE',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:pow(${this.props.column}, 3)`,
+        expression: () => `decimal:pow(:${this.props.column}, 3)`,
       },
       {
         name: 'NEGATE',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:negate(${this.props.column})`,
+        expression: () => `decimal:negate(:${this.props.column})`,
       },
       {
         name: 'STRIPZERO',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:strip_zero(${this.props.column})`,
+        expression: () => `decimal:strip_zero(:${this.props.column})`,
       },
       {
         name: 'SIGN',
         validColTypes: ['bigdecimal'],
-        expression: () => `decimal:sign(${this.props.column})`,
+        expression: () => `decimal:sign(:${this.props.column})`,
       },
     ];
 
