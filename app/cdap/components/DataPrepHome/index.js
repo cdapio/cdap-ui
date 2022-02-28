@@ -303,6 +303,7 @@ export default class DataPrepHome extends Component {
             allowDefaultConnection={true}
             connectionId={connectionId}
             initPath={path}
+            showParsingConfig={true}
             {...attributes}
           />
         ) : null}
