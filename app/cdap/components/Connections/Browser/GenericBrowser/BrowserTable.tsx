@@ -31,6 +31,8 @@ import IconSVG from 'components/shared/IconSVG';
 import Button from '@material-ui/core/Button';
 import { getConnectionPath } from 'components/Connections/helper';
 
+const SAMPLE_DEFAULT_TYPE = 'SAMPLE_DEFAULT';
+
 function getIcon(entity, classes) {
   const type = entity.type.toLowerCase();
 
@@ -139,6 +141,16 @@ function getTypesByHeader(headers, entities) {
   return typeMap;
 }
 
+function removeSampleDefaultHeaders(headers, typeMap) {
+  const updatedHeaders = [];
+  headers.forEach((h) => {
+    if (typeMap[h] !== SAMPLE_DEFAULT_TYPE) {
+      updatedHeaders.push(h);
+    }
+  });
+  return updatedHeaders;
+}
+
 function getPropertyColumnWidth(type) {
   if (type === 'NUMBER' || type === 'SIZE_BYTES') {
     return '6rem';
@@ -161,15 +173,16 @@ export function BrowserTable({
   const hasSelectable = isSelectMode && entities.some((entity: IBrowseEntity) => entity.canBrowse);
   const actionColumnWidth = hasSelectable ? ' 0.5fr' : '';
   const headerTypeMap = getTypesByHeader(propertyHeaders, entities);
+  const propertyHeadersToUse = removeSampleDefaultHeaders(propertyHeaders, headerTypeMap);
   const columnTemplate =
-    propertyHeaders && propertyHeaders.length > 0
-      ? `2fr 1fr ${propertyHeaders
+    propertyHeadersToUse && propertyHeadersToUse.length > 0
+      ? `2fr 1fr ${propertyHeadersToUse
           .map((h) => getPropertyColumnWidth(headerTypeMap[h]))
           .join(' ')}${actionColumnWidth}`
       : `2fr 1fr${actionColumnWidth}`;
 
   let headers = ['Name', 'Type'];
-  headers = [...headers, ...propertyHeaders];
+  headers = [...headers, ...propertyHeadersToUse];
 
   const onEntitySelect = (entity: IBrowseEntity, event: React.SyntheticEvent) => {
     loadEntitySpec(entity);
@@ -194,7 +207,7 @@ export function BrowserTable({
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
-            {propertyHeaders.map((header) => {
+            {propertyHeadersToUse.map((header) => {
               return <TableCell key={header}>{header}</TableCell>;
             })}
             {hasSelectable && <TableCell>Actions</TableCell>}
@@ -222,7 +235,7 @@ export function BrowserTable({
                   </div>
                 </TableCell>
                 <TableCell>{entity.type}</TableCell>
-                {propertyHeaders.map((header) => {
+                {propertyHeadersToUse.map((header) => {
                   const prop = entity.properties[header];
                   return (
                     <TableCell

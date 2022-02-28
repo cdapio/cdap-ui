@@ -66,6 +66,7 @@ interface IPropertyRowProps extends WithStyles<typeof styles> {
   disabled: boolean;
   errors?: IErrorObj[];
   locked?: boolean;
+  macrosDisabled?: boolean;
 }
 
 const EditorTypeWidgets = [
@@ -162,6 +163,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       widgetProperty,
       errors,
       locked,
+      macrosDisabled,
     } = this.props;
 
     if (widgetProperty[WIDGET_TYPE] === 'hidden') {
@@ -213,13 +215,16 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
             disabled={disabled || locked}
             errors={errors}
           />
-          {pluginProperty.macroSupported && widgetCategory !== PLUGIN && !locked && (
-            <MacroIndicator
-              onClick={this.toggleMacro}
-              disabled={disabled}
-              isActive={this.state.isMacroTextbox}
-            />
-          )}
+          {!macrosDisabled &&
+            !locked &&
+            pluginProperty.macroSupported &&
+            widgetCategory !== PLUGIN && (
+              <MacroIndicator
+                onClick={this.toggleMacro}
+                disabled={disabled}
+                isActive={this.state.isMacroTextbox}
+              />
+            )}
           {locked && <LockedTooltip />}
         </div>
         {propertyLevelErrorMsg !== '' && widgetCategory !== PLUGIN && (
