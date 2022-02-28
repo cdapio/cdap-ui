@@ -59,6 +59,9 @@ export function dateTimeFormat(
   }
 ) {
   if (!(date instanceof Date)) {
+    if (typeof date === 'string') {
+      date = date.replace(/-/g, '/');
+    }
     date = new Date(date);
   }
   if (date.toString() !== 'Invalid Date') {

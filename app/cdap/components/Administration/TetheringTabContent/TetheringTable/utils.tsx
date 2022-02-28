@@ -16,7 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import { IConnection } from '../types';
+import { IConnection, INamespaceAllocations } from '../types';
 import { dateTimeFormat } from 'services/DataFormatter';
 import { StyledIcon, GridRow, GridCell, LinedSpan } from '../shared.styles';
 import { ICONS, PREFIX, DESC_COLUMN_TEMPLATE } from './constants';
@@ -45,22 +45,45 @@ export const getIconForStatus = (status: string, isForPendingReqs: boolean) => {
 };
 
 export const getTransformedTableData = (tableData: IConnection[]) => {
-  return tableData.map((conn) => ({
-    requestTime: dateTimeFormat(conn.requestTime, {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    }),
-    description: conn.metadata?.description,
-    gcloudProject: conn.metadata?.metadata?.project,
-    instanceName: conn.name,
-    region: conn.metadata?.metadata?.location,
-    allocationData: conn.metadata?.namespaceAllocations,
-    status: conn.connectionStatus,
-    highlighted: false,
-  }));
+  return tableData.map((conn) => {
+    // Avoid null pointer exception
+    let description: string | null;
+    let gcloudProject: string;
+    let region: string;
+    let allocationData: INamespaceAllocations[];
+
+    const { metadata } = conn;
+    if (metadata) {
+      const {
+        description: nestedDescription,
+        metadata: nestedMetadata,
+        namespaceAllocations,
+      } = metadata;
+      allocationData = namespaceAllocations;
+      description = nestedDescription;
+      if (nestedMetadata) {
+        gcloudProject = nestedMetadata.project;
+        region = nestedMetadata.location;
+      }
+    }
+
+    return {
+      requestTime: dateTimeFormat(conn.requestTime, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      }),
+      instanceName: conn.name,
+      status: conn.connectionStatus,
+      description,
+      gcloudProject,
+      region,
+      allocationData,
+      highlighted: false,
+    };
+  });
 };
 
 export const renderAllocationsHeader = () => (
