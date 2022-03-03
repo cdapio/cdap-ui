@@ -25,19 +25,19 @@ const PREFIX = 'features.DataPrep.Directives.Decode';
 const DECODEOPTIONS = [
   {
     label: T.translate(`${PREFIX}.base64`),
-    getDirective: (column) => `decode base64 ${column}`,
+    getDirective: (column) => `decode base64 :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.base32`),
-    getDirective: (column) => `decode base32 ${column}`,
+    getDirective: (column) => `decode base32 :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.hex`),
-    getDirective: (column) => `decode hex ${column}`,
+    getDirective: (column) => `decode hex :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.urldecode`),
-    getDirective: (column) => `url-decode ${column}`,
+    getDirective: (column) => `url-decode :${column}`,
   },
 ];
 export default function Decode({ onComplete, column, isOpen }) {

@@ -200,7 +200,7 @@ export default class UsingPatternsModal extends Component {
     if (!this.state.pattern) {
       return;
     }
-    let directive = `extract-regex-groups ${this.props.column} ${this.state.pattern}`;
+    let directive = `extract-regex-groups :${this.props.column} ${this.state.pattern}`;
     execute([directive]).subscribe(
       () => {
         this.props.onComplete();

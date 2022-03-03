@@ -69,7 +69,7 @@ export default class MaskSelection extends Component {
   }
   applyDirective() {
     let pattern = this.getPattern();
-    let directive = [`mask-number ${this.props.columns.toString()} ${pattern}`];
+    let directive = [`mask-number :${this.props.columns.toString()} ${pattern}`];
     execute(directive).subscribe(
       () => {
         this.props.onClose();
