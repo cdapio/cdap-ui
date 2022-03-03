@@ -207,27 +207,27 @@ export function CreateConnection({
     if (selectedConnector.name === 'MySQL' && !('jdbcPluginName' in properties)) {
       setError('MySQL connection requires a JDBC Driver');
       setTestInProgress(false);
-    } else {
-      try {
-        const testResult = await testConnection(connectionConfiguration);
-        setTestResponseMessages(testResult);
-        setTestSucceeded(!testResult);
+      return;
+    }
+    try {
+      const testResult = await testConnection(connectionConfiguration);
+      setTestResponseMessages(testResult);
+      setTestSucceeded(!testResult);
 
-        if (testResult) {
-          const configErrors = constructErrors(testResult);
-          // All test errors will be shown next to the test button,
-          // so don't repeat orphaned errors
-          const { orphanErrors, ...assignedErrors } = configErrors.propertyErrors;
-          setConfigurationErrors(assignedErrors);
-        } else {
-          setConfigurationErrors(null);
-        }
-      } catch (e) {
-        const errorMsg = extractErrorMessage(e);
-        setError(`A server error occurred when testing the connection. Error: ${errorMsg}`);
-      } finally {
-        setTestInProgress(false);
+      if (testResult) {
+        const configErrors = constructErrors(testResult);
+        // All test errors will be shown next to the test button,
+        // so don't repeat orphaned errors
+        const { orphanErrors, ...assignedErrors } = configErrors.propertyErrors;
+        setConfigurationErrors(assignedErrors);
+      } else {
+        setConfigurationErrors(null);
       }
+    } catch (e) {
+      const errorMsg = extractErrorMessage(e);
+      setError(`A server error occurred when testing the connection. Error: ${errorMsg}`);
+    } finally {
+      setTestInProgress(false);
     }
   };
 
