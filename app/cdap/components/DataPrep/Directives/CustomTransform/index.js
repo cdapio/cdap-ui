@@ -70,7 +70,7 @@ export default class CustomTransform extends Component {
       return;
     }
 
-    let directive = `set-column ${this.props.column} ${this.state.input}`;
+    let directive = `set-column :${this.props.column} ${this.state.input}`;
 
     execute([directive]).subscribe(
       () => {

@@ -122,7 +122,7 @@ export default class FindAndReplaceDirective extends Component {
     if (this.state.exactMatch) {
       findInput = `^${findInput}$`;
     }
-    let directive = `find-and-replace ${column} s/${findInput}/${replaceInput}`;
+    let directive = `find-and-replace :${column} s/${findInput}/${replaceInput}`;
 
     if (this.state.ignoreCase) {
       directive = `${directive}/Ig`;

@@ -30,7 +30,7 @@ export default class SwapColumnsDirective extends Component {
 
   applyDirective() {
     let columns = this.props.column;
-    let directive = `swap ${columns[0]} ${columns[1]}`;
+    let directive = `swap :${columns[0]} :${columns[1]}`;
 
     execute([directive]).subscribe(
       () => {

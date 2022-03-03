@@ -30,7 +30,10 @@ export default class KeepColumnDirective extends Component {
   }
 
   applyDirective() {
-    let column = this.props.column.toString();
+    let column = `:${this.props.column.toString()}`;
+    if (Array.isArray(this.props.column) && this.props.column.length > 1) {
+      column = this.props.column.map(c => `:${c}`).join(',');
+    }
     let directive = `keep ${column}`;
 
     execute([directive]).subscribe(
