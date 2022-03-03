@@ -145,7 +145,7 @@ export default class Hash extends Component<IHashProps> {
     const column = this.props.column;
     const hashAlgorithm = this.state.selectedHashAlgorithm;
     const encode = this.state.encode;
-    directive = `hash ${column} ${hashAlgorithm} ${encode}`;
+    directive = `hash :${column} ${hashAlgorithm} ${encode}`;
 
     this.execute([directive]);
   };

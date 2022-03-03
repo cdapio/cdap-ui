@@ -129,9 +129,9 @@ export default class MergeColumnsDirective extends Component {
       delimiterSymbol = this.state.customDelimiter;
     }
 
-    let directive = `merge ${this.state.firstColumn} ${
+    let directive = `merge :${this.state.firstColumn} :${
       this.state.secondColumn
-    } ${newColumnInput} ${delimiterSymbol}`;
+    } :${newColumnInput} ${delimiterSymbol}`;
 
     execute([directive]).subscribe(
       () => {

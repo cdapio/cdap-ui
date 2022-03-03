@@ -63,7 +63,7 @@ export default class MaskData extends Component {
     this.props.onComplete();
   }
   maskByShuffling() {
-    this.applyDirective(`mask-shuffle ${this.props.column}`);
+    this.applyDirective(`mask-shuffle :${this.props.column}`);
   }
   applyDirective(directive) {
     execute([directive]).subscribe(
@@ -101,11 +101,11 @@ export default class MaskData extends Component {
   }
   maskLast4Digits() {
     let pattern = this.maskLastNDigits(4);
-    this.applyDirective(`mask-number ${this.props.column} ${pattern}`);
+    this.applyDirective(`mask-number :${this.props.column} ${pattern}`);
   }
   maskLast2Digits() {
     let pattern = this.maskLastNDigits(2);
-    this.applyDirective(`mask-number ${this.props.column} ${pattern}`);
+    this.applyDirective(`mask-number :${this.props.column} ${pattern}`);
   }
   renderSubMenu() {
     if (!this.props.isOpen || !this.isDirectiveEnabled()) {

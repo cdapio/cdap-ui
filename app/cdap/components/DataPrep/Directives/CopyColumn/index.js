@@ -80,7 +80,7 @@ export default class CopyColumnDirective extends Component {
     let source = this.props.column;
     let destination = this.state.input;
 
-    let directive = `copy ${source} ${destination} true`;
+    let directive = `copy :${source} :${destination} true`;
 
     execute([directive]).subscribe(
       () => {
