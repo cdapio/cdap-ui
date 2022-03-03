@@ -120,17 +120,17 @@ export default class Format extends Component {
     },
     {
       name: 'UPPERCASE',
-      onClick: this.applyDirective.bind(this, `uppercase ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `uppercase :${this.props.column}`),
       validColTypes: ['string'],
     },
     {
       name: 'LOWERCASE',
-      onClick: this.applyDirective.bind(this, `lowercase ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `lowercase :${this.props.column}`),
       validColTypes: ['string'],
     },
     {
       name: 'TITLECASE',
-      onClick: this.applyDirective.bind(this, `titlecase ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `titlecase :${this.props.column}`),
       validColTypes: ['string'],
     },
     {
@@ -140,17 +140,17 @@ export default class Format extends Component {
     },
     {
       name: 'TRIM_WHITESPACE',
-      onClick: this.applyDirective.bind(this, `trim ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `trim :${this.props.column}`),
       validColTypes: ['string'],
     },
     {
       name: 'TRIM_LEADING_WHITESPACE',
-      onClick: this.applyDirective.bind(this, `ltrim ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `ltrim :${this.props.column}`),
       validColTypes: ['string'],
     },
     {
       name: 'TRIM_TRAILING_WHITESPACE',
-      onClick: this.applyDirective.bind(this, `rtrim ${this.props.column}`),
+      onClick: this.applyDirective.bind(this, `rtrim :${this.props.column}`),
       validColTypes: ['string'],
     },
   ];
@@ -241,7 +241,7 @@ export default class Format extends Component {
     } else {
       expression = `${this.props.column} + '${this.state.formatInput}'`;
     }
-    let directive = `set-column ${destinationColumn} ${expression}`;
+    let directive = `set-column :${destinationColumn} ${expression}`;
 
     this.applyDirective(directive);
   };

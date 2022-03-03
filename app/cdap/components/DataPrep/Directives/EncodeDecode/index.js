@@ -31,19 +31,19 @@ const PREFIX = 'features.DataPrep.Directives.Encode';
 const ENCODEOPTIONS = [
   {
     label: T.translate(`${PREFIX}.base64`),
-    getDirective: (column) => `encode base64 ${column}`,
+    getDirective: (column) => `encode base64 :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.base32`),
-    getDirective: (column) => `encode base32 ${column}`,
+    getDirective: (column) => `encode base32 :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.hex`),
-    getDirective: (column) => `encode hex ${column}`,
+    getDirective: (column) => `encode hex :${column}`,
   },
   {
     label: T.translate(`${PREFIX}.url`),
-    getDirective: (column) => `url-encode ${column}`,
+    getDirective: (column) => `url-encode :${column}`,
   },
 ];
 export default class EncodeDecode extends Component {

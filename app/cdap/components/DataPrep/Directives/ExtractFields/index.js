@@ -129,7 +129,7 @@ export default class ExtractFields extends Component {
 
   handleUsingDelimiters(delimiter) {
     let column = this.props.column;
-    let directive = `split-to-columns ${column} ${delimiter}`;
+    let directive = `split-to-columns :${column} ${delimiter}`;
     this.execute([directive]);
   }
 

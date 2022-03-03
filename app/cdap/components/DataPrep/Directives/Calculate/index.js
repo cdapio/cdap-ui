@@ -537,7 +537,7 @@ export default class Calculate extends Component {
     ) {
       destinationColumn = this.state.newColumnInput;
     }
-    let directive = `set-column ${destinationColumn} ${expression}`;
+    let directive = `set-column :${destinationColumn} ${expression}`;
 
     execute([directive]).subscribe(
       () => {
