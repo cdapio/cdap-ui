@@ -206,6 +206,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
 
   const onCancelParsingConfig = () => {
     setShowConfigModal(false);
+    setParsingConfigErrorMessage(null);
     setSelectedEntity(null);
   };
 
