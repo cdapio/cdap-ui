@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import { IWidgetProps } from 'components/AbstractWidget';
@@ -60,6 +60,7 @@ function MultiSelectBase({
   const delimiter = objectQuery(widgetProps, 'delimiter') || ',';
 
   let options = objectQuery(widgetProps, 'options') || [];
+
   // Convert 'option' to IOption if it is string
   options = options.map((opt) => {
     return typeof opt === 'string' ? { id: opt, label: opt } : opt;
@@ -71,13 +72,28 @@ function MultiSelectBase({
   const initSelection = value.toString().split(delimiter);
   const [selections, setSelections] = useState<string[]>(initSelection);
 
+  // Get the width of the select box for different window size
+  const ref = useRef(null);
+  const [selectWidth, setSelectWidth] = useState(500);
+
   //  onChangeHandler takes array, turns it into string w/delimiter, and calls onChange on the string
   const onChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const values = event.target.value as any; // it's expecting a string but multiple select returns an array
     const selectionsString = values.filter((val) => val).join(delimiter);
     setSelections(values);
+    setSelectWidth(ref.current.offsetWidth);
     onChange(selectionsString);
   };
+
+  useEffect(() => {
+    function handleResize() {
+      setSelectWidth(ref.current.offsetWidth);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const selection = value.toString().split(delimiter);
@@ -98,13 +114,17 @@ function MultiSelectBase({
         .join(', ');
       return selectionText;
     }
-    const selectionID = selections.find((el) => el !== '');
-    const firstSelection = options.find((op) => op.id === selectionID);
-    const selectionLabel = firstSelection ? firstSelection.label : '';
-
+    let selectionLabel = '';
     let additionalSelectionCount = '';
-    if (selections.length > 1) {
-      additionalSelectionCount = `+${selections.length - 1}`;
+    for (let i = 0; i < selections.length; i++) {
+      // 10 is some magic number that I think will be able to render all options
+      if (selectionLabel.length * 10 < selectWidth) {
+        // can show more
+        selectionLabel += selections[i] + ', ';
+      } else {
+        additionalSelectionCount = `+${selections.length - i}`;
+        break;
+      }
     }
     return `${selectionLabel} ${additionalSelectionCount}`;
   }
@@ -129,6 +149,7 @@ function MultiSelectBase({
         },
       }}
       classes={classes}
+      ref={ref}
     >
       {options.map((opt) => (
         <MenuItem value={opt.id} key={opt.id} data-cy={`multioption-${opt.label}`}>
