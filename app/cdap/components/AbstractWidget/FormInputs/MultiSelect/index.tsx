@@ -20,6 +20,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { IWidgetProps } from 'components/AbstractWidget';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
+import Chip from '@material-ui/core/Chip';
 import Select from '@material-ui/core/Select';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
@@ -41,6 +43,9 @@ const styles = (theme) => {
   return {
     root: {
       margin: theme.Spacing(2),
+    },
+    chip: {
+      margin: 1,
     },
   };
 };
@@ -74,7 +79,7 @@ function MultiSelectBase({
 
   // Get the width of the select box for different window size
   const ref = useRef(null);
-  const [selectWidth, setSelectWidth] = useState(500);
+  const [selectWidth, setSelectWidth] = useState(600);
 
   //  onChangeHandler takes array, turns it into string w/delimiter, and calls onChange on the string
   const onChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -106,27 +111,40 @@ function MultiSelectBase({
     }
 
     if (!showSelectionCount) {
-      const selectionText = selections
-        .map((sel) => {
-          const element = options.find((op) => op.id === sel);
-          return element ? element.label : '';
-        })
-        .join(', ');
-      return selectionText;
+      return (
+        <Box>
+          {selections.map((item) => (
+            <Chip className={classes.chip} variant="outlined" key={item} label={item} />
+          ))}
+        </Box>
+      );
     }
-    let selectionLabel = '';
+    const shownSelections = [];
     let additionalSelectionCount = '';
     for (let i = 0; i < selections.length; i++) {
-      // 10 is some magic number that I think will be able to render all options
-      if (selectionLabel.length * 10 < selectWidth) {
+      // 50 is some magic number that I think will be able to render all options
+      if (shownSelections.length * 100 < selectWidth) {
         // can show more
-        selectionLabel += selections[i] + ', ';
+        shownSelections.push(selections[i]);
       } else {
-        additionalSelectionCount = `+${selections.length - i}`;
+        additionalSelectionCount = `...${selections.length - i} more`;
         break;
       }
     }
-    return `${selectionLabel} ${additionalSelectionCount}`;
+    return (
+      <Box>
+        {shownSelections.map((value) => (
+          <Chip className={classes.chip} variant="outlined" key={value} label={value} />
+        ))}
+        {additionalSelectionCount != '' && (
+          <Chip
+            className={classes.chip}
+            key={additionalSelectionCount}
+            label={additionalSelectionCount}
+          />
+        )}
+      </Box>
+    );
   }
   const selectionsSet = new Set(selections);
   return (
