@@ -40,10 +40,11 @@ const styles = (theme) => {
       margin: theme.Spacing(2),
     },
     chip: {
-      margin: 1,
+      margin: 2,
+      backgroundColor: 'white',
     },
     hyperlink: {
-      margin: 1,
+      margin: 2,
       color: '#0000EE',
     },
   };
@@ -131,7 +132,7 @@ function MultiSelectBase({
     let additionalSelectionCount = '';
     let additionalSelectionText = '';
     for (let i = 0; i < selections.length; i++) {
-      // 50 is some magic number that I think will be able to render all options
+      // 100 is some magic number that I think will be able to render all options
       if (shownSelections.length * 100 < selectWidth) {
         // can show more
         shownSelections.push(selections[i]);
