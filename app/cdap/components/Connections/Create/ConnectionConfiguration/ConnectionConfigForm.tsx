@@ -16,11 +16,14 @@
 
 import * as React from 'react';
 import ConfigurationGroup from 'components/shared/ConfigurationGroup';
-import { Button } from '@material-ui/core';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
-import LoadingSVG from 'components/shared/LoadingSVG';
 import Alert from '@material-ui/lab/Alert';
+import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
+import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
+import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
+
+const PrimaryOutlinedLoadingButton = ButtonLoadingHoc(PrimaryOutlinedButton);
 
 const useStyle = makeStyle((theme) => {
   return {
@@ -109,8 +112,6 @@ export function ConnectionConfigForm({
         errors={testResults.configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
-        {testResults.inProgress && <LoadingSVG height="1rem" />}
-
         {testResults.succeeded && (
           <Alert severity="success" className={classes.alert} data-cy="connection-test-success">
             Successfully connected.
@@ -130,16 +131,15 @@ export function ConnectionConfigForm({
           ))}
       </div>
       <div className={classes.formStyles}>
-        <Button
-          variant="outlined"
-          color="primary"
+        <PrimaryOutlinedLoadingButton
+          loading={testResults.inProgress}
           onClick={() => onConnectionTest({ properties: values })}
           disabled={testResults.inProgress}
           data-cy="connection-test-button"
         >
           Test Connection
-        </Button>
-        <Button
+        </PrimaryOutlinedLoadingButton>
+        <PrimaryContainedButton
           variant="contained"
           color="primary"
           onClick={() =>
@@ -152,7 +152,7 @@ export function ConnectionConfigForm({
           data-cy="connection-submit-button"
         >
           {isEdit ? 'Save' : 'Create'}
-        </Button>
+        </PrimaryContainedButton>
       </div>
     </div>
   );
