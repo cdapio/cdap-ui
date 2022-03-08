@@ -19,6 +19,7 @@ import PrimaryContainedButton from './PrimaryContainedButton';
 import PrimaryTextButton from './PrimaryTextButton';
 import PrimaryOutlinedButton from './PrimaryOutlinedButton';
 import ButtonLoadingIcon from './ButtonLoadingIcon';
+import ButtonLoadingHoc from './ButtonLoadingHoc';
 
 export default {
   title: 'MuiButtons',
@@ -67,15 +68,12 @@ PrimaryOutlined.argTypes = {
   onClick: { action: 'click' },
 };
 
+const PrimaryContainedLoadingButton = ButtonLoadingHoc(PrimaryContainedButton);
+
 export const LoadingButton = ({ label, loading, disabled, onClick, ...args }) => (
-  <PrimaryContainedButton
-    onClick={onClick}
-    startIcon={loading && <ButtonLoadingIcon />}
-    disabled={disabled || loading}
-    {...args}
-  >
+  <PrimaryContainedLoadingButton onClick={onClick} loading={loading} disabled={disabled} {...args}>
     {label}
-  </PrimaryContainedButton>
+  </PrimaryContainedLoadingButton>
 );
 LoadingButton.args = {
   disabled: false,
