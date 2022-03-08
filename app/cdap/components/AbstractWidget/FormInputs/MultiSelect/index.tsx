@@ -16,13 +16,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-import Checkbox from '@material-ui/core/Checkbox';
 import { IWidgetProps } from 'components/AbstractWidget';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Box from '@material-ui/core/Box';
-import Chip from '@material-ui/core/Chip';
-import Select from '@material-ui/core/Select';
+import { Tooltip, Checkbox, ListItemText, MenuItem, Box, Chip, Select } from '@material-ui/core';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
@@ -47,8 +42,21 @@ const styles = (theme) => {
     chip: {
       margin: 1,
     },
+    hyperlink: {
+      margin: 1,
+      color: '#0000EE',
+    },
   };
 };
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+  },
+}))(Tooltip);
 
 interface IMultiSelectProps
   extends IWidgetProps<IMultiSelectWidgetProps>,
@@ -121,6 +129,7 @@ function MultiSelectBase({
     }
     const shownSelections = [];
     let additionalSelectionCount = '';
+    let additionalSelectionText = '';
     for (let i = 0; i < selections.length; i++) {
       // 50 is some magic number that I think will be able to render all options
       if (shownSelections.length * 100 < selectWidth) {
@@ -128,6 +137,7 @@ function MultiSelectBase({
         shownSelections.push(selections[i]);
       } else {
         additionalSelectionCount = `...${selections.length - i} more`;
+        additionalSelectionText = selections.slice(i, selections.length).join(', ');
         break;
       }
     }
@@ -137,11 +147,9 @@ function MultiSelectBase({
           <Chip className={classes.chip} variant="outlined" key={value} label={value} />
         ))}
         {additionalSelectionCount != '' && (
-          <Chip
-            className={classes.chip}
-            key={additionalSelectionCount}
-            label={additionalSelectionCount}
-          />
+          <LightTooltip title={additionalSelectionText} placement="right-start">
+            <u className={classes.hyperlink}>{additionalSelectionCount}</u>
+          </LightTooltip>
         )}
       </Box>
     );
