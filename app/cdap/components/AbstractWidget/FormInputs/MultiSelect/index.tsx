@@ -46,17 +46,14 @@ const styles = (theme) => {
       margin: 2,
       color: '#0000EE',
     },
+    tooltip: {
+      backgroundColor: theme.palette.common.white,
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+    },
   };
 };
-
-const LightTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
-    boxShadow: theme.shadows[1],
-    fontSize: 11,
-  },
-}))(Tooltip);
 
 interface IMultiSelectProps
   extends IWidgetProps<IMultiSelectWidgetProps>,
@@ -147,9 +144,13 @@ function MultiSelectBase({
           <Chip className={classes.chip} variant="outlined" key={item} label={item} />
         ))}
         {additionalSelectionCount !== '' && (
-          <LightTooltip title={additionalSelectionText} placement="right-start">
+          <Tooltip
+            classes={{ tooltip: classes.tooltip }}
+            title={additionalSelectionText}
+            placement="right-start"
+          >
             <a className={classes.hyperlink}>{additionalSelectionCount}</a>
-          </LightTooltip>
+          </Tooltip>
         )}
       </Box>
     );
