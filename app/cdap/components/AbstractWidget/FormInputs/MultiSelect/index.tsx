@@ -15,7 +15,6 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-
 import { IWidgetProps } from 'components/AbstractWidget';
 import { Tooltip, Checkbox, ListItemText, MenuItem, Box, Chip, Select } from '@material-ui/core';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
@@ -144,12 +143,12 @@ function MultiSelectBase({
     }
     return (
       <Box>
-        {shownSelections.map((value) => (
-          <Chip className={classes.chip} variant="outlined" key={value} label={value} />
+        {shownSelections.map((item) => (
+          <Chip className={classes.chip} variant="outlined" key={item} label={item} />
         ))}
-        {additionalSelectionCount != '' && (
+        {additionalSelectionCount !== '' && (
           <LightTooltip title={additionalSelectionText} placement="right-start">
-            <u className={classes.hyperlink}>{additionalSelectionCount}</u>
+            <a className={classes.hyperlink}>{additionalSelectionCount}</a>
           </LightTooltip>
         )}
       </Box>
