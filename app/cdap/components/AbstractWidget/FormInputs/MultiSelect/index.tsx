@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { IWidgetProps } from 'components/AbstractWidget';
 import { Tooltip, Checkbox, ListItemText, MenuItem, Box, Chip, Select } from '@material-ui/core';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
@@ -38,14 +39,7 @@ const styles = (theme) => {
     root: {
       margin: theme.Spacing(2),
     },
-    chip: {
-      margin: 2,
-      backgroundColor: 'white',
-    },
-    hyperlink: {
-      margin: 2,
-      color: '#0000EE',
-    },
+    // unable to use styled component for Tooltip
     tooltip: {
       backgroundColor: theme.palette.common.white,
       color: 'rgba(0, 0, 0, 0.87)',
@@ -54,6 +48,15 @@ const styles = (theme) => {
     },
   };
 };
+
+const StyledChip = styled(Chip)`
+  margin: 3px;
+  background-color: white;
+`;
+
+const Hyperlink = styled.a`
+  margin: 3px;
+`;
 
 interface IMultiSelectProps
   extends IWidgetProps<IMultiSelectWidgetProps>,
@@ -119,7 +122,7 @@ function MultiSelectBase({
       return (
         <Box>
           {selections.map((item) => (
-            <Chip className={classes.chip} variant="outlined" key={item} label={item} />
+            <StyledChip variant="outlined" key={item} label={item} />
           ))}
         </Box>
       );
@@ -141,7 +144,7 @@ function MultiSelectBase({
     return (
       <Box>
         {shownSelections.map((item) => (
-          <Chip className={classes.chip} variant="outlined" key={item} label={item} />
+          <StyledChip variant="outlined" key={item} label={item} />
         ))}
         {additionalSelectionCount !== '' && (
           <Tooltip
@@ -149,7 +152,7 @@ function MultiSelectBase({
             title={additionalSelectionText}
             placement="right-start"
           >
-            <a className={classes.hyperlink}>{additionalSelectionCount}</a>
+            <Hyperlink>{additionalSelectionCount}</Hyperlink>
           </Tooltip>
         )}
       </Box>
