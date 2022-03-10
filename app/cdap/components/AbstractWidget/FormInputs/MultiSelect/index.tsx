@@ -14,13 +14,10 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
-
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { IWidgetProps } from 'components/AbstractWidget';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import { Tooltip, Checkbox, ListItemText, MenuItem, Box, Chip, Select } from '@material-ui/core';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
@@ -42,8 +39,24 @@ const styles = (theme) => {
     root: {
       margin: theme.Spacing(2),
     },
+    // unable to use styled component for Tooltip
+    tooltip: {
+      backgroundColor: theme.palette.common.white,
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 11,
+    },
   };
 };
+
+const StyledChip = styled(Chip)`
+  margin: 3px;
+  background-color: white;
+`;
+
+const Hyperlink = styled.a`
+  margin: 3px;
+`;
 
 interface IMultiSelectProps
   extends IWidgetProps<IMultiSelectWidgetProps>,
@@ -60,6 +73,7 @@ function MultiSelectBase({
   const delimiter = objectQuery(widgetProps, 'delimiter') || ',';
 
   let options = objectQuery(widgetProps, 'options') || [];
+
   // Convert 'option' to IOption if it is string
   options = options.map((opt) => {
     return typeof opt === 'string' ? { id: opt, label: opt } : opt;
@@ -71,13 +85,28 @@ function MultiSelectBase({
   const initSelection = value.toString().split(delimiter);
   const [selections, setSelections] = useState<string[]>(initSelection);
 
+  // Get the width of the select box for different window size
+  const ref = useRef(null);
+  const [selectWidth, setSelectWidth] = useState(600);
+
   //  onChangeHandler takes array, turns it into string w/delimiter, and calls onChange on the string
   const onChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const values = event.target.value as any; // it's expecting a string but multiple select returns an array
     const selectionsString = values.filter((val) => val).join(delimiter);
     setSelections(values);
+    setSelectWidth(ref.current.offsetWidth);
     onChange(selectionsString);
   };
+
+  useEffect(() => {
+    function handleResize() {
+      setSelectWidth(ref.current.offsetWidth);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const selection = value.toString().split(delimiter);
@@ -90,23 +119,44 @@ function MultiSelectBase({
     }
 
     if (!showSelectionCount) {
-      const selectionText = selections
-        .map((sel) => {
-          const element = options.find((op) => op.id === sel);
-          return element ? element.label : '';
-        })
-        .join(', ');
-      return selectionText;
+      return (
+        <Box>
+          {selections.map((item) => (
+            <StyledChip variant="outlined" key={item} label={item} />
+          ))}
+        </Box>
+      );
     }
-    const selectionID = selections.find((el) => el !== '');
-    const firstSelection = options.find((op) => op.id === selectionID);
-    const selectionLabel = firstSelection ? firstSelection.label : '';
-
+    const shownSelections = [];
     let additionalSelectionCount = '';
-    if (selections.length > 1) {
-      additionalSelectionCount = `+${selections.length - 1}`;
+    let additionalSelectionText = '';
+    for (let i = 0; i < selections.length; i++) {
+      // 100 is some magic number that I think will be able to render all options
+      if (shownSelections.length * 100 < selectWidth) {
+        // can show more
+        shownSelections.push(selections[i]);
+      } else {
+        additionalSelectionCount = `...${selections.length - i} more`;
+        additionalSelectionText = selections.slice(i, selections.length).join(', ');
+        break;
+      }
     }
-    return `${selectionLabel} ${additionalSelectionCount}`;
+    return (
+      <Box>
+        {shownSelections.map((item) => (
+          <StyledChip variant="outlined" key={item} label={item} />
+        ))}
+        {additionalSelectionCount !== '' && (
+          <Tooltip
+            classes={{ tooltip: classes.tooltip }}
+            title={additionalSelectionText}
+            placement="right-start"
+          >
+            <Hyperlink>{additionalSelectionCount}</Hyperlink>
+          </Tooltip>
+        )}
+      </Box>
+    );
   }
   const selectionsSet = new Set(selections);
   return (
@@ -129,6 +179,7 @@ function MultiSelectBase({
         },
       }}
       classes={classes}
+      ref={ref}
     >
       {options.map((opt) => (
         <MenuItem value={opt.id} key={opt.id} data-cy={`multioption-${opt.label}`}>
