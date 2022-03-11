@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import { Button, Checkbox, Grid, Radio, RadioGroup } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 
 export const Backdrop = styled.div`
   position: absolute;
@@ -78,10 +79,6 @@ export const RadioContainer = styled.div`
   padding-left: 10px;
   margin-top: 15px;
   margin-bottom: 5px;
-`;
-
-export const ButtonWithMarginRight = styled(Button)`
-  margin-right: 25px;
 `;
 
 export const StyledRadioGroup = styled(RadioGroup)`
@@ -285,4 +282,8 @@ export const Circle = styled.div`
 
 export const NumSpan = styled.span`
   text-align: right;
+`;
+
+export const CancelButton = styled(PrimaryOutlinedButton)`
+  margin-right: 40px;
 `;

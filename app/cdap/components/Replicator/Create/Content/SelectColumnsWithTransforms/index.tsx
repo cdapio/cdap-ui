@@ -20,13 +20,17 @@ import { Map } from 'immutable';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import CachedIcon from '@material-ui/icons/Cached';
-import ClearIcon from '@material-ui/icons/Clear';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyReplicatorApi } from 'api/replicator';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { IColumnImmutable, ITableInfo, ISelectedList } from 'components/Replicator/types';
+import {
+  IColumnImmutable,
+  ITableInfo,
+  ISelectedList,
+  IColumnTransformation,
+} from 'components/Replicator/types';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import { ISelectColumnsProps, ReplicateSelect } from './types';
@@ -44,8 +48,12 @@ import {
   RadioContainer,
   StyledRadioGroup,
   RefreshContainer,
+  CancelButton,
 } from './styles';
-import { IconButton } from '@material-ui/core';
+import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
+import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
+
+const LoadingButton = ButtonLoadingHoc(Button);
 
 const I18N_PREFIX = 'features.Replication.Create.Content.SelectColumns';
 
@@ -141,6 +149,15 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
     }
   }, [state.columns]);
 
+  useEffect(() => {
+    if (props.transformations[props.tableInfo.table]) {
+      dispatch({
+        type: 'setInitialTransformations',
+        payload: props.transformations[props.tableInfo.table].columnTransformations,
+      });
+    }
+  }, []);
+
   const handleSearch = (search) => {
     dispatch({ type: 'setSearch', payload: search });
   };
@@ -177,7 +194,12 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
   }, [debouncedSearch, state.filterErrs]);
 
   const handleSave = () => {
-    props.onSave(props.tableInfo, returnSelectedList());
+    props.saveTransformationsAndColumns(
+      props.tableInfo,
+      { tableName: props.tableInfo.table, columnTransformations: state.transformations },
+      returnSelectedList()
+    );
+
     props.toggle();
   };
 
@@ -248,6 +270,12 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
     ) {
       return true;
     }
+    // disable saving table if assessment hasn't been run or if there are any errors
+    // table assessment with be an empty object if there are no errors for this table
+    const tableAssessment = props.tableAssessments;
+    if (!tableAssessment || (tableAssessment && Object.keys(tableAssessment).length !== 0)) {
+      return true;
+    }
 
     return state.loading;
   };
@@ -272,19 +300,10 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
           label={`${props.tableInfo.table} - Mappings, assessments and transformations`}
         />
         <ActionButtons>
-          {/* 
-            Will need to add this back for the 6.6 version https://cdap.atlassian.net/browse/CDAP-18593
-          <ButtonWithMarginRight variant="text" color="primary" onClick={props.toggle}>
-            Cancel
-          </ButtonWithMarginRight> */}
-          <IconButton
-            // variant="contained"
-            // color="primary"
-            onClick={handleSave}
-            // disabled={isSaveDisabled()}
-          >
-            <ClearIcon />
-          </IconButton>
+          <CancelButton onClick={props.toggle}>Cancel</CancelButton>
+          <PrimaryContainedButton onClick={handleSave} disabled={isSaveDisabled()}>
+            Save
+          </PrimaryContainedButton>
         </ActionButtons>
       </Header>
       <Root>
@@ -308,13 +327,20 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
               </StyledRadioGroup>
             </RadioContainer>
             <RefreshContainer>
-              <Button
+              <LoadingButton
+                loading={props.assessmentLoading}
                 variant="outlined"
                 color="primary"
-                onClick={() => props.handleAssessTable(props.tableInfo, returnSelectedList())}
+                onClick={() =>
+                  props.handleAssessTable(
+                    props.tableInfo,
+                    state.transformations,
+                    returnSelectedList()
+                  )
+                }
               >
                 <CachedIcon /> REFRESH
-              </Button>
+              </LoadingButton>
             </RefreshContainer>
           </Box>
         )}
@@ -326,14 +352,17 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
               toggleSelected,
               I18N_PREFIX,
               handleSearch,
-              addColumnsToTransforms: props.addColumnsToTransforms,
-              deleteColumnsFromTransforms: props.deleteColumnsFromTransforms,
-              transforms: props.transformations[props.tableInfo.table],
+              addColumnsToTransforms: (opts: IColumnTransformation) =>
+                dispatch({ type: 'setColumnTransformation', payload: opts }),
+              deleteColumnsFromTransforms: (colTransIndex: number) =>
+                dispatch({ type: 'removeColumnTransformation', payload: colTransIndex }),
+              transforms: state.transformations,
               tableInfo: props.tableInfo,
               tableAssessments: props.tableAssessments,
               handleFilterErrors,
               filterErrs: state.filterErrs,
               selectedList: returnSelectedList,
+              tinkEnabled: props.tinkEnabled,
             })}
       </Root>
     </Backdrop>
