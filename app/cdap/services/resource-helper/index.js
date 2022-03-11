@@ -23,6 +23,7 @@ import { objectQuery } from 'services/helpers';
 const cookie = new Cookies();
 
 function createApi(dataSrc, method, type, path, options = {}) {
+  // add api version to options to change it to v1
   return (params = {}, body, headers) => {
     let url = buildUrl(path, params);
 

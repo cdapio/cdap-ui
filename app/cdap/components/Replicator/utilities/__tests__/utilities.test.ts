@@ -18,6 +18,7 @@ import {
   generateTableKey,
   constructTablesSelection,
   convertConfigToState,
+  parseErrorMessageForTransformations,
 } from 'components/Replicator/utilities';
 import { DML } from 'components/Replicator/types';
 import { List, Map, Set } from 'immutable';
@@ -126,6 +127,16 @@ describe('Replication Utilities', () => {
       expect(result[0].columns[0].name).toBe('col-table1-1');
       expect(result[0].columns[1].name).toBe('col-table1-2');
     });
+  });
+
+  describe('Parse transformations error message', () => {
+    const exampleError =
+      'Failed to apply transformations on the schema for the table : ORDERS and column : PRICE with error : Field name QTY already exists.';
+
+    const [table, column, errorMessage] = parseErrorMessageForTransformations(exampleError);
+    expect(table).toBe('ORDERS');
+    expect(column).toBe('PRICE');
+    expect(errorMessage).toBe('Field name QTY already exists.');
   });
 
   describe('Convert JSON Config to State', () => {

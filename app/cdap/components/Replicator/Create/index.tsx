@@ -27,6 +27,7 @@ import {
   convertConfigToState,
   generateTableKey,
   getTableInfoFromImmutable,
+  parseErrorMessageForTransformations,
 } from 'components/Replicator/utilities';
 
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
@@ -50,6 +51,9 @@ import {
 import { IWidgetJson } from 'components/shared/ConfigurationGroup/types';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import { ITransAssessmentRes } from './Content/SelectColumnsWithTransforms/types';
+import { SUPPORT } from './Content/Assessment/TablesAssessment/Mappings/Supported';
+import { MyArtifactApi } from 'api/artifact';
 
 export const CreateContext = React.createContext({});
 export const LEFT_PANEL_WIDTH = 275;
@@ -106,6 +110,8 @@ export interface ICreateState {
   isInvalidSource: boolean;
   loading: boolean;
   activeStep: number;
+  assessmentLoading: boolean;
+  tinkEnabled: boolean;
   setActiveStep: (step: number) => void;
   setNameDescription: (name: string, description?: string) => void;
   setSourcePluginInfo: (sourcePluginInfo: IPluginInfo) => void;
@@ -121,22 +127,23 @@ export interface ICreateState {
     checkTransformations?: boolean
   ) => void;
   setAdvanced: (numInstances) => void;
+  checkIfTinkEnabled: () => void;
   getReplicatorConfig: () => any;
   saveDraft: () => Observable<any>;
   setColumns: (columns, callback) => void;
   isStateFilled: (stateKeys: string[]) => boolean;
   transformations: { [tableName: string]: ITransformation };
-  addColumnsToTransforms: (
-    opts: IColumnTransformation,
+
+  saveTransformationsAndColumns: (
     table: ITableInfo,
-    columns: ISelectedList
+    transformations?: ITransformation,
+    columns?: ISelectedList
   ) => void;
-  deleteColumnsFromTransforms: (
-    tableName: ITableInfo,
-    colTransIndex: number,
-    columns: ISelectedList
+  handleAssessTable: (
+    table: ITableInfo,
+    trasnformations: IColumnTransformation[],
+    columns?: ISelectedList
   ) => void;
-  handleAssessTable: (table: ITableInfo, columns?: ISelectedList) => void;
   tableAssessments: {
     [tableName: string]: {
       [colName: string]: ITableAssessmentColumn;
@@ -217,58 +224,38 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     }
   };
 
-  public setTable = (table, cb) => {
-    const key = generateTableKey(table);
-
-    if (this.state.tables.get(key)) {
-      cb();
-      return;
-    }
-
-    this.setState(
-      {
-        tables: this.state.tables.set(key, Map(table)),
-      },
-      () => {
-        cb();
-      }
-    );
-  };
-
-  public deleteColumnsFromTransforms = (
+  public saveTransformationsAndColumns = (
     table: ITableInfo,
-    colTransIndex: number,
-    columns: ISelectedList
+    transformations?: ITransformation,
+    columns?: ISelectedList
   ) => {
-    if (colTransIndex === 0) {
-      const transf = this.state.transformations;
-      delete transf[table.table];
-      this.setState(
-        {
-          transformations: {
-            ...this.state.transformations,
-          },
-        },
-        () => {
-          this.handleAssessTable(table, columns);
-        }
-      );
-    } else {
-      const transformationTable = this.state.transformations[table.table];
-      const newTransformations = transformationTable.columnTransformations.splice(0, colTransIndex);
-      transformationTable.columnTransformations = newTransformations;
-      this.setState(
-        {
-          transformations: {
-            ...this.state.transformations,
-            [table.table]: transformationTable,
-          },
-        },
-        () => {
-          this.handleAssessTable(table, columns);
-        }
-      );
+    const tableKey = generateTableKey(table);
+    const setValues: {
+      tables: ITablesStore;
+      transformations?: { [tableName: string]: ITransformation };
+      columns?: IColumnsStore;
+    } = {
+      tables: this.state.tables,
+    };
+
+    if (!this.state.tables.get(tableKey)) {
+      setValues.tables.set(tableKey, Map(table));
     }
+
+    if (transformations) {
+      const stateTransformations = { ...this.state.transformations };
+      stateTransformations[table.table] = transformations;
+      setValues.transformations = stateTransformations;
+    }
+    const prevColumns = this.state.columns;
+    let newColumns = prevColumns.set(tableKey, columns);
+    if (!columns || columns.size === 0) {
+      newColumns = newColumns.delete(tableKey);
+    }
+
+    setValues.columns = newColumns;
+
+    this.setState(setValues);
   };
 
   public handleError = (err: object | string | null) => {
@@ -277,96 +264,145 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     });
   };
 
-  public handleAssessTable = (table: ITableInfo, columns?: ISelectedList) => {
-    const draftId = this.state.draftId;
-    const assessTable = () => {
-      const params = {
-        namespace: getCurrentNamespace(),
-        draftId,
-      };
-
-      // const body: ITableInfo = {
-      //   database: this.state.sourceConfig.database,
-      //   table: table.,
-      // };
-
-      MyReplicatorApi.assessTable(params, table).subscribe(
-        (res) => {
-          const assessments = {};
-          res.columns.forEach((col) => {
-            assessments[col.sourceName] = col;
-          });
-
-          this.setState({
-            tableAssessments: {
-              [table.table]: assessments,
-            },
-          });
-        },
-        (err) => {
-          this.handleError({
-            error: err,
-          });
-          // commented until assessTable route is built
-          // if (columnAltered) {
-          //   this.setState({
-          //     tableAssessments: {
-          //       [tableName]: {
-          //         [columnAltered]: {
-          //           support: SUPPORT.no,
-          //           suggestion: err.response,
-          //           sourceName: columnAltered,
-          //         },
-          //       },
-          //     },
-          //   });
-          // }
-        }
-      );
-    };
-    this.handleColumns(table, columns, () => {
-      this.saveDraft().subscribe(assessTable);
-    });
-  };
-
-  public addColumnsToTransforms = (
-    opts: IColumnTransformation,
+  public handleAssessTable = (
     table: ITableInfo,
-    columns: ISelectedList
+    transformations: IColumnTransformation[],
+    columns?: ISelectedList
   ) => {
-    const { columnName, directive } = opts;
-    const transformationTable = this.state.transformations[table.table];
-    this.setTable(table, () => {
-      if (!transformationTable) {
-        this.setState(
-          {
-            transformations: {
-              ...this.state.transformations,
-              [table.table]: {
-                tableName: table.table,
-                columnTransformations: [opts],
-              },
-            },
-          },
-          () => {
-            this.handleAssessTable(table, columns);
+    this.setState(
+      {
+        assessmentLoading: true,
+      },
+      () => {
+        const params = {
+          namespace: getCurrentNamespace(),
+        };
+        // create replicator config for request
+        // this is a temporary representation of the replication state
+        // we don't want to add to replication state until this assessment
+        // comes back without errors
+        const replicatorConfig = this.getReplicatorConfig();
+        const existingTable = replicatorConfig.tables.find((tbl) => {
+          return tbl.table === table.table;
+        });
+        // add columns
+        const columnArr = [];
+        if (columns && columns.size > 0) {
+          columns.forEach((column) => {
+            const columnObj: any = {
+              name: column.get('name'),
+              type: column.get('type'),
+            };
+
+            if (column.get('suppressWarning')) {
+              columnObj.suppressWarning = true;
+            }
+
+            columnArr.push(columnObj);
+          });
+        }
+
+        if (existingTable) {
+          existingTable.columns = columnArr;
+        } else {
+          replicatorConfig.tables.push({ ...table, columns: columnArr });
+        }
+
+        if (transformations) {
+          // add transformations
+          let removeIndex;
+          const existingTrans = replicatorConfig.tableTransformations.find(
+            (tr: ITransformation, i) => {
+              if (tr.tableName === table.table) {
+                removeIndex = i;
+                return true;
+              }
+            }
+          );
+
+          if (existingTrans) {
+            replicatorConfig.tableTransformations.splice(removeIndex, 1);
           }
-        );
-      } else {
-        transformationTable.columnTransformations.push(opts);
-        this.setState(
-          {
-            transformations: {
-              ...this.state.transformations,
-              [table.table]: transformationTable,
-            },
+
+          replicatorConfig.tableTransformations.push({
+            tableName: table.table,
+            columnTransformations: transformations,
+          });
+        }
+
+        MyReplicatorApi.validatePipeline(params, replicatorConfig).subscribe(
+          (res: ITransAssessmentRes) => {
+            let allErrors = '';
+            const tableAssessments = { [table.table]: {} };
+            if (res.features.length) {
+              for (const feature of res.features) {
+                if (feature.severity === 'ERROR') {
+                  const descSplit = feature.description.split(' ');
+                  const err = `${feature.name} - ${feature.description} - ${feature.suggestion}`;
+                  if (descSplit[0] === 'Table') {
+                    // tableName follows Table with quotes like 'ORDERS'
+                    const tableName = descSplit[1].split("'")[1];
+                    tableAssessments[tableName] = {
+                      FEATURE_ERROR_FROM_ASSESSMENT: {
+                        err,
+                        // hide from column filtering
+                        support: SUPPORT.yes,
+                      },
+                    };
+                  }
+
+                  if (allErrors === '') {
+                    allErrors += err;
+                  } else {
+                    allErrors += '\n';
+                    allErrors += err;
+                  }
+                }
+              }
+
+              this.handleError({ error: { response: allErrors } });
+            }
+
+            if (res.transformationIssues.length) {
+              res.transformationIssues.forEach((issue) => {
+                const assessments = {};
+                const [resTable, column, errorMessage] = parseErrorMessageForTransformations(
+                  issue.description
+                );
+
+                assessments[column] = {
+                  support: SUPPORT.no,
+                  suggestion: errorMessage,
+                  sourceName: column,
+                };
+
+                tableAssessments[resTable] = {
+                  ...tableAssessments[resTable],
+                  ...assessments,
+                };
+              });
+            }
+
+            this.setState({
+              tableAssessments,
+              assessmentLoading: false,
+            });
           },
-          () => {
-            this.handleAssessTable(table, columns);
+          (err) => {
+            this.setState(
+              {
+                assessmentLoading: false,
+              },
+              () => {
+                this.handleError({
+                  error: err,
+                });
+              }
+            );
           }
         );
       }
-    });
+    );
   };
 
   public setAdvanced = (numInstances) => {
@@ -378,24 +414,6 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     this.setState({ columns }, () => {
       callback();
     });
-  };
-
-  public handleColumns = (tableInfo: ITableInfo, columns: IColumnsList, cb: () => void) => {
-    const tableKey = generateTableKey(tableInfo);
-    let newColumns = this.state.columns.set(tableKey, columns);
-
-    if (!columns || columns.size === 0) {
-      newColumns = newColumns.delete(tableKey);
-    }
-
-    this.setState(
-      {
-        columns: newColumns,
-      },
-      () => {
-        cb();
-      }
-    );
   };
 
   private saveDraft = () => {
@@ -472,6 +490,52 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     return true;
   };
 
+  /**
+   * If the tink plugin is in the list of artifacts,
+   * enable the tink option for transformations
+   */
+  private checkIfTinkEnabled = () => {
+    const namespace = getCurrentNamespace();
+    MyArtifactApi.fetchArtifactVersion({
+      namespace,
+      artifactName: 'delta-app',
+      scope: 'system',
+    }).subscribe((res) => {
+      let version;
+      if (res.length) {
+        version = res.sort((a, b) => {
+          // check the newest version of delta app
+          if (a.version > b.version) {
+            return -1;
+          } else {
+            return 1;
+          }
+        })[0].version;
+      } else {
+        return;
+      }
+
+      const systemParams = {
+        namespace,
+        artifactId: 'delta-app',
+        version,
+        scope: 'system',
+        extensionType: 'transform',
+      };
+
+      MyArtifactApi.fetchPluginTypes(systemParams).subscribe((types: Array<{ name: string }>) => {
+        for (const plugin of types) {
+          if (plugin.name === 'tink') {
+            this.setState({
+              tinkEnabled: true,
+            });
+            break;
+          }
+        }
+      });
+    });
+  };
+
   public state = {
     name: '',
     description: '',
@@ -486,6 +550,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     dmlBlacklist: Map() as IDMLStore,
     offsetBasePath: window.CDAP_CONFIG.delta.defaultCheckpointDir || '',
     numInstances: null,
+    assessmentLoading: false,
 
     parentArtifact: null,
     draftId: null,
@@ -494,6 +559,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     transformations: {},
 
     activeStep: 0,
+    tinkEnabled: false,
 
     setActiveStep: this.setActiveStep,
     setNameDescription: this.setNameDescription,
@@ -504,14 +570,12 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     setTargetPluginWidget: this.setTargetPluginWidget,
     setTargetConfig: this.setTargetConfig,
     setTables: this.setTables,
-    setTable: this.setTable,
     setAdvanced: this.setAdvanced,
     getReplicatorConfig: this.getReplicatorConfig,
     saveDraft: this.saveDraft,
     setColumns: this.setColumns,
     isStateFilled: this.isStateFilled,
-    addColumnsToTransforms: this.addColumnsToTransforms,
-    deleteColumnsFromTransforms: this.deleteColumnsFromTransforms,
+    saveTransformationsAndColumns: this.saveTransformationsAndColumns,
     tableAssessments: {},
     handleAssessTable: this.handleAssessTable,
     error: null,
@@ -538,6 +602,8 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
 
       this.initDraft(draftId);
     });
+
+    this.checkIfTinkEnabled();
   }
 
   private initCreate = () => {
