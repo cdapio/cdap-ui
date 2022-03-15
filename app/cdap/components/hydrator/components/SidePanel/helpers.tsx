@@ -19,7 +19,8 @@ import { myRemoveCamelCase } from 'services/filters/removeCamelCase';
 import { myMultiKeySearch } from 'services/filters/multiKeySearch';
 
 export const generatePluginMapKey = (plugin) => {
-  let { name, type, artifact } = plugin;
+  let { name, type } = plugin;
+  const { artifact } = plugin;
 
   if (plugin.pluginTemplate) {
     name = plugin.pluginName;
@@ -43,7 +44,7 @@ export const generateLabel = (plugin, pluginsMap) => {
   return displayName;
 };
 
-export const filterPlugins = function(searchTerm: string, unfilteredPlugins: any) {
+export const filterPlugins = (searchTerm: string, unfilteredPlugins: any) => {
   if (searchTerm === '' || undefined) {
     return unfilteredPlugins;
   }
