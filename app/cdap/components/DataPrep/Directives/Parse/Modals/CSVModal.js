@@ -21,6 +21,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import MouseTrap from 'mousetrap';
+import WarningIcon from '@material-ui/icons/Warning';
 
 const PREFIX = 'features.DataPrep.Directives.Parse';
 
@@ -152,6 +153,10 @@ export default class CSVModal extends Component {
                   'fa-check-square': this.state.firstRowHeader,
                 })}
               />
+              <span className="deprecated-warning">
+                <WarningIcon size="small" />
+                {T.translate(`${PREFIX}.Parsers.CSV.deprecatedWarning`)}
+              </span>
               <span>{T.translate(`${PREFIX}.Parsers.CSV.firstRowHeader`)}</span>
             </span>
           </div>

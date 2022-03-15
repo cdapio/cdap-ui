@@ -53,6 +53,10 @@ $option-hover-active-bg-color: #dddddd;
       span:first-child {
         margin-right: 5px;
       }
+      .deprecated-warning {
+        font-weight: bold;
+        margin-right: 5px;
+      }
     }
 
     .list-options > div,
