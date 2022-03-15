@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,9 +19,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CollapsibleSidebar from 'components/shared/CollapsibleSidebar';
 import classnames from 'classnames';
-import PipelineListTab from 'components/PipelineTriggers/PipelineListTab';
-import EnabledTriggersTab from 'components/PipelineTriggers/EnabledTriggersTab';
-import { fetchTriggersAndApps } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
+import PipelineListTab from 'components/PipelineTriggers/PipelineListTab/index.tsx';
+import EnabledTriggersTab from 'components/PipelineTriggers/EnabledTriggersTab/index.tsx';
+import { fetchTriggersAndApps } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator.ts';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
 import PipelineTriggersStore from 'components/PipelineTriggers/store/PipelineTriggersStore';
 import NamespaceStore from 'services/NamespaceStore';
@@ -81,6 +81,7 @@ export default class PipelineTriggers extends Component {
       payload: {
         pipelineName: this.props.pipelineName,
         workflowName: GLOBALS.programId[this.props.pipelineType],
+        pipelineAndTriggersEnabled: this.props.usePipelineAndTriggers,
       },
     });
 
@@ -104,15 +105,15 @@ export default class PipelineTriggers extends Component {
     });
   }
 
-  setTab(tab) {
+  setTab = (tab) => {
     this.setState({ activeTab: tab });
-  }
+  };
 
   renderTabContent() {
     if (this.state.activeTab === 0) {
-      return <EnabledTriggersTab />;
+      return <EnabledTriggersTab setTab={this.setTab} />;
     } else if (this.state.activeTab === 1) {
-      return <PipelineListTab />;
+      return <PipelineListTab setTab={this.setTab} />;
     }
   }
 
@@ -129,25 +130,27 @@ export default class PipelineTriggers extends Component {
       >
         <Provider store={PipelineTriggersStore}>
           <div className="pipeline-triggers-content">
-            <div className="tab-headers">
-              <div
-                className={classnames('tab', { active: this.state.activeTab === 0 })}
-                onClick={this.setTab.bind(this, 0)}
-                data-cy="enabled-triggers-tab"
-              >
-                {T.translate(`${PREFIX}.EnabledTriggers.tabLabel`, {
-                  count: this.state.enabledTriggersCount,
-                })}
-              </div>
+            {this.props.usePipelineAndTriggers ? null : (
+              <div className="tab-headers">
+                <div
+                  className={classnames('tab', { active: this.state.activeTab === 0 })}
+                  onClick={() => this.setTab(0)}
+                  data-cy="enabled-triggers-tab"
+                >
+                  {T.translate(`${PREFIX}.EnabledTriggers.tabLabel`, {
+                    count: this.state.enabledTriggersCount,
+                  })}
+                </div>
 
-              <div
-                className={classnames('tab', { active: this.state.activeTab === 1 })}
-                onClick={this.setTab.bind(this, 1)}
-                data-cy="set-triggers-tab"
-              >
-                {T.translate(`${PREFIX}.SetTriggers.tabLabel`)}
+                <div
+                  className={classnames('tab', { active: this.state.activeTab === 1 })}
+                  onClick={() => this.setTab(1)}
+                  data-cy="set-triggers-tab"
+                >
+                  {T.translate(`${PREFIX}.SetTriggers.tabLabel`)}
+                </div>
               </div>
-            </div>
+            )}
 
             {this.renderTabContent()}
           </div>
@@ -158,6 +161,7 @@ export default class PipelineTriggers extends Component {
 }
 
 PipelineTriggers.propTypes = {
+  usePipelineAndTriggers: PropTypes.bool.isRequired,
   pipelineName: PropTypes.string.isRequired,
   namespace: PropTypes.string.isRequired,
   pipelineType: PropTypes.string.isRequired,

@@ -91,7 +91,7 @@ const ListOrIconsButton = styled(Button)`
 
 interface ISidePanelProps {
   itemGenericName: string;
-  groups: Array<any>;
+  groups: any[];
   groupGenericName: string;
   onPanelItemClick: (event: any, plugin: any) => void;
 }

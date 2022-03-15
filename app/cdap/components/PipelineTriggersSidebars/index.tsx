@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,14 +14,32 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-
 import React from 'react';
 import PipelineTriggers from 'components/PipelineTriggers';
 import TriggeredPipelines from 'components/TriggeredPipelines';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 import { Theme } from 'services/ThemeHelper';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
-export default function PipelineTriggersSidebars({ pipelineName, namespace, pipelineType }) {
+interface IPipelineTriggersSidebarsProps {
+  pipelineName: string;
+  namespace: string;
+  pipelineType: string;
+}
+
+export default function PipelineTriggersSidebars(props) {
+  return (
+    <FeatureProvider>
+      <PipelineTriggersWithFeatures {...props} />
+    </FeatureProvider>
+  );
+}
+
+function PipelineTriggersWithFeatures({
+  pipelineName,
+  namespace,
+  pipelineType,
+}: IPipelineTriggersSidebarsProps) {
   if (Theme.showTriggers === false) {
     return null;
   }
@@ -29,17 +47,16 @@ export default function PipelineTriggersSidebars({ pipelineName, namespace, pipe
   return (
     <div className="pipeline-triggers-sidebar-container">
       <PipelineTriggers
-        pipelineName={pipelineName}
-        namespace={namespace}
-        pipelineType={pipelineType}
+        {...{
+          usePipelineAndTriggers: useFeatureFlagDefaultFalse(
+            'pipeline.triggers.conditional.and.enabled'
+          ),
+          pipelineName,
+          namespace,
+          pipelineType,
+        }}
       />
       <TriggeredPipelines pipelineName={pipelineName} />
     </div>
   );
 }
-
-PipelineTriggersSidebars.propTypes = {
-  pipelineName: PropTypes.string,
-  namespace: PropTypes.string,
-  pipelineType: PropTypes.string,
-};

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,15 +16,51 @@
 
 import { combineReducers, createStore } from 'redux';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
+import {
+  IPipelineInfo,
+  IProgramStatusTrigger,
+  ISchedule,
+  ITriggersGroupRunArgs,
+} from 'components/PipelineTriggers/store/ScheduleTypes';
+import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 
-const defaultAction = {
-  action: '',
+interface IPayLoad {
+  pipelineName?: string;
+  workflowName?: string;
+  pipelineAndTriggersEnabled?: boolean;
+  pipelineList?: IPipelineInfo[];
+  selectedNamespace?: string;
+  selectedTriggersType?: string;
+  triggersGroupToAdd?: IProgramStatusTrigger[];
+  triggersGroupRunArgsToAdd?: ITriggersGroupRunArgs;
+  enabledTriggers?: ISchedule[];
+  expandedPipeline?: string;
+  error?: any;
+  isOpen?: boolean;
+  expandedTrigger?: string;
+  pipelineInfo?: IPipelineInfo;
+}
+
+interface IAction {
+  type: string;
+  payload: IPayLoad;
+}
+
+const defaultAction: IAction = {
+  type: '',
   payload: {},
 };
 
 const defaultInitialState = {
   pipelineList: [],
+  triggersGroupToAdd: [],
   selectedNamespace: '',
+  selectedTriggersType: PipelineTriggersTypes.orType,
+  triggersGroupRunArgsToAdd: {
+    arguments: [],
+    pluginProperties: [],
+    propertiesConfig: [],
+  },
   enabledTriggers: [],
   pipelineName: '',
   pipelineType: '',
@@ -32,6 +68,7 @@ const defaultInitialState = {
   expandedTrigger: null,
   configureError: null,
   payloadModalIsOpen: false,
+  pipelineAndTriggersEnabled: false,
 };
 
 const defaultInitialEnabledTriggersState = {
@@ -45,50 +82,94 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
 
   switch (action.type) {
     case PipelineTriggersActions.setPipeline:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         pipelineName: action.payload.pipelineName,
         workflowName: action.payload.workflowName,
-      });
+        pipelineAndTriggersEnabled: action.payload.pipelineAndTriggersEnabled,
+      };
       break;
     case PipelineTriggersActions.changeNamespace:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         pipelineList: action.payload.pipelineList,
         selectedNamespace: action.payload.selectedNamespace,
         expandedPipeline: null,
         configureError: null,
-      });
+      };
+      break;
+    case PipelineTriggersActions.setTriggerType:
+      stateCopy = {
+        ...state,
+        selectedTriggersType: action.payload.selectedTriggersType,
+        configureError: null,
+      };
+      break;
+    case PipelineTriggersActions.setTriggersGroup:
+      stateCopy = {
+        ...state,
+        triggersGroupToAdd: action.payload.triggersGroupToAdd,
+        expandedPipeline: null,
+        configureError: null,
+      };
+      break;
+    case PipelineTriggersActions.setTriggersGroupRunArgsMapping:
+      stateCopy = {
+        ...state,
+        triggersGroupRunArgsToAdd: action.payload.triggersGroupRunArgsToAdd,
+        expandedPipeline: null,
+        configureError: null,
+      };
+      break;
+    case PipelineTriggersActions.resetTriggersGroup:
+      stateCopy = {
+        ...state,
+        triggersGroupToAdd: [],
+        triggersGroupRunArgsToAdd: {
+          arguments: [],
+          pluginProperties: [],
+          propertiesConfig: [],
+        },
+        expandedPipeline: null,
+        configureError: null,
+      };
       break;
     case PipelineTriggersActions.setTriggersAndPipelineList:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         pipelineList: action.payload.pipelineList,
         enabledTriggers: action.payload.enabledTriggers,
         selectedNamespace: action.payload.selectedNamespace,
         expandedPipeline: null,
         configureError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setExpandedPipeline:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         expandedPipeline: action.payload.expandedPipeline,
         configureError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setExpandedTrigger:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         expandedTrigger: action.payload.expandedTrigger,
         configureError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setConfigureTriggerError:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         configureError: action.payload.error,
-      });
+      };
       break;
     case PipelineTriggersActions.setPayloadModalState:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         payloadModalIsOpen: action.payload.isOpen,
         configureError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.reset:
       return defaultInitialState;
@@ -104,27 +185,31 @@ const enabledTriggers = (state = defaultInitialEnabledTriggersState, action = de
 
   switch (action.type) {
     case PipelineTriggersActions.setExpandedTrigger:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         loading: true,
         disableError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setTriggersAndPipelineList:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         disableError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setEnabledTriggerPipelineInfo:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         pipelineInfo: action.payload.pipelineInfo,
         loading: false,
         disableError: null,
-      });
+      };
       break;
     case PipelineTriggersActions.setDisableTriggerError:
-      stateCopy = Object.assign({}, state, {
+      stateCopy = {
+        ...state,
         disableError: action.payload.error,
-      });
+      };
       break;
     case PipelineTriggersActions.reset:
       return defaultInitialState;
@@ -144,7 +229,10 @@ const PipelineTriggersStore = createStore(
     triggers: defaultInitialState,
     enabledTriggers: defaultInitialEnabledTriggersState,
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    window &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default PipelineTriggersStore;

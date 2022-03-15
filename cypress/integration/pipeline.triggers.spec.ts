@@ -69,11 +69,14 @@ describe('Pipeline Studio', () => {
         cy.get(dataCy('set-triggers-tab')).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).should('exist');
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).click();
-        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).get(dataCy('enable-trigger-btn')).click();
+        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).should('exist');
+        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-enable-trigger-btn`)).click();
         cy.get(dataCy('enabled-triggers-tab')).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).should('exist');
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).get(dataCy('disable-trigger-btn')).click();
+        cy.get(dataCy('Delete')).should('exist');
+        cy.get(dataCy('Delete')).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).should('not.exist');
         cy.get(dataCy('inbound-triggers-toggle')).click();
     });
@@ -83,14 +86,15 @@ describe('Pipeline Studio', () => {
         cy.get(dataCy('set-triggers-tab')).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).should('exist');
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).click();
-        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).get(dataCy('trigger-config-btn')).click();
+        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).should('exist');
+        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-trigger-config-btn`)).click();
         cy.get(`${dataCy(`row-0`)} ${dataCy('runtime-arg-of-trigger')} select`).select('source_path');
         cy.get(`${dataCy(`row-0`)} ${dataCy('runtime-arg-of-triggered')} select`).select('source_path');
         cy.get(`${dataCy(`row-1`)} ${dataCy('runtime-arg-of-trigger')} select`).select('sink_path');
         cy.get(`${dataCy(`row-1`)} ${dataCy('runtime-arg-of-triggered')} select`).select('sink_path');
         cy.get(dataCy('configure-and-enable-trigger-btn')).click();
         cy.get(dataCy('enabled-triggers-tab')).click();
-        cy.get(dataCy('view-payload-btn')).click();
+        cy.get(dataCy(`${TRIGGER_PIPELINE_1}-view-payload-btn`)).click();
         cy.get(`${dataCy(`row-0`)} ${dataCy('runtime-arg-of-trigger')} select`).should('be.disabled');
         cy.get(`${dataCy(`row-0`)} ${dataCy('runtime-arg-of-triggered')} select`).should('be.disabled');
         cy.get(`${dataCy(`row-1`)} ${dataCy('runtime-arg-of-trigger')} select`).should('be.disabled');
@@ -99,7 +103,7 @@ describe('Pipeline Studio', () => {
         cy.get(`${dataCy(`row-0`)} ${dataCy('runtime-arg-of-triggered')} select`).should('have.value','source_path');
         cy.get(`${dataCy(`row-1`)} ${dataCy('runtime-arg-of-trigger')} select`).should('have.value','sink_path');
         cy.get(`${dataCy(`row-1`)} ${dataCy('runtime-arg-of-triggered')} select`).should('have.value','sink_path');
-    })
+    });
 
     it('Should have outbound trigger available in pipeline1', () => {
         cy.visit(`/pipelines/ns/default/view/${TRIGGER_PIPELINE_1}`);

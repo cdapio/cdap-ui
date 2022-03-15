@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,10 @@
  * the License.
  */
 
-.existing-triggers-tab {
-  padding: 15px;
+const PipelineTriggersTypes = {
+  programStatus: 'PROGRAM_STATUS',
+  andType: 'AND',
+  orType: 'OR',
+};
 
-  .pipeline-name {
-    width: calc(100% - 25px - 100px);
-  }
-
-  .namespace {
-    width: 100px;
-  }
-
-  .error {
-    margin-bottom: 10px;
-  }
-}
+export default PipelineTriggersTypes;
