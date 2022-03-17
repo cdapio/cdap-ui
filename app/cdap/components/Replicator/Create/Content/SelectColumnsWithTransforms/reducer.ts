@@ -67,6 +67,22 @@ export const reducer = (state: ISelectColumnsState, action) => {
         ...state,
         filterErrs: action.payload,
       };
+    case 'setColumnTransformation':
+      return {
+        ...state,
+        transformations: [...state.transformations, action.payload],
+      };
+    case 'removeColumnTransformation':
+      const newTransforms = state.transformations.splice(0, action.payload);
+      return {
+        ...state,
+        transformations: newTransforms,
+      };
+    case 'setInitialTransformations':
+      return {
+        ...state,
+        transformations: action.payload,
+      };
     default:
       return state;
   }
@@ -83,4 +99,5 @@ export const initialState = {
   error: null,
   search: '',
   columnsWithErrors: '',
+  transformations: [],
 };

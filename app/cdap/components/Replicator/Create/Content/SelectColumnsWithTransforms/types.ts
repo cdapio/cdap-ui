@@ -32,19 +32,20 @@ export interface ISelectColumnsProps {
   toggle: () => void;
   saveDraft: () => Observable<any>;
   draftId: string;
-  addColumnsToTransforms: (
-    opts: IColumnTransformation,
-    table: ITableInfo,
-    columns: ISelectedList
-  ) => void;
-  deleteColumnsFromTransforms: (
-    table: ITableInfo,
-    colTransIndex: number,
-    columns: ISelectedList
-  ) => void;
-  transformations: ITransformation;
+  transformations: { [tableName: string]: ITransformation };
   tableAssessments: undefined | { [colName: string]: ITableAssessmentColumn };
-  handleAssessTable: (table: ITableInfo, columns: IColumnsList) => void;
+  handleAssessTable: (
+    table: ITableInfo,
+    transformations: IColumnTransformation[],
+    columns: IColumnsList
+  ) => void;
+  saveTransformationsAndColumns: (
+    table: ITableInfo,
+    transformations?: ITransformation,
+    columns?: ISelectedList
+  ) => void;
+  assessmentLoading: boolean;
+  tinkEnabled: boolean;
 }
 
 interface IColumn {
@@ -68,27 +69,38 @@ export interface ISelectColumnsState {
   error: any;
   filterErrs: string[];
   search: string;
+  transformations: IColumnTransformation[];
 }
 
 export interface ITransformAddProps {
   row: IColumn;
-  tableInfo: ITableInfo;
-  columns: () => ISelectedList;
-  addColumnsToTransforms: (
-    opts: IColumnTransformation,
-    table: ITableInfo,
-    columns: ISelectedList
-  ) => void;
+  addColumnsToTransforms: (opts: IColumnTransformation) => void;
+  tinkEnabled: boolean;
 }
 
 export interface ITransformDeleteProps {
   row: IColumn;
-  tableInfo: ITableInfo;
-  transforms: ITransformation;
-  columns: () => ISelectedList;
-  deleteColumnsFromTransforms: (
-    table: ITableInfo,
-    colTransIndex: number,
-    columns: ISelectedList
-  ) => void;
+  transforms: IColumnTransformation[];
+  deleteColumnsFromTransforms: (colTransIndex: number) => void;
+}
+
+export interface ITransAssessmentResDesc {
+  name: string;
+  description: string;
+  suggestion: string;
+  impact: string;
+  severity: 'ERROR' | string;
+}
+
+export interface ITransAssessmentRes {
+  connectivity: any[];
+  features: ITransAssessmentResDesc[];
+  tables: Array<{
+    numColumnsNotSupported: number;
+    numColumnsPartiallySupported: number;
+    database: string;
+    table: string;
+    numColumns: number;
+  }>;
+  transformationIssues: ITransAssessmentResDesc[];
 }

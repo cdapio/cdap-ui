@@ -507,7 +507,11 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
         initialSelected={this.getInitialSelected()}
         toggle={this.openTable.bind(this, null)}
         onSave={this.onColumnsSelection}
+        assessmentLoading={this.props.assessmentLoading}
+        transformations={this.props.transformations}
+        saveTransformationsAndColumns={this.props.saveTransformationsAndColumns}
         assessTable={this.props.handleAssessTable}
+        isTinkEnabled={this.props.tinkEnabled}
       />
     );
   };

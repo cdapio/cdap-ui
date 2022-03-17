@@ -48,12 +48,28 @@ import TransformAddButton from './TransformAdd';
 import {
   ISelectedList,
   ITableInfo,
-  ITransformation,
   IColumnTransformation,
+  ITableAssessmentColumn,
 } from 'components/Replicator/types';
 
 import TransformDelete from './TransformDelete';
 import { SUPPORT } from '../Assessment/TablesAssessment/Mappings/Supported';
+
+// uses the last created rename directive on that column to show the target column name
+const useLastRenameOrRowName = (columnName: string, transforms: IColumnTransformation[]) => {
+  const renameDir = transforms
+    .slice()
+    .reverse()
+    .find((tr) => {
+      return tr.directive.startsWith('rename') && tr.columnName === columnName;
+    });
+
+  if (renameDir) {
+    return renameDir.directive.split(' ')[2];
+  }
+
+  return columnName;
+};
 
 export const renderTable = ({
   state,
@@ -69,37 +85,34 @@ export const renderTable = ({
   handleFilterErrors,
   filterErrs,
   selectedList,
+  tinkEnabled,
 }: {
   state: ISelectColumnsState;
-  addColumnsToTransforms: (
-    opts: IColumnTransformation,
-    table: ITableInfo,
-    columns: ISelectedList
-  ) => void;
-  deleteColumnsFromTransforms: (
-    table: ITableInfo,
-    colTransIndex: number,
-    columns: ISelectedList
-  ) => void;
+  addColumnsToTransforms: (opts: IColumnTransformation) => void;
+  deleteColumnsFromTransforms: (colTransIndex: number) => void;
   handleSearch: (search: any) => void;
   toggleSelectAll: () => void;
   toggleSelected: (row: any) => void;
-  transforms: ITransformation;
+  transforms: IColumnTransformation[];
   I18N_PREFIX: string;
   tableInfo: ITableInfo;
-  tableAssessments: undefined | { [colName: string]: any };
+  tableAssessments: { [colName: string]: ITableAssessmentColumn };
   handleFilterErrors: (errs: string[]) => void;
   filterErrs: string[];
   selectedList: () => ISelectedList;
+  tinkEnabled: boolean;
 }) => {
   const hasTableAssessments = !!tableAssessments;
+  // empty table assessments object means there were no errors
+  const allAssessmentsPassed = hasTableAssessments && Object.keys(tableAssessments).length === 0;
   const errNames = [];
   let errs;
 
   if (hasTableAssessments) {
     errs = Object.values(tableAssessments).filter((a) => {
       if (a.support !== SUPPORT.yes) {
-        errNames.push(a.sourceName);
+        // toLowerCase because search/filtering is lower cased
+        errNames.push(a.sourceName.toLowerCase());
         return true;
       }
     });
@@ -227,6 +240,11 @@ export const renderTable = ({
             assessmentForCol = tableAssessments[row.name];
           }
 
+          if (allAssessmentsPassed) {
+            // show all green checks if all the assessments pass
+            assessmentForCol = { support: SUPPORT.yes };
+          }
+
           return (
             <GridBorderBottom key={row.name} container direction="row">
               <GridCellContainer item xs={1} container direction="row">
@@ -258,7 +276,9 @@ export const renderTable = ({
                   <span></span>
                 </Grid>
                 <GridCell item xs={4}>
-                  <NoPaddingSpanLeft>{row.name}</NoPaddingSpanLeft>
+                  <NoPaddingSpanLeft>
+                    {useLastRenameOrRowName(row.name, transforms)}
+                  </NoPaddingSpanLeft>
                 </GridCell>
               </GridCellContainer>
               <GridCellContainer item xs={2} container direction="row">
@@ -294,18 +314,16 @@ export const renderTable = ({
                 <GridCell item xs={4}>
                   <TransformAddButton
                     row={row}
+                    tinkEnabled={tinkEnabled}
                     addColumnsToTransforms={addColumnsToTransforms}
-                    tableInfo={tableInfo}
                     columns={selectedList}
                   />
                 </GridCell>
                 <GridCell item xs={6}>
                   <TransformDelete
                     row={row}
-                    tableInfo={tableInfo}
                     transforms={transforms}
                     deleteColumnsFromTransforms={deleteColumnsFromTransforms}
-                    columns={selectedList}
                   />
                 </GridCell>
               </GridCellContainer>

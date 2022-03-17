@@ -26,13 +26,16 @@ import { addTinkToTransforms, addRenameToTransforms, addMaskToTransforms } from 
 export default function TransformAddButton({
   row,
   addColumnsToTransforms,
-  tableInfo,
-  columns,
+  tinkEnabled,
 }: ITransformAddProps) {
+  // todo replace this with a useReducer
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
   const [directive, setDirective] = useState(null);
   const [directiveText, setDirectiveText] = useState('');
+  const [maskAnchorEl, setMaskAnchorEl] = useState(null);
+  const maskOpen = !!maskAnchorEl;
+
   const open = !!anchorEl;
   const subMenuOpen = !!subMenuAnchorEl;
 
@@ -49,11 +52,28 @@ export default function TransformAddButton({
     setAnchorEl(null);
     setDirective(null);
     setSubMenuAnchorEl(null);
+    setMaskAnchorEl(null);
     setDirectiveText('');
+  };
+
+  const handleSetMaskLast = (numChars: number) => {
+    const newDirective = addMaskToTransforms({
+      columnName: row.name,
+      directive: `right * ${numChars}`,
+    });
+    addColumnsToTransforms({
+      columnName: row.name,
+      directive: newDirective,
+    });
+    handleClose();
   };
 
   const handleDirectiveChange = (event) => {
     setDirectiveText(event.target.value);
+  };
+
+  const handleMaskOpen = (event) => {
+    setMaskAnchorEl(event.currentTarget);
   };
 
   const handleAddToTransforms = () => {
@@ -63,7 +83,7 @@ export default function TransformAddButton({
       directive: directiveText,
     };
 
-    if (directive === 'TINK') {
+    if (directive === 'tink') {
       fullDirective = addTinkToTransforms(transformInfo);
     } else if (directive === 'Rename') {
       fullDirective = addRenameToTransforms(transformInfo);
@@ -71,14 +91,10 @@ export default function TransformAddButton({
       fullDirective = addMaskToTransforms(transformInfo);
     }
 
-    addColumnsToTransforms(
-      {
-        columnName: row.name,
-        directive: fullDirective,
-      },
-      tableInfo,
-      columns()
-    );
+    addColumnsToTransforms({
+      columnName: row.name,
+      directive: fullDirective,
+    });
     handleClose();
   };
 
@@ -119,12 +135,36 @@ export default function TransformAddButton({
         <MenuItem onClick={handleMenuClick}>
           Rename <ArrowRight />
         </MenuItem>
-        <MenuItem onClick={handleMenuClick}>
+        <MenuItem onClick={handleMaskOpen}>
           Mask <ArrowRight />
         </MenuItem>
-        <MenuItem onClick={handleMenuClick}>
-          TINK <ArrowRight />
-        </MenuItem>
+        <Menu
+          getContentAnchorEl={null}
+          id={`transform-menu-${row.name}-mask`}
+          anchorEl={maskAnchorEl}
+          open={maskOpen}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          onClose={handleClose}
+          style={{ paddingTop: 0, paddingBottom: 0 }}
+          MenuListProps={{
+            'aria-labelledby': `transform-menu-${row.name}-button-mask-menu`,
+            dense: true,
+          }}
+        >
+          <MenuItem onClick={() => handleSetMaskLast(2)}>Show last 2</MenuItem>
+          <MenuItem onClick={() => handleSetMaskLast(4)}>Show last 4</MenuItem>
+          <MenuItem onClick={handleMenuClick}>
+            Custom <ArrowRight />
+          </MenuItem>
+          {tinkEnabled && (
+            <MenuItem onClick={handleMenuClick}>
+              TINK <ArrowRight />
+            </MenuItem>
+          )}
+        </Menu>
       </Menu>
 
       <Popover
@@ -147,7 +187,7 @@ export default function TransformAddButton({
           <TextField
             size="small"
             id={`${row.name}-outlined-multiline-flexible-directive-text`}
-            label={directive}
+            label={directive === 'Custom' ? 'Mask (ie: right * 4)' : directive}
             variant="outlined"
             value={directiveText}
             onChange={handleDirectiveChange}

@@ -435,3 +435,20 @@ export function identifyReplicatorEntityFromMetadata(metadata: {
 }): boolean {
   return metadata.type === 'Worker' && metadata.program === 'DeltaWorker';
 }
+
+/**
+ * Returns Table, column and error message from table assessment for transformations
+ * Message always comes in this format:
+ * Failed to apply transformations on the schema for the table : ORDERS and column : PRICE with error : Field name QTY already exists.
+ * so we just need to split the string on colons etc.
+ * @param string description of the error
+ * @returns [table, column, error message]
+ */
+export function parseErrorMessageForTransformations(message: string) {
+  const [_, tablePiece, columnPiece, messagePiece] = message.split(' : ');
+  const table = tablePiece.split(' ')[0];
+  const column = columnPiece.split(' ')[0];
+  const errorMessage = messagePiece;
+
+  return [table, column, errorMessage];
+}
