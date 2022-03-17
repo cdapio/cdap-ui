@@ -53,7 +53,7 @@
 
           <!-- ICON VIEW -->
           <div ng-if="MySidePanel.view === 'icon'"
-               ng-repeat="plugin in group.filtered = (group.plugins | myMultiKeySearch: ['name', 'label']: MySidePanel.searchText | orderBy: 'pluginTemplate || name') track by $index"
+               ng-repeat="plugin in group.filtered = (MySidePanel.getFilteredPluginsFromGroup(group) | orderBy: 'pluginTemplate || name') track by $index"
                class="plugin-item {{plugin.nodeClass}}"
                ng-class="{'hovered': plugin.hovering}"
                my-popover
@@ -88,7 +88,7 @@
 
           <!-- LIST VIEW -->
           <div ng-if="MySidePanel.view === 'list'"
-               ng-repeat="plugin in group.filtered = (group.plugins | myMultiKeySearch: ['name', 'label']: MySidePanel.searchText | orderBy: 'pluginTemplate || name') track by $index"
+               ng-repeat="plugin in group.filtered = (MySidePanel.getFilteredPluginsFromGroup(group) | orderBy: 'pluginTemplate || name') track by $index"
                class="plugin-item {{plugin.nodeClass}}"
                ng-click="MySidePanel.onItemClicked($event, plugin)"
                data-cy="plugin-{{plugin.name}}-{{plugin.type}}">
@@ -99,7 +99,7 @@
                   data-template="plugin.template"
                   content-data="plugin"
                   data-popover-context="MySidePanel"
-            >{{ (plugin.name || plugin.pluginTemplate) | myRemoveCamelcase}}</span>
+            >{{ MySidePanel.generateLabel(plugin) }}</span>
             <span class="plugin-badge">T</span>
           </div>
         </div>
