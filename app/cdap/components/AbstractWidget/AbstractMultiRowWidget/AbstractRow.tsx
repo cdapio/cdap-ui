@@ -19,7 +19,6 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import If from 'components/shared/If';
 import { KEY_CODE } from 'services/global-constants';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import classnames from 'classnames';
@@ -51,6 +50,7 @@ export interface IAbstractRowProps<S extends typeof AbstractRowStyles> extends W
   index: number;
   autofocus: boolean;
   disabled: boolean;
+  addRowDisabled?: boolean;
   onChange: (id: string, value: string) => void;
   addRow: () => void;
   removeRow: () => void;
@@ -113,24 +113,28 @@ export default class AbstractRow<
         >
           {this.renderInput()}
 
-          <If condition={!this.props.disabled}>
+          {!this.props.disabled && (
             <React.Fragment>
-              <IconButton onClick={this.props.addRow} data-cy="add-row">
+              <IconButton
+                disabled={this.props.addRowDisabled}
+                onClick={this.props.addRow}
+                data-cy="add-row"
+              >
                 <AddIcon fontSize="small" />
               </IconButton>
-              <If condition={!this.props.deleteDisabled}>
+              {!this.props.deleteDisabled && (
                 <IconButton color="secondary" onClick={this.props.removeRow} data-cy="remove-row">
                   <DeleteIcon fontSize="small" />
                 </IconButton>
-              </If>
+              )}
             </React.Fragment>
-          </If>
+          )}
         </div>
-        <If condition={errorMsg}>
+        {errorMsg && (
           <div className={this.props.classes.errorText} data-cy={`error-text-${index}`}>
             {errorMsg}
           </div>
-        </If>
+        )}
       </React.Fragment>
     );
   }
