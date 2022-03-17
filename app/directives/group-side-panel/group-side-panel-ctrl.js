@@ -97,6 +97,27 @@ angular.module(PKG.name + '.commons')
       return myHelpers.objectQuery(this.pluginsMap, key, 'widgets', 'icon', 'arguments', 'url');
     };
 
+    this.getFilteredPluginsFromGroup = (group) => {
+      const trimmedSearchText = this.searchText ? this.searchText.trim().toLowerCase() : null;
+
+      const containsTerm = (field, term) => {
+        if (!field) {
+          return false;
+        }
+        return field.toLowerCase().indexOf(term) > -1;
+      }
+
+      if (!trimmedSearchText || !trimmedSearchText.length) {
+        return group.plugins;
+      }
+
+      return group.plugins.filter(plugin => {
+        return containsTerm(plugin.name, trimmedSearchText) ||
+          containsTerm(plugin.label, trimmedSearchText) ||
+          containsTerm(this.generateLabel(plugin), trimmedSearchText);
+      });
+    }
+
     let sub = AvailablePluginsStore.subscribe(() => {
       this.pluginsMap = AvailablePluginsStore.getState().plugins.pluginsMap;
     });
