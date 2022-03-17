@@ -31,6 +31,7 @@ import { objectQuery } from 'services/helpers';
 interface IKeyValueDropdownWidgetProps extends IMultiRowWidgetProps {
   'key-placeholder'?: string;
   'kv-delimiter'?: string;
+  'kv-pair-limit'?: number;
   dropdownOptions: IDropdownOption[];
   delimiter?: string;
   showDelimiter?: boolean;
@@ -43,6 +44,8 @@ class KeyValueDropdownWidgetView extends AbstractMultiRowWidget<IKeyValueDropdow
     const keyPlaceholder = objectQuery(this.props, 'widgetProps', 'key-placeholder');
     const kvDelimiter = objectQuery(this.props, 'widgetProps', 'kv-delimiter');
     const dropdownOptions = objectQuery(this.props, 'widgetProps', 'dropdownOptions');
+    const rowLimit = objectQuery(this.props, 'widgetProps', 'kv-pair-limit');
+    const addRowDisabled = !!rowLimit && Object.keys(this.values).length >= rowLimit;
 
     return (
       <KeyValueDropdownRow
@@ -55,6 +58,7 @@ class KeyValueDropdownWidgetView extends AbstractMultiRowWidget<IKeyValueDropdow
         removeRow={this.removeRow.bind(this, index)}
         autofocus={this.state.autofocus === id}
         changeFocus={this.changeFocus}
+        addRowDisabled={addRowDisabled}
         disabled={this.props.disabled}
         keyPlaceholder={keyPlaceholder}
         kvDelimiter={kvDelimiter}

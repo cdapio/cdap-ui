@@ -22,7 +22,6 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 import AbstractWidget from 'components/AbstractWidget';
 import DescriptionTooltip from 'components/shared/ConfigurationGroup/PropertyRow/DescriptionTooltip';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
-import If from 'components/shared/If';
 import PropTypes from 'prop-types';
 import ThemeWrapper from 'components/ThemeWrapper';
 import classnames from 'classnames';
@@ -144,14 +143,12 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
       onBlur={onBlur}
       data-cy="widget-wrapper-container"
     >
-      <If condition={!hideWrapper && !hideLabel}>
+      {!hideWrapper && !hideLabel && (
         <div className={`widget-wrapper-label ${classes.label}`}>
           {widgetProperty.label}
-          <If condition={pluginProperty.required}>
-            <span className={classes.required}>*</span>
-          </If>
+          {pluginProperty.required && <span className={classes.required}>*</span>}
         </div>
-      </If>
+      )}
       <div className={classes.widgetContainer}>
         <AbstractWidget
           type={widgetType}
@@ -165,11 +162,11 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
           dataCy={pluginProperty.name}
         />
       </div>
-      <If condition={!hideDescription && !hideWrapper}>
+      {!hideDescription && !hideWrapper && (
         <div className={classes.tooltipContainer}>
           <DescriptionTooltip description={pluginProperty.description} />
         </div>
-      </If>
+      )}
     </div>
   );
 };
