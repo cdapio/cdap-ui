@@ -27,6 +27,7 @@ const servicePath = `${deltaAppPath}/services/assessor/methods/v1/contexts/:name
 const draftPath = `${servicePath}/drafts/:draftId`;
 const workerPath = `${appPath}/workers/DeltaWorker`;
 const artifactBasePath = `/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties`;
+const validatePipelinePath = `${servicePath}/assessPipeline`;
 
 export const MyReplicatorApi = {
   getDeltaApp: apiCreator(dataSrc, 'GET', 'REQUEST', deltaAppPath),
@@ -48,6 +49,7 @@ export const MyReplicatorApi = {
   getTableInfo: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/describeTable`),
   getReplicator: apiCreator(dataSrc, 'GET', 'REQUEST', appPath),
   assessPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessPipeline`),
+  validatePipeline: apiCreator(dataSrc, 'POST', 'REQUEST', validatePipelinePath),
   assessTable: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessTable`),
   fetchArtifactProperties: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
 

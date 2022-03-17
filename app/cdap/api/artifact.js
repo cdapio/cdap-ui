@@ -30,7 +30,7 @@ export const MyArtifactApi = {
     'REQUEST',
     `${baseArtifactPath}/extensions/microservice`
   ),
-  gettMicroservicePluginDetails: apiCreator(
+  getMicroservicePluginDetails: apiCreator(
     dataSrc,
     'GET',
     'REQUEST',
@@ -45,5 +45,17 @@ export const MyArtifactApi = {
     'GET',
     'REQUEST',
     `${baseArtifactPath}/extensions/:extensionType/plugins/:pluginName`
+  ),
+  fetchPluginTypes: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${baseArtifactPath}/extensions/:extensionType?scope=:scope`
+  ),
+  fetchArtifactVersion: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    '/namespaces/:namespace/artifacts/:artifactName?scope=:scope'
   ),
 };

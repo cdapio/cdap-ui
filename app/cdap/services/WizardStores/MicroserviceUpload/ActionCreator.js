@@ -133,7 +133,7 @@ const getMicroservicePluginProperties = (pluginId) => {
     scope
   };
 
-  return MyArtifactApi.gettMicroservicePluginDetails(pluginParams);
+  return MyArtifactApi.getMicroservicePluginDetails(pluginParams);
 };
 
 const getTrimmedMicroserviceQueueObj = (queueObj) => {

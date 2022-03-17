@@ -26,11 +26,8 @@ export default function TransformMenuButton({
   row,
   deleteColumnsFromTransforms,
   transforms,
-  tableInfo,
-  columns,
 }: ITransformDeleteProps) {
-  const cols = (transforms && transforms.columnTransformations) ?? [];
-  const transformsInColumn = cols.filter(({ columnName }) => {
+  const transformsInColumn = transforms.filter(({ columnName }) => {
     return columnName === row.name;
   });
 
@@ -43,7 +40,7 @@ export default function TransformMenuButton({
   };
 
   const handleDeleteClick = (index) => {
-    deleteColumnsFromTransforms(tableInfo, index, columns());
+    deleteColumnsFromTransforms(index);
     handleClose();
   };
 
@@ -101,12 +98,12 @@ export default function TransformMenuButton({
           </Grid>
         </Grid>
 
-        {cols.map((col, i) => {
-          const name = col.columnName;
-          const dir = col.directive;
+        {transforms.map((tr, i) => {
+          const name = tr.columnName;
+          const dir = tr.directive;
           const thisCol = name === row.name;
           return (
-            <Grid container direction="row">
+            <Grid container direction="row" key={`${name}-${dir}-row`}>
               <MenuItem
                 style={{
                   minWidth: '400px',
