@@ -75,7 +75,7 @@ export function ConnectionConfigForm({
             pluginProperty={{
               name: 'name',
               macroSupported: false,
-              required: false,
+              required: true,
             }}
             value={name}
             onChange={(v) => setName(v.name)}
