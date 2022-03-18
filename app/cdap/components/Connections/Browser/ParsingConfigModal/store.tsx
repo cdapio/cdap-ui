@@ -41,23 +41,9 @@ export const INITIAL_STATE = {
   loadingSubscription: null,
 };
 
-// Copied from PluginListWidget/index
-// TODO Centralize server-defined types
-interface IPlugin {
-  name: string;
-  type: string;
-  description: string;
-  className: string;
-  artifact: {
-    name: string;
-    version: string;
-    scope: string;
-  };
-}
-
-interface IConnectionSpecification {
-  relatedPlugins: IPlugin[];
-}
+const SOURCE_PLUGIN_NAME_PROPERTY = '_pluginName';
+// Source parsing applies only to batch sources for now
+const SOURCE_PLUGIN_TYPE = 'batchsource';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -110,8 +96,8 @@ interface IPlugin {
   };
 }
 
-interface IConnectionSpecification {
-  relatedPlugins: IPlugin[];
+interface IConnectionDetails {
+  plugin: IPlugin;
 }
 
 export const performInitialLoad = (connection, sampleProperties, entity, dispatch) => {
@@ -119,7 +105,8 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
   // Get the default property values from the entity (provided by the browse response)
   sampleProperties.forEach((sp) => {
     let value = null;
-    if (entity.properties[sp.name]) {
+    // Properties starting with `_` are for system usage and shouldn't be passed through
+    if (!sp.name.includes('_') && entity.properties[sp.name]) {
       value = entity.properties[sp.name].value;
     }
     selectedProperties[sp.name] = value;
@@ -132,32 +119,33 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
     connectionId: connection,
   };
 
-  const body = {
-    path: entity.path,
-    properties: {},
-  };
+  // The source plugin name is passed in the sample properties
+  const sourcePluginNameProperty = sampleProperties.find(
+    (sp) => sp.name === SOURCE_PLUGIN_NAME_PROPERTY
+  );
+  const sourcePluginName = sourcePluginNameProperty.description;
 
   let widgetKey;
-  // Get the connection specification in order to find the source plugin
-  const widgetObs = ConnectionsApi.getSpecification(params, body).pipe(
-    switchMap((spec: IConnectionSpecification) => {
-      const sourcePlugin = spec.relatedPlugins.find((plugin) => plugin.type === 'batchsource');
-      widgetKey = `widgets.${sourcePlugin.name}-${sourcePlugin.type}`;
-      const { artifact } = sourcePlugin;
+  // Get the connection details in order to find the arttifact version
+  // Assume the source plugin is in the same artifact as the connector
+  const widgetObs = ConnectionsApi.getConnection(params).pipe(
+    switchMap((connectionDetails: IConnectionDetails) => {
+      const connectorArtifact = connectionDetails.plugin.artifact;
+      widgetKey = `widgets.${sourcePluginName}-${SOURCE_PLUGIN_TYPE}`;
       const widgetJsonParams = {
         namespace,
-        artifactName: artifact.name,
-        artifactVersion: artifact.version,
-        scope: artifact.scope,
+        artifactName: connectorArtifact.name,
+        artifactVersion: connectorArtifact.version,
+        scope: connectorArtifact.scope,
         keys: widgetKey,
       };
       const pluginDetailsParams = {
-        namespace: getCurrentNamespace(),
-        artifactId: artifact.name,
-        version: artifact.version,
-        scope: artifact.scope,
-        extensionType: sourcePlugin.type,
-        pluginName: sourcePlugin.name,
+        namespace,
+        artifactId: connectorArtifact.name,
+        version: connectorArtifact.version,
+        scope: connectorArtifact.scope,
+        extensionType: SOURCE_PLUGIN_TYPE,
+        pluginName: sourcePluginName,
       };
 
       // Get the widget JSON (to specific the UI) and the plugin properties
