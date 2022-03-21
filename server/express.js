@@ -538,18 +538,21 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         function(err, response) {
           if (err) {
             log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
-            res.status(response.statusCode || 500).send(err);
+            res.status(response && response.statusCode || 502).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }
         }
       ).on('error', function(err) {
-        try {
-          res.status(500).send(err);
-        } catch (e) {
-          log.error('Failed sending exception to client', e);
+        // If an error hasn't already been sent, send it here
+        if (!res.headersSent) {
+          try {
+              res.status(502).send(err);
+          } catch (e) {
+            log.error('Failed sending exception to client', e);
+          }
+          log.error(err);
         }
-        log.error(err);
       });
     },
   ]);
