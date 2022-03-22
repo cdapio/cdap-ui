@@ -66,7 +66,6 @@ const ResultList: React.FC<IResultListProps> = ({ results, currentPage, pageSize
           <Title>
             <Link
               to={getMetadataPageUrl('summary', {
-                query,
                 entityType: result.entityTypeState,
                 entityId: result.name,
               })}
