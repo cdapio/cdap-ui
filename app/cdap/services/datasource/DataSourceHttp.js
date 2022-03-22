@@ -14,32 +14,18 @@
  * the License.
  */
 
-import Socket from '../socket';
 import uuidV4 from 'uuid/v4';
 import ee from 'event-emitter';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/dom/ajax';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/combineLatest';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import {map} from 'rxjs/operators';
 import WindowManager, { WINDOW_ON_BLUR, WINDOW_ON_FOCUS } from 'services/WindowManager';
 import { objectQuery } from 'services/helpers';
-import ifvisible from 'ifvisible.js';
 import SystemDelayStore from 'services/SystemDelayStore';
 import SystemDelayActions from 'services/SystemDelayStore/SystemDelayActions';
 import globalEvents from 'services/global-events';
 import Cookies from 'universal-cookie';
+import LoadingIndicatorStore, { BACKENDSTATUS} from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
 
 const cookie = new Cookies();
 
@@ -47,38 +33,37 @@ const CDAP_API_VERSION = 'v3';
 // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
 const REQUEST_ORIGIN_ROUTER = 'ROUTER';
 
+function isBackendDown(status) {
+  return status === BACKENDSTATUS.NODESERVERDOWN || status === BACKENDSTATUS.BACKENDDOWN;
+}
+
 export default class Datasource {
   constructor(genericResponseHandlers = [() => true]) {
     this.eventEmitter = ee(ee);
     this.polling = {};
     this.genericResponseHandlers = genericResponseHandlers;
 
-    /**
-     * On socket reconnect, go through the the existing bindings, and resend the requests
-     * to the websocket. The original request bindings will still be preserved.
-     */
-    this.eventEmitter.on('SOCKET_RECONNECT', () => {
-      Object.keys(this.bindings).forEach((reqId) => {
-        const req = this.bindings[reqId];
-        if (!req) {
-          return;
-        }
-
-        if (req.type === 'REQUEST') {
-          // TODO Can we do anything here?
-          // Would need retry logic
-          //this.socketSend('request', req.resource);
-        } else if (req.type === 'POLL') {
-          //this.socketSend('poll-start', req.resource);
-        }
-      });
-    });
     this.eventEmitter.on(WINDOW_ON_FOCUS, this.resumePoll.bind(this));
     this.eventEmitter.on(WINDOW_ON_BLUR, this.pausePoll.bind(this));
       SystemDelayStore.dispatch({
         type: SystemDelayActions.registerDataSource,
         payload: this,
       });
+
+    this.pausedPolling = false;
+    this.loadingIndicatorStoreSubscription = LoadingIndicatorStore.subscribe(() => {
+      const { status } = LoadingIndicatorStore.getState();
+      if (isBackendDown(status)) {
+        console.log('Pausing polling because backend appears down');
+        this.pausePoll();
+        this.pausedPolling = true;
+      } else if (this.pausedPolling) {
+        console.log('Resuming polling because backend appears up');
+        // TODO Resume polling with staggered timing?
+        this.resumePoll();
+        this.pausedPolling = false;
+      }
+    });
   }
 
   getBindingsForHealthCheck() {
@@ -91,47 +76,6 @@ export default class Datasource {
       }
     });
     return bindingsWithTime;
-  }
-
-  handleResponse(ajaxResponse) {
-    //console.log(ajaxResponse);
-    //const data = JSON.parse(resp);
-
-    // TODO We don't seem to be using genericResponseHandlers at all
-    // Does this need to be updated?
-    //genericResponseHandlers.forEach((handler) => handler(data));
-    const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
-    this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
-    if (ajaxResponse.status > 299/* || data.warning*/) {
-      /**
-       * There is an issue here. When backend goes down we stop all the poll
-       * and inspite of stopping all polling calls and unsubscribing all subscribers
-       * we still get the rx.error call which tries to set the observers length to 0
-       * and errors out. This doesn't harm us today as when system comes up we refresh
-       * the UI and everything loads.
-       *
-       * This is being wrapped in a try catch block in case the subscriber do not define
-       * an error callback. Without this, the error will bubble up as an uncaught error
-       * and terminate the socketData subscriber.
-       */
-      /*try {
-        this.bindings[hash].rx.error({
-          statusCode: data.statusCode,
-          response: data.response || data.body || data.error,
-        });
-      } catch (e) {
-        console.groupCollapsed('Error: ' + data.resource.url);
-        console.log('Resource', data.resource);
-        console.log('Error', e);
-        console.groupEnd();
-      }*/
-      throw {
-        statusCode: ajaxResponse.status,
-        response: ajaxResponse.response,
-      }
-    } else {
-      return ajaxResponse.response;
-    }
   }
 
   createResponseHandler(bindingInfo) {
@@ -373,6 +317,7 @@ export default class Datasource {
   }
 
   resumePoll = () => {
+    // TODO When resuming, should polling requests be staggered to avoid overloading the server?
     Object.keys(this.polling)
       .filter(subscriptionID => this.polling[subscriptionID].type === 'POLL')
       .forEach(subscriptionID => {
