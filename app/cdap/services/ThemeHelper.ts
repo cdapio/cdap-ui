@@ -227,7 +227,6 @@ interface IThemeObj {
   featureNames?: IFeatureNames;
   showSqlPipeline?: boolean;
   showCDC?: boolean;
-  isMetadataInReact?: boolean;
   allowForceDynamicExecution?: boolean;
   tethering?: boolean;
   onPremTetheredInstance?: boolean;
@@ -436,7 +435,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showReloadSystemArtifacts: true,
       showSqlPipeline: true,
       showCDC: false,
-      isMetadataInReact: false,
     };
     if (isNilOrEmpty(featuresJson)) {
       return features;
@@ -534,9 +532,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     }
     if ('cdc' in featuresJson && isBoolean(featuresJson.cdc)) {
       features.showCDC = featuresJson.cdc;
-    }
-    if ('metadata-in-react' in featuresJson && isBoolean(featuresJson['metadata-in-react'])) {
-      features.isMetadataInReact = featuresJson['metadata-in-react'];
     }
     if (
       'allow-force-dynamic-execution' in featuresJson &&

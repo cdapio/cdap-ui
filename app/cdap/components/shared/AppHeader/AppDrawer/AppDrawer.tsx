@@ -224,30 +224,17 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-rulesengine-link"
             />
-            {Theme.isMetadataInReact ? (
-              <DrawerFeatureLink
-                featureUrl={`/${nsurl}/metadata`}
-                featureSVGIconName="icon-metadata"
-                featureFlag={Theme.showMetadata}
-                featureName={Theme.featureNames.metadata}
-                componentDidNavigate={componentDidNavigate}
-                id="navbar-metadata"
-                data-cy="navbar-metadata-link"
-                data-testid="navbar-metadata-link"
-                isActive={location.pathname === `/cdap/${nsurl}/metadata`}
-              />
-            ) : (
-              <DrawerFeatureLink
-                featureUrl={`/metadata/${nsurl}`}
-                featureSVGIconName="icon-metadata"
-                featureFlag={Theme.showMetadata}
-                featureName={Theme.featureNames.metadata}
-                isAngular={true}
-                id="navbar-metadata"
-                data-cy="navbar-metadata-link"
-                data-testid="navbar-metadata-link"
-              />
-            )}
+            <DrawerFeatureLink
+              featureUrl={`/${nsurl}/metadata`}
+              featureSVGIconName="icon-metadata"
+              featureFlag={Theme.showMetadata}
+              featureName={Theme.featureNames.metadata}
+              componentDidNavigate={componentDidNavigate}
+              id="navbar-metadata"
+              data-cy="navbar-metadata-link"
+              data-testid="navbar-metadata-link"
+              isActive={location.pathname === `/cdap/${nsurl}/metadata`}
+            />
           </List>
           <List component="nav" dense={true} className={classes.namespaceAdminMenu}>
             <DrawerFeatureLink

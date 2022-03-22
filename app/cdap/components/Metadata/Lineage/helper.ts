@@ -238,7 +238,6 @@ function getNodeProperties(uniqueNodes: IUniqueNodes, query: string, node: INode
     link = getMetadataPageUrl('summary', {
       entityType: nodeInfo.entityType,
       entityId: nodeInfo.entityId,
-      query,
     });
   } else if (nodeInfo.nodeType === 'program') {
     displayType = nodeInfo.label;
