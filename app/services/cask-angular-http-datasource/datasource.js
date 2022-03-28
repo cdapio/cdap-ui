@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -54,11 +54,11 @@ var socketDataSource = angular.module(PKG.name+'.services');
   });
 
 
-  socketDataSource.provider('MyWebsocketDataSource', function () {
+  socketDataSource.provider('MyHttpDataSource', function () {
 
     this.defaultPollInterval = 10;
 
-    this.$get = function($rootScope, caskWindowManager, mySocket, MYSOCKET_EVENT, $q, MyPromise, uuid, EventPipe) {
+    this.$get = function($rootScope, caskWindowManager, MYSOCKET_EVENT, $q, MyPromise, uuid, EventPipe) {
       var CDAP_API_VERSION = 'v3';
       // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
       const REQUEST_ORIGIN_ROUTER = 'ROUTER';
@@ -71,8 +71,9 @@ var socketDataSource = angular.module(PKG.name+'.services');
       var instances = {}; // keyed by scopeid
 
 
-      function DataSource (scope) {
+      function DataSource (scope, httpDelegate) {
         scope = scope || $rootScope.$new();
+        this.scope = scope;
 
         var id = scope.$id,
             self = this;
@@ -88,9 +89,11 @@ var socketDataSource = angular.module(PKG.name+'.services');
         instances[id] = self;
 
         this.scopeId = id;
-        this.bindings = {};
+        this.polling = {};
+        this.httpDelegate = httpDelegate;
+        console.log(`httpDelegate: ${httpDelegate}`);
 
-        EventPipe.on(MYSOCKET_EVENT.message, function (data) {
+        /*EventPipe.on(MYSOCKET_EVENT.message, function (data) {
           var hash;
           var isPoll;
           hash = data.resource.id;
@@ -118,7 +121,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
               the execution goes to stopPoll function in line 264 and there we delete the entry from bindings
               as we no longer need it. After the stopPoll request has gone out the execution continues back
               here and we can do self.bindings[hash].poll as self.bindings[hash] is already deleted in stopPoll.
-            */
+            * /
             if (!self.bindings[hash]) {
               return;
             }
@@ -134,9 +137,9 @@ var socketDataSource = angular.module(PKG.name+'.services');
             }
           }
           return;
-        });
+        });*/
 
-        EventPipe.on(MYSOCKET_EVENT.reconnected, () => {
+        /*EventPipe.on(MYSOCKET_EVENT.reconnected, () => {
           Object.keys(this.bindings).forEach((reqId) => {
             const req = self.bindings[reqId];
 
@@ -152,45 +155,90 @@ var socketDataSource = angular.module(PKG.name+'.services');
 
         EventPipe.on(MYSOCKET_EVENT.closed, () => {
           pausePoll(self.bindings);
-        });
+        });*/
 
         scope.$on('$destroy', function () {
-          Object.keys(self.bindings).forEach(function(key) {
-            var b = self.bindings[key];
-            if (b.poll) {
-              stopPoll(self.bindings, b.resource.id);
-            }
+          Object.keys(self.polling).forEach(function(key) {
+            var b = self.polling[key];
+            self.stopPoll(self.polling, b.resource.id);
           });
 
           delete instances[self.scopeId];
         });
 
         scope.$on(caskWindowManager.event.blur, function () {
-          pausePoll(self.bindings);
+          self.pausePoll(self.polling);
         });
 
         scope.$on(caskWindowManager.event.focus, function () {
-          resumePoll(self.bindings);
+          self.resumePoll(self.polling);
         });
 
       }
 
-      function startClientPoll(resourceId, bindings, interval) {
+      DataSource.prototype.sendRequest = function(binding) {
+        console.log('sendRequest');
+        console.log(binding);
+        const self = this;
+        try {
+          const responsePromise = self.httpDelegate({
+            method: binding.resource.method,
+            url: binding.resource.url,
+            data: binding.resource.body,
+            headers: binding.resource.headers,
+          });
+          responsePromise.then(function(response) {
+            console.log('sendRequest Response received');
+            console.log(response);
+            if (response.status > 299) {
+              if (binding.errorCallback) {
+                $rootScope.$apply(binding.errorCallback.bind(null, response.data));
+              } else if (binding.reject) {
+                $rootScope.$apply(binding.reject.bind(null, {data: response.data, statusCode: response.status }));
+              }
+            } else {
+              if (binding.callback) {
+                self.scope.$apply(binding.callback.bind(null, response.data));
+              } else if (binding.resolve) {
+                // https://github.com/angular/angular.js/wiki/When-to-use-$scope.$apply%28%29
+                self.scope.$apply(binding.resolve.bind(null, {data: response.data, statusCode: response.status }));
+              }
+            }
+
+            if (binding.poll && self.polling[binding.id]) {
+              self.polling[binding.id].resource.interval = 
+                self.startClientPoll(binding.id, self.polling[binding.id].resource.intervalTime);
+            }
+          }, function(errorResponse) {
+            console.log('request error');
+            console.log(errorResponse);
+          });
+          console.log('sendRequest sent');
+        }
+        catch (e) {
+          console.log('top=level error');
+          console.log(e);
+        }
+      };
+
+      DataSource.prototype.startClientPoll = function(resourceId, interval) {
         const intervalTimer = setTimeout(() => {
-          const resource = bindings[resourceId]? bindings[resourceId].resource : undefined;
+          const binding = this.polling[resourceId];
+          const resource = binding ? binding.resource : undefined;
           if (!resource) {
             clearTimeout(intervalTimer);
             return;
           }
-          mySocket.send({
+          /*mySocket.send({
             action: 'request',
             resource
-          });
+          });*/
+          this.sendRequest(binding);
         }, interval);
         return intervalTimer;
-      }
+      };
 
-      function stopPoll(bindings, resourceId) {
+      DataSource.prototype.stopPoll = function(resourceId) {
         let id;
         if (typeof resourceId === 'object' && resourceId !== null) {
           id = resourceId.params.pollId;
@@ -198,34 +246,36 @@ var socketDataSource = angular.module(PKG.name+'.services');
           id = resourceId;
         }
 
-        if (bindings[id]) {
-          clearTimeout(bindings[id].resource.interval);
-          delete bindings[id];
+        if (this.polling[id]) {
+          clearTimeout(this.polling[id].resource.interval);
+          delete this.polling[id];
         }
-      }
+      };
 
-      function pausePoll(bindings) {
-        Object.keys(bindings)
-          .filter(resourceId => bindings[resourceId].type === 'POLL')
+      DataSource.prototype.pausePoll = function() {
+        Object.keys(this.polling)
+          .filter(resourceId => this.polling[resourceId].type === 'POLL')
           .forEach(resourceId => {
-            clearTimeout(bindings[resourceId].resource.interval);
+            clearTimeout(this.polling[resourceId].resource.interval);
           });
-      }
+      };
 
-      function resumePoll(bindings) {
-        Object.keys(bindings)
-          .filter(resourceId => bindings[resourceId].type === 'POLL')
+      DataSource.prototype.resumePoll = function() {
+        Object.keys(this.polling)
+          .filter(resourceId => this.polling[resourceId].type === 'POLL')
           .forEach(resourceId => {
-            bindings[resourceId].resource.interval = startClientPoll(resourceId, bindings, bindings[resourceId].resource);
+            this.polling[resourceId].resource.interval = 
+              this.startClientPoll(resourceId, this.polling[resourceId].resource.interval);
           });
-      }
+      };
 
       /**
        * Start polling of a resource when in scope.
        */
       DataSource.prototype.poll = function (resource, cb, errorCb) {
-        var self = this;
-        var generatedResource = {};
+        console.log('New HHTP poll');
+        const self = this;
+        let generatedResource = {};
         const intervalTime = resource.interval || (resource.options &&  resource.options.interval) || $rootScope.defaultPollInterval;
         var promise = new MyPromise(function(resolve, reject) {
           const resourceId = uuid.v4();
@@ -233,7 +283,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
             id: resourceId,
             json: resource.json,
             intervalTime,
-            interval: startClientPoll(resourceId, self.bindings, intervalTime),
+            interval: this.startClientPoll(resourceId, self.bindings, intervalTime),
             body: resource.body,
             method: resource.method || 'GET',
             suppressErrors: resource.suppressErrors || false
@@ -245,7 +295,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
 
           let apiVersion = resource.apiVersion || CDAP_API_VERSION;
           if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
-            resource.url = `/${apiVersion}${resource.url}`;
+            resource.url = `/api/${apiVersion}${resource.url}`;
           }
 
           if (resource.requestOrigin) {
@@ -255,7 +305,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
           }
 
           generatedResource.url = buildUrl(resource.url, resource.params || {});
-          self.bindings[generatedResource.id] = {
+          const binding = {
             poll: true,
             type: 'POLL',
             callback: cb,
@@ -264,11 +314,14 @@ var socketDataSource = angular.module(PKG.name+'.services');
             resolve: resolve,
             reject: reject
           };
+          self.polling[generatedResource.id] = binding;
 
-          mySocket.send({
+          /*mySocket.send({
             action: 'request',
             resource: generatedResource
-          });
+          });*/
+          self.sendRequest(binding);
+
         }, true);
 
         if (!resource.$isResource) {
@@ -296,11 +349,11 @@ var socketDataSource = angular.module(PKG.name+'.services');
           id = resourceId;
         }
 
-        var match = this.bindings[resourceId];
+        var match = this.polling[resourceId];
 
         if (match) {
           resource = match.resource;
-          stopPoll(this.bindings, resourceId);
+          this.stopPoll(resourceId);
           defer.resolve({});
         } else {
           defer.reject({});
@@ -313,11 +366,13 @@ var socketDataSource = angular.module(PKG.name+'.services');
        * 'template-config' to the node backend.
        */
       DataSource.prototype.config = function (resource, cb, errorCb) {
+        console.log('New HHTP config call');
+        const self = this;
         var deferred = $q.defer();
 
         resource.suppressErrors = true;
         resource.id = uuid.v4();
-        this.bindings[resource.id] = {
+        const reqObject = {
           resource: resource,
           callback: function (result) {
             if (cb) {
@@ -332,11 +387,27 @@ var socketDataSource = angular.module(PKG.name+'.services');
             deferred.reject(err);
           }
         };
+        /*this.polling[resource.id] = {
+          resource: resource,
+          callback: function (result) {
+            if (cb) {
+              cb.apply(null, result);
+            }
+            deferred.resolve(result);
+          },
+          errorCallback: function(err) {
+            if (errorCb) {
+              errorCb.apply(null, err);
+            }
+            deferred.reject(err);
+          }
+        };*/
 
-        mySocket.send({
+        /*mySocket.send({
           action: resource.actionName,
           resource: resource
-        });
+        });*/
+        self.sendRequest(reqObject);
         return deferred.promise;
       };
 
@@ -345,8 +416,10 @@ var socketDataSource = angular.module(PKG.name+'.services');
        * the node backend.
        */
       DataSource.prototype.request = function (resource, cb, errorCb) {
-        var self = this;
+        console.log(`New HHTP request: ${resource.url}`);
+        const self = this;
         var promise = new MyPromise(function(resolve, reject) {
+          console.log('preparing promise for request');
 
           var generatedResource = {
             json: resource.json,
@@ -370,7 +443,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
 
           let apiVersion = resource.apiVersion || CDAP_API_VERSION;
           if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
-            resource.url = `/${apiVersion}${resource.url}`;
+            resource.url = `/api/${apiVersion}${resource.url}`;
           }
           if (resource.requestOrigin) {
             generatedResource.requestOrigin = resource.requestOrigin;
@@ -379,7 +452,15 @@ var socketDataSource = angular.module(PKG.name+'.services');
           }
           generatedResource.url = buildUrl(resource.url, resource.params || {});
           generatedResource.id = uuid.v4();
-          self.bindings[generatedResource.id] = {
+          /*self.bindings[generatedResource.id] = {
+            type: 'REQUEST',
+            callback: cb,
+            errorCallback: errorCb,
+            resource: generatedResource,
+            resolve: resolve,
+            reject: reject
+          };*/
+          const binding = {
             type: 'REQUEST',
             callback: cb,
             errorCallback: errorCb,
@@ -388,10 +469,12 @@ var socketDataSource = angular.module(PKG.name+'.services');
             reject: reject
           };
 
-          mySocket.send({
+          /*mySocket.send({
             action: 'request',
             resource: generatedResource
-          });
+          });*/
+          console.log('about to send request');
+          self.sendRequest(binding);
         }, false);
 
         if (!resource.$isResource) {

@@ -14,6 +14,7 @@
  * the License.
  */
 import 'whatwg-fetch';
+import ee from 'event-emitter';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
@@ -27,6 +28,7 @@ import SessionTokenStore from 'services/SessionTokenStore';
 let pollingObservable;
 let systemServiceSubscription;
 let retries = 0;
+let eventEmitter;
 const BACKEND_STATUS_POLL_INTERVAL = 10000;
 const MAX_RETRIES_BEFORE_SHOWING_ERROR_IN_UI = 3;
 const cookie = new Cookies();
@@ -41,6 +43,7 @@ const parseAndDispatchBackendStatus = (response) => {
           status: BACKENDSTATUS.BACKENDUP,
         },
       });
+      eventEmitter.emit('BACKEND_STATUS_UPDATE', BACKENDSTATUS.BACKENDUP);
       retries = 0;
     }
     if ([BACKENDSTATUS.BACKENDDOWN].indexOf(loadingState.status) !== -1) {
@@ -56,6 +59,7 @@ const parseAndDispatchBackendStatus = (response) => {
           status: BACKENDSTATUS.BACKENDUP,
         },
       });
+      eventEmitter.emit('BACKEND_STATUS_UPDATE', BACKENDSTATUS.BACKENDUP);
       retries = 0;
     }
   }
@@ -91,6 +95,7 @@ const parseAndDispatchBackendStatus = (response) => {
         status: BACKENDSTATUS.BACKENDDOWN,
       },
     });
+    eventEmitter.emit('BACKEND_STATUS_UPDATE', BACKENDSTATUS.BACKENDDOWN);
   }
 };
 
@@ -101,6 +106,7 @@ const dispatchNodeServerDown = () => {
       status: BACKENDSTATUS.NODESERVERDOWN,
     },
   });
+  eventEmitter.emit('BACKEND_STATUS_UPDATE', BACKENDSTATUS.NODESERVERDOWN);
 };
 
 const getRequestInfo = () => {
@@ -137,6 +143,7 @@ const startServicePolling = () => {
 };
 
 const startPolling = () => {
+  eventEmitter = ee(ee);
   stopPolling();
   pollSystemServices();
   startServicePolling();

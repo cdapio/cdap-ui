@@ -15,8 +15,8 @@
  */
 
 angular.module(PKG.name + '.services')
-  .factory('DashboardHelper', function (MyCDAPDataSource, MyChartHelpers, MyMetricsQueryHelper) {
-    var dataSrc = new MyCDAPDataSource();
+  .factory('DashboardHelper', function (MyCDAPDataSource, MyChartHelpers, MyMetricsQueryHelper, $http) {
+    var dataSrc = new MyCDAPDataSource(null, $http);
 
     function startPolling (widget) {
       widget.pollId = dataSrc.poll({

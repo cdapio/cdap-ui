@@ -89,8 +89,8 @@ angular
     window.CaskCommon.ThemeHelper.applyTheme();
   })
 
-  .config(function (MyDataSourceProvider) {
-    MyDataSourceProvider.defaultInterval = 5;
+  .config(function (MyWebsocketDataSourceProvider) {
+    MyWebsocketDataSourceProvider.defaultInterval = 5;
   })
 
   .config(function ($locationProvider) {
@@ -129,15 +129,15 @@ angular
 
       function newHttp(config) {
         var promise,
-            myDataSrc;
+          myDataSrc;
         if (config.options) {
           // Can/Should make use of my<whatever>Api service in another service.
           // So in that case the service will not have a scope. Hence the check
           if (config.params && config.params.scope && angular.isObject(config.params.scope)) {
-            myDataSrc = MyCDAPDataSource(config.params.scope);
+            myDataSrc = MyCDAPDataSource(config.params.scope, $delegate);
             delete config.params.scope;
           } else {
-            myDataSrc = MyCDAPDataSource();
+            myDataSrc = MyCDAPDataSource(null, $delegate);
           }
           // We can use MyCDAPDataSource directly or through $resource'y way.
           // If we use $resource'y way then we need to make some changes to
@@ -281,11 +281,11 @@ angular
    * attached to the <body> tag, mostly responsible for
    *  setting the className based events from $state and caskTheme
    */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers) {
+  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
 
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
-    var dataSource = new MyCDAPDataSource($scope);
+    var dataSource = new MyCDAPDataSource($scope, $http);
     getVersion();
     this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
     this.pageLevelError = null;
@@ -320,6 +320,7 @@ angular
     $scope.copyrightYear = new Date().getFullYear();
 
     function getVersion() {
+      //$http.get({ url: '/api/v3/version' })
       dataSource.request({
         _cdapPath: '/version'
       })

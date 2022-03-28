@@ -45,7 +45,8 @@ class HydratorPlusPlusTopPanelCtrl {
     HydratorPlusPlusHydratorService,
     $rootScope,
     uuid,
-    HydratorUpgradeService
+    HydratorUpgradeService,
+    $http
   ) {
     this.consoleStore = HydratorPlusPlusConsoleStore;
     this.myPipelineExportModalService = myPipelineExportModalService;
@@ -66,7 +67,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.myPreferenceApi = myPreferenceApi;
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.$state = $state;
-    this.dataSrc = new MyCDAPDataSource($scope);
+    this.dataSrc = new MyCDAPDataSource($scope, $http);
     this.myAlertOnValium = myAlertOnValium;
     this.currentPreviewId = null;
     this.$window = $window;

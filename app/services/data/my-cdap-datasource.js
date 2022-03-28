@@ -14,15 +14,20 @@
  * the License.
  */
 angular.module(PKG.name + '.services')
-  .factory('MyCDAPDataSource', function(MyDataSource, $rootScope, myCdapUrl, $cookies) {
-    function MyCDAPDataSource(scope) {
+  .factory('MyCDAPDataSource', function(MyWebsocketDataSource, MyHttpDataSource, $rootScope, myCdapUrl, $cookies) {
+    function MyCDAPDataSource(scope, httpDelegate) {
       scope = scope || $rootScope.$new();
 
       if (!(this instanceof MyCDAPDataSource)) {
         return new MyCDAPDataSource(scope);
       }
 
-      this.MyDataSource = new MyDataSource(scope);
+      if (true) {
+        console.log(`creating HTTP Datasource: ${httpDelegate}`);
+        this.MyDataSource = new MyHttpDataSource(scope, httpDelegate);
+      } else {
+        this.MyDataSource = new MyWebsocketDataSource(scope);
+      }
     }
 
     MyCDAPDataSource.prototype.poll = function (resource, cb, errorCb) {

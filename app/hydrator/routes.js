@@ -289,8 +289,8 @@ angular.module(PKG.name + '.feature.hydrator')
               });
               return defer.promise;
             },
-            rVersion: function($state, MyCDAPDataSource) {
-              var dataSource = new MyCDAPDataSource();
+            rVersion: function($state, MyCDAPDataSource, $http) {
+              var dataSource = new MyCDAPDataSource(null, $http);
               return dataSource.request({
                 _cdapPath: '/version'
               });
