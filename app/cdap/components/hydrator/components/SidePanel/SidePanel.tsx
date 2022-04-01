@@ -28,11 +28,13 @@ import {
   Chip,
   Icon,
   ListItem,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
 import styled, { css } from 'styled-components';
+import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 // the old styling was pretty specific and we can't get rid of the classname
@@ -43,8 +45,9 @@ const GroupsContainer = styled.div`
     && {
       && {
         height: auto;
-        overflow: scroll;
+        overflow-y: scroll;
         position: absolute;
+        padding: 0;
         right: 1px;
       }
     }
@@ -66,8 +69,9 @@ const StyledGroupName = styled(Typography)`
 const StyledAccordion = styled(Accordion)`
   background: #eeeeee;
   &.Mui-expanded {
-    margin: 0px;
-    overflow: scroll;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
   }
 `;
 
@@ -89,6 +93,11 @@ const ListOrIconsButton = styled(Button)`
   background: white;
 `;
 
+const TooltipText = styled.div`
+  font-size: 14px;
+  line-height: 14px;
+`;
+
 interface ISidePanelProps {
   itemGenericName: string;
   groups: any[];
@@ -103,16 +112,33 @@ export const SidePanel = ({
   onPanelItemClick,
 }: ISidePanelProps) => {
   const [searchText, setSearchText] = useState<string | undefined>(undefined);
+  const [pluginGroups, setPluginGroups] = useState(groups);
+  const [openedAccordions, setOpenedAccordions] = useState([]);
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
-  const groupWrapperHeight = 'calc(100% - ' + (groups.length * 35 - 35 - 1) + 'px)';
-  const [pluginsMap, setPluginsMap] = useState({});
   let AvailablePluginsStoreSubscription;
+
+  useEffect(() => {
+    // set first group opened
+    if (groups) {
+      setOpenedAccordions([groups[0].name]);
+    }
+  }, []);
 
   useEffect(() => {
     AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
       const all = AvailablePluginsStore.getState();
       if (all.plugins) {
-        setPluginsMap(all.plugins.pluginsMap);
+        const newPluginGroups = [...pluginGroups];
+        newPluginGroups.forEach((group) => {
+          group.plugins.forEach((plugin) => {
+            // add the display name and show custom icon to the plugins
+            plugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
+            plugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
+            plugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+          });
+        });
+
+        setPluginGroups(newPluginGroups);
       }
     });
   }, []);
@@ -121,8 +147,22 @@ export const SidePanel = ({
     AvailablePluginsStoreSubscription();
   });
 
-  const handleSetSearch = (text) => {
+  const handleSetSearch = debounce((text) => {
     setSearchText(text);
+  }, 400);
+
+  const handleOpenAccordion = (name: string) => {
+    // openAccordions handles the opened accordion state - necessary to have search
+    // open accordions
+    const accordions = [...openedAccordions];
+    const accIndex = accordions.indexOf(name);
+    if (accIndex === -1) {
+      accordions.push(name);
+    } else {
+      accordions.splice(accIndex, 1);
+    }
+
+    setOpenedAccordions(accordions);
   };
 
   const handleSetSidePanelViewType = (viewType: string) => {
@@ -136,69 +176,79 @@ export const SidePanel = ({
 
   const renderPlugins = (plugins: [any]) => {
     return plugins.map((plugin) => {
-      const showCustomIcon = shouldShowCustomIcon(plugin, pluginsMap);
+      const id = `plugin-${plugin.displayName}-${plugin.type}`;
+      const label = plugin.displayName || plugin.name;
       return (
-        <div
-          role="button"
-          className={`plugin-item ${plugin.nodeClass ? plugin.nodeClass : ''} ${
-            plugin.hovering ? 'hovered' : ''
-          }`}
-          // need to implement my popover
-          // my-popover
-          // data-placement="right"
-          // data-template={plugin.template}
-          // content-data={plugin}
-          // data-popover-context={'MySidePanel'} // whole controller
-          // end plugin stuff
-          onClick={(event) => handleClickPlugin(event, plugin)}
-          data-cy={`plugin-${plugin.name}-${plugin.type}`}
+        <Tooltip
+          title={
+            <TooltipText>
+              <span>{label}</span>
+              <br />
+              <br />
+              <span>{plugin.description}</span>
+            </TooltipText>
+          }
+          arrow
+          placement="right"
         >
-          {sidePanelViewType === 'icon' && (
-            <>
-              {showCustomIcon && (
-                <div className="text-center fa icon-container">
-                  <img src={getCustomIconSrc(plugin, pluginsMap)} />
-                </div>
-              )}
-              {!showCustomIcon && <div className={`text-center fa ${plugin.icon}`}> </div>}
-              <div className="name plugin-name">{generateLabel(plugin, pluginsMap)}</div>
-            </>
-          )}
-          {sidePanelViewType === 'list' && (
-            <ListItem>
-              <Icon className={`text-center fa ${plugin.icon}`} />
-              <span
-                style={{ marginLeft: '5px' }}
-                className="name"
-                // need to implement my popover
-                // my-popover
-                // data-placement="right"
-                // data-template={plugin.template}
-                // content-data={plugin}
-                // data-popover-context={'MySidePanel'} // whole controller
-                // end popover stuff
-              >
-                {myRemoveCamelCase(plugin.name || plugin.pluginTemplate)}
-              </span>
-            </ListItem>
-          )}
-          <div className="plugin-badge">T</div>
-        </div>
+          <div
+            role="button"
+            className={`plugin-item ${plugin.nodeClass ? plugin.nodeClass : ''} ${
+              plugin.hovering ? 'hovered' : ''
+            }`}
+            key={id}
+            onClick={(event) => handleClickPlugin(event, plugin)}
+            data-cy={id}
+          >
+            {sidePanelViewType === 'icon' && (
+              <>
+                {plugin.showCustomIcon && (
+                  <div className="text-center fa icon-container">
+                    <img src={plugin.customIconSrc} />
+                  </div>
+                )}
+                {!plugin.showCustomIcon && <div className={`text-center fa ${plugin.icon}`}> </div>}
+                <div className="name plugin-name">{label}</div>
+              </>
+            )}
+            {sidePanelViewType === 'list' && (
+              <ListItem>
+                <Icon className={`text-center fa ${plugin.icon}`} />
+                <span style={{ marginLeft: '5px' }} className="name">
+                  {myRemoveCamelCase(label || plugin.pluginTemplate)}
+                </span>
+              </ListItem>
+            )}
+            <div className="plugin-badge">T</div>
+          </div>
+        </Tooltip>
       );
     });
   };
 
   const renderAccGroups = () => {
-    return groups.map((group, i) => {
+    return pluginGroups.map((group, i) => {
+      const plugins = filterPlugins(searchText, group.plugins);
+      // open accordion if the user searches for a plugin and a plugin
+      // is in that group or use the accordion state
+      const expanded =
+        searchText !== '' && searchText !== undefined
+          ? plugins.length
+          : openedAccordions.indexOf(group.name) !== -1;
       return (
-        <StyledAccordion elevation={0} square defaultExpanded={i === 0}>
+        <StyledAccordion
+          elevation={0}
+          square
+          expanded={expanded}
+          onClick={() => handleOpenAccordion(group.name)}
+        >
           <StyledAccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls=""
             id={`${group.name}-acc-summary`}
             data-cy={`plugin-${group.name}-group`}
           >
-            <Chip label={group.plugins.length} size="small" />
+            <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
           <AccordionDetails className="item">
@@ -207,8 +257,8 @@ export const SidePanel = ({
                 className={`item-body ${sidePanelViewType === 'icon' ? 'view-icon' : 'view-list'}`}
                 style={{ overflow: 'scroll' }}
               >
-                {renderPlugins(filterPlugins(searchText, group.plugins))}
-                {group.plugins.length === 0 && (
+                {renderPlugins(plugins)}
+                {plugins.length === 0 && (
                   <div className="no-item-message">
                     <h4>No {itemGenericName} found.</h4>
                   </div>
@@ -234,7 +284,7 @@ export const SidePanel = ({
           <ListOrIconsButton
             size="small"
             variant={'contained'}
-            className={`${sidePanelViewType === 'list' ? 'active' : ''}`}
+            disabled={sidePanelViewType === 'list'}
             onClick={() => handleSetSidePanelViewType('list')}
           >
             <ListIcon />
@@ -242,7 +292,7 @@ export const SidePanel = ({
           <ListOrIconsButton
             variant={'contained'}
             size="small"
-            className={`${sidePanelViewType === 'icon' ? 'active' : ''}`}
+            disabled={sidePanelViewType === 'icon'}
             onClick={() => handleSetSidePanelViewType('icon')}
           >
             <AppsIcon />
