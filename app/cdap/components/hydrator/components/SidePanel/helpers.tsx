@@ -49,7 +49,7 @@ export const filterPlugins = (searchTerm: string, unfilteredPlugins: any) => {
     return unfilteredPlugins;
   }
   // still need to order by ?
-  return myMultiKeySearch(unfilteredPlugins, ['name', 'label'], searchTerm);
+  return myMultiKeySearch(unfilteredPlugins, ['name', 'label', 'displayName'], searchTerm);
 };
 
 export const shouldShowCustomIcon = (plugin, pluginsMap) => {
