@@ -52,6 +52,7 @@ import {
 } from './styles';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
+import { Observable } from 'rxjs/Observable';
 
 const LoadingButton = ButtonLoadingHoc(Button);
 
@@ -112,29 +113,36 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
       body.schema = props.tableInfo.schema;
     }
 
-    MyReplicatorApi.getTableInfo(params, body).subscribe(
-      (res) => {
-        const selectedColumns = getInitialSelectedColumns(res.columns);
-
+    Observable.forkJoin([
+      MyReplicatorApi.getTableInfo(params, body),
+      MyReplicatorApi.assessTable(params, body),
+    ]).subscribe({
+      next: (value: any) => {
+        const [tableInfo, assessedTable] = value;
+        const combinedColumns = tableInfo.columns.map((t1) => ({
+          ...t1,
+          ...assessedTable.columns.find((t2) => t2.sourceName === t1.name),
+        }));
+        const selectedColumns = getInitialSelectedColumns(combinedColumns);
         dispatch({
           type: 'setTableInfo',
           payload: {
-            columns: res.columns,
-            primaryKeys: res.primaryKey,
+            columns: combinedColumns,
+            primaryKeys: tableInfo.primaryKey,
             selectedColumns,
-            filteredColumns: res.columns,
+            filteredColumns: combinedColumns,
             selectedReplication:
               selectedColumns.size === 0 ? ReplicateSelect.all : ReplicateSelect.individual,
           },
         });
       },
-      (err) => {
+      error: (err) => {
         dispatch({ type: 'setError', payload: err });
       },
-      () => {
+      complete: () => {
         dispatch({ type: 'setLoading', payload: false });
-      }
-    );
+      },
+    });
   }, []);
 
   useEffect(() => {
