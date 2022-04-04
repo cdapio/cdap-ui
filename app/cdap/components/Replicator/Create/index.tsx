@@ -325,7 +325,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
           }
 
           replicatorConfig.tableTransformations.push({
-            tableName: table.table,
+            tableName: table.schema + '.' + table.table,
             columnTransformations: transformations,
           });
         }
