@@ -325,7 +325,10 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
           }
 
           replicatorConfig.tableTransformations.push({
-            tableName: table.schema + '.' + table.table,
+            tableName:
+              replicatorConfig.connections[0].from === 'Microsoft SQLServer'
+                ? table.schema + '.' + table.table
+                : table.table,
             columnTransformations: transformations,
           });
         }
