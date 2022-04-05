@@ -14,13 +14,10 @@
  * the License.
  */
 
-import DataSourceWebsockets from './DataSourceWebsockets';
-import DataSourceHttp from './DataSourceHttp';
-import { isHttpEnabled } from './DataSourceConfigurer';
-
-let DataSource = DataSourceWebsockets;
-if (isHttpEnabled()) {
-  DataSource = DataSourceHttp;
+export interface IHealthCheckBindings {
+  [key: string]: number | null;
 }
 
-export default DataSource;
+export interface IDataSource {
+  getBindingsForHealthCheck: () => IHealthCheckBindings;
+}
