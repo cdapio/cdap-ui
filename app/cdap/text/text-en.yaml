@@ -2661,10 +2661,21 @@ features:
     collapsedTabLabel: "Inbound triggers ({count})"
     description: Description
     EnabledTriggers:
+      addNewTrigger: Add new trigger
+      andTriggersPipelineCount:
+        0: "No triggers set"
+        1: "{context} trigger is set"
+        _: "{context} triggers are set"
+      andTriggersTitle: "View Enabled triggers for pipeline \"{pipelineName}\""
       buttonLabel: Disable Trigger
+      deleteTrigger: Delete Trigger
+      deleteTriggerButton: Delete Trigger
+      deleteConfirm: Delete
+      deleteConfirmationText: Are you sure you want to delete this {type} trigger?
       pipelineCount:
         0: "No pipelines set as trigger"
-        1: "1 pipeline is set as trigger"
+        1: "{context} pipeline is set as trigger"
+        _: "{context} pipelines are set as trigger"
       tabLabel: "View enabled triggers ({count})"
       title: "View pipelines enabled to trigger pipeline \"{pipelineName}\""
     Events:
@@ -2675,8 +2686,11 @@ features:
     helperText: "\"{pipelineName}\" is triggered when this pipeline"
     namespace: Namespace
     pipelineName: Pipeline Name
+    groupTriggers: Inbound Group Triggers
+    pipelineTriggerType: "Trigger Type: {type}"
     ScheduleRuntimeArgs:
       configure_enable_btn: Configure and Enable Trigger
+      configure_select_btn: Configure and Select Trigger
       DefaultMessages:
         choose_runtime_arg: Pick runtime argument
         choose_plugin: Pick plugin
@@ -2696,7 +2710,7 @@ features:
           noRuntimeArgsMessage: No runtime arguments found for "{triggeredPipelineid}"
           TableHeaders:
             runtimeargs: Runtime arguments to map
-            t_runtimeargs: Trigger runtime rrguments
+            t_runtimeargs: Trigger runtime arguments
           tab_message: Select how runtime arguments for trigger "{triggeringPipelineid}" map to runtime arguments for "{triggeredPipelineid}"
           tab_message2: (if not mapped, runtime arguments are derived from pipeline's or namespace's preferences)
           title: Runtime arguments
@@ -2711,10 +2725,22 @@ features:
           tab_message2: (if not mapped, runtime arguments are derived from pipeline's or namespace's preferences)
           title: Plugin config
     SetTriggers:
+      addNewTrigger: Enable the trigger
+      andTriggersTitle: "Add a new trigger for \"{pipelineName}\""
       buttonLabel: Enable Trigger
       pipelineCount: "{count} pipelines available"
+      selectedPipelines: "Selected Pipelines:"
+      selectButtonLabel: Select
       tabLabel: Set pipeline triggers
       title: "Set which pipeline triggers \"{pipelineName}\""
+      triggerName: "Trigger Name"
+      triggerType: "Trigger Type"
+      triggerNameExists: "Trigger Name already exists"
+      triggerNameRequired: "Trigger Name is required"
+      triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
+      selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
+      triggerAndType: "Wait for all events (AND)"
+      triggerOrType: "Trigger on any selected event (OR)"
       viewNamespace: View pipelines in namespace
     viewPipeline: View Pipeline
   PreviewData:

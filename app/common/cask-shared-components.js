@@ -44,7 +44,8 @@ var Mousetrap = require('mousetrap');
 var StatusFactory = require('../cdap/services/StatusFactory').default;
 var LoadingIndicator = require('../cdap/components/shared/LoadingIndicator').default;
 var StatusAlertMessage = require('../cdap/components/shared/StatusAlertMessage').default;
-var PipelineTriggersSidebars = require('../cdap/components/PipelineTriggersSidebars').default;
+var PipelineTriggersSidebars = require('../cdap/components/PipelineTriggersSidebars/index.tsx')
+  .default;
 var TriggeredPipelineStore = require('../cdap/components/TriggeredPipelines/store/TriggeredPipelineStore')
   .default;
 var PipelineErrorFactory = require('../cdap/services/PipelineErrorFactory');
