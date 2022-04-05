@@ -47,6 +47,15 @@ export default function TriggeredPipelineRow({
     );
   }
 
+  let programStatuses = [];
+  if (pipeline.trigger.triggers) {
+    pipeline.trigger.triggers
+      .filter((tr) => tr.programId.application === sourcePipeline)
+      .map((t) => programStatuses.push(...t.programStatuses));
+  } else {
+    programStatuses = pipeline.trigger.programStatuses;
+  }
+
   const loadingIcon = (
     <div className="text-center">
       <LoadingSVG />
@@ -84,7 +93,7 @@ export default function TriggeredPipelineRow({
           </div>
 
           <div className="events-list">
-            {pipeline.trigger.programStatuses.map((status) => {
+            {programStatuses.map((status) => {
               return <div>- {T.translate(`${PREFIX}.Events.${status}`)}</div>;
             })}
           </div>

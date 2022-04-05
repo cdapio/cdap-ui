@@ -22,7 +22,7 @@ import ScheduleRuntimeArgs from 'components/PipelineTriggers/ScheduleRuntimeArgs
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
-import If from 'components/shared/If';
+import Button from '@material-ui/core/Button';
 
 require('./PayloadConfigModal.scss');
 
@@ -39,6 +39,7 @@ export default class PayloadConfigModal extends Component {
     scheduleInfo: PropTypes.object,
     configureError: PropTypes.string,
     onToggle: PropTypes.func,
+    andTriggersEnabled: PropTypes.bool,
   };
 
   state = {
@@ -87,33 +88,35 @@ export default class PayloadConfigModal extends Component {
             onEnableSchedule={this.props.onEnableSchedule}
             disabled={this.props.disabled}
             scheduleInfo={this.props.scheduleInfo}
+            andTriggersEnabled={this.props.andTriggersEnabled}
           />
         </ModalBody>
-        <If condition={this.props.configureError}>
+        {this.props.configureError && (
           <CardActionFeedback
             type={CARD_ACTION_TYPES.DANGER}
             message="Failed to configure and enable trigger"
             extendedMessage={this.props.configureError}
           />
-        </If>
+        )}
       </Modal>
     );
   };
 
   render() {
-    let label = this.props.disabled
+    const label = this.props.disabled
       ? T.translate(`${PREFIX}.configPayloadBtnDisabled`)
       : T.translate(`${PREFIX}.configPayloadBtn`);
+    const btnCy = this.props.disabled ? 'view-payload-btn' : 'trigger-config-btn';
 
     return (
       <div className="payload-config-modal">
-        <button
-          className="btn btn-link"
+        <Button
+          className="view-payload-btn"
           onClick={this.toggle}
-          data-cy={this.props.disabled ? 'view-payload-btn' : 'trigger-config-btn'}
+          data-cy={`${this.props.triggeringPipelineInfo.id}-${btnCy}`}
         >
           {label}
-        </button>
+        </Button>
         {this.renderModal()}
       </div>
     );

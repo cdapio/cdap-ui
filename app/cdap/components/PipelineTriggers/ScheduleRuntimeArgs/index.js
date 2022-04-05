@@ -48,6 +48,7 @@ export default class ScheduleRuntimeArgs extends Component {
     triggeredPipelineInfo: PropTypes.object.isRequired,
     disabled: PropTypes.bool,
     scheduleInfo: PropTypes.object,
+    andTriggersEnabled: PropTypes.bool,
   };
 
   state = {
@@ -171,7 +172,9 @@ export default class ScheduleRuntimeArgs extends Component {
           disabled={this.isEnableTriggerDisabled()}
           data-cy="configure-and-enable-trigger-btn"
         >
-          {T.translate(`${PREFIX}.configure_enable_btn`)}
+          {this.props.andTriggersEnabled
+            ? T.translate(`${PREFIX}.configure_select_btn`)
+            : T.translate(`${PREFIX}.configure_enable_btn`)}
         </button>
       </div>
     );
