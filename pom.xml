@@ -228,16 +228,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp@7.1.2</arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>install-lru-cache</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>global add lru-cache@6.0.0</arguments>
+                  <arguments>global add node-gyp@6.1.0</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -354,7 +345,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp</arguments>
+                  <arguments>global add node-gyp@6.1.0</arguments>
                 </configuration>
               </execution>
               <execution>
