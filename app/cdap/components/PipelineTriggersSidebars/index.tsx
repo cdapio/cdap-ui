@@ -48,8 +48,8 @@ function PipelineTriggersWithFeatures({
     <div className="pipeline-triggers-sidebar-container">
       <PipelineTriggers
         {...{
-          usePipelineAndTriggers: useFeatureFlagDefaultFalse(
-            'pipeline.triggers.conditional.and.enabled'
+          usePipelineCompositeTriggers: useFeatureFlagDefaultFalse(
+            'pipeline.composite.triggers.enabled'
           ),
           pipelineName,
           namespace,

@@ -20,24 +20,25 @@ import {
   IPipelineInfo,
   IProgramStatusTrigger,
   ISchedule,
-  ITriggersGroupRunArgs,
+  ICompositeTriggerRunArgsWithTargets,
+  ITriggeringPipelineId,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 
 interface IPayLoad {
   pipelineName?: string;
   workflowName?: string;
-  pipelineAndTriggersEnabled?: boolean;
+  pipelineCompositeTriggersEnabled?: boolean;
   pipelineList?: IPipelineInfo[];
   selectedNamespace?: string;
   selectedTriggersType?: string;
   triggersGroupToAdd?: IProgramStatusTrigger[];
-  triggersGroupRunArgsToAdd?: ITriggersGroupRunArgs;
+  triggersGroupRunArgsToAdd?: ICompositeTriggerRunArgsWithTargets;
   enabledTriggers?: ISchedule[];
   expandedPipeline?: string;
   error?: any;
   isOpen?: boolean;
-  expandedTrigger?: string;
+  expandedSchedule?: string;
   pipelineInfo?: IPipelineInfo;
 }
 
@@ -59,16 +60,15 @@ const defaultInitialState = {
   triggersGroupRunArgsToAdd: {
     arguments: [],
     pluginProperties: [],
-    propertiesConfig: [],
+    targets: new Map<string, ITriggeringPipelineId>(),
   },
   enabledTriggers: [],
   pipelineName: '',
   pipelineType: '',
   expandedPipeline: null,
-  expandedTrigger: null,
+  expandedSchedule: null,
   configureError: null,
-  payloadModalIsOpen: false,
-  pipelineAndTriggersEnabled: false,
+  pipelineCompositeTriggersEnabled: false,
 };
 
 const defaultInitialEnabledTriggersState = {
@@ -86,7 +86,7 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         ...state,
         pipelineName: action.payload.pipelineName,
         workflowName: action.payload.workflowName,
-        pipelineAndTriggersEnabled: action.payload.pipelineAndTriggersEnabled,
+        pipelineCompositeTriggersEnabled: action.payload.pipelineCompositeTriggersEnabled,
       };
       break;
     case PipelineTriggersActions.changeNamespace:
@@ -109,13 +109,6 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
       stateCopy = {
         ...state,
         triggersGroupToAdd: action.payload.triggersGroupToAdd,
-        expandedPipeline: null,
-        configureError: null,
-      };
-      break;
-    case PipelineTriggersActions.setTriggersGroupRunArgsMapping:
-      stateCopy = {
-        ...state,
         triggersGroupRunArgsToAdd: action.payload.triggersGroupRunArgsToAdd,
         expandedPipeline: null,
         configureError: null,
@@ -128,7 +121,7 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         triggersGroupRunArgsToAdd: {
           arguments: [],
           pluginProperties: [],
-          propertiesConfig: [],
+          targets: new Map<string, ITriggeringPipelineId>(),
         },
         expandedPipeline: null,
         configureError: null,
@@ -151,10 +144,10 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         configureError: null,
       };
       break;
-    case PipelineTriggersActions.setExpandedTrigger:
+    case PipelineTriggersActions.setExpandedSchedule:
       stateCopy = {
         ...state,
-        expandedTrigger: action.payload.expandedTrigger,
+        expandedSchedule: action.payload.expandedSchedule,
         configureError: null,
       };
       break;
@@ -162,13 +155,6 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
       stateCopy = {
         ...state,
         configureError: action.payload.error,
-      };
-      break;
-    case PipelineTriggersActions.setPayloadModalState:
-      stateCopy = {
-        ...state,
-        payloadModalIsOpen: action.payload.isOpen,
-        configureError: null,
       };
       break;
     case PipelineTriggersActions.reset:
@@ -184,7 +170,7 @@ const enabledTriggers = (state = defaultInitialEnabledTriggersState, action = de
   let stateCopy;
 
   switch (action.type) {
-    case PipelineTriggersActions.setExpandedTrigger:
+    case PipelineTriggersActions.setExpandedSchedule:
       stateCopy = {
         ...state,
         loading: true,

@@ -28,12 +28,14 @@ import {
   HelperText,
   PipelineDescription,
   PipelineName,
+  PipelineTriggerButton,
   StyledNameSpace,
   TextCenter,
 } from 'components/PipelineTriggers/shared.styles';
 import styled from 'styled-components';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
+const PAYLOAD_PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.PayloadConfigModal';
 
 const InlineTriggersExpandedRow = styled.div`
   border: 2px solid #dedede;
@@ -46,7 +48,9 @@ const PipelineLink = styled.a`
 `;
 
 const InlineTriggerActionButtonsContainer = styled.div`
-  padding-bottom: 40px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 10px 10px 0;
 `;
 
 const InlineTriggerHeaderRow = styled.div`
@@ -69,6 +73,7 @@ const EnabledInlineTriggerRow = ({
   const [isLoading, setLoading] = useState(true);
   const [expandedTriggerInfo, setExpandedTriggerInfo] = useState(null);
   const [namespace, setNameSpace] = useState(null);
+  const [payloadModalOpen, setPayloadModalOpen] = useState(false);
 
   useEffect(() => {
     getGroupInlinePipelineInfo(trigger).subscribe((res) => {
@@ -78,6 +83,10 @@ const EnabledInlineTriggerRow = ({
     const ns = NamespaceStore.getState().selectedNamespace;
     setNameSpace(ns);
   }, []);
+
+  const handlePayloadToggleClick = () => {
+    setPayloadModalOpen(!payloadModalOpen);
+  };
 
   const renderLoading = () => {
     return (
@@ -131,11 +140,20 @@ const EnabledInlineTriggerRow = ({
         </div>
         {disableError && <ErrorText>{disableError}</ErrorText>}
         <InlineTriggerActionButtonsContainer>
+          <PipelineTriggerButton
+            onClick={handlePayloadToggleClick}
+            data-cy={`${triggeringPipelineInfo.id}-view-payload-btn`}
+          >
+            {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtnDisabled`)}
+          </PipelineTriggerButton>
           <PayloadConfigModal
+            isOpen={payloadModalOpen}
             triggeringPipelineInfo={triggeringPipelineInfo}
             triggeredPipelineInfo={triggeredPipelineInfo}
+            onToggle={handlePayloadToggleClick}
             scheduleInfo={groupSchedule}
             disabled={true}
+            pipelineCompositeTriggersEnabled={true}
           />
         </InlineTriggerActionButtonsContainer>
       </div>

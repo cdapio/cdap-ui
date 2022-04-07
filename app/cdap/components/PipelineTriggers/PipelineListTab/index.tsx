@@ -38,15 +38,20 @@ import {
   IProgramStatusTrigger,
   ISchedule,
   ITriggeringPipelineInfo,
-  ITriggersGroupRunArgs,
+  ICompositeTriggerRunArgsWithTargets,
+  ITriggeringPipelineId,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
+import ConfigTabs from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import {
   PipelineListHeader,
   PipelineName,
+  PipelineTriggerButton,
   PipelineTriggerHeader,
+  StyledNameSpace,
 } from 'components/PipelineTriggers/shared.styles';
 import { TextField } from '@material-ui/core';
 import { initialNameState, triggerNameReducer } from 'components/PipelineTriggers/reducer';
+import PayloadConfigModal from 'components/PipelineTriggers/PayloadConfigModal';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
@@ -58,7 +63,6 @@ const CloseTabIconButton = styled(IconButton)`
 const EnableGroupTriggerButton = styled(Button)`
   background-color: #5a84e4;
   text-transform: none;
-  margin: 10px 0;
 `;
 
 const NamespaceSelectorDropdown = styled.div`
@@ -116,11 +120,29 @@ const TriggerNameTextField = styled(TextField)`
   }
 `;
 
+const ButtonsWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 10px 10px 0;
+`;
+
+const PipelineTriggerComputeProfileButton = styled(PipelineTriggerButton)`
+  background: #dddddd;
+`;
+
+const StyledPipelineName = styled(PipelineName)`
+  width: calc(100% - 105px);
+`;
+
+const StyledSelectedPipelineName = styled(PipelineName)`
+  width: calc(100% - 135px);
+`;
+
 interface IPipelineListTabViewProps {
   existingTriggers: ISchedule[];
   pipelineList: IPipelineInfo[];
   triggersGroupToAdd: IProgramStatusTrigger[];
-  triggersGroupRunArgsToAdd: ITriggersGroupRunArgs;
+  triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets;
   selectedNamespace: string;
   selectedTriggersType: string;
   pipelineName: string;
@@ -129,7 +151,6 @@ interface IPipelineListTabViewProps {
   workflowName: string;
   configureError: string;
   onPayloadToggle: (isOpen: boolean) => void;
-  payloadModalIsOpen: boolean;
   setTab: (tab: number) => void;
 }
 
@@ -145,8 +166,6 @@ const PipelineListTabView = ({
   toggleExpandPipeline,
   workflowName,
   configureError,
-  onPayloadToggle,
-  payloadModalIsOpen,
   setTab,
 }: IPipelineListTabViewProps) => {
   const [state, dispatch] = useReducer(triggerNameReducer, initialNameState);
@@ -159,14 +178,19 @@ const PipelineListTabView = ({
     id: pipelineName,
     namespace: state.namespace,
   };
-  const selectedPipelineNames = triggersGroupToAdd.map(
-    (pipeline) => pipeline.programId.application
-  );
+  const selectedPipelines: ITriggeringPipelineId[] = triggersGroupToAdd.map((pipeline) => ({
+    namespace: pipeline.programId.namespace,
+    pipelineName: pipeline.programId.application,
+  }));
   const availablePipelines = pipelineList.filter(
-    (pipeline) => !selectedPipelineNames.includes(pipeline.name)
+    (pipeline) =>
+      !selectedPipelines.find(
+        (selected) =>
+          selected.namespace === selectedNamespace && selected.pipelineName === pipeline.name
+      )
   );
-  const pipelineAndTriggersEnabled = useFeatureFlagDefaultFalse(
-    'pipeline.triggers.conditional.and.enabled'
+  const pipelineCompositeTriggersEnabled = useFeatureFlagDefaultFalse(
+    'pipeline.composite.triggers.enabled'
   );
 
   const onTriggerNameChange = (e) => {
@@ -203,19 +227,27 @@ const PipelineListTabView = ({
   };
 
   const addGroupTriggerClick = () => {
-    enableGroupTrigger(state.triggerName, setTab);
+    enableGroupTrigger(state.triggerName, setTab, state.computeProfile);
+  };
+
+  const handlePayloadToggleClick = () => {
+    dispatch({ type: 'TOGGLE_PAYLOAD' });
+  };
+
+  const configureComputeProfile = (mapping, propertiesConfig = {}) => {
+    dispatch({ type: 'COMPUTE_PROFILE', computeProfile: propertiesConfig });
   };
 
   return (
     <PipelineListTabDiv>
-      {pipelineAndTriggersEnabled && (
+      {pipelineCompositeTriggersEnabled && (
         <CloseTabIconButton onClick={() => setTab(0)}>
           <CloseIcon />
         </CloseTabIconButton>
       )}
       <PipelineTriggerHeader>
-        {pipelineAndTriggersEnabled
-          ? T.translate(`${PREFIX}.andTriggersTitle`, { pipelineName })
+        {pipelineCompositeTriggersEnabled
+          ? T.translate(`${PREFIX}.compositeTriggersTitle`, { pipelineName })
           : T.translate(`${PREFIX}.title`, { pipelineName })}
       </PipelineTriggerHeader>
 
@@ -239,7 +271,7 @@ const PipelineListTabView = ({
         </NamespaceSelectorDropdown>
       </div>
 
-      {pipelineAndTriggersEnabled && (
+      {pipelineCompositeTriggersEnabled && (
         <div>
           <div>
             <span>{T.translate(`${PREFIX}.triggerType`)}</span>
@@ -274,27 +306,56 @@ const PipelineListTabView = ({
 
           <SelectedGroupPipelinesContainer>
             <div>
-              <span>{T.translate(`${PREFIX}.selectedPipelines`)}</span>
+              <PipelineListHeader>
+                <StyledPipelineName>
+                  {T.translate(`${PREFIX}.selectedPipelines`)}
+                </StyledPipelineName>
+                <StyledNameSpace>{T.translate(`${TRIGGER_PREFIX}.namespace`)}</StyledNameSpace>
+              </PipelineListHeader>
               {triggersGroupToAdd.map((pipeline) => {
                 return (
                   <div>
                     <StyledDeleteIconButton onClick={() => removePipelineFromGroupEvent(pipeline)}>
                       <DeleteIcon fontSize="small" />
                     </StyledDeleteIconButton>
-                    <span>{pipeline.programId.application}</span>
+                    <StyledSelectedPipelineName>
+                      {pipeline.programId.application}
+                    </StyledSelectedPipelineName>
+                    <StyledNameSpace>{pipeline.programId.namespace}</StyledNameSpace>
                   </div>
                 );
               })}
             </div>
-            <EnableGroupTriggerButton
-              color="primary"
-              disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
-              variant="contained"
-              onClick={() => addGroupTriggerClick()}
-              data-cy="enable-group-trigger-btn"
-            >
-              {T.translate(`${PREFIX}.addNewTrigger`)}
-            </EnableGroupTriggerButton>
+            <ButtonsWrap>
+              <EnableGroupTriggerButton
+                color="primary"
+                disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
+                variant="contained"
+                onClick={() => addGroupTriggerClick()}
+                data-cy="enable-group-trigger-btn"
+              >
+                {T.translate(`${PREFIX}.addNewTrigger`)}
+              </EnableGroupTriggerButton>
+              <PipelineTriggerComputeProfileButton
+                onClick={handlePayloadToggleClick}
+                data-cy={`${state.triggerName}-view-payload-btn`}
+              >
+                {T.translate(`${PREFIX}.configComputeProfie`)}
+              </PipelineTriggerComputeProfileButton>
+            </ButtonsWrap>
+            <PayloadConfigModal
+              triggeringPipelineInfo={{
+                id: '',
+                namespace: selectedNamespace,
+              }}
+              isOpen={state.computeModalOpen}
+              triggeredPipelineInfo={triggeredPipelineInfo}
+              onConfigureSchedule={configureComputeProfile}
+              configureError={configureError}
+              onToggle={handlePayloadToggleClick}
+              pipelineCompositeTriggersEnabled={true}
+              modalConfigTab={ConfigTabs.ComputeProfileTabConfig}
+            />
           </SelectedGroupPipelinesContainer>
           <SelectedGroupPipelinesContainer>
             <span>{T.translate(`${PREFIX}.selectPipelineInstruction`)}</span>
@@ -328,9 +389,7 @@ const PipelineListTabView = ({
                 triggeredPipelineInfo={triggeredPipelineInfo}
                 selectedNamespace={selectedNamespace}
                 configureError={configureError}
-                onPayloadToggle={onPayloadToggle}
-                payloadModalIsOpen={payloadModalIsOpen}
-                andTriggersEnabled={pipelineAndTriggersEnabled}
+                pipelineCompositeTriggersEnabled={pipelineCompositeTriggersEnabled}
                 pipelineName={pipelineName}
                 workflowName={workflowName}
                 triggersGroupToAdd={triggersGroupToAdd}
@@ -356,7 +415,6 @@ const mapStateToProps = (state) => {
     expandedPipeline: state.triggers.expandedPipeline,
     workflowName: state.triggers.workflowName,
     configureError: state.triggers.configureError,
-    payloadModalIsOpen: state.triggers.payloadModalIsOpen,
   };
 };
 
@@ -366,14 +424,6 @@ const mapDispatch = (dispatch) => {
       dispatch({
         type: PipelineTriggersActions.setExpandedPipeline,
         payload: { expandedPipeline: pipeline },
-      });
-    },
-    onPayloadToggle: (isOpen) => {
-      dispatch({
-        type: PipelineTriggersActions.setPayloadModalState,
-        payload: {
-          isOpen,
-        },
       });
     },
   };
