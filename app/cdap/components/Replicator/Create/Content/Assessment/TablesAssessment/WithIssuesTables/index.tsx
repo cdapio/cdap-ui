@@ -61,7 +61,7 @@ const WithIssuesTableView: React.FC<IIssuesTableProps> = ({ classes, tables, set
         {tables.length} tables have been assessed with schema issues
       </div>
 
-      <Table columnTemplate="2fr 100px 2fr 100px 100px 100px 3fr">
+      <Table columnTemplate="150px 150px 5fr 150px 150px 150px 2fr">
         <TableHeader>
           <TableRow classes={borderClass}>
             <TableCell>Name</TableCell>
