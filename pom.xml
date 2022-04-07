@@ -232,6 +232,15 @@
                 </configuration>
               </execution>
               <execution>
+                <id>install-lru-cache</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>global add lru-cache@6.0.0</arguments>
+                </configuration>
+              </execution>
+              <execution>
                 <id>yarn-install</id>
                 <goals>
                   <goal>yarn</goal>
