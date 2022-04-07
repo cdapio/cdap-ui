@@ -207,7 +207,6 @@
     "jsplumb": "2.5.12",
     "lodash": "4.17.15",
     "log4js": "6.1.0",
-    "node-gyp": "7.1.2",
     "marksy": "8.0.0",
     "modclean": "2.1.2",
     "moment": "2.24.0",
@@ -267,7 +266,6 @@
     "node": ">= 10.12.2"
   },
   "resolutions": {
-    "semver/lru-cache": "6.0.0",
     "**/@npmcli/fs": "1.0.0",
     "**/cypress": "5.6.0",
     "**/npmlog": "4.1.2"
