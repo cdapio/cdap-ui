@@ -28,7 +28,10 @@ import {
   IProgramStatusTrigger,
   ISchedule,
   ITriggeringPipelineInfo,
-  ITriggersGroupRunArgs,
+  ICompositeTriggerRunArgs,
+  ITriggerPropertyMapping,
+  ICompositeTriggerRunArgsWithTargets,
+  ITriggeringPipelineId,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 
 const WORKFLOW_TYPE = 'workflows';
@@ -70,10 +73,11 @@ export function changeTriggersType(selectedTriggersType: string) {
 }
 
 /**
- * Method to remove the selected trigger from the AND or OR trigger group.
+ * Method to remove the selected trigger from the composite AND or OR trigger group.
  */
 export function removePipelineFromGroup(pipelineToRemove: IProgramStatusTrigger) {
-  const triggersGroup = PipelineTriggersStore.getState().triggers.triggersGroupToAdd;
+  const triggersGroup: IProgramStatusTrigger[] = PipelineTriggersStore.getState().triggers
+    .triggersGroupToAdd;
   const updatedTriggersGroup = triggersGroup.filter(
     (pipelineTrigger: IProgramStatusTrigger) =>
       !(
@@ -81,44 +85,38 @@ export function removePipelineFromGroup(pipelineToRemove: IProgramStatusTrigger)
         pipelineTrigger.programId.namespace === pipelineToRemove.programId.namespace
       )
   );
+  const triggersGroupRunArgs: ICompositeTriggerRunArgsWithTargets = PipelineTriggersStore.getState()
+    .triggers.triggersGroupRunArgsToAdd;
+  const updatedTargetMapping = new Map<string, ITriggeringPipelineId>();
+  triggersGroupRunArgs.targets.forEach((value, key) => {
+    if (!checkPipelineId(value, pipelineToRemove)) {
+      updatedTargetMapping.set(key, value);
+    }
+  });
+
   PipelineTriggersStore.dispatch({
     type: PipelineTriggersActions.setTriggersGroup,
     payload: {
       triggersGroupToAdd: updatedTriggersGroup,
-    },
-  });
-
-  const triggersGroupRunArgs = PipelineTriggersStore.getState().triggers.triggersGroupRunArgsToAdd;
-
-  PipelineTriggersStore.dispatch({
-    type: PipelineTriggersActions.setTriggersGroupRunArgsMapping,
-    payload: {
       triggersGroupRunArgsToAdd: {
         arguments: triggersGroupRunArgs.arguments.filter(
-          (triggerArg) =>
-            !(
-              triggerArg.namespace === pipelineToRemove.programId.namespace &&
-              triggerArg.application === pipelineToRemove.programId.application
-            )
+          (triggerArg) => !checkPipelineId(triggerArg.pipelineId, pipelineToRemove)
         ),
-        plugins: triggersGroupRunArgs.pluginProperties.filer(
-          (plugin) =>
-            !(
-              plugin.namespace === pipelineToRemove.programId.namespace &&
-              plugin.application === pipelineToRemove.programId.application
-            )
+        pluginProperties: triggersGroupRunArgs.pluginProperties.filter(
+          (plugin) => !checkPipelineId(plugin.pipelineId, pipelineToRemove)
         ),
-        properties: triggersGroupRunArgs.propertiesConfig.filer(
-          (property) =>
-            !(
-              property.namespace === pipelineToRemove.programId.namespace &&
-              property.application === pipelineToRemove.programId.application
-            )
-        ),
+        targets: updatedTargetMapping,
       },
     },
   });
 }
+
+const checkPipelineId = (pipelineId: ITriggeringPipelineId, pipeline: IProgramStatusTrigger) => {
+  return (
+    pipelineId.namespace === pipeline.programId.namespace &&
+    pipelineId.pipelineName === pipeline.programId.application
+  );
+};
 
 function setConfigureError(err) {
   const errMessage = extractErrorMessage(err);
@@ -143,25 +141,21 @@ function resetTriggersGroup(pipelineTriggers: any) {
 
 /**
  * Method to enable the AND or OR group trigger.
- * @param setTab - the arrow function that resets the tab
+ * @param setTab - the arrow function that resets the tab.
+ * @param scheduleName - the name of the new trigger schedule.
+ * @param computeProfile - the compute profile of thie schedule.
  */
-export function enableGroupTrigger(scheduleName: string, setTab: (tab: number) => void) {
+export function enableGroupTrigger(
+  scheduleName: string,
+  setTab: (tab: number) => void,
+  computeProfile: any
+) {
   const namespace = NamespaceStore.getState().selectedNamespace;
   const pipelineTriggers = PipelineTriggersStore.getState().triggers;
-  const configMappings = pipelineTriggers.triggersGroupRunArgsToAdd;
-  const runArgsMapping = {
-    arguments: [],
-    pluginProperties: [],
+  const runArgsMapping: ICompositeTriggerRunArgs = {
+    arguments: [...pipelineTriggers.triggersGroupRunArgsToAdd.arguments],
+    pluginProperties: [...pipelineTriggers.triggersGroupRunArgsToAdd.pluginProperties],
   };
-  let propertiesConfigToEnable = {};
-  configMappings.arguments.map((arg) => runArgsMapping.arguments.push(arg.arg));
-  configMappings.pluginProperties.map((plugin) =>
-    runArgsMapping.pluginProperties.push(plugin.plugin)
-  );
-  configMappings.propertiesConfig.map(
-    (property) =>
-      (propertiesConfigToEnable = { ...propertiesConfigToEnable, ...property.propertiesConfig })
-  );
 
   const requestObj: ISchedule = {
     name: scheduleName,
@@ -172,7 +166,7 @@ export function enableGroupTrigger(scheduleName: string, setTab: (tab: number) =
     },
     properties: {
       'triggering.properties.mapping': JSON.stringify(runArgsMapping),
-      ...propertiesConfigToEnable,
+      ...computeProfile,
     },
     trigger: {
       triggers: pipelineTriggers.triggersGroupToAdd,
@@ -313,13 +307,17 @@ export function enableSchedule(
 }
 
 /**
- * Method to transform the single trigger to OR group trigger.
+ * Method to configure composite trigger.
+ * @param mapping - the argument mappings of the pipeline trigger.
+ * @param triggersGroupRunArgsToAdd - the run arguments of the pipeline group trigger.
  * @param triggersGroupToAdd - the argument mappings of the pipeline trigger.
  * @param selectedNamespace - the selected namespace.
  * @param triggeringPipelineInfo - the triggering pipeline's info.
  * @param config - the rconfig of the pipeline group trigger.
  */
 export function addToTriggerGroup(
+  mapping: ITriggerPropertyMapping[],
+  triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets,
   triggersGroupToAdd: IProgramStatusTrigger[],
   selectedNamespace: string,
   triggeringPipelineInfo: ITriggeringPipelineInfo,
@@ -341,10 +339,39 @@ export function addToTriggerGroup(
     },
   ];
 
+  const triggersGroupRunArgs = { ...triggersGroupRunArgsToAdd };
+
+  if (!!mapping && !!triggersGroupRunArgs) {
+    mapping.forEach((map) => {
+      const keySplit = map.key.split(':');
+      const currpPipelineId = {
+        namespace: selectedNamespace,
+        pipelineName: triggeringPipelineInfo.id,
+      };
+      if (keySplit.length > 1) {
+        triggersGroupRunArgs.pluginProperties.push({
+          pipelineId: currpPipelineId,
+          stageName: keySplit[1],
+          source: keySplit[2],
+          target: map.value,
+        });
+        triggersGroupRunArgs.targets.set(map.value || keySplit[2], currpPipelineId);
+      } else {
+        triggersGroupRunArgs.arguments.push({
+          pipelineId: currpPipelineId,
+          source: map.key,
+          target: map.value,
+        });
+        triggersGroupRunArgs.targets.set(map.value || map.key, currpPipelineId);
+      }
+    });
+  }
+
   PipelineTriggersStore.dispatch({
     type: PipelineTriggersActions.setTriggersGroup,
     payload: {
       triggersGroupToAdd: newTriggersGroupToAdd,
+      triggersGroupRunArgsToAdd: triggersGroupRunArgs,
     },
   });
 }
@@ -357,7 +384,7 @@ export function addToTriggerGroup(
  *    {"pluginName":"name1","propertyKey":"key1","type":"PLUGIN_PROPERTY","namespace":"ns1","pipelineName":"p1"}
  * @param mapping - the argument mappings of the pipeline trigger.
  */
-export function generateRuntimeMapping(mapping) {
+export function generateRuntimeMapping(mapping: ITriggerPropertyMapping[]) {
   const runArgsMapping = {
     arguments: [],
     pluginProperties: [],
@@ -381,57 +408,33 @@ export function generateRuntimeMapping(mapping) {
 }
 
 /**
- * Method to transform the single trigger to OR group trigger.
+ * Method to validate the incoming trigger argument mapping.
  * @param mapping - the argument mappings of the pipeline trigger.
- * @param propertiesConfig - the properties config of the pipeline trigger.
  * @param triggersGroupRunArgsToAdd - the run arguments of the pipeline group trigger.
- * @param selectedNamespace - the selected namespace.
- * @param triggeringPipelineInfo - the triggering pipeline's info.
+ * @returns the validation result, null for valid result, string error for invalid result.
  */
-export function configureGroupTriggersProperties(
-  mapping: any,
-  propertiesConfig: any,
-  triggersGroupRunArgsToAdd: ITriggersGroupRunArgs,
-  selectedNamespace: string,
-  triggeringPipelineInfo: ITriggeringPipelineInfo
-) {
-  const triggersGroupRunArgs = { ...triggersGroupRunArgsToAdd };
-  mapping.forEach((map) => {
-    const keySplit = map.key.split(':');
+export function validateTriggerMappping(
+  mappings: ITriggerPropertyMapping[],
+  triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets
+): string {
+  if (!mappings) {
+    return null;
+  }
+  for (const mapping of mappings) {
+    const keySplit = mapping.key.split(':');
+    let targetToAdd: string;
     if (keySplit.length > 1) {
-      triggersGroupRunArgs.pluginProperties.push({
-        namespace: selectedNamespace,
-        application: triggeringPipelineInfo.id,
-        plugin: {
-          stageName: keySplit[1],
-          source: keySplit[2],
-          target: map.value,
-        },
-      });
+      targetToAdd = mapping.value || keySplit[2];
     } else {
-      triggersGroupRunArgs.arguments.push({
-        namespace: selectedNamespace,
-        application: triggeringPipelineInfo.id,
-        arg: {
-          source: map.key,
-          target: map.value,
-        },
-      });
+      targetToAdd = mapping.value || mapping.key;
     }
-  });
 
-  triggersGroupRunArgs.propertiesConfig.push({
-    namespace: selectedNamespace,
-    application: triggeringPipelineInfo.id,
-    propertiesConfig: { ...propertiesConfig },
-  });
-
-  PipelineTriggersStore.dispatch({
-    type: PipelineTriggersActions.setTriggersGroupRunArgsMapping,
-    payload: {
-      triggersGroupRunArgsToAdd: triggersGroupRunArgs,
-    },
-  });
+    if (triggersGroupRunArgsToAdd.targets.has(targetToAdd)) {
+      const pipelineId = triggersGroupRunArgsToAdd.targets.get(targetToAdd);
+      return `Argument mapping of "${targetToAdd}" already selected in pipeline: "${pipelineId.pipelineName}" of namespace: "${pipelineId.namespace}"`;
+    }
+  }
+  return null;
 }
 
 export function fetchTriggersAndApps(
@@ -502,9 +505,9 @@ export function disableSchedule(schedule: ISchedule, activePipeline: string, wor
 
 export function getPipelineInfo(schedule: ISchedule) {
   PipelineTriggersStore.dispatch({
-    type: PipelineTriggersActions.setExpandedTrigger,
+    type: PipelineTriggersActions.setExpandedSchedule,
     payload: {
-      expandedTrigger: schedule ? schedule.name : null,
+      expandedSchedule: schedule ? schedule.name : null,
     },
   });
 
@@ -547,9 +550,9 @@ export function getGroupInlinePipelineInfo(schedule: IProgramStatusTrigger) {
 
 export function getGroupPipelineInfo(schedule: ISchedule) {
   PipelineTriggersStore.dispatch({
-    type: PipelineTriggersActions.setExpandedTrigger,
+    type: PipelineTriggersActions.setExpandedSchedule,
     payload: {
-      expandedTrigger: schedule ? schedule.name : null,
+      expandedSchedule: schedule ? schedule.name : null,
     },
   });
 
@@ -580,8 +583,8 @@ function _filterPipelineList(
     .map((schedule) => {
       return (schedule.trigger as IProgramStatusTrigger).programId.application;
     });
-  const pipelineAndTriggersEnabled = PipelineTriggersStore.getState().triggers
-    .pipelineAndTriggersEnabled;
+  const pipelineCompositeTriggersEnabled = PipelineTriggersStore.getState().triggers
+    .pipelineCompositeTriggersEnabled;
 
   const pipelineList = appsList.filter((app) => {
     const isWorkflow = GLOBALS.programType[app.artifact.name] === WORKFLOW_TYPE;
@@ -591,7 +594,9 @@ function _filterPipelineList(
 
     const isNotExistingTrigger = triggersPipelineName.indexOf(app.name) === -1;
 
-    return isWorkflow && isCurrentNamespace && (pipelineAndTriggersEnabled || isNotExistingTrigger);
+    return (
+      isWorkflow && isCurrentNamespace && (pipelineCompositeTriggersEnabled || isNotExistingTrigger)
+    );
   });
 
   return pipelineList;
@@ -602,10 +607,10 @@ function _filterPipelineList(
  * @param existingSchedules - the existing enabled trigger schedules.
  */
 function _transformSchedule(existingSchedules: ISchedule[]) {
-  const pipelineAndTriggersEnabled = PipelineTriggersStore.getState().triggers
-    .pipelineAndTriggersEnabled;
+  const pipelineCompositeTriggersEnabled = PipelineTriggersStore.getState().triggers
+    .pipelineCompositeTriggersEnabled;
 
-  if (!pipelineAndTriggersEnabled) {
+  if (!pipelineCompositeTriggersEnabled) {
     return existingSchedules;
   }
 
@@ -618,11 +623,11 @@ function _transformSchedule(existingSchedules: ISchedule[]) {
     .map((schedule) => {
       const transformedSchedule = {
         ...schedule,
-        name: (schedule.trigger as IProgramStatusTrigger).programId.application,
         trigger: {
           triggers: [{ ...schedule.trigger }],
           type: PipelineTriggersTypes.orType,
         } as IGroupTrigger,
+        isTransformed: true,
       };
 
       return transformedSchedule;

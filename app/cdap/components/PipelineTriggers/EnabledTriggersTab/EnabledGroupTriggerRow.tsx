@@ -23,7 +23,11 @@ import {
   getGroupPipelineInfo,
 } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
 import T from 'i18n-react';
-import { ISchedule, IGroupTrigger } from 'components/PipelineTriggers/store/ScheduleTypes';
+import {
+  ISchedule,
+  IGroupTrigger,
+  ITriggeringPipelineId,
+} from 'components/PipelineTriggers/store/ScheduleTypes';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import {
   PipelineName,
@@ -36,7 +40,8 @@ import {
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 
 const DisableGroupTriggerBtn = styled(PipelineTriggerButton)`
-  position: absolute;
+  height: fit-content;
+  margin-top: 5px;
   right: 10px;
   width: 100px;
 `;
@@ -45,8 +50,13 @@ const TriggerType = styled(PipelineName)`
   margin: 10px;
 `;
 
+const GroupTriggerHeaderWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 interface IEnabledGroupTriggerRowProps {
-  expandedTrigger: string;
+  expandedSchedule: string;
   triggerGroup: ISchedule;
   loading: boolean;
   pipelineName: string;
@@ -55,7 +65,7 @@ interface IEnabledGroupTriggerRowProps {
 }
 
 const EnabledGroupTriggerRowView = ({
-  expandedTrigger,
+  expandedSchedule,
   triggerGroup,
   loading,
   pipelineName,
@@ -63,6 +73,10 @@ const EnabledGroupTriggerRowView = ({
   workflowName,
 }: IEnabledGroupTriggerRowProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const isExpanded = expandedSchedule === triggerGroup.name;
+  const scheduleName = triggerGroup.isTransformed
+    ? (triggerGroup.trigger as IGroupTrigger).triggers[0].programId.application
+    : triggerGroup.name;
 
   function handleConfirmModalOpen() {
     setShowDeleteModal(true);
@@ -73,12 +87,12 @@ const EnabledGroupTriggerRowView = ({
   }
 
   function handleConfirmModal() {
-    setShowDeleteModal(false);
     disableSchedule(triggerGroup, pipelineName, workflowName);
+    setShowDeleteModal(false);
   }
 
   function handleAccordionClick() {
-    if (expandedTrigger === triggerGroup.name) {
+    if (isExpanded) {
       getGroupPipelineInfo(null);
     } else {
       getGroupPipelineInfo(triggerGroup);
@@ -89,29 +103,27 @@ const EnabledGroupTriggerRowView = ({
     <StyledAccordion
       elevation={0}
       square
-      expanded={expandedTrigger === triggerGroup.name}
+      expanded={isExpanded}
       onChange={() => handleAccordionClick()}
-      data-cy={
-        expandedTrigger === triggerGroup.name
-          ? `${triggerGroup.name}-expanded`
-          : `${triggerGroup.name}-collapsed`
-      }
+      data-cy={isExpanded ? `${triggerGroup.name}-expanded` : `${triggerGroup.name}-collapsed`}
     >
       <StyledAccordionSummary>
-        <PipelineName>{triggerGroup.name}</PipelineName>
+        <PipelineName>{scheduleName}</PipelineName>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
-        <DisableGroupTriggerBtn
-          onClick={handleConfirmModalOpen}
-          data-cy="disable-group-trigger-btn"
-        >
-          {T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteTriggerButton`)}
-        </DisableGroupTriggerBtn>
-        <TriggerType>
-          {T.translate(`${TRIGGER_PREFIX}.pipelineTriggerType`, {
-            type: triggerGroup.trigger.type,
-          })}
-        </TriggerType>
+        <GroupTriggerHeaderWrap>
+          <TriggerType>
+            {T.translate(`${TRIGGER_PREFIX}.pipelineTriggerType`, {
+              type: triggerGroup.trigger.type,
+            })}
+          </TriggerType>
+          <DisableGroupTriggerBtn
+            onClick={handleConfirmModalOpen}
+            data-cy="disable-group-trigger-btn"
+          >
+            {T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteTriggerButton`)}
+          </DisableGroupTriggerBtn>
+        </GroupTriggerHeaderWrap>
         <ConfirmationModal
           headerTitle={T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteTrigger`)}
           confirmationText={T.translate(
@@ -127,7 +139,6 @@ const EnabledGroupTriggerRowView = ({
           errorMessage={disableError}
           isLoading={loading}
         />
-
         {(triggerGroup.trigger as IGroupTrigger).triggers.map((trigger) => {
           return (
             <EnabledInlineTriggerRow
@@ -145,7 +156,7 @@ const EnabledGroupTriggerRowView = ({
 
 const mapGroupTriggerRowStateToProps = (state) => {
   return {
-    expandedTrigger: state.triggers.expandedTrigger,
+    expandedSchedule: state.triggers.expandedSchedule,
     loading: state.enabledTriggers.loading,
     disableError: state.enabledTriggers.disableError,
     pipelineName: state.triggers.pipelineName,

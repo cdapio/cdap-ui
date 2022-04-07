@@ -316,7 +316,6 @@ export const renderTable = ({
                     row={row}
                     tinkEnabled={tinkEnabled}
                     addColumnsToTransforms={addColumnsToTransforms}
-                    columns={selectedList}
                   />
                 </GridCell>
                 <GridCell item xs={6}>
