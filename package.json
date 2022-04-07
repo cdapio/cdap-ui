@@ -267,13 +267,7 @@
     "node": ">= 10.12.2"
   },
   "resolutions": {
-    "@npmcli/fs/semver": "7.3.5",
-    "node-gyp/semver": "7.3.5",
-    "postcss-loader/semver": "7.3.5",
-    "ts-jest/semver": "7.3.5",
-    "@storybook/core-common/semver": "7.3.5",
-    "css-loader/semver": "7.3.5",
-    "jest-snapshot/semver": "7.3.5",
+    "semver/lru-cache": "6.0.0",
     "**/@npmcli/fs": "1.0.0",
     "**/cypress": "5.6.0",
     "**/npmlog": "4.1.2"
