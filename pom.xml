@@ -223,24 +223,6 @@
                 </configuration>
               </execution>
               <execution>
-                <id>install-semver</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>global add semver@7.3.0</arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>install-node-gyp</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>global add node-gyp@7.1.2</arguments>
-                </configuration>
-              </execution>
-              <execution>
                 <id>yarn-install</id>
                 <goals>
                   <goal>yarn</goal>
