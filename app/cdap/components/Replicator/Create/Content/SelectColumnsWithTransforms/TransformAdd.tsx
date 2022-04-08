@@ -27,7 +27,7 @@ export default function TransformAddButton({
   row,
   addColumnsToTransforms,
   tinkEnabled,
-  transforms,
+  currentColumnName,
 }: ITransformAddProps) {
   // todo replace this with a useReducer
   const [anchorEl, setAnchorEl] = useState(null);
@@ -39,17 +39,6 @@ export default function TransformAddButton({
 
   const open = !!anchorEl;
   const subMenuOpen = !!subMenuAnchorEl;
-
-  const getCurrentColumnName = (columnName: string) => {
-    const sameColumnRenames = transforms.filter(
-      (transform) => transform.columnName == columnName && transform.directive.includes('rename')
-    );
-    if (sameColumnRenames.length > 0) {
-      const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];
-      return currName;
-    }
-    return columnName;
-  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,7 +58,6 @@ export default function TransformAddButton({
   };
 
   const handleSetMaskLast = (numChars: number) => {
-    const currentColumnName = getCurrentColumnName(row.name);
     const newDirective = addMaskToTransforms({
       columnName: currentColumnName,
       directive: `right * ${numChars}`,
@@ -91,7 +79,6 @@ export default function TransformAddButton({
 
   const handleAddToTransforms = () => {
     let fullDirective: string;
-    const currentColumnName = getCurrentColumnName(row.name);
     const transformInfo = {
       columnName: currentColumnName,
       directive: directiveText,
