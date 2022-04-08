@@ -40,6 +40,17 @@ export default function TransformAddButton({
   const open = !!anchorEl;
   const subMenuOpen = !!subMenuAnchorEl;
 
+  const getCurrentColumnName = (columnName: string) => {
+    const sameColumnRenames = transforms.filter(
+      (transform) => transform.columnName == columnName && transform.directive.includes('rename')
+    );
+    if (sameColumnRenames.length > 0) {
+      const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];
+      return currName;
+    }
+    return columnName;
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -58,8 +69,9 @@ export default function TransformAddButton({
   };
 
   const handleSetMaskLast = (numChars: number) => {
+    const currentColumnName = getCurrentColumnName(row.name);
     const newDirective = addMaskToTransforms({
-      columnName: row.name,
+      columnName: currentColumnName,
       directive: `right * ${numChars}`,
     });
     addColumnsToTransforms({
@@ -79,21 +91,15 @@ export default function TransformAddButton({
 
   const handleAddToTransforms = () => {
     let fullDirective: string;
+    const currentColumnName = getCurrentColumnName(row.name);
     const transformInfo = {
-      columnName: row.name,
+      columnName: currentColumnName,
       directive: directiveText,
     };
 
     if (directive === 'tink') {
       fullDirective = addTinkToTransforms(transformInfo);
     } else if (directive === 'Rename') {
-      const sameColumnRenames = transforms.filter(
-        (transform) => transform.columnName == row.name && transform.directive.includes('rename')
-      );
-      if (sameColumnRenames.length > 0) {
-        const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];
-        transformInfo.columnName = currName;
-      }
       fullDirective = addRenameToTransforms(transformInfo);
     } else {
       fullDirective = addMaskToTransforms(transformInfo);
