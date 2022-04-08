@@ -106,6 +106,17 @@ export const renderTable = ({
   // empty table assessments object means there were no errors
   const allAssessmentsPassed = hasTableAssessments && Object.keys(tableAssessments).length === 0;
   const errNames = [];
+  const getCurrentColumnName = (columnName: string) => {
+    const sameColumnRenames = transforms.filter(
+      (transform) => transform.columnName == columnName && transform.directive.includes('rename')
+    );
+    if (sameColumnRenames.length > 0) {
+      const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];
+      return currName;
+    }
+    return columnName;
+  };
+
   let errs;
 
   if (hasTableAssessments) {
@@ -315,7 +326,7 @@ export const renderTable = ({
                   <TransformAddButton
                     row={row}
                     tinkEnabled={tinkEnabled}
-                    transforms={transforms}
+                    currentColumnName={getCurrentColumnName(row.name)}
                     addColumnsToTransforms={addColumnsToTransforms}
                     columns={selectedList}
                   />
