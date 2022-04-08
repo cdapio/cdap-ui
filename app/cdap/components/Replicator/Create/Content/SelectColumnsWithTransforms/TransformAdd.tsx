@@ -27,6 +27,7 @@ export default function TransformAddButton({
   row,
   addColumnsToTransforms,
   tinkEnabled,
+  transforms,
 }: ITransformAddProps) {
   // todo replace this with a useReducer
   const [anchorEl, setAnchorEl] = useState(null);
@@ -86,6 +87,13 @@ export default function TransformAddButton({
     if (directive === 'tink') {
       fullDirective = addTinkToTransforms(transformInfo);
     } else if (directive === 'Rename') {
+      const sameColumnRenames = transforms.filter(
+        (transform) => transform.columnName == row.name && transform.directive.includes('rename')
+      );
+      if (sameColumnRenames.length > 0) {
+        const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];
+        transformInfo.columnName = currName;
+      }
       fullDirective = addRenameToTransforms(transformInfo);
     } else {
       fullDirective = addMaskToTransforms(transformInfo);
