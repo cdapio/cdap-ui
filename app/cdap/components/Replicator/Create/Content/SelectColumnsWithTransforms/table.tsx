@@ -315,6 +315,7 @@ export const renderTable = ({
                   <TransformAddButton
                     row={row}
                     tinkEnabled={tinkEnabled}
+                    transforms={transforms}
                     addColumnsToTransforms={addColumnsToTransforms}
                     columns={selectedList}
                   />
