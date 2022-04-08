@@ -325,13 +325,15 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.DAGPlusPlusNodesActionsFactory.resetSelectedNode();
     let name = item.name || item.pluginTemplate;
     const configProperties = {};
+    let configurationGroups;
+    let widgets;
 
     if (!item.pluginTemplate) {
       let itemArtifact = item.artifact;
       let key = `${item.name}-${item.type}-${itemArtifact.name}-${itemArtifact.version}-${itemArtifact.scope}`;
-      const widgets = this.myHelpers.objectQuery(this.availablePluginMap, key, 'widgets');
+      widgets = this.myHelpers.objectQuery(this.availablePluginMap, key, 'widgets');
       const displayName = this.myHelpers.objectQuery(widgets, 'display-name');
-      const configurationGroups = this.myHelpers.objectQuery(widgets, 'configuration-groups');
+      configurationGroups = this.myHelpers.objectQuery(widgets, 'configuration-groups');
       if (configurationGroups && configurationGroups.length > 0) {
         configurationGroups.forEach(cg => {
           cg.properties.forEach(prop => {
@@ -361,7 +363,9 @@ class HydratorPlusPlusLeftPanelCtrl {
         inputSchema: item.inputSchema,
         pluginTemplate: item.pluginTemplate,
         description: item.description,
-        lock: item.lock
+        lock: item.lock,
+        configGroups: configurationGroups,
+        filters: widgets && widgets.filters
       };
     } else {
       config = {
@@ -374,7 +378,9 @@ class HydratorPlusPlusLeftPanelCtrl {
         icon: item.icon,
         description: item.description,
         type: item.type,
-        warning: true
+        warning: true,
+        configGroups: configurationGroups,
+        filters: widgets && widgets.filters
       };
     }
     this.DAGPlusPlusNodesActionsFactory.addNode(config);
