@@ -344,25 +344,25 @@ export function addToTriggerGroup(
   if (!!mapping && !!triggersGroupRunArgs) {
     mapping.forEach((map) => {
       const keySplit = map.key.split(':');
-      const currpPipelineId = {
+      const currentPipelineId = {
         namespace: selectedNamespace,
         pipelineName: triggeringPipelineInfo.id,
       };
       if (keySplit.length > 1) {
         triggersGroupRunArgs.pluginProperties.push({
-          pipelineId: currpPipelineId,
+          pipelineId: currentPipelineId,
           stageName: keySplit[1],
           source: keySplit[2],
           target: map.value,
         });
-        triggersGroupRunArgs.targets.set(map.value || keySplit[2], currpPipelineId);
+        triggersGroupRunArgs.targets.set(map.value || keySplit[2], currentPipelineId);
       } else {
         triggersGroupRunArgs.arguments.push({
-          pipelineId: currpPipelineId,
+          pipelineId: currentPipelineId,
           source: map.key,
           target: map.value,
         });
-        triggersGroupRunArgs.targets.set(map.value || map.key, currpPipelineId);
+        triggersGroupRunArgs.targets.set(map.value || map.key, currentPipelineId);
       }
     });
   }
@@ -409,9 +409,10 @@ export function generateRuntimeMapping(mapping: ITriggerPropertyMapping[]) {
 
 /**
  * Method to validate the incoming trigger argument mapping.
- * @param mapping - the argument mappings of the pipeline trigger.
+ *
+ * @param mappings - the argument mappings of the pipeline trigger.
  * @param triggersGroupRunArgsToAdd - the run arguments of the pipeline group trigger.
- * @returns the validation result, null for valid result, string error for invalid result.
+ * @returns {string} the validation result, null for valid result, string error for invalid result.
  */
 export function validateTriggerMappping(
   mappings: ITriggerPropertyMapping[],
