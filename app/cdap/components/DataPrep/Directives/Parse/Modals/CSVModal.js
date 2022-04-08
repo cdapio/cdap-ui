@@ -155,7 +155,7 @@ export default class CSVModal extends Component {
               />
               <span className="deprecated-warning">
                 <WarningIcon size="small" />
-                {T.translate(`${PREFIX}.Parsers.CSV.deprecatedWarning`)}
+                [{T.translate(`${PREFIX}.Parsers.CSV.deprecatedWarning`)}]
               </span>
               <span>{T.translate(`${PREFIX}.Parsers.CSV.firstRowHeader`)}</span>
             </span>
