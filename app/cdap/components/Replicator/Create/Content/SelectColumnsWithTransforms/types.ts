@@ -76,6 +76,7 @@ export interface ITransformAddProps {
   row: IColumn;
   addColumnsToTransforms: (opts: IColumnTransformation) => void;
   tinkEnabled: boolean;
+  currentColumnName: string;
 }
 
 export interface ITransformDeleteProps {
