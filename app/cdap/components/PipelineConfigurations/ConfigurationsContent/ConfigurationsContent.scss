@@ -139,6 +139,10 @@ $secondary-btn-color: $brand-primary;
         color: $secondary-btn-color;
         margin-left: 5px;
       }
+
+      .deprecated-warning {
+        font-weight: bold;
+      }
     }
   }
 }
