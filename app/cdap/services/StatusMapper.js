@@ -51,13 +51,13 @@ function getStatusIndicatorClass(displayStatus) {
   if (
     displayStatus === statusMap[PROGRAM_STATUSES.RUNNING] ||
     displayStatus === statusMap[PROGRAM_STATUSES.STARTING] ||
-    displayStatus === statusMap[PROGRAM_STATUSES.PENDING]
+    displayStatus === statusMap[PROGRAM_STATUSES.PENDING] ||
+    displayStatus === statusMap[PROGRAM_STATUSES.STOPPING]
   ) {
     return 'status-blue';
   } else if (
     displayStatus === statusMap[PROGRAM_STATUSES.SUCCEEDED] ||
-    displayStatus === statusMap[PROGRAM_STATUSES.SCHEDULING] ||
-    displayStatus === statusMap[PROGRAM_STATUSES.STOPPING]
+    displayStatus === statusMap[PROGRAM_STATUSES.SCHEDULING]
   ) {
     return 'status-light-green';
   } else if (
