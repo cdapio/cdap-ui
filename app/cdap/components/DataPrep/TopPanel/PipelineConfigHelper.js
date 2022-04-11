@@ -53,21 +53,29 @@ export default function getPipelineConfig() {
 
     res.sources.forEach((plugin) => {
       const pluginType = plugin.plugin.type;
-      // add if to prevent making batchsink into realtime source
-      if (pluginType !== 'batchsink') {
-        const connections = pluginType === 'batchsource' ? batchConnections : realtimeConnections;
-        const stages = pluginType === 'batchsource' ? batchStages : realtimeStages;
+      // check if plugin can be source
+      if (pluginType === 'batchsource' && pluginType !== 'streamingsource') {
+        return;
+      }
 
-        const pluginStage = formatPluginSpec(plugin);
-        const pluginName = pluginStage.name;
+      const pluginStage = formatPluginSpec(plugin);
+      const pluginName = pluginStage.name;
 
-        const connectionObj = {
-          from: pluginName,
-          to: wranglerName,
-        };
+      const connectionObj = {
+        from: pluginName,
+        to: wranglerName,
+      };
 
-        connections.push(connectionObj);
-        stages.push(pluginStage);
+      if (pluginType === 'batchsource') {
+        batchConnections.push(connectionObj);
+        batchStages.push(pluginStage);
+        return;
+      }
+
+      if (pluginType === 'streamingsource') {
+        realtimeConnections.push(connectionObj);
+        realtimeStages.push(pluginStage);
+        return;
       }
     });
 
