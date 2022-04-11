@@ -1091,7 +1091,7 @@ features:
             label: Avro
           CSV:
             customPlaceholder: "Delimiter (e.g ;, #, %, ^)"
-            deprecatedWarning: "[Deprecated]"
+            deprecatedWarning: "Deprecated"
             firstRowHeader: Set first row as header
             label: CSV
             modalTitle: Please select the delimiter
