@@ -153,67 +153,69 @@ export default class PipelineStopPopover extends Component {
               ) : null}
             </button>
           </div>
-          <table className="stop-btn-popover-table table">
-            <thead>
-              <tr>
-                <th />
-                <th>{T.translate('features.PipelineDetails.startTime')}</th>
-                <th>{T.translate('features.PipelineDetails.duration')}</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.runs.map((run, i) => {
-                let runStartTime;
-                if (run.starting) {
-                  runStartTime = moment.unix(run.starting).calendar();
-                } else {
-                  runStartTime = '--';
-                }
+          <div className="stop-btn-popover-table-container">
+            <table className="stop-btn-popover-table table">
+              <thead>
+                <tr>
+                  <th />
+                  <th>{T.translate('features.PipelineDetails.startTime')}</th>
+                  <th>{T.translate('features.PipelineDetails.duration')}</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.runs.map((run, i) => {
+                  let runStartTime;
+                  if (run.starting) {
+                    runStartTime = moment.unix(run.starting).calendar();
+                  } else {
+                    runStartTime = '--';
+                  }
 
-                return (
-                  <tr
-                    key={i}
-                    className={classnames({
-                      'current-run-row': run.runid === this.props.currentRunId,
-                    })}
-                  >
-                    <td>
-                      <a href={this.getRunIdUrl(run.runid)}>
-                        {run.runid === this.props.currentRunId ? (
-                          <IconSVG name="icon-check" />
-                        ) : null}
-                      </a>
-                    </td>
-                    <td>
-                      <a href={this.getRunIdUrl(run.runid)}>{runStartTime}</a>
-                    </td>
-                    <td>
-                      <a href={this.getRunIdUrl(run.runid)}>
-                        <Duration
-                          targetTime={run.starting}
-                          isMillisecond={false}
-                          showFullDuration={true}
-                        />
-                      </a>
-                    </td>
-                    <td>
-                      {this.state.runsBeingStopped.indexOf(run.runid) !== -1 ? (
-                        <IconSVG name="icon-spinner" className="fa-spin" />
-                      ) : (
-                        <span
-                          className="stop-run"
-                          onClick={this.stopSingleRun.bind(this, run.runid)}
-                        >
-                          {T.translate(`${PREFIX}.stopRun`)}
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr
+                      key={i}
+                      className={classnames({
+                        'current-run-row': run.runid === this.props.currentRunId,
+                      })}
+                    >
+                      <td>
+                        <a href={this.getRunIdUrl(run.runid)}>
+                          {run.runid === this.props.currentRunId ? (
+                            <IconSVG name="icon-check" />
+                          ) : null}
+                        </a>
+                      </td>
+                      <td>
+                        <a href={this.getRunIdUrl(run.runid)}>{runStartTime}</a>
+                      </td>
+                      <td>
+                        <a href={this.getRunIdUrl(run.runid)}>
+                          <Duration
+                            targetTime={run.starting}
+                            isMillisecond={false}
+                            showFullDuration={true}
+                          />
+                        </a>
+                      </td>
+                      <td>
+                        {this.state.runsBeingStopped.indexOf(run.runid) !== -1 ? (
+                          <IconSVG name="icon-spinner" className="fa-spin" />
+                        ) : (
+                          <span
+                            className="stop-run"
+                            onClick={this.stopSingleRun.bind(this, run.runid)}
+                          >
+                            {T.translate(`${PREFIX}.stopRun`)}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </fieldset>
       </Popover>
     );
