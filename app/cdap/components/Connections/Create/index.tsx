@@ -27,11 +27,11 @@ import {
   navigateToConfigStep,
   navigateToConnectionCategoryStep,
   navigateToConnectionList,
-  IConnectorDetails,
   fetchConnectionDetails,
   createConnection,
   getConnection,
   testConnection,
+  IConnectorDetailsWithErrorMessage,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
@@ -69,10 +69,13 @@ export function CreateConnection({
   const [loading, setLoading] = React.useState(true);
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const activeCategory = React.useRef(null);
-  const [connectionDetails, setConnectionDetails] = React.useState<IConnectorDetails>({
+  const [connectionDetails, setConnectionDetails] = React.useState<
+    IConnectorDetailsWithErrorMessage
+  >({
     connectorWidgetJSON: null,
     connectorProperties: null,
     connectorDoc: null,
+    error: null,
   });
   const [initValues, setInitValues] = React.useState({});
   const [error, setError] = React.useState(null);
@@ -127,11 +130,13 @@ export function CreateConnection({
     setLoading(true);
     const connDetails = await fetchConnectionDetails(selectedConnector);
     setConnectionDetails(connDetails);
-    navigateToConfigStep(dispatch, selectedConnector);
+    if (!connDetails.error) {
+      navigateToConfigStep(dispatch, selectedConnector);
+    }
     setLoading(false);
     setTestResponseMessages(undefined);
     setTestSucceeded(false);
-    setError(null);
+    setError(connDetails.error);
     setConfigurationErrors(null);
   };
 
