@@ -38,6 +38,12 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
 
   const classes = useStyle();
 
+  function handleFileClear() {
+    if (fileInputRef && fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  }
+
   function handleFile(event) {
     if (!objectQuery(event, 'target', 'files', 0)) {
       return;
@@ -85,6 +91,7 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
         <input
           type="file"
           accept=".json"
+          onClick={handleFileClear}
           onChange={handleFile}
           ref={fileInputRef}
           className={classes.hidden}
