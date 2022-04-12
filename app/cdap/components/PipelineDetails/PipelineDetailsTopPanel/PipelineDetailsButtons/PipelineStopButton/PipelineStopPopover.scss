@@ -64,6 +64,12 @@
       }
     }
 
+    .stop-btn-popover-table-container {
+      overflow-y: scroll;
+      overflow-x: hidden;
+      max-height: 800px;
+    }
+
     .table.stop-btn-popover-table {
       background-color: white;
 
