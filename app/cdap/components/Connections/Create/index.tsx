@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import { useState, useEffect, useRef, useContext, useReducer } from 'react';
 import T from 'i18n-react';
 import { CategorizedConnectors } from 'components/Connections/Create/CategorizedConnectors';
 import makeStyle from '@material-ui/core/styles/makeStyles';
@@ -27,11 +28,11 @@ import {
   navigateToConfigStep,
   navigateToConnectionCategoryStep,
   navigateToConnectionList,
-  IConnectorDetails,
   fetchConnectionDetails,
   createConnection,
   getConnection,
   testConnection,
+  IConnectorDetails,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
@@ -64,23 +65,24 @@ export function CreateConnection({
   isEdit = false,
   enableRouting = true,
 }) {
-  const { mode, disabledTypes } = React.useContext(ConnectionsContext);
+  const { mode, disabledTypes } = useContext(ConnectionsContext);
   const classes = useStyle();
-  const [loading, setLoading] = React.useState(true);
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-  const activeCategory = React.useRef(null);
-  const [connectionDetails, setConnectionDetails] = React.useState<IConnectorDetails>({
+  const [loading, setLoading] = useState(true);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const activeCategory = useRef(null);
+  const [connectionDetails, setConnectionDetails] = useState<IConnectorDetails>({
     connectorWidgetJSON: null,
     connectorProperties: null,
     connectorDoc: null,
+    connectorError: null,
   });
-  const [initValues, setInitValues] = React.useState({});
-  const [error, setError] = React.useState(null);
-  const [configurationErrors, setConfigurationErrors] = React.useState(null);
-  const [testSucceeded, setTestSucceeded] = React.useState(false);
-  const [testInProgress, setTestInProgress] = React.useState(false);
-  const [testResponseMessages, setTestResponseMessages] = React.useState(undefined);
-  const [redirectUrl, setRedirectUrl] = React.useState(null);
+  const [initValues, setInitValues] = useState({});
+  const [error, setError] = useState(null);
+  const [configurationErrors, setConfigurationErrors] = useState(null);
+  const [testSucceeded, setTestSucceeded] = useState(false);
+  const [testInProgress, setTestInProgress] = useState(false);
+  const [testResponseMessages, setTestResponseMessages] = useState(undefined);
+  const [redirectUrl, setRedirectUrl] = useState(null);
 
   const init = async () => {
     try {
@@ -90,7 +92,7 @@ export function CreateConnection({
       setLoading(false);
     }
   };
-  React.useEffect(() => {
+  useEffect(() => {
     init();
 
     if (initialConfig && Object.keys(initialConfig).length > 0) {
@@ -127,11 +129,13 @@ export function CreateConnection({
     setLoading(true);
     const connDetails = await fetchConnectionDetails(selectedConnector);
     setConnectionDetails(connDetails);
-    navigateToConfigStep(dispatch, selectedConnector);
+    if (!connDetails.connectorError) {
+      navigateToConfigStep(dispatch, selectedConnector);
+    }
     setLoading(false);
     setTestResponseMessages(undefined);
     setTestSucceeded(false);
-    setError(null);
+    setError(connDetails.connectorError);
     setConfigurationErrors(null);
   };
 
@@ -274,6 +278,7 @@ export function CreateConnection({
           connectorProperties={connectionDetails.connectorProperties}
           connectorWidgetJSON={connectionDetails.connectorWidgetJSON}
           connectorDoc={connectionDetails.connectorDoc}
+          connectorError={connectionDetails.connectorError}
           onConnectionCreate={onConnectionCreate}
           onConnectionTest={onConnectionTest}
           initValues={initValues}

@@ -38,6 +38,13 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
 
   const classes = useStyle();
 
+  // This makes sure the onChange hook will fire for same file
+  function handleFileClear() {
+    if (fileInputRef && fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  }
+
   function handleFile(event) {
     if (!objectQuery(event, 'target', 'files', 0)) {
       return;
@@ -85,6 +92,7 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
         <input
           type="file"
           accept=".json"
+          onClick={handleFileClear}
           onChange={handleFile}
           ref={fileInputRef}
           className={classes.hidden}
@@ -98,14 +106,14 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
         onCreate={handleCreate}
       />
 
-      <If condition={!!parseError}>
+      {!!parseError && (
         <Alert
           message={parseError}
           type="error"
           showAlert={true}
           onClose={() => setParseError(null)}
         />
-      </If>
+      )}
     </>
   );
 }
