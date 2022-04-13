@@ -44,6 +44,7 @@ export interface IConnectorDetails {
   connectorProperties: Record<string, any>;
   connectorWidgetJSON: unknown;
   connectorDoc: unknown;
+  connectorError: string;
 }
 
 enum ICreateConnectionActions {
@@ -225,6 +226,7 @@ export async function fetchConnectionDetails(connection) {
     connectorProperties: null,
     connectorWidgetJSON: null,
     connectorDoc: null,
+    connectorError: null,
   };
   const {
     name: artifactname = 'google-cloud',
@@ -272,8 +274,7 @@ export async function fetchConnectionDetails(connection) {
     connDetails.connectorWidgetJSON = JSON.parse(connectionWidgetJSON[widgetJSONKey]);
     connDetails.connectorDoc = connectionDoc[docKey];
   } catch (e) {
-    // tslint:disable-next-line: no-console
-    console.log('Error fetching widget json or parsing: ', e);
+    connDetails.connectorError = `Error fetching widget json or parsing: '${e.response}'`;
   }
   return connDetails;
 }
