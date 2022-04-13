@@ -38,6 +38,7 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
 
   const classes = useStyle();
 
+  // This makes sure the onChange hook will fire for same file
   function handleFileClear() {
     if (fileInputRef && fileInputRef.current) {
       fileInputRef.current.value = null;
@@ -105,14 +106,14 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
         onCreate={handleCreate}
       />
 
-      <If condition={!!parseError}>
+      {!!parseError && (
         <Alert
           message={parseError}
           type="error"
           showAlert={true}
           onClose={() => setParseError(null)}
         />
-      </If>
+      )}
     </>
   );
 }

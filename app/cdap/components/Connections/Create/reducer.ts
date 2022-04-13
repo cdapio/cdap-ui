@@ -44,10 +44,7 @@ export interface IConnectorDetails {
   connectorProperties: Record<string, any>;
   connectorWidgetJSON: unknown;
   connectorDoc: unknown;
-}
-
-export interface IConnectorDetailsWithErrorMessage extends IConnectorDetails {
-  error: string;
+  connectorError: string;
 }
 
 enum ICreateConnectionActions {
@@ -225,11 +222,11 @@ function addVersionInfo(categoryToConnectionsMap, versionsMap) {
 }
 
 export async function fetchConnectionDetails(connection) {
-  const connDetails: IConnectorDetailsWithErrorMessage = {
+  const connDetails: IConnectorDetails = {
     connectorProperties: null,
     connectorWidgetJSON: null,
     connectorDoc: null,
-    error: null,
+    connectorError: null,
   };
   const {
     name: artifactname = 'google-cloud',
@@ -277,9 +274,7 @@ export async function fetchConnectionDetails(connection) {
     connDetails.connectorWidgetJSON = JSON.parse(connectionWidgetJSON[widgetJSONKey]);
     connDetails.connectorDoc = connectionDoc[docKey];
   } catch (e) {
-    // tslint:disable-next-line: no-console
-    connDetails.error = `Error fetching widget json or parsing: '${e.response}'`;
-    // console.log('Error fetching widget json or parsing: ', e);
+    connDetails.connectorError = `Error fetching widget json or parsing: '${e.response}'`;
   }
   return connDetails;
 }
