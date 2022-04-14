@@ -177,7 +177,7 @@ export function CreateConnection({
         onCreate();
       }
 
-      if (mode === IConnectionMode.ROUTED && !isEdit) {
+      if (mode === IConnectionMode.ROUTED && enableRouting) {
         setRedirectUrl(`${getConnectionPath(name)}`);
       }
 
