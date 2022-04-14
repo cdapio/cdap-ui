@@ -98,7 +98,6 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
       } as Pick<IKeyValueState, StateKeys>,
       () => {
         let { key, value } = this.state;
-        value = value?.trim();
         if (this.props.isEncoded) {
           key = encodeURIComponent(key);
           value = encodeURIComponent(value);
