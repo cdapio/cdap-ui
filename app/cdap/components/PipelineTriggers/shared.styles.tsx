@@ -62,6 +62,7 @@ export const EventsList = styled.div`
 `;
 
 export const PipelineDescription = styled.div`
+  color: #888888;
   margin: 5px;
 `;
 
@@ -74,7 +75,8 @@ export const PipelineListHeader = styled.div`
   font-weight: bold;
   border-bottom: 1px solid #dedede;
   padding: 5px 0;
-  margin-top: 5px;
+  margin: 5px 0 0 23px;
+  text-decoration: underline;
 `;
 
 export const PipelineTriggerHeader = styled.div`
@@ -99,6 +101,10 @@ export const StyledNameSpace = styled.div`
   text-overflow: ellipsis;
   vertical-align: middle;
   width: 100px;
+`;
+
+export const StyledNameSpaceHeader = styled(StyledNameSpace)`
+  text-decoration: underline;
 `;
 
 export const StyledAccordion = styled(Accordion)`
@@ -133,4 +139,28 @@ export const StyledAccordionDetails = styled(AccordionDetails)`
   border-top: 1px solid rgba(0, 0, 0, 0.125);
   flex-direction: column;
   background-color: #efefef;
+`;
+
+export const PipelineCount = styled.div`
+  margin-bottom: 10px;
+`;
+
+export const TriggersTab = styled.div`
+  padding: 15px;
+`;
+
+export const StyledPipelineName = styled(PipelineName)`
+  width: calc(100% - 125px);
+`;
+
+export const StyledPipelineNameHeader = styled(StyledPipelineName)`
+  text-decoration: underline;
+`;
+
+export const PipelineLink = styled.a`
+  margin-left: 10px;
+`;
+
+export const PipelineListContainer = styled.div`
+  padding-right: 7px;
 `;

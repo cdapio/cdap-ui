@@ -44,19 +44,24 @@ function PipelineTriggersWithFeatures({
     return null;
   }
 
+  const pipelineCompositeTriggersEnabled = useFeatureFlagDefaultFalse(
+    'pipeline.composite.triggers.enabled'
+  );
+
   return (
     <div className="pipeline-triggers-sidebar-container">
       <PipelineTriggers
         {...{
-          usePipelineCompositeTriggers: useFeatureFlagDefaultFalse(
-            'pipeline.composite.triggers.enabled'
-          ),
+          pipelineCompositeTriggersEnabled,
           pipelineName,
           namespace,
           pipelineType,
         }}
       />
-      <TriggeredPipelines pipelineName={pipelineName} />
+      <TriggeredPipelines
+        pipelineName={pipelineName}
+        pipelineCompositeTriggersEnabled={pipelineCompositeTriggersEnabled}
+      />
     </div>
   );
 }
