@@ -18,6 +18,7 @@ import { apiCreator } from 'services/resource-helper';
 
 let dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/artifacts';
+const listArtifactVersionsPath = basepath + '/:artifactId';
 const baseArtifactPath = basepath + '/:artifactId/versions/:version';
 const basePluginArtifactJSON = baseArtifactPath + '/properties';
 
@@ -39,6 +40,7 @@ export const MyArtifactApi = {
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', baseArtifactPath),
   loadPluginConfiguration: apiCreator(dataSrc, 'PUT', 'REQUEST', basePluginArtifactJSON),
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
+  listArtifactVersions: apiCreator(dataSrc, 'GET', 'REQUEST', listArtifactVersionsPath),
   reloadSystemArtifacts: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/system/artifacts'),
   fetchPluginDetails: apiCreator(
     dataSrc,

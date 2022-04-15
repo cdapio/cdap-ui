@@ -20,6 +20,7 @@ import { ConnectionsApi } from 'api/connections';
 import { MyPipelineApi } from 'api/pipeline';
 import { MyArtifactApi } from 'api/artifact';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import semverRcompare from 'semver/functions/rcompare';
 
 export const STATE_INITIAL_LOADING = 'STATE_INITIAL_LOADING';
 export const STATE_AVAILABLE = 'STATE_AVAILABLE';
@@ -84,16 +85,19 @@ export const reducer = (state, action) => {
 
 // Copied from PluginListWidget/index
 // TODO Centralize server-defined types
+
+interface IArtifact {
+  name: string;
+  version: string;
+  scope: string;
+}
+
 interface IPlugin {
   name: string;
   type: string;
   description: string;
   className: string;
-  artifact: {
-    name: string;
-    version: string;
-    scope: string;
-  };
+  artifact: IArtifact;
 }
 
 interface IConnectionDetails {
@@ -126,11 +130,34 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
   const sourcePluginName = sourcePluginNameProperty.description;
 
   let widgetKey;
-  // Get the connection details in order to find the arttifact version
+  // Get the connection details in order to find the artifact version
   // Assume the source plugin is in the same artifact as the connector
   const widgetObs = ConnectionsApi.getConnection(params).pipe(
     switchMap((connectionDetails: IConnectionDetails) => {
       const connectorArtifact = connectionDetails.plugin.artifact;
+      if (connectorArtifact.version) {
+        return Observable.of(connectorArtifact);
+      } else {
+        // If no verion was provided by this response,
+        // look up the artifact and get the latest version
+        // This can happen for the default connection
+        const listArtifactVersionsParams = {
+          namespace,
+          artifactId: connectorArtifact.name,
+          scope: connectorArtifact.scope,
+        };
+        return MyArtifactApi.listArtifactVersions(listArtifactVersionsParams).pipe(
+          switchMap((artifactsList: IArtifact[]) => {
+            // Sort artifacts in descending order by version
+            const sortedArtifacts = artifactsList.sort((a, b) => {
+              return semverRcompare(a.version, b.version, { includePrerelease: true });
+            });
+            return Observable.of(sortedArtifacts[0]);
+          })
+        );
+      }
+    }),
+    switchMap((connectorArtifact: IArtifact) => {
       widgetKey = `widgets.${sourcePluginName}-${SOURCE_PLUGIN_TYPE}`;
       const widgetJsonParams = {
         namespace,
@@ -148,7 +175,7 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
         pluginName: sourcePluginName,
       };
 
-      // Get the widget JSON (to specific the UI) and the plugin properties
+      // Get the widget JSON (to specify the UI) and the plugin properties
       // (for the semantics of the properties, e.g. required fields)
       return Observable.forkJoin(
         MyPipelineApi.fetchWidgetJson(widgetJsonParams),
