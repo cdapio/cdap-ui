@@ -67,8 +67,8 @@ class Login extends Component {
         }
       })
       .then((res) => {
-        const isSecure = window.CDAP_CONFIG.sslEnabled;
-        cookie.set('CDAP_Auth_Token', res.access_token, {
+        const { isSecure, access_token } = res;
+        cookie.set('CDAP_Auth_Token', access_token, {
           path: '/',
           secure: isSecure,
           sameSite: 'strict',
