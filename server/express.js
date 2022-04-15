@@ -466,7 +466,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         var statusCode = (nres ? nres.statusCode : 500) || 500;
         res.status(statusCode).send(nbody);
       } else {
-        res.send(nbody);
+        const jsonBody = JSON.parse(nbody);
+        jsonBody.isSecure = isSecure;
+        res.send(JSON.stringify(jsonBody));
       }
     });
   }
