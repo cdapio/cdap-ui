@@ -108,7 +108,7 @@ export const renderTable = ({
   const errNames = [];
   const getCurrentColumnName = (columnName: string) => {
     const sameColumnRenames = transforms.filter(
-      (transform) => transform.columnName == columnName && transform.directive.includes('rename')
+      (transform) => transform.columnName === columnName && transform.directive.includes('rename')
     );
     if (sameColumnRenames.length > 0) {
       const currName = sameColumnRenames[sameColumnRenames.length - 1].directive.split(' ')[2];

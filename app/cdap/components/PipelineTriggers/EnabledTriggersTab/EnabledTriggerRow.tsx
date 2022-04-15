@@ -39,6 +39,7 @@ import {
   HelperText,
   LoadingIconStyle,
   PipelineDescription,
+  PipelineLink,
   PipelineName,
   PipelineTriggerButton,
   StyledAccordion,
@@ -51,10 +52,6 @@ import ConfirmationModal from 'components/shared/ConfirmationModal';
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PAYLOAD_PREFIX = `${TRIGGER_PREFIX}.ScheduleRuntimeArgs.PayloadConfigModal`;
 const PREFIX = `${TRIGGER_PREFIX}.EnabledTriggers`;
-
-const PipelineLink = styled.a`
-  margin-left: 10px;
-`;
 
 const StyledPipelineName = styled(PipelineName)`
   width: calc(100% - 125px);
