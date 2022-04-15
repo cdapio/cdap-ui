@@ -22,7 +22,6 @@ import ScheduleRuntimeArgs from 'components/PipelineTriggers/ScheduleRuntimeArgs
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
-import Button from '@material-ui/core/Button';
 
 require('./PayloadConfigModal.scss');
 
@@ -33,41 +32,24 @@ export default class PayloadConfigModal extends Component {
     isOpen: PropTypes.bool,
     triggeringPipelineInfo: PropTypes.object,
     triggeredPipelineInfo: PropTypes.string,
-    onClose: PropTypes.func,
-    onEnableSchedule: PropTypes.func,
+    onConfigureSchedule: PropTypes.func,
     disabled: PropTypes.bool,
     scheduleInfo: PropTypes.object,
     configureError: PropTypes.string,
     onToggle: PropTypes.func,
-    andTriggersEnabled: PropTypes.bool,
-  };
-
-  state = {
-    isOpen: false,
-  };
-
-  toggle = () => {
-    const newState = !this.state.isOpen;
-    this.setState({
-      isOpen: newState,
-    });
-    if (typeof this.props.onToggle === 'function') {
-      this.props.onToggle(newState);
-    }
-    if (!this.state.isOpen && this.props.onClose) {
-      this.props.onClose();
-    }
+    pipelineCompositeTriggersEnabled: PropTypes.bool,
+    modalConfigTab: PropTypes.object,
   };
 
   renderModal = () => {
-    if (!this.state.isOpen) {
+    if (!this.props.isOpen) {
       return null;
     }
 
     return (
       <Modal
-        isOpen={this.state.isOpen}
-        toggle={this.toggle}
+        isOpen={this.props.isOpen}
+        toggle={this.props.onToggle}
         modalClassName="payload-config-modal"
         size="lg"
         zIndex="1061"
@@ -76,7 +58,7 @@ export default class PayloadConfigModal extends Component {
         <ModalHeader className="clearfix">
           <span className="pull-left">{T.translate(`${PREFIX}.title`)}</span>
           <div className="btn-group pull-right">
-            <a className="btn" onClick={this.toggle}>
+            <a className="btn" onClick={this.props.onToggle}>
               <IconSVG name="icon-close" className="fa" />
             </a>
           </div>
@@ -85,10 +67,11 @@ export default class PayloadConfigModal extends Component {
           <ScheduleRuntimeArgs
             triggeringPipelineInfo={this.props.triggeringPipelineInfo}
             triggeredPipelineInfo={this.props.triggeredPipelineInfo}
-            onEnableSchedule={this.props.onEnableSchedule}
+            onEnableSchedule={this.props.onConfigureSchedule}
             disabled={this.props.disabled}
             scheduleInfo={this.props.scheduleInfo}
-            andTriggersEnabled={this.props.andTriggersEnabled}
+            pipelineCompositeTriggersEnabled={this.props.pipelineCompositeTriggersEnabled}
+            modalConfigTab={this.props.modalConfigTab}
           />
         </ModalBody>
         {this.props.configureError && (
@@ -103,22 +86,6 @@ export default class PayloadConfigModal extends Component {
   };
 
   render() {
-    const label = this.props.disabled
-      ? T.translate(`${PREFIX}.configPayloadBtnDisabled`)
-      : T.translate(`${PREFIX}.configPayloadBtn`);
-    const btnCy = this.props.disabled ? 'view-payload-btn' : 'trigger-config-btn';
-
-    return (
-      <div className="payload-config-modal">
-        <Button
-          className="view-payload-btn"
-          onClick={this.toggle}
-          data-cy={`${this.props.triggeringPipelineInfo.id}-${btnCy}`}
-        >
-          {label}
-        </Button>
-        {this.renderModal()}
-      </div>
-    );
+    return <div className="payload-config-modal">{this.renderModal()}</div>;
   }
 }

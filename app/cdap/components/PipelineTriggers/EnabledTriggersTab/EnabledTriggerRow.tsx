@@ -49,14 +49,8 @@ import {
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
+const PAYLOAD_PREFIX = `${TRIGGER_PREFIX}.ScheduleRuntimeArgs.PayloadConfigModal`;
 const PREFIX = `${TRIGGER_PREFIX}.EnabledTriggers`;
-
-const HeaderRow = styled.div`
-  margin-left: -5px;
-  margin-right: -5px;
-  font-weight: bold;
-  cursor: pointer;
-`;
 
 const PipelineLink = styled.a`
   margin-left: 10px;
@@ -66,14 +60,8 @@ const StyledPipelineName = styled(PipelineName)`
   width: calc(100% - 125px);
 `;
 
-const styledLoadingIcon = styled(LoadingSVG)`
-  svg:not(:root) {
-    height: 20px;
-  }
-`;
-
 interface IEnabledTriggerRowViewProps {
-  expandedTrigger: string;
+  expandedSchedule: string;
   schedule: ISchedule;
   loading: boolean;
   info: IPipelineInfo;
@@ -83,7 +71,7 @@ interface IEnabledTriggerRowViewProps {
 }
 
 const EnabledTriggerRowView = ({
-  expandedTrigger,
+  expandedSchedule,
   schedule,
   loading,
   info,
@@ -94,6 +82,8 @@ const EnabledTriggerRowView = ({
   const currentTrigger = schedule.trigger as IProgramStatusTrigger;
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedNamespace, setSelectedNamesapce] = useState(null);
+  const [payloadModalOpen, setPayloadModalOpen] = useState(false);
+  const isExpanded = expandedSchedule === schedule.name;
   useEffect(() => {
     const ns = NamespaceStore.getState().selectedNamespace;
     setSelectedNamesapce(ns);
@@ -113,7 +103,7 @@ const EnabledTriggerRowView = ({
   }
 
   function handleAccordionClick() {
-    if (expandedTrigger === schedule.name) {
+    if (isExpanded) {
       getPipelineInfo(null);
     } else {
       getPipelineInfo(schedule);
@@ -126,6 +116,10 @@ const EnabledTriggerRowView = ({
         <LoadingSVG height="15px" />
       </LoadingIconStyle>
     );
+  };
+
+  const handlePayloadToggleClick = () => {
+    setPayloadModalOpen(!payloadModalOpen);
   };
 
   const renderContent = () => {
@@ -182,25 +176,33 @@ const EnabledTriggerRowView = ({
           >
             {T.translate(`${PREFIX}.deleteTriggerButton`)}
           </PipelineTriggerButton>
-          <ConfirmationModal
-            headerTitle={T.translate(`${PREFIX}.deleteTrigger`)}
-            confirmationText={T.translate(`${PREFIX}.deleteConfirmationText`, {
-              type: pipelineName,
-            })}
-            confirmButtonText={T.translate(`${PREFIX}.deleteConfirm`)}
-            confirmFn={handleConfirmModal}
-            cancelFn={handleConfirmModalClose}
-            isOpen={showDeleteModal}
-            errorMessage={disableError}
-            isLoading={loading}
-          />
-          <PayloadConfigModal
-            triggeringPipelineInfo={triggeringPipelineInfo}
-            triggeredPipelineInfo={triggeredPipelineInfo}
-            scheduleInfo={schedule}
-            disabled={true}
-          />
+          <PipelineTriggerButton
+            onClick={handlePayloadToggleClick}
+            data-cy={`${triggeringPipelineInfo.id}-view-payload-btn`}
+          >
+            {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtnDisabled`)}
+          </PipelineTriggerButton>
         </ActionButtonsContainer>
+        <ConfirmationModal
+          headerTitle={T.translate(`${PREFIX}.deleteTrigger`)}
+          confirmationText={T.translate(`${PREFIX}.deleteConfirmationText`, {
+            type: pipelineName,
+          })}
+          confirmButtonText={T.translate(`${PREFIX}.deleteConfirm`)}
+          confirmFn={handleConfirmModal}
+          cancelFn={handleConfirmModalClose}
+          isOpen={showDeleteModal}
+          errorMessage={disableError}
+          isLoading={loading}
+        />
+        <PayloadConfigModal
+          isOpen={payloadModalOpen}
+          onToggle={handlePayloadToggleClick}
+          triggeringPipelineInfo={triggeringPipelineInfo}
+          triggeredPipelineInfo={triggeredPipelineInfo}
+          scheduleInfo={schedule}
+          disabled={true}
+        />
       </div>
     );
   };
@@ -209,10 +211,10 @@ const EnabledTriggerRowView = ({
     <StyledAccordion
       elevation={0}
       square
-      expanded={expandedTrigger === schedule.name}
+      expanded={isExpanded}
       onChange={() => handleAccordionClick()}
       data-cy={
-        expandedTrigger === schedule.name
+        isExpanded
           ? `${currentTrigger.programId.application}-expanded`
           : `${currentTrigger.programId.application}-collapsed`
       }
@@ -228,7 +230,7 @@ const EnabledTriggerRowView = ({
 
 const mapTriggerRowStateToProps = (state) => {
   return {
-    expandedTrigger: state.triggers.expandedTrigger,
+    expandedSchedule: state.triggers.expandedSchedule,
     loading: state.enabledTriggers.loading,
     info: state.enabledTriggers.pipelineInfo,
     disableError: state.enabledTriggers.disableError,

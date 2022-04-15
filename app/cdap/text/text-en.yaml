@@ -2662,11 +2662,11 @@ features:
     description: Description
     EnabledTriggers:
       addNewTrigger: Add new trigger
-      andTriggersPipelineCount:
+      compositeTriggersPipelineCount:
         0: "No triggers set"
         1: "{context} trigger is set"
         _: "{context} triggers are set"
-      andTriggersTitle: "View Enabled triggers for pipeline \"{pipelineName}\""
+      compositeTriggersTitle: "View Enabled triggers for pipeline \"{pipelineName}\""
       buttonLabel: Disable Trigger
       deleteTrigger: Delete Trigger
       deleteTriggerButton: Delete Trigger
@@ -2690,7 +2690,7 @@ features:
     pipelineTriggerType: "Trigger Type: {type}"
     ScheduleRuntimeArgs:
       configure_enable_btn: Configure and Enable Trigger
-      configure_select_btn: Configure and Select Trigger
+      configure_select_btn: Select
       DefaultMessages:
         choose_runtime_arg: Pick runtime argument
         choose_plugin: Pick plugin
@@ -2701,7 +2701,7 @@ features:
         title: Payload configuration
       Tabs:
         ComputeConfig:
-          title: Select a compute profile to use when the pipeline is triggered by "{triggeringPipelineId}"
+          title: Select a compute profile to use when the pipeline is triggered.
           tabTitle: Compute config
         PayloadConfig:
           title: Payload config
@@ -2726,7 +2726,8 @@ features:
           title: Plugin config
     SetTriggers:
       addNewTrigger: Enable the trigger
-      andTriggersTitle: "Add a new trigger for \"{pipelineName}\""
+      configComputeProfie: Compute Profile
+      compositeTriggersTitle: "Add a new trigger for \"{pipelineName}\""
       buttonLabel: Enable Trigger
       pipelineCount: "{count} pipelines available"
       selectedPipelines: "Selected Pipelines:"

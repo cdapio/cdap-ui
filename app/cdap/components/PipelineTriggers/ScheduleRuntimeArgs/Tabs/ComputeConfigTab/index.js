@@ -23,10 +23,10 @@ import { setSelectedProfile } from 'components/PipelineTriggers/ScheduleRuntimeA
 
 const PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.Tabs.ComputeConfig';
 
-function ComputeConfigTab({ triggeringPipelineId, selectedProfile, disabled }) {
+function ComputeConfigTab({ selectedProfile, disabled }) {
   return (
     <div className="compute-config-tab">
-      {disabled ? null : <h4>{T.translate(`${PREFIX}.title`, { triggeringPipelineId })} </h4>}
+      {disabled ? null : <h4>{T.translate(`${PREFIX}.title`)} </h4>}
       <ProfilesListViewInPipeline
         selectedProfile={selectedProfile}
         onProfileSelect={setSelectedProfile}
@@ -43,7 +43,6 @@ ComputeConfigTab.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    triggeringPipelineId: state.args.triggeringPipelineInfo.id,
     selectedProfile: state.args.selectedProfile,
     disabled: state.args.disabled,
   };

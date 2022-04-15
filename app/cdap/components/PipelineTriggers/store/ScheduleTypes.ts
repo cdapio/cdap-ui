@@ -57,6 +57,7 @@ export interface ISchedule {
   timeoutMillis: number;
   lastUpdateTime?: number;
   status?: string;
+  isTransformed?: boolean;
 }
 
 export interface IPipelineInfo {
@@ -96,8 +97,32 @@ export interface ITriggeringPipelineInfo {
   version?: string;
 }
 
-export interface ITriggersGroupRunArgs {
-  arguments: any[];
-  pluginProperties: any[];
-  propertiesConfig: any[];
+export interface ICompositeTriggerRunArgs {
+  arguments: IRuntimeArgumentMapping[];
+  pluginProperties: IPluginPropertyMapping[];
+}
+
+export interface ICompositeTriggerRunArgsWithTargets extends ICompositeTriggerRunArgs {
+  targets: Map<string, ITriggeringPipelineId>;
+}
+
+export interface IRuntimeArgumentMapping {
+  source: string;
+  target: string;
+  pipelineId: ITriggeringPipelineId;
+}
+
+export interface ITriggeringPipelineId {
+  namespace: string;
+  pipelineName: string;
+}
+
+export interface IPluginPropertyMapping extends IRuntimeArgumentMapping {
+  stageName: string;
+}
+
+export interface ITriggerPropertyMapping {
+  key: string;
+  value: string;
+  type: string;
 }
