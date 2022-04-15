@@ -131,8 +131,25 @@ function bulkSetArgMapping(argsArray) {
     },
   });
 }
+
+/**
+ * Method to get the information of member trigger of an AND or OR pipeline trigger group.
+ * @param args - triggering pipeline argument/plugin mapping.
+ * @param triggeringPipelineInfo - the triggering pipeline ID info.
+ * @returns all the args that belong to the triggering pipeline.
+ */
+function filterPropertyMapping(args, triggeringPipelineInfo) {
+  return args.filter(
+    (arg) =>
+      arg.pipelineId &&
+      arg.pipelineId.namespace === triggeringPipelineInfo.namespace &&
+      arg.pipelineId.pipelineName === triggeringPipelineInfo.id
+  );
+}
+
 export {
   fetchPipelineMacroDetails,
+  filterPropertyMapping,
   setArgMapping,
   resetStore,
   bulkSetArgMapping,

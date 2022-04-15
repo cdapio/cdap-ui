@@ -52,6 +52,8 @@ export const HelperText = styled.div`
 `;
 
 export const ActionButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding: 15px;
 `;
 
@@ -72,6 +74,7 @@ export const PipelineListHeader = styled.div`
   font-weight: bold;
   border-bottom: 1px solid #dedede;
   padding: 5px 0;
+  margin-top: 5px;
 `;
 
 export const PipelineTriggerHeader = styled.div`

@@ -68,8 +68,8 @@ const EnabledTriggersView = ({
   pipelineName,
   setTab,
 }: IEnabledTriggersViewProps) => {
-  const andTriggersEnabled = useFeatureFlagDefaultFalse(
-    'pipeline.triggers.conditional.and.enabled'
+  const pipelineCompositeTriggersEnabled = useFeatureFlagDefaultFalse(
+    'pipeline.composite.triggers.enabled'
   );
   const enabledSingleTriggers = enabledTriggers.filter(
     (schedule) => schedule.trigger.type === PipelineTriggersTypes.programStatus
@@ -83,14 +83,14 @@ const EnabledTriggersView = ({
   return (
     <ExistingTriggersTab>
       <PipelineTriggerHeader>
-        {andTriggersEnabled
-          ? T.translate(`${PREFIX}.andTriggersTitle`, { pipelineName })
+        {pipelineCompositeTriggersEnabled
+          ? T.translate(`${PREFIX}.compositeTriggersTitle`, { pipelineName })
           : T.translate(`${PREFIX}.title`, { pipelineName })}
       </PipelineTriggerHeader>
 
       <PipelineCount>
-        {andTriggersEnabled
-          ? T.translate(`${PREFIX}.andTriggersPipelineCount`, {
+        {pipelineCompositeTriggersEnabled
+          ? T.translate(`${PREFIX}.compositeTriggersPipelineCount`, {
               context: enabledTriggers.length,
             })
           : T.translate(`${PREFIX}.pipelineCount`, {
@@ -121,7 +121,7 @@ const EnabledTriggersView = ({
         </div>
       )}
 
-      {andTriggersEnabled && (
+      {pipelineCompositeTriggersEnabled && (
         <AddNewTriggerButton
           color="primary"
           variant="contained"

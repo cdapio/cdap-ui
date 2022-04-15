@@ -26,15 +26,25 @@ export function triggerConditionReducer(oldstate, action) {
       return { ...oldstate, killed: !oldstate.killed };
     case 'FAILED':
       return { ...oldstate, failed: !oldstate.failed };
+    case 'TOGGLE_PAYLOAD':
+      return {
+        ...oldstate,
+        payloadModalOpen: !oldstate.payloadModalOpen,
+        mappingError: !oldstate.payloadModalOpen ? '' : oldstate.mappingError,
+      };
+    case 'INVALID_MAPPING':
+      return { ...oldstate, mappingError: action.error };
     default:
       return oldstate;
   }
 }
 
-export const initialConditionState = {
+export const initialInlineTriggerState = {
   completed: true,
   killed: false,
   failed: false,
+  payloadModalOpen: false,
+  mappingError: '',
 };
 
 export function triggerNameReducer(oldstate, action) {
@@ -71,6 +81,14 @@ export function triggerNameReducer(oldstate, action) {
         triggerNameError: '',
         triggerName: action.triggerName,
       };
+    case 'TOGGLE_PAYLOAD':
+      return { ...oldstate, computeModalOpen: !oldstate.computeModalOpen };
+    case 'COMPUTE_PROFILE':
+      return {
+        ...oldstate,
+        computeProfile: { ...oldstate.computeProfile, ...action.computeProfile },
+        computeModalOpen: !oldstate.computeModalOpen,
+      };
     default:
       return oldstate;
   }
@@ -81,5 +99,7 @@ export const initialNameState = {
   namespace: '',
   triggerName: '',
   isNameInvalid: true,
+  computeModalOpen: false,
+  computeProfile: {},
   triggerNameError: T.translate(`${TRIGGER_PREFIX}.triggerNameRequired`),
 };

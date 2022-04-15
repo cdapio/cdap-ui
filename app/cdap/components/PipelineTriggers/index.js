@@ -81,7 +81,7 @@ export default class PipelineTriggers extends Component {
       payload: {
         pipelineName: this.props.pipelineName,
         workflowName: GLOBALS.programId[this.props.pipelineType],
-        pipelineAndTriggersEnabled: this.props.usePipelineAndTriggers,
+        pipelineCompositeTriggersEnabled: this.props.usePipelineCompositeTriggers,
       },
     });
 
@@ -130,7 +130,7 @@ export default class PipelineTriggers extends Component {
       >
         <Provider store={PipelineTriggersStore}>
           <div className="pipeline-triggers-content">
-            {this.props.usePipelineAndTriggers ? null : (
+            {this.props.usePipelineCompositeTriggers ? null : (
               <div className="tab-headers">
                 <div
                   className={classnames('tab', { active: this.state.activeTab === 0 })}
@@ -161,7 +161,7 @@ export default class PipelineTriggers extends Component {
 }
 
 PipelineTriggers.propTypes = {
-  usePipelineAndTriggers: PropTypes.bool.isRequired,
+  usePipelineCompositeTriggers: PropTypes.bool.isRequired,
   pipelineName: PropTypes.string.isRequired,
   namespace: PropTypes.string.isRequired,
   pipelineType: PropTypes.string.isRequired,

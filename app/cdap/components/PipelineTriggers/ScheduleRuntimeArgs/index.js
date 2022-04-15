@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
   fetchPipelineMacroDetails,
+  filterPropertyMapping,
   resetStore,
   bulkSetArgMapping,
   setSelectedProfile,
@@ -27,7 +28,7 @@ import ScheduleRuntimeArgsStore, {
   SCHEDULERUNTIMEARGSACTIONS,
 } from 'components/PipelineTriggers/ScheduleRuntimeArgs/ScheduleRuntimeArgsStore';
 import ConfigurableTab from 'components/shared/ConfigurableTab';
-import TabConfig from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
+import Tabs from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import { objectQuery } from 'services/helpers';
@@ -48,7 +49,8 @@ export default class ScheduleRuntimeArgs extends Component {
     triggeredPipelineInfo: PropTypes.object.isRequired,
     disabled: PropTypes.bool,
     scheduleInfo: PropTypes.object,
-    andTriggersEnabled: PropTypes.bool,
+    pipelineCompositeTriggersEnabled: PropTypes.bool,
+    modalConfigTab: PropTypes.object,
   };
 
   state = {
@@ -98,7 +100,9 @@ export default class ScheduleRuntimeArgs extends Component {
 
       let argsArray = [];
 
-      let runtimeArgs = triggerProperties.arguments;
+      let runtimeArgs = this.props.pipelineCompositeTriggersEnabled
+        ? filterPropertyMapping(triggerProperties.arguments, this.props.triggeringPipelineInfo)
+        : triggerProperties.arguments;
       if (runtimeArgs.length > 0) {
         runtimeArgs.forEach((args) => {
           argsArray.push({
@@ -109,7 +113,12 @@ export default class ScheduleRuntimeArgs extends Component {
         });
       }
 
-      let pluginProperties = triggerProperties.pluginProperties;
+      let pluginProperties = this.props.pipelineCompositeTriggersEnabled
+        ? filterPropertyMapping(
+            triggerProperties.pluginProperties,
+            this.props.triggeringPipelineInfo
+          )
+        : triggerProperties.pluginProperties;
       if (pluginProperties.length > 0) {
         pluginProperties.forEach((properties) => {
           let key = `${this.props.triggeringPipelineInfo.id}:${properties.stageName}:${properties.source}`;
@@ -172,7 +181,7 @@ export default class ScheduleRuntimeArgs extends Component {
           disabled={this.isEnableTriggerDisabled()}
           data-cy="configure-and-enable-trigger-btn"
         >
-          {this.props.andTriggersEnabled
+          {this.props.pipelineCompositeTriggersEnabled
             ? T.translate(`${PREFIX}.configure_select_btn`)
             : T.translate(`${PREFIX}.configure_enable_btn`)}
         </button>
@@ -183,7 +192,9 @@ export default class ScheduleRuntimeArgs extends Component {
       <div className={classnames('schedule-runtime-args', { disabled: this.props.disabled })}>
         <Provider store={ScheduleRuntimeArgsStore}>
           <fieldset disabled={this.props.disabled}>
-            <ConfigurableTab tabConfig={TabConfig} />
+            <ConfigurableTab
+              tabConfig={this.props.modalConfigTab ? this.props.modalConfigTab : Tabs.TabConfig}
+            />
           </fieldset>
         </Provider>
 

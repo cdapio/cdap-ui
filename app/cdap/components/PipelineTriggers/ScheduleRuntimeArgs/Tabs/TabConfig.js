@@ -52,4 +52,47 @@ const TabConfig = {
   layout: 'vertical',
   defaultTab: 1.1,
 };
-export default TabConfig;
+
+const PayLoadConfigTabConfig = {
+  tabs: [
+    {
+      id: 1,
+      type: 'tab-group',
+      name: T.translate(`${PREFIX}.PayloadConfig.title`),
+      opened: true,
+      subtabs: [
+        {
+          id: 1.1,
+          name: T.translate(`${PREFIX}.RuntimeArgs.title`),
+          content: <RuntimeArgsTab />,
+          default: true,
+        },
+        {
+          id: 1.2,
+          name: T.translate(`${PREFIX}.StageProps.title`),
+          content: <StagePropertiesTab />,
+        },
+      ],
+    },
+  ],
+  layout: 'vertical',
+  defaultTab: 1.1,
+};
+
+const ComputeProfileTabConfig = {
+  tabs: [
+    {
+      id: 1,
+      name: T.translate(`${PREFIX}.ComputeConfig.tabTitle`),
+      content: <ComputeConfigTab />,
+    },
+  ],
+  layout: 'vertical',
+  defaultTab: 1,
+};
+
+export default {
+  TabConfig,
+  PayLoadConfigTabConfig,
+  ComputeProfileTabConfig,
+};

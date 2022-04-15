@@ -18,11 +18,12 @@ import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import {
   addToTriggerGroup,
-  configureGroupTriggersProperties,
   enableSchedule,
   generateRuntimeMapping,
+  validateTriggerMappping,
 } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
 import PayloadConfigModal from 'components/PipelineTriggers/PayloadConfigModal';
+import ConfigTabs from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import T from 'i18n-react';
 import Checkbox from '@material-ui/core/Checkbox';
 import {
@@ -39,16 +40,19 @@ import {
   StyledAccordionSummary,
 } from 'components/PipelineTriggers/shared.styles';
 import {
+  ICompositeTriggerRunArgsWithTargets,
   IProgramStatusTrigger,
   ITriggeringPipelineInfo,
+  ITriggerPropertyMapping,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import {
-  initialConditionState,
+  initialInlineTriggerState,
   triggerConditionReducer,
 } from 'components/PipelineTriggers/reducer';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
+const PAYLOAD_PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.PayloadConfigModal';
 
 const PipelineLink = styled.a`
   margin-left: 10px;
@@ -62,13 +66,11 @@ interface IPipelineTriggersRowViewProps {
   triggeredPipelineInfo: any;
   selectedNamespace: string;
   configureError: string;
-  onPayloadToggle: (isOpen: boolean) => void;
-  payloadModalIsOpen: boolean;
-  andTriggersEnabled: boolean;
+  pipelineCompositeTriggersEnabled: boolean;
   pipelineName: string;
   workflowName: string;
   triggersGroupToAdd: IProgramStatusTrigger[];
-  triggersGroupRunArgsToAdd: any;
+  triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets;
 }
 
 const PipelineTriggersRow = ({
@@ -79,15 +81,13 @@ const PipelineTriggersRow = ({
   triggeredPipelineInfo,
   selectedNamespace,
   configureError,
-  onPayloadToggle,
-  payloadModalIsOpen,
-  andTriggersEnabled,
+  pipelineCompositeTriggersEnabled,
   pipelineName,
   workflowName,
   triggersGroupToAdd,
   triggersGroupRunArgsToAdd,
 }: IPipelineTriggersRowViewProps) => {
-  const [state, dispatch] = useReducer(triggerConditionReducer, initialConditionState);
+  const [state, dispatch] = useReducer(triggerConditionReducer, initialInlineTriggerState);
 
   const getConfig = () => {
     const config = {
@@ -110,32 +110,40 @@ const PipelineTriggersRow = ({
     onToggle(null);
     const config = getConfig();
     enableSchedule(triggeringPipelineInfo, workflowName, pipelineName, selectedNamespace, config);
+    dispatch({ type: 'TOGGLE_PAYLOAD' });
   };
 
-  const addToTriggerGroupClick = () => {
+  const addToTriggerGroupClick = (mapping: ITriggerPropertyMapping[]) => {
     onToggle(null);
     const config = getConfig();
-    addToTriggerGroup(triggersGroupToAdd, selectedNamespace, triggeringPipelineInfo, config);
+    addToTriggerGroup(
+      mapping,
+      triggersGroupRunArgsToAdd,
+      triggersGroupToAdd,
+      selectedNamespace,
+      triggeringPipelineInfo,
+      config
+    );
+    dispatch({ type: 'TOGGLE_PAYLOAD' });
   };
 
-  const configureAndEnable = (mapping, propertiesConfig = {}) => {
+  const configureAndEnable = (mapping: ITriggerPropertyMapping[], propertiesConfig = {}) => {
     const config = getConfig();
     config.properties = {
       'triggering.properties.mapping': generateRuntimeMapping(mapping),
       ...propertiesConfig,
     };
     enableSchedule(triggeringPipelineInfo, workflowName, pipelineName, selectedNamespace, config);
+    dispatch({ type: 'TOGGLE_PAYLOAD' });
   };
 
-  const configureGroupTriggers = (mapping, propertiesConfig = {}) => {
-    addToTriggerGroupClick();
-    configureGroupTriggersProperties(
-      mapping,
-      propertiesConfig,
-      triggersGroupRunArgsToAdd,
-      selectedNamespace,
-      triggeringPipelineInfo
-    );
+  const configureGroupTriggers = (mapping: ITriggerPropertyMapping[], propertiesConfig = {}) => {
+    const validateResult = validateTriggerMappping(mapping, triggersGroupRunArgsToAdd);
+    if (!!validateResult) {
+      dispatch({ type: 'INVALID_MAPPING', error: validateResult });
+    } else {
+      addToTriggerGroupClick(mapping);
+    }
   };
 
   const handleAccordionClick = () => {
@@ -144,6 +152,10 @@ const PipelineTriggersRow = ({
     } else {
       onToggle(pipelineRow);
     }
+  };
+
+  const handlePayloadToggleClick = () => {
+    dispatch({ type: 'TOGGLE_PAYLOAD' });
   };
 
   const enabledButtonDisabled = !state.completed && !state.killed && !state.failed;
@@ -187,29 +199,45 @@ const PipelineTriggersRow = ({
           </CheckboxItemContainer>
         </EventsList>
 
-        {configureError && !payloadModalIsOpen && <ErrorText>{configureError}</ErrorText>}
+        {configureError && !state.payloadModalOpen && <ErrorText>{configureError}</ErrorText>}
 
         <ActionButtonsContainer>
           <PipelineTriggerButton
             disabled={enabledButtonDisabled}
             onClick={
-              andTriggersEnabled ? () => addToTriggerGroupClick() : () => enableScheduleClick()
+              pipelineCompositeTriggersEnabled
+                ? () => addToTriggerGroupClick(null)
+                : () => enableScheduleClick()
             }
             data-cy={`${pipelineRow}-enable-trigger-btn`}
           >
-            {andTriggersEnabled
+            {pipelineCompositeTriggersEnabled
               ? T.translate(`${PREFIX}.selectButtonLabel`)
               : T.translate(`${PREFIX}.buttonLabel`)}
           </PipelineTriggerButton>
-          <PayloadConfigModal
-            triggeringPipelineInfo={triggeringPipelineInfo}
-            triggeredPipelineInfo={triggeredPipelineInfo}
-            onEnableSchedule={andTriggersEnabled ? configureGroupTriggers : configureAndEnable}
-            configureError={configureError}
-            onToggle={onPayloadToggle}
-            andTriggersEnabled={andTriggersEnabled}
-          />
+          <PipelineTriggerButton
+            onClick={handlePayloadToggleClick}
+            data-cy={`${triggeringPipelineInfo.id}-trigger-config-btn`}
+          >
+            {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtn`)}
+          </PipelineTriggerButton>
         </ActionButtonsContainer>
+        <PayloadConfigModal
+          triggeringPipelineInfo={triggeringPipelineInfo}
+          triggeredPipelineInfo={triggeredPipelineInfo}
+          onConfigureSchedule={
+            pipelineCompositeTriggersEnabled ? configureGroupTriggers : configureAndEnable
+          }
+          configureError={state.mappingError || configureError}
+          isOpen={state.payloadModalOpen}
+          onToggle={handlePayloadToggleClick}
+          pipelineCompositeTriggersEnabled={pipelineCompositeTriggersEnabled}
+          modalConfigTab={
+            pipelineCompositeTriggersEnabled
+              ? ConfigTabs.PayLoadConfigTabConfig
+              : ConfigTabs.TabConfig
+          }
+        />
       </StyledAccordionDetails>
     </StyledAccordion>
   );
