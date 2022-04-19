@@ -54,7 +54,7 @@ export default function getPipelineConfig() {
     res.sources.forEach((plugin) => {
       const pluginType = plugin.plugin.type;
       // check if plugin can be source
-      if (pluginType === 'batchsource' && pluginType !== 'streamingsource') {
+      if (pluginType !== 'batchsource' && pluginType !== 'streamingsource') {
         return;
       }
 
