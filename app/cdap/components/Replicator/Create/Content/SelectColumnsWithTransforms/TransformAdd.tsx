@@ -27,6 +27,7 @@ export default function TransformAddButton({
   row,
   addColumnsToTransforms,
   tinkEnabled,
+  currentColumnName,
 }: ITransformAddProps) {
   // todo replace this with a useReducer
   const [anchorEl, setAnchorEl] = useState(null);
@@ -58,7 +59,7 @@ export default function TransformAddButton({
 
   const handleSetMaskLast = (numChars: number) => {
     const newDirective = addMaskToTransforms({
-      columnName: row.name,
+      columnName: currentColumnName,
       directive: `right * ${numChars}`,
     });
     addColumnsToTransforms({
@@ -79,7 +80,7 @@ export default function TransformAddButton({
   const handleAddToTransforms = () => {
     let fullDirective: string;
     const transformInfo = {
-      columnName: row.name,
+      columnName: currentColumnName,
       directive: directiveText,
     };
 
