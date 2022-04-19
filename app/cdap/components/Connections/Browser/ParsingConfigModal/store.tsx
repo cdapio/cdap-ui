@@ -20,6 +20,7 @@ import { ConnectionsApi } from 'api/connections';
 import { MyPipelineApi } from 'api/pipeline';
 import { MyArtifactApi } from 'api/artifact';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import VersionStore from 'services/VersionStore';
 
 export const STATE_INITIAL_LOADING = 'STATE_INITIAL_LOADING';
 export const STATE_AVAILABLE = 'STATE_AVAILABLE';
@@ -44,6 +45,7 @@ export const INITIAL_STATE = {
 const SOURCE_PLUGIN_NAME_PROPERTY = '_pluginName';
 // Source parsing applies only to batch sources for now
 const SOURCE_PLUGIN_TYPE = 'batchsource';
+const PIPELINE_ARTIFACT_ID = 'cdap-data-pipeline';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -125,34 +127,55 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
   );
   const sourcePluginName = sourcePluginNameProperty.description;
 
+  const cdapVersion = VersionStore.getState().version;
+
   let widgetKey;
   // Get the connection details in order to find the arttifact version
   // Assume the source plugin is in the same artifact as the connector
   const widgetObs = ConnectionsApi.getConnection(params).pipe(
     switchMap((connectionDetails: IConnectionDetails) => {
-      const connectorArtifact = connectionDetails.plugin.artifact;
+      const { artifact: connectorArtifact } = connectionDetails.plugin;
+      let pluginDetailsParams;
+      if (connectorArtifact.version) {
+        pluginDetailsParams = {
+          namespace,
+          artifactId: connectorArtifact.name,
+          version: connectorArtifact.version,
+          scope: connectorArtifact.scope,
+          extensionType: SOURCE_PLUGIN_TYPE,
+          pluginName: sourcePluginName,
+        };
+      } else {
+        // If the connection doesn't specify an artifact version,
+        // find the latest version and use that
+        // This can happen for the default connection
+        pluginDetailsParams = {
+          namespace,
+          artifactId: PIPELINE_ARTIFACT_ID,
+          version: cdapVersion,
+          scope: connectorArtifact.scope,
+          extensionType: SOURCE_PLUGIN_TYPE,
+          pluginName: sourcePluginName,
+          order: 'DESC',
+          limit: 1,
+        };
+      }
+
+      return MyArtifactApi.fetchPluginDetails(pluginDetailsParams);
+    }),
+    switchMap((pluginDetails) => {
+      const pluginArtifact = pluginDetails[0].artifact;
       widgetKey = `widgets.${sourcePluginName}-${SOURCE_PLUGIN_TYPE}`;
       const widgetJsonParams = {
         namespace,
-        artifactName: connectorArtifact.name,
-        artifactVersion: connectorArtifact.version,
-        scope: connectorArtifact.scope,
+        artifactName: pluginArtifact.name,
+        artifactVersion: pluginArtifact.version,
+        scope: pluginArtifact.scope,
         keys: widgetKey,
       };
-      const pluginDetailsParams = {
-        namespace,
-        artifactId: connectorArtifact.name,
-        version: connectorArtifact.version,
-        scope: connectorArtifact.scope,
-        extensionType: SOURCE_PLUGIN_TYPE,
-        pluginName: sourcePluginName,
-      };
-
-      // Get the widget JSON (to specific the UI) and the plugin properties
-      // (for the semantics of the properties, e.g. required fields)
       return Observable.forkJoin(
         MyPipelineApi.fetchWidgetJson(widgetJsonParams),
-        MyArtifactApi.fetchPluginDetails(pluginDetailsParams)
+        Observable.of(pluginDetails)
       );
     })
   );
