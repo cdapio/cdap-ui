@@ -53,9 +53,10 @@ export default function getPipelineConfig() {
 
     res.sources.forEach((plugin) => {
       const pluginType = plugin.plugin.type;
-
-      const connections = pluginType === 'batchsource' ? batchConnections : realtimeConnections;
-      const stages = pluginType === 'batchsource' ? batchStages : realtimeStages;
+      // check if plugin can be source
+      if (pluginType !== 'batchsource' && pluginType !== 'streamingsource') {
+        return;
+      }
 
       const pluginStage = formatPluginSpec(plugin);
       const pluginName = pluginStage.name;
@@ -65,8 +66,17 @@ export default function getPipelineConfig() {
         to: wranglerName,
       };
 
-      connections.push(connectionObj);
-      stages.push(pluginStage);
+      if (pluginType === 'batchsource') {
+        batchConnections.push(connectionObj);
+        batchStages.push(pluginStage);
+        return;
+      }
+
+      if (pluginType === 'streamingsource') {
+        realtimeConnections.push(connectionObj);
+        realtimeStages.push(pluginStage);
+        return;
+      }
     });
 
     const batchConfig = {
