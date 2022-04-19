@@ -2326,6 +2326,8 @@ features:
         default: Cluster Default
         forceOff: Force Off
         forceOn: Force On
+      mapreduce:
+        deprecated: Deprecated
       numExecutors: Number of Executors
       numExecutorsTooltip: The number of executors to allocate for this pipeline on Apache Yarn.
       showCustomConfig: Show custom config
