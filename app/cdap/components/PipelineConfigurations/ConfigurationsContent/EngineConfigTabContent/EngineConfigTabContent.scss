@@ -139,5 +139,10 @@ $input-label-color: $grey-03;
         margin-bottom: 16px;
       }
     }
+
+    .deprecated-warning {
+      font-weight: bold;
+      padding: 0 0.25em;
+    }
   }
 }
