@@ -50,7 +50,7 @@ const NoIssuesTablesView: React.FC<INoIssuesTablesProps> = ({ classes, tables, s
         {tables.length} tables have been assessed with no schema issues
       </div>
 
-      <Table columnTemplate="250px 100px 1fr">
+      <Table columnTemplate="150px 150px 1fr">
         <TableHeader>
           <TableRow>
             <TableCell>Name</TableCell>
