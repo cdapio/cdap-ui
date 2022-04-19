@@ -62,8 +62,6 @@ export default function ImportConnectionBtn({ onCreate, className = null }) {
   }
 
   function handleCreate() {
-    setIsOpen(false);
-
     if (typeof onCreate === 'function') {
       onCreate();
     }

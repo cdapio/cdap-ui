@@ -37,7 +37,6 @@ export default function AddConnectionBtnModal({ onCreate, className = null }) {
   }
 
   function onCreateHandler() {
-    setIsOpen(false);
     if (typeof onCreate === 'function') {
       onCreate();
     }
