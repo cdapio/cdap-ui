@@ -446,7 +446,12 @@ export function identifyReplicatorEntityFromMetadata(metadata: {
  */
 export function parseErrorMessageForTransformations(message: string) {
   const [_, tablePiece, columnPiece, messagePiece] = message.split(' : ');
-  const table = tablePiece.split(' ')[0];
+  // for mssql source, table name will be in format of schema.table
+  // hence need to split on '.' and take the last element as table name
+  const table = tablePiece
+    .split(' ')[0]
+    .split('.')
+    .slice(-1)[0];
   const column = columnPiece.split(' ')[0];
   const errorMessage = messagePiece;
 
