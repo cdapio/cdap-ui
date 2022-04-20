@@ -15,10 +15,10 @@
  */
 
 import React from 'react';
+import { useState, useEffect } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { CreateConnection } from 'components/Connections/Create';
 import { createPortal } from 'react-dom';
-import If from 'components/shared/If';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -45,9 +45,9 @@ export default function CreateConnectionModal({
   const classes = useStyle();
 
   const body = document.body;
-  const [el] = React.useState(document.createElement('div'));
+  const [el] = useState(document.createElement('div'));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       body.appendChild(el);
     }
@@ -62,7 +62,7 @@ export default function CreateConnectionModal({
 
   return createPortal(
     <div className={classes.root}>
-      <If condition={isOpen}>
+      {isOpen && (
         <CreateConnection
           onToggle={onToggle}
           initialConfig={initialConfig}
@@ -70,7 +70,7 @@ export default function CreateConnectionModal({
           isEdit={isEdit}
           enableRouting={false}
         />
-      </If>
+      )}
     </div>,
     el
   );
