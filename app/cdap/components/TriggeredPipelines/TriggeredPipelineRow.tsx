@@ -33,6 +33,7 @@ import {
   IPipelineInfo,
   ISchedule,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
+import { openLinkInNewTab } from 'services/helpers';
 
 const PREFIX = `features.TriggeredPipelines`;
 
@@ -97,7 +98,13 @@ export const TriggeredPipelineRow = ({
         <PipelineDescription>
           <strong>{T.translate(`${PREFIX}.description`)}: </strong>
           {pipelineInfo ? <span>{pipelineInfo.description}</span> : renderLoading()}
-          <PipelineLink href={`/pipelines/ns/${schedule.namespace}/view/${schedule.application}`}>
+          <PipelineLink
+            href={`/pipelines/ns/${schedule.namespace}/view/${schedule.application}`}
+            // The Anchor tab is not working, using this hacky way to fix it for now
+            onClick={() =>
+              openLinkInNewTab(`/pipelines/ns/${schedule.namespace}/view/${schedule.application}`)
+            }
+          >
             {T.translate(`${PREFIX}.viewPipeline`)}
           </PipelineLink>
         </PipelineDescription>

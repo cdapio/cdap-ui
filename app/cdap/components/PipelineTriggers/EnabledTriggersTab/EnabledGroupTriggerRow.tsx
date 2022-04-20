@@ -23,11 +23,7 @@ import {
   getGroupPipelineInfo,
 } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
 import T from 'i18n-react';
-import {
-  ISchedule,
-  IGroupTrigger,
-  ITriggeringPipelineId,
-} from 'components/PipelineTriggers/store/ScheduleTypes';
+import { ISchedule, IGroupTrigger } from 'components/PipelineTriggers/store/ScheduleTypes';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import {
   PipelineName,

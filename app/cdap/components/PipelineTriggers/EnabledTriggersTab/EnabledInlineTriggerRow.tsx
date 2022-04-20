@@ -33,6 +33,7 @@ import {
   TextCenter,
 } from 'components/PipelineTriggers/shared.styles';
 import styled from 'styled-components';
+import { openLinkInNewTab } from 'services/helpers';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PAYLOAD_PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.PayloadConfigModal';
@@ -120,6 +121,13 @@ const EnabledInlineTriggerRow = ({
         </PipelineDescription>
         <PipelineLink
           href={`/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`}
+          target="_blank"
+          // The Anchor tab is not working, using this hacky way to fix it for now
+          onClick={() =>
+            openLinkInNewTab(
+              `/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`
+            )
+          }
         >
           {T.translate(`${TRIGGER_PREFIX}.viewPipeline`)}
         </PipelineLink>
