@@ -40,6 +40,8 @@ export default function TransformAddButton({
   const open = !!anchorEl;
   const subMenuOpen = !!subMenuAnchorEl;
 
+  const isString = row.targetType.toLowerCase() === 'string';
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -136,7 +138,7 @@ export default function TransformAddButton({
         <MenuItem onClick={handleMenuClick}>
           Rename <ArrowRight />
         </MenuItem>
-        <MenuItem onClick={handleMaskOpen}>
+        <MenuItem disabled={!isString} onClick={handleMaskOpen}>
           Mask <ArrowRight />
         </MenuItem>
         <Menu
@@ -155,9 +157,13 @@ export default function TransformAddButton({
             dense: true,
           }}
         >
-          <MenuItem onClick={() => handleSetMaskLast(2)}>Show last 2</MenuItem>
-          <MenuItem onClick={() => handleSetMaskLast(4)}>Show last 4</MenuItem>
-          <MenuItem onClick={handleMenuClick}>
+          <MenuItem disabled={!isString} onClick={() => handleSetMaskLast(2)}>
+            Show last 2
+          </MenuItem>
+          <MenuItem disabled={!isString} onClick={() => handleSetMaskLast(4)}>
+            Show last 4
+          </MenuItem>
+          <MenuItem disabled={!isString} onClick={handleMenuClick}>
             Custom <ArrowRight />
           </MenuItem>
           {tinkEnabled && (
