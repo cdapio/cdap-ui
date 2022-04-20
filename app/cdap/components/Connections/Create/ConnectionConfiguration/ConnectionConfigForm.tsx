@@ -45,6 +45,10 @@ const useStyle = makeStyle((theme) => {
   };
 });
 
+interface valueProp {
+  required?: boolean;
+}
+
 export function ConnectionConfigForm({
   connectorWidgetJSON,
   connectorProperties,
@@ -68,7 +72,7 @@ export function ConnectionConfigForm({
     const fieldErrors = {};
     for (const [fieldName, value] of Object.entries(connectorProperties)) {
       if (
-        !!value.required &&
+        !!(value as valueProp).required &&
         (!values.hasOwnProperty(fieldName) || values[fieldName] === '' || values[fieldName] == null)
       ) {
         fieldErrors[fieldName] = [
