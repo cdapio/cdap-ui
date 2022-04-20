@@ -300,7 +300,7 @@ export const renderTable = ({
                   <span></span>
                 </Grid>
                 <GridCell item xs={4}>
-                  <NoPaddingSpanLeft>{row.type.toLowerCase()}</NoPaddingSpanLeft>
+                  <NoPaddingSpanLeft>{row.targetType.toLowerCase()}</NoPaddingSpanLeft>
                 </GridCell>
               </GridCellContainer>
               <GridDividerCell item xs={2} container direction="row">
