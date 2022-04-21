@@ -214,10 +214,10 @@ features:
             label: Name
           CpuLimit:
             name: cpuLimit
-            label: CPU
+            label: CPU (# of cores)
           MemoryLimit:
             name: memoryLimit
-            label: Memory
+            label: Memory (GB)
         CDFInformation:
           title: CDF Information
           ProjectName: 

@@ -166,7 +166,13 @@ export const fetchNamespaceList = async (dispatch) => {
   const namespaces = [];
 
   namespaceList.forEach((ns) => {
-    if (ns.name !== DEFAULT_NS) {
+    if (ns.name === DEFAULT_NS) {
+      namespaces.unshift({
+        namespace: DEFAULT_NS,
+        cpuLimit: ns.config[K8S_NS_CPU_LIMITS],
+        memoryLimit: ns.config[K8S_NS_MEMORY_LIMITS],
+      });
+    } else {
       namespaces.push({
         namespace: ns.config[K8S_NS_NAME],
         cpuLimit: ns.config[K8S_NS_CPU_LIMITS],
