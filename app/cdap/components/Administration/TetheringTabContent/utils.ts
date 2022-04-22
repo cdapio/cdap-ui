@@ -16,6 +16,7 @@
 
 import T from 'i18n-react';
 import { IValidationErrors } from './types';
+import { K8S_NS_MEMORY_LIMIT_UNIT } from './NewTetheringRequest/constants';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const SCROLLER_WIDTH = '16px';
@@ -56,3 +57,7 @@ export const areInputsValid = ({ selectedNamespaces, inputFields }) => {
 };
 
 export const getScrollableColTemplate = (template: string) => `${template} ${SCROLLER_WIDTH}`;
+
+export const trimMemoryLimit = (limit) => {
+  return limit.toString().slice(0, -K8S_NS_MEMORY_LIMIT_UNIT.length);
+};

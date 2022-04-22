@@ -22,6 +22,7 @@ export const DEFAULT_NS = 'default';
 export const K8S_NS_NAME = 'k8s.namespace';
 export const K8S_NS_CPU_LIMITS = 'k8s.namespace.cpu.limits';
 export const K8S_NS_MEMORY_LIMITS = 'k8s.namespace.memory.limits';
+export const K8S_NS_MEMORY_LIMIT_UNIT = 'Gi';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 export const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
