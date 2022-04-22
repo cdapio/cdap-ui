@@ -247,8 +247,8 @@ features:
          instanceName: Instance name
          region: Region
          tetheredNamespace: Tethered namespace
-         cpu: CPU
-         memory: Memory
+         cpu: CPU (# of cores)
+         memory: Memory (GB)
       Actions:
         edit: Edit
         delete: Delete
