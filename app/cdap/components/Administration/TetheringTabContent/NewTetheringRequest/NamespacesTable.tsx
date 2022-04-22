@@ -17,7 +17,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledCheckbox } from '../shared.styles';
-import { getScrollableColTemplate } from '../utils';
+import { getScrollableColTemplate, trimMemoryLimit } from '../utils';
 import { INamespace } from '../types';
 import { OMNI_NS_COLUMN_TEMPLATE, OMNI_NS_TABLE_HEADERS } from './constants';
 
@@ -83,7 +83,7 @@ const NameSpacesTable = ({
         </GridCell>
         <GridCell>{namespace}</GridCell>
         <GridCell>{cpuLimit}</GridCell>
-        <GridCell>{memoryLimit}</GridCell>
+        <GridCell>{trimMemoryLimit(memoryLimit)}</GridCell>
       </GridRow>
     );
   };
