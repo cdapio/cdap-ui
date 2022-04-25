@@ -389,8 +389,7 @@ export function removeFilteredProperties(values, filteredConfigurationGroups) {
     filteredConfigurationGroups.forEach((group) => {
       group.properties.forEach((property) => {
         if (property.show === false) {
-          // instead of deleting the field, set it to undefined
-          newValues[property.name] = undefined;
+          delete newValues[property.name];
         }
       });
     });
