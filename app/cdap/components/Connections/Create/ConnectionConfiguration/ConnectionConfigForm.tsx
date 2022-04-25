@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import T from 'i18n-react';
 import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
@@ -23,6 +24,7 @@ import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedBu
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 
+const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const PrimaryOutlinedLoadingButton = ButtonLoadingHoc(PrimaryOutlinedButton);
 
 const useStyle = makeStyle((theme) => {
@@ -58,6 +60,33 @@ export function ConnectionConfigForm({
   const [name, setName] = React.useState(initName);
   const [description, setDescription] = React.useState(initDescription);
   const classes = useStyle();
+  const [configurationErrors, setConfigurationErrors] = React.useState(
+    testResults.configurationErrors
+  );
+
+  const onCreate = () => {
+    const fieldErrors = {};
+    for (const [fieldName, value] of Object.entries(connectorProperties)) {
+      if (
+        !!value.required &&
+        (!values.hasOwnProperty(fieldName) || values[fieldName] === '' || values[fieldName] == null)
+      ) {
+        fieldErrors[fieldName] = [
+          { msg: T.translate(`${I18NPREFIX}.inputValidationError`, { fieldName }) },
+        ];
+      }
+    }
+    if (Object.keys(fieldErrors).length) {
+      setConfigurationErrors(fieldErrors);
+    } else {
+      onConnectionCreate({
+        name,
+        description,
+        properties: values,
+      });
+      setConfigurationErrors(testResults.configurationErrors);
+    }
+  };
 
   return (
     <div>
@@ -109,7 +138,7 @@ export function ConnectionConfigForm({
         pluginProperties={connectorProperties}
         values={values}
         onChange={setValues}
-        errors={testResults.configurationErrors}
+        errors={configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
         {testResults.succeeded && (
@@ -142,13 +171,7 @@ export function ConnectionConfigForm({
         <PrimaryContainedButton
           variant="contained"
           color="primary"
-          onClick={() =>
-            onConnectionCreate({
-              name,
-              description,
-              properties: values,
-            })
-          }
+          onClick={onCreate}
           data-cy="connection-submit-button"
         >
           {isEdit ? 'Save' : 'Create'}
