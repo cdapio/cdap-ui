@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,16 +16,27 @@
 
 import { combineReducers, createStore } from 'redux';
 import TriggeredPipelineActions from 'components/TriggeredPipelines/store/TriggeredPipelineActions';
+import { IPipelineInfo, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 
-const defaultAction = {
-  action: '',
+interface IPayLoad {
+  triggeredPipelines?: ISchedule[];
+  expandedPipeline?: string;
+  expandedPipelineInfo?: IPipelineInfo;
+}
+
+interface IAction {
+  type: string;
+  payload: IPayLoad;
+}
+
+const defaultAction: IAction = {
+  type: '',
   payload: {},
 };
 
 const defaultInitialState = {
   triggeredPipelines: [],
   expandedPipeline: null,
-  pipelineInfoLoading: false,
   expandedPipelineInfo: null,
 };
 
@@ -42,16 +53,13 @@ const triggered = (state = defaultInitialState, action = defaultAction) => {
         ...state,
         expandedPipeline: action.payload.expandedPipeline,
         expandedPipelineInfo: null,
-        pipelineInfoLoading: action.payload.expandedPipeline === null ? false : true,
       };
 
     case TriggeredPipelineActions.setPipelineInfo:
       return {
         ...state,
         expandedPipelineInfo: action.payload.expandedPipelineInfo,
-        pipelineInfoLoading: false,
       };
-
     case TriggeredPipelineActions.reset:
       return defaultInitialState;
     default:
@@ -66,7 +74,9 @@ const TriggeredPipelineStore = createStore(
   {
     triggered: defaultInitialState,
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default TriggeredPipelineStore;

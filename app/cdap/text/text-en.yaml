@@ -3053,6 +3053,7 @@ features:
       FAILED: Fails
     expandedTabLabel: "Outbound triggers ({count})"
     helperText: "This pipeline is triggered when \"{pipelineName}\""
+    compositeTriggerHelperText: "This pipeline is triggered when \"{pipelineName}\" of composite trigger \"{triggerName}\""
     namespace: Namespace
     pipelineCount:
       "0": "No pipelines triggered"

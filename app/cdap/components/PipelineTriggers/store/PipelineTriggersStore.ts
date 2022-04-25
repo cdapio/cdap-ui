@@ -217,7 +217,6 @@ const PipelineTriggersStore = createStore(
   },
   window &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    window &&
     (window as any).__REDUX_DEVTOOLS_EXTENSION__()
 );
 

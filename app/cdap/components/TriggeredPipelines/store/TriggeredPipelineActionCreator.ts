@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,9 +18,10 @@ import TriggeredPipelineActions from 'components/TriggeredPipelines/store/Trigge
 import TriggeredPipelineStore from 'components/TriggeredPipelines/store/TriggeredPipelineStore';
 import { MyScheduleApi } from 'api/schedule';
 import { MyAppApi } from 'api/app';
+import { IPipelineInfo, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 
 export function setTriggeredPipelines(namespace, pipelineName) {
-  let params = {
+  const params = {
     namespace,
     'trigger-namespace-id': namespace,
     'trigger-program-type': 'workflows',
@@ -29,7 +30,7 @@ export function setTriggeredPipelines(namespace, pipelineName) {
     'schedule-status': 'SCHEDULED',
   };
 
-  MyScheduleApi.getTriggeredList(params).subscribe((res) => {
+  MyScheduleApi.getTriggeredList(params).subscribe((res: ISchedule[]) => {
     TriggeredPipelineStore.dispatch({
       type: TriggeredPipelineActions.setTriggered,
       payload: {
@@ -51,12 +52,12 @@ export function togglePipeline(pipeline) {
     return;
   }
 
-  let params = {
+  const params = {
     namespace: pipeline.namespace,
     appId: pipeline.application,
   };
 
-  MyAppApi.get(params).subscribe((res) => {
+  MyAppApi.get(params).subscribe((res: IPipelineInfo) => {
     TriggeredPipelineStore.dispatch({
       type: TriggeredPipelineActions.setPipelineInfo,
       payload: {
