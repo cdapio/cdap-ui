@@ -18,9 +18,10 @@ import React, { useState, useEffect } from 'react';
 import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../shared.styles';
 import { CONNECTIONS_TABLE_HEADERS } from './constants';
 import { IConnection, ITableData } from '../types';
+import { trimMemoryLimit } from '../utils';
 import { getIconForStatus, renderAllocationsHeader, getTransformedTableData } from './utils';
 
-const COLUMN_TEMPLATE = '50px 200px 2fr 1.5fr 1.5fr 200px 1.5fr 120px 120px 225px';
+const COLUMN_TEMPLATE = '50px 200px 2fr 1.5fr 1.5fr 200px 1.5fr 140px 140px 225px';
 
 interface ITetheringTableProps {
   tableData: IConnection[];
@@ -127,7 +128,7 @@ const TetheringTable = ({
             {namespace}
           </GridCell>
           <GridCell border={!isLast}>{cpuLimit}</GridCell>
-          <GridCell border={!isLast}>{memoryLimit}</GridCell>
+          <GridCell border={!isLast}>{trimMemoryLimit(memoryLimit)}</GridCell>
           {isFirst && <GridCell lastCol={true}>{renderLastColumn(instanceName)}</GridCell>}
         </GridRow>
       );

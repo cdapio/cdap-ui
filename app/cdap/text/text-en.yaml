@@ -214,10 +214,10 @@ features:
             label: Name
           CpuLimit:
             name: cpuLimit
-            label: CPU
+            label: CPU (# of cores)
           MemoryLimit:
             name: memoryLimit
-            label: Memory
+            label: Memory (GB)
         CDFInformation:
           title: CDF Information
           ProjectName: 
@@ -247,8 +247,8 @@ features:
          instanceName: Instance name
          region: Region
          tetheredNamespace: Tethered namespace
-         cpu: CPU
-         memory: Memory
+         cpu: CPU (# of cores)
+         memory: Memory (GB)
       Actions:
         edit: Edit
         delete: Delete
@@ -1091,7 +1091,7 @@ features:
             label: Avro
           CSV:
             customPlaceholder: "Delimiter (e.g ;, #, %, ^)"
-            deprecatedWarning: "[Deprecated]"
+            deprecatedWarning: "Deprecated"
             firstRowHeader: Set first row as header
             label: CSV
             modalTitle: Please select the delimiter
@@ -2326,6 +2326,8 @@ features:
         default: Cluster Default
         forceOff: Force Off
         forceOn: Force On
+      mapreduce:
+        deprecated: Deprecated
       numExecutors: Number of Executors
       numExecutorsTooltip: The number of executors to allocate for this pipeline on Apache Yarn.
       showCustomConfig: Show custom config

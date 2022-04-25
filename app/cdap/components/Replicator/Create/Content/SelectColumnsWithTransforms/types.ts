@@ -52,6 +52,10 @@ interface IColumn {
   name: string;
   type: string;
   nullable: boolean;
+  sourceName: string;
+  sourceType: string;
+  targetName: string;
+  targetType: string;
 }
 
 export enum ReplicateSelect {
