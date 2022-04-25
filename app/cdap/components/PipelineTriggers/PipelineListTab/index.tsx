@@ -43,6 +43,7 @@ import {
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import ConfigTabs from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import {
+  PipelineListContainer,
   PipelineListHeader,
   PipelineName,
   PipelineTriggerButton,
@@ -123,7 +124,7 @@ const TriggerNameTextField = styled(TextField)`
 const ButtonsWrap = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 10px 10px 10px 0;
+  margin: 10px;
 `;
 
 const PipelineTriggerComputeProfileButton = styled(PipelineTriggerButton)`
@@ -290,7 +291,6 @@ const PipelineListTabView = ({
               </select>
             </TypeSelectorDropdown>
           </div>
-
           <div>
             <span>{T.translate(`${PREFIX}.triggerName`)}</span>
             <TriggerNameTextField
@@ -303,72 +303,73 @@ const PipelineListTabView = ({
               helperText={state.triggerNameError}
             />
           </div>
-
-          <SelectedGroupPipelinesContainer>
-            <div>
-              <PipelineListHeader>
-                <StyledPipelineName>
-                  {T.translate(`${PREFIX}.selectedPipelines`)}
-                </StyledPipelineName>
-                <StyledNameSpace>{T.translate(`${TRIGGER_PREFIX}.namespace`)}</StyledNameSpace>
-              </PipelineListHeader>
-              {triggersGroupToAdd.map((pipeline) => {
-                return (
-                  <div>
-                    <StyledDeleteIconButton onClick={() => removePipelineFromGroupEvent(pipeline)}>
-                      <DeleteIcon fontSize="small" />
-                    </StyledDeleteIconButton>
-                    <StyledSelectedPipelineName>
-                      {pipeline.programId.application}
-                    </StyledSelectedPipelineName>
-                    <StyledNameSpace>{pipeline.programId.namespace}</StyledNameSpace>
-                  </div>
-                );
-              })}
-            </div>
-            <ButtonsWrap>
-              <EnableGroupTriggerButton
-                color="primary"
-                disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
-                variant="contained"
-                onClick={() => addGroupTriggerClick()}
-                data-cy="enable-group-trigger-btn"
-              >
-                {T.translate(`${PREFIX}.addNewTrigger`)}
-              </EnableGroupTriggerButton>
-              <PipelineTriggerComputeProfileButton
-                onClick={handlePayloadToggleClick}
-                data-cy={`${state.triggerName}-view-payload-btn`}
-              >
-                {T.translate(`${PREFIX}.configComputeProfie`)}
-              </PipelineTriggerComputeProfileButton>
-            </ButtonsWrap>
-            <PayloadConfigModal
-              triggeringPipelineInfo={{
-                id: '',
-                namespace: selectedNamespace,
-              }}
-              isOpen={state.computeModalOpen}
-              triggeredPipelineInfo={triggeredPipelineInfo}
-              onConfigureSchedule={configureComputeProfile}
-              configureError={configureError}
-              onToggle={handlePayloadToggleClick}
-              pipelineCompositeTriggersEnabled={true}
-              modalConfigTab={ConfigTabs.ComputeProfileTabConfig}
-            />
-          </SelectedGroupPipelinesContainer>
+          {triggersGroupToAdd.length > 0 && (
+            <SelectedGroupPipelinesContainer>
+              <div>
+                <PipelineListHeader>
+                  <StyledPipelineName>
+                    {T.translate(`${PREFIX}.selectedPipelines`)}
+                  </StyledPipelineName>
+                  <StyledNameSpace>{T.translate(`${TRIGGER_PREFIX}.namespace`)}</StyledNameSpace>
+                </PipelineListHeader>
+                {triggersGroupToAdd.map((pipeline) => {
+                  return (
+                    <div>
+                      <StyledDeleteIconButton
+                        onClick={() => removePipelineFromGroupEvent(pipeline)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </StyledDeleteIconButton>
+                      <StyledSelectedPipelineName>
+                        {pipeline.programId.application}
+                      </StyledSelectedPipelineName>
+                      <StyledNameSpace>{pipeline.programId.namespace}</StyledNameSpace>
+                    </div>
+                  );
+                })}
+              </div>
+              <ButtonsWrap>
+                <EnableGroupTriggerButton
+                  color="primary"
+                  disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
+                  variant="contained"
+                  onClick={() => addGroupTriggerClick()}
+                  data-cy="enable-group-trigger-btn"
+                >
+                  {T.translate(`${PREFIX}.addNewTrigger`)}
+                </EnableGroupTriggerButton>
+                <PipelineTriggerComputeProfileButton
+                  onClick={handlePayloadToggleClick}
+                  data-cy={`${state.triggerName}-view-payload-btn`}
+                >
+                  {T.translate(`${PREFIX}.configComputeProfie`)}
+                </PipelineTriggerComputeProfileButton>
+              </ButtonsWrap>
+              <PayloadConfigModal
+                triggeringPipelineInfo={{
+                  id: '',
+                  namespace: selectedNamespace,
+                }}
+                isOpen={state.computeModalOpen}
+                triggeredPipelineInfo={triggeredPipelineInfo}
+                onConfigureSchedule={configureComputeProfile}
+                configureError={configureError}
+                onToggle={handlePayloadToggleClick}
+                pipelineCompositeTriggersEnabled={true}
+                modalConfigTab={ConfigTabs.ComputeProfileTabConfig}
+              />
+            </SelectedGroupPipelinesContainer>
+          )}
           <SelectedGroupPipelinesContainer>
             <span>{T.translate(`${PREFIX}.selectPipelineInstruction`)}</span>
           </SelectedGroupPipelinesContainer>
         </div>
       )}
-
       <PipelineCount>
         {T.translate(`${PREFIX}.pipelineCount`, { count: availablePipelines.length })}
       </PipelineCount>
-
       {availablePipelines.length === 0 ? null : (
-        <div>
+        <PipelineListContainer>
           <PipelineListHeader>
             <PipelineName>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</PipelineName>
           </PipelineListHeader>
@@ -397,7 +398,7 @@ const PipelineListTabView = ({
               />
             );
           })}
-        </div>
+        </PipelineListContainer>
       )}
     </PipelineListTabDiv>
   );

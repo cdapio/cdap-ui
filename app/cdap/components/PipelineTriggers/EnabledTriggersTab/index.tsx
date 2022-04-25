@@ -24,10 +24,13 @@ import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTri
 import Button from '@material-ui/core/Button';
 import { ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 import {
+  PipelineCount,
+  PipelineListContainer,
   PipelineListHeader,
-  PipelineName,
   PipelineTriggerHeader,
-  StyledNameSpace,
+  StyledNameSpaceHeader,
+  StyledPipelineNameHeader,
+  TriggersTab,
 } from 'components/PipelineTriggers/shared.styles';
 import styled from 'styled-components';
 
@@ -38,23 +41,6 @@ const AddNewTriggerButton = styled(Button)`
   background-color: #5a84e4;
   text-transform: none;
   margin: 20px;
-`;
-
-const CaretContainer = styled.div`
-  width: 25px;
-  vertical-align: middle;
-`;
-
-const ExistingTriggersTab = styled.div`
-  padding: 15px;
-`;
-
-const PipelineCount = styled.div`
-  margin-bottom: 10px;
-`;
-
-const StyledPipelineName = styled(PipelineName)`
-  width: calc(100% - 125px);
 `;
 
 interface IEnabledTriggersViewProps {
@@ -81,7 +67,7 @@ const EnabledTriggersView = ({
   );
 
   return (
-    <ExistingTriggersTab>
+    <TriggersTab>
       <PipelineTriggerHeader>
         {pipelineCompositeTriggersEnabled
           ? T.translate(`${PREFIX}.compositeTriggersTitle`, { pipelineName })
@@ -99,26 +85,30 @@ const EnabledTriggersView = ({
       </PipelineCount>
 
       {enabledSingleTriggers.length === 0 ? null : (
-        <div>
+        <PipelineListContainer>
           <PipelineListHeader>
-            <StyledPipelineName>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</StyledPipelineName>
-            <StyledNameSpace>{T.translate(`${TRIGGER_PREFIX}.namespace`)}</StyledNameSpace>
+            <StyledPipelineNameHeader>
+              {T.translate(`${TRIGGER_PREFIX}.pipelineName`)}
+            </StyledPipelineNameHeader>
+            <StyledNameSpaceHeader>
+              {T.translate(`${TRIGGER_PREFIX}.namespace`)}
+            </StyledNameSpaceHeader>
           </PipelineListHeader>
           {enabledSingleTriggers.map((schedule) => (
             <EnabledTriggerRow schedule={schedule} />
           ))}
-        </div>
+        </PipelineListContainer>
       )}
 
       {enabledGroupTriggers.length === 0 ? null : (
-        <div>
+        <PipelineListContainer>
           <PipelineListHeader>
             <div>{T.translate(`${TRIGGER_PREFIX}.groupTriggers`)}</div>
           </PipelineListHeader>
           {enabledGroupTriggers.map((triggerGroup) => (
             <GroupTriggerRow triggerGroup={triggerGroup} />
           ))}
-        </div>
+        </PipelineListContainer>
       )}
 
       {pipelineCompositeTriggersEnabled && (
@@ -131,7 +121,7 @@ const EnabledTriggersView = ({
           {T.translate(`${PREFIX}.addNewTrigger`)}
         </AddNewTriggerButton>
       )}
-    </ExistingTriggersTab>
+    </TriggersTab>
   );
 };
 
