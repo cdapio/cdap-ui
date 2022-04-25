@@ -746,12 +746,22 @@ function santizeStringForHTMLID(str) {
   return str.replace(/[ \/]/g, '-');
 }
 
+/**
+ * Method to open link with a new tab
+ * @param link - the link to route to.
+ */
+ function openLinkInNewTab(link) {
+  window.open(link, '_blank');
+};
+
+
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
   'cdap-data-streams',
 ];
 
 export {
+  openLinkInNewTab,
   objectQuery,
   convertBytesToHumanReadable,
   humanReadableNumber,
