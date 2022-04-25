@@ -48,7 +48,7 @@ describe('Unit tests for Utilities', () => {
           ],
         },
       ];
-      expect(removeFilteredProperties(values, filteredConfigurationGroups)).toEqual({
+      expect(removeFilteredProperties(values, filteredConfigurationGroups)).toStrictEqual({
         location: 'US-default',
         project: 'test',
       });

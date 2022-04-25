@@ -119,7 +119,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   function updateFilteredConfigurationGroup(configGroup, newValues) {
     let newFilteredConfigurationGroup;
-    let updatedValuesWithDefault;
+
     try {
       newFilteredConfigurationGroup = filterByCondition(
         configGroup,
@@ -127,45 +127,26 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
         pluginProperties,
         newValues
       );
-      updatedValuesWithDefault = addDefaultValueToShownProperties(
-        newFilteredConfigurationGroup,
-        newValues
-      );
     } catch (e) {
       newFilteredConfigurationGroup = configGroup;
-      updatedValuesWithDefault = newValues;
       // tslint:disable:no-console
       console.log('Issue with applying filters: ', e);
     }
+
     referenceValueForUnMount.current = {
       configurationGroups: newFilteredConfigurationGroup,
-      values: updatedValuesWithDefault,
+      values: newValues,
     };
     setFilteredConfigurationGroups(newFilteredConfigurationGroup);
-    // to trigger another update if properties are updated with default values
-    changeParentHandler(updatedValuesWithDefault);
     getOrphanedErrors();
   }
-  // Some fields may have been cleared and lost their default value
-  // this function adds default value to property which shows and
-  // currently has a null value and non-null default value
-  function addDefaultValueToShownProperties(configGroup, newValues) {
-    const cpyValues = { ...newValues };
-    configGroup.forEach((config) => {
-      config.properties.forEach((property) => {
-        if (property.show && !newValues[property.name] && property.defaultValue) {
-          cpyValues[property.name] = property.defaultValue;
-        }
-      });
-    });
-    return cpyValues;
-  }
+
   // Watch for changes in values to determine dynamic widget
   useEffect(() => {
-    if (!filteredConfigurationGroups || filteredConfigurationGroups.length === 0) {
+    if (!configurationGroups || configurationGroups.length === 0) {
       return;
     }
-    updateFilteredConfigurationGroup(filteredConfigurationGroups, values);
+    updateFilteredConfigurationGroup(configurationGroups, values);
   }, [values]);
 
   function handleValueChanges(changedValues, params: { [key: string]: boolean } = {}) {
@@ -174,10 +155,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
 
-    const updatedFilteredValues = addDefaultValueToShownProperties(
-      filteredConfigurationGroups,
-      removeFilteredProperties(changedValues, fcg)
-    );
+    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
     changeParentHandler(updatedFilteredValues);
   }
 
