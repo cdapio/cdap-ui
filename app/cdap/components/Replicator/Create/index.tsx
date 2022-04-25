@@ -369,9 +369,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
             if (res.transformationIssues.length) {
               res.transformationIssues.forEach((issue) => {
                 const assessments = {};
-                const [resTable, column, errorMessage] = parseErrorMessageForTransformations(
-                  issue.description
-                );
+                const [resTable, column, errorMessage] = parseErrorMessageForTransformations(issue);
 
                 assessments[column] = {
                   support: SUPPORT.no,

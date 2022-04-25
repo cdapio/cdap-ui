@@ -73,7 +73,6 @@ const useLastRenameOrRowName = (columnName: string, transforms: IColumnTransform
 
 export const renderTable = ({
   state,
-  tableInfo,
   handleSearch,
   toggleSelectAll,
   toggleSelected,
@@ -84,7 +83,6 @@ export const renderTable = ({
   tableAssessments,
   handleFilterErrors,
   filterErrs,
-  selectedList,
   tinkEnabled,
 }: {
   state: ISelectColumnsState;
