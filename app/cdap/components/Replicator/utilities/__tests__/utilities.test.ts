@@ -130,13 +130,20 @@ describe('Replication Utilities', () => {
   });
 
   describe('Parse transformations error message', () => {
-    const exampleError =
-      'Failed to apply transformations on the schema for the table : ORDERS and column : PRICE with error : Field name QTY already exists.';
+    const exampleError = {
+      name: 'Transformation Loading failed',
+      description: 'Exception while loading plugin for directive : mask name abcd.',
+      suggestion: 'Please ensure the applied transformation\u0027s plugin is uploaded\u0027',
+      impact: '',
+      severity: 'ERROR',
+      table: 'dbo.persons',
+      column: 'name',
+    };
 
     const [table, column, errorMessage] = parseErrorMessageForTransformations(exampleError);
-    expect(table).toBe('ORDERS');
-    expect(column).toBe('PRICE');
-    expect(errorMessage).toBe('Field name QTY already exists.');
+    expect(table).toBe('persons');
+    expect(column).toBe('name');
+    expect(errorMessage).toBe('Exception while loading plugin for directive : mask name abcd.');
   });
 
   describe('Convert JSON Config to State', () => {
