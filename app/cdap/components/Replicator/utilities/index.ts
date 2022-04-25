@@ -35,6 +35,7 @@ import { fetchPluginWidget } from 'services/PluginUtilities';
 import { ICreateState } from 'components/Replicator/Create';
 import { objectQuery, truncateNumber } from 'services/helpers';
 import { PluginType } from 'components/Replicator/constants';
+import { ITransAssessmentResDesc } from '../Create/Content/SelectColumnsWithTransforms/types';
 
 // TODO: can more of these functions move & generalize into PluginUtilities without adding complexity?
 export function fetchPluginInfo(
@@ -437,23 +438,27 @@ export function identifyReplicatorEntityFromMetadata(metadata: {
 }
 
 /**
- * Returns Table, column and error message from table assessment for transformations
- * Message always comes in this format:
- * Failed to apply transformations on the schema for the table : ORDERS and column : PRICE with error : Field name QTY already exists.
- * so we just need to split the string on colons etc.
- * @param string description of the error
- * @returns [table, column, error message]
+ * Error messages will come from the server in the following format:
+ * {
+ *   "name": "Transformation Loading failed",
+ *   "description": "Exception while loading plugi...
+ *   "suggestion": "Please ensure the applied tran...
+ *   "impact": "",
+ *   "severity": "ERROR",
+ *   "table": "dbo.persons",
+ *   "column": "name"
+ * }
+ * This returns the pieces we care about and removes the schema from
+ * mssql table names
+ * @param message error response
+ * @returns [table, column, errorMessage]
  */
-export function parseErrorMessageForTransformations(message: string) {
-  const [_, tablePiece, columnPiece, messagePiece] = message.split(' : ');
-  // for mssql source, table name will be in format of schema.table
-  // hence need to split on '.' and take the last element as table name
-  const table = tablePiece
-    .split(' ')[0]
-    .split('.')
-    .slice(-1)[0];
-  const column = columnPiece.split(' ')[0];
-  const errorMessage = messagePiece;
+export function parseErrorMessageForTransformations(message: ITransAssessmentResDesc) {
+  const { description, column, table } = message;
+  // for mssql, table name will be in format schema.table
+  // so we need to split on '.' and take the last element as table name
+  // for other tables this will do nothing
+  const trimmedTable = table.split('.').slice(-1)[0];
 
-  return [table, column, errorMessage];
+  return [trimmedTable, column, description];
 }

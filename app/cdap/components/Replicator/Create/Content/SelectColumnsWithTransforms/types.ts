@@ -94,7 +94,9 @@ export interface ITransAssessmentResDesc {
   description: string;
   suggestion: string;
   impact: string;
-  severity: 'ERROR' | string;
+  severity: string; // enum - need to add other responses if there are any
+  table: string;
+  column: string;
 }
 
 export interface ITransAssessmentRes {
