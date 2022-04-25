@@ -18,7 +18,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { IWidgetJson, PluginProperties } from './types';
-import { processConfigurationGroups, removeFilteredProperties } from './utilities';
+import {
+  processConfigurationGroups,
+  removeFilteredProperties,
+  addDefaultValueToShownProperties,
+} from './utilities';
 import { objectQuery } from 'services/helpers';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import defaults from 'lodash/defaults';
@@ -31,6 +35,7 @@ import {
 } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { h2Styles } from 'components/shared/Markdown/MarkdownHeading';
+import isEqual from 'lodash/isEqual';
 
 const styles = (theme): StyleRules => {
   return {
@@ -119,7 +124,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   function updateFilteredConfigurationGroup(configGroup, newValues) {
     let newFilteredConfigurationGroup;
-
+    let updatedValuesWithDefault;
     try {
       newFilteredConfigurationGroup = filterByCondition(
         configGroup,
@@ -127,26 +132,34 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
         pluginProperties,
         newValues
       );
+      updatedValuesWithDefault = addDefaultValueToShownProperties(
+        newFilteredConfigurationGroup,
+        newValues
+      );
     } catch (e) {
       newFilteredConfigurationGroup = configGroup;
+      updatedValuesWithDefault = newValues;
       // tslint:disable:no-console
       console.log('Issue with applying filters: ', e);
     }
-
     referenceValueForUnMount.current = {
       configurationGroups: newFilteredConfigurationGroup,
-      values: newValues,
+      values: updatedValuesWithDefault,
     };
     setFilteredConfigurationGroups(newFilteredConfigurationGroup);
+    // to trigger another update if properties are updated with default values
+    // only trigger if the contents of two objs are different
+    if (!isEqual(newValues, updatedValuesWithDefault)) {
+      changeParentHandler(updatedValuesWithDefault);
+    }
     getOrphanedErrors();
   }
-
   // Watch for changes in values to determine dynamic widget
   useEffect(() => {
-    if (!configurationGroups || configurationGroups.length === 0) {
+    if (!filteredConfigurationGroups || filteredConfigurationGroups.length === 0) {
       return;
     }
-    updateFilteredConfigurationGroup(configurationGroups, values);
+    updateFilteredConfigurationGroup(filteredConfigurationGroups, values);
   }, [values]);
 
   function handleValueChanges(changedValues, params: { [key: string]: boolean } = {}) {
@@ -155,7 +168,10 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
 
-    const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
+    const updatedFilteredValues = addDefaultValueToShownProperties(
+      filteredConfigurationGroups,
+      removeFilteredProperties(changedValues, fcg)
+    );
     changeParentHandler(updatedFilteredValues);
   }
 

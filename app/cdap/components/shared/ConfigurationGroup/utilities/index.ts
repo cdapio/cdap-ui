@@ -397,3 +397,18 @@ export function removeFilteredProperties(values, filteredConfigurationGroups) {
 
   return newValues;
 }
+
+// Some fields may have been cleared and lost their default value
+// this function adds default value to property which shows and
+// currently has a null value and non-null default value
+export function addDefaultValueToShownProperties(configGroup, newValues) {
+  const cpyValues = { ...newValues };
+  configGroup.forEach((config) => {
+    config.properties.forEach((property) => {
+      if (property.show && newValues[property.name] === undefined && property.defaultValue) {
+        cpyValues[property.name] = property.defaultValue;
+      }
+    });
+  });
+  return cpyValues;
+}
