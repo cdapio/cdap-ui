@@ -49,6 +49,7 @@ import {
   initialInlineTriggerState,
   triggerConditionReducer,
 } from 'components/PipelineTriggers/reducer';
+import { openLinkInNewTab } from 'services/helpers';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
@@ -175,7 +176,14 @@ const PipelineTriggersRow = ({
         <PipelineDescription>
           <strong>{T.translate(`${TRIGGER_PREFIX}.description`)}: </strong>
           <span>{triggeringPipelineInfo && triggeringPipelineInfo.description}</span>
-          <PipelineLink href={`/pipelines/ns/${selectedNamespace}/view/${pipelineRow}`}>
+          <PipelineLink
+            href={`/pipelines/ns/${selectedNamespace}/view/${pipelineRow}`}
+            target="_blank"
+            // The Anchor tab is not working, using this hacky way to fix it for now
+            onClick={() =>
+              openLinkInNewTab(`/pipelines/ns/${selectedNamespace}/view/${pipelineRow}`)
+            }
+          >
             {T.translate(`${TRIGGER_PREFIX}.viewPipeline`)}
           </PipelineLink>
         </PipelineDescription>
