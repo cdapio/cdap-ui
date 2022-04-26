@@ -88,7 +88,11 @@ export const TriggeredPipelineRow = ({
       square
       expanded={isExpanded}
       onChange={() => handleAccordionClick()}
-      data-cy={`${schedule.application}-triggered-expanded`}
+      data-cy={
+        isExpanded
+          ? `${schedule.application}-triggered-expanded`
+          : `${schedule.application}-triggered-collapsed`
+      }
     >
       <StyledAccordionSummary>
         <StyledPipelineName>{schedule.application}</StyledPipelineName>
