@@ -112,7 +112,7 @@ export default function ParsingConfigModal({
   };
 
   return (
-    <Dialog open={true} maxWidth="md">
+    <Dialog open={true} maxWidth="sm" fullWidth={true}>
       <DialogTitle>Parsing Options</DialogTitle>
       <DialogContent>
         <ContentContainer>
