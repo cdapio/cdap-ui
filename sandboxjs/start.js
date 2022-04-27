@@ -26,9 +26,15 @@ function stringifyop(data) {
   }
 }
 
-function startCDAP(pathToCDAP) {
+function startCDAP(pathToCDAP, javaHomeDir = '') {
   return new Promise((resolve, reject) => {
-    const tool = spawn(path.join(pathToCDAP, 'bin', 'cdap'), ['sandbox', 'start']);
+    const sandboxPath = path.join(pathToCDAP, 'bin', 'cdap')
+    let tool;
+    if (javaHomeDir) {
+      tool = spawn(`export JAVA_HOME=${javaHomeDir} && ${sandboxPath} sandbox start`, { shell: true });
+    } else {
+      tool = spawn(sandboxPath, ['sandbox', 'start']);
+    }
     tool.stdout.on('data', stringifyop);
     tool.stderr.on('data', stringifyop);
     tool.on('exit', function(code) {

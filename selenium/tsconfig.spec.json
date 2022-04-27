@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../node_modules",
+    "target": "es5",
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "module": "commonjs",
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "../node_modules/selenium-webdriver/*/*.ts",
+    "./**/*.ts",
+  ]
+}

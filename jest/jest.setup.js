@@ -16,3 +16,5 @@
 
 import '@testing-library/jest-dom';
 import 'regenerator-runtime/runtime';
+
+jest.setTimeout(15000);
