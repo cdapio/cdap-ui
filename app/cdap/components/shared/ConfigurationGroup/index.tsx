@@ -18,7 +18,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { IWidgetJson, PluginProperties } from './types';
-import { processConfigurationGroups, removeFilteredProperties } from './utilities';
+import {
+  addCurrentValueToShownProperty,
+  processConfigurationGroups,
+  removeFilteredProperties,
+  replaceDifferenceInObjects,
+} from './utilities';
 import { objectQuery } from 'services/helpers';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import defaults from 'lodash/defaults';
@@ -85,6 +90,8 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   }>({});
   const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState([]);
   const [orphanErrors, setOrphanErrors] = useState([]);
+  // a state to remember the properties values after each user interaction
+  const [currentValues, setCurrentValues] = useState(values);
 
   // Initialize the configurationGroups based on widgetJson and pluginProperties obtained from backend
   useEffect(() => {
@@ -125,14 +132,17 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
         configGroup,
         widgetJson,
         pluginProperties,
-        newValues
+        // pass currentValues instead of newValues for conditions like this:
+        // {useConnection === false && serviceAccountType === 'filePath'}
+        currentValues
       );
     } catch (e) {
       newFilteredConfigurationGroup = configGroup;
       // tslint:disable:no-console
       console.log('Issue with applying filters: ', e);
     }
-
+    // update the properties that are shown in newValues with currentValues
+    addCurrentValueToShownProperty(newValues, currentValues, newFilteredConfigurationGroup);
     referenceValueForUnMount.current = {
       configurationGroups: newFilteredConfigurationGroup,
       values: newValues,
@@ -154,7 +164,10 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     if (params.updateFilteredConfigurationGroups) {
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
-
+    // update currentValues state with whatever changed
+    setCurrentValues((values) => {
+      return replaceDifferenceInObjects(values, changedValues);
+    });
     const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
     changeParentHandler(updatedFilteredValues);
   }
