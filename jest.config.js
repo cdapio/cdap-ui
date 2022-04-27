@@ -46,7 +46,6 @@ module.exports = {
   ],
   modulePaths: ['./app/cdap/'],
   preset: 'ts-jest/presets/js-with-babel',
-  roots: ['./app/cdap/'],
   setupFilesAfterEnv: ['./jest/jest.setup.js'],
   testEnvironment: 'jsdom',
   transform: {
