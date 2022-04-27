@@ -35,11 +35,12 @@ interface IConnectionsProps {
 const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProps) => {
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
-      target={() => <IconSVG name="icon-more" />}
+      target={() => <IconSVG name="icon-more" dataTestId="established-connection" />}
       confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionHeader`)}
       confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionCopy`)}
       onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
       onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
+      dataTestIds={{ delete: 'delete-connection', edit: 'edit-connection' }}
     />
   );
 

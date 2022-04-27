@@ -44,9 +44,16 @@ describe('Setting and saving preferences', () => {
   });
 
   it('Should allow user to save valid preference at instance level after fixing error', async () => {
+    await driver.get(CONFIGURATION_URL);
+    await driver.sleep(1000);
+    await driver.findElement(By.css(dataTestId('system-prefs-accordion'))).click();
+    await driver.findElement(By.css(dataTestId('edit-system-prefs-btn'))).click();
     const keyInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control key-input']"));
     keyInput.clear();
     keyInput.sendKeys(TEST_KEY);
+    const valueInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control value-input']"));
+    valueInput.clear();
+    valueInput.sendKeys(TEST_VALUE);
     await driver.findElement(By.css(dataTestId('save-prefs-btn'))).click();
     const addedKeyCssLocator = 'div[class*="grid-row"] > div';
     const key = await driver.findElement(By.css(addedKeyCssLocator)).getText(); 
