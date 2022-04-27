@@ -42,11 +42,12 @@ interface IPendingRequestsProps {
 const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {
   const renderLastColumn = (instanceName: string) => (
     <ActionsPopover
-      target={() => <IconSVG name="icon-more" />}
+      target={() => <IconSVG name="icon-more" dataTestId="pending-request" />}
       confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestHeader`)}
       confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestCopy`)}
       onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
       onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
+      dataTestIds={{ delete: 'delete-pending-request', edit: 'edit-pending-request' }}
     />
   );
   const canSeeReqHistory = false; // Will remove after request history page is ready

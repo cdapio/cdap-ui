@@ -43,6 +43,7 @@ module.exports = {
   modulePathIgnorePatterns: [
     './app/cdap/components/AbstractWidget/SchemaEditor/Context/__tests__/schemas.js',
     './app/cdap/components/AbstractWidget/SchemaEditor/Context/__tests__/data',
+    './selenium/integration/tethering',
   ],
   modulePaths: ['./app/cdap/'],
   preset: 'ts-jest/presets/js-with-babel',
