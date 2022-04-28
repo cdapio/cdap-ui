@@ -19,7 +19,6 @@ import { TetheringApi } from 'api/tethering';
 import { MyNamespaceApi } from 'api/namespace';
 import { IApiError, IValidationErrors, INamespace } from '../types';
 import {
-  K8S_NS_NAME,
   K8S_NS_CPU_LIMITS,
   K8S_NS_MEMORY_LIMITS,
   DEFAULT_NS,
@@ -176,13 +175,17 @@ export const fetchNamespaceList = async (dispatch) => {
       namespaces.unshift({
         namespace: DEFAULT_NS,
         cpuLimit: ns.config[K8S_NS_CPU_LIMITS],
-        memoryLimit: `${ns.config[K8S_NS_MEMORY_LIMITS]}${K8S_NS_MEMORY_LIMIT_UNIT}`,
+        memoryLimit: ns.config[K8S_NS_MEMORY_LIMITS]
+          ? `${ns.config[K8S_NS_MEMORY_LIMITS]}${K8S_NS_MEMORY_LIMIT_UNIT}`
+          : undefined,
       });
     } else {
       namespaces.push({
-        namespace: ns.config[K8S_NS_NAME],
+        namespace: ns.name,
         cpuLimit: ns.config[K8S_NS_CPU_LIMITS],
-        memoryLimit: `${ns.config[K8S_NS_MEMORY_LIMITS]}${K8S_NS_MEMORY_LIMIT_UNIT}`,
+        memoryLimit: ns.config[K8S_NS_MEMORY_LIMITS]
+          ? `${ns.config[K8S_NS_MEMORY_LIMITS]}${K8S_NS_MEMORY_LIMIT_UNIT}`
+          : undefined,
       });
     }
   });

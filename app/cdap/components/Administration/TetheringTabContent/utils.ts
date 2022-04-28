@@ -59,5 +59,5 @@ export const areInputsValid = ({ selectedNamespaces, inputFields }) => {
 export const getScrollableColTemplate = (template: string) => `${template} ${SCROLLER_WIDTH}`;
 
 export const trimMemoryLimit = (limit) => {
-  return limit.toString().slice(0, -K8S_NS_MEMORY_LIMIT_UNIT.length);
+  return limit ? limit.toString().slice(0, -K8S_NS_MEMORY_LIMIT_UNIT.length) : '';
 };
