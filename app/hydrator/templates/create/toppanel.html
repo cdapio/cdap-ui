@@ -28,6 +28,16 @@
       <span ng-if="HydratorPlusPlusTopPanelCtrl.state.artifact.name === HydratorPlusPlusTopPanelCtrl.GLOBALS.etlDataStreams"
             class="icon-sparkstreaming"></span>
     </div>
+    <!-- remove the ng-if="false" to get this to render, this is WIP for the overall toppanel react migration -->
+    <div class="metadata text-left" ng-if="false">
+      <name-and-description
+        metadata-expanded="HydratorPlusPlusTopPanelCtrl.metadataExpanded"
+        state="HydratorPlusPlusTopPanelCtrl.state"
+        invalid-name="HydratorPlusPlusTopPanelCtrl.invalidName"
+        parsed-description="HydratorPlusPlusTopPanelCtrl.parsedDescription"
+        save-metadata="HydratorPlusPlusTopPanelCtrl.saveMetadataV2"
+        reset-metadata="HydratorPlusPlusTopPanelCtrl.resetMetadataV2"></name-and-description>
+    </div>
     <div class="metadata text-left">
       <div class="pipeline-name"
            ng-class="{'placeholder': !HydratorPlusPlusTopPanelCtrl.state.metadata.name.length, 'error': HydratorPlusPlusTopPanelCtrl.invalidName}"
