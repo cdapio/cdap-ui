@@ -20,11 +20,9 @@ import {
   updatePipeline,
   runPipeline,
   schedulePipeline,
-  updatePreferences,
 } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { setRunError } from 'components/PipelineDetails/store/ActionCreator';
 import ConfigModelessSaveBtn from 'components/PipelineConfigurations/ConfigurationsContent/ConfigModelessActionButtons/ConfigModelessSaveBtn';
-import { Observable } from 'rxjs/Observable';
 
 require('./ConfigModelessActionButtons.scss');
 
@@ -65,7 +63,7 @@ export default class ConfigModelessActionButtons extends Component {
     this.setState({
       [loadingState]: true,
     });
-    Observable.forkJoin(updatePipeline(), updatePreferences()).subscribe(
+    updatePipeline().subscribe(
       () => {
         actionFn();
         this.setState({
