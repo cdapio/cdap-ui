@@ -103,13 +103,24 @@ export default function ParsingConfigModal({
     properties: state.selectedProperties,
   };
 
-  const handleConfig = () => {
+  const handleConfirm = () => {
     dispatch({
       type: SET_STATUS_ACTION,
       value: STATE_CONFIG_CONFIRMED,
     });
-    onConfirm(state.selectedProperties);
+    const confirmedProperties = {};
+    // Filter out hidden properties before submitting
+    Object.keys(state.selectedProperties).forEach((propertyKey) => {
+      if (!state.hiddenProperties[propertyKey]) {
+        confirmedProperties[propertyKey] = state.selectedProperties[propertyKey];
+      }
+    });
+    onConfirm(confirmedProperties);
   };
+
+  const widgets = state.widgets.filter((widget) => {
+    return !state.hiddenProperties[widget.name];
+  });
 
   return (
     <Dialog open={true} maxWidth="sm" fullWidth={true}>
@@ -119,7 +130,7 @@ export default function ParsingConfigModal({
           {(state.status === STATE_AVAILABLE || state.status === STATE_CONFIG_CONFIRMED) && (
             <>
               {errorMessage && <StyledAlert severity="error">{errorMessage}</StyledAlert>}
-              {state.widgets.map((widget) => (
+              {widgets.map((widget) => (
                 <PropertyRow
                   key={widget.name}
                   widgetProperty={widget}
@@ -153,7 +164,7 @@ export default function ParsingConfigModal({
       <DialogActions>
         <PrimaryTextButton onClick={onCancel}>Cancel</PrimaryTextButton>
         <PrimaryTextButton
-          onClick={handleConfig}
+          onClick={handleConfirm}
           disabled={state.status !== STATE_AVAILABLE}
           data-cy="parsing-config-confirm"
         >
