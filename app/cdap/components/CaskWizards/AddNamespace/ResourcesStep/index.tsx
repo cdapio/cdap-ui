@@ -104,7 +104,7 @@ const mapDispatchToServiceAccountEmailProps = (dispatch) => {
     onChange: (e) => {
       dispatch({
         type: AddNamespaceActions.setServiceAccountEmail,
-        payload: { k8sNamespace: e.target.value },
+        payload: { serviceAccountEmail: e.target.value },
       });
     },
   };
