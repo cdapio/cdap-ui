@@ -22,6 +22,9 @@ import {
   ITransformation,
   ISelectedList,
   ITableAssessmentColumn,
+  ITablesStore,
+  IColumnsStore,
+  IDMLStore,
 } from 'components/Replicator/types';
 import { Observable } from 'rxjs/Observable';
 
@@ -46,6 +49,15 @@ export interface ISelectColumnsProps {
   ) => void;
   assessmentLoading: boolean;
   tinkEnabled: boolean;
+  setTables: (
+    tables: ITablesStore,
+    columns: IColumnsStore,
+    dmlBlacklist: IDMLStore,
+    checkTransformations?: boolean
+  ) => void;
+  tables: ITablesStore;
+  columns: IColumnsStore;
+  dmlBlacklist: IDMLStore;
 }
 
 interface IColumn {

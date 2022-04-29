@@ -30,6 +30,7 @@ import {
   ITableInfo,
   ISelectedList,
   IColumnTransformation,
+  ITableImmutable,
 } from 'components/Replicator/types';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
@@ -53,6 +54,7 @@ import {
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import { Observable } from 'rxjs/Observable';
+import { generateTableKey } from 'components/Replicator/utilities';
 
 const LoadingButton = ButtonLoadingHoc(Button);
 
@@ -113,36 +115,69 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
       body.schema = props.tableInfo.schema;
     }
 
-    Observable.forkJoin([
-      MyReplicatorApi.getTableInfo(params, body),
-      MyReplicatorApi.assessTable(params, body),
-    ]).subscribe({
-      next: (value: any) => {
-        const [tableInfo, assessedTable] = value;
-        const combinedColumns = tableInfo.columns.map((t1) => ({
-          ...t1,
-          ...assessedTable.columns.find((t2) => t2.sourceName === t1.name),
-        }));
-        const selectedColumns = getInitialSelectedColumns(combinedColumns);
-        dispatch({
-          type: 'setTableInfo',
-          payload: {
-            columns: combinedColumns,
-            primaryKeys: tableInfo.primaryKey,
-            selectedColumns,
-            filteredColumns: combinedColumns,
-            selectedReplication:
-              selectedColumns.size === 0 ? ReplicateSelect.all : ReplicateSelect.individual,
-          },
-        });
-      },
-      error: (err) => {
-        dispatch({ type: 'setError', payload: err });
-      },
-      complete: () => {
-        dispatch({ type: 'setLoading', payload: false });
-      },
+    // need to check if the current table is selected
+    const tableKey = generateTableKey(body);
+    let needUpdateTables = true;
+    props.tables.forEach((table) => {
+      if (generateTableKey(table) === tableKey) {
+        // already selected, no need to update selected tables
+        needUpdateTables = false;
+        return;
+      }
     });
+    if (needUpdateTables) {
+      let updatedSelectedTables = props.tables;
+      const tableInfo: ITableImmutable = Map({
+        database: body.database,
+        table: body.table,
+        schema: body.schema,
+      });
+      updatedSelectedTables = updatedSelectedTables.set(tableKey, tableInfo);
+      props.setTables(updatedSelectedTables, props.columns, props.dmlBlacklist);
+    }
+    // wait for setTables to finish updating state
+    setTimeout(() => {
+      // assessTable requires the table to be selected, or it will throw exception
+      // saveDraft updates the selected table information
+      props.saveDraft().subscribe(
+        () => {
+          Observable.forkJoin([
+            MyReplicatorApi.getTableInfo(params, body),
+            MyReplicatorApi.assessTable(params, body),
+          ]).subscribe({
+            next: (value: any) => {
+              const [tableInfo, assessedTable] = value;
+              const combinedColumns = tableInfo.columns.map((t1) => ({
+                ...t1,
+                ...assessedTable.columns.find((t2) => t2.sourceName === t1.name),
+              }));
+              const selectedColumns = getInitialSelectedColumns(combinedColumns);
+              dispatch({
+                type: 'setTableInfo',
+                payload: {
+                  columns: combinedColumns,
+                  primaryKeys: tableInfo.primaryKey,
+                  selectedColumns,
+                  filteredColumns: combinedColumns,
+                  selectedReplication:
+                    selectedColumns.size === 0 ? ReplicateSelect.all : ReplicateSelect.individual,
+                },
+              });
+            },
+            error: (err) => {
+              dispatch({ type: 'setError', payload: err });
+            },
+            complete: () => {
+              dispatch({ type: 'setLoading', payload: false });
+            },
+          });
+        },
+        (err) => {
+          // tslint:disable-next-line: no-console
+          console.log('Failed to save draft', err);
+        }
+      );
+    }, 100);
   }, []);
 
   useEffect(() => {
