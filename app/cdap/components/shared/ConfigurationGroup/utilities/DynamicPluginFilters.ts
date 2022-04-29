@@ -75,6 +75,38 @@ function evaluateConditionObj(filter: IPropertyFilter, propertyValues: IProperty
 }
 
 /**
+ * Determine if a property filter is true
+ * based on the property values.
+ * @param filter
+ * @param propertyValues
+ * @param propertiesFromBackend
+ * @returns Result of evaluating the filter.
+ * In general, `true` means the property should be shown.
+ */
+export function evaluateFilter(
+  filter: IPropertyFilter,
+  propertyValues: IPropertyValues,
+  propertiesFromBackend: PluginProperties
+) {
+  if (!filter.condition.expression) {
+    return evaluateConditionObj(filter, propertyValues);
+  }
+
+  // Skip filtering condition in which the property in the condition
+  // is a macro. We can't decide if the condition will be true or not.
+  // So always show the field.
+  if (expressionContainMacro(filter, propertyValues)) {
+    return true;
+  }
+
+  const typedPropertyValues = {
+    ...getTypedPropertyValues(propertyValues, propertiesFromBackend),
+  };
+
+  return jexl.evalSync(`${filter.condition.expression}`, typedPropertyValues);
+}
+
+/**
  * Parse the expression and find the token literals involved in the expression.
  * This is to check if the literal property has a macro.
  */
@@ -229,22 +261,7 @@ export function filterByCondition(
           })
         );
       };
-      if (!expression) {
-        return !evaluateConditionObj(filter, propertyValues) ? mapPropertyToShow(filter) : [];
-      }
-
-      const typedPropertyValues = {
-        ...getTypedPropertyValues(propertyValues, propertiesFromBackend),
-      };
-
-      // Skip filtering condition in which the property in the condition
-      // is a macro. We can't decide if the condition will be true or not. So skip.
-      if (expressionContainMacro(filter, propertyValues)) {
-        return [];
-      }
-
-      // If the condition is not true then that means the property has to be hidden.
-      if (!jexl.evalSync(`${filter.condition.expression}`, typedPropertyValues)) {
+      if (!evaluateFilter(filter, propertyValues, propertiesFromBackend)) {
         return flatten(mapPropertyToShow(filter));
       }
       return [];
