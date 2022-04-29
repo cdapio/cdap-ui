@@ -21,6 +21,7 @@ import { MyPipelineApi } from 'api/pipeline';
 import { MyArtifactApi } from 'api/artifact';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
+import { evaluateFilter } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
 
 export const STATE_INITIAL_LOADING = 'STATE_INITIAL_LOADING';
 export const STATE_AVAILABLE = 'STATE_AVAILABLE';
@@ -40,12 +41,28 @@ export const INITIAL_STATE = {
   widgets: [],
   pluginProperties: {},
   loadingSubscription: null,
+  propertyFilters: [],
+  hiddenProperties: {},
 };
 
 const SOURCE_PLUGIN_NAME_PROPERTY = '_pluginName';
 // Source parsing applies only to batch sources for now
 const SOURCE_PLUGIN_TYPE = 'batchsource';
 const PIPELINE_ARTIFACT_ID = 'cdap-data-pipeline';
+
+function determineHiddenProperties(propertyFilters, selectedProperties, pluginProperties) {
+  const hiddenProperties = {};
+
+  propertyFilters.forEach((filter) => {
+    if (!evaluateFilter(filter, selectedProperties, pluginProperties)) {
+      filter.show.map((filterShow) => {
+        hiddenProperties[filterShow.name] = true;
+      });
+    }
+  });
+
+  return hiddenProperties;
+}
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -60,9 +77,15 @@ export const reducer = (state, action) => {
         status: action.value,
       };
     case SET_PROPERTIES_ACTION:
+      const newHiddenProperties = determineHiddenProperties(
+        state.propertyFilters,
+        action.value,
+        state.pluginProperties
+      );
       return {
         ...state,
         selectedProperties: action.value,
+        hiddenProperties: newHiddenProperties,
       };
     case SET_WIDGETS_ACTION:
       return {
@@ -200,13 +223,23 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
         });
       });
 
+      const propertyFilters = sourceWidgets.filters || [];
+      const pluginProperties = pluginDetails[0].properties;
+      const hiddenProperties = determineHiddenProperties(
+        propertyFilters,
+        selectedProperties,
+        pluginProperties
+      );
+
       dispatch({
         type: SET_INITIAL_STATE_ACTION,
         value: {
           widgets: parsingWidgets,
-          pluginProperties: pluginDetails[0].properties,
+          pluginProperties,
           selectedProperties,
           status: STATE_AVAILABLE,
+          propertyFilters,
+          hiddenProperties,
         },
       });
     },
