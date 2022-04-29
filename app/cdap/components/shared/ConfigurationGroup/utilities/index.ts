@@ -397,3 +397,36 @@ export function removeFilteredProperties(values, filteredConfigurationGroups) {
 
   return newValues;
 }
+
+/**
+ * replace the values in values1 with values2
+ *
+ * @param values1 the target that we want to update
+ * @param values2 the source that the target gets value from
+ */
+export function replaceDifferenceInObjects(values1, values2) {
+  const values = { ...values1 };
+  Object.keys(values2).forEach((key) => {
+    values[key] = values2[key];
+  });
+  return values;
+}
+
+/**
+ * replace the values in filteredValues with currentValues when
+ * the property.show is true
+ *
+ * @param filteredValues the result values of removing hidden properties
+ * @param currentValues the state that includes all current user input
+ * @param configGroup a filter group based on user input that decide whether a property
+ *                    show of not
+ */
+export function addCurrentValueToShownProperty(filteredValues, currentValues, configGroup) {
+  configGroup.forEach((config) => {
+    config.properties.forEach((property) => {
+      if (property.show) {
+        filteredValues[property.name] = currentValues[property.name];
+      }
+    });
+  });
+}
