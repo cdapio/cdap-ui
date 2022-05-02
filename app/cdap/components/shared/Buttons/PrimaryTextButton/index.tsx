@@ -17,9 +17,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-export default function PrimaryTextButton({ children, onClick, disabled = false, ...props }) {
+export default function PrimaryTextButton({ children, disabled = false, ...props }) {
   return (
-    <Button color="primary" disabled={disabled} onClick={onClick} {...props}>
+    <Button color="primary" disabled={disabled} {...props}>
       {children}
     </Button>
   );
