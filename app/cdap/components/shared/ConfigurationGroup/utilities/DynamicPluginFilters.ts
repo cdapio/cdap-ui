@@ -219,54 +219,43 @@ export function filterByCondition(
     })
   );
   const filters: IPropertyFilter[] = widgetJSON ? widgetJSON.filters : [];
-  if (!filters) {
-    return filteredGroupConfiguration.map((group) => {
-      return {
-        ...group,
-        show: true,
-        properties: group.properties.map((property) => ({
-          ...property,
-          show: true,
-        })),
-      };
-    });
-  }
   // Iterate through all filters and hide those properties whose filter
   // condition is not true.
-  const propertiesToHide = flatten(
-    filters.map((filter) => {
-      const { expression } = filter.condition;
-      const mapPropertyToShow = (f: IPropertyFilter) => {
-        return flatten(
-          f.show.map((showConfig) => {
-            if (showConfig.type === PropertyShowConfigTypeEnums.GROUP) {
-              const configuationGroups = widgetJSON['configuration-groups'];
-              return configuationGroups
-                .filter((group) => group.label === showConfig.name)
-                .map((group) =>
-                  group.properties
-                    .filter((property) => property['widget-category'] !== 'plugin')
-                    .map((property) => ({
-                      property: property.name,
-                      filterName: f.name,
-                    }))
-                );
-            }
-            return [
-              {
-                property: showConfig.name,
-                filterName: f.name,
-              },
-            ];
-          })
-        );
-      };
-      if (!evaluateFilter(filter, propertyValues, propertiesFromBackend)) {
-        return flatten(mapPropertyToShow(filter));
-      }
-      return [];
-    })
-  );
+  const propertiesToHide = !filters
+    ? []
+    : flatten(
+        filters.map((filter) => {
+          const mapPropertyToShow = (propertyFilter: IPropertyFilter) => {
+            return flatten(
+              propertyFilter.show.map((showConfig) => {
+                if (showConfig.type === PropertyShowConfigTypeEnums.GROUP) {
+                  const configuationGroups = widgetJSON['configuration-groups'];
+                  return configuationGroups
+                    .filter((group) => group.label === showConfig.name)
+                    .map((group) =>
+                      group.properties
+                        .filter((property) => property['widget-category'] !== 'plugin')
+                        .map((property) => ({
+                          property: property.name,
+                          filterName: propertyFilter.name,
+                        }))
+                    );
+                }
+                return [
+                  {
+                    property: showConfig.name,
+                    filterName: propertyFilter.name,
+                  },
+                ];
+              })
+            );
+          };
+          if (!evaluateFilter(filter, propertyValues, propertiesFromBackend)) {
+            return flatten(mapPropertyToShow(filter));
+          }
+          return [];
+        })
+      );
   propertiesToShow = difference(
     propertiesToShow,
     propertiesToHide.map((p) => p.property)
