@@ -38,7 +38,8 @@
         save-metadata="HydratorPlusPlusTopPanelCtrl.saveMetadataV2"
         reset-metadata="HydratorPlusPlusTopPanelCtrl.resetMetadataV2"></name-and-description>
     </div>
-    <div class="metadata text-left">
+    <!-- change to ng-if="false" to get this to hide, this is WIP for the overall toppanel react migration -->
+    <div class="metadata text-left" ng-if="true">
       <div class="pipeline-name"
            ng-class="{'placeholder': !HydratorPlusPlusTopPanelCtrl.state.metadata.name.length, 'error': HydratorPlusPlusTopPanelCtrl.invalidName}"
            ng-if="!HydratorPlusPlusTopPanelCtrl.metadataExpanded"
