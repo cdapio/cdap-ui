@@ -22,9 +22,11 @@ import {
 import {
   logicalTypeToSimpleTypeMap,
   AvroSchemaTypesEnum,
+  getDefaultEmptyAvroSchema,
 } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
 import cloneDeep from 'lodash/cloneDeep';
 import { objectQuery } from 'services/helpers';
+import { isObject } from 'vega-lite/build/src/util';
 
 const displayTypes: Array<ISimpleType | IComplexTypeNames | ILogicalTypeNames> = [
   AvroSchemaTypesEnum.ARRAY,
@@ -196,6 +198,44 @@ const isNoSchemaAvailable = (schema) => {
   return true;
 };
 
+const parseImportedSchemas = (schemas) => {
+  let importedSchemas = schemas;
+  if (typeof schemas === 'string') {
+    importedSchemas = JSON.parse(schemas);
+  }
+
+  if (!Array.isArray(importedSchemas)) {
+    // This will be the case when we hit 'Apply' button from wrangler.
+    // We don't maintain consistency in importing schemas from multiple
+    // sources. This will take time to fix as we right now throw schemas
+    // in multiple formats across all places.
+    if (isObject(importedSchemas) && !importedSchemas.hasOwnProperty('schema')) {
+      importedSchemas = { name: 'etlSchemaBody', schema: importedSchemas };
+    }
+    importedSchemas = [importedSchemas];
+  }
+
+  const newSchemas = importedSchemas.map((schema) => {
+    if (typeof schema !== 'object' && schema.hasOwnProperty('schema')) {
+      return { ...getDefaultEmptyAvroSchema() };
+    }
+    const s = { ...schema };
+
+    if (typeof schema.schema === 'string') {
+      s.schema = JSON.parse(schema.schema);
+    }
+    if (!s.schema || s.schema.type !== 'record' || !Array.isArray(s.schema.fields)) {
+      throw new Error('Imported schema is not a valid Avro schema');
+    }
+    if (s.schema.name) {
+      s.schema.name = s.schema.name.replace('.', '.type');
+    }
+    return s;
+  });
+
+  return newSchemas;
+};
+
 export {
   isNullable,
   isUnion,
@@ -208,4 +248,5 @@ export {
   isDisplayTypeLogical,
   isDisplayTypeComplex,
   isNoSchemaAvailable,
+  parseImportedSchemas,
 };
