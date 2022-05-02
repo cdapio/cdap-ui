@@ -165,8 +165,8 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     }
     // update currentValues state with whatever changed
-    setCurrentValues((values) => {
-      return replaceDifferenceInObjects(values, changedValues);
+    setCurrentValues((newValues) => {
+      return replaceDifferenceInObjects(newValues, changedValues);
     });
     const updatedFilteredValues = removeFilteredProperties(changedValues, fcg);
     changeParentHandler(updatedFilteredValues);
