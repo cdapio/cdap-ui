@@ -45,7 +45,7 @@ const useStyle = makeStyle((theme) => {
   };
 });
 
-interface valueProp {
+interface IValueProp {
   required?: boolean;
 }
 
@@ -72,7 +72,7 @@ export function ConnectionConfigForm({
     const fieldErrors = {};
     for (const [fieldName, value] of Object.entries(connectorProperties)) {
       if (
-        !!(value as valueProp).required &&
+        !!(value as IValueProp).required &&
         (!values.hasOwnProperty(fieldName) || values[fieldName] === '' || values[fieldName] == null)
       ) {
         fieldErrors[fieldName] = [
