@@ -14,8 +14,7 @@
  * the License.
  */
 
-import { Tooltip } from '@material-ui/core';
-import makeStyle from '@material-ui/core/styles/makeStyles';
+import { Button, Tooltip, withStyles } from '@material-ui/core';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -29,7 +28,6 @@ interface INameAndDescriptionProps {
 }
 
 const PipelineName = styled.div`
-  color: gray;
   font-size: 14px;
   margin-top: 5px;
   line-height: 17px;
@@ -46,20 +44,39 @@ const PipelineDescription = styled.div`
   font-size: 12px;
 `;
 
-const useStyle = makeStyle(() => {
+const CustomTooltip = withStyles(() => {
+  return {
+    tooltip: {
+      fontSize: '13px',
+    },
+  };
+})(Tooltip);
+
+const ErrorTooltip = withStyles(() => {
   return {
     arrow: {
       color: '#d15668',
     },
     tooltip: {
-      fontSize: '13px',
-    },
-    dangerTooltip: {
-      fontSize: '13px',
       background: '#d15668',
     },
   };
-});
+})(CustomTooltip);
+
+const SaveButton = styled(Button)`
+  background-color: #5a84e4;
+  margin-right: 10px;
+  text-transform: none;
+`;
+
+const CancelButton = styled(Button)`
+  background-color: white;
+  text-transform: none;
+`;
+
+const ButtonsContainer = styled.div`
+  float: left !important;
+`;
 
 export const NameAndDescription = ({
   metadataExpanded,
@@ -88,45 +105,10 @@ export const NameAndDescription = ({
       resetMetadata(event);
     }
   };
-  const classes = useStyle();
 
   return (
     <div>
-      {!metadataExpanded && (
-        <div>
-          {invalidName ? (
-            <Tooltip
-              title={'Invalid Name'}
-              arrow
-              open
-              placement="bottom-start"
-              classes={{ arrow: classes.arrow, tooltip: classes.dangerTooltip }}
-            >
-              <PipelineName errorName={true}>{name || 'Name your pipeline'}</PipelineName>
-            </Tooltip>
-          ) : (
-            <Tooltip
-              title={name}
-              arrow
-              placement="bottom-start"
-              classes={{ tooltip: classes.tooltip }}
-            >
-              <PipelineName errorName={false}>{name || 'Name your pipeline'}</PipelineName>
-            </Tooltip>
-          )}
-          <Tooltip
-            title={parsedDescription}
-            arrow
-            placement="bottom-start"
-            classes={{ tooltip: classes.tooltip }}
-          >
-            <PipelineDescription>
-              {parsedDescription || 'Enter a description for your pipeline'}
-            </PipelineDescription>
-          </Tooltip>
-        </div>
-      )}
-      {metadataExpanded && (
+      {metadataExpanded ? (
         <div>
           <input
             type="text"
@@ -142,24 +124,31 @@ export const NameAndDescription = ({
             data-cy="pipeline-description-input"
             onChange={handleDescriptionChange}
           ></textarea>
-          <div className="btn-group pull-left">
-            <button
-              type="button"
-              className="btn btn-primary save-button"
-              onClick={saveMetadata}
-              data-cy="pipeline-metadata-ok-btn"
-            >
+          <ButtonsContainer>
+            <SaveButton variant="contained" color="primary" onClick={saveMetadata}>
               Save
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary cancel-button"
-              onClick={resetMetadata}
-              data-cy="pipeline-metadata-cancel-btn"
-            >
+            </SaveButton>
+            <CancelButton variant="contained" onClick={resetMetadata}>
               Cancel
-            </button>
-          </div>
+            </CancelButton>
+          </ButtonsContainer>
+        </div>
+      ) : (
+        <div>
+          {invalidName ? (
+            <ErrorTooltip title={'Invalid Name'} arrow open placement="bottom-start">
+              <PipelineName errorName={true}>{name || 'Name your pipeline'}</PipelineName>
+            </ErrorTooltip>
+          ) : (
+            <CustomTooltip title={name} arrow placement="bottom-start">
+              <PipelineName errorName={false}>{name || 'Name your pipeline'}</PipelineName>
+            </CustomTooltip>
+          )}
+          <CustomTooltip title={parsedDescription} arrow placement="bottom-start">
+            <PipelineDescription>
+              {parsedDescription || 'Enter a description for your pipeline'}
+            </PipelineDescription>
+          </CustomTooltip>
         </div>
       )}
     </div>
