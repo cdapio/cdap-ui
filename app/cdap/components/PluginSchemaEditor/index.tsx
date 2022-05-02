@@ -38,7 +38,10 @@ import { isObject } from 'vega-lite/build/src/util';
 import { isMacro } from 'services/helpers';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import isEqual from 'lodash/isEqual';
-import { isNoSchemaAvailable } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
+import {
+  isNoSchemaAvailable,
+  parseImportedSchemas,
+} from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
 
 const styles = (theme): StyleRules => {
   return {
@@ -310,59 +313,17 @@ class PluginSchemaEditorBase extends React.PureComponent<
     if (this.state.mode === IPluginSchemaEditorModes.Macro) {
       return;
     }
-    let importedSchemas = schemas;
-    if (typeof schemas === 'string') {
-      try {
-        importedSchemas = JSON.parse(schemas);
-      } catch (e) {
-        this.setState({
-          error: e.message,
-        });
-        return;
-      }
-    }
-    let hasError = false;
-    if (!Array.isArray(importedSchemas)) {
-      // This will be the case when we hit 'Apply' button from wrangler.
-      // We don't maintain consistency in importing schemas from multiple
-      // sources. This will take time to fix as we right now throw schemas
-      // in multiple formats across all places.
-      if (isObject(importedSchemas) && !importedSchemas.hasOwnProperty('schema')) {
-        importedSchemas = { name: 'etlSchemaBody', schema: importedSchemas };
-      }
-      importedSchemas = [importedSchemas];
-    }
-    const newSchemas = importedSchemas.map((schema) => {
-      if (typeof schema !== 'object' && schema.hasOwnProperty('schema')) {
-        return { ...getDefaultEmptyAvroSchema() };
-      }
-      const s = { ...schema };
-      try {
-        if (typeof schema.schema === 'string') {
-          s.schema = JSON.parse(schema.schema);
-        }
-      } catch (e) {
-        this.setState({
-          error: e.message,
-        });
-        hasError = true;
-        return;
-      }
-      if (!s.schema || s.schema.type !== 'record' || !Array.isArray(s.schema.fields)) {
-        this.setState({
-          error: 'Imported schema is not a valid Avro schema',
-        });
-        hasError = true;
-        return;
-      }
-      if (s.schema.name) {
-        s.schema.name = s.schema.name.replace('.', '.type');
-      }
-      return s;
-    });
-    if (hasError) {
+
+    let newSchemas;
+    try {
+      newSchemas = parseImportedSchemas(schemas);
+    } catch (e) {
+      this.setState({
+        error: e.message,
+      });
       return;
     }
+
     this.setState({ loading: true }, () => {
       const schemasForPlugin = newSchemas.map((s) => {
         if (typeof s.schema !== 'string') {
