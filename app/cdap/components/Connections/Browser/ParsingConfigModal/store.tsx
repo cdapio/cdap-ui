@@ -34,6 +34,7 @@ export const SET_WIDGETS_ACTION = 'SET_WIDGETS_ACTION';
 export const SET_LOADING_SUBSCRIPTION_ACTION = 'SET_LOADING_OBSERVABLE_ACTION';
 export const SET_PLUGIN_PROPERTIES_ACTION = 'SET_PLUGIN_PROPERTIES_ACTION';
 export const SET_INITIAL_STATE_ACTION = 'SET_INITIAL_STATE_ACTION';
+export const SET_SCHEMA_ACTION = 'SET_SCHEMA_ACTION';
 
 export const INITIAL_STATE = {
   selectedProperties: {},
@@ -43,12 +44,17 @@ export const INITIAL_STATE = {
   loadingSubscription: null,
   propertyFilters: [],
   hiddenProperties: {},
+  allowSchemaUpload: false,
+  schemaUploadTooltip: '',
+  schema: null,
 };
 
 const SOURCE_PLUGIN_NAME_PROPERTY = '_pluginName';
 // Source parsing applies only to batch sources for now
 const SOURCE_PLUGIN_TYPE = 'batchsource';
 const PIPELINE_ARTIFACT_ID = 'cdap-data-pipeline';
+
+const SAMPLE_PROPERTY_SCHEMA = 'schema';
 
 function determineHiddenProperties(propertyFilters, selectedProperties, pluginProperties) {
   const hiddenProperties = {};
@@ -102,6 +108,11 @@ export const reducer = (state, action) => {
         ...state,
         pluginProperties: action.value,
       };
+    case SET_SCHEMA_ACTION:
+      return {
+        ...state,
+        schema: action.value,
+      };
     default:
       throw new Error();
   }
@@ -127,12 +138,18 @@ interface IConnectionDetails {
 
 export const performInitialLoad = (connection, sampleProperties, entity, dispatch) => {
   const selectedProperties = {};
+  let allowSchemaUpload = false;
+  let schemaUploadTooltip = '';
   // Get the default property values from the entity (provided by the browse response)
   sampleProperties.forEach((sp) => {
     let value = null;
     // Properties starting with `_` are for system usage and shouldn't be passed through
     if (!sp.name.includes('_') && entity.properties[sp.name]) {
       value = entity.properties[sp.name].value;
+    }
+    if (sp.name === SAMPLE_PROPERTY_SCHEMA) {
+      allowSchemaUpload = true;
+      schemaUploadTooltip = sp.description;
     }
     selectedProperties[sp.name] = value;
   });
@@ -240,6 +257,8 @@ export const performInitialLoad = (connection, sampleProperties, entity, dispatc
           status: STATE_AVAILABLE,
           propertyFilters,
           hiddenProperties,
+          allowSchemaUpload,
+          schemaUploadTooltip,
         },
       });
     },

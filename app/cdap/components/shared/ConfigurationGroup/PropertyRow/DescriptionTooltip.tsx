@@ -25,15 +25,31 @@ const StyledHelpIcon = styled(Help)`
 
 interface IDescriptionTooltipProps {
   description?: string;
+  placement?:
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom-end'
+    | 'bottom-start'
+    | 'left-end'
+    | 'left-start'
+    | 'right-end'
+    | 'right-start'
+    | 'top-end'
+    | 'top-start';
 }
 
-const DescriptionTooltip: React.FC<IDescriptionTooltipProps> = ({ description }) => {
+const DescriptionTooltip: React.FC<IDescriptionTooltipProps> = ({
+  description,
+  placement = 'left',
+}) => {
   if (!description) {
     return null;
   }
 
   return (
-    <PropertyRowTooltip title={description} placement="left">
+    <PropertyRowTooltip title={description} placement={placement}>
       <StyledHelpIcon />
     </PropertyRowTooltip>
   );
