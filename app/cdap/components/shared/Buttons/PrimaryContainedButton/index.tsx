@@ -17,9 +17,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 
-export default function PrimaryContainedButton({ children, onClick, disabled = false, ...props }) {
+export default function PrimaryContainedButton({ children, disabled = false, ...props }) {
   return (
-    <Button variant="contained" color="primary" disabled={disabled} onClick={onClick} {...props}>
+    <Button variant="contained" color="primary" disabled={disabled} {...props}>
       {children}
     </Button>
   );
