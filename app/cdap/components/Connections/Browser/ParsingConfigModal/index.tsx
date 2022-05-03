@@ -14,8 +14,10 @@
  * the License.
  */
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
+import T from 'i18n-react';
+import DescriptionTooltip from 'components/shared/ConfigurationGroup/PropertyRow/DescriptionTooltip';
 import styled from 'styled-components';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -25,6 +27,8 @@ import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
+import ImportFileButton from './ImportFileButton';
+import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
 import {
   reducer,
   performInitialLoad,
@@ -36,7 +40,10 @@ import {
   STATE_INITIAL_LOADING,
   STATE_CONFIG_CONFIRMED,
   SET_STATUS_ACTION,
+  SET_SCHEMA_ACTION,
 } from './store';
+
+const I18N_PREFIX = 'features.DataPrepConnections.ConnectionManagement.SourceParsing';
 
 const ContentContainer = styled.div`
   width: 100%;
@@ -64,6 +71,14 @@ const StyledAlert = styled(Alert)`
   font-size: inherit;
 `;
 
+const SchemaButtonRow = styled.div`
+  padding: 15px 10px 10px;
+`;
+
+const SchemaButtonContainer = styled.span`
+  padding-right: 10px;
+`;
+
 export default function ParsingConfigModal({
   connection,
   entity,
@@ -73,6 +88,7 @@ export default function ParsingConfigModal({
   errorMessage,
 }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [parsingErrorMessage, setParsingErrorMessage] = useState(null);
 
   useEffect(() => {
     performInitialLoad(connection, sampleProperties, entity, dispatch);
@@ -115,7 +131,29 @@ export default function ParsingConfigModal({
         confirmedProperties[propertyKey] = state.selectedProperties[propertyKey];
       }
     });
-    onConfirm(confirmedProperties);
+    onConfirm({
+      ...confirmedProperties,
+      schema: state.schema && JSON.stringify(state.schema),
+    });
+  };
+
+  const handleSchemaUpload = (schemaFile) => {
+    const reader = new FileReader();
+    reader.readAsText(schemaFile, 'UTF-8');
+
+    reader.onload = (evt) => {
+      try {
+        const fileContents = JSON.parse(evt.target.result.toString());
+        const importedSchemas = parseImportedSchemas(fileContents);
+        const schema = importedSchemas[0] && importedSchemas[0].schema;
+        dispatch({
+          type: SET_SCHEMA_ACTION,
+          value: schema,
+        });
+      } catch (e) {
+        setParsingErrorMessage('Imported schema is not a valid Avro schema');
+      }
+    };
   };
 
   const widgets = state.widgets.filter((widget) => {
@@ -130,6 +168,9 @@ export default function ParsingConfigModal({
           {(state.status === STATE_AVAILABLE || state.status === STATE_CONFIG_CONFIRMED) && (
             <>
               {errorMessage && <StyledAlert severity="error">{errorMessage}</StyledAlert>}
+              {parsingErrorMessage && (
+                <StyledAlert severity="error">{parsingErrorMessage}</StyledAlert>
+              )}
               {widgets.map((widget) => (
                 <PropertyRow
                   key={widget.name}
@@ -142,6 +183,22 @@ export default function ParsingConfigModal({
                   macrosDisabled={true}
                 />
               ))}
+              {state.allowSchemaUpload && (
+                <SchemaButtonRow>
+                  {state.schema && (
+                    <StyledAlert severity="success">
+                      A schema has been imported for this file
+                    </StyledAlert>
+                  )}
+                  <SchemaButtonContainer>
+                    <ImportFileButton onFileSelect={handleSchemaUpload} />
+                  </SchemaButtonContainer>
+                  <DescriptionTooltip
+                    description={`${T.translate(`${I18N_PREFIX}.ImportSchema.description`)}`}
+                    placement="right"
+                  />
+                </SchemaButtonRow>
+              )}
               {state.status === STATE_CONFIG_CONFIRMED && (
                 <ConfirmedLoadingIconContainer>
                   <LoadingSVG />
