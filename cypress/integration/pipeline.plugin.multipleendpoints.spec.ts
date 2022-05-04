@@ -226,7 +226,7 @@ describe('Pipelines with plugins having more than one endpoints', () => {
     cy.pipeline_clean_up_graph_control();
     cy.fit_pipeline_to_screen();
     // Name pipeline
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(unionSplitterPipeline)
@@ -268,7 +268,7 @@ describe('Pipelines with plugins having more than one endpoints', () => {
   });
 
   it('Should deploy pipeline with union splitter and condition plugins', (done) => {
-    cy.get('[data-testid=deploy-pipeline]').click();
+    cy.get('[data-cy="deploy-pipeline-btn"]').click();
     cy.get('[data-cy="Deployed"]', { timeout: 60000 }).should('contain', 'Deployed');
     cy.url()
       .should('include', `/view/${unionSplitterPipeline}`)
