@@ -51,6 +51,7 @@ export const MyReplicatorApi = {
   assessPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessPipeline`),
   validatePipeline: apiCreator(dataSrc, 'POST', 'REQUEST', validatePipelinePath),
   assessTable: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessTable`),
+  getTargetTableInfo: apiCreator(dataSrc, 'POST', 'REQUEST', `${servicePath}/assessTable`),
   fetchArtifactProperties: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
 
   // Detail
