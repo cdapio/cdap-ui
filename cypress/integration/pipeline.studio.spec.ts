@@ -194,7 +194,7 @@ describe('Pipeline Studio', () => {
       expect(sinkPropertiesFromNode.project).equal(sinkProperties.project);
       expect(sinkPropertiesFromNode.serviceFilePath).equal(sinkProperties.serviceFilePath);
     });
-    cy.get('[data-testid="deploy-pipeline"]').click();
+    cy.get('[data-cy="deploy-pipeline-btn"]').click();
     cy.url({ timeout: 60000 }).should('include', `/view/${TEST_PIPELINE_NAME}`);
   });
 
@@ -218,7 +218,7 @@ describe('Pipeline Studio', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.create_simple_pipeline();
 
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .type(TEST_PIPELINE_NAME)
       .type('{enter}');

@@ -63,7 +63,7 @@ describe('Pipeline Studio', () => {
       expect(subject.length).to.be.eq(1);
     });
     cy.get('[title="Airport_source"').should('exist');
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(PIPELINE_NAME)

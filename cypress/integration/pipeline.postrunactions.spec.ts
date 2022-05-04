@@ -59,7 +59,7 @@ describe('Pipeline post-run actions', () => {
 
     cy.wait(1000);
 
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
         .clear()
         .type(PIPELINE_NAME)
