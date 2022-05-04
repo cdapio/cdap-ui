@@ -244,7 +244,15 @@ export async function convertConfigToState(rawConfig, parentArtifact) {
     activeStep: 1,
     offsetBasePath: objectQuery(rawConfig, 'config', 'offsetBasePath') || '',
     numInstances: objectQuery(rawConfig, 'config', 'parallelism', 'numInstances') || 1,
+    transformations: objectQuery(rawConfig, 'config', 'tableTransformations') || {},
   };
+
+  // replace key in transformations with tableName
+  Object.keys(newState.transformations).forEach((key) => {
+    const newKey = newState.transformations[key].tableName;
+    newState.transformations[newKey] = newState.transformations[key];
+    delete newState.transformations[key];
+  });
 
   const stages = objectQuery(rawConfig, 'config', 'stages') || [];
 
