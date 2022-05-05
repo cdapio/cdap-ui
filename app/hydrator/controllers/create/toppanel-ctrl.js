@@ -88,6 +88,8 @@ class HydratorPlusPlusTopPanelCtrl {
     this.HydratorUpgradeService = HydratorUpgradeService;
 
     this.closeLogs = this.closeLogs.bind(this);
+    this.saveMetadataV2 = this.saveMetadataV2.bind(this);
+    this.resetMetadataV2 = this.resetMetadataV2.bind(this);
 
     this.setState();
     this.setActiveNodes();
@@ -224,12 +226,46 @@ class HydratorPlusPlusTopPanelCtrl {
       document.getElementById('pipeline-name-input').focus();
     });
   }
+
+  /**
+   * This is a copy of resetMetadata
+   * with the scope bound to the function -- copied
+   * so we don't break original functionality
+   */
+  resetMetadataV2(event) {
+    this.setState();
+    this.metadataExpanded = false;
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   resetMetadata(event) {
     this.setState();
     this.metadataExpanded = false;
     event.preventDefault();
     event.stopPropagation();
   }
+  
+  /**
+   * This is a copy of saveMetadata
+   * with the scope bound to the function -- copied
+   * so we don't break original functionality
+   */
+  saveMetadataV2(event) {
+    this.HydratorPlusPlusConfigActions.setMetadataInfo(this.state.metadata.name, this.state.metadata.description);
+    if (this.state.metadata.description) {
+      this.parsedDescription = this.state.metadata.description.replace(/\n/g, ' ');
+      this.tooltipDescription = this.state.metadata.description.replace(/\n/g, '<br />');
+    } else {
+      this.parsedDescription = '';
+      this.tooltipDescription = '';
+    }
+    this.metadataExpanded = false;
+    event.preventDefault();
+    event.stopPropagation();
+    this.onSaveDraft();
+  }
+
   saveMetadata(event) {
     this.HydratorPlusPlusConfigActions.setMetadataInfo(this.state.metadata.name, this.state.metadata.description);
     if (this.state.metadata.description) {
