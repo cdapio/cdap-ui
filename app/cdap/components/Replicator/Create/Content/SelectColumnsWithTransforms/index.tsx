@@ -158,12 +158,14 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
   }, [state.columns]);
 
   useEffect(() => {
-    if (props.transformations[props.tableInfo.table]) {
-      dispatch({
-        type: 'setInitialTransformations',
-        payload: props.transformations[props.tableInfo.table].columnTransformations,
-      });
-    }
+    Object.values(props.transformations).forEach((tableTransformation) => {
+      if (tableTransformation.tableName === props.tableInfo.table) {
+        dispatch({
+          type: 'setInitialTransformations',
+          payload: tableTransformation.columnTransformations,
+        });
+      }
+    });
   }, []);
 
   const handleSearch = (search) => {
