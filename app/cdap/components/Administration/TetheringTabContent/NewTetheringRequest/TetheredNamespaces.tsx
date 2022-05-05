@@ -24,28 +24,28 @@ import {
   ErrorText,
   NoDataText,
 } from '../shared.styles';
-import { I18N_OMNI_PREFIX } from './constants';
+import { I18N_TETHERED_PREFIX } from './constants';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import NamespacesTable from './NamespacesTable';
 
-interface IOmniNamespacesProps {
+interface ITetheredNamespacesProps {
   namespaces: INamespace[];
   selectedNamespaces: string[];
   validationError: IErrorObj;
   broadcastChange: (ns: string) => void;
 }
 
-const OmniNamespaces = ({
+const TetheredNamespaces = ({
   namespaces,
   selectedNamespaces,
   validationError,
   broadcastChange,
-}: IOmniNamespacesProps) => {
+}: ITetheredNamespacesProps) => {
   return (
     <NewReqContainer>
-      <HeaderTitle>{T.translate(`${I18N_OMNI_PREFIX}.title`)}</HeaderTitle>
+      <HeaderTitle>{T.translate(`${I18N_TETHERED_PREFIX}.title`)}</HeaderTitle>
       <hr />
-      <span>{T.translate(`${I18N_OMNI_PREFIX}.description`)}</span>
+      <span>{T.translate(`${I18N_TETHERED_PREFIX}.description`)}</span>
       <BodyContainer>
         {namespaces.length > 0 ? (
           <NamespacesTable
@@ -54,7 +54,7 @@ const OmniNamespaces = ({
             broadcastChange={broadcastChange}
           />
         ) : (
-          <NoDataText>{T.translate(`${I18N_OMNI_PREFIX}.noNamespaces`)}</NoDataText>
+          <NoDataText>{T.translate(`${I18N_TETHERED_PREFIX}.noNamespaces`)}</NoDataText>
         )}
       </BodyContainer>
       {validationError && <ErrorText>{validationError.msg}</ErrorText>}
@@ -62,4 +62,4 @@ const OmniNamespaces = ({
   );
 };
 
-export default OmniNamespaces;
+export default TetheredNamespaces;

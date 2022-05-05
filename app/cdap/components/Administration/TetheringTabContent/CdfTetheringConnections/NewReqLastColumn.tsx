@@ -60,7 +60,7 @@ const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastCol
         <GridCellButton onClick={() => handleAcceptOrReject('accept', instanceName)}>
           {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
         </GridCellButton>
-        <GridCellButton onClick={confirmReject}>
+        <GridCellButton onClick={toggleModalOpen}>
           {T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
         </GridCellButton>
       </ButtonsContainer>
