@@ -54,7 +54,7 @@ export interface IConnectionsProps {
   handleDelete: (connType: string, peer: string) => void;
 }
 
-export interface IOdfConnectionsProps extends IConnectionsProps {
+export interface IOnPremConnectionsProps extends IConnectionsProps {
   pendingRequests: IConnection[];
 }
 
