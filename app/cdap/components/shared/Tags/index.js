@@ -76,7 +76,7 @@ export default class Tags extends Component {
 
   componentWillUnmount() {
     Mousetrap.unbind('return');
-    Mousetrap.unbind('escape');
+    Mousetrap.unbind('escape'); 
 
     this.subscriptions.map((subscriber) => subscriber.unsubscribe());
   }
