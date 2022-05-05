@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import PendingRequests from './PendingRequests';
 import Connections from '../Connections';
-import { IOdfConnectionsProps } from '../types';
+import { IOnPremConnectionsProps } from '../types';
 import { StyledLinkBtn } from '../shared.styles';
 
 const PREFIX = 'features.Administration.Tethering';
@@ -28,12 +28,12 @@ const ButtonContainer = styled.div`
   margin: 5px 0 25px 30px;
 `;
 
-const OdfTetheringConnections = ({
+const OnPremConnections = ({
   pendingRequests,
   establishedConnections,
   handleEdit,
   handleDelete,
-}: IOdfConnectionsProps) => {
+}: IOnPremConnectionsProps) => {
   return (
     <>
       <PendingRequests
@@ -55,4 +55,4 @@ const OdfTetheringConnections = ({
   );
 };
 
-export default OdfTetheringConnections;
+export default OnPremConnections;

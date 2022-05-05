@@ -27,7 +27,7 @@ import T from 'i18n-react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 import { Theme } from 'services/ThemeHelper';
-import OdfTetheringConnections from './OdfTetheringConnections';
+import OnpremTetheringConnections from './OnPremTetheringConnections';
 import CdfTetheringConnections from './CdfTetheringConnections';
 import Alert from 'components/shared/Alert';
 
@@ -87,8 +87,8 @@ const AdminTetheringTabContent = () => {
         })}
       />
       <AdminTetheringTabContainer>
-        {Theme.odf ? (
-          <OdfTetheringConnections
+        {Theme.onPremTetheredInstance ? (
+          <OnpremTetheringConnections
             establishedConnections={establishedConnections}
             pendingRequests={pendingRequests}
             handleEdit={handleEdit}
