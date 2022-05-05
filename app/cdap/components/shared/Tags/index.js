@@ -51,7 +51,6 @@ export default class Tags extends Component {
   };
 
   state = {
-    systemTags: [],
     userTags: [],
     showInputField: false,
     loading: false,
@@ -89,10 +88,6 @@ export default class Tags extends Component {
       (res) => {
         this.setState(
           {
-            systemTags: res.tags
-              .filter((tag) => tag.scope === SCOPES.SYSTEM)
-              .map((tag) => tag.name)
-              .sort(),
             userTags: res.tags
               .filter((tag) => tag.scope === SCOPES.USER)
               .map((tag) => tag.name)
@@ -220,24 +215,6 @@ export default class Tags extends Component {
     });
   };
 
-  renderSystemTags() {
-    return (
-      <span>
-        {this.state.systemTags.map((tag) => {
-          return (
-            <Tag
-              value={tag}
-              scope={SCOPES.SYSTEM}
-              isNativeLink={this.props.isNativeLink}
-              preventDefault={this.props.preventDefault}
-              key={tag}
-            />
-          );
-        })}
-      </span>
-    );
-  }
-
   renderUserTags() {
     return (
       <span>
@@ -263,7 +240,7 @@ export default class Tags extends Component {
       return <span className="all-tags-label">{T.translate(`${PREFIX}.allTags`)}</span>;
     };
 
-    let tagsCount = this.state.systemTags.length + this.state.userTags.length;
+    let tagsCount = this.state.userTags.length;
 
     return (
       <Popover
@@ -278,7 +255,6 @@ export default class Tags extends Component {
           <strong>{T.translate(`${PREFIX}.labelWithCount`, { count: tagsCount })}</strong>
           <IconSVG name="icon-close" onClick={this.toggleAllTagsPopover} />
         </div>
-        {this.renderSystemTags()}
         {this.renderUserTags()}
       </Popover>
     );
@@ -322,7 +298,7 @@ export default class Tags extends Component {
   }
 
   render() {
-    let tagsCount = this.state.systemTags.length + this.state.userTags.length;
+    let tagsCount = this.state.userTags.length;
 
     return (
       <div className="tags-holder">
@@ -330,10 +306,7 @@ export default class Tags extends Component {
           <strong>{`${T.translate(`${PREFIX}.labelWithCount`, { count: tagsCount })}:`}</strong>
         ) : null}
         {!tagsCount && !this.state.loading ? <i>{T.translate(`${PREFIX}.notags`)}</i> : null}
-        <span className="tags-list">
-          {this.renderSystemTags()}
-          {this.renderUserTags()}
-        </span>
+        <span className="tags-list">{this.renderUserTags()}</span>
         {this.state.showAllTagsLabel ? this.renderTagsPopover() : null}
         {this.renderAddTag()}
         {this.state.loading ? (
