@@ -36,12 +36,14 @@ const useStyle = makeStyle<Theme>((theme) => {
 
 interface ICategorizedConnectors {
   connectorsMap: Map<string, any[]>;
+  allConnectorsPluginProperties: Map<string, any[]>;
   onActiveCategory: (activeCategory: string) => void;
   onConnectorSelection: (selectedConnection: any) => void;
 }
 
 export function CategorizedConnectors({
   connectorsMap: connectionsTypeMap,
+  allConnectorsPluginProperties: allConnectorsPluginProperties,
   onActiveCategory: onSelection,
   onConnectorSelection,
 }: ICategorizedConnectors) {
@@ -67,6 +69,7 @@ export function CategorizedConnectors({
         content: (
           <ActiveConnectionTab
             search={search}
+            allConnectorsPluginProperties={allConnectorsPluginProperties}
             connector={getAllConnections()}
             onConnectorSelection={onConnectorSelection}
             onSearchChange={setSearch}
@@ -85,6 +88,7 @@ export function CategorizedConnectors({
       name: category,
       content: (
         <ActiveConnectionTab
+          allConnectorsPluginProperties={allConnectorsPluginProperties}
           connector={connectionsTypeMap.get(category)}
           onConnectorSelection={onConnectorSelection}
           search={search}

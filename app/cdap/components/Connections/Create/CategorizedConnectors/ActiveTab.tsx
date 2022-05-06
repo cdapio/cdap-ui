@@ -26,6 +26,7 @@ import TableBody from 'components/shared/Table/TableBody';
 import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import { getSelectedConnectorDisplayName } from '../reducer';
 
 const I18NPREFIX = 'features.DataPrepConnections.AddConnections.ConnectionList';
 const COLUMN_TEMPLATE = 'minmax(10rem, 2fr) 6fr 2fr';
@@ -60,7 +61,13 @@ const useStyle = makeStyle((theme) => {
   };
 });
 
-export function ActiveConnectionTab({ connector, onConnectorSelection, search, onSearchChange }) {
+export function ActiveConnectionTab({
+  connector,
+  allConnectorsPluginProperties,
+  onConnectorSelection,
+  search,
+  onSearchChange,
+}) {
   const classes = useStyle();
 
   return (
@@ -105,6 +112,10 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                 return false;
               })
               .map((conn, i) => {
+                const displayName = getSelectedConnectorDisplayName(
+                  conn,
+                  allConnectorsPluginProperties
+                );
                 return (
                   <React.Fragment key={i}>
                     <ListItem
@@ -119,7 +130,7 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                       }}
                       data-cy={`connector-${conn.name}`}
                     >
-                      <TableCell>{conn.name}</TableCell>
+                      <TableCell>{displayName}</TableCell>
                       <TableCell>
                         <Tooltip title={conn.description} classes={{ tooltip: classes.tooltip }}>
                           <span>{conn.description}</span>
