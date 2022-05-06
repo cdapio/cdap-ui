@@ -30,6 +30,7 @@ import {
   ITableInfo,
   ISelectedList,
   IColumnTransformation,
+  IDeltaConfig,
 } from 'components/Replicator/types';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
@@ -104,6 +105,10 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
       draftId: props.draftId,
     };
 
+    const paramsTargetTable = {
+      namespace: getCurrentNamespace(),
+    };
+
     const body: ITableInfo = {
       table: props.tableInfo.table,
       database: props.tableInfo.database,
@@ -113,9 +118,31 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
       body.schema = props.tableInfo.schema;
     }
 
+    const replicatorConfig = props.getReplicatorConfig();
+
+    // This checks if the clicked table is selected or not.
+    // The getTargetTableInfo requires the submitted table
+    // to be in replicatorConfig.tables, below process inserts
+    // the unselected table into the payload if necessary
+    let needInsertTable = true;
+    replicatorConfig.tables.forEach((table) => {
+      if (table.table === body.table) {
+        needInsertTable = false;
+        return;
+      }
+    });
+    if (needInsertTable) {
+      replicatorConfig.tables = [...replicatorConfig.tables, body];
+    }
+
+    const bodyTargetTable: IDeltaConfig = {
+      dBTable: body,
+      deltaConfig: replicatorConfig,
+    };
+
     Observable.forkJoin([
       MyReplicatorApi.getTableInfo(params, body),
-      MyReplicatorApi.assessTable(params, body),
+      MyReplicatorApi.getTargetTableInfo(paramsTargetTable, bodyTargetTable),
     ]).subscribe({
       next: (value: any) => {
         const [tableInfo, assessedTable] = value;

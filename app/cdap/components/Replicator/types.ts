@@ -39,6 +39,11 @@ export interface ITableInfo {
   schema?: string;
 }
 
+export interface IDeltaConfig {
+  dBTable: ITableInfo;
+  deltaConfig?: any;
+}
+
 export interface ITable extends ITableInfo {
   numColumns?: number;
 }
