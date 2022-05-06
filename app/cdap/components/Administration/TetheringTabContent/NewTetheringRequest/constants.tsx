@@ -25,29 +25,29 @@ export const K8S_NS_MEMORY_LIMITS = 'k8s.namespace.memory.limits';
 export const K8S_NS_MEMORY_LIMIT_UNIT = 'Gi';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
-export const I18N_OMNI_PREFIX = `${I18NPREFIX}.OmniNamespaces`;
+export const I18N_TETHERED_PREFIX = `${I18NPREFIX}.TetheredNamespaces`;
 export const I18N_CDF_PREFIX = `${I18NPREFIX}.CDFInformation`;
 
-export const OMNI_NS_COLUMN_TEMPLATE = '50px 4fr 2fr 3fr';
+export const TETHERED_NS_COLUMN_TEMPLATE = '50px 4fr 2fr 3fr';
 
 const WIDGET_TYPE = 'widget-type';
 const WIDGET_ATTRIBUTES = 'widget-attributes';
 
-export const OMNI_NS_TABLE_HEADERS = [
+export const TETHERED_NS_TABLE_HEADERS = [
   {
     label: <StyledCheckbox checked={false} />,
   },
   {
     property: 'namespace',
-    label: T.translate(`${I18N_OMNI_PREFIX}.Name.label`),
+    label: T.translate(`${I18N_TETHERED_PREFIX}.Name.label`),
   },
   {
     property: 'cpuLimit',
-    label: T.translate(`${I18N_OMNI_PREFIX}.CpuLimit.label`),
+    label: T.translate(`${I18N_TETHERED_PREFIX}.CpuLimit.label`),
   },
   {
     property: 'memoryLimit',
-    label: T.translate(`${I18N_OMNI_PREFIX}.MemoryLimit.label`),
+    label: T.translate(`${I18N_TETHERED_PREFIX}.MemoryLimit.label`),
   },
 ];
 

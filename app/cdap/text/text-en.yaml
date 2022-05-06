@@ -205,8 +205,8 @@ features:
         failure: Failed to create request
         inputValidationError: Required field {fieldName} has no value
         nsValidationError: At least one namespace must be selected
-        OmniNamespaces:
-          title: Omni Namespaces
+        TetheredNamespaces:
+          title: Tethered Namespaces
           description: Select the namespaces that will be tethered to the cloud instance
           noNamespaces: There are no available namespaces
           Name: 

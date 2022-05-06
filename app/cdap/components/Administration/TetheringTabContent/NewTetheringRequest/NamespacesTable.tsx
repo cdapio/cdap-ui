@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import { Grid, GridHeader, GridBody, GridRow, GridCell, StyledCheckbox } from '../shared.styles';
 import { getScrollableColTemplate, trimMemoryLimit } from '../utils';
 import { INamespace } from '../types';
-import { OMNI_NS_COLUMN_TEMPLATE, OMNI_NS_TABLE_HEADERS } from './constants';
+import { TETHERED_NS_COLUMN_TEMPLATE, TETHERED_NS_TABLE_HEADERS } from './constants';
 
 interface INameSpacesTableProps {
   tableData: INamespace[];
@@ -40,12 +40,12 @@ const StyledGridBody = styled(GridBody)`
 const renderTableHeader = (tableData: INamespace[]) => {
   const columnTemplate =
     tableData.length > 5
-      ? getScrollableColTemplate(OMNI_NS_COLUMN_TEMPLATE)
-      : OMNI_NS_COLUMN_TEMPLATE;
+      ? getScrollableColTemplate(TETHERED_NS_COLUMN_TEMPLATE)
+      : TETHERED_NS_COLUMN_TEMPLATE;
   return (
     <GridHeader>
       <GridRow columnTemplate={columnTemplate}>
-        {OMNI_NS_TABLE_HEADERS.map((header, i) => {
+        {TETHERED_NS_TABLE_HEADERS.map((header, i) => {
           return <GridCell key={i}>{header.label}</GridCell>;
         })}
       </GridRow>
@@ -72,7 +72,7 @@ const NameSpacesTable = ({
     };
 
     return (
-      <GridRow columnTemplate={OMNI_NS_COLUMN_TEMPLATE} border={!isLast} key={idx}>
+      <GridRow columnTemplate={TETHERED_NS_COLUMN_TEMPLATE} border={!isLast} key={idx}>
         <GridCell>
           <StyledCheckbox
             checked={selectedNamespaces.includes(namespace)}

@@ -28,8 +28,8 @@ export const TetheringApi = {
   deleteTethering: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${connectionPeerPath}`),
   getTetheringStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionPeerPath}`),
   getTetheringStatusForAll: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsBasePath}`),
-  getOdfInstanceNames: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsBasePath}/peers`), // TODO: update with new endpoints when ready
-  getOdfInstanceName: apiCreator(
+  getOnPremInstanceNames: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsBasePath}/peers`), // TODO: update with new endpoints when ready
+  getOnPremInstanceName: apiCreator(
     dataSrc,
     'GET',
     'REQUEST',
