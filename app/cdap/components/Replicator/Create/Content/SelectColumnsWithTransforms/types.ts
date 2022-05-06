@@ -46,6 +46,7 @@ export interface ISelectColumnsProps {
   ) => void;
   assessmentLoading: boolean;
   tinkEnabled: boolean;
+  getReplicatorConfig: () => any;
 }
 
 interface IColumn {
