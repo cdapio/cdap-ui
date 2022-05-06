@@ -28,7 +28,7 @@ import {
   createTethering,
   fetchNamespaceList,
 } from './reducer';
-import OmniNamespaces from './OmniNamespaces';
+import TetheredNamespaces from './TetheredNamespaces';
 import CdfInfo from './CdfInfo';
 import { HeaderContainer, HeaderTitle, StyledButton, StyledAlert } from '../shared.styles';
 import { Container, BackButton, Divider, StyledBodyContainer, ButtonsContainer } from './styles';
@@ -124,7 +124,7 @@ const NewTetheringRequest = () => {
         <HeaderTitle>{T.translate(`${I18NPREFIX}.headerTitle`)}</HeaderTitle>
       </HeaderContainer>
       <StyledBodyContainer>
-        <OmniNamespaces
+        <TetheredNamespaces
           namespaces={namespaces}
           selectedNamespaces={selectedNamespaces}
           validationError={validationErrors.namespaces}
