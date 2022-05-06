@@ -61,7 +61,7 @@ const tableHeaders = [
   },
 ];
 
-const colorScale = d3Lib.scaleOrdinal(d3Lib.schemeCategory20);
+const colorScale = d3Lib.scaleOrdinal(d3Lib.schemeAccent);
 const PLUSBUTTONCONTEXTMENUITEMS = [
   {
     label: T.translate(`${PREFIX}.createNew`),
