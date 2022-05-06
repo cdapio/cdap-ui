@@ -913,7 +913,7 @@ class HydratorPlusPlusConfigStore {
             node.configGroups,
             node,
             node._backendProperties,
-            node.plugin.properties,
+            node.plugin.properties
           );
           visibilityMap = filteredConfigGroups.reduce((fieldsMap, group) => {
             group.properties.forEach((property) => {

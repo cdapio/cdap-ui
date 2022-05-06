@@ -105,7 +105,7 @@ angular.module(PKG.name + '.commons')
           return false;
         }
         return field.toLowerCase().indexOf(term) > -1;
-      }
+      };
 
       if (!trimmedSearchText || !trimmedSearchText.length) {
         return group.plugins;
@@ -116,7 +116,7 @@ angular.module(PKG.name + '.commons')
           containsTerm(plugin.label, trimmedSearchText) ||
           containsTerm(this.generateLabel(plugin), trimmedSearchText);
       });
-    }
+    };
 
     let sub = AvailablePluginsStore.subscribe(() => {
       this.pluginsMap = AvailablePluginsStore.getState().plugins.pluginsMap;
