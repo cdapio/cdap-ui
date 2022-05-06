@@ -18,12 +18,13 @@ import { IWidgetProps } from 'components/AbstractWidget';
 import Input from '@material-ui/core/Input';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
-import React from 'react';
+import React, { useState } from 'react';
 import Tooltip from '@material-ui/core/Tooltip';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { isNilOrEmptyString } from 'services/helpers';
 import { objectQuery } from 'services/helpers';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { ClickAwayListener } from '@material-ui/core';
 
 const CustomTooltip = withStyles((theme) => {
   return {
@@ -115,6 +116,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
       onChange(v);
     }
   };
+  const [open, setOpen] = useState(false);
 
   const options = objectQuery(widgetProps, 'options') || objectQuery(widgetProps, 'values') || [];
   const dense = objectQuery(widgetProps, 'dense') || false;
@@ -133,51 +135,63 @@ const CustomSelect: React.FC<ISelectProps> = ({
 
   const InputComponent = enableUnderline ? CustomizedInput : CustomizedInputBase;
 
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+
+  const onClickSelectHandler = () => {
+    setOpen(!open);
+  };
+
   return (
-    <SelectComponent
-      fullWidth
-      value={value}
-      onChange={onChangeHandler}
-      input={<InputComponent />}
-      readOnly={disabled}
-      inputProps={{
-        'data-cy': dataCy,
-      }}
-      MenuProps={{
-        getContentAnchorEl: null,
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'left',
-        },
-        ...MenuProps,
-      }}
-      displayEmpty={!isNilOrEmptyString(placeholder)}
-      inputRef={inputRef}
-      classes={classes}
-      data-cy={`select-${dataCy}`}
-      {...widgetProps}
-    >
-      {optionValues.map((opt) => {
-        const option = (
-          <OptionItem
-            value={opt.value}
-            key={opt.value}
-            disabled={opt.disabled || !isNilOrEmptyString(opt.placeholder)}
-            data-cy={`option-${opt.value}`}
-          >
-            {opt.label}
-          </OptionItem>
-        );
-        if (opt.tooltip) {
-          return (
-            <CustomTooltip title={opt.tooltip} placement={opt.tooltipPlacement || 'left'}>
-              <span>{option}</span>
-            </CustomTooltip>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <SelectComponent
+        open={open}
+        onClick={onClickSelectHandler}
+        fullWidth
+        value={value}
+        onChange={onChangeHandler}
+        input={<InputComponent />}
+        readOnly={disabled}
+        inputProps={{
+          'data-cy': dataCy,
+        }}
+        MenuProps={{
+          getContentAnchorEl: null,
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          ...MenuProps,
+        }}
+        displayEmpty={!isNilOrEmptyString(placeholder)}
+        inputRef={inputRef}
+        classes={classes}
+        data-cy={`select-${dataCy}`}
+        {...widgetProps}
+      >
+        {optionValues.map((opt) => {
+          const option = (
+            <OptionItem
+              value={opt.value}
+              key={opt.value}
+              disabled={opt.disabled || !isNilOrEmptyString(opt.placeholder)}
+              data-cy={`option-${opt.value}`}
+            >
+              {opt.label}
+            </OptionItem>
           );
-        }
-        return option;
-      })}
-    </SelectComponent>
+          if (opt.tooltip) {
+            return (
+              <CustomTooltip title={opt.tooltip} placement={opt.tooltipPlacement || 'left'}>
+                <span>{option}</span>
+              </CustomTooltip>
+            );
+          }
+          return option;
+        })}
+      </SelectComponent>
+    </ClickAwayListener>
   );
 };
 
