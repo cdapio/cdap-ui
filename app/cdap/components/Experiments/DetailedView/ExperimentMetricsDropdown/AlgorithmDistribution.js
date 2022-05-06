@@ -22,7 +22,7 @@ import { getAlgorithmLabel } from 'components/Experiments/store/SharedActionCrea
 import EmptyMetricMessage from 'components/Experiments/DetailedView/ExperimentMetricsDropdown/EmptyMetricMessage';
 
 const HEIGHT_OF_PIE_CHART = 190;
-const colorScale = d3Lib.scaleOrdinal(d3Lib.schemeCategory20);
+const colorScale = d3Lib.scaleOrdinal(d3Lib.schemeAccent);
 const AlgorithmDistribution = ({ algorithms }) => {
   if (!algorithms.length) {
     return (

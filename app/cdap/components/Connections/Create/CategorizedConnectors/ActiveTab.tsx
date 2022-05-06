@@ -179,9 +179,9 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                     <ListItem
                       divider
                       disableGutters
-                      button={!hasOlderVersion}
+                      button={!hasOlderVersion as any}
                       className={classes.tableRow}
-                      onClick={(event) => {
+                      onClick={(event: any) => {
                         if (event.target.dataset.cell !== 'version-toggle') {
                           onConnectorSelection(conn);
                         }
