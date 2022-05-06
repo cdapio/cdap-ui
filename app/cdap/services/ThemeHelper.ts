@@ -106,7 +106,7 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     'metadata-in-react'?: boolean;
     'allow-force-dynamic-execution'?: boolean;
     tethering?: boolean;
-    odf?: boolean;
+    'on-prem-tethered-instance'?: boolean;
   };
 }
 
@@ -230,7 +230,7 @@ interface IThemeObj {
   isMetadataInReact?: boolean;
   allowForceDynamicExecution?: boolean;
   tethering?: boolean;
-  odf?: boolean;
+  onPremTetheredInstance?: boolean;
 }
 
 function getTheme(): IThemeObj {
@@ -547,8 +547,11 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     if ('tethering' in featuresJson && isBoolean(featuresJson.tethering)) {
       features.tethering = featuresJson.tethering;
     }
-    if ('odf' in featuresJson && isBoolean(featuresJson.odf)) {
-      features.odf = featuresJson.odf;
+    if (
+      'on-prem-tethered-instance' in featuresJson &&
+      isBoolean(featuresJson['on-prem-tethered-instance'])
+    ) {
+      features.onPremTetheredInstance = featuresJson['on-prem-tethered-instance'];
     }
     return features;
   }

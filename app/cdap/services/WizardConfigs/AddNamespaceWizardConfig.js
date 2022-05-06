@@ -75,7 +75,7 @@ if (Theme.showNamespaceSecurity === false) {
   AddNamespaceWizardConfig.steps.splice(securityIndex, 1);
 }
 
-if (Theme.odf === false) {
+if (Theme.onPremTetheredInstance === false) {
   const ResourcesIndex = findIndex(AddNamespaceWizardConfig.steps, { id: 'resources' });
   AddNamespaceWizardConfig.steps.splice(ResourcesIndex, 1);
 }
