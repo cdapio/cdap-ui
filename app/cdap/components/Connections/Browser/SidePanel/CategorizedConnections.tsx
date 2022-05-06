@@ -33,10 +33,12 @@ import { ConnectionsApi } from 'api/connections';
 import { IConnectorType } from 'components/Connections/Browser/SidePanel';
 import { getConnectionPath } from 'components/Connections/helper';
 import { ConnectionConfigurationMode } from 'components/Connections/types';
+import { getSelectedConnectorDisplayName } from 'components/Connections/Create/reducer';
 
 interface ICategorizedConnectionsProps {
   categorizedConnections: Map<string, any[]>;
   connectorTypes: IConnectorType[];
+  mapOfConnectorPluginProperties: { [key: string]: any };
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
   boundaryElement: any;
@@ -188,6 +190,7 @@ function getConnectionConfig(conn) {
 export function CategorizedConnections({
   categorizedConnections = new Map(),
   connectorTypes = [],
+  mapOfConnectorPluginProperties = null,
   onConnectionSelection,
   selectedConnection,
   boundaryElement,
@@ -371,6 +374,10 @@ export function CategorizedConnections({
       {connectorTypes.map((connectorType) => {
         const key = connectorType.name;
         const connections = categorizedConnections.get(key) || [];
+        const displayName = getSelectedConnectorDisplayName(
+          connectorType,
+          mapOfConnectorPluginProperties
+        );
 
         return (
           <Accordion
@@ -383,7 +390,7 @@ export function CategorizedConnections({
               expandIcon={<ExpandMoreIcon />}
               data-cy={`categorized-connection-type-${key}`}
             >
-              {key}({connections.length})
+              {displayName}({connections.length})
             </CustomAccordionSummary>
             <CustomAccordionDetails>
               {connections.map((connection) => {
