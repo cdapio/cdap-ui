@@ -238,9 +238,9 @@ export async function fetchConnectionDetails(connection) {
     namespace: getCurrentNamespace(),
     datapipelineArtifactVersion: cdapVersion,
     connectionTypeName: connection.name,
-    artifactname,
-    artifactversion,
-    artifactscope,
+    artifactName: artifactname,
+    artifactVersion: artifactversion,
+    artifactScope: artifactscope,
   });
 
   const pluginKey = `${connection.name}-connector`;
