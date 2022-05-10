@@ -17,13 +17,15 @@
 const fetchSandbox = require('./fetch_sandbox');
 const startCDAP = require('./start');
 
-function main() {
+async function main() {
   const targetDir = process.argv[2];
+  const javaHomeDir = process.argv[3];
+
   if (!targetDir) {
     throw new Error('Target directory required');
   }
   await fetchSandbox(targetDir);
-  await startCDAP(targetDir);
+  await startCDAP(targetDir, javaHomeDir);
 }
 
 main();

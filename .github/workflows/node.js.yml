@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: CDAP UI Build and Unit Test
+name: CDAP UI Unit and Integration Tests
 
 on:
   push:
@@ -16,15 +16,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.16]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [12.22.7]
+        java-version: [8]
+
+    # Cancel ongoing runs
+    concurrency: 
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
     - uses: actions/checkout@v2
 
     # installing dependency for node-canvas
     - name: Install Ubuntu debendency
-      run: sudo apt-get install libgif-dev
+      run: sudo apt-get install -y libgif-dev
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -36,14 +41,30 @@ jobs:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-    - name: Install Yarn dependencies
-      run: yarn --frozen-lockfile
+    # installing Java 8 to run the sandbox
+    - name: Setup Java ${{ matrix.java-version }}
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: ${{ matrix.java-version }}
 
-    - name: Install Bower dependencies
-      run: ./node_modules/bower/bin/bower install
+    - name: Download CDAP Sandbox and Start it
+      run: |
+        cd sandboxjs
+        npm install -g yarn # Install Yarn globally
+        yarn --frozen-lockfile # Install sandbox runner dependencies 
+        yarn setup-gitpod $JAVA_HOME # Fetch and start sandbox
+        sudo pkill -f node # Kill the sandbox UI
 
-    - name: Build UI
-      run: yarn run cdap-full-build-more-memory
+    - name: Install UI Dependencies
+      run: |
+        yarn --frozen-lockfile
+        yarn run bower-root # Install Bower dependencies
 
-    - name: Run Unit Tests
-      run: yarn run jest
+    - name: Start CDAP-UI and run the tests
+      run: |
+        Xvfb :1 -screen 0 1024x768x24 & export DISPLAY=:1 # Set Display port
+        yarn run cdap-full-build-more-memory # Build UI
+        yarn start & > server.out
+        yarn run test:unit
+        yarn run test:integration
