@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import T from 'i18n-react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { isNilOrEmptyString } from 'services/helpers';
@@ -23,19 +23,12 @@ import TableHeader from 'components/shared/Table/TableHeader';
 import TableRow from 'components/shared/Table/TableRow';
 import TableCell from 'components/shared/Table/TableCell';
 import TableBody from 'components/shared/Table/TableBody';
-import TableColumnGroup from 'components/shared/Table/TableColumnGroup';
-import ColumnGroup from 'components/shared/Table/ColumnGroup';
 import Tooltip from '@material-ui/core/Tooltip';
-import classnames from 'classnames';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import Collapse from '@material-ui/core/Collapse';
 
 const I18NPREFIX = 'features.DataPrepConnections.AddConnections.ConnectionList';
-const COLUMN_TEMPLATE = 'minmax(10rem, 1fr) 6fr 2fr 1.5fr 1fr 0.5fr';
+const COLUMN_TEMPLATE = 'minmax(10rem, 2fr) 6fr 2fr';
 
 const useStyle = makeStyle((theme) => {
   return {
@@ -69,60 +62,6 @@ const useStyle = makeStyle((theme) => {
 
 export function ActiveConnectionTab({ connector, onConnectorSelection, search, onSearchChange }) {
   const classes = useStyle();
-  const [expandedConnection, setExpandedConnection] = useState(null);
-
-  const renderToggleIcon = (isExpanded, name) => {
-    const title = isExpanded
-      ? T.translate(`${I18NPREFIX}.hideOlderVersions`)
-      : T.translate(`${I18NPREFIX}.showOlderVersions`);
-    return (
-      <Tooltip title={title} classes={{ tooltip: classes.tooltip }}>
-        <IconButton
-          color="primary"
-          size="small"
-          onClick={(event) => {
-            setExpandedConnection(isExpanded ? null : name);
-            event.stopPropagation();
-          }}
-        >
-          {isExpanded ? <ExpandLess /> : <ExpandMore />}
-        </IconButton>
-      </Tooltip>
-    );
-  };
-
-  const renderOlderVersions = (conn, isExpanded) => {
-    return (
-      <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-        <List className={classes.divider} component="div" disablePadding>
-          {conn.olderVersions.map((plugin, idx) => {
-            const isLast = idx < conn.olderVersions.length - 1;
-            const cellClass = classnames(classes.nestedCell, {
-              [classes.divider]: isLast,
-            });
-            return (
-              <ListItem
-                key={idx}
-                className={classnames(classes.nestedRow, classes.tableRow)}
-                disableGutters
-                button
-                onClick={() => {
-                  onConnectorSelection({ ...conn, artifact: plugin });
-                }}
-              >
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell className={cellClass}>{plugin.name}</TableCell>
-                <TableCell className={cellClass}>{plugin.version}</TableCell>
-                <TableCell className={cellClass}>{plugin.scope}</TableCell>
-                <TableCell></TableCell>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Collapse>
-    );
-  };
 
   return (
     <div className={classes.root}>
@@ -146,16 +85,10 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
 
       <Table columnTemplate={COLUMN_TEMPLATE}>
         <TableHeader>
-          <TableColumnGroup>
-            <ColumnGroup gridColumn="3 / span 3">Artifact Information</ColumnGroup>
-          </TableColumnGroup>
-
           <TableRow>
             <TableCell>{T.translate(`${I18NPREFIX}.Columns.name`)}</TableCell>
             <TableCell>{T.translate(`${I18NPREFIX}.Columns.description`)}</TableCell>
             <TableCell>{T.translate(`${I18NPREFIX}.Columns.artifact`)}</TableCell>
-            <TableCell>{T.translate(`${I18NPREFIX}.Columns.version`)}</TableCell>
-            <TableCell>{T.translate(`${I18NPREFIX}.Columns.scope`)}</TableCell>
           </TableRow>
         </TableHeader>
 
@@ -172,14 +105,12 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                 return false;
               })
               .map((conn, i) => {
-                const hasOlderVersion = conn.olderVersions.length > 0;
-                const isExpanded = expandedConnection === conn.name;
                 return (
                   <React.Fragment key={i}>
                     <ListItem
                       divider
                       disableGutters
-                      button={!hasOlderVersion}
+                      button={true}
                       className={classes.tableRow}
                       onClick={(event) => {
                         if (event.target.dataset.cell !== 'version-toggle') {
@@ -195,13 +126,7 @@ export function ActiveConnectionTab({ connector, onConnectorSelection, search, o
                         </Tooltip>
                       </TableCell>
                       <TableCell>{conn.artifact.name}</TableCell>
-                      <TableCell>{conn.artifact.version}</TableCell>
-                      <TableCell>{conn.artifact.scope}</TableCell>
-                      <TableCell textAlign="center" data-cell="version-toggle">
-                        {hasOlderVersion && renderToggleIcon(isExpanded, conn.name)}
-                      </TableCell>
                     </ListItem>
-                    {hasOlderVersion && renderOlderVersions(conn, isExpanded)}
                   </React.Fragment>
                 );
               })}
