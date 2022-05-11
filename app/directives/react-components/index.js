@@ -189,4 +189,7 @@ angular
   })
   .directive('sidePanel', function (reactDirective) {
     return reactDirective(window.CaskCommon.SidePanel);
+  })
+  .directive('nameAndDescription', function (reactDirective) {
+    return reactDirective(window.CaskCommon.NameAndDescription);
   });
