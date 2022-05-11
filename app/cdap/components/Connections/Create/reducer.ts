@@ -228,45 +228,48 @@ export async function fetchConnectionDetails(connection) {
     connectorDoc: null,
     connectorError: null,
   };
-  const {
-    name: artifactname = 'google-cloud',
-    version: artifactversion = '0.18.0-SNAPSHOT',
-    scope: artifactscope = 'SYSTEM',
-  } = connection.artifact || {};
-  const cdapVersion = VersionStore.getState().version;
-  const connectionProperties$ = ConnectionsApi.fetchConnectorPluginProperties({
-    namespace: getCurrentNamespace(),
-    datapipelineArtifactVersion: cdapVersion,
-    connectionTypeName: connection.name,
-    artifactName: artifactname,
-    artifactVersion: artifactversion,
-    artifactScope: artifactscope,
-  });
-
-  const pluginKey = `${connection.name}-connector`;
-
-  const widgetJSONKey = `widgets.${pluginKey}`;
-  const docKey = `doc.${pluginKey}`;
-  const connectionArtifactObj = {
-    namespace: getCurrentNamespace(),
-    artifactname,
-    artifactversion,
-    scope: artifactscope,
-  };
-  // TODO: Once we have APIs from backend to get all widget json and docs for
-  // connectors we already build a map of it. We should just use that.
-  // This is ONLY a temporary workaround to do something in create view.
-  const connectionWidgetJSON$ = ConnectionsApi.fetchConnectorArtifactProperty({
-    ...connectionArtifactObj,
-    keys: widgetJSONKey,
-  });
-  const connectionDoc$ = ConnectionsApi.fetchConnectorArtifactProperty({
-    ...connectionArtifactObj,
-    keys: docKey,
-  });
   try {
-    const [connectionProperties, connectionWidgetJSON, connectionDoc] = await Observable.forkJoin(
-      connectionProperties$,
+    const { name: artifactName, version: artifactVersion, scope: artifactScope } =
+      connection.artifact || {};
+    const cdapVersion = VersionStore.getState().version;
+    const connectionProperties$ = ConnectionsApi.fetchConnectorPluginProperties({
+      namespace: getCurrentNamespace(),
+      datapipelineArtifactVersion: cdapVersion,
+      connectionTypeName: connection.name,
+      artifactName,
+      artifactVersion,
+      artifactScope,
+    });
+
+    // If we're looking at a pre-configured connection, no version is supplied
+    // We need to get the latest version from the backend using
+    // fetchConnectorPluginProperties and use that for the
+    // docs and widget JSON
+    const connectionProperties = await connectionProperties$.toPromise();
+
+    const pluginKey = `${connection.name}-connector`;
+
+    const widgetJSONKey = `widgets.${pluginKey}`;
+    const docKey = `doc.${pluginKey}`;
+    const connectionArtifactObj = {
+      namespace: getCurrentNamespace(),
+      artifactname: artifactName,
+      artifactversion: artifactVersion || connectionProperties[0].artifact.version,
+      scope: artifactScope || connectionProperties[0].artifact.scope,
+    };
+    // TODO: Once we have APIs from backend to get all widget json and docs for
+    // connectors we already build a map of it. We should just use that.
+    // This is ONLY a temporary workaround to do something in create view.
+    const connectionWidgetJSON$ = ConnectionsApi.fetchConnectorArtifactProperty({
+      ...connectionArtifactObj,
+      keys: widgetJSONKey,
+    });
+    const connectionDoc$ = ConnectionsApi.fetchConnectorArtifactProperty({
+      ...connectionArtifactObj,
+      keys: docKey,
+    });
+
+    const [connectionWidgetJSON, connectionDoc] = await Observable.forkJoin(
       connectionWidgetJSON$,
       connectionDoc$
     ).toPromise();

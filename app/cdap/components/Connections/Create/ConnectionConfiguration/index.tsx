@@ -21,6 +21,7 @@ import ConfigurableTab, { ITabConfigObj, TabLayoutEnum } from 'components/shared
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import Markdown from 'components/shared/Markdown';
 import { ConnectionConfigForm } from 'components/Connections/Create/ConnectionConfiguration/ConnectionConfigForm';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
 
 const useStyle = makeStyle(() => {
   return {
@@ -49,7 +50,7 @@ interface IConnectionConfigurationProps extends IConnectorDetails {
     messages?: any;
     configurationErrors?: any;
   };
-  isEdit: boolean;
+  mode: ConnectionConfigurationMode;
 }
 
 export function ConnectionConfiguration({
@@ -59,7 +60,7 @@ export function ConnectionConfiguration({
   onConnectionCreate,
   onConnectionTest,
   initValues = {},
-  isEdit,
+  mode,
   testResults,
 }: IConnectionConfigurationProps) {
   if (!connectorProperties) {
@@ -83,7 +84,7 @@ export function ConnectionConfiguration({
             initName={initValues.initName}
             initDescription={initValues.initDescription}
             initProperties={initValues.initProperties}
-            isEdit={isEdit}
+            mode={mode}
             testResults={testResults}
           />
         ),

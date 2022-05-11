@@ -32,6 +32,7 @@ import CreateConnectionModal from 'components/Connections/CreateConnectionModal'
 import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
 import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
 import ImportConnectionBtn from 'components/Connections/ImportConnectionBtn';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -58,7 +59,9 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   const [initConnConfig, setInitConnConfig] = useState(null);
   const [connectionToDelete, setConnectionToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
+  const [connectionCreateMode, setConnectionCreateMode] = useState(
+    ConnectionConfigurationMode.CREATE
+  );
 
   let confirmDeleteElem;
   if (connectionToDelete) {
@@ -95,7 +98,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
 
     if (!newState) {
       setInitConnConfig(null);
-      setIsEdit(false);
+      setConnectionCreateMode(ConnectionConfigurationMode.CREATE);
     }
   }
 
@@ -134,8 +137,48 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
 
   function editConnection(conn) {
     const config = getConnectionConfig(conn);
-    setIsEdit(true);
+    setConnectionCreateMode(ConnectionConfigurationMode.EDIT);
     openConnectionConfig(config);
+  }
+
+  function viewConnection(conn) {
+    const config = getConnectionConfig(conn);
+    setConnectionCreateMode(ConnectionConfigurationMode.VIEW);
+    openConnectionConfig(config);
+  }
+
+  function getConnectionActions(conn: IConnection): IAction[] {
+    if (!conn.preConfigured) {
+      return [
+        {
+          label: 'Edit',
+          actionFn: () => editConnection(conn),
+        },
+        {
+          label: 'Export',
+          actionFn: () => exportConnection(conn),
+        },
+        {
+          label: 'Duplicate',
+          actionFn: () => cloneConnection(conn),
+        },
+        {
+          label: 'separator',
+        },
+        {
+          label: 'Delete',
+          actionFn: () => setConnectionToDelete(conn),
+          className: classes.delete,
+        },
+      ];
+    } else {
+      return [
+        {
+          label: 'View',
+          actionFn: () => viewConnection(conn),
+        },
+      ];
+    }
   }
 
   return (
@@ -158,28 +201,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
 
         <TableBody>
           {connections.map((conn) => {
-            const actions: IAction[] = [
-              {
-                label: 'Edit',
-                actionFn: () => editConnection(conn),
-              },
-              {
-                label: 'Export',
-                actionFn: () => exportConnection(conn),
-              },
-              {
-                label: 'Duplicate',
-                actionFn: () => cloneConnection(conn),
-              },
-              {
-                label: 'separator',
-              },
-              {
-                label: 'Delete',
-                actionFn: () => setConnectionToDelete(conn),
-                className: classes.delete,
-              },
-            ];
+            const actions: IAction[] = getConnectionActions(conn);
 
             return (
               <TableRow key={conn.name}>
@@ -213,7 +235,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         onToggle={toggleConnectionCreate}
         initialConfig={initConnConfig}
         onCreate={getConnections}
-        isEdit={isEdit}
+        mode={connectionCreateMode}
       />
     </div>
   );
