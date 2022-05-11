@@ -1521,6 +1521,7 @@ features:
       edit: Edit
       editConnection: 'Edit {connector} connection - "{connectionName}"'
       createConnection: "Create a {connector} connection"
+      viewConnection: 'View {connector} connection - "{connectionName}"'
       SourceParsing:
         ImportSchema:
           description: In most cases, schema is inferred automatically. Use the Import Schema button to override the inferred schema. It is also useful for specifying schema manually, for formats such as JSON where schema inference is not possible.
