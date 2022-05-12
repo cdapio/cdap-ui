@@ -16,6 +16,8 @@
 import AddNamespaceStore from 'services/WizardStores/AddNamespace/AddNamespaceStore';
 import { MyNamespaceApi } from 'api/namespace';
 
+const K8S_NS_MEMORY_LIMIT_UNIT = 'Gi';
+
 const createNamespace = () => {
   return createOrEditNamespace(MyNamespaceApi.create);
 };
@@ -71,7 +73,7 @@ const createOrEditNamespace = (api) => {
   }
 
   if (state.resources.k8sNamespaceMemoryLimit) {
-    putParams['config']['k8s.namespace.memory.limits'] = state.resources.k8sNamespaceMemoryLimit;
+    putParams['config']['k8s.namespace.memory.limits'] = `${state.resources.k8sNamespaceMemoryLimit}${K8S_NS_MEMORY_LIMIT_UNIT}`;
   }
 
   if (state.resources.serviceAccountEmail) {
