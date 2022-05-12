@@ -36,6 +36,7 @@ import {
 } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { h2Styles } from 'components/shared/Markdown/MarkdownHeading';
+import AccordionWrapper from './AccordionWrapper';
 
 const styles = (theme): StyleRules => {
   return {
@@ -106,7 +107,6 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
       widgetConfigurationGroup,
       widgetOutputs
     );
-
     setConfigurationGroups(processedConfigurationGroup.configurationGroups);
 
     // We don't need to add default values for plugins in published pipeline
@@ -239,6 +239,53 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     setOrphanErrors(Array.from(orphanedErrors));
   }
 
+  function renderConfigurationGroupHeader(group) {
+    return (
+      <div className={classes.groupTitle}>
+        <h2 className={classes.h2Title}>{group.label}</h2>
+        {group.description && group.description.length > 0 && (
+          <small className={classes.groupSubTitle}>{group.description}</small>
+        )}
+      </div>
+    );
+  }
+
+  function renderConfigurationGroupDetails(group) {
+    return (
+      <div>
+        {group.properties.map((property, j) => {
+          if (property.show === false) {
+            return null;
+          }
+          // Hiding all plugin functions if pipeline is deployed
+          if (
+            disabled &&
+            property.hasOwnProperty('widget-category') &&
+            property['widget-category'] === 'plugin'
+          ) {
+            return null;
+          }
+
+          const errorObjs = getPropertyError(property.name);
+
+          return (
+            <PropertyRow
+              key={`${property.name}-${j}`}
+              widgetProperty={property}
+              pluginProperty={pluginProperties[property.name]}
+              value={values[property.name]}
+              onChange={handleValueChanges}
+              extraConfig={extraConfig}
+              disabled={disabled}
+              locked={lockedProperties && lockedProperties[property.name]}
+              errors={errorObjs}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div data-cy="configuration-group">
       {orphanErrors.length > 0 && (
@@ -258,44 +305,17 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
         return (
           <div key={`${group.label}-${i}`} className={classes.group}>
-            <div className={classes.groupTitle}>
-              <h2 className={classes.h2Title}>{group.label}</h2>
-              {group.description && group.description.length > 0 && (
-                <small className={classes.groupSubTitle}>{group.description}</small>
-              )}
-            </div>
-
-            <div>
-              {group.properties.map((property, j) => {
-                if (property.show === false) {
-                  return null;
-                }
-                // Hiding all plugin functions if pipeline is deployed
-                if (
-                  disabled &&
-                  property.hasOwnProperty('widget-category') &&
-                  property['widget-category'] === 'plugin'
-                ) {
-                  return null;
-                }
-
-                const errorObjs = getPropertyError(property.name);
-
-                return (
-                  <PropertyRow
-                    key={`${property.name}-${j}`}
-                    widgetProperty={property}
-                    pluginProperty={pluginProperties[property.name]}
-                    value={values[property.name]}
-                    onChange={handleValueChanges}
-                    extraConfig={extraConfig}
-                    disabled={disabled}
-                    locked={lockedProperties && lockedProperties[property.name]}
-                    errors={errorObjs}
-                  />
-                );
-              })}
-            </div>
+            {group.hideByDefault ? (
+              <AccordionWrapper
+                header={renderConfigurationGroupHeader(group)}
+                details={renderConfigurationGroupDetails(group)}
+              />
+            ) : (
+              <>
+                {renderConfigurationGroupHeader(group)}
+                {renderConfigurationGroupDetails(group)}
+              </>
+            )}
           </div>
         );
       })}
