@@ -144,9 +144,11 @@ function addPluginFunctions(configurationGroups) {
   const updatedConfigurationGroups = [];
 
   configurationGroups.forEach((group) => {
+    const { label, description, hideByDefault } = group;
     const newGroup = {
-      label: group.label,
-      description: group.description,
+      label,
+      description,
+      hideByDefault,
       properties: [],
     };
 
