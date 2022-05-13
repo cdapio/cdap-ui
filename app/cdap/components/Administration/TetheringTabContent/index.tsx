@@ -80,39 +80,41 @@ const AdminTetheringTabContent = () => {
   }, []);
 
   return (
-    <>
-      <Helmet
-        title={T.translate(`${I18NPREFIX}.pageTitle`, {
-          productName: Theme.productName,
-        })}
-      />
-      <AdminTetheringTabContainer>
-        {Theme.onPremTetheredInstance ? (
-          <OnpremTetheringConnections
-            establishedConnections={establishedConnections}
-            pendingRequests={pendingRequests}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-          />
-        ) : (
-          <CdfTetheringConnections
-            establishedConnections={establishedConnections}
-            newRequests={pendingRequests}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            handleAcceptOrReject={handleAcceptOrReject}
-          />
-        )}
-        {error && (
-          <Alert
-            message={error}
-            type={'error'}
-            showAlert={Boolean(error)}
-            onClose={() => setError(null)}
-          />
-        )}
-      </AdminTetheringTabContainer>
-    </>
+    Theme.tethering && (
+      <>
+        <Helmet
+          title={T.translate(`${I18NPREFIX}.pageTitle`, {
+            productName: Theme.productName,
+          })}
+        />
+        <AdminTetheringTabContainer>
+          {Theme.onPremTetheredInstance ? (
+            <OnpremTetheringConnections
+              establishedConnections={establishedConnections}
+              pendingRequests={pendingRequests}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          ) : (
+            <CdfTetheringConnections
+              establishedConnections={establishedConnections}
+              newRequests={pendingRequests}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+              handleAcceptOrReject={handleAcceptOrReject}
+            />
+          )}
+          {error && (
+            <Alert
+              message={error}
+              type={'error'}
+              showAlert={Boolean(error)}
+              onClose={() => setError(null)}
+            />
+          )}
+        </AdminTetheringTabContainer>
+      </>
+    )
   );
 };
 
