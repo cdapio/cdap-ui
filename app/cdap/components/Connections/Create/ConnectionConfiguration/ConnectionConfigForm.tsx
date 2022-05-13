@@ -23,6 +23,7 @@ import Alert from '@material-ui/lab/Alert';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
 
 const I18NPREFIX = 'features.Administration.Tethering.CreateRequest';
 const PrimaryOutlinedLoadingButton = ButtonLoadingHoc(PrimaryOutlinedButton);
@@ -57,7 +58,7 @@ export function ConnectionConfigForm({
   initProperties = {},
   initName = '',
   initDescription = '',
-  isEdit,
+  mode,
   testResults,
 }) {
   const [values, setValues] = React.useState<Record<string, string>>(initProperties);
@@ -95,7 +96,7 @@ export function ConnectionConfigForm({
   return (
     <div>
       <div>
-        {!isEdit && (
+        {mode === ConnectionConfigurationMode.CREATE && (
           <PropertyRow
             widgetProperty={{
               'widget-type': 'textbox',
@@ -121,7 +122,10 @@ export function ConnectionConfigForm({
           widgetProperty={{
             'widget-type': 'textbox',
             'widget-attributes': {
-              placeholder: 'Specify a description to identify the connection',
+              placeholder:
+                mode !== ConnectionConfigurationMode.VIEW
+                  ? 'Specify a description to identify the connection'
+                  : '',
             },
             label: 'Description',
             name: 'description',
@@ -133,7 +137,7 @@ export function ConnectionConfigForm({
           }}
           value={description}
           onChange={(v) => setDescription(v.description)}
-          disabled={false}
+          disabled={mode === ConnectionConfigurationMode.VIEW}
           extraConfig={{ properties: {} }}
         />
       </div>
@@ -142,6 +146,7 @@ export function ConnectionConfigForm({
         pluginProperties={connectorProperties}
         values={values}
         onChange={setValues}
+        disabled={mode === ConnectionConfigurationMode.VIEW}
         errors={configurationErrors}
       />
       <div className={classes.connectionTestMessage}>
@@ -163,24 +168,26 @@ export function ConnectionConfigForm({
             </Alert>
           ))}
       </div>
-      <div className={classes.formStyles}>
-        <PrimaryOutlinedLoadingButton
-          loading={testResults.inProgress}
-          onClick={() => onConnectionTest({ properties: values })}
-          disabled={testResults.inProgress}
-          data-cy="connection-test-button"
-        >
-          Test Connection
-        </PrimaryOutlinedLoadingButton>
-        <PrimaryContainedButton
-          variant="contained"
-          color="primary"
-          onClick={onCreate}
-          data-cy="connection-submit-button"
-        >
-          {isEdit ? 'Save' : 'Create'}
-        </PrimaryContainedButton>
-      </div>
+      {mode !== ConnectionConfigurationMode.VIEW && (
+        <div className={classes.formStyles}>
+          <PrimaryOutlinedLoadingButton
+            loading={testResults.inProgress}
+            onClick={() => onConnectionTest({ properties: values })}
+            disabled={testResults.inProgress}
+            data-cy="connection-test-button"
+          >
+            Test Connection
+          </PrimaryOutlinedLoadingButton>
+          <PrimaryContainedButton
+            variant="contained"
+            color="primary"
+            onClick={onCreate}
+            data-cy="connection-submit-button"
+          >
+            {mode === ConnectionConfigurationMode.EDIT ? 'Save' : 'Create'}
+          </PrimaryContainedButton>
+        </div>
+      )}
     </div>
   );
 }

@@ -64,6 +64,7 @@ export interface IConnection {
   connectionType: string;
   createdTimeMillis: number;
   description: string;
+  isDefault: boolean;
   name: string;
   preConfigured: boolean;
   updatedTimeMillis: number;
