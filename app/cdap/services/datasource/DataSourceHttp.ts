@@ -232,7 +232,7 @@ export default class Datasource implements IDataSource {
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
 
-    if (window.CDAP_CONFIG.securityEnabled) {
+    if (objectQuery(window, 'CDAP_CONFIG', 'securityEnabled')) {
       const token = cookie.get('CDAP_Auth_Token');
       if (!isNil(token)) {
         generatedResource.headers.Authorization = `Bearer ${token}`;
