@@ -35,7 +35,7 @@ describe('Setting and saving preferences', () => {
     await driver.findElement(By.css(dataTestId('edit-system-prefs-btn'))).click();
     const keyInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control key-input']"));
     keyInput.clear();
-    keyInput.sendKeys('system.profile.name')
+    keyInput.sendKeys('system.profile.name');
     const valueInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control value-input']"));
     valueInput.clear();
     valueInput.sendKeys(TEST_VALUE);
@@ -48,7 +48,7 @@ describe('Setting and saving preferences', () => {
     keyInput.clear();
     keyInput.sendKeys(TEST_KEY);
     await driver.findElement(By.css(dataTestId('save-prefs-btn'))).click();
-    const addedKeyCssLocator = 'div[class*="grid-row highlighted"] > div';
+    const addedKeyCssLocator = 'div[class*="grid-row"] > div';
     const key = await driver.findElement(By.css(addedKeyCssLocator)).getText(); 
     const value = await driver.findElement(By.css(`${addedKeyCssLocator} + div`)).getText();
     expect(key).toBe(TEST_KEY);
