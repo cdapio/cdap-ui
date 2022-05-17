@@ -33,6 +33,7 @@ import {
   getConnection,
   testConnection,
   IConnectorDetails,
+  getSelectedConnectorDisplayName,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
@@ -239,22 +240,28 @@ export function CreateConnection({
 
     onToggle();
   }
+
   let title;
+  const displayedConnectionName = getSelectedConnectorDisplayName(
+    state.selectedConnector,
+    state.allConnectorsPluginProperties
+  );
   if (mode === 'EDIT') {
     title = T.translate(`${PREFIX}.editConnection`, {
-      connector: state?.selectedConnector?.name,
+      connector: displayedConnectionName,
       connectionName: objectQuery(initValues, 'initName'),
     });
   } else if (mode === 'VIEW') {
     title = T.translate(`${PREFIX}.viewConnection`, {
-      connector: state?.selectedConnector?.name,
+      connector: displayedConnectionName,
       connectionName: objectQuery(initValues, 'initName'),
     });
   } else {
     title = T.translate(`${PREFIX}.createConnection`, {
-      connector: state?.selectedConnector?.name,
+      connector: displayedConnectionName,
     });
   }
+
   return (
     <div className={classes.root}>
       {state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG && (
@@ -280,6 +287,7 @@ export function CreateConnection({
         <CategorizedConnectors
           onActiveCategory={(active) => (activeCategory.current = active)}
           connectorsMap={state.categoriesToConnectorsMap}
+          allConnectorsPluginProperties={state.allConnectorsPluginProperties}
           onConnectorSelection={onConnectorSelection}
         />
       )}
