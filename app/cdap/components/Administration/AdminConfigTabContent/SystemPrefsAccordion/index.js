@@ -185,6 +185,7 @@ export default class SystemPrefsAccordion extends Component {
           className="btn btn-secondary"
           onClick={this.togglePrefsModal}
           data-cy="edit-system-prefs-btn"
+          data-testid="edit-system-prefs-btn"
         >
           {T.translate(`${PREFIX}.create`)}
         </button>
@@ -220,6 +221,7 @@ export default class SystemPrefsAccordion extends Component {
           expanded: this.props.expanded,
         })}
         data-cy="system-prefs-accordion"
+        data-testid="system-prefs-accordion"
       >
         {this.renderLabel()}
         {this.renderContent()}

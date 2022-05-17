@@ -13,30 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import { Builder } from 'selenium-webdriver';
-import chrome from 'selenium-webdriver/chrome';
+import { By } from 'selenium-webdriver';
+import { BASE_URL } from '../support/constants';
+import { buildChromeDriver } from '../support/utils';
 
-describe('Setting and saving preferences', () => {
+describe('Ensuring CDAP is up and running', () => {
   let driver;
 
-  beforeAll(async () => {
-    const options = new chrome.Options()
-  
-    options.addArguments('--disable-dev-shm-usage')
-    options.addArguments('--no-sandbox')
-    options.addArguments('--headless')
-
-    driver = new Builder()
-      .forBrowser('chrome')
-      .setChromeOptions(options)
-      .build()
+  beforeAll(() => {
+    driver = buildChromeDriver();
   });
 
   it('Should open cdap', async () => {
-    await driver.get('http://localhost:11011')
+    await driver.get(BASE_URL)
     await driver.sleep(2000)
-    const allValid = true;
-    expect(allValid).toBe(true);
+    await driver.findElement(By.xpath('//div[@id="app-container"]'));
   })
 
   afterAll(async () => {
