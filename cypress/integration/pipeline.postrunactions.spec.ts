@@ -54,7 +54,7 @@ describe('Pipeline post-run actions', () => {
 
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     );
 
     cy.wait(1000);
@@ -68,13 +68,13 @@ describe('Pipeline post-run actions', () => {
 
     // Set up email notification
     cy.get(dataCy('pipeline-configure-modeless-btn')).click();
-    cy.get(dataCy('pipeline-configure-alerts-tab')).click();
+    cy.contains('Pipeline alert').click();
     cy.get(dataCy('post-run-alerts-create')).click();
 
     cy.wait(1000);
     cy.contains('Alerts').should('exist');
 
-    cy.contains('Send Email').click();
+    cy.contains('Email').click();
     cy.wait(500);
 
     cy.get(`input${dataCy('sender')}`)

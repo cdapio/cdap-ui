@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,6 @@
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import PropTypes from 'prop-types';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
@@ -33,6 +32,8 @@ import ResourcesTabContent from 'components/PipelineConfigurations/Configuration
 import AlertsTabContent from 'components/PipelineConfigurations/ConfigurationsContent/AlertsTabContent';
 import ComputeTabContent from 'components/PipelineConfigurations/ConfigurationsContent/ComputeTabContent';
 import PushdownTabContent from './ConfigurationsContent/PushdownTabContent';
+import { RuntimeTabContent } from './ConfigurationsContent/RuntimeTabContent';
+import PreviewTabContent from './ConfigurationsContent/PreviewTabContent';
 
 require('./PipelineConfigurations.scss');
 require('./ConfigurationsContent/ConfigurationsContent.scss');
@@ -82,38 +83,62 @@ const TABS = {
     contentClassName: 'pipeline-configurations-body',
     paneClassName: 'configuration-content',
   },
+  runtimeConfig: {
+    id: 7,
+    name: T.translate(`${PREFIX}.RuntimeConfig.title`),
+    content: <RuntimeTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
+  previewConfig: {
+    id: 8,
+    name: T.translate(`${PREFIX}.PreviewConfig.title`),
+    content: <PreviewTabContent />,
+    contentClassName: 'pipeline-configurations-body',
+    paneClassName: 'configuration-content',
+  },
 };
 
-export default class PipelineConfigurations extends Component {
-  static propTypes = {
-    open: PropTypes.func,
-    onClose: PropTypes.func,
-    anchorEl: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
-    isDetailView: PropTypes.bool,
-    isPreview: PropTypes.bool,
-    pipelineType: PropTypes.string,
-    isHistoricalRun: PropTypes.bool,
-    action: PropTypes.string,
-    pipelineName: PropTypes.string,
-  };
+interface IPipelineConfigurationsProps {
+  open: boolean;
+  onClose: () => void;
+  anchorEl: any;
+  isDetailView: boolean;
+  isPreview?: boolean;
+  pipelineType: string;
+  isHistoricalRun?: boolean;
+  action?: string;
+  pipelineName: string;
+  isDeployed?: boolean;
+  artifact?: object;
+  actionCreator?: any;
+  applyRuntimeArguments?: (runtimeArgs: any) => void;
+  studioRunPipeline?: () => void;
+  getPostActions?: () => any[];
+  applyBatchConfig?: (...args) => void;
+  applyRealtimeConfig?: (...args) => void;
+  validatePluginProperties?: (action: any, errorCb: any) => void;
+  getRuntimeArgs?: () => any;
+}
 
-  static defaultProps = {
+export default class PipelineConfigurations extends Component<IPipelineConfigurationsProps> {
+  public storeSubscription: () => void;
+  public configModeless: any;
+
+  public static defaultProps = {
     isDetailView: false,
     isPreview: false,
+    isDeployed: true,
     pipelineType: GLOBALS.etlDataPipeline,
   };
 
-  componentDidMount() {
-    if (!this.props.isDetailView) {
-      return;
-    }
+  public componentDidMount() {
     PipelineConfigurationsStore.dispatch({
       type: PipelineConfigurationsActions.SET_MODELESS_OPEN_STATUS,
       payload: { open: true },
     });
 
-    let { pipelineType, isDetailView, isHistoricalRun, isPreview } = this.props;
-
+    const { pipelineType, isDetailView, isHistoricalRun, isPreview } = this.props;
     PipelineConfigurationsStore.dispatch({
       type: PipelineConfigurationsActions.SET_PIPELINE_VISUAL_CONFIGURATION,
       payload: {
@@ -127,21 +152,25 @@ export default class PipelineConfigurations extends Component {
     });
 
     this.storeSubscription = PipelineConfigurationsStore.subscribe(() => {
-      let state = PipelineConfigurationsStore.getState();
+      const state = PipelineConfigurationsStore.getState();
       if (!state.modelessOpen) {
         this.props.onClose();
         this.storeSubscription();
       }
     });
+
+    if (!this.props.isDetailView) {
+      TABS.runtimeConfig.content = <RuntimeTabContent getRuntimeArgs={this.props.getRuntimeArgs} />;
+    }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     if (this.storeSubscription) {
       this.storeSubscription();
     }
   }
 
-  getHeaderLabel() {
+  public getHeaderLabel() {
     let headerLabel;
     if (this.props.isHistoricalRun) {
       headerLabel = T.translate(`${PREFIX}.titleHistorical`);
@@ -154,7 +183,7 @@ export default class PipelineConfigurations extends Component {
     return headerLabel;
   }
 
-  renderHeader() {
+  public renderHeader() {
     let headerLabel;
     if (this.props.isHistoricalRun) {
       headerLabel = T.translate(`${PREFIX}.titleHistorical`);
@@ -176,9 +205,29 @@ export default class PipelineConfigurations extends Component {
     );
   }
 
-  render() {
+  public render() {
     let tabs;
-    if (GLOBALS.etlBatchPipelines.includes(this.props.pipelineType)) {
+    let defaultTab = 1;
+    if (!this.props.isDeployed && this.props.isPreview) {
+      tabs = [TABS.runtimeConfig, TABS.previewConfig, TABS.pipelineConfig, TABS.engineConfig];
+      defaultTab = 7;
+    } else if (
+      GLOBALS.etlBatchPipelines.includes(this.props.pipelineType) &&
+      !this.props.isDeployed
+    ) {
+      const studioAlerts = { ...TABS.alerts };
+      studioAlerts.content = (
+        <AlertsTabContent
+          isDeployed={this.props.isDeployed}
+          artifact={this.props.artifact}
+          actionCreator={this.props.actionCreator}
+          getPostActions={this.props.getPostActions}
+          validatePluginProperties={this.props.validatePluginProperties}
+        />
+      );
+      tabs = [TABS.pipelineConfig, TABS.engineConfig, TABS.resources, studioAlerts];
+      defaultTab = 2;
+    } else if (GLOBALS.etlBatchPipelines.includes(this.props.pipelineType)) {
       tabs = [
         TABS.computeConfig,
         TABS.pipelineConfig,
@@ -187,6 +236,14 @@ export default class PipelineConfigurations extends Component {
         TABS.resources,
         TABS.alerts,
       ];
+    } else if (this.props.pipelineType === GLOBALS.etlDataStreams && !this.props.isDeployed) {
+      tabs = [
+        TABS.pipelineConfig,
+        TABS.engineConfig,
+        TABS.resources,
+        // no alerts tab for realtime pipelines
+      ];
+      defaultTab = 2;
     } else if (this.props.pipelineType === GLOBALS.etlDataStreams) {
       tabs = [
         TABS.computeConfig,
@@ -202,7 +259,7 @@ export default class PipelineConfigurations extends Component {
     const tabConfig = {
       tabs,
       layout: 'vertical',
-      defaultTab: 1,
+      defaultTab,
     };
     return (
       <PipelineModeless
@@ -211,6 +268,7 @@ export default class PipelineConfigurations extends Component {
         onClose={this.props.onClose}
         title={this.getHeaderLabel()}
         popoverClassName="pipeline-config-modal"
+        isDeployed={this.props.isDeployed}
       >
         <Provider store={PipelineConfigurationsStore}>
           <div
@@ -219,7 +277,16 @@ export default class PipelineConfigurations extends Component {
           >
             <div className="pipeline-config-tabs-wrapper">
               <ConfigurableTab tabConfig={tabConfig} />
-              <ConfigModelessActionButtons onClose={this.props.onClose} />
+              <ConfigModelessActionButtons
+                onClose={this.props.onClose}
+                isDeployed={this.props.isDeployed}
+                applyRuntimeArguments={this.props.applyRuntimeArguments}
+                isPreview={this.props.isPreview}
+                studioRunPipeline={this.props.studioRunPipeline}
+                applyBatchConfig={this.props.applyBatchConfig}
+                applyRealtimeConfig={this.props.applyRealtimeConfig}
+                pipelineType={this.props.pipelineType}
+              />
             </div>
           </div>
         </Provider>

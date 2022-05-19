@@ -15,8 +15,12 @@
  */
 
 import IconSVG from 'components/shared/IconSVG';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { objectQuery } from 'services/helpers';
+import PipelineConfigurationsStore, {
+  ACTIONS as PipelineConfigurationsActions,
+} from 'components/PipelineConfigurations/Store';
+import { PipelineConfigure } from '../PipelineConfigure';
 import {
   ActionButtonsContainer,
   BorderRightButton,
@@ -63,6 +67,18 @@ interface IActionButtonsProps {
   currentPreviewId: string;
   viewLogs: boolean;
   timerLabel: string;
+  applyRuntimeArguments: (runtimeArgs) => void;
+  state: any;
+  runPipeline: () => void;
+  applyBatchConfig: (...args) => void;
+  applyRealtimeConfig: (...args) => void;
+  actionCreator: any;
+  isDeployed: boolean;
+  showPreviewConfig: boolean;
+  getPostActions: () => any[];
+  validatePluginProperties: (action: any, errorCb: any) => void;
+  getRuntimeArgs: () => any;
+  getStoreConfig: () => any;
 }
 
 export const ActionButtons = ({
@@ -90,7 +106,21 @@ export const ActionButtons = ({
   currentPreviewId,
   viewLogs,
   timerLabel,
+  applyRuntimeArguments,
+  state,
+  runPipeline,
+  applyBatchConfig,
+  applyRealtimeConfig,
+  actionCreator,
+  isDeployed,
+  showPreviewConfig,
+  getPostActions,
+  validatePluginProperties,
+  getRuntimeArgs,
+  getStoreConfig,
 }: IActionButtonsProps) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const handleFile = (event) => {
     if (!objectQuery(event, 'target', 'files', 0)) {
       return;
@@ -99,204 +129,240 @@ export const ActionButtons = ({
 
     if (onFileSelect) {
       onFileSelect(uploadedFiles);
+      setSelectedFile(uploadedFiles);
     }
   };
+
+  const configureButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof getStoreConfig === 'function') {
+      // this is to map angular store to react store
+      PipelineConfigurationsStore.dispatch({
+        type: PipelineConfigurationsActions.INITIALIZE_CONFIG,
+        payload: { ...getStoreConfig() },
+      });
+    }
+  }, [selectedFile]);
+
   return (
-    <ActionButtonsContainer>
-      {previewMode ? (
-        //   PREVIEW MODE BUTTONS
-        <>
-          <PreviewModeButton onClick={togglePreviewMode} data-cy="preview-active-btn">
-            <div>
-              <IconSVG name="icon-eye"></IconSVG>
-              <ButtonLabel>Preview</ButtonLabel>
-            </div>
-          </PreviewModeButton>
-          <CommonButton
-            active={viewConfig}
-            disabled={previewLoading || previewRunning}
-            onClick={!previewLoading && !previewRunning && toggleConfig}
-            data-cy="preview-config-btn"
-          >
-            <div>
-              <IconSliders name="icon-sliders"></IconSliders>
-              <ButtonLabel>Configure</ButtonLabel>
-            </div>
-          </CommonButton>
-          {!previewLoading &&
-            (!previewRunning ? (
+    <>
+      <ActionButtonsContainer>
+        {previewMode ? (
+          //   PREVIEW MODE BUTTONS
+          <>
+            <PreviewModeButton onClick={togglePreviewMode} data-cy="preview-active-btn">
+              <div>
+                <IconSVG name="icon-eye"></IconSVG>
+                <ButtonLabel>Preview</ButtonLabel>
+              </div>
+            </PreviewModeButton>
+            <CommonButton
+              active={viewConfig}
+              disabled={previewLoading || previewRunning}
+              onClick={!previewLoading && !previewRunning && toggleConfig}
+              data-cy="preview-config-btn"
+            >
+              <div>
+                <IconSliders name="icon-sliders"></IconSliders>
+                <span ref={configureButtonRef}>
+                  <ButtonLabel>Configure</ButtonLabel>
+                </span>
+              </div>
+            </CommonButton>
+            {!previewLoading &&
+              (!previewRunning ? (
+                <CustomTooltip
+                  title={hasNodes ? '' : 'Start building a pipeline before starting preview'}
+                  arrow
+                  placement="bottom"
+                >
+                  <span>
+                    <CommonButton
+                      disabled={!hasNodes}
+                      onClick={hasNodes && startOrStopPreview}
+                      data-cy="preview-top-run-btn"
+                    >
+                      <div>
+                        <IconPlay name="icon-play" disabled={!hasNodes}></IconPlay>
+                        <ButtonLabel>Run</ButtonLabel>
+                      </div>
+                    </CommonButton>
+                  </span>
+                </CustomTooltip>
+              ) : (
+                <CommonButton onClick={startOrStopPreview} data-cy="stop-preview-btn">
+                  <div>
+                    <IconStop name="icon-stop"></IconStop>
+                    <ButtonLabel>Stop</ButtonLabel>
+                  </div>
+                </CommonButton>
+              ))}
+            {previewLoading && (
+              <CommonButton data-cy="starting-preview-btn">
+                <div>
+                  <IconLoading className="fa fa-refresh fa-spin"></IconLoading>
+                  <ButtonLabel>{loadingLabel}</ButtonLabel>
+                </div>
+              </CommonButton>
+            )}
+            <CommonButton title={queueStatus}>
+              <div>
+                <RunTimeSpan>
+                  {displayDuration.minutes}:{displayDuration.seconds}
+                </RunTimeSpan>
+                <ButtonLabel>{timerLabel}</ButtonLabel>
+              </div>
+            </CommonButton>
+            <CommonButton disabled={!currentPreviewId} active={viewLogs} onClick={onClickLogs}>
+              <div>
+                <IconSVG name="icon-file-text-o"></IconSVG>
+                <ButtonLabel>Logs</ButtonLabel>
+              </div>
+            </CommonButton>
+          </>
+        ) : (
+          <>
+            <CustomTooltip
+              title={previewEnabled ? '' : 'Pipeline preview is not available in distributed mode'}
+              arrow
+              placement="bottom"
+            >
+              <BorderRightButton
+                disabled={!previewEnabled}
+                onClick={previewEnabled && togglePreviewMode}
+                data-cy="pipeline-preview-btn"
+              >
+                <div>
+                  <IconSVG name="icon-eye"></IconSVG>
+                  <ButtonLabel>Preview</ButtonLabel>
+                </div>
+              </BorderRightButton>
+            </CustomTooltip>
+            <CommonButton
+              active={viewConfig}
+              onClick={toggleConfig}
+              data-cy="pipeline-configure-modeless-btn"
+            >
+              <div>
+                <IconSliders name="icon-sliders"></IconSliders>
+                <span ref={configureButtonRef}>
+                  <ButtonLabel>Configure</ButtonLabel>
+                </span>
+              </div>
+            </CommonButton>
+            {showSchedule && (
               <CustomTooltip
-                title={hasNodes ? '' : 'Start building a pipeline before starting preview'}
+                title={hasNodes ? '' : 'Start building a pipeline before scheduling'}
                 arrow
                 placement="bottom"
               >
                 <span>
                   <CommonButton
+                    active={viewScheduler}
                     disabled={!hasNodes}
-                    onClick={hasNodes && startOrStopPreview}
-                    data-cy="preview-top-run-btn"
+                    onClick={!hasNodes || toggleScheduler}
+                    id="pipeline-schedule-modeless-btn"
+                    data-cy="pipeline-schedule-modeless-btn"
                   >
                     <div>
-                      <IconPlay name="icon-play" disabled={!hasNodes}></IconPlay>
-                      <ButtonLabel>Run</ButtonLabel>
+                      <IconSchedule name="icon-runtimestarttime"></IconSchedule>
+                      <ButtonLabel>Schedule</ButtonLabel>
                     </div>
                   </CommonButton>
                 </span>
               </CustomTooltip>
-            ) : (
-              <CommonButton onClick={startOrStopPreview} data-cy="stop-preview-btn">
-                <div>
-                  <IconStop name="icon-stop"></IconStop>
-                  <ButtonLabel>Stop</ButtonLabel>
-                </div>
-              </CommonButton>
-            ))}
-          {previewLoading && (
-            <CommonButton data-cy="starting-preview-btn">
-              <div>
-                <IconLoading className="fa fa-refresh fa-spin"></IconLoading>
-                <ButtonLabel>{loadingLabel}</ButtonLabel>
-              </div>
-            </CommonButton>
-          )}
-          <CommonButton title={queueStatus}>
-            <div>
-              <RunTimeSpan>
-                {displayDuration.minutes}:{displayDuration.seconds}
-              </RunTimeSpan>
-              <ButtonLabel>{timerLabel}</ButtonLabel>
-            </div>
-          </CommonButton>
-          <CommonButton disabled={!currentPreviewId} active={viewLogs} onClick={onClickLogs}>
-            <div>
-              <IconSVG name="icon-file-text-o"></IconSVG>
-              <ButtonLabel>Logs</ButtonLabel>
-            </div>
-          </CommonButton>
-        </>
-      ) : (
-        <>
-          <CustomTooltip
-            title={previewEnabled ? '' : 'Pipeline preview is not available in distributed mode'}
-            arrow
-            placement="bottom"
-          >
-            <BorderRightButton
-              disabled={!previewEnabled}
-              onClick={previewEnabled && togglePreviewMode}
-              data-cy="pipeline-preview-btn"
-            >
-              <div>
-                <IconSVG name="icon-eye"></IconSVG>
-                <ButtonLabel>Preview</ButtonLabel>
-              </div>
-            </BorderRightButton>
-          </CustomTooltip>
-          <CommonButton
-            active={viewConfig}
-            onClick={toggleConfig}
-            data-cy="pipeline-configure-modeless-btn"
-          >
-            <div>
-              <IconSliders name="icon-sliders"></IconSliders>
-              <ButtonLabel>Configure</ButtonLabel>
-            </div>
-          </CommonButton>
-          {showSchedule && (
+            )}
             <CustomTooltip
-              title={hasNodes ? '' : 'Start building a pipeline before scheduling'}
+              title={hasNodes ? '' : 'Start building a pipeline before saving'}
               arrow
               placement="bottom"
             >
               <span>
                 <CommonButton
-                  active={viewScheduler}
                   disabled={!hasNodes}
-                  onClick={!hasNodes || toggleScheduler}
-                  id="pipeline-schedule-modeless-btn"
-                  data-cy="pipeline-schedule-modeless-btn"
+                  onClick={!hasNodes || onSaveDraft}
+                  data-cy="pipeline-draft-save-btn"
                 >
                   <div>
-                    <IconSchedule name="icon-runtimestarttime"></IconSchedule>
-                    <ButtonLabel>Schedule</ButtonLabel>
+                    <IconSVG name="icon-savedraft"></IconSVG>
+                    <ButtonLabel>Save</ButtonLabel>
                   </div>
                 </CommonButton>
               </span>
             </CustomTooltip>
-          )}
-          <CustomTooltip
-            title={hasNodes ? '' : 'Start building a pipeline before saving'}
-            arrow
-            placement="bottom"
-          >
-            <span>
-              <CommonButton
-                disabled={!hasNodes}
-                onClick={!hasNodes || onSaveDraft}
-                data-cy="pipeline-draft-save-btn"
-              >
-                <div>
-                  <IconSVG name="icon-savedraft"></IconSVG>
-                  <ButtonLabel>Save</ButtonLabel>
-                </div>
-              </CommonButton>
-            </span>
-          </CustomTooltip>
-          <CustomTooltip
-            title={hasNodes ? '' : 'Start building a pipeline before deploying'}
-            arrow
-            placement="bottom"
-          >
-            <span>
-              <BorderRightButton
-                disabled={!hasNodes}
-                onClick={!hasNodes || onPublish}
-                data-cy="deploy-pipeline-btn"
-              >
-                <div>
-                  <IconSVG name="icon-publish"></IconSVG>
-                  <ButtonLabel>Deploy</ButtonLabel>
-                </div>
-              </BorderRightButton>
-            </span>
-          </CustomTooltip>
-          <CommonButton onClick={onImport} data-cy="pipeline-import-btn">
-            <div>
-              <IconSVG name="icon-import"></IconSVG>
-              <ButtonLabel>Import</ButtonLabel>
-            </div>
-          </CommonButton>
-          <label htmlFor="pipeline-import-config-link">
-            {/* The onClick here is to clear the file, so if the user uploads the same file
+            <CustomTooltip
+              title={hasNodes ? '' : 'Start building a pipeline before deploying'}
+              arrow
+              placement="bottom"
+            >
+              <span>
+                <BorderRightButton
+                  disabled={!hasNodes}
+                  onClick={!hasNodes || onPublish}
+                  data-cy="deploy-pipeline-btn"
+                >
+                  <div>
+                    <IconSVG name="icon-publish"></IconSVG>
+                    <ButtonLabel>Deploy</ButtonLabel>
+                  </div>
+                </BorderRightButton>
+              </span>
+            </CustomTooltip>
+            <CommonButton onClick={onImport} data-cy="pipeline-import-btn">
+              <div>
+                <IconSVG name="icon-import"></IconSVG>
+                <ButtonLabel>Import</ButtonLabel>
+              </div>
+            </CommonButton>
+            <label htmlFor="pipeline-import-config-link">
+              {/* The onClick here is to clear the file, so if the user uploads the same file
             twice then we can show the error, instead of showing nothing */}
-            <HiddenInput
-              id="pipeline-import-config-link"
-              type="file"
-              accept=".json"
-              onChange={handleFile}
-              onClick={(e) => (e.target.value = null)}
-            />
-          </label>
-          <CustomTooltip
-            title={hasNodes ? '' : 'Start building a pipeline before exporting'}
-            arrow
-            placement="bottom"
-          >
-            <span>
-              <BorderRightButton
-                disabled={!hasNodes}
-                onClick={!hasNodes || onExport}
-                data-cy="pipeline-export-btn"
-              >
-                <div>
-                  <IconSVG name="icon-export"></IconSVG>
-                  <ButtonLabel>Export</ButtonLabel>
-                </div>
-              </BorderRightButton>
-            </span>
-          </CustomTooltip>
-        </>
-      )}
-    </ActionButtonsContainer>
+              <HiddenInput
+                id="pipeline-import-config-link"
+                type="file"
+                accept=".json"
+                onChange={handleFile}
+                onClick={(e) => (e.target.value = null)}
+              />
+            </label>
+            <CustomTooltip
+              title={hasNodes ? '' : 'Start building a pipeline before exporting'}
+              arrow
+              placement="bottom"
+            >
+              <span>
+                <BorderRightButton
+                  disabled={!hasNodes}
+                  onClick={!hasNodes || onExport}
+                  data-cy="pipeline-export-btn"
+                >
+                  <div>
+                    <IconSVG name="icon-export"></IconSVG>
+                    <ButtonLabel>Export</ButtonLabel>
+                  </div>
+                </BorderRightButton>
+              </span>
+            </CustomTooltip>
+          </>
+        )}
+      </ActionButtonsContainer>
+      <PipelineConfigure
+        viewConfig={viewConfig}
+        toggleConfig={toggleConfig}
+        applyRuntimeArguments={applyRuntimeArguments}
+        state={state}
+        runPipeline={runPipeline}
+        applyBatchConfig={applyBatchConfig}
+        applyRealtimeConfig={applyRealtimeConfig}
+        actionCreator={actionCreator}
+        isDeployed={isDeployed}
+        showPreviewConfig={showPreviewConfig}
+        getPostActions={getPostActions}
+        anchorEl={configureButtonRef.current}
+        validatePluginProperties={validatePluginProperties}
+        getRuntimeArgs={getRuntimeArgs}
+      ></PipelineConfigure>
+    </>
   );
 };

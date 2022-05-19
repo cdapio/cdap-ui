@@ -108,7 +108,7 @@ describe('Creating a pipeline', () => {
     cy.get('@instrumentationDiv').contains('Off');
     cy.contains('Pipeline alert').click();
     cy.contains('+').click();
-    cy.contains('Send Email').click();
+    cy.contains('Email').click();
     // enter sender, recipients, subject, message
 
     cy.wait(1000);

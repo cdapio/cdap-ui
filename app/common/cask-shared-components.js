@@ -142,9 +142,12 @@ var TopPanelActionButtons = require('../cdap/components/hydrator/components/TopP
   .ActionButtons;
 var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
+var PipelineConfigure = require('../cdap/components/hydrator/components/TopPanel/PipelineConfigure')
+  .PipelineConfigure;
 
 export {
   PipelineCanvasActionBtns,
+  PipelineConfigure,
   TopPanelActionButtons,
   TopPanelNameAndDescription,
   SidePanel,
