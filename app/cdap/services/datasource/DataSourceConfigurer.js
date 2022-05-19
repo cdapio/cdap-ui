@@ -20,7 +20,7 @@ import { objectQuery } from 'services/helpers';
 
 export function isHttpEnabled() {
   const featureFlags = objectQuery(window, 'CDAP_CONFIG', 'featureFlags');
-  if (featureFlags && featureFlags['network.client.useHttp'] === 'false') {
+  if (featureFlags && featureFlags['network.client.useHttp'] !== 'true') {
     return false;
   }
   return true;
