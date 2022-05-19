@@ -199,3 +199,6 @@ angular
   .directive('pipelineCanvasActionBtns', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineCanvasActionBtns);
   })
+  .directive('pipelineConfigure', function (reactDirective) {
+    return reactDirective(window.CaskCommon.PipelineConfigure);
+  });

@@ -56,7 +56,7 @@ describe('Creating a pipeline with missing artifacts', () => {
     cy.visit('pipelines/ns/default/studio');
     cy.upload_pipeline(
           'missing-artifact-pipeline.json',
-          '#pipeline-import-config-link > input[type="file"]')
+          '#pipeline-import-config-link')
         .then((subject) => {
           expect(subject.length).to.be.eq(1);
           cy.get(dataCy('fix-all-btn')).click();

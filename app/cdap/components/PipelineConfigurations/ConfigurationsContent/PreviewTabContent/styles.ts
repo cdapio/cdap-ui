@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2019 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,26 +14,15 @@
  * the License.
  */
 
-.theme-cdap {
-  .modal.hydrator-modal {
-    .confirm-step-content {
-      max-height: ~"calc(100% - 100px)";
-      overflow: auto;
-      overflow-x: hidden;
-    }
-    .confirm-step-wizard-footer {
-      border-top: 1px solid #cccccc;
-      padding-top: 10px;
-      margin-left: -10px;
-      margin-right: -10px;
-      padding-right: 10px;
+import styled from 'styled-components';
 
-      .confirm-step-next-btn {
-        &[disabled="disabled"] {
-          background-color: #056bc0;
-          color: white;
-        }
-      }
-    }
-  }
-}
+export const BorderedDiv = styled.div`
+  width: auto
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  padding: 2px 12px;
+`;
