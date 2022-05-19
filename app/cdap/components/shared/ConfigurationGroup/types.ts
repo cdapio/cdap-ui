@@ -25,6 +25,7 @@ export interface IConfigurationGroup {
   label: string;
   description?: string;
   properties: IWidgetProperty[];
+  hideByDefault?: boolean;
 }
 export enum CustomOperator {
   EXISTS = 'exists',

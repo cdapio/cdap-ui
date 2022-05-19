@@ -20,7 +20,11 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { CategorizedConnections } from 'components/Connections/Browser/SidePanel/CategorizedConnections';
-import { fetchConnectors } from 'components/Connections/Create/reducer';
+import {
+  fetchAllConnectorPluginProperties,
+  fetchConnectors,
+  getMapOfConnectorToPluginProperties,
+} from 'components/Connections/Create/reducer';
 import { CreateConnectionBtn } from 'components/Connections/CreateConnectionBtn';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import IconButton from '@material-ui/core/IconButton';
@@ -76,6 +80,7 @@ export interface IConnectorType {
 interface IConnectionsBrowserSidePanelState {
   categorizedConnections: Map<string, any[]>;
   connectorTypes: IConnectorType[];
+  mapOfConnectorPluginProperties: { [key: string]: any };
 }
 
 interface IConnectionBrowserSidePanelProps {
@@ -100,6 +105,7 @@ export function ConnectionsBrowserSidePanel({
   const [state, setState] = useState<IConnectionsBrowserSidePanelState>({
     categorizedConnections: new Map(),
     connectorTypes: [],
+    mapOfConnectorPluginProperties: null,
   });
   const { disabledTypes } = useContext(ConnectionsContext);
   const [createConnOpen, setCreateConnOpen] = useState(false);
@@ -110,6 +116,10 @@ export function ConnectionsBrowserSidePanel({
     connectorTypes = connectorTypes.filter((conn) => {
       return !disabledTypes[conn.name];
     });
+    const allConnectorsPluginProperties = await fetchAllConnectorPluginProperties(connectorTypes);
+    const mapOfConnectorPluginProperties = getMapOfConnectorToPluginProperties(
+      allConnectorsPluginProperties
+    );
     if (selectedConnectorType) {
       const connectionTypeLower = selectedConnectorType.toLowerCase();
       const filteredConnectorTypes = connectorTypes.filter((conn) => {
@@ -125,6 +135,7 @@ export function ConnectionsBrowserSidePanel({
     setState({
       categorizedConnections,
       connectorTypes,
+      mapOfConnectorPluginProperties,
     });
   };
 
@@ -150,6 +161,7 @@ export function ConnectionsBrowserSidePanel({
       <CategorizedConnections
         connectorTypes={state.connectorTypes}
         categorizedConnections={state.categorizedConnections}
+        mapOfConnectorPluginProperties={state.mapOfConnectorPluginProperties}
         onConnectionSelection={onConnectionSelection}
         selectedConnection={selectedConnection}
         boundaryElement={boundaryElement}
@@ -162,7 +174,6 @@ export function ConnectionsBrowserSidePanel({
         onToggle={() => setCreateConnOpen(!createConnOpen)}
         initialConfig={null}
         onCreate={initState}
-        isEdit={false}
       />
 
       <If condition={!hideAddConnection}>

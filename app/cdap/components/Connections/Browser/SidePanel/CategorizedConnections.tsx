@@ -32,10 +32,13 @@ import CreateConnectionModal from 'components/Connections/CreateConnectionModal'
 import { ConnectionsApi } from 'api/connections';
 import { IConnectorType } from 'components/Connections/Browser/SidePanel';
 import { getConnectionPath } from 'components/Connections/helper';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
+import { getSelectedConnectorDisplayName } from 'components/Connections/Create/reducer';
 
 interface ICategorizedConnectionsProps {
   categorizedConnections: Map<string, any[]>;
   connectorTypes: IConnectorType[];
+  mapOfConnectorPluginProperties: { [key: string]: any };
   onConnectionSelection: (conn: string) => void;
   selectedConnection: string;
   boundaryElement: any;
@@ -187,6 +190,7 @@ function getConnectionConfig(conn) {
 export function CategorizedConnections({
   categorizedConnections = new Map(),
   connectorTypes = [],
+  mapOfConnectorPluginProperties = null,
   onConnectionSelection,
   selectedConnection,
   boundaryElement,
@@ -203,7 +207,9 @@ export function CategorizedConnections({
   const [initConnConfig, setInitConnConfig] = useState(null);
   const [connectionToDelete, setConnectionToDelete] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
+  const [createConnectionMode, setCreateConnectionMode] = useState(
+    ConnectionConfigurationMode.CREATE
+  );
 
   useEffect(() => {
     const currentCategory = selectedConnection
@@ -249,7 +255,13 @@ export function CategorizedConnections({
 
   function editConnection(conn) {
     const config = getConnectionConfig(conn);
-    setIsEdit(true);
+    setCreateConnectionMode(ConnectionConfigurationMode.EDIT);
+    openConnectionConfig(config);
+  }
+
+  function viewConnection(conn) {
+    const config = getConnectionConfig(conn);
+    setCreateConnectionMode(ConnectionConfigurationMode.VIEW);
     openConnectionConfig(config);
   }
 
@@ -265,7 +277,7 @@ export function CategorizedConnections({
 
     if (!newState) {
       setInitConnConfig(null);
-      setIsEdit(false);
+      setCreateConnectionMode(ConnectionConfigurationMode.CREATE);
     }
   }
 
@@ -288,6 +300,40 @@ export function CategorizedConnections({
         setDeleteError(err);
       }
     );
+  }
+
+  function getConnectionActions(conn): IAction[] {
+    if (!conn.preConfigured) {
+      return [
+        {
+          label: 'Edit',
+          actionFn: () => editConnection(conn),
+        },
+        {
+          label: 'Export',
+          actionFn: () => exportConnection(conn),
+        },
+        {
+          label: 'Duplicate',
+          actionFn: () => cloneConnection(conn),
+        },
+        {
+          label: 'separator',
+        },
+        {
+          label: 'Delete',
+          actionFn: () => setConnectionToDelete(conn),
+          className: classes.delete,
+        },
+      ];
+    } else {
+      return [
+        {
+          label: 'View',
+          actionFn: () => viewConnection(conn),
+        },
+      ];
+    }
   }
 
   const popperModifiers = {
@@ -328,6 +374,10 @@ export function CategorizedConnections({
       {connectorTypes.map((connectorType) => {
         const key = connectorType.name;
         const connections = categorizedConnections.get(key) || [];
+        const displayName = getSelectedConnectorDisplayName(
+          connectorType,
+          mapOfConnectorPluginProperties
+        );
 
         return (
           <Accordion
@@ -340,32 +390,11 @@ export function CategorizedConnections({
               expandIcon={<ExpandMoreIcon />}
               data-cy={`categorized-connection-type-${key}`}
             >
-              {key}({connections.length})
+              {displayName}({connections.length})
             </CustomAccordionSummary>
             <CustomAccordionDetails>
               {connections.map((connection) => {
-                const actions: IAction[] = [
-                  {
-                    label: 'Edit',
-                    actionFn: () => editConnection(connection),
-                  },
-                  {
-                    label: 'Export',
-                    actionFn: () => exportConnection(connection),
-                  },
-                  {
-                    label: 'Duplicate',
-                    actionFn: () => cloneConnection(connection),
-                  },
-                  {
-                    label: 'separator',
-                  },
-                  {
-                    label: 'Delete',
-                    actionFn: () => setConnectionToDelete(connection),
-                    className: classes.delete,
-                  },
-                ];
+                const actions = getConnectionActions(connection);
 
                 return (
                   <div
@@ -428,7 +457,7 @@ export function CategorizedConnections({
         onToggle={toggleConnectionCreate}
         initialConfig={initConnConfig}
         onCreate={fetchConnections}
-        isEdit={isEdit}
+        mode={createConnectionMode}
       />
     </div>
   );

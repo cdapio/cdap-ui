@@ -145,6 +145,9 @@ const CustomSelect: React.FC<ISelectProps> = ({
       }}
       MenuProps={{
         getContentAnchorEl: null,
+        style: {
+          zIndex: 1302,
+        },
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'left',
