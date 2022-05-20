@@ -18,8 +18,6 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import DataFetcher from 'components/LogViewer/DataFetcher';
 import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import classnames from 'classnames';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import If from 'components/shared/If';

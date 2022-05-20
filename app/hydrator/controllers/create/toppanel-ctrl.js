@@ -90,6 +90,16 @@ class HydratorPlusPlusTopPanelCtrl {
     this.closeLogs = this.closeLogs.bind(this);
     this.saveMetadataV2 = this.saveMetadataV2.bind(this);
     this.resetMetadataV2 = this.resetMetadataV2.bind(this);
+    this.togglePreviewModeV2 = this.togglePreviewModeV2.bind(this);
+    this.toggleConfigV2 = this.toggleConfigV2.bind(this);
+    this.toggleSchedulerV2 = this.toggleSchedulerV2.bind(this);
+    this.onSaveDraftV2 = this.onSaveDraftV2.bind(this);
+    this.onPublishV2 = this.onPublishV2.bind(this);
+    this.onImportV2 = this.onImportV2.bind(this);
+    this.onExportV2 = this.onExportV2.bind(this);
+    this.startOrStopPreviewV2 = this.startOrStopPreviewV2.bind(this);
+    this.onClickLogs = this.onClickLogs.bind(this);
+    this.openMetadataV2 = this.openMetadataV2.bind(this);
 
     this.setState();
     this.setActiveNodes();
@@ -227,6 +237,16 @@ class HydratorPlusPlusTopPanelCtrl {
     });
   }
 
+  openMetadataV2() {
+    this.metadataExpanded = true;
+    this.invalidName = false;
+
+    this.$timeout.cancel(this.focusTimeout);
+    this.focusTimeout = this.$timeout(() => {
+      document.getElementById('pipeline-name-input').focus();
+    });
+  }
+
   /**
    * This is a copy of resetMetadata
    * with the scope bound to the function -- copied
@@ -302,6 +322,13 @@ class HydratorPlusPlusTopPanelCtrl {
     this._checkAndShowConfirmationModalOnDirtyState(fileBrowserClickCB);
   }
 
+  onImportV2() {
+    const fileBrowserClickCB = () => {
+      document.getElementById('pipeline-import-config-link').click();
+    };
+    this._checkAndShowConfirmationModalOnDirtyState(fileBrowserClickCB);
+  }
+
   onExport() {
     this.DAGPlusPlusNodesActionsFactory.resetSelectedNode();
     let config = angular.copy(this.HydratorPlusPlusConfigStore.getDisplayConfig());
@@ -314,11 +341,31 @@ class HydratorPlusPlusTopPanelCtrl {
       window.CaskCommon.DownloadFile(exportConfig);
     }
   }
+  onExportV2() {
+    this.DAGPlusPlusNodesActionsFactory.resetSelectedNode();
+    const config = angular.copy(this.HydratorPlusPlusConfigStore.getDisplayConfig());
+    let exportConfig = this.HydratorPlusPlusConfigStore.getConfigForExport();
+    delete exportConfig.__ui__;
+    if (window.Cypress) {
+      this.myPipelineExportModalService.show(config, exportConfig);
+    } else {
+      window.CaskCommon.DownloadFile(exportConfig);
+    }
+  }
   onSaveDraft() {
     this.HydratorPlusPlusConfigActions.saveAsDraft();
     this.checkNameError();
     this.$window.localStorage.setItem('LastDraftId', this.HydratorPlusPlusConfigStore.getDraftId());
     this.$window.localStorage.setItem('LastPreviewId', this.currentPreviewId);
+  }
+  onSaveDraftV2() {
+    this.HydratorPlusPlusConfigActions.saveAsDraft();
+    this.checkNameError();
+    this.$window.localStorage.setItem('LastDraftId', this.HydratorPlusPlusConfigStore.getDraftId());
+    this.$window.localStorage.setItem('LastPreviewId', this.currentPreviewId);
+  }
+  onClickLogs() {
+    this.viewLogs = !this.viewLogs;
   }
   checkNameError() {
     let messages = this.consoleStore.getMessages() || [];
@@ -329,6 +376,10 @@ class HydratorPlusPlusTopPanelCtrl {
     this.invalidName = (filteredMessages.length ? true : false);
   }
   onPublish() {
+    this.HydratorPlusPlusConfigActions.publishPipeline();
+    this.checkNameError();
+  }
+  onPublishV2() {
     this.HydratorPlusPlusConfigActions.publishPipeline();
     this.checkNameError();
   }
@@ -590,12 +641,27 @@ class HydratorPlusPlusTopPanelCtrl {
     });
   }
 
+  toggleConfigV2() {
+    this.getRuntimeArguments()
+    .then(() => {
+      this.viewConfig = !this.viewConfig;
+    });
+  }
+
   startOrStopPreview() {
     if (this.doesPreviewHaveEmptyMacros) {
       this.doStartOrStopPreview();
     } else {
       // Validate and show runtime arguments if there are
       // un-fulfilled macros.
+      this.toggleConfig();
+    }
+  }
+
+  startOrStopPreviewV2() {
+    if (this.doesPreviewHaveEmptyMacros) {
+      this.doStartOrStopPreview();
+    } else {
       this.toggleConfig();
     }
   }
@@ -612,6 +678,11 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 
   toggleScheduler(e) {
+    this.viewScheduler = !this.viewScheduler;
+    e.stopPropagation();
+  }
+
+  toggleSchedulerV2(e) {
     this.viewScheduler = !this.viewScheduler;
     e.stopPropagation();
   }
@@ -861,6 +932,15 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 
   togglePreviewMode() {
+    if (this.previewRunning && this.previewMode) {
+      this.stopPreview(true);
+    }
+    this.previewStore.dispatch(
+      this.previewActions.togglePreviewMode(!this.previewMode)
+    );
+  }
+
+  togglePreviewModeV2() {
     if (this.previewRunning && this.previewMode) {
       this.stopPreview(true);
     }
