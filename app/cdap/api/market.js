@@ -16,13 +16,13 @@
 
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreatorAbsPath } from 'services/resource-helper';
+import { REQUEST_ORIGIN_MARKET } from 'services/datasource/requestTypes';
 
 let dataSrc = DataSourceConfigurer.getInstance();
 const basepaths = window.CDAP_CONFIG.marketUrls;
 // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
-const REQUEST_TYPE_MARKET = 'MARKET';
 const requestOptions = {
-  requestOrigin: REQUEST_TYPE_MARKET,
+  requestOrigin: REQUEST_ORIGIN_MARKET,
 };
 
 function getVerifiedMarketHost(host) {
