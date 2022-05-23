@@ -40,6 +40,7 @@ const TextBoxComponent: React.FC<ITextBoxProps> = ({
   widgetProps,
   disabled,
   dataCy,
+  dataTestId,
   autoFocus,
   inputRef,
   onKeyPress,
@@ -85,6 +86,7 @@ const TextBoxComponent: React.FC<ITextBoxProps> = ({
       maxRows={customMaxRows ? customMaxRows : defaultProps.maxRows}
       inputProps={{
         'data-cy': dataCy,
+        'data-testid': dataTestId,
       }}
       autoFocus={autoFocus}
       inputRef={inputRef}
