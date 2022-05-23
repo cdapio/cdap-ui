@@ -16,7 +16,6 @@
 
 import React, { useState, useEffect } from 'react';
 import T from 'i18n-react';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -31,6 +30,7 @@ import { MySearchApi } from 'api/search';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { duration } from 'moment';
 import { dateTimeFormat } from 'services/DataFormatter';
+import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { INodeDisplay } from 'components/Metadata/Lineage/helper';
 
 const I18N_PREFIX = 'features.MetadataLineage.programRunInfo';
@@ -117,10 +117,10 @@ const ProgramModal: React.FC<IProgramModalProps> = ({ node, onClose }) => {
   return (
     <Dialog open={true} onClose={onClose}>
       <Header>
-        {node.displayType}
+        {node.label}
         <SubHeader>
           <EntityIcon className={node.icon}></EntityIcon>
-          {node.oldDisplayType}
+          {node.displayType}
         </SubHeader>
       </Header>
       <InfoDialogContent>
@@ -186,9 +186,9 @@ const ProgramModal: React.FC<IProgramModalProps> = ({ node, onClose }) => {
         )}
       </InfoDialogContent>
       <DialogActions>
-        <Button variant="contained" color="primary" onClick={onClose}>
+        <PrimaryTextButton onClick={onClose}>
           {T.translate(`${I18N_PREFIX}.close`)}
-        </Button>
+        </PrimaryTextButton>
       </DialogActions>
     </Dialog>
   );
