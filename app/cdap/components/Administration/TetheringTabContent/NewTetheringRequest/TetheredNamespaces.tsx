@@ -57,7 +57,7 @@ const TetheredNamespaces = ({
           <NoDataText>{T.translate(`${I18N_TETHERED_PREFIX}.noNamespaces`)}</NoDataText>
         )}
       </BodyContainer>
-      {validationError && <ErrorText>{validationError.msg}</ErrorText>}
+      {validationError && <ErrorText data-testid="no-ns-selected">{validationError.msg}</ErrorText>}
     </NewReqContainer>
   );
 };

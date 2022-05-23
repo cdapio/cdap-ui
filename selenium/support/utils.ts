@@ -25,16 +25,16 @@ let isAuthEnabled = false;
 let authToken = null;
 
 export const buildChromeDriver = () => {
-  const options = new chrome.Options()
+  const options = new chrome.Options();
   
-  options.addArguments('--disable-dev-shm-usage')
-  options.addArguments('--no-sandbox')
-  options.addArguments('--headless')
+  options.addArguments('--disable-dev-shm-usage');
+  options.addArguments('--no-sandbox');
+  options.addArguments('--headless');
 
   return new Builder()
     .forBrowser('chrome')
     .setChromeOptions(options)
-    .build()
+    .build();
 }
 
 export const loginIfRequired = async (driver) => {

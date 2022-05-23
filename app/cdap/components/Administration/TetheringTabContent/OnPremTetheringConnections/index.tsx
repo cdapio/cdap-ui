@@ -42,7 +42,10 @@ const OnPremConnections = ({
         handleDelete={handleDelete}
       />
       <ButtonContainer>
-        <StyledLinkBtn to="/administration/tethering/newTetheringRequest">
+        <StyledLinkBtn
+          data-testid="create-tethering-req-btn"
+          to="/administration/tethering/newTetheringRequest"
+        >
           {T.translate(`${PREFIX}.CreateRequest.createRequestButton`)}
         </StyledLinkBtn>
       </ButtonContainer>
