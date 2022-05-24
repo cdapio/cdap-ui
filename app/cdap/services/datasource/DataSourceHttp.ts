@@ -31,12 +31,11 @@ import LoadingIndicatorStore, {
 import { IDataSource } from './IDataSource';
 import { Subscription } from 'rxjs/Subscription';
 import isNil from 'lodash/isNil';
+import { REQUEST_ORIGIN_ROUTER, REQUEST_ORIGIN_MARKET } from './requestTypes';
 
 const cookie = new Cookies();
 
 const CDAP_API_VERSION = 'v3';
-// FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
-const REQUEST_ORIGIN_ROUTER = 'ROUTER';
 
 function isBackendDown(status) {
   return status === BACKENDSTATUS.NODESERVERDOWN || status === BACKENDSTATUS.BACKENDDOWN;
@@ -47,6 +46,23 @@ function debugLog(message) {
     // tslint:disable-next-line:no-console
     console.log(message);
   }
+}
+
+function parseResponse(ajaxResponse, bindingInfo) {
+  const { response } = ajaxResponse;
+  if (bindingInfo.json) {
+    try {
+      return JSON.parse(response);
+    } catch (e) {
+      // Intentionally left empty
+      // In case the response can't be parsed, fall through to
+      // the logic below
+    }
+  }
+  if (response && response.length > 0) {
+    return response;
+  }
+  return null;
 }
 
 interface IHeadersMap {
@@ -79,7 +95,7 @@ interface IResource {
   id: string;
   method: string;
   suppressErrors: boolean;
-  json?: any;
+  responseType: string;
   body?: any;
   headers?: IHeadersMap;
   url?: string;
@@ -93,6 +109,7 @@ interface IBinding {
   rx: Subject<any>;
   resource: IResource;
   type: 'POLL' | 'REQUEST';
+  json: boolean;
 }
 
 interface IPollingMap {
@@ -152,42 +169,59 @@ export default class Datasource implements IDataSource {
 
   public createResponseHandler(bindingInfo: IBinding) {
     return (ajaxResponse) => {
+      // All responses here are successful; Observable.ajax() will throw on errors
+      // See this.createErrorHandler()
       const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
       this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
-      if (ajaxResponse.status > 299) {
-        /**
-         * There is an issue here. When backend goes down we stop all the poll
-         * and inspite of stopping all polling calls and unsubscribing all subscribers
-         * we still get the rx.error call which tries to set the observers length to 0
-         * and errors out. This doesn't harm us today as when system comes up we refresh
-         * the UI and everything loads.
-         *
-         * This is being wrapped in a try catch block in case the subscriber do not define
-         * an error callback. Without this, the error will bubble up as an uncaught error
-         * and terminate the socketData subscriber.
-         */
-        try {
-          bindingInfo.rx.error({
-            statusCode: ajaxResponse.statusCode,
-            response: ajaxResponse.response || ajaxResponse.body || ajaxResponse.error,
-          });
-        } catch (e) {
-          /* tslint:disable:no-console */
-          console.groupCollapsed('Error: ' + ajaxResponse.resource.url);
-          console.log('Resource', ajaxResponse.resource);
-          console.log('Error', e);
-          console.groupEnd();
-          /* tslint:enable:no-console */
-        }
-      } else {
-        debugLog(`Sending response to subscribers for ${bindingInfo.resource.id}`);
-        bindingInfo.rx.next(ajaxResponse.response);
 
-        if (bindingInfo.type === 'POLL') {
-          this.startClientPoll(bindingInfo.resource.id);
-        } else {
-          bindingInfo.rx.complete();
-        }
+      const parsedResponse = parseResponse(ajaxResponse, bindingInfo);
+
+      debugLog(`Sending response to subscribers for ${bindingInfo.resource.id}`);
+      bindingInfo.rx.next(parsedResponse);
+
+      if (bindingInfo.type === 'POLL') {
+        this.startClientPoll(bindingInfo.resource.id);
+      } else {
+        bindingInfo.rx.complete();
+      }
+    };
+  }
+
+  public createErrorHandler(bindingInfo: IBinding) {
+    return (ajaxResponse) => {
+      debugLog(
+        `Error response received for ${bindingInfo.resource.id}; status: ${ajaxResponse.status}`
+      );
+      const parsedResponse = parseResponse(ajaxResponse, bindingInfo);
+      /**
+       * There is an issue here. When backend goes down we stop all the poll
+       * and inspite of stopping all polling calls and unsubscribing all subscribers
+       * we still get the rx.error call which tries to set the observers length to 0
+       * and errors out. This doesn't harm us today as when system comes up we refresh
+       * the UI and everything loads.
+       *
+       * This is being wrapped in a try catch block in case the subscriber do not define
+       * an error callback. Without this, the error will bubble up as an uncaught error
+       * and terminate the socketData subscriber.
+       */
+      try {
+        // Prefer parsedResponse.message because that is what is returned from the API
+        const errorMessage =
+          // objectQuery(ajaxResponse, 'response', 'message') || ajaxResponse.message;
+          parsedResponse.message || parsedResponse || ajaxResponse.message;
+        bindingInfo.rx.error({
+          statusCode: ajaxResponse.status,
+          message: errorMessage,
+          response: errorMessage,
+          responseObject: ajaxResponse.response,
+        });
+      } catch (e) {
+        /* tslint:disable:no-console */
+        console.groupCollapsed('Error: ' + bindingInfo.resource.url);
+        console.log('Resource', bindingInfo.resource);
+        console.log('Error', e);
+        console.groupEnd();
+        /* tslint:enable:no-console */
       }
     };
   }
@@ -196,7 +230,12 @@ export default class Datasource implements IDataSource {
     const excludeFromHealthCheck = !!resource.excludeFromHealthCheck;
     const generatedResource: IResource = {
       id: resource.id || uuidV4(),
-      json: resource.json === false ? false : true,
+      // Always set `responseType` to 'text', even for 'json' endpoints
+      // Some APIs return plaintext bodies for errors
+      // so we need to handle parsing in our own code.
+      // Setting `responseType` to 'json' would cause the error details
+      // to be lost
+      responseType: 'text',
       method: resource.method || 'GET',
       suppressErrors: resource.suppressErrors || false,
     };
@@ -220,15 +259,16 @@ export default class Datasource implements IDataSource {
       resource.url = resource._cdapPath;
       delete resource._cdapPath;
     }
-    const apiVersion = resource.apiVersion || CDAP_API_VERSION;
-    if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
-      resource.url = `/${apiVersion}${resource.url}`;
-    }
-    generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
 
-    if (resource.requestOrigin) {
+    if (resource.requestOrigin === REQUEST_ORIGIN_MARKET) {
+      generatedResource.url = this.buildUrl('/market', {
+        source: resource.url,
+      });
       generatedResource.requestOrigin = resource.requestOrigin;
     } else {
+      const apiVersion = resource.apiVersion || CDAP_API_VERSION;
+      resource.url = `/${apiVersion}${resource.url}`;
+      generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
 
@@ -249,11 +289,15 @@ export default class Datasource implements IDataSource {
       resource: generatedResource,
       type: 'REQUEST',
       excludeFromHealthCheck,
+      json: resource.json === false ? false : true,
     };
 
     const responseHandler = this.createResponseHandler(bindingInfo);
     // TODO Handle network errors
-    Observable.ajax(generatedResource).subscribe(responseHandler);
+    Observable.ajax(generatedResource).subscribe(
+      responseHandler,
+      this.createErrorHandler(bindingInfo)
+    );
     return subject;
   }
 
@@ -265,7 +309,8 @@ export default class Datasource implements IDataSource {
       id,
       interval: null,
       intervalTime,
-      json: resource.json || true,
+      // See comment about `responseType` in `.request()`
+      responseType: 'text',
       method: resource.method || 'GET',
       suppressErrors: resource.suppressErrors || false,
     };
@@ -287,12 +332,17 @@ export default class Datasource implements IDataSource {
       delete resource._cdapPath;
     }
 
-    const apiVersion = resource.apiVersion || CDAP_API_VERSION;
-    if (!resource.requestOrigin || resource.requestOrigin === REQUEST_ORIGIN_ROUTER) {
+    if (resource.requestOrigin === REQUEST_ORIGIN_MARKET) {
+      generatedResource.url = this.buildUrl('/market', {
+        source: resource.url,
+      });
+      generatedResource.requestOrigin = resource.requestOrigin;
+    } else {
+      const apiVersion = resource.apiVersion || CDAP_API_VERSION;
       resource.url = `/${apiVersion}${resource.url}`;
+      generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
+      generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
-
-    generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
 
     if (window.CDAP_CONFIG.securityEnabled) {
       const token = cookie.get('CDAP_Auth_Token');
@@ -301,11 +351,6 @@ export default class Datasource implements IDataSource {
       }
     }
 
-    if (resource.requestOrigin) {
-      generatedResource.requestOrigin = resource.requestOrigin;
-    } else {
-      generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
-    }
     const subject = new Subject();
 
     // Wrap subject in an Observable for teardown
@@ -338,13 +383,17 @@ export default class Datasource implements IDataSource {
       resource: generatedResource,
       type: 'POLL',
       excludeFromHealthCheck,
+      json: resource.json === false ? false : true,
     };
     this.polling[generatedResource.id] = bindingInfo;
 
     debugLog(`Polling requested for ${generatedResource.id} URL ${generatedResource.url}`);
 
     const responseHandler = this.createResponseHandler(bindingInfo);
-    Observable.ajax(generatedResource).subscribe(responseHandler);
+    Observable.ajax(generatedResource).subscribe(
+      responseHandler,
+      this.createErrorHandler(bindingInfo)
+    );
 
     return observable;
   }
