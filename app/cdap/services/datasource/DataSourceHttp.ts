@@ -212,7 +212,7 @@ export default class Datasource implements IDataSource {
         bindingInfo.rx.error({
           statusCode: ajaxResponse.status,
           message: errorMessage,
-          response: errorMessage,
+          response: parsedResponse,
           responseObject: ajaxResponse.response,
         });
       } catch (e) {
