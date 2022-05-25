@@ -28,8 +28,8 @@ export const TETHERING_URL = `${BASE_URL}/cdap/administration/tethering/`
 export const CONFIGURATION_URL = `${BASE_URL}/cdap/administration/configuration`
 export const PIPELINE_STUDIO_URL = `${BASE_URL}/pipelines/ns/default/studio`
 
-// export const DEFAULT_GCP_SERVICEACCOUNT_PATH = constCypress.env('gcp_service_account_path');
-// export const DEFAULT_GCP_PROJECTID = Cypress.env('gcp_projectid');
+export const DEFAULT_GCP_SERVICEACCOUNT_PATH = process.env.GCP_SERVICE_ACCOUNT_PATH;
+export const DEFAULT_GCP_PROJECTID = process.env.GCP_PROJECTID;
 
 export const DEFAULT_GCS_CONNECTION_NAME = `gcs_${getRandomArbitrary()}`;
 // 000 to keep this bucket in the first 1000 entries
