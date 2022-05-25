@@ -11,8 +11,8 @@
 
 # This workflow will trigger build.yml only when needed.
 # This way we don't flood main workflow run list
-# Note that build.yml from develop will be used even for PR builds
-# Also it will have access to the proper GITHUB_SECRET
+# Note that node.js.yml from develop will be used even for PR builds
+# Also it will have access to the proper secrets
 
 name: Trigger build
 
