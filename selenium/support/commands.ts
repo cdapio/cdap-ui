@@ -43,7 +43,7 @@ class SeleniumCommands {
     const node = await this.driver.findElement(By.css(elementId));
     await node.click();
     //Ensure node property page is open by locating its close button
-    return this.driver.findElement(By.css('[data-testid="close-config-popover"]'))
+    return this.driver.findElement(By.css('[data-testid="close-config-popover"]'));
   };
 
   closeNodeProperty = async () => {
@@ -107,7 +107,6 @@ class SeleniumCommands {
     const targetEl = await this.driver.findElement(By.css('[data-testid="pipeline-fit-to-screen-control"]'));
     return targetEl.click();
   };
-
 }
 
 export default SeleniumCommands;

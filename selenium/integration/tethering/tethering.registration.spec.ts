@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import { By } from 'selenium-webdriver';
 import { TETHERING_URL } from '../../support/constants';
 import { buildChromeDriver, dataTestId } from '../../support/utils';
@@ -72,6 +73,6 @@ describe('Create a new tethering request from the on-prem instance', () => {
   })
 
   afterAll(async () => {
-    await driver.quit()
+    await driver.quit();
   });
 });

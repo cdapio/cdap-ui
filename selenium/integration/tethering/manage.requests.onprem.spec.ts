@@ -74,6 +74,6 @@ describe('Manage tethering requests from the on-prem instance', () => {
   })
 
   afterAll(async () => {
-    await driver.quit()
+    await driver.quit();
   });
 });

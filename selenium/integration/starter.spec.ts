@@ -13,24 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import { By } from 'selenium-webdriver';
 import { BASE_URL } from '../support/constants';
-import { buildChromeDriver } from '../support/utils';
+import { buildChromeDriver, makeElementHelpers } from '../support/utils';
 
 describe('Ensuring CDAP is up and running', () => {
   let driver;
+  let se;
 
   beforeAll(() => {
     driver = buildChromeDriver();
+    se = makeElementHelpers(driver);
   });
 
   it('Should open cdap', async () => {
-    await driver.get(BASE_URL)
-    await driver.sleep(2000)
-    await driver.findElement(By.xpath('//div[@id="app-container"]'));
+    await driver.get(BASE_URL);
+    await se.waitByXpath('//div[@id="app-container"]');
   })
 
   afterAll(async () => {
-    await driver.quit()
+    await driver.quit();
   });
 });

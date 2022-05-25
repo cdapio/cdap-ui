@@ -14,57 +14,56 @@
  * the License.
  */
 
-import { By, until } from 'selenium-webdriver';
-import { dataTestId, buildChromeDriver, loginIfRequired } from '../support/utils';
-import { CONFIGURATION_URL, TEST_TIMEOUT_TIME, RETRY_INTERVAL, TEST_TIMEOUT_MESSAGE } from '../support/constants';
-
-let driver;
-const TEST_KEY = 'name';
-const TEST_VALUE = 'hello';
+import { buildChromeDriver, loginIfRequired, makeElementHelpers } from '../support/utils';
+import { CONFIGURATION_URL } from '../support/constants';
 
 describe('Setting and saving preferences', () => {
+  let driver;
+  let se;
+  const TEST_KEY = 'name';
+  const TEST_VALUE = 'hello';
+
   beforeAll(async () => {
     driver = buildChromeDriver();
+    se = makeElementHelpers(driver);
     await loginIfRequired(driver);
   });
 
   it('Should show error message if user tries to set profile at the instance level', async () => {
     await driver.get(CONFIGURATION_URL);
-    await driver.sleep(1000);
-    await driver.findElement(By.css(dataTestId('system-prefs-accordion'))).click();
-    await driver.findElement(By.css(dataTestId('edit-system-prefs-btn'))).click();
-    const keyInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control key-input']"));
+    await se.waitByTestId('system-prefs-accordion').click();
+    await se.findByTestId('edit-system-prefs-btn').click();
+    const keyInput = await se.findByCssSelector("div[class='key-value-pair-preference'] > input[class='form-control key-input']");
     await keyInput.clear();
     await keyInput.sendKeys('system.profile.name');
-    const valueInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control value-input']"));
+    const valueInput = await se.findByCssSelector("div[class='key-value-pair-preference'] > input[class='form-control value-input']");
     await valueInput.clear();
     await valueInput.sendKeys(TEST_VALUE);
-    await driver.findElement(By.css(dataTestId('save-prefs-btn'))).click();
-    await driver.findElement(By.css('div[class="preferences-error"]'));
+    await se.findByTestId('save-prefs-btn').click();
+    await se.findByCssSelector('div[class="preferences-error"]');
   });
 
   it('Should allow user to save valid preference at instance level after fixing error', async () => {
     await driver.get(CONFIGURATION_URL);
-    await driver.sleep(1000);
-    await driver.findElement(By.css(dataTestId('system-prefs-accordion'))).click();
-    await driver.findElement(By.css(dataTestId('edit-system-prefs-btn'))).click();
-    const keyInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control key-input']"));
+    await se.waitByTestId('system-prefs-accordion').click();
+    await se.findByTestId('edit-system-prefs-btn').click();
+    const keyInput = await se.findByCssSelector("div[class='key-value-pair-preference'] > input[class='form-control key-input']");
     await keyInput.clear();
     await keyInput.sendKeys(TEST_KEY);
-    const valueInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control value-input']"));
+    const valueInput = await se.findByCssSelector("div[class='key-value-pair-preference'] > input[class='form-control value-input']");
     await valueInput.clear();
     await valueInput.sendKeys(TEST_VALUE);
-    await driver.findElement(By.css(dataTestId('save-prefs-btn'))).click();
+    await se.findByTestId('save-prefs-btn').click();
     const addedKeyCssLocator = 'div[class*="grid-row"] > div';
-    const keyEl = await driver.wait(until.elementLocated(By.css(addedKeyCssLocator)), TEST_TIMEOUT_TIME, TEST_TIMEOUT_MESSAGE, RETRY_INTERVAL); 
+    const keyEl = await se.waitByCssSelector(addedKeyCssLocator);
     const key = await keyEl.getText();
-    const valueEl = await driver.wait(until.elementLocated(By.css(`${addedKeyCssLocator} + div`)), TEST_TIMEOUT_TIME, TEST_TIMEOUT_MESSAGE, RETRY_INTERVAL);
+    const valueEl = await se.findByCssSelector(`${addedKeyCssLocator} + div`);
     const value = await valueEl.getText();
     expect(key).toBe(TEST_KEY);
     expect(value).toBe(TEST_VALUE);
   });
 
   afterAll(async () => {
-    await driver.quit()
+    await driver.quit();
   });
 });

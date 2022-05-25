@@ -16,18 +16,17 @@
 
 import PropTypes from 'prop-types';
 
-import React from 'react';
+import React, { useState } from 'react';
 import NamespaceStore, { getValidNamespace } from 'services/NamespaceStore';
 import isEmpty from 'lodash/isEmpty';
 import T from 'i18n-react';
-import If from 'components/shared/If';
 
 require('./404.scss');
 
 const I18N_PREFIX = 'features.Page404';
 
 export default function Page404({ entityName, entityType, children, message }) {
-  const [validNs, setvalidNs] = React.useState('');
+  const [validNs, setvalidNs] = useState('');
 
   React.useEffect(() => {
     const { selectedNamespace } = NamespaceStore.getState();
@@ -43,16 +42,18 @@ export default function Page404({ entityName, entityType, children, message }) {
       <h1 className="error-main-title">{T.translate(`${I18N_PREFIX}.mainTitle`)}</h1>
       <h1>
         <strong>
-          <If condition={typeof message === 'string'}>
-            <span data-cy="page-404-error-msg">{message}</span>
-          </If>
-          <If condition={!message}>
-            <span data-cy="page-404-default-msg">
+          {typeof message === 'string' && (
+            <span data-cy="page-404-error-msg" data-testid="page-404-error-msg">
+              {message}
+            </span>
+          )}
+          {!message && (
+            <span data-cy="page-404-default-msg" data-testid="page-404-default-msg">
               {isEmpty(entityType) || isEmpty(entityName)
                 ? T.translate(`${I18N_PREFIX}.genericMessage`)
                 : T.translate(`${I18N_PREFIX}.entityMessage`, { entityType, entityName })}
             </span>
-          </If>
+          )}
         </strong>
       </h1>
       {children ? (

@@ -108,11 +108,11 @@ describe.skip('Hierarchy Widgets', () => {
   });
 
   it('Should get the schema', async () => {
-    await driver.findElement(By.css(`div${dataTestId('plugin-undefined')} div${dataTestId('widget-wrapper-container')} .WidgetWrapperView-widgetContainer-607 .abstract-widget-wrapper > div`)).click()
+    await driver.findElement(By.css(`div${dataTestId('plugin-undefined')} div${dataTestId('widget-wrapper-container')} .WidgetWrapperView-widgetContainer-607 .abstract-widget-wrapper > div`)).click();
     await driver.findElement(By.css(`${dataTestId('get-schema-btn')}`)).click();
   });
 
   afterAll(async () => {
-    await driver.quit()
+    await driver.quit();
   });
 });
