@@ -16,12 +16,14 @@
 
 import IconSVG from 'components/shared/IconSVG';
 import React from 'react';
+import { objectQuery } from 'services/helpers';
 import {
   ActionButtonsContainer,
   BorderRightButton,
   ButtonLabel,
   CommonButton,
   CustomTooltip,
+  HiddenInput,
   IconLoading,
   IconPlay,
   IconSchedule,
@@ -49,6 +51,7 @@ interface IActionButtonsProps {
   onSaveDraft: () => void;
   onPublish: () => void;
   onImport: () => void;
+  onFileSelect: (files: FileList) => void;
   onExport: () => void;
   onClickLogs: () => void;
   previewLoading: boolean;
@@ -75,6 +78,7 @@ export const ActionButtons = ({
   onSaveDraft,
   onPublish,
   onImport,
+  onFileSelect,
   onExport,
   onClickLogs,
   previewLoading,
@@ -87,6 +91,16 @@ export const ActionButtons = ({
   viewLogs,
   timerLabel,
 }: IActionButtonsProps) => {
+  const handleFile = (event) => {
+    if (!objectQuery(event, 'target', 'files', 0)) {
+      return;
+    }
+    const uploadedFiles = event.target.files;
+
+    if (onFileSelect) {
+      onFileSelect(uploadedFiles);
+    }
+  };
   return (
     <ActionButtonsContainer>
       {previewMode ? (
@@ -252,6 +266,17 @@ export const ActionButtons = ({
               <ButtonLabel>Import</ButtonLabel>
             </div>
           </CommonButton>
+          <label htmlFor="pipeline-import-config-link">
+            {/* The onClick here is to clear the file, so if the user uploads the same file
+            twice then we can show the error, instead of showing nothing */}
+            <HiddenInput
+              id="pipeline-import-config-link"
+              type="file"
+              accept=".json"
+              onChange={handleFile}
+              onClick={(e) => (e.target.value = null)}
+            />
+          </label>
           <CustomTooltip
             title={hasNodes ? '' : 'Start building a pipeline before exporting'}
             arrow

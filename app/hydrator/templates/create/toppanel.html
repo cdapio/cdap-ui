@@ -42,6 +42,7 @@
     on-save-draft="HydratorPlusPlusTopPanelCtrl.onSaveDraftV2"
     on-publish="HydratorPlusPlusTopPanelCtrl.onPublishV2"
     on-import="HydratorPlusPlusTopPanelCtrl.onImportV2"
+    on-file-select="HydratorPlusPlusTopPanelCtrl.importFile2"
     on-export="HydratorPlusPlusTopPanelCtrl.onExportV2"
     on-click-logs="HydratorPlusPlusTopPanelCtrl.onClickLogs"
     preview-loading="HydratorPlusPlusTopPanelCtrl.previewLoading"
@@ -294,6 +295,13 @@
         </div>
       </div>
     </div>
+    <my-file-select
+      class="sr-only"
+      id="pipeline-import-config-link"
+      data-button-icon="fa-upload"
+      on-file-select="HydratorPlusPlusTopPanelCtrl.importFile($files)"
+      data-button-label="Import">
+    </my-file-select>
   </div>
 
   <cask-resource-center-button></cask-resource-center-button>
@@ -342,10 +350,3 @@
     on-close="HydratorPlusPlusTopPanelCtrl.closeLogs">
   </preview-logs>
 </div>
-
-<my-file-select class="sr-only"
-                id="pipeline-import-config-link"
-                data-button-icon="fa-upload"
-                on-file-select="HydratorPlusPlusTopPanelCtrl.importFile($files)"
-                data-button-label="Import">
-</my-file-select>

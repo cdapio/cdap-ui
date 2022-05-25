@@ -106,3 +106,9 @@ export const RunTimeSpan = styled.span`
   font-weight: 500;
   vertical-align: middle;
 `;
+
+export const HiddenInput = styled.input`
+  &&& {
+    display: none;
+  }
+`; // beating specificity. The file input needs to be hidden at all times
