@@ -148,6 +148,7 @@ const ComplexSchema: React.FC<IComplexSchemaProps> = ({ schema, inputProps }) =>
                         value={field.name}
                         aria-label={T.translate(`${I18N_PREFIX}.schemaName`)}
                         data-cy={`schema-row-field-name-input-${index}}`}
+                        data-testid={`schema-row-field-name-input-${index}}`}
                         placeholder={T.translate(`${I18N_PREFIX}.fieldName`)}
                         disabled={inputProps.isDisabled}
                       />
@@ -155,6 +156,7 @@ const ComplexSchema: React.FC<IComplexSchemaProps> = ({ schema, inputProps }) =>
                     <td>
                       <FieldSelect
                         data-cy="schema-row-type-select-{{$index}}"
+                        data-testid="schema-row-type-select-{{$index}}"
                         value={field.displayType}
                         disabled={inputProps.isDisabled}
                       >

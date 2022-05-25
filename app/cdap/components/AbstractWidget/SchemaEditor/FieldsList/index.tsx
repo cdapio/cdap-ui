@@ -97,6 +97,7 @@ class FieldsListBase extends React.Component<IFieldsListProps, IFieldsListState>
             field={field}
             onChange={this.onChange}
             dataCy={`schema-row-${i}`}
+            dataTestId={`schema-row-${i}`}
           />
         );
       });
