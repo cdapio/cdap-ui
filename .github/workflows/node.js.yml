@@ -71,6 +71,7 @@ jobs:
         echo $GCP_PROJECTID # Will remove after test in develop - git will show secrets as ***
         echo $GCP_SERVICE_ACCOUNT_PATH # Will remove after test in develop - git will show secrets as ***
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
+        cd sandboxjs
         npm install -g yarn # Install Yarn globally
         yarn --frozen-lockfile # Install sandbox runner dependencies 
         yarn setup-gitpod $JAVA_HOME # Fetch and start sandbox
