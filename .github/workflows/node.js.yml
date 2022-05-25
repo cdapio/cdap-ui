@@ -4,16 +4,19 @@
 name: CDAP UI Unit and Integration Tests
 
 on:
-  push:
-    branches: [ develop, release/** ]
-  pull_request:
-    branches: [ develop, release/** ]
+  workflow_run:
+    workflows:
+      - Trigger build
+    types:
+      - completed
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    
     strategy:
       matrix:
         node-version: [10.16]
