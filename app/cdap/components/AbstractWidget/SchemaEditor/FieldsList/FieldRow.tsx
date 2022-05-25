@@ -70,6 +70,7 @@ interface IFieldRowProps extends WithStyles<typeof styles> {
   autoFocus?: boolean;
   disabled?: boolean;
   dataCy?: string;
+  dataTestId?: string;
 }
 
 class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
@@ -231,7 +232,7 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
   };
 
   public render() {
-    const { classes, dataCy } = this.props;
+    const { classes, dataCy, dataTestId } = this.props;
     const { ancestors, internalType } = this.props.field;
     if (internalType === InternalTypesEnum.SCHEMA) {
       return null;
@@ -247,6 +248,7 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
                 [classes.erroredRow]: hasError,
               })}
               dataCy={dataCy}
+              dataTestId={dataTestId}
             >
               <React.Fragment>
                 <If condition={hasError}>
