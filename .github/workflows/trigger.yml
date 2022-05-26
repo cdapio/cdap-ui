@@ -18,9 +18,9 @@ name: Trigger build
 
 on:
   push:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, temp/testing-workflow-fixes ]
   pull_request:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, temp/testing-workflow-fixes ]
     types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
