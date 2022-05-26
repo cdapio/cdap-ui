@@ -14,10 +14,16 @@
  * the License.
  */
 
-import { Builder } from 'selenium-webdriver';
+import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import fetch from 'node-fetch';
-import { BASE_URL, BASE_SERVER_URL } from './constants';
+import { 
+  BASE_URL,
+  BASE_SERVER_URL,
+  TEST_TIMEOUT_TIME,
+  RETRY_INTERVAL,
+  TEST_TIMEOUT_MESSAGE
+} from './constants';
 
 const username = 'admin';
 const password = 'admin';
@@ -96,4 +102,39 @@ export const getArtifactsPoll = (headers, retries = 0) => {
 
 export const getGenericEndpoint = (options, id) => {
   return `.plugin-endpoint_${id}-right`;
+}
+
+export const makeBackendRequest = (params) => {
+  const { path, json, ...otherParams } = params;
+  const url = `${BASE_SERVER_URL}${path}`;
+  // TODO Auth headers if needed
+  return fetch(url, otherParams).then(res => {
+    if (res.ok) {
+      if (json){
+        return res.json();
+      } else {
+        return res.text();
+      }
+    } else {
+      // TODO Get error response body?
+      return Promise.reject(`Status: ${res.status}`);
+    }
+  });
+}
+
+export const makeElementHelpers = (driver) => {
+  return {
+    findByTestId: (id) => {
+      return driver.findElement(By.css(dataTestId(id)))
+    },
+
+    waitByTestId: (id) => {
+      return driver.wait(
+        until.elementLocated(By.css(dataTestId(id))), 
+        TEST_TIMEOUT_TIME, 
+        TEST_TIMEOUT_MESSAGE, 
+        RETRY_INTERVAL
+      );
+    },
+  };
 }
