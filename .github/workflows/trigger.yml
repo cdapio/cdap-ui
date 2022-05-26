@@ -38,9 +38,8 @@ jobs:
     if: >
       github.event_name == 'workflow_dispatch'
       || github.event_name == 'push'
-      || (contains(github.event.pull_request.labels.*.name, 'build')
-         && (github.event.action != 'labeled' || github.event.label.name == 'build')
-         )
+      || github.event_name == 'pull_request'
+
     steps:
       - name: Trigger build
         run: echo UI build will be triggered now
