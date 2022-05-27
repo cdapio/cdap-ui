@@ -100,6 +100,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.startOrStopPreviewV2 = this.startOrStopPreviewV2.bind(this);
     this.onClickLogs = this.onClickLogs.bind(this);
     this.openMetadataV2 = this.openMetadataV2.bind(this);
+    this.importFile2 = this.importFile2.bind(this);
 
     this.setState();
     this.setActiveNodes();
@@ -950,6 +951,15 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 
   importFile(files) {
+    if (!files.length) {
+      return;
+    }
+
+    let uploadedFile = files[0];
+    this.HydratorUpgradeService.validateAndUpgradeConfigFile(uploadedFile);
+  }
+
+  importFile2(files) {
     if (!files.length) {
       return;
     }
