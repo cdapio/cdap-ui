@@ -75,16 +75,14 @@ export const loginIfRequired = async (driver) => {
 
 export const getSessionToken = async (headers) => {
   if (sessionToken !== null) {
-    return sessionToken
+    return sessionToken;
   }
   return fetch(`${BASE_URL}/sessionToken`, {
     headers: headers
   }).then(response => response.text()).then(data => {
-    sessionToken = data
-    return sessionToken
+    sessionToken = data;
+    return sessionToken;
   })
-      
-
 }
 
 export const dataTestId = (property) => {

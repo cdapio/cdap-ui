@@ -14,10 +14,9 @@
  * the License.
  */
 import { Theme } from '../../app/cdap/services/ThemeHelper';
-import { By, until } from 'selenium-webdriver';
-import {Request} from 'selenium-webdriver/http'
+import { By } from 'selenium-webdriver';
 import { dataTestId, buildChromeDriver, loginIfRequired, getSessionToken } from '../support/utils';
-import { BASE_URL, CDAP_URL, UPDATE_THEME_URL } from '../support/constants';
+import { CDAP_URL, UPDATE_THEME_URL } from '../support/constants';
 import fetch from 'node-fetch';
 
 let driver
@@ -52,7 +51,7 @@ describe('Navbar tests', () => {
       
   });
   afterAll(async () => {
-    await fetch(`${BASE_URL}/updateTheme`, {
+    await fetch(UPDATE_THEME_URL, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({
@@ -81,7 +80,7 @@ describe('Navbar tests', () => {
     await driver.findElement(By.css(dataTestId('navbar-hamburger-icon'))).click();
   });
   it('Should have right bgcolor for light theme', async () => {
-    await fetch(`${BASE_URL}/updateTheme`, {
+    await fetch(UPDATE_THEME_URL, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({
