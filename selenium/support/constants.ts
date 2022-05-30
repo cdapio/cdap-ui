@@ -27,6 +27,8 @@ export const BASE_SERVER_URL = 'http://localhost:11015'
 export const TETHERING_URL = `${BASE_URL}/cdap/administration/tethering/`
 export const CONFIGURATION_URL = `${BASE_URL}/cdap/administration/configuration`
 export const PIPELINE_STUDIO_URL = `${BASE_URL}/pipelines/ns/default/studio`
+export const CDAP_URL = `${BASE_URL}/cdap`
+export const UPDATE_THEME_URL = `${BASE_URL}/updateTheme`
 
 export const DEFAULT_GCP_SERVICEACCOUNT_PATH = process.env.GCP_SERVICE_ACCOUNT_PATH;
 export const DEFAULT_GCP_PROJECTID = process.env.GCP_PROJECTID;

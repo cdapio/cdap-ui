@@ -47,6 +47,7 @@ describe('Setting and saving preferences', () => {
     await driver.get(CONFIGURATION_URL);
     await driver.sleep(1000);
     await driver.findElement(By.css(dataTestId('system-prefs-accordion'))).click();
+    await driver.sleep(200);
     await driver.findElement(By.css(dataTestId('edit-system-prefs-btn'))).click();
     const keyInput = await driver.findElement(By.css("div[class='key-value-pair-preference'] > input[class='form-control key-input']"));
     await keyInput.clear();
