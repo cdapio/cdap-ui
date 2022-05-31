@@ -187,8 +187,8 @@ angular
   .directive('connectionsBrowser', function (reactDirective) {
     return reactDirective(window.CaskCommon.Connections);
   })
-  .directive('sidePanel', function (reactDirective) {
-    return reactDirective(window.CaskCommon.SidePanel);
+  .directive('leftPanelReact', function (reactDirective) {
+    return reactDirective(window.CaskCommon.LeftPanelReact);
   })
   .directive('nameAndDescription', function (reactDirective) {
     return reactDirective(window.CaskCommon.NameAndDescription);

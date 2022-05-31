@@ -135,13 +135,14 @@ var Comment = require('../cdap/components/AbstractWidget/Comment').default;
 var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
 var Connections = require('../cdap/components/Connections').default;
-var SidePanel = require('../cdap/components/hydrator/components/SidePanel/SidePanel').SidePanel;
+var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/LeftPanel')
+  .LeftPanel;
 var NameAndDescription = require('../cdap/components/hydrator/components/TopPanel/NameAndDescription')
   .NameAndDescription;
 
 export {
   NameAndDescription,
-  SidePanel,
+  LeftPanelReact,
   Store,
   NameSpaceStoreActions,
   DataPrepHome,
