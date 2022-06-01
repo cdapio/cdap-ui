@@ -15,9 +15,6 @@
  */
 
 import * as React from 'react';
-import If from 'components/shared/If';
-import Helmet from 'react-helmet';
-import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 import { ConnectionRoutes } from 'components/Connections/Routes';
 import { MemoryRouter, Redirect } from 'react-router';
@@ -25,7 +22,6 @@ import { Route } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import PipelineMetricsStore from 'services/PipelineMetricsStore';
 
-const DATAPREP_I18N_PREFIX = 'features.DataPrep.pageTitle';
 import {
   IConnectionMode,
   IConnections,
@@ -95,18 +91,6 @@ export default function Connections({
   });
   const classes = useStyle();
   const [loading, setLoading] = useState(true);
-  const featureName = Theme.featureNames.dataPrep;
-  const pageTitle = (
-    <Helmet
-      title={T.translate(DATAPREP_I18N_PREFIX, {
-        productName: Theme.productName,
-        featureName,
-      })}
-    />
-  );
-  const shouldUpdatePageTitle =
-    mode === IConnectionMode.ROUTED || mode === IConnectionMode.ROUTED_WORKSPACE;
-
   let initialEntry = `/ns/${getCurrentNamespace()}/connections`;
 
   if (initialConnectionId) {
@@ -157,24 +141,23 @@ export default function Connections({
   return (
     <ConnectionsContext.Provider value={state}>
       <div className={classes.container}>
-        <If condition={shouldUpdatePageTitle}>{pageTitle}</If>
-        <If condition={mode === IConnectionMode.ROUTED}>
-          <Route exact path="/ns/:namespace/connections">
-            <RedirectIfDefaultConnection
-              path={initialEntry}
-              initialConnectionId={initialConnectionId}
-              connectionId={connectionId}
-            />
-          </Route>
-          <ConnectionRoutes />
-        </If>
-        <If
-          condition={mode === IConnectionMode.INMEMORY || mode === IConnectionMode.ROUTED_WORKSPACE}
-        >
+        {mode === IConnectionMode.ROUTED && (
+          <>
+            <Route exact path="/ns/:namespace/connections">
+              <RedirectIfDefaultConnection
+                path={initialEntry}
+                initialConnectionId={initialConnectionId}
+                connectionId={connectionId}
+              />
+            </Route>
+            <ConnectionRoutes />
+          </>
+        )}
+        {(mode === IConnectionMode.INMEMORY || mode === IConnectionMode.ROUTED_WORKSPACE) && (
           <MemoryRouter initialEntries={[initialEntry]}>
             <ConnectionRoutes />
           </MemoryRouter>
-        </If>
+        )}
       </div>
     </ConnectionsContext.Provider>
   );
