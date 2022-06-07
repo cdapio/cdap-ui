@@ -14,13 +14,14 @@
  * the License.
  */
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Select from '@material-ui/core/Select';
 import SidePanel from 'components/hydrator/components/SidePanel/SidePanel';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IconButton } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import styled from 'styled-components';
 
 interface ILeftPanelProps {
   onArtifactChange: (value: any) => void;
@@ -35,6 +36,10 @@ interface ILeftPanelProps {
   isSideBarExpanded: boolean;
 }
 
+const StyledSelect = styled(Select)`
+  overflow: hidden;
+`;
+
 export const LeftPanel = ({
   onArtifactChange,
   selectedArtifact,
@@ -43,47 +48,53 @@ export const LeftPanel = ({
   groups,
   groupGenericName,
   onPanelItemClick,
-  pluginsMap,
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
 
   return (
     <>
-      <div className="left-top-section">
-        <Select
-          value={selectedArtifact}
-          className="form-control"
-          onChange={(event) => onArtifactChange(event.target.value)}
-          MenuProps={{
-            getContentAnchorEl: null,
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'left',
-            },
-          }}
-        >
-          {artifacts.map((artifact) => {
-            return (
-              <MenuItem value={artifact.label} key={artifact.label}>
-                {artifact.label}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </div>
-      {pluginsMap && pluginsMap.length && (
-        <SidePanel
-          itemGenericName={itemGenericName}
-          groups={groups}
-          groupGenericName={groupGenericName}
-          onPanelItemClick={onPanelItemClick}
-        />
-      )}
-      <div className="btn-left-panel-toggle btn-sm pull-right">
-        <IconButton onClick={() => setIsExpanded(!isExpanded)} color="primary" component="span">
-          {isExpanded ? <ChevronLeft /> : <ChevronRight />}
-        </IconButton>
+      <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>
+        <div className="left-panel">
+          <div className="left-top-section">
+            <StyledSelect
+              value={selectedArtifact.label}
+              className="form-control"
+              onChange={(event: any) => onArtifactChange(event.currentTarget.dataset.name)}
+              MenuProps={{
+                getContentAnchorEl: null,
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                },
+              }}
+            >
+              {artifacts.map((artifact) => {
+                return (
+                  <MenuItem value={artifact.label} key={artifact.label} data-name={artifact.name}>
+                    {artifact.label}
+                  </MenuItem>
+                );
+              })}
+            </StyledSelect>
+            <Button
+              onClick={() => setIsExpanded(!isExpanded)}
+              color="primary"
+              component="button"
+              className="btn-sm pull-right"
+            >
+              {isExpanded ? <ChevronLeft /> : <ChevronRight />}
+            </Button>
+          </div>
+          <div className="my-side-panel">
+            <SidePanel
+              itemGenericName={itemGenericName}
+              groups={groups}
+              groupGenericName={groupGenericName}
+              onPanelItemClick={(event, plugin) => onPanelItemClick(event, plugin)}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
