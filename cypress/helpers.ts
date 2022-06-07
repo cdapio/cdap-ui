@@ -108,12 +108,12 @@ function deployAndTestPipeline(filename, pipelineName, done = () => ({})) {
   // is this won't take more than 10 seconds.
   cy.wait(10000);
   // Name pipeline then deploy pipeline
-  cy.get('.pipeline-name').click();
+  cy.get('[data-cy="pipeline-metadata"]').click();
   cy.get('#pipeline-name-input')
     .clear()
     .type(pipelineName)
     .type('{enter}');
-  cy.get('[data-testid=deploy-pipeline]').click();
+  cy.get('[data-cy="deploy-pipeline-btn"]').click();
   cy.get('[data-cy="Deployed"]', { timeout: 60000 }).should('contain', 'Deployed');
   return cy
     .url()

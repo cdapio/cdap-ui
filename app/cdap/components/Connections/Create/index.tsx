@@ -33,6 +33,7 @@ import {
   getConnection,
   testConnection,
   IConnectorDetails,
+  getSelectedConnectorDisplayName,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
@@ -43,6 +44,7 @@ import { extractErrorMessage, objectQuery } from 'services/helpers';
 import Alert from 'components/shared/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 import { constructErrors } from 'components/shared/ConfigurationGroup/utilities';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
 
 const PREFIX = 'features.DataPrepConnections.ConnectionManagement';
 
@@ -62,10 +64,10 @@ export function CreateConnection({
   onToggle = null,
   initialConfig = {},
   onCreate = null,
-  isEdit = false,
+  mode = ConnectionConfigurationMode.CREATE,
   enableRouting = true,
 }) {
-  const { mode, disabledTypes } = useContext(ConnectionsContext);
+  const { mode: connectionMode, disabledTypes } = useContext(ConnectionsContext);
   const classes = useStyle();
   const [loading, setLoading] = useState(true);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -118,7 +120,7 @@ export function CreateConnection({
   }
 
   if (
-    mode === IConnectionMode.ROUTED &&
+    connectionMode === IConnectionMode.ROUTED &&
     state.activeStep === ICreateConnectionSteps.CONNECTOR_LIST &&
     enableRouting
   ) {
@@ -150,7 +152,7 @@ export function CreateConnection({
       return;
     }
 
-    if (!isEdit) {
+    if (mode === 'CREATE') {
       // validate existing connection name
       try {
         await getConnection(name);
@@ -177,7 +179,7 @@ export function CreateConnection({
         onCreate();
       }
 
-      if (mode === IConnectionMode.ROUTED && enableRouting) {
+      if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
         setRedirectUrl(`${getConnectionPath(name)}`);
       }
 
@@ -231,20 +233,35 @@ export function CreateConnection({
   };
 
   function onClose() {
-    if (mode === IConnectionMode.ROUTED && enableRouting) {
+    if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
       navigateToConnectionList(dispatch);
       return;
     }
 
     onToggle();
   }
-  const editPanelTitle = T.translate(`${PREFIX}.editConnection`, {
-    connector: state?.selectedConnector?.name,
-    connectionName: objectQuery(initValues, 'initName'),
-  });
-  const createPanelTitle = T.translate(`${PREFIX}.createConnection`, {
-    connector: state?.selectedConnector?.name,
-  });
+
+  let title;
+  const displayedConnectionName = getSelectedConnectorDisplayName(
+    state.selectedConnector,
+    state.allConnectorsPluginProperties
+  );
+  if (mode === 'EDIT') {
+    title = T.translate(`${PREFIX}.editConnection`, {
+      connector: displayedConnectionName,
+      connectionName: objectQuery(initValues, 'initName'),
+    });
+  } else if (mode === 'VIEW') {
+    title = T.translate(`${PREFIX}.viewConnection`, {
+      connector: displayedConnectionName,
+      connectionName: objectQuery(initValues, 'initName'),
+    });
+  } else {
+    title = T.translate(`${PREFIX}.createConnection`, {
+      connector: displayedConnectionName,
+    });
+  }
+
   return (
     <div className={classes.root}>
       {state.activeStep === ICreateConnectionSteps.CONNECTOR_CONFIG && (
@@ -252,10 +269,10 @@ export function CreateConnection({
           historyBack={false}
           breadCrumbAnchorLabel="Select Connection"
           onBreadCrumbClick={() => navigateToConnectionCategoryStep(dispatch)}
-          title={`${isEdit ? editPanelTitle : createPanelTitle}`}
+          title={title}
           closeBtnAnchorLink={onClose}
           className={classes.topPanel}
-          showBreadcrumb={!isEdit}
+          showBreadcrumb={mode === 'CREATE'}
         />
       )}
       {state.activeStep === ICreateConnectionSteps.CONNECTOR_SELECTION && (
@@ -270,6 +287,7 @@ export function CreateConnection({
         <CategorizedConnectors
           onActiveCategory={(active) => (activeCategory.current = active)}
           connectorsMap={state.categoriesToConnectorsMap}
+          allConnectorsPluginProperties={state.allConnectorsPluginProperties}
           onConnectorSelection={onConnectorSelection}
         />
       )}
@@ -282,7 +300,7 @@ export function CreateConnection({
           onConnectionCreate={onConnectionCreate}
           onConnectionTest={onConnectionTest}
           initValues={initValues}
-          isEdit={isEdit}
+          mode={mode}
           testResults={{
             succeeded: testSucceeded,
             messages: testResponseMessages,

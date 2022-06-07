@@ -1,4 +1,4 @@
-<!--
+/*
  * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -12,17 +12,10 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
- *
--->
+ */
 
-<left-panel-react
-on-artifact-change="HydratorPlusPlusLeftPanelCtrl.onArtifactChangeV2"
-plugins-map="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
-selected-artifact="HydratorPlusPlusLeftPanelCtrl.selectedArtifact"
-artifacts="HydratorPlusPlusLeftPanelCtrl.artifacts"
-groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
-item-generic-name="plugins"
-group-generic-name="artifacts"
-on-panel-item-click="HydratorPlusPlusLeftPanelCtrl.onV2ItemClicked"
->
-</left-panel-react>
+export enum ConnectionConfigurationMode {
+  CREATE = 'CREATE',
+  EDIT = 'EDIT',
+  VIEW = 'VIEW',
+}

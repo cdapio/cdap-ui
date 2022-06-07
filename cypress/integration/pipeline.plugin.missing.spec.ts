@@ -81,7 +81,7 @@ describe('Creating a pipeline with missing artifacts', () => {
     cy.get(dataCy('plugin-properties-validate-btn')).should('does.not.exist');
     cy.get(`#PDFExtractor ${dataCy('node-badge')}`).click();
     cy.get(dataCy('plugin-properties-validate-btn')).should('does.not.exist');
-    cy.get(dataCy('pipeline-metadata')).click({force: true});
+    cy.get(dataCy('pipeline-metadata')).click();
     cy.get('#pipeline-name-input').should('be.visible');
     cy.get('#pipeline-name-input')
         .clear()
