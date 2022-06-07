@@ -196,3 +196,6 @@ angular
   .directive('topPanelActionButtons', function (reactDirective) {
     return reactDirective(window.CaskCommon.TopPanelActionButtons);
   })
+  .directive('pipelineCanvasActionBtns', function(reactDirective) {
+    return reactDirective(window.CaskCommon.PipelineCanvasActionBtns);
+  })
