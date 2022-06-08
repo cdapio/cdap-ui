@@ -120,7 +120,7 @@ export function ConnectionConfigForm({
 
         <PropertyRow
           widgetProperty={{
-            'widget-type': 'textbox',
+            'widget-type': 'textarea',
             'widget-attributes': {
               placeholder:
                 mode !== ConnectionConfigurationMode.VIEW
