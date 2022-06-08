@@ -319,12 +319,18 @@ export function getSelectedConnectorDisplayName(selectedConnector, mapOfConnecto
   const pluginKey = `${selectedConnector.name}-${selectedConnector.type}`;
   const artifactKey = getArtifactKey(selectedConnector.artifact);
   const parsedwidgetJSONKey = `parsedWidgetJson.${pluginKey}`;
-  const selectedWidgetJSON =
-    mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`][parsedwidgetJSONKey];
 
-  if (selectedWidgetJSON['display-name']) {
-    return selectedWidgetJSON['display-name'];
+  if (
+    mapOfConnectorPluginProperties &&
+    `${pluginKey}-${artifactKey}` in Object.keys(mapOfConnectorPluginProperties)
+  ) {
+    const selectedWidgetJSON =
+      mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`][parsedwidgetJSONKey];
+    if (selectedWidgetJSON['display-name']) {
+      return selectedWidgetJSON['display-name'];
+    }
   }
+
   return selectedConnector.name;
 }
 
