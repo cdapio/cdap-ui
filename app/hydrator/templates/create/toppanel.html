@@ -15,48 +15,6 @@
 -->
 
 <div class="side-panel top text-center">
-  <!-- change to ng-if="true" to get this to render, this is WIP for the overall toppanel react migration -->
-  <top-panel-name-and-description
-    ng-if="false"
-    globals="HydratorPlusPlusTopPanelCtrl.GLOBALS"
-    metadata-expanded="HydratorPlusPlusTopPanelCtrl.metadataExpanded"
-    state="HydratorPlusPlusTopPanelCtrl.state"
-    invalid-name="HydratorPlusPlusTopPanelCtrl.invalidName"
-    parsed-description="HydratorPlusPlusTopPanelCtrl.parsedDescription"
-    save-metadata="HydratorPlusPlusTopPanelCtrl.saveMetadataV2"
-    reset-metadata="HydratorPlusPlusTopPanelCtrl.resetMetadataV2"
-    open-metadata="HydratorPlusPlusTopPanelCtrl.openMetadataV2"
-    ></top-panel-name-and-description>
-  <!-- change to ng-if="true" to get this to render-->
-  <top-panel-action-buttons
-    ng-if="false"
-    preview-mode="HydratorPlusPlusTopPanelCtrl.previewMode"
-    preview-enabled="HydratorPlusPlusTopPanelCtrl.isPreviewEnabled"
-    toggle-preview-mode="HydratorPlusPlusTopPanelCtrl.togglePreviewModeV2"
-    toggle-config="HydratorPlusPlusTopPanelCtrl.toggleConfigV2"
-    view-config="HydratorPlusPlusTopPanelCtrl.viewConfig"
-    show-schedule="HydratorPlusPlusTopPanelCtrl.showSchedule"
-    view-scheduler="HydratorPlusPlusTopPanelCtrl.viewScheduler"
-    toggle-scheduler="HydratorPlusPlusTopPanelCtrl.toggleSchedulerV2"
-    has-nodes="HydratorPlusPlusTopPanelCtrl.hasNodes"
-    on-save-draft="HydratorPlusPlusTopPanelCtrl.onSaveDraftV2"
-    on-publish="HydratorPlusPlusTopPanelCtrl.onPublishV2"
-    on-import="HydratorPlusPlusTopPanelCtrl.onImportV2"
-    on-file-select="HydratorPlusPlusTopPanelCtrl.importFile2"
-    on-export="HydratorPlusPlusTopPanelCtrl.onExportV2"
-    on-click-logs="HydratorPlusPlusTopPanelCtrl.onClickLogs"
-    preview-loading="HydratorPlusPlusTopPanelCtrl.previewLoading"
-    preview-running="HydratorPlusPlusTopPanelCtrl.previewRunning"
-    start-or-stop-preview="HydratorPlusPlusTopPanelCtrl.startOrStopPreviewV2"
-    queue-status="HydratorPlusPlusTopPanelCtrl.queueStatus"
-    display-duration="HydratorPlusPlusTopPanelCtrl.displayDuration"
-    loading-label="HydratorPlusPlusTopPanelCtrl.loadingLabel"
-    current-preview-id="HydratorPlusPlusTopPanelCtrl.currentPreviewId"
-    view-logs="HydratorPlusPlusTopPanelCtrl.viewLogs"
-    timer-label="HydratorPlusPlusTopPanelCtrl.timerLabel"
-    ></top-panel-action-buttons>
-
-  <!-- change to ng-if="false" to get this to hide, this is WIP for the overall toppanel react migration -->
   <div class="hydrator-metadata"
       ng-class="{'expanded': HydratorPlusPlusTopPanelCtrl.metadataExpanded}"
       ng-click="!HydratorPlusPlusTopPanelCtrl.metadataExpanded && HydratorPlusPlusTopPanelCtrl.openMetadata()"
@@ -125,7 +83,6 @@
     </div>
   </div>
   
-  <!-- change to ng-if="false" to get this to hide, this is WIP for the overall toppanel react migration -->
   <div ng-if="true"> 
     <div class="btn-group action-buttons"
         ng-if="!HydratorPlusPlusTopPanelCtrl.previewMode">

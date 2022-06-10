@@ -136,17 +136,13 @@ var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasAction
   .default;
 var Connections = require('../cdap/components/Connections').default;
 var SidePanel = require('../cdap/components/hydrator/components/SidePanel/SidePanel').SidePanel;
-var TopPanelNameAndDescription = require('../cdap/components/hydrator/components/TopPanel/NameAndDescription')
-  .NameAndDescription;
-var TopPanelActionButtons = require('../cdap/components/hydrator/components/TopPanel/ActionButtons')
-  .ActionButtons;
 var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
+var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
 
 export {
+  TopPanelReact,
   PipelineCanvasActionBtns,
-  TopPanelActionButtons,
-  TopPanelNameAndDescription,
   SidePanel,
   Store,
   NameSpaceStoreActions,

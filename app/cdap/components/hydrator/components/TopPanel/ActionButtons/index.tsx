@@ -17,6 +17,7 @@
 import IconSVG from 'components/shared/IconSVG';
 import React from 'react';
 import { objectQuery } from 'services/helpers';
+import { IDuration } from '../TopPanel';
 import {
   ActionButtonsContainer,
   BorderRightButton,
@@ -32,11 +33,6 @@ import {
   PreviewModeButton,
   RunTimeSpan,
 } from './styles';
-
-interface IDuration {
-  minutes: string;
-  seconds: string;
-}
 
 interface IActionButtonsProps {
   previewMode: boolean;

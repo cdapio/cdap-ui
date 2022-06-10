@@ -190,12 +190,10 @@ angular
   .directive('sidePanel', function (reactDirective) {
     return reactDirective(window.CaskCommon.SidePanel);
   })
-  .directive('topPanelNameAndDescription', function (reactDirective) {
-    return reactDirective(window.CaskCommon.TopPanelNameAndDescription);
-  })
-  .directive('topPanelActionButtons', function (reactDirective) {
-    return reactDirective(window.CaskCommon.TopPanelActionButtons);
+  .directive('topPanelReact', function(reactDirective) {
+    return reactDirective(window.CaskCommon.TopPanelReact);
   })
   .directive('pipelineCanvasActionBtns', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineCanvasActionBtns);
   })
+  

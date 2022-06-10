@@ -313,7 +313,11 @@ angular.module(PKG.name + '.feature.hydrator')
             'toppanel@hydrator.create': {
               templateUrl: '/assets/features/hydrator/templates/create/toppanel.html',
               controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
-            }
+            },
+            'reacttoppanel@hydrator.create': {
+              templateUrl: '/assets/features/hydrator/templates/create/reacttoppanel.html',
+              controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
+            },
           },
           onExit: function($uibModalStack) {
             $uibModalStack.dismissAll();
