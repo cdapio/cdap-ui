@@ -16,7 +16,7 @@
 
 <!-- Control Buttons -->
 <!-- change to ng-if="false" to get this to hide, this is WIP for the overall DAG react migration -->
-<div ng-if="true" class="btn-group-vertical btn-group-sm zoom-control">
+<div ng-if="false" class="btn-group-vertical btn-group-sm zoom-control">
   <button class="btn btn-default"
           data-cy="pipeline-zoom-in-control"
           data-testid="pipeline-zoom-in-control"
@@ -117,7 +117,7 @@
 
 <!-- change to ng-if="true" to get this to render-->
 <pipeline-canvas-action-btns
-  ng-if="false"
+  ng-if="true"
   set-pipeline-comments="DAGPlusPlusCtrl.setPipelineComments"
   pipeline-comments="DAGPlusPlusCtrl.pipelineComments"
   is-disabled="DAGPlusPlusCtrl.isDisabled"

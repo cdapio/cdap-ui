@@ -29,29 +29,7 @@ import {
   StyledIconSVG,
 } from './styles';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
-
-interface IGlobalObj {
-  etlRealtime?: string;
-  etlDataStreams?: string;
-  etlBatchPipelines?: string[];
-}
-
-interface IMetadata {
-  description: string;
-  name: string;
-}
-
-interface IArtifact {
-  name: string;
-  scope: string;
-  version: string;
-}
-
-interface INameState {
-  metadata?: IMetadata;
-  artifact?: IArtifact;
-  viewSettings?: boolean;
-}
+import { IGlobalObj, INameState } from '../TopPanel';
 
 interface INameAndDescriptionProps {
   metadataExpanded?: boolean;

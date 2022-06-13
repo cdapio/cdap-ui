@@ -20,7 +20,8 @@
     <div ui-view="leftpanel" class="left-panel"></div>
   </div>
 
-  <div ui-view="toppanel" class="top-panel"></div>
+  <div ui-view="toppanel" class="top-panel" ng-if="false"></div>
+  <div ui-view="reacttoppanel" class="top-panel" ng-if="true"></div>
   <div class="right-wrapper">
     <div ui-view="canvas" class="canvas"></div>
   </div>

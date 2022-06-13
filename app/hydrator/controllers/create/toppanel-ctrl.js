@@ -96,6 +96,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.togglePreviewModeV2 = this.togglePreviewModeV2.bind(this);
     this.toggleConfigV2 = this.toggleConfigV2.bind(this);
     this.toggleSchedulerV2 = this.toggleSchedulerV2.bind(this);
+    this.closeScheduler = this.closeScheduler.bind(this);
     this.onSaveDraftV2 = this.onSaveDraftV2.bind(this);
     this.onPublishV2 = this.onPublishV2.bind(this);
     this.onImportV2 = this.onImportV2.bind(this);
@@ -114,6 +115,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.validatePluginProperties = this.validatePluginProperties.bind(this);
     this.getRuntimeArgumentsV2 = this.getRuntimeArgumentsV2.bind(this)
     this.getStoreConfig = this.getStoreConfig.bind(this)
+    this.getScheduleInfo = this.getScheduleInfo.bind(this);
 
     this.setState();
     this.setActiveNodes();
@@ -282,6 +284,12 @@ class HydratorPlusPlusTopPanelCtrl {
 
   getPostActions() {
     return this.HydratorPlusPlusConfigStore.getPostActions();
+  }
+
+  getScheduleInfo() {
+    const schedule = this.HydratorPlusPlusConfigStore.getSchedule();
+    const maxConcurrentRuns = this.HydratorPlusPlusConfigStore.getMaxConcurrentRuns();
+    return {schedule, maxConcurrentRuns};
   }
 
   applyAndRunPipeline() {
@@ -1068,6 +1076,10 @@ class HydratorPlusPlusTopPanelCtrl {
 
   setRuntimeArguments(runtimeArguments) {
     this.runtimeArguments = runtimeArguments;
+  }
+  
+  closeScheduler(){
+    this.viewScheduler = false;
   }
 
   applyRuntimeArguments() {

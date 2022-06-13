@@ -73,8 +73,6 @@ interface IActionButtonsProps {
   applyBatchConfig: (...args) => void;
   applyRealtimeConfig: (...args) => void;
   actionCreator: any;
-  isDeployed: boolean;
-  showPreviewConfig: boolean;
   getPostActions: () => any[];
   validatePluginProperties: (action: any, errorCb: any) => void;
   getRuntimeArgs: () => any;
@@ -112,8 +110,6 @@ export const ActionButtons = ({
   applyBatchConfig,
   applyRealtimeConfig,
   actionCreator,
-  isDeployed,
-  showPreviewConfig,
   getPostActions,
   validatePluginProperties,
   getRuntimeArgs,
@@ -356,8 +352,8 @@ export const ActionButtons = ({
         applyBatchConfig={applyBatchConfig}
         applyRealtimeConfig={applyRealtimeConfig}
         actionCreator={actionCreator}
-        isDeployed={isDeployed}
-        showPreviewConfig={showPreviewConfig}
+        isDeployed={false}
+        showPreviewConfig={previewMode}
         getPostActions={getPostActions}
         anchorEl={configureButtonAnchorSelector}
         validatePluginProperties={validatePluginProperties}

@@ -25,6 +25,7 @@ const previewActive = colors.grey051;
 const greyBorder = colors.grey03;
 const stopRed = colors.red03;
 const playGreen = colors.green06;
+const toolTipBackground = colors.blue07;
 
 export const ActionButtonsContainer = styled.div`
   display: inline-block;
@@ -63,6 +64,10 @@ export const CustomTooltip = withStyles(() => {
   return {
     tooltip: {
       fontSize: '13px',
+      backgroundColor: toolTipBackground,
+    },
+    arrow: {
+      color: toolTipBackground,
     },
   };
 })(Tooltip);
