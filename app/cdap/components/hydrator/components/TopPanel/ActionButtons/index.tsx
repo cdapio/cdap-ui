@@ -15,7 +15,7 @@
  */
 
 import IconSVG from 'components/shared/IconSVG';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { objectQuery } from 'services/helpers';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
@@ -133,7 +133,9 @@ export const ActionButtons = ({
     }
   };
 
-  const configureButtonRef = useRef(null);
+  const configureButtonAnchorSelector = previewMode
+    ? 'preview-config-btn'
+    : 'pipeline-configure-modeless-btn';
 
   useEffect(() => {
     if (typeof getStoreConfig === 'function') {
@@ -161,13 +163,12 @@ export const ActionButtons = ({
               active={viewConfig}
               disabled={previewLoading || previewRunning}
               onClick={!previewLoading && !previewRunning && toggleConfig}
+              id="preview-config-btn"
               data-cy="preview-config-btn"
             >
               <div>
                 <IconSliders name="icon-sliders"></IconSliders>
-                <span ref={configureButtonRef}>
-                  <ButtonLabel>Configure</ButtonLabel>
-                </span>
+                <ButtonLabel>Configure</ButtonLabel>
               </div>
             </CommonButton>
             {!previewLoading &&
@@ -242,13 +243,12 @@ export const ActionButtons = ({
             <CommonButton
               active={viewConfig}
               onClick={toggleConfig}
+              id="pipeline-configure-modeless-btn"
               data-cy="pipeline-configure-modeless-btn"
             >
               <div>
                 <IconSliders name="icon-sliders"></IconSliders>
-                <span ref={configureButtonRef}>
-                  <ButtonLabel>Configure</ButtonLabel>
-                </span>
+                <ButtonLabel>Configure</ButtonLabel>
               </div>
             </CommonButton>
             {showSchedule && (
@@ -359,7 +359,7 @@ export const ActionButtons = ({
         isDeployed={isDeployed}
         showPreviewConfig={showPreviewConfig}
         getPostActions={getPostActions}
-        anchorEl={configureButtonRef.current}
+        anchorEl={configureButtonAnchorSelector}
         validatePluginProperties={validatePluginProperties}
         getRuntimeArgs={getRuntimeArgs}
       ></PipelineConfigure>
