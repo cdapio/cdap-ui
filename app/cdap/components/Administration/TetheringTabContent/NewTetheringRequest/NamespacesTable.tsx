@@ -75,6 +75,7 @@ const NameSpacesTable = ({
       <GridRow columnTemplate={TETHERED_NS_COLUMN_TEMPLATE} border={!isLast} key={idx}>
         <GridCell>
           <StyledCheckbox
+            data-testid="tethering-ns-chk-box"
             checked={selectedNamespaces.includes(namespace)}
             color="primary"
             value={namespace}
