@@ -21,7 +21,7 @@ import { IConnection, ITableData } from '../types';
 import { trimMemoryLimit } from '../utils';
 import { getIconForStatus, renderAllocationsHeader, getTransformedTableData } from './utils';
 
-const COLUMN_TEMPLATE = '50px 200px 2fr 1.5fr 1.5fr 200px 1.5fr 140px 140px 225px';
+const COLUMN_TEMPLATE = '50px 200px 2fr 2fr 2fr 2fr 170px 2fr 140px 140px 20px';
 
 interface ITetheringTableProps {
   tableData: IConnection[];
@@ -36,7 +36,11 @@ const renderTableHeader = (showAllocationHeader: boolean) => (
     <GridHeader>
       <GridRow columnTemplate={COLUMN_TEMPLATE}>
         {CONNECTIONS_TABLE_HEADERS.map((header, i) => {
-          return <GridCell key={i}>{header.label}</GridCell>;
+          return (
+            <GridCell key={i} title={header.label}>
+              {header.label}
+            </GridCell>
+          );
         })}
       </GridRow>
     </GridHeader>
@@ -100,6 +104,7 @@ const TetheringTable = ({
       gcloudProject,
       description,
       instanceName,
+      instanceUrl,
       region,
       highlighted,
     } = conn;
@@ -123,6 +128,7 @@ const TetheringTable = ({
           <GridCell title={description}>{isFirst ? description : ''}</GridCell>
           <GridCell title={gcloudProject}>{isFirst ? gcloudProject : ''}</GridCell>
           <GridCell title={instanceName}>{isFirst ? instanceName : ''}</GridCell>
+          <GridCell title={instanceUrl}>{isFirst ? instanceUrl : ''}</GridCell>
           <GridCell>{isFirst ? region : ''}</GridCell>
           <GridCell title={namespace} border={!isLast}>
             {namespace}
