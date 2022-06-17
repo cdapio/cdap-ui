@@ -78,7 +78,7 @@ export const WizardNav = (props: IWizardNavProps) => {
   function pluginFetch(action) {
     if (action) {
       const { name, version, scope } = action.plugin.artifact;
-      const params = {
+      const pluginParams = {
         namespace: getCurrentNamespace(),
         artifactId: name,
         version,
@@ -87,7 +87,7 @@ export const WizardNav = (props: IWizardNavProps) => {
         pluginName: action.plugin.name,
       };
 
-      MyArtifactApi.fetchPluginDetails(params).subscribe((res) => {
+      MyArtifactApi.fetchPluginDetails(pluginParams).subscribe((res) => {
         action._backendProperties = res[0].properties;
         fetchWidgets(action);
       });
@@ -117,6 +117,7 @@ export const WizardNav = (props: IWizardNavProps) => {
         });
         props.setAction(action);
       } catch (e) {
+        // tslint:disable-next-line: no-console
         console.log(`Cannot parse widget JSON for ${action.plugin.name}`, e);
       }
     });
@@ -181,6 +182,7 @@ export const WizardNav = (props: IWizardNavProps) => {
           setPostActionsList(filterPlugins(res));
         },
         error: (err) => {
+          // tslint:disable-next-line: no-console
           console.log('ERROR: ', err);
         },
       });

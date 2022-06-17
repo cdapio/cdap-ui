@@ -130,6 +130,7 @@ export default class PostRunActionsWizard extends Component<IPostRunActionsWizar
           };
         });
       } catch (e) {
+        // tslint:disable-next-line: no-console
         console.log(`Cannot parse widget JSON for ${action.plugin.name}`, e);
       }
     });
