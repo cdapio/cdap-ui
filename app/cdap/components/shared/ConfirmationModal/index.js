@@ -89,6 +89,7 @@ export default class ConfirmationModal extends Component {
           className="btn btn-primary disabled-btn"
           disabled
           data-cy={this.props.confirmButtonText}
+          data-testid={this.props.confirmButtonText}
         >
           {this.props.confirmButtonText}
         </button>
@@ -99,6 +100,7 @@ export default class ConfirmationModal extends Component {
           className="btn btn-primary"
           onClick={this.props.confirmFn}
           data-cy={this.props.confirmButtonText}
+          data-testid={this.props.confirmButtonText}
         >
           {this.props.confirmButtonText}
         </button>
@@ -112,7 +114,11 @@ export default class ConfirmationModal extends Component {
         <ModalFooter>
           <div className="confirmation-button-options">
             {actionBtn}
-            <button className="btn btn-secondary" onClick={this.props.cancelFn}>
+            <button
+              className="btn btn-secondary"
+              onClick={this.props.cancelFn}
+              data-testid={this.props.cancelButtonText}
+            >
               {this.props.cancelButtonText}
             </button>
           </div>

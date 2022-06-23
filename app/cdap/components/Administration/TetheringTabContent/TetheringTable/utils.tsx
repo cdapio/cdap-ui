@@ -76,6 +76,7 @@ export const getTransformedTableData = (tableData: IConnection[]) => {
         minute: 'numeric',
       }),
       instanceName: conn.name,
+      instanceUrl: conn.endpoint,
       status: conn.connectionStatus,
       description,
       gcloudProject,

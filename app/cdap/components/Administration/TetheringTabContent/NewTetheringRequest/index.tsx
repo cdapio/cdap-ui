@@ -108,7 +108,7 @@ const NewTetheringRequest = () => {
       : T.translate(`${I18NPREFIX}.success`);
     const type = hasError ? 'error' : 'success';
     return (
-      <StyledAlert severity={type} onClose={() => reset(dispatch, hasError)}>
+      <StyledAlert data-testid={type} severity={type} onClose={() => reset(dispatch, hasError)}>
         {message}
       </StyledAlert>
     );
@@ -137,10 +137,10 @@ const NewTetheringRequest = () => {
         />
         {showAlert && renderAlert()}
         <ButtonsContainer>
-          <StyledButton onClick={handleSend}>
+          <StyledButton data-testid="tethering-req-accept-btn" onClick={handleSend}>
             {T.translate(`${I18NPREFIX}.sendButton`)}
           </StyledButton>
-          <StyledButton onClick={handleCancel}>
+          <StyledButton data-testid="tethering-req-reject-btn" onClick={handleCancel}>
             {T.translate(`${I18NPREFIX}.cancelButton`)}
           </StyledButton>
         </ButtonsContainer>

@@ -53,7 +53,7 @@ const Textbox = ({
         errors={errors}
         onChange={handleChange}
       />
-      {hasErrors && <ErrorText>{errors[0].msg}</ErrorText>}
+      {hasErrors && <ErrorText data-testid="missing-required-field">{errors[0].msg}</ErrorText>}
     </WidgetContainer>
   );
 };
