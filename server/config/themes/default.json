@@ -52,7 +52,7 @@
     "reload-system-artifacts": true,
     "cdc": true,
     "allow-force-dynamic-execution": false,
-    "tethering": false,
-    "on-prem-tethered-instance": false
+    "tethering": true,
+    "on-prem-tethered-instance": true
   }
 }
