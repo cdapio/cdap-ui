@@ -26,3 +26,4 @@ cypress/screenshots
 cypress/snapshots/actual/
 cypress/snapshots/diff/
 sandboxjs/node_modules/
+.idea/
