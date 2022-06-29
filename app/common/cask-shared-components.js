@@ -16,6 +16,8 @@
 
 import T from 'i18n-react';
 T.setTexts(require('../cdap/text/text-en.yaml'));
+// calling react from the below component
+require('../cdap/components/hydrator/react-loader');
 var Store = require('../cdap/services/NamespaceStore').default;
 var validateNamespace = require('../cdap/services/NamespaceStore').validateNamespace;
 var NameSpaceStoreActions = require('../cdap/services/NamespaceStore/NamespaceActions').default;

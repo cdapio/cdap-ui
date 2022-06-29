@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,16 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { configureStore } from '@reduxjs/toolkit';
+import reduxThunk from 'redux-thunk';
+import { pluginReducer, extensionsReducer } from './leftPanelStore';
 
-declare global {
-  /* tslint:disable:interface-name */
-  interface Window {
-    getHydratorUrl: ({}) => string;
-    angular;
-    ReactStores;
-    Cypress;
-    ace;
-  }
-}
-
-export {};
+export const configureStores = configureStore({
+  reducer: {
+    extensions: extensionsReducer,
+    plugins: pluginReducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(reduxThunk),
+  devTools: true,
+});

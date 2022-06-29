@@ -195,4 +195,4 @@ angular
   })
   .directive('topPanelActionButtons', function (reactDirective) {
     return reactDirective(window.CaskCommon.TopPanelActionButtons);
-  })
+  });

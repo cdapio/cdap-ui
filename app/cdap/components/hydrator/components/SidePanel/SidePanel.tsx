@@ -137,14 +137,18 @@ export const SidePanel = ({
     AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
       const all = AvailablePluginsStore.getState();
       if (all.plugins) {
-        const newPluginGroups = [...pluginGroups];
-        newPluginGroups.forEach((group) => {
-          group.plugins.forEach((plugin) => {
+        // treat plugin group plugins as immutable
+        const newPluginGroups = pluginGroups.map((group) => {
+          const newGroup = { ...group, plugins: [] };
+          newGroup.plugins = group.plugins.map((plugin) => {
+            const newPlugin = { ...plugin };
             // add the display name and show custom icon to the plugins
-            plugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
-            plugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
-            plugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            newPlugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
+            newPlugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
+            newPlugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            return newPlugin;
           });
+          return newGroup;
         });
 
         setPluginGroups(newPluginGroups);

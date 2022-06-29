@@ -15,7 +15,7 @@
  */
 
 class HydratorPlusPlusLeftPanelCtrl {
-  constructor($scope, $stateParams, rVersion, HydratorPlusPlusConfigStore, HydratorPlusPlusLeftPanelStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, rArtifacts, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS) {
+  constructor($rootScope, HydratorPlusPlusLeftPanelStore, $scope, $stateParams, rVersion, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, rArtifacts, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS) {
     this.$state = $state;
     this.$scope = $scope;
     this.$stateParams = $stateParams;
@@ -25,7 +25,14 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
     this.PluginTemplatesDirActions = PluginTemplatesDirActions;
     this.rVersion = rVersion;
-    this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
+    this.useRootScopeStore = false;
+    if ($rootScope.stores) {
+      this.leftpanelStore = $rootScope.stores;
+      this.useRootScopeStore = true;
+    } else {
+      this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
+    }
+
     this.myAlertOnValium = myAlertOnValium;
     this.$q = $q;
     this.HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFactory;
@@ -36,7 +43,6 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.PipelineAvailablePluginsActions = PipelineAvailablePluginsActions;
     this.AvailablePluginsStore = AvailablePluginsStore;
     this.AVAILABLE_PLUGINS_ACTIONS = AVAILABLE_PLUGINS_ACTIONS;
-
 
     this.pluginsMap = [];
     this.sourcesToVersionMap = {};
@@ -50,7 +56,6 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
     this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
     this.onArtifactChangeV2 = this.onArtifactChangeV2.bind(this);
-
     this.init();
 
     var sub = this.leftpanelStore.subscribe( () => {
@@ -84,7 +89,6 @@ class HydratorPlusPlusLeftPanelCtrl {
           fetchedPluginsMap[0].pluginTypes.push(ext);
         }
       });
-
       this.pluginsMap = this.HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
     });
 
@@ -141,10 +145,14 @@ class HydratorPlusPlusLeftPanelCtrl {
         scope: this.$scope
       }
     );
-
-    this.leftpanelStore.dispatch(
-      this.leftpanelActions.fetchDefaultVersion()
-    );
+    
+    if (this.useRootScopeStore) {
+      this.leftpanelActions.fetchDefaultVersion();
+    } else {
+      this.leftpanelStore.dispatch(
+        this.leftpanelActions.fetchDefaultVersion()
+      );
+    }
   }
 
   leftPanelStoreFetchExtension() {
@@ -319,6 +327,7 @@ class HydratorPlusPlusLeftPanelCtrl {
         });
       });
   }
+
   addPluginToCanvas(event, node) {
     const getMatchedPlugin = (plugin) => {
       if (plugin.pluginTemplate) {
