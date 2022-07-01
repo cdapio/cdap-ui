@@ -296,14 +296,42 @@ function getArtifactKey(artifact) {
   return `${artifact.name}-${artifact.version}-${artifact.scope}`;
 }
 
-function getMapOfConnectorToPluginProperties(allConnectors) {
+export function getMapOfConnectorToPluginProperties(allConnectors) {
   const mapOfConnectorPluginProperties = {};
   for (const connectorProps of allConnectors) {
     const pluginKey = getPluginKey(connectorProps.properties);
+    const widgetJSONKey = `widgets.${pluginKey}`;
+    const parsedWidgetJson = JSON.parse(connectorProps.properties[widgetJSONKey]);
     const artifactKey = getArtifactKey(connectorProps);
-    mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`] = connectorProps.properties;
+    const parsedWidgetJsonKey = `parsedWidgetJson.${pluginKey}`;
+    mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`] = {
+      ...connectorProps.properties,
+      [parsedWidgetJsonKey]: parsedWidgetJson,
+    };
   }
   return mapOfConnectorPluginProperties;
+}
+
+export function getSelectedConnectorDisplayName(selectedConnector, mapOfConnectorPluginProperties) {
+  if (!selectedConnector) {
+    return;
+  }
+  const pluginKey = `${selectedConnector.name}-${selectedConnector.type}`;
+  const artifactKey = getArtifactKey(selectedConnector.artifact);
+  const parsedwidgetJSONKey = `parsedWidgetJson.${pluginKey}`;
+
+  if (
+    mapOfConnectorPluginProperties &&
+    `${pluginKey}-${artifactKey}` in mapOfConnectorPluginProperties
+  ) {
+    const selectedWidgetJSON =
+      mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`][parsedwidgetJSONKey];
+    if (selectedWidgetJSON['display-name']) {
+      return selectedWidgetJSON['display-name'];
+    }
+  }
+
+  return selectedConnector.name;
 }
 
 export async function initStore(
