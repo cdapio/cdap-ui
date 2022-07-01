@@ -31,6 +31,7 @@ function RemoveRowButtonBase({ classes, onRemove, ...rest }) {
     <IconWrapper
       onClick={onRemove}
       data-cy="schema-field-remove-button"
+      data-testid="schema-field-remove-button"
       disabled={typeof onRemove !== 'function'}
     >
       <DeleteIcon

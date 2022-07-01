@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import 'jsplumb';
 import T from 'i18n-react';
 import uuidV4 from 'uuid/v4';
@@ -53,26 +53,37 @@ const LineageDiagram: React.FC<ILineageDiagramProps> = ({
   const graphInfo = graph.graph();
   graphInfo.width = Math.max(DIAGRAM_WIDTH, graphInfo.width);
   const scaleInfo = getScale(graphInfo);
+  const jsPlumbInstance = useRef<any>();
 
   useEffect(() => {
     jsPlumb.ready(() => {
-      const jsPlumbInstance = jsPlumb.getInstance({
-        Container: DAG_CONTAINER_ID,
-        PaintStyle: {
-          fill: STROKE_COLOR,
-          stroke: STROKE_COLOR,
-          strokeWidth: 2,
-        },
-        Connector: [
-          'Flowchart',
-          { gap: 0, stub: [10, 15], alwaysRespectStubs: true, cornerRadius: 0 },
-        ],
-        ConnectionOverlays: [['Arrow', { location: 1, direction: 1, width: 10, length: 10 }]],
-        Endpoints: ['Blank', 'Blank'],
-      });
-      jsPlumbInstance.setContainer(document.getElementById(DAG_CONTAINER_ID));
+      let currentInstance = jsPlumbInstance.current;
+      if (!currentInstance) {
+        // Only get the JSPlumb instance when initializing so connector state
+        // is preserved on subsequent renderings
+        currentInstance = jsPlumb.getInstance({
+          Container: DAG_CONTAINER_ID,
+          PaintStyle: {
+            fill: STROKE_COLOR,
+            stroke: STROKE_COLOR,
+            strokeWidth: 2,
+          },
+          Connector: [
+            'Flowchart',
+            { gap: 0, stub: [10, 15], alwaysRespectStubs: true, cornerRadius: 0 },
+          ],
+          ConnectionOverlays: [['Arrow', { location: 1, direction: 1, width: 10, length: 10 }]],
+          Endpoints: ['Blank', 'Blank'],
+        });
+        currentInstance.setContainer(document.getElementById(DAG_CONTAINER_ID));
+        jsPlumbInstance.current = currentInstance;
+      }
+
+      // Delete previously rendered connections before adding current ones
+      currentInstance.deleteEveryEndpoint();
+
       connections.forEach((connection) => {
-        jsPlumbInstance.connect({
+        currentInstance.connect({
           source: connection.source,
           target: connection.target,
           detachable: false,

@@ -104,6 +104,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
   widgetProps,
   disabled,
   dataCy,
+  dataTestId,
   inputRef,
   placeholder,
   classes,
@@ -142,6 +143,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
       readOnly={disabled}
       inputProps={{
         'data-cy': dataCy,
+        'data-testid': dataTestId,
       }}
       MenuProps={{
         getContentAnchorEl: null,
@@ -158,6 +160,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
       inputRef={inputRef}
       classes={classes}
       data-cy={`select-${dataCy}`}
+      data-testid={`select-${dataTestId}`}
       {...widgetProps}
     >
       {optionValues.map((opt) => {

@@ -18,13 +18,18 @@ function getRandomArbitrary(min = 1, max = 10000) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+export const TEST_TIMEOUT_TIME = 10000;
+export const RETRY_INTERVAL = 2000;
+export const TEST_TIMEOUT_MESSAGE = `Timed out after ${(TEST_TIMEOUT_TIME / 1000)} seconds`;
+
 export const BASE_URL = 'http://localhost:11011'
 export const BASE_SERVER_URL = 'http://localhost:11015'
 export const TETHERING_URL = `${BASE_URL}/cdap/administration/tethering/`
 export const CONFIGURATION_URL = `${BASE_URL}/cdap/administration/configuration`
+export const PIPELINE_STUDIO_URL = `${BASE_URL}/pipelines/ns/default/studio`
 
-// export const DEFAULT_GCP_SERVICEACCOUNT_PATH = constCypress.env('gcp_service_account_path');
-// export const DEFAULT_GCP_PROJECTID = Cypress.env('gcp_projectid');
+export const DEFAULT_GCP_SERVICEACCOUNT_PATH = process.env.GCP_SERVICE_ACCOUNT_PATH;
+export const DEFAULT_GCP_PROJECTID = process.env.GCP_PROJECTID;
 
 export const DEFAULT_GCS_CONNECTION_NAME = `gcs_${getRandomArbitrary()}`;
 // 000 to keep this bucket in the first 1000 entries

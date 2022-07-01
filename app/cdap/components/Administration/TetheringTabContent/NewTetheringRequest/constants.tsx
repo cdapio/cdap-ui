@@ -62,6 +62,7 @@ export const CDF_ITEMS = [
       },
     },
     pluginProperty: {
+      name: `${T.translate(`${I18N_CDF_PREFIX}.ProjectName.name`)}`,
       type: 'string',
       required: true,
     },
@@ -76,6 +77,7 @@ export const CDF_ITEMS = [
       },
     },
     pluginProperty: {
+      name: `${T.translate(`${I18N_CDF_PREFIX}.Region.name`)}`,
       type: 'string',
       required: true,
     },
@@ -90,6 +92,7 @@ export const CDF_ITEMS = [
       },
     },
     pluginProperty: {
+      name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceName.name`)}`,
       type: 'string',
       required: true,
     },
@@ -104,6 +107,7 @@ export const CDF_ITEMS = [
       },
     },
     pluginProperty: {
+      name: `${T.translate(`${I18N_CDF_PREFIX}.InstanceUrl.name`)}`,
       type: 'string',
       required: true,
     },
@@ -119,6 +123,7 @@ export const CDF_ITEMS = [
       },
     },
     pluginProperty: {
+      name: `${T.translate(`${I18N_CDF_PREFIX}.Description.name`)}`,
       type: 'string',
     },
   },

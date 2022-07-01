@@ -25,16 +25,16 @@ let isAuthEnabled = false;
 let authToken = null;
 
 export const buildChromeDriver = () => {
-  const options = new chrome.Options()
+  const options = new chrome.Options();
   
-  options.addArguments('--disable-dev-shm-usage')
-  options.addArguments('--no-sandbox')
-  options.addArguments('--headless')
+  options.addArguments('--disable-dev-shm-usage');
+  options.addArguments('--no-sandbox');
+  options.addArguments('--headless');
 
   return new Builder()
     .forBrowser('chrome')
     .setChromeOptions(options)
-    .build()
+    .build();
 }
 
 export const loginIfRequired = async (driver) => {
@@ -74,4 +74,26 @@ export const loginIfRequired = async (driver) => {
 
 export const dataTestId = (property) => {
   return `[data-testid="${property}"]`;
+}
+
+export const getNodeSelectorFromNodeIndentifier = (node) => {
+  const { nodeName, nodeType, nodeId } = node;
+  return `[data-testid="plugin-node-${nodeName}-${nodeType}-${nodeId}"]`;
+}
+
+export const getArtifactsPoll = (headers, retries = 0) => {
+  if (retries === 3) {
+    return;
+  }
+
+  fetch(`${BASE_SERVER_URL}/v3/namespaces/default/artifacts?scope=SYSTEM`, headers).then((response) => {
+    if (response.status >= 400) {
+      return getArtifactsPoll(headers, retries + 1);
+    }
+    return;
+  });
+}
+
+export const getGenericEndpoint = (options, id) => {
+  return `.plugin-endpoint_${id}-right`;
 }
