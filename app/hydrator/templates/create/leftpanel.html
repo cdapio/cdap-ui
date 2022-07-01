@@ -13,33 +13,30 @@
   License for the specific language governing permissions and limitations under
   the License.
 -->
+<div class="left-top-section">
 
+  <select class="form-control"
+          ng-change="HydratorPlusPlusLeftPanelCtrl.onArtifactChange()"
+          ng-model="HydratorPlusPlusLeftPanelCtrl.selectedArtifact"
+          ng-options="artifact as artifact.label for artifact in HydratorPlusPlusLeftPanelCtrl.artifacts">
+  </select>
+</div>
+<my-side-panel
+  data-panel-groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
 
-  <div class="left-top-section">
+  data-placement="left"
+  data-is-sub-menu="true"
 
-    <select class="form-control"
-            ng-change="HydratorPlusPlusLeftPanelCtrl.onArtifactChange()"
-            ng-model="HydratorPlusPlusLeftPanelCtrl.selectedArtifact"
-            ng-options="artifact as artifact.label for artifact in HydratorPlusPlusLeftPanelCtrl.artifacts">
-    </select>
-  </div>
-  <my-side-panel
-    data-panel-groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
+  data-item-generic-name="plugins"
+  data-group-generic-name="artifacts"
 
-    data-placement="left"
-    data-is-sub-menu="true"
+  data-on-panel-item-click-context="HydratorPlusPlusLeftPanelCtrl"
+  data-on-panel-item-click="HydratorPlusPlusLeftPanelCtrl.onLeftSidePanelItemClicked">
+</my-side-panel>
 
-    data-item-generic-name="plugins"
-    data-group-generic-name="artifacts"
-
-    data-on-panel-item-click-context="HydratorPlusPlusLeftPanelCtrl"
-    data-on-panel-item-click="HydratorPlusPlusLeftPanelCtrl.onLeftSidePanelItemClicked">
-  </my-side-panel>
-
-  <div class="btn btn-default btn-left-panel-toggle btn-sm pull-right" ng-click="HydratorPlusPlusStudioCtrl.toggleSidebar();">
-    <span
-      ng-class="{'fa-angle-double-left': HydratorPlusPlusStudioCtrl.isExpanded === true, 'fa-angle-double-right': HydratorPlusPlusStudioCtrl.isExpanded === false}"
-      class="fa">
-    </span>
-  </div>
-  
+<div class="btn btn-default btn-left-panel-toggle btn-sm pull-right" ng-click="HydratorPlusPlusStudioCtrl.toggleSidebar();">
+  <span
+    ng-class="{'fa-angle-double-left': HydratorPlusPlusStudioCtrl.isExpanded === true, 'fa-angle-double-right': HydratorPlusPlusStudioCtrl.isExpanded === false}"
+    class="fa">
+  </span>
+</div>
