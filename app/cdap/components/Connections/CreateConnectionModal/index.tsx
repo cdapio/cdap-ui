@@ -18,6 +18,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { CreateConnection } from 'components/Connections/Create';
+import { ConnectionConfigurationMode } from 'components/Connections/types';
 import { createPortal } from 'react-dom';
 
 const useStyle = makeStyles((theme) => {
@@ -40,7 +41,7 @@ export default function CreateConnectionModal({
   onToggle,
   initialConfig = null,
   onCreate,
-  isEdit = false,
+  mode = ConnectionConfigurationMode.CREATE,
 }) {
   const classes = useStyle();
 
@@ -67,7 +68,7 @@ export default function CreateConnectionModal({
           onToggle={onToggle}
           initialConfig={initialConfig}
           onCreate={onCreate}
-          isEdit={isEdit}
+          mode={mode}
           enableRouting={false}
         />
       )}
