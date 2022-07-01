@@ -426,7 +426,6 @@ class HydratorPlusPlusTopPanelCtrl {
     event.preventDefault();
     event.stopPropagation();
   }
-
   /**
    * This is a copy of saveMetadata
    * with the scope bound to the function -- copied
@@ -552,6 +551,15 @@ class HydratorPlusPlusTopPanelCtrl {
       this.HydratorPlusPlusConfigStore.getDraftId()
     );
     this.$window.localStorage.setItem("LastPreviewId", this.currentPreviewId);
+  }
+  onClickLogs() {
+    this.viewLogs = !this.viewLogs;
+  }
+  onSaveDraftV2() {
+    this.HydratorPlusPlusConfigActions.saveAsDraft();
+    this.checkNameError();
+    this.$window.localStorage.setItem('LastDraftId', this.HydratorPlusPlusConfigStore.getDraftId());
+    this.$window.localStorage.setItem('LastPreviewId', this.currentPreviewId);
   }
   onClickLogs() {
     this.viewLogs = !this.viewLogs;
@@ -1032,6 +1040,13 @@ class HydratorPlusPlusTopPanelCtrl {
 
   toggleConfigV2() {
     this.getRuntimeArguments().then(() => {
+      this.viewConfig = !this.viewConfig;
+    });
+  }
+
+  toggleConfigV2() {
+    this.getRuntimeArguments()
+    .then(() => {
       this.viewConfig = !this.viewConfig;
     });
   }

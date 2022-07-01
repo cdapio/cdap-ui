@@ -44,19 +44,19 @@ const GroupsContainer = styled.div`
   && {
     && {
       && {
-        height: auto;
         overflow-y: scroll;
-        position: absolute;
         padding: 0;
         right: 1px;
+        height: 100%;
+        border: none;
       }
     }
   }
 `;
 
 const ItemBodyWrapper = styled.div`
-  width: 100%;
   background: white;
+  border: none;
 `;
 
 const StyledGroupName = styled(Typography)`
@@ -68,11 +68,20 @@ const StyledGroupName = styled(Typography)`
 
 const StyledAccordion = styled(Accordion)`
   background: #eeeeee;
+  :before {
+    border: none;
+  }
+
   &.Mui-expanded {
     margin: 0;
     padding: 0;
     overflow-y: scroll;
   }
+`;
+
+const StyledAccordionDetails = styled(AccordionDetails)`
+  background: #ffffff;
+  background-clip: content-box;
 `;
 
 const StyledAccordionSummary = styled(AccordionSummary)`
@@ -85,6 +94,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
     }
   `}
 `;
+
 const ListOrIconsButton = styled(Button)`
   min-width: 20px;
   padding: 5px;
@@ -116,13 +126,12 @@ export const SidePanel = ({
   const [openedAccordions, setOpenedAccordions] = useState([]);
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
   let AvailablePluginsStoreSubscription;
-
   useEffect(() => {
     // set first group opened
-    if (groups) {
+    if (groups && groups.length) {
       setOpenedAccordions([groups[0].name]);
     }
-  }, []);
+  }, [groups, groups.length]);
 
   useEffect(() => {
     AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
@@ -227,6 +236,10 @@ export const SidePanel = ({
   };
 
   const renderAccGroups = () => {
+    if (!groups || groups.length === 0) {
+      return null;
+    }
+
     return pluginGroups.map((group, i) => {
       const plugins = filterPlugins(searchText, group.plugins);
       // open accordion if the user searches for a plugin and a plugin
@@ -251,7 +264,7 @@ export const SidePanel = ({
             <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
-          <AccordionDetails className="item">
+          <StyledAccordionDetails className="item">
             <ItemBodyWrapper className="item-body-wrapper">
               <div
                 className={`item-body ${sidePanelViewType === 'icon' ? 'view-icon' : 'view-list'}`}
@@ -260,12 +273,12 @@ export const SidePanel = ({
                 {renderPlugins(plugins)}
                 {plugins.length === 0 && (
                   <div className="no-item-message">
-                    <h4>No {itemGenericName} found.</h4>
+                    <h4>No {itemGenericName === '' ? itemGenericName : 'items'} found.</h4>
                   </div>
                 )}
               </div>
             </ItemBodyWrapper>
-          </AccordionDetails>
+          </StyledAccordionDetails>
         </StyledAccordion>
       );
     });

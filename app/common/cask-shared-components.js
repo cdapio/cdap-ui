@@ -135,7 +135,8 @@ var Comment = require('../cdap/components/AbstractWidget/Comment').default;
 var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
 var Connections = require('../cdap/components/Connections').default;
-var SidePanel = require('../cdap/components/hydrator/components/SidePanel/SidePanel').SidePanel;
+var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/LeftPanel')
+  .LeftPanel;
 var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
 var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
@@ -143,7 +144,7 @@ var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/Top
 export {
   TopPanelReact,
   PipelineCanvasActionBtns,
-  SidePanel,
+  LeftPanelReact,
   Store,
   NameSpaceStoreActions,
   DataPrepHome,

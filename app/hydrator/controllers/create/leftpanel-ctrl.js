@@ -49,6 +49,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.artifactToRevert = this.selectedArtifact;
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
     this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
+    this.onArtifactChangeV2 = this.onArtifactChangeV2.bind(this);
 
     this.init();
 
@@ -154,6 +155,25 @@ class HydratorPlusPlusLeftPanelCtrl {
   }
 
   onArtifactChange() {
+    this._checkAndShowConfirmationModalOnDirtyState()
+      .then(proceedToNextStep => {
+        if (!proceedToNextStep) {
+          this.selectedArtifact = this.artifactToRevert;
+        } else {
+          this.HydratorPlusPlusConfigStore.setState(this.HydratorPlusPlusConfigStore.getDefaults());
+          this.$state.go('hydrator.create', {
+            namespace: this.$state.params.namespace,
+            artifactType: this.selectedArtifact.name,
+            data: null,
+          }, {reload: true, inherit: false});
+        }
+      });
+  }
+
+  onArtifactChangeV2(newArtifact) {
+    this.selectedArtifact = this.artifacts.find((art) => {
+      return art.name === newArtifact;
+    });
     this._checkAndShowConfirmationModalOnDirtyState()
       .then(proceedToNextStep => {
         if (!proceedToNextStep) {

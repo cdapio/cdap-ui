@@ -310,6 +310,10 @@ angular.module(PKG.name + '.feature.hydrator')
               templateUrl: '/assets/features/hydrator/templates/create/leftpanel.html',
               controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
             },
+            'reactleftpanel@hydrator.create': {
+              templateUrl: '/assets/features/hydrator/templates/create/reactleftpanel.html',
+              controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
+            },
             'toppanel@hydrator.create': {
               templateUrl: '/assets/features/hydrator/templates/create/toppanel.html',
               controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
