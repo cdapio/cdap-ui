@@ -71,7 +71,7 @@ describe('Creating pipeline with macros ', () => {
     });
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     );
     cy.wait(10000);
     cy.get(dataCy('pipeline-preview-btn')).click();
@@ -233,7 +233,7 @@ describe('Deploying pipeline with temporary runtime arguments', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
     });
@@ -335,7 +335,7 @@ describe('Deploying pipeline with saved runtime arguments', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
     });

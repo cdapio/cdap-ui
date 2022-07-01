@@ -102,7 +102,7 @@ function deployAndTestPipeline(filename, pipelineName, done = () => ({})) {
   cy.get('#resource-center-btn').click();
   cy.get('#create-pipeline-link').click();
   cy.url().should('include', '/studio');
-  cy.upload_pipeline(filename, '#pipeline-import-config-link > input[type="file"]');
+  cy.upload_pipeline(filename, '#pipeline-import-config-link');
   // This is arbitrary. Right now we don't have a way to determine
   // if the upgrade check is done. Since this a standalone the assumption
   // is this won't take more than 10 seconds.

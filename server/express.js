@@ -291,6 +291,42 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       .pipe(res);
   });
 
+  /**
+   * This is used to send GET requests to the market endpoint to,
+   * for example, show the plugins available on the Hub.
+   *
+   * Query parameters:
+   *   source: Link to the market resource to retrieve
+  */
+  app.get('/market', function(req, res) {
+    const sourceLink = req.query['source'];
+
+    log.debug('[REQUEST]: (method: ' + req.method + ', url: ' + sourceLink + ')');
+
+    // early out if market place url is invalid. The server won't attempt to request the specified url.
+    if (!isVerifiedMarketHost(cdapConfig, sourceLink)) {
+      const errorMsg = 'invalid market request';
+      log.error('[ERROR]: (url: ' + sourceLink + ') ' + errorMsg);
+      return res.status(403).send(errorMsg);
+    }
+
+    request({
+      method: 'GET',
+      url: sourceLink,
+      agent: false,
+    }, function(err, marketResponse) {
+      if (err) {
+        log.error('[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err);
+        res.status(marketResponse && marketResponse.statusCode || 502).send(err);
+      } else {
+        res.status(marketResponse.statusCode).send(marketResponse.body);
+      }
+    }).on('error', function(err) {
+      log.error('[ERROR] Market request had error: (url: ' + sourceLink + ') ' + err.message);
+      res.status(502).send(err.message);
+    });
+  });
+
   app.get('/downloadLogs', function(req, res) {
     var url = constructUrl(cdapConfig, decodeURIComponent(req.query.backendPath));
     var method = req.query.method || 'GET';

@@ -81,7 +81,7 @@ describe('Pipeline multi-select nodes + context menu for plugins & canvas', () =
             width: toWidth,
             height: toHeight,
           } = toNodeElement[0].getBoundingClientRect();
-          cy.get('[data-cy="pipeline-move-mdoe-action-btn"]').click();
+          cy.get('[data-cy="pipeline-move-mode-action-btn"]').click();
           cy.get('#dag-container').trigger('mousedown', {
             which: 1,
             clientX: fromX - 10,
@@ -95,7 +95,7 @@ describe('Pipeline multi-select nodes + context menu for plugins & canvas', () =
             })
             .trigger('mouseup', { force: true });
           cy.get('.box.selected').should('have.length', 0);
-          cy.get('[data-cy="pipeline-move-mdoe-action-btn"]').click();
+          cy.get('[data-cy="pipeline-move-mode-action-btn"]').click();
         });
       });
     });

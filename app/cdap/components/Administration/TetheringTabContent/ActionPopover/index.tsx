@@ -75,6 +75,7 @@ interface IActionsPopoverProps {
   confirmationText: React.ReactNode;
   onEditClick: () => void;
   onDeleteClick: () => void;
+  dataTestIds: { [key: string]: string };
 }
 
 const ActionsPopover = ({
@@ -83,6 +84,7 @@ const ActionsPopover = ({
   confirmationText,
   onDeleteClick,
   onEditClick,
+  dataTestIds,
 }: IActionsPopoverProps) => {
   const [modalOpen, setModalOpen] = useState(false);
   const canEdit = false; // TODO: should update when edit functionality is enabled
@@ -110,13 +112,13 @@ const ActionsPopover = ({
         <ul>
           {canEdit && (
             <>
-              <ListItem disabled={!canEdit} onClick={onEditClick}>
+              <ListItem disabled={!canEdit} onClick={onEditClick} data-testid={dataTestIds.edit}>
                 {T.translate(`${PREFIX}.Actions.edit`)}
               </ListItem>
               <hr />
             </>
           )}
-          <ListItem red={true} onClick={toggleModalOpen}>
+          <ListItem red={true} onClick={toggleModalOpen} data-testid={dataTestIds.delete}>
             {T.translate(`${PREFIX}.Actions.delete`)}
           </ListItem>
         </ul>

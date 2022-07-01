@@ -142,6 +142,7 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       data-cy="widget-wrapper-container"
+      data-testid="widget-wrapper-container"
     >
       {!hideWrapper && !hideLabel && (
         <div className={`widget-wrapper-label ${classes.label}`}>
@@ -160,6 +161,7 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
           disabled={disabled}
           errors={errors}
           dataCy={pluginProperty.name}
+          dataTestId={pluginProperty.name}
         />
       </div>
       {!hideDescription && !hideWrapper && (

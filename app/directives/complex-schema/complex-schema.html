@@ -61,7 +61,8 @@
             lazyload-id="{{$index}}">
           <div class="clearfix"
                ng-class="{'error-row': ComplexSchema.errors[field.name]}"
-               data-cy="schema-row-{{$index}}">
+               data-cy="schema-row-{{$index}}"
+               data-testid="schema-row-{{$index}}">
             <div class="input-column"
                  ng-class="{'tab-header': field.nested}">
               <div class="tab-header-inner">
@@ -69,6 +70,7 @@
                        id="{{ field.id }}"
                        class="form-control"
                        data-cy="{{ field.name }}-schema-field"
+                       data-testid="{{ field.name }}-schema-field"
                        title="{{ field.name }}"
                        ng-model="field.name"
                        ng-blur="ComplexSchema.formatOutput()"
@@ -76,7 +78,8 @@
                        placeholder="Field Name"
                        ng-paste="ComplexSchema.pasteFields($event, $index)"
                        ng-class="{'disabled': ComplexSchema.isDisabled }"
-                       data-cy="schema-row-field-name-input-{{$index}}">
+                       data-cy="schema-row-field-name-input-{{$index}}"
+                       data-testid="schema-row-field-name-input-{{$index}}">
               </div>
             </div>
             <div class="type-column">
@@ -86,7 +89,8 @@
                         title="{{ field.displayType }}"
                         ng-options="option as option for option in ComplexSchema.SCHEMA_TYPES"
                         ng-change="ComplexSchema.changeType(field)"
-                        data-cy="schema-row-type-select-{{$index}}">
+                        data-cy="schema-row-type-select-{{$index}}"
+                        data-testid="schema-row-type-select-{{$index}}">
                 </select>
               </div>
             </div>
@@ -101,18 +105,20 @@
               <div class="actions-buttons text-right" ng-if="!ComplexSchema.isDisabled">
                 <button class="btn btn-link"
                         ng-click="ComplexSchema.removeField($index)"
-                        data-cy="schema-row-remove-button">
+                        data-cy="schema-row-remove-button"
+                        data-testid="schema-row-remove-button">
                   <i class="text-danger fa fa-trash"></i>
                 </button>
                 <button class="btn btn-link"
                         ng-click="ComplexSchema.addField($index)"
-                        data-cy="schema-row-add-button">
+                        data-cy="schema-row-add-button"
+                        data-testid="schema-row-add-button">
                   <i class="fa fa-plus"></i>
                 </button>
               </div>
             </div>
           </div>
-          <span class="error" data-cy="schema-row-error-{{$index}}">
+          <span class="error" data-cy="schema-row-error-{{$index}}" data-testid="schema-row-error-{{$index}}">
             {{ComplexSchema.errors[field.name] }}
           </span>
           <my-embedded-schema-selector

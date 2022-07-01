@@ -20,6 +20,7 @@ import styled from 'styled-components';
 const colors = require('styles/colors.scss');
 const errorRed = colors.red03;
 const blueType = '#397cf1';
+const toolTipBackground = colors.blue07;
 
 export const EllipsisText = styled.div`
   text-overflow: ellipsis;
@@ -44,6 +45,10 @@ export const CustomTooltip = withStyles(() => {
   return {
     tooltip: {
       fontSize: '13px',
+      backgroundColor: toolTipBackground,
+    },
+    arrow: {
+      color: toolTipBackground,
     },
   };
 })(Tooltip);

@@ -2305,9 +2305,10 @@ features:
         1: "{context} runtime argument"
         _: "{context} runtime arguments"
       save: Save
-      saveAndRun: Save and Run
+      saveAndRun: Save & Run
       saveAndSchedule: Save and Schedule
       saving: Saving
+      run: Run
     advancedOptions: Advanced options
     Alerts:
       contentHeading: Set alerts for your batch pipeline
@@ -2349,8 +2350,8 @@ features:
       stageLogging: Stage level logging
       stageLoggingTooltip: Allows logs from each stage in the pipeline to be queried individually. It is recommended to always have this setting on, unless the environment is short on resources.
       title: Pipeline config
-    PreviewConfig:
-      title: Preview config
+      previewTimeoutTooltip: Number of minutes to run Realtime pipeline preview. It can be run for a maximum of 15 mins
+      previewRecordsTooltip: The number of records to be read during the pipeline preview. For MapReduce, this translates to the number of records that are read by each map task
     Resources:
       client: Client
       clientTooltip: Resources for the client process which launches the Apache Spark Streaming pipeline
@@ -2362,6 +2363,14 @@ features:
       executorMapReduceTooltip: Resources for the executor process which initializes the pipeline
       contentHeading: Specify the resources for the following processes of the {engineDisplayLabel} program
       title: Resources
+    RuntimeConfig:
+      title: Runtime arguments
+      contentHeading: Specify runtime arguments or update the ones derived from preferences
+      contentSubHeading: By default, values for all runtime arguments must be provided before running the pipeline.
+          If a stage in your pipeline provides the value of an argument, you can skip that argument
+          by marking it as provided.
+    PreviewConfig:
+      title: Preview config
     title: Configure
     titleHistorical: Run configurations
 

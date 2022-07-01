@@ -90,7 +90,7 @@ describe('Pipeline Drafts tests', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.upload_pipeline(
       'fll_wrangler-test-pipeline.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     );
     cy.wait(10000);
     cy.get('[data-cy="pipeline-metadata"]').click();

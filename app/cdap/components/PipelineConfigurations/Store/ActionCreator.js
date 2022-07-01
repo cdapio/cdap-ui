@@ -78,6 +78,24 @@ const updateRunTimeArgs = (rtArgs) => {
   });
 };
 
+const updatePreviewRecords = (previewRecords) => {
+  PipelineConfigurationsStore.dispatch({
+    type: PipelineConfigurationsActions.SET_NUM_RECORDS_PREVIEW,
+    payload: {
+      numRecordsPreview: previewRecords,
+    },
+  });
+};
+
+const updatePreviewTimeout = (previewTimeout) => {
+  PipelineConfigurationsStore.dispatch({
+    type: PipelineConfigurationsActions.SET_PREVIEW_TIMEOUT,
+    payload: {
+      previewTimeoutInMin: previewTimeout,
+    },
+  });
+};
+
 /*
   FIXME: We should get rid of this function. This is not good. Scenario why this is not good:
 
@@ -421,4 +439,6 @@ export {
   getCustomizationMap,
   fetchAndUpdateRuntimeArgs,
   reset,
+  updatePreviewRecords,
+  updatePreviewTimeout,
 };
