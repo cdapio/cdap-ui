@@ -62,14 +62,8 @@ const TopPanelContainer = styled.div`
   border-left: 0;
   border-top: 0;
   display: flex;
-  position: fixed;
-  left: 290px;
-  max-width: calc(100% - 290px);
   text-align: center !important;
   transition: all 0.2s ease;
-  top: 50px;
-  right: 0;
-  z-index: 999;
 `;
 
 const PipelinePreviewLogs = styled.div`

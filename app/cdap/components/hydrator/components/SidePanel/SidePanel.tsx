@@ -33,7 +33,7 @@ import {
 } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
-import styled, { css } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -108,6 +108,19 @@ const TooltipText = styled.div`
   line-height: 14px;
 `;
 
+// Mui creates tooltips at the bottom of the dom tree
+// so if you wrap the tooltip in a normal styled component
+// the style won't apply to that element - this is a way
+// to just insert regular css onto the page using
+// styled-components
+const GlobalTooltipStyle = createGlobalStyle`
+  .MuiTooltip-popper {
+    .MuiTooltip-tooltip {
+      background-color: black;
+    }
+  }
+`;
+
 interface ISidePanelProps {
   itemGenericName: string;
   groups: any[];
@@ -137,14 +150,18 @@ export const SidePanel = ({
     AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
       const all = AvailablePluginsStore.getState();
       if (all.plugins) {
-        const newPluginGroups = [...pluginGroups];
-        newPluginGroups.forEach((group) => {
-          group.plugins.forEach((plugin) => {
+        // treat plugin group plugins as immutable
+        const newPluginGroups = pluginGroups.map((group) => {
+          const newGroup = { ...group, plugins: [] };
+          newGroup.plugins = group.plugins.map((plugin) => {
+            const newPlugin = { ...plugin };
             // add the display name and show custom icon to the plugins
-            plugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
-            plugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
-            plugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            newPlugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
+            newPlugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
+            newPlugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            return newPlugin;
           });
+          return newGroup;
         });
 
         setPluginGroups(newPluginGroups);
@@ -286,6 +303,7 @@ export const SidePanel = ({
 
   return (
     <div className="side-panel text-center left">
+      <GlobalTooltipStyle />
       <div className="hydrator-filter text-left">
         <input
           className="form-control"
