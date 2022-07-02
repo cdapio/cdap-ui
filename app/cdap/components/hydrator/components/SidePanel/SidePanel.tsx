@@ -33,7 +33,7 @@ import {
 } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
-import styled, { css } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -106,6 +106,19 @@ const ListOrIconsButton = styled(Button)`
 const TooltipText = styled.div`
   font-size: 14px;
   line-height: 14px;
+`;
+
+// Mui creates tooltips at the bottom of the dom tree
+// so if you wrap the tooltip in a normal styled component
+// the style won't apply to that element - this is a way
+// to just insert regular css onto the page using
+// styled-components
+const GlobalTooltipStyle = createGlobalStyle`
+  .MuiTooltip-popper {
+    .MuiTooltip-tooltip {
+      background-color: black;
+    }
+  }
 `;
 
 interface ISidePanelProps {
@@ -290,6 +303,7 @@ export const SidePanel = ({
 
   return (
     <div className="side-panel text-center left">
+      <GlobalTooltipStyle />
       <div className="hydrator-filter text-left">
         <input
           className="form-control"
