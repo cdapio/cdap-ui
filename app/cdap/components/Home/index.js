@@ -26,8 +26,13 @@ import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
+// import ConnectionContainer from '../ConnectionList';
 require('./Home.scss');
 
+const ConnectionContainerView = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList/index'),
+  loading: LoadingSVGCentered,
+});
 const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
@@ -140,6 +145,7 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
+          <Route exact path="/ns/:namespace/wrangler1" component={ConnectionContainerView} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact
