@@ -49,13 +49,11 @@ const WranglerCard: React.FC<IWranglerCardProps> = (props) => {
 
   const IconRen = props.image;
 
-  // console.log(props, "check props");
-
   return (
     <Box className={classes.cardWrapper}>
       <CusotmBox>
+        {/* rendering the SVG icon that was recived as a prop */}
         {IconRen}
-        {/* <img src={IconRen} className={classes.connectionImage} /> */}
         <Typography variant="body1" className={classes.connectionName}>
           {props.name}
         </Typography>

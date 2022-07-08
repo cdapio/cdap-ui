@@ -53,11 +53,13 @@ const ConnectionContainer = () => {
   const [connectionsList, setConnectionsList] = useState([]);
 
   const getConnectorDetails = async () => {
+    // Define Default Card types which are not coming from API
     let connectorsData = [{ name: 'New Exploration' }, { name: 'Imported Datasets' }];
     let connectorsDetails = [];
+    // fetching the list of connections
     const connectorsDataFected = await fetchConnectors();
     connectorsData = [...connectorsData, ...connectorsDataFected];
-
+    // creating list of connector's name & corresponding icon
     connectorsDetails = connectorsData.map((connector) => {
       const eachConnector = {
         name: connector.name,
@@ -76,7 +78,6 @@ const ConnectionContainer = () => {
     <>
       <Paper variant="outlined" elevation={9} className={classes.dashBoard}>
         <WelcomeCard />
-        {/* <SearchConnection /> */}
         <Paper elevation={0} className={classes.flexContainer}>
           {connectionsList.map((connection) => (
             <WranglerCard key={connection.name} name={connection.name} image={connection.image} />
