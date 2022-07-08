@@ -19,7 +19,7 @@ import T from 'i18n-react';
 import { StyledIcon } from '../shared.styles';
 
 export const PREFIX = 'features.Administration.Tethering';
-export const DESC_COLUMN_TEMPLATE = '50px 200px 8fr 170px 2fr 280px 20px';
+export const DESC_COLUMN_TEMPLATE = '50px 200px 8fr 170px 2fr 280px 225px';
 
 export const ICONS = {
   active: {

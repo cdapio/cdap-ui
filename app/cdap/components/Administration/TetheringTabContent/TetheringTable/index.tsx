@@ -21,7 +21,7 @@ import { IConnection, ITableData } from '../types';
 import { trimMemoryLimit } from '../utils';
 import { getIconForStatus, renderAllocationsHeader, getTransformedTableData } from './utils';
 
-const COLUMN_TEMPLATE = '50px 200px 2fr 2fr 2fr 2fr 170px 2fr 140px 140px 20px';
+const COLUMN_TEMPLATE = '50px 200px 2fr 2fr 2fr 2fr 170px 2fr 140px 140px 225px';
 
 interface ITetheringTableProps {
   tableData: IConnection[];
