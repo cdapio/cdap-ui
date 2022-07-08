@@ -1,54 +1,89 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { makeStyles, Paper } from '@material-ui/core';
-import { data } from './connectionsData.js';
 import WranglerCard from './WranglerCard';
-import SearchConnection from './SearchConnection';
-import ButtonAppBar from './Header';
-import { ApiTest } from './Test.js';
+import { fetchConnectors } from 'components/Connections/Create/reducer';
+import { GetConnectionIcon, GetIcon } from './IconStore';
+import WelcomeCard from './WelcomeCard';
 
 const ConnectionContainer = () => {
   const useStyles = makeStyles(() => ({
     flexContainer: {
+      paddingTop: '18px',
       display: 'flex',
       flexWrap: 'wrap',
-      padding: '0 20px',
-      backgroundColor: '#F0EBE3',
-      width: '35%',
+      backgroundColor: '#F3F6F9',
+      width: '100%',
       height: '100%',
-      // justifyContent: 'center',
+      '& > :nth-child(3n+1)': {
+        borderRight: '1px solid #E3E3E3',
+        borderBottom: '1px solid #E3E3E3',
+        width: '160px',
+      },
+      '& > :nth-child(3n+2)': {
+        borderBottom: '1px solid #E3E3E3',
+        width: '180px',
+      },
+      '& > :nth-child(3n)': {
+        borderLeft: '1px solid #E3E3E3',
+        borderBottom: '1px solid #E3E3E3',
+        width: '160px',
+      },
+      '& > :nth-last-child(1)': {
+        borderBottom: '0px',
+      },
+      '& > :nth-last-child(2)': {
+        borderBottom: '0px',
+      },
+      '& > :nth-last-child(3)': {
+        borderBottom: '0px',
+      },
+    },
+    dashBoard: {
+      padding: '18px 59px 18px 60px',
+      backgroundColor: '#F3F6F9',
+      maxWidth: '620px',
+      border: '0px',
+      borderRight: '1px dashed #DADCE0',
     },
   }));
 
   const classes = useStyles();
 
-  const imageUrl = 'https://cdn.worldvectorlogo.com/logos/google-bigquery-logo-1.svg';
-  const fetchConnectionsData = (rawData) => {
-    const listOfConnection = rawData.map((eachConnection) => {
-      return {
-        name: eachConnection.name,
-        imageUrl,
+  const [connectionsList, setConnectionsList] = useState([]);
+
+  const getConnectorDetails = async () => {
+    let connectorsData = [{ name: 'New Exploration' }, { name: 'Imported Datasets' }];
+    let connectorsDetails = [];
+    const connectorsDataFected = await fetchConnectors();
+    connectorsData = [...connectorsData, ...connectorsDataFected];
+
+    connectorsDetails = connectorsData.map((connector) => {
+      const eachConnector = {
+        name: connector.name,
+        image: GetConnectionIcon(connector.name),
       };
+      return eachConnector;
     });
-    return listOfConnection;
+    setConnectionsList((prev) => [...prev, ...connectorsDetails]);
   };
 
-  const ConnectionsList = fetchConnectionsData(data.response);
+  useEffect(() => {
+    getConnectorDetails();
+  }, []);
 
   return (
-    <div>
-      <ApiTest />
-      <ButtonAppBar />
-      <SearchConnection />
-      <Paper variant="outlined" elevation={9} className={classes.flexContainer}>
-        {ConnectionsList.map((connection) => (
-          <WranglerCard
-            key={connection.name}
-            name={connection.name}
-            imageUrl={connection.imageUrl}
-          />
-        ))}
+    <>
+      <Paper variant="outlined" elevation={9} className={classes.dashBoard}>
+        <WelcomeCard />
+        {/* <SearchConnection /> */}
+        <Paper elevation={0} className={classes.flexContainer}>
+          {connectionsList.map((connection) => (
+            <WranglerCard key={connection.name} name={connection.name} image={connection.image} />
+          ))}
+        </Paper>
       </Paper>
-    </div>
+    </>
   );
 };
 

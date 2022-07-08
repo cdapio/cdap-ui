@@ -7,14 +7,16 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
       alignItems: 'center',
-      width: '400px',
+      width: '540px',
       margin: '20px',
+      marginLeft: '0px',
       border: '1px solid grey',
     },
     input: {
@@ -149,7 +151,16 @@ const SearchConnection = () => {
     setSearchTerm(event.target.value);
   };
 
+  const getConnectionsList = async () => {
+    const categorizedConnections = await getCategorizedConnections();
+
+    // tslint:disable-next-line: no-console
+    console.log(categorizedConnections);
+    return categorizedConnections;
+  };
+
   useEffect(() => {
+    getConnectionsList();
     const searchTermMatchedData = top100Films.filter((each) => each.title.includes(searchTerm));
     setFilteredData(searchTermMatchedData.slice(0, 4));
   }, [searchTerm]);

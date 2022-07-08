@@ -1,27 +1,40 @@
 import React from 'react';
 import { Box, Card, Typography, makeStyles, styled } from '@material-ui/core';
+import { Icon } from '@material-ui/core';
+import { prevPage } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 
 interface IWranglerCardProps {
   name: string;
-  imageUrl: string;
+  image: any;
 }
 
 const WranglerCard: React.FC<IWranglerCardProps> = (props) => {
-  // console.log('props', props);
   const useStyles = makeStyles(() => ({
     cardWrapper: {
-      marginTop: '10px',
-      marginRight: '10px',
-      width: '30%',
-      height: '100px',
-      backgroundColor: 'white',
+      height: '150px',
+      backgroundColor: '#F3F6F9',
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
       alignItems: 'center',
+      borderRadius: '0px',
+      margin: '0px',
+      padding: '0px',
+      '&:hover': {
+        cursor: 'pointer',
+        backgroundColor: '#ffffff',
+        boxShadow: '3px 4px 15px rgba(68, 132, 245, 0.15)',
+      },
     },
     connectionImage: {
-      width: '40px',
+      width: '200px',
+    },
+    connectionName: {
+      fontSize: '14px',
+      lineHeight: '21px',
+      fontWeight: 400,
+      letterSpacing: '0.15px',
+      marginTop: '7px',
     },
   }));
 
@@ -34,13 +47,20 @@ const WranglerCard: React.FC<IWranglerCardProps> = (props) => {
 
   const classes = useStyles();
 
+  const IconRen = props.image;
+
+  // console.log(props, "check props");
+
   return (
-    <Card variant="outlined" className={classes.cardWrapper}>
+    <Box className={classes.cardWrapper}>
       <CusotmBox>
-        <img src={props.imageUrl} alt="card" className={classes.connectionImage} />
-        <Typography variant="body1">{props.name}</Typography>
+        {IconRen}
+        {/* <img src={IconRen} className={classes.connectionImage} /> */}
+        <Typography variant="body1" className={classes.connectionName}>
+          {props.name}
+        </Typography>
       </CusotmBox>
-    </Card>
+    </Box>
   );
 };
 
