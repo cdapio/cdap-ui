@@ -8,7 +8,8 @@ const useStyles = makeStyles({
   root: {
     minWidth: '100px',
     maxWidth: '250px',
-    backgroundColor: '#F3F6F9',
+    backgroundImage:
+      'linear-gradient(180deg, rgba(70, 129, 244, 0) -49.23%, rgba(70, 129, 244, 0.1) 100%)',
     padding: '10px 0px 10px 30px',
     borderRadius: '0px',
   },

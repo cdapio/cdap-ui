@@ -82,6 +82,7 @@ function createData(
   lastUpdated: number,
   connectionName: string,
   connectionStatus: string,
+  lastAvailable: number,
   showWrangle: boolean
 ) {
   return {
@@ -91,17 +92,18 @@ function createData(
     lastUpdated,
     connectionName,
     connectionStatus,
+    lastAvailable,
     showWrangle,
   };
 }
 
 const rowsData = [
-  createData('DivamiDatase', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', false),
-  createData('DivamiDatase1', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', false),
-  createData('DivamiDatase2', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', false),
-  createData('DivamiDatase3', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', false),
-  createData('DivamiDatase4', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', false),
-  createData('DivamiDatase5', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', false),
+  createData('DivamiDatase', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 10, false),
+  createData('DivamiDatase1', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', 11, false),
+  createData('DivamiDatase2', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 10, false),
+  createData('DivamiDatase3', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', 9, false),
+  createData('DivamiDatase4', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 2, false),
+  createData('DivamiDatase5', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 3, false),
 ];
 
 const OnlineIndicator = ({ classes }) => <span className={classes.onlineIndicator}></span>;
@@ -178,7 +180,7 @@ export default function BasicTable() {
                   ) : (
                     <OfflineIndicator classes={classes} />
                   )}
-                  {row.lastUpdated}
+                  {row.lastAvailable}
                   {' days ago'}
                   {row.showWrangle && <RefreshIcon />}
                 </Box>
