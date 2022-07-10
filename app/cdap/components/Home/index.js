@@ -30,7 +30,7 @@ import ee from 'event-emitter';
 require('./Home.scss');
 
 const ConnectionContainerView = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList/index'),
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectorTypes/index'),
   loading: LoadingSVGCentered,
 });
 const WranglerHome = Loadable({

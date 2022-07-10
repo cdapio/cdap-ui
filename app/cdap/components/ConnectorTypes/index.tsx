@@ -1,10 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { makeStyles, Paper } from '@material-ui/core';
-import WranglerCard from './WranglerCard';
+import WranglerCard from './ConnectorTypeCard';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { GetConnectionIcon, GetIcon } from './IconStore';
+import { GetConnectionIcon } from './IconStore';
 import WelcomeCard from './WelcomeCard';
+import { defaultConnectorTypes } from 'components/WrangleHome/constants/defaultConnectorTypes';
 
 const useStyles = makeStyles(() => ({
   flexContainer: {
@@ -47,31 +48,26 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ConnectionContainer = () => {
+const ConnectorTypesComponent = () => {
   const classes = useStyles();
 
-  const [connectionsList, setConnectionsList] = useState([]);
+  const [connectorTypesList, setConnectorTypesList] = useState([]);
 
-  const getConnectorDetails = async () => {
-    // Define Default Card types which are not coming from API
-    let connectorsData = [{ name: 'New Exploration' }, { name: 'Imported Datasets' }];
-    let connectorsDetails = [];
-    // fetching the list of connections
-    const connectorsDataFected = await fetchConnectors();
-    connectorsData = [...connectorsData, ...connectorsDataFected];
+  const fetchConnectorTypeDetails = async () => {
+    // fetching the list of connector types
+    const fetchedConnectorTypes = await fetchConnectors();
+    const connectorTypes = [...defaultConnectorTypes, ...fetchedConnectorTypes];
+
     // creating list of connector's name & corresponding icon
-    connectorsDetails = connectorsData.map((connector) => {
-      const eachConnector = {
-        name: connector.name,
-        image: GetConnectionIcon(connector.name),
-      };
-      return eachConnector;
-    });
-    setConnectionsList((prev) => [...prev, ...connectorsDetails]);
+    const connectorTypesWithImage = connectorTypes.map((connector) => ({
+      name: connector.name,
+      image: GetConnectionIcon(connector.name),
+    }));
+    setConnectorTypesList((prev) => [...prev, ...connectorTypesWithImage]);
   };
 
   useEffect(() => {
-    getConnectorDetails();
+    fetchConnectorTypeDetails();
   }, []);
 
   return (
@@ -79,8 +75,12 @@ const ConnectionContainer = () => {
       <Paper variant="outlined" elevation={9} className={classes.dashBoard}>
         <WelcomeCard />
         <Paper elevation={0} className={classes.flexContainer}>
-          {connectionsList.map((connection) => (
-            <WranglerCard key={connection.name} name={connection.name} image={connection.image} />
+          {connectorTypesList.map((eachConnectorType) => (
+            <WranglerCard
+              key={eachConnectorType.name}
+              name={eachConnectorType.name}
+              image={eachConnectorType.image}
+            />
           ))}
         </Paper>
       </Paper>
@@ -88,4 +88,4 @@ const ConnectionContainer = () => {
   );
 };
 
-export default ConnectionContainer;
+export default ConnectorTypesComponent;

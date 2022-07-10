@@ -1,11 +1,11 @@
 import { Box } from '@material-ui/core';
-import ConnectionContainer from 'components/ConnectionList';
+import ConnectorTypesComponent from 'components/ConnectorTypes';
 import * as React from 'react';
 
 const WrangleHome: React.FC = () => {
   return (
     <Box>
-      <ConnectionContainer />
+      <ConnectorTypesComponent />
     </Box>
   );
 };
