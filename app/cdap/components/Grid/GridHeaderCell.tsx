@@ -6,11 +6,13 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: '100px',
-    maxWidth: '250px',
-    backgroundColor: '#F3F6F9',
+    minWidth: '216px',
+    width: 'fit-content',
+    // maxWidth: '202px',
     padding: '10px 0px 10px 30px',
     borderRadius: '0px',
+    backgroundImage:
+      'linear-gradient(0deg, rgba(70, 129, 244, 0) -49.23%, rgba(70, 129, 244, 0.1) 100%)',
   },
   posRight: {
     marginLeft: '2px',
