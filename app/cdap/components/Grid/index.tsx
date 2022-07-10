@@ -3,6 +3,7 @@ import GridHeaderCell from './GridHeaderCell';
 import Box from '@material-ui/core/Box';
 import GridKPICell from './GridKPICell';
 import GridTextCell from './GridTextCell';
+import BasicTable from './DataTable';
 
 const GridView = () => {
   return (
@@ -10,6 +11,7 @@ const GridView = () => {
       <GridHeaderCell />
       <GridKPICell />
       <GridTextCell />
+      <BasicTable />
     </Box>
   );
 };
