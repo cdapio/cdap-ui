@@ -8,10 +8,7 @@ import { TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, styled } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { getDatasetsList } from './GetDatasets';
 import CachedIcon from '@material-ui/icons/Cached';
-
-const x = getDatasetsList();
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -80,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 
 function createData(
   name: string,
-  FileFormat: string,
+  fileFormat: string,
   schema: number,
   lastUpdated: number,
   connectionName: string,
@@ -89,7 +86,7 @@ function createData(
 ) {
   return {
     name,
-    FileFormat,
+    fileFormat,
     schema,
     lastUpdated,
     connectionName,
@@ -164,7 +161,7 @@ export default function BasicTable() {
               onMouseLeave={(event) => handleMouseLeave(event, row.name)}
             >
               <TableCell className={classes.tableRowCell}>{row.name}</TableCell>
-              <TableCell className={classes.tableRowCell}>{row.FileFormat}</TableCell>
+              <TableCell className={classes.tableRowCell}>{row.fileFormat}</TableCell>
               <TableCell className={classes.tableRowCell}>
                 {row.schema}
                 {' Columns'}
