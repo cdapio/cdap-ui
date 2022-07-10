@@ -126,16 +126,12 @@ export default function BasicTable() {
     const newRows = [...rows];
     newRows[selectedRowIndex].showWrangle = false;
     setSelectedRow(newRows);
-    console.log(event.target);
-    console.log(name);
   };
   const handleMouseEnter = (event, name) => {
     const selectedRowIndex = rows.findIndex((row) => row.name === name);
     const newRows = [...rows];
     newRows[selectedRowIndex].showWrangle = true;
     setSelectedRow(newRows);
-    console.log(event.target);
-    console.log(name);
   };
 
   return (
