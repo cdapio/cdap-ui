@@ -6,8 +6,12 @@ import { TableContainer } from '@material-ui/core';
 import { TableHead } from '@material-ui/core';
 import { TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import { Box, styled } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
+import { getDatasetsList } from './GetDatasets';
+import CachedIcon from '@material-ui/icons/Cached';
+
+const x = getDatasetsList();
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -42,10 +46,14 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     marginRight: '10px',
+    fontSize: '14px',
+    lineHeight: '21px',
+    fontWeight: 400,
   },
   wrangleBox: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: '30px',
   },
   onlineIndicator: {
     height: '8px',
@@ -102,6 +110,16 @@ const rowsData = [
 const OnlineIndicator = ({ classes }) => <span className={classes.onlineIndicator}></span>;
 const OfflineIndicator = ({ classes }) => <span className={classes.offlineIndicator}></span>;
 
+const RefreshIcon = styled(CachedIcon)({
+  display: 'inline',
+  marginLeft: '20px',
+  cursor: 'pointer',
+  '& :hover': {
+    fontSize: 'large',
+    color: 'blueviolet',
+  },
+});
+
 export default function BasicTable() {
   const [rows, setSelectedRow] = useState(rowsData);
 
@@ -157,25 +175,21 @@ export default function BasicTable() {
               </TableCell>
               <TableCell className={classes.tableRowCell}>{row.connectionName}</TableCell>
               <TableCell className={classes.tableRowCell}>
-                {row.connectionStatus === 'online' ? (
-                  <OnlineIndicator classes={classes} />
-                ) : (
-                  <OfflineIndicator classes={classes} />
-                )}
-                {row.lastUpdated}
-                {' days ago'}
+                <Box>
+                  {row.connectionStatus === 'online' ? (
+                    <OnlineIndicator classes={classes} />
+                  ) : (
+                    <OfflineIndicator classes={classes} />
+                  )}
+                  {row.lastUpdated}
+                  {' days ago'}
+                  {row.showWrangle && <RefreshIcon />}
+                </Box>
               </TableCell>
               <TableCell className={classes.tableRowCell}>
                 <Box className={classes.wrangleBox}>
                   {row.showWrangle && (
-                    <Link
-                      className={classes.link}
-                      component="button"
-                      variant="body2"
-                      onClick={() => {
-                        console.info('Wrangling....');
-                      }}
-                    >
+                    <Link className={classes.link} component="button" variant="body2">
                       Wrangle
                     </Link>
                   )}
