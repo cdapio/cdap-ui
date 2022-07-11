@@ -17,7 +17,7 @@ const DatasetWrapper = () => {
   }, [data]);
 
   const selectedTabValueHandler = (selectedValue: string) => {
-    console.log('selecte value', selectedValue);
+    setData([]);
     selectedValue !== 'All Connections' && getCategorizedConnectionsFromAPI(selectedValue);
   };
 
@@ -29,7 +29,6 @@ const DatasetWrapper = () => {
   };
 
   const fetchEntities = async (connections) => {
-    console.log('connections', connections);
     const connectionsUpdated = connections.map((eachConnection) =>
       exploreConnection({ connectionid: eachConnection.connectionId, path: pathFromUrl })
     );
