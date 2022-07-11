@@ -26,7 +26,7 @@ import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
-import DatasetsListComponent from 'components/Dataset/index';
+import DatasetsListComponent from 'components/Dataset/index2';
 // import ConnectionContainer from '../ConnectionList';
 require('./Home.scss');
 
