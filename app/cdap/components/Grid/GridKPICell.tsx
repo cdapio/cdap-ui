@@ -40,16 +40,20 @@ const StringIndicatorBox = styled(Box)({
 
 const GridKPICell = () => {
   const classes = useStyles();
+  const metricOne = 'KPI Name';
+  const metricTwo = 'KPI Name';
+  const metricOneValue = 794;
+  const metricTwoValue = 142;
 
   return (
     <Card className={classes.root} variant="outlined">
       <Box className={classes.KPICell}>
-        <Typography className={classes.posLeft}>{'Missing/Null'}</Typography>
-        <Typography className={classes.posRight}>{'794'}</Typography>
+        <Typography className={classes.posLeft}>{metricOne}</Typography>
+        <Typography className={classes.posRight}>{metricOneValue}</Typography>
       </Box>
       <Box className={classes.KPICell}>
-        <Typography className={classes.posLeft}>{'Invalid'}</Typography>
-        <Typography className={classes.posRight}>{'142'}</Typography>
+        <Typography className={classes.posLeft}>{metricTwo}</Typography>
+        <Typography className={classes.posRight}>{metricTwoValue}</Typography>
       </Box>
     </Card>
   );

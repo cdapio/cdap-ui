@@ -42,21 +42,25 @@ const StringIndicatorBox = styled(Box)({
 
 const GridHeaderCell = () => {
   const classes = useStyles();
-
+  const columnName = 'Header Name';
+  const columnDataType = 'ABC';
+  const columnSubDataType = 'String';
   return (
     <Card className={classes.root} variant="outlined">
-      <Typography className={classes.pos}>{'Customer Name'}</Typography>
+      <Typography className={classes.pos}>{columnName}</Typography>
       <StringIndicatorBox>
         <Typography className={classes.posLeft} color="textSecondary">
-          {'ABC'}
+          {columnDataType}
         </Typography>
         <StringIndicatorBox>
           <Typography className={classes.posRight} color="textSecondary">
             {'|'}
           </Typography>
-          <Typography className={classes.posRight} color="textSecondary">
-            {'Credit Card'}
-          </Typography>
+          {columnSubDataType && (
+            <Typography className={classes.posRight} color="textSecondary">
+              {columnSubDataType}
+            </Typography>
+          )}
         </StringIndicatorBox>
       </StringIndicatorBox>
     </Card>
