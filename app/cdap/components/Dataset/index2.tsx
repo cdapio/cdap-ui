@@ -28,10 +28,10 @@ const DatasetsListComponent = () => {
 
   const [path, setPath] = useState(pathFromUrl);
 
-  const fetchEntities = async (connectionid = 'ggjh') => {
+  const fetchEntities = async (connectionid = 'exl') => {
     try {
       Promise.all([await exploreConnection({ connectionid, path })]).then((values) => {
-        console.log('ggjh data', values);
+        console.log('PostgresSql data', values);
         const dataArray = [];
         values.map((each) => each.entities.forEach((eachentity) => dataArray.push(eachentity)));
       });
