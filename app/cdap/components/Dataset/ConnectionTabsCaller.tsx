@@ -26,7 +26,7 @@ interface ConnectionTabSidePanel {
   mapOfConnectorPluginProperties: { [key: string]: any };
 }
 
-const ConnectionTabsCaller = () => {
+const ConnectionTabsCaller = ({ selectedTabValueHandler }) => {
   const [value, setValue] = React.useState('All Connections');
   const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
@@ -34,6 +34,7 @@ const ConnectionTabsCaller = () => {
   });
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
     setValue(newValue);
+    selectedTabValueHandler(newValue);
   };
   const getConnectionTabData = async () => {
     let connectorTypes = await fetchConnectors();
