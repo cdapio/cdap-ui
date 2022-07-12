@@ -158,7 +158,6 @@ export default class Home extends Component {
   render() {
     return (
       <div>
-        x
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/wrangle" component={WranglerHome} />
