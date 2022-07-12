@@ -52,12 +52,20 @@ export default function GridTable() {
       .slice(1);
   };
 
+  const getMetricsData = () => {
+    return headersNamesList.map((eachHeader) => {
+      return;
+    });
+  };
+
   const getGridTableData = async () => {
     const fetchedResponse = await mockJSON;
     const rawData = fetchedResponse.response;
 
     const headersData = createHeadersData(rawData.headers, rawData.values[0], rawData.types);
     setHeadersNamesList(headersData);
+
+    const metricsData = getMetricsData();
 
     const rowData = rawData.values.slice(1).map((eachRow) => {
       const { body, ...rest } = eachRow;
