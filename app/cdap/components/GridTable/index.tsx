@@ -1,40 +1,11 @@
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { Table } from '@material-ui/core';
-import { TableBody } from '@material-ui/core';
-import { TableCell } from '@material-ui/core';
-import { TableContainer } from '@material-ui/core';
-import { TableHead } from '@material-ui/core';
-import { TableRow } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
-import GridHeaderCell from '../Grid/GridHeaderCell';
-import { metricsData } from './GridTableData';
-import GridKPICell from 'components/Grid/GridKPICell';
-import GridTextCell from 'components/Grid/GridTextCell';
-import mockJSON from './gridTableResponse';
+import { GridHeaderCell, GridKPICell, GridTextCell } from './helpers';
+import { metricsData } from './mock/gridTableData';
+import mockJSON from './mock/gridTableResponse';
 
-const useStyles = makeStyles((theme) => ({
-  tableHeaderCell: {
-    padding: '0px',
-    width: 'auto',
-    fontSize: '14px',
-    border: '1px solid #E0E0E0',
-  },
-  tableRowCell: {
-    minWidth: '150.6px',
-    border: '1px solid #E0E0E0',
-    fontSize: '14px',
-    width: 'auto',
-    lineHeight: '21px',
-    padding: '0px',
-    borderBottom: '1px solid #E0E0E0',
-    color: '#5F6368',
-    boxSizing: 'content-box',
-  },
-}));
+const GridTable = () => {
 
-export default function GridTable() {
-  const classes = useStyles();
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
 
@@ -83,27 +54,21 @@ export default function GridTable() {
         <TableHead>
           <TableRow>
             {headersNamesList.map((eachHeader) => (
-              <TableCell className={classes.tableHeaderCell} key={eachHeader.name}>
-                <GridHeaderCell label={eachHeader.label} types={eachHeader.type} />
-              </TableCell>
+              <GridHeaderCell label={eachHeader.label} types={eachHeader.type} key={eachHeader.name} />
+            ))}
+          </TableRow>
+          <TableRow>
+            {metricsData.map((each) => (
+              <GridKPICell metricData={each} key={each.name} />
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            {metricsData.map((each) => (
-              <TableCell className={classes.tableHeaderCell} key={each.name}>
-                <GridKPICell metricData={each} />
-              </TableCell>
-            ))}
-          </TableRow>
           {rowsDataList.map((eachRow, index) => {
             return (
               <TableRow key={index * Math.random()}>
                 {Object.keys(eachRow).map((eachKey, indexKey) => (
-                  <TableCell className={classes.tableRowCell} key={index * indexKey}>
-                    <GridTextCell cellValue={eachRow[eachKey]} />
-                  </TableCell>
+                  <GridTextCell cellValue={eachRow[eachKey]} key={index * indexKey} />
                 ))}
               </TableRow>
             );
@@ -113,3 +78,5 @@ export default function GridTable() {
     </TableContainer>
   );
 }
+
+export default GridTable
