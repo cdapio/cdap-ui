@@ -33,6 +33,10 @@ const ConnectionContainerView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList/index'),
   loading: LoadingSVGCentered,
 });
+const GridTableView = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable/index'),
+  loading: LoadingSVGCentered,
+});
 const GridView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/Grid/index'),
   loading: LoadingSVGCentered,
@@ -151,6 +155,7 @@ export default class Home extends Component {
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/wrangler1" component={ConnectionContainerView} />
           <Route exact path="/ns/:namespace/grid" component={GridView} />
+          <Route exact path="/ns/:namespace/gridtable" component={GridTableView} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact

@@ -7,9 +7,9 @@ import GridTextCell from './GridTextCell';
 const GridView = () => {
   return (
     <Box>
-      <GridHeaderCell />
-      <GridKPICell />
-      <GridTextCell />
+      {/* <GridHeaderCell /> */}
+      {/* <GridKPICell /> */}
+      {/* <GridTextCell /> */}
     </Box>
   );
 };

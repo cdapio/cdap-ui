@@ -7,11 +7,11 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
   root: {
     minWidth: '216px',
-    // maxWidth: '202px',
     width: 'fit-content',
     backgroundColor: '#fff',
-    padding: '10px 10px 10px 30px',
+    padding: '10px 10px 0px 30px',
     borderRadius: '0px',
+    border: 'none',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -38,12 +38,20 @@ const StringIndicatorBox = styled(Box)({
   display: 'flex',
 });
 
-const GridKPICell = () => {
+interface Props {
+  metricData: {
+    name: string;
+    values: Array<{ label: string; count: number }>;
+  };
+}
+
+const GridKPICell: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const metricOne = 'KPI Name';
-  const metricTwo = 'KPI Name';
-  const metricOneValue = 794;
-  const metricTwoValue = 142;
+  const { values } = props.metricData;
+  const metricOne = values[0].label;
+  const metricTwo = values[1].label;
+  const metricOneValue = values[0].count;
+  const metricTwoValue = values[0].count;
 
   return (
     <Card className={classes.root} variant="outlined">
