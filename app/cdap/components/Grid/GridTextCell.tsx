@@ -9,6 +9,7 @@ const useStyles = makeStyles({
     backgroundColor: '#fff',
     padding: '5px 5px 5px 30px',
     borderRadius: '0px',
+    border: 'none',
     display: 'flex',
     flexDirection: 'column',
     width: 'fit-content',
@@ -21,12 +22,16 @@ const useStyles = makeStyles({
   },
 });
 
-const GridTextCell = () => {
+interface Props {
+  cellValue: string;
+}
+
+const GridTextCell: React.FC<Props> = (props) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root} variant="outlined">
-      <Typography className={classes.pos}>{'Kathy Albertson'}</Typography>
+      <Typography className={classes.pos}>{props.cellValue}</Typography>
     </Card>
   );
 };
