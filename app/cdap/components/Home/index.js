@@ -48,10 +48,6 @@ const GridTableView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable/index'),
   loading: LoadingSVGCentered,
 });
-const GridView = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/Grid/index'),
-  loading: LoadingSVGCentered,
-});
 const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
@@ -162,6 +158,7 @@ export default class Home extends Component {
   render() {
     return (
       <div>
+        x
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/wrangle" component={WranglerHome} />
