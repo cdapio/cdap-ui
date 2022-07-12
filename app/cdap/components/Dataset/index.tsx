@@ -1,83 +1,30 @@
+import * as React from 'react';
+import ConnectionsTabs from './ConnectionTabs';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
-import {
-  fetchAllConnectorPluginProperties,
-  fetchConnectors,
-  getMapOfConnectorToPluginProperties,
-} from 'components/Connections/Create/reducer';
-import * as React from 'react';
+import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
-import ConnectionsTabs from './ConnectionTabs';
+
+import { Idata } from './interfaces/interface';
+import { ConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
-interface IConnectorTypes {
-  name: string;
-  type: string;
-  category: string;
-  description: string;
-  artifact: {
-    name: string;
-    version: string;
-    scope: string;
-  };
-}
-interface ConnectionTabSidePanel {
-  connectorTypes: IConnectorTypes[];
-  mapOfConnectorPluginProperties: { [key: string]: any };
-}
 
-const DatasetWrapper = () => {
-  const loc = useLocation();
-  const [data, setData] = React.useState<any>([]);
-  const [value, setValue] = React.useState('All Connections');
+const DatasetWrapper: React.FC = () => {
   const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
-    mapOfConnectorPluginProperties: null,
   });
+  const loc = useLocation();
+  const [data, setData] = React.useState<Idata>();
+  const [value, setValue] = useState('All Connections');
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
-    console.log(data, 'this is data');
-  }, [data]);
-
-  const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: any) => {
-    console.log(newValue);
-    setData([]);
-    newValue !== 'All Connections' && getCategorizedConnectionsFromAPI(newValue);
-  };
-
-  const getCategorizedConnectionsFromAPI = async (selectedValue: string) => {
-    const categorizedConnections = await getCategorizedConnections();
-    const connections = categorizedConnections.get(selectedValue) || [];
-
-    fetchEntities(connections);
-  };
-
-  const fetchEntities = async (connections) => {
-    const connectionsUpdated = connections.map((eachConnection) =>
-      exploreConnection({
-        connectionid: eachConnection.connectionId,
-        path: pathFromUrl,
-      })
-    );
-
-    try {
-      await Promise.all([await connectionsUpdated]).then((values) => {
-        values.map((each) => {
-          each.map((each2) =>
-            each2.then((response) => {
-              setData((prev: any) => ([...prev, response.entities] as any).flat());
-            })
-          );
-        });
-      });
-    } catch (e) {
-      console.log('error', e);
-    }
-  };
-  const getConnectionTabData = async () => {
+    getConnectionsTabData();
+  }, []);
+  const getConnectionsTabData = async () => {
     let connectorTypes = await fetchConnectors();
     let allConnectionsTotalLength = 0;
 
@@ -85,10 +32,6 @@ const DatasetWrapper = () => {
     connectorTypes = connectorTypes.filter((conn) => {
       return [conn.name];
     });
-    const allConnectorsPluginProperties = await fetchAllConnectorPluginProperties(connectorTypes);
-    const mapOfConnectorPluginProperties = getMapOfConnectorToPluginProperties(
-      allConnectorsPluginProperties
-    );
     connectorTypes = connectorTypes.map((connectorType) => {
       const connections = categorizedConnections.get(connectorType.name) || [];
       allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
@@ -116,12 +59,47 @@ const DatasetWrapper = () => {
 
     setState({
       connectorTypes,
-      mapOfConnectorPluginProperties,
     });
   };
+
+  const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: string) => {
+    console.log('New Value is', newValue);
+    setValue(newValue);
+    setData([]);
+    newValue !== 'All Connections' && getCategorizedConnectionsforSelectedTab(newValue);
+  };
+
+  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string) => {
+    const categorizedConnections = await getCategorizedConnections();
+    const connections = categorizedConnections.get(selectedValue) || [];
+    fetchEntities(connections);
+  };
+
+  const fetchEntities = async (connections) => {
+    const connectionsUpdated = connections.map((eachConnection) =>
+      exploreConnection({
+        connectionid: eachConnection.connectionId,
+        path: pathFromUrl,
+      })
+    );
+
+    try {
+      await Promise.all([await connectionsUpdated]).then((values) => {
+        values.map((value) => {
+          value.map((each) =>
+            each.then((response) => {
+              setData((prev: any) => ([...prev, response.entities] as any).flat());
+            })
+          );
+        });
+      });
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
   React.useEffect(() => {
-    getConnectionTabData();
-  }, []);
+    console.log(data, 'this is data');
+  }, [data]);
 
   return (
     <div>

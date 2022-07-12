@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core';
 import ConnectorTypesComponent from 'components/ConnectorTypes';
-import Dataset from 'components/Dataset/index';
+import Dataset from 'components/Dataset';
+
 import * as React from 'react';
 
 const WrangleHome: React.FC = () => {
