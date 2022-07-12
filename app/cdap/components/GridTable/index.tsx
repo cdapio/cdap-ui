@@ -6,12 +6,10 @@ import { TableContainer } from '@material-ui/core';
 import { TableHead } from '@material-ui/core';
 import { TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, styled } from '@material-ui/core';
-import { headerData } from './GridTableData';
+import { Box } from '@material-ui/core';
 import GridHeaderCell from '../Grid/GridHeaderCell';
 import { metricsData } from './GridTableData';
 import GridKPICell from 'components/Grid/GridKPICell';
-import { rowData } from './GridTableData';
 import GridTextCell from 'components/Grid/GridTextCell';
 import mockJSON from './gridTableResponse';
 
