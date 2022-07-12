@@ -26,7 +26,8 @@ import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
-import DatasetsListComponent from 'components/Dataset/index';
+import DatasetWrapper from 'components/Dataset/index';
+
 // import ConnectionContainer from '../ConnectionList';
 require('./Home.scss');
 
@@ -160,7 +161,7 @@ export default class Home extends Component {
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/wrangle" component={WranglerHome} />
-          <Route exact path="/ns/:namespace/wrangler-2" component={DatasetsListComponent} />
+          <Route exact path="/ns/:namespace/wrangler-2" component={DatasetWrapper} />
           <Route exact path="/ns/:namespace/wrangler1" component={ConnectionContainerView} />
           <Route exact path="/ns/:namespace/grid" component={GridView} />
           <Route exact path="/ns/:namespace/datasets" component={DatasetListTable} />
