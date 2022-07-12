@@ -1,19 +1,14 @@
 import React from 'react';
 import { GetIcon } from './IconStore';
-import { Box, styled, Typography } from '@material-ui/core';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { Box, styled, Typography, makeStyles } from '@material-ui/core';
 
-const THEME = createTheme({
-  typography: {
-    allVariants: {
-      fontSize: 24,
-      fontFamily: 'Noto Sans',
-      fontWeight: 500,
-      letterSpacing: '0.15px',
-      lineHeight: '36px',
-    },
+const useStyles = makeStyles(() => ({
+  welcomeText: {
+    fontSize: '24px',
+    fontWeight: 500,
+    height: '36px',
   },
-});
+}));
 
 const WelcomeCardContainer = styled(Box)({
   display: 'flex',
@@ -23,22 +18,21 @@ const WelcomeCardContainer = styled(Box)({
 const CustomBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  justifyContent: 'flex-end',
   marginLeft: '36px',
 });
 
 const WelcomeCard = () => {
+  const classes = useStyles();
   const welcomeIcon = GetIcon('welcomeIcon');
   return (
-    <ThemeProvider theme={THEME}>
-      <WelcomeCardContainer>
-        <Box>{welcomeIcon}</Box>
-        <CustomBox>
-          <Typography>Hi David</Typography>
-          <Typography>Welcome to Wrangler</Typography>
-        </CustomBox>
-      </WelcomeCardContainer>
-    </ThemeProvider>
+    <WelcomeCardContainer>
+      <Box>{welcomeIcon}</Box>
+      <CustomBox>
+        <Typography className={classes.welcomeText}>Hi David</Typography>
+        <Typography className={classes.welcomeText}>Welcome to Wrangler</Typography>
+      </CustomBox>
+    </WelcomeCardContainer>
   );
 };
 
