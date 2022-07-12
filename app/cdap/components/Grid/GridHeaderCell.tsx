@@ -41,20 +41,17 @@ const StringIndicatorBox = styled(Box)({
 
 interface Props {
   label: string;
-  types: Array<{
-    label: string;
-    name: string;
-  }>;
+  types: string[];
 }
 
 const GridHeaderCell: React.FC<Props> = (props) => {
   const classes = useStyles();
   const columnName = props.label;
   const columnTypes = props.types;
-  const columnDataType = columnTypes[0].label;
+  const columnDataType = columnTypes[0];
   let columnSubDataType: any = null;
   if (columnTypes.length > 1) {
-    columnSubDataType = columnTypes[1].label;
+    columnSubDataType = columnTypes[1];
   }
   return (
     <Card className={classes.root} variant="outlined">
