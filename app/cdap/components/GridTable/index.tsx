@@ -1,11 +1,10 @@
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { GridHeaderCell, GridKPICell, GridTextCell } from './helpers';
 import { metricsData } from './mock/gridTableData';
 import mockJSON from './mock/gridTableResponse';
 
 const GridTable = () => {
-
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
 
@@ -21,20 +20,12 @@ const GridTable = () => {
       .slice(1);
   };
 
-  const getMetricsData = () => {
-    return headersNamesList.map((eachHeader) => {
-      return;
-    });
-  };
-
   const getGridTableData = async () => {
     const fetchedResponse = await mockJSON;
     const rawData = fetchedResponse.response;
 
     const headersData = createHeadersData(rawData.headers, rawData.values[0], rawData.types);
     setHeadersNamesList(headersData);
-
-    const metricsData = getMetricsData();
 
     const rowData = rawData.values.slice(1).map((eachRow) => {
       const { body, ...rest } = eachRow;
@@ -54,7 +45,11 @@ const GridTable = () => {
         <TableHead>
           <TableRow>
             {headersNamesList.map((eachHeader) => (
-              <GridHeaderCell label={eachHeader.label} types={eachHeader.type} key={eachHeader.name} />
+              <GridHeaderCell
+                label={eachHeader.label}
+                types={eachHeader.type}
+                key={eachHeader.name}
+              />
             ))}
           </TableRow>
           <TableRow>
@@ -64,19 +59,17 @@ const GridTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowsDataList.map((eachRow, index) => {
-            return (
-              <TableRow key={index * Math.random()}>
-                {Object.keys(eachRow).map((eachKey, indexKey) => (
-                  <GridTextCell cellValue={eachRow[eachKey]} key={index * indexKey} />
-                ))}
-              </TableRow>
-            );
-          })}
+          {rowsDataList.map((eachRow, rowIndex) => (
+            <TableRow key={`row-${rowIndex}`}>
+              {Object.keys(eachRow).map((eachKey, keyIndex) => (
+                <GridTextCell cellValue={eachRow[eachKey]} key={`${eachKey}-${keyIndex}`} />
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
-}
+};
 
-export default GridTable
+export default GridTable;
