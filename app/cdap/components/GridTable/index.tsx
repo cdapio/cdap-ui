@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table } from '@material-ui/core';
 import { TableBody } from '@material-ui/core';
 import { TableCell } from '@material-ui/core';
@@ -13,6 +13,7 @@ import { metricsData } from './GridTableData';
 import GridKPICell from 'components/Grid/GridKPICell';
 import { rowData } from './GridTableData';
 import GridTextCell from 'components/Grid/GridTextCell';
+import mockJSON from './gridTableResponse';
 
 const useStyles = makeStyles((theme) => ({
   tableHeaderCell: {
@@ -36,15 +37,48 @@ const useStyles = makeStyles((theme) => ({
 
 export default function GridTable() {
   const classes = useStyles();
+  const [headersNamesList, setHeadersNamesList] = React.useState([]);
+  const [rowsDataList, setRowsDataList] = React.useState([]);
+
+  const createHeadersData = (columnNamesList, columnLabelsList, columnTypesList) => {
+    return columnNamesList
+      .map((eachColumnName) => {
+        return {
+          name: eachColumnName,
+          label: columnLabelsList[eachColumnName],
+          type: [columnTypesList[eachColumnName]],
+        };
+      })
+      .slice(1);
+  };
+
+  const getGridTableData = async () => {
+    const fetchedResponse = await mockJSON;
+    const rawData = fetchedResponse.response;
+
+    const headersData = createHeadersData(rawData.headers, rawData.values[0], rawData.types);
+    setHeadersNamesList(headersData);
+
+    const rowData = rawData.values.slice(1).map((eachRow) => {
+      const { body, ...rest } = eachRow;
+      return rest;
+    });
+
+    setRowsDataList(rowData);
+  };
+
+  useEffect(() => {
+    getGridTableData();
+  }, []);
 
   return (
     <TableContainer component={Box}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            {headerData.map((eachHeader) => (
-              <TableCell className={classes.tableHeaderCell} key={eachHeader.label}>
-                <GridHeaderCell label={eachHeader.label} types={eachHeader.types} />
+            {headersNamesList.map((eachHeader) => (
+              <TableCell className={classes.tableHeaderCell} key={eachHeader.name}>
+                <GridHeaderCell label={eachHeader.label} types={eachHeader.type} />
               </TableCell>
             ))}
           </TableRow>
@@ -57,7 +91,7 @@ export default function GridTable() {
               </TableCell>
             ))}
           </TableRow>
-          {rowData.map((eachRow, index) => {
+          {rowsDataList.map((eachRow, index) => {
             return (
               <TableRow key={index * Math.random()}>
                 {Object.keys(eachRow).map((eachKey, indexKey) => (
