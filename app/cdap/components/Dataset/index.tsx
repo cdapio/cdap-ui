@@ -5,18 +5,24 @@ import { getCategorizedConnections } from 'components/Connections/Browser/SidePa
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
+import { Box, styled } from '@material-ui/core';
 
 import { Idata } from './interfaces/interface';
 import { ConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
+import DataTable from '../DatasetListTable/DataTable';
+
+const SelectDatasetWrapper = styled(Box)({
+  display: 'flex',
+});
 
 const DatasetWrapper: React.FC = () => {
   const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
   });
   const loc = useLocation();
-  const [data, setData] = React.useState<Idata>();
+  const [data, setData] = React.useState<any>([]);
   const [value, setValue] = useState('All Connections');
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
@@ -63,7 +69,6 @@ const DatasetWrapper: React.FC = () => {
   };
 
   const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: string) => {
-    console.log('New Value is', newValue);
     setValue(newValue);
     setData([]);
     newValue !== 'All Connections' && getCategorizedConnectionsforSelectedTab(newValue);
@@ -93,22 +98,21 @@ const DatasetWrapper: React.FC = () => {
           );
         });
       });
-    } catch (e) {
-      console.log('error', e);
-    }
+    } catch (e) {}
   };
   React.useEffect(() => {
     console.log(data, 'this is data');
   }, [data]);
 
   return (
-    <div>
+    <SelectDatasetWrapper>
       <ConnectionsTabs
         connectorTypes={state.connectorTypes}
         handleChange={selectedTabValueHandler}
         value={value}
       />
-    </div>
+      <DataTable datasetList={data} />
+    </SelectDatasetWrapper>
   );
 };
 

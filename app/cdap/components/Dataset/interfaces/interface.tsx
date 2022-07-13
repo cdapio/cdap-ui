@@ -16,8 +16,8 @@ export interface ConnectionTabSidePanel {
 
 export interface Idata {
   type: string;
-  canSample: Boolean;
-  canBrowse: Boolean;
+  canSample: boolean;
+  canBrowse: boolean;
   name: string;
   properties: {
     group: { value: string; type: string };
