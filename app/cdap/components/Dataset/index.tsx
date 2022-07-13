@@ -16,7 +16,7 @@ const DatasetWrapper: React.FC = () => {
     connectorTypes: [],
   });
   const loc = useLocation();
-  const [data, setData] = React.useState<Idata>();
+  const [data, setData] = React.useState<any>();
   const [value, setValue] = useState('All Connections');
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
