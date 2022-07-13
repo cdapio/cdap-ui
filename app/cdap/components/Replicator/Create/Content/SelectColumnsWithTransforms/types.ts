@@ -75,6 +75,7 @@ export interface ISelectColumnsState {
   filterErrs: string[];
   search: string;
   transformations: IColumnTransformation[];
+  saveButtonDisabled: boolean;
 }
 
 export interface ITransformAddProps {
