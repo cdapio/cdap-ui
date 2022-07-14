@@ -1,20 +1,20 @@
-import * as React from 'react';
-import ConnectionsTabs from './ConnectionTabs';
-import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
-import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { useState } from 'react';
-import { useLocation } from 'react-router';
-import { Box, styled } from '@material-ui/core';
+import * as React from "react";
+import ConnectionsTabs from "./ConnectionTabs";
+import { exploreConnection } from "components/Connections/Browser/GenericBrowser/apiHelpers";
+import { getCategorizedConnections } from "components/Connections/Browser/SidePanel/apiHelpers";
+import { fetchConnectors } from "components/Connections/Create/reducer";
+import { useState } from "react";
+import { useLocation } from "react-router";
+import { Box, styled } from "@material-ui/core";
 
-import { Idata } from './interfaces/interface';
-import { ConnectionTabSidePanel } from './interfaces/interface';
-import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
-import GCSIcon from './SVGs/GCSIcon';
-import DataTable from '../DatasetListTable/DataTable';
+import { Idata } from "./interfaces/interface";
+import { ConnectionTabSidePanel } from "./interfaces/interface";
+import AllConnectionsIcon from "./SVGs/AllConnectionsIcon";
+import GCSIcon from "./SVGs/GCSIcon";
+import DataTable from "../DatasetListTable/DataTable";
 
 const SelectDatasetWrapper = styled(Box)({
-  display: 'flex',
+  display: "flex",
 });
 
 const DatasetWrapper: React.FC = () => {
@@ -23,9 +23,9 @@ const DatasetWrapper: React.FC = () => {
   });
   const loc = useLocation();
   const [data, setData] = React.useState<any>([]);
-  const [value, setValue] = useState('All Connections');
+  const [value, setValue] = useState("All Connections");
   const queryParams = new URLSearchParams(loc.search);
-  const pathFromUrl = queryParams.get('path') || '/';
+  const pathFromUrl = queryParams.get("path") || "/";
 
   React.useEffect(() => {
     getConnectionsTabData();
@@ -40,7 +40,8 @@ const DatasetWrapper: React.FC = () => {
     });
     connectorTypes = connectorTypes.map((connectorType) => {
       const connections = categorizedConnections.get(connectorType.name) || [];
-      allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
+      allConnectionsTotalLength =
+        allConnectionsTotalLength + connections.length;
 
       return {
         ...connectorType,
@@ -50,14 +51,14 @@ const DatasetWrapper: React.FC = () => {
     });
 
     connectorTypes.unshift({
-      name: 'All Connections',
-      type: 'default',
-      category: 'default',
-      description: 'All Connections from the List',
+      name: "All Connections",
+      type: "default",
+      category: "default",
+      description: "All Connections from the List",
       artifact: {
-        name: 'allConnections',
-        version: 'local',
-        scope: 'local',
+        name: "allConnections",
+        version: "local",
+        scope: "local",
       },
       count: allConnectionsTotalLength,
       SVG: <AllConnectionsIcon />,
@@ -68,13 +69,19 @@ const DatasetWrapper: React.FC = () => {
     });
   };
 
-  const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: string) => {
+  const selectedTabValueHandler = (
+    event: React.SyntheticEvent,
+    newValue: string
+  ) => {
     setValue(newValue);
     setData([]);
-    newValue !== 'All Connections' && getCategorizedConnectionsforSelectedTab(newValue);
+    newValue !== "All Connections" &&
+      getCategorizedConnectionsforSelectedTab(newValue);
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string) => {
+  const getCategorizedConnectionsforSelectedTab = async (
+    selectedValue: string
+  ) => {
     const categorizedConnections = await getCategorizedConnections();
     const connections = categorizedConnections.get(selectedValue) || [];
     fetchEntities(connections);
@@ -93,7 +100,10 @@ const DatasetWrapper: React.FC = () => {
         values.map((value) => {
           value.map((each) =>
             each.then((response) => {
-              setData((prev: any) => ([...prev, response.entities] as any).flat());
+              console.log(response, "entities");
+              setData((prev: any) =>
+                ([...prev, response.entities] as any).flat()
+              );
             })
           );
         });
@@ -101,7 +111,7 @@ const DatasetWrapper: React.FC = () => {
     } catch (e) {}
   };
   React.useEffect(() => {
-    console.log(data, 'this is data');
+    console.log(data, "this is data");
   }, [data]);
 
   return (
