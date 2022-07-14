@@ -1,39 +1,32 @@
+import { Box, styled, Typography } from '@material-ui/core';
 import React from 'react';
-import { GetIcon } from './IconStore';
-import { Box, styled, Typography, makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles(() => ({
-  welcomeText: {
-    fontSize: '24px',
-    fontWeight: 500,
-    height: '36px',
-  },
-}));
+import { GetIcon } from '../iconStore';
+import { useWelcomeCardComponentStyles } from './styles';
 
 const WelcomeCardContainer = styled(Box)({
   display: 'flex',
   paddingTop: '18px',
 });
 
-const CustomBox = styled(Box)({
+const StyledBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'flex-end',
   marginLeft: '36px',
 });
 
-const WelcomeCard = () => {
-  const classes = useStyles();
+const WelcomeCardComponent: React.FC = () => {
+  const classes = useWelcomeCardComponentStyles();
   const welcomeIcon = GetIcon('welcomeIcon');
   return (
     <WelcomeCardContainer>
       <Box>{welcomeIcon}</Box>
-      <CustomBox>
+      <StyledBox>
         <Typography className={classes.welcomeText}>Hi David</Typography>
         <Typography className={classes.welcomeText}>Welcome to Wrangler</Typography>
-      </CustomBox>
+      </StyledBox>
     </WelcomeCardContainer>
   );
 };
 
-export default WelcomeCard;
+export default WelcomeCardComponent;

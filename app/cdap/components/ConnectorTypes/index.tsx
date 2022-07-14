@@ -1,55 +1,14 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { makeStyles, Paper } from '@material-ui/core';
-import WranglerCard from './ConnectorTypeCard';
+import { Paper } from '@material-ui/core';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { GetConnectionIcon } from './IconStore';
-import WelcomeCard from './WelcomeCard';
 import { defaultConnectorTypes } from 'components/WrangleHome/constants/defaultConnectorTypes';
-
-const useStyles = makeStyles(() => ({
-  flexContainer: {
-    paddingTop: '18px',
-    display: 'flex',
-    flexWrap: 'wrap',
-    backgroundColor: '#F3F6F9',
-    width: '100%',
-    height: '100%',
-    '& > :nth-child(3n+1)': {
-      borderRight: '1px solid #E3E3E3',
-      borderBottom: '1px solid #E3E3E3',
-      width: '160px',
-    },
-    '& > :nth-child(3n+2)': {
-      borderBottom: '1px solid #E3E3E3',
-      width: '180px',
-    },
-    '& > :nth-child(3n)': {
-      borderLeft: '1px solid #E3E3E3',
-      borderBottom: '1px solid #E3E3E3',
-      width: '160px',
-    },
-    '& > :nth-last-child(1)': {
-      borderBottom: '0px',
-    },
-    '& > :nth-last-child(2)': {
-      borderBottom: '0px',
-    },
-    '& > :nth-last-child(3)': {
-      borderBottom: '0px',
-    },
-  },
-  dashBoard: {
-    padding: '18px 59px 18px 60px',
-    backgroundColor: '#F3F6F9',
-    maxWidth: '620px',
-    border: '0px',
-    borderRight: '1px dashed #DADCE0',
-  },
-}));
+import React, { useEffect, useState } from 'react';
+import WranglerCard from './ConnectorTypeCard';
+import { GetConnectionIcon } from './iconStore';
+import { useConnectorTypesComponentStyles } from './styles';
+import WelcomeCard from './WelcomeCard';
 
 const ConnectorTypesComponent = () => {
-  const classes = useStyles();
+  const classes = useConnectorTypesComponentStyles();
 
   const [connectorTypesList, setConnectorTypesList] = useState([]);
 
