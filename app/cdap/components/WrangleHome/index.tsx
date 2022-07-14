@@ -7,8 +7,7 @@ import * as React from 'react';
 const WrangleHome: React.FC = () => {
   return (
     <Box>
-      {/* <ConnectorTypesComponent /> */}
-      <Dataset />
+      <ConnectorTypesComponent />
     </Box>
   );
 };

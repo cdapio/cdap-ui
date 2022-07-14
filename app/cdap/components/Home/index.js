@@ -26,34 +26,27 @@ import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
-import DatasetWrapper from 'components/Dataset/index';
 
-// import ConnectionContainer from '../ConnectionList';
 require('./Home.scss');
 
-const ConnectionContainerView = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectorTypes/index'),
-  loading: LoadingSVGCentered,
-});
-const WranglerHome = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/WrangleHome/index'),
-  loading: LoadingSVGCentered,
-});
-const DatasetListTable = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "EntityListView" */ 'components/DatasetListTable/index'),
-  loading: LoadingSVGCentered,
-});
-const GridTableView = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable/index'),
-  loading: LoadingSVGCentered,
-});
 const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
 });
 const Connections = Loadable({
   loader: () => import(/* webpackChunkName: "Connections" */ 'components/Connections'),
+  loading: LoadingSVGCentered,
+});
+const WrangleHome = Loadable({
+  loader: () => import(/* webpackChunkName: "DataPrepHome" */ 'components/WrangleHome'),
+  loading: LoadingSVGCentered,
+});
+const DatasetsList = Loadable({
+  loader: () => import(/* webpackChunkName: "DataPrepHome" */ 'components/Dataset'),
+  loading: LoadingSVGCentered,
+});
+const WorkspaceGrid = Loadable({
+  loader: () => import(/* webpackChunkName: "DataPrepHome" */ 'components/GridTable'),
   loading: LoadingSVGCentered,
 });
 const DataPrepHome = Loadable({
@@ -160,12 +153,6 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
-          <Route exact path="/ns/:namespace/wrangle" component={WranglerHome} />
-          <Route exact path="/ns/:namespace/wrangler-2" component={DatasetWrapper} />
-          <Route exact path="/ns/:namespace/wrangler1" component={ConnectionContainerView} />
-          <Route exact path="/ns/:namespace/grid" component={GridView} />
-          <Route exact path="/ns/:namespace/datasets" component={DatasetListTable} />
-          <Route exact path="/ns/:namespace/gridtable" component={GridTableView} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact
@@ -176,6 +163,9 @@ export default class Home extends Component {
           />
           <Route path="/ns/:namespace/datasets/:datasetId" component={DatasetDetailedView} />
           <Route exact path="/ns/:namespace/rulesengine" component={RulesEngineHome} />
+          <Route exact path="/ns/:namespace/wrangle-home" component={WrangleHome} />
+          <Route exact path="/ns/:namespace/datasets-list" component={DatasetsList} />
+          <Route exact path="/ns/:namespace/workspace-data" component={WorkspaceGrid} />
           <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
           <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
           <Route path="/ns/:namespace/connections" component={Connections} />
