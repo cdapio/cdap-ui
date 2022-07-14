@@ -6,6 +6,7 @@ import WranglerCard from './ConnectorTypeCard';
 import { GetConnectionIcon } from './iconStore';
 import { useConnectorTypesComponentStyles } from './styles';
 import WelcomeCard from './WelcomeCard';
+import { Link } from 'react-router-dom';
 
 const ConnectorTypesComponent = () => {
   const classes = useConnectorTypesComponentStyles();
@@ -35,11 +36,13 @@ const ConnectorTypesComponent = () => {
         <WelcomeCard />
         <Paper elevation={0} className={classes.flexContainer}>
           {connectorTypesList.map((eachConnectorType) => (
-            <WranglerCard
-              key={eachConnectorType.name}
-              name={eachConnectorType.name}
-              image={eachConnectorType.image}
-            />
+            <Link to={'datasets-list'}>
+              <WranglerCard
+                key={eachConnectorType.name}
+                name={eachConnectorType.name}
+                image={eachConnectorType.image}
+              />
+            </Link>
           ))}
         </Paper>
       </Paper>

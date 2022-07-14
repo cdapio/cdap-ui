@@ -1,17 +1,16 @@
-import * as React from 'react';
-import ConnectionsTabs from './ConnectionTabs';
+import { Box, styled } from '@material-ui/core';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
+import * as React from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
-import { Box, styled } from '@material-ui/core';
+import ConnectionsTabs from './ConnectionTabs';
 
-import { Idata } from './interfaces/interface';
+import DataTable from '../DatasetListTable/DataTable';
 import { ConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
-import DataTable from '../DatasetListTable/DataTable';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
