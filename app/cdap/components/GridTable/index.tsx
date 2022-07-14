@@ -1,10 +1,13 @@
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect } from 'react';
+import { useParams } from 'react-router';
 import { GridHeaderCell, GridKPICell, GridTextCell } from './helpers';
 import { metricsData } from './mock/gridTableData';
 import mockJSON from './mock/gridTableResponse';
 
 const GridTable = () => {
+  const { workspaceid } = useParams() as any;
+
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
 
@@ -36,6 +39,7 @@ const GridTable = () => {
   };
 
   useEffect(() => {
+    console.log(workspaceid, 'this is workspace id');
     getGridTableData();
   }, []);
 

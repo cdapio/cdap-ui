@@ -7,6 +7,7 @@ import { GetConnectionIcon } from './iconStore';
 import { useConnectorTypesComponentStyles } from './styles';
 import WelcomeCard from './WelcomeCard';
 import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const ConnectorTypesComponent = () => {
   const classes = useConnectorTypesComponentStyles();
@@ -36,7 +37,7 @@ const ConnectorTypesComponent = () => {
         <WelcomeCard />
         <Paper elevation={0} className={classes.flexContainer}>
           {connectorTypesList.map((eachConnectorType) => (
-            <Link to={`datasets-list/${eachConnectorType.name}`}>
+            <Link to={`/ns/${getCurrentNamespace()}/datasets-list/${eachConnectorType.name}`}>
               <WranglerCard
                 key={eachConnectorType.name}
                 name={eachConnectorType.name}

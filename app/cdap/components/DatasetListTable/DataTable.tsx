@@ -7,8 +7,10 @@ import { TableHead } from '@material-ui/core';
 import { TableRow } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, styled } from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import MUILink from '@material-ui/core/Link';
 import CachedIcon from '@material-ui/icons/Cached';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -195,8 +197,10 @@ const DataTable = (props) => {
               <TableCell className={classes.tableRowCell}>
                 <Box className={classes.wrangleBox}>
                   {row.showWrangle && (
-                    <Link className={classes.link} component="button" variant="body2">
-                      Wrangle
+                    <Link to={`/ns/${getCurrentNamespace()}/workspace-data/${'xyz'}`}>
+                      <MUILink className={classes.link} component="button" variant="body2">
+                        Wrangle
+                      </MUILink>
                     </Link>
                   )}
                 </Box>
