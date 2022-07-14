@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from '@material-ui/core';
 import { TableBody } from '@material-ui/core';
 import { TableCell } from '@material-ui/core';
@@ -13,6 +13,8 @@ import CachedIcon from '@material-ui/icons/Cached';
 const useStyles = makeStyles((theme) => ({
   table: {
     maxWidth: 1054,
+    marginLeft: '30px',
+    marginRight: '30px',
   },
   tableHeaderCell: {
     padding: '15px 0px 15px 10px',
@@ -23,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '150.6px',
   },
   tableRowCell: {
-    minWidth: '150.6px',
     fontSize: '14px',
     width: 'auto',
     lineHeight: '21px',
@@ -32,11 +33,12 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '1px solid #E0E0E0',
     color: '#5F6368',
     '& > :nth-last-child(1)': {
-      minWidth: '100px',
+      minWidth: '80px',
     },
     boxSizing: 'content-box',
   },
   tableRow: {
+    paddingLeft: '10px',
     '&:hover': {
       backgroundColor: '#EFF0F2',
     },
@@ -76,14 +78,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function createData(
-  name: string,
-  fileFormat: string,
-  schema: number,
-  lastUpdated: number,
-  connectionName: string,
-  connectionStatus: string,
-  lastAvailable: number,
-  showWrangle: boolean
+  name,
+  fileFormat = 'CSV',
+  schema = 4,
+  lastUpdated = 20,
+  connectionName = 'BigQ-Sales-connection',
+  connectionStatus = 'online',
+  lastAvailable = 10,
+  showWrangle = false
 ) {
   return {
     name,
@@ -96,15 +98,6 @@ function createData(
     showWrangle,
   };
 }
-
-const rowsData = [
-  createData('DivamiDatase', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 10, false),
-  createData('DivamiDatase1', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', 11, false),
-  createData('DivamiDatase2', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 10, false),
-  createData('DivamiDatase3', 'CSV', 4, 20, 'BigQ-Sales-connection', 'offline', 9, false),
-  createData('DivamiDatase4', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 2, false),
-  createData('DivamiDatase5', 'CSV', 4, 20, 'BigQ-Sales-connection', 'online', 3, false),
-];
 
 const OnlineIndicator = ({ classes }) => <span className={classes.onlineIndicator}></span>;
 const OfflineIndicator = ({ classes }) => <span className={classes.offlineIndicator}></span>;
@@ -119,8 +112,20 @@ const RefreshIcon = styled(CachedIcon)({
   },
 });
 
-export default function BasicTable() {
-  const [rows, setSelectedRow] = useState(rowsData);
+const DataTable = (props) => {
+  console.log('DataTable props: ', props);
+
+  const [rows, setSelectedRow] = useState([]);
+
+  useEffect(() => {
+    if (props.datasetList) {
+      setSelectedRow(
+        props.datasetList.map((dataset) => {
+          return createData(dataset.name);
+        })
+      );
+    }
+  }, [props.datasetList]);
 
   const classes = useStyles();
   const handleMouseLeave = (event, name) => {
@@ -136,18 +141,24 @@ export default function BasicTable() {
     setSelectedRow(newRows);
   };
 
+  const headersList = [
+    'Dataset name',
+    'File format',
+    'Schema',
+    'Last updated',
+    'Connection name',
+    'Connection Status',
+    '',
+  ];
+
   return (
     <TableContainer component={Box}>
       <Table aria-label="simple table" className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.tableHeaderCell}>Dataset name</TableCell>
-            <TableCell className={classes.tableHeaderCell}>File format</TableCell>
-            <TableCell className={classes.tableHeaderCell}>Schema</TableCell>
-            <TableCell className={classes.tableHeaderCell}>Last updated</TableCell>
-            <TableCell className={classes.tableHeaderCell}>Connection name</TableCell>
-            <TableCell className={classes.tableHeaderCell}>Connection Status</TableCell>
-            <TableCell className={classes.tableHeaderCell}></TableCell>
+            {headersList.map((header) => (
+              <TableCell className={classes.tableHeaderCell}>{header}</TableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -196,4 +207,5 @@ export default function BasicTable() {
       </Table>
     </TableContainer>
   );
-}
+};
+export default DataTable;
