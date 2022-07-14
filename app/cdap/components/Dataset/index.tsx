@@ -4,7 +4,7 @@ import { getCategorizedConnections } from 'components/Connections/Browser/SidePa
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import * as React from 'react';
 import { useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './ConnectionTabs';
 
 import DataTable from '../DatasetListTable/DataTable';
@@ -17,6 +17,8 @@ const SelectDatasetWrapper = styled(Box)({
 });
 
 const DatasetWrapper: React.FC = () => {
+  const { dataset } = useParams() as any;
+
   const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
   });
@@ -27,6 +29,7 @@ const DatasetWrapper: React.FC = () => {
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
+    console.log(dataset, 'this is the param value for tabs');
     getConnectionsTabData();
   }, []);
   const getConnectionsTabData = async () => {

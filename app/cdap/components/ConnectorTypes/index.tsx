@@ -36,7 +36,7 @@ const ConnectorTypesComponent = () => {
         <WelcomeCard />
         <Paper elevation={0} className={classes.flexContainer}>
           {connectorTypesList.map((eachConnectorType) => (
-            <Link to={'datasets-list'}>
+            <Link to={`datasets-list/${eachConnectorType.name}`}>
               <WranglerCard
                 key={eachConnectorType.name}
                 name={eachConnectorType.name}

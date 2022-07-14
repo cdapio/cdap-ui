@@ -164,7 +164,7 @@ export default class Home extends Component {
           <Route path="/ns/:namespace/datasets/:datasetId" component={DatasetDetailedView} />
           <Route exact path="/ns/:namespace/rulesengine" component={RulesEngineHome} />
           <Route exact path="/ns/:namespace/wrangle-home" component={WrangleHome} />
-          <Route exact path="/ns/:namespace/datasets-list" component={DatasetsList} />
+          <Route exact path="/ns/:namespace/datasets-list/:dataset" component={DatasetsList} />
           <Route exact path="/ns/:namespace/workspace-data" component={WorkspaceGrid} />
           <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
           <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
