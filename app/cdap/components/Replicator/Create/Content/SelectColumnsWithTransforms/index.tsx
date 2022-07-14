@@ -300,6 +300,13 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
     props.onSave(props.tableInfo, returnSelectedList());
   }, [state.selectedColumns, state.selectedReplication]);
 
+  useEffect(() => {
+    dispatch({
+      type: 'setSaveButtonDisabled',
+      payload: true,
+    });
+  }, [state.transformations]);
+
   const isSaveDisabled = () => {
     if (
       state.selectedReplication === ReplicateSelect.individual &&
@@ -314,7 +321,7 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
       return true;
     }
 
-    return state.loading;
+    return state.loading || state.saveButtonDisabled || props.assessmentLoading;
   };
 
   const renderLoading = () => {
@@ -368,13 +375,17 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
                 loading={props.assessmentLoading}
                 variant="outlined"
                 color="primary"
-                onClick={() =>
+                onClick={() => {
                   props.handleAssessTable(
                     props.tableInfo,
                     state.transformations,
                     returnSelectedList()
-                  )
-                }
+                  );
+                  dispatch({
+                    type: 'setSaveButtonDisabled',
+                    payload: false,
+                  });
+                }}
               >
                 <CachedIcon /> REFRESH
               </LoadingButton>
