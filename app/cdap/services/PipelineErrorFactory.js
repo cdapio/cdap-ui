@@ -337,6 +337,9 @@ let validateImportJSON = (configString) => {
 
   try {
     config = JSON.parse(configString);
+    if (!config.config && config.configuration) {
+      config.config = JSON.parse(config.configuration);
+    }
   } catch (e) {
     let messagePath = errorPath.concat(['INVALID-SYNTAX']);
     return objectQuery.apply(null, [GLOBALS].concat(messagePath));
@@ -361,6 +364,15 @@ let validateImportJSON = (configString) => {
   return false;
 };
 
+let adjustConfigNode = (configString) => { 
+  const configJSON = JSON.parse(configString);    
+  if (!configJSON.config && configJSON.configuration) {
+    configJSON.config = JSON.parse(configJSON.configuration);
+    return JSON.stringify(configJSON); 
+  }
+  return configString; 
+}
+
 export {
   isUniqueNodeNames,
   isRequiredFieldsFilled,
@@ -377,4 +389,5 @@ export {
   allConnectionsValid,
   connectionIsValid,
   validateImportJSON,
+  adjustConfigNode
 };
