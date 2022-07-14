@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'content-box',
   },
   tableRow: {
+    paddingLeft: '10px',
     '&:hover': {
       backgroundColor: '#EFF0F2',
     },
