@@ -11,6 +11,7 @@ import DataTable from '../DatasetListTable/DataTable';
 import { ConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
+import { forEach } from 'vega-lite/build/src/encoding';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
@@ -29,7 +30,14 @@ const DatasetWrapper: React.FC = () => {
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
-    setValue(dataset);
+    if (dataset === 'Imported Datasets') {
+      setValue('All Connections');
+      getCategorizedConnectionsforSelectedTab('All Connections');
+    } else {
+      setValue(dataset);
+
+      getCategorizedConnectionsforSelectedTab(dataset);
+    }
     getConnectionsTabData();
   }, []);
   const getConnectionsTabData = async () => {
@@ -72,14 +80,37 @@ const DatasetWrapper: React.FC = () => {
 
   const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+
     setData([]);
     newValue !== 'All Connections' && getCategorizedConnectionsforSelectedTab(newValue);
+
+    if (newValue === 'All Connections') {
+      getCategorizedConnectionsforSelectedTab(newValue);
+    }
   };
 
   const getCategorizedConnectionsforSelectedTab = async (selectedValue: string) => {
     const categorizedConnections = await getCategorizedConnections();
-    const connections = categorizedConnections.get(selectedValue) || [];
-    fetchEntities(connections);
+
+    if (selectedValue !== 'All Connections') {
+      const connections = categorizedConnections.get(selectedValue) || [];
+      console.log('Normal:', connections);
+      fetchEntities(connections);
+    } else {
+      const categorizedConnections = await getCategorizedConnections();
+      let connections = [];
+      const allConnections = [];
+      for (const [key] of categorizedConnections) {
+        if (key !== 'Spanner') {
+          connections = categorizedConnections.get(key);
+          connections.forEach((item, idx) => {
+            allConnections.push(item);
+          });
+        }
+      }
+      console.log('All:', allConnections);
+      fetchEntities(allConnections);
+    }
   };
 
   const fetchEntities = async (connections) => {
@@ -101,7 +132,9 @@ const DatasetWrapper: React.FC = () => {
           );
         });
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log('Error !!');
+    }
   };
   React.useEffect(() => {
     console.log(data, 'this is data');

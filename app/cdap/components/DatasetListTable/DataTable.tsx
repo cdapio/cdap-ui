@@ -164,9 +164,9 @@ const DataTable = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row, idx) => (
             <TableRow
-              key={row.name}
+              key={idx}
               className={classes.tableRow}
               onMouseEnter={(event) => handleMouseEnter(event, row.name)}
               onMouseLeave={(event) => handleMouseLeave(event, row.name)}
