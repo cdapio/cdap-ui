@@ -65,7 +65,7 @@ const StyledTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ connectorTypes, handleChange, value }) => {
+const ConnectionsTabs = ({ connectorTypes, handleChange, value, dataset }) => {
   const classes = useStyles();
 
   return (
@@ -94,6 +94,7 @@ const TabsComponent = ({ handleChange, value, connectorTypes }) => {
           icon={<Box className={classes.iconBoxStyles}>{connectorType.SVG}</Box>}
           disableTouchRipple
           key={`${connectorType.name}=${connectorTypeIndex}`}
+          id={connectorType.name}
         />
       ))}
     </Tabs>

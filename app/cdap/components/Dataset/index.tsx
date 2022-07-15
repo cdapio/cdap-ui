@@ -110,7 +110,7 @@ const DatasetWrapper: React.FC = () => {
           });
         }
       }
-      console.log('All:', allConnections);
+
       fetchEntities(allConnections);
     }
   };
@@ -147,6 +147,7 @@ const DatasetWrapper: React.FC = () => {
         connectorTypes={state.connectorTypes}
         handleChange={selectedTabValueHandler}
         value={value}
+        dataset={dataset}
       />
       <DataTable datasetList={data} selectedTab={value} />
     </SelectDatasetWrapper>
