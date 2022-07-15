@@ -31,6 +31,7 @@ const DatasetWrapper: React.FC = () => {
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
+    setValue(dataset);
     getConnectionsTabData();
   }, []);
   const getConnectionsTabData = async () => {
