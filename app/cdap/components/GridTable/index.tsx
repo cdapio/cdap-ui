@@ -1,7 +1,9 @@
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { GridHeaderCell, GridKPICell, GridTextCell } from './helpers';
+import { GridHeaderCell } from './GridHeaderCell';
+import { GridKPICell } from './GridKPICell';
+import { GridTextCell } from './GridTextCell';
 import { metricsData } from './mock/gridTableData';
 import mockJSON from './mock/gridTableResponse';
 
