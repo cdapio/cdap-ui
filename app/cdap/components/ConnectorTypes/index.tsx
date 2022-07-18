@@ -1,4 +1,4 @@
-import { Paper } from '@material-ui/core';
+import { Box, Paper, Typography } from '@material-ui/core';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { defaultConnectorTypes } from 'components/WrangleHome/constants/defaultConnectorTypes';
 import React, { useEffect, useState } from 'react';
@@ -6,8 +6,9 @@ import WranglerCard from './ConnectorTypeCard';
 import { GetConnectionIcon } from './iconStore';
 import { useConnectorTypesComponentStyles } from './styles';
 import WelcomeCard from './WelcomeCard';
-import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
+import { UnderLine } from './iconStore';
 
 const ConnectorTypesComponent = () => {
   const classes = useConnectorTypesComponentStyles();
@@ -35,9 +36,14 @@ const ConnectorTypesComponent = () => {
     <>
       <Paper variant="outlined" elevation={9} className={classes.dashBoard}>
         <WelcomeCard />
+        <Typography className={classes.subTitle}>Start data exploration</Typography>
+        <Box className={classes.underLine}>{UnderLine}</Box>
         <Paper elevation={0} className={classes.flexContainer}>
           {connectorTypesList.map((eachConnectorType) => (
-            <Link to={`/ns/${getCurrentNamespace()}/datasets-list/${eachConnectorType.name}`}>
+            <Link
+              to={`/ns/${getCurrentNamespace()}/datasets-list/${eachConnectorType.name}`}
+              className={classes.linkLine}
+            >
               <WranglerCard
                 key={eachConnectorType.name}
                 name={eachConnectorType.name}

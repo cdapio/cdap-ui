@@ -9,38 +9,43 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, styled } from '@material-ui/core';
 import MUILink from '@material-ui/core/Link';
 import CachedIcon from '@material-ui/icons/Cached';
-import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
+  tableContainer: {
+    marginTop: '35px',
+    maxWidth: '1114px',
+    paddingLeft: '30px',
+    paddingRight: '30px',
+  },
   table: {
-    maxWidth: 1054,
-    marginLeft: '30px',
-    marginRight: '30px',
+    maxWidth: '1054px',
   },
   tableHeaderCell: {
-    padding: '15px 0px 15px 10px',
+    minWidth: '120px',
+    padding: '0px 0px 9px 10px',
     borderBottom: '1px solid #5F6368',
     marginRight: '50px !important',
-    width: 'auto',
     fontSize: '14px',
-    minWidth: '150.6px',
+    lineHeight: '21px',
   },
   tableRowCell: {
+    minWidth: '120px',
     fontSize: '14px',
-    width: 'auto',
     lineHeight: '21px',
     padding: '15px 0px 15px 10px',
     paddingLeft: '10px',
     borderBottom: '1px solid #E0E0E0',
     color: '#5F6368',
     '& > :nth-last-child(1)': {
-      minWidth: '80px',
+      minWidth: '150px',
     },
     boxSizing: 'content-box',
   },
   tableRow: {
     paddingLeft: '10px',
+    minHeight: '51px',
     '&:hover': {
       backgroundColor: '#EFF0F2',
     },
@@ -48,13 +53,16 @@ const useStyles = makeStyles((theme) => ({
   link: {
     marginRight: '10px',
     fontSize: '14px',
-    lineHeight: '21px',
     fontWeight: 400,
+    '&:hover': {
+      textDecoration: 'none',
+    },
   },
   wrangleBox: {
     display: 'flex',
     justifyContent: 'flex-end',
     paddingRight: '30px',
+    minWidth: '150px',
   },
   onlineIndicator: {
     height: '8px',
@@ -116,6 +124,7 @@ const RefreshIcon = styled(CachedIcon)({
 
 const DataTable = (props) => {
   console.log('DataTable props: ', props);
+  const { selectedTab } = props;
 
   const [rows, setSelectedRow] = useState([]);
 
@@ -150,11 +159,11 @@ const DataTable = (props) => {
     'Last updated',
     'Connection name',
     'Connection Status',
-    '',
+    ' ',
   ];
 
   return (
-    <TableContainer component={Box}>
+    <TableContainer component={Box} className={classes.tableContainer}>
       <Table aria-label="simple table" className={classes.table}>
         <TableHead>
           <TableRow>
