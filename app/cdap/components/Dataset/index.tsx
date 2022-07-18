@@ -11,7 +11,6 @@ import DataTable from '../DatasetListTable/DataTable';
 import { IConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
-import { forEach } from 'vega-lite/build/src/encoding';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
@@ -21,8 +20,7 @@ const SelectDatasetWrapper = styled(Box)({
 
 const DatasetWrapper: React.FC = () => {
   const { dataset } = useParams() as any;
-
-  const [state, setState] = useState<IConnectionTabSidePanel>({
+  const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
   });
   const loc = useLocation();
@@ -37,11 +35,11 @@ const DatasetWrapper: React.FC = () => {
       getCategorizedConnectionsforSelectedTab('All Connections');
     } else {
       setValue(dataset);
-
       getCategorizedConnectionsforSelectedTab(dataset);
     }
     getConnectionsTabData();
   }, []);
+
   const getConnectionsTabData = async () => {
     let connectorTypes = await fetchConnectors();
     let allConnectionsTotalLength = 0;
@@ -96,7 +94,6 @@ const DatasetWrapper: React.FC = () => {
 
     if (selectedValue !== 'All Connections') {
       const connections = categorizedConnections.get(selectedValue) || [];
-      console.log('Normal:', connections);
       fetchEntities(connections);
     } else {
       const categorizedConnections = await getCategorizedConnections();
@@ -147,7 +144,6 @@ const DatasetWrapper: React.FC = () => {
         connectorTypes={state.connectorTypes}
         handleChange={selectedTabValueHandler}
         value={value}
-        dataset={dataset}
       />
       <DataTable datasetList={data} selectedTab={value} />
     </SelectDatasetWrapper>
