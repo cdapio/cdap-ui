@@ -135,7 +135,7 @@ const DatasetWrapper: React.FC = () => {
     }
   };
   React.useEffect(() => {
-    // do nothing
+    console.log(data, '----> Entities');
   }, [data]);
 
   return (

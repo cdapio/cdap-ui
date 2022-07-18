@@ -88,14 +88,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function createData(
-  name,
-  fileFormat = 'CSV',
-  schema = 4,
-  lastUpdated = 20,
-  connectionName = 'BigQ-Sales-connection',
-  connectionStatus = 'online',
-  lastAvailable = 10,
-  showWrangle = false
+  name: string,
+  fileFormat: string = 'CSV',
+  schema: number = 4,
+  lastUpdated: number = 20,
+  connectionName: string = 'BigQ-Sales-connection',
+  connectionStatus: string = 'online',
+  lastAvailable: number = 10,
+  showWrangle: boolean = false
 ) {
   return {
     name,
@@ -131,7 +131,7 @@ const DataTable = (props) => {
     if (props.datasetList) {
       setSelectedRow(
         props.datasetList.map((dataset) => {
-          return createData(dataset.name);
+          return createData(dataset.name, dataset.type, 4, 4, selectedTab, 'online', 4, false);
         })
       );
     }
