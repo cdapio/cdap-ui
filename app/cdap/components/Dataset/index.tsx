@@ -74,7 +74,9 @@ const DatasetWrapper: React.FC = () => {
   const selectedTabValueHandler = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     setData([]);
-    newValue !== 'All Connections' && getCategorizedConnectionsforSelectedTab(newValue);
+    if (newValue !== 'All Connections') {
+      getCategorizedConnectionsforSelectedTab(newValue);
+    }
   };
 
   const getCategorizedConnectionsforSelectedTab = async (selectedValue: string) => {
@@ -93,8 +95,8 @@ const DatasetWrapper: React.FC = () => {
 
     try {
       await Promise.all([await connectionsUpdated]).then((values) => {
-        values.map((value) => {
-          value.map((each) =>
+        values.map((eachValue) => {
+          eachValue.map((each) =>
             each.then((response) => {
               setData((prev: any) => ([...prev, response.entities] as any).flat());
             })
@@ -102,10 +104,12 @@ const DatasetWrapper: React.FC = () => {
         });
       });
     } catch (e) {
-      console.log(e);
+      // do nothing
     }
   };
-  React.useEffect(() => {}, [data]);
+  React.useEffect(() => {
+    // do nothing
+  }, [data]);
 
   return (
     <SelectDatasetWrapper>

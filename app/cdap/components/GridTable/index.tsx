@@ -41,7 +41,6 @@ const GridTable = () => {
   };
 
   useEffect(() => {
-    console.log(workspaceid, 'this is workspace id');
     getGridTableData();
   }, []);
 

@@ -14,7 +14,7 @@ export interface IConnectionTabSidePanel {
   //  mapOfConnectorPluginProperties: { [key: string]: any };
 }
 
-export interface Idata {
+export interface IData {
   type: string;
   canSample: boolean;
   canBrowse: boolean;

@@ -123,7 +123,6 @@ const RefreshIcon = styled(CachedIcon)({
 });
 
 const DataTable = (props) => {
-  console.log('DataTable props: ', props);
   const { selectedTab } = props;
 
   const [rows, setSelectedRow] = useState([]);
