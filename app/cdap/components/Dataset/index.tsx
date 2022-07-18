@@ -30,7 +30,7 @@ const DatasetWrapper: React.FC = () => {
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
-    if (dataset === 'Imported Datasets') {
+    if (['Imported Datasets', 'New Exploration'].includes(dataset)) {
       setValue('All Connections');
       getCategorizedConnectionsforSelectedTab('All Connections');
     } else {
