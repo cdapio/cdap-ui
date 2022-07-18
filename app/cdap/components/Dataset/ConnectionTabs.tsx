@@ -65,7 +65,7 @@ const StyledTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ connectorTypes, handleChange, value }) => {
+const ConnectionsTabs = ({ connectorTypes, handleChange, value, dataset }) => {
   const classes = useStyles();
 
   return (
