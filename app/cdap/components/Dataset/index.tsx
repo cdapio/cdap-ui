@@ -20,7 +20,7 @@ const SelectDatasetWrapper = styled(Box)({
 
 const DatasetWrapper: React.FC = () => {
   const { dataset } = useParams() as any;
-  const [state, setState] = useState<ConnectionTabSidePanel>({
+  const [state, setState] = useState<any>({
     connectorTypes: [],
   });
   const loc = useLocation();
