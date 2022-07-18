@@ -86,7 +86,7 @@ export const PipelineType = styled.div`
 
 export const MetadataLeft = styled.div`
   margin-left: 10px;
-  width: calc(100% - 50px);
+  width: calc(100% - 310px);
   text-align: left !important;
 `;
 
