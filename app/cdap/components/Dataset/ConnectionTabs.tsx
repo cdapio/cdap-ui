@@ -7,11 +7,10 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles({
   boxStyles: {
-    maxWidth: '252px',
+    width: '252px',
     background: 'linear-gradient(180deg, rgba(243, 246, 249, 0) -0.07%, #F3F6F9 22.66%)',
-    border: '1px dashed #DADCE0',
+    borderRight: '1px dashed #DADCE0',
     zIndex: 1,
-    borderTop: '1px solid #E0E0E0;',
   },
   tabIndicatorStyles: {
     backgroundColor: 'white',
@@ -20,6 +19,10 @@ const useStyles = makeStyles({
     borderStyle: 'solid',
     borderImage: 'linear-gradient(to left, #4681F4, 2%,white,white,white,white,white,white) 1',
     zIndex: 2,
+  },
+  labelsContainer: {
+    display: 'flex',
+    gap: '4px',
   },
   labelStyles: {
     maxWidth: '125px',
@@ -36,7 +39,7 @@ const useStyles = makeStyles({
 
 const StyledTab = styled(Tab)({
   minWidth: '161px',
-  maxHeight: '54px',
+  // maxHeight: '54px',
   padding: '15px 0px 15px 32px',
   textTransform: 'none',
   color: 'black',
@@ -55,6 +58,10 @@ const StyledTab = styled(Tab)({
   },
   '&.MuiTab-labelIcon .MuiTab-wrapper > *:first-child': {
     marginBottom: '0px',
+  },
+  '&:first-child': {
+    paddingTop: '30px',
+    paddingBottom: '30px',
   },
 });
 
@@ -98,12 +105,12 @@ const TooltipLabel = ({ label, count }) => {
 
   return (
     <Tooltip title={label}>
-      <>
+      <Box className={classes.labelsContainer}>
         <Typography variant="body1" className={classes.labelStyles}>
           {label}
         </Typography>
         <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
-      </>
+      </Box>
     </Tooltip>
   );
 };

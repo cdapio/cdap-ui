@@ -27,14 +27,24 @@ export const GetIcon = (IconName) => {
   switch (IconName) {
     case 'welcomeIcon':
       return IconWelcome;
+    case 'underlineIcon':
+      return UnderLine;
     default:
       return IconSVG;
   }
 };
 
+export const UnderLine = (
+  <svg width="67" height="2" viewBox="0 0 67 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0H50L53 2H3L0 0Z" fill="#4681F4" />
+    <path d="M54 0H63.5L66.5 2H57L54 0Z" fill="#4681F4" />
+  </svg>
+);
+
 const IconSVG = (
   <svg
     width="40px"
+    height="40px"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="-1.633235433328256 7.0326093303156565 131.26574682416876 114.63439066968435"
   >
@@ -122,7 +132,7 @@ const IconWelcome = (
 );
 
 const fileSVG = (
-  <svg width="38" height="31" viewBox="0 0 38 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="40" height="40" viewBox="0 0 38 31" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fillRule="evenodd"
       clipRule="evenodd"

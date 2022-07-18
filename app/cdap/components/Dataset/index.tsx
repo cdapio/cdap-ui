@@ -8,18 +8,20 @@ import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './ConnectionTabs';
 
 import DataTable from '../DatasetListTable/DataTable';
-import { ConnectionTabSidePanel } from './interfaces/interface';
+import { IConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
+  marginTop: '48px',
+  borderTop: '1px solid #E0E0E0;',
 });
 
 const DatasetWrapper: React.FC = () => {
   const { dataset } = useParams() as any;
 
-  const [state, setState] = useState<ConnectionTabSidePanel>({
+  const [state, setState] = useState<IConnectionTabSidePanel>({
     connectorTypes: [],
   });
   const loc = useLocation();
@@ -29,7 +31,6 @@ const DatasetWrapper: React.FC = () => {
   const pathFromUrl = queryParams.get('path') || '/';
 
   React.useEffect(() => {
-    console.log(dataset, 'this is the param value for tabs');
     getConnectionsTabData();
   }, []);
   const getConnectionsTabData = async () => {
@@ -95,17 +96,16 @@ const DatasetWrapper: React.FC = () => {
         values.map((value) => {
           value.map((each) =>
             each.then((response) => {
-              console.log(response, 'entities');
               setData((prev: any) => ([...prev, response.entities] as any).flat());
             })
           );
         });
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
-  React.useEffect(() => {
-    console.log(data, 'this is data');
-  }, [data]);
+  React.useEffect(() => {}, [data]);
 
   return (
     <SelectDatasetWrapper>
@@ -114,7 +114,7 @@ const DatasetWrapper: React.FC = () => {
         handleChange={selectedTabValueHandler}
         value={value}
       />
-      <DataTable datasetList={data} />
+      <DataTable datasetList={data} selectedTab={value} />
     </SelectDatasetWrapper>
   );
 };

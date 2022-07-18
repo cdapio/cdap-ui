@@ -1,26 +1,28 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { UnderLine } from './iconStore';
 
 export const useConnectorTypesComponentStyles = makeStyles(() => ({
   flexContainer: {
-    paddingTop: '18px',
+    marginTop: '17px',
+    paddingBottom: '17px',
     display: 'flex',
     flexWrap: 'wrap',
-    backgroundColor: '#F3F6F9',
     width: '100%',
     height: '100%',
+    background: 'transparent',
     '& > :nth-child(3n+1)': {
       borderRight: '1px solid #E3E3E3',
       borderBottom: '1px solid #E3E3E3',
-      width: '160px',
+      // width: '160px',
     },
     '& > :nth-child(3n+2)': {
       borderBottom: '1px solid #E3E3E3',
-      width: '180px',
+      // width: '180px',
     },
     '& > :nth-child(3n)': {
       borderLeft: '1px solid #E3E3E3',
       borderBottom: '1px solid #E3E3E3',
-      width: '160px',
+      // width: '160px',
     },
     '& > :nth-last-child(1)': {
       borderBottom: '0px',
@@ -33,10 +35,25 @@ export const useConnectorTypesComponentStyles = makeStyles(() => ({
     },
   },
   dashBoard: {
-    padding: '18px 59px 18px 60px',
-    backgroundColor: '#F3F6F9',
+    padding: '0px 59px 0px 60px',
     maxWidth: '620px',
     border: '0px',
     borderRight: '1px dashed #DADCE0',
+    backgroundImage: 'linear-gradient(180deg, rgba(243, 246, 249, 0) -0.07%, #F3F6F9 22.66%)',
+  },
+  linkLine: {
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'none !important',
+    },
+  },
+  subTitle: {
+    fontSize: '18px',
+    fontWeight: 400,
+    lineHeight: '27px',
+    marginTop: '63.5px',
+  },
+  underLine: {
+    lineHeight: '2px',
   },
 }));

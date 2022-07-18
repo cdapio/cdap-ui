@@ -2,8 +2,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useConnectorTypeCardComponentStyles = makeStyles(() => ({
   cardWrapper: {
+    width: '166px',
     height: '150px',
-    backgroundColor: '#F3F6F9',
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -23,5 +23,7 @@ export const useConnectorTypeCardComponentStyles = makeStyles(() => ({
     fontWeight: 400,
     letterSpacing: '0.15px',
     marginTop: '7px',
+    textDecoration: 'none !important',
+    color: '#000000',
   },
 }));

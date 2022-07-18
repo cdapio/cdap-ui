@@ -9,7 +9,7 @@ export interface IConnectorTypes {
     scope: string;
   };
 }
-export interface ConnectionTabSidePanel {
+export interface IConnectionTabSidePanel {
   connectorTypes: IConnectorTypes[];
   //  mapOfConnectorPluginProperties: { [key: string]: any };
 }
