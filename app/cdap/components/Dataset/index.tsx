@@ -11,7 +11,6 @@ import DataTable from '../DatasetListTable/DataTable';
 import { ConnectionTabSidePanel } from './interfaces/interface';
 import AllConnectionsIcon from './SVGs/AllConnectionsIcon';
 import GCSIcon from './SVGs/GCSIcon';
-import { forEach } from 'vega-lite/build/src/encoding';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
@@ -19,7 +18,6 @@ const SelectDatasetWrapper = styled(Box)({
 
 const DatasetWrapper: React.FC = () => {
   const { dataset } = useParams() as any;
-
   const [state, setState] = useState<ConnectionTabSidePanel>({
     connectorTypes: [],
   });
@@ -35,11 +33,11 @@ const DatasetWrapper: React.FC = () => {
       getCategorizedConnectionsforSelectedTab('All Connections');
     } else {
       setValue(dataset);
-
       getCategorizedConnectionsforSelectedTab(dataset);
     }
     getConnectionsTabData();
   }, []);
+
   const getConnectionsTabData = async () => {
     let connectorTypes = await fetchConnectors();
     let allConnectionsTotalLength = 0;
@@ -94,7 +92,6 @@ const DatasetWrapper: React.FC = () => {
 
     if (selectedValue !== 'All Connections') {
       const connections = categorizedConnections.get(selectedValue) || [];
-      console.log('Normal:', connections);
       fetchEntities(connections);
     } else {
       const categorizedConnections = await getCategorizedConnections();
@@ -126,7 +123,6 @@ const DatasetWrapper: React.FC = () => {
         values.map((value) => {
           value.map((each) =>
             each.then((response) => {
-              console.log(response, 'entities');
               setData((prev: any) => ([...prev, response.entities] as any).flat());
             })
           );
@@ -136,9 +132,6 @@ const DatasetWrapper: React.FC = () => {
       console.log('Error !!');
     }
   };
-  React.useEffect(() => {
-    console.log(data, 'this is data');
-  }, [data]);
 
   return (
     <SelectDatasetWrapper>
@@ -146,7 +139,6 @@ const DatasetWrapper: React.FC = () => {
         connectorTypes={state.connectorTypes}
         handleChange={selectedTabValueHandler}
         value={value}
-        dataset={dataset}
       />
       <DataTable datasetList={data} />
     </SelectDatasetWrapper>
