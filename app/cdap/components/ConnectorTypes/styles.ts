@@ -1,7 +1,16 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { UnderLine } from './iconStore';
+import './styles.scss';
 
 export const useConnectorTypesComponentStyles = makeStyles(() => ({
+  dashBoard: {
+    fontFamily: 'noto-sans !important',
+    padding: '0px 59px 0px 60px',
+    maxWidth: '620px',
+    border: '0px',
+    borderRight: '1px dashed #DADCE0',
+    backgroundImage: 'linear-gradient(180deg, rgba(243, 246, 249, 0) -0.07%, #F3F6F9 22.66%)',
+  },
   flexContainer: {
     marginTop: '17px',
     paddingBottom: '17px',
@@ -33,13 +42,6 @@ export const useConnectorTypesComponentStyles = makeStyles(() => ({
     '& > :nth-last-child(3)': {
       borderBottom: '0px',
     },
-  },
-  dashBoard: {
-    padding: '0px 59px 0px 60px',
-    maxWidth: '620px',
-    border: '0px',
-    borderRight: '1px dashed #DADCE0',
-    backgroundImage: 'linear-gradient(180deg, rgba(243, 246, 249, 0) -0.07%, #F3F6F9 22.66%)',
   },
   linkLine: {
     textDecoration: 'none',

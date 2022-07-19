@@ -26,6 +26,7 @@ const DatasetWrapper: React.FC = () => {
   const loc = useLocation();
   const [data, setData] = React.useState<any>([]);
   const [value, setValue] = useState('All Connections');
+  const [datasetsWithConnectionName, setDatasetsWithConnectionName] = useState([]);
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
 
@@ -95,14 +96,16 @@ const DatasetWrapper: React.FC = () => {
     if (selectedValue !== 'All Connections') {
       const connections = categorizedConnections.get(selectedValue) || [];
       fetchEntities(connections);
+      console.log('connections', connections);
     } else {
       const categorizedConnections = await getCategorizedConnections();
       let connections = [];
       const allConnections = [];
+      console.log('categorizedConnections', categorizedConnections);
       for (const [key] of categorizedConnections) {
-        if (key !== 'Spanner') {
+        if (key !== 'Spanner' || key !== 'PostgreSQL') {
           connections = categorizedConnections.get(key);
-          connections.forEach((item, idx) => {
+          connections.forEach((item) => {
             allConnections.push(item);
           });
         }
@@ -113,19 +116,29 @@ const DatasetWrapper: React.FC = () => {
   };
 
   const fetchEntities = async (connections) => {
-    const connectionsUpdated = connections.map((eachConnection) =>
-      exploreConnection({
+    const ids = [];
+    const connectionsUpdated = connections.map((eachConnection) => {
+      ids.push(eachConnection.connectionId);
+      return exploreConnection({
         connectionid: eachConnection.connectionId,
         path: pathFromUrl,
-      })
-    );
+      });
+    });
 
+    console.log(ids, 'list of Ids');
+    let count = 0;
     try {
       await Promise.all([await connectionsUpdated]).then((values) => {
-        values.map((eachValue) => {
+        values.map((eachValue, valueIndex) => {
           eachValue.map((each) =>
             each.then((response) => {
+              console.log(ids[count], 'count value', count, 'ids[valueIndex]');
+              response.entities.map((eachEntity) => {
+                eachEntity[`connectionsName`] = ids[count];
+              });
               setData((prev: any) => ([...prev, response.entities] as any).flat());
+              console.log(response.entities, 'response.entities');
+              count = count + 1;
             })
           );
         });
@@ -134,9 +147,10 @@ const DatasetWrapper: React.FC = () => {
       // do nothing
     }
   };
+
   React.useEffect(() => {
-    console.log(data, '----> Entities');
-  }, [data]);
+    // nothing goes here;
+  }, [datasetsWithConnectionName]);
 
   return (
     <SelectDatasetWrapper>

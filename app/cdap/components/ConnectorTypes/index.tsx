@@ -9,6 +9,7 @@ import WelcomeCard from './WelcomeCard';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 import { UnderLine } from './iconStore';
+import './Assets/NotoSans-Regular.ttf';
 
 const ConnectorTypesComponent = () => {
   const classes = useConnectorTypesComponentStyles();

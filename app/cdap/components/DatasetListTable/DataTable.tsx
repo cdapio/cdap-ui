@@ -131,7 +131,16 @@ const DataTable = (props) => {
     if (props.datasetList) {
       setSelectedRow(
         props.datasetList.map((dataset) => {
-          return createData(dataset.name, dataset.type, 4, 4, selectedTab, 'online', 4, false);
+          return createData(
+            dataset.name,
+            dataset.type,
+            4,
+            4,
+            dataset.connectionsName,
+            'online',
+            4,
+            false
+          );
         })
       );
     }
