@@ -34,6 +34,11 @@ const GridCellButton = styled(StyledButton)`
   height: 18px;
 `;
 
+const connectionActions = {
+  ACCEPT: 'accept',
+  REJECT: 'reject',
+};
+
 interface INewReqLastColumnProps {
   instanceName: string;
   handleAcceptOrReject: (action: string, peer: string) => void;
@@ -48,7 +53,7 @@ const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastCol
 
   const confirmReject = () => {
     toggleModalOpen();
-    handleAcceptOrReject('reject', instanceName);
+    handleAcceptOrReject(connectionActions.REJECT, instanceName);
   };
   const confirmRejectElem = (
     <div>{T.translate(`${PREFIX}.ConfirmationModal.rejectRequestCopy`)}</div>
@@ -58,7 +63,7 @@ const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastCol
     <>
       <ButtonsContainer>
         <GridCellButton
-          onClick={() => handleAcceptOrReject('accept', instanceName)}
+          onClick={() => handleAcceptOrReject(connectionActions.ACCEPT, instanceName)}
           data-testid="accept-connection"
         >
           {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
