@@ -76,7 +76,8 @@ export default class Calculate extends Component {
       operationPopoverOpen: null,
       operationInput: 1,
       createNewColumn: false,
-      newColumnInput: this.props.column + T.translate(`${COPY_NEW_COLUMN_PREFIX}.inputSuffix`),
+      newColumnInput: (typeof this.props.column === 'string' ? this.props.column : this.props.column.join('_'))
+         + T.translate(`${COPY_NEW_COLUMN_PREFIX}.inputSuffix`),
       isDisabled: !this.columnTypes.every(type => this.VALID_TYPES.includes(type)) || this.isDisabled
     };
 
@@ -122,6 +123,12 @@ export default class Calculate extends Component {
       'CROSSEQUAL',
       'CROSSMAX',
       'CROSSMIN',
+      'CROSSAVG',
+      'MULTIADD',
+      'MULTIMULTIPLY',
+      'MULTIEQUAL',
+      'MULTIMAX',
+      'MULTIMIN',
       'MULTIAVG',
       'DECIMALSQUARE',
       'DECIMALCUBE',
@@ -362,37 +369,37 @@ export default class Calculate extends Component {
         {
           name: 'CROSSADD',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:add(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSSUBTRACT',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:minus(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSMULTIPLY',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:multiply(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSDIVIDEQ',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:divideq(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSDIVIDER',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:divider(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSLCM',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:lcm(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
@@ -404,13 +411,13 @@ export default class Calculate extends Component {
         {
           name: 'CROSSMAX',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:max(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
           name: 'CROSSMIN',
           validColTypes: NUMBER_TYPES,
-          acceptMixedTypes: false,
+          acceptMixedTypes: true,
           expression: () => `arithmetic:min(${this.columns[0]}, ${this.columns[1]})`,
         },
         {
@@ -422,6 +429,36 @@ export default class Calculate extends Component {
       ],
       // These options operate on >2 columns at a time, and appear in the order provided
       MULTI_COLUMN_CALCULATE_OPTIONS: [
+       {
+         name: 'MULTIADD',
+         validColTypes: NUMBER_TYPES,
+         acceptMixedTypes: true,
+         expression: () => `arithmetic:add(${this.columns})`,
+       },
+       {
+         name: 'MULTIMULTIPLY',
+         validColTypes: NUMBER_TYPES,
+         acceptMixedTypes: true,
+         expression: () => `arithmetic:multiply(${this.columns})`,
+       },
+       {
+         name: 'MULTIEQUAL',
+         validColTypes: NUMBER_TYPES,
+         acceptMixedTypes: false,
+         expression: () => `arithmetic:equal(${this.columns})`,
+       },
+       {
+         name: 'MULTIMAX',
+         validColTypes: NUMBER_TYPES,
+         acceptMixedTypes: true,
+         expression: () => `arithmetic:max(${this.columns})`,
+       },
+       {
+         name: 'MULTIMIN',
+         validColTypes: NUMBER_TYPES,
+         acceptMixedTypes: true,
+         expression: () => `arithmetic:min(${this.columns})`,
+       },
        {
          name: 'MULTIAVG',
          validColTypes: NUMBER_TYPES,
@@ -518,10 +555,18 @@ export default class Calculate extends Component {
   parseColumns = () => {
     const columns = typeof this.props.column === 'string' ? [this.props.column] : this.props.column;
     const columnTypes = [...new Set(columns.map(col => DataPrepStore.getState().dataprep.typesCheck[col]))];
+
+    // We replace 'decimal' with 'bigdecimal' to be compatible with the NUMBER_TYPES list
+    let index = columnTypes.indexOf('decimal');
+    if (index !== -1) {
+      columnTypes[index] = 'bigdecimal';
+    }
+
     const crossColumn = columns.length === 2;
     const multiColumn = columns.length > 2;
     const areColsMixedTypes = columnTypes.length > 1;
     let allOptions;
+
     if (multiColumn) {
       allOptions = this.MULTI_COLUMN_CALCULATE_OPTIONS;
     } else if (crossColumn) {
@@ -529,6 +574,7 @@ export default class Calculate extends Component {
     } else {
       allOptions = this.CALCULATE_OPTIONS;
     }
+
     const availableOptions = allOptions.filter(
         option => option.name === 'label'
                    || (!areColsMixedTypes && option.validColTypes.includes(columnTypes[0]))
@@ -748,7 +794,7 @@ export default class Calculate extends Component {
       );
     }
 
-    if (this.SIMPLE_POPOVER_OPTIONS.indexOf(this.state.operationPopoverOpen) !== -1) {
+    if (this.SIMPLE_POPOVER_OPTIONS.includes(this.state.operationPopoverOpen)) {
       return (
         <div className="third-level-popover" onClick={preventPropagation}>
           {this.renderNewColumnNameInputWithCheckbox()}

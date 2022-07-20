@@ -723,6 +723,11 @@ features:
           CROSSMAX: Max
           CROSSMIN: Min
           CROSSAVG: Average
+          MULTIADD: Add
+          MULTIMULTIPLY: Multiply
+          MULTIEQUAL: Equal
+          MULTIMAX: Max
+          MULTIMIN: Min
           MULTIAVG: Average
         title: Calculate
       ChangeDataType:
