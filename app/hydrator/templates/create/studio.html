@@ -23,14 +23,14 @@
     </div>
   </div>
 
-
   <div class="canvas-wrapper" ng-if="false">
     <div class="left-panel-wrapper"
          ng-class="{'expanded': HydratorPlusPlusStudioCtrl.isExpanded === true}">
       <div ui-view="leftpanel" class="left-panel"></div>
     </div>
   
-  <div ui-view="toppanel" class="top-panel" ng-if="false"></div>
-  <div class="right-wrapper">
-    <div ui-view="canvas" class="canvas"></div>
+    <div ui-view="toppanel" class="top-panel"></div>
+    <div class="right-wrapper">
+      <div ui-view="canvas" class="canvas"></div>
+    </div>
   </div>
