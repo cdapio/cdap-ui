@@ -245,6 +245,7 @@ features:
          description: Description
          gcp: Google cloud project
          instanceName: Instance name
+         instanceUrl: Instance URL
          region: Region
          tetheredNamespace: Tethered namespace
          cpu: CPU (# of cores)
@@ -721,6 +722,13 @@ features:
           CROSSEQUAL: Equal
           CROSSMAX: Max
           CROSSMIN: Min
+          CROSSAVG: Average
+          MULTIADD: Add
+          MULTIMULTIPLY: Multiply
+          MULTIEQUAL: Equal
+          MULTIMAX: Max
+          MULTIMIN: Min
+          MULTIAVG: Average
         title: Calculate
       ChangeDataType:
         disabledTooltip: "Change data type is not available on columns of data type 'LocalDate', 'LocalTime', or 'ZonedDateTime'"

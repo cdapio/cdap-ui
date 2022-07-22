@@ -274,6 +274,7 @@ class HydratorUpgradeService {
         return;
       }
 
+      fileDataString = this.NonStorePipelineErrorFactory.adjustConfigNode(fileDataString);
       this.openUpgradeModal(fileDataString);
     };
   }

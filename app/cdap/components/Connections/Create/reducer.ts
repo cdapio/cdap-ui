@@ -322,7 +322,7 @@ export function getSelectedConnectorDisplayName(selectedConnector, mapOfConnecto
 
   if (
     mapOfConnectorPluginProperties &&
-    `${pluginKey}-${artifactKey}` in Object.keys(mapOfConnectorPluginProperties)
+    `${pluginKey}-${artifactKey}` in mapOfConnectorPluginProperties
   ) {
     const selectedWidgetJSON =
       mapOfConnectorPluginProperties[`${pluginKey}-${artifactKey}`][parsedwidgetJSONKey];
