@@ -27,7 +27,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 
-
 public class Admin {
 
   @When("Open configuration page")
