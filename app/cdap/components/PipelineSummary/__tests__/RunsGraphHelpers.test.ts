@@ -14,7 +14,10 @@
  * the License.
  */
 
-import { getResolution, getGapFilledAccumulatedData } from 'components/PipelineSummary/RunsGraphHelpers';
+import {
+  getResolution,
+  getGapFilledAccumulatedData,
+} from 'components/PipelineSummary/RunsGraphHelpers';
 const secondsi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.seconds';
 const minutesi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.minutes';
 const hoursi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.hours';
@@ -49,42 +52,57 @@ describe('RunsGraphHelper', () => {
 
   describe.only('getGapFilledAccumulatedData', () => {
     it('should return the same elements if there are no gaps', () => {
-      expect(getGapFilledAccumulatedData([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1002, y: 575}
-      ], 0)).toStrictEqual([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1002, y: 575}
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1002, y: 575 },
+          ],
+          0
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 575 },
       ]);
     });
 
     it('should fill a gap in the middle of the series', () => {
-      expect(getGapFilledAccumulatedData([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1003, y: 575}
-      ], 0)).toStrictEqual([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1002, y: 550},
-        {x: 1003, y: 575}
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1003, y: 575 },
+          ],
+          0
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 550 },
+        { x: 1003, y: 575 },
       ]);
     });
 
     it('should add new entries at the end of the series', () => {
-      expect(getGapFilledAccumulatedData([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1002, y: 575}
-      ], 5)).toStrictEqual([
-        {x: 1000, y: 500},
-        {x: 1001, y: 550},
-        {x: 1002, y: 575},
-        {x: 1003, y: 575},
-        {x: 1004, y: 575}
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1002, y: 575 },
+          ],
+          5
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 575 },
+        { x: 1003, y: 575 },
+        { x: 1004, y: 575 },
       ]);
-    })
+    });
   });
 });
