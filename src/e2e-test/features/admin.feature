@@ -37,4 +37,3 @@ Feature: Admin - Validate profile setting
     Then Add "hello" as value
     Then Click on "Save Preferences" button
     Then Verify successful saving of preferences with "name" as key and "hello" as value
-    

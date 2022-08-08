@@ -54,7 +54,7 @@ public class HttpRequestHandler {
   }
 
   private static ContentProvider buildHttpReqBody(Map<String, String> body) {
-    String bodyStr = Joiner.on(",").withKeyValueSeparator("=").join(body);
+    final String bodyStr = Joiner.on(",").withKeyValueSeparator("=").join(body);
     return new ContentProvider<InputStream>() {
       @Override
       public InputStream getInput() {

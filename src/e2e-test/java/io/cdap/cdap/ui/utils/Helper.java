@@ -51,10 +51,10 @@ public class Helper implements CdfHelper {
     if (response.getResponseCode() == 401) {
       isAuthEnabled = true;
       try {
-        Map<String, String> reqHeaders = new HashMap<>();
+        Map<String, String> reqHeaders = new HashMap<String, String>();
         reqHeaders.put("Accept", "application/json");
         reqHeaders.put("Content-Type", "application/json");
-        Map<String, String> reqBody = new HashMap<>();
+        Map<String, String> reqBody = new HashMap<String, String>();
         reqBody.put("username", USERNAME);
         reqBody.put("password", PASSWORD);
         HttpResponse authResponse = HttpRequestHandler.makeHttpRequest(
