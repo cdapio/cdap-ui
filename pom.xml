@@ -235,6 +235,8 @@
         <package.deb.arch>amd64</package.deb.arch>
         <package.rpm.arch>x86_64</package.rpm.arch>
         <ui.build.name>cdap-prod-build</ui.build.name>
+        <stage.dir>${project.build.directory}/stage-packaging</stage.dir>
+        <stage.opt.dir>${stage.dir}/opt/cdap/ui</stage.opt.dir>
       </properties>
       <build>
         <plugins>
