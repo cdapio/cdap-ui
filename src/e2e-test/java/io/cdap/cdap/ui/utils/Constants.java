@@ -30,6 +30,8 @@ public class Constants {
   public static final String BASE_URL = "http://localhost:11011/";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String CONFIGURATION_URL = "http://localhost:11011/cdap/administration/configuration";
+  public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
+  public static final String DEFAULT_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/default/profiles/create";
 
   public static final String DEFAULT_GCS_CONNECTION_NAME = "gcs_" + String.valueOf(getRandomArbitrary(1, 10000));
   
