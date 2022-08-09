@@ -52,6 +52,18 @@ jobs:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+    - name: Checkout cdap repo
+      uses: actions/checkout@v2.3.4
+      with:
+        repository: cdapio/cdap
+        path: cdap
+
+    - name: Make CDAP pom available to CDAP-UI
+      run: |
+        mv cdap ..
+        cd ../cdap
+        mv pom.xml ..
+
     - name: Download CDAP Sandbox and Start it   
       run: python3 sandboxjs/sandbox_starter.py
         
@@ -69,6 +81,14 @@ jobs:
     - name: Start CDAP-UI and run the tests
       run: |
         yarn run cdap-full-build-more-memory # Build UI
-        yarn start & > server.out
+        yarn start &
         yarn run test:unit
         mvn clean verify -P e2e-tests
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v2.2.2
+      if: always()
+      with:
+        name: Build debug files
+        path: |
+          **/target/rat.txt
