@@ -30,13 +30,13 @@ sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/latest/cda
 sandbox_dir = sandbox_url.split("/")[-1].split(".zip")[0]
 r = requests.get(sandbox_url)
 z = zipfile.ZipFile(io.BytesIO(r.content))
-z.extractall("./sandbox")
+z.extractall("../../sandbox")
 
 print("Start the sandbox")
-run_shell_command(f"chmod +x sandbox/{sandbox_dir}/bin/cdap")
+run_shell_command(f"chmod +x ../../sandbox/{sandbox_dir}/bin/cdap")
 my_env = os.environ.copy()
 my_env["_JAVA_OPTIONS"] = "-Xmx24G"
-sandbox_start_cmd = "sandbox/" + sandbox_dir + "/bin/cdap sandbox start"
+sandbox_start_cmd = "../../sandbox/" + sandbox_dir + "/bin/cdap sandbox start"
 process = subprocess.Popen(sandbox_start_cmd, shell=True, env=my_env)
 process.communicate()
 assert process.returncode == 0
