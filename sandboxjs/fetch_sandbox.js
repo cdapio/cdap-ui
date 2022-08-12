@@ -16,10 +16,13 @@
 
 const branchInfo = require('./bamboo_plan_info.json');
 const path = require('path');
-const xml2js = require('xml2js');
 const fs = require('fs-extra');
 const fetch = require('node-fetch');
 const unzip = require('./unzip');
+const { exec } = require('child_process');
+
+const DEVELOP_BRANCH = 'develop';
+const RELEASE_NAME = 'latest';
 
 async function downloadSDK(res, pathToZipFile) {
   const fileStream = fs.createWriteStream(pathToZipFile);
@@ -34,18 +37,23 @@ async function downloadSDK(res, pathToZipFile) {
 }
 
 async function fetchSandbox(targetDir) {
-  // Get the last successful build from appropriate plan branch. This plan branch corresponds to bamboo plan name for respective branches
-  const branchResultsRaw = await fetch(`https://builds.cask.co/rest/api/latest/result/${branchInfo.planName}.json?buildstate=successful&max-result=1`);
-  const branchResults = await branchResultsRaw.json();
-  if (!branchResults.results.result.length) {
-    throw `No successful build found in ${branchInfo.planName}`;
-  }
-  const latestSuccessfulBuildName = branchResults.results.result[0].key;
+  // Get the last successful build from cdap-build
+  let release = RELEASE_NAME;
   const cdapversion = branchInfo.version;
   console.log('CDAP version: ', cdapversion);
 
   // Based on the version of CDAP construct the path to the SDK zip file from bamboo build plan.
-  const SDKZipPath = `https://builds.cask.co/browse/${latestSuccessfulBuildName}/artifact/shared/SDK/cdap/cdap-standalone/target/cdap-sandbox-${cdapversion}.zip`;
+  exec('git rev-parse --abbrev-ref HEAD', (err, stdout, stderr) => {
+    if (err) {
+        console.log(err);
+    }
+
+    if (typeof stdout === 'string' && stdout !== DEVELOP_BRANCH) {
+      const idxPos = cdapversion.indexOf("-");
+      release = `v${cdapversion.substring(0, idxPos - 1)}`;
+    }
+  });
+  const SDKZipPath = `https://github.com/cdapio/cdap-build/releases/download/${release}/cdap-sandbox-${cdapversion}.zip`;
   console.log('SDK zip path: ', SDKZipPath);
   let res;
   try {
