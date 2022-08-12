@@ -21,12 +21,17 @@ import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
 import io.cdap.e2e.utils.CdfHelper;
+import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
+import io.cdap.e2e.utils.WaitHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +82,16 @@ public class Helper implements CdfHelper {
       .findElement(By.cssSelector(cssSelector));
   }
 
+  public static WebElement locateElementById(String elementId) {
+    return SeleniumDriver.getDriver()
+            .findElement(By.id(elementId));
+  }
+
+  public static boolean isElementExists(String cssSelector) {
+    return SeleniumDriver.getDriver()
+            .findElements(By.cssSelector(cssSelector)).size() > 0;
+  }
+
   public static String getCssSelectorByDataTestId (String dataTestId) {
     return "[data-testid=" + dataTestId + "]";
   }
@@ -86,5 +101,62 @@ public class Helper implements CdfHelper {
       node.getNodeName() + "-" +
       node.getNodeType() + "-" +
       node.getNodeId() + "\"]";
+  }
+
+  public static void deployAndTestPipeline(String filename, String pipelineName) {
+    SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "pipelines");
+    WaitHelper.waitForPageToLoad();
+    ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
+    ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
+    if (!SeleniumDriver.getDriver().getCurrentUrl().contains("studio")) {
+      throw new RuntimeException("URL redirection for pipeline creation unsuccessful.");
+    }
+    WaitHelper.waitForPageToLoad();
+    WebElement uploadFile = SeleniumDriver.getDriver()
+            .findElement(By.xpath("//*[@id='pipeline-import-config-link']/input[@type='file']"));
+
+    File pipelineJSONFile = new File(Constants.FIXTURES_DIR + filename);
+    String filePath = pipelineJSONFile.getAbsolutePath();
+    uploadFile.sendKeys(filePath);
+
+    String pipelineNameCSSSelector = "div[class*='pipeline-name']";
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+            .stalenessOf(locateElementByCssSelector(pipelineNameCSSSelector)));
+    ElementHelper.clickOnElement(locateElementByCssSelector(pipelineNameCSSSelector));
+
+    WebElement pipelineNameInput = locateElementById("pipeline-name-input");
+    ElementHelper.clearElementValue(pipelineNameInput);
+    ElementHelper.sendKeys(pipelineNameInput, pipelineName);
+    pipelineNameInput.sendKeys(Keys.RETURN);
+    
+    ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
+            getCssSelectorByDataTestId("deploy-pipeline")));
+
+    String statusText = ElementHelper.getElementText(
+            WaitHelper.waitForElementToBeDisplayed(
+                    locateElementByCssSelector(getCssSelectorByDataTestId("Deployed")), 200)
+    );
+    if (!statusText.equals("Deployed")) {
+      throw new RuntimeException("Pipeline deploy is unsuccessful.");
+    }
+
+    if (!SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName)) {
+      throw new RuntimeException("URL redirection for pipeline deploy is unsuccessful.");
+    }
+  }
+
+  public static void cleanupPipelines(String pipelineName) {
+    try {
+      HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.GET,
+              Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName ,
+              null, null, null);
+      if (response.getResponseCode() == 200) {
+        HttpRequestHandler.makeHttpRequest(HttpMethod.DELETE,
+                Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName,
+                null, null, null);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 }

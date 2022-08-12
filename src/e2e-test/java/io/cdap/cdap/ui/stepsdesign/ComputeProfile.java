@@ -25,7 +25,6 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class ComputeProfile {
 
     @When("Open default profiles create page")
     public void openDefaultProfilesCreate() {
-        SeleniumDriver.openPage(Constants.DEFAULT_PROFILES_CREATE_URL);
+        SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "profiles/create");
         WaitHelper.waitForPageToLoad();
     }
 
