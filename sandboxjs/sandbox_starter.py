@@ -17,6 +17,7 @@ import os
 import requests
 import subprocess
 import zipfile
+import json
 
 def run_shell_command(cmd):
     process = subprocess.run(cmd.split(" "), stderr=subprocess.PIPE)
@@ -26,7 +27,9 @@ def run_shell_command(cmd):
 
 # Start CDAP sandbox
 print("Downloading CDAP sandbox")
-sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/latest/cdap-sandbox-6.8.0-SNAPSHOT.zip"
+with open('sandbox_version.json') as sandbox_info_file:
+  sandbox_info = json.load(sandbox_info_file)
+sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/{}/cdap-sandbox-{}.zip".format(sandbox_info["release"], sandbox_info["version"])
 sandbox_dir = sandbox_url.split("/")[-1].split(".zip")[0]
 r = requests.get(sandbox_url)
 z = zipfile.ZipFile(io.BytesIO(r.content))
