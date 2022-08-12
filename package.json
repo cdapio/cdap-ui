@@ -266,9 +266,6 @@
     "whatwg-fetch": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-1.0.0.tgz",
     "yml-loader": "2.1.0"
   },
-  "engines": {
-    "node": ">= 16.16.0"
-  },
   "resolutions": {
     "**/cypress": "5.6.0"
   }
