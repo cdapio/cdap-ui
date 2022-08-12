@@ -16,14 +16,27 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
+import PipelineConfigurationsStore, {
+  ACTIONS as PipelineConfigurationsActions,
+} from 'components/PipelineConfigurations/Store';
 
 import PushdownConfig from 'components/PushdownConfig';
+import { CLOUD } from 'services/global-constants';
+import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+
+const getPushdownEnabledValue = (state) => {
+  const pushdownEnabledKeyValuePair = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === CLOUD.PIPELINE_PUSHDOWN_ENABLED
+  );
+  return pushdownEnabledKeyValuePair
+    ? pushdownEnabledKeyValuePair.value === 'true'
+    : state.pushdownEnabled;
+};
 
 export default function PushdownTabContent({}) {
   const value = useSelector(
     (state) => ({
-      pushdownEnabled: state.pushdownEnabled,
+      pushdownEnabled: getPushdownEnabledValue(state),
       transformationPushdown: state.transformationPushdown,
     }),
     shallowEqual
@@ -36,9 +49,19 @@ export default function PushdownTabContent({}) {
   const dispatch = useDispatch();
   const onChange = useCallback(
     ({ pushdownEnabled, transformationPushdown }) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[CLOUD.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
+      runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN] = JSON.stringify(transformationPushdown);
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_PUSHDOWN_CONFIG,
         payload: { pushdownEnabled, transformationPushdown },
+      });
+      dispatch({
+        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+        payload: { runtimeArgs: { pairs: newRunTimePairs } },
       });
     },
     [dispatch]

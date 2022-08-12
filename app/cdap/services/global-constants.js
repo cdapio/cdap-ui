@@ -348,6 +348,14 @@ const CLOUD = {
   DEFAULT_PROFILE_NAME: 'SYSTEM:native',
   PROFILE_NAME_PREFERENCE_PROPERTY: 'system.profile.name',
   PROFILE_PROPERTIES_PREFERENCE: 'system.profile.properties',
+  PIPELINE_INSTRUMENTATION: 'app.pipeline.instrumentation',
+  PIPELINE_PUSHDOWN_ENABLED: 'app.pipeline.pushdown.enabled',
+  PIPELINE_TRANSFORMATION_PUSHDOWN: 'app.pipeline.pushdown',
+  CUSTOM_SPARK_KEY_PREFIX: 'system.spark.',
+  SYSTEM_DRIVER_RESOURCES_MEMORY: 'task.driver.system.resources.memory',
+  SYSTEM_DRIVER_RESOURCES_CORES: 'task.driver.system.resources.cores',
+  SYSTEM_EXECUTOR_RESOURCES_MEMORY: 'task.executor.system.resources.memory',
+  SYSTEM_EXECUTOR_RESOURCES_CORES: 'task.executor.system.resources.cores'
 };
 
 const SCOPES = {

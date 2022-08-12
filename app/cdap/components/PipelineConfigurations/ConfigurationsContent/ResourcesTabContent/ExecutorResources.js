@@ -21,32 +21,61 @@ import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import PipelineResources from 'components/PipelineResources';
 import { ENGINE_OPTIONS } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
+import PipelineConfigurationsStore, {
+  ACTIONS as PipelineConfigurationsActions,
+} from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
-import { GLOBALS } from 'services/global-constants';
+import { CLOUD, GLOBALS } from 'services/global-constants';
+import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
 const mapStateToProps = (state, ownProps) => {
+  const executorResourcesMemory = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === CLOUD.SYSTEM_EXECUTOR_RESOURCES_MEMORY
+  );
+  const executorResourcesCores = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === CLOUD.SYSTEM_EXECUTOR_RESOURCES_CORES
+  );
   return {
     pipelineType: ownProps.pipelineType,
     engine: state.engine,
-    virtualCores: state.resources.virtualCores,
-    memoryMB: state.resources.memoryMB,
+    virtualCores: executorResourcesCores
+      ? executorResourcesCores.value
+      : state.resources.virtualCores,
+    memoryMB: executorResourcesMemory ? executorResourcesMemory.value : state.resources.memoryMB,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     onVirtualCoresChange: (e) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[CLOUD.SYSTEM_EXECUTOR_RESOURCES_CORES] = e.target.value;
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
         payload: { virtualCores: e.target.value },
       });
+      dispatch({
+        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+        payload: { runtimeArgs: { pairs: newRunTimePairs } },
+      });
     },
     onMemoryMBChange: (e) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[CLOUD.SYSTEM_EXECUTOR_RESOURCES_MEMORY] = e.target.value;
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_MB,
         payload: { memoryMB: e.target.value },
+      });
+      dispatch({
+        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+        payload: { runtimeArgs: { pairs: newRunTimePairs } },
       });
     },
   };

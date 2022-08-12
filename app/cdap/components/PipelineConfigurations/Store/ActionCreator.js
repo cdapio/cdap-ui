@@ -132,14 +132,54 @@ const getMacrosResolvedByPrefs = (resolvedPrefs = {}, macrosMap = {}) => {
   return resolvedMacros;
 };
 
-const updatePreferences = () => {
-  let { runtimeArgs } = PipelineConfigurationsStore.getState();
+const updatePreferences = (overwriteConfig = false) => {
+  const {
+    runtimeArgs,
+    properties,
+    pipelineVisualConfiguration,
+  } = PipelineConfigurationsStore.getState();
   let filteredRuntimeArgs = cloneDeep(runtimeArgs);
   filteredRuntimeArgs.pairs = filteredRuntimeArgs.pairs.filter(
     (runtimeArg) => !runtimeArg.provided
   );
   let appId = PipelineDetailStore.getState().name;
   let prefObj = convertKeyValuePairsObjToMap(runtimeArgs);
+  const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
+    pair.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX)
+  );
+  let pairs = cloneDeep(customSparkConfigKeyValuePairs);
+
+  // engine config overwritting
+  if (overwriteConfig) {
+    // save from runtime args dropdown
+    pairs.forEach((pair) => {
+      const trimmedKey = pair.key.substring(CLOUD.CUSTOM_SPARK_KEY_PREFIX.length);
+      pair.key = trimmedKey;
+    });
+    pairs.push({
+      key: '',
+      value: '',
+    });
+    const keyValues = { pairs: pairs };
+    PipelineConfigurationsStore.dispatch({
+      type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS,
+      payload: { keyValues },
+    });
+    const customConfigObj = convertKeyValuePairsObjToMap(keyValues);
+    PipelineConfigurationsStore.dispatch({
+      type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG,
+      payload: {
+        customConfig: customConfigObj,
+        pipelineType: pipelineVisualConfiguration.pipelineType,
+      },
+    });
+  } else {
+    // save from config tabs
+    pairs.forEach((pair) => {
+      delete prefObj[pair.key];
+    });
+    prefObj = { ...prefObj, ...properties };
+  }
 
   return MyPreferenceApi.setAppPreferences(
     {

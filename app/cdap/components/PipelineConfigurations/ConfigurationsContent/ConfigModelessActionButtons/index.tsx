@@ -17,7 +17,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  updatePipeline,
   runPipeline,
   schedulePipeline,
   updatePreferences,
@@ -88,7 +87,7 @@ export default class ConfigModelessActionButtons extends Component<
     this.setState({
       [loadingState]: true,
     });
-    Observable.forkJoin(updatePipeline(), updatePreferences()).subscribe(
+    updatePreferences().subscribe(
       () => {
         actionFn();
         this.setState({

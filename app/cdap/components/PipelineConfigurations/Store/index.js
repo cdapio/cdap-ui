@@ -124,6 +124,7 @@ const DEFAULT_CONFIGURE_OPTIONS = {
   maxConcurrentRuns: 1,
   isMissingKeyValues: false,
   modelessOpen: false,
+  pushdownEnabled: false,
 
   pipelineVisualConfiguration: {
     pipelineType: GLOBALS.etlDataPipeline,

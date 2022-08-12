@@ -94,7 +94,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
   public saveRuntimeArgs = (e) => {
     preventPropagation(e);
     this.toggleSaving();
-    updatePreferences().subscribe(
+    updatePreferences(true).subscribe(
       () => {
         this.setState(
           {
