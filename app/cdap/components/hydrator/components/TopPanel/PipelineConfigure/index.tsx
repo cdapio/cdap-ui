@@ -17,6 +17,7 @@
 import PipelineConfigurations from 'components/PipelineConfigurations';
 import React from 'react';
 import classnames from 'classnames';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 export interface IPipelineConfigureProps {
   viewConfig: boolean;
@@ -40,30 +41,32 @@ export const PipelineConfigure = (props: IPipelineConfigureProps) => {
   const pipelineType = props.state.artifact.name;
 
   return (
-    <div
-      className={classnames('pipeline-action-container pipeline-configure-container', {
-        active: props.viewConfig,
-      })}
-    >
-      <PipelineConfigurations
-        open={props.viewConfig}
-        onClose={props.toggleConfig}
-        isDetailView={false}
-        pipelineName={pipelineName}
-        pipelineType={pipelineType}
-        isPreview={props.showPreviewConfig}
-        isDeployed={props.isDeployed}
-        artifact={props.state.artifact}
-        actionCreator={props.actionCreator}
-        applyRuntimeArguments={props.applyRuntimeArguments}
-        studioRunPipeline={props.runPipeline}
-        getPostActions={props.getPostActions}
-        applyBatchConfig={props.applyBatchConfig}
-        applyRealtimeConfig={props.applyRealtimeConfig}
-        anchorEl={props.anchorEl}
-        validatePluginProperties={props.validatePluginProperties}
-        getRuntimeArgs={props.getRuntimeArgs}
-      />
-    </div>
+    <FeatureProvider>
+      <div
+        className={classnames('pipeline-action-container pipeline-configure-container', {
+          active: props.viewConfig,
+        })}
+      >
+        <PipelineConfigurations
+          open={props.viewConfig}
+          onClose={props.toggleConfig}
+          isDetailView={false}
+          pipelineName={pipelineName}
+          pipelineType={pipelineType}
+          isPreview={props.showPreviewConfig}
+          isDeployed={props.isDeployed}
+          artifact={props.state.artifact}
+          actionCreator={props.actionCreator}
+          applyRuntimeArguments={props.applyRuntimeArguments}
+          studioRunPipeline={props.runPipeline}
+          getPostActions={props.getPostActions}
+          applyBatchConfig={props.applyBatchConfig}
+          applyRealtimeConfig={props.applyRealtimeConfig}
+          anchorEl={props.anchorEl}
+          validatePluginProperties={props.validatePluginProperties}
+          getRuntimeArgs={props.getRuntimeArgs}
+        />
+      </div>
+    </FeatureProvider>
   );
 };
