@@ -39,7 +39,7 @@ async function downloadSDK(res, pathToZipFile) {
 async function fetchSandbox(targetDir) {
   // Get the last successful build from cdap-build
   let release = RELEASE_NAME;
-  const cdapversion = branchInfo.version;
+  let cdapversion = branchInfo.version;
   console.log('CDAP version: ', cdapversion);
 
   // Based on the version of CDAP construct the path to the SDK zip file from bamboo build plan.
@@ -50,7 +50,8 @@ async function fetchSandbox(targetDir) {
 
     if (typeof stdout === 'string' && stdout !== DEVELOP_BRANCH) {
       const idxPos = cdapversion.indexOf("-");
-      release = `v${cdapversion.substring(0, idxPos - 1)}`;
+      cdapversion = cdapversion.substring(0, idxPos);
+      release = `v${cdapversion}`;
     }
   });
   const SDKZipPath = `https://github.com/cdapio/cdap-build/releases/download/${release}/cdap-sandbox-${cdapversion}.zip`;
