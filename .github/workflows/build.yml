@@ -65,7 +65,9 @@ jobs:
         mv pom.xml ..
 
     - name: Download CDAP Sandbox and Start it   
-      run: python3 sandboxjs/sandbox_starter.py
+      run: |
+        cd sandboxjs
+        python3 sandbox_starter.py
         
     - name: Install UI Dependencies
       env:
