@@ -33,7 +33,7 @@ import {
 } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
-import styled, { css } from 'styled-components';
+import styled, { css, createGlobalStyle } from 'styled-components';
 import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -44,19 +44,19 @@ const GroupsContainer = styled.div`
   && {
     && {
       && {
-        height: auto;
         overflow-y: scroll;
-        position: absolute;
         padding: 0;
         right: 1px;
+        height: 100%;
+        border: none;
       }
     }
   }
 `;
 
 const ItemBodyWrapper = styled.div`
-  width: 100%;
   background: white;
+  border: none;
 `;
 
 const StyledGroupName = styled(Typography)`
@@ -68,11 +68,20 @@ const StyledGroupName = styled(Typography)`
 
 const StyledAccordion = styled(Accordion)`
   background: #eeeeee;
+  :before {
+    border: none;
+  }
+
   &.Mui-expanded {
     margin: 0;
     padding: 0;
     overflow-y: scroll;
   }
+`;
+
+const StyledAccordionDetails = styled(AccordionDetails)`
+  background: #ffffff;
+  background-clip: content-box;
 `;
 
 const StyledAccordionSummary = styled(AccordionSummary)`
@@ -85,6 +94,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
     }
   `}
 `;
+
 const ListOrIconsButton = styled(Button)`
   min-width: 20px;
   padding: 5px;
@@ -96,6 +106,19 @@ const ListOrIconsButton = styled(Button)`
 const TooltipText = styled.div`
   font-size: 14px;
   line-height: 14px;
+`;
+
+// Mui creates tooltips at the bottom of the dom tree
+// so if you wrap the tooltip in a normal styled component
+// the style won't apply to that element - this is a way
+// to just insert regular css onto the page using
+// styled-components
+const GlobalTooltipStyle = createGlobalStyle`
+  .MuiTooltip-popper {
+    .MuiTooltip-tooltip {
+      background-color: black;
+    }
+  }
 `;
 
 interface ISidePanelProps {
@@ -116,26 +139,29 @@ export const SidePanel = ({
   const [openedAccordions, setOpenedAccordions] = useState([]);
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
   let AvailablePluginsStoreSubscription;
-
   useEffect(() => {
     // set first group opened
-    if (groups) {
+    if (groups && groups.length) {
       setOpenedAccordions([groups[0].name]);
     }
-  }, []);
+  }, [groups, groups.length]);
 
   useEffect(() => {
     AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
       const all = AvailablePluginsStore.getState();
       if (all.plugins) {
-        const newPluginGroups = [...pluginGroups];
-        newPluginGroups.forEach((group) => {
-          group.plugins.forEach((plugin) => {
+        // treat plugin group plugins as immutable
+        const newPluginGroups = pluginGroups.map((group) => {
+          const newGroup = { ...group, plugins: [] };
+          newGroup.plugins = group.plugins.map((plugin) => {
+            const newPlugin = { ...plugin };
             // add the display name and show custom icon to the plugins
-            plugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
-            plugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
-            plugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            newPlugin.displayName = generateLabel(plugin, all.plugins.pluginsMap);
+            newPlugin.showCustomIcon = shouldShowCustomIcon(plugin, all.plugins.pluginsMap);
+            newPlugin.customIconSrc = getCustomIconSrc(plugin, all.plugins.pluginsMap);
+            return newPlugin;
           });
+          return newGroup;
         });
 
         setPluginGroups(newPluginGroups);
@@ -227,6 +253,10 @@ export const SidePanel = ({
   };
 
   const renderAccGroups = () => {
+    if (!groups || groups.length === 0) {
+      return null;
+    }
+
     return pluginGroups.map((group, i) => {
       const plugins = filterPlugins(searchText, group.plugins);
       // open accordion if the user searches for a plugin and a plugin
@@ -251,7 +281,7 @@ export const SidePanel = ({
             <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
-          <AccordionDetails className="item">
+          <StyledAccordionDetails className="item">
             <ItemBodyWrapper className="item-body-wrapper">
               <div
                 className={`item-body ${sidePanelViewType === 'icon' ? 'view-icon' : 'view-list'}`}
@@ -260,12 +290,12 @@ export const SidePanel = ({
                 {renderPlugins(plugins)}
                 {plugins.length === 0 && (
                   <div className="no-item-message">
-                    <h4>No {itemGenericName} found.</h4>
+                    <h4>No {itemGenericName === '' ? itemGenericName : 'items'} found.</h4>
                   </div>
                 )}
               </div>
             </ItemBodyWrapper>
-          </AccordionDetails>
+          </StyledAccordionDetails>
         </StyledAccordion>
       );
     });
@@ -273,6 +303,7 @@ export const SidePanel = ({
 
   return (
     <div className="side-panel text-center left">
+      <GlobalTooltipStyle />
       <div className="hydrator-filter text-left">
         <input
           className="form-control"

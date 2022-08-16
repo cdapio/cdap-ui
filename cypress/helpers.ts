@@ -102,18 +102,18 @@ function deployAndTestPipeline(filename, pipelineName, done = () => ({})) {
   cy.get('#resource-center-btn').click();
   cy.get('#create-pipeline-link').click();
   cy.url().should('include', '/studio');
-  cy.upload_pipeline(filename, '#pipeline-import-config-link > input[type="file"]');
+  cy.upload_pipeline(filename, '#pipeline-import-config-link');
   // This is arbitrary. Right now we don't have a way to determine
   // if the upgrade check is done. Since this a standalone the assumption
   // is this won't take more than 10 seconds.
   cy.wait(10000);
   // Name pipeline then deploy pipeline
-  cy.get('.pipeline-name').click();
+  cy.get('[data-cy="pipeline-metadata"]').click();
   cy.get('#pipeline-name-input')
     .clear()
     .type(pipelineName)
     .type('{enter}');
-  cy.get('[data-testid=deploy-pipeline]').click();
+  cy.get('[data-cy="deploy-pipeline-btn"]').click();
   cy.get('[data-cy="Deployed"]', { timeout: 60000 }).should('contain', 'Deployed');
   return cy
     .url()

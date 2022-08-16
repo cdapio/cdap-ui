@@ -108,7 +108,7 @@ describe('Creating a pipeline', () => {
     cy.get('@instrumentationDiv').contains('Off');
     cy.contains('Pipeline alert').click();
     cy.contains('+').click();
-    cy.contains('Send Email').click();
+    cy.contains('Email').click();
     // enter sender, recipients, subject, message
 
     cy.wait(1000);
@@ -186,13 +186,13 @@ describe('Creating a pipeline', () => {
 
   it('shows correct configuration after deploying pipeline', () => {
     // Name pipeline
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .type(TEST_PIPELINE_NAME)
       .type('{enter}');
 
     // Deploy pipeline
-    cy.get('[data-testid=deploy-pipeline]').click();
+    cy.get('[data-cy="deploy-pipeline-btn"]').click();
 
     // Do assertions
     cy.url({ timeout: 60000 }).should('include', `/view/${TEST_PIPELINE_NAME}`);

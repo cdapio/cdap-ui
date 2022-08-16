@@ -42,7 +42,7 @@ describe('Pipeline Drafts tests', () => {
       cy.get('input[data-cy="datasetProject"]').type(dummyproject);
       cy.get('input[data-cy="dataset"]').type(dummydataset);
       cy.close_node_property();
-      cy.get('.pipeline-name').click();
+      cy.get('[data-cy="pipeline-metadata"]').click();
       cy.get('#pipeline-name-input')
         .type(TEST_PIPELINE_NAME)
         .type('{enter}');
@@ -90,10 +90,10 @@ describe('Pipeline Drafts tests', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.upload_pipeline(
       'fll_wrangler-test-pipeline.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     );
     cy.wait(10000);
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(`pre_publish_${TEST_PIPELINE_NAME}`)
@@ -130,7 +130,7 @@ describe('Pipeline Drafts tests', () => {
         cy.location('search').then((searchStr) => {
           const queryObject = parse(searchStr);
           const queryId = queryObject.queryId;
-          cy.get('.pipeline-name').click();
+          cy.get('[data-cy="pipeline-metadata"]').click();
           cy.get('#pipeline-name-input')
             .clear()
             .type(newPipelineDraftName)
@@ -156,7 +156,7 @@ describe('Pipeline Drafts tests', () => {
     const TEST_PIPELINE_NAME = `Test_Draft_Pipeline_${Date.now()}`;
     cy.visit('/pipelines/ns/default/studio');
     cy.create_simple_pipeline().then(() => {
-      cy.get('.pipeline-name').click();
+      cy.get('[data-cy="pipeline-metadata"]').click();
       cy.get('#pipeline-name-input')
         .type(TEST_PIPELINE_NAME)
         .type('{enter}');
