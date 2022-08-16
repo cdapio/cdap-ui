@@ -264,7 +264,7 @@
                   <goal>install-node-and-yarn</goal>
                 </goals>
                 <configuration>
-                  <nodeVersion>v10.16.2</nodeVersion>
+                  <nodeVersion>v16.16.0</nodeVersion>
                   <yarnVersion>v1.7.0</yarnVersion>
                 </configuration>
               </execution>
@@ -274,7 +274,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp@6.1.0</arguments>
+                  <arguments>global add node-gyp</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -381,7 +381,7 @@
                   <goal>install-node-and-yarn</goal>
                 </goals>
                 <configuration>
-                  <nodeVersion>v10.16.2</nodeVersion>
+                  <nodeVersion>v16.16.0</nodeVersion>
                   <yarnVersion>v1.7.0</yarnVersion>
                 </configuration>
               </execution>
@@ -391,7 +391,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp@6.1.0</arguments>
+                  <arguments>global add node-gyp</arguments>
                 </configuration>
               </execution>
               <execution>
