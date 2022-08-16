@@ -16,6 +16,8 @@
 
 package io.cdap.cdap.ui.utils;
 
+import java.util.HashMap;
+
 public class Constants {
   private static double getRandomArbitrary(int min, int max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -27,8 +29,9 @@ public class Constants {
     String.valueOf(TEST_TIMEOUT_TIME / 1000) +
     "seconds";
 
-  public static final String BASE_URL = "http://localhost:11011/";
+  public static final String BASE_URL = "http://localhost:11011";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
+  public static final String CDAP_URL = BASE_URL + "/cdap";
   public static final String CONFIGURATION_URL = "http://localhost:11011/cdap/administration/configuration";
   public static final String BASE_STUDIO_URL = "http://localhost:11011/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
@@ -55,4 +58,8 @@ public class Constants {
   public static final String RUNTIME_ARGS_DEPLOYED_SELECTOR = "runtimeargs-deployed";
   public static final String RUNTIME_ARGS_KEY_SELECTOR = "runtimeargs-key";
   public static final String RUNTIME_ARGS_VALUE_SELECTOR = "runtimeargs-value";
+
+  // cdap themes
+  public static final String DEFAULT_THEME_PATH = "config/themes/default.json";
+  public static final String LIGHT_THEME_PATH = "config/themes/light.json";
 }

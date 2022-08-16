@@ -24,6 +24,7 @@ import io.cdap.e2e.utils.CdfHelper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Keys;
@@ -57,8 +58,7 @@ public class Helper implements CdfHelper {
       isAuthEnabled = true;
       try {
         Map<String, String> reqHeaders = new HashMap<String, String>();
-        reqHeaders.put("Accept", "application/json");
-        reqHeaders.put("Content-Type", "application/json");
+        reqHeaders.put("Content-Type", "application/x-www-form-urlencoded");
         Map<String, String> reqBody = new HashMap<String, String>();
         reqBody.put("username", USERNAME);
         reqBody.put("password", PASSWORD);
@@ -77,6 +77,15 @@ public class Helper implements CdfHelper {
     }
   }
 
+  public static String getSessionToken() throws IOException {
+    HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.GET,
+                                       Constants.BASE_URL + "/sessionToken",
+                                       null,
+                                       null,
+                                       null);
+    return response.getResponseBodyAsString();
+  }
+
   public static WebElement locateElementByCssSelector(String cssSelector) {
     return SeleniumDriver.getDriver()
       .findElement(By.cssSelector(cssSelector));
@@ -89,6 +98,11 @@ public class Helper implements CdfHelper {
 
   public static WebElement locateElementByLocator(By locator) {
     return SeleniumDriver.getDriver().findElement(locator);
+  }
+  
+  public static WebElement locateElementByXPath(String xpath) {
+    return SeleniumDriver.getDriver()
+      .findElement(By.xpath(xpath));
   }
 
   public static boolean isElementExists(String cssSelector) {
@@ -179,5 +193,25 @@ public class Helper implements CdfHelper {
   public static void expandPluginGroupIfNotAlreadyExpanded(String pluginGroupName) {
     ElementHelper.clickIfDisplayed(locatorOfPluginGroupCollapsed(pluginGroupName));
     WaitHelper.waitForElementToBeDisplayed(locateElementByLocator(locatorOfPluginGroupExpanded(pluginGroupName)));
+  }
+  
+  public static void setCdapTheme(String themePath) {
+    Map<String, String> reqHeaders = new HashMap<String, String>();
+    reqHeaders.put("Content-Type", "application/x-www-form-urlencoded");
+    Map<String, String> reqBody = new HashMap<String, String>();
+    reqBody.put("uiThemePath", themePath);
+    try {
+      reqHeaders.put("Session-Token", getSessionToken());
+      HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.POST,
+                                                                 Constants.BASE_URL + "/updateTheme",
+                                                                 reqHeaders,
+                                                                 reqBody,
+                                                                 null);
+      if (response.getResponseCode() == 200) {
+        System.out.println("Successfully updated theme");
+      }
+    } catch (IOException e) {
+      Assert.fail(e.getMessage());
+    }
   }
 }
