@@ -61,17 +61,29 @@ export const PipelineCanvasActionBtns = ({
       {!disableNodeClick && (
         <>
           <CanvasButtonTooltip title="Zoom In">
-            <ActionButton onClick={zoomIn} data-cy="pipeline-zoom-in-control">
+            <ActionButton
+              onClick={zoomIn}
+              data-cy="pipeline-zoom-in-control"
+              data-testid="pipeline-zoom-in-control"
+            >
               <ZoomInIcon />
             </ActionButton>
           </CanvasButtonTooltip>
           <CanvasButtonTooltip title="Zoom Out">
-            <ActionButton onClick={zoomOut} data-cy="pipeline-zoom-out-control">
+            <ActionButton
+              onClick={zoomOut}
+              data-cy="pipeline-zoom-out-control"
+              data-testid="pipeline-zoom-out-control"
+            >
               <ZoomOutIcon />
             </ActionButton>
           </CanvasButtonTooltip>
           <CanvasButtonTooltip title="Fit to screen">
-            <ActionButton onClick={fitToScreen} data-cy="pipeline-fit-to-screen-control">
+            <ActionButton
+              onClick={fitToScreen}
+              data-cy="pipeline-fit-to-screen-control"
+              data-testid="pipeline-fit-to-screen-control"
+            >
               <AspectRatioIcon fontSize="small" />
             </ActionButton>
           </CanvasButtonTooltip>
@@ -80,7 +92,11 @@ export const PipelineCanvasActionBtns = ({
       {!isDisabled && (
         <>
           <CanvasButtonTooltip title="Align">
-            <ActionButton onClick={cleanUpGraph} data-cy="pipeline-clean-up-graph-control">
+            <ActionButton
+              onClick={cleanUpGraph}
+              data-cy="pipeline-clean-up-graph-control"
+              data-testid="pipeline-clean-up-graph-control"
+            >
               <DragIndicatorIcon />
             </ActionButton>
           </CanvasButtonTooltip>
@@ -89,6 +105,7 @@ export const PipelineCanvasActionBtns = ({
             <ActionButton
               onClick={undoActions}
               data-cy="pipeline-undo-action-btn"
+              data-testid="pipeline-undo-action-btn"
               disabled={undoStates.length === 0}
             >
               <UndoIcon fontSize="small" />
@@ -99,6 +116,7 @@ export const PipelineCanvasActionBtns = ({
             <ActionButton
               onClick={redoActions}
               data-cy="pipeline-redo-action-btn"
+              data-testid="pipeline-redo-action-btn"
               disabled={redoStates.length === 0}
             >
               <RedoIcon fontSize="small" />
@@ -109,6 +127,7 @@ export const PipelineCanvasActionBtns = ({
               active={!selectionBox.toggle}
               onClick={() => selectionBox.toggleSelectionMode()}
               data-cy="pipeline-move-mode-action-btn"
+              data-testid="pipeline-move-mode-action-btn"
             >
               <OpenWithIcon fontSize="small" />
             </ActionButton>

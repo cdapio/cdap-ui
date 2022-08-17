@@ -19,10 +19,12 @@ package io.cdap.cdap.ui.stepsdesign;
 import com.google.common.base.Strings;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.cdap.ui.utils.Commands;
+import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
+import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -69,7 +71,14 @@ public class PipelineHierarchy {
 
   @Then("Open transform panel")
   public void openTransformPanel() {
-    CdfStudioActions.expandPluginGroupIfNotAlreadyExpanded("Transform");
+    Helper.expandPluginGroupIfNotAlreadyExpanded("Transform");
+  }
+
+  @Then("Close {string} panel")
+  public void closePluginGroupPanel(String pluginGroupName) {
+    ElementHelper.clickIfDisplayed(Helper.locatorOfPluginGroupExpanded(pluginGroupName));
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByLocator(
+      Helper.locatorOfPluginGroupCollapsed(pluginGroupName)));
   }
 
   @Then("Add \"CloneRecord\" node to canvas")
