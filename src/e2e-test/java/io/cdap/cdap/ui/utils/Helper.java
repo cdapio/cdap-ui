@@ -87,6 +87,10 @@ public class Helper implements CdfHelper {
             .findElement(By.id(elementId));
   }
 
+  public static WebElement locateElementByLocator(By locator) {
+    return SeleniumDriver.getDriver().findElement(locator);
+  }
+
   public static boolean isElementExists(String cssSelector) {
     return SeleniumDriver.getDriver()
             .findElements(By.cssSelector(cssSelector)).size() > 0;
@@ -113,16 +117,16 @@ public class Helper implements CdfHelper {
     }
     WaitHelper.waitForPageToLoad();
     WebElement uploadFile = SeleniumDriver.getDriver()
-            .findElement(By.xpath("//*[@id='pipeline-import-config-link']/input[@type='file']"));
+            .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
 
     File pipelineJSONFile = new File(Constants.FIXTURES_DIR + filename);
     String filePath = pipelineJSONFile.getAbsolutePath();
     uploadFile.sendKeys(filePath);
 
-    String pipelineNameCSSSelector = "div[class*='pipeline-name']";
+    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     SeleniumDriver.getWaitDriver().until(ExpectedConditions
-            .stalenessOf(locateElementByCssSelector(pipelineNameCSSSelector)));
-    ElementHelper.clickOnElement(locateElementByCssSelector(pipelineNameCSSSelector));
+            .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
+    ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
 
     WebElement pipelineNameInput = locateElementById("pipeline-name-input");
     ElementHelper.clearElementValue(pipelineNameInput);
@@ -158,5 +162,22 @@ public class Helper implements CdfHelper {
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage());
     }
+  }
+
+  public static By locatorOfPluginGroupCollapsed(String pluginGroupName) {
+    String xpath = "//div[@data-cy='plugin-" + pluginGroupName
+      + "-group' and not(contains(@class, 'Mui-expanded'))]//div[contains(@class, 'expandIcon')]";
+    return By.xpath(xpath);
+  }
+
+  public static By locatorOfPluginGroupExpanded(String pluginGroupName) {
+    String xpath = "//div[@data-cy='plugin-" + pluginGroupName
+      + "-group' and contains(@class, 'Mui-expanded')]//div[contains(@class, 'expandIcon')]";
+    return By.xpath(xpath);
+  }
+
+  public static void expandPluginGroupIfNotAlreadyExpanded(String pluginGroupName) {
+    ElementHelper.clickIfDisplayed(locatorOfPluginGroupCollapsed(pluginGroupName));
+    WaitHelper.waitForElementToBeDisplayed(locateElementByLocator(locatorOfPluginGroupExpanded(pluginGroupName)));
   }
 }

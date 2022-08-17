@@ -202,7 +202,7 @@ export const SidePanel = ({
 
   const renderPlugins = (plugins: [any]) => {
     return plugins.map((plugin) => {
-      const id = `plugin-${plugin.displayName}-${plugin.type}`;
+      const id = `plugin-${plugin.name}-${plugin.type}`;
       const label = plugin.displayName || plugin.name;
       return (
         <Tooltip
@@ -225,6 +225,7 @@ export const SidePanel = ({
             key={id}
             onClick={(event) => handleClickPlugin(event, plugin)}
             data-cy={id}
+            data-testid={id}
           >
             {sidePanelViewType === 'icon' && (
               <>
@@ -271,12 +272,13 @@ export const SidePanel = ({
           square
           expanded={expanded}
           onClick={() => handleOpenAccordion(group.name)}
+          data-cy={`plugin-${group.name}-group`}
+          data-testid={`plugin-${group.name}-group`}
         >
           <StyledAccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls=""
             id={`${group.name}-acc-summary`}
-            data-cy={`plugin-${group.name}-group`}
           >
             <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>

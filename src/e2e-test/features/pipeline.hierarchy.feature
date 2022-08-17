@@ -21,6 +21,7 @@ Feature: Pipeline Hierarchy - Hierarchy Widgets
   Scenario: Render file and duplicate record
     Given Open Datafusion Project to configure pipeline
     Then Add "File" node to canvas
+    Then Close "Source" panel
     Then Open transform panel
     Then Add "CloneRecord" node to canvas
     Then Cleanup pipeline graph control

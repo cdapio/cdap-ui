@@ -297,6 +297,7 @@ export const ActionButtons = ({
                   disabled={!hasNodes}
                   onClick={!hasNodes || onPublish}
                   data-cy="deploy-pipeline-btn"
+                  data-testid="deploy-pipeline"
                 >
                   <div>
                     <IconSVG name="icon-publish"></IconSVG>
