@@ -39,7 +39,7 @@ public class HttpRequestHandler {
                                              @Nullable Map<String, String> headers,
                                              @Nullable Map<String, String> body,
                                              @Nullable Long bodyLength) throws IOException {
-    ContentProvider reqBody = body != null
+    ContentProvider<? extends InputStream> reqBody = body != null
       ? buildHttpReqBody(body)
       : null;
     Multimap<String, String> reqHeaders = headers != null
