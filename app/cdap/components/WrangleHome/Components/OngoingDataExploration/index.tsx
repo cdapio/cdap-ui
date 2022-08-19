@@ -68,7 +68,7 @@ const OngoingDataExploration = () => {
   }, [ongoingExpDatas]);
 
   return (
-    <Box>
+    <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item) => {
         return (
           <Link
