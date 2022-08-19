@@ -5,7 +5,7 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { GCSIcon } from 'components/Datasets/iconStore';
 import * as React from 'react';
 import { useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import BreadCumb from './Components/Breadcrumb';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
@@ -19,6 +19,8 @@ const SelectDatasetWrapper = styled(Box)({
 });
 
 const DatasetWrapper = () => {
+  const { connectorType } = useParams() as any;
+
   const classes = useStyles();
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
@@ -155,6 +157,15 @@ const DatasetWrapper = () => {
   React.useEffect(() => {
     getConnectionsTabData();
   }, []);
+
+  React.useEffect(() => {
+    setDataForTabs((prev) => {
+      const temp = [...prev];
+      temp[0].selectedTab = connectorType;
+      return temp;
+    });
+    getCategorizedConnectionsforSelectedTab(connectorType, 0);
+  }, [connectorType]);
 
   const headerForLevelZero = () => {
     return (
