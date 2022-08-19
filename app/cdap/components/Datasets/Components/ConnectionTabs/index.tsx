@@ -44,7 +44,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   return (
     <Box data-testid='connections-tabs-parent'>
       {tabsData.showTabs && (
-        <div className={classes.boxStyles}>
+        <div className={classes.boxStyles} data-testid="connections-tabs-parent">
           <Tabs
             value={value}
             orientation="vertical"
