@@ -279,6 +279,8 @@ export const SidePanel = ({
             expandIcon={<ExpandMoreIcon />}
             aria-controls=""
             id={`${group.name}-acc-summary`}
+            data-cy={`plugin-${group.name}-group-summary`}
+            data-testid={`plugin-${group.name}-group-summary`}
           >
             <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>

@@ -72,10 +72,10 @@ describe('Pipeline Studio', () => {
     const sinkNodeId: INodeIdentifier = { ...sinkNode, nodeId: '2' };
     cy.add_node_to_canvas(sourceNode);
 
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(transformNode);
 
-    cy.open_sink_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode);
 
     cy.get('#diagram-container');
@@ -121,7 +121,7 @@ describe('Pipeline Studio', () => {
     };
     cy.add_node_to_canvas(sourceNode);
 
-    cy.open_sink_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode1);
 
     cy.connect_two_nodes(sourceNodeId, sinkNodeId1, getGenericEndpoint);
