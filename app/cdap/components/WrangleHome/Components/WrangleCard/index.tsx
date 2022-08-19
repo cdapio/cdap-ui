@@ -121,7 +121,7 @@ const WrangleCard = () => {
   const classes = useStyles();
   const connectorTypes = state.connectorTypes;
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} data-testid="wrangle-card-parent">
       {connectorTypes.map((item, index) => {
         return (
           <Card className={classes.card}>
