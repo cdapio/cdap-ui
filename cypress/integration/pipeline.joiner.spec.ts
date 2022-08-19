@@ -119,10 +119,10 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
     cy.add_node_to_canvas(sourceNode1);
     cy.add_node_to_canvas(sourceNode2);
 
-    cy.open_analytics_panel();
+    cy.toggle_analytics_panel();
     cy.add_node_to_canvas(joinerNode);
 
-    cy.open_sink_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode);
 
     cy.get(cleanUpButton).click();

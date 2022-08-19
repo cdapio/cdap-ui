@@ -116,16 +116,20 @@ describe('Pipelines with plugins having more than one endpoints', () => {
       emitter.emit(input);
     }`;
     cy.add_node_to_canvas(fileSourceId);
-    cy.open_transform_panel();
+    cy.toggle_source_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(csvTransformId);
     cy.add_node_to_canvas(jsTransformId);
     cy.add_node_to_canvas(unionSplitterTransformId);
     cy.add_node_to_canvas(stringJsTransformId);
-    cy.open_sink_panel();
+    cy.toggle_transform_panel()
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(stringFileSinkId);
-    cy.open_transform_panel();
+    cy.toggle_sink_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(intJsTransformId);
-    cy.open_sink_panel();
+    cy.toggle_transform_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(intFileSinkId);
 
     cy.pipeline_clean_up_graph_control();

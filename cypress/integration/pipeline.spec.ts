@@ -15,6 +15,7 @@
  */
 
 import { dataCy, loginIfRequired, getArtifactsPoll } from '../helpers';
+import { INodeIdentifier, INodeInfo } from '../typings';
 
 const TEST_PIPELINE_NAME = '__UI_test_pipeline';
 const TEST_PATH = '__UI_test_path';
@@ -73,14 +74,11 @@ describe('Creating a pipeline', () => {
     cy.url().should('include', '/studio');
 
     // Add an action node, to create minimal working pipeline
-    cy.get('.item', {
-      timeout: 10000,
-    })
-      .contains('Conditions and Actions')
-      .click();
-    cy.get('.item-body-wrapper')
-      .contains('File Delete')
-      .click();
+    cy.toggle_source_panel();
+    cy.toggle_condition_and_actions_panel();
+    const deleteActionInfo: INodeInfo = { nodeName: 'FileDelete', nodeType: 'action' };
+    const deleteActionId: INodeIdentifier = { ...deleteActionInfo, nodeId: '0' };
+    cy.add_node_to_canvas(deleteActionId)
 
     // Fill out required Path input field with some test value
     cy.get('.node-configure-btn')
