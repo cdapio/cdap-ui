@@ -167,7 +167,7 @@ const DatasetWrapper = () => {
   let headerContent;
 
   return (
-    <>
+    <Box data-testid='data-sets-parent'>
       <BreadCumb />
       <SelectDatasetWrapper>
         {dataForTabs &&
@@ -197,7 +197,7 @@ const DatasetWrapper = () => {
             );
           })}
       </SelectDatasetWrapper>
-    </>
+    </Box>
   );
 };
 
