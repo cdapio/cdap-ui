@@ -2,13 +2,13 @@ import { Box, styled, Typography } from '@material-ui/core';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
+import { GCSIcon } from 'components/Datasets/iconStore';
 import * as React from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
-import { useStyles } from './styles';
-import { GCSIcon } from 'components/Datasets/iconStore';
-import ConnectionsTabs from './Components/ConnectionTabs';
 import BreadCumb from './Components/Breadcrumb';
+import ConnectionsTabs from './Components/ConnectionTabs';
+import { useStyles } from './styles';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
@@ -44,8 +44,7 @@ const DatasetWrapper = () => {
 
     connectorTypes = connectorTypes.map((connectorType): any => {
       const connections = categorizedConnections.get(connectorType.name) || [];
-      allConnectionsTotalLength =
-        allConnectionsTotalLength + connections.length;
+      allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
 
       return {
         ...connectorType,
@@ -68,10 +67,7 @@ const DatasetWrapper = () => {
     });
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (
-    selectedValue: string,
-    index: number
-  ) => {
+  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
     const categorizedConnections = await getCategorizedConnections();
     const connections = categorizedConnections.get(selectedValue) || [];
 
@@ -183,9 +179,7 @@ const DatasetWrapper = () => {
               headerContent = (
                 <>
                   <Box className={classes.beforeSearchIconClickDisplay}>
-                    <Typography variant="h6">
-                      {dataForTabs[index - 1].selectedTab}
-                    </Typography>
+                    <Typography variant="h6">{dataForTabs[index - 1].selectedTab}</Typography>
                   </Box>
                 </>
               );
