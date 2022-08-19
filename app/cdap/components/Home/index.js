@@ -32,6 +32,10 @@ const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
 });
+const Datasets = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/Datasets'),
+  loading: LoadingSVGCentered,
+});
 const Connections = Loadable({
   loader: () => import(/* webpackChunkName: "Connections" */ 'components/Connections'),
   loading: LoadingSVGCentered,
@@ -140,6 +144,7 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
+          <Route exact path="/ns/:namespace/datasets" component={Datasets} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact
