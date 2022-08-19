@@ -42,7 +42,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   const classes = useStyles();
 
   return (
-    <>
+    <Box data-testid='connections-tabs-parent'>
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -98,7 +98,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
           </Tabs>
         </div>
       )}
-    </>
+    </Box>
   );
 };
 

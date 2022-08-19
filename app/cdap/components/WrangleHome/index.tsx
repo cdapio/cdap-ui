@@ -11,7 +11,7 @@ import { useStyles } from './styles';
 const WranglerHomeNew = () => {
   const classes = useStyles();
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
         <Typography className={classes.welcome}>
           Hi David, <br />

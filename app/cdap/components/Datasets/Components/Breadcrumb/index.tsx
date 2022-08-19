@@ -9,7 +9,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 const BreadCumb = () => {
   const classes = useStyles();
   return (
-    <Box className={classes.breadCombContainer}>
+    <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
       <Box className={classes.selectPrevPage}>
         <Link to={`/ns/${getCurrentNamespace()}/home`} style={{ textDecoration: 'none' }}>
           <PrevPageIcon />
