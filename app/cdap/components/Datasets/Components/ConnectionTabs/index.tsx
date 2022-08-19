@@ -40,9 +40,9 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   const classes = useStyles();
 
   return (
-    <>
+    <Box data-testid='connections-tabs-parent'>
       {tabsData.showTabs && (
-        <div className={classes.boxStyles} data-testid='connections-tabs-parent'>
+        <div className={classes.boxStyles}>
           <Tabs
             value={value}
             orientation="vertical"
@@ -96,7 +96,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
           </Tabs>
         </div>
       )}
-    </>
+    </Box>
   );
 };
 
