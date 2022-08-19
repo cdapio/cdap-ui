@@ -4,8 +4,8 @@ import { useParams } from 'react-router';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
-import { metricsData } from './components/mock/gridTableData';
-import mockJSON from './components/mock/gridTableResponse';
+import metricsJSON from './mock/metrics';
+import mockJSON from './mock/apiMock';
 
 const GridTable = () => {
   const { workspaceid } = useParams() as any;
@@ -58,7 +58,7 @@ const GridTable = () => {
             ))}
           </TableRow>
           <TableRow>
-            {metricsData.map((each) => (
+            {metricsJSON.map((each) => (
               <GridKPICell metricData={each} key={each.name} />
             ))}
           </TableRow>
