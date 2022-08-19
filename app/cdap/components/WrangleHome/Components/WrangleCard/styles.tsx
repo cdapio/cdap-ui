@@ -42,4 +42,7 @@ export const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     maxWidth: '166px',
   },
+  link: {
+    textDecoration: 'none',
+  },
 });

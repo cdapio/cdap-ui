@@ -3,6 +3,8 @@ import { Box, Grid, Typography } from '@material-ui/core/';
 import ExplorationCardStyles from './styles';
 import { updatedData } from './utils';
 import MyDataPrepApi from 'api/dataprep';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const OngoingDataExploration = () => {
   const classes = ExplorationCardStyles();
@@ -69,54 +71,61 @@ const OngoingDataExploration = () => {
     <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item) => {
         return (
-          <Grid container className={classes.gridContainer}>
-            {item.map((eachItem) => {
-              switch (eachItem.type) {
-                case 'iconWithText':
-                  return (
-                    <Grid item className={classes.elementStyle}>
-                      <Box className={classes.iconStyle}> {eachItem.icon}</Box>
+          <Link
+            to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Grid container className={classes.gridContainer}>
+              {item.map((eachItem) => {
+                switch (eachItem.type) {
+                  case 'iconWithText':
+                    return (
+                      <Grid item className={classes.elementStyle}>
+                        <Box className={classes.iconStyle}> {eachItem.icon}</Box>
 
-                      <Typography variant="body1">{eachItem.label}</Typography>
-                    </Grid>
-                  );
-                case 'text':
-                  return (
-                    <Grid item className={classes.elementStyle}>
-                      <Typography variant="body1"> {eachItem.label}</Typography>
-                    </Grid>
-                  );
-                case 'percentageWithText':
-                  const percent = parseInt(eachItem.label);
+                        <Typography variant="body1">{eachItem.label}</Typography>
+                      </Grid>
+                    );
+                  case 'text':
+                    return (
+                      <Grid item className={classes.elementStyle}>
+                        <Typography variant="body1"> {eachItem.label}</Typography>
+                      </Grid>
+                    );
+                  case 'percentageWithText':
+                    const percent = parseInt(eachItem.label);
 
-                  return (
-                    <Grid item className={classes.elementStyle}>
-                      <Typography
-                        variant="body2"
-                        className={
-                          percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
-                        }
-                      >
-                        {eachItem.label}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        className={
-                          percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
-                        }
-                      >
-                        {eachItem.percentageSymbol}
-                      </Typography>
+                    return (
+                      <Grid item className={classes.elementStyle}>
+                        <Typography
+                          variant="body2"
+                          className={
+                            percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
+                          }
+                        >
+                          {eachItem.label}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          className={
+                            percent > 50
+                              ? classes.percentageSymbolGreen
+                              : classes.percentageSymbolRed
+                          }
+                        >
+                          {eachItem.percentageSymbol}
+                        </Typography>
 
-                      <Typography variant="body1">{eachItem.subText}</Typography>
-                    </Grid>
-                  );
+                        <Typography variant="body1">{eachItem.subText}</Typography>
+                      </Grid>
+                    );
 
-                default:
-                  break;
-              }
-            })}
-          </Grid>
+                  default:
+                    break;
+                }
+              })}
+            </Grid>
+          </Link>
         );
       })}
     </Box>

@@ -1,6 +1,8 @@
 import { Box, Card, Typography } from '@material-ui/core';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Bigquery } from './iconStore/Bigquery';
 import { CloudSQLMySQL } from './iconStore/CloudSQLMySQL';
 import { CloudSQLPostGreSQL } from './iconStore/CloudSQLPostGreSQL';
@@ -124,12 +126,17 @@ const WrangleCard = () => {
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
       {connectorTypes.map((item, index) => {
         return (
-          <Card className={classes.card}>
-            <Box className={classes.cardContent} key={index}>
-              {item.SVG}
-              <Typography className={classes.cardText}>{item.name}</Typography>
-            </Box>
-          </Card>
+          <Link
+            to={`/ns/${getCurrentNamespace()}/datasets/${item.name}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Card className={classes.card}>
+              <Box className={classes.cardContent} key={index}>
+                {item.SVG}
+                <Typography className={classes.cardText}>{item.name}</Typography>
+              </Box>
+            </Card>
+          </Link>
         );
       })}
     </Box>
