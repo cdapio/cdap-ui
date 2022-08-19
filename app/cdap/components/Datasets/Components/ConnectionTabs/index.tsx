@@ -6,6 +6,8 @@ import { CanBrowseIcon, CanBrowseIconHover, WrangelIcon } from 'components/Datas
 import * as React from 'react';
 import { useStyles } from 'components/Datasets/Components/ConnectionTabs/styles';
 import CustomTooltip from 'components/Datasets/Components/CustomTooltip';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 
 const ConnectionTab = styled(Tab)({
   minWidth: '300px',
@@ -146,10 +148,15 @@ const TabLabelCanSample = ({ label }: { label: string }) => {
         <Typography variant="body1" className={classes.labelStylesCanSample}>
           {label}
         </Typography>
-        <Box>
-          <WrangelIcon />
-          <Typography color="primary">Wrangle</Typography>
-        </Box>
+        <Link
+          to={`/ns/${getCurrentNamespace()}/wrangler-grid/${label}`}
+          style={{ textDecoration: 'none' }}
+        >
+          <Box className={classes.wranglingHover}>
+            <WrangelIcon />
+            <Typography color="primary">Wrangle</Typography>
+          </Box>
+        </Link>
       </Box>
     </CustomTooltip>
   );
