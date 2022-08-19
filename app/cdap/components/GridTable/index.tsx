@@ -1,11 +1,11 @@
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { GridHeaderCell } from './GridHeaderCell';
-import { GridKPICell } from './GridKPICell';
-import { GridTextCell } from './GridTextCell';
-import { metricsData } from './mock/gridTableData';
-import mockJSON from './mock/gridTableResponse';
+import { GridHeaderCell } from './components/GridHeaderCell';
+import { GridKPICell } from './components/GridKPICell';
+import { GridTextCell } from './components/GridTextCell';
+import { metricsData } from './components/mock/gridTableData';
+import mockJSON from './components/mock/gridTableResponse';
 
 const GridTable = () => {
   const { workspaceid } = useParams() as any;
