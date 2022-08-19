@@ -73,4 +73,9 @@ export const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  wranglingHover: {
+    display: 'flex',
+    textDecoration: 'none',
+    gap: '10px',
+  },
 }));
