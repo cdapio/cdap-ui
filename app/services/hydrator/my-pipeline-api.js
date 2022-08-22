@@ -75,7 +75,6 @@ angular.module(PKG.name + '.services')
 
         // FIXME: This needs to be replaced with fetching etl-batch & etl-realtime separately.
         list: myHelpers.getConfig('GET', 'REQUEST', listPath, true),
-        pollStatus: myHelpers.getConfig('GET', 'POLL', pipelinePath + '/status'),
         stopPollStatus: myHelpers.getConfig('GET', 'POLL-STOP', pipelinePath + '/status'),
         delete: myHelpers.getConfig('DELETE', 'REQUEST', pipelinePath),
         runs: myHelpers.getConfig('GET', 'REQUEST', pipelinePath + '/runs', true),
