@@ -211,7 +211,12 @@ export const ActionButtons = ({
                 <ButtonLabel>{timerLabel}</ButtonLabel>
               </div>
             </CommonButton>
-            <CommonButton disabled={!currentPreviewId} active={viewLogs} onClick={onClickLogs}>
+            <CommonButton
+              disabled={!currentPreviewId}
+              active={viewLogs}
+              onClick={onClickLogs}
+              data-testid="preview-logs"
+            >
               <div>
                 <IconSVG name="icon-file-text-o"></IconSVG>
                 <ButtonLabel>Logs</ButtonLabel>
