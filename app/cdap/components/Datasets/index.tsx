@@ -15,7 +15,12 @@ const SelectDatasetWrapper = styled(Box)({
   borderTop: '1px solid #E0E0E0;',
   overflow: 'auto',
   height: '100%',
-  borderRight: '1px dashed #DADCE0',
+  '& > :first-child': {
+    width: '280px',
+  },
+  '& > :not(:first-child)': {
+    width: '300px',
+  },
 });
 
 const DatasetWrapper = () => {
