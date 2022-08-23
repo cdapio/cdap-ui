@@ -1937,6 +1937,12 @@ features:
 
   licenseText: Licensed under the Apache License, Version 2.0
 
+  LifeCycleManagement:
+    errors:
+      noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
+      outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
+        This draft is outdated and please export the draft for manual reconciliation.
+
   LoadingIndicator:
     contactadmin: It could take a few minutes for the system to self-heal.
     defaultMessage: 'Loading...'
@@ -2437,6 +2443,7 @@ features:
       deleteError: There was a problem with the pipeline you were trying to delete
       details: Details
       duplicate: Duplicate
+      edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
       run: Run

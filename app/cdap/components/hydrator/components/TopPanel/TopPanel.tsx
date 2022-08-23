@@ -14,14 +14,23 @@
  * the License.
  */
 
-import { Button } from '@material-ui/core';
+import { Button, TextareaAutosize } from '@material-ui/core';
+import { MyPipelineApi } from 'api/pipeline';
 import PipelineScheduler from 'components/PipelineScheduler';
 import PreviewLogs from 'components/PreviewLogs';
 import ResourceCenterButton from 'components/ResourceCenterButton';
-import React from 'react';
+import ConfirmationModal from 'components/shared/ConfirmationModal';
+import React, { useEffect, useReducer, useState } from 'react';
+import { GLOBALS } from 'services/global-constants';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import { ActionButtons } from './ActionButtons';
 import { NameAndDescription } from './NameAndDescription';
+import ErrorBanner from 'components/shared/ErrorBanner';
+import T from 'i18n-react';
+import { editPipeline } from 'services/PipelineUtils';
+import downloadFile from 'services/download-file';
+import { cleanseAndCompareTwoObjects } from 'services/helpers';
 
 export interface IGlobalObj {
   etlRealtime?: string;
@@ -40,7 +49,7 @@ interface IArtifact {
   version: string;
 }
 
-interface IScheduleInfo {
+export interface IScheduleInfo {
   schedule: string;
   maxConcurrentRuns: number;
 }
@@ -91,6 +100,15 @@ const ReturnButton = styled(Button)`
   z-index: 999;
 `;
 
+const StyledTextarea = styled(TextareaAutosize)`
+  width: 100%;
+  height: 90px;
+`;
+
+const ErrorExportButton = styled(Button)`
+  color: white;
+`;
+
 interface ITopPanelProps {
   metadataExpanded?: boolean;
   globals?: IGlobalObj;
@@ -111,7 +129,7 @@ interface ITopPanelProps {
   toggleScheduler: () => void;
   hasNodes: boolean;
   onSaveDraft: () => void;
-  onPublish: () => void;
+  onPublish: (isEdit) => void;
   onImport: () => void;
   onFileSelect: (files: FileList) => void;
   onExport: () => void;
@@ -136,6 +154,10 @@ interface ITopPanelProps {
   validatePluginProperties: (action: any, errorCb: any) => void;
   getRuntimeArgs: () => any;
   getStoreConfig: () => any;
+  getConfigForExport: () => any;
+  isEdit: boolean;
+  saveChangeSummary: (changeSummary: string) => any;
+  getParentVersion: () => any;
 }
 
 export const TopPanel = ({
@@ -183,10 +205,152 @@ export const TopPanel = ({
   validatePluginProperties,
   getRuntimeArgs,
   getStoreConfig,
+  getConfigForExport,
+  isEdit,
+  saveChangeSummary,
+  getParentVersion,
 }: ITopPanelProps) => {
   const sheculdeInfo = getScheduleInfo();
+  const [isChangeSummaryOpen, setIsChangeSummaryOpen] = useState<boolean>(false);
+  const [changeSummary, setChangeSummary] = useState('');
+  const [parentConfig, setParentConfig] = useState({ ...getConfigForExport().config });
+  const [editStatus, setEditStatus] = useState(null);
+
+  const initialError = {
+    errorMessage: null,
+    actionElements: null,
+  };
+
+  const exportDraftAndRedirect = () => {
+    downloadFile(getConfigForExport());
+    window.onbeforeunload = null;
+    editPipeline(state.metadata.name);
+  };
+
+  const outdatedDraftErrorActionElements = () => {
+    return (
+      <div>
+        <ErrorExportButton
+          variant="outlined"
+          onClick={() => {
+            exportDraftAndRedirect();
+          }}
+        >
+          Export
+        </ErrorExportButton>
+      </div>
+    );
+  };
+
+  const PREFIX = 'features.LifeCycleManagement';
+
+  const errorReducer = (eState, action) => {
+    switch (action.type) {
+      case 'noEditChangeError':
+        return {
+          errorMessage: T.translate(`${PREFIX}.errors.noEditChangeError`),
+          actionElements: null,
+        };
+      case 'outdatedDraftError':
+        return {
+          errorMessage: T.translate(`${PREFIX}.errors.outdatedDraftError`, {
+            pipelineName: state.metadata.name,
+          }),
+          actionElements: outdatedDraftErrorActionElements(),
+        };
+      case 'reset':
+        return initialError;
+    }
+  };
+
+  const [errorState, errorDispatch] = useReducer(errorReducer, initialError);
+
+  const onSummaryChange = (value: string) => {
+    setChangeSummary(value);
+  };
+
+  const closeChangeSummary = () => {
+    setIsChangeSummaryOpen(false);
+  };
+
+  const publishPipeline = () => {
+    if (isEdit) {
+      // check for if edit has new changes
+      if (cleanseAndCompareTwoObjects(parentConfig, getConfigForExport().config)) {
+        errorDispatch({ type: 'noEditChangeError' });
+        return;
+      }
+      // check for if parentVersion is still good
+      const params = {
+        namespace: getCurrentNamespace(),
+        appId: state.metadata.name,
+      };
+      MyPipelineApi.get(params).subscribe((res) => {
+        if (res.appVersion !== getParentVersion()) {
+          errorDispatch({ type: 'outdatedDraftError' });
+          setEditStatus('Draft out of date');
+          return;
+        }
+        setIsChangeSummaryOpen(true);
+      });
+    } else {
+      onPublish(isEdit);
+    }
+  };
+
+  // poll the edit status every 5 seconds
+  useEffect(() => {
+    if (!isEdit) {
+      return;
+    }
+    const interval = setInterval(() => {
+      MyPipelineApi.get({
+        namespace: getCurrentNamespace(),
+        appId: state.metadata.name,
+      }).subscribe({
+        next(res) {
+          if (res.appVersion === getParentVersion()) {
+            setEditStatus('Editing in progress');
+            return;
+          }
+          if (res.appVersion !== getParentVersion()) {
+            setEditStatus('Draft out of date');
+            return;
+          }
+        },
+        error(err) {
+          setEditStatus('Orphaned draft');
+        },
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const updatePipeline = () => {
+    saveChangeSummary(changeSummary);
+    onPublish(isEdit);
+    closeChangeSummary();
+  };
+
+  const confirmationElem = (
+    <StyledTextarea
+      rowsMin={3}
+      autoFocus={true}
+      onChange={(e) => onSummaryChange(e.target.value)}
+      value={changeSummary}
+    />
+  );
   return (
     <>
+      {errorState.errorMessage && (
+        <ErrorBanner
+          error={errorState.errorMessage}
+          actionElements={errorState.actionElements}
+          onClose={() => {
+            errorDispatch({ type: 'reset' });
+          }}
+        />
+      )}
       <TopPanelContainer>
         <NameAndDescription
           globals={globals}
@@ -197,6 +361,8 @@ export const TopPanel = ({
           saveMetadata={saveMetadata}
           resetMetadata={resetMetadata}
           openMetadata={openMetadata}
+          isEdit={isEdit}
+          editStatus={editStatus}
         ></NameAndDescription>
         <ActionButtons
           previewMode={previewMode}
@@ -209,7 +375,7 @@ export const TopPanel = ({
           toggleScheduler={toggleScheduler}
           hasNodes={hasNodes}
           onSaveDraft={onSaveDraft}
-          onPublish={onPublish}
+          onPublish={publishPipeline}
           onImport={onImport}
           onFileSelect={onFileSelect}
           onExport={onExport}
@@ -268,6 +434,15 @@ export const TopPanel = ({
           }}
         ></ReturnButton>
       )}
+      <ConfirmationModal
+        headerTitle="Enter Change Summary"
+        isOpen={isChangeSummaryOpen}
+        cancelFn={closeChangeSummary}
+        confirmButtonText="Deploy"
+        toggleModal={closeChangeSummary}
+        confirmationElem={confirmationElem}
+        confirmFn={updatePipeline}
+      />
     </>
   );
 };

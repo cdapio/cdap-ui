@@ -25,6 +25,9 @@ import uuidV4 from 'uuid/v4';
 import round from 'lodash/round';
 import React from 'react';
 import { connect } from 'react-redux';
+import isEqual from 'lodash/isEqual';
+import transform from 'lodash/transform';
+import isArray from 'lodash/isArray';
 // We don't use webpack alias here because this is used in Footer which is used in login app
 // And for login 'components/Lab/..' aliases to components folder inside login app.
 import experimentsList from '../components/Lab/experiment-list.tsx';
@@ -750,10 +753,62 @@ function santizeStringForHTMLID(str) {
  * Method to open link with a new tab
  * @param link - the link to route to.
  */
- function openLinkInNewTab(link) {
+function openLinkInNewTab(link) {
   window.open(link, '_blank');
 };
 
+/**
+ * Find difference between two objects
+ * @param  {object} origObj - Source object to compare newObj against
+ * @param  {object} newObj  - New object with potential changes
+ * @return {object} differences
+ */
+const differenceBetweenObjects = (origObj, newObj) => {
+  function changes(newObj, origObj) {
+    let arrayIndexCounter = 0;
+    return transform(newObj, function(result, value, key) {
+      if (!isEqual(value, origObj[key])) {
+        const resultKey = isArray(origObj) ? arrayIndexCounter++ : key;
+        result[resultKey] =
+          isObject(value) && isObject(origObj[key]) ? changes(value, origObj[key]) : value;
+      }
+    });
+  }
+  return changes(newObj, origObj);
+};
+
+/**
+ * remove undefined fields from object recursively
+ * @param  {object} obj - Object to cleanse
+ */
+function cleanseObject(obj) {
+  Object.keys(obj).forEach(function(key) {
+    // Get this value and its type
+    var value = obj[key];
+    if (isObject(value)) {
+      // Recurse...
+      cleanseObject(value);
+      if (!Object.keys(value).length) {
+        delete obj[key];
+      }
+    } else if (value === undefined) {
+      // Undefined, remove it
+      delete obj[key];
+    }
+  });
+}
+
+/**
+ * Compare if two objects are the same
+ * @param  {object} obj1 - Object 1
+ * @param  {object} obj2 - Object 2
+ * @return {boolean} if they are the same
+ */
+const cleanseAndCompareTwoObjects = (obj1, obj2) => {
+  cleanseObject(obj1)
+  cleanseObject(obj2)
+  return isEqual(obj1, obj2)
+}
 
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
@@ -815,5 +870,8 @@ export {
   isAuthSetToProxyMode,
   isAuthSetToManagedMode,
   santizeStringForHTMLID,
+  differenceBetweenObjects,
+  cleanseObject,
+  cleanseAndCompareTwoObjects,
   PIPELINE_ARTIFACTS,
 };

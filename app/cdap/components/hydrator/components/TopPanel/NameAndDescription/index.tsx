@@ -19,6 +19,7 @@ import {
   ButtonsContainer,
   CustomTooltip,
   DescriptionTextField,
+  EditStatus,
   ErrorTooltip,
   HydratorMetadata,
   MetadataLeft,
@@ -40,6 +41,8 @@ interface INameAndDescriptionProps {
   saveMetadata?: (event: MouseEvent | KeyboardEvent) => void;
   resetMetadata?: (event: MouseEvent | KeyboardEvent) => void;
   openMetadata?: () => void;
+  isEdit?: boolean;
+  editStatus?: string;
 }
 
 export const NameAndDescription = ({
@@ -51,6 +54,8 @@ export const NameAndDescription = ({
   saveMetadata,
   resetMetadata,
   openMetadata,
+  isEdit,
+  editStatus,
 }: INameAndDescriptionProps) => {
   const [name, setName] = useState(state.metadata.name);
   const [description, setDescription] = useState(state.metadata.description);
@@ -79,73 +84,79 @@ export const NameAndDescription = ({
   const NameToolTip = invalidName ? ErrorTooltip : CustomTooltip;
 
   return (
-    <HydratorMetadata
-      expanded={metadataExpanded}
-      data-cy="pipeline-metadata"
-      data-testid="pipeline-metadata"
-    >
-      <PipelineType>
-        {eTLBatch && <StyledIconSVG name="icon-ETLBatch"></StyledIconSVG>}
-        {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
-        {sparkstreaming && <StyledIconSVG name="icon-sparkstreaming"></StyledIconSVG>}
-      </PipelineType>
-      <MetadataLeft>
-        {metadataExpanded ? (
-          <>
-            <NameTextField
-              id="pipeline-name-input"
-              variant="outlined"
-              placeholder="Name your pipeline"
-              onKeyUp={onEnterOnMetadata}
-              onChange={handleNameChange}
-              value={name}
-            />
-            <DescriptionTextField
-              multiline
-              variant="outlined"
-              rows={2}
-              value={description}
-              placeholder="Enter a description for your pipeline."
-              data-cy="pipeline-description-input"
-              data-testid="pipeline-description-input"
-              onChange={handleDescriptionChange}
-            />
-            <ButtonsContainer>
-              <PrimaryContainedButton
-                onClick={saveMetadata}
-                data-cy="pipeline-metadata-ok-btn"
-                data-testid="pipeline-metadata-ok-btn"
+    <>
+      <HydratorMetadata
+        expanded={metadataExpanded}
+        disabled={isEdit}
+        data-cy="pipeline-metadata"
+        data-testid="pipeline-metadata"
+      >
+        <PipelineType>
+          {eTLBatch && <StyledIconSVG name="icon-ETLBatch"></StyledIconSVG>}
+          {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
+          {sparkstreaming && <StyledIconSVG name="icon-sparkstreaming"></StyledIconSVG>}
+        </PipelineType>
+        <MetadataLeft>
+          {metadataExpanded ? (
+            <>
+              <NameTextField
+                id="pipeline-name-input"
+                variant="outlined"
+                placeholder="Name your pipeline"
+                onKeyUp={onEnterOnMetadata}
+                onChange={handleNameChange}
+                value={name}
+              />
+              <DescriptionTextField
+                multiline
+                variant="outlined"
+                rows={2}
+                value={description}
+                placeholder="Enter a description for your pipeline."
+                data-cy="pipeline-description-input"
+                data-testid="pipeline-description-input"
+                onChange={handleDescriptionChange}
+              />
+              <ButtonsContainer>
+                <PrimaryContainedButton
+                  onClick={saveMetadata}
+                  data-cy="pipeline-metadata-ok-btn"
+                  data-testid="pipeline-metadata-ok-btn"
+                >
+                  Save
+                </PrimaryContainedButton>
+                <PrimaryContainedButton
+                  color="default"
+                  onClick={resetMetadata}
+                  data-cy="pipeline-metadata-cancel-btn"
+                  data-testid="pipeline-metadata-cancel-btn"
+                >
+                  Cancel
+                </PrimaryContainedButton>
+              </ButtonsContainer>
+            </>
+          ) : (
+            <div onClick={openMetadata} role="button">
+              <NameToolTip
+                title={invalidName ? 'Invalid Name' : name}
+                arrow
+                open={!!invalidName}
+                placement="bottom-start"
               >
-                Save
-              </PrimaryContainedButton>
-              <PrimaryContainedButton
-                color="default"
-                onClick={resetMetadata}
-                data-cy="pipeline-metadata-cancel-btn"
-                data-testid="pipeline-metadata-cancel-btn"
-              >
-                Cancel
-              </PrimaryContainedButton>
-            </ButtonsContainer>
-          </>
-        ) : (
-          <div onClick={openMetadata} role="button">
-            <NameToolTip
-              title={invalidName ? 'Invalid Name' : name}
-              arrow
-              open={!!invalidName}
-              placement="bottom-start"
-            >
-              <PipelineName errorName={!!invalidName}>{name || 'Name your pipeline'}</PipelineName>
-            </NameToolTip>
-            <CustomTooltip title={parsedDescription} arrow placement="bottom-start">
-              <PipelineDescription>
-                {parsedDescription || 'Enter a description for your pipeline'}
-              </PipelineDescription>
-            </CustomTooltip>
-          </div>
-        )}
-      </MetadataLeft>
-    </HydratorMetadata>
+                <PipelineName errorName={!!invalidName}>
+                  {name || 'Name your pipeline'}
+                </PipelineName>
+              </NameToolTip>
+              <CustomTooltip title={parsedDescription} arrow placement="bottom-start">
+                <PipelineDescription>
+                  {parsedDescription || 'Enter a description for your pipeline'}
+                </PipelineDescription>
+              </CustomTooltip>
+            </div>
+          )}
+        </MetadataLeft>
+      </HydratorMetadata>
+      <EditStatus>{editStatus}</EditStatus>
+    </>
   );
 };

@@ -56,6 +56,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
     this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
     this.onArtifactChangeV2 = this.onArtifactChangeV2.bind(this);
+    this.isEdit = this.$stateParams.isEdit ? this.$stateParams.isEdit === 'true' : false;
     this.init();
 
     var sub = this.leftpanelStore.subscribe( () => {
