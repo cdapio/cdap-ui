@@ -18,5 +18,19 @@ export const useStyles = makeStyles({
     display: 'flex',
     gap: '12px',
     alignItems: 'flex-end',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
+  importDataContainer: {
+    display: 'flex',
+    gap: '30px',
+    alignItems: 'flex-end',
+    fontSize: '14px',
+  },
+  breadCrumbTyporgraphy: {
+    color: '#000000',
+    fontSize: '14px',
+    lineHeight: '21px',
   },
 });
