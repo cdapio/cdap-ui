@@ -8,4 +8,7 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: 'black',
     fontSize: '16px',
   },
+  forEachTabLabelWidth: {
+    width: '100%',
+  },
 }));

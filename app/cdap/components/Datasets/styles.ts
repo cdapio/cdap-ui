@@ -13,31 +13,31 @@ export const useStyles = makeStyles({
     backgroundColor: 'black',
     color: 'white',
   },
-  tabsContainerWithHeader: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
   tabHeaders: {
-    width: '300px',
     backgroundColor: '#F1F8FF',
   },
   StyleForLevelZero: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    height: '53px',
-    borderRight: '1px dashed #DADCE0',
+    height: '50px',
+    paddingLeft: '38px',
   },
   beforeSearchIconClickDisplay: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '53px',
-    borderRight: '1px dashed #DADCE0',
+    height: '50px',
     paddingRight: '18px',
     paddingLeft: '30px',
   },
   hideComponent: {
     display: 'none',
+  },
+  tabsContainerWithHeader: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100% !important',
+    borderRight: '1px solid #DADCE0',
   },
 });
