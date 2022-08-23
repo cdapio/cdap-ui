@@ -10,14 +10,19 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 
 const ConnectionTab = styled(Tab)({
-  minWidth: '300px',
+  width: '100%',
   padding: '15px 10px 15px 30px',
   textTransform: 'none',
   color: 'black',
   fontSize: '16px',
   minHeight: '53px !important',
+  maxWidth: '300px',
+  '& .MuiTab-root': {
+    maxWidth: '300px',
+  },
   '& .MuiTab-labelIcon': { minHeight: '54px !important' },
   '& .MuiTab-wrapper': {
+    width: '100%',
     fontSize: '16px',
     fontWeight: '400',
     display: 'flex',
@@ -27,14 +32,8 @@ const ConnectionTab = styled(Tab)({
     zIndex: 3,
     whiteSpace: 'nowrap',
   },
-  '&.MuiTab-root': {
-    maxWidth: '300px',
-  },
   '&.MuiTab-labelIcon .MuiTab-wrapper > *:first-child': {
     marginBottom: '0px',
-  },
-  '&.makeStyles-canBrowseIconHover': {
-    border: '10px solid green',
   },
 });
 
@@ -42,7 +41,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   const classes = useStyles();
 
   return (
-    <Box data-testid='connections-tabs-parent'>
+    <Box data-testid="connections-tabs-parent">
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -154,7 +153,7 @@ const TabLabelCanSample = ({ label }: { label: string }) => {
         >
           <Box className={classes.wranglingHover}>
             <WrangelIcon />
-            <Typography color="primary">Wrangle</Typography>
+            <Box className={classes.wrangleTypography}>Wrangle</Box>
           </Box>
         </Link>
       </Box>
