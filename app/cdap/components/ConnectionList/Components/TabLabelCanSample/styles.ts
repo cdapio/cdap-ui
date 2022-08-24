@@ -14,34 +14,38 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 
-export const useGridTextCellStyles = makeStyles({
-  root: {
-    minWidth: '216px',
-    backgroundColor: '#fff',
-    padding: '5px 5px 5px 30px',
-    borderRadius: '0px',
-    border: 'none',
+export const useStyles = makeStyles({
+  labelsContainerCanSample: {
+    width: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    width: 'fit-content',
+    justifyContent: 'space-between',
+    gap: '4px',
+    '&:hover': {
+      '&>.MuiBox-root': {
+        display: 'flex',
+        justifyContent: 'space-between',
+        gap: '10px',
+      },
+    },
+    '&>.MuiBox-root': {
+      display: 'none',
+    },
   },
-  tableRowCell: {
-    minWidth: '150.6px',
-    border: '1px solid #E0E0E0',
-    fontSize: '14px',
-    width: 'auto',
-    lineHeight: '21px',
-    padding: '0px',
-    borderBottom: '1px solid #E0E0E0',
-    color: '#5F6368',
-    boxSizing: 'content-box',
+  labelStylesCanSample: {
+    maxWidth: '145px',
+    fontSize: '16px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
-  cell: {
-    lineHeight: '21px',
+  wranglingHover: {
+    display: 'flex',
+    textDecoration: 'none',
+    gap: '10px',
+  },
+  wrangleTypography: {
+    color: '#4681F4 !important',
     fontSize: '14px',
-    fontWeight: 400,
-    color: '#5F6368',
   },
 });
