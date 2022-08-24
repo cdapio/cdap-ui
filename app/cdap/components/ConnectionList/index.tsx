@@ -25,6 +25,8 @@ import { useLocation, useParams } from 'react-router';
 import SubHeader from './Components/SubHeader';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
@@ -46,7 +48,12 @@ const DatasetWrapper = () => {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
+  const [loading, setLoading] = useState(false);
 
+  const toggleLoader = () => {
+    setLoading(!loading);
+  };
+  let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
     {
       data: [],
@@ -205,6 +212,9 @@ const DatasetWrapper = () => {
         {dataForTabs &&
           Array.isArray(dataForTabs) &&
           dataForTabs.map((each, index) => {
+            if (each.data.filter((el) => el.connectionId).length) {
+              connectionId = each.data.filter((el) => el.connectionId)[0].connectionId;
+            }
             if (index === 0) {
               headerContent = headerForLevelZero();
             } else {
@@ -224,11 +234,18 @@ const DatasetWrapper = () => {
                   handleChange={selectedTabValueHandler}
                   value={each.selectedTab}
                   index={index}
+                  connectionId={connectionId || ''}
+                  toggleLoader={toggleLoader}
                 />
               </Box>
             );
           })}
       </SelectDatasetWrapper>
+      <If condition={loading}>
+        <div className={classes.loadingContainer}>
+          <LoadingSVG />
+        </div>
+      </If>
     </Box>
   );
 };
