@@ -28,7 +28,7 @@ import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
 import { Kafka } from './iconStore/Kafka';
 import { MySQL } from './iconStore/MySQL';
 import { Oracle } from './iconStore/Oracle';
-import { PostgreSQL } from './iconStore/PostgreSQL';
+import { PostgreSQL } from './iconStore/PostgreSQLIcon';
 import { S3 } from './iconStore/S3';
 import { Spanner } from './iconStore/Spanner';
 import { SQLServer } from './iconStore/SQLServer';
