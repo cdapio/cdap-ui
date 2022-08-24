@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,7 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Bigquery } from './iconStore/Bigquery';
+import { BigQuery } from './iconStore/BigQuery';
 import { CloudSQLMySQL } from './iconStore/CloudSQLMySQL';
 import { CloudSQLPostGreSQL } from './iconStore/CloudSQLPostGreSQL';
 import { Database } from './iconStore/Database';
@@ -55,7 +55,7 @@ const WrangleCard = () => {
       } else if (connectorType.name === 'BigQuery') {
         return {
           ...connectorType,
-          SVG: Bigquery,
+          SVG: BigQuery,
         };
       } else if (connectorType.name === 'GCS') {
         return {
@@ -110,7 +110,7 @@ const WrangleCard = () => {
       } else {
         return {
           ...connectorType,
-          SVG: Bigquery,
+          SVG: BigQuery,
         };
       }
     });
