@@ -51,8 +51,13 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
+const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
   const classes = useStyles();
+
+  const [connectionIdV, setConnectionId] = React.useState(connectionId);
+  React.useEffect(() => {
+    setConnectionId(connectionId);
+  }, []);
 
   return (
     <Box data-testid="connections-tabs-parent">
@@ -90,7 +95,12 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                         index={index}
                       />
                     ) : (
-                      <TabLabelCanSample label={connectorType.name} />
+                      <TabLabelCanSample
+                        label={connectorType.name}
+                        entity={connectorType}
+                        initialConnectionId={connectionIdV}
+                        toggleLoader={props.toggleLoader}
+                      />
                     )
                   ) : (
                     <TabLabelCanBrowse

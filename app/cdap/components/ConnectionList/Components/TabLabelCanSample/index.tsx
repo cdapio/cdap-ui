@@ -16,31 +16,72 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { useStyles } from './styles';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { WrangelIcon } from 'components/ConnectionList/iconStore';
+import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useStyles } from './styles';
 
-const TabLabelCanSample = ({ label }: { label: string }) => {
+const TabLabelCanSample = ({
+  label,
+  entity,
+  initialConnectionId,
+  toggleLoader,
+}: {
+  label: string;
+  entity: any;
+  initialConnectionId: string;
+  toggleLoader: () => any;
+}) => {
   const classes = useStyles();
+  const [workspaceId, setWorkspaceId] = React.useState(null);
+  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
+  const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
 
+  const onExplore = (entity) => {
+    toggleLoader();
+    const { canBrowse } = entity;
+    if (!canBrowse) {
+      onCreateWorkspace(entity);
+    }
+  };
+
+  const onCreateWorkspace = async (entity, parseConfig = {}) => {
+    try {
+      createWorkspaceInternal(entity, parseConfig);
+    } catch (e) {}
+  };
+
+  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
+    const wid = await createWorkspace({
+      entity,
+      connection: currentConnection,
+      properties: parseConfig,
+    });
+    if (onWorkspaceCreate) {
+      return onWorkspaceCreate(wid);
+    }
+    setWorkspaceId(wid);
+    toggleLoader();
+  };
+  if (workspaceId) {
+    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
+  }
   return (
     <CustomTooltip title={label.length > 16 ? label : ''} arrow>
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body1" className={classes.labelStylesCanSample}>
           {label}
         </Typography>
-        <Link
-          to={`/ns/${getCurrentNamespace()}/wrangler-grid/${label}`}
-          style={{ textDecoration: 'none' }}
-        >
-          <Box className={classes.wranglingHover}>
+        <div onClick={() => onExplore(entity)}>
+          <Box className={classes.wranglingHover} onClick={() => onExplore(entity)}>
             <WrangelIcon />
-            <Box className={classes.wrangleTypography}>Wrangle</Box>
+            <Typography color="primary">Wrangle</Typography>
           </Box>
-        </Link>
+        </div>
       </Box>
     </CustomTooltip>
   );
