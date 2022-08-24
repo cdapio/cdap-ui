@@ -13,6 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-export interface IGridTextCellProps {
-  cellValue: string;
-}
+
+import * as React from 'react';
+import { useStyles } from './styles';
+import { Box, Tooltip, TooltipProps } from '@material-ui/core';
+
+const CustomTooltip = (props: TooltipProps) => {
+  const classes = useStyles();
+
+  return (
+    <Box data-testid="tooltip-parent">
+      <Tooltip arrow classes={classes} {...props} />
+    </Box>
+  );
+};
+
+export default CustomTooltip;
