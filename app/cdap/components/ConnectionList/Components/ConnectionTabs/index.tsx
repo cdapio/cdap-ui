@@ -22,9 +22,6 @@ import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/s
 import * as React from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
-import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
-import { Redirect } from 'react-router';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',

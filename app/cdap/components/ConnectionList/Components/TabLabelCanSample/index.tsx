@@ -18,13 +18,12 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { WrangelIcon } from 'components/ConnectionList/iconStore';
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { useStyles } from './styles';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
+import * as React from 'react';
 import { Redirect } from 'react-router';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useStyles } from './styles';
 
 const TabLabelCanSample = ({
   label,

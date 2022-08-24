@@ -14,20 +14,19 @@
  * the License.
  */
 
-import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import MyDataPrepApi from 'api/dataprep';
+import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
+import DataPrepStore from 'components/DataPrep/store';
+import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
-import mockJSON from './mock/apiMock';
 import metricsJSON from './mock/metrics';
-import MyDataPrepApi from 'api/dataprep';
-import DataPrepStore from 'components/DataPrep/store';
-import { objectQuery } from 'services/helpers';
-import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 
 const GridTable = () => {
   const { datasetName } = useParams() as any;
@@ -82,13 +81,14 @@ const GridTable = () => {
           },
         });
         setGridData(response);
-        console.log('response', response);
       });
     });
   };
 
   useEffect(() => {
-    // -----------------Get DATA from URL paramteres to get data of workspace
+    /**
+     * Get DATA from URL paramteres to get data of workspace
+     */
     const payload = {
       context: params.namespace,
       workspaceId: params.datasetName,
@@ -107,8 +107,6 @@ const GridTable = () => {
   };
 
   const getGridTableData = async () => {
-    // const fetchedResponse = await mockJSON;
-    // const rawData = fetchedResponse.response;
     const rawData: any = gridData;
     const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
