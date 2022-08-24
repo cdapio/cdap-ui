@@ -71,7 +71,3 @@ const OngoingDataExplorationCard = ({ item }) => {
   );
 };
 export default OngoingDataExplorationCard;
-
-function CardStyles() {
-  throw new Error('Function not implemented.');
-}

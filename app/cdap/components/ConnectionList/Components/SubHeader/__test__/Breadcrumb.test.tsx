@@ -16,10 +16,10 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import SubHeader from '../index';
+import BreadCumb from '../index';
 
-test('renders SubHeader Component', () => {
-  render(<SubHeader />);
-  const ele = screen.getByTestId(/sub-header-container-parent/i);
+test('renders BreadCumb Component', () => {
+  render(<BreadCumb />);
+  const ele = screen.getByTestId(/bread-comb-container-parent/i);
   expect(ele).toBeInTheDocument();
 });

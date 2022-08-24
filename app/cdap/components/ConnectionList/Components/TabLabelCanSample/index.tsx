@@ -14,12 +14,12 @@
  * the License.
  */
 
-import Box from '@material-ui/core/Box';
-import * as React from 'react';
 import { Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { WrangelIcon } from 'components/ConnectionList/iconStore';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
@@ -38,7 +38,7 @@ const TabLabelCanSample = ({ label }: { label: string }) => {
         >
           <Box className={classes.wranglingHover}>
             <WrangelIcon />
-            <Typography color="primary">Wrangle</Typography>
+            <Box className={classes.wrangleTypography}>Wrangle</Box>
           </Box>
         </Link>
       </Box>

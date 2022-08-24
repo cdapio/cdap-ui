@@ -17,31 +17,20 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
-  labelsContainerCanSample: {
+  labelContainerBox: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    gap: '4px',
-    '&:hover': {
-      '&>.MuiBox-root': {
-        display: 'flex',
-        justifyContent: 'space-between',
-        gap: '10px',
-      },
-    },
-    '&>.MuiBox-root': {
-      display: 'none',
-    },
   },
-  labelStylesCanSample: {
-    maxWidth: '145px',
+  labelsContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: '4px',
+  },
+  labelStyles: {
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-  },
-  wranglingHover: {
-    display: 'flex',
-    textDecoration: 'none',
-    gap: '10px',
   },
 });
