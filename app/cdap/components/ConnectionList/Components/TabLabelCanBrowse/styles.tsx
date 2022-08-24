@@ -13,6 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-export interface IGridTextCellProps {
-  cellValue: string;
-}
+
+import { makeStyles } from '@material-ui/styles';
+
+export const useStyles = makeStyles({
+  labelContainerBox: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  labelsContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: '4px',
+  },
+  labelStyles: {
+    maxWidth: '300px',
+    fontSize: '16px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+});

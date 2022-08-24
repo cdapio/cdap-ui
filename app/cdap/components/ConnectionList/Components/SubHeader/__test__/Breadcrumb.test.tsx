@@ -13,6 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-export interface IGridTextCellProps {
-  cellValue: string;
-}
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import SubHeader from '../index';
+
+test('renders SubHeader Component', () => {
+  render(<SubHeader />);
+  const ele = screen.getByTestId(/sub-header-container-parent/i);
+  expect(ele).toBeInTheDocument();
+});
