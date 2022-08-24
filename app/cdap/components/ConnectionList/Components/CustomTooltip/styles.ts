@@ -13,6 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-export interface IGridTextCellProps {
-  cellValue: string;
-}
+
+import { makeStyles } from '@material-ui/styles';
+
+export const useStyles = makeStyles((theme) => ({
+  arrow: {
+    color: 'black',
+  },
+  tooltip: {
+    backgroundColor: 'black',
+    fontSize: '16px',
+  },
+  forEachTabLabelWidth: {
+    width: '100%',
+  },
+}));
