@@ -36,8 +36,8 @@ const WrangleHome = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/WrangleHome'),
   loading: LoadingSVGCentered,
 });
-const Datasets = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/Datasets'),
+const ConnectionList = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList'),
   loading: LoadingSVGCentered,
 });
 const WrangleGrid = Loadable({
@@ -153,7 +153,7 @@ export default class Home extends Component {
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/home" component={WrangleHome} />
-          <Route exact path="/ns/:namespace/datasets/:connectorType" component={Datasets} />
+          <Route exact path="/ns/:namespace/datasets/:connectorType" component={ConnectionList} />
           <Route exact path="/ns/:namespace/wrangler-grid/:datasetName" component={WrangleGrid} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
