@@ -14,19 +14,19 @@
  * the License.
  */
 
-import * as React from 'react';
-import SubHeader from './Components/SubHeader';
-import ConnectionsTabs from './Components/ConnectionTabs';
 import { Box, styled, Typography } from '@material-ui/core';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { GCSIcon } from 'components/ConnectionList/iconStore';
+import * as React from 'react';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router';
+import SubHeader from './Components/SubHeader';
+import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
 
-const ConnectionListWrapper = styled(Box)({
+const SelectDatasetWrapper = styled(Box)({
   display: 'flex',
   borderTop: '1px solid #E0E0E0;',
   overflow: 'auto',
@@ -39,7 +39,7 @@ const ConnectionListWrapper = styled(Box)({
   },
 });
 
-const ConnectionList = () => {
+const DatasetWrapper = () => {
   const { connectorType } = useParams() as any;
 
   const classes = useStyles();
@@ -201,7 +201,7 @@ const ConnectionList = () => {
   return (
     <Box data-testid="data-sets-parent">
       <SubHeader />
-      <ConnectionListWrapper>
+      <SelectDatasetWrapper>
         {dataForTabs &&
           Array.isArray(dataForTabs) &&
           dataForTabs.map((each, index) => {
@@ -228,9 +228,9 @@ const ConnectionList = () => {
               </Box>
             );
           })}
-      </ConnectionListWrapper>
+      </SelectDatasetWrapper>
     </Box>
   );
 };
 
-export default ConnectionList;
+export default DatasetWrapper;

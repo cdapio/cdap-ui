@@ -17,7 +17,7 @@
 import { Box, Typography } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { useStyles } from 'components/ConnectionList/Components/SubHeader/styles';
+import { useStyles } from './styles';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
