@@ -56,4 +56,15 @@ export const useStyles = makeStyles({
     height: '100% !important',
     borderRight: '1px solid #DADCE0',
   },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+  },
 });
