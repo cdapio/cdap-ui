@@ -1,18 +1,15 @@
-import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import BreadCumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
-import mockJSON from './mock/apiMock';
-import metricsJSON from './mock/metrics';
 import MyDataPrepApi from 'api/dataprep';
 import DataPrepStore from 'components/DataPrep/store';
 import { objectQuery } from 'services/helpers';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
-import { valueFromAST } from 'graphql';
 
 const GridTable = () => {
   const { datasetName } = useParams() as any;
