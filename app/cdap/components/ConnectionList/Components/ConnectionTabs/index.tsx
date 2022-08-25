@@ -76,9 +76,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
               <ConnectionTab
                 onClick={() => {
                   if (index > 1) {
-                    connectorType.canBrowse
-                      ? handleChange(connectorType, index)
-                      : null;
+                    connectorType.canBrowse ? handleChange(connectorType, index) : null;
                   } else {
                     handleChange(connectorType, index);
                   }
@@ -107,11 +105,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={
-                  connectorType.canSample
-                    ? classes.wrangleTab
-                    : 'eachConnectionStyle'
-                }
+                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
               />
             ))}
           </Tabs>
