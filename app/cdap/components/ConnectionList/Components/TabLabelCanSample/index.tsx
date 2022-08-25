@@ -41,34 +41,27 @@ const TabLabelCanSample = ({
   const myLabelRef: any = React.createRef();
   const [refValue, setRefValue] = React.useState(false);
   const [workspaceId, setWorkspaceId] = React.useState(null);
-  const [currentConnection, setCurrentConnection] = React.useState(
-    initialConnectionId
-  );
+  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
 
   const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
 
   React.useEffect(() => {
-    setRefValue(
-      myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth
-    );
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
 
   const onExplore = (entity) => {
-    console.log('on explore', entity);
     toggleLoader();
     const { canBrowse } = entity;
     if (!canBrowse) {
-      console.log('in can sample condition', entity);
       onCreateWorkspace(entity);
     }
   };
 
   const onCreateWorkspace = async (entity, parseConfig = {}) => {
     try {
-      console.log('on create workspace', entity, parseConfig);
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      console.log(e); //as of now just consoling the exception
+      console.log(e); // as of now just consoling the exception
     }
   };
 
@@ -78,21 +71,15 @@ const TabLabelCanSample = ({
       connection: currentConnection,
       properties: parseConfig,
     });
-    console.log('await wid ', wid);
 
     if (onWorkspaceCreate) {
-      console.log(wid, 'this is wid');
       return onWorkspaceCreate(wid);
     }
     setWorkspaceId(wid);
     toggleLoader();
   };
   if (workspaceId) {
-    return (
-      <Redirect
-        to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`}
-      />
-    );
+    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
   }
   return refValue ? (
     <CustomTooltip title={label} arrow>
