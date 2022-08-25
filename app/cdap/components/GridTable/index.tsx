@@ -234,7 +234,7 @@ const GridTable = () => {
                   {headersNamesList.map((eachKey, eachIndex) => {
                     return (
                       <GridTextCell
-                        cellValue={eachRow[eachKey.name]}
+                        cellValue={eachRow[eachKey.name] || '--'}
                         key={`${eachKey.name}-${eachIndex}`}
                       />
                     );
