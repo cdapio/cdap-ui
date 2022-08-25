@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -51,8 +51,13 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
+const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
   const classes = useStyles();
+
+  const [connectionIdV, setConnectionId] = React.useState(connectionId);
+  React.useEffect(() => {
+    setConnectionId(connectionId);
+  }, []);
 
   return (
     <Box data-testid="connections-tabs-parent">
@@ -76,9 +81,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
               <ConnectionTab
                 onClick={() => {
                   if (index > 1) {
-                    connectorType.canBrowse
-                      ? handleChange(connectorType, index)
-                      : null;
+                    connectorType.canBrowse ? handleChange(connectorType, index) : null;
                   } else {
                     handleChange(connectorType, index);
                   }
@@ -92,7 +95,12 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                         index={index}
                       />
                     ) : (
-                      <TabLabelCanSample label={connectorType.name} />
+                      <TabLabelCanSample
+                        label={connectorType.name}
+                        entity={connectorType}
+                        initialConnectionId={connectionIdV}
+                        toggleLoader={props.toggleLoader}
+                      />
                     )
                   ) : (
                     <TabLabelCanBrowse
@@ -107,11 +115,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={
-                  connectorType.canSample
-                    ? classes.wrangleTab
-                    : 'eachConnectionStyle'
-                }
+                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
               />
             ))}
           </Tabs>
