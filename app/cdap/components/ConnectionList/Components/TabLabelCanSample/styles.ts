@@ -21,8 +21,10 @@ export const useStyles = makeStyles({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
     gap: '4px',
     '&:hover': {
+      cursor: 'default',
       '&>.MuiBox-root': {
         display: 'flex',
         justifyContent: 'space-between',

@@ -17,6 +17,9 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles((theme) => ({
+  columnContainer: {
+    // maxHeight: '500px',
+  },
   boxStyles: {
     zIndex: 1,
     height: '100%',
@@ -31,6 +34,7 @@ export const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   tabsContainer: {
+    // overflow: 'scroll',
     '& .MuiTabs-scroller': {
       '& .MuiButtonBase-root.Mui-selected': {
         color: '#fff',
@@ -46,6 +50,7 @@ export const useStyles = makeStyles((theme) => ({
   wrangleTab: {
     '&:hover': {
       backgroundColor: '#EFF0F2',
+      cursor: 'default',
     },
   },
   labelContainerBox: {

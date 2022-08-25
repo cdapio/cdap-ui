@@ -29,7 +29,8 @@ const ConnectionTab = styled(Tab)({
   textTransform: 'none',
   color: 'black',
   fontSize: '16px',
-  minHeight: '53px !important',
+  height: '50px',
+  // minHeight: '53px !important',
   maxWidth: '300px',
   '& .MuiTab-root': {
     maxWidth: '300px',
@@ -55,7 +56,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   const classes = useStyles();
 
   return (
-    <Box data-testid="connections-tabs-parent">
+    <Box data-testid="connections-tabs-parent" className={classes.columnContainer}>
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs

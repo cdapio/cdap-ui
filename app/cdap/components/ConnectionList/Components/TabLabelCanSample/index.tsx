@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
+import { setRef, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
@@ -25,11 +25,17 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const TabLabelCanSample = ({ label }: { label: string }) => {
   const classes = useStyles();
+  const myLabelRef: any = React.createRef();
+  const [refValue, setRefValue] = React.useState(false);
 
-  return (
-    <CustomTooltip title={label.length > 16 ? label : ''} arrow>
+  React.useEffect(() => {
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
+  }, []);
+
+  return refValue ? (
+    <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample}>
+        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
         <Link
@@ -43,6 +49,21 @@ const TabLabelCanSample = ({ label }: { label: string }) => {
         </Link>
       </Box>
     </CustomTooltip>
+  ) : (
+    <Box className={classes.labelsContainerCanSample}>
+      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        {label}
+      </Typography>
+      <Link
+        to={`/ns/${getCurrentNamespace()}/wrangler-grid/${label}`}
+        style={{ textDecoration: 'none' }}
+      >
+        <Box className={classes.wranglingHover}>
+          <WrangelIcon />
+          <Box className={classes.wrangleTypography}>Wrangle</Box>
+        </Box>
+      </Link>
+    </Box>
   );
 };
 
