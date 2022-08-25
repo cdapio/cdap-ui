@@ -30,49 +30,52 @@ const OngoingDataExploration = (props) => {
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     }).subscribe((res) => {
-      res.values.forEach((item) => {
-        const params = {
-          context: 'default',
-          workspaceId: item.workspaceId,
-        };
-        const requestBody = {
-          directives: item.directives,
-          limit: 1000,
-          insights: {
-            name: item.name,
-            workspaceName: item.workspaceName,
-            path: item?.sampleSpec?.path,
-            visualization: {},
-          },
-        };
-
-        MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
-          let dataQuality = 0;
-          response.headers.forEach((head) => {
-            const general = response.summary.statistics[head].general;
-            const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
-            const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
-            dataQuality = dataQuality + nonNull;
-          });
-
-          const totalDataQuality = dataQuality / response.headers.length;
-
-          setOngoingExpDatas((current) => [
-            ...current,
-            {
-              connectionName:
-                item?.sampleSpec?.connectionName === undefined
-                  ? 'Upload'
-                  : item?.sampleSpec?.connectionName,
+      res.values.forEach((item, index) => {
+        if (index <= 2) {
+          const params = {
+            context: 'default',
+            workspaceId: item.workspaceId,
+          };
+          const requestBody = {
+            directives: item.directives,
+            limit: 1000,
+            insights: {
+              name: item.name,
               workspaceName: item.workspaceName,
-              recipeSteps: item.directives.length,
-              dataQuality: totalDataQuality,
+              path: item?.sampleSpec?.path,
+              visualization: {},
             },
-          ]);
-        });
+          };
+
+          MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
+            let dataQuality = 0;
+            response.headers.forEach((head) => {
+              const general = response.summary.statistics[head].general;
+              const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
+              const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
+              dataQuality = dataQuality + nonNull;
+            });
+
+            const totalDataQuality = dataQuality / response.headers.length;
+
+            setOngoingExpDatas((current) => [
+              ...current,
+              {
+                connectionName:
+                  item?.sampleSpec?.connectionName === undefined
+                    ? 'Upload'
+                    : item?.sampleSpec?.connectionName,
+                workspaceName: item.workspaceName,
+                recipeSteps: item.directives.length,
+                dataQuality: totalDataQuality,
+              },
+            ]);
+          });
+        }
       });
+
+      props.toggleLoader();
     });
-    props.toggleLoader;
   };
 
   useEffect(() => {
@@ -82,7 +85,6 @@ const OngoingDataExploration = (props) => {
   useEffect(() => {
     const final = generateDataForExplorationCard(ongoingExpDatas);
     setFinalArray(final);
-    props.toggleLoader;
   }, [ongoingExpDatas]);
 
   return (
@@ -93,7 +95,7 @@ const OngoingDataExploration = (props) => {
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 2 && <OngoingDataExplorationCard item={item} />}
+            {index <= 1 && <OngoingDataExplorationCard item={item} />}
           </Link>
         );
       })}
