@@ -33,7 +33,12 @@ export const GridKPICell: React.FC<IGridKPICellProps> = ({ metricData }) => {
           values.map((eachValue: { label: string; count: number }) => (
             <Box className={classes.KPICell} key={eachValue.label}>
               <Typography className={classes.label}>{eachValue.label}</Typography>
-              <Typography className={classes.count}>{eachValue.count}</Typography>
+              <Typography
+                className={classes.count}
+                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+              >
+                {eachValue.count}
+              </Typography>
             </Box>
           ))}
       </Card>

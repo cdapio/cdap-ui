@@ -29,15 +29,17 @@ import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 
 const SelectDatasetWrapper = styled(Box)({
+  maxWidth: '1200',
+  overflowX: 'scroll',
   display: 'flex',
   borderTop: '1px solid #E0E0E0;',
-  overflow: 'auto',
+
   height: '100%',
   '& > :first-child': {
-    width: '280px',
+    minWidth: '280px',
   },
   '& > :not(:first-child)': {
-    width: '300px',
+    minWidth: '300px',
   },
 });
 
@@ -197,8 +199,8 @@ const DatasetWrapper = () => {
 
   const headerForLevelZero = () => {
     return (
-      <Box className={classes.StyleForLevelZero}>
-        <Typography variant="h6">Data Connections</Typography>
+      <Box className={classes.styleForLevelZero}>
+        <Typography variant="body2">Data Connections</Typography>
       </Box>
     );
   };
@@ -206,7 +208,7 @@ const DatasetWrapper = () => {
   let headerContent;
 
   return (
-    <Box data-testid="data-sets-parent">
+    <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
         {dataForTabs &&
@@ -221,7 +223,7 @@ const DatasetWrapper = () => {
               headerContent = (
                 <>
                   <Box className={classes.beforeSearchIconClickDisplay}>
-                    <Typography variant="h6">{dataForTabs[index - 1].selectedTab}</Typography>
+                    <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
                   </Box>
                 </>
               );
