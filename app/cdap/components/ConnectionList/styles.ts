@@ -60,10 +60,7 @@ export const useStyles = makeStyles({
     minHeight: '539px',
     borderRight: '1px solid #DADCE0',
   },
-  ConnectionsListContainer: {
-    // position: 'fixed',
-    // maxWidth: '100vw',
-    // overflowX: 'scroll',
+  connectionsListContainer: {
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
