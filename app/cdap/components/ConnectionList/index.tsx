@@ -69,7 +69,8 @@ const DatasetWrapper = () => {
 
     connectorTypes = connectorTypes.map((connectorType): any => {
       const connections = categorizedConnections.get(connectorType.name) || [];
-      allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
+      allConnectionsTotalLength =
+        allConnectionsTotalLength + connections.length;
 
       return {
         ...connectorType,
@@ -92,7 +93,10 @@ const DatasetWrapper = () => {
     });
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
+  const getCategorizedConnectionsforSelectedTab = async (
+    selectedValue: string,
+    index: number
+  ) => {
     const categorizedConnections = await getCategorizedConnections();
     const connections = categorizedConnections.get(selectedValue) || [];
 
@@ -201,7 +205,10 @@ const DatasetWrapper = () => {
   let headerContent;
 
   return (
-    <Box data-testid="data-sets-parent" className={classes.ConnectionsListContainer}>
+    <Box
+      data-testid="data-sets-parent"
+      className={classes.connectionsListContainer}
+    >
       <SubHeader />
       <SelectDatasetWrapper>
         {dataForTabs &&
@@ -213,7 +220,9 @@ const DatasetWrapper = () => {
               headerContent = (
                 <>
                   <Box className={classes.beforeSearchIconClickDisplay}>
-                    <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
+                    <Typography variant="body2">
+                      {dataForTabs[index - 1].selectedTab}
+                    </Typography>
                   </Box>
                 </>
               );

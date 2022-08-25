@@ -30,7 +30,6 @@ const ConnectionTab = styled(Tab)({
   color: 'black',
   fontSize: '16px',
   height: '50px',
-  // minHeight: '53px !important',
   maxWidth: '300px',
   '& .MuiTab-root': {
     maxWidth: '300px',
@@ -56,7 +55,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
   const classes = useStyles();
 
   return (
-    <Box data-testid="connections-tabs-parent" className={classes.columnContainer}>
+    <Box data-testid="connections-tabs-parent">
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -77,7 +76,9 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
               <ConnectionTab
                 onClick={() => {
                   if (index > 1) {
-                    connectorType.canBrowse ? handleChange(connectorType, index) : null;
+                    connectorType.canBrowse
+                      ? handleChange(connectorType, index)
+                      : null;
                   } else {
                     handleChange(connectorType, index);
                   }
@@ -106,7 +107,11 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
+                className={
+                  connectorType.canSample
+                    ? classes.wrangleTab
+                    : 'eachConnectionStyle'
+                }
               />
             ))}
           </Tabs>
