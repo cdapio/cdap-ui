@@ -14,18 +14,18 @@
  * the License.
  */
 
-import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import MyDataPrepApi from 'api/dataprep';
+import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
+import DataPrepStore from 'components/DataPrep/store';
+import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import BreadCumb from './components/Breadcrumb';
+import { objectQuery } from 'services/helpers';
+import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
-import MyDataPrepApi from 'api/dataprep';
-import DataPrepStore from 'components/DataPrep/store';
-import { objectQuery } from 'services/helpers';
-import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 
 const GridTable = () => {
   const { datasetName } = useParams() as any;
@@ -88,13 +88,12 @@ const GridTable = () => {
           },
         });
         setGridData(response);
-        console.log('response', response);
       });
     });
   };
 
   useEffect(() => {
-    // -----------------Get DATA from URL paramteres to get data of workspace
+    // Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
       workspaceId: params.datasetName,
@@ -214,7 +213,7 @@ const GridTable = () => {
 
   return (
     <>
-      <BreadCumb datasetName={datasetName} />
+      <BreadCrumb datasetName={datasetName} />
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
