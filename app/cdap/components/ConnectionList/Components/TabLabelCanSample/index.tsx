@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { setRef, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { WrangelIcon } from 'components/ConnectionList/iconStore';
@@ -41,12 +41,16 @@ const TabLabelCanSample = ({
   const myLabelRef: any = React.createRef();
   const [refValue, setRefValue] = React.useState(false);
   const [workspaceId, setWorkspaceId] = React.useState(null);
-  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
+  const [currentConnection, setCurrentConnection] = React.useState(
+    initialConnectionId
+  );
 
   const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
 
   React.useEffect(() => {
-    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
+    setRefValue(
+      myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth
+    );
   }, []);
 
   const onExplore = (entity) => {
@@ -64,7 +68,7 @@ const TabLabelCanSample = ({
       console.log('on create workspace', entity, parseConfig);
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      // do nothing
+      console.log(e); //as of now just consoling the exception
     }
   };
 
@@ -84,7 +88,11 @@ const TabLabelCanSample = ({
     toggleLoader();
   };
   if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
+    return (
+      <Redirect
+        to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`}
+      />
+    );
   }
   return refValue ? (
     <CustomTooltip title={label} arrow>
