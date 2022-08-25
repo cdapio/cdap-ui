@@ -24,6 +24,13 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     marginRight: '30px',
     marginLeft: '34px',
+    '& .MuiBreadcrumbs-root': {
+      fontSize: '14px',
+      fontWeight: '400',
+    },
+    '& .MuiTypography-root': {
+      color: '#000000',
+    },
   },
   selectPrevPage: {
     display: 'flex',

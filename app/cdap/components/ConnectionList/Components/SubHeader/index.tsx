@@ -32,7 +32,7 @@ const SubHeader = () => {
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             Home
           </Link>
-          <Typography color="textPrimary">Datasets</Typography>
+          <Typography>Data Sources</Typography>
         </Breadcrumbs>
       </Box>
 

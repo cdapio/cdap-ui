@@ -15,6 +15,7 @@
  */
 
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { useStyles } from './styles';
 import { default as React, useEffect } from 'react';
 import { useParams } from 'react-router';
 import BreadCrumb from './components/Breadcrumb';
@@ -26,6 +27,7 @@ import metricsJSON from './mock/metrics';
 
 const GridTable = () => {
   const { datasetName } = useParams() as any;
+  const classes = useStyles();
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
@@ -62,7 +64,7 @@ const GridTable = () => {
   }, []);
 
   return (
-    <>
+    <Box className={classes.wrapper}>
       <BreadCrumb datasetName={datasetName} />
       <TableContainer component={Box}>
         <Table aria-label="simple table">
@@ -93,7 +95,7 @@ const GridTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </Box>
   );
 };
 
