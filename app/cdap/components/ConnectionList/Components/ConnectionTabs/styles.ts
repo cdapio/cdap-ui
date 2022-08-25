@@ -46,6 +46,7 @@ export const useStyles = makeStyles((theme) => ({
   wrangleTab: {
     '&:hover': {
       backgroundColor: '#EFF0F2',
+      cursor: 'default',
     },
   },
   labelContainerBox: {

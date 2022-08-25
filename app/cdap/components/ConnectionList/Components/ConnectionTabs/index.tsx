@@ -29,7 +29,7 @@ const ConnectionTab = styled(Tab)({
   textTransform: 'none',
   color: 'black',
   fontSize: '16px',
-  minHeight: '53px !important',
+  height: '50px',
   maxWidth: '300px',
   '& .MuiTab-root': {
     maxWidth: '300px',
