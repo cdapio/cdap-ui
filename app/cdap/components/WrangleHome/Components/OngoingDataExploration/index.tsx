@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 
-const OngoingDataExploration = () => {
+const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
   const [finalArray, setFinalArray] = useState([]);
 
@@ -72,6 +72,7 @@ const OngoingDataExploration = () => {
         });
       });
     });
+    props.toggleLoader;
   };
 
   useEffect(() => {
@@ -81,17 +82,18 @@ const OngoingDataExploration = () => {
   useEffect(() => {
     const final = generateDataForExplorationCard(ongoingExpDatas);
     setFinalArray(final);
+    props.toggleLoader;
   }, [ongoingExpDatas]);
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {finalArray.map((item) => {
+      {finalArray.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            <OngoingDataExplorationCard item={item} />
+            {index <= 2 && <OngoingDataExplorationCard item={item} />}
           </Link>
         );
       })}
