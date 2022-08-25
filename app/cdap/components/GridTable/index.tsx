@@ -150,9 +150,15 @@ const GridTable = () => {
               ? checkFrequentlyOccuredValues(key).name
               : vKey == 'general'
               ? 'Missing/Null'
-              : vKey,
+              : vKey == 'types'
+              ? 'Invalid'
+              : 'Invalid',
           count:
-            convertNonNullPercent(key, vValue) == 0
+            vKey == 'types'
+              ? 0
+              : vKey !== 'general' && vKey !== 'types'
+              ? 0
+              : convertNonNullPercent(key, vValue) == 0
               ? checkFrequentlyOccuredValues(key).count
               : convertNonNullPercent(key, vValue),
         });
