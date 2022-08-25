@@ -22,6 +22,12 @@ const GridTable = () => {
   const [rowsDataList, setRowsDataList] = React.useState([]);
   const [gridData, setGridData] = useState<any>({});
   const [missingDataList, setMissingDataList] = useState([]);
+  const [invalidCountArray, setInvalidCountArray] = useState([
+    {
+      label: 'Invalid',
+      count: '0',
+    },
+  ]);
 
   const getWorkSpaceData = (params, workspaceId) => {
     DataPrepStore.dispatch({
@@ -151,13 +157,11 @@ const GridTable = () => {
               : vKey == 'general'
               ? 'Missing/Null'
               : vKey == 'types'
-              ? 'Invalid'
-              : 'Invalid',
+              ? ''
+              : '',
           count:
             vKey == 'types'
-              ? 0
-              : vKey !== 'general' && vKey !== 'types'
-              ? 0
+              ? ''
               : convertNonNullPercent(key, vValue) == 0
               ? checkFrequentlyOccuredValues(key).count
               : convertNonNullPercent(key, vValue),
@@ -165,7 +169,7 @@ const GridTable = () => {
       }),
         metricArray.push({
           name: key,
-          values: tempArray,
+          values: tempArray.concat(invalidCountArray),
         });
     });
     return metricArray;
