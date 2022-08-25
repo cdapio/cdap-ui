@@ -1,4 +1,5 @@
 import { Box, Table, TableBody, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import ParsingDrawer from 'components/ParsingDrawer';
 import { default as React, useEffect } from 'react';
 import { useParams } from 'react-router';
 import BreadCumb from './components/Breadcrumb';
@@ -48,6 +49,7 @@ const GridTable = () => {
   return (
     <>
       <BreadCumb datasetName={datasetName} />
+      <ParsingDrawer />
       <TableContainer component={Box}>
         <Table aria-label="simple table">
           <TableHead>
