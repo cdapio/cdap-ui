@@ -28,6 +28,19 @@ export const useStyles = makeStyles({
     display: 'flex',
     gap: '110px',
   },
+  headerTitle: {
+    display: 'flex',
+  },
+  viewMore: {
+    margin: 'auto 0px',
+    paddingTop: '26px',
+    paddingLeft: '16px',
+    fontSize: '14px',
+    lineHeight: '21px',
+    letterSpacing: '0.15px',
+    color: '#4681F4',
+    cursor: 'pointer',
+  },
   welcome: {
     fontSize: '36px',
     fontWeight: 600,
@@ -36,5 +49,16 @@ export const useStyles = makeStyles({
     maxWidth: '382px',
     padding: '47px 0px 0px 0px',
     color: '#000000',
+  },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
   },
 });

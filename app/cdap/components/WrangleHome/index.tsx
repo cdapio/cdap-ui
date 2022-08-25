@@ -16,7 +16,9 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import React from 'react';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import React, { useState } from 'react';
 import OngoingDataExploration from './Components/OngoingDataExploration';
 import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
@@ -25,6 +27,12 @@ import { useStyles } from './styles';
 
 const WranglerHomeNew = () => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+
+  const toggleLoader = () => {
+    setLoading(!loading);
+  };
+
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
@@ -37,10 +45,21 @@ const WranglerHomeNew = () => {
       {GradientLine}
 
       <Box>
-        <WrangleHomeTitle title="Start data exploration" />
+        <div className={classes.headerTitle}>
+          <WrangleHomeTitle title="Start data exploration" />
+          <div className={classes.viewMore}>View More</div>
+        </div>
         <WrangleCard />
-        <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-        <OngoingDataExploration />
+        <div className={classes.headerTitle}>
+          <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
+          <div className={classes.viewMore}>View More</div>
+        </div>
+        <OngoingDataExploration toggleLoader={toggleLoader} />
+        <If condition={loading}>
+          <div className={classes.loadingContainer}>
+            <LoadingSVG />
+          </div>
+        </If>
       </Box>
     </Box>
   );
