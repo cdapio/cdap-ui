@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 
-const OngoingDataExploration = () => {
+const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
   const [finalArray, setFinalArray] = useState([]);
 
@@ -30,47 +30,51 @@ const OngoingDataExploration = () => {
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     }).subscribe((res) => {
-      res.values.forEach((item) => {
-        const params = {
-          context: 'default',
-          workspaceId: item.workspaceId,
-        };
-        const requestBody = {
-          directives: item.directives,
-          limit: 1000,
-          insights: {
-            name: item.name,
-            workspaceName: item.workspaceName,
-            path: item?.sampleSpec?.path,
-            visualization: {},
-          },
-        };
-
-        MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
-          let dataQuality = 0;
-          response.headers.forEach((head) => {
-            const general = response.summary.statistics[head].general;
-            const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
-            const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
-            dataQuality = dataQuality + nonNull;
-          });
-
-          const totalDataQuality = dataQuality / response.headers.length;
-
-          setOngoingExpDatas((current) => [
-            ...current,
-            {
-              connectionName:
-                item?.sampleSpec?.connectionName === undefined
-                  ? 'Upload'
-                  : item?.sampleSpec?.connectionName,
+      res.values.forEach((item, index) => {
+        if (index <= 2) {
+          const params = {
+            context: 'default',
+            workspaceId: item.workspaceId,
+          };
+          const requestBody = {
+            directives: item.directives,
+            limit: 1000,
+            insights: {
+              name: item.name,
               workspaceName: item.workspaceName,
-              recipeSteps: item.directives.length,
-              dataQuality: totalDataQuality,
+              path: item?.sampleSpec?.path,
+              visualization: {},
             },
-          ]);
-        });
+          };
+
+          MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
+            let dataQuality = 0;
+            response.headers.forEach((head) => {
+              const general = response.summary.statistics[head].general;
+              const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
+              const nonNullCount = Math.floor((nonEmpty - empty) * 10) / 10;
+              dataQuality = dataQuality + nonNullCount;
+            });
+
+            const totalDataQuality = dataQuality / response.headers.length;
+
+            setOngoingExpDatas((current) => [
+              ...current,
+              {
+                connectionName:
+                  item?.sampleSpec?.connectionName === undefined
+                    ? 'Upload'
+                    : item?.sampleSpec?.connectionName,
+                workspaceName: item.workspaceName,
+                recipeSteps: item.directives.length,
+                dataQuality: totalDataQuality,
+              },
+            ]);
+          });
+        }
       });
+
+      props.toggleLoader();
     });
   };
 
@@ -85,13 +89,13 @@ const OngoingDataExploration = () => {
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {finalArray.map((item) => {
+      {finalArray.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            <OngoingDataExplorationCard item={item} />
+            {index <= 1 && <OngoingDataExplorationCard item={item} />}
           </Link>
         );
       })}
