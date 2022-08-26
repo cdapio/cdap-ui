@@ -90,7 +90,7 @@ const TabLabelCanSample = ({
   return refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample}>
+        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
         <div onClick={() => onExplore(entity)}>
@@ -103,7 +103,7 @@ const TabLabelCanSample = ({
     </CustomTooltip>
   ) : (
     <Box className={classes.labelsContainerCanSample}>
-      <Typography variant="body1" className={classes.labelStylesCanSample}>
+      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
       <div onClick={() => onExplore(entity)}>
