@@ -25,7 +25,7 @@ import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
 
-const WranglerHomeNew = () => {
+const WranglerHome = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
 
@@ -61,4 +61,4 @@ const WranglerHomeNew = () => {
   );
 };
 
-export default WranglerHomeNew;
+export default WranglerHome;
