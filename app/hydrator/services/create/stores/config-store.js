@@ -176,7 +176,9 @@ class HydratorPlusPlusConfigStore {
       const sanitize =  window.CaskCommon.CDAPHelpers.santizeStringForHTMLID;
       if (node.outputSchemaProperty) {
         try {
-          let outputSchema = JSON.parse(node.outputSchema);
+          const outputSchema = angular.isArray(node.outputSchema) ?
+              JSON.parse(node.outputSchema[0].schema) :
+              JSON.parse(node.outputSchema);
           if (angular.isArray(outputSchema.fields)) {
             outputSchema.fields = outputSchema.fields.filter( field => !field.readonly);
           }

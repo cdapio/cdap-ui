@@ -118,9 +118,11 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
 
     cy.add_node_to_canvas(sourceNode1);
     cy.add_node_to_canvas(sourceNode2);
+    cy.toggle_source_panel();
 
     cy.toggle_analytics_panel();
     cy.add_node_to_canvas(joinerNode);
+    cy.toggle_analytics_panel();
 
     cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode);
@@ -352,7 +354,6 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
       }
     });
 
-    cy.get(dataCy('preview-config-btn')).trigger('click', { force: true });
     cy.get(dataCy(`plugin-node-Joiner-batchjoiner-2`)).within(() => {
       cy.get(dataCy(`${joinerNode.nodeName}-preview-data-btn`)).click();
     });
