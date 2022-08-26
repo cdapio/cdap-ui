@@ -29,7 +29,6 @@ import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 
 const SelectDatasetWrapper = styled(Box)({
-  maxWidth: '1200',
   overflowX: 'scroll',
   display: 'flex',
   borderTop: '1px solid #E0E0E0;',
