@@ -41,20 +41,20 @@ const WranglerHomeNew = () => {
       {GradientLine}
 
       <Box>
-        <div className={classes.headerTitle}>
+        <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Start data exploration" />
-          <div className={classes.viewMore}>View More</div>
-        </div>
+          <Box className={classes.viewMore}>View More</Box>
+        </Box>
         <WrangleCard />
-        <div className={classes.headerTitle}>
+        <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <div className={classes.viewMore}>View More</div>
-        </div>
+          <Box className={classes.viewMore}>View More</Box>
+        </Box>
         <OngoingDataExploration toggleLoader={() => setLoading(!loading)} />
         <If condition={loading}>
-          <div className={classes.loadingContainer}>
+          <Box className={classes.loadingContainer}>
             <LoadingSVG />
-          </div>
+          </Box>
         </If>
       </Box>
     </Box>
