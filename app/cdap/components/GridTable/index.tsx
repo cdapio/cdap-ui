@@ -26,10 +26,13 @@ import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
+import Box from '@material-ui/core/Box';
+import { useStyles } from './styles';
 
 const GridTable = () => {
   const { datasetName } = useParams() as any;
   const params = useParams() as any;
+  const classes = useStyles();
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
@@ -212,7 +215,7 @@ const GridTable = () => {
   }, [gridData]);
 
   return (
-    <>
+    <Box className={classes.wrapper}>
       <BreadCrumb datasetName={datasetName} />
       <Table aria-label="simple table" className="test">
         <TableHead>
@@ -256,7 +259,7 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
-    </>
+    </Box>
   );
 };
 
