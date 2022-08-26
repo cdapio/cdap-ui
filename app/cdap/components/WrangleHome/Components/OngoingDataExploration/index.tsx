@@ -29,6 +29,8 @@ const OngoingDataExploration = (props) => {
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
+    props.toggleLoader(true);
+
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })
@@ -90,14 +92,17 @@ const OngoingDataExploration = (props) => {
   };
 
   useEffect(() => {
-    props.toggleLoader;
     getOngoingData();
-    props.toggleLoader;
   }, []);
 
   useEffect(() => {
+    props.toggleLoader(true);
     const final = generateDataForExplorationCard(ongoingExpDatas);
     setFinalArray(final);
+
+    if (final) {
+      props.toggleLoader(false);
+    }
   }, [ongoingExpDatas]);
 
   return (
