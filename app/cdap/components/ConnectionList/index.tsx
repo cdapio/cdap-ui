@@ -27,9 +27,9 @@ import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import ErrorSnackbar from 'components/SnackbarComponent';
 
 const SelectDatasetWrapper = styled(Box)({
-  maxWidth: '1200',
   overflowX: 'scroll',
   display: 'flex',
   borderTop: '1px solid #E0E0E0;',
@@ -51,9 +51,13 @@ const DatasetWrapper = () => {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(false);
+  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState(false);
 
-  const toggleLoader = () => {
-    setLoading(!loading);
+  const toggleLoader = (value: boolean, isError?: boolean) => {
+    setLoading(value);
+    if (isError) {
+      setIsErrorOnNoWorkSpace(isError);
+    }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
@@ -116,6 +120,7 @@ const DatasetWrapper = () => {
       tempData[index + 1][`selectedTab`] = null;
       return tempData.slice(0, index + 2);
     });
+    toggleLoader(false);
   };
 
   const fetchEntities = async (connectionId, url = pathFromUrl) => {
@@ -130,6 +135,7 @@ const DatasetWrapper = () => {
   };
 
   const selectedTabValueHandler = (entity: any, index: number) => {
+    toggleLoader(true);
     setDataForTabs((currentData): any => {
       let newData = [...currentData];
       newData[index].selectedTab = entity.name;
@@ -159,6 +165,7 @@ const DatasetWrapper = () => {
             tempData[index + 1][`isSearching`] = false;
             return tempData.slice(0, index + 2);
           });
+          toggleLoader(false);
         });
       } else {
         if (entity.canBrowse) {
@@ -177,6 +184,7 @@ const DatasetWrapper = () => {
               tempData[index + 1][`isSearching`] = false;
               return tempData.slice(0, index + 2);
             });
+            toggleLoader(false);
           });
         }
       }
@@ -237,7 +245,7 @@ const DatasetWrapper = () => {
                   value={each.selectedTab}
                   index={index}
                   connectionId={connectionId || ''}
-                  toggleLoader={toggleLoader}
+                  toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 />
               </Box>
             );
@@ -248,6 +256,9 @@ const DatasetWrapper = () => {
           <LoadingSVG />
         </div>
       </If>
+      {isErrorOnNoWorkspace && (
+        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+      )}
     </Box>
   );
 };
