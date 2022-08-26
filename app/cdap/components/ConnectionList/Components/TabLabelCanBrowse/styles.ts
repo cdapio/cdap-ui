@@ -17,12 +17,22 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
-  breadCombContainer: {
+  labelContainerBox: {
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '48px',
     alignItems: 'center',
-    marginRight: '30px',
-    marginLeft: '34px',
+  },
+  labelsContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    height: '24px',
+  },
+  labelStyles: {
+    fontSize: '16px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    fontFamily: "'Noto Sans', sans-serif",
   },
 });
