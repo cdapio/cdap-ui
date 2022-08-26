@@ -29,7 +29,6 @@ const OngoingDataExploration = (props) => {
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
-    props.toggleLoader(true);
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })
@@ -107,9 +106,7 @@ const OngoingDataExploration = (props) => {
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 1 && (
-              <OngoingDataExplorationCard item={item} toggleLoader={props.toggleLoader} />
-            )}
+            {index <= 1 && <OngoingDataExplorationCard item={item} />}
           </Link>
         );
       })}
