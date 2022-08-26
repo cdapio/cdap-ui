@@ -14,17 +14,12 @@
  * the License.
  */
 import * as React from 'react';
-import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import { Divider } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
 import { useErrorStyles } from './styles';
+import { State } from './types';
+import { TransitionComponent } from './Components/TransitionComponent';
 
-export interface State extends SnackbarOrigin {
-  open: boolean;
-}
-
-export default function PositionedSnackbar(props) {
+const PositionedSnackbar = (props) => {
   const classes = useErrorStyles();
   const [state, setState] = React.useState<State>({
     open: true,
@@ -49,22 +44,8 @@ export default function PositionedSnackbar(props) {
     props.handleCloseError();
   };
 
-  const TransitionComponent = () => {
-    return (
-      <div>
-        <div className={classes.headFlex}>
-          <h5 className={classes.errorHead}>
-            <WarningRoundedIcon className={classes.warningIcon} />
-            &nbsp;Error
-          </h5>
-          <span className={classes.dismissSpan} onClick={() => handleClose()}>
-            Dismiss
-          </span>
-        </div>
-        <Divider />
-        <p className={classes.errorMessage}>Failed to retrieve sample</p>
-      </div>
-    );
+  const properties = {
+    close: () => handleClose(),
   };
 
   return (
@@ -73,8 +54,10 @@ export default function PositionedSnackbar(props) {
       open={open}
       onClose={handleClose}
       key={vertical + horizontal}
-      TransitionComponent={TransitionComponent}
+      TransitionComponent={() => TransitionComponent(properties)}
       className={classes.snackBarDiv}
     />
   );
-}
+};
+
+export default PositionedSnackbar;
