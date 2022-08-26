@@ -32,12 +32,20 @@ const TabLabelCanBrowse = ({
   SVG?: any;
 }) => {
   const classes = useStyles();
-  return (
-    <CustomTooltip title={label.length > 16 ? label : ''} arrow key={`tooltip-${index}`}>
+
+  const myLabelRef: any = React.createRef();
+  const [refValue, setRefValue] = React.useState(false);
+
+  React.useEffect(() => {
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
+  }, []);
+
+  return refValue ? (
+    <CustomTooltip title={label} arrow key={`tooltip-${index}`}>
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
-          <Box>{SVG}</Box>
-          <Typography variant="body1" className={classes.labelStyles}>
+          {SVG && <Box>{SVG}</Box>}
+          <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
             {label}
           </Typography>
           {count && (
@@ -54,6 +62,26 @@ const TabLabelCanBrowse = ({
         </Box>
       </Box>
     </CustomTooltip>
+  ) : (
+    <Box className={classes.labelContainerBox}>
+      <Box className={classes.labelsContainer}>
+        {SVG && <Box>{SVG}</Box>}
+        <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
+          {label}
+        </Typography>
+        {count && (
+          <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
+        )}
+      </Box>
+      <Box>
+        <Box className={`canBrowseNormal`}>
+          <CanBrowseIcon />
+        </Box>
+        <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
+          <CanBrowseIconHover />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 export default TabLabelCanBrowse;

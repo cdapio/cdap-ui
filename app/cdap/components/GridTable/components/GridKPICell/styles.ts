@@ -42,12 +42,12 @@ export const useGridKPICellStyles = makeStyles({
     lineHeight: '21px',
     fontSize: '14px',
     fontWeight: 400,
-    color: 'red',
+    color: '#5F6368',
   },
   count: {
     fontSize: '14px',
     lineHeight: '21px',
     fontWeight: 400,
-    color: '#5F6368',
+    color: 'red',
   },
 });

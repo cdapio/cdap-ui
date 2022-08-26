@@ -37,7 +37,10 @@ export const GridHeaderCell: React.FC<IGridHeaderCellProps> = ({ label, types })
       <Card className={classes.root} variant="outlined">
         <Typography className={classes.columnHeader}>{label}</Typography>
         <StringIndicatorBox>
-          <TypographyComponent className={classes.dataTypeIndicator} label={data?.datatype1} />
+          <TypographyComponent
+            className={classes.dataTypeIndicator}
+            label={data?.datatype1 || 'Unknown'}
+          />
           {data.datatype2 && (
             <StringIndicatorBox>
               <TypographyComponent className={classes.subDataTypeIndicator} label={'|'} />
