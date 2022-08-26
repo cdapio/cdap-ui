@@ -18,7 +18,7 @@ import React from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 
-const OngoingDataExplorationCard = ({ item, toggleLoader }) => {
+const OngoingDataExplorationCard = ({ item }) => {
   const classes = useStyles();
   return (
     <Grid container className={classes.gridContainer}>
@@ -39,9 +39,7 @@ const OngoingDataExplorationCard = ({ item, toggleLoader }) => {
             );
           case 'percentageWithText':
             const percent = parseInt(eachItem.label);
-            if (percent && !isNaN(percent)) {
-              toggleLoader(false);
-            }
+
             return percent && !isNaN(percent) ? (
               <Grid item className={classes.elementStyle}>
                 <Typography
