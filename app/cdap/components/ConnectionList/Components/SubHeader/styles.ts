@@ -30,6 +30,11 @@ export const useStyles = makeStyles({
     },
     '& .MuiTypography-root': {
       color: '#000000',
+      lineHeight: '21px',
+    },
+    '& a': {
+      color: '#3994FF',
+      lineHeight: '21px',
     },
   },
   selectPrevPage: {

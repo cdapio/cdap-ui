@@ -17,6 +17,10 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles((theme) => ({
+  connectionsTabsParent: {
+    height: 500,
+    overflow: 'scroll',
+  },
   boxStyles: {
     zIndex: 1,
     height: '100%',
