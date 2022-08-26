@@ -17,12 +17,37 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles({
-  breadCombContainer: {
+  labelsContainerCanSample: {
+    width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    height: '48px',
     alignItems: 'center',
-    marginRight: '30px',
-    marginLeft: '34px',
+    gap: '4px',
+    '&:hover': {
+      cursor: 'default',
+      '&>.MuiBox-root': {
+        display: 'flex',
+        justifyContent: 'space-between',
+        gap: '10px',
+      },
+    },
+    '&>.MuiBox-root': {
+      display: 'none',
+    },
+  },
+  labelStylesCanSample: {
+    maxWidth: '145px',
+    fontSize: '16px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  wranglingHover: {
+    display: 'flex',
+    textDecoration: 'none',
+    gap: '10px',
+  },
+  wrangleTypography: {
+    color: '#4681F4 !important',
+    fontSize: '14px',
   },
 });

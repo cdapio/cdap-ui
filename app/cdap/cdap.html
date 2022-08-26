@@ -16,25 +16,55 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title></title>
 
-    <link rel="icon" href="/cdap_assets/img/favicon.png">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Cask Data Application Platform">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base href="/cdap"/>
-</head>
-<body class="cdap-body-container">
-  <div id="app-container"></div>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/config.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/ui-config.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/ui-theme.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/dll_assets/dll.shared.vendor.<%= htmlWebpackPlugin.options.mode %>js?<%= htmlWebpackPlugin.options.hashId %>"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/dll_assets/dll.cdap.vendor.<%= htmlWebpackPlugin.options.mode %>js?<%= htmlWebpackPlugin.options.hashId %>"></script>
-  <% for (key in htmlWebpackPlugin.files.js) { %>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="<%= htmlWebpackPlugin.files.js[key] %>"></script>
-  <% } %>
-</body>
+    <link rel="icon" href="/cdap_assets/img/favicon.png" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Cask Data Application Platform" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap"
+      rel="stylesheet"
+    />
+    <base href="/cdap" />
+  </head>
+  <body class="cdap-body-container">
+    <div id="app-container"></div>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="/config.js"
+    ></script>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="/ui-config.js"
+    ></script>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="/ui-theme.js"
+    ></script>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="/dll_assets/dll.shared.vendor.<%= htmlWebpackPlugin.options.mode %>js?<%= htmlWebpackPlugin.options.hashId %>"
+    ></script>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="/dll_assets/dll.cdap.vendor.<%= htmlWebpackPlugin.options.mode %>js?<%= htmlWebpackPlugin.options.hashId %>"
+    ></script>
+    <% for (key in htmlWebpackPlugin.files.js) { %>
+    <script
+      type="text/javascript"
+      nonce="<_= nonceVal _>"
+      src="<%= htmlWebpackPlugin.files.js[key] %>"
+    ></script>
+    <% } %>
+  </body>
 </html>

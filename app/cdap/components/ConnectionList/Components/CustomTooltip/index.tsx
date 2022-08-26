@@ -14,15 +14,18 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
+import { Box, Tooltip, TooltipProps } from '@material-ui/core';
+import * as React from 'react';
+import { useStyles } from './styles';
 
-export const useStyles = makeStyles({
-  breadCombContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    height: '48px',
-    alignItems: 'center',
-    marginRight: '30px',
-    marginLeft: '34px',
-  },
-});
+const CustomTooltip = (props: TooltipProps) => {
+  const classes = useStyles();
+
+  return (
+    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+      <Tooltip arrow classes={classes} {...props} />
+    </Box>
+  );
+};
+
+export default CustomTooltip;
