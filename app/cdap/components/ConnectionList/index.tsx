@@ -30,7 +30,6 @@ import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 
 const SelectDatasetWrapper = styled(Box)({
-  maxWidth: '1200',
   overflowX: 'scroll',
   display: 'flex',
   borderTop: '1px solid #E0E0E0;',
