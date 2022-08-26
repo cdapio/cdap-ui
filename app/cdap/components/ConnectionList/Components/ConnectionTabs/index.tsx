@@ -19,6 +19,7 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
+import Calculate from 'components/DataPrep/Directives/Calculate';
 import * as React from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
@@ -60,7 +61,11 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
   }, []);
 
   return (
-    <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
+    <Box
+      data-testid="connections-tabs-parent"
+      className={classes.connectionsTabsParent}
+      style={{ height: 'calc(100vh - 200px)' }}
+    >
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
