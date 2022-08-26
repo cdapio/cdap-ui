@@ -61,7 +61,8 @@ export const useStyles = makeStyles({
   },
   connectionsListContainer: {
     width: '100vw',
-    position: 'fixed',
+    // position: 'fixed',
+    overflow: 'scroll',
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
