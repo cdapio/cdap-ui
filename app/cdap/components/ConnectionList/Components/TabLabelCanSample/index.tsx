@@ -34,7 +34,7 @@ const TabLabelCanSample = ({
   label: string;
   entity: any;
   initialConnectionId: string;
-  toggleLoader: (value: boolean, isError?: boolean) => any;
+  toggleLoader: (value: boolean, isError?: boolean) => void;
 }) => {
   const classes = useStyles();
 
