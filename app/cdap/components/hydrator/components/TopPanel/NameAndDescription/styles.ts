@@ -104,7 +104,7 @@ export const HydratorMetadata = styled.div`
     height: 185px;
     cursor: auto;
     padding: 10px;
-    width: 100%;
+    width: calc(100% - 70px);
     position: absolute;
     box-shadow: 0 7px 7px rgb(0 0 0 / 10%), 0 19px 59px rgb(0 0 0 / 20%);`}
 `;
