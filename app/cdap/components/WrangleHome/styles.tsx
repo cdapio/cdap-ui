@@ -41,7 +41,7 @@ export const useStyles = makeStyles({
     color: '#4681F4',
     cursor: 'pointer',
   },
-  welcome: {
+  welcomeCard: {
     fontSize: '36px',
     fontWeight: 600,
     lineHeight: '54px',
