@@ -54,7 +54,7 @@ const ConnectionTab = styled(Tab)({
 const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
   const classes = useStyles();
 
-  const [connectionIdprop, setConnectionId] = React.useState(connectionId);
+  const [connectionIdProp, setConnectionId] = React.useState(connectionId);
 
   React.useEffect(() => {
     setConnectionId(connectionId);
@@ -103,7 +103,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
                       <TabLabelCanSample
                         label={connectorType.name}
                         entity={connectorType}
-                        initialConnectionId={connectionIdprop}
+                        initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                       />
                     )
