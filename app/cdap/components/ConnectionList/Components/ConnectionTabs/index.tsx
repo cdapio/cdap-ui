@@ -60,7 +60,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
   }, []);
 
   return (
-    <Box data-testid="connections-tabs-parent">
+    <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
