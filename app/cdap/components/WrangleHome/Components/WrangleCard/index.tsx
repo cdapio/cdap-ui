@@ -143,7 +143,7 @@ const WrangleCard = () => {
       {connectorTypes.map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/datasets/${item.name}`}
+            to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
             style={{ textDecoration: 'none' }}
           >
             <Card className={classes.card}>
