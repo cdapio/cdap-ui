@@ -27,13 +27,20 @@ import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
 
+interface ExecuteAPIResponse {
+  headers: [];
+  types: {};
+  values: [];
+  summary: { statistics: {}; validations: {} };
+}
+
 const GridTable = () => {
   const { datasetName } = useParams() as any;
   const params = useParams() as any;
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
-  const [gridData, setGridData] = useState<any>({});
+  const [gridData, setGridData] = useState({} as ExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -93,7 +100,6 @@ const GridTable = () => {
   };
 
   useEffect(() => {
-    // Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
       workspaceId: params.datasetName,
@@ -101,7 +107,7 @@ const GridTable = () => {
     getWorkSpaceData(payload, datasetName);
   }, []);
 
-  const createHeadersData = (columnNamesList: any, columnLabelsList, columnTypesList) => {
+  const createHeadersData = (columnNamesList: [], columnLabelsList, columnTypesList) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName) => {
         return {
@@ -114,55 +120,56 @@ const GridTable = () => {
   };
 
   const convertNonNullPercent = (key, nonNullValue) => {
-    const lengthOfData = gridData.values.length;
-    let count = 0;
-    let nonNull: any = 0;
-    let empty: any = 0;
-    let nullValue: any = 0;
+    const lengthOfData: number = gridData.values.length;
+    let count: number = 0;
+    let nonNullCount: number = 0;
+    let emptyCount: number = 0;
+    let nullValueCount: number = 0;
     if (lengthOfData) {
-      nonNull = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-      nullValue = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      empty = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValue + empty);
+      nonNullCount = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
+      nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
+      emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
+      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
     }
     return count;
   };
 
   const checkFrequentlyOccuredValues = (key) => {
-    const valueOfKey = gridData.values.map((el) => el[key]);
-    let mostfrequentItem = 1;
-    let count = 0;
-    let item = '';
-    const data = {
+    const valueOfHeaderKey = gridData.values.map((el) => el[key]);
+    let mostfrequentItemCount: number = 1;
+    let count: number = 0;
+    let mostfrequentItemValue: string = '';
+    const mostFrequentOccuredData = {
       name: '',
       count: 0,
     };
-    for (let i = 0; i < valueOfKey.length; i++) {
-      for (let j = i; j < valueOfKey.length; j++) {
-        if (valueOfKey[i] == valueOfKey[j]) {
+    for (let i = 0; i < valueOfHeaderKey.length; i++) {
+      for (let j = i; j < valueOfHeaderKey.length; j++) {
+        if (valueOfHeaderKey[i] == valueOfHeaderKey[j]) {
           count++;
         }
-        if (mostfrequentItem < count) {
-          mostfrequentItem = count;
-          item = valueOfKey[i];
+        if (mostfrequentItemCount < count) {
+          mostfrequentItemCount = count;
+          mostfrequentItemValue = valueOfHeaderKey[i];
         }
       }
       count = 0;
-      item = item == '' ? valueOfKey[i] : item;
+      mostfrequentItemValue =
+        mostfrequentItemValue == '' ? valueOfHeaderKey[i] : mostfrequentItemValue;
     }
-    data.name = item;
-    data.count = mostfrequentItem;
-    return data;
+    mostFrequentOccuredData.name = mostfrequentItemValue;
+    mostFrequentOccuredData.count = mostfrequentItemCount;
+    return mostFrequentOccuredData;
   };
 
   const createMissingData = (statistics) => {
-    const objectArray = Object.entries(statistics);
+    const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
-    objectArray.forEach(([key, value]) => {
-      const valueToArray = Object.entries(value);
-      const tempArray = [];
-      valueToArray.forEach(([vKey, vValue]) => {
-        tempArray.push({
+    statisticObjectToArray.forEach(([key, value]) => {
+      const headerKeyTypeArray = Object.entries(value);
+      const typeArrayOfMissingValue = [];
+      headerKeyTypeArray.forEach(([vKey, vValue]) => {
+        typeArrayOfMissingValue.push({
           label:
             vKey == 'general' && convertNonNullPercent(key, vValue) == 0
               ? checkFrequentlyOccuredValues(key).name
@@ -181,29 +188,28 @@ const GridTable = () => {
       }),
         metricArray.push({
           name: key,
-          values: tempArray.concat(invalidCountArray),
+          values: typeArrayOfMissingValue.concat(invalidCountArray),
         });
     });
     return metricArray;
   };
 
   const getGridTableData = async () => {
-    const rawData: any = gridData;
+    const rawData: ExecuteAPIResponse = gridData;
     const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
-    if (rawData && rawData.summary && rawData.summary.statistics) {
-      const missingData = createMissingData(gridData.summary.statistics);
+    if (rawData && rawData.summary && rawData.summary?.statistics) {
+      const missingData = createMissingData(gridData.summary?.statistics);
       setMissingDataList(missingData);
     }
     const rowData =
       rawData &&
       rawData.values &&
       Array.isArray(rawData.values) &&
-      rawData.values.map((eachRow) => {
-        const { body, ...rest } = eachRow;
+      rawData.values.map((eachRow: {}) => {
+        const { ...rest } = eachRow;
         return rest;
       });
-
     setRowsDataList(rowData);
   };
 
@@ -214,6 +220,9 @@ const GridTable = () => {
   return (
     <>
       <BreadCrumb datasetName={datasetName} />
+      {Array.isArray(headersNamesList) && headersNamesList.length === 0 && (
+        <p style={{ textAlign: 'center' }}>No rows to display</p>
+      )}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
