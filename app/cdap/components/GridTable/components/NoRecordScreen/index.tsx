@@ -3,7 +3,7 @@ import { NoDataSVG } from 'components/GridTable/iconStore';
 import { useStyles } from './styles';
 import { Box } from '@material-ui/core';
 
-export default function NoRecordPresent() {
+const NoRecordPresent = () => {
   const classes = useStyles();
   return (
     <Box className={classes.noRecordWrapper}>
@@ -14,4 +14,6 @@ export default function NoRecordPresent() {
       </Box>
     </Box>
   );
-}
+};
+
+export default NoRecordPresent;
