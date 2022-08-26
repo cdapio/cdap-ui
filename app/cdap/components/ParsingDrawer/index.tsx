@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@material-ui/core/Box';
-import Drawer from '@material-ui/core/Drawer';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Button } from '@material-ui/core';
 import { useStyles } from './styles';
 import { FORMAT_OPTIONS, ENCODING_OPTIONS } from './options';
-import { APPLY_BUTTON, PARSING_INFO_TEXT } from './constants';
-import ParsingPopupHeader from './Components/ParsingPopupHeader';
+import { APPLY_BUTTON, IMPORT_SCHEMA, PARSING, PARSING_INFO_TEXT } from './constants';
 import ParsingPopupBody from './Components/ParsingPopupBody';
+import DrawerWidget from 'components/DrawerWidget';
+import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
 
 const ParsingDrawer = (props) => {
   const [drawerStatus, setDrawerStatus] = useState(true);
@@ -48,40 +48,42 @@ const ParsingDrawer = (props) => {
   };
 
   const componentToRender = (
-    <Drawer classes={{ paper: classes.paper }} anchor="right" open={drawerStatus}>
-      <Box className={classes.parsingDrawerStyles} sx={{ width: 460 }} role="presentation">
-        <ParsingPopupHeader closeClickHandler={closeClickHandler} />
+    <DrawerWidget
+      heading_text={PARSING}
+      openDrawer={setDrawerStatus}
+      showDivider={true}
+      headerActionTemplate={<ParsingHeaderActionTemplate />}
+      closeClickHandler={closeClickHandler}
+    >
+      <Box className={classes.bodyContainerStyles}>
+        <ParsingPopupBody
+          formatValue={formatValue}
+          handleFormatChange={handleFormatChange}
+          encodingValue={encodingValue}
+          handleEncodingChange={handleEncodingChange}
+          quotedValuesChecked={quotedValuesChecked}
+          handleQuoteValueChange={handleQuoteValueChange}
+          headerValueChecked={headerValueChecked}
+          handleCheckboxChange={handleCheckboxChange}
+        />
 
-        <Box className={classes.bodyContainerStyles}>
-          <ParsingPopupBody
-            formatValue={formatValue}
-            handleFormatChange={handleFormatChange}
-            encodingValue={encodingValue}
-            handleEncodingChange={handleEncodingChange}
-            quotedValuesChecked={quotedValuesChecked}
-            handleQuoteValueChange={handleQuoteValueChange}
-            headerValueChecked={headerValueChecked}
-            handleCheckboxChange={handleCheckboxChange}
-          />
-
-          <Box className={classes.bottomSectionStyles}>
-            <Box className={classes.infoWrapperStyles}>
-              <ErrorOutlineIcon />
-              <span className={classes.infoTextStyles}>{PARSING_INFO_TEXT}</span>
-            </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              classes={{ containedPrimary: classes.buttonStyles }}
-              className={classes.applyButtonStyles}
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleApply(e)}
-            >
-              {APPLY_BUTTON}
-            </Button>
+        <Box className={classes.bottomSectionStyles}>
+          <Box className={classes.infoWrapperStyles}>
+            <ErrorOutlineIcon />
+            <span className={classes.infoTextStyles}>{PARSING_INFO_TEXT}</span>
           </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            classes={{ containedPrimary: classes.buttonStyles }}
+            className={classes.applyButtonStyles}
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleApply(e)}
+          >
+            {APPLY_BUTTON}
+          </Button>
         </Box>
       </Box>
-    </Drawer>
+    </DrawerWidget>
   );
 
   return drawerStatus && componentToRender;
