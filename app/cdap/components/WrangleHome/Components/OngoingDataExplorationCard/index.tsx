@@ -18,7 +18,7 @@ import React from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 
-const OngoingDataExplorationCard = ({ item }) => {
+const OngoingDataExplorationCard = ({ item, toggleLoader }) => {
   const classes = useStyles();
   return (
     <Grid container className={classes.gridContainer}>
@@ -39,8 +39,10 @@ const OngoingDataExplorationCard = ({ item }) => {
             );
           case 'percentageWithText':
             const percent = parseInt(eachItem.label);
-
-            return (
+            if (percent && !isNaN(percent)) {
+              toggleLoader(false);
+            }
+            return percent && !isNaN(percent) ? (
               <Grid item className={classes.elementStyle}>
                 <Typography
                   variant="body2"
@@ -61,6 +63,8 @@ const OngoingDataExplorationCard = ({ item }) => {
 
                 <Typography variant="body1">{eachItem.subText}</Typography>
               </Grid>
+            ) : (
+              <></>
             );
 
           default:
