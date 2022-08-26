@@ -34,7 +34,7 @@ const TabLabelCanSample = ({
   label: string;
   entity: any;
   initialConnectionId: string;
-  toggleLoader: () => any;
+  toggleLoader: (value: boolean, isError?: boolean) => void;
 }) => {
   const classes = useStyles();
 
@@ -50,7 +50,6 @@ const TabLabelCanSample = ({
   }, []);
 
   const onExplore = (entity) => {
-    toggleLoader();
     const { canBrowse } = entity;
     if (!canBrowse) {
       onCreateWorkspace(entity);
@@ -66,17 +65,24 @@ const TabLabelCanSample = ({
   };
 
   const createWorkspaceInternal = async (entity, parseConfig = {}) => {
-    const wid = await createWorkspace({
+    toggleLoader(true);
+    const wid = createWorkspace({
       entity,
       connection: currentConnection,
       properties: parseConfig,
-    });
-
-    if (onWorkspaceCreate) {
-      return onWorkspaceCreate(wid);
-    }
-    setWorkspaceId(wid);
-    toggleLoader();
+    })
+      .then((res) => {
+        if (onWorkspaceCreate) {
+          return onWorkspaceCreate(res);
+        }
+        if (res) {
+          setWorkspaceId(res);
+          toggleLoader(false);
+        }
+      })
+      .catch((err) => {
+        toggleLoader(false, true);
+      });
   };
   if (workspaceId) {
     return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
