@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, Box } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
@@ -26,6 +26,8 @@ import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
+import NoDataScreen from './components/NoRecordScreen/index';
+import { useStyles } from './styles';
 
 interface ExecuteAPIResponse {
   headers: [];
@@ -37,6 +39,7 @@ interface ExecuteAPIResponse {
 const GridTable = () => {
   const { datasetName } = useParams() as any;
   const params = useParams() as any;
+  const classes = useStyles();
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
@@ -218,11 +221,9 @@ const GridTable = () => {
   }, [gridData]);
 
   return (
-    <>
+    <Box className={classes.wrapper}>
       <BreadCrumb datasetName={datasetName} />
-      {Array.isArray(headersNamesList) && headersNamesList.length === 0 && (
-        <p style={{ textAlign: 'center' }}>No rows to display</p>
-      )}
+      {Array.isArray(gridData.headers) && gridData.headers.length === 0 && <NoDataScreen />}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
@@ -265,7 +266,7 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
-    </>
+    </Box>
   );
 };
 
