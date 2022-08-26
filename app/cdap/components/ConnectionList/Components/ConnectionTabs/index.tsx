@@ -19,7 +19,6 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import Calculate from 'components/DataPrep/Directives/Calculate';
 import * as React from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
@@ -55,7 +54,8 @@ const ConnectionTab = styled(Tab)({
 const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
   const classes = useStyles();
 
-  const [connectionIdV, setConnectionId] = React.useState(connectionId);
+  const [connectionIdprop, setConnectionId] = React.useState(connectionId);
+
   React.useEffect(() => {
     setConnectionId(connectionId);
   }, []);
@@ -103,7 +103,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
                       <TabLabelCanSample
                         label={connectorType.name}
                         entity={connectorType}
-                        initialConnectionId={connectionIdV}
+                        initialConnectionId={connectionIdprop}
                         toggleLoader={props.toggleLoader}
                       />
                     )
