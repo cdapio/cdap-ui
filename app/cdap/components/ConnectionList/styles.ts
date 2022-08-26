@@ -57,10 +57,11 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '539px',
     borderRight: '1px solid #DADCE0',
   },
   connectionsListContainer: {
+    width: '100vw',
+    position: 'fixed',
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',

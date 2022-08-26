@@ -18,7 +18,6 @@ import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles((theme) => ({
   connectionsTabsParent: {
-    height: 500,
     overflow: 'scroll',
   },
   boxStyles: {
@@ -104,3 +103,6 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
 }));
+function calc(arg0: number) {
+  throw new Error('Function not implemented.');
+}
