@@ -103,6 +103,3 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
 }));
-function calc(arg0: number) {
-  throw new Error('Function not implemented.');
-}
