@@ -32,7 +32,7 @@ const WranglerHome = () => {
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
-        <Typography className={classes.welcome}>
+        <Typography className={classes.welcomeCard}>
           Hello! <br />
           Welcome to Wrangler
         </Typography>
