@@ -49,7 +49,7 @@ const ParsingDrawer = (props) => {
 
   const componentToRender = (
     <DrawerWidget
-      heading_text={PARSING}
+      headingText={PARSING}
       openDrawer={setDrawerStatus}
       showDivider={true}
       headerActionTemplate={<ParsingHeaderActionTemplate />}

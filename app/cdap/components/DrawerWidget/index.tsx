@@ -2,11 +2,12 @@ import { Box, Container, Drawer } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import { useStyles } from './styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import DrawerWidgetHeading from './DrawerWidgetHeading';
 
 const DrawerWidget = (props) => {
   const classes = useStyles();
   const {
-    heading_text,
+    headingText,
     openDrawer,
     showDivider,
     headerActionTemplate,
@@ -18,10 +19,7 @@ const DrawerWidget = (props) => {
     <Drawer classes={{ paper: classes.paper }} anchor="right" open={openDrawer}>
       <Container className={classes.drawerContainerStyles} role="presentation">
         <header className={classes.headerStyles}>
-          <Box className={classes.headingStyles}>
-            <div className={classes.headingTextStyles}>{heading_text}</div>
-            <img src="/cdap_assets/img/Underline.svg" alt="header line" />
-          </Box>
+          <DrawerWidgetHeading headingText={headingText} />
           <Box className={classes.headerRightStyles}>
             {headerActionTemplate && <div>{headerActionTemplate}</div>}
             {showDivider && <div className={classes.dividerLineStyles} />}
