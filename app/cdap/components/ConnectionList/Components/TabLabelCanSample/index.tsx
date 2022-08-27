@@ -70,7 +70,7 @@ const TabLabelCanSample = ({
 
   const createWorkspaceInternal = async (entity, parseConfig = {}) => {
     toggleLoader(true);
-    const wid = createWorkspace({
+    createWorkspace({
       entity,
       connection: currentConnection,
       properties: parseConfig,
@@ -86,12 +86,13 @@ const TabLabelCanSample = ({
       })
       .catch((err) => {
         toggleLoader(false, true);
+        setIsErrorOnNoWorkSpace(true);
       });
   };
-  if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
-  }
-  return refValue ? (
+
+  return workspaceId ? (
+    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+  ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
