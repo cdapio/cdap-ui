@@ -158,7 +158,7 @@ export default class Home extends Component {
             path="/ns/:namespace/datasources/:connectorType"
             component={ConnectionList}
           />
-          <Route exact path="/ns/:namespace/wrangler-grid/:workspacename" component={WrangleGrid} />
+          <Route exact path="/ns/:namespace/wrangler-grid/:wid" component={WrangleGrid} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact
