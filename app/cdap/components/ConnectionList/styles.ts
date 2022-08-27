@@ -57,10 +57,12 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '539px',
     borderRight: '1px solid #DADCE0',
   },
   connectionsListContainer: {
+    width: '100vw',
+    // position: 'fixed',
+    overflow: 'scroll',
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
@@ -76,5 +78,6 @@ export const useStyles = makeStyles({
     position: 'absolute',
     top: 0,
     width: '100%',
+    zIndex: 2000,
   },
 });

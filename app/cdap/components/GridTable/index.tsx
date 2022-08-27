@@ -32,7 +32,7 @@ import { ExecuteAPIResponse } from './types';
 import { convertNonNullPercent, checkFrequentlyOccuredValues } from './utils';
 
 const GridTable = () => {
-  const { datasetName } = useParams() as any;
+  const { wid } = useParams() as any;
   const params = useParams() as any;
   const classes = useStyles();
 
@@ -100,10 +100,10 @@ const GridTable = () => {
   useEffect(() => {
     const payload = {
       context: params.namespace,
-      workspaceId: params.datasetName,
+      workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, datasetName);
-  }, []);
+    getWorkSpaceData(payload, wid);
+  }, [wid]);
 
   const createHeadersData = (columnNamesList: [], columnLabelsList, columnTypesList) => {
     if (Array.isArray(columnNamesList)) {
@@ -174,7 +174,7 @@ const GridTable = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <BreadCrumb datasetName={datasetName} />
+      <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
       <Table aria-label="simple table" className="test">
         <TableHead>
