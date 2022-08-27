@@ -51,7 +51,15 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
+const ConnectionsTabs = ({
+  tabsData,
+  handleChange,
+  value,
+  index,
+  connectionId,
+  setIsErrorOnNoWorkSpace,
+  ...props
+}) => {
   const classes = useStyles();
 
   const [connectionIdProp, setConnectionId] = React.useState(connectionId);
@@ -105,6 +113,7 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
                         entity={connectorType}
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
+                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
                       />
                     )
                   ) : (

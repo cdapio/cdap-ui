@@ -25,5 +25,6 @@ export const useErrorStyles = makeStyles({
     height: '148px',
     width: '401px',
     bottom: '10% !important',
+    backgroundColor: '#fff',
   },
 });
