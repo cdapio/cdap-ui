@@ -30,11 +30,13 @@ const TabLabelCanSample = ({
   entity,
   initialConnectionId,
   toggleLoader,
+  setIsErrorOnNoWorkSpace,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
+  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
 
@@ -50,9 +52,11 @@ const TabLabelCanSample = ({
   }, []);
 
   const onExplore = (entity) => {
-    const { canBrowse } = entity;
-    if (!canBrowse) {
+    const { canBrowse, canSample } = entity;
+    if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
+    } else {
+      setIsErrorOnNoWorkSpace(true);
     }
   };
 
