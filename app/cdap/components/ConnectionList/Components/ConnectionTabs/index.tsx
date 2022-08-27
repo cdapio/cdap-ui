@@ -1,13 +1,27 @@
-import { styled, Typography } from '@material-ui/core';
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import { styled } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { CanBrowseIcon, CanBrowseIconHover, WrangelIcon } from 'components/Datasets/iconStore';
+import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
 import * as React from 'react';
-import { useStyles } from 'components/Datasets/Components/ConnectionTabs/styles';
-import CustomTooltip from 'components/Datasets/Components/CustomTooltip';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Link } from 'react-router-dom';
+import TabLabelCanBrowse from '../TabLabelCanBrowse';
+import TabLabelCanSample from '../TabLabelCanSample';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',
@@ -15,7 +29,7 @@ const ConnectionTab = styled(Tab)({
   textTransform: 'none',
   color: 'black',
   fontSize: '16px',
-  minHeight: '53px !important',
+  height: '50px',
   maxWidth: '300px',
   '& .MuiTab-root': {
     maxWidth: '300px',
@@ -37,11 +51,29 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
+const ConnectionsTabs = ({
+  tabsData,
+  handleChange,
+  value,
+  index,
+  connectionId,
+  setIsErrorOnNoWorkSpace,
+  ...props
+}) => {
   const classes = useStyles();
 
+  const [connectionIdProp, setConnectionId] = React.useState(connectionId);
+
+  React.useEffect(() => {
+    setConnectionId(connectionId);
+  }, []);
+
   return (
-    <Box data-testid="connections-tabs-parent">
+    <Box
+      data-testid="connections-tabs-parent"
+      className={classes.connectionsTabsParent}
+      style={{ height: 'calc(100vh - 200px)' }}
+    >
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -76,7 +108,13 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
                         index={index}
                       />
                     ) : (
-                      <TabLabelCanSample label={connectorType.name} />
+                      <TabLabelCanSample
+                        label={connectorType.name}
+                        entity={connectorType}
+                        initialConnectionId={connectionIdProp}
+                        toggleLoader={props.toggleLoader}
+                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                      />
                     )
                   ) : (
                     <TabLabelCanBrowse
@@ -98,66 +136,6 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index }) => {
         </div>
       )}
     </Box>
-  );
-};
-
-const TabLabelCanBrowse = ({
-  label,
-  count,
-  index,
-  SVG,
-}: {
-  label: string;
-  count: number;
-  index: number;
-  SVG?: any;
-}) => {
-  const classes = useStyles();
-  return (
-    <CustomTooltip title={label.length > 16 ? label : ''} arrow key={`tooltip-${index}`}>
-      <Box className={classes.labelContainerBox}>
-        <Box className={classes.labelsContainer}>
-          <Box>{SVG}</Box>
-          <Typography variant="body1" className={classes.labelStyles}>
-            {label}
-          </Typography>
-          {count && (
-            <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
-          )}
-        </Box>
-        <Box>
-          <Box className={`canBrowseNormal`}>
-            <CanBrowseIcon />
-          </Box>
-          <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
-            <CanBrowseIconHover />
-          </Box>
-        </Box>
-      </Box>
-    </CustomTooltip>
-  );
-};
-
-const TabLabelCanSample = ({ label }: { label: string }) => {
-  const classes = useStyles();
-
-  return (
-    <CustomTooltip title={label.length > 16 ? label : ''} arrow>
-      <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample}>
-          {label}
-        </Typography>
-        <Link
-          to={`/ns/${getCurrentNamespace()}/wrangler-grid/${label}`}
-          style={{ textDecoration: 'none' }}
-        >
-          <Box className={classes.wranglingHover}>
-            <WrangelIcon />
-            <Box className={classes.wrangleTypography}>Wrangle</Box>
-          </Box>
-        </Link>
-      </Box>
-    </CustomTooltip>
   );
 };
 
