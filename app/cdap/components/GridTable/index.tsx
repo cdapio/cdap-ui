@@ -30,7 +30,7 @@ import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 
 const GridTable = () => {
-  const { datasetName } = useParams() as any;
+  const { wid } = useParams() as any;
   const params = useParams() as any;
   const classes = useStyles();
 
@@ -99,10 +99,10 @@ const GridTable = () => {
     // Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
-      workspaceId: params.datasetName,
+      workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, datasetName);
-  }, []);
+    getWorkSpaceData(payload, wid);
+  }, [wid]);
 
   const createHeadersData = (columnNamesList: any, columnLabelsList, columnTypesList) => {
     if (Array.isArray(columnNamesList)) {
@@ -216,7 +216,7 @@ const GridTable = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <BreadCrumb datasetName={datasetName} />
+      <BreadCrumb datasetName={wid} />
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
