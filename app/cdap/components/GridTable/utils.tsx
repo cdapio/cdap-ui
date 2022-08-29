@@ -30,32 +30,3 @@ export const convertNonNullPercent = (gridData: IExecuteAPIResponse, key: string
   }
   return count;
 };
-
-export const checkFrequentlyOccuredValues = (gridData: IExecuteAPIResponse, key: string) => {
-  const valueOfHeaderKey = gridData?.values.map((el) => el[key]);
-  let mostfrequentItemCount: number = 1;
-  let count: number = 0;
-  let mostfrequentItemValue: string = '';
-  const mostFrequentOccuredData = {
-    name: '',
-    count: 0,
-  };
-  if (Array.isArray(valueOfHeaderKey) && valueOfHeaderKey.length) {
-    valueOfHeaderKey.map((item, index) => {
-      valueOfHeaderKey.map((value, valueIndex) => {
-        if (item == value) {
-          count++;
-        }
-        if (mostfrequentItemCount < count) {
-          mostfrequentItemCount = count;
-          mostfrequentItemValue = item;
-        }
-      });
-      count = 0;
-      mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
-    });
-  }
-  mostFrequentOccuredData.name = mostfrequentItemValue;
-  mostFrequentOccuredData.count = mostfrequentItemCount;
-  return mostFrequentOccuredData;
-};

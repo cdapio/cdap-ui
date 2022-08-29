@@ -29,7 +29,7 @@ import { GridTextCell } from './components/GridTextCell';
 import NoDataScreen from './components/NoRecordScreen/index';
 import { useStyles } from './styles';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
-import { convertNonNullPercent, checkFrequentlyOccuredValues } from './utils';
+import { convertNonNullPercent } from './utils';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -125,20 +125,8 @@ const GridTable = () => {
       const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
-          label:
-            vKey == 'general' && convertNonNullPercent(gridData, key, vValue) == 0
-              ? checkFrequentlyOccuredValues(gridData, key).name
-              : vKey == 'general'
-              ? 'Missing/Null'
-              : vKey == 'types'
-              ? ''
-              : '',
-          count:
-            vKey == 'types'
-              ? ''
-              : convertNonNullPercent(gridData, key, vValue) == 0
-              ? checkFrequentlyOccuredValues(gridData, key).count
-              : convertNonNullPercent(gridData, key, vValue),
+          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          count: vKey == 'types' ? '' : convertNonNullPercent(gridData, key, vValue),
         });
       }),
         metricArray.push({
