@@ -30,6 +30,7 @@ export const useStyles = makeStyles({
     height: '24px',
   },
   labelStyles: {
+    maxWidth: 244,
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
