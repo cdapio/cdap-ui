@@ -476,11 +476,36 @@ features:
           selectAll: Select All
       directivesTabLabel: Transformation steps ({directivesCount})
       targetTabLabel: Target
+      samplingTabLabel: Sampling
       TargetTab:
         selectDataModel: "Select a target data model to start mapping"
         targetDataModel: "Target data model"
       DirectivesTab:
         label: Transformations
+      SamplingTab:
+        SampleTypes:
+          default: First
+          defaultTooltip: The default sampling method for new connections. Selects rows starting from the top of your table.
+          prompt: "Sample type:"
+          random: Random
+          randomTooltip: Selects rows at random. Number of returned rows may not exactly match the number requested.
+          stratified: Proportionate
+          stratifiedTooltip: |+
+            Selects rows proportionally from each category found in the strata column.
+            Computationally intensive for large datasets, and in some cases may time out.
+        strataPrompt: "Strata column:"
+        numRowsPrompt: "Rows:"
+        resampleButton: Resample
+        TimeLimit:
+          prompt: "Time limit:"
+          Options:
+            0: None
+            1: 10 seconds
+            2: 30 seconds
+            3: 1 minute
+            4: 10 minutes
+            5: 30 minutes
+            6: 1 hour
       noColumns: No columns
       noDirectives: No transformations
     DataPrepTable:

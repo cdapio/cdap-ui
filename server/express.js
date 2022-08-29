@@ -190,6 +190,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         mode: process.env.NODE_ENV,
         proxyBaseUrl: cdapConfig['dashboard.proxy.base.url'],
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
+        ui: uiSettings['ui'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',

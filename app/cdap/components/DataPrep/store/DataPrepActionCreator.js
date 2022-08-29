@@ -90,7 +90,7 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
   });
 }
 
-function setWorkspaceRetry(params, observer, workspaceId) {
+function setWorkspaceRetry(params, observer, workspaceId, limit = 1000) {
   MyDataPrepApi.getWorkspace(params).subscribe(
     (res) => {
       let { dataprep } = DataPrepStore.getState();
@@ -106,7 +106,7 @@ function setWorkspaceRetry(params, observer, workspaceId) {
         return;
       }
       let directives = objectQuery(res, 'directives') || [];
-      let requestBody = directiveRequestBodyCreator(directives);
+      let requestBody = directiveRequestBodyCreator(directives, limit);
       let sampleSpec = objectQuery(res, 'sampleSpec') || {};
       let visualization = objectQuery(res, 'insights', 'visualization') || {};
 
@@ -136,6 +136,11 @@ function setWorkspaceRetry(params, observer, workspaceId) {
               workspaceUri,
               workspaceInfo,
               insights,
+              supportedSampleTypes: sampleSpec.supportedSampleTypes,
+              sampleLimit: sampleSpec.sampleRequest.limit,
+              sampleType: sampleSpec.sampleRequest.properties.sampleType,
+              strata: sampleSpec.sampleRequest.properties.strata || null,
+              sampleTimeoutMs: sampleSpec.sampleRequest.timeoutMs,
             },
           });
 
@@ -581,5 +586,53 @@ export function setTargetModel(model) {
     payload: {
       targetModel: model || null,
     },
+  });
+}
+
+export function resampleWorkspace(limit, sampleType, strata, timeoutMs) {
+  DataPrepStore.dispatch({
+    type: DataPrepActions.enableLoading,
+  });
+
+  DataPrepStore.dispatch({
+    type: DataPrepActions.setMostRecentSample,
+    payload: {
+      sampleLimit: limit,
+      sampleType: sampleType,
+      strata: strata,
+    },
+  });
+
+  let { workspaceId, insights } = DataPrepStore.getState().dataprep;
+  let namespace = NamespaceStore.getState().selectedNamespace;
+  let params = {
+    context: namespace,
+    workspaceId,
+  };
+  let requestBody = {
+    sampleRequest: {
+      path: insights.path,
+      timeoutMs,
+      properties: {
+        sampleType,
+        ...(sampleType === 'stratified' && { strata }),
+      },
+      limit,
+    },
+  };
+
+  return Observable.create((observer) => {
+    MyDataPrepApi.resampleWorkspace(params, requestBody).subscribe(
+      (res) => {
+        observer.next(res);
+        setWorkspaceRetry(params, observer, workspaceId, limit);
+      },
+      (err) => {
+        observer.error(err);
+        DataPrepStore.dispatch({
+          type: DataPrepActions.disableLoading,
+        });
+      }
+    );
   });
 }

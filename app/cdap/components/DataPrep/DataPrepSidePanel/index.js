@@ -21,8 +21,8 @@ import classnames from 'classnames';
 import ColumnsTab from 'components/DataPrep/DataPrepSidePanel/ColumnsTab';
 import TargetTab from 'components/DataPrep/DataPrepSidePanel/TargetTab';
 import DirectivesTab from 'components/DataPrep/DataPrepSidePanel/DirectivesTab';
+import SamplingTab from 'components/DataPrep/DataPrepSidePanel/SamplingTab';
 import T from 'i18n-react';
-import If from 'components/shared/If';
 
 require('./DataPrepSidePanel.scss');
 const PREFIX = 'features.DataPrep.DataPrepSidePanel';
@@ -39,6 +39,7 @@ export default class DataPrepSidePanel extends Component {
       headers: storeState.headers,
       directives: storeState.directives,
       summary: {},
+      showSampleColumn: storeState.supportedSampleTypes.length > 0,
     };
   }
 
@@ -49,6 +50,7 @@ export default class DataPrepSidePanel extends Component {
       this.setState({
         headers: state.headers,
         directives: state.directives,
+        showSampleColumn: state.supportedSampleTypes.length > 0,
       });
     });
   }
@@ -89,11 +91,19 @@ export default class DataPrepSidePanel extends Component {
 
   renderTarget() {
     return (
-      <If condition={Theme.showWranglerDatamodelViewer}>
+      Theme.showWranglerDatamodelViewer && (
         <div className="tab-content">
           <TargetTab />
         </div>
-      </If>
+      )
+    );
+  }
+
+  renderSampling() {
+    return (
+      <div className="tab-content">
+        <SamplingTab />
+      </div>
     );
   }
 
@@ -105,6 +115,8 @@ export default class DataPrepSidePanel extends Component {
         return this.renderDirectives();
       case 3:
         return this.renderTarget();
+      case 4:
+        return this.renderSampling();
 
       default:
         return null;
@@ -132,14 +144,22 @@ export default class DataPrepSidePanel extends Component {
                 directivesCount: this.state.directives.length,
               })}
             </div>
-            <If condition={Theme.showWranglerDatamodelViewer}>
+            {Theme.showWranglerDatamodelViewer && (
               <div
                 className={classnames('tab', { active: this.state.activeTab === 3 })}
                 onClick={this.setActiveTab.bind(this, 3)}
               >
                 {T.translate(`${PREFIX}.targetTabLabel`)}
               </div>
-            </If>
+            )}
+            {this.state.showSampleColumn && (
+              <div
+                className={classnames('tab', { active: this.state.activeTab === 4 })}
+                onClick={this.setActiveTab.bind(this, 4)}
+              >
+                {T.translate(`${PREFIX}.samplingTabLabel`)}
+              </div>
+            )}
           </div>
 
           {this.renderTabContent()}
