@@ -23,16 +23,25 @@ export const useStyles = makeStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: '4px',
+    '& .wranglingHover': {
+      display: 'none',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      gap: '10px',
+      '& .MuiTypography-root': {
+        color: '#4681F4',
+        fontSize: '14px',
+        letterSpacing: '0.15px',
+        fontWeight: 400,
+      },
+    },
     '&:hover': {
       cursor: 'default',
-      '&>.MuiBox-root': {
+      '& .wranglingHover': {
         display: 'flex',
         justifyContent: 'space-between',
         gap: '10px',
       },
-    },
-    '&>.MuiBox-root': {
-      display: 'none',
     },
   },
   labelStylesCanSample: {
@@ -40,20 +49,6 @@ export const useStyles = makeStyles({
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-  },
-  wranglingHover: {
-    '&:hover': {
-      cursor: 'pointer',
-    },
-    display: 'flex',
-    textDecoration: 'none',
-    gap: '10px',
-    '& .MuiTypography-root': {
-      color: '#4681F4',
-      fontSize: '14px',
-      letterSpacing: '0.15px',
-      fontWeight: 400,
-    },
   },
   wrangleTypography: {
     color: '#4681F4 !important',
