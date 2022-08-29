@@ -106,7 +106,7 @@ const OngoingDataExploration = (props) => {
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 1 && <OngoingDataExplorationCard item={item} />}
+            {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>
         );
       })}
