@@ -64,7 +64,7 @@ const TabLabelCanSample = ({
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      console.log(e); // as of now just consoling the exception
+      setIsErrorOnNoWorkSpace(true);
     }
   };
 
