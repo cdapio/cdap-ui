@@ -42,27 +42,48 @@ const OngoingDataExplorationCard = ({ item }) => {
 
             return percent && !isNaN(percent) ? (
               <Grid item className={classes.elementStyle}>
-                <Typography
-                  variant="body2"
-                  className={
-                    percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
-                  }
-                >
-                  {eachItem.label}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className={
-                    percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
-                  }
-                >
-                  {eachItem.percentageSymbol}
-                </Typography>
-
-                <Typography variant="body1">{eachItem.subText}</Typography>
+                <Box className={classes.percent}>
+                  <Typography
+                    variant="body2"
+                    className={
+                      percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
+                    }
+                  >
+                    {eachItem.label}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    className={
+                      percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
+                    }
+                  >
+                    {eachItem.percentageSymbol}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="body1" className={classes.dataQualityText}>
+                    {eachItem.subText}
+                  </Typography>
+                </Box>
               </Grid>
             ) : (
-              <></>
+              <>
+                <Grid item className={classes.elementStyle}>
+                  <Box className={classes.percent}>
+                    <Typography variant="body2" className={classes.percentageStyleRed}>
+                      0
+                    </Typography>
+                    <Typography variant="body2" className={classes.percentageSymbolRed}>
+                      {eachItem.percentageSymbol}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" className={classes.dataQualityText}>
+                      {eachItem.subText}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </>
             );
 
           default:
