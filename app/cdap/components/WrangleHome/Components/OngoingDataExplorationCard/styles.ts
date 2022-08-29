@@ -33,7 +33,8 @@ export const useStyles = makeStyles({
     paddingBottom: '13px',
     paddingRight: '23px',
     display: 'flex',
-
+    margin: 'auto 0px',
+    justifyContent: 'space-between',
     '& .MuiTypography-body1': {
       margin: 'auto 0px',
       fontSize: '16px',
@@ -46,10 +47,20 @@ export const useStyles = makeStyles({
       color: '#000000',
     },
   },
+
+  percent: {
+    display: 'flex',
+    minWidth: '85px',
+    justifyContent: 'end',
+  },
   iconStyle: {
     marginRight: '32px',
     height: '50px',
     width: '50px',
+  },
+  dataQualityWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   percentageStyleRed: {
     lineHeight: '30px',
@@ -65,6 +76,7 @@ export const useStyles = makeStyles({
     lineHeight: '30px',
     marginRight: '6px',
     margin: 'auto 0px',
+    paddingTop: '14px',
   },
   percentageStyleGreen: {
     lineHeight: '30px',
@@ -80,5 +92,9 @@ export const useStyles = makeStyles({
     marginRight: '6px',
     margin: 'auto 0px',
     letterSpacing: '0.15px',
+    paddingTop: '14px',
+  },
+  dataQualityText: {
+    paddingTop: '11px',
   },
 });
