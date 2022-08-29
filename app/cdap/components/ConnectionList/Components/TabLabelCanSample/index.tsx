@@ -31,12 +31,14 @@ const TabLabelCanSample = ({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
+  setMessageToDisplay,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+  setMessageToDisplay: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const classes = useStyles();
 
@@ -87,6 +89,7 @@ const TabLabelCanSample = ({
       .catch((err) => {
         toggleLoader(false, true);
         setIsErrorOnNoWorkSpace(true);
+        setMessageToDisplay('Failed to retrieve sample data'); // -----Error Message can be sent here
       });
   };
 

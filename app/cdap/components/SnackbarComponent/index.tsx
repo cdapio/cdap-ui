@@ -19,7 +19,13 @@ import { useErrorStyles } from './styles';
 import { State } from './types';
 import { TransitionComponent } from './Components/TransitionComponent';
 
-const PositionedSnackbar = (props) => {
+const PositionedSnackbar = ({
+  handleCloseError,
+  messageToDisplay,
+}: {
+  handleCloseError: () => void;
+  messageToDisplay: string;
+}) => {
   const classes = useErrorStyles();
   const [state, setState] = React.useState<State>({
     open: true,
@@ -41,11 +47,12 @@ const PositionedSnackbar = (props) => {
 
   const handleClose = () => {
     setState({ ...state, open: false });
-    props.handleCloseError();
+    handleCloseError();
   };
 
   const properties = {
     close: () => handleClose(),
+    messageToDisplay,
   };
 
   return (

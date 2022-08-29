@@ -52,6 +52,7 @@ const DatasetWrapper = () => {
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
+  const [messageToDisplay, setMessageToDisplay] = useState('');
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
@@ -248,6 +249,7 @@ const DatasetWrapper = () => {
                   connectionId={connectionId || ''}
                   toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                   setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                  setMessageToDisplay={setMessageToDisplay}
                 />
               </Box>
             );
@@ -259,7 +261,10 @@ const DatasetWrapper = () => {
         </div>
       </If>
       {isErrorOnNoWorkspace && (
-        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+        <ErrorSnackbar
+          handleCloseError={() => setIsErrorOnNoWorkSpace(false)}
+          messageToDisplay={messageToDisplay}
+        />
       )}
     </Box>
   );

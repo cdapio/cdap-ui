@@ -33,7 +33,7 @@ export const TransitionComponent = (props) => {
         </span>
       </div>
       <Divider />
-      <p className={classes.errorMessage}>Failed to retrieve sample</p>
+      <p className={classes.errorMessage}>{props?.messageToDisplay}</p>
     </div>
   );
 };
