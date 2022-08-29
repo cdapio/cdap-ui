@@ -40,19 +40,20 @@ export const checkFrequentlyOccuredValues = (gridData: IExecuteAPIResponse, key:
     name: '',
     count: 0,
   };
-  for (let i = 0; i < valueOfHeaderKey.length; i++) {
-    for (let j = i; j < valueOfHeaderKey.length; j++) {
-      if (valueOfHeaderKey[i] == valueOfHeaderKey[j]) {
-        count++;
-      }
-      if (mostfrequentItemCount < count) {
-        mostfrequentItemCount = count;
-        mostfrequentItemValue = valueOfHeaderKey[i];
-      }
-    }
-    count = 0;
-    mostfrequentItemValue =
-      mostfrequentItemValue == '' ? valueOfHeaderKey[i] : mostfrequentItemValue;
+  if (Array.isArray(valueOfHeaderKey) && valueOfHeaderKey.length) {
+    valueOfHeaderKey.map((item, index) => {
+      valueOfHeaderKey.map((value, valueIndex) => {
+        if (item == value) {
+          count++;
+        }
+        if (mostfrequentItemCount < count) {
+          mostfrequentItemCount = count;
+          mostfrequentItemValue = item;
+        }
+      });
+      count = 0;
+      mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+    });
   }
   mostFrequentOccuredData.name = mostfrequentItemValue;
   mostFrequentOccuredData.count = mostfrequentItemCount;
