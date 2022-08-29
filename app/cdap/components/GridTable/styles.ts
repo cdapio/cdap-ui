@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
   wrapper: {
-    height: '100%',
+    height: 'calc(100vh - 200px )',
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
     },
