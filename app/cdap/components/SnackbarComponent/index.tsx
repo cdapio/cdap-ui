@@ -32,7 +32,7 @@ const PositionedSnackbar = (props) => {
     handleClick();
     setTimeout(() => {
       handleClose();
-    }, 7000);
+    }, 5000);
   }, []);
 
   const handleClick = () => () => {

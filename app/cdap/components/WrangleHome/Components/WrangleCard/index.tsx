@@ -19,7 +19,7 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { BigQuery } from './iconStore/BigQuery';
+import { BigQuery } from './iconStore/BigQuerySVG';
 import { CloudSQLMySQL } from './iconStore/CloudSQLMySQL';
 import { CloudSQLPostGreSQL } from './iconStore/CloudSQLPostGreSQL';
 import { Database } from './iconStore/Database';

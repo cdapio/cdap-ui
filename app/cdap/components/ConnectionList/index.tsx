@@ -51,7 +51,7 @@ const DatasetWrapper = () => {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(false);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState(false);
+  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
@@ -246,6 +246,7 @@ const DatasetWrapper = () => {
                   index={index}
                   connectionId={connectionId || ''}
                   toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                  setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
                 />
               </Box>
             );

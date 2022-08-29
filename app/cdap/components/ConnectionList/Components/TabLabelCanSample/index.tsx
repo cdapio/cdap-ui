@@ -30,11 +30,13 @@ const TabLabelCanSample = ({
   entity,
   initialConnectionId,
   toggleLoader,
+  setIsErrorOnNoWorkSpace,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
+  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
 
@@ -50,9 +52,11 @@ const TabLabelCanSample = ({
   }, []);
 
   const onExplore = (entity) => {
-    const { canBrowse } = entity;
-    if (!canBrowse) {
+    const { canBrowse, canSample } = entity;
+    if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
+    } else {
+      setIsErrorOnNoWorkSpace(true);
     }
   };
 
@@ -66,7 +70,7 @@ const TabLabelCanSample = ({
 
   const createWorkspaceInternal = async (entity, parseConfig = {}) => {
     toggleLoader(true);
-    const wid = createWorkspace({
+    createWorkspace({
       entity,
       connection: currentConnection,
       properties: parseConfig,
@@ -82,12 +86,13 @@ const TabLabelCanSample = ({
       })
       .catch((err) => {
         toggleLoader(false, true);
+        setIsErrorOnNoWorkSpace(true);
       });
   };
-  if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
-  }
-  return refValue ? (
+
+  return workspaceId ? (
+    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+  ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
