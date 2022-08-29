@@ -60,6 +60,7 @@ const OngoingDataExploration = (props) => {
                 workspaceName: item.workspaceName,
                 recipeSteps: item.directives.length,
                 dataQuality: null,
+                workspaceId: item.workspaceId,
               },
             ]);
             return MyDataPrepApi.execute(params, requestBody);
@@ -103,7 +104,7 @@ const OngoingDataExploration = (props) => {
       {finalArray.map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
+            to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
