@@ -50,6 +50,7 @@ Feature: Pipeline Hierarchy - Hierarchy Widgets
     Then Open "File" node property
     Then Click on "Get Schema" button
     Then Close node property
+    Then Exit Studio Page
 
   @ignore
   Scenario: Render "Duplicate Record" node
