@@ -64,7 +64,7 @@ const TabLabelCanSample = ({
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      console.log(e); // as of now just consoling the exception
+      setIsErrorOnNoWorkSpace(true);
     }
   };
 
@@ -99,7 +99,7 @@ const TabLabelCanSample = ({
           {label}
         </Typography>
         <div onClick={() => onExplore(entity)}>
-          <Box className={classes.wranglingHover}>
+          <Box className="wranglingHover">
             <WrangelIcon />
             <Typography color="primary">Wrangle</Typography>
           </Box>
@@ -112,7 +112,7 @@ const TabLabelCanSample = ({
         {label}
       </Typography>
       <div onClick={() => onExplore(entity)}>
-        <Box className={classes.wranglingHover}>
+        <Box className="wranglingHover">
           <WrangelIcon />
           <Typography color="primary">Wrangle</Typography>
         </Box>

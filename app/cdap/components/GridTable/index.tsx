@@ -19,6 +19,8 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import If from 'components/shared/If';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
@@ -34,6 +36,7 @@ const GridTable = () => {
   const params = useParams() as any;
   const classes = useStyles();
 
+  const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
   const [gridData, setGridData] = useState<any>({});
@@ -46,6 +49,7 @@ const GridTable = () => {
   ]);
 
   const getWorkSpaceData = (params, workspaceId) => {
+    setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -90,6 +94,7 @@ const GridTable = () => {
             insights,
           },
         });
+        setLoading(false);
         setGridData(response);
       });
     });
@@ -259,6 +264,11 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
+      <If condition={loading}>
+        <div className={classes.loadingContainer}>
+          <LoadingSVG />
+        </div>
+      </If>
     </Box>
   );
 };

@@ -22,48 +22,53 @@ const OngoingDataExplorationCard = ({ item }) => {
   const classes = useStyles();
   return (
     <Grid container className={classes.gridContainer}>
-      {item.map((eachItem) => {
+      {item.map((eachItem, index) => {
         switch (eachItem.type) {
           case 'iconWithText':
             return (
-              <Grid item className={classes.elementStyle}>
+              <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.iconStyle}> {eachItem.icon}</Box>
                 <Typography variant="body1">{eachItem.label}</Typography>
               </Grid>
             );
           case 'text':
             return (
-              <Grid item className={classes.elementStyle}>
+              <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Typography variant="body1"> {eachItem.label}</Typography>
               </Grid>
             );
-          case 'percentageWithText':
+          case 'percentageWithText': {
             const percent = parseInt(eachItem.label);
-
             return percent && !isNaN(percent) ? (
-              <Grid item className={classes.elementStyle}>
-                <Typography
-                  variant="body2"
-                  className={
-                    percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
-                  }
-                >
-                  {eachItem.label}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  className={
-                    percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
-                  }
-                >
-                  {eachItem.percentageSymbol}
-                </Typography>
-
-                <Typography variant="body1">{eachItem.subText}</Typography>
+              <Grid item xs={3} className={classes.elementStyle} key={index}>
+                <Box className={classes.percent}>
+                  <Typography
+                    variant="body2"
+                    className={
+                      percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
+                    }
+                  >
+                    {percent}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    className={
+                      percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
+                    }
+                  >
+                    {eachItem.percentageSymbol}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="body1" className={classes.dataQualityText}>
+                    {eachItem.subText}
+                  </Typography>
+                </Box>
               </Grid>
             ) : (
-              <></>
+              <Grid item xs={3}></Grid>
             );
+          }
 
           default:
             break;
