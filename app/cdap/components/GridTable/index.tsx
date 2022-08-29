@@ -30,6 +30,7 @@ import NoDataScreen from './components/NoRecordScreen/index';
 import { useStyles } from './styles';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 import { convertNonNullPercent } from './utils';
+import metricsJSON from './mock/metrics';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -177,15 +178,15 @@ const GridTable = () => {
               ))}
           </TableRow>
           <TableRow>
-            {Array.isArray(missingDataList) &&
-              Array.isArray(headersNamesList) &&
-              headersNamesList.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name == each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
-              })}
+            {metricsJSON.map((each, index) => {
+              if (
+                Array.isArray(headersNamesList) &&
+                headersNamesList.length &&
+                index <= headersNamesList.length - 1
+              ) {
+                return <GridKPICell metricData={each} key={each?.name} />;
+              }
+            })}
           </TableRow>
         </TableHead>
         <TableBody>
