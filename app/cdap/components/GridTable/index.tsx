@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow, Box } from '@material-ui/core';
+import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
@@ -24,13 +24,11 @@ import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
-import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
 import NoDataScreen from './components/NoRecordScreen/index';
 import { useStyles } from './styles';
-import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import { IDataOfStatistics, IDataTypeOfColumns, IExecuteAPIResponse, IParams } from './types';
 import { convertNonNullPercent } from './utils';
-import metricsJSON from './mock/metrics';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -176,17 +174,6 @@ const GridTable = () => {
                   key={eachHeader.name}
                 />
               ))}
-          </TableRow>
-          <TableRow>
-            {metricsJSON.map((each, index) => {
-              if (
-                Array.isArray(headersNamesList) &&
-                headersNamesList.length &&
-                index <= headersNamesList.length - 1
-              ) {
-                return <GridKPICell metricData={each} key={each?.name} />;
-              }
-            })}
           </TableRow>
         </TableHead>
         <TableBody>
