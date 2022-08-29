@@ -17,6 +17,9 @@
 import { makeStyles } from '@material-ui/styles';
 
 export const useStyles = makeStyles((theme) => ({
+  connectionsTabsParent: {
+    overflow: 'scroll',
+  },
   boxStyles: {
     zIndex: 1,
     height: '100%',
@@ -46,6 +49,7 @@ export const useStyles = makeStyles((theme) => ({
   wrangleTab: {
     '&:hover': {
       backgroundColor: '#EFF0F2',
+      cursor: 'default',
     },
   },
   labelContainerBox: {

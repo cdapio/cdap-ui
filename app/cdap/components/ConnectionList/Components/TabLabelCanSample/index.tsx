@@ -30,60 +30,94 @@ const TabLabelCanSample = ({
   entity,
   initialConnectionId,
   toggleLoader,
+  setIsErrorOnNoWorkSpace,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
-  toggleLoader: () => any;
+  toggleLoader: (value: boolean, isError?: boolean) => void;
+  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
+
+  const myLabelRef: any = React.createRef();
+  const [refValue, setRefValue] = React.useState(false);
   const [workspaceId, setWorkspaceId] = React.useState(null);
   const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
+
   const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
 
+  React.useEffect(() => {
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
+  }, []);
+
   const onExplore = (entity) => {
-    toggleLoader();
-    const { canBrowse } = entity;
-    if (!canBrowse) {
+    const { canBrowse, canSample } = entity;
+    if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
+    } else {
+      setIsErrorOnNoWorkSpace(true);
     }
   };
 
   const onCreateWorkspace = async (entity, parseConfig = {}) => {
     try {
       createWorkspaceInternal(entity, parseConfig);
-    } catch (e) {}
+    } catch (e) {
+      console.log(e); // as of now just consoling the exception
+    }
   };
 
   const createWorkspaceInternal = async (entity, parseConfig = {}) => {
-    const wid = await createWorkspace({
+    toggleLoader(true);
+    createWorkspace({
       entity,
       connection: currentConnection,
       properties: parseConfig,
-    });
-    if (onWorkspaceCreate) {
-      return onWorkspaceCreate(wid);
-    }
-    setWorkspaceId(wid);
-    toggleLoader();
+    })
+      .then((res) => {
+        if (onWorkspaceCreate) {
+          return onWorkspaceCreate(res);
+        }
+        if (res) {
+          setWorkspaceId(res);
+          toggleLoader(false);
+        }
+      })
+      .catch((err) => {
+        toggleLoader(false, true);
+        setIsErrorOnNoWorkSpace(true);
+      });
   };
-  if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
-  }
-  return (
-    <CustomTooltip title={label.length > 16 ? label : ''} arrow>
+
+  return workspaceId ? (
+    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+  ) : refValue ? (
+    <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample}>
+        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
         <div onClick={() => onExplore(entity)}>
-          <Box className={classes.wranglingHover} onClick={() => onExplore(entity)}>
+          <Box className={classes.wranglingHover}>
             <WrangelIcon />
             <Typography color="primary">Wrangle</Typography>
           </Box>
         </div>
       </Box>
     </CustomTooltip>
+  ) : (
+    <Box className={classes.labelsContainerCanSample}>
+      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        {label}
+      </Typography>
+      <div onClick={() => onExplore(entity)}>
+        <Box className={classes.wranglingHover}>
+          <WrangelIcon />
+          <Typography color="primary">Wrangle</Typography>
+        </Box>
+      </div>
+    </Box>
   );
 };
 

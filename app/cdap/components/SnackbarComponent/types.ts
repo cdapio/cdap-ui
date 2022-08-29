@@ -14,25 +14,7 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
-
-export const useStyles = makeStyles({
-  labelContainerBox: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  labelsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    height: '24px',
-  },
-  labelStyles: {
-    fontSize: '16px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    fontFamily: "'Noto Sans', sans-serif",
-  },
-});
+import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
+export interface State extends SnackbarOrigin {
+  open: boolean;
+}

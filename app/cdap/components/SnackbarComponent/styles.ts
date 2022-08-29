@@ -14,25 +14,17 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core';
 
-export const useStyles = makeStyles({
-  labelContainerBox: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  labelsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    height: '24px',
-  },
-  labelStyles: {
-    fontSize: '16px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    fontFamily: "'Noto Sans', sans-serif",
+export const useErrorStyles = makeStyles({
+  snackBarDiv: {
+    padding: '10px',
+    display: 'block',
+    border: '1px solid #E97567',
+    boxShadow: '-3px 4px 15px rgba(68, 132, 245, 0.25)',
+    height: '148px',
+    width: '401px',
+    bottom: '10% !important',
+    backgroundColor: '#fff',
   },
 });

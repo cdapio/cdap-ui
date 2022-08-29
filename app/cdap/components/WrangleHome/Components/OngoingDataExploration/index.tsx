@@ -21,57 +21,72 @@ import MyDataPrepApi from 'api/dataprep';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
+import { switchMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 
-const OngoingDataExploration = () => {
+const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
-    }).subscribe((res) => {
-      res.values.forEach((item) => {
-        const params = {
-          context: 'default',
-          workspaceId: item.workspaceId,
-        };
-        const requestBody = {
-          directives: item.directives,
-          limit: 1000,
-          insights: {
-            name: item.name,
-            workspaceName: item.workspaceName,
-            path: item?.sampleSpec?.path,
-            visualization: {},
-          },
-        };
+    })
+      .pipe(
+        switchMap((res: any) => {
+          const workspaces = res.values.map((item) => {
+            const params = {
+              context: 'default',
+              workspaceId: item.workspaceId,
+            };
+            const requestBody = {
+              directives: item.directives,
+              limit: 1000,
+              insights: {
+                name: item.name,
+                workspaceName: item.workspaceName,
+                path: item?.sampleSpec?.path,
+                visualization: {},
+              },
+            };
 
-        MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
+            setOngoingExpDatas((current) => [
+              ...current,
+              {
+                connectionName:
+                  item?.sampleSpec?.connectionName === undefined
+                    ? 'Upload'
+                    : item?.sampleSpec?.connectionName,
+                workspaceName: item.workspaceName,
+                recipeSteps: item.directives.length,
+                dataQuality: null,
+              },
+            ]);
+            return MyDataPrepApi.execute(params, requestBody);
+          });
+          return forkJoin(workspaces);
+        })
+      )
+      .subscribe((response) => {
+        response.forEach((workspace, index) => {
           let dataQuality = 0;
-          response.headers.forEach((head) => {
-            const general = response.summary.statistics[head].general;
+          workspace.headers.forEach((element) => {
+            const general = workspace.summary.statistics[element].general;
             const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
             const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
             dataQuality = dataQuality + nonNull;
           });
-
-          const totalDataQuality = dataQuality / response.headers.length;
-
+          const totalDataQuality = dataQuality / workspace.headers.length;
           setOngoingExpDatas((current) => [
-            ...current,
+            ...current.slice(0, index),
             {
-              connectionName:
-                item?.sampleSpec?.connectionName === undefined
-                  ? 'Upload'
-                  : item?.sampleSpec?.connectionName,
-              workspaceName: item.workspaceName,
-              recipeSteps: item.directives.length,
+              ...current[index],
               dataQuality: totalDataQuality,
             },
+            ...current.slice(index + 1),
           ]);
         });
       });
-    });
   };
 
   useEffect(() => {
@@ -85,13 +100,13 @@ const OngoingDataExploration = () => {
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {finalArray.map((item) => {
+      {finalArray.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/:${`${'testDataset'}`}`}
             style={{ textDecoration: 'none' }}
           >
-            <OngoingDataExplorationCard item={item} />
+            {index <= 1 && <OngoingDataExplorationCard item={item} />}
           </Link>
         );
       })}

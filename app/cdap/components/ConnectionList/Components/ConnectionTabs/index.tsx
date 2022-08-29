@@ -29,7 +29,7 @@ const ConnectionTab = styled(Tab)({
   textTransform: 'none',
   color: 'black',
   fontSize: '16px',
-  minHeight: '53px !important',
+  height: '50px',
   maxWidth: '300px',
   '& .MuiTab-root': {
     maxWidth: '300px',
@@ -51,16 +51,29 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, ...props }) => {
+const ConnectionsTabs = ({
+  tabsData,
+  handleChange,
+  value,
+  index,
+  connectionId,
+  setIsErrorOnNoWorkSpace,
+  ...props
+}) => {
   const classes = useStyles();
 
-  const [connectionIdV, setConnectionId] = React.useState(connectionId);
+  const [connectionIdProp, setConnectionId] = React.useState(connectionId);
+
   React.useEffect(() => {
     setConnectionId(connectionId);
   }, []);
 
   return (
-    <Box data-testid="connections-tabs-parent">
+    <Box
+      data-testid="connections-tabs-parent"
+      className={classes.connectionsTabsParent}
+      style={{ height: 'calc(100vh - 200px)' }}
+    >
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -98,8 +111,9 @@ const ConnectionsTabs = ({ tabsData, handleChange, value, index, connectionId, .
                       <TabLabelCanSample
                         label={connectorType.name}
                         entity={connectorType}
-                        initialConnectionId={connectionIdV}
+                        initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
+                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
                       />
                     )
                   ) : (

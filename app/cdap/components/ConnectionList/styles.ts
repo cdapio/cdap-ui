@@ -31,8 +31,12 @@ export const useStyles = makeStyles({
   },
   tabHeaders: {
     backgroundColor: '#F1F8FF',
+    '& .MuiTypography-root': {
+      fontSize: '16px',
+      color: '#000000',
+    },
   },
-  StyleForLevelZero: {
+  styleForLevelZero: {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -53,8 +57,16 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100% !important',
     borderRight: '1px solid #DADCE0',
+  },
+  connectionsListContainer: {
+    width: '100vw',
+    // position: 'fixed',
+    overflow: 'scroll',
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+      letterSpacing: '0.15px',
+    },
   },
   loadingContainer: {
     display: 'flex',
@@ -66,5 +78,6 @@ export const useStyles = makeStyles({
     position: 'absolute',
     top: 0,
     width: '100%',
+    zIndex: 2000,
   },
 });

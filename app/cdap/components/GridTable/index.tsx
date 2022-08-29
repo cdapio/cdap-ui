@@ -169,6 +169,7 @@ const GridTable = () => {
         <TableHead>
           <TableRow>
             {Array.isArray(headersNamesList) &&
+              Array.isArray(headersNamesList) &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
