@@ -26,7 +26,7 @@ import {
 } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
 import cloneDeep from 'lodash/cloneDeep';
 import { objectQuery } from 'services/helpers';
-import { isObject } from 'vega-lite/build/src/util';
+import { isObject } from 'vega';
 
 const displayTypes: Array<ISimpleType | IComplexTypeNames | ILogicalTypeNames> = [
   AvroSchemaTypesEnum.ARRAY,
