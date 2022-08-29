@@ -30,6 +30,8 @@ import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
+import { flatMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -49,6 +51,7 @@ const GridTable = () => {
   ]);
 
   const getWorkSpaceData = (params, workspaceId) => {
+    const gridParams = {};
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -57,47 +60,54 @@ const GridTable = () => {
         loading: true,
       },
     });
-    MyDataPrepApi.getWorkspace(params).subscribe((res) => {
-      const { dataprep } = DataPrepStore.getState();
-      if (dataprep.workspaceId !== workspaceId) {
-        return;
-      }
-      const directives = objectQuery(res, 'directives') || [];
-      const requestBody = directiveRequestBodyCreator(directives);
-      const sampleSpec = objectQuery(res, 'sampleSpec') || {};
-      const visualization = objectQuery(res, 'insights', 'visualization') || {};
+    MyDataPrepApi.getWorkspace(params)
+      .pipe(
+        flatMap((res: any) => {
+          const { dataprep } = DataPrepStore.getState();
+          console.log(res);
+          if (dataprep.workspaceId !== workspaceId) {
+            return;
+          }
+          const directives = objectQuery(res, 'directives') || [];
+          const requestBody = directiveRequestBodyCreator(directives);
+          const sampleSpec = objectQuery(res, 'sampleSpec') || {};
+          const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
-      const insights = {
-        name: sampleSpec.connectionName,
-        workspaceName: res.workspaceName,
-        path: sampleSpec.path,
-        visualization,
-      };
-      requestBody.insights = insights;
+          const insights = {
+            name: sampleSpec.connectionName,
+            workspaceName: res.workspaceName,
+            path: sampleSpec.path,
+            visualization,
+          };
+          requestBody.insights = insights;
 
-      const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
-      const workspaceInfo = {
-        properties: insights,
-      };
-
-      MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
+          const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
+          const workspaceInfo = {
+            properties: insights,
+          };
+          const gridParams = {
+            directives,
+            workspaceId,
+            workspaceUri,
+            workspaceInfo,
+            insights,
+          };
+          return MyDataPrepApi.execute(params, requestBody);
+        })
+      )
+      .subscribe((response) => {
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
             data: response.values,
             headers: response.headers,
             types: response.types,
-            directives,
-            workspaceId,
-            workspaceUri,
-            workspaceInfo,
-            insights,
+            ...gridParams,
           },
         });
         setLoading(false);
         setGridData(response);
       });
-    });
   };
 
   useEffect(() => {
