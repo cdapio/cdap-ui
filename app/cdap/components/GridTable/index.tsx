@@ -1,23 +1,43 @@
-import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import { Table, TableBody, TableHead, TableRow, Box } from '@material-ui/core';
+import MyDataPrepApi from 'api/dataprep';
+import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
+import DataPrepStore from 'components/DataPrep/store';
+import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import BreadCumb from './components/Breadcrumb';
+import { objectQuery } from 'services/helpers';
+import BreadCrumb from './components/Breadcrumb';
 import { GridHeaderCell } from './components/GridHeaderCell';
 import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
-import MyDataPrepApi from 'api/dataprep';
-import DataPrepStore from 'components/DataPrep/store';
-import { objectQuery } from 'services/helpers';
-import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
+import { useStyles } from './styles';
+import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import { convertNonNullPercent } from './utils';
 
 const GridTable = () => {
-  const { datasetName } = useParams() as any;
+  const { wid } = useParams() as any;
   const params = useParams() as any;
+  const classes = useStyles();
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
-  const [gridData, setGridData] = useState<any>({});
+  const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -26,7 +46,7 @@ const GridTable = () => {
     },
   ]);
 
-  const getWorkSpaceData = (params, workspaceId) => {
+  const getWorkSpaceData = (params: IParams, workspaceId: string) => {
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -72,23 +92,21 @@ const GridTable = () => {
           },
         });
         setGridData(response);
-        console.log('response', response);
       });
     });
   };
 
   useEffect(() => {
-    // -----------------Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
-      workspaceId: params.datasetName,
+      workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, datasetName);
-  }, []);
+    getWorkSpaceData(payload, wid);
+  }, [wid]);
 
-  const createHeadersData = (columnNamesList: any, columnLabelsList, columnTypesList) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
     if (Array.isArray(columnNamesList)) {
-      return columnNamesList.map((eachColumnName) => {
+      return columnNamesList.map((eachColumnName: string) => {
         return {
           name: eachColumnName,
           label: eachColumnName,
@@ -98,97 +116,42 @@ const GridTable = () => {
     }
   };
 
-  const convertNonNullPercent = (key, nonNullValue) => {
-    const lengthOfData = gridData.values.length;
-    let count = 0;
-    let nonNull: any = 0;
-    let empty: any = 0;
-    let nullValue: any = 0;
-    if (lengthOfData) {
-      nonNull = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-      nullValue = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      empty = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValue + empty);
-    }
-    return count;
-  };
-
-  const checkFrequentlyOccuredValues = (key) => {
-    const valueOfKey = gridData.values.map((el) => el[key]);
-    let mostfrequentItem = 1;
-    let count = 0;
-    let item = '';
-    const data = {
-      name: '',
-      count: 0,
-    };
-    for (let i = 0; i < valueOfKey.length; i++) {
-      for (let j = i; j < valueOfKey.length; j++) {
-        if (valueOfKey[i] == valueOfKey[j]) {
-          count++;
-        }
-        if (mostfrequentItem < count) {
-          mostfrequentItem = count;
-          item = valueOfKey[i];
-        }
-      }
-      count = 0;
-      item = item == '' ? valueOfKey[i] : item;
-    }
-    data.name = item;
-    data.count = mostfrequentItem;
-    return data;
-  };
-
-  const createMissingData = (statistics) => {
-    const objectArray = Object.entries(statistics);
+  const createMissingData = (statistics: IDataOfStatistics) => {
+    const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
-    objectArray.forEach(([key, value]) => {
-      const valueToArray = Object.entries(value);
-      const tempArray = [];
-      valueToArray.forEach(([vKey, vValue]) => {
-        tempArray.push({
-          label:
-            vKey == 'general' && convertNonNullPercent(key, vValue) == 0
-              ? checkFrequentlyOccuredValues(key).name
-              : vKey == 'general'
-              ? 'Missing/Null'
-              : vKey == 'types'
-              ? ''
-              : '',
-          count:
-            vKey == 'types'
-              ? ''
-              : convertNonNullPercent(key, vValue) == 0
-              ? checkFrequentlyOccuredValues(key).count
-              : convertNonNullPercent(key, vValue),
+    statisticObjectToArray.forEach(([key, value]) => {
+      const headerKeyTypeArray = Object.entries(value);
+      const typeArrayOfMissingValue = [];
+      headerKeyTypeArray.forEach(([vKey, vValue]) => {
+        typeArrayOfMissingValue.push({
+          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          count: vKey == 'types' ? '' : convertNonNullPercent(gridData, key, vValue),
         });
       }),
         metricArray.push({
           name: key,
-          values: tempArray.concat(invalidCountArray),
+          values: typeArrayOfMissingValue.concat(invalidCountArray),
         });
     });
     return metricArray;
   };
 
   const getGridTableData = async () => {
-    const rawData: any = gridData;
-    const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
+    const rawData: IExecuteAPIResponse = gridData;
+    const headersData = createHeadersData(rawData?.headers, rawData?.types);
     setHeadersNamesList(headersData);
-    if (rawData && rawData.summary && rawData.summary.statistics) {
-      const missingData = createMissingData(gridData.summary.statistics);
+    if (rawData && rawData.summary && rawData.summary?.statistics) {
+      const missingData = createMissingData(gridData?.summary?.statistics);
       setMissingDataList(missingData);
     }
     const rowData =
       rawData &&
       rawData.values &&
-      Array.isArray(rawData.values) &&
-      rawData.values.map((eachRow) => {
-        const { body, ...rest } = eachRow;
+      Array.isArray(rawData?.values) &&
+      rawData?.values.map((eachRow: {}) => {
+        const { ...rest } = eachRow;
         return rest;
       });
-
     setRowsDataList(rowData);
   };
 
@@ -197,8 +160,11 @@ const GridTable = () => {
   }, [gridData]);
 
   return (
-    <>
-      <BreadCumb datasetName={datasetName} />
+    <Box className={classes.wrapper}>
+      <BreadCrumb datasetName={wid} />
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
+        <p>No rows in this sample</p>
+      )}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
@@ -241,7 +207,7 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
-    </>
+    </Box>
   );
 };
 
