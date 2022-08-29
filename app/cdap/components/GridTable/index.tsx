@@ -28,7 +28,7 @@ import { GridKPICell } from './components/GridKPICell';
 import { GridTextCell } from './components/GridTextCell';
 import NoDataScreen from './components/NoRecordScreen/index';
 import { useStyles } from './styles';
-import { ExecuteAPIResponse } from './types';
+import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 import { convertNonNullPercent, checkFrequentlyOccuredValues } from './utils';
 
 const GridTable = () => {
@@ -38,7 +38,7 @@ const GridTable = () => {
 
   const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [rowsDataList, setRowsDataList] = React.useState([]);
-  const [gridData, setGridData] = useState({} as ExecuteAPIResponse);
+  const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -47,7 +47,7 @@ const GridTable = () => {
     },
   ]);
 
-  const getWorkSpaceData = (params, workspaceId) => {
+  const getWorkSpaceData = (params: IParams, workspaceId: string) => {
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -105,9 +105,9 @@ const GridTable = () => {
     getWorkSpaceData(payload, wid);
   }, [wid]);
 
-  const createHeadersData = (columnNamesList: [], columnLabelsList, columnTypesList) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
     if (Array.isArray(columnNamesList)) {
-      return columnNamesList.map((eachColumnName) => {
+      return columnNamesList.map((eachColumnName: string) => {
         return {
           name: eachColumnName,
           label: eachColumnName,
@@ -117,7 +117,7 @@ const GridTable = () => {
     }
   };
 
-  const createMissingData = (statistics) => {
+  const createMissingData = (statistics: IDataOfStatistics) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -150,8 +150,8 @@ const GridTable = () => {
   };
 
   const getGridTableData = async () => {
-    const rawData: ExecuteAPIResponse = gridData;
-    const headersData = createHeadersData(rawData?.headers, rawData?.headers, rawData?.types);
+    const rawData: IExecuteAPIResponse = gridData;
+    const headersData = createHeadersData(rawData?.headers, rawData?.types);
     setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary?.statistics) {
       const missingData = createMissingData(gridData?.summary?.statistics);
