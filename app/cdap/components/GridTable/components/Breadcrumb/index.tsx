@@ -30,7 +30,7 @@ const BreadCrumb = ({ datasetName }) => {
         <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
           Home
         </Link>
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/datasets/${`select-dataset`}`}>
+        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}>
           Select Dataset
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>

@@ -27,7 +27,7 @@ import { useStyles } from './styles';
 
 const WranglerHome = () => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
@@ -50,7 +50,7 @@ const WranglerHome = () => {
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
           <Box className={classes.viewMore}>View More</Box>
         </Box>
-        <OngoingDataExploration toggleLoader={() => setLoading(!loading)} />
+        <OngoingDataExploration />
         <If condition={loading}>
           <Box className={classes.loadingContainer}>
             <LoadingSVG />

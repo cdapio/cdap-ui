@@ -42,9 +42,18 @@ export const useStyles = makeStyles({
     textOverflow: 'ellipsis',
   },
   wranglingHover: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
     display: 'flex',
     textDecoration: 'none',
     gap: '10px',
+    '& .MuiTypography-root': {
+      color: '#4681F4',
+      fontSize: '14px',
+      letterSpacing: '0.15px',
+      fontWeight: 400,
+    },
   },
   wrangleTypography: {
     color: '#4681F4 !important',
