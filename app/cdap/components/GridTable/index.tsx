@@ -62,7 +62,7 @@ const GridTable = () => {
     });
     MyDataPrepApi.getWorkspace(params)
       .pipe(
-        flatMap((res: any, index: any) => {
+        flatMap((res: any) => {
           const { dataprep } = DataPrepStore.getState();
           console.log(res);
           if (dataprep.workspaceId !== workspaceId) {
