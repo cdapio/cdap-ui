@@ -42,6 +42,8 @@ export const generateDataForExplorationCard = (olddata: any) => {
           obj.percentageSymbol = '%';
           obj.subText = 'Data Quality';
           obj.type = 'percentageWithText';
+        } else if (keys === 'workspaceId') {
+          obj.workspaceId = eachItem[keys];
         }
         childarr.push(obj);
       });
