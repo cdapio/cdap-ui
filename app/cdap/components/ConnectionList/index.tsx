@@ -50,7 +50,7 @@ const DatasetWrapper = () => {
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
@@ -96,6 +96,7 @@ const DatasetWrapper = () => {
         };
       }
     });
+    setLoading(false);
     setDataForTabs((prev): any => {
       const tempData = [...prev];
       tempData[0].data = firstLevelData;
