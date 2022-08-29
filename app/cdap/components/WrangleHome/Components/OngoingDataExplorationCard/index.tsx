@@ -40,7 +40,7 @@ const OngoingDataExplorationCard = ({ item }) => {
           case 'percentageWithText':
             const percent = parseInt(eachItem.label);
 
-            return (
+            return percent && !isNaN(percent) ? (
               <Grid item className={classes.elementStyle}>
                 <Typography
                   variant="body2"
@@ -61,6 +61,8 @@ const OngoingDataExplorationCard = ({ item }) => {
 
                 <Typography variant="body1">{eachItem.subText}</Typography>
               </Grid>
+            ) : (
+              <></>
             );
 
           default:
