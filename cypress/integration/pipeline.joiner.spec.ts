@@ -304,6 +304,7 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
     });
     // Start and then immediately stop preview
     cy.get(dataCy('preview-config-btn')).trigger('click', { force: true });
+    cy.get(dataCy('pipeline-modeless-close-btn')).click();
     cy.get(dataCy('preview-top-run-btn')).click();
     cy.get(dataCy('stop-preview-btn')).click();
     cy.get(dataCy('preview-top-run-btn'), { timeout: 35000 }).should('exist');
@@ -323,6 +324,7 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
     });
     // Start and run preview
     cy.get(dataCy('preview-config-btn')).trigger('click', { force: true });
+    cy.get(dataCy('pipeline-modeless-close-btn')).click();
     cy.get(dataCy('preview-top-run-btn')).click();
     cy.wait(2000);
     cy.get(dataCy('stop-preview-btn')).should('be.visible');
@@ -353,10 +355,13 @@ describe('Creating pipeline with joiner in pipeline studio', () => {
         skip();
       }
     });
-
+    cy.get(dataCy('preview-config-btn')).trigger('click', { force: true });
+    cy.get(dataCy('pipeline-modeless-close-btn')).click();
     cy.get(dataCy(`plugin-node-Joiner-batchjoiner-2`)).within(() => {
       cy.get(dataCy(`${joinerNode.nodeName}-preview-data-btn`)).click();
     });
+    // load preview data
+    cy.wait(1000);
     cy.get(dataCy(`tab-head-${sourceNode1.nodeName}`)).should('be.visible');
     cy.get(dataCy(`tab-head-${sourceNode2.nodeName}2`)).should('be.visible');
     cy.close_node_property();
