@@ -476,6 +476,7 @@ features:
           selectAll: Select All
       directivesTabLabel: Transformation steps ({directivesCount})
       targetTabLabel: Target
+      samplingTabLabel: Sampling
       TargetTab:
         selectDataModel: "Select a target data model to start mapping"
         targetDataModel: "Target data model"
@@ -1226,6 +1227,36 @@ features:
       collapse: Collapse the side panel
       expand: Expand the side panel
     TopPanel:
+      ResampleModal:
+        cancel: Cancel
+        confirm: Confirm
+        default: First
+        numRowsPrompt: "Rows:"
+        SampleTypes:
+          description: |+
+            Default: Selects rows starting from the top of your table.
+            
+            Random: Selects rows uniformly at random. Number of returned rows may not exactly match the number requested.
+            
+            Proportionate: Selects rows proportionally from each category found in the strata column.
+            Computationally intensive for large datasets, and in some cases may time out.
+          prompt: "Sample type:"
+          random: Random
+          stratified: Proportionate
+        strataPrompt: "Strata column:"
+        TimeLimit:
+          prompt: "Time limit:"
+          description: Set a time limit for how long to wait for the resample request to complete. In some cases the request may cancel early, or may continue longer than requested, depending on the JDBC driver used.
+          Options:
+            0: None
+            1: 10 seconds
+            2: 30 seconds
+            3: 1 minute
+            4: 10 minutes
+            5: 30 minutes
+            6: 1 hour
+        title: Resample
+      resampleButton: Resample
       addToPipelineBtnLabel: Create a Pipeline
       addToPipelineModal:
         title: Choose the type of pipeline to create

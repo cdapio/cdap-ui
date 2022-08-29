@@ -76,6 +76,11 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
+  supportedSampleTypes?: string[];
+  sampleLimit?: number;
+  sampleType?: string;
+  strata?: string;
+  sampleTimeoutMs?: number;
 }
 
 const defaultInitialState: IDataPrepState = {
@@ -101,6 +106,11 @@ const defaultInitialState: IDataPrepState = {
   dataModelList: null,
   targetDataModel: null,
   targetModel: null,
+  supportedSampleTypes: [],
+  sampleLimit: 1000, // The number of rows requested for the most recent sample
+  sampleType: 'default', // The method used for the most recent sample (default, random, or stratified)
+  strata: null,
+  sampleTimeoutMs: null,
 };
 
 const errorInitialState = {
@@ -200,6 +210,11 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
         loading: false,
         selectedHeaders: [],
         workspaceInfo: action.payload.workspaceInfo,
+        supportedSampleTypes: action.payload.supportedSampleTypes || [],
+        sampleLimit: action.payload.sampleLimit,
+        sampleType: action.payload.sampleType || 'default',
+        strata: action.payload.strata,
+        sampleTimeoutMs: action.payload.sampleTimeoutMs,
       });
       break;
     case DataPrepActions.setSelectedHeaders:
@@ -252,6 +267,13 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
     case DataPrepActions.setTargetModel:
       stateCopy = Object.assign({}, state, {
         targetModel: action.payload.targetModel,
+      });
+      break;
+    case DataPrepActions.setMostRecentSample:
+      stateCopy = Object.assign({}, state, {
+        sampleLimit: action.payload.sampleLimit,
+        sampleType: action.payload.sampleType,
+        strata: action.payload.strata,
       });
       break;
     default:
