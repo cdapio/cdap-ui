@@ -19,7 +19,7 @@ import reject from 'lodash/reject';
 import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import { Avatar } from '@material-ui/core';
 
-export function getCategoriesToConnectorsMap(connectionTypes = []) {
+export const getCategoriesToConnectorsMap = (connectionTypes = []) => {
   const categoryToConnectionsMap = new Map();
   const connectionToVersionsMap = new Map();
   if (!connectionTypes.length) {
@@ -49,9 +49,9 @@ export function getCategoriesToConnectorsMap(connectionTypes = []) {
     }
   }
   return addVersionInfo(categoryToConnectionsMap, connectionToVersionsMap);
-}
+};
 
-function addVersionInfo(categoryToConnectionsMap, versionsMap) {
+export const addVersionInfo = (categoryToConnectionsMap, versionsMap) => {
   const updatedConnectionsMap = new Map();
   for (const [category, connections] of categoryToConnectionsMap.entries()) {
     for (const connection of connections) {
@@ -71,7 +71,7 @@ function addVersionInfo(categoryToConnectionsMap, versionsMap) {
     updatedConnectionsMap.set(category, connections);
   }
   return updatedConnectionsMap;
-}
+};
 
 export const getSVG = (dataSrc) => {
   return dataSrc ? (
