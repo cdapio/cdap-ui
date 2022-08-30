@@ -94,7 +94,7 @@ const WrangleCard = () => {
     widgetData();
   }, []);
   const classes = useStyles();
-  const connectorTypes = state.connectorTypes;
+  const connectorTypes: IConnectorArray[] = state.connectorTypes;
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
       {connectorTypes.map((item, index) => {
