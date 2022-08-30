@@ -104,8 +104,6 @@ const OngoingDataExploration = (props) => {
 
   finalArray = finalArray.filter((eachWorkspace) => eachWorkspace[5].count !== 0);
 
-  console.log(finalArray, 'final Array');
-
   return (
     <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item, index) => {
