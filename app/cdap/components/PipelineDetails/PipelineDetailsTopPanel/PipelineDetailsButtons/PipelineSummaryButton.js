@@ -23,7 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
-import If from 'components/shared/If';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -52,16 +52,17 @@ export default class PipelineSummaryButton extends Component {
   renderSummaryButton() {
     return (
       <div
-        onClick={() => this.toggleSummary(true)}
         className={classnames('btn pipeline-action-btn pipeline-summary-btn', {
           'btn-select': this.state.showSummary,
         })}
         ref={this.buttonRef}
       >
-        <div className="btn-container">
-          <IconSVG name="icon-line-chart" className="summary-icon" />
-          <div className="button-label">{T.translate(`${PREFIX}.summary`)}</div>
-        </div>
+        <PrimaryTextLowercaseButton onClick={() => this.toggleSummary(true)}>
+          <div className="btn-container">
+            <IconSVG name="icon-line-chart" className="summary-icon" />
+            <div className="button-label">{T.translate(`${PREFIX}.summary`)}</div>
+          </div>
+        </PrimaryTextLowercaseButton>
       </div>
     );
   }
@@ -78,7 +79,7 @@ export default class PipelineSummaryButton extends Component {
         })}
       >
         {this.renderSummaryButton()}
-        <If condition={this.state.showSummary}>
+        {this.state.showSummary && (
           <PipelineSummary
             pipelineType={pipelineType}
             namespaceId={getCurrentNamespace()}
@@ -91,7 +92,7 @@ export default class PipelineSummaryButton extends Component {
             anchorEl={this.buttonRef.current}
             open={this.state.showSummary}
           />
-        </If>
+        )}
       </div>
     );
   }
