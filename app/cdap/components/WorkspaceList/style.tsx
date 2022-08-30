@@ -31,9 +31,6 @@ export const useStyles = makeStyles({
     marginLeft: '30px',
     textDecoration: 'none',
   },
-  link: {
-    textDecoration: 'none',
-  },
   explorationList: {
     marginTop: '30px',
   },

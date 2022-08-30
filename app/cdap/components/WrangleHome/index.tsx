@@ -19,7 +19,8 @@ import Box from '@material-ui/core/Box';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
-
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 import OngoingDataExploration from './Components/OngoingDataExploration';
 import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
@@ -49,7 +50,12 @@ const WranglerHome = () => {
         <WrangleCard />
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View More</Box>
+
+          <Box className={classes.viewMore}>
+            <Link color="inherit" to={`/ns/${getCurrentNamespace()}/workspace-list`}>
+              View More
+            </Link>
+          </Box>
         </Box>
         <OngoingDataExploration cardCount={cardCount} />
         <If condition={loading}>

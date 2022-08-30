@@ -17,7 +17,7 @@ const WorkspaceList = () => {
           aria-label="breadcrumb"
           className={classes.breadcrumb}
         >
-          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`} className={classes.link}>
+          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             <Typography className={classes.text}> Home</Typography>
           </Link>
           <Typography className={classes.text}>Workspaces</Typography>
