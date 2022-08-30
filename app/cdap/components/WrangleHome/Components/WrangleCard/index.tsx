@@ -22,6 +22,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
 import { getCategoriesToConnectorsMap, getSVG } from './Components/WidgetData';
 import { fetchConnectionDetails } from 'components/Connections/Create/reducer';
+import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
 
 const WrangleCard = () => {
   const [state, setState] = useState({
@@ -70,6 +71,19 @@ const WrangleCard = () => {
           });
         }
       });
+    });
+    connectorDataWithSvgArray.unshift({
+      name: 'Imported Datasets',
+      type: 'default',
+      category: 'default',
+      description: 'All Connections from the List',
+      artifact: {
+        name: 'allConnections',
+        version: 'local',
+        scope: 'local',
+      },
+
+      SVG: ImportDatasetIcon,
     });
     setState({
       connectorTypes: connectorDataWithSvgArray,
