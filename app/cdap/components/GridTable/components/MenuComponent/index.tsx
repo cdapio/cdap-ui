@@ -1,8 +1,14 @@
 import { Menu, MenuItem } from '@material-ui/core';
 import React from 'react';
 import MenuItemComponent from '../MenuItemComponent';
+import { IMenuComponentProps } from './types';
 
-const MenuComponent: React.FC<any> = ({ anchorEl, menuOptions, setAnchorEl, submitOption }) => {
+const MenuComponent: React.FC<IMenuComponentProps> = ({
+  anchorEl,
+  menuOptions,
+  setAnchorEl,
+  submitOption,
+}) => {
   const open = Boolean(anchorEl);
 
   return (

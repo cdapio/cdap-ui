@@ -38,7 +38,7 @@ const ToolBarList = () => {
   return (
     <Box className="cont">
       <Box className="bgcont">
-        <NestedMenu icon={menuIcon} onMenuClick={(a) => console.log('menu-z', a)} />
+        <NestedMenu icon={menuIcon} submitMenuOption={(a) => console.log('menu-z', a)} />
         {listItems.map((eachItem) => (
           <Aaitems details={eachItem} key={eachItem.id} />
         ))}

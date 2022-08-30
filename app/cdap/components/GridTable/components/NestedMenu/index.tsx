@@ -4,8 +4,9 @@ import MenuComponent from '../MenuComponent';
 import MenuItemComponent from '../MenuItemComponent';
 import { MENU_OPTIONS } from './constants';
 import { useNestedMenuStyles } from './styles';
+import { INestedMenuProps } from './types';
 
-const NestedMenu: React.FC<any> = ({ icon, submitMenuOption }) => {
+const NestedMenu: React.FC<INestedMenuProps> = ({ icon, submitMenuOption }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const open = Boolean(anchorEl);

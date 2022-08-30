@@ -2,8 +2,9 @@ import { MenuItem } from '@material-ui/core';
 import React from 'react';
 import { menuArrowIcon } from '../AaToolbar/images';
 import { useNestedMenuStyles } from '../NestedMenu/styles';
+import { IMenuItemComponentProps } from './types';
 
-const MenuItemComponent: React.FC<any> = ({ item, index, onMenuClick }) => {
+const MenuItemComponent: React.FC<IMenuItemComponentProps> = ({ item, index, onMenuClick }) => {
   const classes = useNestedMenuStyles();
 
   if (item.key === 'divider') {
