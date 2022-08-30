@@ -71,7 +71,6 @@ const OngoingDataExploration = (props) => {
       )
       .subscribe((response) => {
         response.forEach((workspace, index) => {
-          console.log(workspace.count, 'each Workspace items count');
           let dataQuality = 0;
           workspace.headers.forEach((element) => {
             const general = workspace.summary.statistics[element].general;
