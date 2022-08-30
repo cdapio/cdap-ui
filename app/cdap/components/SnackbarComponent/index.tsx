@@ -22,9 +22,11 @@ import { TransitionComponent } from './Components/TransitionComponent';
 const PositionedSnackbar = ({
   handleCloseError,
   messageToDisplay,
+  isSuccess,
 }: {
   handleCloseError: () => void;
   messageToDisplay: string;
+  isSuccess: boolean;
 }) => {
   const classes = useErrorStyles();
   const [state, setState] = React.useState<State>({
@@ -53,6 +55,7 @@ const PositionedSnackbar = ({
   const properties = {
     close: () => handleClose(),
     messageToDisplay,
+    isSuccess,
   };
 
   return (
@@ -62,7 +65,7 @@ const PositionedSnackbar = ({
       onClose={handleClose}
       key={vertical + horizontal}
       TransitionComponent={() => TransitionComponent(properties)}
-      className={classes.snackBarDiv}
+      className={isSuccess ? classes.success : classes.error}
     />
   );
 };

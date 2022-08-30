@@ -31,16 +31,15 @@ const TabLabelCanSample = ({
   entity,
   initialConnectionId,
   toggleLoader,
-  setIsErrorOnNoWorkSpace,
+  setToaster,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
-  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<IMessageState>>;
+  setToaster: React.Dispatch<React.SetStateAction<IMessageState>>;
 }) => {
   const classes = useStyles();
-
   const myLabelRef: any = React.createRef();
   const [refValue, setRefValue] = React.useState(false);
   const [workspaceId, setWorkspaceId] = React.useState(null);
@@ -57,9 +56,10 @@ const TabLabelCanSample = ({
     if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
     } else {
-      setIsErrorOnNoWorkSpace({
+      setToaster({
         open: true,
         message: 'Failed to retrieve sample data',
+        isSuccess: false,
       });
     }
   };
@@ -68,9 +68,10 @@ const TabLabelCanSample = ({
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      setIsErrorOnNoWorkSpace({
+      setToaster({
         open: true,
         message: 'Failed to create workspace',
+        isSuccess: false,
       });
     }
   };
@@ -83,19 +84,27 @@ const TabLabelCanSample = ({
       properties: parseConfig,
     })
       .then((res) => {
-        if (onWorkspaceCreate) {
-          return onWorkspaceCreate(res);
-        }
-        if (res) {
-          setWorkspaceId(res);
-          toggleLoader(false);
-        }
+        toggleLoader(false);
+        setToaster({
+          open: true,
+          message: 'Success',
+          isSuccess: true,
+        });
+        setTimeout(() => {
+          if (onWorkspaceCreate) {
+            return onWorkspaceCreate(res);
+          }
+          if (res) {
+            setWorkspaceId(res);
+          }
+        }, 1000);
       })
       .catch((err) => {
         toggleLoader(false, true);
-        setIsErrorOnNoWorkSpace({
+        setToaster({
           open: true,
           message: 'Failed to retrieve sample data', // -----Error Message can be sent here
+          isSuccess: false,
         });
       });
   };

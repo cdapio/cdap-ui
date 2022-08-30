@@ -27,7 +27,7 @@ import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import ErrorSnackbar from 'components/SnackbarComponent';
+import PositionedSnackbar from 'components/SnackbarComponent';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -51,9 +51,10 @@ const DatasetWrapper = () => {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState({
+  const [toaster, setToaster] = useState({
     open: false,
     message: '',
+    isSuccess: false,
   });
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
@@ -247,7 +248,7 @@ const DatasetWrapper = () => {
                   index={index}
                   connectionId={connectionId || ''}
                   toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                  setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                  setToaster={setToaster}
                 />
               </Box>
             );
@@ -258,15 +259,17 @@ const DatasetWrapper = () => {
           <LoadingSVG />
         </div>
       </If>
-      {isErrorOnNoWorkspace.open && (
-        <ErrorSnackbar
+      {toaster.open && (
+        <PositionedSnackbar
           handleCloseError={() =>
-            setIsErrorOnNoWorkSpace({
+            setToaster({
               open: false,
               message: '',
+              isSuccess: false,
             })
           }
-          messageToDisplay={isErrorOnNoWorkspace.message}
+          messageToDisplay={toaster.message}
+          isSuccess={toaster.isSuccess}
         />
       )}
     </Box>

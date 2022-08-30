@@ -57,7 +57,7 @@ const ConnectionsTabs = ({
   value,
   index,
   connectionId,
-  setIsErrorOnNoWorkSpace,
+  setToaster,
   ...props
 }) => {
   const classes = useStyles();
@@ -113,7 +113,7 @@ const ConnectionsTabs = ({
                         entity={connectorType}
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
-                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        setToaster={setToaster}
                       />
                     )
                   ) : (
