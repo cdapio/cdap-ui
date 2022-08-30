@@ -19,6 +19,7 @@ import Box from '@material-ui/core/Box';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
+
 import OngoingDataExploration from './Components/OngoingDataExploration';
 import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
@@ -28,7 +29,7 @@ import { useStyles } from './styles';
 const WranglerHome = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-
+  const cardCount = 2;
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
@@ -50,7 +51,7 @@ const WranglerHome = () => {
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
           <Box className={classes.viewMore}>View More</Box>
         </Box>
-        <OngoingDataExploration />
+        <OngoingDataExploration cardCount={cardCount} />
         <If condition={loading}>
           <Box className={classes.loadingContainer}>
             <LoadingSVG />

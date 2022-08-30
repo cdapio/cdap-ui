@@ -24,5 +24,23 @@ export const useStyles = makeStyles({
   header: {
     height: '48px',
     borderBottom: '1px solid #E0E0E0',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  breadcrumb: {
+    marginLeft: '30px',
+    textDecoration: 'none',
+  },
+  link: {
+    textDecoration: 'none',
+  },
+  explorationList: {
+    marginTop: '30px',
+  },
+  text: {
+    fontSize: '14px',
+    lineHeight: '21px',
+    letterSpacing: '0.15px',
+    fontWeight: 400,
   },
 });

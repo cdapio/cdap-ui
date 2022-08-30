@@ -24,17 +24,26 @@ import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 
-const OngoingDataExploration = (props) => {
+interface ICardCount {
+  cardCount?: number;
+}
+const OngoingDataExploration = ({ cardCount }: ICardCount) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
   const [finalArray, setFinalArray] = useState([]);
-
   const getOngoingData = () => {
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })
       .pipe(
         switchMap((res: any) => {
-          const workspaces = res.values.map((item) => {
+          let values = [];
+          console.log(cardCount);
+          if (cardCount) {
+            values = res.values.slice(0, cardCount);
+          } else {
+            values = res.values;
+          }
+          const workspaces = values.map((item) => {
             const params = {
               context: 'default',
               workspaceId: item.workspaceId,
@@ -107,7 +116,7 @@ const OngoingDataExploration = (props) => {
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
+            {<OngoingDataExplorationCard item={item} key={index} />}
           </Link>
         );
       })}
