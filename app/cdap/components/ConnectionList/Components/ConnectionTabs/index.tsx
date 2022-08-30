@@ -58,7 +58,6 @@ const ConnectionsTabs = ({
   index,
   connectionId,
   setIsErrorOnNoWorkSpace,
-  setMessageToDisplay,
   ...props
 }) => {
   const classes = useStyles();
@@ -115,7 +114,6 @@ const ConnectionsTabs = ({
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                        setMessageToDisplay={setMessageToDisplay}
                       />
                     )
                   ) : (

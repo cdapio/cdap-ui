@@ -24,6 +24,7 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
+import { IMessageState } from './types';
 
 const TabLabelCanSample = ({
   label,
@@ -31,14 +32,12 @@ const TabLabelCanSample = ({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
-  setMessageToDisplay,
 }: {
   label: string;
   entity: any;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
-  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-  setMessageToDisplay: React.Dispatch<React.SetStateAction<string>>;
+  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<IMessageState>>;
 }) => {
   const classes = useStyles();
 
@@ -58,7 +57,10 @@ const TabLabelCanSample = ({
     if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
     } else {
-      setIsErrorOnNoWorkSpace(true);
+      setIsErrorOnNoWorkSpace({
+        open: true,
+        message: '',
+      });
     }
   };
 
@@ -66,7 +68,10 @@ const TabLabelCanSample = ({
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      setIsErrorOnNoWorkSpace(true);
+      setIsErrorOnNoWorkSpace({
+        open: true,
+        message: '',
+      });
     }
   };
 
@@ -88,8 +93,10 @@ const TabLabelCanSample = ({
       })
       .catch((err) => {
         toggleLoader(false, true);
-        setIsErrorOnNoWorkSpace(true);
-        setMessageToDisplay('Failed to retrieve sample data'); // -----Error Message can be sent here
+        setIsErrorOnNoWorkSpace({
+          open: true,
+          message: 'Failed to retrieve sample data', // -----Error Message can be sent here
+        });
       });
   };
 

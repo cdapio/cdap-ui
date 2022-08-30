@@ -51,14 +51,19 @@ const DatasetWrapper = () => {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
-  const [messageToDisplay, setMessageToDisplay] = useState('');
+  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState({
+    open: false,
+    message: '',
+  });
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
-    if (isError) {
-      setIsErrorOnNoWorkSpace(isError);
-    }
+    // if (isError) {
+    //   setIsErrorOnNoWorkSpace({
+    //     open: true,
+
+    //   });
+    // }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
@@ -249,7 +254,6 @@ const DatasetWrapper = () => {
                   connectionId={connectionId || ''}
                   toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                   setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                  setMessageToDisplay={setMessageToDisplay}
                 />
               </Box>
             );
@@ -260,10 +264,15 @@ const DatasetWrapper = () => {
           <LoadingSVG />
         </div>
       </If>
-      {isErrorOnNoWorkspace && (
+      {isErrorOnNoWorkspace.open && (
         <ErrorSnackbar
-          handleCloseError={() => setIsErrorOnNoWorkSpace(false)}
-          messageToDisplay={messageToDisplay}
+          handleCloseError={() =>
+            setIsErrorOnNoWorkSpace({
+              open: false,
+              message: '',
+            })
+          }
+          messageToDisplay={isErrorOnNoWorkspace.message}
         />
       )}
     </Box>
