@@ -338,6 +338,7 @@ export const ActionButtons = ({
                   disabled={!hasNodes}
                   onClick={!hasNodes || onExport}
                   data-cy="pipeline-export-btn"
+                  data-testid="pipeline-export-btn"
                 >
                   <div>
                     <IconSVG name="icon-export"></IconSVG>
