@@ -23,6 +23,7 @@ import { useStyles } from './styles';
 import { getCategoriesToConnectorsMap, getSVG } from './Components/WidgetData';
 import { fetchConnectionDetails } from 'components/Connections/Create/reducer';
 import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
+import { IConnectorArray } from './types';
 
 const WrangleCard = () => {
   const [state, setState] = useState({
@@ -32,8 +33,8 @@ const WrangleCard = () => {
   const widgetData = async () => {
     const connectorTypes = await fetchConnectors();
     const connectorDataArray = [];
-    const connectorDataWithSvgArray = [];
-    const allConnectorsPluginProperties: any = getCategoriesToConnectorsMap(connectorTypes);
+    const connectorDataWithSvgArray: IConnectorArray[] = [];
+    const allConnectorsPluginProperties = getCategoriesToConnectorsMap(connectorTypes);
     const connectionPayloadArray = [];
     allConnectorsPluginProperties.forEach((connectorsArray) => {
       if (connectorsArray.length) {
