@@ -73,4 +73,6 @@ export const MyPipelineApi = {
     'REQUEST',
     `${pipelineV1AppContextPath}/drafts/:draftId`
   ),
+
+  getAppVersions: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions`),
 };
