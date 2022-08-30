@@ -1,5 +1,5 @@
 """
- Copyright © 2019 Cask Data, Inc.
+ Copyright © 2022 Cask Data, Inc.
 
  Licensed under the Apache License, Version 2.0 (the "License"); you may not
  use this file except in compliance with the License. You may obtain a copy of
@@ -14,16 +14,8 @@
  the License.
 """
 
-# import PipelineRecord from "pipelineRecordSchema.graphql"
-
-type PipelinesResponse {
-  applications: [PipelineRecord]!
-  nextPageToken: String
-}
-
-type Query {
-  status: String!
-  pipelines(namespace: String = "default", pageToken: String,
-    pageSize: Int = 25, orderBy: String, nameFilter: String,
-    latestOnly: String, nameFilterType: String): PipelinesResponse!
+type ChangeDetail {
+  description: String
+  creationTimeMillis: String!
+  author: String
 }

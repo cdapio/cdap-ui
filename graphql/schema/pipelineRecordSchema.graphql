@@ -15,6 +15,7 @@
 """
 
 # import ArtifactSummary from "artifactSchema.graphql"
+# import ChangeDetail from "changeDetailSchema.graphql"
 
 type PipelineRecord {
   type: String!
@@ -26,6 +27,7 @@ type PipelineRecord {
   runs: [PipelineRun]
   totalRuns: Int
   nextRuntime: [PipelineSchedule]
+  change: ChangeDetail
 }
 
 type PipelineRun {
