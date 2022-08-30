@@ -2689,12 +2689,12 @@ features:
         0: "No triggers set"
         1: "{context} trigger is set"
         _: "{context} triggers are set"
-      compositeTriggersTitle: "View Enabled triggers for pipeline \"{pipelineName}\""
+      compositeTriggersTitle: "View enabled triggers for pipeline \"{pipelineName}\""
       buttonLabel: Disable Trigger
       deleteTrigger: Delete Trigger
       deleteTriggerButton: Delete Trigger
       deleteConfirm: Delete
-      deleteConfirmationText: Are you sure you want to delete this {type} trigger?
+      deleteConfirmationText: "Are you sure you want to delete trigger \"{name}\"?"
       pipelineCount:
         0: "No pipelines set as trigger"
         1: "{context} pipeline is set as trigger"
@@ -2709,8 +2709,9 @@ features:
     helperText: "\"{pipelineName}\" is triggered when this pipeline"
     namespace: Namespace
     pipelineName: Pipeline Name
-    groupTriggers: Inbound Group Triggers
+    groupTriggers: Composite Triggers
     pipelineTriggerType: "Trigger Type: {type}"
+    pipelineTriggerTypeHeader: "Type"
     ScheduleRuntimeArgs:
       configure_enable_btn: Configure and Enable Trigger
       configure_select_btn: Select
@@ -2720,7 +2721,9 @@ features:
         choose_plugin_property: Pick plugin property
       PayloadConfigModal:
         configPayloadBtn: Trigger Config
+        configPayloadBtnCaptalized: TRIGGER CONFIG
         configPayloadBtnDisabled: View Payload
+        configPayloadBtnDisabledCapitalized: VIEW PAYLOAD
         title: Payload configuration
       Tabs:
         ComputeConfig:
@@ -2767,6 +2770,7 @@ features:
       triggerOrType: "Trigger on any selected event (OR)"
       viewNamespace: View pipelines in namespace
     viewPipeline: View Pipeline
+    viewPipelineCapitalized: VIEW PIPELINE
   PreviewData:
     DataView:
       Table:
@@ -3083,6 +3087,7 @@ features:
     pipelineName: Pipeline name
     title: "Pipelines to be triggered by \"{pipelineName}\""
     viewPipeline: View Pipeline
+    viewPipelineCapitalized: VIEW PIPELINE
 
   ViewAllLabel:
     viewAll: View all

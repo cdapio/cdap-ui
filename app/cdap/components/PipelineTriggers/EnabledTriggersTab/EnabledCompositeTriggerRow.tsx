@@ -20,78 +20,80 @@ import { connect } from 'react-redux';
 import EnabledInlineTriggerRow from 'components/PipelineTriggers/EnabledTriggersTab/EnabledInlineTriggerRow';
 import {
   disableSchedule,
-  getGroupPipelineInfo,
+  getCompositePipelineInfo,
 } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import T from 'i18n-react';
-import { ISchedule, IGroupTrigger } from 'components/PipelineTriggers/store/ScheduleTypes';
+import { ISchedule, ICompositeTrigger } from 'components/PipelineTriggers/store/ScheduleTypes';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import {
   PipelineName,
-  PipelineTriggerButton,
   StyledAccordion,
   StyledAccordionDetails,
   StyledAccordionSummary,
 } from 'components/PipelineTriggers/shared.styles';
+import { Button } from '@material-ui/core';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 
-const DisableGroupTriggerBtn = styled(PipelineTriggerButton)`
-  height: fit-content;
-  margin-top: 5px;
+const DisableCompositeTriggerBtn = styled(Button)`
   right: 10px;
-  width: 100px;
+  padding: 0;
+  position: absolute;
 `;
 
-const TriggerType = styled(PipelineName)`
-  margin: 10px;
+const PipelineNameSummary = styled(PipelineName)`
+  width: calc(100% - 125px);
 `;
 
-const GroupTriggerHeaderWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
+const StyledEnabledInlineTriggerRow = styled.div`
+  &:not(:last-child) {
+    padding-bottom: 5px;
+  }
 `;
 
 interface IEnabledGroupTriggerRowProps {
   expandedSchedule: string;
-  triggerGroup: ISchedule;
+  compositeTrigger: ISchedule;
   loading: boolean;
   pipelineName: string;
   disableError: string;
   workflowName: string;
 }
 
-const EnabledGroupTriggerRowView = ({
+const EnabledCompositeTriggerRowView = ({
   expandedSchedule,
-  triggerGroup,
+  compositeTrigger,
   loading,
   pipelineName,
   disableError,
   workflowName,
 }: IEnabledGroupTriggerRowProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const isExpanded = expandedSchedule === triggerGroup.name;
-  const scheduleName = triggerGroup.isTransformed
-    ? (triggerGroup.trigger as IGroupTrigger).triggers[0].programId.application
-    : triggerGroup.name;
+  const isExpanded = expandedSchedule === compositeTrigger.name;
+  const scheduleName = compositeTrigger.isTransformed
+    ? (compositeTrigger.trigger as ICompositeTrigger).triggers[0].programId.application
+    : compositeTrigger.name;
 
-  function handleConfirmModalOpen() {
+  const handleConfirmModalOpen = (e) => {
+    e.stopPropagation();
     setShowDeleteModal(true);
-  }
+  };
 
   function handleConfirmModalClose() {
     setShowDeleteModal(false);
   }
 
   function handleConfirmModal() {
-    disableSchedule(triggerGroup, pipelineName, workflowName);
+    disableSchedule(compositeTrigger, pipelineName, workflowName);
     setShowDeleteModal(false);
   }
 
   function handleAccordionClick() {
     if (isExpanded) {
-      getGroupPipelineInfo(null);
+      getCompositePipelineInfo(null);
     } else {
-      getGroupPipelineInfo(triggerGroup);
+      getCompositePipelineInfo(compositeTrigger);
     }
   }
 
@@ -101,31 +103,31 @@ const EnabledGroupTriggerRowView = ({
       square
       expanded={isExpanded}
       onChange={() => handleAccordionClick()}
-      data-cy={isExpanded ? `${triggerGroup.name}-expanded` : `${triggerGroup.name}-collapsed`}
+      data-cy={
+        isExpanded ? `${compositeTrigger.name}-expanded` : `${compositeTrigger.name}-collapsed`
+      }
+      data-testid={
+        isExpanded ? `${compositeTrigger.name}-expanded` : `${compositeTrigger.name}-collapsed`
+      }
     >
       <StyledAccordionSummary>
-        <PipelineName>{scheduleName}</PipelineName>
+        <PipelineNameSummary>{scheduleName}</PipelineNameSummary>
+        <PipelineName>{compositeTrigger.trigger.type}</PipelineName>
+        <DisableCompositeTriggerBtn
+          onClick={handleConfirmModalOpen}
+          data-cy="disable-group-trigger-btn"
+          data-testid="disable-group-trigger-btn"
+        >
+          <DeleteOutlineIcon />
+        </DisableCompositeTriggerBtn>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
-        <GroupTriggerHeaderWrap>
-          <TriggerType>
-            {T.translate(`${TRIGGER_PREFIX}.pipelineTriggerType`, {
-              type: triggerGroup.trigger.type,
-            })}
-          </TriggerType>
-          <DisableGroupTriggerBtn
-            onClick={handleConfirmModalOpen}
-            data-cy="disable-group-trigger-btn"
-          >
-            {T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteTriggerButton`)}
-          </DisableGroupTriggerBtn>
-        </GroupTriggerHeaderWrap>
         <ConfirmationModal
           headerTitle={T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteTrigger`)}
           confirmationText={T.translate(
             `${TRIGGER_PREFIX}.EnabledTriggers.deleteConfirmationText`,
             {
-              type: triggerGroup.trigger.type,
+              name: scheduleName,
             }
           )}
           confirmButtonText={T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteConfirm`)}
@@ -134,15 +136,18 @@ const EnabledGroupTriggerRowView = ({
           isOpen={showDeleteModal}
           errorMessage={disableError}
           isLoading={loading}
+          closeable={true}
         />
-        {(triggerGroup.trigger as IGroupTrigger).triggers.map((trigger) => {
+        {(compositeTrigger.trigger as ICompositeTrigger).triggers.map((trigger) => {
           return (
-            <EnabledInlineTriggerRow
-              trigger={trigger}
-              groupSchedule={triggerGroup}
-              pipelineName={pipelineName}
-              disableError={disableError}
-            />
+            <StyledEnabledInlineTriggerRow>
+              <EnabledInlineTriggerRow
+                trigger={trigger}
+                compositeTriggerSchedule={compositeTrigger}
+                pipelineName={pipelineName}
+                disableError={disableError}
+              />
+            </StyledEnabledInlineTriggerRow>
           );
         })}
       </StyledAccordionDetails>
@@ -150,7 +155,7 @@ const EnabledGroupTriggerRowView = ({
   );
 };
 
-const mapGroupTriggerRowStateToProps = (state) => {
+const mapCompositeTriggerRowStateToProps = (state) => {
   return {
     expandedSchedule: state.triggers.expandedSchedule,
     loading: state.enabledTriggers.loading,
@@ -159,6 +164,8 @@ const mapGroupTriggerRowStateToProps = (state) => {
     workflowName: state.triggers.workflowName,
   };
 };
-const GroupTriggerRow = connect(mapGroupTriggerRowStateToProps)(EnabledGroupTriggerRowView);
+const CompositeTriggerRow = connect(mapCompositeTriggerRowStateToProps)(
+  EnabledCompositeTriggerRowView
+);
 
-export default GroupTriggerRow;
+export default CompositeTriggerRow;
