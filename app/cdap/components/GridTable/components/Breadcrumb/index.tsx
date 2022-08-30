@@ -21,11 +21,14 @@ import { useStyles } from './styles';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
+import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants';
 
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
   const sourcePath =
-    location.state.from === 'Workspaces' ? 'home' : `datasources/${location.state.path}`;
+    location.state.from === MATCH_SOURCE
+      ? HOME_URL_PARAM
+      : `${DATASOURCES_URL_PARAM}/${location.state.path}`;
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">

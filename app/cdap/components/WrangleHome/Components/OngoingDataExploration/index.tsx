@@ -23,6 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { HOME_URL_PARAM, WORKSPACES_LABEL } from './constants';
 
 const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
@@ -106,9 +107,9 @@ const OngoingDataExploration = (props) => {
           <Link
             to={{
               pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
-              state: { from: 'Workspaces' },
+              state: { from: WORKSPACES_LABEL, path: HOME_URL_PARAM },
             }}
-            style={{ textDecoration: 'none', path: 'home' }}
+            style={{ textDecoration: 'none' }}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>
