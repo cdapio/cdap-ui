@@ -59,7 +59,7 @@ const TabLabelCanSample = ({
     } else {
       setIsErrorOnNoWorkSpace({
         open: true,
-        message: '',
+        message: 'Failed to retrieve sample data',
       });
     }
   };
@@ -70,7 +70,7 @@ const TabLabelCanSample = ({
     } catch (e) {
       setIsErrorOnNoWorkSpace({
         open: true,
-        message: '',
+        message: 'Failed to create workspace',
       });
     }
   };

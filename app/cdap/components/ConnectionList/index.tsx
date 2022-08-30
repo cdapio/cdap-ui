@@ -58,12 +58,6 @@ const DatasetWrapper = () => {
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
-    // if (isError) {
-    //   setIsErrorOnNoWorkSpace({
-    //     open: true,
-
-    //   });
-    // }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
