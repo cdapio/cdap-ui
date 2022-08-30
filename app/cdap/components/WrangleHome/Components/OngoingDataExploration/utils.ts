@@ -45,7 +45,7 @@ export const generateDataForExplorationCard = (olddata: any) => {
         } else if (keys === 'workspaceId') {
           obj.workspaceId = eachItem[keys];
         } else if (keys === 'count') {
-          obj.workspaceId = eachItem[keys];
+          obj.count = eachItem[keys];
         }
 
         childarr.push(obj);
