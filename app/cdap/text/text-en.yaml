@@ -2454,6 +2454,7 @@ features:
       edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
+      history: History
       run: Run
       schedule: Schedule
       starting: Starting
@@ -2695,6 +2696,17 @@ features:
       avgRunTime: Average duration
       totalRuns: Total runs
     title: 'Summary (Max: 100 runs)'
+
+  PipelineHistory:
+    header: Version history of pipeline
+    table:
+      date: Date and day
+      time: Time
+      author: Author
+      summary: Summary
+      unfinish: Not yet implemented
+      view: View
+      restore: Restore
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"

@@ -23,6 +23,7 @@ import PipelineConfigureButton from 'components/PipelineDetails/PipelineDetailsT
 import PipelineStopButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineStopButton';
 import PipelineRunButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineRunButton';
 import PipelineSummaryButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineSummaryButton';
+import { PipelineHistoryButton } from './PipelineHistoryButton';
 
 const mapStateToConfigureButton = (state, ownProps) => {
   return {
@@ -103,6 +104,7 @@ export default function PipelineDetailsButtons({
           runError={runError}
         />
         <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
+        <PipelineHistoryButton pipelineName={pipelineName} />
       </div>
     </Provider>
   );
