@@ -24,6 +24,7 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
+import { useLocation } from 'react-router';
 
 const TabLabelCanSample = ({
   label,
@@ -39,6 +40,7 @@ const TabLabelCanSample = ({
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const classes = useStyles();
+  const pathName = useLocation();
 
   const myLabelRef: any = React.createRef();
   const [refValue, setRefValue] = React.useState(false);
@@ -90,8 +92,16 @@ const TabLabelCanSample = ({
       });
   };
 
+  const indexOfSelectedDataset = location.pathname.lastIndexOf('/');
+  const requiredPath = location.pathname.slice(indexOfSelectedDataset + 1);
+
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: { from: 'Data Sources', path: requiredPath },
+      }}
+    />
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>

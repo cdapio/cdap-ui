@@ -104,8 +104,11 @@ const OngoingDataExploration = (props) => {
       {finalArray.map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
-            style={{ textDecoration: 'none' }}
+            to={{
+              pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
+              state: { from: 'Workspaces' },
+            }}
+            style={{ textDecoration: 'none', path: 'home' }}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>
