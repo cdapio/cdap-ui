@@ -44,7 +44,10 @@ export const generateDataForExplorationCard = (olddata: any) => {
           obj.type = 'percentageWithText';
         } else if (keys === 'workspaceId') {
           obj.workspaceId = eachItem[keys];
+        } else if (keys === 'count') {
+          obj.workspaceId = eachItem[keys];
         }
+
         childarr.push(obj);
       });
 

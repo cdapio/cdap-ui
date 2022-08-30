@@ -26,7 +26,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 
 const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
-  const [finalArray, setFinalArray] = useState([]);
+  let [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
     MyDataPrepApi.getWorkspaceList({
@@ -61,6 +61,7 @@ const OngoingDataExploration = (props) => {
                 recipeSteps: item.directives.length,
                 dataQuality: null,
                 workspaceId: item.workspaceId,
+                count: null,
               },
             ]);
             return MyDataPrepApi.execute(params, requestBody);
@@ -70,6 +71,7 @@ const OngoingDataExploration = (props) => {
       )
       .subscribe((response) => {
         response.forEach((workspace, index) => {
+          console.log(workspace.count, 'each Workspace items count');
           let dataQuality = 0;
           workspace.headers.forEach((element) => {
             const general = workspace.summary.statistics[element].general;
@@ -83,6 +85,7 @@ const OngoingDataExploration = (props) => {
             {
               ...current[index],
               dataQuality: totalDataQuality,
+              count: workspace.count,
             },
             ...current.slice(index + 1),
           ]);
@@ -98,6 +101,10 @@ const OngoingDataExploration = (props) => {
     const final = generateDataForExplorationCard(ongoingExpDatas);
     setFinalArray(final);
   }, [ongoingExpDatas]);
+
+  finalArray = finalArray.filter((eachWorkspace) => eachWorkspace[5].count !== 0);
+
+  console.log(finalArray, 'final Array');
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
