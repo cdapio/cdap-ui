@@ -3,7 +3,6 @@ import Box from '@material-ui/core/Box';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Button } from '@material-ui/core';
 import { useStyles } from './styles';
-import { FORMAT_OPTIONS, ENCODING_OPTIONS } from './options';
 import { APPLY_BUTTON, IMPORT_SCHEMA, PARSING, PARSING_INFO_TEXT } from './constants';
 import ParsingPopupBody from './Components/ParsingPopupBody';
 import DrawerWidget from 'components/DrawerWidget';
@@ -11,8 +10,8 @@ import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplat
 
 const ParsingDrawer = (props) => {
   const [drawerStatus, setDrawerStatus] = useState(true);
-  const [formatValue, setFormatValue] = useState(FORMAT_OPTIONS[0].value);
-  const [encodingValue, setEncodingValue] = useState(ENCODING_OPTIONS[0].value);
+  const [formatValue, setFormatValue] = useState();
+  const [encodingValue, setEncodingValue] = useState();
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const classes = useStyles();
