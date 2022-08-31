@@ -45,6 +45,12 @@ const GridTable = () => {
       count: '0',
     },
   ]);
+  const [connectorType, setConnectorType] = useState(null);
+
+  useEffect(() => {
+    const { dataprep } = DataPrepStore.getState();
+    setConnectorType(dataprep.connectorType);
+  }, []);
 
   const getWorkSpaceData = (params, workspaceId) => {
     DataPrepStore.dispatch({
@@ -218,7 +224,7 @@ const GridTable = () => {
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      <ParsingDrawer />
+      {connectorType === 'File' && <ParsingDrawer />}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
