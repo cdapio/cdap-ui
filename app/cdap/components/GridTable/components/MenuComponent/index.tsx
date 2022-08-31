@@ -2,6 +2,7 @@ import { Menu, MenuItem } from '@material-ui/core';
 import React from 'react';
 import MenuItemComponent from '../MenuItemComponent';
 import { IMenuComponentProps } from './types';
+import { useStyles } from './styles';
 
 const MenuComponent: React.FC<IMenuComponentProps> = ({
   anchorEl,
@@ -10,7 +11,7 @@ const MenuComponent: React.FC<IMenuComponentProps> = ({
   submitOption,
 }) => {
   const open = Boolean(anchorEl);
-
+  const classes = useStyles();
   return (
     <Menu
       id="long-menu"
@@ -30,6 +31,7 @@ const MenuComponent: React.FC<IMenuComponentProps> = ({
         e.preventDefault();
         setAnchorEl(null);
       }}
+      className={classes.root}
     >
       {menuOptions.map((item, index) => (
         <MenuItemComponent item={item} index={index} onMenuClick={submitOption} />

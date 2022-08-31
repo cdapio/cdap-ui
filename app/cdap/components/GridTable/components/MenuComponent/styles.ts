@@ -1,16 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useNestedMenuStyles = makeStyles({
+export const useStyles = makeStyles({
   divider: {
     borderColor: '#DADCE0',
-    width: '159px',
   },
   heading: {
     fontSize: '14px',
     fontWeight: 600,
     color: '#5F6368',
-    padding: '0px 20px',
-    // height: '33px',
+    padding: '0px 21px',
   },
   root: {
     '& .MuiMenuItem-root': {
