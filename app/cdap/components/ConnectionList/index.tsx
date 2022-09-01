@@ -230,8 +230,6 @@ const DatasetWrapper = () => {
       tempData[index].isSearching = true;
       return tempData;
     });
-    console.log(document.getElementById(`search${index}`));
-    document.getElementById(`search${index}`).focus();
   };
 
   const handleChange = (e: any, index: number) => {
@@ -285,7 +283,6 @@ const DatasetWrapper = () => {
                       className={classes.searchBar}
                       onChange={(e: any) => handleChange(e, index)}
                       autoFocus={true}
-                      id={`search${index}`}
                     />
                   </Box>
                 </>
