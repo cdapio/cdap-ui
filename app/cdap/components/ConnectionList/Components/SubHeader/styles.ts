@@ -37,6 +37,10 @@ export const useStyles = makeStyles({
       lineHeight: '21px',
     },
   },
+  subheadeIcon: {
+    fontSize: '24px',
+    color: '#757575',
+  },
   selectPrevPage: {
     display: 'flex',
     gap: '8px',

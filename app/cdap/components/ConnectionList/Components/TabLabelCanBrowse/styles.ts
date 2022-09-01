@@ -36,4 +36,12 @@ export const useStyles = makeStyles({
     textOverflow: 'ellipsis',
     fontFamily: "'Noto Sans', sans-serif",
   },
+  rightArrow: {
+    color: '#757575',
+    fontSize: 'large',
+  },
+  rightArrowSelected: {
+    color: '##FFFFFF',
+    fontSize: 'large',
+  },
 });
