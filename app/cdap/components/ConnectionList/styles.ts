@@ -58,6 +58,7 @@ export const useStyles = makeStyles({
     marginLeft: '9px',
     height: '21px',
     fontSize: '14px',
+    outline: 0,
   },
   afterSearchIconClick: {
     display: 'flex',
@@ -65,12 +66,17 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     height: '50px',
     borderRight: '1px dashed #DADCE0',
-    paddingRight: '15px',
+    paddingRight: '20px',
     paddingLeft: '18px',
     textDecoration: 'none',
   },
   hideComponent: {
     display: 'none',
+  },
+  closeIcon: {
+    '& :hover': {
+      cursor: 'pointer',
+    },
   },
   tabsContainerWithHeader: {
     display: 'flex',

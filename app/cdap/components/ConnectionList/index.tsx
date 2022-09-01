@@ -14,13 +14,13 @@
  * the License.
  */
 
-import { Box, Input, styled, Typography } from '@material-ui/core';
+import { Box, IconButton, Input, styled, Typography } from '@material-ui/core';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { GCSIcon, SearchIcon } from 'components/ConnectionList/iconStore';
 import * as React from 'react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import SubHeader from './Components/SubHeader';
 import ConnectionsTabs from './Components/ConnectionTabs';
@@ -29,6 +29,8 @@ import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import _ from 'lodash';
+import CloseIcon from '@material-ui/icons/Close';
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -46,6 +48,7 @@ const SelectDatasetWrapper = styled(Box)({
 
 const DatasetWrapper = () => {
   const { connectorType } = useParams() as any;
+  const refs = useRef([]);
 
   const classes = useStyles();
   const loc = useLocation();
@@ -145,7 +148,6 @@ const DatasetWrapper = () => {
 
   const selectedTabValueHandler = (entity: any, index: number) => {
     toggleLoader(true);
-    console.log('---->', dataForTabs, 'main', filteredData, 'filtered');
     setDataForTabs((currentData): any => {
       let newData = [...currentData];
       newData[index].selectedTab = entity.name;
@@ -231,10 +233,15 @@ const DatasetWrapper = () => {
       tempData[index].isSearching = true;
       return tempData;
     });
+    refs.current[index].focus();
   };
 
-  const handleChange = (e: any, index: number) => {
-    const val = e.target.value.toLowerCase();
+  const handleChange = (e: any, emitter: string, index: number) => {
+    const val = emitter === 'clear' ? '' : e.target.value.toLowerCase();
+    if (val === '') {
+      refs.current[index].value = '';
+      console.log(refs.current[index]);
+    }
     const newData = _.cloneDeep(dataForTabs);
     const newDataToSearch = [...newData[index].data];
     const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(val));
@@ -242,10 +249,9 @@ const DatasetWrapper = () => {
     setFilteredData(_.cloneDeep(newData));
   };
 
-  React.useEffect(() => {
-    console.log('EFFECT FILTER', dataForTabs, 'main', filteredData, 'filtered');
-  }, [filteredData]);
-
+  const makeCursorFocused = (index: number) => {
+    refs.current[index].focus();
+  };
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
@@ -274,21 +280,33 @@ const DatasetWrapper = () => {
                         searchHandler(index);
                       }}
                     >
-                      <SearchIcon />
+                      <IconButton>
+                        <SearchRoundedIcon />
+                      </IconButton>
                     </Box>
                   </Box>
                   <Box
                     className={
                       each.isSearching ? classes.afterSearchIconClick : classes.hideComponent
                     }
+                    onMouseOver={() => makeCursorFocused(index)}
                   >
-                    <SearchIcon />
-                    <Input
-                      disableUnderline={true}
+                    <SearchRoundedIcon />
+                    <input
+                      type="text"
+                      // disableUnderline={true}
                       className={classes.searchBar}
-                      onChange={(e: any) => handleChange(e, index)}
-                      autoFocus={true}
+                      onChange={(e: any) => handleChange(e, 'search', index)}
+                      ref={(e) => {
+                        refs.current[index] = e;
+                      }}
                     />
+                    <Box
+                      className={classes.closeIcon}
+                      onClick={(e: any) => handleChange(e, 'clear', index)}
+                    >
+                      <CloseIcon />
+                    </Box>
                   </Box>
                 </>
               );
