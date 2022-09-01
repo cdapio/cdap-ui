@@ -39,6 +39,9 @@ const GridTable = () => {
   const [rowsDataList, setRowsDataList] = React.useState([]);
   const [gridData, setGridData] = useState<any>({});
   const [missingDataList, setMissingDataList] = useState([]);
+  const { dataprep } = DataPrepStore.getState();
+  const [isFirstWrangle, setIsFirstWrangle] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -48,7 +51,7 @@ const GridTable = () => {
   const [connectorType, setConnectorType] = useState(null);
 
   useEffect(() => {
-    const { dataprep } = DataPrepStore.getState();
+    setIsFirstWrangle(true);
     setConnectorType(dataprep.connectorType);
   }, []);
 
@@ -69,7 +72,6 @@ const GridTable = () => {
       const requestBody = directiveRequestBodyCreator(directives);
       const sampleSpec = objectQuery(res, 'sampleSpec') || {};
       const visualization = objectQuery(res, 'insights', 'visualization') || {};
-
       const insights = {
         name: sampleSpec.connectionName,
         workspaceName: res.workspaceName,
@@ -77,17 +79,16 @@ const GridTable = () => {
         visualization,
       };
       requestBody.insights = insights;
-
       const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
       const workspaceInfo = {
         properties: insights,
       };
-
       MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
             data: response.values,
+            values: response.values,
             headers: response.headers,
             types: response.types,
             directives,
@@ -100,6 +101,15 @@ const GridTable = () => {
         setGridData(response);
       });
     });
+  };
+
+  const updateDataTranformation = (wid: string) => {
+    const payload = {
+      context: params.namespace,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+    setIsFirstWrangle(false);
   };
 
   useEffect(() => {
@@ -224,7 +234,9 @@ const GridTable = () => {
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      {connectorType === 'File' && <ParsingDrawer />}
+      {isFirstWrangle && connectorType === 'File' && (
+        <ParsingDrawer updateDataTranformation={(wid) => updateDataTranformation(wid)} />
+      )}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
