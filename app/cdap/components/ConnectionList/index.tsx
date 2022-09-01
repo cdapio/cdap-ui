@@ -145,6 +145,7 @@ const DatasetWrapper = () => {
 
   const selectedTabValueHandler = (entity: any, index: number) => {
     toggleLoader(true);
+    console.log('---->', dataForTabs, 'main', filteredData, 'filtered');
     setDataForTabs((currentData): any => {
       let newData = [...currentData];
       newData[index].selectedTab = entity.name;
@@ -241,6 +242,10 @@ const DatasetWrapper = () => {
     setFilteredData(_.cloneDeep(newData));
   };
 
+  React.useEffect(() => {
+    console.log('EFFECT FILTER', dataForTabs, 'main', filteredData, 'filtered');
+  }, [filteredData]);
+
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
@@ -263,7 +268,7 @@ const DatasetWrapper = () => {
                         : classes.beforeSearchIconClickDisplay
                     }
                   >
-                    <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
+                    <Typography variant="body2">{filteredData[index - 1].selectedTab}</Typography>
                     <Box
                       onClick={() => {
                         searchHandler(index);
