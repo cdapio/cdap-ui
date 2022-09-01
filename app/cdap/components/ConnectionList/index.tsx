@@ -14,11 +14,11 @@
  * the License.
  */
 
-import { Box, styled, Typography } from '@material-ui/core';
+import { Box, Input, styled, Typography } from '@material-ui/core';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { GCSIcon } from 'components/ConnectionList/iconStore';
+import { GCSIcon, SearchIcon } from 'components/ConnectionList/iconStore';
 import * as React from 'react';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -28,6 +28,7 @@ import { useStyles } from './styles';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
+import _ from 'lodash';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -68,6 +69,13 @@ const DatasetWrapper = () => {
       isSearching: false,
     },
   ]);
+
+  const [filteredData, setFilteredData] = useState(_.cloneDeep(dataForTabs));
+
+  React.useEffect(() => {
+    const newData = _.cloneDeep(dataForTabs);
+    setFilteredData(newData);
+  }, [dataForTabs]);
 
   const getConnectionsTabData = async () => {
     let connectorTypes = await fetchConnectors();
@@ -216,13 +224,32 @@ const DatasetWrapper = () => {
 
   let headerContent;
 
+  const searchHandler = (index: number) => {
+    setDataForTabs((prev) => {
+      const tempData = [...prev];
+      tempData[index].isSearching = true;
+      return tempData;
+    });
+    console.log(document.getElementById(`search${index}`));
+    document.getElementById(`search${index}`).focus();
+  };
+
+  const handleChange = (e: any, index: number) => {
+    const val = e.target.value.toLowerCase();
+    const newData = _.cloneDeep(dataForTabs);
+    const newDataToSearch = [...newData[index].data];
+    const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(val));
+    newData[index].data = [...tempData];
+    setFilteredData(_.cloneDeep(newData));
+  };
+
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs &&
-          Array.isArray(dataForTabs) &&
-          dataForTabs.map((each, index) => {
+        {filteredData &&
+          Array.isArray(filteredData) &&
+          filteredData.map((each, index) => {
             if (each.data.filter((el) => el.connectionId).length) {
               connectionId = each.data.filter((el) => el.connectionId)[0].connectionId;
             }
@@ -231,8 +258,35 @@ const DatasetWrapper = () => {
             } else {
               headerContent = (
                 <>
-                  <Box className={classes.beforeSearchIconClickDisplay}>
+                  <Box
+                    className={
+                      each.isSearching
+                        ? classes.hideComponent
+                        : classes.beforeSearchIconClickDisplay
+                    }
+                  >
                     <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
+                    <Box
+                      onClick={() => {
+                        searchHandler(index);
+                      }}
+                    >
+                      <SearchIcon />
+                    </Box>
+                  </Box>
+                  <Box
+                    className={
+                      each.isSearching ? classes.afterSearchIconClick : classes.hideComponent
+                    }
+                  >
+                    <SearchIcon />
+                    <Input
+                      disableUnderline={true}
+                      className={classes.searchBar}
+                      onChange={(e: any) => handleChange(e, index)}
+                      autoFocus={true}
+                      id={`search${index}`}
+                    />
                   </Box>
                 </>
               );
