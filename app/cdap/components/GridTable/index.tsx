@@ -30,12 +30,7 @@ import { GridTextCell } from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import {
-  IExecuteAPIResponse,
-  IDataTypeOfColumns,
-  IDataOfStatistics,
-  IParams,
-} from './types';
+import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -74,8 +69,7 @@ const GridTable = () => {
           const directives = objectQuery(res, 'directives') || [];
           const requestBody = directiveRequestBodyCreator(directives);
           const sampleSpec = objectQuery(res, 'sampleSpec') || {};
-          const visualization =
-            objectQuery(res, 'insights', 'visualization') || {};
+          const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
             name: sampleSpec.connectionName,
@@ -124,10 +118,7 @@ const GridTable = () => {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (
-    columnNamesList: string[],
-    columnTypesList: IDataTypeOfColumns
-  ) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -146,12 +137,8 @@ const GridTable = () => {
     let emptyCount: number = 0;
     let nullValueCount: number = 0;
     if (lengthOfData) {
-      nullValueCount = nonNullValue.null
-        ? (nonNullValue.null / 100) * lengthOfData
-        : 0;
-      emptyCount = nonNullValue.empty
-        ? (nonNullValue.empty / 100) * lengthOfData
-        : 0;
+      nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
+      emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
       count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
     }
     return count;
@@ -179,8 +166,7 @@ const GridTable = () => {
           }
         });
         mostFrequentItemCount = 0;
-        mostfrequentItemValue =
-          mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+        mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostfrequentItemValue;
