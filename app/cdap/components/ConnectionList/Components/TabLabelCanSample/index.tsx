@@ -95,26 +95,30 @@ const TabLabelCanSample = ({
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
         <div onClick={() => onExplore(entity)}>
           <Box className="wranglingHover">
             <WrangelIcon />
-            <Typography color="primary">Wrangle</Typography>
+            <Typography variant="body2" className={classes.wrangleButton}>
+              Wrangle
+            </Typography>
           </Box>
         </div>
       </Box>
     </CustomTooltip>
   ) : (
     <Box className={classes.labelsContainerCanSample}>
-      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+      <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
       <div onClick={() => onExplore(entity)}>
         <Box className="wranglingHover">
           <WrangelIcon />
-          <Typography color="primary">Wrangle</Typography>
+          <Typography variant="body2" className={classes.wrangleButton}>
+            Wrangle
+          </Typography>
         </Box>
       </div>
     </Box>
