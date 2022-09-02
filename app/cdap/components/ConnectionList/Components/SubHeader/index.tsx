@@ -17,11 +17,12 @@
 import { Breadcrumbs, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useStyles } from 'components/ConnectionList/Components/SubHeader/styles';
-import { DownloadIcon, AddConnection } from 'components/ConnectionList/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 
 const SubHeader = () => {
   const classes = useStyles();
@@ -38,11 +39,11 @@ const SubHeader = () => {
 
       <Box className={classes.importDataContainer}>
         <Box className={classes.importData}>
-          <AddConnection />
+          <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
         </Box>
         <Box className={classes.importData}>
-          <DownloadIcon />
+          <SaveAltRoundedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
         </Box>
       </Box>
