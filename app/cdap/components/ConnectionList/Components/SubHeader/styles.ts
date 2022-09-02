@@ -16,7 +16,8 @@
 
 import { makeStyles } from '@material-ui/styles';
 import grey from '@material-ui/core/colors/grey';
-import red from '@material-ui/core/colors/red';
+import { blue } from '@material-ui/core/colors';
+
 export const useStyles = makeStyles({
   breadCombContainer: {
     display: 'flex',
@@ -34,7 +35,7 @@ export const useStyles = makeStyles({
       lineHeight: '21px',
     },
     '& a': {
-      color: '#3994FF',
+      color: blue[500],
       lineHeight: '21px',
     },
   },

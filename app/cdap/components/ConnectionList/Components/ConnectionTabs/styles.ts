@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
   connectionsTabsParent: {
@@ -26,7 +27,7 @@ export const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   tabIndicatorStyles: {
-    backgroundColor: '#3994FF',
+    backgroundColor: blue[500],
     color: 'white !important',
     width: '100%',
     zIndex: 2,
