@@ -19,7 +19,7 @@ import React from 'react';
 import { useGridKPICellStyles } from './styles';
 import { IGridKPICellProps } from './types';
 
-export const GridKPICell: ({ metricData }: IGridKPICellProps) => JSX.Element = ({ metricData }) => {
+export const GridKPICell = ({ metricData }) => {
   const classes = useGridKPICellStyles();
 
   const metricValue = metricData.values;
