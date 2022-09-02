@@ -38,11 +38,12 @@ const WrangleCard = () => {
   const [connectorTypes, setConnectorTypes] = useState({
     fetchedConnectorTypes: [],
   });
+
+  // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
+  // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
   const getConnectorTypesNames = async () => {
     let fetchedConnectorTypes = await fetchConnectors();
 
-    // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
-    // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
     fetchedConnectorTypes = fetchedConnectorTypes.map((connectorType) => {
       if (connectorType.name === 'S3') {
         return {
