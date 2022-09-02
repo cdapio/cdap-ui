@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   wrapper: {
@@ -26,7 +27,8 @@ export const useStyles = makeStyles({
     padding: '0px 28px',
     height: '180px',
     width: '220px',
-    border: '1px solid #E3E3E3',
+    border: '1px solid',
+    borderColor: grey[300],
     borderRadius: '10px',
     boxShadow: 'none',
     display: 'flex',
