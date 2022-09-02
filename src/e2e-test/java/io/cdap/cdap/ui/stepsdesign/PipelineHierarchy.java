@@ -24,6 +24,7 @@ import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
+import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import org.openqa.selenium.By;
@@ -139,4 +140,10 @@ public class PipelineHierarchy {
     ));
   }
 
+  @Then("Exit Studio Page")
+  public void exitStudioPage() {
+    SeleniumDriver.openPage(Constants.BASE_URL);
+    Commands.dismissStudioLeaveConfirmationModal();
+    WaitHelper.waitForPageToLoad();
+  }
 }

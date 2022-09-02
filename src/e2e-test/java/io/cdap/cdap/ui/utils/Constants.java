@@ -16,7 +16,7 @@
 
 package io.cdap.cdap.ui.utils;
 
-import java.util.HashMap;
+import java.io.File;
 
 public class Constants {
   private static double getRandomArbitrary(int min, int max) {
@@ -62,4 +62,7 @@ public class Constants {
   // cdap themes
   public static final String DEFAULT_THEME_PATH = "config/themes/default.json";
   public static final String LIGHT_THEME_PATH = "config/themes/light.json";
+
+  public static final String DEFAULT_GCP_PROJECTID = System.getenv("GCP_PROJECTID");
+  public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
 }
