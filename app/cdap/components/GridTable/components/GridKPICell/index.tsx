@@ -19,10 +19,10 @@ import React from 'react';
 import { useGridKPICellStyles } from './styles';
 import { IGridKPICellProps } from './types';
 
-export const GridKPICell: React.FC<IGridKPICellProps> = ({ metricData }) => {
+export const GridKPICell: React.FC<IGridKPICellProps> = ({ value }) => {
   const classes = useGridKPICellStyles();
 
-  const { values } = metricData;
+  const { values } = value;
 
   return (
     <TableCell className={classes.tableHeaderCell}>

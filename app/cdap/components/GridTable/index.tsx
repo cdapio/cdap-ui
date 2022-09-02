@@ -249,7 +249,7 @@ const GridTable = () => {
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
                   if (item.name == each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
+                    return <GridKPICell value={item} key={item.name} />;
                   }
                 });
               })}
