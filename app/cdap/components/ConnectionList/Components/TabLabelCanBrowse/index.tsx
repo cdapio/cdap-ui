@@ -22,7 +22,7 @@ import * as React from 'react';
 import { createRef, useEffect, useState } from 'react';
 import { useStyles } from './styles';
 
-const TabLabelCanBrowse = ({
+export default ({
   label,
   count,
   index,
@@ -66,7 +66,7 @@ const TabLabelCanBrowse = ({
           <Box className={'canBrowseNormal'}>
             <CanBrowseIcon />
           </Box>
-          <Box className={'canBrowseHover'} /* sx={{ display: 'none' }} */>
+          <Box className={'canBrowseHover'}>
             <CanBrowseIconHover />
           </Box>
         </Box>
@@ -87,11 +87,11 @@ const TabLabelCanBrowse = ({
         <Box className={'canBrowseNormal'}>
           <CanBrowseIcon />
         </Box>
-        <Box className={'canBrowseHover'} sx={{ display: 'none' }}>
+        <Box className={'canBrowseHover'}>
           <CanBrowseIconHover />
         </Box>
       </Box>
     </Box>
   );
 };
-export default TabLabelCanBrowse;
+// export default TabLabelCanBrowse;
