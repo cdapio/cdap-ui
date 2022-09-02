@@ -16,12 +16,12 @@
 import * as React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import { useErrorStyles } from './styles';
-import { State } from './types';
+import { IState } from './types';
 import { TransitionComponent } from './Components/TransitionComponent';
 
 const PositionedSnackbar = (props) => {
   const classes = useErrorStyles();
-  const [state, setState] = React.useState<State>({
+  const [state, setState] = React.useState<IState>({
     open: true,
     vertical: 'bottom',
     horizontal: 'right',
