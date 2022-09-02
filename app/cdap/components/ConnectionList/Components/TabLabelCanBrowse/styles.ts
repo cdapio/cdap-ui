@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import grey from '@material-ui/core/colors/grey';
 
 export const useStyles = makeStyles({
   labelContainerBox: {
@@ -37,11 +38,11 @@ export const useStyles = makeStyles({
     fontFamily: "'Noto Sans', sans-serif",
   },
   rightArrow: {
-    color: '#757575',
+    color: grey[600],
     fontSize: 'large',
   },
   rightArrowSelected: {
-    color: '#FFFFFF',
+    color: '#fff',
     fontSize: 'large',
   },
 });

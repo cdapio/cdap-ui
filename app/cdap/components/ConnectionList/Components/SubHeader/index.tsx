@@ -39,11 +39,11 @@ const SubHeader = () => {
 
       <Box className={classes.importDataContainer}>
         <Box className={classes.importData}>
-          <AddCircleOutlineOutlinedIcon className={classes.subheadeIcon} />
+          <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
         </Box>
         <Box className={classes.importData}>
-          <SaveAltRoundedIcon className={classes.subheadeIcon} />
+          <SaveAltRoundedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
         </Box>
       </Box>

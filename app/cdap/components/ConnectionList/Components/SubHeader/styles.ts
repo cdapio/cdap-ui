@@ -15,7 +15,8 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
-
+import grey from '@material-ui/core/colors/grey';
+import red from '@material-ui/core/colors/red';
 export const useStyles = makeStyles({
   breadCombContainer: {
     display: 'flex',
@@ -37,9 +38,9 @@ export const useStyles = makeStyles({
       lineHeight: '21px',
     },
   },
-  subheadeIcon: {
+  subHeaderIcon: {
     fontSize: 'x-large',
-    color: '#757575',
+    color: grey[700],
   },
   selectPrevPage: {
     display: 'flex',
