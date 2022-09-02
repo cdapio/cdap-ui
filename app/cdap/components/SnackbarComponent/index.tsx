@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import { useErrorStyles } from './styles';
-import { State } from './types';
+import { IState } from './types';
 import { TransitionComponent } from './Components/TransitionComponent';
 
 const PositionedSnackbar = (props) => {
   const classes = useErrorStyles();
-  const [state, setState] = React.useState<State>({
+  const [state, setState] = useState<IState>({
     open: true,
     vertical: 'bottom',
     horizontal: 'right',
   });
   const { vertical, horizontal, open } = state;
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleClick();
     setTimeout(() => {
       handleClose();

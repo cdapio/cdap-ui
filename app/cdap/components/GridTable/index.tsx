@@ -19,7 +19,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import { default as React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
@@ -35,8 +35,8 @@ const GridTable = () => {
   const params = useParams() as any;
   const classes = useStyles();
 
-  const [headersNamesList, setHeadersNamesList] = React.useState([]);
-  const [rowsDataList, setRowsDataList] = React.useState([]);
+  const [headersNamesList, setHeadersNamesList] = useState([]);
+  const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
@@ -162,14 +162,11 @@ const GridTable = () => {
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
-        <p>No rows in this sample</p>
-      )}
+      {gridData?.headers?.length === 0 && <p>No rows in this sample</p>}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
-            {Array.isArray(headersNamesList) &&
-              Array.isArray(headersNamesList) &&
+            {headersNamesList?.length &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
@@ -179,8 +176,8 @@ const GridTable = () => {
               ))}
           </TableRow>
           <TableRow>
-            {Array.isArray(missingDataList) &&
-              Array.isArray(headersNamesList) &&
+            {missingDataList?.length &&
+              headersNamesList?.length &&
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
                   if (item.name == each.name) {
@@ -191,7 +188,7 @@ const GridTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Array.isArray(rowsDataList) &&
+          {rowsDataList?.length &&
             rowsDataList.map((eachRow, rowIndex) => {
               return (
                 <TableRow key={`row-${rowIndex}`}>
