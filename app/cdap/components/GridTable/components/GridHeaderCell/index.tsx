@@ -24,7 +24,10 @@ const StringIndicatorBox = styled(Box)({
   display: 'flex',
 });
 
-export const GridHeaderCell: React.FC<IGridHeaderCellProps> = ({ label, types }) => {
+export const GridHeaderCell: ({ label, types }: IGridHeaderCellProps) => JSX.Element = ({
+  label,
+  types,
+}) => {
   const classes = useGridHeaderCellStyles();
 
   const [data, setData] = useState<Record<string, string>>({

@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import grey from '@material-ui/core/colors/grey';
 
 export const useStyles = makeStyles({
   labelContainerBox: {
@@ -35,5 +36,13 @@ export const useStyles = makeStyles({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     fontFamily: "'Noto Sans', sans-serif",
+  },
+  rightArrow: {
+    color: grey[600],
+    fontSize: 'large',
+  },
+  rightArrowSelected: {
+    color: '#fff',
+    fontSize: 'large',
   },
 });

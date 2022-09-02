@@ -19,23 +19,31 @@ import React from 'react';
 import { useGridKPICellStyles } from './styles';
 import { IGridKPICellProps } from './types';
 
-export const GridKPICell: React.FC<IGridKPICellProps> = ({ value }) => {
+export const GridKPICell: ({
+  metricData,
+}: IGridKPICellProps) => JSX.Element = ({ metricData }) => {
   const classes = useGridKPICellStyles();
 
-  const { values } = value;
+  const metricValue = metricData.values;
 
   return (
     <TableCell className={classes.tableHeaderCell}>
       <Card className={classes.root} variant="outlined">
-        {values &&
-          Array.isArray(values) &&
-          values.length &&
-          values.map((eachValue: { label: string; count: number }) => (
+        {metricValue &&
+          Array.isArray(metricValue) &&
+          metricValue.length &&
+          metricValue.map((eachValue: { label: string; count: number }) => (
             <Box className={classes.KPICell} key={eachValue.label}>
-              <Typography className={classes.label}>{eachValue.label}</Typography>
+              <Typography className={classes.label}>
+                {eachValue.label}
+              </Typography>
               <Typography
                 className={classes.count}
-                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+                style={
+                  eachValue.label == 'Missing/Null'
+                    ? { color: 'red' }
+                    : { color: '#000' }
+                }
               >
                 {eachValue.count}
               </Typography>

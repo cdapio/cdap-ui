@@ -19,7 +19,9 @@ import React from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
 
-export const GridTextCell: React.FC<IGridTextCellProps> = ({ cellValue }) => {
+export const GridTextCell: ({ cellValue }: { cellValue: IGridTextCellProps }) => JSX.Element = ({
+  cellValue,
+}) => {
   const classes = useGridTextCellStyles();
 
   return (
