@@ -70,18 +70,18 @@ jobs:
         python3 sandbox_starter.py
         
     - name: Install UI Dependencies
+      run: |       
+        npm install -g yarn # Install Yarn globally
+        yarn --frozen-lockfile
+        yarn run bower-root # Install Bower dependencies
+
+    - name: Start CDAP-UI and run the tests
       env:
         GCP_PROJECTID: ${{ secrets.GCP_PROJECTID }}
         GCP_SERVICE_ACCOUNT_CONTENTS: ${{ secrets.GCP_SERVICE_ACCOUNT_CONTENTS }}
         GCP_SERVICE_ACCOUNT_PATH: '${{ github.workspace }}/key_file.json'
       run: |
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
-        npm install -g yarn # Install Yarn globally
-        yarn --frozen-lockfile
-        yarn run bower-root # Install Bower dependencies
-
-    - name: Start CDAP-UI and run the tests
-      run: |
         yarn run cdap-full-build-more-memory # Build UI
         yarn start &
         yarn run test:unit

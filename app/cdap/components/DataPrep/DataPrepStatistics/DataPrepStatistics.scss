@@ -1,0 +1,97 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+*/
+
+@import '../../../styles/variables.scss';
+
+$border-and-selected-color: #dbdbdb;
+$header-bg-color: #eeeeee;
+$col_type_font_color: gray;
+$new-section-padding: 10px;
+
+.dataprep-statistics {
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 20px;
+
+  .MuiGrid-container {
+    margin-top: 10px;
+
+    .MuiGrid-item {
+
+      .MuiPaper-root {
+        width: 325px;
+        min-height: 525px;
+        padding: 10px;
+
+        .col-type {
+          color: $col_type_font_color;
+          font-weight: 400;
+          font-size: 13px;
+        }
+
+        .header-text-wrapper {
+          display: inline-flex;
+          align-items: center;
+          width: 100%;
+          margin-bottom: 15px;
+
+          .header-text {
+            width: 100%;
+            font-size: 20px;
+            cursor: initial;
+            margin-right: 5px;
+            white-space: nowrap;
+          }
+        }
+
+        .vega-embed {
+          width: 100%;
+          text-align: center;
+        }
+
+        .info-table {
+          width: 100%;
+          font-size: 14px;
+
+          tr.end-of-section {
+            td {
+              padding-bottom: $new-section-padding;
+            }
+          }
+
+          tr.new-section {
+            border: solid;
+            border-width: 1px 0 0;
+
+            td {
+              padding-top: $new-section-padding;
+            }
+          }
+
+          td {
+            border: none;
+            padding: 5px 0;
+          }
+
+          .info-name {
+            font-weight: bold;
+            padding-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
