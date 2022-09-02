@@ -41,7 +41,7 @@ export const useStyles = makeStyles({
     fontSize: 'large',
   },
   rightArrowSelected: {
-    color: '##FFFFFF',
+    color: '#FFFFFF',
     fontSize: 'large',
   },
 });
