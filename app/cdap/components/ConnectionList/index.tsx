@@ -51,13 +51,12 @@ const DatasetWrapper = () => {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
+  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(
+    false
+  );
 
-  const toggleLoader = (value: boolean, isError?: boolean) => {
+  const toggleLoader = (value: boolean) => {
     setLoading(value);
-    if (isError) {
-      setIsErrorOnNoWorkSpace(isError);
-    }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
@@ -82,7 +81,8 @@ const DatasetWrapper = () => {
     // Mapping connector types and corresponding connections
     connectorTypes = connectorTypes.map((connectorType): any => {
       const connections = categorizedConnections.get(connectorType.name) || [];
-      allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
+      allConnectionsTotalLength =
+        allConnectionsTotalLength + connections.length;
       return {
         ...connectorType,
         count: connections.length,
@@ -106,7 +106,10 @@ const DatasetWrapper = () => {
     });
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
+  const getCategorizedConnectionsforSelectedTab = async (
+    selectedValue: string,
+    index: number
+  ) => {
     const categorizedConnections = await getCategorizedConnections();
     const connections = categorizedConnections.get(selectedValue) || [];
 
@@ -219,12 +222,16 @@ const DatasetWrapper = () => {
   let headerContent;
 
   return (
-    <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
+    <Box
+      data-testid="data-sets-parent"
+      className={classes.connectionsListContainer}
+    >
       <SubHeader />
       <SelectDatasetWrapper>
         {dataForTabs.map((each, index) => {
           if (each.data.filter((el) => el.connectionId).length) {
-            connectionId = each.data.filter((el) => el.connectionId)[0].connectionId;
+            connectionId = each.data.filter((el) => el.connectionId)[0]
+              .connectionId;
           }
           if (index === 0) {
             headerContent = headerForLevelZero();
@@ -232,7 +239,9 @@ const DatasetWrapper = () => {
             headerContent = (
               <>
                 <Box className={classes.beforeSearchIconClickDisplay}>
-                  <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
+                  <Typography variant="body2">
+                    {dataForTabs[index - 1].selectedTab}
+                  </Typography>
                 </Box>
               </>
             );
@@ -246,7 +255,9 @@ const DatasetWrapper = () => {
                 value={each.selectedTab}
                 index={index}
                 connectionId={connectionId || ''}
-                toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                toggleLoader={(value: boolean, isError?: boolean) =>
+                  toggleLoader(value, isError)
+                }
                 setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
               />
             </Box>
@@ -260,7 +271,9 @@ const DatasetWrapper = () => {
         </div>
       </If>
       {isErrorOnNoWorkspace && (
-        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+        <ErrorSnackbar
+          handleCloseError={() => setIsErrorOnNoWorkSpace(false)}
+        />
       )}
     </Box>
   );

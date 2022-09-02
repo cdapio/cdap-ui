@@ -25,7 +25,7 @@ import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 
 const OngoingDataExploration = (props) => {
-  const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
+  const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {

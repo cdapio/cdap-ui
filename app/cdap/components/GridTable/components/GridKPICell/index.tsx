@@ -19,7 +19,9 @@ import React from 'react';
 import { useGridKPICellStyles } from './styles';
 import { IGridKPICellProps } from './types';
 
-export const GridKPICell: ({ metricData }: IGridKPICellProps) => JSX.Element = ({ metricData }) => {
+export const GridKPICell: ({
+  metricData,
+}: IGridKPICellProps) => JSX.Element = ({ metricData }) => {
   const classes = useGridKPICellStyles();
 
   const metricValue = metricData.values;
@@ -32,10 +34,16 @@ export const GridKPICell: ({ metricData }: IGridKPICellProps) => JSX.Element = (
           metricValue.length &&
           metricValue.map((eachValue: { label: string; count: number }) => (
             <Box className={classes.KPICell} key={eachValue.label}>
-              <Typography className={classes.label}>{eachValue.label}</Typography>
+              <Typography className={classes.label}>
+                {eachValue.label}
+              </Typography>
               <Typography
                 className={classes.count}
-                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+                style={
+                  eachValue.label == 'Missing/Null'
+                    ? { color: 'red' }
+                    : { color: '#000' }
+                }
               >
                 {eachValue.count}
               </Typography>
