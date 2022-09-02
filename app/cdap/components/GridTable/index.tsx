@@ -19,9 +19,8 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import { default as React, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
@@ -39,9 +38,9 @@ const GridTable = () => {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [headersNamesList, setHeadersNamesList] = React.useState([]);
-  const [rowsDataList, setRowsDataList] = React.useState([]);
-  const [gridData, setGridData] = useState<any>({});
+  const [headersNamesList, setHeadersNamesList] = useState([]);
+  const [rowsDataList, setRowsDataList] = useState([]);
+  const [gridData, setGridData] = useState({} as any);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -64,7 +63,6 @@ const GridTable = () => {
       .pipe(
         flatMap((res: any) => {
           const { dataprep } = DataPrepStore.getState();
-          console.log(res);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -132,7 +130,7 @@ const GridTable = () => {
   };
 
   const convertNonNullPercent = (key, nonNullValue) => {
-    const lengthOfData = gridData.values.length;
+    const lengthOfData = gridData?.values.length;
     let count = 0;
     let nonNull: any = 0;
     let empty: any = 0;
@@ -147,7 +145,7 @@ const GridTable = () => {
   };
 
   const checkFrequentlyOccuredValues = (key) => {
-    const valueOfKey = gridData.values.map((el) => el[key]);
+    const valueOfKey = gridData?.values.map((el) => el[key]);
     let mostfrequentItem = 1;
     let count = 0;
     let item = '';
@@ -210,7 +208,7 @@ const GridTable = () => {
     const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
-      const missingData = createMissingData(gridData.summary.statistics);
+      const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
     }
     const rowData =
@@ -274,11 +272,11 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
-      <If condition={loading}>
+      {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
-      </If>
+      )}
     </Box>
   );
 };
