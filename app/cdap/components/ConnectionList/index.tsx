@@ -28,11 +28,13 @@ import { useStyles } from './styles';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
+import { grey } from '@material-ui/core/colors';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
   display: 'flex',
-  borderTop: '1px solid #E0E0E0;',
+  borderTop: '1px solid',
+  borderColor: grey[300],
 
   height: '100%',
   '& > :first-child': {
