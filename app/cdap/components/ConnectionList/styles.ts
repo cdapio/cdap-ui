@@ -59,12 +59,11 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '1px solid',
-    borderColor: grey[300],
+    borderRight: '1px solid  #E0E0E0',
+    // borderColor: grey[300],
   },
   connectionsListContainer: {
     width: '100vw',
-    // position: 'fixed',
     overflow: 'scroll',
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
