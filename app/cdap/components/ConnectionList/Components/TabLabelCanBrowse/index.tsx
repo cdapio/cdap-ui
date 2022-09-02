@@ -18,7 +18,7 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { CanBrowseIcon, CanBrowseIconHover } from 'components/ConnectionList/iconStore';
+import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import * as React from 'react';
 const TabLabelCanBrowse = ({
   label,
@@ -54,10 +54,10 @@ const TabLabelCanBrowse = ({
         </Box>
         <Box>
           <Box className={`canBrowseNormal`}>
-            <CanBrowseIcon />
+            <ChevronRightRoundedIcon className={classes.rightArrow} />
           </Box>
           <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
-            <CanBrowseIconHover />
+            <ChevronRightRoundedIcon className={classes.rightArrowSelected} />
           </Box>
         </Box>
       </Box>
@@ -75,10 +75,10 @@ const TabLabelCanBrowse = ({
       </Box>
       <Box>
         <Box className={`canBrowseNormal`}>
-          <CanBrowseIcon />
+          <ChevronRightRoundedIcon className={classes.rightArrow} />
         </Box>
         <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
-          <CanBrowseIconHover />
+          <ChevronRightRoundedIcon className={classes.rightArrowSelected} />
         </Box>
       </Box>
     </Box>
