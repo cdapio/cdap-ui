@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   labelsContainerCanSample: {
@@ -29,7 +30,7 @@ export const useStyles = makeStyles({
       textDecoration: 'none',
       gap: '10px',
       '& .MuiTypography-root': {
-        color: '#4681F4',
+        color: blue[500],
         fontSize: '14px',
         letterSpacing: '0.15px',
         fontWeight: 400,
