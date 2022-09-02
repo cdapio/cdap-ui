@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import blue from '@material-ui/core/colors/blue';
 
 const useStyles = makeStyles({
   labelsContainerCanSample: {
@@ -31,7 +32,6 @@ const useStyles = makeStyles({
       border: 0,
       outline: 0,
       '& .MuiTypography-root': {
-        color: '#4681F4',
         fontSize: '14px',
         letterSpacing: '0.15px',
         fontWeight: 400,
@@ -53,8 +53,10 @@ const useStyles = makeStyles({
     textOverflow: 'ellipsis',
   },
   wrangleTypography: {
-    color: '#4681F4 !important',
     fontSize: '14px',
+  },
+  wrangleButton: {
+    color: blue[500],
   },
 });
 

@@ -44,7 +44,7 @@ const TabLabelCanSample = ({
   const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
   const [workspaceId, setWorkspaceId] = useState(null);
-  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
+  const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
 
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
 
@@ -96,23 +96,27 @@ const TabLabelCanSample = ({
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
           <WrangelIcon />
-          <Typography color="primary">Wrangle</Typography>
+          <Typography variant="body2" className={classes.wrangleButton}>
+            Wrangle
+          </Typography>
         </button>
       </Box>
     </CustomTooltip>
   ) : (
     <Box className={classes.labelsContainerCanSample}>
-      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+      <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
         <WrangelIcon />
-        <Typography color="primary">Wrangle</Typography>
+        <Typography variant="body2" className={classes.wrangleButton}>
+          Wrangle
+        </Typography>
       </button>
     </Box>
   );
