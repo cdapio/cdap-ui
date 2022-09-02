@@ -20,6 +20,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
 
@@ -62,18 +63,14 @@ const ConnectionsTabs = ({
 }) => {
   const classes = useStyles();
 
-  const [connectionIdProp, setConnectionId] = React.useState(connectionId);
+  const [connectionIdProp, setConnectionId] = useState(connectionId);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setConnectionId(connectionId);
   }, []);
 
   return (
-    <Box
-      data-testid="connections-tabs-parent"
-      className={classes.connectionsTabsParent}
-      style={{ height: 'calc(100vh - 200px)' }}
-    >
+    <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -121,7 +118,7 @@ const ConnectionsTabs = ({
                       label={connectorType.name}
                       count={index === 0 ? connectorType.count : undefined}
                       index={index}
-                      SVG={connectorType.SVG}
+                      icon={connectorType.icon}
                     />
                   )
                 }
