@@ -17,7 +17,6 @@
 import { makeStyles } from '@material-ui/styles';
 import { blue } from '@material-ui/core/colors';
 
-
 export const useStyles = makeStyles({
   breadCombContainer: {
     display: 'flex',
