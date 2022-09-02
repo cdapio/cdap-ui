@@ -201,7 +201,7 @@ const DatasetWrapper = () => {
 
   useEffect(() => {
     setDataForTabs((prev) => {
-      const temp = [...prev];
+      const temp = prev;
       temp[0].selectedTab = connectorType;
       return temp;
     });

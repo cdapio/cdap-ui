@@ -206,7 +206,7 @@ const GridTable = () => {
   };
 
   const getGridTableData = async () => {
-    const rawData: any = gridData;
+    const rawData = gridData;
     const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
