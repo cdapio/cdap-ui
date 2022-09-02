@@ -41,7 +41,7 @@ export const useStyles = makeStyles({
       margin: 'auto 0px',
       fontSize: '16px',
       lineHeight: '24px',
-      width: '254px',
+      width: '253px',
       textOverflow: 'ellipsis',
       fontWeight: 400,
       overflow: 'hidden',
