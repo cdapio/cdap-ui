@@ -30,7 +30,7 @@ import { GridTextCell } from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -40,7 +40,7 @@ const GridTable = () => {
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState([]);
   const [rowsDataList, setRowsDataList] = useState([]);
-  const [gridData, setGridData] = useState({} as any);
+  const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -49,7 +49,7 @@ const GridTable = () => {
     },
   ]);
 
-  const getWorkSpaceData = (params, workspaceId) => {
+  const getWorkSpaceData = (params: IParams, workspaceId: string) => {
     const gridParams = {};
     setLoading(true);
     DataPrepStore.dispatch({
@@ -117,9 +117,10 @@ const GridTable = () => {
     getWorkSpaceData(payload, wid);
   }, [wid]);
 
-  const createHeadersData = (columnNamesList: any, columnLabelsList, columnTypesList) => {
+  // ------------@createHeadersData Function is used for creating data of Table Header
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
     if (Array.isArray(columnNamesList)) {
-      return columnNamesList.map((eachColumnName) => {
+      return columnNamesList.map((eachColumnName: string) => {
         return {
           name: eachColumnName,
           label: eachColumnName,
@@ -129,58 +130,63 @@ const GridTable = () => {
     }
   };
 
-  const convertNonNullPercent = (key, nonNullValue) => {
-    const lengthOfData = gridData?.values.length;
-    let count = 0;
-    let nonNull: any = 0;
-    let empty: any = 0;
-    let nullValue: any = 0;
+  // ------------@convertNonNullPercent Function is used for calculation of Missing/Null value
+  const convertNonNullPercent = (nonNullValue) => {
+    const lengthOfData: number = gridData?.values.length;
+    let count: number = 0;
+    let nonNullCount: number = 0;
+    let emptyCount: number = 0;
+    let nullValueCount: number = 0;
     if (lengthOfData) {
-      nonNull = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-      nullValue = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      empty = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValue + empty);
+      nonNullCount = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
+      nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
+      emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
+      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
     }
     return count;
   };
 
+  // ------------@checkFrequentlyOccuredValues Function is used for checking which value appears maximum time in a column if that column doesn't have missing/null value
   const checkFrequentlyOccuredValues = (key) => {
-    const valueOfKey = gridData?.values.map((el) => el[key]);
-    let mostfrequentItem = 1;
-    let count = 0;
-    let item = '';
-    const data = {
+    const valueOfKey = gridData.values.map((el) => el[key]);
+    let mostfrequentItem: number = 1;
+    let mostFrequentItemCount: number = 0;
+    let mostfrequentItemValue: string = '';
+    const mostFrequentDataItem = {
       name: '',
       count: 0,
     };
-    for (let i = 0; i < valueOfKey.length; i++) {
-      for (let j = i; j < valueOfKey.length; j++) {
-        if (valueOfKey[i] == valueOfKey[j]) {
-          count++;
-        }
-        if (mostfrequentItem < count) {
-          mostfrequentItem = count;
-          item = valueOfKey[i];
-        }
-      }
-      count = 0;
-      item = item == '' ? valueOfKey[i] : item;
+    if (Array.isArray(valueOfKey) && valueOfKey.length) {
+      valueOfKey.map((item, index) => {
+        valueOfKey.map((value, valueIndex) => {
+          if (item == value) {
+            mostFrequentItemCount++;
+          }
+          if (mostfrequentItem < mostFrequentItemCount) {
+            mostfrequentItem = mostFrequentItemCount;
+            mostfrequentItemValue = item;
+          }
+        });
+        mostFrequentItemCount = 0;
+        mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+      });
     }
-    data.name = item;
-    data.count = mostfrequentItem;
-    return data;
+    mostFrequentDataItem.name = mostfrequentItemValue;
+    mostFrequentDataItem.count = mostFrequentItemCount;
+    return mostFrequentDataItem;
   };
 
-  const createMissingData = (statistics) => {
-    const objectArray = Object.entries(statistics);
+  // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
+  const createMissingData = (statistics: IDataOfStatistics) => {
+    const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
-    objectArray.forEach(([key, value]) => {
-      const valueToArray = Object.entries(value);
-      const tempArray = [];
-      valueToArray.forEach(([vKey, vValue]) => {
-        tempArray.push({
+    statisticObjectToArray.forEach(([key, value]) => {
+      const headerKeyTypeArray = Object.entries(value);
+      const typeArrayOfMissingValue = [];
+      headerKeyTypeArray.forEach(([vKey, vValue]) => {
+        typeArrayOfMissingValue.push({
           label:
-            vKey == 'general' && convertNonNullPercent(key, vValue) == 0
+            vKey == 'general' && convertNonNullPercent(vValue) == 0
               ? checkFrequentlyOccuredValues(key).name
               : vKey == 'general'
               ? 'Missing/Null'
@@ -190,22 +196,23 @@ const GridTable = () => {
           count:
             vKey == 'types'
               ? ''
-              : convertNonNullPercent(key, vValue) == 0
+              : convertNonNullPercent(vValue) == 0
               ? checkFrequentlyOccuredValues(key).count
-              : convertNonNullPercent(key, vValue),
+              : convertNonNullPercent(vValue),
         });
       }),
         metricArray.push({
           name: key,
-          values: tempArray.concat(invalidCountArray),
+          values: typeArrayOfMissingValue.concat(invalidCountArray),
         });
     });
     return metricArray;
   };
 
+  // ------------@getGridTableData Function is used for preparing data for entire grid-table
   const getGridTableData = async () => {
-    const rawData: any = gridData;
-    const headersData = createHeadersData(rawData.headers, rawData.headers, rawData.types);
+    const rawData: IExecuteAPIResponse = gridData;
+    const headersData = createHeadersData(rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
@@ -233,7 +240,7 @@ const GridTable = () => {
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
-            {Array.isArray(headersNamesList) &&
+            {headersNamesList?.length &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
@@ -243,8 +250,8 @@ const GridTable = () => {
               ))}
           </TableRow>
           <TableRow>
-            {Array.isArray(missingDataList) &&
-              Array.isArray(headersNamesList) &&
+            {missingDataList?.length &&
+              headersNamesList.length &&
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
                   if (item.name == each.name) {
@@ -255,7 +262,7 @@ const GridTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Array.isArray(rowsDataList) &&
+          {rowsDataList?.length &&
             rowsDataList.map((eachRow, rowIndex) => {
               return (
                 <TableRow key={`row-${rowIndex}`}>
