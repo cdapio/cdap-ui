@@ -53,11 +53,8 @@ const DatasetWrapper = () => {
   const [loading, setLoading] = useState(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
 
-  const toggleLoader = (value: boolean, isError?: boolean) => {
+  const toggleLoader = (value: boolean) => {
     setLoading(value);
-    if (isError) {
-      setIsErrorOnNoWorkSpace(isError);
-    }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
@@ -246,7 +243,7 @@ const DatasetWrapper = () => {
                   value={each.selectedTab}
                   index={index}
                   connectionId={connectionId || ''}
-                  toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                  toggleLoader={(value: boolean) => toggleLoader(value)}
                   setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
                 />
               </Box>
