@@ -38,7 +38,7 @@ export const useStyles = makeStyles({
     },
   },
   subheadeIcon: {
-    fontSize: '24px',
+    fontSize: 'x-large',
     color: '#757575',
   },
   selectPrevPage: {
