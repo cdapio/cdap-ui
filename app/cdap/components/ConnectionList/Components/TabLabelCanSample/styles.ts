@@ -32,6 +32,7 @@ const useStyles = makeStyles({
       border: 0,
       outline: 0,
       '& .MuiTypography-root': {
+        color: blue[500],
         fontSize: '14px',
         letterSpacing: '0.15px',
         fontWeight: 400,
