@@ -22,6 +22,7 @@ const ParsingDrawer = (props) => {
   const [encodingValue, setEncodingValue] = useState();
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
+  const [schemaValue, setSchemaValue] = useState(null);
   const { dataprep } = DataPrepStore.getState();
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
   const [errorOnTranformation, setErrorOnTransformation] = useState({
@@ -37,7 +38,7 @@ const ParsingDrawer = (props) => {
         fileEncoding: encodingValue,
         skipHeader: headerValueChecked,
         enableQuotedValues: quotedValuesChecked,
-        schema: null,
+        schema: schemaValue,
         _pluginName: null,
       },
       limit: 1000,
@@ -55,14 +56,14 @@ const ParsingDrawer = (props) => {
           fileEncoding: encodingValue,
           skipHeader: headerValueChecked,
           enableQuotedValues: quotedValuesChecked,
-          schema: null,
+          schema: JSON.stringify(schemaValue),
           _pluginName: null,
         },
         limit: 1000,
       },
     });
     setDrawerStatus(true);
-  }, [dataprep, formatValue, encodingValue, quotedValuesChecked, headerValueChecked]);
+  }, [dataprep, formatValue, encodingValue, quotedValuesChecked, headerValueChecked, schemaValue]);
 
   const closeClickHandler = () => {
     setDrawerStatus(false);
@@ -84,6 +85,10 @@ const ParsingDrawer = (props) => {
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHeaderValueChecked(event.target.checked);
+  };
+
+  const handleSchemaUpload = (schema) => {
+    setSchemaValue(schema);
   };
 
   const handleApply = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -123,7 +128,12 @@ const ParsingDrawer = (props) => {
       headingText={PARSING}
       openDrawer={setDrawerStatus}
       showDivider={true}
-      headerActionTemplate={<ParsingHeaderActionTemplate />}
+      headerActionTemplate={
+        <ParsingHeaderActionTemplate
+          handleSchemaUpload={(schema) => handleSchemaUpload(schema)}
+          setErrorOnTransformation={setErrorOnTransformation}
+        />
+      }
       closeClickHandler={closeClickHandler}
     >
       <Box className={classes.bodyContainerStyles}>
