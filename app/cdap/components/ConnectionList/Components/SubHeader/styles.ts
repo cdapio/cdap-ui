@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import grey from '@material-ui/core/colors/grey';
 import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
@@ -37,6 +38,10 @@ export const useStyles = makeStyles({
       color: blue[500],
       lineHeight: '21px',
     },
+  },
+  subHeaderIcon: {
+    fontSize: 'x-large',
+    color: grey[700],
   },
   selectPrevPage: {
     display: 'flex',
