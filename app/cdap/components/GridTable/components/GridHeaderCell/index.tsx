@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
 import { TypographyComponent } from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
@@ -24,10 +24,13 @@ const StringIndicatorBox = styled(Box)({
   display: 'flex',
 });
 
-export const GridHeaderCell: React.FC<IGridHeaderCellProps> = ({ label, types }) => {
+export const GridHeaderCell: ({ label, types }: IGridHeaderCellProps) => JSX.Element = ({
+  label,
+  types,
+}) => {
   const classes = useGridHeaderCellStyles();
 
-  const [data, setData] = React.useState<Record<string, string>>({
+  const [data, setData] = useState<Record<string, string>>({
     datatype1: types.length > 0 ? types[0] : null,
     datatype2: types.length > 1 ? types[1] : null,
   });

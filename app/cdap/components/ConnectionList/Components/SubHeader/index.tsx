@@ -17,7 +17,7 @@
 import { Breadcrumbs, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { useStyles } from 'components/ConnectionList/Components/SubHeader/styles';
-import { DownloadIcon, AddConnection } from 'components/ConnectionList/iconStore';
+import { DownloadIcon, AddConnection } from 'components/ConnectionList/icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
