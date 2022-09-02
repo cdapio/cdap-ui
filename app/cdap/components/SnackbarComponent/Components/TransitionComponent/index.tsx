@@ -19,7 +19,7 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import { Divider } from '@material-ui/core';
 import { useStyles } from './styles';
 
-export const TransitionComponent = (props) => {
+const TransitionComponent = (props) => {
   const classes = useStyles();
   return (
     <div>
@@ -37,3 +37,5 @@ export const TransitionComponent = (props) => {
     </div>
   );
 };
+
+export default TransitionComponent;

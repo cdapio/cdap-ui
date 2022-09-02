@@ -35,13 +35,16 @@ import { SQLServer } from './iconStore/SQLServer';
 import { useStyles } from './styles';
 
 const WrangleCard = () => {
-  const [state, setState] = useState({
-    connectorTypes: [],
+  const [connectorTypes, setConnectorTypes] = useState({
+    fetchedConnectorTypes: [],
   });
-  const getConnectorTypesNames = async () => {
-    let connectorTypes = await fetchConnectors();
 
-    connectorTypes = connectorTypes.map((connectorType) => {
+  // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
+  // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
+  const getConnectorTypesNames = async () => {
+    let fetchedConnectorTypes = await fetchConnectors();
+
+    fetchedConnectorTypes = fetchedConnectorTypes.map((connectorType) => {
       if (connectorType.name === 'S3') {
         return {
           ...connectorType,
@@ -115,7 +118,7 @@ const WrangleCard = () => {
       }
     });
 
-    connectorTypes.unshift({
+    fetchedConnectorTypes.unshift({
       name: 'Imported Datasets',
       type: 'default',
       category: 'default',
@@ -129,18 +132,18 @@ const WrangleCard = () => {
       SVG: ImportDatasetIcon,
     });
 
-    setState({
-      connectorTypes,
+    setConnectorTypes({
+      fetchedConnectorTypes,
     });
   };
   useEffect(() => {
     getConnectorTypesNames();
   }, []);
   const classes = useStyles();
-  const connectorTypes = state.connectorTypes;
+  const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
-      {connectorTypes.map((item, index) => {
+      {fetchedConnectorTypes.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
