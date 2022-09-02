@@ -35,15 +35,15 @@ import { SQLServer } from './iconStore/SQLServer';
 import { useStyles } from './styles';
 
 const WrangleCard = () => {
-  const [connectorType, setConnectorType] = useState<any>({
-    item: [],
+  const [connectorTypes, setConnectorTypes] = useState({
+    fetchedConnectorTypes: [],
   });
   const getConnectorTypesNames = async () => {
-    // Fetching all the connectorTypes and adding SVG its object to each connectorType and
-    // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
-    let connectorTypeItem = await fetchConnectors();
+    let fetchedConnectorTypes = await fetchConnectors();
 
-    connectorTypeItem = connectorTypeItem.map((connectorType) => {
+    // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
+    // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
+    fetchedConnectorTypes = fetchedConnectorTypes.map((connectorType) => {
       if (connectorType.name === 'S3') {
         return {
           ...connectorType,
@@ -117,7 +117,7 @@ const WrangleCard = () => {
       }
     });
 
-    connectorTypeItem.unshift({
+    fetchedConnectorTypes.unshift({
       name: 'Imported Datasets',
       type: 'default',
       category: 'default',
@@ -130,18 +130,19 @@ const WrangleCard = () => {
 
       SVG: ImportDatasetIcon,
     });
-    setConnectorType({
-      connectorTypeItem,
+
+    setConnectorTypes({
+      fetchedConnectorTypes,
     });
   };
   useEffect(() => {
     getConnectorTypesNames();
   }, []);
   const classes = useStyles();
-  const connectorTypeItem = connectorType.item;
+  const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
-      {connectorTypeItem.map((item, index) => {
+      {fetchedConnectorTypes.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
