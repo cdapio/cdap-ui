@@ -86,7 +86,7 @@ const TabLabelCanSample = ({
         }
       })
       .catch((err) => {
-        toggleLoader(false, true);
+        toggleLoader(false);
         setIsErrorOnNoWorkSpace(true);
       });
   };

@@ -14,7 +14,35 @@
  * the License.
  */
 
-import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
-export interface State extends SnackbarOrigin {
-  open: boolean;
+export interface IParams {
+  context: string;
+  workspaceId: string;
+}
+
+export interface IDataTypeOfColumns {
+  [key: string]: string;
+}
+
+interface IRowData {
+  [key: string]: string;
+}
+
+export interface IPercentOfDataTypeValues {
+  [key: string]: number;
+}
+
+export interface IDataOfStatistics {
+  [key: string]: string;
+}
+
+interface ISummary {
+  statistics: IDataOfStatistics;
+  validations: IDataOfStatistics;
+}
+
+export interface IExecuteAPIResponse {
+  headers: string[];
+  types: IDataTypeOfColumns;
+  values: IRowData[];
+  summary: ISummary;
 }
