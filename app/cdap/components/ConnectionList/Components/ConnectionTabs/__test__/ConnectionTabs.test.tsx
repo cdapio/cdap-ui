@@ -28,7 +28,7 @@ test('renders Connections Tab Component', () => {
       value="apple"
       index="one"
       connectionId={undefined}
-      setIsErrorOnNoWorkSpace={null}
+      setIsErrorOnNoWorkSpace={jest.fn()}
     />
   );
   const ele = screen.getByTestId(/connections-tabs-parent/i);

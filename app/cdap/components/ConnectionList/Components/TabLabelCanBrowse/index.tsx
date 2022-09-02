@@ -17,10 +17,7 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import {
-  CanBrowseIcon,
-  CanBrowseIconHover,
-} from 'components/ConnectionList/icons';
+import { CanBrowseIcon, CanBrowseIconHover } from 'components/ConnectionList/icons';
 import * as React from 'react';
 import { createRef, useEffect, useState } from 'react';
 import { useStyles } from './styles';
@@ -50,9 +47,7 @@ const TabLabelCanBrowse = ({
     width of the wrapping element or not. if the size is greater then it sets true for custom tooltip
     otherwise it sets false.
      */
-    setRefValue(
-      myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth
-    );
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
 
   return refValue ? (
@@ -60,18 +55,11 @@ const TabLabelCanBrowse = ({
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}
-          <Typography
-            variant="body1"
-            className={classes.labelStyles}
-            ref={myLabelRef}
-          >
+          <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
             {label}
           </Typography>
           {count && (
-            <Typography
-              variant="body1"
-              className={classes.labelStyles}
-            >{`(${count})`}</Typography>
+            <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
           )}
         </Box>
         <Box>
@@ -88,18 +76,11 @@ const TabLabelCanBrowse = ({
     <Box className={classes.labelContainerBox}>
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
-        <Typography
-          variant="body1"
-          className={classes.labelStyles}
-          ref={myLabelRef}
-        >
+        <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
           {label}
         </Typography>
         {count && (
-          <Typography
-            variant="body1"
-            className={classes.labelStyles}
-          >{`(${count})`}</Typography>
+          <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
         )}
       </Box>
       <Box>
