@@ -134,11 +134,9 @@ const GridTable = () => {
   const convertNonNullPercent = (nonNullValue) => {
     const lengthOfData: number = gridData?.values.length;
     let count: number = 0;
-    let nonNullCount: number = 0;
     let emptyCount: number = 0;
     let nullValueCount: number = 0;
     if (lengthOfData) {
-      nonNullCount = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
       nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
       emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
       count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
@@ -182,28 +180,24 @@ const GridTable = () => {
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
       const headerKeyTypeArray = Object.entries(value);
-      const typeArrayOfMissingValue = [];
+      const arrayForMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
-        typeArrayOfMissingValue.push({
-          label:
-            vKey == 'general' && convertNonNullPercent(vValue) == 0
-              ? checkFrequentlyOccuredValues(key).name
-              : vKey == 'general'
-              ? 'Missing/Null'
-              : vKey == 'types'
-              ? ''
-              : '',
-          count:
-            vKey == 'types'
-              ? ''
-              : convertNonNullPercent(vValue) == 0
-              ? checkFrequentlyOccuredValues(key).count
-              : convertNonNullPercent(vValue),
-        });
+        if (vKey !== 'types') {
+          arrayForMissingValue.push({
+            label:
+              convertNonNullPercent(vValue) == 0
+                ? checkFrequentlyOccuredValues(key).name
+                : 'Missing/Null',
+            count:
+              convertNonNullPercent(vValue) == 0
+                ? checkFrequentlyOccuredValues(key).count
+                : convertNonNullPercent(vValue),
+          });
+        }
       }),
         metricArray.push({
           name: key,
-          values: typeArrayOfMissingValue.concat(invalidCountArray),
+          values: arrayForMissingValue.concat(invalidCountArray),
         });
     });
     return metricArray;
