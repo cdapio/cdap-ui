@@ -45,7 +45,7 @@ const SelectDatasetWrapper = styled(Box)({
   },
 });
 
-const DatasetWrapper = () => {
+export default function ConnectionList() {
   const { connectorType } = useParams() as Record<string, string>;
 
   const classes = useStyles();
@@ -263,6 +263,4 @@ const DatasetWrapper = () => {
       )}
     </Box>
   );
-};
-
-export default DatasetWrapper;
+}

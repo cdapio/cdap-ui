@@ -24,7 +24,7 @@ import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 
-const OngoingDataExploration = (props) => {
+export default function OngoingDataExploration() {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
 
@@ -115,5 +115,4 @@ const OngoingDataExploration = (props) => {
       })}
     </Box>
   );
-};
-export default OngoingDataExploration;
+}

@@ -22,7 +22,7 @@ import * as React from 'react';
 import { createRef, useEffect, useState } from 'react';
 import { useStyles } from './styles';
 
-export default ({
+export default function TabLabelCanBrowse({
   label,
   count,
   index,
@@ -32,7 +32,7 @@ export default ({
   count: number;
   index: number;
   icon?: JSX.Element;
-}) => {
+}) {
   const classes = useStyles();
 
   const myLabelRef: any = createRef();
@@ -93,5 +93,4 @@ export default ({
       </Box>
     </Box>
   );
-};
-// export default TabLabelCanBrowse;
+}

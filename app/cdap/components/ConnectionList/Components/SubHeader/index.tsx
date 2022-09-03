@@ -24,7 +24,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 
-const SubHeader = () => {
+export default function SubHeader() {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
@@ -49,6 +49,4 @@ const SubHeader = () => {
       </Box>
     </Box>
   );
-};
-
-export default SubHeader;
+}
