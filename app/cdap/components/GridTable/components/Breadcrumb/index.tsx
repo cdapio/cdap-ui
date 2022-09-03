@@ -22,7 +22,7 @@ import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 
-const BreadCrumb = ({ datasetName }) => {
+export default function BreadCrumb({ datasetName }) {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer}>
@@ -37,6 +37,4 @@ const BreadCrumb = ({ datasetName }) => {
       </Breadcrumbs>
     </Box>
   );
-};
-
-export default BreadCrumb;
+}
