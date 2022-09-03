@@ -17,9 +17,8 @@
 import { Box, Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
 import { useGridKPICellStyles } from './styles';
-import { IGridKPICellProps } from './types';
 
-export const GridKPICell = ({ metricData }) => {
+export default function GridKPICell({ metricData }) {
   const classes = useGridKPICellStyles();
 
   const metricValue = metricData.values;
@@ -44,4 +43,4 @@ export const GridKPICell = ({ metricData }) => {
       </Card>
     </TableCell>
   );
-};
+}

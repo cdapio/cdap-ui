@@ -19,9 +19,7 @@ import React from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
 
-export const GridTextCell: ({ cellValue }: { cellValue: IGridTextCellProps }) => JSX.Element = ({
-  cellValue,
-}) => {
+export default function GridTextCell({ cellValue }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
 
   return (
@@ -31,4 +29,4 @@ export const GridTextCell: ({ cellValue }: { cellValue: IGridTextCellProps }) =>
       </Card>
     </TableCell>
   );
-};
+}
