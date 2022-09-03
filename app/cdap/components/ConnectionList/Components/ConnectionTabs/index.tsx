@@ -52,7 +52,7 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({
+export default function ConnectionsTabs({
   tabsData,
   handleChange,
   value,
@@ -60,7 +60,7 @@ const ConnectionsTabs = ({
   connectionId,
   setIsErrorOnNoWorkSpace,
   ...props
-}) => {
+}) {
   const classes = useStyles();
 
   const [connectionIdProp, setConnectionId] = useState(connectionId);
@@ -134,6 +134,4 @@ const ConnectionsTabs = ({
       )}
     </Box>
   );
-};
-
-export default ConnectionsTabs;
+}
