@@ -16,7 +16,6 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
 import OngoingDataExploration from './Components/OngoingDataExploration';
@@ -51,11 +50,11 @@ export default function WranglerHome() {
           <Box className={classes.viewMore}>View More</Box>
         </Box>
         <OngoingDataExploration />
-        <If condition={loading}>
+        {loading && (
           <Box className={classes.loadingContainer}>
             <LoadingSVG />
           </Box>
-        </If>
+        )}
       </Box>
     </Box>
   );
