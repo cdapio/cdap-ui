@@ -34,6 +34,7 @@ import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } f
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
+import ParsingDrawer from 'components/ParsingDrawer';
 
 export default function GridTable() {
   const { wid } = useParams() as any;
@@ -288,6 +289,7 @@ export default function GridTable() {
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
       <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
+      <ParsingDrawer />
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
