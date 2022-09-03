@@ -34,7 +34,7 @@ export default function GridKPICell({ metricData }) {
               <Typography className={classes.label}>{eachValue.label}</Typography>
               <Typography
                 className={classes.count}
-                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+                style={eachValue.label === 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
               >
                 {eachValue.count}
               </Typography>

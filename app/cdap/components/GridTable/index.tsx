@@ -33,6 +33,7 @@ import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
+import { getDirective } from './directives';
 
 export default function GridTable() {
   const { wid } = useParams() as any;
@@ -40,8 +41,6 @@ export default function GridTable() {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [headersNamesList, setHeadersNamesList] = useState([]);
-  const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
@@ -50,9 +49,10 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [columnSelected, setColumnSelected] = useState('');
 
   const getWorkSpaceData = (params: IParams, workspaceId: string) => {
-    const gridParams = {};
+    let gridParams = {};
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -85,7 +85,7 @@ export default function GridTable() {
           const workspaceInfo = {
             properties: insights,
           };
-          const gridParams = {
+          gridParams = {
             directives,
             workspaceId,
             workspaceUri,
@@ -209,7 +209,6 @@ export default function GridTable() {
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
     const headersData = createHeadersData(rawData.headers, rawData.types);
-    setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
@@ -222,36 +221,92 @@ export default function GridTable() {
         const { body, ...rest } = eachRow;
         return rest;
       });
-
-    setRowsDataList(rowData);
   };
 
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
 
+  const applyDirective = (option, column) => {
+    setLoading(true);
+    const newDirective = getDirective(option, column);
+    const { dataprep } = DataPrepStore.getState();
+    const { workspaceId, workspaceUri, directives, insights } = dataprep;
+
+    if (newDirective === null || !Boolean(column)) {
+      setLoading(false);
+      return;
+    }
+
+    let gridParams = {};
+    const updatedDirectives = directives.concat(newDirective);
+    const requestBody = directiveRequestBodyCreator(updatedDirectives);
+
+    requestBody.insights = insights;
+
+    const workspaceInfo = {
+      properties: insights,
+    };
+    gridParams = {
+      directives: updatedDirectives,
+      workspaceId,
+      workspaceUri,
+      workspaceInfo,
+      insights,
+    };
+    const payload = {
+      context: params.namespace,
+      workspaceId: params.wid,
+    };
+    MyDataPrepApi.execute(payload, requestBody).subscribe(
+      (response) => {
+        // response
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+      },
+      (err) => {
+        // err
+        setLoading(false);
+      }
+    );
+  };
+
+  // Redux store
+  const { dataprep } = DataPrepStore.getState();
+  const { data, headers, types } = dataprep;
+
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      <ToolBarList />
+      <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
-            {headersNamesList?.length &&
-              headersNamesList.map((eachHeader) => (
-                <GridHeaderCell
-                  label={eachHeader.label}
-                  types={eachHeader.type}
-                  key={eachHeader.name}
-                />
-              ))}
+            {headers.map((eachHeader) => (
+              <GridHeaderCell
+                label={eachHeader}
+                type={types[eachHeader]}
+                key={eachHeader}
+                columnSelected={columnSelected}
+                setColumnSelected={setColumnSelected}
+              />
+            ))}
           </TableRow>
           <TableRow>
-            {missingDataList?.length &&
-              headersNamesList.length &&
-              headersNamesList.map((each, index) => {
+            {Array.isArray(missingDataList) &&
+              Array.isArray(headers) &&
+              headers.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
-                  if (item.name == each.name) {
+                  if (item.name === each) {
                     return <GridKPICell metricData={item} key={item.name} />;
                   }
                 });
@@ -259,21 +314,20 @@ export default function GridTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowsDataList?.length &&
-            rowsDataList.map((eachRow, rowIndex) => {
-              return (
-                <TableRow key={`row-${rowIndex}`}>
-                  {headersNamesList.map((eachKey, eachIndex) => {
-                    return (
-                      <GridTextCell
-                        cellValue={eachRow[eachKey.name] || '--'}
-                        key={`${eachKey.name}-${eachIndex}`}
-                      />
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+          {data.map((eachRow, rowIndex) => {
+            return (
+              <TableRow key={`row-${rowIndex}`}>
+                {headers.map((eachKey, eachIndex) => {
+                  return (
+                    <GridTextCell
+                      cellValue={eachRow[eachKey] || '--'}
+                      key={`${eachKey}-${eachIndex}`}
+                    />
+                  );
+                })}
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       {loading && (

@@ -13,21 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+export const DATATYPE_OPTIONS = [
+  'string',
+  'boolean',
+  'integer',
+  'long',
+  'short',
+  'float',
+  'double',
+  'decimal',
+  'bytes',
+];
+
 export const MENU_OPTIONS = [
   {
     key: 'changeDatatype',
     label: 'Change data type',
-    options: [
-      { key: 'string', label: 'string' },
-      { key: 'boolean', label: 'boolean' },
-      { key: 'integer', label: 'integer' },
-      { key: 'long', label: 'long' },
-      { key: 'short', label: 'short' },
-      { key: 'float', label: 'float' },
-      { key: 'double', label: 'double' },
-      { key: 'decimal', label: 'decimal' },
-      { key: 'bytes', label: 'bytes' },
-    ],
+    options: DATATYPE_OPTIONS.map((option) => ({ key: option, label: option })),
   },
   {
     key: 'setQualifiler',
@@ -64,5 +66,13 @@ export const MENU_OPTIONS = [
   {
     key: 'filter',
     label: 'Filter',
+  },
+  {
+    key: 'delete',
+    label: 'Delete column',
+  },
+  {
+    key: 'keep',
+    label: 'Keep column',
   },
 ];
