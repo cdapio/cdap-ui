@@ -16,7 +16,7 @@
 
 import React, { useState } from 'react';
 import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
-import { TypographyComponent } from '../Typography';
+import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
 
@@ -24,10 +24,7 @@ const StringIndicatorBox = styled(Box)({
   display: 'flex',
 });
 
-export const GridHeaderCell: ({ label, types }: IGridHeaderCellProps) => JSX.Element = ({
-  label,
-  types,
-}) => {
+export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
 
   const [data, setData] = useState<Record<string, string>>({
@@ -57,4 +54,4 @@ export const GridHeaderCell: ({ label, types }: IGridHeaderCellProps) => JSX.Ele
       </Card>
     </TableCell>
   );
-};
+}

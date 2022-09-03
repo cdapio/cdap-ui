@@ -24,15 +24,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
-import { GridHeaderCell } from './components/GridHeaderCell';
-import { GridKPICell } from './components/GridKPICell';
-import { GridTextCell } from './components/GridTextCell';
+import GridHeaderCell from './components/GridHeaderCell';
+import GridKPICell from './components/GridKPICell';
+import GridTextCell from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 
-const GridTable = () => {
+export default function GridTable() {
   const { wid } = useParams() as any;
   const params = useParams() as any;
   const classes = useStyles();
@@ -280,6 +280,4 @@ const GridTable = () => {
       )}
     </Box>
   );
-};
-
-export default GridTable;
+}
