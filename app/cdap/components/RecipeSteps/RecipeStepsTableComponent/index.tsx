@@ -37,14 +37,11 @@ const RecipeStepsTableComponent = (props) => {
               <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
                 {index + 1 > 10 ? index + 1 : `0${index + 1}`}
               </TableCell>
-              <TableCell
-                classes={{ body: classes.recipeStepsTableRowStyles }}
-                // component="th"
-                // scope="row"
-              >
-                <span className={classes.recipeStepsActionTypeStyles}>{eachStep.actionType}</span>
+              <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
+                <span>{eachStep}</span>
+                {/* <span className={classes.recipeStepsActionTypeStyles}>{eachStep.actionType}</span>
                 &nbsp;
-                {eachStep.description}
+                {eachStep.description} */}
               </TableCell>
               <TableCell
                 className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}

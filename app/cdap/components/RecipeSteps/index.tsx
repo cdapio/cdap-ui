@@ -1,6 +1,7 @@
 import { Container } from '@material-ui/core';
+import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RECIPE } from './constants';
 import RecipeHeaderActionTemplate from './RecipeHeaderActionTemplate';
 import RecipeStepsEmptyScreen from './RecipeStepsEmptyScreen';
@@ -23,6 +24,12 @@ const RecipeSteps = (props) => {
   const [recipeSteps, setRecipeSteps] = useState(recipes);
 
   const classes = useStyles();
+
+  useEffect(() => {
+    const { dataprep } = DataPrepStore.getState();
+
+    setRecipeSteps(dataprep.directives);
+  }, []);
 
   const closeClickHandler = () => {
     setDrawerStatus(false);
