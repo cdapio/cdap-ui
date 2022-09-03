@@ -18,7 +18,7 @@ import React from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 
-const OngoingDataExplorationCard = ({ item }) => {
+export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
   return (
     <Grid container className={classes.gridContainer}>
@@ -76,5 +76,4 @@ const OngoingDataExplorationCard = ({ item }) => {
       })}
     </Grid>
   );
-};
-export default OngoingDataExplorationCard;
+}

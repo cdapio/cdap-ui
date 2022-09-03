@@ -34,7 +34,7 @@ import { Spanner } from './iconStore/Spanner';
 import { SQLServer } from './iconStore/SQLServer';
 import { useStyles } from './styles';
 
-const WrangleCard = () => {
+export default function WrangleCard() {
   const [connectorTypes, setConnectorTypes] = useState({
     fetchedConnectorTypes: [],
   });
@@ -160,5 +160,4 @@ const WrangleCard = () => {
       })}
     </Box>
   );
-};
-export default WrangleCard;
+}
