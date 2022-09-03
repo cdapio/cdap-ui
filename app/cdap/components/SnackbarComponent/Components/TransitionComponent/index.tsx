@@ -19,7 +19,7 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import { Divider } from '@material-ui/core';
 import { useStyles } from './styles';
 
-const TransitionComponent = (props) => {
+export default function TransitionComponent(props) {
   const classes = useStyles();
   return (
     <div>
@@ -36,6 +36,4 @@ const TransitionComponent = (props) => {
       <p className={classes.errorMessage}>Failed to retrieve sample</p>
     </div>
   );
-};
-
-export default TransitionComponent;
+}
