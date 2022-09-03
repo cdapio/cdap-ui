@@ -26,7 +26,7 @@ import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
 
-const TabLabelCanSample = ({
+export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,
@@ -38,7 +38,7 @@ const TabLabelCanSample = ({
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+}) {
   const classes = useStyles();
 
   const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
@@ -120,6 +120,4 @@ const TabLabelCanSample = ({
       </button>
     </Box>
   );
-};
-
-export default TabLabelCanSample;
+}

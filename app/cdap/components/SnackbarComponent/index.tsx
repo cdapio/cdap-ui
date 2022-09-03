@@ -18,7 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { useStyles } from './styles';
 import TransitionComponent from './Components/TransitionComponent';
 
-const PositionedSnackbar = (props) => {
+export default function PositionedSnackbar(props) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -47,6 +47,4 @@ const PositionedSnackbar = (props) => {
       className={classes.snackBarDiv}
     />
   );
-};
-
-export default PositionedSnackbar;
+}
