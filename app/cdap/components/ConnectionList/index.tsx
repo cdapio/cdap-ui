@@ -105,10 +105,8 @@ export default function ConnectionList() {
     });
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
-    const categorizedConnections = await getCategorizedConnections();
-    const connections = categorizedConnections.get(selectedValue) || [];
-
+  const setDataForTabsHelper = (res, index) => {
+    console.log(res, index);
     setDataForTabs((prev): any => {
       const tempData = [...prev];
       tempData.push({
@@ -117,11 +115,22 @@ export default function ConnectionList() {
         selectedTab: '',
         isSearching: false,
       });
-      tempData[index + 1][`data`] = connections;
+      if (res.entities) {
+        tempData[index + 1][`data`] = res.entities;
+      } else {
+        tempData[index + 1][`data`] = res;
+      }
       tempData[index + 1][`showTabs`] = true;
       tempData[index + 1][`selectedTab`] = null;
+      tempData[index + 1][`isSearching`] = false;
       return tempData.slice(0, index + 2);
     });
+  };
+
+  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
+    const categorizedConnections = await getCategorizedConnections();
+    const connections = categorizedConnections.get(selectedValue) || [];
+    setDataForTabsHelper(connections, index);
     toggleLoader(false);
   };
 
@@ -153,39 +162,13 @@ export default function ConnectionList() {
         getCategorizedConnectionsforSelectedTab(entity.name, index);
       } else if (index === 1) {
         fetchEntities(entity.name).then((res) => {
-          setDataForTabs((prev): any => {
-            const tempData = [...prev];
-            tempData.push({
-              data: [],
-              showTabs: false,
-              selectedTab: '',
-              isSearching: false,
-            });
-            tempData[index + 1][`data`] = res.entities;
-            tempData[index + 1][`showTabs`] = true;
-            tempData[index + 1][`selectedTab`] = null;
-            tempData[index + 1][`isSearching`] = false;
-            return tempData.slice(0, index + 2);
-          });
+          setDataForTabsHelper(res, index);
           toggleLoader(false);
         });
       } else {
         if (entity.canBrowse) {
           fetchEntities(dataForTabs[1].selectedTab, entity.path).then((res) => {
-            setDataForTabs((prev): any => {
-              const tempData = [...prev];
-              tempData.push({
-                data: [],
-                showTabs: false,
-                selectedTab: '',
-                isSearching: false,
-              });
-              tempData[index + 1][`data`] = res.entities;
-              tempData[index + 1][`showTabs`] = true;
-              tempData[index + 1][`selectedTab`] = null;
-              tempData[index + 1][`isSearching`] = false;
-              return tempData.slice(0, index + 2);
-            });
+            setDataForTabsHelper(res, index);
             toggleLoader(false);
           });
         }
