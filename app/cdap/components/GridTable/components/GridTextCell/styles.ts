@@ -28,7 +28,7 @@ export const useGridTextCellStyles = makeStyles({
     width: 'fit-content',
   },
   tableRowCell: {
-    minWidth: '150.6px',
+    minWidth: '151px',
     border: '1px solid #E0E0E0',
     fontSize: '14px',
     width: 'auto',
