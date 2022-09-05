@@ -15,6 +15,8 @@
  */
 
 import { makeStyles } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   wrapper: {
@@ -41,7 +43,7 @@ export const useStyles = makeStyles({
     fontSize: '14px',
     lineHeight: '21px',
     letterSpacing: '0.15px',
-    color: '#4681F4',
+    color: blue[500],
     cursor: 'pointer',
   },
   welcomeCard: {
@@ -51,7 +53,7 @@ export const useStyles = makeStyles({
     letterSpacing: '0.15px',
     maxWidth: '382px',
     padding: '47px 0px 0px 0px',
-    color: '#000000',
+    color: grey[900],
   },
   loadingContainer: {
     display: 'flex',
