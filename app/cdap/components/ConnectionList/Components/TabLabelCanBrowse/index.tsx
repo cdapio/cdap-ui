@@ -16,27 +16,37 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import { useStyles } from './styles';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { CanBrowseIcon, CanBrowseIconHover } from 'components/ConnectionList/iconStore';
+import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import * as React from 'react';
-const TabLabelCanBrowse = ({
+import { createRef, useEffect, useState } from 'react';
+import { useStyles } from './styles';
+
+export default function TabLabelCanBrowse({
   label,
   count,
   index,
-  SVG,
+  icon,
 }: {
   label: string;
   count: number;
   index: number;
-  SVG?: any;
-}) => {
+  icon?: JSX.Element;
+}) {
   const classes = useStyles();
 
-  const myLabelRef: any = React.createRef();
-  const [refValue, setRefValue] = React.useState(false);
+  const myLabelRef: any = createRef();
+  const [refValue, setRefValue] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    /**
+    In case, the size of the lable or file name exceeds the maximum width 
+    of it's wrapping container we are showing ellipses using styles and
+    we are also showing the custom tooltip using the following logic.
+    So the following statement checks whether the size of the text is greater than the maximum
+    width of the wrapping element or not. if the size is greater then it sets true for custom tooltip
+    otherwise it sets false.
+     */
     setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
 
@@ -44,7 +54,7 @@ const TabLabelCanBrowse = ({
     <CustomTooltip title={label} arrow key={`tooltip-${index}`}>
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
-          {SVG && <Box>{SVG}</Box>}
+          {icon && <Box>{icon}</Box>}
           <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
             {label}
           </Typography>
@@ -53,11 +63,11 @@ const TabLabelCanBrowse = ({
           )}
         </Box>
         <Box>
-          <Box className={`canBrowseNormal`}>
-            <CanBrowseIcon />
+          <Box className={'canBrowseNormal'}>
+            <ChevronRightRoundedIcon className={classes.rightArrow} />
           </Box>
-          <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
-            <CanBrowseIconHover />
+          <Box className={'canBrowseHover'}>
+            <ChevronRightRoundedIcon className={classes.rightArrowSelected} />
           </Box>
         </Box>
       </Box>
@@ -65,7 +75,7 @@ const TabLabelCanBrowse = ({
   ) : (
     <Box className={classes.labelContainerBox}>
       <Box className={classes.labelsContainer}>
-        {SVG && <Box>{SVG}</Box>}
+        {icon && <Box>{icon}</Box>}
         <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
           {label}
         </Typography>
@@ -74,14 +84,13 @@ const TabLabelCanBrowse = ({
         )}
       </Box>
       <Box>
-        <Box className={`canBrowseNormal`}>
-          <CanBrowseIcon />
+        <Box className={'canBrowseNormal'}>
+          <ChevronRightRoundedIcon className={classes.rightArrow} />
         </Box>
-        <Box className={`canBrowseHover`} sx={{ display: 'none' }}>
-          <CanBrowseIconHover />
+        <Box className={'canBrowseHover'}>
+          <ChevronRightRoundedIcon className={classes.rightArrowSelected} />
         </Box>
       </Box>
     </Box>
   );
-};
-export default TabLabelCanBrowse;
+}

@@ -16,7 +16,6 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
 import OngoingDataExploration from './Components/OngoingDataExploration';
@@ -25,7 +24,7 @@ import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
 
-const WranglerHome = () => {
+export default function WranglerHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
@@ -51,14 +50,12 @@ const WranglerHome = () => {
           <Box className={classes.viewMore}>View More</Box>
         </Box>
         <OngoingDataExploration />
-        <If condition={loading}>
+        {loading && (
           <Box className={classes.loadingContainer}>
             <LoadingSVG />
           </Box>
-        </If>
+        )}
       </Box>
     </Box>
   );
-};
-
-export default WranglerHome;
+}

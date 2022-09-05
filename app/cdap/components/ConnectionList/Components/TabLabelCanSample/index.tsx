@@ -17,15 +17,16 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { WrangelIcon } from 'components/ConnectionList/iconStore';
+import { WrangelIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import * as React from 'react';
+import { createRef, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { useStyles } from './styles';
+import useStyles from './styles';
 
-const TabLabelCanSample = ({
+export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,
@@ -37,17 +38,17 @@ const TabLabelCanSample = ({
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+}) {
   const classes = useStyles();
 
-  const myLabelRef: any = React.createRef();
-  const [refValue, setRefValue] = React.useState(false);
-  const [workspaceId, setWorkspaceId] = React.useState(null);
-  const [currentConnection, setCurrentConnection] = React.useState(initialConnectionId);
+  const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
+  const [refValue, setRefValue] = useState(false);
+  const [workspaceId, setWorkspaceId] = useState(null);
+  const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
 
-  const { onWorkspaceCreate } = React.useContext(ConnectionsContext);
+  const { onWorkspaceCreate } = useContext(ConnectionsContext);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
 
@@ -85,7 +86,7 @@ const TabLabelCanSample = ({
         }
       })
       .catch((err) => {
-        toggleLoader(false, true);
+        toggleLoader(false);
         setIsErrorOnNoWorkSpace(true);
       });
   };
@@ -95,30 +96,28 @@ const TabLabelCanSample = ({
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <div onClick={() => onExplore(entity)}>
-          <Box className="wranglingHover">
-            <WrangelIcon />
-            <Typography color="primary">Wrangle</Typography>
-          </Box>
-        </div>
+        <button className="wranglingHover" onClick={() => onExplore(entity)}>
+          <WrangelIcon />
+          <Typography variant="body2" className={classes.wrangleButton}>
+            Wrangle
+          </Typography>
+        </button>
       </Box>
     </CustomTooltip>
   ) : (
     <Box className={classes.labelsContainerCanSample}>
-      <Typography variant="body1" className={classes.labelStylesCanSample} ref={myLabelRef}>
+      <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <div onClick={() => onExplore(entity)}>
-        <Box className="wranglingHover">
-          <WrangelIcon />
-          <Typography color="primary">Wrangle</Typography>
-        </Box>
-      </div>
+      <button className="wranglingHover" onClick={() => onExplore(entity)}>
+        <WrangelIcon />
+        <Typography variant="body2" className={classes.wrangleButton}>
+          Wrangle
+        </Typography>
+      </button>
     </Box>
   );
-};
-
-export default TabLabelCanSample;
+}
