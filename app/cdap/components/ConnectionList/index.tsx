@@ -25,7 +25,6 @@ import { useLocation, useParams } from 'react-router';
 import SubHeader from './Components/SubHeader';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import { useStyles } from './styles';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import { grey } from '@material-ui/core/colors';
@@ -253,11 +252,11 @@ export default function ConnectionList() {
         })}
       </SelectDatasetWrapper>
 
-      <If condition={loading}>
+      {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
-      </If>
+      )}
       {isErrorOnNoWorkspace && (
         <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
       )}
