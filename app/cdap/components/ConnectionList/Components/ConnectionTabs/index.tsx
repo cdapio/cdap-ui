@@ -126,7 +126,7 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
+                className={connectorType.canBrowse ? 'eachConnectionStyle' : classes.wrangleTab}
               />
             ))}
           </Tabs>
