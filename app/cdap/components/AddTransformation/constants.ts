@@ -8,3 +8,4 @@ export const SELECT_ACTION_TO_TAKE = 'Select action to take';
 export const APPLY_STEP = 'Apply Step';
 export const COLUMNS = 'Columns';
 export const DATA_QUALITY = 'Data Quality';
+export const DONE_STEP = 'Done';

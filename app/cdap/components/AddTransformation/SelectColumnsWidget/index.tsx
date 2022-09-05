@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import React from 'react';
 import {
   QUICK_SELECT_INFO,
@@ -8,6 +8,7 @@ import {
 import { useStyles } from '../styles';
 
 const SelectColumnsWidget = (props) => {
+  const { selectedColumns } = props;
   const classes = useStyles();
 
   return (
@@ -16,14 +17,24 @@ const SelectColumnsWidget = (props) => {
         {SELECT_COLUMNS_TO_APPLY_THIS_FUNCTION}
       </div>
       <div className={classes.quickSelectTextStyles}>{QUICK_SELECT_INFO}</div>
-      <Button
-        variant="outlined"
-        color="primary"
-        className={classes.selectButtonStyles}
-        onClick={props.handleSelectColumn}
-      >
-        {SELECT_COLUMNS}
-      </Button>
+      {selectedColumns.length ? (
+        selectedColumns.map((item, index) => {
+          return (
+            <Typography variant="body1" className={classes.quickSelectTextStyles}>
+              {index + 1}.&nbsp; {item.label}
+            </Typography>
+          );
+        })
+      ) : (
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.selectButtonStyles}
+          onClick={props.handleSelectColumn}
+        >
+          {SELECT_COLUMNS}
+        </Button>
+      )}
     </section>
   );
 };

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, Button } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
@@ -29,6 +29,7 @@ import { GridTextCell } from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import ParsingDrawer from 'components/ParsingDrawer';
+import AddTransformation from 'components/AddTransformation';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -39,6 +40,7 @@ const GridTable = () => {
   const [rowsDataList, setRowsDataList] = React.useState([]);
   const [gridData, setGridData] = useState<any>({});
   const [missingDataList, setMissingDataList] = useState([]);
+  const [openTranformationPanel, setOpenTransformationPanel] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -224,7 +226,9 @@ const GridTable = () => {
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
+      <Button onClick={() => setOpenTransformationPanel(true)}>Open Panel</Button>
       {connectorType === 'File' && <ParsingDrawer />}
+      {openTranformationPanel && <AddTransformation columnData={headersNamesList} />}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>

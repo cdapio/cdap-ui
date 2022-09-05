@@ -6,6 +6,7 @@ import {
   ADD_TRANSFORMATION_STEP,
   APPLY_STEP,
   SELECT_COLUMNS_TO_APPLY_THIS_FUNCTION,
+  DONE_STEP,
 } from './constants';
 import FunctionNameWidget from './FunctionNameWidget';
 import SelectColumnsList from './SelectColumnsList';
@@ -14,7 +15,7 @@ import SelectedColumnCountWidget from './SelectedColumnCountWidget';
 import { useStyles } from './styles';
 
 const AddTransformation = (props) => {
-  const { functionName } = props;
+  const { functionName, columnData } = props;
 
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [columnsPopup, setColumnsPopup] = useState(false);
@@ -50,6 +51,7 @@ const AddTransformation = (props) => {
             <SelectColumnsWidget
               setSelectedColumns={setSelectedColumns}
               handleSelectColumn={handleSelectColumn}
+              selectedColumns={selectedColumns}
             />
             <ActionsWidget functionName={functionName} />
           </div>
@@ -70,7 +72,20 @@ const AddTransformation = (props) => {
         showBackIcon={true}
         closeClickHandler={closeSelectColumnsPopup}
       >
-        <SelectColumnsList />
+        <SelectColumnsList
+          columnData={columnData}
+          selectedColumnsCount={selectedColumns.length}
+          setSelectedColumns={setSelectedColumns}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          classes={{ containedPrimary: classes.buttonStyles }}
+          className={classes.applyStepButtonStyles}
+          onClick={closeSelectColumnsPopup}
+        >
+          {DONE_STEP}
+        </Button>
       </DrawerWidget>
     </Fragment>
   );

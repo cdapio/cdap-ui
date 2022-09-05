@@ -7,68 +7,85 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Button,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
 import { useStyles } from '../styles';
 
-const columnsData = [
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-  {
-    label: 'Customer name',
-    domainType: 'ABC',
-    dataType: 'String',
-    dataQuality: '65',
-    isSelected: false,
-  },
-];
+// const columnsData = [
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+//   {
+//     label: 'Customer name',
+//     domainType: 'ABC',
+//     dataType: 'String',
+//     dataQuality: '65',
+//     isSelected: false,
+//   },
+// ];
 
 const SelectColumnsList = (props) => {
-  const { selectedColumnsCount } = props;
-  const [columns, setColumns] = useState(columnsData);
-  const [selectedColumns, setSelectedColumns] = useState([]);
+  const { selectedColumnsCount, columnData, setSelectedColumns } = props;
+  const [columns, setColumns] = useState(columnData);
+  const [selectedColumns, setSelectedColumn] = useState([]);
   const classes = useStyles();
 
   const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setSelectedColumns(columns);
+      setSelectedColumn(columns);
       return;
     }
     setSelectedColumns([]);
+    setSelectedColumn([]);
+  };
+
+  const onSelect = (event, label, column) => {
+    const selectColumnArray = [...selectedColumns];
+    const findIndexOfCurrent = selectedColumns.findIndex((el) => el?.label == label);
+    if (findIndexOfCurrent > -1) {
+      selectColumnArray.splice(findIndexOfCurrent, 1);
+      setSelectedColumns(selectColumnArray);
+      setSelectedColumn(selectColumnArray);
+    } else {
+      selectColumnArray.push(column);
+      setSelectedColumns(selectColumnArray);
+      setSelectedColumn(selectColumnArray);
+    }
   };
 
   return (
@@ -80,7 +97,7 @@ const SelectColumnsList = (props) => {
               ? selectedColumnsCount
               : `0${selectedColumnsCount}`
             : 'No '}{' '}
-          {COLUMNS_SELECTED}
+          &nbsp;{COLUMNS_SELECTED}
         </div>
         <img src="/cdap_assets/img/search.svg" alt="search" />
       </div>
@@ -116,14 +133,7 @@ const SelectColumnsList = (props) => {
                 <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
                   <Checkbox
                     color="primary"
-                    indeterminate={
-                      selectedColumns.length > 0 && selectedColumns.length < columns.length
-                    }
-                    checked={columns.length > 0 && selectedColumns.length === columns.length}
-                    onChange={onSelectAllClick}
-                    inputProps={{
-                      'aria-label': 'select all columns',
-                    }}
+                    onChange={(e) => onSelect(e, eachColumn.label, eachColumn)}
                   />
                 </TableCell>
                 <TableCell
@@ -133,7 +143,8 @@ const SelectColumnsList = (props) => {
                 >
                   <span className={classes.recipeStepsActionTypeStyles}>{eachColumn.label}</span>
                   &nbsp;
-                  {eachColumn.label}
+                  <br />
+                  {eachColumn.type}
                 </TableCell>
                 <TableCell
                   className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
