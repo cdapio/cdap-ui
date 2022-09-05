@@ -9,3 +9,6 @@ export const APPLY_STEP = 'Apply Step';
 export const COLUMNS = 'Columns';
 export const DATA_QUALITY = 'Data Quality';
 export const DONE_STEP = 'Done';
+export const REMOVE_ROWS = 'Remove rows';
+export const REPLACE_ROWS = 'Replace rows';
+export const REPLACE_WITH = 'Replace with';

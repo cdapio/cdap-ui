@@ -7,56 +7,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Button,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
 import { useStyles } from '../styles';
-
-// const columnsData = [
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-//   {
-//     label: 'Customer name',
-//     domainType: 'ABC',
-//     dataType: 'String',
-//     dataQuality: '65',
-//     isSelected: false,
-//   },
-// ];
 
 const SelectColumnsList = (props) => {
   const { selectedColumnsCount, columnData, setSelectedColumns } = props;

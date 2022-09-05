@@ -152,5 +152,24 @@ export const useStyles = makeStyles(() => {
       cursor: 'pointer',
       //   padding: '15px 10px',
     },
+    radioStyles: {
+      '& span:last-child': {
+        fontFamily: 'Noto Sans',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '14px',
+        color: '#5F6368',
+      },
+    },
+    replaceWithInput: {
+      width: '90%',
+    },
+    replaceWithText: {
+      fontFamily: 'Noto Sans',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '12px',
+      color: '#5F6368',
+    },
   };
 });
