@@ -30,7 +30,10 @@ const FileDnD = ({ file, onDropHandler }) => {
   const handleRemoveFile = () => {
     onDropHandler(null);
   };
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: '.csv, .json, .CSV, .JSON',
+  });
 
   return (
     <Box>
@@ -57,7 +60,7 @@ const FileDnD = ({ file, onDropHandler }) => {
       ) : (
         <Box>
           <Box className={classes.FlexFile}>
-            <Typography className={classes.fileNameText}>{file[0].name}</Typography>
+            <Typography className={classes.fileNameText}>{file.name}</Typography>
             <Box onClick={handleRemoveFile}>{deleteSVG()}</Box>
           </Box>
           <Divider />

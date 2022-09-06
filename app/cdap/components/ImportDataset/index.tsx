@@ -14,18 +14,32 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Box from '@material-ui/core/Box';
 import { Button } from '@material-ui/core';
 import { useStyles } from './styles';
 import DrawerWidget from 'components/DrawerWidget';
 import { IMPORT_DATASET, WRANGLE } from './constants';
 import DatasetBody from './Components/ImportDatasetBody';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
+import UploadFile from 'services/upload-file';
+import isNil from 'lodash/isNil';
+import Cookies from 'universal-cookie';
+import { Redirect } from 'react-router';
+import PositionedSnackbar from 'components/SnackbarComponent';
+
+const FILE_SIZE_LIMIT = 10 * 1024 * 1024; // 10 MB
+const cookie = new Cookies();
 
 const ImportDataSet = (props) => {
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [file, setFile] = useState(null);
   const classes = useStyles();
+  const [recordDelimiter, setRecordDelimiter] = useState('\\n');
+  const [workspaceId, setWorkspaceId] = useState(null);
+  const [error, setError] = useState(null);
+  const { onWorkspaceCreate } = useContext(ConnectionsContext);
 
   useEffect(() => {
     setDrawerStatus(true);
@@ -36,10 +50,69 @@ const ImportDataSet = (props) => {
     props.handleClosePanel();
   };
 
-  const onDropHandler = (acceptedFile) => {
-    setFile(acceptedFile);
+  const onDropHandler = (e) => {
+    console.log('e', e);
+    if (e) {
+      const isJSONOrXML = e[0].type === 'application/json' || e[0].type === 'text/xml';
+      if (e[0].size > FILE_SIZE_LIMIT) {
+        setError('File size must be less than 10MB');
+      } else {
+        setFile(e[0]);
+        setRecordDelimiter(isJSONOrXML ? '' : '\\n');
+      }
+    } else {
+      setFile(null);
+    }
   };
 
+  const uploadWrangle = () => {
+    if (!file) {
+      return;
+    }
+
+    const delimiter = recordDelimiter;
+    const namespace = getCurrentNamespace();
+    const fileName = file.name;
+
+    const url = `/namespaces/system/apps/dataprep/services/service/methods/v2/contexts/${namespace}/workspaces/upload`;
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/data-prep',
+      'X-Archive-Name': fileName,
+      file: fileName,
+    };
+
+    if (window.CDAP_CONFIG.securityEnabled) {
+      const token = cookie.get('CDAP_Auth_Token');
+      if (!isNil(token)) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
+    if (delimiter) {
+      headers.recorddelimiter = delimiter;
+    }
+
+    UploadFile({ url, fileContents: file, headers }).subscribe(
+      (res) => {
+        try {
+          const workspace = JSON.parse(res);
+          if (onWorkspaceCreate) {
+            return onWorkspaceCreate(res);
+          }
+          setWorkspaceId(workspace);
+        } catch (e) {
+          setError(e);
+        }
+      },
+      (err) => {
+        setError(err.message);
+      }
+    );
+  };
+  if (workspaceId) {
+    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
+  }
   const componentToRender = (
     <DrawerWidget
       headingText={IMPORT_DATASET}
@@ -53,12 +126,13 @@ const ImportDataSet = (props) => {
         </Box>
         {file && (
           <Box className={classes.buttonWrapper}>
-            <Button variant="contained" className={classes.wrangleButton}>
+            <Button variant="contained" className={classes.wrangleButton} onClick={uploadWrangle}>
               {WRANGLE}
             </Button>
           </Box>
         )}
       </Box>
+      {error && <PositionedSnackbar handleCloseError={() => setError(null)} />}
     </DrawerWidget>
   );
 

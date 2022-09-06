@@ -218,7 +218,7 @@ export default function GridTable() {
       Array.isArray(rawData.values) &&
       rawData.values.map((eachRow) => {
         const { body, ...rest } = eachRow;
-        return rest;
+        return eachRow;
       });
 
     setRowsDataList(rowData);
