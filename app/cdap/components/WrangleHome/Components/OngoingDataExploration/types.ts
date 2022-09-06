@@ -55,17 +55,17 @@ export interface IPlugin {
 export interface IPluginObject {
   name: string;
   type: string;
-  properties: {};
+  properties: Record<string, unknown>;
   artifact: IArtifact;
 }
 
 export interface ISchema {
   type: string;
   name: string;
-  fields: [
-    {
-      name: string;
-      type: string;
-    }
-  ];
+  fields: IFields[];
+}
+
+export interface IFields {
+  name: string;
+  type: string;
 }
