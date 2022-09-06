@@ -15,20 +15,20 @@
  */
 
 import { Box, styled, Typography } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { GCSIcon } from 'components/ConnectionList/icons';
-import * as React from 'react';
-import { createRef, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
-import SubHeader from './Components/SubHeader';
-import ConnectionsTabs from './Components/ConnectionTabs';
-import { useStyles } from './styles';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
-import { grey } from '@material-ui/core/colors';
+import * as React from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
+import { useLocation, useParams } from 'react-router';
+import ConnectionsTabs from './Components/ConnectionTabs';
 import CustomTooltip from './Components/CustomTooltip';
+import SubHeader from './Components/SubHeader';
+import { useStyles } from './styles';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -50,6 +50,7 @@ export default function ConnectionList() {
   const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 
+  const refs = useRef([]);
   const classes = useStyles();
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
@@ -180,8 +181,11 @@ export default function ConnectionList() {
 
   useEffect(() => {
     getConnectionsTabData();
-    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
+
+  useEffect(() => {
+    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
+  }, [dataForTabs]);
 
   useEffect(() => {
     setDataForTabs((prev) => {
@@ -202,6 +206,7 @@ export default function ConnectionList() {
 
   let headerContent;
 
+  console.log(refValue);
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
@@ -213,21 +218,35 @@ export default function ConnectionList() {
           if (index === 0) {
             headerContent = headerForLevelZero();
           } else {
-            headerContent = refValue ? (
-              <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+            headerContent =
+              refs.current[index]?.current?.offsetWidth <
+              refs.current[index]?.current?.scrollWidth ? (
+                <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+                  <Box className={classes.beforeSearchIconClickDisplay}>
+                    <Typography
+                      variant="body2"
+                      className={classes.headerLabel}
+                      ref={(element) => {
+                        refs.current[index] = element;
+                      }}
+                    >
+                      {dataForTabs[index - 1].selectedTab}
+                    </Typography>
+                  </Box>
+                </CustomTooltip>
+              ) : (
                 <Box className={classes.beforeSearchIconClickDisplay}>
-                  <Typography variant="body2" className={classes.headerLabel} ref={myLabelRef}>
+                  <Typography
+                    variant="body2"
+                    className={classes.headerLabel}
+                    ref={(element) => {
+                      refs.current[index] = element;
+                    }}
+                  >
                     {dataForTabs[index - 1].selectedTab}
                   </Typography>
                 </Box>
-              </CustomTooltip>
-            ) : (
-              <Box className={classes.beforeSearchIconClickDisplay}>
-                <Typography variant="body2" className={classes.headerLabel} ref={myLabelRef}>
-                  {dataForTabs[index - 1].selectedTab}
-                </Typography>
-              </Box>
-            );
+              );
           }
           return (
             <Box className={classes.tabsContainerWithHeader}>
