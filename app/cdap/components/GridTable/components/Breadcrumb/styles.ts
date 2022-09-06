@@ -26,7 +26,7 @@ export const useStyles = makeStyles({
     marginRight: '30px',
     marginLeft: '34px',
   },
-  breadCrumbLabel: {
+  breadcrumbLabel: {
     color: blue[500],
     fontSize: '14px',
     fontWeight: 400,
