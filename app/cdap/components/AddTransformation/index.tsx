@@ -24,6 +24,7 @@ const AddTransformation = (props) => {
   const [columnsPopup, setColumnsPopup] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([]);
   const [selectedAction, setSelectedAction] = useState('');
+  const [replaceValue, setReplaceValue] = useState('');
   const { dataprep } = DataPrepStore.getState();
   console.log('state', dataprep);
 
@@ -39,17 +40,23 @@ const AddTransformation = (props) => {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    const directivesArray = selectedColumns.map(
-      ({ label }) => `filter-rows-on condition-true ${label} == null || ${label} =~ \"^\\W*$\"`
-    );
+    const directivesArray =
+      selectedAction == 'remove'
+        ? selectedColumns.map(
+            ({ label }) =>
+              `filter-rows-on condition-true ${label} == null || ${label} =~ \"^\\W*$\"`
+          )
+        : selectedColumns.map(({ label }) => `fill-null-or-empty :${label} '${replaceValue}'`);
     const apiPayload = {
-      directives: dataprep.directives.concat(directivesArray),
+      directives: dataprep.directives.length
+        ? dataprep.directives.concat(directivesArray)
+        : directivesArray,
       limit: 1000,
       insights: dataprep.insights,
     };
 
     MyDataPrepApi.execute(paramsData, apiPayload).subscribe((response) => {
-      console.log('response', response);
+      props.callBack(response);
     });
   };
 
@@ -83,6 +90,8 @@ const AddTransformation = (props) => {
               functionName={functionName}
               setSelectedAction={setSelectedAction}
               selectedAction={selectedAction}
+              setReplaceValue={setReplaceValue}
+              replaceValue={replaceValue}
             />
           </div>
           <Button

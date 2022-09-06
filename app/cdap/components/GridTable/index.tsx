@@ -228,7 +228,15 @@ const GridTable = () => {
       <BreadCrumb datasetName={wid} />
       <Button onClick={() => setOpenTransformationPanel(true)}>Open Panel</Button>
       {connectorType === 'File' && <ParsingDrawer />}
-      {openTranformationPanel && <AddTransformation columnData={headersNamesList} />}
+      {openTranformationPanel && (
+        <AddTransformation
+          columnData={headersNamesList}
+          callBack={(response) => {
+            setGridData(response);
+            setOpenTransformationPanel(false);
+          }}
+        />
+      )}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>

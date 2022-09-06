@@ -29,17 +29,8 @@ const SelectColumnsList = (props) => {
   };
 
   const onSelect = (event, label, column) => {
-    const selectColumnArray = [...selectedColumns];
-    const findIndexOfCurrent = selectedColumns.findIndex((el) => el?.label == label);
-    if (findIndexOfCurrent > -1) {
-      selectColumnArray.splice(findIndexOfCurrent, 1);
-      setSelectedColumns(selectColumnArray);
-      setSelectedColumn(selectColumnArray);
-    } else {
-      selectColumnArray.push(column);
-      setSelectedColumns(selectColumnArray);
-      setSelectedColumn(selectColumnArray);
-    }
+    setSelectedColumns([column]);
+    setSelectedColumn([column]);
   };
 
   return (
@@ -88,6 +79,11 @@ const SelectColumnsList = (props) => {
                   <Checkbox
                     color="primary"
                     onChange={(e) => onSelect(e, eachColumn.label, eachColumn)}
+                    checked={
+                      selectedColumns.filter((el) => el.label == eachColumn.label).length
+                        ? true
+                        : false
+                    }
                   />
                 </TableCell>
                 <TableCell

@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 
 const ActionsWidget = (props) => {
-  const { selectedAction, setSelectedAction } = props;
+  const { selectedAction, setSelectedAction, setReplaceValue, replaceValue } = props;
   const classes = useStyles();
 
   return (
@@ -48,7 +48,11 @@ const ActionsWidget = (props) => {
       {selectedAction == 'replace' && (
         <FormControl className={classes.replaceWithInput}>
           <FormLabel className={classes.replaceWithText}>{REPLACE_WITH}</FormLabel>
-          <TextField variant="outlined" />
+          <TextField
+            variant="outlined"
+            value={replaceValue}
+            onChange={(e) => setReplaceValue(e.target.value)}
+          />
         </FormControl>
       )}
     </section>
