@@ -23,13 +23,49 @@ export interface IResponseData {
 export interface IValues {
   createdTimeMillis: number;
   directives: [];
-  insights: {};
-  sampleSpec: {
-    connectionName: string;
-    path: string;
-    relatedPlugins: [];
-  };
+  insights: IInsights;
+  sampleSpec: ISampleSpec;
   updatedTimeMillis: number;
   workspaceId: string;
   workspaceName: string;
+}
+
+export interface IInsights {
+  name: string;
+  path: string;
+  visualization: {};
+  workspaceName: string;
+}
+export interface ISampleSpec {
+  connectionName: string;
+  path: string;
+  relatedPlugins: IPlugin;
+}
+interface IArtifact {
+  name: string;
+  version: string;
+  scope: string;
+}
+
+export interface IPlugin {
+  plugin: IPluginObject;
+  schema: ISchema;
+}
+
+export interface IPluginObject {
+  name: string;
+  type: string;
+  properties: {};
+  artifact: IArtifact;
+}
+
+export interface ISchema {
+  type: string;
+  name: string;
+  fields: [
+    {
+      name: string;
+      type: string;
+    }
+  ];
 }
