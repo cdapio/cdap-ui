@@ -30,6 +30,7 @@ import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import ParsingDrawer from 'components/ParsingDrawer';
 import AddTransformation from 'components/AddTransformation';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -41,6 +42,7 @@ const GridTable = () => {
   const [gridData, setGridData] = useState<any>({});
   const [missingDataList, setMissingDataList] = useState([]);
   const [openTranformationPanel, setOpenTransformationPanel] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -230,6 +232,7 @@ const GridTable = () => {
       {connectorType === 'File' && <ParsingDrawer />}
       {openTranformationPanel && (
         <AddTransformation
+          setLoading={setLoading}
           columnData={headersNamesList}
           callBack={(response) => {
             setGridData(response);
@@ -279,6 +282,11 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
+      {loading && (
+        <div className={classes.loadingContainer}>
+          <LoadingSVG />
+        </div>
+      )}
     </Box>
   );
 };

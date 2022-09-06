@@ -22,4 +22,16 @@ export const useStyles = makeStyles({
       fontFamily: "'Noto Sans', sans-serif",
     },
   },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 2000,
+  },
 });

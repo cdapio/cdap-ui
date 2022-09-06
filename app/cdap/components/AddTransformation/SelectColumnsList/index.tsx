@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Radio,
 } from '@material-ui/core';
 import React, { useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
@@ -17,16 +18,6 @@ const SelectColumnsList = (props) => {
   const [columns, setColumns] = useState(columnData);
   const [selectedColumns, setSelectedColumn] = useState([]);
   const classes = useStyles();
-
-  const onSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setSelectedColumns(columns);
-      setSelectedColumn(columns);
-      return;
-    }
-    setSelectedColumns([]);
-    setSelectedColumn([]);
-  };
 
   const onSelect = (event, label, column) => {
     setSelectedColumns([column]);
@@ -50,19 +41,7 @@ const SelectColumnsList = (props) => {
         <Table aria-label="recipe steps table">
           <TableHead>
             <TableRow className={classes.recipeStepsTableRowStyles}>
-              <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-                <Checkbox
-                  color="primary"
-                  indeterminate={
-                    selectedColumns.length > 0 && selectedColumns.length < columns.length
-                  }
-                  checked={columns.length > 0 && selectedColumns.length === columns.length}
-                  onChange={onSelectAllClick}
-                  inputProps={{
-                    'aria-label': 'select all columns',
-                  }}
-                />
-              </TableCell>
+              <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}></TableCell>
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
                 {COLUMNS}
               </TableCell>
@@ -76,7 +55,7 @@ const SelectColumnsList = (props) => {
             {columns.map((eachColumn, index) => (
               <TableRow className={classes.recipeStepsTableBodyRowStyles} key={index}>
                 <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
-                  <Checkbox
+                  <Radio
                     color="primary"
                     onChange={(e) => onSelect(e, eachColumn.label, eachColumn)}
                     checked={

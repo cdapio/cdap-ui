@@ -18,7 +18,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { useParams } from 'react-router';
 
 const AddTransformation = (props) => {
-  const { functionName, columnData } = props;
+  const { functionName, columnData, setLoading } = props;
   const params = useParams() as any;
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [columnsPopup, setColumnsPopup] = useState(false);
@@ -35,6 +35,7 @@ const AddTransformation = (props) => {
   };
 
   const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setLoading(true);
     // ------------- For NULL Function
     const paramsData = {
       context: params.namespace,
@@ -55,9 +56,14 @@ const AddTransformation = (props) => {
       insights: dataprep.insights,
     };
 
-    MyDataPrepApi.execute(paramsData, apiPayload).subscribe((response) => {
-      props.callBack(response);
-    });
+    MyDataPrepApi.execute(paramsData, apiPayload)
+      .subscribe((response) => {
+        props.callBack(response);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   const handleSelectColumn = () => {
