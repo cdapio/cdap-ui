@@ -30,7 +30,7 @@ import GridTextCell from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
 
 export default function GridTable() {
   const { wid } = useParams() as any;
@@ -38,7 +38,7 @@ export default function GridTable() {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [headersNamesList, setHeadersNamesList] = useState([]);
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
@@ -118,7 +118,7 @@ export default function GridTable() {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -175,7 +175,7 @@ export default function GridTable() {
   };
 
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
-  const createMissingData = (statistics: IDataOfStatistics) => {
+  const createMissingData = (statistics: IRecords) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
