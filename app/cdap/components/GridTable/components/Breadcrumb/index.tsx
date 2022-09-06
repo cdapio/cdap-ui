@@ -27,10 +27,12 @@ export default function BreadCrumb({ datasetName }) {
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
+        <Link className={`${classes.breadCrumbLabel} ${classes.home}`}  
+         to={`/ns/${getCurrentNamespace()}/home`}>
           Home
         </Link>
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}>
+        <Link className={`${classes.breadCrumbLabel} ${classes.dataset}`}
+         to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}>
           Select Dataset
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
