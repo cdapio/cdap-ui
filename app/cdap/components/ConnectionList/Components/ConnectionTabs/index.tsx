@@ -69,6 +69,8 @@ export default function ConnectionsTabs({
     setConnectionId(connectionId);
   }, []);
 
+  console.log(tabsData, 'tabs Data');
+
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
@@ -126,11 +128,7 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={
-                  !connectorType.canBrowse && connectorType.canSample
-                    ? classes.wrangleTab
-                    : 'eachConnectionStyle'
-                }
+                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
           </Tabs>
