@@ -44,6 +44,7 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         gap: '10px',
+        background: 'none',
       },
     },
   },
