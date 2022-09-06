@@ -47,8 +47,6 @@ const SelectDatasetWrapper = styled(Box)({
 
 export default function ConnectionList() {
   const { connectorType } = useParams() as Record<string, string>;
-  const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
-  const [refValue, setRefValue] = useState(false);
 
   const refs = useRef([]);
   const classes = useStyles();
@@ -184,10 +182,6 @@ export default function ConnectionList() {
   }, []);
 
   useEffect(() => {
-    setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
-  }, [dataForTabs]);
-
-  useEffect(() => {
     setDataForTabs((prev) => {
       const temp = prev;
       temp[0].selectedTab = connectorType;
@@ -206,7 +200,6 @@ export default function ConnectionList() {
 
   let headerContent;
 
-  console.log(refValue);
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
@@ -219,8 +212,7 @@ export default function ConnectionList() {
             headerContent = headerForLevelZero();
           } else {
             headerContent =
-              refs.current[index]?.current?.offsetWidth <
-              refs.current[index]?.current?.scrollWidth ? (
+              refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
                 <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
                   <Box className={classes.beforeSearchIconClickDisplay}>
                     <Typography
