@@ -14,12 +14,24 @@
  * the License.
  */
 
-import React from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 
 export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
+  const connectionNameRef = createRef();
+  const datasetNameRef = createRef();
+  const [connectionRefValue, setconnectionRefValue] = useState(false);
+  const [datasetNameRefValue, setdatasetNameRef] = useState(false);
+
+  useEffect(() => {
+    setconnectionRefValue(
+      connectionNameRef?.current?.offsetWidth < connectionNameRef?.current?.scrollWidth
+    );
+    setdatasetNameRef(datasetNameRef?.current?.offsetWidth < datasetNameRef?.current?.scrollWidth);
+  }, []);
+
   return (
     <Grid container className={classes.gridContainer}>
       {item.map((eachItem, index) => {
@@ -28,13 +40,18 @@ export default function OngoingDataExplorationCard({ item }) {
             return (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.iconStyle}> {eachItem.icon}</Box>
-                <Typography variant="body1">{eachItem.label}</Typography>
+                <Typography variant="body1">
+                  {eachItem.label} ref={connectionNameRef}
+                </Typography>
               </Grid>
             );
           case 'text':
             return (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
-                <Typography variant="body1"> {eachItem.label}</Typography>
+                <Typography variant="body1">
+                  {' '}
+                  {eachItem.label} ref={datasetNameRef}
+                </Typography>
               </Grid>
             );
           case 'percentageWithText': {
