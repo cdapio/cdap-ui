@@ -51,7 +51,6 @@ const ImportDataSet = (props) => {
   };
 
   const onDropHandler = (e) => {
-    console.log('e', e);
     if (e) {
       const isJSONOrXML = e[0].type === 'application/json' || e[0].type === 'text/xml';
       if (e[0].size > FILE_SIZE_LIMIT) {
