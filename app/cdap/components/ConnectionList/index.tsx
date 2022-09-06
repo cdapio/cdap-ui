@@ -28,6 +28,7 @@ import { useStyles } from './styles';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import { grey } from '@material-ui/core/colors';
+import ImportDatasetPanel from 'components/ImportDataset';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -53,6 +54,7 @@ export default function ConnectionList() {
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
+  const [openImportDataPanel, setOpenImportDataPanel] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
@@ -201,7 +203,7 @@ export default function ConnectionList() {
 
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
-      <SubHeader />
+      <SubHeader setOpenImportDataPanel={setOpenImportDataPanel} />
       <SelectDatasetWrapper>
         {dataForTabs.map((each, index) => {
           if (each.data.filter((el) => el.connectionId).length) {
@@ -242,6 +244,9 @@ export default function ConnectionList() {
       )}
       {isErrorOnNoWorkspace && (
         <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+      )}
+      {openImportDataPanel && (
+        <ImportDatasetPanel handleClosePanel={() => setOpenImportDataPanel(false)} />
       )}
     </Box>
   );

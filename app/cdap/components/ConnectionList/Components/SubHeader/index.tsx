@@ -24,7 +24,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 
-export default function SubHeader() {
+export default function SubHeader(props) {
+  const { setOpenImportDataPanel } = props;
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
@@ -42,7 +43,7 @@ export default function SubHeader() {
           <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
         </Box>
-        <Box className={classes.importData}>
+        <Box className={classes.importData} onClick={() => setOpenImportDataPanel(true)}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
         </Box>
