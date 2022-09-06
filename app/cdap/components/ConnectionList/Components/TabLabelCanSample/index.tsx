@@ -22,7 +22,7 @@ import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/a
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import { IRecords } from 'components/GridTable/types';
 import * as React from 'react';
-import { createRef, useContext, useEffect, useState } from 'react';
+import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
@@ -42,7 +42,7 @@ export default function TabLabelCanSample({
 }) {
   const classes = useStyles();
 
-  const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
+  const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
   const [workspaceId, setWorkspaceId] = useState(null);
   const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
