@@ -45,7 +45,7 @@ export default function OngoingDataExplorationCard({ item }) {
                   <Typography
                     variant="body2"
                     className={
-                      percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
+                      percent < 100 ? classes.percentageStyleRed : classes.percentageStyleGreen
                     }
                   >
                     {percent}
@@ -53,7 +53,7 @@ export default function OngoingDataExplorationCard({ item }) {
                   <Typography
                     variant="body2"
                     className={
-                      percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
+                      percent < 100 ? classes.percentageSymbolRed : classes.percentageSymbolGreen
                     }
                   >
                     {eachItem.percentageSymbol}
