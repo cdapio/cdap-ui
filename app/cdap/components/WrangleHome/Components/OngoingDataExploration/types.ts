@@ -17,17 +17,19 @@
 export interface IResponseData {
   count: number;
   message: string;
-  values: Array<{
-    createdTimeMillis: number;
-    directives: [];
-    insights: {};
-    sampleSpec: {
-      connectionName: string;
-      path: string;
-      relatedPlugins: [];
-    };
-    updatedTimeMillis: number;
-    workspaceId: string;
-    workspaceName: string;
-  }>;
+  values: IValues[];
+}
+
+export interface IValues {
+  createdTimeMillis: number;
+  directives: [];
+  insights: {};
+  sampleSpec: {
+    connectionName: string;
+    path: string;
+    relatedPlugins: [];
+  };
+  updatedTimeMillis: number;
+  workspaceId: string;
+  workspaceName: string;
 }
