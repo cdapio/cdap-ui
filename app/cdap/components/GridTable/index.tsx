@@ -52,6 +52,13 @@ export default function GridTable() {
   ]);
   const [columnSelected, setColumnSelected] = useState('');
 
+  const [connectorType, setConnectorType] = useState(null);
+
+  useEffect(() => {
+    const { dataprep } = DataPrepStore.getState();
+    setConnectorType(dataprep.connectorType);
+  }, []);
+
   const getWorkSpaceData = (params: IParams, workspaceId: string) => {
     let gridParams = {};
     setLoading(true);

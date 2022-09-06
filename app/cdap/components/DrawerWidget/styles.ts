@@ -6,7 +6,7 @@ export const useStyles = makeStyles(() => {
       top: '46px',
     },
     drawerContainerStyles: {
-      width: 460,
+      width: 500,
       height: '100%',
       padding: '5px 20px 5px 30px',
     },
@@ -21,6 +21,7 @@ export const useStyles = makeStyles(() => {
     headingStyles: {
       display: 'flex',
       flexDirection: 'column',
+      alignItems: 'flex-start',
     },
     pointerStyles: {
       cursor: 'pointer',
@@ -43,6 +44,15 @@ export const useStyles = makeStyles(() => {
       height: 28,
       backgroundColor: '#DADCE0',
       margin: '0 15px',
+    },
+    headerTextWithBackIconStyles: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    headerBackIconStyles: {
+      marginRight: '10px',
+      width: '10px',
+      height: '20px',
     },
   };
 });
