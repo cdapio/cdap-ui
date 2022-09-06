@@ -17,11 +17,12 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { WrangelIcon } from 'components/ConnectionList/icons';
+import { WrangleIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
+import { IRecords } from 'components/GridTable/types';
 import * as React from 'react';
-import { createRef, useContext, useEffect, useState } from 'react';
+import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
@@ -34,14 +35,14 @@ export default function TabLabelCanSample({
   setIsErrorOnNoWorkSpace,
 }: {
   label: string;
-  entity: any;
+  entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const classes = useStyles();
 
-  const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
+  const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
   const [workspaceId, setWorkspaceId] = useState(null);
   const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
@@ -100,7 +101,7 @@ export default function TabLabelCanSample({
           {label}
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <WrangelIcon />
+          <WrangleIcon />
           <Typography variant="body2" className={classes.wrangleButton}>
             Wrangle
           </Typography>
@@ -113,7 +114,7 @@ export default function TabLabelCanSample({
         {label}
       </Typography>
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
-        <WrangelIcon />
+        <WrangleIcon />
         <Typography variant="body2" className={classes.wrangleButton}>
           Wrangle
         </Typography>
