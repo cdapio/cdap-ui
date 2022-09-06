@@ -29,6 +29,7 @@ import { GridTextCell } from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import ParsingDrawer from 'components/ParsingDrawer';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const GridTable = () => {
   const { wid } = useParams() as any;
@@ -83,23 +84,28 @@ const GridTable = () => {
       const workspaceInfo = {
         properties: insights,
       };
-      MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
-        DataPrepStore.dispatch({
-          type: DataPrepActions.setWorkspace,
-          payload: {
-            data: response.values,
-            values: response.values,
-            headers: response.headers,
-            types: response.types,
-            directives,
-            workspaceId,
-            workspaceUri,
-            workspaceInfo,
-            insights,
-          },
+      MyDataPrepApi.execute(params, requestBody)
+        .subscribe((response) => {
+          DataPrepStore.dispatch({
+            type: DataPrepActions.setWorkspace,
+            payload: {
+              data: response.values,
+              values: response.values,
+              headers: response.headers,
+              types: response.types,
+              directives,
+              workspaceId,
+              workspaceUri,
+              workspaceInfo,
+              insights,
+            },
+          });
+          setGridData(response);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
         });
-        setGridData(response);
-      });
     });
   };
 
@@ -235,7 +241,10 @@ const GridTable = () => {
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
       {isFirstWrangle && connectorType === 'File' && (
-        <ParsingDrawer updateDataTranformation={(wid) => updateDataTranformation(wid)} />
+        <ParsingDrawer
+          updateDataTranformation={(wid) => updateDataTranformation(wid)}
+          setLoading={setLoading}
+        />
       )}
       <Table aria-label="simple table" className="test">
         <TableHead>
@@ -279,6 +288,11 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
+      {loading && (
+        <div className={classes.loadingContainer}>
+          <LoadingSVG />
+        </div>
+      )}
     </Box>
   );
 };

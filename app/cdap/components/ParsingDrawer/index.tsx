@@ -17,6 +17,7 @@ import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import Snackbar from 'components/SnackbarComponent/index';
 
 const ParsingDrawer = (props) => {
+  const { setLoading } = props;
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [formatValue, setFormatValue] = useState();
   const [encodingValue, setEncodingValue] = useState();
@@ -97,6 +98,7 @@ const ParsingDrawer = (props) => {
 
   const createWorkspaceInternal = async (entity, parseConfig = {}) => {
     try {
+      setLoading(true);
       const wid = await createWorkspace({
         entity,
         connection: dataprep.insights.name,
@@ -112,6 +114,7 @@ const ParsingDrawer = (props) => {
         open: true,
         message: 'Selected Transformation Cannot Be Applied',
       });
+      setLoading(false);
     }
   };
 
@@ -120,6 +123,7 @@ const ParsingDrawer = (props) => {
       await createWorkspaceInternal(connectionPayload, parseConfig);
     } catch (e) {
       console.log('error', e);
+      setLoading(false);
     }
   };
 
