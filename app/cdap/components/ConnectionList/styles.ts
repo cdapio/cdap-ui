@@ -83,7 +83,7 @@ export const useStyles = makeStyles({
     zIndex: 2000,
   },
   headerLabel: {
-    maxWidth: '250px',
+    maxWidth: '245px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
