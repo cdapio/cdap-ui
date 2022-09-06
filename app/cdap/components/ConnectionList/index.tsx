@@ -228,6 +228,7 @@ export default function ConnectionList() {
                 </CustomTooltip>
               ) : (
                 <Box className={classes.beforeSearchIconClickDisplay}>
+                  <Box className={classes.beforeSearchIconClickDisplay}></Box>
                   <Typography
                     variant="body2"
                     className={classes.headerLabel}
