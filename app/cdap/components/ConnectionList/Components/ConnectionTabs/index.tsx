@@ -69,10 +69,11 @@ export default function ConnectionsTabs({
     setConnectionId(connectionId);
   }, []);
 
-  console.log(tabsData, 'tabs Data');
-
   return (
-    <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
+    <Box
+      data-testid="connections-tabs-parent"
+      className={classes.connectionsTabsParent}
+    >
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -93,7 +94,9 @@ export default function ConnectionsTabs({
               <ConnectionTab
                 onClick={() => {
                   if (index > 1) {
-                    connectorType.canBrowse ? handleChange(connectorType, index) : null;
+                    connectorType.canBrowse
+                      ? handleChange(connectorType, index)
+                      : null;
                   } else {
                     handleChange(connectorType, index);
                   }
