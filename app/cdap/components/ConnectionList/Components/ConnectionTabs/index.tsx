@@ -69,6 +69,8 @@ export default function ConnectionsTabs({
     setConnectionId(connectionId);
   }, []);
 
+  console.log(tabsData, 'tabs Data');
+
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
@@ -127,8 +129,10 @@ export default function ConnectionsTabs({
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
                 className={
-                  !connectorType.canBrowse && connectorType.canSample
-                    ? classes.wrangleTab
+                  index > 1
+                    ? connectorType.canBrowse
+                      ? 'eachConnectionStyle'
+                      : classes.wrangleTab
                     : 'eachConnectionStyle'
                 }
               />
