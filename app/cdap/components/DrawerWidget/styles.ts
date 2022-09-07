@@ -6,7 +6,7 @@ export const useStyles = makeStyles(() => {
       top: '46px',
     },
     drawerContainerStyles: {
-      width: 500,
+      width: 520,
       height: '100%',
       padding: '5px 20px 5px 30px',
     },

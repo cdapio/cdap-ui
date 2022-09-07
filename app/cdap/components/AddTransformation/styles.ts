@@ -10,6 +10,7 @@ export const useStyles = makeStyles(() => {
     },
     addTransformationBodyWrapperStyles: {
       height: 'calc(100% - 40px)',
+      overflowY: 'auto',
     },
     columnsCountTextStyles: {
       fontFamily: 'Noto Sans',
@@ -170,6 +171,25 @@ export const useStyles = makeStyles(() => {
       fontWeight: 400,
       fontSize: '12px',
       color: '#5F6368',
+    },
+    searchFormControl: {
+      position: 'relative',
+    },
+    searchTextField: {},
+    searchInputAdornment: {
+      zIndex: 0,
+      cursor: 'pointer',
+      position: 'absolute',
+      right: 0,
+    },
+    isFocused: {
+      border: 'none',
+      borderBottom: '1px solid grey',
+      outline: 'none',
+    },
+    isBlurred: {
+      border: 'none',
+      borderBottom: '1px solid transparent',
     },
   };
 });

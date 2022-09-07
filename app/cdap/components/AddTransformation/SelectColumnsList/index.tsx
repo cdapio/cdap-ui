@@ -8,20 +8,49 @@ import {
   TableHead,
   TableRow,
   Radio,
+  FormControl,
+  InputAdornment,
+  TextField,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
 import { useStyles } from '../styles';
+import SearchIcon from '@material-ui/icons/Search';
+import classNames from 'classnames';
 
 const SelectColumnsList = (props) => {
   const { selectedColumnsCount, columnData, setSelectedColumns } = props;
   const [columns, setColumns] = useState(columnData);
   const [selectedColumns, setSelectedColumn] = useState([]);
+  const [focused, setFocused] = useState(false);
+  const [blurred, setBlurred] = useState(false);
   const classes = useStyles();
+  const ref = useRef(null);
 
   const onSelect = (event, label, column) => {
     setSelectedColumns([column]);
     setSelectedColumn([column]);
+  };
+
+  const handleSearch = (event) => {
+    if (event.target.value) {
+      const columnValue = columnData.filter((el) =>
+        el?.label.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      console.log('columnValue', columnValue);
+      if (columnValue.length) {
+        setColumns(columnValue);
+      } else {
+        setColumns([]);
+      }
+    } else {
+      setColumns(columnData);
+    }
+  };
+
+  const handleFocus = () => {
+    ref?.current.focus();
+    setFocused(true);
   };
 
   return (
@@ -35,7 +64,16 @@ const SelectColumnsList = (props) => {
             : 'No '}{' '}
           &nbsp;{COLUMNS_SELECTED}
         </div>
-        <img src="/cdap_assets/img/search.svg" alt="search" />
+        <div className={classes.searchFormControl}>
+          <input
+            className={focused ? classes.isFocused : classes.isBlurred}
+            onChange={handleSearch}
+            ref={ref}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+          />
+          <SearchIcon className={classes.searchInputAdornment} onClick={handleFocus} />
+        </div>
       </div>
       <TableContainer component={Box}>
         <Table aria-label="recipe steps table">
@@ -48,7 +86,6 @@ const SelectColumnsList = (props) => {
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
                 {DATA_QUALITY}
               </TableCell>
-              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
