@@ -99,4 +99,14 @@ export const useStyles = makeStyles({
   dataQualityText: {
     paddingTop: '11px',
   },
+  iconWithText: {
+    maxWidth: '171px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  textWithoutIcon: {
+    maxWidth: '166px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 });
