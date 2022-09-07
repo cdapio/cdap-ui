@@ -69,3 +69,12 @@ export interface IFields {
   name: string;
   type: string;
 }
+
+export interface IMassagedObject {
+  icon: JSX.Element;
+  label: string | number;
+  type: string;
+  percentageSymbol: string;
+  subText: string;
+  workspaceId: string;
+}
