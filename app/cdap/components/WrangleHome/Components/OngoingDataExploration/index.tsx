@@ -71,8 +71,8 @@ export default function OngoingDataExploration() {
           return forkJoin(workspaces);
         })
       )
-      .subscribe((response) => {
-        response.forEach((workspace, index) => {
+      .subscribe((responses) => {
+        responses.forEach((workspace, index) => {
           let dataQuality = 0;
           workspace.headers.forEach((element) => {
             const general = workspace.summary.statistics[element].general;
