@@ -20,6 +20,7 @@ import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
+import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import * as React from 'react';
@@ -76,11 +77,11 @@ export default function ConnectionList() {
 
     // Fetching all the connections list inside a connector
     const categorizedConnections = await getCategorizedConnections();
-    connectorTypes = connectorTypes.filter((conn): any => {
+    connectorTypes = connectorTypes.filter((conn) => {
       return [conn.name];
     });
     // Mapping connector types and corresponding connections
-    connectorTypes = connectorTypes.map((connectorType): any => {
+    connectorTypes = connectorTypes.map((connectorType) => {
       const connections = categorizedConnections.get(connectorType.name) || [];
       allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
       return {
@@ -107,7 +108,7 @@ export default function ConnectionList() {
   };
 
   const setDataForTabsHelper = (res, index) => {
-    setDataForTabs((prev): any => {
+    setDataForTabs((prev) => {
       const tempData = [...prev];
       tempData.push({
         data: [],
@@ -145,9 +146,9 @@ export default function ConnectionList() {
     });
   };
 
-  const selectedTabValueHandler = (entity: any, index: number) => {
+  const selectedTabValueHandler = (entity: IRecords, index: number) => {
     toggleLoader(true);
-    setDataForTabs((currentData): any => {
+    setDataForTabs((currentData) => {
       let newData = [...currentData];
       newData[index].selectedTab = entity.name;
       newData = newData.map((each) => {
