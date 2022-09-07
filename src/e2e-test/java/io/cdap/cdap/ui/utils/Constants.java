@@ -35,10 +35,11 @@ public class Constants {
   public static final String CONFIGURATION_URL = "http://localhost:11011/cdap/administration/configuration";
   public static final String BASE_STUDIO_URL = "http://localhost:11011/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
+  public static final String PIPELINE_STUDIO_URL = "http://localhost:11011/pipelines/ns/default/studio";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
 
   public static final String DEFAULT_GCS_CONNECTION_NAME = "gcs_" + String.valueOf(getRandomArbitrary(1, 10000));
-  
+
   // 000 to keep this bucket in the first 1000 entries
   // TODO Change back when we support > 1000 entries
   public static final String DEFAULT_GCS_FOLDER = "000cdap-gcp-ui-test";

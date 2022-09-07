@@ -120,7 +120,6 @@ public class ComputeProfile {
     public void verifyProfileInList(String profileName) {
          WebElement profileInList = Helper.locateElementByCssSelector(
                 Helper.getCssSelectorByDataTestId("profile-list-" + profileName));
-
     }
 
     @Then("Delete system profile {string} as cleanup action")

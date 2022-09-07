@@ -239,7 +239,8 @@
               <div class="node-metadata">
                 <div class="node-name"
                       ng-bind="node.plugin.label || node.name"
-                      ng-attr-title="{{node.plugin.label || node.name}}">
+                      ng-attr-title="{{node.plugin.label || node.name}}"
+                      data-testid="plugin-node-name-{{node.plugin.name}}-{{node.type}}-{{$index}}">
                 </div>
                 <div class="node-version"
                       ng-class="{ 'hidden': DAGPlusPlusCtrl.nodeMenuOpen === node.name}"

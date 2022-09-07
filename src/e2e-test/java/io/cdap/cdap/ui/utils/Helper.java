@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Helper implements CdfHelper {
+
   private static final Gson gson = new Gson();
   private static final String USERNAME = "admin";
   private static final String PASSWORD = "admin";
@@ -79,10 +80,10 @@ public class Helper implements CdfHelper {
 
   public static String getSessionToken() throws IOException {
     HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.GET,
-                                       Constants.BASE_URL + "/sessionToken",
-                                       null,
-                                       null,
-                                       null);
+                                                               Constants.BASE_URL + "/sessionToken",
+                                                               null,
+                                                               null,
+                                                               null);
     return response.getResponseBodyAsString();
   }
 
@@ -93,13 +94,13 @@ public class Helper implements CdfHelper {
 
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
-            .findElement(By.id(elementId));
+      .findElement(By.id(elementId));
   }
 
   public static WebElement locateElementByLocator(By locator) {
     return SeleniumDriver.getDriver().findElement(locator);
   }
-  
+
   public static WebElement locateElementByXPath(String xpath) {
     return SeleniumDriver.getDriver()
       .findElement(By.xpath(xpath));
@@ -107,14 +108,14 @@ public class Helper implements CdfHelper {
 
   public static boolean isElementExists(String cssSelector) {
     return SeleniumDriver.getDriver()
-            .findElements(By.cssSelector(cssSelector)).size() > 0;
+      .findElements(By.cssSelector(cssSelector)).size() > 0;
   }
 
-  public static String getCssSelectorByDataTestId (String dataTestId) {
+  public static String getCssSelectorByDataTestId(String dataTestId) {
     return "[data-testid=" + dataTestId + "]";
   }
 
-  public static String getNodeSelectorFromNodeIndentifier (NodeInfo node) {
+  public static String getNodeSelectorFromNodeIndentifier(NodeInfo node) {
     return "[data-testid=\"plugin-node-" +
       node.getNodeName() + "-" +
       node.getNodeType() + "-" +
@@ -131,7 +132,7 @@ public class Helper implements CdfHelper {
     }
     WaitHelper.waitForPageToLoad();
     WebElement uploadFile = SeleniumDriver.getDriver()
-            .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
+      .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
 
     File pipelineJSONFile = new File(Constants.FIXTURES_DIR + filename);
     String filePath = pipelineJSONFile.getAbsolutePath();
@@ -139,20 +140,20 @@ public class Helper implements CdfHelper {
 
     String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     SeleniumDriver.getWaitDriver().until(ExpectedConditions
-            .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
+                                           .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
     ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
 
     WebElement pipelineNameInput = locateElementById("pipeline-name-input");
     ElementHelper.clearElementValue(pipelineNameInput);
     ElementHelper.sendKeys(pipelineNameInput, pipelineName);
     pipelineNameInput.sendKeys(Keys.RETURN);
-    
+
     ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
-            getCssSelectorByDataTestId("deploy-pipeline")));
+      getCssSelectorByDataTestId("deploy-pipeline")));
 
     String statusText = ElementHelper.getElementText(
-            WaitHelper.waitForElementToBeDisplayed(
-                    locateElementByCssSelector(getCssSelectorByDataTestId("Deployed")), 200)
+      WaitHelper.waitForElementToBeDisplayed(
+        locateElementByCssSelector(getCssSelectorByDataTestId("Deployed")), 200)
     );
     if (!statusText.equals("Deployed")) {
       throw new RuntimeException("Pipeline deploy is unsuccessful.");
@@ -165,13 +166,14 @@ public class Helper implements CdfHelper {
 
   public static void cleanupPipelines(String pipelineName) {
     try {
-      HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.GET,
-              Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName ,
-              null, null, null);
+      HttpResponse response = HttpRequestHandler
+        .makeHttpRequest(HttpMethod.GET,
+                         Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName,
+                         null, null, null);
       if (response.getResponseCode() == 200) {
         HttpRequestHandler.makeHttpRequest(HttpMethod.DELETE,
-                Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName,
-                null, null, null);
+                                           Constants.BASE_SERVER_URL + "/v3/namespaces/default/apps/" + pipelineName,
+                                           null, null, null);
       }
     } catch (IOException e) {
       throw new RuntimeException(e.getMessage());
@@ -192,9 +194,10 @@ public class Helper implements CdfHelper {
 
   public static void expandPluginGroupIfNotAlreadyExpanded(String pluginGroupName) {
     ElementHelper.clickIfDisplayed(locatorOfPluginGroupCollapsed(pluginGroupName));
-    WaitHelper.waitForElementToBeDisplayed(locateElementByLocator(locatorOfPluginGroupExpanded(pluginGroupName)));
+    WaitHelper.waitForElementToBeDisplayed(
+      locateElementByLocator(locatorOfPluginGroupExpanded(pluginGroupName)));
   }
-  
+
   public static void setCdapTheme(String themePath) {
     Map<String, String> reqHeaders = new HashMap<String, String>();
     reqHeaders.put("Content-Type", "application/x-www-form-urlencoded");
