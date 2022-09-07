@@ -142,7 +142,7 @@ export const useStyles = makeStyles(() => {
       },
     },
     recipeStepsActionTypeStyles: {
-      fontWeight: 600,
+      fontWeight: 400,
     },
     displayNone: {
       visibility: 'hidden',
