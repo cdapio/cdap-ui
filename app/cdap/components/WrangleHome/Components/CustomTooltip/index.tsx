@@ -14,17 +14,16 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
+import { Box, Tooltip, TooltipProps } from '@material-ui/core';
+import * as React from 'react';
+import { useStyles } from './styles';
 
-export const useStyles = makeStyles((theme) => ({
-  arrow: {
-    color: '#000000',
-  },
-  tooltip: {
-    backgroundColor: '#000000',
-    fontSize: '16px',
-  },
-  forEachTabLabelWidth: {
-    width: '100%',
-  },
-}));
+export default function CustomTooltip(props: TooltipProps) {
+  const classes = useStyles();
+
+  return (
+    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+      <Tooltip arrow classes={classes} {...props} />
+    </Box>
+  );
+}
