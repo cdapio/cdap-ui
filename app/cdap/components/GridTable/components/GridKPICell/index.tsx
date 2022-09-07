@@ -33,8 +33,11 @@ export default function GridKPICell({ metricData }) {
             <Box className={classes.KPICell} key={eachValue.label}>
               <Typography className={classes.label}>{eachValue.label}</Typography>
               <Typography
-                className={classes.count}
-                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+                className={
+                  eachValue.label == 'Missing/Null'
+                    ? `${classes.missingClass + ' ' + classes.count}`
+                    : `${classes.generalClass + ' ' + classes.count}`
+                }
               >
                 {eachValue.count}
               </Typography>
