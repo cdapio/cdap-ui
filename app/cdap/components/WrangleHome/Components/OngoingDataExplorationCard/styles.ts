@@ -105,7 +105,7 @@ export const useStyles = makeStyles({
     textOverflow: 'ellipsis',
   },
   textWithoutIcon: {
-    maxWidth: '119px',
+    maxWidth: '166px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
