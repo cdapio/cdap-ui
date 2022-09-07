@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
+import { COLUMNS, COLUMNS_SELECTED, NULL_VALUES } from '../constants';
 import { useStyles } from '../styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { prepareDataQualtiy } from '../CircularProgressBar/utils';
@@ -89,7 +89,7 @@ const SelectColumnsList = (props) => {
                 {COLUMNS}
               </TableCell>
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-                {DATA_QUALITY}
+                {NULL_VALUES}
               </TableCell>
             </TableRow>
           </TableHead>

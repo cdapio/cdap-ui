@@ -17,7 +17,7 @@ export const prepareDataQualtiy = (statistics, columnList) => {
             } else {
               dataQuality.push({
                 label: key,
-                value: 100,
+                value: 0,
               });
             }
           }
