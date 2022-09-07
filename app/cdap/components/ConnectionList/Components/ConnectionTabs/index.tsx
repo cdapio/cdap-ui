@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
@@ -69,8 +69,6 @@ export default function ConnectionsTabs({
     setConnectionId(connectionId);
   }, []);
 
-  console.log(tabsData, 'tabs Data');
-
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
@@ -91,6 +89,7 @@ export default function ConnectionsTabs({
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
+                role="button"
                 onClick={() => {
                   if (index > 1) {
                     connectorType.canBrowse ? handleChange(connectorType, index) : null;

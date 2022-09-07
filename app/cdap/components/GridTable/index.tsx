@@ -148,9 +148,9 @@ export default function GridTable() {
   // ------------@checkFrequentlyOccuredValues Function is used for checking which value appears maximum time in a column if that column doesn't have missing/null value
   const checkFrequentlyOccuredValues = (key) => {
     const valueOfKey = gridData.values.map((el) => el[key]);
-    let mostfrequentItem: number = 1;
+    let mostFrequentItem: number = 1;
     let mostFrequentItemCount: number = 0;
-    let mostfrequentItemValue: string = '';
+    let mostFrequentItemValue: string = '';
     const mostFrequentDataItem = {
       name: '',
       count: 0,
@@ -161,16 +161,16 @@ export default function GridTable() {
           if (item == value) {
             mostFrequentItemCount++;
           }
-          if (mostfrequentItem < mostFrequentItemCount) {
-            mostfrequentItem = mostFrequentItemCount;
-            mostfrequentItemValue = item;
+          if (mostFrequentItem < mostFrequentItemCount) {
+            mostFrequentItem = mostFrequentItemCount;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
       });
     }
-    mostFrequentDataItem.name = mostfrequentItemValue;
+    mostFrequentDataItem.name = mostFrequentItemValue;
     mostFrequentDataItem.count = mostFrequentItemCount;
     return mostFrequentDataItem;
   };

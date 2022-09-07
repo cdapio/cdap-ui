@@ -17,6 +17,7 @@
 import { Box, Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
 import { useGridKPICellStyles } from './styles';
+import { MISSING_NULL } from 'components/GridTable/constants';
 
 export default function GridKPICell({ metricData }) {
   const classes = useGridKPICellStyles();
@@ -33,8 +34,11 @@ export default function GridKPICell({ metricData }) {
             <Box className={classes.KPICell} key={eachValue.label}>
               <Typography className={classes.label}>{eachValue.label}</Typography>
               <Typography
-                className={classes.count}
-                style={eachValue.label == 'Missing/Null' ? { color: 'red' } : { color: '#000' }}
+                className={
+                  eachValue.label == MISSING_NULL
+                    ? `${classes.missingClass} ${classes.count}`
+                    : `${classes.generalClass} ${classes.count}`
+                }
               >
                 {eachValue.count}
               </Typography>

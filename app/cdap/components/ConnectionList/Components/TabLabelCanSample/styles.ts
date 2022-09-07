@@ -53,6 +53,7 @@ const useStyles = makeStyles({
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    pointerEvents: 'none',
   },
   wrangleTypography: {
     fontSize: '14px',
