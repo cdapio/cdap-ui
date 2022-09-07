@@ -48,12 +48,12 @@ export const useGridKPICellStyles = makeStyles({
     fontSize: '14px',
     lineHeight: '21px',
     fontWeight: 400,
-    color: 'red',
+    color: '#E97567',
   },
   missingClass: {
-    color: 'red',
+    color: '#E97567',
   },
   generalClass: {
-    color: '#000',
+    color: '#212121',
   },
 });
