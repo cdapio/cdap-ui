@@ -16,7 +16,6 @@
 
 import { makeStyles } from '@material-ui/styles';
 import { blue } from '@material-ui/core/colors';
-import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   canBrowseHover: {
@@ -60,7 +59,6 @@ export const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     borderRight: '1px solid  #E0E0E0',
-    // borderColor: grey[300],
   },
   connectionsListContainer: {
     width: '100vw',
@@ -86,5 +84,6 @@ export const useStyles = makeStyles({
     maxWidth: '245px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    pointerEvents: 'none',
   },
 });
