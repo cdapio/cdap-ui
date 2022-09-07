@@ -14,65 +14,92 @@
  * the License.
  */
 export const DATATYPE_OPTIONS = [
-  'string',
-  'boolean',
-  'integer',
-  'long',
-  'short',
-  'float',
-  'double',
-  'decimal',
-  'bytes',
+  {
+    value: 'string',
+    label: 'string',
+  },
+  {
+    value: 'boolean',
+    label: 'boolean',
+  },
+  {
+    value: 'integer',
+    label: 'integer',
+  },
+  {
+    value: 'long',
+    label: 'long',
+  },
+  {
+    value: 'short',
+    label: 'short',
+  },
+  {
+    value: 'float',
+    label: 'float',
+  },
+  {
+    value: 'double',
+    label: 'double',
+  },
+  {
+    value: 'decimal',
+    label: 'decimal',
+  },
+  {
+    value: 'bytes',
+    label: 'bytes',
+  },
 ];
 
 export const MENU_OPTIONS = [
   {
-    key: 'changeDatatype',
+    value: 'changeDatatype',
     label: 'Change data type',
-    options: DATATYPE_OPTIONS.map((option) => ({ key: option, label: option })),
+    options: DATATYPE_OPTIONS,
   },
   {
-    key: 'setQualifiler',
+    value: 'setQualifiler',
     label: 'Set qualifier',
   },
   {
-    key: 'divider',
+    value: 'divider',
   },
   {
-    key: 'text',
+    value: 'text',
     label: 'Text',
     options: [
-      { key: 'heading', label: 'Remove' },
-      { key: 'letters', label: 'Letters' },
-      { key: 'numbers', label: 'Numbers' },
-      { key: 'specialCharacters', label: 'Special Characters' },
-      { key: 'numbers', label: 'Leading white spaces' },
-      { key: 'numbers', label: 'Trailing White spaces' },
-      { key: 'divider' },
-      { key: 'heading', label: 'Format' },
-      { key: 'numbers', label: 'UPPERCASE' },
-      { key: 'numbers', label: 'Lowercase' },
-      { key: 'numbers', label: 'Title Case' },
+      { value: 'heading', label: 'Remove' },
+      { value: 'letters', label: 'Letters' },
+      { value: 'numbers', label: 'Numbers' },
+      { value: 'specialCharacters', label: 'Special Characters' },
+      { value: 'numbers', label: 'Leading white spaces' },
+      { value: 'numbers', label: 'Trailing White spaces' },
+      { value: 'divider' },
+      { value: 'heading', label: 'Format' },
+      { value: 'numbers', label: 'UPPERCASE' },
+      { value: 'numbers', label: 'Lowercase' },
+      { value: 'numbers', label: 'Title Case' },
     ],
   },
   {
-    key: 'dateAndTime',
+    value: 'dateAndTime',
     label: 'Date and Time',
   },
   {
-    key: 'findAndReplace',
+    value: 'findAndReplace',
     label: 'Find and Replace',
   },
   {
-    key: 'filter',
+    value: 'filter',
     label: 'Filter',
   },
   {
-    key: 'delete',
+    value: 'delete',
     label: 'Delete column',
   },
   {
-    key: 'keep',
+    value: 'keep',
     label: 'Keep column',
   },
 ];
