@@ -14,15 +14,15 @@
  * the License.
  */
 
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 import CustomTooltip from '../CustomTooltip';
 
 export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
-  const connectionNameRef: any = createRef();
-  const datasetNameRef: any = createRef();
+  const connectionNameRef: RefObject<HTMLInputElement> = createRef();
+  const datasetNameRef: RefObject<HTMLInputElement> = createRef();
   const [connectionRefValue, setconnectionRefValue] = useState(false);
   const [datasetNameRefValue, setdatasetNameRef] = useState(false);
 
@@ -32,8 +32,6 @@ export default function OngoingDataExplorationCard({ item }) {
     );
     setdatasetNameRef(datasetNameRef?.current?.offsetWidth < datasetNameRef?.current?.scrollWidth);
   });
-
-  console.log(connectionNameRef, datasetNameRef, connectionRefValue, datasetNameRefValue);
 
   return (
     <Grid container className={classes.gridContainer}>
