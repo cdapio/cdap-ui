@@ -16,6 +16,7 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 export const useGridKPICellStyles = makeStyles({
   root: {
@@ -55,6 +56,6 @@ export const useGridKPICellStyles = makeStyles({
     color: red[600],
   },
   generalClass: {
-    color: '#212121',
+    color: grey[900],
   },
 });
