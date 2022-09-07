@@ -47,7 +47,7 @@ const SelectDatasetWrapper = styled(Box)({
 });
 
 export default function ConnectionList() {
-  const { connectorType } = useParams() as Record<string, string>;
+  const { connectorType } = useParams() as IRecords;
 
   const refs = useRef([]);
   const classes = useStyles();
