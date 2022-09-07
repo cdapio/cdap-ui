@@ -36,6 +36,7 @@ export const useStyles = makeStyles({
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    pointerEvents: 'none',
     fontFamily: "'Noto Sans', sans-serif",
   },
   rightArrow: {
