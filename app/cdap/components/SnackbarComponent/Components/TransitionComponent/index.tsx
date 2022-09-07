@@ -28,7 +28,12 @@ export default function TransitionComponent(props) {
           <WarningRoundedIcon className={classes.warningIcon} />
           &nbsp;Error
         </h5>
-        <span className={classes.dismissSpan} onClick={() => props.close()}>
+        <span
+          role="button"
+          tabIndex={0}
+          className={classes.dismissSpan}
+          onClick={() => props.close()}
+        >
           Dismiss
         </span>
       </div>
