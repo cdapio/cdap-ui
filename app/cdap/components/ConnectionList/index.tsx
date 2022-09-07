@@ -206,8 +206,9 @@ export default function ConnectionList() {
       <SubHeader />
       <SelectDatasetWrapper>
         {dataForTabs.map((each, index) => {
-          if (each.data.filter((el) => el.connectionId).length) {
-            connectionId = each.data.filter((el) => el.connectionId)[0].connectionId;
+          const connectionIdRequired = each.data.filter((el) => el.connectionId);
+          if (connectionIdRequired.length) {
+            connectionId = connectionIdRequired[0].connectionId;
           }
           if (index === 0) {
             headerContent = headerForLevelZero();
