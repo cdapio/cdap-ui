@@ -17,11 +17,12 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
+import CustomTooltip from '../CustomTooltip';
 
 export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
-  const connectionNameRef = createRef();
-  const datasetNameRef = createRef();
+  const connectionNameRef: any = createRef();
+  const datasetNameRef: any = createRef();
   const [connectionRefValue, setconnectionRefValue] = useState(false);
   const [datasetNameRefValue, setdatasetNameRef] = useState(false);
 
@@ -30,7 +31,9 @@ export default function OngoingDataExplorationCard({ item }) {
       connectionNameRef?.current?.offsetWidth < connectionNameRef?.current?.scrollWidth
     );
     setdatasetNameRef(datasetNameRef?.current?.offsetWidth < datasetNameRef?.current?.scrollWidth);
-  }, []);
+  });
+
+  console.log(connectionNameRef, datasetNameRef, connectionRefValue, datasetNameRefValue);
 
   return (
     <Grid container className={classes.gridContainer}>
@@ -40,18 +43,59 @@ export default function OngoingDataExplorationCard({ item }) {
             return (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.iconStyle}> {eachItem.icon}</Box>
-                <Typography variant="body1">
-                  {eachItem.label} ref={connectionNameRef}
-                </Typography>
+                {connectionRefValue ? (
+                  <CustomTooltip title={eachItem.label} arrow>
+                    <Typography
+                      variant="body1"
+                      ref={connectionNameRef}
+                      className={classes.iconWithText}
+                    >
+                      {eachItem.label}
+                    </Typography>
+                  </CustomTooltip>
+                ) : (
+                  <Typography
+                    variant="body1"
+                    ref={connectionNameRef}
+                    className={classes.iconWithText}
+                  >
+                    {eachItem.label}
+                  </Typography>
+                )}
               </Grid>
             );
           case 'text':
-            return (
+            console.log(eachItem.label);
+            return eachItem.label.includes('Recipe steps') ? (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.textWithoutIcon}>
                   {' '}
-                  {eachItem.label} ref={datasetNameRef}
+                  {eachItem.label}
                 </Typography>
+              </Grid>
+            ) : (
+              <Grid item xs={3} className={classes.elementStyle} key={index}>
+                {datasetNameRefValue ? (
+                  <CustomTooltip title={eachItem.label} arrow>
+                    <Typography
+                      variant="body1"
+                      ref={datasetNameRef}
+                      className={classes.textWithoutIcon}
+                    >
+                      {' '}
+                      {eachItem.label}
+                    </Typography>
+                  </CustomTooltip>
+                ) : (
+                  <Typography
+                    variant="body1"
+                    ref={datasetNameRef}
+                    className={classes.textWithoutIcon}
+                  >
+                    {' '}
+                    {eachItem.label}
+                  </Typography>
+                )}
               </Grid>
             );
           case 'percentageWithText': {
