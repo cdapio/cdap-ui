@@ -32,7 +32,6 @@ export default function GridHeaderCell({
   setColumnSelected,
 }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
-  console.log(label, columnSelected);
   const isColumnHighlited = label === columnSelected;
 
   return (

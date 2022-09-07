@@ -35,6 +35,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
 import ParsingDrawer from 'components/ParsingDrawer';
+import AddTransformation from 'components/AddTransformation';
 
 export default function GridTable() {
   const { wid } = useParams() as any;
@@ -51,6 +52,7 @@ export default function GridTable() {
     },
   ]);
   const [columnSelected, setColumnSelected] = useState('');
+  const [directiveFunction, setDirectiveFunction] = useState('');
 
   const [connectorType, setConnectorType] = useState(null);
 
@@ -216,7 +218,7 @@ export default function GridTable() {
   // ------------@getGridTableData Function is used for preparing data for entire grid-table
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
-    const headersData = createHeadersData(rawData.headers, rawData.types);
+    // const headersData = createHeadersData(rawData.headers, rawData.types);
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
@@ -235,13 +237,15 @@ export default function GridTable() {
     getGridTableData();
   }, [gridData]);
 
-  const applyDirective = (option, column) => {
+  const applyDirective = (option) => {
     setLoading(true);
-    const newDirective = getDirective(option, column);
+    const newDirective = getDirective(option, columnSelected);
     const { dataprep } = DataPrepStore.getState();
     const { workspaceId, workspaceUri, directives, insights } = dataprep;
-
-    if (newDirective === null || !Boolean(column)) {
+    // setOpenTransformationPanel(option);
+    console.log(newDirective, columnSelected, option);
+    if (!Boolean(newDirective) || !Boolean(columnSelected)) {
+      setDirectiveFunction(option);
       setLoading(false);
       return;
     }
@@ -288,15 +292,31 @@ export default function GridTable() {
     );
   };
 
+  const handleColumnSelect = (columnName) =>
+    setColumnSelected((prevColumn) => (prevColumn === columnName ? '' : columnName));
+
   // Redux store
   const { dataprep } = DataPrepStore.getState();
   const { data, headers, types } = dataprep;
+  console.log(columnSelected, directiveFunction);
 
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
+      <ToolBarList submitMenuOption={(option) => applyDirective(option)} />
       <ParsingDrawer />
+      {directiveFunction && (
+        <AddTransformation
+          functionName={directiveFunction}
+          setLoading={setLoading}
+          columnData={headers}
+          callBack={(response) => {
+            setGridData(response);
+            setDirectiveFunction('');
+            setColumnSelected('');
+          }}
+        />
+      )}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
@@ -306,7 +326,7 @@ export default function GridTable() {
                 type={types[eachHeader]}
                 key={eachHeader}
                 columnSelected={columnSelected}
-                setColumnSelected={setColumnSelected}
+                setColumnSelected={handleColumnSelect}
               />
             ))}
           </TableRow>

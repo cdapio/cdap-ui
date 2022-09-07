@@ -16,14 +16,14 @@ import { useStyles } from './styles';
 const AddTransformation = (props) => {
   const { functionName } = props;
 
-  const [drawerStatus, setDrawerStatus] = useState(true);
+  // const [drawerStatus, setDrawerStatus] = useState(functionName);
   const [columnsPopup, setColumnsPopup] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([]);
 
   const classes = useStyles();
 
   const closeClickHandler = () => {
-    setDrawerStatus(false);
+    props.callBack();
   };
 
   const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {};
@@ -40,7 +40,7 @@ const AddTransformation = (props) => {
     <Fragment>
       <DrawerWidget
         headingText={ADD_TRANSFORMATION_STEP}
-        openDrawer={drawerStatus}
+        openDrawer={functionName}
         closeClickHandler={closeClickHandler}
       >
         <Container className={classes.addTransformationBodyStyles}>
