@@ -191,5 +191,14 @@ export const useStyles = makeStyles(() => {
       border: 'none',
       borderBottom: '1px solid transparent',
     },
+    circularProgress: {
+      transform: 'rotate(180deg) !important',
+    },
+    circularProgressSuccess: {
+      color: '#8BCC74',
+    },
+    circularProgressRed: {
+      color: '#E97567',
+    },
   };
 });

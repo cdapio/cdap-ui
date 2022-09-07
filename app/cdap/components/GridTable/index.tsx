@@ -41,6 +41,7 @@ const GridTable = () => {
   const [rowsDataList, setRowsDataList] = React.useState([]);
   const [gridData, setGridData] = useState<any>({});
   const [missingDataList, setMissingDataList] = useState([]);
+  const [dataQuality, setDataQuality] = useState({});
   const [openTranformationPanel, setOpenTransformationPanel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
@@ -57,6 +58,7 @@ const GridTable = () => {
   }, []);
 
   const getWorkSpaceData = (params, workspaceId) => {
+    setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -102,6 +104,7 @@ const GridTable = () => {
           },
         });
         setGridData(response);
+        setLoading(false);
       });
     });
   };
@@ -208,6 +211,7 @@ const GridTable = () => {
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData.summary.statistics);
       setMissingDataList(missingData);
+      setDataQuality(gridData.summary.statistics);
     }
     const rowData =
       rawData &&
@@ -234,6 +238,7 @@ const GridTable = () => {
         <AddTransformation
           setLoading={setLoading}
           columnData={headersNamesList}
+          missingDataList={dataQuality}
           callBack={(response) => {
             setGridData(response);
             setOpenTransformationPanel(false);

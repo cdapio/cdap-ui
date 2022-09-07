@@ -18,7 +18,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { useParams } from 'react-router';
 
 const AddTransformation = (props) => {
-  const { functionName, columnData, setLoading } = props;
+  const { functionName, columnData, setLoading, missingDataList } = props;
   const params = useParams() as any;
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [columnsPopup, setColumnsPopup] = useState(false);
@@ -123,6 +123,7 @@ const AddTransformation = (props) => {
               columnData={columnData}
               selectedColumnsCount={selectedColumns.length}
               setSelectedColumns={setSelectedColumns}
+              dataQuality={missingDataList}
             />
           </div>
           <Button

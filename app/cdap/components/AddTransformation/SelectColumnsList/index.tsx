@@ -12,20 +12,26 @@ import {
   InputAdornment,
   TextField,
 } from '@material-ui/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
 import { useStyles } from '../styles';
 import SearchIcon from '@material-ui/icons/Search';
-import classNames from 'classnames';
+import { prepareDataQualtiy } from '../CircularProgressBar/utils';
+import DataQualityProgress from '../CircularProgressBar';
 
 const SelectColumnsList = (props) => {
-  const { selectedColumnsCount, columnData, setSelectedColumns } = props;
+  const { selectedColumnsCount, columnData, setSelectedColumns, dataQuality } = props;
   const [columns, setColumns] = useState(columnData);
+  const [dataQualityValue, setDataQualityValue] = useState(dataQuality);
   const [selectedColumns, setSelectedColumn] = useState([]);
   const [focused, setFocused] = useState(false);
-  const [blurred, setBlurred] = useState(false);
   const classes = useStyles();
   const ref = useRef(null);
+
+  useEffect(() => {
+    const getPreparedDataQuality = prepareDataQualtiy(dataQuality, columnData);
+    setDataQualityValue(getPreparedDataQuality);
+  }, []);
 
   const onSelect = (event, label, column) => {
     setSelectedColumns([column]);
@@ -37,7 +43,6 @@ const SelectColumnsList = (props) => {
       const columnValue = columnData.filter((el) =>
         el?.label.toLowerCase().includes(event.target.value.toLowerCase())
       );
-      console.log('columnValue', columnValue);
       if (columnValue.length) {
         setColumns(columnValue);
       } else {
@@ -113,13 +118,11 @@ const SelectColumnsList = (props) => {
                   {eachColumn.type}
                 </TableCell>
                 <TableCell
-                  className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
+                // className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
                 >
-                  <img
-                    className={classes.recipeStepsDeleteStyles}
-                    src="/cdap_assets/img/delete.svg"
-                    alt="delete"
-                  />
+                  {dataQualityValue?.length && (
+                    <DataQualityProgress percentage={dataQualityValue[index]?.value} />
+                  )}
                 </TableCell>
               </TableRow>
             ))}
