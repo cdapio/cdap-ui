@@ -16,6 +16,7 @@
 
 import { makeStyles } from '@material-ui/styles';
 import { blue } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   canBrowseHover: {
@@ -58,7 +59,7 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '1px solid  #E0E0E0',
+    borderRight: `1px solid ${grey[300]}`,
   },
   connectionsListContainer: {
     width: '100vw',
