@@ -65,7 +65,6 @@ export default function OngoingDataExplorationCard({ item }) {
               </Grid>
             );
           case 'text':
-            console.log(eachItem.label);
             return eachItem.label.includes('Recipe steps') ? (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Typography variant="body1" className={classes.textWithoutIcon}>
