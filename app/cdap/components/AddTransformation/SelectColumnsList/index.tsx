@@ -109,6 +109,7 @@ const SelectColumnsList = (props) => {
                 </TableCell>
                 <TableCell
                   classes={{ body: classes.recipeStepsTableRowStyles }}
+                  style={{ width: 50 }}
                   // component="th"
                   // scope="row"
                 >

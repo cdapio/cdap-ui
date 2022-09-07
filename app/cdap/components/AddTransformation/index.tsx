@@ -74,8 +74,6 @@ const AddTransformation = (props) => {
     setColumnsPopup(false);
   };
 
-  const handleSelectAction = () => {};
-
   return (
     <Fragment>
       <DrawerWidget
