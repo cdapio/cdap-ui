@@ -11,6 +11,7 @@ import {
   FormControl,
   InputAdornment,
   TextField,
+  Typography,
 } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, NULL_VALUES } from '../constants';
@@ -88,7 +89,9 @@ const SelectColumnsList = (props) => {
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
                 {COLUMNS}
               </TableCell>
-              <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
+              <TableCell
+                classes={{ head: `${classes.recipeStepsTableHeadStyles} ${classes.nullValueHead}` }}
+              >
                 {NULL_VALUES}
               </TableCell>
             </TableRow>
@@ -96,7 +99,11 @@ const SelectColumnsList = (props) => {
           <TableBody>
             {columns.map((eachColumn, index) => (
               <TableRow className={classes.recipeStepsTableBodyRowStyles} key={index}>
-                <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
+                <TableCell
+                  classes={{
+                    body: `${classes.recipeStepsTableRowStyles} ${classes.radioButtonCellStyles}`,
+                  }}
+                >
                   <Radio
                     color="primary"
                     onChange={(e) => onSelect(e, eachColumn.label, eachColumn)}
@@ -113,16 +120,19 @@ const SelectColumnsList = (props) => {
                   // component="th"
                   // scope="row"
                 >
-                  <span className={classes.recipeStepsActionTypeStyles}>{eachColumn.label}</span>
-                  &nbsp;
-                  <br />
-                  {eachColumn.type}
+                  <Typography className={classes.recipeStepsActionTypeStyles}>
+                    {eachColumn.label}
+                  </Typography>
+                  <Typography className={classes.recipeStepsActionTypeStyles}>
+                    {eachColumn.type}
+                  </Typography>
                 </TableCell>
                 <TableCell
-                // className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
+                  // className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
+                  className={[classes.recipeStepsTableRowStyles, classes.circularBarCell].join(' ')}
                 >
                   {dataQualityValue?.length && (
-                    <DataQualityProgress percentage={dataQualityValue[index]?.value} />
+                    <DataQualityProgress value={dataQualityValue[index]?.value} />
                   )}
                 </TableCell>
               </TableRow>

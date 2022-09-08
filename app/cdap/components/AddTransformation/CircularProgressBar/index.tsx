@@ -1,49 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { CircularProgress, Box, Typography } from '@material-ui/core';
-import { useStyles } from '../styles';
+import { Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import { useStyles } from './styles';
 
-const CircularDeterminate = (props) => {
-  const [progress, setProgress] = useState(props.percentage);
+const MatchMeter: React.FC<{ value: number }> = ({ value }) => {
   const classes = useStyles();
-  useEffect(() => {
-    setProgress(props.percentage);
-  }, [props]);
 
+  const getInlineStyles = (): string => {
+    if (value < 100) {
+      return '#E97567';
+    } else {
+      return '#8BCC74';
+    }
+  };
   return (
-    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress
-        variant="determinate"
-        value={parseInt(progress)}
-        className={
-          progress < 100
-            ? classes.circularProgress + ' ' + classes.circularProgressRed
-            : classes.circularProgress + ' ' + classes.circularProgressSuccess
-        }
-        size={60}
-        thickness={4}
-      />
-      <Box
-        sx={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography
-          variant="caption"
-          component="div"
-          className={progress < 100 ? classes.circularProgressRed : classes.circularProgressSuccess}
-        >
-          {`${parseInt(progress)}%`}
+    <>
+      <Typography component="div" className={classes.progress}>
+        <Typography component="div" className={classes.barOverflow}>
+          <Typography
+            style={{
+              borderBottomColor: getInlineStyles(),
+              borderRightColor: getInlineStyles(),
+              transform: `rotate(${45 + value * 1.8}deg)`,
+            }}
+            component="div"
+            className={classes.bar}
+          ></Typography>
         </Typography>
-      </Box>
-    </Box>
+        <Typography component="span" className={classes.value} style={{ color: getInlineStyles() }}>
+          {value}%
+        </Typography>
+      </Typography>
+    </>
   );
 };
 
-export default CircularDeterminate;
+export default MatchMeter;

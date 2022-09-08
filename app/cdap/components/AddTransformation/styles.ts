@@ -22,7 +22,6 @@ export const useStyles = makeStyles(() => {
       color: '#5F6368',
       paddingTop: '5px',
       paddingBottom: '15px',
-      borderBottom: '1px solid #DADCE0',
     },
     functionSectionStyles: {
       padding: '15px 0',
@@ -143,6 +142,14 @@ export const useStyles = makeStyles(() => {
     },
     recipeStepsActionTypeStyles: {
       fontWeight: 400,
+      maxWidth: '190px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      fontSize: '14px',
+      fontFamily: 'Noto Sans',
+      fontStyle: 'normal',
+      marginBottom: 5,
+      textTransform: 'capitalize',
     },
     displayNone: {
       visibility: 'hidden',
@@ -199,6 +206,15 @@ export const useStyles = makeStyles(() => {
     },
     circularProgressRed: {
       color: '#E97567',
+    },
+    radioButtonCellStyles: {
+      width: 50,
+    },
+    circularBarCell: {
+      width: 70,
+    },
+    nullValueHead: {
+      width: 120,
     },
   };
 });
