@@ -33,4 +33,8 @@ export const useStyles = makeStyles({
     width: '100%',
     zIndex: 2000,
   },
+  tableHeight: {
+    height: 'calc(100vh - 192px)',
+    overflow: 'scroll',
+  },
 });
