@@ -42,6 +42,12 @@ const MyDataPrepApi = {
   setWorkspace: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepathV2}`),
   getWorkspace: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepathV2}`),
   getWorkspaceList: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPathV2}/workspaces`),
+  resampleWorkspace: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${contextPathV2}/workspaces/:workspaceId/resample `
+  ),
 
   // Wrangler Data Model
   attachDataModel: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/datamodels`),

@@ -22,10 +22,10 @@ import Version from 'services/VersionRange/Version';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import NamespaceStore from 'services/NamespaceStore';
 
-export function directiveRequestBodyCreator(directivesArray) {
+export function directiveRequestBodyCreator(directivesArray, limit) {
   return {
     directives: directivesArray,
-    limit: 1000,
+    limit: limit,
   };
 }
 
