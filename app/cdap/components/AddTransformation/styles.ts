@@ -181,6 +181,7 @@ export const useStyles = makeStyles(() => {
     },
     searchFormControl: {
       position: 'relative',
+      display: 'flex',
     },
     searchTextField: {},
     searchInputAdornment: {

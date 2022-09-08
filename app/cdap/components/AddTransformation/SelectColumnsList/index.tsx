@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { COLUMNS, COLUMNS_SELECTED, NULL_VALUES } from '../constants';
 import { useStyles } from '../styles';
-import SearchIcon from '@material-ui/icons/Search';
+import { SearchIcon } from '../iconStore';
 import { prepareDataQualtiy } from '../CircularProgressBar/utils';
 import DataQualityProgress from '../CircularProgressBar';
 
@@ -78,7 +78,9 @@ const SelectColumnsList = (props) => {
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
           />
-          <SearchIcon className={classes.searchInputAdornment} onClick={handleFocus} />
+          <Box className={classes.searchInputAdornment} onClick={handleFocus}>
+            {SearchIcon()}
+          </Box>
         </div>
       </div>
       <TableContainer component={Box}>
