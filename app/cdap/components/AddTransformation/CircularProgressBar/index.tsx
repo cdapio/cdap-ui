@@ -27,7 +27,7 @@ const MatchMeter: React.FC<{ value: number }> = ({ value }) => {
           ></Typography>
         </Typography>
         <Typography component="span" className={classes.value} style={{ color: getInlineStyles() }}>
-          {value}%
+          {value.toFixed(0)}%
         </Typography>
       </Typography>
     </>

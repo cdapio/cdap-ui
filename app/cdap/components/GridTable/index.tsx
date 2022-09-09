@@ -131,18 +131,14 @@ const GridTable = () => {
   };
 
   const convertNonNullPercent = (key, nonNullValue) => {
-    const lengthOfData = gridData.values.length;
-    let count = 0;
-    let nonNull: any = 0;
-    let empty: any = 0;
-    let nullValue: any = 0;
+    const lengthOfData: number = gridData?.values.length;
+    let nullValueCount: number = 0;
     if (lengthOfData) {
-      nonNull = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-      nullValue = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      empty = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValue + empty);
+      nullValueCount = nonNullValue.null
+        ? (((nonNullValue.null || 0) + (nonNullValue.empty || 0)) / 100) * lengthOfData
+        : 0;
     }
-    return count;
+    return nullValueCount;
   };
 
   const checkFrequentlyOccuredValues = (key) => {

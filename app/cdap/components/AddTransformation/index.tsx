@@ -100,6 +100,7 @@ const AddTransformation = (props) => {
           </div>
           <Button
             variant="contained"
+            disabled={selectedColumns.length && selectedAction ? false : true}
             color="primary"
             classes={{ containedPrimary: classes.buttonStyles }}
             className={classes.applyStepButtonStyles}
@@ -126,6 +127,7 @@ const AddTransformation = (props) => {
           </div>
           <Button
             variant="contained"
+            disabled={selectedColumns.length ? false : true}
             color="primary"
             classes={{ containedPrimary: classes.buttonStyles }}
             className={classes.applyStepButtonStyles}
