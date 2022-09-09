@@ -10,7 +10,7 @@ const Footer = () => {
       <Box className={classes.cont}>
         <Box className={classes.imgCont}>{ColumnIcon}</Box>
         <Box>
-          <p className={classes.paraElement}> Current data - 1000 rows and 30 columns</p>
+          <p className={classes.data}> Current data - 1000 rows and 30 columns</p>
         </Box>
         <Box className={classes.zoomCont}>
           {ZoomIn}

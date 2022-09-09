@@ -39,7 +39,7 @@ export const useCss = makeStyles({
     order: 0,
     flexGrow: 0,
   },
-  paraElement: {
+  data: {
     width: '900px',
     padding: '8px 32px',
     height: '21px',
