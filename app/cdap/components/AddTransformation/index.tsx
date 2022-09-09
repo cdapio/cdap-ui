@@ -37,7 +37,38 @@ const AddTransformation = (props) => {
 
   const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
-    props.applyTransformation(selectedColumns[0].label);
+    if (functionName == 'null') {
+      const paramsData = {
+        context: params.namespace,
+        workspaceId: params.wid,
+      };
+      const directivesArray =
+        selectedAction == 'remove'
+          ? selectedColumns.map(
+              ({ label }) =>
+                `filter-rows-on condition-true ${label} == null || ${label} =~ \"^\\W*$\"`
+            )
+          : selectedColumns.map(({ label }) => `fill-null-or-empty :${label} '${replaceValue}'`);
+      const apiPayload = {
+        directives: dataprep.directives.length
+          ? dataprep.directives.concat(directivesArray)
+          : directivesArray,
+        limit: 1000,
+        insights: dataprep.insights,
+      };
+
+      MyDataPrepApi.execute(paramsData, apiPayload)
+        .subscribe((response) => {
+          props.callBack(response);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+      props.applyTransformation(selectedColumns[0].label);
+    }
   };
 
   const handleSelectColumn = () => {

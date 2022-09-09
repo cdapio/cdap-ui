@@ -13,6 +13,12 @@ export const getDirective = (option, column) => {
     return `lowercase :${column}`;
   } else if (option === 'titlecase') {
     return `titlecase :${column}`;
+  } else if (option === 'ltrim') {
+    return `ltrim :${column}`;
+  } else if (option === 'rtrim') {
+    return `rtrim :${column}`;
+  } else if (option === 'trim') {
+    return `trim :${column}`;
   } else {
     null;
   }

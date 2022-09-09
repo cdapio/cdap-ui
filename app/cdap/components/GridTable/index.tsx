@@ -319,6 +319,7 @@ export default function GridTable() {
             setColumnSelected(selectedColumn);
             applyDirective(optionSelected, selectedColumn);
           }}
+          callBack={(response) => setGridData(response)}
         />
       )}
       <Table aria-label="simple table" className="test">
