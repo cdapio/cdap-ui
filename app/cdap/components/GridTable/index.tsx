@@ -31,7 +31,6 @@ import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
-import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
 import ParsingDrawer from 'components/ParsingDrawer';
@@ -42,9 +41,12 @@ export default function GridTable() {
   const params = useParams() as any;
   const classes = useStyles();
 
+  const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [loading, setLoading] = useState(false);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
+  const [dataQuality, setDataQuality] = useState({});
+  const [optionSelected, setOptionSelected] = useState(null);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -117,6 +119,7 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setLoading(false);
       });
   };
 
@@ -145,15 +148,13 @@ export default function GridTable() {
   // ------------@convertNonNullPercent Function is used for calculation of Missing/Null value
   const convertNonNullPercent = (nonNullValue) => {
     const lengthOfData: number = gridData?.values.length;
-    let count: number = 0;
-    let emptyCount: number = 0;
     let nullValueCount: number = 0;
     if (lengthOfData) {
-      nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
+      nullValueCount = nonNullValue.null
+        ? (((nonNullValue.null || 0) + (nonNullValue.empty || 0)) / 100) * lengthOfData
+        : 0;
     }
-    return count;
+    return nullValueCount;
   };
 
   // ------------@checkFrequentlyOccuredValues Function is used for checking which value appears maximum time in a column if that column doesn't have missing/null value
@@ -218,10 +219,12 @@ export default function GridTable() {
   // ------------@getGridTableData Function is used for preparing data for entire grid-table
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
-    // const headersData = createHeadersData(rawData.headers, rawData.types);
+    const headersData = createHeadersData(rawData.headers, rawData.types);
+    setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
+      setDataQuality(gridData.summary.statistics);
     }
     const rowData =
       rawData &&
@@ -237,7 +240,8 @@ export default function GridTable() {
     getGridTableData();
   }, [gridData]);
 
-  const applyDirective = (option) => {
+  const applyDirective = (option, columnSelected) => {
+    setOptionSelected(option);
     setLoading(true);
     const newDirective = getDirective(option, columnSelected);
     const { dataprep } = DataPrepStore.getState();
@@ -272,7 +276,6 @@ export default function GridTable() {
     };
     MyDataPrepApi.execute(payload, requestBody).subscribe(
       (response) => {
-        // response
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
@@ -284,9 +287,10 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setDirectiveFunction('');
+        setColumnSelected('');
       },
       (err) => {
-        // err
         setLoading(false);
       }
     );
@@ -303,17 +307,17 @@ export default function GridTable() {
   return (
     <Box className={classes.wrapper}>
       <BreadCrumb datasetName={wid} />
-      <ToolBarList submitMenuOption={(option) => applyDirective(option)} />
+      <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
       <ParsingDrawer />
       {directiveFunction && (
         <AddTransformation
           functionName={directiveFunction}
           setLoading={setLoading}
-          columnData={headers}
-          callBack={(response) => {
-            setGridData(response);
-            setDirectiveFunction('');
-            setColumnSelected('');
+          columnData={headersNamesList}
+          missingDataList={dataQuality}
+          applyTransformation={(selectedColumn) => {
+            setColumnSelected(selectedColumn);
+            applyDirective(optionSelected, selectedColumn);
           }}
         />
       )}

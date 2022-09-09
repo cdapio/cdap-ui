@@ -10,6 +10,7 @@ export const useStyles = makeStyles(() => {
     },
     addTransformationBodyWrapperStyles: {
       height: 'calc(100% - 40px)',
+      overflowY: 'auto',
     },
     columnsCountTextStyles: {
       fontFamily: 'Noto Sans',
@@ -21,7 +22,6 @@ export const useStyles = makeStyles(() => {
       color: '#5F6368',
       paddingTop: '5px',
       paddingBottom: '15px',
-      borderBottom: '1px solid #DADCE0',
     },
     functionSectionStyles: {
       padding: '15px 0',
@@ -141,7 +141,15 @@ export const useStyles = makeStyles(() => {
       },
     },
     recipeStepsActionTypeStyles: {
-      fontWeight: 600,
+      fontWeight: 400,
+      maxWidth: '190px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      fontSize: '14px',
+      fontFamily: 'Noto Sans',
+      fontStyle: 'normal',
+      marginBottom: 5,
+      textTransform: 'capitalize',
     },
     displayNone: {
       visibility: 'hidden',
@@ -151,6 +159,63 @@ export const useStyles = makeStyles(() => {
       height: '20px',
       cursor: 'pointer',
       //   padding: '15px 10px',
+    },
+    radioStyles: {
+      '& span:last-child': {
+        fontFamily: 'Noto Sans',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '14px',
+        color: '#5F6368',
+      },
+    },
+    replaceWithInput: {
+      width: '90%',
+    },
+    replaceWithText: {
+      fontFamily: 'Noto Sans',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '12px',
+      color: '#5F6368',
+    },
+    searchFormControl: {
+      position: 'relative',
+      display: 'flex',
+    },
+    searchTextField: {},
+    searchInputAdornment: {
+      zIndex: 0,
+      cursor: 'pointer',
+      position: 'absolute',
+      right: 0,
+    },
+    isFocused: {
+      border: 'none',
+      borderBottom: '1px solid grey',
+      outline: 'none',
+    },
+    isBlurred: {
+      border: 'none',
+      borderBottom: '1px solid transparent',
+    },
+    circularProgress: {
+      transform: 'rotate(180deg) !important',
+    },
+    circularProgressSuccess: {
+      color: '#8BCC74',
+    },
+    circularProgressRed: {
+      color: '#E97567',
+    },
+    radioButtonCellStyles: {
+      width: 50,
+    },
+    circularBarCell: {
+      width: 70,
+    },
+    nullValueHead: {
+      width: 120,
     },
   };
 });

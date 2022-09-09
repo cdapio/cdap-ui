@@ -7,6 +7,12 @@ export const getDirective = (option, column) => {
     return `drop ${column}`;
   } else if (option === 'keep') {
     return `keep ${column}`;
+  } else if (option === 'uppercase') {
+    return `uppercase :${column}`;
+  } else if (option === 'lowercase') {
+    return `lowercase :${column}`;
+  } else if (option === 'titlecase') {
+    return `titlecase :${column}`;
   } else {
     null;
   }

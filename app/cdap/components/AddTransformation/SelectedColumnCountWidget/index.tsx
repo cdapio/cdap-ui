@@ -13,7 +13,7 @@ const SelectedColumnCountWidget = (props) => {
           ? selectedColumnsCount
           : `0${selectedColumnsCount}`
         : 'No '}{' '}
-      {COLUMNS_SELECTED}
+      &nbsp;{COLUMNS_SELECTED}
     </div>
   );
 };

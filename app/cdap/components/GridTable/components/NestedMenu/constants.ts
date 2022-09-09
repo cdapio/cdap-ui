@@ -77,9 +77,9 @@ export const MENU_OPTIONS = [
       { value: 'numbers', label: 'Trailing White spaces' },
       { value: 'divider' },
       { value: 'heading', label: 'Format' },
-      { value: 'numbers', label: 'UPPERCASE' },
-      { value: 'numbers', label: 'Lowercase' },
-      { value: 'numbers', label: 'Title Case' },
+      { value: 'uppercase', label: 'UPPERCASE' },
+      { value: 'lowercase', label: 'Lowercase' },
+      { value: 'titlecase', label: 'Title Case' },
     ],
   },
   {
@@ -89,6 +89,10 @@ export const MENU_OPTIONS = [
   {
     value: 'findAndReplace',
     label: 'Find and Replace',
+  },
+  {
+    value: 'fillNullOrEmpty',
+    label: 'Fill null or empty',
   },
   {
     value: 'filter',
