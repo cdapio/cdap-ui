@@ -37,6 +37,7 @@ public class Constants {
   public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
   public static final String PIPELINE_STUDIO_URL = "http://localhost:11011/pipelines/ns/default/studio";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
+  public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
 
   public static final String DEFAULT_GCS_CONNECTION_NAME = "gcs_" + String.valueOf(getRandomArbitrary(1, 10000));
 
