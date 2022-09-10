@@ -18,12 +18,18 @@ package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.cdap.ui.utils.HttpRequestHandler;
+import io.cdap.common.http.HttpMethod;
+import io.cdap.common.http.HttpResponse;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
+import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+
+import java.io.IOException;
 
 public class Nuxtour {
   private static final String NUXTOUR_MODAL_XPATH =
@@ -104,5 +110,18 @@ public class Nuxtour {
   @Then("Welcome tour should close")
   public void welcomeShouldClose() {
     Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId("welcome-nux-tour")));
+  }
+
+  @After
+  public void resetNuxtourSettings() {
+    try {
+      HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.PUT,
+                                                                 Constants.BASE_SERVER_URL + "/v3/configuration/user",
+                                                                 null,
+                                                                 null,
+                                                                 null);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

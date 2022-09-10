@@ -69,7 +69,7 @@ public class PipelineHierarchy {
 
   @Then("Open transform panel")
   public void openTransformPanel() {
-    Helper.expandPluginGroupIfNotAlreadyExpanded("Transform");
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("plugin-Transform-group-summary"));
   }
 
   @Then("Close {string} panel")
