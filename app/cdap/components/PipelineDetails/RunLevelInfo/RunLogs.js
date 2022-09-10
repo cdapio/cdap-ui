@@ -67,6 +67,7 @@ const RunLogs = ({ currentRun, runs }) => {
           className={classnames('run-info-container run-logs-container', { active: isOpen })}
           onClick={toggleLogs}
           data-cy="log-viewer-btn-toggle"
+          data-testid="log-viewer-btn-toggle"
         >
           <LogsBtnComp />
         </div>

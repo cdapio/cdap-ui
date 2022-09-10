@@ -16,10 +16,12 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
+import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.HttpRequestHandler;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
+import io.cucumber.core.api.Scenario;
 import io.cucumber.java.After;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,13 @@ public class AfterActions {
                                                                  null);
     } catch (IOException e) {
       logger.info(e.getMessage());
+    }
+  }
+
+  @After
+  public void takeScreenShotOnFailure(Scenario scenario) {
+    if (scenario.isFailed()) {
+      Commands.takeScreenshot(scenario.getName(), scenario.getLine().toString());
     }
   }
 }
