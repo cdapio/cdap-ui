@@ -30,7 +30,6 @@ export const useStyles = makeStyles({
     color: blue[500],
     fontSize: '14px',
     fontWeight: 400,
-    fontFamily: 'Noto Sans',
   },
   home: {
     width: '41px',
