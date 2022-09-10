@@ -16,6 +16,8 @@ import DataPrepStore from 'components/DataPrep/store';
 import { useStyles } from './styles';
 import MyDataPrepApi from 'api/dataprep';
 import { useParams } from 'react-router';
+import DirectiveContent from 'components/GridTable/DirectiveComponents';
+import { DIRECTIVE_COMPONENTS } from 'components/GridTable/DirectiveComponents/constants';
 
 const AddTransformation = (props) => {
   const { functionName, columnData, setLoading, missingDataList } = props;
@@ -79,6 +81,8 @@ const AddTransformation = (props) => {
     setColumnsPopup(false);
   };
 
+  const isComponentAvailable = DIRECTIVE_COMPONENTS.some((item) => item.type === functionName);
+
   return (
     <Fragment>
       <DrawerWidget
@@ -95,7 +99,7 @@ const AddTransformation = (props) => {
               handleSelectColumn={handleSelectColumn}
               selectedColumns={selectedColumns}
             />
-            {functionName == 'null' && (
+            {functionName == 'null' ? (
               <ActionsWidget
                 functionName={functionName}
                 setSelectedAction={setSelectedAction}
@@ -103,6 +107,10 @@ const AddTransformation = (props) => {
                 setReplaceValue={setReplaceValue}
                 replaceValue={replaceValue}
               />
+            ) : (
+              isComponentAvailable && (
+                <DirectiveContent directiveComponents={DIRECTIVE_COMPONENTS} {...props} />
+              )
             )}
           </div>
           <Button
