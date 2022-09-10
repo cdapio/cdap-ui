@@ -65,7 +65,6 @@ export const useStyles = makeStyles({
     width: '100vw',
     overflow: 'scroll',
     '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
     },
   },
