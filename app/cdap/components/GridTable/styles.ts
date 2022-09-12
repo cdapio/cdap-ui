@@ -16,11 +16,6 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  wrapper: {
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
-  },
   loadingContainer: {
     display: 'flex',
     justifyContent: 'center',
