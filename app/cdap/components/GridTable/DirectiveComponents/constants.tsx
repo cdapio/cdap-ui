@@ -1,6 +1,7 @@
 import React from 'react';
 import FilterComponent from './FilterComponent';
 import ParseCSVComponent from './ParseComponent/ParseCSVComponent';
+import ParseDateTimeComponent from './ParseComponent/ParseDateTimeComponent';
 import ParseLogComponent from './ParseComponent/ParseLogComponent';
 import ParseSimpleDateComponent from './ParseComponent/ParseSimpleDateComponent';
 
@@ -20,6 +21,10 @@ export const DIRECTIVE_COMPONENTS = [
   {
     type: 'parseSimpleDate',
     component: ParseSimpleDateComponent,
+  },
+  {
+    type: 'parseDateTime',
+    component: ParseDateTimeComponent,
   },
 ];
 

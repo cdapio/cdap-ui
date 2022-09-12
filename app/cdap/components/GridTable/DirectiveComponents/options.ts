@@ -128,3 +128,34 @@ export const PARSE_SIMPLE_DATE_OPTIONS = [
     value: 'customFormat',
   },
 ];
+
+export const PARSE_DATE_TIME_OPTIONS = [
+  {
+    label: 'yyyy-MM-dd HH:mm:ss',
+    value: 'yyyy-MM-dd HH:mm:ss',
+  },
+  {
+    label: "MM-dd-yyyy 'at' HH:mm:ss with timezone",
+    value: "MM-dd-yyyy 'at' HH:mm:ss with timezone",
+  },
+  {
+    label: 'dd/MM/yy HH:mm:ss',
+    value: 'dd/MM/yy HH:mm:ss',
+  },
+  {
+    label: "yyyy,MM.dd'T'HH:mm:ss.SSS with RFC timezone",
+    value: "yyyy,MM.dd'T'HH:mm:ss.SSS with RFC timezone",
+  },
+  {
+    label: 'MM.dd.yyyy HH:mm:ss.SSS',
+    value: 'MM.dd.yyyy HH:mm:ss.SSS',
+  },
+  {
+    label: 'EEE, d MMM yyyy HH:mm:ss',
+    value: 'EEE, d MMM yyyy HH:mm:ss',
+  },
+  {
+    label: 'Custom Format',
+    value: 'customFormat',
+  },
+];
