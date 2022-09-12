@@ -27,6 +27,7 @@ import io.cdap.e2e.utils.WaitHelper;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -216,5 +217,11 @@ public class Helper implements CdfHelper {
     } catch (IOException e) {
       Assert.fail(e.getMessage());
     }
+  }
+
+  public static void setShowWelcomeSessionStorage() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(String.format(
+      "window.sessionStorage.setItem('showWelcome','true');"));
   }
 }
