@@ -65,3 +65,66 @@ export const PARSE_LOG_OPTIONS = [
     label: 'Custom',
   },
 ];
+
+export const PARSE_SIMPLE_DATE_OPTIONS = [
+  {
+    label: 'MM/dd/yyyy',
+    value: 'MM/dd/yyyy',
+  },
+  {
+    label: 'dd/MM/yyyy',
+    value: 'dd/MM/yyyy',
+  },
+  {
+    label: 'MM-dd-yyyy',
+    value: 'MM-dd-yyyy',
+  },
+  {
+    label: 'MM-dd-yy',
+    value: 'MM-dd-yy',
+  },
+  {
+    label: 'yyyy-MM-dd',
+    value: 'yyyy-MM-dd',
+  },
+  {
+    label: 'yyyy-MM-dd HH:mm:ss',
+    value: 'yyyy-MM-dd HH:mm:ss',
+  },
+  {
+    label: "MM-dd-yyyy 'at' HH:mm:ss z",
+    value: "MM-dd-yyyy 'at' HH:mm:ss z",
+  },
+  {
+    label: 'dd/MM/yy HH:mm:ss',
+    value: 'dd/MM/yy HH:mm:ss',
+  },
+  {
+    label: "yyyy,MM.dd'T'HH:mm:ss.SSSZ",
+    value: "yyyy,MM.dd'T'HH:mm:ss.SSSZ",
+  },
+  {
+    label: 'MM.dd.yyyy HH:mm:ss.SSS',
+    value: 'MM.dd.yyyy HH:mm:ss.SSS',
+  },
+  {
+    label: 'EEE, d MMM yyyy HH:mm:ss',
+    value: 'EEE, d MMM yyyy HH:mm:ss',
+  },
+  {
+    label: "EEE, MMM d, ''yy",
+    value: "EEE, MMM d, ''yy",
+  },
+  {
+    label: 'h:mm a',
+    value: 'h:mm a',
+  },
+  {
+    label: 'H:mm a, z',
+    value: 'H:mm a, z',
+  },
+  {
+    label: 'Custom Format',
+    value: 'customFormat',
+  },
+];
