@@ -37,7 +37,6 @@ import java.util.List;
 
 public class PipelineCanvasActions {
 
-
   @When("Open pipeline studio page")
   public void openPipelineStudioPage() {
     try {
