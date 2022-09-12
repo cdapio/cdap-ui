@@ -6,7 +6,7 @@ import {
   PIPE,
   SPACE,
   TAB,
-} from './ParseCSVComponent/constants';
+} from './ParseComponent/ParseCSVComponent/constants';
 
 export const PARSE_CSV_OPTIONS = [
   {

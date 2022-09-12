@@ -1,6 +1,6 @@
 import React from 'react';
 import FilterComponent from './FilterComponent';
-import ParseCSVComponent from './ParseCSVComponent';
+import ParseCSVComponent from './ParseComponent/ParseCSVComponent';
 
 export const DIRECTIVE_COMPONENTS = [
   {

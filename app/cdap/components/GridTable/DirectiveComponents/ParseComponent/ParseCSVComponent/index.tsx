@@ -1,9 +1,10 @@
 import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
 import React, { useState } from 'react';
 import { PLEASE_SELECT_THE_DELIMITER, SET_FIRST_ROW_AS_HEADER } from './constants';
-import { PARSE_CSV_OPTIONS } from '../options';
-import { useStyles } from '../styles';
+import { PARSE_CSV_OPTIONS } from '../../options';
+import { useStyles } from '../../styles';
 import InputRadioWithCustomInputComponent from '../InputRadioWithCustomInputComponent';
+import ParseComponent from '..';
 
 const ParseCSVComponent = (props) => {
   const [selectedParseType, setSelectedParseType] = useState('');
@@ -12,15 +13,7 @@ const ParseCSVComponent = (props) => {
   const classes = useStyles();
 
   return (
-    <section className={classes.functionSectionStyles}>
-      <div className={classes.funtionSectionWrapperStyles}>
-        <div className={classes.functionHeadingTextStyles}>{PLEASE_SELECT_THE_DELIMITER}</div>
-        <img
-          className={classes.greenCheckIconStyles}
-          src="/cdap_assets/img/green-check.svg"
-          alt="tick icon"
-        />
-      </div>
+    <ParseComponent sectionHeading={PLEASE_SELECT_THE_DELIMITER}>
       <InputRadioWithCustomInputComponent
         options={PARSE_CSV_OPTIONS}
         radioValue={selectedParseType}
@@ -35,7 +28,7 @@ const ParseCSVComponent = (props) => {
         onChange={(e) => setFirstRowAsHeader(e.target.checked)}
         className={classes.checkboxStyles}
       />
-    </section>
+    </ParseComponent>
   );
 };
 

@@ -7,7 +7,7 @@ import {
   RadioGroup,
 } from '@material-ui/core';
 import React from 'react';
-import { useStyles } from '../styles';
+import { useStyles } from '../../styles';
 
 const InputRadioWithCustomInputComponent = (props) => {
   const {
