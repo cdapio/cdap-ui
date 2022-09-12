@@ -1,4 +1,12 @@
-import { CAP_A, CAP_D, COMMA, CUSTOM_DELIMITER, PIPE, SPACE, TAB } from './constants';
+import {
+  CAP_A,
+  CAP_D,
+  COMMA,
+  CUSTOM_DELIMITER,
+  PIPE,
+  SPACE,
+  TAB,
+} from './ParseCSVComponent/constants';
 
 export const PARSE_CSV_OPTIONS = [
   {
