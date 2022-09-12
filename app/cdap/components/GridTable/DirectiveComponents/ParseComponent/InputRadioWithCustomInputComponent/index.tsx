@@ -40,7 +40,7 @@ const InputRadioWithCustomInputComponent = (props) => {
       </FormControl>
       {radioValue === customInputType && (
         <FormControlLabel
-          value="input"
+          value={customInput}
           className={classes.formFieldStyles}
           control={
             <Input

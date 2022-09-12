@@ -38,3 +38,30 @@ export const PARSE_CSV_OPTIONS = [
     label: CUSTOM_DELIMITER,
   },
 ];
+
+export const PARSE_LOG_OPTIONS = [
+  {
+    value: 'common',
+    label: 'Common',
+  },
+  {
+    value: 'combined',
+    label: 'Combined',
+  },
+  {
+    value: 'combinedio',
+    label: 'Combinedio',
+  },
+  {
+    value: 'referer',
+    label: 'Referer',
+  },
+  {
+    value: 'agent',
+    label: 'Agent',
+  },
+  {
+    value: 'custom',
+    label: 'Custom',
+  },
+];
