@@ -38,10 +38,12 @@ export default function SubHeader() {
       </Box>
 
       <Box className={classes.importDataContainer}>
-        <Box className={classes.importData}>
-          <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
-        </Box>
+        <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
+          <Box className={classes.importData}>
+            <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
+            <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
+          </Box>
+        </Link>
         <Box className={classes.importData}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>

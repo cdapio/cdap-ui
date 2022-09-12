@@ -67,4 +67,9 @@ export const useStyles = makeStyles({
     fontSize: '14px',
     lineHeight: '21px',
   },
+  link: {
+    '&:hover': {
+      textDecoration: 'none',
+    },
+  },
 });
