@@ -230,7 +230,7 @@ export default function GridTable() {
   }, [gridData]);
 
   return (
-    <Box className={classes.wrapper}>
+    <Box>
       <BreadCrumb datasetName={wid} />
       <Table aria-label="simple table" className="test">
         <TableHead>
