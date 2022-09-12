@@ -52,11 +52,59 @@ export const DATATYPE_OPTIONS = [
   },
 ];
 
+export const PARSE_OPTIONS = [
+  {
+    value: 'parseCSV',
+    label: 'CSV',
+  },
+  {
+    value: 'parseAvro',
+    label: 'Avro',
+  },
+  {
+    value: 'parseExcel',
+    label: 'Excel',
+  },
+  {
+    value: 'parseJSON',
+    label: 'JSON',
+  },
+  {
+    value: 'parseXML',
+    label: 'XML to JSON',
+  },
+  {
+    value: 'parseLog',
+    label: 'Log',
+  },
+  {
+    value: 'parseSimpleDate',
+    label: 'Simple Date',
+  },
+  {
+    value: 'parseDateTime',
+    label: 'Datetime',
+  },
+  {
+    value: 'parseFixedLength',
+    label: 'Fixed Length',
+  },
+  {
+    value: 'parseHL7',
+    label: 'HL7',
+  },
+];
+
 export const MENU_OPTIONS = [
   {
     value: 'changeDatatype',
     label: 'Change data type',
     options: DATATYPE_OPTIONS,
+  },
+  {
+    value: 'parse',
+    label: 'Parse',
+    options: PARSE_OPTIONS,
   },
   {
     value: 'setQualifiler',
