@@ -94,4 +94,4 @@ jobs:
         name: Build debug files
         path: |
           **/target/rat.txt
-          **/cucumber/snapshots/*.png
+          /tmp/cdap-ui-integration-fixtures/cucumber/snapshots/
