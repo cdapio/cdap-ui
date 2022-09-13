@@ -73,5 +73,16 @@ export const useStyles = makeStyles(() => {
     formGroupStyles: {
       width: 'calc(100% - 60px)',
     },
+    formLabelStyles: {
+      color: '#5F6368',
+      fontSize: '14px',
+      fontStyle: 'normal',
+      marginTop: '10px',
+      fontFamily: 'Noto Sans',
+      fontWeight: 400,
+      lineHeight: '150%',
+      letterSpacing: '0.15px',
+      marginBottom: '10px',
+    },
   };
 });
