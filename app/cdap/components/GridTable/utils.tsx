@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,19 +14,24 @@
  * the License.
  */
 import React from 'react';
-import { IExecuteAPIResponse } from './types';
+import { IExecuteAPIResponse, IGeneralNonNull } from './types';
 
-export const convertNonNullPercent = (gridData: IExecuteAPIResponse, key: string, nonNullValue) => {
+/**
+ * 
+ * @description This function takes API response of execute api and object containing detail about null, non-null or 
+ * empty values and returns the count of Missing/Null values
+ * @param {IExecuteAPIResponse} gridData This is the execute API Response
+ * @param {nonNullValue} nonNullValue This the extracted object with respect to column from execute API Response
+ * @returns {number} This is the calculated count of missing/null value
+ */
+export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValue: IGeneralNonNull) => {
   const lengthOfData: number = gridData?.values.length;
-  let count: number = 0;
-  let nonNullCount: number = 0;
-  let emptyCount: number = 0;
   let nullValueCount: number = 0;
   if (lengthOfData) {
-    nonNullCount = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-    nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-    emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-    count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
+    nullValueCount = nonNullValue.null
+      ? (((nonNullValue.null || 0) + (nonNullValue.empty || 0)) / 100) * lengthOfData
+      : 0;
   }
-  return count;
+  return nullValueCount;
 };
+
