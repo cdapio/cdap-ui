@@ -28,16 +28,15 @@ interface ICardCount {
   cardCount?: number;
 }
 const OngoingDataExploration = ({ cardCount }: ICardCount) => {
-  const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
+  const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
   const getOngoingData = () => {
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })
       .pipe(
-        switchMap((res: any) => {
+        switchMap((res: Record<string, unknown[]>) => {
           let values = [];
-          console.log(cardCount);
           if (cardCount) {
             values = res.values.slice(0, cardCount);
           } else {
