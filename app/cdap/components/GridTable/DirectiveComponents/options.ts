@@ -159,3 +159,14 @@ export const PARSE_DATE_TIME_OPTIONS = [
     value: 'customFormat',
   },
 ];
+
+export const PARSE_EXCEL_OPTIONS = [
+  {
+    label: 'Sheet Number',
+    value: 'sheetNumber',
+  },
+  {
+    label: 'Sheet Name',
+    value: 'sheetName',
+  },
+];

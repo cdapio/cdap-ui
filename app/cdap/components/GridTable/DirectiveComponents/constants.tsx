@@ -2,6 +2,7 @@ import React from 'react';
 import FilterComponent from './FilterComponent';
 import ParseCSVComponent from './ParseComponent/ParseCSVComponent';
 import ParseDateTimeComponent from './ParseComponent/ParseDateTimeComponent';
+import ParseExcelComponent from './ParseComponent/ParseExcelComponent';
 import ParseFixedLengthComponent from './ParseComponent/ParseFixedLengthComponent';
 import ParseLogComponent from './ParseComponent/ParseLogComponent';
 import ParseSimpleDateComponent from './ParseComponent/ParseSimpleDateComponent';
@@ -36,6 +37,14 @@ export const DIRECTIVE_COMPONENTS = [
     type: 'parseXML',
     component: ParseXMLToJSONComponent,
   },
+  {
+    type: 'parseJSON',
+    component: ParseXMLToJSONComponent,
+  },
+  {
+    type: 'parseExcel',
+    component: ParseExcelComponent,
+  },
 ];
 
 export const PLEASE_SELECT_THE_LOGS_FORMAT = 'Please select the logs format';
@@ -48,3 +57,7 @@ export const PADDING_PLACEHOLDER = 'Optional padding parameter';
 export const PARSE_AS_XML_TO_JSON = 'Parse as XML to JSON';
 export const DEPTH = 'Depth';
 export const DEPTH_PLACEHOLDER = 'Enter depth';
+export const CHOOSE_SHEET_IN_EXCEL =
+  'Choose how you would like to specify the sheet in your Excel file';
+export const SHEET_NUMBER_PLACEHOLDER = 'Sheet number';
+export const SHEET_NAME_PLACEHOLDER = 'Sheet name';
