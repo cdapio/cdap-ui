@@ -1,6 +1,6 @@
 import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
 import React, { useState } from 'react';
-import { PLEASE_SELECT_THE_DELIMITER, SET_FIRST_ROW_AS_HEADER } from './constants';
+import { PLEASE_SELECT_THE_DELIMITER, SET_FIRST_ROW_AS_HEADER } from '../../constants';
 import { PARSE_CSV_OPTIONS } from '../../options';
 import { useStyles } from '../../styles';
 import InputRadioWithCustomInputComponent from '../InputRadioWithCustomInputComponent';

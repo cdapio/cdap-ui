@@ -61,3 +61,12 @@ export const CHOOSE_SHEET_IN_EXCEL =
   'Choose how you would like to specify the sheet in your Excel file';
 export const SHEET_NUMBER_PLACEHOLDER = 'Sheet number';
 export const SHEET_NAME_PLACEHOLDER = 'Sheet name';
+export const PLEASE_SELECT_THE_DELIMITER = 'Please select the delimiter';
+export const COMMA = 'Comma';
+export const TAB = 'Tab';
+export const SPACE = 'Space';
+export const PIPE = 'Pipe';
+export const CAP_A = '^A';
+export const CAP_D = '^D';
+export const CUSTOM_DELIMITER = 'Custom delimiter';
+export const SET_FIRST_ROW_AS_HEADER = 'Set first row as header';
