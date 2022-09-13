@@ -15,18 +15,12 @@
  */
 import React, { useState, useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
-import { useErrorStyles } from './styles';
-import { IState } from './types';
-import { TransitionComponent } from './Components/TransitionComponent';
+import { useStyles } from './styles';
+import TransitionComponent from './Components/TransitionComponent';
 
-const PositionedSnackbar = (props) => {
-  const classes = useErrorStyles();
-  const [state, setState] = useState<IState>({
-    open: true,
-    vertical: 'bottom',
-    horizontal: 'right',
-  });
-  const { vertical, horizontal, open } = state;
+export default function PositionedSnackbar(props) {
+  const classes = useStyles();
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     handleClick();
@@ -36,28 +30,21 @@ const PositionedSnackbar = (props) => {
   }, []);
 
   const handleClick = () => () => {
-    setState({ open: true, ...state });
+    setIsOpen(true);
   };
 
   const handleClose = () => {
-    setState({ ...state, open: false });
+    setIsOpen(false);
     props.handleCloseError();
-  };
-
-  const properties = {
-    close: () => handleClose(),
   };
 
   return (
     <Snackbar
-      anchorOrigin={{ vertical, horizontal }}
-      open={open}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      open={isOpen}
       onClose={handleClose}
-      key={vertical + horizontal}
-      TransitionComponent={() => TransitionComponent(properties)}
+      TransitionComponent={() => <TransitionComponent close={() => handleClose()} />}
       className={classes.snackBarDiv}
     />
   );
-};
-
-export default PositionedSnackbar;
+}

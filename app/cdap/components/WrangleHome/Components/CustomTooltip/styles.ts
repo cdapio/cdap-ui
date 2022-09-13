@@ -14,7 +14,17 @@
  * the License.
  */
 
-import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
-export interface IState extends SnackbarOrigin {
-  open: boolean;
-}
+import { makeStyles } from '@material-ui/styles';
+
+export const useStyles = makeStyles((theme) => ({
+  arrow: {
+    color: '#000000',
+  },
+  tooltip: {
+    backgroundColor: '#000000',
+    fontSize: '16px',
+  },
+  forEachTabLabelWidth: {
+    width: '100%',
+  },
+}));

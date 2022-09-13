@@ -15,6 +15,8 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { blue } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   canBrowseHover: {
@@ -30,7 +32,7 @@ export const useStyles = makeStyles({
     color: 'white',
   },
   tabHeaders: {
-    backgroundColor: '#F1F8FF',
+    backgroundColor: blue[50],
     '& .MuiTypography-root': {
       fontSize: '16px',
       color: '#000000',
@@ -57,14 +59,12 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '1px solid #DADCE0',
+    borderRight: `1px solid ${grey[300]}`,
   },
   connectionsListContainer: {
     width: '100vw',
-    // position: 'fixed',
     overflow: 'scroll',
     '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
     },
   },
@@ -79,5 +79,11 @@ export const useStyles = makeStyles({
     top: 0,
     width: '100%',
     zIndex: 2000,
+  },
+  headerLabel: {
+    maxWidth: '245px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    pointerEvents: 'none',
   },
 });

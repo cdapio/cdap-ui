@@ -49,6 +49,8 @@ html {
   position: relative;
   min-height: 100%;
   overflow-y: hidden;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
 body {

@@ -19,23 +19,34 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
-import { GridHeaderCell } from './components/GridHeaderCell';
-import { GridKPICell } from './components/GridKPICell';
-import { GridTextCell } from './components/GridTextCell';
+import GridHeaderCell from './components/GridHeaderCell';
+import GridKPICell from './components/GridKPICell';
+import GridTextCell from './components/GridTextCell';
 import { useStyles } from './styles';
-import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import { flatMap } from 'rxjs/operators';
+import {
+  IExecuteAPIResponse,
+  IRecords,
+  IParams,
+  IHeaderNamesList,
+  IDataTypeOfColumns,
+  IDataOfStatistics,
+} from './types';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
 
-const GridTable = () => {
-  const { wid } = useParams() as any;
-  const params = useParams() as any;
+export default function GridTable() {
+  const { wid } = useParams() as IRecords;
+  const params = useParams() as IRecords;
   const classes = useStyles();
 
-  const [headersNamesList, setHeadersNamesList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
@@ -47,6 +58,8 @@ const GridTable = () => {
   ]);
 
   const getWorkSpaceData = (params: IParams, workspaceId: string) => {
+    const gridParams = {};
+    setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -54,46 +67,53 @@ const GridTable = () => {
         loading: true,
       },
     });
-    MyDataPrepApi.getWorkspace(params).subscribe((res) => {
-      const { dataprep } = DataPrepStore.getState();
-      if (dataprep.workspaceId !== workspaceId) {
-        return;
-      }
-      const directives = objectQuery(res, 'directives') || [];
-      const requestBody = directiveRequestBodyCreator(directives);
-      const sampleSpec = objectQuery(res, 'sampleSpec') || {};
-      const visualization = objectQuery(res, 'insights', 'visualization') || {};
+    MyDataPrepApi.getWorkspace(params)
+      .pipe(
+        flatMap((res: IValues) => {
+          const { dataprep } = DataPrepStore.getState();
+          if (dataprep.workspaceId !== workspaceId) {
+            return;
+          }
+          const directives = objectQuery(res, 'directives') || [];
+          const requestBody = directiveRequestBodyCreator(directives);
+          const sampleSpec = objectQuery(res, 'sampleSpec') || {};
+          const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
-      const insights = {
-        name: sampleSpec.connectionName,
-        workspaceName: res.workspaceName,
-        path: sampleSpec.path,
-        visualization,
-      };
-      requestBody.insights = insights;
+          const insights = {
+            name: sampleSpec.connectionName,
+            workspaceName: res.workspaceName,
+            path: sampleSpec.path,
+            visualization,
+          };
+          requestBody.insights = insights;
 
-      const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
-      const workspaceInfo = {
-        properties: insights,
-      };
-
-      MyDataPrepApi.execute(params, requestBody).subscribe((response) => {
+          const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
+          const workspaceInfo = {
+            properties: insights,
+          };
+          const gridParams = {
+            directives,
+            workspaceId,
+            workspaceUri,
+            workspaceInfo,
+            insights,
+          };
+          return MyDataPrepApi.execute(params, requestBody);
+        })
+      )
+      .subscribe((response) => {
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
             data: response.values,
             headers: response.headers,
             types: response.types,
-            directives,
-            workspaceId,
-            workspaceUri,
-            workspaceInfo,
-            insights,
+            ...gridParams,
           },
         });
+        setLoading(false);
         setGridData(response);
       });
-    });
   };
 
   useEffect(() => {
@@ -104,7 +124,8 @@ const GridTable = () => {
     getWorkSpaceData(payload, wid);
   }, [wid]);
 
-  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
+  // ------------@createHeadersData Function is used for creating data of Table Header
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -136,6 +157,7 @@ const GridTable = () => {
     return metricArray;
   };
 
+  // ------------@getGridTableData Function is used for preparing data for entire grid-table
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
     const headersData = createHeadersData(rawData?.headers, rawData?.types);
@@ -160,7 +182,7 @@ const GridTable = () => {
   }, [gridData]);
 
   return (
-    <Box className={classes.wrapper}>
+    <Box>
       <BreadCrumb datasetName={wid} />
       {gridData?.headers?.length === 0 && <p>No rows in this sample</p>}
       <Table aria-label="simple table" className="test">
@@ -205,8 +227,11 @@ const GridTable = () => {
             })}
         </TableBody>
       </Table>
+      {loading && (
+        <div className={classes.loadingContainer}>
+          <LoadingSVG />
+        </div>
+      )}
     </Box>
   );
-};
-
-export default GridTable;
+}

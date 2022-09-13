@@ -13,14 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  wrapper: {
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '100%',
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 2000,
   },
 });

@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   breadCombContainer: {
@@ -24,5 +25,18 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     marginRight: '30px',
     marginLeft: '34px',
+  },
+  breadcrumbLabel: {
+    color: blue[500],
+    fontSize: '14px',
+    fontWeight: 400,
+  },
+  home: {
+    width: '41px',
+    height: '21px',
+  },
+  dataset: {
+    width: '81px',
+    height: '21px',
   },
 });
