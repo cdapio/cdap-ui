@@ -1,33 +1,31 @@
-import { CAP_A, CAP_D, COMMA, CUSTOM_DELIMITER, PIPE, SPACE, TAB } from './constants';
-
 export const PARSE_CSV_OPTIONS = [
   {
     value: 'comma',
-    label: COMMA,
+    label: 'Comma',
   },
   {
     value: 'tab',
-    label: TAB,
+    label: 'Tab',
   },
   {
     value: 'space',
-    label: SPACE,
+    label: 'Space',
   },
   {
     value: 'pipe',
-    label: PIPE,
+    label: 'Pipe',
   },
   {
     value: 'capA',
-    label: CAP_A,
+    label: '^A',
   },
   {
     value: 'capD',
-    label: CAP_D,
+    label: '^D',
   },
   {
     value: 'customDelimiter',
-    label: CUSTOM_DELIMITER,
+    label: 'Custom delimiter',
   },
 ];
 
