@@ -125,7 +125,7 @@ const GridTable = () => {
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
           label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
-          count: vKey == 'types' ? '' : convertNonNullPercent(gridData, key, vValue),
+          count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
         });
       }),
         metricArray.push({

@@ -47,9 +47,3 @@ export interface IExecuteAPIResponse {
   values: IRowData[];
   summary: ISummary;
 }
-
-export interface IGeneralNonNull {
-  'non-null'?: number;
-  null?: number;
-  empty?: number;
-}

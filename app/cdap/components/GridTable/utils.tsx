@@ -14,17 +14,17 @@
  * the License.
  */
 import React from 'react';
-import { IExecuteAPIResponse, IGeneralNonNull } from './types';
+import { IExecuteAPIResponse } from './types';
 
 /**
- * 
- * @description This function takes API response of execute api and object containing detail about null, non-null or 
+ *
+ * @description This function takes API response of execute api and object containing detail about null, non-null or
  * empty values and returns the count of Missing/Null values
  * @param {IExecuteAPIResponse} gridData This is the execute API Response
  * @param {nonNullValue} nonNullValue This the extracted object with respect to column from execute API Response
  * @returns {number} This is the calculated count of missing/null value
  */
-export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValue: IGeneralNonNull) => {
+export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValue) => {
   const lengthOfData: number = gridData?.values.length;
   let nullValueCount: number = 0;
   if (lengthOfData) {
@@ -34,4 +34,3 @@ export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValu
   }
   return nullValueCount;
 };
-
