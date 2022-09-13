@@ -240,7 +240,6 @@ const DatasetWrapper = () => {
     const val = emitter === 'clear' ? '' : e.target.value.toLowerCase();
     if (val === '') {
       refs.current[index].value = '';
-      console.log(refs.current[index]);
     }
     const newData = _.cloneDeep(dataForTabs);
     const newDataToSearch = [...newData[index].data];
