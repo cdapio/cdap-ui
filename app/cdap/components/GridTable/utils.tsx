@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,26 +16,41 @@
 import React from 'react';
 import { IExecuteAPIResponse } from './types';
 
-export const convertNonNullPercent = (gridData: IExecuteAPIResponse, key: string, nonNullValue) => {
-  const lengthOfData: number = gridData?.values.length;
-  let count: number = 0;
-  let nonNullCount: number = 0;
-  let emptyCount: number = 0;
+/**
+ *
+ * @description This function takes API response of execute api and object containing detail about null, non-null or
+ * empty values and returns the count of Missing/Null values
+ * @param {IExecuteAPIResponse} gridData This is the execute API Response
+ * @param {nonNullValue} nonNullValue This the extracted object with respect to column from execute API Response
+ * @returns {number} This is the calculated count of missing/null value
+ */
+export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValue) => {
+  const lengthOfData: number = gridData.values.length;
   let nullValueCount: number = 0;
   if (lengthOfData) {
-    nonNullCount = nonNullValue['non-null'] ? (nonNullValue['non-null'] / 100) * lengthOfData : 0;
-    nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-    emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-    count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
+    nullValueCount = nonNullValue.null
+      ? (((nonNullValue.null || 0) + (nonNullValue.empty || 0)) / 100) * lengthOfData
+      : 0;
   }
-  return count;
+  return nullValueCount;
 };
 
-export const checkFrequentlyOccuredValues = (gridData: IExecuteAPIResponse, key: string) => {
-  const valueOfKey = gridData.values.map((el) => el[key]);
-  let mostfrequentItem: number = 1;
+/**
+ *
+ * @description This function takes API response of execute api and key(header column key) and finds out which item
+ * in a column appears maximum times, and returns an object containing value and the number of time it is present
+ * @param {IExecuteAPIResponse} gridData This is the execute API Response
+ * @param {string} key This is the name of column header
+ * @returns {name: string, count: number} Return value, object containing name of most frequently occurred value with its count
+ */
+export const checkFrequentlyOccuredValues = (
+  gridData: IExecuteAPIResponse | undefined,
+  key: string
+) => {
+  const valueOfKey = gridData?.values.map((el) => el[key]);
+  let mostFrequentItem: number = 1;
   let mostFrequentItemCount: number = 0;
-  let mostfrequentItemValue: string = '';
+  let mostFrequentItemValue: string = '';
   const mostFrequentDataItem = {
     name: '',
     count: 0,
@@ -46,16 +61,16 @@ export const checkFrequentlyOccuredValues = (gridData: IExecuteAPIResponse, key:
         if (item == value) {
           mostFrequentItemCount++;
         }
-        if (mostfrequentItem < mostFrequentItemCount) {
-          mostfrequentItem = mostFrequentItemCount;
-          mostfrequentItemValue = item;
+        if (mostFrequentItem < mostFrequentItemCount) {
+          mostFrequentItem = mostFrequentItemCount;
+          mostFrequentItemValue = item;
         }
       });
       mostFrequentItemCount = 0;
-      mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+      mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
     });
   }
-  mostFrequentDataItem.name = mostfrequentItemValue;
+  mostFrequentDataItem.name = mostFrequentItemValue;
   mostFrequentDataItem.count = mostFrequentItemCount;
   return mostFrequentDataItem;
 };
