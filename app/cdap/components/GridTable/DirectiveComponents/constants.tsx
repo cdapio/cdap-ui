@@ -5,6 +5,7 @@ import ParseDateTimeComponent from './ParseComponent/ParseDateTimeComponent';
 import ParseFixedLengthComponent from './ParseComponent/ParseFixedLengthComponent';
 import ParseLogComponent from './ParseComponent/ParseLogComponent';
 import ParseSimpleDateComponent from './ParseComponent/ParseSimpleDateComponent';
+import ParseXMLToJSONComponent from './ParseComponent/ParseXMLToJSONComponent';
 
 export const DIRECTIVE_COMPONENTS = [
   {
@@ -31,6 +32,10 @@ export const DIRECTIVE_COMPONENTS = [
     type: 'parseFixedLength',
     component: ParseFixedLengthComponent,
   },
+  {
+    type: 'parseXML',
+    component: ParseXMLToJSONComponent,
+  },
 ];
 
 export const PLEASE_SELECT_THE_LOGS_FORMAT = 'Please select the logs format';
@@ -40,3 +45,6 @@ export const COLUMN_WIDTHS = 'Column widths';
 export const PADDING = 'Padding';
 export const COLUMN_WIDTHS_PLACEHOLDER = 'e.g. 3, 5, 2, 5, 15';
 export const PADDING_PLACEHOLDER = 'Optional padding parameter';
+export const PARSE_AS_XML_TO_JSON = 'Parse as XML to JSON';
+export const DEPTH = 'Depth';
+export const DEPTH_PLACEHOLDER = 'Enter depth';

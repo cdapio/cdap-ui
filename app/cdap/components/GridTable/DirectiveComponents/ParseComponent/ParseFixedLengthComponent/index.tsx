@@ -25,7 +25,7 @@ const ParseFixedLengthComponent = (props) => {
           classnames={classes.formFieldStyles}
           inputProps={{
             classes: { underline: classes.underlineStyles, input: classes.inputStyles },
-            type: 'text',
+            type: 'number',
             value: columnWidths,
             onChange: (e) => setColumnWidths(e.target.value),
             color: 'primary',
@@ -38,7 +38,7 @@ const ParseFixedLengthComponent = (props) => {
           classnames={classes.formFieldStyles}
           inputProps={{
             classes: { underline: classes.underlineStyles, input: classes.inputStyles },
-            type: 'text',
+            type: 'number',
             value: padding,
             onChange: (e) => setPadding(e.target.value),
             color: 'primary',
