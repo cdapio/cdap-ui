@@ -17,7 +17,7 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { WrangelIcon } from 'components/ConnectionList/iconStore';
+import { WrangleIcon } from 'components/ConnectionList/iconStore';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import * as React from 'react';
@@ -111,7 +111,7 @@ const TabLabelCanSample = ({
         </Typography>
         <div onClick={() => onExplore(entity)}>
           <Box className="wranglingHover">
-            <WrangelIcon />
+            <WrangleIcon />
             <Typography color="primary">{WRANGLE_LABEL}</Typography>
           </Box>
         </div>
@@ -124,7 +124,7 @@ const TabLabelCanSample = ({
       </Typography>
       <div onClick={() => onExplore(entity)}>
         <Box className="wranglingHover">
-          <WrangelIcon />
+          <WrangleIcon />
           <Typography color="primary">{WRANGLE_LABEL}</Typography>
         </Box>
       </div>
