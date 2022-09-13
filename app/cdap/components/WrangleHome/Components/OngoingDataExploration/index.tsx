@@ -46,7 +46,7 @@ export default function OngoingDataExploration() {
               directives: item.directives,
               limit: 1000,
               insights: {
-                name: item.name,
+                name: item.sampleSpec.connectionName,
                 workspaceName: item.workspaceName,
                 path: item?.sampleSpec?.path,
                 visualization: {},
