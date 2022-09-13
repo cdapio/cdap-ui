@@ -16,7 +16,7 @@ import {
 } from '../../constants';
 import { PARSE_EXCEL_OPTIONS } from '../../options';
 import { useStyles } from '../../styles';
-import { SET_FIRST_ROW_AS_HEADER } from '../ParseCSVComponent/constants';
+import { SET_FIRST_ROW_AS_HEADER } from '../../constants';
 
 const ParseExcelComponent = (props) => {
   const [sheetRadioType, setSheetRadioType] = useState('sheetNumber');
