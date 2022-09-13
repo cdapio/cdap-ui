@@ -22,21 +22,25 @@ import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 
-const BreadCrumb = ({ datasetName }) => {
+export default function BreadCrumb({ datasetName }) {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
+        <Link
+          className={`${classes.breadcrumbLabel} ${classes.home}`}
+          to={`/ns/${getCurrentNamespace()}/home`}
+        >
           Home
         </Link>
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}>
-          Select Dataset
+        <Link
+          className={`${classes.breadcrumbLabel} ${classes.dataset}`}
+          to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
+        >
+          Data Sources
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
       </Breadcrumbs>
     </Box>
   );
-};
-
-export default BreadCrumb;
+}

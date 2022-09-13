@@ -15,24 +15,27 @@
  */
 
 import { Box, styled, Typography } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
+import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { GCSIcon } from 'components/ConnectionList/iconStore';
-import * as React from 'react';
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router';
-import SubHeader from './Components/SubHeader';
-import ConnectionsTabs from './Components/ConnectionTabs';
-import { useStyles } from './styles';
-import If from 'components/shared/If';
+import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
+import * as React from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
+import { useLocation, useParams } from 'react-router';
+import ConnectionsTabs from './Components/ConnectionTabs';
+import CustomTooltip from './Components/CustomTooltip';
+import SubHeader from './Components/SubHeader';
+import { useStyles } from './styles';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
   display: 'flex',
-  borderTop: '1px solid #E0E0E0;',
+  borderTop: '1px solid',
+  borderColor: grey[300],
 
   height: '100%',
   '& > :first-child': {
@@ -43,21 +46,19 @@ const SelectDatasetWrapper = styled(Box)({
   },
 });
 
-const DatasetWrapper = () => {
-  const { connectorType } = useParams() as any;
+export default function ConnectionList() {
+  const { connectorType } = useParams() as IRecords;
 
+  const refs = useRef([]);
   const classes = useStyles();
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
-    if (isError) {
-      setIsErrorOnNoWorkSpace(isError);
-    }
   };
   let connectionId;
   const [dataForTabs, setDataForTabs] = useState([
@@ -70,24 +71,26 @@ const DatasetWrapper = () => {
   ]);
 
   const getConnectionsTabData = async () => {
+    // Fetching the all available connectors list
     let connectorTypes = await fetchConnectors();
     let allConnectionsTotalLength = 0;
 
+    // Fetching all the connections list inside a connector
     const categorizedConnections = await getCategorizedConnections();
-    connectorTypes = connectorTypes.filter((conn): any => {
+    connectorTypes = connectorTypes.filter((conn) => {
       return [conn.name];
     });
-
-    connectorTypes = connectorTypes.map((connectorType): any => {
+    // Mapping connector types and corresponding connections
+    connectorTypes = connectorTypes.map((connectorType) => {
       const connections = categorizedConnections.get(connectorType.name) || [];
       allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
-
       return {
         ...connectorType,
         count: connections.length,
-        SVG: <GCSIcon />,
+        icon: <GCSIcon />,
       };
     });
+
     const firstLevelData = connectorTypes.filter((each) => {
       if (each.count > 0) {
         return {
@@ -96,18 +99,16 @@ const DatasetWrapper = () => {
         };
       }
     });
-    setDataForTabs((prev): any => {
+    setLoading(false);
+    setDataForTabs((prev) => {
       const tempData = [...prev];
       tempData[0].data = firstLevelData;
       return tempData;
     });
   };
 
-  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
-    const categorizedConnections = await getCategorizedConnections();
-    const connections = categorizedConnections.get(selectedValue) || [];
-
-    setDataForTabs((prev): any => {
+  const setDataForTabsHelper = (res, index) => {
+    setDataForTabs((prev) => {
       const tempData = [...prev];
       tempData.push({
         data: [],
@@ -115,11 +116,22 @@ const DatasetWrapper = () => {
         selectedTab: '',
         isSearching: false,
       });
-      tempData[index + 1][`data`] = connections;
+      if (res.entities) {
+        tempData[index + 1][`data`] = res.entities;
+      } else {
+        tempData[index + 1][`data`] = res;
+      }
       tempData[index + 1][`showTabs`] = true;
       tempData[index + 1][`selectedTab`] = null;
+      tempData[index + 1][`isSearching`] = false;
       return tempData.slice(0, index + 2);
     });
+  };
+
+  const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
+    const categorizedConnections = await getCategorizedConnections();
+    const connections = categorizedConnections.get(selectedValue) || [];
+    setDataForTabsHelper(connections, index);
     toggleLoader(false);
   };
 
@@ -134,9 +146,9 @@ const DatasetWrapper = () => {
     });
   };
 
-  const selectedTabValueHandler = (entity: any, index: number) => {
+  const selectedTabValueHandler = (entity: IRecords, index: number) => {
     toggleLoader(true);
-    setDataForTabs((currentData): any => {
+    setDataForTabs((currentData) => {
       let newData = [...currentData];
       newData[index].selectedTab = entity.name;
       newData = newData.map((each) => {
@@ -151,39 +163,13 @@ const DatasetWrapper = () => {
         getCategorizedConnectionsforSelectedTab(entity.name, index);
       } else if (index === 1) {
         fetchEntities(entity.name).then((res) => {
-          setDataForTabs((prev): any => {
-            const tempData = [...prev];
-            tempData.push({
-              data: [],
-              showTabs: false,
-              selectedTab: '',
-              isSearching: false,
-            });
-            tempData[index + 1][`data`] = res.entities;
-            tempData[index + 1][`showTabs`] = true;
-            tempData[index + 1][`selectedTab`] = null;
-            tempData[index + 1][`isSearching`] = false;
-            return tempData.slice(0, index + 2);
-          });
+          setDataForTabsHelper(res, index);
           toggleLoader(false);
         });
       } else {
         if (entity.canBrowse) {
           fetchEntities(dataForTabs[1].selectedTab, entity.path).then((res) => {
-            setDataForTabs((prev): any => {
-              const tempData = [...prev];
-              tempData.push({
-                data: [],
-                showTabs: false,
-                selectedTab: '',
-                isSearching: false,
-              });
-              tempData[index + 1][`data`] = res.entities;
-              tempData[index + 1][`showTabs`] = true;
-              tempData[index + 1][`selectedTab`] = null;
-              tempData[index + 1][`isSearching`] = false;
-              return tempData.slice(0, index + 2);
-            });
+            setDataForTabsHelper(res, index);
             toggleLoader(false);
           });
         }
@@ -192,13 +178,13 @@ const DatasetWrapper = () => {
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getConnectionsTabData();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setDataForTabs((prev) => {
-      const temp = [...prev];
+      const temp = prev;
       temp[0].selectedTab = connectorType;
       return temp;
     });
@@ -219,49 +205,68 @@ const DatasetWrapper = () => {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs &&
-          Array.isArray(dataForTabs) &&
-          dataForTabs.map((each, index) => {
-            if (each.data.filter((el) => el.connectionId).length) {
-              connectionId = each.data.filter((el) => el.connectionId)[0].connectionId;
-            }
-            if (index === 0) {
-              headerContent = headerForLevelZero();
-            } else {
-              headerContent = (
-                <>
+        {dataForTabs.map((each, index) => {
+          const connectionIdRequired = each.data.filter((el) => el.connectionId);
+          if (connectionIdRequired.length) {
+            connectionId = connectionIdRequired[0].connectionId;
+          }
+          if (index === 0) {
+            headerContent = headerForLevelZero();
+          } else {
+            headerContent =
+              refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
+                <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
                   <Box className={classes.beforeSearchIconClickDisplay}>
-                    <Typography variant="body2">{dataForTabs[index - 1].selectedTab}</Typography>
+                    <Typography
+                      variant="body2"
+                      className={classes.headerLabel}
+                      ref={(element) => {
+                        refs.current[index] = element;
+                      }}
+                    >
+                      {dataForTabs[index - 1].selectedTab}
+                    </Typography>
                   </Box>
-                </>
+                </CustomTooltip>
+              ) : (
+                <Box className={classes.beforeSearchIconClickDisplay}>
+                  <Typography
+                    variant="body2"
+                    className={classes.headerLabel}
+                    ref={(element) => {
+                      refs.current[index] = element;
+                    }}
+                  >
+                    {dataForTabs[index - 1].selectedTab}
+                  </Typography>
+                </Box>
               );
-            }
-            return (
-              <Box className={classes.tabsContainerWithHeader}>
-                <Box className={classes.tabHeaders}>{headerContent}</Box>
-                <ConnectionsTabs
-                  tabsData={each}
-                  handleChange={selectedTabValueHandler}
-                  value={each.selectedTab}
-                  index={index}
-                  connectionId={connectionId || ''}
-                  toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                  setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                />
-              </Box>
-            );
-          })}
+          }
+          return (
+            <Box className={classes.tabsContainerWithHeader}>
+              <Box className={classes.tabHeaders}>{headerContent}</Box>
+              <ConnectionsTabs
+                tabsData={each}
+                handleChange={selectedTabValueHandler}
+                value={each.selectedTab}
+                index={index}
+                connectionId={connectionId || ''}
+                toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+              />
+            </Box>
+          );
+        })}
       </SelectDatasetWrapper>
-      <If condition={loading}>
+
+      {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
-      </If>
+      )}
       {isErrorOnNoWorkspace && (
         <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
       )}
     </Box>
   );
-};
-
-export default DatasetWrapper;
+}

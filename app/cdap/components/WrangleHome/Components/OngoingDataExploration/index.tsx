@@ -23,17 +23,20 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { IResponseData } from './types';
 
-const OngoingDataExploration = (props) => {
-  const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
+export default function OngoingDataExploration() {
+  const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
+    // Getting the workspace name, path ,workspaceId and name from MyDataPrepApi.getWorkspaceList API and
+    //  using these in params and requestBody to get Data quality from MyDataPrepApi.execute API
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })
       .pipe(
-        switchMap((res: any) => {
+        switchMap((res: IResponseData) => {
           const workspaces = res.values.map((item) => {
             const params = {
               context: 'default',
@@ -43,7 +46,7 @@ const OngoingDataExploration = (props) => {
               directives: item.directives,
               limit: 1000,
               insights: {
-                name: item.name,
+                name: item.sampleSpec.connectionName,
                 workspaceName: item.workspaceName,
                 path: item?.sampleSpec?.path,
                 visualization: {},
@@ -68,8 +71,8 @@ const OngoingDataExploration = (props) => {
           return forkJoin(workspaces);
         })
       )
-      .subscribe((response) => {
-        response.forEach((workspace, index) => {
+      .subscribe((responses) => {
+        responses.forEach((workspace, index) => {
           let dataQuality = 0;
           workspace.headers.forEach((element) => {
             const general = workspace.summary.statistics[element].general;
@@ -113,5 +116,4 @@ const OngoingDataExploration = (props) => {
       })}
     </Box>
   );
-};
-export default OngoingDataExploration;
+}

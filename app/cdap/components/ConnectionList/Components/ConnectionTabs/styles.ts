@@ -15,17 +15,19 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import { blue } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
   connectionsTabsParent: {
     overflow: 'scroll',
+    height: 'calc(100vh - 200px)',
   },
   boxStyles: {
     zIndex: 1,
     height: '100%',
   },
   tabIndicatorStyles: {
-    backgroundColor: '#3994FF',
+    backgroundColor: blue[500],
     color: 'white !important',
     width: '100%',
     zIndex: 2,
@@ -35,6 +37,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   tabsContainer: {
     '& .MuiTabs-scroller': {
+      '& .canBrowseHover': {
+        display: 'none',
+      },
       '& .MuiButtonBase-root.Mui-selected': {
         color: '#fff',
         '& .canBrowseHover': {
@@ -94,6 +99,8 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     textDecoration: 'none',
     gap: '10px',
+    outline: 0,
+    border: 0,
   },
   wrangleTypography: {
     color: '#4681F4 !important',
