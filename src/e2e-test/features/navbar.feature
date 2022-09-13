@@ -26,7 +26,7 @@ Feature: Navbar - Validate navbar functionalities
 
   @NAVBAR_TEST
   Scenario: Verify instance navbar in light theme
-    # Given Set "light" theme
+    Given Set "light" theme
     When Open CDAP main page
     Then Check navbar should have "light" bgcolor
     Then Check drawer invisible

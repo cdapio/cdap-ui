@@ -90,4 +90,5 @@ jobs:
         name: Build debug files
         path: |
           **/target/rat.txt
-          /tmp/cdap-ui-integration-fixtures/cucumber/snapshots/
+          **/target/cucumber-html-report/
+          **/target/cucumber-reports/

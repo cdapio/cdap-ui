@@ -21,8 +21,15 @@ import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.HttpRequestHandler;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
+import io.cdap.e2e.utils.ConstantsUtil;
+import io.cdap.e2e.utils.SeleniumDriver;
+import io.cdap.e2e.utils.SeleniumHelper;
 import io.cucumber.core.api.Scenario;
 import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,13 +53,14 @@ public class AfterActions {
     }
   }
 
-  @After
-  public void takeScreenShotOnFailure(Scenario scenario) {
-    if (scenario.isFailed()) {
-      String uri = scenario.getUri();
-      Commands.takeScreenshot(uri.substring(uri.lastIndexOf("/") + 1, uri.lastIndexOf(".")),
-                              scenario.getName(),
-                              scenario.getLine().toString());
-    }
-  }
+//  @After
+//  public void takeScreenShotOnFailure(Scenario scenario) {
+//    if (scenario.isFailed()) {
+//      String uri = scenario.getUri();
+//      Commands.takeScreenshot(uri.substring(uri.lastIndexOf("/") + 1, uri.lastIndexOf(".")),
+//                              scenario.getName(),
+//                              scenario.getLine().toString());
+//    }
+//  }
+
 }
