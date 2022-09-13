@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class AfterActions {
   private static final Logger logger = LoggerFactory.getLogger(stepsdesign.BeforeActions.class);
@@ -48,7 +49,10 @@ public class AfterActions {
   @After
   public void takeScreenShotOnFailure(Scenario scenario) {
     if (scenario.isFailed()) {
-      Commands.takeScreenshot(scenario.getName(), scenario.getLine().toString());
+      String uri = scenario.getUri();
+      Commands.takeScreenshot(uri.substring(uri.lastIndexOf("/") + 1, uri.lastIndexOf(".")),
+                              scenario.getName(),
+                              scenario.getLine().toString());
     }
   }
 }

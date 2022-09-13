@@ -312,17 +312,18 @@ public class Commands implements CdfHelper {
   }
 
   public static void takeScreenshot() {
-    takeScreenshot(String.format("%s", new Date()), "");
+    takeScreenshot(String.format("%s", new Date()), "", "");
   }
 
-  public static void takeScreenshot(String scenarioName, String failedLine) {
+  public static void takeScreenshot(String featureName, String scenarioName, String failedLine) {
     try {
       TakesScreenshot scrShot = (TakesScreenshot) SeleniumDriver.getDriver();
       File srcFile = scrShot.getScreenshotAs(OutputType.FILE);
       File destFile = new File(String.format(
-        "/tmp/cdap-ui-integration-fixtures/cucumber/snapshots/%s_%s.png",
+        "/tmp/cdap-ui-integration-fixtures/cucumber/snapshots/%s_%s_%s.png",
+        featureName,
         scenarioName,
-        "failed_at_line" + failedLine));
+        "failed-at-L" + failedLine));
       FileUtils.copyFile(srcFile, destFile);
     } catch (IOException e) {
       e.printStackTrace();
