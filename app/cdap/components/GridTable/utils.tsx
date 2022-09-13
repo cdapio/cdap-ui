@@ -24,8 +24,8 @@ import { IExecuteAPIResponse } from './types';
  * @param {nonNullValue} nonNullValue This the extracted object with respect to column from execute API Response
  * @returns {number} This is the calculated count of missing/null value
  */
-export const convertNonNullPercent = (gridData: IExecuteAPIResponse, nonNullValue) => {
-  const lengthOfData: number = gridData.values.length;
+export const convertNonNullPercent = (gridData: IExecuteAPIResponse | undefined, nonNullValue) => {
+  const lengthOfData: number = gridData?.values.length;
   let nullValueCount: number = 0;
   if (lengthOfData) {
     nullValueCount = nonNullValue.null
