@@ -33,7 +33,7 @@ export default function SubHeader() {
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             Home
           </Link>
-          <Typography>Data Sources</Typography>
+          <Typography className={classes.breadCrumbTyporgraphy}>Data Sources</Typography>
         </Breadcrumbs>
       </Box>
 
