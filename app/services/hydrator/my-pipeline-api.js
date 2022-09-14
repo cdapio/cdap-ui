@@ -94,6 +94,7 @@ angular.module(PKG.name + '.services')
 
         // PREVIEW
         runPreview: myHelpers.getConfig('POST', 'REQUEST', '/namespaces/:namespace/previews', false, { suppressErrors: true }),
+        getPreviewStatus: myHelpers.getConfig('GET', 'REQUEST', '/namespaces/:namespace/previews/:previewId/status', false, { suppressErrors: true }),
         stopPreview: myHelpers.getConfig('POST', 'REQUEST', '/namespaces/:namespace/previews/:previewId/stop', false, { suppressErrors: true }),
         getStagePreview: myHelpers.getConfig('POST', 'REQUEST', previewPath + '/:previewId/tracers', false, { suppressErrors: true }),
 

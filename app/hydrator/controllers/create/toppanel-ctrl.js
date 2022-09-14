@@ -32,7 +32,6 @@ class HydratorPlusPlusTopPanelCtrl {
     $interval,
     myPipelineApi,
     $state,
-    MyCDAPDataSource,
     myAlertOnValium,
     MY_CONFIG,
     PREVIEWSTORE_ACTIONS,
@@ -46,7 +45,8 @@ class HydratorPlusPlusTopPanelCtrl {
     HydratorPlusPlusHydratorService,
     $rootScope,
     uuid,
-    HydratorUpgradeService
+    HydratorUpgradeService,
+    MyPollingService
   ) {
     this.consoleStore = HydratorPlusPlusConsoleStore;
     this.myPipelineExportModalService = myPipelineExportModalService;
@@ -67,7 +67,6 @@ class HydratorPlusPlusTopPanelCtrl {
     this.myPreferenceApi = myPreferenceApi;
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.$state = $state;
-    this.dataSrc = new MyCDAPDataSource($scope);
     this.myAlertOnValium = myAlertOnValium;
     this.currentPreviewId = null;
     this.$window = $window;
@@ -89,6 +88,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.HydratorUpgradeService = HydratorUpgradeService;
     this.startingPipeline = false;
     this.enablePipelineUpdate = false;
+    this.pollingService = new MyPollingService($scope);
 
     this.closeLogs = this.closeLogs.bind(this);
     this.saveMetadataV2 = this.saveMetadataV2.bind(this);
@@ -113,8 +113,8 @@ class HydratorPlusPlusTopPanelCtrl {
     this.applyBatchConfigFromReactStore = this.applyBatchConfigFromReactStore.bind(this);
     this.applyRealtimeConfigFromReactStore = this.applyRealtimeConfigFromReactStore.bind(this);
     this.validatePluginProperties = this.validatePluginProperties.bind(this);
-    this.getRuntimeArgumentsV2 = this.getRuntimeArgumentsV2.bind(this)
-    this.getStoreConfig = this.getStoreConfig.bind(this)
+    this.getRuntimeArgumentsV2 = this.getRuntimeArgumentsV2.bind(this);
+    this.getStoreConfig = this.getStoreConfig.bind(this);
     this.getScheduleInfo = this.getScheduleInfo.bind(this);
 
     this.setState();
@@ -1092,7 +1092,7 @@ class HydratorPlusPlusTopPanelCtrl {
   setRuntimeArguments(runtimeArguments) {
     this.runtimeArguments = runtimeArguments;
   }
-  
+
   closeScheduler(){
     this.viewScheduler = false;
   }
@@ -1270,7 +1270,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.stopTimer();
     this.previewLoading = false;
     this.previewRunning = false;
-    this.dataSrc.stopPoll(this.pollId);
+    this.pollingService.stopPoll(this.pollId);
     this.pollId = null;
   }
 
@@ -1334,13 +1334,15 @@ class HydratorPlusPlusTopPanelCtrl {
   startPollPreviewStatus(previewId) {
     this.previewLoading = false;
     this.previewRunning = true;
-    let poll = this.dataSrc.poll(
-      {
-        _cdapNsPath: "/previews/" + previewId + "/status",
-        interval: 1000,
-      },
-      (res) => {
-        this.pollId = res.__pollId__;
+
+    this.pollingService.poll(() => {
+      return this.myPipelineApi.getPreviewStatus({
+        namespace: this.$state.params.namespace,
+        previewId,
+      });
+    }, 1000,
+      (res, pollId) => {
+        this.pollId = pollId;
         if (this.previewStore) {
           this.previewStore.dispatch({
             type: this.PREVIEWSTORE_ACTIONS.SET_PREVIEW_STATUS,
@@ -1368,6 +1370,8 @@ class HydratorPlusPlusTopPanelCtrl {
             pipelineName.length > 0 ? ` "${pipelineName}"` : ""
           }`;
           if (res.status === COMPLETED || res.status === KILLED_BY_TIMER) {
+            this.pollingService.stopPoll(this.pollId);
+            this.pollId = null;
             this.myAlertOnValium.show({
               type: "success",
               content: `${pipelinePreviewPlaceholder} has completed successfully.`,
@@ -1403,7 +1407,7 @@ class HydratorPlusPlusTopPanelCtrl {
           content: "Pipeline preview failed : " + errorMsg,
         });
         this.previewRunning = false;
-        this.dataSrc.stopPoll(poll.__pollId__);
+        this.pollingService.stopPoll(this.pollId);
         this.pollId = null;
       }
     );
