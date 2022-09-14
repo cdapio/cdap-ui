@@ -26,6 +26,7 @@ export default function ToggleSwitch({
   onLabel,
   offLabel,
   dataCy = null,
+  dataTestId = null,
 }) {
   return (
     <div className={classnames('toggle-switch-container', { disabled: disabled })}>
@@ -33,6 +34,7 @@ export default function ToggleSwitch({
         className={classnames('toggle-switch', { on: isOn, off: !isOn })}
         onClick={onToggle}
         data-cy={`switch-${dataCy}`}
+        data-testid={`switch-${dataTestId}`}
       >
         <div className="switch-button" />
         <div
@@ -58,4 +60,5 @@ ToggleSwitch.propTypes = {
   onLabel: PropTypes.string,
   offLabel: PropTypes.string,
   dataCy: PropTypes.string,
+  dataTestId: PropTypes.string,
 };
