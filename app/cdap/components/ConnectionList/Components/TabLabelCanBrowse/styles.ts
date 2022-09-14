@@ -31,8 +31,15 @@ export const useStyles = makeStyles({
     height: '24px',
   },
   labelStyles: {
-    maxWidth: '192px',
+    maxWidth: '160px',
     whiteSpace: 'nowrap',
+    fontSize: '16px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    pointerEvents: 'none',
+  },
+  labelStylesCount: {
+    maxWidth: '36px',
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
