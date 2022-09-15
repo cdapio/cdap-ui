@@ -20,7 +20,7 @@ import { useStyles } from './styles';
 import { Box } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
-const screenWithoutSampleData = () => {
+export default function() {
   const classes = useStyles();
   return (
     <Box className={classes.noRecordWrapper}>
@@ -33,6 +33,4 @@ const screenWithoutSampleData = () => {
       </Box>
     </Box>
   );
-};
-
-export default screenWithoutSampleData;
+}
