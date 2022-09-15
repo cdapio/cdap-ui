@@ -299,7 +299,6 @@ const DatasetWrapper = () => {
                     <SearchRoundedIcon />
                     <input
                       type="text"
-                      // disableUnderline={true}
                       className={classes.searchBar}
                       onChange={(e: any) => handleSearch(e, index)}
                       ref={(e) => {
