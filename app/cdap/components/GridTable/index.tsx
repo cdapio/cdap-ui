@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow, Box } from '@material-ui/core';
+import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
@@ -25,8 +25,8 @@ import { useParams } from 'react-router';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
-import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
+import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import {
@@ -34,8 +34,8 @@ import {
   IRecords,
   IParams,
   IHeaderNamesList,
-  IDataTypeOfColumns,
   IDataOfStatistics,
+  IDataTypeOfColumns,
 } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
@@ -184,11 +184,11 @@ export default function GridTable() {
   return (
     <Box>
       <BreadCrumb datasetName={wid} />
-      {gridData?.headers?.length === 0 && <p>No rows in this sample</p>}
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
-            {headersNamesList?.length &&
+            {headersNamesList?.length > 0 &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
@@ -198,8 +198,8 @@ export default function GridTable() {
               ))}
           </TableRow>
           <TableRow>
-            {missingDataList?.length &&
-              headersNamesList?.length &&
+            {missingDataList?.length > 0 &&
+              headersNamesList.length > 0 &&
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
                   if (item.name == each.name) {
@@ -210,7 +210,7 @@ export default function GridTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rowsDataList?.length &&
+          {rowsDataList?.length > 0 &&
             rowsDataList.map((eachRow, rowIndex) => {
               return (
                 <TableRow key={`row-${rowIndex}`}>
