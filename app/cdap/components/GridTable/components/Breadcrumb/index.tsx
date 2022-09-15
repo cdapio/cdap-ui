@@ -26,7 +26,6 @@ import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
 
-  console.log('dataset Name', datasetName, 'locatiopn', location);
   const sourcePath =
     location.state.from === MATCH_SOURCE
       ? HOME_URL_PARAM

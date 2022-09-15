@@ -187,8 +187,6 @@ export default function GridTable() {
     getGridTableData();
   }, [gridData]);
 
-  console.log(workspaceName, 'workspace name');
-
   return (
     <Box>
       <BreadCrumb datasetName={workspaceName} location={location} />
