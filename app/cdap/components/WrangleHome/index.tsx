@@ -16,18 +16,17 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 import OngoingDataExploration from './Components/OngoingDataExploration';
-import WrangleCard from './Components/WrangleCard';
+import { WrangleCard } from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
 
-const WranglerHome = () => {
+export default function WranglerHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const cardCount = 2;
@@ -58,14 +57,12 @@ const WranglerHome = () => {
           </Box>
         </Box>
         <OngoingDataExploration cardCount={cardCount} />
-        <If condition={loading}>
+        {loading && (
           <Box className={classes.loadingContainer}>
             <LoadingSVG />
           </Box>
-        </If>
+        )}
       </Box>
     </Box>
   );
-};
-
-export default WranglerHome;
+}
