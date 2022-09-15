@@ -15,12 +15,16 @@
  */
 
 import { Button } from '@material-ui/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import classnames from 'classnames';
-import { PipelineHistory } from 'components/PipelineHistory/PipelineHistory';
+import PipelineHistoryOuter from 'components/PipelineHistory/PipelineHistory';
 import HistoryIcon from '@material-ui/icons/History';
 import T from 'i18n-react';
+import { ApolloClient, gql, InMemoryCache } from 'apollo-boost';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useQuery } from '@apollo/react-hooks';
+import PaginationStepper from 'components/shared/PaginationStepper';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -55,7 +59,7 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
       data-cy="pipeline-history-btn"
     >
       {renderPipelineHistoryBtn()}
-      <PipelineHistory
+      <PipelineHistoryOuter
         isOpen={isOpen}
         toggle={() => setIsOpen(false)}
         anchorEl={buttonRef.current}

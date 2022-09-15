@@ -24,6 +24,42 @@ import PipelineStopButton from 'components/PipelineDetails/PipelineDetailsTopPan
 import PipelineRunButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineRunButton';
 import PipelineSummaryButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineSummaryButton';
 import { PipelineHistoryButton } from './PipelineHistoryButton';
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import introspectionQueryResultData from '../../../../../../graphql/fragments/fragmentTypes.json';
+import Cookies from 'universal-cookie';
+import SessionTokenStore from 'services/SessionTokenStore';
+
+const cookie = new Cookies();
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache({ fragmentMatcher }),
+  request: (operation) => {
+    if (window.CDAP_CONFIG.securityEnabled && cookie.get('CDAP_Auth_Token')) {
+      const token = `Bearer ${cookie.get('CDAP_Auth_Token')}`;
+
+      operation.setContext({
+        headers: {
+          authorization: token,
+          'Session-Token': SessionTokenStore.getState(),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+    } else {
+      operation.setContext({
+        headers: {
+          'Session-Token': SessionTokenStore.getState(),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+    }
+  },
+});
 
 const mapStateToConfigureButton = (state, ownProps) => {
   return {
@@ -104,7 +140,9 @@ export default function PipelineDetailsButtons({
           runError={runError}
         />
         <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-        <PipelineHistoryButton pipelineName={pipelineName} />
+        <ApolloProvider client={client}>
+          <PipelineHistoryButton pipelineName={pipelineName} />
+        </ApolloProvider>
       </div>
     </Provider>
   );

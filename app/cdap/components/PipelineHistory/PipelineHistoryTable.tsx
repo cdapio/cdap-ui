@@ -41,23 +41,21 @@ export const PipelineHistoryTable = ({ appVersions }: IPipelineHistoryTableProps
   };
 
   return (
-    <div className="grid-wrapper pipeline-history-list-table">
-      <div className="grid grid-container">
-        {appVersions && (
-          <div className="grid-header">
-            <div className="grid-row">
-              <strong>{`Version (For develop)`}</strong>
-              <strong>{T.translate(`${PREFIX}.date`)}</strong>
-              <strong>{T.translate(`${PREFIX}.time`)}</strong>
-              <strong>{T.translate(`${PREFIX}.author`)}</strong>
-              <strong>{T.translate(`${PREFIX}.summary`)}</strong>
-              <strong />
-              <strong />
-            </div>
+    <div className="grid grid-container">
+      {appVersions && (
+        <div className="grid-header">
+          <div className="grid-row">
+            <strong>{`Version (For develop)`}</strong>
+            <strong>{T.translate(`${PREFIX}.date`)}</strong>
+            <strong>{T.translate(`${PREFIX}.time`)}</strong>
+            <strong>{T.translate(`${PREFIX}.author`)}</strong>
+            <strong>{T.translate(`${PREFIX}.summary`)}</strong>
+            <strong />
+            <strong />
           </div>
-        )}
-        {renderTableBody()}
-      </div>
+        </div>
+      )}
+      {renderTableBody()}
     </div>
   );
 };
