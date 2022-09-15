@@ -24,6 +24,7 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
@@ -35,6 +36,10 @@ import java.util.List;
 
 public class Commands implements CdfHelper {
 
+  public static NodeInfo simpleSourceNode = new NodeInfo("BigQueryTable", "batchsource", "0");
+  public static NodeInfo simpleTransformNode = new NodeInfo("Wrangler", "transform", "1");
+  public static NodeInfo simpleSinkNode = new NodeInfo("BigQueryMultiTable", "batchsink", "2");
+
   public static void addNodeToCanvas(NodeInfo node) {
     ElementHelper.clickOnElement(
       Helper.locateElementByCssSelector(
@@ -42,8 +47,8 @@ public class Commands implements CdfHelper {
     );
   }
 
-  public static WebElement getNode(NodeInfo element) {
-    return Helper.locateElementByCssSelector(Helper.getNodeSelectorFromNodeIndentifier(element));
+  public static WebElement getNode(NodeInfo node) {
+    return Helper.locateElementByCssSelector(Helper.getNodeSelectorFromNodeIdentifier(node));
   }
 
   public static void moveNode(String node, int toX, int toY) {
@@ -52,7 +57,7 @@ public class Commands implements CdfHelper {
   }
 
   public static void moveNode(NodeInfo node, int toX, int toY) {
-    moveNode(Helper.getNodeSelectorFromNodeIndentifier(node), toX, toY);
+    moveNode(Helper.getNodeSelectorFromNodeIdentifier(node), toX, toY);
   }
 
   public static void connectTwoNodes(NodeInfo source, NodeInfo target) {
@@ -80,26 +85,22 @@ public class Commands implements CdfHelper {
                                     String projectId, String serviceAccountPath) {
     fillConnectionCreateForm(connectionType, connectionId, projectId, serviceAccountPath);
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("connection-test-button")), 5);
+      Helper.locateElementByTestId("connection-test-button"), 5);
   }
 
   public static void createConnection(String connectionType, String connectionId) {
     fillConnectionCreateForm(connectionType, connectionId, null, null);
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("connection-submit-button")), 5);
+      Helper.locateElementByTestId("connection-submit-button"), 5);
     WaitHelper.waitForPageToLoad();
   }
 
   public static void deleteConnection(String connectionType, String connectionId) {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("categorized-connection-type-" + connectionType)));
+      Helper.locateElementByTestId("categorized-connection-type-" + connectionType));
 
     String connectionItemName = "connection-container-" + connectionType + "-" + connectionId;
-    WebElement connectionItem = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId(connectionItemName));
+    WebElement connectionItem = Helper.locateElementByTestId(connectionItemName);
 
     connectionItem.findElement(By.cssSelector("div[class*='actions-popover']")).click();
     String popperId = connectionItem.findElement(
@@ -151,22 +152,14 @@ public class Commands implements CdfHelper {
     }
 
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("add-connection-button")), 30);
+      Helper.locateElementByTestId("add-connection-button"), 30);
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("connector-" + connectionType)));
-    ElementHelper.sendKeys(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("name")), connectionId);
-    ElementHelper.replaceElementValue(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("project")), projectId);
+      Helper.locateElementByTestId("connector-" + connectionType));
+    sendKeysToInputElementByTestId("name", connectionId);
+    clearInputAndSendKeysToElementByTestId("project", projectId);
 
     //Using service account file path
-    ElementHelper.replaceElementValue(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("serviceFilePath")), serviceAccountPath);
+    clearInputAndSendKeysToElementByTestId("serviceFilePath", serviceAccountPath);
   }
 
   public static void dismissStudioLeaveConfirmationModal() {
@@ -175,57 +168,49 @@ public class Commands implements CdfHelper {
 
   public static void toggleTransformPanel() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-Transform-group-summary"))
+      Helper.locateElementByTestId("plugin-Transform-group-summary")
     );
   }
 
   public static void toggleAnalyticsPanel() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-Analytics-group-summary"))
+      Helper.locateElementByTestId("plugin-Analytics-group-summary")
     );
   }
 
   public static void toggleConditionsAndActionsPanel() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("\"plugin-Conditions and Actions-group-summary\""))
+      Helper.locateElementByTestId("\"plugin-Conditions and Actions-group-summary\"")
     );
   }
 
   public static void toggleSinkPanel() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-Sink-group-summary"))
+      Helper.locateElementByTestId("plugin-Sink-group-summary")
     );
   }
 
   public static void clickUndoButton() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("pipeline-undo-action-btn"))
+      Helper.locateElementByTestId("pipeline-undo-action-btn")
     );
   }
 
   public static void clickRedoButton() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("pipeline-redo-action-btn"))
+      Helper.locateElementByTestId("pipeline-redo-action-btn")
     );
   }
 
   public static void clickZoomInButton() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("pipeline-zoom-in-control"))
+      Helper.locateElementByTestId("pipeline-zoom-in-control")
     );
   }
 
   public static void closeConfigPopover() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("close-config-popover"))
+      Helper.locateElementByTestId("close-config-popover")
     );
   }
 
@@ -235,22 +220,18 @@ public class Commands implements CdfHelper {
   }
 
   public static void createSimplePipeline() {
-    NodeInfo sourceNode = new NodeInfo("Spanner", "batchsource", "0");
-    NodeInfo transformNode = new NodeInfo("Wrangler", "transform", "1");
-    NodeInfo sinkNode = new NodeInfo("BigQueryMultiTable", "batchsink", "2");
-
-    addNodeToCanvas(sourceNode);
+    addNodeToCanvas(simpleSourceNode);
 
     toggleTransformPanel();
-    addNodeToCanvas(transformNode);
+    addNodeToCanvas(simpleTransformNode);
     toggleTransformPanel();
 
     toggleSinkPanel();
-    addNodeToCanvas(sinkNode);
+    addNodeToCanvas(simpleSinkNode);
     toggleSinkPanel();
 
-    connectTwoNodes(sourceNode, transformNode);
-    connectTwoNodes(transformNode, sinkNode);
+    connectTwoNodes(simpleSourceNode, simpleTransformNode);
+    connectTwoNodes(simpleTransformNode, simpleSinkNode);
   }
 
   public static void createComplexPipeline() {
@@ -322,5 +303,17 @@ public class Commands implements CdfHelper {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public static void sendKeysToInputElementByTestId(String testId, String keys) {
+    ElementHelper.sendKeys(Helper.locateElementByCssSelector(
+      "input" + Helper.getCssSelectorByDataTestId(testId)), keys);
+  }
+
+  public static void clearInputAndSendKeysToElementByTestId(String testId, String keys) {
+    WebElement element = Helper.locateElementByCssSelector(
+      "input" + Helper.getCssSelectorByDataTestId(testId));
+    ElementHelper.clearElementValue(element);
+    ElementHelper.sendKeys(element, keys);
   }
 }

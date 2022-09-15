@@ -31,6 +31,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.io.File;
@@ -93,6 +95,11 @@ public class Helper implements CdfHelper {
       .findElement(By.cssSelector(cssSelector));
   }
 
+  public static WebElement locateElementByTestId(String testId) {
+    return SeleniumDriver.getDriver()
+      .findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
       .findElement(By.id(elementId));
@@ -116,7 +123,7 @@ public class Helper implements CdfHelper {
     return "[data-testid=" + dataTestId + "]";
   }
 
-  public static String getNodeSelectorFromNodeIndentifier(NodeInfo node) {
+  public static String getNodeSelectorFromNodeIdentifier(NodeInfo node) {
     return "[data-testid=\"plugin-node-" +
       node.getNodeName() + "-" +
       node.getNodeType() + "-" +
@@ -128,9 +135,8 @@ public class Helper implements CdfHelper {
     WaitHelper.waitForPageToLoad();
     ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
     ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
-    if (!SeleniumDriver.getDriver().getCurrentUrl().contains("studio")) {
-      throw new RuntimeException("URL redirection for pipeline creation unsuccessful.");
-    }
+    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("studio"));
+
     WaitHelper.waitForPageToLoad();
     WebElement uploadFile = SeleniumDriver.getDriver()
       .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
@@ -150,19 +156,15 @@ public class Helper implements CdfHelper {
     pipelineNameInput.sendKeys(Keys.RETURN);
 
     ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
-      getCssSelectorByDataTestId("deploy-pipeline")));
+      getCssSelectorByDataTestId("deploy-pipeline-btn")));
 
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(
         locateElementByCssSelector(getCssSelectorByDataTestId("Deployed")), 200)
     );
-    if (!statusText.equals("Deployed")) {
-      throw new RuntimeException("Pipeline deploy is unsuccessful.");
-    }
 
-    if (!SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName)) {
-      throw new RuntimeException("URL redirection for pipeline deploy is unsuccessful.");
-    }
+    Assert.assertEquals(statusText, "Deployed");
+    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName));
   }
 
   public static void cleanupPipelines(String pipelineName) {
@@ -223,5 +225,17 @@ public class Helper implements CdfHelper {
     JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
     js.executeScript(String.format(
       "window.sessionStorage.setItem('showWelcome','true');"));
+  }
+
+  public static void setNewSchemaEditor(boolean state) {
+    LocalStorage local = ((WebStorage) SeleniumDriver.getDriver()).getLocalStorage();
+
+    // set default schema editor to use old schema editor
+    local.setItem("schema-editor", String.valueOf(state));
+  }
+
+  public static void clearLocalStorage() {
+    LocalStorage local = ((WebStorage) SeleniumDriver.getDriver()).getLocalStorage();
+    local.clear();
   }
 }

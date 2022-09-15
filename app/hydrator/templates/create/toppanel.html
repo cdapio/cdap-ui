@@ -18,7 +18,8 @@
   <div class="hydrator-metadata"
       ng-class="{'expanded': HydratorPlusPlusTopPanelCtrl.metadataExpanded}"
       ng-click="!HydratorPlusPlusTopPanelCtrl.metadataExpanded && HydratorPlusPlusTopPanelCtrl.openMetadata()"
-      data-cy="pipeline-metadata">
+      data-cy="pipeline-metadata"
+      data-testid="pipeline-metadata">
     <div class="pipeline-type">
       <span ng-if="HydratorPlusPlusTopPanelCtrl.GLOBALS.etlBatchPipelines.includes(HydratorPlusPlusTopPanelCtrl.state.artifact.name)"
             class="icon-ETLBatch"></span>
@@ -62,20 +63,23 @@
       <textarea ng-model="HydratorPlusPlusTopPanelCtrl.state.metadata['description']"
                 placeholder="Enter a description for your pipeline."
                 ng-if="HydratorPlusPlusTopPanelCtrl.metadataExpanded"
-                data-cy="pipeline-description-input"></textarea>
+                data-cy="pipeline-description-input"
+                data-testid="pipeline-description-input"></textarea>
       <div class="btn-group pull-left" ng-if="HydratorPlusPlusTopPanelCtrl.metadataExpanded">
         <button
           type="button"
           class="btn btn-primary save-button"
           ng-click="HydratorPlusPlusTopPanelCtrl.saveMetadata($event)"
-          data-cy="pipeline-metadata-ok-btn">
+          data-cy="pipeline-metadata-ok-btn"
+          data-testid="pipeline-metadata-ok-btn">
           Save
         </button>
         <button
           type="button"
           class="btn btn-secondary cancel-button"
           ng-click="HydratorPlusPlusTopPanelCtrl.resetMetadata($event)"
-          data-cy="pipeline-metadata-cancel-btn">
+          data-cy="pipeline-metadata-cancel-btn"
+          data-testid="pipeline-metadata-cancel-btn">
           Cancel
         </button>
       </div>
@@ -146,7 +150,8 @@
           tooltip-class="toppanel-tooltip"
           tooltip-append-to-body="true"
           ng-disabled="!HydratorPlusPlusTopPanelCtrl.hasNodes"
-          data-cy="deploy-pipeline-btn">
+          data-cy="deploy-pipeline-btn"
+          data-testid="deploy-pipeline-btn">
         <div class="btn-container">
           <span class="fa icon-publish"></span>
           <div class="button-label">Deploy</div>

@@ -37,27 +37,10 @@ import java.util.List;
 
 public class PipelineCanvasActions {
 
-  @When("Open pipeline studio page")
-  public void openPipelineStudioPage() {
-    try {
-      SeleniumDriver.openPage(Constants.PIPELINE_STUDIO_URL);
-      WaitHelper.waitForPageToLoad();
-    } catch (UnhandledAlertException e) {
-      try {
-        Alert alert = SeleniumDriver.getDriver().switchTo().alert();
-        alert.accept();
-      } catch (NoAlertPresentException ex) {
-        ex.printStackTrace();
-      }
-    }
-  }
-
   @Then("Verify redo undo buttons are disabled")
   public void verifyRedoUndoButtonsAreDisabled() {
-    WebElement undoSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-undo-action-btn"));
-    WebElement redoSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-redo-action-btn"));
+    WebElement undoSelector = Helper.locateElementByTestId("pipeline-undo-action-btn");
+    WebElement redoSelector = Helper.locateElementByTestId("pipeline-redo-action-btn");
 
     Assert.assertFalse(undoSelector.isEnabled());
     Assert.assertFalse(redoSelector.isEnabled());
@@ -70,10 +53,8 @@ public class PipelineCanvasActions {
 
   @Then("Verify redo button disabled but undo button enabled")
   public void verifyRedoUndoButtonsEnabled() {
-    WebElement undoSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-undo-action-btn"));
-    WebElement redoSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-redo-action-btn"));
+    WebElement undoSelector = Helper.locateElementByTestId("pipeline-undo-action-btn");
+    WebElement redoSelector = Helper.locateElementByTestId("pipeline-redo-action-btn");
 
     Assert.assertTrue(undoSelector.isEnabled());
     Assert.assertFalse(redoSelector.isEnabled());
@@ -112,8 +93,7 @@ public class PipelineCanvasActions {
 
   @Then("Verify export button disabled")
   public void verifyExportButtonDisabled() {
-    WebElement exportSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-export-btn"));
+    WebElement exportSelector = Helper.locateElementByTestId("pipeline-export-btn");
 
     Assert.assertFalse(exportSelector.isEnabled());
   }
@@ -127,8 +107,7 @@ public class PipelineCanvasActions {
 
   @Then("Verify simple pipeline recovered")
   public void verifySimplePipelineRecovered() {
-    WebElement exportSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("pipeline-export-btn"));
+    WebElement exportSelector = Helper.locateElementByTestId("pipeline-export-btn");
 
     Assert.assertTrue(exportSelector.isEnabled());
 
@@ -143,10 +122,8 @@ public class PipelineCanvasActions {
 
   @Then("Verify sink nodes are visible")
   public void verifySinkNodesAreVisible() {
-    WebElement sink1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-BigQueryMultiTable-batchsink-7"));
-    WebElement sink2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-BigQueryMultiTable-batchsink-6"));
+    WebElement sink1Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-7");
+    WebElement sink2Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-6");
 
     Assert.assertTrue(sink1Selector.isDisplayed());
     Assert.assertTrue(sink2Selector.isDisplayed());
@@ -161,10 +138,8 @@ public class PipelineCanvasActions {
 
   @Then("Verify sink nodes are invisible")
   public void verifySinkNodesAreInvisible() {
-    WebElement sink1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-BigQueryMultiTable-batchsink-7"));
-    WebElement sink2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-BigQueryMultiTable-batchsink-6"));
+    WebElement sink1Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-7");
+    WebElement sink2Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-6");
 
     Assert.assertFalse(sink1Selector.isDisplayed());
     Assert.assertFalse(sink2Selector.isDisplayed());
@@ -177,39 +152,32 @@ public class PipelineCanvasActions {
 
   @Then("Move minimap")
   public void moveMinimap() {
-    WebElement minimapViewportBoxSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("minimap-viewport-box"));
+    WebElement minimapViewportBoxSelector = Helper.locateElementByTestId("minimap-viewport-box");
     ElementHelper.dragAndDropByOffset(minimapViewportBoxSelector, 70, 60);
   }
 
   @Then("Verify source nodes are invisible")
   public void verifySourceNodesAreInvisible() {
-    WebElement sink1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-Spanner-batchsource-0"));
-    WebElement sink2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-Spanner-batchsource-1"));
+    WebElement source1Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-0");
+    WebElement source2Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-1");
 
-    Assert.assertFalse(sink1Selector.isDisplayed());
-    Assert.assertFalse(sink2Selector.isDisplayed());
+    Assert.assertFalse(source1Selector.isDisplayed());
+    Assert.assertFalse(source2Selector.isDisplayed());
   }
 
   @Then("Verify source nodes are visible")
   public void verifySourceNodesAreVisible() {
-    WebElement sink1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-Spanner-batchsource-0"));
-    WebElement sink2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-Spanner-batchsource-1"));
+    WebElement source1Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-0");
+    WebElement source2Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-1");
 
-    Assert.assertTrue(sink1Selector.isDisplayed());
-    Assert.assertTrue(sink2Selector.isDisplayed());
+    Assert.assertTrue(source1Selector.isDisplayed());
+    Assert.assertTrue(source2Selector.isDisplayed());
   }
 
   @Then("Use shift click to delete two transform nodes")
   public void useShiftClickToDeleteTwoTransformNodes() {
-    WebElement transform1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-name-JavaScript-transform-2"));
-    WebElement transform2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-name-JavaScript-transform-3"));
+    WebElement transform1Selector = Helper.locateElementByTestId("plugin-node-name-JavaScript-transform-2");
+    WebElement transform2Selector = Helper.locateElementByTestId("plugin-node-name-JavaScript-transform-3");
 
     Actions actions = new Actions(SeleniumDriver.getDriver());
     actions.keyDown(Keys.SHIFT)
@@ -224,15 +192,13 @@ public class PipelineCanvasActions {
   @Then("Verify transform nodes do not exist")
   public void verifyTransformNodesDoNotExist() {
     try {
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-node-JavaScript-transform-2"));
+      Helper.locateElementByTestId("plugin-node-JavaScript-transform-2");
     } catch (NoSuchElementException e) {
       // DO NOTHING
     }
 
     try {
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-node-JavaScript-transform-3"));
+      Helper.locateElementByTestId("plugin-node-JavaScript-transform-3");
     } catch (NoSuchElementException e) {
       // DO NOTHING
     }
@@ -243,19 +209,10 @@ public class PipelineCanvasActions {
     Commands.clickUndoButton();
     Commands.clickUndoButton();
 
-    WebElement transform1Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-JavaScript-transform-2"));
-    WebElement transform2Selector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId("plugin-node-JavaScript-transform-3"));
+    WebElement transform1Selector = Helper.locateElementByTestId("plugin-node-JavaScript-transform-2");
+    WebElement transform2Selector = Helper.locateElementByTestId("plugin-node-JavaScript-transform-3");
 
     Assert.assertTrue(transform1Selector.isDisplayed());
     Assert.assertTrue(transform2Selector.isDisplayed());
-  }
-
-  @Then("Clean the pipeline")
-  public void cleanThePipeline() {
-    for (int i = 0; i < 5; ++i) {
-      Commands.clickUndoButton();
-    }
   }
 }

@@ -33,6 +33,8 @@ Feature: Pipeline Hierarchy - Hierarchy Widgets
   @PIPELINE_HIERARCHY_TEST
   Scenario: Add schema with simple files
     Then Open "File" node property
+    Then Remove field "0"
+    Then Remove field "0"
     Then Add field at row "0" and name "column1"
     Then Add field at row "1" and name "column2"
     Then Add field at row "2" and name "column3"
