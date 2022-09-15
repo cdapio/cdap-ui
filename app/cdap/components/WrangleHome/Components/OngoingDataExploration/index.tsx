@@ -26,7 +26,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 
 const OngoingDataExploration = (props) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
-  let [finalArray, setFinalArray] = useState([]);
+  const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
     MyDataPrepApi.getWorkspaceList({
@@ -101,11 +101,11 @@ const OngoingDataExploration = (props) => {
     setFinalArray(final);
   }, [ongoingExpDatas]);
 
-  finalArray = finalArray.filter((eachWorkspace) => eachWorkspace[5].count !== 0);
+  const filteredData = finalArray.filter((eachWorkspace) => eachWorkspace[5].count !== 0);
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {finalArray.map((item, index) => {
+      {filteredData.map((item, index) => {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
