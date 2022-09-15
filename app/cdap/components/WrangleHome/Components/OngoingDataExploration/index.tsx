@@ -24,9 +24,10 @@ import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { IResponseData } from './types';
+import { HOME_URL_PARAM, WORKSPACES_LABEL } from './constants';
 
-export default function OngoingDataExploration() {
-  const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
+const OngoingDataExploration = (props) => {
+  const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
@@ -107,7 +108,10 @@ export default function OngoingDataExploration() {
       {finalArray.map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
+            to={{
+              pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
+              state: { from: WORKSPACES_LABEL, path: HOME_URL_PARAM },
+            }}
             style={{ textDecoration: 'none' }}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
@@ -116,4 +120,5 @@ export default function OngoingDataExploration() {
       })}
     </Box>
   );
-}
+};
+export default OngoingDataExploration;

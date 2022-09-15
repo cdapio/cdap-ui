@@ -43,3 +43,11 @@ export interface IHeaderNamesList {
   label: string;
   type: string[];
 }
+
+export interface IDataTypeOfColumns {
+  [key: string]: string;
+}
+
+export interface IDataOfStatistics {
+  [key: string]: string;
+}

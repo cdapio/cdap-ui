@@ -34,8 +34,7 @@ import { useStyles } from './styles';
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
   display: 'flex',
-  borderTop: '1px solid',
-  borderColor: grey[300],
+  borderTop: `1px solid ${grey[300]}`,
 
   height: '100%',
   '& > :first-child': {

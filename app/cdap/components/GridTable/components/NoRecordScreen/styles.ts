@@ -14,35 +14,28 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
-import { blue } from '@material-ui/core/colors';
+import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  breadCombContainer: {
+  noRecordWrapper: {
+    height: '100%',
     display: 'flex',
-    justifyContent: 'space-between',
-    height: '48px',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginRight: '30px',
-    marginLeft: '34px',
-    '& .MuiBreadcrumbs-li': {
-      fontSize: '14px',
-    },
-    '& .MuiTypography-body1': {
-      fontSize: '14px',
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
     },
   },
-  breadcrumbLabel: {
-    color: blue[500],
-    fontSize: '14px',
-    fontWeight: 400,
+  mainHeaderMessage: {
+    fontSize: '20px',
+    color: '#000000',
+    marginTop: '20px',
   },
-  home: {
-    width: '41px',
-    height: '21px',
+  subHeaderMessage: {
+    fontSize: '16px',
+    color: '#000000',
   },
-  dataset: {
-    width: '81px',
-    height: '21px',
+  innerWrapper: {
+    textAlign: 'center',
   },
 });
