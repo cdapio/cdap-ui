@@ -76,6 +76,7 @@ export default function GridTable() {
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
+          setWorkspaceName(res.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
