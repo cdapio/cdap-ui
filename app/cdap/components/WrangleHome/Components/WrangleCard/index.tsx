@@ -24,16 +24,22 @@ import { getCategoriesToConnectorsMap, getSVG } from './Components/WidgetData';
 import { fetchConnectionDetails } from 'components/Connections/Create/reducer';
 import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
 import { IConnectorArray, IConnectorDetailPayloadArray } from './types';
+import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 
-const WrangleCard = () => {
+export const WrangleCard = () => {
   const [state, setState] = useState({
     connectorTypes: [],
   });
 
   const widgetData = async () => {
     const connectorTypes = await fetchConnectors();
+    const categorizedConnections = await getCategorizedConnections();
+    const connectorTypeWithConnections = [];
+    categorizedConnections.forEach((_, key) => {
+      connectorTypeWithConnections.push(key);
+    });
     const connectorDataArray = [];
-    const connectorDataWithSvgArray: IConnectorArray[] = [];
+    let connectorDataWithSvgArray: IConnectorArray[] = [];
     const allConnectorsPluginProperties = getCategoriesToConnectorsMap(connectorTypes);
     const connectionPayloadArray: IConnectorDetailPayloadArray[] = [];
     allConnectorsPluginProperties.forEach((connectorsArray) => {
@@ -73,6 +79,15 @@ const WrangleCard = () => {
         }
       });
     });
+
+    connectorDataWithSvgArray = connectorDataWithSvgArray.filter((obj) =>
+      connectorTypeWithConnections.find((item) => item == obj.name)
+    );
+
+    connectorDataWithSvgArray = [
+      ...new Map(connectorDataWithSvgArray.map((item) => [item.name, item])).values(),
+    ];
+
     connectorDataWithSvgArray.unshift({
       name: 'Imported Datasets',
       type: 'default',
@@ -115,4 +130,3 @@ const WrangleCard = () => {
     </Box>
   );
 };
-export default WrangleCard;

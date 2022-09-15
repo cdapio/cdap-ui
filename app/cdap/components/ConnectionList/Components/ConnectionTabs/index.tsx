@@ -19,7 +19,8 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import * as React from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
 
@@ -51,7 +52,7 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-const ConnectionsTabs = ({
+export default function ConnectionsTabs({
   tabsData,
   handleChange,
   value,
@@ -59,21 +60,17 @@ const ConnectionsTabs = ({
   connectionId,
   setIsErrorOnNoWorkSpace,
   ...props
-}) => {
+}) {
   const classes = useStyles();
 
-  const [connectionIdProp, setConnectionId] = React.useState(connectionId);
+  const [connectionIdProp, setConnectionId] = useState(connectionId);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setConnectionId(connectionId);
   }, []);
 
   return (
-    <Box
-      data-testid="connections-tabs-parent"
-      className={classes.connectionsTabsParent}
-      style={{ height: 'calc(100vh - 200px)' }}
-    >
+    <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
         <div className={classes.boxStyles}>
           <Tabs
@@ -92,6 +89,7 @@ const ConnectionsTabs = ({
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
+                role="button"
                 onClick={() => {
                   if (index > 1) {
                     connectorType.canBrowse ? handleChange(connectorType, index) : null;
@@ -121,7 +119,7 @@ const ConnectionsTabs = ({
                       label={connectorType.name}
                       count={index === 0 ? connectorType.count : undefined}
                       index={index}
-                      SVG={connectorType.SVG}
+                      icon={connectorType.icon}
                     />
                   )
                 }
@@ -129,7 +127,7 @@ const ConnectionsTabs = ({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
+                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
           </Tabs>
@@ -137,6 +135,4 @@ const ConnectionsTabs = ({
       )}
     </Box>
   );
-};
-
-export default ConnectionsTabs;
+}

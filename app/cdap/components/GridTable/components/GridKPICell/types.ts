@@ -15,8 +15,8 @@
  */
 
 export interface IGridKPICellProps {
-  metricData: {
+  value: {
     name: string;
-    values: Array<{ label: string; count: number }>;
+    metricData: Array<{ label: string; count: number }>;
   };
 }

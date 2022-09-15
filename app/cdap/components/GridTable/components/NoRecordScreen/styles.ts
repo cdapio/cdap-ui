@@ -13,33 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import { makeStyles } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
-import { grey } from '@material-ui/core/colors';
 
-export const useStyles = makeStyles((theme) => ({
-  warningIcon: {
-    color: '#E97567',
-    fontSize: '20px !important',
-  },
-  errorHead: {
-    color: '#E97567',
-    fontSize: '20px !important',
-  },
-  dismissSpan: {
-    display: 'block',
-    fontSize: '14px',
-    color: blue[500],
-    cursor: 'pointer',
-  },
-  errorMessage: {
-    color: grey[900],
-    fontSize: '14px',
-    padding: '10px',
-  },
-  headFlex: {
+import { makeStyles } from '@material-ui/core';
+
+export const useStyles = makeStyles({
+  noRecordWrapper: {
+    height: '100%',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+    },
   },
-}));
+  mainHeaderMessage: {
+    fontSize: '20px',
+    color: '#000000',
+    marginTop: '20px',
+  },
+  subHeaderMessage: {
+    fontSize: '16px',
+    color: '#000000',
+  },
+  innerWrapper: {
+    textAlign: 'center',
+  },
+});
