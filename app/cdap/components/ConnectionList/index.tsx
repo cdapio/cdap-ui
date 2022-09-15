@@ -20,7 +20,7 @@ import { getCategorizedConnections } from 'components/Connections/Browser/SidePa
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { GCSIcon, SearchIcon } from 'components/ConnectionList/iconStore';
 import * as React from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import SubHeader from './Components/SubHeader';
 import ConnectionsTabs from './Components/ConnectionTabs';
@@ -28,7 +28,7 @@ import { useStyles } from './styles';
 import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 
@@ -73,10 +73,10 @@ const DatasetWrapper = () => {
     },
   ]);
 
-  const [filteredData, setFilteredData] = useState(_.cloneDeep(dataForTabs));
+  const [filteredData, setFilteredData] = useState(cloneDeep(dataForTabs));
 
-  React.useEffect(() => {
-    const newData = _.cloneDeep(dataForTabs);
+  useEffect(() => {
+    const newData = cloneDeep(dataForTabs);
     setFilteredData(newData);
   }, [dataForTabs]);
 
@@ -236,16 +236,22 @@ const DatasetWrapper = () => {
     refs.current[index].focus();
   };
 
-  const handleChange = (e: any, emitter: string, index: number) => {
-    const val = emitter === 'clear' ? '' : e.target.value.toLowerCase();
-    if (val === '') {
-      refs.current[index].value = '';
-    }
-    const newData = _.cloneDeep(dataForTabs);
+  const handleSearch = (e: any, index: number) => {
+    const val = e.target.value.toLowerCase();
+    const newData = cloneDeep(dataForTabs);
     const newDataToSearch = [...newData[index].data];
     const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(val));
     newData[index].data = [...tempData];
-    setFilteredData(_.cloneDeep(newData));
+    setFilteredData(cloneDeep(newData));
+  };
+
+  const handleClearSearch = (e: any, index: number) => {
+    refs.current[index].value = '';
+    const newData = cloneDeep(dataForTabs);
+    const newDataToSearch = [...newData[index].data];
+    const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(''));
+    newData[index].data = [...tempData];
+    setFilteredData(cloneDeep(newData));
   };
 
   const makeCursorFocused = (index: number) => {
@@ -295,14 +301,14 @@ const DatasetWrapper = () => {
                       type="text"
                       // disableUnderline={true}
                       className={classes.searchBar}
-                      onChange={(e: any) => handleChange(e, 'search', index)}
+                      onChange={(e: any) => handleSearch(e, index)}
                       ref={(e) => {
                         refs.current[index] = e;
                       }}
                     />
                     <Box
                       className={classes.closeIcon}
-                      onClick={(e: any) => handleChange(e, 'clear', index)}
+                      onClick={(e: any) => handleClearSearch(e, index)}
                     >
                       <CloseIcon />
                     </Box>
