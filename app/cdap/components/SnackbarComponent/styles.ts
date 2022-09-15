@@ -16,7 +16,7 @@
 
 import { makeStyles } from '@material-ui/core';
 
-export const useErrorStyles = makeStyles({
+export const useStyles = makeStyles({
   snackBarDiv: {
     padding: '10px',
     display: 'block',

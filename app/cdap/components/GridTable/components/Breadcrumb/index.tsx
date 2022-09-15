@@ -25,6 +25,8 @@ import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants
 
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
+
+  console.log('dataset Name', datasetName, 'locatiopn', location);
   const sourcePath =
     location.state.from === MATCH_SOURCE
       ? HOME_URL_PARAM
@@ -32,7 +34,10 @@ const BreadCrumb = ({ datasetName, location }) => {
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
+        <Link
+          className={`${classes.breadcrumbLabel} ${classes.home}`}
+          to={`/ns/${getCurrentNamespace()}/home`}
+        >
           Home
         </Link>
         <Link color="inherit" to={`/ns/${getCurrentNamespace()}/${sourcePath}`}>
