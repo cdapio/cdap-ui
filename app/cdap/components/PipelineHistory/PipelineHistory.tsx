@@ -21,6 +21,18 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { PipelineHistoryTable } from './PipelineHistoryTable';
+import { gql } from 'apollo-boost';
+import { useQuery } from '@apollo/react-hooks';
+import PaginationStepper from 'components/shared/PaginationStepper';
+import { Provider, useSelector } from 'react-redux';
+import Store, {
+  nextPage,
+  prevPage,
+  reset,
+  setPageLimit,
+  setVersions,
+} from './PipelineHistoryStore';
+import SelectWithOptions from 'components/shared/SelectWithOptions';
 
 const PREFIX = 'features.PipelineHistory';
 
@@ -31,13 +43,60 @@ interface IPipelineHistoryProps {
   pipelineName: string;
 }
 
-export const PipelineHistory = ({
-  isOpen,
-  toggle,
-  anchorEl,
-  pipelineName,
-}: IPipelineHistoryProps) => {
-  const [appVersions, setAppVersions] = useState([]);
+const QUERY = gql`
+  query Query($namespace: String, $pageSize: Int, $token: String, $nameFilter: String) {
+    pipelines(
+      namespace: $namespace
+      pageSize: $pageSize
+      pageToken: $token
+      nameFilter: $nameFilter
+    ) {
+      applications {
+        name
+        version
+        artifact {
+          name
+        }
+        runs {
+          status
+          starting
+        }
+        totalRuns
+        nextRuntime {
+          id
+          time
+        }
+      }
+      nextPageToken
+    }
+  }
+`;
+
+const PaginationContainer = styled.div`
+  margin-right: 20px;
+  display: block;
+`;
+
+const PaginationBlock = styled.div`
+  display: inline-block;
+  margin-right: 10px;
+`;
+
+const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
+  const [totalVersions, setTotalVersions] = useState(0);
+  const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
+
+  const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
+    errorPolicy: 'all',
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      nameFilter: pipelineName || undefined,
+      token: pageToken || undefined,
+      pageSize: pageLimit,
+      namespace: getCurrentNamespace(),
+    },
+  });
 
   useEffect(() => {
     MyPipelineApi.getAppVersions({
@@ -45,13 +104,59 @@ export const PipelineHistory = ({
       appId: pipelineName,
     }).subscribe({
       next(res) {
-        setAppVersions(res);
+        setTotalVersions(res.length);
       },
       error(err) {
         console.log(err);
       },
     });
   }, []);
+
+  const Pagination = ({}) => {
+    const { prevDisabled, nextDisabled, pageLimit, pageCount, pageIndex } = useSelector(
+      ({ versions }) => ({
+        prevDisabled: !versions.previousTokens.length,
+        nextDisabled: !versions.nextPageToken,
+        pageLimit: versions.pageLimit,
+        pageCount: versions.pipelineVersions.length,
+        pageIndex: versions.previousTokens.length,
+      })
+    );
+
+    const onChange = (e) => {
+      setPageLimit(e.target.value);
+    };
+
+    return (
+      <PaginationContainer className="float-right">
+        <PaginationBlock>Rows per page: </PaginationBlock>
+        <PaginationBlock>
+          <SelectWithOptions value={pageLimit} onChange={onChange} options={[4, 5, 6, 7, 8, 9]} />
+        </PaginationBlock>
+        <PaginationBlock>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit +
+          pageCount}`}</PaginationBlock>
+        <PaginationBlock>
+          <PaginationStepper
+            onNext={nextPage}
+            onPrev={prevPage}
+            nextDisabled={nextDisabled}
+            prevDisabled={prevDisabled}
+          />
+        </PaginationBlock>
+      </PaginationContainer>
+    );
+  };
+
+  useEffect(() => {
+    if (loading || networkStatus === 4) {
+      return;
+    }
+    setVersions({
+      pipelineVersions: data.pipelines.applications.map((app) => app.version),
+      nextPageToken: data.pipelines.nextPageToken,
+    });
+  }, [loading, networkStatus, data]);
+
   return (
     <PipelineModeless
       open={isOpen}
@@ -59,7 +164,23 @@ export const PipelineHistory = ({
       anchorEl={anchorEl}
       title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
     >
-      <PipelineHistoryTable appVersions={appVersions} />
+      <div className="grid-wrapper pipeline-history-list-table">
+        {ready && <PipelineHistoryTable appVersions={pipelineVersions} />}
+        <Pagination />
+      </div>
     </PipelineModeless>
   );
 };
+
+const PipelineHistoryOuter = ({ isOpen, toggle, anchorEl, pipelineName }) => (
+  <Provider store={Store}>
+    <PipelineHistory
+      isOpen={isOpen}
+      toggle={toggle}
+      anchorEl={anchorEl}
+      pipelineName={pipelineName}
+    />
+  </Provider>
+);
+
+export default PipelineHistoryOuter;
