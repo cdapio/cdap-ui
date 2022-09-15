@@ -75,11 +75,10 @@ const QUERY = gql`
 const PaginationContainer = styled.div`
   margin-right: 20px;
   display: block;
-`;
-
-const PaginationBlock = styled.div`
-  display: inline-block;
-  margin-right: 10px;
+  div {
+    display: inline-block;
+    margin-right: 10px;
+  }
 `;
 
 const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
@@ -129,20 +128,19 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
 
     return (
       <PaginationContainer className="float-right">
-        <PaginationBlock>Rows per page: </PaginationBlock>
-        <PaginationBlock>
+        <div>Rows per page: </div>
+        <div>
           <SelectWithOptions value={pageLimit} onChange={onChange} options={[4, 5, 6, 7, 8, 9]} />
-        </PaginationBlock>
-        <PaginationBlock>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit +
-          pageCount}`}</PaginationBlock>
-        <PaginationBlock>
+        </div>
+        <div>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit + pageCount}`}</div>
+        <div>
           <PaginationStepper
             onNext={nextPage}
             onPrev={prevPage}
             nextDisabled={nextDisabled}
             prevDisabled={prevDisabled}
           />
-        </PaginationBlock>
+        </div>
       </PaginationContainer>
     );
   };
