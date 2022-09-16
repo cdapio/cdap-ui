@@ -24,17 +24,24 @@ import { PipelineHistoryTableRow } from './PipelineHistoryTableRow';
 import './PipelineHistoryTable.scss';
 
 interface IPipelineHistoryTableProps {
+  pipelineName: string;
   appVersions: string[];
 }
 
 const PREFIX = 'features.PipelineHistory.table';
 
-export const PipelineHistoryTable = ({ appVersions }: IPipelineHistoryTableProps) => {
+export const PipelineHistoryTable = ({ pipelineName, appVersions }: IPipelineHistoryTableProps) => {
   const renderTableBody = () => {
     return (
       <div className="grid-body">
         {appVersions.map((appVersion) => {
-          return <PipelineHistoryTableRow key={appVersion} appVersion={appVersion} />;
+          return (
+            <PipelineHistoryTableRow
+              key={appVersion}
+              pipelineName={pipelineName}
+              appVersion={appVersion}
+            />
+          );
         })}
       </div>
     );

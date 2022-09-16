@@ -14,20 +14,64 @@
  * the License.
  */
 
+import React, { useEffect, useState } from 'react';
 import { MyPipelineApi } from 'api/pipeline';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
-import React, { useEffect, useState } from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
+import PipelineDetailStore from 'components/PipelineDetails/store';
+import { map } from 'rxjs/operators';
 
 interface IPipelineHistoryTableRowProps {
+  pipelineName: string;
   appVersion: string;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
 
-export const PipelineHistoryTableRow = ({ appVersion }: IPipelineHistoryTableRowProps) => {
+export const PipelineHistoryTableRow = ({
+  pipelineName,
+  appVersion,
+}: IPipelineHistoryTableRowProps) => {
+  const namespace = getCurrentNamespace();
+  const pipelineLink = window.getHydratorUrl({
+    stateName: 'hydrator.detail',
+    stateParams: {
+      namespace,
+      pipelineId: pipelineName,
+    },
+  });
+
+  const viewVersion = () => {
+    window.localStorage.setItem('pipelineHistoryVersion', appVersion);
+    window.location.href = pipelineLink;
+  };
+
+  const restoreVersion = () => {
+    MyPipelineApi.getAppVersion({
+      namespace,
+      appId: pipelineName,
+      version: appVersion,
+    }).subscribe((res) => {
+      const config = JSON.parse(res.configuration);
+      MyPipelineApi.publish(
+        {
+          namespace,
+          appId: pipelineName,
+        },
+        {
+          name: res.name,
+          description: res.description,
+          artifact: res.artifact,
+          config,
+        }
+      ).subscribe(() => {
+        window.location.href = pipelineLink;
+      });
+    });
+  };
+
   return (
     <div className=" grid-row">
       <div>{appVersion}</div>
@@ -35,8 +79,22 @@ export const PipelineHistoryTableRow = ({ appVersion }: IPipelineHistoryTableRow
       <div>{T.translate(`${PREFIX}.unfinish`)}</div>
       <div>{T.translate(`${PREFIX}.unfinish`)}</div>
       <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-      <a>{T.translate(`${PREFIX}.view`)}</a>
-      <a>{T.translate(`${PREFIX}.restore`)}</a>
+      <a
+        href="#"
+        onClick={() => {
+          viewVersion();
+        }}
+      >
+        {T.translate(`${PREFIX}.view`)}
+      </a>
+      <a
+        href="#"
+        onClick={() => {
+          restoreVersion();
+        }}
+      >
+        {T.translate(`${PREFIX}.restore`)}
+      </a>
     </div>
   );
 };
