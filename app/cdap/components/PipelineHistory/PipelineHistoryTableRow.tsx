@@ -22,6 +22,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import { map } from 'rxjs/operators';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLevel';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -73,28 +74,30 @@ export const PipelineHistoryTableRow = ({
   };
 
   return (
-    <div className=" grid-row">
-      <div>{appVersion}</div>
-      <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-      <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-      <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-      <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-      <a
-        href="#"
-        onClick={() => {
-          viewVersion();
-        }}
-      >
-        {T.translate(`${PREFIX}.view`)}
-      </a>
-      <a
-        href="#"
-        onClick={() => {
-          restoreVersion();
-        }}
-      >
-        {T.translate(`${PREFIX}.restore`)}
-      </a>
-    </div>
+    <>
+      <div className=" grid-row">
+        <div>{appVersion}</div>
+        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
+        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
+        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
+        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
+        <a
+          href="#"
+          onClick={() => {
+            viewVersion();
+          }}
+        >
+          {T.translate(`${PREFIX}.view`)}
+        </a>
+        <a
+          href="#"
+          onClick={() => {
+            restoreVersion();
+          }}
+        >
+          {T.translate(`${PREFIX}.restore`)}
+        </a>
+      </div>
+    </>
   );
 };

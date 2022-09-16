@@ -33,6 +33,7 @@ import Store, {
   setVersions,
 } from './PipelineHistoryStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLevel';
 
 const PREFIX = 'features.PipelineHistory';
 
@@ -156,19 +157,21 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
   }, [loading, networkStatus, data]);
 
   return (
-    <PipelineModeless
-      open={isOpen}
-      onClose={toggle}
-      anchorEl={anchorEl}
-      title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
-    >
-      <div className="grid-wrapper pipeline-history-list-table">
-        {ready && (
-          <PipelineHistoryTable pipelineName={pipelineName} appVersions={pipelineVersions} />
-        )}
-        <Pagination />
-      </div>
-    </PipelineModeless>
+    <>
+      <PipelineModeless
+        open={isOpen}
+        onClose={toggle}
+        anchorEl={anchorEl}
+        title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
+      >
+        <div className="grid-wrapper pipeline-history-list-table">
+          {ready && (
+            <PipelineHistoryTable pipelineName={pipelineName} appVersions={pipelineVersions} />
+          )}
+          <Pagination />
+        </div>
+      </PipelineModeless>
+    </>
   );
 };
 
