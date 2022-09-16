@@ -26,11 +26,16 @@ import './PipelineHistoryTable.scss';
 interface IPipelineHistoryTableProps {
   pipelineName: string;
   appVersions: string[];
+  setRestoreLoading: (val: boolean) => void;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
 
-export const PipelineHistoryTable = ({ pipelineName, appVersions }: IPipelineHistoryTableProps) => {
+export const PipelineHistoryTable = ({
+  pipelineName,
+  appVersions,
+  setRestoreLoading,
+}: IPipelineHistoryTableProps) => {
   const renderTableBody = () => {
     return (
       <div className="grid-body">
@@ -40,6 +45,7 @@ export const PipelineHistoryTable = ({ pipelineName, appVersions }: IPipelineHis
               key={appVersion}
               pipelineName={pipelineName}
               appVersion={appVersion}
+              setRestoreLoading={setRestoreLoading}
             />
           );
         })}

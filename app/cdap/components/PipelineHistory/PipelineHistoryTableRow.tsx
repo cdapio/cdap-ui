@@ -27,6 +27,7 @@ import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLev
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
   appVersion: string;
+  setRestoreLoading: (val: boolean) => void;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
@@ -34,6 +35,7 @@ const PREFIX = 'features.PipelineHistory.table';
 export const PipelineHistoryTableRow = ({
   pipelineName,
   appVersion,
+  setRestoreLoading,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = window.getHydratorUrl({
@@ -50,6 +52,7 @@ export const PipelineHistoryTableRow = ({
   };
 
   const restoreVersion = () => {
+    setRestoreLoading(true);
     MyPipelineApi.getAppVersion({
       namespace,
       appId: pipelineName,
@@ -68,6 +71,7 @@ export const PipelineHistoryTableRow = ({
           config,
         }
       ).subscribe(() => {
+        setRestoreLoading(false);
         window.location.href = pipelineLink;
       });
     });
