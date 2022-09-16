@@ -15,17 +15,18 @@
  */
 
 import { ImportDatasetIcon } from '../WrangleCard/iconStore/ImportDatasetIcon';
+import { IMassagedObject } from './types';
 
-export const generateDataForExplorationCard = (olddata: any) => {
+export const generateDataForExplorationCard = (oldData) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List
   const massagedArray = [];
 
-  if (olddata && Array.isArray(olddata) && olddata.length) {
-    olddata.forEach((eachItem: any) => {
-      const childarr = [];
+  if (oldData && Array.isArray(oldData) && oldData.length) {
+    oldData.forEach((eachItem) => {
+      const childArray = [];
 
       Object.keys(eachItem).map((keys) => {
-        const obj = {} as any;
+        const obj = {} as IMassagedObject;
 
         if (keys === 'connectionName') {
           obj.icon = ImportDatasetIcon;
@@ -42,11 +43,15 @@ export const generateDataForExplorationCard = (olddata: any) => {
           obj.percentageSymbol = '%';
           obj.subText = 'Data Quality';
           obj.type = 'percentageWithText';
+        } else if (keys === 'workspaceId') {
+          obj.workspaceId = eachItem[keys];
+        } else if (keys === 'count') {
+          obj.count = eachItem[keys];
         }
-        childarr.push(obj);
+        childArray.push(obj);
       });
 
-      massagedArray.push(childarr);
+      massagedArray.push(childArray);
     });
   }
 

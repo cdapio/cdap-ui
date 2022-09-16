@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,14 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  wrapper: {
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 2000,
   },
   loadingContainer: {
     display: 'flex',
