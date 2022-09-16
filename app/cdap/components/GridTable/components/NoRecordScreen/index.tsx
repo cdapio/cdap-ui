@@ -15,30 +15,22 @@
  */
 
 import React from 'react';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import { Divider } from '@material-ui/core';
+import { NoDataSVG } from 'components/GridTable/iconStore';
 import { useStyles } from './styles';
+import { Box } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
-export default function TransitionComponent(props) {
+export default function() {
   const classes = useStyles();
   return (
-    <div>
-      <div className={classes.headFlex}>
-        <h5 className={classes.errorHead}>
-          <WarningRoundedIcon className={classes.warningIcon} />
-          &nbsp;Error
-        </h5>
-        <span
-          role="button"
-          tabIndex={0}
-          className={classes.dismissSpan}
-          onClick={() => props.close()}
-        >
-          Dismiss
-        </span>
-      </div>
-      <Divider />
-      <p className={classes.errorMessage}>Failed to retrieve sample</p>
-    </div>
+    <Box className={classes.noRecordWrapper}>
+      <Box className={classes.innerWrapper}>
+        {NoDataSVG}
+        <Typography className={classes.mainHeaderMessage}>No rows left in this sample</Typography>
+        <Typography className={classes.subHeaderMessage}>
+          Remove some recipe steps to view some data
+        </Typography>
+      </Box>
+    </Box>
   );
 }
