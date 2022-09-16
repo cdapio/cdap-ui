@@ -24,6 +24,7 @@ const ParsingDrawer = (props) => {
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const { dataprep } = DataPrepStore.getState();
+  console.log('dataprep', dataprep);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
   const [errorOnTranformation, setErrorOnTransformation] = useState({
     open: false,

@@ -72,7 +72,7 @@ export default function GridTable() {
   }, []);
 
   const getWorkSpaceData = (params: IParams, workspaceId: string) => {
-    const gridParams = {};
+    let gridParams = {};
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -95,9 +95,9 @@ export default function GridTable() {
           const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
-            name: sampleSpec.connectionName,
+            name: res?.sampleSpec?.connectionName,
             workspaceName: res.workspaceName,
-            path: sampleSpec.path,
+            path: res?.sampleSpec?.path,
             visualization,
           };
           requestBody.insights = insights;
@@ -106,7 +106,7 @@ export default function GridTable() {
           const workspaceInfo = {
             properties: insights,
           };
-          const gridParams = {
+          gridParams = {
             directives,
             workspaceId,
             workspaceUri,
