@@ -4,7 +4,6 @@ import { useStyles } from '../styles';
 const ParseComponent = (props) => {
   const { sectionHeading, children } = props;
   const classes = useStyles();
-
   return (
     <section className={classes.functionSectionStyles}>
       <div className={classes.funtionSectionWrapperStyles}>

@@ -32,9 +32,11 @@ import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 import ToolBarList from './components/AaToolbar';
-import { getDirective } from './directives';
+import { getDirective, getDirectiveOnTwoInputs, getDirectiveOnMultipleInputs } from './directives';
 import ParsingDrawer from 'components/ParsingDrawer';
 import AddTransformation from 'components/AddTransformation';
+import { OPTION_WITH_NO_INPUT, OPTION_WITH_TWO_INPUT } from './constants';
+import Snackbar from 'components/SnackbarComponent';
 
 export default function GridTable() {
   const { wid } = useParams() as any;
@@ -47,6 +49,7 @@ export default function GridTable() {
   const [missingDataList, setMissingDataList] = useState([]);
   const [dataQuality, setDataQuality] = useState({});
   const [optionSelected, setOptionSelected] = useState(null);
+  const [toast, setToast] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -121,6 +124,85 @@ export default function GridTable() {
         setGridData(response);
         setLoading(false);
       });
+  };
+
+  const applyDirectiveAPICall = (newDirective) => {
+    const { dataprep } = DataPrepStore.getState();
+    const { workspaceId, workspaceUri, directives, insights } = dataprep;
+    let gridParams = {};
+    const updatedDirectives = directives.concat(newDirective);
+    const requestBody = directiveRequestBodyCreator(updatedDirectives);
+
+    requestBody.insights = insights;
+
+    const workspaceInfo = {
+      properties: insights,
+    };
+    gridParams = {
+      directives: updatedDirectives,
+      workspaceId,
+      workspaceUri,
+      workspaceInfo,
+      insights,
+    };
+    const payload = {
+      context: params.namespace,
+      workspaceId: params.wid,
+    };
+    MyDataPrepApi.execute(payload, requestBody).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+        setDirectiveFunction('');
+        setColumnSelected('');
+      },
+      (err) => {
+        setToast(true);
+        setLoading(false);
+      }
+    );
+  };
+
+  const applyDirective = (option, columnSelected, value_1?, value_2?) => {
+    setLoading(true);
+    setOptionSelected(option);
+    if (OPTION_WITH_NO_INPUT.includes(option)) {
+      const newDirective = getDirective(option, columnSelected);
+      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
+        setDirectiveFunction(option);
+        setLoading(false);
+        return;
+      } else {
+        applyDirectiveAPICall(newDirective);
+      }
+    } else if (OPTION_WITH_TWO_INPUT.includes(option)) {
+      const newDirective = getDirectiveOnTwoInputs(option, columnSelected, value_1);
+      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
+        setDirectiveFunction(option);
+        setLoading(false);
+        return;
+      } else {
+        applyDirectiveAPICall(newDirective);
+      }
+    } else {
+      const newDirective = getDirectiveOnMultipleInputs(option, columnSelected, value_1, value_2);
+      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
+        setDirectiveFunction(option);
+        setLoading(false);
+        return;
+      } else {
+        applyDirectiveAPICall(newDirective);
+      }
+    }
   };
 
   useEffect(() => {
@@ -240,62 +322,6 @@ export default function GridTable() {
     getGridTableData();
   }, [gridData]);
 
-  const applyDirective = (option, columnSelected) => {
-    setOptionSelected(option);
-    setLoading(true);
-    const newDirective = getDirective(option, columnSelected);
-    const { dataprep } = DataPrepStore.getState();
-    const { workspaceId, workspaceUri, directives, insights } = dataprep;
-    // setOpenTransformationPanel(option);
-    console.log(newDirective, columnSelected, option);
-    if (!Boolean(newDirective) || !Boolean(columnSelected)) {
-      setDirectiveFunction(option);
-      setLoading(false);
-      return;
-    }
-
-    let gridParams = {};
-    const updatedDirectives = directives.concat(newDirective);
-    const requestBody = directiveRequestBodyCreator(updatedDirectives);
-
-    requestBody.insights = insights;
-
-    const workspaceInfo = {
-      properties: insights,
-    };
-    gridParams = {
-      directives: updatedDirectives,
-      workspaceId,
-      workspaceUri,
-      workspaceInfo,
-      insights,
-    };
-    const payload = {
-      context: params.namespace,
-      workspaceId: params.wid,
-    };
-    MyDataPrepApi.execute(payload, requestBody).subscribe(
-      (response) => {
-        DataPrepStore.dispatch({
-          type: DataPrepActions.setWorkspace,
-          payload: {
-            data: response.values,
-            headers: response.headers,
-            types: response.types,
-            ...gridParams,
-          },
-        });
-        setLoading(false);
-        setGridData(response);
-        setDirectiveFunction('');
-        setColumnSelected('');
-      },
-      (err) => {
-        setLoading(false);
-      }
-    );
-  };
-
   const handleColumnSelect = (columnName) =>
     setColumnSelected((prevColumn) => (prevColumn === columnName ? '' : columnName));
 
@@ -315,9 +341,9 @@ export default function GridTable() {
           setLoading={setLoading}
           columnData={headersNamesList}
           missingDataList={dataQuality}
-          applyTransformation={(selectedColumn) => {
+          applyTransformation={(selectedColumn, value) => {
             setColumnSelected(selectedColumn);
-            applyDirective(optionSelected, selectedColumn);
+            applyDirective(optionSelected, selectedColumn, value);
           }}
           callBack={(response) => {
             setGridData(response);
@@ -368,6 +394,7 @@ export default function GridTable() {
           })}
         </TableBody>
       </Table>
+      {toast && <Snackbar handleCloseError={() => setToast(false)} />}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

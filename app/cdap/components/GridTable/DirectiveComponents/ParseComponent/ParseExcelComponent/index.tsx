@@ -7,7 +7,7 @@ import {
   RadioGroup,
 } from '@material-ui/core';
 import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ParseComponent from '..';
 import {
   CHOOSE_SHEET_IN_EXCEL,
@@ -19,11 +19,22 @@ import { useStyles } from '../../styles';
 import { SET_FIRST_ROW_AS_HEADER } from '../../constants';
 
 const ParseExcelComponent = (props) => {
+  const { setDirectiveComponentsValue, directiveComponentValues } = props;
   const [sheetRadioType, setSheetRadioType] = useState('sheetNumber');
   const [sheetValue, setSheetValue] = useState('');
   const [firstRowAsHeader, setFirstRowAsHeader] = useState(false);
   const classes = useStyles();
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, radioValue: sheetRadioType });
+  }, [sheetRadioType]);
 
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, customTextValue: sheetValue });
+  }, [sheetValue]);
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, checkBoxValue: firstRowAsHeader });
+  }, [firstRowAsHeader]);
   return (
     <ParseComponent sectionHeading={CHOOSE_SHEET_IN_EXCEL}>
       <FormGroup>

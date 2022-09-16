@@ -18,6 +18,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { useParams } from 'react-router';
 import DirectiveContent from 'components/GridTable/DirectiveComponents';
 import { DIRECTIVE_COMPONENTS } from 'components/GridTable/DirectiveComponents/constants';
+import { parseDirective } from './utils';
 
 const AddTransformation = (props) => {
   const { functionName, columnData, setLoading, missingDataList } = props;
@@ -29,7 +30,12 @@ const AddTransformation = (props) => {
   const [selectedAction, setSelectedAction] = useState('');
   const [replaceValue, setReplaceValue] = useState('');
   const { dataprep } = DataPrepStore.getState();
-  console.log('state', dataprep);
+  const [directiveComponentValues, setDirectiveComponentsValue] = useState({
+    radioValue: '',
+    checkBoxValue: false,
+    customTextValue: '',
+  });
+  console.log('directiveComponentValues', directiveComponentValues);
 
   const classes = useStyles();
 
@@ -67,6 +73,33 @@ const AddTransformation = (props) => {
         .catch((err) => {
           setLoading(false);
         });
+    } else if (functionName == 'parseCSV') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioValue,
+        directiveComponentValues.customTextValue,
+        directiveComponentValues.checkBoxValue
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseExcel') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioValue,
+        directiveComponentValues.customTextValue,
+        directiveComponentValues.checkBoxValue
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseJSON') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioValue,
+        directiveComponentValues.customTextValue,
+        directiveComponentValues.checkBoxValue
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
     } else {
       setLoading(false);
       props.applyTransformation(selectedColumns[0].label);
@@ -109,7 +142,12 @@ const AddTransformation = (props) => {
               />
             ) : (
               isComponentAvailable && (
-                <DirectiveContent directiveComponents={DIRECTIVE_COMPONENTS} {...props} />
+                <DirectiveContent
+                  setDirectiveComponentsValue={setDirectiveComponentsValue}
+                  directiveComponents={DIRECTIVE_COMPONENTS}
+                  directiveComponentValues={directiveComponentValues}
+                  {...props}
+                />
               )
             )}
           </div>

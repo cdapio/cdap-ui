@@ -1,5 +1,5 @@
 import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PLEASE_SELECT_THE_DELIMITER, SET_FIRST_ROW_AS_HEADER } from '../../constants';
 import { PARSE_CSV_OPTIONS } from '../../options';
 import { useStyles } from '../../styles';
@@ -7,10 +7,23 @@ import InputRadioWithCustomInputComponent from '../InputRadioWithCustomInputComp
 import ParseComponent from '..';
 
 const ParseCSVComponent = (props) => {
+  const { setDirectiveComponentsValue, directiveComponentValues } = props;
   const [selectedParseType, setSelectedParseType] = useState('');
   const [firstRowAsHeader, setFirstRowAsHeader] = useState(false);
   const [delimiter, setDelimiter] = useState('');
   const classes = useStyles();
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, radioValue: selectedParseType });
+  }, [selectedParseType]);
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, customTextValue: delimiter });
+  }, [delimiter]);
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, checkBoxValue: firstRowAsHeader });
+  }, [firstRowAsHeader]);
 
   return (
     <ParseComponent sectionHeading={PLEASE_SELECT_THE_DELIMITER}>
