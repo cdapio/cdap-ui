@@ -85,6 +85,7 @@ const PaginationContainer = styled.div`
 const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
   const [totalVersions, setTotalVersions] = useState(0);
   const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
+  const [isRestoreLoading, setIsRestoreLoading] = useState(false);
 
   const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
     errorPolicy: 'all',
@@ -158,6 +159,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
 
   return (
     <>
+      <LoadingAppLevel message={'Restoring Version ...'} isopen={isRestoreLoading} />
       <PipelineModeless
         open={isOpen}
         onClose={toggle}
@@ -166,7 +168,11 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       >
         <div className="grid-wrapper pipeline-history-list-table">
           {ready && (
-            <PipelineHistoryTable pipelineName={pipelineName} appVersions={pipelineVersions} />
+            <PipelineHistoryTable
+              pipelineName={pipelineName}
+              appVersions={pipelineVersions}
+              setRestoreLoading={setIsRestoreLoading}
+            />
           )}
           <Pagination />
         </div>

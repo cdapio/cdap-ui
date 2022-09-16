@@ -14,108 +14,127 @@
  * the License.
  */
 
-import React from "react";
+import { Box, Modal } from '@material-ui/core';
+import React from 'react';
 
 interface ILoadingAppLevelProps {
-    message: String;
-    subtitle?: String;
+  message: String;
+  subtitle?: String;
+  isopen: boolean;
 }
 
-export const LoadingAppLevel = ({ message, subtitle } : ILoadingAppLevelProps) => {
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  fontSize: '84px',
+  boxShadow: 24,
+  textAlign: 'center',
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
+
+export const LoadingAppLevel = ({ message, subtitle, isopen }: ILoadingAppLevelProps) => {
   return (
-    <div className="modal-body text-center" app-level-loading-icon>
-      <div className="icon-loading-bars text-xs-center">
-        <svg
-          className="loading-bar"
-          version="1.1"
-          x="0px"
-          y="0px"
-          width="24px"
-          height="30px"
-          viewBox="0 0 24 30"
-        >
-          <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
-            <animate
-              attributeName="opacity"
-              attributeType="XML"
-              values="0.2; 1; .2"
-              begin="0s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="height"
-              attributeType="XML"
-              values="10; 20; 10"
-              begin="0s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y"
-              attributeType="XML"
-              values="10; 5; 10"
-              begin="0s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-          </rect>
-          <rect x="8" y="10" width="4" height="10" fill="#333" opacity="0.2">
-            <animate
-              attributeName="opacity"
-              attributeType="XML"
-              values="0.2; 1; .2"
-              begin="0.15s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="height"
-              attributeType="XML"
-              values="10; 20; 10"
-              begin="0.15s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y"
-              attributeType="XML"
-              values="10; 5; 10"
-              begin="0.15s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-          </rect>
-          <rect x="16" y="10" width="4" height="10" fill="#333" opacity="0.2">
-            <animate
-              attributeName="opacity"
-              attributeType="XML"
-              values="0.2; 1; .2"
-              begin="0.3s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="height"
-              attributeType="XML"
-              values="10; 20; 10"
-              begin="0.3s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="y"
-              attributeType="XML"
-              values="10; 5; 10"
-              begin="0.3s"
-              dur="0.6s"
-              repeatCount="indefinite"
-            />
-          </rect>
-        </svg>
-      </div>
-      <h2> {message} </h2>
-      <h4>{subtitle}</h4>
-    </div>
+    <Modal open={isopen}>
+      <Box sx={{ ...style }}>
+        <div>
+          <svg
+            className="loading-bar"
+            version="1.1"
+            x="0px"
+            y="0px"
+            width="24px"
+            height="30px"
+            viewBox="0 0 24 30"
+          >
+            <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+              <animate
+                attributeName="opacity"
+                attributeType="XML"
+                values="0.2; 1; .2"
+                begin="0s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="height"
+                attributeType="XML"
+                values="10; 20; 10"
+                begin="0s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="y"
+                attributeType="XML"
+                values="10; 5; 10"
+                begin="0s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+            </rect>
+            <rect x="8" y="10" width="4" height="10" fill="#333" opacity="0.2">
+              <animate
+                attributeName="opacity"
+                attributeType="XML"
+                values="0.2; 1; .2"
+                begin="0.15s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="height"
+                attributeType="XML"
+                values="10; 20; 10"
+                begin="0.15s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="y"
+                attributeType="XML"
+                values="10; 5; 10"
+                begin="0.15s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+            </rect>
+            <rect x="16" y="10" width="4" height="10" fill="#333" opacity="0.2">
+              <animate
+                attributeName="opacity"
+                attributeType="XML"
+                values="0.2; 1; .2"
+                begin="0.3s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="height"
+                attributeType="XML"
+                values="10; 20; 10"
+                begin="0.3s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+              <animate
+                attributeName="y"
+                attributeType="XML"
+                values="10; 5; 10"
+                begin="0.3s"
+                dur="0.6s"
+                repeatCount="indefinite"
+              />
+            </rect>
+          </svg>
+        </div>
+        <h2> {message} </h2>
+        <h4>{subtitle}</h4>
+      </Box>
+    </Modal>
   );
 };
