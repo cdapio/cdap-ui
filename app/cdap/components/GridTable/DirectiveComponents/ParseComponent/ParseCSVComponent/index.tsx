@@ -14,15 +14,15 @@ const ParseCSVComponent = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, radioValue: selectedParseType });
+    setDirectiveComponentsValue({ ...directiveComponentValues, radioOption: selectedParseType });
   }, [selectedParseType]);
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, customTextValue: delimiter });
+    setDirectiveComponentsValue({ ...directiveComponentValues, customInput: delimiter });
   }, [delimiter]);
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, checkBoxValue: firstRowAsHeader });
+    setDirectiveComponentsValue({ ...directiveComponentValues, firstRowAsHeader });
   }, [firstRowAsHeader]);
 
   return (

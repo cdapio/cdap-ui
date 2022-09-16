@@ -31,9 +31,21 @@ const AddTransformation = (props) => {
   const [replaceValue, setReplaceValue] = useState('');
   const { dataprep } = DataPrepStore.getState();
   const [directiveComponentValues, setDirectiveComponentsValue] = useState({
-    radioValue: '',
-    checkBoxValue: false,
-    customTextValue: '',
+    radioOption: '',
+    ignoreCase: false,
+    exactMatch: false,
+    filterRowToKeepOrRemove: '',
+    filterCondition: '',
+    filterConditionValue: '',
+    findPreviousValue: '',
+    findReplaceValue: '',
+    copyColumnName: '',
+    customInput: '',
+    sheetValue: '',
+    firstRowAsHeader: false,
+    depth: 1,
+    columnWidths: '',
+    optionPaddingParam: '',
   });
   console.log('directiveComponentValues', directiveComponentValues);
 
@@ -77,27 +89,74 @@ const AddTransformation = (props) => {
       const getDirective = parseDirective(
         functionName,
         selectedColumns[0].label,
-        directiveComponentValues.radioValue,
-        directiveComponentValues.customTextValue,
-        directiveComponentValues.checkBoxValue
+        directiveComponentValues.radioOption,
+        directiveComponentValues.customInput,
+        directiveComponentValues.firstRowAsHeader
       );
       props.applyTransformation(selectedColumns[0].label, getDirective);
     } else if (functionName == 'parseExcel') {
       const getDirective = parseDirective(
         functionName,
         selectedColumns[0].label,
-        directiveComponentValues.radioValue,
-        directiveComponentValues.customTextValue,
-        directiveComponentValues.checkBoxValue
+        directiveComponentValues.radioOption,
+        directiveComponentValues.sheetValue,
+        directiveComponentValues.firstRowAsHeader
       );
       props.applyTransformation(selectedColumns[0].label, getDirective);
     } else if (functionName == 'parseJSON') {
       const getDirective = parseDirective(
         functionName,
         selectedColumns[0].label,
-        directiveComponentValues.radioValue,
-        directiveComponentValues.customTextValue,
-        directiveComponentValues.checkBoxValue
+        directiveComponentValues.radioOption,
+        directiveComponentValues.depth,
+        directiveComponentValues.firstRowAsHeader
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseXML') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioOption,
+        directiveComponentValues.depth,
+        directiveComponentValues.firstRowAsHeader
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseLog') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioOption,
+        directiveComponentValues.customInput,
+        directiveComponentValues.firstRowAsHeader
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseSimpleDate') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioOption,
+        directiveComponentValues.customInput,
+        directiveComponentValues.firstRowAsHeader
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseDateTime') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioOption,
+        directiveComponentValues.customInput,
+        directiveComponentValues.firstRowAsHeader
+      );
+      props.applyTransformation(selectedColumns[0].label, getDirective);
+    } else if (functionName == 'parseFixedLength') {
+      const getDirective = parseDirective(
+        functionName,
+        selectedColumns[0].label,
+        directiveComponentValues.radioOption,
+        directiveComponentValues.customInput,
+        directiveComponentValues.firstRowAsHeader,
+        directiveComponentValues.columnWidths,
+        directiveComponentValues.optionPaddingParam
       );
       props.applyTransformation(selectedColumns[0].label, getDirective);
     } else {

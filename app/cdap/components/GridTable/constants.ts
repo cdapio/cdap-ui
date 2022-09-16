@@ -26,6 +26,8 @@ export const OPTION_WITH_NO_INPUT = [
   'character-encoding-iso-8859-1',
   'character-encoding-utf16-be',
   'character-encoding-utf16-le',
+  'parseHL7',
+  'parseAvro',
 ];
 
 export const OPTION_WITH_TWO_INPUT = [
@@ -41,4 +43,9 @@ export const OPTION_WITH_TWO_INPUT = [
   'parseCSV',
   'parseExcel',
   'parseJSON',
+  'parseXML',
+  'parseLog',
+  'parseSimpleDate',
+  'parseDateTime',
+  'parseFixedLength',
 ];

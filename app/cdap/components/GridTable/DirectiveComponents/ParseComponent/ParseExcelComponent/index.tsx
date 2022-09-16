@@ -25,15 +25,15 @@ const ParseExcelComponent = (props) => {
   const [firstRowAsHeader, setFirstRowAsHeader] = useState(false);
   const classes = useStyles();
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, radioValue: sheetRadioType });
+    setDirectiveComponentsValue({ ...directiveComponentValues, radioOption: sheetRadioType });
   }, [sheetRadioType]);
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, customTextValue: sheetValue });
+    setDirectiveComponentsValue({ ...directiveComponentValues, sheetValue });
   }, [sheetValue]);
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, checkBoxValue: firstRowAsHeader });
+    setDirectiveComponentsValue({ ...directiveComponentValues, firstRowAsHeader });
   }, [firstRowAsHeader]);
   return (
     <ParseComponent sectionHeading={CHOOSE_SHEET_IN_EXCEL}>

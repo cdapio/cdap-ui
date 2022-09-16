@@ -12,7 +12,7 @@ const ParseXMLToJSONComponent = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    setDirectiveComponentsValue({ ...directiveComponentValues, customTextValue: depth });
+    setDirectiveComponentsValue({ ...directiveComponentValues, depth });
   }, [depth]);
 
   return (

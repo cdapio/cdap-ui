@@ -1,5 +1,5 @@
 import { FormGroup } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ParseComponent from '..';
 import {
   COLUMN_WIDTHS,
@@ -12,9 +12,18 @@ import { useStyles } from '../../styles';
 import FormInputFieldComponent from '../FormInputFieldComponent';
 
 const ParseFixedLengthComponent = (props) => {
+  const { setDirectiveComponentsValue, directiveComponentValues } = props;
   const [columnWidths, setColumnWidths] = useState('');
   const [padding, setPadding] = useState('');
   const classes = useStyles();
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, columnWidths });
+  }, [columnWidths]);
+
+  useEffect(() => {
+    setDirectiveComponentsValue({ ...directiveComponentValues, optionPaddingParam: padding });
+  }, [padding]);
 
   return (
     <ParseComponent sectionHeading={PARSE_AS_FIXED_LENGTH}>
