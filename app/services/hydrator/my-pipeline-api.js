@@ -79,6 +79,7 @@ angular.module(PKG.name + '.services')
         delete: myHelpers.getConfig('DELETE', 'REQUEST', pipelinePath),
         runs: myHelpers.getConfig('GET', 'REQUEST', pipelinePath + '/runs', true),
         get: myHelpers.getConfig('GET', 'REQUEST', pipelinePath),
+        getAppVersion: myHelpers.getConfig('GET', 'REQUEST', pipelinePath + '/versions/:version'),
         datasets: myHelpers.getConfig('GET', 'REQUEST', pipelinePath + '/datasets', true),
         action: myHelpers.getConfig('POST', 'REQUEST', pipelinePath + '/:action'),
 

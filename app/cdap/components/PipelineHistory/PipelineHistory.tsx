@@ -163,7 +163,9 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
     >
       <div className="grid-wrapper pipeline-history-list-table">
-        {ready && <PipelineHistoryTable appVersions={pipelineVersions} />}
+        {ready && (
+          <PipelineHistoryTable pipelineName={pipelineName} appVersions={pipelineVersions} />
+        )}
         <Pagination />
       </div>
     </PipelineModeless>
