@@ -16,19 +16,20 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 import OngoingDataExploration from './Components/OngoingDataExploration';
-import WrangleCard from './Components/WrangleCard';
+import { WrangleCard } from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
 
-const WranglerHome = () => {
+export default function WranglerHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-
+  const cardCount = 2;
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
@@ -48,17 +49,20 @@ const WranglerHome = () => {
         <WrangleCard />
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View More</Box>
+
+          <Box className={classes.viewMore}>
+            <Link color="inherit" to={`/ns/${getCurrentNamespace()}/workspace-list`}>
+              View More
+            </Link>
+          </Box>
         </Box>
-        <OngoingDataExploration />
-        <If condition={loading}>
+        <OngoingDataExploration cardCount={cardCount} />
+        {loading && (
           <Box className={classes.loadingContainer}>
             <LoadingSVG />
           </Box>
-        </If>
+        )}
       </Box>
     </Box>
   );
-};
-
-export default WranglerHome;
+}

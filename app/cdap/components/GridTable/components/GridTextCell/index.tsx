@@ -19,7 +19,7 @@ import React from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
 
-export const GridTextCell: React.FC<IGridTextCellProps> = ({ cellValue }) => {
+export default function GridTextCell({ cellValue }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
 
   return (
@@ -29,4 +29,4 @@ export const GridTextCell: React.FC<IGridTextCellProps> = ({ cellValue }) => {
       </Card>
     </TableCell>
   );
-};
+}
