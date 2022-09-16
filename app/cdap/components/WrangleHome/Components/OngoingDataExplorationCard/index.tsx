@@ -14,12 +14,25 @@
  * the License.
  */
 
-import React from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
+import CustomTooltip from '../CustomTooltip';
 
-const OngoingDataExplorationCard = ({ item }) => {
+export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
+  const connectionNameRef: RefObject<HTMLInputElement> = createRef();
+  const datasetNameRef: RefObject<HTMLInputElement> = createRef();
+  const [connectionRefValue, setconnectionRefValue] = useState(false);
+  const [datasetNameRefValue, setdatasetNameRef] = useState(false);
+
+  useEffect(() => {
+    setconnectionRefValue(
+      connectionNameRef?.current?.offsetWidth < connectionNameRef?.current?.scrollWidth
+    );
+    setdatasetNameRef(datasetNameRef?.current?.offsetWidth < datasetNameRef?.current?.scrollWidth);
+  });
+
   return (
     <Grid container className={classes.gridContainer}>
       {item.map((eachItem, index) => {
@@ -28,13 +41,58 @@ const OngoingDataExplorationCard = ({ item }) => {
             return (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.iconStyle}> {eachItem.icon}</Box>
-                <Typography variant="body1">{eachItem.label}</Typography>
+                {connectionRefValue ? (
+                  <CustomTooltip title={eachItem.label} arrow>
+                    <Typography
+                      variant="body1"
+                      ref={connectionNameRef}
+                      className={classes.iconWithText}
+                    >
+                      {eachItem.label}
+                    </Typography>
+                  </CustomTooltip>
+                ) : (
+                  <Typography
+                    variant="body1"
+                    ref={connectionNameRef}
+                    className={classes.iconWithText}
+                  >
+                    {eachItem.label}
+                  </Typography>
+                )}
               </Grid>
             );
           case 'text':
-            return (
+            return eachItem.label.includes('Recipe steps') ? (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
-                <Typography variant="body1"> {eachItem.label}</Typography>
+                <Typography variant="body1" className={classes.textWithoutIcon}>
+                  {' '}
+                  {eachItem.label}
+                </Typography>
+              </Grid>
+            ) : (
+              <Grid item xs={3} className={classes.elementStyle} key={index}>
+                {datasetNameRefValue ? (
+                  <CustomTooltip title={eachItem.label} arrow>
+                    <Typography
+                      variant="body1"
+                      ref={datasetNameRef}
+                      className={classes.textWithoutIcon}
+                    >
+                      {' '}
+                      {eachItem.label}
+                    </Typography>
+                  </CustomTooltip>
+                ) : (
+                  <Typography
+                    variant="body1"
+                    ref={datasetNameRef}
+                    className={classes.textWithoutIcon}
+                  >
+                    {' '}
+                    {eachItem.label}
+                  </Typography>
+                )}
               </Grid>
             );
           case 'percentageWithText': {
@@ -45,7 +103,7 @@ const OngoingDataExplorationCard = ({ item }) => {
                   <Typography
                     variant="body2"
                     className={
-                      percent > 50 ? classes.percentageStyleGreen : classes.percentageStyleRed
+                      percent < 100 ? classes.percentageStyleRed : classes.percentageStyleGreen
                     }
                   >
                     {percent}
@@ -53,7 +111,7 @@ const OngoingDataExplorationCard = ({ item }) => {
                   <Typography
                     variant="body2"
                     className={
-                      percent > 50 ? classes.percentageSymbolGreen : classes.percentageSymbolRed
+                      percent < 100 ? classes.percentageSymbolRed : classes.percentageSymbolGreen
                     }
                   >
                     {eachItem.percentageSymbol}
@@ -76,5 +134,4 @@ const OngoingDataExplorationCard = ({ item }) => {
       })}
     </Grid>
   );
-};
-export default OngoingDataExplorationCard;
+}
