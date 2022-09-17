@@ -89,7 +89,6 @@ export default function ConnectionsTabs({
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
-                id="dodo"
                 role="button"
                 onClick={() => {
                   if (index > 1) {
