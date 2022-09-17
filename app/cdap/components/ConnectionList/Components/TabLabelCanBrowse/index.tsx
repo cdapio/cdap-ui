@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import * as React from 'react';
-import { createRef, useEffect, useState } from 'react';
+import { createRef, Ref, useEffect, useState } from 'react';
 import { useStyles } from './styles';
 
 export default function TabLabelCanBrowse({
@@ -35,7 +35,7 @@ export default function TabLabelCanBrowse({
 }) {
   const classes = useStyles();
 
-  const myLabelRef: any = createRef();
+  const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 
   useEffect(() => {
@@ -80,7 +80,10 @@ export default function TabLabelCanBrowse({
           {label}
         </Typography>
         {count && (
-          <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
+          <Typography
+            variant="body1"
+            className={classes.labelStylesCount}
+          >{`(${count})`}</Typography>
         )}
       </Box>
       <Box>

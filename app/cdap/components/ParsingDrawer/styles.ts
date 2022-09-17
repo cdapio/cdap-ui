@@ -86,6 +86,8 @@ export const useStyles = makeStyles(() => {
       border: '1px solid #DADCE0',
       borderRadius: '4px',
       padding: '5px 15px',
+      fontFamily: 'Noto Sans',
+      fontSize: '14px',
 
       '&:before': {
         display: 'none',
@@ -98,6 +100,13 @@ export const useStyles = makeStyles(() => {
       '&:after': {
         display: 'none',
       },
+    },
+    optionStyles: {
+      fontFamily: 'Noto Sans',
+      fontSize: '14px',
+      lineHeight: '150%',
+      letterSpacing: '0.15px',
+      color: '#000000',
     },
     selectIconStyles: {
       top: 'calc(50% - 10px)',
@@ -151,6 +160,7 @@ export const useStyles = makeStyles(() => {
       color: '#FFFFFF',
       alignSelf: 'flex-end',
       marginTop: '30px',
+      textTransform: 'none',
     },
     buttonStyles: {
       '&:hover': {

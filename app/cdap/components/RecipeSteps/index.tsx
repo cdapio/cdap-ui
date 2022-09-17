@@ -19,8 +19,7 @@ const recipes = [
   },
 ];
 
-const RecipeSteps = (props) => {
-  const [drawerStatus, setDrawerStatus] = useState(true);
+const RecipeSteps = ({ setShowRecipePanel, showRecipePanel }) => {
   const [recipeSteps, setRecipeSteps] = useState(recipes);
 
   const classes = useStyles();
@@ -32,13 +31,13 @@ const RecipeSteps = (props) => {
   }, []);
 
   const closeClickHandler = () => {
-    setDrawerStatus(false);
+    setShowRecipePanel(false);
   };
 
   return (
     <DrawerWidget
       headingText={RECIPE}
-      openDrawer={drawerStatus}
+      openDrawer={showRecipePanel}
       showDivider={true}
       headerActionTemplate={<RecipeHeaderActionTemplate />}
       closeClickHandler={closeClickHandler}

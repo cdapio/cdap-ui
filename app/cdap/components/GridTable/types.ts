@@ -19,30 +19,35 @@ export interface IParams {
   workspaceId: string;
 }
 
-export interface IDataTypeOfColumns {
+export interface IRecords {
   [key: string]: string;
 }
-
-interface IRowData {
-  [key: string]: string;
-}
-
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
 }
 
-export interface IDataOfStatistics {
-  [key: string]: string;
-}
-
 interface ISummary {
-  statistics: IDataOfStatistics;
-  validations: IDataOfStatistics;
+  statistics: IRecords;
+  validations: IRecords;
 }
 
 export interface IExecuteAPIResponse {
   headers: string[];
-  types: IDataTypeOfColumns;
-  values: IRowData[];
+  types: IRecords;
+  values: IRecords[];
   summary: ISummary;
+}
+
+export interface IHeaderNamesList {
+  name: string;
+  label: string;
+  type: string[];
+}
+
+export interface IDataTypeOfColumns {
+  [key: string]: string;
+}
+
+export interface IDataOfStatistics {
+  [key: string]: string;
 }

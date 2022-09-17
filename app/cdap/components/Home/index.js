@@ -40,6 +40,10 @@ const ConnectionList = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList'),
   loading: LoadingSVGCentered,
 });
+const WorkspaceList = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/WorkspaceList'),
+  loading: LoadingSVGCentered,
+});
 const WrangleGrid = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable'),
   loading: LoadingSVGCentered,
@@ -158,6 +162,7 @@ export default class Home extends Component {
             path="/ns/:namespace/datasources/:connectorType"
             component={ConnectionList}
           />
+          <Route exact path="/ns/:namespace/workspace-list" component={WorkspaceList} />
           <Route exact path="/ns/:namespace/wrangler-grid/:wid" component={WrangleGrid} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
