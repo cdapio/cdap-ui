@@ -26,6 +26,7 @@ export const useStyles = makeStyles({
     borderRadius: '4px',
     marginBottom: '10px',
     cursor: 'pointer',
+    margin: '10px auto',
   },
   elementStyle: {
     width: '301px',

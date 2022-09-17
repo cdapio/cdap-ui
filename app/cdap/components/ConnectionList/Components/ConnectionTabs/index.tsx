@@ -19,6 +19,8 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
+import DataPrepStore from 'components/DataPrep/store';
+import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
@@ -68,6 +70,15 @@ export default function ConnectionsTabs({
   useEffect(() => {
     setConnectionId(connectionId);
   }, []);
+
+  if (index === 0) {
+    DataPrepStore.dispatch({
+      type: DataPrepActions.setConnectorType,
+      payload: {
+        connectorType: tabsData.selectedTab,
+      },
+    });
+  }
 
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>

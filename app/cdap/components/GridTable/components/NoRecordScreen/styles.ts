@@ -14,36 +14,28 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
-import grey from '@material-ui/core/colors/grey';
+import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  labelContainerBox: {
-    width: '100%',
+  noRecordWrapper: {
+    height: '100%',
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+    },
   },
-  labelsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    height: '24px',
+  mainHeaderMessage: {
+    fontSize: '20px',
+    color: '#000000',
+    marginTop: '20px',
   },
-  labelStyles: {
-    maxWidth: '192px',
-    whiteSpace: 'nowrap',
+  subHeaderMessage: {
     fontSize: '16px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    pointerEvents: 'none',
+    color: '#000000',
   },
-  rightArrow: {
-    color: grey[600],
-    fontSize: 'large',
-  },
-  rightArrowSelected: {
-    color: '#fff',
-    fontSize: 'large',
+  innerWrapper: {
+    textAlign: 'center',
   },
 });

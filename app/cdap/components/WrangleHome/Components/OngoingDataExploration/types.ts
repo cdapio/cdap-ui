@@ -77,4 +77,5 @@ export interface IMassagedObject {
   percentageSymbol: string;
   subText: string;
   workspaceId: string;
+  count: number;
 }

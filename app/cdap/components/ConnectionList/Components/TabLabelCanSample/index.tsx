@@ -25,6 +25,8 @@ import * as React from 'react';
 import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useLocation } from 'react-router';
+import { DATASOURCES_LABEL, WRANGLE_LABEL } from './constants';
 import useStyles from './styles';
 
 export default function TabLabelCanSample({
@@ -41,6 +43,7 @@ export default function TabLabelCanSample({
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const classes = useStyles();
+  const pathName = useLocation();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -92,8 +95,16 @@ export default function TabLabelCanSample({
       });
   };
 
+  const indexOfSelectedDataset = location.pathname.lastIndexOf('/');
+  const requiredPath = location.pathname.slice(indexOfSelectedDataset + 1);
+
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: { from: DATASOURCES_LABEL, path: requiredPath },
+      }}
+    />
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
@@ -101,10 +112,12 @@ export default function TabLabelCanSample({
           {label}
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
-            Wrangle
-          </Typography>
+          <Box className="wranglingHover">
+            <WrangleIcon />
+            <Typography color="primary" variant="body2" className={classes.wrangleButton}>
+              {WRANGLE_LABEL}
+            </Typography>
+          </Box>
         </button>
       </Box>
     </CustomTooltip>
@@ -114,10 +127,12 @@ export default function TabLabelCanSample({
         {label}
       </Typography>
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
-        <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
-          Wrangle
-        </Typography>
+        <Box className="wranglingHover">
+          <WrangleIcon />
+          <Typography color="primary" variant="body2" className={classes.wrangleButton}>
+            {WRANGLE_LABEL}
+          </Typography>
+        </Box>
       </button>
     </Box>
   );
