@@ -25,9 +25,6 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
   },
   subHeader: {
     display: 'flex',
@@ -65,5 +62,8 @@ export const useStyles = makeStyles({
     position: 'absolute',
     top: 0,
     width: '100%',
+  },
+  link: {
+    textDecoration: 'none',
   },
 });

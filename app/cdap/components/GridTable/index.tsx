@@ -15,36 +15,53 @@
  */
 
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import ParsingDrawer from 'components/ParsingDrawer';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
 import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
-import Box from '@material-ui/core/Box';
+import NoDataScreen from './components/NoRecordScreen';
 import { useStyles } from './styles';
-import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import {
+  IDataOfStatistics,
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IParams,
+  IRecords,
+} from './types';
+import { convertNonNullPercent } from './utils';
+import FooterPanel from 'components/FooterPanel';
+import RecipeSteps from 'components/RecipeSteps';
+import AddTransformation from 'components/AddTransformation';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
-import ParsingDrawer from 'components/ParsingDrawer';
-import AddTransformation from 'components/AddTransformation';
 
 export default function GridTable() {
-  const { wid } = useParams() as any;
-  const params = useParams() as any;
+  const { wid } = useParams() as IRecords;
+  const params = useParams() as IRecords;
   const classes = useStyles();
+  const location = useLocation();
 
   const [loading, setLoading] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState('');
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
+  const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
+  const { dataprep } = DataPrepStore.getState();
+  const [isFirstWrangle, setIsFirstWrangle] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -55,9 +72,10 @@ export default function GridTable() {
   const [directiveFunction, setDirectiveFunction] = useState('');
 
   const [connectorType, setConnectorType] = useState(null);
+  const [showRecipePanel, setShowRecipePanel] = useState(false);
 
   useEffect(() => {
-    const { dataprep } = DataPrepStore.getState();
+    setIsFirstWrangle(true);
     setConnectorType(dataprep.connectorType);
   }, []);
 
@@ -73,8 +91,9 @@ export default function GridTable() {
     });
     MyDataPrepApi.getWorkspace(params)
       .pipe(
-        flatMap((res: any) => {
+        flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
+          setWorkspaceName(res.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -84,9 +103,9 @@ export default function GridTable() {
           const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
-            name: sampleSpec.connectionName,
+            name: res?.sampleSpec?.connectionName,
             workspaceName: res.workspaceName,
-            path: sampleSpec.path,
+            path: res?.sampleSpec?.path,
             visualization,
           };
           requestBody.insights = insights;
@@ -110,6 +129,7 @@ export default function GridTable() {
           type: DataPrepActions.setWorkspace,
           payload: {
             data: response.values,
+            values: response.values,
             headers: response.headers,
             types: response.types,
             ...gridParams,
@@ -120,8 +140,16 @@ export default function GridTable() {
       });
   };
 
+  const updateDataTranformation = (wid: string) => {
+    const payload = {
+      context: params.namespace,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+    setIsFirstWrangle(false);
+  };
+
   useEffect(() => {
-    // Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
       workspaceId: params.wid,
@@ -130,7 +158,7 @@ export default function GridTable() {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -142,79 +170,27 @@ export default function GridTable() {
     }
   };
 
-  // ------------@convertNonNullPercent Function is used for calculation of Missing/Null value
-  const convertNonNullPercent = (nonNullValue) => {
-    const lengthOfData: number = gridData?.values.length;
-    let count: number = 0;
-    let emptyCount: number = 0;
-    let nullValueCount: number = 0;
-    if (lengthOfData) {
-      nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
-      emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
-    }
-    return count;
-  };
-
-  // ------------@checkFrequentlyOccuredValues Function is used for checking which value appears maximum time in a column if that column doesn't have missing/null value
-  const checkFrequentlyOccuredValues = (key) => {
-    const valueOfKey = gridData.values.map((el) => el[key]);
-    let mostfrequentItem: number = 1;
-    let mostFrequentItemCount: number = 0;
-    let mostfrequentItemValue: string = '';
-    const mostFrequentDataItem = {
-      name: '',
-      count: 0,
-    };
-    if (Array.isArray(valueOfKey) && valueOfKey.length) {
-      valueOfKey.map((item, index) => {
-        valueOfKey.map((value, valueIndex) => {
-          if (item == value) {
-            mostFrequentItemCount++;
-          }
-          if (mostfrequentItem < mostFrequentItemCount) {
-            mostfrequentItem = mostFrequentItemCount;
-            mostfrequentItemValue = item;
-          }
-        });
-        mostFrequentItemCount = 0;
-        mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
-      });
-    }
-    mostFrequentDataItem.name = mostfrequentItemValue;
-    mostFrequentDataItem.count = mostFrequentItemCount;
-    return mostFrequentDataItem;
-  };
-
-  // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
   const createMissingData = (statistics: IDataOfStatistics) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
       const headerKeyTypeArray = Object.entries(value);
-      const arrayForMissingValue = [];
+      const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
-        if (vKey !== 'types') {
-          arrayForMissingValue.push({
-            label:
-              convertNonNullPercent(vValue) == 0
-                ? checkFrequentlyOccuredValues(key).name
-                : 'Missing/Null',
-            count:
-              convertNonNullPercent(vValue) == 0
-                ? checkFrequentlyOccuredValues(key).count
-                : convertNonNullPercent(vValue),
-          });
-        }
+        typeArrayOfMissingValue.push({
+          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
+        });
       }),
         metricArray.push({
           name: key,
-          values: arrayForMissingValue.concat(invalidCountArray),
+          values: typeArrayOfMissingValue.concat(invalidCountArray),
         });
     });
     return metricArray;
   };
 
+  // ------------@getGridTableData Function is used for preparing data for entire grid-table
   // ------------@getGridTableData Function is used for preparing data for entire grid-table
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
@@ -226,18 +202,27 @@ export default function GridTable() {
     const rowData =
       rawData &&
       rawData.values &&
-      Array.isArray(rawData.values) &&
-      rawData.values.map((eachRow) => {
-        const { body, ...rest } = eachRow;
-        return rest;
+      Array.isArray(rawData?.values) &&
+      rawData?.values.map((eachRow: {}) => {
+        return eachRow;
       });
+    setRowsDataList(rowData);
   };
 
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
 
-  const applyDirective = (option) => {
+  const showRecipePanelHandler = () => {
+    setShowRecipePanel((prev) => !prev);
+  };
+
+  const [showAddTransformation, setSshowAddTransformation] = useState(false);
+  const showAddTransformationHandler = () => {
+    setSshowAddTransformation((prev) => !prev);
+  };
+
+  const applyDirective = (option, column) => {
     setLoading(true);
     const newDirective = getDirective(option, columnSelected);
     const { dataprep } = DataPrepStore.getState();
@@ -296,15 +281,23 @@ export default function GridTable() {
     setColumnSelected((prevColumn) => (prevColumn === columnName ? '' : columnName));
 
   // Redux store
-  const { dataprep } = DataPrepStore.getState();
   const { data, headers, types } = dataprep;
   console.log(columnSelected, directiveFunction);
 
   return (
-    <Box className={classes.wrapper}>
-      <BreadCrumb datasetName={wid} />
-      <ToolBarList submitMenuOption={(option) => applyDirective(option)} />
-      <ParsingDrawer />
+    <Box>
+      <BreadCrumb datasetName={workspaceName} location={location} />
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
+      <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
+      {isFirstWrangle && connectorType === 'File' && (
+        <ParsingDrawer
+          updateDataTranformation={(wid) => updateDataTranformation(wid)}
+          setLoading={setLoading}
+        />
+      )}
+      {showRecipePanel && (
+        <RecipeSteps setShowRecipePanel={setShowRecipePanel} showRecipePanel={showRecipePanel} />
+      )}
       {directiveFunction && (
         <AddTransformation
           functionName={directiveFunction}
@@ -359,6 +352,10 @@ export default function GridTable() {
           })}
         </TableBody>
       </Table>
+      <FooterPanel
+        showRecipePanelHandler={showRecipePanelHandler}
+        showAddTransformationHandler={showAddTransformationHandler}
+      />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

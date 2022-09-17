@@ -21,7 +21,7 @@ import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
@@ -100,6 +100,7 @@ export default function ConnectionsTabs({
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
+                role="button"
                 onClick={() => {
                   if (index > 1) {
                     connectorType.canBrowse ? handleChange(connectorType, index) : null;
@@ -137,7 +138,7 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={connectorType.canSample ? classes.wrangleTab : 'eachConnectionStyle'}
+                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
           </Tabs>

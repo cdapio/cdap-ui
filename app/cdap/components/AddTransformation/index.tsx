@@ -14,7 +14,7 @@ import SelectedColumnCountWidget from './SelectedColumnCountWidget';
 import { useStyles } from './styles';
 
 const AddTransformation = (props) => {
-  const { functionName } = props;
+  const { functionName, showAddTransformationHandler } = props;
 
   // const [drawerStatus, setDrawerStatus] = useState(functionName);
   const [columnsPopup, setColumnsPopup] = useState(false);

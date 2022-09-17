@@ -14,17 +14,28 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core';
 
-export const useStyles = makeStyles((theme) => ({
-  arrow: {
+export const useStyles = makeStyles({
+  noRecordWrapper: {
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+    },
+  },
+  mainHeaderMessage: {
+    fontSize: '20px',
+    color: '#000000',
+    marginTop: '20px',
+  },
+  subHeaderMessage: {
+    fontSize: '16px',
     color: '#000000',
   },
-  tooltip: {
-    backgroundColor: '#000000',
-    fontSize: '16px',
+  innerWrapper: {
+    textAlign: 'center',
   },
-  forEachTabLabelWidth: {
-    width: '100%',
-  },
-}));
+});

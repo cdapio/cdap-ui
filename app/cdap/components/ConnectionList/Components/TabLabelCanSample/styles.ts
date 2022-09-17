@@ -44,6 +44,7 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         gap: '10px',
+        background: 'none',
       },
     },
   },
@@ -52,6 +53,7 @@ const useStyles = makeStyles({
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+    pointerEvents: 'none',
   },
   wrangleTypography: {
     fontSize: '14px',

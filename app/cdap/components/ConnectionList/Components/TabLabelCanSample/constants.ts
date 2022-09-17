@@ -14,17 +14,5 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
-
-export const useStyles = makeStyles((theme) => ({
-  arrow: {
-    color: '#000000',
-  },
-  tooltip: {
-    backgroundColor: '#000000',
-    fontSize: '16px',
-  },
-  forEachTabLabelWidth: {
-    width: '100%',
-  },
-}));
+export const DATASOURCES_LABEL = 'Data Sources';
+export const WRANGLE_LABEL = 'Wrangle';
