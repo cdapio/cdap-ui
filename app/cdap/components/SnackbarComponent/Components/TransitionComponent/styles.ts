@@ -14,6 +14,8 @@
  * the License.
  */
 import { makeStyles } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
   warningIcon: {
@@ -27,11 +29,11 @@ export const useStyles = makeStyles((theme) => ({
   dismissSpan: {
     display: 'block',
     fontSize: '14px',
-    color: '#4681F4',
+    color: blue[500],
     cursor: 'pointer',
   },
   errorMessage: {
-    color: '#000000',
+    color: grey[900],
     fontSize: '14px',
     padding: '10px',
   },

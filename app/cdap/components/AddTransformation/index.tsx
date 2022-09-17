@@ -14,7 +14,7 @@ import SelectedColumnCountWidget from './SelectedColumnCountWidget';
 import { useStyles } from './styles';
 
 const AddTransformation = (props) => {
-  const { functionName } = props;
+  const { functionName, showAddTransformationHandler } = props;
 
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [columnsPopup, setColumnsPopup] = useState(false);
@@ -24,6 +24,7 @@ const AddTransformation = (props) => {
 
   const closeClickHandler = () => {
     setDrawerStatus(false);
+    showAddTransformationHandler(false);
   };
 
   const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {};
