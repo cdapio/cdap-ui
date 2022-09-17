@@ -188,7 +188,6 @@ export default function GridTable() {
   };
 
   useEffect(() => {
-    // Get DATA from URL paramteres to get data of workspace
     const payload = {
       context: params.namespace,
       workspaceId: params.wid,
@@ -310,7 +309,6 @@ export default function GridTable() {
   // Redux store
   const { dataprep } = DataPrepStore.getState();
   const { data, headers, types } = dataprep;
-  console.log(columnSelected, directiveFunction);
 
   return (
     <Box className={classes.wrapper}>

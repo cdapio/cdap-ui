@@ -57,35 +57,7 @@ const AddTransformation = (props) => {
 
   const handleApply = (e: React.MouseEvent<HTMLButtonElement>) => {
     setLoading(true);
-    if (functionName == 'null') {
-      const paramsData = {
-        context: params.namespace,
-        workspaceId: params.wid,
-      };
-      const directivesArray =
-        selectedAction == 'remove'
-          ? selectedColumns.map(
-              ({ label }) =>
-                `filter-rows-on condition-true ${label} == null || ${label} =~ \"^\\W*$\"`
-            )
-          : selectedColumns.map(({ label }) => `fill-null-or-empty :${label} '${replaceValue}'`);
-      const apiPayload = {
-        directives: dataprep.directives.length
-          ? dataprep.directives.concat(directivesArray)
-          : directivesArray,
-        limit: 1000,
-        insights: dataprep.insights,
-      };
-
-      MyDataPrepApi.execute(paramsData, apiPayload)
-        .subscribe((response) => {
-          props.callBack(response);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setLoading(false);
-        });
-    } else if (functionName == 'parseCSV') {
+    if (functionName == 'parseCSV') {
       const getDirective = parseDirective(
         functionName,
         selectedColumns[0].label,
