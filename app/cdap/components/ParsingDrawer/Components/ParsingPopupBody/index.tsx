@@ -8,8 +8,81 @@ import {
   FORMAT,
   USE_FIRST_ROW_AS_HEADER,
 } from 'components/ParsingDrawer/constants';
-import { ENCODING_OPTIONS, FORMAT_OPTIONS } from 'components/ParsingDrawer/options';
 import InputCheckbox from '../InputCheckbox';
+import T from 'i18n-react';
+
+const PREFIX = 'features.DataPrep.Directives.SetCharEncoding';
+const SUFFIX = 'features.DataPrep.Directives.Parse';
+
+const CHAR_ENCODING_OPTIONS = [
+  {
+    label: T.translate(`${PREFIX}.utf8`),
+    value: T.translate(`${PREFIX}.utf8`),
+  },
+  {
+    label: T.translate(`${PREFIX}.utf16`),
+    value: T.translate(`${PREFIX}.utf16`),
+  },
+  {
+    label: T.translate(`${PREFIX}.usascii`),
+    value: T.translate(`${PREFIX}.usascii`),
+  },
+  {
+    label: T.translate(`${PREFIX}.iso88591`),
+    value: T.translate(`${PREFIX}.iso88591`),
+  },
+  {
+    label: T.translate(`${PREFIX}.utf16be`),
+    value: T.translate(`${PREFIX}.utf16be`),
+  },
+  {
+    label: T.translate(`${PREFIX}.utf16le`),
+    value: T.translate(`${PREFIX}.utf16le`),
+  },
+];
+
+const FORMAT_OPTIONS = [
+  {
+    label: T.translate(`${SUFFIX}.Parsers.CSV.label`),
+    value: T.translate(`${SUFFIX}.Parsers.CSV.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.EXCEL.label`),
+    value: T.translate(`${SUFFIX}.Parsers.EXCEL.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.FIXEDLENGTH.label`),
+    value: T.translate(`${SUFFIX}.Parsers.FIXEDLENGTH.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.HL7.label`),
+    value: T.translate(`${SUFFIX}.Parsers.HL7.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.JSON.label`),
+    value: T.translate(`${SUFFIX}.Parsers.JSON.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.LOG.label`),
+    value: T.translate(`${SUFFIX}.Parsers.LOG.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.NATURALDATE.label`),
+    value: T.translate(`${SUFFIX}.Parsers.NATURALDATE.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.SIMPLEDATE.label`),
+    value: T.translate(`${SUFFIX}.Parsers.SIMPLEDATE.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.DATETIME.label`),
+    value: T.translate(`${SUFFIX}.Parsers.DATETIME.label`),
+  },
+  {
+    label: T.translate(`${SUFFIX}.Parsers.XMLTOJSON.label`),
+    value: T.translate(`${SUFFIX}.Parsers.XMLTOJSON.label`),
+  },
+];
 
 const ParsingPopupBody = (props) => {
   const classes = useStyles();
@@ -33,7 +106,9 @@ const ParsingPopupBody = (props) => {
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
           className={classes.selectFieldStyles}
+          optionClassName={{ root: classes.optionStyles }}
           fullWidth
+          defaultValue={FORMAT_OPTIONS[0].value}
           value={formatValue}
           onChange={handleFormatChange}
           options={FORMAT_OPTIONS}
@@ -47,10 +122,12 @@ const ParsingPopupBody = (props) => {
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
           className={classes.selectFieldStyles}
+          optionClassName={{ root: classes.optionStyles }}
+          defaultValue={CHAR_ENCODING_OPTIONS[0].value}
           fullWidth
           value={encodingValue}
           onChange={handleEncodingChange}
-          options={ENCODING_OPTIONS}
+          options={CHAR_ENCODING_OPTIONS}
         />
       </Box>
 

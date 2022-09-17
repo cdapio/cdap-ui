@@ -28,7 +28,7 @@ export const useGridTextCellStyles = makeStyles({
     width: 'fit-content',
   },
   tableRowCell: {
-    minWidth: '150.6px',
+    minWidth: '151px',
     border: '1px solid #E0E0E0',
     fontSize: '14px',
     width: 'auto',
@@ -37,11 +37,13 @@ export const useGridTextCellStyles = makeStyles({
     borderBottom: '1px solid #E0E0E0',
     color: '#5F6368',
     boxSizing: 'content-box',
+    paddingBottom: '5px',
   },
   cell: {
     lineHeight: '21px',
     fontSize: '14px',
     fontWeight: 400,
     color: '#5F6368',
+    marginBottom: '0px',
   },
 });
