@@ -15,24 +15,37 @@
  */
 
 import { makeStyles } from '@material-ui/styles';
+import blue from '@material-ui/core/colors/blue';
 
-export const useStyles = makeStyles({
+const useStyles = makeStyles({
   labelsContainerCanSample: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: '4px',
+    '& .wranglingHover': {
+      display: 'none',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      gap: '10px',
+      border: 0,
+      outline: 0,
+      '& .MuiTypography-root': {
+        color: blue[500],
+        fontSize: '14px',
+        letterSpacing: '0.15px',
+        fontWeight: 400,
+      },
+    },
     '&:hover': {
       cursor: 'default',
-      '&>.MuiBox-root': {
+      '& .wranglingHover': {
         display: 'flex',
         justifyContent: 'space-between',
         gap: '10px',
+        background: 'none',
       },
-    },
-    '&>.MuiBox-root': {
-      display: 'none',
     },
   },
   labelStylesCanSample: {
@@ -40,23 +53,14 @@ export const useStyles = makeStyles({
     fontSize: '16px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-  },
-  wranglingHover: {
-    '&:hover': {
-      cursor: 'pointer',
-    },
-    display: 'flex',
-    textDecoration: 'none',
-    gap: '10px',
-    '& .MuiTypography-root': {
-      color: '#4681F4',
-      fontSize: '14px',
-      letterSpacing: '0.15px',
-      fontWeight: 400,
-    },
+    pointerEvents: 'none',
   },
   wrangleTypography: {
-    color: '#4681F4 !important',
     fontSize: '14px',
   },
+  wrangleButton: {
+    color: blue[500],
+  },
 });
+
+export default useStyles;

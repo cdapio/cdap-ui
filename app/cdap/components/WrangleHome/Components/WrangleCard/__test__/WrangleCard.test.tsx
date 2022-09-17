@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import WrangleCard from '../index';
+import { WrangleCard } from '../index';
 
 test('It renders Wrangler-Card ', () => {
   jest.mock('components/Connections/Create/reducer', () => {

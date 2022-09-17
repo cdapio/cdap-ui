@@ -160,6 +160,7 @@ export const useStyles = makeStyles(() => {
       color: '#FFFFFF',
       alignSelf: 'flex-end',
       marginTop: '30px',
+      textTransform: 'none',
     },
     buttonStyles: {
       '&:hover': {

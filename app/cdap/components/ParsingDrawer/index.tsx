@@ -25,6 +25,7 @@ const ParsingDrawer = (props) => {
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const [schemaValue, setSchemaValue] = useState(null);
   const { dataprep } = DataPrepStore.getState();
+  console.log('dataprep', dataprep);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
   const [errorOnTranformation, setErrorOnTransformation] = useState({
     open: false,
@@ -122,6 +123,7 @@ const ParsingDrawer = (props) => {
     try {
       await createWorkspaceInternal(connectionPayload, parseConfig);
     } catch (e) {
+      setLoading(false);
       console.log('error', e);
       setLoading(false);
     }
