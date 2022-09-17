@@ -30,6 +30,7 @@ export default function BreadCrumb({ datasetName }) {
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
+          data-testid="breadcrumb-home-text"
         >
           Home
         </Link>
