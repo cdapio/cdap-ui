@@ -38,6 +38,20 @@ export default function TabLabelCanBrowse({
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 
+  const messagesRef = React.useRef(null);
+  const scrollToBottom = () => {
+    messagesRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
+  };
+  React.useEffect(() => {
+    if (messagesRef.current) {
+      scrollToBottom();
+    }
+  }, [messagesRef]);
+
   useEffect(() => {
     /**
     In case, the size of the lable or file name exceeds the maximum width 
@@ -52,7 +66,7 @@ export default function TabLabelCanBrowse({
 
   return refValue ? (
     <CustomTooltip title={label} arrow key={`tooltip-${index}`}>
-      <Box className={classes.labelContainerBox}>
+      <Box {...({ ref: messagesRef } as any)} className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}
           <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
@@ -73,7 +87,7 @@ export default function TabLabelCanBrowse({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelContainerBox}>
+    <Box {...({ ref: messagesRef } as any)} className={classes.labelContainerBox}>
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
         <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
