@@ -18,7 +18,7 @@ import { Box, Modal } from '@material-ui/core';
 import React from 'react';
 
 interface ILoadingAppLevelProps {
-  message: String;
+  message?: String;
   subtitle?: String;
   isopen: boolean;
 }
@@ -132,7 +132,7 @@ export const LoadingAppLevel = ({ message, subtitle, isopen }: ILoadingAppLevelP
             </rect>
           </svg>
         </div>
-        <h2> {message} </h2>
+        <h2> {message || 'Loading...'} </h2>
         <h4>{subtitle}</h4>
       </Box>
     </Modal>
