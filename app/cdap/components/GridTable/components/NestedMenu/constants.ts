@@ -97,43 +97,64 @@ export const PARSE_OPTIONS = [
 
 export const MENU_OPTIONS = [
   {
-    value: 'changeDatatype',
-    label: 'Change data type',
-    options: DATATYPE_OPTIONS,
-  },
-  {
     value: 'parse',
     label: 'Parse',
     options: PARSE_OPTIONS,
   },
   {
-    value: 'setQualifiler',
-    label: 'Set qualifier',
+    value: 'divider',
+  },
+  {
+    value: 'changeDatatype',
+    label: 'Change data type',
+    options: DATATYPE_OPTIONS,
+  },
+  {
+    value: 'set-character-encoding',
+    label: 'Set character encoding',
+    options: [
+      { value: 'character-encoding-utf8', label: 'UTF-8' },
+      { value: 'character-encoding-utf16', label: 'UTF-16' },
+      { value: 'character-encoding-us-ascii', label: 'US-ASCII' },
+      { value: 'character-encoding-iso-8859-1', label: 'ISO-8859-1' },
+      { value: 'character-encoding-utf16-be', label: 'UTF-16BE' },
+      { value: 'character-encoding-utf16-le', label: 'UTF-16LE' },
+    ],
   },
   {
     value: 'divider',
   },
   {
     value: 'text',
-    label: 'Text',
+    label: 'Format',
     options: [
-      { value: 'heading', label: 'Remove' },
-      { value: 'letters', label: 'Letters' },
-      { value: 'numbers', label: 'Numbers' },
-      { value: 'specialCharacters', label: 'Special Characters' },
-      { value: 'trim', label: 'White spaces' },
-      { value: 'ltrim', label: 'Leading white spaces' },
-      { value: 'rtrim', label: 'Trailing White spaces' },
-      { value: 'divider' },
-      { value: 'heading', label: 'Format' },
       { value: 'uppercase', label: 'UPPERCASE' },
       { value: 'lowercase', label: 'Lowercase' },
       { value: 'titlecase', label: 'Title Case' },
+      { value: 'concatenate', label: 'Concatenate' },
+      { value: 'trim', label: 'White spaces' },
+      { value: 'ltrim', label: 'Leading white spaces' },
+      { value: 'rtrim', label: 'Trailing White spaces' },
     ],
   },
   {
-    value: 'dateAndTime',
-    label: 'Date and Time',
+    value: 'calculate',
+    label: 'Calculate',
+  },
+  {
+    value: 'custom-transform',
+    label: 'Custom Transform',
+  },
+  {
+    value: 'divider',
+  },
+  {
+    value: 'filter',
+    label: 'Filter',
+  },
+  {
+    value: 'send-to-error',
+    label: 'Send to error',
   },
   {
     value: 'findAndReplace',
@@ -144,8 +165,11 @@ export const MENU_OPTIONS = [
     label: 'Fill null or empty',
   },
   {
-    value: 'filter',
-    label: 'Filter',
+    value: 'divider',
+  },
+  {
+    value: 'copy-column',
+    label: 'Copy column',
   },
   {
     value: 'delete',
@@ -154,5 +178,72 @@ export const MENU_OPTIONS = [
   {
     value: 'keep',
     label: 'Keep column',
+  },
+  {
+    value: 'divider',
+  },
+  {
+    value: 'extract',
+    label: 'Extract',
+    options: [
+      { value: 'using-patterns', label: 'Using Patterns' },
+      { value: 'using-delimiters', label: 'Using Delimiters' },
+      { value: 'using-positions', label: 'Using Positions' },
+    ],
+  },
+  {
+    value: 'explode',
+    label: 'Explode',
+    options: [
+      { value: 'delimited-text', label: 'Delimited Text' },
+      { value: 'array-flattening', label: 'Array By Flattening' },
+      { value: 'record-flattening', label: 'Record By Flattening' },
+    ],
+  },
+  {
+    value: 'define-variable',
+    label: 'Define variable',
+  },
+  {
+    value: 'set-counter',
+    label: 'Set counter',
+  },
+  {
+    value: 'divider',
+  },
+  {
+    value: 'mask-data',
+    label: 'Mask Data',
+    options: [
+      { value: 'last-4', label: 'Show last 4 characters only' },
+      { value: 'last-2', label: 'Show last 2 characters only' },
+      { value: 'numbers', label: 'Custom Selection' },
+      { value: 'divider' },
+      { value: 'shuffle', label: 'By Shuffling' },
+    ],
+  },
+  {
+    value: 'encode',
+    label: 'Encode',
+    options: [
+      { value: 'encode-base64', label: 'Base64' },
+      { value: 'encode-base32', label: 'Base32' },
+      { value: 'encode-hex', label: 'Hex' },
+      { value: 'encode-url', label: 'URL' },
+    ],
+  },
+  {
+    value: 'decode',
+    label: 'Decode',
+    options: [
+      { value: 'decode-base64', label: 'Base64' },
+      { value: 'decode-base32', label: 'Base32' },
+      { value: 'decode-hex', label: 'Hex' },
+      { value: 'decode-url', label: 'URL' },
+    ],
+  },
+  {
+    value: 'hash',
+    label: 'Hash',
   },
 ];

@@ -32,7 +32,7 @@ import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
 import ToolBarList from './components/AaToolbar';
-import { getDirective, getDirectiveOnTwoInputs, getDirectiveOnMultipleInputs } from './directives';
+import { getDirective } from './directives';
 import ParsingDrawer from 'components/ParsingDrawer';
 import AddTransformation from 'components/AddTransformation';
 import { OPTION_WITH_NO_INPUT, OPTION_WITH_TWO_INPUT } from './constants';
@@ -177,24 +177,6 @@ export default function GridTable() {
     setOptionSelected(option);
     if (OPTION_WITH_NO_INPUT.includes(option)) {
       const newDirective = getDirective(option, columnSelected);
-      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
-        setDirectiveFunction(option);
-        setLoading(false);
-        return;
-      } else {
-        applyDirectiveAPICall(newDirective);
-      }
-    } else if (OPTION_WITH_TWO_INPUT.includes(option)) {
-      const newDirective = getDirectiveOnTwoInputs(option, columnSelected, value_1);
-      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
-        setDirectiveFunction(option);
-        setLoading(false);
-        return;
-      } else {
-        applyDirectiveAPICall(newDirective);
-      }
-    } else {
-      const newDirective = getDirectiveOnMultipleInputs(option, columnSelected, value_1, value_2);
       if (!Boolean(newDirective) || !Boolean(columnSelected)) {
         setDirectiveFunction(option);
         setLoading(false);
