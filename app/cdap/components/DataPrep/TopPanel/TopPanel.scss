@@ -136,6 +136,12 @@ $row_column_count_color: #6b6767;
         }
       }
 
+      .btn-secondary {
+        margin: 0 10px;
+        color: $blue-02;
+        border-color: $blue-02;
+      }
+
       .plus-button-container {
         max-height: 100%;
         .plus-button {

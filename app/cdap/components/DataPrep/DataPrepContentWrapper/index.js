@@ -29,13 +29,12 @@ import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import DataPrepSidePanel from 'components/DataPrep/DataPrepSidePanel';
 import classnames from 'classnames';
 import T from 'i18n-react';
+import DataPrepStore from 'components/DataPrep/store';
 require('./DataPrepContentWrapper.scss');
 
-const DataPrepVisualization = Loadable({
+const DataPrepStatistics = Loadable({
   loader: () =>
-    import(
-      /* webpackChunkName: "DataprepVisualization" */ 'components/DataPrep/DataPrepVisualization'
-    ),
+    import(/* webpackChunkName: "DataPrepStatistics" */ 'components/DataPrep/DataPrepStatistics'),
   loading: LoadingSVGCentered,
 });
 const PREFIX = 'features.DataPrep.TopPanel';
@@ -52,8 +51,8 @@ const view = (state = DEFAULTVIEW, action = defaultAction) => {
   }
 };
 
-const ViewStore = createStore(
-  combineReducers({ view }),
+const store = createStore(
+  combineReducers({ view, DataPrepStore }),
   DEFAULTSTORESTATE,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
@@ -88,6 +87,7 @@ ContentSwitch.propTypes = {
 const mapStateToProps = (state) => {
   return {
     activeTab: state.view,
+    dataPrep: state.dataprep,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -103,7 +103,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const SwitchWrapper = connect(mapStateToProps, mapDispatchToProps)(ContentSwitch);
 const Switch = () => (
-  <Provider store={ViewStore}>
+  <Provider store={store}>
     <SwitchWrapper />
   </Provider>
 );
@@ -114,15 +114,15 @@ export default class DataPrepContentWrapper extends Component {
   };
 
   componentDidMount() {
-    this.viewStoreSubscription = ViewStore.subscribe(() => {
-      let { view } = ViewStore.getState();
+    this.viewStoreSubscription = store.subscribe(() => {
+      let { view } = store.getState();
       this.onSwitchChange(view);
     });
   }
 
   componentWillUnmount() {
     if (this.viewStoreSubscription) {
-      ViewStore.dispatch({
+      store.dispatch({
         type: 'RESET',
       });
       this.viewStoreSubscription();
@@ -153,7 +153,7 @@ export default class DataPrepContentWrapper extends Component {
     const vizPart = (
       <div className="row">
         <div className="col-12">
-          <DataPrepVisualization />
+          <DataPrepStatistics />
         </div>
       </div>
     );
@@ -168,4 +168,4 @@ export default class DataPrepContentWrapper extends Component {
   }
 }
 
-export { Switch, ViewStore };
+export { Switch, store };

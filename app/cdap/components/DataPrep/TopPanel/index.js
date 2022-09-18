@@ -43,6 +43,11 @@ const AddToPipelineModal = Loadable({
     ),
   loading: LoadingSVGCentered,
 });
+const ResampleModal = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "ResampleModal" */ 'components/DataPrep/TopPanel/ResampleModal'),
+  loading: LoadingSVGCentered,
+});
 const UpgradeModal = Loadable({
   loader: () =>
     import(/* webpackChunkName: "UpgradeModal" */ 'components/DataPrep/TopPanel/UpgradeModal'),
@@ -68,6 +73,7 @@ export default class DataPrepTopPanel extends Component {
       workspaceModal: false,
       schemaModal: false,
       addToPipelineModal: false,
+      resampleModal: false,
       upgradeModal: false,
       higherVersion: initialState.higherVersion,
       onSubmitError: null,
@@ -76,10 +82,12 @@ export default class DataPrepTopPanel extends Component {
       path: null,
       connectionName: null,
       workspacename: null,
+      samplingOptions: initialState.supportedSampleTypes,
     };
 
     this.toggleSchemaModal = this.toggleSchemaModal.bind(this);
     this.toggleAddToPipelineModal = this.toggleAddToPipelineModal.bind(this);
+    this.toggleResampleModal = this.toggleResampleModal.bind(this);
     this.toggleUpgradeModal = this.toggleUpgradeModal.bind(this);
 
     this.sub = DataPrepStore.subscribe(() => {
@@ -91,6 +99,7 @@ export default class DataPrepTopPanel extends Component {
         connectionName: objectQuery(state, 'insights', 'name'),
         path: state.workspaceUri,
         workspaceName: objectQuery(state, 'insights', 'workspaceName'),
+        samplingOptions: state.supportedSampleTypes,
       });
     });
   }
@@ -105,6 +114,10 @@ export default class DataPrepTopPanel extends Component {
 
   toggleAddToPipelineModal = () => {
     this.setState({ addToPipelineModal: !this.state.addToPipelineModal });
+  };
+
+  toggleResampleModal = () => {
+    this.setState({ resampleModal: !this.state.resampleModal });
   };
 
   toggleUpgradeModal() {
@@ -125,6 +138,14 @@ export default class DataPrepTopPanel extends Component {
     }
 
     return <AddToPipelineModal toggle={this.toggleAddToPipelineModal} />;
+  }
+
+  renderResampleModal() {
+    if (!this.state.resampleModal) {
+      return null;
+    }
+
+    return <ResampleModal toggle={this.toggleResampleModal} />;
   }
 
   renderUpgradeModal() {
@@ -315,6 +336,14 @@ export default class DataPrepTopPanel extends Component {
     );
   }
 
+  renderResampleBtn() {
+    return (
+      <button className="btn btn-secondary" onClick={this.toggleResampleModal}>
+        {T.translate(`${PREFIX}.resampleButton`)}
+      </button>
+    );
+  }
+
   render() {
     return (
       <div className="row top-panel clearfix">
@@ -328,6 +357,7 @@ export default class DataPrepTopPanel extends Component {
             <span className="text-danger">{this.state.onSubmitError}</span>
           ) : null}
           {this.state.higherVersion ? this.renderUpgradeBtn() : null}
+          {this.state.samplingOptions.length > 0 ? this.renderResampleBtn() : null}
           {this.props.mode === 'ROUTED_WORKSPACE' ? this.renderApplyBtn() : null}
           {this.props.mode !== 'ROUTED_WORKSPACE' ? (
             <button className="btn btn-primary" onClick={this.toggleAddToPipelineModal}>
@@ -336,6 +366,7 @@ export default class DataPrepTopPanel extends Component {
           ) : null}
           {this.renderMenu()}
           {!this.props.mode === 'ROUTED_WORKSPACE' ? <DataPrepPlusButton /> : null}
+          {this.renderResampleModal()}
           {this.renderAddToPipelineModal()}
           {this.renderSchemaModal()}
         </div>

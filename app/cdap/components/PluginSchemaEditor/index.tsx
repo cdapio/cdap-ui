@@ -34,7 +34,6 @@ import ConfigurableTab, {
 import classnames from 'classnames';
 import { objectQuery, isNilOrEmptyString } from 'services/helpers';
 import Alert from 'components/shared/Alert';
-import { isObject } from 'vega-lite/build/src/util';
 import { isMacro } from 'services/helpers';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import isEqual from 'lodash/isEqual';
