@@ -14,32 +14,16 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
+import { Box, Tooltip, TooltipProps } from '@material-ui/core';
+import * as React from 'react';
+import { useStyles } from './styles';
 
-export interface IRecords {
-  [key: string]: string;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
+export default function CustomTooltip(props: TooltipProps) {
+  const classes = useStyles();
 
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
+  return (
+    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+      <Tooltip arrow classes={classes} {...props} />
+    </Box>
+  );
 }

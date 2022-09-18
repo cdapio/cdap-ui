@@ -23,6 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { IResponseData } from './types';
 
 export default function OngoingDataExploration() {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
@@ -35,7 +36,7 @@ export default function OngoingDataExploration() {
       context: 'default',
     })
       .pipe(
-        switchMap((res: any) => {
+        switchMap((res: IResponseData) => {
           const workspaces = res.values.map((item) => {
             const params = {
               context: 'default',
@@ -45,7 +46,7 @@ export default function OngoingDataExploration() {
               directives: item.directives,
               limit: 1000,
               insights: {
-                name: item.name,
+                name: item.sampleSpec.connectionName,
                 workspaceName: item.workspaceName,
                 path: item?.sampleSpec?.path,
                 visualization: {},
@@ -70,8 +71,8 @@ export default function OngoingDataExploration() {
           return forkJoin(workspaces);
         })
       )
-      .subscribe((response) => {
-        response.forEach((workspace, index) => {
+      .subscribe((responses) => {
+        responses.forEach((workspace, index) => {
           let dataQuality = 0;
           workspace.headers.forEach((element) => {
             const general = workspace.summary.statistics[element].general;

@@ -30,21 +30,23 @@ import GridTextCell from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IDataTypeOfColumns, IDataOfStatistics, IParams } from './types';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
 import ParsingDrawer from 'components/ParsingDrawer';
 import AddTransformation from 'components/AddTransformation';
 import { OPTION_WITH_NO_INPUT, OPTION_WITH_TWO_INPUT } from './constants';
 import Snackbar from 'components/SnackbarComponent';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 
 export default function GridTable() {
-  const { wid } = useParams() as any;
-  const params = useParams() as any;
+  const { wid } = useParams() as IRecords;
+  const params = useParams() as IRecords;
   const classes = useStyles();
 
-  const [headersNamesList, setHeadersNamesList] = React.useState([]);
   const [loading, setLoading] = useState(false);
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
+  const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [dataQuality, setDataQuality] = useState({});
@@ -78,7 +80,7 @@ export default function GridTable() {
     });
     MyDataPrepApi.getWorkspace(params)
       .pipe(
-        flatMap((res: any) => {
+        flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
           if (dataprep.workspaceId !== workspaceId) {
             return;
@@ -187,6 +189,67 @@ export default function GridTable() {
     }
   };
 
+  const applyDirectiveAPICall = (newDirective) => {
+    const { dataprep } = DataPrepStore.getState();
+    const { workspaceId, workspaceUri, directives, insights } = dataprep;
+    let gridParams = {};
+    const updatedDirectives = directives.concat(newDirective);
+    const requestBody = directiveRequestBodyCreator(updatedDirectives);
+
+    requestBody.insights = insights;
+
+    const workspaceInfo = {
+      properties: insights,
+    };
+    gridParams = {
+      directives: updatedDirectives,
+      workspaceId,
+      workspaceUri,
+      workspaceInfo,
+      insights,
+    };
+    const payload = {
+      context: params.namespace,
+      workspaceId: params.wid,
+    };
+    MyDataPrepApi.execute(payload, requestBody).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+        setDirectiveFunction('');
+        setColumnSelected('');
+      },
+      (err) => {
+        setToast(true);
+        setLoading(false);
+      }
+    );
+  };
+
+  const applyDirective = (option, columnSelected, value_1?, value_2?) => {
+    setLoading(true);
+    setOptionSelected(option);
+    if (OPTION_WITH_NO_INPUT.includes(option)) {
+      const newDirective = getDirective(option, columnSelected);
+      if (!Boolean(newDirective) || !Boolean(columnSelected)) {
+        setDirectiveFunction(option);
+        setLoading(false);
+        return;
+      } else {
+        applyDirectiveAPICall(newDirective);
+      }
+    }
+  };
+
   useEffect(() => {
     const payload = {
       context: params.namespace,
@@ -196,7 +259,7 @@ export default function GridTable() {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (columnNamesList: string[], columnTypesList: IDataTypeOfColumns) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -223,9 +286,9 @@ export default function GridTable() {
   // ------------@checkFrequentlyOccuredValues Function is used for checking which value appears maximum time in a column if that column doesn't have missing/null value
   const checkFrequentlyOccuredValues = (key) => {
     const valueOfKey = gridData.values.map((el) => el[key]);
-    let mostfrequentItem: number = 1;
+    let mostFrequentItem: number = 1;
     let mostFrequentItemCount: number = 0;
-    let mostfrequentItemValue: string = '';
+    let mostFrequentItemValue: string = '';
     const mostFrequentDataItem = {
       name: '',
       count: 0,
@@ -236,22 +299,22 @@ export default function GridTable() {
           if (item == value) {
             mostFrequentItemCount++;
           }
-          if (mostfrequentItem < mostFrequentItemCount) {
-            mostfrequentItem = mostFrequentItemCount;
-            mostfrequentItemValue = item;
+          if (mostFrequentItem < mostFrequentItemCount) {
+            mostFrequentItem = mostFrequentItemCount;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostfrequentItemValue = mostfrequentItemValue == '' ? item : mostfrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
       });
     }
-    mostFrequentDataItem.name = mostfrequentItemValue;
+    mostFrequentDataItem.name = mostFrequentItemValue;
     mostFrequentDataItem.count = mostFrequentItemCount;
     return mostFrequentDataItem;
   };
 
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
-  const createMissingData = (statistics: IDataOfStatistics) => {
+  const createMissingData = (statistics: IRecords) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -311,7 +374,7 @@ export default function GridTable() {
   const { data, headers, types } = dataprep;
 
   return (
-    <Box className={classes.wrapper}>
+    <Box>
       <BreadCrumb datasetName={wid} />
       <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
       <ParsingDrawer />

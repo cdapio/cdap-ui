@@ -25,9 +25,6 @@ export const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
   },
   subHeader: {
     display: 'flex',

@@ -59,14 +59,12 @@ export const useStyles = makeStyles({
   tabsContainerWithHeader: {
     display: 'flex',
     flexDirection: 'column',
-    borderRight: '1px solid  #E0E0E0',
-    // borderColor: grey[300],
+    borderRight: `1px solid ${grey[300]}`,
   },
   connectionsListContainer: {
     width: '100vw',
     overflow: 'scroll',
     '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
       letterSpacing: '0.15px',
     },
   },
@@ -81,5 +79,11 @@ export const useStyles = makeStyles({
     top: 0,
     width: '100%',
     zIndex: 2000,
+  },
+  headerLabel: {
+    maxWidth: '245px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    pointerEvents: 'none',
   },
 });
