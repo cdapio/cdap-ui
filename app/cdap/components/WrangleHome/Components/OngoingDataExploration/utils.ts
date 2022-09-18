@@ -52,6 +52,5 @@ export const generateDataForExplorationCard = (oldData) => {
       massagedArray.push(childArray);
     });
   }
-
   return massagedArray;
 };
