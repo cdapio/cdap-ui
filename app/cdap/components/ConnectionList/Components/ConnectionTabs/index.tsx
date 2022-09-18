@@ -21,7 +21,7 @@ import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';

@@ -14,12 +14,6 @@
  *  the License.
  */
 
-export interface IResponseData {
-  count: number;
-  message: string;
-  values: IValues[];
-}
-
 export interface IValues {
   createdTimeMillis: number;
   directives: [];
@@ -30,6 +24,11 @@ export interface IValues {
   workspaceName: string;
 }
 
+export interface IResponseData {
+  count: number;
+  message: string;
+  values: IValues[];
+}
 export interface IInsights {
   name: string;
   path: string;
@@ -77,4 +76,5 @@ export interface IMassagedObject {
   percentageSymbol: string;
   subText: string;
   workspaceId: string;
+  count: number;
 }

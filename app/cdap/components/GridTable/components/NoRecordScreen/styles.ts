@@ -13,35 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  loadingContainer: {
+  noRecordWrapper: {
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+    },
   },
-  tableHeight: {
-    height: 'calc(100vh - 192px)',
-    overflow: 'scroll',
+  mainHeaderMessage: {
+    fontSize: '20px',
+    color: '#000000',
+    marginTop: '20px',
   },
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
+  subHeaderMessage: {
+    fontSize: '16px',
+    color: '#000000',
+  },
+  innerWrapper: {
+    textAlign: 'center',
   },
 });
