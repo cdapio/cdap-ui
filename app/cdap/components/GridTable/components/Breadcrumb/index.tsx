@@ -37,6 +37,7 @@ export default function BreadCrumb({ datasetName }) {
         <Link
           className={`${classes.breadcrumbLabel} ${classes.dataset}`}
           to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
+          data-testid="breadcrumb-data-sources-text"
         >
           Data Sources
         </Link>
