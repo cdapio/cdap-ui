@@ -34,6 +34,7 @@ export default class PipelineRunButton extends Component {
     runButtonLoading: PropTypes.bool,
     runError: PropTypes.string,
     runtimeArgs: PropTypes.array,
+    isLatest: PropTypes.string,
   };
 
   state = {
@@ -50,7 +51,7 @@ export default class PipelineRunButton extends Component {
   };
 
   runPipelineOrToggleConfig = () => {
-    if (this.props.runButtonLoading) {
+    if (this.props.isLatest !== 'true' || this.props.runButtonLoading) {
       return;
     }
 
@@ -89,6 +90,7 @@ export default class PipelineRunButton extends Component {
         showRunOptions={this.state.showRunOptions}
         onToggle={this.toggleRunConfigOption}
         disabled={this.props.runButtonLoading}
+        isLatest={this.props.isLatest}
       />
     );
   };
@@ -100,7 +102,7 @@ export default class PipelineRunButton extends Component {
         data-testid="pipeline-run-btn"
         onClick={this.runPipelineOrToggleConfig}
         className="btn btn-secondary pipeline-action-btn pipeline-run-btn"
-        disabled={this.props.runButtonLoading}
+        disabled={this.props.isLatest !== 'true' || this.props.runButtonLoading}
       >
         <div className="btn-container">
           {this.props.runButtonLoading ? (

@@ -68,6 +68,7 @@ const mapStateToConfigureButton = (state, ownProps) => {
     pipelineName: ownProps.pipelineName,
     resolvedMacros: state.resolvedMacros,
     runtimeArgs: state.runtimeArgs,
+    isLatest: ownProps.isLatest,
   };
 };
 
@@ -78,6 +79,7 @@ const mapStateToRunButton = (state, ownProps) => {
     runButtonLoading: ownProps.runButtonLoading,
     runError: ownProps.runError,
     runtimeArgs: state.runtimeArgs,
+    isLatest: ownProps.isLatest,
   };
 };
 
@@ -91,6 +93,7 @@ const mapStateToScheduleButton = (state, ownProps) => {
     scheduleButtonLoading: ownProps.scheduleButtonLoading,
     scheduleError: ownProps.scheduleError,
     runtimeArgs: state.runtimeArgs,
+    isLatest: ownProps.isLatest,
   };
 };
 
@@ -112,11 +115,17 @@ export default function PipelineDetailsButtons({
   scheduleError,
   stopButtonLoading,
   stopError,
+  changeSummary,
 }) {
+  const isLatest = changeSummary.isLatest;
   return (
     <Provider store={PipelineConfigurationsStore}>
       <div className="pipeline-details-buttons">
-        <ConnectedConfigureButton pipelineType={pipelineType} pipelineName={pipelineName} />
+        <ConnectedConfigureButton
+          pipelineType={pipelineType}
+          pipelineName={pipelineName}
+          isLatest={isLatest}
+        />
         <ConnectedScheduleButton
           pipelineType={pipelineType}
           pipelineName={pipelineName}
@@ -125,6 +134,7 @@ export default function PipelineDetailsButtons({
           scheduleStatus={scheduleStatus}
           scheduleButtonLoading={scheduleButtonLoading}
           scheduleError={scheduleError}
+          isLatest={isLatest}
         />
         <PipelineStopButton
           pipelineType={pipelineType}
@@ -133,12 +143,14 @@ export default function PipelineDetailsButtons({
           currentRun={currentRun}
           stopButtonLoading={stopButtonLoading}
           stopError={stopError}
+          isLatest={isLatest}
         />
         <ConnectedRunButton
           pipelineType={pipelineType}
           pipelineName={pipelineName}
           runButtonLoading={runButtonLoading}
           runError={runError}
+          isLatest={isLatest}
         />
         <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
         <ApolloProvider client={client}>
@@ -163,4 +175,5 @@ PipelineDetailsButtons.propTypes = {
   scheduleError: PropTypes.string,
   stopButtonLoading: PropTypes.bool,
   stopError: PropTypes.string,
+  changeSummary: PropTypes.object,
 };

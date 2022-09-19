@@ -30,6 +30,7 @@ export default class PipelineConfigureButton extends Component {
     pipelineName: PropTypes.string,
     resolvedMacros: PropTypes.object,
     runtimeArgs: PropTypes.array,
+    isLatest: PropTypes.string,
   };
 
   state = {
@@ -87,6 +88,7 @@ export default class PipelineConfigureButton extends Component {
           isDetailView={true}
           pipelineType={this.props.pipelineType}
           pipelineName={this.props.pipelineName}
+          isLatest={this.props.isLatest}
         />
       </div>
     );

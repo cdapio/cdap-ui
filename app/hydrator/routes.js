@@ -343,7 +343,6 @@ angular.module(PKG.name + '.feature.hydrator')
                 namespace: $stateParams.namespace,
                 pipeline: $stateParams.pipelineId
               };
-
               if ($window.localStorage.getItem('pipelineHistoryVersion') !== null) {
                 params.version = $window.localStorage.getItem('pipelineHistoryVersion');
                 return myPipelineApi
@@ -352,6 +351,7 @@ angular.module(PKG.name + '.feature.hydrator')
                   .then(
                     (pipelineDetail) => {
                       let config = pipelineDetail.configuration;
+                      $window.localStorage.removeItem('pipelineHistoryVersion');
                       try {
                         config = JSON.parse(config);
                       } catch (e) {
@@ -370,9 +370,9 @@ angular.module(PKG.name + '.feature.hydrator')
                         $q.reject(false);
                         return;
                       }
-                      $window.localStorage.removeItem('pipelineHistoryVersion');
                       return $q.resolve(pipelineDetail);
                     },(err) => {
+                        $window.localStorage.removeItem('pipelineHistoryVersion');
                         window.CaskCommon.ee.emit(
                           window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, err);
                       }
