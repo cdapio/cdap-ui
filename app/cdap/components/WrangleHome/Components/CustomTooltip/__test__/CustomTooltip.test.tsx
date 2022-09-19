@@ -16,12 +16,15 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import BreadCumb from '../index';
-import { Router } from 'react-router';
-import history from 'services/history';
+import CustomTooltip from '../index';
+import { Typography } from '@material-ui/core';
 
-test('renders BreadCumb Component', () => {
-  render(<Router history={history}><BreadCumb /></Router>);
-  const ele = screen.getByTestId(/bread-comb-container-parent/i);
+test('renders Custom tooltip component', () => {
+  render(
+    <CustomTooltip arrow title={'Custom tooltip'}>
+      <Typography></Typography>
+    </CustomTooltip>
+  );
+  const ele = screen.getByTestId(/tooltip-parent/i);
   expect(ele).toBeInTheDocument();
 });
