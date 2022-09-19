@@ -119,45 +119,45 @@ export default function PipelineDetailsButtons({
 }) {
   const isLatest = changeSummary.isLatest;
   return (
-    <Provider store={PipelineConfigurationsStore}>
-      <div className="pipeline-details-buttons">
-        <ConnectedConfigureButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          isLatest={isLatest}
-        />
-        <ConnectedScheduleButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          schedule={schedule}
-          maxConcurrentRuns={maxConcurrentRuns}
-          scheduleStatus={scheduleStatus}
-          scheduleButtonLoading={scheduleButtonLoading}
-          scheduleError={scheduleError}
-          isLatest={isLatest}
-        />
-        <PipelineStopButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          runs={runs}
-          currentRun={currentRun}
-          stopButtonLoading={stopButtonLoading}
-          stopError={stopError}
-          isLatest={isLatest}
-        />
-        <ConnectedRunButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          runButtonLoading={runButtonLoading}
-          runError={runError}
-          isLatest={isLatest}
-        />
-        <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-        <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <Provider store={PipelineConfigurationsStore}>
+        <div className="pipeline-details-buttons">
+          <ConnectedConfigureButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            isLatest={isLatest}
+          />
+          <ConnectedScheduleButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            schedule={schedule}
+            maxConcurrentRuns={maxConcurrentRuns}
+            scheduleStatus={scheduleStatus}
+            scheduleButtonLoading={scheduleButtonLoading}
+            scheduleError={scheduleError}
+            isLatest={isLatest}
+          />
+          <PipelineStopButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            runs={runs}
+            currentRun={currentRun}
+            stopButtonLoading={stopButtonLoading}
+            stopError={stopError}
+            isLatest={isLatest}
+          />
+          <ConnectedRunButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            runButtonLoading={runButtonLoading}
+            runError={runError}
+            isLatest={isLatest}
+          />
+          <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
           <PipelineHistoryButton pipelineName={pipelineName} />
-        </ApolloProvider>
-      </div>
-    </Provider>
+        </div>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
