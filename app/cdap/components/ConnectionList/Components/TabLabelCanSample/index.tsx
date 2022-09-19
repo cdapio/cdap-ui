@@ -106,27 +106,33 @@ export default function TabLabelCanSample({
       }}
     />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow>
+    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <Box className="wranglingHover">
-            <WrangleIcon />
-            <Typography color="primary" variant="body2" className={classes.wrangleButton}>
-              {WRANGLE_LABEL}
-            </Typography>
-          </Box>
+        <button
+          className="wranglingHover"
+          data-testid="connections-tab-ref-explore"
+          onClick={() => onExplore(entity)}
+        >
+          <WrangleIcon />
+          <Typography variant="body2" className={classes.wrangleButton}>
+            Wrangle
+          </Typography>
         </button>
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample}>
+    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button className="wranglingHover" onClick={() => onExplore(entity)}>
+      <button
+        className="wranglingHover"
+        data-testid="connections-tab-explore"
+        onClick={() => onExplore(entity)}
+      >
         <Box className="wranglingHover">
           <WrangleIcon />
           <Typography color="primary" variant="body2" className={classes.wrangleButton}>

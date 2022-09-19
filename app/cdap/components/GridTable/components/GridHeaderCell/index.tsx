@@ -35,7 +35,9 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   return (
     <TableCell className={classes.tableHeaderCell}>
       <Card className={classes.root} variant="outlined">
-        <Typography className={classes.columnHeader}>{label}</Typography>
+        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
+          {label}
+        </Typography>
         <StringIndicatorBox>
           <TypographyComponent
             className={classes.dataTypeIndicator}

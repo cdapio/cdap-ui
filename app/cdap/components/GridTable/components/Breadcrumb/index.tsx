@@ -37,11 +37,16 @@ const BreadCrumb = ({ datasetName, location }) => {
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
+          data-testid="breadcrumb-home-text"
         >
           Home
         </Link>
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/${sourcePath}`}>
-          {location.state.from}
+        <Link
+          className={`${classes.breadcrumbLabel} ${classes.dataset}`}
+          to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
+          data-testid="breadcrumb-data-sources-text"
+        >
+          Data Sources
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
       </Breadcrumbs>
