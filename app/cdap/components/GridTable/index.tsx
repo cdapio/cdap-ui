@@ -232,7 +232,7 @@ export default function GridTable() {
   return (
     <Box>
       <BreadCrumb datasetName={wid} />
-      <Table aria-label="simple table" className="test">
+      <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
             {headersNamesList?.length &&

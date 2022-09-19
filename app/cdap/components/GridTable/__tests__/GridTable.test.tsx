@@ -16,8 +16,25 @@
 
 import React from "react";
 import GridTable from "..";
-import {render} from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { Route, Router, Switch } from "react-router";
+import { createBrowserHistory as createHistory } from 'history';
+
+const history = createHistory({
+    basename: '/',
+});
 
 describe('Testing Grid Table Component', () => {
-    render(<GridTable />)
+    const {getByTestId} = render(
+        <Router history={history}>
+            <Switch>
+                <Route>
+                    <GridTable />
+                </Route>
+            </Switch>
+        </Router>)
+
+    it('Should check if the component is rendered', () => {
+        expect(getByTestId('grid-table')).toBeInTheDocument();
+    })
 })
