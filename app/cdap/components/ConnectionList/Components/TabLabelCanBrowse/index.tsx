@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import * as React from 'react';
-import { createRef, Ref, useEffect, useState } from 'react';
+import { createRef, Ref, useEffect, useRef, useState } from 'react';
 import { useStyles } from './styles';
 
 export default function TabLabelCanBrowse({
@@ -38,7 +38,7 @@ export default function TabLabelCanBrowse({
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 
-  const messagesRef = React.useRef(null);
+  const messagesRef = useRef(null);
   const scrollToBottom = () => {
     messagesRef.current.scrollIntoView({
       behavior: 'smooth',
@@ -46,7 +46,7 @@ export default function TabLabelCanBrowse({
       inline: 'end',
     });
   };
-  React.useEffect(() => {
+  useEffect(() => {
     if (messagesRef.current) {
       scrollToBottom();
     }
