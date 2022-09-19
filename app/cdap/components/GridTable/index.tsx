@@ -48,7 +48,9 @@ export default function GridTable() {
   const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
-  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>(
+    []
+  );
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
@@ -79,7 +81,8 @@ export default function GridTable() {
           const directives = objectQuery(res, 'directives') || [];
           const requestBody = directiveRequestBodyCreator(directives);
           const sampleSpec = objectQuery(res, 'sampleSpec') || {};
-          const visualization = objectQuery(res, 'insights', 'visualization') || {};
+          const visualization =
+            objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
             name: sampleSpec.connectionName,
@@ -127,7 +130,10 @@ export default function GridTable() {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
+  const createHeadersData = (
+    columnNamesList: string[],
+    columnTypesList: IRecords
+  ) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -186,8 +192,14 @@ export default function GridTable() {
   return (
     <Box>
       <BreadCrumb datasetName={wid} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
-      <Table aria-label="simple table" className="test">
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
+        <NoDataScreen />
+      )}
+      <Table
+        aria-label="simple table"
+        className="test"
+        data-testid="grid-table"
+      >
         <TableHead>
           <TableRow>
             {headersNamesList?.length > 0 &&
