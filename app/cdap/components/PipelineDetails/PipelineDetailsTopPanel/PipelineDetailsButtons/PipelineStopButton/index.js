@@ -36,6 +36,7 @@ export default class PipelineStopButton extends Component {
     runs: PropTypes.array,
     stopButtonLoading: PropTypes.bool,
     stopError: PropTypes.string,
+    isLatest: PropTypes.string,
   };
 
   state = {
@@ -58,7 +59,7 @@ export default class PipelineStopButton extends Component {
   }
 
   stopPipeline = () => {
-    if (this.props.stopButtonLoading || this.state.disabled) {
+    if (this.props.isLatest !== 'true' || this.props.stopButtonLoading || this.state.disabled) {
       return;
     }
 
@@ -116,7 +117,9 @@ export default class PipelineStopButton extends Component {
       <div
         onClick={this.stopPipeline}
         className="btn pipeline-action-btn pipeline-stop-btn"
-        disabled={this.props.stopButtonLoading || this.state.disabled}
+        disabled={
+          this.props.isLatest !== 'true' || this.props.stopButtonLoading || this.state.disabled
+        }
       >
         <div className="btn-container">
           {this.props.stopButtonLoading ? (
