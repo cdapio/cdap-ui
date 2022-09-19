@@ -14,21 +14,17 @@
  * the License.
  */
 
-import { Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
-import { useGridTextCellStyles } from './styles';
-import { IGridTextCellProps } from './types';
+import { render, screen } from '@testing-library/react';
+import CustomTooltip from '../index';
+import { Typography } from '@material-ui/core';
 
-export default function GridTextCell({ cellValue }: IGridTextCellProps) {
-  const classes = useGridTextCellStyles();
-
-  return (
-    <TableCell className={classes.tableRowCell}>
-      <Card className={classes.root} variant="outlined">
-        <Typography className={classes.cell}
-          data-testid = {`grid-text-cell-${cellValue}`}
-        >{cellValue}</Typography>
-      </Card>
-    </TableCell>
+test('renders Custom tooltip component', () => {
+  render(
+    <CustomTooltip arrow title={'Custom tooltip'}>
+      <Typography></Typography>
+    </CustomTooltip>
   );
-}
+  const ele = screen.getByTestId(/tooltip-parent/i);
+  expect(ele).toBeInTheDocument();
+});

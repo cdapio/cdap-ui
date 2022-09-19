@@ -17,9 +17,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import BreadCumb from '../index';
+import { Router } from 'react-router';
+import history from 'services/history';
 
 test('renders BreadCumb Component', () => {
-  render(<BreadCumb />);
+  render(<Router history={history}><BreadCumb /></Router>);
   const ele = screen.getByTestId(/bread-comb-container-parent/i);
   expect(ele).toBeInTheDocument();
 });
