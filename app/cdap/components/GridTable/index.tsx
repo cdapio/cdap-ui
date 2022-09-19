@@ -191,7 +191,7 @@ export default function GridTable() {
     <Box>
       <BreadCrumb datasetName={workspaceName} location={location} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
-      <Table aria-label="simple table" className="test">
+      <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
             {headersNamesList?.length > 0 &&
