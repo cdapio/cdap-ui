@@ -43,7 +43,7 @@ export default function TabLabelCanBrowse({
     messagesRef.current.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
-      inline: 'start',
+      inline: 'end',
     });
   };
   React.useEffect(() => {
