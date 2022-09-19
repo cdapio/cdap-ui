@@ -41,12 +41,12 @@ export default function WranglerHome() {
       <Box>
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View More</Box>
+          <Box className={classes.viewMore}>View all</Box>
         </Box>
         <WrangleCard />
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View More</Box>
+          <Box className={classes.viewMore}>View all</Box>
         </Box>
         <OngoingDataExploration />
       </Box>
