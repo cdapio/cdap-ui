@@ -22,7 +22,7 @@ export const useStyles = makeStyles({
     lineHeight: '30px',
     letterSpacing: '0.15px',
     marginBottom: '-4px',
-    color: '#000000',
+    color: '#212121',
     fontWeight: 400,
   },
   dataExplorationWrapper: {
