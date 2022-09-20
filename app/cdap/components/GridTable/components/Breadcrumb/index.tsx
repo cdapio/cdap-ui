@@ -21,11 +21,7 @@ import { useStyles } from './styles';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
-import {
-  MATCH_SOURCE,
-  HOME_URL_PARAM,
-  DATASOURCES_URL_PARAM,
-} from './constants';
+import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants';
 
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
@@ -36,10 +32,7 @@ const BreadCrumb = ({ datasetName, location }) => {
       : `${DATASOURCES_URL_PARAM}/${location.state.path}`;
   return (
     <Box className={classes.breadCombContainer}>
-      <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
-        aria-label="breadcrumb"
-      >
+      <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
