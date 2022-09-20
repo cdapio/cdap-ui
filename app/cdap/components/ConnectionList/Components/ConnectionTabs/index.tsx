@@ -83,7 +83,7 @@ export default function ConnectionsTabs({
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
-        <div className={classes.boxStyles}>
+        <div className={classes.boxStyles} data-testid="connection-tabs">
           <Tabs
             value={value}
             orientation="vertical"
@@ -101,6 +101,7 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
+                data-testid="connections-tab-button"
                 onClick={() => {
                   if (index > 1) {
                     connectorType.canBrowse ? handleChange(connectorType, index) : null;
@@ -113,7 +114,7 @@ export default function ConnectionsTabs({
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
                         label={connectorType.name}
-                        count={index === 0 ? connectorType.count : undefined}
+                        count={undefined}
                         index={index}
                       />
                     ) : (

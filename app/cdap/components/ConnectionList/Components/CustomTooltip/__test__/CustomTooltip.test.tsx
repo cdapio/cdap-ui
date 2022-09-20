@@ -14,18 +14,19 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
 import React from 'react';
-import { ITypographyTextComponentProps } from './types';
+import { render, screen } from '@testing-library/react';
+import CustomTooltip from '../index';
+import { Typography } from '@material-ui/core';
 
-export default function TypographyComponent({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
-}
+describe('Test Connections List Component', () => {
+  it('Should render Connection list component', () => {
+    render(
+      <CustomTooltip arrow title={'Custom tooltip'}>
+        <Typography>Custom Tooltip</Typography>
+      </CustomTooltip>
+    );
+    const ele = screen.getByTestId(/tooltip-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
+});
