@@ -16,13 +16,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { MyPipelineApi } from 'api/pipeline';
-import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
-import PipelineDetailStore from 'components/PipelineDetails/store';
-import { map } from 'rxjs/operators';
-import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLevel';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -38,7 +35,7 @@ export const PipelineHistoryTableRow = ({
   setRestoreLoading,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
-  const pipelineLink = window.getHydratorUrl({
+  const pipelineLink = getHydratorUrl({
     stateName: 'hydrator.detail',
     stateParams: {
       namespace,
