@@ -48,7 +48,9 @@ export default function GridHeaderCell({
         style={isColumnHighlited ? { background: '#FFFFFF' } : { background: '#F1F8FF' }}
         variant="outlined"
       >
-        <Typography className={classes.columnHeader}>{label}</Typography>
+        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
+          {label}
+        </Typography>
         <StringIndicatorBox>
           <TypographyComponent className={classes.dataTypeIndicator} label={type || 'Unknown'} />
         </StringIndicatorBox>

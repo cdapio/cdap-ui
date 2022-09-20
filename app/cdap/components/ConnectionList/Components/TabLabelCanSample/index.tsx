@@ -21,7 +21,7 @@ import { WrangleIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import { IRecords } from 'components/GridTable/types';
-import * as React from 'react';
+import React from 'react';
 import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -106,27 +106,33 @@ export default function TabLabelCanSample({
       }}
     />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow>
+    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <Box className="wranglingHover">
-            <WrangleIcon />
-            <Typography color="primary" variant="body2" className={classes.wrangleButton}>
-              {WRANGLE_LABEL}
-            </Typography>
-          </Box>
+        <button
+          className="wranglingHover"
+          data-testid="connections-tab-ref-explore"
+          onClick={() => onExplore(entity)}
+        >
+          <WrangleIcon />
+          <Typography variant="body2" className={classes.wrangleButton}>
+            Wrangle
+          </Typography>
         </button>
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample}>
+    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button className="wranglingHover" onClick={() => onExplore(entity)}>
+      <button
+        className="wranglingHover"
+        data-testid="connections-tab-explore"
+        onClick={() => onExplore(entity)}
+      >
         <Box className="wranglingHover">
           <WrangleIcon />
           <Typography color="primary" variant="body2" className={classes.wrangleButton}>
