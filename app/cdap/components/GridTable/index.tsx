@@ -48,7 +48,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import ToolBarList from './components/AaToolbar';
 import { getDirective } from './directives';
 import { OPTION_WITH_NO_INPUT, OPTION_WITH_TWO_INPUT } from './constants';
-import Snackbar from 'components/SnackbarComponent';
+import PositionedSnackbar from 'components/SnackbarComponent';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -64,7 +64,6 @@ export default function GridTable() {
   const [missingDataList, setMissingDataList] = useState([]);
   const [dataQuality, setDataQuality] = useState({});
   const [optionSelected, setOptionSelected] = useState(null);
-  const [toast, setToast] = useState(false);
   const { dataprep } = DataPrepStore.getState();
   const [isFirstWrangle, setIsFirstWrangle] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
@@ -78,6 +77,11 @@ export default function GridTable() {
 
   const [connectorType, setConnectorType] = useState(null);
   const [showRecipePanel, setShowRecipePanel] = useState(false);
+  const [toaster, setToaster] = useState({
+    open: false,
+    message: '',
+    isSuccess: false,
+  });
 
   useEffect(() => {
     setIsFirstWrangle(true);
@@ -147,7 +151,11 @@ export default function GridTable() {
           setColumnSelected('');
         },
         (err) => {
-          setToast(true);
+          setToaster({
+            open: true,
+            message: 'Failed to load data',
+            isSuccess: false,
+          });
           setLoading(false);
         }
       );
@@ -224,9 +232,18 @@ export default function GridTable() {
         setGridData(response);
         setDirectiveFunction('');
         setColumnSelected('');
+        setToaster({
+          open: true,
+          message: 'Step successfully added',
+          isSuccess: true,
+        });
       },
       (err) => {
-        setToast(true);
+        setToaster({
+          open: true,
+          message: 'Transformation failed',
+          isSuccess: false,
+        });
         setLoading(false);
       }
     );
@@ -381,7 +398,19 @@ export default function GridTable() {
         showRecipePanelHandler={showRecipePanelHandler}
         showAddTransformationHandler={showAddTransformationHandler}
       />
-      {toast && <Snackbar handleCloseError={() => setToast(false)} />}
+      {toaster.open && (
+        <PositionedSnackbar
+          handleCloseError={() =>
+            setToaster({
+              open: false,
+              message: '',
+              isSuccess: false,
+            })
+          }
+          messageToDisplay={toaster.message}
+          isSuccess={toaster.isSuccess}
+        />
+      )}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

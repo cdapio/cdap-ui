@@ -16,29 +16,41 @@
 
 import React from 'react';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
-import { Divider } from '@material-ui/core';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import { Box, Divider, Typography } from '@material-ui/core';
 import { useStyles } from './styles';
+import { SUCCESS_LABEL, FAILURE_LABEL } from './constants';
 
-export default function TransitionComponent(props) {
+const TransitionComponent = (props) => {
   const classes = useStyles();
   return (
-    <div>
-      <div className={classes.headFlex}>
-        <h5 className={classes.errorHead}>
-          <WarningRoundedIcon className={classes.warningIcon} />
-          &nbsp;Error
-        </h5>
-        <span
-          role="button"
-          tabIndex={0}
-          className={classes.dismissSpan}
-          onClick={() => props.close()}
-        >
-          Dismiss
-        </span>
-      </div>
+    <Box>
+      <Box className={classes.headFlex}>
+        <Box className={classes.iconText}>
+          {props.isSuccess ? (
+            <CheckCircleIcon fontSize="large" className={classes.successIcon} />
+          ) : (
+            <WarningRoundedIcon fontSize="large" className={classes.warningIcon} />
+          )}
+          <Typography
+            variant="body1"
+            className={props.isSuccess ? classes.successLabel : classes.failureLabel}
+          >
+            {props.isSuccess ? <>{SUCCESS_LABEL}</> : <>{FAILURE_LABEL}</>}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="body1" className={classes.dismissSpan} onClick={() => props.close()}>
+            Dismiss
+          </Typography>
+        </Box>
+      </Box>
       <Divider />
-      <p className={classes.errorMessage}>Failed to retrieve sample</p>
-    </div>
+      <Typography variant="body1" className={classes.message}>
+        {props?.messageToDisplay}
+      </Typography>
+    </Box>
   );
-}
+};
+
+export default TransitionComponent;
