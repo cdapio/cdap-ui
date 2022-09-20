@@ -20,11 +20,11 @@ import CustomTooltip from '../index';
 import { Typography } from '@material-ui/core';
 
 test('renders Connection list component', () => {
-    render(
-        <CustomTooltip arrow title={'Custom tooltip'}>
-          <Typography></Typography>
-        </CustomTooltip>
-      );
+  render(
+    <CustomTooltip arrow title={'Custom tooltip'}>
+      <Typography></Typography>
+    </CustomTooltip>
+  );
   const ele = screen.getByTestId(/tooltip-parent/i);
   expect(ele).toBeInTheDocument();
 });
