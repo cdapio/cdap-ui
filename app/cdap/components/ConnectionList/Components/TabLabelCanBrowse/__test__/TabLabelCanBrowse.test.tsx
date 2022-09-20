@@ -17,31 +17,19 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import TabLabelCanBrowse from '../index';
-import { GCSIcon } from 'components/ConnectionList/icons';
+import { mockConnectorTypeData } from '../mock/mockConnectorTypeData';
 
-const mockConnectorTypeData = {
-    name: "File",
-    type: "connector",
-    category: "File",
-    description:
-        "Connection to browse and sample data from the local file system.",
-    className: "io.cdap.plugin.batch.connector.FileConnector",
-    artifact: {
-        name: "core-plugins",
-        version: "2.10.0-SNAPSHOT",
-        scope: "SYSTEM",
-    },
-    canBrowse: true,
-    count: 1,
-    icon: <GCSIcon />,
-};
-
-test('Renders Tab label can browse', () => {
-  render(<TabLabelCanBrowse
-    label={mockConnectorTypeData.name}
-    count={mockConnectorTypeData.count}
-    icon={mockConnectorTypeData.icon}
-    index={0} />);
-  const ele = screen.getByTestId(/connections-tab-label-browse/i);
-  expect(ele).toBeInTheDocument();
+describe('Test TabLabelCanBrowse Component', () => {
+  it('Should render TabLabelCanBrowse Component', () => {
+    render(
+      <TabLabelCanBrowse
+        label={mockConnectorTypeData.name}
+        count={mockConnectorTypeData.count}
+        icon={mockConnectorTypeData.icon}
+        index={0}
+      />
+    );
+    const ele = screen.getByTestId(/connections-tab-label-browse/i);
+    expect(ele).toBeInTheDocument();
+  });
 });

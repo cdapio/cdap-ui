@@ -20,8 +20,14 @@ import BreadCumb from '../index';
 import { Router } from 'react-router';
 import history from 'services/history';
 
-test('renders BreadCumb Component', () => {
-  render(<Router history={history}><BreadCumb /></Router>);
-  const ele = screen.getByTestId(/bread-comb-container-parent/i);
-  expect(ele).toBeInTheDocument();
+describe('Test Breadcrumb Component', () => {
+  it('Should render BreadCumb Component', () => {
+    render(
+      <Router history={history}>
+        <BreadCumb />
+      </Router>
+    );
+    const ele = screen.getByTestId(/bread-comb-container-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
 });
