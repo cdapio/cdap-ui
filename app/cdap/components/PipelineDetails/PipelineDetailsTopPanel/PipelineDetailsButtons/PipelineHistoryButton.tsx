@@ -42,7 +42,7 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
 
   const renderPipelineHistoryBtn = () => {
     return (
-      <div onClick={toggleButton} className="btn pipeline-action-btn" ref={buttonRef}>
+      <div onClick={toggleButton} className="btn pipeline-action-btn" ref={buttonRef} role="button">
         <div className="btn-container">
           <HistoryIcon />
           <div className="button-label">{T.translate(`${PREFIX}.history`)}</div>

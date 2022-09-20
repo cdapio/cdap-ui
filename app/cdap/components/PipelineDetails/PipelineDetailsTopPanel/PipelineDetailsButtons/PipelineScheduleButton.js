@@ -100,6 +100,7 @@ export default class PipelineScheduleButton extends Component {
           className="btn pipeline-action-btn pipeline-scheduler-btn"
           disabled={this.state.scheduleStatus === StatusMapper.statusMap['SUSPENDING']}
           ref={this.buttonRef}
+          role="button"
         >
           <div className="btn-container">
             {this.props.scheduleButtonLoading ? (

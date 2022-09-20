@@ -120,6 +120,7 @@ export default class PipelineStopButton extends Component {
         disabled={
           this.props.isLatest !== 'true' || this.props.stopButtonLoading || this.state.disabled
         }
+        role="button"
       >
         <div className="btn-container">
           {this.props.stopButtonLoading ? (

@@ -103,6 +103,7 @@ export default class PipelineRunButton extends Component {
         onClick={this.runPipelineOrToggleConfig}
         className="btn btn-secondary pipeline-action-btn pipeline-run-btn"
         disabled={this.props.isLatest !== 'true' || this.props.runButtonLoading}
+        role="button"
       >
         <div className="btn-container">
           {this.props.runButtonLoading ? (
