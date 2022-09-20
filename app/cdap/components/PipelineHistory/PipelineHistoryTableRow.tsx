@@ -82,7 +82,6 @@ export const PipelineHistoryTableRow = ({
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <Button
           variant="text"
           color="primary"
