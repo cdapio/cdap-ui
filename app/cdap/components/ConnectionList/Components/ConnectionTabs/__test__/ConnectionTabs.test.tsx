@@ -22,7 +22,7 @@ import { tabsDataWithBrowseIndex } from '../mock/tabsDataWithBrowseIndex';
 import { tabsTestData } from '../mock/tabsTestData';
 
 describe('Test ConnectionsTabs', () => {
-  test('renders Connections Tab Component', () => {
+  test('Should render Connections Tab Component', () => {
     render(
       <ConnectionsTabs
         tabsData={tabsTestData}
@@ -37,7 +37,7 @@ describe('Test ConnectionsTabs', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  test('renders Connections Tabs', () => {
+  test('Should render Connections Tabs', () => {
     render(
       <ConnectionsTabs
         tabsData={tabsTestData}
@@ -52,7 +52,7 @@ describe('Test ConnectionsTabs', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  test('renders TabLabelCanBrowse with count connectorType count', () => {
+  test('Should render TabLabelCanBrowse with count connectorType count', () => {
     render(
       <ConnectionsTabs
         tabsData={tabsDataWithBrowseIndex}
@@ -66,8 +66,10 @@ describe('Test ConnectionsTabs', () => {
     const ele = screen.getByTestId(/connections-tab-label-browse/i);
     expect(ele).toBeInTheDocument();
   });
+});
 
-  test('Fire tab click event and trigger handlechange function', () => {
+describe('Test whether handleChange function is triggered or not', () => {
+  test('Should trigger handlechange function for the first column i.e. Connector Types', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
@@ -84,7 +86,7 @@ describe('Test ConnectionsTabs', () => {
     expect(handleChange).toHaveBeenCalled();
   });
 
-  test('Fire tab click event with index 2 and handlechange should not trigger', () => {
+  test('Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is false', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
@@ -101,7 +103,7 @@ describe('Test ConnectionsTabs', () => {
     expect(handleChange).toHaveBeenCalledTimes(0);
   });
 
-  test('Fire tab click event with index 2 and handlechange should trigger', () => {
+  test('Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is true', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
