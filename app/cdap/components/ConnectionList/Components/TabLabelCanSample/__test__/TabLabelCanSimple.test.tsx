@@ -16,57 +16,42 @@
 
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { GCSIcon } from 'components/ConnectionList/icons';
 import TabLabelCanSample from '../index';
 
 const mockConnectorTypeData = {
-    name: "File",
-    type: "connector",
-    category: "File",
-    description:
-        "Connection to browse and sample data from the local file system.",
-    className: "io.cdap.plugin.batch.connector.FileConnector",
-    // canBrowse: false,
-    // canSample: true
-    // count: 1,
-    // icon: <GCSIcon />,
+  name: 'File',
+  type: 'connector',
+  category: 'File',
+  description: 'Connection to browse and sample data from the local file system.',
+  className: 'io.cdap.plugin.batch.connector.FileConnector',
 };
 
 test('renders Tab label can browse', () => {
-  render(<TabLabelCanSample
-    label={mockConnectorTypeData.name}
-    entity={mockConnectorTypeData}
-    initialConnectionId={undefined}
-    toggleLoader={() => null}
-    setIsErrorOnNoWorkSpace={jest.fn()} />);
+  render(
+    <TabLabelCanSample
+      label={mockConnectorTypeData.name}
+      entity={mockConnectorTypeData}
+      initialConnectionId={undefined}
+      toggleLoader={() => null}
+      setIsErrorOnNoWorkSpace={jest.fn()}
+    />
+  );
   const ele = screen.getByTestId(/connections-tab-label-simple/i);
   expect(ele).toBeInTheDocument();
 });
 
 test('Fire click event and trigger setIsErrorOnNoWorkSpace function ', () => {
-    const setIsErrorOnNoWorkSpace = jest.fn();
-  render(<TabLabelCanSample
-    label={mockConnectorTypeData.name}
-    entity={mockConnectorTypeData}
-    initialConnectionId={undefined}
-    toggleLoader={() => null}
-    setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace} />);
+  const setIsErrorOnNoWorkSpace = jest.fn();
+  render(
+    <TabLabelCanSample
+      label={mockConnectorTypeData.name}
+      entity={mockConnectorTypeData}
+      initialConnectionId={undefined}
+      toggleLoader={() => null}
+      setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+    />
+  );
   const ele = screen.getByTestId(/connections-tab-explore/i);
   fireEvent.click(ele);
   expect(setIsErrorOnNoWorkSpace).toHaveBeenCalled();
 });
-
-// test('Fire click event and trigger onCreateWorkspace function ', () => {
-//     const setIsErrorOnNoWorkSpace = jest.fn();
-//     const onCreateWorkspace = jest.fn();
-//     const createWorkspaceInternal = jest.fn();
-//   render(<TabLabelCanSample
-//     label={mockConnectorTypeData.name}
-//     entity={mockConnectorTypeData}
-//     initialConnectionId={undefined}
-//     toggleLoader={() => null}
-//     setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace} />);
-//   const ele = screen.getByTestId(/connections-tab-explore/i);
-//   fireEvent.click(ele);
-//   expect(onCreateWorkspace).toHaveBeenCalled();
-// });
