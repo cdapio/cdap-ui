@@ -18,9 +18,6 @@ const Footer = ({ showRecipePanelHandler, showAddTransformationHandler }) => {
           <p className={classes.spanElement}> 100%</p>
           {ArrowIcon}
         </Box>
-        <p className={classes.directivesCont} onClick={showAddTransformationHandler}>
-          Trasnformations
-        </p>
         <p className={classes.directivesCont}> Directives </p>
         <Box className={classes.recipeCont} onClick={showRecipePanelHandler}>
           <p> Recipe Steps</p>
