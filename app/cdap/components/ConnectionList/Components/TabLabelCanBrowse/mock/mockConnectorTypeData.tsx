@@ -14,17 +14,21 @@
  * the License.
  */
 
-import { expectedResult, mockOldData } from '../mock/mockOldData';
-import { generateDataForExplorationCard } from '../utils';
+import { GCSIcon } from 'components/ConnectionList/icons';
+import React from 'react';
 
-describe('Test the Utility Functions', () => {
-  it('Should test the result for empty array', () => {
-    const result = generateDataForExplorationCard([]);
-    expect(result).toEqual([]);
-  });
-
-  it('Should test the result for mock data', () => {
-    const result = generateDataForExplorationCard(mockOldData);
-    expect(result).toEqual(expectedResult);
-  });
-});
+export const mockConnectorTypeData = {
+  name: 'File',
+  type: 'connector',
+  category: 'File',
+  description: 'Connection to browse and sample data from the local file system.',
+  className: 'io.cdap.plugin.batch.connector.FileConnector',
+  artifact: {
+    name: 'core-plugins',
+    version: '2.10.0-SNAPSHOT',
+    scope: 'SYSTEM',
+  },
+  canBrowse: true,
+  count: 1,
+  icon: <GCSIcon />,
+};

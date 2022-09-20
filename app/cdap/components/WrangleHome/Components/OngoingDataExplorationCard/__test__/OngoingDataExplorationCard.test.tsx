@@ -17,115 +17,42 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import OngoingDataExplorationCard from '../index';
-import { ImportDatasetIcon } from '../../WrangleCard/iconStore/ImportDatasetIcon';
+import { mockItems, mockItemsWithPercentage, mockItemsPercentageData } from '../mock/mock';
 
-const mockItems = [
-  {
-    icon: ImportDatasetIcon,
-    label: 'Test_postgres_01',
-    type: 'iconWithText',
-  },
-  {
-    label: 'sql_features',
-    type: 'text',
-  },
-  {
-    label: '9 Recipe steps',
-    type: 'text',
-  },
-  {
-    label: null,
-    percentageSymbol: '%',
-    subText: 'Data Quality',
-    type: 'percentageWithText',
-  },
-  {
-    workspaceId: '08e5d850-357d-4982-960a-6e1d19c7e0e8',
-  },
-];
+describe('Test Ongoing Data Explrations Component', () => {
+  it('Should render OngoingDataExplorationCard component', () => {
+    render(<OngoingDataExplorationCard item={mockItems} />);
+    const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card/i);
+    expect(ele).toBeInTheDocument();
+  });
 
-const mockItemsWithPercentage = [
-  {
-    icon: ImportDatasetIcon,
-    label: 'Test_postgres_01',
-    type: 'iconWithText',
-  },
-  {
-    label: 'sql_features',
-    type: 'text',
-  },
-  {
-    label: '9 Recipe steps',
-    type: 'text',
-  },
-  {
-    label: '80',
-    percentageSymbol: '%',
-    subText: 'Data Quality',
-    type: 'percentageWithText',
-  },
-  {
-    workspaceId: '08e5d850-357d-4982-960a-6e1d19c7e0e8',
-  },
-];
+  it('Should render OngoingDataExplorationCard percentage non nan code', () => {
+    render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
+    const ele = screen.getByTestId(/ongoing-data-exploration-card-percentage-nan/i);
+    expect(ele).toBeInTheDocument();
+  });
 
-const mockItemsPercentageData = [
-  {
-    icon: ImportDatasetIcon,
-    label: 'Test_postgres_01',
-    type: 'iconWithText',
-  },
-  {
-    label: 'sql_features',
-    type: 'text',
-  },
-  {
-    label: '9 Recipe steps',
-    type: 'text',
-  },
-  {
-    label: '100',
-    percentageSymbol: '%',
-    subText: 'Data Quality',
-    type: 'percentageWithText',
-  },
-  {
-    workspaceId: '08e5d850-357d-4982-960a-6e1d19c7e0e8',
-  },
-];
+  it('Should check whether percentageStyleRed is applied to ongoing-data-card-percentage when percent is < 100', () => {
+    render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
+    const ele = screen.getByTestId(/ongoing-data-card-percentage/i);
+    expect(ele).toHaveStyle('color: rgb(229, 57, 53)');
+  });
 
-test('renders OngoingDataExplorationCard component', () => {
-  render(<OngoingDataExplorationCard item={mockItems} />);
-  const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card/i);
-  expect(ele).toBeInTheDocument();
-});
+  it('Should check whether percentageSymbolRed is applied to ongoing-data-percentage-symbol when percent is < 100', () => {
+    render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
+    const ele = screen.getByTestId(/ongoing-data-percentage-symbol/i);
+    expect(ele).toHaveStyle('color: rgb(229, 57, 53)');
+  });
 
-test('renders OngoingDataExplorationCard percentage non nan code', () => {
-  render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
-  const ele = screen.getByTestId(/ongoing-data-exploration-card-percentage-nan/i);
-  expect(ele).toBeInTheDocument();
-});
+  it('Should check whether percentageStyleGreen is applied to ongoing-data-card-percentage when percent is 100', () => {
+    render(<OngoingDataExplorationCard item={mockItemsPercentageData} />);
+    const ele = screen.getByTestId(/ongoing-data-card-percentage/i);
+    expect(ele).toHaveStyle('color: rgb(67, 160, 71)');
+  });
 
-test('Test if percentageStyleRed is applied to ongoing-data-card-percentage when percent is < 100', () => {
-  render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
-  const ele = screen.getByTestId(/ongoing-data-card-percentage/i);
-  expect(ele).toHaveStyle('color: rgb(229, 57, 53)');
-});
-
-test('Test if percentageSymbolRed is applied to ongoing-data-percentage-symbol when percent is < 100', () => {
-  render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
-  const ele = screen.getByTestId(/ongoing-data-percentage-symbol/i);
-  expect(ele).toHaveStyle('color: rgb(229, 57, 53)');
-});
-
-test('Test if percentageStyleGreen is applied to ongoing-data-card-percentage when percent is 100', () => {
-  render(<OngoingDataExplorationCard item={mockItemsPercentageData} />);
-  const ele = screen.getByTestId(/ongoing-data-card-percentage/i);
-  expect(ele).toHaveStyle('color: rgb(67, 160, 71)');
-});
-
-test('Test if percentageSymbolGreen is applied to ongoing-data-percentage-symbol when percent is 100', () => {
-  render(<OngoingDataExplorationCard item={mockItemsPercentageData} />);
-  const ele = screen.getByTestId(/ongoing-data-percentage-symbol/i);
-  expect(ele).toHaveStyle('color: rgb(67, 160, 71)');
+  it('Should check whether percentageSymbolGreen is applied to ongoing-data-percentage-symbol when percent is 100', () => {
+    render(<OngoingDataExplorationCard item={mockItemsPercentageData} />);
+    const ele = screen.getByTestId(/ongoing-data-percentage-symbol/i);
+    expect(ele).toHaveStyle('color: rgb(67, 160, 71)');
+  });
 });
