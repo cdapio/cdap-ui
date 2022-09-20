@@ -1,4 +1,4 @@
-import { arg, result } from '../mock/oldData.mock';
+import { arg } from '../mock/oldData.mock';
 import { generateDataForExplorationCard } from '../utils';
 
 describe('Test the Utility Functions', () => {

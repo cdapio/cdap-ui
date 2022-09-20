@@ -20,7 +20,7 @@ import CustomTooltip from '../index';
 import { Typography } from '@material-ui/core';
 
 describe('Test Custom Tooltip Component', () => {
-  test('Should render Custom tooltip component', () => {
+  it('Should render Custom tooltip component', () => {
     render(
       <CustomTooltip arrow title={'Custom tooltip'}>
         <Typography></Typography>
