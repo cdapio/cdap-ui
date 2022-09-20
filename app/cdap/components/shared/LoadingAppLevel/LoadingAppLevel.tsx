@@ -18,8 +18,8 @@ import { Box, Modal } from '@material-ui/core';
 import React from 'react';
 
 interface ILoadingAppLevelProps {
-  message?: String;
-  subtitle?: String;
+  message?: string;
+  subtitle?: string;
   isopen: boolean;
 }
 
