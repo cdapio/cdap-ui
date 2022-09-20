@@ -14,22 +14,28 @@
  * the License.
  */
 
+import { GCSIcon } from 'components/ConnectionList/icons';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import TabLabelCanBrowse from '../index';
-import { mockConnectorTypeData } from '../mock/mockConnectorTypeData';
 
-describe('Test TabLabelCanBrowse Component', () => {
-  it('Should render TabLabelCanBrowse Component', () => {
-    render(
-      <TabLabelCanBrowse
-        label={mockConnectorTypeData.name}
-        count={mockConnectorTypeData.count}
-        icon={mockConnectorTypeData.icon}
-        index={0}
-      />
-    );
-    const ele = screen.getByTestId(/connections-tab-label-browse/i);
-    expect(ele).toBeInTheDocument();
-  });
-});
+export const mockTabsDataWithBrowseIndex = {
+  data: [
+    {
+      name: 'File',
+      type: 'connector',
+      category: 'File',
+      description: 'Connection to browse and sample data from the local file system.',
+      className: 'io.cdap.plugin.batch.connector.FileConnector',
+      artifact: {
+        name: 'core-plugins',
+        version: '2.10.0-SNAPSHOT',
+        scope: 'SYSTEM',
+      },
+      canBrowse: true,
+      count: 1,
+      icon: <GCSIcon />,
+    },
+  ],
+  showTabs: true,
+  selectedTab: 'S3',
+  isSearching: false,
+};
