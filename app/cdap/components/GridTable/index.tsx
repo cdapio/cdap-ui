@@ -227,7 +227,7 @@ export default function GridTable() {
       {showRecipePanel && (
         <RecipeSteps setShowRecipePanel={setShowRecipePanel} showRecipePanel={showRecipePanel} />
       )}
-      <Table aria-label="simple table" className="test">
+      <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
             {headersNamesList?.length > 0 &&
