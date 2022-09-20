@@ -216,7 +216,7 @@ export default function GridTable() {
           setLoading={setLoading}
         />
       )}
-      <Table aria-label="simple table" className="test">
+      <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
             {headersNamesList?.length > 0 &&
