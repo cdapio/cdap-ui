@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { expectedResult, mockOldData } from '../mock/oldData.mock';
+import { expectedResult, mockOldData } from '../mock/mockOldData';
 import { generateDataForExplorationCard } from '../utils';
 
 describe('Test the Utility Functions', () => {
