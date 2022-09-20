@@ -61,7 +61,6 @@ export const PipelineHistoryTable = ({
             <strong>{`Version (For develop)`}</strong>
             <strong>{T.translate(`${PREFIX}.date`)}</strong>
             <strong>{T.translate(`${PREFIX}.time`)}</strong>
-            <strong>{T.translate(`${PREFIX}.author`)}</strong>
             <strong>{T.translate(`${PREFIX}.summary`)}</strong>
             <strong />
             <strong />
