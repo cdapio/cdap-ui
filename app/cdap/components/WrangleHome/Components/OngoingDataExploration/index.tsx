@@ -28,8 +28,9 @@ import { HOME_URL_PARAM, WORKSPACES_LABEL } from './constants';
 
 interface ICardCount {
   cardCount?: number;
+  fromAddress: string;
 }
-const OngoingDataExploration = ({ cardCount }: ICardCount) => {
+const OngoingDataExploration = ({ cardCount, fromAddress }: ICardCount) => {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
   const getOngoingData = () => {
@@ -122,7 +123,7 @@ const OngoingDataExploration = ({ cardCount }: ICardCount) => {
           <Link
             to={{
               pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
-              state: { from: WORKSPACES_LABEL, path: HOME_URL_PARAM },
+              state: { from: fromAddress, path: HOME_URL_PARAM },
             }}
             style={{ textDecoration: 'none' }}
           >

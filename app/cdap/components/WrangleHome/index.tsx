@@ -56,7 +56,7 @@ export default function WranglerHome() {
             </Link>
           </Box>
         </Box>
-        <OngoingDataExploration cardCount={cardCount} />
+        <OngoingDataExploration cardCount={cardCount} fromAddress="home" />
         {loading && (
           <Box className={classes.loadingContainer}>
             <LoadingSVG />
