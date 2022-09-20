@@ -28,7 +28,7 @@ export default function SubHeader() {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
-      <Box>
+      <Box className={classes.box}>
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             Home

@@ -324,7 +324,6 @@ export default function GridTable() {
   return (
     <Box>
       <BreadCrumb datasetName={workspaceName} location={location} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
       <ToolBarList submitMenuOption={(option) => applyDirective(option, columnSelected)} />
       {isFirstWrangle && connectorType === 'File' && (
         <ParsingDrawer
@@ -352,48 +351,53 @@ export default function GridTable() {
           }}
         />
       )}
-      <Table aria-label="simple table" className="test">
-        <TableHead>
-          <TableRow>
-            {headers.map((eachHeader) => (
-              <GridHeaderCell
-                label={eachHeader}
-                type={types[eachHeader]}
-                key={eachHeader}
-                columnSelected={columnSelected}
-                setColumnSelected={handleColumnSelect}
-              />
-            ))}
-          </TableRow>
-          <TableRow>
-            {Array.isArray(missingDataList) &&
-              Array.isArray(headers) &&
-              headers.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name === each) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
-              })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((eachRow, rowIndex) => {
-            return (
-              <TableRow key={`row-${rowIndex}`}>
-                {headers.map((eachKey, eachIndex) => {
-                  return (
-                    <GridTextCell
-                      cellValue={eachRow[eachKey] || '--'}
-                      key={`${eachKey}-${eachIndex}`}
-                    />
-                  );
+      {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
+        <Table aria-label="simple table" className="test">
+          <TableHead>
+            <TableRow>
+              {headers.map((eachHeader) => (
+                <GridHeaderCell
+                  label={eachHeader}
+                  type={types[eachHeader]}
+                  key={eachHeader}
+                  columnSelected={columnSelected}
+                  setColumnSelected={handleColumnSelect}
+                />
+              ))}
+            </TableRow>
+            <TableRow>
+              {Array.isArray(missingDataList) &&
+                Array.isArray(headers) &&
+                headers.map((each, index) => {
+                  return missingDataList.map((item, itemIndex) => {
+                    if (item.name === each) {
+                      return <GridKPICell metricData={item} key={item.name} />;
+                    }
+                  });
                 })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((eachRow, rowIndex) => {
+              return (
+                <TableRow key={`row-${rowIndex}`}>
+                  {headers.map((eachKey, eachIndex) => {
+                    return (
+                      <GridTextCell
+                        cellValue={eachRow[eachKey] || '--'}
+                        key={`${eachKey}-${eachIndex}`}
+                      />
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      ) : (
+        <NoDataScreen />
+      )}
+
       <FooterPanel
         showRecipePanelHandler={showRecipePanelHandler}
         showAddTransformationHandler={showAddTransformationHandler}
