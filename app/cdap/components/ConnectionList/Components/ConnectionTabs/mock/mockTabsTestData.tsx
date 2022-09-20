@@ -1,7 +1,7 @@
 import { GCSIcon } from 'components/ConnectionList/icons';
 import React from 'react';
 
-export const tabsDataWithBrowse = {
+export const mockTabsTestData = {
   data: [
     {
       name: 'File',
@@ -14,7 +14,6 @@ export const tabsDataWithBrowse = {
         version: '2.10.0-SNAPSHOT',
         scope: 'SYSTEM',
       },
-      canBrowse: true,
       count: 1,
       icon: <GCSIcon />,
     },

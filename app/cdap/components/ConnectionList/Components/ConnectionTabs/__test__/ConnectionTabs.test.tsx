@@ -17,15 +17,15 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import ConnectionsTabs from '../index';
-import { tabsDataWithBrowse } from '../mock/tabsDataWithBrowse';
-import { tabsDataWithBrowseIndex } from '../mock/tabsDataWithBrowseIndex';
-import { tabsTestData } from '../mock/tabsTestData';
+import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
+import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
+import { mockTabsTestData } from '../mock/mockTabsTestData';
 
 describe('Test ConnectionsTabs', () => {
   it('Should render Connections Tab Component', () => {
     render(
       <ConnectionsTabs
-        tabsData={tabsTestData}
+        tabsData={mockTabsTestData}
         handleChange={() => null}
         value="apple"
         index="0"
@@ -40,7 +40,7 @@ describe('Test ConnectionsTabs', () => {
   it('Should render Connections Tabs', () => {
     render(
       <ConnectionsTabs
-        tabsData={tabsTestData}
+        tabsData={mockTabsTestData}
         handleChange={() => null}
         value="apple"
         index="1"
@@ -55,7 +55,7 @@ describe('Test ConnectionsTabs', () => {
   it('Should render TabLabelCanBrowse with count connectorType count', () => {
     render(
       <ConnectionsTabs
-        tabsData={tabsDataWithBrowseIndex}
+        tabsData={mockTabsDataWithBrowseIndex}
         handleChange={() => null}
         value="apple"
         index={0}
@@ -73,7 +73,7 @@ describe('Test whether handleChange function is triggered or not', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={tabsTestData}
+        tabsData={mockTabsTestData}
         handleChange={handleChange}
         value="apple"
         index="1"
@@ -90,7 +90,7 @@ describe('Test whether handleChange function is triggered or not', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={tabsTestData}
+        tabsData={mockTabsTestData}
         handleChange={handleChange}
         value="apple"
         index="2"
@@ -107,7 +107,7 @@ describe('Test whether handleChange function is triggered or not', () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={tabsDataWithBrowse}
+        tabsData={mockTabsDataWithBrowse}
         handleChange={handleChange}
         value="apple"
         index="2"
