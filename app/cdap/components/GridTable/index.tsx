@@ -52,9 +52,7 @@ export default function GridTable() {
   const location = useLocation();
 
   const [workspaceName, setWorkspaceName] = useState('');
-  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>(
-    []
-  );
+  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
@@ -96,8 +94,7 @@ export default function GridTable() {
           const directives = objectQuery(res, 'directives') || [];
           const requestBody = directiveRequestBodyCreator(directives);
           const sampleSpec = objectQuery(res, 'sampleSpec') || {};
-          const visualization =
-            objectQuery(res, 'insights', 'visualization') || {};
+          const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
             name: res?.sampleSpec?.connectionName,
@@ -157,10 +154,7 @@ export default function GridTable() {
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
-  const createHeadersData = (
-    columnNamesList: string[],
-    columnTypesList: IRecords
-  ) => {
+  const createHeadersData = (columnNamesList: string[], columnTypesList: IRecords) => {
     if (Array.isArray(columnNamesList)) {
       return columnNamesList.map((eachColumnName: string) => {
         return {
@@ -228,9 +222,7 @@ export default function GridTable() {
   return (
     <Box>
       <BreadCrumb datasetName={workspaceName} location={location} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
-        <NoDataScreen />
-      )}
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && <NoDataScreen />}
       {isFirstWrangle && connectorType === 'File' && (
         <ParsingDrawer
           updateDataTranformation={(wid) => updateDataTranformation(wid)}
@@ -238,10 +230,7 @@ export default function GridTable() {
         />
       )}
       {showRecipePanel && (
-        <RecipeSteps
-          setShowRecipePanel={setShowRecipePanel}
-          showRecipePanel={showRecipePanel}
-        />
+        <RecipeSteps setShowRecipePanel={setShowRecipePanel} showRecipePanel={showRecipePanel} />
       )}
       {showAddTransformation && (
         <AddTransformation
