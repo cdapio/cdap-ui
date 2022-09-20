@@ -16,7 +16,7 @@
 
 import { ImportDatasetIcon } from '../../WrangleCard/iconStore/ImportDatasetIcon';
 
-export const arg = [
+export const mockOldData = [
   {
     connectionName: 'postgres1',
     workspaceName: 'sql_implementation_info',
@@ -26,7 +26,7 @@ export const arg = [
   },
 ];
 
-export const result = [
+export const expectedResult = [
   [
     {
       icon: ImportDatasetIcon,

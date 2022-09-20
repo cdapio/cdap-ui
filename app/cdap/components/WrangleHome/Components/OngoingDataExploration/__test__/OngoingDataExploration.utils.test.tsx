@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { arg } from '../mock/oldData.mock';
+import { expectedResult, mockOldData } from '../mock/oldData.mock';
 import { generateDataForExplorationCard } from '../utils';
 
 describe('Test the Utility Functions', () => {
@@ -24,7 +24,7 @@ describe('Test the Utility Functions', () => {
   });
 
   it('Should test the result for mock data', () => {
-    const result = generateDataForExplorationCard(arg);
-    expect(result).toEqual(result);
+    const result = generateDataForExplorationCard(mockOldData);
+    expect(result).toEqual(expectedResult);
   });
 });
