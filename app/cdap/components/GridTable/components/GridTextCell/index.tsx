@@ -25,7 +25,9 @@ export default function GridTextCell({ cellValue }: IGridTextCellProps) {
   return (
     <TableCell className={classes.tableRowCell}>
       <Card className={classes.root} variant="outlined">
-        <Typography className={classes.cell}>{cellValue}</Typography>
+        <Typography className={classes.cell} data-testid={`grid-text-cell-${cellValue}`}>
+          {cellValue}
+        </Typography>
       </Card>
     </TableCell>
   );

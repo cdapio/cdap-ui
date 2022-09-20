@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
   noRecordWrapper: {
-    height: '100%',
+    height: 'calc(100vh - 246px)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
