@@ -22,7 +22,7 @@ import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex
 import { mockTabsTestData } from '../mock/mockTabsTestData';
 
 describe('Test ConnectionsTabs', () => {
-  it('Should render Connections Tab Component', () => {
+  it('Should render Connections Tabs Parent Component', () => {
     render(
       <ConnectionsTabs
         tabsData={mockTabsTestData}
@@ -37,7 +37,7 @@ describe('Test ConnectionsTabs', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render Connections Tabs', () => {
+  it('Should render Connections Tabs Component', () => {
     render(
       <ConnectionsTabs
         tabsData={mockTabsTestData}
@@ -52,7 +52,7 @@ describe('Test ConnectionsTabs', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render TabLabelCanBrowse with count connectorType count', () => {
+  it('Should render TabLabelCanBrowse with connectorTypes and count', () => {
     render(
       <ConnectionsTabs
         tabsData={mockTabsDataWithBrowseIndex}
@@ -68,7 +68,7 @@ describe('Test ConnectionsTabs', () => {
   });
 });
 
-describe('Test whether handleChange function is triggered or not', () => {
+describe('Should test whether handleChange function is triggered or not', () => {
   it('Should trigger handlechange function for the first column i.e. Connector Types', () => {
     const handleChange = jest.fn();
     render(
