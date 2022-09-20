@@ -37,8 +37,7 @@ public class PageLevelErrors {
 
   @Then("Verify Page NotFound Error Message")
   public void verifyPageNotFoundErrorMessage() {
-    WebElement notFoundSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId(pageNotFound));
+    WebElement notFoundSelector = Helper.locateElementByTestId(pageNotFound);
 
     Assert.assertTrue(notFoundSelector.isEnabled());
   }
@@ -99,8 +98,7 @@ public class PageLevelErrors {
 
   @Then("Verify Page NotFound Default Error Message")
   public void verifyPageNotFoundDefaultErrorMessage() {
-    WebElement notFoundSelector = Helper.locateElementByCssSelector(
-      Helper.getCssSelectorByDataTestId(pageNotFoundDefaultMessage));
+    WebElement notFoundSelector = Helper.locateElementByTestId(pageNotFoundDefaultMessage);
 
     Assert.assertTrue(notFoundSelector.isEnabled());
   }

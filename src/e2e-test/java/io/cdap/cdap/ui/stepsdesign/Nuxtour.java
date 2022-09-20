@@ -29,7 +29,7 @@ public class Nuxtour {
   private static final String NUXTOUR_MODAL_XPATH =
     "//div[contains(@class, 'guided-tour-tooltip') and not(contains(@style, 'display: none'))]";
   private static final String NUXTOUR_TITLE_XPATH = NUXTOUR_MODAL_XPATH +
-      "//*[contains(@class, 'shepherd-title')]";
+    "//*[contains(@class, 'shepherd-title')]";
   private static final String NUXTOUR_NEXT_XPATH = NUXTOUR_MODAL_XPATH +
     "//a[contains(@class, 'next-btn')]";
   private static final String NUXTOUR_COMPLETE_XPATH = NUXTOUR_MODAL_XPATH +
@@ -54,23 +54,17 @@ public class Nuxtour {
 
   @Then("Click Start Tour button")
   public void clickStartTour() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("start-tour-btn"))
-    );
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("start-tour-btn"));
   }
 
   @Then("Click No thanks button")
   public void clickNoThanks() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("no-tour-btn"))
-    );
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("no-tour-btn"));
   }
 
   @Then("Check Don't show again checkbox")
   public void checkDontShowAgain() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("show-again-checkbox"))
-    );
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("show-again-checkbox"));
   }
 
   @Then("{string} title should exist")
@@ -109,6 +103,6 @@ public class Nuxtour {
 
   @Then("Welcome tour should close")
   public void welcomeShouldClose() {
-    Assert.assertEquals(false, Helper.isElementExists(Helper.getCssSelectorByDataTestId("welcome-nux-tour")));
+    Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId("welcome-nux-tour")));
   }
 }

@@ -19,7 +19,7 @@ Feature: Pipeline Canvas - Actions
 
   @PIPELINE_CANVAS_ACTIONS_TEST
   Scenario: Correctly undo redo actions done by the user
-    When Open pipeline studio page
+    Given Open Datafusion Project to configure pipeline
     Then Verify redo undo buttons are disabled
     Then Create a simple pipeline
     Then Verify redo button disabled but undo button enabled
@@ -31,11 +31,11 @@ Feature: Pipeline Canvas - Actions
     Then Verify export button disabled
     Then Redo everything
     Then Verify simple pipeline recovered
-    Then Clean the pipeline
+    Then Exit Studio Page
 
   @PIPELINE_CANVAS_ACTIONS_TEST
   Scenario: Fit pipeline to screen and let user select multiple nodes
-    When Open pipeline studio page
+    Given Open Datafusion Project to configure pipeline
     Then Create a complex pipeline
     Then Verify sink nodes are visible
     Then Zoom in seven times
@@ -49,4 +49,5 @@ Feature: Pipeline Canvas - Actions
     Then Use shift click to delete two transform nodes
     Then Verify transform nodes do not exist
     Then Undo delete nodes
+    Then Exit Studio Page
 

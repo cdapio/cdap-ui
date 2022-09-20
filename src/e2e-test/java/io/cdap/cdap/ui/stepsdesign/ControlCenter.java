@@ -45,11 +45,9 @@ public class ControlCenter {
 
     @Then("Find filter dropdown and unselect \"applications\"")
     public void unCheckFilterOption() {
-        WebElement filterDropdown = Helper.locateElementByCssSelector(
-                Helper.getCssSelectorByDataTestId("filter-dropdown"));
+        WebElement filterDropdown = Helper.locateElementByTestId("filter-dropdown");
         ElementHelper.clickOnElement(filterDropdown);
-        ElementHelper.selectCheckbox(Helper.locateElementByCssSelector(
-                Helper.getCssSelectorByDataTestId("Applications-input")));
+        ElementHelper.selectCheckbox(Helper.locateElementByTestId("Applications-input"));
     }
 
     @Then("Verify that pipeline {string} should not present")

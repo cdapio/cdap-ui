@@ -79,7 +79,11 @@ export const NameAndDescription = ({
   const NameToolTip = invalidName ? ErrorTooltip : CustomTooltip;
 
   return (
-    <HydratorMetadata expanded={metadataExpanded} data-cy="pipeline-metadata">
+    <HydratorMetadata
+      expanded={metadataExpanded}
+      data-cy="pipeline-metadata"
+      data-testid="pipeline-metadata"
+    >
       <PipelineType>
         {eTLBatch && <StyledIconSVG name="icon-ETLBatch"></StyledIconSVG>}
         {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
@@ -103,16 +107,22 @@ export const NameAndDescription = ({
               value={description}
               placeholder="Enter a description for your pipeline."
               data-cy="pipeline-description-input"
+              data-testid="pipeline-description-input"
               onChange={handleDescriptionChange}
             />
             <ButtonsContainer>
-              <PrimaryContainedButton onClick={saveMetadata} data-cy="pipeline-metadata-ok-btn">
+              <PrimaryContainedButton
+                onClick={saveMetadata}
+                data-cy="pipeline-metadata-ok-btn"
+                data-testid="pipeline-metadata-ok-btn"
+              >
                 Save
               </PrimaryContainedButton>
               <PrimaryContainedButton
                 color="default"
                 onClick={resetMetadata}
                 data-cy="pipeline-metadata-cancel-btn"
+                data-testid="pipeline-metadata-cancel-btn"
               >
                 Cancel
               </PrimaryContainedButton>

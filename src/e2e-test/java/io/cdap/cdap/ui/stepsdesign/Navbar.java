@@ -55,7 +55,7 @@ public class Navbar {
 
   @Then("Check navbar should have {string} bgcolor")
   public void checkBgColor(String theme) {
-    String bgColor = Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("app-navbar"))
+    String bgColor = Helper.locateElementByTestId("app-navbar")
       .getCssValue("background-color");
     if (theme.equals("default")) {
       Assert.assertEquals(NAVBAR_BG_COLOR, bgColor);
@@ -66,19 +66,16 @@ public class Navbar {
 
   @Then("Check drawer invisible")
   public void checkDrawerInvisible() {
-    String visibility = Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("navbar-drawer"))
-      .getCssValue("visibility");
+    String visibility = Helper.locateElementByTestId("navbar-drawer").getCssValue("visibility");
     Assert.assertEquals("hidden", visibility);
   }
 
-  @Then ("Click on hamburger menu")
+  @Then("Click on hamburger menu")
   public void toggleMenu() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("navbar-hamburger-icon"))
-    );
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("navbar-hamburger-icon"));
   }
 
-  @Then ("Click on Hub")
+  @Then("Click on Hub")
   public void clickHub() throws InterruptedException {
     ElementHelper.clickOnElement(
       Helper.locateElementById("navbar-hub")
@@ -117,12 +114,10 @@ public class Navbar {
 
   public void assertFeatureHighlightHelper(String featureSelector) {
     toggleMenu();
-    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId(featureSelector)));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(featureSelector));
     toggleMenu();
-    String bgColor = Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId(featureSelector))
-      .getCssValue("background-color");
-    String color = Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId(featureSelector))
-      .getCssValue("color");
+    String bgColor = Helper.locateElementByTestId(featureSelector).getCssValue("background-color");
+    String color = Helper.locateElementByTestId(featureSelector).getCssValue("color");
     Assert.assertEquals(NAVBAR_MENU_FONT_COLOR, color);
     Assert.assertEquals(NAVBAR_MENU_HIGHLIGHT_COLOR, bgColor);
     toggleMenu();

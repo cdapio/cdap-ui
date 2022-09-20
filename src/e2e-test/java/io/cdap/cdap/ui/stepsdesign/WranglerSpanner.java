@@ -25,6 +25,7 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 public class WranglerSpanner {
@@ -52,11 +53,8 @@ public class WranglerSpanner {
     @Then("Verify for successful test connection and message")
     public void verifyTestConnectionSuccess() {
         String statusText = ElementHelper.getElementText(
-                Helper.locateElementByCssSelector(
-                        Helper.getCssSelectorByDataTestId("connection-test-success")));
-        if (!statusText.equals("Successfully connected.")) {
-            throw new RuntimeException("Test GCP connection of type Spanner is not successful.");
-        }
+                Helper.locateElementByTestId("connection-test-success"));
+        Assert.assertEquals(statusText, "Successfully connected.");
     }
 
     @Then("Test Spanner Connection with {string}, {string}, {string}")
@@ -67,11 +65,8 @@ public class WranglerSpanner {
     @Then("Verify test connection failure and message")
     public void verifyTestConnectionFailure() {
         String statusText = ElementHelper.getElementText(
-                Helper.locateElementByCssSelector(
-                        Helper.getCssSelectorByDataTestId("connection-test-failure")));
-        if (!statusText.contains("Could not connect to Spanner")) {
-            throw new RuntimeException("Test GCP Spanner connection failure message is not shown properly.");
-        }
+                Helper.locateElementByTestId("connection-test-failure"));
+        Assert.assertTrue(statusText.contains("Could not connect to Spanner"));
     }
 
     @Then("Create Spanner Connection with name {string}")
@@ -92,9 +87,7 @@ public class WranglerSpanner {
     public static void checkConnectionAlreadyExistsError(String connectionName) {
         String errorText = ElementHelper.getElementText(
                 Helper.locateElementByCssSelector("div[class*='modal-content'] > div[class*='error']"));
-        if (!errorText.contains("'" + connectionName + "' already exists")) {
-            throw new RuntimeException("Error message is not properly shown.");
-        }
+        Assert.assertTrue(errorText.contains("'" + connectionName + "' already exists"));
     }
 
     @Then("Select Spanner connection {string}")
@@ -125,9 +118,7 @@ public class WranglerSpanner {
 
     @Then("Verify URL navigation")
     public static void verifyURLNavigation() {
-        if (!SeleniumDriver.getDriver().getCurrentUrl().contains("/ns/default/wrangler")) {
-            throw new RuntimeException("URL navigation for connection browser is failed.");
-        }
+        Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/ns/default/wrangler"));
     }
 
     @Then("Check for connection {string} not found message")
@@ -135,9 +126,7 @@ public class WranglerSpanner {
         String errorText = "\"Connection '" + connectionName + "' in namespace 'default' not found\"";
         String xpathExpression = "//*[contains(text(), " + errorText + ")]";
         boolean isElementPresent = ElementHelper.isElementDisplayed(By.xpath(xpathExpression), 1000);
-        if (!isElementPresent) {
-            throw new RuntimeException("Error message is not shown properly.");
-        }
+        Assert.assertTrue(isElementPresent);
     }
 
     @Then("Delete Connection {string}")
@@ -152,8 +141,6 @@ public class WranglerSpanner {
                 By.xpath("//*[@data-testid='" + connectionLocatorName + "']"), 200);
         boolean isConnectionExists = Helper.isElementExists(
                 Helper.getCssSelectorByDataTestId(connectionLocatorName));
-        if (isConnectionExists) {
-            throw new RuntimeException("Connection deletion unsuccessful.");
-        }
+        Assert.assertFalse(isConnectionExists);
     }
 }
