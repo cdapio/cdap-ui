@@ -26,7 +26,6 @@ import { useStyles } from './styles';
 
 export default function WranglerHome() {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
 
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
@@ -42,19 +41,14 @@ export default function WranglerHome() {
       <Box>
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View More</Box>
+          <Box className={classes.viewMore}>View all</Box>
         </Box>
         <WrangleCard />
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View More</Box>
+          <Box className={classes.viewMore}>View all</Box>
         </Box>
         <OngoingDataExploration />
-        {loading && (
-          <Box className={classes.loadingContainer}>
-            <LoadingSVG />
-          </Box>
-        )}
       </Box>
     </Box>
   );
