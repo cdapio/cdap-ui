@@ -21,7 +21,9 @@ import { exploreConnection } from 'components/Connections/Browser/GenericBrowser
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
-import * as React from 'react';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import ErrorSnackbar from 'components/SnackbarComponent';
+import React from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './Components/ConnectionTabs';
