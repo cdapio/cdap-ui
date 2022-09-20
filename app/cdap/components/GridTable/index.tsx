@@ -34,8 +34,7 @@ import {
   IRecords,
   IParams,
   IHeaderNamesList,
-  IDataOfStatistics,
-  IDataTypeOfColumns,
+  IObject,
 } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
@@ -139,7 +138,7 @@ export default function GridTable() {
     }
   };
 
-  const createMissingData = (statistics: IDataOfStatistics) => {
+  const createMissingData = (statistics: IObject) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -147,7 +146,7 @@ export default function GridTable() {
       const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
-          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          label: vKey == 'general' ? 'Missing/Null' : '',
           count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
         });
       }),
