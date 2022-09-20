@@ -57,6 +57,7 @@ export default class PipelineSummaryButton extends Component {
           'btn-select': this.state.showSummary,
         })}
         ref={this.buttonRef}
+        role="button"
       >
         <div className="btn-container">
           <IconSVG name="icon-line-chart" className="summary-icon" />

@@ -64,6 +64,7 @@ export default class PipelineConfigureButton extends Component {
         className="btn pipeline-action-btn pipeline-configure-btn"
         data-cy="pipeline-configure-btn"
         ref={this.buttonRef}
+        role="button"
       >
         <div className="btn-container">
           <IconSVG name="icon-sliders" className="configure-icon" />
