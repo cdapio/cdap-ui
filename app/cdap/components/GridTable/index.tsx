@@ -335,7 +335,7 @@ export default function GridTable() {
           }}
         />
       )}
-      <Table aria-label="simple table" className="test">
+      <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
             {headers.map((eachHeader) => (

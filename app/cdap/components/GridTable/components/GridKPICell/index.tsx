@@ -39,6 +39,7 @@ export default function GridKPICell({ metricData }) {
                     ? `${classes.missingClass} ${classes.count}`
                     : `${classes.generalClass} ${classes.count}`
                 }
+                data-testid={`grid-kpi-metric-value-${eachValue.label}`}
               >
                 {eachValue.count}
               </Typography>
