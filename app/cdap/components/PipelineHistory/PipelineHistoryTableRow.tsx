@@ -20,6 +20,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
+import { Button } from '@material-ui/core';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -82,22 +83,24 @@ export const PipelineHistoryTableRow = ({
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-        <a
-          href="#"
+        <Button
+          variant="text"
+          color="primary"
           onClick={() => {
             viewVersion();
           }}
         >
           {T.translate(`${PREFIX}.view`)}
-        </a>
-        <a
-          href="#"
+        </Button>
+        <Button
+          variant="text"
+          color="primary"
           onClick={() => {
             restoreVersion();
           }}
         >
           {T.translate(`${PREFIX}.restore`)}
-        </a>
+        </Button>
       </div>
     </>
   );
