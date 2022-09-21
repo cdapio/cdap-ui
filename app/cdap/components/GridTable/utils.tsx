@@ -25,14 +25,15 @@ import { IExecuteAPIResponse } from './types';
  * @returns {number} This is the calculated count of missing/null value
  */
 export const convertNonNullPercent = (gridData: IExecuteAPIResponse | undefined, nonNullValue) => {
+  console.log('nonNullValue', nonNullValue);
   const lengthOfData: number = gridData?.values.length;
   let nullValueCount: number = 0;
   if (lengthOfData) {
-    nullValueCount = nonNullValue.null
-      ? (((nonNullValue.null || 0) + (nonNullValue.empty || 0)) / 100) * lengthOfData
-      : 0;
+    nullValueCount =
+      (((nonNullValue?.null || 0) + (nonNullValue?.empty || 0)) / 100) * lengthOfData || 0;
   }
-  return nullValueCount;
+  console.log('nonNullValue', nullValueCount);
+  return nullValueCount.toFixed(0);
 };
 
 /**
