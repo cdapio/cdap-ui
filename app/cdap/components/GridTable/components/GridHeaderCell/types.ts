@@ -16,5 +16,7 @@
 
 export interface IGridHeaderCellProps {
   label: string;
-  types: string[];
+  type: string;
+  columnSelected: string;
+  setColumnSelected: (value: string) => void;
 }

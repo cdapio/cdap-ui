@@ -17,31 +17,36 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { WrangelIcon } from 'components/ConnectionList/icons';
+import { WrangleIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
-import * as React from 'react';
-import { createRef, useContext, useEffect, useState } from 'react';
+import { IRecords } from 'components/GridTable/types';
+import React from 'react';
+import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useLocation } from 'react-router';
+import { DATASOURCES_LABEL, WRANGLE_LABEL } from './constants';
 import useStyles from './styles';
+import { IMessageState } from './types';
 
 export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,
   toggleLoader,
-  setIsErrorOnNoWorkSpace,
+  setToaster,
 }: {
   label: string;
-  entity: any;
+  entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
-  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+  setToaster: React.Dispatch<React.SetStateAction<IMessageState>>;
 }) {
   const classes = useStyles();
+  const pathName = useLocation();
 
-  const myLabelRef: React.Ref<HTMLSpanElement> = createRef();
+  const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
   const [workspaceId, setWorkspaceId] = useState(null);
   const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
@@ -57,7 +62,11 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(entity);
     } else {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: 'Failed to retrieve sample data',
+        isSuccess: false,
+      });
     }
   };
 
@@ -65,7 +74,11 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: 'Failed to create workspace',
+        isSuccess: false,
+      });
     }
   };
 
@@ -77,30 +90,53 @@ export default function TabLabelCanSample({
       properties: parseConfig,
     })
       .then((res) => {
-        if (onWorkspaceCreate) {
-          return onWorkspaceCreate(res);
-        }
-        if (res) {
-          setWorkspaceId(res);
-          toggleLoader(false);
-        }
+        toggleLoader(false);
+        setToaster({
+          open: true,
+          message: 'Success',
+          isSuccess: true,
+        });
+        setTimeout(() => {
+          if (onWorkspaceCreate) {
+            return onWorkspaceCreate(res);
+          }
+          if (res) {
+            setWorkspaceId(res);
+          }
+        }, 1000);
       })
       .catch((err) => {
         toggleLoader(false);
-        setIsErrorOnNoWorkSpace(true);
+        setToaster({
+          open: true,
+          message: 'Failed to retrieve sample data', // -----Error Message can be sent here
+          isSuccess: false,
+        });
       });
   };
 
+  const indexOfSelectedDataset = location.pathname.lastIndexOf('/');
+  const requiredPath = location.pathname.slice(indexOfSelectedDataset + 1);
+
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: { from: DATASOURCES_LABEL, path: requiredPath },
+      }}
+    />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow>
+    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <WrangelIcon />
+        <button
+          className="wranglingHover"
+          data-testid="connections-tab-ref-explore"
+          onClick={() => onExplore(entity)}
+        >
+          <WrangleIcon />
           <Typography variant="body2" className={classes.wrangleButton}>
             Wrangle
           </Typography>
@@ -108,15 +144,21 @@ export default function TabLabelCanSample({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample}>
+    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button className="wranglingHover" onClick={() => onExplore(entity)}>
-        <WrangelIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
-          Wrangle
-        </Typography>
+      <button
+        className="wranglingHover"
+        data-testid="connections-tab-explore"
+        onClick={() => onExplore(entity)}
+      >
+        <Box className="wranglingHover">
+          <WrangleIcon />
+          <Typography color="primary" variant="body2" className={classes.wrangleButton}>
+            {WRANGLE_LABEL}
+          </Typography>
+        </Box>
       </button>
     </Box>
   );

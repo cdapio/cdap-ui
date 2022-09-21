@@ -20,26 +20,41 @@ import { grey } from '@material-ui/core/colors';
 export const useStyles = makeStyles((theme) => ({
   warningIcon: {
     color: '#E97567',
-    fontSize: '20px !important',
+    marginRight: '10px',
   },
-  errorHead: {
+  successIcon: {
+    color: '#4BAF4F',
+    marginRight: '10px',
+  },
+  successLabel: {
+    color: '#4BAF4F',
+    fontSize: '20px !important',
+    lineHeight: '20px',
+  },
+  failureLabel: {
     color: '#E97567',
     fontSize: '20px !important',
+    lineHeight: '20px',
   },
   dismissSpan: {
     display: 'block',
     fontSize: '14px',
-    color: blue[500],
+    color: '#4681F4',
     cursor: 'pointer',
+    lineHeight: '21px',
+    fontWeight: 400,
   },
-  errorMessage: {
-    color: grey[900],
+  iconText: {
+    display: 'flex',
+  },
+  message: {
+    color: '#000000',
     fontSize: '14px',
-    padding: '10px',
+    padding: '10px 30px 0px 30px',
   },
   headFlex: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    paddingBottom: '15px',
   },
 }));

@@ -26,6 +26,7 @@ export const useStyles = makeStyles({
     borderRadius: '4px',
     marginBottom: '10px',
     cursor: 'pointer',
+    margin: '10px auto',
   },
   elementStyle: {
     width: '301px',
@@ -98,5 +99,15 @@ export const useStyles = makeStyles({
   },
   dataQualityText: {
     paddingTop: '11px',
+  },
+  iconWithText: {
+    maxWidth: '171px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  textWithoutIcon: {
+    maxWidth: '166px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
 });

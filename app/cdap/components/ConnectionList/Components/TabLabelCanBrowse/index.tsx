@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import * as React from 'react';
-import { createRef, useEffect, useState } from 'react';
+import { createRef, Ref, useEffect, useRef, useState } from 'react';
 import { useStyles } from './styles';
 
 export default function TabLabelCanBrowse({
@@ -35,7 +35,7 @@ export default function TabLabelCanBrowse({
 }) {
   const classes = useStyles();
 
-  const myLabelRef: any = createRef();
+  const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 
   useEffect(() => {
@@ -51,7 +51,12 @@ export default function TabLabelCanBrowse({
   }, []);
 
   return refValue ? (
-    <CustomTooltip title={label} arrow key={`tooltip-${index}`}>
+    <CustomTooltip
+      title={label}
+      arrow
+      key={`tooltip-${index}`}
+      data-testid="connections-tab-ref-label-browse"
+    >
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}
@@ -73,14 +78,17 @@ export default function TabLabelCanBrowse({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelContainerBox}>
+    <Box className={classes.labelContainerBox} data-testid="connections-tab-label-browse">
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
         <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
           {label}
         </Typography>
         {count && (
-          <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
+          <Typography
+            variant="body1"
+            className={classes.labelStylesCount}
+          >{`(${count})`}</Typography>
         )}
       </Box>
       <Box>
