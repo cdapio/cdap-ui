@@ -241,7 +241,7 @@ export function CreateConnection({
   function onClose() {
     if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
       navigateToConnectionList(dispatch);
-      return;
+      return setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/Imported%20Datasets`);
     }
 
     onToggle();

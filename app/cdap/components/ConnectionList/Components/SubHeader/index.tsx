@@ -26,9 +26,11 @@ import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 
 export default function SubHeader() {
   const classes = useStyles();
+
   const handleAddConnection = () => {
     localStorage.setItem('addConnection', 'true');
   };
+
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
       <Box>
