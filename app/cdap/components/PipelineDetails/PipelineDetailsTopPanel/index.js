@@ -26,6 +26,7 @@ import PipelineConfigurationsStore, {
 import PlusButton from 'components/shared/PlusButton';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import { setEditDraftId } from '../store/ActionCreator';
 
 require('./PipelineDetailsTopPanel.scss');
 
@@ -66,6 +67,10 @@ export default class PipelineDetailsTopPanel extends Component {
       payload: { ...pipelineDetailStoreConfig },
     });
     fetchAndUpdateRuntimeArgs();
+    if (window.localStorage.getItem('editDraftId')) {
+      setEditDraftId(window.localStorage.getItem('editDraftId'));
+      window.localStorage.removeItem('editDraftId');
+    }
   }
   render() {
     return (

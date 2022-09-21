@@ -21,7 +21,6 @@ import PreviewLogs from 'components/PreviewLogs';
 import ResourceCenterButton from 'components/ResourceCenterButton';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import React, { useEffect, useReducer, useState } from 'react';
-import { GLOBALS } from 'services/global-constants';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import { ActionButtons } from './ActionButtons';
@@ -275,24 +274,30 @@ export const TopPanel = ({
 
   const publishPipeline = () => {
     if (isEdit) {
-      // check for if edit has new changes
-      if (cleanseAndCompareTwoObjects(parentConfig, getConfigForExport().config)) {
-        errorDispatch({ type: 'noEditChangeError' });
-        return;
-      }
       // check for if parentVersion is still good
       const params = {
         namespace: getCurrentNamespace(),
         appId: state.metadata.name,
       };
-      MyPipelineApi.get(params).subscribe((res) => {
-        if (res.appVersion !== getParentVersion()) {
-          errorDispatch({ type: 'outdatedDraftError' });
-          setEditStatus('Draft out of date');
-          return;
+      MyPipelineApi.get(params).subscribe(
+        (res) => {
+          // check for if edit has new changes
+          if (cleanseAndCompareTwoObjects(parentConfig, getConfigForExport().config)) {
+            errorDispatch({ type: 'noEditChangeError' });
+            return;
+          }
+          if (res.appVersion !== getParentVersion()) {
+            errorDispatch({ type: 'outdatedDraftError' });
+            setEditStatus('Draft out of date');
+            return;
+          }
+          setIsChangeSummaryOpen(true);
+        },
+        (err) => {
+          // Draft is orphaned, can do normal deploy
+          onPublish(!isEdit);
         }
-        setIsChangeSummaryOpen(true);
-      });
+      );
     } else {
       onPublish(isEdit);
     }
@@ -303,11 +308,30 @@ export const TopPanel = ({
     if (!isEdit) {
       return;
     }
+    const params = {
+      namespace: getCurrentNamespace(),
+      appId: state.metadata.name,
+    };
+
+    // first time execute before interval
+    MyPipelineApi.get(params).subscribe(
+      (res) => {
+        setParentConfig(JSON.parse(res.configuration));
+        if (res.appVersion === getParentVersion()) {
+          setEditStatus('Editing in progress');
+          return;
+        }
+        if (res.appVersion !== getParentVersion()) {
+          setEditStatus('Draft out of date');
+          return;
+        }
+      },
+      (err) => {
+        setEditStatus('Orphaned draft');
+      }
+    );
     const interval = setInterval(() => {
-      MyPipelineApi.get({
-        namespace: getCurrentNamespace(),
-        appId: state.metadata.name,
-      }).subscribe({
+      MyPipelineApi.get(params).subscribe({
         next(res) {
           if (res.appVersion === getParentVersion()) {
             setEditStatus('Editing in progress');

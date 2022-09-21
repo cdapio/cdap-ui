@@ -29,6 +29,7 @@ const mapDetailsStateToProps = (state) => {
     artifact: state.artifact,
     config: state.config,
     version: state.version,
+    editDraftId: state.editDraftId,
   };
 };
 
@@ -38,6 +39,7 @@ const PipelineDetailsDetailsActions = ({
   artifact,
   config,
   version,
+  editDraftId,
 }) => {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
@@ -52,6 +54,7 @@ const PipelineDetailsDetailsActions = ({
         config={config}
         version={version}
         lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+        editDraftId={editDraftId}
       />
     </div>
   );
@@ -63,6 +66,7 @@ PipelineDetailsDetailsActions.propTypes = {
   artifact: PropTypes.object,
   config: PropTypes.object,
   version: PropTypes.string,
+  editDraftId: PropTypes.string,
 };
 
 const ConnectedPipelineDetailsDetailsActions = connect(mapDetailsStateToProps)(
