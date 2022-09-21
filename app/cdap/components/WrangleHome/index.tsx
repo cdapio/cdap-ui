@@ -44,7 +44,11 @@ export default function WranglerHome() {
       <Box>
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View all</Box>
+          <Box className={classes.viewMore}>
+            <Link color="inherit" to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}>
+              View all
+            </Link>
+          </Box>
         </Box>
         <WrangleCard />
         <Box className={classes.headerTitle}>
