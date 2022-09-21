@@ -25,6 +25,12 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     marginRight: '30px',
     marginLeft: '34px',
+    '& .MuiBreadcrumbs-li': {
+      fontSize: '14px',
+    },
+    '& .MuiTypography-body1': {
+      fontSize: '14px',
+    },
   },
   breadcrumbLabel: {
     color: blue[500],

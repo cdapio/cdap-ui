@@ -17,14 +17,22 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  snackBarDiv: {
-    padding: '10px',
-    display: 'block',
+  error: {
     border: '1px solid #E97567',
     boxShadow: '-3px 4px 15px rgba(68, 132, 245, 0.25)',
-    height: '148px',
     width: '401px',
     bottom: '10% !important',
     backgroundColor: '#fff',
+    padding: '20px',
+    display: 'block',
+  },
+  success: {
+    border: '1px solid #4BAF4F',
+    boxShadow: '-3px 4px 15px rgba(68, 132, 245, 0.25)',
+    width: '401px',
+    bottom: '10% !important',
+    backgroundColor: '#fff',
+    padding: '20px',
+    display: 'block',
   },
 });
