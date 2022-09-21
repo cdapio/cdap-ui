@@ -39,8 +39,8 @@ angular
       ]).name,
       'mgcrea.ngStrap.datepicker',
       'mgcrea.ngStrap.timepicker',
-      
-      'mgcrea.ngStrap.core', 
+
+      'mgcrea.ngStrap.core',
       'mgcrea.ngStrap.helpers.dimensions',
 
       'mgcrea.ngStrap.alert',
@@ -122,55 +122,6 @@ angular
   .run(function(myNamespace) {
     myNamespace.getList();
   })
-  .config(function($provide) {
-
-    $provide.decorator('$http', function($delegate, MyCDAPDataSource) {
-
-
-      function newHttp(config) {
-        var promise,
-            myDataSrc;
-        if (config.options) {
-          // Can/Should make use of my<whatever>Api service in another service.
-          // So in that case the service will not have a scope. Hence the check
-          if (config.params && config.params.scope && angular.isObject(config.params.scope)) {
-            myDataSrc = MyCDAPDataSource(config.params.scope);
-            delete config.params.scope;
-          } else {
-            myDataSrc = MyCDAPDataSource();
-          }
-          // We can use MyCDAPDataSource directly or through $resource'y way.
-          // If we use $resource'y way then we need to make some changes to
-          // the data we get for $resource.
-          config.$isResource = true;
-          switch (config.options.type) {
-            case 'POLL':
-              promise = myDataSrc.poll(config);
-              break;
-            case 'REQUEST':
-              promise = myDataSrc.request(config);
-              break;
-            case 'POLL-STOP':
-              promise = myDataSrc.stopPoll(config);
-              break;
-          }
-          return promise;
-        } else {
-          return $delegate(config);
-        }
-      }
-
-      newHttp.get = $delegate.get;
-      newHttp.delete = $delegate.delete;
-      newHttp.save = $delegate.save;
-      newHttp.query = $delegate.query;
-      newHttp.remove = $delegate.remove;
-      newHttp.post = $delegate.post;
-      newHttp.put = $delegate.put;
-      return newHttp;
-    });
-  })
-
   .config(function($httpProvider) {
     $httpProvider.interceptors.push(function($rootScope, myHelpers) {
       return {
