@@ -94,3 +94,5 @@ jobs:
         name: Build debug files
         path: |
           **/target/rat.txt
+          **/target/cucumber-html-report/
+          **/target/cucumber-reports/
