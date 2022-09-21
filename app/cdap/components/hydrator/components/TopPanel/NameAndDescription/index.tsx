@@ -85,12 +85,7 @@ export const NameAndDescription = ({
 
   return (
     <>
-      <HydratorMetadata
-        expanded={metadataExpanded}
-        disabled={isEdit}
-        data-cy="pipeline-metadata"
-        data-testid="pipeline-metadata"
-      >
+      <HydratorMetadata expanded={metadataExpanded} disabled={isEdit}>
         <PipelineType>
           {eTLBatch && <StyledIconSVG name="icon-ETLBatch"></StyledIconSVG>}
           {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
@@ -136,7 +131,12 @@ export const NameAndDescription = ({
               </ButtonsContainer>
             </>
           ) : (
-            <div onClick={openMetadata} role="button">
+            <div
+              onClick={openMetadata}
+              role="button"
+              data-cy="pipeline-metadata"
+              data-testid="pipeline-metadata"
+            >
               <NameToolTip
                 title={invalidName ? 'Invalid Name' : name}
                 arrow
