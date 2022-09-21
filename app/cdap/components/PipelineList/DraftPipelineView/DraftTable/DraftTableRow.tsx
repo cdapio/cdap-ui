@@ -36,12 +36,18 @@ export default class DraftTableRow extends React.PureComponent<IProps> {
       true
     );
 
+    const stateParams = {
+      namespace,
+      draftId: draft.needsUpgrade ? draft.__ui__.draftId : draft.id,
+    };
+
+    if (draft.parentVersion) {
+      Object.assign(stateParams, { isEdit: true });
+    }
+
     const link = window.getHydratorUrl({
       stateName: 'hydrator.create',
-      stateParams: {
-        namespace,
-        draftId: draft.needsUpgrade ? draft.__ui__.draftId : draft.id,
-      },
+      stateParams,
     });
 
     return (

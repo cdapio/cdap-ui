@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import PipelineTableRow from 'components/PipelineList/DeployedPipelineView/PipelineTable/PipelineTableRow';
+import { PipelineTableRow } from './PipelineTableRow';
 import { connect } from 'react-redux';
 import T from 'i18n-react';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
@@ -81,6 +81,9 @@ const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refe
           <div className="grid-header">
             <div className="grid-row">
               <SortableHeader columnName="name" />
+              {lifecycleManagementEditEnabled && (
+                <strong>{T.translate(`${PREFIX}.editStatus`)}</strong>
+              )}
               <strong>{T.translate(`${PREFIX}.type`)}</strong>
               <strong>{T.translate(`${PREFIX}.status`)}</strong>
               <strong>{T.translate(`${PREFIX}.lastStartTime`)}</strong>

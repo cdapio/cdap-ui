@@ -21,6 +21,7 @@ $table-bg-color: white;
 $row-hover-color: $grey-08;
 $row-color: $grey-01;
 
+$editStatus-width: 180px;
 $type-width: 100px;
 $runs-width: 120px;
 $status-width: 150px;
@@ -50,7 +51,7 @@ $action-width: 60px;
     }
 
     .grid-row {
-      grid-template-columns: 1fr $type-width $status-width $last-start-width $next-run-width $runs-width 1fr $action-width;
+      grid-template-columns: 1fr $editStatus-width $type-width $status-width $last-start-width $next-run-width $runs-width 1fr $action-width;
 
       > div {
         padding-top: 5px;

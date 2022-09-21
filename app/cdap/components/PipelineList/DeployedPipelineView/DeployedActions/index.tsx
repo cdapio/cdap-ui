@@ -15,7 +15,10 @@
  */
 
 import * as React from 'react';
-import { deletePipeline } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
+import {
+  deleteEditDraft,
+  deletePipeline,
+} from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
@@ -28,6 +31,7 @@ import { MyScheduleApi } from 'api/schedule';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
 import downloadFile from 'services/download-file';
+import { DiscardDraftModal } from 'components/shared/DiscardDraftModal/DiscardDraftModal';
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
 
 interface IProps {
@@ -36,6 +40,7 @@ interface IProps {
   clearDeleteError: () => void;
   refetch: () => void;
   lifecycleManagementEditEnabled?: boolean;
+  draftId: string;
 }
 
 interface ITriggeredPipeline {
@@ -47,6 +52,7 @@ interface IState {
   showDeleteConfirmation: boolean;
   triggeredPipelines: ITriggeredPipeline[];
   showPopover?: boolean;
+  showDiscardConfirmation: boolean;
 }
 
 class DeployedActionsView extends React.PureComponent<IProps, IState> {
@@ -55,6 +61,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     showDeleteConfirmation: false,
     triggeredPipelines: [],
     showPopover: false,
+    showDiscardConfirmation: false,
   };
 
   private pipelineConfig = {};
@@ -205,11 +212,45 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     }
   };
 
+  private toggleDiscardConfirmation = () => {
+    this.setState({
+      showDiscardConfirmation: !this.state.showDiscardConfirmation,
+    });
+  };
+
+  private discardAndStartNewEdit = () => {
+    this.toggleDiscardConfirmation();
+    editPipeline(this.props.pipeline.name);
+  };
+
+  private handlePipelineEdit = () => {
+    if (!this.props.draftId) {
+      editPipeline(this.props.pipeline.name);
+      return;
+    }
+    this.setState({
+      showPopover: false,
+    });
+    this.toggleDiscardConfirmation();
+  };
+
+  private continueSameDraft = () => {
+    const link = window.getHydratorUrl({
+      stateName: 'hydrator.create',
+      stateParams: {
+        namespace: getCurrentNamespace(),
+        draftId: this.props.draftId,
+        isEdit: true,
+      },
+    });
+    window.location.href = link;
+  };
+
   private actions: IAction[] = this.props.lifecycleManagementEditEnabled
     ? [
         {
           label: T.translate('commons.edit'),
-          actionFn: editPipeline.bind(null, this.props.pipeline.name),
+          actionFn: this.handlePipelineEdit,
         },
         {
           label: T.translate('commons.duplicate'),
@@ -266,6 +307,12 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
         />
 
         {this.renderDeleteConfirmation()}
+        <DiscardDraftModal
+          isOpen={this.state.showDiscardConfirmation}
+          toggleModal={this.toggleDiscardConfirmation}
+          discardFn={deleteEditDraft.bind(null, this.props.draftId, this.discardAndStartNewEdit)}
+          continueFn={this.continueSameDraft}
+        />
       </div>
     );
   }

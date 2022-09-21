@@ -133,6 +133,7 @@ const EnabledCompositeTriggerRowView = ({
           confirmButtonText={T.translate(`${TRIGGER_PREFIX}.EnabledTriggers.deleteConfirm`)}
           confirmFn={handleConfirmModal}
           cancelFn={handleConfirmModalClose}
+          toggleModal={handleConfirmModalClose}
           isOpen={showDeleteModal}
           errorMessage={disableError}
           isLoading={loading}

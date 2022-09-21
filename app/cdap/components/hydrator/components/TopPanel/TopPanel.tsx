@@ -21,7 +21,6 @@ import PreviewLogs from 'components/PreviewLogs';
 import ResourceCenterButton from 'components/ResourceCenterButton';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import React, { useEffect, useReducer, useState } from 'react';
-import { GLOBALS } from 'services/global-constants';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import { ActionButtons } from './ActionButtons';
@@ -303,11 +302,16 @@ export const TopPanel = ({
     if (!isEdit) {
       return;
     }
+    const params = {
+      namespace: getCurrentNamespace(),
+      appId: state.metadata.name,
+    };
+
+    MyPipelineApi.get(params).subscribe((res) => {
+      setParentConfig(JSON.parse(res.configuration));
+    });
     const interval = setInterval(() => {
-      MyPipelineApi.get({
-        namespace: getCurrentNamespace(),
-        appId: state.metadata.name,
-      }).subscribe({
+      MyPipelineApi.get(params).subscribe({
         next(res) {
           if (res.appVersion === getParentVersion()) {
             setEditStatus('Editing in progress');
