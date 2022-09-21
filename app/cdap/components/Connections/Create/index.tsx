@@ -180,7 +180,13 @@ export function CreateConnection({
       }
 
       if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
-        setRedirectUrl(`${getConnectionPath(name)}`);
+        const value = localStorage.getItem('addConnection');
+        if (value == 'true') {
+          localStorage.removeItem('addConnection');
+          setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/${name}`);
+        } else {
+          setRedirectUrl(`${getConnectionPath(name)}`);
+        }
       }
 
       if (typeof onToggle === 'function') {
