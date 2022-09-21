@@ -33,6 +33,8 @@ export const useNestedMenuStyles = makeStyles({
     },
     '& .MuiMenu-paper': {
       width: '199px',
+      top: '145px !important',
+      maxHeight: '70% !important',
     },
     '& .MuiMenu-list': {
       color: '#5F6368',
