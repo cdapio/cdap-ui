@@ -28,6 +28,7 @@ import isNil from 'lodash/isNil';
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router';
 import PositionedSnackbar from 'components/SnackbarComponent';
+import { DATASOURCES_LABEL } from 'components/ConnectionList/Components/TabLabelCanSample/constants';
 
 const FILE_SIZE_LIMIT = 10 * 1024 * 1024; // 10 MB
 const cookie = new Cookies();
@@ -110,7 +111,14 @@ const ImportDataSet = (props) => {
     );
   };
   if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />;
+    return (
+      <Redirect
+        to={{
+          pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+          state: { from: DATASOURCES_LABEL, path: '/wrangler-grid/' },
+        }}
+      />
+    );
   }
   const componentToRender = (
     <DrawerWidget
