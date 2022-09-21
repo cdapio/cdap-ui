@@ -13,13 +13,24 @@ const DrawerWidget = (props) => {
     headerActionTemplate,
     children,
     closeClickHandler,
+    showBackIcon,
   } = props;
 
   return (
     <Drawer classes={{ paper: classes.paper }} anchor="right" open={openDrawer}>
       <Container className={classes.drawerContainerStyles} role="presentation">
         <header className={classes.headerStyles}>
-          <DrawerWidgetHeading headingText={headingText} />
+          <div className={classes.headerTextWithBackIconStyles}>
+            {showBackIcon && (
+              <img
+                onClick={closeClickHandler}
+                className={classes.headerBackIconStyles}
+                src="/cdap_assets/img/back-icon.svg"
+                alt="Back icon"
+              />
+            )}
+            <DrawerWidgetHeading headingText={headingText} />
+          </div>
           <Box className={classes.headerRightStyles}>
             {headerActionTemplate && <div>{headerActionTemplate}</div>}
             {showDivider && <div className={classes.dividerLineStyles} />}

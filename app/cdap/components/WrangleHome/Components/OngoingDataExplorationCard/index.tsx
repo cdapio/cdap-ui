@@ -18,8 +18,9 @@ import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
 import { useStyles } from './styles';
 import CustomTooltip from '../CustomTooltip';
+import { HOME_URL_PARAM } from '../OngoingDataExploration/constants';
 
-export default function OngoingDataExplorationCard({ item }) {
+export default function OngoingDataExplorationCard({ item, fromAddress }) {
   const classes = useStyles();
   const connectionNameRef: RefObject<HTMLInputElement> = createRef();
   const datasetNameRef: RefObject<HTMLInputElement> = createRef();
@@ -36,7 +37,9 @@ export default function OngoingDataExplorationCard({ item }) {
   return (
     <Grid
       container
-      className={classes.gridContainer}
+      className={
+        fromAddress === HOME_URL_PARAM ? classes.gridContainerHome : classes.gridContainerWorkspaces
+      }
       data-testid="wrangler-home-ongoing-data-exploration-card"
     >
       {item.map((eachItem, index) => {

@@ -18,7 +18,8 @@ const FunctionNameWidget = (props) => {
       </div>
       <div className={classes.functionInfoSectionStyles}>
         <span className={classes.functionTextStyles}>{functionName}</span>
-        <img className={classes.infoIconTextStyles} src="/cdap_assets/img/info.svg" alt="info" />
+        {/* Below commented code will re-direct the use to CDAP documnentation */}
+        {/* <img className={classes.infoIconTextStyles} src="/cdap_assets/img/info.svg" alt="info" /> */}
       </div>
     </section>
   );

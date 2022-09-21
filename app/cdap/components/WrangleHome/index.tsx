@@ -30,6 +30,8 @@ export default function WranglerHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const cardCount = 2;
+  localStorage.setItem('newWranglerLaunched', 'True');
+
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>

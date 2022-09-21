@@ -27,6 +27,11 @@ import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 export default function SubHeader(props) {
   const { setOpenImportDataPanel } = props;
   const classes = useStyles();
+
+  const handleAddConnection = () => {
+    localStorage.setItem('addConnection', 'true');
+  };
+
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
       <Box className={classes.box}>
@@ -39,10 +44,12 @@ export default function SubHeader(props) {
       </Box>
 
       <Box className={classes.importDataContainer}>
-        <Box className={classes.importData}>
-          <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
-        </Box>
+        <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
+          <Box onClick={handleAddConnection} className={classes.importData}>
+            <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
+            <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
+          </Box>
+        </Link>
         <Box className={classes.importData} onClick={() => setOpenImportDataPanel(true)}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>

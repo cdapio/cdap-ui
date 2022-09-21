@@ -127,7 +127,7 @@ const OngoingDataExploration = ({ cardCount, fromAddress }: ICardCount) => {
             }}
             style={{ textDecoration: 'none' }}
           >
-            <OngoingDataExplorationCard item={item} key={index} />
+            <OngoingDataExplorationCard item={item} key={index} fromAddress={fromAddress} />
           </Link>
         );
       })}
