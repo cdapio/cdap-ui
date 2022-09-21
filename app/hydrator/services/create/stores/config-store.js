@@ -60,6 +60,7 @@ class HydratorPlusPlusConfigStore {
     this.hydratorPlusPlusConfigDispatcher.register('onDeletePostAction', this.deletePostAction.bind(this));
     this.hydratorPlusPlusConfigDispatcher.register('onSetMaxConcurrentRuns', this.setMaxConcurrentRuns.bind(this));
     this.hydratorPlusPlusConfigDispatcher.register('onPublishPipeline', this.publishPipeline.bind(this));
+    this.hydratorPlusPlusConfigDispatcher.register('onSetChangeSummary', this.setChangeSummary.bind(this));
   }
   registerOnChangeListener(callback) {
     // index of the listener to be removed while un-subscribing
@@ -84,6 +85,10 @@ class HydratorPlusPlusConfigStore {
       },
       description: '',
       name: '',
+      changeSummary: {
+        description: '',
+      },
+      parentVersion: '',
     };
     Object.assign(this.state, { config: this.getDefaultConfig() });
 
@@ -202,7 +207,7 @@ class HydratorPlusPlusConfigStore {
           _backendProperties: node._backendProperties,
         },
         information: node.information,
-        outputSchema: node.outputSchema,
+        outputSchema: angular.isArray(node.outputSchema) ? node.outputSchema[0].schema : node.outputSchema,
         inputSchema: node.inputSchema
       };
 
@@ -1118,6 +1123,21 @@ class HydratorPlusPlusConfigStore {
     return this.getState().config.serviceAccountPath;
   }
 
+  setChangeSummary(changeSummaryDesc) {
+    this.state.changeSummary.description = changeSummaryDesc;
+    this.emitChange();
+  }
+  getChangeSummary() {
+    return this.getState().changeSummary.description;
+  }
+
+  setParentVersion(parentVersion) {
+    this.state.parentVersion = parentVersion;
+  }
+  getParentVersion() {
+    return this.getState().parentVersion;
+  }
+
   setForceDynamicExecution(forceDynamicExecution) {
     const keysToClear = [
       window.CaskCommon.PipelineConfigConstants.SPARK_DYNAMIC_ALLOCATION,
@@ -1218,7 +1238,7 @@ class HydratorPlusPlusConfigStore {
         });
   }
 
-  publishPipeline() {
+  publishPipeline(isEdit) {
     this.HydratorPlusPlusConsoleActions.resetMessages();
     let error = this.validateState({
       showConsoleMessage: true
@@ -1308,16 +1328,22 @@ class HydratorPlusPlusConfigStore {
       .list({ namespace: this.$state.params.namespace })
       .$promise
       .then( (apps) => {
-        var appNames = apps.map( (app) => { return app.name; } );
-
-        if (appNames.indexOf(config.name) !== -1) {
-          this.HydratorPlusPlusConsoleActions.addMessage([{
-            type: 'error',
-            content: this.GLOBALS.en.hydrator.studio.error['NAME-ALREADY-EXISTS']
-          }]);
-          this.EventPipe.emit('hideLoadingIcon.immediate');
-        } else {
+        if (isEdit) {
           publish(config.name);
+        } else {
+          var appNames = apps.map( (app) => { return app.name; } );
+          if (appNames.indexOf(config.name) !== -1) {
+            this.HydratorPlusPlusConsoleActions.addMessage([{
+              type: 'error',
+              content: this.GLOBALS.en.hydrator.studio.error['NAME-ALREADY-EXISTS']
+            }]);
+            this.EventPipe.emit('hideLoadingIcon.immediate');
+          } else {
+            // normal deployment does not need these fields
+            delete config.changeSummary;
+            delete config.parentVersion;
+            publish(config.name);
+          }
         }
       });
   }

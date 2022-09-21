@@ -28,6 +28,7 @@ import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 interface IProps {
   pipeline: IPipeline;
   refetch: () => void;
+  lifecycleManagementEditEnabled?: boolean;
 }
 
 const PREFIX = 'features.PipelineList';
@@ -56,7 +57,11 @@ export default class PipelineTableRow extends React.PureComponent<IProps> {
         <NextRun pipeline={pipeline} />
         <RunsCount pipeline={pipeline} />
         <PipelineTags pipeline={pipeline} />
-        <DeployedActions pipeline={pipeline} refetch={this.props.refetch} />
+        <DeployedActions
+          pipeline={pipeline}
+          refetch={this.props.refetch}
+          lifecycleManagementEditEnabled={this.props.lifecycleManagementEditEnabled}
+        />
       </a>
     );
   }

@@ -110,12 +110,15 @@ class HydratorPlusPlusTopPanelCtrl {
     );
     this.getPostActions = this.getPostActions.bind(this);
     this.applyAndRunPipeline = this.applyAndRunPipeline.bind(this);
+    this.saveChangeSummary = this.saveChangeSummary.bind(this);
     this.applyBatchConfigFromReactStore = this.applyBatchConfigFromReactStore.bind(this);
     this.applyRealtimeConfigFromReactStore = this.applyRealtimeConfigFromReactStore.bind(this);
     this.validatePluginProperties = this.validatePluginProperties.bind(this);
     this.getRuntimeArgumentsV2 = this.getRuntimeArgumentsV2.bind(this);
     this.getStoreConfig = this.getStoreConfig.bind(this);
     this.getScheduleInfo = this.getScheduleInfo.bind(this);
+    this.getConfigForExport = this.getConfigForExport.bind(this);
+    this.getParentVersion = this.getParentVersion.bind(this);
 
     this.setState();
     this.setActiveNodes();
@@ -134,6 +137,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.showSchedule =
       this.state.artifact.name === this.GLOBALS.etlDataPipeline &&
       themeShowSchedule;
+    this.isEdit = this.$stateParams.isEdit ? this.$stateParams.isEdit === "true" : false;
 
     if ($stateParams.isClone) {
       this.openMetadata();
@@ -305,14 +309,18 @@ class HydratorPlusPlusTopPanelCtrl {
         this.myAlertOnValium.show({
           type: "danger",
           content:
-            typeof err === "object"
-              ? JSON.stringify(err)
-              : "Updating pipeline failed: " + err,
+            typeof err === "object" ? 
+              JSON.stringify(err) : 
+              "Updating pipeline failed: " + err,
         });
       });
     } else {
       applyAndRun.call(this);
     }
+  }
+
+  saveChangeSummary(changeSummary) {
+    this.HydratorPlusPlusConfigStore.setChangeSummary(changeSummary);
   }
 
   applyBatchConfigFromReactStore(
@@ -397,7 +405,15 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 
   getStoreConfig() {
-    return this.HydratorPlusPlusConfigStore.state.config
+    return this.HydratorPlusPlusConfigStore.state.config;
+  }
+
+  getConfigForExport() {
+    return this.HydratorPlusPlusConfigStore.getConfigForExport();
+  }
+
+  getParentVersion() {
+    return this.HydratorPlusPlusConfigStore.getParentVersion();
   }
 
   validatePluginProperties(action, errorCb) {
@@ -555,15 +571,6 @@ class HydratorPlusPlusTopPanelCtrl {
   onClickLogs() {
     this.viewLogs = !this.viewLogs;
   }
-  onSaveDraftV2() {
-    this.HydratorPlusPlusConfigActions.saveAsDraft();
-    this.checkNameError();
-    this.$window.localStorage.setItem('LastDraftId', this.HydratorPlusPlusConfigStore.getDraftId());
-    this.$window.localStorage.setItem('LastPreviewId', this.currentPreviewId);
-  }
-  onClickLogs() {
-    this.viewLogs = !this.viewLogs;
-  }
   checkNameError() {
     let messages = this.consoleStore.getMessages() || [];
     let filteredMessages = messages.filter((message) => {
@@ -576,8 +583,8 @@ class HydratorPlusPlusTopPanelCtrl {
     this.HydratorPlusPlusConfigActions.publishPipeline();
     this.checkNameError();
   }
-  onPublishV2() {
-    this.HydratorPlusPlusConfigActions.publishPipeline();
+  onPublishV2(isEdit = false) {
+    this.HydratorPlusPlusConfigActions.publishPipeline(isEdit);
     this.checkNameError();
   }
   showSettings() {
@@ -1040,13 +1047,6 @@ class HydratorPlusPlusTopPanelCtrl {
 
   toggleConfigV2() {
     this.getRuntimeArguments().then(() => {
-      this.viewConfig = !this.viewConfig;
-    });
-  }
-
-  toggleConfigV2() {
-    this.getRuntimeArguments()
-    .then(() => {
       this.viewConfig = !this.viewConfig;
     });
   }
@@ -1563,5 +1563,5 @@ class HydratorPlusPlusTopPanelCtrl {
   }
 }
 
-angular.module(PKG.name + '.feature.hydrator')
-  .controller('HydratorPlusPlusTopPanelCtrl', HydratorPlusPlusTopPanelCtrl);
+angular.module(PKG.name + ".feature.hydrator")
+  .controller("HydratorPlusPlusTopPanelCtrl", HydratorPlusPlusTopPanelCtrl);

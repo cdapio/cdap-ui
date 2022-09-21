@@ -19,7 +19,7 @@ import { deletePipeline } from 'components/PipelineList/DeployedPipelineView/sto
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
-import { duplicatePipeline, getPipelineConfig } from 'services/PipelineUtils';
+import { duplicatePipeline, editPipeline, getPipelineConfig } from 'services/PipelineUtils';
 import PipelineExportModal from 'components/PipelineExportModal';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { connect } from 'react-redux';
@@ -35,6 +35,7 @@ interface IProps {
   deleteError?: string;
   clearDeleteError: () => void;
   refetch: () => void;
+  lifecycleManagementEditEnabled?: boolean;
 }
 
 interface ITriggeredPipeline {
@@ -204,24 +205,47 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     }
   };
 
-  private actions: IAction[] = [
-    {
-      label: T.translate('commons.duplicate'),
-      actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
-    },
-    {
-      label: T.translate('commons.export'),
-      actionFn: this.handlePipelineExport,
-    },
-    {
-      label: 'separator',
-    },
-    {
-      label: T.translate('commons.delete'),
-      actionFn: this.showDeleteConfirmation,
-      className: 'delete',
-    },
-  ];
+  private actions: IAction[] = this.props.lifecycleManagementEditEnabled
+    ? [
+        {
+          label: T.translate('commons.edit'),
+          actionFn: editPipeline.bind(null, this.props.pipeline.name),
+        },
+        {
+          label: T.translate('commons.duplicate'),
+          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
+        },
+        {
+          label: T.translate('commons.export'),
+          actionFn: this.handlePipelineExport,
+        },
+        {
+          label: 'separator',
+        },
+        {
+          label: T.translate('commons.delete'),
+          actionFn: this.showDeleteConfirmation,
+          className: 'delete',
+        },
+      ]
+    : [
+        {
+          label: T.translate('commons.duplicate'),
+          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
+        },
+        {
+          label: T.translate('commons.export'),
+          actionFn: this.handlePipelineExport,
+        },
+        {
+          label: 'separator',
+        },
+        {
+          label: T.translate('commons.delete'),
+          actionFn: this.showDeleteConfirmation,
+          className: 'delete',
+        },
+      ];
 
   public render() {
     return (

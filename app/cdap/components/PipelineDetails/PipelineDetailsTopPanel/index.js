@@ -25,6 +25,7 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import PlusButton from 'components/shared/PlusButton';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 require('./PipelineDetailsTopPanel.scss');
 
@@ -68,14 +69,16 @@ export default class PipelineDetailsTopPanel extends Component {
   }
   render() {
     return (
-      <Provider store={PipelineDetailStore}>
-        <div className="pipeline-details-top-panel">
-          <PipelineDetailsMetadata />
-          <ConnectedPipelineDetailsButtons />
-          <PipelineDetailsDetailsActions />
-          <PlusButton mode={PlusButton.MODE.resourcecenter} />
-        </div>
-      </Provider>
+      <FeatureProvider>
+        <Provider store={PipelineDetailStore}>
+          <div className="pipeline-details-top-panel">
+            <PipelineDetailsMetadata />
+            <ConnectedPipelineDetailsButtons />
+            <PipelineDetailsDetailsActions />
+            <PlusButton mode={PlusButton.MODE.resourcecenter} />
+          </div>
+        </Provider>
+      </FeatureProvider>
     );
   }
 }

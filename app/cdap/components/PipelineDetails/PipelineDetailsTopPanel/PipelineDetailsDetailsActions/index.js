@@ -18,6 +18,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PipelineDetailsActionsButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsDetailsActions/PipelineDetailsActionsButton';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+
 require('./PipelineDetailsDetailsActions.scss');
 
 const mapDetailsStateToProps = (state) => {
@@ -26,10 +28,21 @@ const mapDetailsStateToProps = (state) => {
     description: state.description,
     artifact: state.artifact,
     config: state.config,
+    version: state.version,
   };
 };
 
-const PipelineDetailsDetailsActions = ({ pipelineName, description, artifact, config }) => {
+const PipelineDetailsDetailsActions = ({
+  pipelineName,
+  description,
+  artifact,
+  config,
+  version,
+}) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+
   return (
     <div className="pipeline-details-buttons pipeline-details-details-actions">
       <PipelineDetailsActionsButton
@@ -37,6 +50,8 @@ const PipelineDetailsDetailsActions = ({ pipelineName, description, artifact, co
         description={description}
         artifact={artifact}
         config={config}
+        version={version}
+        lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
       />
     </div>
   );
@@ -47,6 +62,7 @@ PipelineDetailsDetailsActions.propTypes = {
   description: PropTypes.string,
   artifact: PropTypes.object,
   config: PropTypes.object,
+  version: PropTypes.string,
 };
 
 const ConnectedPipelineDetailsDetailsActions = connect(mapDetailsStateToProps)(

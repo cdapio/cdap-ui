@@ -25,7 +25,7 @@ import PipelineExportModal from 'components/PipelineExportModal';
 import TriggeredPipelineStore from 'components/TriggeredPipelines/store/TriggeredPipelineStore';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import { duplicatePipeline } from 'services/PipelineUtils';
+import { duplicatePipeline, editPipeline } from 'services/PipelineUtils';
 import cloneDeep from 'lodash/cloneDeep';
 import downloadFile from 'services/download-file';
 import { santizeStringForHTMLID } from 'services/helpers';
@@ -63,6 +63,8 @@ export default class PipelineDetailsActionsButton extends Component {
     description: PropTypes.string,
     artifact: PropTypes.object,
     config: PropTypes.object,
+    version: PropTypes.string,
+    lifecycleManagementEditEnabled: PropTypes.bool,
   };
 
   state = {
@@ -89,10 +91,15 @@ export default class PipelineDetailsActionsButton extends Component {
     description: this.props.description,
     artifact: this.props.artifact,
     config: cloneDeep(this.props.config), // currently doing a cloneDeep because angular is mutating this state...
+    version: this.props.version,
   };
 
   duplicateConfigAndNavigate = () => {
     duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+  };
+
+  editConfigAndNavigate = () => {
+    editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
   };
 
   deletePipeline = () => {
@@ -250,6 +257,9 @@ export default class PipelineDetailsActionsButton extends Component {
           onTogglePopover={this.togglePopover}
         >
           <ul>
+            {this.props.lifecycleManagementEditEnabled && (
+              <li onClick={this.editConfigAndNavigate}>{T.translate(`${PREFIX}.edit`)}</li>
+            )}
             <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
             <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>
             <hr />

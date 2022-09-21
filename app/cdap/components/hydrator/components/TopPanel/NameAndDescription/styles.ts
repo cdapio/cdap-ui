@@ -91,7 +91,7 @@ export const MetadataLeft = styled.div`
 `;
 
 export const HydratorMetadata = styled.div`
-  width: calc(100vw - 805px);
+  width: calc(80vw - 700px);
   flex-wrap: wrap;
   display: flex;
   background-color: transparent;
@@ -107,6 +107,11 @@ export const HydratorMetadata = styled.div`
     width: calc(100% - 70px);
     position: absolute;
     box-shadow: 0 7px 7px rgb(0 0 0 / 10%), 0 19px 59px rgb(0 0 0 / 20%);`}
+
+  ${({ disabled }) =>
+    disabled &&
+    `pointer-events: none;
+    opacity: 0.7;`}
 `;
 
 export const NameTextField = styled(TextField)`
@@ -121,4 +126,13 @@ export const DescriptionTextField = styled(TextField)`
   width: 100%;
   max-width: 100%;
   margin: 12px 0 15px 0;
+`;
+
+export const EditStatus = styled.div`
+  width: calc(20vw - 110px);
+  flex-wrap: wrap;
+  display: flex;
+  background-color: transparent;
+  padding-top: 10px;
+  box-shadow: none;
 `;

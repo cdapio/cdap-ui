@@ -83,7 +83,7 @@ angular.module(PKG.name + '.feature.hydrator')
         }
       })
         .state('hydrator.create', {
-          url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId',
+          url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId&isEdit',
           onEnter: function() {
             document.title = `${productName} | Studio`;
           },
