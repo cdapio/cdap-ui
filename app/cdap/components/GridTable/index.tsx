@@ -352,7 +352,7 @@ export default function GridTable() {
         />
       )}
       {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
-        <Table aria-label="simple table" className="test">
+        <Table aria-label="simple table" className="test" data-testid="grid-table">
           <TableHead>
             <TableRow>
               {headers.map((eachHeader) => (

@@ -69,7 +69,7 @@ export const useStyles = makeStyles({
     fontSize: '14px',
   },
   breadCrumbTyporgraphy: {
-    color: '#000000',
+    color: '#212121',
     fontSize: '14px',
     lineHeight: '21px',
   },
