@@ -23,6 +23,7 @@ export const useStyles = makeStyles({
     height: '48px',
     marginTop: '0px',
     padding: '10px',
+    paddingLeft: '18px',
   },
   container: {
     display: 'flex',

@@ -345,7 +345,6 @@ export default function GridTable() {
             applyDirective(optionSelected, selectedColumn, value);
           }}
           callBack={(response) => {
-            setGridData(response);
             setColumnSelected('');
             setDirectiveFunction('');
           }}
