@@ -44,10 +44,6 @@ export interface IHeaderNamesList {
   type: string[];
 }
 
-export interface IDataTypeOfColumns {
-  [key: string]: string;
-}
-
-export interface IDataOfStatistics {
+export interface IObject {
   [key: string]: string;
 }
