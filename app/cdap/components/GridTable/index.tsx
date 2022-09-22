@@ -145,7 +145,7 @@ export default function GridTable() {
       const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
-          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          label: vKey == 'general' ? 'Missing/Null' : '',
           count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
         });
       }),
