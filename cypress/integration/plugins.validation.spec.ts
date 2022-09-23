@@ -59,6 +59,7 @@ const ERROR_BOUNDARY_COLOR = 'rgb(164, 4, 3)';
 const VALIDATE_BTN_SELECTOR = 'plugin-properties-validate-btn';
 const WIDGET_WRAPPER_SELECTOR = 'widget-wrapper-container';
 const REFERENCE_NAME_PROP_SELECTOR = 'referenceName';
+const DATASET_PROP_SELECTOR = 'dataset';
 const GET_SCHEMA_BTN_SELECTOR = 'get-schema-btn';
 
 let headers = {};
@@ -94,18 +95,13 @@ describe('Plugin properties', () => {
     // Testing for errors found
     cy.get(dataCy(VALIDATE_BTN_SELECTOR)).click();
     cy.get(dataCy('plugin-properties-errors-found')).should('have.text', '2 errors found.');
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
-      'have.css',
-      'border-color',
-      ERROR_BOUNDARY_COLOR
-    );
     // Testing if the widget is highlighted when there is an error
     // and the error text
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} ~ ${dataCy('property-row-error')}`).should(
+    cy.get(`${dataCy(DATASET_PROP_SELECTOR)} ~ ${dataCy('property-row-error')}`).should(
       'have.text',
-      "Required property 'referenceName' has no value."
+      "Required property 'dataset' has no value."
     );
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
+    cy.get(`${dataCy(DATASET_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
       'have.css',
       'border-color',
       ERROR_BOUNDARY_COLOR
