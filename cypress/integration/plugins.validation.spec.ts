@@ -93,7 +93,7 @@ describe('Plugin properties', () => {
 
     // Testing for errors found
     cy.get(dataCy(VALIDATE_BTN_SELECTOR)).click();
-    cy.get(dataCy('plugin-properties-errors-found')).should('have.text', '3 errors found.');
+    cy.get(dataCy('plugin-properties-errors-found')).should('have.text', '2 errors found.');
     cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
       'have.css',
       'border-color',

@@ -206,7 +206,7 @@ describe('Pipeline Studio', () => {
     cy.add_node_to_canvas(sourceNode);
 
     cy.get(dataCy('plugin-node-BigQueryTable-batchsource-0')).within(() => {
-      cy.get(dataCy('node-error-count')).should('have.text', '3');
+      cy.get(dataCy('node-error-count')).should('have.text', '2');
     });
   });
 
