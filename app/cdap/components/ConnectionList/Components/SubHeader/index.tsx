@@ -25,7 +25,7 @@ import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOut
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
 import { ADD_CONNECTION_LABEL, IMPORT_DATA_LABEL } from './constants';
 
-export default function SubHeader() {
+export default function() {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
@@ -34,18 +34,18 @@ export default function SubHeader() {
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             Home
           </Link>
-          <Typography className={classes.breadCrumbTyporgraphy}>Data Sources</Typography>
+          <Typography className={classes.breadcrumbTyporgraphy}>Data Sources</Typography>
         </Breadcrumbs>
       </Box>
 
       <Box className={classes.importDataContainer}>
         <Box className={classes.importData}>
           <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>{ADD_CONNECTION_LABEL}</Box>
+          <Box className={classes.breadcrumbTyporgraphy}>{ADD_CONNECTION_LABEL}</Box>
         </Box>
         <Box className={classes.importData}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>{IMPORT_DATA_LABEL}</Box>
+          <Box className={classes.breadcrumbTyporgraphy}>{IMPORT_DATA_LABEL}</Box>
         </Box>
       </Box>
     </Box>
