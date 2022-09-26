@@ -232,10 +232,9 @@ angular
    * attached to the <body> tag, mostly responsible for
    *  setting the className based events from $state and caskTheme
    */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers) {
+  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
-    var dataSource = new MyCDAPDataSource($scope);
     getVersion();
     $rootScope.stores = window.ReactStores;
     this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
@@ -271,17 +270,20 @@ angular
     $scope.copyrightYear = new Date().getFullYear();
 
     function getVersion() {
-      dataSource.request({
-        _cdapPath: '/version'
+      $http({
+        method: 'GET',
+        url: '/api/v3/version'
       })
         .then(function(res) {
-          $scope.version = res.version;
+          var data = res.data;
+
+          $scope.version = data.version;
           $rootScope.cdapVersion = $scope.version;
 
           window.CaskCommon.VersionStore.dispatch({
             type: window.CaskCommon.VersionActions.updateVersion,
             payload: {
-              version: res.version
+              version: data.version
             }
           });
         });
