@@ -182,14 +182,14 @@ export default class ConfigModelessActionButtons extends Component<
             <>
               <ConfigModelessSaveBtn
                 saveConfig={this.closeModelessAndRunStudio}
-                saveLoading={this.props.isLatest === 'true' ? this.state.saveLoading : true}
+                saveLoading={this.state.saveAndRunLoading}
                 buttonLabel={'saveAndRun'}
                 className={'btn btn-primary'}
                 dataCy={'preview-configure-run-btn'}
               />
               <ConfigModelessSaveBtn
                 saveConfig={this.saveConfig}
-                saveLoading={this.props.isLatest === 'true' ? this.state.saveLoading : true}
+                saveLoading={this.state.saveLoading}
                 buttonLabel={'save'}
                 className={'btn btn-secondary'}
                 dataTestId="config-apply-close"
