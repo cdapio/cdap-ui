@@ -14,36 +14,7 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
-
-export interface IRecords {
-  [key: string]: string;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
-
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
-
-export interface IObject {
-  [key: string]: string;
-}
+export const VIEW_ALL_LABEL = 'View all';
+export const DATA_EXPLORATION_TITLE =
+  'Continue ongoing data explorations, pick up where you left off';
+export const CONNECTORS_TITLE = 'Start data exploration';
