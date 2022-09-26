@@ -14,7 +14,7 @@
  * the License.
  */
 
-export const MATCH_SOURCE = 'Workspaces';
-export const HOME_URL_PARAM = 'home';
-export const DATASOURCES_URL_PARAM = 'datasources';
-export const HOME_LABLE = 'Home';
+export const VIEW_ALL_LABEL = 'View all';
+export const DATA_EXPLORATION_TITLE =
+  'Continue ongoing data explorations, pick up where you left off';
+export const CONNECTORS_TITLE = 'Start data exploration';
