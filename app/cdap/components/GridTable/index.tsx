@@ -30,14 +30,7 @@ import GridTextCell from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { useLocation } from 'react-router';
-import {
-  IExecuteAPIResponse,
-  IRecords,
-  IParams,
-  IHeaderNamesList,
-  IDataOfStatistics,
-  IDataTypeOfColumns,
-} from './types';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList, IObject } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
 import GridKPICell from './components/GridKPICell';
@@ -143,7 +136,7 @@ export default function GridTable() {
     }
   };
 
-  const createMissingData = (statistics: IDataOfStatistics) => {
+  const createMissingData = (statistics: IObject) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -151,7 +144,7 @@ export default function GridTable() {
       const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
-          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          label: vKey == 'general' ? 'Missing/Null' : '',
           count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
         });
       }),

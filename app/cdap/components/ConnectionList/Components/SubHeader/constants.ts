@@ -14,36 +14,5 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
-
-export interface IRecords {
-  [key: string]: string;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
-
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
-
-export interface IObject {
-  [key: string]: string;
-}
+export const ADD_CONNECTION_LABEL = 'Add connection';
+export const IMPORT_DATA_LABEL = 'Import data';
