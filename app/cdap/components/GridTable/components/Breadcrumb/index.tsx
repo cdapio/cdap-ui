@@ -21,7 +21,7 @@ import { useStyles } from './styles';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
-import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants';
+import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM, HOME_LABLE } from './constants';
 
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
@@ -38,7 +38,7 @@ const BreadCrumb = ({ datasetName, location }) => {
           to={`/ns/${getCurrentNamespace()}/home`}
           data-testid="breadcrumb-home-text"
         >
-          Home
+          {HOME_LABLE}
         </Link>
         <Link color="inherit" to={`/ns/${getCurrentNamespace()}/${sourcePath}`}>
           {location.state.from}
