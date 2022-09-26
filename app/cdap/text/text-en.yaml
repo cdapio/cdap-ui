@@ -10,6 +10,7 @@ commons:
   clickhere: click here
   close: Close
   delete: Delete
+  deprecated: Deprecated
   descriptionLabel: Description
   doneLabel: Done
   duplicate: Duplicate
@@ -194,7 +195,7 @@ features:
         allocation: Allocation
       NewRequests:
         newRequestsHeader: New requests
-        noNewRequests: There are no new requests 
+        noNewRequests: There are no new requests
       CreateRequest:
         createRequestButton: CREATE NEW REQUEST
         headerTitle: Create new tethering request
@@ -209,7 +210,7 @@ features:
           title: Tethered Namespaces
           description: Select the namespaces that will be tethered to the cloud instance
           noNamespaces: There are no available namespaces
-          Name: 
+          Name:
             name: namespace
             label: Name
           CpuLimit:
@@ -220,7 +221,7 @@ features:
             label: Memory (GB)
         CDFInformation:
           title: CDF Information
-          ProjectName: 
+          ProjectName:
             name: projectName
             label: Project Name
             placeholder: Specify the Google Cloud project name
@@ -2301,11 +2302,11 @@ features:
       status: Status
       close: Close
       loading: Loading
-  ApiError:    
+  ApiError:
     CmekError:
       mainTitle: CMEK Key Revoked
       secondaryTitle: Instance is unusable because the CMEK key for this instance has been revoked.
-      suggestionPart1: View the  
+      suggestionPart1: View the
       suggestionPart2: troubleshooting
       suggestionPart3: page
   Pagination:
