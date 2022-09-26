@@ -27,7 +27,7 @@ import { IResponseData } from './types';
 import { HOME_URL_PARAM, WORKSPACES_LABEL } from './constants';
 
 const OngoingDataExploration = (props) => {
-  const [ongoingExpDatas, setOngoingExpDatas] = useState<any>([]);
+  const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
 
   const getOngoingData = () => {
