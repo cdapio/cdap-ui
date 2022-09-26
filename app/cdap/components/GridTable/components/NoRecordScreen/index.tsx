@@ -21,7 +21,7 @@ import { Box } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { MAIN_HEADER_TEXT, SUB_HEADER_TEXT } from './constants';
 
-export default function () {
+export default function() {
   const classes = useStyles();
   return (
     <Box className={classes.noRecordWrapper}>
@@ -32,4 +32,4 @@ export default function () {
       </Box>
     </Box>
   );
-};
+}
