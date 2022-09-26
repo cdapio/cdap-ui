@@ -83,7 +83,6 @@ const PaginationContainer = styled.div`
 `;
 
 const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
-  const [totalVersions, setTotalVersions] = useState(0);
   const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
   const [isRestoreLoading, setIsRestoreLoading] = useState(false);
 
@@ -98,20 +97,6 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       namespace: getCurrentNamespace(),
     },
   });
-
-  useEffect(() => {
-    MyPipelineApi.getAppVersions({
-      namespace: getCurrentNamespace(),
-      appId: pipelineName,
-    }).subscribe({
-      next(res) {
-        setTotalVersions(res.length);
-      },
-      error(err) {
-        console.log(err);
-      },
-    });
-  }, []);
 
   const Pagination = ({}) => {
     const { prevDisabled, nextDisabled, pageLimit, pageCount, pageIndex } = useSelector(

@@ -30,6 +30,7 @@ import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemo
 import introspectionQueryResultData from '../../../../../../graphql/fragments/fragmentTypes.json';
 import Cookies from 'universal-cookie';
 import SessionTokenStore from 'services/SessionTokenStore';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const cookie = new Cookies();
 const fragmentMatcher = new IntrospectionFragmentMatcher({
@@ -117,7 +118,10 @@ export default function PipelineDetailsButtons({
   stopError,
   changeSummary,
 }) {
-  const isLatest = changeSummary.isLatest;
+  const isLatest = changeSummary ? changeSummary.isLatest : 'true';
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return (
     <ApolloProvider client={client}>
       <Provider store={PipelineConfigurationsStore}>
@@ -154,7 +158,7 @@ export default function PipelineDetailsButtons({
             isLatest={isLatest}
           />
           <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-          <PipelineHistoryButton pipelineName={pipelineName} />
+          {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
         </div>
       </Provider>
     </ApolloProvider>
