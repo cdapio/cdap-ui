@@ -25,7 +25,7 @@ import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
 import { CONNECTORS_TITLE, DATA_EXPLORATION_TITLE, VIEW_ALL_LABEL } from './constants';
 
-export default function WranglerHome() {
+export default function() {
   const classes = useStyles();
 
   return (
