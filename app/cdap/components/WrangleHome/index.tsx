@@ -23,6 +23,7 @@ import { WrangleCard } from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
+import { CONNECTORS_TITLE, DATA_EXPLORATION_TITLE, VIEW_ALL_LABEL } from './constants';
 
 export default function WranglerHome() {
   const classes = useStyles();
@@ -40,13 +41,13 @@ export default function WranglerHome() {
 
       <Box>
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View all</Box>
+          <WrangleHomeTitle title={CONNECTORS_TITLE} />
+          <Box className={classes.viewMore}>{VIEW_ALL_LABEL}</Box>
         </Box>
         <WrangleCard />
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View all</Box>
+          <WrangleHomeTitle title={DATA_EXPLORATION_TITLE} />
+          <Box className={classes.viewMore}>{VIEW_ALL_LABEL}</Box>
         </Box>
         <OngoingDataExploration />
       </Box>

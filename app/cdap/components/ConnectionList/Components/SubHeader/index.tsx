@@ -23,6 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
+import { ADD_CONNECTION_LABEL, IMPORT_DATA_LABEL } from './constants';
 
 export default function SubHeader() {
   const classes = useStyles();
@@ -40,11 +41,11 @@ export default function SubHeader() {
       <Box className={classes.importDataContainer}>
         <Box className={classes.importData}>
           <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
+          <Box className={classes.breadCrumbTyporgraphy}>{ADD_CONNECTION_LABEL}</Box>
         </Box>
         <Box className={classes.importData}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
+          <Box className={classes.breadCrumbTyporgraphy}>{IMPORT_DATA_LABEL}</Box>
         </Box>
       </Box>
     </Box>
