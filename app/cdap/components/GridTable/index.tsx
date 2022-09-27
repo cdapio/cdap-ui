@@ -37,7 +37,7 @@ import GridKPICell from './components/GridKPICell';
 import NoDataScreen from './components/NoRecordScreen';
 import ParsingDrawer from 'components/ParsingDrawer';
 
-export default function GridTable() {
+export default function() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
