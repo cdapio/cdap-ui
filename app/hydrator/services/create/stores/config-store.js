@@ -1262,7 +1262,7 @@ class HydratorPlusPlusConfigStore {
     };
 
     const removeOldDraft = (draftId, adapterName, res) => {
-      if (res.statusCode !== 404) {
+      if (res.status !== 404) {
         return draftDeleteErrorHandler.bind(this, res.response || res.data);
       }
       this.mySettings.get('hydratorDrafts', true)
