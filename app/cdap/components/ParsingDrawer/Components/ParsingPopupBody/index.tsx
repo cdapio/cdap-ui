@@ -42,7 +42,7 @@ export default function(props) {
 
   return (
     <Box>
-      <Box className={[classes.formFieldWrapperStyles, classes.marginBottomStyles].join(' ')}>
+      <Box className={`${classes.formFieldWrapperStyles} ${classes.marginBottomStyles}`}>
         <InputLabel id="label" className={classes.labelTextStyles}>
           {FORMAT}
         </InputLabel>
@@ -61,7 +61,7 @@ export default function(props) {
         />
       </Box>
 
-      <Box className={[classes.formFieldWrapperStyles, classes.marginBottomStyles].join(' ')}>
+      <Box className={`${classes.formFieldWrapperStyles} ${classes.marginBottomStyles}`}>
         <InputLabel id="label" className={classes.labelTextStyles}>
           {ENCODING}
         </InputLabel>

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState, MouseEvent } from 'react';
 import Box from '@material-ui/core/Box';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Button } from '@material-ui/core';
@@ -23,7 +23,7 @@ import ParsingPopupBody from './Components/ParsingPopupBody';
 import DrawerWidget from 'components/DrawerWidget';
 import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
 
-const ParsingDrawer = (props) => {
+export default function(props) {
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [formatValue, setFormatValue] = useState();
   const [encodingValue, setEncodingValue] = useState();
@@ -39,26 +39,26 @@ const ParsingDrawer = (props) => {
     setDrawerStatus(false);
   };
 
-  const handleFormatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as any;
     setFormatValue(value);
   };
 
-  const handleEncodingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleEncodingChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as any;
     setEncodingValue(value);
   };
 
-  const handleQuoteValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuoteValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuotedValuesChecked(event.target.checked);
   };
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     setHeaderValueChecked(event.target.checked);
   };
 
-  const handleApply = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // do nothing
+  const handleApply = (event: MouseEvent<HTMLButtonElement>) => {
+    // This function will be utilized when this code gets merged with subsequent PR
   };
 
   const componentToRender = (
@@ -91,7 +91,7 @@ const ParsingDrawer = (props) => {
             color="primary"
             classes={{ containedPrimary: classes.buttonStyles }}
             className={classes.applyButtonStyles}
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleApply(e)}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => handleApply(e)}
           >
             {APPLY_BUTTON}
           </Button>
@@ -101,6 +101,4 @@ const ParsingDrawer = (props) => {
   );
 
   return drawerStatus && componentToRender;
-};
-
-export default ParsingDrawer;
+}
