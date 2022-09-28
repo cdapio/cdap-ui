@@ -41,7 +41,7 @@ interface IConfigModelessActionButtonsProps {
   applyBatchConfig?: (...args) => void;
   applyRealtimeConfig?: (...args) => void;
   pipelineType?: string;
-  isLatest?: string;
+  isLatestVersion?: boolean;
 }
 
 export default class ConfigModelessActionButtons extends Component<
@@ -172,7 +172,7 @@ export default class ConfigModelessActionButtons extends Component<
           {!this.props.isHistoricalRun && !this.props.isPreview ? (
             <ConfigModelessSaveBtn
               saveConfig={this.saveConfig}
-              saveLoading={this.props.isLatest === 'true' ? this.state.saveLoading : true}
+              saveLoading={this.props.isLatestVersion !== false ? this.state.saveLoading : true}
               buttonLabel={'save'}
               className={'btn btn-primary'}
               dataTestId="config-apply-close"

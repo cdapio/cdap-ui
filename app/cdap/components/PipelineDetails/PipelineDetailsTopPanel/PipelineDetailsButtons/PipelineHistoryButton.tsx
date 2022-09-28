@@ -15,16 +15,11 @@
  */
 
 import { Button } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useRef, useState } from 'react';
 import classnames from 'classnames';
 import PipelineHistoryOuter from 'components/PipelineHistory/PipelineHistory';
 import HistoryIcon from '@material-ui/icons/History';
 import T from 'i18n-react';
-import { ApolloClient, gql, InMemoryCache } from 'apollo-boost';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { useQuery } from '@apollo/react-hooks';
-import PaginationStepper from 'components/shared/PaginationStepper';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

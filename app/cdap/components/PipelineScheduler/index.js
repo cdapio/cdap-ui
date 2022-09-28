@@ -248,7 +248,7 @@ export default class PipelineScheduler extends Component {
   }
 
   renderActionButtons() {
-    const buttonDisable = this.props.isLatest === 'false';
+    const buttonDisable = !this.props.isLatestVersion;
     if (this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULED']) {
       return (
         <div className="schedule-navigation">
@@ -351,5 +351,5 @@ PipelineScheduler.propTypes = {
   schedulePipeline: PropTypes.func,
   suppressAnimation: PropTypes.bool,
   suspendSchedule: PropTypes.func,
-  isLatest: PropTypes.string,
+  isLatestVersion: PropTypes.bool,
 };

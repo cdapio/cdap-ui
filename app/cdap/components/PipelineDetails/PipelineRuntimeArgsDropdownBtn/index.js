@@ -32,7 +32,7 @@ export default class PipelineRuntimeArgsDropdownBtn extends Component {
     showRunOptions: PropTypes.bool,
     onToggle: PropTypes.fun,
     disabled: PropTypes.bool,
-    isLatest: PropTypes.string,
+    isLatestVersion: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -104,7 +104,7 @@ export default class PipelineRuntimeArgsDropdownBtn extends Component {
             >
               <RuntimeArgsModeless
                 onClose={this.toggleRunConfigOption}
-                isLatest={this.props.isLatest}
+                isLatestVersion={this.props.isLatestVersion}
               />
             </PipelineModeless>
           </Provider>

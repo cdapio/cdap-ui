@@ -45,7 +45,7 @@ export default class PipelineScheduleButton extends Component {
     scheduleButtonLoading: PropTypes.bool,
     scheduleError: PropTypes.string,
     runtimeArgs: PropTypes.array,
-    isLatest: PropTypes.string,
+    isLatestVersion: PropTypes.bool,
   };
 
   state = {
@@ -163,7 +163,7 @@ export default class PipelineScheduleButton extends Component {
           scheduleStatus={this.state.scheduleStatus}
           schedulePipeline={schedulePipeline}
           suspendSchedule={suspendSchedule}
-          isLatest={this.props.isLatest}
+          isLatestVersion={this.props.isLatestVersion}
         />
       </div>
     );

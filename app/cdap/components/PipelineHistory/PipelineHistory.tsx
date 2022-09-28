@@ -34,6 +34,7 @@ import Store, {
 } from './PipelineHistoryStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLevel';
+import { PipelineHistoryTableDiv } from './styles';
 
 const PREFIX = 'features.PipelineHistory';
 
@@ -151,7 +152,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
         anchorEl={anchorEl}
         title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
       >
-        <div className="grid-wrapper pipeline-history-list-table">
+        <PipelineHistoryTableDiv className="grid-wrapper pipeline-history-list-table">
           {ready && (
             <PipelineHistoryTable
               pipelineName={pipelineName}
@@ -160,7 +161,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
             />
           )}
           <Pagination />
-        </div>
+        </PipelineHistoryTableDiv>
       </PipelineModeless>
     </>
   );
