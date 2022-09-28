@@ -20,6 +20,7 @@ import classnames from 'classnames';
 import PipelineHistoryOuter from 'components/PipelineHistory/PipelineHistory';
 import HistoryIcon from '@material-ui/icons/History';
 import T from 'i18n-react';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -37,11 +38,13 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
 
   const renderPipelineHistoryBtn = () => {
     return (
-      <div onClick={toggleButton} className="btn pipeline-action-btn" ref={buttonRef} role="button">
-        <div className="btn-container">
-          <HistoryIcon />
-          <div className="button-label">{T.translate(`${PREFIX}.history`)}</div>
-        </div>
+      <div className="btn pipeline-action-btn" ref={buttonRef}>
+        <PrimaryTextLowercaseButton onClick={toggleButton}>
+          <div className="btn-container">
+            <HistoryIcon />
+            <div className="button-label">{T.translate(`${PREFIX}.history`)}</div>
+          </div>
+        </PrimaryTextLowercaseButton>
       </div>
     );
   };

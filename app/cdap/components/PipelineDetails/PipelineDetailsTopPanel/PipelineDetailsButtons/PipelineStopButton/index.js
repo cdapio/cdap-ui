@@ -25,6 +25,7 @@ import PipelineStopPopover from 'components/PipelineDetails/PipelineDetailsTopPa
 import { setStopButtonLoading, setStopError } from 'components/PipelineDetails/store/ActionCreator';
 import isEqual from 'lodash/isEqual';
 import T from 'i18n-react';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -114,13 +115,12 @@ export default class PipelineStopButton extends Component {
       );
     }
     return (
-      <div
+      <PrimaryTextLowercaseButton
         onClick={this.stopPipeline}
         className="btn pipeline-action-btn pipeline-stop-btn"
         disabled={
           !this.props.isLatestVersion || this.props.stopButtonLoading || this.state.disabled
         }
-        role="button"
       >
         <div className="btn-container">
           {this.props.stopButtonLoading ? (
@@ -135,7 +135,7 @@ export default class PipelineStopButton extends Component {
             </span>
           )}
         </div>
-      </div>
+      </PrimaryTextLowercaseButton>
     );
   }
 
