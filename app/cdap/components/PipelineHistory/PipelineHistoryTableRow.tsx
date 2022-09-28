@@ -14,13 +14,12 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import styled from 'styled-components';
 import T from 'i18n-react';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
-import { Button } from '@material-ui/core';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -82,24 +81,22 @@ export const PipelineHistoryTableRow = ({
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-        <Button
-          variant="text"
-          color="primary"
+        <PrimaryTextLowercaseButton
+          textColor="#0000EE"
           onClick={() => {
             viewVersion();
           }}
         >
           {T.translate(`${PREFIX}.view`)}
-        </Button>
-        <Button
-          variant="text"
-          color="primary"
+        </PrimaryTextLowercaseButton>
+        <PrimaryTextLowercaseButton
+          textColor="#0000EE"
           onClick={() => {
             restoreVersion();
           }}
         >
           {T.translate(`${PREFIX}.restore`)}
-        </Button>
+        </PrimaryTextLowercaseButton>
       </div>
     </>
   );

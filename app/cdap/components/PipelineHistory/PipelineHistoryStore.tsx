@@ -14,6 +14,7 @@
  * the License.
  */
 
+import { gql } from 'apollo-boost';
 import { combineReducers, createStore } from 'redux';
 import { Reducer, Store as StoreInterface } from 'redux';
 import { IAction } from 'services/redux-helpers';
@@ -25,11 +26,41 @@ interface IState {
   pageLimit: number;
   pipelineVersions: string[];
   ready: boolean;
+  pageLimitOptions: number[];
 }
 
 interface IStore {
   versions: IState;
 }
+
+export const QUERY = gql`
+  query Query($namespace: String, $pageSize: Int, $token: String, $nameFilter: String) {
+    pipelines(
+      namespace: $namespace
+      pageSize: $pageSize
+      pageToken: $token
+      nameFilter: $nameFilter
+    ) {
+      applications {
+        name
+        version
+        artifact {
+          name
+        }
+        runs {
+          status
+          starting
+        }
+        totalRuns
+        nextRuntime {
+          id
+          time
+        }
+      }
+      nextPageToken
+    }
+  }
+`;
 
 const Actions = {
   prevPage: 'PIPELINE_VERSIONS_PREV_PAGE',
@@ -47,6 +78,7 @@ const defaultInitialState: IState = {
   pageLimit: 5,
   pipelineVersions: [],
   ready: false,
+  pageLimitOptions: [4, 5, 6, 7, 8, 9],
 };
 
 const versions: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
@@ -107,7 +139,7 @@ const Store: StoreInterface<IStore> = createStore(
 export function setPageLimit(pageLimit) {
   Store.dispatch({
     type: Actions.setPageLimit,
-    payload: { pageLimit: parseInt(pageLimit) },
+    payload: { pageLimit: parseInt(pageLimit, 10) },
   });
 }
 
