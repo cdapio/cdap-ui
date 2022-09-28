@@ -37,7 +37,6 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
 
-// TODO: this is bad. Should find a better place to put the provider
 const client = new ApolloClient({
   uri: '/graphql',
   cache: new InMemoryCache({ fragmentMatcher }),

@@ -24,6 +24,7 @@ import PipelineRuntimeArgsDropdownBtn from 'components/PipelineDetails/PipelineR
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import { convertKeyValuePairsToMap } from 'services/helpers';
 import T from 'i18n-react';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -97,13 +98,12 @@ export default class PipelineRunButton extends Component {
 
   renderPipelineRunButton() {
     return (
-      <div
+      <PrimaryTextLowercaseButton
         data-cy="pipeline-run-btn"
         data-testid="pipeline-run-btn"
         onClick={this.runPipelineOrToggleConfig}
         className="btn btn-secondary pipeline-action-btn pipeline-run-btn"
         disabled={!this.props.isLatestVersion || this.props.runButtonLoading}
-        role="button"
       >
         <div className="btn-container">
           {this.props.runButtonLoading ? (
@@ -118,7 +118,7 @@ export default class PipelineRunButton extends Component {
             </span>
           )}
         </div>
-      </div>
+      </PrimaryTextLowercaseButton>
     );
   }
 
