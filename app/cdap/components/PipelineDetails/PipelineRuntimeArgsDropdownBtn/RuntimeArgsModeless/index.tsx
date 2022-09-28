@@ -67,7 +67,7 @@ const styles = (theme): StyleRules => {
 interface IRuntimeArgsModelessProps extends WithStyles<typeof styles> {
   runtimeArgs: any;
   onClose: () => void;
-  isLatest: string;
+  isLatestVersion: boolean;
 }
 
 const I18N_PREFIX =
@@ -159,7 +159,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           className="btn btn-primary"
           data-cy="save-runtime-args-btn"
           onClick={this.saveRuntimeArgs}
-          disabled={this.props.isLatest !== 'true' || this.state.saving || this.state.savingAndRun}
+          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Save"
         />
       );
@@ -170,7 +170,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           loading={this.state.savingAndRun}
           className="btn btn-secondary"
           onClick={this.runPipelineWithArguments}
-          disabled={this.props.isLatest !== 'true' || this.state.saving || this.state.savingAndRun}
+          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Run"
           data-cy="run-deployed-pipeline-modal-btn"
         />

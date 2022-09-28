@@ -14,14 +14,10 @@
  * the License.
  */
 
-import { MyPipelineApi } from 'api/pipeline';
-import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import React, { useEffect, useState } from 'react';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { PipelineHistoryTableRow } from './PipelineHistoryTableRow';
-import './PipelineHistoryTable.scss';
 
 interface IPipelineHistoryTableProps {
   pipelineName: string;

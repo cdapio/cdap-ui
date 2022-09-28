@@ -69,7 +69,7 @@ const mapStateToConfigureButton = (state, ownProps) => {
     pipelineName: ownProps.pipelineName,
     resolvedMacros: state.resolvedMacros,
     runtimeArgs: state.runtimeArgs,
-    isLatest: ownProps.isLatest,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -80,7 +80,7 @@ const mapStateToRunButton = (state, ownProps) => {
     runButtonLoading: ownProps.runButtonLoading,
     runError: ownProps.runError,
     runtimeArgs: state.runtimeArgs,
-    isLatest: ownProps.isLatest,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -94,7 +94,7 @@ const mapStateToScheduleButton = (state, ownProps) => {
     scheduleButtonLoading: ownProps.scheduleButtonLoading,
     scheduleError: ownProps.scheduleError,
     runtimeArgs: state.runtimeArgs,
-    isLatest: ownProps.isLatest,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -118,7 +118,7 @@ export default function PipelineDetailsButtons({
   stopError,
   changeSummary,
 }) {
-  const isLatest = changeSummary ? changeSummary.isLatest : 'true';
+  const isLatestVersion = changeSummary ? changeSummary.isLatestVersion : true;
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
@@ -129,7 +129,7 @@ export default function PipelineDetailsButtons({
           <ConnectedConfigureButton
             pipelineType={pipelineType}
             pipelineName={pipelineName}
-            isLatest={isLatest}
+            isLatestVersion={isLatestVersion}
           />
           <ConnectedScheduleButton
             pipelineType={pipelineType}
@@ -139,7 +139,7 @@ export default function PipelineDetailsButtons({
             scheduleStatus={scheduleStatus}
             scheduleButtonLoading={scheduleButtonLoading}
             scheduleError={scheduleError}
-            isLatest={isLatest}
+            isLatestVersion={isLatestVersion}
           />
           <PipelineStopButton
             pipelineType={pipelineType}
@@ -148,14 +148,14 @@ export default function PipelineDetailsButtons({
             currentRun={currentRun}
             stopButtonLoading={stopButtonLoading}
             stopError={stopError}
-            isLatest={isLatest}
+            isLatestVersion={isLatestVersion}
           />
           <ConnectedRunButton
             pipelineType={pipelineType}
             pipelineName={pipelineName}
             runButtonLoading={runButtonLoading}
             runError={runError}
-            isLatest={isLatest}
+            isLatestVersion={isLatestVersion}
           />
           <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
           {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
