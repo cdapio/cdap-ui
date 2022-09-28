@@ -58,7 +58,23 @@ structure, which could change for unrelated reasons.
 
 ## CSS
 
-All new CSS should be CSS-in-JS. Use `styled-components` where feasible.
+All new CSS should be CSS-in-JS. Use `styled-components` where feasible, including in all new components.
 
 When setting colors on elements, please check the
 [palette](./app/cdap/components/ThemeWrapper/colors.ts) and use an existing color if possible.
+
+## Internationalization
+
+Please help improve our Internationalization. Text strings should be read from
+[text-en.yaml](./adpp/cdap/text/text-en.yaml) and read using the `i18n-react` module.
+Data should be formatted for display using the
+[DataFormatter](./app/cdap/services/DataFormatter/index.ts) module.
+
+## Testing
+
+All new code should have associated tests. We use the following test approaches:
+* For business logic unit tests, use `jest`
+  ([example](./app/cdap/services/DataFormatter/__tests__/DataFormatter.test.ts))
+* For component unit testing, use `testing-library`
+  ([example](./app/cdap/services/react/customHooks/useDebounce.test.ts))
+* For end-to-end integration tests, use `cucumber` ([test cases](./src/e2e-test/))
