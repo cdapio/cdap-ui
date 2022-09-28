@@ -64,6 +64,7 @@ export default class PipelineConfigureButton extends Component {
         <PrimaryTextLowercaseButton
           onClick={this.getRuntimeArgumentsAndToggleModeless.bind(this, true)}
           data-cy="pipeline-configure-btn"
+          data-testid="pipeline-configure-btn"
         >
           <div className="btn-container">
             <IconSVG name="icon-sliders" className="configure-icon" />
