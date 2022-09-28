@@ -14,8 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import T from 'i18n-react';
 import { PipelineHistoryTableRow } from './PipelineHistoryTableRow';
 

@@ -14,21 +14,19 @@
  * the License.
  */
 
-import { MyPipelineApi } from 'api/pipeline';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import React, { useEffect, useState } from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { PipelineHistoryTable } from './PipelineHistoryTable';
-import { gql } from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 import PaginationStepper from 'components/shared/PaginationStepper';
 import { Provider, useSelector } from 'react-redux';
 import Store, {
   nextPage,
   prevPage,
-  reset,
+  QUERY,
   setPageLimit,
   setVersions,
 } from './PipelineHistoryStore';
@@ -44,35 +42,6 @@ interface IPipelineHistoryProps {
   anchorEl: any;
   pipelineName: string;
 }
-
-const QUERY = gql`
-  query Query($namespace: String, $pageSize: Int, $token: String, $nameFilter: String) {
-    pipelines(
-      namespace: $namespace
-      pageSize: $pageSize
-      pageToken: $token
-      nameFilter: $nameFilter
-    ) {
-      applications {
-        name
-        version
-        artifact {
-          name
-        }
-        runs {
-          status
-          starting
-        }
-        totalRuns
-        nextRuntime {
-          id
-          time
-        }
-      }
-      nextPageToken
-    }
-  }
-`;
 
 const PaginationContainer = styled.div`
   margin-right: 20px;
@@ -100,13 +69,13 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
   });
 
   const Pagination = ({}) => {
-    const { prevDisabled, nextDisabled, pageLimit, pageCount, pageIndex } = useSelector(
+    const { prevDisabled, nextDisabled, pageCount, pageIndex, pageLimitOptions } = useSelector(
       ({ versions }) => ({
         prevDisabled: !versions.previousTokens.length,
         nextDisabled: !versions.nextPageToken,
-        pageLimit: versions.pageLimit,
         pageCount: versions.pipelineVersions.length,
         pageIndex: versions.previousTokens.length,
+        pageLimitOptions: versions.pageLimitOptions,
       })
     );
 
@@ -118,7 +87,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       <PaginationContainer className="float-right">
         <div>Rows per page: </div>
         <div>
-          <SelectWithOptions value={pageLimit} onChange={onChange} options={[4, 5, 6, 7, 8, 9]} />
+          <SelectWithOptions value={pageLimit} onChange={onChange} options={pageLimitOptions} />
         </div>
         <div>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit + pageCount}`}</div>
         <div>

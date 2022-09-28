@@ -21,7 +21,7 @@ import Button from '@material-ui/core/Button';
 const NewButton = styled(Button)`
   text-transform: none;
   font-weight: normal;
-  color: #666666;
+  color: ${(props) => props.textColor || '#666666'};
 `;
 
 export const PrimaryTextLowercaseButton = ({ children, disabled = false, ...props }) => {
