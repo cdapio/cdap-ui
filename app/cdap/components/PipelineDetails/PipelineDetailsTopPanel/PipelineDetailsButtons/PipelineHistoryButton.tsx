@@ -14,19 +14,23 @@
  * the License.
  */
 
-import { Button } from '@material-ui/core';
 import React, { useRef, useState } from 'react';
 import classnames from 'classnames';
 import PipelineHistoryOuter from 'components/PipelineHistory/PipelineHistory';
 import HistoryIcon from '@material-ui/icons/History';
 import T from 'i18n-react';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import styled from 'styled-components';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
 interface IPipelineHistoryButtonProps {
   pipelineName: string;
 }
+
+const StyledHistoryIcon = styled(HistoryIcon)`
+  margin-bottom: -4px;
+`;
 
 export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,9 +43,13 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
   const renderPipelineHistoryBtn = () => {
     return (
       <div className="btn pipeline-action-btn" ref={buttonRef}>
-        <PrimaryTextLowercaseButton onClick={toggleButton}>
+        <PrimaryTextLowercaseButton
+          onClick={toggleButton}
+          data-cy="pipeline-history-btn"
+          data-testid="pipeline-history-btn"
+        >
           <div className="btn-container">
-            <HistoryIcon />
+            <StyledHistoryIcon viewBox="1 1 22 22" />
             <div className="button-label">{T.translate(`${PREFIX}.history`)}</div>
           </div>
         </PrimaryTextLowercaseButton>
