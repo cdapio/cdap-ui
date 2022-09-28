@@ -66,17 +66,17 @@ const NewReqLastColumn = ({ instanceName, handleAcceptOrReject }: INewReqLastCol
           onClick={() => handleAcceptOrReject(connectionActions.ACCEPT, instanceName)}
           data-testid="accept-connection"
         >
-          {T.translate(`${PREFIX}.PendingRequests.acceptButton`)}
+          {T.translate(`${PREFIX}.TetheringRequests.acceptButton`)}
         </GridCellButton>
         <GridCellButton onClick={toggleModalOpen} data-testid="reject-connection">
-          {T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
+          {T.translate(`${PREFIX}.TetheringRequests.rejectButton`)}
         </GridCellButton>
       </ButtonsContainer>
       <ConfirmationModal
         isOpen={modalOpen}
         headerTitle={T.translate(`${PREFIX}.ConfirmationModal.rejectRequestHeader`)}
         confirmationElem={confirmRejectElem}
-        confirmButtonText={T.translate(`${PREFIX}.PendingRequests.rejectButton`)}
+        confirmButtonText={T.translate(`${PREFIX}.TetheringRequests.rejectButton`)}
         confirmFn={confirmReject}
         cancelFn={toggleModalOpen}
       />

@@ -25,29 +25,32 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 import { IConnection } from '../types';
 
 const PREFIX = 'features.Administration.Tethering';
-const I18NPREFIX = `${PREFIX}.PendingRequests`;
-const CONNECTION_STATUS = 'PENDING';
+const I18NPREFIX = `${PREFIX}.TetheringRequests`;
 
-const PendingRequestHistory = styled(Link)`
+const TetheringRequestHistory = styled(Link)`
   margin-left: 40px;
   font-size: 1rem;
 `;
 
-interface IPendingRequestsProps {
-  pendingRequests: IConnection[];
+interface ITetheringRequestsProps {
+  tetheringRequests: IConnection[];
   handleEdit: (connType: string, peer: string) => void;
   handleDelete: (connType: string, peer: string) => void;
 }
 
-const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPendingRequestsProps) => {
-  const renderLastColumn = (instanceName: string) => (
+const TetheringRequests = ({
+  tetheringRequests,
+  handleEdit,
+  handleDelete,
+}: ITetheringRequestsProps) => {
+  const renderLastColumn = (instanceName: string, tetheringStatus: string) => (
     <ActionsPopover
-      target={() => <IconSVG name="icon-more" dataTestId="pending-request" />}
+      target={() => <IconSVG name="icon-more" dataTestId="tethering-request" />}
       confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestHeader`)}
       confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestCopy`)}
-      onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
-      onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
-      dataTestIds={{ delete: 'delete-pending-request', edit: 'edit-pending-request' }}
+      onDeleteClick={() => handleDelete(tetheringStatus, instanceName)}
+      onEditClick={() => handleEdit(tetheringStatus, instanceName)}
+      dataTestIds={{ delete: 'delete-tethering-request', edit: 'edit-tethering-request' }}
     />
   );
   const canSeeReqHistory = false; // Will remove after request history page is ready
@@ -55,26 +58,26 @@ const PendingRequests = ({ pendingRequests, handleEdit, handleDelete }: IPending
   return (
     <>
       <HeaderContainer>
-        <HeaderTitle>{T.translate(`${I18NPREFIX}.pendingRequestHeader`)}</HeaderTitle>
+        <HeaderTitle>{T.translate(`${I18NPREFIX}.tetheringRequestHeader`)}</HeaderTitle>
         {canSeeReqHistory && (
-          <PendingRequestHistory to="/administration/tethering/requestHistory">
-            {T.translate(`${I18NPREFIX}.pendingRequestHistory`)}
-          </PendingRequestHistory>
+          <TetheringRequestHistory to="/administration/tethering/requestHistory">
+            {T.translate(`${I18NPREFIX}.tetheringRequestHistory`)}
+          </TetheringRequestHistory>
         )}
       </HeaderContainer>
       <BodyContainer>
-        {pendingRequests.length > 0 ? (
+        {tetheringRequests.length > 0 ? (
           <TetheringTable
-            tableData={pendingRequests}
-            isForPendingReqs={true}
+            tableData={tetheringRequests}
+            isForTetheringReqs={true}
             renderLastColumn={renderLastColumn}
           />
         ) : (
-          <NoDataText>{T.translate(`${I18NPREFIX}.noPendingRequests`)}</NoDataText>
+          <NoDataText>{T.translate(`${I18NPREFIX}.noTetheringRequests`)}</NoDataText>
         )}
       </BodyContainer>
     </>
   );
 };
 
-export default PendingRequests;
+export default TetheringRequests;
