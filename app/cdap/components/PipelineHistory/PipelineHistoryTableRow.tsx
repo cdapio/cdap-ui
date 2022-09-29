@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { ReactNode, useState } from 'react';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
@@ -25,6 +25,7 @@ interface IPipelineHistoryTableRowProps {
   pipelineName: string;
   appVersion: string;
   setRestoreLoading: (val: boolean) => void;
+  setErrorMessage: (val: string | ReactNode) => void;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
@@ -33,6 +34,7 @@ export const PipelineHistoryTableRow = ({
   pipelineName,
   appVersion,
   setRestoreLoading,
+  setErrorMessage,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
@@ -54,24 +56,34 @@ export const PipelineHistoryTableRow = ({
       namespace,
       appId: pipelineName,
       version: appVersion,
-    }).subscribe((res) => {
-      const config = JSON.parse(res.configuration);
-      MyPipelineApi.publish(
-        {
-          namespace,
-          appId: pipelineName,
-        },
-        {
-          name: res.name,
-          description: res.description,
-          artifact: res.artifact,
-          config,
-        }
-      ).subscribe(() => {
-        setRestoreLoading(false);
-        window.location.href = pipelineLink;
-      });
-    });
+    }).subscribe(
+      (res) => {
+        const config = JSON.parse(res.configuration);
+        MyPipelineApi.publish(
+          {
+            namespace,
+            appId: pipelineName,
+          },
+          {
+            name: res.name,
+            description: res.description,
+            artifact: res.artifact,
+            config,
+          }
+        ).subscribe(
+          () => {
+            setRestoreLoading(false);
+            window.location.href = pipelineLink;
+          },
+          (err) => {
+            setErrorMessage(T.translate(`${PREFIX}.restoreFailError`));
+          }
+        );
+      },
+      (err) => {
+        setErrorMessage(T.translate(`${PREFIX}.fetchVersionFailError`));
+      }
+    );
   };
 
   return (

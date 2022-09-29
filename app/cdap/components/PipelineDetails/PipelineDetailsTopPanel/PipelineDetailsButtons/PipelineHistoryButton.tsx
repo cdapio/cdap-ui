@@ -62,7 +62,6 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
       className={classnames('pipeline-action-container pipeline-history-container', {
         active: isOpen,
       })}
-      data-cy="pipeline-history-btn"
     >
       {renderPipelineHistoryBtn()}
       <PipelineHistoryOuter

@@ -14,9 +14,10 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'i18n-react';
 import { PipelineHistoryTableRow } from './PipelineHistoryTableRow';
+import ErrorBanner from 'components/shared/ErrorBanner';
 
 interface IPipelineHistoryTableProps {
   pipelineName: string;
@@ -31,6 +32,8 @@ export const PipelineHistoryTable = ({
   appVersions,
   setRestoreLoading,
 }: IPipelineHistoryTableProps) => {
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const renderTableBody = () => {
     return (
       <div className="grid-body">
@@ -41,6 +44,7 @@ export const PipelineHistoryTable = ({
               pipelineName={pipelineName}
               appVersion={appVersion}
               setRestoreLoading={setRestoreLoading}
+              setErrorMessage={setErrorMessage}
             />
           );
         })}
@@ -49,20 +53,30 @@ export const PipelineHistoryTable = ({
   };
 
   return (
-    <div className="grid grid-container">
-      {appVersions && (
-        <div className="grid-header">
-          <div className="grid-row">
-            <strong>{`Version (For develop)`}</strong>
-            <strong>{T.translate(`${PREFIX}.date`)}</strong>
-            <strong>{T.translate(`${PREFIX}.time`)}</strong>
-            <strong>{T.translate(`${PREFIX}.summary`)}</strong>
-            <strong />
-            <strong />
-          </div>
-        </div>
+    <>
+      {errorMessage && (
+        <ErrorBanner
+          error={errorMessage}
+          onClose={() => {
+            setErrorMessage(null);
+          }}
+        />
       )}
-      {renderTableBody()}
-    </div>
+      <div className="grid grid-container">
+        {appVersions && (
+          <div className="grid-header">
+            <div className="grid-row">
+              <strong>{`Version (For develop)`}</strong>
+              <strong>{T.translate(`${PREFIX}.date`)}</strong>
+              <strong>{T.translate(`${PREFIX}.time`)}</strong>
+              <strong>{T.translate(`${PREFIX}.summary`)}</strong>
+              <strong />
+              <strong />
+            </div>
+          </div>
+        )}
+        {renderTableBody()}
+      </div>
+    </>
   );
 };

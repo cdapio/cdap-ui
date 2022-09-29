@@ -117,7 +117,7 @@ export default function PipelineDetailsButtons({
   stopError,
   changeSummary,
 }) {
-  const isLatestVersion = changeSummary ? changeSummary.isLatestVersion : true;
+  const isLatestVersion = changeSummary ? changeSummary.isLatest === 'true' : true;
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
@@ -147,7 +147,6 @@ export default function PipelineDetailsButtons({
             currentRun={currentRun}
             stopButtonLoading={stopButtonLoading}
             stopError={stopError}
-            isLatestVersion={isLatestVersion}
           />
           <ConnectedRunButton
             pipelineType={pipelineType}
