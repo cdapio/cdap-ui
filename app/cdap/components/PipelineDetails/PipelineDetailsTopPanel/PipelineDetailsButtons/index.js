@@ -156,7 +156,7 @@ export default function PipelineDetailsButtons({
             isLatestVersion={isLatestVersion}
           />
           <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-          {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
+          <PipelineHistoryButton pipelineName={pipelineName} />
         </div>
       </Provider>
     </ApolloProvider>

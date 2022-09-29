@@ -291,9 +291,7 @@ export default class PipelineDetailsActionsButton extends Component {
           onTogglePopover={this.togglePopover}
         >
           <ul>
-            {this.props.lifecycleManagementEditEnabled && (
-              <li onClick={this.handlePipelineEdit}>{T.translate(`${PREFIX}.edit`)}</li>
-            )}
+            <li onClick={this.handlePipelineEdit}>{T.translate(`${PREFIX}.edit`)}</li>
             <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
             <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>
             <hr />

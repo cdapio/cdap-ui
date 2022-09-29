@@ -246,7 +246,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     window.location.href = link;
   };
 
-  private actions: IAction[] = this.props.lifecycleManagementEditEnabled
+  private actions: IAction[] = true
     ? [
         {
           label: T.translate('commons.edit'),

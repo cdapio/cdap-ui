@@ -49,7 +49,9 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
   });
 
   const saveDraftIdToLocalStorage = () => {
-    window.localStorage.setItem('editDraftId', draftId);
+    if (draftId) {
+      window.localStorage.setItem('editDraftId', draftId);
+    }
   };
 
   useEffect(() => {
@@ -71,14 +73,14 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
       setEditStageMessage('Draft out of date');
     }
     setDraftId(filteredDraft[0].id);
-  }, [drafts]);
+  }, []);
 
   return (
     <a href={pipelineLink} onClick={saveDraftIdToLocalStorage} className="grid-row">
       <div className="name" title={pipeline.name}>
         {pipeline.name}
       </div>
-      {lifecycleManagementEditEnabled && <div>{editStageMessage}</div>}
+      <div>{editStageMessage}</div>
       <div className="type">{T.translate(`${PREFIX}.${pipeline.artifact.name}`)}</div>
       <Status pipeline={pipeline} />
       <LastStart pipeline={pipeline} />

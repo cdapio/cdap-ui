@@ -81,9 +81,8 @@ const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refe
           <div className="grid-header">
             <div className="grid-row">
               <SortableHeader columnName="name" />
-              {lifecycleManagementEditEnabled && (
-                <strong>{T.translate(`${PREFIX}.editStatus`)}</strong>
-              )}
+
+              <strong>{T.translate(`${PREFIX}.editStatus`)}</strong>
               <strong>{T.translate(`${PREFIX}.type`)}</strong>
               <strong>{T.translate(`${PREFIX}.status`)}</strong>
               <strong>{T.translate(`${PREFIX}.lastStartTime`)}</strong>
