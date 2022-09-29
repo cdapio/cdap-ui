@@ -146,164 +146,162 @@ describe('Testing Grid Table Component', () => {
         pipe: () => {
           return {
             subscribe: (callback) => {
-              callback(
-                {
-                  headers: [
-                    'implementation_info_id',
-                    'implementation_info_name',
-                    'integer_value',
-                    'character_value',
-                    'comments',
-                  ],
-                  types: {
-                    character_value: 'String',
-                    comments: 'String',
-                    implementation_info_name: 'String',
-                    implementation_info_id: 'String',
-                    integer_value: 'Int',
-                  },
-                  summary: {
-                    statistics: {
-                      character_value: {
-                        general: {
-                          'non-null': 50,
-                          null: 50,
-                          empty: 25,
-                        },
-                        types: {
-                          Text: 16.666668,
-                        },
-                      },
-                      comments: {
-                        general: {
-                          'non-null': 50,
-                          null: 50,
-                        },
-                        types: {
-                          Text: 16.666668,
-                        },
-                      },
-                      implementation_info_name: {
-                        general: {
-                          'non-null': 100,
-                        },
-                        types: {
-                          Text: 100,
-                        },
-                      },
-                      implementation_info_id: {
-                        general: {
-                          'non-null': 100,
-                        },
-                        types: {
-                          Integer: 100,
-                          'Zip Code': 16.666668,
-                          ZipCode: 16.666668,
-                        },
-                      },
-                      integer_value: {
-                        general: {
-                          'non-null': 41.666664,
-                          null: 58.333332,
-                        },
-                      },
-                    },
-                    validation: {
-                      character_value: {
-                        valid: false,
-                      },
-                      comments: {
-                        valid: false,
-                      },
-                      implementation_info_name: {
-                        valid: false,
-                      },
-                      implementation_info_id: {
-                        valid: false,
-                      },
-                      integer_value: {
-                        valid: false,
-                      },
-                    },
-                  },
-                  message: 'Success',
-                  count: 12,
-                  values: [
-                    {
-                      implementation_info_name: 'CATALOG NAME',
-                      character_value: 'Y',
-                      implementation_info_id: '10003',
-                    },
-                    {
-                      implementation_info_name: 'COLLATING SEQUENCE',
-                      implementation_info_id: '10004',
-                    },
-                    {
-                      implementation_info_name: 'CURSOR COMMIT BEHAVIOR',
-                      implementation_info_id: '23',
-                      comments: 'close cursors and retain prepared statements',
-                      integer_value: '1',
-                    },
-                    {
-                      implementation_info_name: 'DATA SOURCE NAME',
-                      character_value: '',
-                      implementation_info_id: '2',
-                    },
-                    {
-                      implementation_info_name: 'DBMS NAME',
-                      character_value: 'PostgreSQL',
-                      implementation_info_id: '17',
-                    },
-                    {
-                      implementation_info_name: 'DEFAULT TRANSACTION ISOLATION',
-                      implementation_info_id: '26',
-                      comments: 'READ COMMITTED; user-settable',
-                      integer_value: '2',
-                    },
-                    {
-                      implementation_info_name: 'IDENTIFIER CASE',
-                      implementation_info_id: '28',
-                      comments: 'stored in mixed case - case sensitive',
-                      integer_value: '3',
-                    },
-                    {
-                      implementation_info_name: 'NULL COLLATION',
-                      implementation_info_id: '85',
-                      comments: 'nulls higher than non-nulls',
-                      integer_value: '0',
-                    },
-                    {
-                      implementation_info_name: 'SERVER NAME',
-                      character_value: '',
-                      implementation_info_id: '13',
-                    },
-                    {
-                      implementation_info_name: 'SPECIAL CHARACTERS',
-                      character_value: '',
-                      implementation_info_id: '94',
-                      comments: 'all non-ASCII characters allowed',
-                    },
-                    {
-                      implementation_info_name: 'TRANSACTION CAPABLE',
-                      implementation_info_id: '46',
-                      comments: 'both DML and DDL',
-                      integer_value: '2',
-                    },
-                    {
-                      implementation_info_name: 'DBMS VERSION',
-                      character_value: '12.07.0000',
-                      implementation_info_id: '18',
-                    },
-                  ],
+              callback({
+                headers: [
+                  'implementation_info_id',
+                  'implementation_info_name',
+                  'integer_value',
+                  'character_value',
+                  'comments',
+                ],
+                types: {
+                  character_value: 'String',
+                  comments: 'String',
+                  implementation_info_name: 'String',
+                  implementation_info_id: 'String',
+                  integer_value: 'Int',
                 },
-              );
+                summary: {
+                  statistics: {
+                    character_value: {
+                      general: {
+                        'non-null': 50,
+                        null: 50,
+                        empty: 25,
+                      },
+                      types: {
+                        Text: 16.666668,
+                      },
+                    },
+                    comments: {
+                      general: {
+                        'non-null': 50,
+                        null: 50,
+                      },
+                      types: {
+                        Text: 16.666668,
+                      },
+                    },
+                    implementation_info_name: {
+                      general: {
+                        'non-null': 100,
+                      },
+                      types: {
+                        Text: 100,
+                      },
+                    },
+                    implementation_info_id: {
+                      general: {
+                        'non-null': 100,
+                      },
+                      types: {
+                        Integer: 100,
+                        'Zip Code': 16.666668,
+                        ZipCode: 16.666668,
+                      },
+                    },
+                    integer_value: {
+                      general: {
+                        'non-null': 41.666664,
+                        null: 58.333332,
+                      },
+                    },
+                  },
+                  validation: {
+                    character_value: {
+                      valid: false,
+                    },
+                    comments: {
+                      valid: false,
+                    },
+                    implementation_info_name: {
+                      valid: false,
+                    },
+                    implementation_info_id: {
+                      valid: false,
+                    },
+                    integer_value: {
+                      valid: false,
+                    },
+                  },
+                },
+                message: 'Success',
+                count: 12,
+                values: [
+                  {
+                    implementation_info_name: 'CATALOG NAME',
+                    character_value: 'Y',
+                    implementation_info_id: '10003',
+                  },
+                  {
+                    implementation_info_name: 'COLLATING SEQUENCE',
+                    implementation_info_id: '10004',
+                  },
+                  {
+                    implementation_info_name: 'CURSOR COMMIT BEHAVIOR',
+                    implementation_info_id: '23',
+                    comments: 'close cursors and retain prepared statements',
+                    integer_value: '1',
+                  },
+                  {
+                    implementation_info_name: 'DATA SOURCE NAME',
+                    character_value: '',
+                    implementation_info_id: '2',
+                  },
+                  {
+                    implementation_info_name: 'DBMS NAME',
+                    character_value: 'PostgreSQL',
+                    implementation_info_id: '17',
+                  },
+                  {
+                    implementation_info_name: 'DEFAULT TRANSACTION ISOLATION',
+                    implementation_info_id: '26',
+                    comments: 'READ COMMITTED; user-settable',
+                    integer_value: '2',
+                  },
+                  {
+                    implementation_info_name: 'IDENTIFIER CASE',
+                    implementation_info_id: '28',
+                    comments: 'stored in mixed case - case sensitive',
+                    integer_value: '3',
+                  },
+                  {
+                    implementation_info_name: 'NULL COLLATION',
+                    implementation_info_id: '85',
+                    comments: 'nulls higher than non-nulls',
+                    integer_value: '0',
+                  },
+                  {
+                    implementation_info_name: 'SERVER NAME',
+                    character_value: '',
+                    implementation_info_id: '13',
+                  },
+                  {
+                    implementation_info_name: 'SPECIAL CHARACTERS',
+                    character_value: '',
+                    implementation_info_id: '94',
+                    comments: 'all non-ASCII characters allowed',
+                  },
+                  {
+                    implementation_info_name: 'TRANSACTION CAPABLE',
+                    implementation_info_id: '46',
+                    comments: 'both DML and DDL',
+                    integer_value: '2',
+                  },
+                  {
+                    implementation_info_name: 'DBMS VERSION',
+                    character_value: '12.07.0000',
+                    implementation_info_id: '18',
+                  },
+                ],
+              });
             },
           };
         },
       };
     });
-   
-    const  screen =  render(
+
+    const screen = render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -316,21 +314,20 @@ describe('Testing Grid Table Component', () => {
     const gridTable = screen.getByTestId('grid-table');
     expect(screen.getByTestId('grid-table')).toBeInTheDocument();
   });
-  
+
   it('Should check if the component is rendered', () => {
     jest.spyOn(MyDataPrepApi, 'getWorkspace').mockImplementation(() => {
       return {
         pipe: () => {
           return {
             subscribe: (callback) => {
-              callback([ 
-              ]);
+              callback([]);
             },
           };
         },
       };
     });
-    const  screen =  render(
+    const screen = render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -343,7 +340,4 @@ describe('Testing Grid Table Component', () => {
     const gridTable = screen.getByTestId('grid-table');
     expect(screen.getByTestId('grid-table')).toBeInTheDocument();
   });
-  
-
 });
-

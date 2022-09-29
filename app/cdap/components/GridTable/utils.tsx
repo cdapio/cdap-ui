@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import React from 'react';
 import { IExecuteAPIResponse } from './types';
 
@@ -47,30 +48,32 @@ export const checkFrequentlyOccuredValues = (
   gridData: IExecuteAPIResponse | undefined,
   key: string
 ) => {
-  const valueOfKey = gridData?.values.map((el) => el[key]);
-  let mostFrequentItem: number = 1;
-  let mostFrequentItemCount: number = 0;
-  let mostFrequentItemValue: string = '';
-  const mostFrequentDataItem = {
-    name: '',
-    count: 0,
-  };
-  if (Array.isArray(valueOfKey) && valueOfKey.length) {
-    valueOfKey.map((item, index) => {
-      valueOfKey.map((value, valueIndex) => {
-        if (item == value) {
-          mostFrequentItemCount++;
-        }
-        if (mostFrequentItem < mostFrequentItemCount) {
-          mostFrequentItem = mostFrequentItemCount;
-          mostFrequentItemValue = item;
-        }
+  if (gridData?.values && Array.isArray(gridData?.values)) {
+    const valueOfKey = gridData?.values?.map((el) => el[key]);
+    let mostFrequentItem: number = 1;
+    let mostFrequentItemCount: number = 0;
+    let mostFrequentItemValue: string = '';
+    const mostFrequentDataItem = {
+      name: '',
+      count: 0,
+    };
+    if (Array.isArray(valueOfKey) && valueOfKey.length) {
+      valueOfKey.map((item, index) => {
+        valueOfKey.map((value, valueIndex) => {
+          if (item == value) {
+            mostFrequentItemCount++;
+          }
+          if (mostFrequentItem < mostFrequentItemCount) {
+            mostFrequentItem = mostFrequentItemCount;
+            mostFrequentItemValue = item;
+          }
+        });
+        mostFrequentItemCount = 0;
+        mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
       });
-      mostFrequentItemCount = 0;
-      mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
-    });
+    }
+    mostFrequentDataItem.name = mostFrequentItemValue;
+    mostFrequentDataItem.count = mostFrequentItemCount;
+    return mostFrequentDataItem;
   }
-  mostFrequentDataItem.name = mostFrequentItemValue;
-  mostFrequentDataItem.count = mostFrequentItemCount;
-  return mostFrequentDataItem;
 };
