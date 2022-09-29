@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Select from '@material-ui/core/Select';
@@ -35,6 +35,7 @@ interface ILeftPanelProps {
   toggleSideBar: () => void;
   isSideBarExpanded: boolean;
   isEdit: boolean;
+  createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
 }
 
 const StyledSelect = styled(Select)`
@@ -50,6 +51,7 @@ export const LeftPanel = ({
   groupGenericName,
   onPanelItemClick,
   isEdit,
+  createPluginTemplate,
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -95,6 +97,7 @@ export const LeftPanel = ({
               groups={groups}
               groupGenericName={groupGenericName}
               onPanelItemClick={(event, plugin) => onPanelItemClick(event, plugin)}
+              createPluginTemplate={createPluginTemplate}
             />
           </div>
         </div>
