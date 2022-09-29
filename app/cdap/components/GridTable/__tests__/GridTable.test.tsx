@@ -146,7 +146,7 @@ describe('Testing Grid Table Component', () => {
         pipe: () => {
           return {
             subscribe: (callback) => {
-              callback([
+              callback(
                 {
                   headers: [
                     'implementation_info_id',
@@ -296,7 +296,7 @@ describe('Testing Grid Table Component', () => {
                     },
                   ],
                 },
-              ]);
+              );
             },
           };
         },
