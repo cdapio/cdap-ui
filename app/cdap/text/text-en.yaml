@@ -2700,13 +2700,17 @@ features:
   PipelineHistory:
     header: Version history of pipeline
     table:
-      date: Date and day
+      date: Date
       time: Time
       author: Author
       summary: Summary
       unfinish: Not yet implemented
       view: View
       restore: Restore
+      rowsPerPage: "Rows per page: "
+      restoreFailError: Cannot restore (deploy) selected version
+      fetchVersionFailError: Cannot fetch selected version's detail
+
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"

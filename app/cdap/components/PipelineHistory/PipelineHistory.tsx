@@ -85,7 +85,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
 
     return (
       <PaginationContainer className="float-right">
-        <div>Rows per page: </div>
+        <div>{T.translate(`${PREFIX}.table.rowsPerPage`)}</div>
         <div>
           <SelectWithOptions value={pageLimit} onChange={onChange} options={pageLimitOptions} />
         </div>
