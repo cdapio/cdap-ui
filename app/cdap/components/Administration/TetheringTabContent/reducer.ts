@@ -28,17 +28,13 @@ const CONNECTION_GROUPS = {
 export interface IConnectionsState {
   pendingRequests: IConnection[];
   establishedConnections: IConnection[];
+  rejectedRequests: IConnection[];
 }
 
 export const initialConnectionsState = {
   pendingRequests: [],
   rejectedRequests: [],
   establishedConnections: [],
-};
-
-const apiConnectionActions = {
-  ACCEPT: 'accept',
-  REJECT: 'reject',
 };
 
 enum IConnectionsActions {
@@ -100,13 +96,6 @@ export const acceptOrRejectTetheringConnectionReq = async (
   { action, peer }
 ) => {
   await TetheringApi.acceptOrRejectTethering({ peer }, { action }).toPromise();
-  if (action === apiConnectionActions.REJECT) {
-    await TetheringApi.deleteTethering({ peer }).toPromise();
-    dispatch({
-      type: IConnectionsActions.DELETE_CONNECTION,
-      payload: { connGroup: CONNECTION_GROUPS.PENDING, peer },
-    });
-  }
   await fetchConnections(dispatch);
 };
 

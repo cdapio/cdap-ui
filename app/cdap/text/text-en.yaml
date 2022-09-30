@@ -182,10 +182,14 @@ features:
     Management:
       pageTitle: '{productName} | Administration | Management'
     Tethering:
-      PendingRequests:
-        pendingRequestHeader: Pending requests
-        pendingRequestHistory: VIEW REQUEST HISTORY
-        noPendingRequests: There are no requests pending
+      TetheringStatus:
+        accepted: Accepted
+        rejected: Rejected
+        pending: Pending
+      TetheringRequests:
+        tetheringRequestHeader: Tethering requests
+        tetheringRequestHistory: VIEW REQUEST HISTORY
+        noTetheringRequests: There are no tethering requests
         acceptButton: Accept
         rejectButton: Reject
         acceptSuccess: Request has been accepted.
@@ -242,6 +246,7 @@ features:
             label: Description
             placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
+         tetheringStatus: Tethering Status
          requestTime: Request Time
          description: Description
          gcp: Google cloud project
