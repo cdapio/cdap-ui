@@ -80,6 +80,7 @@ export const WrangleCard = () => {
       });
     });
 
+    /* remove the other connector Types based on getCategorized connections */
     connectorDataWithSvgArray = connectorDataWithSvgArray.filter((obj) =>
       connectorTypeWithConnections.find((item) => item == obj.name)
     );
