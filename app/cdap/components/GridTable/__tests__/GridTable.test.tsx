@@ -21,7 +21,6 @@ import { Route, Router, Switch } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
 import rxjs from 'rxjs/operators';
-import { async } from 'q';
 import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
 
 const history = createHistory({

@@ -18,6 +18,7 @@ import { IExecuteAPIResponse } from 'components/GridTable/types';
 
 export const mock: IExecuteAPIResponse = {
   headers: ['body_0', 'body_1', 'body_2', 'body_3', 'body_4', 'body_5'],
+  message: 'mock data for testing',
   types: {
     body_3: 'String',
     body_4: 'String',

@@ -127,7 +127,7 @@ export default function WrangleCard() {
     /* remove the other connector Types based on getCategorized connections */
 
     fetchedConnectorTypes = fetchedConnectorTypes.filter((obj) =>
-      connectorTypeWithConnections.find((each) => each == obj.name)
+      connectorTypeWithConnections.find((each) => each === obj.name)
     );
 
     fetchedConnectorTypes.unshift({
