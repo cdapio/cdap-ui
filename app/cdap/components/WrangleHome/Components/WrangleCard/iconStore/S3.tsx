@@ -1,0 +1,28 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import React from 'react';
+
+export const S3 = (
+  <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M11.2313 37.5568V30.48L16.0601 32.1256V39.2904L11.2313 37.5568ZM21.7737 37.5568V30.48L16.9449 32.1256V39.2904L21.7737 37.5568ZM16.6137 28.5744L21.1449 30.0352L16.6137 31.5736L11.7337 29.9496L16.6137 28.5744ZM5.48169 27.6704V20.584L10.3105 22.2288V29.3936L5.48169 27.6704ZM16.0257 27.6696V20.584L11.1969 22.2288V29.3936L16.0257 27.6696ZM10.8657 18.6856L15.3969 20.1472L10.8657 21.6856L5.98569 20.0616L10.8657 18.6856ZM16.7497 27.6696V20.584L21.5785 22.2288V29.3936L16.7497 27.6696ZM27.2921 27.6696V20.584L22.4633 22.2288V29.3936L27.2921 27.6696ZM22.1401 18.6856L26.6713 20.1472L22.1401 21.6856L17.2601 20.0616L22.1401 18.6856ZM22.5065 17.7816V10.704L27.3353 12.3496V19.5136L22.5065 17.7816ZM33.0425 17.7808V10.704L28.2137 12.3496V19.5136L33.0425 17.7808ZM27.8817 8.8L32.4129 10.2608L27.8817 11.7992L23.0017 10.1752L27.8817 8.8ZM33.7657 17.7816V10.704L38.5945 12.3496V19.5136L33.7657 17.7816ZM44.3001 17.7816V10.704L39.4713 12.3496V19.5136L44.3001 17.7816ZM39.1481 8.8L43.6793 10.2608L39.1481 11.7992L34.2681 10.1752L39.1481 8.8Z"
+      fill="#FF9900"
+    />
+  </svg>
+);
