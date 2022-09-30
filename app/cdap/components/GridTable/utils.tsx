@@ -76,4 +76,5 @@ export const checkFrequentlyOccuredValues = (
     mostFrequentDataItem.count = mostFrequentItemCount;
     return mostFrequentDataItem;
   }
+  return { name: 'No Data Found', count: 0 };
 };

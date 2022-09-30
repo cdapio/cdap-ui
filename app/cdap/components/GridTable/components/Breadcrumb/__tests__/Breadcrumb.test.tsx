@@ -26,7 +26,6 @@ const history = createHistory({
 
 describe('Test Breadcrumb Component', () => {
   const locationMock = jest.mock('react-router-dom', () => ({
-    // ...jest.requireActual('react-router-dom'),
     useLocation: () => ({
       pathname: 'localhost:3000/example/path',
     }),
@@ -45,8 +44,4 @@ describe('Test Breadcrumb Component', () => {
   it('Should have the Home text in the Breadcrumb', () => {
     expect(screen.getByTestId('breadcrumb-home-text')).toHaveTextContent('Home');
   });
-
-  // it('Should have the Data Sources text in the Breadcrumb', () => {
-  //   expect(screen.getByTestId('breadcrumb-data-sources-text')).toHaveTextContent('Data Sources');
-  // });
 });
