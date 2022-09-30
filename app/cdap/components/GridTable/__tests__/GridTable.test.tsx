@@ -16,7 +16,7 @@
 
 import React from 'react';
 import GridTable from '..';
-import { render, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Route, Router, Switch } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
