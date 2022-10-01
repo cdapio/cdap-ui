@@ -177,7 +177,7 @@ export default function ConnectionList() {
         };
       });
       if (index === 0) {
-        getCategorizedConnectionsforSelectedTab(entity.name, index);
+        getCategorizedConnectionsforSelectedTab(entity.name as string, index);
       } else if (index === 1) {
         fetchEntities(entity.name).then((res) => {
           setDataForTabsHelper(res, index);
@@ -185,7 +185,7 @@ export default function ConnectionList() {
         });
       } else {
         if (entity.canBrowse) {
-          fetchEntities(dataForTabs[1].selectedTab, entity.path).then((res) => {
+          fetchEntities(dataForTabs[1].selectedTab, entity.path as string).then((res) => {
             setDataForTabsHelper(res, index);
             toggleLoader(false);
           });
@@ -205,7 +205,7 @@ export default function ConnectionList() {
       temp[0].selectedTab = connectorType;
       return temp;
     });
-    getCategorizedConnectionsforSelectedTab(connectorType, 0);
+    getCategorizedConnectionsforSelectedTab(connectorType as string, 0);
   }, [connectorType]);
 
   const headerForLevelZero = () => {
