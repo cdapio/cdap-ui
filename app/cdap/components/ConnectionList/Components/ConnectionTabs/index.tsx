@@ -54,7 +54,7 @@ const ConnectionTab = styled(Tab)({
   },
 });
 
-export default function ConnectionsTabs({
+export default function({
   tabsData,
   handleChange,
   value,
