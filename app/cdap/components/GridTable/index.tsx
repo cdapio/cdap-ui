@@ -33,19 +33,13 @@ import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
 import NoDataScreen from './components/NoRecordScreen';
 import { useStyles } from './styles';
-import {
-  IDataOfStatistics,
-  IExecuteAPIResponse,
-  IHeaderNamesList,
-  IParams,
-  IRecords,
-} from './types';
+import { IExecuteAPIResponse, IHeaderNamesList, IObject, IParams, IRecords } from './types';
 import { convertNonNullPercent } from './utils';
 import FooterPanel from 'components/FooterPanel';
 import RecipeSteps from 'components/RecipeSteps';
 import AddTransformation from 'components/AddTransformation';
 
-export default function GridTable() {
+export default function() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
@@ -150,7 +144,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, wid);
+    getWorkSpaceData(payload as IParams, wid as string);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -166,7 +160,7 @@ export default function GridTable() {
     }
   };
 
-  const createMissingData = (statistics: IDataOfStatistics) => {
+  const createMissingData = (statistics: IObject) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -174,7 +168,7 @@ export default function GridTable() {
       const typeArrayOfMissingValue = [];
       headerKeyTypeArray.forEach(([vKey, vValue]) => {
         typeArrayOfMissingValue.push({
-          label: vKey == 'general' ? 'Missing/Null' : vKey == 'types' ? '' : '',
+          label: vKey == 'general' ? 'Missing/Null' : '',
           count: vKey == 'types' ? '' : convertNonNullPercent(gridData, vValue),
         });
       }),
@@ -245,7 +239,7 @@ export default function GridTable() {
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
-                  types={eachHeader.type}
+                  types={eachHeader.type as string[]}
                   key={eachHeader.name}
                 />
               ))}
