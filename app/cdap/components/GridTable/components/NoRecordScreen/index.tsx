@@ -19,6 +19,7 @@ import { NoDataSVG } from 'components/GridTable/iconStore';
 import { useStyles } from './styles';
 import { Box } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { MAIN_HEADER_TEXT, SUB_HEADER_TEXT } from './constants';
 
 export default function() {
   const classes = useStyles();
@@ -26,10 +27,8 @@ export default function() {
     <Box className={classes.noRecordWrapper}>
       <Box className={classes.innerWrapper}>
         {NoDataSVG}
-        <Typography className={classes.mainHeaderMessage}>No rows left in this sample</Typography>
-        <Typography className={classes.subHeaderMessage}>
-          Remove some recipe steps to view some data
-        </Typography>
+        <Typography className={classes.mainHeaderMessage}>{MAIN_HEADER_TEXT}</Typography>
+        <Typography className={classes.subHeaderMessage}>{SUB_HEADER_TEXT}</Typography>
       </Box>
     </Box>
   );
