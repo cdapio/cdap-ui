@@ -21,26 +21,31 @@ import { useStyles } from './styles';
 import React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
-import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM } from './constants';
+import { MATCH_SOURCE, HOME_URL_PARAM, DATASOURCES_URL_PARAM, HOME_LABLE } from './constants';
 
 const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
 
   const sourcePath =
-    location.state.from === MATCH_SOURCE
+    location.state?.from === MATCH_SOURCE
       ? HOME_URL_PARAM
-      : `${DATASOURCES_URL_PARAM}/${location.state.path}`;
+      : `${DATASOURCES_URL_PARAM}/${location.state?.path}`;
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
+          data-testid="breadcrumb-home-text"
         >
-          Home
+          {HOME_LABLE}
         </Link>
-        <Link color="inherit" to={`/ns/${getCurrentNamespace()}/${sourcePath}`}>
-          {location.state.from}
+        <Link
+          color="inherit"
+          to={`/ns/${getCurrentNamespace()}/${sourcePath}`}
+          className={`${classes.breadcrumbLabel}`}
+        >
+          {location.state?.from}
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
       </Breadcrumbs>

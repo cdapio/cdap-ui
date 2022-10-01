@@ -15,6 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 
 export const useStyles = makeStyles({
   dataExploration: {
@@ -22,7 +23,7 @@ export const useStyles = makeStyles({
     lineHeight: '30px',
     letterSpacing: '0.15px',
     marginBottom: '-4px',
-    color: '#000000',
+    color: grey[900],
     fontWeight: 400,
   },
   dataExplorationWrapper: {
