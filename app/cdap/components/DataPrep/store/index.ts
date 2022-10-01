@@ -76,7 +76,7 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
-  connectorType?: any;
+  connectorType?: string;
 }
 
 const defaultInitialState: IDataPrepState = {
