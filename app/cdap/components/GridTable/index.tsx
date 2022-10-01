@@ -127,7 +127,7 @@ export default function() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, wid);
+    getWorkSpaceData(payload as IParams, wid as string);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -199,7 +199,7 @@ export default function() {
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
-                  types={eachHeader.type}
+                  types={eachHeader.type as string[]}
                   key={eachHeader.name}
                 />
               ))}

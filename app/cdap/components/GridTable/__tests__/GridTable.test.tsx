@@ -19,23 +19,68 @@ import GridTable from '..';
 import { render } from '@testing-library/react';
 import { Route, Router, Switch } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
+import MyDataPrepApi from 'api/dataprep';
+import rxjs from 'rxjs/operators';
+import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
 
 const history = createHistory({
   basename: '/',
 });
 
 describe('Testing Grid Table Component', () => {
-  const { getByTestId } = render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <GridTable />
-        </Route>
-      </Switch>
-    </Router>
-  );
+  jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
+    callback(mockForFlatMap);
+  });
+  it('Should check if the component is rendered', () => {
+    jest.spyOn(MyDataPrepApi, 'getWorkspace').mockImplementation(() => {
+      return {
+        pipe: () => {
+          return {
+            subscribe: (callback) => {
+              callback(mockForGetWorkspace);
+            },
+          };
+        },
+      };
+    });
+
+    const screen = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <GridTable />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(render).toBeDefined();
+    const gridTable = screen.getByTestId('grid-table');
+    expect(screen.getByTestId('grid-table')).toBeInTheDocument();
+  });
 
   it('Should check if the component is rendered', () => {
-    expect(getByTestId('grid-table')).toBeInTheDocument();
+    jest.spyOn(MyDataPrepApi, 'getWorkspace').mockImplementation(() => {
+      return {
+        pipe: () => {
+          return {
+            subscribe: (callback) => {
+              callback([]);
+            },
+          };
+        },
+      };
+    });
+    const screen = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <GridTable />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(render).toBeDefined();
+    const gridTable = screen.getByTestId('grid-table');
+    expect(screen.getByTestId('grid-table')).toBeInTheDocument();
   });
 });
