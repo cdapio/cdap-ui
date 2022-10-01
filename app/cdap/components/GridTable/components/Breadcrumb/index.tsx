@@ -27,9 +27,9 @@ const BreadCrumb = ({ datasetName, location }) => {
   const classes = useStyles();
 
   const sourcePath =
-    location.state.from === MATCH_SOURCE
+    location.state?.from === MATCH_SOURCE
       ? HOME_URL_PARAM
-      : `${DATASOURCES_URL_PARAM}/${location.state.path}`;
+      : `${DATASOURCES_URL_PARAM}/${location.state?.path}`;
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
@@ -45,7 +45,7 @@ const BreadCrumb = ({ datasetName, location }) => {
           to={`/ns/${getCurrentNamespace()}/${sourcePath}`}
           className={`${classes.breadcrumbLabel}`}
         >
-          {location.state.from}
+          {location.state?.from}
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
       </Breadcrumbs>
