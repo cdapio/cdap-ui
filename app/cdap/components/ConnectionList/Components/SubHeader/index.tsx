@@ -23,8 +23,9 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
+import { ADD_CONNECTION_LABEL, IMPORT_DATA_LABEL } from './constants';
 
-export default function SubHeader() {
+export default function() {
   const classes = useStyles();
 
   const handleAddConnection = () => {
@@ -38,7 +39,7 @@ export default function SubHeader() {
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             Home
           </Link>
-          <Typography className={classes.breadCrumbTyporgraphy}>Data Sources</Typography>
+          <Typography className={classes.breadcrumbTyporgraphy}>Data Sources</Typography>
         </Breadcrumbs>
       </Box>
 
@@ -46,12 +47,12 @@ export default function SubHeader() {
         <Link to={`/ns/${getCurrentNamespace()}/connections/create`} className={classes.link}>
           <Box onClick={handleAddConnection} className={classes.importData}>
             <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
-            <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
+            <Box className={classes.breadcrumbTyporgraphy}>Add connection</Box>
           </Box>
         </Link>
         <Box className={classes.importData}>
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
+          <Box className={classes.breadcrumbTyporgraphy}>{IMPORT_DATA_LABEL}</Box>
         </Box>
       </Box>
     </Box>
