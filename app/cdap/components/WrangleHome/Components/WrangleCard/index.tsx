@@ -35,7 +35,7 @@ export const WrangleCard = () => {
     const connectorTypes = await fetchConnectors();
     const categorizedConnections = await getCategorizedConnections();
     const connectorTypeWithConnections = [];
-    categorizedConnections.forEach((_, key) => {
+    categorizedConnections.forEach((itemEach, key) => {
       connectorTypeWithConnections.push(key);
     });
     const connectorDataArray = [];

@@ -15,12 +15,12 @@
  */
 
 export interface IParams {
-  context: string;
+  context: string | number | IRecords;
   workspaceId: string;
 }
 
 export interface IRecords {
-  [key: string]: string;
+  [key: string]: string | number | IRecords;
 }
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
@@ -36,18 +36,15 @@ export interface IExecuteAPIResponse {
   types: IRecords;
   values: IRecords[];
   summary: ISummary;
+  message: string;
 }
 
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: string[];
+  type: Array<string | number | IRecords>;
 }
 
-export interface IDataTypeOfColumns {
-  [key: string]: string;
-}
-
-export interface IDataOfStatistics {
-  [key: string]: string;
+export interface IObject {
+  [key: string]: string | number | IRecords;
 }
