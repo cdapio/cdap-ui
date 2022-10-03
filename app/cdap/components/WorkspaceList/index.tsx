@@ -23,7 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Link } from 'react-router-dom';
 
-const WorkspaceList = () => {
+export default function WorkspaceList() {
   const classes = useStyles();
   return (
     <Box className={classes.wrapper}>
@@ -44,5 +44,4 @@ const WorkspaceList = () => {
       </Box>
     </Box>
   );
-};
-export default WorkspaceList;
+}
