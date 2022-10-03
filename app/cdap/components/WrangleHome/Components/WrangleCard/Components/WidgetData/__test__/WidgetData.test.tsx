@@ -14,21 +14,18 @@
  * the License.
  */
 
-import { Avatar } from '@material-ui/core';
-import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import React from 'react';
-import styled from 'styled-components';
+import { render, screen } from '@testing-library/react';
+import WidgetSVG from '../index';
 
-const ImageContainer = styled.div`
-  font-size: 40px;
-`;
+describe('Test Widget Data Component', () => {
+  render(<WidgetSVG dataSrc="iALTyuui" />);
+  it('should render the component with image from widget api', () => {
+    expect(screen.getByTestId('card-image-from-widget-api')).toBeInTheDocument();
+  });
 
-export default function({ dataSrc }) {
-  return dataSrc ? (
-    <Avatar src={dataSrc} variant="square" data-testid="card-image-from-widget-api" />
-  ) : (
-    <ImageContainer>
-      <ImageOutlined fontSize="inherit" data-testid="card-image-default" />
-    </ImageContainer>
-  );
-}
+  it('should render the component with default avatar', () => {
+    render(<WidgetSVG dataSrc={undefined} />);
+    expect(screen.getByTestId('card-image-default')).toBeInTheDocument();
+  });
+});
