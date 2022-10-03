@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import { Avatar } from '@material-ui/core';
 import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import React from 'react';
