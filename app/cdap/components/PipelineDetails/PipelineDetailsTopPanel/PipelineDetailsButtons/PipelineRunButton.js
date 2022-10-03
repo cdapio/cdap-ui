@@ -24,7 +24,7 @@ import PipelineRuntimeArgsDropdownBtn from 'components/PipelineDetails/PipelineR
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import { convertKeyValuePairsToMap } from 'services/helpers';
 import T from 'i18n-react';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

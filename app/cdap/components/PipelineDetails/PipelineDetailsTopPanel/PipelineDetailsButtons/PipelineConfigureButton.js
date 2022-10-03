@@ -21,7 +21,7 @@ import IconSVG from 'components/shared/IconSVG';
 import PipelineConfigurations from 'components/PipelineConfigurations';
 import T from 'i18n-react';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

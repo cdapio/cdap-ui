@@ -25,7 +25,7 @@ import PipelineStopPopover from 'components/PipelineDetails/PipelineDetailsTopPa
 import { setStopButtonLoading, setStopError } from 'components/PipelineDetails/store/ActionCreator';
 import isEqual from 'lodash/isEqual';
 import T from 'i18n-react';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

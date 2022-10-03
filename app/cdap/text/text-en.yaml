@@ -2702,7 +2702,6 @@ features:
     table:
       date: Date
       time: Time
-      author: Author
       summary: Summary
       unfinish: Not yet implemented
       view: View

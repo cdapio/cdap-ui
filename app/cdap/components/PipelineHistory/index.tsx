@@ -31,7 +31,7 @@ import Store, {
   setVersions,
 } from './PipelineHistoryStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
-import { LoadingAppLevel } from 'components/shared/LoadingAppLevel/LoadingAppLevel';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
 import { PipelineHistoryTableDiv } from './styles';
 
 const PREFIX = 'features.PipelineHistory';

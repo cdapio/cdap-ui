@@ -32,7 +32,7 @@ import {
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 import { GLOBALS } from 'services/global-constants';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 

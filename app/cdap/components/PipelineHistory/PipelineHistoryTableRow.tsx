@@ -19,7 +19,7 @@ import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;

@@ -16,10 +16,10 @@
 
 import React, { useRef, useState } from 'react';
 import classnames from 'classnames';
-import PipelineHistoryOuter from 'components/PipelineHistory/PipelineHistory';
+import PipelineHistoryOuter from 'components/PipelineHistory';
 import HistoryIcon from '@material-ui/icons/History';
 import T from 'i18n-react';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 import styled from 'styled-components';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';

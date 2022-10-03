@@ -23,7 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
-import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton/PrimaryTextLowercaseButton';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
