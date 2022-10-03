@@ -66,6 +66,8 @@ public class PipelineComplexSchema {
         tryOpenStudioPage();
       }
     }
+    // wait for rendering to finish otherwise elements are not attached to dom
+    Helper.waitSeconds(2);
   }
 
   private static void tryOpenStudioPage() {
