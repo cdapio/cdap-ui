@@ -1944,6 +1944,8 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
+    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
+      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
@@ -2495,6 +2497,7 @@ features:
         1: "{context} pipeline you saved"
         _: "{context} pipelines you saved"
     duration: Duration
+    editStatus: Status
     EmptyList:
       actionTitle: "You can try to:"
       aPipeline: a pipeline

@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import PipelineTableRow from 'components/PipelineList/DeployedPipelineView/PipelineTable/PipelineTableRow';
+import { PipelineTableRow } from './PipelineTableRow';
 import { connect } from 'react-redux';
 import T from 'i18n-react';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
