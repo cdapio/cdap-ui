@@ -49,6 +49,9 @@ const ToggleSwitchWidgetView: React.FC<IToggleToggleSwitchProps> = ({
   widgetProps,
   value,
   onChange,
+  updateAllProperties,
+  widgetProperty,
+  extraConfig,
   disabled,
   classes,
   dataCy,
@@ -61,6 +64,16 @@ const ToggleSwitchWidgetView: React.FC<IToggleToggleSwitchProps> = ({
   const isOn = value === onValue;
 
   function toggleSwitch() {
+    if (typeof updateAllProperties === 'function') {
+      updateAllProperties(
+        {
+          ...extraConfig.properties,
+          [widgetProperty.name]: isOn ? offValue : onValue,
+        },
+        { updateFilteredConfigurationGroups: true }
+      );
+      return;
+    }
     onChange(isOn ? offValue : onValue);
   }
 
