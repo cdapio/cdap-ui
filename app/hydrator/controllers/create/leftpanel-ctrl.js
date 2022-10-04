@@ -56,6 +56,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
     this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
     this.onArtifactChangeV2 = this.onArtifactChangeV2.bind(this);
+    this.createPluginTemplateV2 = this.createPluginTemplate.bind(this);
     this.isEdit = this.$stateParams.isEdit ? this.$stateParams.isEdit === 'true' : false;
     this.init();
 
@@ -261,7 +262,9 @@ class HydratorPlusPlusLeftPanelCtrl {
    * so we don't break original functionality
    */
   onV2ItemClicked(event, node) {
-    event.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+    }
     if (node.action === 'createTemplate') {
       this.createPluginTemplate(node.contentData, 'create');
     } else if(node.action === 'deleteTemplate') {
