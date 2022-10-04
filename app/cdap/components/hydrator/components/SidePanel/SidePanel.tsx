@@ -41,7 +41,7 @@ import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddCircle from '@material-ui/icons/AddCircle';
 import DeleteIcon from '@material-ui/icons/Delete';
-import RichTooltip from 'components/shared/RichToolTip/RichToolTip';
+import RichTooltip from 'components/shared/RichToolTip';
 import { ToolTipButtonContainer } from './sharedStyled';
 import ChangeVersionMenu from './ChangeVersionMenu';
 
