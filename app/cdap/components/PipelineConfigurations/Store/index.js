@@ -239,6 +239,8 @@ const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
     };
   });
   currentRuntimeArgs.pairs = macros.concat(currentRuntimeArgs.pairs);
+  // always concat an empty cell
+  currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(getDefaultKeyValuePair());
   return currentRuntimeArgs;
 };
 

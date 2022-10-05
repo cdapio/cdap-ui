@@ -21,6 +21,7 @@ import AbstractMultiRowWidget, {
 import RuntimeArgsRow from 'components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsRow';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { objectQuery } from 'services/helpers';
+import { CLOUD } from 'services/global-constants';
 
 interface IRuntimeArgsPairsWidgetProps {
   'key-placeholder'?: string;
@@ -31,6 +32,7 @@ interface IRuntimeArgsPairsWidgetProps {
 
 interface IRuntimeArgsPairsProps extends IMultiRowProps<IRuntimeArgsPairsWidgetProps> {
   isEncoded?: boolean; // for compatiblity with keyvalue-encoded type
+  showGeneratedArgs?: boolean;
 }
 
 interface IValue {
@@ -67,6 +69,13 @@ class RuntimeArgsPairsView extends AbstractMultiRowWidget<IRuntimeArgsPairsProps
     const isEncoded = this.props.isEncoded || objectQuery(this.props, 'widgetProps', 'isEncoded');
     const value = this.values[id].value;
     const notDeletable = objectQuery(value, 'notDeletable');
+    if (
+      !this.props.showGeneratedArgs &&
+      (Object.values(CLOUD).includes(value.key) ||
+        value.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX))
+    ) {
+      return;
+    }
 
     return (
       <RuntimeArgsRow
