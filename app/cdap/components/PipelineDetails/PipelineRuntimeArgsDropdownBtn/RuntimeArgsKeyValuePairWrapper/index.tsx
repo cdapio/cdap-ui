@@ -118,7 +118,7 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const argsPairs = runtimeArgs ? reorderArgsPairs(runtimeArgs.pairs) : [];
   return (
     <>
-      <DetailViewRuntimeArgsLabel />
+      {numOfGeneratedRuntimeArgs > 0 && <DetailViewRuntimeArgsLabel />}
       <div
         id="runtime-arguments-key-value-pairs-wrapper"
         className="configuration-step-content configuration-content-container"
