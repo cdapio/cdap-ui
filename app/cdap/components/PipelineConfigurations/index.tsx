@@ -19,7 +19,7 @@ import { Provider } from 'react-redux';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
-import ConfigModelessActionButtons from 'components/PipelineConfigurations/ConfigurationsContent/ConfigModelessActionButtons';
+import { ConfigModelessActionButtons } from './ConfigurationsContent/ConfigModelessActionButtons';
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import ConfigurableTab from 'components/shared/ConfigurableTab';
