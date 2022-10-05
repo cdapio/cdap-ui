@@ -177,32 +177,34 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
     };
     return (
       <div className={classes.container} data-cy="runtime-args-modeless">
-        <If condition={this.state.initialPropsLoading}>
+        {this.state.initialPropsLoading && (
           <div className={classes.loading}>
             <LoadingSVGCentered data-cy="runtime-args-modeless-loading" />
           </div>
-        </If>
-        <If condition={!this.state.initialPropsLoading}>
-          <div className={classes.argumentsLabel}>{T.translate(`${I18N_PREFIX}.specifyArgs`)}</div>
-          <RuntimeArgsTabContent
-            runtimeArgs={this.props.runtimeArgs}
-            onRuntimeArgsChange={this.onRuntimeArgsChanged}
-          />
-          <div className={classes.tabFooter}>
-            <div className={classes.btnsContainer}>
-              <Popover target={SaveBtn} placement="left" showOn="Hover">
-                {T.translate(`${I18N_PREFIX}.saveBtnPopover`)}
-              </Popover>
-              <Popover target={RunBtn} showOn="Hover" placement="right">
-                {T.translate(`${I18N_PREFIX}.runBtnPopover`)}
-              </Popover>
+        )}
+        {!this.state.initialPropsLoading && (
+          <>
+            <div className={classes.argumentsLabel}>
+              {T.translate(`${I18N_PREFIX}.specifyArgs`)}
             </div>
-            <PipelineRunTimeArgsCounter />
-          </div>
-          <If condition={this.state.error}>
-            <div className={classes.errorContainer}>{this.state.error}</div>
-          </If>
-        </If>
+            <RuntimeArgsTabContent
+              runtimeArgs={this.props.runtimeArgs}
+              onRuntimeArgsChange={this.onRuntimeArgsChanged}
+            />
+            <div className={classes.tabFooter}>
+              <div className={classes.btnsContainer}>
+                <Popover target={SaveBtn} placement="left" showOn="Hover">
+                  {T.translate(`${I18N_PREFIX}.saveBtnPopover`)}
+                </Popover>
+                <Popover target={RunBtn} showOn="Hover" placement="right">
+                  {T.translate(`${I18N_PREFIX}.runBtnPopover`)}
+                </Popover>
+              </div>
+              <PipelineRunTimeArgsCounter />
+            </div>
+            {this.state.error && <div className={classes.errorContainer}>{this.state.error}</div>}
+          </>
+        )}
       </div>
     );
   }
