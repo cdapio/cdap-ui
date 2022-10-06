@@ -31,8 +31,8 @@ export default function(props) {
   const { setLoading } = props;
 
   const [drawerStatus, setDrawerStatus] = useState(true);
-  const [formatValue, setFormatValue] = useState();
-  const [encodingValue, setEncodingValue] = useState();
+  const [formatValue, setFormatValue] = useState('');
+  const [encodingValue, setEncodingValue] = useState('');
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const { dataprep } = DataPrepStore.getState();
@@ -83,12 +83,12 @@ export default function(props) {
   };
 
   const handleFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setFormatValue(value);
   };
 
   const handleEncodingChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setEncodingValue(value);
   };
 
