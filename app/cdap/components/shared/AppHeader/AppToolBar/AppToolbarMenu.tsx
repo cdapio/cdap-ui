@@ -137,12 +137,8 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
     const { classes } = this.props;
     const cdapVersion = VersionStore.getState().version;
     let builtSettingsUrls;
-    const settingsUrls = objectQuery(
-      window.CDAP_CONFIG.cdap.ui,
-      'settings',
-      'cogMenu',
-      'externalLinks'
-    );
+    const settingsUrls = objectQuery(window.CDAP_CONFIG.cdap.ui, 'externalLinks');
+
     if (settingsUrls && typeof settingsUrls === 'object') {
       builtSettingsUrls = Object.entries<string>(settingsUrls).map(([displayName, url]) => {
         return (

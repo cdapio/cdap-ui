@@ -364,5 +364,5 @@ angular
         <auth-refresher></auth-refresher>
         <api-error-dialog ng-if="BodyCtrl.apiError"></api-error-dialog>
       `
-    }
+    };
   });
