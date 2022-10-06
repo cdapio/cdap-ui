@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 import {
   Box,
   Checkbox,
@@ -9,8 +25,8 @@ import {
   TableRow,
 } from '@material-ui/core';
 import React, { useState } from 'react';
-import { COLUMNS, COLUMNS_SELECTED, DATA_QUALITY } from '../constants';
 import { useStyles } from '../styles';
+import T from 'i18n-react';
 
 const columnsData = [
   {
@@ -57,7 +73,7 @@ const columnsData = [
   },
 ];
 
-const SelectColumnsList = (props) => {
+export default function(props) {
   const { selectedColumnsCount } = props;
   const [columns, setColumns] = useState(columnsData);
   const [selectedColumns, setSelectedColumns] = useState([]);
@@ -80,7 +96,7 @@ const SelectColumnsList = (props) => {
               ? selectedColumnsCount
               : `0${selectedColumnsCount}`
             : 'No '}{' '}
-          {COLUMNS_SELECTED}
+          {T.translate('features.WranglerNewAddTransformation.columnsSelected')}
         </div>
         <img src="/cdap_assets/img/search.svg" alt="search" />
       </div>
@@ -102,10 +118,10 @@ const SelectColumnsList = (props) => {
                 />
               </TableCell>
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-                {COLUMNS}
+                {T.translate('features.WranglerNewAddTransformation.columns')}
               </TableCell>
               <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-                {DATA_QUALITY}
+                {T.translate('features.WranglerNewAddTransformation.dataQuality')}
               </TableCell>
               <TableCell />
             </TableRow>
@@ -151,6 +167,4 @@ const SelectColumnsList = (props) => {
       </TableContainer>
     </section>
   );
-};
-
-export default SelectColumnsList;
+}

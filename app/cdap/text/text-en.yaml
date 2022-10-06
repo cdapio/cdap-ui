@@ -3378,4 +3378,20 @@ features:
     startWrangleSubTitle: Select a column or function to add your first recipe step
     recipeSteps: Recipe steps
     serialNo: S.No.
+  WranglerNewAddTransformation:
+    addTransformation: Add Transformation Step
+    columnsSelected: columns selected
+    function: Function
+    selectColumn: Select column(s) to apply this function
+    quickSelect: Quick select by clicking a column on the grid/columns panel
+    selectCoulmns: Select columns
+    selectAction: Select action to take
+    applyStep: Apply Step
+    columns: Columns
+    dataQuality: Data Quality
+   WranglerNewFooterPanel: 
+    currentData: Current data - 1000 rows and 30 columns
+    trasnformations: Trasnformations
+    recipeSteps: Recipe Steps
+    directives: Directives
 ...

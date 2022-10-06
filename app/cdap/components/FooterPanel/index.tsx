@@ -17,6 +17,7 @@ import React from 'react';
 import { Box } from '@material-ui/core';
 import { useCss } from './styles';
 import { ColumnIcon, ZoomIn, ArrowIcon } from './images';
+import T from 'i18n-react';
 
 export default function({ showRecipePanelHandler, showAddTransformationHandler }) {
   const classes = useCss();
@@ -25,7 +26,10 @@ export default function({ showRecipePanelHandler, showAddTransformationHandler }
       <Box className={classes.cont}>
         <Box className={classes.imgCont}>{ColumnIcon}</Box>
         <Box>
-          <p className={classes.data}> Current data - 1000 rows and 30 columns</p>
+          <p className={classes.data}>
+            {' '}
+            {T.translate('features.WranglerNewFooterPanel.currentData')}
+          </p>
         </Box>
         <Box className={classes.zoomCont}>
           {ZoomIn}
@@ -33,11 +37,14 @@ export default function({ showRecipePanelHandler, showAddTransformationHandler }
           {ArrowIcon}
         </Box>
         <p className={classes.directivesCont} onClick={showAddTransformationHandler}>
-          Trasnformations
+          {T.translate('features.WranglerNewFooterPanel.transformations')}
         </p>
-        <p className={classes.directivesCont}> Directives </p>
+        <p className={classes.directivesCont}>
+          {' '}
+          {T.translate('features.WranglerNewFooterPanel.directives')}{' '}
+        </p>
         <Box className={classes.recipeCont} onClick={showRecipePanelHandler}>
-          <p> Recipe Steps</p>
+          <p> {T.translate('features.WranglerNewFooterPanel.recipeSteps')}</p>
           <p className={classes.spanElement1}> 10</p>
         </Box>
       </Box>
