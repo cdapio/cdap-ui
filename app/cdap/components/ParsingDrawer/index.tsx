@@ -1,4 +1,3 @@
-import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -14,6 +13,7 @@ import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
