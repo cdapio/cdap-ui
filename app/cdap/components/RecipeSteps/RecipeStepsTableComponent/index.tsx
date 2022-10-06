@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 import {
   Box,
   Table,
@@ -8,10 +24,10 @@ import {
   TableRow,
 } from '@material-ui/core';
 import React from 'react';
-import { RECIPE_STEPS, SERIAL_NUMBER } from '../constants';
 import { useStyles } from '../styles';
+import T from 'i18n-react';
 
-const RecipeStepsTableComponent = (props) => {
+export default function(props) {
   const { recipeSteps } = props;
   const classes = useStyles();
 
@@ -23,10 +39,10 @@ const RecipeStepsTableComponent = (props) => {
         <TableHead>
           <TableRow className={classes.recipeStepsTableRowStyles}>
             <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-              {SERIAL_NUMBER}
+              {T.translate('features.WranglerNewRecipeSteps.serialNo')}
             </TableCell>
             <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-              {RECIPE_STEPS}
+              {T.translate('features.WranglerNewRecipeSteps.recipeSteps')}
             </TableCell>
             <TableCell />
           </TableRow>
@@ -62,6 +78,4 @@ const RecipeStepsTableComponent = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-export default RecipeStepsTableComponent;
+}
