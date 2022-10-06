@@ -3389,9 +3389,14 @@ features:
     applyStep: Apply Step
     columns: Columns
     dataQuality: Data Quality
-   WranglerNewFooterPanel: 
+  WranglerNewFooterPanel: 
     currentData: Current data - 1000 rows and 30 columns
     trasnformations: Trasnformations
     recipeSteps: Recipe Steps
     directives: Directives
+  WranglerNewParsingDrawer:
+    importSchema: Import schema
+    apply: Apply
+    parsing: Parsing
+    parsingInfoText: Once applied parsing settings cannot be changed.
 ...

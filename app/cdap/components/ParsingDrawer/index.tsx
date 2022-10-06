@@ -24,8 +24,8 @@ import DrawerWidget from 'components/DrawerWidget';
 import Snackbar from 'components/SnackbarComponent/index';
 import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
 import ParsingPopupBody from './Components/ParsingPopupBody';
-import { APPLY_BUTTON, PARSING, PARSING_INFO_TEXT } from './constants';
 import { useStyles } from './styles';
+import T from 'i18n-react';
 
 export default function(props) {
   const { setLoading } = props;
@@ -143,7 +143,7 @@ export default function(props) {
 
   const componentToRender = (
     <DrawerWidget
-      headingText={PARSING}
+      headingText={T.translate('features.WranglerNewParsingDrawer.parsing')}
       openDrawer={setDrawerStatus}
       showDivider={true}
       headerActionTemplate={
@@ -169,7 +169,9 @@ export default function(props) {
         <Box className={classes.bottomSectionStyles}>
           <Box className={classes.infoWrapperStyles}>
             <ErrorOutlineIcon />
-            <span className={classes.infoTextStyles}>{PARSING_INFO_TEXT}</span>
+            <span className={classes.infoTextStyles}>
+              {T.translate('features.WranglerNewParsingDrawer.parsingInfoText')}
+            </span>
           </Box>
           <Button
             variant="contained"
@@ -178,7 +180,7 @@ export default function(props) {
             className={classes.applyButtonStyles}
             onClick={(e: MouseEvent<HTMLButtonElement>) => handleApply(e)}
           >
-            {APPLY_BUTTON}
+            {T.translate('features.WranglerNewParsingDrawer.apply')}
           </Button>
         </Box>
       </Box>
