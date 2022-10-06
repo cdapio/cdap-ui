@@ -35,7 +35,6 @@ import NoDataScreen from './components/NoRecordScreen';
 import { useStyles } from './styles';
 import { IExecuteAPIResponse, IHeaderNamesList, IObject, IParams, IRecords } from './types';
 import { convertNonNullPercent } from './utils';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import FooterPanel from 'components/FooterPanel';
 
 export default function() {
