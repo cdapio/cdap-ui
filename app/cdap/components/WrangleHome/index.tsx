@@ -19,7 +19,7 @@ import Box from '@material-ui/core/Box';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import React, { useState } from 'react';
 import OngoingDataExploration from './Components/OngoingDataExploration';
-import { WrangleCard } from './Components/WrangleCard';
+import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
