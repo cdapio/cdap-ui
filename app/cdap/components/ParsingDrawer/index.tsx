@@ -1,4 +1,3 @@
-import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -14,6 +13,7 @@ import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -31,8 +31,8 @@ export default function(props) {
   const { setLoading } = props;
 
   const [drawerStatus, setDrawerStatus] = useState(true);
-  const [formatValue, setFormatValue] = useState();
-  const [encodingValue, setEncodingValue] = useState();
+  const [formatValue, setFormatValue] = useState('');
+  const [encodingValue, setEncodingValue] = useState('');
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const [schemaValue, setSchemaValue] = useState(null);
@@ -84,12 +84,12 @@ export default function(props) {
   };
 
   const handleFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setFormatValue(value);
   };
 
   const handleEncodingChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setEncodingValue(value);
   };
 

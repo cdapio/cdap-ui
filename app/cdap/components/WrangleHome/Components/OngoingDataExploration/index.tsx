@@ -29,7 +29,8 @@ import { HOME_URL_PARAM, WORKSPACES_LABEL } from './constants';
 interface ICardCount {
   cardCount?: number;
 }
-const OngoingDataExploration = ({ cardCount }: ICardCount) => {
+
+export default function OngoingDataExploration({ cardCount }: ICardCount) {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
   const getOngoingData = () => {
@@ -132,5 +133,4 @@ const OngoingDataExploration = ({ cardCount }: ICardCount) => {
       })}
     </Box>
   );
-};
-export default OngoingDataExploration;
+}
