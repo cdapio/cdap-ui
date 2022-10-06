@@ -15,8 +15,8 @@
  */
 import { Container } from '@material-ui/core';
 import React, { Fragment } from 'react';
-import { RECIPE_STEPS_EMPTY_INFO_TEXT, START_WRANGLING_YOUR_DATA } from '../constants';
 import { useStyles } from '../styles';
+import T from 'i18n-react';
 
 export default function(props) {
   const classes = useStyles();
@@ -24,8 +24,12 @@ export default function(props) {
   return (
     <Container className={classes.emptyScreenStyles}>
       <img src="/cdap_assets/img/recipe-steps_infographic.svg" alt="Empty infographic" />
-      <div className={classes.emptyScreenText}>{START_WRANGLING_YOUR_DATA}</div>
-      <div className={classes.emptyScreenInfoText}>{RECIPE_STEPS_EMPTY_INFO_TEXT}</div>
+      <div className={classes.emptyScreenText}>
+        {T.translate('features.WranglerNewRecipeSteps.startWrangleTitle')}
+      </div>
+      <div className={classes.emptyScreenInfoText}>
+        {T.translate('features.WranglerNewRecipeSteps.startWrangleSubTitle')}
+      </div>
     </Container>
   );
 }

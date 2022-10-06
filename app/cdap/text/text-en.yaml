@@ -3372,5 +3372,10 @@ features:
         title: Configure a pipeline
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
-
+  WranglerNewRecipeSteps:
+    recipe: Recipe
+    startWrangleTitle: Start Wrangling your data
+    startWrangleSubTitle: Select a column or function to add your first recipe step
+    recipeSteps: Recipe steps
+    serialNo: S.No.
 ...

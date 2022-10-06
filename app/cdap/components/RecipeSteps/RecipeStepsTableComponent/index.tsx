@@ -24,8 +24,8 @@ import {
   TableRow,
 } from '@material-ui/core';
 import React from 'react';
-import { RECIPE_STEPS, SERIAL_NUMBER } from '../constants';
 import { useStyles } from '../styles';
+import T from 'i18n-react';
 
 export default function(props) {
   const { recipeSteps } = props;
@@ -39,10 +39,10 @@ export default function(props) {
         <TableHead>
           <TableRow className={classes.recipeStepsTableRowStyles}>
             <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-              {SERIAL_NUMBER}
+              {T.translate('features.WranglerNewRecipeSteps.serialNo')}
             </TableCell>
             <TableCell classes={{ head: classes.recipeStepsTableHeadStyles }}>
-              {RECIPE_STEPS}
+              {T.translate('features.WranglerNewRecipeSteps.recipeSteps')}
             </TableCell>
             <TableCell />
           </TableRow>

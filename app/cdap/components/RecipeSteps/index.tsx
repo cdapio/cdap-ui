@@ -16,11 +16,11 @@
 import { Container } from '@material-ui/core';
 import DrawerWidget from 'components/DrawerWidget';
 import React, { useState } from 'react';
-import { RECIPE } from './constants';
 import RecipeHeaderActionTemplate from './RecipeHeaderActionTemplate';
 import RecipeStepsEmptyScreen from './RecipeStepsEmptyScreen';
 import RecipeStepsTableComponent from './RecipeStepsTableComponent';
 import { useStyles } from './styles';
+import T from 'i18n-react';
 
 const recipes = [
   {
@@ -44,7 +44,7 @@ export default function({ setShowRecipePanel, showRecipePanel }) {
 
   return (
     <DrawerWidget
-      headingText={RECIPE}
+      headingText={T.translate('features.WranglerNewRecipeSteps.recipe')}
       openDrawer={showRecipePanel}
       showDivider={true}
       headerActionTemplate={<RecipeHeaderActionTemplate />}
