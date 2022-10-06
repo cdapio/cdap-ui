@@ -21,7 +21,7 @@ import React, { useState } from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 import OngoingDataExploration from './Components/OngoingDataExploration';
-import { WrangleCard } from './Components/WrangleCard';
+import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
