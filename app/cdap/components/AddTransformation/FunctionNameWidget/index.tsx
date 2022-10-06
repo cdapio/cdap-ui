@@ -15,7 +15,6 @@
  */
 
 import React from 'react';
-import { FUNCTION } from '../constants';
 import { useStyles } from '../styles';
 import T from 'i18n-react';
 
