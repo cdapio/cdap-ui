@@ -204,7 +204,6 @@ export default function() {
   }, [gridData]);
 
   const showRecipePanelHandler = () => {
-    console.log(showRecipePanel, 'clicked');
     setShowRecipePanel((prev) => !prev);
   };
 
