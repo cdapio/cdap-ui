@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 import { makeStyles } from '@material-ui/core';
 
 export const useCss = makeStyles({
@@ -33,11 +48,13 @@ export const useCss = makeStyles({
     gap: '8px',
     width: '88px',
     height: '40px',
-    backgroundColor: '#F3F6F9',
-    boxShadow: 'inset 0px 2px 4px rgba(0, 0, 0, 0.2)',
+    background:
+      'linear-gradient(180deg, rgba(70, 129, 244, 0) 0.85%, rgba(70, 129, 244, 0.2) 118.78%)',
+    borderLeft: '1px solid rgba(57, 148, 255, 0.4)',
     flex: 'none',
     order: 0,
     flexGrow: 0,
+    borderRight: '1px solid rgba(57, 148, 255, 0.4)',
   },
   data: {
     width: '700px',
