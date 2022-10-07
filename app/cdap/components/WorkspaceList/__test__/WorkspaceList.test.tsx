@@ -15,26 +15,44 @@
  */
 
 import { render } from '@testing-library/react';
+import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
-import WrangleCard from '../index';
-
-import { createBrowserHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
+import WorkspaceList from '..';
 
-const history = createBrowserHistory({
+const history = createHistory({
   basename: '/',
 });
-describe('Testing the Wrangle Card Component', () => {
-  test('Should check whether WrangleCard Component is rendered or not', () => {
+
+describe('Test the Workspace List Component', () => {
+  it('Should render the Workspace List Component', () => {
     const screen = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <WrangleCard />
+            <WorkspaceList />
           </Route>
         </Switch>
       </Router>
     );
-    expect(screen).toBeDefined();
+    expect(render).toBeDefined();
+    const ele = screen.getByTestId(/workspace-list-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
+
+  it('Should should have Workspaces Label in Breadcrumb', () => {
+    const screen = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WorkspaceList />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(render).toBeDefined();
+    const element = screen.getByTestId(/breadcrumb-label-workspaces/i);
+    console.log(element);
+    expect(element).toHaveTextContent('Workspaces');
   });
 });

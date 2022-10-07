@@ -15,101 +15,28 @@
  */
 
 import { Box, Card, Typography } from '@material-ui/core';
-import { fetchConnectors } from 'components/Connections/Create/reducer';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getWidgetData } from './services/getWidgetData';
 import { useStyles } from './styles';
-import { getCategoriesToConnectorsMap, getSVG } from './Components/WidgetData';
-import { fetchConnectionDetails } from 'components/Connections/Create/reducer';
-import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
-import { IConnectorArray, IConnectorDetailPayloadArray } from './types';
-import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
+import { IConnectorArray } from './types';
 
-export const WrangleCard = () => {
+export default function() {
   const [state, setState] = useState({
     connectorTypes: [],
   });
-
-  const widgetData = async () => {
-    const connectorTypes = await fetchConnectors();
-    const categorizedConnections = await getCategorizedConnections();
-    const connectorTypeWithConnections = [];
-    categorizedConnections.forEach((itemEach, key) => {
-      connectorTypeWithConnections.push(key);
-    });
-    const connectorDataArray = [];
-    let connectorDataWithSvgArray: IConnectorArray[] = [];
-    const allConnectorsPluginProperties = getCategoriesToConnectorsMap(connectorTypes);
-    const connectionPayloadArray: IConnectorDetailPayloadArray[] = [];
-    allConnectorsPluginProperties.forEach((connectorsArray) => {
-      if (connectorsArray.length) {
-        connectorsArray.map((item) => {
-          connectionPayloadArray.push(item);
-        });
-      }
-    });
-    const connectionDetailsData = await Promise.all(
-      connectionPayloadArray.map(async (item, index) => {
-        const selectedConnector = {
-          artifact: item.artifact,
-          category: item.category,
-          name: item.name,
-          type: item.type,
-        };
-        connectorDataArray.push(selectedConnector);
-        return new Promise((resolve, reject) => {
-          const response = fetchConnectionDetails(selectedConnector);
-          if (response) {
-            resolve(response);
-          }
-        });
-      })
-    );
-    const connectorWidgetJson = connectionDetailsData.map(
-      ({ connectorWidgetJSON }) => connectorWidgetJSON
-    );
-    connectorWidgetJson.map((item) => {
-      connectorDataArray.map((connectorType) => {
-        if (item['display-name'] && item['display-name'].includes(connectorType.name)) {
-          connectorDataWithSvgArray.push({
-            ...connectorType,
-            SVG: getSVG(item?.icon?.arguments?.data),
-          });
-        }
-      });
-    });
-
-    connectorDataWithSvgArray = connectorDataWithSvgArray.filter((obj) =>
-      connectorTypeWithConnections.find((item) => item == obj.name)
-    );
-
-    connectorDataWithSvgArray = [
-      ...new Map(connectorDataWithSvgArray.map((item) => [item.name, item])).values(),
-    ];
-
-    connectorDataWithSvgArray.unshift({
-      name: 'Imported Datasets',
-      type: 'default',
-      category: 'default',
-      description: 'All Connections from the List',
-      artifact: {
-        name: 'allConnections',
-        version: 'local',
-        scope: 'local',
-      },
-
-      SVG: ImportDatasetIcon,
-    });
-    setState({
-      connectorTypes: connectorDataWithSvgArray,
-    });
-  };
-  useEffect(() => {
-    widgetData();
-  }, []);
   const classes = useStyles();
   const connectorTypes: IConnectorArray[] = state.connectorTypes;
+
+  const updateState = (updatedState) => {
+    setState(updatedState);
+  };
+
+  useEffect(() => {
+    getWidgetData(updateState);
+  }, []);
+
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
       {connectorTypes.map((item, index) => {
@@ -129,4 +56,4 @@ export const WrangleCard = () => {
       })}
     </Box>
   );
-};
+}

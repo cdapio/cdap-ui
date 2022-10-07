@@ -44,7 +44,6 @@ export default function TabLabelCanSample({
   setToaster: React.Dispatch<React.SetStateAction<IMessageState>>;
 }) {
   const classes = useStyles();
-  const pathName = useLocation();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
