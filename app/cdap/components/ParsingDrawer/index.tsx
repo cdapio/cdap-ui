@@ -1,4 +1,3 @@
-import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -14,6 +13,7 @@ import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import React, { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -24,15 +24,15 @@ import DrawerWidget from 'components/DrawerWidget';
 import Snackbar from 'components/SnackbarComponent/index';
 import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
 import ParsingPopupBody from './Components/ParsingPopupBody';
-import { APPLY_BUTTON, PARSING, PARSING_INFO_TEXT } from './constants';
 import { useStyles } from './styles';
+import T from 'i18n-react';
 
 export default function(props) {
   const { setLoading } = props;
 
   const [drawerStatus, setDrawerStatus] = useState(true);
-  const [formatValue, setFormatValue] = useState();
-  const [encodingValue, setEncodingValue] = useState();
+  const [formatValue, setFormatValue] = useState('');
+  const [encodingValue, setEncodingValue] = useState('');
   const [quotedValuesChecked, setQuotedValuesChecked] = useState(false);
   const [headerValueChecked, setHeaderValueChecked] = useState(false);
   const [schemaValue, setSchemaValue] = useState(null);
@@ -84,12 +84,12 @@ export default function(props) {
   };
 
   const handleFormatChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setFormatValue(value);
   };
 
   const handleEncodingChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as any;
+    const value = event.target.value as string;
     setEncodingValue(value);
   };
 
@@ -143,7 +143,7 @@ export default function(props) {
 
   const componentToRender = (
     <DrawerWidget
-      headingText={PARSING}
+      headingText={T.translate('features.WranglerNewParsingDrawer.parsing')}
       openDrawer={setDrawerStatus}
       showDivider={true}
       headerActionTemplate={
@@ -169,7 +169,9 @@ export default function(props) {
         <Box className={classes.bottomSectionStyles}>
           <Box className={classes.infoWrapperStyles}>
             <ErrorOutlineIcon />
-            <span className={classes.infoTextStyles}>{PARSING_INFO_TEXT}</span>
+            <span className={classes.infoTextStyles}>
+              {T.translate('features.WranglerNewParsingDrawer.parsingInfoText')}
+            </span>
           </Box>
           <Button
             variant="contained"
@@ -178,7 +180,7 @@ export default function(props) {
             className={classes.applyButtonStyles}
             onClick={(e: MouseEvent<HTMLButtonElement>) => handleApply(e)}
           >
-            {APPLY_BUTTON}
+            {T.translate('features.WranglerNewParsingDrawer.apply')}
           </Button>
         </Box>
       </Box>
