@@ -29,13 +29,7 @@ import GridTextCell from './components/GridTextCell';
 import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import {
-  IExecuteAPIResponse,
-  IRecords,
-  IParams,
-  IHeaderNamesList,
-  IObject,
-} from './types';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList, IObject } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
 import GridKPICell from './components/GridKPICell';
