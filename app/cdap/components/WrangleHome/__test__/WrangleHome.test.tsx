@@ -14,12 +14,25 @@
  * the License.
  */
 
+import { render } from '@testing-library/react';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import WranglerHomeNew from '../index';
+import { Route, Router, Switch } from 'react-router';
+import { createBrowserHistory as createHistory } from 'history';
+import WrangleHome from '..';
 
+const history = createHistory({
+  basename: '/',
+});
 test('renders Wrangler-Home-New component', () => {
-  render(<WranglerHomeNew />);
+  const screen = render(
+    <Router history={history}>
+      <Switch>
+        <Route>
+          <WrangleHome />
+        </Route>
+      </Switch>
+    </Router>
+  );
   const ele = screen.getByTestId(/wrangler-home-new-parent/i);
   expect(ele).toBeInTheDocument();
 });

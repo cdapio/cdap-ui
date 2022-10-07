@@ -14,27 +14,18 @@
  * the License.
  */
 
-import { render } from '@testing-library/react';
 import React from 'react';
-import WrangleCard from '../index';
+import { render, screen } from '@testing-library/react';
+import WidgetSVG from '../index';
 
-import { createBrowserHistory } from 'history';
-import { Route, Router, Switch } from 'react-router';
+describe('Test Widget Data Component', () => {
+  render(<WidgetSVG dataSrc="iALTyuui" />);
+  it('should render the component with image from widget api', () => {
+    expect(screen.getByTestId('card-image-from-widget-api')).toBeInTheDocument();
+  });
 
-const history = createBrowserHistory({
-  basename: '/',
-});
-describe('Testing the Wrangle Card Component', () => {
-  test('Should check whether WrangleCard Component is rendered or not', () => {
-    const screen = render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <WrangleCard />
-          </Route>
-        </Switch>
-      </Router>
-    );
-    expect(screen).toBeDefined();
+  it('should render the component with default avatar', () => {
+    render(<WidgetSVG dataSrc={undefined} />);
+    expect(screen.getByTestId('card-image-default')).toBeInTheDocument();
   });
 });
