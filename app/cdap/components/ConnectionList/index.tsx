@@ -16,6 +16,8 @@
 
 import { Box, IconButton, styled, Typography } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
+import CloseIcon from '@material-ui/icons/Close';
+import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
@@ -23,19 +25,13 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
-import React from 'react';
-import { createRef, useEffect, useRef, useState } from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './Components/ConnectionTabs';
-import CustomTooltip from './Components/CustomTooltip';
 import SubHeader from './Components/SubHeader';
 import { useStyles } from './styles';
-import If from 'components/shared/If';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import ErrorSnackbar from 'components/SnackbarComponent';
-import cloneDeep from 'lodash/cloneDeep';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
+import { IData, IdataForTabs } from './types';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -222,20 +218,20 @@ export default function ConnectionList() {
     refs.current[index].focus();
   };
 
-  const handleSearch = (e: any, index: number) => {
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const val = e.target.value.toLowerCase();
-    const newData = cloneDeep(dataForTabs);
-    const newDataToSearch = [...newData[index].data];
-    const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(val));
+    const newData: IdataForTabs[] = cloneDeep(dataForTabs);
+    const newDataToSearch: IData[] = [...newData[index].data];
+    const tempData = newDataToSearch.filter((item: IData) => item.name.toLowerCase().includes(val));
     newData[index].data = [...tempData];
     setFilteredData(cloneDeep(newData));
   };
 
-  const handleClearSearch = (e: any, index: number) => {
+  const handleClearSearch = (e: MouseEvent<HTMLElement>, index: number) => {
     refs.current[index].value = '';
-    const newData = cloneDeep(dataForTabs);
-    const newDataToSearch = [...newData[index].data];
-    const tempData = newDataToSearch.filter((item: any) => item.name.toLowerCase().includes(''));
+    const newData: IdataForTabs[] = cloneDeep(dataForTabs);
+    const newDataToSearch: IData[] = [...newData[index].data];
+    const tempData = newDataToSearch.filter((item: IData) => item.name.toLowerCase().includes(''));
     newData[index].data = [...tempData];
     setFilteredData(cloneDeep(newData));
   };
@@ -286,14 +282,14 @@ export default function ConnectionList() {
                     <input
                       type="text"
                       className={classes.searchBar}
-                      onChange={(e: any) => handleSearch(e, index)}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e, index)}
                       ref={(e) => {
                         refs.current[index] = e;
                       }}
                     />
                     <Box
                       className={classes.closeIcon}
-                      onClick={(e: any) => handleClearSearch(e, index)}
+                      onClick={(e: MouseEvent<HTMLElement>) => handleClearSearch(e, index)}
                     >
                       <CloseIcon />
                     </Box>

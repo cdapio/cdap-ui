@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, InputLabel } from '@material-ui/core';
 import { useStyles } from '../../styles';
 import InputSelect from '../InputSelect';
@@ -40,6 +40,17 @@ export default function(props) {
     handleCheckboxChange,
   } = props;
 
+  let selectedFormatValue = [];
+  let selectedEncodingValue = [];
+
+  useEffect(() => {
+    selectedFormatValue = FORMAT_OPTIONS.filter((i) => i.value === formatValue);
+  }, [formatValue]);
+
+  useEffect(() => {
+    selectedEncodingValue = CHAR_ENCODING_OPTIONS.filter((i) => i.value === encodingValue);
+  }, [encodingValue]);
+
   return (
     <Box>
       <Box className={`${classes.formFieldWrapperStyles} ${classes.marginBottomStyles}`}>
@@ -55,7 +66,7 @@ export default function(props) {
           optionClassName={{ root: classes.optionStyles }}
           fullWidth
           defaultValue={FORMAT_OPTIONS[0].value}
-          value={formatValue}
+          value={selectedFormatValue[0]?.value}
           onChange={handleFormatChange}
           options={FORMAT_OPTIONS}
         />
@@ -74,7 +85,7 @@ export default function(props) {
           optionClassName={{ root: classes.optionStyles }}
           defaultValue={CHAR_ENCODING_OPTIONS[0].value}
           fullWidth
-          value={encodingValue}
+          value={selectedEncodingValue[0]?.value}
           onChange={handleEncodingChange}
           options={CHAR_ENCODING_OPTIONS}
         />
