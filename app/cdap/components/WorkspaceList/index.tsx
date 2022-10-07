@@ -26,7 +26,7 @@ import { Link } from 'react-router-dom';
 export default function WorkspaceList() {
   const classes = useStyles();
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} data-testid="workspace-list-parent">
       <Box className={classes.header}>
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
@@ -36,7 +36,9 @@ export default function WorkspaceList() {
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
             <Typography className={classes.text}> Home</Typography>
           </Link>
-          <Typography className={classes.text}>Workspaces</Typography>
+          <Typography className={classes.text} data-testid="breadcrumb-label-workspaces">
+            Workspaces
+          </Typography>
         </Breadcrumbs>
       </Box>
       <Box className={classes.explorationList}>
