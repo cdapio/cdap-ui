@@ -33,7 +33,7 @@ import { DATASOURCES_LABEL } from 'components/ConnectionList/Components/TabLabel
 const FILE_SIZE_LIMIT = 10 * 1024 * 1024; // 10 MB
 const cookie = new Cookies();
 
-const ImportDataSet = (props) => {
+export default function ImportDataSet(props) {
   const [drawerStatus, setDrawerStatus] = useState(true);
   const [file, setFile] = useState(null);
   const classes = useStyles();
@@ -144,6 +144,4 @@ const ImportDataSet = (props) => {
   );
 
   return drawerStatus && componentToRender;
-};
-
-export default ImportDataSet;
+}

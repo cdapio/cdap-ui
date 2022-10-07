@@ -22,7 +22,7 @@ import { Box, Divider, Typography } from '@material-ui/core';
 import { uploadSVG, infoIcon, deleteSVG } from 'components/ImportDataset/iconStore';
 import { DRAG_AND_DROP_TEXT, MAX_SIZE_TEXT } from 'components/ImportDataset/constants';
 
-const FileDnD = ({ file, onDropHandler }) => {
+export default function FileDnD({ file, onDropHandler }) {
   const classes = useStyles();
   const onDrop = useCallback((acceptedFiles) => {
     onDropHandler(acceptedFiles);
@@ -68,6 +68,4 @@ const FileDnD = ({ file, onDropHandler }) => {
       )}
     </Box>
   );
-};
-
-export default FileDnD;
+}

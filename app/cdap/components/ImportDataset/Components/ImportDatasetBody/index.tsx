@@ -17,13 +17,11 @@
 import React from 'react';
 import DragDrop from '../DragAndDrop';
 
-const DatasetBody = (props) => {
+export default function DatasetBody(props) {
   const { file, onDropHandler } = props;
   return (
     <div>
       <DragDrop file={file} onDropHandler={onDropHandler} />
     </div>
   );
-};
-
-export default DatasetBody;
+}
