@@ -15,32 +15,25 @@
  */
 
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
-import GridTextCell from './components/GridTextCell';
-import Box from '@material-ui/core/Box';
-import { useStyles } from './styles';
-import { useLocation } from 'react-router';
-import {
-  IExecuteAPIResponse,
-  IRecords,
-  IParams,
-  IHeaderNamesList,
-  IObject,
-} from './types';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import { convertNonNullPercent } from './utils';
 import GridKPICell from './components/GridKPICell';
+import GridTextCell from './components/GridTextCell';
 import NoDataScreen from './components/NoRecordScreen';
+import { useStyles } from './styles';
+import { IExecuteAPIResponse, IHeaderNamesList, IObject, IParams, IRecords } from './types';
+import { convertNonNullPercent } from './utils';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
