@@ -30,13 +30,7 @@ import GridKPICell from './components/GridKPICell';
 import NoDataScreen from './components/NoRecordScreen/index';
 import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
-import {
-  IExecuteAPIResponse,
-  IRecords,
-  IParams,
-  IHeaderNamesList,
-  IObject,
-} from './types';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList, IObject } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { convertNonNullPercent } from './utils';
 
