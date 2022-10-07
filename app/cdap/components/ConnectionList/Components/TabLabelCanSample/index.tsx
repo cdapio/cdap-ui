@@ -43,7 +43,6 @@ export default function TabLabelCanSample({
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const classes = useStyles();
-  const pathName = useLocation();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
