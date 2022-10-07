@@ -14,40 +14,27 @@
  * the License.
  */
 
+import { render } from '@testing-library/react';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { WrangleCard } from '../index';
+import WrangleCard from '../index';
 
-test('It renders Wrangler-Card ', () => {
-  jest.mock('components/Connections/Create/reducer', () => {
-    return Promise.resolve([
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'HeMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'BatMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'SuperMan',
-        type: 'js',
-      },
-    ]);
+import { createBrowserHistory } from 'history';
+import { Route, Router, Switch } from 'react-router';
+
+const history = createBrowserHistory({
+  basename: '/',
+});
+describe('Testing the Wrangle Card Component', () => {
+  test('Should check whether WrangleCard Component is rendered or not', () => {
+    const screen = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WrangleCard />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(screen).toBeDefined();
   });
-  render(<WrangleCard />);
-  const ele = screen.getByTestId(/wrangle-card-parent/i);
-  expect(ele).toBeInTheDocument();
 });
