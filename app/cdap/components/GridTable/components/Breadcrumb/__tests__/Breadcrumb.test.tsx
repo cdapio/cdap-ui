@@ -28,6 +28,9 @@ describe('Test Breadcrumb Component', () => {
   const locationMock = jest.mock('react-router-dom', () => ({
     useLocation: () => ({
       pathname: 'localhost:3000/example/path',
+      state: {
+        from: 'Workspaces',
+      },
     }),
   }));
 
