@@ -1,5 +1,5 @@
 """
- Copyright © 2019 Cask Data, Inc.
+ Copyright © 2022 Cask Data, Inc.
 
  Licensed under the Apache License, Version 2.0 (the "License"); you may not
  use this file except in compliance with the License. You may obtain a copy of
@@ -14,32 +14,8 @@
  the License.
 """
 
-# import ArtifactSummary from "artifactSchema.graphql"
-# import ChangeDetail from "changeDetailSchema.graphql"
-
-type PipelineRecord {
-  type: String!
-  name: String!
-  version: String!
+type ChangeDetail {
   description: String!
-  artifact: ArtifactSummary!
-  ownerPrincipal: String
-  runs: [PipelineRun]
-  totalRuns: Int
-  nextRuntime: [PipelineSchedule]
-  changeDetail: ChangeDetail!
-}
-
-type PipelineRun {
-  runid: String!
-  starting: String!
-  start: String
-  end: String
-  status: String!
-  profileId: String
-}
-
-type PipelineSchedule {
-  id: String!
-  time: String!
+  creationTimeMillis: String!
+  author: String!
 }

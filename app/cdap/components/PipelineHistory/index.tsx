@@ -65,6 +65,8 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       token: pageToken || undefined,
       pageSize: pageLimit,
       namespace: getCurrentNamespace(),
+      orderBy: 'DESC',
+      strictEqual: true,
     },
   });
 

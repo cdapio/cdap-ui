@@ -34,12 +34,21 @@ interface IStore {
 }
 
 export const QUERY = gql`
-  query Query($namespace: String, $pageSize: Int, $token: String, $nameFilter: String) {
+  query Query(
+    $namespace: String
+    $pageSize: Int
+    $token: String
+    $nameFilter: String
+    $orderBy: String
+    $strictEqual: Boolean
+  ) {
     pipelines(
       namespace: $namespace
       pageSize: $pageSize
       pageToken: $token
       nameFilter: $nameFilter
+      orderBy: $orderBy
+      strictEqual: $strictEqual
     ) {
       applications {
         name
