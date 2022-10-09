@@ -72,7 +72,8 @@ class RuntimeArgsPairsView extends AbstractMultiRowWidget<IRuntimeArgsPairsProps
     if (
       !this.props.showGeneratedArgs &&
       (Object.values(CLOUD).includes(value.key) ||
-        value.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX))
+        value.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX) ||
+        value.key.startsWith(CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX))
     ) {
       return;
     }

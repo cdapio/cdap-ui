@@ -19,19 +19,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { getFilteredRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
-import { CLOUD } from 'services/global-constants';
 require('./PipelineRuntimeArgsCounter.scss');
 
 const getTotalRuntimeArgsCount = (runtimeArgs) => {
   let count = 0;
   runtimeArgs.pairs.forEach((runtimeArg) => {
-    if (
-      !isEmpty(runtimeArg.key) &&
-      !(
-        Object.values(CLOUD).includes(runtimeArg.key) ||
-        runtimeArg.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX)
-      )
-    ) {
+    if (!isEmpty(runtimeArg.key)) {
       count += 1;
     }
   });

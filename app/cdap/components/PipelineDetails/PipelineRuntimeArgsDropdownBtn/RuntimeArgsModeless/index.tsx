@@ -38,7 +38,7 @@ const styles = (theme): StyleRules => {
       gridTemplateRows: 'auto',
       margin: '0',
       textAlign: 'left',
-      width: '730px',
+      width: '950px',
       padding: '10px 30px 30px',
     },
     loading: {

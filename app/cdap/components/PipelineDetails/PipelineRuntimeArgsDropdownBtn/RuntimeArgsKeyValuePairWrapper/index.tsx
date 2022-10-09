@@ -65,7 +65,10 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const numOfGeneratedRuntimeArgs = runtimeArgs.pairs
     .map((pair) => pair.key)
     .filter(
-      (key) => Object.values(CLOUD).includes(key) || key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX)
+      (key) =>
+        Object.values(CLOUD).includes(key) ||
+        key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX) ||
+        key.startsWith(CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
     ).length;
 
   const runtimeArgsChanged = (changedArgs) => {
@@ -108,7 +111,11 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const reorderArgsPairs = (pairs) => {
     // make auto generated args at top
     return pairs.sort((a, b) => {
-      if (Object.values(CLOUD).includes(a.key) || a.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX)) {
+      if (
+        Object.values(CLOUD).includes(a.key) ||
+        a.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX) ||
+        a.key.startsWith(CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+      ) {
         return -1;
       }
       return 1;
@@ -118,6 +125,7 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const argsPairs = runtimeArgs ? reorderArgsPairs(runtimeArgs.pairs) : [];
   return (
     <>
+      <DetailViewRuntimeArgsLabel />
       <div
         id="runtime-arguments-key-value-pairs-wrapper"
         className="configuration-step-content configuration-content-container"

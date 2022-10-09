@@ -22,7 +22,7 @@ import PipelineConfigurationsStore, {
 
 import PushdownConfig from 'components/PushdownConfig';
 import { CLOUD } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { convertKeyValuePairsToMap, convertMapToKeyValuePairs, flattenObj } from 'services/helpers';
 
 const getPushdownEnabledValue = (state) => {
   const pushdownEnabledKeyValuePair = state.runtimeArgs.pairs.find(
@@ -53,7 +53,18 @@ export default function PushdownTabContent({}) {
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
       runtimeObj[CLOUD.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
-      runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN] = JSON.stringify(transformationPushdown);
+      const flattenedTransformationPushdown = flattenObj(transformationPushdown);
+      for (const key of Object.keys(flattenedTransformationPushdown)) {
+        if (
+          flattenedTransformationPushdown[key] !== undefined &&
+          flattenedTransformationPushdown[key] !== null
+        ) {
+          runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX + key] = String(
+            flattenedTransformationPushdown[key]
+          );
+        }
+      }
+      // runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN] = JSON.stringify(transformationPushdown);
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_PUSHDOWN_CONFIG,
