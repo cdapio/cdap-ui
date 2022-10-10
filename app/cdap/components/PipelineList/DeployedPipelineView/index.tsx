@@ -15,13 +15,14 @@
  */
 
 import * as React from 'react';
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import PipelineTable from 'components/PipelineList/DeployedPipelineView/PipelineTable';
 import {
   reset,
   setPipelines,
   nextPage,
   prevPage,
+  setDrafts,
 } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import PipelineCount from 'components/PipelineList/DeployedPipelineView/PipelineCount';
 import SearchBox from 'components/PipelineList/DeployedPipelineView/SearchBox';
@@ -36,13 +37,13 @@ import If from 'components/shared/If';
 import { categorizeGraphQlErrors } from 'services/helpers';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
-import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import './DeployedPipelineView.scss';
 const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 
 import PaginationStepper from 'components/shared/PaginationStepper';
 import styled from 'styled-components';
+import { MyPipelineApi } from 'api/pipeline';
 
 const PaginationContainer = styled.div`
   margin-right: 50px;
@@ -130,6 +131,7 @@ const DeployedPipeline: React.FC = () => {
             id
             time
           }
+          version
         }
         nextPageToken
       }
@@ -158,6 +160,12 @@ const DeployedPipeline: React.FC = () => {
     },
   });
   const bannerMessage = checkError(error);
+
+  useEffect(() => {
+    MyPipelineApi.getDrafts({ context: getCurrentNamespace() }).subscribe((res) => {
+      setDrafts(res);
+    });
+  }, []);
 
   useEffect(() => {
     if (loading || networkStatus === 4) {
