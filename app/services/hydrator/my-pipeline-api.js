@@ -107,6 +107,9 @@ angular.module(PKG.name + '.services')
         saveDraft: myHelpers.getConfig('PUT', 'REQUEST', pipelineAppPath + '/contexts/:context/drafts/:draftId', false),
         getDraft: myHelpers.getConfig('GET', 'REQUEST', pipelineAppPath + '/contexts/:context/drafts/:draftId', false),
         deleteDraft: myHelpers.getConfig('DELETE', 'REQUEST', pipelineAppPath + '/contexts/:context/drafts/:draftId', false),
+
+        // save schedule
+        createSchedule: myHelpers.getConfig('PUT', 'REQUEST', pipelinePath + '/schedules/:scheduleId', false),
       }
     );
   });
