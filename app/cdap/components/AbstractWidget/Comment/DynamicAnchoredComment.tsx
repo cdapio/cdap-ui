@@ -17,11 +17,10 @@
 import * as React from 'react';
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper';
 import CommentBox from 'components/AbstractWidget/Comment/CommentBox';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { COMMENT_WIDTH, IComment } from 'components/AbstractWidget/Comment/CommentConstants';
+import { UniversalBackdrop } from 'components/UniversalBackdrop';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import cloneDeep from 'lodash/cloneDeep';
-import If from 'components/shared/If';
 import isNil from 'lodash/isNil';
 
 const useStyles = makeStyles(() => {
@@ -132,48 +131,48 @@ function DynamicAnchor({
   }, [comments]);
 
   return (
-    <ClickAwayListener onClickAway={onClickAway} mouseEvent="onMouseDown">
-      <div className={classes.root}>
-        <If condition={!isNil(localAnchorEl)}>
-          <Popper
-            className={classes.popperRoot}
-            anchorEl={localAnchorEl}
-            open={isOpen}
-            placement={placement}
-            modifiers={{
-              flip: {
-                enabled: true,
-              },
-              preventOverflow: {
-                enabled: true,
-                boundariesElement: 'scrollParent',
-              },
-              arrow: {
-                enabled: false,
-              },
-              offset: {
-                enabled: true,
-                offset: '95%, 10%',
-              },
-            }}
-          >
-            {localComments.map((comment, id) => {
-              return (
-                <CommentBox
-                  key={id}
-                  comment={comment}
-                  onSave={onSave.bind(null, id)}
-                  onDelete={onDelete.bind(null, id)}
-                  focus={localComments.length - 1 === id}
-                  disabled={disabled}
-                  onClose={onClose}
-                />
-              );
-            })}
-          </Popper>
-        </If>
-      </div>
-    </ClickAwayListener>
+    <div className={classes.root}>
+      {!isNil(localAnchorEl) && (
+        <Popper
+          className={classes.popperRoot}
+          anchorEl={localAnchorEl}
+          open={isOpen}
+          placement={placement}
+          modifiers={{
+            flip: {
+              enabled: true,
+            },
+            preventOverflow: {
+              enabled: true,
+              boundariesElement: 'scrollParent',
+            },
+            arrow: {
+              enabled: false,
+            },
+            offset: {
+              enabled: true,
+              offset: '95%, 10%',
+            },
+          }}
+        >
+          <UniversalBackdrop open={isOpen} onClose={onClose} invisible />
+          {localComments.map((comment, id) => {
+            return (
+              <CommentBox
+                key={id}
+                comment={comment}
+                onSave={onSave.bind(null, id)}
+                onDelete={onDelete.bind(null, id)}
+                focus={localComments.length - 1 === id}
+                disabled={disabled}
+                onClose={onClose}
+                onClickAway={onClickAway}
+              />
+            );
+          })}
+        </Popper>
+      )}
+    </div>
   );
 }
 

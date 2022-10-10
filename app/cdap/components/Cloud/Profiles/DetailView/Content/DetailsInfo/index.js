@@ -118,8 +118,13 @@ export default class ProfileDetailViewDetailsInfo extends Component {
     return (
       <div className="details-table">
         {profile.provisioner.properties.map((property) => {
-          let propertyLabel = propertyToLabelWidgetMap[property.name].label || property.name;
-          const widgetType = propertyToLabelWidgetMap[property.name].widget;
+          let propertyLabel =
+            (propertyToLabelWidgetMap[property.name] &&
+              propertyToLabelWidgetMap[property.name].label) ||
+            property.name;
+          const widgetType =
+            propertyToLabelWidgetMap[property.name] &&
+            propertyToLabelWidgetMap[property.name].widget;
           let value = this.convertValueBasedOnWidget(widgetType, property.value);
 
           if (property.name === 'accountKey') {

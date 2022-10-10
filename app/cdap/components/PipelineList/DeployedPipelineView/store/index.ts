@@ -19,6 +19,7 @@ import { composeEnhancers } from 'services/helpers';
 import { Reducer, Store as StoreInterface } from 'redux';
 import { IAction } from 'services/redux-helpers';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
+import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
 
 enum SORT_ORDER {
   asc = 'asc',
@@ -38,6 +39,7 @@ interface IState {
   pageLimit: number;
   pipelines: IPipeline[];
   ready: boolean;
+  drafts: IDraft[];
 }
 
 interface IStore {
@@ -55,6 +57,7 @@ const Actions = {
   reset: 'DEPLOYED_PIPELINE_RESET',
   setPipelines: 'DEPLOYED_PIPELINE_SET_PIPELINES',
   updatePipelines: 'DEPLOYED_PIPELINE_UPDATE_PIPELINES',
+  setDrafts: 'DEPLOYED_PIPELINE_SET_DRAFTS',
 };
 
 const defaultInitialState: IState = {
@@ -70,6 +73,7 @@ const defaultInitialState: IState = {
   pipelines: null,
   hasMultiple: false,
   ready: false,
+  drafts: [],
 };
 
 const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
@@ -142,6 +146,11 @@ const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction)
       return {
         ...state,
         pipelines: action.payload.pipelines,
+      };
+    case Actions.setDrafts:
+      return {
+        ...state,
+        drafts: action.payload.drafts,
       };
     case Actions.reset:
       return defaultInitialState;

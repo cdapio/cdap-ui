@@ -116,10 +116,22 @@ interface IPollingMap {
   [index: string]: IBinding;
 }
 
+interface IHandlerData {
+  statusCode: number;
+  resource: IResource;
+}
+
+function createHandlerData(ajaxResponse, bindingInfo) {
+  return {
+    statusCode: ajaxResponse.status,
+    resource: bindingInfo.resource,
+  };
+}
+
 export default class Datasource implements IDataSource {
   public eventEmitter: ee;
   public polling: IPollingMap;
-  public genericResponseHandlers: [() => boolean];
+  public genericResponseHandlers: [(IHandlerData) => boolean];
   public pausedPolling: boolean;
   public loadingIndicatorStoreSubscription: Subscription;
 
@@ -171,6 +183,9 @@ export default class Datasource implements IDataSource {
     return (ajaxResponse) => {
       // All responses here are successful; Observable.ajax() will throw on errors
       // See this.createErrorHandler()
+      this.genericResponseHandlers.forEach((handler) =>
+        handler(createHandlerData(ajaxResponse, bindingInfo))
+      );
       const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
       this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
 
@@ -191,6 +206,9 @@ export default class Datasource implements IDataSource {
     return (ajaxResponse) => {
       debugLog(
         `Error response received for ${bindingInfo.resource.id}; status: ${ajaxResponse.status}`
+      );
+      this.genericResponseHandlers.forEach((handler) =>
+        handler(createHandlerData(ajaxResponse, bindingInfo))
       );
       const parsedResponse = parseResponse(ajaxResponse, bindingInfo);
       /**

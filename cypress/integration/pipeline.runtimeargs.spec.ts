@@ -71,7 +71,7 @@ describe('Creating pipeline with macros ', () => {
     });
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     );
     cy.wait(10000);
     cy.get(dataCy('pipeline-preview-btn')).click();
@@ -233,12 +233,12 @@ describe('Deploying pipeline with temporary runtime arguments', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
     });
     cy.get('[title="Airport_source"').should('exist');
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(runtimeArgsPipeline)
@@ -335,12 +335,12 @@ describe('Deploying pipeline with saved runtime arguments', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
     });
     cy.get('[title="Airport_source"').should('exist');
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(runtimeArgsPipeline)
