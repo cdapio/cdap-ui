@@ -77,6 +77,7 @@ describe('Pipeline Studio', () => {
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-expanded`)).get(dataCy('disable-trigger-btn')).click();
         cy.get(dataCy('Delete')).should('exist');
         cy.get(dataCy('Delete')).click();
+        cy.get(dataCy('enabled-triggers-tab')).click();
         cy.get(dataCy(`${TRIGGER_PIPELINE_1}-collapsed`)).should('not.exist');
         cy.get(dataCy('inbound-triggers-toggle')).click();
     });

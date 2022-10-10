@@ -174,12 +174,15 @@ export function getDuration(time) {
 }
 
 export function getGapFilledAccumulatedData(data, numOfDataPoints) {
-  let { x: minx, y: miny } = data[0];
-  let maxx = data[data.length - 1].x;
-  let numberOfEntries = maxx - minx;
+  const { x: minx, y: miny } = data[0];
+  const maxx = data[data.length - 1].x;
+  const numberOfEntries = maxx - minx;
   let lasty = miny;
-  let finalData = Array(numberOfEntries + 1).map((i, index) => {
-    let matchInActualData = data.find((d) => d.x === minx + index);
+  // Create an array with numberOfEntries + 1 undefined values
+  const arrayOfSize = [...Array(numberOfEntries + 1)];
+  // Map arrayOfSize to fill in gaps in data
+  const finalData = arrayOfSize.map((i, index) => {
+    const matchInActualData = data.find((d) => d.x === minx + index);
     if (!isNil(matchInActualData)) {
       lasty = matchInActualData.y;
     }
@@ -190,10 +193,10 @@ export function getGapFilledAccumulatedData(data, numOfDataPoints) {
     };
   });
   if (finalData.length < numOfDataPoints) {
-    let diff = numOfDataPoints - finalData.length;
-    let lastDataPoint = finalData[finalData.length - 1];
-    for (var i = 0; i < diff; i++) {
-      let currDataPoint = {
+    const diff = numOfDataPoints - finalData.length;
+    const lastDataPoint = finalData[finalData.length - 1];
+    for (let i = 1; i <= diff; i++) {
+      const currDataPoint = {
         ...lastDataPoint,
         x: lastDataPoint.x + i,
         y: lastDataPoint.y,

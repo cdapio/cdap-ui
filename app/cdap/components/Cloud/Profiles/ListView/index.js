@@ -358,6 +358,7 @@ class ProfilesListView extends Component {
           className="profile-label"
           title={profile.label || profile.name}
           data-cy={`profile-list-${profile.name}`}
+          data-testid={`profile-list-${profile.name}`}
         >
           {profile.label || profile.name}
         </div>

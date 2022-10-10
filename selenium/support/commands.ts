@@ -34,7 +34,7 @@ class SeleniumCommands {
   }
 
   openTransformPanel = async () => {
-    const transformPanel = await this.driver.findElement(By.css('[data-testid="plugin-Transform-group"]'));
+    const transformPanel = await this.driver.findElement(By.css('[data-testid="plugin-Transform-group-summary"]'));
     return transformPanel.click();
   };
   

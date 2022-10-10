@@ -98,13 +98,13 @@ describe('Page level error because of ', () => {
 
   it('no namespace in metadata page should show 404', () => {
     // Go to metadata page
-    cy.visit(`/metadata/ns/${FAKE_NAMESPACE}`);
+    cy.visit(`/cdap/ns/${FAKE_NAMESPACE}/metadata`);
     cy.get(SELECTOR_404_MSG).should('exist');
   });
 
   it('no namespace in metadata search results page should show 404', () => {
     // Go to metadata search results page
-    cy.visit(`/metadata/ns/${FAKE_NAMESPACE}/search/search_term/result`);
+    cy.visit(`/cdap/ns/${FAKE_NAMESPACE}/metadata/search/search_term/result`);
     cy.get(SELECTOR_404_MSG).should('exist');
   });
 
@@ -124,12 +124,6 @@ describe('Page level error because of ', () => {
     // Go to pipeline details page of invalid pipeline
     cy.visit(`/pipelines/ns/default/view/invalidPipelineName`);
     cy.get(SELECTOR_404_MSG).should('exist');
-  });
-
-  it('no valid path should show 404 in metadata page', () => {
-    // Go to metadata search results page
-    cy.visit(`/metadata/ns/default/search/search_term/resultinvalidPath`);
-    cy.get(SELECTOR_404_DEFAULT_MSG).should('exist');
   });
 
   it('no valid path should show 404 in wrangler', () => {
