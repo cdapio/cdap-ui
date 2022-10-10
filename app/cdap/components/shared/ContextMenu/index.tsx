@@ -151,6 +151,7 @@ export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenu
             key={name}
             onClick={disabled === true ? undefined : handleClose.bind(null, option)}
             data-cy={`menu-item-${name}`}
+            data-testid={`menu-item-${name}`}
             disabled={disabled ? true : false}
           >
             <MenuItemContentWrapper option={option} />

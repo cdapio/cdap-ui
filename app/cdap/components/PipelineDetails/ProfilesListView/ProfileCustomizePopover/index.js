@@ -28,7 +28,7 @@ require('./ProfileCustomizePopover.scss');
 
 const CustomizedPopover = withStyles({
   paper: {
-    padding: '20px',
+    padding: '20px 10px',
   },
 })(Popover);
 

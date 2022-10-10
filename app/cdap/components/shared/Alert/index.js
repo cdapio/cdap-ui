@@ -39,6 +39,7 @@ export default class Alert extends Component {
     onClose: PropTypes.func,
     type: PropTypes.oneOf(['success', 'error', 'info']),
     canEditPageWhileOpen: PropTypes.bool,
+    actionElements: PropTypes.element,
   };
 
   alertTimeout = null;
@@ -122,6 +123,7 @@ export default class Alert extends Component {
       >
         <div className={this.state.type} data-cy="alert">
           {msgElem}
+          {this.props.actionElements}
           <IconSVG name="icon-close" onClick={this.onClose} dataCy="alert-close" />
         </div>
       </Modal>

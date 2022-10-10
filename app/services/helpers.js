@@ -208,10 +208,14 @@ angular.module(PKG.name+'.services')
       message = error.data;
     } else if (typeof error.response === 'string') {
       message = error.response;
+    } else if (error.statusText) {
+      message = error.statusText;
     }
 
     if (error.statusCode) {
       errorCode = error.statusCode;
+    } else if(error.status) {
+      errorCode = error.status;
     } else {
       // If we don't know about the error type, showing a 500 level error
       errorCode = 500;

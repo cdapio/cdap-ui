@@ -354,6 +354,7 @@ body.theme-cdap.state-hydrator-create {
 
     width: 130px;
     .left-top-section {
+      height: 46px;
       padding: 6.5px;
       background: white;
       border-right: 1px solid #dddddd;
@@ -385,7 +386,7 @@ body.theme-cdap.state-hydrator-create {
         ::-webkit-scrollbar {
           display: none;
         }
-        height: 100%;
+        height: calc(100% - 55px);
       }
       .groups-container {
         top: 88px;
@@ -684,6 +685,100 @@ body.theme-cdap.state-hydrator-create {
       }
     }
   }
+
+  .react-version {
+  .canvas-wrapper {
+    display: flex;
+    top: 50px;
+    bottom: 53px;
+    right: 0;
+    left: 0;
+    position: fixed;
+  }
+
+  .left-control {
+    width: 100%;
+    display:flex;
+    z-index: 1;
+  }
+
+  .top-panel {
+    width: 100%;
+    z-index: 1;
+    height: 42px;
+    flex-shrink: 0;
+    .top {
+      position: inherit;
+      flex-grow: 10;
+      .hydrator-metadata {
+        flex-grow: 2;
+      }
+      .action-buttons {
+        flex-grow: 1;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .right-wrapper {
+    position: absolute;
+    z-index: 0;
+    left: 190px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    my-dag-plus {
+      height: 100vh;
+    }
+  }
+
+  .left-panel-wrapper {
+    position: inherit;
+    width: 190px;
+    height: 100%;
+    &.expanded {
+      width: 270px;
+      .left-panel {
+        .left-top-section {
+          display: flex;
+          padding: 4.5px;
+          select.form-control {
+            width: unset;
+          }
+        }
+        .item-body-wrapper {
+          width: 100%;
+        }
+        .item-body {
+          &.view-icon {
+            .plugin-item {
+              max-width: 213px;
+            }
+          }
+        }
+      }
+    }
+    .left-panel {
+      .left-top-section {
+        display: flex;
+      }
+    }
+    .my-side-panel {
+      .side-panel {
+        max-width: 100%;
+      }
+      .hydrator-filter {
+        display: flex;
+        input.form-control {
+          width: 106px;
+        }
+        .btn-group {
+          display: block;
+        }
+      }
+    }
+  }
+}
 
   @media(min-width: @screen-md) {
     .modal {

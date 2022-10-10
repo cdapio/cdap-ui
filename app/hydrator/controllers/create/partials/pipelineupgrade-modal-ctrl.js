@@ -15,7 +15,7 @@
  */
 
 angular.module(PKG.name + '.feature.hydrator')
-  .controller('PipelineUpgradeModalController', function ($scope, rPipelineConfig, HydratorUpgradeService, $rootScope, HydratorPlusPlusConfigStore, $state, DAGPlusPlusFactory, GLOBALS, HydratorPlusPlusLeftPanelStore, rIsImport) {
+  .controller('PipelineUpgradeModalController', function ($scope, HydratorPlusPlusLeftPanelStore, rPipelineConfig, HydratorUpgradeService, $rootScope, HydratorPlusPlusConfigStore, $state, DAGPlusPlusFactory, GLOBALS, rIsImport) {
     let eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
     let globalEvents = window.CaskCommon.globalEvents;
 
@@ -116,7 +116,12 @@ angular.module(PKG.name + '.feature.hydrator')
     // The reason is because in LeftPanelController, we fetch the default version map
     // with a 10 seconds timeout. So if user import before 10 seconds, it will make another
     // call to fetch list of plugins
-    let sub = HydratorPlusPlusLeftPanelStore.subscribe(checkStages);
+    let sub;
+    if ($rootScope.stores) {
+      sub = $rootScope.stores.subscribe(checkStages);
+    } else {
+      sub = HydratorPlusPlusLeftPanelStore.subscribe(checkStages);
+    }
 
     this.openMarket = () => {
       eventEmitter.emit(globalEvents.OPENMARKET);
