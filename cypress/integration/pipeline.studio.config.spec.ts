@@ -101,23 +101,23 @@ describe('Pipeline Studio Config', () => {
 
     cy.contains('Resources').click();
     cy.get(dataCy('resources-config-tab-driver')).within(() => {
-      cy.get('[ng-model="virtualCores"]').select('2');
-      cy.get('[ng-model="internalModel"]').clear().type('3072');
+      cy.get(dataCy('virtualCores')).select('2');
+      cy.get(dataCy('internalModel')).clear().type('3072');
     });
     cy.get(dataCy('resources-config-tab-executor')).within(() => {
-      cy.get('[ng-model="virtualCores"]').select('3');
-      cy.get('[ng-model="internalModel"]').clear().type('4096');
+      cy.get(dataCy('virtualCores')).select('3');
+      cy.get(dataCy('internalModel')).clear().type('4096');
     });
 
     cy.get('[data-testid="config-apply-close"]').click();
 
     cy.get_pipeline_json().then((pipelineConfig) => {
       const { driverResources, resources } = pipelineConfig.config;
-      expect(driverResources.memoryMB).eq(3072);
-      expect(driverResources.virtualCores).eq(2);
+      expect(driverResources.memoryMB).eq('3072');
+      expect(driverResources.virtualCores).eq('2');
 
-      expect(resources.memoryMB).eq(4096);
-      expect(resources.virtualCores).eq(3);
+      expect(resources.memoryMB).eq('4096');
+      expect(resources.virtualCores).eq('3');
     });
   });
 });

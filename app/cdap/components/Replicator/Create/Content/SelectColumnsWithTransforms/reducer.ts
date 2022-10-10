@@ -83,6 +83,11 @@ export const reducer = (state: ISelectColumnsState, action) => {
         ...state,
         transformations: action.payload,
       };
+    case 'setSaveButtonDisabled':
+      return {
+        ...state,
+        saveButtonDisabled: action.payload,
+      };
     default:
       return state;
   }
@@ -100,4 +105,5 @@ export const initialState = {
   search: '',
   columnsWithErrors: '',
   transformations: [],
+  saveButtonDisabled: true,
 };

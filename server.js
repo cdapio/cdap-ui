@@ -192,6 +192,10 @@ getCDAPConfig()
      */
     let authToken, userid;
     sockServer.on('connection', function(c) {
+      if (!c) {
+        log.error('Connection requested, but no connection available');
+        return;
+      }
       log.debug('[SOCKET OPEN] Connection to client "' + c.id + '" opened');
       // @ts-ignore
       var a = new Aggregator(c, { ...cdapConfig, ...securityConfig });

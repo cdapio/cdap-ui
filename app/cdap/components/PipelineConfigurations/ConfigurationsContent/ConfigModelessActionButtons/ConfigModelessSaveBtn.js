@@ -26,17 +26,30 @@ const mapStateToProps = (state, ownProps) => {
   return {
     saveLoading: ownProps.saveLoading,
     saveConfig: ownProps.saveConfig,
+    buttonLabel: ownProps.buttonLabel,
+    className: ownProps.className,
+    dataTestId: ownProps.dataTestId,
+    dataCy: ownProps.dataCy,
   };
 };
 
-const ConfigModelessSaveBtn = ({ saveLoading, saveConfig }) => {
+const ConfigModelessSaveBtn = ({
+  saveLoading,
+  saveConfig,
+  buttonLabel,
+  className,
+  dataTestId,
+  dataCy,
+}) => {
   return (
     <BtnWithLoading
       loading={saveLoading}
-      className="btn btn-primary"
+      className={className}
       onClick={saveConfig}
-      label={T.translate(`${PREFIX}.save`)}
+      label={T.translate(`${PREFIX}.${buttonLabel}`)}
       disabled={saveLoading}
+      dataTestId={dataTestId}
+      dataCy={dataCy}
     />
   );
 };
@@ -44,6 +57,10 @@ const ConfigModelessSaveBtn = ({ saveLoading, saveConfig }) => {
 ConfigModelessSaveBtn.propTypes = {
   saveLoading: PropTypes.bool,
   saveConfig: PropTypes.func,
+  buttonLabel: PropTypes.string,
+  className: PropTypes.string,
+  dataTestId: PropTypes.string,
+  dataCy: PropTypes.string,
 };
 
 const ConnectedConfigModelessSaveBtn = connect(mapStateToProps)(ConfigModelessSaveBtn);

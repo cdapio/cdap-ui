@@ -1,3 +1,19 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 import {
   getArtifactsPoll,
   getGenericEndpoint,
@@ -43,6 +59,7 @@ const ERROR_BOUNDARY_COLOR = 'rgb(164, 4, 3)';
 const VALIDATE_BTN_SELECTOR = 'plugin-properties-validate-btn';
 const WIDGET_WRAPPER_SELECTOR = 'widget-wrapper-container';
 const REFERENCE_NAME_PROP_SELECTOR = 'referenceName';
+const DATASET_PROP_SELECTOR = 'dataset';
 const GET_SCHEMA_BTN_SELECTOR = 'get-schema-btn';
 
 let headers = {};
@@ -77,19 +94,14 @@ describe('Plugin properties', () => {
 
     // Testing for errors found
     cy.get(dataCy(VALIDATE_BTN_SELECTOR)).click();
-    cy.get(dataCy('plugin-properties-errors-found')).should('have.text', '3 errors found.');
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
-      'have.css',
-      'border-color',
-      ERROR_BOUNDARY_COLOR
-    );
+    cy.get(dataCy('plugin-properties-errors-found')).should('have.text', '2 errors found.');
     // Testing if the widget is highlighted when there is an error
     // and the error text
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} ~ ${dataCy('property-row-error')}`).should(
+    cy.get(`${dataCy(DATASET_PROP_SELECTOR)} ~ ${dataCy('property-row-error')}`).should(
       'have.text',
-      "Required property 'referenceName' has no value."
+      "Required property 'dataset' has no value."
     );
-    cy.get(`${dataCy(REFERENCE_NAME_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
+    cy.get(`${dataCy(DATASET_PROP_SELECTOR)} > ${dataCy(WIDGET_WRAPPER_SELECTOR)}`).should(
       'have.css',
       'border-color',
       ERROR_BOUNDARY_COLOR
@@ -147,7 +159,7 @@ describe('Plugin properties', () => {
     const nested_property = 'defaults';
     const required_property = 'mapping';
     // adding value mapper node to canvas and connecting to source
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(valueMapperNode);
     cy.connect_two_nodes(sourceNodeId, valueMapperNodeId, getGenericEndpoint);
     cy.open_node_property(valueMapperNodeId);

@@ -44,6 +44,7 @@ export default function(props) {
               color="action"
               fontSize="large"
               onClick={closeClickHandler}
+              data-testid="drawer-widget-close-round-icon"
             />
           </Box>
         </header>
