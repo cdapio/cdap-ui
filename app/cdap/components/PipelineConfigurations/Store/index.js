@@ -124,6 +124,7 @@ const DEFAULT_CONFIGURE_OPTIONS = {
   maxConcurrentRuns: 1,
   isMissingKeyValues: false,
   modelessOpen: false,
+  pushdownEnabled: false,
 
   pipelineVisualConfiguration: {
     pipelineType: GLOBALS.etlDataPipeline,
@@ -238,6 +239,10 @@ const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
     };
   });
   currentRuntimeArgs.pairs = macros.concat(currentRuntimeArgs.pairs);
+  // always concat an empty cell if not empty
+  if (currentRuntimeArgs.pairs.length >= 1 && currentRuntimeArgs.pairs[0].key !== '') {
+    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(getDefaultKeyValuePair());
+  }
   return currentRuntimeArgs;
 };
 

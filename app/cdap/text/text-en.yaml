@@ -2408,6 +2408,12 @@ features:
           runBtnPopover: Run the pipeline once with the runtime arguments set above. Any changes made to the runtime arguments will be available only for the next run.
           saveBtnPopover: Changes to runtime arguments will be saved for all future runs of the pipeline. This may impact any schedules and triggers configured for this pipeline.
           specifyArgs: Specify runtime arguments, empty values need to come from the pipeline.
+          showReservedKeys: Show auto-generated runtime arguments
+          tooltipLabel: Key value pairs generated from pipeline configurations that will apply at runtime
+          numOfGeneratedRuntimeArgs: 
+            1: "{context} auto-generated runtime argument"
+            _: "{context} auto-generated runtime arguments"
+
     ProfilesListView:
       click: Click here
       countProfiles:
