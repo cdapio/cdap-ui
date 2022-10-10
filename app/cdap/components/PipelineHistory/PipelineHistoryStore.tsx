@@ -40,7 +40,7 @@ export const QUERY = gql`
     $token: String
     $nameFilter: String
     $orderBy: String
-    $strictEqual: Boolean
+    $nameFilterType: String
   ) {
     pipelines(
       namespace: $namespace
@@ -48,7 +48,7 @@ export const QUERY = gql`
       pageToken: $token
       nameFilter: $nameFilter
       orderBy: $orderBy
-      strictEqual: $strictEqual
+      nameFilterType: $nameFilterType
     ) {
       applications {
         name
