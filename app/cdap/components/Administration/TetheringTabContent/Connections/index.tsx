@@ -24,7 +24,6 @@ import { HeaderContainer, HeaderTitle, BodyContainer, NoDataText } from '../shar
 
 const PREFIX = 'features.Administration.Tethering';
 const I18NPREFIX = `${PREFIX}.Connections`;
-const CONNECTION_STATUS = 'ACCEPTED';
 
 interface IConnectionsProps {
   connections: IConnection[];
@@ -33,13 +32,13 @@ interface IConnectionsProps {
 }
 
 const Connections = ({ connections, handleEdit, handleDelete }: IConnectionsProps) => {
-  const renderLastColumn = (instanceName: string) => (
+  const renderLastColumn = (instanceName: string, tetheringStatus: string) => (
     <ActionsPopover
       target={() => <IconSVG name="icon-more" dataTestId="established-connection" />}
       confirmationTitle={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionHeader`)}
       confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteConnectionCopy`)}
-      onDeleteClick={() => handleDelete(CONNECTION_STATUS, instanceName)}
-      onEditClick={() => handleEdit(CONNECTION_STATUS, instanceName)}
+      onDeleteClick={() => handleDelete(tetheringStatus, instanceName)}
+      onEditClick={() => handleEdit(tetheringStatus, instanceName)}
       dataTestIds={{ delete: 'delete-connection', edit: 'edit-connection' }}
     />
   );

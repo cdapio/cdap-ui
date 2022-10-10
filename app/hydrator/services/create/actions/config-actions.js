@@ -82,8 +82,8 @@ class HydratorPlusPlusConfigActions {
   setMaxConcurrentRuns(num) {
     this.dispatcher.dispatch('onSetMaxConcurrentRuns', num);
   }
-  publishPipeline() {
-    this.dispatcher.dispatch('onPublishPipeline');
+  publishPipeline(isEdit) {
+    this.dispatcher.dispatch('onPublishPipeline', isEdit);
   }
 }
 

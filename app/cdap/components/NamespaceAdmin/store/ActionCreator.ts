@@ -27,8 +27,6 @@ import Store, {
   NamespaceAdminActions,
 } from 'components/NamespaceAdmin/store';
 import { objectQuery, PIPELINE_ARTIFACTS } from 'services/helpers';
-import { MyCloudApi } from 'api/cloud';
-import { Theme } from 'services/ThemeHelper';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS, SCOPES } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';

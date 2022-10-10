@@ -50,7 +50,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const DriverResources = ({ virtualCores, onVirtualCoresChange, memoryMB, onMemoryMBChange }) => {
   return (
-    <div className="driver">
+    <div className="driver" data-cy="resources-config-tab-driver">
       <div className="resource-title-icon">
         <span className="resource-title">{T.translate(`${PREFIX}.driver`)}</span>
         <Popover

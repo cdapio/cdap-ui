@@ -287,7 +287,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   }
 
   return (
-    <div data-cy="configuration-group">
+    <div data-cy="configuration-group" data-testid="configuration-group">
       {orphanErrors.length > 0 && (
         <div>
           <h2>Errors</h2>
