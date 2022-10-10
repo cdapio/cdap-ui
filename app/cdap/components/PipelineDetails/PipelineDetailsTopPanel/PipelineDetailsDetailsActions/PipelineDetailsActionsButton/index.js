@@ -25,10 +25,12 @@ import PipelineExportModal from 'components/PipelineExportModal';
 import TriggeredPipelineStore from 'components/TriggeredPipelines/store/TriggeredPipelineStore';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import { duplicatePipeline } from 'services/PipelineUtils';
+import { duplicatePipeline, editPipeline } from 'services/PipelineUtils';
 import cloneDeep from 'lodash/cloneDeep';
 import downloadFile from 'services/download-file';
 import { santizeStringForHTMLID } from 'services/helpers';
+import { deleteEditDraft } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
+import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
 require('./PipelineDetailsActionsButton.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
@@ -63,12 +65,16 @@ export default class PipelineDetailsActionsButton extends Component {
     description: PropTypes.string,
     artifact: PropTypes.object,
     config: PropTypes.object,
+    version: PropTypes.string,
+    lifecycleManagementEditEnabled: PropTypes.bool,
+    editDraftId: PropTypes.string,
   };
 
   state = {
     showExportModal: false,
     showDeleteConfirmationModal: false,
     showPopover: false,
+    showDiscardConfirmation: false,
   };
 
   togglePopover = (showPopover = !this.state.showPopover) => {
@@ -89,10 +95,45 @@ export default class PipelineDetailsActionsButton extends Component {
     description: this.props.description,
     artifact: this.props.artifact,
     config: cloneDeep(this.props.config), // currently doing a cloneDeep because angular is mutating this state...
+    version: this.props.version,
   };
 
   duplicateConfigAndNavigate = () => {
     duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+  };
+
+  toggleDiscardConfirmation = () => {
+    this.setState({
+      showDiscardConfirmation: !this.state.showDiscardConfirmation,
+    });
+  };
+
+  discardAndStartNewEdit = () => {
+    this.toggleDiscardConfirmation();
+    editPipeline(this.props.pipelineName);
+  };
+
+  handlePipelineEdit = () => {
+    if (!this.props.editDraftId) {
+      editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+      return;
+    }
+    this.setState({
+      showPopover: false,
+    });
+    this.toggleDiscardConfirmation();
+  };
+
+  continueSameDraft = () => {
+    const link = window.getHydratorUrl({
+      stateName: 'hydrator.create',
+      stateParams: {
+        namespace: getCurrentNamespace(),
+        draftId: this.props.editDraftId,
+        isEdit: true,
+      },
+    });
+    window.location.href = link;
   };
 
   deletePipeline = () => {
@@ -250,6 +291,9 @@ export default class PipelineDetailsActionsButton extends Component {
           onTogglePopover={this.togglePopover}
         >
           <ul>
+            {this.props.lifecycleManagementEditEnabled && (
+              <li onClick={this.handlePipelineEdit}>{T.translate(`${PREFIX}.edit`)}</li>
+            )}
             <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
             <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>
             <hr />
@@ -264,6 +308,16 @@ export default class PipelineDetailsActionsButton extends Component {
         </Popover>
         {this.renderExportPipelineModal()}
         {this.renderDeleteConfirmationModal()}
+        <DiscardDraftModal
+          isOpen={this.state.showDiscardConfirmation}
+          toggleModal={this.toggleDiscardConfirmation}
+          discardFn={deleteEditDraft.bind(
+            null,
+            this.props.editDraftId,
+            this.discardAndStartNewEdit
+          )}
+          continueFn={this.continueSameDraft}
+        />
       </div>
     );
   }

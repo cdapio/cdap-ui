@@ -18,7 +18,6 @@ import React, { useState } from 'react';
 import T from 'i18n-react';
 import Search from '@material-ui/icons/Search';
 import styled from 'styled-components';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';

@@ -28,6 +28,7 @@ const CONNECTION_GROUPS = {
 export interface IConnectionsState {
   pendingRequests: IConnection[];
   establishedConnections: IConnection[];
+  rejectedRequests: IConnection[];
 }
 
 export const initialConnectionsState = {

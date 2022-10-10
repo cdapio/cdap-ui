@@ -20,7 +20,9 @@ import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { objectQuery } from 'services/helpers';
 
 const HiddenInput = styled.input`
-  display: none !important;
+  &&& {
+    display: none;
+  }
 `; // beating specificity. The file input needs to be hidden at all times
 
 export default function ImportFileButton({ onFileSelect, ...props }) {

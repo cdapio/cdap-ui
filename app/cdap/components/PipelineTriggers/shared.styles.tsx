@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import { Accordion, Button } from '@material-ui/core';
+import { Accordion, Button, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import AccordionSummary, { AccordionSummaryProps } from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -31,8 +31,12 @@ export const CaretContainer = styled.div`
 
 export const CheckboxItemContainer = styled.div`
   display: inline-block;
-  width: 50%;
-  padding: 2px 5px;
+  width: 33%;
+`;
+
+export const CheckboxContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const ErrorText = styled.div`
@@ -41,6 +45,7 @@ export const ErrorText = styled.div`
 
 export const PipelineName = styled.div`
   display: inline-block;
+  max-width: 230px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -48,7 +53,7 @@ export const PipelineName = styled.div`
 `;
 
 export const HelperText = styled.div`
-  margin: 5px;
+  margin: 5px 0;
 `;
 
 export const ActionButtonsContainer = styled.div`
@@ -57,18 +62,16 @@ export const ActionButtonsContainer = styled.div`
   padding: 15px;
 `;
 
-export const EventsList = styled.div`
+export const EventsList = styled(CheckboxContainer)`
   margin-bottom: 10px;
 `;
 
 export const PipelineDescription = styled.div`
-  color: #888888;
   margin: 5px;
 `;
 
 export const PipelineTriggerButton = styled(Button)`
   background: white;
-  text-transform: none;
 `;
 
 export const PipelineListHeader = styled.div`
@@ -95,7 +98,6 @@ export const LoadingIconStyle = styled.span`
 
 export const StyledNameSpace = styled.div`
   display: inline-block;
-  opacity: 0.7;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -104,6 +106,11 @@ export const StyledNameSpace = styled.div`
 `;
 
 export const StyledNameSpaceHeader = styled(StyledNameSpace)`
+  text-decoration: underline;
+`;
+
+export const StyledTypeHeader = styled(StyledNameSpace)`
+  opacity: 1;
   text-decoration: underline;
 `;
 
@@ -142,6 +149,7 @@ export const StyledAccordionDetails = styled(AccordionDetails)`
 `;
 
 export const PipelineCount = styled.div`
+  font-style: italic;
   margin-bottom: 10px;
 `;
 
@@ -163,4 +171,19 @@ export const PipelineLink = styled.a`
 
 export const PipelineListContainer = styled.div`
   padding-right: 7px;
+`;
+
+export const TriggerCardButton = styled(Button)`
+  color: #5a84e4;
+`;
+
+export const SearchTriggerTextField = styled(TextField)`
+  width: 100%;
+  && {
+    margin: 10px 0;
+    vertical-align: inherit;
+    .MuiInput-underline:after {
+      border-bottom: 2px solid black;
+    }
+  }
 `;
