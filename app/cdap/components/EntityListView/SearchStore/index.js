@@ -130,6 +130,8 @@ const search = (state = defaultSearchState, action = defaultAction) => {
       return Object.assign({}, state, {
         activeFilters: action.payload.activeFilters,
         overviewEntity: null,
+        currentPage: 1,
+        offset: 0,
       });
     case SearchStoreActions.SETACTIVESORT:
       if (isNil(action.payload.activeSort)) {
