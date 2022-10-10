@@ -14,27 +14,34 @@
  * the License.
  */
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
+import styled from 'styled-components';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
   appVersion: string;
   setRestoreLoading: (val: boolean) => void;
   setErrorMessage: (val: string | ReactNode) => void;
+  latestVersion: string;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
+
+const StyledUl = styled.ul`
+  color: green;
+`;
 
 export const PipelineHistoryTableRow = ({
   pipelineName,
   appVersion,
   setRestoreLoading,
   setErrorMessage,
+  latestVersion,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
@@ -89,7 +96,14 @@ export const PipelineHistoryTableRow = ({
   return (
     <>
       <div className=" grid-row">
-        <div>{appVersion}</div>
+        <div>
+          {appVersion}
+          {appVersion === latestVersion && (
+            <StyledUl>
+              <li>Latest</li>
+            </StyledUl>
+          )}
+        </div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>
         <div>{T.translate(`${PREFIX}.unfinish`)}</div>

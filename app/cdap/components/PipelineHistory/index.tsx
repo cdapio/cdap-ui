@@ -33,6 +33,7 @@ import Store, {
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
 import { PipelineHistoryTableDiv } from './styles';
+import { MyPipelineApi } from 'api/pipeline';
 
 const PREFIX = 'features.PipelineHistory';
 
@@ -55,6 +56,7 @@ const PaginationContainer = styled.div`
 const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
   const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
   const [isRestoreLoading, setIsRestoreLoading] = useState(false);
+  const [latestVersion, setLatestVersion] = useState(null);
 
   const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
     errorPolicy: 'all',
@@ -114,6 +116,16 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
     });
   }, [loading, networkStatus, data]);
 
+  useEffect(() => {
+    const params = {
+      namespace: getCurrentNamespace(),
+      appId: pipelineName,
+    };
+    MyPipelineApi.get(params).subscribe((res) => {
+      setLatestVersion(res.appVersion);
+    });
+  }, []);
+
   return (
     <>
       <LoadingAppLevel message={'Restoring Version ...'} isopen={isRestoreLoading} />
@@ -129,6 +141,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
               pipelineName={pipelineName}
               appVersions={pipelineVersions}
               setRestoreLoading={setIsRestoreLoading}
+              latestVersion={latestVersion}
             />
           )}
           <Pagination />
