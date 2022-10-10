@@ -75,6 +75,10 @@ const ACTIONS = {
   SET_PUSHDOWN_CONFIG: 'SET_PUSHDOWN_CONFIG',
   RESET: 'RESET',
   SET_DYNAMIC_EXECUTION: 'SET_DYNAMIC_EXECUTION',
+  ADD_POST_ACTION: 'ADD_POST_ACTION',
+  EDIT_POST_ACTION: 'EDIT_POST_ACTION',
+  DELETE_POST_ACTION: 'DELETE_POST_ACTION',
+  SET_PREVIEW_TIMEOUT: 'SET_PREVIEW_TIMEOUT',
 };
 
 const BATCH_INTERVAL_RANGE = range(1, 61);
@@ -492,6 +496,33 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
           },
         };
       }
+    case ACTIONS.ADD_POST_ACTION:
+      return {
+        ...state,
+        postActions: state.postActions.concat(action.payload.confirmedAction),
+      };
+    case ACTIONS.EDIT_POST_ACTION: {
+      const postActions = state.postActions.filter(
+        (postAction) => postAction.id !== action.payload.editedAction.id
+      );
+      postActions.push(action.payload.editedAction);
+      return {
+        ...state,
+        postActions: postActions,
+      };
+    }
+    case ACTIONS.DELETE_POST_ACTION:
+      return {
+        ...state,
+        postActions: state.postActions.filter(
+          (postAction) => postAction.id !== action.payload.deletedAction.id
+        ),
+      };
+    case ACTIONS.SET_PREVIEW_TIMEOUT:
+      return {
+        ...state,
+        previewTimeoutInMin: action.payload.previewTimeoutInMin,
+      };
     default:
       return state;
   }

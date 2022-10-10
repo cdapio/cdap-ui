@@ -28,4 +28,5 @@ export interface IPipeline {
     id: string;
     time: string;
   };
+  version?: string;
 }

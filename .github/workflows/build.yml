@@ -24,7 +24,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: k8s-runner-e2e
 
     if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
 
@@ -41,48 +41,58 @@ jobs:
         ref: ${{ github.event.workflow_run.head_sha }}
         submodules: recursive
 
-    # installing dependency for node-canvas
-    - name: Install Ubuntu debendency
-      run: sudo apt-get install -y libgif-dev
-
-    - name: Use Node.js 10.16
+    # installing node 16.16
+    - name: Use Node.js 16.16
       uses: actions/setup-node@v1
       with:
-        node-version: 10.16
+        node-version: 16.16
 
     - uses: actions/cache@v2
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
-    # installing Java 8 to run the sandbox
-    - name: Setup Java 8
-      uses: actions/setup-java@v2
+    - name: Checkout cdap repo
+      uses: actions/checkout@v2.3.4
       with:
-        distribution: 'temurin'
-        java-version: 8
+        repository: cdapio/cdap
+        path: cdap
 
-    - name: Download CDAP Sandbox and Start it
+    - name: Make CDAP pom available to CDAP-UI
+      run: |
+        mv cdap ..
+        cd ../cdap
+        mv pom.xml ..
+
+    - name: Download CDAP Sandbox and Start it   
+      run: |
+        cd sandboxjs
+        python3 sandbox_starter.py
+        
+    - name: Install UI Dependencies
+      run: |       
+        npm install -g yarn # Install Yarn globally
+        yarn --frozen-lockfile
+        yarn run bower-root # Install Bower dependencies
+
+    - name: Start CDAP-UI and run the tests
       env:
         GCP_PROJECTID: ${{ secrets.GCP_PROJECTID }}
         GCP_SERVICE_ACCOUNT_CONTENTS: ${{ secrets.GCP_SERVICE_ACCOUNT_CONTENTS }}
         GCP_SERVICE_ACCOUNT_PATH: '${{ github.workspace }}/key_file.json'
       run: |
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
-        cd sandboxjs
-        npm install -g yarn # Install Yarn globally
-        yarn --frozen-lockfile # Install sandbox runner dependencies 
-        yarn setup-gitpod $JAVA_HOME # Fetch and start sandbox
-        sudo pkill -f node # Kill the sandbox UI
-
-    - name: Install UI Dependencies
-      run: |
-        yarn --frozen-lockfile
-        yarn run bower-root # Install Bower dependencies
-    - name: Start CDAP-UI and run the tests
-      run: |
-        Xvfb :1 -screen 0 1024x768x24 & export DISPLAY=:1 # Set Display port
         yarn run cdap-full-build-more-memory # Build UI
-        yarn start & > server.out
+        yarn start &
         yarn run test:unit
-        yarn run test:integration
+        mvn clean verify -P e2e-tests
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v2.2.2
+      if: always()
+      with:
+        name: Build debug files
+        path: |
+          **/target/rat.txt
+          **/target/cucumber-html-report/
+          **/target/cucumber-reports/

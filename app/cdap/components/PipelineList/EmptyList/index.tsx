@@ -17,7 +17,7 @@
 import * as React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS } from 'services/global-constants';
-import { validateImportJSON } from 'services/PipelineErrorFactory';
+import { validateImportJSON, adjustConfigNode } from 'services/PipelineErrorFactory';
 import { Input, Label } from 'reactstrap';
 import uuidV4 from 'uuid/v4';
 import { objectQuery } from 'services/helpers';
@@ -89,13 +89,13 @@ class EmptyList extends React.PureComponent<IProps, IState> {
         return;
       }
 
-      const fileDataString: string = evt.target.result;
+      let fileDataString: string = evt.target.result;
       const error = validateImportJSON(fileDataString);
       if (error) {
         this.onError(error);
         return;
       }
-
+      fileDataString = adjustConfigNode(fileDataString);
       this.onError(null);
       window.localStorage.setItem(resourceCenterId, fileDataString);
       window.location.href = pipelineImportLink;

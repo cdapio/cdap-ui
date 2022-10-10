@@ -152,6 +152,7 @@ const WidgetWrapperView: React.FC<IWidgetWrapperProps> = ({
       )}
       <div className={classes.widgetContainer}>
         <AbstractWidget
+          widgetProperty={widgetProperty}
           type={widgetType}
           value={value}
           onChange={onChange}

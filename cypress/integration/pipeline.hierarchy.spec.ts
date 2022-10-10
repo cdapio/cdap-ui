@@ -53,7 +53,7 @@ describe.skip('Hierarchy Widgets', () => {
   it('Should render File and Create Record', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.add_node_to_canvas(fileSource)
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(createRecord);
     cy.pipeline_clean_up_graph_control();
     cy.fit_pipeline_to_screen();

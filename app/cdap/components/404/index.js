@@ -44,10 +44,12 @@ export default function Page404({ entityName, entityType, children, message }) {
       <h1>
         <strong>
           <If condition={typeof message === 'string'}>
-            <span data-cy="page-404-error-msg">{message}</span>
+            <span data-cy="page-404-error-msg" data-testid="page-404-error-msg">
+              {message}
+            </span>
           </If>
           <If condition={!message}>
-            <span data-cy="page-404-default-msg">
+            <span data-cy="page-404-default-msg" data-testid="page-404-default-msg">
               {isEmpty(entityType) || isEmpty(entityName)
                 ? T.translate(`${I18N_PREFIX}.genericMessage`)
                 : T.translate(`${I18N_PREFIX}.entityMessage`, { entityType, entityName })}
