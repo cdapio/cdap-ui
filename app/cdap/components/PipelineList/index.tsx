@@ -26,6 +26,7 @@ import T from 'i18n-react';
 import ErrorBoundary from 'components/shared/ErrorBoundary';
 
 import './PipelineList.scss';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const PREFIX = 'features.PipelineList';
 
@@ -39,37 +40,39 @@ const PipelineList: React.SFC = () => {
   const pageTitle = `${productName} | ${featureName}`;
 
   return (
-    <div className="pipeline-list-view">
-      <Helmet title={pageTitle} />
-      <h4 className="view-header" data-cy="pipeline-list-view-header">
-        <NavLink exact to={basepath} className="option" activeClassName="active">
-          {T.translate(`${PREFIX}.deployed`)}
-        </NavLink>
+    <FeatureProvider>
+      <div className="pipeline-list-view">
+        <Helmet title={pageTitle} />
+        <h4 className="view-header" data-cy="pipeline-list-view-header">
+          <NavLink exact to={basepath} className="option" activeClassName="active">
+            {T.translate(`${PREFIX}.deployed`)}
+          </NavLink>
 
-        <span className="separator">|</span>
+          <span className="separator">|</span>
 
-        <NavLink exact to={`${basepath}/drafts`} className="option" activeClassName="active">
-          {T.translate(`${PREFIX}.draft`)}
-        </NavLink>
-      </h4>
+          <NavLink exact to={`${basepath}/drafts`} className="option" activeClassName="active">
+            {T.translate(`${PREFIX}.draft`)}
+          </NavLink>
+        </h4>
 
-      <ResourceCenterButton />
+        <ResourceCenterButton />
 
-      <Switch>
-        <Route
-          exact
-          path="/ns/:namespace/pipelines"
-          component={() => {
-            return (
-              <ErrorBoundary>
-                <DeployedPipelineView />
-              </ErrorBoundary>
-            );
-          }}
-        />
-        <Route exact path="/ns/:namespace/pipelines/drafts" component={DraftPipelineView} />
-      </Switch>
-    </div>
+        <Switch>
+          <Route
+            exact
+            path="/ns/:namespace/pipelines"
+            component={() => {
+              return (
+                <ErrorBoundary>
+                  <DeployedPipelineView />
+                </ErrorBoundary>
+              );
+            }}
+          />
+          <Route exact path="/ns/:namespace/pipelines/drafts" component={DraftPipelineView} />
+        </Switch>
+      </div>
+    </FeatureProvider>
   );
 };
 

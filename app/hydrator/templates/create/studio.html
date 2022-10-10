@@ -13,15 +13,24 @@
   License for the specific language governing permissions and limitations under
   the License.
 -->
-
-<div class="canvas-wrapper">
-  <div class="left-panel-wrapper"
-       ng-class="{'expanded': HydratorPlusPlusStudioCtrl.isExpanded === true}">
-    <div ui-view="leftpanel" class="left-panel"></div>
+  <div class="react-version" ng-if="true">
+    <div class="canvas-wrapper">
+        <div ui-view="reactleftpanel" class="left-control"></div>
+        <div ui-view="reacttoppanel" class="top-panel"></div>
+        <div class="right-wrapper">
+          <div ui-view="canvas" class="canvas"></div>
+        </div>
+    </div>
   </div>
 
-  <div ui-view="toppanel" class="top-panel"></div>
-  <div class="right-wrapper">
-    <div ui-view="canvas" class="canvas"></div>
+  <div class="canvas-wrapper" ng-if="false">
+    <div class="left-panel-wrapper"
+         ng-class="{'expanded': HydratorPlusPlusStudioCtrl.isExpanded === true}">
+      <div ui-view="leftpanel" class="left-panel"></div>
+    </div>
+  
+    <div ui-view="toppanel" class="top-panel"></div>
+    <div class="right-wrapper">
+      <div ui-view="canvas" class="canvas"></div>
+    </div>
   </div>
-</div>

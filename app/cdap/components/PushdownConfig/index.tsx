@@ -22,7 +22,6 @@ import { MyPipelineApi } from 'api/pipeline';
 import { fetchPluginWidget } from 'services/PluginUtilities';
 import ConfigurationGroup from 'components/shared/ConfigurationGroup';
 import { objectQuery } from 'services/helpers';
-import ToggleSwitch from 'components/shared/ToggleSwitch';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import VersionStore from 'services/VersionStore';
 import { catchError } from 'rxjs/operators';

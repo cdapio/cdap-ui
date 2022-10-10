@@ -48,7 +48,7 @@ describe('Pipeline Upgrade should work fine', () => {
     cy.get('#resource-center-btn').click();
     cy.get('#create-pipeline-link').click();
     cy.url().should('include', '/studio');
-    cy.upload_pipeline('pipeline1.json', '#pipeline-import-config-link > input[type="file"]').then(
+    cy.upload_pipeline('pipeline1.json', '#pipeline-import-config-link').then(
       (subject) => {
         expect(subject.length).to.be.eq(1);
       }
@@ -62,7 +62,7 @@ describe('Pipeline Upgrade should work fine', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_old.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
       cy.get('.hydrator-modal.node-config-modal.upgrade-modal');
@@ -78,6 +78,7 @@ describe('Pipeline Upgrade should work fine', () => {
     generateDraftFromPipeline('draft_for_upgrade.json').then(({ pipelineDraft, pipelineName }) => {
       cy.upload_draft_via_api(headers, pipelineDraft);
       cy.visit('/cdap/ns/default/pipelines/drafts');
+      // this is flaky if too many drafts
       cy.get(dataCy(`draft-${pipelineName}`)).should('be.visible');
       cy.get(dataCy(`draft-${pipelineName}`)).click();
       cy.get(dataCy('upgrade-modal-header')).should('contain', 'Upgrade Pipeline');

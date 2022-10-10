@@ -48,6 +48,7 @@ export function CreateConnectionBtn() {
         variant="outlined"
         color="primary"
         data-cy="add-connection-button"
+        data-testid="add-connection-button"
       >
         Add Connection
       </Button>

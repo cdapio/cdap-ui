@@ -15,7 +15,8 @@
 -->
 
 <!-- Control Buttons -->
-<div class="btn-group-vertical btn-group-sm zoom-control">
+<!-- change to ng-if="false" to get this to hide, this is WIP for the overall DAG react migration -->
+<div ng-if="false" class="btn-group-vertical btn-group-sm zoom-control">
   <button class="btn btn-default"
           data-cy="pipeline-zoom-in-control"
           data-testid="pipeline-zoom-in-control"
@@ -113,6 +114,24 @@
     disabled='DAGPlusPlusCtrl.isDisabled'
   ></pipeline-comments-action-btn>
 </div>
+
+<!-- change to ng-if="true" to get this to render-->
+<pipeline-canvas-action-btns
+  ng-if="true"
+  set-pipeline-comments="DAGPlusPlusCtrl.setPipelineComments"
+  pipeline-comments="DAGPlusPlusCtrl.pipelineComments"
+  is-disabled="DAGPlusPlusCtrl.isDisabled"
+  selection-box="DAGPlusPlusCtrl.selectionBox"
+  redo-states="DAGPlusPlusCtrl.redoStates"
+  redo-actions="DAGPlusPlusCtrl.redoActions"
+  undo-states="DAGPlusPlusCtrl.undoStates"
+  undo-actions="DAGPlusPlusCtrl.undoActions"
+  clean-up-graph="DAGPlusPlusCtrl.cleanUpGraph"
+  fit-to-screen="DAGPlusPlusCtrl.fitToScreen"
+  disable-node-click="DAGPlusPlusCtrl.disableNodeClick"
+  zoom-out="DAGPlusPlusCtrl.zoomOut"
+  zoom-in="DAGPlusPlusCtrl.zoomIn"
+></pipeline-canvas-action-btns>
 
 <div class="my-js-dag"
     ng-class="{'disabled': DAGPlusPlusCtrl.isDisabled, 'normal-cursor': disableNodeClick, 'preview-mode': previewMode }"
@@ -220,7 +239,8 @@
               <div class="node-metadata">
                 <div class="node-name"
                       ng-bind="node.plugin.label || node.name"
-                      ng-attr-title="{{node.plugin.label || node.name}}">
+                      ng-attr-title="{{node.plugin.label || node.name}}"
+                      data-testid="plugin-node-name-{{node.plugin.name}}-{{node.type}}-{{$index}}">
                 </div>
                 <div class="node-version"
                       ng-class="{ 'hidden': DAGPlusPlusCtrl.nodeMenuOpen === node.name}"

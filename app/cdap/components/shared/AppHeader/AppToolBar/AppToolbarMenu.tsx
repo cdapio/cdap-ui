@@ -34,7 +34,7 @@ import Divider from '@material-ui/core/Divider';
 import AccessTokenModal from 'components/shared/AppHeader/AccessTokenModal';
 import Cookies from 'universal-cookie';
 import RedirectToLogin from 'services/redirect-to-login';
-import { isAuthSetToManagedMode } from 'services/helpers';
+import { isAuthSetToManagedMode, objectQuery } from 'services/helpers';
 
 const cookie = new Cookies();
 
@@ -73,6 +73,7 @@ const styles = (theme) => ({
     color: 'inherit' as 'inherit',
   },
 });
+
 interface IAppToolbarMenuProps extends WithStyles<typeof styles> {}
 
 class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarState> {
@@ -94,6 +95,7 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
       accessTokenModalOpen: !this.state.accessTokenModalOpen,
     });
   };
+
   private getDocsUrl = () => {
     if (Theme.productDocumentationLink === null) {
       const cdapVersion = VersionStore.getState().version;
@@ -102,6 +104,7 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
 
     return Theme.productDocumentationLink;
   };
+
   public toggleSettings = (event: React.MouseEvent<HTMLElement>) => {
     if (this.state.anchorEl) {
       this.setState({
@@ -133,8 +136,33 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
     const { anchorEl } = this.state;
     const { classes } = this.props;
     const cdapVersion = VersionStore.getState().version;
+    let builtSettingsUrls;
+    const settingsUrls = objectQuery(
+      window.CDAP_CONFIG.cdap.ui,
+      'settings',
+      'cogMenu',
+      'externalLinks'
+    );
+    if (settingsUrls && typeof settingsUrls === 'object') {
+      builtSettingsUrls = Object.entries<string>(settingsUrls).map(([displayName, url]) => {
+        return (
+          <a
+            key={`${displayName + '-' + url}`}
+            className={classes.linkStyles}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MenuItem onClick={this.closeSettings} className={classes.anchorMenuItem}>
+              {displayName}
+            </MenuItem>
+          </a>
+        );
+      });
+    }
+
     return (
-      <React.Fragment>
+      <>
         <div onClick={this.toggleSettings}>
           <IconButton className={classnames(classes.buttonLink, classes.iconButtonFocus)}>
             <IconSVG name="icon-cogs" className={classes.cogWheelFontSize} />
@@ -165,7 +193,7 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                         {T.translate('features.Navbar.ProductDropdown.documentationLabel')}
                       </MenuItem>
                     </a>
-                    <If condition={Theme.showAboutProductModal === true}>
+                    {Theme.showAboutProductModal === true && (
                       <MenuItem
                         onClick={(e) => {
                           this.toggleAboutPage();
@@ -179,9 +207,10 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                           })}
                         </a>
                       </MenuItem>
-                    </If>
-                    <If condition={isAuthSetToManagedMode() && this.state.username !== ''}>
-                      <React.Fragment>
+                    )}
+                    {builtSettingsUrls && builtSettingsUrls}
+                    {this.state.username !== '' && (
+                      <>
                         <Divider />
                         <MenuItem
                           className={`${classes.anchorMenuItem} ${classes.loginUserMenuItem}`}
@@ -207,29 +236,29 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                             {T.translate('features.Navbar.ProductDropdown.logout')}
                           </a>
                         </MenuItem>
-                      </React.Fragment>
-                    </If>
+                      </>
+                    )}
                   </div>
                 </ClickAwayListener>
               </Paper>
             </Grow>
           )}
         </Popper>
-        <If condition={isAuthSetToManagedMode() && this.state.username !== ''}>
+        {isAuthSetToManagedMode() && this.state.username !== '' && (
           <AccessTokenModal
             cdapVersion={cdapVersion}
             isOpen={this.state.accessTokenModalOpen}
             toggle={this.toggleAccessTokenModal}
           />
-        </If>
-        <If condition={Theme.showAboutProductModal === true}>
+        )}
+        {Theme.showAboutProductModal === true && (
           <AboutPageModal
             cdapVersion={cdapVersion}
             isOpen={this.state.aboutPageOpen}
             toggle={this.toggleAboutPage}
           />
-        </If>
-      </React.Fragment>
+        )}
+      </>
     );
   }
 }
