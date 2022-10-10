@@ -22,9 +22,10 @@ interface IErrorProps {
   error: object | string | null;
   onClose?: () => void;
   canEditPageWhileOpen?: boolean;
+  actionElements?: Element;
 }
 
-const ErrorBanner = ({ error, onClose, canEditPageWhileOpen }: IErrorProps) => {
+const ErrorBanner = ({ error, onClose, canEditPageWhileOpen, actionElements }: IErrorProps) => {
   if (!error) {
     return null;
   }
@@ -38,6 +39,7 @@ const ErrorBanner = ({ error, onClose, canEditPageWhileOpen }: IErrorProps) => {
       type="error"
       showAlert={true}
       onClose={onClose}
+      actionElements={actionElements}
       canEditPageWhileOpen={canEditPageWhileOpen}
     />
   );

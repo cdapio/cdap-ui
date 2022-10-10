@@ -30,4 +30,5 @@ export interface IDraft {
   description?: string;
   config?: any;
   needsUpgrade?: boolean;
+  parentVersion?: string;
 }

@@ -18,8 +18,7 @@ angular.module(PKG.name + '.services')
   .service('myNamespace', function myNamespace($q, MyCDAPDataSource, EventPipe, $http, $rootScope, myAuth, myHelpers, $state) {
 
     this.namespaceList = [];
-    var data = new MyCDAPDataSource(),
-        prom,
+    var prom,
         queryInProgress = null;
 
 
@@ -31,21 +30,22 @@ angular.module(PKG.name + '.services')
       if (!queryInProgress) {
         prom = $q.defer();
         queryInProgress = true;
-        data.request(
+        $http(
           {
-            _cdapPath: '/namespaces',
+            url: '/api/v3/namespaces',
             method: 'GET'
           })
             .then(
               (function(res) {
+                var data = res.data;
 
-                if (!res.length && !$state.includes('admin.**')) {
+                if (!data.length && !$state.includes('admin.**')) {
                   $state.go('unauthorized');
                 }
 
-                this.namespaceList = res;
+                this.namespaceList = data;
                 EventPipe.emit('namespace.update');
-                prom.resolve(res);
+                prom.resolve(data);
                 queryInProgress = null;
               }).bind(this),
               function (err) {

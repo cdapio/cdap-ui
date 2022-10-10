@@ -68,6 +68,15 @@ const getExpressStaticConfig = () => {
   };
 };
 
+const removeBCookie = (req, res, cookieSettings) => {
+  // BCookie is the browser cookie, that is generated and will live for a year.
+  // This cookie is no longer needed and should be deleted.
+  if (req.cookies.bcookie) {
+    const date = new Date(0); // Expire in the past to delete
+    res.cookie('bcookie', '', { ...cookieSettings, expires: date } );
+  }
+}
+
 export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
   if (cdapConfig['security.authentication.mode'] === 'PROXY' && typeof res.headers === 'object') {
     delete res.headers.Authorization;
@@ -190,6 +199,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         mode: process.env.NODE_ENV,
         proxyBaseUrl: cdapConfig['dashboard.proxy.base.url'],
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
+        ui: uiSettings['ui'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
@@ -633,16 +643,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     ['/pipelines', '/pipelines/*'],
     [
       function(req, res) {
-        // BCookie is the browser cookie, that is generated and will live for a year.
-        // This cookie is always generated to provide unique id for the browser that
-        // is being used to interact with the CDAP backend.
-        var date = new Date();
-        date.setDate(date.getDate() + 365); // Expires after a year.
-        if (!req.cookies.bcookie) {
-          res.cookie('bcookie', uuidV4(), { ...cookieSettings, expires: date } );
-        } else {
-          res.cookie('bcookie', req.cookies.bcookie, { ...cookieSettings, expires: date });
-        }
+        removeBCookie(req, res, cookieSettings);
         res.render('hydrator', { nonceVal: res.locals.nonce });
       },
     ]
@@ -651,16 +652,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     ['/metadata', '/metadata/*'],
     [
       function(req, res) {
-        // BCookie is the browser cookie, that is generated and will live for a year.
-        // This cookie is always generated to provide unique id for the browser that
-        // is being used to interact with the CDAP backend.
-        var date = new Date();
-        date.setDate(date.getDate() + 365); // Expires after a year.
-        if (!req.cookies.bcookie) {
-          res.cookie('bcookie', uuidV4(), { ...cookieSettings, expires: date });
-        } else {
-          res.cookie('bcookie', req.cookies.bcookie, { ...cookieSettings, expires: date });
-        }
+        removeBCookie(req, res, cookieSettings);
         res.render('tracker', { nonceVal: res.locals.nonce });
       },
     ]
@@ -670,6 +662,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     ['/', '/cdap', '/cdap/*'],
     [
       function(req, res) {
+        removeBCookie(req, res, cookieSettings);
         res.render('cdap', { nonceVal: `${res.locals.nonce}` });
       },
     ]

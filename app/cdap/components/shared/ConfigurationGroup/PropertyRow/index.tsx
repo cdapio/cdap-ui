@@ -202,6 +202,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       <div className={classes.root}>
         <div
           data-cy={cypressId}
+          data-testid={cypressId}
           className={classnames(classes.row, { [classes.macroRow]: this.state.isMacroTextbox })}
         >
           <WidgetWrapper
