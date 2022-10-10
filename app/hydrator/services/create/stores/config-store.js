@@ -1300,15 +1300,17 @@ class HydratorPlusPlusConfigStore {
     };
 
     let postDeploymentCleanUp = (adapterName) => {
-      // save schedule on deploy
-      this.myPipelineApi.createSchedule(
-        {
-          namespace: this.$state.params.namespace,
-          pipeline: adapterName,
-          scheduleId: this.GLOBALS.defaultScheduleId
-        },
-        this.getSchedulePayload()
-      ).$promise.then(() => {console.log('successfully created schedule')})
+      // create schedule only on first deploy
+      if (!isEdit) {
+        this.myPipelineApi.createSchedule(
+          {
+            namespace: this.$state.params.namespace,
+            pipeline: adapterName,
+            scheduleId: this.GLOBALS.defaultScheduleId
+          },
+          this.getSchedulePayload()
+        ).$promise.then(() => {console.log('successfully created schedule')})
+      }
       const draftId = this.getDraftId();
       if (!draftId) {
         return navigateToDetailedView.call(this, adapterName);
