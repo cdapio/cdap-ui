@@ -16,15 +16,11 @@
 
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyPipelineApi } from 'api/pipeline';
-import Store, {
-  Actions,
-  SORT_ORDER,
-  IStore,
-} from 'components/PipelineList/DeployedPipelineView/store';
+import Store, { Actions, SORT_ORDER } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
-import { objectQuery } from 'services/helpers';
-import { PROGRAM_STATUSES, GLOBALS } from 'services/global-constants';
+import { GLOBALS } from 'services/global-constants';
 import debounce from 'lodash/debounce';
+import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
 
 export function deletePipeline(pipeline: IPipeline, refetch: () => void) {
   const namespace = getCurrentNamespace();
@@ -191,4 +187,22 @@ export function setSort(columnName: string) {
     },
   });
   getRunsForPipelines();
+}
+
+export function setDrafts(drafts: IDraft[]) {
+  Store.dispatch({
+    type: Actions.setDrafts,
+    payload: {
+      drafts,
+    },
+  });
+}
+
+export function deleteEditDraft(draftId: string, callbackFn: () => void) {
+  MyPipelineApi.deleteDraft({
+    context: getCurrentNamespace(),
+    draftId,
+  }).subscribe((res) => {
+    callbackFn();
+  });
 }
