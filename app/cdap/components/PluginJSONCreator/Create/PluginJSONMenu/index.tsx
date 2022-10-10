@@ -280,6 +280,7 @@ const PluginJSONMenuView: React.FC<IPluginJSONMenuProps> = ({ classes, uploadedF
           paperAnchorRight: isLiveView ? classes.liveViewerPaper : classes.closedMenuPaper,
         }}
         data-cy="navbar-drawer"
+        data-testid="navbar-drawer"
       >
         <div className={classes.toolbar} />
         <If condition={isLiveView}>
