@@ -18,22 +18,24 @@ import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
 
 export default function(props) {
-  const {
-    options,
-    value,
-    onChange,
-    classes,
-    className,
-    fullWidth,
-    optionClassName,
-    defaultValue,
-  } = props;
+  const { options, classes, optionClassName } = props;
 
   return (
-    <Select classes={{ ...classes }} {...props}>
-      {options.map((option) => {
+    <Select
+      classes={{ ...classes }}
+      {...props}
+      MenuProps={{
+        dataTestid: 'input-select-menu',
+      }}
+    >
+      {options.map((option, index) => {
         return (
-          <MenuItem classes={...optionClassName} value={option.value} key={option.value}>
+          <MenuItem
+            classes={{ ...optionClassName }}
+            value={option.value}
+            key={option.value}
+            data-testid={`input-select-${index}`}
+          >
             {option.label}
           </MenuItem>
         );

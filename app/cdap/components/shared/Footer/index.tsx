@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[400],
     fontSize: '11px',
     fontWeight: 600,
-    zIndex: 0,
+    zIndex: 2,
     position: 'absolute',
     width: '100%',
     bottom: '0',

@@ -23,51 +23,38 @@ import NamespaceStore from 'services/NamespaceStore';
 import { IProgramStatusTrigger, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 import Checkbox from '@material-ui/core/Checkbox';
 import {
+  CheckboxContainer,
   CheckboxItemContainer,
   ErrorText,
   HelperText,
-  PipelineDescription,
   PipelineName,
-  PipelineTriggerButton,
   StyledNameSpace,
   TextCenter,
+  TriggerCardButton,
 } from 'components/PipelineTriggers/shared.styles';
 import styled from 'styled-components';
 import { openLinkInNewTab } from 'services/helpers';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { CardActions } from '@material-ui/core';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PAYLOAD_PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.PayloadConfigModal';
 
-const InlineTriggersExpandedRow = styled.div`
-  border: 2px solid #dedede;
-  margin: 5px;
-  background: #f5f5f5;
-`;
-
-const PipelineLink = styled.a`
-  margin-left: 5px;
-`;
-
-const InlineTriggerActionButtonsContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 10px 10px 0;
-`;
-
-const InlineTriggerHeaderRow = styled.div`
-  font-weight: bold;
+const PipelineNameInDescription = styled.div`
+  font-size: 14px;
 `;
 
 interface IEnabledInlineTriggerRowProps {
   trigger: IProgramStatusTrigger;
-  groupSchedule: ISchedule;
+  compositeTriggerSchedule: ISchedule;
   pipelineName: string;
   disableError: string;
 }
 
 const EnabledInlineTriggerRow = ({
   trigger,
-  groupSchedule,
+  compositeTriggerSchedule,
   pipelineName,
   disableError,
 }: IEnabledInlineTriggerRowProps) => {
@@ -114,75 +101,76 @@ const EnabledInlineTriggerRow = ({
     const failed = events.indexOf('FAILED') > -1;
 
     return (
-      <div>
-        <PipelineDescription>
-          <strong>{T.translate(`${TRIGGER_PREFIX}.description`)}: </strong>
-          <span>{expandedTriggerInfo && expandedTriggerInfo.description}</span>
-        </PipelineDescription>
-        <PipelineLink
-          href={`/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`}
-          target="_blank"
-          // The Anchor tab is not working, using this hacky way to fix it for now
-          onClick={() =>
-            openLinkInNewTab(
-              `/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`
-            )
-          }
-        >
-          {T.translate(`${TRIGGER_PREFIX}.viewPipeline`)}
-        </PipelineLink>
-        <HelperText>{T.translate(`${TRIGGER_PREFIX}.helperText`, { pipelineName })}</HelperText>
-        <div>
-          <CheckboxItemContainer>
-            <Checkbox checked={completed} color="primary" size="small" />
-            <span>{T.translate(`${TRIGGER_PREFIX}.Events.COMPLETED`)}</span>
-          </CheckboxItemContainer>
-          <CheckboxItemContainer>
-            <Checkbox checked={killed} color="primary" size="small" />
-            <span>{T.translate(`${TRIGGER_PREFIX}.Events.KILLED`)}</span>
-          </CheckboxItemContainer>
-          <CheckboxItemContainer>
-            <Checkbox checked={failed} color="primary" size="small" />
-            <span>{T.translate(`${TRIGGER_PREFIX}.Events.FAILED`)}</span>
-          </CheckboxItemContainer>
-        </div>
-        {disableError && <ErrorText>{disableError}</ErrorText>}
-        <InlineTriggerActionButtonsContainer>
-          <PipelineTriggerButton
-            onClick={handlePayloadToggleClick}
-            data-cy={`${triggeringPipelineInfo.id}-view-payload-btn`}
-          >
-            {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtnDisabled`)}
-          </PipelineTriggerButton>
+      <Card>
+        <CardContent>
+          <PipelineNameInDescription>
+            <strong>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}: </strong>
+            <PipelineName>{trigger.programId.application}</PipelineName>
+          </PipelineNameInDescription>
+          <div>
+            <strong>{T.translate(`${TRIGGER_PREFIX}.namespace`)}: </strong>
+            <StyledNameSpace>{trigger.programId.namespace}</StyledNameSpace>
+          </div>
+          <div>
+            <strong>{T.translate(`${TRIGGER_PREFIX}.description`)}: </strong>
+            <span>{expandedTriggerInfo && expandedTriggerInfo.description}</span>
+          </div>
+          <HelperText>{T.translate(`${TRIGGER_PREFIX}.helperText`, { pipelineName })}</HelperText>
+          <CheckboxContainer>
+            <CheckboxItemContainer>
+              <Checkbox checked={completed} color="primary" size="small" />
+              <span>{T.translate(`${TRIGGER_PREFIX}.Events.COMPLETED`)}</span>
+            </CheckboxItemContainer>
+            <CheckboxItemContainer>
+              <Checkbox checked={killed} color="primary" size="small" />
+              <span>{T.translate(`${TRIGGER_PREFIX}.Events.KILLED`)}</span>
+            </CheckboxItemContainer>
+            <CheckboxItemContainer>
+              <Checkbox checked={failed} color="primary" size="small" />
+              <span>{T.translate(`${TRIGGER_PREFIX}.Events.FAILED`)}</span>
+            </CheckboxItemContainer>
+          </CheckboxContainer>
+          {disableError && <ErrorText>{disableError}</ErrorText>}
           <PayloadConfigModal
             isOpen={payloadModalOpen}
             triggeringPipelineInfo={triggeringPipelineInfo}
             triggeredPipelineInfo={triggeredPipelineInfo}
             onToggle={handlePayloadToggleClick}
-            scheduleInfo={groupSchedule}
+            scheduleInfo={compositeTriggerSchedule}
             disabled={true}
             pipelineCompositeTriggersEnabled={true}
           />
-        </InlineTriggerActionButtonsContainer>
-      </div>
+        </CardContent>
+        <CardActions>
+          <TriggerCardButton
+            // The Anchor tab is not working, using this hacky way to fix it for now
+            onClick={() =>
+              openLinkInNewTab(
+                `/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`
+              )
+            }
+          >
+            {T.translate(`${TRIGGER_PREFIX}.viewPipelineCapitalized`)}
+          </TriggerCardButton>
+          <TriggerCardButton
+            onClick={handlePayloadToggleClick}
+            data-cy={`${triggeringPipelineInfo.id}-view-payload-btn`}
+            data-testid={`${triggeringPipelineInfo.id}-view-payload-btn`}
+          >
+            {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtnDisabledCapitalized`)}
+          </TriggerCardButton>
+        </CardActions>
+      </Card>
     );
   };
 
   return (
-    <InlineTriggersExpandedRow data-cy={`${trigger.programId.application}-expanded`}>
-      <InlineTriggerHeaderRow>
-        <PipelineDescription>
-          <strong>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}: </strong>
-          <PipelineName>{trigger.programId.application}</PipelineName>
-        </PipelineDescription>
-        <PipelineDescription>
-          <strong>{T.translate(`${TRIGGER_PREFIX}.namespace`)}: </strong>
-          <StyledNameSpace>{trigger.programId.namespace}</StyledNameSpace>
-        </PipelineDescription>
-      </InlineTriggerHeaderRow>
-
+    <div
+      data-cy={`${trigger.programId.application}-expanded`}
+      data-testid={`${trigger.programId.application}-expanded`}
+    >
       {isLoading ? renderLoading() : renderContent()}
-    </InlineTriggersExpandedRow>
+    </div>
   );
 };
 
