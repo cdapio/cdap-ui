@@ -63,7 +63,7 @@ const ExecutorResources = ({
   const isMapReduce =
     engine === ENGINE_OPTIONS.MAPREDUCE && GLOBALS.etlBatchPipelines.includes(pipelineType);
   return (
-    <div className="executor">
+    <div className="executor" data-cy="resources-config-tab-executor">
       <div className="resource-title-icon">
         <span className="resource-title">
           {isMapReduce

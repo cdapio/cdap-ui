@@ -72,10 +72,10 @@ describe('Pipeline Studio', () => {
     const sinkNodeId: INodeIdentifier = { ...sinkNode, nodeId: '2' };
     cy.add_node_to_canvas(sourceNode);
 
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(transformNode);
 
-    cy.open_sink_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode);
 
     cy.get('#diagram-container');
@@ -121,7 +121,7 @@ describe('Pipeline Studio', () => {
     };
     cy.add_node_to_canvas(sourceNode);
 
-    cy.open_sink_panel();
+    cy.toggle_sink_panel();
     cy.add_node_to_canvas(sinkNode1);
 
     cy.connect_two_nodes(sourceNodeId, sinkNodeId1, getGenericEndpoint);
@@ -194,7 +194,7 @@ describe('Pipeline Studio', () => {
       expect(sinkPropertiesFromNode.project).equal(sinkProperties.project);
       expect(sinkPropertiesFromNode.serviceFilePath).equal(sinkProperties.serviceFilePath);
     });
-    cy.get('[data-testid="deploy-pipeline"]').click();
+    cy.get('[data-cy="deploy-pipeline-btn"]').click();
     cy.url({ timeout: 60000 }).should('include', `/view/${TEST_PIPELINE_NAME}`);
   });
 
@@ -206,7 +206,7 @@ describe('Pipeline Studio', () => {
     cy.add_node_to_canvas(sourceNode);
 
     cy.get(dataCy('plugin-node-BigQueryTable-batchsource-0')).within(() => {
-      cy.get(dataCy('node-error-count')).should('have.text', '3');
+      cy.get(dataCy('node-error-count')).should('have.text', '2');
     });
   });
 
@@ -218,7 +218,7 @@ describe('Pipeline Studio', () => {
     cy.visit('/pipelines/ns/default/studio');
     cy.create_simple_pipeline();
 
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .type(TEST_PIPELINE_NAME)
       .type('{enter}');

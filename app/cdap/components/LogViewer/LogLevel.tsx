@@ -90,6 +90,7 @@ const LogLevelView: React.FC<ILogLevelProps> = ({ classes, dataFetcher, changeLo
         {...props}
         className={`${props.className} ${classes.target}`}
         data-cy="log-viewer-log-level-toggle"
+        data-testid="log-viewer-log-level-toggle"
       >
         <span>Level</span>
         <ArrowDropDown />
@@ -108,7 +109,7 @@ const LogLevelView: React.FC<ILogLevelProps> = ({ classes, dataFetcher, changeLo
   return (
     <div className={classes.root}>
       <Popover target={target} placement="bottom" className={classes.popoverContainer}>
-        <div data-cy="log-viewer-log-level-popover">
+        <div data-cy="log-viewer-log-level-popover" data-testid="log-viewer-log-level-popover">
           {LEVEL_OPTIONS.map((level, i) => {
             const shouldShowCheckmark = i <= logLevel || i <= mouseHover;
 
@@ -120,6 +121,7 @@ const LogLevelView: React.FC<ILogLevelProps> = ({ classes, dataFetcher, changeLo
                 onMouseEnter={() => setMouseHover(i)}
                 onMouseLeave={() => setMouseHover(null)}
                 data-cy={`log-level-row-${level}`}
+                data-testid={`log-level-row-${level}`}
               >
                 <span>
                   <If condition={shouldShowCheckmark}>
@@ -127,6 +129,7 @@ const LogLevelView: React.FC<ILogLevelProps> = ({ classes, dataFetcher, changeLo
                       name="icon-check"
                       className={getIconClassName(i)}
                       dataCy="log-level-check"
+                      data-testid="log-level-check"
                     />
                   </If>
                 </span>

@@ -198,6 +198,7 @@ export default function TransformAddButton({
             variant="outlined"
             value={directiveText}
             onChange={handleDirectiveChange}
+            autoFocus
           />
         </Grid>
         <Grid

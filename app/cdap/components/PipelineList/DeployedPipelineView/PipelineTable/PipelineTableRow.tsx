@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import NextRun from 'components/PipelineList/DeployedPipelineView/NextRun';
 import PipelineTags from 'components/PipelineList/DeployedPipelineView/PipelineTags';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -24,40 +24,66 @@ import LastStart from 'components/PipelineList/DeployedPipelineView/LastStart';
 import RunsCount from 'components/PipelineList/DeployedPipelineView/RunsCount';
 import DeployedActions from 'components/PipelineList/DeployedPipelineView/DeployedActions';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   pipeline: IPipeline;
   refetch: () => void;
+  lifecycleManagementEditEnabled?: boolean;
 }
 
 const PREFIX = 'features.PipelineList';
 
-export default class PipelineTableRow extends React.PureComponent<IProps> {
-  public render() {
-    const pipeline = this.props.pipeline;
-    const namespace = getCurrentNamespace();
+export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEnabled }: IProps) => {
+  const [draftId, setDraftId] = useState(null);
+  const { drafts } = useSelector(({ deployed }) => deployed);
+  const namespace = getCurrentNamespace();
 
-    const pipelineLink = window.getHydratorUrl({
-      stateName: 'hydrator.detail',
-      stateParams: {
-        namespace,
-        pipelineId: pipeline.name,
-      },
-    });
+  const pipelineLink = window.getHydratorUrl({
+    stateName: 'hydrator.detail',
+    stateParams: {
+      namespace,
+      pipelineId: pipeline.name,
+    },
+  });
 
-    return (
-      <a href={pipelineLink} className=" grid-row">
-        <div className="name" title={pipeline.name}>
-          {pipeline.name}
-        </div>
-        <div className="type">{T.translate(`${PREFIX}.${pipeline.artifact.name}`)}</div>
-        <Status pipeline={pipeline} />
-        <LastStart pipeline={pipeline} />
-        <NextRun pipeline={pipeline} />
-        <RunsCount pipeline={pipeline} />
-        <PipelineTags pipeline={pipeline} />
-        <DeployedActions pipeline={pipeline} refetch={this.props.refetch} />
-      </a>
+  const saveDraftIdToLocalStorage = () => {
+    if (draftId) {
+      window.localStorage.setItem('editDraftId', draftId);
+    }
+  };
+
+  useEffect(() => {
+    const filteredDraft = drafts.filter(
+      (draft) =>
+        draft.name === pipeline.name &&
+        draft.artifact.name === pipeline.artifact.name &&
+        draft.parentVersion
     );
-  }
-}
+    if (filteredDraft.length === 0) {
+      // currently there's no edit draft saved for this pipeline
+      return;
+    }
+    setDraftId(filteredDraft[0].id);
+  }, []);
+
+  return (
+    <a href={pipelineLink} onClick={saveDraftIdToLocalStorage} className="grid-row">
+      <div className="name" title={pipeline.name}>
+        {pipeline.name}
+      </div>
+      <div className="type">{T.translate(`${PREFIX}.${pipeline.artifact.name}`)}</div>
+      <Status pipeline={pipeline} />
+      <LastStart pipeline={pipeline} />
+      <NextRun pipeline={pipeline} />
+      <RunsCount pipeline={pipeline} />
+      <PipelineTags pipeline={pipeline} />
+      <DeployedActions
+        pipeline={pipeline}
+        refetch={refetch}
+        lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+        draftId={draftId}
+      />
+    </a>
+  );
+};

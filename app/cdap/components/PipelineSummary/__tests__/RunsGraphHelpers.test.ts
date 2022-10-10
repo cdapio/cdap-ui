@@ -14,33 +14,95 @@
  * the License.
  */
 
-import { getResolution } from 'components/PipelineSummary/RunsGraphHelpers';
+import {
+  getResolution,
+  getGapFilledAccumulatedData,
+} from 'components/PipelineSummary/RunsGraphHelpers';
 const secondsi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.seconds';
 const minutesi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.minutes';
 const hoursi18nLabel = 'features.PipelineSummary.pipelineNodesMetricsGraph.hours';
-describe('Resolving resolution in plugin metrics graph', () => {
-  it('Should return default if no input is provided', () => {
-    expect(getResolution('')).toBe(secondsi18nLabel);
-  });
-  it('Should return seconds if resolution is < 60s', () => {
-    expect(getResolution('1s')).toBe(secondsi18nLabel);
-    expect(getResolution('20s')).toBe(secondsi18nLabel);
-    expect(getResolution('59s')).toBe(secondsi18nLabel);
-  });
-  it('Should return minutes if resolution is between 60 and 3600s', () => {
-    expect(getResolution('60s')).toBe(minutesi18nLabel);
-    expect(getResolution('2300s')).toBe(minutesi18nLabel);
-    expect(getResolution('2599s')).toBe(minutesi18nLabel);
+
+describe('RunsGraphHelper', () => {
+  describe('getResolution Resolving resolution in plugin metrics graph', () => {
+    it('Should return default if no input is provided', () => {
+      expect(getResolution('')).toBe(secondsi18nLabel);
+    });
+    it('Should return seconds if resolution is < 60s', () => {
+      expect(getResolution('1s')).toBe(secondsi18nLabel);
+      expect(getResolution('20s')).toBe(secondsi18nLabel);
+      expect(getResolution('59s')).toBe(secondsi18nLabel);
+    });
+    it('Should return minutes if resolution is between 60 and 3600s', () => {
+      expect(getResolution('60s')).toBe(minutesi18nLabel);
+      expect(getResolution('2300s')).toBe(minutesi18nLabel);
+      expect(getResolution('2599s')).toBe(minutesi18nLabel);
+    });
+
+    it('Should return hours if resolution is > 3600s', () => {
+      expect(getResolution('3600s')).toBe(hoursi18nLabel);
+      expect(getResolution('6000s')).toBe(hoursi18nLabel);
+    });
+
+    it('Should not error out if given an invalid resolution', () => {
+      expect(getResolution('unknown')).toBe(secondsi18nLabel);
+      expect(getResolution(10 as any)).toBe(secondsi18nLabel);
+      expect(getResolution('-100s')).toBe(secondsi18nLabel);
+    });
   });
 
-  it('Should return hours if resolution is > 3600s', () => {
-    expect(getResolution('3600s')).toBe(hoursi18nLabel);
-    expect(getResolution('6000s')).toBe(hoursi18nLabel);
-  });
+  describe.only('getGapFilledAccumulatedData', () => {
+    it('should return the same elements if there are no gaps', () => {
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1002, y: 575 },
+          ],
+          0
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 575 },
+      ]);
+    });
 
-  it('Should not error out if given an invalid resolution', () => {
-    expect(getResolution('unknown')).toBe(secondsi18nLabel);
-    expect(getResolution(10 as any)).toBe(secondsi18nLabel);
-    expect(getResolution('-100s')).toBe(secondsi18nLabel);
+    it('should fill a gap in the middle of the series', () => {
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1003, y: 575 },
+          ],
+          0
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 550 },
+        { x: 1003, y: 575 },
+      ]);
+    });
+
+    it('should add new entries at the end of the series', () => {
+      expect(
+        getGapFilledAccumulatedData(
+          [
+            { x: 1000, y: 500 },
+            { x: 1001, y: 550 },
+            { x: 1002, y: 575 },
+          ],
+          5
+        )
+      ).toStrictEqual([
+        { x: 1000, y: 500 },
+        { x: 1001, y: 550 },
+        { x: 1002, y: 575 },
+        { x: 1003, y: 575 },
+        { x: 1004, y: 575 },
+      ]);
+    });
   });
 });
