@@ -83,7 +83,7 @@ angular.module(PKG.name + '.feature.hydrator')
         }
       })
         .state('hydrator.create', {
-          url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId',
+          url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId&isEdit',
           onEnter: function() {
             document.title = `${productName} | Studio`;
           },
@@ -310,10 +310,18 @@ angular.module(PKG.name + '.feature.hydrator')
               templateUrl: '/assets/features/hydrator/templates/create/leftpanel.html',
               controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
             },
+            'reactleftpanel@hydrator.create': {
+              templateUrl: '/assets/features/hydrator/templates/create/reactleftpanel.html',
+              controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
+            },
             'toppanel@hydrator.create': {
               templateUrl: '/assets/features/hydrator/templates/create/toppanel.html',
               controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
-            }
+            },
+            'reacttoppanel@hydrator.create': {
+              templateUrl: '/assets/features/hydrator/templates/create/reacttoppanel.html',
+              controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
+            },
           },
           onExit: function($uibModalStack) {
             $uibModalStack.dismissAll();

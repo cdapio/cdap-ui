@@ -278,20 +278,25 @@ Cypress.Commands.add('start_wrangler', (headers) => {
   });
 });
 
-Cypress.Commands.add('open_source_panel', () => {
-  cy.get('[data-cy="plugin-Source-group"]').click();
+Cypress.Commands.add('toggle_source_panel', () => {
+  cy.get('[data-cy="plugin-Source-group-summary"]').click();
+  cy.wait(100)
 });
-Cypress.Commands.add('open_transform_panel', () => {
-  cy.get('[data-cy="plugin-Transform-group"]').click();
+Cypress.Commands.add('toggle_transform_panel', () => {
+  cy.get('[data-cy="plugin-Transform-group-summary"]').click();
+  cy.wait(100)
 });
-Cypress.Commands.add('open_analytics_panel', () => {
-  cy.get('[data-cy="plugin-Analytics-group"]').click();
+Cypress.Commands.add('toggle_analytics_panel', () => {
+  cy.get('[data-cy="plugin-Analytics-group-summary"]').click();
+  cy.wait(100)
 });
-Cypress.Commands.add('open_sink_panel', () => {
-  cy.get('[data-cy="plugin-Sink-group"]').click();
+Cypress.Commands.add('toggle_sink_panel', () => {
+  cy.get('[data-cy="plugin-Sink-group-summary"]').click();
+  cy.wait(100)
 });
-Cypress.Commands.add('open_condition_and_actions_panel', () => {
-  cy.get('[data-cy="plugin-Conditions and Actions-group"]').click();
+Cypress.Commands.add('toggle_condition_and_actions_panel', () => {
+  cy.get('[data-cy="plugin-Conditions and Actions-group-summary"]').click();
+  cy.wait(100)
 });
 
 Cypress.Commands.add('add_node_to_canvas', (nodeObj: INodeInfo) => {
@@ -411,10 +416,10 @@ Cypress.Commands.add('create_simple_pipeline', () => {
 
   cy.add_node_to_canvas(sourceNode);
 
-  cy.open_transform_panel();
+  cy.toggle_transform_panel();
   cy.add_node_to_canvas(transformNode);
 
-  cy.open_sink_panel();
+  cy.toggle_sink_panel();
   cy.add_node_to_canvas(sinkNode);
 
   cy.connect_two_nodes(sourceNodeId, transformNodeId, getGenericEndpoint);
@@ -452,17 +457,17 @@ Cypress.Commands.add('create_complex_pipeline', () => {
   cy.add_node_to_canvas(sourceNode1);
   cy.add_node_to_canvas(sourceNode2);
 
-  cy.open_transform_panel();
+  cy.toggle_transform_panel();
   cy.add_node_to_canvas(transformNode1);
   cy.add_node_to_canvas(transformNode2);
 
-  cy.open_analytics_panel();
+  cy.toggle_analytics_panel();
   cy.add_node_to_canvas(joinerNode);
 
-  cy.open_condition_and_actions_panel();
+  cy.toggle_condition_and_actions_panel();
   cy.add_node_to_canvas(conditionNode);
 
-  cy.open_sink_panel();
+  cy.toggle_sink_panel();
   cy.add_node_to_canvas(sinkNode1);
   cy.add_node_to_canvas(sinkNode2);
 

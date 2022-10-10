@@ -22,6 +22,7 @@ type IStringBoolean = 'true' | 'false';
 export interface IFeatureFlags {
   'replication.transformations.enabled'?: IStringBoolean;
   'pipeline.composite.triggers.enabled'?: IStringBoolean;
+  'lifecycle.management.edit.enabled'?: IStringBoolean;
 }
 
 export const FeatureFlagsContext = createContext(null);

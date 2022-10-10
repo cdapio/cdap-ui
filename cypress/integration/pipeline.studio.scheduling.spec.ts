@@ -58,12 +58,12 @@ describe('Pipeline Studio', () => {
     cy.url().should('include', '/studio');
     cy.upload_pipeline(
       'pipeline_with_macros.json',
-      '#pipeline-import-config-link > input[type="file"]'
+      '#pipeline-import-config-link'
     ).then((subject) => {
       expect(subject.length).to.be.eq(1);
     });
     cy.get('[title="Airport_source"').should('exist');
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .clear()
       .type(PIPELINE_NAME)

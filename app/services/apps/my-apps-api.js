@@ -18,7 +18,7 @@ angular.module(PKG.name + '.services')
   .factory('myAppsApi', function(myCdapUrl, $resource, myAuth, myHelpers) {
 
     var url = myCdapUrl.constructUrl,
-        basePath = '/namespaces/:namespace/apps',
+        basePath = '/api/v3/namespaces/:namespace/apps',
         listPath = basePath,
         detailPath = basePath + '/:appId';
 

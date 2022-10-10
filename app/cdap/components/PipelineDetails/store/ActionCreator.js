@@ -369,6 +369,13 @@ const setStopError = (error) => {
   });
 };
 
+const setEditDraftId = (draftId) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_EDIT_DRAFT_ID,
+    payload: { draftId },
+  });
+};
+
 const reset = () => {
   PipelineDetailStore.dispatch({
     type: ACTIONS.RESET,
@@ -414,5 +421,6 @@ export {
   setScheduleError,
   setStopButtonLoading,
   setStopError,
+  setEditDraftId,
   reset,
 };

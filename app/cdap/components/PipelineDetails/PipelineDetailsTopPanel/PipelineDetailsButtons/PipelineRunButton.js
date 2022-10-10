@@ -97,6 +97,7 @@ export default class PipelineRunButton extends Component {
     return (
       <div
         data-cy="pipeline-run-btn"
+        data-testid="pipeline-run-btn"
         onClick={this.runPipelineOrToggleConfig}
         className="btn btn-secondary pipeline-action-btn pipeline-run-btn"
         disabled={this.props.runButtonLoading}

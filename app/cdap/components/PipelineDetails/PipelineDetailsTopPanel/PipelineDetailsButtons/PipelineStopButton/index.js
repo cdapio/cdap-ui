@@ -72,7 +72,7 @@ export default class PipelineStopButton extends Component {
     );
   };
 
-  stopRun = (runId = this.props.runs[0].runid) => {
+  stopRun = (runId = this.state.activeRuns[0].runid) => {
     let params = {
       graceful: 6 * 60 * 60,
       namespace: getCurrentNamespace(),

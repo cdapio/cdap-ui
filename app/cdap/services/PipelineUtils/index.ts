@@ -27,8 +27,18 @@ interface IPipelineConfig {
     scope: string;
   };
   config: any;
+  version: string;
+  parentVersion?: string;
 }
 
+/**
+ * Duplicate selected pipeline and navigate to studio page
+ *
+ * @param {string} pipelineName - input pipeline name
+ * @param {object} config - pipeline config object, if not provided
+ *                          will fetch the config through given pipelineName
+ * @returns
+ */
 export function duplicatePipeline(pipelineName: string, config?: IPipelineConfig): void {
   const newName = getClonePipelineName(pipelineName);
 
@@ -42,6 +52,31 @@ export function duplicatePipeline(pipelineName: string, config?: IPipelineConfig
   });
 }
 
+/**
+ * Edit selected pipeline and navigate to studio page
+ *
+ * @param {string} pipelineName - input pipeline name
+ * @param {object} config - pipeline config object, if not provided
+ *                          will fetch the config through given pipelineName
+ * @returns
+ */
+export function editPipeline(pipelineName: string, config?: IPipelineConfig): void {
+  if (config) {
+    setConfigAndNavigate({ ...config }, true);
+    return;
+  }
+
+  getPipelineConfig(pipelineName).subscribe((pipelineConfig) => {
+    setConfigAndNavigate({ ...pipelineConfig }, true);
+  });
+}
+
+/**
+ * Get pipeline config from pipeline name
+ *
+ * @param {string} pipelineName - input pipeline name
+ * @returns {Observable}
+ */
 export function getPipelineConfig(pipelineName: string): Observable<IPipelineConfig> {
   return Observable.create((observer) => {
     const params = {
@@ -55,6 +90,7 @@ export function getPipelineConfig(pipelineName: string): Observable<IPipelineCon
         description: res.description,
         artifact: res.artifact,
         config: JSON.parse(res.configuration),
+        version: res.appVersion,
       };
 
       observer.next(pipelineConfig);
@@ -63,15 +99,19 @@ export function getPipelineConfig(pipelineName: string): Observable<IPipelineCon
   });
 }
 
-function setConfigAndNavigate(config: IPipelineConfig): void {
-  window.localStorage.setItem(config.name, JSON.stringify(config));
+function setConfigAndNavigate(config: IPipelineConfig, isEdit = false): void {
+  const newConfig = { ...config };
+  newConfig.parentVersion = newConfig.version;
+  delete newConfig.version;
+  window.localStorage.setItem(newConfig.name, JSON.stringify(newConfig));
 
   const hydratorLink = window.getHydratorUrl({
     stateName: 'hydrator.create',
     stateParams: {
       namespace: getCurrentNamespace(),
-      cloneId: config.name,
-      artifactType: config.artifact.name,
+      cloneId: newConfig.name,
+      artifactType: newConfig.artifact.name,
+      isEdit: isEdit.toString(),
     },
   });
 

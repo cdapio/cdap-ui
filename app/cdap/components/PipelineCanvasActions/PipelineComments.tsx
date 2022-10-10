@@ -19,7 +19,6 @@ import Popper from '@material-ui/core/Popper';
 import CommentBox from 'components/AbstractWidget/Comment/CommentBox';
 import { COMMENT_WIDTH } from 'components/AbstractWidget/Comment/CommentConstants';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import If from 'components/shared/If';
 import isNil from 'lodash/isNil';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -132,6 +131,16 @@ export function PipelineComments({
     setLocalComments([{ content: '', createDate: Date.now() }, ...localComments]);
   };
 
+  const onClickAway = () => {
+    if (!isOpen) {
+      return;
+    }
+    if (typeof onClose === 'function') {
+      onClose();
+    }
+    setLocalAnchorEl(null);
+  };
+
   React.useEffect(() => {
     if (anchorEl !== null && typeof anchorEl === 'object') {
       setIsOpen(true);
@@ -143,7 +152,7 @@ export function PipelineComments({
   }, [anchorEl]);
   return (
     <div className={classes.root} onClick={preventPropagation}>
-      <If condition={!isNil(localAnchorEl)}>
+      {!isNil(localAnchorEl) && (
         <Popper
           className={classes.popper}
           anchorEl={localAnchorEl}
@@ -170,7 +179,7 @@ export function PipelineComments({
           <UniversalBackdrop open={isOpen} onClose={onClose} invisible />
           <div className={classes.arrow} ref={setArrowRef} />
           <Paper className={classes.pipelineCommentsWrapper}>
-            <If condition={!disabled}>
+            {!disabled && (
               <div className={classes.popperHeading}>
                 <Button
                   onClick={onAddNewComment}
@@ -183,7 +192,7 @@ export function PipelineComments({
                   <CloseIcon />
                 </IconButton>
               </div>
-            </If>
+            )}
             {localComments.map((comment, id) => {
               return (
                 <CommentBox
@@ -193,12 +202,13 @@ export function PipelineComments({
                   onDelete={onDelete.bind(null, id)}
                   focus={!comment.content.length}
                   disabled={disabled}
+                  onClickAway={onClickAway}
                 />
               );
             })}
           </Paper>
         </Popper>
-      </If>
+      )}
     </div>
   );
 }

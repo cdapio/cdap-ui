@@ -79,7 +79,11 @@ class ProfileCreateProvisionerSelection extends Component {
         key={provisioner.name}
       >
         {provisioner.beta ? <ExperimentalBanner /> : null}
-        <div className="provisioner-content" data-cy={`provisioner-${provisioner.name}`}>
+        <div
+          className="provisioner-content"
+          data-cy={`provisioner-${provisioner.name}`}
+          data-testid={`provisioner-${provisioner.name}`}
+        >
           <div className="provisioner-icon">
             {src ? <img src={src} /> : <IconSVG name={icon} />}
           </div>
