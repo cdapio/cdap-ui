@@ -19,6 +19,7 @@ declare global {
   interface Window {
     getHydratorUrl: ({}) => string;
     angular;
+    ReactStores;
     Cypress;
     ace;
   }

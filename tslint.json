@@ -8,6 +8,7 @@
     "quotemark": [
       false
     ],
+    "prefer-for-of": false,
     "ordered-imports": false,
     "interface-name": [
       true,

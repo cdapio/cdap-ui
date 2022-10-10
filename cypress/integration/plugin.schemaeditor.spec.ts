@@ -50,7 +50,7 @@ describe('Plugin Schema Editor', () => {
     const projection: INodeInfo = { nodeName: 'Projection', nodeType: 'transform' };
     const projectionId: INodeIdentifier = { ...projection, nodeId: '0' };
 
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(projection);
 
     return cy.open_node_property(projectionId);
@@ -744,7 +744,7 @@ describe('Plugin Schema Editor', () => {
   describe('Should show disabled schema in detailed view', () => {
     it('Should be disabled in deployed pipeline', () => {
       const testPipeline = `test_pipeline_${Date.now()}`;
-      Helpers.deployAndTestPipeline('fll_wrangler-test-pipeline.json', testPipeline);
+      Helpers.deployAndTestPipeline('fll_wrangler-test-pipeline.json', testPipeline, () => {});
 
       // this wait is a bit arbitrary since cypress needs the UI to settle down in the detail page before
       // attempting to open wrangler node
@@ -778,7 +778,7 @@ describe('Plugin Schema Editor', () => {
       const speechToTextId: INodeIdentifier = { ...speechToText, nodeId: '1' };
       cy.visit('/pipelines/ns/default/studio');
       cy.add_node_to_canvas(fileId);
-      cy.open_transform_panel();
+      cy.toggle_transform_panel();
       cy.add_node_to_canvas(speechToTextId);
       cy.connect_two_nodes(fileId, speechToTextId, Helpers.getGenericEndpoint);
 

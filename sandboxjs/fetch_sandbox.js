@@ -14,9 +14,8 @@
  * the License.
 */
 
-const branchInfo = require('./bamboo_plan_info.json');
+const branchInfo = require('./sandbox_version.json');
 const path = require('path');
-const xml2js = require('xml2js');
 const fs = require('fs-extra');
 const fetch = require('node-fetch');
 const unzip = require('./unzip');
@@ -34,18 +33,11 @@ async function downloadSDK(res, pathToZipFile) {
 }
 
 async function fetchSandbox(targetDir) {
-  // Get the last successful build from appropriate plan branch. This plan branch corresponds to bamboo plan name for respective branches
-  const branchResultsRaw = await fetch(`https://builds.cask.co/rest/api/latest/result/${branchInfo.planName}.json?buildstate=successful&max-result=1`);
-  const branchResults = await branchResultsRaw.json();
-  if (!branchResults.results.result.length) {
-    throw `No successful build found in ${branchInfo.planName}`;
-  }
-  const latestSuccessfulBuildName = branchResults.results.result[0].key;
-  const cdapversion = branchInfo.version;
-  console.log('CDAP version: ', cdapversion);
+  // Get the last successful build from cdap-build
+  const cdapVersion = branchInfo.version;
+  console.log('CDAP version: ', cdapVersion);
 
-  // Based on the version of CDAP construct the path to the SDK zip file from bamboo build plan.
-  const SDKZipPath = `https://builds.cask.co/browse/${latestSuccessfulBuildName}/artifact/shared/SDK/cdap/cdap-standalone/target/cdap-sandbox-${cdapversion}.zip`;
+  const SDKZipPath = `https://github.com/cdapio/cdap-build/releases/download/${branchInfo.release}/cdap-sandbox-${cdapVersion}.zip`;
   console.log('SDK zip path: ', SDKZipPath);
   let res;
   try {
@@ -57,7 +49,7 @@ async function fetchSandbox(targetDir) {
 
   // Download and unzip SDK
   const downloadPath = await fs.mkdtemp('cdf_sandbox_download_');
-  const pathToZipFile = path.join(downloadPath, `cdap-sandbox-${cdapversion}.zip`);
+  const pathToZipFile = path.join(downloadPath, `cdap-sandbox-${cdapVersion}.zip`);
   console.log(`Downloading sandbox to: ${pathToZipFile}`);
   let unzippedPath;
   try {
@@ -66,7 +58,7 @@ async function fetchSandbox(targetDir) {
     unzippedPath = await fs.mkdtemp('cdf_sandbox_unzipped_');
     await unzip(pathToZipFile, unzippedPath);
     // Move the unzipped files so subsequent scripts don't need to know the version
-    await fs.move(path.join(unzippedPath, `cdap-sandbox-${cdapversion}`), targetDir);
+    await fs.move(path.join(unzippedPath, `cdap-sandbox-${cdapVersion}`), targetDir);
     console.log(`SDK is unzipped and ready to start! Location: ${targetDir}`);
   } catch(e) {
     console.error('Unable to download or unzip the SDK');
