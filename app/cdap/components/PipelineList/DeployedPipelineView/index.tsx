@@ -109,7 +109,7 @@ const DeployedPipeline: React.FC = () => {
       $token: String
       $nameFilter: String
       $orderBy: String
-      $latestOnly: Boolean
+      $latestOnly: String
     ) {
       pipelines(
         namespace: $namespace
@@ -159,7 +159,7 @@ const DeployedPipeline: React.FC = () => {
       token: pageToken || undefined,
       pageSize: pageLimit,
       namespace: getCurrentNamespace(),
-      latestOnly: true,
+      latestOnly: 'true',
     },
   });
   const bannerMessage = checkError(error);
