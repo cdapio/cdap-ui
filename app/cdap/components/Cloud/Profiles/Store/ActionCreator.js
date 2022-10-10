@@ -341,9 +341,11 @@ export const getProfiles = (namespace) => {
 };
 
 export const exportProfile = (namespace, profile) => {
-  let apiObservable$ = MyCloudApi.get({ namespace, profile: profile.name });
-  if (namespace === SYSTEM_NAMESPACE) {
+  let apiObservable$;
+  if (namespace === SYSTEM_NAMESPACE || SCOPES.SYSTEM === profile.scope) {
     apiObservable$ = MyCloudApi.getSystemProfile({ profile: profile.name });
+  } else {
+    apiObservable$ = MyCloudApi.get({ namespace, profile: profile.name });
   }
   apiObservable$.subscribe((res) => {
     let json = JSON.stringify(res, null, 2);

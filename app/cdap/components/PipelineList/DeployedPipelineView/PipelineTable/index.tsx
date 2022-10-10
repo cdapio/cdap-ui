@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import PipelineTableRow from 'components/PipelineList/DeployedPipelineView/PipelineTable/PipelineTableRow';
+import { PipelineTableRow } from './PipelineTableRow';
 import { connect } from 'react-redux';
 import T from 'i18n-react';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
@@ -24,6 +24,7 @@ import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from 'components/PipelineList/DeployedPipelineView/PipelineTable/SortableHeader';
 import If from 'components/shared/If';
 import './PipelineTable.scss';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 interface IProps {
   pipelines: IPipeline[];
@@ -35,6 +36,10 @@ interface IProps {
 const PREFIX = 'features.PipelineList';
 
 const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refetch }) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+
   function renderBody() {
     if (!pipelines || (Array.isArray(pipelines) && pipelines.length === 0)) {
       return (
@@ -56,7 +61,14 @@ const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refe
     return (
       <div className="grid-body">
         {pipelines.map((pipeline) => {
-          return <PipelineTableRow key={pipeline.name} pipeline={pipeline} refetch={refetch} />;
+          return (
+            <PipelineTableRow
+              key={pipeline.name}
+              pipeline={pipeline}
+              refetch={refetch}
+              lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+            />
+          );
         })}
       </div>
     );

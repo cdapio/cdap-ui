@@ -18,7 +18,7 @@ angular.module(PKG.name + '.services')
   .factory('myPreviewLogsApi', function(myCdapUrl, $resource, myAuth, myHelpers) {
 
     var url = myCdapUrl.constructUrl,
-        basepath = '/namespaces/:namespace/previews/:previewId',
+        basepath = '/api/v3/namespaces/:namespace/previews/:previewId',
         logsPath = basepath + '/logs?';
 
     return $resource(

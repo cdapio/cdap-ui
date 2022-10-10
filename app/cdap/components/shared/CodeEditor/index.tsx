@@ -53,6 +53,7 @@ export interface IBaseCodeEditorProps {
   prettyPrintFunction?: (value: string) => string;
   classes: Record<string, string>;
   dataCy?: string;
+  dataTestId?: string;
 }
 
 interface ICodeEditorProps extends IBaseCodeEditorProps, WithStyles<typeof styles> {}
@@ -115,6 +116,7 @@ class CodeEditorView extends React.Component<ICodeEditorProps> {
     const textArea = this.editor.textInput.getElement();
     if (textArea) {
       textArea.setAttribute('data-cy', this.props.dataCy);
+      textArea.setAttribute('data-testid', this.props.dataTestId);
     }
     if (this.props.disabled) {
       this.editor.setReadOnly(true);
@@ -183,4 +185,5 @@ export default function CodeEditor(props) {
   activeLineMarker: PropTypes.bool,
   showPrettyPrintButton: PropTypes.bool,
   dataCy: PropTypes.string,
+  dataTestId: PropTypes.string,
 };
