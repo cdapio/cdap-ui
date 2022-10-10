@@ -24,14 +24,15 @@ import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
-import { CLOUD } from 'services/global-constants';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
 
 const mapStateToInstrumentationProps = (state) => {
   const processTimingEnabledKeyValuePair = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.PIPELINE_INSTRUMENTATION
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION
   );
   return {
     instrumentation: processTimingEnabledKeyValuePair
@@ -40,21 +41,26 @@ const mapStateToInstrumentationProps = (state) => {
   };
 };
 const mapDispatchToInstrumentationProps = (dispatch) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onToggle: (value) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.PIPELINE_INSTRUMENTATION] = value.toString();
+      runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION] = value.toString();
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_INSTRUMENTATION,
         payload: { instrumentation: value },
       });
-      dispatch({
-        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
-        payload: { runtimeArgs: { pairs: newRunTimePairs } },
-      });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };

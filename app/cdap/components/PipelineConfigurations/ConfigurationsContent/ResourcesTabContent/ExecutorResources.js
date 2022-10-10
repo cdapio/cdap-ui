@@ -25,17 +25,18 @@ import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
-import { CLOUD, GLOBALS } from 'services/global-constants';
+import { GENERATED_RUNTIMEARGS, GLOBALS } from 'services/global-constants';
 import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
 const mapStateToProps = (state, ownProps) => {
   const executorResourcesMemory = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.SYSTEM_EXECUTOR_RESOURCES_MEMORY
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY
   );
   const executorResourcesCores = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.SYSTEM_EXECUTOR_RESOURCES_CORES
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES
   );
   return {
     pipelineType: ownProps.pipelineType,
@@ -47,12 +48,15 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 const mapDispatchToProps = (dispatch) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onVirtualCoresChange: (e) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.SYSTEM_EXECUTOR_RESOURCES_CORES] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES] = e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
@@ -67,16 +71,18 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.SYSTEM_EXECUTOR_RESOURCES_MEMORY] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY] = e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_MB,
         payload: { memoryMB: e.target.value },
       });
-      dispatch({
-        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
-        payload: { runtimeArgs: { pairs: newRunTimePairs } },
-      });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };

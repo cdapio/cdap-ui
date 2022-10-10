@@ -24,7 +24,8 @@ import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import T from 'i18n-react';
 import styled from 'styled-components';
-import { CLOUD } from 'services/global-constants';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 require('./RuntimeArgsKeyValuePairWrapper.scss');
 
@@ -59,6 +60,9 @@ const RuntimeArgsKeyValuePairWrapper = ({
   dataCy = 'runtimeargs-deployed',
 }: IRuntimeArgsKeyValuePairWrapperProps) => {
   const [showGeneratedArgs, setShowGeneratedArgs] = useState(false);
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   const toggleGeneratedArgs = () => {
     setShowGeneratedArgs(!showGeneratedArgs);
   };
@@ -66,9 +70,9 @@ const RuntimeArgsKeyValuePairWrapper = ({
     .map((pair) => pair.key)
     .filter(
       (key) =>
-        Object.values(CLOUD).includes(key) ||
-        key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX) ||
-        key.startsWith(CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+        Object.values(GENERATED_RUNTIMEARGS).includes(key) ||
+        key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX) ||
+        key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
     ).length;
 
   const runtimeArgsChanged = (changedArgs) => {
@@ -112,9 +116,9 @@ const RuntimeArgsKeyValuePairWrapper = ({
     // make auto generated args at top
     return pairs.sort((a, b) => {
       if (
-        Object.values(CLOUD).includes(a.key) ||
-        a.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX) ||
-        a.key.startsWith(CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+        Object.values(GENERATED_RUNTIMEARGS).includes(a.key) ||
+        a.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX) ||
+        a.key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
       ) {
         return -1;
       }
@@ -125,7 +129,7 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const argsPairs = runtimeArgs ? reorderArgsPairs(runtimeArgs.pairs) : [];
   return (
     <>
-      <DetailViewRuntimeArgsLabel />
+      {lifecycleManagementEditEnabled && <DetailViewRuntimeArgsLabel />}
       <div
         id="runtime-arguments-key-value-pairs-wrapper"
         className="configuration-step-content configuration-content-container"

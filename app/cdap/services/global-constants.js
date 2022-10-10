@@ -348,6 +348,9 @@ const CLOUD = {
   DEFAULT_PROFILE_NAME: 'SYSTEM:native',
   PROFILE_NAME_PREFERENCE_PROPERTY: 'system.profile.name',
   PROFILE_PROPERTIES_PREFERENCE: 'system.profile.properties',
+};
+
+const GENERATED_RUNTIMEARGS = {
   PIPELINE_INSTRUMENTATION: 'app.pipeline.instrumentation',
   PIPELINE_PUSHDOWN_ENABLED: 'app.pipeline.pushdownEnabled',
   PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX: 'app.pipeline.pushdown.',
@@ -355,8 +358,9 @@ const CLOUD = {
   SYSTEM_DRIVER_RESOURCES_MEMORY: 'task.driver.system.resources.memory',
   SYSTEM_DRIVER_RESOURCES_CORES: 'task.driver.system.resources.cores',
   SYSTEM_EXECUTOR_RESOURCES_MEMORY: 'task.executor.system.resources.memory',
-  SYSTEM_EXECUTOR_RESOURCES_CORES: 'task.executor.system.resources.cores'
-};
+  SYSTEM_EXECUTOR_RESOURCES_CORES: 'task.executor.system.resources.cores',
+  PIPELINE_CONFIG_OVERWRITE: 'app.pipeline.overwriteConfig',
+}
 
 const SCOPES = {
   SYSTEM: 'SYSTEM',
@@ -387,4 +391,5 @@ export {
   SYSTEM_NAMESPACE,
   KEY_CODE,
   PIPELINE_LOGS_FILTER,
+  GENERATED_RUNTIMEARGS,
 };

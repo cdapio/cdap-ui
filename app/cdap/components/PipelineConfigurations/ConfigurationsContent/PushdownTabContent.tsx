@@ -21,12 +21,13 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 
 import PushdownConfig from 'components/PushdownConfig';
-import { CLOUD } from 'services/global-constants';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { convertKeyValuePairsToMap, convertMapToKeyValuePairs, flattenObj } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const getPushdownEnabledValue = (state) => {
   const pushdownEnabledKeyValuePair = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.PIPELINE_PUSHDOWN_ENABLED
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED
   );
   return pushdownEnabledKeyValuePair
     ? pushdownEnabledKeyValuePair.value === 'true'
@@ -41,6 +42,9 @@ export default function PushdownTabContent({}) {
     }),
     shallowEqual
   );
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   const stages = useSelector((state) => state.stages);
   const cloudArtifact = useMemo(
     () => stages.map((x) => x.plugin.artifact).find((artifact) => artifact.name === 'google-cloud'),
@@ -52,28 +56,29 @@ export default function PushdownTabContent({}) {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
+      runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
       const flattenedTransformationPushdown = flattenObj(transformationPushdown);
       for (const key of Object.keys(flattenedTransformationPushdown)) {
         if (
           flattenedTransformationPushdown[key] !== undefined &&
           flattenedTransformationPushdown[key] !== null
         ) {
-          runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX + key] = String(
+          runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX + key] = String(
             flattenedTransformationPushdown[key]
           );
         }
       }
-      // runtimeObj[CLOUD.PIPELINE_TRANSFORMATION_PUSHDOWN] = JSON.stringify(transformationPushdown);
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_PUSHDOWN_CONFIG,
         payload: { pushdownEnabled, transformationPushdown },
       });
-      dispatch({
-        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
-        payload: { runtimeArgs: { pairs: newRunTimePairs } },
-      });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
     [dispatch]
   );

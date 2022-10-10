@@ -24,17 +24,18 @@ import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
-import { CLOUD } from 'services/global-constants';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
 const mapStateToProps = (state) => {
   const driverResourcesMemory = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.SYSTEM_DRIVER_RESOURCES_MEMORY
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY
   );
   const driverResourcesCores = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === CLOUD.SYSTEM_DRIVER_RESOURCES_CORES
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES
   );
   return {
     virtualCores: driverResourcesCores
@@ -44,12 +45,15 @@ const mapStateToProps = (state) => {
   };
 };
 const mapDispatchToProps = (dispatch) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onVirtualCoresChange: (e) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.SYSTEM_DRIVER_RESOURCES_CORES] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES] = e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_VIRTUAL_CORES,
@@ -64,16 +68,18 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[CLOUD.SYSTEM_DRIVER_RESOURCES_MEMORY] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY] = e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_MEMORY_MB,
         payload: { memoryMB: e.target.value },
       });
-      dispatch({
-        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
-        payload: { runtimeArgs: { pairs: newRunTimePairs } },
-      });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };

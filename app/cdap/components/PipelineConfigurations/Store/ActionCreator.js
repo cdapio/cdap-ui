@@ -42,7 +42,7 @@ import { objectQuery } from 'services/helpers';
 import uuidV4 from 'uuid/v4';
 import uniqBy from 'lodash/uniqBy';
 import cloneDeep from 'lodash/cloneDeep';
-import { CLOUD } from 'services/global-constants';
+import { CLOUD, GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
@@ -132,7 +132,10 @@ const getMacrosResolvedByPrefs = (resolvedPrefs = {}, macrosMap = {}) => {
   return resolvedMacros;
 };
 
-const updatePreferences = (overwriteConfig = false) => {
+const updatePreferences = (
+  lifecycleManagementEditEnabled = false,
+  overwriteEngineConfig = false
+) => {
   const {
     runtimeArgs,
     properties,
@@ -144,41 +147,44 @@ const updatePreferences = (overwriteConfig = false) => {
   );
   let appId = PipelineDetailStore.getState().name;
   let prefObj = convertKeyValuePairsObjToMap(runtimeArgs);
-  const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
-    pair.key.startsWith(CLOUD.CUSTOM_SPARK_KEY_PREFIX)
-  );
-  let pairs = cloneDeep(customSparkConfigKeyValuePairs);
 
-  // engine config overwritting
-  if (overwriteConfig) {
-    // save from runtime args dropdown
-    pairs.forEach((pair) => {
-      const trimmedKey = pair.key.substring(CLOUD.CUSTOM_SPARK_KEY_PREFIX.length);
-      pair.key = trimmedKey;
-    });
-    pairs.push({
-      key: '',
-      value: '',
-    });
-    const keyValues = { pairs: pairs };
-    PipelineConfigurationsStore.dispatch({
-      type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS,
-      payload: { keyValues },
-    });
-    const customConfigObj = convertKeyValuePairsObjToMap(keyValues);
-    PipelineConfigurationsStore.dispatch({
-      type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG,
-      payload: {
-        customConfig: customConfigObj,
-        pipelineType: pipelineVisualConfiguration.pipelineType,
-      },
-    });
-  } else {
-    // save from config tabs
-    pairs.forEach((pair) => {
-      delete prefObj[pair.key];
-    });
-    prefObj = { ...prefObj, ...properties };
+  if (lifecycleManagementEditEnabled) {
+    const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
+      pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
+    );
+    let pairs = cloneDeep(customSparkConfigKeyValuePairs);
+
+    // engine config overwritting
+    if (!overwriteEngineConfig) {
+      // save from runtime args dropdown
+      pairs.forEach((pair) => {
+        const trimmedKey = pair.key.substring(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX.length);
+        pair.key = trimmedKey;
+      });
+      pairs.push({
+        key: '',
+        value: '',
+      });
+      const keyValues = { pairs: pairs };
+      PipelineConfigurationsStore.dispatch({
+        type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS,
+        payload: { keyValues },
+      });
+      const customConfigObj = convertKeyValuePairsObjToMap(keyValues);
+      PipelineConfigurationsStore.dispatch({
+        type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG,
+        payload: {
+          customConfig: customConfigObj,
+          pipelineType: pipelineVisualConfiguration.pipelineType,
+        },
+      });
+    } else {
+      // save from config tabs
+      pairs.forEach((pair) => {
+        delete prefObj[pair.key];
+      });
+      prefObj = { ...prefObj, ...properties, 'app.pipeline.overwriteConfig': 'true' };
+    }
   }
 
   return MyPreferenceApi.setAppPreferences(
