@@ -25,6 +25,10 @@ import { preventPropagation } from 'services/helpers';
 require('./RuntimeArgsKeyValuePairWrapper.scss');
 
 class RuntimeArgsKeyValuePairWrapper extends React.Component {
+  static defaultProps = {
+    dataCy: 'runtimeargs-deployed',
+  };
+
   runtimeArgsChanged = (changedArgs) => {
     const newArgs = changedArgs.length ? changedArgs : [getDefaultKeyValuePair()];
     updateRunTimeArgs({ pairs: newArgs });
@@ -51,7 +55,7 @@ class RuntimeArgsKeyValuePairWrapper extends React.Component {
             }}
             onChange={this.runtimeArgsChanged}
             value={argsPairs}
-            dataCy="runtimeargs-deployed"
+            dataCy={this.props.dataCy}
           />
         </div>
       </div>
@@ -63,11 +67,13 @@ RuntimeArgsKeyValuePairWrapper.propTypes = {
   isHistoricalRun: PropTypes.bool,
   runtimeArgs: PropTypes.object,
   onRuntimeArgsChange: PropTypes.func,
+  dataCy: PropTypes.string,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
     runtimeArgs: state.runtimeArgs,
+    dataCy: ownProps.dataCy,
   };
 };
 

@@ -68,6 +68,7 @@ interface IDrawerFeatureLinkProps extends WithStyles<typeof styles> {
   isActive?: boolean;
   subMenu?: IDrawerFeatureLinkProps[];
   'data-cy'?: string;
+  'data-testid'?: string;
   id: string;
 }
 interface IDrawerFeatureLinkState {
@@ -128,6 +129,7 @@ class DrawerFeatureLink extends React.PureComponent<
         to={featureUrl}
         onClick={componentDidNavigate}
         data-cy={rest['data-cy']}
+        data-testid={rest['data-testid']}
       >
         <If condition={typeof featureSVGIconName === 'string'}>
           <IconSVG className={classes.featureIconSize} name={featureSVGIconName || ''} />

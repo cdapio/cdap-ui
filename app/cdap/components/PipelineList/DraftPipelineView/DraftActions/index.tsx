@@ -22,6 +22,9 @@ import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import PipelineExportModal from 'components/PipelineExportModal';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import downloadFile from 'services/download-file';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { MyPipelineApi } from 'api/pipeline';
+import ErrorBanner from 'components/shared/ErrorBanner';
 
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
 
@@ -33,6 +36,7 @@ interface IState {
   showExport: boolean;
   showDeleteConfirmation: boolean;
   showPopover?: boolean;
+  errorMessage?: string;
 }
 
 class DraftActions extends React.PureComponent<IProps, IState> {
@@ -40,13 +44,13 @@ class DraftActions extends React.PureComponent<IProps, IState> {
     showExport: false,
     showDeleteConfirmation: false,
     showPopover: false,
+    errorMessage: null,
   };
 
   public pipelineConfig = {};
 
   private handlePipelineExport = () => {
     const draft = this.props.draft;
-
     this.pipelineConfig = {
       name: draft.name,
       description: draft.description,
@@ -54,17 +58,34 @@ class DraftActions extends React.PureComponent<IProps, IState> {
       config: draft.config,
     };
 
-    if (window.Cypress) {
-      this.openExportModal();
-      return;
-    }
-    const postExportCb = () => {
-      this.pipelineConfig = {};
-      this.setState({ showPopover: false });
+    const params = {
+      context: getCurrentNamespace(),
+      draftId: draft.id,
     };
+    MyPipelineApi.getDraft(params).subscribe({
+      next: (res: any) => {
+        this.pipelineConfig = { ...this.pipelineConfig, config: res.config };
+        if (window.Cypress) {
+          this.openExportModal();
+          return;
+        }
+        const postExportCb = () => {
+          this.pipelineConfig = {};
+          this.setState({ showPopover: false });
+        };
 
-    // Unless we are running an e2e test, just export the pipeline JSON
-    downloadFile(this.pipelineConfig, postExportCb);
+        // Unless we are running an e2e test, just export the pipeline JSON
+        downloadFile(this.pipelineConfig, postExportCb);
+        this.setState({
+          errorMessage: null,
+        });
+      },
+      error: (err) => {
+        this.setState({
+          errorMessage: err,
+        });
+      },
+    });
   };
 
   private openExportModal = (): void => {
@@ -141,6 +162,13 @@ class DraftActions extends React.PureComponent<IProps, IState> {
   public render() {
     return (
       <div className="action" onClick={(e) => e.preventDefault()}>
+        {this.state.errorMessage && (
+          <ErrorBanner
+            error={this.state.errorMessage}
+            onClose={() => this.setState({ errorMessage: null })}
+            canEditPageWhileOpen={true}
+          />
+        )}
         <ActionsPopover
           actions={this.actions}
           showPopover={this.state.showPopover}
