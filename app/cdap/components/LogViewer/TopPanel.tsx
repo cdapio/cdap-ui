@@ -18,8 +18,6 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import DataFetcher from 'components/LogViewer/DataFetcher';
 import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import classnames from 'classnames';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import If from 'components/shared/If';
@@ -181,11 +179,17 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
         className={classnames(classes.actionButton, { [classes.disabled]: isPolling })}
         disabled={isPolling}
         onClick={getLatestLogs}
+        data-testid="scroll-to-latest"
       >
         Scroll to Latest Logs
         <ArrowDownward className={classes.downArrow} />
       </Button>
-      <Button variant="contained" className={classes.actionButton} onClick={handleToggleSystemLogs}>
+      <Button
+        variant="contained"
+        className={classes.actionButton}
+        onClick={handleToggleSystemLogs}
+        data-testid="view-advanced-logs"
+      >
         {includeSystemLogs ? 'Hide' : 'View'} Advanced Logs
       </Button>
       <div className={classes.btnGroup}>
@@ -194,6 +198,7 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
           className={`${classes.actionButton} ${classes.downloadBtn}`}
           href={getDownloadLogsUrl()}
           target="_blank"
+          data-testid="download-all"
         >
           Download All
         </Button>
@@ -224,7 +229,12 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
         </Popover>
       </div>
       <If condition={typeof onClose === 'function'}>
-        <span onClick={onClose} className={classes.closeButton} data-cy="log-viewer-close-btn">
+        <span
+          onClick={onClose}
+          className={classes.closeButton}
+          data-cy="log-viewer-close-btn"
+          data-testid="log-viewer-close-btn"
+        >
           <IconSVG name="icon-close" />
         </span>
       </If>

@@ -41,7 +41,7 @@ export interface ITabConfig {
 
 export interface ITabConfigObj {
   tabs: ITabConfig[];
-  layout: TabLayoutEnum;
+  layout: TabLayoutEnum | string;
   defaultTab: string | number;
 }
 

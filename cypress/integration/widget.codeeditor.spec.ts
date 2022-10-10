@@ -57,7 +57,7 @@ describe('Code editor widget', () => {
 
   it('Should render default value the first time', () => {
     cy.visit('/pipelines/ns/default/studio');
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(js);
     cy.open_node_property(jsId);
     cy.window().then((win) => {
@@ -70,7 +70,7 @@ describe('Code editor widget', () => {
 
   it('Should not jump the cursor position on selecting text and replacing them', () => {
     cy.visit('/pipelines/ns/default/studio');
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(js);
     cy.open_node_property(jsId);
     cy.window().then((win) => {

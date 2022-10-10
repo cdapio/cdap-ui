@@ -15,13 +15,17 @@
  */
 
 class HydratorUpgradeService {
-  constructor($rootScope, myPipelineApi, $state, $uibModal, HydratorPlusPlusConfigStore, HydratorPlusPlusLeftPanelStore, $q, PipelineAvailablePluginsActions, myAlertOnValium, NonStorePipelineErrorFactory) {
+  constructor($rootScope, myPipelineApi, HydratorPlusPlusLeftPanelStore, $state, $uibModal, HydratorPlusPlusConfigStore, $q, PipelineAvailablePluginsActions, myAlertOnValium, NonStorePipelineErrorFactory) {
     this.$rootScope = $rootScope;
     this.myPipelineApi = myPipelineApi;
     this.$state = $state;
     this.$uibModal = $uibModal;
     this.HydratorPlusPlusConfigStore = HydratorPlusPlusConfigStore;
-    this.leftPanelStore = HydratorPlusPlusLeftPanelStore;
+    if ($rootScope.stores) {
+      this.leftPanelStore = $rootScope.stores;
+    } else {
+      this.leftPanelStore = HydratorPlusPlusLeftPanelStore;
+    }
     this.$q = $q;
     this.PipelineAvailablePluginsActions = PipelineAvailablePluginsActions;
     this.myAlertOnValium = myAlertOnValium;
@@ -270,6 +274,7 @@ class HydratorUpgradeService {
         return;
       }
 
+      fileDataString = this.NonStorePipelineErrorFactory.adjustConfigNode(fileDataString);
       this.openUpgradeModal(fileDataString);
     };
   }

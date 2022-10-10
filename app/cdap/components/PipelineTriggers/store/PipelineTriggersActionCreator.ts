@@ -23,7 +23,7 @@ import { MyScheduleApi } from 'api/schedule';
 import { GLOBALS } from 'services/global-constants';
 import { extractErrorMessage } from 'services/helpers';
 import {
-  IGroupTrigger,
+  ICompositeTrigger,
   IPipelineInfo,
   IProgramStatusTrigger,
   ISchedule,
@@ -549,7 +549,7 @@ export function getGroupInlinePipelineInfo(schedule: IProgramStatusTrigger) {
   return MyAppApi.get(params);
 }
 
-export function getGroupPipelineInfo(schedule: ISchedule) {
+export function getCompositePipelineInfo(schedule: ISchedule) {
   PipelineTriggersStore.dispatch({
     type: PipelineTriggersActions.setExpandedSchedule,
     payload: {
@@ -627,7 +627,7 @@ function _transformSchedule(existingSchedules: ISchedule[]) {
         trigger: {
           triggers: [{ ...schedule.trigger }],
           type: PipelineTriggersTypes.orType,
-        } as IGroupTrigger,
+        } as ICompositeTrigger,
         isTransformed: true,
       };
 

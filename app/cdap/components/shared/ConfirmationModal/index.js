@@ -153,7 +153,7 @@ export default class ConfirmationModal extends Component {
         <ModalHeader>
           {this.props.headerTitle}
           <If condition={this.props.closeable}>
-            <div className="close-section float-right" onClick={this.props.cancelFn}>
+            <div className="close-section float-right" onClick={this.props.toggleModal}>
               <IconSVG name="icon-close" />
             </div>
           </If>

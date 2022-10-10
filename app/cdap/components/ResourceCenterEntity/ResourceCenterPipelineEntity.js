@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import PlusButtonStore from 'services/PlusButtonStore';
 import NamespaceStore from 'services/NamespaceStore';
-import { validateImportJSON } from 'services/PipelineErrorFactory';
+import { validateImportJSON, adjustConfigNode } from 'services/PipelineErrorFactory';
 import { objectQuery } from 'services/helpers';
 import IconSVG from 'components/shared/IconSVG';
 import { Input, Label } from 'reactstrap';
@@ -86,6 +86,7 @@ export default function ResourceCenterPipelineEntity({ onError }) {
         onError(T.translate(`${PREFIX}.errorLabel`), error);
         return;
       }
+      fileDataString = adjustConfigNode(fileDataString);
 
       onError(null, null);
       window.localStorage.setItem(resourceCenterId, fileDataString);

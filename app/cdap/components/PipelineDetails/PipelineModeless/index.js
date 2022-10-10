@@ -20,7 +20,6 @@ import IconSVG from 'components/shared/IconSVG';
 import Popper from '@material-ui/core/Popper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import If from 'components/shared/If';
 import classnames from 'classnames';
 import Grow from '@material-ui/core/Grow';
 
@@ -39,6 +38,7 @@ export default function PipelineModeless({
   arrow,
   placement = 'bottom',
   popoverClassName = '',
+  isDeployed = true,
 }) {
   let anchorElCb;
   if (typeof anchorEl === 'string') {
@@ -88,22 +88,43 @@ export default function PipelineModeless({
         >
           <div className={className}>
             {arrow ? <div className="pipeline-modeless-arrow" ref={setArrowRef} /> : null}
-            <ClickAwayListener onClickAway={onClose}>
+            {isDeployed ? (
+              <ClickAwayListener onClickAway={onClose}>
+                <Paper className="pipeline-modeless-container" variant="outlined">
+                  <div className="pipeline-modeless-header">
+                    <div className="pipeline-modeless-title">{title}</div>
+                    {!!secondaryTitle && (
+                      <div className="secondary-title text-right">{secondaryTitle}</div>
+                    )}
+                    <div className="btn-group">
+                      <button
+                        className="btn"
+                        data-cy="pipeline-modeless-close-btn"
+                        onClick={onClose}
+                      >
+                        <IconSVG name="icon-close" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="pipeline-modeless-content">{children}</div>
+                </Paper>
+              </ClickAwayListener>
+            ) : (
               <Paper className="pipeline-modeless-container" variant="outlined">
                 <div className="pipeline-modeless-header">
                   <div className="pipeline-modeless-title">{title}</div>
-                  <If condition={!!secondaryTitle}>
+                  {!!secondaryTitle && (
                     <div className="secondary-title text-right">{secondaryTitle}</div>
-                  </If>
+                  )}
                   <div className="btn-group">
-                    <a className="btn" data-cy="pipeline-modeless-close-btn" onClick={onClose}>
+                    <button className="btn" data-cy="pipeline-modeless-close-btn" onClick={onClose}>
                       <IconSVG name="icon-close" />
-                    </a>
+                    </button>
                   </div>
                 </div>
                 <div className="pipeline-modeless-content">{children}</div>
               </Paper>
-            </ClickAwayListener>
+            )}
           </div>
         </Grow>
       )}
@@ -124,4 +145,5 @@ PipelineModeless.propTypes = {
   children: PropTypes.node,
   placement: PropTypes.string,
   popoverClassName: PropTypes.string,
+  isDeployed: PropTypes.bool,
 };

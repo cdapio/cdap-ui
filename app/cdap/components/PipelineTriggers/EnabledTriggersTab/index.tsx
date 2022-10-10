@@ -14,33 +14,38 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import EnabledTriggerRow from 'components/PipelineTriggers/EnabledTriggersTab/EnabledTriggerRow';
-import GroupTriggerRow from 'components/PipelineTriggers/EnabledTriggersTab/EnabledGroupTriggerRow';
+import CompositeTriggerRow from 'components/PipelineTriggers/EnabledTriggersTab/EnabledCompositeTriggerRow';
 import T from 'i18n-react';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 import Button from '@material-ui/core/Button';
-import { ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
+import { ICompositeTrigger, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 import {
   PipelineCount,
   PipelineListContainer,
   PipelineListHeader,
   PipelineTriggerHeader,
+  SearchTriggerTextField,
   StyledNameSpaceHeader,
   StyledPipelineNameHeader,
+  StyledTypeHeader,
   TriggersTab,
 } from 'components/PipelineTriggers/shared.styles';
 import styled from 'styled-components';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.EnabledTriggers`;
 
 const AddNewTriggerButton = styled(Button)`
   background-color: #5a84e4;
-  text-transform: none;
   margin: 20px;
+  position: absolute;
+  right: 20px;
 `;
 
 interface IEnabledTriggersViewProps {
@@ -54,17 +59,39 @@ const EnabledTriggersView = ({
   pipelineName,
   setTab,
 }: IEnabledTriggersViewProps) => {
+  const [searchInput, setSearchInput] = useState('');
   const pipelineCompositeTriggersEnabled = useFeatureFlagDefaultFalse(
     'pipeline.composite.triggers.enabled'
   );
   const enabledSingleTriggers = enabledTriggers.filter(
     (schedule) => schedule.trigger.type === PipelineTriggersTypes.programStatus
   );
-  const enabledGroupTriggers = enabledTriggers.filter(
+  const enabledCompositeTriggers = enabledTriggers.filter(
     (schedule) =>
       schedule.trigger.type === PipelineTriggersTypes.andType ||
       schedule.trigger.type === PipelineTriggersTypes.orType
   );
+
+  const onSearchTriggersChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const getFilteredCompositeTriggers = () => {
+    if (!searchInput) {
+      return enabledCompositeTriggers;
+    }
+    const newFilteredTriggers = enabledCompositeTriggers.filter(
+      (compositeTrigger) =>
+        compositeTrigger.name.toLowerCase().includes(searchInput) ||
+        (compositeTrigger.description &&
+          compositeTrigger.description.toLowerCase().includes(searchInput)) ||
+        compositeTrigger.namespace.toLowerCase().includes(searchInput) ||
+        (compositeTrigger.trigger as ICompositeTrigger).triggers.find((childTrigger) =>
+          childTrigger.programId.application.toLowerCase().includes(searchInput)
+        )
+    );
+    return newFilteredTriggers;
+  };
 
   return (
     <TriggersTab>
@@ -100,13 +127,31 @@ const EnabledTriggersView = ({
         </PipelineListContainer>
       )}
 
-      {enabledGroupTriggers.length === 0 ? null : (
+      {enabledCompositeTriggers.length === 0 ? null : (
         <PipelineListContainer>
+          <SearchTriggerTextField
+            onChange={onSearchTriggersChange}
+            placeholder="Search triggers by name, namespace..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
           <PipelineListHeader>
-            <div>{T.translate(`${TRIGGER_PREFIX}.groupTriggers`)}</div>
+            <StyledPipelineNameHeader>
+              <div>{T.translate(`${TRIGGER_PREFIX}.groupTriggers`)}</div>
+            </StyledPipelineNameHeader>
+            <StyledTypeHeader>
+              <div>{T.translate(`${TRIGGER_PREFIX}.pipelineTriggerTypeHeader`)}</div>
+            </StyledTypeHeader>
           </PipelineListHeader>
-          {enabledGroupTriggers.map((triggerGroup) => (
-            <GroupTriggerRow triggerGroup={triggerGroup} />
+          {getFilteredCompositeTriggers().map((compositeTrigger) => (
+            <CompositeTriggerRow compositeTrigger={compositeTrigger} />
           ))}
         </PipelineListContainer>
       )}
@@ -117,6 +162,7 @@ const EnabledTriggersView = ({
           variant="contained"
           onClick={() => setTab(1)}
           data-cy="add-new-group-trigger-btn"
+          data-testid="add-new-group-trigger-btn"
         >
           {T.translate(`${PREFIX}.addNewTrigger`)}
         </AddNewTriggerButton>
