@@ -21,7 +21,6 @@ import ThemeWrapper from 'components/ThemeWrapper';
 import CommentRounded from '@material-ui/icons/CommentRounded';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
-import If from 'components/shared/If';
 import { Theme } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
 import { PipelineComments } from 'components/PipelineCanvasActions/PipelineComments';
@@ -139,9 +138,7 @@ function PipelineCommentsActionBtn({
           disableRipple={true}
           disabled={!showMarker && disabled}
         >
-          <If condition={showMarker}>
-            <span className={classes.marker}></span>
-          </If>
+          {showMarker && <span className={classes.marker}></span>}
           <CommentRounded className={classes.iconRoot} />
           <PipelineComments
             comments={comments}

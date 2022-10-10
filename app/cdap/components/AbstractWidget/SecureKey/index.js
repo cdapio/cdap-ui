@@ -36,6 +36,7 @@ export default class SecureKeyTextarea extends Component {
     ...WIDGET_PROPTYPES,
     inputTextType: PropTypes.oneOf(['textarea', 'text', 'password']),
     dataCy: PropTypes.string,
+    dataTestId: PropTypes.string,
   };
   static defaultProps = DEFAULT_WIDGET_PROPS;
 
@@ -221,6 +222,7 @@ export default class SecureKeyTextarea extends Component {
           onChange={this.handleOnInputChange}
           value={this.props.value}
           data-cy={this.props.dataCy}
+          data-testid={this.props.dataTestId}
           {...this.props.widgetProps}
         />
       );
@@ -233,6 +235,7 @@ export default class SecureKeyTextarea extends Component {
         onChange={this.handleOnInputChange}
         value={this.props.value}
         data-cy={this.props.dataCy}
+        data-testid={this.props.dataTestId}
         {...this.props.widgetProps}
       />
     );

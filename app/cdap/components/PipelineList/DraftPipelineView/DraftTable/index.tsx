@@ -15,12 +15,13 @@
  */
 
 import * as React from 'react';
-import DraftTableRow from 'components/PipelineList/DraftPipelineView/DraftTable/DraftTableRow';
+import { DraftTableRow } from './DraftTableRow';
 import { connect } from 'react-redux';
 import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
 import EmptyList, { VIEW_TYPES } from 'components/PipelineList/EmptyList';
 import SortableHeader from 'components/PipelineList/DraftPipelineView/DraftTable/SortableHeader';
-import If from 'components/shared/If';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import T from 'i18n-react';
 
 interface IProps {
   drafts: IDraft[];
@@ -30,7 +31,13 @@ interface IProps {
 
 require('./DraftTable.scss');
 
+const PREFIX = 'features.PipelineList';
+
 const DraftTableView: React.SFC<IProps> = ({ drafts, currentPage, pageLimit }) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+
   function renderBody() {
     if (drafts.length === 0) {
       return <EmptyList type={VIEW_TYPES.draft} />;
@@ -55,16 +62,21 @@ const DraftTableView: React.SFC<IProps> = ({ drafts, currentPage, pageLimit }) =
   return (
     <div className="draft-table grid-wrapper" data-cy="draft-pipeline-table">
       <div className="grid grid-container">
-        <If condition={drafts && drafts.length > 0}>
+        {drafts && drafts.length > 0 && (
           <div className="grid-header">
             <div className="grid-row">
               <SortableHeader columnName="name" />
+              {lifecycleManagementEditEnabled ? (
+                <strong>{T.translate(`${PREFIX}.editStatus`)}</strong>
+              ) : (
+                <strong></strong>
+              )}
               <SortableHeader columnName="type" />
               <SortableHeader columnName="lastSaved" />
               <strong />
             </div>
           </div>
-        </If>
+        )}
         {renderBody()}
       </div>
     </div>

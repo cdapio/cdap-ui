@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "setup-cloudbuild": "node setup_cloudbuild.js ../sandbox",
-    "setup-gitpod": "sudo node setup_gitpod.js /workspace"
+    "setup-gitpod": "node setup_gitpod.js /workspace"
   },
   "dependencies": {
     "fs-extra": "^9.1.0",

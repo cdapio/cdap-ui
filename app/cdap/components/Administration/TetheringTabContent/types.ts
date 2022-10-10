@@ -44,7 +44,8 @@ export interface ITableData {
   instanceName: string;
   instanceUrl: string;
   region: string;
-  status: string;
+  tetheringStatus: string;
+  connectionStatus: string;
   allocationData: INamespaceAllocations[];
   highlighted?: boolean;
 }
@@ -56,7 +57,7 @@ export interface IConnectionsProps {
 }
 
 export interface IOnPremConnectionsProps extends IConnectionsProps {
-  pendingRequests: IConnection[];
+  tetheringRequests: IConnection[];
 }
 
 export interface ICdfConnectionsProps extends IConnectionsProps {

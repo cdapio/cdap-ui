@@ -28,10 +28,9 @@ import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import CommentMenu from 'components/AbstractWidget/Comment/CommentMenu';
 import { humanReadableDate } from 'services/helpers';
 import Markdown from 'components/shared/Markdown';
-import { IconButton } from '@material-ui/core';
+import { ClickAwayListener, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import isObject from 'lodash/isObject';
-import If from 'components/shared/If';
 
 const useStyles = makeStyle<Theme, ICommentStyleProps>((theme) => {
   return {
@@ -67,6 +66,7 @@ interface ICommentBoxProps {
   focus?: boolean;
   disabled?: boolean;
   onClose?: () => void;
+  onClickAway?: () => void;
 }
 
 export default function CommentBox({
@@ -76,6 +76,7 @@ export default function CommentBox({
   focus = false,
   disabled = false,
   onClose,
+  onClickAway,
 }: ICommentBoxProps) {
   const isThereExistingComment = comment.content && comment.content.length > 0 ? true : false;
   const [editMode, setEditMode] = React.useState(!isThereExistingComment && !disabled);
@@ -106,7 +107,12 @@ export default function CommentBox({
   const onResetComment = () => {
     onSave(comment);
   };
-
+  const handleClickAway = () => {
+    if (localComment && localComment.content && !confirm('Discard comment?')) {
+      return;
+    }
+    onClickAway();
+  };
   React.useEffect(() => {
     setLocalComment(comment);
     const commentExists = comment.content && comment.content.length > 0 ? true : false;
@@ -115,14 +121,12 @@ export default function CommentBox({
 
   const CommentMenuLocal = (
     <div className={classes.cardAction}>
-      <If condition={!disabled}>
-        <CommentMenu onEdit={() => setEditMode(true)} onDelete={onDelete} />
-      </If>
-      <If condition={typeof onClose === 'function'}>
+      {!disabled && <CommentMenu onEdit={() => setEditMode(true)} onDelete={onDelete} />}
+      {typeof onClose === 'function' && (
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
         </IconButton>
-      </If>
+      )}
     </div>
   );
   if (!editMode) {
@@ -140,44 +144,46 @@ export default function CommentBox({
     );
   }
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.contentRoot}>
-        <TextareaAutosize
-          className={classes.textarea}
-          value={localComment.content}
-          placeholder="Add a comment"
-          rowsMax={10}
-          rowsMin={3}
-          onChange={(e) => onCommentChange(e.target.value)}
-          autoFocus={focus}
-        />
-      </CardContent>
-      <CardActions className={classes.cardAction}>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={typeof localComment.content === 'string' && localComment.content.length === 0}
-          onClick={() => {
-            onSaveComment();
-            setEditMode(false);
-          }}
-        >
-          Comment
-        </Button>
-        <Button
-          onClick={() => {
-            if (isObject(comment) && !comment.content.length && typeof onClose === 'function') {
-              onClose();
-              return;
-            }
-            setLocalComment({ ...localComment, content: comment.content });
-            onResetComment();
-            setEditMode(false);
-          }}
-        >
-          Cancel
-        </Button>
-      </CardActions>
-    </Card>
+    <ClickAwayListener onClickAway={handleClickAway} mouseEvent="onMouseDown">
+      <Card className={classes.root}>
+        <CardContent className={classes.contentRoot}>
+          <TextareaAutosize
+            className={classes.textarea}
+            value={localComment.content}
+            placeholder="Add a comment"
+            rowsMax={10}
+            rowsMin={3}
+            onChange={(e) => onCommentChange(e.target.value)}
+            autoFocus={focus}
+          />
+        </CardContent>
+        <CardActions className={classes.cardAction}>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={typeof localComment.content === 'string' && localComment.content.length === 0}
+            onClick={() => {
+              onSaveComment();
+              setEditMode(false);
+            }}
+          >
+            Comment
+          </Button>
+          <Button
+            onClick={() => {
+              if (isObject(comment) && !comment.content.length && typeof onClose === 'function') {
+                onClose();
+                return;
+              }
+              setLocalComment({ ...localComment, content: comment.content });
+              onResetComment();
+              setEditMode(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </CardActions>
+      </Card>
+    </ClickAwayListener>
   );
 }
