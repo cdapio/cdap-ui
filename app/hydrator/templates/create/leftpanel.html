@@ -21,17 +21,6 @@
           ng-options="artifact as artifact.label for artifact in HydratorPlusPlusLeftPanelCtrl.artifacts">
   </select>
 </div>
-<!-- remove the && false to get this to render -->
-<div ng-if="HydratorPlusPlusLeftPanelCtrl.pluginsMap && HydratorPlusPlusLeftPanelCtrl.pluginsMap.length && false">
-<side-panel
-  groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
-  item-generic-name="plugins"
-  class="my-side-panel"
-  group-generic-name="artifacts"
-  on-panel-item-click="HydratorPlusPlusLeftPanelCtrl.onV2ItemClicked"
-  ></side-panel>
-</div>
-<!-- comment this out or add ng-if="false" for the react version -->
 <my-side-panel
   data-panel-groups="HydratorPlusPlusLeftPanelCtrl.pluginsMap"
 

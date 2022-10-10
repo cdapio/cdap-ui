@@ -39,8 +39,8 @@ angular
       ]).name,
       'mgcrea.ngStrap.datepicker',
       'mgcrea.ngStrap.timepicker',
-      
-      'mgcrea.ngStrap.core', 
+
+      'mgcrea.ngStrap.core',
       'mgcrea.ngStrap.helpers.dimensions',
 
       'mgcrea.ngStrap.alert',
@@ -122,55 +122,6 @@ angular
   .run(function(myNamespace) {
     myNamespace.getList();
   })
-  .config(function($provide) {
-
-    $provide.decorator('$http', function($delegate, MyCDAPDataSource) {
-
-
-      function newHttp(config) {
-        var promise,
-            myDataSrc;
-        if (config.options) {
-          // Can/Should make use of my<whatever>Api service in another service.
-          // So in that case the service will not have a scope. Hence the check
-          if (config.params && config.params.scope && angular.isObject(config.params.scope)) {
-            myDataSrc = MyCDAPDataSource(config.params.scope);
-            delete config.params.scope;
-          } else {
-            myDataSrc = MyCDAPDataSource();
-          }
-          // We can use MyCDAPDataSource directly or through $resource'y way.
-          // If we use $resource'y way then we need to make some changes to
-          // the data we get for $resource.
-          config.$isResource = true;
-          switch (config.options.type) {
-            case 'POLL':
-              promise = myDataSrc.poll(config);
-              break;
-            case 'REQUEST':
-              promise = myDataSrc.request(config);
-              break;
-            case 'POLL-STOP':
-              promise = myDataSrc.stopPoll(config);
-              break;
-          }
-          return promise;
-        } else {
-          return $delegate(config);
-        }
-      }
-
-      newHttp.get = $delegate.get;
-      newHttp.delete = $delegate.delete;
-      newHttp.save = $delegate.save;
-      newHttp.query = $delegate.query;
-      newHttp.remove = $delegate.remove;
-      newHttp.post = $delegate.post;
-      newHttp.put = $delegate.put;
-      return newHttp;
-    });
-  })
-
   .config(function($httpProvider) {
     $httpProvider.interceptors.push(function($rootScope, myHelpers) {
       return {
@@ -281,12 +232,11 @@ angular
    * attached to the <body> tag, mostly responsible for
    *  setting the className based events from $state and caskTheme
    */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers) {
-
+  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
-    var dataSource = new MyCDAPDataSource($scope);
     getVersion();
+    $rootScope.stores = window.ReactStores;
     this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
     this.pageLevelError = null;
     this.apiError = false;
@@ -320,17 +270,20 @@ angular
     $scope.copyrightYear = new Date().getFullYear();
 
     function getVersion() {
-      dataSource.request({
-        _cdapPath: '/version'
+      $http({
+        method: 'GET',
+        url: '/api/v3/version'
       })
         .then(function(res) {
-          $scope.version = res.version;
+          var data = res.data;
+
+          $scope.version = data.version;
           $rootScope.cdapVersion = $scope.version;
 
           window.CaskCommon.VersionStore.dispatch({
             type: window.CaskCommon.VersionActions.updateVersion,
             payload: {
-              version: res.version
+              version: data.version
             }
           });
         });
@@ -377,4 +330,39 @@ angular
     });
 
     console.timeEnd(PKG.name);
+  }).directive('initStores', function() {
+    return {
+      restrict: 'E',
+      scope: {
+        stores: '=',
+      },
+      bindToController: true,
+      controller: 'BodyCtrl as BodyCtrl',
+      template: `
+        <my-global-navbar></my-global-navbar>
+        <main class="container" id="app-container">
+          <div ng-if="!BodyCtrl.pageLevelError" ui-view></div>
+          <page403
+            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 403"
+            message="BodyCtrl.pageLevelError.message"
+          ></page403>
+          <page404
+            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 404"
+            message="BodyCtrl.pageLevelError.message"
+          ></page404>
+          <page500
+            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 500"
+            message="BodyCtrl.pageLevelError.message"
+          ></page500>
+        </main>
+
+        <div class="alerts" id="alerts" data-cy="valium-banner-hydrator"></div>
+        <loading-icon></loading-icon>
+        <loading-indicator></loading-indicator>
+        <status-alert-message></status-alert-message>
+        <global-footer></global-footer>
+        <auth-refresher></auth-refresher>
+        <api-error-dialog ng-if="BodyCtrl.apiError"></api-error-dialog>
+      `
+    }
   });

@@ -1507,8 +1507,8 @@ angular.module(PKG.name + '.commons')
       var parent = $scope.element[0].parentElement.getBoundingClientRect();
 
       // margins from the furthest nodes to the edge of the canvas (75px each)
-      var leftRightMargins = 150;
-      var topBottomMargins = 150;
+      var leftRightMargins = 250;
+      var topBottomMargins = 250;
 
       // calculating the scales and finding the minimum scale
       var widthScale = (parent.width - leftRightMargins) / width;
