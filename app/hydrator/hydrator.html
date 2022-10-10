@@ -34,24 +34,9 @@
 </head>
 
 <body ng-class="bodyClass" class="cdap-body-container" ng-controller="BodyCtrl as BodyCtrl" ng-keyup="onSearch($event)">
-  <my-global-navbar></my-global-navbar>
-  <main class="container" id="app-container">
-    <div ng-if="!BodyCtrl.pageLevelError" ui-view></div>
-    <page403 ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 403"
-           message="BodyCtrl.pageLevelError.message"></page403>
-    <page404 ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 404"
-            message="BodyCtrl.pageLevelError.message"></page404>
-    <page500 ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 500"
-            message="BodyCtrl.pageLevelError.message"></page500>
-  </main>
-
-  <div class="alerts" id="alerts" data-cy="valium-banner-hydrator"></div>
-  <loading-icon></loading-icon>
-  <loading-indicator></loading-indicator>
-  <status-alert-message></status-alert-message>
-  <global-footer></global-footer>
-  <auth-refresher></auth-refresher>
-  <api-error-dialog ng-if="BodyCtrl.apiError"></api-error-dialog>
+  <div id="main-react">
+    
+  </div>
 
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/config.js"></script>
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/ui-config.js"></script>
@@ -63,6 +48,7 @@
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/hydrator.js"></script>
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/common.es6.js"></script>
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/tpl.js"></script>
+  <script type="text/javascript" nonce="<_= nonceVal _>" src="../cdap/components/hydrator/main.js"></script>
 </body>
 
 </html>

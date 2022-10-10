@@ -22,6 +22,7 @@ angular.module(PKG.name + '.feature.hydrator')
     const pipelineConfigurationsActionCreator = window.CaskCommon.PipelineConfigurationsActionCreator;
 
     this.pipelineType = rPipelineDetail.artifact.name;
+    this.appInfo = {namespace: $stateParams.namespace, pipelineId: $stateParams.pipelineId};
     let programType = GLOBALS.programType[this.pipelineType];
     let programTypeForRunsCount = GLOBALS.programTypeForRunsCount[this.pipelineType];
     let programName = GLOBALS.programId[this.pipelineType];

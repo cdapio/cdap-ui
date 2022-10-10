@@ -45,6 +45,9 @@ const ACTIONS = {
   SET_STOP_BUTTON_LOADING: 'SET_STOP_BUTTON_LOADING',
   SET_STOP_ERROR: 'SET_STOP_ERROR',
 
+  // lifecycle management draftid
+  SET_EDIT_DRAFT_ID: 'SET_EDIT_DRAFT_ID',
+
   RESET: 'RESET',
 };
 
@@ -80,6 +83,7 @@ const DEFAULT_PIPELINE_DETAILS = {
   scheduleError: '',
   stopButtonLoading: true,
   stopError: '',
+  editDraftId: null,
 };
 
 const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultAction) => {
@@ -226,6 +230,11 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
       return {
         ...state,
         stopError: action.payload.error,
+      };
+    case ACTIONS.SET_EDIT_DRAFT_ID:
+      return {
+        ...state,
+        editDraftId: action.payload.draftId,
       };
     case ACTIONS.RESET:
       return DEFAULT_PIPELINE_DETAILS;

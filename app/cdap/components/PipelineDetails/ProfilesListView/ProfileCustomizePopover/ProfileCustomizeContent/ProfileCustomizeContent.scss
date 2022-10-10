@@ -25,6 +25,9 @@
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 10px;
 
   .profile-customize-metadata {
     margin-bottom: 10px;
@@ -54,9 +57,7 @@
       }
     }
   }
-  .profile-customize-footer {
-    margin-bottom: 20px;
-  }
+
   .btn.btn-primary {
     margin-top: 10px;
     width: 100px;

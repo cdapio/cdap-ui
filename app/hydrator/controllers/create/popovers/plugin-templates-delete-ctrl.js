@@ -15,8 +15,14 @@
  */
 
 angular.module(`${PKG.name}.feature.hydrator`)
-  .controller('PluginTemplatesDeleteCtrl', function(rNode, $scope, mySettings, $stateParams, myAlertOnValium, HydratorPlusPlusPluginActions, HydratorPlusPlusLeftPanelStore, rTemplateType) {
+  .controller('PluginTemplatesDeleteCtrl', function($rootScope, HydratorPlusPlusLeftPanelStore, rNode, $scope, mySettings, $stateParams, myAlertOnValium, HydratorPlusPlusPluginActions, rTemplateType) {
     let node = rNode;
+    let leftPanelStore;
+    if ($rootScope.stores) {
+      leftPanelStore = $rootScope.stores;
+    } else {
+      leftPanelStore = HydratorPlusPlusLeftPanelStore;
+    }
     $scope.templateName = node.pluginTemplate;
     $scope.ok = () => {
       $scope.disableOKButton = true;
@@ -32,7 +38,7 @@ angular.module(`${PKG.name}.feature.hydrator`)
               type: 'success',
               content: 'Successfully deleted template ' + node.pluginTemplate
             });
-            HydratorPlusPlusLeftPanelStore.dispatch(
+            leftPanelStore.dispatch(
               HydratorPlusPlusPluginActions.fetchTemplates(
                 { namespace: $stateParams.namespace },
                 { namespace: $stateParams.namespace, pipelineType: rTemplateType }

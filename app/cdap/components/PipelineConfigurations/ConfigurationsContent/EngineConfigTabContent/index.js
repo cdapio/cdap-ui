@@ -27,10 +27,10 @@ import CustomConfig from 'components/PipelineConfigurations/ConfigurationsConten
 import { connect } from 'react-redux';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import WarningIcon from '@material-ui/icons/Warning';
 import { GLOBALS } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
+import DeprecatedMessage from 'components/shared/DeprecatedMessage';
 
 require('./EngineConfigTabContent.scss');
 
@@ -78,10 +78,7 @@ class EngineConfigTabContent extends Component {
           </label>
           <label className="radio-inline radio-mapReduce">
             <EngineRadioInput value={ENGINE_OPTIONS.MAPREDUCE} />
-            <WarningIcon fontSize="inherit" />
-            <span className="deprecated-warning">
-              [{T.translate(`${PREFIX}.mapreduce.deprecated`)}]
-            </span>
+            <DeprecatedMessage />
             {T.translate('commons.entity.mapreduce.singular')}
           </label>
         </div>

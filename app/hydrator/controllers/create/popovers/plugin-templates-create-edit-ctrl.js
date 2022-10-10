@@ -15,36 +15,43 @@
  */
 
 angular.module(`${PKG.name}.feature.hydrator`)
-  .controller('PluginTemplatesCreateEditCtrl', function ($scope, PluginTemplatesDirStore, PluginTemplatesDirActions, HydratorPlusPlusPluginActions, $stateParams, myAlertOnValium, rTemplateType, HydratorPlusPlusLeftPanelStore) {
-      $scope.closeTemplateCreationModal = ()=> {
+  .controller('PluginTemplatesCreateEditCtrl', function ($rootScope, $scope, PluginTemplatesDirStore, PluginTemplatesDirActions, HydratorPlusPlusPluginActions, $stateParams, myAlertOnValium, rTemplateType, HydratorPlusPlusLeftPanelStore) {
+    let leftPanelStore;
+    if ($rootScope.stores) {
+      leftPanelStore = $rootScope.stores;
+    } else {
+      leftPanelStore = HydratorPlusPlusLeftPanelStore;
+    }
+    $scope.closeTemplateCreationModal = ()=> {
+      PluginTemplatesDirActions.reset();
+      $scope.$close();
+    };
+
+    $scope.pluginTemplateSaveError = null;
+
+    PluginTemplatesDirStore.registerOnChangeListener(() => {
+      let getIsSaveSuccessfull = PluginTemplatesDirStore.getIsSaveSuccessfull();
+      let getIsCloseCommand = PluginTemplatesDirStore.getIsCloseCommand();
+      if (getIsSaveSuccessfull) {
+        PluginTemplatesDirActions.reset();
+        
+        leftPanelStore.dispatch(
+          HydratorPlusPlusPluginActions.fetchTemplates(
+            { namespace: $stateParams.namespace },
+            { namespace: $stateParams.namespace, pipelineType: rTemplateType }
+          )
+        );
+
+        myAlertOnValium.show({
+          type: 'success',
+          content: 'Plugin template saved successfully'
+        });
+        $scope.$close();
+      }
+      if (getIsCloseCommand) {
         PluginTemplatesDirActions.reset();
         $scope.$close();
-      };
-
-      $scope.pluginTemplateSaveError = null;
-
-      PluginTemplatesDirStore.registerOnChangeListener(() => {
-        let getIsSaveSuccessfull = PluginTemplatesDirStore.getIsSaveSuccessfull();
-        let getIsCloseCommand = PluginTemplatesDirStore.getIsCloseCommand();
-        if (getIsSaveSuccessfull) {
-          PluginTemplatesDirActions.reset();
-          HydratorPlusPlusLeftPanelStore.dispatch(
-            HydratorPlusPlusPluginActions.fetchTemplates(
-              { namespace: $stateParams.namespace },
-              { namespace: $stateParams.namespace, pipelineType: rTemplateType }
-            )
-          );
-
-          myAlertOnValium.show({
-            type: 'success',
-            content: 'Plugin template saved successfully'
-          });
-          $scope.$close();
-        }
-        if (getIsCloseCommand) {
-          PluginTemplatesDirActions.reset();
-          $scope.$close();
-        }
-      });
+      }
+    });
 
   });
