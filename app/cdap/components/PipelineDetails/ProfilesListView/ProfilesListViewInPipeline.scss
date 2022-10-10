@@ -23,7 +23,7 @@ $enabled-color: $green-02;
   height: 100%;
 }
 .profiles-list-view-on-pipeline {
-  height: calc(100% - 40px); // 40px for the buttons at the bottom
+  height: calc(100% - 70px); // 70px for the buttons at the bottom
 
   &.empty-container {
     display: flex;

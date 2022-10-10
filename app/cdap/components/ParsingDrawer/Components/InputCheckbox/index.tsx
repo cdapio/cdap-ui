@@ -25,7 +25,14 @@ export default function(props) {
   return (
     <FormControlLabel
       className={className}
-      control={<Checkbox onChange={onChange} checked={value} color="primary" />}
+      control={
+        <Checkbox
+          onChange={onChange}
+          checked={value}
+          color="primary"
+          data-testid={`parsing-checkbox-${label}`}
+        />
+      }
       label={<span className={classes.labelTextStyles}>{label}</span>}
     />
   );

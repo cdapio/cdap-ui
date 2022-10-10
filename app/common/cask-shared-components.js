@@ -16,6 +16,8 @@
 
 import T from 'i18n-react';
 T.setTexts(require('../cdap/text/text-en.yaml'));
+// calling react from the below component
+require('../cdap/components/hydrator/react-loader');
 var Store = require('../cdap/services/NamespaceStore').default;
 var validateNamespace = require('../cdap/services/NamespaceStore').validateNamespace;
 var NameSpaceStoreActions = require('../cdap/services/NamespaceStore/NamespaceActions').default;
@@ -135,10 +137,16 @@ var Comment = require('../cdap/components/AbstractWidget/Comment').default;
 var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
 var Connections = require('../cdap/components/Connections').default;
-var SidePanel = require('../cdap/components/hydrator/components/SidePanel/SidePanel').SidePanel;
+var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/LeftPanel')
+  .LeftPanel;
+var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
+  .PipelineCanvasActionBtns;
+var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
 
 export {
-  SidePanel,
+  TopPanelReact,
+  PipelineCanvasActionBtns,
+  LeftPanelReact,
   Store,
   NameSpaceStoreActions,
   DataPrepHome,

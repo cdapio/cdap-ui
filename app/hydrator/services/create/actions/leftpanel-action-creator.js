@@ -25,15 +25,15 @@ class HydratorPlusPlusPluginActions {
   fetchExtensions(params) {
     return (dispatch) => {
       this.api
-          .fetchExtensions(params)
-          .$promise
-          .then(
-            res => dispatch({
-              type: this.leftpanelactions.EXTENSIONS_FETCH,
-              payload: Object.assign({}, { pipelineType: params.pipelineType, extensions: res })
-            }),
-            err => console.log('ERR: Fetching list of artifacts failed', err)
-          );
+        .fetchExtensions(params)
+        .$promise
+        .then(
+          res => dispatch({
+            type: this.leftpanelactions.EXTENSIONS_FETCH,
+            payload: Object.assign({}, { pipelineType: params.pipelineType, extensions: res })
+          }),
+          err => console.log('ERR: Fetching list of artifacts failed', err)
+        );
     };
   }
   fetchPlugins(extension, params) {
@@ -67,34 +67,34 @@ class HydratorPlusPlusPluginActions {
   fetchDefaultVersion() {
     return (dispatch) => {
       this.mySettings
-          .get('plugin-default-version')
-          .then( res => {
-            if (!res) { return; }
-            dispatch({
-              type: this.leftpanelactions.PLUGINS_DEFAULT_VERSION_FETCH,
-              payload: {res}
-            });
+        .get('plugin-default-version')
+        .then( res => {
+          if (!res) { return; }
+          dispatch({
+            type: this.leftpanelactions.PLUGINS_DEFAULT_VERSION_FETCH,
+            payload: {res}
           });
+        });
     };
   }
   updateDefaultVersion(plugin) {
     return (dispatch) => {
       this.mySettings
-          .get('plugin-default-version')
-          .then( res => {
-            let key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
-            res = res || {};
-            res[key] = plugin.artifact;
-            return this.mySettings.set('plugin-default-version', res);
-          })
-          .then(() => this.mySettings.get('plugin-default-version'))
-          .then(res => {
-            if (!res) { return; }
-            dispatch({
-              type: this.leftpanelactions.PLUGINS_DEFAULT_VERSION_FETCH,
-              payload: {res}
-            });
+        .get('plugin-default-version')
+        .then( res => {
+          let key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
+          res = res || {};
+          res[key] = plugin.artifact;
+          return this.mySettings.set('plugin-default-version', res);
+        })
+        .then(() => this.mySettings.get('plugin-default-version'))
+        .then(res => {
+          if (!res) { return; }
+          dispatch({
+            type: this.leftpanelactions.PLUGINS_DEFAULT_VERSION_FETCH,
+            payload: {res}
           });
+        });
     };
   }
 }

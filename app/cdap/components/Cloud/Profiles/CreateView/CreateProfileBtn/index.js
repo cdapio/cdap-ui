@@ -29,6 +29,7 @@ function CreateProfileBtn({ onClick, loading, disabled }) {
       disabled={disabled}
       label="Create"
       dataCy="profile-create-btn"
+      dataTestId="profile-create-btn"
     />
   );
 }

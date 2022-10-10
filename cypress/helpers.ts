@@ -14,28 +14,33 @@
  * the License.
  */
 
-import { INodeIdentifier } from './typings';
-const uuidV4 = require('uuid/v4');
+import { INodeIdentifier } from "./typings";
+const uuidV4 = require("uuid/v4");
 
-const username = Cypress.env('username') || 'admin';
-const password = Cypress.env('password') || 'admin';
+const username = Cypress.env("username") || "admin";
+const password = Cypress.env("password") || "admin";
 let isAuthEnabled = false;
 let authToken = null;
 let sessionToken = null;
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false;
+});
 
 function loginIfRequired() {
   if (isAuthEnabled && authToken !== null) {
-    cy.setCookie('CDAP_Auth_Token', authToken);
-    cy.setCookie('CDAP_Auth_User', username);
+    cy.setCookie("CDAP_Auth_Token", authToken);
+    cy.setCookie("CDAP_Auth_User", username);
     Cypress.Cookies.defaults({
-      preserve: ['CDAP_Auth_Token', 'CDAP_Auth_User'],
+      preserve: ["CDAP_Auth_Token", "CDAP_Auth_User"],
     });
     return cy.wrap({});
   }
   return cy
     .request({
-      method: 'GET',
-      url: `http://${Cypress.env('host')}:11015/v3/namespaces`,
+      method: "GET",
+      url: `http://${Cypress.env("host")}:11015/v3/namespaces`,
       failOnStatusCode: false,
     })
     .then((response) => {
@@ -43,9 +48,12 @@ function loginIfRequired() {
       if (response.status === 401) {
         isAuthEnabled = true;
         cy.request({
-          method: 'POST',
-          url: '/login',
-          headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+          method: "POST",
+          url: "/login",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             username,
             password,
@@ -53,10 +61,10 @@ function loginIfRequired() {
         }).then((res) => {
           const respBody = JSON.parse(res.body);
           authToken = respBody.access_token;
-          cy.setCookie('CDAP_Auth_Token', respBody.access_token);
-          cy.setCookie('CDAP_Auth_User', username);
+          cy.setCookie("CDAP_Auth_Token", respBody.access_token);
+          cy.setCookie("CDAP_Auth_User", username);
           Cypress.Cookies.defaults({
-            preserve: ['CDAP_Auth_Token', 'CDAP_Auth_User'],
+            preserve: ["CDAP_Auth_Token", "CDAP_Auth_User"],
           });
         });
       }
@@ -69,8 +77,8 @@ function getSessionToken(headers) {
   }
   return cy
     .request({
-      method: 'GET',
-      url: `http://${Cypress.env('host')}:${Cypress.env('port')}/sessionToken`,
+      method: "GET",
+      url: `http://${Cypress.env("host")}:${Cypress.env("port")}/sessionToken`,
       failOnStatusCode: false,
       headers,
     })
@@ -85,8 +93,10 @@ function getArtifactsPoll(headers, retries = 0) {
     return;
   }
   cy.request({
-    method: 'GET',
-    url: `http://${Cypress.env('host')}:11015/v3/namespaces/default/artifacts?scope=SYSTEM`,
+    method: "GET",
+    url: `http://${Cypress.env(
+      "host"
+    )}:11015/v3/namespaces/default/artifacts?scope=SYSTEM`,
     failOnStatusCode: false,
     headers,
   }).then((response) => {
@@ -97,27 +107,30 @@ function getArtifactsPoll(headers, retries = 0) {
   });
 }
 
-function deployAndTestPipeline(filename, pipelineName, done = () => ({})) {
-  cy.visit('/cdap/ns/default/pipelines');
-  cy.get('#resource-center-btn').click();
-  cy.get('#create-pipeline-link').click();
-  cy.url().should('include', '/studio');
-  cy.upload_pipeline(filename, '#pipeline-import-config-link > input[type="file"]');
+function deployAndTestPipeline(filename, pipelineName, done: () => void) {
+  cy.visit("/cdap/ns/default/pipelines");
+  cy.get("#resource-center-btn").click();
+  cy.get("#create-pipeline-link").click();
+  cy.url().should("include", "/studio");
+  cy.upload_pipeline(filename, "#pipeline-import-config-link");
   // This is arbitrary. Right now we don't have a way to determine
   // if the upgrade check is done. Since this a standalone the assumption
   // is this won't take more than 10 seconds.
   cy.wait(10000);
   // Name pipeline then deploy pipeline
-  cy.get('.pipeline-name').click();
-  cy.get('#pipeline-name-input')
+  cy.get('[data-cy="pipeline-metadata"]').click();
+  cy.get("#pipeline-name-input")
     .clear()
     .type(pipelineName)
-    .type('{enter}');
-  cy.get('[data-testid=deploy-pipeline]').click();
-  cy.get('[data-cy="Deployed"]', { timeout: 60000 }).should('contain', 'Deployed');
+    .type("{enter}");
+  cy.get('[data-cy="deploy-pipeline-btn"]').click();
+  cy.get('[data-cy="Deployed"]', { timeout: 60000 }).should(
+    "contain",
+    "Deployed"
+  );
   return cy
     .url()
-    .should('include', `/view/${pipelineName}`)
+    .should("include", `/view/${pipelineName}`)
     .then(() => done());
 }
 
@@ -142,8 +155,8 @@ function getNodeSelectorFromNodeIndentifier(node: INodeIdentifier) {
   return `[data-cy="plugin-node-${nodeName}-${nodeType}-${nodeId}"]`;
 }
 
-function setNewSchemaEditor(state = 'false') {
-  const SCHEMA_LAB_ID = 'schema-editor';
+function setNewSchemaEditor(state = "false") {
+  const SCHEMA_LAB_ID = "schema-editor";
 
   // set default schema editor to use old schema editor
   cy.window().then((win) => {

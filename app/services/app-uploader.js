@@ -20,7 +20,7 @@ angular.module(PKG.name + '.services')
 
       for (var i = 0; i < files.length; i++) {
         myFileUploader.upload({
-          path: '/namespaces/' + ($state.params.namespace || namespace) + '/apps',
+          path: '/api/v3/namespaces/' + ($state.params.namespace || namespace) + '/apps',
           file: files[i]
 
         }, {
