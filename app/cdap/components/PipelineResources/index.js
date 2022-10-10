@@ -38,6 +38,7 @@ export default function PipelineResources({
           options={CORE_OPTIONS}
           value={virtualCores}
           onChange={onVirtualCoresChange}
+          dataCy={'virtualCores'}
         />
       </div>
       <div className="resource-group row">
@@ -48,6 +49,7 @@ export default function PipelineResources({
           min={0}
           value={memoryMB}
           onChange={onMemoryMBChange}
+          data-cy={'internalModel'}
         />
         <span className="control-label mb">{T.translate(`${PREFIX}.mb`)}</span>
       </div>

@@ -110,7 +110,6 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         ...state,
         triggersGroupToAdd: action.payload.triggersGroupToAdd,
         triggersGroupRunArgsToAdd: action.payload.triggersGroupRunArgsToAdd,
-        expandedPipeline: null,
         configureError: null,
       };
       break;

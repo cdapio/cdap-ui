@@ -10,6 +10,7 @@ commons:
   clickhere: click here
   close: Close
   delete: Delete
+  deprecated: Deprecated
   descriptionLabel: Description
   doneLabel: Done
   duplicate: Duplicate
@@ -181,10 +182,14 @@ features:
     Management:
       pageTitle: '{productName} | Administration | Management'
     Tethering:
-      PendingRequests:
-        pendingRequestHeader: Pending requests
-        pendingRequestHistory: VIEW REQUEST HISTORY
-        noPendingRequests: There are no requests pending
+      TetheringStatus:
+        accepted: Accepted
+        rejected: Rejected
+        pending: Pending
+      TetheringRequests:
+        tetheringRequestHeader: Tethering requests
+        tetheringRequestHistory: VIEW REQUEST HISTORY
+        noTetheringRequests: There are no tethering requests
         acceptButton: Accept
         rejectButton: Reject
         acceptSuccess: Request has been accepted.
@@ -194,7 +199,7 @@ features:
         allocation: Allocation
       NewRequests:
         newRequestsHeader: New requests
-        noNewRequests: There are no new requests 
+        noNewRequests: There are no new requests
       CreateRequest:
         createRequestButton: CREATE NEW REQUEST
         headerTitle: Create new tethering request
@@ -209,7 +214,7 @@ features:
           title: Tethered Namespaces
           description: Select the namespaces that will be tethered to the cloud instance
           noNamespaces: There are no available namespaces
-          Name: 
+          Name:
             name: namespace
             label: Name
           CpuLimit:
@@ -220,7 +225,7 @@ features:
             label: Memory (GB)
         CDFInformation:
           title: CDF Information
-          ProjectName: 
+          ProjectName:
             name: projectName
             label: Project Name
             placeholder: Specify the Google Cloud project name
@@ -241,6 +246,7 @@ features:
             label: Description
             placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
+         tetheringStatus: Tethering Status
          requestTime: Request Time
          description: Description
          gcp: Google cloud project
@@ -722,6 +728,13 @@ features:
           CROSSEQUAL: Equal
           CROSSMAX: Max
           CROSSMIN: Min
+          CROSSAVG: Average
+          MULTIADD: Add
+          MULTIMULTIPLY: Multiply
+          MULTIEQUAL: Equal
+          MULTIMAX: Max
+          MULTIMIN: Min
+          MULTIAVG: Average
         title: Calculate
       ChangeDataType:
         disabledTooltip: "Change data type is not available on columns of data type 'LocalDate', 'LocalTime', or 'ZonedDateTime'"
@@ -1930,6 +1943,14 @@ features:
 
   licenseText: Licensed under the Apache License, Version 2.0
 
+  LifeCycleManagement:
+    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
+      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+    errors:
+      noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
+      outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
+        This draft is outdated and please export the draft for manual reconciliation.
+
   LoadingIndicator:
     contactadmin: It could take a few minutes for the system to self-heal.
     defaultMessage: 'Loading...'
@@ -2288,11 +2309,11 @@ features:
       status: Status
       close: Close
       loading: Loading
-  ApiError:    
+  ApiError:
     CmekError:
       mainTitle: CMEK Key Revoked
       secondaryTitle: Instance is unusable because the CMEK key for this instance has been revoked.
-      suggestionPart1: View the  
+      suggestionPart1: View the
       suggestionPart2: troubleshooting
       suggestionPart3: page
   Pagination:
@@ -2306,9 +2327,10 @@ features:
         1: "{context} runtime argument"
         _: "{context} runtime arguments"
       save: Save
-      saveAndRun: Save and Run
+      saveAndRun: Save & Run
       saveAndSchedule: Save and Schedule
       saving: Saving
+      run: Run
     advancedOptions: Advanced options
     Alerts:
       contentHeading: Set alerts for your batch pipeline
@@ -2350,8 +2372,8 @@ features:
       stageLogging: Stage level logging
       stageLoggingTooltip: Allows logs from each stage in the pipeline to be queried individually. It is recommended to always have this setting on, unless the environment is short on resources.
       title: Pipeline config
-    PreviewConfig:
-      title: Preview config
+      previewTimeoutTooltip: Number of minutes to run Realtime pipeline preview. It can be run for a maximum of 15 mins
+      previewRecordsTooltip: The number of records to be read during the pipeline preview. For MapReduce, this translates to the number of records that are read by each map task
     Resources:
       client: Client
       clientTooltip: Resources for the client process which launches the Apache Spark Streaming pipeline
@@ -2363,6 +2385,14 @@ features:
       executorMapReduceTooltip: Resources for the executor process which initializes the pipeline
       contentHeading: Specify the resources for the following processes of the {engineDisplayLabel} program
       title: Resources
+    RuntimeConfig:
+      title: Runtime arguments
+      contentHeading: Specify runtime arguments or update the ones derived from preferences
+      contentSubHeading: By default, values for all runtime arguments must be provided before running the pipeline.
+          If a stage in your pipeline provides the value of an argument, you can skip that argument
+          by marking it as provided.
+    PreviewConfig:
+      title: Preview config
     title: Configure
     titleHistorical: Run configurations
 
@@ -2421,6 +2451,7 @@ features:
       deleteError: There was a problem with the pipeline you were trying to delete
       details: Details
       duplicate: Duplicate
+      edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
       run: Run
@@ -2466,6 +2497,7 @@ features:
         1: "{context} pipeline you saved"
         _: "{context} pipelines you saved"
     duration: Duration
+    editStatus: Status
     EmptyList:
       actionTitle: "You can try to:"
       aPipeline: a pipeline
@@ -2673,12 +2705,12 @@ features:
         0: "No triggers set"
         1: "{context} trigger is set"
         _: "{context} triggers are set"
-      compositeTriggersTitle: "View Enabled triggers for pipeline \"{pipelineName}\""
+      compositeTriggersTitle: "View enabled triggers for pipeline \"{pipelineName}\""
       buttonLabel: Disable Trigger
       deleteTrigger: Delete Trigger
       deleteTriggerButton: Delete Trigger
       deleteConfirm: Delete
-      deleteConfirmationText: Are you sure you want to delete this {type} trigger?
+      deleteConfirmationText: "Are you sure you want to delete trigger \"{name}\"?"
       pipelineCount:
         0: "No pipelines set as trigger"
         1: "{context} pipeline is set as trigger"
@@ -2693,8 +2725,9 @@ features:
     helperText: "\"{pipelineName}\" is triggered when this pipeline"
     namespace: Namespace
     pipelineName: Pipeline Name
-    groupTriggers: Inbound Group Triggers
+    groupTriggers: Composite Triggers
     pipelineTriggerType: "Trigger Type: {type}"
+    pipelineTriggerTypeHeader: "Type"
     ScheduleRuntimeArgs:
       configure_enable_btn: Configure and Enable Trigger
       configure_select_btn: Select
@@ -2704,7 +2737,9 @@ features:
         choose_plugin_property: Pick plugin property
       PayloadConfigModal:
         configPayloadBtn: Trigger Config
+        configPayloadBtnCaptalized: TRIGGER CONFIG
         configPayloadBtnDisabled: View Payload
+        configPayloadBtnDisabledCapitalized: VIEW PAYLOAD
         title: Payload configuration
       Tabs:
         ComputeConfig:
@@ -2751,6 +2786,7 @@ features:
       triggerOrType: "Trigger on any selected event (OR)"
       viewNamespace: View pipelines in namespace
     viewPipeline: View Pipeline
+    viewPipelineCapitalized: VIEW PIPELINE
   PreviewData:
     DataView:
       Table:
@@ -3067,6 +3103,7 @@ features:
     pipelineName: Pipeline name
     title: "Pipelines to be triggered by \"{pipelineName}\""
     viewPipeline: View Pipeline
+    viewPipelineCapitalized: VIEW PIPELINE
 
   ViewAllLabel:
     viewAll: View all

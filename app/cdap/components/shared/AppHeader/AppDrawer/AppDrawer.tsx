@@ -129,6 +129,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
           paper: classes.drawerPaper,
         }}
         data-cy="navbar-drawer"
+        data-testid="navbar-drawer"
       >
         <div className={classes.toolbar} />
         <NamespaceDropdown
@@ -170,6 +171,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                   componentDidNavigate,
                   featureSVGIconName: 'icon-list',
                   'data-cy': 'navbar-pipelines-link',
+                  'data-testid': 'navbar-pipelines-link',
                 },
                 {
                   featureName: Theme.featureNames.pipelineStudio,
@@ -180,6 +182,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                   componentDidNavigate,
                   isAngular: true,
                   'data-cy': 'navbar-pipeline-studio-link',
+                  'data-testid': 'navbar-pipeline-studio-link',
                 },
               ]}
             />
@@ -230,6 +233,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                 componentDidNavigate={componentDidNavigate}
                 id="navbar-metadata"
                 data-cy="navbar-metadata-link"
+                data-testid="navbar-metadata-link"
                 isActive={location.pathname === `/cdap/${nsurl}/metadata`}
               />
             ) : (
@@ -241,6 +245,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                 isAngular={true}
                 id="navbar-metadata"
                 data-cy="navbar-metadata-link"
+                data-testid="navbar-metadata-link"
               />
             )}
           </List>
@@ -251,6 +256,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               featureUrl={`/${nsurl}/control`}
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-control-center-link"
+              data-testid="navbar-control-center-link"
               id="navbar-control-center"
               isActive={
                 location.pathname === `/cdap/${nsurl}/control` ||
@@ -264,6 +270,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               featureFlag={true}
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-project-admin-link"
+              data-testid="navbar-project-admin-link"
             />
           </List>
         </div>

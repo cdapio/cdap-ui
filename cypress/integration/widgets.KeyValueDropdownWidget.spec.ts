@@ -55,7 +55,7 @@ describe('KeyValueDropdown Widgets', () => {
     cy.visit('/pipelines/ns/default/studio');
 
     // add plugin to canvas
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(projection);
 
     cy.open_node_property(projectionId);

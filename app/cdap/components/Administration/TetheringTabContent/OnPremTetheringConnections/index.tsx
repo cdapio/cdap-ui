@@ -17,7 +17,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
-import PendingRequests from './PendingRequests';
+import TetheringRequests from './TetheringRequests';
 import Connections from '../Connections';
 import { IOnPremConnectionsProps } from '../types';
 import { StyledLinkBtn } from '../shared.styles';
@@ -29,15 +29,15 @@ const ButtonContainer = styled.div`
 `;
 
 const OnPremConnections = ({
-  pendingRequests,
+  tetheringRequests,
   establishedConnections,
   handleEdit,
   handleDelete,
 }: IOnPremConnectionsProps) => {
   return (
     <>
-      <PendingRequests
-        pendingRequests={pendingRequests}
+      <TetheringRequests
+        tetheringRequests={tetheringRequests}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
       />
