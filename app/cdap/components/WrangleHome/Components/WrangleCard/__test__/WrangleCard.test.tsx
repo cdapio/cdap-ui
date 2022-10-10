@@ -26,7 +26,7 @@ const history = createBrowserHistory({
 });
 describe('Testing the Wrangle Card Component', () => {
   test('Should check whether WrangleCard Component is rendered or not', () => {
-    const screen = render(
+    const container = render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -35,6 +35,6 @@ describe('Testing the Wrangle Card Component', () => {
         </Switch>
       </Router>
     );
-    expect(screen).toBeDefined();
+    expect(container).toBeDefined();
   });
 });

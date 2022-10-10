@@ -18,7 +18,7 @@ angular.module(PKG.name + '.services')
   .factory('myPreferenceApi', function(myCdapUrl, $resource, myAuth, myHelpers) {
 
     var url = myCdapUrl.constructUrl,
-        basepath = '/namespaces/:namespace';
+        basepath = '/api/v3/namespaces/:namespace';
 
     return $resource(
       url({ _cdapPath: basepath }),

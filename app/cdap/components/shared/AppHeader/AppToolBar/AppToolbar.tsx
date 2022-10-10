@@ -78,6 +78,7 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
           className={classnames(classes.iconButton, classes.iconButtonFocus)}
           edge="start"
           data-cy="navbar-hamburger-icon"
+          data-testid="navbar-hamburger-icon"
         >
           <MenuIcon fontSize="inherit" />
         </IconButton>

@@ -302,7 +302,7 @@ describe('Testing Ongoing Data Exploration Component', () => {
         },
       };
     });
-    const screen = render(
+    const container = render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -311,6 +311,6 @@ describe('Testing Ongoing Data Exploration Component', () => {
         </Switch>
       </Router>
     );
-    expect(screen).toBeDefined();
+    expect(container).toBeDefined();
   });
 });
