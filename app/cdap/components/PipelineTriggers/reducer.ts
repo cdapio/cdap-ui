@@ -26,6 +26,16 @@ export function triggerConditionReducer(oldstate, action) {
       return { ...oldstate, killed: !oldstate.killed };
     case 'FAILED':
       return { ...oldstate, failed: !oldstate.failed };
+    case 'PIPELINE_SELECT':
+      return {
+        ...oldstate,
+        selected: true,
+      };
+    case 'PIPELINE_UNSELECT':
+      return {
+        ...oldstate,
+        selected: false,
+      };
     case 'TOGGLE_PAYLOAD':
       return {
         ...oldstate,
@@ -44,6 +54,7 @@ export const initialInlineTriggerState = {
   killed: false,
   failed: false,
   payloadModalOpen: false,
+  selected: false,
   mappingError: '',
 };
 
@@ -52,7 +63,16 @@ export function triggerNameReducer(oldstate, action) {
     case 'SET_NAMESPACE':
       const nsList = NamespaceStore.getState().namespaces;
       const ns = NamespaceStore.getState().selectedNamespace;
-      return { ...oldstate, namespaceList: nsList, namespace: ns };
+      return {
+        ...oldstate,
+        namespaceList: nsList,
+        namespace: ns,
+      };
+    case 'SET_SEARCH_INPUT':
+      return {
+        ...oldstate,
+        searchInput: action.searchInput,
+      };
     case 'NO_TRIGGER_NAME_ERROR':
       return {
         ...oldstate,
@@ -94,7 +114,8 @@ export function triggerNameReducer(oldstate, action) {
   }
 }
 
-export const initialNameState = {
+export const initialAvailablePipelineListState = {
+  searchInput: '',
   namespaceList: [],
   namespace: '',
   triggerName: '',

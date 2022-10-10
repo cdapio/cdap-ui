@@ -17,27 +17,27 @@
 angular.module(PKG.name + '.services')
   .factory('myPipelineApi', function($resource, myHelpers, GLOBALS) {
     var templatePath = '/templates',
-        pipelinePath = '/namespaces/:namespace/apps/:pipeline',
+        pipelinePath = '/api/v3/namespaces/:namespace/apps/:pipeline',
         macrosPath = pipelinePath + '/plugins',
 
-        loadArtifactPath = '/namespaces/:namespace/artifacts/:artifactName',
+        loadArtifactPath = '/api/v3/namespaces/:namespace/artifacts/:artifactName',
         loadArtifactJSON = loadArtifactPath + '/versions/:version/properties',
-        listPath = '/namespaces/:namespace/apps?artifactName=' + GLOBALS.etlBatch + ',' + GLOBALS.etlRealtime + ',' + GLOBALS.etlDataPipeline + ',' + GLOBALS.etlDataStreams,
-        artifactsPath = '/namespaces/:namespace/artifacts?scope=SYSTEM',
-        artifactsBasePath = '/namespaces/:namespace/artifacts',
-        extensionsFetchBase = '/namespaces/:namespace/artifacts/:pipelineType/versions/:version/extensions',
+        listPath = '/api/v3/namespaces/:namespace/apps?artifactName=' + GLOBALS.etlBatch + ',' + GLOBALS.etlRealtime + ',' + GLOBALS.etlDataPipeline + ',' + GLOBALS.etlDataStreams,
+        artifactsPath = '/api/v3/namespaces/:namespace/artifacts?scope=SYSTEM',
+        artifactsBasePath = '/api/v3/namespaces/:namespace/artifacts',
+        extensionsFetchBase = '/api/v3/namespaces/:namespace/artifacts/:pipelineType/versions/:version/extensions',
         pluginFetchBase = extensionsFetchBase + '/:extensionType',
         pluginsFetchPath = pluginFetchBase + '?scope=system',
         extensionsFetchPath = extensionsFetchBase + '?scope=system',
         pluginDetailFetch = pluginFetchBase + '/plugins/:pluginName?scope=system',
         postActionDetailFetch = pluginFetchBase + '/plugins/:pluginName',
-        artifactPropertiesPath = '/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties',
-        pluginMethodsPath = '/namespaces/:namespace/artifacts/:artifactName/versions/:version/plugintypes/:pluginType/plugins/:pluginName/methods/:methodName',
-        previewPath = '/namespaces/:namespace/previews',
-        runsCountPath = '/namespaces/:namespace/runcount',
-        latestRuns = '/namespaces/:namespace/runs';
+        artifactPropertiesPath = '/api/v3/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties',
+        pluginMethodsPath = '/api/v3/namespaces/:namespace/artifacts/:artifactName/versions/:version/plugintypes/:pluginType/plugins/:pluginName/methods/:methodName',
+        previewPath = '/api/v3/namespaces/:namespace/previews',
+        runsCountPath = '/api/v3/namespaces/:namespace/runcount',
+        latestRuns = '/api/v3/namespaces/:namespace/runs';
 
-    var pipelineAppPath = '/namespaces/system/apps/pipeline/services/studio/methods/v1';
+    var pipelineAppPath = '/api/v3/namespaces/system/apps/pipeline/services/studio/methods/v1';
 
     return $resource(
       '',
@@ -70,12 +70,11 @@ angular.module(PKG.name + '.services')
         fetchPostActionProperties: myHelpers.getConfig('GET', 'REQUEST', postActionDetailFetch, true),
 
         // Batch fetching plugin properties
-        fetchAllPluginsProperties: myHelpers.getConfig('POST', 'REQUEST', '/namespaces/:namespace/artifactproperties', true),
+        fetchAllPluginsProperties: myHelpers.getConfig('POST', 'REQUEST', '/api/v3/namespaces/:namespace/artifactproperties', true),
 
 
         // FIXME: This needs to be replaced with fetching etl-batch & etl-realtime separately.
         list: myHelpers.getConfig('GET', 'REQUEST', listPath, true),
-        pollStatus: myHelpers.getConfig('GET', 'POLL', pipelinePath + '/status'),
         stopPollStatus: myHelpers.getConfig('GET', 'POLL-STOP', pipelinePath + '/status'),
         delete: myHelpers.getConfig('DELETE', 'REQUEST', pipelinePath),
         runs: myHelpers.getConfig('GET', 'REQUEST', pipelinePath + '/runs', true),
@@ -94,8 +93,9 @@ angular.module(PKG.name + '.services')
         deletePluginMethod: myHelpers.getConfig('DELETE', 'REQUEST', pluginMethodsPath, false, { suppressErrors: true }),
 
         // PREVIEW
-        runPreview: myHelpers.getConfig('POST', 'REQUEST', '/namespaces/:namespace/previews', false, { suppressErrors: true }),
-        stopPreview: myHelpers.getConfig('POST', 'REQUEST', '/namespaces/:namespace/previews/:previewId/stop', false, { suppressErrors: true }),
+        runPreview: myHelpers.getConfig('POST', 'REQUEST', '/api/v3/namespaces/:namespace/previews', false, { suppressErrors: true }),
+        getPreviewStatus: myHelpers.getConfig('GET', 'REQUEST', '/api/v3/namespaces/:namespace/previews/:previewId/status', false, { suppressErrors: true }),
+        stopPreview: myHelpers.getConfig('POST', 'REQUEST', '/api/v3/namespaces/:namespace/previews/:previewId/stop', false, { suppressErrors: true }),
         getStagePreview: myHelpers.getConfig('POST', 'REQUEST', previewPath + '/:previewId/tracers', false, { suppressErrors: true }),
 
 
