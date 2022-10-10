@@ -40,7 +40,7 @@ export interface IProgramStatusTrigger extends IBaseTrigger {
   programId: IProgramId;
 }
 
-export interface IGroupTrigger extends IBaseTrigger {
+export interface ICompositeTrigger extends IBaseTrigger {
   triggers: IProgramStatusTrigger[];
 }
 
@@ -53,7 +53,7 @@ export interface ISchedule {
   program: IProgram;
   properties: { [key: string]: string };
   constraints: IConstraint[];
-  trigger: IGroupTrigger | IProgramStatusTrigger;
+  trigger: ICompositeTrigger | IProgramStatusTrigger;
   timeoutMillis: number;
   lastUpdateTime?: number;
   status?: string;

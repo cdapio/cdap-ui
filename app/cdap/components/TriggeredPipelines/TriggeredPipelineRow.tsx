@@ -29,7 +29,7 @@ import {
   StyledPipelineName,
 } from 'components/PipelineTriggers/shared.styles';
 import {
-  IGroupTrigger,
+  ICompositeTrigger,
   IPipelineInfo,
   ISchedule,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
@@ -58,7 +58,7 @@ export const TriggeredPipelineRow = ({
   let scheduleName = '';
   if ('triggers' in schedule.trigger) {
     scheduleName = schedule.name;
-    (schedule.trigger as IGroupTrigger).triggers
+    (schedule.trigger as ICompositeTrigger).triggers
       .filter((tr) => tr.programId.application === sourcePipeline)
       .map((t) => programStatuses.push(...t.programStatuses));
   } else {

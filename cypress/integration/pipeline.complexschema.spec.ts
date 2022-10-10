@@ -77,7 +77,7 @@ describe('Output Schema', () => {
     cy.visit('/pipelines/ns/default/studio');
 
     // add plugin to canvas
-    cy.open_transform_panel();
+    cy.toggle_transform_panel();
     cy.add_node_to_canvas(projection);
 
     cy.open_node_property(projectionId);
@@ -215,7 +215,7 @@ describe('Output Schema', () => {
       cy.get('[data-cy="pipeline-description-input"]').type('Sample pipeline description');
       cy.get('[data-cy="pipeline-metadata-ok-btn"]').click();
 
-      cy.get('[data-testid="deploy-pipeline"]').click();
+      cy.get('[data-cy="deploy-pipeline-btn"]').click();
       cy.url({ timeout: 60000 }).should('include', `/view/${PIPELINE_NAME}`);
 
       // Wait to allow pipeline to finish rendering before checking node properties

@@ -389,6 +389,7 @@ export function CategorizedConnections({
             <CustomAccordionSummary
               expandIcon={<ExpandMoreIcon />}
               data-cy={`categorized-connection-type-${key}`}
+              data-testid={`categorized-connection-type-${key}`}
             >
               {displayName}({connections.length})
             </CustomAccordionSummary>
@@ -401,6 +402,7 @@ export function CategorizedConnections({
                     className={classnames(classes.connectionGroup, {
                       [classes.selectedConnection]: localSelectedConnection === connection.name,
                     })}
+                    data-testid={`connection-container-${key}-${connection.name}`}
                   >
                     <Link
                       to={getConnectionPath(connection.name)}
@@ -412,6 +414,7 @@ export function CategorizedConnections({
                         <strong
                           className="connection-name"
                           data-cy={`connection-${key}-${connection.name}`}
+                          data-testid={`connection-${key}-${connection.name}`}
                         >
                           {connection.name}
                         </strong>
@@ -420,6 +423,7 @@ export function CategorizedConnections({
                         <span
                           className="connection-name"
                           data-cy={`connection-${key}-${connection.name}`}
+                          data-testid={`connection-${key}-${connection.name}`}
                         >
                           {connection.name}
                         </span>
