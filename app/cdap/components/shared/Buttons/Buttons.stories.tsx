@@ -18,7 +18,6 @@ import React from 'react';
 import PrimaryContainedButton from './PrimaryContainedButton';
 import PrimaryTextButton from './PrimaryTextButton';
 import PrimaryOutlinedButton from './PrimaryOutlinedButton';
-import ButtonLoadingIcon from './ButtonLoadingIcon';
 import ButtonLoadingHoc from './ButtonLoadingHoc';
 
 export default {

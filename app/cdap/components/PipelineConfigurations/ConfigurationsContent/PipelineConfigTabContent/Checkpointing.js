@@ -21,6 +21,7 @@ import IconSVG from 'components/shared/IconSVG';
 import ToggleSwitch from 'components/shared/ToggleSwitch';
 import Popover from 'components/shared/Popover';
 import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
+import DeprecatedMessage from 'components/shared/DeprecatedMessage';
 import T from 'i18n-react';
 
 const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
@@ -54,7 +55,10 @@ const mapDispatchToCheckpointingProps = (dispatch) => {
 const Checkpointing = ({ disableCheckpoints, checkpointDir, onToggle, onCheckpointDirChange }) => {
   const checkpointDirComponent = (
     <div className="label-with-toggle row">
-      <span className="toggle-label col-4">{T.translate(`${PREFIX}.checkpointDir`)}</span>
+      <span className="toggle-label col-4">
+        <DeprecatedMessage />
+        {T.translate(`${PREFIX}.checkpointDir`)}
+      </span>
       <div className="col-7">
         <input
           type="text"
@@ -69,7 +73,10 @@ const Checkpointing = ({ disableCheckpoints, checkpointDir, onToggle, onCheckpoi
   return (
     <React.Fragment>
       <div className="label-with-toggle checkpointing row">
-        <span className="toggle-label col-4">{T.translate(`${PREFIX}.checkpointing`)}</span>
+        <span className="toggle-label col-4">
+          <DeprecatedMessage />
+          {T.translate(`${PREFIX}.checkpointing`)}
+        </span>
         <div className="col-7 toggle-container">
           <ToggleSwitch
             isOn={!disableCheckpoints}

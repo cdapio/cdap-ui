@@ -14,11 +14,11 @@ declare global {
     // tslint:disable-next-line: interface-name
     interface Chainable {
 
-      open_source_panel: () => Chainable<JQuery<HTMLElement>>;
-      open_transform_panel: () => Chainable<JQuery<HTMLElement>>;
-      open_analytics_panel: () => Chainable<JQuery<HTMLElement>>;
-      open_sink_panel: () => Chainable<JQuery<HTMLElement>>;
-      open_condition_and_actions_panel: () => Chainable<JQuery<HTMLElement>>;
+      toggle_source_panel: () => Chainable<JQuery<HTMLElement>>;
+      toggle_transform_panel: () => Chainable<JQuery<HTMLElement>>;
+      toggle_analytics_panel: () => Chainable<JQuery<HTMLElement>>;
+      toggle_sink_panel: () => Chainable<JQuery<HTMLElement>>;
+      toggle_condition_and_actions_panel: () => Chainable<JQuery<HTMLElement>>;
 
       /**
        * Given the nodeidentifier object returns the html element of the plugin

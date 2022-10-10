@@ -48,6 +48,7 @@ import {
   StyledNameSpace,
 } from 'components/PipelineTriggers/shared.styles';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
+import { openLinkInNewTab } from 'services/helpers';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PAYLOAD_PREFIX = `${TRIGGER_PREFIX}.ScheduleRuntimeArgs.PayloadConfigModal`;
@@ -142,6 +143,13 @@ const EnabledTriggerRowView = ({
           {info ? <span>{info && info.description}</span> : renderLoading()}
           <PipelineLink
             href={`/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`}
+            target="_blank"
+            // The Anchor tab is not working, using this hacky way to fix it for now
+            onClick={() =>
+              openLinkInNewTab(
+                `/pipelines/ns/${triggeringPipelineInfo.namespace}/view/${triggeringPipelineInfo.id}`
+              )
+            }
           >
             {T.translate(`${TRIGGER_PREFIX}.viewPipeline`)}
           </PipelineLink>
@@ -170,12 +178,14 @@ const EnabledTriggerRowView = ({
           <PipelineTriggerButton
             onClick={() => handleConfirmModalOpen()}
             data-cy="disable-trigger-btn"
+            data-testid="disable-trigger-btn"
           >
             {T.translate(`${PREFIX}.deleteTriggerButton`)}
           </PipelineTriggerButton>
           <PipelineTriggerButton
             onClick={handlePayloadToggleClick}
             data-cy={`${triggeringPipelineInfo.id}-view-payload-btn`}
+            data-testid={`${triggeringPipelineInfo.id}-view-payload-btn`}
           >
             {T.translate(`${PAYLOAD_PREFIX}.configPayloadBtnDisabled`)}
           </PipelineTriggerButton>
@@ -183,7 +193,7 @@ const EnabledTriggerRowView = ({
         <ConfirmationModal
           headerTitle={T.translate(`${PREFIX}.deleteTrigger`)}
           confirmationText={T.translate(`${PREFIX}.deleteConfirmationText`, {
-            type: pipelineName,
+            name: pipelineName,
           })}
           confirmButtonText={T.translate(`${PREFIX}.deleteConfirm`)}
           confirmFn={handleConfirmModal}
@@ -211,6 +221,11 @@ const EnabledTriggerRowView = ({
       expanded={isExpanded}
       onChange={() => handleAccordionClick()}
       data-cy={
+        isExpanded
+          ? `${currentTrigger.programId.application}-expanded`
+          : `${currentTrigger.programId.application}-collapsed`
+      }
+      data-testid={
         isExpanded
           ? `${currentTrigger.programId.application}-expanded`
           : `${currentTrigger.programId.application}-collapsed`

@@ -41,7 +41,7 @@ const TableView: React.FC<React.PropsWithChildren<ITableProps>> = ({
   });
 
   return (
-    <div className={classes.grid} data-cy={dataCy}>
+    <div className={classes.grid} data-cy={dataCy} data-testid={dataCy}>
       {childrenClone}
     </div>
   );
