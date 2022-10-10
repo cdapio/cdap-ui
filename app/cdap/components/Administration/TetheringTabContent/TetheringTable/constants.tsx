@@ -19,7 +19,7 @@ import T from 'i18n-react';
 import { StyledIcon } from '../shared.styles';
 
 export const PREFIX = 'features.Administration.Tethering';
-export const DESC_COLUMN_TEMPLATE = '50px 200px 8fr 170px 2fr 280px 20px';
+export const DESC_COLUMN_TEMPLATE = '50px 200px 8fr 170px 2fr 280px 225px';
 
 export const ICONS = {
   active: {
@@ -48,7 +48,11 @@ export const CONNECTIONS_TABLE_HEADERS = [
     label: <StyledIcon name={ICONS.header.name} color={ICONS.header.color} />,
   },
   {
-    property: 'requestTime', // properties may come handy when adding sort by columns to the table, will remove if not needed
+    property: 'tetheringStatus', // properties may come handy when adding sort by columns to the table, will remove if not needed
+    label: T.translate(`${PREFIX}.ColumnHeaders.tetheringStatus`),
+  },
+  {
+    property: 'requestTime',
     label: T.translate(`${PREFIX}.ColumnHeaders.requestTime`),
   },
   {
@@ -87,3 +91,9 @@ export const CONNECTIONS_TABLE_HEADERS = [
     label: '',
   },
 ];
+
+export const TETHERING_STATUS = {
+  ACCEPTED: T.translate(`${PREFIX}.TetheringStatus.accepted`),
+  REJECTED: T.translate(`${PREFIX}.TetheringStatus.rejected`),
+  PENDING: T.translate(`${PREFIX}.TetheringStatus.pending`),
+};

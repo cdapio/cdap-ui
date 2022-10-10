@@ -23,10 +23,6 @@ import { objectQuery } from 'services/helpers';
 
 const styles = (): StyleRules => {
   return {
-    button: {
-      width: '105px',
-      height: '30px',
-    },
     spinner: {
       fontSize: '16px',
     },

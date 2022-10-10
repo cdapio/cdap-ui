@@ -1,4 +1,12 @@
 {
   "standalone.website.sdk.download": "true",
-  "ui.debug.enabled": "false"
+  "ui": {
+    "debug.enabled": "false",
+    "settings": {
+      "cogMenu": {
+        "externalLinks": {
+        }
+      }
+    }
+  }
 }

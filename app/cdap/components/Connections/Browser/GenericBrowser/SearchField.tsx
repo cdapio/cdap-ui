@@ -45,6 +45,7 @@ export default function SearchField({ onChange, value }) {
         placeholder="Search this directory"
         value={value}
         data-cy="connection-browser-search"
+        data-testid="connection-browser-search"
         startAdornment={
           <InputAdornment position="start">
             <Search />

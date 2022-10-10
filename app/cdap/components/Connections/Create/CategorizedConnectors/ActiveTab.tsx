@@ -129,6 +129,7 @@ export function ActiveConnectionTab({
                         }
                       }}
                       data-cy={`connector-${conn.name}`}
+                      data-testid={`connector-${conn.name}`}
                     >
                       <TableCell>{displayName}</TableCell>
                       <TableCell>

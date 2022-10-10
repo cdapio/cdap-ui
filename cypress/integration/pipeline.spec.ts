@@ -15,6 +15,7 @@
  */
 
 import { dataCy, loginIfRequired, getArtifactsPoll } from '../helpers';
+import { INodeIdentifier, INodeInfo } from '../typings';
 
 const TEST_PIPELINE_NAME = '__UI_test_pipeline';
 const TEST_PATH = '__UI_test_path';
@@ -73,14 +74,11 @@ describe('Creating a pipeline', () => {
     cy.url().should('include', '/studio');
 
     // Add an action node, to create minimal working pipeline
-    cy.get('.item', {
-      timeout: 10000,
-    })
-      .contains('Conditions and Actions')
-      .click();
-    cy.get('.item-body-wrapper')
-      .contains('File Delete')
-      .click();
+    cy.toggle_source_panel();
+    cy.toggle_condition_and_actions_panel();
+    const deleteActionInfo: INodeInfo = { nodeName: 'FileDelete', nodeType: 'action' };
+    const deleteActionId: INodeIdentifier = { ...deleteActionInfo, nodeId: '0' };
+    cy.add_node_to_canvas(deleteActionId)
 
     // Fill out required Path input field with some test value
     cy.get('.node-configure-btn')
@@ -108,7 +106,7 @@ describe('Creating a pipeline', () => {
     cy.get('@instrumentationDiv').contains('Off');
     cy.contains('Pipeline alert').click();
     cy.contains('+').click();
-    cy.contains('Send Email').click();
+    cy.contains('Email').click();
     // enter sender, recipients, subject, message
 
     cy.wait(1000);
@@ -186,13 +184,13 @@ describe('Creating a pipeline', () => {
 
   it('shows correct configuration after deploying pipeline', () => {
     // Name pipeline
-    cy.get('.pipeline-name').click();
+    cy.get('[data-cy="pipeline-metadata"]').click();
     cy.get('#pipeline-name-input')
       .type(TEST_PIPELINE_NAME)
       .type('{enter}');
 
     // Deploy pipeline
-    cy.get('[data-testid=deploy-pipeline]').click();
+    cy.get('[data-cy="deploy-pipeline-btn"]').click();
 
     // Do assertions
     cy.url({ timeout: 60000 }).should('include', `/view/${TEST_PIPELINE_NAME}`);

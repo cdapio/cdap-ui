@@ -17,7 +17,7 @@
 const popoverTemplate = '/assets/features/hydrator/templates/create/popovers/leftpanel-plugin-popover.html';
 
 class PipelineAvailablePluginsActions {
-  constructor(myPipelineApi, GLOBALS, $q, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, DAGPlusPlusFactory, $filter, myHelpers, LEFTPANELSTORE_ACTIONS, HydratorPlusPlusLeftPanelStore, mySettings, HydratorPlusPlusNodeService) {
+  constructor(myPipelineApi, GLOBALS, $q, HydratorPlusPlusLeftPanelStore, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, DAGPlusPlusFactory, $filter, myHelpers, LEFTPANELSTORE_ACTIONS, mySettings, HydratorPlusPlusNodeService, $rootScope) {
     this.api = myPipelineApi;
     this.GLOBALS = GLOBALS;
     this.$q = $q;
@@ -27,7 +27,11 @@ class PipelineAvailablePluginsActions {
     this.$filter = $filter;
     this.myHelpers = myHelpers;
     this.leftpanelactions = LEFTPANELSTORE_ACTIONS;
-    this.leftpanelstore = HydratorPlusPlusLeftPanelStore;
+    if ($rootScope.stores) {
+      this.leftpanelstore = $rootScope.stores;
+    } else {
+      this.leftpanelstore = HydratorPlusPlusLeftPanelStore;
+    }
     this.mySettings = mySettings;
     this.hydratorNodeService = HydratorPlusPlusNodeService;
   }

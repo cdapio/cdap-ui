@@ -137,6 +137,7 @@ export default class EntityCard extends Component {
               className={classnames({ 'with-version': this.props.entity.version })}
               title={this.props.entity.id}
               data-cy={`${this.props.entity.id}-header`}
+              data-testid={`${this.props.entity.id}-header`}
             >
               {this.props.entity.id}
             </h4>

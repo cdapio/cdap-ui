@@ -16,18 +16,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { Grid, GridHeader, GridBody, GridRow, GridCell } from '../shared.styles';
-import { CONNECTIONS_TABLE_HEADERS } from './constants';
+import { CONNECTIONS_TABLE_HEADERS, TETHERING_STATUS } from './constants';
 import { IConnection, ITableData } from '../types';
 import { trimMemoryLimit } from '../utils';
 import { getIconForStatus, renderAllocationsHeader, getTransformedTableData } from './utils';
 
-const COLUMN_TEMPLATE = '50px 200px 2fr 2fr 2fr 2fr 170px 2fr 140px 140px 20px';
+const COLUMN_TEMPLATE = '50px 170px 170px 2fr 2fr 2fr 2fr 170px 2fr 140px 140px 225px';
 
 interface ITetheringTableProps {
   tableData: IConnection[];
   showAllocationHeader?: boolean;
-  isForPendingReqs?: boolean;
-  renderLastColumn: (instanceName: string) => JSX.Element;
+  isForTetheringReqs?: boolean;
+  renderLastColumn: (instanceName: string, tetheringStatus: string) => JSX.Element;
 }
 
 const renderTableHeader = (showAllocationHeader: boolean) => (
@@ -55,7 +55,7 @@ const renderTableBody = (
 const TetheringTable = ({
   tableData,
   showAllocationHeader,
-  isForPendingReqs,
+  isForTetheringReqs,
   renderLastColumn,
 }: ITetheringTableProps) => {
   const [gridData, setGridData] = useState([]);
@@ -65,7 +65,11 @@ const TetheringTable = ({
     const transformedTableData = getTransformedTableData(tableData);
 
     setGridData((prevState) => {
-      if (!isForPendingReqs && prevState.length && prevState.length < transformedTableData.length) {
+      if (
+        !isForTetheringReqs &&
+        prevState.length &&
+        prevState.length < transformedTableData.length
+      ) {
         let index = -1;
         // Check if a new connection has been added to established connections
         transformedTableData.some((conn, idx) => {
@@ -98,7 +102,8 @@ const TetheringTable = ({
 
   const renderRow = (conn: ITableData, idx: number) => {
     const {
-      status,
+      tetheringStatus,
+      connectionStatus,
       allocationData,
       requestTime,
       gcloudProject,
@@ -108,7 +113,7 @@ const TetheringTable = ({
       region,
       highlighted,
     } = conn;
-    const icon = getIconForStatus(status, isForPendingReqs);
+    const icon = getIconForStatus(connectionStatus, isForTetheringReqs);
 
     return allocationData.map((resource, i) => {
       const { namespace, cpuLimit, memoryLimit } = resource;
@@ -124,6 +129,7 @@ const TetheringTable = ({
           key={i}
         >
           <GridCell>{isFirst ? icon : ''}</GridCell>
+          <GridCell>{isFirst ? TETHERING_STATUS[tetheringStatus] : ''}</GridCell>
           <GridCell>{isFirst ? requestTime : ''}</GridCell>
           <GridCell title={description}>{isFirst ? description : ''}</GridCell>
           <GridCell title={gcloudProject}>{isFirst ? gcloudProject : ''}</GridCell>
@@ -135,7 +141,9 @@ const TetheringTable = ({
           </GridCell>
           <GridCell border={!isLast}>{cpuLimit}</GridCell>
           <GridCell border={!isLast}>{trimMemoryLimit(memoryLimit)}</GridCell>
-          {isFirst && <GridCell lastCol={true}>{renderLastColumn(instanceName)}</GridCell>}
+          {isFirst && (
+            <GridCell lastCol={true}>{renderLastColumn(instanceName, tetheringStatus)}</GridCell>
+          )}
         </GridRow>
       );
     });
