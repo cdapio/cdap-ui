@@ -37,7 +37,6 @@ export default function() {
     getWidgetData(updateState);
   }, []);
 
-  console.log(state, 'statet----');
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
       {connectorTypes.map((item, index) => {
