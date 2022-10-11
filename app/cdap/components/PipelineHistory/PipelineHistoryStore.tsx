@@ -18,13 +18,14 @@ import { gql } from 'apollo-boost';
 import { combineReducers, createStore } from 'redux';
 import { Reducer, Store as StoreInterface } from 'redux';
 import { IAction } from 'services/redux-helpers';
+import { IPipelineVersion } from './types';
 
 interface IState {
   previousTokens: string[];
   nextPageToken: string;
   pageToken: string;
   pageLimit: number;
-  pipelineVersions: string[];
+  pipelineVersions: IPipelineVersion[];
   ready: boolean;
   pageLimitOptions: number[];
 }
@@ -64,6 +65,10 @@ export const QUERY = gql`
         nextRuntime {
           id
           time
+        }
+        change {
+          description
+          creationTimeMillis
         }
       }
       nextPageToken

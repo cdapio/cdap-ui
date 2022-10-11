@@ -28,12 +28,18 @@ interface IPipelineHistoryTableRowProps {
   setRestoreLoading: (val: boolean) => void;
   setErrorMessage: (val: string | ReactNode) => void;
   latestVersion: string;
+  description?: string;
+  date: string;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
 
-const StyledUl = styled.ul`
-  color: green;
+const StyledGreenUl = styled.ul`
+  color: #389e0d;
+`;
+
+const StyledOrangeUl = styled.ul`
+  color: #f29900;
 `;
 
 export const PipelineHistoryTableRow = ({
@@ -42,6 +48,8 @@ export const PipelineHistoryTableRow = ({
   setRestoreLoading,
   setErrorMessage,
   latestVersion,
+  description,
+  date,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
@@ -76,6 +84,7 @@ export const PipelineHistoryTableRow = ({
             description: res.description,
             artifact: res.artifact,
             config,
+            change: { description: T.translate(`${PREFIX}.restoreChangeSummary`, { date }) },
           }
         ).subscribe(
           () => {
@@ -97,16 +106,18 @@ export const PipelineHistoryTableRow = ({
     <>
       <div className=" grid-row">
         <div>
-          {appVersion}
-          {appVersion === latestVersion && (
-            <StyledUl>
-              <li>Latest</li>
-            </StyledUl>
+          {date}
+          {appVersion === latestVersion ? (
+            <StyledGreenUl>
+              <li>{T.translate(`${PREFIX}.latest`)}</li>
+            </StyledGreenUl>
+          ) : (
+            <StyledOrangeUl>
+              <li>{T.translate(`${PREFIX}.older`)}</li>
+            </StyledOrangeUl>
           )}
         </div>
-        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
-        <div>{T.translate(`${PREFIX}.unfinish`)}</div>
+        <div>{description}</div>
         <PrimaryTextLowercaseButton
           textColor="#0000EE"
           onClick={() => {

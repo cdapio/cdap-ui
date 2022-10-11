@@ -15,7 +15,7 @@
 """
 
 type ChangeDetail {
-  description: String!
+  description: String
   creationTimeMillis: String!
-  author: String!
+  author: String
 }
