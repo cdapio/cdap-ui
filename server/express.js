@@ -187,6 +187,34 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     next(err);
   });
 
+  app.get('/analytics.js', (req, res) => {
+    /**
+     * Add Google analytics tag if ui.analyticsTag is present in the config
+     */
+    const aTag = cdapConfig['ui.analyticsTag'];
+    if (aTag) {
+      res.header({
+        'Content-Type': 'text/javascript',
+        'Cache-Control': 'no-store, must-revalidate',
+      });
+      res.send(
+        `
+        let gaScript1 = document.createElement('script');
+        gaScript1.setAttribute('async', 'true');
+        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
+        document.body.appendChild(gaScript1);
+        
+        let gaScript2 = document.createElement('script');
+        gaScript2.setAttribute('type', 'text/javascript');
+        gaScript2.innerHTML = "window.dataLayer = window.dataLayer || [];function gtag(){window.dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${aTag}');"
+        document.body.appendChild(gaScript2);
+        `
+      );
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   // serve the config file
   app.get('/config.js', function(req, res) {
     uiSettings.ui.externalLinks = cdapConfig.externalLinks;
@@ -219,6 +247,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
       featureFlags: cdapConfig.featureFlags,
+      analyticsTag: cdapConfig.analyticsTag,
     });
 
     res.header({
