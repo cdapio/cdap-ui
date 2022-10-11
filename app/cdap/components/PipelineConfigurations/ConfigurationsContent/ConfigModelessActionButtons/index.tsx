@@ -166,7 +166,7 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
   return (
     <div className="configuration-step-navigation">
       <div className="apply-action-container">
-        {!props.isHistoricalRun && !props.isPreview ? (
+        {!props.isHistoricalRun && !props.isPreview && props.isLatestVersion ? (
           <ConfigModelessSaveBtn
             saveConfig={saveConfig}
             saveLoading={saveLoading}
