@@ -14,13 +14,13 @@
  * the License.
  */
 
-import { Box, Card, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { getWidgetData } from './services/getWidgetData';
-import { useStyles } from './styles';
-import { IConnectorArray } from './types';
+import { Box, Card, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getCurrentNamespace } from "services/NamespaceStore";
+import { getWidgetData } from "./services/getWidgetData";
+import { useStyles } from "./styles";
+import { IConnectorArray } from "./types";
 
 export default function() {
   const [state, setState] = useState({
@@ -43,12 +43,14 @@ export default function() {
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
                 {item.SVG}
-                <Typography className={classes.cardText}>{item.name}</Typography>
+                <Typography className={classes.cardText}>
+                  {item.name}
+                </Typography>
               </Box>
             </Card>
           </Link>
