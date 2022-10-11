@@ -18,17 +18,28 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import TabLabelCanSample from '../index';
 import { mockConnectorTypeData } from '../mock/mockConnectorTypeData';
+import { Router, Switch, Route } from 'react-router-dom'
+import { createBrowserHistory } from 'history';
 
+const history = createBrowserHistory({
+  basename: '/',
+});
 describe('Test TabLabelCanSample Component', () => {
   it('Should render TabLabelCanSample Component', () => {
     render(
-      <TabLabelCanSample
-        label={mockConnectorTypeData.name}
-        entity={mockConnectorTypeData}
-        initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={jest.fn()}
-      />
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <TabLabelCanSample
+              label={mockConnectorTypeData.name}
+              entity={mockConnectorTypeData}
+              initialConnectionId={undefined}
+              toggleLoader={() => null}
+              setIsErrorOnNoWorkSpace={jest.fn()}
+            />
+          </Route>
+        </Switch>
+      </Router>
     );
     const ele = screen.getByTestId(/connections-tab-label-simple/i);
     expect(ele).toBeInTheDocument();
@@ -37,13 +48,19 @@ describe('Test TabLabelCanSample Component', () => {
   it('Should trigger setIsErrorOnNoWorkSpace function ', () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
     render(
-      <TabLabelCanSample
-        label={mockConnectorTypeData.name}
-        entity={mockConnectorTypeData}
-        initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <TabLabelCanSample
+              label={mockConnectorTypeData.name}
+              entity={mockConnectorTypeData}
+              initialConnectionId={undefined}
+              toggleLoader={() => null}
+              setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+            />
+          </Route>
+        </Switch>
+      </Router>
     );
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
