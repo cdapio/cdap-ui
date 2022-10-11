@@ -18,7 +18,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import TabLabelCanSample from '../index';
 import { mockConnectorTypeData } from '../mock/mockConnectorTypeData';
-import { Router, Switch, Route } from 'react-router-dom'
+import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory({
