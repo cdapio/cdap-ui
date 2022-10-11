@@ -60,6 +60,13 @@ export const getWidgetData = async (cbUpdateState) => {
   const connectorWidgetJson = connectionDetailsData.map(
     ({ connectorWidgetJSON }) => connectorWidgetJSON
   );
+
+  if (connectorWidgetJson.every((each) => each[`display-name`] !== 'File')) {
+    connectorWidgetJson.unshift({
+      'display-name': 'File',
+    });
+  }
+
   connectorWidgetJson.map((item) => {
     connectorDataArray.map((connectorType) => {
       if (item['display-name'] && item['display-name'].includes(connectorType.name)) {
