@@ -211,6 +211,7 @@
     "moment": "2.24.0",
     "moment-timezone": "0.5.27",
     "mousetrap": "1.6.3",
+    "moveable": "^0.36.6",
     "natural-orderby": "2.0.3",
     "ngreact": "0.5.2",
     "node-fetch": "2",
@@ -240,6 +241,7 @@
     "react-timeago": "4.4.0",
     "react-transition-group": "4.3.0",
     "react-vis": "1.11.7",
+    "reactflow": "^11.1.1",
     "reactstrap": "8.4.0",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",
@@ -260,9 +262,12 @@
     "vega-lite": "2.0.0-beta.16",
     "vega-tooltip": "0.4.3",
     "webpack-dev-server": "3.11.0",
-    "yml-loader": "2.1.0"
+    "whatwg-fetch": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-1.0.0.tgz",
+    "yml-loader": "2.1.0",
+    "zustand": "^4.1.2"
   },
   "resolutions": {
-    "**/cypress": "5.6.0"
+    "**/cypress": "5.6.0",
+    "acorn": "8.7.1"
   }
 }

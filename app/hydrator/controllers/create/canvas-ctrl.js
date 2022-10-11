@@ -28,6 +28,11 @@ class HydratorPlusPlusCreateCanvasCtrl {
     this.connections = [];
     this.previewMode = false;
     this.nodeConfigModalOpen = false;
+    this.updateNodesStoreNodes = this.updateNodesStoreNodes.bind(this);
+    this.updateNodesStoreConnections = this.updateNodesStoreConnections.bind(this);
+    this.openPluginProperties = this.openPluginProperties.bind(this);
+    this.getConnections = this.getConnections.bind(this);
+    this.getNodes = this.getNodes.bind(this);
 
     DAGPlusPlusNodesStore.registerOnChangeListener(() => {
       this.setActiveNode();
@@ -49,6 +54,32 @@ class HydratorPlusPlusCreateCanvasCtrl {
     this.connections = this.DAGPlusPlusNodesStore.getConnections();
     this.HydratorPlusPlusConfigStore.setNodes(this.nodes);
     this.HydratorPlusPlusConfigStore.setConnections(this.connections);
+  }
+
+  getConnections() {
+    return this.HydratorPlusPlusConfigStore.getConnections();
+  }
+
+  getNodes() {
+    return this.HydratorPlusPlusConfigStore.getNodes();
+  }
+
+  updateNodesStoreNodes(nodes) {
+    this.nodes = nodes;
+    this.DAGPlusPlusNodesStore.setNodes(nodes);
+    this.HydratorPlusPlusConfigStore.setNodes(this.nodes);
+  }
+
+  updateNodesStoreConnections(connections) {
+    this.connections = connections;
+    this.DAGPlusPlusNodesStore.setConnections(connections);
+    this.HydratorPlusPlusConfigStore.setConnections(this.connections);
+  }
+
+  openPluginProperties(node) {
+    window.CaskCommon.PipelineMetricsActionCreator.setMetricsTabActive(false);
+    window.CaskCommon.PipelineMetricsActionCreator.setSelectedPlugin(node.type, node.plugin.name);
+    this.DAGPlusPlusNodesActionsFactory.selectNode(node.name);
   }
 
   setActiveNode() {

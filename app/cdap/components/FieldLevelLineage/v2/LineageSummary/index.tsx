@@ -104,8 +104,8 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
     const offsetY =
       -(this.myRef as HTMLElement).getBoundingClientRect().top - 65 + this.myRef.scrollTop; // From TopPanel, FllHeader, and scroll
 
-    const sourceXY = sourceEl.node().getBoundingClientRect();
-    const destXY = destEl.node().getBoundingClientRect();
+    const sourceXY = (sourceEl.node() as HTMLElement).getBoundingClientRect();
+    const destXY = (destEl.node() as HTMLElement).getBoundingClientRect();
 
     const sourceX1 = sourceXY.right + offsetX;
     const sourceY1 = sourceXY.top + 0.5 * sourceXY.height + offsetY;
@@ -121,7 +121,7 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
     // Draw a line with a bit of curve between the straight parts
     const lineGenerator = d3.line().curve(d3.curveMonotoneX);
 
-    const points = [
+    const points: Iterable<[number, number]> | Array<[number, number]> = [
       [sourceX1, sourceY1],
       [sourceX1 + third, sourceY1],
       [sourceX2 - third, sourceY2],
