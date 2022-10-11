@@ -18,10 +18,11 @@ import React, { useState } from 'react';
 import T from 'i18n-react';
 import { PipelineHistoryTableRow } from './PipelineHistoryTableRow';
 import ErrorBanner from 'components/shared/ErrorBanner';
+import { IPipelineVersion } from './types';
 
 interface IPipelineHistoryTableProps {
   pipelineName: string;
-  appVersions: string[];
+  pipelineVersions: IPipelineVersion[];
   setRestoreLoading: (val: boolean) => void;
   latestVersion: string;
 }
@@ -30,7 +31,7 @@ const PREFIX = 'features.PipelineHistory.table';
 
 export const PipelineHistoryTable = ({
   pipelineName,
-  appVersions,
+  pipelineVersions,
   setRestoreLoading,
   latestVersion,
 }: IPipelineHistoryTableProps) => {
@@ -39,12 +40,14 @@ export const PipelineHistoryTable = ({
   const renderTableBody = () => {
     return (
       <div className="grid-body">
-        {appVersions.map((appVersion) => {
+        {pipelineVersions.map((pipelineVersion) => {
           return (
             <PipelineHistoryTableRow
-              key={appVersion}
+              key={pipelineVersion.version}
               pipelineName={pipelineName}
-              appVersion={appVersion}
+              appVersion={pipelineVersion.version}
+              description={pipelineVersion.description}
+              date={pipelineVersion.date}
               setRestoreLoading={setRestoreLoading}
               setErrorMessage={setErrorMessage}
               latestVersion={latestVersion}
@@ -66,12 +69,10 @@ export const PipelineHistoryTable = ({
         />
       )}
       <div className="grid grid-container">
-        {appVersions && (
+        {pipelineVersions && (
           <div className="grid-header">
             <div className="grid-row">
-              <strong>{`Version (For develop)`}</strong>
               <strong>{T.translate(`${PREFIX}.date`)}</strong>
-              <strong>{T.translate(`${PREFIX}.time`)}</strong>
               <strong>{T.translate(`${PREFIX}.summary`)}</strong>
               <strong />
               <strong />

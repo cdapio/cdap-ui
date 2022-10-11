@@ -2709,7 +2709,9 @@ features:
       rowsPerPage: "Rows per page: "
       restoreFailError: Cannot restore (deploy) selected version
       fetchVersionFailError: Cannot fetch selected version's detail
-
+      latest: Latest version
+      older: Older version
+      restoreChangeSummary: "Restore version at {date}"
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"

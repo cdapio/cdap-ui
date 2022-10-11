@@ -27,7 +27,7 @@ type PipelineRecord {
   runs: [PipelineRun]
   totalRuns: Int
   nextRuntime: [PipelineSchedule]
-  changeDetail: ChangeDetail!
+  change: ChangeDetail
 }
 
 type PipelineRun {

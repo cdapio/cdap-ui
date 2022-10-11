@@ -111,7 +111,13 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       return;
     }
     setVersions({
-      pipelineVersions: data.pipelines.applications.map((app) => app.version),
+      pipelineVersions: data.pipelines.applications.map((app) => {
+        return {
+          version: app.version,
+          description: app.change.description,
+          date: new Date(parseInt(app.change.creationTimeMillis, 10)).toUTCString(),
+        };
+      }),
       nextPageToken: data.pipelines.nextPageToken,
     });
   }, [loading, networkStatus, data]);
@@ -139,7 +145,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
           {ready && (
             <PipelineHistoryTable
               pipelineName={pipelineName}
-              appVersions={pipelineVersions}
+              pipelineVersions={pipelineVersions}
               setRestoreLoading={setIsRestoreLoading}
               latestVersion={latestVersion}
             />
