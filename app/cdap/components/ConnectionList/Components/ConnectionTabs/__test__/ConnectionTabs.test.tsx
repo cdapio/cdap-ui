@@ -21,11 +21,6 @@ import { Route, Router, Switch } from 'react-router-dom';
 import ConnectionsTabs from '../index';
 import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
 import { mockTabsTestData } from '../mock/mockTabsTestData';
-<<<<<<< Updated upstream
-import { Router, Switch, Route } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-=======
->>>>>>> Stashed changes
 
 const history = createBrowserHistory({
   basename: '/',
