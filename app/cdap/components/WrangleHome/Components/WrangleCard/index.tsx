@@ -42,6 +42,7 @@ export default function WrangleCard() {
 
   // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
   // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
+
   const getConnectorTypesNames = async () => {
     let fetchedConnectorTypes = await fetchConnectors();
     const categorizedConnections = await getCategorizedConnections();
