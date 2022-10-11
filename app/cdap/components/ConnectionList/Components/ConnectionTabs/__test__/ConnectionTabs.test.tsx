@@ -20,7 +20,7 @@ import ConnectionsTabs from '../index';
 import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
 import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
 import { mockTabsTestData } from '../mock/mockTabsTestData';
-import { Router, Switch, Route } from 'react-router-dom'
+import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory({
