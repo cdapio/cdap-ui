@@ -24,7 +24,7 @@ import TabLabelCanSample from '../index';
 import {
   mockConnectorTypeData,
   mockEntityData,
-  mockEntityDataForNoWorkspace
+  mockEntityDataForNoWorkspace,
 } from '../mock/mockConnectorTypeData';
 
 const history = createBrowserHistory({

@@ -294,11 +294,11 @@ export const SidePanel = ({
             .map((plugin) => {
               return {
                 ...plugin,
-                displayName: 
-                generateLabel(plugin, all.plugins.pluginsMap) || plugin.name,
+                displayName: generateLabel(plugin, all.plugins.pluginsMap) || plugin.name,
                 showCustomIcon: shouldShowCustomIcon(plugin, all.plugins.pluginsMap),
                 customIconSrc: getCustomIconSrc(plugin, all.plugins.pluginsMap),
-            }})
+              };
+            })
             .sort((pluginA, pluginB) => {
               return pluginA.displayName < pluginB.displayName ? -1 : 1;
             });
