@@ -47,4 +47,17 @@ describe('Test Breadcrumb Component', () => {
   it('Should have the Home text in the Breadcrumb', () => {
     expect(screen.getByTestId('breadcrumb-home-text')).toHaveTextContent('Home');
   });
+
+  it('match state should be equal to location.state.from', () => {
+    const location = { state: { from: 'Workspaces' } };
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <BreadCrumb datasetName="abc" location={location} />
+          </Route>
+        </Switch>
+      </Router>
+    );
+  });
 });

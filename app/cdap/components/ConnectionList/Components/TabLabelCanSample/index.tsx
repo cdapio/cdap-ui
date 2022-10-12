@@ -64,7 +64,7 @@ export default function TabLabelCanSample({
     }
   };
 
-  const onCreateWorkspace = async (entity, parseConfig = {}) => {
+  const onCreateWorkspace = (entity, parseConfig = {}) => {
     try {
       createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
@@ -72,7 +72,7 @@ export default function TabLabelCanSample({
     }
   };
 
-  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
+  const createWorkspaceInternal = (entity, parseConfig = {}) => {
     toggleLoader(true);
     createWorkspace({
       entity,
