@@ -14,12 +14,25 @@
  *  the License.
  */
 
-import { checkFrequentlyOccuredValues } from '../utils';
+import { checkFrequentlyOccuredValues, convertNonNullPercent } from '../utils';
 import { mock, mockUtilResult } from '../mock/mockDataForGrid';
 
 describe('Test util Function checkFrequentlyOccuredValues', () => {
   it('Should return expected output', () => {
     const key = 'body_4';
     expect(checkFrequentlyOccuredValues(mock, key)).toStrictEqual(mockUtilResult);
+  });
+
+  it('should be undefined and trigger 0', () => {
+    convertNonNullPercent(
+      {
+        headers: [],
+        types: undefined,
+        values: [],
+        summary: undefined,
+        message: '',
+      },
+      undefined
+    );
   });
 });
