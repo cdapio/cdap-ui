@@ -23,6 +23,44 @@ import PipelineConfigureButton from 'components/PipelineDetails/PipelineDetailsT
 import PipelineStopButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineStopButton';
 import PipelineRunButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineRunButton';
 import PipelineSummaryButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineSummaryButton';
+import { PipelineHistoryButton } from './PipelineHistoryButton';
+import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-boost';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import introspectionQueryResultData from '../../../../../../graphql/fragments/fragmentTypes.json';
+import Cookies from 'universal-cookie';
+import SessionTokenStore from 'services/SessionTokenStore';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+
+const cookie = new Cookies();
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache({ fragmentMatcher }),
+  request: (operation) => {
+    if (window.CDAP_CONFIG.securityEnabled && cookie.get('CDAP_Auth_Token')) {
+      const token = `Bearer ${cookie.get('CDAP_Auth_Token')}`;
+
+      operation.setContext({
+        headers: {
+          authorization: token,
+          'Session-Token': SessionTokenStore.getState(),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+    } else {
+      operation.setContext({
+        headers: {
+          'Session-Token': SessionTokenStore.getState(),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+    }
+  },
+});
 
 const mapStateToConfigureButton = (state, ownProps) => {
   return {
@@ -30,6 +68,7 @@ const mapStateToConfigureButton = (state, ownProps) => {
     pipelineName: ownProps.pipelineName,
     resolvedMacros: state.resolvedMacros,
     runtimeArgs: state.runtimeArgs,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -40,6 +79,7 @@ const mapStateToRunButton = (state, ownProps) => {
     runButtonLoading: ownProps.runButtonLoading,
     runError: ownProps.runError,
     runtimeArgs: state.runtimeArgs,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -53,6 +93,7 @@ const mapStateToScheduleButton = (state, ownProps) => {
     scheduleButtonLoading: ownProps.scheduleButtonLoading,
     scheduleError: ownProps.scheduleError,
     runtimeArgs: state.runtimeArgs,
+    isLatestVersion: ownProps.isLatestVersion,
   };
 };
 
@@ -74,37 +115,51 @@ export default function PipelineDetailsButtons({
   scheduleError,
   stopButtonLoading,
   stopError,
+  changeSummary,
 }) {
+  const isLatestVersion = changeSummary ? changeSummary.isLatest === 'true' : true;
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return (
-    <Provider store={PipelineConfigurationsStore}>
-      <div className="pipeline-details-buttons">
-        <ConnectedConfigureButton pipelineType={pipelineType} pipelineName={pipelineName} />
-        <ConnectedScheduleButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          schedule={schedule}
-          maxConcurrentRuns={maxConcurrentRuns}
-          scheduleStatus={scheduleStatus}
-          scheduleButtonLoading={scheduleButtonLoading}
-          scheduleError={scheduleError}
-        />
-        <PipelineStopButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          runs={runs}
-          currentRun={currentRun}
-          stopButtonLoading={stopButtonLoading}
-          stopError={stopError}
-        />
-        <ConnectedRunButton
-          pipelineType={pipelineType}
-          pipelineName={pipelineName}
-          runButtonLoading={runButtonLoading}
-          runError={runError}
-        />
-        <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-      </div>
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={PipelineConfigurationsStore}>
+        <div className="pipeline-details-buttons">
+          <ConnectedConfigureButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            isLatestVersion={isLatestVersion}
+          />
+          <ConnectedScheduleButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            schedule={schedule}
+            maxConcurrentRuns={maxConcurrentRuns}
+            scheduleStatus={scheduleStatus}
+            scheduleButtonLoading={scheduleButtonLoading}
+            scheduleError={scheduleError}
+            isLatestVersion={isLatestVersion}
+          />
+          <PipelineStopButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            runs={runs}
+            currentRun={currentRun}
+            stopButtonLoading={stopButtonLoading}
+            stopError={stopError}
+          />
+          <ConnectedRunButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+            runButtonLoading={runButtonLoading}
+            runError={runError}
+            isLatestVersion={isLatestVersion}
+          />
+          <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
+          {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
+        </div>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
@@ -122,4 +177,5 @@ PipelineDetailsButtons.propTypes = {
   scheduleError: PropTypes.string,
   stopButtonLoading: PropTypes.bool,
   stopError: PropTypes.string,
+  changeSummary: PropTypes.object,
 };
