@@ -14,29 +14,30 @@
  * the License.
  */
 
-import React from "react";
-import { render } from '@testing-library/react';
+import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import { Route, Router, Switch } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
-import PositionedSnackbar from "..";
-
+import PositionedSnackbar from '..';
+import TransitionComponent from '../Components/TransitionComponent';
 
 const history = createHistory({
   basename: '/',
 });
 
-describe("It should test the Snackbar Component",()=>{
-    test('renders Snackbar Component', () => {
-        const container = render(
-          <Router history={history}>
-            <Switch>
-              <Route>
-                <PositionedSnackbar />
-              </Route>
-            </Switch>
-          </Router>
-        );
-        const ele = container.getByTestId(/parent-snackbar-component/i);
-        expect(ele).toBeInTheDocument();
-      });
-})
+describe('It should test the Snackbar Component', () => {
+  it('renders Snackbar Component', () => {
+    const handleCloseError = jest.fn();
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <PositionedSnackbar handleCloseError={handleCloseError} />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const ele = container.getByTestId(/parent-snackbar-component/i);
+    expect(ele).toBeInTheDocument();
+  });
+});
