@@ -115,9 +115,9 @@ export default function PipelineDetailsButtons({
   scheduleError,
   stopButtonLoading,
   stopError,
-  change,
+  changeSummary,
 }) {
-  const isLatestVersion = change ? change.latest === 'true' : true;
+  const isLatestVersion = changeSummary ? changeSummary.isLatest === 'true' : true;
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
@@ -177,5 +177,5 @@ PipelineDetailsButtons.propTypes = {
   scheduleError: PropTypes.string,
   stopButtonLoading: PropTypes.bool,
   stopError: PropTypes.string,
-  change: PropTypes.object,
+  changeSummary: PropTypes.object,
 };

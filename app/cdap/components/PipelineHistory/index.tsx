@@ -26,7 +26,7 @@ import { Provider, useSelector } from 'react-redux';
 import Store, {
   nextPage,
   prevPage,
-  QUERY,
+  PIPELINE_HISTORY_QUERY,
   setPageLimit,
   setVersions,
 } from './PipelineHistoryStore';
@@ -58,7 +58,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
   const [isRestoreLoading, setIsRestoreLoading] = useState(false);
   const [latestVersion, setLatestVersion] = useState(null);
 
-  const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
+  const { loading, error, data, refetch, networkStatus } = useQuery(PIPELINE_HISTORY_QUERY, {
     errorPolicy: 'all',
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,

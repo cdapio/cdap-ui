@@ -34,7 +34,7 @@ interface IStore {
   versions: IState;
 }
 
-export const QUERY = gql`
+export const PIPELINE_HISTORY_QUERY = gql`
   query Query(
     $namespace: String
     $pageSize: Int

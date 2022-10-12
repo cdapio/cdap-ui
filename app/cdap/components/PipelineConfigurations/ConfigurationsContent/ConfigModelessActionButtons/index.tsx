@@ -14,11 +14,12 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
+  updatePipeline,
   runPipeline,
   schedulePipeline,
-  updatePipeline,
   updatePreferences,
 } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { setRunError } from 'components/PipelineDetails/store/ActionCreator';
@@ -27,7 +28,6 @@ import { Observable } from 'rxjs/Observable';
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import { convertKeyValuePairsToMap } from 'services/helpers';
 import { GLOBALS } from 'services/global-constants';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 require('./ConfigModelessActionButtons.scss');
 
@@ -44,74 +44,76 @@ interface IConfigModelessActionButtonsProps {
   isLatestVersion?: boolean;
 }
 
-export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionButtonsProps) => {
-  const [saveLoading, setSaveLoading] = useState(false);
-  const [saveAndRunLoading, setSaveAndRunLoading] = useState(false);
-  const [saveAndScheduleLoading, setSaveAndScheduleLoading] = useState(false);
-  const [runtimeArgsCopied, setRuntimeArgsCopied] = useState(false);
+export default class ConfigModelessActionButtons extends Component<
+  IConfigModelessActionButtonsProps
+> {
+  public state = {
+    saveLoading: false,
+    saveAndRunLoading: false,
+    saveAndScheduleLoading: false,
+    runtimeArgsCopied: false,
+  };
 
-  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
-    'lifecycle.management.edit.enabled'
-  );
-
-  const closeModeless = () => {
-    if (typeof props.onClose === 'function') {
-      props.onClose();
+  public closeModeless = () => {
+    if (typeof this.props.onClose === 'function') {
+      this.props.onClose();
     }
   };
 
-  const closeModelessAndRun = () => {
+  public closeModelessAndRun = () => {
     const { runtimeArgs } = PipelineConfigurationsStore.getState();
-    closeModeless();
+    this.closeModeless();
     runPipeline(runtimeArgs);
   };
 
-  const closeModelessAndRunStudio = () => {
-    saveReactStoreToAngularStore();
-    props.studioRunPipeline();
+  public closeModelessAndRunStudio = () => {
+    this.saveReactStoreToAngularStore();
+    this.props.studioRunPipeline();
   };
 
-  const closeModelessAndSchedule = () => {
-    closeModeless();
+  public closeModelessAndSchedule = () => {
+    this.closeModeless();
     schedulePipeline();
   };
 
-  const saveConfig = () => {
-    if (props.isDeployed) {
-      saveAndAction(closeModeless);
+  public saveConfig = () => {
+    if (this.props.isDeployed) {
+      this.saveAndAction('saveLoading', this.closeModeless);
     } else {
-      saveReactStoreToAngularStore();
-      props.onClose();
+      this.saveReactStoreToAngularStore();
+      this.props.onClose();
     }
   };
 
-  const saveAndAction = (actionFn) => {
-    setSaveLoading(true);
-    let observable;
-    if (lifecycleManagementEditEnabled) {
-      observable = updatePreferences(lifecycleManagementEditEnabled, true);
-    } else {
-      observable = Observable.forkJoin(updatePipeline(), updatePreferences());
-    }
-    observable.subscribe(
+  public saveAndAction = (loadingState, actionFn) => {
+    this.setState({
+      [loadingState]: true,
+    });
+    Observable.forkJoin(updatePipeline(), updatePreferences()).subscribe(
       () => {
         actionFn();
-        setSaveLoading(false);
+        this.setState({
+          [loadingState]: false,
+        });
       },
       (err) => {
         setRunError(err.response || err);
-        setSaveLoading(false);
+        this.setState({
+          [loadingState]: false,
+        });
       }
     );
   };
 
-  const setRuntimeArgsCopiedState = () => {
-    setRuntimeArgsCopied(true);
+  public setRuntimeArgsCopiedState = () => {
+    this.setState({
+      runtimeArgsCopied: true,
+    });
   };
 
   // This is a temporary measure before 'deploy' button
   // migrates to react
-  const saveReactStoreToAngularStore = () => {
+  public saveReactStoreToAngularStore = () => {
     const {
       engine,
       resources,
@@ -131,8 +133,8 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
       previewTimeoutInMin,
     } = PipelineConfigurationsStore.getState();
     const customConfig = convertKeyValuePairsToMap(Object.values(customConfigKeyValuePairs)[0]);
-    if (props.pipelineType === GLOBALS.etlDataPipeline) {
-      props.applyBatchConfig(
+    if (this.props.pipelineType === GLOBALS.etlDataPipeline) {
+      this.props.applyBatchConfig(
         engine,
         resources,
         driverResources,
@@ -143,8 +145,8 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
         numOfRecordsPreview,
         runtimeArgs
       );
-    } else if (props.pipelineType === GLOBALS.etlDataStreams) {
-      props.applyRealtimeConfig(
+    } else if (this.props.pipelineType === GLOBALS.etlDataStreams) {
+      this.props.applyRealtimeConfig(
         resources,
         driverResources,
         processTimingEnabled,
@@ -163,37 +165,39 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
     }
   };
 
-  return (
-    <div className="configuration-step-navigation">
-      <div className="apply-action-container">
-        {!props.isHistoricalRun && !props.isPreview && props.isLatestVersion ? (
-          <ConfigModelessSaveBtn
-            saveConfig={saveConfig}
-            saveLoading={saveLoading}
-            buttonLabel={'save'}
-            className={'btn btn-primary'}
-            dataTestId="config-apply-close"
-          />
-        ) : null}
-        {props.isPreview && (
-          <>
+  public render() {
+    return (
+      <div className="configuration-step-navigation">
+        <div className="apply-action-container">
+          {!this.props.isHistoricalRun && !this.props.isPreview ? (
             <ConfigModelessSaveBtn
-              saveConfig={closeModelessAndRunStudio}
-              saveLoading={saveAndRunLoading}
-              buttonLabel={'saveAndRun'}
-              className={'btn btn-primary'}
-              dataCy={'preview-configure-run-btn'}
-            />
-            <ConfigModelessSaveBtn
-              saveConfig={saveConfig}
-              saveLoading={saveLoading}
+              saveConfig={this.saveConfig}
+              saveLoading={this.props.isLatestVersion !== false ? this.state.saveLoading : true}
               buttonLabel={'save'}
-              className={'btn btn-secondary'}
+              className={'btn btn-primary'}
               dataTestId="config-apply-close"
             />
-          </>
-        )}
+          ) : null}
+          {this.props.isPreview && (
+            <>
+              <ConfigModelessSaveBtn
+                saveConfig={this.closeModelessAndRunStudio}
+                saveLoading={this.state.saveAndRunLoading}
+                buttonLabel={'saveAndRun'}
+                className={'btn btn-primary'}
+                dataCy={'preview-configure-run-btn'}
+              />
+              <ConfigModelessSaveBtn
+                saveConfig={this.saveConfig}
+                saveLoading={this.state.saveLoading}
+                buttonLabel={'save'}
+                className={'btn btn-secondary'}
+                dataTestId="config-apply-close"
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}

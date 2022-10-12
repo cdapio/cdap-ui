@@ -104,7 +104,7 @@ export const PipelineHistoryTableRow = ({
 
   return (
     <>
-      <div className=" grid-row">
+      <div className="grid-row">
         <div>
           {date}
           {appVersion === latestVersion ? (
@@ -126,14 +126,16 @@ export const PipelineHistoryTableRow = ({
         >
           {T.translate(`${PREFIX}.view`)}
         </PrimaryTextLowercaseButton>
-        <PrimaryTextLowercaseButton
-          textColor="#0000EE"
-          onClick={() => {
-            restoreVersion();
-          }}
-        >
-          {T.translate(`${PREFIX}.restore`)}
-        </PrimaryTextLowercaseButton>
+        {appVersion !== latestVersion && (
+          <PrimaryTextLowercaseButton
+            textColor="#0000EE"
+            onClick={() => {
+              restoreVersion();
+            }}
+          >
+            {T.translate(`${PREFIX}.restore`)}
+          </PrimaryTextLowercaseButton>
+        )}
       </div>
     </>
   );

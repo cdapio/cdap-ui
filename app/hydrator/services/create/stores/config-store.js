@@ -85,7 +85,7 @@ class HydratorPlusPlusConfigStore {
       },
       description: '',
       name: '',
-      changeSummary: {
+      change: {
         description: '',
       },
       parentVersion: '',
@@ -1124,11 +1124,11 @@ class HydratorPlusPlusConfigStore {
   }
 
   setChangeSummary(changeSummaryDesc) {
-    this.state.changeSummary.description = changeSummaryDesc;
+    this.state.change.description = changeSummaryDesc;
     this.emitChange();
   }
   getChangeSummary() {
-    return this.getState().changeSummary.description;
+    return this.getState().change.description;
   }
 
   setParentVersion(parentVersion) {
@@ -1341,7 +1341,7 @@ class HydratorPlusPlusConfigStore {
             this.EventPipe.emit('hideLoadingIcon.immediate');
           } else {
             // normal deployment does not need these fields
-            delete config.changeSummary;
+            delete config.change;
             delete config.parentVersion;
             publish(config.name);
           }

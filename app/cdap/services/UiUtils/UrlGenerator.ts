@@ -33,6 +33,20 @@
     without any side effects. Moving forward once we have everything in react we should use this
     as a proper utility function in es6 module system.
 */
+
+/**
+ *
+ * @param navigationObj {uiApp,
+ *                       redirectUrl,
+ *                       clientId,
+ *                       namespaceId,
+ *                       appId,
+ *                       entityType,
+ *                       entityId,
+ *                       runId}
+ *                       that specify an absolute url
+ * @returns redirect url
+ */
 export const getAbsUIUrl = (navigationObj: any = {}) => {
   const {
     uiApp = 'cdap',
@@ -69,6 +83,12 @@ export const getAbsUIUrl = (navigationObj: any = {}) => {
   return baseUrl;
 };
 
+/**
+ *
+ * @param navigationObj {stateName, stateParams} that specifiy the base url
+ *                      and queryparams
+ * @returns redirect url
+ */
 export const getDataPrepUrl = (navigationObj: any = {}) => {
   const { stateName, stateParams } = navigationObj;
 
@@ -85,6 +105,12 @@ export const getDataPrepUrl = (navigationObj: any = {}) => {
   return url;
 };
 
+/**
+ *
+ * @param navigationObj {stateName, stateParams} that specifiy the base url
+ *                      and queryparams
+ * @returns redirect url
+ */
 export const getTrackerUrl = (navigationObj: any = {}) => {
   const { stateName, stateParams } = navigationObj;
   const uiApp = 'metadata';
@@ -102,6 +128,12 @@ export const getTrackerUrl = (navigationObj: any = {}) => {
   return url;
 };
 
+/**
+ *
+ * @param navigationObj {stateName, stateParams} that specifiy the base url
+ *                      and queryparams
+ * @returns redirect url
+ */
 export const getHydratorUrl = (navigationObj: any = {}) => {
   const { stateName, stateParams } = navigationObj;
   const uiApp = stateName === 'hydrator.list' ? 'cdap' : 'pipelines';
@@ -117,6 +149,12 @@ export const getHydratorUrl = (navigationObj: any = {}) => {
   return url;
 };
 
+/**
+ *
+ * @param navigationObj {stateName, stateParams} that specifiy the base url
+ *                      and queryparams
+ * @returns redirect url
+ */
 export const getOldCDAPUrl = (navigationObj: any = {}) => {
   const { stateName, stateParams } = navigationObj;
   const uiApp = 'oldcdap';

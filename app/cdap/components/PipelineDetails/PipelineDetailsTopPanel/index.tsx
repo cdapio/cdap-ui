@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import PipelineDetailsMetadata from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsMetadata';
 import PipelineDetailsButtons from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons';
@@ -45,14 +45,14 @@ const mapStateToButtonsProps = (state) => {
     scheduleError: state.scheduleError,
     stopButtonLoading: state.stopButtonLoading,
     stopError: state.stopError,
-    change: state.change,
+    changeSummary: state.changeSummary,
   };
 };
 
 const ConnectedPipelineDetailsButtons = connect(mapStateToButtonsProps)(PipelineDetailsButtons);
 
-export const PipelineDetailsTopPanel = () => {
-  useEffect(() => {
+export default class PipelineDetailsTopPanel extends Component {
+  componentDidMount() {
     const pipelineDetailStore = PipelineDetailStore.getState();
     const pipelineDetailStoreConfig = pipelineDetailStore.config;
     PipelineConfigurationsStore.dispatch({
@@ -72,17 +72,19 @@ export const PipelineDetailsTopPanel = () => {
       setEditDraftId(window.localStorage.getItem('editDraftId'));
       window.localStorage.removeItem('editDraftId');
     }
-  });
-  return (
-    <FeatureProvider>
-      <Provider store={PipelineDetailStore}>
-        <div className="pipeline-details-top-panel">
-          <PipelineDetailsMetadata />
-          <ConnectedPipelineDetailsButtons />
-          <PipelineDetailsDetailsActions />
-          <PlusButton mode={PlusButton.MODE.resourcecenter} />
-        </div>
-      </Provider>
-    </FeatureProvider>
-  );
-};
+  }
+  render() {
+    return (
+      <FeatureProvider>
+        <Provider store={PipelineDetailStore}>
+          <div className="pipeline-details-top-panel">
+            <PipelineDetailsMetadata />
+            <ConnectedPipelineDetailsButtons />
+            <PipelineDetailsDetailsActions />
+            <PlusButton mode={PlusButton.MODE.resourcecenter} />
+          </div>
+        </Provider>
+      </FeatureProvider>
+    );
+  }
+}
