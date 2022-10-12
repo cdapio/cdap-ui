@@ -27,6 +27,7 @@
     "build-server": "webpack --config=webpack.config.server.js",
     "jest": "jest --coverage",
     "jest-w": "jest --watch",
+    "test:local": "jest",
     "karma-test": "node ./node_modules/karma/bin/karma start test/karma-conf.js",
     "karma-test-single-run": "node ./node_modules/karma/bin/karma start test/karma-conf.js --no-auto-watch --single-run",
     "storybook": "NODE_ENV=development start-storybook -p 6006",
