@@ -14,24 +14,24 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
-import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import { createBrowserHistory } from 'history';
-import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { Route, Router, Switch } from 'react-router-dom';
-import TabLabelCanSample from '../index';
+import { fireEvent, render, screen } from "@testing-library/react";
+import * as apiHelpers from "components/Connections/Browser/GenericBrowser/apiHelpers";
+import { createBrowserHistory } from "history";
+import React from "react";
+import { act } from "react-dom/test-utils";
+import { Route, Router, Switch } from "react-router-dom";
+import TabLabelCanSample from "../index";
 import {
   mockConnectorTypeData,
   mockEntityData,
   mockEntityDataForNoWorkspace,
-} from '../mock/mockConnectorTypeData';
+} from "../mock/mockConnectorTypeData";
 
 const history = createBrowserHistory({
-  basename: '/',
+  basename: "/",
 });
-describe('Test TabLabelCanSample Component', () => {
-  it('Should render TabLabelCanSample Component', () => {
+describe("Test TabLabelCanSample Component", () => {
+  it("Should render TabLabelCanSample Component", () => {
     render(
       <Router history={history}>
         <Switch>
@@ -51,7 +51,7 @@ describe('Test TabLabelCanSample Component', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should trigger setIsErrorOnNoWorkSpace function ', () => {
+  it("Should trigger setIsErrorOnNoWorkSpace function ", () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
     render(
       <Router history={history}>
@@ -73,7 +73,7 @@ describe('Test TabLabelCanSample Component', () => {
     expect(setIsErrorOnNoWorkSpace).toHaveBeenCalled();
   });
 
-  it('Should trigger onCreateWorkspace(entity) function', () => {
+  it("Should trigger onCreateWorkspace(entity) function", () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
     render(
       <TabLabelCanSample
@@ -89,25 +89,23 @@ describe('Test TabLabelCanSample Component', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should trigger onWorkspaceCreate Function', async () => {
+  it("Should trigger onWorkspaceCreate Function", async () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
-    const res = createWorkspace({
-      entity: {
-        name: 'sql_feature',
-        path: '/information_schema/sql_features',
-        type: 'system table',
-        canSample: true,
-        canBrowse: false,
+   
+    jest.spyOn(apiHelpers, "createWorkspace").mockReturnValue(
+      Promise.resolve({
+        entity: {
+          name: "sql_feature",
+          path: "/information_schema/sql_features",
+          type: "system table",
+          canSample: true,
+          canBrowse: false,
+          properties: {},
+        },
+        connection: "exl",
         properties: {},
-      },
-      connection: 'exl',
-      properties: {},
-    });
-    const abc = Promise.resolve(res);
-    act(() => {
-      console.log(abc, 'ssfsfds');
-    });
-    console.log(abc, 'ssfsfds');
+      })
+    );
 
     render(
       <TabLabelCanSample
@@ -118,6 +116,7 @@ describe('Test TabLabelCanSample Component', () => {
         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
       />
     );
+
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
     expect(ele).toBeInTheDocument();
