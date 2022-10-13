@@ -194,7 +194,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     const aTag = cdapConfig['ui.analyticsTag'];
     if (aTag) {
       res.header({
-        'Content-Type': 'text/javascript',
+        'Content-Type': 'text/html',
         'Cache-Control': 'no-store, must-revalidate',
       });
       res.send(

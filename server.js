@@ -120,13 +120,13 @@ getCDAPConfig()
         delete c[key];
       }
 
-      if (key.match(/uiExternalLinks/)) {
+      if (key.match(/ui.externalLinks/)) {
         /**
-         * uiExternalLinks is 15 characters so remove uiExternalLinks.
-         * the format for external links inside of the config is uiExternalLinks.link
+         * ui.externalLinks is 15 characters so remove ui.ui.ExternalLinks.
+         * the format for external links inside of the config is ui.externalLinks.link
          * and the value is the url it should link to
          */
-        externalLinks[key.substring(16)] = value;
+        externalLinks[key.substring(17)] = value;
         delete c[key];
       }
     }
