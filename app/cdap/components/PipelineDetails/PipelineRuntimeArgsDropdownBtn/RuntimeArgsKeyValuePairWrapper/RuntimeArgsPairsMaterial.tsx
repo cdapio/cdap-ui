@@ -20,7 +20,8 @@ import AbstractMultiRowWidget, {
 } from 'components/AbstractWidget/AbstractMultiRowWidget';
 import RuntimeArgsRow from 'components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsRow';
 import ThemeWrapper from 'components/ThemeWrapper';
-import { objectQuery } from 'services/helpers';
+import { arrayOfStringsMatchTargetPrefix, objectQuery } from 'services/helpers';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
 
 interface IRuntimeArgsPairsWidgetProps {
   'key-placeholder'?: string;
@@ -31,6 +32,7 @@ interface IRuntimeArgsPairsWidgetProps {
 
 interface IRuntimeArgsPairsProps extends IMultiRowProps<IRuntimeArgsPairsWidgetProps> {
   isEncoded?: boolean; // for compatiblity with keyvalue-encoded type
+  showGeneratedArgs?: boolean;
 }
 
 interface IValue {
@@ -67,6 +69,15 @@ class RuntimeArgsPairsView extends AbstractMultiRowWidget<IRuntimeArgsPairsProps
     const isEncoded = this.props.isEncoded || objectQuery(this.props, 'widgetProps', 'isEncoded');
     const value = this.values[id].value;
     const notDeletable = objectQuery(value, 'notDeletable');
+    const valueKey = objectQuery(value, 'key');
+    // Saving pipeline configs will auto generate runtime arguments, which can be a lot
+    // check whether to show or hide auto-generated runtime arguments
+    if (
+      !this.props.showGeneratedArgs &&
+      arrayOfStringsMatchTargetPrefix(Object.values(GENERATED_RUNTIMEARGS), valueKey)
+    ) {
+      return;
+    }
 
     return (
       <RuntimeArgsRow
