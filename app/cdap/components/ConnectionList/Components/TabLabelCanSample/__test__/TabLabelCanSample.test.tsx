@@ -26,6 +26,8 @@ import {
   mockEntityData,
   mockEntityDataForNoWorkspace,
 } from '../mock/mockConnectorTypeData';
+import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+
 
 const history = createBrowserHistory({
   basename: '/',
@@ -73,51 +75,40 @@ describe('Test TabLabelCanSample Component', () => {
     expect(setIsErrorOnNoWorkSpace).toHaveBeenCalled();
   });
 
-  it('Should trigger onCreateWorkspace(entity) function', () => {
-    const setIsErrorOnNoWorkSpace = jest.fn();
-    render(
-      <TabLabelCanSample
-        label={mockEntityData.name}
-        entity={mockEntityData}
-        initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
-    );
-    const ele = screen.getByTestId(/connections-tab-explore/i);
-    fireEvent.click(ele);
-    expect(ele).toBeInTheDocument();
-  });
-
   it('Should trigger onWorkspaceCreate Function', async () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
-    const res = createWorkspace({
-      entity: {
-        name: 'sql_feature',
-        path: '/information_schema/sql_features',
-        type: 'system table',
-        canSample: true,
-        canBrowse: false,
+
+    jest.spyOn(apiHelpers, 'createWorkspace').mockReturnValue(
+      Promise.resolve({
+        entity: {
+          name: 'sql_feature',
+          path: '/information_schema/sql_features',
+          type: 'system table',
+          canSample: true,
+          canBrowse: false,
+          properties: {},
+        },
+        connection: 'exl',
         properties: {},
-      },
-      connection: 'exl',
-      properties: {},
-    });
-    const abc = Promise.resolve(res);
-    act(() => {
-      console.log(abc, 'ssfsfds');
-    });
-    console.log(abc, 'ssfsfds');
+      })
+    );
 
     render(
-      <TabLabelCanSample
-        label={mockEntityDataForNoWorkspace.name}
-        entity={mockEntityDataForNoWorkspace}
-        initialConnectionId="exl"
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <TabLabelCanSample
+              label={mockEntityDataForNoWorkspace.name}
+              entity={mockEntityDataForNoWorkspace}
+              initialConnectionId="exl"
+              toggleLoader={() => null}
+              setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+            />
+          </Route>
+        </Switch>
+      </Router>
     );
+
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
     expect(ele).toBeInTheDocument();
