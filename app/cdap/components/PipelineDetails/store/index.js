@@ -83,6 +83,7 @@ const DEFAULT_PIPELINE_DETAILS = {
   scheduleError: '',
   stopButtonLoading: true,
   stopError: '',
+  changeSummary: {},
   editDraftId: null,
 };
 
@@ -110,6 +111,7 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
         },
         config: { ...newPipelineConfig },
         version: pipeline.appVersion,
+        changeSummary: pipeline.changeSummary,
       };
     }
     case ACTIONS.SET_OPTIONAL_PROPERTY:
