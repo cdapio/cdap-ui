@@ -14,21 +14,6 @@
  * the License.
  */
 
-<<<<<<< HEAD
-import { render } from '@testing-library/react';
-import React from 'react';
-import WrangleCard from '../index';
-
-import { screen } from '@testing-library/react';
-import * as apiHelpers from 'components/Connections/Browser/SidePanel/apiHelpers';
-import * as reducers from 'components/Connections/Create/reducer';
-import { createBrowserHistory } from 'history';
-import { Route, Router, Switch } from 'react-router';
-
-const history = createBrowserHistory({
-  basename: '/',
-});
-=======
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import WrangleCard from '../index';
@@ -41,7 +26,6 @@ const history = createHistory({
   basename: '/',
 });
 
->>>>>>> 451ecde829a8dbc6107f9c060262adfaaea2c916
 describe('Testing the Wrangle Card Component', () => {
   test('Should check whether WrangleCard Component is rendered or not', () => {
     const container = render(
