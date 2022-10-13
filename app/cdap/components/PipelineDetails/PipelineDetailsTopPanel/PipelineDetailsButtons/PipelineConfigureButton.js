@@ -21,6 +21,7 @@ import IconSVG from 'components/shared/IconSVG';
 import PipelineConfigurations from 'components/PipelineConfigurations';
 import T from 'i18n-react';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -30,6 +31,7 @@ export default class PipelineConfigureButton extends Component {
     pipelineName: PropTypes.string,
     resolvedMacros: PropTypes.object,
     runtimeArgs: PropTypes.array,
+    isLatestVersion: PropTypes.bool,
   };
 
   state = {
@@ -58,16 +60,17 @@ export default class PipelineConfigureButton extends Component {
 
   renderConfigureButton() {
     return (
-      <div
-        onClick={this.getRuntimeArgumentsAndToggleModeless.bind(this, true)}
-        className="btn pipeline-action-btn pipeline-configure-btn"
-        data-cy="pipeline-configure-btn"
-        ref={this.buttonRef}
-      >
-        <div className="btn-container">
-          <IconSVG name="icon-sliders" className="configure-icon" />
-          <div className="button-label">{T.translate(`${PREFIX}.configure`)}</div>
-        </div>
+      <div className="btn pipeline-action-btn pipeline-configure-btn" ref={this.buttonRef}>
+        <PrimaryTextLowercaseButton
+          onClick={this.getRuntimeArgumentsAndToggleModeless.bind(this, true)}
+          data-cy="pipeline-configure-btn"
+          data-testid="pipeline-configure-btn"
+        >
+          <div className="btn-container">
+            <IconSVG name="icon-sliders" className="configure-icon" />
+            <div className="button-label">{T.translate(`${PREFIX}.configure`)}</div>
+          </div>
+        </PrimaryTextLowercaseButton>
       </div>
     );
   }
@@ -87,6 +90,7 @@ export default class PipelineConfigureButton extends Component {
           isDetailView={true}
           pipelineType={this.props.pipelineType}
           pipelineName={this.props.pipelineName}
+          isLatestVersion={this.props.isLatestVersion}
         />
       </div>
     );
