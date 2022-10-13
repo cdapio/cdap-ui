@@ -39,8 +39,8 @@ describe('It should test the Snackbar Component', () => {
     );
     const ele = container.getByTestId(/parent-snackbar-component/i);
     expect(ele).toBeInTheDocument();
-    fireEvent.click(ele)
-    const transitionComponent = render(<TransitionComponent/>);
+    fireEvent.click(ele);
+    const transitionComponent = render(<TransitionComponent />);
     const spanEle = transitionComponent.getAllByTestId(/snackbar-close-button/i);
     fireEvent.click(spanEle[0]);
   });
