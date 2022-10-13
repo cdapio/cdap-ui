@@ -21,3 +21,21 @@ export const mockConnectorTypeData = {
   description: 'Connection to browse and sample data from the local file system.',
   className: 'io.cdap.plugin.batch.connector.FileConnector',
 };
+
+export const mockEntityData = {
+  name: 'role_routine_grants',
+  path: '/information_schema/role_routine_grants',
+  type: 'system view',
+  canSample: true,
+  canBrowse: false,
+  properties: {},
+};
+
+export const mockEntityDataForNoWorkspace = {
+  name: 'sql_feature',
+  path: '/information_schema/sql_features',
+  type: 'system table',
+  canSample: true,
+  canBrowse: false,
+  properties: {},
+};
