@@ -28,7 +28,6 @@ import {
 } from '../mock/mockConnectorTypeData';
 import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 
-
 const history = createBrowserHistory({
   basename: '/',
 });
