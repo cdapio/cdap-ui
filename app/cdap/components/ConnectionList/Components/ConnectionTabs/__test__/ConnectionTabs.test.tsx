@@ -15,17 +15,13 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createBrowserHistory } from 'history';
 import React from 'react';
-import { Route, Router, Switch } from 'react-router-dom';
 import ConnectionsTabs from '../index';
 import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
+import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
 import { mockTabsTestData } from '../mock/mockTabsTestData';
-<<<<<<< Updated upstream
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-=======
->>>>>>> Stashed changes
 
 const history = createBrowserHistory({
   basename: '/',
@@ -59,6 +55,21 @@ describe('Test ConnectionsTabs', () => {
       />
     );
     const ele = screen.getByTestId(/connection-tabs/i);
+    expect(ele).toBeInTheDocument();
+  });
+
+  it('Should render TabLabelCanBrowse with connectorTypes and count', () => {
+    render(
+      <ConnectionsTabs
+        tabsData={mockTabsDataWithBrowseIndex}
+        handleChange={() => null}
+        value="apple"
+        index={0}
+        connectionId={undefined}
+        setIsErrorOnNoWorkSpace={jest.fn()}
+      />
+    );
+    const ele = screen.getByTestId(/connections-tab-label-browse/i);
     expect(ele).toBeInTheDocument();
   });
 });
