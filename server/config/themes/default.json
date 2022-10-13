@@ -33,7 +33,6 @@
     "data-prep": true,
     "pipelines": true,
     "analytics": false,
-    "rules-engine": false,
     "metadata": true,
     "hub": true,
     "ingest-data": true,

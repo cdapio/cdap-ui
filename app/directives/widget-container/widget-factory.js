@@ -242,14 +242,6 @@ angular.module(PKG.name + '.commons')
           'on-change': 'onChange'
         }
       },
-      'rules-engine-editor': {
-        element: '<my-rules-engine-editor></my-rules-engine-editor>',
-        attributes: {
-          'ng-model': 'model',
-          'data-config': 'myconfig',
-          'properties': 'properties'
-        }
-      },
       // 'textarea-validate': {
       //   element: '<my-textarea-validate></my-textarea-validate>',
       //   attributes: {

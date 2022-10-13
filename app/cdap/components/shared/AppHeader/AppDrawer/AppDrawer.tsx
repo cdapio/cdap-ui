@@ -216,14 +216,6 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-experiments-link"
             />
-            <DrawerFeatureLink
-              featureUrl={`/${nsurl}/rulesengine`}
-              featureSVGIconName="icon-rules"
-              featureFlag={Theme.showRulesEngine}
-              featureName={Theme.featureNames.rulesEngine}
-              componentDidNavigate={componentDidNavigate}
-              data-cy="navbar-rulesengine-link"
-            />
             {Theme.isMetadataInReact ? (
               <DrawerFeatureLink
                 featureUrl={`/${nsurl}/metadata`}

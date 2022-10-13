@@ -36,7 +36,6 @@ interface IJsonFeatureNames {
   pipelines?: string;
   pipelineStudio?: string;
   reports?: string;
-  'rules-engine'?: string;
   cdc?: string;
 }
 
@@ -84,7 +83,6 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     pipelines?: boolean;
     pipelineStudio?: boolean;
     analytics?: boolean;
-    'rules-engine'?: boolean;
     metadata?: boolean;
     hub?: boolean;
     'ingest-data'?: boolean;
@@ -181,7 +179,6 @@ interface IFeatureNames {
   pipelinesList: string;
   pipelineStudio: string;
   reports: string;
-  rulesEngine: string;
   projectAdmin: string;
   systemAdmin: string;
   cdc: string;
@@ -206,7 +203,6 @@ interface IThemeObj {
   showPipelines?: boolean;
   showPipelineStudio?: boolean;
   showAnalytics?: boolean;
-  showRulesEngine?: boolean;
   showMetadata?: boolean;
   showHub?: boolean;
   showIngestData?: boolean;
@@ -286,7 +282,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
         pipelinesList: 'List',
         pipelineStudio: 'Studio',
         reports: 'Reports',
-        rulesEngine: 'Rules',
         projectAdmin: 'Namespace Admin',
         systemAdmin: 'System Admin',
         cdc: 'Delta Replicator',
@@ -394,9 +389,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       if ('reports' in contentJson['feature-names']) {
         featureNames.reports = objectQuery(contentJson, 'feature-names', 'reports');
       }
-      if ('rules-engine' in contentJson['feature-names']) {
-        featureNames.rulesEngine = objectQuery(contentJson, 'feature-names', 'rules-engine');
-      }
       if ('cdc' in contentJson['feature-names']) {
         featureNames.cdc = objectQuery(contentJson, 'feature-names', 'cdc');
       }
@@ -417,7 +409,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showPipelines: true,
       showPipelineStudio: true,
       showAnalytics: false,
-      showRulesEngine: false,
       showMetadata: true,
       showHub: true,
       showIngestData: true,
@@ -468,9 +459,6 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     }
     if ('analytics' in featuresJson && isBoolean(featuresJson.analytics)) {
       features.showAnalytics = featuresJson.analytics;
-    }
-    if ('rules-engine' in featuresJson && isBoolean(featuresJson['rules-engine'])) {
-      features.showRulesEngine = featuresJson['rules-engine'];
     }
     if ('metadata' in featuresJson && isBoolean(featuresJson.metadata)) {
       features.showMetadata = featuresJson.metadata;
