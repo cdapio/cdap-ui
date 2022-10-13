@@ -18,6 +18,7 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { createBrowserHistory as createHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
+import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import ParsingDrawer from '..';
 
 const history = createHistory({
@@ -37,6 +38,27 @@ describe('It Should Test the Parsing Drawer Component', () => {
     );
 
     expect(container).toBeDefined();
+  });
+
+  it('Should test the handleApply Button ', () => {
+    jest.spyOn(apiHelpers, 'createWorkspace').mockImplementationOnce(() => {
+      return Promise.reject({ open: true, message: 'Selected Transformation Cannot Be Applied' });
+    });
+    const screen = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <ParsingDrawer updateDataTranformation={(wid) => jest.fn(wid)} setLoading={jest.fn()} />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const handleApplyBtn = screen.getByTestId('parsing-apply-button');
+    expect(handleApplyBtn).toBeInTheDocument();
+    fireEvent.click(handleApplyBtn, () => {
+      return Promise.reject('abc');
+    });
+    expect(handleApplyBtn).toBeInTheDocument();
   });
 
   it('Should test the handleApply Button ', () => {
