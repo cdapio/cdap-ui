@@ -14,31 +14,34 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
-import DrawerWidget from 'components/DrawerWidget';
-import { createBrowserHistory as createHistory } from 'history';
-import React from 'react';
-import { Route, Router, Switch } from 'react-router';
-import RecipeStepsTableComponent from '..';
-import { mockRecipe } from '../mock/mock';
+import { fireEvent, render ,screen} from "@testing-library/react";
+import { createBrowserHistory as createHistory } from "history";
+import React from "react";
+import { Route, Router, Switch } from "react-router";
+import AddTransformation from "..";
 
 const history = createHistory({
-  basename: '/',
+  basename: "/",
 });
 
-describe('It should test the Recipe Component', () => {
-  it('renders Recipe Component and triggers button and following functionality', () => {
-   const container = render(
+describe("It should test the SelectColumnsList Component", () => {
+  it("should render the SelectColumnsList Component and triggers the button and following event", () => {
+    const container = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeStepsTableComponent recipeSteps={mockRecipe} />
+            <AddTransformation />
           </Route>
         </Switch>
       </Router>
     );
     expect(container).toBeDefined;
-    const ele = screen.getByTestId(/recipe-steps-table-component-image-click10/i);
+    const ele = screen.getByTestId(/add-transformation-button/i);
     fireEvent.click(ele);
+    const ele1 = screen.getByTestId(/select-column-widget-button/i);
+    fireEvent.click(ele1);
   });
+
+  
+
 });

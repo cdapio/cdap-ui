@@ -47,11 +47,22 @@ describe("It should test the Recipe Component", () => {
         <Router history={history}>
           <Switch>
             <Route>
-              <DrawerWidget closeClickHandler = {jest.fn}/>
+              <DrawerWidget closeClickHandler = {jest.fn()} openDrawer={true} showBackIcon={true}/>
             </Route>
           </Switch>
         </Router>)
         expect(container).toBeDefined;
        console.log(container);
+       const {debug} = render(<DrawerWidget showBackIcon/>);
+       debug();
+
+      const element  = screen.getByRole("button");
+      const imagetag = screen.getByAltText('Back icon 1');
+      fireEvent.click(element)
+      fireEvent.click(imagetag)
+      console.log(imagetag,'sssasasasa')
+      // fireEvent.click(element);
+      
+
   });
 });
