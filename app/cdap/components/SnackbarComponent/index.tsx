@@ -29,7 +29,7 @@ export default function PositionedSnackbar(props) {
     }, 5000);
   }, []);
 
-  const handleClick = () => () => {
+  const handleClick = () => {
     setIsOpen(true);
   };
 
