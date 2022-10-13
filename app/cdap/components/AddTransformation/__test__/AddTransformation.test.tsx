@@ -38,6 +38,8 @@ describe("It should test the SelectColumnsList Component", () => {
     expect(container).toBeDefined;
     const ele = screen.getByTestId(/add-transformation-button/i);
     fireEvent.click(ele);
+    const ele1 = screen.getByTestId(/select-column-widget-button/i);
+    fireEvent.click(ele1);
   });
 
   
