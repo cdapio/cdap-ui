@@ -114,6 +114,7 @@ export default function(props) {
                   onChange={onSelectAllClick}
                   inputProps={{
                     'aria-label': 'select all columns',
+                    "id": "transformation-checkbox-select-all-columns"
                   }}
                 />
               </TableCell>
