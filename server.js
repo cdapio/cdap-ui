@@ -106,6 +106,16 @@ getCDAPConfig()
         featureFlags[key.substring(8)] = value;
         delete c[key];
       }
+
+      if (key.match(/ui.externalLinks/)) {
+        /**
+         * ui.externalLinks is 15 characters so remove ui.ui.ExternalLinks.
+         * the format for external links inside of the config is ui.externalLinks.link
+         * and the value is the url it should link to
+         */
+        externalLinks[key.substring(17)] = value;
+        delete c[key];
+      }
     }
 
     cdapConfig = c;
