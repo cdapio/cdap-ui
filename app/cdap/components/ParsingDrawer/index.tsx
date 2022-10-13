@@ -142,6 +142,7 @@ export default function(props) {
       showDivider={true}
       headerActionTemplate={<ParsingHeaderActionTemplate />}
       closeClickHandler={closeClickHandler}
+      data-testid="drawer-widget"
     >
       <Box className={classes.bodyContainerStyles}>
         <ParsingPopupBody
