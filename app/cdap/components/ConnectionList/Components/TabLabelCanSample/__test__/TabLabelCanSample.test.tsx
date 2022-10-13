@@ -18,14 +18,14 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import * as apiHelpers from "components/Connections/Browser/GenericBrowser/apiHelpers";
 import { createBrowserHistory } from "history";
 import React from "react";
-import { act } from "react-dom/test-utils";
 import { Route, Router, Switch } from "react-router-dom";
 import TabLabelCanSample from "../index";
 import {
   mockConnectorTypeData,
   mockEntityData,
-  mockEntityDataForNoWorkspace,
-} from "../mock/mockConnectorTypeData";
+  mockEntityDataForNoWorkspace
+} from '../mock/mockConnectorTypeData';
+
 
 const history = createBrowserHistory({
   basename: "/",
@@ -108,13 +108,19 @@ describe("Test TabLabelCanSample Component", () => {
     );
 
     render(
-      <TabLabelCanSample
-        label={mockEntityDataForNoWorkspace.name}
-        entity={mockEntityDataForNoWorkspace}
-        initialConnectionId="exl"
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <TabLabelCanSample
+              label={mockEntityDataForNoWorkspace.name}
+              entity={mockEntityDataForNoWorkspace}
+              initialConnectionId="exl"
+              toggleLoader={() => null}
+              setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+            />
+          </Route>
+        </Switch>
+      </Router>
     );
 
     const ele = screen.getByTestId(/connections-tab-explore/i);
