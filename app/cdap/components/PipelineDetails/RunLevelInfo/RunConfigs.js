@@ -151,6 +151,7 @@ export default class RunConfigs extends Component {
           value={this.state.runtimeArgs.pairs}
           dataCy="runlevel-runtimeargs-deployed"
           disabled={true}
+          showGeneratedArgs={true}
         />
       </div>
     );

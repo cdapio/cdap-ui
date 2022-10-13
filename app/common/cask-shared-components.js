@@ -58,7 +58,7 @@ var StatusMapper = require('../cdap/services/StatusMapper').default;
 var PipelineDetailStore = require('../cdap/components/PipelineDetails/store').default;
 var PipelineDetailActionCreator = require('../cdap/components/PipelineDetails/store/ActionCreator');
 var PipelineDetailsTopPanel = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel')
-  .default;
+  .PipelineDetailsTopPanel;
 var PipelineScheduler = require('../cdap/components/PipelineScheduler').default;
 var AvailablePluginsStore = require('../cdap/services/AvailablePluginsStore').default;
 var AVAILABLE_PLUGINS_ACTIONS = require('../cdap/services/AvailablePluginsStore')

@@ -20,30 +20,66 @@ import { connect } from 'react-redux';
 import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import PipelineResources from 'components/PipelineResources';
-import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
+import PipelineConfigurationsStore, {
+  ACTIONS as PipelineConfigurationsActions,
+} from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
+import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
 const mapStateToProps = (state) => {
+  const driverResourcesMemory = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY
+  );
+  const driverResourcesCores = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES
+  );
   return {
-    virtualCores: state.driverResources.virtualCores,
-    memoryMB: state.driverResources.memoryMB,
+    virtualCores: driverResourcesCores
+      ? driverResourcesCores.value
+      : state.driverResources.virtualCores,
+    memoryMB: driverResourcesMemory ? driverResourcesMemory.value : state.driverResources.memoryMB,
   };
 };
 const mapDispatchToProps = (dispatch) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onVirtualCoresChange: (e) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES] = e.target.value;
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_VIRTUAL_CORES,
         payload: { virtualCores: e.target.value },
       });
+      dispatch({
+        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+        payload: { runtimeArgs: { pairs: newRunTimePairs } },
+      });
     },
     onMemoryMBChange: (e) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY] = e.target.value;
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_MEMORY_MB,
         payload: { memoryMB: e.target.value },
       });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };
