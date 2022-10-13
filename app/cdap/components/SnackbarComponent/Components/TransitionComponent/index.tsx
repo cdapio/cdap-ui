@@ -22,7 +22,7 @@ import { useStyles } from './styles';
 export default function TransitionComponent(props) {
   const classes = useStyles();
   return (
-    <div>
+    <div data-testid="transition-component-parent">
       <div className={classes.headFlex}>
         <h5 className={classes.errorHead}>
           <WarningRoundedIcon className={classes.warningIcon} />
@@ -33,6 +33,7 @@ export default function TransitionComponent(props) {
           tabIndex={0}
           className={classes.dismissSpan}
           onClick={() => props.close()}
+          data-testid="snackbar-close-button"
         >
           Dismiss
         </span>

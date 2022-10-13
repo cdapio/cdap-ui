@@ -70,6 +70,7 @@ export default function(props) {
                   onClick={handleDelete}
                   src="/cdap_assets/img/delete.svg"
                   alt="delete"
+                  data-testid={'recipe-steps-table-component-image-click' + index}
                 />
               </TableCell>
             </TableRow>

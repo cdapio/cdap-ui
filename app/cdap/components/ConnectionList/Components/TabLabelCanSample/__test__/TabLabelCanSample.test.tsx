@@ -15,10 +15,9 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { createBrowserHistory } from 'history';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { Route, Router, Switch } from 'react-router-dom';
 import TabLabelCanSample from '../index';
 import {
@@ -91,33 +90,38 @@ describe('Test TabLabelCanSample Component', () => {
 
   it('Should trigger onWorkspaceCreate Function', async () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
-    const res = createWorkspace({
-      entity: {
-        name: 'sql_feature',
-        path: '/information_schema/sql_features',
-        type: 'system table',
-        canSample: true,
-        canBrowse: false,
+
+    jest.spyOn(apiHelpers, 'createWorkspace').mockReturnValue(
+      Promise.resolve({
+        entity: {
+          name: 'sql_feature',
+          path: '/information_schema/sql_features',
+          type: 'system table',
+          canSample: true,
+          canBrowse: false,
+          properties: {},
+        },
+        connection: 'exl',
         properties: {},
-      },
-      connection: 'exl',
-      properties: {},
-    });
-    const abc = Promise.resolve(res);
-    act(() => {
-      console.log(abc, 'ssfsfds');
-    });
-    console.log(abc, 'ssfsfds');
+      })
+    );
 
     render(
-      <TabLabelCanSample
-        label={mockEntityDataForNoWorkspace.name}
-        entity={mockEntityDataForNoWorkspace}
-        initialConnectionId="exl"
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <TabLabelCanSample
+              label={mockEntityDataForNoWorkspace.name}
+              entity={mockEntityDataForNoWorkspace}
+              initialConnectionId="exl"
+              toggleLoader={() => null}
+              setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+            />
+          </Route>
+        </Switch>
+      </Router>
     );
+
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
     expect(ele).toBeInTheDocument();
