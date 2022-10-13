@@ -25,7 +25,7 @@
   (in Studio view) or to PipelineDetailStore (in Detail view)
 */
 
-import { defaultAction, composeEnhancers } from 'services/helpers';
+import { defaultAction, composeEnhancers, arrayOfStringsMatchTargetPrefix } from 'services/helpers';
 import { createStore } from 'redux';
 import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
 import range from 'lodash/range';
@@ -43,7 +43,7 @@ import {
   SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
   ENGINE_OPTIONS,
 } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import { GLOBALS } from 'services/global-constants';
+import { GLOBALS, GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
 
 const ACTIONS = {
@@ -240,8 +240,14 @@ const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
     };
   });
   currentRuntimeArgs.pairs = macros.concat(currentRuntimeArgs.pairs);
-  // always concat an empty cell if not empty
-  if (currentRuntimeArgs.pairs.length && currentRuntimeArgs.pairs[0].key !== '') {
+  // concat an empty cell if all runtimeargs are generated and no user entered
+  const numOfGeneratedRuntimeArgs = currentRuntimeArgs.pairs.filter((pair) =>
+    arrayOfStringsMatchTargetPrefix(Object.values(GENERATED_RUNTIMEARGS), pair.key)
+  ).length;
+  if (
+    numOfGeneratedRuntimeArgs > 0 &&
+    currentRuntimeArgs.pairs.length === numOfGeneratedRuntimeArgs
+  ) {
     currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(getDefaultKeyValuePair());
   }
   return currentRuntimeArgs;
