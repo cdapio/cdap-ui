@@ -18,8 +18,8 @@ import { fireEvent, render } from '@testing-library/react';
 import React, { useContext } from 'react';
 import { createBrowserHistory as createHistory } from 'history';
 import { Route, Router, Switch } from 'react-router';
-import ParsingDrawer from '..';
 import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import ParsingDrawer from '..';
 import { Snackbar } from '@material-ui/core';
 
 const history = createHistory({
