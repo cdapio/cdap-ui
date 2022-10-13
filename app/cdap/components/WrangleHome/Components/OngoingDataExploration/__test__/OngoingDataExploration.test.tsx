@@ -18,29 +18,44 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import OngoingDataExploration from '../index';
 import MyDataPrepApi from 'api/dataprep';
-import rxjs from 'rxjs/operators';
-import { Route, Router, Switch } from 'react-router';
+import operators from 'rxjs/operators';
 import { createBrowserHistory as createHistory } from 'history';
+import { Route, Router, Switch } from 'react-router';
+import { screen } from '@testing-library/react';
 
 const history = createHistory({
   basename: '/',
 });
 
-describe('Testing Ongoing Data Exploration Component', () => {
-  jest.spyOn(rxjs, 'switchMap' as any).mockImplementation((callback: any) => {
+const testObj = {
+  connectionName: 'Upload',
+  workspaceName: 'Divami_Users_Emails.xlsx',
+  recipeSteps: 0,
+  dataQuality: 100,
+};
+
+test('renders Ongoing Data Exploration component', async () => {
+  // jest.mock('api/dataprep', () => {
+  //   return Promise.resolve([
+  //     { connectionName: 'yolo', workspaceName: 'Divami_Users_Emails.xlsx', recipeSteps: 0 },
+  //     { connectionName: 'Upload', workspaceName: 'Divami_Users_Emails.xlsx', recipeSteps: 0 },
+  //   ]);
+  // });
+
+  jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
     callback({
       message: 'Success',
-      count: 31,
+      count: 1,
       values: [
         {
-          workspaceName: 'sql_implementation_info',
-          workspaceId: '0cbc0f7b-c554-4bbb-ad3a-74fe147dfe3b',
+          workspaceName: 'sql_features',
+          workspaceId: '0f622401-5a2f-49c9-9d9e-ae8c707d4475',
           directives: [],
-          createdTimeMillis: 1663072234554,
-          updatedTimeMillis: 1663681848374,
+          createdTimeMillis: 1663766821131,
+          updatedTimeMillis: 1665582448801,
           sampleSpec: {
-            connectionName: 'postgres1',
-            path: '/information_schema/sql_implementation_info',
+            connectionName: 'TESTING',
+            path: '/information_schema/sql_features',
             relatedPlugins: [
               {
                 schema: {
@@ -48,63 +63,27 @@ describe('Testing Ongoing Data Exploration Component', () => {
                   name: 'outputSchema',
                   fields: [
                     {
-                      name: 'implementation_info_id',
+                      name: 'feature_id',
                       type: ['string', 'null'],
                     },
                     {
-                      name: 'implementation_info_name',
+                      name: 'feature_name',
                       type: ['string', 'null'],
                     },
                     {
-                      name: 'integer_value',
-                      type: ['int', 'null'],
-                    },
-                    {
-                      name: 'character_value',
+                      name: 'sub_feature_id',
                       type: ['string', 'null'],
                     },
                     {
-                      name: 'comments',
-                      type: ['string', 'null'],
-                    },
-                  ],
-                },
-                plugin: {
-                  name: 'Postgres',
-                  type: 'batchsink',
-                  properties: {
-                    useConnection: 'true',
-                    dbSchemaName: 'information_schema',
-                    connection: '${conn(postgres1)}',
-                    tableName: 'sql_implementation_info',
-                    referenceName: 'sql_implementation_info',
-                  },
-                  artifact: {
-                    name: 'postgresql-plugin',
-                    version: '1.9.0-SNAPSHOT',
-                    scope: 'SYSTEM',
-                  },
-                },
-              },
-              {
-                schema: {
-                  type: 'record',
-                  name: 'outputSchema',
-                  fields: [
-                    {
-                      name: 'implementation_info_id',
+                      name: 'sub_feature_name',
                       type: ['string', 'null'],
                     },
                     {
-                      name: 'implementation_info_name',
+                      name: 'is_supported',
                       type: ['string', 'null'],
                     },
                     {
-                      name: 'integer_value',
-                      type: ['int', 'null'],
-                    },
-                    {
-                      name: 'character_value',
+                      name: 'is_verified_by',
                       type: ['string', 'null'],
                     },
                     {
@@ -120,10 +99,62 @@ describe('Testing Ongoing Data Exploration Component', () => {
                     useConnection: 'true',
                     fetchSize: '1000',
                     numSplits: '1',
-                    importQuery: 'SELECT * FROM "information_schema"."sql_implementation_info"',
-                    connection: '${conn(postgres1)}',
+                    importQuery: 'SELECT * FROM "information_schema"."sql_features"',
+                    connection: '${conn(TESTING)}',
                     connectionTimeout: '100',
-                    referenceName: 'sql_implementation_info',
+                    referenceName: 'sql_features',
+                  },
+                  artifact: {
+                    name: 'postgresql-plugin',
+                    version: '1.9.0-SNAPSHOT',
+                    scope: 'SYSTEM',
+                  },
+                },
+              },
+              {
+                schema: {
+                  type: 'record',
+                  name: 'outputSchema',
+                  fields: [
+                    {
+                      name: 'feature_id',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'feature_name',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'sub_feature_id',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'sub_feature_name',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'is_supported',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'is_verified_by',
+                      type: ['string', 'null'],
+                    },
+                    {
+                      name: 'comments',
+                      type: ['string', 'null'],
+                    },
+                  ],
+                },
+                plugin: {
+                  name: 'Postgres',
+                  type: 'batchsink',
+                  properties: {
+                    useConnection: 'true',
+                    dbSchemaName: 'information_schema',
+                    connection: '${conn(TESTING)}',
+                    tableName: 'sql_features',
+                    referenceName: 'sql_features',
                   },
                   artifact: {
                     name: 'postgresql-plugin',
@@ -139,178 +170,140 @@ describe('Testing Ongoing Data Exploration Component', () => {
       ],
     });
   });
-
-  it('Should check if the component is rendered', () => {
-    jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
-      return {
-        pipe: () => {
-          return {
-            subscribe: (callback) => {
-              callback([
-                {
-                  headers: [
-                    'implementation_info_id',
-                    'implementation_info_name',
-                    'integer_value',
-                    'character_value',
-                    'comments',
-                  ],
-                  types: {
-                    character_value: 'String',
-                    comments: 'String',
-                    implementation_info_name: 'String',
-                    implementation_info_id: 'String',
-                    integer_value: 'Int',
-                  },
-                  summary: {
-                    statistics: {
-                      character_value: {
-                        general: {
-                          'non-null': 50,
-                          null: 50,
-                          empty: 25,
-                        },
-                        types: {
-                          Text: 16.666668,
-                        },
-                      },
-                      comments: {
-                        general: {
-                          'non-null': 50,
-                          null: 50,
-                        },
-                        types: {
-                          Text: 16.666668,
-                        },
-                      },
-                      implementation_info_name: {
-                        general: {
-                          'non-null': 100,
-                        },
-                        types: {
-                          Text: 100,
-                        },
-                      },
-                      implementation_info_id: {
-                        general: {
-                          'non-null': 100,
-                        },
-                        types: {
-                          Integer: 100,
-                          'Zip Code': 16.666668,
-                          ZipCode: 16.666668,
-                        },
-                      },
-                      integer_value: {
-                        general: {
-                          'non-null': 41.666664,
-                          null: 58.333332,
-                        },
-                      },
-                    },
-                    validation: {
-                      character_value: {
-                        valid: false,
-                      },
-                      comments: {
-                        valid: false,
-                      },
-                      implementation_info_name: {
-                        valid: false,
-                      },
-                      implementation_info_id: {
-                        valid: false,
-                      },
-                      integer_value: {
-                        valid: false,
-                      },
-                    },
-                  },
-                  message: 'Success',
-                  count: 12,
-                  values: [
-                    {
-                      implementation_info_name: 'CATALOG NAME',
-                      character_value: 'Y',
-                      implementation_info_id: '10003',
-                    },
-                    {
-                      implementation_info_name: 'COLLATING SEQUENCE',
-                      implementation_info_id: '10004',
-                    },
-                    {
-                      implementation_info_name: 'CURSOR COMMIT BEHAVIOR',
-                      implementation_info_id: '23',
-                      comments: 'close cursors and retain prepared statements',
-                      integer_value: '1',
-                    },
-                    {
-                      implementation_info_name: 'DATA SOURCE NAME',
-                      character_value: '',
-                      implementation_info_id: '2',
-                    },
-                    {
-                      implementation_info_name: 'DBMS NAME',
-                      character_value: 'PostgreSQL',
-                      implementation_info_id: '17',
-                    },
-                    {
-                      implementation_info_name: 'DEFAULT TRANSACTION ISOLATION',
-                      implementation_info_id: '26',
-                      comments: 'READ COMMITTED; user-settable',
-                      integer_value: '2',
-                    },
-                    {
-                      implementation_info_name: 'IDENTIFIER CASE',
-                      implementation_info_id: '28',
-                      comments: 'stored in mixed case - case sensitive',
-                      integer_value: '3',
-                    },
-                    {
-                      implementation_info_name: 'NULL COLLATION',
-                      implementation_info_id: '85',
-                      comments: 'nulls higher than non-nulls',
-                      integer_value: '0',
-                    },
-                    {
-                      implementation_info_name: 'SERVER NAME',
-                      character_value: '',
-                      implementation_info_id: '13',
-                    },
-                    {
-                      implementation_info_name: 'SPECIAL CHARACTERS',
-                      character_value: '',
-                      implementation_info_id: '94',
-                      comments: 'all non-ASCII characters allowed',
-                    },
-                    {
-                      implementation_info_name: 'TRANSACTION CAPABLE',
-                      implementation_info_id: '46',
-                      comments: 'both DML and DDL',
-                      integer_value: '2',
-                    },
-                    {
-                      implementation_info_name: 'DBMS VERSION',
-                      character_value: '12.07.0000',
-                      implementation_info_id: '18',
-                    },
-                  ],
+  jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
+    return {
+      pipe: () => {
+        return {
+          subscribe: (callback) => {
+            callback([
+              {
+                headers: [
+                  'feature_id',
+                  'feature_name',
+                  'sub_feature_id',
+                  'sub_feature_name',
+                  'is_supported',
+                  'is_verified_by',
+                  'comments',
+                ],
+                types: {
+                  feature_id: 'String',
+                  is_supported: 'String',
+                  comments: 'String',
+                  feature_name: 'String',
+                  sub_feature_id: 'String',
+                  sub_feature_name: 'String',
                 },
-              ]);
-            },
-          };
-        },
-      };
-    });
-    const container = render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <OngoingDataExploration />
-          </Route>
-        </Switch>
-      </Router>
-    );
-    expect(container).toBeDefined();
+                summary: {
+                  statistics: {
+                    feature_id: {
+                      general: {
+                        'non-null': 100,
+                      },
+                    },
+                    is_supported: {
+                      general: {
+                        'non-null': 100,
+                      },
+                      types: {
+                        Text: 100,
+                        Boolean: 100,
+                      },
+                    },
+                    comments: {
+                      general: {
+                        'non-null': 100,
+                        empty: 96.36871,
+                      },
+                      types: {
+                        Text: 2.6536312,
+                      },
+                    },
+                    feature_name: {
+                      general: {
+                        'non-null': 100,
+                      },
+                      types: {
+                        Text: 71.36871,
+                      },
+                    },
+                    sub_feature_id: {
+                      general: {
+                        'non-null': 100,
+                        empty: 73.463684,
+                      },
+                      types: {
+                        Integer: 26.536312,
+                      },
+                    },
+                    is_verified_by: {
+                      general: {
+                        null: 100,
+                      },
+                    },
+                    sub_feature_name: {
+                      general: {
+                        'non-null': 100,
+                        empty: 73.463684,
+                      },
+                      types: {
+                        Integer: 0.2793296,
+                        Text: 20.111732,
+                      },
+                    },
+                  },
+                  validation: {
+                    feature_id: {
+                      valid: false,
+                    },
+                    is_supported: {
+                      valid: false,
+                    },
+                    comments: {
+                      valid: false,
+                    },
+                    feature_name: {
+                      valid: false,
+                    },
+                    sub_feature_id: {
+                      valid: false,
+                    },
+                    is_verified_by: {
+                      valid: false,
+                    },
+                    sub_feature_name: {
+                      valid: false,
+                    },
+                  },
+                },
+                message: 'Success',
+                count: 716,
+                values: [
+                  {
+                    feature_id: 'X410',
+                    is_supported: 'YES',
+                    comments: '',
+                    feature_name: 'Alter column data type: XML type',
+                    sub_feature_id: '',
+                    sub_feature_name: '',
+                  },
+                ],
+              },
+            ]);
+          },
+        };
+      },
+    };
   });
+  render(
+    <Router history={history}>
+      <Switch>
+        <Route>
+          <OngoingDataExploration />
+        </Route>
+      </Switch>
+    </Router>
+  );
+  const ele = screen.getByTestId(/ongoing-data-explore-parent/i);
+  expect(ele).toBeInTheDocument();
 });

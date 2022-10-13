@@ -81,7 +81,12 @@ export default function TabLabelCanBrowse({
     <Box className={classes.labelContainerBox} data-testid="connections-tab-label-browse">
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
-        <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
+        <Typography
+          variant="body1"
+          data-testid="connections-tab-label-browse-body1"
+          className={classes.labelStyles}
+          ref={myLabelRef}
+        >
           {label}
         </Typography>
         {count && (

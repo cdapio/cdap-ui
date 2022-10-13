@@ -1,0 +1,90 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import { fireEvent, render, screen } from '@testing-library/react';
+import DrawerWidget from 'components/DrawerWidget';
+import { createBrowserHistory as createHistory } from 'history';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import RecipeStepsTableComponent from '..';
+import { mockRecipe } from '../mock/mock';
+
+const history = createHistory({
+  basename: '/',
+});
+
+describe('It should test the Recipe Component', () => {
+  it('renders Recipe Component', () => {
+    // const mockRecipe = [
+    //   {
+    //     actionType: 'Parse Column',
+    //     description: "'Body' with delimiter 'comma' and set 'first row as header'",
+    //   },
+    //   {
+    //     actionType: 'a Column',
+    //     description: "'any'",
+    //   },
+    //   {
+    //     actionType: 'b Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'c Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'd Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'e Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'f Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'g Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'h Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'i Column',
+    //     description: "'Body'",
+    //   },
+    //   {
+    //     actionType: 'j',
+    //     description: "'Body'",
+    //   },
+    // ];
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <RecipeStepsTableComponent recipeSteps={mockRecipe} />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(container).toBeDefined;
+    const ele = screen.getByTestId(/recipe-steps-table-component-image-click10/i);
+    fireEvent.click(ele);
+  });
+});
