@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import DrawerWidget from 'components/DrawerWidget';
 import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
@@ -36,8 +36,14 @@ describe('It should test the Recipe Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined;
-    // const ele = screen.getByTestId(/recipe-steps-table-component-image-click10/i);
-    // fireEvent.click(ele);
+    const defaultProps = {
+      headingText: 'features.WranglerNewAddTransformation.addTransformation',
+      openDrawer: true,
+    };
+    const drawerWidget = render(
+      <DrawerWidget {...defaultProps} closeClickHandler={jest.fn()} showBackIcon={true} />
+    );
+    const childAbc = drawerWidget.findAllByAltText('Back icon 1');
+    fireEvent.click(childAbc as any);
   });
 });
