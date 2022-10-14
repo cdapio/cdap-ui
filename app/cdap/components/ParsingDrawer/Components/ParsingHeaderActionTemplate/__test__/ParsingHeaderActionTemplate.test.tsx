@@ -37,23 +37,5 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
       </Router>
     );
     expect(container).toBeDefined();
-    const inputELe = container.getByTestId('fileinput');
-    const abc = jest.fn();
-    const reader = new FileReader();
-    const blob = new Blob();
-    reader.readAsText(blob, 'UTF-8');
-    jest.spyOn(global, 'FileReader').mockImplementationOnce(abc);
-    const file = {
-      size: 1000,
-      type: 'audio/mp3',
-      name: 'my-file.mp3',
-    };
-    const event = {
-      target: {
-        files: [file],
-      },
-    };
-    // console.log(inputELe, 'changesss');
-    fireEvent.change(inputELe, event);
   });
 });
