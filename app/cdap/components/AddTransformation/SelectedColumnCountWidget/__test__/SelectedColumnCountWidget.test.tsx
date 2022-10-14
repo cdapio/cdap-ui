@@ -14,31 +14,27 @@
  * the License.
  */
 
-import { fireEvent, render ,screen} from "@testing-library/react";
-import { createBrowserHistory as createHistory } from "history";
+import { render } from "@testing-library/react";
 import React from "react";
-import { Route, Router, Switch } from "react-router";
-import AddTransformation from "..";
-
-const history = createHistory({
-  basename: "/",
-});
+import SelectedColumnCountWidget from "..";
 
 describe("It should test the SelectColumnsList Component", () => {
-  it("should render the SelectColumnsList Component and triggers the button and following event", () => {
+  it("should render the SelectColumnsList Component with selectedColumnsCount>10", () => {
     const container = render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <AddTransformation />
-          </Route>
-        </Switch>
-      </Router>
+      <SelectedColumnCountWidget selectedColumnsCount={20} />
     );
     expect(container).toBeDefined;
-    const ele = screen.getByTestId(/add-transformation-button/i);
-    fireEvent.click(ele);
-    const ele1 = screen.getByTestId(/select-column-widget-button/i);
-    fireEvent.click(ele1);
+  });
+  it("should render the SelectColumnsList Component with selectedColumnsCount<10", () => {
+    const container = render(
+      <SelectedColumnCountWidget selectedColumnsCount={1} />
+    );
+    expect(container).toBeDefined;
+  });
+  it("should render the SelectColumnsList Component with no selectedColumnsCount", () => {
+    const container = render(
+      <SelectedColumnCountWidget  />
+    );
+    expect(container).toBeDefined;
   });
 });
