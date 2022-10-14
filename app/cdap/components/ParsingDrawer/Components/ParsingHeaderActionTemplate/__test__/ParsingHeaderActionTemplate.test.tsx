@@ -37,10 +37,5 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
       </Router>
     );
     expect(container).toBeDefined();
-<<<<<<< HEAD
-    const inputELe = container.getByTestId('fileinput');
-  
-=======
->>>>>>> 576bb55acf15d0b286b716f66de3f725df29bde1
   });
 });
