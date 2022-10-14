@@ -27,8 +27,6 @@
     "build-server": "webpack --config=webpack.config.server.js",
     "jest": "jest --coverage",
     "jest-w": "jest --watch",
-
-    "test:local": "jest",
     "karma-test": "node ./node_modules/karma/bin/karma start test/karma-conf.js",
     "karma-test-single-run": "node ./node_modules/karma/bin/karma start test/karma-conf.js --no-auto-watch --single-run",
     "storybook": "NODE_ENV=development start-storybook -p 6006",
@@ -38,7 +36,7 @@
     "cypress": "cypress run",
     "cypress-open": "node -e \"console.log('**DISABLE BEYOND CORP EXTENSION OR THIS WONT WORK**')\" && cypress open",
     "test:integration": "jest --testPathPattern=selenium/integration",
-    "test:unit": "jest",
+    "test:unit": "jest --testPathPattern=app/cdap",
     "test": "run-p jest cypress",
     "ncc": "rm -rf server_dist && ncc build server.js -o server_dist",
     "build-graphql-fragment": "node ./graphql/schemaQuery.js",
