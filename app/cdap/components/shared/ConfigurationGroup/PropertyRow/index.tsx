@@ -72,7 +72,6 @@ interface IPropertyRowProps extends WithStyles<typeof styles> {
 const EditorTypeWidgets = [
   'javascript-editor',
   'python-editor',
-  'rules-engine-editor',
   'scala-editor',
   'sql-editor',
   'textarea',

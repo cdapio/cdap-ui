@@ -83,7 +83,7 @@ angular.module(PKG.name + '.feature.hydrator')
         }
       })
         .state('hydrator.create', {
-          url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId&isEdit',
+          url: '/studio?artifactType&draftId&workspaceId&configParams&resourceCenterId&cloneId&isEdit',
           onEnter: function() {
             document.title = `${productName} | Studio`;
           },
@@ -186,15 +186,6 @@ angular.module(PKG.name + '.feature.hydrator')
                   defer.resolve({ valid: false });
                 }
                 $window.localStorage.removeItem($stateParams.workspaceId);
-              } else if ($stateParams.rulesengineid) {
-                try {
-                  let configParams = $window.localStorage.getItem($stateParams.rulesengineid);
-                  let config = JSON.parse(configParams);
-                  defer.resolve({ valid: true, config });
-                } catch (e) {
-                  defer.resolve({ valid: false });
-                }
-                $window.localStorage.removeItem($stateParams.rulesengineid);
               } else if ($stateParams.cloneId) {
                 try {
                   let configParams = $window.localStorage.getItem($stateParams.cloneId);

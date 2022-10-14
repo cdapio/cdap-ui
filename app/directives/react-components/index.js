@@ -34,9 +34,6 @@ angular
   .directive('pipelineSummary', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineSummary);
   })
-  .directive('rulesEngineHome', function(reactDirective) {
-    return reactDirective(window.CaskCommon.RulesEngineHome);
-  })
   .directive('pipelineNodeMetricsGraph', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineNodeMetricsGraph);
   })

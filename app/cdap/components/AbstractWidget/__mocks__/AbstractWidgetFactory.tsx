@@ -77,9 +77,6 @@ export const WIDGET_FACTORY = {
   'sql-conditions': 'SqlConditionsWidget',
   'sql-select-fields': 'SqlSelectorWidget',
 
-  // Rules Engine
-  'rules-engine-editor': 'RulesEngineEditor',
-
   // Wrangler
   'wrangler-directives': 'WranglerEditor',
 };

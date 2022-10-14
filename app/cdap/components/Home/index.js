@@ -40,10 +40,6 @@ const DataPrepHome = Loadable({
   loader: () => import(/* webpackChunkName: "DataPrepHome" */ 'components/DataPrepHome'),
   loading: LoadingSVGCentered,
 });
-const RulesEngineHome = Loadable({
-  loader: () => import(/* webpackChunkName: "RulesEngineHome" */ 'components/RulesEngineHome'),
-  loading: LoadingSVGCentered,
-});
 const DatasetDetailedView = Loadable({
   loader: () =>
     import(/* webpackChunkName: "DatasetDetailedView" */ 'components/DatasetDetailedView'),
@@ -149,7 +145,6 @@ export default class Home extends Component {
             }}
           />
           <Route path="/ns/:namespace/datasets/:datasetId" component={DatasetDetailedView} />
-          <Route exact path="/ns/:namespace/rulesengine" component={RulesEngineHome} />
           <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
           <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
           <Route path="/ns/:namespace/connections" component={Connections} />

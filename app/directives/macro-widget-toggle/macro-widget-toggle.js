@@ -30,7 +30,6 @@ function MacroWidgetToggleController(myHelpers, $timeout, $scope, HydratorPlusPl
   vm.otherAceEditorWidgets = [
     'wrangler-directives',
     'textarea',
-    'rules-engine-editor',
   ];
 
   vm.containsMacro = false;
