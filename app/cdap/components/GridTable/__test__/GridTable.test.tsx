@@ -16,7 +16,7 @@
 
 import React from 'react';
 import GridTable from '..';
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Route, Router, Switch } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
@@ -70,6 +70,8 @@ describe('Testing Grid Table Component', () => {
         },
       };
     });
+    const realUseState = React.useState
+    React.useState = jest.fn().mockReturnValue([realUseState, {}])
     const container = render(
       <Router history={history}>
         <Switch>
@@ -79,8 +81,15 @@ describe('Testing Grid Table Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined();
     const gridTable = container.getByTestId('grid-table');
     expect(container.getByTestId('grid-table')).toBeInTheDocument();
+    const ele = screen.getByTestId(/footer-panel-box-click/i);
+    fireEvent.click(ele);
+    const ele2 = screen.getByTestId(/menu-item-component-8/i);
+    fireEvent.click(ele2);
+    expect(container).toBeDefined();
+   
   });
 });
+
+

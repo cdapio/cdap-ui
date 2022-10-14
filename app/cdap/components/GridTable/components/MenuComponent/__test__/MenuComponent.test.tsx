@@ -14,30 +14,36 @@
  *  the License.
  */
 
-import React from 'react';
-import { Switch, Router, Route } from 'react-router';
-import { createBrowserHistory as createHistory } from 'history';
-import { fireEvent, getByTestId, render } from '@testing-library/react';
-import ParsingHeaderActionTemplate from '..';
-import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
+import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
+import { Route, Router, Switch } from "react-router";
+import MenuComponent from "..";
+import { createBrowserHistory as createHistory } from "history";
 
 const history = createHistory({
-  basename: '/',
+  basename: "/",
 });
 
-describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
-  it('Should test whether ParsingHeaderActionTemplate Component is rendered or not', () => {
+describe("To Test Grid Menu Component", () => {
+  it("Should check if the component is rendered", () => {
     const container = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingHeaderActionTemplate />
+            <MenuComponent
+              anchorEl={false}
+              menuOptions={['test1']}
+              setAnchorEl={() => jest.fn()}
+              submitOption={() => jest.fn()}
+            />
           </Route>
         </Switch>
       </Router>
     );
     expect(container).toBeDefined();
-    const inputELe = container.getByTestId('fileinput');
-  
+    const ele = screen.getAllByTestId(/menu-component-menu/i);
+    fireEvent.click(ele[0]);
   });
+
+  
 });
