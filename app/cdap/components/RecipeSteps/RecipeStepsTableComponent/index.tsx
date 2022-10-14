@@ -54,7 +54,7 @@ export default function(props) {
                 {index + 1 > 10 ? index + 1 : `0${index + 1}`}
               </TableCell>
               <TableCell classes={{ body: classes.recipeStepsTableRowStyles }}>
-                <span>{eachStep}</span>
+                <span data-testid={'recipe-steps-span' + index}>{eachStep}</span>
                 {/* <span className={classes.recipeStepsActionTypeStyles}>{eachStep.actionType}</span>
                 &nbsp;
                 {eachStep.description} */}

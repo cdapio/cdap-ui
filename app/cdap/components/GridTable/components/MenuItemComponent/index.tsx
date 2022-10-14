@@ -33,7 +33,7 @@ const MenuItemComponent: React.FC<IMenuItemComponentProps> = ({ item, index, onM
     );
   } else {
     return (
-      <MenuItem key={index} title={item.key} onClick={(e) => onMenuClick(e, item)}>
+      <MenuItem key={index} title={item.key} onClick={(e) => onMenuClick(e, item)} data-testid={'menu-component-menu-item' + item.key}>
         <span>{item.label} </span>
         {item.options?.length && menuArrowIcon}
       </MenuItem>

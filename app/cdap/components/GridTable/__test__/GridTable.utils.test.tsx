@@ -16,6 +16,7 @@
 
 import { checkFrequentlyOccuredValues, convertNonNullPercent } from '../utils';
 import { mock, mockUtilResult } from '../mock/mockDataForGrid';
+import { getDirective } from '../directives';
 
 describe('Test util Function checkFrequentlyOccuredValues', () => {
   it('Should return expected output', () => {
@@ -34,5 +35,11 @@ describe('Test util Function checkFrequentlyOccuredValues', () => {
       },
       undefined
     );
+  });
+
+  it('should trigget getDirectives', () => {
+    const x = getDirective(1,1);
+    const y = getDirective('delete',1);
+    const z = getDirective('keep',1);
   });
 });
