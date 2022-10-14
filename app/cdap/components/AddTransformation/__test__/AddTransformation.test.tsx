@@ -14,31 +14,18 @@
  * the License.
  */
 
-<<<<<<< Updated upstream
 import { fireEvent, render ,screen} from "@testing-library/react";
 import { createBrowserHistory as createHistory } from "history";
 import React from "react";
 import { Route, Router, Switch } from "react-router";
 import AddTransformation from "..";
-=======
-import { fireEvent, render, screen } from '@testing-library/react';
-import { createBrowserHistory as createHistory } from 'history';
-import React from 'react';
-import { Route, Router, Switch } from 'react-router';
-import AddTransformation from '..';
->>>>>>> Stashed changes
 
 const history = createHistory({
   basename: "/",
 });
 
-<<<<<<< Updated upstream
 describe("It should test the SelectColumnsList Component", () => {
   it("should render the SelectColumnsList Component and triggers the button and following event", () => {
-=======
-describe('It should test the AddTransformation Component', () => {
-  it('renders AddTransformation Component', () => {
->>>>>>> Stashed changes
     const container = render(
       <Router history={history}>
         <Switch>
@@ -48,19 +35,10 @@ describe('It should test the AddTransformation Component', () => {
         </Switch>
       </Router>
     );
-<<<<<<< Updated upstream
     expect(container).toBeDefined;
     const ele = screen.getByTestId(/add-transformation-button/i);
-=======
-    
-    expect(container).toBeDefined;
-    const ele = container.getByTestId(/add-transformation-button/i);
->>>>>>> Stashed changes
     fireEvent.click(ele);
     const ele1 = screen.getByTestId(/select-column-widget-button/i);
     fireEvent.click(ele1);
   });
-
-  
-
 });

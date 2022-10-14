@@ -35,11 +35,7 @@ export default function(props) {
         color="primary"
         className={classes.selectButtonStyles}
         onClick={props.handleSelectColumn}
-<<<<<<< Updated upstream
         data-testid='select-column-widget-button'
-=======
-        data-testid = "select-column-widget-button"
->>>>>>> Stashed changes
       >
         {T.translate('features.WranglerNewAddTransformation.selectColumns')}
       </Button>
