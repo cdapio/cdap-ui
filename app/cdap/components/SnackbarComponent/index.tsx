@@ -37,7 +37,7 @@ const PositionedSnackbar = ({
     }, 5000);
   }, []);
 
-  const handleClick = () => () => {
+  const handleClick = () => {
     setIsOpen(true);
   };
 
