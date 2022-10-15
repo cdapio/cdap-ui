@@ -37,6 +37,7 @@ export default function OngoingDataExploration({ cardCount, fromAddress }: ICard
   const getOngoingData = () => {
     // Getting the workspace name, path ,workspaceId and name from MyDataPrepApi.getWorkspaceList API and
     //  using these in params and requestBody to get Data quality from MyDataPrepApi.execute API
+
     MyDataPrepApi.getWorkspaceList({
       context: 'default',
     })

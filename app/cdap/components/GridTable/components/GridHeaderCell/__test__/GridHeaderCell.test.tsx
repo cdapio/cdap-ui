@@ -14,15 +14,46 @@
  *  the License.
  */
 
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import GridHeaderCell from '..';
-import { screen } from '@testing-library/dom';
 
 describe('To Test Grid Header Cell Component', () => {
-  const arr = ['PostgrSQL', 'SQL'];
-  render(<GridHeaderCell label={'abc'} types={arr} />);
-  it('Should check if the label is displayed as expected', () => {
-    screen.getByTestId(`grid-header-cell-abc`);
+  const str = 'PostGres';
+  render(
+    <GridHeaderCell
+      label={'abc'}
+      type={str}
+      columnSelected={''}
+      setColumnSelected={() => jest.fn()}
+    />
+  );
+
+  it('label in TypographyComponent is Unknown', () => {
+    const str1 = 'SQL';
+    render(
+      <GridHeaderCell
+        label={'abc'}
+        type={str1}
+        columnSelected={''}
+        setColumnSelected={() => jest.fn()}
+      />
+    );
+  });
+
+  it('datatype1 should return null when types.length is 0 ', () => {
+    const str2 = 'mongoDb';
+    render(
+      <GridHeaderCell
+        label={'abc'}
+        type={str2}
+        columnSelected={'abc'}
+        setColumnSelected={() => console.log('triggered')}
+      />
+    );
+
+    const ele = screen.getAllByTestId(/grid-header-cell-table-cellabc/i);
+
+    fireEvent.click(ele[0]);
   });
 });

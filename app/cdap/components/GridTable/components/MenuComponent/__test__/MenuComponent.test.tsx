@@ -14,50 +14,34 @@
  *  the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import BreadCrumb from '..';
+import MenuComponent from '..';
 import { createBrowserHistory as createHistory } from 'history';
 
 const history = createHistory({
   basename: '/',
 });
 
-describe('Test Breadcrumb Component', () => {
-  const locationMock = jest.mock('react-router-dom', () => ({
-    useLocation: () => ({
-      pathname: 'localhost:3000/example/path',
-      state: {
-        from: 'Workspaces',
-      },
-    }),
-  }));
-
-  render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <BreadCrumb datasetName="abc" location={locationMock} />
-        </Route>
-      </Switch>
-    </Router>
-  );
-
-  it('Should have the Home text in the Breadcrumb', () => {
-    expect(screen.getByTestId('breadcrumb-home-text')).toHaveTextContent('Home');
-  });
-
-  it('match state should be equal to location.state.from', () => {
-    const location = { state: { from: 'Workspaces' } };
-    render(
+describe('To Test Grid Menu Component', () => {
+  it('Should check if the component is rendered', () => {
+    const container = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <BreadCrumb datasetName="abc" location={location} />
+            <MenuComponent
+              anchorEl={false}
+              menuOptions={['test1']}
+              setAnchorEl={() => jest.fn()}
+              submitOption={() => jest.fn()}
+            />
           </Route>
         </Switch>
       </Router>
     );
+    expect(container).toBeDefined();
+    const ele = screen.getAllByTestId(/menu-component-menu/i);
+    fireEvent.click(ele[0]);
   });
 });
