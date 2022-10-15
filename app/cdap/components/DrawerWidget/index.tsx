@@ -42,7 +42,9 @@ export default function(props) {
                 onClick={closeClickHandler}
                 className={classes.headerBackIconStyles}
                 src="/cdap_assets/img/back-icon.svg"
-                alt="Back icon"
+                alt="Back icon 1"
+                data-testid="abc"
+                role="button"
               />
             )}
             <DrawerWidgetHeading headingText={headingText} />

@@ -43,6 +43,7 @@ export default function(props) {
   return (
     <Box className={classes.pointerStyles}>
       <input
+        data-testId="fileinput"
         id="file"
         type="file"
         accept=".json"

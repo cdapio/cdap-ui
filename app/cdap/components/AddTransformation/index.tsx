@@ -203,6 +203,7 @@ export default function(props) {
             classes={{ containedPrimary: classes.buttonStyles }}
             className={classes.applyStepButtonStyles}
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleApply(e)}
+            data-testid="add-transformation-button"
           >
             {T.translate('features.WranglerNewAddTransformation.applyStep')}
           </Button>

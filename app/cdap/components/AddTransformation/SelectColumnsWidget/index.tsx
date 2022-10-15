@@ -28,7 +28,9 @@ export default function(props) {
       <div className={classes.functionHeadingTextStyles}>
         {T.translate('features.WranglerNewAddTransformation.selectColumn')}
       </div>
-      <div className={classes.quickSelectTextStyles}>{QUICK_SELECT_INFO}</div>
+      <div className={classes.quickSelectTextStyles}>
+        {T.translate('features.WranglerNewAddTransformation.quickSelect')}
+      </div>
       {selectedColumns.length ? (
         selectedColumns.map((item, index) => {
           return (
@@ -44,7 +46,7 @@ export default function(props) {
           className={classes.selectButtonStyles}
           onClick={props.handleSelectColumn}
         >
-          {SELECT_COLUMNS}
+          {T.translate('features.WranglerNewAddTransformation.selectColumns')}
         </Button>
       )}
     </section>
