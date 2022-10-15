@@ -86,8 +86,12 @@ const CustomConfig = ({
 
   const StudioViewCustomConfigLabel = () => {
     return (
-      <span>
-        <a className="add-custom-config-label" onClick={toggleCustomConfig}>
+      <span className="add-custom-config-headers">
+        <a
+          className="add-custom-config-label"
+          onClick={toggleCustomConfig}
+          data-cy="engine-config-tab-custom"
+        >
           <IconSVG name={showCustomConfig ? 'icon-caret-down' : 'icon-caret-right'} />
           {T.translate(`${PREFIX}.showCustomConfig`)}
         </a>
@@ -101,8 +105,9 @@ const CustomConfig = ({
         {showCustomConfig ? (
           <span>
             <span className="float-right num-rows">
-              {`${numberOfCustomConfigFilled}`}
-              {T.translate(`${PREFIX}.customConfigCount`, { context: numberOfCustomConfigFilled })}
+              {T.translate(`${PREFIX}.customConfigCount`, {
+                context: numberOfCustomConfigFilled,
+              })}
             </span>
             <hr />
           </span>

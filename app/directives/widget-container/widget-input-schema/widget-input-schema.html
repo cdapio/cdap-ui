@@ -82,7 +82,7 @@
     <!-- End of section that shows single input schema table-->
   </div>
 
-  <div ng-if="!MyInputSchemaCtrl.multipleInputs && MyInputSchemaCtrl.inputSchemas[0].isMacro" data-cy="macro-input-schema">
+  <div ng-if="!MyInputSchemaCtrl.multipleInputs && MyInputSchemaCtrl.inputSchemas[0].isMacro" data-cy="macro-input-schema" data-testid="macro-input-schema">
     {{MyInputSchemaCtrl.inputSchemas[0].schema}}
   </div>
 

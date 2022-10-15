@@ -151,7 +151,12 @@ export function ConnectionConfigForm({
       />
       <div className={classes.connectionTestMessage}>
         {testResults.succeeded && (
-          <Alert severity="success" className={classes.alert} data-cy="connection-test-success">
+          <Alert
+            severity="success"
+            className={classes.alert}
+            data-cy="connection-test-success"
+            data-testid="connection-test-success"
+          >
             Successfully connected.
           </Alert>
         )}
@@ -163,6 +168,7 @@ export function ConnectionConfigForm({
               key={i}
               className={classes.alert}
               data-cy="connection-test-failure"
+              data-testid="connection-test-failure"
             >
               {message.message} {message.correctiveAction}
             </Alert>
@@ -175,6 +181,7 @@ export function ConnectionConfigForm({
             onClick={() => onConnectionTest({ properties: values })}
             disabled={testResults.inProgress}
             data-cy="connection-test-button"
+            data-testid="connection-test-button"
           >
             Test Connection
           </PrimaryOutlinedLoadingButton>
@@ -183,6 +190,7 @@ export function ConnectionConfigForm({
             color="primary"
             onClick={onCreate}
             data-cy="connection-submit-button"
+            data-testid="connection-submit-button"
           >
             {mode === ConnectionConfigurationMode.EDIT ? 'Save' : 'Create'}
           </PrimaryContainedButton>
