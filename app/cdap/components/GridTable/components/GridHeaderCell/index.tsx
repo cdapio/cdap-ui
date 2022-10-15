@@ -35,7 +35,11 @@ export default function GridHeaderCell({
   const isColumnHighlited = label === columnSelected;
 
   return (
-    <TableCell className={classes.tableHeaderCell} onClick={() => setColumnSelected(label)}>
+    <TableCell
+      className={classes.tableHeaderCell}
+      onClick={() => setColumnSelected(label)}
+      data-testid={'grid-header-cell-table-cell' + label}
+    >
       <div
         className={classes.headerHighlitedIcon}
         style={isColumnHighlited ? { display: 'inline' } : { display: 'none' }}

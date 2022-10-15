@@ -15,23 +15,22 @@
  */
 
 import React from 'react';
-import { Switch, Router, Route } from 'react-router';
 import { createBrowserHistory as createHistory } from 'history';
-import { fireEvent, getByTestId, render } from '@testing-library/react';
-import ParsingHeaderActionTemplate from '..';
-import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
+import { Route, Router, Switch } from 'react-router';
+import FooterPanel from '..';
+import { render } from '@testing-library/react';
 
 const history = createHistory({
   basename: '/',
 });
 
-describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
-  it('Should test whether ParsingHeaderActionTemplate Component is rendered or not', () => {
+describe('It Should test the Footer Panel Component', () => {
+  it('Should render the Footer Panel Component', () => {
     const container = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingHeaderActionTemplate />
+            <FooterPanel />
           </Route>
         </Switch>
       </Router>
