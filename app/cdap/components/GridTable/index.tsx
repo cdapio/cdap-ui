@@ -50,8 +50,8 @@ export default function GridTable() {
     },
   ]);
 
-  const getWorkSpaceData = (params: IParams, workspaceId: string) => {
-    const gridParams = {};
+  const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
+    let gridParams = {};
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -60,7 +60,7 @@ export default function GridTable() {
         loading: true,
       },
     });
-    MyDataPrepApi.getWorkspace(params)
+    MyDataPrepApi.getWorkspace(payload)
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
@@ -84,14 +84,14 @@ export default function GridTable() {
           const workspaceInfo = {
             properties: insights,
           };
-          const gridParams = {
+          gridParams = {
             directives,
             workspaceId,
             workspaceUri,
             workspaceInfo,
             insights,
           };
-          return MyDataPrepApi.execute(params, requestBody);
+          return MyDataPrepApi.execute(payload, requestBody);
         })
       )
       .subscribe((response) => {
@@ -140,7 +140,7 @@ export default function GridTable() {
     if (lengthOfData) {
       nullValueCount = nonNullValue.null ? (nonNullValue.null / 100) * lengthOfData : 0;
       emptyCount = nonNullValue.empty ? (nonNullValue.empty / 100) * lengthOfData : 0;
-      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0));
+      count = parseInt(nullValueCount.toFixed(0) + emptyCount.toFixed(0), 2);
     }
     return count;
   };
@@ -158,7 +158,7 @@ export default function GridTable() {
     if (Array.isArray(valueOfKey) && valueOfKey.length) {
       valueOfKey.map((item, index) => {
         valueOfKey.map((value, valueIndex) => {
-          if (item == value) {
+          if (item === value) {
             mostFrequentItemCount++;
           }
           if (mostFrequentItem < mostFrequentItemCount) {
@@ -167,7 +167,7 @@ export default function GridTable() {
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue == '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -186,11 +186,11 @@ export default function GridTable() {
         if (vKey !== 'types') {
           arrayForMissingValue.push({
             label:
-              convertNonNullPercent(vValue) == 0
+              convertNonNullPercent(vValue) === 0
                 ? checkFrequentlyOccuredValues(key).name
                 : 'Missing/Null',
             count:
-              convertNonNullPercent(vValue) == 0
+              convertNonNullPercent(vValue) === 0
                 ? checkFrequentlyOccuredValues(key).count
                 : convertNonNullPercent(vValue),
           });
@@ -249,7 +249,7 @@ export default function GridTable() {
               headersNamesList.length &&
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
-                  if (item.name == each.name) {
+                  if (item.name === each.name) {
                     return <GridKPICell metricData={item} key={item.name} />;
                   }
                 });

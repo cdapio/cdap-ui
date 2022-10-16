@@ -40,12 +40,12 @@ export default function TabLabelCanBrowse({
 
   useEffect(() => {
     /**
-    In case, the size of the lable or file name exceeds the maximum width 
-    of it's wrapping container we are showing ellipses using styles and
-    we are also showing the custom tooltip using the following logic.
-    So the following statement checks whether the size of the text is greater than the maximum
-    width of the wrapping element or not. if the size is greater then it sets true for custom tooltip
-    otherwise it sets false.
+     * In case, the size of the lable or file name exceeds the maximum width
+     * of it's wrapping container we are showing ellipses using styles and
+     * we are also showing the custom tooltip using the following logic.
+     * So the following statement checks whether the size of the text is greater than the maximum
+     * width of the wrapping element or not. if the size is greater then it sets true for custom tooltip
+     * otherwise it sets false.
      */
     setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);

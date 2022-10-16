@@ -42,9 +42,9 @@ export default function WrangleCard() {
   // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
   // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
   const getConnectorTypesNames = async () => {
-    let fetchedConnectorTypes = await fetchConnectors();
+    let fetchedConnectorTypesFromAPI = await fetchConnectors();
 
-    fetchedConnectorTypes = fetchedConnectorTypes.map((connectorType) => {
+    fetchedConnectorTypesFromAPI = fetchedConnectorTypesFromAPI.map((connectorType) => {
       if (connectorType.name === 'S3') {
         return {
           ...connectorType,
@@ -118,7 +118,7 @@ export default function WrangleCard() {
       }
     });
 
-    fetchedConnectorTypes.unshift({
+    fetchedConnectorTypesFromAPI.unshift({
       name: 'Imported Datasets',
       type: 'default',
       category: 'default',
@@ -133,12 +133,14 @@ export default function WrangleCard() {
     });
 
     setConnectorTypes({
-      fetchedConnectorTypes,
+      fetchedConnectorTypes: fetchedConnectorTypesFromAPI,
     });
   };
+
   useEffect(() => {
     getConnectorTypesNames();
   }, []);
+
   const classes = useStyles();
   const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
   return (

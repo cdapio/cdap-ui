@@ -53,27 +53,27 @@ export default function TabLabelCanSample({
     setRefValue(myLabelRef?.current?.offsetWidth < myLabelRef?.current?.scrollWidth);
   }, []);
 
-  const onExplore = (entity) => {
-    const { canBrowse, canSample } = entity;
+  const onExplore = (currentEntity) => {
+    const { canBrowse, canSample } = currentEntity;
     if (!canBrowse && canSample) {
-      onCreateWorkspace(entity);
+      onCreateWorkspace(currentEntity);
     } else {
       setIsErrorOnNoWorkSpace(true);
     }
   };
 
-  const onCreateWorkspace = async (entity, parseConfig = {}) => {
+  const onCreateWorkspace = async (currentEntity, parseConfig = {}) => {
     try {
-      createWorkspaceInternal(entity, parseConfig);
+      createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
       setIsErrorOnNoWorkSpace(true);
     }
   };
 
-  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
+  const createWorkspaceInternal = async (currentEntity, parseConfig = {}) => {
     toggleLoader(true);
     createWorkspace({
-      entity,
+      entity: currentEntity,
       connection: currentConnection,
       properties: parseConfig,
     })

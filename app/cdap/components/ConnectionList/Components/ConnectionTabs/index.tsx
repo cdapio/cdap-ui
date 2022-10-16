@@ -92,7 +92,9 @@ export default function ConnectionsTabs({
                 role="button"
                 onClick={() => {
                   if (index > 1) {
-                    connectorType.canBrowse ? handleChange(connectorType, index) : null;
+                    if (connectorType.canBrowse) {
+                      handleChange(connectorType, index);
+                    }
                   } else {
                     handleChange(connectorType, index);
                   }

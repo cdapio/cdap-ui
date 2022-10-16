@@ -81,11 +81,11 @@ export default function ConnectionList() {
       return [conn.name];
     });
     // Mapping connector types and corresponding connections
-    connectorTypes = connectorTypes.map((connectorType) => {
-      const connections = categorizedConnections.get(connectorType.name) || [];
+    connectorTypes = connectorTypes.map((eachConnectorType) => {
+      const connections = categorizedConnections.get(eachConnectorType.name) || [];
       allConnectionsTotalLength = allConnectionsTotalLength + connections.length;
       return {
-        ...connectorType,
+        ...eachConnectorType,
         count: connections.length,
         icon: <GCSIcon />,
       };
@@ -135,10 +135,10 @@ export default function ConnectionList() {
     toggleLoader(false);
   };
 
-  const fetchEntities = async (connectionId, url = pathFromUrl) => {
+  const fetchEntities = async (connectionName, url = pathFromUrl) => {
     const pathDesired = url ? url : pathFromUrl;
     const entitiesPromise = exploreConnection({
-      connectionid: connectionId,
+      connectionid: connectionName,
       path: pathDesired,
     });
     return entitiesPromise.then((values) => {
