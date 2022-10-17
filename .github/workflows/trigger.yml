@@ -18,9 +18,9 @@ name: Trigger build
 
 on:
   push:
-    branches: [ develop, release/**, cdapio:feature/wrangler-2022 ]
+    branches: [ develop, release/**, 'cdapio:feature/wrangler-2022' ]
   pull_request:
-    branches: [ develop, release/**, cdapio:feature/wrangler-2022 ]
+    branches: [ develop, release/**, 'cdapio:feature/wrangler-2022' ]
     types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
