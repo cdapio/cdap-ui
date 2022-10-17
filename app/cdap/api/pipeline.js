@@ -57,6 +57,7 @@ export const MyPipelineApi = {
   fetchWidgetJson: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
   fetchPlugins: apiCreator(dataSrc, 'GET', 'REQUEST', pluginsFetchPath),
   get: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
+  getAppVersion: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions/:version`),
   pollStatistics: apiCreator(dataSrc, 'GET', 'REQUEST', statsPath),
   getBatchRuns: apiCreator(dataSrc, 'POST', 'REQUEST', batchRunsPath),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', basepath),
@@ -73,4 +74,6 @@ export const MyPipelineApi = {
     'REQUEST',
     `${pipelineV1AppContextPath}/drafts/:draftId`
   ),
+
+  getAppVersions: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions`),
 };

@@ -248,10 +248,15 @@ export default class PipelineScheduler extends Component {
   }
 
   renderActionButtons() {
+    const buttonDisabled = !this.props.isLatestVersion;
     if (this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULED']) {
       return (
         <div className="schedule-navigation">
-          <button className="btn btn-primary schedule-btn" onClick={this.suspendSchedule}>
+          <button
+            className="btn btn-primary schedule-btn"
+            onClick={this.suspendSchedule}
+            disabled={buttonDisabled}
+          >
             {T.translate(`${PREFIX}.suspendSchedule`)}
           </button>
         </div>
@@ -278,7 +283,7 @@ export default class PipelineScheduler extends Component {
           data-cy="save-start-schedule-btn"
           className="btn btn-primary start-schedule-btn"
           onClick={this.startScheduleAndClose}
-          disabled={this.state.savingSchedule || this.state.savingAndScheduling}
+          disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
         >
           <span>
             {this.state.isScheduleChanged
@@ -293,7 +298,7 @@ export default class PipelineScheduler extends Component {
           data-cy="save-schedule-btn"
           className="btn btn-secondary start-schedule-btn"
           onClick={this.saveSchedule.bind(this, false)}
-          disabled={this.state.savingSchedule || this.state.savingAndScheduling}
+          disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
         >
           <span>{T.translate(`${PREFIX}.saveSchedule`)}</span>
           {this.state.savingSchedule ? <IconSVG name="icon-spinner" className="fa-spin" /> : null}
@@ -346,4 +351,5 @@ PipelineScheduler.propTypes = {
   schedulePipeline: PropTypes.func,
   suppressAnimation: PropTypes.bool,
   suspendSchedule: PropTypes.func,
+  isLatestVersion: PropTypes.bool,
 };

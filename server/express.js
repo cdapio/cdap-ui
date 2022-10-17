@@ -83,7 +83,8 @@ export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
     delete res.headers[cdapConfig['security.authentication.proxy.user.identity.header']];
   }
   return res;
-}
+};
+
 function makeApp(authAddress, cdapConfig, uiSettings) {
   var app = express();
   const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
@@ -186,8 +187,37 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     next(err);
   });
 
+  app.get('/analytics.js', (req, res) => {
+    /**
+     * Add Google analytics tag if ui.analyticsTag is present in the config
+     */
+    const aTag = cdapConfig['ui.analyticsTag'];
+    if (aTag) {
+      res.header({
+        'Content-Type': 'text/html',
+        'Cache-Control': 'no-store, must-revalidate',
+      });
+      res.send(
+        `
+        let gaScript1 = document.createElement('script');
+        gaScript1.setAttribute('async', 'true');
+        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
+        document.body.appendChild(gaScript1);
+        
+        let gaScript2 = document.createElement('script');
+        gaScript2.setAttribute('type', 'text/javascript');
+        gaScript2.innerHTML = "window.dataLayer = window.dataLayer || [];function gtag(){window.dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${aTag}');"
+        document.body.appendChild(gaScript2);
+        `
+      );
+    } else {
+      res.sendStatus(404);
+    }
+  });
+
   // serve the config file
   app.get('/config.js', function(req, res) {
+    uiSettings.ui.externalLinks = cdapConfig.externalLinks;
     var data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
@@ -217,6 +247,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
       featureFlags: cdapConfig.featureFlags,
+      analyticsTag: cdapConfig.analyticsTag,
     });
 
     res.header({
@@ -307,7 +338,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    *
    * Query parameters:
    *   source: Link to the market resource to retrieve
-  */
+   */
   app.get('/market', function(req, res) {
     const sourceLink = req.query['source'];
 
@@ -320,18 +351,23 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       return res.status(403).send(errorMsg);
     }
 
-    request({
-      method: 'GET',
-      url: sourceLink,
-      agent: false,
-    }, function(err, marketResponse) {
-      if (err) {
-        log.error('[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err);
-        res.status(marketResponse && marketResponse.statusCode || 502).send(err);
-      } else {
-        res.status(marketResponse.statusCode).send(marketResponse.body);
+    request(
+      {
+        method: 'GET',
+        url: sourceLink,
+        agent: false,
+      },
+      function(err, marketResponse) {
+        if (err) {
+          log.error(
+            '[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err
+          );
+          res.status((marketResponse && marketResponse.statusCode) || 502).send(err);
+        } else {
+          res.status(marketResponse.statusCode).send(marketResponse.body);
+        }
       }
-    }).on('error', function(err) {
+    ).on('error', function(err) {
       log.error('[ERROR] Market request had error: (url: ' + sourceLink + ') ' + err.message);
       res.status(502).send(err.message);
     });
@@ -390,7 +426,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             } else {
               responseHeaders['Content-Type'] = 'text/plain';
             }
-            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, { headers: responseHeaders });
+            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, {
+              headers: responseHeaders,
+            });
             responseHeaders = strippedResponse.headers;
             res.set(responseHeaders);
           }
@@ -586,7 +624,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         function(err, response) {
           if (err) {
             log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
-            res.status(response && response.statusCode || 502).send(err);
+            res.status((response && response.statusCode) || 502).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }
@@ -595,7 +633,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         // If an error hasn't already been sent, send it here
         if (!res.headersSent) {
           try {
-              res.status(502).send(err);
+            res.status(502).send(err);
           } catch (e) {
             log.error('Failed sending exception to client', e);
           }

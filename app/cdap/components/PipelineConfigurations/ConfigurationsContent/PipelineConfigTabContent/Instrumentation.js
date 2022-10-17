@@ -20,23 +20,47 @@ import { connect } from 'react-redux';
 import IconSVG from 'components/shared/IconSVG';
 import ToggleSwitch from 'components/shared/ToggleSwitch';
 import Popover from 'components/shared/Popover';
-import { ACTIONS as PipelineConfigurationsActions } from 'components/PipelineConfigurations/Store';
+import PipelineConfigurationsStore, {
+  ACTIONS as PipelineConfigurationsActions,
+} from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
+import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
 
 const mapStateToInstrumentationProps = (state) => {
+  const processTimingEnabledKeyValuePair = state.runtimeArgs.pairs.find(
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION
+  );
   return {
-    instrumentation: state.processTimingEnabled,
+    instrumentation: processTimingEnabledKeyValuePair
+      ? processTimingEnabledKeyValuePair.value === 'true'
+      : state.processTimingEnabled,
   };
 };
 const mapDispatchToInstrumentationProps = (dispatch) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onToggle: (value) => {
+      const { runtimeArgs } = PipelineConfigurationsStore.getState();
+      const pairs = [...runtimeArgs.pairs];
+      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+      runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION] = value.toString();
+      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_INSTRUMENTATION,
         payload: { instrumentation: value },
       });
+      if (lifecycleManagementEditEnabled) {
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };

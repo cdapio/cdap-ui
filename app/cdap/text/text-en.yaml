@@ -2408,6 +2408,12 @@ features:
           runBtnPopover: Run the pipeline once with the runtime arguments set above. Any changes made to the runtime arguments will be available only for the next run.
           saveBtnPopover: Changes to runtime arguments will be saved for all future runs of the pipeline. This may impact any schedules and triggers configured for this pipeline.
           specifyArgs: Specify runtime arguments, empty values need to come from the pipeline.
+          showReservedKeys: Show auto-generated runtime arguments
+          tooltipLabel: Key value pairs generated from pipeline configurations that will apply at runtime
+          numOfGeneratedRuntimeArgs: 
+            1: "{context} auto-generated runtime argument"
+            _: "{context} auto-generated runtime arguments"
+
     ProfilesListView:
       click: Click here
       countProfiles:
@@ -2454,6 +2460,7 @@ features:
       edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
+      history: History
       run: Run
       schedule: Schedule
       starting: Starting
@@ -2695,6 +2702,22 @@ features:
       avgRunTime: Average duration
       totalRuns: Total runs
     title: 'Summary (Max: 100 runs)'
+
+  PipelineHistory:
+    header: Version history of pipeline
+    table:
+      date: Date
+      time: Time
+      summary: Summary
+      unfinish: Not yet implemented
+      view: View
+      restore: Restore
+      rowsPerPage: "Rows per page: "
+      restoreFailError: Cannot restore (deploy) selected version
+      fetchVersionFailError: Cannot fetch selected version's detail
+      latest: Latest version
+      older: Older version
+      restoreChangeSummary: "Restore version at {date}"
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"

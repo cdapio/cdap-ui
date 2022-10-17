@@ -24,6 +24,7 @@ import PipelineRuntimeArgsDropdownBtn from 'components/PipelineDetails/PipelineR
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 import { convertKeyValuePairsToMap } from 'services/helpers';
 import T from 'i18n-react';
+import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -34,6 +35,7 @@ export default class PipelineRunButton extends Component {
     runButtonLoading: PropTypes.bool,
     runError: PropTypes.string,
     runtimeArgs: PropTypes.array,
+    isLatestVersion: PropTypes.bool,
   };
 
   state = {
@@ -50,7 +52,7 @@ export default class PipelineRunButton extends Component {
   };
 
   runPipelineOrToggleConfig = () => {
-    if (this.props.runButtonLoading) {
+    if (!this.props.isLatestVersion || this.props.runButtonLoading) {
       return;
     }
 
@@ -89,18 +91,19 @@ export default class PipelineRunButton extends Component {
         showRunOptions={this.state.showRunOptions}
         onToggle={this.toggleRunConfigOption}
         disabled={this.props.runButtonLoading}
+        isLatestVersion={this.props.isLatestVersion}
       />
     );
   };
 
   renderPipelineRunButton() {
     return (
-      <div
+      <PrimaryTextLowercaseButton
         data-cy="pipeline-run-btn"
         data-testid="pipeline-run-btn"
         onClick={this.runPipelineOrToggleConfig}
         className="btn btn-secondary pipeline-action-btn pipeline-run-btn"
-        disabled={this.props.runButtonLoading}
+        disabled={!this.props.isLatestVersion || this.props.runButtonLoading}
       >
         <div className="btn-container">
           {this.props.runButtonLoading ? (
@@ -115,7 +118,7 @@ export default class PipelineRunButton extends Component {
             </span>
           )}
         </div>
-      </div>
+      </PrimaryTextLowercaseButton>
     );
   }
 
