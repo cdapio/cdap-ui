@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Provider, connect } from 'react-redux';
 import PipelineDetailsMetadata from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsMetadata';
 import PipelineDetailsButtons from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons';
@@ -45,13 +45,14 @@ const mapStateToButtonsProps = (state) => {
     scheduleError: state.scheduleError,
     stopButtonLoading: state.stopButtonLoading,
     stopError: state.stopError,
+    changeSummary: state.changeSummary,
   };
 };
 
 const ConnectedPipelineDetailsButtons = connect(mapStateToButtonsProps)(PipelineDetailsButtons);
 
-export default class PipelineDetailsTopPanel extends Component {
-  componentDidMount() {
+export const PipelineDetailsTopPanel = () => {
+  useEffect(() => {
     const pipelineDetailStore = PipelineDetailStore.getState();
     const pipelineDetailStoreConfig = pipelineDetailStore.config;
     PipelineConfigurationsStore.dispatch({
@@ -71,19 +72,17 @@ export default class PipelineDetailsTopPanel extends Component {
       setEditDraftId(window.localStorage.getItem('editDraftId'));
       window.localStorage.removeItem('editDraftId');
     }
-  }
-  render() {
-    return (
-      <FeatureProvider>
-        <Provider store={PipelineDetailStore}>
-          <div className="pipeline-details-top-panel">
-            <PipelineDetailsMetadata />
-            <ConnectedPipelineDetailsButtons />
-            <PipelineDetailsDetailsActions />
-            <PlusButton mode={PlusButton.MODE.resourcecenter} />
-          </div>
-        </Provider>
-      </FeatureProvider>
-    );
-  }
-}
+  }, []);
+  return (
+    <FeatureProvider>
+      <Provider store={PipelineDetailStore}>
+        <div className="pipeline-details-top-panel">
+          <PipelineDetailsMetadata />
+          <ConnectedPipelineDetailsButtons />
+          <PipelineDetailsDetailsActions />
+          <PlusButton mode={PlusButton.MODE.resourcecenter} />
+        </div>
+      </Provider>
+    </FeatureProvider>
+  );
+};

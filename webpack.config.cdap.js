@@ -206,7 +206,7 @@ if (isModeProduction(mode)) {
 if (mode === 'development') {
   plugins.push(
     new LiveReloadPlugin({
-      port: 35728,
+      port: 35799,
       appendScriptTag: true,
       delay: 500,
       ignore:

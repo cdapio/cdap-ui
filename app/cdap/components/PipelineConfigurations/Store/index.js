@@ -25,7 +25,7 @@
   (in Studio view) or to PipelineDetailStore (in Detail view)
 */
 
-import { defaultAction, composeEnhancers } from 'services/helpers';
+import { defaultAction, composeEnhancers, arrayOfStringsMatchTargetPrefix } from 'services/helpers';
 import { createStore } from 'redux';
 import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
 import range from 'lodash/range';
@@ -43,7 +43,7 @@ import {
   SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
   ENGINE_OPTIONS,
 } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import { GLOBALS } from 'services/global-constants';
+import { GLOBALS, GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
 
 const ACTIONS = {
@@ -63,6 +63,7 @@ const ACTIONS = {
   SET_BACKPRESSURE: 'SET_BACKPRESSURE',
   SET_CUSTOM_CONFIG: 'SET_CUSTOM_CONFIG',
   SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS: 'SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS',
+  SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS: 'SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS',
   SET_NUM_EXECUTORS: 'SET_NUM_EXECUTORS',
   SET_INSTRUMENTATION: 'SET_INSTRUMENTATION',
   SET_STAGE_LOGGING: 'SET_STAGE_LOGGING',
@@ -124,6 +125,7 @@ const DEFAULT_CONFIGURE_OPTIONS = {
   maxConcurrentRuns: 1,
   isMissingKeyValues: false,
   modelessOpen: false,
+  pushdownEnabled: false,
 
   pipelineVisualConfiguration: {
     pipelineType: GLOBALS.etlDataPipeline,
@@ -238,6 +240,16 @@ const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
     };
   });
   currentRuntimeArgs.pairs = macros.concat(currentRuntimeArgs.pairs);
+  // concat an empty cell if all runtimeargs are generated and no user entered
+  const numOfGeneratedRuntimeArgs = currentRuntimeArgs.pairs.filter((pair) =>
+    arrayOfStringsMatchTargetPrefix(Object.values(GENERATED_RUNTIMEARGS), pair.key)
+  ).length;
+  if (
+    numOfGeneratedRuntimeArgs > 0 &&
+    currentRuntimeArgs.pairs.length === numOfGeneratedRuntimeArgs
+  ) {
+    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(getDefaultKeyValuePair());
+  }
   return currentRuntimeArgs;
 };
 
@@ -400,6 +412,41 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
           ...currentProperties,
           ...newCustomConfigs,
         },
+      };
+    }
+    case ACTIONS.SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS: {
+      // Need to remove previous custom configs from config.properties before setting new ones
+      let currentProperties = { ...state.properties };
+      let currentCustomConfigs = getCustomConfigFromProperties(currentProperties);
+      Object.keys(currentCustomConfigs).forEach((customConfigKey) => {
+        if (Object.prototype.hasOwnProperty.call(currentProperties, customConfigKey)) {
+          delete currentProperties[customConfigKey];
+        }
+      });
+
+      // Need to add system.mapreduce or system.spark to beginning of the keys that the user added
+      let newCustomConfigs = {};
+      Object.keys(action.payload.customConfig).forEach((newCustomConfigKey) => {
+        let newCustomConfigValue = action.payload.customConfig[newCustomConfigKey];
+        if (
+          GLOBALS.etlBatchPipelines.includes(action.payload.pipelineType) &&
+          state.engine === ENGINE_OPTIONS.MAPREDUCE
+        ) {
+          newCustomConfigKey = 'system.mapreduce.' + newCustomConfigKey;
+        } else {
+          newCustomConfigKey = 'system.spark.' + newCustomConfigKey;
+        }
+        newCustomConfigs[newCustomConfigKey] = newCustomConfigValue;
+      });
+
+      return {
+        ...state,
+        properties: {
+          ...currentProperties,
+          ...newCustomConfigs,
+        },
+        customConfigKeyValuePairs: action.payload.keyValues,
+        isMissingKeyValues: checkIfMissingKeyValues(state.runtimeArgs, action.payload.keyValues),
       };
     }
     case ACTIONS.SET_NUM_EXECUTORS: {

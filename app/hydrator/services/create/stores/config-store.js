@@ -85,7 +85,7 @@ class HydratorPlusPlusConfigStore {
       },
       description: '',
       name: '',
-      changeSummary: {
+      change: {
         description: '',
       },
       parentVersion: '',
@@ -1116,6 +1116,26 @@ class HydratorPlusPlusConfigStore {
     this.state.config.maxConcurrentRuns = num;
   }
 
+  getSchedulePayload() {
+    return {
+      'program': {
+        'programName': 'DataPipelineWorkflow',
+        'programType': 'WORKFLOW'
+      },
+      'trigger': {
+        'cronExpression': this.getSchedule(),
+        'type': 'TIME'
+      },
+      'constraints': [
+        {
+          'maxConcurrency': this.getMaxConcurrentRuns(),
+          'type': 'CONCURRENCY',
+          'waitUntilMet': false
+        }
+      ]
+    }
+  }
+
   setServiceAccountPath(path) {
     this.state.config.serviceAccountPath = path;
   }
@@ -1124,11 +1144,11 @@ class HydratorPlusPlusConfigStore {
   }
 
   setChangeSummary(changeSummaryDesc) {
-    this.state.changeSummary.description = changeSummaryDesc;
+    this.state.change.description = changeSummaryDesc;
     this.emitChange();
   }
   getChangeSummary() {
-    return this.getState().changeSummary.description;
+    return this.getState().change.description;
   }
 
   setParentVersion(parentVersion) {
@@ -1279,7 +1299,18 @@ class HydratorPlusPlusConfigStore {
         ).then(navigateToDetailedView.bind(this, adapterName));
     };
 
-    let removeFromUserDrafts = (adapterName) => {
+    let postDeploymentCleanUp = (adapterName) => {
+      // create schedule only on first deploy
+      if (!isEdit) {
+        this.myPipelineApi.createSchedule(
+          {
+            namespace: this.$state.params.namespace,
+            pipeline: adapterName,
+            scheduleId: this.GLOBALS.defaultScheduleId
+          },
+          this.getSchedulePayload()
+        ).$promise.then(() => {console.log('successfully created schedule')})
+      }
       const draftId = this.getDraftId();
       if (!draftId) {
         return navigateToDetailedView.call(this, adapterName);
@@ -1310,7 +1341,7 @@ class HydratorPlusPlusConfigStore {
       )
       .$promise
       .then(
-        removeFromUserDrafts.bind(this, pipelineName),
+        postDeploymentCleanUp.bind(this, pipelineName),
         (err) => {
           this.EventPipe.emit('hideLoadingIcon.immediate');
           this.HydratorPlusPlusConsoleActions.addMessage([{
@@ -1322,6 +1353,7 @@ class HydratorPlusPlusConfigStore {
     };
 
     var config = this.getConfigForExport();
+    config['app.deploy.update.schedules'] = false
 
     // Checking if Pipeline name already exist
     this.myAppsApi
@@ -1340,7 +1372,7 @@ class HydratorPlusPlusConfigStore {
             this.EventPipe.emit('hideLoadingIcon.immediate');
           } else {
             // normal deployment does not need these fields
-            delete config.changeSummary;
+            delete config.change;
             delete config.parentVersion;
             publish(config.name);
           }

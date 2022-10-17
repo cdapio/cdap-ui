@@ -19,7 +19,7 @@ import { Provider } from 'react-redux';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
-import ConfigModelessActionButtons from 'components/PipelineConfigurations/ConfigurationsContent/ConfigModelessActionButtons';
+import { ConfigModelessActionButtons } from './ConfigurationsContent/ConfigModelessActionButtons';
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import ConfigurableTab from 'components/shared/ConfigurableTab';
@@ -119,6 +119,7 @@ interface IPipelineConfigurationsProps {
   applyRealtimeConfig?: (...args) => void;
   validatePluginProperties?: (action: any, errorCb: any) => void;
   getRuntimeArgs?: () => any;
+  isLatestVersion?: boolean;
 }
 
 export default class PipelineConfigurations extends Component<IPipelineConfigurationsProps> {
@@ -286,6 +287,7 @@ export default class PipelineConfigurations extends Component<IPipelineConfigura
                 applyBatchConfig={this.props.applyBatchConfig}
                 applyRealtimeConfig={this.props.applyRealtimeConfig}
                 pipelineType={this.props.pipelineType}
+                isLatestVersion={this.props.isLatestVersion}
               />
             </div>
           </div>
