@@ -83,7 +83,8 @@ export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
     delete res.headers[cdapConfig['security.authentication.proxy.user.identity.header']];
   }
   return res;
-}
+};
+
 function makeApp(authAddress, cdapConfig, uiSettings) {
   var app = express();
   const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
@@ -188,6 +189,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   // serve the config file
   app.get('/config.js', function(req, res) {
+    uiSettings.ui.externalLinks = cdapConfig.externalLinks;
     var data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
@@ -307,7 +309,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    *
    * Query parameters:
    *   source: Link to the market resource to retrieve
-  */
+   */
   app.get('/market', function(req, res) {
     const sourceLink = req.query['source'];
 
@@ -320,18 +322,23 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       return res.status(403).send(errorMsg);
     }
 
-    request({
-      method: 'GET',
-      url: sourceLink,
-      agent: false,
-    }, function(err, marketResponse) {
-      if (err) {
-        log.error('[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err);
-        res.status(marketResponse && marketResponse.statusCode || 502).send(err);
-      } else {
-        res.status(marketResponse.statusCode).send(marketResponse.body);
+    request(
+      {
+        method: 'GET',
+        url: sourceLink,
+        agent: false,
+      },
+      function(err, marketResponse) {
+        if (err) {
+          log.error(
+            '[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err
+          );
+          res.status((marketResponse && marketResponse.statusCode) || 502).send(err);
+        } else {
+          res.status(marketResponse.statusCode).send(marketResponse.body);
+        }
       }
-    }).on('error', function(err) {
+    ).on('error', function(err) {
       log.error('[ERROR] Market request had error: (url: ' + sourceLink + ') ' + err.message);
       res.status(502).send(err.message);
     });
@@ -390,7 +397,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             } else {
               responseHeaders['Content-Type'] = 'text/plain';
             }
-            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, { headers: responseHeaders });
+            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, {
+              headers: responseHeaders,
+            });
             responseHeaders = strippedResponse.headers;
             res.set(responseHeaders);
           }
@@ -586,7 +595,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         function(err, response) {
           if (err) {
             log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
-            res.status(response && response.statusCode || 502).send(err);
+            res.status((response && response.statusCode) || 502).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }
@@ -595,7 +604,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         // If an error hasn't already been sent, send it here
         if (!res.headersSent) {
           try {
-              res.status(502).send(err);
+            res.status(502).send(err);
           } catch (e) {
             log.error('Failed sending exception to client', e);
           }
