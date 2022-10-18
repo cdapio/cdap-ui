@@ -32,6 +32,18 @@ const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
 });
+const WrangleHome = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/WrangleHome'),
+  loading: LoadingSVGCentered,
+});
+const ConnectionList = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/ConnectionList'),
+  loading: LoadingSVGCentered,
+});
+const WrangleGrid = Loadable({
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable'),
+  loading: LoadingSVGCentered,
+});
 const Connections = Loadable({
   loader: () => import(/* webpackChunkName: "Connections" */ 'components/Connections'),
   loading: LoadingSVGCentered,
@@ -140,6 +152,13 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
+          <Route exact path="/ns/:namespace/home" component={WrangleHome} />
+          <Route
+            exact
+            path="/ns/:namespace/datasources/:connectorType"
+            component={ConnectionList}
+          />
+          <Route exact path="/ns/:namespace/wrangler-grid/:wid" component={WrangleGrid} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
           <Route
             exact
