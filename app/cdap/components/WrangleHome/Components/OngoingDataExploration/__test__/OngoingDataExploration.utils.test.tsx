@@ -14,22 +14,17 @@
  * the License.
  */
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import BreadCumb from '../index';
-import history from 'services/history';
-import { Router, Route } from 'react-router';
+import { expectedResult, mockOldData } from '../mock/oldData';
+import { generateDataForExplorationCard } from '../utils';
 
-describe('renders BreadCumb Component', () => {
-  render(
-    <Router history={history}>
-      <Route>
-        <BreadCumb />
-      </Route>
-    </Router>
-  );
-  it('should render the Breadcrumb component', () => {
-    const ele = screen.getByTestId(/bread-comb-container-parent/i);
-    expect(ele).toBeInTheDocument();
+describe('Test the Utility Functions', () => {
+  it('Should test the result for empty array', () => {
+    const result = generateDataForExplorationCard([]);
+    expect(result).toEqual([]);
+  });
+
+  it('Should test the result for mock data', () => {
+    const result = generateDataForExplorationCard(mockOldData);
+    expect(result).toEqual(expectedResult);
   });
 });

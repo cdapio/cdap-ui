@@ -39,7 +39,13 @@ export default function OngoingDataExplorationCard({ item }) {
         switch (eachItem.type) {
           case 'iconWithText':
             return (
-              <Grid item xs={3} className={classes.elementStyle} key={index}>
+              <Grid
+                item
+                xs={3}
+                className={classes.elementStyle}
+                key={index}
+                data-testid="wrangler-home-ongoing-data-exploration-card"
+              >
                 <Box className={classes.iconStyle}> {eachItem.icon}</Box>
                 {connectionRefValue ? (
                   <CustomTooltip title={eachItem.label} arrow>
@@ -96,15 +102,22 @@ export default function OngoingDataExplorationCard({ item }) {
               </Grid>
             );
           case 'percentageWithText': {
-            const percent = parseInt(eachItem.label);
+            const percent = parseInt(eachItem.label, 10);
             return percent && !isNaN(percent) ? (
-              <Grid item xs={3} className={classes.elementStyle} key={index}>
+              <Grid
+                item
+                xs={3}
+                className={classes.elementStyle}
+                key={index}
+                data-testid="ongoing-data-exploration-card-percentage-nan"
+              >
                 <Box className={classes.percent}>
                   <Typography
                     variant="body2"
                     className={
                       percent < 100 ? classes.percentageStyleRed : classes.percentageStyleGreen
                     }
+                    data-testid="ongoing-data-card-percentage"
                   >
                     {percent}
                   </Typography>
@@ -113,6 +126,7 @@ export default function OngoingDataExplorationCard({ item }) {
                     className={
                       percent < 100 ? classes.percentageSymbolRed : classes.percentageSymbolGreen
                     }
+                    data-testid="ongoing-data-percentage-symbol"
                   >
                     {eachItem.percentageSymbol}
                   </Typography>
