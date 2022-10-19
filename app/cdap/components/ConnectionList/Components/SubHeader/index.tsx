@@ -23,6 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
+import T from 'i18n-react';
 
 export default function SubHeader() {
   const classes = useStyles();
@@ -31,9 +32,11 @@ export default function SubHeader() {
       <Box>
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
-            Home
+            {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
           </Link>
-          <Typography>Data Sources</Typography>
+          <Typography>
+            {T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList')}
+          </Typography>
         </Breadcrumbs>
       </Box>
 

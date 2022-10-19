@@ -28,7 +28,7 @@ describe('renders BreadCumb Component', () => {
       </Route>
     </Router>
   );
-  it('should render the Breadcrumb component', () => {
+  it('should render the SubHeader component', () => {
     const ele = screen.getByTestId(/bread-comb-container-parent/i);
     expect(ele).toBeInTheDocument();
   });

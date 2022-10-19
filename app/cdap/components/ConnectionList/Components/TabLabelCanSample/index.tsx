@@ -26,6 +26,8 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
+import { useLocation } from 'react-router';
+import T from 'i18n-react';
 
 export default function TabLabelCanSample({
   label,
@@ -41,6 +43,8 @@ export default function TabLabelCanSample({
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const classes = useStyles();
+
+  const location = useLocation();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -92,8 +96,20 @@ export default function TabLabelCanSample({
       });
   };
 
+  const indexOfSelectedDataset = location?.pathname?.lastIndexOf('/');
+  const requiredPath =
+    indexOfSelectedDataset && location.pathname.slice(indexOfSelectedDataset + 1);
+
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: {
+          from: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList'),
+          path: requiredPath,
+        },
+      }}
+    />
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
@@ -101,10 +117,12 @@ export default function TabLabelCanSample({
           {label}
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
-          <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
-            Wrangle
-          </Typography>
+          <Box className="wranglingHover">
+            <WrangleIcon />
+            <Typography variant="body2" className={classes.wrangleButton}>
+              {T.translate('features.WranglerNewUI.Breadcrumb.labels.loadToGrid')}
+            </Typography>
+          </Box>
         </button>
       </Box>
     </CustomTooltip>
@@ -116,7 +134,7 @@ export default function TabLabelCanSample({
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
         <WrangleIcon />
         <Typography variant="body2" className={classes.wrangleButton}>
-          Wrangle
+          {T.translate('features.WranglerNewUI.Breadcrumb.labels.loadToGrid')}
         </Typography>
       </button>
     </Box>
