@@ -16,9 +16,8 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ConnectionsTabs from '../index';
-
-const tabsTestData = [{ showTabs: true }];
+import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
+import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabTestData';
 
 test('renders Connections Tab Component', () => {
   render(
@@ -26,9 +25,10 @@ test('renders Connections Tab Component', () => {
       tabsData={tabsTestData}
       handleChange={() => null}
       value="apple"
-      index="one"
+      index={0}
       connectionId={undefined}
-      setIsErrorOnNoWorkSpace={jest.fn()}
+      setToaster={jest.fn}
+      toggleLoader={jest.fn}
     />
   );
   const ele = screen.getByTestId(/connections-tabs-parent/i);

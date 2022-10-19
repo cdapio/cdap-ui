@@ -14,6 +14,32 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
-export const PREFIX = 'features.WranglerNewUI';
-export const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
+import { makeStyles } from '@material-ui/core';
+import { green, red } from '@material-ui/core/colors';
+
+export const useStyles = makeStyles({
+  error: {
+    borderRadius: 4,
+    width: '100%',
+    top: '48px !important',
+    backgroundColor: red[600],
+    padding: '15px 18px 14px 18px',
+    display: 'block',
+    minHeight: 76,
+  },
+  success: {
+    width: '100%',
+    top: '48px !important',
+    backgroundColor: green[600],
+    padding: '15px 18px 14px 18px',
+    display: 'block',
+    borderRadius: 4,
+    minHeight: 76,
+  },
+  anchor: {
+    left: 0,
+  },
+  root: {
+    left: 0,
+  },
+});

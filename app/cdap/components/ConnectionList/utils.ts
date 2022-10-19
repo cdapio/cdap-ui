@@ -14,6 +14,4 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
-export const PREFIX = 'features.WranglerNewUI';
-export const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
+export const joinStringsWithSpaceSeparator = (stringsData = []) => stringsData.join(' ');

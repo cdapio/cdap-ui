@@ -14,6 +14,15 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
-export const PREFIX = 'features.WranglerNewUI';
-export const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
+export interface ISnackbarProps {
+  handleCloseError: () => void;
+  description?: string;
+  isSuccess?: boolean;
+  actionType?: string;
+  snackbarAction?: string;
+}
+export interface ISnackbar {
+  open: boolean;
+  message?: string;
+  isSuccess?: boolean;
+}
