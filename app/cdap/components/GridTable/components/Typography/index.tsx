@@ -16,11 +16,15 @@
 
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { ITypographyTextComponentProps } from './types';
+import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
 
-export default function TypographyComponent({ className, label }: ITypographyTextComponentProps) {
+export default function({ className, label }: ITypographyTextComponentProps) {
   return (
-    <Typography className={className} color="textSecondary">
+    <Typography
+      className={className}
+      color="textSecondary"
+      data-testid={`typography-component-${label}`}
+    >
       {label}
     </Typography>
   );

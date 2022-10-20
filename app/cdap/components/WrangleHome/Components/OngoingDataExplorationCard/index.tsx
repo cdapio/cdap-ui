@@ -14,10 +14,10 @@
  * the License.
  */
 
-import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
-import { useStyles } from './styles';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import CustomTooltip from '../CustomTooltip';
+import { useStyles } from './styles';
 
 export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();

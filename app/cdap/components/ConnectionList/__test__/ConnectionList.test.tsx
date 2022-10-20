@@ -16,16 +16,16 @@
 
 import { render } from '@testing-library/react';
 import ConnectionList from 'components/ConnectionList/index';
+import {
+  connectionListDummyResPostGresSql,
+  mockResponseForFetchConnectors,
+} from 'components/ConnectionList/mock/mockDataForConnectionList';
 import * as apiHelpersForExploreConnection from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import * as apiHelpers from 'components/Connections/Browser/SidePanel/apiHelpers';
 import * as reducer from 'components/Connections/Create/reducer';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
-import {
-  connectionListDummyResPostGresSql,
-  mockResponseForFetchConnectors,
-} from '../mock/mockDataForConnectionList';
 
 describe('It Should test Connection List Component', () => {
   it('Should render Connection List Component', () => {

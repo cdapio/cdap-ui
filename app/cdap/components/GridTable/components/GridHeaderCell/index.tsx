@@ -14,8 +14,8 @@
  * the License.
  */
 
-import React, { useState } from 'react';
 import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
 import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
@@ -33,7 +33,7 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   });
 
   return (
-    <TableCell className={classes.tableHeaderCell}>
+    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-abc">
       <Card className={classes.root} variant="outlined">
         <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
           {label}

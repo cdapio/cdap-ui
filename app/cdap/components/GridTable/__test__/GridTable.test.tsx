@@ -14,23 +14,20 @@
  *  the License.
  */
 
-import React from 'react';
-import GridTable from 'components/GridTable/index';
 import { render } from '@testing-library/react';
-import { Route, Router, Switch } from 'react-router';
-import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
+import GridTable from 'components/GridTable/index';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
 import rxjs from 'rxjs/operators';
+import history from 'services/history';
 import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
-
-const history = createHistory({
-  basename: '/',
-});
 
 describe('Testing Grid Table Component', () => {
   jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
     callback(mockForFlatMap);
   });
+
   it('Should mock API', () => {
     jest.spyOn(MyDataPrepApi, 'getWorkspace').mockImplementation(() => {
       return {
