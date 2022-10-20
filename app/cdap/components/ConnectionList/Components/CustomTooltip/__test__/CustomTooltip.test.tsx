@@ -14,33 +14,19 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import CustomTooltip from '../index';
+import { Typography } from '@material-ui/core';
 
-export interface IRecords {
-  [key: string]: string | unknown;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
-
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-  message: string;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
+describe('Test Connections List Component', () => {
+  it('Should render Connection list component', () => {
+    render(
+      <CustomTooltip arrow title={'Custom tooltip'}>
+        <Typography>Custom Tooltip</Typography>
+      </CustomTooltip>
+    );
+    const ele = screen.getByTestId(/tooltip-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
+});

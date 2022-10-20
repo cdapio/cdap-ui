@@ -14,33 +14,21 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
+import { GCSIcon } from 'components/ConnectionList/icons';
+import React from 'react';
 
-export interface IRecords {
-  [key: string]: string | unknown;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
-
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-  message: string;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
+export const mockConnectorTypeData = {
+  name: 'File',
+  type: 'connector',
+  category: 'File',
+  description: 'Connection to browse and sample data from the local file system.',
+  className: 'io.cdap.plugin.batch.connector.FileConnector',
+  artifact: {
+    name: 'core-plugins',
+    version: '2.10.0-SNAPSHOT',
+    scope: 'SYSTEM',
+  },
+  canBrowse: true,
+  count: 1,
+  icon: <GCSIcon />,
+};
