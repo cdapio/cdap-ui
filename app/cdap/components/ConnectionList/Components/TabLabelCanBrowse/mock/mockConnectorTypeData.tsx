@@ -14,31 +14,21 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { GCSIcon } from 'components/ConnectionList/icons';
+import React from 'react';
 
-export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
+export const mockConnectorTypeData = {
+  name: 'File',
+  type: 'connector',
+  category: 'File',
+  description: 'Connection to browse and sample data from the local file system.',
+  className: 'io.cdap.plugin.batch.connector.FileConnector',
+  artifact: {
+    name: 'core-plugins',
+    version: '2.10.0-SNAPSHOT',
+    scope: 'SYSTEM',
   },
-  columnViewDrawer: {
-    maxHeight: 'calc(100vh - 240px)',
-    border: '1px solid #E0E0E0',
-  },
-  columnViewContainer: {
-    display: 'flex',
-    fontFamily: 'Roboto',
-  },
-  gridTableWrapper: {
-    maxHeight: 'calc(100vh - 240px)',
-    overflowY: 'auto',
-  },
-});
+  canBrowse: true,
+  count: 1,
+  icon: <GCSIcon />,
+};

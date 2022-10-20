@@ -14,31 +14,24 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 
-export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
-  },
-  columnViewDrawer: {
-    maxHeight: 'calc(100vh - 240px)',
-    border: '1px solid #E0E0E0',
-  },
-  columnViewContainer: {
-    display: 'flex',
-    fontFamily: 'Roboto',
-  },
-  gridTableWrapper: {
-    maxHeight: 'calc(100vh - 240px)',
-    overflowY: 'auto',
-  },
+export const useStyles = makeStyles(() => {
+  return {
+    headingStyles: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    },
+
+    headingTextStyles: {
+      fontFamily: 'Noto Sans',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: 20,
+      lineHeight: '150%',
+      letterSpacing: '0.15px',
+      color: '#000000',
+    },
+  };
 });

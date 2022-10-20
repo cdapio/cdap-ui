@@ -3436,4 +3436,8 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+    ColumnViewPanel:
+      columns: 'Columns'
+      nullValues: 'Null Values'
+      columnView: 'Column View'
 ...

@@ -14,31 +14,23 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+export interface IHeaderNamesList {
+  name: string;
+  label: string;
+  type: Array<string | number | boolean>;
+}
 
-export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
-  },
-  columnViewDrawer: {
-    maxHeight: 'calc(100vh - 240px)',
-    border: '1px solid #E0E0E0',
-  },
-  columnViewContainer: {
-    display: 'flex',
-    fontFamily: 'Roboto',
-  },
-  gridTableWrapper: {
-    maxHeight: 'calc(100vh - 240px)',
-    overflowY: 'auto',
-  },
-});
+export interface ISelectColumnListProps {
+  columnData: IHeaderNamesList[];
+  dataQuality: IDataQuality;
+  searchTerm: string;
+}
+
+interface IDataQuality {
+  [key: string]: unknown;
+}
+
+export interface IDataQualityRecord {
+  label: string;
+  value: number;
+}

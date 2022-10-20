@@ -39,6 +39,7 @@ export const useGridKPICellStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     paddingBottom: '5px',
+    borderRight: '1px solid #E0E0E0',
   },
   label: {
     lineHeight: '21px',
