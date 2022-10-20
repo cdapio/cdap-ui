@@ -50,10 +50,6 @@ export const PipelineHistoryTableDiv = styled.div`
           &:first-child {
             padding-left: 25px;
           }
-
-          &:last-child {
-            padding-right: 25px;
-          }
         }
       }
 

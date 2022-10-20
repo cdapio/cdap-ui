@@ -69,6 +69,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       namespace: getCurrentNamespace(),
       orderBy: 'DESC',
       nameFilterType: 'EQUALS',
+      sortCreationTime: 'true',
     },
   });
 

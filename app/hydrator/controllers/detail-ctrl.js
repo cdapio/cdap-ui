@@ -99,7 +99,8 @@ angular.module(PKG.name + '.feature.hydrator')
         namespace: $stateParams.namespace,
         appId: rPipelineDetail.name,
         programType,
-        programName
+        programName,
+        allVersions: true
       });
     }
 
