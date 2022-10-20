@@ -14,10 +14,10 @@
  * the License.
  */
 
-import React, { createRef, RefObject, useEffect, useState } from 'react';
 import { Box, Grid, Typography } from '@material-ui/core/';
-import { useStyles } from './styles';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import CustomTooltip from '../CustomTooltip';
+import { useStyles } from './styles';
 
 export default function OngoingDataExplorationCard({ item }) {
   const classes = useStyles();
@@ -96,7 +96,7 @@ export default function OngoingDataExplorationCard({ item }) {
               </Grid>
             );
           case 'percentageWithText': {
-            const percent = parseInt(eachItem.label);
+            const percent = parseInt(eachItem.label, 10);
             return percent && !isNaN(percent) ? (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.percent}>

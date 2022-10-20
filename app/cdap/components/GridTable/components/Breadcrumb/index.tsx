@@ -17,10 +17,10 @@
 import { Box, Typography } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { useStyles } from './styles';
 import React from 'react';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useStyles } from './styles';
 
 export default function BreadCrumb({ datasetName }) {
   const classes = useStyles();
@@ -30,12 +30,14 @@ export default function BreadCrumb({ datasetName }) {
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
+          data-testid="breadcrumb-home-text"
         >
           Home
         </Link>
         <Link
           className={`${classes.breadcrumbLabel} ${classes.dataset}`}
           to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
+          data-testid="breadcrumb-data-sources-text"
         >
           Data Sources
         </Link>

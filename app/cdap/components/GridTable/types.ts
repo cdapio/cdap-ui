@@ -20,7 +20,7 @@ export interface IParams {
 }
 
 export interface IRecords {
-  [key: string]: string;
+  [key: string]: string | Record<string, Record<string, string | number>>;
 }
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
@@ -36,10 +36,11 @@ export interface IExecuteAPIResponse {
   types: IRecords;
   values: IRecords[];
   summary: ISummary;
+  message: string;
 }
 
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: string[];
+  type: Array<string | Record<string, Record<string, string | number>>>;
 }
