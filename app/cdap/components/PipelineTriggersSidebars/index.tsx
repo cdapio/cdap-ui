@@ -48,11 +48,16 @@ function PipelineTriggersWithFeatures({
     'pipeline.composite.triggers.enabled'
   );
 
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+
   return (
     <div className="pipeline-triggers-sidebar-container">
       <PipelineTriggers
         {...{
           pipelineCompositeTriggersEnabled,
+          lifecycleManagementEditEnabled,
           pipelineName,
           namespace,
           pipelineType,
