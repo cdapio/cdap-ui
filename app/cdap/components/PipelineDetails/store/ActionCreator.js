@@ -213,15 +213,17 @@ const pollRunsCount = ({ appId, programType, programName: programId, namespace }
       programId,
     },
   ];
-  return MyPipelineApi.pollRunsCount({ namespace }, postBody).subscribe((runsCountArray) => {
-    let runsCount = runsCountArray[0].runCount;
-    PipelineDetailStore.dispatch({
-      type: ACTIONS.SET_RUNS_COUNT,
-      payload: {
-        runsCount,
-      },
-    });
-  });
+  return MyPipelineApi.pollRunsCount({ namespace, allVersions: true }, postBody).subscribe(
+    (runsCountArray) => {
+      let runsCount = runsCountArray[0].runCount;
+      PipelineDetailStore.dispatch({
+        type: ACTIONS.SET_RUNS_COUNT,
+        payload: {
+          runsCount,
+        },
+      });
+    }
+  );
 };
 
 const pollRuns = (params) => {

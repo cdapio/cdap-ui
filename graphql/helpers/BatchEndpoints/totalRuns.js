@@ -28,7 +28,7 @@ getCDAPConfig().then(function(value) {
 export async function batchTotalRuns(req, auth, userIdProperty, userIdValue) {
   const namespace = req[0].namespace;
   const options = getPOSTRequestOptions();
-  options.url = constructUrl(cdapConfig, `/v3/namespaces/${namespace}/runcount`);
+  options.url = constructUrl(cdapConfig, `/v3/namespaces/${namespace}/runcount?allVersions=true`);
 
   const errorModifiersFn = (error, statusCode) => {
     return new ApolloError(error, statusCode, { errorOrigin: 'totalRuns' });
