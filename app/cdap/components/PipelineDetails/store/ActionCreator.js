@@ -213,7 +213,7 @@ const pollRunsCount = ({ appId, programType, programName: programId, namespace }
       programId,
     },
   ];
-  return MyPipelineApi.pollRunsCount({ namespace, allVersions: true }, postBody).subscribe(
+  return MyPipelineApi.pollRunsCount({ namespace, 'version-select': 'ALL' }, postBody).subscribe(
     (runsCountArray) => {
       let runsCount = runsCountArray[0].runCount;
       PipelineDetailStore.dispatch({
