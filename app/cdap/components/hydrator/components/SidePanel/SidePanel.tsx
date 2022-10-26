@@ -233,6 +233,9 @@ interface ISidePanelProps {
   createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
 }
 
+// this value is definied once and doesn't change dynamically
+let allGroups;
+
 /**
  * There are tons of rerenders on this component right now - unfortunately its difficult to tackle
  * while we're using angular to manage the state. Will be tackled soon.
@@ -279,6 +282,7 @@ export const SidePanel = ({
   useEffect(() => {
     // set first group opened
     if (groups && groups.length) {
+      allGroups = groups.map((group) => group.name);
       setOpenedAccordions([groups[0].name]);
     }
   }, [groups, groups.length]);
@@ -315,7 +319,14 @@ export const SidePanel = ({
   });
 
   const handleSetSearch = debounce((text) => {
-    setSearchText(text);
+    // open all accordions when searching (then filtered closes them if no plugins)
+    if (text === '' || text === undefined) {
+      setOpenedAccordions([groups[0].name]);
+      setSearchText(text);
+    } else {
+      setOpenedAccordions(allGroups);
+      setSearchText(text);
+    }
   }, 400);
 
   const handleOpenAccordion = (name: string) => {
@@ -463,10 +474,13 @@ export const SidePanel = ({
       const plugins = filterPlugins(searchText, group.plugins);
       // open accordion if the user searches for a plugin and a plugin
       // is in that group or use the accordion state
-      const expanded =
-        searchText !== '' && searchText !== undefined
-          ? plugins.length
-          : openedAccordions.indexOf(group.name) !== -1;
+
+      let expanded = openedAccordions.indexOf(group.name) !== -1;
+      if (plugins.length === 0) {
+        // closes accordion if no plugins are present after searching.
+        expanded = false;
+      }
+
       return (
         <StyledAccordion
           elevation={0}
