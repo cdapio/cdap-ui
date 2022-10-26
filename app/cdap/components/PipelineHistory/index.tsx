@@ -114,8 +114,8 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       pipelineVersions: data.pipelines.applications.map((app) => {
         return {
           version: app.version,
-          description: app.change.description,
-          date: new Date(parseInt(app.change.creationTimeMillis, 10)).toUTCString(),
+          description: app.change && app.change.description,
+          date: app.change && new Date(parseInt(app.change.creationTimeMillis, 10)).toUTCString(),
         };
       }),
       nextPageToken: data.pipelines.nextPageToken,
