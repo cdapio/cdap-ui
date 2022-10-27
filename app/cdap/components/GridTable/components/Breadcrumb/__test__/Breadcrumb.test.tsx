@@ -15,10 +15,10 @@
  */
 
 import { render, screen } from '@testing-library/react';
+import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
-import BreadCrumb from '..';
 
 describe('Test Breadcrumb Component', () => {
   render(

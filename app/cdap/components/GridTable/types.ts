@@ -42,5 +42,9 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | Record<string, Record<string, string | number>>>;
+  type: Array<string | Record<string, IType>>;
+}
+
+export interface IType {
+  [key: string]: string | number;
 }

@@ -15,8 +15,8 @@
  */
 
 import { render, screen } from '@testing-library/react';
+import GridTextCell from 'components/GridTable/components/GridTextCell';
 import React from 'react';
-import GridTextCell from '..';
 
 describe('Testing GridTextCell Component', () => {
   const cellValue = 'testing';

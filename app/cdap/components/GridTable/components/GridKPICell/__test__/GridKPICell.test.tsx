@@ -14,9 +14,9 @@
  *  the License.
  */
 
-import { render } from '@testing-library/react';
-import GridKPICell from '..';
 import { screen } from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import GridKPICell from 'components/GridTable/components/GridKPICell';
 import React from 'react';
 
 describe('Test GridKPICell Component', () => {
