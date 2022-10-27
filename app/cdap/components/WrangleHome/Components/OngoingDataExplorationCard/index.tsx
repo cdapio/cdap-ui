@@ -96,7 +96,7 @@ export default function OngoingDataExplorationCard({ item }) {
               </Grid>
             );
           case 'percentageWithText': {
-            const percent = parseInt(eachItem.label, 10);
+            const percent = Number(eachItem.label);
             return percent && !isNaN(percent) ? (
               <Grid item xs={3} className={classes.elementStyle} key={index}>
                 <Box className={classes.percent}>

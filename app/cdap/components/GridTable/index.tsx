@@ -31,7 +31,11 @@ import GridHeaderCell from './components/GridHeaderCell';
 import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
 import { useStyles } from './styles';
-import { IExecuteAPIResponse, IHeaderNamesList, IParams, IRecords } from './types';
+import { flatMap } from 'rxjs/operators';
+import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import NoRecordScreen from 'components/NoRecordScreen';
+import T from 'i18n-react';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -233,6 +237,12 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table">
       <BreadCrumb datasetName={wid} />
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
+        <NoRecordScreen
+          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+        />
+      )}
       <Table aria-label="simple table" className="test" data-testid="grid-table">
         <TableHead>
           <TableRow>
