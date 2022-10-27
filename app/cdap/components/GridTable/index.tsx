@@ -165,11 +165,12 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item;
+            mostFrequentItemValue = item as string;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue =
+          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
