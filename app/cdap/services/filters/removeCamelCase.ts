@@ -21,6 +21,10 @@
  */
 
 export const myRemoveCamelCase = (input: string): string => {
+  // don't change BigQuery
+  if (input.indexOf('BigQuery') !== -1) {
+    return input;
+  }
   // Handle "HBase" or "OCaml" case with no change to input.
   const result = input.match(/^[A-Z][A-Z][a-z]+/);
   // FIXME: specifically for 'JavaScript' case which we don't want to split.
