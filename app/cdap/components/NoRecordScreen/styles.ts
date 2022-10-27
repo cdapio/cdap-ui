@@ -17,16 +17,30 @@
 import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles({
-  loadingContainer: {
+  noRecordWrapper: {
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
     position: 'absolute',
     top: 0,
-    width: '100%',
-    zIndex: 2000,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    '& *': {
+      fontFamily: "'Noto Sans', sans-serif",
+    },
+  },
+  mainHeaderMessage: {
+    fontSize: 20,
+    color: '#000000',
+    marginTop: 20,
+  },
+  subHeaderMessage: {
+    fontSize: 16,
+    color: '#000000',
+  },
+  innerWrapper: {
+    textAlign: 'center',
   },
 });
