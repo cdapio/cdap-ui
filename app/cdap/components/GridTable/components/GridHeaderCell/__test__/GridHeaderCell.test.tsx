@@ -14,10 +14,10 @@
  *  the License.
  */
 
-import { render } from '@testing-library/react';
-import React from 'react';
-import GridHeaderCell from '..';
 import { screen } from '@testing-library/dom';
+import { render } from '@testing-library/react';
+import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
+import React from 'react';
 
 describe('To Test Grid Header Cell Component', () => {
   const arr = ['PostgrSQL', 'SQL'];

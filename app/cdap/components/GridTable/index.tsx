@@ -163,11 +163,12 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item;
+            mostFrequentItemValue = item as string;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue =
+          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -239,7 +240,7 @@ export default function GridTable() {
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
-                  types={eachHeader.type}
+                  types={eachHeader.type as string[]}
                   key={eachHeader.name}
                 />
               ))}

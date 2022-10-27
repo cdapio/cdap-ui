@@ -14,21 +14,20 @@
  * the License.
  */
 
-import { act, fireEvent, getByTestId, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import ConnectionList from 'components/ConnectionList';
+import {
+  connectionListDummyResFile,
+  connectionListDummyResPostGresSql,
+  mockDataForExploreConnection,
+  mockResponseForFetchConnectors,
+} from 'components/ConnectionList/mock/mockDataForConnectionList';
+import * as apiHelpersForExploreConnection from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import * as apiHelpers from 'components/Connections/Browser/SidePanel/apiHelpers';
 import * as reducer from 'components/Connections/Create/reducer';
 import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import ConnectionList from '..';
-import {
-  connectionListDummyResPostGresSql,
-  mockResponseForFetchConnectors,
-  mockDataForExploreConnection,
-  connectionListDummyResFile,
-} from '../mock/mockDataForConnectionList';
-import * as apiHelpersForExploreConnection from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 
 const history = createHistory({
   basename: '/',
@@ -58,14 +57,6 @@ describe('It Should test Connection List Component', () => {
         </Switch>
       </Router>
     );
-
-    // act(() => {
-    //   /* fire events that update state */
-    //   const ele = screen.getByTestId(/connections-tabs-list-change/i);
-    // });
-
-    // await act( async () => render(<TestApp/>));
-
     expect(container).toBeDefined();
   });
 
