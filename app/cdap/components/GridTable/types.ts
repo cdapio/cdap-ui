@@ -20,7 +20,7 @@ export interface IParams {
 }
 
 export interface IRecords {
-  [key: string]: string | Record<string, IType>;
+  [key: string]: string | boolean | Record<string, IType>;
 }
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
@@ -42,7 +42,7 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | Record<string, IType>>;
+  type: Array<string | boolean | Record<string, IType>>;
 }
 
 export interface IType {
