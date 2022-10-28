@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { ISnackbarToast } from '../TabLabelCanSample/types';
+import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 
 export interface IRecords {
   [key: string]: string | number | IRecords | boolean;
