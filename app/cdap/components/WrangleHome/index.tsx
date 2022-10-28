@@ -23,10 +23,14 @@ import WrangleCard from './Components/WrangleCard';
 import WrangleHomeTitle from './Components/WrangleHomeTitle';
 import { GradientLine, HeaderImage } from './icons';
 import { useStyles } from './styles';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
+import T from 'i18n-react';
 
-export default function WranglerHome() {
+export default function() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  localStorage.setItem('addConnectionRequestFromNewUI', 'home');
 
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
@@ -41,12 +45,24 @@ export default function WranglerHome() {
 
       <Box>
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View More</Box>
+          <WrangleHomeTitle
+            title={T.translate('features.WranglerNewUI.HomePage.labels.connectorTypes.title')}
+          />
+          <Box className={classes.viewMore}>
+            <Link
+              color="inherit"
+              to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}
+              data-testid="connector-types-view-all"
+            >
+              {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+            </Link>{' '}
+          </Box>
         </Box>
         <WrangleCard />
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
+          <WrangleHomeTitle
+            title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
+          />
           <Box className={classes.viewMore}>View More</Box>
         </Box>
         <OngoingDataExploration />

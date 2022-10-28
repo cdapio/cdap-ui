@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { ImportDatasetIcon } from '../WrangleCard/iconStore/ImportDatasetIcon';
-import { IMassagedObject } from './types';
+import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
+import { IEachData, IMassagedObject } from './types';
 
-export const generateDataForExplorationCard = (oldData) => {
+export const generateDataForExplorationCard = (oldData: IEachData[]) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List
   const massagedArray = [];
 
