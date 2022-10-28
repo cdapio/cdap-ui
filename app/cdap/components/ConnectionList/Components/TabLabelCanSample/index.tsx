@@ -122,7 +122,11 @@ export default function TabLabelCanSample({
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
           <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
+          <Typography
+            variant="body2"
+            className={classes.wrangleButton}
+            data-testid={`connection-list-wrangle-link`}
+          >
             Wrangle
           </Typography>
         </button>
@@ -135,7 +139,11 @@ export default function TabLabelCanSample({
       </Typography>
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
+        <Typography
+          variant="body2"
+          className={classes.wrangleButton}
+          data-testid={`connection-list-wrangle-link`}
+        >
           Wrangle
         </Typography>
       </button>

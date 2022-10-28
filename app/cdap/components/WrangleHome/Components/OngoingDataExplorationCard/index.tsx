@@ -106,7 +106,7 @@ export default function OngoingDataExplorationCard({ item }) {
                       percent < 100 ? classes.percentageStyleRed : classes.percentageStyleGreen
                     }
                   >
-                    {percent}
+                    {Math.round(percent)}
                   </Typography>
                   <Typography
                     variant="body2"
