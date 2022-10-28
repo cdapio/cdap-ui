@@ -22,13 +22,14 @@ import { getCategorizedConnections } from 'components/Connections/Browser/SidePa
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import ErrorSnackbar from 'components/SnackbarComponent';
+import Snackbar from 'components/Snackbar';
 import * as React from 'react';
 import { createRef, useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import CustomTooltip from './Components/CustomTooltip';
 import SubHeader from './Components/SubHeader';
+import { ISnackbarToast } from './Components/TabLabelCanSample/types';
 import { useStyles } from './styles';
 
 const SelectDatasetWrapper = styled(Box)({
@@ -55,8 +56,10 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
-
+  const [toaster, setToaster] = useState<ISnackbarToast>({
+    open: false,
+    isSuccess: false,
+  });
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
   };
@@ -252,21 +255,28 @@ export default function ConnectionList() {
                 index={index}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                setToaster={setToaster}
               />
             </Box>
           );
         })}
       </SelectDatasetWrapper>
-
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
       )}
-      {isErrorOnNoWorkspace && (
-        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
-      )}
+      {toaster.open && (
+        <Snackbar
+          handleCloseError={() =>
+            setToaster({
+              open: false,
+            })
+          }
+          messageToDisplay={toaster.message ? toaster.message : ''}
+          isSuccess={toaster.isSuccess}
+        />
+      )}{' '}
     </Box>
   );
 }
