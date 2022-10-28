@@ -32,6 +32,8 @@ export default function() {
   const [loading, setLoading] = useState(false);
   localStorage.setItem('addConnectionRequestFromNewUI', 'home');
 
+  const [viewAllLink, toggleViewAllLink] = useState<boolean>(false);
+
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
       <Box className={classes.subHeader}>
@@ -48,22 +50,24 @@ export default function() {
           <WrangleHomeTitle
             title={T.translate('features.WranglerNewUI.HomePage.labels.connectorTypes.title')}
           />
-          <Box className={classes.viewMore}>
-            <Link
-              color="inherit"
-              to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}
-              data-testid="connector-types-view-all"
-            >
-              {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
-            </Link>{' '}
-          </Box>
+          {viewAllLink && (
+            <Box className={classes.viewMore}>
+              <Link
+                color="inherit"
+                to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}
+                data-testid="connector-types-view-all"
+              >
+                {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+              </Link>{' '}
+            </Box>
+          )}
         </Box>
-        <WrangleCard />
+        <WrangleCard toggleViewAllLink={toggleViewAllLink} />
         <Box className={classes.headerTitle}>
           <WrangleHomeTitle
             title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
           />
-          <Box className={classes.viewMore}>View More</Box>
+          <Box className={classes.viewMore}>View All</Box>
         </Box>
         <OngoingDataExploration />
         {loading && (
