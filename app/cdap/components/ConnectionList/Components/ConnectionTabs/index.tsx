@@ -19,11 +19,10 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import React from 'react';
-import { useEffect, useState } from 'react';
-import TabLabelCanBrowse from '../TabLabelCanBrowse';
-import TabLabelCanSample from '../TabLabelCanSample';
-import { IConnectionTabsProps } from './types';
+import { IConnectionTabsProps } from 'components/ConnectionList/Components/ConnectionTabs/types';
+import TabLabelCanBrowse from 'components/ConnectionList/Components/TabLabelCanBrowse';
+import TabLabelCanSample from 'components/ConnectionList/Components/TabLabelCanSample';
+import React, { useEffect, useState } from 'react';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',

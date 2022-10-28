@@ -17,17 +17,16 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
+import useStyles from 'components/ConnectionList/Components/TabLabelCanSample/styles';
+import { ITableSampleCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { WrangleIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
-import { IRecords } from 'components/GridTable/types';
+import T from 'i18n-react';
 import * as React from 'react';
 import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import useStyles from './styles';
-import T from 'i18n-react';
-import { ITableSampleCanSampleProps } from './types';
 
 export default function TabLabelCanSample({
   label,
@@ -98,7 +97,6 @@ export default function TabLabelCanSample({
           setTimeout(() => {
             setWorkspaceId(res);
           }, 2000);
-          // TODO: this setTimeout needs to be removed after getting merged with Destination(test/unit-tests-for-m1) branch
           toggleLoader(false);
         }
       })

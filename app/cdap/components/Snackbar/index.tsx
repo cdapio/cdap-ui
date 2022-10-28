@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import React, { useState, useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
-import { useStyles } from './styles';
-import Transition from './Components/Transition';
-import { ISnackbarProps } from './types';
+import Transition from 'components/Snackbar/Components/Transition/index';
+import { useStyles } from 'components/Snackbar/styles';
+import { ISnackbarProps } from 'components/Snackbar/types';
+import React, { useEffect, useState } from 'react';
 
 export default function({
   handleCloseError,
