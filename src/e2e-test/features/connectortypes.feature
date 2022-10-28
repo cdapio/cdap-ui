@@ -19,9 +19,6 @@ Feature: Navigating through the connector types
   @ConnectorTypes
   Scenario: Navigate to all the connector types
     Given Navigate to the Home Page
-    Then Click on the View all option
-    Then Click on the Home link
-    Then Click on the Connector type card
+    Then Click on the Connector card
+    Then verify user is on datasource page or not
     Then Click on the Home link in Data Sources page
-    Then Click on the Exploration card
-    Then Click on the Home link on wrangle page

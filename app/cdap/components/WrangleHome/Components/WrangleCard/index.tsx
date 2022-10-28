@@ -60,6 +60,7 @@ export default function() {
                 : `/ns/${getCurrentNamespace()}/datasources/${item.name}`
             }
             style={{ textDecoration: 'none' }}
+            data-testid={`wrangle-card-${item.name}`}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>

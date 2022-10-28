@@ -7,6 +7,9 @@ import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cucumber.java.en.Then;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class ConnectorTypes {
     @Given("Navigate to the Home Page")
@@ -14,23 +17,17 @@ public class ConnectorTypes {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
-    @Then("Click on the View all option")
-    public void clickOnTheViewAllOption() {
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(
-                Helper.locateElementByTestId("connector-types-view-all"));
-    }
-    @Then("Click on the Home link")
-    public void  clickOnTheHomeLink(){
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(
-                Helper.locateElementByTestId("breadcrumb-home-link"));
-    }
-    @Then("Click on the Connector type card")
+    @Then("Click on the Connector card")
     public void clickOnTheConnectorTypeCard() {
         WaitHelper.waitForPageToLoad();
         ElementHelper.clickOnElement(
-                Helper.locateElementByTestId("item2"));
+                Helper.locateElementByTestId("wrangle-card-File"));
+    }
+    @Then("verify user is on datasource page or not")
+    public void verifyDataSourcePage() {
+        WaitHelper.waitForPageToLoad();
+        String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(ActualText,"http://localhost:11011/cdap/ns/default/datasources/File");
     }
     @Then("Click on the Home link in Data Sources page")
     public void clickOnTheHomeLinkInDataSourcesPage() {
@@ -38,16 +35,5 @@ public class ConnectorTypes {
         ElementHelper.clickOnElement(
                 Helper.locateElementByTestId("breadcrumb-home-link"));
     }
-    @Then("Click on the Exploration card")
-    public void clickOnTheExplorationCard(){
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(
-                Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card"));
-    }
-    @Then("Click on the Home link on wrangle page")
-    public void clickOnTheHomeLinkOnWranglePage(){
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(
-                Helper.locateElementByTestId("breadcrumb-home-text"));
-    }
+
 }
