@@ -16,23 +16,40 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import OngoingDataExploration from '../index';
+import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
+import MyDataPrepApi from 'api/dataprep';
+import operators from 'rxjs/operators';
+import { Route, Router, Switch } from 'react-router';
+import history from 'services/history';
+import {
+  getWorkspaceListSubscribeMock,
+  switchMapCallbackMock,
+} from 'components/WrangleHome/Components/OngoingDataExploration/mock/mockoldData';
 
-const testObj = {
-  connectionName: 'Upload',
-  workspaceName: 'Divami_Users_Emails.xlsx',
-  recipeSteps: 0,
-  dataQuality: 100,
-};
-
-test('renders Ongoing Data Exploration component', () => {
-  jest.mock('api/dataprep', () => {
-    return Promise.resolve([
-      { connectionName: 'yolo', workspaceName: 'Divami_Users_Emails.xlsx', recipeSteps: 0 },
-      { connectionName: 'Upload', workspaceName: 'Divami_Users_Emails.xlsx', recipeSteps: 0 },
-    ]);
+test('renders Ongoing Data Exploration component', async () => {
+  jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
+    callback(switchMapCallbackMock);
   });
-  render(<OngoingDataExploration />);
+  jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
+    return {
+      pipe: () => {
+        return {
+          subscribe: (callback) => {
+            callback(getWorkspaceListSubscribeMock);
+          },
+        };
+      },
+    };
+  });
+  render(
+    <Router history={history}>
+      <Switch>
+        <Route>
+          <OngoingDataExploration />
+        </Route>
+      </Switch>
+    </Router>
+  );
   const ele = screen.getByTestId(/ongoing-data-explore-parent/i);
   expect(ele).toBeInTheDocument();
 });
