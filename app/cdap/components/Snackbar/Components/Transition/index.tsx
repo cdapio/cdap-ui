@@ -14,14 +14,14 @@
  * the License.
  */
 
-import React from 'react';
-import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import { Box, Typography } from '@material-ui/core';
-import { useStyles } from './styles';
+import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
-import T from 'i18n-react';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { ITransitionComponentProps } from './types';
+import { useStyles } from 'components/Snackbar/Components/Transition/styles';
+import { ITransitionComponentProps } from 'components/Snackbar/Components/Transition/types';
+import T from 'i18n-react';
+import React from 'react';
 
 export default function({
   handleClose,
@@ -38,9 +38,15 @@ export default function({
       <Box className={classes.headFlex}>
         <Box className={classes.iconText}>
           {isSuccess ? (
-            <CheckCircleOutlinedIcon className={classes.successIcon} />
+            <CheckCircleOutlinedIcon
+              className={classes.successIcon}
+              data-testid={`snackbar-success-icon`}
+            />
           ) : (
-            <ErrorOutlineIcon className={classes.warningIcon} />
+            <ErrorOutlineIcon
+              className={classes.warningIcon}
+              data-testid={`snackbar-failure-icon`}
+            />
           )}
           <Typography
             variant="body1"
