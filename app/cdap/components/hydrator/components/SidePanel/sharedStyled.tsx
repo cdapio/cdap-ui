@@ -19,6 +19,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  Icon,
   Box,
   IconButton,
   ListItem,
@@ -181,6 +182,20 @@ export const IconImg = styled.img`
   width: 32px;
   height: 32px;
   margin: 0 auto;
+`;
+
+export const ListIconImg = styled.img`
+  width: 19px;
+  height: 19px;
+  margin: 0 auto;
+`;
+
+export const ListCustomIcon = styled(Icon)`
+  && {
+    && {
+      font-size: 19px;
+    }
+  }
 `;
 
 export const PluginListItem = styled(ListItem)`
