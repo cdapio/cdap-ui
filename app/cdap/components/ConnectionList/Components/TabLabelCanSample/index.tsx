@@ -26,20 +26,16 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
+import T from 'i18n-react';
+import { ITableSampleCanSampleProps } from './types';
 
 export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,
   toggleLoader,
-  setIsErrorOnNoWorkSpace,
-}: {
-  label: string;
-  entity: IRecords;
-  initialConnectionId: string;
-  toggleLoader: (value: boolean, isError?: boolean) => void;
-  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+  setToaster,
+}: ITableSampleCanSampleProps) {
   const classes = useStyles();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
@@ -58,7 +54,13 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(currentEntity);
     } else {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.retrieveFailure')} ${
+          entity?.name
+        }`,
+        isSuccess: false,
+      });
     }
   };
 
@@ -66,7 +68,13 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.workspaceFailure')} ${
+          entity?.name
+        }`,
+        isSuccess: false,
+      });
     }
   };
 
@@ -82,13 +90,25 @@ export default function TabLabelCanSample({
           return onWorkspaceCreate(res);
         }
         if (res) {
-          setWorkspaceId(res);
+          setToaster({
+            open: true,
+            message: `${T.translate('features.WranglerNewUI.Snackbar.labels.datasetSuccess')}`,
+            isSuccess: true,
+          });
+          setTimeout(() => {
+            setWorkspaceId(res);
+          }, 2000);
+          // TODO: this setTimeout needs to be removed after getting merged with Destination(test/unit-tests-for-m1) branch
           toggleLoader(false);
         }
       })
       .catch((err) => {
         toggleLoader(false);
-        setIsErrorOnNoWorkSpace(true);
+        setToaster({
+          open: true,
+          message: `${T.translate('features.WranglerNewUI.Snackbar.labels.sampleFailure')}`,
+          isSuccess: false,
+        });
       });
   };
 

@@ -23,6 +23,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
+import { IConnectionTabsProps } from './types';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',
@@ -58,9 +59,9 @@ export default function ConnectionsTabs({
   value,
   index,
   connectionId,
-  setIsErrorOnNoWorkSpace,
-  ...props
-}) {
+  setToaster,
+  toggleLoader,
+}: IConnectionTabsProps) {
   const classes = useStyles();
 
   const [connectionIdProp, setConnectionId] = useState(connectionId);
@@ -112,8 +113,8 @@ export default function ConnectionsTabs({
                         label={connectorType.name}
                         entity={connectorType}
                         initialConnectionId={connectionIdProp}
-                        toggleLoader={props.toggleLoader}
-                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        toggleLoader={toggleLoader}
+                        setToaster={setToaster}
                       />
                     )
                   ) : (
