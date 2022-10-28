@@ -17,15 +17,15 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import React, { useState } from 'react';
-import OngoingDataExploration from './Components/OngoingDataExploration';
-import WrangleCard from './Components/WrangleCard';
-import WrangleHomeTitle from './Components/WrangleHomeTitle';
-import { GradientLine, HeaderImage } from './icons';
-import { useStyles } from './styles';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Link } from 'react-router-dom';
+import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
+import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle/index';
+import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
+import { useStyles } from 'components/WrangleHome/styles';
 import T from 'i18n-react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export default function() {
   const classes = useStyles();
