@@ -21,16 +21,18 @@ import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
 test('It renders Wrangler-Card ', async () => {
-  render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <WrangleCard />
-        </Route>
-      </Switch>
-    </Router>
-  );
+  describe('It should test WrangleCard Component', () => {
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WrangleCard />
+          </Route>
+        </Switch>
+      </Router>
+    );
 
-  const ele = screen.getByTestId(/wrangle-card-parent/i);
-  expect(ele).toBeInTheDocument();
+    const ele = screen.getByTestId(/wrangle-card-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
 });
