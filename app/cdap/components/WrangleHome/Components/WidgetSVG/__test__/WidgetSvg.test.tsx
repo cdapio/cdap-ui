@@ -19,8 +19,13 @@ import { render, screen } from '@testing-library/react';
 import WidgetSvg from 'components/WrangleHome/Components/WidgetSVG/index';
 
 describe('Test Widget data Component', () => {
-  it('Should render Widget data component', () => {
+  it('Should render Widget data component without dataSrc', () => {
     const container = render(<WidgetSvg />);
+    expect(container).toBeDefined();
+  });
+
+  it('Should render Widget data component with dataSrc', () => {
+    const container = render(<WidgetSvg dataSrc />);
     expect(container).toBeDefined();
   });
 });
