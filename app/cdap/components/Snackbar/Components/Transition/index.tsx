@@ -38,9 +38,15 @@ export default function({
       <Box className={classes.headFlex}>
         <Box className={classes.iconText}>
           {isSuccess ? (
-            <CheckCircleOutlinedIcon className={classes.successIcon} />
+            <CheckCircleOutlinedIcon
+              className={classes.successIcon}
+              data-testid={`snackbar-success-icon`}
+            />
           ) : (
-            <ErrorOutlineIcon className={classes.warningIcon} />
+            <ErrorOutlineIcon
+              className={classes.warningIcon}
+              data-testid={`snackbar-failure-icon`}
+            />
           )}
           <Typography
             variant="body1"
