@@ -72,7 +72,7 @@ export default function ConnectionsTabs({
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
       {tabsData.showTabs && (
-        <div className={classes.boxStyles}>
+        <div className={classes.boxStyles} data-testid="connection-tabs">
           <Tabs
             value={value}
             orientation="vertical"
@@ -90,6 +90,7 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
+                data-testid={`connections-tab-button-${connectorType.name}`}
                 onClick={() => {
                   if (index > 1) {
                     if (connectorType.canBrowse) {
@@ -129,7 +130,6 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                data-testid={`connection-tab-${connectorType.name}`}
                 className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
