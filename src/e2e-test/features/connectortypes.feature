@@ -19,6 +19,5 @@ Feature: Navigating through the connector types
   @ConnectorTypes
   Scenario: Navigate to all the connector types
     Given Navigate to the Home Page
-    Then Click on the Connector card
-    Then verify user is on datasource page or not
-    Then Click on the Home link in Data Sources page
+    Then Click on the connections available
+    Then Check import data is displayed by default or not
