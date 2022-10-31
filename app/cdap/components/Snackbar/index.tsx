@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import Snackbar from '@material-ui/core/Snackbar';
 import Transition from 'components/Snackbar/Components/Transition/index';
 import { useStyles } from 'components/Snackbar/styles';

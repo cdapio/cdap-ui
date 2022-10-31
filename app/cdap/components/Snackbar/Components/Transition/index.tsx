@@ -19,7 +19,7 @@ import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { useStyles } from 'components/Snackbar/Components/Transition/styles';
-import { ITransitionComponentProps } from 'components/Snackbar/Components/Transition/types';
+import { ITransitionProps } from 'components/Snackbar/Components/Transition/types';
 import T from 'i18n-react';
 import React from 'react';
 
@@ -28,9 +28,9 @@ export default function({
   isSuccess,
   messageToDisplay,
   actionType,
-}: ITransitionComponentProps) {
+}: ITransitionProps) {
   const undoActivity = () => {
-    // method where the recent activity on transformations in undone
+    // TODO: this is the method used to undo the recent activity on transformations
   };
   const classes = useStyles();
   return (

@@ -14,7 +14,7 @@
  * the License.
  */
 
-export interface ITransitionComponentProps {
+export interface ITransitionProps {
   handleClose: () => void;
   isSuccess: boolean;
   actionType: string;
