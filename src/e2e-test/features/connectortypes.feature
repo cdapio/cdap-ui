@@ -19,9 +19,5 @@ Feature: Navigating through the connector types
   @ConnectorTypes
   Scenario: Navigate to all the connector types
     Given Navigate to the Home Page
-    Then Click on the View all option
-    Then Click on the Home link
-    Then Click on the Connector type card
-    Then Click on the Home link in Data Sources page
-    Then Click on the Exploration card
-    Then Click on the Home link on wrangle page
+    Then Click on the connections available
+    Then Check import data is displayed by default or not

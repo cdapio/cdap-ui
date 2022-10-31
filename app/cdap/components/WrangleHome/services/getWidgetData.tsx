@@ -22,16 +22,16 @@ import {
   getMapOfConnectorToPluginProperties,
   getSelectedConnectorDisplayName,
 } from 'components/Connections/Create/reducer';
-import React from 'react';
 import WidgetSVG from 'components/WrangleHome/Components/WidgetSVG';
-import { ImportDatasetIcon } from '../Components/WrangleCard/iconStore/ImportDatasetIcon';
-import { ImportDataIcon } from '../Components/WrangleCard/iconStore/ImportDataIcon';
-import { AddConnectionIcon } from '../Components/WrangleCard/iconStore/AddConnectionIcon';
-import { getCategoriesToConnectorsMap } from '../Components/WidgetSVG/utils';
+import { getCategoriesToConnectorsMap } from 'components/WrangleHome/Components/WidgetSVG/utils';
+import { AddConnectionIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/AddConnectionIcon';
+import { ImportDataIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDataIcon';
+import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
 import {
   IConnectorArray,
   IConnectorDetailPayloadArray,
 } from 'components/WrangleHome/Components/WrangleCard/types';
+import React from 'react';
 
 export const getWidgetData = async (cbUpdateState) => {
   const connectorTypes = await fetchConnectors();

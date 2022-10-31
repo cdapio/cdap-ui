@@ -14,8 +14,11 @@
  * the License.
  */
 
+import {
+  IEachData,
+  IMassagedObject,
+} from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
-import { IEachData, IMassagedObject } from './types';
 
 export const generateDataForExplorationCard = (oldData: IEachData[]) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List

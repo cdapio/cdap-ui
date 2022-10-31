@@ -26,30 +26,32 @@ import {
   switchMapCallbackMock,
 } from 'components/WrangleHome/Components/OngoingDataExploration/mock/mockoldData';
 
-test('renders Ongoing Data Exploration component', async () => {
-  jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
-    callback(switchMapCallbackMock);
+describe('It should test OngoingDataExploration Component', () => {
+  test('renders Ongoing Data Exploration component', async () => {
+    jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
+      callback(switchMapCallbackMock);
+    });
+    jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
+      return {
+        pipe: () => {
+          return {
+            subscribe: (callback) => {
+              callback(getWorkspaceListSubscribeMock);
+            },
+          };
+        },
+      };
+    });
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <OngoingDataExploration />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const ele = screen.getByTestId(/ongoing-data-explore-parent/i);
+    expect(ele).toBeInTheDocument();
   });
-  jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
-    return {
-      pipe: () => {
-        return {
-          subscribe: (callback) => {
-            callback(getWorkspaceListSubscribeMock);
-          },
-        };
-      },
-    };
-  });
-  render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <OngoingDataExploration />
-        </Route>
-      </Switch>
-    </Router>
-  );
-  const ele = screen.getByTestId(/ongoing-data-explore-parent/i);
-  expect(ele).toBeInTheDocument();
 });
