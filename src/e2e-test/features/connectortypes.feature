@@ -20,4 +20,4 @@ Feature: Navigating through the connector types
   Scenario: Navigate to all the connector types
     Given Navigate to the Home Page
     Then Click on the connections available
-    Then Check import data is displayed by default or not
+    Then Check if 'Import Data' is displayed by default or not
