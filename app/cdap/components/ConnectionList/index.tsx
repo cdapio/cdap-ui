@@ -208,26 +208,26 @@ export default function ConnectionList() {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs.map((each, index) => {
-          const connectionIdRequired = each.data.filter((el) => el.connectionId);
+        {dataForTabs.map((eachTab, tabIndex) => {
+          const connectionIdRequired = eachTab.data.filter((el) => el.connectionId);
           if (connectionIdRequired.length) {
             connectionId = connectionIdRequired[0].connectionId;
           }
-          if (index === 0) {
+          if (tabIndex === 0) {
             headerContent = headerForLevelZero();
           } else {
             headerContent =
-              refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
-                <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+              refs.current[tabIndex]?.offsetWidth < refs.current[tabIndex]?.scrollWidth ? (
+                <CustomTooltip title={dataForTabs[tabIndex - 1].selectedTab} arrow>
                   <Box className={classes.beforeSearchIconClickDisplay}>
                     <Typography
                       variant="body2"
                       className={classes.headerLabel}
                       ref={(element) => {
-                        refs.current[index] = element;
+                        refs.current[tabIndex] = element;
                       }}
                     >
-                      {dataForTabs[index - 1].selectedTab}
+                      {dataForTabs[tabIndex - 1].selectedTab}
                     </Typography>
                   </Box>
                 </CustomTooltip>
@@ -237,22 +237,25 @@ export default function ConnectionList() {
                     variant="body2"
                     className={classes.headerLabel}
                     ref={(element) => {
-                      refs.current[index] = element;
+                      refs.current[tabIndex] = element;
                     }}
                   >
-                    {dataForTabs[index - 1].selectedTab}
+                    {dataForTabs[tabIndex - 1].selectedTab}
                   </Typography>
                 </Box>
               );
           }
           return (
-            <Box className={classes.tabsContainerWithHeader}>
+            <Box
+              className={classes.tabsContainerWithHeader}
+              data-testid={`connection-tabs-column-${tabIndex}`}
+            >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
-                tabsData={each}
+                tabsData={eachTab}
                 handleChange={selectedTabValueHandler}
-                value={each.selectedTab}
-                index={index}
+                value={eachTab.selectedTab}
+                index={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 setToaster={setToaster}
