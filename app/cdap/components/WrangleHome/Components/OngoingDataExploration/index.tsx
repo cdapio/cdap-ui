@@ -18,7 +18,7 @@ import { Box } from '@material-ui/core/';
 import MyDataPrepApi from 'api/dataprep';
 import { IResponseData } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import { generateDataForExplorationCard } from 'components/WrangleHome/Components/OngoingDataExploration/utils';
-import OngoingDataExplorationCard from 'components/WrangleHome/Components/OngoingDataExplorationCard/index';
+import OngoingDataExplorationCard from 'components/WrangleHome/Components/OngoingDataExplorationCard';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
