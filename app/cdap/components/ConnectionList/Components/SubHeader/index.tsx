@@ -30,10 +30,14 @@ export default function SubHeader() {
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
       <Box>
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
+          <Link
+            color="inherit"
+            to={`/ns/${getCurrentNamespace()}/home`}
+            data-testid="breadcrumb-home-link"
+          >
             Home
           </Link>
-          <Typography>Data Sources</Typography>
+          <Typography data-testid="breadcrumb-datasources-text">Data Sources</Typography>
         </Breadcrumbs>
       </Box>
 
