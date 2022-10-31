@@ -67,7 +67,9 @@ export default function() {
           <WrangleHomeTitle
             title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
           />
-          <Box className={classes.viewMore}>View All</Box>
+          <Box className={classes.viewMore}>
+            {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+          </Box>
         </Box>
         <OngoingDataExploration />
         {loading && (
