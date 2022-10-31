@@ -14,43 +14,27 @@
  * the License.
  */
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
-import MyDataPrepApi from 'api/dataprep';
-import operators from 'rxjs/operators';
-import { Route, Router, Switch } from 'react-router';
-import history from 'services/history';
-import {
-  getWorkspaceListSubscribeMock,
-  switchMapCallbackMock,
-} from 'components/WrangleHome/Components/OngoingDataExploration/mock/mockoldData';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import OngoingDataExploration from "components/WrangleHome/Components/OngoingDataExploration/index";
 
-describe('It should test OngoingDataExploration Component', () => {
-  test('renders Ongoing Data Exploration component', async () => {
-    jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
-      callback(switchMapCallbackMock);
-    });
-    jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
-      return {
-        pipe: () => {
-          return {
-            subscribe: (callback) => {
-              callback(getWorkspaceListSubscribeMock);
-            },
-          };
+describe("It should test OngoingDataExploration Component", () => {
+  test("renders Ongoing Data Exploration component", () => {
+    jest.mock("api/dataprep", () => {
+      return Promise.resolve([
+        {
+          connectionName: "test1",
+          workspaceName: "Divami_Users_Emails.xlsx",
+          recipeSteps: 0,
         },
-      };
+        {
+          connectionName: "Upload",
+          workspaceName: "Divami_Users_Emails.xlsx",
+          recipeSteps: 0,
+        },
+      ]);
     });
-    render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <OngoingDataExploration />
-          </Route>
-        </Switch>
-      </Router>
-    );
+    render(<OngoingDataExploration />);
     const ele = screen.getByTestId(/ongoing-data-explore-parent/i);
     expect(ele).toBeInTheDocument();
   });
