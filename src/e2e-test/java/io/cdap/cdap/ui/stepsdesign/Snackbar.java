@@ -22,89 +22,108 @@ public class Snackbar {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
-    @Then("Click on the Connector type")
-    public void clickOnConnection() throws InterruptedException{
-        System.out.println("User navigated to data source page");
-        WaitHelper.waitForPageToLoad();
-        Thread.sleep(1000);
-        String cssSelector = "div[data-testid*='connectionstabs-eachtab-0-0'] >";
-        if(cssSelector.length() > 0) {
-            System.out.println("cssSelector found" + cssSelector);
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("connectionstabs-eachtab-0-0"));
-            String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/PostgreSQL");
-            System.out.println("Clicked on Postgrl 1");
-        }
-        else {
-            System.out.println("cssSelector not found" + cssSelector);
-        }
 
-        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("connectionstabs-eachtab-0-0")))
-        {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("connectionstabs-eachtab-0-0"));
-            String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/PostgreSQL");
-            System.out.println("Clicked on Postgrl");
-        } else{
-            System.out.println("Cant find the PostgreSQL element");
+    @Then("Click on \\\"(.*)\\\" with the testid \\\"(.*)\\\"")
+    public void clickOnConnection(String connectionLabel, String connectionTestId) {
+//        System.out.println("User navigated to data source page");
+//        WaitHelper.waitForPageToLoad();
+//        Thread.sleep(1000);
+//        String cssSelector = "div[data-testid*='connectionstabs-eachtab-0-0'] >";
+//        if(cssSelector.length() > 0) {
+//            System.out.println("cssSelector found" + cssSelector);
+//            ElementHelper.clickOnElement(Helper.locateElementByTestId("connectionstabs-eachtab-0-0"));
+//            String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+//            Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/PostgreSQL");
+//            System.out.println("Clicked on Postgrl 1");
+//        }
+//        else {
+//            System.out.println("cssSelector not found" + cssSelector);
+//        }
+//
+//        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("connectionstabs-eachtab-0-0")))
+//        {
+//            ElementHelper.clickOnElement(Helper.locateElementByTestId("connectionstabs-eachtab-0-0"));
+//            String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+//            Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/PostgreSQL");
+//            System.out.println("Clicked on Postgrl");
+//        } else{
+//            System.out.println("Cant find the PostgreSQL element");
+//        }
+//    }
+        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("wrangle-card-" + connectionTestId))) {
+            System.out.println(connectionLabel + " Element is found successfully");
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+            System.out.println("Clicked on " + connectionLabel + " Element");
+            WaitHelper.waitForPageToLoad();
+            if (connectionLabel.equals("Add Connections")) {
+                ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+                System.out.println("Clicked on " + connectionLabel + " Element");
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/connections/create");
+                System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
+            }
+            if (connectionLabel.equals("PostgreSQL") || connectionLabel.equals("File")) {
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
+                System.out.println("Navigated to Data Source page wit connection " + connectionLabel + " selected");
+            }
         }
     }
-    @Then("Click on the first tab of second column")
-    public void clickOnTheFirstTabOfSecondColumn() throws InterruptedException{
-        WaitHelper.waitForPageToLoad();
+        @Then("Click on the first tab of second column")
+        public void clickOnTheFirstTabOfSecondColumn() {
+            WaitHelper.waitForPageToLoad();
+
 //        ElementHelper.clickOnElement(Helper.locateElementByTestId("connectionstabs-eachtab-0-0"));
 //        WaitHelper.waitForPageToLoad();
 //        ElementHelper.clickOnElement(Helper.locateElementByTestId("connections-tab-button-ex2"));
 
-        for(int i=1;i <2 ;i ++)
-        {
-            // WaitHelper.waitForPageToLoad(5000);
-            Thread.sleep(1000);
-            System.out.println("Checking for file or folder");
-            if(Helper.isElementExists("connection-tabs-column-1")) {
-                System.out.println("tab found in "+i+"-0");
+            for (int i = 1; i < 5; i++) {
+                // WaitHelper.waitForPageToLoad(5000);
+//            Thread.sleep(1000);
+                System.out.println("Checking for file or folder");
 
-                // iterates thru columns
-                // for(int j=0;j<10;j++) {
+                if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("connection-tabs-column-" + i + "-0"))) {
+                    System.out.println("tab found in " + i + "-0");
+
+                    // iterates thru columns
+                    // for(int j=0;j<10;j++) {
                     // iterates thru rows in specific column, i
-                    WebElement ele = Helper.locateElementByTestId("connectionstabs-eachtab-"+1+"-0");
-                    System.out.println("tab found in "+i+"-0");
+                    WebElement ele = Helper.locateElementByTestId("connectionstabs-eachtab-" + i + "-0");
+                    System.out.println("tab found in " + i + "-0");
 
                     Actions action = new Actions(SeleniumDriver.getDriver());
                     WaitHelper.waitForPageToLoad();
                     action.moveToElement(ele).perform();
                     System.out.println("hovered on the tab");
 
-                    if(Helper.isElementExists("connection-list-wrangle-link")){
+                    if (Helper.isElementExists("connection-list-wrangle-link")) {
                         System.out.println("wrangle icon is existing");
 
                         ElementHelper.clickOnElement(Helper.locateElementByTestId("connection-list-wrangle-link"));
                         System.out.println("clicked on wrangle icon");
 
-                        if (Helper.isElementExists("snackbar-success-icon"))
-                        {
+                        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("snackbar-success-icon"))) {
                             WaitHelper.waitForPageToLoad();
                             ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-success-icon"));
                             System.out.println("inside snack bar success icon");
-                        }
-                        else {
+                        } else {
                             ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-failure-icon"));
                             System.out.println("inside snack bar failure icon");
                         }
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         ele.click();
                         System.out.println("clicked on the tab");
                     }
-                //}
-            }
-            else {
-                System.out.println("tab not found in "+i+"-0"+"->   connection-tabs-column-1");
+                    //}
+                } else {
+                    System.out.println("tab not found in " + i + "-0" + "->   connection-tabs-column-" + i +"-0");
+                    break;
+                }
             }
         }
     }
+
 //    @Then("Click on the first tab of third column")
 //    public void clickOnTheFirstTabOfThirdColumn() {
 //        WaitHelper.waitForPageToLoad();
@@ -171,4 +190,4 @@ public class Snackbar {
 //            public void clickOnTheFirstTabOfSecondColumn(){
 //        List<WebElement> myList=Helper.locateElementByTestId("accordion-toggle"));
 //}
-}
+
