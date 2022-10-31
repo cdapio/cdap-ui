@@ -17,7 +17,14 @@
 @Integration_Tests
 Feature: Navigating through the connector types
   @ConnectorTypes
-  Scenario: Navigate to all the connector types
+  Scenario Outline: Navigate to all the connector types
+
     Given Navigate to the Home Page
-    Then Click on the connections available
-    Then Check if 'Import Data' is displayed by default or not
+    Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>" available
+
+  Examples:
+    | connectionLabel | connectionTestId |
+    | Add Connections | add-connection |
+    | PostgreSQL | postgresql |
+    | File | file |
+    | Imported Data | import-data |

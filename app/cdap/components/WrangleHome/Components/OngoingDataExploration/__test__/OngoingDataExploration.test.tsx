@@ -14,22 +14,22 @@
  * the License.
  */
 
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import OngoingDataExploration from "components/WrangleHome/Components/OngoingDataExploration/index";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
 
-describe("It should test OngoingDataExploration Component", () => {
-  test("renders Ongoing Data Exploration component", () => {
-    jest.mock("api/dataprep", () => {
+describe('It should test OngoingDataExploration Component', () => {
+  test('renders Ongoing Data Exploration component', () => {
+    jest.mock('api/dataprep', () => {
       return Promise.resolve([
         {
-          connectionName: "test1",
-          workspaceName: "Divami_Users_Emails.xlsx",
+          connectionName: 'test1',
+          workspaceName: 'Divami_Users_Emails.xlsx',
           recipeSteps: 0,
         },
         {
-          connectionName: "Upload",
-          workspaceName: "Divami_Users_Emails.xlsx",
+          connectionName: 'Upload',
+          workspaceName: 'Divami_Users_Emails.xlsx',
           recipeSteps: 0,
         },
       ]);
