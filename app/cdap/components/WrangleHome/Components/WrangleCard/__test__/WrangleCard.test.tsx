@@ -26,7 +26,7 @@ test('It renders Wrangler-Card ', async () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <WrangleCard />
+            <WrangleCard toggleViewAllLink={jest.fn} />
           </Route>
         </Switch>
       </Router>

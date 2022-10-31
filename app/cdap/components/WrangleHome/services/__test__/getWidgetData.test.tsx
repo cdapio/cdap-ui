@@ -31,8 +31,13 @@ import {
   postGresMock,
 } from '../mock/mockData';
 
+window.CDAP_CONFIG = {
+  cdap: {
+    uiDebugEnabled: true,
+  },
+};
 describe('Test function getWidgetData', () => {
-  it('invokes getWidgetData function with data from API`s data', () => {
+  it('invokes getWidgetData function with data from API`s data', async () => {
     jest.spyOn(reducers, 'fetchConnectors').mockReturnValue(Promise.resolve(fetchConnectorMock));
     const dummyRes = new Map();
     dummyRes.set('PostgreSql', postGresMock);
@@ -48,7 +53,16 @@ describe('Test function getWidgetData', () => {
 
     jest.spyOn(utils, 'getCategoriesToConnectorsMap').mockReturnValue(dummyReturnMap);
 
-    getWidgetData(() => {});
-    expect(getWidgetData).toBeTruthy;
+    let result;
+
+    const expectedresult = {
+      connectorTypes: [],
+    };
+    const updateState = (newState) => {
+      result = { ...newState };
+      // do nothing
+    };
+    await getWidgetData(updateState);
+    expect(result).toStrictEqual(expectedresult);
   });
 });
