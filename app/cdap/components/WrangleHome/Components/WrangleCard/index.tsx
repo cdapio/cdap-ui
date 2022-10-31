@@ -70,7 +70,10 @@ export default function({ toggleViewAllLink }) {
                 : `/ns/${getCurrentNamespace()}/datasources/${item.name}`
             }
             style={{ textDecoration: 'none' }}
-            data-testid={`wrangle-card-${item.name}`}
+            data-testid={`wrangle-card-${item.name
+              .toLowerCase()
+              .split(' ')
+              .join('-')}`}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
