@@ -40,3 +40,7 @@ export interface IConnectorDetailPayloadArray {
     scope: string;
   };
 }
+
+export interface IWrangleCard {
+  toggleViewAllLink: (x: boolean) => void;
+}
