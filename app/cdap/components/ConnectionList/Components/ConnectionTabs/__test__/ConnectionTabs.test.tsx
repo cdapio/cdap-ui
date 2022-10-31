@@ -18,7 +18,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ConnectionsTabs from '../index';
 
-const tabsTestData = {data:[], showTabs: true ,selectedTab:"",isSearching:true};
+const tabsTestData = { data: [], showTabs: true, selectedTab: '', isSearching: true };
 
 test('renders Connections Tab Component', () => {
   render(
@@ -27,9 +27,10 @@ test('renders Connections Tab Component', () => {
       handleChange={() => null}
       value="apple"
       index={0}
-      connectionId={undefined} 
-      setToaster={() => jest.fn()} 
-      toggleLoader={() => jest.fn()}    />
+      connectionId={undefined}
+      setToaster={() => jest.fn()}
+      toggleLoader={() => jest.fn()}
+    />
   );
   const ele = screen.getByTestId(/connections-tabs-parent/i);
   expect(ele).toBeInTheDocument();

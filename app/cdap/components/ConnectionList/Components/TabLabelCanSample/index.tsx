@@ -118,10 +118,7 @@ export default function TabLabelCanSample({
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button
-          className="wranglingHover"
-          onClick={() => onExplore(entity)}
-        >
+        <button className="wranglingHover" onClick={() => onExplore(entity)}>
           <WrangleIcon />
           <Typography
             variant="body2"
@@ -138,10 +135,7 @@ export default function TabLabelCanSample({
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button
-        className="wranglingHover"
-        onClick={() => onExplore(entity)}
-      >
+      <button className="wranglingHover" onClick={() => onExplore(entity)}>
         <WrangleIcon />
         <Typography
           variant="body2"
