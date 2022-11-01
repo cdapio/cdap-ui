@@ -23,6 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
+import T from 'i18n-react';
 
 export default function SubHeader() {
   const classes = useStyles();
@@ -37,7 +38,9 @@ export default function SubHeader() {
           >
             Home
           </Link>
-          <Typography data-testid="breadcrumb-datasources-text">Data Sources</Typography>
+          <Typography data-testid="breadcrumb-datasources-text">
+            {T.translate('features.WranglerNewUI.BreadCrumb.labels.dataSources')}
+          </Typography>
         </Breadcrumbs>
       </Box>
 

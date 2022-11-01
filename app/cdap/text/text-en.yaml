@@ -3432,6 +3432,10 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    BreadCrumb:
+      labels:
+        dataSources: Data Sources
+
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
@@ -3444,5 +3448,6 @@ features:
         sampleFailure: Failed to retrieve sample data
         success: Success
         failure: Failure
+    
 
 ...
