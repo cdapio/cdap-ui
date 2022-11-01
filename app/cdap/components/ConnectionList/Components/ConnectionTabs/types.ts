@@ -15,13 +15,14 @@
  */
 
 import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import { IConnectorType } from 'components/Connections/Browser/SidePanel';
 
 export interface IRecords {
   [key: string]: string | number | IRecords | boolean;
 }
 
 export interface ITabsData {
-  data: any[];
+  data: IRecords[];
   showTabs: boolean;
   selectedTab: string;
   isSearching: boolean;

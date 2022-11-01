@@ -19,7 +19,10 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import { IConnectionTabsProps } from 'components/ConnectionList/Components/ConnectionTabs/types';
+import {
+  IConnectionTabsProps,
+  IRecords,
+} from 'components/ConnectionList/Components/ConnectionTabs/types';
 import TabLabelCanBrowse from 'components/ConnectionList/Components/TabLabelCanBrowse';
 import TabLabelCanSample from 'components/ConnectionList/Components/TabLabelCanSample';
 import React, { useEffect, useState } from 'react';
@@ -104,14 +107,14 @@ export default function ConnectionsTabs({
                   index > 1 ? (
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
-                        label={connectorType.name}
-                        count={index === 0 ? connectorType.count : undefined}
+                        label={connectorType.name as string}
+                        count={index === 0 ? (connectorType.count as number) : undefined}
                         index={index}
                       />
                     ) : (
                       <TabLabelCanSample
-                        label={connectorType.name}
-                        entity={connectorType}
+                        label={connectorType.name as string}
+                        entity={connectorType as IRecords}
                         initialConnectionId={connectionIdProp}
                         toggleLoader={toggleLoader}
                         setToaster={setToaster}
@@ -119,17 +122,17 @@ export default function ConnectionsTabs({
                     )
                   ) : (
                     <TabLabelCanBrowse
-                      label={connectorType.name}
-                      count={index === 0 ? connectorType.count : undefined}
+                      label={connectorType.name as string}
+                      count={index === 0 ? (connectorType.count as number) : undefined}
                       index={index}
-                      icon={connectorType.icon}
+                      icon={(connectorType.icon as unknown) as JSX.Element}
                     />
                   )
                 }
                 value={connectorType.name}
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
-                id={connectorType.name}
+                id={connectorType.name as string}
                 className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
