@@ -20,8 +20,8 @@ import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import rxjs from 'rxjs/operators';
 import history from 'services/history';
-import GridTable from '..';
-import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
+import GridTable from 'components/GridTable/index';
+import { mockForFlatMap, mockForGetWorkspace } from 'components/GridTable/mock/mockDataForGrid';
 
 describe('Testing Grid Table Component', () => {
   jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
