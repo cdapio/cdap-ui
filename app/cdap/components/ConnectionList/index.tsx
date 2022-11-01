@@ -208,8 +208,8 @@ export default function ConnectionList() {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs.map((eachTab, tabIndex) => {
-          const connectionIdRequired = eachTab.data.filter((el) => el.connectionId);
+        {dataForTabs?.map((eachTab, tabIndex) => {
+          const connectionIdRequired = eachTab?.data?.filter((el) => el.connectionId);
           if (connectionIdRequired.length) {
             connectionId = connectionIdRequired[0].connectionId;
           }
