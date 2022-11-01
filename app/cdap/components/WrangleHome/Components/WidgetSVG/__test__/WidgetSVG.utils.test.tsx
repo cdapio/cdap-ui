@@ -77,11 +77,6 @@ describe('Test Utils function', () => {
     );
   });
 
-  it('Should invoke the utils function with no parameters', () => {
-    getCategoriesToConnectorsMap(undefined);
-    expect(getCategoriesToConnectorsMap(undefined)).toStrictEqual(mockReturnedValue);
-  });
-
   it('Should invoke the function when there is no category', () => {
     getCategoriesToConnectorsMap(mockConnectorTypeWithNoCategory);
     expect(getCategoriesToConnectorsMap(mockConnectorTypeWithNoCategory)).toStrictEqual(
