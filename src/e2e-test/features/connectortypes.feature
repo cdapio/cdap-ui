@@ -20,11 +20,11 @@ Feature: Navigating through the connector types
   Scenario Outline: Navigate to all the connector types
 
     Given Navigate to the Home Page
-    Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>" available
+    Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>"
 
   Examples:
     | connectionLabel | connectionTestId |
     | Add Connections | add-connection |
     | PostgreSQL | postgresql |
     | File | file |
-    | Imported Data | import-data |
+    | Import Data | import-data |
