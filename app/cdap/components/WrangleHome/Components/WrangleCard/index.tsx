@@ -33,16 +33,10 @@ import { S3 } from './iconStore/S3';
 import { Spanner } from './iconStore/Spanner';
 import { SQLServer } from './iconStore/SQLServer';
 import { useStyles } from './styles';
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
-import Snackbar from 'components/Snackbar';
 
 export default function WrangleCard() {
   const [connectorTypes, setConnectorTypes] = useState({
     fetchedConnectorTypes: [],
-  });
-  const [toaster, setToaster] = useState<ISnackbarToast>({
-    open: false,
-    isSuccess: false,
   });
 
   // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
@@ -146,13 +140,6 @@ export default function WrangleCard() {
   useEffect(() => {
     getConnectorTypesNames();
   }, []);
-  const handleSnack = (e) => {
-    e.preventDefault();
-    setToaster({
-      open: true,
-      isSuccess: false,
-    });
-  };
   const classes = useStyles();
   const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
   return (
@@ -163,7 +150,6 @@ export default function WrangleCard() {
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
             style={{ textDecoration: 'none' }}
             data-testid={`wrangle-card-${item.name}`}
-            onClick={(e) => handleSnack(e)}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
@@ -174,17 +160,6 @@ export default function WrangleCard() {
           </Link>
         );
       })}
-      {toaster.open && (
-        <Snackbar
-          handleCloseError={() =>
-            setToaster({
-              open: false,
-            })
-          }
-          messageToDisplay={'This is failuer Snackbar'}
-          isSuccess={toaster.isSuccess}
-        />
-      )}
     </Box>
   );
 }
