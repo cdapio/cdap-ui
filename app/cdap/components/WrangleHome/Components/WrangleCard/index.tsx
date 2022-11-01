@@ -36,7 +36,7 @@ export default function({ toggleViewAllLink }: IWrangleCard) {
     if (
       updatedState.hasOwnProperty('connectorTypes') &&
       Array.isArray(updatedState.connectorTypes) &&
-      updatedState.connectorTypes.length >= 4
+      updatedState.connectorTypes.length > 5
     ) {
       toggleViewAllLink(true);
     } else {
