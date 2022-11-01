@@ -78,7 +78,6 @@ describe('Test Utils function', () => {
   });
 
   it('Should invoke the utils function with no parameters', () => {
-    const mockReturnedValue = new Map();
     getCategoriesToConnectorsMap(undefined);
     expect(getCategoriesToConnectorsMap(undefined)).toStrictEqual(mockReturnedValue);
   });

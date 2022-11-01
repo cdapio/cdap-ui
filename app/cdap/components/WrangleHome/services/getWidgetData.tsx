@@ -102,7 +102,7 @@ export const getWidgetData = async (cbUpdateState) => {
   });
 
   connectorDataWithSvgArray = connectorDataWithSvgArray.filter((obj) =>
-    connectorTypeWithConnections.find((item) => item == obj.name)
+    connectorTypeWithConnections.find((item) => item === obj.name)
   );
 
   connectorDataWithSvgArray = [
