@@ -43,16 +43,16 @@ public class ConnectorTypes {
                 String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
                 Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/connections/create");
                 System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
-            }
-            if (!connectionLabel.equals("Add Connections")) {
-                if (!connectionLabel.equals("Import Data")) {
-                    String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
-                    Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
-                    System.out.println("Navigated to Data Source page wit connection " + connectionLabel + " selected");
-                }
+            } else if (connectionLabel.equals("Import Data")) {
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/home");
+            } else {
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
+                System.out.println("Navigated to Data Source page with connection " + connectionLabel + " selected");
             }
         } catch (Exception e) {
-            System.out.println(connectionLabel + " Element does not exist");
+            System.err.println("error: "+e);
         }
     }
 }
