@@ -110,7 +110,6 @@ export default function OngoingDataExploration() {
 
   const handleSnack = (e) => {
     e.preventDefault();
-    console.log('yolo');
     setToaster({
       open: true,
       isSuccess: true,
