@@ -24,10 +24,16 @@ import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { IResponseData } from './types';
+import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import Snackbar from 'components/Snackbar';
 
 export default function OngoingDataExploration() {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
   const [finalArray, setFinalArray] = useState([]);
+  const [toaster, setToaster] = useState<ISnackbarToast>({
+    open: false,
+    isSuccess: false,
+  });
 
   const getOngoingData = () => {
     // Getting the workspace name, path ,workspaceId and name from MyDataPrepApi.getWorkspaceList API and
@@ -102,6 +108,15 @@ export default function OngoingDataExploration() {
     setFinalArray(final);
   }, [ongoingExpDatas]);
 
+  const handleSnack = (e) => {
+    e.preventDefault();
+    console.log('yolo');
+    setToaster({
+      open: true,
+      isSuccess: true,
+    });
+  };
+
   return (
     <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item, index) => {
@@ -109,11 +124,23 @@ export default function OngoingDataExploration() {
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
+            onClick={(e) => handleSnack(e)}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>
         );
       })}
+      {toaster.open && (
+        <Snackbar
+          handleCloseError={() =>
+            setToaster({
+              open: false,
+            })
+          }
+          messageToDisplay={'This is Snackbar'}
+          isSuccess={toaster.isSuccess}
+        />
+      )}
     </Box>
   );
 }
