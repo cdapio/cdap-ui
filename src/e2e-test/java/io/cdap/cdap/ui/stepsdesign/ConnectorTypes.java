@@ -32,27 +32,27 @@ public class ConnectorTypes {
         WaitHelper.waitForPageToLoad();
     }
 
-    @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\" available")
+    @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
     public void clickOnConnections(String connectionLabel, String connectionTestId) {
-        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("wrangle-card-" + connectionTestId))) {
-            System.out.println(connectionLabel + " Element is found successfully");
+        try {
             ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+            System.out.println(connectionLabel + " Element is found successfully");
             System.out.println("Clicked on " + connectionLabel + " Element");
             WaitHelper.waitForPageToLoad();
             if (connectionLabel.equals("Add Connections")) {
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-                System.out.println("Clicked on " + connectionLabel + " Element");
                 String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
                 Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/connections/create");
                 System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
-            }
-            if (connectionLabel.equals("PostgreSQL") || connectionLabel.equals("File")) {
+            } else if (connectionLabel.equals("Import Data")) {
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/home");
+            } else {
                 String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
                 Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
-                System.out.println("Navigated to Data Source page wit connection " + connectionLabel + " selected");
+                System.out.println("Navigated to Data Source page with connection " + connectionLabel + " selected");
             }
-        } else {
-            System.out.println(connectionLabel + " Element does not exist");
+        } catch (Exception e) {
+            System.err.println("error: "+e);
         }
     }
 }

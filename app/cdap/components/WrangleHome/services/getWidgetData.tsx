@@ -36,10 +36,20 @@ import React from 'react';
 export const getWidgetData = async (cbUpdateState) => {
   const connectorTypes = await fetchConnectors();
   const categorizedConnections = await getCategorizedConnections();
+
   const connectorTypeWithConnections = [];
-  categorizedConnections?.forEach((itemEach, key) => {
-    connectorTypeWithConnections.push(key);
+  categorizedConnections?.forEach((value, key) => {
+    let mostUpdatedTimeStamp = value[0].updatedTimeMillis;
+    value.forEach((e) => {
+      if (mostUpdatedTimeStamp < e.updatedTimeMillis) {
+        mostUpdatedTimeStamp = e.updatedTimeMillis;
+      }
+    });
+    connectorTypeWithConnections.push({ name: key, time: mostUpdatedTimeStamp });
   });
+  const sortedConections = connectorTypeWithConnections.slice(0);
+  sortedConections.sort((a, b) => b.time - a.time);
+
   const connectorDataArray = [];
   let connectorDataWithSvgArray: IConnectorArray[] = [];
   const allConnectorsPluginProperties: Map<
@@ -101,8 +111,8 @@ export const getWidgetData = async (cbUpdateState) => {
     }
   });
 
-  connectorDataWithSvgArray = connectorDataWithSvgArray.filter((obj) =>
-    connectorTypeWithConnections.find((item) => item === obj.name)
+  connectorDataWithSvgArray = sortedConections.map((obj) =>
+    connectorDataWithSvgArray.find((item) => item.name === obj.name)
   );
 
   connectorDataWithSvgArray = [
