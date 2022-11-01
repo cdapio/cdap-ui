@@ -35,7 +35,6 @@ public class ConnectorTypes {
     @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
     public void clickOnConnections(String connectionLabel, String connectionTestId) {
         try {
-
             ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
             System.out.println(connectionLabel + " Element is found successfully");
             System.out.println("Clicked on " + connectionLabel + " Element");
@@ -45,7 +44,6 @@ public class ConnectorTypes {
                 Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/connections/create");
                 System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
             }
-
             if (!connectionLabel.equals("Add Connections")) {
                 if (!connectionLabel.equals("Import Data")) {
                     String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
