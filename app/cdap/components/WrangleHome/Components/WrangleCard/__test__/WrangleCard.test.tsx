@@ -20,8 +20,8 @@ import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
-test('It renders Wrangler-Card ', async () => {
-  describe('It should test WrangleCard Component', () => {
+describe('It renders Wrangler-Card ', () => {
+  it('It should test WrangleCard Component', () => {
     render(
       <Router history={history}>
         <Switch>

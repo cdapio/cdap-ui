@@ -20,16 +20,18 @@ import WranglerHomeNew from '../index';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
-test('renders Wrangler-Home-New component', () => {
-  const container = render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <WranglerHomeNew />
-        </Route>
-      </Switch>
-    </Router>
-  );
-  const ele = screen.getByTestId(/wrangler-home-new-parent/i);
-  expect(ele).toBeInTheDocument();
+describe('It renders Wrangle Home ', () => {
+  test('renders Wrangler-Home-New component', () => {
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WranglerHomeNew />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const ele = screen.getByTestId(/wrangler-home-new-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
 });
