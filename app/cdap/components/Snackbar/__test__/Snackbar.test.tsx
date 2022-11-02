@@ -35,7 +35,7 @@ describe('It should test the Snackbar Component while triggering set timeOut fun
     expect(container).toBeDefined();
   });
 
-  it('Should trigger handleClose()', () => {
+  it('expect the relevent class when isSuccess is false', () => {
     render(
       <Snackbar
         handleCloseError={jest.fn()}
@@ -45,8 +45,23 @@ describe('It should test the Snackbar Component while triggering set timeOut fun
         actionType={''}
       />
     );
+    const snackBarParent = screen.getByTestId(/snackbar-alert/i);
+    expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
+  });
+
+  it('Should trigger handleClose and also check for snackBar parent class', () => {
+    render(
+      <Snackbar
+        handleCloseError={jest.fn()}
+        handleDefaultCloseSnackbar={jest.fn()}
+        messageToDisplay={undefined}
+        isSuccess={true}
+        actionType={'test'}
+      />
+    );
+    const snackBarParent = screen.getByTestId(/snackbar-alert/i);
     const closeBtn = screen.getByTestId('snackbar-close-icon');
-    expect(closeBtn).toBeInTheDocument();
     fireEvent.click(closeBtn);
+    expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
   });
 });
