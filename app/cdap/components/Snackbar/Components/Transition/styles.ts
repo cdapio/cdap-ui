@@ -21,13 +21,15 @@ export const useStyles = makeStyles((theme) => ({
     color: '#ffffff',
     marginRight: 8,
     fontSize: 'x-large',
+    width: 18,
   },
   successIcon: {
     fontSize: 'xx-large',
     color: '#ffffff',
-    paddingRight: 14,
     position: 'relative',
     bottom: 4,
+    width: 18,
+    marginRight: 13,
   },
   successLabel: {
     color: '#ffffff',
