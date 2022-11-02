@@ -89,14 +89,7 @@ export default function TabLabelCanSample({
           return onWorkspaceCreate(res);
         }
         if (res) {
-          setToaster({
-            open: true,
-            message: `${T.translate('features.WranglerNewUI.Snackbar.labels.datasetSuccess')}`,
-            isSuccess: true,
-          });
-          setTimeout(() => {
-            setWorkspaceId(res);
-          }, 2000);
+          setWorkspaceId(res);
           toggleLoader(false);
         }
       })

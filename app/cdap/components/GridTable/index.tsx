@@ -61,6 +61,7 @@ export default function GridTable() {
     setToaster({
       open: true,
       isSuccess: true,
+      message: `${T.translate('features.WranglerNewUI.Snackbar.labels.datasetSuccess')}`,
     });
   };
 
@@ -266,10 +267,10 @@ export default function GridTable() {
                 ))}
             </TableRow>
             <TableRow>
-              {missingDataList?.length &&
-                headersNamesList.length &&
+              {missingDataList?.length !== 0 &&
+                headersNamesList.length !== 0 &&
                 headersNamesList.map((each, index) => {
-                  return missingDataList.map((item, itemIndex) => {
+                  return missingDataList?.map((item, itemIndex) => {
                     if (item.name === each.name) {
                       return <GridKPICell metricData={item} key={item.name} />;
                     }
@@ -278,8 +279,8 @@ export default function GridTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rowsDataList?.length &&
-              rowsDataList.map((eachRow, rowIndex) => {
+            {rowsDataList?.length !== 0 &&
+              rowsDataList?.map((eachRow, rowIndex) => {
                 return (
                   <TableRow key={`row-${rowIndex}`}>
                     {headersNamesList.map((eachKey, eachIndex) => {
@@ -308,7 +309,7 @@ export default function GridTable() {
               open: false,
             })
           }
-          messageToDisplay="Dataset successfully loaded"
+          messageToDisplay={toaster.message ? toaster.message : ''}
           isSuccess={toaster.isSuccess}
         />
       )}
