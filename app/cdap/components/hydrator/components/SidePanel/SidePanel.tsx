@@ -36,6 +36,8 @@ import {
   IconImg,
   IconsMenuContainer,
   ItemBodyWrapper,
+  ListCustomIcon,
+  ListIconImg,
   ListOrIconsButton,
   PluginBadge,
   PluginButton,
@@ -293,7 +295,14 @@ export const SidePanel = ({
             )}
             {sidePanelViewType === 'list' && (
               <PluginListItem>
-                <Icon className={`fa ${plugin.icon}`} />
+                {plugin.showCustomIcon && (
+                  <ListCustomIcon className="fa">
+                    <ListIconImg src={plugin.customIconSrc} />
+                  </ListCustomIcon>
+                )}
+                {!plugin.showCustomIcon && (
+                  <ListCustomIcon className={`fa ${plugin.icon}`}> </ListCustomIcon>
+                )}
                 <PluginNameContainerList>
                   {myRemoveCamelCase(label || plugin.pluginTemplate)}
                 </PluginNameContainerList>
