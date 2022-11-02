@@ -19,15 +19,17 @@ import { makeStyles } from '@material-ui/core';
 export const useStyles = makeStyles((theme) => ({
   warningIcon: {
     color: '#ffffff',
-    marginRight: 10,
+    marginRight: 13,
     fontSize: 'x-large',
+    width: 18,
   },
   successIcon: {
     fontSize: 'xx-large',
     color: '#ffffff',
-    paddingRight: 14,
     position: 'relative',
     bottom: 4,
+    width: 18,
+    marginRight: 13,
   },
   successLabel: {
     color: '#ffffff',
