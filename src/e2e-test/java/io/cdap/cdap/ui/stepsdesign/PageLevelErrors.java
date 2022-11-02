@@ -80,13 +80,13 @@ public class PageLevelErrors {
 
   @When("Open fake namespace metadata page")
   public void openFakeNamespaceMetadataPage() {
-    SeleniumDriver.openPage(Constants.NAMESPACE_URL + fakeNamespace + "/metadata");
+    SeleniumDriver.openPage(Constants.BASE_URL + "/metadata/ns" + fakeNamespace);
     WaitHelper.waitForPageToLoad();
   }
 
   @When("Open fake namespace search results page")
   public void openFakeNamespaceSearchResultsPage() {
-    SeleniumDriver.openPage(Constants.NAMESPACE_URL + fakeNamespace + "/metadata/search/search_term/result");
+    SeleniumDriver.openPage(Constants.BASE_URL + "/metadata/ns" + fakeNamespace + "/search/search_term/result");
     WaitHelper.waitForPageToLoad();
   }
 
