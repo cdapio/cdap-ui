@@ -15,13 +15,13 @@
  */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import Transition from 'components/Snackbar/Components/Transition/index';
 import { Router, Switch, Route } from 'react-router';
 import history from 'app/cdap/services/history';
 
 describe('Test Transition Component', () => {
-  it('Should have rendered the component correctly with isSuccess as false', () => {
+  it('Should have rendered the component correctly with isSuccess as false and its relevant components', () => {
     const container = render(
       <Router history={history}>
         <Switch>
@@ -37,9 +37,11 @@ describe('Test Transition Component', () => {
       </Router>
     );
     expect(container).toBeDefined();
+    const errorIconElement = screen.getByTestId(/snackbar-failure-icon/i);
+    expect(errorIconElement).toBeInTheDocument();
   });
 
-  it('Should have rendered the component correctly with action type as add', () => {
+  it('Should have rendered the component correctly with action type as add and its relevant components', () => {
     const container = render(
       <Router history={history}>
         <Switch>
@@ -55,5 +57,7 @@ describe('Test Transition Component', () => {
       </Router>
     );
     expect(container).toBeDefined();
+    const circleIconElement = screen.getByTestId(/snackbar-success-icon/i);
+    expect(circleIconElement).toBeInTheDocument();
   });
 });
