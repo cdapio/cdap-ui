@@ -15,9 +15,8 @@
  */
 
 export interface ISnackbarProps {
-    handleCloseError: () => void;
-    handleDefaultCloseSnackbar?: () => void;
-    messageToDisplay?: string;
-    isSuccess?: boolean;
-    actionType?: string;
-  }
+  handleCloseError: () => void;
+  description?: string;
+  isSuccess?: boolean;
+  snackbarAction?: string;
+}

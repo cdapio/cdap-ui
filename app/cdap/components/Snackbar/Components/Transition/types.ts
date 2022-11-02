@@ -17,6 +17,6 @@
 export interface ITransitionProps {
   handleClose: () => void;
   isSuccess: boolean;
-  actionType: string;
+  transitionAction: string;
   messageToDisplay?: string;
 }

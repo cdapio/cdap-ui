@@ -18,16 +18,15 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import Snackbar from 'components/Snackbar/index';
 
-describe('It should test the Snackbar Component while triggering set timeOut function', () => {
+describe('Should test the Snackbar Component while triggering setTimeout function', () => {
   it('renders Snackbar Component', () => {
     jest.useFakeTimers();
     const container = render(
       <Snackbar
-        handleCloseError={jest.fn()}
-        handleDefaultCloseSnackbar={jest.fn()}
-        messageToDisplay={'Hello This is Snackbar'}
+        handleCloseError={jest.fn}
+        description={'Hello This is Snackbar'}
         isSuccess={true}
-        actionType={'add'}
+        snackbarAction={'add'}
       />
     );
     jest.runAllTimers();
@@ -35,33 +34,31 @@ describe('It should test the Snackbar Component while triggering set timeOut fun
     expect(container).toBeDefined();
   });
 
-  it('expect the relevent class when isSuccess is false', () => {
+  it('Expects the relevent class when isSuccess is false', () => {
     render(
       <Snackbar
-        handleCloseError={jest.fn()}
-        handleDefaultCloseSnackbar={jest.fn()}
-        messageToDisplay={undefined}
+        handleCloseError={jest.fn}
+        description={undefined}
         isSuccess={false}
-        actionType={''}
+        snackbarAction={''}
       />
     );
     const snackBarParent = screen.getByTestId(/snackbar-alert/i);
     expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
   });
 
-  it('Should trigger handleClose and also check for snackBar parent class', () => {
+  it('Triggers handleClose and checks for snackbar parent class', () => {
     render(
       <Snackbar
-        handleCloseError={jest.fn()}
-        handleDefaultCloseSnackbar={jest.fn()}
-        messageToDisplay={undefined}
+        handleCloseError={jest.fn}
+        description={undefined}
         isSuccess={true}
-        actionType={'test'}
+        snackbarAction={'test'}
       />
     );
     const snackBarParent = screen.getByTestId(/snackbar-alert/i);
-    const closeBtn = screen.getByTestId('snackbar-close-icon');
-    fireEvent.click(closeBtn);
+    const closeButton = screen.getByTestId('snackbar-close-icon');
+    fireEvent.click(closeButton);
     expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
   });
 });

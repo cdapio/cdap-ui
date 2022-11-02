@@ -108,7 +108,7 @@ export default function OngoingDataExploration() {
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
-            data-testid={`ongoing-data-exploration-card-${index}`}
+            data-testid={`ongoing-data-exploration-card-${item[index].workspaceName}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

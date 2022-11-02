@@ -34,23 +34,23 @@ export const useStyles = makeStyles((theme) => ({
   successLabel: {
     color: '#ffffff',
     fontSize: '16px !important',
-    lineHeight: '24px',
+    lineHeight: 24,
     fontWeight: 500,
-    letterSpacing: '0.15px',
+    letterSpacing: 0.15,
   },
   failureLabel: {
     color: '#ffffff',
     fontSize: '16px !important',
-    lineHeight: '24px',
+    lineHeight: 24,
     fontWeight: 500,
-    letterSpacing: '0.15px',
+    letterSpacing: 0.15,
   },
   dismissSpan: {
     display: 'block',
     fontSize: 14,
     color: '#ffffff',
     cursor: 'pointer',
-    lineHeight: '21px',
+    lineHeight: 21,
     fontWeight: 400,
   },
   iconText: {

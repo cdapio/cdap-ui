@@ -276,7 +276,7 @@ export default function ConnectionList() {
               open: false,
             })
           }
-          messageToDisplay={toaster.message ? toaster.message : ''}
+          description={toaster.message ? toaster.message : ''}
           isSuccess={toaster.isSuccess}
         />
       )}{' '}
