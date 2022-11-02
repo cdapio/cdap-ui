@@ -16,9 +16,8 @@
 
 import React, { useEffect, useState, MouseEvent } from 'react';
 
-import { myRemoveCamelCase } from 'services/filters/removeCamelCase';
 import { shouldShowCustomIcon, getCustomIconSrc, filterPlugins, generateLabel } from './helpers';
-import { Button, Chip, Box, Icon, Typography } from '@material-ui/core';
+import { Button, Chip, Box, Typography } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppsIcon from '@material-ui/icons/Apps';
@@ -288,9 +287,7 @@ export const SidePanel = ({
                   <FontIconContainer className={`fa ${plugin.icon}`}> </FontIconContainer>
                 )}
 
-                <PluginNameContainer>
-                  {myRemoveCamelCase(label || plugin.pluginTemplate)}
-                </PluginNameContainer>
+                <PluginNameContainer>{label || plugin.pluginTemplate}</PluginNameContainer>
               </div>
             )}
             {sidePanelViewType === 'list' && (
@@ -303,9 +300,7 @@ export const SidePanel = ({
                 {!plugin.showCustomIcon && (
                   <ListCustomIcon className={`fa ${plugin.icon}`}> </ListCustomIcon>
                 )}
-                <PluginNameContainerList>
-                  {myRemoveCamelCase(label || plugin.pluginTemplate)}
-                </PluginNameContainerList>
+                <PluginNameContainerList>{label || plugin.pluginTemplate}</PluginNameContainerList>
               </PluginListItem>
             )}
             {plugin.pluginTemplate && <PluginBadge>T</PluginBadge>}
