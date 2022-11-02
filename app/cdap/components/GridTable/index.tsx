@@ -307,7 +307,7 @@ export default function GridTable() {
               open: false,
             })
           }
-          messageToDisplay="success thoster"
+          messageToDisplay="Dataset successfully loaded"
           isSuccess={toaster.isSuccess}
         />
       )}
