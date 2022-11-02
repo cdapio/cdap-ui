@@ -19,7 +19,7 @@ import { makeStyles } from '@material-ui/core';
 export const useStyles = makeStyles((theme) => ({
   warningIcon: {
     color: '#ffffff',
-    marginRight: 10,
+    marginRight: 8,
     fontSize: 'x-large',
   },
   successIcon: {
