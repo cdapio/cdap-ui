@@ -57,7 +57,7 @@ export default function GridTable() {
     open: false,
     isSuccess: false,
   });
-  const snackbarThostar = () => {
+  const handleSnackbar = () => {
     setToaster({
       open: true,
       isSuccess: true,
@@ -120,7 +120,7 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-        snackbarThostar();
+        handleSnackbar();
       });
   };
 
