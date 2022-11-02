@@ -18,8 +18,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import Snackbar from 'components/Snackbar/index';
 
-describe('It should test the Snackbar Component', () => {
+describe('It should test the Snackbar Component while triggering set timeOut function', () => {
   it('renders Snackbar Component', () => {
+    jest.useFakeTimers();
     const container = render(
       <Snackbar
         handleCloseError={jest.fn()}
@@ -29,6 +30,8 @@ describe('It should test the Snackbar Component', () => {
         actionType={'add'}
       />
     );
+    jest.runAllTimers();
+    jest.useRealTimers();
     expect(container).toBeDefined();
   });
 
