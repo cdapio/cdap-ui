@@ -140,7 +140,6 @@ export default function WrangleCard() {
   useEffect(() => {
     getConnectorTypesNames();
   }, []);
-
   const classes = useStyles();
   const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
   return (

@@ -34,6 +34,8 @@ import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './type
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
+import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import Snackbar from 'components/Snackbar';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -51,6 +53,16 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [toaster, setToaster] = useState<ISnackbarToast>({
+    open: false,
+    isSuccess: false,
+  });
+  const handleSnackbar = () => {
+    setToaster({
+      open: true,
+      isSuccess: true,
+    });
+  };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -108,6 +120,7 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        handleSnackbar();
       });
   };
 
@@ -286,6 +299,17 @@ export default function GridTable() {
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
+      )}
+      {toaster.open && (
+        <Snackbar
+          handleCloseError={() =>
+            setToaster({
+              open: false,
+            })
+          }
+          messageToDisplay="Dataset successfully loaded"
+          isSuccess={toaster.isSuccess}
+        />
       )}
     </Box>
   );
