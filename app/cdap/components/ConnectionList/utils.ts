@@ -14,14 +14,4 @@
  * the License.
  */
 
-export interface ISnackbarProps {
-  handleCloseError: () => void;
-  description?: string;
-  isSuccess?: boolean;
-  actionType?: string;
-}
-export interface ISnackbar {
-  open: boolean;
-  message?: string;
-  isSuccess?: boolean;
-}
+export const joinStringsWithSpaceSeparator = (stringsData = []) => stringsData.join(' ');

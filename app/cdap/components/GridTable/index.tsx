@@ -34,8 +34,11 @@ import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './type
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import { ISnackbar } from 'components/Snackbar/types';
 import Snackbar from 'components/Snackbar';
+
+const PREFIX = 'features.WranglerNewUI';
+const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -53,17 +56,10 @@ export default function GridTable() {
       count: '0',
     },
   ]);
-  const [toaster, setToaster] = useState<ISnackbarToast>({
+  const [toaster, setToaster] = useState<ISnackbar>({
     open: false,
     isSuccess: false,
   });
-  const handleSnackbar = () => {
-    setToaster({
-      open: true,
-      isSuccess: true,
-      message: `${T.translate('features.WranglerNewUI.Snackbar.labels.datasetSuccess')}`,
-    });
-  };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -121,7 +117,11 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-        handleSnackbar();
+        setToaster({
+          open: true,
+          isSuccess: true,
+          message: T.translate(`${PREFIX}.Snackbar.labels.datasetSuccess`).toString(),
+        });
       });
   };
 
@@ -250,8 +250,8 @@ export default function GridTable() {
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          title={T.translate(`${GRID_TABLE_PREFIX}.title`)}
+          subtitle={T.translate(`${GRID_TABLE_PREFIX}.subtitle`)}
         />
       ) : (
         <Table aria-label="simple table" className="test">
@@ -309,7 +309,7 @@ export default function GridTable() {
               open: false,
             })
           }
-          description={toaster.message ? toaster.message : ''}
+          description={toaster.message}
           isSuccess={toaster.isSuccess}
         />
       )}

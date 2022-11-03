@@ -19,7 +19,7 @@ import { grey } from '@material-ui/core/colors';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import { ISnackbar } from 'components/Snackbar/types';
 import { GCSIcon } from 'components/ConnectionList/icons';
 import { useStyles } from 'components/ConnectionList/styles';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
@@ -56,7 +56,7 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [toaster, setToaster] = useState<ISnackbarToast>({
+  const [toaster, setToaster] = useState<ISnackbar>({
     open: false,
     isSuccess: false,
   });
@@ -209,9 +209,11 @@ export default function ConnectionList() {
       <SubHeader />
       <SelectDatasetWrapper>
         {dataForTabs?.map((eachTab, tabIndex) => {
-          const connectionIdRequired = eachTab?.data?.filter((el) => el.connectionId);
-          if (connectionIdRequired.length) {
-            connectionId = connectionIdRequired[0].connectionId;
+          const requiredConnectionId = eachTab?.data?.filter(
+            (eachDataItem) => eachDataItem.connectionId
+          );
+          if (requiredConnectionId.length) {
+            connectionId = requiredConnectionId[0].connectionId;
           }
           if (tabIndex === 0) {
             headerContent = headerForLevelZero();
@@ -276,7 +278,7 @@ export default function ConnectionList() {
               open: false,
             })
           }
-          description={toaster.message ? toaster.message : ''}
+          description={toaster.message}
           isSuccess={toaster.isSuccess}
         />
       )}{' '}
