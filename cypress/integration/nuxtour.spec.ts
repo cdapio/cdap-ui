@@ -21,7 +21,7 @@ const studioText = 'Pipeline Studio';
 
 // Assumes 5 step tour: Pipeline Studio, Wrangler, Metadata, Control Center, Hub
 
-describe('NUX tour tests', () => {
+describe.skip('NUX tour tests', () => {
   before(() => {
     Helpers.loginIfRequired().then(() => {
       cy.getCookie('CDAP_Auth_Token').then((cookie) => {
