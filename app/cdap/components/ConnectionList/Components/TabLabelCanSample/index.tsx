@@ -103,7 +103,7 @@ export default function TabLabelCanSample({
         toggleLoader(false);
         setToaster({
           open: true,
-          message: T.translate(`${PREFIX}.sampleFailure`).toString(),
+          message: `${T.translate(`${PREFIX}.sampleFailure`)} ${currentEntity?.name.toString()}`,
           isSuccess: false,
         });
       });
