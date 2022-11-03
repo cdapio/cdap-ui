@@ -418,7 +418,17 @@ class HydratorPlusPlusNodeConfigCtrl {
             const generateJumpConfig = (jumpConfig, properties) => {
               let datasets = [];
               let jumpConfigDatasets = jumpConfig.datasets || [];
-              datasets = jumpConfigDatasets.map(dataset => ({ datasetId: properties[dataset['ref-property-name']], entityType: 'datasets' }));
+              datasets = jumpConfigDatasets.map(dataset => {
+                let datasetId = properties[dataset['ref-property-name']];
+                const { metadataEndpoints } = window.CaskCommon.PipelineDetailStore.getState();
+                if (!datasetId && metadataEndpoints) {
+                  const endpoint = metadataEndpoints.find(endpoint => {
+                    return endpoint.properties.stageName === this.state.node.id;
+                  });
+                  datasetId = endpoint && endpoint.name;
+                }
+                return { datasetId, entityType: 'datasets' };
+              });
               return {datasets};
             };
             if (res.errorDataset || this.state.node.errorDatasetName) {

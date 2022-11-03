@@ -296,6 +296,25 @@ const getStatistics = (params) => {
   );
 };
 
+const getMetadataEndpoints = ({ namespace, appId, workflowType, runId }) => {
+  return MyPipelineApi.getMetadataEndpoints({
+    namespace,
+    runId,
+    appId,
+    workflowType,
+  }).subscribe(
+    (res) => {
+      PipelineDetailStore.dispatch({
+        type: ACTIONS.SET_METADATA_ENDPOINTS,
+        payload: { metadataEndpoints: res.endpoints },
+      });
+    },
+    (err) => {
+      console.log(err);
+    }
+  );
+};
+
 const setMacros = (macrosMap) => {
   PipelineDetailStore.dispatch({
     type: ACTIONS.SET_MACROS,
@@ -411,6 +430,7 @@ export {
   pollRunsCount,
   getNextRunTime,
   getStatistics,
+  getMetadataEndpoints,
   setMacros,
   setUserRuntimeArguments,
   setMacrosAndUserRuntimeArguments,
