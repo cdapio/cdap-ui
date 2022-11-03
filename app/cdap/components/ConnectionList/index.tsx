@@ -208,8 +208,8 @@ export default function ConnectionList() {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs?.map((eachTab, tabIndex) => {
-          const requiredConnectionId = eachTab?.data?.filter(
+        {dataForTabs?.map((eachTabItem, tabIndex) => {
+          const requiredConnectionId = eachTabItem?.data?.filter(
             (eachDataItem) => eachDataItem.connectionId
           );
           if (requiredConnectionId.length) {
@@ -254,10 +254,10 @@ export default function ConnectionList() {
             >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
-                tabsData={eachTab}
+                tabsData={eachTabItem}
                 handleChange={selectedTabValueHandler}
-                value={eachTab.selectedTab}
-                index={tabIndex}
+                value={eachTabItem.selectedTab}
+                connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 setToaster={setToaster}

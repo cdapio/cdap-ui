@@ -32,7 +32,7 @@ export interface IConnectionTabsProps {
   tabsData: ITabsData;
   handleChange: (entity: IRecords, index: number) => void;
   value: string;
-  index: number;
+  connectionColumnIndex: number;
   connectionId: string;
   setToaster: React.Dispatch<React.SetStateAction<ISnackbar>>;
   toggleLoader: (value: boolean, isError?: boolean) => void;
