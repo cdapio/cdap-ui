@@ -18,7 +18,6 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { ActionConfig } from 'components/Home/HomeActions/ActionConfig';
 import ActionCard from 'components/Home/HomeActions/ActionCard';
-import Welcome from 'components/Home/Welcome';
 import ExperimentalFeature from 'components/Lab/ExperimentalFeature';
 
 const styles = (): StyleRules => {
@@ -62,7 +61,6 @@ const HomeActionsView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
           })}
         </div>
       </div>
-      <Welcome />
     </div>
   );
 };
