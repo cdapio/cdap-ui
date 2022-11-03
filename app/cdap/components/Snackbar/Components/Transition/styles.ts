@@ -33,8 +33,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   successLabel: {
     color: '#ffffff',
-    fontSize: '16px !important',
-    lineHeight: 24,
+    lineHeight: '24px',
     fontWeight: 500,
     letterSpacing: 0.15,
   },
@@ -47,10 +46,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   dismissSpan: {
     display: 'block',
-    fontSize: 14,
     color: '#ffffff',
     cursor: 'pointer',
-    lineHeight: 21,
+    lineHeight: '21px',
     fontWeight: 400,
   },
   iconText: {
@@ -58,7 +56,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   message: {
     color: '#ffffff',
-    fontSize: 14,
     paddingLeft: 31,
   },
   headFlex: {

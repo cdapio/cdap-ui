@@ -51,6 +51,7 @@ export default function({
           <Typography
             variant="body1"
             className={isSuccess ? classes.successLabel : classes.failureLabel}
+            component="h6"
           >
             {isSuccess ? (
               <>{T.translate('features.WranglerNewUI.Snackbar.labels.success')}</>
@@ -63,6 +64,7 @@ export default function({
           <Typography
             variant="body1"
             className={classes.dismissSpan}
+            component="h6"
             onClick={() => undoActivity()}
           >
             {transitionAction === 'add' ? (
@@ -79,7 +81,7 @@ export default function({
           </Typography>
         </Box>
       </Box>
-      <Typography variant="body1" className={classes.message}>
+      <Typography variant="body1" className={classes.message} component="p">
         {messageToDisplay}
       </Typography>
     </Box>

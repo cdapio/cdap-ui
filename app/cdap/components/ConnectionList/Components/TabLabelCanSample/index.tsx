@@ -28,6 +28,8 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
+const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
+
 export default function TabLabelCanSample({
   label,
   entity,
@@ -55,9 +57,7 @@ export default function TabLabelCanSample({
     } else {
       setToaster({
         open: true,
-        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.retrieveFailure')} ${
-          entity?.name
-        }`,
+        message: `${T.translate(`${PREFIX}.retrieveFailure`)} ${entity?.name}`,
         isSuccess: false,
       });
     }
@@ -69,9 +69,7 @@ export default function TabLabelCanSample({
     } catch (e) {
       setToaster({
         open: true,
-        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.workspaceFailure')} ${
-          entity?.name
-        }`,
+        message: `${T.translate(`${PREFIX}.workspaceFailure`)} ${entity?.name}`,
         isSuccess: false,
       });
     }
@@ -97,7 +95,7 @@ export default function TabLabelCanSample({
         toggleLoader(false);
         setToaster({
           open: true,
-          message: `${T.translate('features.WranglerNewUI.Snackbar.labels.sampleFailure')}`,
+          message: `${T.translate(`${PREFIX}.sampleFailure`)}`,
           isSuccess: false,
         });
       });
