@@ -17,7 +17,7 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import useStyles from 'components/ConnectionList/Components/TabLabelCanSample/styles';
+import { useStyles } from 'components/ConnectionList/Components/TabLabelCanSample/styles';
 import { ITabLabelCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { WrangleIcon } from 'components/ConnectionList/icons';
 import { joinStringsWithSpaceSeparator } from 'components/ConnectionList/utils';

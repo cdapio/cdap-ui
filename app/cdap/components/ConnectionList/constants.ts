@@ -14,5 +14,7 @@
  * the License.
  */
 
-export const addActionType = 'add';
-export const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
+export const snackbarDefaultValues = {
+  open: false,
+  isSuccess: false,
+};
