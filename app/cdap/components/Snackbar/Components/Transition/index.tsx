@@ -27,7 +27,7 @@ export default function({
   handleClose,
   isSuccess,
   messageToDisplay,
-  actionType,
+  transitionAction,
 }: ITransitionProps) {
   const undoActivity = () => {
     // TODO: this is the method used to undo the recent activity on transformations
@@ -65,7 +65,7 @@ export default function({
             className={classes.dismissSpan}
             onClick={() => undoActivity()}
           >
-            {actionType === 'add' ? (
+            {transitionAction === 'add' ? (
               'Undo'
             ) : (
               <Box>
