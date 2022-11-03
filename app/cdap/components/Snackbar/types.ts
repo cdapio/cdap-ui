@@ -19,6 +19,7 @@ export interface ISnackbarProps {
   description?: string;
   isSuccess?: boolean;
   actionType?: string;
+  snackbarAction?: string;
 }
 export interface ISnackbar {
   open: boolean;

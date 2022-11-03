@@ -32,7 +32,7 @@ export default function({
   messageToDisplay,
   transitionAction,
 }: ITransitionProps) {
-  const undoActivity = () => {
+  const handleUndoOperation = () => {
     // TODO: this is the method used to undo the recent activity on transformations
   };
   const classes = useStyles();
@@ -66,7 +66,7 @@ export default function({
         <Box className={classes.operations}>
           <Typography
             className={classes.dismissSpan}
-            onClick={() => undoActivity()}
+            onClick={() => handleUndoOperation()}
             variant="body1"
             component="span"
           >
