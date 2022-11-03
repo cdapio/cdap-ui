@@ -15,27 +15,28 @@
  */
 
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import { GRID_TABLE_PREFIX, PREFIX } from 'components/GridTable/constants';
+import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import Snackbar from 'components/Snackbar';
+import { ISnackbar } from 'components/Snackbar/types';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
 import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
-import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
-import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import NoRecordScreen from 'components/NoRecordScreen';
-import T from 'i18n-react';
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
-import Snackbar from 'components/Snackbar';
+import { IExecuteAPIResponse, IHeaderNamesList, IParams, IRecords } from './types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -53,17 +54,10 @@ export default function GridTable() {
       count: '0',
     },
   ]);
-  const [toaster, setToaster] = useState<ISnackbarToast>({
+  const [toaster, setToaster] = useState<ISnackbar>({
     open: false,
     isSuccess: false,
   });
-  const handleSnackbar = () => {
-    setToaster({
-      open: true,
-      isSuccess: true,
-      message: `${T.translate('features.WranglerNewUI.Snackbar.labels.datasetSuccess')}`,
-    });
-  };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -121,7 +115,11 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-        handleSnackbar();
+        setToaster({
+          open: true,
+          isSuccess: true,
+          message: T.translate(`${PREFIX}.Snackbar.labels.datasetSuccess`).toString(),
+        });
       });
   };
 
@@ -250,11 +248,11 @@ export default function GridTable() {
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          title={T.translate(`${GRID_TABLE_PREFIX}.title`)}
+          subtitle={T.translate(`${GRID_TABLE_PREFIX}.subtitle`)}
         />
       ) : (
-        <Table aria-label="simple table" className="test">
+        <Table aria-label="Wrangling grid" className="test">
           <TableHead>
             <TableRow>
               {headersNamesList?.length &&
@@ -309,7 +307,7 @@ export default function GridTable() {
               open: false,
             })
           }
-          messageToDisplay={toaster.message ? toaster.message : ''}
+          description={toaster.message}
           isSuccess={toaster.isSuccess}
         />
       )}

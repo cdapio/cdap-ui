@@ -16,23 +16,12 @@
 
 import React from 'react';
 import { IRecords } from 'components/GridTable/types';
+import { ISnackbar } from 'components/Snackbar/types';
 
-export interface ITableSampleCanSampleProps {
+export interface ITabLabelCanSampleProps {
   label: string;
   entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
-  setToaster: React.Dispatch<React.SetStateAction<IMessageState>>;
-}
-
-export interface IMessageState {
-  open: boolean;
-  message: string;
-  isSuccess: boolean;
-}
-
-export interface ISnackbarToast {
-  open: boolean;
-  message?: string;
-  isSuccess?: boolean;
+  setToaster: React.Dispatch<React.SetStateAction<ISnackbar>>;
 }

@@ -16,9 +16,8 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ConnectionsTabs from '../index';
-
-const tabsTestData = { data: [], showTabs: true, selectedTab: '', isSearching: true };
+import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
+import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabsTestData';
 
 test('renders Connections Tab Component', () => {
   render(
@@ -28,8 +27,8 @@ test('renders Connections Tab Component', () => {
       value="apple"
       index={0}
       connectionId={undefined}
-      setToaster={() => jest.fn()}
-      toggleLoader={() => jest.fn()}
+      setToaster={jest.fn}
+      toggleLoader={jest.fn}
     />
   );
   const ele = screen.getByTestId(/connections-tabs-parent/i);

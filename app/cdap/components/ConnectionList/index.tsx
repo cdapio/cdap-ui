@@ -19,7 +19,7 @@ import { grey } from '@material-ui/core/colors';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import { snackbarDefaultValues } from 'components/ConnectionList/constants';
 import { GCSIcon } from 'components/ConnectionList/icons';
 import { useStyles } from 'components/ConnectionList/styles';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
@@ -28,6 +28,7 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
+import { ISnackbar } from 'components/Snackbar/types';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -56,10 +57,7 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [toaster, setToaster] = useState<ISnackbarToast>({
-    open: false,
-    isSuccess: false,
-  });
+  const [toaster, setToaster] = useState<ISnackbar>(snackbarDefaultValues);
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
   };
@@ -69,7 +67,7 @@ export default function ConnectionList() {
       data: [],
       showTabs: true,
       selectedTab: null,
-      isSearching: false,
+      toggleSearch: false,
     },
   ]);
 
@@ -117,7 +115,7 @@ export default function ConnectionList() {
         data: [],
         showTabs: false,
         selectedTab: '',
-        isSearching: false,
+        toggleSearch: false,
       });
       if (res.entities) {
         tempData[index + 1][`data`] = res.entities;
@@ -126,7 +124,7 @@ export default function ConnectionList() {
       }
       tempData[index + 1][`showTabs`] = true;
       tempData[index + 1][`selectedTab`] = null;
-      tempData[index + 1][`isSearching`] = false;
+      tempData[index + 1][`toggleSearch`] = false;
       return tempData.slice(0, index + 2);
     });
   };
@@ -159,7 +157,7 @@ export default function ConnectionList() {
           data: each.data,
           showTabs: each.showTabs,
           selectedTab: each.selectedTab,
-          isSearching: false,
+          toggleSearch: false,
         };
       });
       if (index === 0) {
@@ -208,10 +206,12 @@ export default function ConnectionList() {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs?.map((eachTab, tabIndex) => {
-          const connectionIdRequired = eachTab?.data?.filter((el) => el.connectionId);
-          if (connectionIdRequired.length) {
-            connectionId = connectionIdRequired[0].connectionId;
+        {dataForTabs?.map((eachTabItem, tabIndex) => {
+          const requiredConnectionId = eachTabItem?.data?.filter(
+            (eachDataItem) => eachDataItem.connectionId
+          );
+          if (requiredConnectionId.length) {
+            connectionId = requiredConnectionId[0].connectionId;
           }
           if (tabIndex === 0) {
             headerContent = headerForLevelZero();
@@ -252,10 +252,10 @@ export default function ConnectionList() {
             >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
-                tabsData={eachTab}
+                tabsData={eachTabItem}
                 handleChange={selectedTabValueHandler}
-                value={eachTab.selectedTab}
-                index={tabIndex}
+                value={eachTabItem.selectedTab}
+                connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 setToaster={setToaster}
@@ -276,7 +276,7 @@ export default function ConnectionList() {
               open: false,
             })
           }
-          messageToDisplay={toaster.message ? toaster.message : ''}
+          description={toaster.message}
           isSuccess={toaster.isSuccess}
         />
       )}{' '}

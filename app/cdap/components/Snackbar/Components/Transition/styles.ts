@@ -18,10 +18,12 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   warningIcon: {
+    fontSize: 'xx-large',
     color: '#ffffff',
-    marginRight: 8,
-    fontSize: 'x-large',
+    position: 'relative',
+    bottom: 4,
     width: 18,
+    marginRight: 13,
   },
   successIcon: {
     fontSize: 'xx-large',
@@ -33,21 +35,20 @@ export const useStyles = makeStyles((theme) => ({
   },
   successLabel: {
     color: '#ffffff',
-    fontSize: '16px !important',
     lineHeight: '24px',
     fontWeight: 500,
-    letterSpacing: '0.15px',
+    letterSpacing: 0.15,
+    fontSize: 16,
   },
   failureLabel: {
     color: '#ffffff',
-    fontSize: '16px !important',
     lineHeight: '24px',
     fontWeight: 500,
-    letterSpacing: '0.15px',
+    letterSpacing: 0.15,
+    fontSize: 16,
   },
   dismissSpan: {
     display: 'block',
-    fontSize: 14,
     color: '#ffffff',
     cursor: 'pointer',
     lineHeight: '21px',
@@ -58,8 +59,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   message: {
     color: '#ffffff',
-    fontSize: 14,
     paddingLeft: 31,
+    fontSize: 14,
   },
   headFlex: {
     display: 'flex',
@@ -69,7 +70,7 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     gap: 13,
   },
-  cross: {
+  closeIcon: {
     color: '#ffffff',
     cursor: 'pointer',
   },

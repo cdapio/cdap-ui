@@ -18,7 +18,7 @@ import React from 'react';
 import { screen, render } from '@testing-library/react';
 import Transition from 'components/Snackbar/Components/Transition/index';
 import { Router, Switch, Route } from 'react-router';
-import history from 'app/cdap/services/history';
+import history from 'services/history';
 
 describe('Test Transition Component', () => {
   it('Should have rendered the component correctly with isSuccess as false and its relevant components', () => {
@@ -27,9 +27,9 @@ describe('Test Transition Component', () => {
         <Switch>
           <Route>
             <Transition
-              handleClose={() => jest.fn()}
+              handleClose={jest.fn}
               isSuccess={false}
-              actionType={''}
+              transitionAction={''}
               messageToDisplay={''}
             />
           </Route>
@@ -49,7 +49,7 @@ describe('Test Transition Component', () => {
             <Transition
               handleClose={() => jest.fn()}
               isSuccess={true}
-              actionType={'add'}
+              transitionAction={'add'}
               messageToDisplay={''}
             />
           </Route>

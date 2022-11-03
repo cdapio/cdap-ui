@@ -59,7 +59,7 @@ export default function ConnectionsTabs({
   tabsData,
   handleChange,
   value,
-  index,
+  connectionColumnIndex,
   connectionId,
   setToaster,
   toggleLoader,
@@ -93,23 +93,25 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
-                data-testid={`connectionstabs-eachtab-${index}-${connectorTypeIndex}`}
+                data-testid={`connectionstabs-eachtab-${connectionColumnIndex}-${connectorTypeIndex}`}
                 onClick={() => {
-                  if (index > 1) {
+                  if (connectionColumnIndex > 1) {
                     if (connectorType.canBrowse) {
-                      handleChange(connectorType, index);
+                      handleChange(connectorType, connectionColumnIndex);
                     }
                   } else {
-                    handleChange(connectorType, index);
+                    handleChange(connectorType, connectionColumnIndex);
                   }
                 }}
                 label={
-                  index > 1 ? (
+                  connectionColumnIndex > 1 ? (
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
                         label={connectorType.name as string}
-                        count={index === 0 ? (connectorType.count as number) : undefined}
-                        index={index}
+                        count={
+                          connectionColumnIndex === 0 ? (connectorType.count as number) : undefined
+                        }
+                        index={connectionColumnIndex}
                       />
                     ) : (
                       <TabLabelCanSample
@@ -123,8 +125,10 @@ export default function ConnectionsTabs({
                   ) : (
                     <TabLabelCanBrowse
                       label={connectorType.name as string}
-                      count={index === 0 ? (connectorType.count as number) : undefined}
-                      index={index}
+                      count={
+                        connectionColumnIndex === 0 ? (connectorType.count as number) : undefined
+                      }
+                      index={connectionColumnIndex}
                       icon={(connectorType.icon as unknown) as JSX.Element}
                     />
                   )
@@ -133,7 +137,9 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name as string}
-                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
+                className={
+                  connectionColumnIndex > 1 && !connectorType.canBrowse ? classes.wrangleTab : null
+                }
               />
             ))}
           </Tabs>

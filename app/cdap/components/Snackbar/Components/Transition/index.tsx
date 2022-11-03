@@ -18,6 +18,7 @@ import { Box, Typography } from '@material-ui/core';
 import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { addActionType, PREFIX } from 'components/Snackbar/Components/Transition/constants';
 import { useStyles } from 'components/Snackbar/Components/Transition/styles';
 import { ITransitionProps } from 'components/Snackbar/Components/Transition/types';
 import T from 'i18n-react';
@@ -27,9 +28,9 @@ export default function({
   handleClose,
   isSuccess,
   messageToDisplay,
-  actionType,
+  transitionAction,
 }: ITransitionProps) {
-  const undoActivity = () => {
+  const handleUndoOperation = () => {
     // TODO: this is the method used to undo the recent activity on transformations
   };
   const classes = useStyles();
@@ -49,28 +50,30 @@ export default function({
             />
           )}
           <Typography
-            variant="body1"
             className={isSuccess ? classes.successLabel : classes.failureLabel}
+            variant="body1"
+            component="span"
           >
             {isSuccess ? (
-              <>{T.translate('features.WranglerNewUI.Snackbar.labels.success')}</>
+              <>{T.translate(`${PREFIX}.success`)}</>
             ) : (
-              <>{T.translate('features.WranglerNewUI.Snackbar.labels.failure')}</>
+              <>{T.translate(`${PREFIX}.failure`)}</>
             )}
           </Typography>
         </Box>
         <Box className={classes.operations}>
           <Typography
-            variant="body1"
             className={classes.dismissSpan}
-            onClick={() => undoActivity()}
+            onClick={() => handleUndoOperation()}
+            variant="body1"
+            component="span"
           >
-            {actionType === 'add' ? (
-              'Undo'
+            {transitionAction === addActionType ? (
+              `${PREFIX}.undo`
             ) : (
               <Box>
                 <CloseIcon
-                  className={classes.cross}
+                  className={classes.closeIcon}
                   onClick={handleClose}
                   data-testid="snackbar-close-icon"
                 />
@@ -79,7 +82,7 @@ export default function({
           </Typography>
         </Box>
       </Box>
-      <Typography variant="body1" className={classes.message}>
+      <Typography variant="body1" className={classes.message} component="span">
         {messageToDisplay}
       </Typography>
     </Box>
