@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { ISnackbarToast } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { IConnectorType } from 'components/Connections/Browser/SidePanel';
+import { ISnackbar } from 'components/Snackbar/types';
 
 export interface IRecords {
   [key: string]: string | number | IRecords | boolean;
@@ -34,6 +34,6 @@ export interface IConnectionTabsProps {
   value: string;
   index: number;
   connectionId: string;
-  setToaster: React.Dispatch<React.SetStateAction<ISnackbarToast>>;
+  setToaster: React.Dispatch<React.SetStateAction<ISnackbar>>;
   toggleLoader: (value: boolean, isError?: boolean) => void;
 }

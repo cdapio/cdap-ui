@@ -14,14 +14,4 @@
  * the License.
  */
 
-export interface ISnackbarProps {
-  handleCloseError: () => void;
-  description?: string;
-  isSuccess?: boolean;
-  actionType?: string;
-}
-export interface ISnackbar {
-  open: boolean;
-  message?: string;
-  isSuccess?: boolean;
-}
+const tabsTestData = { data: [], showTabs: true, selectedTab: '', isSearching: true };

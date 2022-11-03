@@ -22,6 +22,9 @@ import { useStyles } from 'components/Snackbar/Components/Transition/styles';
 import { ITransitionProps } from 'components/Snackbar/Components/Transition/types';
 import T from 'i18n-react';
 import React from 'react';
+import { addActionType } from 'components/Snackbar/Components/Transition/constants';
+
+const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
 export default function({
   handleClose,
@@ -51,11 +54,12 @@ export default function({
           <Typography
             variant="body1"
             className={isSuccess ? classes.successLabel : classes.failureLabel}
+            component="div"
           >
             {isSuccess ? (
-              <>{T.translate('features.WranglerNewUI.Snackbar.labels.success')}</>
+              <>{T.translate(`${PREFIX}.success`)}</>
             ) : (
-              <>{T.translate('features.WranglerNewUI.Snackbar.labels.failure')}</>
+              <>{T.translate(`${PREFIX}.failure`)}</>
             )}
           </Typography>
         </Box>
@@ -63,14 +67,15 @@ export default function({
           <Typography
             variant="body1"
             className={classes.dismissSpan}
+            component="div"
             onClick={() => undoActivity()}
           >
-            {transitionAction === 'add' ? (
-              'Undo'
+            {transitionAction === addActionType ? (
+              `${PREFIX}.undo`
             ) : (
               <Box>
                 <CloseIcon
-                  className={classes.cross}
+                  className={classes.closeIcon}
                   onClick={handleClose}
                   data-testid="snackbar-close-icon"
                 />
@@ -79,7 +84,7 @@ export default function({
           </Typography>
         </Box>
       </Box>
-      <Typography variant="body1" className={classes.message}>
+      <Typography variant="body1" className={classes.message} component="div">
         {messageToDisplay}
       </Typography>
     </Box>

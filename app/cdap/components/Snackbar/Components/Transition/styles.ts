@@ -69,7 +69,7 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     gap: 13,
   },
-  cross: {
+  closeIcon: {
     color: '#ffffff',
     cursor: 'pointer',
   },

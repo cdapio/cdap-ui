@@ -18,8 +18,9 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import useStyles from 'components/ConnectionList/Components/TabLabelCanSample/styles';
-import { ITableSampleCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
+import { ITabLabelCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { WrangleIcon } from 'components/ConnectionList/icons';
+import { joinStringsWithSpaceSeparator } from 'components/ConnectionList/utils';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import T from 'i18n-react';
@@ -34,8 +35,9 @@ export default function TabLabelCanSample({
   initialConnectionId,
   toggleLoader,
   setToaster,
-}: ITableSampleCanSampleProps) {
+}: ITabLabelCanSampleProps) {
   const classes = useStyles();
+  const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -55,9 +57,10 @@ export default function TabLabelCanSample({
     } else {
       setToaster({
         open: true,
-        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.retrieveFailure')} ${
-          entity?.name
-        }`,
+        message: joinStringsWithSpaceSeparator([
+          T.translate(`${PREFIX}.retrieveFailure`),
+          entity?.name,
+        ]),
         isSuccess: false,
       });
     }
@@ -69,9 +72,10 @@ export default function TabLabelCanSample({
     } catch (e) {
       setToaster({
         open: true,
-        message: `${T.translate('features.WranglerNewUI.Snackbar.labels.workspaceFailure')} ${
-          entity?.name
-        }`,
+        message: joinStringsWithSpaceSeparator([
+          T.translate(`${PREFIX}.workspaceFailure`).toString(),
+          entity?.name,
+        ]),
         isSuccess: false,
       });
     }
@@ -97,7 +101,7 @@ export default function TabLabelCanSample({
         toggleLoader(false);
         setToaster({
           open: true,
-          message: `${T.translate('features.WranglerNewUI.Snackbar.labels.sampleFailure')}`,
+          message: T.translate(`${PREFIX}.sampleFailure`).toString(),
           isSuccess: false,
         });
       });
