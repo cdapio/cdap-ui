@@ -45,7 +45,7 @@ export const CustomTooltip = withStyles(() => {
   return {
     tooltip: {
       fontSize: '13px',
-      backgroundColor: toolTipBackground,
+      backgroundColor: `${toolTipBackground} !important`,
     },
     arrow: {
       color: toolTipBackground,
@@ -59,7 +59,7 @@ export const ErrorTooltip = withStyles(() => {
       color: errorRed,
     },
     tooltip: {
-      background: errorRed,
+      backgroundColor: `${errorRed} !important`,
     },
   };
 })(CustomTooltip);
