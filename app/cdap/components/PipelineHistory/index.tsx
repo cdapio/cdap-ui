@@ -70,6 +70,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       orderBy: 'DESC',
       nameFilterType: 'EQUALS',
       sortCreationTime: 'true',
+      latestOnly: 'false',
     },
   });
 
