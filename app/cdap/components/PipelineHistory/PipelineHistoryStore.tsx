@@ -42,6 +42,7 @@ export const PIPELINE_HISTORY_QUERY = gql`
     $nameFilter: String
     $orderBy: String
     $nameFilterType: String
+    $sortCreationTime: String
   ) {
     pipelines(
       namespace: $namespace
@@ -50,6 +51,7 @@ export const PIPELINE_HISTORY_QUERY = gql`
       nameFilter: $nameFilter
       orderBy: $orderBy
       nameFilterType: $nameFilterType
+      sortCreationTime: $sortCreationTime
     ) {
       applications {
         name
