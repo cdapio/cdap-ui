@@ -101,7 +101,6 @@ export default function OngoingDataExploration() {
     const final = generateDataForExplorationCard(ongoingExpDatas);
     setFinalArray(final);
   }, [ongoingExpDatas]);
-
   return (
     <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item, index) => {
@@ -109,6 +108,7 @@ export default function OngoingDataExploration() {
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
+            data-testid={`ongoing-data-exploration-card-${index}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

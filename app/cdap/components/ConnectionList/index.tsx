@@ -16,20 +16,22 @@
 
 import { Box, styled, Typography } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
+import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
+import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
+import SubHeader from 'components/ConnectionList/Components/SubHeader';
+import { snackbarDefaultValues } from 'components/ConnectionList/constants';
 import { GCSIcon } from 'components/ConnectionList/icons';
+import { useStyles } from 'components/ConnectionList/styles';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import ErrorSnackbar from 'components/SnackbarComponent';
+import Snackbar from 'components/Snackbar';
+import { ISnackbar } from 'components/Snackbar/types';
 import * as React from 'react';
-import { createRef, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
-import ConnectionsTabs from './Components/ConnectionTabs';
-import CustomTooltip from './Components/CustomTooltip';
-import SubHeader from './Components/SubHeader';
-import { useStyles } from './styles';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -55,8 +57,7 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
-
+  const [toaster, setToaster] = useState<ISnackbar>(snackbarDefaultValues);
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
   };
@@ -66,7 +67,7 @@ export default function ConnectionList() {
       data: [],
       showTabs: true,
       selectedTab: null,
-      isSearching: false,
+      toggleSearch: false,
     },
   ]);
 
@@ -114,7 +115,7 @@ export default function ConnectionList() {
         data: [],
         showTabs: false,
         selectedTab: '',
-        isSearching: false,
+        toggleSearch: false,
       });
       if (res.entities) {
         tempData[index + 1][`data`] = res.entities;
@@ -123,7 +124,7 @@ export default function ConnectionList() {
       }
       tempData[index + 1][`showTabs`] = true;
       tempData[index + 1][`selectedTab`] = null;
-      tempData[index + 1][`isSearching`] = false;
+      tempData[index + 1][`toggleSearch`] = false;
       return tempData.slice(0, index + 2);
     });
   };
@@ -156,7 +157,7 @@ export default function ConnectionList() {
           data: each.data,
           showTabs: each.showTabs,
           selectedTab: each.selectedTab,
-          isSearching: false,
+          toggleSearch: false,
         };
       });
       if (index === 0) {
@@ -205,26 +206,28 @@ export default function ConnectionList() {
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
       <SubHeader />
       <SelectDatasetWrapper>
-        {dataForTabs.map((each, index) => {
-          const connectionIdRequired = each.data.filter((el) => el.connectionId);
-          if (connectionIdRequired.length) {
-            connectionId = connectionIdRequired[0].connectionId;
+        {dataForTabs?.map((eachTabItem, tabIndex) => {
+          const requiredConnectionId = eachTabItem?.data?.filter(
+            (eachDataItem) => eachDataItem.connectionId
+          );
+          if (requiredConnectionId.length) {
+            connectionId = requiredConnectionId[0].connectionId;
           }
-          if (index === 0) {
+          if (tabIndex === 0) {
             headerContent = headerForLevelZero();
           } else {
             headerContent =
-              refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
-                <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+              refs.current[tabIndex]?.offsetWidth < refs.current[tabIndex]?.scrollWidth ? (
+                <CustomTooltip title={dataForTabs[tabIndex - 1].selectedTab} arrow>
                   <Box className={classes.beforeSearchIconClickDisplay}>
                     <Typography
                       variant="body2"
                       className={classes.headerLabel}
                       ref={(element) => {
-                        refs.current[index] = element;
+                        refs.current[tabIndex] = element;
                       }}
                     >
-                      {dataForTabs[index - 1].selectedTab}
+                      {dataForTabs[tabIndex - 1].selectedTab}
                     </Typography>
                   </Box>
                 </CustomTooltip>
@@ -234,39 +237,49 @@ export default function ConnectionList() {
                     variant="body2"
                     className={classes.headerLabel}
                     ref={(element) => {
-                      refs.current[index] = element;
+                      refs.current[tabIndex] = element;
                     }}
                   >
-                    {dataForTabs[index - 1].selectedTab}
+                    {dataForTabs[tabIndex - 1].selectedTab}
                   </Typography>
                 </Box>
               );
           }
           return (
-            <Box className={classes.tabsContainerWithHeader}>
+            <Box
+              className={classes.tabsContainerWithHeader}
+              data-testid={`connection-tabs-column-${tabIndex}`}
+            >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
-                tabsData={each}
+                tabsData={eachTabItem}
                 handleChange={selectedTabValueHandler}
-                value={each.selectedTab}
-                index={index}
+                value={eachTabItem.selectedTab}
+                connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                setToaster={setToaster}
               />
             </Box>
           );
         })}
       </SelectDatasetWrapper>
-
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
       )}
-      {isErrorOnNoWorkspace && (
-        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
-      )}
+      {toaster.open && (
+        <Snackbar
+          handleCloseError={() =>
+            setToaster({
+              open: false,
+            })
+          }
+          description={toaster.message}
+          isSuccess={toaster.isSuccess}
+        />
+      )}{' '}
     </Box>
   );
 }

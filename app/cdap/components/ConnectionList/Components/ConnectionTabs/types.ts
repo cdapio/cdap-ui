@@ -14,6 +14,25 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
-export const PREFIX = 'features.WranglerNewUI';
-export const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
+import { ISnackbar } from 'components/Snackbar/types';
+
+export interface IRecords {
+  [key: string]: string | number | IRecords | boolean;
+}
+
+export interface ITabsData {
+  data: IRecords[];
+  showTabs: boolean;
+  selectedTab: string;
+  toggleSearch: boolean;
+}
+
+export interface IConnectionTabsProps {
+  tabsData: ITabsData;
+  handleChange: (entity: IRecords, index: number) => void;
+  value: string;
+  connectionColumnIndex: number;
+  connectionId: string;
+  setToaster: React.Dispatch<React.SetStateAction<ISnackbar>>;
+  toggleLoader: (isLoading: boolean, isError?: boolean) => void;
+}
