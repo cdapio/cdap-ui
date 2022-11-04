@@ -268,6 +268,7 @@ const PipelineListCompositeTabView = ({
           <TriggerNameTextField
             required
             focused
+            autoComplete="off"
             id="standard-required"
             onChange={onTriggerNameChange}
             placeholder="Enter the Trigger Name..."

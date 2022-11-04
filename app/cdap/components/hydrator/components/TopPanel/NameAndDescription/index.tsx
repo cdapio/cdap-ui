@@ -95,6 +95,7 @@ export const NameAndDescription = ({
           {metadataExpanded ? (
             <>
               <NameTextField
+                autoComplete="off"
                 id="pipeline-name-input"
                 variant="outlined"
                 placeholder="Name your pipeline"
@@ -103,6 +104,7 @@ export const NameAndDescription = ({
                 value={name}
               />
               <DescriptionTextField
+                autoComplete="off"
                 multiline
                 variant="outlined"
                 rows={2}
