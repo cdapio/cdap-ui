@@ -91,7 +91,7 @@ export const NameAndDescription = ({
           {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
           {sparkstreaming && <StyledIconSVG name="icon-sparkstreaming"></StyledIconSVG>}
         </PipelineType>
-        <MetadataLeft>
+        <MetadataLeft expanded={metadataExpanded}>
           {metadataExpanded ? (
             <>
               <NameTextField
