@@ -1133,7 +1133,7 @@ class HydratorPlusPlusConfigStore {
           'waitUntilMet': false
         }
       ]
-    }
+    };
   }
 
   setServiceAccountPath(path) {
@@ -1309,7 +1309,7 @@ class HydratorPlusPlusConfigStore {
             scheduleId: this.GLOBALS.defaultScheduleId
           },
           this.getSchedulePayload()
-        ).$promise.then(() => {console.log('successfully created schedule')})
+        ).$promise.then(() => console.log('successfully created schedule'));
       }
       const draftId = this.getDraftId();
       if (!draftId) {
@@ -1353,7 +1353,7 @@ class HydratorPlusPlusConfigStore {
     };
 
     var config = this.getConfigForExport();
-    config['app.deploy.update.schedules'] = false
+    config['app.deploy.update.schedules'] = false;
 
     // Checking if Pipeline name already exist
     this.myAppsApi

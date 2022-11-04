@@ -49,15 +49,12 @@ const Metadata: React.FC = () => {
         <Route
           exact
           path={basepath}
-          render={() => checkFeatureFlag(<MetadataHome />, `/cdap/ns/${namespace}/metadata`)}
+          render={() => checkFeatureFlag(<MetadataHome />, `/metadata/ns/${namespace}`)}
         />
         <Route
           path={`${basepath}/search/:query/result`}
           render={() =>
-            checkFeatureFlag(
-              <SearchResults />,
-              `/cdap/ns/${namespace}/metadata/search/${query}/result`
-            )
+            checkFeatureFlag(<SearchResults />, `/metadata/ns/${namespace}/search/${query}/result`)
           }
         />
         <Route
@@ -65,7 +62,7 @@ const Metadata: React.FC = () => {
           render={() =>
             checkFeatureFlag(
               <SearchSummary />,
-              `/cdap/ns/${namespace}/metadata/entity/datasets/${entity}/summary?searchTerm=${query}`
+              `/metadata/ns/${namespace}/entity/datasets/${entity}/summary?searchTerm=${query}`
             )
           }
         />
@@ -74,7 +71,7 @@ const Metadata: React.FC = () => {
           render={() =>
             checkFeatureFlag(
               <Lineage />,
-              `/cdap/ns/${namespace}/metadata/entity/datasets/${entity}/lineage?searchTerm=${query}`
+              `/metadata/ns/${namespace}/entity/datasets/${entity}/lineage?searchTerm=${query}`
             )
           }
         />

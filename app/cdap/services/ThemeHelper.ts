@@ -436,7 +436,7 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showReloadSystemArtifacts: true,
       showSqlPipeline: true,
       showCDC: false,
-      isMetadataInReact: true,
+      isMetadataInReact: false,
     };
     if (isNilOrEmpty(featuresJson)) {
       return features;
