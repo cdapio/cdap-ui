@@ -22,7 +22,7 @@ import history from 'services/history';
 
 describe('Test Transition Component', () => {
   it('Should have rendered the component correctly with isSuccess as false and its relevant components', () => {
-    const container = render(
+    render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -36,13 +36,12 @@ describe('Test Transition Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined();
     const errorIconElement = screen.getByTestId(/snackbar-failure-icon/i);
     expect(errorIconElement).toBeInTheDocument();
   });
 
   it('Should have rendered the component correctly with action type as add and its relevant components', () => {
-    const container = render(
+    render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -56,7 +55,7 @@ describe('Test Transition Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined();
+
     const circleIconElement = screen.getByTestId(/snackbar-success-icon/i);
     expect(circleIconElement).toBeInTheDocument();
   });

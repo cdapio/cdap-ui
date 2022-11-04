@@ -14,4 +14,10 @@
  * the License.
  */
 
-export const tabsTestData = { data: [], showTabs: true, selectedTab: '', toggleSearch: true , isSearching: true};
+export const tabsTestData = {
+  data: [],
+  showTabs: true,
+  selectedTab: '',
+  toggleSearch: true,
+  isSearching: true,
+};

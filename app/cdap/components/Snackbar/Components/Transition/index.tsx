@@ -69,7 +69,7 @@ export default function({
             component="span"
           >
             {transitionAction === addActionType ? (
-              `${PREFIX}.undo`
+              T.translate(`${PREFIX}.undo`)
             ) : (
               <Box>
                 <CloseIcon
