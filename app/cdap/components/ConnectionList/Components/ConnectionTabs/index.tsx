@@ -19,10 +19,13 @@ import Box from '@material-ui/core/Box';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useStyles } from 'components/ConnectionList/Components/ConnectionTabs/styles';
-import React from 'react';
-import { useEffect, useState } from 'react';
-import TabLabelCanBrowse from '../TabLabelCanBrowse';
-import TabLabelCanSample from '../TabLabelCanSample';
+import {
+  IConnectionTabsProps,
+  IRecords,
+} from 'components/ConnectionList/Components/ConnectionTabs/types';
+import TabLabelCanBrowse from 'components/ConnectionList/Components/TabLabelCanBrowse';
+import TabLabelCanSample from 'components/ConnectionList/Components/TabLabelCanSample';
+import React, { useEffect, useState } from 'react';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',
@@ -56,11 +59,11 @@ export default function ConnectionsTabs({
   tabsData,
   handleChange,
   value,
-  index,
+  connectionColumnIndex,
   connectionId,
-  setIsErrorOnNoWorkSpace,
-  ...props
-}) {
+  setToaster,
+  toggleLoader,
+}: IConnectionTabsProps) {
   const classes = useStyles();
 
   const [connectionIdProp, setConnectionId] = useState(connectionId);
@@ -90,46 +93,49 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
+                data-testid={`connectionstabs-eachtab-${connectionColumnIndex}-${connectorTypeIndex}`}
                 onClick={() => {
-                  if (index > 1) {
+                  if (connectionColumnIndex > 1) {
                     if (connectorType.canBrowse) {
-                      handleChange(connectorType, index);
+                      handleChange(connectorType, connectionColumnIndex);
                     }
                   } else {
-                    handleChange(connectorType, index);
+                    handleChange(connectorType, connectionColumnIndex);
                   }
                 }}
                 label={
-                  index > 1 ? (
+                  connectionColumnIndex > 1 ? (
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
-                        label={connectorType.name}
-                        count={index === 0 ? connectorType.count : undefined}
-                        index={index}
+                        label={connectorType.name as string}
+                        count={undefined}
+                        index={connectionColumnIndex}
                       />
                     ) : (
                       <TabLabelCanSample
-                        label={connectorType.name}
-                        entity={connectorType}
+                        label={connectorType.name as string}
+                        entity={connectorType as IRecords}
                         initialConnectionId={connectionIdProp}
-                        toggleLoader={props.toggleLoader}
-                        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        toggleLoader={toggleLoader}
+                        setToaster={setToaster}
                       />
                     )
                   ) : (
                     <TabLabelCanBrowse
-                      label={connectorType.name}
-                      count={index === 0 ? connectorType.count : undefined}
-                      index={index}
-                      icon={connectorType.icon}
+                      label={connectorType.name as string}
+                      count={connectorType.count as number}
+                      index={connectionColumnIndex}
+                      icon={(connectorType.icon as unknown) as JSX.Element}
                     />
                   )
                 }
                 value={connectorType.name}
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
-                id={connectorType.name}
-                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
+                id={connectorType.name as string}
+                className={
+                  connectionColumnIndex > 1 && !connectorType.canBrowse ? classes.wrangleTab : null
+                }
               />
             ))}
           </Tabs>

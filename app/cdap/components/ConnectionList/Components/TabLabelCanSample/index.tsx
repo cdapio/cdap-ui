@@ -17,30 +17,28 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
+import { useStyles } from 'components/ConnectionList/Components/TabLabelCanSample/styles';
+import { ITabLabelCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { WrangleIcon } from 'components/ConnectionList/icons';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
-import { IRecords } from 'components/GridTable/types';
+import T from 'i18n-react';
 import * as React from 'react';
 import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import useStyles from './styles';
+
+const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
 export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,
   toggleLoader,
-  setIsErrorOnNoWorkSpace,
-}: {
-  label: string;
-  entity: IRecords;
-  initialConnectionId: string;
-  toggleLoader: (value: boolean, isError?: boolean) => void;
-  setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+  setToaster,
+}: ITabLabelCanSampleProps) {
   const classes = useStyles();
+  const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -58,7 +56,11 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(currentEntity);
     } else {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: [T.translate(`${PREFIX}.retrieveFailure`), entity?.name].join(' '),
+        isSuccess: false,
+      });
     }
   };
 
@@ -66,7 +68,11 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
-      setIsErrorOnNoWorkSpace(true);
+      setToaster({
+        open: true,
+        message: [T.translate(`${PREFIX}.workspaceFailure`).toString(), entity?.name].join(' '),
+        isSuccess: false,
+      });
     }
   };
 
@@ -88,7 +94,11 @@ export default function TabLabelCanSample({
       })
       .catch((err) => {
         toggleLoader(false);
-        setIsErrorOnNoWorkSpace(true);
+        setToaster({
+          open: true,
+          message: `${T.translate(`${PREFIX}.sampleFailure`)} ${currentEntity?.name.toString()}`,
+          isSuccess: false,
+        });
       });
   };
 
@@ -97,12 +107,22 @@ export default function TabLabelCanSample({
   ) : refValue ? (
     <CustomTooltip title={label} arrow>
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        <Typography
+          variant="body2"
+          className={classes.labelStylesCanSample}
+          ref={myLabelRef}
+          component="span"
+        >
           {label}
         </Typography>
         <button className="wranglingHover" onClick={() => onExplore(entity)}>
           <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
+          <Typography
+            variant="body2"
+            component="span"
+            className={classes.wrangleButton}
+            data-testid={`connection-list-wrangle-link`}
+          >
             Wrangle
           </Typography>
         </button>
@@ -115,7 +135,11 @@ export default function TabLabelCanSample({
       </Typography>
       <button className="wranglingHover" onClick={() => onExplore(entity)}>
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
+        <Typography
+          variant="body2"
+          className={classes.wrangleButton}
+          data-testid={`connection-list-wrangle-link`}
+        >
           Wrangle
         </Typography>
       </button>

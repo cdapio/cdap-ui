@@ -14,6 +14,5 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
-export const PREFIX = 'features.WranglerNewUI';
-export const GRID_TABLE_PREFIX = `${PREFIX}.NoRecordScreen.gridTable`;
+export const addActionType = 'add';
+export const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
