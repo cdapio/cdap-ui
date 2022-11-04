@@ -14,32 +14,26 @@
  * the License.
  */
 
-export interface IParams {
-  context: string;
-  workspaceId: string;
-}
+import { ISnackbar } from 'components/Snackbar/types';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IRecords {
   [key: string]: string | number | IRecords | boolean;
 }
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
+
+export interface ITabsData {
+  data: IRecords[];
+  showTabs: boolean;
+  selectedTab: string;
+  toggleSearch: boolean;
 }
 
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
+export interface IConnectionTabsProps {
+  tabsData: ITabsData;
+  handleChange: (entity: IRecords, index: number) => void;
+  value: string;
+  connectionColumnIndex: number;
+  connectionId: string;
+  setToaster: Dispatch<SetStateAction<ISnackbar>>;
+  toggleLoader: (isLoading: boolean, isError?: boolean) => void;
 }

@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
 import blue from '@material-ui/core/colors/blue';
+import { makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
   labelsContainerCanSample: {
     width: '100%',
     display: 'flex',
@@ -62,5 +62,3 @@ const useStyles = makeStyles({
     color: blue[500],
   },
 });
-
-export default useStyles;
