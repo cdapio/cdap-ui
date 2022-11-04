@@ -14,7 +14,7 @@
 # the License.
 #
 
-@Integration_Tests
+@Integration_Tests @ignore
 Feature: Nuxtour - Validate Nuxtour functionalities
 
   @NUXTOUR_TEST
