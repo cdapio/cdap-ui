@@ -15,8 +15,7 @@
  */
 
 import { makeStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
-import { red } from '@material-ui/core/colors';
+import { green, red } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
   error: {
@@ -37,10 +36,10 @@ export const useStyles = makeStyles({
     borderRadius: 4,
     minHeight: 76,
   },
-  MUIanchor: {
+  anchor: {
     left: 0,
   },
-  MUIRoot: {
+  root: {
     left: 0,
   },
 });

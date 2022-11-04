@@ -22,16 +22,15 @@ import React, { useEffect, useState } from 'react';
 
 export default function({
   handleCloseError,
-  handleDefaultCloseSnackbar,
-  messageToDisplay,
+  description = '',
   isSuccess,
-  actionType,
+  snackbarAction,
 }: ISnackbarProps) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   useEffect(() => {
-    handleClick();
+    setIsOpen(true);
     const timer = setTimeout(() => {
       setIsOpen(false);
       handleCloseError();
@@ -41,10 +40,6 @@ export default function({
       clearTimeout(timer);
     };
   }, []);
-
-  const handleClick = () => {
-    setIsOpen(true);
-  };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -56,15 +51,15 @@ export default function({
       anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
       open={isOpen}
       classes={{
-        anchorOriginTopLeft: classes.MUIanchor,
-        root: classes.MUIRoot,
+        anchorOriginTopLeft: classes.anchor,
+        root: classes.root,
       }}
       TransitionComponent={() => (
         <Transition
           handleClose={() => handleClose()}
           isSuccess={isSuccess}
-          messageToDisplay={messageToDisplay ?? ''}
-          actionType={actionType}
+          messageToDisplay={description}
+          transitionAction={snackbarAction}
         />
       )}
       className={isSuccess ? classes.success : classes.error}
