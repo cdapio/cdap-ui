@@ -71,7 +71,6 @@ const organizePlugins = (pluginGroups, availablePlugins) => {
     if (!group.plugins?.length) {
       return;
     }
-
     group.plugins.forEach((plugin) => {
       plugin.displayName =
         generateLabel(plugin, availablePlugins.plugins.pluginsMap) || plugin.name;
@@ -131,6 +130,11 @@ export const SidePanel = ({
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
 
+  // keep track of number of plugins so if you create a template we can rerun organizePlugins
+  const numberOfPlugins = groups.reduce((prev, curr) => {
+    return (prev += curr.plugins.length);
+  }, 0);
+
   const handlePopperButtonClick = (popoverId: string) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -158,7 +162,7 @@ export const SidePanel = ({
 
   useEffect(() => {
     setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
-  }, [groups]);
+  }, [numberOfPlugins]);
 
   const handleSetSearch = debounce((text) => {
     // open all accordions when searching (then filtered closes them if no plugins)
@@ -208,7 +212,7 @@ export const SidePanel = ({
       const ToolTipContent = (
         <TooltipContentBox>
           <Box>
-            <Typography variant="h6">{label}</Typography>
+            <Typography variant="h4">{label}</Typography>
             <Button
               aria-label={`show more ${label}`}
               component="span"
@@ -236,7 +240,7 @@ export const SidePanel = ({
             )}
           </Box>
           <Box>
-            <Typography>
+            <Typography variant="h6">
               {plugin.defaultArtifact?.version} {plugin.defaultArtifact?.scope}
             </Typography>
             <ChangeVersionMenu changePluginVersion={handleChangePluginVersion} plugin={plugin} />
