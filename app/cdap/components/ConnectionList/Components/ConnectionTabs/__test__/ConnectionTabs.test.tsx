@@ -17,7 +17,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
-import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabsTestData';
+import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabTestData';
 
 test('renders Connections Tab Component', () => {
   render(

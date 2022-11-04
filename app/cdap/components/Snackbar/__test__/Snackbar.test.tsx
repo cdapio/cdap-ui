@@ -18,47 +18,35 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import Snackbar from 'components/Snackbar/index';
 
-describe('Should test the Snackbar Component while triggering setTimeout function', () => {
+describe('Should test the Snackbar Component while triggering setTimeout function and Triggers handleClose and checks for snackbar parent class', () => {
   it('renders Snackbar Component', () => {
     jest.useFakeTimers();
     const container = render(
       <Snackbar
         handleCloseError={jest.fn}
-        description={'Hello This is Snackbar'}
         isSuccess={true}
-        snackbarAction={'add'}
       />
     );
+    expect(container).toBeDefined();
+    const snackBarParent = screen.getByTestId(/snackbar-alert/i);
+    const closeButton = screen.getByTestId('snackbar-close-icon');
+    fireEvent.click(closeButton);
+    expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
+
     jest.runAllTimers();
     jest.useRealTimers();
-    expect(container).toBeDefined();
+    
   });
 
   it('Expects the relevent class when isSuccess is false', () => {
     render(
       <Snackbar
         handleCloseError={jest.fn}
-        description={undefined}
         isSuccess={false}
-        snackbarAction={''}
       />
     );
     const snackBarParent = screen.getByTestId(/snackbar-alert/i);
     expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
   });
 
-  it('Triggers handleClose and checks for snackbar parent class', () => {
-    render(
-      <Snackbar
-        handleCloseError={jest.fn}
-        description={undefined}
-        isSuccess={true}
-        snackbarAction={'test'}
-      />
-    );
-    const snackBarParent = screen.getByTestId(/snackbar-alert/i);
-    const closeButton = screen.getByTestId('snackbar-close-icon');
-    fireEvent.click(closeButton);
-    expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
-  });
 });
