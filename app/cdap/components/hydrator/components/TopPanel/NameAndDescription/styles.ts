@@ -86,17 +86,17 @@ export const PipelineType = styled.div`
 
 export const MetadataLeft = styled.div`
   margin-left: 10px;
-  width: calc(100% - 250px);
   text-align: left !important;
+  ${({ expanded }) => expanded && 'width: calc(100% - 250px);'}
 `;
 
 export const HydratorMetadata = styled.div`
   width: calc(80vw - 700px);
-  flex-wrap: wrap;
   display: flex;
   background-color: transparent;
   z-index: 999;
   box-shadow: none;
+  overflow: hidden;
 
   ${({ expanded }) =>
     expanded &&
