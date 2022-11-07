@@ -45,7 +45,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
     <Box>
       <Box className={`${classes.formFieldWrapperStyles}${classes.marginBottomStyles}`}>
         <InputLabel className={classes.labelTextStyles}>
-          {T.translate('features.NewWranglerUI.WranglerNewParsingDrawer.format')}
+          {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}
         </InputLabel>
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
@@ -63,7 +63,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
 
       <Box className={`${classes.formFieldWrapperStyles}${classes.marginBottomStyles}`}>
         <InputLabel className={classes.labelTextStyles}>
-          {T.translate('features.NewWranglerUI.WranglerNewParsingDrawer.encoding')}
+          {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
         </InputLabel>
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
@@ -80,7 +80,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
       </Box>
 
       <InputCheckbox
-        label={T.translate('features.NewWranglerUI.WranglerNewParsingDrawer.enableQuotedValues')}
+        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues')}
         value={enableQuotedValues}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
@@ -89,7 +89,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
       />
 
       <InputCheckbox
-        label={T.translate('features.NewWranglerUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
+        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
