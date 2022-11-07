@@ -23,6 +23,8 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 
 public class Snackbar {
     @Given("Navigate to the Home Page")
@@ -31,10 +33,9 @@ public class Snackbar {
             SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
             WaitHelper.waitForPageToLoad();
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("error:" + e);
         }
     }
-
     @Then("Click on the data exploration card")
     public void clickOnTheDataExplorationCard() {
         try {
@@ -43,10 +44,9 @@ public class Snackbar {
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("error:" + e);
         }
     }
-
     @Then("Click on the Snackbar close icon")
     public void verifyTheSnackbarPopUpIsComingOrNot() {
         try {
@@ -55,7 +55,7 @@ public class Snackbar {
             ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-close-icon"));
             Assert.assertFalse(ElementHelper.isElementDisplayed(ele));
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("error:" + e);
         }
     }
 }
