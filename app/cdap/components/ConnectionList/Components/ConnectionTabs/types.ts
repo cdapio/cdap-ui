@@ -15,6 +15,7 @@
  */
 
 import { ISnackbar } from 'components/Snackbar/types';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IRecords {
   [key: string]: string | number | IRecords | boolean;
@@ -33,6 +34,6 @@ export interface IConnectionTabsProps {
   value: string;
   connectionColumnIndex: number;
   connectionId: string;
-  setToaster: React.Dispatch<React.SetStateAction<ISnackbar>>;
+  setToaster: Dispatch<SetStateAction<ISnackbar>>;
   toggleLoader: (isLoading: boolean, isError?: boolean) => void;
 }

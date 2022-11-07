@@ -108,9 +108,7 @@ export default function ConnectionsTabs({
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
                         label={connectorType.name as string}
-                        count={
-                          connectionColumnIndex === 0 ? (connectorType.count as number) : undefined
-                        }
+                        count={undefined}
                         index={connectionColumnIndex}
                       />
                     ) : (
@@ -125,9 +123,7 @@ export default function ConnectionsTabs({
                   ) : (
                     <TabLabelCanBrowse
                       label={connectorType.name as string}
-                      count={
-                        connectionColumnIndex === 0 ? (connectorType.count as number) : undefined
-                      }
+                      count={connectorType.count as number}
                       index={connectionColumnIndex}
                       icon={(connectorType.icon as unknown) as JSX.Element}
                     />

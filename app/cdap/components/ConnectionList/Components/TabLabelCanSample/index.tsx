@@ -20,7 +20,6 @@ import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { useStyles } from 'components/ConnectionList/Components/TabLabelCanSample/styles';
 import { ITabLabelCanSampleProps } from 'components/ConnectionList/Components/TabLabelCanSample/types';
 import { WrangleIcon } from 'components/ConnectionList/icons';
-import { joinStringsWithSpaceSeparator } from 'components/ConnectionList/utils';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import T from 'i18n-react';
@@ -59,10 +58,7 @@ export default function TabLabelCanSample({
     } else {
       setToaster({
         open: true,
-        message: joinStringsWithSpaceSeparator([
-          T.translate(`${PREFIX}.retrieveFailure`),
-          entity?.name,
-        ]),
+        message: [T.translate(`${PREFIX}.retrieveFailure`), entity?.name].join(' '),
         isSuccess: false,
       });
     }
@@ -74,10 +70,7 @@ export default function TabLabelCanSample({
     } catch (e) {
       setToaster({
         open: true,
-        message: joinStringsWithSpaceSeparator([
-          T.translate(`${PREFIX}.workspaceFailure`).toString(),
-          entity?.name,
-        ]),
+        message: [T.translate(`${PREFIX}.workspaceFailure`).toString(), entity?.name].join(' '),
         isSuccess: false,
       });
     }
