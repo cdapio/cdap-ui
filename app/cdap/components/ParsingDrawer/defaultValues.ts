@@ -14,37 +14,30 @@
  * the License.
  */
 
-export interface IParams {
-  workspaceId: string;
-  context: string | number | IRecords | boolean;
-}
+export const defaultConnectionPayload = {
+  path: '',
+  connection: '',
+  sampleRequest: {
+    properties: {
+      format: '',
+      fileEncoding: '',
+      skipHeader: false,
+      enableQuotedValues: false,
+      schema: null,
+      _pluginName: null,
+    },
+    limit: 1000,
+  },
+};
 
-export interface IRecords {
-  [key: string]: string;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
+export const defaultErrorOnTransformations = {
+  open: false,
+  message: '',
+};
 
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
-
-export interface IInvalidCountArray {
-  label: string;
-  count: string;
-}
+export const defaultProperties = {
+  format: 'csv',
+  fileEncoding: 'UTF-8',
+  enableQuotedValues: false,
+  skipHeader: false,
+};

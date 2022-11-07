@@ -14,37 +14,19 @@
  * the License.
  */
 
-export interface IParams {
-  workspaceId: string;
-  context: string | number | IRecords | boolean;
+import { ReactChild, ReactChildren, ReactNode } from 'react';
+
+export interface IDrawerWidgetHeaderProps {
+  headingText: string | number | ReactNode | boolean;
 }
 
-export interface IRecords {
-  [key: string]: string;
-}
-export interface IPercentOfDataTypeValues {
-  [key: string]: number;
-}
-
-interface ISummary {
-  statistics: IRecords;
-  validations: IRecords;
-}
-
-export interface IExecuteAPIResponse {
-  headers: string[];
-  types: IRecords;
-  values: IRecords[];
-  summary: ISummary;
-}
-
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: string[];
-}
-
-export interface IInvalidCountArray {
-  label: string;
-  count: string;
+export interface IDrawerWidgetProps {
+  headingText?: string | ReactNode;
+  openDrawer: boolean;
+  showDivider?: boolean;
+  headerActionTemplate?: ReactNode | JSX.Element;
+  children?: JSX.Element[] | boolean;
+  closeClickHandler?: () => void;
+  showBackIcon?: boolean;
+  anchor?: 'bottom' | 'left' | 'right' | 'top';
 }

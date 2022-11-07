@@ -15,27 +15,34 @@
  */
 
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import NoRecordScreen from 'components/NoRecordScreen';
+import ParsingDrawer from 'components/ParsingDrawer';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
 import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
-import Box from '@material-ui/core/Box';
 import { useStyles } from './styles';
-import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import NoRecordScreen from 'components/NoRecordScreen';
-import T from 'i18n-react';
+import {
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IInvalidCountArray,
+  IParams,
+  IRecords,
+} from './types';
 
-export default function GridTable() {
+export default function() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
@@ -45,12 +52,21 @@ export default function GridTable() {
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
-  const [invalidCountArray, setInvalidCountArray] = useState([
+  const [workspaceName, setWorkspaceName] = useState<string>('');
+  const [invalidCountArray, setInvalidCountArray] = useState<IInvalidCountArray[]>([
     {
       label: 'Invalid',
       count: '0',
     },
   ]);
+  const { dataprep } = DataPrepStore.getState();
+  const [isFirstWrangle, setIsFirstWrangle] = useState<boolean>(false);
+  const [connectorType, setConnectorType] = useState<string>(null);
+
+  useEffect(() => {
+    setIsFirstWrangle(true);
+    setConnectorType(dataprep.connectorType);
+  }, []);
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -66,6 +82,7 @@ export default function GridTable() {
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
+          setWorkspaceName(res.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -75,9 +92,9 @@ export default function GridTable() {
           const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
           const insights = {
-            name: sampleSpec.connectionName,
+            name: res?.sampleSpec?.connectionName,
             workspaceName: res.workspaceName,
-            path: sampleSpec.path,
+            path: res?.sampleSpec?.path,
             visualization,
           };
           requestBody.insights = insights;
@@ -101,14 +118,24 @@ export default function GridTable() {
           type: DataPrepActions.setWorkspace,
           payload: {
             data: response.values,
+            values: response.values,
             headers: response.headers,
             types: response.types,
             ...gridParams,
           },
         });
-        setLoading(false);
         setGridData(response);
+        setLoading(false);
       });
+  };
+
+  const updateDataTranformation = (wid: string) => {
+    const payload = {
+      context: params.namespace,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+    setIsFirstWrangle(false);
   };
 
   useEffect(() => {
@@ -233,6 +260,12 @@ export default function GridTable() {
 
   return (
     <Box>
+      {dataprep.insights.name && isFirstWrangle && connectorType === 'File' && (
+        <ParsingDrawer
+          updateDataTranformation={(wid) => updateDataTranformation(wid)}
+          setLoading={setLoading}
+        />
+      )}
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
         <NoRecordScreen
@@ -243,7 +276,8 @@ export default function GridTable() {
       <Table aria-label="simple table" className="test">
         <TableHead>
           <TableRow>
-            {headersNamesList?.length &&
+            {Array.isArray(headersNamesList) &&
+              headersNamesList?.length > 0 &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
@@ -253,7 +287,8 @@ export default function GridTable() {
               ))}
           </TableRow>
           <TableRow>
-            {missingDataList?.length &&
+            {Array.isArray(missingDataList) &&
+              missingDataList?.length > 0 &&
               headersNamesList.length &&
               headersNamesList.map((each, index) => {
                 return missingDataList.map((item, itemIndex) => {
