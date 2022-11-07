@@ -14,17 +14,26 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
+import React from 'react';
+import styled from 'styled-components';
 
-export const useStyles = makeStyles((theme) => ({
-  arrow: {
-    color: '#000000',
-  },
-  tooltip: {
-    backgroundColor: '#000000',
-    fontSize: '16px',
-  },
-  forEachTabLabelWidth: {
-    maxWidth: '100%',
-  },
-}));
+const SimpleLabel = styled(Typography)`
+  margin-left: 2px;
+  margin-right: 5px;
+  margin-top: 2px;
+`;
+
+/**
+ *
+ * @param children: children to be rendered inside the label
+ * @returns Label with appropriate style
+ */
+
+export default function({ children }: { children: JSX.Element }) {
+  return (
+    <SimpleLabel data-testid="footerpanel-simple-label" component="span">
+      {children}
+    </SimpleLabel>
+  );
+}
