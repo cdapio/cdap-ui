@@ -130,7 +130,7 @@ export default function() {
   };
 
   const updateDataTranformation = (wid: string) => {
-    const payload = {
+    const payload: IParams = {
       context: params.namespace,
       workspaceId: wid,
     };
@@ -260,7 +260,7 @@ export default function() {
 
   return (
     <Box>
-      {dataprep.insights.name && isFirstWrangle && connectorType === 'File' && (
+      {dataprep?.insights?.name && isFirstWrangle && connectorType === 'File' && (
         <ParsingDrawer
           updateDataTranformation={(wid) => updateDataTranformation(wid)}
           setLoading={setLoading}

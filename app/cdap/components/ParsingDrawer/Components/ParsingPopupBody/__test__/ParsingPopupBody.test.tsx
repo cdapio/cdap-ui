@@ -14,12 +14,10 @@
  *  the License.
  */
 
-import React from 'react';
-import { createBrowserHistory as createHistory } from 'history';
-import { Router, Route, Switch } from 'react-router';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody/index';
-import { fireEvent, render, within, screen } from '@testing-library/react';
-import { CHAR_ENCODING_OPTIONS, FORMAT_OPTIONS } from '../parsingOptions';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
 describe('It Should Test the ParsingPopupBody component', () => {
