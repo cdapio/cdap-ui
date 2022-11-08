@@ -102,7 +102,7 @@ export default function OngoingDataExplorationCard({ item }) {
               </Grid>
             );
           case 'percentageWithText': {
-            const percent = Number(eachItem.label);
+            const percent = Math.round(Number(eachItem.label));
             return percent && !isNaN(percent) ? (
               <Grid
                 item
