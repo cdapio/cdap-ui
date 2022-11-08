@@ -36,6 +36,7 @@ public class Constants {
   public static final String BASE_STUDIO_URL = "http://localhost:11011/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
   public static final String PIPELINE_STUDIO_URL = "http://localhost:11011/pipelines/ns/default/studio";
+  public static final String PIPELINE_LIST_URL = CDAP_URL + "/ns/default/pipelines";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
   public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
 
@@ -57,6 +58,7 @@ public class Constants {
   public static final String DEFAULT_SPANNER_CONNECTION_NAME = "spanner_" +
     String.valueOf(getRandomArbitrary(1, 10000));
 
+  public static final String RUNTIME_ARGS_PREVIEW_SELECTOR = "runtimeargs-preview";
   public static final String RUNTIME_ARGS_DEPLOYED_SELECTOR = "runtimeargs-deployed";
   public static final String RUNTIME_ARGS_KEY_SELECTOR = "runtimeargs-key";
   public static final String RUNTIME_ARGS_VALUE_SELECTOR = "runtimeargs-value";
@@ -67,4 +69,7 @@ public class Constants {
 
   public static final String DEFAULT_GCP_PROJECTID = System.getenv("GCP_PROJECTID");
   public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
+
+  public static final String SINK_PATH_VAL = "/tmp/cdap-ui-integration-fixtures";
+  public static final String SOURCE_PATH_VAL = "file:/tmp/cdap-ui-integration-fixtures/airports.csv";
 }
