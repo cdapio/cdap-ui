@@ -42,6 +42,9 @@ interface ILeftPanelProps {
 
 const StyledSelect = styled(Select)`
   overflow: hidden;
+  .MuiSelect-select:focus {
+    background-color: white;
+  }
 `;
 
 export const LeftPanel = ({
