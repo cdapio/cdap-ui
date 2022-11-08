@@ -22,10 +22,7 @@ import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
 import rxjs from 'rxjs/operators';
 import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
-
-const history = createHistory({
-  basename: '/',
-});
+import history from 'services/history';
 
 describe('Testing Grid Table Component', () => {
   jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
@@ -54,6 +51,6 @@ describe('Testing Grid Table Component', () => {
       </Router>
     );
     expect(container).toBeDefined();
-    expect(container.getByTestId('grid-table')).toBeInTheDocument();
+    expect(container.getByTestId('grid-table-container')).toBeInTheDocument();
   });
 });
