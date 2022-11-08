@@ -14,18 +14,14 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
+import { IMenuItem } from 'components/GridTable/components/MenuItemComponent/types';
 import React from 'react';
-import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
 
-export default function({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
+export interface IMenuComponentProps {
+  anchorElement: HTMLElement;
+  menuOptions: IMenuItem[];
+  setAnchorElement: React.Dispatch<React.SetStateAction<HTMLElement[]>>;
+  submitOption: (e: React.MouseEvent<HTMLLIElement, MouseEvent>, item: IMenuItem) => void;
+  columnType: string;
+  setMenuComponentOptions: React.Dispatch<React.SetStateAction<IMenuItem[][]>>;
 }

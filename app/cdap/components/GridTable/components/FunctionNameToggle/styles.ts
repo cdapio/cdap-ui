@@ -14,18 +14,17 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
+import { makeStyles } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 
-export default function({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
-}
+export const useStyles = makeStyles({
+  functionWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  typoClass: {
+    color: grey[600],
+    fontSize: 14,
+  },
+});

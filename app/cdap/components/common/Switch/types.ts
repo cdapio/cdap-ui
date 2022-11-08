@@ -14,18 +14,12 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
+interface IInputProps {
+  [key: string]: string;
+}
 
-export default function({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
+export interface ISwitchProps {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  show: boolean;
+  inputProps?: IInputProps;
 }
