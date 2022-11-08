@@ -14,18 +14,6 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
-
-export default function({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
-}
+export const TOOLBAR_ICONS_LABEL_ALL_PREFIX =
+  'features.WranglerNewUI.GridPage.toolbarIcons.labels.all';
+export const TOOLBAR_ICONS_LABEL_PREFIX = 'features.WranglerNewUI.GridPage.toolbarIcons.labels';

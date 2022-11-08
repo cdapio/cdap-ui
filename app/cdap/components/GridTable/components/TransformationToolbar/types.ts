@@ -13,19 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { ITypographyTextComponentProps } from 'components/GridTable/components/Typography/types';
-
-export default function({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
+export interface ITransformationToolBarProps {
+  columnType: string;
+  submitMenuOption: (value: string, dataType: string[]) => void;
+  setShowBreadCrumb: React.Dispatch<React.SetStateAction<boolean>>;
+  showBreadCrumb: boolean;
 }
