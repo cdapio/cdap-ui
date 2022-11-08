@@ -50,11 +50,6 @@ export default function WranglerHome() {
           <Box className={classes.viewMore}>View More</Box>
         </Box>
         <OngoingDataExploration />
-        {loading && (
-          <Box className={classes.loadingContainer}>
-            <LoadingSVG />
-          </Box>
-        )}
       </Box>
     </Box>
   );

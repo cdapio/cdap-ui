@@ -14,9 +14,7 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
-
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
+export interface INoDataScreenProps {
+  title: React.ReactNode;
+  subtitle: React.ReactNode;
 }

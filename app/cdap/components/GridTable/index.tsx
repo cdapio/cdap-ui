@@ -32,6 +32,8 @@ import { useStyles } from './styles';
 import { flatMap } from 'rxjs/operators';
 import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import NoRecordScreen from 'components/NoRecordScreen';
+import T from 'i18n-react';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -231,50 +233,57 @@ export default function GridTable() {
   }, [gridData]);
 
   return (
-    <Box>
+    <Box data-testid="grid-table">
       <BreadCrumb datasetName={wid} />
-      <Table aria-label="simple table" className="test">
-        <TableHead>
-          <TableRow>
-            {headersNamesList?.length &&
-              headersNamesList.map((eachHeader) => (
-                <GridHeaderCell
-                  label={eachHeader.label}
-                  types={eachHeader.type as string[]}
-                  key={eachHeader.name}
-                />
-              ))}
-          </TableRow>
-          <TableRow>
-            {missingDataList?.length &&
-              headersNamesList.length &&
-              headersNamesList.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name === each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
+        <NoRecordScreen
+          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+        />
+      ) : (
+        <Table aria-label="simple table" className="test">
+          <TableHead>
+            <TableRow>
+              {headersNamesList?.length &&
+                headersNamesList.map((eachHeader) => (
+                  <GridHeaderCell
+                    label={eachHeader.label}
+                    types={eachHeader.type}
+                    key={eachHeader.name}
+                  />
+                ))}
+            </TableRow>
+            <TableRow>
+              {missingDataList?.length &&
+                headersNamesList.length &&
+                headersNamesList.map((each, index) => {
+                  return missingDataList.map((item, itemIndex) => {
+                    if (item.name === each.name) {
+                      return <GridKPICell metricData={item} key={item.name} />;
+                    }
+                  });
+                })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rowsDataList?.length &&
+              rowsDataList.map((eachRow, rowIndex) => {
+                return (
+                  <TableRow key={`row-${rowIndex}`}>
+                    {headersNamesList.map((eachKey, eachIndex) => {
+                      return (
+                        <GridTextCell
+                          cellValue={eachRow[eachKey.name] || '--'}
+                          key={`${eachKey.name}-${eachIndex}`}
+                        />
+                      );
+                    })}
+                  </TableRow>
+                );
               })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rowsDataList?.length &&
-            rowsDataList.map((eachRow, rowIndex) => {
-              return (
-                <TableRow key={`row-${rowIndex}`}>
-                  {headersNamesList.map((eachKey, eachIndex) => {
-                    return (
-                      <GridTextCell
-                        cellValue={eachRow[eachKey.name] || '--'}
-                        key={`${eachKey.name}-${eachIndex}`}
-                      />
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </Table>
+      )}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

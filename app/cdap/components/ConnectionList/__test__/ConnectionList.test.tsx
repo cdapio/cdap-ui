@@ -25,13 +25,9 @@ import {
 import * as apiHelpersForExploreConnection from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import * as apiHelpers from 'components/Connections/Browser/SidePanel/apiHelpers';
 import * as reducer from 'components/Connections/Create/reducer';
-import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-
-const history = createHistory({
-  basename: '/',
-});
+import history from 'services/history';
 
 describe('It Should test Connection List Component', () => {
   it('Should render Connection List Component', () => {
