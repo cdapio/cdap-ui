@@ -21,8 +21,12 @@ import React from 'react';
 
 describe('To Test Grid Header Cell Component', () => {
   const arr = ['PostgrSQL', 'SQL'];
-  render(<GridHeaderCell label={'abc'} types={arr} />);
   it('Should check if the label is displayed as expected', () => {
-    screen.getByTestId(`grid-header-cell-abc`);
+    render(<GridHeaderCell label={'abc'} types={arr} />);
+    const ele = screen.getByTestId(`grid-header-cell-abc`);
+    expect(ele).toHaveTextContent('abc');
+  });
+  it('Renders Component with empty types array to trigger Null', () => {
+    render(<GridHeaderCell label={'abc'} types={[]} />);
   });
 });

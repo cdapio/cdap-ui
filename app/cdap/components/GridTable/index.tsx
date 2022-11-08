@@ -132,7 +132,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]],
+          type: [columnTypesList[eachColumnName]] as string[],
         };
       });
     }
@@ -238,7 +238,7 @@ export default function GridTable() {
   }, [gridData]);
 
   return (
-    <Box data-testid="grid-table">
+    <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
         <NoRecordScreen

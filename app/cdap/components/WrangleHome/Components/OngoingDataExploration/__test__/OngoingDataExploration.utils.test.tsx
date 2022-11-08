@@ -14,9 +14,17 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { expectedResult, mockOldData } from '../mock/oldData';
+import { generateDataForExplorationCard } from '../utils';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-}
+describe('Test the Utility Functions', () => {
+  it('Should test the result for empty array', () => {
+    const result = generateDataForExplorationCard([]);
+    expect(result).toEqual([]);
+  });
+
+  it('Should test the result for mock data', () => {
+    const result = generateDataForExplorationCard(mockOldData);
+    expect(result).toEqual(expectedResult);
+  });
+});

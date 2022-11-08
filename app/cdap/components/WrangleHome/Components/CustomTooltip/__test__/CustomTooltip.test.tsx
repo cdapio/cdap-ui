@@ -14,9 +14,19 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import CustomTooltip from '../index';
+import { Typography } from '@material-ui/core';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-}
+describe('Test Custom Tooltip Component', () => {
+  it('Should render Custom tooltip component', () => {
+    render(
+      <CustomTooltip arrow title={'Custom tooltip'}>
+        <Typography></Typography>
+      </CustomTooltip>
+    );
+    const ele = screen.getByTestId(/tooltip-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
+});

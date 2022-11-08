@@ -28,8 +28,8 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
 
   const [data, setData] = useState<Record<string, string>>({
-    datatype1: types.length > 0 ? types[0] : null,
-    datatype2: types.length > 1 ? types[1] : null,
+    datatype1: types.length > 0 ? (types[0] as string) : null,
+    datatype2: types.length > 1 ? (types[1] as string) : null,
   });
 
   return (
