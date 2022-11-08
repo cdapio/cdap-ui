@@ -29,7 +29,7 @@ import {
   VerticalBarSeries as BarSeries,
 } from 'react-vis';
 import moment from 'moment';
-import { convertProgramToApi } from 'services/program-api-converter';
+import { getLogViewerPageUrl } from 'components/LogViewer/LogViewerPage';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import IconSVG from 'components/shared/IconSVG';
@@ -43,7 +43,6 @@ import SortableStickyTable from 'components/shared/SortableStickyTable';
 import { getYAxisProps } from 'components/PipelineSummary/RunsGraphHelpers';
 import ee from 'event-emitter';
 import EmptyMessageContainer from 'components/PipelineSummary/EmptyMessageContainer';
-import { getLogViewerPageUrl } from 'components/LogViewer/LogViewerPage';
 import colorVariables from 'styles/variables.scss';
 
 // TODO: CDAP-17725
@@ -335,10 +334,9 @@ export default class LogsMetricsGraph extends Component {
       <table className="table">
         <tbody>
           {runs.map((run) => {
-            let logUrl = `/logviewer/view?namespace=${namespaceId}&appId=${appId}&programType=${convertProgramToApi(
-              programType
-            )}&programId=${programId}&runId=${run.runid}`;
-            let runid = run.runid;
+            const runid = run.runid;
+            const logUrl = getLogViewerPageUrl(namespaceId, appId, programType, programId, runid);
+
             return (
               <tr>
                 <td>
