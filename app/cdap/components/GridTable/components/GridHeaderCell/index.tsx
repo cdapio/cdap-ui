@@ -33,7 +33,7 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   });
 
   return (
-    <TableCell className={classes.tableHeaderCell}>
+    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-container">
       <Card className={classes.root} variant="outlined">
         <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
           {label}

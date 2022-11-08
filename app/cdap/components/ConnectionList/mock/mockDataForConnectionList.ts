@@ -84,3 +84,35 @@ export const mockResponseForFetchConnectors = [
     },
   },
 ];
+
+export const mockDataForExploreConnection = {
+  totalCount: 3,
+  sampleProperties: [],
+  entities: [
+    {
+      name: 'information_schema',
+      path: '/information_schema',
+      type: 'schema',
+      canSample: false,
+      canBrowse: true,
+      properties: {},
+    },
+    {
+      name: 'pg_catalog',
+      path: '/pg_catalog',
+      type: 'schema',
+      canSample: false,
+      canBrowse: true,
+      properties: {},
+    },
+    {
+      name: 'public',
+      path: '/public',
+      type: 'schema',
+      canSample: false,
+      canBrowse: true,
+      properties: {},
+    },
+  ],
+  propertyHeaders: [],
+};

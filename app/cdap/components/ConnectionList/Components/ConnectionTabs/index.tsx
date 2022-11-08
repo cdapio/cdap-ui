@@ -86,10 +86,12 @@ export default function ConnectionsTabs({
               indicator: classes.indicator,
               root: classes.tabsContainer,
             }}
+            data-testid="connection-tabs"
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
+                data-testid="connections-tab-button"
                 onClick={() => {
                   if (index > 1) {
                     if (connectorType.canBrowse) {
