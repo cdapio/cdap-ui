@@ -37,10 +37,10 @@ import { useStyles } from './styles';
 import {
   IExecuteAPIResponse,
   IHeaderNamesList,
-  IInvalidCountArray,
+  IInvalidCount,
   IParams,
   IRecords,
-} from './types';
+} from 'components/GridTable/types';
 
 export default function() {
   const { wid } = useParams() as IRecords;
@@ -52,8 +52,7 @@ export default function() {
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
-  const [workspaceName, setWorkspaceName] = useState<string>('');
-  const [invalidCountArray, setInvalidCountArray] = useState<IInvalidCountArray[]>([
+  const [invalidCount, setInvalidCount] = useState<IInvalidCount[]>([
     {
       label: 'Invalid',
       count: '0',
@@ -82,7 +81,6 @@ export default function() {
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
-          setWorkspaceName(res.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -207,7 +205,7 @@ export default function() {
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
   const createMissingData = (statistics: IRecords) => {
     const statisticObjectToArray = Object.entries(statistics);
-    const metricArray = [];
+    const metricsData = [];
     statisticObjectToArray.forEach(([key, value]) => {
       const headerKeyTypeArray = Object.entries(value);
       const arrayForMissingValue = [];
@@ -225,12 +223,12 @@ export default function() {
           });
         }
       }),
-        metricArray.push({
+        metricsData.push({
           name: key,
-          values: arrayForMissingValue.concat(invalidCountArray),
+          values: arrayForMissingValue.concat(invalidCount),
         });
     });
-    return metricArray;
+    return metricsData;
   };
 
   // ------------@getGridTableData Function is used for preparing data for entire grid-table
@@ -239,7 +237,7 @@ export default function() {
     const headersData = createHeadersData(rawData.headers, rawData.types);
     setHeadersNamesList(headersData);
     if (rawData && rawData.summary && rawData.summary.statistics) {
-      const missingData = createMissingData(gridData?.summary.statistics);
+      const missingData = createMissingData(gridData?.summary?.statistics);
       setMissingDataList(missingData);
     }
     const rowData =

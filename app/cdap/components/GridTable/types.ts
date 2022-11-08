@@ -44,7 +44,7 @@ export interface IHeaderNamesList {
   type: string[];
 }
 
-export interface IInvalidCountArray {
+export interface IInvalidCount {
   label: string;
   count: string;
 }

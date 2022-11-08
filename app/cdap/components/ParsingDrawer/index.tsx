@@ -37,6 +37,7 @@ import {
 import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
+import { MouseEvent } from 'react';
 
 export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
@@ -132,9 +133,8 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
           <Button
             variant="contained"
             color="primary"
-            classes={{ containedPrimary: classes.buttonStyles }}
-            className={classes.applyButtonStyles}
-            onClick={(event: React.MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
+            classes={{ containedPrimary: classes.buttonStyles, root: classes.applyButtonStyles }}
+            onClick={(event: MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
             data-testid="parsing-apply-button"
           >
             {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.apply')}

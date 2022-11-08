@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { ReactChild, ReactChildren, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export interface IDrawerWidgetHeaderProps {
   headingText: string | number | ReactNode | boolean;
