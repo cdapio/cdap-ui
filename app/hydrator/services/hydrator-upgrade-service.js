@@ -207,8 +207,11 @@ class HydratorUpgradeService {
         }
 
         // This is to check whether the version of the imported pipeline exist or not
-        let existingVersion = pluginsMap[stageKey].artifactVersionMap[stageArtifact.version];
-        if (existingVersion && existingVersion.indexOf(stageArtifact.scope) !== -1) {
+        const existingVersion = pluginsMap[stageKey].allArtifacts.find(
+          (ver) => (ver.version === stageArtifact.version && ver.scope === stageArtifact.scope)
+        );
+
+        if (existingVersion) {
           data.error = 'CAN_UPGRADE';
         }
       } else if (pluginsMap[stageKey].highestVersion.scope.indexOf(stageArtifact.scope) < 0) {
