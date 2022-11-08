@@ -14,8 +14,8 @@
  * the License.
  */
 
-import React, { useState } from 'react';
 import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
 import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
