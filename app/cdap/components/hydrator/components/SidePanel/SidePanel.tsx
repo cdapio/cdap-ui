@@ -208,6 +208,7 @@ export const SidePanel = ({
     return plugins.map((plugin) => {
       const id = `plugin-${plugin.name}-${plugin.type}`;
       const label = plugin.displayName || plugin.name;
+      const createOrEditLabel = plugin.pluginTemplate ? 'Edit' : 'Create';
       const handleClickShowDetails = handlePopperButtonClick(id);
       const ToolTipContent = (
         <TooltipContentBox>
@@ -218,12 +219,12 @@ export const SidePanel = ({
               component="span"
               onClick={(e) => {
                 e.stopPropagation();
-                createPluginTemplate(plugin, 'create');
+                createPluginTemplate(plugin, createOrEditLabel.toLowerCase() as 'edit' | 'create');
                 handlePopoverClose();
               }}
             >
               <ToolTipButtonContainer>
-                <AddCircle /> Create Template
+                <AddCircle /> {`${createOrEditLabel} Template`}
               </ToolTipButtonContainer>
             </Button>
             {plugin.pluginTemplate && (
