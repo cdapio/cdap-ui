@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { IDataQuality } from 'components/ColumnView/SelectColumnsList/types';
+import { IHeaderNamesList } from 'components/GridTable/types';
 
-export const prepareDataQualtiy = (statistics, columnList) => {
+export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeaderNamesList[]) => {
   const dataQualityToArray = statistics && Object.entries(statistics);
   const dataQuality = [];
   Array.isArray(columnList) &&

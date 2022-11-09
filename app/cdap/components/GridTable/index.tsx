@@ -41,6 +41,7 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import FooterPanel from 'components/FooterPanel';
+import { IDataQuality } from 'components/ColumnView/types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -54,7 +55,7 @@ export default function GridTable() {
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
   const [openColumnView, setOpenColumnView] = useState<boolean>(false);
-  const [dataQuality, setDataQuality] = useState({});
+  const [dataQuality, setDataQuality] = useState<IDataQuality>({});
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
@@ -242,19 +243,9 @@ export default function GridTable() {
     setRowsDataList(rowData);
   };
 
-  const setOpenColumnViewHandler = () => {
-    setOpenColumnView((prev) => !prev);
-  };
-
-  const closeClickHandler = () => {
-    setOpenColumnView(false);
-  };
-
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
-
-  console.log(tableMetaInfo, 'tableMetaInfo');
 
   return (
     <Box data-testid="grid-table-container">
@@ -266,7 +257,7 @@ export default function GridTable() {
               setLoading={setLoading}
               columnData={headersNamesList}
               dataQuality={dataQuality}
-              closeClickHandler={closeClickHandler}
+              closeClickHandler={() => setOpenColumnView(false)}
             />
           </Box>
         )}
@@ -297,7 +288,9 @@ export default function GridTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rowsDataList?.length > 0 &&
+                {rowsDataList &&
+                  Array.isArray(rowsDataList) &&
+                  rowsDataList?.length > 0 &&
                   rowsDataList.map((eachRow, rowIndex) => {
                     return (
                       <TableRow key={`row-${rowIndex}`}>
@@ -324,7 +317,7 @@ export default function GridTable() {
         <FooterPanel
           recipeStepsCount={0}
           gridMetaInfo={tableMetaInfo}
-          setOpenColumnViewHandler={setOpenColumnViewHandler}
+          setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
         />
       </Box>
       {loading && (

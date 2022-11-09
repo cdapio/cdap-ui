@@ -33,11 +33,12 @@ import {
 } from 'components/ColumnView/SelectColumnsList/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
+import { IHeaderNamesList } from 'components/GridTable/types';
 import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
 
 export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
   const classes = useStyles();
-  const [filteredColumns, setFilteredColumns] = useState(columnData);
+  const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
     <section className={classes.columnsCountTextStyles}>
       <TableContainer component={Box} classes={{ root: classes.customTableContainer }}>
         <Table aria-label="recipe steps table" stickyHeader>
-          {filteredColumns.length !== 0 && (
+          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 && (
             <TableHead>
               <TableRow className={classes.recipeStepsTableRowStyles}>
                 <TableCell className={classes.columnLeft} data-testid="column-name-header">

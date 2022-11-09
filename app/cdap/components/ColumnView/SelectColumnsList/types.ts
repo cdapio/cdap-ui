@@ -22,7 +22,7 @@ export interface ISelectColumnListProps {
   searchTerm: string;
 }
 
-interface IDataQuality {
+export interface IDataQuality {
   [key: string]: unknown;
 }
 

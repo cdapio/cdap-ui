@@ -31,16 +31,12 @@ export default function({
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const searchedTermHandler = (searchedTerm) => {
-    setSearchValue(searchedTerm);
-  };
-
   return (
     <Fragment>
       <ColumnViewWidget
         headingText={HEADING_TEXT}
         closeClickHandler={closeClickHandler}
-        searchedTermHandler={searchedTermHandler}
+        searchedTermHandler={(searchedTerm) => setSearchValue(searchedTerm)}
       >
         <Box className={classes.selectColumnListBodyStyles} data-testid="select-column-list-parent">
           <SelectColumnsList

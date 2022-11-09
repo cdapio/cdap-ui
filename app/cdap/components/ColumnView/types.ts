@@ -24,6 +24,6 @@ export interface IColumnViewProps {
   dataQuality: IDataQuality;
 }
 
-interface IDataQuality {
+export interface IDataQuality {
   [key: string]: unknown;
 }
