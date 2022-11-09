@@ -38,7 +38,7 @@ export const useStyles = makeStyles({
     textAlign: 'center',
     padding: '9.5px 12px',
     gap: '8px',
-    width: (props: any) => props.width,
+    width: (props: Record<string, number>) => props.width,
     height: 40,
     background: 'linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%)',
     borderLeft: '1px solid rgba(57, 148, 255, 0.4)',
