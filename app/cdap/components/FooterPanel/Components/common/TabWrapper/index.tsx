@@ -17,47 +17,7 @@
 import { Box } from '@material-ui/core';
 import { ITabWrapperProps } from 'components/FooterPanel/Components/common/TabWrapper/types';
 import React from 'react';
-import styled from 'styled-components';
-
-const SmallBox = styled(Box)`
-  &&& {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 8px 32px;
-    gap: 8px;
-    width: 88px;
-    height: 40px;
-    border-left: 1px solid #3994ff66;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-    border-right: 1px solid #3994ff66;
-    cursor: pointer;
-  }
-`;
-
-const MediumBox = styled(Box)`
-  &&& {
-    text-align: center;
-    padding: 9.5px 12px;
-    gap: 8px;
-    width: ${(props) => props.width}%;
-    height: 40px;
-    background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-    border-left: 1px solid rgba(57, 148, 255, 0.4);
-    cursor: pointer;
-  }
-`;
-
-const LargeBox = styled(Box)`
-  &&& {
-    width: 65%;
-    padding: 9.5px 32px;
-  }
-`;
+import { useStyles } from 'components/FooterPanel/Components/common/TabWrapper/styles';
 
 /**
  *
@@ -74,22 +34,23 @@ export default function({
   width,
   dataTestID,
 }: ITabWrapperProps) {
+  const classes = useStyles({ width });
   return (
     <>
       {size === 'small' && (
-        <SmallBox onClick={clickEventListener} data-testid={dataTestID}>
+        <Box className={classes.smallBox} onClick={clickEventListener} data-testid={dataTestID}>
           {children}
-        </SmallBox>
+        </Box>
       )}
       {size === 'medium' && (
-        <MediumBox onClick={clickEventListener} width={width} data-testid={dataTestID}>
+        <Box className={classes.mediumBox} onClick={clickEventListener} data-testid={dataTestID}>
           {children}
-        </MediumBox>
+        </Box>
       )}
       {size === 'large' && (
-        <LargeBox onClick={clickEventListener} data-testid={dataTestID}>
+        <Box className={classes.largeBox} onClick={clickEventListener} data-testid={dataTestID}>
           {children}
-        </LargeBox>
+        </Box>
       )}
     </>
   );

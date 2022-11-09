@@ -24,7 +24,7 @@ import React from 'react';
 
 export default function() {
   return (
-    <TabWrapper size="medium" width={10.5} dataTestID="footer-panel-zoom-tab">
+    <TabWrapper size="medium" width={143} dataTestID="footer-panel-zoom-tab">
       <>
         {ZoomIcon}
         <RenderLabel type="simple">
