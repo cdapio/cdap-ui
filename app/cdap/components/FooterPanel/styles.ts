@@ -14,18 +14,26 @@
  * the License.
  */
 
-import RenderLabel from 'components/FooterPanel/Components/common/RenderLabel';
-import TabWrapper from 'components/FooterPanel/Components/common/TabWrapper';
-import { PREFIX } from 'components/FooterPanel/constants';
-import T from 'i18n-react';
-import React from 'react';
+import { makeStyles } from '@material-ui/styles';
 
-export default function() {
-  return (
-    <TabWrapper size="medium" width={130} dataTestID="footer-panel-directives-tab">
-      <RenderLabel type="simple">
-        <>{`${T.translate(`${PREFIX}.directives`)}`}</>
-      </RenderLabel>
-    </TabWrapper>
-  );
-}
+export const useStyles = makeStyles({
+  footerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    width: '100%',
+    position: 'absolute',
+    bottom: '54px',
+  },
+  tabsWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'space-between',
+    backgroundColor: '#f3f6f9',
+    height: 40,
+    boxShadow: '0px -2px 2px #0000001a',
+    width: '100%',
+  },
+});

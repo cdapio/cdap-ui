@@ -314,12 +314,12 @@ export default function GridTable() {
             subtitle={T.translate('features.NoRecordScreen.gridTable.subtitle')}
           />
         )}
-        <FooterPanel
-          recipeStepsCount={0}
-          gridMetaInfo={tableMetaInfo}
-          setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
-        />
       </Box>
+      <FooterPanel
+        recipeStepsCount={0}
+        gridMetaInfo={tableMetaInfo}
+        setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
+      />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

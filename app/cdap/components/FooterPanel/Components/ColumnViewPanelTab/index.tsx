@@ -31,6 +31,7 @@ export default function({ setOpenColumnViewHandler, gridMetaInfo }) {
         <Box
           onClick={setOpenColumnViewHandler}
           className={gridMetaInfo?.rowCount === 0 ? classes.disabled : classes.notDisabled}
+          data-testid="footer-panel-column-view-panel-button"
         >
           <TabWrapper size="small" dataTestID="footer-panel-column-view-panel-tab">
             {ColumnIcon}

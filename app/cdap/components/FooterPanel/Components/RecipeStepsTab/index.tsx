@@ -23,7 +23,7 @@ import React from 'react';
 
 export default function({ recipeStepsCount }: IRecipeStepsTabProps) {
   return (
-    <TabWrapper size="medium" width={13.5} dataTestID="footer-panel-recipe-steps-tab">
+    <TabWrapper size="medium" width={184} dataTestID="footer-panel-recipe-steps-tab">
       <>
         <RenderLabel type="simple">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
