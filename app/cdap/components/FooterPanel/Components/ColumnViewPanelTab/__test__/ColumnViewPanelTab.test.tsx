@@ -20,7 +20,7 @@ import React from 'react';
 
 describe('Testing render ColumnViewPanelTab component', () => {
   it('Should render component with all the parent elements and child elements', () => {
-    render(<ColumnViewPanelTab />);
+    render(<ColumnViewPanelTab setOpenColumnViewHandler={undefined} gridMetaInfo={undefined} />);
 
     const parentComponent = screen.getByTestId(/footer-panel-column-view-panel-tab-wrapper/i);
 

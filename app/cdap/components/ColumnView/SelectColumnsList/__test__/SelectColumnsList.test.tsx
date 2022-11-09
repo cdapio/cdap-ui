@@ -26,7 +26,7 @@ describe('It should test SelectColumnList Component', () => {
       <SelectColumnsList
         columnData={mockColumnData}
         dataQuality={mockDataQuality}
-        searchTerm={'mockSearchItem'}
+        searchTerm={'body_0'}
       />
     );
     const nullValueHeader = screen.getByTestId('null-values-header');
