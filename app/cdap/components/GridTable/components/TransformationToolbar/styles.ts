@@ -21,7 +21,6 @@ export const useStyles = makeStyles({
   closeHeader: {
     transform: 'rotate(180deg)',
   },
-  openHeader: {},
   iconContainer: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -47,7 +46,6 @@ export const useStyles = makeStyles({
   closeBreadCrumb: {
     transform: 'rotate(180deg)',
   },
-  openedBreadcrumb: {},
   functionNameWrapper: {
     display: 'flex',
     flexDirection: 'column',

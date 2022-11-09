@@ -75,5 +75,4 @@ export const useNestedMenuStyles = makeStyles({
     color: grey[600],
     textTransform: 'capitalize',
   },
-  muiPopoverRoot: {},
 });
