@@ -30,7 +30,7 @@ export default function({
   title,
   anchorElement,
   setAnchorElement,
-  handleMenuOpenClose,
+  menuToggleHandler,
 }: INestedMenuProps) {
   const [menuComponentOptions, setMenuComponentOptions] = useState<IMenuItem[][]>([]);
   const classes = useNestedMenuStyles();
@@ -50,7 +50,7 @@ export default function({
       } else {
         submitMenuOption(menuItem.value, menuItem.supportedDataType);
         setAnchorElement(null);
-        handleMenuOpenClose(title);
+        menuToggleHandler(title);
       }
     } else {
       if (menuItem.hasOwnProperty('options') && menuItem?.options?.length > 0) {
@@ -88,7 +88,7 @@ export default function({
       } else {
         submitMenuOption(menuItem.value, menuItem.supportedDataType);
         setAnchorElement(null);
-        handleMenuOpenClose(title);
+        menuToggleHandler(title);
       }
     }
   };
@@ -103,7 +103,7 @@ export default function({
         getContentAnchorEl={null}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-        onClose={() => handleMenuOpenClose()}
+        onClose={() => menuToggleHandler()}
         onClick={(clickEvent) => {
           clickEvent.preventDefault();
           clickEvent.stopPropagation();
@@ -111,19 +111,22 @@ export default function({
         className={classes.root}
         classes={{ paper: classes.popoverPaper }}
       >
-        {menuOptions?.map((eachOption, optionsIndex) => {
-          return (
-            <MenuItemComponent
-              item={eachOption}
-              columnType={columnType.toLowerCase()}
-              index={optionsIndex}
-              onMenuClick={(onClickEvent, clickedItem) =>
-                handleMenuClick(onClickEvent, clickedItem, 'parentMenu')
-              }
-            />
-          );
-        })}
-        {menuComponentOptions?.length > 0 &&
+        {Array.isArray(menuOptions) &&
+          menuOptions.length &&
+          menuOptions?.map((eachOption, optionsIndex) => {
+            return (
+              <MenuItemComponent
+                item={eachOption}
+                columnType={columnType.toLowerCase()}
+                index={optionsIndex}
+                onMenuClick={(onClickEvent, clickedItem) =>
+                  handleMenuClick(onClickEvent, clickedItem, 'parentMenu')
+                }
+              />
+            );
+          })}
+        {Array.isArray(menuComponentOptions) &&
+          menuComponentOptions?.length > 0 &&
           menuComponentOptions.map((eachOption, optionsIndex) => {
             return (
               <MenuComponent
