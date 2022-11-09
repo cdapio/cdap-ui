@@ -14,18 +14,17 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { ITypographyTextComponentProps } from './types';
+import { expectedResult, mockOldData } from '../mock/oldData';
+import { generateDataForExplorationCard } from '../utils';
 
-export default function TypographyComponent({ className, label }: ITypographyTextComponentProps) {
-  return (
-    <Typography
-      className={className}
-      color="textSecondary"
-      data-testid={`typography-component-${label}`}
-    >
-      {label}
-    </Typography>
-  );
-}
+describe('Test the Utility Functions', () => {
+  it('Should test the result for empty array', () => {
+    const result = generateDataForExplorationCard([]);
+    expect(result).toEqual([]);
+  });
+
+  it('Should test the result for mock data', () => {
+    const result = generateDataForExplorationCard(mockOldData);
+    expect(result).toEqual(expectedResult);
+  });
+});
