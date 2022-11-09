@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
-  snackBarDiv: {
+  snackBarDivSuccess: {
     padding: '10px',
     display: 'block',
     border: '1px solid #4BAF4F',
@@ -27,5 +27,15 @@ export const useStyles = makeStyles({
     width: '401px',
     bottom: '10% !important',
     backgroundColor: green[50],
+  },
+  snackBarDivFailure: {
+    padding: '10px',
+    display: 'block',
+    border: '1px solid #E97567',
+    boxShadow: '-3px 4px 15px rgba(68, 132, 245, 0.25)',
+    height: '148px',
+    width: '401px',
+    bottom: '10% !important',
+    backgroundColor: '#fff',
   },
 });

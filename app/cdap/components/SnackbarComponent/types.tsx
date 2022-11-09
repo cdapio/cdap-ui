@@ -17,4 +17,5 @@
 export interface IPositionedSnackbarProps {
   handleCloseError: () => void;
   messageToDisplay: string;
+  snackbarStatus: 'success' | 'failure';
 }

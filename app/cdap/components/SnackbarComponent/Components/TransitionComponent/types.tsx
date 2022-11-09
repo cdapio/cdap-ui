@@ -17,4 +17,5 @@
 export interface ITransitionComponentProps {
   close: () => void;
   messageToDisplay: string;
+  snackbarStatus: 'success' | 'failure';
 }

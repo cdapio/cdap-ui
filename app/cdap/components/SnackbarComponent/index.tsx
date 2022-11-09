@@ -19,7 +19,11 @@ import { useStyles } from './styles';
 import TransitionComponent from './Components/TransitionComponent';
 import { IPositionedSnackbarProps } from './types';
 
-export default function({ handleCloseError, messageToDisplay }: IPositionedSnackbarProps){
+export default function({
+  handleCloseError,
+  messageToDisplay,
+  snackbarStatus,
+}: IPositionedSnackbarProps) {
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(true);
 
@@ -45,9 +49,15 @@ export default function({ handleCloseError, messageToDisplay }: IPositionedSnack
       open={isOpen}
       onClose={handleClose}
       TransitionComponent={() => (
-        <TransitionComponent close={() => handleClose()} messageToDisplay={messageToDisplay} />
+        <TransitionComponent
+          close={() => handleClose()}
+          messageToDisplay={messageToDisplay}
+          snackbarStatus={snackbarStatus}
+        />
       )}
-      className={classes.snackBarDiv}
+      className={
+        snackbarStatus === 'success' ? classes.snackBarDivSuccess : classes.snackBarDivFailure
+      }
     />
   );
 }

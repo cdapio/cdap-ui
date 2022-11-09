@@ -21,17 +21,27 @@ import { useStyles } from './styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { ITransitionComponentProps } from './types';
 
-export default function({ messageToDisplay, close }: ITransitionComponentProps) {
+export default function({ messageToDisplay, close, snackbarStatus }: ITransitionComponentProps) {
   const classes = useStyles();
+
+  const messenger =
+    snackbarStatus === 'success' ? (
+      <h5 className={classes.successHead}>
+        <CheckCircleIcon fontSize="large" className={classes.successIcon} />
+        &nbsp; Step Successfully added!
+      </h5>
+    ) : (
+      <h5 className={classes.errorHead}>
+        <WarningRoundedIcon className={classes.warningIcon} />
+        &nbsp;Error
+      </h5>
+    );
   return (
     <div>
       <div className={classes.headFlex}>
-        <h5 className={classes.successHead}>
-          <CheckCircleIcon fontSize="large" className={classes.successIcon} />
-          &nbsp; Step Successfully added!
-        </h5>
+        {messenger}
         <span role="button" tabIndex={0} className={classes.undoSpan} onClick={() => close()}>
-          UNDO
+          {snackbarStatus === 'success' ? 'UNDO' : 'Dismiss'}
         </span>
       </div>
       <Divider />

@@ -149,6 +149,7 @@ export default function({ setLoading, updateDataTranformation }) {
             })
           }
           messageToDisplay={errorOnTransformation.message}
+          snackbarStatus="failure"
         />
       )}
       {successUpload.open && (
@@ -160,6 +161,7 @@ export default function({ setLoading, updateDataTranformation }) {
             })
           }
           messageToDisplay={successUpload.message}
+          snackbarStatus="success"
         />
       )}
     </DrawerWidget>
