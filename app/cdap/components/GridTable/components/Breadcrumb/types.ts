@@ -14,4 +14,11 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+export interface IBreadcrumbItemProps {
+  link?: string;
+  label: string;
+}
+
+export interface IBreadcrumbProps {
+  breadcrumbsList: IBreadcrumbItemProps[];
+}

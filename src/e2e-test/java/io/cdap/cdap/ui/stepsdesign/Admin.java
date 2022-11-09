@@ -50,7 +50,7 @@ public class Admin {
   @Then("Add {string} as key")
   public void addInputKey(String keyValue) {
     WebElement keyInput = Helper.locateElementByCssSelector(
-      "div[class='key-value-pair-preference'] > input[class='form-control key-input']"
+    "div[class='key-value-pair-preference'] > input[class='form-control key-input']"
     );
     ElementHelper.clearElementValue(keyInput);
     ElementHelper.sendKeys(keyInput, keyValue);
@@ -59,7 +59,7 @@ public class Admin {
   @Then("Add {string} as value")
   public void addInputValue(String value) {
     WebElement valueInput = Helper.locateElementByCssSelector(
-      "div[class='key-value-pair-preference'] > input[class='form-control value-input']"
+    "div[class='key-value-pair-preference'] > input[class='form-control value-input']"
     );
     ElementHelper.clearElementValue(valueInput);
     ElementHelper.sendKeys(valueInput, value);

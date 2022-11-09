@@ -19,29 +19,32 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { IBreadcrumbProps } from './types';
+import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
 
-export default function BreadCrumb({ datasetName }) {
+export default function({ breadcrumbsList }: IBreadcrumbProps) {
   const classes = useStyles();
+
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-        <Link
-          className={`${classes.breadcrumbLabel} ${classes.home}`}
-          to={`/ns/${getCurrentNamespace()}/home`}
-          data-testid="breadcrumb-home-text"
-        >
-          Home
-        </Link>
-        <Link
-          className={`${classes.breadcrumbLabel} ${classes.dataset}`}
-          to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
-          data-testid="breadcrumb-data-sources-text"
-        >
-          Data Sources
-        </Link>
-        <Typography color="textPrimary">{datasetName}</Typography>
+        {breadcrumbsList.map((eachBreadcrumb) =>
+          eachBreadcrumb.link ? (
+            <Link
+              className={`${classes.breadcrumbLabel} ${classes.home}`}
+              to={eachBreadcrumb.link}
+              data-testid={`breadcrumb-home-${eachBreadcrumb.label}`}
+            >
+              {eachBreadcrumb.label}
+            </Link>
+          ) : (
+            <Typography color="textPrimary" data-testid="breadcrumb-workspace-name">
+              {eachBreadcrumb.label}
+            </Typography>
+          )
+        )}
       </Breadcrumbs>
     </Box>
   );

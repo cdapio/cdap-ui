@@ -150,11 +150,15 @@ export default function WrangleCard() {
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
             style={{ textDecoration: 'none' }}
+            data-testid="wranglecard-link-1"
+            id={`wranglecard-link-${index}`}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
                 {item.SVG}
-                <Typography className={classes.cardText}>{item.name}</Typography>
+                <Typography className={classes.cardText} data-testid="wranglecard-typography-1">
+                  {item.name}
+                </Typography>
               </Box>
             </Card>
           </Link>

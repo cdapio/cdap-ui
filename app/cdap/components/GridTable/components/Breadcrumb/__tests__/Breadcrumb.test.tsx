@@ -15,17 +15,24 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
+import Breadcrumb from 'components/GridTable/components/Breadcrumb/index';
 import history from 'services/history';
+
+const location = {
+  state: {
+    from: 'features.WranglerNewUI.Breadcrumb.params.wrangleHome',
+    path: 'wrangle-home',
+  },
+};
 
 describe('Test Breadcrumb Component', () => {
   render(
     <Router history={history}>
       <Switch>
         <Route>
-          <BreadCrumb breadcrumbsList={[{ label: 'display name', link: 'path to redirect' }]} />
+          <Breadcrumb breadcrumbsList={[{ label: 'display name', link: 'path to redirect' }]} />
         </Route>
       </Switch>
     </Router>

@@ -14,4 +14,15 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import T from 'i18n-react';
+
+export const CONNECTION_LIST_BREADCRUMB_OPTIONS = [
+  {
+    link: `/ns/${getCurrentNamespace()}/home`,
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome').toString(),
+  },
+  {
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList').toString(),
+  },
+];
