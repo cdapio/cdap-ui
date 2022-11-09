@@ -90,3 +90,8 @@ export interface ISnackbar {
   open?: boolean;
   message?: string;
 }
+
+export interface ISuccessUpload {
+  open: boolean;
+  message: string;
+}

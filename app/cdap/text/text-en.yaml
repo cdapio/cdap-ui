@@ -3443,6 +3443,7 @@ features:
     WranglerNewParsingDrawer: 
       importSchema: Import schema
       importSchemaErrorMessage: Imported schema is not a valid Avro schema
+      importSchemaSuccessMessage: A schema has been imported for this file
       apply: Apply
       parsing: Parsing
       parsingInfoText: Once applied parsing settings cannot be changed.
@@ -3450,4 +3451,6 @@ features:
       enableQuotedValues: Enable quoted values
       encoding: Encoding
       format: Format
+      transformationErrorMessage1: Selected Transformation Cannot Be Applied
+      transformationErrorMessage2: Error Encountered...
 ...

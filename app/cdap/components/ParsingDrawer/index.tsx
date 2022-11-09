@@ -33,11 +33,13 @@ import {
   IDefaultErrorOnTransformations,
   IDefaultProperties,
   IParsingDrawer,
+  ISuccessUpload,
 } from 'components/ParsingDrawer/types';
 import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { MouseEvent } from 'react';
+import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate';
 
 export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
@@ -51,6 +53,8 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
   );
   const classes = useStyles();
   const { dataprep } = DataPrepStore.getState();
+  const [successUpload, setSuccessUpload] = useState<ISuccessUpload>({ open: false, message: '' });
+  const [schemaValue, setSchemaValue] = useState(null);
 
   useEffect(() => {
     setConnectionPayload({
@@ -89,7 +93,9 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
     } catch (err) {
       snackbar = {
         open: true,
-        message: 'Failed to retrive sample',
+        message: T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.transformationErrorMessage1'
+        ).toString(),
       };
     }
     setErrorOnTransformation(snackbar);
@@ -118,6 +124,13 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
       openDrawer={drawerStatus}
       showDivider={true}
       closeClickHandler={() => setDrawerStatus(false)}
+      headerActionTemplate={
+        <ParsingHeaderActionTemplate
+          setSuccessUpload={setSuccessUpload}
+          handleSchemaUpload={(schema: unknown) => setSchemaValue(schema)}
+          setErrorOnTransformation={setErrorOnTransformation}
+        />
+      }
     >
       <Box className={classes.bodyContainerStyles}>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
@@ -144,8 +157,27 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
 
       {errorOnTransformation.open && (
         <PositionedSnackbar
-          handleCloseError={() => {}}
+          handleCloseError={() =>
+            setErrorOnTransformation({
+              open: false,
+              message: T.translate(
+                'features.WranglerNewUI.WranglerNewParsingDrawer.transformationErrorMessage2'
+              ).toString(),
+            })
+          }
           messageToDisplay={errorOnTransformation.message}
+        />
+      )}
+
+      {successUpload.open && (
+        <PositionedSnackbar
+          handleCloseError={() =>
+            setErrorOnTransformation({
+              open: false,
+              message: '',
+            })
+          }
+          messageToDisplay={successUpload.message}
         />
       )}
     </DrawerWidget>

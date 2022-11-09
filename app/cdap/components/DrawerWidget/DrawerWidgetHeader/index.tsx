@@ -29,12 +29,6 @@ export default function({ headingText }: IDrawerWidgetHeaderProps) {
         <Typography className={classes.headingTextStyles}>{headingText}</Typography>
         <UnderLineSVG />
       </Box>
-      <Box className={classes.importStyles}>
-        <ImportIcon />
-        <Typography className={classes.importTextStyles}>
-          {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}
-        </Typography>
-      </Box>
     </Box>
   );
 }
