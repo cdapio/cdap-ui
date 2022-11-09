@@ -31,14 +31,13 @@ export const useStyles = makeStyles({
   },
   columnViewDrawer: {
     maxHeight: 'calc(100vh - 240px)',
-    border: '1px solid #E0E0E0',
   },
   columnViewContainer: {
     display: 'flex',
     fontFamily: 'Roboto',
   },
   gridTableWrapper: {
-    maxHeight: 'calc(100vh - 240px)',
+    maxHeight: 'calc(100vh - 190px)',
     overflowY: 'auto',
   },
 });

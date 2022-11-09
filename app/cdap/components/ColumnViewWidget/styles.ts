@@ -21,7 +21,7 @@ export const useStyles = makeStyles(() => {
     drawerContainerStyles: {
       width: 389,
       borderTop: '1px solid #3994FF',
-      height: 'calc(100vh - 240px)',
+      height: 'calc(100vh - 190px)',
     },
     headerStyles: {
       height: 60,
