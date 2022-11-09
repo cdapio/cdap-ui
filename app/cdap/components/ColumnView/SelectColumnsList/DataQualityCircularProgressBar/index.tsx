@@ -19,6 +19,24 @@ import React from 'react';
 import { useStyles } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/styles';
 import { IDataQualityCircularProgressBarProps } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/types';
 
+import styled from 'styled-components';
+
+const RenderLabel = styled(Typography)`
+  &&& {
+    border-bottom-color: ${(props) => props.color};
+    border-left-color: ${(props) => props.color};
+    transform: ${(props) => `rotate(${45 + props.dataQualityPercentValue * 1.8}deg)`}%;
+    position: 'absolute',
+    top: 0;
+    left: 0;
+    width: 59;
+    height: 59;
+    borderRadius: 50%;
+    boxSizing: border-box;
+    border: ' 4px solid #dbdbdb;
+  }
+`;
+
 export default function({ dataQualityPercentValue, index }: IDataQualityCircularProgressBarProps) {
   const classes = useStyles();
   return (
@@ -29,15 +47,12 @@ export default function({ dataQualityPercentValue, index }: IDataQualityCircular
         data-testid="circular-progress-bar-parent"
       >
         <Typography component="div" className={classes.barOverflow}>
-          <Typography
-            style={{
-              borderBottomColor: dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567',
-              borderRightColor: dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567',
-              transform: `rotate(${45 + dataQualityPercentValue * 1.8}deg)`,
-            }}
-            component="div"
+          <RenderLabel
+            color={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
+            dataQualityPercentValue={dataQualityPercentValue}
             className={classes.bar}
-          ></Typography>
+            component="div"
+          />
         </Typography>
         <Typography
           component="span"
