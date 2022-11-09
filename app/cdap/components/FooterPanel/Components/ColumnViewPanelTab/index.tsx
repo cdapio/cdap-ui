@@ -30,7 +30,7 @@ export default function({ setOpenColumnViewHandler, gridMetaInfo }) {
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
         <Box
           onClick={setOpenColumnViewHandler}
-          className={gridMetaInfo.rowCount === 0 ? classes.disabled : classes.notDisabled}
+          className={gridMetaInfo?.rowCount === 0 ? classes.disabled : classes.notDisabled}
         >
           <TabWrapper size="small" dataTestID="footer-panel-column-view-panel-tab">
             {ColumnIcon}
