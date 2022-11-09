@@ -46,13 +46,17 @@ public class Breadcrumb {
     @Then("Click on the first tab of second column")
     public void clickOnTheFirstTabOfSecondColumn() {
         WaitHelper.waitForPageToLoad();
-        driver.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId("connectionlist-connectiontabs-tabs-loop-1-0"))).click();
+        driver.findElement(
+                By.cssSelector(Helper.getCssSelectorByDataTestId("connectionlist-connectiontabs-tabs-loop-1-0")))
+                .click();
     }
+
     @Then("Click on the first tab of third column")
     public void clickOnTheFirstTabOfThirdColumn() {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.id("connectionlist-connectiontabs-tabs-loop-2-0")).click();
     }
+
     @When("Hover&Click on the Wrangler")
     public void hoverAndClickOnTheWrangler() {
         WaitHelper.waitForPageToLoad();
@@ -63,29 +67,34 @@ public class Breadcrumb {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.id("tablabelcansample-typography-2")).click();
     }
+
     @Then("Click on the Data Sources link")
     public void clickONTheDataSourcesLink() {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.id("breadcrumb-data-sources-text")).click();
     }
+
     @Then("Click on the Home link")
     public void clickOnTheHomeLink() {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.id("breadcrumb-home-text")).click();
     }
+
     @Then("Click on the Home link button")
     public void clickOnTheHomeLinkButton() {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.id("connectionlist-subheader-1")).click();
     }
+
     @Then("Click on the Exploration card")
     public void clickOnTheExplorationCard() {
         WaitHelper.waitForPageToLoad();
         driver.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId("ongoingdataexplorations-link-1"))).click();
     }
+
     @Then("Check the user navigated back to home page or not")
     public void dashboard() {
         WaitHelper.waitForPageToLoad();
-        WebElement text= driver.findElement(By.id("wranglehome-1"));
+        WebElement text = driver.findElement(By.id("wranglehome-1"));
     }
 }
