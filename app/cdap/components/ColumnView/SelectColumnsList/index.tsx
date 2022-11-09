@@ -31,6 +31,8 @@ import {
   ISelectColumnListProps,
   IDataQualityRecord,
 } from 'components/ColumnView/SelectColumnsList/types';
+import NoRecordScreen from 'components/NoRecordScreen';
+import T from 'i18n-react';
 import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
 
 export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
@@ -63,45 +65,52 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
     <section className={classes.columnsCountTextStyles}>
       <TableContainer component={Box} classes={{ root: classes.customTableContainer }}>
         <Table aria-label="recipe steps table" stickyHeader>
-          <TableHead>
-            <TableRow className={classes.recipeStepsTableRowStyles}>
-              <TableCell className={classes.columnLeft} data-testid="column-name-header">
-                {`${COLUMNS} (${columnData?.length})`}
-              </TableCell>
-              <TableCell className={classes.columnRight} data-testid="null-values-header">
-                {NULL_VALUES}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className={classes.tableBody}>
-            {Array.isArray(filteredColumns) &&
-              filteredColumns.length !== 0 &&
-              filteredColumns.map((eachColumn, index) => (
-                <>
-                  <TableRow key={index} className={classes.tableRowContainer}>
-                    <TableCell
-                      className={classes.leftSideCell}
-                      data-testid={`each-column-label-type-${index}`}
-                    >
-                      <Box>
-                        {eachColumn?.label}
-                        &nbsp;
-                        <br />
-                        {eachColumn?.type}
-                      </Box>
-                    </TableCell>
-                    <TableCell className={classes.nullValuesContainer}>
-                      {dataQualityList?.length && (
-                        <DataQualityCircularProgressBar
-                          dataQualityPercentValue={dataQualityList[index].value as number}
-                          index={index}
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                </>
-              ))}
-          </TableBody>
+          {filteredColumns.length !== 0 && (
+            <TableHead>
+              <TableRow className={classes.recipeStepsTableRowStyles}>
+                <TableCell className={classes.columnLeft} data-testid="column-name-header">
+                  {`${COLUMNS} (${columnData?.length})`}
+                </TableCell>
+                <TableCell className={classes.columnRight} data-testid="null-values-header">
+                  {NULL_VALUES}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          )}
+          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 ? (
+            filteredColumns.map((eachColumn, index) => (
+              <TableBody className={classes.tableBody}>
+                <TableRow key={index} className={classes.tableRowContainer}>
+                  <TableCell
+                    className={classes.leftSideCell}
+                    data-testid={`each-column-label-type-${index}`}
+                  >
+                    <Box>
+                      {eachColumn?.label}
+                      &nbsp;
+                      <br />
+                      {eachColumn?.type}
+                    </Box>
+                  </TableCell>
+                  <TableCell className={classes.nullValuesContainer}>
+                    {dataQualityList?.length && (
+                      <DataQualityCircularProgressBar
+                        dataQualityPercentValue={dataQualityList[index].value as number}
+                        index={index}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            ))
+          ) : (
+            <NoRecordScreen
+              title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
+              subtitle={T.translate(
+                'features.WranglerNewUI.ColumnViewPanel.noRecordScreen.subtitle'
+              )}
+            />
+          )}
         </Table>
       </TableContainer>
     </section>

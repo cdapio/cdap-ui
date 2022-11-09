@@ -3438,6 +3438,9 @@ features:
       columns: 'Columns'
       nullValues: 'Null Values'
       columnView: 'Column View'
+      noRecordScreen: 
+        title: No rows left in this sample
+        subtitle: Search for another column to view some data
     FooterPanel:
       labels:
         columns: columns

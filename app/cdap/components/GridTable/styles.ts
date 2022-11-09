@@ -36,6 +36,9 @@ export const useStyles = makeStyles({
   columnViewContainer: {
     display: 'flex',
     fontFamily: 'Roboto',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 'calc(100vh - 224px)',
   },
   gridTableWrapper: {
     maxHeight: 'calc(100vh - 240px)',
