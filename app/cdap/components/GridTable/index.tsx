@@ -310,8 +310,8 @@ export default function GridTable() {
           </Box>
         ) : (
           <NoRecordScreen
-            title={T.translate('features.NoRecordScreen.gridTable.title')}
-            subtitle={T.translate('features.NoRecordScreen.gridTable.subtitle')}
+            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
           />
         )}
       </Box>
@@ -320,6 +320,7 @@ export default function GridTable() {
         gridMetaInfo={tableMetaInfo}
         setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
       />
+
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
