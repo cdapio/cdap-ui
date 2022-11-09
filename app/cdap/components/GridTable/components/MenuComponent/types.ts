@@ -15,13 +15,13 @@
  */
 
 import { IMenuItem } from 'components/GridTable/components/MenuItemComponent/types';
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IMenuComponentProps {
   anchorElement: HTMLElement;
   menuOptions: IMenuItem[];
-  setAnchorElement: React.Dispatch<React.SetStateAction<HTMLElement[]>>;
+  setAnchorElement: Dispatch<SetStateAction<HTMLElement[]>>;
   submitOption: (e: React.MouseEvent<HTMLLIElement, MouseEvent>, item: IMenuItem) => void;
   columnType: string;
-  setMenuComponentOptions: React.Dispatch<React.SetStateAction<IMenuItem[][]>>;
+  setMenuComponentOptions: Dispatch<SetStateAction<IMenuItem[][]>>;
 }

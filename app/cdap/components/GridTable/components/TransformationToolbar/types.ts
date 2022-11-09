@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -16,6 +18,6 @@
 export interface ITransformationToolBarProps {
   columnType: string;
   submitMenuOption: (value: string, dataType: string[]) => void;
-  setShowBreadCrumb: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowBreadCrumb: Dispatch<SetStateAction<boolean>>;
   showBreadCrumb: boolean;
 }

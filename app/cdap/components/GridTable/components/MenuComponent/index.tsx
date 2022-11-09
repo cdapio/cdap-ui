@@ -15,11 +15,10 @@
  */
 
 import { Menu } from '@material-ui/core';
-import React from 'react';
-import MenuItemComponent from 'components/GridTable/components/MenuItemComponent';
 import { useStyles } from 'components/GridTable/components/MenuComponent/styles';
 import { IMenuComponentProps } from 'components/GridTable/components/MenuComponent/types';
-import { isNullable } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
+import MenuItemComponent from 'components/GridTable/components/MenuItemComponent';
+import React from 'react';
 
 export default function({
   anchorElement,
@@ -32,7 +31,6 @@ export default function({
   const classes = useStyles();
   return (
     <Menu
-      id="long-menu"
       keepMounted
       anchorEl={anchorElement}
       open={anchorElement ? true : false}

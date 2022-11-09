@@ -36,7 +36,6 @@ export default function({ setShowName, showName }: IFunctionNameToggleProps) {
         data-testid="name-toggle-child-label"
       >
         {T.translate(`${PREFIX}.toolbarIcons.labels.toggleDescription`)}
-        &nbsp;
       </Typography>
       <SwitchInputComponent
         setShow={setShowName}

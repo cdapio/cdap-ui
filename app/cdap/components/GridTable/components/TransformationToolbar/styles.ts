@@ -55,7 +55,7 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     width: '-webkit-fill-available',
     '& .MuiIconButton-root': {
-      paddingBottom: '8px',
+      paddingBottom: 8,
     },
   },
   typoClass: {

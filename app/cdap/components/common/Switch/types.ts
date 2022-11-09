@@ -14,12 +14,14 @@
  * the License.
  */
 
+import { Dispatch, SetStateAction } from 'react';
+
 interface IInputProps {
   [key: string]: string;
 }
 
 export interface ISwitchProps {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setShow: Dispatch<SetStateAction<boolean>>;
   show: boolean;
   inputProps?: IInputProps;
 }

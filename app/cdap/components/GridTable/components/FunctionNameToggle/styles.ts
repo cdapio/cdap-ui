@@ -26,5 +26,6 @@ export const useStyles = makeStyles({
   typoClass: {
     color: grey[600],
     fontSize: 14,
+    marginRight: 9,
   },
 });

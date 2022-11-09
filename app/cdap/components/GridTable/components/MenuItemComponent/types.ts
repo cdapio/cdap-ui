@@ -18,7 +18,7 @@ export interface IMenuItem {
   label: string;
   supportedDataType: string[];
   value: string;
-  options?: IMenuItem[];
+  options?: any;
 }
 
 export interface IMenuItemComponentProps {

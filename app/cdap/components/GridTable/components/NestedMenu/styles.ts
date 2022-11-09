@@ -68,7 +68,7 @@ export const useNestedMenuStyles = makeStyles({
     },
   },
   popoverPaper: {
-    boxShadow: '3px 4px 15px rgba(68, 132, 245, 0.15);',
+    boxShadow: '3px 4px 15px #4484f526',
   },
   menuLabels: {
     fontSize: 14,

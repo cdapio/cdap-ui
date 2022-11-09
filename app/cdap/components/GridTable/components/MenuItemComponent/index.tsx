@@ -14,36 +14,39 @@
  * the License.
  */
 
-import { MenuItem, Typography } from '@material-ui/core';
-import React from 'react';
+import { Box, MenuItem, Typography } from '@material-ui/core';
+import { IMenuItemComponentProps } from 'components/GridTable/components/MenuItemComponent/types';
 import { useNestedMenuStyles } from 'components/GridTable/components/NestedMenu/styles';
 import { menuArrowIcon } from 'components/GridTable/components/TransformationToolbar/iconStore';
-import { IMenuItemComponentProps } from 'components/GridTable/components/MenuItemComponent/types';
-import T from 'i18n-react';
+import React from 'react';
 
 export default function({ item, index, onMenuClick, columnType }: IMenuItemComponentProps) {
   const classes = useNestedMenuStyles();
-  if (item?.value === T.translate('features.WranglerNewUI.GridPage.menuItems.divider')) {
+
+  let menuItemDisableProp;
+  if (columnType) {
+    menuItemDisableProp =
+      item?.supportedDataType?.includes(columnType) || item?.supportedDataType?.includes('all')
+        ? false
+        : true;
+  } else {
+    menuItemDisableProp = false;
+  }
+
+  if (item?.value === 'divider') {
     return <hr className={classes.divider} key={index} data-testid="menu-item-divider" />;
   }
-  if (item?.value === T.translate('features.WranglerNewUI.GridPage.menuItems.heading')) {
+  if (item?.value === 'heading') {
     return (
-      <div className={classes.heading} key={index} data-testid="menu-item-heading">
+      <Box className={classes.heading} key={index} data-testid="menu-item-heading">
         {item.label}
-      </div>
+      </Box>
     );
   } else {
     return (
       <MenuItem
         key={index}
-        disabled={
-          columnType
-            ? item?.supportedDataType?.includes(columnType) ||
-              item?.supportedDataType?.includes('all')
-              ? false
-              : true
-            : false
-        }
+        disabled={menuItemDisableProp}
         title={item.value}
         onClick={(onClickEvent) => onMenuClick(onClickEvent, item)}
         data-testid="menu-item-parent"

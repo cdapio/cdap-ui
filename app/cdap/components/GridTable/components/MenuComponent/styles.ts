@@ -28,7 +28,7 @@ export const useStyles = makeStyles({
     padding: '0px 21px',
   },
   root: {
-    position: 'absolute !important',
+    position: 'absolute',
     left: '0 !important',
     right: '0 !important',
     bottom: '0 !important',
@@ -61,6 +61,6 @@ export const useStyles = makeStyles({
     },
   },
   popoverPaper: {
-    boxShadow: '3px 4px 15px rgba(68, 132, 245, 0.15);',
+    boxShadow: '3px 4px 15px #4484f526;',
   },
 });
