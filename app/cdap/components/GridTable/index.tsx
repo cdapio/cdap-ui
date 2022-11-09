@@ -236,8 +236,8 @@ export default function GridTable() {
         return rest;
       });
     setTableMetaInfo({
-      rowCount: rawData.headers.length,
-      columnCount: rawData.values.length,
+      rowCount: rawData.values.length,
+      columnCount: rawData.headers.length,
     });
     setRowsDataList(rowData);
   };
@@ -253,6 +253,8 @@ export default function GridTable() {
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
+
+  console.log(tableMetaInfo, 'tableMetaInfo');
 
   return (
     <Box data-testid="grid-table-container">

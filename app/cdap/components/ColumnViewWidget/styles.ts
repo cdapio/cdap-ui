@@ -22,6 +22,7 @@ export const useStyles = makeStyles(() => {
       width: 389,
       borderTop: '1px solid #3994FF',
       height: 'calc(100vh - 190px)',
+      borderRight: '1px solid #E0E0E0',
     },
     headerStyles: {
       height: 60,

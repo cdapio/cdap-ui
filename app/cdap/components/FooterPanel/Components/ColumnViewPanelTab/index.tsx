@@ -19,14 +19,19 @@ import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import TabWrapper from 'components/FooterPanel/Components/common/TabWrapper';
 import { PREFIX } from 'components/FooterPanel/constants';
 import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
+import { useStyles } from 'components/FooterPanel/Components/ColumnViewPanelTab/styles';
 import T from 'i18n-react';
 import React from 'react';
 
-export default function({ setOpenColumnViewHandler }) {
+export default function({ setOpenColumnViewHandler, gridMetaInfo }) {
+  const classes = useStyles();
   return (
     <Box data-testid="footer-panel-column-view-panel-tab-wrapper">
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
-        <Box onClick={setOpenColumnViewHandler}>
+        <Box
+          onClick={setOpenColumnViewHandler}
+          className={gridMetaInfo.rowCount === 0 ? classes.disabled : classes.notDisabled}
+        >
           <TabWrapper size="small" dataTestID="footer-panel-column-view-panel-tab">
             {ColumnIcon}
           </TabWrapper>

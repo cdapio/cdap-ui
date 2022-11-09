@@ -57,7 +57,10 @@ export default function({
   return (
     <Container data-testid="footer-panel-container">
       <TabsWrapper data-testid="footer-panel-wrapper">
-        <ColumnViewPanelTab setOpenColumnViewHandler={setOpenColumnViewHandler} />
+        <ColumnViewPanelTab
+          setOpenColumnViewHandler={setOpenColumnViewHandler}
+          gridMetaInfo={gridMetaInfo}
+        />
         <TableMetaInfoTab {...gridMetaInfo} />
         <ZoomTab />
         <DirectivesTab />
