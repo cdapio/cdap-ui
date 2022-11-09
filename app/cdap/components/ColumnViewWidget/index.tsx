@@ -74,6 +74,7 @@ export default function({
             className={classes.pointerStyles}
             color="action"
             onClick={closeClickHandler}
+            data-testid="column-view-panel-close"
           />
         </Box>
       </header>
