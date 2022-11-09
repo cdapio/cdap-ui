@@ -49,6 +49,7 @@ export default function({
     <Box className={classes.iconContainer} data-testid="transformations-toolbar-container">
       <Box className={classes.container} data-testid="nested-menu-container">
         {nestedMenuOptions?.map((eachOption, optionIndex) => {
+          console.log(eachOption);
           return (
             <>
               <Box

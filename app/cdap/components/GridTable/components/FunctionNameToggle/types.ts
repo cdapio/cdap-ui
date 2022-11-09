@@ -14,7 +14,9 @@
  * the License.
  */
 
+import { Dispatch, SetStateAction } from 'react';
+
 export interface IFunctionNameToggleProps {
-  setShowName: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowName: Dispatch<SetStateAction<boolean>>;
   showName: boolean;
 }

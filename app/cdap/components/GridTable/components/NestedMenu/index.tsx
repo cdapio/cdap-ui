@@ -15,14 +15,13 @@
  */
 
 import { Menu } from '@material-ui/core';
-import React, { useState } from 'react';
 import MenuComponent from 'components/GridTable/components/MenuComponent';
 import MenuItemComponent from 'components/GridTable/components/MenuItemComponent';
 import { IMenuItem } from 'components/GridTable/components/MenuItemComponent/types';
 import { useNestedMenuStyles } from 'components/GridTable/components/NestedMenu/styles';
 import { INestedMenuProps } from 'components/GridTable/components/NestedMenu/types';
 import _ from 'lodash';
-import { reverseArrayWithoutMutating } from 'services/helpers';
+import React, { useState } from 'react';
 
 export default function({
   menuOptions,
@@ -56,8 +55,8 @@ export default function({
     } else {
       if (menuItem.hasOwnProperty('options') && menuItem?.options?.length > 0) {
         let referenceIndex = -1;
-        menuComponentOptions.forEach((menuOptions, menuOptionsIndex) => {
-          menuOptions.forEach((eachOption, optionsIndex) => {
+        menuComponentOptions.forEach((eachMenuOptions, menuOptionsIndex) => {
+          eachMenuOptions.forEach((eachOption, optionsIndex) => {
             if (eachOption.value === menuItem.value) {
               referenceIndex = menuOptionsIndex;
             }
@@ -75,7 +74,7 @@ export default function({
         } else if (anchorElement.includes(event.currentTarget)) {
           const currentTargetIndex = _.findIndex(
             anchorElement,
-            (anchor) => anchor == event.currentTarget
+            (anchor) => anchor === event.currentTarget
           );
           menuComponentOptions.splice(currentTargetIndex, 0, menuItem?.options);
           setAnchorElement((prev) => prev.slice(0, currentTargetIndex + 1));
@@ -102,8 +101,8 @@ export default function({
         anchorEl={anchorElement?.length ? anchorElement[0] : null}
         open={anchorElement?.length ? true : false}
         getContentAnchorEl={null}
-        // anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        // transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         onClose={() => handleMenuOpenClose()}
         onClick={(clickEvent) => {
           clickEvent.preventDefault();
