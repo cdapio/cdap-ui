@@ -14,47 +14,36 @@
  * the License.
  */
 
-import { Button, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
-import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
+import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
+import PositionedSnackbar from 'components/SnackbarComponent/index';
+import T from 'i18n-react';
+import React, { useContext, useEffect, useState } from 'react';
+import ParsingPopupBody from './Components/ParsingPopupBody';
 import {
   defaultConnectionPayload,
   defaultErrorOnTransformations,
   defaultProperties,
-} from 'components/ParsingDrawer/defaultValues';
-import { useStyles } from 'components/ParsingDrawer/styles';
-import {
-  IConnectionPayload,
-  IDefaultErrorOnTransformations,
-  IDefaultProperties,
-  IParsingDrawer,
-  ISuccessUpload,
-} from 'components/ParsingDrawer/types';
-import PositionedSnackbar from 'components/SnackbarComponent/index';
-import T from 'i18n-react';
-import React, { useContext, useEffect, useState } from 'react';
-import { MouseEvent } from 'react';
-import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate';
+} from './defaultValues';
+import { useStyles } from './styles';
 
-export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
-  const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
-  const [properties, setProperties] = useState<IDefaultProperties>(defaultProperties);
+export default function({ setLoading, updateDataTranformation }) {
+  const [drawerStatus, setDrawerStatus] = useState(true);
+  const [properties, setProperties] = useState(defaultProperties);
+  const [schemaValue, setSchemaValue] = useState(null);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
-  const [errorOnTransformation, setErrorOnTransformation] = useState<
-    IDefaultErrorOnTransformations
-  >(defaultErrorOnTransformations);
-  const [connectionPayload, setConnectionPayload] = useState<IConnectionPayload>(
-    defaultConnectionPayload
-  );
+  const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
+  const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
+  const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
+
   const classes = useStyles();
   const { dataprep } = DataPrepStore.getState();
-  const [successUpload, setSuccessUpload] = useState<ISuccessUpload>({ open: false, message: '' });
-  const [schemaValue, setSchemaValue] = useState(null);
 
   useEffect(() => {
     setConnectionPayload({
@@ -63,17 +52,16 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
       sampleRequest: {
         properties: {
           ...properties,
-          schema: null,
+          schema: schemaValue != null ? JSON.stringify(schemaValue) : null,
           _pluginName: null,
         },
         limit: 1000,
       },
     });
     setDrawerStatus(true);
-  }, [dataprep, properties]);
+  }, [dataprep, properties, schemaValue]);
 
-  const createWorkspaceInternal = async (entity: IConnectionPayload, parseConfig: {}) => {
-    let snackbar: IDefaultErrorOnTransformations = {};
+  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
     try {
       setLoading(true);
       const wid = await createWorkspace({
@@ -86,20 +74,15 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
       }
       setDrawerStatus(false);
       updateDataTranformation(wid);
-      snackbar = {
-        open: true,
-        message: 'success',
-      };
     } catch (err) {
-      snackbar = {
+      setErrorOnTransformation({
         open: true,
         message: T.translate(
           'features.WranglerNewUI.WranglerNewParsingDrawer.transformationErrorMessage1'
         ).toString(),
-      };
+      });
+      setLoading(false);
     }
-    setErrorOnTransformation(snackbar);
-    setLoading(false);
   };
 
   const onConfirm = async (parseConfig) => {
@@ -111,11 +94,10 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
   };
 
   const handleChange = (value: string | boolean, property: string) => {
-    value &&
-      setProperties((prev) => ({
-        ...prev,
-        [property]: property === 'format' ? (value as string).toLowerCase() : value,
-      }));
+    setProperties((prev) => ({
+      ...prev,
+      [property]: property === 'format' ? (value as string).toLowerCase() : value,
+    }));
   };
 
   const componentToRender = (
@@ -123,7 +105,6 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
       headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
       openDrawer={drawerStatus}
       showDivider={true}
-      closeClickHandler={() => setDrawerStatus(false)}
       headerActionTemplate={
         <ParsingHeaderActionTemplate
           setSuccessUpload={setSuccessUpload}
@@ -131,6 +112,7 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
           setErrorOnTransformation={setErrorOnTransformation}
         />
       }
+      closeClickHandler={() => setDrawerStatus(false)}
     >
       <Box className={classes.bodyContainerStyles}>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
@@ -138,16 +120,17 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
         <Box className={classes.bottomSectionStyles}>
           <Box className={classes.infoWrapperStyles}>
             <InfoOutlinedIcon />
-            <Typography className={classes.infoTextStyles}>
+            <span className={classes.infoTextStyles}>
               {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsingInfoText')}
-            </Typography>
+            </span>
           </Box>
 
           <Button
             variant="contained"
             color="primary"
-            classes={{ containedPrimary: classes.buttonStyles, root: classes.applyButtonStyles }}
-            onClick={(event: MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
+            classes={{ containedPrimary: classes.buttonStyles }}
+            className={classes.applyButtonStyles}
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
             data-testid="parsing-apply-button"
           >
             {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.apply')}
@@ -168,7 +151,6 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
           messageToDisplay={errorOnTransformation.message}
         />
       )}
-
       {successUpload.open && (
         <PositionedSnackbar
           handleCloseError={() =>

@@ -16,11 +16,11 @@
 
 import { Box, Typography } from '@material-ui/core';
 import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
-import { importIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/importicon';
-import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
 import { useStyles } from 'components/ParsingDrawer/styles';
 import T from 'i18n-react';
 import React, { ChangeEvent } from 'react';
+import { importIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/importicon';
+import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
 
 export default function({
   setSuccessUpload,

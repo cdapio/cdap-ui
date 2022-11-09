@@ -14,10 +14,15 @@
  * the License.
  */
 import { makeStyles } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
-import { grey } from '@material-ui/core/colors';
+import { blue, green, grey } from '@material-ui/core/colors';
 
 export const useStyles = makeStyles((theme) => ({
+  undoSpan: {
+    display: 'block',
+    fontSize: '14px',
+    cursor: 'pointer',
+    color: green[900],
+  },
   warningIcon: {
     color: '#E97567',
     fontSize: '20px !important',
@@ -41,5 +46,18 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  successIcon: {
+    color: '#4BAF4F',
+    fontSize: '20px !important',
+  },
+  successHead: {
+    color: '#4BAF4F',
+    fontSize: '18px !important',
+  },
+  successMessage: {
+    color: green[900],
+    fontSize: '14px',
+    padding: '10px',
   },
 }));
