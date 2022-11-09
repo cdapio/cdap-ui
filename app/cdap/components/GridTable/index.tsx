@@ -312,11 +312,6 @@ export default function GridTable() {
                   })}
               </TableBody>
             </Table>
-            <FooterPanel
-              recipeStepsCount={0}
-              gridMetaInfo={tableMetaInfo}
-              setOpenColumnViewHandler={setOpenColumnViewHandler}
-            />
           </Box>
         ) : (
           <NoRecordScreen
@@ -324,6 +319,11 @@ export default function GridTable() {
             subtitle={T.translate('features.NoRecordScreen.gridTable.subtitle')}
           />
         )}
+        <FooterPanel
+          recipeStepsCount={0}
+          gridMetaInfo={tableMetaInfo}
+          setOpenColumnViewHandler={setOpenColumnViewHandler}
+        />
       </Box>
       {loading && (
         <div className={classes.loadingContainer}>
