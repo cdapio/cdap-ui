@@ -37,7 +37,7 @@ describe('Testing nested menu component', () => {
     );
 
     const parentElement = screen.getByTestId(/menu-item-parent/i);
-    // fireEvent.click(parentElement);
+    fireEvent.click(parentElement);
     fireEvent.click(screen.getByTestId(/nested-menu-parent-root/i));
     expect(screen.getByTestId(/nested-menu-parent-root/i)).toBeInTheDocument();
     expect(parentElement).toBeInTheDocument();
