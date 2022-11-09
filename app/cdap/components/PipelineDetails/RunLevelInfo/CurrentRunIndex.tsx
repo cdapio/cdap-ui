@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,29 +16,38 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import IconSVG from 'components/shared/IconSVG';
 import { reverseArrayWithoutMutating, objectQuery } from 'services/helpers';
 import findIndex from 'lodash/findIndex';
 import { setCurrentRunId } from 'components/PipelineDetails/store/ActionCreator';
 import T from 'i18n-react';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
 
 const mapStateToProps = (state) => {
   return {
+    pipelineName: state.name,
     runsCount: state.runsCount,
     runs: state.runs,
     currentRun: state.currentRun,
   };
 };
 
-const CurrentRunIndex = ({ runs, currentRun, runsCount }) => {
-  let reversedRuns = reverseArrayWithoutMutating(runs);
-  let currentRunIndex = findIndex(reversedRuns, { runid: objectQuery(currentRun, 'runid') });
+interface ICurrentRunIndexProps {
+  runs: any[];
+  runsCount: number;
+  currentRun: object;
+  pipelineName: string;
+}
+
+const CurrentRunIndex = ({ runs, currentRun, runsCount, pipelineName }: ICurrentRunIndexProps) => {
+  const reversedRuns = reverseArrayWithoutMutating(runs);
+  const currentRunIndex = findIndex(reversedRuns, { runid: objectQuery(currentRun, 'runid') });
   // The currentRunIndex is the index in latest 100 runs
   // total runs count would be much higher for pipelines that ran more than 100 runs
-  let runIndexInTotalRunsCount = Math.max(
+  const runIndexInTotalRunsCount = Math.max(
     currentRunIndex,
     runsCount - (runs.length - currentRunIndex)
   );
@@ -59,13 +68,30 @@ const CurrentRunIndex = ({ runs, currentRun, runsCount }) => {
     );
   }
 
-  let previousRunId, nextRunId;
+  let previousRunId;
+  let nextRunId;
+  const previousRunIndex = currentRunIndex - 1;
+  const nextRunIndex = currentRunIndex + 1;
   if (currentRunIndex > 0) {
-    previousRunId = reversedRuns[currentRunIndex - 1].runid;
+    previousRunId = reversedRuns[previousRunIndex].runid;
   }
   if (currentRunIndex < reversedRuns.length - 1) {
-    nextRunId = reversedRuns[currentRunIndex + 1].runid;
+    nextRunId = reversedRuns[nextRunIndex].runid;
   }
+
+  const setRunIdAndNavigate = (runid, runIndex) => {
+    setCurrentRunId(runid);
+    const pipelineLink = getHydratorUrl({
+      stateName: 'hydrator.detail',
+      stateParams: {
+        namespace: getCurrentNamespace(),
+        pipelineId: pipelineName,
+        runid,
+      },
+    });
+    window.localStorage.setItem('pipelineHistoryVersion', reversedRuns[runIndex].version);
+    window.location.href = pipelineLink;
+  };
 
   return (
     <div className="run-number-container run-info-container">
@@ -76,21 +102,25 @@ const CurrentRunIndex = ({ runs, currentRun, runsCount }) => {
         })}
       </h4>
       <div className="run-number-switches">
-        <button disabled={!previousRunId} onClick={setCurrentRunId.bind(null, previousRunId)}>
+        <button
+          disabled={!previousRunId}
+          onClick={() => {
+            setRunIdAndNavigate(previousRunId, previousRunIndex);
+          }}
+        >
           <IconSVG name="icon-caret-left" />
         </button>
-        <button disabled={!nextRunId} onClick={setCurrentRunId.bind(null, nextRunId)}>
+        <button
+          disabled={!nextRunId}
+          onClick={() => {
+            setRunIdAndNavigate(nextRunId, nextRunIndex);
+          }}
+        >
           <IconSVG name="icon-caret-right" />
         </button>
       </div>
     </div>
   );
-};
-
-CurrentRunIndex.propTypes = {
-  runs: PropTypes.array,
-  runsCount: PropTypes.number,
-  currentRun: PropTypes.object,
 };
 
 const ConnectedCurrentRunIndex = connect(mapStateToProps)(CurrentRunIndex);
