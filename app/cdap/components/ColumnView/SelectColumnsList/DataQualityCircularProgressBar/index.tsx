@@ -21,8 +21,7 @@ import { IDataQualityCircularProgressBarProps } from 'components/ColumnView/Sele
 
 import styled from 'styled-components';
 
-const RenderLabel = styled(Typography)`
-  &&& {
+const RenderGraph = styled(Typography)`
     border-bottom-color: ${(props) => props.color};
     border-left-color: ${(props) => props.color};
     transform: ${(props) => `rotate(${45 + props.dataQualityPercentValue * 1.8}deg)`}%;
@@ -34,7 +33,6 @@ const RenderLabel = styled(Typography)`
     borderRadius: 50%;
     boxSizing: border-box;
     border: ' 4px solid #dbdbdb;
-  }
 `;
 
 export default function({ dataQualityPercentValue, index }: IDataQualityCircularProgressBarProps) {
@@ -47,7 +45,7 @@ export default function({ dataQualityPercentValue, index }: IDataQualityCircular
         data-testid="circular-progress-bar-parent"
       >
         <Typography component="div" className={classes.barOverflow}>
-          <RenderLabel
+          <RenderGraph
             color={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
             dataQualityPercentValue={dataQualityPercentValue}
             className={classes.bar}
