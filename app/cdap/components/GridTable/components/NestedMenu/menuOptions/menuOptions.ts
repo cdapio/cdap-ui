@@ -18,12 +18,13 @@ import { DATATYPE_OPTIONS } from 'components/GridTable/components/NestedMenu/men
 import { TOOLBAR_ICONS_LABEL_PREFIX } from 'components/GridTable/components/NestedMenu/menuOptions/constants';
 import { TOOLBAR_ICONS_LABEL_ALL_PREFIX } from 'components/GridTable/components/TransformationToolbar/constants';
 import T from 'i18n-react';
+import { IMenuItem } from '../../MenuItemComponent/types';
 
-export const MENU_OPTIONS = [
+export const MENU_OPTIONS: IMenuItem[] = [
   {
     value: 'changeDatatype',
     label: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.menu.changeDatatype`).toString(),
     options: DATATYPE_OPTIONS,
-    supportedDataType: [T.translate(`${TOOLBAR_ICONS_LABEL_ALL_PREFIX}`).toString()],
+    supportedDataType: [TOOLBAR_ICONS_LABEL_ALL_PREFIX],
   },
 ];

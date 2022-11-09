@@ -32,7 +32,7 @@ describe('Testing nested menu component', () => {
         anchorElement={[]}
         setAnchorElement={() => jest.fn()}
         open={true}
-        handleMenuOpenClose={() => jest.fn()}
+        menuToggleHandler={() => jest.fn()}
       />
     );
 
@@ -58,7 +58,7 @@ describe('Testing nested menu component', () => {
         anchorElement={[]}
         setAnchorElement={() => jest.fn()}
         open={false}
-        handleMenuOpenClose={() => jest.fn()}
+        menuToggleHandler={() => jest.fn()}
       />
     );
 

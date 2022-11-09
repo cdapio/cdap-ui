@@ -24,14 +24,9 @@ export default function({ item, index, onMenuClick, columnType }: IMenuItemCompo
   const classes = useNestedMenuStyles();
 
   let menuItemDisableProp;
-  if (columnType) {
-    menuItemDisableProp =
-      item?.supportedDataType?.includes(columnType) || item?.supportedDataType?.includes('all')
-        ? false
-        : true;
-  } else {
-    menuItemDisableProp = false;
-  }
+  menuItemDisableProp = columnType
+    ? !(item?.supportedDataType?.includes(columnType) || item?.supportedDataType?.includes('all'))
+    : (menuItemDisableProp = false);
 
   if (item?.value === 'divider') {
     return <hr className={classes.divider} key={index} data-testid="menu-item-divider" />;

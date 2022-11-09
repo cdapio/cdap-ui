@@ -15,10 +15,16 @@
  */
 
 export interface IMenuItem {
-  label: string;
-  supportedDataType: string[];
-  value: string;
-  options?: any;
+  label?: string;
+  supportedDataType?: string[];
+  value?: string;
+  options?: IMenuItem[];
+  title?: string;
+  action?: string;
+  dataType?: string[];
+  icon?: JSX.Element;
+  toolName?: string;
+  open?: boolean;
 }
 
 export interface IMenuItemComponentProps {
