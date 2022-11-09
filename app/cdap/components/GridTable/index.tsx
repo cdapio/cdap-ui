@@ -40,11 +40,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import FooterPanel from 'components/FooterPanel';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
+  const [tableMetaInfo, setTableMetaInfo] = useState({ columnCount: 0, rowCount: 0 });
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -233,7 +235,10 @@ export default function GridTable() {
         const { body, ...rest } = eachRow;
         return rest;
       });
-
+    setTableMetaInfo({
+      rowCount: rawData.headers.length,
+      columnCount: rawData.values.length,
+    });
     setRowsDataList(rowData);
   };
 
@@ -252,7 +257,6 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <button onClick={setOpenColumnViewHandler}>Column View</button>
       <Box className={classes.columnViewContainer}>
         {openColumnView && (
           <Box className={classes.columnViewDrawer}>
@@ -308,6 +312,11 @@ export default function GridTable() {
                   })}
               </TableBody>
             </Table>
+            <FooterPanel
+              recipeStepsCount={0}
+              gridMetaInfo={tableMetaInfo}
+              setOpenColumnViewHandler={setOpenColumnViewHandler}
+            />
           </Box>
         ) : (
           <NoRecordScreen

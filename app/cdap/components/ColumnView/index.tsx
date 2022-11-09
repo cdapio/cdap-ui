@@ -22,7 +22,12 @@ import SelectColumnsList from 'components/ColumnView/SelectColumnsList';
 import { useStyles } from 'components/ColumnView/styles';
 import { IColumnViewProps } from 'components/ColumnView/types';
 
-export default function({ columnData, dataQuality, closeClickHandler }: IColumnViewProps) {
+export default function({
+  columnData,
+  dataQuality,
+  closeClickHandler,
+  setLoading,
+}: IColumnViewProps) {
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState<string>('');
 

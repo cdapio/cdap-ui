@@ -49,11 +49,15 @@ const TabsWrapper = styled(Box)`
   }
 `;
 
-export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
+export default function({
+  recipeStepsCount,
+  gridMetaInfo,
+  setOpenColumnViewHandler,
+}: IFooterPanelProps) {
   return (
     <Container data-testid="footer-panel-container">
       <TabsWrapper data-testid="footer-panel-wrapper">
-        <ColumnViewPanelTab />
+        <ColumnViewPanelTab setOpenColumnViewHandler={setOpenColumnViewHandler} />
         <TableMetaInfoTab {...gridMetaInfo} />
         <ZoomTab />
         <DirectivesTab />

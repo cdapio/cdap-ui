@@ -14,10 +14,11 @@
  * the License.
  */
 
-import { IHeaderNamesList } from 'components/ColumnView/SelectColumnsList/types';
+import { IHeaderNamesList } from 'components/GridTable/types';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IColumnViewProps {
-  setLoading?: boolean;
+  setLoading?: Dispatch<SetStateAction<boolean>>;
   columnData: IHeaderNamesList[];
   closeClickHandler: () => void;
   dataQuality: IDataQuality;

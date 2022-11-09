@@ -17,6 +17,7 @@
 export interface IFooterPanelProps {
   recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
+  setOpenColumnViewHandler: () => void;
 }
 
 interface IGridMetaInfo {

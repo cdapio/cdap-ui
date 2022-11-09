@@ -22,11 +22,11 @@ import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
 import T from 'i18n-react';
 import React from 'react';
 
-export default function() {
+export default function({ setOpenColumnViewHandler }) {
   return (
     <Box data-testid="footer-panel-column-view-panel-tab-wrapper">
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
-        <Box>
+        <Box onClick={setOpenColumnViewHandler}>
           <TabWrapper size="small" dataTestID="footer-panel-column-view-panel-tab">
             {ColumnIcon}
           </TabWrapper>

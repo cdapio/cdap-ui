@@ -14,11 +14,7 @@
  * the License.
  */
 
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-  type: Array<string | number | boolean>;
-}
+import { IHeaderNamesList } from 'components/GridTable/types';
 
 export interface ISelectColumnListProps {
   columnData: IHeaderNamesList[];
