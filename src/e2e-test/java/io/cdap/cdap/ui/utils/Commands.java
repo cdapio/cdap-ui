@@ -17,6 +17,8 @@
 package io.cdap.cdap.ui.utils;
 
 import io.cdap.cdap.ui.types.NodeInfo;
+import io.cdap.common.http.HttpMethod;
+import io.cdap.common.http.HttpResponse;
 import io.cdap.e2e.pages.locators.CdfStudioLocators;
 import io.cdap.e2e.utils.CdfHelper;
 import io.cdap.e2e.utils.ElementHelper;
@@ -320,5 +322,22 @@ public class Commands implements CdfHelper {
       "input" + Helper.getCssSelectorByDataTestId(testId));
     ElementHelper.clearElementValue(element);
     ElementHelper.sendKeys(element, keys);
+  }
+
+  public static int uploadPipelineDraftViaApi(String pipelineDraftJson) throws IOException {
+    HttpResponse response = HttpRequestHandler.makeHttpRequest(
+      HttpMethod.PUT, Constants.BASE_SERVER_URL + "/v3/configuration/user", null, pipelineDraftJson, null
+    );
+    return response.getResponseCode();
+  }
+
+  public static int checkDraftPipelineExistsViaApi(String draftId) throws IOException {
+    HttpResponse response = HttpRequestHandler.makeHttpRequest(
+      HttpMethod.GET,
+      Constants.BASE_SERVER_URL +
+        "/v3/namespaces/system/apps/pipeline/services/studio/methods/v1/contexts/default/drafts/"
+        + draftId, null, null, null
+    );
+    return response.getResponseCode();
   }
 }

@@ -16,6 +16,7 @@
 
 package io.cdap.cdap.ui.utils;
 
+import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
@@ -25,6 +26,8 @@ import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -32,8 +35,6 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -45,17 +46,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Helper implements CdfHelper {
 
-  private static final Gson gson = new Gson();
+  private static final Gson GSON = new Gson();
   private static final String USERNAME = "admin";
   private static final String PASSWORD = "admin";
   private static boolean isAuthEnabled = false;
@@ -81,10 +85,10 @@ public class Helper implements CdfHelper {
         reqBody.put("username", USERNAME);
         reqBody.put("password", PASSWORD);
         HttpResponse authResponse = HttpRequestHandler.makeHttpRequest(
-          HttpMethod.POST, Constants.BASE_URL + "/login", reqHeaders, reqBody, null
+          HttpMethod.POST, Constants.BASE_URL + "/login", reqHeaders, convertMapToString(reqBody), null
         );
         Map<String, String> authResponseMap
-          = gson.fromJson(authResponse.getResponseBodyAsString(),
+          = GSON.fromJson(authResponse.getResponseBodyAsString(),
                           Map.class);
         authToken = authResponseMap.get("access_token");
         driver.manage().addCookie(new Cookie("CDAP_Auth_Token", authToken));
@@ -142,6 +146,10 @@ public class Helper implements CdfHelper {
   public static boolean isElementExists(String cssSelector) {
     return SeleniumDriver.getDriver()
       .findElements(By.cssSelector(cssSelector)).size() > 0;
+  }
+
+  public static boolean isElementExists(By by) {
+    return SeleniumDriver.getDriver().findElements(by).size() > 0;
   }
 
   public static boolean isElementExists(By by, WebElement withinElement) {
@@ -245,12 +253,13 @@ public class Helper implements CdfHelper {
     reqHeaders.put("Content-Type", "application/x-www-form-urlencoded");
     Map<String, String> reqBody = new HashMap<String, String>();
     reqBody.put("uiThemePath", themePath);
+    String jsonBody = GSON.toJson(reqBody);
     try {
       reqHeaders.put("Session-Token", getSessionToken());
       HttpResponse response = HttpRequestHandler.makeHttpRequest(HttpMethod.POST,
                                                                  Constants.BASE_URL + "/updateTheme",
                                                                  reqHeaders,
-                                                                 reqBody,
+                                                                 convertMapToString(reqBody),
                                                                  null);
       if (response.getResponseCode() == 200) {
         System.out.println("Successfully updated theme");
@@ -309,5 +318,65 @@ public class Helper implements CdfHelper {
     }
     // wait for rendering to finish otherwise elements are not attached to dom
     Helper.waitSeconds(2);
+  }
+  
+  public static boolean urlHasString(String targetString) {
+    String strUrl = SeleniumDriver.getDriver().getCurrentUrl();
+    return strUrl.contains(targetString);
+  }
+
+  public static void reloadPage() {
+    SeleniumDriver.getDriver().navigate().refresh();
+  }
+
+  public static void cleanupDirectory(File dir) {
+    for (File file : dir.listFiles()) {
+      if (file.isDirectory()) {
+        cleanupDirectory(file);
+      }
+      file.delete();
+    }
+  }
+
+  public static Map generateDraftFromPipelineJson(String pipelineJsonFileName) throws IOException {
+    Reader reader = Files.newBufferedReader(Paths.get(Constants.FIXTURES_DIR + pipelineJsonFileName));
+    Map jsonMap = GSON.fromJson(reader, Map.class);
+    UUID draftId = UUID.randomUUID();
+
+    // build draft pipeline map
+    Map uiPropMap = new HashMap();
+    uiPropMap.put("draftId", draftId.toString());
+    uiPropMap.put("lastSaved", System.currentTimeMillis());
+    String pipelineName = jsonMap.get("name").toString() + System.currentTimeMillis();
+    jsonMap.put("__ui__", uiPropMap);
+    jsonMap.put("name", pipelineName);
+
+    // build response map
+    Map pipelineDraft = new HashMap();
+    Map defaultObj = new HashMap();
+    Map draftIdObj = new HashMap();
+    draftIdObj.put(draftId.toString(), jsonMap);
+    defaultObj.put("default", draftIdObj);
+    pipelineDraft.put("hydratorDrafts", defaultObj);
+
+    Map response = new HashMap();
+    response.put("pipelineDraft", pipelineDraft);
+    response.put("pipelineName", pipelineName);
+
+    return response;
+  }
+
+  public static String convertMapToString(Map map) {
+    return Joiner.on(",").withKeyValueSeparator("=").join(map);
+  }
+
+  public static String extractQueryParamValue (String queryParam) throws URISyntaxException {
+    String strUrl = SeleniumDriver.getDriver().getCurrentUrl();
+    URIBuilder uriBuilder = new URIBuilder(strUrl);
+    List<NameValuePair> queryParameters = uriBuilder.getQueryParams()
+      .stream()
+      .filter(p -> p.getName().equals(queryParam))
+      .collect(Collectors.toList());
+    return queryParameters.get(0).getValue();
   }
 }
