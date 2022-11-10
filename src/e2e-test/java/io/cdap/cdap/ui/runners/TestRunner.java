@@ -19,18 +19,13 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
-
 /**
  * Test Runner to execute namespace creation related test cases.
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(
-  features = {"/src/e2e-test/features/breadcrumb.feature"},
-  glue = {"io.cdap.cdap.ui.stepsdesign", "stepsdesign"},
-  tags = {"not @ignore"},
-  plugin = {"pretty", "html:target/cucumber-html-report/tethering",
-    "json:target/cucumber-reports/cucumber-tethering.json",
-    "junit:target/cucumber-reports/cucumber-tethering.xml"}
-)
+@CucumberOptions(features = { "/src/e2e-test/features/" }, glue = { "io.cdap.cdap.ui.stepsdesign",
+    "stepsdesign" }, tags = { "not @ignore" }, plugin = { "pretty", "html:target/cucumber-html-report/tethering",
+        "json:target/cucumber-reports/cucumber-tethering.json",
+        "junit:target/cucumber-reports/cucumber-tethering.xml" })
 public class TestRunner {
 }

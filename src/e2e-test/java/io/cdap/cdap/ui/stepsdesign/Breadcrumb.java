@@ -17,84 +17,89 @@
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-
+import io.cdap.e2e.utils.SeleniumDriver;
+import io.cdap.cdap.ui.utils.Constants;
+import org.junit.Assert;
+import java.time.Duration;
+import org.openqa.selenium.WebElement;
 
 public class Breadcrumb {
-    ChromeDriver driver;
-
     @Given("Navigate to the home page")
     public void navigateToTheHomePage() {
-        driver = new ChromeDriver();
-        driver.get("http://localhost:11011/cdap/ns/default/home");
+        SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
 
-    @Then("Click on the Data source")
-    public void clickOnTheDatasource() {
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId("wranglecard-link-1"))).click();
-    }
-
-    @Then("Click on the first tab of second column")
-    public void clickOnTheFirstTabOfSecondColumn() {
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(
-                By.cssSelector(Helper.getCssSelectorByDataTestId("connectionlist-connectiontabs-tabs-loop-1-0")))
-                .click();
-    }
-
-    @Then("Click on the first tab of third column")
-    public void clickOnTheFirstTabOfThirdColumn() {
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(By.id("connectionlist-connectiontabs-tabs-loop-2-0")).click();
-    }
-
-    @When("Hover&Click on the Wrangler")
-    public void hoverAndClickOnTheWrangler() {
-        WaitHelper.waitForPageToLoad();
-        WebElement ele = driver.findElement(By.id("connectionlist-connectiontabs-label-loop-3-0"));
-        Actions action = new Actions(driver);
-        WaitHelper.waitForPageToLoad();
-        action.moveToElement(ele).perform();
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(By.id("tablabelcansample-typography-2")).click();
-    }
-
-    @Then("Click on the Data Sources link")
-    public void clickONTheDataSourcesLink() {
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(By.id("breadcrumb-data-sources-text")).click();
-    }
-
-    @Then("Click on the Home link")
-    public void clickOnTheHomeLink() {
-        WaitHelper.waitForPageToLoad();
-        driver.findElement(By.id("breadcrumb-home-text")).click();
+    @Then("Click on the Connector type with \\\"(.*)\\\" and \\\"(.*)\\\"")
+    public void clickOnTheConnectorType(String connectionLabel, String connectionTestId) {
+        try {
+            WaitHelper.waitForElementToBeEnabled(
+                    Helper.locateElementByTestId("connector-type-" + connectionTestId));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("connector-type-" + connectionTestId));
+            System.out.println("Clicked on " + connectionLabel + " Element");
+            WaitHelper.waitForPageToLoad();
+            if (connectionLabel.equals("Add Connections")) {
+                ElementHelper.clickOnElement(Helper.locateElementByTestId("connector-type-" + connectionTestId));
+                System.out.println("Clicked on " + connectionLabel + " Element");
+                WaitHelper.waitForPageToLoad();
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText, "http://localhost:11011/cdap/ns/default/connections/create");
+                System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
+            } else {
+                WaitHelper.waitForPageToLoad();
+                String ActualText = SeleniumDriver.getDriver().getCurrentUrl();
+                Assert.assertEquals(ActualText,
+                        "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
+                System.out.println("Navigated to Data Source page with connection " + connectionLabel + " selected");
+            }
+        } catch (Exception e) {
+            System.out.println(connectionLabel + " Element does not exist");
+        }
     }
 
     @Then("Click on the Home link button")
     public void clickOnTheHomeLinkButton() {
         WaitHelper.waitForPageToLoad();
-        driver.findElement(By.id("connectionlist-subheader-1")).click();
+        SeleniumDriver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-text"));
+        System.out.println("clicked on home link from Data source page");
     }
 
-    @Then("Click on the Exploration card")
-    public void clickOnTheExplorationCard() {
+    @Then("Click on the Exploration card with \\\"(.*)\\\"")
+    public void clickOnTheExplorationCard(String testId) {
         WaitHelper.waitForPageToLoad();
-        driver.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId("ongoingdataexplorations-link-1"))).click();
+
+        SeleniumDriver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explorations-" + testId));
+        System.out.println("clicked on exploration card");
     }
 
-    @Then("Check the user navigated back to home page or not")
-    public void dashboard() {
-        WaitHelper.waitForPageToLoad();
-        WebElement text = driver.findElement(By.id("wranglehome-1"));
+    @Then("Click on the Home link of wrangle page")
+    public void clickOnTheHomeLink() {
+        System.out.println("inside the function");
+        SeleniumDriver.getDriver().manage().window().maximize();
+        SeleniumDriver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
+        String url = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
+        System.out.println(url);
+        boolean flag = true;
+        for (int i = 0; flag == true; i++) {
+            if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+                flag = true;
+            } else {
+                flag = false;
+            }
+        }
+
+        WebElement ele = Helper.locateElementByTestId("breadcrumb-home-link");
+        Actions action = new Actions(SeleniumDriver.getDriver());
+        action.moveToElement(ele).perform();
+        ele.click();
+
     }
 }

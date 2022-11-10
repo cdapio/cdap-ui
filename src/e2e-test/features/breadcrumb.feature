@@ -16,15 +16,14 @@
 
 @Integration_Tests
 Feature: Breadcrumb - Navigate to the application
+
   @Breadcrumb
-  Scenario: Navigate to the Data Source
-    Given Navigate to the Home Page
-#    Then  Click on the View all option
-#    Then Click on the Home link
-    Then Click on the Connector type card
-    Then Click on the Home link in Data Sources page
-    Then Click on the Connector type card
-    Then Click on the another Connector type in Data Sources page
-    Then Click on the Exploration card
-    Then Click on the Home link on wrangle page
-    
+  Scenario Outline: Navigate to the Data Source
+    Given Navigate to the home page
+    Then  Click on the Connector type with "<connectionLabel>" and "<connectionTestId>"
+    Then Click on the Home link button
+    Then Click on the Exploration card with "<testId>"
+    Then Click on the Home link of wrangle page
+    Examples:
+         | connectionLabel | connectionTestId |testId|
+         | PostgreSQL | postgresql |developers-md-1 |
