@@ -124,8 +124,7 @@ public class ColumnViewPanel {
     public void verifyPanelClosed() {
         try {
             ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-button"));
-            Assert.assertFalse(ElementHelper.isElementDisplayed
-                    (Helper.locateElementByTestId("column-view-panel-parent")));
+            Assert.assertFalse((Helper.isElementExists("column-view-panel-parent")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
