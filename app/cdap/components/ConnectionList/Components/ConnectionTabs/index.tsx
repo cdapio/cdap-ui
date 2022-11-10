@@ -89,6 +89,7 @@ export default function ConnectionsTabs({
               indicator: classes.indicator,
               root: classes.tabsContainer,
             }}
+            data-testid="connection-tabs"
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab

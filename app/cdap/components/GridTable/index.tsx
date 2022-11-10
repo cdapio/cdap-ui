@@ -26,6 +26,12 @@ import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
 import { GRID_TABLE_PREFIX, PREFIX } from 'components/GridTable/constants';
 import { useStyles } from 'components/GridTable/styles';
+import {
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IParams,
+  IRecords
+} from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
@@ -36,7 +42,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-import { IExecuteAPIResponse, IHeaderNamesList, IParams, IRecords } from './types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -126,7 +131,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, wid);
+    getWorkSpaceData(payload as IParams, wid as string);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -136,7 +141,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]],
+          type: [columnTypesList[eachColumnName]] as string[],
         };
       });
     }
@@ -174,11 +179,12 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item;
+            mostFrequentItemValue = item as string;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue =
+          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -248,7 +254,7 @@ export default function GridTable() {
   };
 
   return (
-    <Box>
+    <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen

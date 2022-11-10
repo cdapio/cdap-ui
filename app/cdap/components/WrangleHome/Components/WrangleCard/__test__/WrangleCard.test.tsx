@@ -14,40 +14,48 @@
  * the License.
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import * as reducers from 'components/Connections/Create/reducer';
+import { createBrowserHistory as createHistory } from 'history';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
 import WrangleCard from '../index';
+import { wrangleCardFetchConnectors } from '../mock/wrangleCardMockData';
 
-test('It renders Wrangler-Card ', () => {
-  jest.mock('components/Connections/Create/reducer', () => {
-    return Promise.resolve([
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'HeMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'BatMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'SuperMan',
-        type: 'js',
-      },
-    ]);
+const history = createHistory({
+  basename: '/',
+});
+
+describe('Testing the Wrangle Card Component', () => {
+  test('Should check whether WrangleCard Component is rendered or not', () => {
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WrangleCard />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(container).toBeDefined();
   });
-  render(<WrangleCard />);
-  const ele = screen.getByTestId(/wrangle-card-parent/i);
-  expect(ele).toBeInTheDocument();
+
+  test('It renders Wrangler-Card ', async () => {
+    jest
+      .spyOn(reducers, 'fetchConnectors')
+      .mockReturnValue(Promise.resolve(wrangleCardFetchConnectors));
+
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WrangleCard />
+          </Route>
+        </Switch>
+      </Router>
+    );
+
+    const ele = screen.getByTestId(/wrangle-card-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
 });
