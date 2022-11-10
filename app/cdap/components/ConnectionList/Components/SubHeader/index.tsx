@@ -19,12 +19,14 @@ import Box from '@material-ui/core/Box';
 import { useStyles } from 'components/ConnectionList/Components/SubHeader/styles';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import SaveAltRoundedIcon from '@material-ui/icons/SaveAltRounded';
+import { ISubHeaderProps } from 'components/ConnectionList/types';
 
-export default function SubHeader() {
+export default function({ setOpenImportDataPanel }: ISubHeaderProps) {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
@@ -38,13 +40,23 @@ export default function SubHeader() {
       </Box>
 
       <Box className={classes.importDataContainer}>
-        <Box className={classes.importData}>
+        <Box
+          className={classes.importData}
+          onClick={() => setOpenImportDataPanel(true)}
+          data-testid="import-data"
+        >
           <AddCircleOutlineOutlinedIcon className={classes.subHeaderIcon} />
           <Box className={classes.breadCrumbTyporgraphy}>Add connection</Box>
         </Box>
-        <Box className={classes.importData}>
+        <Box
+          className={classes.importData}
+          onClick={() => setOpenImportDataPanel(true)}
+          data-testid="import-data"
+        >
           <SaveAltRoundedIcon className={classes.subHeaderIcon} />
-          <Box className={classes.breadCrumbTyporgraphy}>Import data</Box>
+          <Box className={classes.breadCrumbTyporgraphy}>
+            {T.translate('features.WranglerNewUI.ImportData.referenceLabel')}
+          </Box>
         </Box>
       </Box>
     </Box>

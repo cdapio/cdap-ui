@@ -14,22 +14,14 @@
  * the License.
  */
 
+import { IDragAndDrop } from 'components/ImportDataset/types';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import TabLabelCanBrowse from '../index';
-import { mockConnectorTypeData } from '../mock/mockConnectorTypeData';
+import DragDrop from 'components/ImportDataset/Components/DragAndDrop/index';
 
-describe('Test TabLabelCanBrowse Component', () => {
-  it('Should render TabLabelCanBrowse Component', () => {
-    render(
-      <TabLabelCanBrowse
-        label={mockConnectorTypeData.name}
-        count={mockConnectorTypeData.count}
-        icon={mockConnectorTypeData.icon}
-        index={0}
-      />
-    );
-    const ele = screen.getAllByTestId(/connections-tab-label-browse/i);
-    expect(ele[0]).toBeInTheDocument();
-  });
-});
+export default function({ file, onDropHandler }: IDragAndDrop) {
+  return (
+    <div>
+      <DragDrop file={file} onDropHandler={onDropHandler} />
+    </div>
+  );
+}

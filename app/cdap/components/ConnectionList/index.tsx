@@ -25,11 +25,13 @@ import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import T from 'i18n-react';
 import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import CustomTooltip from './Components/CustomTooltip';
 import SubHeader from './Components/SubHeader';
-import { useStyles } from './styles';
+import { useStyles } from 'components/ConnectionList/styles';
+import ImportDatasetPanel from 'components/ImportDataset';
 
 const SelectDatasetWrapper = styled(Box)({
   overflowX: 'scroll',
@@ -46,7 +48,7 @@ const SelectDatasetWrapper = styled(Box)({
   },
 });
 
-export default function ConnectionList() {
+export default function() {
   const { connectorType } = useParams() as IRecords;
 
   const refs = useRef([]);
@@ -55,6 +57,7 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
+  const [openImportDataPanel, setOpenImportDataPanel] = useState<boolean>(false);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean, isError?: boolean) => {
@@ -107,7 +110,7 @@ export default function ConnectionList() {
     });
   };
 
-  const setDataForTabsHelper = (res, index) => {
+  const setDataForTabsHelper = (res, index: number) => {
     setDataForTabs((prev) => {
       const tempData = [...prev];
       tempData.push({
@@ -194,7 +197,9 @@ export default function ConnectionList() {
   const headerForLevelZero = () => {
     return (
       <Box className={classes.styleForLevelZero}>
-        <Typography variant="body2">Data Connections</Typography>
+        <Typography variant="body2" component="span">
+          {T.translate('features.WranglerNewUI.ConnectionsList.headerForLevelZero')}
+        </Typography>
       </Box>
     );
   };
@@ -203,19 +208,35 @@ export default function ConnectionList() {
 
   return (
     <Box data-testid="data-sets-parent" className={classes.connectionsListContainer}>
-      <SubHeader />
+      <SubHeader setOpenImportDataPanel={setOpenImportDataPanel} />
       <SelectDatasetWrapper>
-        {dataForTabs.map((each, index) => {
-          const connectionIdRequired = each.data.filter((el) => el.connectionId);
-          if (connectionIdRequired.length) {
-            connectionId = connectionIdRequired[0].connectionId;
-          }
-          if (index === 0) {
-            headerContent = headerForLevelZero();
-          } else {
-            headerContent =
-              refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
-                <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+        {Array.isArray(dataForTabs) &&
+          dataForTabs.length &&
+          dataForTabs.map((each, index) => {
+            const connectionIdRequired = each.data?.filter((el) => el.connectionId);
+            if (connectionIdRequired.length) {
+              connectionId = connectionIdRequired[0].connectionId;
+            }
+            if (index === 0) {
+              headerContent = headerForLevelZero();
+            } else {
+              headerContent =
+                refs.current[index]?.offsetWidth < refs.current[index]?.scrollWidth ? (
+                  <CustomTooltip title={dataForTabs[index - 1].selectedTab} arrow>
+                    <Box className={classes.beforeSearchIconClickDisplay}>
+                      <Typography
+                        variant="body2"
+                        className={classes.headerLabel}
+                        ref={(element) => {
+                          refs.current[index] = element;
+                        }}
+                        component="span"
+                      >
+                        {dataForTabs[index - 1].selectedTab}
+                      </Typography>
+                    </Box>
+                  </CustomTooltip>
+                ) : (
                   <Box className={classes.beforeSearchIconClickDisplay}>
                     <Typography
                       variant="body2"
@@ -227,37 +248,25 @@ export default function ConnectionList() {
                       {dataForTabs[index - 1].selectedTab}
                     </Typography>
                   </Box>
-                </CustomTooltip>
-              ) : (
-                <Box className={classes.beforeSearchIconClickDisplay}>
-                  <Typography
-                    variant="body2"
-                    className={classes.headerLabel}
-                    ref={(element) => {
-                      refs.current[index] = element;
-                    }}
-                  >
-                    {dataForTabs[index - 1].selectedTab}
-                  </Typography>
+                );
+            }
+            return (
+              <Box className={classes.tabsContainerWithHeader}>
+                <Box className={classes.tabHeaders}>
+                  <Typography component="span">{headerContent}</Typography>
                 </Box>
-              );
-          }
-          return (
-            <Box className={classes.tabsContainerWithHeader}>
-              <Box className={classes.tabHeaders}>{headerContent}</Box>
-              <ConnectionsTabs
-                tabsData={each}
-                handleChange={selectedTabValueHandler}
-                value={each.selectedTab}
-                index={index}
-                connectionId={connectionId || ''}
-                toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                data-testid="connections-tabs-list-change"
-              />
-            </Box>
-          );
-        })}
+                <ConnectionsTabs
+                  tabsData={each}
+                  handleChange={selectedTabValueHandler}
+                  value={each.selectedTab}
+                  index={index}
+                  connectionId={connectionId || ''}
+                  toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                  setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                />
+              </Box>
+            );
+          })}
       </SelectDatasetWrapper>
 
       {loading && (
@@ -267,6 +276,9 @@ export default function ConnectionList() {
       )}
       {isErrorOnNoWorkspace && (
         <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+      )}
+      {openImportDataPanel && (
+        <ImportDatasetPanel handleClosePanel={() => setOpenImportDataPanel(false)} />
       )}
     </Box>
   );

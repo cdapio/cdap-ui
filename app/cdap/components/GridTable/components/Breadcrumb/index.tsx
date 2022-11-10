@@ -41,7 +41,9 @@ export default function BreadCrumb({ datasetName }) {
         >
           Data Sources
         </Link>
-        <Typography color="textPrimary">{datasetName}</Typography>
+        <Typography color="textPrimary" data-testid={`${datasetName}-dataset`}>
+          {datasetName}
+        </Typography>
       </Breadcrumbs>
     </Box>
   );
