@@ -41,7 +41,7 @@ export default function({ messageToDisplay, close, snackbarStatus }: ITransition
       <div className={classes.headFlex}>
         {messenger}
         <span role="button" tabIndex={0} className={classes.undoSpan} onClick={() => close()}>
-          {snackbarStatus === 'success' ? 'UNDO' : 'Dismiss'}
+          Dismiss
         </span>
       </div>
       <Divider />

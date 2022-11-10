@@ -32,6 +32,7 @@ import {
   defaultProperties,
 } from './defaultValues';
 import { useStyles } from './styles';
+import Alert from '@material-ui/lab/Alert';
 
 export default function({ setLoading, updateDataTranformation }) {
   const [drawerStatus, setDrawerStatus] = useState(true);
@@ -41,13 +42,38 @@ export default function({ setLoading, updateDataTranformation }) {
   const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
   const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
   const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
+  const [failureSchema, setFailureSchemaStatus] = useState(false);
+  const [toaster, setToaster] = useState({ lastValue: null });
 
   const classes = useStyles();
   const { dataprep } = DataPrepStore.getState();
 
   useEffect(() => {
+    if (failureSchema) {
+      if (toaster.lastValue === 'success' || toaster.lastValue === null) {
+        setToaster({ lastValue: 'fail' });
+      }
+    } else if (successUpload.open) {
+      if (toaster.lastValue === 'fail' || toaster.lastValue === null) {
+        setToaster({ lastValue: 'success' });
+      }
+    }
+  }, [failureSchema, successUpload.open]);
+
+  useEffect(() => {
+    if (errorOnTransformation.open) {
+      setFailureSchemaStatus(true);
+      setSuccessUpload({ open: false, message: '' });
+    }
+    if (successUpload.open) {
+      setFailureSchemaStatus(false);
+    }
+  }, [errorOnTransformation, successUpload.open]);
+
+  useEffect(() => {
     setConnectionPayload({
       path: dataprep.insights.path,
+
       connection: dataprep.insights.name,
       sampleRequest: {
         properties: {
@@ -100,6 +126,16 @@ export default function({ setLoading, updateDataTranformation }) {
     }));
   };
 
+  let toastMessage;
+  if (toaster.lastValue) {
+    toastMessage =
+      toaster.lastValue === 'fail' ? (
+        <Alert severity="error">Imported schema is not a valid Avro schema</Alert>
+      ) : (
+        <Alert severity="success">A schema has been imported for this file</Alert>
+      );
+  }
+
   const componentToRender = (
     <DrawerWidget
       headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
@@ -117,6 +153,13 @@ export default function({ setLoading, updateDataTranformation }) {
       <Box className={classes.bodyContainerStyles}>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
 
+        {toaster.lastValue &&
+          (toaster.lastValue === 'fail' ? (
+            <Alert severity="error">Imported schema is not a valid Avro schema</Alert>
+          ) : (
+            <Alert severity="success">A schema has been imported for this file</Alert>
+          ))}
+
         <Box className={classes.bottomSectionStyles}>
           <Box className={classes.infoWrapperStyles}>
             <InfoOutlinedIcon />
@@ -133,7 +176,7 @@ export default function({ setLoading, updateDataTranformation }) {
             onClick={(event: React.MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
             data-testid="parsing-apply-button"
           >
-            {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.apply')}
+            {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.apply').toString()}
           </Button>
         </Box>
       </Box>
