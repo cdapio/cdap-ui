@@ -35,7 +35,7 @@ export default function TabLabelCanSample({
   entity,
   initialConnectionId,
   toggleLoader,
-  setToaster,
+  setSnackbar,
 }: ITabLabelCanSampleProps) {
   const classes = useStyles();
   const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
@@ -56,7 +56,7 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(currentEntity);
     } else {
-      setToaster({
+      setSnackbar({
         open: true,
         message: [T.translate(`${PREFIX}.retrieveFailure`), entity?.name].join(' '),
         isSuccess: false,
@@ -68,7 +68,7 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
-      setToaster({
+      setSnackbar({
         open: true,
         message: [T.translate(`${PREFIX}.workspaceFailure`).toString(), entity?.name].join(' '),
         isSuccess: false,
@@ -94,7 +94,7 @@ export default function TabLabelCanSample({
       })
       .catch((err) => {
         toggleLoader(false);
-        setToaster({
+        setSnackbar({
           open: true,
           message: `${T.translate(`${PREFIX}.sampleFailure`)} ${currentEntity?.name.toString()}`,
           isSuccess: false,

@@ -61,7 +61,7 @@ export default function ConnectionsTabs({
   value,
   connectionColumnIndex,
   connectionId,
-  setToaster,
+  setSnackbar,
   toggleLoader,
 }: IConnectionTabsProps) {
   const classes = useStyles();
@@ -117,7 +117,7 @@ export default function ConnectionsTabs({
                         entity={connectorType as IRecords}
                         initialConnectionId={connectionIdProp}
                         toggleLoader={toggleLoader}
-                        setToaster={setToaster}
+                        setSnackbar={setSnackbar}
                       />
                     )
                   ) : (

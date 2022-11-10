@@ -19,10 +19,66 @@ import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { addActionType, PREFIX } from 'components/Snackbar/Components/Transition/constants';
-import { useStyles } from 'components/Snackbar/Components/Transition/styles';
 import { ITransitionProps } from 'components/Snackbar/Components/Transition/types';
 import T from 'i18n-react';
 import React from 'react';
+import styled, { css } from 'styled-components';
+
+const IconComponent = css`
+  font-size: xx-large;
+  color: #ffffff;
+  position: relative;
+  bottom: 4px;
+  width: 18px;
+  margin-right: 13px;
+`;
+
+const ErrorOutlineIconWrapper = styled(ErrorOutlineIcon)`
+  ${IconComponent}
+`;
+
+const SuccessIconWrapper = styled(CheckCircleOutlinedIcon)`
+  ${IconComponent}
+`;
+
+const ClsoeIconWrapper = styled(CloseIcon)`
+  color: #ffffff;
+  cursor: pointer;
+`;
+
+const TransitionTextWrapper = styled(Box)`
+  display: flex;
+`;
+
+const TransitionWrapper = styled(TransitionTextWrapper)`
+  justify-content: space-between;
+`;
+
+const TransitionLabel = styled(Typography)`
+  color: #ffffff;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15;
+  font-size: 16px;
+`;
+
+const TransitionActionsWrapper = styled(TransitionTextWrapper)`
+  gap: 13;
+`;
+
+const TransitionAction = styled(Typography)`
+  display: block;
+  color: #ffffff;
+  cursor: pointer;
+  line-height: 21px;
+  font-weight: 400;
+`;
+
+const TransitionMessage = styled(Typography)`
+  color: #ffffff;
+  padding-left: 31px;
+  font-size: 14px;
+`;
 
 export default function({
   handleClose,
@@ -33,58 +89,39 @@ export default function({
   const handleUndoOperation = () => {
     // TODO: this is the method used to undo the recent activity on transformations
   };
-  const classes = useStyles();
+
   return (
     <Box>
-      <Box className={classes.headFlex}>
-        <Box className={classes.iconText}>
+      <TransitionWrapper>
+        <TransitionTextWrapper>
           {isSuccess ? (
-            <CheckCircleOutlinedIcon
-              className={classes.successIcon}
-              data-testid={`snackbar-success-icon`}
-            />
+            <SuccessIconWrapper data-testid={`snackbar-success-icon`} />
           ) : (
-            <ErrorOutlineIcon
-              className={classes.warningIcon}
-              data-testid={`snackbar-failure-icon`}
-            />
+            <ErrorOutlineIconWrapper data-testid={`snackbar-failure-icon`} />
           )}
-          <Typography
-            className={isSuccess ? classes.successLabel : classes.failureLabel}
-            variant="body1"
-            component="span"
-          >
+          <TransitionLabel variant="body1" component="span">
             {isSuccess ? (
               <>{T.translate(`${PREFIX}.success`)}</>
             ) : (
               <>{T.translate(`${PREFIX}.failure`)}</>
             )}
-          </Typography>
-        </Box>
-        <Box className={classes.operations}>
-          <Typography
-            className={classes.dismissSpan}
-            onClick={() => handleUndoOperation()}
-            variant="body1"
-            component="span"
-          >
+          </TransitionLabel>
+        </TransitionTextWrapper>
+        <TransitionActionsWrapper>
+          <TransitionAction onClick={() => handleUndoOperation()} variant="body1" component="span">
             {transitionAction === addActionType ? (
               T.translate(`${PREFIX}.undo`)
             ) : (
               <Box>
-                <CloseIcon
-                  className={classes.closeIcon}
-                  onClick={handleClose}
-                  data-testid="snackbar-close-icon"
-                />
+                <ClsoeIconWrapper onClick={handleClose} data-testid="snackbar-close-icon" />
               </Box>
             )}
-          </Typography>
-        </Box>
-      </Box>
-      <Typography variant="body1" className={classes.message} component="span">
+          </TransitionAction>
+        </TransitionActionsWrapper>
+      </TransitionWrapper>
+      <TransitionMessage variant="body1" component="span">
         {messageToDisplay}
-      </Typography>
+      </TransitionMessage>
     </Box>
   );
 }

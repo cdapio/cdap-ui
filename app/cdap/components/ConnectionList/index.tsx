@@ -19,7 +19,6 @@ import { grey } from '@material-ui/core/colors';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
-import { snackbarDefaultValues } from 'components/ConnectionList/constants';
 import { GCSIcon } from 'components/ConnectionList/icons';
 import { useStyles } from 'components/ConnectionList/styles';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
@@ -28,7 +27,7 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
-import { ISnackbar } from 'components/Snackbar/types';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -57,7 +56,7 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
-  const [toaster, setToaster] = useState<ISnackbar>(snackbarDefaultValues);
+  const [snackbarState, setSnackbar] = useSnackbar();
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
   };
@@ -200,6 +199,12 @@ export default function ConnectionList() {
     );
   };
 
+  const setSnackbarState = (value: boolean) => {
+    setSnackbar({
+      open: false,
+    });
+  };
+
   let headerContent;
 
   return (
@@ -258,7 +263,7 @@ export default function ConnectionList() {
                 connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                setToaster={setToaster}
+                setSnackbar={setSnackbar}
               />
             </Box>
           );
@@ -269,15 +274,17 @@ export default function ConnectionList() {
           <LoadingSVG />
         </div>
       )}
-      {toaster.open && (
+      {snackbarState.open && (
         <Snackbar
           handleCloseError={() =>
-            setToaster({
+            setSnackbar({
               open: false,
             })
           }
-          description={toaster.message}
-          isSuccess={toaster.isSuccess}
+          setSnackbarState={setSnackbarState}
+          isOpen={snackbarState.open}
+          description={snackbarState.message}
+          isSuccess={snackbarState.isSuccess}
         />
       )}{' '}
     </Box>

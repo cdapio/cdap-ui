@@ -14,17 +14,16 @@
  * the License.
  */
 
-export interface ISnackbarProps {
-  handleCloseError: () => void;
-  setSnackbarState: (value: boolean) => void;
-  isOpen: boolean;
-  description?: string;
-  isSuccess?: boolean;
-  actionType?: string;
-  snackbarAction?: string;
-}
-export interface ISnackbar {
-  open: boolean;
-  message?: string;
-  isSuccess?: boolean;
+import { snackbarDefaultValues } from 'components/ConnectionList/constants';
+import { ISnackbar } from 'components/Snackbar/types';
+import { useState } from 'react';
+
+export default function() {
+  const [snackbarState, setSnackbarState] = useState<ISnackbar>(snackbarDefaultValues);
+
+  function setSnackbar(value) {
+    setSnackbarState(value);
+  }
+
+  return [snackbarState, setSnackbar] as const;
 }
