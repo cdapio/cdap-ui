@@ -117,7 +117,7 @@ export default function PipelineDetailsButtons({
   stopError,
   change,
 }) {
-  const isLatestVersion = change ? change.latest === 'true' : true;
+  const isLatestVersion = change ? change.latest : true;
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
