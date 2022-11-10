@@ -17,15 +17,15 @@
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+
 
 public class Breadcrumb {
     ChromeDriver driver;
