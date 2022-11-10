@@ -24,7 +24,7 @@ export const useStyles = makeStyles({
     alignItems: 'flex-start',
     width: '100%',
     position: 'absolute',
-    bottom: '54px',
+    bottom: 54,
   },
   tabsWrapper: {
     display: 'flex',
