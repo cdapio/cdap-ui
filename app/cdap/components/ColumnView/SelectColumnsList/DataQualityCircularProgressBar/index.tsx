@@ -24,8 +24,8 @@ import styled from 'styled-components';
 const RenderGraph = styled(Typography)`
     border-bottom-color: ${(props) => props.color};
     border-left-color: ${(props) => props.color};
-    transform: ${(props) => `rotate(${45 + props.dataQualityPercentValue * 1.8}deg)`}%;
-    position: 'absolute',
+    transform: ${(props) => `rotate(${props.dataQualityPercentValue * 1.8 - 45}deg)`};
+    position: absolute;
     top: 0;
     left: 0;
     width: 59;
