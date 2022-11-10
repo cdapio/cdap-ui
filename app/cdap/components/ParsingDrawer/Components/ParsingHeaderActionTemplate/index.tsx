@@ -44,7 +44,7 @@ export default function({
             'features.WranglerNewUI.WranglerNewParsingDrawer.importSchemaSuccessMessage'
           ),
         });
-      } catch (e) {
+      } catch (error) {
         setErrorOnTransformation({
           open: true,
           message: T.translate(

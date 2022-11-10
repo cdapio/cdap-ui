@@ -49,14 +49,10 @@ export default function({ setLoading, updateDataTranformation }) {
   const { dataprep } = DataPrepStore.getState();
 
   useEffect(() => {
-    if (failureSchema) {
-      if (toaster.lastValue === 'success' || toaster.lastValue === null) {
-        setToaster({ lastValue: 'fail' });
-      }
-    } else if (successUpload.open) {
-      if (toaster.lastValue === 'fail' || toaster.lastValue === null) {
-        setToaster({ lastValue: 'success' });
-      }
+    if (failureSchema && toaster.lastValue !== 'fail') {
+      setToaster({ lastValue: 'fail' });
+    } else if (successUpload.open && toaster.lastValue !== 'success') {
+      setToaster({ lastValue: 'success' });
     }
   }, [failureSchema, successUpload.open]);
 
@@ -126,16 +122,6 @@ export default function({ setLoading, updateDataTranformation }) {
     }));
   };
 
-  let toastMessage;
-  if (toaster.lastValue) {
-    toastMessage =
-      toaster.lastValue === 'fail' ? (
-        <Alert severity="error">Imported schema is not a valid Avro schema</Alert>
-      ) : (
-        <Alert severity="success">A schema has been imported for this file</Alert>
-      );
-  }
-
   const componentToRender = (
     <DrawerWidget
       headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
@@ -155,9 +141,17 @@ export default function({ setLoading, updateDataTranformation }) {
 
         {toaster.lastValue &&
           (toaster.lastValue === 'fail' ? (
-            <Alert severity="error">Imported schema is not a valid Avro schema</Alert>
+            <Alert severity="error">
+              {T.translate(
+                'features.WranglerNewUI.WranglerNewParsingDrawer.importSchemaErrorMessage'
+              )}
+            </Alert>
           ) : (
-            <Alert severity="success">A schema has been imported for this file</Alert>
+            <Alert severity="success">
+              {T.translate(
+                'features.WranglerNewUI.WranglerNewParsingDrawer.importSchemaSuccessMessage'
+              )}
+            </Alert>
           ))}
 
         <Box className={classes.bottomSectionStyles}>
