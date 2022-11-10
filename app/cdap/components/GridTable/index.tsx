@@ -30,7 +30,7 @@ import {
   IExecuteAPIResponse,
   IHeaderNamesList,
   IParams,
-  IRecords
+  IRecords,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';

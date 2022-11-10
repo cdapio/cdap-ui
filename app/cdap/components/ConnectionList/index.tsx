@@ -263,7 +263,7 @@ export default function ConnectionList() {
                 connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
-                setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                setSnackbar={setSnackbar}
                 data-testid="connections-tabs-list-change"
               />
             </Box>
