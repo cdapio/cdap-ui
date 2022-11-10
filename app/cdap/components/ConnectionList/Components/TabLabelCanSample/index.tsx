@@ -121,7 +121,7 @@ export default function TabLabelCanSample({
             variant="body2"
             component="span"
             className={classes.wrangleButton}
-            data-testid={`connection-list-wrangle-link`}
+            data-testid="connection-list-wrangle-link"
           >
             Wrangle
           </Typography>
@@ -138,7 +138,7 @@ export default function TabLabelCanSample({
         <Typography
           variant="body2"
           className={classes.wrangleButton}
-          data-testid={`connection-list-wrangle-link`}
+          data-testid="connection-list-wrangle-link"
         >
           Wrangle
         </Typography>
