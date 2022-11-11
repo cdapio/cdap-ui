@@ -43,8 +43,8 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
 
   return (
     <Box>
-      <Box className={classes.marginBottomStyles}>
-        <InputLabel className={classes.labelTextStyles}>
+      <Box className={classes.inputWrapper} data-testid="input-format-wrapper">
+        <InputLabel className={classes.labelTextStyles} data-testid="input-format-label">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}
         </InputLabel>
         <InputSelect
@@ -58,11 +58,12 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'format')
           }
           options={FORMAT_OPTIONS}
+          data-testid="parsing-panel-format-input"
         />
       </Box>
 
-      <Box className={classes.marginBottomStyles}>
-        <InputLabel className={classes.labelTextStyles}>
+      <Box className={classes.inputWrapper} data-testid="input-encoding-wrapper">
+        <InputLabel className={classes.labelTextStyles} data-testid="input-encoding-label">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
         </InputLabel>
         <InputSelect
@@ -76,6 +77,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'fileEncoding')
           }
           options={CHAR_ENCODING_OPTIONS}
+          data-testid="parsing-panel-encoding-input"
         />
       </Box>
 
@@ -86,6 +88,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
         className={classes.checkboxStyles}
+        data-testid="parsing-panel-enabled-quotes-checkbox"
       />
 
       <InputCheckbox
@@ -95,6 +98,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           changeEventListener(event.target.checked, 'skipHeader')
         }
         className={classes.checkboxStyles}
+        data-testid="parsing-panel-first-row-header-checkbox"
       />
     </Box>
   );

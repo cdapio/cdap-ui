@@ -34,7 +34,12 @@ export default function({
 }: IDrawerWidgetProps) {
   const classes = useStyles();
   return (
-    <Drawer classes={{ paper: classes.paper }} anchor={anchor ? anchor : 'right'} open={openDrawer}>
+    <Drawer
+      classes={{ paper: classes.paper }}
+      anchor={anchor ? anchor : 'right'}
+      open={openDrawer}
+      data-testid="parsing-panel-widget"
+    >
       <Container className={classes.drawerContainerStyles} role="presentation">
         <header className={classes.headerStyles}>
           <Box className={classes.headerTextWithBackIconStyles}>

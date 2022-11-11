@@ -155,9 +155,9 @@ export default function({ setLoading, updateDataTranformation }) {
           ))}
 
         <Box className={classes.bottomSectionStyles}>
-          <Box className={classes.infoWrapperStyles}>
-            <InfoOutlinedIcon />
-            <span className={classes.infoTextStyles}>
+          <Box className={classes.infoWrapperStyles} data-testid="parsing-panel-info-wrapper">
+            <InfoOutlinedIcon data-testid="parsing-panel-info-icon" />
+            <span className={classes.infoTextStyles} data-testid="parsing-panel-info-text">
               {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsingInfoText')}
             </span>
           </Box>
