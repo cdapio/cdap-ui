@@ -100,10 +100,6 @@ export const useStyles = makeStyles(() => {
       letterSpacing: 0.15,
       color: '#5F6368',
     },
-    formFieldWrapperStyles: {
-      width: 'calc(100% - 60px)',
-      marginRight: 60,
-    },
     marginBottomStyles: {
       marginBottom: 10,
     },
