@@ -22,7 +22,7 @@ import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
 import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
-import PositionedSnackbar from 'components/SnackbarComponent/index';
+import PositionedSnackbar from 'components/Snackbar';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
@@ -185,8 +185,9 @@ export default function({ setLoading, updateDataTranformation }) {
               ).toString(),
             })
           }
-          messageToDisplay={errorOnTransformation.message}
-          snackbarStatus="failure"
+          description={errorOnTransformation.message}
+          isSuccess={false}
+          snackbarAction="failure"
         />
       )}
       {successUpload.open && (
@@ -197,8 +198,9 @@ export default function({ setLoading, updateDataTranformation }) {
               message: '',
             })
           }
-          messageToDisplay={successUpload.message}
-          snackbarStatus="success"
+          description={successUpload.message}
+          isSuccess={true}
+          snackbarAction="failure"
         />
       )}
     </DrawerWidget>

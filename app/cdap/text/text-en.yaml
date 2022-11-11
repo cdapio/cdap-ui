@@ -3453,4 +3453,11 @@ features:
       format: Format
       transformationErrorMessage1: Selected Transformation Cannot Be Applied
       transformationErrorMessage2: Error Encountered...
+    Snackbar:
+        labels:
+          success: Success
+          failure: Failure
+          errorMessage:
+            transformation: 'Selected Transformation Cannot Be Applied'
+            encountered : 'Error Encountered...'
 ...
