@@ -68,6 +68,7 @@ export default function TabLabelCanBrowse({
               .toLowerCase()
               .split(' ')
               .join('-')}-connection`}
+            component="span"
           >
             {label}
           </Typography>
@@ -79,6 +80,7 @@ export default function TabLabelCanBrowse({
                 .toLowerCase()
                 .split(' ')
                 .join('-')}-${count}`}
+              component="span"
             >{`(${count})`}</Typography>
           )}
         </Box>
@@ -104,6 +106,7 @@ export default function TabLabelCanBrowse({
             .toLowerCase()
             .split(' ')
             .join('-')}-connection`}
+          component="span"
         >
           {label}
         </Typography>
@@ -115,6 +118,7 @@ export default function TabLabelCanBrowse({
               .toLowerCase()
               .split(' ')
               .join('-')}-${count}`}
+            component="span"
           >{`(${count})`}</Typography>
         )}
       </Box>
