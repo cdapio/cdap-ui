@@ -22,7 +22,7 @@ import { getCategorizedConnections } from 'components/Connections/Browser/SidePa
 import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import ErrorSnackbar from 'components/SnackbarComponent';
+import PositionedSnackbar from 'components/Snackbar';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -266,7 +266,12 @@ export default function ConnectionList() {
         </div>
       )}
       {isErrorOnNoWorkspace && (
-        <ErrorSnackbar handleCloseError={() => setIsErrorOnNoWorkSpace(false)} />
+        <PositionedSnackbar
+          handleCloseError={() => setIsErrorOnNoWorkSpace(false)}
+          description={''}
+          isSuccess={false}
+          snackbarAction="failure"
+        />
       )}
     </Box>
   );
