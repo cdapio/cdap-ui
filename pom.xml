@@ -269,12 +269,12 @@
                 </configuration>
               </execution>
               <execution>
-                <id>install-node-gyp</id>
+                <id>yarn-use-2</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp</arguments>
+                  <arguments>init -2</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -283,7 +283,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>install --silent --frozen-lockfile</arguments>
+                  <arguments>install --immutable</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -386,12 +386,12 @@
                 </configuration>
               </execution>
               <execution>
-                <id>install-node-gyp</id>
+                <id>yarn-use-2</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>global add node-gyp</arguments>
+                  <arguments>init -2</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -400,7 +400,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>install --silent --frozen-lockfile</arguments>
+                  <arguments>install --immutable</arguments>
                 </configuration>
               </execution>
               <execution>

@@ -263,8 +263,5 @@
     "vega-tooltip": "0.4.3",
     "webpack-dev-server": "3.11.0",
     "yml-loader": "2.1.0"
-  },
-  "resolutions": {
-    "**/cypress": "5.6.0"
   }
 }
