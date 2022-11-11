@@ -101,7 +101,10 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
-                data-testid="connections-tab-button"
+                data-testid={`${connectorType.name
+                  .toLowerCase()
+                  .split(' ')
+                  .join('-')}-connection`}
                 onClick={() => {
                   if (index > 1) {
                     if (connectorType.canBrowse) {

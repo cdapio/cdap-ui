@@ -64,7 +64,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
 
       <Box className={classes.inputWrapper} data-testid="input-encoding-wrapper">
         <InputLabel className={classes.labelTextStyles} data-testid="input-encoding-label">
-          {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
+          {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding').toString()}
         </InputLabel>
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
@@ -82,7 +82,9 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
       </Box>
 
       <InputCheckbox
-        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues')}
+        label={T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues'
+        ).toString()}
         value={enableQuotedValues}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
@@ -92,7 +94,9 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
       />
 
       <InputCheckbox
-        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
+        label={T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader'
+        ).toString()}
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')

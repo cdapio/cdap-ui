@@ -200,7 +200,7 @@ export default function({ setLoading, updateDataTranformation }) {
           }
           description={successUpload.message}
           isSuccess={true}
-          snackbarAction="failure"
+          snackbarAction="success"
         />
       )}
     </DrawerWidget>

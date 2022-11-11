@@ -60,11 +60,26 @@ export default function TabLabelCanBrowse({
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}
-          <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
+          <Typography
+            variant="body1"
+            className={classes.labelStyles}
+            ref={myLabelRef}
+            data-testid={`${label
+              .toLowerCase()
+              .split(' ')
+              .join('-')}-connection`}
+          >
             {label}
           </Typography>
           {count && (
-            <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
+            <Typography
+              variant="body1"
+              className={classes.labelStyles}
+              data-testid={`${label
+                .toLowerCase()
+                .split(' ')
+                .join('-')}-${count}`}
+            >{`(${count})`}</Typography>
           )}
         </Box>
         <Box>
@@ -81,11 +96,26 @@ export default function TabLabelCanBrowse({
     <Box className={classes.labelContainerBox} data-testid="connections-tab-label-browse">
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
-        <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
+        <Typography
+          variant="body1"
+          className={classes.labelStyles}
+          ref={myLabelRef}
+          data-testid={`${label
+            .toLowerCase()
+            .split(' ')
+            .join('-')}-connection`}
+        >
           {label}
         </Typography>
         {count && (
-          <Typography variant="body1" className={classes.labelStyles}>{`(${count})`}</Typography>
+          <Typography
+            variant="body1"
+            className={classes.labelStyles}
+            data-testid={`${label
+              .toLowerCase()
+              .split(' ')
+              .join('-')}-${count}`}
+          >{`(${count})`}</Typography>
         )}
       </Box>
       <Box>
