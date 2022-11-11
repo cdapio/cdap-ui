@@ -258,7 +258,7 @@ export default function() {
   }, [gridData]);
 
   return (
-    <Box>
+    <Box data-testid="grid-table-container">
       {dataprep?.insights?.name && isFirstWrangle && connectorType === 'File' && (
         <ParsingDrawer
           updateDataTranformation={(wid) => updateDataTranformation(wid)}

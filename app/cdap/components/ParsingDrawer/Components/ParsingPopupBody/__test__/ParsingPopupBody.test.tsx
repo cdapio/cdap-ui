@@ -74,11 +74,9 @@ describe('It Should Test the ParsingPopupBody component', () => {
         </Switch>
       </Router>
     );
-    const renderedCheckbox = screen.getByTestId(
-      'parsing-checkbox-features.WranglerNewParsingDrawer.useFirstRowAsHeader'
-    );
-    expect(renderedCheckbox).toBeInTheDocument();
-    fireEvent.click(renderedCheckbox);
-    fireEvent.change(renderedCheckbox, { target: { checked: true } });
+    const renderedCheckbox = screen.getAllByTestId('parsing-checkbox');
+    expect(renderedCheckbox[0]).toBeInTheDocument();
+    fireEvent.click(renderedCheckbox[0]);
+    fireEvent.change(renderedCheckbox[0], { target: { checked: true } });
   });
 });
