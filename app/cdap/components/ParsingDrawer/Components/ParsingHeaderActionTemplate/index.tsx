@@ -55,7 +55,7 @@ export default function({
     };
   };
   return (
-    <Box className={classes.importSchemaIconText}>
+    <Box className={classes.importSchemaIconText} data-testid="import-schema-input-wrapper">
       <input
         data-testId="fileinput"
         id="file"

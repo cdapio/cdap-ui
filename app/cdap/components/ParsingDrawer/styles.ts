@@ -97,7 +97,7 @@ export const useStyles = makeStyles(() => {
       letterSpacing: 0.15,
       color: '#5F6368',
     },
-    marginBottomStyles: {
+    inputWrapper: {
       marginBottom: 10,
     },
     selectFieldStyles: {
