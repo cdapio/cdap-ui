@@ -42,7 +42,7 @@ export default function({ setLoading, updateDataTranformation }) {
   const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
   const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
   const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
-  const [failureSchema, setFailureSchemaStatus] = useState(false);
+  const [failureSchema, setFailureSchemaStatus] = useState<boolean>(false);
   const [toaster, setToaster] = useState({ lastValue: null });
 
   const classes = useStyles();
