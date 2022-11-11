@@ -61,9 +61,8 @@ export default function({
         id="file"
         type="file"
         accept=".json"
-        style={{ display: 'none' }}
         onChange={handleFile}
-        className={classes.pointerStyles}
+        className={classes.importFileInput}
       />
       <label htmlFor="file" className={classes.importSchemaLabel}>
         {importIcon}

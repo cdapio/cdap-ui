@@ -47,8 +47,8 @@ export default function({
         getContentAnchorEl: null,
       }}
     >
-      {Array.isArray(options) &&
-        options?.length &&
+      {options &&
+        options.length &&
         options.map((option, index) => {
           return (
             <MenuItem

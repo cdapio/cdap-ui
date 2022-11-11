@@ -41,9 +41,10 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'column',
     },
-    pointerStyles: {
+    importFileInput: {
       cursor: 'pointer',
       marginBottom: '0 !important',
+      display: 'none',
     },
     importSchemaLabel: {
       cursor: 'pointer',

@@ -25,13 +25,13 @@ import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplat
 import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
-import ParsingPopupBody from './Components/ParsingPopupBody';
+import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
 import {
   defaultConnectionPayload,
   defaultErrorOnTransformations,
   defaultProperties,
-} from './defaultValues';
-import { useStyles } from './styles';
+} from 'components/ParsingDrawer/defaultValues';
+import { useStyles } from 'components/ParsingDrawer/styles';
 import Alert from '@material-ui/lab/Alert';
 
 export default function({ setLoading, updateDataTranformation }) {

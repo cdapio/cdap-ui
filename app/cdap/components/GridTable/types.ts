@@ -49,7 +49,7 @@ export interface IType {
   [key: string]: string | number;
 }
 
-export interface IInvalidCount {
+export interface IInvalidDataCount {
   label: string;
   count: string;
 }

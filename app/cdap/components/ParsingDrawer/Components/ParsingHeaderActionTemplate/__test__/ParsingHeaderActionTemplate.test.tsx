@@ -18,7 +18,7 @@ import { render } from '@testing-library/react';
 import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import ParsingHeaderActionTemplate from '..';
+import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate';
 
 const history = createHistory({
   basename: '/',

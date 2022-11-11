@@ -34,7 +34,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
   let selectedEncodingValue: IOptions[] = [];
 
   useEffect(() => {
-    selectedFormatValue = FORMAT_OPTIONS?.filter((i) => i.value === format);
+    selectedFormatValue = FORMAT_OPTIONS?.filter((eachOption) => eachOption.value === format);
   }, [format]);
 
   useEffect(() => {

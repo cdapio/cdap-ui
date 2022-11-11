@@ -19,7 +19,7 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import { Divider } from '@material-ui/core';
 import { useStyles } from './styles';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { ITransitionComponentProps } from './types';
+import { ITransitionComponentProps } from 'components/SnackbarComponent/Components/TransitionComponent/types';
 
 export default function({ messageToDisplay, close, snackbarStatus }: ITransitionComponentProps) {
   const classes = useStyles();

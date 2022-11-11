@@ -24,7 +24,7 @@ export interface IInputCheckboxProps {
 }
 
 export interface IInputSelectProps {
-  options: IOptions[] | ReactNode;
+  options: IOptions[];
   value: string | ReactNode;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   classes: { icon: string; select: string };

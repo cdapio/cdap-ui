@@ -28,7 +28,7 @@ import { useStyles } from 'components/GridTable/styles';
 import {
   IExecuteAPIResponse,
   IHeaderNamesList,
-  IInvalidCount,
+  IInvalidDataCount,
   IParams,
   IRecords,
 } from 'components/GridTable/types';
@@ -52,7 +52,7 @@ export default function() {
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
-  const [invalidCount, setInvalidCount] = useState<IInvalidCount[]>([
+  const [invalidDataCount, setInvalidDataCount] = useState<IInvalidDataCount[]>([
     {
       label: 'Invalid',
       count: '0',
@@ -226,7 +226,7 @@ export default function() {
       }),
         metricsData.push({
           name: key,
-          values: arrayForMissingValue.concat(invalidCount),
+          values: arrayForMissingValue.concat(invalidDataCount),
         });
     });
     return metricsData;
