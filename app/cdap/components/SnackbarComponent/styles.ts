@@ -26,7 +26,7 @@ export const useStyles = makeStyles({
     height: '148px',
     width: '401px',
     bottom: '10% !important',
-    backgroundColor: green[50],
+    backgroundColor: '#ffffff',
   },
   snackBarDivFailure: {
     padding: '10px',
