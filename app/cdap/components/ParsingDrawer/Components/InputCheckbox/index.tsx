@@ -30,7 +30,7 @@ export default function({ label, value, onChange, className }: IInputCheckboxPro
           onChange={onChange}
           checked={value}
           color="primary"
-          data-testid={`parsing-checkbox-${label}`}
+          data-testid={`parsing-checkbox`}
         />
       }
       label={<Typography className={classes.labelTextStyles}>{label}</Typography>}
