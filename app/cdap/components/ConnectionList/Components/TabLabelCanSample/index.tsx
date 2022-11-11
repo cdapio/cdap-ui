@@ -97,11 +97,17 @@ export default function TabLabelCanSample({
   ) : refValue ? (
     <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef} data-testid={`${label
-              .toLowerCase()
-              .split(' ')
-              .join('-')}-connection`}
-            component="span">
+        <Typography
+          variant="body2"
+          className={classes.labelStylesCanSample}
+          ref={myLabelRef}
+          data-testid={`${label
+            .toLowerCase()
+            .replace(/\./g, ' ')
+            .split(' ')
+            .join('-')}-connection`}
+          component="span"
+        >
           {label}
         </Typography>
         <button
@@ -124,6 +130,7 @@ export default function TabLabelCanSample({
         ref={myLabelRef}
         data-testid={`${label
           .toLowerCase()
+          .replace(/\./g, ' ')
           .split(' ')
           .join('-')}-connection`}
         component="span"

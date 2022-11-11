@@ -66,7 +66,11 @@ export default function({
       />
       <label htmlFor="file" className={classes.importSchemaLabel}>
         {importIcon}
-        <Typography className={classes.importSchemaTextStyles} data-testid='import-schema-text'>
+        <Typography
+          className={classes.importSchemaTextStyles}
+          data-testid="import-schema-text"
+          component="span"
+        >
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}
         </Typography>
       </label>

@@ -21,7 +21,6 @@ import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/Par
 import history from 'services/history';
 import T from 'i18n-react';
 
-
 describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
   it('Should test whether ParsingHeaderActionTemplate Component is rendered as expected', () => {
     render(
@@ -43,7 +42,8 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
 
     const labelElement = screen.getByTestId(/import-schema-text/i);
     expect(labelElement).toBeInTheDocument();
-    expect(labelElement).toHaveTextContent(`${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}`);
-
+    expect(labelElement).toHaveTextContent(
+      `${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}`
+    );
   });
 });
