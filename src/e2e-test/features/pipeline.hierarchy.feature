@@ -19,7 +19,7 @@ Feature: Pipeline Hierarchy - Hierarchy Widgets
 
   @PIPELINE_HIERARCHY_TEST
   Scenario: Render file and duplicate record
-    Given Open Datafusion Project to configure pipeline
+    When Open Pipeline Studio Page
     Then Add "File" node to canvas
     Then Open transform panel
     Then Add "CloneRecord" node to canvas

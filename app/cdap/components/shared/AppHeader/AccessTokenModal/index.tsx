@@ -21,7 +21,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CardActionFeedback from 'components/shared/CardActionFeedback';
 import SessionStore from 'services/SessionTokenStore';
 import T from 'i18n-react';
-import 'whatwg-fetch';
 
 import './AccessTokenModal.scss';
 

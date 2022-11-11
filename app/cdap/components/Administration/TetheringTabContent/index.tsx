@@ -44,7 +44,7 @@ const AdminTetheringTabContainer = styled.div`
 const AdminTetheringTabContent = () => {
   const [connections, dispatch] = useReducer(reducer, initialConnectionsState);
   const [error, setError] = useState(null);
-  const { establishedConnections, pendingRequests } = connections;
+  const { establishedConnections, pendingRequests, rejectedRequests } = connections;
 
   const fetchConnectionsList = async () => {
     try {
@@ -91,7 +91,7 @@ const AdminTetheringTabContent = () => {
           {Theme.onPremTetheredInstance ? (
             <OnpremTetheringConnections
               establishedConnections={establishedConnections}
-              pendingRequests={pendingRequests}
+              tetheringRequests={[...pendingRequests, ...rejectedRequests]}
               handleEdit={handleEdit}
               handleDelete={handleDelete}
             />

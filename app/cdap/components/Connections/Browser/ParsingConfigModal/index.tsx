@@ -224,6 +224,7 @@ export default function ParsingConfigModal({
           onClick={handleConfirm}
           disabled={state.status !== STATE_AVAILABLE}
           data-cy="parsing-config-confirm"
+          data-testid="parsing-config-confirm"
         >
           Confirm
         </PrimaryTextButton>

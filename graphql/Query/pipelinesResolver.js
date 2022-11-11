@@ -37,6 +37,9 @@ export async function queryTypePipelinesResolver(parent, args, context) {
     pageSize: args.pageSize,
     orderBy: args.orderBy,
     nameFilter: args.nameFilter,
+    latestOnly: args.latestOnly,
+    nameFilterType: args.nameFilterType,
+    sortCreationTime: args.sortCreationTime
   };
   for (let key in params) {
     if (params[key] === undefined) {

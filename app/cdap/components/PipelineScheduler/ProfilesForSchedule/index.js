@@ -17,7 +17,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconSVG from 'components/shared/IconSVG';
-import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import Button from 'components/shared/Buttons/PrimaryOutlinedButton';
+import { withStyles } from '@material-ui/core/styles';
+import { Popover } from '@material-ui/core/';
+import styled from 'styled-components';
 import { setSelectedProfile } from 'components/PipelineScheduler/Store/ActionCreator';
 import { connect } from 'react-redux';
 import StatusMapper from 'services/StatusMapper';
@@ -28,10 +31,50 @@ import { getProvisionersMap } from 'components/Cloud/Profiles/Store/Provisioners
 import { preventPropagation } from 'services/helpers';
 import { extractProfileName, isSystemProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import T from 'i18n-react';
-require('./ProfilesForSchedule.scss');
 
 export const PROFILES_DROPDOWN_DOM_CLASS = 'profiles-list-dropdown';
 const PREFIX = 'features.PipelineScheduler';
+
+const StyledPopover = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+    width: '600px',
+    height: '300px',
+    outline: 'none',
+    '& .profiles-list-view-on-pipeline': {
+      height: '100%',
+      width: '100%',
+      '& .grid-wrapper': {
+        height: '100%',
+        overflow: 'auto',
+        '& .grid.grid-container': {
+          maxHeight: '100%',
+        },
+      },
+    },
+  },
+})(Popover);
+
+const StyledButton = styled(Button)`
+  border: 1px solid #d3d4d5;
+  color: #555555;
+  min-width: 150px;
+  max-width: 250px;
+  &:hover,
+  &:focus,
+  &:active {
+    background: transparent;
+    box-shadow: none;
+  }
+`;
+
+const StyledSpan = styled.span`
+  max-width: 90%;
+  margin-right: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 class ProfilesForSchedule extends Component {
   static propTypes = {
@@ -50,7 +93,7 @@ class ProfilesForSchedule extends Component {
     profileDetails: {},
     selectedProfile: this.props.selectedProfile,
     profileCustomizations: this.props.profileCustomizations,
-    openProfilesDropdown: false,
+    anchorEl: null,
   };
 
   componentDidMount() {
@@ -72,7 +115,7 @@ class ProfilesForSchedule extends Component {
 
   toggleProfileDropdown = (e) => {
     this.setState({
-      openProfilesDropdown: !this.state.openProfilesDropdown,
+      anchorEl: this.state.anchorEl ? null : e.currentTarget,
     });
     if (typeof e === 'object') {
       preventPropagation(e);
@@ -111,7 +154,7 @@ class ProfilesForSchedule extends Component {
   };
 
   renderProfilesTable = () => {
-    if (!this.state.openProfilesDropdown) {
+    if (!this.state.anchorEl) {
       return null;
     }
     let isScheduled = this.props.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
@@ -157,18 +200,27 @@ class ProfilesForSchedule extends Component {
     };
 
     return (
-      <Dropdown
-        className={PROFILES_DROPDOWN_DOM_CLASS}
-        disabled={isScheduled}
-        isOpen={this.state.openProfilesDropdown}
-        toggle={this.toggleProfileDropdown}
-      >
-        <DropdownToggle disabled={isScheduled} caret>
-          {getDropdownToggleLabel()}
+      <div>
+        <StyledButton disabled={isScheduled} onClick={this.toggleProfileDropdown}>
+          <StyledSpan>{getDropdownToggleLabel()}</StyledSpan>
           <IconSVG name="icon-caret-down" />
-        </DropdownToggle>
-        <DropdownMenu>{this.renderProfilesTable()}</DropdownMenu>
-      </Dropdown>
+        </StyledButton>
+        <StyledPopover
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          anchorEl={this.state.anchorEl}
+          open={Boolean(this.state.anchorEl)}
+          onClose={this.toggleProfileDropdown}
+        >
+          {this.renderProfilesTable()}
+        </StyledPopover>
+      </div>
     );
   };
 

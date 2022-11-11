@@ -18,9 +18,9 @@ name: Trigger build
 
 on:
   push:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, feature/wrangler-2022 ]
   pull_request:
-    branches: [ develop, release/** ]
+    branches: [ develop, release/**, feature/wrangler-2022 ]
     types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 

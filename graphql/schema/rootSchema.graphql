@@ -24,5 +24,6 @@ type PipelinesResponse {
 type Query {
   status: String!
   pipelines(namespace: String = "default", pageToken: String,
-    pageSize: Int = 25, orderBy: String, nameFilter: String): PipelinesResponse!
+    pageSize: Int = 25, orderBy: String, nameFilter: String,
+    latestOnly: String, nameFilterType: String, sortCreationTime: String): PipelinesResponse!
 }

@@ -182,10 +182,14 @@ features:
     Management:
       pageTitle: '{productName} | Administration | Management'
     Tethering:
-      PendingRequests:
-        pendingRequestHeader: Pending requests
-        pendingRequestHistory: VIEW REQUEST HISTORY
-        noPendingRequests: There are no requests pending
+      TetheringStatus:
+        accepted: Accepted
+        rejected: Rejected
+        pending: Pending
+      TetheringRequests:
+        tetheringRequestHeader: Tethering requests
+        tetheringRequestHistory: VIEW REQUEST HISTORY
+        noTetheringRequests: There are no tethering requests
         acceptButton: Accept
         rejectButton: Reject
         acceptSuccess: Request has been accepted.
@@ -242,6 +246,7 @@ features:
             label: Description
             placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
+         tetheringStatus: Tethering Status
          requestTime: Request Time
          description: Description
          gcp: Google cloud project
@@ -1939,6 +1944,8 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
+    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
+      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
@@ -2401,6 +2408,12 @@ features:
           runBtnPopover: Run the pipeline once with the runtime arguments set above. Any changes made to the runtime arguments will be available only for the next run.
           saveBtnPopover: Changes to runtime arguments will be saved for all future runs of the pipeline. This may impact any schedules and triggers configured for this pipeline.
           specifyArgs: Specify runtime arguments, empty values need to come from the pipeline.
+          showReservedKeys: Show auto-generated runtime arguments
+          tooltipLabel: Key value pairs generated from pipeline configurations that will apply at runtime
+          numOfGeneratedRuntimeArgs: 
+            1: "{context} auto-generated runtime argument"
+            _: "{context} auto-generated runtime arguments"
+
     ProfilesListView:
       click: Click here
       countProfiles:
@@ -2447,6 +2460,7 @@ features:
       edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
+      history: History
       run: Run
       schedule: Schedule
       starting: Starting
@@ -2490,6 +2504,7 @@ features:
         1: "{context} pipeline you saved"
         _: "{context} pipelines you saved"
     duration: Duration
+    editStatus: Status
     EmptyList:
       actionTitle: "You can try to:"
       aPipeline: a pipeline
@@ -2687,6 +2702,22 @@ features:
       avgRunTime: Average duration
       totalRuns: Total runs
     title: 'Summary (Max: 100 runs)'
+
+  PipelineHistory:
+    header: Version history of pipeline
+    table:
+      date: Date
+      time: Time
+      summary: Summary
+      unfinish: Not yet implemented
+      view: View
+      restore: Restore
+      rowsPerPage: "Rows per page: "
+      restoreFailError: Cannot restore (deploy) selected version
+      fetchVersionFailError: Cannot fetch selected version's detail
+      latest: Latest version
+      older: Older version
+      restoreChangeSummary: "Restore version at {date}"
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"

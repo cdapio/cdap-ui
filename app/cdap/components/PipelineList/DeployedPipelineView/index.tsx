@@ -15,13 +15,14 @@
  */
 
 import * as React from 'react';
-import { useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import PipelineTable from 'components/PipelineList/DeployedPipelineView/PipelineTable';
 import {
   reset,
   setPipelines,
   nextPage,
   prevPage,
+  setDrafts,
 } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import PipelineCount from 'components/PipelineList/DeployedPipelineView/PipelineCount';
 import SearchBox from 'components/PipelineList/DeployedPipelineView/SearchBox';
@@ -36,13 +37,14 @@ import If from 'components/shared/If';
 import { categorizeGraphQlErrors } from 'services/helpers';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
-import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import './DeployedPipelineView.scss';
 const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 
 import PaginationStepper from 'components/shared/PaginationStepper';
 import styled from 'styled-components';
+import { MyPipelineApi } from 'api/pipeline';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PaginationContainer = styled.div`
   margin-right: 50px;
@@ -108,6 +110,7 @@ const DeployedPipeline: React.FC = () => {
       $token: String
       $nameFilter: String
       $orderBy: String
+      $latestOnly: String
     ) {
       pipelines(
         namespace: $namespace
@@ -115,6 +118,7 @@ const DeployedPipeline: React.FC = () => {
         pageToken: $token
         nameFilter: $nameFilter
         orderBy: $orderBy
+        latestOnly: $latestOnly
       ) {
         applications {
           name
@@ -130,6 +134,7 @@ const DeployedPipeline: React.FC = () => {
             id
             time
           }
+          version
         }
         nextPageToken
       }
@@ -142,6 +147,10 @@ const DeployedPipeline: React.FC = () => {
       reset();
     };
   }, []);
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+  const latestOnly = lifecycleManagementEditEnabled ? 'true' : 'false';
   const { ready, search, pageToken, sortOrder, pageLimit } = useSelector(
     ({ deployed }) => deployed
   );
@@ -155,9 +164,16 @@ const DeployedPipeline: React.FC = () => {
       token: pageToken || undefined,
       pageSize: pageLimit,
       namespace: getCurrentNamespace(),
+      latestOnly,
     },
   });
   const bannerMessage = checkError(error);
+
+  useEffect(() => {
+    MyPipelineApi.getDrafts({ context: getCurrentNamespace() }).subscribe((res) => {
+      setDrafts(res);
+    });
+  }, []);
 
   useEffect(() => {
     if (loading || networkStatus === 4) {

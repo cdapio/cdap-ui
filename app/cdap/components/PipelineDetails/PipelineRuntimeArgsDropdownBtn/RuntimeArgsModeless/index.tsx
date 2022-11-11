@@ -38,7 +38,7 @@ const styles = (theme): StyleRules => {
       gridTemplateRows: 'auto',
       margin: '0',
       textAlign: 'left',
-      width: '730px',
+      width: '950px',
       padding: '10px 30px 30px',
     },
     loading: {
@@ -67,6 +67,7 @@ const styles = (theme): StyleRules => {
 interface IRuntimeArgsModelessProps extends WithStyles<typeof styles> {
   runtimeArgs: any;
   onClose: () => void;
+  isLatestVersion: boolean;
 }
 
 const I18N_PREFIX =
@@ -94,7 +95,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
   public saveRuntimeArgs = (e) => {
     preventPropagation(e);
     this.toggleSaving();
-    updatePreferences().subscribe(
+    updatePreferences(true).subscribe(
       () => {
         this.setState(
           {
@@ -158,7 +159,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           className="btn btn-primary"
           data-cy="save-runtime-args-btn"
           onClick={this.saveRuntimeArgs}
-          disabled={this.state.saving || this.state.savingAndRun}
+          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Save"
         />
       );
@@ -169,7 +170,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           loading={this.state.savingAndRun}
           className="btn btn-secondary"
           onClick={this.runPipelineWithArguments}
-          disabled={this.state.saving || this.state.savingAndRun}
+          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Run"
           data-cy="run-deployed-pipeline-modal-btn"
         />
@@ -177,32 +178,34 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
     };
     return (
       <div className={classes.container} data-cy="runtime-args-modeless">
-        <If condition={this.state.initialPropsLoading}>
+        {this.state.initialPropsLoading && (
           <div className={classes.loading}>
             <LoadingSVGCentered data-cy="runtime-args-modeless-loading" />
           </div>
-        </If>
-        <If condition={!this.state.initialPropsLoading}>
-          <div className={classes.argumentsLabel}>{T.translate(`${I18N_PREFIX}.specifyArgs`)}</div>
-          <RuntimeArgsTabContent
-            runtimeArgs={this.props.runtimeArgs}
-            onRuntimeArgsChange={this.onRuntimeArgsChanged}
-          />
-          <div className={classes.tabFooter}>
-            <div className={classes.btnsContainer}>
-              <Popover target={SaveBtn} placement="left" showOn="Hover">
-                {T.translate(`${I18N_PREFIX}.saveBtnPopover`)}
-              </Popover>
-              <Popover target={RunBtn} showOn="Hover" placement="right">
-                {T.translate(`${I18N_PREFIX}.runBtnPopover`)}
-              </Popover>
+        )}
+        {!this.state.initialPropsLoading && (
+          <>
+            <div className={classes.argumentsLabel}>
+              {T.translate(`${I18N_PREFIX}.specifyArgs`)}
             </div>
-            <PipelineRunTimeArgsCounter />
-          </div>
-          <If condition={this.state.error}>
-            <div className={classes.errorContainer}>{this.state.error}</div>
-          </If>
-        </If>
+            <RuntimeArgsTabContent
+              runtimeArgs={this.props.runtimeArgs}
+              onRuntimeArgsChange={this.onRuntimeArgsChanged}
+            />
+            <div className={classes.tabFooter}>
+              <div className={classes.btnsContainer}>
+                <Popover target={SaveBtn} placement="left" showOn="Hover">
+                  {T.translate(`${I18N_PREFIX}.saveBtnPopover`)}
+                </Popover>
+                <Popover target={RunBtn} showOn="Hover" placement="right">
+                  {T.translate(`${I18N_PREFIX}.runBtnPopover`)}
+                </Popover>
+              </div>
+              <PipelineRunTimeArgsCounter />
+            </div>
+            {this.state.error && <div className={classes.errorContainer}>{this.state.error}</div>}
+          </>
+        )}
       </div>
     );
   }

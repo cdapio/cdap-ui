@@ -69,6 +69,7 @@ async function setAllowedOrigin() {
 
   // take exact domain as-is from config
   const whitelistedOrigin = cdapConfig['dashboard.origin'];
+
   allowedOrigin = [getFullURL(nodejsserver)];
   try {
     hostname = await getHostName();
@@ -96,20 +97,43 @@ async function setAllowedOrigin() {
 log.info('Starting CDAP UI ...');
 getCDAPConfig()
   .then(function(c) {
-    // extract feature flags from the config with shorter keys to make it easier
-    // to consume
+    /**
+     * In order for the sandbox to refresh the conf/cdap-config.json you need
+     * to run 'cdap config-tool --cdap' in the sandbox folder.
+     *
+     * In order to simulate what is created there, you need to edit
+     * server/config/development and add whatever config piece you want there.
+     *
+     * You also need to edit the get /config route inside of express.js if you
+     * want your new config to be returned to the ui.
+     */
+
+    // extract feature flags from the config with shorter keys to make it
+    // easier to consume
     const featureFlags = {};
+    // extract external links to be placed in cog menu of the app toolbar
+    const externalLinks = {};
     for (const [key, value] of Object.entries(c)) {
       if (key.match(/^feature/)) {
-        // feature. is 8 characters and we only want to include
-        // feature flags
+        // feature. is 8 characters and we only want to include feature flags
         featureFlags[key.substring(8)] = value;
+        delete c[key];
+      }
+
+      if (key.match(/ui.externalLinks/)) {
+        /**
+         * ui.externalLinks is 15 characters so remove ui.ui.ExternalLinks.
+         * the format for external links inside of the config is ui.externalLinks.link
+         * and the value is the url it should link to
+         */
+        externalLinks[key.substring(17)] = value;
         delete c[key];
       }
     }
 
     cdapConfig = c;
     cdapConfig.featureFlags = featureFlags;
+    cdapConfig.externalLinks = externalLinks;
     if (cdapConfig['security.enabled'] === 'true') {
       log.debug('CDAP Security has been enabled');
       return extractConfig('security');
@@ -231,7 +255,7 @@ getCDAPConfig()
     function gracefulShutdown() {
       log.info('Caught SIGTERM. Closing http & ws server');
       server.close();
-      if(typeof wsConnections === 'object' && Object.keys(wsConnections).length) {
+      if (typeof wsConnections === 'object' && Object.keys(wsConnections).length) {
         log.debug(`Closing ${Object.keys(wsConnections).length} open websocket connections`)
         Object.values(wsConnections).forEach((connection) => {
           log.debug('Ending and destroying all graceful shutdown: ' + connection.readyState);

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Provider, connect } from 'react-redux';
 import PipelineDetailsMetadata from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsMetadata';
 import PipelineDetailsButtons from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons';
@@ -26,6 +26,7 @@ import PipelineConfigurationsStore, {
 import PlusButton from 'components/shared/PlusButton';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import { setEditDraftId } from '../store/ActionCreator';
 
 require('./PipelineDetailsTopPanel.scss');
 
@@ -44,13 +45,14 @@ const mapStateToButtonsProps = (state) => {
     scheduleError: state.scheduleError,
     stopButtonLoading: state.stopButtonLoading,
     stopError: state.stopError,
+    change: state.change,
   };
 };
 
 const ConnectedPipelineDetailsButtons = connect(mapStateToButtonsProps)(PipelineDetailsButtons);
 
-export default class PipelineDetailsTopPanel extends Component {
-  componentDidMount() {
+export const PipelineDetailsTopPanel = () => {
+  useEffect(() => {
     const pipelineDetailStore = PipelineDetailStore.getState();
     const pipelineDetailStoreConfig = pipelineDetailStore.config;
     PipelineConfigurationsStore.dispatch({
@@ -66,19 +68,21 @@ export default class PipelineDetailsTopPanel extends Component {
       payload: { ...pipelineDetailStoreConfig },
     });
     fetchAndUpdateRuntimeArgs();
-  }
-  render() {
-    return (
-      <FeatureProvider>
-        <Provider store={PipelineDetailStore}>
-          <div className="pipeline-details-top-panel">
-            <PipelineDetailsMetadata />
-            <ConnectedPipelineDetailsButtons />
-            <PipelineDetailsDetailsActions />
-            <PlusButton mode={PlusButton.MODE.resourcecenter} />
-          </div>
-        </Provider>
-      </FeatureProvider>
-    );
-  }
-}
+    if (window.localStorage.getItem('editDraftId')) {
+      setEditDraftId(window.localStorage.getItem('editDraftId'));
+      window.localStorage.removeItem('editDraftId');
+    }
+  }, []);
+  return (
+    <FeatureProvider>
+      <Provider store={PipelineDetailStore}>
+        <div className="pipeline-details-top-panel">
+          <PipelineDetailsMetadata />
+          <ConnectedPipelineDetailsButtons />
+          <PipelineDetailsDetailsActions />
+          <PlusButton mode={PlusButton.MODE.resourcecenter} />
+        </div>
+      </Provider>
+    </FeatureProvider>
+  );
+};

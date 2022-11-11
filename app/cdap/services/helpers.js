@@ -810,6 +810,58 @@ const cleanseAndCompareTwoObjects = (obj1, obj2) => {
   return isEqual(obj1, obj2)
 }
 
+/**
+ * 
+ * @param {object} ob - object to be flattened
+ * @returns {object} a flattened object with keys concatenated with '.'
+ */
+const flattenObj = (ob) => {
+ 
+  // The object which contains the
+  // final result
+  let result = {};
+
+  // loop through the object "ob"
+  for (const i in ob) {
+
+      // We check the type of the i using
+      // typeof() function and recursively
+      // call the function again
+      if ((typeof ob[i]) === 'object' && !Array.isArray(ob[i])) {
+          const temp = flattenObj(ob[i]);
+          for (const j in temp) {
+
+              // Store temp in result
+              result[i + '.' + j] = temp[j];
+          }
+      }
+
+      // Else store ob[i] in result directly
+      else {
+          result[i] = ob[i];
+      }
+  }
+  return result;
+};
+
+/**
+ * 
+ * @param {string[]} arr - a string array to search
+ * @param {string} target - target string
+ * @returns 
+ */
+const arrayOfStringsMatchTargetPrefix = (arr, target) => {
+  if (!target) {
+    return false
+  }
+  for (let x of arr) {
+    if (target.startsWith(x)) {
+      return true
+    }
+  }
+  return false
+}
+
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
   'cdap-data-streams',
@@ -873,5 +925,7 @@ export {
   differenceBetweenObjects,
   cleanseObject,
   cleanseAndCompareTwoObjects,
+  flattenObj,
+  arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
 };
