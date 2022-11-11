@@ -21,7 +21,7 @@ import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/a
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
-import ParsingHeaderActionTemplate from './Components/ParsingHeaderActionTemplate';
+import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate';
 import PositionedSnackbar from 'components/Snackbar';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
