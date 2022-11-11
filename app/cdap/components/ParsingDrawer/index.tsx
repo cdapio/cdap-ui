@@ -35,7 +35,7 @@ import { useStyles } from 'components/ParsingDrawer/styles';
 import Alert from '@material-ui/lab/Alert';
 
 export default function({ setLoading, updateDataTranformation }) {
-  const [drawerStatus, setDrawerStatus] = useState(true);
+  const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [properties, setProperties] = useState(defaultProperties);
   const [schemaValue, setSchemaValue] = useState(null);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
