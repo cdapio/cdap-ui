@@ -171,8 +171,6 @@ export const useStyles = makeStyles(() => {
       fontStyle: 'normal',
       fontWeight: 400,
       fontSize: 15,
-      lineHeight: 26,
-      letterSpacing: 0.46,
       color: '#FFFFFF',
       alignSelf: 'flex-end',
       marginTop: 30,
@@ -187,6 +185,21 @@ export const useStyles = makeStyles(() => {
       '&:hover': {
         backgroundColor: '#3994FF',
       },
+    },
+    drawerContainerStyles: {
+      width: 460,
+      height: '100%',
+      overflow: 'hidden',
+      paddingLeft: 30,
+      borderLeft: '1px solid #E0E0E0',
+    },
+    headerTextWithBackIconStyles: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+
+    chevronLeftRounded: {
+      fontSize: 24,
     },
   };
 });

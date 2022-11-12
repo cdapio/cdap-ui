@@ -29,4 +29,20 @@ export const useStyles = makeStyles({
     width: '100%',
     zIndex: 2000,
   },
+  gridWrapper: {
+    width: '100%',
+  },
+  gridTableWrapper: {
+    display: 'flex',
+    overflowX: 'auto',
+    overflowY: 'scroll',
+  },
+  container: {
+    display: 'flex',
+    height: 'calc(100vh - 101px)',
+  },
+  gridWrapperWithParsingPannel: {
+    width: 'calc(100% - 460px)',
+    overflowY: 'scroll',
+  },
 });

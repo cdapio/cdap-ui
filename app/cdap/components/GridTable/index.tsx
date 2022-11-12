@@ -256,65 +256,74 @@ export default function() {
     getGridTableData();
   }, [gridData]);
 
+  const isParsingPanel = dataprep?.insights?.name && isFirstWrangle && connectorType === 'File';
+
   return (
-    <Box>
-      {dataprep?.insights?.name && isFirstWrangle && connectorType === 'File' && (
-        <ParsingDrawer
-          updateDataTranformation={(wid) => updateDataTranformation(wid)}
-          setLoading={setLoading}
-        />
-      )}
-      <BreadCrumb datasetName={wid} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
-        <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-        />
-      )}
-      <Table aria-label="simple table" className="test">
-        <TableHead>
-          <TableRow>
-            {Array.isArray(headersNamesList) &&
-              headersNamesList?.length > 0 &&
-              headersNamesList.map((eachHeader) => (
-                <GridHeaderCell
-                  label={eachHeader.label}
-                  types={eachHeader.type}
-                  key={eachHeader.name}
-                />
-              ))}
-          </TableRow>
-          <TableRow>
-            {Array.isArray(missingDataList) &&
-              missingDataList?.length > 0 &&
-              headersNamesList.length &&
-              headersNamesList.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name === each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
-              })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rowsDataList?.length &&
-            rowsDataList.map((eachRow, rowIndex) => {
-              return (
-                <TableRow key={`row-${rowIndex}`}>
-                  {headersNamesList.map((eachKey, eachIndex) => {
-                    return (
-                      <GridTextCell
-                        cellValue={eachRow[eachKey.name] || '--'}
-                        key={`${eachKey.name}-${eachIndex}`}
-                      />
-                    );
+    <Box className={classes.container}>
+      <Box className={isParsingPanel ? classes.gridWrapperWithParsingPannel : classes.gridWrapper}>
+        <BreadCrumb datasetName={wid} />
+        {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
+          <NoRecordScreen
+            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          />
+        )}
+        <Box className={classes.gridTableWrapper}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                {Array.isArray(headersNamesList) &&
+                  headersNamesList?.length > 0 &&
+                  headersNamesList.map((eachHeader) => (
+                    <GridHeaderCell
+                      label={eachHeader.label}
+                      types={eachHeader.type}
+                      key={eachHeader.name}
+                    />
+                  ))}
+              </TableRow>
+              <TableRow>
+                {Array.isArray(missingDataList) &&
+                  missingDataList?.length > 0 &&
+                  headersNamesList.length &&
+                  headersNamesList.map((each, index) => {
+                    return missingDataList.map((item, itemIndex) => {
+                      if (item.name === each.name) {
+                        return <GridKPICell metricData={item} key={item.name} />;
+                      }
+                    });
                   })}
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rowsDataList?.length &&
+                rowsDataList.map((eachRow, rowIndex) => {
+                  return (
+                    <TableRow key={`row-${rowIndex}`}>
+                      {headersNamesList.map((eachKey, eachIndex) => {
+                        return (
+                          <GridTextCell
+                            cellValue={eachRow[eachKey.name] || '--'}
+                            key={`${eachKey.name}-${eachIndex}`}
+                          />
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </Box>
+      </Box>
+      {isParsingPanel && (
+        <Box>
+          <ParsingDrawer
+            updateDataTranformation={(wid) => updateDataTranformation(wid)}
+            setLoading={setLoading}
+            closeParsingDrawer={() => setIsFirstWrangle(false)}
+          />
+        </Box>
+      )}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

@@ -74,6 +74,7 @@ export const useStyles = makeStyles(() => {
       lineHeight: '150%',
       letterSpacing: 0.15,
       paddingLeft: 8,
+      whiteSpace: 'nowrap',
     },
     headerRightStyles: {
       display: 'flex',
