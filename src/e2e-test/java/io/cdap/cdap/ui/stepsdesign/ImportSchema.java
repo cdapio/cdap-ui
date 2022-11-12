@@ -22,25 +22,46 @@ public class ImportSchema {
         ElementHelper.clickOnElement(Helper.locateElementByTestId("file-connector-type"));
     }
     @Then("Click on first tab of the second column")
-    public void clickOnFirstTabOfTheSecondColumn() {
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("dhanu-connection"));
-    }
-    @Then("Click on first tab of the third column")
-    public void clickOnFirstTabOfTheThirdColumn() {
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("users-connection"));
-    }
-    @Then("Click on first tab of the fourth column")
-    public void clickOnFirstTabOfTheFourthColumn() {
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("divami-connection"));
-    }
-    @Then("Click on first tab of the fifth column")
-    public void clickOnFirstTabOfTheFifthColumn() {
-        WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("downloads-connection"));
-    }
+public void clickOnFirstTabOfTheSecondColumn() {
+    for(int i=0;i <10 ;i ++){
+        if(Helper.isElementExists("connection-tabs-column-"+ i)){
+            // iterates thru columns
+            // for(int j=0;j<10;j++) {
+            // iterates thru rows in specific column, i
+            WebElement ele = Helper.locateElementByTestId("connectionstabs-eachtab-"+i+"-0");
+
+            Actions action = new Actions(SeleniumDriver.getDriver());
+            WaitHelper.waitForPageToLoad();
+            action.moveToElement(ele).perform();
+
+            if(Helper.isElementExists("connection-list-wrangle-link")){
+                ElementHelper.clickOnElement(Helper.locateElementByTestId("connection-list-wrangle-link"));
+                if (Helper.isElementExists("snackbar-success-icon")) {
+                    WaitHelper.waitForPageToLoad();
+                    ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-success-icon"));
+                    System.out.println("inside snack bar success icon");
+                }
+                else {
+
+//    public void clickOnFirstTabOfTheSecondColumn() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("dhanu-connection"));
+//    }
+//    @Then("Click on first tab of the third column")
+//    public void clickOnFirstTabOfTheThirdColumn() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("users-connection"));
+//    }
+//    @Then("Click on first tab of the fourth column")
+//    public void clickOnFirstTabOfTheFourthColumn() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("divami-connection"));
+//    }
+//    @Then("Click on first tab of the fifth column")
+//    public void clickOnFirstTabOfTheFifthColumn() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("downloads-connection"));
+//    }
     @Then("Hover&Click on the Wrangle button")
     public void hoverAndClickOnTheWranglerButton() {
         WaitHelper.waitForPageToLoad();
