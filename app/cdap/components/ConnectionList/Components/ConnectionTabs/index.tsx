@@ -57,7 +57,7 @@ export default function ConnectionsTabs({
   tabsData,
   handleChange,
   value,
-  index,
+  columnIndex,
   connectionId,
   setIsErrorOnNoWorkSpace,
   ...props
@@ -70,7 +70,7 @@ export default function ConnectionsTabs({
     setConnectionId(connectionId);
   }, []);
 
-  if (index === 0) {
+  if (columnIndex === 0) {
     DataPrepStore.dispatch({
       type: DataPrepActions.setConnectorType,
       payload: {
@@ -101,27 +101,24 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
-                data-testid={`${connectorType.name
-                  .toLowerCase()
-                  .replace(/\./g, ' ')
-                  .split(' ')
-                  .join('-')}-connection`}
+                data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
                 onClick={() => {
-                  if (index > 1) {
+                  if (columnIndex > 1) {
                     if (connectorType.canBrowse) {
-                      handleChange(connectorType, index);
+                      handleChange(connectorType, columnIndex);
                     }
                   } else {
-                    handleChange(connectorType, index);
+                    handleChange(connectorType, columnIndex);
                   }
                 }}
                 label={
-                  index > 1 ? (
+                  columnIndex > 1 ? (
                     connectorType.canBrowse ? (
                       <TabLabelCanBrowse
                         label={connectorType.name}
-                        count={index === 0 ? connectorType.count : undefined}
-                        index={index}
+                        count={columnIndex === 0 ? connectorType.count : undefined}
+                        columnIndex={columnIndex}
+                        connectorTypeIndex={connectorTypeIndex}
                       />
                     ) : (
                       <TabLabelCanSample
@@ -135,9 +132,10 @@ export default function ConnectionsTabs({
                   ) : (
                     <TabLabelCanBrowse
                       label={connectorType.name}
-                      count={index === 0 ? connectorType.count : undefined}
-                      index={index}
+                      count={columnIndex === 0 ? connectorType.count : undefined}
+                      columnIndex={columnIndex}
                       icon={connectorType.icon}
+                      connectorTypeIndex={connectorTypeIndex}
                     />
                   )
                 }
@@ -145,7 +143,7 @@ export default function ConnectionsTabs({
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
                 id={connectorType.name}
-                className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
+                className={columnIndex > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
           </Tabs>

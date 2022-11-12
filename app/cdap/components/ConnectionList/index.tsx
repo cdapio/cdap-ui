@@ -243,13 +243,16 @@ export default function ConnectionList() {
               );
           }
           return (
-            <Box className={classes.tabsContainerWithHeader}>
+            <Box
+              className={classes.tabsContainerWithHeader}
+              data-testid={`connection-column-${index}`}
+            >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
                 tabsData={each}
                 handleChange={selectedTabValueHandler}
                 value={each.selectedTab}
-                index={index}
+                columnIndex={index}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}

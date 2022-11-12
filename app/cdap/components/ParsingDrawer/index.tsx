@@ -32,7 +32,7 @@ import {
   defaultProperties,
 } from 'components/ParsingDrawer/defaultValues';
 import { useStyles } from 'components/ParsingDrawer/styles';
-import {IParsingDrawer} from "components/ParsingDrawer/types"
+import { IParsingDrawer } from 'components/ParsingDrawer/types';
 import Alert from '@material-ui/lab/Alert';
 
 export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {

@@ -25,13 +25,15 @@ import { useStyles } from './styles';
 export default function TabLabelCanBrowse({
   label,
   count,
-  index,
+  columnIndex,
   icon,
+  connectorTypeIndex,
 }: {
   label: string;
   count: number;
-  index: number;
+  columnIndex: number;
   icon?: JSX.Element;
+  connectorTypeIndex?: number;
 }) {
   const classes = useStyles();
 
@@ -54,7 +56,7 @@ export default function TabLabelCanBrowse({
     <CustomTooltip
       title={label}
       arrow
-      key={`tooltip-${index}`}
+      key={`tooltip-${columnIndex}`}
       data-testid="connections-tab-ref-label-browse"
     >
       <Box className={classes.labelContainerBox}>
@@ -64,11 +66,8 @@ export default function TabLabelCanBrowse({
             variant="body1"
             className={classes.labelStyles}
             ref={myLabelRef}
-            data-testid={`${label
-              .toLowerCase()
-              .split(' ')
-              .join('-')}-connection`}
             component="span"
+            data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
           >
             {label}
           </Typography>
@@ -76,10 +75,7 @@ export default function TabLabelCanBrowse({
             <Typography
               variant="body1"
               className={classes.labelStyles}
-              data-testid={`${label
-                .toLowerCase()
-                .split(' ')
-                .join('-')}-${count}`}
+              data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
               component="span"
             >{`(${count})`}</Typography>
           )}
@@ -102,10 +98,7 @@ export default function TabLabelCanBrowse({
           variant="body1"
           className={classes.labelStyles}
           ref={myLabelRef}
-          data-testid={`${label
-            .toLowerCase()
-            .split(' ')
-            .join('-')}-connection`}
+          data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
           component="span"
         >
           {label}
@@ -114,10 +107,7 @@ export default function TabLabelCanBrowse({
           <Typography
             variant="body1"
             className={classes.labelStyles}
-            data-testid={`${label
-              .toLowerCase()
-              .split(' ')
-              .join('-')}-${count}`}
+            data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
             component="span"
           >{`(${count})`}</Typography>
         )}

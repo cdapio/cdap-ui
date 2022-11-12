@@ -143,7 +143,7 @@ export default function TabLabelCanSample({
         data-testid="connections-tab-explore"
       >
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
+        <Typography variant="body2" className={classes.wrangleButton} data-testid="wrangle-text">
           Wrangle
         </Typography>
       </button>
