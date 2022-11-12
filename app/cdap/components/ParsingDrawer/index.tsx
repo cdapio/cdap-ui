@@ -32,9 +32,10 @@ import {
   defaultProperties,
 } from 'components/ParsingDrawer/defaultValues';
 import { useStyles } from 'components/ParsingDrawer/styles';
+import {IParsingDrawer} from "components/ParsingDrawer/types"
 import Alert from '@material-ui/lab/Alert';
 
-export default function({ setLoading, updateDataTranformation }) {
+export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [properties, setProperties] = useState(defaultProperties);
   const [schemaValue, setSchemaValue] = useState(null);
@@ -42,7 +43,7 @@ export default function({ setLoading, updateDataTranformation }) {
   const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
   const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
   const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
-  const [failureSchema, setFailureSchemaStatus] = useState(false);
+  const [failureSchema, setFailureSchemaStatus] = useState<boolean>(false);
   const [toaster, setToaster] = useState({ lastValue: null });
 
   const classes = useStyles();

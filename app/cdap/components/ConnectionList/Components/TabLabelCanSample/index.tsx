@@ -97,7 +97,17 @@ export default function TabLabelCanSample({
   ) : refValue ? (
     <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
-        <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
+        <Typography
+          variant="body2"
+          className={classes.labelStylesCanSample}
+          ref={myLabelRef}
+          data-testid={`${label
+            .toLowerCase()
+            .replace(/\./g, ' ')
+            .split(' ')
+            .join('-')}-connection`}
+          component="span"
+        >
           {label}
         </Typography>
         <button
@@ -106,7 +116,7 @@ export default function TabLabelCanSample({
           data-testid="connections-tab-ref-explore"
         >
           <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
+          <Typography variant="body2" className={classes.wrangleButton} data-testid="wrangle-text">
             Wrangle
           </Typography>
         </button>
@@ -114,7 +124,17 @@ export default function TabLabelCanSample({
     </CustomTooltip>
   ) : (
     <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
-      <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
+      <Typography
+        variant="body2"
+        className={classes.labelStylesCanSample}
+        ref={myLabelRef}
+        data-testid={`${label
+          .toLowerCase()
+          .replace(/\./g, ' ')
+          .split(' ')
+          .join('-')}-connection`}
+        component="span"
+      >
         {label}
       </Typography>
       <button

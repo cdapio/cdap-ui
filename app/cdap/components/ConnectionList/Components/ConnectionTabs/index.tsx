@@ -103,6 +103,7 @@ export default function ConnectionsTabs({
                 role="button"
                 data-testid={`${connectorType.name
                   .toLowerCase()
+                  .replace(/\./g, ' ')
                   .split(' ')
                   .join('-')}-connection`}
                 onClick={() => {
