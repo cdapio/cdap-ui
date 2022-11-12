@@ -40,7 +40,11 @@ export default function({
       open={openDrawer}
       data-testid="parsing-panel-widget"
     >
-      <Container className={classes.drawerContainerStyles} role="presentation">
+      <Container
+        className={classes.drawerContainerStyles}
+        role="presentation"
+        data-testid="parsing-panel-widget-container"
+      >
         <header className={classes.headerStyles}>
           <Box className={classes.headerTextWithBackIconStyles}>
             {showBackIcon && <ChevronLeftRoundedIcon className={classes.chevronLeftRounded} />}

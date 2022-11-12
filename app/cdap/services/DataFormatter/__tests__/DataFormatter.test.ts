@@ -109,7 +109,7 @@ describe('DataFormatter', () => {
           minute: 'numeric',
           second: 'numeric',
         })
-      ).toBe('Thursday, September 16, 2021, 10:33:30 AM');
+      ).toBe('Thursday, September 16, 2021 at 10:33:30 AM');
     });
   });
 });

@@ -19,7 +19,7 @@ import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/Sch
 import { useStyles } from 'components/ParsingDrawer/styles';
 import T from 'i18n-react';
 import React, { ChangeEvent } from 'react';
-import { importIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/importicon';
+import { importIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/importicon';
 import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
 
 export default function({

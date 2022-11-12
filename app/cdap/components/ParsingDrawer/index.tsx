@@ -32,17 +32,27 @@ import {
   defaultProperties,
 } from 'components/ParsingDrawer/defaultValues';
 import { useStyles } from 'components/ParsingDrawer/styles';
-import {IParsingDrawer} from "components/ParsingDrawer/types"
+import {
+  IParsingDrawer,
+  IDefaultProperties,
+  IDefaultErrorOnTransformations,
+  IConnectionPayload,
+  ISchemaValue,
+} from 'components/ParsingDrawer/types';
 import Alert from '@material-ui/lab/Alert';
 
 export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
-  const [properties, setProperties] = useState(defaultProperties);
-  const [schemaValue, setSchemaValue] = useState(null);
+  const [properties, setProperties] = useState<IDefaultProperties>(defaultProperties);
+  const [schemaValue, setSchemaValue] = useState<ISchemaValue>(null);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
-  const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
+  const [errorOnTransformation, setErrorOnTransformation] = useState<
+    IDefaultErrorOnTransformations
+  >(defaultErrorOnTransformations);
   const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
-  const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
+  const [connectionPayload, setConnectionPayload] = useState<IConnectionPayload>(
+    defaultConnectionPayload
+  );
   const [failureSchema, setFailureSchemaStatus] = useState<boolean>(false);
   const [toaster, setToaster] = useState({ lastValue: null });
 
