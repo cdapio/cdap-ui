@@ -74,7 +74,7 @@ interface IProperties {
   enableQuotedValues: boolean;
   fileEncoding: string;
   format: string;
-  schema: null | unknown;
+  schema: null | ISchemaValue;
   skipHeader: boolean;
   _pluginName: null | unknown;
 }
@@ -94,4 +94,15 @@ export interface ISnackbar {
 export interface ISuccessUpload {
   open: boolean;
   message: string;
+}
+
+export interface ISchemaValue {
+  fields: ISchemaFields[];
+  name: string;
+  type: string;
+}
+
+export interface ISchemaFields {
+  name: string;
+  type: string[];
 }
