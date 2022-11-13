@@ -30,9 +30,9 @@ public class ImportSchema {
         boolean flag = true;
         try {
             for (int i = 1; flag != false; i++) {
-                if (ElementHelper.isElementDisplayed(Helper.locateElementByTestId("connection-tab-" + i + "0"))) {
+                WebElement ele = Helper.locateElementByTestId("connection-tab-" + i + "0");
+                if (ElementHelper.isElementDisplayed(ele)) {
                     System.out.println("element found");
-                    WebElement ele = Helper.locateElementByTestId("connection-tab-" + i + "0");
 
                     Actions action = new Actions(SeleniumDriver.getDriver());
                     action.moveToElement(ele).perform();
@@ -56,39 +56,41 @@ public class ImportSchema {
             System.err.println("error: " + e);
         }
     }
-//
-        @Then("Click on the Import Schema button & Upload file")
-        public void clickOnTheImportSchemaButtonAndUploadFile () {
-            WaitHelper.waitForPageToLoad();
-            WebElement ele = Helper.locateElementByTestId("import-schema-text");
-            ele.click();
-            String file = "/Users/divami/Downloads/f2b01a87-fd9a-4af2-bcb1-c02a35f07d08-schema.json";
-            ele.sendKeys(file);
-        }
-        @Then("Click on the Apply button")
-        public void clickOnTheApplyButton () {
-            WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-apply-button"));
-        }
-//        @Then("Check if the Snackbar is displayed")
-//        public void checkIfTheSnackbarIsDisplayed () {
-//            WaitHelper.waitForPageToLoad();
-//            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
-//        }
-//        @Then("Verify if the toast message is displayed")
-//        public void verifyIfTheToastMessageIsDisplayed () {
-//            WaitHelper.waitForPageToLoad();
-//            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
-//        }
-        @Then("Click on the Cross icon")
-        public void clickOnTheCrossIcon () {
-            WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
-        }
-//        @Then("Verify if the User is on grid table page")
-//        public void verifyIfTheUserIsOnTheGridTablePage () {
-//            WaitHelper.waitForPageToLoad();
-//            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
-//        }
+
+    //
+    @Then("Click on the Import Schema button & Upload file")
+    public void clickOnTheImportSchemaButtonAndUploadFile() {
+        WaitHelper.waitForPageToLoad();
+        WebElement ele = Helper.locateElementByTestId("import-schema-text");
+        ele.click();
+        String file = "/Users/divami/Downloads/f2b01a87-fd9a-4af2-bcb1-c02a35f07d08-schema.json";
+        ele.sendKeys(file);
     }
 
+    @Then("Click on the Apply button")
+    public void clickOnTheApplyButton() {
+        WaitHelper.waitForPageToLoad();
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-apply-button"));
+    }
+
+    // @Then("Check if the Snackbar is displayed")
+    // public void checkIfTheSnackbarIsDisplayed () {
+    // WaitHelper.waitForPageToLoad();
+    // ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+    // }
+    // @Then("Verify if the toast message is displayed")
+    // public void verifyIfTheToastMessageIsDisplayed () {
+    // WaitHelper.waitForPageToLoad();
+    // ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+    // }
+    @Then("Click on the Cross icon")
+    public void clickOnTheCrossIcon() {
+        WaitHelper.waitForPageToLoad();
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
+    }
+    // @Then("Verify if the User is on grid table page")
+    // public void verifyIfTheUserIsOnTheGridTablePage () {
+    // WaitHelper.waitForPageToLoad();
+    // ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+    // }
+}
