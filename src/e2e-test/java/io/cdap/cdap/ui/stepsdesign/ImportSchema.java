@@ -35,6 +35,7 @@ public class ImportSchema {
                     System.out.println("element found");
 
                     Actions action = new Actions(SeleniumDriver.getDriver());
+                    
                     action.moveToElement(ele).perform();
                     if (Helper.isElementExists("connections-tab-explore")) {
                         ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-text"));

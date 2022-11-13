@@ -35,6 +35,8 @@ describe('Test TabLabelCanSample Component', () => {
         initialConnectionId={undefined}
         toggleLoader={() => null}
         setIsErrorOnNoWorkSpace={jest.fn()}
+        columnIndex={1}
+        connectorTypeIndex={3}
       />
     );
     const ele = screen.getByTestId(/connections-tab-label-simple/i);
@@ -50,6 +52,8 @@ describe('Test TabLabelCanSample Component', () => {
         initialConnectionId={undefined}
         toggleLoader={() => null}
         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+        columnIndex={1}
+        connectorTypeIndex={3}
       />
     );
     const ele = screen.getByTestId(/connections-tab-explore/i);
@@ -85,6 +89,8 @@ describe('Test TabLabelCanSample Component', () => {
               initialConnectionId="exl"
               toggleLoader={() => null}
               setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+              columnIndex={1}
+              connectorTypeIndex={3}
             />
           </Route>
         </Switch>

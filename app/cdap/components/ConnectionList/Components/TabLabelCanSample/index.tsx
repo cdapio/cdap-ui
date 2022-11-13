@@ -33,12 +33,17 @@ export default function TabLabelCanSample({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
+  columnIndex,
+  connectorTypeIndex,
 }: {
   label: string;
   entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+    columnIndex: number;
+  connectorTypeIndex:number;
+
 }) {
   const classes = useStyles();
 
@@ -101,12 +106,8 @@ export default function TabLabelCanSample({
           variant="body2"
           className={classes.labelStylesCanSample}
           ref={myLabelRef}
-          data-testid={`${label
-            .toLowerCase()
-            .replace(/\./g, ' ') // TODO: need comment here for regex behavior
-            .split(' ')
-            .join('-')}-connection`}
           component="span"
+          data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
         >
           {label}
         </Typography>
