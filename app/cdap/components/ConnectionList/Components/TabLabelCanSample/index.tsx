@@ -103,7 +103,7 @@ export default function TabLabelCanSample({
           ref={myLabelRef}
           data-testid={`${label
             .toLowerCase()
-            .replace(/\./g, ' ')
+            .replace(/\./g, ' ') // TODO: need comment here for regex behavior
             .split(' ')
             .join('-')}-connection`}
           component="span"
@@ -113,7 +113,7 @@ export default function TabLabelCanSample({
         <button
           className="wranglingHover"
           onClick={() => onExplore(entity)}
-          data-testid="connections-tab-ref-explore"
+          data-testid="connections-tab-explore"
         >
           <WrangleIcon />
           <Typography variant="body2" className={classes.wrangleButton} data-testid="wrangle-text">
