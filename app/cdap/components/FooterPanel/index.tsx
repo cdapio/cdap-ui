@@ -14,12 +14,14 @@
  * the License.
  */
 
-import { Box } from '@material-ui/core';
-import ColumnViewPanelTab from 'components/FooterPanel/Components/ColumnViewPanelTab';
-import DirectivesTab from 'components/FooterPanel/Components/DirectivesTab';
-import RecipeStepsTab from 'components/FooterPanel/Components/RecipeStepsTab';
-import TableMetaInfoTab from 'components/FooterPanel/Components/TableMetaInfoTab';
-import ZoomTab from 'components/FooterPanel/Components/ZoomTab';
+import { Box, IconButton } from '@material-ui/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
+import OutlinedLabel from 'components/common/RenderLabel/OutlinedLabel';
+import SimpleLabel from 'components/common/RenderLabel/SimpleLabel';
+import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
+import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -35,6 +37,46 @@ interface IFooterPanelProps {
   gridMetaInfo: IGridMetaInfo;
 }
 
+const ColumnViewBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 8px 32px;
+  gap: 8px;
+  width: 88px;
+  height: 40px;
+  border-left: 1px solid #3994ff66;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
+  border-right: 1px solid #3994ff66;
+  cursor: pointer;
+`;
+
+const DirectivesBox = styled(Box)`
+  text-align: center;
+  padding: 9.5px 12px;
+  gap: 8px;
+  width: 9.5%;
+  height: 40px;
+  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
+  border-left: 1px solid rgba(57, 148, 255, 0.4);
+  cursor: pointer;
+`;
+
+const ReciepeStepsBox = styled(Box)`
+  text-align: center;
+  padding: 9.5px 12px;
+  gap: 8px;
+  width: 13.5%;
+  height: 40px;
+  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
+  border-left: 1px solid rgba(57, 148, 255, 0.4);
+  cursor: pointer;
+`;
+
 const TabsWrapper = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -48,14 +90,77 @@ const TabsWrapper = styled(Box)`
   bottom: 54px;
 `;
 
-export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
+const TransformatedIconButton = styled(IconButton)`
+  transform: rotate(90deg);
+`;
+
+const ZoomBox = styled(Box)`
+  text-align: center;
+  gap: 8px;
+  width: 10.5%;
+  height: 40px;
+  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
+  border-left: 1px solid rgba(57, 148, 255, 0.4);
+  cursor: pointer;
+`;
+
+export interface ITableMetaInfoTabProps {
+  rowCount: number;
+  columnCount: number;
+}
+
+const LargeBox = styled(Box)`
+  width: 65%;
+  padding: 9.5px 32px;
+`;
+
+export interface IRecipeStepsTabProps {
+  recipeStepsCount: number;
+}
+
+export default function ({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
+
+  const { rowCount, columnCount } = gridMetaInfo;
+
   return (
     <TabsWrapper data-testid="footer-panel-wrapper">
-      <ColumnViewPanelTab />
-      <TableMetaInfoTab {...gridMetaInfo} />
-      <ZoomTab />
-      <DirectivesTab />
-      <RecipeStepsTab recipeStepsCount={recipeStepsCount} />
+      <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
+        <ColumnViewBox data-testid="footer-panel-column-view-panel-tab">{ColumnIcon}</ColumnViewBox>
+      </CustomTooltip>
+      <LargeBox data-testid="footer-panel-meta-info-tab">
+        <SimpleLabel>
+          <>
+            {`${T.translate(`${PREFIX}.currentData`)} 
+          - ${rowCount} ${T.translate(`${PREFIX}.rows`)} ${T.translate(
+              `features.WranglerNewUI.common.and`
+            )} ${columnCount} ${T.translate(`${PREFIX}.columns`)}`}
+          </>
+        </SimpleLabel>
+      </LargeBox>
+      <ZoomBox data-testid="footer-panel-zoom-tab">
+        <IconButton aria-label="zoom">
+          <ZoomInIcon />
+        </IconButton>
+        <SimpleLabel>
+          <>{`${T.translate(`${PREFIX}.zoomPercent100`)}`}</>
+        </SimpleLabel>
+        <TransformatedIconButton aria-label="arrow">
+          <ArrowRightIcon />
+        </TransformatedIconButton>
+      </ZoomBox>
+      <DirectivesBox data-testid="footer-panel-directives-tab">
+        <SimpleLabel>
+          <>{`${T.translate(`${PREFIX}.directives`)}`}</>
+        </SimpleLabel>
+      </DirectivesBox>
+      <ReciepeStepsBox data-testid="footer-panel-recipe-steps-tab">
+        <SimpleLabel>
+          <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
+        </SimpleLabel>
+        <OutlinedLabel>
+          <>{recipeStepsCount}</>
+        </OutlinedLabel>
+      </ReciepeStepsBox>
     </TabsWrapper>
   );
 }

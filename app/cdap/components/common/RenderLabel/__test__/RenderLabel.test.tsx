@@ -16,8 +16,8 @@
 
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import OutlinedLabel from 'components/FooterPanel/Components/common/RenderLabel/OutlinedLabel';
-import SimpleLabel from 'components/FooterPanel/Components/common/RenderLabel/SimpleLabel';
+import OutlinedLabel from 'components/common/RenderLabel/OutlinedLabel';
+import SimpleLabel from 'components/common/RenderLabel/SimpleLabel';
 
 describe('Testing Render Label Component', () => {
   it('Should render component with text as "Simple"', () => {
