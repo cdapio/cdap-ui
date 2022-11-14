@@ -56,10 +56,7 @@ describe('It should test SelectColumnList Component', () => {
       />
     );
 
-    const columnLabelType = screen.getByTestId('each-column-label-type-1');
-    expect(columnLabelType).toHaveTextContent('body_1 String');
-
-    const dataQualityCircularProgressBar = screen.getByTestId('data-quality-percent-1');
-    expect(dataQualityCircularProgressBar).toHaveTextContent('33.3%');
+    const columnLabelType = screen.getByTestId('each-column-label-type-0');
+    expect(columnLabelType).toHaveTextContent('body_0 Int');
   });
 });

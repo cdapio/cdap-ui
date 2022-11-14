@@ -49,7 +49,7 @@ export const RenderSemiCircularProgressBar = ({ wrapperComponentData, dataQualit
   const Wrapper = getProgressBarWrapperComponent(dataQualityList, index);
 
   return (
-    <Wrapper>
+    <Wrapper data-testid='semi-circular-progress-bar-wrapper'>
       <SemiCircleProgressBar
         strokeWidth="5"
         diameter="75"
