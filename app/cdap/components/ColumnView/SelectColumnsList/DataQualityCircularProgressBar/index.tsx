@@ -14,54 +14,35 @@
  * the License.
  */
 
-import { Typography } from '@material-ui/core';
-import React from 'react';
-import { useStyles } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/styles';
+import { Box } from '@material-ui/core';
 import { IDataQualityCircularProgressBarProps } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/types';
-
+import React from 'react';
+import SemiCircleProgressBar from 'react-progressbar-semicircle';
 import styled from 'styled-components';
 
-const RenderGraph = styled(Typography)`
-    border-bottom-color: ${(props) => props.color};
-    border-left-color: ${(props) => props.color};
-    transform: ${(props) => `rotate(${props.dataQualityPercentValue * 1.8 - 45}deg)`};
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 59;
-    height: 59;
-    borderRadius: 50%;
-    boxSizing: border-box;
-    border: ' 4px solid #dbdbdb;
+const RenderSemiCircularProgressBarWrapper = styled(Box)`
+  width: 75px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0.15px;
 `;
 
-export default function({ dataQualityPercentValue, index }: IDataQualityCircularProgressBarProps) {
-  const classes = useStyles();
-  return (
-    <>
-      <Typography
-        component="div"
-        className={classes.progress}
-        data-testid="circular-progress-bar-parent"
-      >
-        <Typography component="div" className={classes.barOverflow}>
-          <RenderGraph
-            color={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
-            dataQualityPercentValue={dataQualityPercentValue}
-            className={classes.bar}
-            component="div"
-          />
-        </Typography>
-        <Typography
-          component="span"
-          className={`${
-            dataQualityPercentValue === 0 ? classes.dataQualityGreen : classes.dataQualityRed
-          }`}
-          data-testid={`data-quality-percent-${index}`}
-        >
-          {dataQualityPercentValue.toFixed(1)}%
-        </Typography>
-      </Typography>
-    </>
-  );
-}
+export const GreenProgressBar = styled(RenderSemiCircularProgressBarWrapper)`
+  color: #8bcc74;
+`;
+
+export const RedProgressBar = styled(RenderSemiCircularProgressBarWrapper)`
+  color: #e97567;
+`;
+
+export const RenderSemiCircularProgressBar = ({ dataQualityPercentValue }) => (
+  <SemiCircleProgressBar
+    strokeWidth="5"
+    diameter="75"
+    percentage={dataQualityPercentValue}
+    stroke={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
+    showPercentValue={true}
+  />
+);
