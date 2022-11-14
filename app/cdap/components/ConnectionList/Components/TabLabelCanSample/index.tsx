@@ -41,9 +41,8 @@ export default function TabLabelCanSample({
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
-    columnIndex: number;
-  connectorTypeIndex:number;
-
+  columnIndex: number;
+  connectorTypeIndex: number;
 }) {
   const classes = useStyles();
 
@@ -107,7 +106,7 @@ export default function TabLabelCanSample({
           className={classes.labelStylesCanSample}
           ref={myLabelRef}
           component="span"
-          data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
+          data-testid={`connection-tab-label-${columnIndex}${connectorTypeIndex}`}
         >
           {label}
         </Typography>
@@ -129,12 +128,8 @@ export default function TabLabelCanSample({
         variant="body2"
         className={classes.labelStylesCanSample}
         ref={myLabelRef}
-        data-testid={`${label
-          .toLowerCase()
-          .replace(/\./g, ' ')
-          .split(' ')
-          .join('-')}-connection`}
         component="span"
+        data-testid={`connection-tab-label-${columnIndex}${connectorTypeIndex}`}
       >
         {label}
       </Typography>
