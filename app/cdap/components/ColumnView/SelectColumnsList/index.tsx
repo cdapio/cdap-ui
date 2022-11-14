@@ -23,20 +23,24 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
-import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
-import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
 import {
-  ISelectColumnListProps,
+  GreenSemiCircleProgressBar,
+  RedSemiCircleProgressBar,
+  RenderSemiCircularProgressBar,
+} from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
+import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
+import {
   IDataQualityRecord,
+  ISelectColumnListProps,
 } from 'components/ColumnView/SelectColumnsList/types';
+import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
+import { IHeaderNamesList } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
-import { IHeaderNamesList } from 'components/GridTable/types';
-import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
+import React, { useEffect, useState } from 'react';
 
-export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
+export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
   const classes = useStyles();
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
@@ -94,12 +98,13 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
                     </Box>
                   </TableCell>
                   <TableCell className={classes.nullValuesContainer}>
-                    {dataQualityList?.length && (
-                      <DataQualityCircularProgressBar
-                        dataQualityPercentValue={dataQualityList[index].value as number}
-                        index={index}
-                      />
-                    )}
+                    <RenderSemiCircularProgressBar
+                      wrapperComponentData={{
+                        dataQualityList,
+                        index
+                      }}
+                      dataQualityPercentValue={dataQualityList[index]?.value}
+                    />
                   </TableCell>
                 </TableRow>
               </TableBody>
