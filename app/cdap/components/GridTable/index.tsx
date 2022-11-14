@@ -246,13 +246,6 @@ export default function GridTable() {
     getGridTableData();
   }, [gridData]);
 
-  const setSnackbarState = (value: boolean) => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: value,
-    }));
-  };
-
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
@@ -310,19 +303,16 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
-      {snackbarState.open && (
-        <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
-          handleCloseError={() =>
-            setSnackbar({
-              open: false,
-            })
-          }
-          setSnackbarState={setSnackbarState}
-          isOpen={snackbarState.open}
-          description={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
-        />
-      )}
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }

@@ -199,12 +199,6 @@ export default function ConnectionList() {
     );
   };
 
-  const setSnackbarState = (value: boolean) => {
-    setSnackbar({
-      open: false,
-    });
-  };
-
   let headerContent;
 
   return (
@@ -275,19 +269,16 @@ export default function ConnectionList() {
           <LoadingSVG />
         </div>
       )}
-      {snackbarState.open && (
-        <Snackbar
-          handleCloseError={() =>
-            setSnackbar({
-              open: false,
-            })
-          }
-          setSnackbarState={setSnackbarState}
-          isOpen={snackbarState.open}
-          description={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
-        />
-      )}{' '}
+      <Snackbar
+        handleClose={() =>
+          setSnackbar({
+            open: false,
+          })
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }

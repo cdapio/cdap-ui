@@ -41,7 +41,7 @@ const SuccessIconWrapper = styled(CheckCircleOutlinedIcon)`
   ${IconComponent}
 `;
 
-const ClsoeIconWrapper = styled(CloseIcon)`
+const CloseIconWrapper = styled(CloseIcon)`
   color: #ffffff;
   cursor: pointer;
 `;
@@ -80,12 +80,7 @@ const TransitionMessage = styled(Typography)`
   font-size: 14px;
 `;
 
-export default function({
-  handleClose,
-  isSuccess,
-  messageToDisplay,
-  transitionAction,
-}: ITransitionProps) {
+export default function({ handleClose, isSuccess, message, transitionAction }: ITransitionProps) {
   const handleUndoOperation = () => {
     // TODO: this is the method used to undo the recent activity on transformations
   };
@@ -100,11 +95,7 @@ export default function({
             <ErrorOutlineIconWrapper data-testid={`snackbar-failure-icon`} />
           )}
           <TransitionLabel variant="body1" component="span">
-            {isSuccess ? (
-              <>{T.translate(`${PREFIX}.success`)}</>
-            ) : (
-              <>{T.translate(`${PREFIX}.failure`)}</>
-            )}
+            {isSuccess ? T.translate(`${PREFIX}.success`) : T.translate(`${PREFIX}.failure`)}
           </TransitionLabel>
         </TransitionTextWrapper>
         <TransitionActionsWrapper>
@@ -113,14 +104,14 @@ export default function({
               T.translate(`${PREFIX}.undo`)
             ) : (
               <Box>
-                <ClsoeIconWrapper onClick={handleClose} data-testid="snackbar-close-icon" />
+                <CloseIconWrapper onClick={handleClose} data-testid="snackbar-close-icon" />
               </Box>
             )}
           </TransitionAction>
         </TransitionActionsWrapper>
       </TransitionWrapper>
       <TransitionMessage variant="body1" component="span">
-        {messageToDisplay}
+        {message}
       </TransitionMessage>
     </Box>
   );

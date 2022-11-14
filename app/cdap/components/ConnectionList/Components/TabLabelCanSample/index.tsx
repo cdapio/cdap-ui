@@ -38,7 +38,6 @@ export default function TabLabelCanSample({
   setSnackbar,
 }: ITabLabelCanSampleProps) {
   const classes = useStyles();
-  const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);

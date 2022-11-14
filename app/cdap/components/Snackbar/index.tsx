@@ -21,10 +21,10 @@ import { ISnackbarProps } from 'components/Snackbar/types';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-const SnackbarWrapper = styled(Snackbar)`
+const CustomizedSnackbar = styled(Snackbar)`
   border-radius: 4px;
   width: 100%;
-  top: 48px !important;
+  top: 48px;
   background-color: ${(props) => (props.isSuccess ? green[600] : red[600])};
   padding: 15px 18px 14px 18px;
   display: block;
@@ -34,39 +34,30 @@ const SnackbarWrapper = styled(Snackbar)`
 `;
 
 export default function({
-  handleCloseError,
-  description = '',
+  message = '',
   isSuccess,
   snackbarAction,
-  isOpen,
-  setSnackbarState,
+  open,
+  handleClose,
 }: ISnackbarProps) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSnackbarState(false);
-      handleCloseError();
-    }, 5000);
+    const timer = setTimeout(() => handleClose(), 5000);
     return () => {
-      setSnackbarState(false);
+      handleClose();
       clearTimeout(timer);
     };
   }, []);
 
-  const handleClose = () => {
-    setSnackbarState(false);
-    handleCloseError();
-  };
-
   return (
-    <SnackbarWrapper
+    <CustomizedSnackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      open={isOpen}
+      open={open}
       isSuccess={isSuccess}
       TransitionComponent={() => (
         <Transition
-          handleClose={() => handleClose()}
+          handleClose={handleClose}
           isSuccess={isSuccess}
-          messageToDisplay={description}
+          message={message}
           transitionAction={snackbarAction}
         />
       )}

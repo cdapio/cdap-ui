@@ -14,12 +14,14 @@
  * the License.
  */
 
-import { snackbarDefaultValues } from 'components/ConnectionList/constants';
 import { ISnackbar } from 'components/Snackbar/types';
 import { useState } from 'react';
 
 export default function() {
-  const [snackbarState, setSnackbarState] = useState<ISnackbar>(snackbarDefaultValues);
+  const [snackbarState, setSnackbarState] = useState<ISnackbar>({
+    open: false,
+    isSuccess: false,
+  });
 
   function setSnackbar(value) {
     setSnackbarState(value);
