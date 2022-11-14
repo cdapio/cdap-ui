@@ -20,7 +20,7 @@ import React from 'react';
 import SemiCircleProgressBar from 'react-progressbar-semicircle';
 import styled from 'styled-components';
 
-const RenderSemiCircularProgressBarWrapper = styled(Box)`
+const SemiCircularProgressBarWrapper = styled(Box)`
   width: 75px;
   font-style: normal;
   font-weight: 400;
@@ -29,20 +29,34 @@ const RenderSemiCircularProgressBarWrapper = styled(Box)`
   letter-spacing: 0.15px;
 `;
 
-export const GreenProgressBar = styled(RenderSemiCircularProgressBarWrapper)`
-  color: #8bcc74;
+export const GreenSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
+  color: #8BCC74;
 `;
 
-export const RedProgressBar = styled(RenderSemiCircularProgressBarWrapper)`
-  color: #e97567;
+export const RedSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
+  color: #E97567;
 `;
 
-export const RenderSemiCircularProgressBar = ({ dataQualityPercentValue }) => (
-  <SemiCircleProgressBar
-    strokeWidth="5"
-    diameter="75"
-    percentage={dataQualityPercentValue}
-    stroke={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
-    showPercentValue={true}
-  />
-);
+const getProgressBarWrapperComponent = (dataQualityList, index) => {
+  return dataQualityList?.length && dataQualityList[index]?.value === 0
+    ? GreenSemiCircleProgressBar
+    : RedSemiCircleProgressBar
+}
+
+export const RenderSemiCircularProgressBar = ({ wrapperComponentData, dataQualityPercentValue }) => {
+
+  const { dataQualityList, index } = wrapperComponentData;
+  const Wrapper = getProgressBarWrapperComponent(dataQualityList, index);
+
+  return (
+    <Wrapper>
+      <SemiCircleProgressBar
+        strokeWidth="5"
+        diameter="75"
+        percentage={Math.floor(dataQualityPercentValue)}
+        stroke={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
+        showPercentValue={true}
+      />
+    </Wrapper>
+  )
+};

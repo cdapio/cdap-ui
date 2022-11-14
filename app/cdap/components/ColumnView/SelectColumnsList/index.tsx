@@ -25,8 +25,8 @@ import {
 } from '@material-ui/core';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
 import {
-  GreenProgressBar,
-  RedProgressBar,
+  GreenSemiCircleProgressBar,
+  RedSemiCircleProgressBar,
   RenderSemiCircularProgressBar,
 } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
 import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
@@ -40,7 +40,7 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 
-export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
+export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
   const classes = useStyles();
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
@@ -98,20 +98,13 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
                     </Box>
                   </TableCell>
                   <TableCell className={classes.nullValuesContainer}>
-                    {dataQualityList?.length &&
-                      (dataQualityList[index]?.value === 0 ? (
-                        <GreenProgressBar>
-                          <RenderSemiCircularProgressBar
-                            dataQualityPercentValue={dataQualityList[index].value as number}
-                          />
-                        </GreenProgressBar>
-                      ) : (
-                        <RedProgressBar>
-                          <RenderSemiCircularProgressBar
-                            dataQualityPercentValue={dataQualityList[index].value as number}
-                          />
-                        </RedProgressBar>
-                      ))}
+                    <RenderSemiCircularProgressBar
+                      wrapperComponentData={{
+                        dataQualityList,
+                        index
+                      }}
+                      dataQualityPercentValue={dataQualityList[index]?.value}
+                    />
                   </TableCell>
                 </TableRow>
               </TableBody>
