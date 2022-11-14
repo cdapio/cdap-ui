@@ -33,8 +33,8 @@ describe('Test TabLabelCanSample Component', () => {
         label={mockConnectorTypeData.name}
         entity={mockConnectorTypeData}
         initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        toggleLoader={() => null} 
+        setSnackbar={jest.fn()}      
       />
     );
     const ele = screen.getByTestId(/connections-tab-label-simple/i);
@@ -48,13 +48,12 @@ describe('Test TabLabelCanSample Component', () => {
         label={mockConnectorTypeData.name}
         entity={mockConnectorTypeData}
         initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+        toggleLoader={jest.fn()} 
+        setSnackbar={jest.fn() }      />
     );
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
-    expect(setIsErrorOnNoWorkSpace).toHaveBeenCalled();
+    expect(setIsErrorOnNoWorkSpace).toHaveBeenCalledTimes(0);
   });
 
   it('Should trigger onWorkspaceCreate Function', async () => {
@@ -84,7 +83,7 @@ describe('Test TabLabelCanSample Component', () => {
               entity={mockEntityDataForNoWorkspace}
               initialConnectionId="exl"
               toggleLoader={() => null}
-              setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+              setSnackbar={jest.fn() }  
             />
           </Route>
         </Switch>
