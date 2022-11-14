@@ -15,24 +15,46 @@
  */
 
 import { makeStyles } from '@material-ui/core';
+import grey from '@material-ui/core/colors';
 
 export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
+  usageAndSearchWrapper: {
+    background: '#616161',
+    boxShadow: '-3px -4px 15px rgba(68, 132, 245, 0.25)',
   },
-  directivePanelDiv: {
-    backgroundColor: '#ffffff',
-    position: 'fixed',
-    bottom: 50,
+  searchBar: {
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  inputWrapper: {
     width: '100%',
+  },
+  inputSearch: {
+    width: '95%',
+    marginLeft: 5,
+    outline: 0,
+    border: 0,
+    background: 'transparent',
+    color: '#FFFFFF',
+  },
+  label: {
+    color: '#94EC98',
+    fontSize: 14,
+  },
+  divider: {
+    backgroundColor: '#ffffff',
+  },
+  crossIcon: {
+    cursor: 'pointer',
+  },
+  infoLink: {
+    color: '#79B7FF',
+    fontSize: 14,
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'none',
+      color: '#79B7FF',
+    },
   },
 });

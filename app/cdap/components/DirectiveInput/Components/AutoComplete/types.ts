@@ -14,25 +14,17 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { IHeaderNamesList, IObject, IUsageDirectives } from 'components/DirectiveInput/types';
 
-export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
-  },
-  directivePanelDiv: {
-    backgroundColor: '#ffffff',
-    position: 'fixed',
-    bottom: 50,
-    width: '100%',
-  },
-});
+export interface IOnRowClickValue {
+  target: IObject;
+}
+export interface IAutoCompleteProps {
+  setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
+  isDirectiveSelected: boolean;
+  columnNamesList: IHeaderNamesList[];
+  onRowClick: (value: IOnRowClickValue) => void;
+  getDirectiveUsage: (results: IUsageDirectives[], value: boolean) => void;
+  onColumnSelected: (value: boolean) => void;
+  directiveInput: string;
+}
