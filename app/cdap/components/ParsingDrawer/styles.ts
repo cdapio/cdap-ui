@@ -98,7 +98,7 @@ export const useStyles = makeStyles(() => {
       color: '#5F6368',
     },
     inputWrapper: {
-      marginBottom: 10,
+      marginBottom: 15,
     },
     selectFieldStyles: {
       height: 40,
