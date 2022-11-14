@@ -256,7 +256,12 @@ export default function() {
     getGridTableData();
   }, [gridData]);
 
-  const isParsingPanel = dataprep?.insights?.name && isFirstWrangle && connectorType === 'File';
+  const isParsingPanel =
+    dataprep?.insights?.name &&
+    isFirstWrangle &&
+    connectorType === 'File' &&
+    Array.isArray(gridData?.headers) &&
+    gridData?.headers.length !== 0;
 
   return (
     <Box className={classes.container}>
@@ -285,7 +290,7 @@ export default function() {
               <TableRow>
                 {Array.isArray(missingDataList) &&
                   missingDataList?.length > 0 &&
-                  headersNamesList.length &&
+                  headersNamesList?.length > 0 &&
                   headersNamesList.map((each, index) => {
                     return missingDataList.map((item, itemIndex) => {
                       if (item.name === each.name) {
@@ -296,7 +301,8 @@ export default function() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowsDataList?.length &&
+              {Array.isArray(rowsDataList) &&
+                rowsDataList?.length > 0 &&
                 rowsDataList.map((eachRow, rowIndex) => {
                   return (
                     <TableRow key={`row-${rowIndex}`}>
