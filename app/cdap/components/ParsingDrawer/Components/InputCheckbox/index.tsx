@@ -33,7 +33,11 @@ export default function({ label, value, onChange, className }: IInputCheckboxPro
           data-testid={`parsing-checkbox-${label}`}
         />
       }
-      label={<Typography className={classes.labelTextStyles}>{label}</Typography>}
+      label={
+        <Typography className={classes.labelTextStyles} component="span">
+          {label}
+        </Typography>
+      }
     />
   );
 }

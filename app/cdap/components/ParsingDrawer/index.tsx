@@ -142,7 +142,7 @@ export default function({
         <Box className={classes.bottomSectionStyles}>
           <Box className={classes.infoWrapperStyles}>
             <InfoOutlinedIcon />
-            <Typography className={classes.infoTextStyles}>
+            <Typography className={classes.infoTextStyles} component="span">
               {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsingInfoText')}
             </Typography>
           </Box>
