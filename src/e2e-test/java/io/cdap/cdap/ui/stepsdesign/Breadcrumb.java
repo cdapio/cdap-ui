@@ -65,8 +65,16 @@ public class Breadcrumb {
     @Then("Click on the Home link button")
     public void clickOnTheHomeLinkButton() {
         WaitHelper.waitForPageToLoad();
+//        boolean flag = true;
         SeleniumDriver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-text"));
+//        for (int i = 0; flag == true; i++) {
+//            if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+//                flag = true;
+//            } else {
+//                flag = false;
+//            }
+//        }
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-Home"));
         System.out.println("clicked on home link from Data source page");
     }
 
@@ -96,7 +104,7 @@ public class Breadcrumb {
             }
         }
 
-        WebElement ele = Helper.locateElementByTestId("breadcrumb-home-link");
+        WebElement ele = Helper.locateElementByTestId("breadcrumb-home-Home");
         Actions action = new Actions(SeleniumDriver.getDriver());
         action.moveToElement(ele).perform();
         ele.click();
