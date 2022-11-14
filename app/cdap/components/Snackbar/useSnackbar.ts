@@ -15,13 +15,29 @@
  */
 
 import { ISnackbar } from 'components/Snackbar/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function() {
   const [snackbarState, setSnackbarState] = useState<ISnackbar>({
     open: false,
     isSuccess: false,
   });
+
+  useEffect(() => {
+    const timer = setTimeout(
+      () =>
+        setSnackbar(() => ({
+          open: false,
+        })),
+      5000
+    );
+    return () => {
+      setSnackbar(() => ({
+        open: false,
+      }));
+      clearTimeout(timer);
+    };
+  }, []);
 
   function setSnackbar(value) {
     setSnackbarState(value);

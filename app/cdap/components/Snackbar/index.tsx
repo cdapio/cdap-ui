@@ -40,14 +40,6 @@ export default function({
   open,
   handleClose,
 }: ISnackbarProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => handleClose(), 5000);
-    return () => {
-      handleClose();
-      clearTimeout(timer);
-    };
-  }, []);
-
   return (
     <CustomizedSnackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
