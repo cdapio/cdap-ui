@@ -95,9 +95,6 @@ export const useStyles = makeStyles(() => {
       marginRight: 60,
       marginBottom: 20,
     },
-    // marginBottomStyles: {
-    //   marginBottom: 20,
-    // },
     selectFieldStyles: {
       height: 40,
       background: '#FFFFFF',
