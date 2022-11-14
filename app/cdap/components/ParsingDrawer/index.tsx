@@ -21,11 +21,6 @@ import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/a
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
-import {
-  defaultConnectionPayload,
-  defaultErrorOnTransformations,
-  defaultProperties,
-} from 'components/ParsingDrawer/defaultValues';
 import { useStyles } from 'components/ParsingDrawer/styles';
 import {
   IConnectionPayload,
@@ -45,6 +40,34 @@ export default function({
   updateDataTranformation,
   closeParsingDrawer,
 }: IParsingDrawer) {
+  const defaultConnectionPayload = {
+    path: '',
+    connection: '',
+    sampleRequest: {
+      properties: {
+        format: '',
+        fileEncoding: '',
+        skipHeader: false,
+        enableQuotedValues: false,
+        schema: null,
+        _pluginName: null,
+      },
+      limit: 1000,
+    },
+  };
+
+  const defaultErrorOnTransformations = {
+    open: false,
+    message: '',
+  };
+
+  const defaultProperties = {
+    format: 'csv',
+    fileEncoding: 'UTF-8',
+    enableQuotedValues: false,
+    skipHeader: false,
+  };
+
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [properties, setProperties] = useState<IDefaultProperties>(defaultProperties);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
