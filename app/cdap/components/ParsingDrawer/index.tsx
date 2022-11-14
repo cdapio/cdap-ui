@@ -110,11 +110,10 @@ export default function({
   };
 
   const handleChange = (value: string | boolean, property: string) => {
-    value &&
-      setProperties((prev) => ({
-        ...prev,
-        [property]: property === 'format' ? (value as string).toLowerCase() : value,
-      }));
+    setProperties((prev) => ({
+      ...prev,
+      [property]: property === 'format' ? (value as string).toLowerCase() : value,
+    }));
   };
 
   const componentToRender = (
