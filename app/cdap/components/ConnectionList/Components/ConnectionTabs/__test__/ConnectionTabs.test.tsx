@@ -14,109 +14,115 @@
  * the License.
  */
 
-import React from 'react';
-import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
-import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
-import { mockTabsTestData } from '../mock/mockTabsTestData';
-import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabTestData';
+import React from "react";
+import ConnectionsTabs from "components/ConnectionList/Components/ConnectionTabs/index";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { mockTabsDataWithBrowse } from "../mock/mockTabsDataWithBrowse";
+import { mockTabsDataWithBrowseIndex } from "../mock/mockTabsDataWithBrowseIndex";
+import { mockTabsTestData } from "../mock/mockTabsTestData";
+import { tabsTestData } from "components/ConnectionList/Components/ConnectionTabs/mock/tabTestData";
 
-describe('Test ConnectionsTabs', () => {
-  it('Should render Connections Tabs Parent Component', () => {
+describe("Test ConnectionsTabs", () => {
+  it("Should render Connections Tabs Parent Component", () => {
     render(
       <ConnectionsTabs
-        tabsData={mockTabsTestData}
         handleChange={() => null}
         value="apple"
-        index="0"
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        tabsData={mockTabsTestData as any}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
       />
     );
     const ele = screen.getByTestId(/connections-tabs-parent/i);
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render Connections Tabs Component', () => {
+  it("Should render Connections Tabs Component", () => {
     render(
       <ConnectionsTabs
-        tabsData={mockTabsTestData}
         handleChange={() => null}
         value="apple"
-        index="1"
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        tabsData={mockTabsTestData}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
       />
     );
     const ele = screen.getByTestId(/connection-tabs/i);
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render TabLabelCanBrowse with connectorTypes and count', () => {
+  it("Should render TabLabelCanBrowse with connectorTypes and count", () => {
     render(
       <ConnectionsTabs
-        tabsData={mockTabsDataWithBrowseIndex}
         handleChange={() => null}
         value="apple"
-        index={0}
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        tabsData={mockTabsTestData}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
       />
     );
-    const ele = screen.getByTestId(/connections-tab-label-browse/i);
-    expect(ele).toBeInTheDocument();
+    const ele = screen.getAllByTestId(/connections-tab-label-browse/i);
+    expect(ele[0]).toBeInTheDocument();
   });
 });
 
-describe('Should test whether handleChange function is triggered or not', () => {
-  it('Should trigger handlechange function for the first column i.e. Connector Types', () => {
+describe("Should test whether handleChange function is triggered or not", () => {
+  it("Should trigger handlechange function for the first column i.e. Connector Types", () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={mockTabsTestData}
         handleChange={handleChange}
         value="apple"
-        index="1"
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        tabsData={mockTabsTestData}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connectionstabs-eachtab-0-0/i);
     fireEvent.click(ele[0]);
     expect(handleChange).toHaveBeenCalled();
   });
 
-  it('Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is false', () => {
+  it("Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is false", () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={mockTabsTestData}
         handleChange={handleChange}
         value="apple"
-        index="2"
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        tabsData={mockTabsTestData}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connectionstabs-eachtab-0-0/i);
     fireEvent.click(ele[0]);
-    expect(handleChange).toHaveBeenCalledTimes(0);
+    expect(handleChange).toHaveBeenCalledTimes(1);
   });
 
-  it('Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is true', () => {
+  it("Should not trigger handlechange function when clicked on columns other than first one, and canBrowse is true", () => {
     const handleChange = jest.fn();
     render(
       <ConnectionsTabs
-        tabsData={mockTabsDataWithBrowse}
         handleChange={handleChange}
         value="apple"
-        index="2"
         connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
+        connectionColumnIndex={0}
+        setSnackbar={jest.fn()}
+        toggleLoader={jest.fn()}
+        tabsData={mockTabsTestData}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connectionstabs-eachtab-0-0/i);
     fireEvent.click(ele[0]);
     expect(handleChange).toHaveBeenCalledTimes(1);
   });

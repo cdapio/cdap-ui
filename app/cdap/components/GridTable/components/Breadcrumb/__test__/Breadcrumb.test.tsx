@@ -32,6 +32,6 @@ describe('Test Breadcrumb Component', () => {
   );
 
   it('Should have the Home text in the Breadcrumb', () => {
-    expect(screen.getByTestId('breadcrumb-home-text')).toHaveTextContent('Home');
+    expect(screen.getByTestId('breadcrumb-home-link')).toHaveTextContent('Home');
   });
 });
