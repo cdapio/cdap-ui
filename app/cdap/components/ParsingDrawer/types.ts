@@ -54,6 +54,7 @@ interface IParsingPopupBodyPropsValues {
 export interface IParsingDrawer {
   setLoading: Dispatch<SetStateAction<boolean>>;
   updateDataTranformation: (wid: string) => void;
+  closeParsingDrawer: () => void;
 }
 
 export interface IDefaultErrorOnTransformations {

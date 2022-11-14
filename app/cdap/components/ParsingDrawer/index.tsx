@@ -14,13 +14,12 @@
  * the License.
  */
 
-import { Button, Typography } from '@material-ui/core';
+import { Button, Container, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
-import DrawerWidget from 'components/DrawerWidget';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
 import {
   defaultConnectionPayload,
@@ -38,8 +37,14 @@ import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { MouseEvent } from 'react';
+import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeader';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
-export default function({ setLoading, updateDataTranformation }: IParsingDrawer) {
+export default function({
+  setLoading,
+  updateDataTranformation,
+  closeParsingDrawer,
+}: IParsingDrawer) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [properties, setProperties] = useState<IDefaultProperties>(defaultProperties);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
@@ -113,12 +118,25 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
   };
 
   const componentToRender = (
-    <DrawerWidget
-      headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
-      openDrawer={drawerStatus}
-      showDivider={true}
-      closeClickHandler={() => setDrawerStatus(false)}
-    >
+    <Container className={classes.drawerContainerStyles} role="presentation">
+      <header className={classes.headerStyles}>
+        <Box className={classes.headerTextWithBackIconStyles}>
+          <DrawerWidgetHeading
+            headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
+          />
+        </Box>
+        <Box className={classes.headerRightStyles}>
+          <div className={classes.dividerLineStyles} />
+          <CloseRoundedIcon
+            className={classes.pointerStyles}
+            color="action"
+            fontSize="large"
+            onClick={closeParsingDrawer}
+            data-testid="drawer-widget-close-round-icon"
+          />
+        </Box>
+      </header>
+
       <Box className={classes.bodyContainerStyles}>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
 
@@ -148,7 +166,7 @@ export default function({ setLoading, updateDataTranformation }: IParsingDrawer)
           messageToDisplay={errorOnTransformation.message}
         />
       )}
-    </DrawerWidget>
+    </Container>
   );
 
   return drawerStatus && componentToRender;
