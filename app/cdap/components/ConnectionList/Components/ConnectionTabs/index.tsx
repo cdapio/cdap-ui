@@ -127,6 +127,8 @@ export default function ConnectionsTabs({
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        columnIndex={columnIndex}
+                        connectorTypeIndex={connectorTypeIndex}
                       />
                     )
                   ) : (

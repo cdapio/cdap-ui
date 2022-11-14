@@ -33,12 +33,17 @@ export default function TabLabelCanSample({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
+  columnIndex,
+  connectorTypeIndex,
 }: {
   label: string;
   entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+    columnIndex: number;
+  connectorTypeIndex:number;
+
 }) {
   const classes = useStyles();
 
@@ -101,19 +106,15 @@ export default function TabLabelCanSample({
           variant="body2"
           className={classes.labelStylesCanSample}
           ref={myLabelRef}
-          data-testid={`${label
-            .toLowerCase()
-            .replace(/\./g, ' ')
-            .split(' ')
-            .join('-')}-connection`}
           component="span"
+          data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
         >
           {label}
         </Typography>
         <button
           className="wranglingHover"
           onClick={() => onExplore(entity)}
-          data-testid="connections-tab-ref-explore"
+          data-testid="connections-tab-explore"
         >
           <WrangleIcon />
           <Typography variant="body2" className={classes.wrangleButton} data-testid="wrangle-text">
