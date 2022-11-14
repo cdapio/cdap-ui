@@ -32,7 +32,7 @@ public class ImportSchema {
                     System.out.println("element found at index = " + i);
                     WebElement button = Helper.locateElementByTestId("connection-tab-label-" + i + "0");
                     Actions action = new Actions(SeleniumDriver.getDriver());
-                    action.moveToElement(button).build().perform();''''
+                    action.moveToElement(button).build().perform();
                     if (Helper.isElementExists("connections-tab-explore",button)) {
                         ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-text"));
                         System.out.println("wrangle clicked");
