@@ -44,7 +44,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
   return (
     <Box>
       <Box className={classes.formFieldWrapperStyles}>
-        <InputLabel className={classes.labelTextStyles}>
+        <InputLabel className={classes.labelTextStyles} data-testid="popup-body-label-text-format">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}
         </InputLabel>
         <InputSelect
@@ -62,7 +62,10 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
       </Box>
 
       <Box className={classes.formFieldWrapperStyles}>
-        <InputLabel className={classes.labelTextStyles}>
+        <InputLabel
+          className={classes.labelTextStyles}
+          data-testid="popup-body-label-text-encoding"
+        >
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
         </InputLabel>
         <InputSelect

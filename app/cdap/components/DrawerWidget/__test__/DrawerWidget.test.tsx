@@ -17,7 +17,7 @@
 import { render } from '@testing-library/react';
 
 import DrawerWidget from 'components/DrawerWidget';
-import { PARSING } from 'components/ParsingDrawer/constants';
+// import { PARSING } from 'components/ParsingDrawer/constants';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
@@ -33,7 +33,7 @@ describe('It should test DrawerWidget Component', () => {
         <Switch>
           <Route>
             <DrawerWidget
-              headingText={PARSING}
+              headingText={''}
               openDrawer={jest.fn}
               showDivider={true}
               headerActionTemplate={<div />}
