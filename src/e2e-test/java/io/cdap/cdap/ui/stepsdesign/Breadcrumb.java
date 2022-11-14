@@ -79,7 +79,7 @@ public class Breadcrumb {
     }
 
     @Then("Click on the Exploration card with \\\"(.*)\\\"")
-    public void clickOnTheExplorationCard(String testId) {
+    public void clickOnTheExplorationCard(int testId) {
         WaitHelper.waitForPageToLoad();
 
         SeleniumDriver.getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));

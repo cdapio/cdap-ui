@@ -26,4 +26,4 @@ Feature: Breadcrumb - Navigate to the application
     Then Click on the Home link of wrangle page
     Examples:
          | connectionLabel | connectionTestId |testId|
-         | PostgreSQL | postgresql |developers-md-1 |
+         | PostgreSQL | postgresql | 0 |
