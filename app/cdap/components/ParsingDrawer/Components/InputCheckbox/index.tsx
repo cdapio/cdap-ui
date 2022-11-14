@@ -15,13 +15,22 @@
  */
 
 import { Checkbox, FormControlLabel, Typography } from '@material-ui/core';
-import { useStyles } from 'components/ParsingDrawer/styles';
 import { IInputCheckboxProps } from 'components/ParsingDrawer/types';
 import React from 'react';
+import styled from 'styled-components';
+
+const Label = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: #5f6368; /* Mui Colors not available */
+  opacity: 0.8;
+  margin-left: 10px;
+`;
 
 export default function({ label, value, onChange, className }: IInputCheckboxProps) {
-  const classes = useStyles();
-
   return (
     <FormControlLabel
       className={className}
@@ -33,11 +42,7 @@ export default function({ label, value, onChange, className }: IInputCheckboxPro
           data-testid={`parsing-checkbox-${label}`}
         />
       }
-      label={
-        <Typography className={classes.labelTextStyles} component="span">
-          {label}
-        </Typography>
-      }
+      label={<Label>{label}</Label>}
     />
   );
 }

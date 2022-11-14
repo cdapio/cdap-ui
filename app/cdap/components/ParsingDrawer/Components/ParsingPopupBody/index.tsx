@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, InputLabel } from '@material-ui/core';
+import { Box, InputLabel, Typography } from '@material-ui/core';
 import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
 import InputSelect from 'components/ParsingDrawer/Components/InputSelect';
 import {
@@ -25,6 +25,49 @@ import { useStyles } from 'components/ParsingDrawer/styles';
 import { IOptions, IParsingPopupBodyProps } from 'components/ParsingDrawer/types';
 import T from 'i18n-react';
 import React, { ChangeEvent, useEffect } from 'react';
+import styled from 'styled-components';
+
+const FormFieldWrapper = styled(Box)`
+  width: calc(100% - 60px);
+  margin-right: 60px;
+  margin-bottom: 15px;
+`;
+
+const CheckBox = styled(InputCheckbox)`
+  display: flex;
+  width: 100%;
+  margin-bottom: 0px;
+`;
+
+const Label = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #5f6368;
+`;
+
+const SelectField = styled(InputSelect)`
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #DADCE0;
+  border-radius: 4,
+  padding: 5px 15px 0px 15px;
+  font-size: 14px;
+  & :before: {
+  display: none;
+  }
+  & :focus-visible: {
+  outline: none !important;
+  }
+  & :after: {
+  display: none;
+  }
+  & .MuiInputBase-input': {
+  padding: 6px 0px 11px;
+  }
+`;
 
 export default function({ values, changeEventListener }: IParsingPopupBodyProps) {
   const classes = useStyles();
@@ -43,10 +86,10 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
 
   return (
     <Box>
-      <Box className={classes.formFieldWrapperStyles}>
-        <InputLabel className={classes.labelTextStyles} data-testid="popup-body-label-text-format">
+      <FormFieldWrapper>
+        <Label data-testid="popup-body-label-text-format">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}
-        </InputLabel>
+        </Label>
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
           className={classes.selectFieldStyles}
@@ -59,15 +102,11 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           }
           options={FORMAT_OPTIONS}
         />
-      </Box>
-
-      <Box className={classes.formFieldWrapperStyles}>
-        <InputLabel
-          className={classes.labelTextStyles}
-          data-testid="popup-body-label-text-encoding"
-        >
+      </FormFieldWrapper>
+      <FormFieldWrapper>
+        <Label data-testid="popup-body-label-text-encoding">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
-        </InputLabel>
+        </Label>
         <InputSelect
           classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
           className={classes.selectFieldStyles}
@@ -80,24 +119,20 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           }
           options={CHAR_ENCODING_OPTIONS}
         />
-      </Box>
-
-      <InputCheckbox
+      </FormFieldWrapper>
+      <CheckBox
         label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues')}
         value={enableQuotedValues}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
-        className={classes.checkboxStyles}
       />
-
-      <InputCheckbox
+      <CheckBox
         label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
         }
-        className={classes.checkboxStyles}
       />
     </Box>
   );
