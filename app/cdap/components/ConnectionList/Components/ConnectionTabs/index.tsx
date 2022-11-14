@@ -96,6 +96,7 @@ export default function ConnectionsTabs({
               indicator: classes.indicator,
               root: classes.tabsContainer,
             }}
+            data-testid={`connection-tab-column-${index}`}
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
@@ -124,6 +125,7 @@ export default function ConnectionsTabs({
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        dataTestId={`tab-label-can-sample-${index}${connectorTypeIndex}`}
                       />
                     )
                   ) : (
@@ -138,7 +140,7 @@ export default function ConnectionsTabs({
                 value={connectorType.name}
                 disableTouchRipple
                 key={`${connectorType.name}=${connectorTypeIndex}`}
-                id={connectorType.name}
+                data-testid={`connection-tab-each-${index}${connectorTypeIndex}`}
                 className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
