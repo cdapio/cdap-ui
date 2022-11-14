@@ -93,7 +93,7 @@ export const useStyles = makeStyles(() => {
     formFieldWrapperStyles: {
       width: 'calc(100% - 60px)',
       marginRight: 60,
-      marginBottom: 20,
+      marginBottom: 15,
     },
     selectFieldStyles: {
       height: 40,
