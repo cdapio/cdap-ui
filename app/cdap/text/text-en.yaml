@@ -664,6 +664,28 @@ features:
           ListingInfo:
             label: "{dirsCount} directories and {filesCount} files"
           selectData: Select data
+    DataPrepStatistics:
+      warningTitle: Warning
+      warning: "Statistics are based on a {numRows}-row sample and may not be representative of the
+          full dataset."
+      DataPrepInfo:
+        bottom: Bottom 10%
+        bottomPrefix: "≤ "
+        distinctStrings: Distinct Strings
+        distinctVals: Distinct Values
+        earliest: Earliest 10%
+        earliestPrefix: "before "
+        latest: Latest 10%
+        latestPrefix: "after "
+        mean: Mean
+        meanStrLength: Mean String Length
+        median: Median
+        mode: Mode
+        mostFrequentStr: Most Frequent String
+        nullCells: Null Cells
+        nullCellsNone: None
+        top: Top 10%
+        topPrefix: "≥ "
     Directives:
       accept: Ok
       apply: Apply

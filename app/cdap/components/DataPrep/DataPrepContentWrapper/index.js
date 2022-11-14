@@ -31,11 +31,9 @@ import classnames from 'classnames';
 import T from 'i18n-react';
 require('./DataPrepContentWrapper.scss');
 
-const DataPrepVisualization = Loadable({
+const DataPrepStatistics = Loadable({
   loader: () =>
-    import(
-      /* webpackChunkName: "DataprepVisualization" */ 'components/DataPrep/DataPrepVisualization'
-    ),
+    import(/* webpackChunkName: "DataPrepStatistics" */ 'components/DataPrep/DataPrepStatistics'),
   loading: LoadingSVGCentered,
 });
 const PREFIX = 'features.DataPrep.TopPanel';
@@ -153,7 +151,7 @@ export default class DataPrepContentWrapper extends Component {
     const vizPart = (
       <div className="row">
         <div className="col-12">
-          <DataPrepVisualization />
+          <DataPrepStatistics />
         </div>
       </div>
     );
