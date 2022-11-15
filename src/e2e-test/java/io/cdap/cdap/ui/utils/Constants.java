@@ -24,9 +24,10 @@ public class Constants {
   public static final int TEST_TIMEOUT_TIME = 10000;
   public static final int RETRY_INTERVAL = 2000;
   public static final String TEST_TIMEOUT_MESSAGE = "Timed out after" +
-    String.valueOf(TEST_TIMEOUT_TIME / 1000) +
-    "seconds";
+      String.valueOf(TEST_TIMEOUT_TIME / 1000) +
+      "seconds";
 
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
   public static final String BASE_URL = "http://localhost:11011";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
@@ -47,7 +48,7 @@ public class Constants {
   public static final String DEFAULT_GCS_FILE = "purchase_bad.csv";
 
   public static final String DEFAULT_BIGQUERY_CONNECTION_NAME = "bigquery_" +
-    String.valueOf(getRandomArbitrary(1, 10000));
+      String.valueOf(getRandomArbitrary(1, 10000));
   public static final String DEFAULT_BIGQUERY_DATASET = "cdap_gcp_ui_test";
   public static final String DEFAULT_BIGQUERY_TABLE = "users";
 
@@ -55,7 +56,7 @@ public class Constants {
   public static final String DEFAULT_SPANNER_DATABASE = "test";
   public static final String DEFAULT_SPANNER_TABLE = "users";
   public static final String DEFAULT_SPANNER_CONNECTION_NAME = "spanner_" +
-    String.valueOf(getRandomArbitrary(1, 10000));
+      String.valueOf(getRandomArbitrary(1, 10000));
 
   public static final String RUNTIME_ARGS_DEPLOYED_SELECTOR = "runtimeargs-deployed";
   public static final String RUNTIME_ARGS_KEY_SELECTOR = "runtimeargs-key";

@@ -341,6 +341,7 @@ export default function GridTable() {
                         <GridTextCell
                           cellValue={eachRow[eachKey.name] || '--'}
                           key={`${eachKey.name}-${eachIndex}`}
+                          dataTestId={`table-cell-${rowIndex}${eachIndex}`}
                         />
                       );
                     })}
