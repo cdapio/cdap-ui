@@ -18,7 +18,7 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface IParsingHeaderActionTemplateProps {
   setSuccessUpload: Dispatch<SetStateAction<ITransformationMessage>>;
-  handleSchemaUpload: (iSchemaProps) => void;
+  handleSchemaUpload: (ISchemaProps) => void;
   setErrorOnTransformation: Dispatch<SetStateAction<ITransformationMessage>>;
 }
 interface ITransformationMessage {
@@ -26,7 +26,7 @@ interface ITransformationMessage {
   message: ReactNode;
 }
 
-interface iSchemaProps {
+interface ISchemaProps {
   type: string;
   name: string;
   fields: Ifields;

@@ -16,18 +16,42 @@
 
 import { Box, Typography } from '@material-ui/core';
 import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
-import { useStyles } from 'components/ParsingDrawer/styles';
 import T from 'i18n-react';
 import React, { ChangeEvent } from 'react';
-import { importIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/importicon';
 import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
+import styled from 'styled-components';
+import { ImportSchemaIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/ImportSchemaIcon';
+const ImportSchemaInputLabelWrapper = styled(Box)`
+  display: flex !important;
+`;
+
+const ImportFileInput = styled.input`
+  cursor: pointer;
+  margin-bottom: 0px !important;
+  display: none;
+`;
+
+const ImportSchemaIconTextWrapper = styled.label`
+  cursor: pointer;
+  margin-bottom: 0px !important;
+  display: flex;
+`;
+
+const ImportSchemaText = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #000000;
+  margin-left: 10px;
+`;
 
 export default function({
   setSuccessUpload,
   handleSchemaUpload,
   setErrorOnTransformation,
 }: IParsingHeaderActionTemplateProps) {
-  const classes = useStyles();
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
     const schemaFile = event.target.files[0];
     const reader = new FileReader();
@@ -55,25 +79,20 @@ export default function({
     };
   };
   return (
-    <Box className={classes.importSchemaIconText} data-testid="import-schema-input-wrapper">
-      <input
+    <ImportSchemaInputLabelWrapper data-testid="import-schema-input-wrapper">
+      <ImportFileInput
         data-testId="fileinput"
         id="file"
         type="file"
         accept=".json"
         onChange={handleFile}
-        className={classes.importFileInput}
       />
-      <label htmlFor="file" className={classes.importSchemaLabel}>
-        {importIcon}
-        <Typography
-          className={classes.importSchemaTextStyles}
-          data-testid="import-schema-text"
-          component="span"
-        >
+      <ImportSchemaIconTextWrapper htmlFor="file">
+        {ImportSchemaIcon}
+        <ImportSchemaText data-testid="import-schema-text" component="span">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}
-        </Typography>
-      </label>
-    </Box>
+        </ImportSchemaText>
+      </ImportSchemaIconTextWrapper>
+    </ImportSchemaInputLabelWrapper>
   );
 }

@@ -259,12 +259,16 @@ export default function() {
 
   return (
     <Box data-testid="grid-table-container">
-      {dataprep?.insights?.name && isFirstWrangle && connectorType === 'File' && (
-        <ParsingDrawer
-          updateDataTranformation={(wid) => updateDataTranformation(wid)}
-          setLoading={setLoading}
-        />
-      )}
+      {dataprep?.insights?.name &&
+        isFirstWrangle &&
+        connectorType === 'File' &&
+        Array.isArray(gridData?.headers) &&
+        gridData?.headers.length !== 0 && (
+          <ParsingDrawer
+            updateDataTranformation={(wid) => updateDataTranformation(wid)}
+            setLoading={setLoading}
+          />
+        )}
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
