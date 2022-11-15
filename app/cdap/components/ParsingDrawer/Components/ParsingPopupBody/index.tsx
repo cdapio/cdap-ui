@@ -93,14 +93,19 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         />
       </FormFieldWrapper>
       <CheckBox
-        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues')}
+        label={T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.enableQuotedValues'
+        ).toString()}
         value={enableQuotedValues}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
       />
       <CheckBox
-        label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
+        label={
+          T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')
+            .toString
+        }
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
