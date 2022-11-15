@@ -70,7 +70,7 @@ public class ParsingPanel {
 //                    if (Helper.isElementExists("connections-label-" + i + "0")) {
                         WebElement button = Helper.locateElementByTestId("connections-label-" + i + "0");
                         System.out.println("label button found");
-//                        ElementHelper.hoverOverElement(button);
+                    ElementHelper.hoverOverElement(button);
              try {
                  if(i==6){
                      WebElement gridBtn = Helper.locateElementByTestId("load-to-grid-wrapper");
