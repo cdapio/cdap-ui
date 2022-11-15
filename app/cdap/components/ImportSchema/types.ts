@@ -23,7 +23,7 @@ export interface IParsingHeaderActionTemplateProps {
 }
 interface ITransformationMessage {
   open: boolean;
-  message: ReactNode;
+  message: string;
 }
 
 interface ISchemaProps {

@@ -58,7 +58,7 @@ export interface IParsingDrawer {
 
 export interface IDefaultErrorOnTransformations {
   open?: boolean;
-  message?: string | ReactNode;
+  message?: string;
 }
 
 export interface IConnectionPayload {
@@ -74,7 +74,7 @@ interface IProperties {
   enableQuotedValues: boolean;
   fileEncoding: string;
   format: string;
-  schema: null | ISchemaValue;
+  schema: null | string;
   skipHeader: boolean;
   _pluginName: null | unknown;
 }

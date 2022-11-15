@@ -17,7 +17,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import ParsingHeaderActionTemplate from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate';
+import ImportSchema from 'components/ImportSchema';
 import history from 'services/history';
 import T from 'i18n-react';
 
@@ -27,7 +27,7 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingHeaderActionTemplate
+            <ImportSchema
               setSuccessUpload={() => jest.fn()}
               handleSchemaUpload={() => jest.fn()}
               setErrorOnTransformation={() => jest.fn()}

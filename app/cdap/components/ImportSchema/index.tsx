@@ -18,9 +18,9 @@ import { Box, Typography } from '@material-ui/core';
 import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
 import T from 'i18n-react';
 import React, { ChangeEvent } from 'react';
-import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
+import { IParsingHeaderActionTemplateProps } from 'components/ImportSchema/types';
 import styled from 'styled-components';
-import { ImportSchemaIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/ImportSchemaIcon';
+import { ImportSchemaIcon } from 'components/ImportSchema/IconStore/ImportSchemaIcon';
 const ImportSchemaInputLabelWrapper = styled(Box)`
   display: flex !important;
 `;
@@ -66,14 +66,14 @@ export default function({
           open: true,
           message: T.translate(
             'features.WranglerNewUI.WranglerNewParsingDrawer.importSchemaSuccessMessage'
-          ),
+          ).toString(),
         });
       } catch (error) {
         setErrorOnTransformation({
           open: true,
           message: T.translate(
             'features.WranglerNewUI.WranglerNewParsingDrawer.importSchemaErrorMessage'
-          ),
+          ).toString(),
         });
       }
     };
