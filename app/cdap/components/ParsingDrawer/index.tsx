@@ -14,13 +14,15 @@
  * the License.
  */
 
-import { Button, Container, Typography, IconButton } from '@material-ui/core';
+import { Button, Container, Drawer, IconButton, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
+import { useStyles } from 'components/ParsingDrawer/styles';
 import {
   IConnectionPayload,
   IDefaultErrorOnTransformations,
@@ -29,12 +31,8 @@ import {
 } from 'components/ParsingDrawer/types';
 import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
-import React, { useContext, useEffect, useState } from 'react';
-import { MouseEvent } from 'react';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import React, { MouseEvent, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import DrawerWidget from 'components/common/DrawerWidget';
-import { useStyles } from './styles';
 
 const ImportIcon = () => {
   return (
@@ -73,8 +71,8 @@ const DrawerHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 15px;
-  padding-right: 0px;
+  padding-left: 30px;
+  padding-right: 20px;
   margin-bottom: 5px;
 `;
 
@@ -112,7 +110,8 @@ const ParsingPopUpBodyContainer = styled(Box)`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  height: calc(100% - 30px);
+  height: calc(100% - 90px);
+  padding: 0px 30px;
 `;
 
 const ParsingPopUpBottomSection = styled(Box)`
@@ -246,42 +245,38 @@ export default function({
 
   const classes = useStyles();
 
-  const ContainerHeaderBox = styled(Box)`
-    display: flex;
-    flexdirection: row;
-    justifycontent: space-between;
+  const CustomizedDrawer = styled(Drawer)`
+    & .MuiDrawer-paper {
+      top: 46px;
+      height: calc(100vh - 47px);
+      width: 500px;
+    }
   `;
 
   return (
     <ParsingDrawerContainer role="presentation">
-      <DrawerWidget
-        open={drawerStatus}
-        headerElement={
-          <DrawerHeader>
-            <TextIconWrapper>
-              <Box className={classes.containerStyles}>
-                <Box className={classes.headingStyles}>
-                  <Typography className={classes.headingTextStyles} component="span">
-                    Parsing
-                  </Typography>
-                  <UnderLineSVG />
-                </Box>
+      <CustomizedDrawer open={drawerStatus} anchor="right">
+        <DrawerHeader>
+          <TextIconWrapper>
+            <Box className={classes.containerStyles}>
+              <Box className={classes.headingStyles}>
+                <Typography className={classes.headingTextStyles} component="span">
+                  Parsing
+                </Typography>
+                <UnderLineSVG />
               </Box>
-            </TextIconWrapper>
-
-            <TextIconWrapper>
-              <Divider />
-              <CustomizedIconButton
-                aria-label="close-icon"
-                data-testid="drawer-widget-close-round-icon"
-                onClick={closeParsingDrawer}
-              >
-                <CloseIcon color="action" />
-              </CustomizedIconButton>
-            </TextIconWrapper>
-          </DrawerHeader>
-        }
-      >
+            </Box>
+          </TextIconWrapper>
+          <TextIconWrapper>
+            <CustomizedIconButton
+              aria-label="close-icon"
+              data-testid="drawer-widget-close-round-icon"
+              onClick={closeParsingDrawer}
+            >
+              <CloseIcon color="action" />
+            </CustomizedIconButton>
+          </TextIconWrapper>
+        </DrawerHeader>
         <ParsingPopUpBodyContainer>
           <ParsingPopupBody values={properties} changeEventListener={handleChange} />
 
@@ -301,7 +296,7 @@ export default function({
             </Button>
           </ParsingPopUpBottomSection>
         </ParsingPopUpBodyContainer>
-      </DrawerWidget>
+      </CustomizedDrawer>
 
       {errorOnTransformation.open && (
         <PositionedSnackbar
