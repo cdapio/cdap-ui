@@ -105,10 +105,12 @@ export default function OngoingDataExploration() {
   return (
     <Box data-testid="ongoing-data-explore-parent">
       {finalArray.map((item, index) => {
+        console.log('item', item);
         return (
           <Link
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
+            data-testid={`ongoing-data-explore-card-link-${index}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

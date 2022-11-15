@@ -119,7 +119,7 @@ export default function({
   };
 
   return (
-    <DirectiveBox>
+    <DirectiveBox data-testid="directive-input-main-container">
       {openDirectivePanel && (
         <SimpleBox data-testid="directive-input-parent">
           <InputPanel

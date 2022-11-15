@@ -215,7 +215,7 @@ export default function({
           <ActiveResultRow
             key={searchItem.uniqueId}
             onClick={() => handleListItemClick(searchItem)}
-            data-testid="select-directive-list-option"
+            data-testid={`select-directive-list-option-${searchItemIndex}`}
           >
             <SimpleWrapper>
               <LargeLabel data-testid="select-directive-list-label" variant="body1">
@@ -230,7 +230,7 @@ export default function({
           <ResultRow
             key={searchItem.uniqueId}
             onClick={() => handleListItemClick(searchItem)}
-            data-testid="select-directive-list-option"
+            data-testid={`select-directive-list-option-${searchItemIndex}`}
           >
             <SimpleWrapper>
               <LargeLabel data-testid="select-directive-list-label" variant="body1">
