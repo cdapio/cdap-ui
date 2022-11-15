@@ -141,7 +141,7 @@ const ParsingPopUpBottomSection = styled(Box)`
 }
 `;
 
-export default function({
+export default function ({
   setLoading,
   updateDataTranformation,
   closeParsingDrawer,
@@ -246,6 +246,12 @@ export default function({
 
   const classes = useStyles();
 
+  const ContainerHeaderBox = styled(Box)`
+    display: flex;
+    flexdirection: row;
+    justifycontent: space-between;
+  `;
+
   return (
     <ParsingDrawerContainer role="presentation">
       <DrawerWidget
@@ -305,7 +311,7 @@ export default function({
 
       {errorOnTransformation.open && (
         <PositionedSnackbar
-          handleCloseError={() => {}}
+          handleCloseError={() => { }}
           messageToDisplay={errorOnTransformation.message}
         />
       )}
