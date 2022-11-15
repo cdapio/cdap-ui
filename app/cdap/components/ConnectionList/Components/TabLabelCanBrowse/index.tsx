@@ -27,11 +27,13 @@ export default function TabLabelCanBrowse({
   count,
   index,
   icon,
+  dataTestId,
 }: {
   label: string;
   count: number;
   index: number;
   icon?: JSX.Element;
+  dataTestId?: string;
 }) {
   const classes = useStyles();
 
@@ -52,7 +54,7 @@ export default function TabLabelCanBrowse({
 
   return refValue ? (
     <CustomTooltip title={label} arrow key={`tooltip-${index}`}>
-      <Box className={classes.labelContainerBox}>
+      <Box className={classes.labelContainerBox} data-testid={dataTestId}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}
           <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>
@@ -73,7 +75,7 @@ export default function TabLabelCanBrowse({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelContainerBox}>
+    <Box className={classes.labelContainerBox} data-testid={dataTestId}>
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
         <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>

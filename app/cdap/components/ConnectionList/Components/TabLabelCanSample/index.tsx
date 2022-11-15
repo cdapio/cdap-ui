@@ -105,7 +105,7 @@ export default function TabLabelCanSample({
         <button
           className="wranglingHover"
           onClick={() => onExplore(entity)}
-          data-testid="load-to-grid-wrapper"
+          data-testid={`load-to-grid-wrapper`}
         >
           <WrangleIcon />
           <Typography
