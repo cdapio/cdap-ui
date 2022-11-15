@@ -52,7 +52,7 @@ const InfoLink = styled(Link)`
   font-size: 14px;
   text-decoration: none;
   margin-left: 10px;
-  width: 180px;
+  width: 185px;
   cursor: pointer;
   &:hover {
     text-decoration: none;
