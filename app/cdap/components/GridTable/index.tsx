@@ -17,7 +17,6 @@
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
-import { DirectiveBox, LoaderContainer } from 'components/common/BoxContainer';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
@@ -43,6 +42,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import { useStyles } from 'components/GridTable/styles';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -64,6 +64,7 @@ export default function GridTable() {
   const [isFirstWrangle, setIsFirstWrangle] = useState(false);
   const [connectorType, setConnectorType] = useState<string | null>(null);
   const [openDirectivePanel, setDirectivePanel] = useState(true);
+  const classes = useStyles();
 
   useEffect(() => {
     setIsFirstWrangle(true);
@@ -361,9 +362,9 @@ export default function GridTable() {
         />
       )}
       {loading && (
-        <LoaderContainer>
+        <div className={classes.loadingContainer}>
           <LoadingSVG />
-        </LoaderContainer>
+        </div>
       )}
     </Box>
   );

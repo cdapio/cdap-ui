@@ -32,11 +32,11 @@ import { IHeaderNamesList } from 'components/GridTable/types';
 
 interface IInputPanelProps {
   setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
-  directiveSelected: boolean;
+  selectedDirective: boolean;
   columnNamesList: IHeaderNamesList[];
-  onSearchItemClicked: (value: string) => void;
+  onSearchItemClick: (value: string) => void;
   getDirectiveSyntax: (results: IDirectiveUsage[], value: boolean) => void;
-  onColumnSelected: (value: boolean) => void;
+  onColumnSelection: (value: boolean) => void;
   inputBoxValue: string;
 }
 
@@ -60,20 +60,24 @@ const LargeLabel = styled(SmallLabel)`
 const ResultRow = styled(Box)`
   padding: 10px;
   border-bottom: 1px solid ${grey[300]};
-  background-color: ${(props) => (props.isActive ? '#EFF0F2' : '#FFFFFF')};
+  background-color: #ffffff;
   &:hover {
     background: #eff0f2;
     cursor: pointer;
   }
 `;
 
+const ActiveResultRow = styled(ResultRow)`
+  background-color: #eff0f2;
+`;
+
 export default function({
   setDirectivesList,
-  directiveSelected,
+  selectedDirective,
   columnNamesList,
-  onSearchItemClicked,
+  onSearchItemClick,
   getDirectiveSyntax,
-  onColumnSelected,
+  onColumnSelection,
   inputBoxValue,
 }: IInputPanelProps) {
   const [searchResults, setSearchResults] = useState<IDirectiveUsage[]>([]);
@@ -83,7 +87,7 @@ export default function({
   const [fuse, setFuse] = useState(new Fuse([], { ...defaultFuseOptions }));
 
   const getUsage = () => {
-    if (!directiveSelected) {
+    if (!selectedDirective) {
       MyDataPrepApi.getUsage({ context: NamespaceStore.getState().selectedNamespace }).subscribe(
         (res) => {
           setDirectivesList(res.values);
@@ -97,18 +101,20 @@ export default function({
 
   useEffect(() => {
     getUsage();
-  }, [directiveSelected]);
+  }, [selectedDirective]);
 
   useEffect(() => {
     eventEmitter.on(globalEvents.DIRECTIVEUPLOAD, getUsage);
+
     const directiveInput = document.getElementById('directive-input-search');
     const mousetrap = new Mousetrap(directiveInput);
+
     mousetrap.bind('up', handleUpArrow);
     mousetrap.bind('down', handleDownArrow);
     mousetrap.bind('enter', handleEnterKey);
     mousetrap.bind('tab', handleTabKey);
 
-    // unbind a single keyboard event or an array of keyboard events.
+    // unbind a keyboard event.
     return () => {
       mousetrap.unbind('up');
       mousetrap.unbind('down');
@@ -137,7 +143,7 @@ export default function({
       if (searchResults[selectedIndex]) {
         handleListItemClick(searchResults[selectedIndex]);
       } else {
-        onSearchItemClicked(inputText);
+        onSearchItemClick(inputText);
       }
     }
   };
@@ -151,7 +157,7 @@ export default function({
   };
 
   useEffect(() => {
-    if (directiveSelected) {
+    if (selectedDirective) {
       setFuse(new Fuse(columnNamesList, { ...defaultFuseOptions, keys: ['label'] }));
     }
     searchMatch(inputBoxValue);
@@ -162,7 +168,7 @@ export default function({
     let searchList = [];
     const spaceIndex: boolean = searchString.includes(' ');
     if (fuse && searchString.length > 0) {
-      if (!directiveSelected) {
+      if (!selectedDirective) {
         searchList = fuse
           .search(searchString)
           .slice(0, 3)
@@ -182,32 +188,46 @@ export default function({
     setSearchResults(searchList);
     setInputText(searchString);
     setSelectedIndex(searchList.length - 1);
-    if (!directiveSelected) {
+    if (!selectedDirective) {
       getDirectiveSyntax(searchList, spaceIndex);
     }
   };
 
   const handleListItemClick = (listItem) => {
-    if (!directiveSelected) {
-      onSearchItemClicked(listItem.item.directive);
+    if (!selectedDirective) {
+      onSearchItemClick(listItem.item.directive);
       getDirectiveSyntax([listItem], true);
     } else {
       const splitData = inputText.split(/(?=[:])|(?<=[:])/g);
-      const eventObject: Record<string, IObject> = {
+      const clickedItem: Record<string, IObject> = {
         target: { value: `${splitData[0]}${splitData[1]}${listItem.item.label}` },
       };
       setInputText(`${splitData[0]}${splitData[1]}${listItem.item.label}`);
-      onSearchItemClicked(eventObject.target.value);
-      onColumnSelected(true);
+      onSearchItemClick(clickedItem.target.value);
+      onColumnSelection(true);
     }
   };
 
   return (
     <SimpleWrapper>
-      {searchResults.map((searchItem, searchItemIndex) => {
-        return (
+      {searchResults.map((searchItem, searchItemIndex) =>
+        searchItemIndex === selectedIndex ? (
+          <ActiveResultRow
+            key={searchItem.uniqueId}
+            onClick={() => handleListItemClick(searchItem)}
+            data-testid="select-directive-list-option"
+          >
+            <SimpleWrapper>
+              <LargeLabel data-testid="select-directive-list-label" variant="body1">
+                {searchItem?.item?.directive || searchItem?.item?.label}
+              </LargeLabel>
+              <SmallLabel data-testid="select-directive-list-description" variant="body1">
+                {searchItem?.item?.description}
+              </SmallLabel>
+            </SimpleWrapper>
+          </ActiveResultRow>
+        ) : (
           <ResultRow
-            isActive={searchItemIndex === selectedIndex}
             key={searchItem.uniqueId}
             onClick={() => handleListItemClick(searchItem)}
             data-testid="select-directive-list-option"
@@ -221,8 +241,8 @@ export default function({
               </SmallLabel>
             </SimpleWrapper>
           </ResultRow>
-        );
-      })}
+        )
+      )}
     </SimpleWrapper>
   );
 }

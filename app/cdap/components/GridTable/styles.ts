@@ -14,25 +14,19 @@
  * the License.
  */
 
-import styled from 'styled-components';
-import { Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-export const DirectiveBox = styled(Box)`
-  background-color: #ffffff;
-  position: fixed;
-  bottom: 50px;
-  width: 100%;
-`;
-
-export const LoaderContainer = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  opacity: 0.5;
-  background: white;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 2000;
-`;
+export const useStyles = makeStyles({
+  loadingContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    opacity: 0.5,
+    background: 'white',
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    zIndex: 2000,
+  },
+});

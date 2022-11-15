@@ -17,7 +17,6 @@
 import { Box, IconButton } from '@material-ui/core';
 import InputPanel from 'components/DirectiveInput/Components/InputPanel';
 import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
-import { CrossIcon } from 'components/DirectiveInput/IconStore/CrossIcon';
 import {
   IDirectiveInputProps,
   IDirectivesList,
@@ -29,7 +28,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PREFIX } from 'components/DirectiveInput/constants';
 import { grey } from '@material-ui/core/colors';
-import { DirectiveBox } from 'components/common/BoxContainer';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 
 const SimpleBox = styled(Box)`
   display: block;
@@ -52,7 +51,7 @@ const DirectiveUsageWrapper = styled(Box)`
 
 const InputComponent = styled.input`
   width: 95%;
-  margin-left: 5;
+  margin-left: 5px;
   outline: 0;
   border: 0;
   background: transparent;
@@ -64,6 +63,17 @@ const LabelComponent = styled.label`
   font-size: 14px;
 `;
 
+const DirectiveBox = styled(Box)`
+  background-color: #ffffff;
+  position: fixed;
+  bottom: 50px;
+  width: 100%;
+`;
+
+const CloseIconButton = styled(IconButton)`
+  color: #ffffff;
+`;
+
 export default function({
   columnNamesList,
   onDirectiveInputHandler,
@@ -72,15 +82,13 @@ export default function({
 }: IDirectiveInputProps) {
   const [inputBoxValue, setInputBoxValue] = useState<string>('');
   const [columnSelected, setColumnSelected] = useState<boolean>(false);
-  const [directiveSelected, setDirectiveSelected] = useState<boolean>(false);
+  const [selectedDirective, setSelectedDirective] = useState<boolean>(false);
   const [directiveUsage, setDirectiveUsage] = useState<IDirectiveUsage[]>([]);
   const [directivesList, setDirectivesList] = useState<IDirectivesList[]>([]);
   const directiveRef = useRef();
 
   const handleDirectiveChange = (value: string) => {
-    if (!value) {
-      setDirectiveSelected(false);
-    }
+    !value && setSelectedDirective(false);
     setInputBoxValue(value);
   };
 
@@ -98,7 +106,7 @@ export default function({
       } else if (
         event.key === 'Enter' &&
         columnSelected &&
-        directiveSelected &&
+        selectedDirective &&
         (directiveSyntax.length === inputSplit.length || inputSplit.length > directiveSyntax.length)
       ) {
         onDirectiveInputHandler(inputBoxValue);
@@ -112,16 +120,16 @@ export default function({
         <SimpleBox data-testid="directive-input-parent">
           <InputPanel
             inputBoxValue={inputBoxValue}
-            onSearchItemClicked={(value) => handleDirectiveChange(value)}
+            onSearchItemClick={(value) => handleDirectiveChange(value)}
             setDirectivesList={setDirectivesList}
             getDirectiveSyntax={(activeResults: IDirectiveUsage[], value) => {
-              setDirectiveSelected(value);
+              setSelectedDirective(value);
               setDirectiveUsage(activeResults);
             }}
-            onColumnSelected={() => {
+            onColumnSelection={() => {
               setColumnSelected(true);
             }}
-            directiveSelected={directiveSelected}
+            selectedDirective={selectedDirective}
             columnNamesList={columnNamesList}
           />
           <DirectiveUsageWrapper>
@@ -148,9 +156,9 @@ export default function({
                   data-testid="select-directive-input-search"
                 />
               </InputWrapper>
-              <IconButton data-testid="close-directive-panel" onClick={onClose}>
-                {CrossIcon}
-              </IconButton>
+              <CloseIconButton data-testid="close-directive-panel" onClick={onClose}>
+                <CloseOutlinedIcon data-testid="close-icon" />
+              </CloseIconButton>
             </SearchBarWrapper>
           </DirectiveUsageWrapper>
         </SimpleBox>

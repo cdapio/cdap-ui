@@ -16,11 +16,11 @@
 
 import { Box, Divider, Typography, Link } from '@material-ui/core';
 import { moreInfoOnDirective, PREFIX } from 'components/DirectiveInput/constants';
-import { InfoIcon } from 'components/DirectiveInput/IconStore/InfoIcon';
 import { IDirectiveUsageProps } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 const DirectiveWrapper = styled(Box)`
   padding: 10px;
@@ -39,7 +39,7 @@ const UsageText = styled(Typography)`
 `;
 
 const DividerLine = styled(Divider)`
-  .root {
+  &.MuiDivider-root {
     background-color: #ffffff;
   }
 `;
@@ -68,7 +68,7 @@ export default function({ eachDirective }: IDirectiveUsageProps) {
         {eachDirective?.item?.usage || eachDirective?.usage}
         {moreInfoOnDirective[eachDirective?.item?.directive] && (
           <InfoLink href={`${moreInfoOnDirective[eachDirective?.item?.directive]}`} target="_blank">
-            {InfoIcon}
+            <InfoOutlinedIcon data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
         )}
