@@ -146,7 +146,7 @@ export default function({
                   $
                 </LabelComponent>
                 <InputComponent
-                  id="directive-input-search"
+                  id="directive-input-search" // is is needed for catching keyboard events while navigating through search list
                   autoComplete="OFF"
                   placeholder={T.translate(`${PREFIX}.inputDirective`).toString()}
                   value={inputBoxValue}
