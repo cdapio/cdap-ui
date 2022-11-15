@@ -141,7 +141,7 @@ const ParsingPopUpBottomSection = styled(Box)`
 }
 `;
 
-export default function ({
+export default function({
   setLoading,
   updateDataTranformation,
   closeParsingDrawer,
@@ -270,12 +270,6 @@ export default function ({
             </TextIconWrapper>
 
             <TextIconWrapper>
-              <Box className={classes.importStyles}>
-                <ImportIcon />
-                <Typography className={classes.importTextStyles} component="span">
-                  {T.translate('features.WranglerNewUI.ParsingDrawer.importSchema')}
-                </Typography>
-              </Box>
               <Divider />
               <CustomizedIconButton
                 aria-label="close-icon"
@@ -311,7 +305,7 @@ export default function ({
 
       {errorOnTransformation.open && (
         <PositionedSnackbar
-          handleCloseError={() => { }}
+          handleCloseError={() => {}}
           messageToDisplay={errorOnTransformation.message}
         />
       )}
