@@ -209,7 +209,7 @@ export default function({
   };
 
   return (
-    <SimpleWrapper data-testid='input-panel-wraper'>
+    <SimpleWrapper data-testid="input-panel-wraper">
       {searchResults.map((searchItem, searchItemIndex) =>
         searchItemIndex === selectedIndex ? (
           <ActiveResultRow

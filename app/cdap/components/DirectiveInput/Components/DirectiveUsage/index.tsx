@@ -62,7 +62,7 @@ const InfoLink = styled(Link)`
 
 export default function({ eachDirective }: IDirectiveUsageProps) {
   return (
-    <DirectiveWrapper data-testid='directive-usage-text-wrapper'>
+    <DirectiveWrapper data-testid="directive-usage-text-wrapper">
       <UsageText variant="body1" data-testid="directive-usage-text">
         {`${T.translate(`${PREFIX}.usage`)} : `}
         {eachDirective?.item?.usage || eachDirective?.usage}
