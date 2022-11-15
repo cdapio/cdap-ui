@@ -14,30 +14,29 @@
  *  the License.
  */
 
-import { fireEvent, render } from '@testing-library/react';
-import * as ApiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import React from 'react';
-import { Route, Router, Switch } from 'react-router';
+import { fireEvent, render } from "@testing-library/react";
+import * as ApiHelpers from "components/Connections/Browser/GenericBrowser/apiHelpers";
+import React from "react";
+import { Route, Router, Switch } from "react-router";
+import ParsingDrawer from "components/ParsingDrawer/index";
+import history from "services/history";
 
-import ParsingDrawer from 'components/ParsingDrawer/index';
-import history from 'services/history';
-
-describe('It Should Test the Parsing Drawer Component', () => {
+describe("It Should Test the Parsing Drawer Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('Should render the Parsing Drawer Parent Component', () => {
-    jest.spyOn(ApiHelpers, 'createWorkspace').mockReturnValue(
+  it("Should render the Parsing Drawer Parent Component", () => {
+    jest.spyOn(ApiHelpers, "createWorkspace").mockReturnValue(
       Promise.resolve({
         entity: {
-          name: 'sql_feature',
-          path: '/information_schema/sql_features',
-          type: 'system table',
+          name: "sql_feature",
+          path: "/information_schema/sql_features",
+          type: "system table",
           canSample: true,
           canBrowse: false,
           properties: {},
         },
-        connection: 'exl',
+        connection: "exl",
         properties: {},
       })
     );
@@ -45,7 +44,11 @@ describe('It Should Test the Parsing Drawer Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingDrawer setLoading={() => jest.fn()} updateDataTranformation={() => jest.fn()} />
+            <ParsingDrawer
+              setLoading={() => jest.fn()}
+              updateDataTranformation={() => jest.fn()}
+              closeParsingDrawer={jest.fn()}
+            />
           </Route>
         </Switch>
       </Router>
@@ -54,17 +57,21 @@ describe('It Should Test the Parsing Drawer Component', () => {
     expect(container).toBeDefined();
   });
 
-  it('Should test the handleApply Button ', () => {
+  it("Should test the handleApply Button ", () => {
     const screen = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingDrawer setLoading={() => jest.fn()} updateDataTranformation={() => jest.fn()} />
+            <ParsingDrawer
+              setLoading={() => jest.fn()}
+              updateDataTranformation={() => jest.fn()}
+              closeParsingDrawer={jest.fn()}
+            />
           </Route>
         </Switch>
       </Router>
     );
-    const handleApplyBtn = screen.getByTestId('parsing-apply-button');
+    const handleApplyBtn = screen.getByTestId("parsing-apply-button");
     fireEvent.click(handleApplyBtn);
     expect(handleApplyBtn).toBeInTheDocument();
   });
