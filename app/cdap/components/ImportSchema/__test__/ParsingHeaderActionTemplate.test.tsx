@@ -46,7 +46,7 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
     const labelElement = screen.getByTestId(/import-schema-text/i);
     expect(labelElement).toBeInTheDocument();
     expect(labelElement).toHaveTextContent(
-      `${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}`
+      `${T.translate('features.WranglerNewUI.ImportSchema.importSchema')}`
     );
   });
 });
