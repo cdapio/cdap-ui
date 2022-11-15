@@ -18,10 +18,9 @@ import { Box, Typography } from '@material-ui/core';
 import { parseImportedSchemas } from 'components/AbstractWidget/SchemaEditor/SchemaHelpers';
 import T from 'i18n-react';
 import React, { ChangeEvent } from 'react';
-import { ImportIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/ImportIcon';
 import { IParsingHeaderActionTemplateProps } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/types';
 import styled from 'styled-components';
-
+import { ImportSchemaIcon } from 'components/ParsingDrawer/Components/ParsingHeaderActionTemplate/IconStore/ImportSchemaIcon';
 const ImportSchemaInputLabelWrapper = styled(Box)`
   display: flex !important;
 `;
@@ -89,7 +88,7 @@ export default function({
         onChange={handleFile}
       />
       <ImportSchemaIconTextWrapper htmlFor="file">
-        {ImportIcon}
+        {ImportSchemaIcon}
         <ImportSchemaText data-testid="import-schema-text" component="span">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}
         </ImportSchemaText>
