@@ -31,7 +31,6 @@ jobs:
     # Cancel ongoing runs
     concurrency: 
       group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-      cancel-in-progress: true
 
     steps:
     # Pinned 1.0.0 version
