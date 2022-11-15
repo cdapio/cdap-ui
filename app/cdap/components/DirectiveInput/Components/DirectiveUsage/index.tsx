@@ -67,7 +67,11 @@ export default function({ eachDirective }: IDirectiveUsageProps) {
         {`${T.translate(`${PREFIX}.usage`)} : `}
         {eachDirective?.item?.usage || eachDirective?.usage}
         {moreInfoOnDirective[eachDirective?.item?.directive] && (
-          <InfoLink href={`${moreInfoOnDirective[eachDirective?.item?.directive]}`} target="_blank">
+          <InfoLink
+            data-testid="info-link"
+            href={`${moreInfoOnDirective[eachDirective?.item?.directive]}`}
+            target="_blank"
+          >
             <InfoOutlinedIcon data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>

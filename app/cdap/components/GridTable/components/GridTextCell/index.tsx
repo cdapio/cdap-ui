@@ -23,7 +23,10 @@ export default function GridTextCell({ cellValue }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
 
   return (
-    <TableCell className={classes.tableRowCell}>
+    <TableCell
+      className={classes.tableRowCell}
+      data-testid={`grid-text-cell-container-${cellValue}`}
+    >
       <Card className={classes.root} variant="outlined">
         <Typography className={classes.cell} data-testid={`grid-text-cell-${cellValue}`}>
           {cellValue}
