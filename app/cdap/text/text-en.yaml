@@ -3441,15 +3441,15 @@ features:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
     WranglerNewParsingDrawer: 
-      importSchema: Import schema
-      importSchemaErrorMessage: Imported schema is not a valid Avro schema
       apply: Apply
-      parsing: Parsing
-      parsingInfoText: Once applied parsing settings cannot be changed.
-      useFirstRowAsHeader: Use first row as header
       enableQuotedValues: Enable quoted values
       encoding: Encoding
       format: Format
+      importSchema: Import schema
+      importSchemaErrorMessage: Imported schema is not a valid Avro schema
+      parsing: Parsing
+      parsingInfoText: Once applied parsing settings cannot be changed.
+      useFirstRowAsHeader: Use first row as header
       SetCharEncoding:
         disabledTooltip: Character encoding can only be set on columns of data type 'bytes'
         iso88591: ISO-8859-1
@@ -3464,6 +3464,8 @@ features:
         Parsers:
           CSV:
             label: CSV
+          DATETIME:
+            label: Datetime
           EXCEL:
             label: Excel
           FIXEDLENGTH:
@@ -3478,8 +3480,6 @@ features:
             label: Natural date
           SIMPLEDATE:
             label: Simple date
-          DATETIME:
-            label: Datetime
           XMLTOJSON:
             label: XML to JSON
         title: Parse

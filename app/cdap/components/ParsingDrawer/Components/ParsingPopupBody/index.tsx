@@ -26,16 +26,16 @@ import T from 'i18n-react';
 import React, { ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 
-const FormFieldWrapper = styled(Box)`
-  width: calc(100% - 60px);
-  margin-right: 60px;
-  margin-bottom: 15px;
-`;
-
 const CheckBox = styled(InputCheckbox)`
   display: flex;
   width: 100%;
   margin-bottom: 0px;
+`;
+
+const FormFieldWrapper = styled(Box)`
+  width: calc(100% - 60px);
+  margin-right: 60px;
+  margin-bottom: 15px;
 `;
 
 const Label = styled(Typography)`
@@ -100,16 +100,17 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
+        dataTestId="parsing-drawer-enable-quoted-values"
       />
       <CheckBox
-        label={
-          T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')
-            .toString
-        }
+        label={T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader'
+        ).toString()}
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
         }
+        dataTestId="parsing-drawer-use-first-row-as-header"
       />
     </Box>
   );
