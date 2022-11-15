@@ -20,23 +20,45 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+<<<<<<< HEAD
 import { GRID_TABLE_PREFIX, PREFIX } from 'components/GridTable/constants';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
 import { ISnackbar } from 'components/Snackbar/types';
+=======
+import BreadCrumb from 'components/GridTable/components/Breadcrumb';
+import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
+import GridKPICell from 'components/GridTable/components/GridKPICell';
+import GridTextCell from 'components/GridTable/components/GridTextCell';
+import { GRID_TABLE_PREFIX, PREFIX } from 'components/GridTable/constants';
+import { useStyles } from 'components/GridTable/styles';
+import {
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IParams,
+  IRecords,
+} from 'components/GridTable/types';
+import NoRecordScreen from 'components/NoRecordScreen';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+<<<<<<< HEAD
 import BreadCrumb from './components/Breadcrumb';
 import GridHeaderCell from './components/GridHeaderCell';
 import GridKPICell from './components/GridKPICell';
 import GridTextCell from './components/GridTextCell';
 import { useStyles } from './styles';
 import { IExecuteAPIResponse, IHeaderNamesList, IParams, IRecords } from './types';
+=======
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -54,10 +76,14 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+<<<<<<< HEAD
   const [toaster, setToaster] = useState<ISnackbar>({
     open: false,
     isSuccess: false,
   });
+=======
+  const [snackbarState, setSnackbar] = useSnackbar();
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -115,7 +141,11 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+<<<<<<< HEAD
         setToaster({
+=======
+        setSnackbar({
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
           open: true,
           isSuccess: true,
           message: T.translate(`${PREFIX}.Snackbar.labels.datasetSuccess`).toString(),
@@ -129,7 +159,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, wid);
+    getWorkSpaceData(payload as IParams, wid as string);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -139,7 +169,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]],
+          type: [columnTypesList[eachColumnName]] as string[],
         };
       });
     }
@@ -177,11 +207,12 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item;
+            mostFrequentItemValue = item as string;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue =
+          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -244,7 +275,7 @@ export default function GridTable() {
   }, [gridData]);
 
   return (
-    <Box>
+    <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
@@ -300,6 +331,7 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
+<<<<<<< HEAD
       {toaster.open && (
         <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
           handleCloseError={() =>
@@ -311,6 +343,18 @@ export default function GridTable() {
           isSuccess={toaster.isSuccess}
         />
       )}
+=======
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
     </Box>
   );
 }

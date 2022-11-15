@@ -14,11 +14,19 @@
  * the License.
  */
 
+<<<<<<< HEAD
 export interface ISnackbarProps {
   handleCloseError: () => void;
   description?: string;
   isSuccess?: boolean;
   actionType?: string;
+=======
+import { SnackbarProps } from '@material-ui/core';
+
+export interface ISnackbarProps extends SnackbarProps {
+  handleClose: () => void;
+  isSuccess?: boolean;
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
   snackbarAction?: string;
 }
 export interface ISnackbar {

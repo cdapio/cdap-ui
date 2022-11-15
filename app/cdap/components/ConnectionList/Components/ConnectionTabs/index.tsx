@@ -61,7 +61,11 @@ export default function ConnectionsTabs({
   value,
   connectionColumnIndex,
   connectionId,
+<<<<<<< HEAD
   setToaster,
+=======
+  setSnackbar,
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
   toggleLoader,
 }: IConnectionTabsProps) {
   const classes = useStyles();
@@ -89,6 +93,7 @@ export default function ConnectionsTabs({
               indicator: classes.indicator,
               root: classes.tabsContainer,
             }}
+            data-testid="connection-tabs"
           >
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
@@ -117,7 +122,11 @@ export default function ConnectionsTabs({
                         entity={connectorType as IRecords}
                         initialConnectionId={connectionIdProp}
                         toggleLoader={toggleLoader}
+<<<<<<< HEAD
                         setToaster={setToaster}
+=======
+                        setSnackbar={setSnackbar}
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
                       />
                     )
                   ) : (

@@ -26,6 +26,7 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
+
 public class Snackbar {
     @Given("Navigate to the Home Page")
     public void navigateToTheHomePage() {
@@ -36,6 +37,7 @@ public class Snackbar {
             System.err.println("error:" + e);
         }
     }
+
     @Then("Click on the data exploration card")
     public void clickOnTheDataExplorationCard() {
         try {
@@ -47,6 +49,7 @@ public class Snackbar {
             System.err.println("error:" + e);
         }
     }
+
     @Then("Click on the Snackbar close icon")
     public void verifyTheSnackbarPopUpIsComingOrNot() {
         try {

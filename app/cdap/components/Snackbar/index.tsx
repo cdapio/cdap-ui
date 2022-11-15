@@ -14,6 +14,7 @@
  * the License.
  */
 
+<<<<<<< HEAD
 import Snackbar from '@material-ui/core/Snackbar';
 import Transition from 'components/Snackbar/Components/Transition/index';
 import { useStyles } from 'components/Snackbar/styles';
@@ -63,6 +64,47 @@ export default function({
         />
       )}
       className={isSuccess ? classes.success : classes.error}
+=======
+import { green, red } from '@material-ui/core/colors';
+import Snackbar from '@material-ui/core/Snackbar';
+import Transition from 'components/Snackbar/Components/Transition/index';
+import { ISnackbarProps } from 'components/Snackbar/types';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+
+const CustomizedSnackbar = styled(Snackbar)`
+  border-radius: 4px;
+  width: 100%;
+  top: 48px;
+  background-color: ${(props) => (props.isSuccess ? green[600] : red[600])};
+  padding: 15px 18px 14px 18px;
+  display: block;
+  min-height: 76px;
+  left: 0;
+  z-index: 9;
+`;
+
+export default function({
+  message = '',
+  isSuccess,
+  snackbarAction,
+  open,
+  handleClose,
+}: ISnackbarProps) {
+  return (
+    <CustomizedSnackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+      open={open}
+      isSuccess={isSuccess}
+      TransitionComponent={() => (
+        <Transition
+          handleClose={handleClose}
+          isSuccess={isSuccess}
+          message={message}
+          transitionAction={snackbarAction}
+        />
+      )}
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
       data-testid="snackbar-alert"
     />
   );

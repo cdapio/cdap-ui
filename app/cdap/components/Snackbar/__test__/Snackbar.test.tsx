@@ -21,7 +21,11 @@ import Snackbar from 'components/Snackbar/index';
 describe('Should test the Snackbar Component while triggering setTimeout function and Triggers handleClose and checks for snackbar parent class', () => {
   it('renders Snackbar Component', () => {
     jest.useFakeTimers();
+<<<<<<< HEAD
     render(<Snackbar handleCloseError={jest.fn} isSuccess={true} />);
+=======
+    render(<Snackbar handleClose={jest.fn} isSuccess={true}  open={true} />);
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
     const snackBarParent = screen.getByTestId(/snackbar-alert/i);
     const closeButton = screen.getByTestId('snackbar-close-icon');
     fireEvent.click(closeButton);
@@ -32,7 +36,11 @@ describe('Should test the Snackbar Component while triggering setTimeout functio
   });
 
   it('Expects the relevent class when isSuccess is false', () => {
+<<<<<<< HEAD
     render(<Snackbar handleCloseError={jest.fn} isSuccess={false} />);
+=======
+    render(<Snackbar handleClose={jest.fn} isSuccess={false}  open={true} />);
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
     const snackBarParent = screen.getByTestId(/snackbar-alert/i);
     expect(snackBarParent).toHaveClass('MuiSnackbar-anchorOriginTopLeft');
   });

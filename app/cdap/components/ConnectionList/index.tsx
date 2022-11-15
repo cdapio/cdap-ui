@@ -19,7 +19,10 @@ import { grey } from '@material-ui/core/colors';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
+<<<<<<< HEAD
 import { snackbarDefaultValues } from 'components/ConnectionList/constants';
+=======
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 import { GCSIcon } from 'components/ConnectionList/icons';
 import { useStyles } from 'components/ConnectionList/styles';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
@@ -28,7 +31,11 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import { IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
+<<<<<<< HEAD
 import { ISnackbar } from 'components/Snackbar/types';
+=======
+import useSnackbar from 'components/Snackbar/useSnackbar';
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
@@ -57,7 +64,11 @@ export default function ConnectionList() {
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
   const [toaster, setToaster] = useState<ISnackbar>(snackbarDefaultValues);
+=======
+  const [snackbarState, setSnackbar] = useSnackbar();
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
   const toggleLoader = (value: boolean, isError?: boolean) => {
     setLoading(value);
   };
@@ -161,7 +172,7 @@ export default function ConnectionList() {
         };
       });
       if (index === 0) {
-        getCategorizedConnectionsforSelectedTab(entity.name, index);
+        getCategorizedConnectionsforSelectedTab(entity.name as string, index);
       } else if (index === 1) {
         fetchEntities(entity.name).then((res) => {
           setDataForTabsHelper(res, index);
@@ -169,7 +180,7 @@ export default function ConnectionList() {
         });
       } else {
         if (entity.canBrowse) {
-          fetchEntities(dataForTabs[1].selectedTab, entity.path).then((res) => {
+          fetchEntities(dataForTabs[1].selectedTab, entity.path as string).then((res) => {
             setDataForTabsHelper(res, index);
             toggleLoader(false);
           });
@@ -189,7 +200,7 @@ export default function ConnectionList() {
       temp[0].selectedTab = connectorType;
       return temp;
     });
-    getCategorizedConnectionsforSelectedTab(connectorType, 0);
+    getCategorizedConnectionsforSelectedTab(connectorType as string, 0);
   }, [connectorType]);
 
   const headerForLevelZero = () => {
@@ -258,7 +269,12 @@ export default function ConnectionList() {
                 connectionColumnIndex={tabIndex}
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+<<<<<<< HEAD
                 setToaster={setToaster}
+=======
+                setSnackbar={setSnackbar}
+                data-testid="connections-tabs-list-change"
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
               />
             </Box>
           );
@@ -269,6 +285,7 @@ export default function ConnectionList() {
           <LoadingSVG />
         </div>
       )}
+<<<<<<< HEAD
       {toaster.open && (
         <Snackbar
           handleCloseError={() =>
@@ -280,6 +297,18 @@ export default function ConnectionList() {
           isSuccess={toaster.isSuccess}
         />
       )}{' '}
+=======
+      <Snackbar
+        handleClose={() =>
+          setSnackbar({
+            open: false,
+          })
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
     </Box>
   );
 }

@@ -34,6 +34,10 @@ export interface IConnectionTabsProps {
   value: string;
   connectionColumnIndex: number;
   connectionId: string;
+<<<<<<< HEAD
   setToaster: Dispatch<SetStateAction<ISnackbar>>;
+=======
+  setSnackbar: Dispatch<SetStateAction<ISnackbar>>;
+>>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
   toggleLoader: (isLoading: boolean, isError?: boolean) => void;
 }
