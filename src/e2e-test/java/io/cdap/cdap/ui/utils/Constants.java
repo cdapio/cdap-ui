@@ -27,6 +27,7 @@ public class Constants {
     String.valueOf(TEST_TIMEOUT_TIME / 1000) +
     "seconds";
 
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
   public static final String BASE_URL = "http://localhost:11011";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
@@ -67,5 +68,4 @@ public class Constants {
 
   public static final String DEFAULT_GCP_PROJECTID = System.getenv("GCP_PROJECTID");
   public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
-  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
 }
