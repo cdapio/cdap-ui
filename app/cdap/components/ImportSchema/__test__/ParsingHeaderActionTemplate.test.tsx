@@ -14,20 +14,21 @@
  *  the License.
  */
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import React from "react";
-import { Route, Router, Switch } from "react-router";
-import ParsingHeaderActionTemplate from "components/ParsingDrawer/Components/ParsingHeaderActionTemplate";
-import history from "services/history";
-import T from "i18n-react";
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import ImportSchema from 'components/ImportSchema';
+import history from 'services/history';
+import T from 'i18n-react';
 
-describe("It Should Test the ParsingHeaderActionTemplate Component", () => {
-  it("Should test whether ParsingHeaderActionTemplate Component is rendered as expected", () => {let readAsDataURL = jest.fn();
+describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
+  it('Should test whether ParsingHeaderActionTemplate Component is rendered as expected', () => {
+    const readAsDataURL = jest.fn();
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <ParsingHeaderActionTemplate
+            <ImportSchema
               setSuccessUpload={() => jest.fn()}
               handleSchemaUpload={() => jest.fn()}
               setErrorOnTransformation={() => jest.fn()}
@@ -36,20 +37,16 @@ describe("It Should Test the ParsingHeaderActionTemplate Component", () => {
         </Switch>
       </Router>
     );
-    const blob = new Blob(["foo"], { type: "text/plain" });
+    const blob = new Blob(['foo'], { type: 'text/plain' });
     const inputElement = screen.getByTestId(/fileinput/i);
     fireEvent.change(inputElement, { target: { files: [blob] } });
-    const actionTemplateParentElement = screen.getByTestId(
-      /import-schema-input-wrapper/i
-    );
+    const actionTemplateParentElement = screen.getByTestId(/import-schema-input-wrapper/i);
     expect(actionTemplateParentElement).toBeInTheDocument();
 
     const labelElement = screen.getByTestId(/import-schema-text/i);
     expect(labelElement).toBeInTheDocument();
     expect(labelElement).toHaveTextContent(
-      `${T.translate(
-        "features.WranglerNewUI.WranglerNewParsingDrawer.importSchema"
-      )}`
+      `${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}`
     );
   });
 });
