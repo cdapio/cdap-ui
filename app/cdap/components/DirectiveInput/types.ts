@@ -14,10 +14,7 @@
  * the License.
  */
 
-export interface IHeaderNamesList {
-  name: string;
-  label: string;
-}
+import { IRecords, IHeaderNamesList } from 'components/GridTable/types';
 
 export interface IDirectiveInputProps {
   columnNamesList: IHeaderNamesList[];
@@ -26,16 +23,8 @@ export interface IDirectiveInputProps {
   openDirectivePanel: boolean;
 }
 
-export interface IRecords {
-  [key: string]: string | IRecords | boolean | IRecords[];
-}
-
 export interface IObject {
   [key: string]: string;
-}
-
-export interface IOnRowClickValue {
-  target: IObject;
 }
 
 export interface IDirectiveUsage {

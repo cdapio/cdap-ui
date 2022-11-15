@@ -17,7 +17,7 @@
 import { Box, Typography } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
 import { defaultFuseOptions } from 'components/DirectiveInput/constants';
-import { IDirectiveUsage, IObject, IHeaderNamesList } from 'components/DirectiveInput/types';
+import { IDirectiveUsage, IObject } from 'components/DirectiveInput/types';
 import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
@@ -28,6 +28,7 @@ import NamespaceStore from 'services/NamespaceStore';
 import styled from 'styled-components';
 import uuidV4 from 'uuid/v4';
 import { grey } from '@material-ui/core/colors';
+import { IHeaderNamesList } from 'components/GridTable/types';
 
 interface IInputPanelProps {
   setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;

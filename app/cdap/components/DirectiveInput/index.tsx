@@ -29,6 +29,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PREFIX } from 'components/DirectiveInput/constants';
 import { grey } from '@material-ui/core/colors';
+import { DirectiveBox } from 'components/common/BoxContainer';
 
 const SimpleBox = styled(Box)`
   display: block;
@@ -106,7 +107,7 @@ export default function({
   };
 
   return (
-    <>
+    <DirectiveBox>
       {openDirectivePanel && (
         <SimpleBox data-testid="directive-input-parent">
           <InputPanel
@@ -134,7 +135,7 @@ export default function({
                   htmlFor="directive-input-search"
                   data-testid="select-directive-input-label"
                 >
-                  {T.translate(`${PREFIX}.dollar`)}
+                  $
                 </LabelComponent>
                 <InputComponent
                   id="directive-input-search"
@@ -154,6 +155,6 @@ export default function({
           </DirectiveUsageWrapper>
         </SimpleBox>
       )}
-    </>
+    </DirectiveBox>
   );
 }

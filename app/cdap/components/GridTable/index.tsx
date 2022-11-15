@@ -17,6 +17,7 @@
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
+import { DirectiveBox, LoaderContainer } from 'components/common/BoxContainer';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
@@ -26,7 +27,6 @@ import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
-import { useStyles } from 'components/GridTable/styles';
 import {
   IApiPayload,
   IExecuteAPIResponse,
@@ -47,7 +47,6 @@ import { objectQuery } from 'services/helpers';
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
-  const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -62,9 +61,9 @@ export default function GridTable() {
   ]);
 
   const { dataprep } = DataPrepStore.getState();
-  const [isFirstWrangle, setIsFirstWrangle] = useState<boolean>(false);
-  const [connectorType, setConnectorType] = useState<string>(null);
-  const [openDirectivePanel, setDirectivePanel] = useState<boolean>(true);
+  const [isFirstWrangle, setIsFirstWrangle] = useState(false);
+  const [connectorType, setConnectorType] = useState<string | null>(null);
+  const [openDirectivePanel, setDirectivePanel] = useState(true);
 
   useEffect(() => {
     setIsFirstWrangle(true);
@@ -351,22 +350,20 @@ export default function GridTable() {
         </Table>
       )}
       {openDirectivePanel && (
-        <Box className={classes.directivePanelDiv}>
-          <DirectiveInput
-            columnNamesList={headersNamesList}
-            onDirectiveInputHandler={(directive) => {
-              addDirectives(directive);
-              setDirectivePanel(false);
-            }}
-            onClose={() => setDirectivePanel(false)}
-            openDirectivePanel={openDirectivePanel}
-          />
-        </Box>
+        <DirectiveInput
+          columnNamesList={headersNamesList}
+          onDirectiveInputHandler={(directive) => {
+            addDirectives(directive);
+            setDirectivePanel(false);
+          }}
+          onClose={() => setDirectivePanel(false)}
+          openDirectivePanel={openDirectivePanel}
+        />
       )}
       {loading && (
-        <div className={classes.loadingContainer}>
+        <LoaderContainer>
           <LoadingSVG />
-        </div>
+        </LoaderContainer>
       )}
     </Box>
   );

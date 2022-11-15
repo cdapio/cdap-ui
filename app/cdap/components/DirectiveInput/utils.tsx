@@ -36,23 +36,22 @@ export const formatDirectiveUsageData = (
     keys: ['directive'],
   };
   const fuse = new Fuse(directivesList, fuseOptions);
-  const results = fuse.search(inputSplit[0]).map((row) => {
+  return fuse.search(inputSplit[0]).map((row) => {
     row.uniqueId = uuidV4();
     return row;
   });
-  return results;
 };
 
 export const handlePasteDirective = (directiveInput: string, directivesList: IDirectivesList[]) => {
   const inputSplit = directiveInput.replace(/^\s+/g, '').split(' ');
   const filterUsageItem =
-    directivesList.length > 0
-      ? directivesList.filter((el) => el.usage.includes(inputSplit[0]))
+    directivesList.length > 0 && directivesList.filter((el) => el.usage.includes(inputSplit[0]));
+  const directiveUsageSplit =
+    Array.isArray(filterUsageItem) && filterUsageItem.length > 0
+      ? filterUsageItem[0].usage.split(' ')
       : [];
-  const usageArraySplit = filterUsageItem.length > 0 ? filterUsageItem[0].usage.split(' ') : [];
-  if (usageArraySplit.length === inputSplit.length || inputSplit.length > usageArraySplit.length) {
-    return true;
-  } else {
-    return false;
-  }
+  return (
+    directiveUsageSplit.length === inputSplit.length ||
+    inputSplit.length > directiveUsageSplit.length
+  );
 };
