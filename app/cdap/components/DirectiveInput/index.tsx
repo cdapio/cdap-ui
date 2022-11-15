@@ -32,21 +32,24 @@ import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 
 const SimpleBox = styled(Box)`
   display: block;
+  box-shadow: -3px -4px 15px rgba(68, 132, 245, 0.25);
 `;
 
 const SearchBarWrapper = styled(Box)`
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const InputWrapper = styled(Box)`
   width: 100%;
+  display: flex;
+  align-items: center;
 `;
 
 const DirectiveUsageWrapper = styled(Box)`
   background: ${grey[700]};
-  box-shadow: -3px -4px 15px rgba(68, 132, 245, 0.25);
 `;
 
 const InputComponent = styled.input`
@@ -61,6 +64,7 @@ const InputComponent = styled.input`
 const LabelComponent = styled.label`
   color: #94ec98;
   font-size: 14px;
+  margin-bottom: 0;
 `;
 
 const DirectiveBox = styled(Box)`
