@@ -19,7 +19,7 @@ import React from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
 
-export default function GridTextCell({ cellValue }: IGridTextCellProps) {
+export default function GridTextCell({ cellValue, dataTestId }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
 
   return (
@@ -28,7 +28,7 @@ export default function GridTextCell({ cellValue }: IGridTextCellProps) {
       data-testid={`grid-text-cell-container-${cellValue}`}
     >
       <Card className={classes.root} variant="outlined">
-        <Typography className={classes.cell} data-testid={`grid-text-cell-${cellValue}`}>
+        <Typography className={classes.cell} data-testid={dataTestId}>
           {cellValue}
         </Typography>
       </Card>

@@ -15,4 +15,5 @@
  */
 export interface IGridTextCellProps {
   cellValue: string;
+  dataTestId: string;
 }
