@@ -16,12 +16,9 @@
 
 import { Box, Typography } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
-import {
-  IAutoCompleteProps,
-  IOnRowClickValue,
-} from 'components/DirectiveInput/Components/InputPanel/types';
+import { IAutoCompleteProps } from 'components/DirectiveInput/Components/InputPanel/types';
 import { defaultFuseOptions } from 'components/DirectiveInput/constants';
-import { IUsageDirective } from 'components/DirectiveInput/types';
+import { IDirectiveUsage, IObject } from 'components/DirectiveInput/types';
 import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
@@ -69,11 +66,11 @@ export default function({
   onColumnSelected,
   inputBoxValue,
 }: IAutoCompleteProps) {
-  const [searchResults, setSearchResults] = useState<IUsageDirective[]>([]);
+  const [searchResults, setSearchResults] = useState<IDirectiveUsage[]>([]);
   const [inputText, setInputText] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const eventEmitter = ee(ee);
-  const [fuse, setFuse] = useState(null);
+  const [fuse, setFuse] = useState(new Fuse([], { ...defaultFuseOptions }));
 
   const getUsage = () => {
     if (!isDirectiveSelected) {
@@ -101,7 +98,6 @@ export default function({
     mousetrap.bind('enter', handleEnterKey);
     mousetrap.bind('tab', handleTabKey);
 
-    // returned function will be called on component unmount
     return () => {
       mousetrap.unbind('up');
       mousetrap.unbind('down');
@@ -128,7 +124,7 @@ export default function({
   const handleEnterKey = () => {
     if (inputText.length > 0) {
       if (searchResults[selectedIndex]) {
-        handleRowClick(searchResults[selectedIndex]);
+        handleListItemClick(searchResults[selectedIndex]);
       } else {
         onSearchItemClicked({
           target: { value: `${inputText}` },
@@ -189,20 +185,20 @@ export default function({
     }
   };
 
-  const handleRowClick = (row) => {
-    let eventObject: IOnRowClickValue = {} as IOnRowClickValue;
+  const handleListItemClick = (listItem) => {
+    let eventObject: Record<string, IObject> = {};
     if (!isDirectiveSelected) {
       eventObject = {
-        target: { value: `${row.item.directive}` },
+        target: { value: `${listItem.item.directive}` },
       };
       onSearchItemClicked(eventObject);
-      getDirectiveSyntax([row], true);
+      getDirectiveSyntax([listItem], true);
     } else {
       const splitData = inputText.split(/(?=[:])|(?<=[:])/g);
       eventObject = {
-        target: { value: `${splitData[0]}${splitData[1]}${row.item.label}` },
+        target: { value: `${splitData[0]}${splitData[1]}${listItem.item.label}` },
       };
-      setInputText(`${splitData[0]}${splitData[1]}${row.item.label}`);
+      setInputText(`${splitData[0]}${splitData[1]}${listItem.item.label}`);
       onSearchItemClicked(eventObject);
       onColumnSelected(true);
     }
@@ -215,7 +211,7 @@ export default function({
           <ResultRow
             isActive={searchItemIndex === selectedIndex}
             key={searchItem.uniqueId}
-            onClick={() => handleRowClick(searchItem)}
+            onClick={() => handleListItemClick(searchItem)}
             data-testid="select-directive-list-option"
           >
             <SimpleWrapper>

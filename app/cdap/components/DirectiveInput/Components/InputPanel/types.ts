@@ -14,17 +14,14 @@
  * the License.
  */
 
-import { IHeaderNamesList, IObject, IUsageDirective } from 'components/DirectiveInput/types';
+import { IHeaderNamesList, IObject, IDirectiveUsage } from 'components/DirectiveInput/types';
 
-export interface IOnRowClickValue {
-  target: IObject;
-}
 export interface IAutoCompleteProps {
   setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
   isDirectiveSelected: boolean;
   columnNamesList: IHeaderNamesList[];
-  onSearchItemClicked: (value: IOnRowClickValue) => void;
-  getDirectiveSyntax: (results: IUsageDirective[], value: boolean) => void;
+  onSearchItemClicked: (value: Record<string, IObject>) => void;
+  getDirectiveSyntax: (results: IDirectiveUsage[], value: boolean) => void;
   onColumnSelected: (value: boolean) => void;
   inputBoxValue: string;
 }

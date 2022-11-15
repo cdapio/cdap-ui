@@ -16,13 +16,14 @@
 
 import { Box, IconButton } from '@material-ui/core';
 import InputPanel from 'components/DirectiveInput/Components/InputPanel';
-import UsageDirective from 'components/DirectiveInput/Components/UsageDirective';
+import UsageDirective from 'components/DirectiveInput/Components/DirectiveUsage';
 import { CrossIcon } from 'components/DirectiveInput/IconStore/CrossIcon';
 import {
   IDirectiveInputProps,
   IDirectivesList,
   IOnRowClickValue,
-  IUsageDirective,
+  IDirectiveUsage,
+  IObject,
 } from 'components/DirectiveInput/types';
 import { formatUsageDirectiveData, handlePasteDirective } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
@@ -71,11 +72,13 @@ export default function({
   const [inputBoxValue, setInputBoxValue] = useState<string>('');
   const [isColumnSelected, setIsColumnSelected] = useState<boolean>(false);
   const [isDirectiveSelected, setIsDirectiveSelected] = useState<boolean>(false);
-  const [usageDirective, setUsageDirective] = useState<IUsageDirective[]>([]);
+  const [usageDirective, setUsageDirective] = useState<IDirectiveUsage[]>([]);
   const [directivesList, setDirectivesList] = useState<IDirectivesList[]>([]);
   const directiveRef = useRef();
 
-  const handleDirectiveChange = (event: IOnRowClickValue | React.ChangeEvent<HTMLInputElement>) => {
+  const handleDirectiveChange = (
+    event: Record<string, IObject> | React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (!event.target.value) {
       setIsDirectiveSelected(false);
     }
@@ -112,7 +115,7 @@ export default function({
             inputBoxValue={inputBoxValue}
             onSearchItemClicked={(eventObject) => handleDirectiveChange(eventObject)}
             setDirectivesList={setDirectivesList}
-            getDirectiveSyntax={(activeResults: IUsageDirective[], value) => {
+            getDirectiveSyntax={(activeResults: IDirectiveUsage[], value) => {
               setIsDirectiveSelected(value);
               setUsageDirective(activeResults);
             }}
@@ -124,7 +127,7 @@ export default function({
           />
           <UsageDirectiveWrapper>
             {usageDirective.length === 1 &&
-              usageDirective.map((eachDirective: IUsageDirective) => (
+              usageDirective.map((eachDirective: IDirectiveUsage) => (
                 <UsageDirective key={eachDirective.uniqueId} eachDirective={eachDirective} />
               ))}
             <SearchBarWrapper>

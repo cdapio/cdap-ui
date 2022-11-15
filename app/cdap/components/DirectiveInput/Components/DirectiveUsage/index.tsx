@@ -17,12 +17,12 @@
 import { Box, Divider, Typography, Link } from '@material-ui/core';
 import { moreInfoOnDirective } from 'components/DirectiveInput/constants';
 import { InfoIcon } from 'components/DirectiveInput/IconStore/InfoIcon';
-import { IUsageDirectiveProps } from 'components/DirectiveInput/types';
+import { IDirectiveUsageProps } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
 
-const UsageWrapper = styled(Box)`
+const DirectiveWrapper = styled(Box)`
   padding: 10px;
 `;
 
@@ -60,9 +60,9 @@ const InfoLink = styled(Link)`
   }
 `;
 
-export default function({ eachDirective }: IUsageDirectiveProps) {
+export default function({ eachDirective }: IDirectiveUsageProps) {
   return (
-    <UsageWrapper>
+    <DirectiveWrapper>
       <UsageText variant="body1" data-testid="directive-usage-text">
         {`${T.translate('features.WranglerNewUI.GridPage.directivePanel.usage')} : `}
         {eachDirective?.item?.usage || eachDirective?.usage}
@@ -74,6 +74,6 @@ export default function({ eachDirective }: IUsageDirectiveProps) {
         )}
       </UsageText>
       <DividerLine />
-    </UsageWrapper>
+    </DirectiveWrapper>
   );
 }

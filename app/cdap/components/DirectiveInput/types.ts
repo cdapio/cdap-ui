@@ -33,28 +33,29 @@ export interface IRecords {
 export interface IObject {
   [key: string]: string;
 }
+
 export interface IOnRowClickValue {
   target: IObject;
 }
 
-export interface IUsageDirective {
-  item: IUsageDirectivesItem;
-  matches: IUsageDirectivesMatches;
+export interface IDirectiveUsage {
+  item: IDirectiveUsageItem;
+  matches: IDirectiveUsageMatches;
   score: number;
   uniqueId: string;
   usage?: string;
 }
 
-export interface IUsageDirectivesMatches {
+export interface IDirectiveUsageMatches {
   arrayIndex: number;
   indices: number[][];
   key: string;
   value: string;
 }
 
-export interface IUsageDirectivesItem {
+export interface IDirectiveUsageItem {
   alias: boolean;
-  arguments: IUsageDirectivesItemArguments;
+  arguments: IDirectiveUsageItemArguments;
   categories: string[];
   description: string;
   directive: string;
@@ -64,7 +65,7 @@ export interface IUsageDirectivesItem {
   label?: string;
 }
 
-export interface IUsageDirectivesItemArguments {
+export interface IDirectiveUsageItemArguments {
   directive: string;
   tokens: IUsageDirectivesItemArgumentsTokens[];
 }
@@ -78,7 +79,7 @@ export interface IUsageDirectivesItemArgumentsTokens {
 
 export interface IDirectivesList {
   alias: boolean;
-  arguments: IUsageDirectivesItemArguments;
+  arguments: IDirectiveUsageItemArguments;
   categories: string[];
   description: string;
   directive: string;
@@ -87,6 +88,6 @@ export interface IDirectivesList {
   usage: string;
 }
 
-export interface IUsageDirectiveProps {
-  eachDirective: IUsageDirective;
+export interface IDirectiveUsageProps {
+  eachDirective: IDirectiveUsage;
 }
