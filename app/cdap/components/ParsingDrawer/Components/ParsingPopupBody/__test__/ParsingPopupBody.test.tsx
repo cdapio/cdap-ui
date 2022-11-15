@@ -19,11 +19,12 @@ import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBo
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
+import T from 'i18n-react';
 
 describe('It Should Test the ParsingPopupBody component', () => {
-  it('Should test whether ParsingPopupBody Component is rendered or not', () => {
-    const handleChange = jest.fn();
+  const handleChange = jest.fn();
 
+  it('Should test whether ParsingPopupBody Component is rendered or not', () => {
     const { getAllByRole, getAllByTestId, getByTestId } = render(
       <Router history={history}>
         <Switch>
@@ -54,9 +55,7 @@ describe('It Should Test the ParsingPopupBody component', () => {
     fireEvent.click(option3);
     expect(handleChange).toHaveBeenCalled();
   });
-  it('Should test whether ParsingPopupBody Component is rendered or not', () => {
-    const handleChange = jest.fn();
-
+  it('Check if the label on screen is as expected', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -74,11 +73,15 @@ describe('It Should Test the ParsingPopupBody component', () => {
         </Switch>
       </Router>
     );
-    const renderedCheckbox = screen.getByTestId(
-      'parsing-checkbox-features.WranglerNewParsingDrawer.useFirstRowAsHeader'
+
+    const labelElementOne = screen.getByTestId(/popup-body-label-text-format/i);
+    expect(labelElementOne).toHaveTextContent(
+      `${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}`
     );
-    expect(renderedCheckbox).toBeInTheDocument();
-    fireEvent.click(renderedCheckbox);
-    fireEvent.change(renderedCheckbox, { target: { checked: true } });
+
+    const labelElementTwo = screen.getByTestId(/popup-body-label-text-encoding/i);
+    expect(labelElementTwo).toHaveTextContent(
+      `${T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}`
+    );
   });
 });

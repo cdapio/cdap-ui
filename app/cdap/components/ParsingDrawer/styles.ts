@@ -36,6 +36,7 @@ export const useStyles = makeStyles(() => {
       alignItems: 'center',
       paddingLeft: 0,
       paddingRight: 0,
+      marginBottom: 5,
     },
     headingStyles: {
       display: 'flex',
@@ -92,9 +93,7 @@ export const useStyles = makeStyles(() => {
     formFieldWrapperStyles: {
       width: 'calc(100% - 60px)',
       marginRight: 60,
-    },
-    marginBottomStyles: {
-      marginBottom: 10,
+      marginBottom: 15,
     },
     selectFieldStyles: {
       height: 40,

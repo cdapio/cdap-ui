@@ -16,15 +16,6 @@
 
 import React from 'react';
 
-export const UnderLineSVG = () => {
-  return (
-    <svg width="67" height="3" viewBox="0 0 67 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0.530273H50L53 2.5318H3L0 0.530273Z" fill="#2196F3" />
-      <path d="M54 0.530273H63.5L66.5 2.5318H57L54 0.530273Z" fill="#2196F3" />
-    </svg>
-  );
-};
-
 export const ImportIcon = () => {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -14,19 +14,13 @@
  * the License.
  */
 
-import { Button, Container, Typography } from '@material-ui/core';
+import { Button, Container, Typography, IconButton } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
 import ParsingPopupBody from 'components/ParsingDrawer/Components/ParsingPopupBody';
-import {
-  defaultConnectionPayload,
-  defaultErrorOnTransformations,
-  defaultProperties,
-} from 'components/ParsingDrawer/defaultValues';
-import { useStyles } from 'components/ParsingDrawer/styles';
 import {
   IConnectionPayload,
   IDefaultErrorOnTransformations,
@@ -39,12 +33,125 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MouseEvent } from 'react';
 import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeader';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import styled from 'styled-components';
+
+const Label = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: #5f6368; /* Mui Colors not available */
+  opacity: 0.8;
+  margin-left: 10px;
+`;
+
+const DrawerHeader = styled.header`
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-bottom: 5px;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 28px;
+  background-color: #dadce0;
+  margin: 5px 15px;
+`;
+
+const CloseIcon = styled(CloseRoundedIcon)`
+  font-size: 30px;
+  cursor: pointer;
+  margin: 5px;
+`;
+
+const CustomizedIconButton = styled(IconButton)`
+  padding: 0px;
+`;
+
+const ParsingDrawerContainer = styled(Container)`
+  width: 460px;
+  height: 100%;
+  overflow: hidden;
+  padding-left: 30px;
+  border-left: 1px solid #e0e0e0;
+`;
+
+const TextIconWrapper = styled(Box)`
+  display: flex;
+  alignitems: center;
+`;
+
+const ParsingPopUpBodyContainer = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: calc(100% - 120px);
+`;
+
+const ParsingPopUpBottomSection = styled(Box)`
+& .MuiButton-containedPrimary {
+  '&:hover': {
+    background-color: #3994FF;
+  },
+}
+& .MuiButton-root {
+  width: 162px;
+  height: 36px;
+  background: #3994FF;
+  box-shadow: 0px 2px 4px rgba(70, 129, 244, 0.15);
+  border-radius: 4px;
+  font-style: normal;
+  font-weight: 400,
+  font-size: 15px
+  color: #FFFFFF;
+  align-self: flex-end;
+  margin-top: 30px;
+  text-transform: none;
+  float: right;
+}
+& .MuiSvgIcon-root {
+  margin-top: 2px;
+}
+`;
 
 export default function({
   setLoading,
   updateDataTranformation,
   closeParsingDrawer,
 }: IParsingDrawer) {
+  const defaultConnectionPayload = {
+    path: '',
+    connection: '',
+    sampleRequest: {
+      properties: {
+        format: '',
+        fileEncoding: '',
+        skipHeader: false,
+        enableQuotedValues: false,
+        schema: null,
+        _pluginName: null,
+      },
+      limit: 1000,
+    },
+  };
+
+  const defaultErrorOnTransformations = {
+    open: false,
+    message: '',
+  };
+
+  const defaultProperties = {
+    format: 'csv',
+    fileEncoding: 'UTF-8',
+    enableQuotedValues: false,
+    skipHeader: false,
+  };
+
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [properties, setProperties] = useState<IDefaultProperties>(defaultProperties);
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
@@ -54,7 +161,6 @@ export default function({
   const [connectionPayload, setConnectionPayload] = useState<IConnectionPayload>(
     defaultConnectionPayload
   );
-  const classes = useStyles();
   const { dataprep } = DataPrepStore.getState();
 
   useEffect(() => {
@@ -110,55 +216,54 @@ export default function({
   };
 
   const handleChange = (value: string | boolean, property: string) => {
-    value &&
-      setProperties((prev) => ({
-        ...prev,
-        [property]: property === 'format' ? (value as string).toLowerCase() : value,
-      }));
+    setProperties((prev) => ({
+      ...prev,
+      [property]: property === 'format' ? (value as string).toLowerCase() : value,
+    }));
   };
 
   const componentToRender = (
-    <Container className={classes.drawerContainerStyles} role="presentation">
-      <header className={classes.headerStyles}>
-        <Box className={classes.headerTextWithBackIconStyles}>
+    <ParsingDrawerContainer role="presentation">
+      <DrawerHeader>
+        <TextIconWrapper>
           <DrawerWidgetHeading
             headingText={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsing')}
           />
-        </Box>
-        <Box className={classes.headerRightStyles}>
-          <div className={classes.dividerLineStyles} />
-          <CloseRoundedIcon
-            className={classes.pointerStyles}
-            color="action"
-            fontSize="large"
-            onClick={closeParsingDrawer}
-            data-testid="drawer-widget-close-round-icon"
-          />
-        </Box>
-      </header>
+        </TextIconWrapper>
 
-      <Box className={classes.bodyContainerStyles}>
+        <TextIconWrapper>
+          <Divider />
+          <CustomizedIconButton
+            aria-label="close-icon"
+            data-testid="drawer-widget-close-round-icon"
+            onClick={closeParsingDrawer}
+          >
+            <CloseIcon color="action" />
+          </CustomizedIconButton>
+        </TextIconWrapper>
+      </DrawerHeader>
+
+      <ParsingPopUpBodyContainer>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
 
-        <Box className={classes.bottomSectionStyles}>
-          <Box className={classes.infoWrapperStyles}>
+        <ParsingPopUpBottomSection>
+          <TextIconWrapper>
             <InfoOutlinedIcon />
-            <Typography className={classes.infoTextStyles}>
+            <Label>
               {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsingInfoText')}
-            </Typography>
-          </Box>
+            </Label>
+          </TextIconWrapper>
 
           <Button
             variant="contained"
             color="primary"
-            classes={{ containedPrimary: classes.buttonStyles, root: classes.applyButtonStyles }}
             onClick={(event: MouseEvent<HTMLButtonElement>) => onConfirm(connectionPayload)}
             data-testid="parsing-apply-button"
           >
             {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.apply')}
           </Button>
-        </Box>
-      </Box>
+        </ParsingPopUpBottomSection>
+      </ParsingPopUpBodyContainer>
 
       {errorOnTransformation.open && (
         <PositionedSnackbar
@@ -166,7 +271,7 @@ export default function({
           messageToDisplay={errorOnTransformation.message}
         />
       )}
-    </Container>
+    </ParsingDrawerContainer>
   );
 
   return drawerStatus && componentToRender;
