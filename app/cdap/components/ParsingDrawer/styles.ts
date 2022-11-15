@@ -38,21 +38,8 @@ export const useStyles = makeStyles(() => {
       paddingRight: 0,
       marginBottom: 5,
     },
-    headingStyles: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
     pointerStyles: {
       cursor: 'pointer',
-    },
-    headingTextStyles: {
-      fontFamily: 'Noto Sans',
-      fontStyle: 'normal',
-      fontWeight: 400,
-      fontSize: 20,
-      lineHeight: '150%',
-      letterSpacing: 0.15,
-      color: '#000000',
     },
     headerRightStyles: {
       display: 'flex',
@@ -199,28 +186,6 @@ export const useStyles = makeStyles(() => {
 
     chevronLeftRounded: {
       fontSize: 24,
-    },
-    containerStyles: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    importStyles: {
-      display: 'flex',
-      flexDirection: 'row',
-      paddingTop: 5,
-      height: 35,
-      alignItems: 'center',
-    },
-    importTextStyles: {
-      fontWeight: 400,
-      fontSize: 14,
-      fontStyle: 'normal',
-      color: '#000000',
-      lineHeight: '150%',
-      letterSpacing: 0.15,
-      paddingLeft: 8,
-      whiteSpace: 'nowrap',
     },
   };
 });

@@ -14,9 +14,11 @@
  * the License.
  */
 
-import { Button, Container, Typography, IconButton } from '@material-ui/core';
+import { Button, Container, IconButton, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import DrawerWidget from 'components/common/DrawerWidget';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import DataPrepStore from 'components/DataPrep/store';
@@ -29,12 +31,8 @@ import {
 } from 'components/ParsingDrawer/types';
 import PositionedSnackbar from 'components/SnackbarComponent/index';
 import T from 'i18n-react';
-import React, { useContext, useEffect, useState } from 'react';
-import { MouseEvent } from 'react';
-import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import React, { MouseEvent, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import DrawerWidget from 'components/common/DrawerWidget';
-import { useStyles } from './styles';
 
 const ImportIcon = () => {
   return (
@@ -141,6 +139,26 @@ const ParsingPopUpBottomSection = styled(Box)`
 }
 `;
 
+const DrawerHeaderContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const DrawerHeadingWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const DrawerHeading = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #000000;
+`;
+
 export default function({
   setLoading,
   updateDataTranformation,
@@ -244,14 +262,6 @@ export default function({
     }));
   };
 
-  const classes = useStyles();
-
-  const ContainerHeaderBox = styled(Box)`
-    display: flex;
-    flexdirection: row;
-    justifycontent: space-between;
-  `;
-
   return (
     <ParsingDrawerContainer role="presentation">
       <DrawerWidget
@@ -259,14 +269,12 @@ export default function({
         headerElement={
           <DrawerHeader>
             <TextIconWrapper>
-              <Box className={classes.containerStyles}>
-                <Box className={classes.headingStyles}>
-                  <Typography className={classes.headingTextStyles} component="span">
-                    Parsing
-                  </Typography>
+              <DrawerHeaderContainer>
+                <DrawerHeadingWrapper>
+                  <DrawerHeading component="span">Parsing</DrawerHeading>
                   <UnderLineSVG />
-                </Box>
-              </Box>
+                </DrawerHeadingWrapper>
+              </DrawerHeaderContainer>
             </TextIconWrapper>
 
             <TextIconWrapper>
