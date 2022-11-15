@@ -70,7 +70,7 @@ describe("Testing Input Panel Component", () => {
 
   });
 
-  it("Should check if the parent wrapper is rendered with selectedDirective as true", () => {
+  it("Should check if the parent wrapper is rendered with selectedDirective as false", () => {
    
     render(
       <InputPanel
