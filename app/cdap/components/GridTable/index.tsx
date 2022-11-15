@@ -44,6 +44,11 @@ import PositionedSnackbar from 'components/Snackbar';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import styled from 'styled-components';
+import {
+  ITransformationMessage,
+  ISchemaValue,
+  IDefaultErrorOnTransformations,
+} from 'components/ImportSchema/types';
 
 const ApplyButton = styled(Button)`
   margin-left: 20px;
@@ -79,9 +84,12 @@ export default function GridTable() {
     },
   ]);
 
-  const [successUpload, setSuccessUpload] = useState({ open: false, message: '' });
-  const [schemaValue, setSchemaValue] = useState(null);
-  const [schemaApplied, setSchemaApplied] = useState(false);
+  const [successUpload, setSuccessUpload] = useState<ITransformationMessage>({
+    open: false,
+    message: '',
+  });
+  const [schemaValue, setSchemaValue] = useState<ISchemaValue>(null);
+  const [schemaApplied, setSchemaApplied] = useState<boolean>(false);
   const [failureSchema, setFailureSchemaStatus] = useState<boolean>(false);
   const defaultErrorOnTransformations = {
     open: false,
@@ -111,7 +119,9 @@ export default function GridTable() {
     skipHeader: false,
   };
 
-  const [errorOnTransformation, setErrorOnTransformation] = useState(defaultErrorOnTransformations);
+  const [errorOnTransformation, setErrorOnTransformation] = useState<
+    IDefaultErrorOnTransformations
+  >(defaultErrorOnTransformations);
   const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
   const [properties, setProperties] = useState(defaultProperties);
 

@@ -21,12 +21,12 @@ export interface IParsingHeaderActionTemplateProps {
   handleSchemaUpload: (ISchemaProps) => void;
   setErrorOnTransformation: Dispatch<SetStateAction<ITransformationMessage>>;
 }
-interface ITransformationMessage {
+export interface ITransformationMessage {
   open: boolean;
   message: string;
 }
 
-interface ISchemaProps {
+export interface ISchemaProps {
   type: string;
   name: string;
   fields: Ifields;
@@ -34,4 +34,20 @@ interface ISchemaProps {
 interface Ifields {
   name: string;
   type: string[];
+}
+
+export interface ISchemaValue {
+  fields: ISchemaFields[];
+  name: string;
+  type: string;
+}
+
+export interface ISchemaFields {
+  name: string;
+  type: string[];
+}
+
+export interface IDefaultErrorOnTransformations {
+  open?: boolean;
+  message?: string;
 }
