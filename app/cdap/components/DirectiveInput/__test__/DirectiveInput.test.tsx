@@ -22,7 +22,7 @@ describe('Testing Directive Input Component', () => {
   beforeEach(() => {
     render(
       <DirectiveInput
-        columnNamesList={[{ name: 'abhilash', label: 'Batman', type:[] }]}
+        columnNamesList={[{ name: 'abhilash', label: 'Batman', type: [] }]}
         onDirectiveInputHandler={() => jest.fn()}
         onClose={() => jest.fn()}
         openDirectivePanel={true}
