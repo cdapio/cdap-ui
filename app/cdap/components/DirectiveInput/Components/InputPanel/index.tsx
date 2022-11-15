@@ -16,9 +16,8 @@
 
 import { Box, Typography } from '@material-ui/core';
 import MyDataPrepApi from 'api/dataprep';
-import { IAutoCompleteProps } from 'components/DirectiveInput/Components/InputPanel/types';
 import { defaultFuseOptions } from 'components/DirectiveInput/constants';
-import { IDirectiveUsage, IObject } from 'components/DirectiveInput/types';
+import { IDirectiveUsage, IObject, IHeaderNamesList } from 'components/DirectiveInput/types';
 import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
@@ -29,6 +28,16 @@ import NamespaceStore from 'services/NamespaceStore';
 import styled from 'styled-components';
 import uuidV4 from 'uuid/v4';
 import { grey } from '@material-ui/core/colors';
+
+interface IInputPanelProps {
+  setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
+  directiveSelected: boolean;
+  columnNamesList: IHeaderNamesList[];
+  onSearchItemClicked: (value: string) => void;
+  getDirectiveSyntax: (results: IDirectiveUsage[], value: boolean) => void;
+  onColumnSelected: (value: boolean) => void;
+  inputBoxValue: string;
+}
 
 const SimpleWrapper = styled(Box)`
   display: block;
@@ -65,7 +74,7 @@ export default function({
   getDirectiveSyntax,
   onColumnSelected,
   inputBoxValue,
-}: IAutoCompleteProps) {
+}: IInputPanelProps) {
   const [searchResults, setSearchResults] = useState<IDirectiveUsage[]>([]);
   const [inputText, setInputText] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
