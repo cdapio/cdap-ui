@@ -16,8 +16,6 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import com.google.cloud.FieldSelector;
-import io.cdap.e2e.utils.SeleniumHelper;
 import io.cucumber.java.en.Given;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cdap.cdap.ui.utils.Constants;
@@ -28,8 +26,6 @@ import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.cdap.ui.utils.Helper;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-
-import java.time.Duration;
 
 public class DirectiveTest {
     @Given("Navigate to the Home page")
