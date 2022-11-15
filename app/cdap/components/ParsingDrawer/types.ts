@@ -36,7 +36,7 @@ export interface IInputSelectProps {
 
 export interface IOptions {
   label?: string | ReactNode;
-  value?: string | ReactNode | boolean;
+  value?: string;
 }
 
 export interface IParsingPopupBodyProps {
