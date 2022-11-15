@@ -35,15 +35,21 @@ import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeader';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import styled from 'styled-components';
 
-const Label = styled(Typography)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 150%;
-  letter-spacing: 0.15px;
-  color: #5f6368; /* Mui Colors not available */
-  opacity: 0.8;
-  margin-left: 10px;
+const CloseIcon = styled(CloseRoundedIcon)`
+  font-size: 30px;
+  cursor: pointer;
+  margin: 5px;
+`;
+
+const CustomizedIconButton = styled(IconButton)`
+  padding: 0px;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 28px;
+  background-color: #dadce0;
+  margin: 5px 15px;
 `;
 
 const DrawerHeader = styled.header`
@@ -56,21 +62,15 @@ const DrawerHeader = styled.header`
   margin-bottom: 5px;
 `;
 
-const Divider = styled.div`
-  width: 1px;
-  height: 28px;
-  background-color: #dadce0;
-  margin: 5px 15px;
-`;
-
-const CloseIcon = styled(CloseRoundedIcon)`
-  font-size: 30px;
-  cursor: pointer;
-  margin: 5px;
-`;
-
-const CustomizedIconButton = styled(IconButton)`
-  padding: 0px;
+const Label = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: #5f6368; /* Mui Colors not available */
+  opacity: 0.8;
+  margin-left: 10px;
 `;
 
 const ParsingDrawerContainer = styled(Container)`
@@ -79,11 +79,6 @@ const ParsingDrawerContainer = styled(Container)`
   overflow: hidden;
   padding-left: 30px;
   border-left: 1px solid #e0e0e0;
-`;
-
-const TextIconWrapper = styled(Box)`
-  display: flex;
-  alignitems: center;
 `;
 
 const ParsingPopUpBodyContainer = styled(Box)`
@@ -117,6 +112,11 @@ const ParsingPopUpBottomSection = styled(Box)`
 & .MuiSvgIcon-root {
   margin-top: 2px;
 }
+`;
+
+const TextIconWrapper = styled(Box)`
+  display: flex;
+  alignitems: center;
 `;
 
 export default function({
@@ -242,10 +242,8 @@ export default function({
           </CustomizedIconButton>
         </TextIconWrapper>
       </DrawerHeader>
-
       <ParsingPopUpBodyContainer>
         <ParsingPopupBody values={properties} changeEventListener={handleChange} />
-
         <ParsingPopUpBottomSection>
           <TextIconWrapper>
             <InfoOutlinedIcon />
@@ -253,7 +251,6 @@ export default function({
               {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.parsingInfoText')}
             </Label>
           </TextIconWrapper>
-
           <Button
             variant="contained"
             color="primary"

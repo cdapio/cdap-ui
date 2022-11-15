@@ -25,7 +25,7 @@ export interface IInputCheckboxProps {
 }
 
 export interface IInputSelectProps {
-  options: IOptions[] | ReactNode;
+  options: IOptions[];
   value: string | ReactNode;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   classes?: { icon: string; select: string };
@@ -38,7 +38,7 @@ export interface IInputSelectProps {
 
 export interface IOptions {
   label?: string | ReactNode;
-  value?: string | ReactNode | boolean;
+  value?: string;
 }
 
 export interface IParsingPopupBodyProps {

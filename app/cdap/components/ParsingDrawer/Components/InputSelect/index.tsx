@@ -81,15 +81,13 @@ export default function({
         'data-testid': dataTestId,
       }}
     >
-      {Array.isArray(options) &&
-        options?.length &&
-        options.map((option, index) => {
-          return (
-            <MenuItem value={option.value} key={option.value} data-testid={`input-select-${index}`}>
-              {option.label}
-            </MenuItem>
-          );
-        })}
+      {options.map((option, index) => {
+        return (
+          <MenuItem value={option.value} key={option.value} data-testid={`input-select-${index}`}>
+            {option.label}
+          </MenuItem>
+        );
+      })}
     </SelectField>
   );
 }
