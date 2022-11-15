@@ -3436,4 +3436,20 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
-...
+    WranglerNewParsingDrawer:
+      importSchemaErrorMessage: Imported schema is not a valid Avro schema
+      importSchemaSuccessMessage: A schema has been imported for this file
+      parsingInfoText: Once applied parsing settings cannot be changed.
+      transformationErrorMessage1: Selected Transformation Cannot Be Applied
+      transformationErrorMessage2: Error Encountered...
+    ImportSchema:
+      importSchema: Import Schema
+      Apply: Apply
+    Snackbar:
+        labels:
+          failure: Failure
+          success: Success
+          errorMessage:
+            encountered : 'Error Encountered...'
+            transformation: 'Selected Transformation Cannot Be Applied'
+
