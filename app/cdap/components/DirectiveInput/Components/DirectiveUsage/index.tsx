@@ -15,7 +15,7 @@
  */
 
 import { Box, Divider, Typography, Link } from '@material-ui/core';
-import { moreInfoOnDirective } from 'components/DirectiveInput/constants';
+import { moreInfoOnDirective, PREFIX } from 'components/DirectiveInput/constants';
 import { InfoIcon } from 'components/DirectiveInput/IconStore/InfoIcon';
 import { IDirectiveUsageProps } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
@@ -64,12 +64,12 @@ export default function({ eachDirective }: IDirectiveUsageProps) {
   return (
     <DirectiveWrapper>
       <UsageText variant="body1" data-testid="directive-usage-text">
-        {`${T.translate('features.WranglerNewUI.GridPage.directivePanel.usage')} : `}
+        {`${T.translate(`${PREFIX}.usage`)} : `}
         {eachDirective?.item?.usage || eachDirective?.usage}
         {moreInfoOnDirective[eachDirective?.item?.directive] && (
           <InfoLink href={`${moreInfoOnDirective[eachDirective?.item?.directive]}`} target="_blank">
             {InfoIcon}
-            {T.translate('features.WranglerNewUI.GridPage.directivePanel.moreInfoOnDirective')}
+            {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
         )}
       </UsageText>

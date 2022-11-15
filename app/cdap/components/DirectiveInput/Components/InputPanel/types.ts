@@ -14,13 +14,13 @@
  * the License.
  */
 
-import { IHeaderNamesList, IObject, IDirectiveUsage } from 'components/DirectiveInput/types';
+import { IHeaderNamesList, IDirectiveUsage } from 'components/DirectiveInput/types';
 
 export interface IAutoCompleteProps {
   setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
-  isDirectiveSelected: boolean;
+  directiveSelected: boolean;
   columnNamesList: IHeaderNamesList[];
-  onSearchItemClicked: (value: Record<string, IObject>) => void;
+  onSearchItemClicked: (value: string) => void;
   getDirectiveSyntax: (results: IDirectiveUsage[], value: boolean) => void;
   onColumnSelected: (value: boolean) => void;
   inputBoxValue: string;

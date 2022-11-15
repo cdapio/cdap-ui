@@ -140,3 +140,5 @@ export const defaultFuseOptions = {
   maxPatternLength: 32,
   keys: ['directive'],
 };
+
+export const PREFIX = 'features.WranglerNewUI.GridPage.directivePanel';

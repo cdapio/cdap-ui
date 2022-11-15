@@ -59,7 +59,7 @@ const ResultRow = styled(Box)`
 
 export default function({
   setDirectivesList,
-  isDirectiveSelected,
+  directiveSelected,
   columnNamesList,
   onSearchItemClicked,
   getDirectiveSyntax,
@@ -73,7 +73,7 @@ export default function({
   const [fuse, setFuse] = useState(new Fuse([], { ...defaultFuseOptions }));
 
   const getUsage = () => {
-    if (!isDirectiveSelected) {
+    if (!directiveSelected) {
       MyDataPrepApi.getUsage({ context: NamespaceStore.getState().selectedNamespace }).subscribe(
         (res) => {
           setDirectivesList(res.values);
@@ -87,7 +87,7 @@ export default function({
 
   useEffect(() => {
     getUsage();
-  }, [isDirectiveSelected]);
+  }, [directiveSelected]);
 
   useEffect(() => {
     eventEmitter.on(globalEvents.DIRECTIVEUPLOAD, getUsage);
@@ -98,6 +98,7 @@ export default function({
     mousetrap.bind('enter', handleEnterKey);
     mousetrap.bind('tab', handleTabKey);
 
+    // unbind a single keyboard event or an array of keyboard events.
     return () => {
       mousetrap.unbind('up');
       mousetrap.unbind('down');
@@ -126,9 +127,7 @@ export default function({
       if (searchResults[selectedIndex]) {
         handleListItemClick(searchResults[selectedIndex]);
       } else {
-        onSearchItemClicked({
-          target: { value: `${inputText}` },
-        });
+        onSearchItemClicked(inputText);
       }
     }
   };
@@ -142,7 +141,7 @@ export default function({
   };
 
   useEffect(() => {
-    if (isDirectiveSelected) {
+    if (directiveSelected) {
       setFuse(new Fuse(columnNamesList, { ...defaultFuseOptions, keys: ['label'] }));
     }
     searchMatch(inputBoxValue);
@@ -150,56 +149,45 @@ export default function({
   }, [inputBoxValue]);
 
   const searchMatch = (searchString: string) => {
-    let results = [];
-    const input: string = searchString;
-    const spaceIndex: number = input.indexOf(' ');
-    if (fuse && input.length > 0) {
-      if (!isDirectiveSelected) {
-        results = fuse
-          .search(input)
+    let searchList = [];
+    const spaceIndex: boolean = searchString.includes(' ');
+    if (fuse && searchString.length > 0) {
+      if (!directiveSelected) {
+        searchList = fuse
+          .search(searchString)
           .slice(0, 3)
-          .filter((row, index) => {
-            if (spaceIndex === -1) {
-              return true;
-            }
-            return row.score === 0 && index === 0;
-          })
-          .map((row) => {
-            row.uniqueId = uuidV4();
-            return row;
+          .map((searchItem) => {
+            searchItem.uniqueId = uuidV4();
+            return searchItem;
           });
-        reverse(results);
+        reverse(searchList);
       } else {
-        results = fuse.search(input.split(':')[1]).map((row) => {
-          row.uniqueId = uuidV4();
-          return row;
+        searchList = fuse.search(searchString.split(':')[1]).map((searchItem) => {
+          searchItem.uniqueId = uuidV4();
+          return searchItem;
         });
-        reverse(results);
+        reverse(searchList);
       }
     }
-    setSearchResults(results);
+    setSearchResults(searchList);
     setInputText(searchString);
-    setSelectedIndex(results.length - 1);
-    if (!isDirectiveSelected) {
-      getDirectiveSyntax(results, spaceIndex !== -1);
+    setSelectedIndex(searchList.length - 1);
+    if (!directiveSelected) {
+      getDirectiveSyntax(searchList, spaceIndex);
     }
   };
 
   const handleListItemClick = (listItem) => {
-    let eventObject: Record<string, IObject> = {};
-    if (!isDirectiveSelected) {
-      eventObject = {
-        target: { value: `${listItem.item.directive}` },
-      };
-      onSearchItemClicked(eventObject);
+    if (!directiveSelected) {
+      onSearchItemClicked(listItem.item.directive);
       getDirectiveSyntax([listItem], true);
     } else {
       const splitData = inputText.split(/(?=[:])|(?<=[:])/g);
-      eventObject = {
+      const eventObject: Record<string, IObject> = {
         target: { value: `${splitData[0]}${splitData[1]}${listItem.item.label}` },
       };
       setInputText(`${splitData[0]}${splitData[1]}${listItem.item.label}`);
-      onSearchItemClicked(eventObject);
+      onSearchItemClicked(eventObject.target.value);
       onColumnSelected(true);
     }
   };

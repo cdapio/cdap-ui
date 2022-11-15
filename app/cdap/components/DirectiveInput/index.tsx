@@ -22,12 +22,13 @@ import {
   IDirectiveInputProps,
   IDirectivesList,
   IDirectiveUsage,
-  IObject,
 } from 'components/DirectiveInput/types';
 import { formatDirectiveUsageData, handlePasteDirective } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { PREFIX } from 'components/DirectiveInput/constants';
+import { grey } from '@material-ui/core/colors';
 
 const SimpleBox = styled(Box)`
   display: block;
@@ -44,7 +45,7 @@ const InputWrapper = styled(Box)`
 `;
 
 const DirectiveUsageWrapper = styled(Box)`
-  background: #616161;
+  background: ${grey[700]};
   box-shadow: -3px -4px 15px rgba(68, 132, 245, 0.25);
 `;
 
@@ -69,37 +70,35 @@ export default function({
   openDirectivePanel,
 }: IDirectiveInputProps) {
   const [inputBoxValue, setInputBoxValue] = useState<string>('');
-  const [isColumnSelected, setIsColumnSelected] = useState<boolean>(false);
-  const [isDirectiveSelected, setIsDirectiveSelected] = useState<boolean>(false);
-  const [usageDirective, setUsageDirective] = useState<IDirectiveUsage[]>([]);
+  const [columnSelected, setColumnSelected] = useState<boolean>(false);
+  const [directiveSelected, setDirectiveSelected] = useState<boolean>(false);
+  const [directiveUsage, setDirectiveUsage] = useState<IDirectiveUsage[]>([]);
   const [directivesList, setDirectivesList] = useState<IDirectivesList[]>([]);
   const directiveRef = useRef();
 
-  const handleDirectiveChange = (
-    event: Record<string, IObject> | React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!event.target.value) {
-      setIsDirectiveSelected(false);
+  const handleDirectiveChange = (value: string) => {
+    if (!value) {
+      setDirectiveSelected(false);
     }
-    setInputBoxValue(event.target.value);
+    setInputBoxValue(value);
   };
 
   useEffect(() => {
-    setUsageDirective(formatDirectiveUsageData(inputBoxValue, directivesList));
+    setDirectiveUsage(formatDirectiveUsageData(inputBoxValue, directivesList));
   }, [inputBoxValue]);
 
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
     {
-      const usageArraySplit =
-        usageDirective.length > 0 ? usageDirective[0]?.item?.usage.split(' ') : [];
+      const directiveSyntax =
+        directiveUsage.length > 0 ? directiveUsage[0]?.item?.usage.split(' ') : [];
       const inputSplit = inputBoxValue.replace(/^\s+/g, '').split(' ');
       if (event.key === 'Enter' && handlePasteDirective(inputBoxValue, directivesList)) {
         onDirectiveInputHandler(inputBoxValue);
       } else if (
         event.key === 'Enter' &&
-        isColumnSelected &&
-        isDirectiveSelected &&
-        (usageArraySplit.length === inputSplit.length || inputSplit.length > usageArraySplit.length)
+        columnSelected &&
+        directiveSelected &&
+        (directiveSyntax.length === inputSplit.length || inputSplit.length > directiveSyntax.length)
       ) {
         onDirectiveInputHandler(inputBoxValue);
       }
@@ -112,21 +111,21 @@ export default function({
         <SimpleBox data-testid="directive-input-parent">
           <InputPanel
             inputBoxValue={inputBoxValue}
-            onSearchItemClicked={(eventObject) => handleDirectiveChange(eventObject)}
+            onSearchItemClicked={(value) => handleDirectiveChange(value)}
             setDirectivesList={setDirectivesList}
             getDirectiveSyntax={(activeResults: IDirectiveUsage[], value) => {
-              setIsDirectiveSelected(value);
-              setUsageDirective(activeResults);
+              setDirectiveSelected(value);
+              setDirectiveUsage(activeResults);
             }}
             onColumnSelected={() => {
-              setIsColumnSelected(true);
+              setColumnSelected(true);
             }}
-            isDirectiveSelected={isDirectiveSelected}
+            directiveSelected={directiveSelected}
             columnNamesList={columnNamesList}
           />
           <DirectiveUsageWrapper>
-            {usageDirective.length === 1 &&
-              usageDirective.map((eachDirective: IDirectiveUsage) => (
+            {directiveUsage.length === 1 &&
+              directiveUsage.map((eachDirective: IDirectiveUsage) => (
                 <DirectiveUsage key={eachDirective.uniqueId} eachDirective={eachDirective} />
               ))}
             <SearchBarWrapper>
@@ -135,22 +134,20 @@ export default function({
                   htmlFor="directive-input-search"
                   data-testid="select-directive-input-label"
                 >
-                  {T.translate('features.WranglerNewUI.GridPage.directivePanel.dollar')}
+                  {T.translate(`${PREFIX}.dollar`)}
                 </LabelComponent>
                 <InputComponent
                   id="directive-input-search"
                   autoComplete="OFF"
-                  placeholder={T.translate(
-                    'features.WranglerNewUI.GridPage.directivePanel.inputDirective'
-                  ).toString()}
+                  placeholder={T.translate(`${PREFIX}.inputDirective`).toString()}
                   value={inputBoxValue}
-                  onChange={handleDirectiveChange}
+                  onChange={(event) => handleDirectiveChange(event.target.value)}
                   ref={directiveRef}
                   onKeyDown={handleKeyDownEvent}
                   data-testid="select-directive-input-search"
                 />
               </InputWrapper>
-              <IconButton data-testid="close-directive-panel" onClick={() => onClose()}>
+              <IconButton data-testid="close-directive-panel" onClick={onClose}>
                 {CrossIcon}
               </IconButton>
             </SearchBarWrapper>
