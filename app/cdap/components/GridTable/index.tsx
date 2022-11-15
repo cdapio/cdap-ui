@@ -32,6 +32,7 @@ import {
   IRecords,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
+import ParsingDrawer from 'components/ParsingDrawer';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
@@ -56,6 +57,32 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+
+  const [isFirstWrangle, setIsFirstWrangle] = useState<boolean>(false);
+  const [connectorType, setConnectorType] = useState<string>(null);
+
+  const { dataprep } = DataPrepStore.getState();
+
+  useEffect(() => {
+    setIsFirstWrangle(true);
+    setConnectorType(dataprep.connectorType);
+  }, []);
+
+  const isParsingPanel =
+    dataprep?.insights?.name &&
+    isFirstWrangle &&
+    connectorType === 'File' &&
+    Array.isArray(gridData?.headers) &&
+    gridData?.headers.length !== 0;
+
+  const updateDataTranformation = (wid: string) => {
+    const payload: IParams = {
+      context: params.namespace as string,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+    setIsFirstWrangle(false);
+  };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -288,6 +315,15 @@ export default function GridTable() {
               })}
           </TableBody>
         </Table>
+      )}
+      {isParsingPanel && (
+        <Box>
+          <ParsingDrawer
+            updateDataTranformation={(wid) => updateDataTranformation(wid)}
+            setLoading={setLoading}
+            closeParsingDrawer={() => setIsFirstWrangle(false)}
+          />
+        </Box>
       )}
       {loading && (
         <div className={classes.loadingContainer}>

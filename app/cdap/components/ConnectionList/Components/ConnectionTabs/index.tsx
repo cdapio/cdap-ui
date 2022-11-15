@@ -23,6 +23,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import TabLabelCanBrowse from '../TabLabelCanBrowse';
 import TabLabelCanSample from '../TabLabelCanSample';
+import DataPrepStore from 'components/DataPrep/store';
+import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 
 const ConnectionTab = styled(Tab)({
   width: '100%',
@@ -68,6 +70,15 @@ export default function ConnectionsTabs({
   useEffect(() => {
     setConnectionId(connectionId);
   }, []);
+
+  if (index === 0) {
+    DataPrepStore.dispatch({
+      type: DataPrepActions.setConnectorType,
+      payload: {
+        connectorType: tabsData.selectedTab,
+      },
+    });
+  }
 
   return (
     <Box data-testid="connections-tabs-parent" className={classes.connectionsTabsParent}>
