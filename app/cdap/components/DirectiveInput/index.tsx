@@ -16,16 +16,15 @@
 
 import { Box, IconButton } from '@material-ui/core';
 import InputPanel from 'components/DirectiveInput/Components/InputPanel';
-import UsageDirective from 'components/DirectiveInput/Components/DirectiveUsage';
+import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
 import { CrossIcon } from 'components/DirectiveInput/IconStore/CrossIcon';
 import {
   IDirectiveInputProps,
   IDirectivesList,
-  IOnRowClickValue,
   IDirectiveUsage,
   IObject,
 } from 'components/DirectiveInput/types';
-import { formatUsageDirectiveData, handlePasteDirective } from 'components/DirectiveInput/utils';
+import { formatDirectiveUsageData, handlePasteDirective } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -44,7 +43,7 @@ const InputWrapper = styled(Box)`
   width: 100%;
 `;
 
-const UsageDirectiveWrapper = styled(Box)`
+const DirectiveUsageWrapper = styled(Box)`
   background: #616161;
   box-shadow: -3px -4px 15px rgba(68, 132, 245, 0.25);
 `;
@@ -86,7 +85,7 @@ export default function({
   };
 
   useEffect(() => {
-    setUsageDirective(formatUsageDirectiveData(inputBoxValue, directivesList));
+    setUsageDirective(formatDirectiveUsageData(inputBoxValue, directivesList));
   }, [inputBoxValue]);
 
   const handleKeyDownEvent = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -125,10 +124,10 @@ export default function({
             isDirectiveSelected={isDirectiveSelected}
             columnNamesList={columnNamesList}
           />
-          <UsageDirectiveWrapper>
+          <DirectiveUsageWrapper>
             {usageDirective.length === 1 &&
               usageDirective.map((eachDirective: IDirectiveUsage) => (
-                <UsageDirective key={eachDirective.uniqueId} eachDirective={eachDirective} />
+                <DirectiveUsage key={eachDirective.uniqueId} eachDirective={eachDirective} />
               ))}
             <SearchBarWrapper>
               <InputWrapper>
@@ -155,7 +154,7 @@ export default function({
                 {CrossIcon}
               </IconButton>
             </SearchBarWrapper>
-          </UsageDirectiveWrapper>
+          </DirectiveUsageWrapper>
         </SimpleBox>
       )}
     </>

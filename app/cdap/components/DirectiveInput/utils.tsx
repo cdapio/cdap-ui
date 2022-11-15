@@ -18,7 +18,7 @@ import Fuse from 'fuse.js';
 import uuidV4 from 'uuid/v4';
 import { IDirectivesList } from './types';
 
-export const formatUsageDirectiveData = (
+export const formatDirectiveUsageData = (
   directiveInput: string,
   directivesList: IDirectivesList[]
 ) => {
