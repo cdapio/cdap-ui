@@ -17,14 +17,12 @@
 import React from 'react';
 import DirectiveInput from 'components/DirectiveInput/index';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Route, Router, Switch } from 'react-router';
-import history from 'services/history';
 
 describe('Testing Directive Input Component', () => {
   beforeEach(() => {
     render(
       <DirectiveInput
-        columnNamesList={[{ name: 'abhilash', label: 'Batman' }]}
+        columnNamesList={[{ name: 'abhilash', label: 'Batman', type: [] }]}
         onDirectiveInputHandler={() => jest.fn()}
         onClose={() => jest.fn()}
         openDirectivePanel={true}
@@ -40,9 +38,9 @@ describe('Testing Directive Input Component', () => {
   it('Should check if the input element is working as expected with test as input', () => {
     const inputElement = screen.getByTestId(/select-directive-input-search/i);
     expect(inputElement).toBeInTheDocument();
-    fireEvent.change(inputElement, { target: { value: undefined } });
+    fireEvent.change(inputElement, { target: { value: 'test' } });
     fireEvent.keyDown(inputElement, { key: 'Enter', code: 'Enter', charCode: 13 });
-    expect(inputElement).toHaveAttribute('value', undefined);
+    expect(inputElement).toHaveAttribute('value', 'test');
   });
 
   it('Should check cross icon is functioning as expected ', () => {
