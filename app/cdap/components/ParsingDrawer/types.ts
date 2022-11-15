@@ -25,20 +25,20 @@ export interface IInputCheckboxProps {
 }
 
 export interface IInputSelectProps {
-  options: IOptions[] | ReactNode;
+  options: IOptions[];
   value: string | ReactNode;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-  classes: { icon: string; select: string };
-  className: string;
+  classes?: { icon: string; select: string };
+  className?: string;
   fullWidth: boolean;
-  optionClassName: { root: string };
+  optionClassName?: { root: string };
   defaultValue: string | ReactNode;
   dataTestId: string;
 }
 
 export interface IOptions {
   label?: string | ReactNode;
-  value?: string | ReactNode | boolean;
+  value?: string;
 }
 
 export interface IParsingPopupBodyProps {

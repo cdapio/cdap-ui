@@ -27,7 +27,6 @@ const Label = styled(Typography)`
   letter-spacing: 0.15px;
   color: #5f6368; /* Mui Colors not available */
   opacity: 0.8;
-  margin-left: 10px;
 `;
 
 export default function({ label, value, onChange, className }: IInputCheckboxProps) {
