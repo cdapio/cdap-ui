@@ -42,6 +42,7 @@ export default class TabHead extends Component {
         })}
         onClick={this.props.onClick}
         data-cy={this.props.dataCy}
+        data-testid={this.props.dataTestid}
       >
         {this.props.children}
       </div>
@@ -54,4 +55,5 @@ TabHead.propTypes = {
   activeTab: PropTypes.bool,
   layout: PropTypes.string,
   dataCy: PropTypes.string,
+  dataTestid: PropTypes.string,
 };

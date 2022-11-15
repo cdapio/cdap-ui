@@ -121,10 +121,15 @@ export default class Alert extends Component {
         className="global-alert"
         zIndex={1062 /* This is required for showing error in angular side*/}
       >
-        <div className={this.state.type} data-cy="alert">
+        <div className={this.state.type} data-cy="alert" data-testid="alert">
           {msgElem}
           {this.props.actionElements}
-          <IconSVG name="icon-close" onClick={this.onClose} dataCy="alert-close" />
+          <IconSVG
+            name="icon-close"
+            onClick={this.onClose}
+            dataCy="alert-close"
+            dataTestId="alert-close"
+          />
         </div>
       </Modal>
     );

@@ -286,7 +286,7 @@ export const ActionButtons = ({
                   disabled={!hasNodes}
                   onClick={!hasNodes || onSaveDraft}
                   data-cy="pipeline-draft-save-btn"
-                  date-testid="pipeline-draft-save-btn"
+                  data-testid="pipeline-draft-save-btn"
                 >
                   <div>
                     <IconSVG name="icon-savedraft"></IconSVG>

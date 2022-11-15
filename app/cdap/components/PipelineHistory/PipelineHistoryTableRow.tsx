@@ -35,12 +35,8 @@ interface IPipelineHistoryTableRowProps {
 
 const PREFIX = 'features.PipelineHistory.table';
 
-const StyledGreenUl = styled.ul`
-  color: #389e0d;
-`;
-
-const StyledOrangeUl = styled.ul`
-  color: #f29900;
+const VersionDateLabel = styled.ul`
+  ${({ isLatest }) => (isLatest ? 'color: #389e0d;' : 'color: #f29900;')}
 `;
 
 export const PipelineHistoryTableRow = ({
@@ -106,22 +102,19 @@ export const PipelineHistoryTableRow = ({
     );
   };
 
+  const isLatest = appVersion === latestVersion;
+  const dateLabel = isLatest ? T.translate(`${PREFIX}.latest`) : T.translate(`${PREFIX}.older`);
+
   return (
     <>
-      <div className="grid-row">
-        <div>
+      <div className="grid-row" data-testid={'pipeline-history-row'}>
+        <div data-testid="pipeline-history-date">
           {date}
-          {appVersion === latestVersion ? (
-            <StyledGreenUl>
-              <li>{T.translate(`${PREFIX}.latest`)}</li>
-            </StyledGreenUl>
-          ) : (
-            <StyledOrangeUl>
-              <li>{T.translate(`${PREFIX}.older`)}</li>
-            </StyledOrangeUl>
-          )}
+          <VersionDateLabel isLatest={appVersion === latestVersion}>
+            <li data-testid="pipeline-history-date-label">{dateLabel}</li>
+          </VersionDateLabel>
         </div>
-        <div>{description}</div>
+        <div data-testid="pipeline-history-description">{description}</div>
         {appVersion !== SNAPSHOT_VERSION && (
           <>
             <PrimaryTextLowercaseButton
@@ -129,6 +122,7 @@ export const PipelineHistoryTableRow = ({
               onClick={() => {
                 viewVersion();
               }}
+              data-testid="pipeline-history-view"
             >
               {T.translate(`${PREFIX}.view`)}
             </PrimaryTextLowercaseButton>
@@ -138,6 +132,7 @@ export const PipelineHistoryTableRow = ({
                 onClick={() => {
                   restoreVersion();
                 }}
+                data-testid="pipeline-history-restore"
               >
                 {T.translate(`${PREFIX}.restore`)}
               </PrimaryTextLowercaseButton>

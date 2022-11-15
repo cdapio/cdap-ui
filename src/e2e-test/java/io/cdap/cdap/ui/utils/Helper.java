@@ -131,6 +131,10 @@ public class Helper implements CdfHelper {
       .findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
+  public static WebElement locateElementByTestId(String testId, WebElement withinElement) {
+    return withinElement.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
       .findElement(By.id(elementId));
@@ -143,6 +147,15 @@ public class Helper implements CdfHelper {
   public static WebElement locateElementByXPath(String xpath) {
     return SeleniumDriver.getDriver()
       .findElement(By.xpath(xpath));
+  }
+
+  public static List<WebElement> locateElementsByXPath(String xpath) {
+    return SeleniumDriver.getDriver().findElements(By.xpath(xpath));
+  }
+
+  public static List<WebElement> locateElementsByTestId(String testId) {
+    return SeleniumDriver.getDriver()
+      .findElements(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
   public static boolean isElementExists(String cssSelector) {

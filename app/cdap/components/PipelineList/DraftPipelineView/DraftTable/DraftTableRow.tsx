@@ -88,7 +88,11 @@ export const DraftTableRow = ({ draft }: IProps) => {
       data-testid={`draft-${draft.name}`}
     >
       <div title={draft.name}>{draft.name}</div>
-      {lifecycleManagementEditEnabled ? <div>{editStageMessage}</div> : <div></div>}
+      {lifecycleManagementEditEnabled ? (
+        <div data-testid={'draft-status'}>{editStageMessage}</div>
+      ) : (
+        <div></div>
+      )}
       <div>{T.translate(`${PREFIX}.${draft.artifact.name}`)}</div>
       <div>{lastSaved}</div>
 
