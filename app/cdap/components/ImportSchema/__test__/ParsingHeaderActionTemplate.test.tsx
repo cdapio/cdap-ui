@@ -23,6 +23,7 @@ import T from 'i18n-react';
 
 describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
   it('Should test whether ParsingHeaderActionTemplate Component is rendered as expected', () => {
+    const readAsDataURL = jest.fn();
     render(
       <Router history={history}>
         <Switch>
@@ -36,7 +37,9 @@ describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
         </Switch>
       </Router>
     );
-
+    const blob = new Blob(['foo'], { type: 'text/plain' });
+    const inputElement = screen.getByTestId(/fileinput/i);
+    fireEvent.change(inputElement, { target: { files: [blob] } });
     const actionTemplateParentElement = screen.getByTestId(/import-schema-input-wrapper/i);
     expect(actionTemplateParentElement).toBeInTheDocument();
 
