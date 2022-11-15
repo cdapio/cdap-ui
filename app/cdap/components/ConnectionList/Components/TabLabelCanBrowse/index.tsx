@@ -67,7 +67,7 @@ export default function TabLabelCanBrowse({
             className={classes.labelStyles}
             ref={myLabelRef}
             component="span"
-            data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
+            data-testid={`connection-tab-label-${columnIndex}${connectorTypeIndex}`}
           >
             {label}
           </Typography>
@@ -75,7 +75,7 @@ export default function TabLabelCanBrowse({
             <Typography
               variant="body1"
               className={classes.labelStyles}
-              data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
+              data-testid={`connection-tab-label-count-${columnIndex}${connectorTypeIndex}`}
               component="span"
             >{`(${count})`}</Typography>
           )}
@@ -98,7 +98,7 @@ export default function TabLabelCanBrowse({
           variant="body1"
           className={classes.labelStyles}
           ref={myLabelRef}
-          data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
+          data-testid={`connection-tab-label-${columnIndex}${connectorTypeIndex}`}
           component="span"
         >
           {label}
@@ -107,7 +107,7 @@ export default function TabLabelCanBrowse({
           <Typography
             variant="body1"
             className={classes.labelStyles}
-            data-testid={`connection-tab-${columnIndex}${connectorTypeIndex}`}
+            data-testid={`connection-tab-label-count-${columnIndex}${connectorTypeIndex}`}
             component="span"
           >{`(${count})`}</Typography>
         )}
