@@ -102,10 +102,9 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         }
       />
       <CheckBox
-        label={
-          T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')
-            .toString
-        }
+        label={T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader'
+        ).toString()}
         value={skipHeader}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
