@@ -106,8 +106,8 @@ const ParsingPopUpBottomSection = styled(Box)`
   box-shadow: 0px 2px 4px rgba(70, 129, 244, 0.15);
   border-radius: 4px;
   font-style: normal;
-  font-weight: 400,
-  font-size: 15px
+  font-weight: 400;
+  font-size: 15px;
   color: #FFFFFF;
   align-self: flex-end;
   margin-top: 30px;

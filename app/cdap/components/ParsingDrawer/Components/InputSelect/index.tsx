@@ -16,24 +16,48 @@
 
 import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
-import { useStyles } from 'components/ParsingDrawer/styles';
 import { IInputSelectProps } from 'components/ParsingDrawer/types';
+import styled from 'styled-components';
 
-export default function({
-  options,
-  value,
-  onChange,
-  classes,
-  className,
-  fullWidth,
-  optionClassName,
-  defaultValue,
-}: IInputSelectProps) {
-  const anchorClass = useStyles();
+const SelectField = styled(Select)`
+  height: 40px;
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  padding: 5px 15px 0px 15px;
+  font-size: 14px;
+  &:before {
+    display: none;
+  }
+  &:focus-visible {
+    outline: none !important;
+  }
+  &:after {
+    display: none;
+  }
+  & .MuiInputBase-input {
+    padding: 6px 0px 11px;
+  }
+  & .MuiBox-root {
+    font-size: 14px;
+    line-height: 150%;
+    letter-spacing: 0.15;
+    color: #000000;
+  }
+  & .MuiSelect-icon {
+    top: calc(50% - 10px);
+    right: 10px;
+  }
+  & .MuiSelect-select {
+    &:focus {
+      background-color: transparent;
+    }
+  }
+`;
+
+export default function({ options, value, onChange, fullWidth, defaultValue }: IInputSelectProps) {
   return (
-    <Select
-      classes={{ ...classes }}
-      className={className}
+    <SelectField
       fullWidth={fullWidth}
       value={value}
       onChange={onChange}
@@ -51,16 +75,11 @@ export default function({
         options?.length &&
         options.map((option, index) => {
           return (
-            <MenuItem
-              classes={{ ...optionClassName }}
-              value={option.value}
-              key={option.value}
-              data-testid={`input-select-${index}`}
-            >
+            <MenuItem value={option.value} key={option.value} data-testid={`input-select-${index}`}>
               {option.label}
             </MenuItem>
           );
         })}
-    </Select>
+    </SelectField>
   );
 }

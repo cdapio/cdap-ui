@@ -21,7 +21,6 @@ import {
   CHAR_ENCODING_OPTIONS,
   FORMAT_OPTIONS,
 } from 'components/ParsingDrawer/Components/ParsingPopupBody/parsingOptions';
-import { useStyles } from 'components/ParsingDrawer/styles';
 import { IOptions, IParsingPopupBodyProps } from 'components/ParsingDrawer/types';
 import T from 'i18n-react';
 import React, { ChangeEvent, useEffect } from 'react';
@@ -48,30 +47,7 @@ const Label = styled(Typography)`
   color: #5f6368;
 `;
 
-const SelectField = styled(InputSelect)`
-  height: 40px;
-  background: #FFFFFF;
-  border: 1px solid #DADCE0;
-  border-radius: 4,
-  padding: 5px 15px 0px 15px;
-  font-size: 14px;
-  & :before: {
-  display: none;
-  }
-  & :focus-visible: {
-  outline: none !important;
-  }
-  & :after: {
-  display: none;
-  }
-  & .MuiInputBase-input': {
-  padding: 6px 0px 11px;
-  }
-`;
-
 export default function({ values, changeEventListener }: IParsingPopupBodyProps) {
-  const classes = useStyles();
-
   const { format, fileEncoding, enableQuotedValues, skipHeader } = values;
   let selectedFormatValue: IOptions[] = [];
   let selectedEncodingValue: IOptions[] = [];
@@ -91,9 +67,6 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.format')}
         </Label>
         <InputSelect
-          classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
-          className={classes.selectFieldStyles}
-          optionClassName={{ root: classes.optionStyles }}
           fullWidth
           defaultValue={FORMAT_OPTIONS[0].value}
           value={selectedFormatValue[0]?.value}
@@ -108,9 +81,6 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.encoding')}
         </Label>
         <InputSelect
-          classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
-          className={classes.selectFieldStyles}
-          optionClassName={{ root: classes.optionStyles }}
           defaultValue={CHAR_ENCODING_OPTIONS[0].value}
           fullWidth
           value={selectedEncodingValue[0]?.value}
