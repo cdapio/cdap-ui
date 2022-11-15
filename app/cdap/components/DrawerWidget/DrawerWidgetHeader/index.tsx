@@ -17,7 +17,8 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { useStyles } from 'components/DrawerWidget/styles';
-import { UnderLineSVG, ImportIcon } from 'components/DrawerWidget/iconStore';
+import { UnderLineSVG } from 'components/DrawerWidget/IconStore/UnderLineSVG';
+import { ImportIcon } from 'components/DrawerWidget/IconStore/ImportIcon';
 import { IDrawerWidgetHeaderProps } from 'components/DrawerWidget/types';
 import T from 'i18n-react';
 
@@ -26,12 +27,14 @@ export default function({ headingText }: IDrawerWidgetHeaderProps) {
   return (
     <Box className={classes.containerStyles}>
       <Box className={classes.headingStyles}>
-        <Typography className={classes.headingTextStyles}>{headingText}</Typography>
+        <Typography className={classes.headingTextStyles} component="span">
+          {headingText}
+        </Typography>
         <UnderLineSVG />
       </Box>
       <Box className={classes.importStyles}>
         <ImportIcon />
-        <Typography className={classes.importTextStyles}>
+        <Typography className={classes.importTextStyles} component="span">
           {T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.importSchema')}
         </Typography>
       </Box>
