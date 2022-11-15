@@ -21,4 +21,8 @@ Feature: ParsingPanel
   Scenario: Go through the parsing panel functionality
     Given Navigate to the Home Page
     Then Click on the Connector type card
-    Then Click on the wrangle button
+    Then Click on the Wrangle button
+#    Then Click on the Format field and Select the value
+#    Then Click on the Encoding field and Select the value
+    Then Click on the Checkboxes
+    Then Click on the Apply button

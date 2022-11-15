@@ -101,6 +101,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'format')
           }
           options={FORMAT_OPTIONS}
+          dataTestId="parsing-drawer-format"
         />
       </FormFieldWrapper>
       <FormFieldWrapper>
@@ -118,6 +119,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'fileEncoding')
           }
           options={CHAR_ENCODING_OPTIONS}
+          dataTestId="parsing-drawer-encoding"
         />
       </FormFieldWrapper>
       <CheckBox
@@ -126,6 +128,11 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
+<<<<<<< Updated upstream
+=======
+        className={classes.checkboxStyles}
+        dataTestId="parsing-drawer-enable-quoted-values"
+>>>>>>> Stashed changes
       />
       <CheckBox
         label={T.translate('features.WranglerNewUI.WranglerNewParsingDrawer.useFirstRowAsHeader')}
@@ -133,6 +140,11 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
         }
+<<<<<<< Updated upstream
+=======
+        className={classes.checkboxStyles}
+        dataTestId="parsing-drawer-use-first-row-as-header"
+>>>>>>> Stashed changes
       />
     </Box>
   );

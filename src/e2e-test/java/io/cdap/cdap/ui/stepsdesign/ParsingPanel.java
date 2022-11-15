@@ -7,6 +7,7 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java8.Th;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -20,26 +21,26 @@ public class ParsingPanel {
     @Then("Click on the Connector type card")
     public void clickOnTheConnectorTypeCard() {
         WaitHelper.waitForPageToLoad();
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("file-connector-type"));
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("connector-type-File"));
     }
 
-    @Then("Click on the wrangle button")
+    @Then("Click on the Wrangle button")
     public void clickOnFirstTabOfTheSecondColumn() {
         try {
-            for (int i = 1; i<=10; i++) {
-                WebElement ele = Helper.locateElementByTestId("connection-tab-" + i + "0");
+            for (int i = 1; i <= 10; i++) {
+                WebElement ele = Helper.locateElementByTestId("connection-tab-each-" + i + "0");
                 if (ElementHelper.isElementDisplayed(ele)) {
                     System.out.println("element found at index = " + i);
-                    WebElement button = Helper.locateElementByTestId("connection-tab-label-" + i + "0");
+                    WebElement button = Helper.locateElementByTestId("tab-label-can-sample-" + i + "0");
                     Actions action = new Actions(SeleniumDriver.getDriver());
                     action.moveToElement(button).build().perform();
-                    if (Helper.isElementExists("connections-tab-explore",button)) {
-                        ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-text"));
+                    if (Helper.isElementExists("load-to-grid-wrapper", button)) {
+                        ElementHelper.clickOnElement(Helper.locateElementByTestId("load-to-grid-button"));
                         System.out.println("wrangle clicked");
-                        if (Helper.isElementExists("snackbar-alert")) {
-                            ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-close-icon"));
-                            break;
-                        }
+//                        if (Helper.isElementExists("snackbar-alert")) {
+//                            ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-close-icon"));
+//                            break;
+//                        }
                         break;
                     } else {
                         ele.click();
@@ -47,9 +48,38 @@ public class ParsingPanel {
                     }
                 }
             }
-
         } catch (Exception e) {
             System.err.println("error: " + e);
         }
+    }
+
+//    @Then("Click on the Format field and Select the value")
+//    public void clickOnTheFormatFieldAndSelectTheValue() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-drawer-format"));
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("input-select-4"));
+//    }
+
+//    @Then("Click on the Encoding field and Select the value")
+//    public void clickOnTheEncodingFieldAndSelectTheValue() {
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-drawer-encoding"));
+//        WaitHelper.waitForPageToLoad();
+//        ElementHelper.clickOnElement(Helper.locateElementByTestId("input-select-2"));
+//    }
+
+    @Then("Click on the Checkboxes")
+    public void clickOnTheCheckboxes() {
+        WaitHelper.waitForPageToLoad();
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-drawer-enable-quoted-values"));
+        WaitHelper.waitForPageToLoad();
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-drawer-use-first-row-as-header"));
+    }
+
+    @Then("Click on the Apply button")
+    public void clickOnTheApplyButton() {
+        WaitHelper.waitForPageToLoad();
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-apply-button"));
     }
 }

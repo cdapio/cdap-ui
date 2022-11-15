@@ -28,6 +28,7 @@ export default function({
   fullWidth,
   optionClassName,
   defaultValue,
+  dataTestId,
 }: IInputSelectProps) {
   const anchorClass = useStyles();
   return (
@@ -45,6 +46,9 @@ export default function({
           horizontal: 'left',
         },
         getContentAnchorEl: null,
+      }}
+      inputProps={{
+        'data-testid': dataTestId,
       }}
     >
       {Array.isArray(options) &&
