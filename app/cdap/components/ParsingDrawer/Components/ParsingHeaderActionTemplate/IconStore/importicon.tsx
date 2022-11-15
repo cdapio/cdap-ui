@@ -16,7 +16,7 @@
 
 import React from 'react';
 
-export const importIcon = (
+export const ImportIcon = (
   <svg
     width="23"
     height="22"
