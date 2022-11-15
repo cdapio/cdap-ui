@@ -29,27 +29,29 @@ const SemiCircularProgressBarWrapper = styled(Box)`
   letter-spacing: 0.15px;
 `;
 
-export const GreenSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
-  color: #8BCC74;
+const GreenSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
+  color: #8bcc74;
 `;
 
-export const RedSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
-  color: #E97567;
+const RedSemiCircleProgressBar = styled(SemiCircularProgressBarWrapper)`
+  color: #e97567;
 `;
 
-const getProgressBarWrapperComponent = (dataQualityList, index) => {
-  return dataQualityList?.length && dataQualityList[index]?.value === 0
+const getProgressBarWrapperComponent = (dataQualityList, filteredColumnIndex) => {
+  return dataQualityList?.length && dataQualityList[filteredColumnIndex]?.value === 0
     ? GreenSemiCircleProgressBar
-    : RedSemiCircleProgressBar
-}
+    : RedSemiCircleProgressBar;
+};
 
-export const RenderSemiCircularProgressBar = ({ wrapperComponentData, dataQualityPercentValue }) => {
-
-  const { dataQualityList, index } = wrapperComponentData;
-  const Wrapper = getProgressBarWrapperComponent(dataQualityList, index);
+export default function({
+  wrapperComponentData,
+  dataQualityPercentValue,
+}: IDataQualityCircularProgressBarProps) {
+  const { dataQualityList, filteredColumnIndex } = wrapperComponentData;
+  const Wrapper = getProgressBarWrapperComponent(dataQualityList, filteredColumnIndex);
 
   return (
-    <Wrapper data-testid='semi-circular-progress-bar-wrapper'>
+    <Wrapper data-testid="semi-circular-progress-bar-wrapper">
       <SemiCircleProgressBar
         strokeWidth="5"
         diameter="75"
@@ -58,5 +60,5 @@ export const RenderSemiCircularProgressBar = ({ wrapperComponentData, dataQualit
         showPercentValue={true}
       />
     </Wrapper>
-  )
-};
+  );
+}

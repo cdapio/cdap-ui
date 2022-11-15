@@ -14,7 +14,14 @@
  * the License.
  */
 
+import { IDataQualityRecord } from 'components/ColumnView/SelectColumnsList/types';
+
 export interface IDataQualityCircularProgressBarProps {
   dataQualityPercentValue: number;
-  index: number;
+  wrapperComponentData: IDataQualityWrapperComponentData;
+}
+
+export interface IDataQualityWrapperComponentData {
+  dataQualityList: IDataQualityRecord[];
+  filteredColumnIndex: number;
 }

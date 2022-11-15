@@ -24,11 +24,7 @@ import {
   TableRow,
 } from '@material-ui/core';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
-import {
-  GreenSemiCircleProgressBar,
-  RedSemiCircleProgressBar,
-  RenderSemiCircularProgressBar,
-} from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
+import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
 import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
 import {
   IDataQualityRecord,
@@ -40,7 +36,7 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 
-export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
+export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
   const classes = useStyles();
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
@@ -70,7 +66,7 @@ export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnL
     <section className={classes.columnsCountTextStyles}>
       <TableContainer component={Box} classes={{ root: classes.customTableContainer }}>
         <Table aria-label="recipe steps table" stickyHeader>
-          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 && (
+          {filteredColumns.length !== 0 && (
             <TableHead>
               <TableRow className={classes.recipeStepsTableRowStyles}>
                 <TableCell className={classes.columnLeft} data-testid="column-name-header">
@@ -82,28 +78,28 @@ export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnL
               </TableRow>
             </TableHead>
           )}
-          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 ? (
-            filteredColumns.map((eachColumn, index) => (
+          {filteredColumns.length !== 0 ? (
+            filteredColumns.map((eachFilteredColumn, filteredColumnIndex) => (
               <TableBody className={classes.tableBody}>
-                <TableRow key={index} className={classes.tableRowContainer}>
+                <TableRow key={filteredColumnIndex} className={classes.tableRowContainer}>
                   <TableCell
                     className={classes.leftSideCell}
-                    data-testid={`each-column-label-type-${index}`}
+                    data-testid={`each-column-label-type-${filteredColumnIndex}`}
                   >
                     <Box>
-                      {eachColumn?.label}
+                      {eachFilteredColumn?.label}
                       &nbsp;
                       <br />
-                      {eachColumn?.type}
+                      {eachFilteredColumn?.type}
                     </Box>
                   </TableCell>
                   <TableCell className={classes.nullValuesContainer}>
-                    <RenderSemiCircularProgressBar
+                    <DataQualityCircularProgressBar
                       wrapperComponentData={{
                         dataQualityList,
-                        index
+                        filteredColumnIndex,
                       }}
-                      dataQualityPercentValue={dataQualityList[index]?.value}
+                      dataQualityPercentValue={dataQualityList[filteredColumnIndex]?.value}
                     />
                   </TableCell>
                 </TableRow>
