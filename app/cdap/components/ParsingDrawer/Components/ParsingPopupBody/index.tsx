@@ -100,6 +100,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'enableQuotedValues')
         }
+        dataTestId="parsing-drawer-enable-quoted-values"
       />
       <CheckBox
         label={T.translate(
@@ -109,6 +110,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           changeEventListener(event.target.checked, 'skipHeader')
         }
+        dataTestId="parsing-drawer-use-first-row-as-header"
       />
     </Box>
   );
