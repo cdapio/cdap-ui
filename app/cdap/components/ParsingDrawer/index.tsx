@@ -76,17 +76,18 @@ const DrawerHeader = styled.header`
   margin-bottom: 5px;
 `;
 
-const Divider = styled.div`
-  width: 1px;
-  height: 28px;
-  background-color: #dadce0;
-  margin: 5px 15px;
-`;
-
 const CloseIcon = styled(CloseRoundedIcon)`
   font-size: 30px;
   cursor: pointer;
   margin: 5px;
+`;
+
+const CustomizedDrawer = styled(Drawer)`
+  & .MuiDrawer-paper {
+    top: 46px;
+    height: calc(100vh - 47px);
+    width: 500px;
+  }
 `;
 
 const CustomizedIconButton = styled(IconButton)`
@@ -138,6 +139,26 @@ const ParsingPopUpBottomSection = styled(Box)`
 & .MuiSvgIcon-root {
   margin-top: 2px;
 }
+`;
+
+const DrawerHeaderContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const DrawerHeadingWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;
+
+const DrawerHeading = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #000000;
 `;
 
 export default function({
@@ -243,30 +264,19 @@ export default function({
     }));
   };
 
-  const classes = useStyles();
-
-  const CustomizedDrawer = styled(Drawer)`
-    & .MuiDrawer-paper {
-      top: 46px;
-      height: calc(100vh - 47px);
-      width: 500px;
-    }
-  `;
-
   return (
     <ParsingDrawerContainer role="presentation">
       <CustomizedDrawer open={drawerStatus} anchor="right">
         <DrawerHeader>
           <TextIconWrapper>
-            <Box className={classes.containerStyles}>
-              <Box className={classes.headingStyles}>
-                <Typography className={classes.headingTextStyles} component="span">
-                  Parsing
-                </Typography>
+            <DrawerHeaderContainer>
+              <DrawerHeadingWrapper>
+                <DrawerHeading component="span">Parsing</DrawerHeading>
                 <UnderLineSVG />
-              </Box>
-            </Box>
+              </DrawerHeadingWrapper>
+            </DrawerHeaderContainer>
           </TextIconWrapper>
+
           <TextIconWrapper>
             <CustomizedIconButton
               aria-label="close-icon"
