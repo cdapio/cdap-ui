@@ -102,9 +102,17 @@ export default function TabLabelCanSample({
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button className="wranglingHover" onClick={() => onExplore(entity)}>
+        <button
+          className="wranglingHover"
+          onClick={() => onExplore(entity)}
+          data-testid="load-to-grid-wrapper"
+        >
           <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
+          <Typography
+            variant="body2"
+            className={classes.wrangleButton}
+            data-testid="load-to-grid-button"
+          >
             Wrangle
           </Typography>
         </button>
@@ -115,9 +123,17 @@ export default function TabLabelCanSample({
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button className="wranglingHover" onClick={() => onExplore(entity)}>
+      <button
+        className="wranglingHover"
+        onClick={() => onExplore(entity)}
+        data-testid="load-to-grid-wrapper"
+      >
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
+        <Typography
+          variant="body2"
+          className={classes.wrangleButton}
+          data-testid="load-to-grid-button"
+        >
           Wrangle
         </Typography>
       </button>

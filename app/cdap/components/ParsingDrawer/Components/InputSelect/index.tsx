@@ -55,7 +55,14 @@ const SelectField = styled(Select)`
   }
 `;
 
-export default function({ options, value, onChange, fullWidth, defaultValue }: IInputSelectProps) {
+export default function({
+  options,
+  value,
+  onChange,
+  fullWidth,
+  defaultValue,
+  dataTestId,
+}: IInputSelectProps) {
   return (
     <SelectField
       fullWidth={fullWidth}
@@ -69,6 +76,9 @@ export default function({ options, value, onChange, fullWidth, defaultValue }: I
           horizontal: 'left',
         },
         getContentAnchorEl: null,
+      }}
+      inputProps={{
+        'data-testid': dataTestId,
       }}
     >
       {Array.isArray(options) &&

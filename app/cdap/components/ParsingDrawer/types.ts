@@ -21,6 +21,7 @@ export interface IInputCheckboxProps {
   value: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   className: string;
+  dataTestId: string;
 }
 
 export interface IInputSelectProps {
@@ -32,6 +33,7 @@ export interface IInputSelectProps {
   fullWidth: boolean;
   optionClassName?: { root: string };
   defaultValue: string | ReactNode;
+  dataTestId: string;
 }
 
 export interface IOptions {

@@ -74,6 +74,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'format')
           }
           options={FORMAT_OPTIONS}
+          dataTestId="parsing-drawer-format"
         />
       </FormFieldWrapper>
       <FormFieldWrapper>
@@ -88,6 +89,7 @@ export default function({ values, changeEventListener }: IParsingPopupBodyProps)
             changeEventListener(event.target.value, 'fileEncoding')
           }
           options={CHAR_ENCODING_OPTIONS}
+          dataTestId="parsing-drawer-encoding"
         />
       </FormFieldWrapper>
       <CheckBox
