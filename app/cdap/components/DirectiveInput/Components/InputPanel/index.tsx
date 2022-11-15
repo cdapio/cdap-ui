@@ -19,9 +19,9 @@ import MyDataPrepApi from 'api/dataprep';
 import {
   IAutoCompleteProps,
   IOnRowClickValue,
-} from 'components/DirectiveInput/Components/AutoComplete/types';
+} from 'components/DirectiveInput/Components/InputPanel/types';
 import { defaultFuseOptions } from 'components/DirectiveInput/constants';
-import { IUsageDirectives } from 'components/DirectiveInput/types';
+import { IUsageDirective } from 'components/DirectiveInput/types';
 import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
@@ -31,18 +31,28 @@ import globalEvents from 'services/global-events';
 import NamespaceStore from 'services/NamespaceStore';
 import styled from 'styled-components';
 import uuidV4 from 'uuid/v4';
+import { grey } from '@material-ui/core/colors';
 
-const DirectiveLabel = styled(Typography)`
-  font-style: normal;
-  font-weight: 600;
-  font-size: ${(props) => (props.isDescription ? '14px' : '16px')};
-  letter-spacing: 0.15;
-  color: #616161;
+const SimpleWrapper = styled(Box)`
+  display: block;
 `;
 
-const DirectiveResultRow = styled(Box)`
+const SmallLabel = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.15;
+  color: ${grey[700]};
+`;
+
+const LargeLabel = styled(SmallLabel)`
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+const ResultRow = styled(Box)`
   padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid ${grey[300]};
   background-color: ${(props) => (props.isActive ? '#EFF0F2' : '#FFFFFF')};
   &:hover {
     background: #eff0f2;
@@ -54,14 +64,14 @@ export default function({
   setDirectivesList,
   isDirectiveSelected,
   columnNamesList,
-  onRowClick,
-  getDirectiveUsage,
+  onSearchItemClicked,
+  getDirectiveSyntax,
   onColumnSelected,
-  directiveInput,
+  inputBoxValue,
 }: IAutoCompleteProps) {
-  const [activeResults, setActiveResults] = useState<IUsageDirectives[]>([]);
-  const [input, setInput] = useState<string>('');
-  const [activeSelectionIndex, setActiveSelectionIndex] = useState<number | null>(null);
+  const [searchResults, setSearchResults] = useState<IUsageDirective[]>([]);
+  const [inputText, setInputText] = useState<string>('');
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const eventEmitter = ee(ee);
   const [fuse, setFuse] = useState(null);
 
@@ -100,37 +110,38 @@ export default function({
       eventEmitter.off(globalEvents.DIRECTIVEUPLOAD, getUsage);
     };
   });
+
   const handleUpArrow = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
-    if (activeSelectionIndex !== 0) {
-      setActiveSelectionIndex(activeSelectionIndex - 1);
+    if (selectedIndex !== 0) {
+      setSelectedIndex(selectedIndex - 1);
     }
   };
 
   const handleDownArrow = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
-    if (activeSelectionIndex !== activeResults.length - 1) {
-      setActiveSelectionIndex(activeSelectionIndex + 1);
+    if (selectedIndex !== searchResults.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
     }
   };
 
   const handleEnterKey = () => {
-    if (input.length > 0) {
-      if (activeResults[activeSelectionIndex]) {
-        handleRowClick(activeResults[activeSelectionIndex]);
+    if (inputText.length > 0) {
+      if (searchResults[selectedIndex]) {
+        handleRowClick(searchResults[selectedIndex]);
       } else {
-        onRowClick({
-          target: { value: `${input}` },
+        onSearchItemClicked({
+          target: { value: `${inputText}` },
         });
       }
     }
   };
 
   const handleTabKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (input.length === 0 || input.split(' ').length !== 1) {
+    event.preventDefault();
+    if (inputText.length === 0 || inputText.split(' ').length !== 1) {
       return;
     }
-    event.preventDefault();
     handleEnterKey();
   };
 
@@ -138,13 +149,13 @@ export default function({
     if (isDirectiveSelected) {
       setFuse(new Fuse(columnNamesList, { ...defaultFuseOptions, keys: ['label'] }));
     }
-    searchMatch(directiveInput);
-    setInput(directiveInput);
-  }, [directiveInput]);
+    searchMatch(inputBoxValue);
+    setInputText(inputBoxValue);
+  }, [inputBoxValue]);
 
-  const searchMatch = (query: string) => {
+  const searchMatch = (searchString: string) => {
     let results = [];
-    const input: string = query;
+    const input: string = searchString;
     const spaceIndex: number = input.indexOf(' ');
     if (fuse && input.length > 0) {
       if (!isDirectiveSelected) {
@@ -170,67 +181,54 @@ export default function({
         reverse(results);
       }
     }
-    setActiveResults(results);
-    setInput(query);
-    setActiveSelectionIndex(results.length - 1);
+    setSearchResults(results);
+    setInputText(searchString);
+    setSelectedIndex(results.length - 1);
     if (!isDirectiveSelected) {
-      if ((spaceIndex !== -1) === true) {
-        getDirectiveUsage(results, true);
-      } else {
-        getDirectiveUsage(results, false);
-      }
+      getDirectiveSyntax(results, spaceIndex !== -1);
     }
   };
 
   const handleRowClick = (row) => {
-    if (typeof onRowClick !== 'function') {
-      return;
-    }
-    let eventObject = {} as IOnRowClickValue;
+    let eventObject: IOnRowClickValue = {} as IOnRowClickValue;
     if (!isDirectiveSelected) {
       eventObject = {
         target: { value: `${row.item.directive}` },
       };
-      onRowClick(eventObject);
-      getDirectiveUsage([row], true);
+      onSearchItemClicked(eventObject);
+      getDirectiveSyntax([row], true);
     } else {
-      const splitData = input.split(/(?=[:])|(?<=[:])/g);
+      const splitData = inputText.split(/(?=[:])|(?<=[:])/g);
       eventObject = {
         target: { value: `${splitData[0]}${splitData[1]}${row.item.label}` },
       };
-      setInput(`${splitData[0]}${splitData[1]}${row.item.label}`);
-      onRowClick(eventObject);
+      setInputText(`${splitData[0]}${splitData[1]}${row.item.label}`);
+      onSearchItemClicked(eventObject);
       onColumnSelected(true);
     }
   };
 
   return (
-    <Box>
-      {Array.isArray(activeResults) &&
-        activeResults.length > 0 &&
-        activeResults.map((row, index) => {
-          return (
-            <DirectiveResultRow
-              isActive={index === activeSelectionIndex}
-              key={row.uniqueId}
-              onClick={() => handleRowClick(row)}
-              data-testid="select-directive-list-option"
-            >
-              <Box>
-                <DirectiveLabel data-testid="select-directive-list-label" variant="body1">
-                  {row?.item?.directive || row?.item?.label}
-                </DirectiveLabel>
-                <DirectiveLabel
-                  isDescription={true}
-                  data-testid="select-directive-list-description"
-                  variant="body1"
-                >
-                  {row?.item?.description}
-                </DirectiveLabel>
-              </Box>
-            </DirectiveResultRow>
-          );
-        })}
-    </Box>
+    <SimpleWrapper>
+      {searchResults.map((searchItem, searchItemIndex) => {
+        return (
+          <ResultRow
+            isActive={searchItemIndex === selectedIndex}
+            key={searchItem.uniqueId}
+            onClick={() => handleRowClick(searchItem)}
+            data-testid="select-directive-list-option"
+          >
+            <SimpleWrapper>
+              <LargeLabel data-testid="select-directive-list-label" variant="body1">
+                {searchItem?.item?.directive || searchItem?.item?.label}
+              </LargeLabel>
+              <SmallLabel data-testid="select-directive-list-description" variant="body1">
+                {searchItem?.item?.description}
+              </SmallLabel>
+            </SimpleWrapper>
+          </ResultRow>
+        );
+      })}
+    </SimpleWrapper>
   );
 }

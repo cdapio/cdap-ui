@@ -14,16 +14,15 @@
  * the License.
  */
 
-import { Box, Divider, Typography } from '@material-ui/core';
+import { Box, Divider, Typography, Link } from '@material-ui/core';
 import { moreInfoOnDirective } from 'components/DirectiveInput/constants';
 import { InfoIcon } from 'components/DirectiveInput/IconStore/InfoIcon';
-import { useStyles } from 'components/DirectiveInput/styles';
 import { IUsageDirectiveProps } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
 
-const UsageDirectiveWrapper = styled(Box)`
+const UsageWrapper = styled(Box)`
   padding: 10px;
 `;
 
@@ -34,6 +33,9 @@ const UsageText = styled(Typography)`
   letter-spacing: 0.15;
   color: #ffffff;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 
 const DividerLine = styled(Divider)`
@@ -42,26 +44,36 @@ const DividerLine = styled(Divider)`
   }
 `;
 
-export default function({ row }: IUsageDirectiveProps) {
-  const classes = useStyles();
+const InfoLink = styled(Link)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #79b7ff;
+  font-size: 14px;
+  text-decoration: none;
+  margin-left: 10px;
+  width: 180px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: none;
+    color: #79b7ff;
+  }
+`;
 
+export default function({ eachDirective }: IUsageDirectiveProps) {
   return (
-    <UsageDirectiveWrapper>
+    <UsageWrapper>
       <UsageText variant="body1" data-testid="directive-usage-text">
-        {T.translate('features.WranglerNewUI.GridPage.directivePanel.usage')}:&nbsp;
-        {row?.item?.usage || row?.usage} &nbsp; &nbsp;
-        {moreInfoOnDirective[row?.item?.directive] && (
-          <a
-            href={`${moreInfoOnDirective[row?.item?.directive]}`}
-            className={classes.infoLink}
-            target="_blank"
-          >
-            {InfoIcon} &nbsp;
+        {`${T.translate('features.WranglerNewUI.GridPage.directivePanel.usage')} : `}
+        {eachDirective?.item?.usage || eachDirective?.usage}
+        {moreInfoOnDirective[eachDirective?.item?.directive] && (
+          <InfoLink href={`${moreInfoOnDirective[eachDirective?.item?.directive]}`} target="_blank">
+            {InfoIcon}
             {T.translate('features.WranglerNewUI.GridPage.directivePanel.moreInfoOnDirective')}
-          </a>
+          </InfoLink>
         )}
       </UsageText>
       <DividerLine />
-    </UsageDirectiveWrapper>
+    </UsageWrapper>
   );
 }

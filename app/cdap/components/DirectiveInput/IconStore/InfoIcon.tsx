@@ -17,7 +17,14 @@
 import React from 'react';
 
 export const InfoIcon = (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    data-testid="info-on-directive"
+  >
     <circle cx="10" cy="10" r="9" stroke="#79B7FF" stroke-width="2" />
     <path d="M9.81006 9.15039V14.4138" stroke="#79B7FF" stroke-width="2" stroke-linecap="round" />
     <path

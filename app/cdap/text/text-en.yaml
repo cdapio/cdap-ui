@@ -3438,7 +3438,8 @@ features:
         subtitle: Remove some recipe steps to view some data
     GridPage:
       directivePanel:
-        dollar: '$'
-        moreInfoOnDirective: 'More info to this directive'
-        usage: 'Usage'
+        dollar: $
+        moreInfoOnDirective: More info to this directive
+        usage: Usage
+        inputDirective: Input a directive
 ...

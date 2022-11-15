@@ -37,7 +37,7 @@ export interface IOnRowClickValue {
   target: IObject;
 }
 
-export interface IUsageDirectives {
+export interface IUsageDirective {
   item: IUsageDirectivesItem;
   matches: IUsageDirectivesMatches;
   score: number;
@@ -88,5 +88,5 @@ export interface IDirectivesList {
 }
 
 export interface IUsageDirectiveProps {
-  row: IUsageDirectives;
+  eachDirective: IUsageDirective;
 }
