@@ -23,7 +23,6 @@ import T from 'i18n-react';
 
 describe('It Should Test the ParsingHeaderActionTemplate Component', () => {
   it('Should test whether ParsingHeaderActionTemplate Component is rendered as expected', () => {
-    const readAsDataURL = jest.fn();
     render(
       <Router history={history}>
         <Switch>
