@@ -17,10 +17,7 @@
 import React from 'react';
 import ConnectionsTabs from 'components/ConnectionList/Components/ConnectionTabs/index';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
-import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
 import { mockTabsTestData } from '../mock/mockTabsTestData';
-import { tabsTestData } from 'components/ConnectionList/Components/ConnectionTabs/mock/tabTestData';
 
 describe('Test ConnectionsTabs', () => {
   it('Should render Connections Tabs Parent Component', () => {
@@ -45,7 +42,7 @@ describe('Test ConnectionsTabs', () => {
         handleChange={() => null}
         value="apple"
         connectionId={undefined}
-        tabsData={mockTabsTestData}
+        tabsData={mockTabsTestData as any}
         connectionColumnIndex={0}
         setSnackbar={jest.fn()}
         toggleLoader={jest.fn()}
@@ -53,22 +50,6 @@ describe('Test ConnectionsTabs', () => {
     );
     const ele = screen.getByTestId(/connection-tabs/i);
     expect(ele).toBeInTheDocument();
-  });
-
-  it('Should render TabLabelCanBrowse with connectorTypes and count', () => {
-    render(
-      <ConnectionsTabs
-        handleChange={() => null}
-        value="apple"
-        connectionId={undefined}
-        tabsData={mockTabsTestData}
-        connectionColumnIndex={0}
-        setSnackbar={jest.fn()}
-        toggleLoader={jest.fn()}
-      />
-    );
-    const ele = screen.getAllByTestId(/connections-tab-label-browse/i);
-    expect(ele[0]).toBeInTheDocument();
   });
 });
 
@@ -80,7 +61,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         handleChange={handleChange}
         value="apple"
         connectionId={undefined}
-        tabsData={mockTabsTestData}
+        tabsData={mockTabsTestData as any}
         connectionColumnIndex={0}
         setSnackbar={jest.fn()}
         toggleLoader={jest.fn()}
@@ -98,7 +79,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         handleChange={handleChange}
         value="apple"
         connectionId={undefined}
-        tabsData={mockTabsTestData}
+        tabsData={mockTabsTestData as any}
         connectionColumnIndex={0}
         setSnackbar={jest.fn()}
         toggleLoader={jest.fn()}
@@ -119,7 +100,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         connectionColumnIndex={0}
         setSnackbar={jest.fn()}
         toggleLoader={jest.fn()}
-        tabsData={mockTabsTestData}
+        tabsData={mockTabsTestData as any}
       />
     );
     const ele = screen.getAllByTestId(/connectionstabs-eachtab-0-0/i);
