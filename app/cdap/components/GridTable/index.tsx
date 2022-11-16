@@ -49,6 +49,7 @@ import {
   IMissingListData,
 } from 'components/GridTable/types';
 import styled from 'styled-components';
+import FooterPanel from 'components/FooterPanel';
 
 const RecipeStepsButton = styled(Button)`
   margin-left: 30px;
@@ -81,6 +82,10 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [tableMetaInfo, setTableMetaInfo] = useState({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   useEffect(() => {
     setIsFirstWrangle(true);
@@ -127,15 +132,6 @@ export default function GridTable() {
         });
       }
     );
-  };
-
-  const updateDataTranformation = (wid: string) => {
-    const payload: IParams = {
-      context: params.namespace as string,
-      workspaceId: wid,
-    };
-    getWorkSpaceData(payload, wid);
-    setIsFirstWrangle(false);
   };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
@@ -310,6 +306,10 @@ export default function GridTable() {
         const { ...rest } = eachRow;
         return rest;
       }) as IRowData[]);
+    setTableMetaInfo({
+      columnCount: rawData.headers.length,
+      rowCount: rawData.values.length - 1,
+    });
     setRowsDataList(rowData);
   };
 
@@ -413,13 +413,6 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <RecipeStepsButton
-        variant="outlined"
-        onClick={showRecipePanelHandler}
-        datat-testid="recipe-steps-button"
-      >
-        {T.translate('features.WranglerNewRecipeSteps.labels.recipeSteps')}
-      </RecipeStepsButton>
       {showRecipePanel && (
         <RecipeSteps
           setShowRecipePanel={setShowRecipePanel}
@@ -498,6 +491,11 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
+      <FooterPanel
+        recipeStepsCount={directives?.length}
+        gridMetaInfo={tableMetaInfo}
+        handleShowRecipePanelHandler={showRecipePanelHandler}
+      />
     </Box>
   );
 }

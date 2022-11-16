@@ -69,7 +69,7 @@ const LabelComponent = styled.label`
 const DirectiveBox = styled(Box)`
   background-color: #ffffff;
   position: fixed;
-  bottom: 50px;
+  bottom: 94px;
   width: 100%;
 `;
 
