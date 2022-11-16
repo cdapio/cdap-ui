@@ -21,6 +21,7 @@ public class Constants {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
   public static final int TEST_TIMEOUT_TIME = 10000;
   public static final int RETRY_INTERVAL = 2000;
   public static final String TEST_TIMEOUT_MESSAGE = "Timed out after" +
