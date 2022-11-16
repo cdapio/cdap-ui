@@ -35,11 +35,7 @@ export default function TabLabelCanSample({
   entity,
   initialConnectionId,
   toggleLoader,
-<<<<<<< HEAD
-  setToaster,
-=======
   setSnackbar,
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 }: ITabLabelCanSampleProps) {
   const classes = useStyles();
   const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
@@ -60,11 +56,7 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(currentEntity);
     } else {
-<<<<<<< HEAD
-      setToaster({
-=======
       setSnackbar({
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
         open: true,
         message: [T.translate(`${PREFIX}.retrieveFailure`), entity?.name].join(' '),
         isSuccess: false,
@@ -76,11 +68,7 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
-<<<<<<< HEAD
-      setToaster({
-=======
       setSnackbar({
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
         open: true,
         message: [T.translate(`${PREFIX}.workspaceFailure`).toString(), entity?.name].join(' '),
         isSuccess: false,
@@ -106,11 +94,7 @@ export default function TabLabelCanSample({
       })
       .catch((err) => {
         toggleLoader(false);
-<<<<<<< HEAD
-        setToaster({
-=======
         setSnackbar({
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
           open: true,
           message: `${T.translate(`${PREFIX}.sampleFailure`)} ${currentEntity?.name.toString()}`,
           isSuccess: false,
@@ -141,11 +125,7 @@ export default function TabLabelCanSample({
             variant="body2"
             component="span"
             className={classes.wrangleButton}
-<<<<<<< HEAD
-            data-testid={`connection-list-wrangle-link`}
-=======
             data-testid="connection-list-wrangle-link"
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
           >
             Wrangle
           </Typography>
@@ -166,11 +146,7 @@ export default function TabLabelCanSample({
         <Typography
           variant="body2"
           className={classes.wrangleButton}
-<<<<<<< HEAD
-          data-testid={`connection-list-wrangle-link`}
-=======
           data-testid="connection-list-wrangle-link"
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
         >
           Wrangle
         </Typography>

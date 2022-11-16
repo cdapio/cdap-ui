@@ -20,13 +20,6 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-<<<<<<< HEAD
-import { GRID_TABLE_PREFIX, PREFIX } from 'components/GridTable/constants';
-import NoRecordScreen from 'components/NoRecordScreen';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import Snackbar from 'components/Snackbar';
-import { ISnackbar } from 'components/Snackbar/types';
-=======
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
@@ -43,22 +36,12 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-<<<<<<< HEAD
-import BreadCrumb from './components/Breadcrumb';
-import GridHeaderCell from './components/GridHeaderCell';
-import GridKPICell from './components/GridKPICell';
-import GridTextCell from './components/GridTextCell';
-import { useStyles } from './styles';
-import { IExecuteAPIResponse, IHeaderNamesList, IParams, IRecords } from './types';
-=======
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -76,14 +59,7 @@ export default function GridTable() {
       count: '0',
     },
   ]);
-<<<<<<< HEAD
-  const [toaster, setToaster] = useState<ISnackbar>({
-    open: false,
-    isSuccess: false,
-  });
-=======
   const [snackbarState, setSnackbar] = useSnackbar();
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -141,11 +117,7 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-<<<<<<< HEAD
-        setToaster({
-=======
         setSnackbar({
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
           open: true,
           isSuccess: true,
           message: T.translate(`${PREFIX}.Snackbar.labels.datasetSuccess`).toString(),
@@ -331,19 +303,6 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
-<<<<<<< HEAD
-      {toaster.open && (
-        <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
-          handleCloseError={() =>
-            setToaster({
-              open: false,
-            })
-          }
-          description={toaster.message}
-          isSuccess={toaster.isSuccess}
-        />
-      )}
-=======
       <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
         handleClose={() =>
           setSnackbar(() => ({
@@ -354,7 +313,6 @@ export default function GridTable() {
         message={snackbarState.message}
         isSuccess={snackbarState.isSuccess}
       />
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
     </Box>
   );
 }

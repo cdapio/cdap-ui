@@ -18,9 +18,5 @@ export interface ITransitionProps {
   handleClose: () => void;
   isSuccess: boolean;
   transitionAction: string;
-<<<<<<< HEAD
-  messageToDisplay?: string;
-=======
   message?: React.ReactNode;
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
 }

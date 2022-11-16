@@ -14,62 +14,11 @@
  * the License.
  */
 
-<<<<<<< HEAD
-import Snackbar from '@material-ui/core/Snackbar';
-import Transition from 'components/Snackbar/Components/Transition/index';
-import { useStyles } from 'components/Snackbar/styles';
-import { ISnackbarProps } from 'components/Snackbar/types';
-import React, { useEffect, useState } from 'react';
-
-export default function({
-  handleCloseError,
-  description = '',
-  isSuccess,
-  snackbarAction,
-}: ISnackbarProps) {
-  const classes = useStyles();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsOpen(true);
-    const timer = setTimeout(() => {
-      setIsOpen(false);
-      handleCloseError();
-    }, 5000);
-    return () => {
-      setIsOpen(true);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    handleCloseError();
-  };
-
-  return (
-    <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      open={isOpen}
-      classes={{
-        anchorOriginTopLeft: classes.anchor,
-        root: classes.root,
-      }}
-      TransitionComponent={() => (
-        <Transition
-          handleClose={() => handleClose()}
-          isSuccess={isSuccess}
-          messageToDisplay={description}
-          transitionAction={snackbarAction}
-        />
-      )}
-      className={isSuccess ? classes.success : classes.error}
-=======
 import { green, red } from '@material-ui/core/colors';
 import Snackbar from '@material-ui/core/Snackbar';
 import Transition from 'components/Snackbar/Components/Transition/index';
 import { ISnackbarProps } from 'components/Snackbar/types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const CustomizedSnackbar = styled(Snackbar)`
@@ -104,7 +53,6 @@ export default function({
           transitionAction={snackbarAction}
         />
       )}
->>>>>>> ba3605ebdc65278966647c11902fe9904c7c7ab7
       data-testid="snackbar-alert"
     />
   );
