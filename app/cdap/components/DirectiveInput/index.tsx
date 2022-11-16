@@ -28,7 +28,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PREFIX } from 'components/DirectiveInput/constants';
 import { grey } from '@material-ui/core/colors';
-import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 
 const SimpleBox = styled(Box)`
   display: block;
@@ -72,10 +71,6 @@ const DirectiveBox = styled(Box)`
   position: fixed;
   bottom: 50px;
   width: 100%;
-`;
-
-const CloseIconButton = styled(IconButton)`
-  color: #ffffff;
 `;
 
 export default function({
@@ -162,9 +157,6 @@ export default function({
                   data-testid="select-directive-input-search"
                 />
               </InputWrapper>
-              <CloseIconButton data-testid="close-directive-panel" onClick={onClose}>
-                <CloseOutlinedIcon data-testid="close-icon" />
-              </CloseIconButton>
             </SearchBarWrapper>
           </DirectiveUsageWrapper>
         </SimpleBox>
