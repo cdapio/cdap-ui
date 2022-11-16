@@ -22,15 +22,13 @@ import history from 'services/history';
 
 describe('It should test the RecipeHeaderActionTemplate Component', () => {
   it('renders RecipeHeaderActionTemplate component and triggers handleDownload', () => {
-
     jest.mock('js-file-download', () => {
       return {
         __esModule: true,
-        default: jest.fn(console.trace)
-      }
-    })
+        default: jest.fn(console.trace),
+      };
+    });
     global.URL.createObjectURL = jest.fn();
-
 
     render(
       <Router history={history}>
@@ -43,8 +41,8 @@ describe('It should test the RecipeHeaderActionTemplate Component', () => {
     );
     const recipeHeaderActionParent = screen.getByTestId(/header-action-template-parent/i);
     expect(recipeHeaderActionParent).toBeInTheDocument();
-    const downloadComponent = screen.getByTestId(/header-action-download-icon/i)
-    fireEvent.click(downloadComponent)
-    expect(downloadComponent).toBeInTheDocument()
+    const downloadComponent = screen.getByTestId(/header-action-download-icon/i);
+    fireEvent.click(downloadComponent);
+    expect(downloadComponent).toBeInTheDocument();
   });
 });

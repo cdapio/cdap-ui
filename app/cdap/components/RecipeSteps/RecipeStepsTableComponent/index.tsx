@@ -119,13 +119,13 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }) {
               >
                 {eachStepIndex + 1 > 10 ? eachStepIndex + 1 : `0${eachStepIndex + 1}`}
               </RecipeStepsBodyTableRow>
-              <RecipeStepsBodyTableRow data-testid="each-recipe-step">
+              <RecipeStepsBodyTableRow data-testid={`${eachStep}-recipe-step`}>
                 <span data-testid={'recipe-steps-span' + eachStepIndex}>{eachStep}</span>
               </RecipeStepsBodyTableRow>
-              <RecipeStepsTableRowStyle data-testid="delete-styles">
+              <RecipeStepsTableRowStyle data-testid={`recipe-step-row-${eachStepIndex}-delete`}>
                 <RecipeStepsDeleteStyle
                   onClick={() => handleDelete(eachStep, eachStepIndex)}
-                  data-testid="step-table-delete"
+                  data-testid={`recipe-step-${eachStepIndex}-delete`}
                 >
                   {DeleteIcon}
                 </RecipeStepsDeleteStyle>

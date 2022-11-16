@@ -142,7 +142,7 @@ export default function({
         <ColumnViewBox data-testid="footer-panel-column-view-panel-tab">{ColumnIcon}</ColumnViewBox>
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-message">
           {T.translate(`${PREFIX}.message`, { rowCount, columnCount })}
         </Label>
       </LargeBox>
@@ -150,7 +150,7 @@ export default function({
         <IconButton aria-label="zoom">
           <ZoomInIcon />
         </IconButton>
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-zoom-label">
           <>{`${T.translate(`${PREFIX}.zoomPercent100`)}`}</>
         </Label>
         <TransformatedIconButton aria-label="arrow">
@@ -158,7 +158,7 @@ export default function({
         </TransformatedIconButton>
       </ZoomBox>
       <DirectivesBox data-testid="footer-panel-directives-tab">
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-directives-label">
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
@@ -166,7 +166,7 @@ export default function({
         data-testid="footer-panel-recipe-steps-tab"
         onClick={handleShowRecipePanelHandler}
       >
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-recipe-steps-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
         </Label>
         <OutlinedLabel data-testid="footerpanel-outlined-label">
