@@ -307,8 +307,8 @@ export default function GridTable() {
         return rest;
       }) as IRowData[]);
     setTableMetaInfo({
-      columnCount: rawData.headers.length,
-      rowCount: rawData.values.length - 1,
+      columnCount: rawData?.headers?.length,
+      rowCount: rawData?.values?.length - 1,
     });
     setRowsDataList(rowData);
   };
