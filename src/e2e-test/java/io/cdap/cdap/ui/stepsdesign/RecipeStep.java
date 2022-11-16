@@ -17,13 +17,14 @@
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Constants;
-import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.WaitHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.e2e.utils.ElementHelper;
+import io.cdap.e2e.utils.SeleniumDriver;
+import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -38,7 +39,7 @@ public class RecipeStep {
     public void clickOnTheDataExplorationsCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-0"));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
@@ -63,8 +64,6 @@ public class RecipeStep {
     @Then("Enter command in the panel with the data {string}")
     public void checkCommandFunction(String command) {
         try {
-//            String text = Helper.locateElementByTestId("table-cell-" + id).getText();
-//            String capital = text.toUpperCase();
             WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
             panel.click();
             panel.sendKeys(command);
@@ -72,9 +71,6 @@ public class RecipeStep {
             panel.sendKeys(Keys.ENTER);
             SeleniumDriver.getDriver().manage().window().maximize();
             SeleniumDriver.getDriver().navigate().refresh();
-//            WebElement ele = Helper.locateElementByTestId("table-cell-" + id);
-//            String newText = ele.getText();
-//            Assert.assertEquals(capital, newText);
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
@@ -89,17 +85,43 @@ public class RecipeStep {
             System.err.println("error:" + e);
         }
     }
+
     @Then("Click on 'Recipe steps' button")
     public void clickOnRecipeStepButton() {
         try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-steps-button"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("footerpanel-recipe-steps-label"));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
     }
+
     @Then("Verify if recipe panel is displayed")
     public void recipePanelIsDisplayed() {
-        Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("drawer-widget-parent")));
+        try {
+        Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("parsing-drawer-container")));
+    } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
+
+    @Then("Click on delete icon of any step with \\\"(.,*)\\\"")
+    public void verifyByClickingOnDeleteIcon(int stepId) {
+        try {
+            WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
+            Actions action = new Actions(SeleniumDriver.getDriver());
+            action.moveToElement(ele).perform();
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-1-delete"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
+
+    @Then("Verify if clicking on close icon of panel")
+    public void verifyByClickingOnCloseIcon() {
+        try {
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
     }
 }
-
