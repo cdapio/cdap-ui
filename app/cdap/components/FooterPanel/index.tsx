@@ -138,12 +138,7 @@ export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
         <Label data-testid="footerpanel-simple-label">
-          <>
-            {`${T.translate(`${PREFIX}.currentData`)} 
-          - ${rowCount} ${T.translate(`${PREFIX}.rows`)} ${T.translate(
-              `features.WranglerNewUI.common.and`
-            )} ${columnCount} ${T.translate(`${PREFIX}.columns`)}`}
-          </>
+          {T.translate(`${PREFIX}.message`, { rowCount, columnCount })}
         </Label>
       </LargeBox>
       <ZoomBox data-testid="footer-panel-zoom-tab">

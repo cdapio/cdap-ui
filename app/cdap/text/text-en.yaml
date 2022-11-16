@@ -3440,11 +3440,9 @@ features:
       and: and
     FooterPanel:
       labels:
-        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
         columnViewPanel: Column View Panel
-        currentData: Current data
         directives: Directives
         recipeSteps: Recipe Steps
-        rows: rows
         zoomPercent100: 100%
 ...
