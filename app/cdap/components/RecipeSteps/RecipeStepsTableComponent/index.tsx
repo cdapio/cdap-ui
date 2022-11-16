@@ -24,9 +24,8 @@ import {
   TableRow,
 } from '@material-ui/core';
 import React from 'react';
-import { useStyles } from 'components/RecipeSteps/styles';
 import { IRecipeStepTebleProps } from 'components/RecipeSteps/RecipeStepsTableComponent/types';
-import { DeleteIcon } from 'components/RecipeSteps/iconStore';
+import { DeleteIcon } from 'components/RecipeSteps/IconStore/DeleteIcon';
 import { headerData } from 'components/RecipeSteps/RecipeStepsTableComponent/utils';
 import styled from 'styled-components';
 
