@@ -119,11 +119,6 @@ const ZoomBox = styled(Box)`
   cursor: pointer;
 `;
 
-export interface ITableMetaInfoTabProps {
-  rowCount: number;
-  columnCount: number;
-}
-
 const LargeBox = styled(Box)`
   width: 65%;
   padding: 0px 32px;
@@ -133,8 +128,7 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function ({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
-
+export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
   return (
