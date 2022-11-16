@@ -26,19 +26,19 @@ public class ImportSchema {
     @Then("Click on the wrangle button")
     public void clickOnFirstTabOfTheSecondColumn() {
         try {
-            for (int i = 1; i<=10; i++) {
+            for (int i = 1; i <= 10; i++) {
                 WebElement ele = Helper.locateElementByTestId("connection-tab-" + i + "0");
                 if (ElementHelper.isElementDisplayed(ele)) {
                     System.out.println("element found at index = " + i);
                     WebElement button = Helper.locateElementByTestId("connection-tab-label-" + i + "0");
                     Actions action = new Actions(SeleniumDriver.getDriver());
                     action.moveToElement(button).build().perform();
-                    if (Helper.isElementExists("connections-tab-explore",button)) {
+                    if (Helper.isElementExists("connections-tab-explore", button)) {
                         ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-text"));
                         System.out.println("wrangle clicked");
                         if (Helper.isElementExists("snackbar-alert")) {
                             ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-close-icon"));
-                         break;
+                            break;
                         }
                         break;
                     } else {
@@ -53,7 +53,6 @@ public class ImportSchema {
         }
     }
 
-    //
     @Then("Click on the Import Schema button & Upload file")
     public void clickOnTheImportSchemaButtonAndUploadFile() {
         WaitHelper.waitForPageToLoad();
