@@ -16,7 +16,6 @@
 
 import { Box, Container, Drawer } from '@material-ui/core';
 import React, { Fragment } from 'react';
-import { useStyles } from './styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeading';
 import { IDrawerWidgetProps } from 'components/DrawerWidget/types';
@@ -88,15 +87,13 @@ export default function({
   showBackIcon,
   anchor,
 }: IDrawerWidgetProps) {
-  const classes = useStyles();
-
   return (
     <PaperDrawer
       anchor={anchor ? anchor : 'right'}
       open={openDrawer}
       data-testid="drawer-widget-parent"
     >
-      <DrawerContainer role="presentation">
+      <DrawerContainer role="presentation" data-testid="parsing-drawer-container">
         <Header>
           <HeaderTextIconWrapper>
             {showBackIcon && <BackIconStyle onClick={closeClickHandler}>{BackIcon}</BackIconStyle>}

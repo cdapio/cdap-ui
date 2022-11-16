@@ -90,7 +90,7 @@ const RecipeStepsTableRowStyle = styled(TableCell)`
   visibility: hidden;
 `;
 
-export default function({ recipeSteps, handleDeleteRecipeSteps }) {
+export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTebleProps) {
   const handleDelete = (eachStep, i) => {
     handleDeleteRecipeSteps(
       recipeSteps.filter((x, index) => index < i),
@@ -99,7 +99,7 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }) {
   };
 
   return (
-    <TableContainer component={Box}>
+    <TableContainer component={Box} data-testid="recipe-step-container">
       <Table aria-label="recipe steps table">
         <TableHead>
           <RecipeStepsTableRow>

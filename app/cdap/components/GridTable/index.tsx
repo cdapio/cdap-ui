@@ -379,7 +379,7 @@ export default function GridTable() {
       (err) => {
         setToaster({
           open: true,
-          message: `Failedd to transform ${newDirective}`,
+          message: `Failed to transform ${newDirective}`,
           isSuccess: false,
         });
         setLoading(false);
