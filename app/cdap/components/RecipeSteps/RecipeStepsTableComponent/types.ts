@@ -15,6 +15,6 @@
  */
 
 export interface IRecipeStepTebleProps {
-  recipeSteps: unknown;
-  handleDeleteRecipeSteps: () => void;
+  recipeSteps: string[];
+  handleDeleteRecipeSteps: (new_arr: string[], remaining_arr: string[]) => void;
 }

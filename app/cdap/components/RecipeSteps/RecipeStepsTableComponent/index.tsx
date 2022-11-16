@@ -90,7 +90,7 @@ const RecipeStepsTableRowStyle = styled(TableCell)`
   visibility: hidden;
 `;
 
-export default function({ recipeSteps, handleDeleteRecipeSteps }) {
+export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTebleProps) {
   const handleDelete = (eachStep, i) => {
     handleDeleteRecipeSteps(
       recipeSteps.filter((x, index) => index < i),
