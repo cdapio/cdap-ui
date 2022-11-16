@@ -15,21 +15,30 @@
  */
 
 import React from 'react';
-import { useStyles } from 'components/RecipeSteps/styles';
 import { DownloadIcon, KebabIcon } from 'components/RecipeSteps/iconStore';
 import { Box } from '@material-ui/core';
+import styled from 'styled-components';
+
+const DownloadMenuActionWrapper = styled(Box)`
+  display: flex;
+`;
+
+const DownloadIconStyle = styled(Box)`
+  margin-right: 20px;
+  cursor: pointer;
+`;
+
+const KebabMenuStyle = styled(Box)`
+  cursor: pointer;
+`;
 
 export default function() {
-  const classes = useStyles();
-
   return (
-    <Box className={classes.downloadMenuActionWrapper} data-testid="header-action-template-parent">
-      <Box className={classes.importIconStyles} data-testid="header-action-download-icon">
+    <DownloadMenuActionWrapper data-testid="header-action-template-parent">
+      <DownloadIconStyle data-testid="header-action-download-icon">
         {DownloadIcon}
-      </Box>
-      <Box className={classes.kebabMenuStyle} data-testid="header-action-kebab-icon">
-        {KebabIcon}
-      </Box>
-    </Box>
+      </DownloadIconStyle>
+      <KebabMenuStyle data-testid="header-action-kebab-icon">{KebabIcon}</KebabMenuStyle>
+    </DownloadMenuActionWrapper>
   );
 }

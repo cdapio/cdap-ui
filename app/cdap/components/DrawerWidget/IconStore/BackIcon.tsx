@@ -14,7 +14,16 @@
  * the License.
  */
 
-export interface IRecipeStepTebleProps {
-  recipeSteps: unknown;
-  handleDeleteRecipeSteps: () => void;
-}
+import React from 'react';
+
+export const BackIcon = (
+  <svg width="13" height="23" viewBox="0 0 13 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M11.2303 1.19922L1 11.429L11.2303 21.1992"
+      stroke="#757575"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);

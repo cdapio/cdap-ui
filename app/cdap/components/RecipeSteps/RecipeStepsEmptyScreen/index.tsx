@@ -19,19 +19,47 @@ import React, { Fragment } from 'react';
 import { useStyles } from 'components/RecipeSteps/styles';
 import T from 'i18n-react';
 import { InfoGraphicData } from 'components/RecipeSteps/iconStore';
+import styled from 'styled-components';
+
+const EmptyScreenContainer = styled(Container)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-iems: center;
+  justify-content: center;
+`;
+
+const EmptyScreenText = styled(Typography)`
+  font-style: normal;
+  font-weight: 400px;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: grey[900];
+`;
+
+const EmptyScreenInfoText = styled(Typography)`
+  font-syle: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: grey[700];
+`;
 
 export default function() {
   const classes = useStyles();
 
   return (
-    <Container className={classes.emptyScreenStyles} data-testid="recipe-steps-empty-screen-parent">
+    <EmptyScreenContainer data-testid="recipe-steps-empty-screen-parent">
       {InfoGraphicData}
-      <Typography className={classes.emptyScreenText} data-testid="start-wrangle-title">
+      <EmptyScreenText data-testid="start-wrangle-title">
         {T.translate('features.WranglerNewRecipeSteps.startWrangleTitle')}
-      </Typography>
-      <Typography className={classes.emptyScreenInfoText} data-testid="start-wrangle-sub-title">
+      </EmptyScreenText>
+      <EmptyScreenInfoText data-testid="start-wrangle-sub-title">
         {T.translate('features.WranglerNewRecipeSteps.startWrangleSubTitle')}
-      </Typography>
-    </Container>
+      </EmptyScreenInfoText>
+    </EmptyScreenContainer>
   );
 }

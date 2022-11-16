@@ -16,8 +16,7 @@
 
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
-import { useStyles } from 'components/DrawerWidget/styles';
-import { UnderLine } from 'components/DrawerWidget/iconStore';
+import { UnderLine } from 'components/DrawerWidget/IconStore/UnderLine';
 import { IDrawerWidgetHeadinProps } from 'components/DrawerWidget/DrawerWidgetHeading/types';
 import styled from 'styled-components';
 
@@ -37,8 +36,6 @@ const DrawerWidgetTitleLabel = styled(Typography)`
 `;
 
 export default function({ headingText }: IDrawerWidgetHeadinProps) {
-  const classes = useStyles();
-
   return (
     <DrawerWidgetTitleIconWrapper>
       <DrawerWidgetTitleLabel data-testid="drawer-widget-heading">

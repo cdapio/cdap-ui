@@ -18,31 +18,20 @@ import { Container } from '@material-ui/core';
 import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
 import React, { useEffect, useState } from 'react';
-import RecipeHeaderActionTemplate from './RecipeHeaderActionTemplate';
-import RecipeStepsEmptyScreen from './RecipeStepsEmptyScreen';
-import RecipeStepsTableComponent from './RecipeStepsTableComponent';
-import { useStyles } from './styles';
+import RecipeHeaderActionTemplate from 'components/RecipeSteps/RecipeHeaderActionTemplate';
+import RecipeStepsEmptyScreen from 'components/RecipeSteps/RecipeStepsEmptyScreen';
+import RecipeStepsTableComponent from 'components/RecipeSteps/RecipeStepsTableComponent';
 import T from 'i18n-react';
-import { IRecipesSteps, IRecipeStepsProps } from './types';
-import { IRecipeStepTebleProps } from './RecipeStepsTableComponent/types';
+import { IRecipeStepsProps } from 'components/RecipeSteps/types';
+import styled from 'styled-components';
 
-const recipes = [
-  {
-    actionType: 'Parse Column',
-    description: "'Body' with delimiter 'comma' and set 'first row as header'",
-  },
-  {
-    actionType: 'Delete Column',
-    description: "'Body'",
-  },
-];
+const RecipeStepsBody = styled(Container)`
+  height: calc(100% - 100px);
+  padding: 0px;
+`;
 
-const recipe_steps = ['uppercase: body1', 'titlecase: body2'];
-
-export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }) {
-  const [recipeSteps, setRecipeSteps] = useState(recipes);
-
-  const classes = useStyles();
+export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }: IRecipeStepsProps) {
+  const [recipeSteps, setRecipeSteps] = useState<string[]>([]);
 
   const { dataprep } = DataPrepStore.getState();
 
@@ -55,7 +44,6 @@ export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }) 
   };
 
   const handleDeleteRecipeSteps = (new_arr, remaining_arr) => {
-    console.log(new_arr, remaining_arr, 'ghghghg');
     deleteRecipes(new_arr, remaining_arr);
   };
 
@@ -67,7 +55,7 @@ export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }) 
       headerActionTemplate={<RecipeHeaderActionTemplate />}
       closeClickHandler={closeClickHandler}
     >
-      <Container className={classes.RecipeStepsBodyStyles}>
+      <RecipeStepsBody>
         {Array.isArray(recipeSteps) && recipeSteps.length ? (
           <RecipeStepsTableComponent
             recipeSteps={recipeSteps}
@@ -76,7 +64,7 @@ export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }) 
         ) : (
           <RecipeStepsEmptyScreen />
         )}
-      </Container>
+      </RecipeStepsBody>
     </DrawerWidget>
   );
 }
