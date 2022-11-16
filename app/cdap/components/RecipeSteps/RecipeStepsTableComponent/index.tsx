@@ -28,6 +28,58 @@ import { useStyles } from 'components/RecipeSteps/styles';
 import { IRecipeStepTebleProps } from 'components/RecipeSteps/RecipeStepsTableComponent/types';
 import { DeleteIcon } from 'components/RecipeSteps/iconStore';
 import { headerData } from 'components/RecipeSteps/RecipeStepsTableComponent/utils';
+import styled from 'styled-components';
+
+const RecipeStepsTableRow = styled(TableRow)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #5f6368;
+  padding: 15px 10px;
+`;
+
+const RecipeStepsTableHead = styled(TableCell)`
+  &.MuiTableCell-head {
+    padding: 10px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.15;
+    color: #5f6368;
+  }
+`;
+
+const RecipeStepsTableBodyRow = styled(TableRow)`
+  &:hover {
+    background: #eff0f2;
+    & td {
+      &:last-child: {
+        visibility: visible;
+      }
+    }
+  }
+`;
+
+const RecipeStepsBodyTableRow = styled(TableCell)`
+  &.MuiTableCell-root {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.15;
+    color: #5f6368;
+    padding: 15px 10px;
+  }
+`;
+
+const RecipeStepsDeleteStyle = styled(Box)`
+  width: 18px;
+  height: 20px;
+  cursor: pointer;
+`;
 
 export default function({ recipeSteps, handleDeleteRecipeSteps }) {
   const classes = useStyles();
@@ -43,43 +95,31 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }) {
     <TableContainer component={Box}>
       <Table aria-label="recipe steps table">
         <TableHead>
-          <TableRow className={classes.recipeStepsTableRowStyles}>
+          <RecipeStepsTableRow>
             {headerData?.map((i) => (
-              <TableCell
-                data-testid={i.textId}
-                classes={{ head: classes.recipeStepsTableHeadStyles }}
-              >
-                {i.text}
-              </TableCell>
+              <RecipeStepsTableHead data-testid={i.textId}>{i.text}</RecipeStepsTableHead>
             ))}
-          </TableRow>
+          </RecipeStepsTableRow>
         </TableHead>
         <TableBody>
           {recipeSteps?.map((eachStep, index) => (
             <TableRow className={classes.recipeStepsTableBodyRowStyles} key={index}>
-              <TableCell
-                data-testid="index-num"
-                classes={{ body: classes.recipeStepsTableRowStyles }}
-              >
+              <RecipeStepsBodyTableRow data-testid="index-num">
                 {index + 1 > 10 ? index + 1 : `0${index + 1}`}
-              </TableCell>
-              <TableCell
-                data-testid="each-recipe-step"
-                classes={{ body: classes.recipeStepsTableRowStyles }}
-              >
+              </RecipeStepsBodyTableRow>
+              <RecipeStepsBodyTableRow data-testid="each-recipe-step">
                 <span data-testid={'recipe-steps-span' + index}>{eachStep}</span>
-              </TableCell>
+              </RecipeStepsBodyTableRow>
               <TableCell
                 className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
                 data-testid="delete-styles"
               >
-                <Box
-                  className={classes.recipeStepsDeleteStyles}
+                <RecipeStepsDeleteStyle
                   onClick={() => handleDelete(eachStep, index)}
                   data-testid="step-table-delete"
                 >
                   {DeleteIcon}
-                </Box>
+                </RecipeStepsDeleteStyle>
               </TableCell>
             </TableRow>
           ))}

@@ -18,8 +18,8 @@ import { Box, Container, Drawer } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import { useStyles } from './styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import DrawerWidgetHeading from './DrawerWidgetHeading';
-import { IDrawerWidgetProps } from './types';
+import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeading';
+import { IDrawerWidgetProps } from 'components/DrawerWidget/types';
 import { BackIcon } from 'components/DrawerWidget/IconStore/BackIcon';
 import styled from 'styled-components';
 
