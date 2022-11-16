@@ -19,16 +19,32 @@ import React from 'react';
 import { useStyles } from 'components/DrawerWidget/styles';
 import { UnderLine } from 'components/DrawerWidget/iconStore';
 import { IDrawerWidgetHeadinProps } from 'components/DrawerWidget/DrawerWidgetHeading/types';
+import styled from 'styled-components';
+
+const DrawerWidgetTitleIconWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const DrawerWidgetTitleLabel = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: grey[900];
+`;
 
 export default function({ headingText }: IDrawerWidgetHeadinProps) {
   const classes = useStyles();
 
   return (
-    <Box className={classes.headingStyles}>
-      <Typography className={classes.headingTextStyles} data-testid="drawer-widget-heading">
+    <DrawerWidgetTitleIconWrapper>
+      <DrawerWidgetTitleLabel data-testid="drawer-widget-heading">
         {headingText}
-      </Typography>
+      </DrawerWidgetTitleLabel>
       {UnderLine}
-    </Box>
+    </DrawerWidgetTitleIconWrapper>
   );
 }

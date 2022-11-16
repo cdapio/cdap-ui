@@ -54,12 +54,9 @@ export default function GridTable() {
   const params = useParams() as IRecords;
   const classes = useStyles();
   const { dataprep } = DataPrepStore.getState();
-  const [isFirstWrangle, setIsFirstWrangle] = useState(false);
+  const [isFirstWrangle, setIsFirstWrangle] = useState<boolean>(false);
   const [connectorType, setConnectorType] = useState<string | null>(null);
-  const [openDirectivePanel, setDirectivePanel] = useState(true);
-  const [toastAction, setToastAction] = useState('');
-
-  const [columnSelected, setColumnSelected] = useState('');
+  const [openDirectivePanel, setDirectivePanel] = useState<boolean>(true);
   const [toaster, setToaster] = useState({
     open: false,
     message: '',
@@ -375,18 +372,12 @@ export default function GridTable() {
                 }`,
           isSuccess: true,
         });
-        if (action === 'add') {
-          setToastAction('add');
-        } else if (action === 'delete') {
-          setToastAction('delete');
-        }
         setTimeout(() => {
           setToaster({
             open: false,
             message: ``,
             isSuccess: false,
           });
-          setToastAction('');
         }, 5000);
       },
       (err) => {
