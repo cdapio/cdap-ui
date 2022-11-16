@@ -110,9 +110,19 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setToaster({
+          open: true,
+          message: `Transformation successfully added`,
+          isSuccess: false,
+        });
       },
       (err) => {
         setLoading(false);
+        setToaster({
+          open: true,
+          message: `Failed to add transformation`,
+          isSuccess: false,
+        });
       }
     );
   };
@@ -382,7 +392,7 @@ export default function GridTable() {
       (err) => {
         setToaster({
           open: true,
-          message: `Failed to transform ${newDirective}`,
+          message: `Failedd to transform ${newDirective}`,
           isSuccess: false,
         });
         setLoading(false);
