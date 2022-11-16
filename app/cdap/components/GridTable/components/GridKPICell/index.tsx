@@ -15,9 +15,9 @@
  */
 
 import { Box, Card, TableCell, Typography } from '@material-ui/core';
+import { MISSING_NULL } from 'components/GridTable/constants';
 import React from 'react';
 import { useGridKPICellStyles } from './styles';
-import { MISSING_NULL } from 'components/GridTable/constants';
 
 export default function GridKPICell({ metricData }) {
   const classes = useGridKPICellStyles();
@@ -39,6 +39,7 @@ export default function GridKPICell({ metricData }) {
                     ? `${classes.missingClass} ${classes.count}`
                     : `${classes.generalClass} ${classes.count}`
                 }
+                data-testid={`grid-kpi-metric-value-${eachValue.label}`}
               >
                 {eachValue.count}
               </Typography>
