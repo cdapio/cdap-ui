@@ -17,7 +17,9 @@
 import React from 'react';
 import { DownloadIcon, KebabIcon } from 'components/RecipeSteps/iconStore';
 import { Box } from '@material-ui/core';
+import fileDownload from 'js-file-download';
 import styled from 'styled-components';
+import DataPrepStore from 'components/DataPrep/store';
 
 const DownloadMenuActionWrapper = styled(Box)`
   display: flex;
@@ -33,9 +35,20 @@ const KebabMenuStyle = styled(Box)`
 `;
 
 export default function() {
+  const handleDownload = () => {
+    const state = DataPrepStore.getState().dataprep;
+    const workspaceId = state.workspaceId,
+      directives = state.directives;
+
+    const data = directives.join('\n'),
+      filename = `${workspaceId}-directives.txt`;
+
+    fileDownload(data, filename);
+  };
+
   return (
     <DownloadMenuActionWrapper data-testid="header-action-template-parent">
-      <DownloadIconStyle data-testid="header-action-download-icon">
+      <DownloadIconStyle data-testid="header-action-download-icon" onClick={handleDownload}>
         {DownloadIcon}
       </DownloadIconStyle>
       <KebabMenuStyle data-testid="header-action-kebab-icon">{KebabIcon}</KebabMenuStyle>

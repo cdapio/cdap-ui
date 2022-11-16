@@ -16,7 +16,6 @@
 
 import { Container, Typography } from '@material-ui/core';
 import React, { Fragment } from 'react';
-import { useStyles } from 'components/RecipeSteps/styles';
 import T from 'i18n-react';
 import { InfoGraphicData } from 'components/RecipeSteps/iconStore';
 import styled from 'styled-components';
@@ -26,31 +25,29 @@ const EmptyScreenContainer = styled(Container)`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-iems: center;
+  align-items: center;
   justify-content: center;
 `;
 
 const EmptyScreenText = styled(Typography)`
   font-style: normal;
-  font-weight: 400px;
+  font-weight: 400;
   font-size: 20px;
   line-height: 150%;
-  letter-spacing: 0.15;
+  letter-spacing: 0.15px;
   color: grey[900];
 `;
 
 const EmptyScreenInfoText = styled(Typography)`
   font-syle: normal;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 150%;
-  letter-spacing: 0.15;
   color: grey[700];
+  letter-spacing: 0.15px;
 `;
 
 export default function() {
-  const classes = useStyles();
-
   return (
     <EmptyScreenContainer data-testid="recipe-steps-empty-screen-parent">
       {InfoGraphicData}
