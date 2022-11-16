@@ -17,5 +17,5 @@
 import T from 'i18n-react';
 
 export const COLUMNS = T.translate('features.WranglerNewUI.ColumnViewPanel.columns');
-export const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');
 export const HEADING_TEXT = T.translate('features.WranglerNewUI.ColumnViewPanel.columnView');
+export const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');
