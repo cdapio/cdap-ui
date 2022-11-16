@@ -162,7 +162,7 @@ export const SidePanel = ({
 
   useEffect(() => {
     setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
-  }, [numberOfPlugins]);
+  }, [numberOfPlugins, JSON.stringify(groups)]);
 
   const handleSetSearch = debounce((text) => {
     // open all accordions when searching (then filtered closes them if no plugins)
