@@ -25,35 +25,104 @@ import {
 } from '@material-ui/core';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
 import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
-import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
 import {
   IDataQualityRecord,
-  ISelectColumnListProps,
+  ISelectColumnsListProps,
 } from 'components/ColumnView/SelectColumnsList/types';
 import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
 import { IHeaderNamesList } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-export default function({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
-  const classes = useStyles();
+const CustomTableBodyCell = styled(TableCell)`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #5f6368;
+  font-size: 14px;
+`;
+
+const CustomTableBodyLeftCell = styled(CustomTableBodyCell)`
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 30px;
+  &.MuiTableCell-root {
+    padding: 10px 0px 10px 30px;
+  }
+`;
+
+const CustomTableBodyNullValuesCell = styled(CustomTableBodyCell)`
+  width: 134px;
+  padding-left: 0;
+`;
+
+const CustomTableBodyRow = styled(TableRow)`
+  &:hover {
+    box-shadow: 3px 4px 15px rgba(68, 132, 245, 0.15);
+  }
+`;
+
+const CustomTableContainer = styled(TableContainer)`
+  &.MuiTableContainer-root {
+    height: calc(100% - 43px);
+    overflow: scroll;
+    padding: 0;
+    position: relative;
+  }
+`;
+
+const CustomTableHeaderCell = styled(TableCell)`
+  background-color: #ffffff;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  padding-left: 30px;
+`;
+
+const CustomTableHeaderRightCell = styled(CustomTableHeaderCell)`
+  padding-left: 0;
+`;
+
+const CustomTableHeaderRow = styled(TableRow)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+`;
+
+const SelectColumnsListSection = styled.section`
+  width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: #5f6368;
+  height: calc(100vh - 211px);
+  overflow: scroll;
+`;
+
+export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
 
   useEffect(() => {
-    const getPreparedDataQuality = prepareDataQualtiy(dataQuality, columnData);
-    setDataQualityList(getPreparedDataQuality);
+    setDataQualityList(prepareDataQualtiy(dataQuality, columnData));
   }, []);
 
   useEffect(() => {
     if (searchTerm) {
-      const columnValue =
+      const filteredColumn =
         Array.isArray(columnData) &&
         columnData.length !== 0 &&
         columnData.filter((el) => el?.label.toLowerCase().includes(searchTerm.toLowerCase()));
-      if (columnValue?.length) {
-        setFilteredColumns(columnValue);
+      if (filteredColumn?.length) {
+        setFilteredColumns(filteredColumn);
       } else {
         setFilteredColumns([]);
       }
@@ -63,27 +132,26 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
   }, [searchTerm]);
 
   return (
-    <section className={classes.columnsCountTextStyles}>
-      <TableContainer component={Box} classes={{ root: classes.customTableContainer }}>
+    <SelectColumnsListSection>
+      <CustomTableContainer component={Box}>
         <Table aria-label="recipe steps table" stickyHeader>
           {filteredColumns.length !== 0 && (
             <TableHead>
-              <TableRow className={classes.recipeStepsTableRowStyles}>
-                <TableCell className={classes.columnLeft} data-testid="column-name-header">
+              <CustomTableHeaderRow>
+                <CustomTableHeaderCell data-testid="column-name-header">
                   {`${COLUMNS} (${columnData?.length})`}
-                </TableCell>
-                <TableCell className={classes.columnRight} data-testid="null-values-header">
+                </CustomTableHeaderCell>
+                <CustomTableHeaderRightCell data-testid="null-values-header">
                   {NULL_VALUES}
-                </TableCell>
-              </TableRow>
+                </CustomTableHeaderRightCell>
+              </CustomTableHeaderRow>
             </TableHead>
           )}
           {filteredColumns.length !== 0 ? (
             filteredColumns.map((eachFilteredColumn, filteredColumnIndex) => (
-              <TableBody className={classes.tableBody}>
-                <TableRow key={filteredColumnIndex} className={classes.tableRowContainer}>
-                  <TableCell
-                    className={classes.leftSideCell}
+              <TableBody>
+                <CustomTableBodyRow key={filteredColumnIndex}>
+                  <CustomTableBodyLeftCell
                     data-testid={`each-column-label-type-${filteredColumnIndex}`}
                   >
                     <Box>
@@ -92,8 +160,8 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
                       <br />
                       {eachFilteredColumn?.type}
                     </Box>
-                  </TableCell>
-                  <TableCell className={classes.nullValuesContainer}>
+                  </CustomTableBodyLeftCell>
+                  <CustomTableBodyNullValuesCell>
                     <DataQualityCircularProgressBar
                       wrapperComponentData={{
                         dataQualityList,
@@ -101,8 +169,8 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
                       }}
                       dataQualityPercentValue={dataQualityList[filteredColumnIndex]?.value}
                     />
-                  </TableCell>
-                </TableRow>
+                  </CustomTableBodyNullValuesCell>
+                </CustomTableBodyRow>
               </TableBody>
             ))
           ) : (
@@ -114,7 +182,7 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnLi
             />
           )}
         </Table>
-      </TableContainer>
-    </section>
+      </CustomTableContainer>
+    </SelectColumnsListSection>
   );
 }

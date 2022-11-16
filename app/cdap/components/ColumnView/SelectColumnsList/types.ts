@@ -16,7 +16,7 @@
 
 import { IHeaderNamesList } from 'components/GridTable/types';
 
-export interface ISelectColumnListProps {
+export interface ISelectColumnsListProps {
   columnData: IHeaderNamesList[];
   dataQuality: IDataQuality;
   searchTerm: string;
