@@ -69,8 +69,6 @@ export default function GridTable() {
   const [showRecipePanel, setShowRecipePanel] = useState<boolean>(false);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState<IMissingListData[]>([]);
-  const [workspaceName, setWorkspaceName] = useState<string>('');
-  const [directiveFunction, setDirectiveFunction] = useState('');
   const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
     {
       label: 'Invalid',
@@ -133,13 +131,6 @@ export default function GridTable() {
     getWorkSpaceData(payload, wid);
     setIsFirstWrangle(false);
   };
-
-  const isParsingPanel =
-    dataprep?.insights?.name &&
-    isFirstWrangle &&
-    connectorType === 'File' &&
-    Array.isArray(gridData?.headers) &&
-    gridData?.headers.length !== 0;
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -358,7 +349,6 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-        setDirectiveFunction('');
         setShowRecipePanel(false);
         setToaster({
           open: true,

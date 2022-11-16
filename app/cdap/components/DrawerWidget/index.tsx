@@ -20,7 +20,63 @@ import { useStyles } from './styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import DrawerWidgetHeading from './DrawerWidgetHeading';
 import { IDrawerWidgetProps } from './types';
-import { BackIcon } from './iconStore';
+import { BackIcon } from 'components/DrawerWidget/IconStore/BackIcon';
+import styled from 'styled-components';
+
+const DrawerContainer = styled(Container)`
+  width: 460px;
+  height: 100%;
+  padding-left: 30px;
+`;
+
+const Header = styled.header`
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0px;
+  padding-right: 0px;
+`;
+
+const HeaderTextIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const BackIconStyle = styled(Box)`
+  cursor: pointer;
+`;
+
+const HeaderIconWrapper = styled(Box)`
+  display: flex;
+  align-items: center;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 28px;
+  background-color: #dadce0;
+  margin: 0 15px;
+`;
+
+const CloseIcon = styled(CloseRoundedIcon)`
+  cursor: pointer;
+`;
+
+const PaperDrawer = styled(Drawer)`
+  & .MuiDrawer-paper: {
+    top: 46px
+    height: calc(100vh - 47px);
+  }
+`;
+
+const StyledDrawer = styled(Drawer)`
+  & .MuiDrawer-paper {
+    top: 46px;
+    height: calc(100vh - 47px);
+    width: 500px;
+  }
+`;
 
 export default function({
   headingText,
@@ -41,31 +97,26 @@ export default function({
       open={openDrawer}
       data-testid="drawer-widget-parent"
     >
-      <Container className={classes.drawerContainerStyles} role="presentation">
-        <header className={classes.headerStyles}>
-          <div className={classes.headerTextWithBackIconStyles}>
-            {showBackIcon && (
-              <Box className={classes.backIconClass} onClick={closeClickHandler}>
-                {BackIcon}
-              </Box>
-            )}
+      <DrawerContainer role="presentation">
+        <Header>
+          <HeaderTextIconWrapper>
+            {showBackIcon && <BackIconStyle onClick={closeClickHandler}>{BackIcon}</BackIconStyle>}
             &nbsp;
             <DrawerWidgetHeading headingText={headingText} />
-          </div>
-          <Box className={classes.headerRightStyles}>
+          </HeaderTextIconWrapper>
+          <HeaderIconWrapper>
             {headerActionTemplate && <div>{headerActionTemplate}</div>}
-            {showDivider && <div className={classes.dividerLineStyles} />}
-            <CloseRoundedIcon
-              className={classes.pointerStyles}
+            {showDivider && <Divider />}
+            <CloseIcon
               color="action"
               fontSize="large"
               onClick={closeClickHandler}
               data-testid="drawer-widget-close-round-icon"
             />
-          </Box>
-        </header>
+          </HeaderIconWrapper>
+        </Header>
         <Fragment>{children}</Fragment>
-      </Container>
+      </DrawerContainer>
     </Drawer>
   );
 }
