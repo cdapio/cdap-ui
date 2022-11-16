@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import RecipeStepsTableComponent from 'components/RecipeSteps/RecipeStepsTableComponent/index';
@@ -27,11 +27,34 @@ describe('It should test the Recipe Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeStepsTableComponent recipeSteps={mockRecipe} />
+            <RecipeStepsTableComponent
+              recipeSteps={mockRecipe}
+              handleDeleteRecipeSteps={undefined}
+            />
           </Route>
         </Switch>
       </Router>
     );
+    const recipeStepsSpan = screen.getByTestId(/recipe-steps-span0/i);
+    expect(recipeStepsSpan).toContainHTML('a-column');
+  });
+
+  it('renders Recipe Component and triggers button and following functionality', () => {
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <RecipeStepsTableComponent
+              recipeSteps={mockRecipe}
+              handleDeleteRecipeSteps={jest.fn()}
+            />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const deleteElement = screen.getAllByTestId(/step-table-delete/i);
+    fireEvent.click(deleteElement[0]);
+    expect(deleteElement[0]).toBeInTheDocument();
     const recipeStepsSpan = screen.getByTestId(/recipe-steps-span0/i);
     expect(recipeStepsSpan).toContainHTML('a-column');
   });

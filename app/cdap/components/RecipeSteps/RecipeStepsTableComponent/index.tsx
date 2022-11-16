@@ -76,6 +76,7 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }) {
                 <Box
                   className={classes.recipeStepsDeleteStyles}
                   onClick={() => handleDelete(eachStep, index)}
+                  data-testid="step-table-delete"
                 >
                   {DeleteIcon}
                 </Box>

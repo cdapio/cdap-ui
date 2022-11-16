@@ -38,14 +38,8 @@ describe('Testing Directive Input Component', () => {
   it('Should check if the input element is working as expected with test as input', () => {
     const inputElement = screen.getByTestId(/select-directive-input-search/i);
     expect(inputElement).toBeInTheDocument();
-    fireEvent.change(inputElement, { target: { value: 'test' } });
+    fireEvent.change(inputElement, { target: { value: '' } });
     fireEvent.keyDown(inputElement, { key: 'Enter', code: 'Enter', charCode: 13 });
-    expect(inputElement).toHaveAttribute('value', 'test');
-  });
-
-  it('Should check cross icon is functioning as expected ', () => {
-    const closeIconElement = screen.getByTestId(/close-directive-panel/i);
-    fireEvent.click(closeIconElement);
-    expect(closeIconElement).toBeInTheDocument();
+    expect(inputElement).toHaveAttribute('value', '');
   });
 });
