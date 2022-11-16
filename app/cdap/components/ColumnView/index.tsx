@@ -15,20 +15,20 @@
  */
 
 import { Box } from '@material-ui/core';
-import ColumnViewWidget from 'components/ColumnViewWidget';
-import React, { Fragment, useState } from 'react';
 import { HEADING_TEXT } from 'components/ColumnView/constants';
 import SelectColumnsList from 'components/ColumnView/SelectColumnsList';
-import { useStyles } from 'components/ColumnView/styles';
 import { IColumnViewProps } from 'components/ColumnView/types';
+import ColumnViewWidget from 'components/ColumnViewWidget';
+import React, { Fragment, useState } from 'react';
+import styled from 'styled-components';
 
-export default function({
-  columnData,
-  dataQuality,
-  closeClickHandler,
-  setLoading,
-}: IColumnViewProps) {
-  const classes = useStyles();
+const SelectColumnListWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+`;
+
+export default function({ columnData, dataQuality, closeClickHandler }: IColumnViewProps) {
   const [searchValue, setSearchValue] = useState<string>('');
 
   return (
@@ -36,15 +36,15 @@ export default function({
       <ColumnViewWidget
         headingText={HEADING_TEXT}
         closeClickHandler={closeClickHandler}
-        searchedTermHandler={(searchedTerm) => setSearchValue(searchedTerm)}
+        searchedTermHandler={(searchValue: string) => setSearchValue(searchValue)}
       >
-        <Box className={classes.selectColumnListBodyStyles} data-testid="select-column-list-parent">
+        <SelectColumnListWrapper data-testid="select-column-list-parent">
           <SelectColumnsList
             columnData={columnData}
             dataQuality={dataQuality}
             searchTerm={searchValue}
           />
-        </Box>
+        </SelectColumnListWrapper>
       </ColumnViewWidget>
     </Fragment>
   );

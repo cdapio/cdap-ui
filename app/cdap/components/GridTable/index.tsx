@@ -254,7 +254,6 @@ export default function GridTable() {
         {openColumnView && (
           <Box className={classes.columnViewDrawer}>
             <ColumnView
-              setLoading={setLoading}
               columnData={headersNamesList}
               dataQuality={dataQuality}
               closeClickHandler={() => setOpenColumnView(false)}

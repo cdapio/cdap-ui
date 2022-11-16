@@ -15,13 +15,18 @@
  */
 
 import { render, screen } from '@testing-library/react';
+import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
 import React from 'react';
-import {RenderSemiCircularProgressBar} from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/index';
 
 describe('It Should test DataQualityCircularProgressBar Component', () => {
   it('Should render the DataQualityCircularProgressBar Component in virtula DOM', () => {
-    render(<RenderSemiCircularProgressBar dataQualityPercentValue={100} wrapperComponentData={[]} />);
+    render(
+      <DataQualityCircularProgressBar
+        dataQualityPercentValue={100}
+        wrapperComponentData={undefined}
+      />
+    );
     const dataQualityPercent = screen.getByTestId(/semi-circular-progress-bar-wrapper/i);
-    expect(dataQualityPercent).toBeInTheDocument()
+    expect(dataQualityPercent).toBeInTheDocument();
   });
 });
