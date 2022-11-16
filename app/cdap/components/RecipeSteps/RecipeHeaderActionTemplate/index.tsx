@@ -17,7 +17,7 @@
 import React from 'react';
 import { DownloadIcon } from 'components/RecipeSteps/IconStore/DownloadIcon';
 import { KebabIcon } from 'components/RecipeSteps/IconStore/KebabIcon';
-import { Box } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import fileDownload from 'js-file-download';
 import styled from 'styled-components';
 import DataPrepStore from 'components/DataPrep/store';
@@ -50,7 +50,9 @@ export default function() {
   return (
     <DownloadMenuActionWrapper data-testid="header-action-template-parent">
       <DownloadIconStyle data-testid="header-action-download-icon" onClick={handleDownload}>
-        {DownloadIcon}
+        <Typography data-testid="download-icon" component="span">
+          {DownloadIcon}
+        </Typography>
       </DownloadIconStyle>
       <KebabMenuStyle data-testid="header-action-kebab-icon">{KebabIcon}</KebabMenuStyle>
     </DownloadMenuActionWrapper>
