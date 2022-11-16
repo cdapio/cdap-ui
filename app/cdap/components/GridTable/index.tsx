@@ -24,6 +24,8 @@ import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
+import DirectiveInput from 'components/DirectiveInput';
+import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
 import { useStyles } from 'components/GridTable/styles';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
@@ -36,7 +38,9 @@ import { objectQuery } from 'services/helpers';
 import RecipeSteps from 'components/RecipeSteps';
 import {
   IExecuteAPIResponse,
+  IApiPayload,
   IHeaderNamesList,
+  IGridParams,
   IObject,
   IParams,
   IRecords,
@@ -48,6 +52,10 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
+  const { dataprep } = DataPrepStore.getState();
+  const [isFirstWrangle, setIsFirstWrangle] = useState(false);
+  const [connectorType, setConnectorType] = useState<string | null>(null);
+  const [openDirectivePanel, setDirectivePanel] = useState(true);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -62,6 +70,58 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+
+  useEffect(() => {
+    setIsFirstWrangle(true);
+    setConnectorType(dataprep.connectorType);
+  }, []);
+
+  const addDirectives = (directive: string) => {
+    setLoading(true);
+    if (directive) {
+      const apiPayload: IApiPayload = getAPIRequestPayload(params, directive, '');
+      addDirectiveAPICall(apiPayload);
+    }
+  };
+
+  const addDirectiveAPICall = (apiPayload: IApiPayload) => {
+    const gridParams: IGridParams = apiPayload.gridParams;
+    applyDirectives(wid, gridParams.directives).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            values: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+      },
+      (err) => {
+        setLoading(false);
+      }
+    );
+  };
+
+  const updateDataTranformation = (wid: string) => {
+    const payload: IParams = {
+      context: params.namespace as string,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+    setIsFirstWrangle(false);
+  };
+
+  const isParsingPanel =
+    dataprep?.insights?.name &&
+    isFirstWrangle &&
+    connectorType === 'File' &&
+    Array.isArray(gridData?.headers) &&
+    gridData?.headers.length !== 0;
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -303,6 +363,17 @@ export default function GridTable() {
               })}
           </TableBody>
         </Table>
+      )}
+      {openDirectivePanel && (
+        <DirectiveInput
+          columnNamesList={headersNamesList}
+          onDirectiveInputHandler={(directive) => {
+            addDirectives(directive);
+            setDirectivePanel(false);
+          }}
+          onClose={() => setDirectivePanel(false)}
+          openDirectivePanel={openDirectivePanel}
+        />
       )}
       {loading && (
         <div className={classes.loadingContainer}>
