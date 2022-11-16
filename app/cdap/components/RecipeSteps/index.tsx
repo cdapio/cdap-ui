@@ -15,6 +15,7 @@
  */
 
 import { Container } from '@material-ui/core';
+import DataPrepStore from 'components/DataPrep/store';
 import DrawerWidget from 'components/DrawerWidget';
 import React, { useEffect, useState } from 'react';
 import RecipeHeaderActionTemplate from './RecipeHeaderActionTemplate';
@@ -38,13 +39,24 @@ const recipes = [
 
 const recipe_steps = ['uppercase: body1', 'titlecase: body2'];
 
-export default function({ setShowRecipePanel, showRecipePanel }: IRecipeStepsProps) {
-  const [recipeSteps, setRecipeSteps] = useState<string[]>(recipe_steps);
+export default function({ setShowRecipePanel, showRecipePanel, deleteRecipes }) {
+  const [recipeSteps, setRecipeSteps] = useState(recipes);
 
   const classes = useStyles();
 
+  const { dataprep } = DataPrepStore.getState();
+
+  useEffect(() => {
+    setRecipeSteps(dataprep.directives);
+  }, [dataprep]);
+
   const closeClickHandler = () => {
     setShowRecipePanel(false);
+  };
+
+  const handleDeleteRecipeSteps = (new_arr, remaining_arr) => {
+    console.log(new_arr, remaining_arr, 'ghghghg');
+    deleteRecipes(new_arr, remaining_arr);
   };
 
   return (
@@ -57,7 +69,10 @@ export default function({ setShowRecipePanel, showRecipePanel }: IRecipeStepsPro
     >
       <Container className={classes.RecipeStepsBodyStyles}>
         {Array.isArray(recipeSteps) && recipeSteps.length ? (
-          <RecipeStepsTableComponent recipeSteps={recipeSteps} />
+          <RecipeStepsTableComponent
+            recipeSteps={recipeSteps}
+            handleDeleteRecipeSteps={handleDeleteRecipeSteps}
+          />
         ) : (
           <RecipeStepsEmptyScreen />
         )}

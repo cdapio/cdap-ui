@@ -107,6 +107,7 @@ export default function({
       const inputSplit = inputBoxValue.replace(/^\s+/g, '').split(' ');
       if (event.key === 'Enter' && handlePasteDirective(inputBoxValue, directivesList)) {
         onDirectiveInputHandler(inputBoxValue);
+        setInputBoxValue('');
       } else if (
         event.key === 'Enter' &&
         columnSelected &&
@@ -114,6 +115,7 @@ export default function({
         (directiveSyntax.length === inputSplit.length || inputSplit.length > directiveSyntax.length)
       ) {
         onDirectiveInputHandler(inputBoxValue);
+        setInputBoxValue('');
       }
     }
   };

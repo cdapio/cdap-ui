@@ -36,6 +36,7 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import RecipeSteps from 'components/RecipeSteps';
+import PositionedSnackbar from 'components/SnackbarComponent';
 import {
   IExecuteAPIResponse,
   IApiPayload,
@@ -56,6 +57,14 @@ export default function GridTable() {
   const [isFirstWrangle, setIsFirstWrangle] = useState(false);
   const [connectorType, setConnectorType] = useState<string | null>(null);
   const [openDirectivePanel, setDirectivePanel] = useState(true);
+  const [toastAction, setToastAction] = useState('');
+
+  const [columnSelected, setColumnSelected] = useState('');
+  const [toaster, setToaster] = useState({
+    open: false,
+    message: '',
+    isSuccess: false,
+  });
 
   const [loading, setLoading] = useState<boolean>(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -64,6 +73,7 @@ export default function GridTable() {
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState<IMissingListData[]>([]);
   const [workspaceName, setWorkspaceName] = useState<string>('');
+  const [directiveFunction, setDirectiveFunction] = useState('');
   const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
     {
       label: 'Invalid',
@@ -302,6 +312,95 @@ export default function GridTable() {
     setShowRecipePanel((prev) => !prev);
   };
 
+  const applyDirectiveAPICall = (newDirective, action, removed_arr, from) => {
+    setLoading(true);
+    const { dataprep } = DataPrepStore.getState();
+    const { workspaceId, workspaceUri, directives, insights } = dataprep;
+    let gridParams = {};
+    const updatedDirectives = action === 'add' ? directives.concat(newDirective) : newDirective;
+    const requestBody = directiveRequestBodyCreator(updatedDirectives);
+    const arr = JSON.parse(JSON.stringify(newDirective));
+    requestBody.insights = insights;
+
+    const workspaceInfo = {
+      properties: insights,
+    };
+    gridParams = {
+      directives: updatedDirectives,
+      workspaceId,
+      workspaceUri,
+      workspaceInfo,
+      insights,
+    };
+    const payload = {
+      context: params.namespace,
+      workspaceId: params.wid,
+    };
+    MyDataPrepApi.execute(payload, requestBody).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            values: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+        setDirectiveFunction('');
+        /// setColumnSelected('');
+        setShowRecipePanel(false);
+        setToaster({
+          open: true,
+          message:
+            action === 'add'
+              ? `Transformation ${arr} successfully added`
+              : from === 'undo' || arr?.length === 0
+              ? 'Transformation successfully deleted'
+              : `${removed_arr?.length} transformation successfully deleted from ${
+                  arr[arr.length - 1]
+                }`,
+          isSuccess: true,
+        });
+        if (action === 'add') {
+          setToastAction('add');
+        } else if (action === 'delete') {
+          setToastAction('delete');
+        }
+        setTimeout(() => {
+          setToaster({
+            open: false,
+            message: ``,
+            isSuccess: false,
+          });
+          setToastAction('');
+        }, 5000);
+      },
+      (err) => {
+        setToaster({
+          open: true,
+          message: `Failed to transform ${newDirective}`,
+          isSuccess: false,
+        });
+        setLoading(false);
+        setShowRecipePanel(false);
+      }
+    );
+  };
+
+  const deleteRecipes = (new_arr, remaining_arr) => {
+    applyDirectiveAPICall(new_arr, 'delete', remaining_arr, 'panel');
+    DataPrepStore.dispatch({
+      type: DataPrepActions.setUndoDirective,
+      payload: {
+        undoDirectives: [],
+      },
+    });
+  };
+
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
@@ -313,7 +412,11 @@ export default function GridTable() {
       </button>
       <BreadCrumb datasetName={wid} />
       {showRecipePanel && (
-        <RecipeSteps setShowRecipePanel={setShowRecipePanel} showRecipePanel={showRecipePanel} />
+        <RecipeSteps
+          setShowRecipePanel={setShowRecipePanel}
+          showRecipePanel={showRecipePanel}
+          deleteRecipes={deleteRecipes}
+        />
       )}
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
@@ -369,10 +472,18 @@ export default function GridTable() {
           columnNamesList={headersNamesList}
           onDirectiveInputHandler={(directive) => {
             addDirectives(directive);
-            setDirectivePanel(false);
           }}
           onClose={() => setDirectivePanel(false)}
           openDirectivePanel={openDirectivePanel}
+        />
+      )}
+      {toaster.open && (
+        <PositionedSnackbar
+          // handleDefaultCloseSnackbar={handleDefaultCloseSnackbar}
+          // handleCloseError={handleCloseSnackbar}
+          messageToDisplay={toaster.message}
+          isSuccess={toaster.isSuccess}
+          actionType={toastAction}
         />
       )}
       {loading && (

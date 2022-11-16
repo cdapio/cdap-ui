@@ -29,8 +29,15 @@ import { IRecipeStepTebleProps } from 'components/RecipeSteps/RecipeStepsTableCo
 import { DeleteIcon } from 'components/RecipeSteps/iconStore';
 import { headerData } from 'components/RecipeSteps/RecipeStepsTableComponent/utils';
 
-export default function({ recipeSteps }: IRecipeStepTebleProps) {
+export default function({ recipeSteps, handleDeleteRecipeSteps }) {
   const classes = useStyles();
+
+  const handleDelete = (eachStep, i) => {
+    handleDeleteRecipeSteps(
+      recipeSteps.filter((x, index) => index < i),
+      recipeSteps.filter((x, index) => index >= i)
+    );
+  };
 
   return (
     <TableContainer component={Box}>
@@ -66,7 +73,12 @@ export default function({ recipeSteps }: IRecipeStepTebleProps) {
                 className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
                 data-testid="delete-styles"
               >
-                <Box className={classes.recipeStepsDeleteStyles}>{DeleteIcon}</Box>
+                <Box
+                  className={classes.recipeStepsDeleteStyles}
+                  onClick={() => handleDelete(eachStep, index)}
+                >
+                  {DeleteIcon}
+                </Box>
               </TableCell>
             </TableRow>
           ))}

@@ -15,5 +15,5 @@
  */
 
 export interface IRecipeStepTebleProps {
-  recipeSteps: string[];
+  recipeSteps: unknown;
 }
