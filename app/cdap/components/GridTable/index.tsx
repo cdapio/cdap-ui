@@ -48,6 +48,12 @@ import {
   IRowData,
   IMissingListData,
 } from 'components/GridTable/types';
+import styled from 'styled-components';
+
+const RecipeStepsButton = styled(Button)`
+  margin-left: 30px;
+  margin-bottom: 10px;
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -407,9 +413,9 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <Button variant="outlined" onClick={showRecipePanelHandler}>
+      <RecipeStepsButton variant="outlined" onClick={showRecipePanelHandler}>
         {T.translate('features.WranglerNewRecipeSteps.labels.recipeSteps')}
-      </Button>
+      </RecipeStepsButton>
       {showRecipePanel && (
         <RecipeSteps
           setShowRecipePanel={setShowRecipePanel}
