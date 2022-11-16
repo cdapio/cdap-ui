@@ -52,7 +52,7 @@ describe('It should test the Recipe Component', () => {
         </Switch>
       </Router>
     );
-    const deleteElement = screen.getAllByTestId(/step-table-delete/i);
+    const deleteElement = screen.getAllByTestId(/recipe-step-0-delete/i);
     fireEvent.click(deleteElement[0]);
     expect(deleteElement[0]).toBeInTheDocument();
     const recipeStepsSpan = screen.getByTestId(/recipe-steps-span0/i);

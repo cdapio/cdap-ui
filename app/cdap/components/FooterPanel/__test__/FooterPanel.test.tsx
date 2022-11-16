@@ -28,7 +28,7 @@ describe('Test Footer Panel Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <FooterPanel recipeStepsCount={42} gridMetaInfo={{ rowCount: 66, columnCount: 6 }} />
+            <FooterPanel recipeStepsCount={42} gridMetaInfo={{ rowCount: 66, columnCount: 6 }} handleShowRecipePanelHandler={jest.fn()} />
           </Route>
         </Switch>
       </Router>
@@ -41,13 +41,11 @@ describe('Test Footer Panel Component', () => {
     // Label inside OutlinedLabelElement to be 42
     expect(outlinedLabelElement).toHaveTextContent('42');
 
-    const simpleLabelElement = screen.getAllByTestId(/footerpanel-simple-label/i);
+    const simpleLabelElement = screen.getAllByTestId(/footerpanel-simple-message/i);
 
     // Check if the row count and column count is same as provided props 66 and 6
     expect(simpleLabelElement[0]).toHaveTextContent(
-      `${T.translate(`${PREFIX}.currentData`)} - 66 ${T.translate(`${PREFIX}.rows`)} ${T.translate(
-        `features.WranglerNewUI.common.and`
-      )} 6 ${T.translate(`${PREFIX}.columns`)}`
+      `${T.translate(`${PREFIX}.message`, '66' )}`
     );
   });
 
