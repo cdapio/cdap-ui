@@ -36,7 +36,7 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import RecipeSteps from 'components/RecipeSteps';
-import PositionedSnackbar from 'components/SnackbarComponent';
+import Snackbar from 'components/Snackbar';
 import {
   IExecuteAPIResponse,
   IApiPayload,
@@ -86,6 +86,7 @@ export default function GridTable() {
     setConnectorType(dataprep.connectorType);
   }, []);
 
+  const { directives } = dataprep;
   const addDirectives = (directive: string) => {
     setLoading(true);
     if (directive) {
@@ -113,7 +114,7 @@ export default function GridTable() {
         setToaster({
           open: true,
           message: `Transformation successfully added`,
-          isSuccess: false,
+          isSuccess: true,
         });
       },
       (err) => {
@@ -361,7 +362,6 @@ export default function GridTable() {
         setLoading(false);
         setGridData(response);
         setDirectiveFunction('');
-        /// setColumnSelected('');
         setShowRecipePanel(false);
         setToaster({
           open: true,
@@ -414,6 +414,14 @@ export default function GridTable() {
   useEffect(() => {
     getGridTableData();
   }, [gridData]);
+
+  const handleCloseSnackbar = () => {
+    setToaster({
+      open: false,
+      message: '',
+      isSuccess: false,
+    });
+  };
 
   return (
     <Box data-testid="grid-table-container">
@@ -488,12 +496,10 @@ export default function GridTable() {
         />
       )}
       {toaster.open && (
-        <PositionedSnackbar
-          // handleDefaultCloseSnackbar={handleDefaultCloseSnackbar}
-          // handleCloseError={handleCloseSnackbar}
-          messageToDisplay={toaster.message}
+        <Snackbar
+          handleCloseError={handleCloseSnackbar}
+          description={toaster.message}
           isSuccess={toaster.isSuccess}
-          actionType={toastAction}
         />
       )}
       {loading && (

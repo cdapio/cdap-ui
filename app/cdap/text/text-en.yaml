@@ -3441,6 +3441,15 @@ features:
         moreInfoOnDirective: More info to this directive
         usage: Usage
         inputDirective: Input a directive
+    Snackbar:
+      labels:
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for
   WranglerNewRecipeSteps:
     labels:
        recipe: Recipe
