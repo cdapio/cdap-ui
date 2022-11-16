@@ -296,23 +296,21 @@ const getStatistics = (params) => {
   );
 };
 
-const getMetadataEndpoints = ({ namespace, appId, workflowType, runId }) => {
-  return MyPipelineApi.getMetadataEndpoints({
-    namespace,
-    runId,
-    appId,
-    workflowType,
-  }).subscribe(
-    (res) => {
-      PipelineDetailStore.dispatch({
-        type: ACTIONS.SET_METADATA_ENDPOINTS,
-        payload: { metadataEndpoints: res.endpoints },
-      });
-    },
-    (err) => {
-      console.log(err);
-    }
-  );
+const getMetadataEndpoints = async ({ namespace, appId, workflowType, runId }) => {
+  try {
+    const endPointsRes = await MyPipelineApi.getMetadataEndpoints({
+      namespace,
+      runId,
+      appId,
+      workflowType,
+    }).toPromise();
+    PipelineDetailStore.dispatch({
+      type: ACTIONS.SET_METADATA_ENDPOINTS,
+      payload: { metadataEndpoints: endPointsRes.endpoints },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const setMacros = (macrosMap) => {

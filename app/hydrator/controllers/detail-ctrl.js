@@ -163,16 +163,17 @@ angular.module(PKG.name + '.feature.hydrator')
 
       if (latestRun.status !== 'RUNNING') {
         pipelineMetricsActionCreator.getMetrics(metricParams);
+        if (latestRun.status === 'COMPLETED') {
+          pipelineDetailsActionCreator.getMetadataEndpoints({
+            namespace: $stateParams.namespace,
+            appId: rPipelineDetail.name,
+            runId: latestRun.runid,
+            workflowType: GLOBALS.programId['cdap-data-pipeline'],
+          });
+        }
       } else {
         metricsObservable = pipelineMetricsActionCreator.pollForMetrics(metricParams);
       }
-
-      pipelineDetailsActionCreator.getMetadataEndpoints({
-        namespace: $stateParams.namespace,
-        appId: rPipelineDetail.name,
-        runId: currentRun && currentRun.runid,
-        workflowType: GLOBALS.programId['cdap-data-pipeline'],
-      });
     });
 
     this.eventEmitter.on(window.CaskCommon.WINDOW_ON_FOCUS, () => {
