@@ -17,7 +17,7 @@
 import { Container, Typography } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import T from 'i18n-react';
-import { InfoGraphicData } from 'components/RecipeSteps/iconStore';
+import { InfoGraphicData } from 'components/RecipeSteps/IconStore/InfoGraphicData';
 import styled from 'styled-components';
 
 const EmptyScreenContainer = styled(Container)`

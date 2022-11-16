@@ -15,7 +15,8 @@
  */
 
 import React from 'react';
-import { DownloadIcon, KebabIcon } from 'components/RecipeSteps/iconStore';
+import { DownloadIcon } from 'components/RecipeSteps/IconStore/DownloadIcon';
+import { KebabIcon } from 'components/RecipeSteps/IconStore/KebabIcon';
 import { Box } from '@material-ui/core';
 import fileDownload from 'js-file-download';
 import styled from 'styled-components';
