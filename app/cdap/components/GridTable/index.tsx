@@ -413,7 +413,11 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <RecipeStepsButton variant="outlined" onClick={showRecipePanelHandler}>
+      <RecipeStepsButton
+        variant="outlined"
+        onClick={showRecipePanelHandler}
+        datat-testid="recipe-steps-button"
+      >
         {T.translate('features.WranglerNewRecipeSteps.labels.recipeSteps')}
       </RecipeStepsButton>
       {showRecipePanel && (
