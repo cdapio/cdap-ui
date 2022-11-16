@@ -30,3 +30,9 @@ export interface IDataQualityRecord {
   label: string;
   value: number;
 }
+
+export interface ISelectColumnsTableRowProps {
+  eachFilteredColumn: IHeaderNamesList;
+  filteredColumnIndex: number;
+  dataQualityList: IDataQualityRecord[];
+}

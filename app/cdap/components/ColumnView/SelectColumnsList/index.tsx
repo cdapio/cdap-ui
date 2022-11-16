@@ -14,17 +14,9 @@
  * the License.
  */
 
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
-import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
+import SelectColumnsTableRow from 'components/ColumnView/SelectColumnsList/SelectColumnsTableRow';
 import {
   IDataQualityRecord,
   ISelectColumnsListProps,
@@ -35,34 +27,6 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-const CustomTableBodyCell = styled(TableCell)`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  color: #5f6368;
-  font-size: 14px;
-`;
-
-const CustomTableBodyLeftCell = styled(CustomTableBodyCell)`
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 30px;
-  &.MuiTableCell-root {
-    padding: 10px 0px 10px 30px;
-  }
-`;
-
-const CustomTableBodyNullValuesCell = styled(CustomTableBodyCell)`
-  width: 134px;
-  padding-left: 0;
-`;
-
-const CustomTableBodyRow = styled(TableRow)`
-  &:hover {
-    box-shadow: 3px 4px 15px rgba(68, 132, 245, 0.15);
-  }
-`;
 
 const CustomTableContainer = styled(TableContainer)`
   &.MuiTableContainer-root {
@@ -107,6 +71,28 @@ const SelectColumnsListSection = styled.section`
   overflow: scroll;
 `;
 
+const getTableBody = (
+  filteredColumns: IHeaderNamesList[],
+  dataQualityList: IDataQualityRecord[]
+) => {
+  {
+    filteredColumns.length !== 0 ? (
+      filteredColumns.map((eachFilteredColumn: IHeaderNamesList, filteredColumnIndex: number) => (
+        <SelectColumnsTableRow
+          eachFilteredColumn={eachFilteredColumn}
+          filteredColumnIndex={filteredColumnIndex}
+          dataQualityList={dataQualityList}
+        />
+      ))
+    ) : (
+      <NoRecordScreen
+        title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
+        subtitle={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.subtitle')}
+      />
+    );
+  }
+};
+
 export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
@@ -118,7 +104,6 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
   useEffect(() => {
     if (searchTerm) {
       const filteredColumn =
-        Array.isArray(columnData) &&
         columnData.length !== 0 &&
         columnData.filter((el) => el?.label.toLowerCase().includes(searchTerm.toLowerCase()));
       if (filteredColumn?.length) {
@@ -147,40 +132,7 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
               </CustomTableHeaderRow>
             </TableHead>
           )}
-          {filteredColumns.length !== 0 ? (
-            filteredColumns.map((eachFilteredColumn, filteredColumnIndex) => (
-              <TableBody>
-                <CustomTableBodyRow key={filteredColumnIndex}>
-                  <CustomTableBodyLeftCell
-                    data-testid={`each-column-label-type-${filteredColumnIndex}`}
-                  >
-                    <Box>
-                      {eachFilteredColumn?.label}
-                      &nbsp;
-                      <br />
-                      {eachFilteredColumn?.type}
-                    </Box>
-                  </CustomTableBodyLeftCell>
-                  <CustomTableBodyNullValuesCell>
-                    <DataQualityCircularProgressBar
-                      wrapperComponentData={{
-                        dataQualityList,
-                        filteredColumnIndex,
-                      }}
-                      dataQualityPercentValue={dataQualityList[filteredColumnIndex]?.value}
-                    />
-                  </CustomTableBodyNullValuesCell>
-                </CustomTableBodyRow>
-              </TableBody>
-            ))
-          ) : (
-            <NoRecordScreen
-              title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
-              subtitle={T.translate(
-                'features.WranglerNewUI.ColumnViewPanel.noRecordScreen.subtitle'
-              )}
-            />
-          )}
+          {getTableBody(filteredColumns, dataQualityList)}
         </Table>
       </CustomTableContainer>
     </SelectColumnsListSection>
