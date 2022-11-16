@@ -99,7 +99,7 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTeb
   };
 
   return (
-    <TableContainer component={Box}>
+    <TableContainer component={Box} data-testid="recipe-step-container">
       <Table aria-label="recipe steps table">
         <TableHead>
           <RecipeStepsTableRow>

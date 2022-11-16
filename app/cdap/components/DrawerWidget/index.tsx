@@ -93,7 +93,7 @@ export default function({
       open={openDrawer}
       data-testid="drawer-widget-parent"
     >
-      <DrawerContainer role="presentation">
+      <DrawerContainer role="presentation" data-testid="parsing-drawer-container">
         <Header>
           <HeaderTextIconWrapper>
             {showBackIcon && <BackIconStyle onClick={closeClickHandler}>{BackIcon}</BackIconStyle>}
