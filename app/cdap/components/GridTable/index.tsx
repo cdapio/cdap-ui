@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import { Button, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
@@ -425,10 +425,10 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
-      <button onClick={showRecipePanelHandler}>
-        {T.translate('features.WranglerNewRecipeSteps.labels.recipeCount')}
-      </button>
       <BreadCrumb datasetName={wid} />
+      <Button variant="outlined" onClick={showRecipePanelHandler}>
+        {T.translate('features.WranglerNewRecipeSteps.labels.recipeSteps')}
+      </Button>
       {showRecipePanel && (
         <RecipeSteps
           setShowRecipePanel={setShowRecipePanel}
