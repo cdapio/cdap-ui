@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => {
       padding: theme.spacing(2),
     },
     popper: {
-      zIndex: 2000,
+      zIndex: 1060,
       '&[x-placement*="bottom"] $arrow': {
         top: 0,
         left: 0,

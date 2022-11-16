@@ -454,8 +454,14 @@ export function fetchTriggersAndApps(
     'schedule-status': 'SCHEDULED',
   };
 
+  const lifecycleManagementEditEnabled = PipelineTriggersStore.getState().triggers
+    .lifecycleManagementEditEnabled;
+  const listParam: any = { namespace: activeNamespaceView };
+  if (lifecycleManagementEditEnabled) {
+    listParam.latestOnly = 'true';
+  }
   MyScheduleApi.getTriggers(params)
-    .combineLatest(MyAppApi.list({ namespace: activeNamespaceView }))
+    .combineLatest(MyAppApi.list(listParam))
     .subscribe((res) => {
       const existingTriggers = _transformSchedule(res[0]);
       const appsList = res[1];

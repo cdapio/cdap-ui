@@ -23,16 +23,16 @@ angular.module(PKG.name + '.feature.hydrator')
 
     this.pipelineType = rPipelineDetail.artifact.name;
     this.appInfo = {namespace: $stateParams.namespace, pipelineId: $stateParams.pipelineId};
-    let programType = GLOBALS.programType[this.pipelineType];
-    let programTypeForRunsCount = GLOBALS.programTypeForRunsCount[this.pipelineType];
-    let programName = GLOBALS.programId[this.pipelineType];
-    let scheduleId = GLOBALS.defaultScheduleId;
+    const programType = GLOBALS.programType[this.pipelineType];
+    const programTypeForRunsCount = GLOBALS.programTypeForRunsCount[this.pipelineType];
+    const programName = GLOBALS.programId[this.pipelineType];
+    const scheduleId = GLOBALS.defaultScheduleId;
 
     let currentRun, metricsObservable, runsPoll, runsCountPoll;
     let pluginsFetched = false;
 
     pipelineDetailsActionCreator.init(rPipelineDetail);
-    let runid = $stateParams.runid;
+    const runid = $stateParams.runid;
 
     this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
     this.pageLevelError = null;
@@ -47,7 +47,7 @@ angular.module(PKG.name + '.feature.hydrator')
       }
     });
 
-    let runsFetch = pipelineDetailsActionCreator.getRuns({
+    const runsFetch = pipelineDetailsActionCreator.getRuns({
       namespace: $stateParams.namespace,
       appId: rPipelineDetail.name,
       programType,
@@ -55,8 +55,8 @@ angular.module(PKG.name + '.feature.hydrator')
     });
 
     runsFetch.subscribe(() => {
-      let {runs} = window.CaskCommon.PipelineDetailStore.getState();
-      let doesCurrentRunExists = _.find(runs, (run) => run.runid === runid);
+      const { runs } = window.CaskCommon.PipelineDetailStore.getState();
+      const doesCurrentRunExists = _.find(runs, (run) => run.runid === runid);
       /**
        * We do this here because of this usecase,
        *
@@ -118,21 +118,20 @@ angular.module(PKG.name + '.feature.hydrator')
       scheduleId
     });
 
-    let pipelineDetailStoreSubscription = window.CaskCommon.PipelineDetailStore.subscribe(() => {
-      let pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
+    const pipelineDetailStoreSubscription = window.CaskCommon.PipelineDetailStore.subscribe(() => {
+      const pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
 
       if (!pluginsFetched) {
-        let pluginsToFetchDetailsFor = pipelineDetailStoreState.config.stages.concat(pipelineDetailStoreState.config.postActions || []);
+        const pluginsToFetchDetailsFor = pipelineDetailStoreState.config.stages.concat(pipelineDetailStoreState.config.postActions || []);
         PipelineAvailablePluginsActions.fetchPluginsForDetails($stateParams.namespace, pluginsToFetchDetailsFor);
         pluginsFetched = true;
       }
 
-      let latestRun = pipelineDetailStoreState.currentRun;
+      const latestRun = pipelineDetailStoreState.currentRun;
       if (!latestRun || !latestRun.runid) {
         return;
       }
 
-      // let latestRunId = latestRun.runid;
       if (
         currentRun &&
         currentRun.runid === latestRun.runid &&
@@ -149,9 +148,9 @@ angular.module(PKG.name + '.feature.hydrator')
 
       currentRun = latestRun;
 
-      let metricProgramType = programType === 'workflows' ? 'workflow' : programType;
+      const metricProgramType = programType === 'workflows' ? 'workflow' : programType;
 
-      let metricParams = {
+      const metricParams = {
         namespace: $stateParams.namespace,
         app: rPipelineDetail.name,
         run: latestRun.runid,
@@ -164,6 +163,14 @@ angular.module(PKG.name + '.feature.hydrator')
 
       if (latestRun.status !== 'RUNNING') {
         pipelineMetricsActionCreator.getMetrics(metricParams);
+        if (latestRun.status === 'COMPLETED') {
+          pipelineDetailsActionCreator.getMetadataEndpoints({
+            namespace: $stateParams.namespace,
+            appId: rPipelineDetail.name,
+            runId: latestRun.runid,
+            workflowType: GLOBALS.programId['cdap-data-pipeline'],
+          });
+        }
       } else {
         metricsObservable = pipelineMetricsActionCreator.pollForMetrics(metricParams);
       }

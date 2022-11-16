@@ -31,9 +31,20 @@ import downloadFile from 'services/download-file';
 import { santizeStringForHTMLID } from 'services/helpers';
 import { deleteEditDraft } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
+import styled from 'styled-components';
 require('./PipelineDetailsActionsButton.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
+
+const StyledLi = styled.li`
+  ${({ isLatestVersion }) =>
+    !isLatestVersion &&
+    `opacity: 0.5;
+    &:hover {
+      background: white !important;
+      cursor: not-allowed !important;
+    }`}
+`;
 
 /**
  * This function is to clean up properties that is not necessary for the pipeline configuration.
@@ -68,6 +79,7 @@ export default class PipelineDetailsActionsButton extends Component {
     version: PropTypes.string,
     lifecycleManagementEditEnabled: PropTypes.bool,
     editDraftId: PropTypes.string,
+    isLatestVersion: PropTypes.bool,
   };
 
   state = {
@@ -114,6 +126,9 @@ export default class PipelineDetailsActionsButton extends Component {
   };
 
   handlePipelineEdit = () => {
+    if (!this.props.isLatestVersion) {
+      return;
+    }
     if (!this.props.editDraftId) {
       editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
       return;
@@ -292,7 +307,12 @@ export default class PipelineDetailsActionsButton extends Component {
         >
           <ul>
             {this.props.lifecycleManagementEditEnabled && (
-              <li onClick={this.handlePipelineEdit}>{T.translate(`${PREFIX}.edit`)}</li>
+              <StyledLi
+                isLatestVersion={this.props.isLatestVersion}
+                onClick={this.handlePipelineEdit}
+              >
+                {T.translate(`${PREFIX}.edit`)}
+              </StyledLi>
             )}
             <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
             <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>

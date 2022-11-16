@@ -18,4 +18,5 @@ type ChangeDetail {
   description: String
   creationTimeMillis: String!
   author: String
+  latest: Boolean
 }

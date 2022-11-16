@@ -91,10 +91,11 @@ export const NameAndDescription = ({
           {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
           {sparkstreaming && <StyledIconSVG name="icon-sparkstreaming"></StyledIconSVG>}
         </PipelineType>
-        <MetadataLeft>
+        <MetadataLeft expanded={metadataExpanded}>
           {metadataExpanded ? (
             <>
               <NameTextField
+                autoComplete="off"
                 id="pipeline-name-input"
                 variant="outlined"
                 placeholder="Name your pipeline"
@@ -103,6 +104,7 @@ export const NameAndDescription = ({
                 value={name}
               />
               <DescriptionTextField
+                autoComplete="off"
                 multiline
                 variant="outlined"
                 rows={2}

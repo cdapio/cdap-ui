@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import 'whatwg-fetch';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';

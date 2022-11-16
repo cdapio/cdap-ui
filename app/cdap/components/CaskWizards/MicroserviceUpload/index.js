@@ -16,7 +16,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import WizardModal from 'components/shared/WizardModal';
 import Wizard from 'components/shared/Wizard';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
@@ -26,7 +26,7 @@ import MicroserviceUploadActionCreator from 'services/WizardStores/MicroserviceU
 import MicroserviceQueueStore from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueStore';
 import MicroserviceQueueActions from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueActions';
 import NamespaceStore from 'services/NamespaceStore';
-import {MyProgramApi} from 'api/program';
+import { MyProgramApi } from 'api/program';
 import T from 'i18n-react';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
@@ -39,17 +39,16 @@ export default class MicroserviceUploadWizard extends Component {
     super(props);
     this.state = {
       showWizard: false,
-      successInfo: {}
+      successInfo: {},
     };
     this.eventEmitter = ee(ee);
   }
   componentWillMount() {
-    return MicroserviceUploadActionCreator
-      .findMicroserviceArtifact()
+    return MicroserviceUploadActionCreator.findMicroserviceArtifact()
       .mergeMap((artifact) => {
         MicroserviceUploadStore.dispatch({
           type: MicroserviceUploadActions.setMicroserviceArtifact,
-          payload: { artifact }
+          payload: { artifact },
         });
         if (isEmpty(artifact)) {
           return Observable.of([]);
@@ -59,38 +58,42 @@ export default class MicroserviceUploadWizard extends Component {
       .mergeMap((plugins) => {
         MicroserviceUploadStore.dispatch({
           type: MicroserviceUploadActions.setDefaultMicroservicePlugins,
-          payload: { plugins }
+          payload: { plugins },
         });
         this.setState({
-          showWizard: true
+          showWizard: true,
         });
-        return MicroserviceUploadActionCreator.getMicroservicePluginProperties(plugins[0].name || '');
+        return MicroserviceUploadActionCreator.getMicroservicePluginProperties(
+          plugins[0].name || ''
+        );
       })
-      .subscribe((propertiesArr) => {
-        if (propertiesArr.length > 0 && propertiesArr[0].properties) {
+      .subscribe(
+        (propertiesArr) => {
+          if (propertiesArr.length > 0 && propertiesArr[0].properties) {
+            MicroserviceUploadStore.dispatch({
+              type: MicroserviceUploadActions.setMicroservicePluginProperties,
+              payload: { pluginProperties: Object.keys(propertiesArr[0].properties) },
+            });
+          }
+        },
+        () => {
           MicroserviceUploadStore.dispatch({
             type: MicroserviceUploadActions.setMicroservicePluginProperties,
-            payload: {pluginProperties: Object.keys(propertiesArr[0].properties)}
+            payload: { pluginProperties: [] },
           });
         }
-      }, () => {
-        MicroserviceUploadStore.dispatch({
-          type: MicroserviceUploadActions.setMicroservicePluginProperties,
-          payload: {pluginProperties: []}
-        });
-      });
+      );
   }
   componentWillUnmount() {
     MicroserviceUploadStore.dispatch({
-      type: MicroserviceUploadActions.onReset
+      type: MicroserviceUploadActions.onReset,
     });
     MicroserviceQueueStore.dispatch({
-      type: MicroserviceQueueActions.onReset
+      type: MicroserviceQueueActions.onReset,
     });
   }
   onSubmit() {
-    return MicroserviceUploadActionCreator
-      .uploadArtifact()
+    return MicroserviceUploadActionCreator.uploadArtifact()
       .mergeMap(() => {
         return MicroserviceUploadActionCreator.uploadConfigurationJson();
       })
@@ -108,7 +111,7 @@ export default class MicroserviceUploadWizard extends Component {
       this.props.onClose(returnResult);
     }
     this.setState({
-      showWizard: !this.state.showWizard
+      showWizard: !this.state.showWizard,
     });
   }
   startMicroservice() {
@@ -120,7 +123,7 @@ export default class MicroserviceUploadWizard extends Component {
       appId,
       programType: 'workers',
       programId: 'microservice',
-      action: 'start'
+      action: 'start',
     };
 
     return MyProgramApi.action(params).map((res) => {
@@ -131,22 +134,22 @@ export default class MicroserviceUploadWizard extends Component {
   buildSuccessInfo() {
     let appName = MicroserviceUploadStore.getState().general.instanceName;
     let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.MicroserviceUpload.success', {appName});
+    let message = T.translate('features.Wizard.MicroserviceUpload.success', { appName });
     let buttonLabel = T.translate('features.Wizard.MicroserviceUpload.callToAction');
     let links = [
       {
         linkLabel: T.translate('features.Wizard.MicroserviceUpload.secondaryCallToAction'),
         linkUrl: window.getAbsUIUrl({
           namespaceId: namespace,
-          appId: appName
-        })
+          appId: appName,
+        }),
       },
       {
         linkLabel: T.translate('features.Wizard.GoToHomePage'),
         linkUrl: window.getAbsUIUrl({
-          namespaceId: namespace
-        })
-      }
+          namespaceId: namespace,
+        }),
+      },
     ];
     this.setState({
       successInfo: {
@@ -154,14 +157,16 @@ export default class MicroserviceUploadWizard extends Component {
         buttonLabel,
         buttonUrl: 'javascript:;', // don't go anywhere, all behavior will be handled by buttonOnClick
         buttonOnClick: this.startMicroservice.bind(this),
-        links
-      }
+        links,
+      },
     });
   }
   render() {
     let input = this.props.input;
     let headerLabel = input.headerLabel;
-    let wizardModalTitle = (headerLabel ? headerLabel : T.translate('features.Resource-Center.Application.modalheadertitle'));
+    let wizardModalTitle = headerLabel
+      ? headerLabel
+      : T.translate('features.Resource-Center.Application.modalheadertitle');
     return (
       <WizardModal
         title={wizardModalTitle}
@@ -185,15 +190,15 @@ export default class MicroserviceUploadWizard extends Component {
 MicroserviceUploadWizard.defaultProps = {
   input: {
     action: {
-      arguments: {}
+      arguments: {},
     },
-    package: {}
-  }
+    package: {},
+  },
 };
 
 MicroserviceUploadWizard.propTypes = {
   isOpen: PropTypes.bool,
   input: PropTypes.any,
   onClose: PropTypes.func,
-  buildSuccessInfo: PropTypes.func
+  buildSuccessInfo: PropTypes.func,
 };
