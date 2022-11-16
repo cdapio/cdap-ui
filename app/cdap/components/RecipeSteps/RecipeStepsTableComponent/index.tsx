@@ -28,10 +28,69 @@ import { useStyles } from 'components/RecipeSteps/styles';
 import { IRecipeStepTebleProps } from 'components/RecipeSteps/RecipeStepsTableComponent/types';
 import { DeleteIcon } from 'components/RecipeSteps/iconStore';
 import { headerData } from 'components/RecipeSteps/RecipeStepsTableComponent/utils';
+import styled from 'styled-components';
+
+const RecipeStepsTableRow = styled(TableRow)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #5f6368;
+  padding: 15px 10px;
+`;
+
+const RecipeStepsTableHead = styled(TableCell)`
+  &.MuiTableCell-head {
+    padding: 10px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.15;
+    color: #5f6368;
+  }
+`;
+
+const RecipeStepsTableBodyRow = styled(TableRow)`
+  &:hover {
+    background: #eff0f2;
+    & td:last-child {
+      visibility: visible;
+    }
+  }
+`;
+
+const RecipeStepsBodyTableRow = styled(TableCell)`
+  &.MuiTableCell-root {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.15;
+    color: #5f6368;
+    padding: 15px 10px;
+  }
+`;
+
+const RecipeStepsDeleteStyle = styled(Box)`
+  width: 18px;
+  height: 20px;
+  cursor: pointer;
+`;
+
+const RecipeStepsTableRowStyle = styled(TableCell)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #5f6368;
+  padding: 15px 10px;
+  visibility: hidden;
+`;
 
 export default function({ recipeSteps, handleDeleteRecipeSteps }) {
-  const classes = useStyles();
-
   const handleDelete = (eachStep, i) => {
     handleDeleteRecipeSteps(
       recipeSteps.filter((x, index) => index < i),
@@ -43,45 +102,35 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }) {
     <TableContainer component={Box}>
       <Table aria-label="recipe steps table">
         <TableHead>
-          <TableRow className={classes.recipeStepsTableRowStyles}>
+          <RecipeStepsTableRow>
             {headerData?.map((i) => (
-              <TableCell
-                data-testid={i.textId}
-                classes={{ head: classes.recipeStepsTableHeadStyles }}
-              >
-                {i.text}
-              </TableCell>
+              <RecipeStepsTableHead data-testid={i.textId}>{i.text}</RecipeStepsTableHead>
             ))}
-          </TableRow>
+          </RecipeStepsTableRow>
         </TableHead>
         <TableBody>
-          {recipeSteps?.map((eachStep, index) => (
-            <TableRow className={classes.recipeStepsTableBodyRowStyles} key={index}>
-              <TableCell
-                data-testid="index-num"
-                classes={{ body: classes.recipeStepsTableRowStyles }}
+          {recipeSteps?.map((eachStep, eachStepIndex) => (
+            <RecipeStepsTableBodyRow
+              key={eachStepIndex}
+              data-testid={`recipe-step-row-${eachStepIndex}`}
+            >
+              <RecipeStepsBodyTableRow
+                data-testid={`recipe-step-row-${eachStepIndex}-number-column`}
               >
-                {index + 1 > 10 ? index + 1 : `0${index + 1}`}
-              </TableCell>
-              <TableCell
-                data-testid="each-recipe-step"
-                classes={{ body: classes.recipeStepsTableRowStyles }}
-              >
-                <span data-testid={'recipe-steps-span' + index}>{eachStep}</span>
-              </TableCell>
-              <TableCell
-                className={[classes.recipeStepsTableRowStyles, classes.displayNone].join(' ')}
-                data-testid="delete-styles"
-              >
-                <Box
-                  className={classes.recipeStepsDeleteStyles}
-                  onClick={() => handleDelete(eachStep, index)}
+                {eachStepIndex + 1 > 10 ? eachStepIndex + 1 : `0${eachStepIndex + 1}`}
+              </RecipeStepsBodyTableRow>
+              <RecipeStepsBodyTableRow data-testid="each-recipe-step">
+                <span data-testid={'recipe-steps-span' + eachStepIndex}>{eachStep}</span>
+              </RecipeStepsBodyTableRow>
+              <RecipeStepsTableRowStyle data-testid="delete-styles">
+                <RecipeStepsDeleteStyle
+                  onClick={() => handleDelete(eachStep, eachStepIndex)}
                   data-testid="step-table-delete"
                 >
                   {DeleteIcon}
-                </Box>
-              </TableCell>
-            </TableRow>
+                </RecipeStepsDeleteStyle>
+              </RecipeStepsTableRowStyle>
+            </RecipeStepsTableBodyRow>
           ))}
         </TableBody>
       </Table>

@@ -3432,6 +3432,13 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    FooterPanel:
+      labels:
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        directives: Directives
+        recipeSteps: Recipe Steps
+        zoomPercent100: 100%
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
@@ -3461,4 +3468,5 @@ features:
   WranglerParsingPanelDrawerWidget:
     labels:
         parsing: Parsing
+   
 ...

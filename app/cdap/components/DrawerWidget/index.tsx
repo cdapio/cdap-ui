@@ -18,8 +18,8 @@ import { Box, Container, Drawer } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import { useStyles } from './styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import DrawerWidgetHeading from './DrawerWidgetHeading';
-import { IDrawerWidgetProps } from './types';
+import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeading';
+import { IDrawerWidgetProps } from 'components/DrawerWidget/types';
 import { BackIcon } from 'components/DrawerWidget/IconStore/BackIcon';
 import styled from 'styled-components';
 
@@ -64,8 +64,8 @@ const CloseIcon = styled(CloseRoundedIcon)`
 `;
 
 const PaperDrawer = styled(Drawer)`
-  & .MuiDrawer-paper: {
-    top: 46px
+  & .MuiDrawer-paper {
+    top: 46px;
     height: calc(100vh - 47px);
   }
 `;
@@ -91,8 +91,7 @@ export default function({
   const classes = useStyles();
 
   return (
-    <Drawer
-      classes={{ paper: classes.paper }}
+    <PaperDrawer
       anchor={anchor ? anchor : 'right'}
       open={openDrawer}
       data-testid="drawer-widget-parent"
@@ -117,6 +116,6 @@ export default function({
         </Header>
         <Fragment>{children}</Fragment>
       </DrawerContainer>
-    </Drawer>
+    </PaperDrawer>
   );
 }
