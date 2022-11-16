@@ -25,12 +25,6 @@ import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
 import { useStyles } from 'components/GridTable/styles';
-import {
-  IExecuteAPIResponse,
-  IHeaderNamesList,
-  IParams,
-  IRecords,
-} from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
@@ -39,18 +33,30 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import RecipeSteps from 'components/RecipeSteps';
+import {
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IObject,
+  IParams,
+  IRecords,
+  IRowData,
+  IMissingListData,
+} from 'components/GridTable/types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
-  const [rowsDataList, setRowsDataList] = useState([]);
+  const [rowsDataList, setRowsDataList] = useState<IRowData[]>([]);
+  const [showRecipePanel, setShowRecipePanel] = useState<boolean>(false);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
-  const [missingDataList, setMissingDataList] = useState([]);
-  const [invalidCountArray, setInvalidCountArray] = useState([
+  const [missingDataList, setMissingDataList] = useState<IMissingListData[]>([]);
+  const [workspaceName, setWorkspaceName] = useState<string>('');
+  const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
     {
       label: 'Invalid',
       count: '0',
@@ -221,16 +227,19 @@ export default function GridTable() {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
     }
-    const rowData =
+    const rowData: IRowData[] =
       rawData &&
       rawData.values &&
-      Array.isArray(rawData.values) &&
-      rawData.values.map((eachRow) => {
-        const { body, ...rest } = eachRow;
+      Array.isArray(rawData?.values) &&
+      (rawData?.values.map((eachRow: IRecords) => {
+        const { ...rest } = eachRow;
         return rest;
-      });
-
+      }) as IRowData[]);
     setRowsDataList(rowData);
+  };
+
+  const showRecipePanelHandler = () => {
+    setShowRecipePanel((prev) => !prev);
   };
 
   useEffect(() => {
@@ -239,7 +248,13 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
+      <button onClick={showRecipePanelHandler}>
+        {T.translate('features.WranglerNewRecipeSteps.labels.recipeCount')}
+      </button>
       <BreadCrumb datasetName={wid} />
+      {showRecipePanel && (
+        <RecipeSteps setShowRecipePanel={setShowRecipePanel} showRecipePanel={showRecipePanel} />
+      )}
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
