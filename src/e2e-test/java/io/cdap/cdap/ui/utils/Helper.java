@@ -18,6 +18,10 @@ package io.cdap.cdap.ui.utils;
 
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
@@ -411,5 +415,30 @@ public class Helper implements CdfHelper {
   public static void rightClickOnElement(WebElement element, int xOffset, int yOffset) {
     Actions actions = new Actions(SeleniumDriver.getDriver());
     actions.moveToElement(element, xOffset, yOffset).contextClick().perform();
+  }
+
+
+  public static void setCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "window.Cypress = {}; window.Cypress.on = function() {}");
+  }
+
+  public static void removeCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "delete window.Cypress");
+  }
+
+  public static JsonObject getJSONObject(String jsonString) {
+    JsonParser jsonParser = new JsonParser();
+    JsonObject jsonObject = new JsonObject();
+    try {
+      JsonElement parsedJSONElement = jsonParser.parse(jsonString);
+      jsonObject = parsedJSONElement.getAsJsonObject();
+    } catch (JsonSyntaxException jse) {
+      Assert.fail(jse.getMessage());
+    }
+    return jsonObject;
   }
 }

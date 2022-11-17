@@ -16,6 +16,9 @@
 
 package io.cdap.cdap.ui.utils;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
@@ -36,7 +39,9 @@ import org.openqa.selenium.WebElement;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Commands implements CdfHelper {
 
@@ -190,7 +195,7 @@ public class Commands implements CdfHelper {
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("plugin-" + pluginGroup + "-group-details"));
     } catch (StaleElementReferenceException | NoSuchElementException e) {
       Assert.assertTrue(Helper.isElementExists(
-      By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='true']")));
+        By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='true']")));
     }
   }
 
@@ -347,10 +352,37 @@ public class Commands implements CdfHelper {
     ElementHelper.clickOnElement(
       Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
   }
-  
+
   public static void dismissTopBanner() {
     ElementHelper.clickOnElement(Helper.locateElementByXPath(
       "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']"));
     WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("valium-banner-hydrator"));
+  }
+
+  public static JsonObject getPipelineJson() {
+    JsonObject pipelineConfigJSON = null;
+    Helper.setCypressObjectOnWindow();
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-export-btn"));
+    String pipelineConfig = Helper.locateElementByCssSelector(
+      Helper.getCssSelectorByDataTestId("pipeline-export-json-container") + " textarea").getAttribute("value");
+    Helper.removeCypressObjectOnWindow();
+    Assert.assertNotNull(pipelineConfig);
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("export-pipeline-close-modal-btn"));
+
+    pipelineConfigJSON = Helper.getJSONObject(pipelineConfig);
+    return pipelineConfigJSON;
+  }
+
+  public static JsonObject getPipelineStageJson(String stageName) {
+    JsonArray stagesArray = getPipelineJson().get("config").getAsJsonObject().get("stages").getAsJsonArray();
+    Iterator iterator = stagesArray.iterator();
+    JsonObject stageJSON = new JsonObject();
+    while (iterator.hasNext()) {
+      JsonElement jsonElement = (JsonElement) iterator.next();
+      if (jsonElement.getAsJsonObject().get("name").getAsString().equalsIgnoreCase(stageName)) {
+        stageJSON =  jsonElement.getAsJsonObject();
+      }
+    }
+    return stageJSON;
   }
 }
