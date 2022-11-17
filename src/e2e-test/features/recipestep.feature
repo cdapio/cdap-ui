@@ -17,8 +17,8 @@
 @Integration_Tests
 Feature: Directives
 
-  @Directives
-  Scenario: Go through the directives functionality
+  @RecipeStep
+  Scenario Outline: Go through the directives functionality
     Given Navigate to the Home page
     Then Click on the Data explorations card
     Then Verify if user is on the wrangle page
@@ -26,11 +26,8 @@ Feature: Directives
     Then Enter command in the panel with the data "uppercase:body_2"
     Then Click on 'Recipe steps' button
     Then Verify if recipe panel is displayed
-#    Then Click on delete icon of any step
-#    Then click on download icon of recipe panel
-#    Then Verify if clicking on close icon of panel
-
-#    Then click on close icon
-#    Examples:
-#      | Id |
-#      | 12 |
+    Then Click on delete icon of any step with "<stepId>"
+    Then Verify if clicking on close icon of panel
+  Examples:
+      | stepId |
+      | 1 |
