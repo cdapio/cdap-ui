@@ -21,7 +21,7 @@ import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading
 import { useStyles } from 'components/ColumnViewWidget/styles';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import { IColumnViewWidget } from 'components/ColumnViewWidget/types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const DrawerContainerStyle = styled(Box)`
   width: 389px;
@@ -82,23 +82,20 @@ export default function({
   const ref = useRef(null);
 
   const InputStyle = styled.input`
-    z-index: 0;
-    cursor: pointer;
-    position: absolute;
-    right: 0px;
+    width: 140px !important;
     ${({ focused }) =>
       focused &&
-      `
-    border: none;
-  border-bottom: 1px solid grey;
-  outline: none;
-  `}
+      css`
+        border: none !important;
+        border-bottom: 1px solid grey !important;
+        outline: none !important;
+      `}
     ${({ focused }) =>
       !focused &&
-      `
-  border: none;
-  border-bottom: 1px solid transparent;
-`}
+      css`
+        border: none !important;
+        border-bottom: 1px solid transparent !important;
+      `}
   `;
 
   const handleFocus = () => {
@@ -118,6 +115,7 @@ export default function({
               className={`${classes.searchInput} ${
                 focused ? classes.isFocused : classes.isBlurred
               }`}
+              // focused={focused}
               onChange={(e) => searchedTermHandler(e.target.value)}
               ref={ref}
               onFocus={() => setFocused(true)}

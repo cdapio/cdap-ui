@@ -14,14 +14,17 @@
  * the License.
  */
 
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import React from 'react';
-import { useStyles } from 'components/ColumnViewWidget/DrawerWidgetHeading/styles';
 import { UnderlineIcon } from 'components/ColumnViewWidget/IconStore/Underline';
 import { IDrawerWidgetHeading } from 'components/ColumnViewWidget/DrawerWidgetHeading/types';
 import styled from 'styled-components';
 
-const HeadingTextIconWrapper = styled(Typography)``;
+const HeadingTextIconWrapper = styled(Typography)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
 
 const HeadingTextStyle = styled(Typography)`
   font-style: normal;
@@ -33,14 +36,12 @@ const HeadingTextStyle = styled(Typography)`
 `;
 
 export default function({ headingText }: IDrawerWidgetHeading) {
-  const classes = useStyles();
-
   return (
-    <Typography className={classes.headingStyles} component="span">
+    <HeadingTextIconWrapper component="span">
       <HeadingTextStyle component="div" data-testid="drawer-widget-heading-text">
         {headingText}
       </HeadingTextStyle>
       {UnderlineIcon}
-    </Typography>
+    </HeadingTextIconWrapper>
   );
 }
