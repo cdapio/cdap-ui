@@ -29,4 +29,8 @@ export const useStyles = makeStyles({
     width: '100%',
     zIndex: 2000,
   },
+  gridTableWrapper: {
+    height: 'calc(100vh - 232px)',
+    overflowY: 'auto',
+  },
 });
