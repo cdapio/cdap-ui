@@ -69,7 +69,7 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
 
   return (
     <a href={pipelineLink} onClick={saveDraftIdToLocalStorage} className="grid-row">
-      <div className="name" title={pipeline.name}>
+      <div className="name" title={pipeline.name} data-testid="pipeline-name">
         {pipeline.name}
       </div>
       <div className="type">{T.translate(`${PREFIX}.${pipeline.artifact.name}`)}</div>

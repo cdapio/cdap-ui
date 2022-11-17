@@ -179,7 +179,7 @@ public class Commands implements CdfHelper {
 
   public static void toggleConditionsAndActionsPanel() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("\"plugin-Conditions and Actions-group-summary\"")
+      Helper.locateElementByTestId("plugin-Conditions and Actions-group-summary")
     );
   }
 

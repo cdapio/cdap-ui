@@ -26,14 +26,18 @@ import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -149,7 +153,7 @@ public class Helper implements CdfHelper {
   }
 
   public static String getCssSelectorByDataTestId(String dataTestId) {
-    return "[data-testid=" + dataTestId + "]";
+    return "[data-testid=\"" + dataTestId + "\"]";
   }
 
   public static String getNodeSelectorFromNodeIdentifier(NodeInfo node) {
@@ -159,14 +163,7 @@ public class Helper implements CdfHelper {
       node.getNodeId() + "\"]";
   }
 
-  public static void deployAndTestPipeline(String filename, String pipelineName) {
-    SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "pipelines");
-    WaitHelper.waitForPageToLoad();
-    ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
-    ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
-    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("studio"));
-
-    WaitHelper.waitForPageToLoad();
+  public static void uploadPipelineFromFile(String filename) {
     WebElement uploadFile = SeleniumDriver.getDriver()
       .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
 
@@ -177,6 +174,19 @@ public class Helper implements CdfHelper {
     String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     SeleniumDriver.getWaitDriver().until(ExpectedConditions
                                            .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
+  }
+
+  public static void deployAndTestPipeline(String filename, String pipelineName) {
+    SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "pipelines");
+    WaitHelper.waitForPageToLoad();
+    ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
+    ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
+    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("studio"));
+
+    WaitHelper.waitForPageToLoad();
+    Helper.uploadPipelineFromFile(filename);
+
+    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
 
     WebElement pipelineNameInput = locateElementById("pipeline-name-input");
@@ -278,5 +288,26 @@ public class Helper implements CdfHelper {
     } catch (InterruptedException e) {
       logger.info("cannot sleep");
     }
+  }
+
+  private static void tryOpenPage(String url) {
+    SeleniumDriver.openPage(url);
+    WaitHelper.waitForPageToLoad();
+  }
+
+  public static void openPage(String url) {
+    try {
+      tryOpenPage(url);
+    } catch (UnhandledAlertException e) {
+      try {
+        Alert alert = SeleniumDriver.getDriver().switchTo().alert();
+        alert.accept();
+      } catch (NoAlertPresentException ex) {
+        SeleniumDriver.getDriver().switchTo().newWindow(WindowType.TAB);
+        tryOpenPage(url);
+      }
+    }
+    // wait for rendering to finish otherwise elements are not attached to dom
+    Helper.waitSeconds(2);
   }
 }
