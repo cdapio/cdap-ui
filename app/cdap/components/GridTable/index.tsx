@@ -42,12 +42,16 @@ import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import FooterPanel from 'components/FooterPanel';
 import { IDataQuality } from 'components/ColumnView/types';
+import { IFooterMetaInfo } from 'components/GridTable/types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
-  const [tableMetaInfo, setTableMetaInfo] = useState({ columnCount: 0, rowCount: 0 });
+  const [tableMetaInfo, setTableMetaInfo] = useState<IFooterMetaInfo>({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
