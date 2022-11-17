@@ -42,12 +42,6 @@ const CustomTableBodyNullValuesCell = styled(CustomTableBodyCell)`
   padding-left: 0;
 `;
 
-const CustomTableBodyRow = styled(TableRow)`
-  &:hover {
-    box-shadow: 3px 4px 15px rgba(68, 132, 245, 0.15);
-  }
-`;
-
 export default function({
   eachFilteredColumn,
   filteredColumnIndex,
@@ -55,11 +49,11 @@ export default function({
 }: ISelectColumnsTableRowProps) {
   return (
     <TableBody>
-      <CustomTableBodyRow key={filteredColumnIndex}>
+      <TableRow key={filteredColumnIndex}>
         <CustomTableBodyLeftCell data-testid={`each-column-label-type-${filteredColumnIndex}`}>
           <Box>
             {eachFilteredColumn?.label}
-            &nbsp;
+
             <br />
             {eachFilteredColumn?.type}
           </Box>
@@ -73,7 +67,7 @@ export default function({
             dataQualityPercentValue={dataQualityList[filteredColumnIndex]?.value}
           />
         </CustomTableBodyNullValuesCell>
-      </CustomTableBodyRow>
+      </TableRow>
     </TableBody>
   );
 }
