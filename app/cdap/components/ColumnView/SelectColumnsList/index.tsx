@@ -76,14 +76,16 @@ const getTableBody = (
   dataQualityList: IDataQualityRecord[]
 ) => {
   {
-    filteredColumns.length !== 0 ? (
-      filteredColumns.map((eachFilteredColumn: IHeaderNamesList, filteredColumnIndex: number) => (
-        <SelectColumnsTableRow
-          eachFilteredColumn={eachFilteredColumn}
-          filteredColumnIndex={filteredColumnIndex}
-          dataQualityList={dataQualityList}
-        />
-      ))
+    return filteredColumns.length !== 0 ? (
+      filteredColumns.map((eachFilteredColumn: IHeaderNamesList, filteredColumnIndex: number) => {
+        return (
+          <SelectColumnsTableRow
+            eachFilteredColumn={eachFilteredColumn}
+            filteredColumnIndex={filteredColumnIndex}
+            dataQualityList={dataQualityList}
+          />
+        );
+      })
     ) : (
       <NoRecordScreen
         title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
