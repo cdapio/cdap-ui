@@ -15,25 +15,33 @@
  */
 
 import { ISnackbar } from 'components/Snackbar/types';
-import { Dispatch, SetStateAction } from 'react';
+import { useEffect, useState } from 'react';
 
-export interface IRecords {
-  [key: string]: string | number | IRecords | boolean;
-}
+export default function() {
+  const [snackbarState, setSnackbarState] = useState<ISnackbar>({
+    open: false,
+    isSuccess: false,
+  });
 
-export interface ITabsData {
-  data: IRecords[];
-  showTabs: boolean;
-  selectedTab: string;
-  toggleSearch: boolean;
-}
+  useEffect(() => {
+    const timer = setTimeout(
+      () =>
+        setSnackbar(() => ({
+          open: false,
+        })),
+      5000
+    );
+    return () => {
+      setSnackbar(() => ({
+        open: false,
+      }));
+      clearTimeout(timer);
+    };
+  }, []);
 
-export interface IConnectionTabsProps {
-  tabsData: ITabsData;
-  handleChange: (entity: IRecords, index: number) => void;
-  value: string;
-  connectionColumnIndex: number;
-  connectionId: string;
-  setSnackbar: Dispatch<SetStateAction<ISnackbar>>;
-  toggleLoader: (isLoading: boolean, isError?: boolean) => void;
+  function setSnackbar(value) {
+    setSnackbarState(value);
+  }
+
+  return [snackbarState, setSnackbar] as const;
 }

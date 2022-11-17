@@ -35,10 +35,9 @@ export default function TabLabelCanSample({
   entity,
   initialConnectionId,
   toggleLoader,
-  setToaster,
+  setSnackbar,
 }: ITabLabelCanSampleProps) {
   const classes = useStyles();
-  const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -56,7 +55,7 @@ export default function TabLabelCanSample({
     if (!canBrowse && canSample) {
       onCreateWorkspace(currentEntity);
     } else {
-      setToaster({
+      setSnackbar({
         open: true,
         message: [T.translate(`${PREFIX}.retrieveFailure`), entity?.name].join(' '),
         isSuccess: false,
@@ -68,7 +67,7 @@ export default function TabLabelCanSample({
     try {
       createWorkspaceInternal(currentEntity, parseConfig);
     } catch (e) {
-      setToaster({
+      setSnackbar({
         open: true,
         message: [T.translate(`${PREFIX}.workspaceFailure`).toString(), entity?.name].join(' '),
         isSuccess: false,
@@ -94,7 +93,7 @@ export default function TabLabelCanSample({
       })
       .catch((err) => {
         toggleLoader(false);
-        setToaster({
+        setSnackbar({
           open: true,
           message: `${T.translate(`${PREFIX}.sampleFailure`)} ${currentEntity?.name.toString()}`,
           isSuccess: false,
@@ -105,7 +104,7 @@ export default function TabLabelCanSample({
   return workspaceId ? (
     <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow>
+    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
         <Typography
           variant="body2"
@@ -115,13 +114,17 @@ export default function TabLabelCanSample({
         >
           {label}
         </Typography>
-        <button className="wranglingHover" onClick={() => onExplore(entity)}>
+        <button
+          className="wranglingHover"
+          onClick={() => onExplore(entity)}
+          data-testid="connections-tab-ref-explore"
+        >
           <WrangleIcon />
           <Typography
             variant="body2"
             component="span"
             className={classes.wrangleButton}
-            data-testid={`connection-list-wrangle-link`}
+            data-testid="connection-list-wrangle-link"
           >
             Wrangle
           </Typography>
@@ -129,16 +132,20 @@ export default function TabLabelCanSample({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample}>
+    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
-      <button className="wranglingHover" onClick={() => onExplore(entity)}>
+      <button
+        className="wranglingHover"
+        onClick={() => onExplore(entity)}
+        data-testid="connections-tab-explore"
+      >
         <WrangleIcon />
         <Typography
           variant="body2"
           className={classes.wrangleButton}
-          data-testid={`connection-list-wrangle-link`}
+          data-testid="connection-list-wrangle-link"
         >
           Wrangle
         </Typography>
