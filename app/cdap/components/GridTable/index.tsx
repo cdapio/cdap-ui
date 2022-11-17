@@ -270,11 +270,12 @@ export default function GridTable() {
               <TableHead>
                 <TableRow>
                   {headersNamesList?.length > 0 &&
-                    headersNamesList.map((eachHeader) => (
+                    headersNamesList.map((eachHeader, eachHeaderIndex) => (
                       <GridHeaderCell
                         label={eachHeader.label}
                         types={eachHeader.type as string[]}
                         key={eachHeader.name}
+                        eachHeaderIndex={eachHeaderIndex}
                       />
                     ))}
                 </TableRow>
