@@ -15,7 +15,7 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
+import DataQualityCircularProgressBar from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/index';
 import React from 'react';
 
 describe('It Should test DataQualityCircularProgressBar Component', () => {
@@ -23,7 +23,17 @@ describe('It Should test DataQualityCircularProgressBar Component', () => {
     render(
       <DataQualityCircularProgressBar
         dataQualityPercentValue={100}
-        wrapperComponentData={undefined}
+        wrapperComponentData={{
+          dataQualityList: [
+            {
+              label: 'body',
+              value: 0,
+            },
+          ],
+          filteredColumnIndex: 0,
+        }}
+        // index={0}
+        // wrapperComponentData={undefined}
       />
     );
     const dataQualityPercent = screen.getByTestId(/semi-circular-progress-bar-wrapper/i);
