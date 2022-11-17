@@ -110,7 +110,7 @@ export default function OngoingDataExploration() {
             to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
+            {index <= 1 && <OngoingDataExplorationCard item={item} index={index} />}
           </Link>
         );
       })}

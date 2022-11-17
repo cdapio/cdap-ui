@@ -3436,4 +3436,41 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+  NewWranglerUI:
+    ColumnInsights: 
+      distribution: Distribution
+      viewFullChart: View Full Chart
+      columnInsightsHeadingText: Column Insights
+      quality: Quality
+      containsLetter: Contains Letter
+      characterCount: Character count
+      distinct: Distinct
+      null : "Null"
+      barChartYLabel: Quantity
+      unknown: unknown
+      empty: Empty
+      options:
+        labelString: String
+        labelBoolean: Boolean
+        labelInteger: Integer
+        labelLong: Long
+        labelShort: Short
+        labelFloat: Float
+        labelDouble: Double
+        labelDecimal: Decimal
+        labelBytes: Bytes
+      error: 
+        invalidError: The name you have entered is invalid. It must contain only letters, numbers, and
+            underscores (_). Pick a new name.
+        matchedColumnError: The name you have entered already exists.Please pick a new name. 
+    GridTable:
+      unknown: unknown
+      missingNull: Missing/Null
+      containsLetterNumberLeadingTrailingSpaces: Contains letters, numbers, leading and trailing spaces
+      containsLetterNumber: Contains letters and numbers
+      containsLetterLeadingTrailing: Contains letters, leading and trailing spaces
+      containsLetterLeading: Contains letters and leading spaces
+      containsLetterTrailing: Contains letters and trailing spaces
+      containsLetterOnly: Contains letters
+      containsNumberOnly: Contains numbers      
 ...

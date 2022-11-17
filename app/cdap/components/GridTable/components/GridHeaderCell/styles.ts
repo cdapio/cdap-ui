@@ -30,6 +30,7 @@ export const useGridHeaderCellStyles = makeStyles({
     width: 'auto',
     fontSize: '14px',
     border: '1px solid #E0E0E0',
+    cursor: 'pointer',
   },
   subDataTypeIndicator: {
     marginLeft: '2px',
@@ -50,5 +51,23 @@ export const useGridHeaderCellStyles = makeStyles({
     fontWeight: 400,
     color: '#000000',
     marginBottom: '5px',
+  },
+
+  cardHighlighted: {
+    minWidth: 216,
+    background: '#FFFFFF',
+    padding: '10px 0px 10px 30px',
+
+    borderRadius: 0,
+    border: 0,
+    backgroundImage:
+      'linear-gradient(0deg, rgba(70, 129, 244, 0) -49.23%, rgba(70, 129, 244, 0.1) 100%)',
+  },
+  cardNotHighlighted: {
+    minWidth: 216,
+    padding: '10px 0px 10px 30px',
+    borderRadius: 0,
+    border: 0,
+    background: '#F1F8FF',
   },
 });
