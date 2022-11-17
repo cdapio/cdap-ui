@@ -115,7 +115,6 @@ export default function({
               className={`${classes.searchInput} ${
                 focused ? classes.isFocused : classes.isBlurred
               }`}
-              // focused={focused}
               onChange={(e) => searchedTermHandler(e.target.value)}
               ref={ref}
               onFocus={() => setFocused(true)}
