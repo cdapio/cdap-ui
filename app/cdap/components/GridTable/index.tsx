@@ -120,7 +120,7 @@ export default function GridTable() {
         setSnackbar({
           open: true,
           isSuccess: true,
-          message: T.translate(`${PREFIX}.Snackbar.labels.datasetSuccess`).toString(),
+          message: T.translate(`${PREFIX}.GridTable.snackbarLabels.datasetSuccess`).toString(),
         });
       });
   };
