@@ -14,20 +14,49 @@
  * the License.
  */
 
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Input } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React, { Fragment, useRef, useState } from 'react';
 import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading';
-import { useStyles } from 'components/ColumnViewWidget/styles';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import { IColumnViewWidget } from 'components/ColumnViewWidget/types';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+
+const CommonInputStyle = styled(Input)`
+  width: 140px !important;
+  border: none !important;
+`;
+
+const DividerLineStyles = styled.div`
+  width: 1px;
+  height: 28px;
+  margin-right: 12px;
+  background-color: #dadce0;
+`;
 
 const DrawerContainerStyle = styled(Box)`
   width: 389px;
   border-top: 1px solid #3994ff;
   height: calc(100vh - 190px);
   border-right: 1px solid #e0e0e0;
+`;
+
+const focused = styled(CommonInputStyle)`
+  border-bottom: 1px solid grey !important;
+  outline: none !important;
+`;
+
+const notFocused = styled(CommonInputStyle)`
+  border: none !important;
+  border-bottom: 1px solid transparent !important;
+  & .MuiInput-underline::before {
+    border: none !important;
+    border-bottom: 1px solid transparent !important;
+  }
+  & .MuiInputBase-input {
+    border: none !important;
+    border-bottom: 1px solid transparent !important;
+  }
 `;
 
 const HeaderStyle = styled.header`
@@ -60,16 +89,13 @@ const SearchIconStyle = styled(Typography)`
   cursor: pointer;
 `;
 
-const DividerLineStyles = styled.div`
-  width: 1px;
-  height: 28px;
-  margin-right: 12px;
-  background-color: #dadce0;
-`;
-
 const PointerStyle = styled(CloseRoundedIcon)`
   cursor: pointer;
 `;
+
+const getInputStyle = (isFocused) => {
+  return isFocused ? focused : notFocused;
+};
 
 export default function({
   headingText,
@@ -77,26 +103,10 @@ export default function({
   searchedTermHandler,
   children,
 }: IColumnViewWidget) {
-  const classes = useStyles();
   const [focused, setFocused] = useState<boolean>(false);
   const ref = useRef(null);
 
-  const InputStyle = styled.input`
-    width: 140px !important;
-    ${({ focused }) =>
-      focused &&
-      css`
-        border: none !important;
-        border-bottom: 1px solid grey !important;
-        outline: none !important;
-      `}
-    ${({ focused }) =>
-      !focused &&
-      css`
-        border: none !important;
-        border-bottom: 1px solid transparent !important;
-      `}
-  `;
+  const InputStyleWrapper = getInputStyle(focused);
 
   const handleFocus = () => {
     ref?.current.focus();
@@ -111,15 +121,13 @@ export default function({
         </HeaderTextWithBackIcon>
         <HeaderRightIconWrapper>
           <SearchFormControl>
-            <input
-              className={`${classes.searchInput} ${
-                focused ? classes.isFocused : classes.isBlurred
-              }`}
+            <InputStyleWrapper
               onChange={(e) => searchedTermHandler(e.target.value)}
-              ref={ref}
+              inputRef={ref}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               data-testid="search-term-input"
+              disableUnderline={true}
             />
             <SearchIconStyle component="span" onClick={handleFocus} data-testid="search-icon">
               <SearchIcon />
