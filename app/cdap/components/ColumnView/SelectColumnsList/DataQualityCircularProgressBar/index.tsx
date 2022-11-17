@@ -55,7 +55,7 @@ export default function({
       <SemiCircleProgressBar
         strokeWidth="5"
         diameter="75"
-        percentage={Math.floor(dataQualityPercentValue)}
+        percentage={!isNaN(dataQualityPercentValue) ? Math.floor(dataQualityPercentValue) : ''}
         stroke={dataQualityPercentValue === 0 ? '#8BCC74' : '#E97567'}
         showPercentValue={true}
       />
