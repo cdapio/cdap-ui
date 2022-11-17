@@ -25,6 +25,6 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: '16px',
   },
   forEachTabLabelWidth: {
-    // width: '100%',
+    width: '100%',
   },
 }));

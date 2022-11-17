@@ -17,12 +17,20 @@
 import { Box, Tooltip, TooltipProps } from '@material-ui/core';
 import * as React from 'react';
 import { useStyles } from './styles';
+import T from 'i18n-react';
 
 export default function CustomTooltip(props: TooltipProps) {
+  const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
+
   const classes = useStyles();
 
   return (
-    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+    <Box
+      data-testid="tooltip-parent"
+      className={
+        props.title !== T.translate(`${PREFIX}.columnViewPanel`) && classes.forEachTabLabelWidth
+      }
+    >
       <Tooltip arrow classes={classes} {...props} />
     </Box>
   );
