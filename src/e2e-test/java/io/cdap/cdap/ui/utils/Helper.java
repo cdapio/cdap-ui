@@ -35,6 +35,8 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -144,20 +146,35 @@ public class Helper implements CdfHelper {
   }
 
   public static boolean isElementExists(String cssSelector) {
-    return SeleniumDriver.getDriver()
-      .findElements(By.cssSelector(cssSelector)).size() > 0;
+    try {
+      return isElementExists(By.cssSelector(cssSelector));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(By by) {
-    return SeleniumDriver.getDriver().findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(SeleniumDriver.getDriver().findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(By by, WebElement withinElement) {
-    return withinElement.findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(withinElement.findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(String cssSelector, WebElement withinElement) {
-    return withinElement.findElements(By.cssSelector(cssSelector)).size() > 0;
+    try {
+      return isElementExists(By.cssSelector(cssSelector), withinElement);
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static String getCssSelectorByDataTestId(String dataTestId) {

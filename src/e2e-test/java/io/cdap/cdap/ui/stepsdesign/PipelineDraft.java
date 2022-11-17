@@ -23,13 +23,11 @@ import com.google.gson.JsonObject;
 import io.cdap.cdap.ui.utils.Commands;;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
@@ -53,17 +51,6 @@ public class PipelineDraft {
   public static String oldApiPipelineDraftName = "";
   public static String draftId = "";
 
-
-  @When("Create simple pipeline")
-  public void createSimplePipeline() {
-    Commands.createSimplePipeline();
-  }
-
-  @Then(" Open source node property")
-  public void openSourceNodeProperty() {
-    CdfStudioActions.navigateToPluginPropertiesPage(Commands.simpleSourceNode.getNodeName());
-  }
-
   @Then("Add DummyProject as dataset project")
   public void addProject() throws InterruptedException {
     WebElement projectField = Helper.locateElementByXPath("//input[@data-testid='datasetProject']");
@@ -75,11 +62,6 @@ public class PipelineDraft {
     WebElement datasetField = Helper.locateElementByXPath("//input[@data-testid='dataset']");
     ElementHelper.clearElementValue(datasetField);
     ElementHelper.replaceElementValue(datasetField, DUMMY_DATASET);
-  }
-
-  @Then("Close source node property")
-  public void closeSourceNodeProperty() {
-    CdfPluginPropertiesActions.clickCloseButton();
   }
 
   @Then("Fill in pipeline name")
@@ -97,18 +79,6 @@ public class PipelineDraft {
     Helper.waitSeconds();
     boolean hasDraftId = Helper.urlHasString("draftId");
     Assert.assertTrue(hasDraftId);
-  }
-
-  @Then("Reload the page")
-  public void reloadPage() {
-    Helper.reloadPage();
-  }
-
-  @Then("Export the pipeline")
-  public void exportPipeline() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-export-btn"));
-    // Wait for the download to finish
-    Helper.waitSeconds(3);
   }
 
   @Then("Verify the exported pipeline")

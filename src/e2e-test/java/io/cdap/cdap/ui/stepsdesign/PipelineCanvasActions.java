@@ -17,19 +17,13 @@
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
-import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -44,11 +38,6 @@ public class PipelineCanvasActions {
 
     Assert.assertFalse(undoSelector.isEnabled());
     Assert.assertFalse(redoSelector.isEnabled());
-  }
-
-  @Then("Create a simple pipeline")
-  public void createASimplePipeline() {
-    Commands.createSimplePipeline();
   }
 
   @Then("Verify redo button disabled but undo button enabled")
@@ -115,11 +104,6 @@ public class PipelineCanvasActions {
     Assert.assertEquals(elements.size(), 2);
   }
 
-  @Then("Create a complex pipeline")
-  public void createAComplexPipeline() {
-    Commands.createComplexPipeline();
-  }
-
   @Then("Verify sink nodes are visible")
   public void verifySinkNodesAreVisible() {
     WebElement sink1Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-7");
@@ -129,8 +113,8 @@ public class PipelineCanvasActions {
     Assert.assertTrue(sink2Selector.isDisplayed());
   }
 
-  @Then("Zoom in seven times")
-  public void zoomInFiveTimes() {
+  @Then("Zoom in ten times")
+  public void zoomInTenTimes() {
     for (int i = 0; i < 10; ++i) {
       Commands.clickZoomInButton();
     }
@@ -143,11 +127,6 @@ public class PipelineCanvasActions {
 
     Assert.assertFalse(sink1Selector.isDisplayed());
     Assert.assertFalse(sink2Selector.isDisplayed());
-  }
-
-  @Then("Click fit to screen")
-  public void clickFitToScreen() {
-    Commands.fitPipelineToScreen();
   }
 
   @Then("Move minimap")
