@@ -44,6 +44,7 @@ const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 import PaginationStepper from 'components/shared/PaginationStepper';
 import styled from 'styled-components';
 import { MyPipelineApi } from 'api/pipeline';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PaginationContainer = styled.div`
   margin-right: 50px;
@@ -146,6 +147,10 @@ const DeployedPipeline: React.FC = () => {
       reset();
     };
   }, []);
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
+  const latestOnly = lifecycleManagementEditEnabled ? 'true' : 'false';
   const { ready, search, pageToken, sortOrder, pageLimit } = useSelector(
     ({ deployed }) => deployed
   );
@@ -159,7 +164,7 @@ const DeployedPipeline: React.FC = () => {
       token: pageToken || undefined,
       pageSize: pageLimit,
       namespace: getCurrentNamespace(),
-      latestOnly: 'true',
+      latestOnly,
     },
   });
   const bannerMessage = checkError(error);

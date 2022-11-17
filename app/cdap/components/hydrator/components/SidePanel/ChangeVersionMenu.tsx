@@ -67,7 +67,7 @@ export default function ChangeVersionMenu({
     <>
       <Button aria-label={'change version'} component="span" onClick={handleOpen} ref={elementRef}>
         <ToolTipButtonContainer>
-          <EditIcon /> Change
+          <EditIcon /> Change Version
         </ToolTipButtonContainer>
       </Button>
       <Menu

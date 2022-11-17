@@ -21,7 +21,6 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import myExploreApi from 'api/explore';
 import isObject from 'lodash/isObject';
 import uuidV4 from 'uuid/v4';
-import 'whatwg-fetch';
 import { insertAt, removeAt, humanReadableDate } from 'services/helpers';
 import { UncontrolledTooltip } from 'components/UncontrolledComponents';
 require('./ExploreModal.scss');

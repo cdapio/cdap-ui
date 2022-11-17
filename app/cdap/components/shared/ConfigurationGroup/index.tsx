@@ -161,9 +161,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   function handleValueChanges(changedValues, params: { [key: string]: boolean } = {}) {
     let fcg = filteredConfigurationGroups;
-    if (params.updateFilteredConfigurationGroups) {
-      fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
-    }
+    fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
     // update currentValues state with whatever changed
     setCurrentValues((newValues) => {
       return replaceDifferenceInObjects(newValues, changedValues);

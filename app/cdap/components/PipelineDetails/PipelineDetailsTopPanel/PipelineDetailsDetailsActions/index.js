@@ -30,6 +30,7 @@ const mapDetailsStateToProps = (state) => {
     config: state.config,
     version: state.version,
     editDraftId: state.editDraftId,
+    change: state.change,
   };
 };
 
@@ -40,11 +41,12 @@ const PipelineDetailsDetailsActions = ({
   config,
   version,
   editDraftId,
+  change,
 }) => {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
-
+  const isLatestVersion = change ? change.latest : true;
   return (
     <div className="pipeline-details-buttons pipeline-details-details-actions">
       <PipelineDetailsActionsButton
@@ -55,6 +57,7 @@ const PipelineDetailsDetailsActions = ({
         version={version}
         lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
         editDraftId={editDraftId}
+        isLatestVersion={isLatestVersion}
       />
     </div>
   );
@@ -67,6 +70,7 @@ PipelineDetailsDetailsActions.propTypes = {
   config: PropTypes.object,
   version: PropTypes.string,
   editDraftId: PropTypes.string,
+  change: PropTypes.object,
 };
 
 const ConnectedPipelineDetailsDetailsActions = connect(mapDetailsStateToProps)(
