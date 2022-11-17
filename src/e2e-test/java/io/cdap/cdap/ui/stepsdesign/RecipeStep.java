@@ -24,9 +24,12 @@ import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RecipeStep {
     @Given("Navigate to the Home page")
@@ -115,12 +118,31 @@ public class RecipeStep {
             System.err.println("error:" + e);
         }
     }
+    @Then("Verify if user clicks on download icon of recipe panel")
+    public void clickOnDownloadIcon() {
+        try {
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("download-icon"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
 
     @Then("Verify if clicking on close icon of panel")
     public void verifyByClickingOnCloseIcon() {
         try {
+            WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(),20);
+            ele.until(ExpectedConditions.invisibilityOfElementLocated
+                    (By.cssSelector("drawer-widget-close-round-icon")));
             ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
         } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
+    @Then("verify if recipe step is Deleted with \\\"(.,*)\\\"")
+    public void verifyIfRecipeStepDeleted(int stepId) {
+        try {
+        Assert.assertFalse(Helper.isElementExists("recipe-step-row-" + stepId));
+    }catch (Exception e) {
             System.err.println("error:" + e);
         }
     }
