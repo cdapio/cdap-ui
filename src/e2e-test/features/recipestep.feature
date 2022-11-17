@@ -26,8 +26,11 @@ Feature: Directives
     Then Enter command in the panel with the data "uppercase:body_2"
     Then Click on 'Recipe steps' button
     Then Verify if recipe panel is displayed
-    Then Click on delete icon of any step with "<stepId>"
     Then Verify if clicking on close icon of panel
+    Then Click on 'Recipe steps' button
+    Then Verify if user clicks on download icon of recipe panel
+    Then Click on delete icon of any step with "<stepId>"
+    Then verify if recipe step is Deleted with "<stepId>"
   Examples:
       | stepId |
       | 1 |
