@@ -47,6 +47,8 @@ import {
   IRecords,
   IRowData,
   IMissingListData,
+  ITableMetaInfo,
+  IToaster,
 } from 'components/GridTable/types';
 import styled from 'styled-components';
 import FooterPanel from 'components/FooterPanel';
@@ -64,7 +66,7 @@ export default function GridTable() {
   const [isFirstWrangle, setIsFirstWrangle] = useState<boolean>(false);
   const [connectorType, setConnectorType] = useState<string | null>(null);
   const [openDirectivePanel, setDirectivePanel] = useState<boolean>(true);
-  const [toaster, setToaster] = useState({
+  const [toaster, setToaster] = useState<IToaster>({
     open: false,
     message: '',
     isSuccess: false,
@@ -82,7 +84,7 @@ export default function GridTable() {
       count: '0',
     },
   ]);
-  const [tableMetaInfo, setTableMetaInfo] = useState({
+  const [tableMetaInfo, setTableMetaInfo] = useState<ITableMetaInfo>({
     columnCount: 0,
     rowCount: 0,
   });
@@ -119,7 +121,9 @@ export default function GridTable() {
         setGridData(response);
         setToaster({
           open: true,
-          message: `Transformation successfully added`,
+          message: T.translate(
+            `features.WranglerNewUI.Snackbar.labels.transformationSuccess`
+          ).toString(),
           isSuccess: true,
         });
       },
@@ -127,7 +131,9 @@ export default function GridTable() {
         setLoading(false);
         setToaster({
           open: true,
-          message: `Failed to add transformation`,
+          message: T.translate(
+            `features.WranglerNewUI.Snackbar.labels.transformationFail`
+          ).toString(),
           isSuccess: false,
         });
       }
@@ -388,8 +394,8 @@ export default function GridTable() {
     );
   };
 
-  const deleteRecipes = (new_arr, remaining_arr) => {
-    applyDirectiveAPICall(new_arr, 'delete', remaining_arr, 'panel');
+  const deleteRecipes = (updatedList, remainingList) => {
+    applyDirectiveAPICall(updatedList, 'delete', remainingList, 'panel');
     DataPrepStore.dispatch({
       type: DataPrepActions.setUndoDirective,
       payload: {

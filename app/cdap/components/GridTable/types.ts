@@ -81,3 +81,14 @@ export interface IApiPayload {
   requestBody: IRequestBody;
   gridParams: IGridParams;
 }
+
+export interface ITableMetaInfo {
+  columnCount: number;
+  rowCount: number;
+}
+
+export interface IToaster {
+  open: boolean;
+  message: string;
+  isSuccess: boolean;
+}

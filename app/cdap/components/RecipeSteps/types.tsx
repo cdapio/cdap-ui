@@ -17,7 +17,7 @@
 export interface IRecipeStepsProps {
   setShowRecipePanel: React.Dispatch<React.SetStateAction<boolean>>;
   showRecipePanel: boolean;
-  deleteRecipes: (new_arr: string[], remaining_arr: string[]) => void;
+  deleteRecipes: (updatedList: string[], remainingList: string[]) => void;
 }
 
 export interface IRecipeSteps {}

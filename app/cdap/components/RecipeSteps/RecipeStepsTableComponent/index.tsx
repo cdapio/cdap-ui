@@ -22,6 +22,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core';
 import React from 'react';
 import { IRecipeStepTebleProps } from 'components/RecipeSteps/RecipeStepsTableComponent/types';
@@ -90,7 +91,7 @@ const RecipeStepsTableRowStyle = styled(TableCell)`
 `;
 
 export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTebleProps) {
-  const handleDelete = (eachStep, i) => {
+  const handleDelete = (i) => {
     handleDeleteRecipeSteps(
       recipeSteps.filter((x, index) => index < i),
       recipeSteps.filter((x, index) => index >= i)
@@ -123,7 +124,7 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTeb
               </RecipeStepsBodyTableRow>
               <RecipeStepsTableRowStyle data-testid={`recipe-step-row-${eachStepIndex}-delete`}>
                 <RecipeStepsDeleteStyle
-                  onClick={() => handleDelete(eachStep, eachStepIndex)}
+                  onClick={() => handleDelete(eachStepIndex)}
                   data-testid={`recipe-step-${eachStepIndex}-delete`}
                 >
                   {DeleteIcon}

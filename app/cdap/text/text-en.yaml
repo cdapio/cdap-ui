@@ -3457,6 +3457,8 @@ features:
         success: Success
         undo: Undo
         workspaceFailure: Failed to create workspace for
+        transformationSuccess: Transformation successfully added
+        transformationFail: Failed to add transformation
   WranglerNewRecipeSteps:
     labels:
        recipe: Recipe
