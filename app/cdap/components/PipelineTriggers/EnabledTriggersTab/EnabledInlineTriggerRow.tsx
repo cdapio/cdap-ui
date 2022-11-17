@@ -118,15 +118,15 @@ const EnabledInlineTriggerRow = ({
           <HelperText>{T.translate(`${TRIGGER_PREFIX}.helperText`, { pipelineName })}</HelperText>
           <CheckboxContainer>
             <CheckboxItemContainer>
-              <Checkbox checked={completed} color="primary" size="small" />
+              <Checkbox disabled checked={completed} color="primary" size="small" />
               <span>{T.translate(`${TRIGGER_PREFIX}.Events.COMPLETED`)}</span>
             </CheckboxItemContainer>
             <CheckboxItemContainer>
-              <Checkbox checked={killed} color="primary" size="small" />
+              <Checkbox disabled checked={killed} color="primary" size="small" />
               <span>{T.translate(`${TRIGGER_PREFIX}.Events.KILLED`)}</span>
             </CheckboxItemContainer>
             <CheckboxItemContainer>
-              <Checkbox checked={failed} color="primary" size="small" />
+              <Checkbox disabled checked={failed} color="primary" size="small" />
               <span>{T.translate(`${TRIGGER_PREFIX}.Events.FAILED`)}</span>
             </CheckboxItemContainer>
           </CheckboxContainer>
