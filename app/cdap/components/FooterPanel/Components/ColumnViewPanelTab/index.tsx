@@ -19,24 +19,26 @@ import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import TabWrapper from 'components/FooterPanel/Components/common/TabWrapper';
 import { PREFIX } from 'components/FooterPanel/constants';
 import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
-import { useStyles } from 'components/FooterPanel/Components/ColumnViewPanelTab/styles';
 import T from 'i18n-react';
 import React from 'react';
+import styled from 'styled-components';
 
 export default function({ setOpenColumnViewHandler, gridMetaInfo }) {
-  const classes = useStyles();
+  const DisabledStyle = styled(Box)`
+    pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+  `;
   return (
     <Box data-testid="footer-panel-column-view-panel-tab-wrapper">
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
-        <Box
+        <DisabledStyle
           onClick={setOpenColumnViewHandler}
-          className={gridMetaInfo?.rowCount === 0 ? classes.disabled : classes.notDisabled}
+          disabled={gridMetaInfo?.rowCount === 0 ? true : false}
           data-testid="footer-panel-column-view-panel-button"
         >
           <TabWrapper size="small" dataTestID="footer-panel-column-view-panel-tab">
             {ColumnIcon}
           </TabWrapper>
-        </Box>
+        </DisabledStyle>
       </CustomTooltip>
     </Box>
   );
