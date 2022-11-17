@@ -14,17 +14,17 @@
  * the License.
  */
 
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import ZoomInIcon from '@material-ui/icons/ZoomIn';
-import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
-import T from 'i18n-react';
-import React from 'react';
-import styled from 'styled-components';
+import { Box, IconButton, Typography } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
+import ZoomInIcon from "@material-ui/icons/ZoomIn";
+import CustomTooltip from "components/ConnectionList/Components/CustomTooltip";
+import { ColumnIcon } from "components/FooterPanel/IconStore/ColumnIcon";
+import T from "i18n-react";
+import React from "react";
+import styled from "styled-components";
 
-export const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
+export const PREFIX = "features.WranglerNewUI.FooterPanel.labels";
 
 interface IGridMetaInfo {
   rowCount: number;
@@ -134,7 +134,7 @@ export default function({
     background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
     border-right: 1px solid #3994ff66;
     cursor: pointer;
-    pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
+    pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
   `;
 
   return (
@@ -149,7 +149,7 @@ export default function({
         </ColumnViewBox>
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-message">
           {T.translate(`${PREFIX}.message`, { rowCount, columnCount })}
         </Label>
       </LargeBox>
@@ -157,7 +157,7 @@ export default function({
         <IconButton aria-label="zoom">
           <ZoomInIcon />
         </IconButton>
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-zoom-label">
           <>{`${T.translate(`${PREFIX}.zoomPercent100`)}`}</>
         </Label>
         <TransformatedIconButton aria-label="arrow">
@@ -165,12 +165,12 @@ export default function({
         </TransformatedIconButton>
       </ZoomBox>
       <DirectivesBox data-testid="footer-panel-directives-tab">
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-simple-directives-label">
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
       <ReciepeStepsBox data-testid="footer-panel-recipe-steps-tab">
-        <Label data-testid="footerpanel-simple-label">
+        <Label data-testid="footerpanel-recipe-steps-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
         </Label>
         <OutlinedLabel data-testid="footerpanel-outlined-label">
