@@ -28,7 +28,7 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
-const PREFIX = 'features.WranglerNewUI.connectionList.snackbarLabels';
+const PREFIX = 'features.WranglerNewUI.ConnectionList.snackbarLabels';
 
 export default function TabLabelCanSample({
   label,
