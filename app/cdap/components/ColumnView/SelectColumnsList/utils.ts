@@ -19,11 +19,10 @@ import { IHeaderNamesList } from 'components/GridTable/types';
 export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeaderNamesList[]) => {
   const dataQualityToArray = statistics && Object.entries(statistics);
   const dataQuality = [];
-  Array.isArray(columnList) &&
-    columnList.length !== 0 &&
-    columnList.map((columnName) => {
+  columnList.length !== 0 &&
+    columnList.map((eachColumnName: IHeaderNamesList) => {
       dataQualityToArray?.forEach(([key, value]) => {
-        if (columnName.name == key) {
+        if (eachColumnName.name == key) {
           const generalValues = Object.entries(value);
           Array.isArray(generalValues) &&
             generalValues.length !== 0 &&

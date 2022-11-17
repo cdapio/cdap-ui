@@ -21,6 +21,55 @@ import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading
 import { useStyles } from 'components/ColumnViewWidget/styles';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import { IColumnViewWidget } from 'components/ColumnViewWidget/types';
+import styled, { css } from 'styled-components';
+
+const DrawerContainerStyle = styled(Box)`
+  width: 389px;
+  border-top: 1px solid #3994ff;
+  height: calc(100vh - 190px);
+  border-right: 1px solid #e0e0e0;
+`;
+
+const HeaderStyle = styled.header`
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const HeaderTextWithBackIcon = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+`;
+
+const HeaderRightIconWrapper = styled(Box)`
+  display: flex;
+  align-items: center;
+  padding-right: 24px;
+`;
+
+const SearchFormControl = styled(Box)`
+  position: relative;
+  display: flex;
+  margin-right: 16px;
+`;
+
+const SearchIconStyle = styled(Typography)`
+  margin-top: 3px;
+  cursor: pointer;
+`;
+
+const DividerLineStyles = styled.div`
+  width: 1px;
+  height: 28px;
+  margin-right: 12px;
+  background-color: #dadce0;
+`;
+
+const PointerStyle = styled(CloseRoundedIcon)`
+  cursor: pointer;
+`;
 
 export default function({
   headingText,
@@ -32,53 +81,61 @@ export default function({
   const [focused, setFocused] = useState<boolean>(false);
   const ref = useRef(null);
 
+  const InputStyle = styled.input`
+    width: 140px !important;
+    ${({ focused }) =>
+      focused &&
+      css`
+        border: none !important;
+        border-bottom: 1px solid grey !important;
+        outline: none !important;
+      `}
+    ${({ focused }) =>
+      !focused &&
+      css`
+        border: none !important;
+        border-bottom: 1px solid transparent !important;
+      `}
+  `;
+
   const handleFocus = () => {
     ref?.current.focus();
     setFocused(true);
   };
 
   return (
-    <Box
-      className={classes.drawerContainerStyles}
-      role="presentation"
-      data-testid="column-view-panel-parent"
-    >
-      <header className={classes.headerStyles}>
-        <div className={classes.headerTextWithBackIconStyles}>
+    <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
+      <HeaderStyle>
+        <HeaderTextWithBackIcon>
           <DrawerWidgetHeading headingText={headingText} />
-        </div>
-        <Box className={classes.headerRightStyles}>
-          <Box className={classes.searchFormControl}>
+        </HeaderTextWithBackIcon>
+        <HeaderRightIconWrapper>
+          <SearchFormControl>
             <input
               className={`${classes.searchInput} ${
                 focused ? classes.isFocused : classes.isBlurred
               }`}
+              // focused={focused}
               onChange={(e) => searchedTermHandler(e.target.value)}
               ref={ref}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
               data-testid="search-term-input"
             />
-            <Typography
-              className={classes.searchIcon}
-              component="span"
-              onClick={handleFocus}
-              data-testid="search-icon"
-            >
+            <SearchIconStyle component="span" onClick={handleFocus} data-testid="search-icon">
               <SearchIcon />
-            </Typography>
-          </Box>
+            </SearchIconStyle>
+          </SearchFormControl>
 
-          <div className={classes.dividerLineStyles} />
-          <CloseRoundedIcon
-            className={classes.pointerStyles}
+          <DividerLineStyles />
+          <PointerStyle
             color="action"
             onClick={closeClickHandler}
             data-testid="column-view-panel-close"
           />
-        </Box>
-      </header>
+        </HeaderRightIconWrapper>
+      </HeaderStyle>
       <Fragment>{children}</Fragment>
-    </Box>
+    </DrawerContainerStyle>
   );
 }

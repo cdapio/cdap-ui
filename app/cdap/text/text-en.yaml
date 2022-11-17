@@ -3447,6 +3447,7 @@ features:
         columnViewPanel: Column View Panel
         currentData: Current data
         directives: Directives
+        message: Current data - {rowCount} rows and {columnCount} columns 
         recipeSteps: Recipe Steps
         rows: rows
         zoomPercent100: 100%

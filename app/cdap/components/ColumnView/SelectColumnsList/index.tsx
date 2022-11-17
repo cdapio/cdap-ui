@@ -14,50 +14,102 @@
  * the License.
  */
 
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core';
+import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
-import {
-  GreenSemiCircleProgressBar,
-  RedSemiCircleProgressBar,
-  RenderSemiCircularProgressBar,
-} from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar';
-import { useStyles } from 'components/ColumnView/SelectColumnsList/styles';
+import SelectColumnsTableRow from 'components/ColumnView/SelectColumnsList/SelectColumnsTableRow';
 import {
   IDataQualityRecord,
-  ISelectColumnListProps,
+  ISelectColumnsListProps,
 } from 'components/ColumnView/SelectColumnsList/types';
 import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
 import { IHeaderNamesList } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnListProps) {
-  const classes = useStyles();
+const CustomTableContainer = styled(TableContainer)`
+  &.MuiTableContainer-root {
+    height: calc(100% - 43px);
+    overflow: scroll;
+    padding: 0;
+    position: relative;
+  }
+`;
+
+const CustomTableHeaderCell = styled(TableCell)`
+  background-color: #ffffff;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  padding-left: 30px;
+`;
+
+const CustomTableHeaderRightCell = styled(CustomTableHeaderCell)`
+  padding-left: 0;
+`;
+
+const CustomTableHeaderRow = styled(TableRow)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+`;
+
+const SelectColumnsListSection = styled.section`
+  width: 100%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15px;
+  color: #5f6368;
+  height: calc(100vh - 211px);
+  overflow: scroll;
+`;
+
+const getTableBody = (
+  filteredColumns: IHeaderNamesList[],
+  dataQualityList: IDataQualityRecord[]
+) => {
+  {
+    return filteredColumns.length !== 0 ? (
+      filteredColumns.map((eachFilteredColumn: IHeaderNamesList, filteredColumnIndex: number) => {
+        return (
+          <SelectColumnsTableRow
+            eachFilteredColumn={eachFilteredColumn}
+            filteredColumnIndex={filteredColumnIndex}
+            dataQualityList={dataQualityList}
+          />
+        );
+      })
+    ) : (
+      <NoRecordScreen
+        title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
+        subtitle={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.subtitle')}
+      />
+    );
+  }
+};
+
+export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
 
   useEffect(() => {
-    const getPreparedDataQuality = prepareDataQualtiy(dataQuality, columnData);
-    setDataQualityList(getPreparedDataQuality);
+    setDataQualityList(prepareDataQualtiy(dataQuality, columnData));
   }, []);
 
   useEffect(() => {
     if (searchTerm) {
-      const columnValue =
-        Array.isArray(columnData) &&
+      const filteredColumn =
         columnData.length !== 0 &&
         columnData.filter((el) => el?.label.toLowerCase().includes(searchTerm.toLowerCase()));
-      if (columnValue?.length) {
-        setFilteredColumns(columnValue);
+      if (filteredColumn?.length) {
+        setFilteredColumns(filteredColumn);
       } else {
         setFilteredColumns([]);
       }
@@ -67,58 +119,24 @@ export default function ({ columnData, dataQuality, searchTerm }: ISelectColumnL
   }, [searchTerm]);
 
   return (
-    <section className={classes.columnsCountTextStyles}>
-      <TableContainer component={Box} classes={{ root: classes.customTableContainer }}>
+    <SelectColumnsListSection>
+      <CustomTableContainer component={Box}>
         <Table aria-label="recipe steps table" stickyHeader>
-          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 && (
+          {filteredColumns.length !== 0 && (
             <TableHead>
-              <TableRow className={classes.recipeStepsTableRowStyles}>
-                <TableCell className={classes.columnLeft} data-testid="column-name-header">
+              <CustomTableHeaderRow>
+                <CustomTableHeaderCell data-testid="column-name-header">
                   {`${COLUMNS} (${columnData?.length})`}
-                </TableCell>
-                <TableCell className={classes.columnRight} data-testid="null-values-header">
+                </CustomTableHeaderCell>
+                <CustomTableHeaderRightCell data-testid="null-values-header">
                   {NULL_VALUES}
-                </TableCell>
-              </TableRow>
+                </CustomTableHeaderRightCell>
+              </CustomTableHeaderRow>
             </TableHead>
           )}
-          {Array.isArray(filteredColumns) && filteredColumns.length !== 0 ? (
-            filteredColumns.map((eachColumn, index) => (
-              <TableBody className={classes.tableBody}>
-                <TableRow key={index} className={classes.tableRowContainer}>
-                  <TableCell
-                    className={classes.leftSideCell}
-                    data-testid={`each-column-label-type-${index}`}
-                  >
-                    <Box>
-                      {eachColumn?.label}
-                      &nbsp;
-                      <br />
-                      {eachColumn?.type}
-                    </Box>
-                  </TableCell>
-                  <TableCell className={classes.nullValuesContainer}>
-                    <RenderSemiCircularProgressBar
-                      wrapperComponentData={{
-                        dataQualityList,
-                        index
-                      }}
-                      dataQualityPercentValue={dataQualityList[index]?.value}
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            ))
-          ) : (
-            <NoRecordScreen
-              title={T.translate('features.WranglerNewUI.ColumnViewPanel.noRecordScreen.title')}
-              subtitle={T.translate(
-                'features.WranglerNewUI.ColumnViewPanel.noRecordScreen.subtitle'
-              )}
-            />
-          )}
+          {getTableBody(filteredColumns, dataQualityList)}
         </Table>
-      </TableContainer>
-    </section>
+      </CustomTableContainer>
+    </SelectColumnsListSection>
   );
 }
