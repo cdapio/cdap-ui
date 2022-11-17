@@ -22,7 +22,7 @@ export default function CustomTooltip(props: TooltipProps) {
   const classes = useStyles();
 
   return (
-    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+    <Box data-testid="tooltip-parent">
       <Tooltip arrow classes={classes} {...props} />
     </Box>
   );
