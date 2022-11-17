@@ -57,6 +57,6 @@ describe('It should test SelectColumnList Component', () => {
     );
 
     const columnLabelType = screen.getByTestId('each-column-label-type-0');
-    expect(columnLabelType).toHaveTextContent('body_0 Int');
+    expect(columnLabelType).toHaveTextContent('body_0Int');
   });
 });
