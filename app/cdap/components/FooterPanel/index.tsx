@@ -26,14 +26,14 @@ import styled from 'styled-components';
 
 export const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
 
-interface IGridMetaInfo {
-  rowCount: number;
-  columnCount: number;
-}
-
 interface IFooterPanelProps {
   recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
+}
+
+interface IGridMetaInfo {
+  rowCount: number;
+  columnCount: number;
 }
 
 const ColumnViewBox = styled(Box)`
@@ -68,6 +68,14 @@ const Label = styled(Typography)`
   line-height: 40px;
 `;
 
+const OutlinedLabel = styled(Label)`
+  background-color: ${grey[600]};
+  line-height: 21px;
+  width: 20px;
+  color: #ffffff;
+  border-radius: 4px;
+`;
+
 const ReciepeStepsBox = styled(Box)`
   text-align: center;
   padding: 9.5px 12px;
@@ -97,14 +105,6 @@ const TabsWrapper = styled(Box)`
 
 const TransformatedIconButton = styled(IconButton)`
   transform: rotate(90deg);
-`;
-
-const OutlinedLabel = styled(Label)`
-  background-color: ${grey[600]};
-  line-height: 21px;
-  width: 20px;
-  color: #ffffff;
-  border-radius: 4px;
 `;
 
 const ZoomBox = styled(Box)`
