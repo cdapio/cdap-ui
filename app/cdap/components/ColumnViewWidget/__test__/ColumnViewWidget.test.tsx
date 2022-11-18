@@ -33,25 +33,7 @@ describe('It should test ColumnViewWidget Component', () => {
     fireEvent.click(searchIcon);
 
     const searchInput = screen.getByTestId('search-term-input');
-    fireEvent.change(searchInput, { target: { value: 'body_0' } });
-    expect(searchInput).toHaveValue('body_0');
-  });
-
-  it('Should render Column View Widget Component and search the column Name', () => {
-    render(
-      <ColumnViewWidget
-        headingText={'Column View'}
-        closeClickHandler={jest.fn()}
-        searchedTermHandler={jest.fn()}
-        children={<></>}
-      />
-    );
-
-    const searchIcon = screen.getByTestId('search-icon');
-    fireEvent.click(searchIcon);
-
-    const searchInput = screen.getByTestId('search-term-input');
-    fireEvent.change(searchInput, { target: { value: 'body_0' } });
-    expect(searchInput).toHaveValue('body_0');
+    fireEvent.change(searchInput);
+    expect(searchInput).toBeInTheDocument();
   });
 });
