@@ -31,13 +31,15 @@ public class Constants {
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
   public static final String CDAP_URL = BASE_URL + "/cdap";
-  public static final String CONFIGURATION_URL = "http://localhost:11011/cdap/administration/configuration";
+  public static final String CONFIGURATION_URL = BASE_URL + "/cdap/administration/configuration";
   public static final String NAMESPACE_URL = BASE_URL + "/cdap/ns";
-  public static final String BASE_STUDIO_URL = "http://localhost:11011/cdap/ns/default/";
-  public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
-  public static final String PIPELINE_STUDIO_URL = "http://localhost:11011/pipelines/ns/default/studio";
+  public static final String BASE_STUDIO_URL = BASE_URL + "/cdap/ns/default/";
+  public static final String SYSTEM_PROFILES_CREATE_URL = BASE_URL + "/cdap/ns/system/profiles/create";
+  public static final String PIPELINE_STUDIO_URL = BASE_URL + "/pipelines/ns/default/studio";
   public static final String PIPELINE_LIST_URL = CDAP_URL + "/ns/default/pipelines";
+  public static final String PIPELINE_DRAFTS_URL = BASE_STUDIO_URL + "pipelines/drafts";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
+  public static final String DOWNLOADS_DIR = "target/downloads/";
   public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
 
   public static final String DEFAULT_GCS_CONNECTION_NAME = "gcs_" + String.valueOf(getRandomArbitrary(1, 10000));
