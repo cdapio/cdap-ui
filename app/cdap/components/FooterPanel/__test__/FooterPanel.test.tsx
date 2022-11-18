@@ -44,11 +44,7 @@ describe('Test Footer Panel Component', () => {
     const simpleLabelElement = screen.getAllByTestId(/footerpanel-simple-label/i);
 
     // Check if the row count and column count is same as provided props 66 and 6
-    expect(simpleLabelElement[0]).toHaveTextContent(
-      `${T.translate(`${PREFIX}.currentData`)} - 66 ${T.translate(`${PREFIX}.rows`)} ${T.translate(
-        `features.WranglerNewUI.common.and`
-      )} 6 ${T.translate(`${PREFIX}.columns`)}`
-    );
+    expect(simpleLabelElement[0]).toHaveTextContent(`${T.translate(`${PREFIX}.message`, '66')}`);
   });
 
   it('Should render all the child elements correctly in the parent component', () => {
