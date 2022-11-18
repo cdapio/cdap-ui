@@ -126,7 +126,9 @@ export default function({
               inputRef={ref}
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
-              data-testid="search-term-input"
+              inputProps={{
+                'data-testid': 'search-term-input',
+              }}
               disableUnderline={true}
             />
             <SearchIconStyle component="span" onClick={handleFocus} data-testid="search-icon">
