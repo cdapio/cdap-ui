@@ -19,6 +19,7 @@ import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
 import ToggleButton from 'components/ColumnInsights/Components/ColumnToggleButton';
 import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
+import EmptyList from 'components/PipelineList/EmptyList';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
@@ -31,19 +32,12 @@ interface IColumnDataQualityProps {
     emptyValueCount: number;
     emptyValuePercentage: number;
   };
-  columnInfo: {
-    general: IGeneral;
-    types: ITypes;
-  };
-}
-interface ITypes {
-  [key: string]: number | string;
+  columnInfo: IColumnInfo;
 }
 
-interface IGeneral {
-  'non-null': number;
-  null: number;
-  empty: number;
+export interface IColumnInfo {
+  general: Record<'non-null' | 'null' | 'empty', number>;
+  types: Record<string, number | string>;
 }
 
 const ColumnDataQualityContainer = styled(Box)`

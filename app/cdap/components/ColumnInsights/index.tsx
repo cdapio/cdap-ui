@@ -17,7 +17,9 @@
 import DrawerWidget from 'components/DrawerWidget';
 import React, { useEffect, useState } from 'react';
 import ColumnDataDistribution from 'components/ColumnInsights/Components/ColumnDataDistribution';
-import ColumnDataQuality from 'components/ColumnInsights/Components/ColumnDataQuality';
+import ColumnDataQuality, {
+  IColumnInfo,
+} from 'components/ColumnInsights/Components/ColumnDataQuality';
 import ColumnDetails from 'components/ColumnInsights/Components/ColumnDetails';
 import styled from 'styled-components';
 import T from 'i18n-react';
@@ -36,9 +38,9 @@ interface IColumnData {
   open: boolean;
   columnName: string;
   distinctValues: number;
-  characterCount: ICharacterCount;
+  characterCount: Record<'min' | 'max', number>;
   dataQuality: IDataQuality;
-  dataQualityBar: {};
+  dataQualityBar: IColumnInfo;
   dataTypeString: string;
   dataDistributionGraphData: IGraphData[];
   columnNamesList: string[];
@@ -47,11 +49,6 @@ interface IColumnData {
 interface IGraphData {
   text: string;
   value: number;
-}
-
-interface ICharacterCount {
-  min: number;
-  max: number;
 }
 
 interface IDataQuality {
