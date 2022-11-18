@@ -123,19 +123,6 @@ export default function({
     setInputValue(e.target.value);
   };
 
-  const onBlurEvent = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (errorMessage.hasError) {
-      setCanEdit(true);
-    } else {
-      if (e.target.value !== columnName) {
-        setCanEdit(false);
-        renameColumnNameHandler(columnName, e.target.value);
-      } else {
-        setCanEdit(false);
-      }
-    }
-  };
-
   const onEnter = (e: React.KeyboardEvent<HTMLElement>) => {
     if (
       (e.target as HTMLInputElement).value !== columnName &&
@@ -155,7 +142,6 @@ export default function({
         {canEdit ? (
           <input
             value={inputValue}
-            onBlur={(e) => onBlurEvent(e)}
             onChange={(e) => onChangeHandler(e)}
             onKeyDown={(e) => onEnter(e)}
             data-testid="column-name-edit-input"

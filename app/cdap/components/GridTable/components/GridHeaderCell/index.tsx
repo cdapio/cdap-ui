@@ -14,18 +14,57 @@
  * the License.
  */
 
-import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
+import { Box, TableCell, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import TypographyComponent from '../Typography';
+import TypographyComponent from 'components/GridTable/components/Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
 import T from 'i18n-react';
+import styled from 'styled-components';
+import { blue, grey } from '@material-ui/core/colors';
 
 const PREFIX = 'features.NewWranglerUI.GridTable';
 
-const StringIndicatorBox = styled(Box)({
-  display: 'flex',
-});
+const StringIndicatorBox = styled(Box)`
+  display: flex;
+`;
+
+const TableHeaderCell = styled(TableCell)`
+  padding: 0px;
+  width: auto;
+  font-size: 14px;
+  border: 1px solid ${grey[300]};
+  cursor: pointer;
+`;
+
+const CustomizedBox = styled(Box)`
+  min-width: 216px;
+  padding: 10px 0px 10px 30px;
+  border-radius: 0px;
+  border: 0px;
+  background: #f1f8ff;
+`;
+
+const HighlightedBox = styled(CustomizedBox)`
+  outline: 2px solid ${blue[500]};
+  outline-offset: -2px;
+`;
+
+const CustomizedTypography = styled(Typography)`
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 5px;
+`;
+
+const getWrapperComponent = (isColumnHighlighted) => {
+  if (isColumnHighlighted) {
+    return HighlightedBox;
+  } else {
+    return CustomizedBox;
+  }
+};
 
 export default function GridHeaderCell({
   label,
@@ -36,7 +75,8 @@ export default function GridHeaderCell({
   index,
 }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
-  const isColumnHighlited = label === columnSelected;
+
+  const isColumnHighlighted = label === columnSelected;
 
   const [data, setData] = useState<Record<string, string>>({
     datatype1: types?.length > 0 ? types[0] : T.translate(`${PREFIX}.unknown`).toString(),
@@ -50,27 +90,24 @@ export default function GridHeaderCell({
     });
   }, [label, types]);
 
+  const ColumnHeaderContent = getWrapperComponent(isColumnHighlighted);
+
   return (
-    <TableCell
-      className={classes.tableHeaderCell}
+    <TableHeaderCell
       onClick={() => {
         setColumnSelected(label);
         onColumnSelection(label);
       }}
       data-testid={`grid-header-cell-${index}`}
     >
-      <Card
-        className={isColumnHighlited ? classes.cardHighlighted : classes.cardNotHighlighted}
-        variant="outlined"
-      >
-        <Typography
-          className={classes.columnHeader}
+      <ColumnHeaderContent variant="outlined">
+        <CustomizedTypography
           component="span"
           data-testid={`grid-header-column-name-${index}`}
           variant="body1"
         >
           {label}
-        </Typography>
+        </CustomizedTypography>
         <StringIndicatorBox>
           <TypographyComponent
             className={classes.dataTypeIndicator}
@@ -86,7 +123,7 @@ export default function GridHeaderCell({
             </StringIndicatorBox>
           )}
         </StringIndicatorBox>
-      </Card>
-    </TableCell>
+      </ColumnHeaderContent>
+    </TableHeaderCell>
   );
 }
