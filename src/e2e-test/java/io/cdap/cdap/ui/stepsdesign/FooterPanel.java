@@ -31,6 +31,7 @@ public class FooterPanel {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
+
     @Then("Click on the Data Explorations card")
     public void clickOnTheDataExplorationCard() {
         WaitHelper.waitForPageToLoad();
@@ -39,6 +40,7 @@ public class FooterPanel {
         Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         System.out.println("Clicked the data exploration card");
     }
+
     @Then("Verify if the Footer Panel is displayed")
     public void verifyIfTheFooterPanelIsDisplayed() {
         WaitHelper.waitForPageToLoad();
@@ -50,19 +52,20 @@ public class FooterPanel {
                 flag = false;
             }
         }
-        boolean test = Helper.isElementExists("footer-panel-container");
-        boolean footer = Helper.isElementExists(Helper.getCssSelectorByDataTestId("footer-panel-container"));
+        boolean test = Helper.isElementExists("footer-panel-wrapper");
+        boolean footer = Helper.isElementExists(Helper.getCssSelectorByDataTestId("footer-panel-wrapper"));
         if (test == footer) {
             System.out.println("Footer panel is displayed");
         } else {
             System.out.println("Footer panel is not displayed");
         }
     }
+
     @Then("Verify if the elements on the Footer Panel are displayed")
     public void verifyIfTheElementsOnTheFooterPanelAreDisplayed() {
         WaitHelper.waitForPageToLoad();
-        Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId
-                ("footer-panel-column-view-panel-tab")));
+        Assert.assertTrue(
+                Helper.isElementExists(Helper.getCssSelectorByDataTestId("footer-panel-column-view-panel-tab")));
         System.out.println("Column icon is displayed");
         Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId("footer-panel-meta-info-tab")));
         System.out.println("Column Title is displayed");
