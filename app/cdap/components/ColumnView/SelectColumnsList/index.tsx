@@ -37,7 +37,7 @@ const CustomTableContainer = styled(TableContainer)`
   }
 `;
 
-const CustomTableHeaderCell = styled(TableCell)`
+const CustomTableColumnHeaderCell = styled(TableCell)`
   background-color: #ffffff;
   font-style: normal;
   font-weight: 400;
@@ -47,7 +47,7 @@ const CustomTableHeaderCell = styled(TableCell)`
   padding-left: 30px;
 `;
 
-const CustomTableHeaderRightCell = styled(CustomTableHeaderCell)`
+const CustomTableNullValuesHeaderCell = styled(CustomTableColumnHeaderCell)`
   padding-left: 0;
 `;
 
@@ -125,12 +125,12 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
           {filteredColumns.length !== 0 && (
             <TableHead>
               <CustomTableHeaderRow>
-                <CustomTableHeaderCell data-testid="column-name-header">
+                <CustomTableColumnHeaderCell data-testid="column-name-header">
                   {`${COLUMNS} (${columnData?.length})`}
-                </CustomTableHeaderCell>
-                <CustomTableHeaderRightCell data-testid="null-values-header">
+                </CustomTableColumnHeaderCell>
+                <CustomTableNullValuesHeaderCell data-testid="null-values-header">
                   {NULL_VALUES}
-                </CustomTableHeaderRightCell>
+                </CustomTableNullValuesHeaderCell>
               </CustomTableHeaderRow>
             </TableHead>
           )}
