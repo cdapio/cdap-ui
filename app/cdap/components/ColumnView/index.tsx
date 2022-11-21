@@ -15,8 +15,8 @@
  */
 
 import { Box } from '@material-ui/core';
-import SelectColumnsList from 'components/ColumnView/SelectColumnsList';
-import ColumnViewWidget from 'components/ColumnViewWidget';
+import SelectColumnsList from 'components/ColumnView/components/SelectColumnsList';
+import ColumnViewWidget from 'components/ColumnView/components/ColumnViewWidget';
 import T from 'i18n-react';
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';

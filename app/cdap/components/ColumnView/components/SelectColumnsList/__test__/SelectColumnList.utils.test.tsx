@@ -14,14 +14,15 @@
  * the License.
  */
 
-import { render, screen } from '@testing-library/react';
-import React from 'react';
-import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading/';
+import { prepareDataQualtiy } from 'components/ColumnView/components/SelectColumnsList';
+import {
+  mockColumnData,
+  mockDataQuality,
+  mockResult,
+} from 'components/ColumnView/__test__/ColumnView.test';
 
-describe('It Should test DrawerWidgetHeading Component', () => {
-  it('Should render DrawerWidgetheading Component and test the column view heading text', () => {
-    render(<DrawerWidgetHeading headingText={'Column View Panel'} />);
-    const headingText = screen.getByTestId('drawer-widget-heading-text');
-    expect(headingText).toHaveTextContent('Column View Panel');
+describe('It Should test the utils function prepareDataQualtiy', () => {
+  it('should test whether the utils function return the expected Value', () => {
+    expect(prepareDataQualtiy(mockDataQuality, mockColumnData)).toStrictEqual(mockResult);
   });
 });

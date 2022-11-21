@@ -16,7 +16,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import ColumnViewWidget from 'components/ColumnViewWidget';
+import ColumnViewWidget from 'components/ColumnView/components/ColumnViewWidget';
 
 describe('It should test ColumnViewWidget Component', () => {
   it('Should render Column View Widget Component and click on search icon for the input to be in the screen', () => {

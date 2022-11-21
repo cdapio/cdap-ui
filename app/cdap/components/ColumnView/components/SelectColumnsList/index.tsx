@@ -15,7 +15,7 @@
  */
 
 import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import SelectColumnsTableRow from 'components/ColumnView/SelectColumnsList/SelectColumnsTableRow';
+import SelectColumnsTableRow from 'components/ColumnView/components/SelectColumnsTableRow';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';

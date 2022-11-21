@@ -17,7 +17,7 @@
 import { Box, Typography, Input } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React, { Fragment, useRef, useState } from 'react';
-import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading';
+import DrawerWidgetHeading from 'components/ColumnView/components/ColumnViewWidget/DrawerWidgetHeading';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import styled from 'styled-components';
 import { ReactNode } from 'react';
