@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Box from '@material-ui/core/Box';

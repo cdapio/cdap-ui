@@ -36,6 +36,11 @@ interface IColumnDetailsProps {
   columnHeaderList: string[];
 }
 
+interface IColumnDetailsError {
+  hasError: boolean;
+  message: string;
+}
+
 const ColumnDetailsContainer = styled(Box)`
   padding-bottom: 20px;
   border-bottom: 1px solid ${grey[300]};
@@ -78,9 +83,9 @@ export default function({
     DATATYPE_OPTIONS?.length &&
     DATATYPE_OPTIONS.filter((each) => each.value === columnType?.toLowerCase());
   const [dataTypeValue, setDataTypeValue] = useState<string>();
-  const [canEdit, setCanEdit] = useState(false);
+  const [canEdit, setCanEdit] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState({
+  const [errorData, setErrorData] = useState<IColumnDetailsError>({
     hasError: false,
     message: '',
   });
@@ -96,17 +101,17 @@ export default function({
 
   const checkForInvalidInput = (renamedString: string) => {
     if (renamedString === '' || !/^\w+$/.test(renamedString)) {
-      setErrorMessage({
+      setErrorData({
         hasError: true,
         message: displayMessage.invalidMessage,
       });
     } else if (columnHeaderList.includes(renamedString) && columnName !== renamedString) {
-      setErrorMessage({
+      setErrorData({
         hasError: true,
         message: displayMessage.matchedColumnMessage,
       });
     } else {
-      setErrorMessage({
+      setErrorData({
         hasError: false,
         message: '',
       });
@@ -130,7 +135,7 @@ export default function({
   const onEnter = (e: React.KeyboardEvent<HTMLElement>) => {
     if (
       (e.target as HTMLInputElement).value !== columnName &&
-      !errorMessage.hasError &&
+      !errorData.hasError &&
       e.keyCode === 13
     ) {
       renameColumnNameHandler(columnName, (e.target as HTMLInputElement).value);
@@ -160,9 +165,9 @@ export default function({
           <EditIcon />
         </CustomizedIconButton>
       </CustomizedColumnNameEditBox>
-      {errorMessage.hasError && (
+      {errorData.hasError && (
         <RenderLabel fontSize={14} color={`${red[600]}`} dataTestId={'invalid-text'}>
-          <> {T.translate(errorMessage.message).toString()}</>
+          <> {T.translate(errorData.message).toString()}</>
         </RenderLabel>
       )}
 

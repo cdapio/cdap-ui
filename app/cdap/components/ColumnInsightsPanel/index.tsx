@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
 import ColumnInsightsInlayWidget from 'components/ColumnInsightsPanel/components/ColumnInsightsWidget';
 import ColumnDetails from 'components/ColumnInsightsPanel/components/ColumnDetails';
@@ -45,8 +44,6 @@ const ColumnInsightsContainer = styled(Box)`
   padding-right: 24px;
   padding-left: 30px !important;
 `;
-
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
 
 export default function({
   columnData,

@@ -19,7 +19,6 @@ import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
 import ToggleButton from 'components/ColumnInsightsPanel/components/ColumnToggleButton';
 import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
-import EmptyList from 'components/PipelineList/EmptyList';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
