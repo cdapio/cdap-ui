@@ -24,7 +24,6 @@ import io.cucumber.java.en.Then;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.cdap.ui.utils.Helper;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
