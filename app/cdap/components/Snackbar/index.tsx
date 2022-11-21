@@ -16,7 +16,7 @@
 
 import { green, red } from '@material-ui/core/colors';
 import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
-import Transition from 'components/Snackbar/Components/Transition/index';
+import Transition from 'components/Snackbar/components/Transition/index';
 import React from 'react';
 import styled from 'styled-components';
 
