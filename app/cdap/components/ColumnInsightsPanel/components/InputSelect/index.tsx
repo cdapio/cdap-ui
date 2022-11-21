@@ -15,7 +15,7 @@
  */
 
 import { MenuItem, Select } from '@material-ui/core';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
 import React from 'react';
 import styled from 'styled-components';
 

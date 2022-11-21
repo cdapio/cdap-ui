@@ -4,7 +4,7 @@ import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
 import ColumnInsightsInlayWidget from 'components/ColumnInsightsPanel/components/ColumnInsightsWidget';
 import ColumnDetails from 'components/ColumnInsightsPanel/components/ColumnDetails';
-import ColumnDataDistribution from 'components/ColumnInsights/Components/ColumnDataDistribution';
+import ColumnDataDistribution from 'components/ColumnInsightsPanel/components/ColumnDataDistribution';
 import ColumnDataQuality, {
   IColumnInfo,
 } from 'components/ColumnInsightsPanel/components/ColumnDataQuality';
@@ -60,8 +60,6 @@ export default function({
   useEffect(() => {
     setColumnDetail(columnData);
   }, [columnData]);
-
-  console.log(columnData, 'columnData');
 
   const closeClickHandler = () => {
     onClose();

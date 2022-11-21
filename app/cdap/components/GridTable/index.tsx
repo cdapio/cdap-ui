@@ -17,7 +17,6 @@
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
-import ColumnInsights from 'components/ColumnInsights';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
@@ -396,8 +395,6 @@ export default function GridTable() {
     }
     setLoading(false);
   }, [rowsDataList]);
-
-  console.log(insightDrawer, 'insightDrawer');
 
   return (
     <Box data-testid="grid-table-container">

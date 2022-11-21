@@ -15,7 +15,7 @@
  */
 
 import { Box } from '@material-ui/core';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel/';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
 import T from 'i18n-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';

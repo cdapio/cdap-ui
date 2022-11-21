@@ -16,7 +16,7 @@
 
 import { Box } from '@material-ui/core';
 import blue from '@material-ui/core/colors/blue';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel/index';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
 import T from 'i18n-react';
 import React from 'react';
 import BarChart from 'react-bar-chart';

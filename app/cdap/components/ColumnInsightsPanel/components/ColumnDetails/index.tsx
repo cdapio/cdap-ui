@@ -17,9 +17,9 @@
 import { Box, IconButton } from '@material-ui/core';
 import { grey, red } from '@material-ui/core/colors';
 import EditIcon from '@material-ui/icons/Edit';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
-import InputSelect from 'components/ColumnInsights/Components/InputSelect';
-import { DATATYPE_OPTIONS } from 'components/ColumnInsights/options';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
+import InputSelect from 'components/ColumnInsightsPanel/components/InputSelect';
+import { DATATYPE_OPTIONS } from 'components/ColumnInsightsPanel/components/ColumnInsightsWidget/options';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
