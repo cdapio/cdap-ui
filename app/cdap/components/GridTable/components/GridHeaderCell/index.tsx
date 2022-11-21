@@ -33,7 +33,9 @@ const TableHeaderCell = styled(TableCell)`
   padding: 0px;
   width: auto;
   font-size: 14px;
-  border: 1px solid ${grey[300]};
+  border-right: 1px solid ${grey[300]};
+  border-top: 1px solid #3994ff;
+  border-bottom: 1px solid ${grey[300]};
   cursor: pointer;
 `;
 

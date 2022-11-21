@@ -2,12 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
-import ColumnInsightsInlayWidget from 'components/ColumnInsightsInlayWidget';
-import ColumnDetails from 'components/ColumnInsightsInlayWidget/Components/ColumnDetails';
+import ColumnInsightsInlayWidget from 'components/ColumnInsightsWidget';
+import ColumnDetails from 'components/ColumnInsightsWidget/Components/ColumnDetails';
 import ColumnDataDistribution from 'components/ColumnInsights/Components/ColumnDataDistribution';
 import ColumnDataQuality, {
   IColumnInfo,
-} from 'components/ColumnInsightsInlayWidget/Components/ColumnDataQuality';
+} from 'components/ColumnInsightsWidget/Components/ColumnDataQuality';
 
 interface IColumnInsightsProps {
   columnData: IColumnData;
@@ -42,7 +42,8 @@ interface IDataQuality {
 }
 
 const ColumnInsightsContainer = styled(Box)`
-  padding-right: 10px;
+  padding-right: 24px;
+  padding-left: 30px !important;
 `;
 
 const PREFIX = 'features.NewWranglerUI.ColumnInsights';
@@ -56,9 +57,17 @@ export default function({
 }: IColumnInsightsProps) {
   const [columnDetail, setColumnDetail] = useState(columnData);
 
+  useEffect(() => {
+    setColumnDetail(columnData);
+  }, [columnData]);
+
+  const closeClickHandler = () => {
+    onClose();
+  };
+
   return (
     <Fragment>
-      <ColumnInsightsInlayWidget>
+      <ColumnInsightsInlayWidget closeClickHandler={closeClickHandler}>
         <ColumnInsightsContainer>
           <ColumnDetails
             columnName={columnDetail?.columnName}

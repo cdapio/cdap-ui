@@ -1,15 +1,17 @@
-import React, { Fragment, useEffect, useState, IconButton } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
-import DrawerWidgetHeading from 'components/ColumnInsightsInlayWidget/DrawerWidgetHeading';
+import { IconButton } from '@material-ui/core';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import DrawerWidgetHeading from 'components/ColumnInsightsWidget/DrawerWidgetHeading';
 
 const PREFIX = 'features.NewWranglerUI.ColumnInsights';
 
 const DrawerContainerStyle = styled(Box)`
-  width: 389px;
+  width: 471px;
   border-top: 1px solid #3994ff;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 130px);
   border-right: 1px solid #e0e0e0;
 `;
 
@@ -32,7 +34,13 @@ const HeaderRightIconWrapper = styled(Box)`
   padding-right: 24px;
 `;
 
-export default function({ children }) {
+const CloseButtonStyle = styled(IconButton)`
+cursor: 'pointer'
+display: 'flex',
+justifyContent: 'flex-end !important',
+`;
+
+export default function({ children, closeClickHandler }) {
   return (
     <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>
@@ -42,14 +50,13 @@ export default function({ children }) {
           />
         </HeaderTextWithBackIcon>
         <HeaderRightIconWrapper>
-          <IconButton
+          <CloseButtonStyle
             data-testid="close-icon"
             aria-label="close-icon"
-            className={classes.closeButtonStyle}
             onClick={closeClickHandler}
           >
             <CloseRoundedIcon color="action" fontSize="large" />
-          </IconButton>
+          </CloseButtonStyle>
         </HeaderRightIconWrapper>
       </HeaderStyle>
       <Fragment>{children}</Fragment>

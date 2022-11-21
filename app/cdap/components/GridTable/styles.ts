@@ -34,10 +34,10 @@ export const useStyles = makeStyles({
     fontFamily: 'Roboto',
   },
   columnViewDrawer: {
-    maxHeight: 'calc(100vh - 190px)',
+    maxHeight: 'calc(100vh - 149px)',
   },
   gridTableWrapper: {
-    maxHeight: 'calc(100vh - 149px)',
+    maxHeight: 'calc(100vh - 130px)',
     overflowY: 'auto',
   },
 });

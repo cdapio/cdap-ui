@@ -18,6 +18,18 @@ import { Box, Card, TableCell, Typography } from '@material-ui/core';
 import { MISSING_NULL } from 'components/GridTable/constants';
 import React from 'react';
 import { useGridKPICellStyles } from './styles';
+import styled from 'styled-components';
+import { grey } from '@material-ui/core/colors';
+
+const TableHeaderCell = styled(TableCell)`
+  padding: 0px;
+  width: auto;
+  font-size: 14px;
+  border-right: 1px solid ${grey[300]};
+  border-top: 1px solid ${grey[300]};
+  border-bottom: 1px solid ${grey[300]};
+  cursor: pointer;
+`;
 
 export default function GridKPICell({ metricData }) {
   const classes = useGridKPICellStyles();
@@ -25,7 +37,7 @@ export default function GridKPICell({ metricData }) {
   const metricValue = metricData.values;
 
   return (
-    <TableCell className={classes.tableHeaderCell}>
+    <TableHeaderCell>
       <Card className={classes.root} variant="outlined">
         {metricValue &&
           Array.isArray(metricValue) &&
@@ -46,6 +58,6 @@ export default function GridKPICell({ metricData }) {
             </Box>
           ))}
       </Card>
-    </TableCell>
+    </TableHeaderCell>
   );
 }

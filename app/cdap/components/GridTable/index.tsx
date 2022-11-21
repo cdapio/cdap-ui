@@ -51,7 +51,7 @@ import {
   convertNonNullPercentForColumnSelected,
   getColumnNames,
 } from 'components/GridTable/utils';
-import ColumnInsightsInlay from 'components/ColumnInsightsInlay';
+import ColumnInsightsInlayPanel from 'components/ColumnInsightsPanel';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -403,7 +403,7 @@ export default function GridTable() {
       <Box className={classes.columnViewContainer}>
         {insightDrawer.open && (
           <Box className={classes.columnViewDrawer}>
-            <ColumnInsightsInlay
+            <ColumnInsightsInlayPanel
               columnType={columnType}
               columnData={insightDrawer}
               renameColumnNameHandler={renameColumnNameHandler}
@@ -428,31 +428,6 @@ export default function GridTable() {
                 setColumnSelected('');
               }}
             />
-            {/* <ColumnInsights
-              columnType={columnType}
-              columnData={insightDrawer}
-              renameColumnNameHandler={renameColumnNameHandler}
-              dataTypeHandler={dataTypeHandler}
-              onClose={() => {
-                setInsightDrawer({
-                  open: false,
-                  columnName: '',
-                  distinctValues: 0,
-                  characterCount: { min: 0, max: 0 },
-                  dataQuality: {
-                    nullValueCount: 0,
-                    nullValuePercentage: 0,
-                    emptyValueCount: 0,
-                    emptyValuePercentage: 0,
-                  },
-                  dataQualityBar: {},
-                  dataTypeString: '',
-                  dataDistributionGraphData: [],
-                  columnNamesList: [],
-                });
-                setColumnSelected('');
-              }}
-            /> */}
           </Box>
         )}
         {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
