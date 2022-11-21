@@ -20,7 +20,6 @@ import ColumnViewWidget from 'components/ColumnViewWidget';
 import T from 'i18n-react';
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
-
 import { IHeaderNamesList } from 'components/GridTable/types';
 
 export const HEADING_TEXT = T.translate('features.WranglerNewUI.ColumnViewPanel.columnView');

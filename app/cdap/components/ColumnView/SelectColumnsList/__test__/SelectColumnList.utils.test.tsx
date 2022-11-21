@@ -16,7 +16,9 @@
 
 import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList';
 import {
-  mockColumnData, mockDataQuality, mockResult
+  mockColumnData,
+  mockDataQuality,
+  mockResult,
 } from 'components/ColumnView/__test__/ColumnView.test';
 
 describe('It Should test the utils function prepareDataQualtiy', () => {
