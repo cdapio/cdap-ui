@@ -15,10 +15,20 @@
  */
 
 import { Box } from '@material-ui/core';
-import { IDataQualityCircularProgressBarProps } from 'components/ColumnView/SelectColumnsList/DataQualityCircularProgressBar/types';
 import React from 'react';
 import SemiCircleProgressBar from 'react-progressbar-semicircle';
 import styled from 'styled-components';
+import { IDataQualityRecord } from 'components/ColumnView/SelectColumnsList/index';
+
+export interface IDataQualityCircularProgressBarProps {
+  dataQualityPercentValue: number;
+  wrapperComponentData: IDataQualityWrapperComponentData;
+}
+
+export interface IDataQualityWrapperComponentData {
+  dataQualityList: IDataQualityRecord[];
+  filteredColumnIndex: number;
+}
 
 const SemiCircularProgressBarWrapper = styled(Box)`
   width: 75px;
