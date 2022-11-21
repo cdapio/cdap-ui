@@ -1,20 +1,20 @@
 Arguments: 
-  /usr/local/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js add react-progressbar-semicircle
+  /Users/adityaarakal/.nvm/versions/node/v16.15.1/bin/node /opt/homebrew/bin/yarn add react-progressbar-semicircle
 
 PATH: 
-  /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/opt/homebrew/sbin
+  /Users/adityaarakal/.nvm/versions/node/v16.15.1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/adityaarakal/.nvm/versions/node/v16.15.1/bin:/opt/homebrew/bin:/opt/homebrew/sbin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  16.17.0
+  16.15.1
 
 Platform: 
   darwin arm64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/LakshmiBhavani/cdap-ui-forked/node_modules/@jest/transform/node_modules/@babel/core/node_modules/source-map/package.json'
+  Error: EACCES: permission denied, unlink '/Users/adityaarakal/Projects/googlewrangler/original-repo/cdap-ui-forked/node_modules/@jest/transform/node_modules/@babel/core/node_modules/source-map/LICENSE'
 
 npm manifest: 
   {

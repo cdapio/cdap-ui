@@ -14,12 +14,12 @@
  * the License.
  */
 
-import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
+import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList';
 import {
   mockColumnData,
   mockDataQuality,
   mockResult,
-} from 'components/ColumnView/mock/mockDataForColumnView';
+} from 'components/ColumnView/__test__/ColumnView.test';
 
 describe('It Should test the utils function prepareDataQualtiy', () => {
   it('should test whether the utils function return the expected Value', () => {

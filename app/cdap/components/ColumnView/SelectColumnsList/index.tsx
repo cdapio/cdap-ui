@@ -15,18 +15,37 @@
  */
 
 import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { COLUMNS, NULL_VALUES } from 'components/ColumnView/constants';
 import SelectColumnsTableRow from 'components/ColumnView/SelectColumnsList/SelectColumnsTableRow';
-import {
-  IDataQualityRecord,
-  ISelectColumnsListProps,
-} from 'components/ColumnView/SelectColumnsList/types';
-import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
-import { IHeaderNamesList } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+const COLUMNS = T.translate('features.WranglerNewUI.ColumnViewPanel.columns');
+const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');
+
+import { IHeaderNamesList } from 'components/GridTable/types';
+
+export interface ISelectColumnsListProps {
+  columnData: IHeaderNamesList[];
+  dataQuality: IDataQuality;
+  searchTerm: string;
+}
+
+export interface IDataQuality {
+  [key: string]: unknown;
+}
+
+export interface IDataQualityRecord {
+  label: string;
+  value: number;
+}
+
+export interface ISelectColumnsTableRowProps {
+  eachFilteredColumn: IHeaderNamesList;
+  filteredColumnIndex: number;
+  dataQualityList: IDataQualityRecord[];
+}
 
 const CustomTableContainer = styled(TableContainer)`
   &.MuiTableContainer-root {
@@ -70,6 +89,38 @@ const SelectColumnsListSection = styled.section`
   height: calc(100vh - 211px);
   overflow: scroll;
 `;
+
+export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeaderNamesList[]) => {
+  const dataQualityToArray = statistics && Object.entries(statistics);
+  const dataQuality = [];
+  columnList?.map((eachColumnName: IHeaderNamesList) => {
+    dataQualityToArray?.forEach(([key, value]) => {
+      if (eachColumnName.name == key) {
+        const generalValues = Object.entries(value);
+        Array.isArray(generalValues) &&
+          generalValues.length !== 0 &&
+          generalValues.forEach(([vKey, vValue]) => {
+            if (vKey == 'general') {
+              if (vValue.null) {
+                const nullCount = vValue.null || 0;
+                const totalNullEmpty = nullCount;
+                dataQuality.push({
+                  label: key,
+                  value: totalNullEmpty,
+                });
+              } else {
+                dataQuality.push({
+                  label: key,
+                  value: 0,
+                });
+              }
+            }
+          });
+      }
+    });
+  });
+  return dataQuality;
+};
 
 const getTableBody = (
   filteredColumns: IHeaderNamesList[],

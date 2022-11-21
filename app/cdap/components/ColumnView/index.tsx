@@ -15,12 +15,24 @@
  */
 
 import { Box } from '@material-ui/core';
-import { HEADING_TEXT } from 'components/ColumnView/constants';
 import SelectColumnsList from 'components/ColumnView/SelectColumnsList';
-import { IColumnViewProps } from 'components/ColumnView/types';
 import ColumnViewWidget from 'components/ColumnViewWidget';
+import T from 'i18n-react';
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
+import { IHeaderNamesList } from 'components/GridTable/types';
+
+export const HEADING_TEXT = T.translate('features.WranglerNewUI.ColumnViewPanel.columnView');
+
+export interface IColumnViewProps {
+  columnData: IHeaderNamesList[];
+  closeClickHandler: () => void;
+  dataQuality: IDataQuality;
+}
+
+export interface IDataQuality {
+  [key: string]: unknown;
+}
 
 const SelectColumnListWrapper = styled(Box)`
   display: flex;

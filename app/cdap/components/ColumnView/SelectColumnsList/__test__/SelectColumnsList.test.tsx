@@ -15,10 +15,10 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import SelectColumnsList from 'components/ColumnView/SelectColumnsList';
+import { mockColumnData, mockDataQuality } from 'components/ColumnView/__test__/ColumnView.test';
 import T from 'i18n-react';
-import { mockColumnData, mockDataQuality } from 'components/ColumnView/mock/mockDataForColumnView';
+import React from 'react';
 
 describe('It should test SelectColumnList Component', () => {
   it('should render SelectColumnList Component and test column header text for null values', () => {
