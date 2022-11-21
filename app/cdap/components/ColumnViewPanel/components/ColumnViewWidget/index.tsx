@@ -97,7 +97,7 @@ const SearchIconStyle = styled(Typography)`
   cursor: pointer;
 `;
 
-const PointerStyle = styled(CloseRoundedIcon)`
+const CloseIconStyle = styled(CloseRoundedIcon)`
   cursor: pointer;
 `;
 
@@ -148,7 +148,7 @@ export default function({
           </SearchFormControl>
 
           <DividerLineStyles />
-          <PointerStyle
+          <CloseIconStyle
             color="action"
             onClick={closeClickHandler}
             data-testid="column-view-panel-close"
