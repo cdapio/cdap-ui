@@ -33,6 +33,7 @@ export interface IColumnViewWidget {
 const CommonInputStyle = styled(Input)`
   width: 140px !important;
   border: none !important;
+  padding-right: 5px !important;
 `;
 
 const DividerLineStyles = styled.div`
