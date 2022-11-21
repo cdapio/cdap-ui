@@ -15,7 +15,7 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import ColumnView from 'components/ColumnView';
+import ColumnView from 'components/ColumnViewPanel/index';
 import React from 'react';
 
 export const mockColumnData = [

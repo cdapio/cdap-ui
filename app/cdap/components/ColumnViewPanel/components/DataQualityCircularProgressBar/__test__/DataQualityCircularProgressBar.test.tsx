@@ -15,7 +15,7 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import DataQualityCircularProgressBar from 'components/ColumnView/components/DataQualityCircularProgressBar/index';
+import DataQualityCircularProgressBar from 'components/ColumnViewPanel/components/DataQualityCircularProgressBar/index';
 import React from 'react';
 
 describe('It Should test DataQualityCircularProgressBar Component', () => {
