@@ -17,7 +17,7 @@
 import { Box, Typography, Input } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React, { Fragment, useRef, useState } from 'react';
-import DrawerWidgetHeading from 'components/ColumnView/components/ColumnViewWidget/DrawerWidgetHeading';
+import DrawerWidgetHeading from 'components/ColumnViewPanel/components/ColumnViewWidget/DrawerWidgetHeading';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
 import styled from 'styled-components';
 import { ReactNode } from 'react';
@@ -27,6 +27,7 @@ export interface IColumnViewWidget {
   closeClickHandler: () => void;
   searchedTermHandler: (searchedTerm: string) => void;
   children: JSX.Element;
+  searchValue: string;
 }
 
 const CommonInputStyle = styled(Input)`
@@ -109,6 +110,7 @@ export default function({
   closeClickHandler,
   searchedTermHandler,
   children,
+  searchValue,
 }: IColumnViewWidget) {
   const [focus, setFocus] = useState<boolean>(false);
   const ref = useRef(null);
@@ -137,6 +139,8 @@ export default function({
                 'data-testid': 'search-term-input',
               }}
               disableUnderline={true}
+              defaultValue={searchValue}
+              autoFocus={focus}
             />
             <SearchIconStyle component="span" onClick={handleFocus} data-testid="search-icon">
               <SearchIcon />

@@ -15,8 +15,8 @@
  */
 
 import { Box } from '@material-ui/core';
-import SelectColumnsList from 'components/ColumnView/components/SelectColumnsList';
-import ColumnViewWidget from 'components/ColumnView/components/ColumnViewWidget';
+import SelectColumnsList from 'components/ColumnViewPanel/components/SelectColumnsList';
+import ColumnViewWidget from 'components/ColumnViewPanel/components/ColumnViewWidget';
 import T from 'i18n-react';
 import React, { Fragment, useState } from 'react';
 import styled from 'styled-components';
@@ -49,6 +49,7 @@ export default function({ columnData, dataQuality, closeClickHandler }: IColumnV
         headingText={HEADING_TEXT}
         closeClickHandler={closeClickHandler}
         searchedTermHandler={(searchValue: string) => setSearchValue(searchValue)}
+        searchValue={searchValue}
       >
         <SelectColumnListWrapper data-testid="select-column-list-parent">
           <SelectColumnsList

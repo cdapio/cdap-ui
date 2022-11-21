@@ -21,7 +21,7 @@ import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
-import ColumnView from 'components/ColumnView';
+import ColumnViewPanel from 'components/ColumnViewPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
@@ -41,7 +41,7 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import FooterPanel from 'components/FooterPanel';
-import { IDataQuality } from 'components/ColumnView/types';
+import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList';
 import { IFooterMetaInfo } from 'components/GridTable/types';
 
 export default function GridTable() {
@@ -257,7 +257,7 @@ export default function GridTable() {
       <Box className={classes.columnViewContainer}>
         {openColumnView && (
           <Box className={classes.columnViewDrawer}>
-            <ColumnView
+            <ColumnViewPanel
               columnData={headersNamesList}
               dataQuality={dataQuality}
               closeClickHandler={() => setOpenColumnView(false)}

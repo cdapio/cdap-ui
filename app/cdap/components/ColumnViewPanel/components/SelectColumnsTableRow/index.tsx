@@ -15,7 +15,7 @@
  */
 
 import { Box, TableBody, TableCell, TableRow } from '@material-ui/core';
-import DataQualityCircularProgressBar from 'components/ColumnView/components/DataQualityCircularProgressBar';
+import DataQualityCircularProgressBar from 'components/ColumnViewPanel/components/DataQualityCircularProgressBar';
 import React from 'react';
 import styled from 'styled-components';
 import { ISelectColumnsTableRowProps } from '../SelectColumnsList';

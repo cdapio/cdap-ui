@@ -15,7 +15,7 @@
  */
 
 import { Box, Table, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import SelectColumnsTableRow from 'components/ColumnView/components/SelectColumnsTableRow';
+import SelectColumnsTableRow from 'components/ColumnViewPanel/components/SelectColumnsTableRow';
 import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
@@ -177,7 +177,7 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
             <TableHead>
               <CustomTableHeaderRow>
                 <CustomTableColumnHeaderCell data-testid="column-name-header">
-                  {`${COLUMNS} (${columnData?.length})`}
+                  {`${COLUMNS} (${filteredColumns?.length})`}
                 </CustomTableColumnHeaderCell>
                 <CustomTableNullValuesHeaderCell data-testid="null-values-header">
                   {NULL_VALUES}
