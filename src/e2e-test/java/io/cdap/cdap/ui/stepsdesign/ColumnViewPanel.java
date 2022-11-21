@@ -24,6 +24,9 @@ import io.cucumber.java.en.Then;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.cdap.ui.utils.Helper;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ColumnViewPanel {
     @Given("Navigate to Home Page")
@@ -56,7 +59,7 @@ public class ColumnViewPanel {
                 }
             }
             Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId
-                    ("footer-panel-column-view-panel-button")));
+                    ("footer-panel-column-view-panel-tab")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
@@ -66,7 +69,7 @@ public class ColumnViewPanel {
     public void clickCloumnButton() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-button"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
             Assert.assertTrue(ElementHelper.isElementDisplayed
                     (Helper.locateElementByTestId("column-view-panel-parent")));
         } catch (Exception e) {
@@ -78,7 +81,7 @@ public class ColumnViewPanel {
     public void verifyColumnsName() {
         try {
             WaitHelper.waitForPageToLoad();
-            String text = Helper.locateElementByTestId("grid-header-cell-container").getText();
+            String text = Helper.locateElementByTestId("grid-header-cell-0").getText();
             String paneltext = Helper.locateElementByTestId("each-column-label-type-0").getText();
             if (text.equals(paneltext)) {
                 System.out.println("The column name is present in the panel");
@@ -92,6 +95,8 @@ public class ColumnViewPanel {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("search-icon"));
+            WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 10);
+                    ele.until(ExpectedConditions.elementToBeClickable(Helper.locateElementByTestId("search-term-input"))).click();
             Helper.locateElementByTestId("search-term-input").sendKeys(columnName);
             Assert.assertTrue(ElementHelper.isElementDisplayed
                     (Helper.locateElementByTestId("each-column-label-type-0")));
@@ -123,7 +128,7 @@ public class ColumnViewPanel {
     @Then("again click on columnview button and verify if the panel is closed")
     public void verifyPanelClosed() {
         try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-button"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
             Assert.assertFalse((Helper.isElementExists("column-view-panel-parent")));
         } catch (Exception e) {
             System.err.println("error:" + e);

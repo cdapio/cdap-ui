@@ -47,7 +47,6 @@ export default function({
   wrapperComponentData,
   dataQualityPercentValue,
 }: IDataQualityCircularProgressBarProps) {
-  console.log(wrapperComponentData, '((()))***&&&&^^^%%%$$##');
   const { dataQualityList, filteredColumnIndex } = wrapperComponentData;
   const Wrapper = getProgressBarWrapperComponent(dataQualityList, filteredColumnIndex);
 

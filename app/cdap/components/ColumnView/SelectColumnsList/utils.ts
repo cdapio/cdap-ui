@@ -19,32 +19,31 @@ import { IHeaderNamesList } from 'components/GridTable/types';
 export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeaderNamesList[]) => {
   const dataQualityToArray = statistics && Object.entries(statistics);
   const dataQuality = [];
-  columnList.length !== 0 &&
-    columnList.map((eachColumnName: IHeaderNamesList) => {
-      dataQualityToArray?.forEach(([key, value]) => {
-        if (eachColumnName.name == key) {
-          const generalValues = Object.entries(value);
-          Array.isArray(generalValues) &&
-            generalValues.length !== 0 &&
-            generalValues.forEach(([vKey, vValue]) => {
-              if (vKey == 'general') {
-                if (vValue.null) {
-                  const nullCount = vValue.null || 0;
-                  const totalNullEmpty = nullCount;
-                  dataQuality.push({
-                    label: key,
-                    value: totalNullEmpty,
-                  });
-                } else {
-                  dataQuality.push({
-                    label: key,
-                    value: 0,
-                  });
-                }
+  columnList?.map((eachColumnName: IHeaderNamesList) => {
+    dataQualityToArray?.forEach(([key, value]) => {
+      if (eachColumnName.name == key) {
+        const generalValues = Object.entries(value);
+        Array.isArray(generalValues) &&
+          generalValues.length !== 0 &&
+          generalValues.forEach(([vKey, vValue]) => {
+            if (vKey == 'general') {
+              if (vValue.null) {
+                const nullCount = vValue.null || 0;
+                const totalNullEmpty = nullCount;
+                dataQuality.push({
+                  label: key,
+                  value: totalNullEmpty,
+                });
+              } else {
+                dataQuality.push({
+                  label: key,
+                  value: 0,
+                });
               }
-            });
-        }
-      });
+            }
+          });
+      }
     });
+  });
   return dataQuality;
 };

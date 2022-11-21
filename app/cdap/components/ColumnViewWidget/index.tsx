@@ -41,12 +41,12 @@ const DrawerContainerStyle = styled(Box)`
   border-right: 1px solid #e0e0e0;
 `;
 
-const focused = styled(CommonInputStyle)`
+const FocusedInput = styled(CommonInputStyle)`
   border-bottom: 1px solid grey !important;
   outline: none !important;
 `;
 
-const notFocused = styled(CommonInputStyle)`
+const NormalInput = styled(CommonInputStyle)`
   border: none !important;
   border-bottom: 1px solid transparent !important;
   & .MuiInput-underline::before {
@@ -94,7 +94,7 @@ const PointerStyle = styled(CloseRoundedIcon)`
 `;
 
 const getInputStyle = (isFocused) => {
-  return isFocused ? focused : notFocused;
+  return isFocused ? FocusedInput : NormalInput;
 };
 
 export default function({
@@ -103,14 +103,14 @@ export default function({
   searchedTermHandler,
   children,
 }: IColumnViewWidget) {
-  const [focused, setFocused] = useState<boolean>(false);
+  const [focus, setFocus] = useState<boolean>(false);
   const ref = useRef(null);
 
-  const InputStyleWrapper = getInputStyle(focused);
+  const InputStyleWrapper = getInputStyle(focus);
 
   const handleFocus = () => {
     ref?.current.focus();
-    setFocused(true);
+    setFocus(true);
   };
 
   return (
@@ -124,9 +124,11 @@ export default function({
             <InputStyleWrapper
               onChange={(e) => searchedTermHandler(e.target.value)}
               inputRef={ref}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              data-testid="search-term-input"
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
+              inputProps={{
+                'data-testid': 'search-term-input',
+              }}
               disableUnderline={true}
             />
             <SearchIconStyle component="span" onClick={handleFocus} data-testid="search-icon">

@@ -20,14 +20,14 @@ import { ISelectColumnsTableRowProps } from 'components/ColumnView/SelectColumns
 import React from 'react';
 import styled from 'styled-components';
 
-const CustomTableBodyCell = styled(TableCell)`
+const CommonCustomTableBodyCell = styled(TableCell)`
   padding-top: 10px;
   padding-bottom: 10px;
   color: #5f6368;
   font-size: 14px;
 `;
 
-const CustomTableBodyLeftCell = styled(CustomTableBodyCell)`
+const CustomTableBodyColumnTypeCell = styled(CommonCustomTableBodyCell)`
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -37,7 +37,7 @@ const CustomTableBodyLeftCell = styled(CustomTableBodyCell)`
   }
 `;
 
-const CustomTableBodyNullValuesCell = styled(CustomTableBodyCell)`
+const CustomTableBodyNullValuesCell = styled(CommonCustomTableBodyCell)`
   width: 134px;
   padding-left: 0;
 `;
@@ -50,14 +50,16 @@ export default function({
   return (
     <TableBody>
       <TableRow key={filteredColumnIndex}>
-        <CustomTableBodyLeftCell data-testid={`each-column-label-type-${filteredColumnIndex}`}>
+        <CustomTableBodyColumnTypeCell
+          data-testid={`each-column-label-type-${filteredColumnIndex}`}
+        >
           <Box>
             {eachFilteredColumn?.label}
 
             <br />
             {eachFilteredColumn?.type}
           </Box>
-        </CustomTableBodyLeftCell>
+        </CustomTableBodyColumnTypeCell>
         <CustomTableBodyNullValuesCell>
           <DataQualityCircularProgressBar
             wrapperComponentData={{

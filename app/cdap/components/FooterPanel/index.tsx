@@ -37,6 +37,10 @@ interface IFooterPanelProps {
   setOpenColumnViewHandler: () => void;
 }
 
+export interface IRecipeStepsTabProps {
+  recipeStepsCount: number;
+}
+
 const DirectivesBox = styled(Box)`
   text-align: center;
   gap: 8px;
@@ -107,9 +111,35 @@ const LargeBox = styled(Box)`
   padding: 0px 32px;
 `;
 
-export interface IRecipeStepsTabProps {
-  recipeStepsCount: number;
-}
+const CommonColumnViewBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 8px 32px;
+  gap: 8px;
+  width: 88px;
+  height: 40px;
+  border-left: 1px solid #3994ff66;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
+  border-right: 1px solid #3994ff66;
+  cursor: pointer;
+`;
+
+const DisabledColumnViewBox = styled(CommonColumnViewBox)`
+  pointer-events: none;
+`;
+
+const NormalColumnViewBox = styled(CommonColumnViewBox)`
+  pointer-events: auto;
+`;
+
+const getColumnViewBoxStyle = (isDisabled) => {
+  return isDisabled ? DisabledColumnViewBox : NormalColumnViewBox;
+};
 
 export default function({
   recipeStepsCount,
@@ -117,36 +147,19 @@ export default function({
   setOpenColumnViewHandler,
 }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
-
-  const ColumnViewBox = styled(Box)`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 8px 32px;
-    gap: 8px;
-    width: 88px;
-    height: 40px;
-    border-left: 1px solid #3994ff66;
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-    background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-    border-right: 1px solid #3994ff66;
-    cursor: pointer;
-    pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  `;
+  const isDisabled = gridMetaInfo?.rowCount === 0 ? true : false;
+  const ColumnViewBoxStyleWrapper = getColumnViewBoxStyle(isDisabled);
 
   return (
     <TabsWrapper data-testid="footer-panel-wrapper">
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
-        <ColumnViewBox
+        <ColumnViewBoxStyleWrapper
           data-testid="footer-panel-column-view-panel-tab"
           onClick={setOpenColumnViewHandler}
           disabled={gridMetaInfo?.rowCount === 0 ? true : false}
         >
           {ColumnIcon}
-        </ColumnViewBox>
+        </ColumnViewBoxStyleWrapper>
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
         <Label data-testid="footerpanel-simple-message">
