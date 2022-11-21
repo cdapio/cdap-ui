@@ -3461,4 +3461,5 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+        dataConnections: Data Connections
 ...

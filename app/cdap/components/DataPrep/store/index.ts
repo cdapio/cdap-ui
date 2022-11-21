@@ -17,6 +17,7 @@
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { combineReducers, createStore } from 'redux';
 import { composeEnhancers } from 'services/helpers';
+import { IConnectorTypesWithSVG } from 'components/WidgetSVG/types';
 
 export interface IDataPrepAction {
   type: string;
@@ -88,7 +89,7 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
-  connectorsWithIcons?: any;
+  connectorsWithIcons?: IConnectorTypesWithSVG[];
 }
 
 const defaultInitialState: IDataPrepState = {

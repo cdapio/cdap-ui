@@ -15,21 +15,27 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import BreadCumb from '../index';
+import { fireEvent, render, screen } from '@testing-library/react';
+import BreadCumb from 'components/ConnectionList/Components/SubHeader/index';
+import { Router, Route, Switch } from 'react-router';
 import history from 'services/history';
-import { Router, Route } from 'react-router';
+import T from 'i18n-react';
 
-describe('renders BreadCumb Component', () => {
+test('renders BreadCumb Component', () => {
   render(
     <Router history={history}>
-      <Route>
-        <BreadCumb />
-      </Route>
+      <Switch>
+        <Route>
+          <BreadCumb selectedConnection={'hello'} />  ̰
+        </Route>
+      </Switch>
     </Router>
   );
-  it('should render the Breadcrumb component', () => {
-    const ele = screen.getByTestId(/bread-comb-container-parent/i);
-    expect(ele).toBeInTheDocument();
-  });
+  const ele = screen.getByTestId(/breadcrumb-container-parent/i);
+  expect(ele).toBeInTheDocument();
+
+  const clickEle = screen.getByTestId(/sub-header-handle-add-connection/i);
+  expect(clickEle).toHaveTextContent(
+    `${T.translate('features.WranglerNewUI.AddConnections.referenceLabel')}`
+  );
 });

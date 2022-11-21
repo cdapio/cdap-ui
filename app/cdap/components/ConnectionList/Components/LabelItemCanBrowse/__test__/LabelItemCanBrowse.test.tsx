@@ -14,22 +14,24 @@
  * the License.
  */
 
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import WranglerHomeNew from 'components/WrangleHome/index';
-import { Route, Router, Switch } from 'react-router';
-import history from 'services/history';
+import LabelItemCanBrowse from 'components/ConnectionList/Components/LabelItemCanBrowse/index';
 
-test('renders Wrangler-Home-New component', () => {
-  render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <WranglerHomeNew />
-        </Route>
-      </Switch>
-    </Router>
-  );
-  const ele = screen.getByTestId(/wrangler-home-new-parent/i);
-  expect(ele).toBeInTheDocument();
+describe('Test TabLabelCanBrowse Component', () => {
+  it('Should render TabLabelCanBrowse Component', () => {
+    render(
+      <LabelItemCanBrowse
+        icon={undefined}
+        myLabelRef={jest.fn()}
+        label={''}
+        count={0}
+        labelContainerTestId="test"
+        labelTestId="label-test"
+      />
+    );
+
+    const labelContainerElement = screen.getAllByTestId(/test/i);
+    expect(labelContainerElement[0]).toBeInTheDocument();
+  });
 });

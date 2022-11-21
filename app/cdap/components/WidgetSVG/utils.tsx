@@ -27,7 +27,7 @@ import {
   IConnectorTypes,
   IConnectorTypesWithSVG,
 } from 'components/WidgetSVG/types';
-import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
+import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
 import React from 'react';
 
 /**
@@ -111,7 +111,7 @@ export const getWidgetData = async () => {
   // appennd this as connector type for uploaded datasets won't be available from API.
   connectionWithConnectorType.push({
     name: 'Imported Dataset',
-    SVG: importDatasetIcon,
+    SVG: ImportDatasetIcon,
   });
 
   DataPrepStore.dispatch({

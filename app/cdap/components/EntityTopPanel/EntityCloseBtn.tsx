@@ -48,7 +48,7 @@ export function EntityCloseBtn({
         type={HeadingTypes.h5}
         className={classes.closeBtn}
         label={
-          <IconButton onClick={closeBtnAnchorLink}>
+          <IconButton onClick={closeBtnAnchorLink} data-testid="close-icon">
             <CloseIcon />
           </IconButton>
         }

@@ -16,14 +16,29 @@
 
 import { Box, Tooltip, TooltipProps } from '@material-ui/core';
 import * as React from 'react';
-import { useStyles } from './styles';
+import styled from 'styled-components';
+import { makeStyles } from '@material-ui/styles';
+
+export const useStyles = makeStyles((theme) => ({
+  arrow: {
+    color: '#000000',
+  },
+  tooltip: {
+    backgroundColor: '#000000',
+    fontSize: '16px',
+  },
+}));
+
+const TooltipContainer = styled(Box)`
+  width: 100%;
+`;
 
 export default function CustomTooltip(props: TooltipProps) {
   const classes = useStyles();
 
   return (
-    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+    <TooltipContainer data-testid="tooltip-parent">
       <Tooltip arrow classes={classes} {...props} />
-    </Box>
+    </TooltipContainer>
   );
 }
