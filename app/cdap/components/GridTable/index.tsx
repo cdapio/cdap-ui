@@ -397,6 +397,8 @@ export default function GridTable() {
     setLoading(false);
   }, [rowsDataList]);
 
+  console.log(insightDrawer, 'insightDrawer');
+
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />

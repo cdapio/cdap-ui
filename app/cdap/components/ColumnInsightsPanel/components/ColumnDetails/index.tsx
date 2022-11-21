@@ -21,7 +21,7 @@ import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel
 import InputSelect from 'components/ColumnInsights/Components/InputSelect';
 import { DATATYPE_OPTIONS } from 'components/ColumnInsights/options';
 import T from 'i18n-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const PREFIX = 'features.NewWranglerUI.ColumnInsights';
@@ -79,11 +79,15 @@ export default function({
     DATATYPE_OPTIONS.filter((each) => each.value === columnType?.toLowerCase());
   const [dataTypeValue, setDataTypeValue] = useState<string>();
   const [canEdit, setCanEdit] = useState(false);
-  const [inputValue, setInputValue] = useState(columnName);
+  const [inputValue, setInputValue] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState({
     hasError: false,
     message: '',
   });
+
+  useEffect(() => {
+    setInputValue(columnName);
+  }, [columnName]);
 
   const displayMessage = {
     invalidMessage: `${PREFIX}.error.invalidError`,

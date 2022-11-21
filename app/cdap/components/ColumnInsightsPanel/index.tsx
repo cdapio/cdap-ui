@@ -2,12 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
-import ColumnInsightsInlayWidget from 'components/ColumnInsightsWidget';
-import ColumnDetails from 'components/ColumnInsightsWidget/Components/ColumnDetails';
+import ColumnInsightsInlayWidget from 'components/ColumnInsightsPanel/components/ColumnInsightsWidget';
+import ColumnDetails from 'components/ColumnInsightsPanel/components/ColumnDetails';
 import ColumnDataDistribution from 'components/ColumnInsights/Components/ColumnDataDistribution';
 import ColumnDataQuality, {
   IColumnInfo,
-} from 'components/ColumnInsightsWidget/Components/ColumnDataQuality';
+} from 'components/ColumnInsightsPanel/components/ColumnDataQuality';
 
 interface IColumnInsightsProps {
   columnData: IColumnData;
@@ -60,6 +60,8 @@ export default function({
   useEffect(() => {
     setColumnDetail(columnData);
   }, [columnData]);
+
+  console.log(columnData, 'columnData');
 
   const closeClickHandler = () => {
     onClose();

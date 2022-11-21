@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { UnderlineIcon } from 'components/ColumnInsightsWidget/IconStore/Underline';
-import { IDrawerWidgetHeading } from 'components/ColumnInsightsWidget/DrawerWidgetHeading/types';
+import { UnderlineIcon } from 'components/ColumnInsightsPanel/IconStore/Underline';
+import { IDrawerWidgetHeading } from 'components/ColumnInsightsPanel/components/DrawerWidgetHeading/types';
 import styled from 'styled-components';
 
 const HeadingTextIconWrapper = styled(Typography)`

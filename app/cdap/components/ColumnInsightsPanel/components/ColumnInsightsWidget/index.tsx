@@ -4,7 +4,7 @@ import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
 import { IconButton } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import DrawerWidgetHeading from 'components/ColumnInsightsWidget/DrawerWidgetHeading';
+import DrawerWidgetHeading from 'components/ColumnInsightsPanel/components/DrawerWidgetHeading';
 
 const PREFIX = 'features.NewWranglerUI.ColumnInsights';
 
