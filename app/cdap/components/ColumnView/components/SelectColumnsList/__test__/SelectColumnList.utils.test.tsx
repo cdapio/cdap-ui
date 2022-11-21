@@ -14,8 +14,15 @@
  * the License.
  */
 
-import { ReactNode } from 'react';
+import { prepareDataQualtiy } from 'components/ColumnView/components/SelectColumnsList';
+import {
+  mockColumnData,
+  mockDataQuality,
+  mockResult,
+} from 'components/ColumnView/__test__/ColumnView.test';
 
-export interface IDrawerWidgetHeading {
-  headingText: ReactNode;
-}
+describe('It Should test the utils function prepareDataQualtiy', () => {
+  it('should test whether the utils function return the expected Value', () => {
+    expect(prepareDataQualtiy(mockDataQuality, mockColumnData)).toStrictEqual(mockResult);
+  });
+});

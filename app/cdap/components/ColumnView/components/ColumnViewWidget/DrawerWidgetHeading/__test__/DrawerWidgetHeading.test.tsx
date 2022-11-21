@@ -16,7 +16,7 @@
 
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading/';
+import DrawerWidgetHeading from 'components/ColumnView/components/ColumnViewWidget/DrawerWidgetHeading';
 
 describe('It Should test DrawerWidgetHeading Component', () => {
   it('Should render DrawerWidgetheading Component and test the column view heading text', () => {
