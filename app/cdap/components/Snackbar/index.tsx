@@ -15,11 +15,22 @@
  */
 
 import { green, red } from '@material-ui/core/colors';
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
 import Transition from 'components/Snackbar/Components/Transition/index';
-import { ISnackbarProps } from 'components/Snackbar/types';
 import React from 'react';
 import styled from 'styled-components';
+
+export interface ISnackbarProps extends SnackbarProps {
+  handleClose: () => void;
+  isSuccess?: boolean;
+  snackbarAction?: string;
+}
+
+export interface ISnackbar {
+  open: boolean;
+  message?: string;
+  isSuccess?: boolean;
+}
 
 const CustomizedSnackbar = styled(Snackbar)`
   border-radius: 4px;

@@ -18,11 +18,19 @@ import { Box, Typography } from '@material-ui/core';
 import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutline';
 import CloseIcon from '@material-ui/icons/Close';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { addActionType, PREFIX } from 'components/Snackbar/Components/Transition/constants';
-import { ITransitionProps } from 'components/Snackbar/Components/Transition/types';
 import T from 'i18n-react';
 import React from 'react';
 import styled, { css } from 'styled-components';
+
+const addActionType = 'add';
+const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
+
+export interface ITransitionProps {
+  handleClose: () => void;
+  isSuccess: boolean;
+  transitionAction: string;
+  message?: React.ReactNode;
+}
 
 const IconComponent = css`
   font-size: xx-large;

@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { ISnackbar } from 'components/Snackbar/types';
 import { useEffect, useState } from 'react';
+import { ISnackbar } from 'components/Snackbar';
 
 export default function() {
   const [snackbarState, setSnackbarState] = useState<ISnackbar>({

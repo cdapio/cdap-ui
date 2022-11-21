@@ -29,8 +29,7 @@ describe('Test Transition Component', () => {
             <Transition
               handleClose={jest.fn}
               isSuccess={false}
-              transitionAction={''}
-              messageToDisplay={''}
+              transitionAction=''
             />
           </Route>
         </Switch>
@@ -48,8 +47,7 @@ describe('Test Transition Component', () => {
             <Transition
               handleClose={() => jest.fn()}
               isSuccess={true}
-              transitionAction={'add'}
-              messageToDisplay={''}
+              transitionAction='add'
             />
           </Route>
         </Switch>
