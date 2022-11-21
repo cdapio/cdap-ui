@@ -24,7 +24,6 @@ import io.cucumber.java.en.Then;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.cdap.ui.utils.Helper;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -65,7 +64,7 @@ public class ColumnViewPanel {
         }
     }
 
-    @Then("click on columnview button")
+    @Then("Click on columnview button")
     public void clickCloumnButton() {
         try {
             WaitHelper.waitForPageToLoad();
@@ -77,7 +76,7 @@ public class ColumnViewPanel {
         }
 
     }
-    @Then("verify columns name of that file displayed in panel")
+    @Then("Verify column names of that file displayed in panel")
     public void verifyColumnsName() {
         try {
             WaitHelper.waitForPageToLoad();
@@ -104,7 +103,7 @@ public class ColumnViewPanel {
             System.err.println("error:" + e);
         }
     }
-    @Then("verify if the search result is displayed as {string}")
+    @Then("Verify if the search result is displayed as {string}")
     public void verifySearchResult(String columnName) {
       try {
           String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
@@ -125,7 +124,7 @@ public class ColumnViewPanel {
             System.err.println("error:" + e);
         }
     }
-    @Then("again click on columnview button and verify if the panel is closed")
+    @Then("Again click on columnview button and verify if the panel is closed")
     public void verifyPanelClosed() {
         try {
             ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));

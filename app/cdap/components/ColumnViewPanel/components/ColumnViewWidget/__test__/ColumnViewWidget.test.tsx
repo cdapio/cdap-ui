@@ -16,7 +16,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import ColumnViewWidget from 'components/ColumnView/components/ColumnViewWidget';
+import ColumnViewWidget from 'components/ColumnViewPanel/components/ColumnViewWidget/index';
 
 describe('It should test ColumnViewWidget Component', () => {
   it('Should render Column View Widget Component and click on search icon for the input to be in the screen', () => {
@@ -25,8 +25,7 @@ describe('It should test ColumnViewWidget Component', () => {
         headingText={'Column View'}
         closeClickHandler={jest.fn()}
         searchedTermHandler={jest.fn()}
-        children={<></>}
-      />
+        children={<></>} searchValue={''}      />
     );
 
     const searchIcon = screen.getByTestId('search-icon');

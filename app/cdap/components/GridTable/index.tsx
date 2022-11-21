@@ -241,8 +241,8 @@ export default function GridTable() {
         return rest;
       });
     setTableMetaInfo({
-      rowCount: rawData.values.length,
-      columnCount: rawData.headers.length,
+      rowCount: rawData?.values?.length,
+      columnCount: rawData?.headers?.length,
     });
     setRowsDataList(rowData);
   };
