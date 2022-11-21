@@ -191,7 +191,7 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
       <div className={classes.inner}>
         <strong>
           Choose to push down compatible transformations to BigQuery. Currently Joiner, Group By,
-          and Deduplicate aggregations are supported.
+          Window aggregations and Deduplicate aggregations are supported.
         </strong>
         <div className={classes.toggleRow}>
           <FormControlLabel

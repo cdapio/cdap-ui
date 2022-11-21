@@ -376,7 +376,7 @@ angular.module(PKG.name + '.feature.hydrator')
                         window.CaskCommon.ee.emit(
                           window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, err);
                       }
-                  )
+                  );
               }
 
               return myPipelineApi

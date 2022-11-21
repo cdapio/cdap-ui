@@ -15,21 +15,13 @@
  */
 
 import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
 
-const NewButton = styled(Button)`
-  text-transform: none;
-  font-weight: normal;
-  color: ${(props) => props.textColor || '#666666'};
-  font-size: 13px;
-  letter-spacing: 0;
-`;
-
-export const PrimaryTextLowercaseButton = ({ children, disabled = false, ...props }) => {
+// This image is an SVG and is not available in MUI Icons Store
+export const Underline = () => {
   return (
-    <NewButton variant="text" color="primary" disabled={disabled} {...props}>
-      {children}
-    </NewButton>
+    <svg width="67" height="3" viewBox="0 0 67 3" fill="none" xmlns="http://www.w3.org/2000/svg" data-testid="underline-icon">
+      <path d="M0 0.530273H50L53 2.5318H3L0 0.530273Z" fill="#2196F3" />
+      <path d="M54 0.530273H63.5L66.5 2.5318H57L54 0.530273Z" fill="#2196F3" />
+    </svg>
   );
 };

@@ -16,179 +16,41 @@
 
 import React, { useEffect, useState, MouseEvent } from 'react';
 
-import { myRemoveCamelCase } from 'services/filters/removeCamelCase';
-import AvailablePluginsStore from 'services/AvailablePluginsStore';
-import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { shouldShowCustomIcon, getCustomIconSrc, filterPlugins, generateLabel } from './helpers';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Chip,
-  Box,
-  Icon,
-  IconButton,
-  ListItem,
-  Typography,
-} from '@material-ui/core';
+import { Button, Chip, Box, Typography } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
-import styled, { css, createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import debounce from 'lodash/debounce';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddCircle from '@material-ui/icons/AddCircle';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RichTooltip from 'components/shared/RichToolTip';
-import { ToolTipButtonContainer } from './sharedStyled';
+import {
+  EllipsisIconButton,
+  FontIconContainer,
+  GroupsContainer,
+  IconImg,
+  IconsMenuContainer,
+  ItemBodyWrapper,
+  ListCustomIcon,
+  ListIconImg,
+  ListOrIconsButton,
+  PluginBadge,
+  PluginButton,
+  PluginListItem,
+  PluginNameContainer,
+  PluginNameContainerList,
+  StyledAccordion,
+  StyledAccordionDetails,
+  StyledAccordionSummary,
+  StyledGroupName,
+  ToolTipButtonContainer,
+  TooltipContentBox,
+} from './sharedStyled';
 import ChangeVersionMenu from './ChangeVersionMenu';
-
-/**
- * the old styling was too specific and we can't get rid of the classname
- * otherwise the rest of the styling won't work so the && > && > && is a way
- * to make this styling more specific without using !important
- */
-const GroupsContainer = styled.div`
-  && {
-    && {
-      && {
-        overflow-y: scroll;
-        padding: 0;
-        right: 1px;
-        height: 100%;
-        border: none;
-      }
-    }
-  }
-`;
-
-const ItemBodyWrapper = styled.div`
-  background: white;
-  border: none;
-  display: flex;
-  flex-wrap: wrap;
-  flex-grow: 1;
-`;
-
-const StyledGroupName = styled(Typography)`
-  margin-left: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const StyledAccordion = styled(Accordion)`
-  background: #eeeeee;
-  :before {
-    border: none;
-  }
-
-  &.Mui-expanded {
-    margin: 0;
-    padding: 0;
-    overflow-y: scroll;
-  }
-`;
-
-const StyledAccordionDetails = styled(AccordionDetails)`
-  background: #ffffff;
-  background-clip: content-box;
-  padding: 0;
-  margin-top: 5px;
-`;
-
-const StyledAccordionSummary = styled(AccordionSummary)`
-  &.Mui-expanded {
-    min-height: 0px;
-  }
-  ${css`
-    .MuiAccordionSummary-content.Mui-expanded {
-      margin: 12px 0;
-    }
-  `}
-`;
-
-const ListOrIconsButton = styled(Button)`
-  min-width: 20px;
-  padding: 5px;
-  margin-left: 5px;
-  box-shadow: 0;
-  background: white;
-`;
-
-const EllipsisIconButton = styled(IconButton)`
-  width: 0;
-  height: 0;
-  z-index: 10000;
-  position: absolute;
-  top: 6px;
-  right: 2px;
-  visibility: hidden;
-`;
-
-// show ellipsisIconButton when you hover PluginButton
-//
-const PluginButton = styled(Button)`
-  color: #666666;
-  text-transform: none;
-  min-height: ${(props) => (props.sidePanelViewType === 'icon' ? '85px' : '0')};
-  &:hover {
-    ${EllipsisIconButton} {
-      visibility: visible;
-    }
-  }
-`;
-
-const IconsMenuContainer = styled.div`
-  flex: 0 1 0;
-  min-width: 33%;
-  display: flex;
-  flex-direction: column;
-  vertical-align: top;
-`;
-
-const FontIconContainer = styled.div`
-  && {
-    && {
-      && {
-        font-size: 32px;
-        display: flex;
-        flex-direction: column;
-      }
-    }
-  }
-`;
-
-// creates a 2 line max wrap text container
-const PluginNameContainer = styled.div`
-  line-height: 14px;
-  padding-top: 8px;
-  overflow: hidden;
-  font-weight: 500;
-  display: -webkit-box;
-  vertical-align: top;
-  text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
-  text-align: center;
-  -webkit-box-orient: vertical;
-`;
-
-const PluginNameContainerList = styled.div`
-  margin-left: 5px;
-  width: 100%;
-  margin-right: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const IconImg = styled.img`
-  width: 32px;
-  height: 32px;
-  margin: 0 auto;
-`;
 
 /**
  * Mui creates tooltips at the bottom of the dom tree
@@ -196,42 +58,45 @@ const IconImg = styled.img`
  * the style won't apply to that element - this is a way
  * to just insert regular css onto the page using styled-comps
  */
-const GlobalTooltipStyle = createGlobalStyle`
-  .MuiTooltip-popper {
-    .MuiTooltip-tooltip {
-      background-color: black;
+export const GlobalTooltipStyle = createGlobalStyle`
+ .MuiTooltip-popper {
+   .MuiTooltip-tooltip {
+     background-color: black;
+   }
+ }
+`;
+
+const organizePlugins = (pluginGroups, availablePlugins) => {
+  pluginGroups.forEach((group) => {
+    if (!group.plugins?.length) {
+      return;
     }
-  }
-`;
+    group.plugins.forEach((plugin) => {
+      plugin.displayName =
+        generateLabel(plugin, availablePlugins.plugins.pluginsMap) || plugin.name;
+      plugin.showCustomIcon = shouldShowCustomIcon(plugin, availablePlugins.plugins.pluginsMap);
+      plugin.customIconSrc = getCustomIconSrc(plugin, availablePlugins.plugins.pluginsMap);
+    });
 
-const PluginListItem = styled(ListItem)`
-  padding: 0;
-`;
+    group.plugins.sort((pluginA, pluginB) => {
+      return pluginA.displayName < pluginB.displayName ? -1 : 1;
+    });
+  });
 
-const TooltipContentBox = styled(Box)`
-  max-width: 300px;
-`;
-
-const PluginBadge = styled.div`
-  display: block;
-  font-size: 8px;
-  position: absolute;
-  left: 90%;
-  background: #d8d8d8;
-  border-radius: 2px;
-
-  padding: 3px;
-  line-height: 8px;
-  bottom: 3px;
-`;
+  return pluginGroups;
+};
 
 interface ISidePanelProps {
+  availablePlugins: any;
   itemGenericName: string;
   groups: any[];
   groupGenericName: string;
   onPanelItemClick: (event: any, plugin: any) => void;
   createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
 }
+
+// this value is definied once and doesn't change dynamically
+let allGroups;
 
 /**
  * There are tons of rerenders on this component right now - unfortunately its difficult to tackle
@@ -252,6 +117,7 @@ interface ISidePanelProps {
  *    that altered plugin.defaultArtifact to the canvas and it automatically sends that to be saved...
  */
 export const SidePanel = ({
+  availablePlugins,
   itemGenericName,
   groups,
   groupGenericName,
@@ -264,6 +130,11 @@ export const SidePanel = ({
   const [sidePanelViewType, setSidePanelViewType] = useState<string>('icon');
   const [openPopoverId, setOpenPopoverId] = useState<string | null>(null);
 
+  // keep track of number of plugins so if you create a template we can rerun organizePlugins
+  const numberOfPlugins = groups.reduce((prev, curr) => {
+    return (prev += curr.plugins.length);
+  }, 0);
+
   const handlePopperButtonClick = (popoverId: string) => (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     event.preventDefault();
@@ -275,47 +146,33 @@ export const SidePanel = ({
     setOpenPopoverId(null);
   };
 
-  let AvailablePluginsStoreSubscription;
   useEffect(() => {
     // set first group opened
     if (groups && groups.length) {
+      allGroups = groups.map((group) => group.name);
       setOpenedAccordions([groups[0].name]);
     }
   }, [groups, groups.length]);
 
   useEffect(() => {
-    AvailablePluginsStoreSubscription = AvailablePluginsStore.subscribe(() => {
-      const all = AvailablePluginsStore.getState();
-      if (all.plugins) {
-        // treat plugin group plugins as immutable
-        const newPluginGroups = pluginGroups.map((group) => {
-          const newGroup = { ...group, plugins: [] };
-          newGroup.plugins = group.plugins
-            .map((plugin) => {
-              return {
-                ...plugin,
-                displayName: generateLabel(plugin, all.plugins.pluginsMap) || plugin.name,
-                showCustomIcon: shouldShowCustomIcon(plugin, all.plugins.pluginsMap),
-                customIconSrc: getCustomIconSrc(plugin, all.plugins.pluginsMap),
-              };
-            })
-            .sort((pluginA, pluginB) => {
-              return pluginA.displayName < pluginB.displayName ? -1 : 1;
-            });
-          return newGroup;
-        });
+    if (availablePlugins && availablePlugins.plugins) {
+      setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
+    }
+  }, [availablePlugins]);
 
-        setPluginGroups(newPluginGroups);
-      }
-    });
-  }, []);
-
-  useOnUnmount(() => {
-    AvailablePluginsStoreSubscription();
-  });
+  useEffect(() => {
+    setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
+  }, [numberOfPlugins, JSON.stringify(groups)]);
 
   const handleSetSearch = debounce((text) => {
-    setSearchText(text);
+    // open all accordions when searching (then filtered closes them if no plugins)
+    if (text === '' || text === undefined) {
+      setOpenedAccordions([groups[0].name]);
+      setSearchText(text);
+    } else {
+      setOpenedAccordions(allGroups);
+      setSearchText(text);
+    }
   }, 400);
 
   const handleOpenAccordion = (name: string) => {
@@ -351,22 +208,23 @@ export const SidePanel = ({
     return plugins.map((plugin) => {
       const id = `plugin-${plugin.name}-${plugin.type}`;
       const label = plugin.displayName || plugin.name;
+      const createOrEditLabel = plugin.pluginTemplate ? 'Edit' : 'Create';
       const handleClickShowDetails = handlePopperButtonClick(id);
       const ToolTipContent = (
         <TooltipContentBox>
           <Box>
-            <Typography variant="h6">{label}</Typography>
+            <Typography variant="h4">{label}</Typography>
             <Button
               aria-label={`show more ${label}`}
               component="span"
               onClick={(e) => {
                 e.stopPropagation();
-                createPluginTemplate(plugin, 'create');
+                createPluginTemplate(plugin, createOrEditLabel.toLowerCase() as 'edit' | 'create');
                 handlePopoverClose();
               }}
             >
               <ToolTipButtonContainer>
-                <AddCircle /> Create Template
+                <AddCircle /> {`${createOrEditLabel} Template`}
               </ToolTipButtonContainer>
             </Button>
             {plugin.pluginTemplate && (
@@ -383,7 +241,7 @@ export const SidePanel = ({
             )}
           </Box>
           <Box>
-            <Typography>
+            <Typography variant="h6">
               {plugin.defaultArtifact?.version} {plugin.defaultArtifact?.scope}
             </Typography>
             <ChangeVersionMenu changePluginVersion={handleChangePluginVersion} plugin={plugin} />
@@ -434,17 +292,20 @@ export const SidePanel = ({
                   <FontIconContainer className={`fa ${plugin.icon}`}> </FontIconContainer>
                 )}
 
-                <PluginNameContainer>
-                  {myRemoveCamelCase(label || plugin.pluginTemplate)}
-                </PluginNameContainer>
+                <PluginNameContainer>{label || plugin.pluginTemplate}</PluginNameContainer>
               </div>
             )}
             {sidePanelViewType === 'list' && (
               <PluginListItem>
-                <Icon className={`fa ${plugin.icon}`} />
-                <PluginNameContainerList>
-                  {myRemoveCamelCase(label || plugin.pluginTemplate)}
-                </PluginNameContainerList>
+                {plugin.showCustomIcon && (
+                  <ListCustomIcon className="fa">
+                    <ListIconImg src={plugin.customIconSrc} />
+                  </ListCustomIcon>
+                )}
+                {!plugin.showCustomIcon && (
+                  <ListCustomIcon className={`fa ${plugin.icon}`}> </ListCustomIcon>
+                )}
+                <PluginNameContainerList>{label || plugin.pluginTemplate}</PluginNameContainerList>
               </PluginListItem>
             )}
             {plugin.pluginTemplate && <PluginBadge>T</PluginBadge>}
@@ -463,10 +324,13 @@ export const SidePanel = ({
       const plugins = filterPlugins(searchText, group.plugins);
       // open accordion if the user searches for a plugin and a plugin
       // is in that group or use the accordion state
-      const expanded =
-        searchText !== '' && searchText !== undefined
-          ? plugins.length
-          : openedAccordions.indexOf(group.name) !== -1;
+
+      let expanded = openedAccordions.indexOf(group.name) !== -1;
+      if (plugins.length === 0) {
+        // closes accordion if no plugins are present after searching.
+        expanded = false;
+      }
+
       return (
         <StyledAccordion
           elevation={0}

@@ -27,6 +27,7 @@ export default class DataPrepErrorAlert extends Component {
 
     this.state = {
       showError: state.showError,
+      workspaceError: state.workspaceError,
     };
 
     this.dismissError = this.dismissError.bind(this);
@@ -38,6 +39,7 @@ export default class DataPrepErrorAlert extends Component {
 
       this.setState({
         showError: state.showError,
+        workspaceError: state.workspaceError,
       });
     });
   }
@@ -54,18 +56,23 @@ export default class DataPrepErrorAlert extends Component {
     });
   }
 
+  getErrorMessage() {
+    if (this.state.showError) {
+      return this.state.showError;
+    } else if (this.state.workspaceError) {
+      return this.state.workspaceError.message;
+    }
+  }
+
   render() {
-    if (!this.state.showError) {
+    const errorMessage = this.getErrorMessage();
+
+    if (!errorMessage) {
       return null;
     }
 
     return (
-      <Alert
-        showAlert={true}
-        type="error"
-        message={this.state.showError}
-        onClose={this.dismissError}
-      />
+      <Alert showAlert={true} type="error" message={errorMessage} onClose={this.dismissError} />
     );
   }
 }
