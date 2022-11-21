@@ -42,14 +42,14 @@ export default function({ children }) {
           />
         </HeaderTextWithBackIcon>
         <HeaderRightIconWrapper>
-        <IconButton
-              data-testid="close-icon"
-              aria-label="close-icon"
-              className={classes.closeButtonStyle}
-              onClick={closeClickHandler}
-            >
-              <CloseRoundedIcon color="action" fontSize="large" />
-            </IconButton>
+          <IconButton
+            data-testid="close-icon"
+            aria-label="close-icon"
+            className={classes.closeButtonStyle}
+            onClick={closeClickHandler}
+          >
+            <CloseRoundedIcon color="action" fontSize="large" />
+          </IconButton>
         </HeaderRightIconWrapper>
       </HeaderStyle>
       <Fragment>{children}</Fragment>
