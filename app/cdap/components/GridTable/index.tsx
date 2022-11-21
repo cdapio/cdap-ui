@@ -51,6 +51,7 @@ import {
   convertNonNullPercentForColumnSelected,
   getColumnNames,
 } from 'components/GridTable/utils';
+import ColumnInsightsInlay from 'components/ColumnInsightsInlay';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -399,15 +400,10 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
-        <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-        />
-      ) : (
-        <>
-          {insightDrawer.open && (
-            <ColumnInsights
+      <Box className={classes.columnViewContainer}>
+        {insightDrawer.open && (
+          <Box className={classes.columnViewDrawer}>
+            <ColumnInsightsInlay
               columnType={columnType}
               columnData={insightDrawer}
               renameColumnNameHandler={renameColumnNameHandler}
@@ -432,55 +428,89 @@ export default function GridTable() {
                 setColumnSelected('');
               }}
             />
-          )}
-          <Table aria-label="simple table" className="test">
-            <TableHead>
-              <TableRow>
-                {headersNamesList?.length &&
-                  headersNamesList.map((eachHeader, headerNameListIndex) => (
-                    <GridHeaderCell
-                      label={eachHeader.label}
-                      types={eachHeader.type}
-                      key={eachHeader.name}
-                      columnSelected={columnSelected}
-                      setColumnSelected={handleColumnSelect}
-                      onColumnSelection={(column) => onColumnSelection(column)}
-                      index={headerNameListIndex}
-                    />
-                  ))}
-              </TableRow>
-              <TableRow>
-                {missingDataList?.length &&
-                  headersNamesList.length &&
-                  headersNamesList.map((each, index) => {
-                    return missingDataList.map((item, itemIndex) => {
-                      if (item.name === each.name) {
-                        return <GridKPICell metricData={item} key={item.name} />;
-                      }
-                    });
+            {/* <ColumnInsights
+              columnType={columnType}
+              columnData={insightDrawer}
+              renameColumnNameHandler={renameColumnNameHandler}
+              dataTypeHandler={dataTypeHandler}
+              onClose={() => {
+                setInsightDrawer({
+                  open: false,
+                  columnName: '',
+                  distinctValues: 0,
+                  characterCount: { min: 0, max: 0 },
+                  dataQuality: {
+                    nullValueCount: 0,
+                    nullValuePercentage: 0,
+                    emptyValueCount: 0,
+                    emptyValuePercentage: 0,
+                  },
+                  dataQualityBar: {},
+                  dataTypeString: '',
+                  dataDistributionGraphData: [],
+                  columnNamesList: [],
+                });
+                setColumnSelected('');
+              }}
+            /> */}
+          </Box>
+        )}
+        {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
+          <Box className={classes.gridTableWrapper}>
+            <Table aria-label="simple table" className="test">
+              <TableHead>
+                <TableRow>
+                  {headersNamesList?.length &&
+                    headersNamesList.map((eachHeader, headerNameListIndex) => (
+                      <GridHeaderCell
+                        label={eachHeader.label}
+                        types={eachHeader.type}
+                        key={eachHeader.name}
+                        columnSelected={columnSelected}
+                        setColumnSelected={handleColumnSelect}
+                        onColumnSelection={(column) => onColumnSelection(column)}
+                        index={headerNameListIndex}
+                      />
+                    ))}
+                </TableRow>
+                <TableRow>
+                  {missingDataList?.length &&
+                    headersNamesList.length &&
+                    headersNamesList.map((each, index) => {
+                      return missingDataList.map((item, itemIndex) => {
+                        if (item.name === each.name) {
+                          return <GridKPICell metricData={item} key={item.name} />;
+                        }
+                      });
+                    })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rowsDataList?.length &&
+                  rowsDataList.map((eachRow, rowIndex) => {
+                    return (
+                      <TableRow key={`row-${rowIndex}`}>
+                        {headersNamesList.map((eachKey, eachIndex) => {
+                          return (
+                            <GridTextCell
+                              cellValue={eachRow[eachKey.name] || '--'}
+                              key={`${eachKey.name}-${eachIndex}`}
+                            />
+                          );
+                        })}
+                      </TableRow>
+                    );
                   })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rowsDataList?.length &&
-                rowsDataList.map((eachRow, rowIndex) => {
-                  return (
-                    <TableRow key={`row-${rowIndex}`}>
-                      {headersNamesList.map((eachKey, eachIndex) => {
-                        return (
-                          <GridTextCell
-                            cellValue={eachRow[eachKey.name] || '--'}
-                            key={`${eachKey.name}-${eachIndex}`}
-                          />
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </>
-      )}
+              </TableBody>
+            </Table>
+          </Box>
+        ) : (
+          <NoRecordScreen
+            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          />
+        )}
+      </Box>
       {toaster.open && (
         <PositionedSnackbar messageToDisplay={toaster.message} isSuccess={toaster.isSuccess} />
       )}

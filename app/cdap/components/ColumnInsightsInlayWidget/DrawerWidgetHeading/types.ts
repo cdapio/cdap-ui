@@ -14,30 +14,8 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { ReactNode } from 'react';
 
-export const useStyles = makeStyles({
-  loadingContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    opacity: 0.5,
-    background: 'white',
-    position: 'absolute',
-    top: 0,
-    width: '100%',
-    zIndex: 2000,
-  },
-  columnViewContainer: {
-    display: 'flex',
-    fontFamily: 'Roboto',
-  },
-  columnViewDrawer: {
-    maxHeight: 'calc(100vh - 190px)',
-  },
-  gridTableWrapper: {
-    maxHeight: 'calc(100vh - 149px)',
-    overflowY: 'auto',
-  },
-});
+export interface IDrawerWidgetHeading {
+  headingText: ReactNode;
+}
