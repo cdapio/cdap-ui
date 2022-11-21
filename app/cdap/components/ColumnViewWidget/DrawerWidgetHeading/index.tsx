@@ -16,9 +16,19 @@
 
 import { Typography } from '@material-ui/core';
 import React from 'react';
-import { UnderlineIcon } from 'components/ColumnViewWidget/IconStore/Underline';
-import { IDrawerWidgetHeading } from 'components/ColumnViewWidget/DrawerWidgetHeading/types';
 import styled from 'styled-components';
+import { ReactNode } from 'react';
+
+const UnderlineIcon = (
+  <svg width="67" height="2" viewBox="0 0 67 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0H50L53 2H3L0 0Z" fill="#2196F3" />
+    <path d="M54 0H63.5L66.5 2H57L54 0Z" fill="#2196F3" />
+  </svg>
+);
+
+interface IDrawerWidgetHeading {
+  headingText: ReactNode;
+}
 
 const HeadingTextIconWrapper = styled(Typography)`
   display: flex;

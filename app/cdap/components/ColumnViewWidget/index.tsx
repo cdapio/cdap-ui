@@ -19,8 +19,15 @@ import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React, { Fragment, useRef, useState } from 'react';
 import DrawerWidgetHeading from 'components/ColumnViewWidget/DrawerWidgetHeading';
 import SearchIcon from '@material-ui/icons/SearchOutlined';
-import { IColumnViewWidget } from 'components/ColumnViewWidget/types';
 import styled from 'styled-components';
+import { ReactNode } from 'react';
+
+export interface IColumnViewWidget {
+  headingText: ReactNode;
+  closeClickHandler: () => void;
+  searchedTermHandler: (searchedTerm: string) => void;
+  children: JSX.Element;
+}
 
 const CommonInputStyle = styled(Input)`
   width: 140px !important;
