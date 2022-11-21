@@ -14,10 +14,26 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { makeStyles } from '@material-ui/styles';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
-}
+export const useStyles = makeStyles({
+  footerContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    width: '100%',
+    position: 'absolute',
+    bottom: 54,
+  },
+  tabsWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'space-between',
+    backgroundColor: '#f3f6f9',
+    height: 40,
+    boxShadow: '0px -2px 2px #0000001a',
+    width: '100%',
+  },
+});

@@ -23,7 +23,7 @@ describe('To Test Grid Header Cell Component', () => {
   const arr = ['PostgrSQL', 'SQL'];
   it('Should check if the label is displayed as expected', () => {
     render(<GridHeaderCell label={'abc'} types={arr} />);
-    const ele = screen.getByTestId(`grid-header-cell-container`);
+    const ele = screen.getByTestId(`grid-header-cell-abc`);
     expect(ele).toHaveTextContent('abc');
   });
   it('Renders Component with empty types array to trigger Null', () => {

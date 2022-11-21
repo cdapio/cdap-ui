@@ -28,8 +28,9 @@ export const useGridHeaderCellStyles = makeStyles({
   tableHeaderCell: {
     padding: '0px',
     width: 'auto',
+    borderTop: '1px solid #E0E0E0',
     fontSize: '14px',
-    border: '1px solid #E0E0E0',
+    borderRight: '1px solid #E0E0E0',
   },
   subDataTypeIndicator: {
     marginLeft: '2px',

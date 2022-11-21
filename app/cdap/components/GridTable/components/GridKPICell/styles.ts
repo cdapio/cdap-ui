@@ -33,7 +33,7 @@ export const useGridKPICellStyles = makeStyles({
     padding: '0px',
     width: 'auto',
     fontSize: '14px',
-    border: '1px solid #E0E0E0',
+    borderRight: '1px solid #E0E0E0',
   },
   KPICell: {
     display: 'flex',

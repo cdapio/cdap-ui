@@ -14,10 +14,15 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { prepareDataQualtiy } from 'components/ColumnView/SelectColumnsList/utils';
+import {
+  mockColumnData,
+  mockDataQuality,
+  mockResult,
+} from 'components/ColumnView/mock/mockDataForColumnView';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
-}
+describe('It Should test the utils function prepareDataQualtiy', () => {
+  it('should test whether the utils function return the expected Value', () => {
+    expect(prepareDataQualtiy(mockDataQuality, mockColumnData)).toStrictEqual(mockResult);
+  });
+});

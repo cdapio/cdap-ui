@@ -14,10 +14,8 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import T from 'i18n-react';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
-}
+export const COLUMNS = T.translate('features.WranglerNewUI.ColumnViewPanel.columns');
+export const HEADING_TEXT = T.translate('features.WranglerNewUI.ColumnViewPanel.columnView');
+export const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');

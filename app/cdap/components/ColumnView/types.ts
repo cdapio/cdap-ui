@@ -14,10 +14,15 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { IHeaderNamesList } from 'components/GridTable/types';
+import { Dispatch, SetStateAction } from 'react';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
+export interface IColumnViewProps {
+  columnData: IHeaderNamesList[];
+  closeClickHandler: () => void;
+  dataQuality: IDataQuality;
+}
+
+export interface IDataQuality {
+  [key: string]: unknown;
 }

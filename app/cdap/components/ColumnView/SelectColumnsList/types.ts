@@ -14,10 +14,25 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { IHeaderNamesList } from 'components/GridTable/types';
 
-export interface IGridHeaderCellProps {
+export interface ISelectColumnsListProps {
+  columnData: IHeaderNamesList[];
+  dataQuality: IDataQuality;
+  searchTerm: string;
+}
+
+export interface IDataQuality {
+  [key: string]: unknown;
+}
+
+export interface IDataQualityRecord {
   label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
+  value: number;
+}
+
+export interface ISelectColumnsTableRowProps {
+  eachFilteredColumn: IHeaderNamesList;
+  filteredColumnIndex: number;
+  dataQualityList: IDataQualityRecord[];
 }

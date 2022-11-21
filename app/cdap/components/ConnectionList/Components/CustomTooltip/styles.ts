@@ -24,7 +24,4 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: '#000000',
     fontSize: '16px',
   },
-  forEachTabLabelWidth: {
-    width: '100%',
-  },
 }));

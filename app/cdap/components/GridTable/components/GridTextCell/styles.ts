@@ -29,7 +29,7 @@ export const useGridTextCellStyles = makeStyles({
   },
   tableRowCell: {
     minWidth: '151px',
-    border: '1px solid #E0E0E0',
+    borderRight: '1px solid #E0E0E0',
     fontSize: '14px',
     width: 'auto',
     lineHeight: '21px',

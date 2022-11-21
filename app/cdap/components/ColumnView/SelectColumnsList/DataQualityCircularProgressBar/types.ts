@@ -14,10 +14,14 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { IDataQualityRecord } from 'components/ColumnView/SelectColumnsList/types';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
+export interface IDataQualityCircularProgressBarProps {
+  dataQualityPercentValue: number;
+  wrapperComponentData: IDataQualityWrapperComponentData;
+}
+
+export interface IDataQualityWrapperComponentData {
+  dataQualityList: IDataQualityRecord[];
+  filteredColumnIndex: number;
 }
