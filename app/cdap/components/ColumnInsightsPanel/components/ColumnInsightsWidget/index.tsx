@@ -11,7 +11,7 @@ const PREFIX = 'features.NewWranglerUI.ColumnInsights';
 const DrawerContainerStyle = styled(Box)`
   width: 471px;
   border-top: 1px solid #3994ff;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 150px);
   border-right: 1px solid #e0e0e0;
 `;
 
@@ -42,7 +42,7 @@ justifyContent: 'flex-end !important',
 
 export default function({ children, closeClickHandler }) {
   return (
-    <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
+    <DrawerContainerStyle role="presentation" data-testid="column-insights-panel-parent">
       <HeaderStyle>
         <HeaderTextWithBackIcon>
           <DrawerWidgetHeading
