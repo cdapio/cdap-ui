@@ -399,9 +399,9 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <Box className={classes.columnViewContainer}>
+      <Box className={classes.columnInsightsContainer}>
         {insightDrawer.open && (
-          <Box className={classes.columnViewDrawer}>
+          <Box className={classes.columnInsightsDrawer}>
             <ColumnInsightsInlayPanel
               columnType={columnType}
               columnData={insightDrawer}

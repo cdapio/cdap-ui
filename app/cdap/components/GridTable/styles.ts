@@ -29,11 +29,11 @@ export const useStyles = makeStyles({
     width: '100%',
     zIndex: 2000,
   },
-  columnViewContainer: {
+  columnInsightsContainer: {
     display: 'flex',
     fontFamily: 'Roboto',
   },
-  columnViewDrawer: {
+  columnInsightsDrawer: {
     maxHeight: 'calc(100vh - 149px)',
   },
   gridTableWrapper: {
