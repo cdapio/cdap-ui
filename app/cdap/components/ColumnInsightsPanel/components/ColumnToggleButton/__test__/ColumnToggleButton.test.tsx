@@ -15,7 +15,7 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import ColumnToggleButton from 'components/ColumnInsights/Components/ColumnToggleButton';
+import ColumnToggleButton from 'components/ColumnInsightsPanel/components/ColumnToggleButton/index';
 import { mockDataQuality } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
 import React from 'react';
 

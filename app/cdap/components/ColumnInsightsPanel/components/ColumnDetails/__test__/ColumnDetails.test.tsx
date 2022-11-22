@@ -15,7 +15,7 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import ColumnDetails from 'components/ColumnInsights/Components/ColumnDetails';
+import ColumnDetails from 'components/ColumnInsightsPanel/components/ColumnDetails/index';
 import React from 'react';
 
 describe('It Should test ColumnDetails Component', () => {

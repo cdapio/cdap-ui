@@ -15,7 +15,7 @@
  */
 
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import InputSelect from 'components/ColumnInsights/Components/InputSelect';
+import InputSelect from 'components/ColumnInsightsPanel/components/InputSelect/index';
 import { mockOptions } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
 import React from 'react';
 
