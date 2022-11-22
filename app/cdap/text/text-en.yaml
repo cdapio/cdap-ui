@@ -3432,6 +3432,25 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    common:
+      and: and
+    ColumnViewPanel:
+      columns: 'Columns'
+      nullValues: 'Null Values'
+      columnView: 'Column View'
+      noRecordScreen: 
+        title: No Columns Found
+        subtitle: Search for another column to view some data
+    FooterPanel:
+      labels:
+        columns: columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        message: Current data - {rowCount} rows and {columnCount} columns 
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample

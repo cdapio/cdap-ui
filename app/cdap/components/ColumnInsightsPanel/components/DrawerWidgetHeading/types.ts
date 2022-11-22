@@ -14,10 +14,8 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { ReactNode } from 'react';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
+export interface IDrawerWidgetHeading {
+  headingText: ReactNode;
 }

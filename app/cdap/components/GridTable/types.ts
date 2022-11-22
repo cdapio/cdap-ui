@@ -48,3 +48,8 @@ export interface IHeaderNamesList {
 export interface IType {
   [key: string]: string | number;
 }
+
+export interface IFooterMetaInfo {
+  columnCount: number;
+  rowCount: number;
+}

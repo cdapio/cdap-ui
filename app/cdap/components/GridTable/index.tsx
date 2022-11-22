@@ -39,6 +39,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import ColumnViewPanel from 'components/ColumnViewPanel';
+import FooterPanel from 'components/FooterPanel';
+import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList';
+import { IFooterMetaInfo } from 'components/GridTable/types';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -56,6 +60,12 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [openColumnView, setOpenColumnView] = useState<boolean>(false);
+  const [dataQuality, setDataQuality] = useState<IDataQuality>({});
+  const [tableMetaInfo, setTableMetaInfo] = useState<IFooterMetaInfo>({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -220,6 +230,7 @@ export default function GridTable() {
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
+      setDataQuality(gridData.summary.statistics);
     }
     const rowData =
       rawData &&
@@ -229,7 +240,10 @@ export default function GridTable() {
         const { body, ...rest } = eachRow;
         return rest;
       });
-
+    setTableMetaInfo({
+      rowCount: rawData?.values?.length,
+      columnCount: rawData?.headers?.length,
+    });
     setRowsDataList(rowData);
   };
 
@@ -240,55 +254,76 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
-        <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-        />
-      ) : (
-        <Table aria-label="simple table" className="test">
-          <TableHead>
-            <TableRow>
-              {headersNamesList?.length &&
-                headersNamesList.map((eachHeader) => (
-                  <GridHeaderCell
-                    label={eachHeader.label}
-                    types={eachHeader.type}
-                    key={eachHeader.name}
-                  />
-                ))}
-            </TableRow>
-            <TableRow>
-              {missingDataList?.length &&
-                headersNamesList.length &&
-                headersNamesList.map((each, index) => {
-                  return missingDataList.map((item, itemIndex) => {
-                    if (item.name === each.name) {
-                      return <GridKPICell metricData={item} key={item.name} />;
-                    }
-                  });
-                })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rowsDataList?.length &&
-              rowsDataList.map((eachRow, rowIndex) => {
-                return (
-                  <TableRow key={`row-${rowIndex}`}>
-                    {headersNamesList.map((eachKey, eachIndex) => {
-                      return (
-                        <GridTextCell
-                          cellValue={eachRow[eachKey.name] || '--'}
-                          key={`${eachKey.name}-${eachIndex}`}
-                        />
-                      );
+      <Box className={classes.columnViewContainer}>
+        {openColumnView && (
+          <Box className={classes.columnViewDrawer}>
+            <ColumnViewPanel
+              columnData={headersNamesList}
+              dataQuality={dataQuality}
+              closeClickHandler={() => setOpenColumnView(false)}
+            />
+          </Box>
+        )}
+        {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
+          <Box className={classes.gridTableWrapper}>
+            <Table aria-label="simple table" className="test" data-testid="grid-table">
+              <TableHead>
+                <TableRow>
+                  {headersNamesList?.length > 0 &&
+                    headersNamesList.map((eachHeader, eachHeaderIndex) => (
+                      <GridHeaderCell
+                        label={eachHeader.label}
+                        types={eachHeader.type as string[]}
+                        key={eachHeader.name}
+                        eachHeaderIndex={eachHeaderIndex}
+                      />
+                    ))}
+                </TableRow>
+                <TableRow>
+                  {missingDataList?.length > 0 &&
+                    headersNamesList.length > 0 &&
+                    headersNamesList.map((each, index) => {
+                      return missingDataList.map((item, itemIndex) => {
+                        if (item.name === each.name) {
+                          return <GridKPICell metricData={item} key={item.name} />;
+                        }
+                      });
                     })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      )}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rowsDataList &&
+                  Array.isArray(rowsDataList) &&
+                  rowsDataList?.length > 0 &&
+                  rowsDataList.map((eachRow, rowIndex) => {
+                    return (
+                      <TableRow key={`row-${rowIndex}`}>
+                        {headersNamesList.map((eachKey, eachIndex) => {
+                          return (
+                            <GridTextCell
+                              cellValue={eachRow[eachKey.name] || '--'}
+                              key={`${eachKey.name}-${eachIndex}`}
+                            />
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </Box>
+        ) : (
+          <NoRecordScreen
+            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          />
+        )}
+      </Box>
+      <FooterPanel
+        recipeStepsCount={0}
+        gridMetaInfo={tableMetaInfo}
+        setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
+      />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

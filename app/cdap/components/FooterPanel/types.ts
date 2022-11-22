@@ -14,10 +14,13 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+export interface IFooterPanelProps {
+  recipeStepsCount: number;
+  gridMetaInfo: IGridMetaInfo;
+  setOpenColumnViewHandler: () => void;
+}
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
+interface IGridMetaInfo {
+  rowCount: number;
+  columnCount: number;
 }
