@@ -16,10 +16,16 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import ColumnToggleButton from 'components/ColumnInsightsPanel/components/ColumnToggleButton/index';
-import { mockDataQuality } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
 import React from 'react';
 
 describe('It should test whether ColumnToggleButton Component.', () => {
+
+   const mockDataQuality = {
+    nullValueCount: 3,
+    nullValuePercentage: 50,
+    emptyValueCount: 0,
+    emptyValuePercentage: 0,
+  };
   it('should test whether ColumnToggleButton Component is rendered and is in the Document', () => {
     render(<ColumnToggleButton dataQuality={mockDataQuality} />);
     const toggleButtonsParent = screen.getByTestId(/data-quality-toggle-parent/i);

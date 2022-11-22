@@ -20,7 +20,7 @@ import { Underline } from 'components/DrawerWidget/DrawerWidgetHeading/IconStore
 import { useStyles } from 'components/DrawerWidget/styles';
 import { IDrawerWidgetHeadingProps } from 'components/DrawerWidget/DrawerWidgetHeading/types';
 import T from 'i18n-react';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
 
 export default function({ headingText }: IDrawerWidgetHeadingProps) {
   const classes = useStyles();
