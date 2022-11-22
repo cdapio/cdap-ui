@@ -47,7 +47,7 @@ public class ColumnInsightsInlay {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("grid-header-cell-1"));
-            Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-view-panel-parent")));
+            Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-insights-panel-parent")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
