@@ -30,9 +30,11 @@ import {
   IHeaderNamesList,
   IParams,
   IRecords,
+  IType,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import PositionedSnackbar from 'components/SnackbarComponent';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
@@ -43,6 +45,16 @@ import ColumnViewPanel from 'components/ColumnViewPanel';
 import FooterPanel from 'components/FooterPanel';
 import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList';
 import { IFooterMetaInfo } from 'components/GridTable/types';
+import {
+  calculateDistinctValues,
+  calculateDistributionGraphData,
+  calculateEmptyValueCount,
+  characterCount,
+  checkAlphaNumericAndSpaces,
+  convertNonNullPercentForColumnSelected,
+  getColumnNames,
+} from 'components/GridTable/utils';
+import ColumnInsightsInlayPanel from 'components/ColumnInsightsPanel';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -66,6 +78,41 @@ export default function GridTable() {
     columnCount: 0,
     rowCount: 0,
   });
+  const { dataprep } = DataPrepStore.getState();
+  const [columnType, setColumnType] = useState<string>('');
+  const [toaster, setToaster] = useState({
+    open: false,
+    message: '',
+    isSuccess: false,
+  });
+  const [columnSelected, setColumnSelected] = useState('');
+  const [insightDrawer, setInsightDrawer] = useState({
+    open: false,
+    columnName: '',
+    distinctValues: 0,
+    characterCount: {
+      min: 0,
+      max: 0,
+    },
+    dataQuality: {
+      nullValueCount: 0,
+      nullValuePercentage: 0,
+      emptyValueCount: 0,
+      emptyValuePercentage: 0,
+    },
+    dataQualityBar: {},
+    dataTypeString: '',
+    dataDistributionGraphData: [],
+    columnNamesList: [],
+  });
+  const { types } = dataprep;
+
+  useEffect(() => {
+    if (insightDrawer.open) {
+      onColumnSelection(columnSelected);
+    }
+    setLoading(false);
+  }, [rowsDataList]);
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -124,6 +171,117 @@ export default function GridTable() {
         setLoading(false);
         setGridData(response);
       });
+  };
+
+  const handleColumnSelect = (columnName: string) => {
+    setColumnSelected((prevColumn) => (prevColumn === columnName ? '' : columnName));
+    setColumnType(types[columnName]);
+  };
+
+  const renameColumnNameHandler = (oldColumnName: string, newColumnName: string) => {
+    const directive = `rename ${oldColumnName} ${newColumnName}`;
+    setColumnSelected(newColumnName);
+    applyDirectiveAPICall(directive, 'add', [], 'insightsPanel');
+  };
+
+  const applyDirectiveAPICall = (newDirective: string, action, removed_arr, from) => {
+    setLoading(true);
+    const { dataprep } = DataPrepStore.getState();
+    const { workspaceId, workspaceUri, directives, insights } = dataprep;
+    let gridParams = {};
+    const updatedDirectives = directives.concat(newDirective);
+    const requestBody = directiveRequestBodyCreator(updatedDirectives);
+    const arr = JSON.parse(JSON.stringify(newDirective));
+    requestBody.insights = insights;
+
+    const workspaceInfo = {
+      properties: insights,
+    };
+    gridParams = {
+      directives: updatedDirectives,
+      workspaceId,
+      workspaceUri,
+      workspaceInfo,
+      insights,
+    };
+    const payload = {
+      context: params.namespace,
+      workspaceId: params.wid,
+    };
+    MyDataPrepApi.execute(payload, requestBody).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            values: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        setGridData(response);
+        if (!insightDrawer.open) {
+          setColumnSelected('');
+        } else {
+          setLoading(true);
+        }
+        setLoading(false);
+      },
+      (err) => {
+        setToaster({
+          open: true,
+          message: `Failed to transform ${newDirective}`,
+          isSuccess: false,
+        });
+        setLoading(false);
+      }
+    );
+    setToaster({
+      open: false,
+      message: '',
+      isSuccess: false,
+    });
+  };
+
+  const dataTypeHandler = (dataType: string) => {
+    const newDirective = `set-type ${columnSelected} ${dataType}`;
+    applyDirectiveAPICall(newDirective, 'add', [], 'insightsPanel');
+  };
+
+  const onColumnSelection = (columnName: string) => {
+    const getDistinctValue = calculateDistinctValues(rowsDataList, columnName);
+    const getCharacterCountOfCell = characterCount(rowsDataList, columnName);
+    const getNullValueCount =
+      convertNonNullPercentForColumnSelected(
+        gridData?.values,
+        (gridData?.summary?.statistics?.columnName as Record<string, IType>)?.general
+      ) || 0;
+    const getDataTypeString = checkAlphaNumericAndSpaces(rowsDataList, columnName);
+    setInsightDrawer({
+      open: true,
+      columnName,
+      distinctValues: getDistinctValue,
+      characterCount: getCharacterCountOfCell,
+      dataQuality: {
+        nullValueCount: Number(getNullValueCount),
+        nullValuePercentage: Number(
+          ((Number(Number(getNullValueCount).toFixed(0)) / rowsDataList?.length) * 100).toFixed(0)
+        ),
+        emptyValueCount: calculateEmptyValueCount(rowsDataList, columnName),
+        emptyValuePercentage: Number(
+          (
+            (Number(Number(calculateEmptyValueCount(rowsDataList, columnName)).toFixed(0)) /
+              rowsDataList?.length) *
+            100
+          ).toFixed(0)
+        ),
+      },
+      dataQualityBar: gridData?.summary?.statistics[columnName],
+      dataTypeString: getDataTypeString,
+      dataDistributionGraphData: calculateDistributionGraphData(rowsDataList, columnName),
+      columnNamesList: getColumnNames(rowsDataList),
+    });
   };
 
   useEffect(() => {
@@ -264,24 +422,56 @@ export default function GridTable() {
             />
           </Box>
         )}
+        {insightDrawer.open && (
+          <Box className={classes.columnInsightsDrawer}>
+            <ColumnInsightsInlayPanel
+              columnType={columnType}
+              columnData={insightDrawer}
+              renameColumnNameHandler={renameColumnNameHandler}
+              dataTypeHandler={dataTypeHandler}
+              onClose={() => {
+                setInsightDrawer({
+                  open: false,
+                  columnName: '',
+                  distinctValues: 0,
+                  characterCount: { min: 0, max: 0 },
+                  dataQuality: {
+                    nullValueCount: 0,
+                    nullValuePercentage: 0,
+                    emptyValueCount: 0,
+                    emptyValuePercentage: 0,
+                  },
+                  dataQualityBar: {},
+                  dataTypeString: '',
+                  dataDistributionGraphData: [],
+                  columnNamesList: [],
+                });
+                setColumnSelected('');
+              }}
+            />
+          </Box>
+        )}
         {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
           <Box className={classes.gridTableWrapper}>
             <Table aria-label="simple table" className="test" data-testid="grid-table">
               <TableHead>
                 <TableRow>
-                  {headersNamesList?.length > 0 &&
+                  {headersNamesList?.length &&
                     headersNamesList.map((eachHeader, eachHeaderIndex) => (
                       <GridHeaderCell
                         label={eachHeader.label}
                         types={eachHeader.type as string[]}
                         key={eachHeader.name}
+                        columnSelected={columnSelected}
+                        setColumnSelected={handleColumnSelect}
+                        onColumnSelection={(column) => onColumnSelection(column)}
                         eachHeaderIndex={eachHeaderIndex}
                       />
                     ))}
                 </TableRow>
                 <TableRow>
-                  {missingDataList?.length > 0 &&
-                    headersNamesList.length > 0 &&
+                  {missingDataList?.length &&
+                    headersNamesList.length &&
                     headersNamesList.map((each, index) => {
                       return missingDataList.map((item, itemIndex) => {
                         if (item.name === each.name) {
@@ -292,9 +482,7 @@ export default function GridTable() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rowsDataList &&
-                  Array.isArray(rowsDataList) &&
-                  rowsDataList?.length > 0 &&
+                {rowsDataList?.length &&
                   rowsDataList.map((eachRow, rowIndex) => {
                     return (
                       <TableRow key={`row-${rowIndex}`}>
@@ -324,6 +512,9 @@ export default function GridTable() {
         gridMetaInfo={tableMetaInfo}
         setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
       />
+      {toaster.open && (
+        <PositionedSnackbar messageToDisplay={toaster.message} isSuccess={toaster.isSuccess} />
+      )}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

@@ -18,17 +18,32 @@ import { Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
+import styled from 'styled-components';
+import { grey } from '@material-ui/core/colors';
+
+const TableRowCell = styled(TableCell)`
+  min-width: 151px;
+  font-size: 14px;
+  width: auto;
+  line-height: 21px;
+  padding: 0px;
+  border-right: 1px solid ${grey[300]};
+  border-top: 1px solid ${grey[300]};
+  border-bottom: 1px solid ${grey[300]};
+  color: #5f6368;
+  box-sizing: content-box;
+`;
 
 export default function GridTextCell({ cellValue }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
 
   return (
-    <TableCell className={classes.tableRowCell}>
+    <TableRowCell>
       <Card className={classes.root} variant="outlined">
         <Typography className={classes.cell} data-testid={`grid-text-cell-${cellValue}`}>
           {cellValue}
         </Typography>
       </Card>
-    </TableCell>
+    </TableRowCell>
   );
 }

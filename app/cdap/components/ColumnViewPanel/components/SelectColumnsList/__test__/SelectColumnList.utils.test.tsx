@@ -40,7 +40,7 @@ describe('It Should test the utils function prepareDataQualtiy', () => {
     },
   ];
 
-   const mockDataQuality = {
+  const mockDataQuality = {
     body_0: {
       general: {
         'non-null': 100,

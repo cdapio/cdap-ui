@@ -44,7 +44,7 @@ describe('It should test SelectColumnList Component', () => {
     },
   ];
 
-   const mockDataQuality = {
+  const mockDataQuality = {
     body_0: {
       general: {
         'non-null': 100,

@@ -34,7 +34,8 @@ interface ISummary {
 export interface IExecuteAPIResponse {
   headers: string[];
   types: IRecords;
-  values: IRecords[];
+  // values: IRecords[];
+  values: IValues[];
   summary: ISummary;
   message: string;
 }
@@ -42,11 +43,15 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | boolean | Record<string, IType>>;
+  // type: Array<string | boolean | Record<string, IType>>;
+  type: string[];
 }
 
 export interface IType {
   [key: string]: string | number;
+}
+export interface IValues {
+  [key: string]: string;
 }
 
 export interface IFooterMetaInfo {

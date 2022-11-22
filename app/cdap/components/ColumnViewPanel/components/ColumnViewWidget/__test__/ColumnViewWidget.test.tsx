@@ -25,7 +25,9 @@ describe('It should test ColumnViewWidget Component', () => {
         headingText={'Column View'}
         closeClickHandler={jest.fn()}
         searchedTermHandler={jest.fn()}
-        children={<></>} searchValue={''}      />
+        children={<></>}
+        searchValue={''}
+      />
     );
 
     const searchIcon = screen.getByTestId('search-icon');
