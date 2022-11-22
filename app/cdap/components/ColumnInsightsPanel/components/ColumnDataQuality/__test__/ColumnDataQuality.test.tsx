@@ -20,7 +20,7 @@ import {
   mockDataQuality,
 } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
 import React from 'react';
-import ColumnDataQuality from 'components/ColumnInsights/Components/ColumnDataQuality';
+import ColumnDataQuality from 'components/ColumnInsightsPanel/components/ColumnDataQuality/index';
 
 describe('It Should test ColumnDatQuality Component.', () => {
   it('Should test whether ColumnDatQuality is rendered in the Screen and Quality Text is as expected. ', () => {

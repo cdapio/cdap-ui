@@ -17,7 +17,7 @@
 import { render, screen } from '@testing-library/react';
 import T from 'i18n-react';
 import React from 'react';
-import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
+import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel/index';
 
 const PREFIX = 'features.NewWranglerUI.ColumnInsights';
 describe('It should test RenderLabel Component', () => {

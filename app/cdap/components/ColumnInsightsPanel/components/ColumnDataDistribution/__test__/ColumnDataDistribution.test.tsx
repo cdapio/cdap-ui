@@ -16,7 +16,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import ColumnDataDistribution from 'components/ColumnInsights/Components/ColumnDataDistribution';
+import ColumnDataDistribution from 'components/ColumnInsightsPanel/components/ColumnDataDistribution/index';
 import history from 'services/history';
 import { Route, Router, Switch } from 'react-router';
 import { mockGraphData } from 'components/ColumnInsights/mock/mockDataForColumnInsights';

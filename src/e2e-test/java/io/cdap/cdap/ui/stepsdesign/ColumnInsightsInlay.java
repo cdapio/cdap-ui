@@ -31,7 +31,6 @@ public class ColumnInsightsInlay {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
-
     @Then("Click on the Ongoing Data Explorations card")
     public void clickOnTheDataExplorationCard() {
         try {
@@ -43,7 +42,6 @@ public class ColumnInsightsInlay {
             System.err.println("error:" + e);
         }
     }
-
     @Then("Click on any column from the grid table")
     public void clickOnAnyColumnFromGridTable() {
         try {
@@ -54,8 +52,7 @@ public class ColumnInsightsInlay {
             System.err.println("error:" + e);
         }
     }
-
-    @Then("Again click on any column from the grid table")
+    @Then("Again click on any other column from the grid table without closing insight panel")
     public void againClickOnAnyColumnFromGridTable() {
         try {
             WaitHelper.waitForPageToLoad();
@@ -73,7 +70,6 @@ public class ColumnInsightsInlay {
             System.err.println("error" + e);
         }
     }
-
     @Then("Click on the cross icon on the inlay popup")
     public void clickOnTheCrossIconOnTheInlayPopup() {
         try {

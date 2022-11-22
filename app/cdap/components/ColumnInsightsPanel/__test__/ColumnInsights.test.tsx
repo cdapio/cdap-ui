@@ -22,7 +22,7 @@ import {
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
-import ColumnInsights from 'components/ColumnInsights';
+import ColumnInsights from 'components/ColumnInsightsPanel/index';
 
 describe('It Should test Column Insights Component', () => {
   it('Should test whether the Column Insights Panel is rendered on the screen.', () => {
