@@ -22,6 +22,7 @@ Feature: ColumnInsightsInlay
     Given Navigate to the Home Page
     Then Click on the Ongoing Data Explorations card
     Then Click on any column from the grid table
-    Then Again click on any column from the grid table
+    Then Verify the column data is showing in the Inlay popup
+    Then Again click on any other column from the grid table without closing insight panel
     Then Verify the column data is showing in the Inlay popup
     Then Click on the cross icon on the inlay popup
