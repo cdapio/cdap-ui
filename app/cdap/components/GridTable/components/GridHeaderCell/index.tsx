@@ -130,5 +130,3 @@ export default function GridHeaderCell({
     </TableHeaderCell>
   );
 }
-{
-}
