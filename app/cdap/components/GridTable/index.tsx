@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
+import { Button, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
@@ -31,19 +31,46 @@ import {
   IParams,
   IRecords,
 } from 'components/GridTable/types';
+import ImportSchema from 'components/ImportSchema';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import PositionedSnackbar from 'components/Snackbar';
+import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
+import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import styled from 'styled-components';
+import {
+  ITransformationMessage,
+  ISchemaValue,
+  IDefaultErrorOnTransformations,
+} from 'components/ImportSchema/types';
+
+const ApplyButton = styled(Button)`
+  margin-left: 20px;
+  margin-bottom: 15px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  opacity: 0.5;
+  background: white;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  z-ndex: 2000;
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
-  const classes = useStyles();
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -56,6 +83,131 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+
+  const [successUpload, setSuccessUpload] = useState<ITransformationMessage>({
+    open: false,
+    message: '',
+  });
+  const [schemaValue, setSchemaValue] = useState<ISchemaValue>(null);
+  const [schemaApplied, setSchemaApplied] = useState<boolean>(false);
+  const [failureSchema, setFailureSchemaStatus] = useState<boolean>(false);
+  const defaultErrorOnTransformations = {
+    open: false,
+    message: '',
+  };
+
+  const defaultConnectionPayload = {
+    path: '',
+    connection: '',
+    sampleRequest: {
+      properties: {
+        format: '',
+        fileEncoding: '',
+        skipHeader: false,
+        enableQuotedValues: false,
+        schema: null,
+        _pluginName: null,
+      },
+      limit: 1000,
+    },
+  };
+
+  const defaultProperties = {
+    format: 'csv',
+    fileEncoding: 'UTF-8',
+    enableQuotedValues: false,
+    skipHeader: false,
+  };
+
+  const [errorOnTransformation, setErrorOnTransformation] = useState<
+    IDefaultErrorOnTransformations
+  >(defaultErrorOnTransformations);
+  const [connectionPayload, setConnectionPayload] = useState(defaultConnectionPayload);
+  const [properties, setProperties] = useState(defaultProperties);
+
+  const [toaster, setToaster] = useState({ lastValue: null });
+  const { dataprep } = DataPrepStore.getState();
+  const { onWorkspaceCreate } = useContext(ConnectionsContext);
+
+  useEffect(() => {
+    setConnectionPayload({
+      path: dataprep.insights.path,
+
+      connection: dataprep.insights.name,
+      sampleRequest: {
+        properties: {
+          ...properties,
+          schema: schemaValue != null ? JSON.stringify(schemaValue) : null,
+          _pluginName: null,
+        },
+        limit: 1000,
+      },
+    });
+  }, [dataprep, properties, schemaValue]);
+
+  useEffect(() => {
+    if (failureSchema && toaster.lastValue !== 'fail') {
+      setToaster({ lastValue: 'fail' });
+    } else if (successUpload.open && toaster.lastValue !== 'success') {
+      setToaster({ lastValue: 'success' });
+    }
+  }, [failureSchema, successUpload.open]);
+
+  useEffect(() => {
+    if (errorOnTransformation.open) {
+      setFailureSchemaStatus(true);
+      setSuccessUpload({ open: false, message: '' });
+    }
+    if (successUpload.open) {
+      setFailureSchemaStatus(false);
+    }
+  }, [errorOnTransformation, successUpload.open]);
+
+  useEffect(() => {
+    if (successUpload.open) {
+      setSchemaApplied(true);
+    }
+  }, [successUpload]);
+
+  const createWorkspaceInternal = async (entity, parseConfig = {}) => {
+    try {
+      setLoading(true);
+      const wid = await createWorkspace({
+        entity,
+        connection: dataprep.insights.name,
+        properties: connectionPayload.sampleRequest.properties,
+      });
+      if (onWorkspaceCreate) {
+        return onWorkspaceCreate(wid);
+      }
+      updateDataTranformation(wid);
+    } catch (err) {
+      setErrorOnTransformation({
+        open: true,
+        message: T.translate(
+          'features.WranglerNewUI.WranglerNewParsingDrawer.transformationErrorMessage1'
+        ).toString(),
+      });
+      setLoading(false);
+    }
+  };
+
+  const onConfirm = async (parseConfig) => {
+    try {
+      await createWorkspaceInternal(connectionPayload, parseConfig);
+    } catch (e) {
+      setLoading(false);
+    }
+    setSchemaApplied(false);
+  };
+
+  const updateDataTranformation = (wid: string) => {
+    const payload: IParams = {
+      context: params.namespace,
+      workspaceId: wid,
+    };
+    getWorkSpaceData(payload, wid);
+  };
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -240,6 +392,16 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
+      <ImportSchema
+        setSuccessUpload={setSuccessUpload}
+        handleSchemaUpload={(schema) => setSchemaValue(schema)}
+        setErrorOnTransformation={setErrorOnTransformation}
+      />
+      {schemaApplied && (
+        <ApplyButton variant="outlined" onClick={() => onConfirm(connectionPayload)}>
+          {T.translate('features.WranglerNewUI.ImportSchema.Apply')}
+        </ApplyButton>
+      )}
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
@@ -289,10 +451,38 @@ export default function GridTable() {
           </TableBody>
         </Table>
       )}
+      {errorOnTransformation.open && (
+        <PositionedSnackbar
+          handleCloseError={() =>
+            setErrorOnTransformation({
+              open: false,
+              message: T.translate(
+                'features.WranglerNewUI.WranglerNewParsingDrawer.transformationErrorMessage2'
+              ).toString(),
+            })
+          }
+          description={errorOnTransformation.message}
+          isSuccess={false}
+          snackbarAction="failure"
+        />
+      )}
+      {successUpload.open && (
+        <PositionedSnackbar
+          handleCloseError={() =>
+            setErrorOnTransformation({
+              open: false,
+              message: '',
+            })
+          }
+          description={successUpload.message}
+          isSuccess={true}
+          snackbarAction="success"
+        />
+      )}
       {loading && (
-        <div className={classes.loadingContainer}>
+        <LoadingContainer>
           <LoadingSVG />
-        </div>
+        </LoadingContainer>
       )}
     </Box>
   );
