@@ -33,6 +33,7 @@ export interface ISelectColumnsListProps {
   setColumnSelected: (columnName: string) => void;
   onColumnSelection: (column: string) => void;
   selectedColumn: string;
+  handleCoumnUnSelect: () => void;
 }
 
 export interface IDataQuality {
@@ -51,6 +52,7 @@ export interface ISelectColumnsTableRowProps {
   setColumnSelected: (columnName: string) => void;
   onColumnSelection: (column: string) => void;
   selectedColumn: string;
+  handleCoumnUnSelect: () => void;
 }
 
 const CustomTableContainer = styled(TableContainer)`
@@ -133,7 +135,8 @@ const getTableBody = (
   dataQualityList: IDataQualityRecord[],
   setColumnSelected,
   onColumnSelection,
-  selectedColumn
+  selectedColumn,
+  handleCoumnUnSelect
 ) => {
   {
     return filteredColumns.length !== 0 ? (
@@ -146,6 +149,7 @@ const getTableBody = (
             setColumnSelected={setColumnSelected}
             onColumnSelection={onColumnSelection}
             selectedColumn={selectedColumn}
+            handleCoumnUnSelect={handleCoumnUnSelect}
           />
         );
       })
@@ -165,6 +169,7 @@ export default function({
   setColumnSelected,
   onColumnSelection,
   selectedColumn,
+  handleCoumnUnSelect,
 }: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
@@ -172,6 +177,12 @@ export default function({
   useEffect(() => {
     setDataQualityList(prepareDataQualtiy(dataQuality, columnData));
   }, []);
+
+  useEffect(() => {
+    if (columnData && columnData.length) {
+      setFilteredColumns(columnData);
+    }
+  }, [columnData]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -209,7 +220,8 @@ export default function({
             dataQualityList,
             setColumnSelected,
             onColumnSelection,
-            selectedColumn
+            selectedColumn,
+            handleCoumnUnSelect
           )}
         </Table>
       </CustomTableContainer>

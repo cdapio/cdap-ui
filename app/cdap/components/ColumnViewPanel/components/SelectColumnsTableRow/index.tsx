@@ -72,6 +72,7 @@ export default function({
   setColumnSelected,
   onColumnSelection,
   selectedColumn,
+  handleCoumnUnSelect,
 }: ISelectColumnsTableRowProps) {
   const [selectedRow, setSelectedRow] = useState(false);
 
@@ -81,11 +82,15 @@ export default function({
     } else {
       setSelectedRow(false);
     }
-  }, [selectedColumn]);
+  }, [selectedColumn, eachFilteredColumn?.label]);
 
   const handleRowClick = () => {
-    setColumnSelected(eachFilteredColumn?.label);
-    onColumnSelection(eachFilteredColumn?.label);
+    if (eachFilteredColumn?.label === selectedColumn) {
+      handleCoumnUnSelect();
+    } else {
+      setColumnSelected(eachFilteredColumn?.label);
+      onColumnSelection(eachFilteredColumn?.label);
+    }
   };
   const ColumnRowStyleWrapper = getColumnRowStyle(selectedRow);
   return (

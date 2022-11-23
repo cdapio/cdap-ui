@@ -173,6 +173,26 @@ export default function GridTable() {
       });
   };
 
+  const handleCoumnUnSelect = () => {
+    setInsightDrawer({
+      open: false,
+      columnName: '',
+      distinctValues: 0,
+      characterCount: { min: 0, max: 0 },
+      dataQuality: {
+        nullValueCount: 0,
+        nullValuePercentage: 0,
+        emptyValueCount: 0,
+        emptyValuePercentage: 0,
+      },
+      dataQualityBar: {},
+      dataTypeString: '',
+      dataDistributionGraphData: [],
+      columnNamesList: [],
+    });
+    setColumnSelected('');
+  };
+
   const handleColumnSelect = (columnName: string) => {
     setColumnSelected((prevColumn) => (prevColumn === columnName ? '' : columnName));
     setColumnType(types[columnName]);
@@ -422,6 +442,7 @@ export default function GridTable() {
               setColumnSelected={handleColumnSelect}
               onColumnSelection={(column) => onColumnSelection(column)}
               selectedColumn={columnSelected}
+              handleCoumnUnSelect={handleCoumnUnSelect}
             />
           </Box>
         )}
