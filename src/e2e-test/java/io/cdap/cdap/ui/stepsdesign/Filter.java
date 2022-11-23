@@ -123,9 +123,8 @@ public class Filter {
         try {
             WaitHelper.waitForPageToLoad();
             WebElement ele = SeleniumDriver.getDriver().findElement(By.xpath("//*[@data-testid='button_done']"));
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
-//            ElementHelper.clickOnElement(Helper.locateElementByTestId("button_done"));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
