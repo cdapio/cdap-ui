@@ -20,7 +20,7 @@ import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { IRecords } from 'components/GridTable/types';
+import { IParams, IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import * as React from 'react';
@@ -47,7 +47,7 @@ const SelectDatasetWrapper = styled(Box)({
 });
 
 export default function ConnectionList() {
-  const { connectorType } = useParams() as IRecords;
+  const { connectorType } = useParams<IParams>();
 
   const refs = useRef([]);
   const classes = useStyles();

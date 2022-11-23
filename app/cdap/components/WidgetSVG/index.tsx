@@ -14,34 +14,20 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { Avatar } from '@material-ui/core';
+import styled from 'styled-components';
+import ImageOutlined from '@material-ui/icons/ImageOutlined';
+import { IWidgetSVGProps } from 'components/WidgetSVG/types';
+import React from 'react';
 
-export const useStyles = makeStyles({
-  noRecordWrapper: {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
-    zIndex: -9,
-  },
-  mainHeaderMessage: {
-    fontSize: 20,
-    color: '#000000',
-    marginTop: 20,
-  },
-  subHeaderMessage: {
-    fontSize: 16,
-    color: '#000000',
-  },
-  innerWrapper: {
-    textAlign: 'center',
-  },
-});
+const StyledImageOutlined = styled(ImageOutlined)`
+  font-size: 40px;
+`;
+
+export default function({ imageSource, label }: IWidgetSVGProps) {
+  return imageSource ? (
+    <Avatar src={imageSource} variant="square" data-testid={`widget-api-image-${label}`} />
+  ) : (
+    <StyledImageOutlined data-testid={`default-widget-image-${label}`} />
+  );
+}

@@ -33,17 +33,18 @@ import {
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import { IWorkspace } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 
 export default function GridTable() {
-  const { wid } = useParams() as IRecords;
-  const params = useParams() as IRecords;
+  const { wid } = useParams<IParams>();
+  const params = useParams<IParams>();
   const classes = useStyles();
+  const location = useLocation();
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -69,7 +70,7 @@ export default function GridTable() {
     });
     MyDataPrepApi.getWorkspace(payload)
       .pipe(
-        flatMap((res: IValues) => {
+        flatMap((res: IWorkspace) => {
           const { dataprep } = DataPrepStore.getState();
           if (dataprep.workspaceId !== workspaceId) {
             return;

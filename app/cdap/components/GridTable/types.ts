@@ -17,11 +17,20 @@
 export interface IParams {
   context: string;
   workspaceId: string;
+  namespace?: string;
+  wid?: string;
+  connectorType?: string;
 }
 
 export interface IRecords {
-  [key: string]: string | boolean | Record<string, IType>;
+  wid?: string;
+  payload?: IParams;
+  body?: string;
+  path?: string;
+  canBrowse?: boolean;
+  name?: string | boolean | Record<string, IType>;
 }
+
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
 }

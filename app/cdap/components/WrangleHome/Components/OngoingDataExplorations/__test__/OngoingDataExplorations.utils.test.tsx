@@ -14,34 +14,12 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/core';
+import { mockOldData } from '../mock/mockOldData';
+import { getUpdatedExplorationCards } from '../utils';
 
-export const useStyles = makeStyles({
-  noRecordWrapper: {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-    '& *': {
-      fontFamily: "'Noto Sans', sans-serif",
-    },
-    zIndex: -9,
-  },
-  mainHeaderMessage: {
-    fontSize: 20,
-    color: '#000000',
-    marginTop: 20,
-  },
-  subHeaderMessage: {
-    fontSize: 16,
-    color: '#000000',
-  },
-  innerWrapper: {
-    textAlign: 'center',
-  },
+describe('Test the Utility Functions', () => {
+  it('Should test the result for empty array', () => {
+    const result = getUpdatedExplorationCards([]);
+    expect(result).toEqual([]);
+  });
 });
