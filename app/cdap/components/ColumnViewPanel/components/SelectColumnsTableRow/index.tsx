@@ -94,12 +94,12 @@ export default function({
   };
   const ColumnRowStyleWrapper = getColumnRowStyle(selectedRow);
   return (
-    <TableBody>
-      <ColumnRowStyleWrapper key={filteredColumnIndex} onClick={() => handleRowClick()} id="yessss">
+    <TableBody data-testid='table-parent-wrapper'>
+      <ColumnRowStyleWrapper key={filteredColumnIndex} onClick={() => handleRowClick()} data-testid='table-column-row-wrapper'>
         <CustomTableBodyColumnTypeCell
           data-testid={`each-column-label-type-${filteredColumnIndex}`}
         >
-          <Box>
+          <Box data-testid='filtered-column-label-type'>
             {eachFilteredColumn?.label}
 
             <br />
