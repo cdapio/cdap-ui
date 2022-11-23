@@ -14,10 +14,13 @@
  * the License.
  */
 
-import { ImportDatasetIcon } from '../WrangleCard/iconStore/ImportDatasetIcon';
-import { IMassagedObject } from './types';
+import {
+  IOngoingExplorationCard,
+  IMassagedObject,
+} from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
 
-export const generateDataForExplorationCard = (oldData) => {
+export const generateDataForExplorationCard = (oldData: IOngoingExplorationCard[]) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List
   const massagedArray = [];
 
@@ -29,7 +32,7 @@ export const generateDataForExplorationCard = (oldData) => {
         const obj = {} as IMassagedObject;
 
         if (keys === 'connectionName') {
-          obj.icon = ImportDatasetIcon;
+          obj.icon = importDatasetIcon;
           obj.label = eachItem[keys];
           obj.type = 'iconWithText';
         } else if (keys === 'workspaceName') {
