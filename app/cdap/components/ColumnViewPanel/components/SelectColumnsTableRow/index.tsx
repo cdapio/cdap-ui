@@ -74,7 +74,7 @@ export default function({
   selectedColumn,
   handleCoumnDeSelect,
 }: ISelectColumnsTableRowProps) {
-  const [selectedRow, setSelectedRow] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<boolean>(false);
 
   useEffect(() => {
     if (eachFilteredColumn?.label === selectedColumn) {
