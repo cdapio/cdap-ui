@@ -43,7 +43,7 @@ import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import ColumnViewPanel from 'components/ColumnViewPanel';
 import FooterPanel from 'components/FooterPanel';
-import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList';
+import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 import { IFooterMetaInfo } from 'components/GridTable/types';
 import {
   calculateDistinctValues,
@@ -85,7 +85,7 @@ export default function GridTable() {
     message: '',
     isSuccess: false,
   });
-  const [columnSelected, setColumnSelected] = useState('');
+  const [columnSelected, setColumnSelected] = useState<string>('');
   const [insightDrawer, setInsightDrawer] = useState({
     open: false,
     columnName: '',
@@ -173,7 +173,7 @@ export default function GridTable() {
       });
   };
 
-  const handleCoumnUnSelect = () => {
+  const handleCoumnDeSelect = () => {
     setInsightDrawer({
       open: false,
       columnName: '',
@@ -442,7 +442,7 @@ export default function GridTable() {
               setColumnSelected={handleColumnSelect}
               onColumnSelection={(column) => onColumnSelection(column)}
               selectedColumn={columnSelected}
-              handleCoumnUnSelect={handleCoumnUnSelect}
+              handleCoumnDeSelect={handleCoumnDeSelect}
             />
           </Box>
         )}

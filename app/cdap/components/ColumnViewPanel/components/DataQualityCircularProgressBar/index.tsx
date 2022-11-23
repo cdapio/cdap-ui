@@ -18,7 +18,7 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import SemiCircleProgressBar from 'react-progressbar-semicircle';
 import styled from 'styled-components';
-import { IDataQualityRecord } from 'components/ColumnViewPanel/components/SelectColumnsList/index';
+import { IDataQualityRecord } from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 
 export interface IDataQualityCircularProgressBarProps {
   dataQualityPercentValue: number;

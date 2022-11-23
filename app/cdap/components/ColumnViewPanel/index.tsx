@@ -31,7 +31,7 @@ export interface IColumnViewProps {
   setColumnSelected: (columName: string) => void;
   onColumnSelection: (column: string) => void;
   selectedColumn: string;
-  handleCoumnUnSelect: () => void;
+  handleCoumnDeSelect: () => void;
 }
 
 export interface IDataQuality {
@@ -51,7 +51,7 @@ export default function({
   setColumnSelected,
   onColumnSelection,
   selectedColumn,
-  handleCoumnUnSelect,
+  handleCoumnDeSelect,
 }: IColumnViewProps) {
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -71,7 +71,7 @@ export default function({
             setColumnSelected={setColumnSelected}
             onColumnSelection={onColumnSelection}
             selectedColumn={selectedColumn}
-            handleCoumnUnSelect={handleCoumnUnSelect}
+            handleCoumnDeSelect={handleCoumnDeSelect}
           />
         </SelectColumnListWrapper>
       </ColumnViewWidget>

@@ -18,7 +18,7 @@ import { Box, TableBody, TableCell, TableRow } from '@material-ui/core';
 import DataQualityCircularProgressBar from 'components/ColumnViewPanel/components/DataQualityCircularProgressBar';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ISelectColumnsTableRowProps } from '../SelectColumnsList';
+import { ISelectColumnsTableRowProps } from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 
 const CommonCustomTableBodyCell = styled(TableCell)`
   padding-top: 10px;
@@ -72,7 +72,7 @@ export default function({
   setColumnSelected,
   onColumnSelection,
   selectedColumn,
-  handleCoumnUnSelect,
+  handleCoumnDeSelect,
 }: ISelectColumnsTableRowProps) {
   const [selectedRow, setSelectedRow] = useState(false);
 
@@ -86,7 +86,7 @@ export default function({
 
   const handleRowClick = () => {
     if (eachFilteredColumn?.label === selectedColumn) {
-      handleCoumnUnSelect();
+      handleCoumnDeSelect();
     } else {
       setColumnSelected(eachFilteredColumn?.label);
       onColumnSelection(eachFilteredColumn?.label);

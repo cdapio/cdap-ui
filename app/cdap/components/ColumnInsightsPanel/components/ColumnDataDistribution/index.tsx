@@ -64,7 +64,7 @@ export default function({ graphData }: IColumnDataDistributionProps) {
   };
 
   const spliceData = (data: IGraphData[]) => {
-    if (data && data?.length >= 10) {
+    if (data && data.length >= 10) {
       return data.slice(0, 9);
     }
     return data;

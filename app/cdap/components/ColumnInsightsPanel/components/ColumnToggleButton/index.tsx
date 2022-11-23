@@ -92,7 +92,7 @@ const getWrapperComponent = (isSelected, position) => {
 };
 
 export default function({ dataQuality }: IDataQualityProps) {
-  const [isSelected, setIsSelected] = useState(1);
+  const [isSelected, setIsSelected] = useState<number>(1);
   const LeftWrapperComponent = getWrapperComponent(isSelected, 'left');
   const RightWrapperComponent = getWrapperComponent(isSelected, 'right');
 

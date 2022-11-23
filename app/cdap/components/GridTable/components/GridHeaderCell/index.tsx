@@ -14,13 +14,10 @@
  * the License.
  */
 
-import { Box, Card, TableCell, Typography } from '@material-ui/core';
+import { Box, TableCell, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-// import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
-// import { Box, TableCell, Typography } from '@material-ui/core';
-// import React, { useEffect, useState } from 'react';
 import TypographyComponent from 'components/GridTable/components/Typography';
 import T from 'i18n-react';
 import styled from 'styled-components';
@@ -134,24 +131,4 @@ export default function GridHeaderCell({
   );
 }
 {
-  /* <Card className={classes.root} variant="outlined">
-        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
-          {label}
-        </Typography>
-        <StringIndicatorBox>
-          <TypographyComponent
-            className={classes.dataTypeIndicator}
-            label={data?.datatype1 || 'Unknown'}
-          />
-          {data.datatype2 && (
-            <StringIndicatorBox>
-              <TypographyComponent className={classes.subDataTypeIndicator} label={'|'} />
-              <TypographyComponent
-                className={classes.subDataTypeIndicator}
-                label={data?.datatype2}
-              />
-            </StringIndicatorBox>
-          )}
-        </StringIndicatorBox>
-      </Card> */
 }
