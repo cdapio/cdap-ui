@@ -75,7 +75,7 @@ export default function GridTable() {
     message: '',
     isSuccess: false,
   });
-  const [columnSelected, setColumnSelected] = useState('');
+  const [columnSelected, setColumnSelected] = useState<string>('');
   const [insightDrawer, setInsightDrawer] = useState({
     open: false,
     columnName: '',
