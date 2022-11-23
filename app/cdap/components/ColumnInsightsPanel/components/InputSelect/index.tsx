@@ -26,7 +26,7 @@ interface IInputSelect {
   fullWidth: boolean;
   defaultValue: string;
   type: string;
-  classes?: any;
+  classes?: unknown;
 }
 
 interface IOption {

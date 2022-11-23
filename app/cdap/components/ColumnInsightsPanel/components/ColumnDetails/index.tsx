@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Input } from '@material-ui/core';
 import { grey, red } from '@material-ui/core/colors';
 import EditIcon from '@material-ui/icons/Edit';
 import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel';
@@ -127,7 +127,7 @@ export default function({
     setCanEdit(true);
   };
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     checkForInvalidInput(e.target.value);
     setInputValue(e.target.value);
   };
@@ -149,7 +149,7 @@ export default function({
     <ColumnDetailsContainer data-testid="column-details-parent">
       <CustomizedColumnNameEditBox>
         {canEdit ? (
-          <input
+          <Input
             value={inputValue}
             onChange={(e) => onChangeHandler(e)}
             onKeyDown={(e) => onEnter(e)}
