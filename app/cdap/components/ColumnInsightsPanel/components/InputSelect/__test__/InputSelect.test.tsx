@@ -14,42 +14,79 @@
  *  the License.
  */
 
-import { fireEvent, render, screen, within } from '@testing-library/react';
-import InputSelect from 'components/ColumnInsightsPanel/components/InputSelect/index';
-import { mockOptions } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
-import React from 'react';
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import InputSelect from "components/ColumnInsightsPanel/components/InputSelect/index";
+import React from "react";
 
-describe('It Should test InputSelect Component', () => {
-  it('should test whether InputSelect Component is rendered.', () => {
+describe("It Should test InputSelect Component", () => {
+  const mockOptions = [
+    {
+      value: "string",
+      label: "String",
+    },
+    {
+      value: "boolean",
+      label: "Boolean",
+    },
+    {
+      value: "int",
+      label: "Integer",
+    },
+    {
+      value: "long",
+      label: "Long",
+    },
+    {
+      value: "short",
+      label: "Short",
+    },
+    {
+      value: "float",
+      label: "Float",
+    },
+    {
+      value: "double",
+      label: "Double",
+    },
+    {
+      value: "decimal",
+      label: "Decimal",
+    },
+    {
+      value: "bytes",
+      label: "Bytes",
+    },
+  ];
+  it("should test whether InputSelect Component is rendered.", () => {
     render(
       <InputSelect
         options={mockOptions}
-        value={'boolean'}
+        value={"boolean"}
         onChange={jest.fn()}
         fullWidth={false}
-        defaultValue={'string'}
-        type={'column-insights'}
+        defaultValue={"string"}
+        type={"column-insights"}
       />
     );
     const inputElement = screen.getByTestId(/input-select/i);
     expect(inputElement).toBeInTheDocument();
   });
-  it('should test whether MenuItem has the expected label which is selected', () => {
+  it("should test whether MenuItem has the expected label which is selected", () => {
     const { getByRole } = render(
       <InputSelect
         options={mockOptions}
-        value={'boolean'}
+        value={"boolean"}
         onChange={jest.fn()}
         fullWidth={false}
-        defaultValue={'string'}
-        type={'column-insights'}
+        defaultValue={"string"}
+        type={"column-insights"}
       />
     );
-    fireEvent.mouseDown(getByRole('button'));
-    const listbox = within(getByRole('listbox'));
+    fireEvent.mouseDown(getByRole("button"));
+    const listbox = within(getByRole("listbox"));
     const longText = listbox.getByText(/Long/i);
     fireEvent.click(longText);
     const selectOption = screen.getByTestId(/select-option-Long/i);
-    expect(selectOption).toHaveTextContent('Long');
+    expect(selectOption).toHaveTextContent("Long");
   });
 });
