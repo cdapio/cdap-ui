@@ -1,0 +1,139 @@
+/*
+ * Copyright © 2022 Cask Data, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+import { Box, InputLabel, Typography } from '@material-ui/core';
+import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
+import InputSelect from 'components/ParsingDrawer/Components/InputSelect';
+import {
+  CHAR_ENCODING_OPTIONS,
+  FORMAT_OPTIONS,
+} from 'components/ParsingDrawer/Components/ParsingPopupBody/parsingOptions';
+import { useStyles } from 'components/ParsingDrawer/styles';
+import { IOptions, IParsingPopupBodyProps } from 'components/ParsingDrawer/types';
+import T from 'i18n-react';
+import React, { ChangeEvent, useEffect } from 'react';
+import styled from 'styled-components';
+
+const FormFieldWrapper = styled(Box)`
+  width: calc(100% - 60px);
+  margin-right: 60px;
+  margin-bottom: 15px;
+`;
+
+const CheckBox = styled(InputCheckbox)`
+  display: flex;
+  width: 100%;
+  margin-bottom: 0px;
+`;
+
+const Label = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  letter-spacing: 0.15;
+  color: #5f6368;
+`;
+
+const SelectField = styled(InputSelect)`
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #DADCE0;
+  border-radius: 4,
+  padding: 5px 15px 0px 15px;
+  font-size: 14px;
+  & :before: {
+  display: none;
+  }
+  & :focus-visible: {
+  outline: none !important;
+  }
+  & :after: {
+  display: none;
+  }
+  & .MuiInputBase-input': {
+  padding: 6px 0px 11px;
+  }
+`;
+
+export default function({ values, changeEventListener }: IParsingPopupBodyProps) {
+  const classes = useStyles();
+
+  const { format, fileEncoding, enableQuotedValues, skipHeader } = values;
+  let selectedFormatValue: IOptions[] = [];
+  let selectedEncodingValue: IOptions[] = [];
+
+  useEffect(() => {
+    selectedFormatValue = FORMAT_OPTIONS?.filter((i) => i.value === format);
+  }, [format]);
+
+  useEffect(() => {
+    selectedEncodingValue = CHAR_ENCODING_OPTIONS?.filter((i) => i.value === fileEncoding);
+  }, [fileEncoding]);
+
+  return (
+    <Box>
+      <FormFieldWrapper>
+        <Label data-testid="popup-body-label-text-format">
+          {T.translate('features.WranglerNewUI.ParsingDrawer.format')}
+        </Label>
+        <InputSelect
+          classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
+          className={classes.selectFieldStyles}
+          optionClassName={{ root: classes.optionStyles }}
+          fullWidth
+          defaultValue={FORMAT_OPTIONS[0].value}
+          value={selectedFormatValue[0]?.value}
+          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+            changeEventListener(event.target.value, 'format')
+          }
+          options={FORMAT_OPTIONS}
+        />
+      </FormFieldWrapper>
+      <FormFieldWrapper>
+        <Label data-testid="popup-body-label-text-encoding">
+          {T.translate('features.WranglerNewUI.ParsingDrawer.encoding')}
+        </Label>
+        <InputSelect
+          classes={{ icon: classes.selectIconStyles, select: classes.selectStyles }}
+          className={classes.selectFieldStyles}
+          optionClassName={{ root: classes.optionStyles }}
+          defaultValue={CHAR_ENCODING_OPTIONS[0].value}
+          fullWidth
+          value={selectedEncodingValue[0]?.value}
+          onChange={(event: ChangeEvent<HTMLSelectElement>) =>
+            changeEventListener(event.target.value, 'fileEncoding')
+          }
+          options={CHAR_ENCODING_OPTIONS}
+        />
+      </FormFieldWrapper>
+      <CheckBox
+        label={T.translate('features.WranglerNewUI.ParsingDrawer.enableQuotedValues')}
+        value={enableQuotedValues}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          changeEventListener(event.target.checked, 'enableQuotedValues')
+        }
+      />
+      <CheckBox
+        label={T.translate('features.WranglerNewUI.ParsingDrawer.useFirstRowAsHeader')}
+        value={skipHeader}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          changeEventListener(event.target.checked, 'skipHeader')
+        }
+      />
+    </Box>
+  );
+}

@@ -76,6 +76,7 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
+  connectorType?: string;
 }
 
 const defaultInitialState: IDataPrepState = {
@@ -101,6 +102,7 @@ const defaultInitialState: IDataPrepState = {
   dataModelList: null,
   targetDataModel: null,
   targetModel: null,
+  connectorType: null,
 };
 
 const errorInitialState = {
@@ -252,6 +254,11 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
     case DataPrepActions.setTargetModel:
       stateCopy = Object.assign({}, state, {
         targetModel: action.payload.targetModel,
+      });
+      break;
+    case DataPrepActions.setConnectorType:
+      stateCopy = Object.assign({}, state, {
+        connectorType: action.payload.connectorType,
       });
       break;
     default:
