@@ -19,13 +19,13 @@ import { MISSING_NULL } from 'components/GridTable/constants';
 import React from 'react';
 import { useGridKPICellStyles } from './styles';
 
-export default function GridKPICell({ metricData }) {
+export default function GridKPICell({ metricData, cellIndex }) {
   const classes = useGridKPICellStyles();
 
   const metricValue = metricData.values;
 
   return (
-    <TableCell className={classes.tableHeaderCell}>
+    <TableCell className={classes.tableHeaderCell} data-testid={`grid-missingDataRow-${cellIndex}`}>
       <Card className={classes.root} variant="outlined">
         {metricValue &&
           Array.isArray(metricValue) &&
