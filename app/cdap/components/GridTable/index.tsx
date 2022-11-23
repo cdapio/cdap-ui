@@ -419,6 +419,9 @@ export default function GridTable() {
               columnData={headersNamesList}
               dataQuality={dataQuality}
               closeClickHandler={() => setOpenColumnView(false)}
+              setColumnSelected={handleColumnSelect}
+              onColumnSelection={(column) => onColumnSelection(column)}
+              selectedColumn={columnSelected}
             />
           </Box>
         )}

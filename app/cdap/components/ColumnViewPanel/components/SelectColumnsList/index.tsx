@@ -30,6 +30,9 @@ export interface ISelectColumnsListProps {
   columnData: IHeaderNamesList[];
   dataQuality: IDataQuality;
   searchTerm: string;
+  setColumnSelected: (columnName: string) => void;
+  onColumnSelection: (column: string) => void;
+  selectedColumn: string;
 }
 
 export interface IDataQuality {
@@ -45,6 +48,9 @@ export interface ISelectColumnsTableRowProps {
   eachFilteredColumn: IHeaderNamesList;
   filteredColumnIndex: number;
   dataQualityList: IDataQualityRecord[];
+  setColumnSelected: (columnName: string) => void;
+  onColumnSelection: (column: string) => void;
+  selectedColumn: string;
 }
 
 const CustomTableContainer = styled(TableContainer)`
@@ -124,7 +130,10 @@ export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeader
 
 const getTableBody = (
   filteredColumns: IHeaderNamesList[],
-  dataQualityList: IDataQualityRecord[]
+  dataQualityList: IDataQualityRecord[],
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn
 ) => {
   {
     return filteredColumns.length !== 0 ? (
@@ -134,6 +143,9 @@ const getTableBody = (
             eachFilteredColumn={eachFilteredColumn}
             filteredColumnIndex={filteredColumnIndex}
             dataQualityList={dataQualityList}
+            setColumnSelected={setColumnSelected}
+            onColumnSelection={onColumnSelection}
+            selectedColumn={selectedColumn}
           />
         );
       })
@@ -146,7 +158,14 @@ const getTableBody = (
   }
 };
 
-export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsListProps) {
+export default function({
+  columnData,
+  dataQuality,
+  searchTerm,
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn,
+}: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
 
@@ -185,7 +204,13 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
               </CustomTableHeaderRow>
             </TableHead>
           )}
-          {getTableBody(filteredColumns, dataQualityList)}
+          {getTableBody(
+            filteredColumns,
+            dataQualityList,
+            setColumnSelected,
+            onColumnSelection,
+            selectedColumn
+          )}
         </Table>
       </CustomTableContainer>
     </SelectColumnsListSection>

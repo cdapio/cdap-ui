@@ -28,6 +28,9 @@ export interface IColumnViewProps {
   columnData: IHeaderNamesList[];
   closeClickHandler: () => void;
   dataQuality: IDataQuality;
+  setColumnSelected: (columName: string) => void;
+  onColumnSelection: (column: string) => void;
+  selectedColumn: string;
 }
 
 export interface IDataQuality {
@@ -40,7 +43,14 @@ const SelectColumnListWrapper = styled(Box)`
   padding: 0;
 `;
 
-export default function({ columnData, dataQuality, closeClickHandler }: IColumnViewProps) {
+export default function({
+  columnData,
+  dataQuality,
+  closeClickHandler,
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn,
+}: IColumnViewProps) {
   const [searchValue, setSearchValue] = useState<string>('');
 
   return (
@@ -56,6 +66,9 @@ export default function({ columnData, dataQuality, closeClickHandler }: IColumnV
             columnData={columnData}
             dataQuality={dataQuality}
             searchTerm={searchValue}
+            setColumnSelected={setColumnSelected}
+            onColumnSelection={onColumnSelection}
+            selectedColumn={selectedColumn}
           />
         </SelectColumnListWrapper>
       </ColumnViewWidget>
