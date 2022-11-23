@@ -22,17 +22,11 @@ import { mockItems, mockItemsWithPercentage, mockItemsPercentageData } from '../
 describe('Test Ongoing Data Explrations Component', () => {
   it('Should render OngoingDataExplorationCard component', () => {
     render(<OngoingDataExplorationCard item={mockItems} />);
-    const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card/i);
+    const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card-iconWithText-0/i);
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render OngoingDataExplorationCard percentage non nan code', () => {
-    render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
-    const ele = screen.getByTestId(/ongoing-data-exploration-card-percentage-nan/i);
-    expect(ele).toBeInTheDocument();
-  });
-
-  it('Should check whether percentageStyleRed is applied to ongoing-data-card-percentage when percent is < 100', () => {
+  it('Should check whether percentageStyleRed is applied to ongoing-data-card-percentage', () => {
     render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
     const ele = screen.getByTestId(/ongoing-data-card-percentage/i);
     expect(ele).toHaveStyle('color: rgb(229, 57, 53)');

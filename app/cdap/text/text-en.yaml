@@ -3436,4 +3436,123 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+    GridPage:
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          otherIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            datatype:
+              string: string
+              boolean: boolean
+              integer: integer
+              long: long
+              short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
+            math:
+              algebra: Algebra
+              add: Add
+              subtract: Subtract
+              multiply: Multiply
+              divide: Divide
+              modulo: Modulo
+              powerOf: Power of
+              square: Square
+              squareRoot: Square root
+              cube: Cube
+              cubeRoot: Cube root
+              log: log
+              naturalLog: Natural log
+              absoluteValue: Absolute value
+              ceil: Ceil
+              floor: Floor
+              trigonometry: Trigonometry
+              sin: Sin
+              cos: Cos
+              tan: Tan
+              arcsin: ARCSIN
+              arccos: ARCCOS
+              arctan: ARCTAN
+              random: Random
+              decimal: DECIMAL
+              decimalAdd: Decimal Add
+              decimalSubtract: Decimal Subtract
+              decimalMultiply: Decimal Multiply
+              decimalDivide: Decimal Divide
+              decimalDivider: Decimal Divider
+              precision: Precision
+              scale: Scale
+              unscaled: Unscaled
+              decimalLeft: Decimal left
+              decimalRight: Decimal right
+              decimalPowerOf: Decimal power of
+              decimalAbsoluteValue: Decimal absolute value
+              decimalSquare: Decimal square
+              decimalCube: Decimal cube
+              negate: Negate
+              stripZero: Strip zero
+              sign: Sign
+            menu:
+              changeDatatype: Change data type
+            other: 
+              characterCount: Character count
+      addTransformationPanel:
+        addTransformation: Add Transformation Step
+        applyStep: Apply Step
+        columnsSelected: columns selected
+        columns: Columns
+        dataQuality: Data Quality
+        done: Done
+        function: Function
+        nullValues: Null Values
+        quickSelect: Quick select by clicking a column on the grid/columns panel
+        selectColumnPara: Select column(s) to apply this function
+        selectColumn: Select column
+        selectMultiColumns: Select columns
+      selectColumnListPanel:
+        columnsSelected: column selected
+        no: No
+        noColumns: No columns to show
+        noMatchColumnDatatype: Selected directive supported datatype does not match which the column's datatype
+        zero: '0' 
+      transformationUI:
+        common: 
+          nameNewColumn:  Name new column 
+          columnExist: This column name already exist
+          destinationColumn: Destination Column
+        calculate:
+          copyToNewColumn: Copy to a new column
+          enterValueTo: Please enter a value to
+          examplePlaceholder: Enter value, e.g. 3
+    Snackbar:
+      labels:
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for
 ...
