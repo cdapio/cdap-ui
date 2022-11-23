@@ -14,10 +14,14 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import DrawerWidgetHeading from 'components/ColumnViewPanel/components/ColumnViewWidget/DrawerWidgetHeading/index';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  eachHeaderIndex: number;
-}
+describe('It Should test DrawerWidgetHeading Component', () => {
+  it('Should render DrawerWidgetheading Component and test the column view heading text', () => {
+    render(<DrawerWidgetHeading headingText={'Column View Panel'} />);
+    const headingText = screen.getByTestId('drawer-widget-heading-text');
+    expect(headingText).toHaveTextContent('Column View Panel');
+  });
+});
