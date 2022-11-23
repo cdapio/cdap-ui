@@ -76,11 +76,11 @@ describe('It Should test ColumnDetails Component', () => {
     const inputField = screen.getByTestId(/column-name-edit-input/i);
     expect(inputField).toBeInTheDocument();
 
-    fireEvent.change(inputField, { target: { value: 'body_10' } }); // When valid input is given
-    expect(inputField).toHaveValue('body_10');
-    fireEvent.keyDown(inputField, { key: 'Enter', code: 13, charCode: 13 });
-    fireEvent.change(inputField, { target: { value: 'body_**' } }); // When invalid input is given
-    expect(inputField).toHaveValue('body_**');
+    fireEvent.change(inputField.firstChild, { target: { value: 'body_10' } }); // When valid input is given
+    expect(inputField.firstChild).toHaveValue('body_10');
+    fireEvent.keyDown(inputField.firstChild, { key: 'Enter', code: 13, charCode: 13 });
+    fireEvent.change(inputField.firstChild, { target: { value: 'body_**' } }); // When invalid input is given
+    expect(inputField.firstChild).toHaveValue('body_**');
     const invalidText = screen.getByTestId('invalid-text');
     expect(invalidText).toHaveTextContent(
       'features.NewWranglerUI.ColumnInsights.error.invalidError'
@@ -104,8 +104,8 @@ describe('It Should test ColumnDetails Component', () => {
 
     const inputField = screen.getByTestId(/column-name-edit-input/i);
     expect(inputField).toBeInTheDocument();
-    fireEvent.change(inputField, { target: { value: 'body_10' } });
-    fireEvent.blur(inputField);
+    fireEvent.change(inputField.firstChild, { target: { value: 'body_10' } });
+    fireEvent.blur(inputField.firstChild);
   });
   it('Should test inputField when onBlur event is triggered and the new column name is same', () => {
     render(
@@ -124,7 +124,7 @@ describe('It Should test ColumnDetails Component', () => {
     fireEvent.click(editIcon);
     const inputField = screen.getByTestId(/column-name-edit-input/i);
     expect(inputField).toBeInTheDocument();
-    fireEvent.change(inputField, { target: { value: 'body_2' } });
+    fireEvent.change(inputField.firstChild, { target: { value: 'body_2' } });
     fireEvent.blur(inputField);
   });
 
@@ -145,7 +145,7 @@ describe('It Should test ColumnDetails Component', () => {
     fireEvent.click(editIcon);
     const inputField = screen.getByTestId(/column-name-edit-input/i);
     expect(inputField).toBeInTheDocument();
-    fireEvent.change(inputField, { target: { value: 'body_2**' } });
+    fireEvent.change(inputField.firstChild, { target: { value: 'body_2**' } });
     fireEvent.blur(inputField);
   });
 });
