@@ -42,7 +42,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-import ColumnViewPanel from 'components/ColumnViewPanel';
 import FooterPanel from 'components/FooterPanel';
 import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 import { IFooterMetaInfo } from 'components/GridTable/types';
@@ -61,18 +60,12 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
-  const [tableMetaInfo, setTableMetaInfo] = useState<IFooterMetaInfo>({
-    columnCount: 0,
-    rowCount: 0,
-  });
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
-  const [openColumnView, setOpenColumnView] = useState<boolean>(false);
-  const [dataQuality, setDataQuality] = useState<IDataQuality>({});
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
       label: 'Invalid',
