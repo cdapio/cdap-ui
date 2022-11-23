@@ -16,7 +16,6 @@
 
 import { render, screen } from '@testing-library/react';
 import SelectColumnsList from 'components/ColumnViewPanel/components/SelectColumnsList/index';
-// import { mockColumnData, mockDataQuality } from 'components/ColumnView/__test__/ColumnView.test';
 import T from 'i18n-react';
 import React from 'react';
 
@@ -44,7 +43,7 @@ describe('It should test SelectColumnList Component', () => {
     },
   ];
 
-   const mockDataQuality = {
+  const mockDataQuality = {
     body_0: {
       general: {
         'non-null': 100,

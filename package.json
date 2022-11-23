@@ -224,6 +224,7 @@
     "query-string": "6.9.0",
     "react": "17.0.2",
     "react-apollo": "3.1.3",
+    "react-bar-chart": "^0.1.2",
     "react-calendar": "2.19.2",
     "react-css-modules": "4.7.11",
     "react-datetime": "2.16.3",
@@ -263,7 +264,6 @@
     "vega-lite": "2.0.0-beta.16",
     "vega-tooltip": "0.4.3",
     "webpack-dev-server": "3.11.0",
-    "whatwg-fetch": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-1.0.0.tgz",
     "yml-loader": "2.1.0"
   },
   "resolutions": {

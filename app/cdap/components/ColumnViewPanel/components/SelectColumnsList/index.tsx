@@ -20,32 +20,16 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import {
+  ISelectColumnsListProps,
+  IDataQuality,
+  IDataQualityRecord,
+} from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 
 const COLUMNS = T.translate('features.WranglerNewUI.ColumnViewPanel.columns');
 const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');
 
 import { IHeaderNamesList } from 'components/GridTable/types';
-
-export interface ISelectColumnsListProps {
-  columnData: IHeaderNamesList[];
-  dataQuality: IDataQuality;
-  searchTerm: string;
-}
-
-export interface IDataQuality {
-  [key: string]: unknown;
-}
-
-export interface IDataQualityRecord {
-  label: string;
-  value: number;
-}
-
-export interface ISelectColumnsTableRowProps {
-  eachFilteredColumn: IHeaderNamesList;
-  filteredColumnIndex: number;
-  dataQualityList: IDataQualityRecord[];
-}
 
 const CustomTableContainer = styled(TableContainer)`
   &.MuiTableContainer-root {
@@ -124,7 +108,11 @@ export const prepareDataQualtiy = (statistics: IDataQuality, columnList: IHeader
 
 const getTableBody = (
   filteredColumns: IHeaderNamesList[],
-  dataQualityList: IDataQualityRecord[]
+  dataQualityList: IDataQualityRecord[],
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn,
+  handleCoumnDeSelect
 ) => {
   {
     return filteredColumns.length !== 0 ? (
@@ -134,6 +122,10 @@ const getTableBody = (
             eachFilteredColumn={eachFilteredColumn}
             filteredColumnIndex={filteredColumnIndex}
             dataQualityList={dataQualityList}
+            setColumnSelected={setColumnSelected}
+            onColumnSelection={onColumnSelection}
+            selectedColumn={selectedColumn}
+            handleCoumnDeSelect={handleCoumnDeSelect}
           />
         );
       })
@@ -146,13 +138,27 @@ const getTableBody = (
   }
 };
 
-export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsListProps) {
+export default function({
+  columnData,
+  dataQuality,
+  searchTerm,
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn,
+  handleCoumnDeSelect,
+}: ISelectColumnsListProps) {
   const [filteredColumns, setFilteredColumns] = useState<IHeaderNamesList[]>(columnData);
   const [dataQualityList, setDataQualityList] = useState<IDataQualityRecord[]>([]);
 
   useEffect(() => {
     setDataQualityList(prepareDataQualtiy(dataQuality, columnData));
   }, []);
+
+  useEffect(() => {
+    if (columnData && columnData.length) {
+      setFilteredColumns(columnData);
+    }
+  }, [columnData]);
 
   useEffect(() => {
     if (searchTerm) {
@@ -185,7 +191,14 @@ export default function({ columnData, dataQuality, searchTerm }: ISelectColumnsL
               </CustomTableHeaderRow>
             </TableHead>
           )}
-          {getTableBody(filteredColumns, dataQualityList)}
+          {getTableBody(
+            filteredColumns,
+            dataQualityList,
+            setColumnSelected,
+            onColumnSelection,
+            selectedColumn,
+            handleCoumnDeSelect
+          )}
         </Table>
       </CustomTableContainer>
     </SelectColumnsListSection>

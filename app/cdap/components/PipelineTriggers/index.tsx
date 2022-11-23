@@ -33,6 +33,7 @@ require('./PipelineTriggers.scss');
 
 interface IPipelineTriggersViewProps {
   pipelineCompositeTriggersEnabled: boolean;
+  lifecycleManagementEditEnabled: boolean;
   pipelineName: string;
   namespace: string;
   pipelineType: string;
@@ -40,6 +41,7 @@ interface IPipelineTriggersViewProps {
 
 const PipelineTriggers = ({
   pipelineCompositeTriggersEnabled,
+  lifecycleManagementEditEnabled,
   pipelineName,
   namespace,
   pipelineType,
@@ -77,6 +79,7 @@ const PipelineTriggers = ({
         pipelineName,
         workflowName: GLOBALS.programId[pipelineType],
         pipelineCompositeTriggersEnabled,
+        lifecycleManagementEditEnabled,
       },
     });
 

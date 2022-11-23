@@ -39,5 +39,9 @@ export const useStyles = makeStyles({
   gridTableWrapper: {
     maxHeight: 'calc(100vh - 190px)',
     overflowY: 'auto',
+    borderTop: '1px solid #3994ff',
+  },
+  columnInsightsDrawer: {
+    maxHeight: 'calc(100vh - 149px)',
   },
 });

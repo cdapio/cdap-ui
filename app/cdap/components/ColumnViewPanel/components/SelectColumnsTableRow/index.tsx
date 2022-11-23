@@ -16,9 +16,9 @@
 
 import { Box, TableBody, TableCell, TableRow } from '@material-ui/core';
 import DataQualityCircularProgressBar from 'components/ColumnViewPanel/components/DataQualityCircularProgressBar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ISelectColumnsTableRowProps } from '../SelectColumnsList';
+import { ISelectColumnsTableRowProps } from 'components/ColumnViewPanel/components/SelectColumnsList/types';
 
 const CommonCustomTableBodyCell = styled(TableCell)`
   padding-top: 10px;
@@ -42,18 +42,68 @@ const CustomTableBodyNullValuesCell = styled(CommonCustomTableBodyCell)`
   padding-left: 0;
 `;
 
+const NormalSelectedRow = styled(TableRow)`
+  & .MuiTableCell-root {
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+  }
+  cursor: pointer;
+`;
+
+const SelectedColumnRow = styled(TableRow)`
+  & .MuiTableRow-root {
+    border-left: 1px solid #2196F3; !important;
+    border-right: 1px solid #2196F3; !important;
+    outline: 1px solid #2196F3; !important;
+  }
+  & .MuiTableCell-root {
+    border-bottom: 1px solid #2196F3; !important;
+    border-top: 1px solid #2196F3; !important;
+  }
+`;
+
+const getColumnRowStyle = (isSelected) => {
+  return isSelected ? SelectedColumnRow : NormalSelectedRow;
+};
+
 export default function({
   eachFilteredColumn,
   filteredColumnIndex,
   dataQualityList,
+  setColumnSelected,
+  onColumnSelection,
+  selectedColumn,
+  handleCoumnDeSelect,
 }: ISelectColumnsTableRowProps) {
+  const [selectedRow, setSelectedRow] = useState(false);
+
+  useEffect(() => {
+    if (eachFilteredColumn?.label === selectedColumn) {
+      setSelectedRow(true);
+    } else {
+      setSelectedRow(false);
+    }
+  }, [selectedColumn, eachFilteredColumn?.label]);
+
+  const handleRowClick = () => {
+    if (eachFilteredColumn?.label === selectedColumn) {
+      handleCoumnDeSelect();
+    } else {
+      setColumnSelected(eachFilteredColumn?.label);
+      onColumnSelection(eachFilteredColumn?.label);
+    }
+  };
+  const ColumnRowStyleWrapper = getColumnRowStyle(selectedRow);
   return (
-    <TableBody>
-      <TableRow key={filteredColumnIndex}>
+    <TableBody data-testid="table-parent-wrapper">
+      <ColumnRowStyleWrapper
+        key={filteredColumnIndex}
+        onClick={() => handleRowClick()}
+        data-testid="table-column-row-wrapper"
+      >
         <CustomTableBodyColumnTypeCell
           data-testid={`each-column-label-type-${filteredColumnIndex}`}
         >
-          <Box>
+          <Box data-testid="filtered-column-label-type">
             {eachFilteredColumn?.label}
 
             <br />
@@ -69,7 +119,7 @@ export default function({
             dataQualityPercentValue={dataQualityList[filteredColumnIndex]?.value}
           />
         </CustomTableBodyNullValuesCell>
-      </TableRow>
+      </ColumnRowStyleWrapper>
     </TableBody>
   );
 }
