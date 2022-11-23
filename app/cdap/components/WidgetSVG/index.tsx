@@ -14,23 +14,20 @@
  * the License.
  */
 
-package io.cdap.cdap.ui.runners;
+import { Avatar } from '@material-ui/core';
+import ImageOutlined from '@material-ui/icons/ImageOutlined';
+import { IWidgetSVGProps } from 'components/WidgetSVG/types';
+import React from 'react';
+import styled from 'styled-components';
 
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
-import org.junit.runner.RunWith;
+const StyledImageOutlined = styled(ImageOutlined)`
+  font-size: 40px;
+`;
 
-/**
- * Test Runner to execute namespace creation related test cases.
- */
-@RunWith(Cucumber.class)
-@CucumberOptions(
-  features = {"src/e2e-test/features/"},
-  glue = {"io.cdap.cdap.ui.stepsdesign", "stepsdesign"},
-  tags = {"not @ignore"},
-  plugin = {"pretty", "html:target/cucumber-html-report/tethering",
-    "json:target/cucumber-reports/cucumber-tethering.json",
-    "junit:target/cucumber-reports/cucumber-tethering.xml"}
-)
-public class TestRunner {
+export default function({ imageSource, label }: IWidgetSVGProps) {
+  return imageSource ? (
+    <Avatar src={imageSource} variant="square" data-testid={`widget-api-image-${label}`} />
+  ) : (
+    <StyledImageOutlined data-testid={`default-widget-image-${label}`} />
+  );
 }
