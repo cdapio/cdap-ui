@@ -14,7 +14,12 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: string[];
-}
+import { mockOldData } from '../mock/mockOldData';
+import { getUpdatedExplorationCards } from '../utils';
+
+describe('Test the Utility Functions', () => {
+  it('Should test the result for empty array', () => {
+    const result = getUpdatedExplorationCards([]);
+    expect(result).toEqual([]);
+  });
+});

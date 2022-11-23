@@ -14,7 +14,20 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: string[];
+import { Avatar } from '@material-ui/core';
+import styled from 'styled-components';
+import ImageOutlined from '@material-ui/icons/ImageOutlined';
+import { IWidgetSVGProps } from 'components/WidgetSVG/types';
+import React from 'react';
+
+const StyledImageOutlined = styled(ImageOutlined)`
+  font-size: 40px;
+`;
+
+export default function({ imageSource, label }: IWidgetSVGProps) {
+  return imageSource ? (
+    <Avatar src={imageSource} variant="square" data-testid={`widget-api-image-${label}`} />
+  ) : (
+    <StyledImageOutlined data-testid={`default-widget-image-${label}`} />
+  );
 }

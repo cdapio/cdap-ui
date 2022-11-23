@@ -24,9 +24,8 @@ export const useStyles = makeStyles({
     justifyContent: 'space-between',
     height: '48px',
     alignItems: 'center',
-    marginRight: 30,
-    marginLeft: 34,
-    zIndex: 9,
+    marginRight: '30px',
+    marginLeft: '34px',
     '& .MuiBreadcrumbs-root': {
       fontSize: '14px',
       fontWeight: '400',

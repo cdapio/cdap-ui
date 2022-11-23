@@ -14,21 +14,20 @@
  * the License.
  */
 
-import { Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
-import { useGridTextCellStyles } from './styles';
-import { IGridTextCellProps } from './types';
+import { render, screen } from '@testing-library/react';
+import OngoingDataExplorationCard from '../index';
+import { mockItems, mockItemsWithPercentage, mockItemsPercentageData } from '../mock/mock';
 
-export default function GridTextCell({ cellValue }: IGridTextCellProps) {
-  const classes = useGridTextCellStyles();
-
-  return (
-    <TableCell className={classes.tableRowCell}>
-      <Card className={classes.root} variant="outlined">
-        <Typography className={classes.cell} data-testid="grid-text-cell-testing">
-          {cellValue}
-        </Typography>
-      </Card>
-    </TableCell>
-  );
-}
+describe('Test Ongoing Data Explrations Component', () => {
+  it('Should render OngoingDataExplorationCard component', () => {
+    render(
+      <OngoingDataExplorationCard
+        explorationCardDetails={mockItemsWithPercentage[0]}
+        cardIndex={1}
+      />
+    );
+    const ele = screen.getByTestId('ongoing-data-explorations-card-1');
+    expect(ele).toBeInTheDocument();
+  });
+});

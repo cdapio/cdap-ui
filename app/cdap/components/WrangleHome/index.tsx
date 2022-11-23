@@ -16,20 +16,30 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import React, { useState } from 'react';
-import OngoingDataExploration from './Components/OngoingDataExploration';
-import WrangleCard from './Components/WrangleCard';
-import WrangleHomeTitle from './Components/WrangleHomeTitle';
-import { GradientLine, HeaderImage } from './icons';
-import { useStyles } from './styles';
+import { getWidgetData } from 'components/WidgetSVG/utils';
+import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations';
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard';
+import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle';
+import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
+import { useStyles } from 'components/WrangleHome/styles';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { CARD_COUNT } from 'components/WrangleHome/constants';
 
-export default function WranglerHome() {
+export default function() {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [showExplorations, setShowExplorations] = useState<boolean>(false);
+  useEffect(() => {
+    getWidgetData();
+  }, []);
 
   return (
-    <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
+    <Box
+      className={`${classes.wrapper} ${showExplorations && classes.wrapperWithBottomSpace}`}
+      data-testid="wrangler-home-new-parent"
+    >
       <Box className={classes.subHeader}>
         <Typography className={classes.welcomeCard}>
           Hello! <br />
@@ -41,15 +51,33 @@ export default function WranglerHome() {
 
       <Box>
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Start data exploration" />
-          <Box className={classes.viewMore}>View More</Box>
+          <WrangleHomeTitle title={T.translate('features.HomePage.labels.connectorTypes.title')} />
+          <Box className={classes.viewMore}>
+            {T.translate('features.HomePage.labels.common.viewAll')}
+          </Box>
         </Box>
         <WrangleCard />
-        <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
-          <Box className={classes.viewMore}>View More</Box>
-        </Box>
-        <OngoingDataExploration />
+        {showExplorations && (
+          <Box className={classes.headerTitle}>
+            <WrangleHomeTitle title={T.translate('features.HomePage.labels.workspaces.title')} />
+            <Box className={classes.viewMore}>
+              <Link
+                color="inherit"
+                to={`/ns/${getCurrentNamespace()}/workspace-list`}
+                data-testid="ongoing-explorations-view-all"
+              >
+                {T.translate('features.HomePage.labels.common.viewAll')}
+              </Link>
+            </Box>
+          </Box>
+        )}
+        <OngoingDataExplorations
+          fromAddress={T.translate(
+            'features.WranglerNewUI.Breadcrumb.labels.wrangleHome'
+          ).toString()}
+          setShowExplorations={setShowExplorations}
+          cardCount={CARD_COUNT}
+        />
       </Box>
     </Box>
   );

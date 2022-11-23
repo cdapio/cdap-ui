@@ -44,12 +44,14 @@ export default function Breadcrumb({ path, baseLinkPath }) {
 
   function createCrumb(title, pathFragment, isLast) {
     return isLast ? (
-      <Typography key={pathFragment} className={classes.lastCrumb}>
+      <Typography key={pathFragment} className={classes.lastCrumb} component="span">
         {title}
       </Typography>
     ) : (
       <Link to={`${baseLinkPath}${pathFragment}`} key={pathFragment} component={RouterLink}>
-        <Typography className={classes.crumb}>{title}</Typography>
+        <Typography className={classes.crumb} component="span">
+          {title}
+        </Typography>
       </Link>
     );
   }

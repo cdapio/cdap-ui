@@ -28,6 +28,11 @@ import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
 require('./Home.scss');
 
+const WorkspaceList = Loadable({
+  loader: () => import(/* webpackChunkName: "WorkspaceList" */ 'components/WorkspaceList'),
+  loading: LoadingSVGCentered,
+});
+
 const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
@@ -177,6 +182,7 @@ export default class Home extends Component {
           <Route exact path="/ns/:namespace/operations" component={Operations} />
           <Route path="/ns/:namespace/details" component={NamespaceAdmin} />
           <Route path="/ns/:namespace/reports" component={Reports} />
+          <Route exact path="/ns/:namespace/workspace-list" component={WorkspaceList} />
           <Route
             exact
             path="/ns/:namespace/profiles/create"

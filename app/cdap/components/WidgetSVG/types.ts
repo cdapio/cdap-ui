@@ -14,7 +14,39 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
+export interface IArtifact {
+  name: string;
+  version: string;
+  scope: string;
+}
+
+export interface IConnectorTypesWithSVG {
+  name: string;
+  typ?: string;
+  category?: string;
+  description?: string;
+  artifact?: IArtifact;
+  SVG: JSX.Element;
+  link?: string;
+  displayName?: string;
+}
+
+export interface IConnectorDetailsPayload {
+  name: string;
+  type: string;
+  category: string;
+  description: string;
+  artifact: IArtifact;
+}
+
+export interface IWidgetSVGProps {
+  imageSource?: string;
   label: string;
-  types: string[];
+}
+
+export interface IConnectorTypes {
+  name: string;
+  type: string;
+  category: string;
+  artifact: IArtifact;
 }

@@ -20,11 +20,11 @@ import { GCSIcon } from 'components/ConnectionList/icons';
 import { exploreConnection } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
 import { fetchConnectors } from 'components/Connections/Create/reducer';
-import { IRecords } from 'components/GridTable/types';
+import { IParams, IRecords } from 'components/GridTable/types';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ErrorSnackbar from 'components/SnackbarComponent';
 import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import ConnectionsTabs from './Components/ConnectionTabs';
 import CustomTooltip from './Components/CustomTooltip';
@@ -47,7 +47,7 @@ const SelectDatasetWrapper = styled(Box)({
 });
 
 export default function ConnectionList() {
-  const { connectorType } = useParams() as IRecords;
+  const { connectorType } = useParams<IParams>();
 
   const refs = useRef([]);
   const classes = useStyles();
@@ -160,7 +160,7 @@ export default function ConnectionList() {
         };
       });
       if (index === 0) {
-        getCategorizedConnectionsforSelectedTab(entity.name as string, index);
+        getCategorizedConnectionsforSelectedTab(entity.name, index);
       } else if (index === 1) {
         fetchEntities(entity.name).then((res) => {
           setDataForTabsHelper(res, index);
@@ -168,7 +168,7 @@ export default function ConnectionList() {
         });
       } else {
         if (entity.canBrowse) {
-          fetchEntities(dataForTabs[1].selectedTab, entity.path as string).then((res) => {
+          fetchEntities(dataForTabs[1].selectedTab, entity.path).then((res) => {
             setDataForTabsHelper(res, index);
             toggleLoader(false);
           });
@@ -188,7 +188,7 @@ export default function ConnectionList() {
       temp[0].selectedTab = connectorType;
       return temp;
     });
-    getCategorizedConnectionsforSelectedTab(connectorType as string, 0);
+    getCategorizedConnectionsforSelectedTab(connectorType, 0);
   }, [connectorType]);
 
   const headerForLevelZero = () => {
@@ -253,7 +253,6 @@ export default function ConnectionList() {
                 connectionId={connectionId || ''}
                 toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
                 setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                data-testid="connections-tabs-list-change"
               />
             </Box>
           );

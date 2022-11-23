@@ -19,20 +19,21 @@ import { fetchConnectors } from 'components/Connections/Create/reducer';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { BigQuery } from './iconStore/BigQuerySVG';
-import { CloudSQLMySQL } from './iconStore/CloudSQLMySQL';
-import { CloudSQLPostGreSQL } from './iconStore/CloudSQLPostGreSQL';
-import { Database } from './iconStore/Database';
-import { GCS } from './iconStore/GCS';
-import { ImportDatasetIcon } from './iconStore/ImportDatasetIcon';
-import { Kafka } from './iconStore/Kafka';
-import { MySQL } from './iconStore/MySQL';
-import { Oracle } from './iconStore/Oracle';
-import { PostgreSQL } from './iconStore/PostgreSQL';
-import { S3 } from './iconStore/S3';
-import { Spanner } from './iconStore/Spanner';
-import { SQLServer } from './iconStore/SQLServer';
-import { useStyles } from './styles';
+import { BigQuery } from 'components/WrangleHome/Components/WrangleCard/iconStore/BigQuerySVG';
+import { CloudSQLMySQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/CloudSQLMySQL';
+import { CloudSQLPostGreSQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/CloudSQLPostGreSQL';
+import { Database } from 'components/WrangleHome/Components/WrangleCard/iconStore/Database';
+import { GCS } from 'components/WrangleHome/Components/WrangleCard/iconStore/GCS';
+import { Kafka } from 'components/WrangleHome/Components/WrangleCard/iconStore/Kafka';
+import { MySQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/MySQL';
+import { Oracle } from 'components/WrangleHome/Components/WrangleCard/iconStore/Oracle';
+import { PostgreSQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/PostgreSQL';
+import { S3 } from 'components/WrangleHome/Components/WrangleCard/iconStore/S3';
+import { Spanner } from 'components/WrangleHome/Components/WrangleCard/iconStore/Spanner';
+import { SQLServer } from 'components/WrangleHome/Components/WrangleCard/iconStore/SQLServer';
+import { useStyles } from 'components/WrangleHome/Components/WrangleCard/styles';
+import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
+import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
 
 export default function WrangleCard() {
   const [connectorTypes, setConnectorTypes] = useState({
@@ -43,7 +44,11 @@ export default function WrangleCard() {
   // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
   const getConnectorTypesNames = async () => {
     let fetchedConnectorTypesFromAPI = await fetchConnectors();
-
+    const categorizedConnections = await getCategorizedConnections();
+    const connectorTypeWithConnections = [];
+    categorizedConnections.forEach((itemEach, key) => {
+      connectorTypeWithConnections.push(key);
+    });
     fetchedConnectorTypesFromAPI = fetchedConnectorTypesFromAPI.map((connectorType) => {
       if (connectorType.name === 'S3') {
         return {
@@ -118,6 +123,12 @@ export default function WrangleCard() {
       }
     });
 
+    /* remove the other connector Types based on getCategorized connections */
+
+    fetchedConnectorTypesFromAPI = fetchedConnectorTypesFromAPI.filter((obj) =>
+      connectorTypeWithConnections.find((each) => each === obj.name)
+    );
+
     fetchedConnectorTypesFromAPI.unshift({
       name: 'Imported Datasets',
       type: 'default',
@@ -150,6 +161,7 @@ export default function WrangleCard() {
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
             style={{ textDecoration: 'none' }}
+            data-testid={'item' + index}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>

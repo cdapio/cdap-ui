@@ -27,10 +27,10 @@ export const useStyles = makeStyles({
     right: 0,
     left: 0,
     bottom: 0,
-    zIndex: -9,
     '& *': {
       fontFamily: "'Noto Sans', sans-serif",
     },
+    zIndex: -9,
   },
   mainHeaderMessage: {
     fontSize: 20,

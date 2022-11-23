@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
+import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
 import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
@@ -28,14 +28,14 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
 
   const [data, setData] = useState<Record<string, string>>({
-    datatype1: types.length > 0 ? (types[0] as string) : null,
-    datatype2: types.length > 1 ? (types[1] as string) : null,
+    datatype1: types.length > 0 ? types[0] : null,
+    datatype2: types.length > 1 ? types[1] : null,
   });
 
   return (
-    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-container">
+    <TableCell className={classes.tableHeaderCell}>
       <Card className={classes.root} variant="outlined">
-        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
+        <Typography className={classes.columnHeader} data-testid="grid-header-cell-container">
           {label}
         </Typography>
         <StringIndicatorBox>

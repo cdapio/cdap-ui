@@ -14,22 +14,17 @@
  *  the License.
  */
 
-import { screen } from '@testing-library/dom';
-import { render } from '@testing-library/react';
-import GridKPICell from 'components/GridTable/components/GridKPICell';
-import React from 'react';
+import T from 'i18n-react';
 
-describe('Test GridKPICell Component', () => {
-  const fakeArray = {
-    values: [
-      { label: 'pg_shadow', count: 10 },
-      { label: 'pg_shadow2', count: 6 },
-    ],
-  };
+const PREFIX = 'features.WranglerNewUI.Breadcrumb';
 
-  render(<GridKPICell metricData={fakeArray} />);
-
-  it('Should should have eachValue Count', () => {
-    expect(screen.getAllByTestId('grid-kpi-metric-value-pg_shadow')[0]).toHaveTextContent('10');
-  });
-});
+export const getSourcePath = (location) => {
+  switch (location?.state?.from) {
+    case T.translate(`${PREFIX}.labels.wrangleHome`).toString():
+      return T.translate(`${PREFIX}.params.wrangleHome`).toString();
+    case T.translate(`${PREFIX}.labels.workSpaces`):
+      return T.translate(`${PREFIX}.params.workSpaces`);
+    default:
+      return `${T.translate(`${PREFIX}.params.connectionsList`)}/${location?.state?.path}`;
+  }
+};

@@ -14,7 +14,18 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: string[];
+export interface IExplorationCardDetails {
+  icon?: JSX.Element;
+  label?: string;
+  type?: string;
+  percentageSymbol?: string;
+  subText?: string;
+  workspaceId?: string;
+  count?: number;
+}
+
+export interface IOngoingDataExplorationsCard {
+  explorationCardDetails: IExplorationCardDetails;
+  cardIndex: number;
+  fromAddress: string;
 }
