@@ -21,6 +21,32 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
+import T from 'i18n-react';
+import styled from 'styled-components';
+import { blue } from '@material-ui/core/colors';
+
+const CreatePipelineButton = styled(Button)`
+  width: 162px;
+  height: 36px;
+  background-color: ${blue[500]};
+  box-shadow: 0px 2px 4px rgba(70, 129, 244, 0.15);
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 15px;
+  color: #ffffff;
+  text-align: center;
+  padding-top: 6px;
+  margin-right: 0;
+  &:hover {
+    background-color: ${blue[500]};
+    box-shadow: none;
+    color: #ffffff;
+  }
+  &:active {
+    box-shadow: none;
+    background-color: ${blue[500]};
+  }
+`;
 
 export default function BreadCrumb({ datasetName, setOpenPipeline }) {
   const classes = useStyles();
@@ -45,12 +71,9 @@ export default function BreadCrumb({ datasetName, setOpenPipeline }) {
       </Breadcrumbs>
 
       <Breadcrumbs separator=" ">
-        <Button
-          className={`${classes.Button} ${classes.pipelineStyles}`}
-          onClick={() => setOpenPipeline(true)}
-        >
-          Create a Pipeline
-        </Button>
+        <CreatePipelineButton onClick={() => setOpenPipeline(true)}>
+          {T.translate('features.WranglerNewUI.Breadcrumb.labels.createPipeline')}
+        </CreatePipelineButton>
       </Breadcrumbs>
     </Box>
   );

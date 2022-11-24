@@ -19,16 +19,87 @@ import { Dialog, DialogContent, DialogTitle, Divider, Box, Typography } from '@m
 import { BatchIcon } from 'components/GridTable/IconStore/BatchIcon';
 import { RealtimePipelineIcon } from 'components/GridTable/IconStore/RealtimePipelineIcon';
 import { CrossIcon } from 'components/GridTable/IconStore/CrossIcon';
-import { useStyles } from './styles';
 import DataPrepStore from 'components/DataPrep/store';
-import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Redirect } from 'react-router';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
+import styled from 'styled-components';
+import T from 'i18n-react';
 
-const PipeLineModal = ({ setOpenPipeline }) => {
-  const classes = useStyles();
+interface ICreatePipelineModalProps {
+  setOpenPipeline: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CommonBatchPipelineBoxStyle = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  margin-right: 20px;
+  cursor: pointer;
+  width: 250px;
+  height: 125px;
+`;
+
+const SelectedBatchPipelineBoxStyle = styled(CommonBatchPipelineBoxStyle)`
+  background: #4681f4;
+  opacity: 0.1;
+  box-shadow: 0px 2px 4px #4681f4;
+`;
+
+const HeaderWrapper = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ModalTextStyle = styled(Typography)`
+  color: #212121;
+  font-size: 16px;
+  margin-top: 20px;
+`;
+
+const HeaderTitle = styled(Typography)`
+  color: #212121;
+  font-size: 20px;
+`;
+
+const CloseIconStyle = styled(Typography)`
+  cursor: pointer;
+`;
+
+const ModalActionGroup = styled(Box)`
+  display: grid;
+  justify-content: center;
+  align-item: center;
+  grid-template-columns: 50% 50%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
+
+const ModalTitle = styled(DialogTitle)`
+  padding-bottom: 5px;
+`;
+
+const MuiDialogPaper = styled(Dialog)`
+  &.MuiPaper-root {
+    width: 600px;
+    padding-bottom: 24px;
+  }
+`;
+
+const getWrapperComponent = (isSelected) => {
+  return isSelected ? SelectedBatchPipelineBoxStyle : CommonBatchPipelineBoxStyle;
+};
+
+export default function({ setOpenPipeline }: ICreatePipelineModalProps) {
   const [open, setOpen] = useState(true);
+  const [batchPipelineSelected, setBatchPipelineSelected] = useState(false);
+  const [realTimePipelineSelected, setRealTimePipelineSelected] = useState(false);
+  const BatchPipelineComponent = getWrapperComponent(batchPipelineSelected);
+  const RealTimePipelineComponent = getWrapperComponent(realTimePipelineSelected);
 
   const handleClose = () => {
     setOpen(false);
@@ -36,6 +107,7 @@ const PipeLineModal = ({ setOpenPipeline }) => {
   };
 
   const generateLinks = () => {
+    setBatchPipelineSelected(true);
     const state = DataPrepStore.getState().dataprep;
     const workspaceId = state.workspaceId;
     const namespace = getCurrentNamespace();
@@ -72,39 +144,42 @@ const PipeLineModal = ({ setOpenPipeline }) => {
   };
 
   return (
-    <Dialog
+    <MuiDialogPaper
       open={open}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      classes={{
-        paper: classes.muiDialogPaper,
-      }}
     >
-      <DialogTitle id="alert-dialog-title" className={classes.muiDialogTitle}>
-        <Box className={classes.headerFlex}>
-          <Typography className={classes.modalHeader}>Create a pipeline</Typography>
-          <span role="button" tabIndex={0} className={classes.closeIcon} onClick={handleClose}>
+      <ModalTitle id="alert-dialog-title">
+        <HeaderWrapper>
+          <HeaderTitle component="span">
+            {T.translate('features.WranglerNewUI.CreatePipeline.labels.title')}
+          </HeaderTitle>
+          <CloseIconStyle role="button" tabIndex={0} onClick={handleClose} component="span">
             {CrossIcon}
-          </span>
-        </Box>
-      </DialogTitle>
+          </CloseIconStyle>
+        </HeaderWrapper>
+      </ModalTitle>
       <DialogContent>
         <Divider />
-        <Typography className={classes.modalText}>Choose the type of pipeline to create</Typography>
-        <Box className={classes.dialogActionGroup}>
-          <Box className={classes.buttonStyles} onClick={() => generateLinks()}>
+        <ModalTextStyle>
+          {T.translate('features.WranglerNewUI.CreatePipeline.labels.subTitle')}
+        </ModalTextStyle>
+        <ModalActionGroup>
+          <BatchPipelineComponent onClick={() => generateLinks()}>
             {BatchIcon}
-            <Typography className={classes.modalText}>Batch Pipeline</Typography>
-          </Box>
-          <Box className={classes.buttonStyles}>
+            <ModalTextStyle>
+              {T.translate('features.WranglerNewUI.CreatePipeline.labels.batchPipeline')}
+            </ModalTextStyle>
+          </BatchPipelineComponent>
+          <RealTimePipelineComponent>
             {RealtimePipelineIcon}
-            <Typography className={classes.modalText}>Realtime Pipeline</Typography>
-          </Box>
-        </Box>
+            <ModalTextStyle>
+              {T.translate('features.WranglerNewUI.CreatePipeline.labels.realTimePipeline')}
+            </ModalTextStyle>
+          </RealTimePipelineComponent>
+        </ModalActionGroup>
       </DialogContent>
-    </Dialog>
+    </MuiDialogPaper>
   );
-};
-
-export default PipeLineModal;
+}
