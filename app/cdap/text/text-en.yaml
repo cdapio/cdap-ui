@@ -82,7 +82,7 @@ commons:
   milliSecondsShortLabel: ms
   nameLabel: Name
   noLabel: No
-  notAvailable: 'N/A'
+  notAvailable: "N/A"
   please: Please
   pipelines: Pipelines
   resource-center: Add entity
@@ -178,9 +178,9 @@ features:
           confirmationText: "Are you sure you want to reload all system artifacts?"
           errorMessage: Failed to load system artifacts
           label: Reload System Artifacts
-      pageTitle: '{productName} | Administration | Configuration'
+      pageTitle: "{productName} | Administration | Configuration"
     Management:
-      pageTitle: '{productName} | Administration | Management'
+      pageTitle: "{productName} | Administration | Management"
     Tethering:
       TetheringStatus:
         accepted: Accepted
@@ -246,16 +246,16 @@ features:
             label: Description
             placeholder: Describe the rationale for the tethering request
       ColumnHeaders:
-         tetheringStatus: Tethering Status
-         requestTime: Request Time
-         description: Description
-         gcp: Google cloud project
-         instanceName: Instance name
-         instanceUrl: Instance URL
-         region: Region
-         tetheredNamespace: Tethered namespace
-         cpu: CPU (# of cores)
-         memory: Memory (GB)
+        tetheringStatus: Tethering Status
+        requestTime: Request Time
+        description: Description
+        gcp: Google cloud project
+        instanceName: Instance name
+        instanceUrl: Instance URL
+        region: Region
+        tetheredNamespace: Tethered namespace
+        cpu: CPU (# of cores)
+        memory: Memory (GB)
       Actions:
         edit: Edit
         delete: Delete
@@ -266,7 +266,7 @@ features:
         deleteConnectionCopy: Are you sure you want to delete this connection?
         rejectRequestHeader: Reject Tethering Request
         rejectRequestCopy: Are you sure you want to reject this request?
-      pageTitle: '{productName} | Administration | Tethering Connections'
+      pageTitle: "{productName} | Administration | Tethering Connections"
     Services:
       title: Services
       headers:
@@ -339,8 +339,8 @@ features:
         autoScaleTooltip: Autoscaling of worker nodes is enabled.
       CreateView:
         ProvisionerSelection:
-          pageTitle: '{productName} | Profiles | Create'
-        pageTitle: '{productName} | Profiles | Create | {provisioner_name}'
+          pageTitle: "{productName} | Profiles | Create"
+        pageTitle: "{productName} | Profiles | Create | {provisioner_name}"
         profileName: Profile name
         profileNamePlaceholder: Name for compute profile
         profileLabel: Profile label
@@ -368,7 +368,7 @@ features:
         enableError: "There was a problem enabling the profile: {message}"
         hideDetails: Hide Details
         noProperties: No properties available for this profile
-        pageTitle: '{productName} | Profiles | {profile_name}'
+        pageTitle: "{productName} | Profiles | {profile_name}"
         profileDetails: Profile details
         profileUsage: "{profile} usage"
         secureKeyPopover: Service account is stored using a secure key
@@ -428,7 +428,7 @@ features:
           displayName: A - Z
         entityNameDesc:
           displayName: Z - A
-        none: ''
+        none: ""
     Info:
       entities: entities
       subtitle:
@@ -449,7 +449,7 @@ features:
       errorMessage: Page {pageNum} not found
       suggestionMessage1: "Go back to:"
       suggestionMessage2: Page 1
-    Title: '{productName} | {featureName}'
+    Title: "{productName} | {featureName}"
   DataPrepServiceControl:
     btnLabel: "Enable {featureName}"
     btnLoadingLabel: "Enabling..."
@@ -511,26 +511,26 @@ features:
           _: "{context} datasets"
         datasets: Datasets
         EmptyMessage:
-          emptyDatasetList: 'No datasets in connection _{connectionName}_'
-          emptyTableList: 'No tables in dataset _{datasetName}_'
+          emptyDatasetList: "No datasets in connection _{connectionName}_"
+          emptyTableList: "No tables in dataset _{datasetName}_"
         name: Name
-        pageTitle: '{productName} | Connections | Google BigQuery | {connectionId}'
+        pageTitle: "{productName} | Connections | Google BigQuery | {connectionId}"
         title: Select table
       DatabaseBrowser:
         defaultErrorMessage: Reading {tableId} failed. Please try again.
         EmptyMessage:
           clearLabel: Clear
-          emptyDatabase: 'No tables in connection _{connectionName}_'
+          emptyDatabase: "No tables in connection _{connectionName}_"
           suggestionTitle: "You can try to:"
           suggestion1: your search
           title: 'No match found for "{searchText}"'
-        pageTitle: '{productName} | Connections | Database | {connectionId}'
+        pageTitle: "{productName} | Connections | Database | {connectionId}"
         searchPlaceholder: Search table name
         table:
           namecollabel: NAME
         tableCount:
           0: No tables
-          1: '{context} table'
+          1: "{context} table"
           _: "{context} tables"
         title: Select table
       GCSBrowser:
@@ -545,7 +545,7 @@ features:
             Name: Name
             Size: Size
             Type: Type
-        pageTitle: '{productName} | Connections | Google Cloud Storage | {connectionId}'
+        pageTitle: "{productName} | Connections | Google Cloud Storage | {connectionId}"
         Search:
           placeholder: Search this directory
         TopPanel:
@@ -595,17 +595,17 @@ features:
       KafkaBrowser:
         EmptyMessage:
           clearLabel: Clear
-          emptyKafka: 'No topics in connection _{connectionName}_'
+          emptyKafka: "No topics in connection _{connectionName}_"
           suggestionTitle: "You can try to:"
           suggestion1: your search
           title: 'No match found for "{searchText}"'
-        pageTitle: '{productName} | Connections | Kafka | {connectionId}'
+        pageTitle: "{productName} | Connections | Kafka | {connectionId}"
         searchPlaceholder: Search topic
         table:
           topics: Topics
         topicCount:
           0: No topics
-          1: '{count} topic'
+          1: "{count} topic"
           _: "{count} topics"
         title: Select topic
       noDataMsg: No data
@@ -620,7 +620,7 @@ features:
             Name: Name
             Owner: Owner
             Size: Size
-        pageTitle: '{productName} | Connections | S3 | {connectionId}'
+        pageTitle: "{productName} | Connections | S3 | {connectionId}"
         Search:
           placeholder: Search this directory
         TopPanel:
@@ -636,9 +636,9 @@ features:
           _: "{context} databases"
         databases: Databases
         EmptyMessage:
-          emptyDatabaseList: 'No databases in instance _{instanceName}_ of connection _{connectionName}_'
-          emptyInstanceList: 'No instances in connection _{connectionName}_'
-          emptyTableList: 'No tables in database _{databaseName}_ of instance _{instanceName}_ of connection _{connectionName}_'
+          emptyDatabaseList: "No databases in instance _{instanceName}_ of connection _{connectionName}_"
+          emptyInstanceList: "No instances in connection _{connectionName}_"
+          emptyTableList: "No tables in database _{databaseName}_ of instance _{instanceName}_ of connection _{connectionName}_"
         instanceCount:
           0: No instances
           1: "{context} instance"
@@ -653,11 +653,11 @@ features:
         title: Select data
       ADLSBrowser:
         EmptyMessage:
-          emptyDatasetList: 'No Data'
-          emptyTableList: 'No Data'
+          emptyDatasetList: "No Data"
+          emptyTableList: "No Data"
         name: Name
-        pageTitle: '{productName} | Connections | ADLS | {connectionId}'
-        title: 'ADLS'
+        pageTitle: "{productName} | Connections | ADLS | {connectionId}"
+        title: "ADLS"
         Search:
           placeholder: Search this directory
         TopPanel:
@@ -813,7 +813,7 @@ features:
         step2: "Choose variable value"
         selectColumnLabel: Select column in selected row
         summaryLabel: "Summary:"
-        summaryText: "you defined the variable \"{variableName}\" for the cell in column {selectedColumn} in the row which {condition} _{value}_ in column \"{columnName}\""
+        summaryText: 'you defined the variable "{variableName}" for the cell in column {selectedColumn} in the row which {condition} _{value}_ in column "{columnName}"'
         title: Define variable
         variableNamePlaceholder: Enter variable_name
       Drop:
@@ -839,7 +839,7 @@ features:
         title: Extract fields
         UsingPatterns:
           creditCardPattern: Credit cards
-          creditCardPatternExample: '#### #### #### ####'
+          creditCardPatternExample: "#### #### #### ####"
           customPattern: Custom
           customPatternContent:
             description: Write your own regex pattern
@@ -847,7 +847,7 @@ features:
           datetimePattern: Date time
           disabledTooltip: Extracting fields using patterns can only be applied on columns of data type 'string'
           emailPattern: Email
-          exampleLabel: 'E.g.'
+          exampleLabel: "E.g."
           htmlHyperlinkPattern: URLs from HTML anchors
           hidePatternLabel: Hide pattern
           isbncodePattern: ISBN codes
@@ -860,11 +860,11 @@ features:
             description2: digits
           patternDescription: Select a pattern to extract from the column "{column}"
           phoneNumberPattern: U.S. phone numbers
-          phoneNumberPatternExample: 'e.g. (###) - ###-####'
+          phoneNumberPatternExample: "e.g. (###) - ###-####"
           selectPatternMessage: Select a pattern
           showPatternLabel: Show Pattern
           ssnPattern: SSN
-          ssnPatternExample: '###-##-####'
+          ssnPatternExample: "###-##-####"
           startEndPattern: Start/End pattern
           startEndPatternContent:
             description1: Extract text that start with
@@ -899,7 +899,7 @@ features:
         ignoreCase: Ignore case
         KEEP: Keep rows
         Placeholders:
-          CUSTOMCONDITION: "E.g. < 30 || gender == \"Male\""
+          CUSTOMCONDITION: 'E.g. < 30 || gender == "Male"'
           TEXTCONTAINS: Enter contained value
           TEXTENDSWITH: Enter suffix
           TEXTEXACTLY: Enter value
@@ -995,7 +995,7 @@ features:
         title: Hash
         WHIRLPOOL: WHIRLPOOL
       Keep:
-       title:
+        title:
           plural: Keep selected columns
           singular: Keep column
       MarkAsError:
@@ -1060,7 +1060,7 @@ features:
         ignoreCase: Ignore case
         if: If
         Placeholders:
-          CUSTOMCONDITION: "E.g. {column} < 30 || gender == \"Male\""
+          CUSTOMCONDITION: 'E.g. {column} < 30 || gender == "Male"'
           TEXTCONTAINS: Enter contained value
           TEXTENDSWITH: Enter suffix
           TEXTEXACTLY: Enter value
@@ -1138,7 +1138,7 @@ features:
             label: JSON
             placeholder: Enter depth
           LOG:
-            customPlaceholder: "e.g. %h %l %u %t \"%r\" %>s %b"
+            customPlaceholder: 'e.g. %h %l %u %t "%r" %>s %b'
             label: Log
             modalTitle: Please select the logs format
             Options:
@@ -1215,7 +1215,7 @@ features:
         OptionFilter:
           modelPlaceholder: Type to filter table
           fieldPlaceholder: Type to filter field
-    pageTitle: '{productName} | {featureName} {workspaceUri}'
+    pageTitle: "{productName} | {featureName} {workspaceUri}"
     PipelineError:
       bigquery: Unable to find Google BigQuery plugin. Please install Google Cloud Plugins from Hub.
       database: Unable to find Database Plugins. Please make sure Database Plugins are available.
@@ -1244,10 +1244,10 @@ features:
       copyToCDAPDatasetBtn:
         btnLabel: Ingest Data
         copyingSteps:
-          Step1: 'Preparing to copy...'
-          Step1Error: 'Unable to copy data.'
-          Step2: 'Submitting copy task...'
-          Step2Error: 'Unable to submit copy task.'
+          Step1: "Preparing to copy..."
+          Step1Error: "Unable to copy data."
+          Step2: "Submitting copy task..."
+          Step2Error: "Unable to submit copy task."
         createBtnLabel: Ingest Data
         description: You are creating a new dataset, select a type and enter information about this new entity
         disabledTooltip: The Ingest Data option is unavailable for uploaded files.
@@ -1527,7 +1527,7 @@ features:
           deleteButton: Delete Connection
           header: "Delete connection: {connection}"
           helper1: You will no longer able to access data from this source.
-          helper2: "You can reconnect to this source at any time by clicking \"Add Connection\""
+          helper2: 'You can reconnect to this source at any time by clicking "Add Connection"'
           mainMessage: "Are you sure you want to delete connection {connection}?"
         failedDeleteMessage: Deleting connection failed
       delete: Delete
@@ -1545,11 +1545,11 @@ features:
     kafka: Kafka ({count})
     NoDefaultConnection:
       title: No default connection available
-    pageTitle: '{productName} | Connections'
+    pageTitle: "{productName} | Connections"
     s3: S3 ({count})
     spanner: Google Cloud Spanner ({count})
     adls: "ADLS Handler ({count})"
-    title: "Connections in \"{namespace}\""
+    title: 'Connections in "{namespace}"'
     upload: Upload
     UploadComponent:
       fileSizeError: "The file you are trying to upload is larger than 10MB. Please select a smaller file and try again."
@@ -1564,7 +1564,7 @@ features:
       programsWithCount: Programs ({count})
       properties: Properties
       schema: Schema
-    Title: '{productName} | Dataset | {datasetId}'
+    Title: "{productName} | Dataset | {datasetId}"
   Dashboard:
     Title: Dashboard
   Description:
@@ -1598,12 +1598,12 @@ features:
       moreInfo: for more info
       nextSelect: Next, select a machine learning algorithm
       numDirectives: "No of transformation steps: "
-      pageTitle: '{productName} | {featureName} | {experimentIdWithSuffix}'
+      pageTitle: "{productName} | {featureName} | {experimentIdWithSuffix}"
       random: Random
       selectMLAlgorithm: Select a machine learning algorithm
       selectOutcome: Select an outcome
       setOutcome: Set outcome for this experiment
-      resplitAndVerify : Resplit data
+      resplitAndVerify: Resplit data
       splitAndVerify: Split data and verify sample
       splitData: Split data
       SplitInfo:
@@ -1641,7 +1641,7 @@ features:
       modelTrainingLogs: Model training logs
       numModels: No of models
       outcome: Outcome
-      pageTitle: '{productName} | {featureName} | {experiment_name}'
+      pageTitle: "{productName} | {featureName} | {experiment_name}"
       precision: Precision
       r2: R2
       recall: Recall
@@ -1656,8 +1656,8 @@ features:
         1: "{context} experiment"
         _: "{context} experiments"
       numModels: No of models
-      pageTitle: '{productName} | {featureName} | All Experiments'
-    pageTitle: '{productName} | {featureName}'
+      pageTitle: "{productName} | {featureName} | All Experiments"
+    pageTitle: "{productName} | {featureName}"
     ServiceControl:
       Benefits:
         b1: Intuitive Web UI for building, training, testing and evaluating machine learning models.
@@ -1730,7 +1730,7 @@ features:
       last7d: Last 7 days
       lastMonth: Last month
       lastYear: Last 12 months
-    title: '{productName} | Field Level Lineage | {datasetId}'
+    title: "{productName} | Field Level Lineage | {datasetId}"
     TopPanel:
       subtitle: Explore root cause and impact for each of the fields of the dataset
       timePickerCaption: View field level info in the
@@ -1743,10 +1743,10 @@ features:
         RelatedSubheader:
           1: "Viewing {first} of {total} dataset"
           _: "Viewing {first} to {last} of {total} datasets"
-        TargetHeader: 'Select a field to view lineage and transformations'
+        TargetHeader: "Select a field to view lineage and transformations"
         TargetSubheader:
-          1:  "Viewing {first} of {total} field"
-          _:  "Viewing {first} to {last} of {total} fields"
+          1: "Viewing {first} of {total} field"
+          _: "Viewing {first} to {last} of {total} fields"
       FllTable:
         fieldsCount:
           1: "{context} field"
@@ -1890,7 +1890,7 @@ features:
       from: From
       label: View events
       limit: Limit
-      modalHeader: "Filter and view events for \"{entityId}\""
+      modalHeader: 'Filter and view events for "{entityId}"'
       noResults: No results
       numEventsTitle: Set number of events
       timeRangeTitle: Select time range
@@ -1920,8 +1920,8 @@ features:
       studioLabel: Studio
       title: Integrate
     Replication:
-      description: 'Replicate data changes in real-time from operational databases into analytical databases.'
-      linkLabel: 'Replication'
+      description: "Replicate data changes in real-time from operational databases into analytical databases."
+      linkLabel: "Replication"
       title: Replicate
     Wrangler:
       description: Explore, transform, cleanse, and enrich data using a code-free environment.
@@ -1944,23 +1944,25 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
-    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
+    discardModalText:
+      An edit draft exists for this pipeline. Click 'Discard' to discard the changes
       that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
-      outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
+      outdatedDraftError:
+        A new version of pipeline "{pipelineName}" has been deployed.
         This draft is outdated and please export the draft for manual reconciliation.
 
   LoadingIndicator:
     contactadmin: It could take a few minutes for the system to self-heal.
-    defaultMessage: 'Loading...'
-    nodeserverDown:  UI is experiencing slowness or is unable to communicate with server.
+    defaultMessage: "Loading..."
+    nodeserverDown: UI is experiencing slowness or is unable to communicate with server.
     restartCDAP: Attempting to reconnect, if problem persists refresh the page.
     restartUI: Restart the UI
     servicesDown: Necessary services are experiencing intermittent problems
     serviceDown: The system service {serviceName} is down
     systemDashboard: system services
-    tryMessage: 'You can try to: '
+    tryMessage: "You can try to: "
 
   LogViewer:
     noLogsMessage: There are no logs to display
@@ -2017,8 +2019,8 @@ features:
       licenseInfo: License
       version: Version
     AdditionalCharges:
-        description:  This plugin may incur additional charges depending on usage within the pipeline.
-        moreInfo: More Info.
+      description: This plugin may incur additional charges depending on usage within the pipeline.
+      moreInfo: More Info.
   MarketEntityModal:
     version: "Version :"
   NamespaceDetails:
@@ -2032,14 +2034,14 @@ features:
     entityCounts:
       customApps: Custom apps
     mapping:
-      hbaseNamespaceName: 'HBase namespace name: '
-      hdfsRootDirectory: 'HDFS root directory: '
-      hiveDatabaseName: 'Hive database name: '
+      hbaseNamespaceName: "HBase namespace name: "
+      hdfsRootDirectory: "HDFS root directory: "
+      hiveDatabaseName: "Hive database name: "
       label: Mapping
-      schedulerQueueName: 'Scheduler queue name: '
+      schedulerQueueName: "Scheduler queue name: "
     namespace: Namespace
     namespaceName: Namespace '{namespace}'
-    pageTitle: '{productName} | Namespace | {namespace_name}'
+    pageTitle: "{productName} | Namespace | {namespace_name}"
     pipelines: Pipelines
     preferences:
       label: Preferences
@@ -2047,9 +2049,9 @@ features:
       noPreferences: No preferences set for this namespace
     scope: Scope
     security:
-      keytabURI: 'Keytab URI: '
+      keytabURI: "Keytab URI: "
       label: Security
-      principal: 'Principal: '
+      principal: "Principal: "
   NamespacesPicker:
     clearAll: Clear All
     monitorNamespace: Monitoring namespace '{namespace}'
@@ -2107,11 +2109,11 @@ features:
       takeTour: Take a short tour to discover all that you can do.
 
   Operations:
-    pageTitle: '{productName} | {featureName}'
+    pageTitle: "{productName} | {featureName}"
 
   OpsDashboard:
     header: Dashboard
-    pageTitle: '{productName} | {featureName}'
+    pageTitle: "{productName} | {featureName}"
     RunsGraph:
       chart: Chart
       disabledArrowTooltip: The runs timelime is only available for the past 7 days
@@ -2162,7 +2164,7 @@ features:
 
   Overview:
     DatasetTab:
-      title: "Datasets used by \"{appId}\""
+      title: 'Datasets used by "{appId}"'
     deployedLabel:
       data: Created
       app: Deployed
@@ -2175,9 +2177,9 @@ features:
     overviewCloseLabel: Close
     overviewCloseLabel1: this panel
     ProgramTab:
-      altTitle: "Programs using {entityType} \"{entityId}\""
+      altTitle: 'Programs using {entityType} "{entityId}"'
       emptyMessage: No programs found.
-      title: "Programs in application \"{appId}\""
+      title: 'Programs in application "{appId}"'
       runningProgramLabel: "Number of running programs: {programCount}"
     SchemaTab:
       emptyMessage: No schema found.
@@ -2238,8 +2240,8 @@ features:
       entities: Entities
     searchPlaceholder: Search datasets
     noResults: No results match your filter settings
-    loading: "Searching for \"{query}\""
-    emptyResults: "No results found for \"{query}\""
+    loading: 'Searching for "{query}"'
+    emptyResults: 'No results found for "{query}"'
     noDescription: No description provided for this Dataset.
     resultCount:
       1: "{page} of {total} result"
@@ -2387,9 +2389,10 @@ features:
     RuntimeConfig:
       title: Runtime arguments
       contentHeading: Specify runtime arguments or update the ones derived from preferences
-      contentSubHeading: By default, values for all runtime arguments must be provided before running the pipeline.
-          If a stage in your pipeline provides the value of an argument, you can skip that argument
-          by marking it as provided.
+      contentSubHeading:
+        By default, values for all runtime arguments must be provided before running the pipeline.
+        If a stage in your pipeline provides the value of an argument, you can skip that argument
+        by marking it as provided.
     PreviewConfig:
       title: Preview config
     title: Configure
@@ -2409,15 +2412,15 @@ features:
           specifyArgs: Specify runtime arguments, empty values need to come from the pipeline.
           showReservedKeys: Show auto-generated runtime arguments
           tooltipLabel: Key value pairs generated from pipeline configurations that will apply at runtime
-          numOfGeneratedRuntimeArgs: 
+          numOfGeneratedRuntimeArgs:
             1: "{context} auto-generated runtime argument"
             _: "{context} auto-generated runtime arguments"
 
     ProfilesListView:
       click: Click here
       countProfiles:
-        1: '{context} compute profile'
-        _: '{context} compute profiles'
+        1: "{context} compute profile"
+        _: "{context} compute profiles"
       noProfiles: No profiles created
       toCreate: to create one
 
@@ -2425,13 +2428,13 @@ features:
       configs: Runtime Args
       configsModelessTitle: "Runtime arguments for run #{currentRunIndex}"
       copyRuntimeArgsBtnLabel: Copy Runtime Arguments
-      currentIndex: '({currentRunIndex} of {numRuns})'
-      currentRunIndex: 'Run {currentRunIndex} of {numRuns}'
+      currentIndex: "({currentRunIndex} of {numRuns})"
+      currentRunIndex: "Run {currentRunIndex} of {numRuns}"
       errors: Errors
       logs: Logs
       noRuns: No Runs
       noRuntimeArgsForRun: No runtime arguments available for this run.
-      pipelineNeverRun: 'This pipeline has never been run.'
+      pipelineNeverRun: "This pipeline has never been run."
       RunComputeProfile:
         label: Compute profile
         noInfo: Profile information unavailable
@@ -2444,12 +2447,12 @@ features:
       configure: Configure
       deleteConfirmation:
         confirm: Delete
-        confirmPrompt: 'Are you sure you want to delete the pipeline '
-        pipeline: 'Pipeline '
-        proceedPrompt: ' is deleted. Are you sure you want to proceed?'
+        confirmPrompt: "Are you sure you want to delete the pipeline "
+        pipeline: "Pipeline "
+        proceedPrompt: " is deleted. Are you sure you want to proceed?"
         title: Delete pipeline
-        trigger: ' is configured to trigger '
-        triggerDelete: '. Triggers will be deleted if pipeline '
+        trigger: " is configured to trigger "
+        triggerDelete: ". Triggers will be deleted if pipeline "
         triggerPluralCheck:
           1: "pipeline "
           _: "pipelines "
@@ -2479,15 +2482,15 @@ features:
     deployed: Deployed
     DeleteConfirmation:
       confirm: Delete
-      confirmDraftPrompt: 'Are you sure you want to delete the draft '
-      confirmPrompt: 'Are you sure you want to delete the pipeline '
-      deleteError: 'There was a problem with the pipeline you were trying to delete'
-      pipeline: 'Pipeline '
-      proceedPrompt: ' is deleted. Are you sure you want to proceed?'
+      confirmDraftPrompt: "Are you sure you want to delete the draft "
+      confirmPrompt: "Are you sure you want to delete the pipeline "
+      deleteError: "There was a problem with the pipeline you were trying to delete"
+      pipeline: "Pipeline "
+      proceedPrompt: " is deleted. Are you sure you want to proceed?"
       title: Delete pipeline
       titleDraft: Delete draft
-      trigger: ' is configured to trigger '
-      triggerDelete: '. Triggers will be deleted if pipeline '
+      trigger: " is configured to trigger "
+      triggerDelete: ". Triggers will be deleted if pipeline "
       triggerPluralCheck:
         1: "pipeline "
         _: "pipelines "
@@ -2511,7 +2514,7 @@ features:
       EmptySearch:
         actionTitle: "You can try to:"
         clear: Clear
-        heading: "There are no pipelines matching the search query \"{search}\""
+        heading: 'There are no pipelines matching the search query "{search}"'
         search: search query
       import: Import
       Message:
@@ -2568,20 +2571,20 @@ features:
       pastTheHour: past the hour
     startSchedule: Start Schedule
     summary:
-      atHourMinuteAMPM: 'at {hour}:{min}{AMPM}.'
-      canMaxConcurrentRuns: 'The pipeline can have {num} concurrent runs.'
-      cannotMaxConcurrentRuns: 'The pipeline cannot have concurrent runs.'
-      every: 'every '
-      everyDateOfMonth: 'every {date} day of the month, '
-      everyDay: 'everyday, '
-      everyHour: 'every hour, '
-      everyNumDays: 'every {num} days, '
-      everyNumHours: 'every {num} hours, '
-      everyYearOn: 'every year on {month} {dateOfMonth}, '
+      atHourMinuteAMPM: "at {hour}:{min}{AMPM}."
+      canMaxConcurrentRuns: "The pipeline can have {num} concurrent runs."
+      cannotMaxConcurrentRuns: "The pipeline cannot have concurrent runs."
+      every: "every "
+      everyDateOfMonth: "every {date} day of the month, "
+      everyDay: "everyday, "
+      everyHour: "every hour, "
+      everyNumDays: "every {num} days, "
+      everyNumHours: "every {num} hours, "
+      everyYearOn: "every year on {month} {dateOfMonth}, "
       label: Summary
-      numMinsPastTheHour: '{num} minutes past the hour.'
-      onTheHour: 'on the hour.'
-      scheduledToRun: 'This pipeline is scheduled to run '
+      numMinsPastTheHour: "{num} minutes past the hour."
+      onTheHour: "on the hour."
+      scheduledToRun: "This pipeline is scheduled to run "
     suspendSchedule: Suspend Schedule
 
   PipelineSummary:
@@ -2646,12 +2649,12 @@ features:
       numberOfRecords: Number of records
       NodeMetricsGraph:
         accumulatedRecords: Accumulated records
-        numOfRecordsError: 'Number of error records'
-        numOfRecordsIn: 'Number of records in'
-        numOfRecordsOut: 'Number of records out'
-        recordsError: 'Error records'
-        recordsIn: 'Records in'
-        recordsOut: 'Records out'
+        numOfRecordsError: "Number of error records"
+        numOfRecordsIn: "Number of records in"
+        numOfRecordsOut: "Number of records out"
+        recordsError: "Error records"
+        recordsIn: "Records in"
+        recordsOut: "Records out"
         ts: Timestamp
       portRecordsCountPopover:
         hide: Hide All
@@ -2700,7 +2703,7 @@ features:
     statsContainer:
       avgRunTime: Average duration
       totalRuns: Total runs
-    title: 'Summary (Max: 100 runs)'
+    title: "Summary (Max: 100 runs)"
 
   PipelineHistory:
     header: Version history of pipeline
@@ -2727,24 +2730,24 @@ features:
         0: "No triggers set"
         1: "{context} trigger is set"
         _: "{context} triggers are set"
-      compositeTriggersTitle: "View enabled triggers for pipeline \"{pipelineName}\""
+      compositeTriggersTitle: 'View enabled triggers for pipeline "{pipelineName}"'
       buttonLabel: Disable Trigger
       deleteTrigger: Delete Trigger
       deleteTriggerButton: Delete Trigger
       deleteConfirm: Delete
-      deleteConfirmationText: "Are you sure you want to delete trigger \"{name}\"?"
+      deleteConfirmationText: 'Are you sure you want to delete trigger "{name}"?'
       pipelineCount:
         0: "No pipelines set as trigger"
         1: "{context} pipeline is set as trigger"
         _: "{context} pipelines are set as trigger"
       tabLabel: "View enabled triggers ({count})"
-      title: "View pipelines enabled to trigger pipeline \"{pipelineName}\""
+      title: 'View pipelines enabled to trigger pipeline "{pipelineName}"'
     Events:
       COMPLETED: Succeeds
       FAILED: Fails
       KILLED: Stops
     expandedTabLabel: "Inbound triggers ({count})"
-    helperText: "\"{pipelineName}\" is triggered when this pipeline"
+    helperText: '"{pipelineName}" is triggered when this pipeline'
     namespace: Namespace
     pipelineName: Pipeline Name
     groupTriggers: Composite Triggers
@@ -2791,13 +2794,13 @@ features:
     SetTriggers:
       addNewTrigger: Enable the trigger
       configComputeProfie: Compute Profile
-      compositeTriggersTitle: "Add a new trigger for \"{pipelineName}\""
+      compositeTriggersTitle: 'Add a new trigger for "{pipelineName}"'
       buttonLabel: Enable Trigger
       pipelineCount: "{count} pipelines available"
       selectedPipelines: "Selected Pipelines:"
       selectButtonLabel: Select
       tabLabel: Set pipeline triggers
-      title: "Set which pipeline triggers \"{pipelineName}\""
+      title: 'Set which pipeline triggers "{pipelineName}"'
       triggerName: "Trigger Name"
       triggerType: "Trigger Type"
       triggerNameExists: "Trigger Name already exists"
@@ -2843,7 +2846,7 @@ features:
       shortError: Failed to add property
       valuePlaceholder: Enter value
     DeleteConfirmation:
-      confirmationText: "Are you sure you want to delete \"{key}\" property?"
+      confirmationText: 'Are you sure you want to delete "{key}" property?'
       confirmButton: Delete
       headerTitle: Delete confirmation
       shortError: Failed to delete property
@@ -2899,7 +2902,7 @@ features:
         select: Select time
         timeRange: "{startTime} to {endTime}"
     header: Reports
-    pageTitle: '{productName} | {featureName}'
+    pageTitle: "{productName} | {featureName}"
     reportName: Report name
     reports:
       1: "{context} report"
@@ -3025,7 +3028,7 @@ features:
       owner: Owner
       version: Version {version}
     Home:
-      pageTitle: '{productName} | {featureName}'
+      pageTitle: "{productName} | {featureName}"
       Tabs:
         rbTitle: RuleBooks
         rulesTitle: Rules
@@ -3064,8 +3067,9 @@ features:
         b4: "Scalable: The {featureName} is horizontally scalable, i.e. it scales out with your big data environment"
         b5: "Easy governance: The {featureName} provides a centralized repository for policies and transformations"
         title: "Benefits of the {featureName} include:"
-      description: Business {featureName} provides an easy way to create and manage a knowledge base that is executable in your big data environment.
-                  The intuitive UI allows business analysts to set up business rules and use them within a data pipeline.
+      description:
+        Business {featureName} provides an easy way to create and manage a knowledge base that is executable in your big data environment.
+        The intuitive UI allows business analysts to set up business rules and use them within a data pipeline.
       enableBtnLabel: Enable {featureName}
       errorCommunicating: Error while communicating with {featureName} service
       errorTitle: Enabling {featureName} failed
@@ -3101,7 +3105,7 @@ features:
       numResults: "{total} results"
 
   StatusAlertMessage:
-    message: 'Services are back online'
+    message: "Services are back online"
   Tags:
     allTags: All Tags
     labelWithCount: Tags ({count})
@@ -3115,15 +3119,15 @@ features:
       KILLED: Stopped
       FAILED: Fails
     expandedTabLabel: "Outbound triggers ({count})"
-    helperText: "This pipeline is triggered when \"{pipelineName}\""
-    compositeTriggerHelperText: "This pipeline is triggered when \"{pipelineName}\" of composite trigger \"{triggerName}\""
+    helperText: 'This pipeline is triggered when "{pipelineName}"'
+    compositeTriggerHelperText: 'This pipeline is triggered when "{pipelineName}" of composite trigger "{triggerName}"'
     namespace: Namespace
     pipelineCount:
       "0": "No pipelines triggered"
       "1": "1 pipeline triggered"
       _: "{context.count} pipelines triggered"
     pipelineName: Pipeline name
-    title: "Pipelines to be triggered by \"{pipelineName}\""
+    title: 'Pipelines to be triggered by "{pipelineName}"'
     viewPipeline: View Pipeline
     viewPipelineCapitalized: VIEW PIPELINE
 
@@ -3159,7 +3163,7 @@ features:
         name-label: "Name"
         name-placeholder: "Namespace name"
         scheduler-queue-label: "Scheduler queue"
-        sld-desc:  "Specify the name and the description of the namespace."
+        sld-desc: "Specify the name and the description of the namespace."
         ssd-label: "General information"
       ResourcesStep:
         k8s-nm-name-label: "Kubernetes namespace name"
@@ -3356,17 +3360,17 @@ features:
         summary:
           count:
             instances:
-              1: '{context} instance'
-              _: '{context} instances'
+              1: "{context} instance"
+              _: "{context} instances"
             vcores:
-              1: '{context} core'
-              _: '{context} cores'
+              1: "{context} core"
+              _: "{context} cores"
             memory:
-              1: '{context} MB'
-              _: '{context} MBs'
+              1: "{context} MB"
+              _: "{context} MBs"
             ethreshold:
-              1: '{context} error'
-              _: '{context} errors'
+              1: "{context} error"
+              _: "{context} errors"
           text: "{instancesWithCount} of microservice '{instanceName}' will be started using {vcoresWithCount}, {memoryWithCount} of memory and with error threshold on event processing as {ethresholdWithCount}."
         thresholdLabel: Threshold
         thresholdPlaceholder: TBD
@@ -3432,23 +3436,29 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-    NoRecordScreen:
-      gridTable:
-        title: No rows left in this sample
-        subtitle: Remove some recipe steps to view some data
-  NewWranglerUI:
-    ColumnInsights: 
-      distribution: Distribution
-      viewFullChart: View Full Chart
-      columnInsightsHeadingText: Column Insights
-      quality: Quality
-      containsLetter: Contains Letter
-      characterCount: Character count
-      distinct: Distinct
-      null : "Null"
+    AddConnections:
+      referenceLabel: Add Connection
+    Breadcrumb:
+      labels:
+        connectionsList: Data Sources
+        wrangleHome: Home
+      params:
+        connectionsList: datasources  
+        wrangeHome: home
+    ColumnInsights:
       barChartYLabel: Quantity
-      unknown: unknown
+      containsLetter: Contains Letter 
+      characterCount: Character count
+      columnInsightsHeadingText: Column Insights
+      distribution: Distribution
+      distinct: Distinct
+      error:
+        invalidError:
+          The name you have entered is invalid. It must contain only letters, numbers, and
+          underscores (_). Pick a new name.
+        matchedColumnError: The name you have entered already exists.Please pick a new name.
       empty: Empty
+      null: "Null"
       options:
         labelString: String
         labelBoolean: Boolean
@@ -3459,18 +3469,41 @@ features:
         labelDouble: Double
         labelDecimal: Decimal
         labelBytes: Bytes
-      error: 
-        invalidError: The name you have entered is invalid. It must contain only letters, numbers, and
-            underscores (_). Pick a new name.
-        matchedColumnError: The name you have entered already exists.Please pick a new name. 
-    GridTable:
+      quality: Quality
       unknown: unknown
-      missingNull: Missing/Null
+      viewFullChart: View Full Chart
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
+    GridTable:
       containsLetterNumberLeadingTrailingSpaces: Contains letters, numbers, leading and trailing spaces
       containsLetterNumber: Contains letters and numbers
       containsLetterLeadingTrailing: Contains letters, leading and trailing spaces
       containsLetterLeading: Contains letters and leading spaces
       containsLetterTrailing: Contains letters and trailing spaces
       containsLetterOnly: Contains letters
-      containsNumberOnly: Contains numbers      
-...
+      containsNumberOnly: Contains numbers
+      missingNull: Missing/Null
+      unknown: unknown
+    HomePage:
+      labels:
+        common:
+          viewAll: View All
+          addConnection: Add Connection
+          importData: Import Data
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
+    NoRecordScreen:
+      gridTable:
+        title: No rows left in this sample
+        subtitle: Remove some recipe steps to view some data
+    
+    
+    
+    
+    

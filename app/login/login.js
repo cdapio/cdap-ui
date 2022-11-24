@@ -16,7 +16,6 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import 'whatwg-fetch';
 import Cookies from 'universal-cookie';
 
 import Card from 'components/shared/Card';

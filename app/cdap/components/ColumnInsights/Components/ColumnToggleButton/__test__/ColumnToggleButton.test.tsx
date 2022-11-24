@@ -42,10 +42,10 @@ describe('It should test whether ColumnToggleButton Component.', () => {
     const rightToggleButtonLabel = screen.getByTestId('toggle-button-right-label');
 
     expect(leftToggleButtonLabel).toHaveTextContent(
-      'features.NewWranglerUI.ColumnInsights.empty 0 (0%)'
+      'features.WranglerNewUI.ColumnInsights.empty 0 (0%)'
     );
     expect(rightToggleButtonLabel).toHaveTextContent(
-      'features.NewWranglerUI.ColumnInsights.null 3 (50%)'
+      'features.WranglerNewUI.ColumnInsights.null 3 (50%)'
     );
   });
 });

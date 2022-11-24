@@ -158,6 +158,7 @@ export const mockColumnInfoForDataQuality = {
   general: {
     'non-null': 40,
     null: 50,
+    empty: 0,
   },
   types: {
     Text: 16.666668,

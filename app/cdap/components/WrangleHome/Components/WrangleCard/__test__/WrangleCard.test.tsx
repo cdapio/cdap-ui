@@ -15,46 +15,29 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import * as reducers from 'components/Connections/Create/reducer';
-import { createBrowserHistory as createHistory } from 'history';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import WrangleCard from '../index';
-import { wrangleCardFetchConnectors } from '../mock/wrangleCardMockData';
-
-const history = createHistory({
-  basename: '/',
-});
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
+import { updatedCardsMockResponse } from 'components/WrangleHome/Components/WrangleCard/mock/wrangleCardMockData';
+import history from 'services/history';
+import * as getUpdatedHelper from 'components/WrangleHome/services/getUpdatedConnectorCards';
 
 describe('Testing the Wrangle Card Component', () => {
-  test('Should check whether WrangleCard Component is rendered or not', () => {
-    const container = render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <WrangleCard />
-          </Route>
-        </Switch>
-      </Router>
-    );
-    expect(container).toBeDefined();
-  });
-
-  test('It renders Wrangler-Card ', async () => {
+  test('It renders Wrangler-Card with getUpdatedConnectorCards mock', async () => {
     jest
-      .spyOn(reducers, 'fetchConnectors')
-      .mockReturnValue(Promise.resolve(wrangleCardFetchConnectors));
+      .spyOn(getUpdatedHelper, 'getUpdatedConnectorCards')
+      .mockReturnValue(Promise.resolve(updatedCardsMockResponse as any));
 
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <WrangleCard />
+            <WrangleCard toggleViewAllLink={jest.fn()} />
           </Route>
         </Switch>
       </Router>
     );
-
+    expect(getUpdatedHelper.getUpdatedConnectorCards).toBeCalledTimes(1);
     const ele = screen.getByTestId(/wrangle-card-parent/i);
     expect(ele).toBeInTheDocument();
   });

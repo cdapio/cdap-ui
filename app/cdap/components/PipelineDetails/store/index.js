@@ -48,6 +48,9 @@ const ACTIONS = {
   // lifecycle management draftid
   SET_EDIT_DRAFT_ID: 'SET_EDIT_DRAFT_ID',
 
+  // Metadata Endpoints Actions
+  SET_METADATA_ENDPOINTS: 'SET_METADATA_ENDPOINTS',
+
   RESET: 'RESET',
 };
 
@@ -83,8 +86,11 @@ const DEFAULT_PIPELINE_DETAILS = {
   scheduleError: '',
   stopButtonLoading: true,
   stopError: '',
-  changeSummary: {},
+  change: {},
   editDraftId: null,
+
+  // endpoints for plugin metadata
+  metadataEndpoints: [],
 };
 
 const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultAction) => {
@@ -111,7 +117,7 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
         },
         config: { ...newPipelineConfig },
         version: pipeline.appVersion,
-        changeSummary: pipeline.changeSummary,
+        change: pipeline.change,
       };
     }
     case ACTIONS.SET_OPTIONAL_PROPERTY:
@@ -181,6 +187,11 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
       return {
         ...state,
         runsCount: action.payload.runsCount,
+      };
+    case ACTIONS.SET_METADATA_ENDPOINTS:
+      return {
+        ...state,
+        metadataEndpoints: action.payload.metadataEndpoints,
       };
     case ACTIONS.SET_STATISTICS:
       return {

@@ -34,7 +34,7 @@ describe('It Should test Column Data Distribution Component', () => {
     );
     const distributionText = screen.getByTestId(/distribution-text/i);
     expect(distributionText).toHaveTextContent(
-      `features.NewWranglerUI.ColumnInsights.distribution`
+      `features.WranglerNewUI.ColumnInsights.distribution`
     );
   });
 
@@ -50,7 +50,7 @@ describe('It Should test Column Data Distribution Component', () => {
     );
     const viewFullChartText = screen.getByTestId(/view-full-chart-text/i);
     expect(viewFullChartText).toHaveTextContent(
-      `features.NewWranglerUI.ColumnInsights.viewFullChart`
+      `features.WranglerNewUI.ColumnInsights.viewFullChart`
     );
   });
 

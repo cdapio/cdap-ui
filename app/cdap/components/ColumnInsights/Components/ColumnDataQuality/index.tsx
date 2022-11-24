@@ -24,7 +24,7 @@ import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
 
-export const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+export const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 interface IColumnDataQualityProps {
   dataQuality: {
     nullValueCount: number;

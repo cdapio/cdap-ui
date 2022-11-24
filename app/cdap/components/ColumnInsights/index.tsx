@@ -25,7 +25,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import Box from '@material-ui/core/Box';
 
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 interface IColumnInsightsProps {
   columnData: IColumnData;
   renameColumnNameHandler: (oldColumnName: string, newColumnName: string) => void;
@@ -34,7 +34,7 @@ interface IColumnInsightsProps {
   onClose: () => void;
 }
 
-interface IColumnData {
+export interface IColumnData {
   open: boolean;
   columnName: string;
   distinctValues: number;

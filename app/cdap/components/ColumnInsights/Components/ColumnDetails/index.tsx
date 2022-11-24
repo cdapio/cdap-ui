@@ -24,7 +24,7 @@ import T from 'i18n-react';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 interface IColumnDetailsProps {
   columnName: string;
   characterCount: string;
