@@ -35,7 +35,7 @@ const CommonPipelineActionBoxStyle = styled(Box)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10;
+  padding: 10px;
   border: 1px solid #dadce0;
   border-radius: 4px;
   margin-right: 20px;
