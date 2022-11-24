@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, Divider, Box, Typography } from '@material-ui/core';
 import { BatchIcon } from 'components/GridTable/IconStore/BatchIcon';
 import { RealtimePipelineIcon } from 'components/GridTable/IconStore/RealtimePipelineIcon';
-import { CrossIcon } from 'components/GridTable/IconStore/CrossIcon';
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import DataPrepStore from 'components/DataPrep/store';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
@@ -156,7 +156,7 @@ export default function({ setOpenPipeline }: ICreatePipelineModalProps) {
             {T.translate('features.WranglerNewUI.CreatePipeline.labels.title')}
           </HeaderTitle>
           <CloseIconStyle role="button" tabIndex={0} onClick={handleClose} component="span">
-            {CrossIcon}
+            <CloseRoundedIcon />
           </CloseIconStyle>
         </HeaderWrapper>
       </ModalTitle>
