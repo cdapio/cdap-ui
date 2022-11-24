@@ -24,6 +24,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import getPipelineConfig from 'components/DataPrep/TopPanel/PipelineConfigHelper';
 import styled from 'styled-components';
 import T from 'i18n-react';
+import { grey } from '@material-ui/core/colors';
 
 interface ICreatePipelineModalProps {
   setOpenPipeline: React.Dispatch<React.SetStateAction<boolean>>;
@@ -54,13 +55,13 @@ const HeaderWrapper = styled(Box)`
 `;
 
 const ModalTextStyle = styled(Typography)`
-  color: #212121;
+  color: ${grey[900]};
   font-size: 16px;
   margin-top: 20px;
 `;
 
 const HeaderTitle = styled(Typography)`
-  color: #212121;
+  color: ${grey[900]};
   font-size: 20px;
 `;
 

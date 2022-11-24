@@ -50,7 +50,7 @@ export default function GridTable() {
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
-  const [openPipeline, setOpenPipeline] = useState(false);
+  const [openPipeline, setOpenPipeline] = useState<boolean>(false);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
