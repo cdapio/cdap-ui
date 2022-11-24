@@ -48,7 +48,7 @@ const CreatePipelineButton = styled(Button)`
   }
 `;
 
-export default function BreadCrumb({ datasetName, setOpenPipeline }) {
+export default function({ datasetName, setOpenPipeline }) {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer}>
