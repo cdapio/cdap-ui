@@ -39,29 +39,4 @@ export const useStyles = makeStyles({
     width: '81px',
     height: '21px',
   },
-  pipelineStyles: {
-    width: 162,
-    height: 36,
-    backgroundColor: blue[500],
-    boxShadow: '0px 2px 4px rgba(70, 129, 244, 0.15)',
-    borderRadius: 4,
-    fontFamily: 'Noto Sans',
-    fontWeight: 400,
-    fontSize: 15,
-    color: '#ffffff',
-    textAlign: 'center',
-    paddingTop: 6,
-    marginRight: 0,
-  },
-  Button: {
-    '&:hover': {
-      backgroundColor: blue[500],
-      boxShadow: 'none',
-      color: '#ffffff',
-    },
-    '&:active': {
-      boxShadow: 'none',
-      backgroundColor: blue[500],
-    },
-  },
 });
