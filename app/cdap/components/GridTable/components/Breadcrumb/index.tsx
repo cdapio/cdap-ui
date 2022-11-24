@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, Typography, Button } from '@material-ui/core';
+import { Box, Typography, Button, IconButton } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import React from 'react';
@@ -24,6 +24,7 @@ import { useStyles } from './styles';
 import T from 'i18n-react';
 import styled from 'styled-components';
 import { blue } from '@material-ui/core/colors';
+import { HelpIcon } from 'components/GridTable/IconStore/HelpIcon';
 
 const CreatePipelineButton = styled(Button)`
   width: 162px;
@@ -71,6 +72,9 @@ export default function({ datasetName, setOpenPipeline }) {
       </Breadcrumbs>
 
       <Breadcrumbs separator=" ">
+        <IconButton>
+          <a href="https://cdap.atlassian.net/wiki/spaces/DOCS/overview">{HelpIcon}</a>
+        </IconButton>
         <CreatePipelineButton onClick={() => setOpenPipeline(true)}>
           {T.translate('features.WranglerNewUI.Breadcrumb.labels.createPipeline')}
         </CreatePipelineButton>
