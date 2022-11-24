@@ -22,10 +22,10 @@ Feature: Column View Panel
     Given Navigate to Home Page
     Then Click on the Data Explorations card
     Then Verify if the column view button is displayed on the Grid Page
-    Then Click on columnview button
+    Then Click on columnView button
     Then Verify column names of that file displayed in panel
     Then Enter any existing name of the columns in the search field "body"
     Then Verify if the search result is displayed as "body"
     Then Click on cross icon
-    Then Click on columnview button
-    Then Again click on columnview button and verify if the panel is closed
+    Then Click on columnView button
+    Then Again click on columnView button and verify if the panel is closed

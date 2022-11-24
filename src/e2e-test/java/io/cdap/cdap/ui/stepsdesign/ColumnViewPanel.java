@@ -64,8 +64,8 @@ public class ColumnViewPanel {
         }
     }
 
-    @Then("Click on columnview button")
-    public void clickCloumnButton() {
+    @Then("Click on columnView button")
+    public void clickColumnButton() {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
@@ -124,7 +124,7 @@ public class ColumnViewPanel {
             System.err.println("error:" + e);
         }
     }
-    @Then("Again click on columnview button and verify if the panel is closed")
+    @Then("Again click on columnView button and verify if the panel is closed")
     public void verifyPanelClosed() {
         try {
             ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
