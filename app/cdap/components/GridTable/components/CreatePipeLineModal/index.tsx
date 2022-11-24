@@ -44,9 +44,7 @@ const CommonBatchPipelineBoxStyle = styled(Box)`
 `;
 
 const SelectedBatchPipelineBoxStyle = styled(CommonBatchPipelineBoxStyle)`
-  background: #4681f4;
-  opacity: 0.1;
-  box-shadow: 0px 2px 4px #4681f4;
+  background: #f3f6f9;
 `;
 
 const HeaderWrapper = styled(Box)`
