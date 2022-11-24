@@ -67,4 +67,7 @@ public class Constants {
 
   public static final String DEFAULT_GCP_PROJECTID = System.getenv("GCP_PROJECTID");
   public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
+
+  //Wrangle New UI
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
 }

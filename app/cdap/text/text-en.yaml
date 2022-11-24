@@ -3436,4 +3436,29 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+    Breadcrumb:
+      labels:
+        connectionsList: Data Sources
+        wrangleHome: Home
+      params:
+        wrangeHome: home
+        connectionsList: datasources
+    AddConnections:
+      referenceLabel: Add Connection
+    ImportData:
+      referenceLabel: Import Data
+    HomePage:
+      labels:
+        common:
+          viewAll: View All
+          addConnection: Add Connection
+          importData: Import Data
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
 ...
