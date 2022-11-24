@@ -38,6 +38,7 @@ const CreatePipelineButton = styled(Button)`
   text-align: center;
   padding-top: 6px;
   margin-right: 0;
+  text-transform: none;
   &:hover {
     background-color: ${blue[500]};
     box-shadow: none;

@@ -30,7 +30,7 @@ interface ICreatePipelineModalProps {
   setOpenPipeline: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CommonBatchPipelineBoxStyle = styled(Box)`
+const CommonPipelineActionBoxStyle = styled(Box)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,10 +42,19 @@ const CommonBatchPipelineBoxStyle = styled(Box)`
   cursor: pointer;
   width: 250px;
   height: 125px;
+  &:hover {
+    background: #f3f6f9;
+    border: 1px solid #2196f3;
+  }
 `;
 
-const SelectedBatchPipelineBoxStyle = styled(CommonBatchPipelineBoxStyle)`
+const SelectedBatchPipelineBoxStyle = styled(CommonPipelineActionBoxStyle)`
   background: #f3f6f9;
+  border: 1px solid #2196f3;
+`;
+
+const RealTimePipelineBoxStyle = styled(CommonPipelineActionBoxStyle)`
+  pointer-events: none;
 `;
 
 const HeaderWrapper = styled(Box)`
@@ -89,16 +98,26 @@ const MuiDialogPaper = styled(Dialog)`
   }
 `;
 
-const getWrapperComponent = (isSelected) => {
-  return isSelected ? SelectedBatchPipelineBoxStyle : CommonBatchPipelineBoxStyle;
+const getWrapperComponent = (isSelected, actionType) => {
+  return isSelected
+    ? SelectedBatchPipelineBoxStyle
+    : actionType ===
+      T.translate('features.WranglerNewUI.CreatePipeline.labels.realTimePipeline').toString()
+    ? RealTimePipelineBoxStyle
+    : CommonPipelineActionBoxStyle;
 };
 
 export default function({ setOpenPipeline }: ICreatePipelineModalProps) {
-  const [open, setOpen] = useState(true);
-  const [batchPipelineSelected, setBatchPipelineSelected] = useState(false);
-  const [realTimePipelineSelected, setRealTimePipelineSelected] = useState(false);
-  const BatchPipelineComponent = getWrapperComponent(batchPipelineSelected);
-  const RealTimePipelineComponent = getWrapperComponent(realTimePipelineSelected);
+  const [open, setOpen] = useState<boolean>(true);
+  const [batchPipelineSelected, setBatchPipelineSelected] = useState<boolean>(false);
+  const BatchPipelineComponent = getWrapperComponent(
+    batchPipelineSelected,
+    T.translate('features.WranglerNewUI.CreatePipeline.labels.batchPipeline').toString()
+  );
+  const RealTimePipelineComponent = getWrapperComponent(
+    false,
+    T.translate('features.WranglerNewUI.CreatePipeline.labels.realTimePipeline').toString()
+  );
 
   const handleClose = () => {
     setOpen(false);
