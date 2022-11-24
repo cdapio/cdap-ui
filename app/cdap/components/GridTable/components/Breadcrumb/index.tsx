@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Button } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import React from 'react';
@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { useStyles } from './styles';
 
-export default function BreadCrumb({ datasetName }) {
+export default function BreadCrumb({ datasetName, setOpenPipeline }) {
   const classes = useStyles();
   return (
     <Box className={classes.breadCombContainer}>
@@ -42,6 +42,15 @@ export default function BreadCrumb({ datasetName }) {
           Data Sources
         </Link>
         <Typography color="textPrimary">{datasetName}</Typography>
+      </Breadcrumbs>
+
+      <Breadcrumbs separator=" ">
+        <Button
+          className={`${classes.Button} ${classes.pipelineStyles}`}
+          onClick={() => setOpenPipeline(true)}
+        >
+          Create a Pipeline
+        </Button>
       </Breadcrumbs>
     </Box>
   );

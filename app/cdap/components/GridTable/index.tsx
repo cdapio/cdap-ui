@@ -39,6 +39,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import CreatePipelineModal from 'components/GridTable/components/CreatePipeLineModal';
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -49,6 +50,7 @@ export default function GridTable() {
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
+  const [openPipeline, setOpenPipeline] = useState(false);
   const [missingDataList, setMissingDataList] = useState([]);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -239,7 +241,8 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
-      <BreadCrumb datasetName={wid} />
+      <BreadCrumb datasetName={wid} setOpenPipeline={setOpenPipeline} />
+      {openPipeline && <CreatePipelineModal setOpenPipeline={setOpenPipeline} />}
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
