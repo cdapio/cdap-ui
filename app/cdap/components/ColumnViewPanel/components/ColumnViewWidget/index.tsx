@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, Typography, Input } from '@material-ui/core';
+import { Box, Typography, Input, IconButton } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React, { Fragment, useRef, useState } from 'react';
 import DrawerWidgetHeading from 'components/ColumnViewPanel/components/ColumnViewWidget/DrawerWidgetHeading';
@@ -39,7 +39,6 @@ const CommonInputStyle = styled(Input)`
 const DividerLineStyles = styled.div`
   width: 1px;
   height: 28px;
-  margin-right: 12px;
   background-color: #dadce0;
 `;
 
@@ -84,22 +83,24 @@ const HeaderTextWithBackIcon = styled.div`
 const HeaderRightIconWrapper = styled(Box)`
   display: flex;
   align-items: center;
-  padding-right: 24px;
+  padding-right: 8px;
 `;
 
 const SearchFormControl = styled(Box)`
   position: relative;
   display: flex;
-  margin-right: 16px;
+  margin-right: 12px;
 `;
 
 const SearchIconStyle = styled(Typography)`
-  margin-top: 3px;
+  margin-top: 5px;
   cursor: pointer;
 `;
 
-const CloseIconStyle = styled(CloseRoundedIcon)`
+const CloseButtonStyle = styled(IconButton)`
   cursor: pointer;
+  display: flex;
+  justify-content: flex-end !important;
 `;
 
 const getInputStyle = (isFocused) => {
@@ -149,11 +150,9 @@ export default function({
           </SearchFormControl>
 
           <DividerLineStyles />
-          <CloseIconStyle
-            color="action"
-            onClick={closeClickHandler}
-            data-testid="column-view-panel-close"
-          />
+          <CloseButtonStyle aria-label="close-icon" onClick={closeClickHandler}>
+            <CloseRoundedIcon color="action" data-testid="column-view-panel-close" />
+          </CloseButtonStyle>
         </HeaderRightIconWrapper>
       </HeaderStyle>
       <Fragment>{children}</Fragment>
