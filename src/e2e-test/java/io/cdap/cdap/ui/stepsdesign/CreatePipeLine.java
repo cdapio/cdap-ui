@@ -36,7 +36,7 @@ public class CreatePipeLine {
     public void clickOnTheDataExplorationCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class CreatePipeLine {
     public void clickOnTheCreateAPipelineButton() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("create-pipeline-button"));
         } catch (Exception e) {
             System.err.println("error" + e);
         }
@@ -58,7 +58,7 @@ public class CreatePipeLine {
     public void clickOnTheCloseIconOnTheCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("create-pipeline-close-icon"));
         } catch (Exception e) {
             System.err.println("error" + e);
         }
@@ -68,7 +68,7 @@ public class CreatePipeLine {
     public void clickOnTheBatchPipeline() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("id"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("create-pipeline-batch"));
         } catch (Exception e) {
             System.err.println("error" + e);
         }
