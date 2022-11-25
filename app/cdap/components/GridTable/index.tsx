@@ -293,7 +293,7 @@ export default function GridTable() {
         });
         setSnackbarIsOpen(true);
         setSnackbarData({
-          description: 'Directive applied successfully',
+          description: 'Transformation applied successfully',
           isSuccess: true,
         });
         setLoading(false);
@@ -303,11 +303,11 @@ export default function GridTable() {
           supportedDataType: [],
         });
       },
-      (err) => {
+      (error) => {
         setLoading(false);
         setSnackbarIsOpen(true);
         setSnackbarData({
-          description: 'Directive cannot applied',
+          description: error.message,
           isSuccess: false,
         });
         setAddTransformationFunction({
