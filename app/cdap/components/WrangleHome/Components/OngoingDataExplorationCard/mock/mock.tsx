@@ -14,11 +14,11 @@
  * the License.
  */
 
-import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
+import { ImportDatasetIcon } from '../../WrangleCard/iconStore/ImportDatasetIcon';
 
 export const mockItems = [
   {
-    icon: importDatasetIcon,
+    icon: ImportDatasetIcon,
     label: 'Test_postgres_01',
     type: 'iconWithText',
   },
@@ -43,7 +43,7 @@ export const mockItems = [
 
 export const mockItemsWithPercentage = [
   {
-    icon: importDatasetIcon,
+    icon: ImportDatasetIcon,
     label: 'Test_postgres_01',
     type: 'iconWithText',
   },
@@ -68,7 +68,7 @@ export const mockItemsWithPercentage = [
 
 export const mockItemsPercentageData = [
   {
-    icon: importDatasetIcon,
+    icon: ImportDatasetIcon,
     label: 'Test_postgres_01',
     type: 'iconWithText',
   },

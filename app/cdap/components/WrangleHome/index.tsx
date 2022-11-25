@@ -16,28 +16,17 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import DataPrepStore from 'components/DataPrep/store';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import { getWidgetData } from 'components/WidgetSVG/utils';
-import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
-import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
-import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle/index';
-import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
-import { useStyles } from 'components/WrangleHome/styles';
-import T from 'i18n-react';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getCurrentNamespace } from 'services/NamespaceStore';
+import React, { useState } from 'react';
+import OngoingDataExploration from './Components/OngoingDataExploration';
+import WrangleCard from './Components/WrangleCard';
+import WrangleHomeTitle from './Components/WrangleHomeTitle';
+import { GradientLine, HeaderImage } from './icons';
+import { useStyles } from './styles';
 
-export default function() {
+export default function WranglerHome() {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-
-  const [viewAllLink, toggleViewAllLink] = useState<boolean>(false);
-
-  useEffect(() => {
-    getWidgetData();
-  }, []);
 
   return (
     <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
@@ -52,29 +41,13 @@ export default function() {
 
       <Box>
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle
-            title={T.translate('features.WranglerNewUI.HomePage.labels.connectorTypes.title')}
-          />
-          {viewAllLink && (
-            <Box className={classes.viewMore}>
-              <Link
-                color="inherit"
-                to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}
-                data-testid="connector-types-view-all"
-              >
-                {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
-              </Link>{' '}
-            </Box>
-          )}
+          <WrangleHomeTitle title="Start data exploration" />
+          <Box className={classes.viewMore}>View More</Box>
         </Box>
-        <WrangleCard toggleViewAllLink={toggleViewAllLink} />
+        <WrangleCard />
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle
-            title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
-          />
-          <Box className={classes.viewMore}>
-            {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
-          </Box>
+          <WrangleHomeTitle title="Continue ongoing data explorations, pick up where you left off" />
+          <Box className={classes.viewMore}>View More</Box>
         </Box>
         <OngoingDataExploration />
       </Box>

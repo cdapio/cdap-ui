@@ -47,17 +47,6 @@ export interface IConnectorDetails {
   connectorError: string;
 }
 
-interface ILocationStateFrom {
-  addConnectionRequestFromNewUI: string;
-}
-interface ILocationState {
-  from: ILocationStateFrom;
-  path: string;
-}
-export interface ILocation {
-  state: ILocationState;
-}
-
 enum ICreateConnectionActions {
   INIT,
   SET_CATEGORIES,
