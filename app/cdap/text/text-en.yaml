@@ -3470,10 +3470,10 @@ features:
       viewFullChart: View Full Chart
       unknown: unknown
     ColumnViewPanel:
-      columnView: 'Column View'
-      columns: 'Columns'
+      columnView: Column View
+      columns: Columns
+      nullValues: Null Values
       noRecordScreen: 
-      nullValues: 'Null Values'
         subtitle: Search for another column to view some data
         title: No Columns Found
     ConnectionsList:
