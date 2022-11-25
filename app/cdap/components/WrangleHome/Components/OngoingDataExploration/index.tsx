@@ -117,7 +117,7 @@ export default function OngoingDataExploration() {
             }}
             style={{ textDecoration: 'none' }}
           >
-            {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
+            {index <= 1 && <OngoingDataExplorationCard item={item} index={index} />}
           </Link>
         );
       })}

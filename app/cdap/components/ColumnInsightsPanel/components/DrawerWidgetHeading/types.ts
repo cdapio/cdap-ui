@@ -14,11 +14,8 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: string[];
-  columnSelected: string;
-  setColumnSelected: (columnName: string) => void;
-  onColumnSelection: (columnName: string) => void;
-  index: number;
+import { ReactNode } from 'react';
+
+export interface IDrawerWidgetHeading {
+  headingText: ReactNode;
 }
