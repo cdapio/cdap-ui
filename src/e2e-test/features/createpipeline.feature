@@ -16,10 +16,10 @@
 
 
 @Integration_Tests
-Feature: TransformationExplode
+Feature: CreatePipeline
 
-  @TransformationExplode
-  Scenario: Go through the Transformation Explode functionality
+  @CreatePipeline
+  Scenario: Go through the Create Pipeline functionality
     Given Navigate to Home Page
     Then Click on the Data Explorations card
     Then Click on the Create a Pipeline button
