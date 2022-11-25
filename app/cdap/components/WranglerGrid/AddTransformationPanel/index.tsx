@@ -22,9 +22,7 @@ import {
   IDataQualityItem,
 } from 'components/WranglerGrid/SelectColumnPanel/types';
 import { getDataQuality } from 'components/common/DataQualityCircularProgressBar/utils';
-import {
-  ADD_TRANSFORMATION_PREFIX,
-} from 'components/WranglerGrid/SelectColumnPanel/constants';
+import { ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import {
   AddTransformationBodyWrapper,
   AddTransformationWrapper,
@@ -53,15 +51,17 @@ interface IAddTransformationProps {
   missingItemsList: IStatistics;
   onCancel: () => void;
   applyTransformation: (directive: string) => void;
+  transformationLink: string;
 }
 
-export default function ({
+export default function({
   transformationDataType,
   transformationName,
   columnsList,
   missingItemsList,
   onCancel,
   applyTransformation,
+  transformationLink,
 }: IAddTransformationProps) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [columnsPopup, setColumnsPopup] = useState<boolean>(false);
@@ -104,10 +104,7 @@ export default function ({
 
   return (
     <Fragment>
-      <StyledDrawer
-        data-testid="add-transformation-drawer" anchor="right"
-        open={drawerStatus}
-      >
+      <StyledDrawer data-testid="add-transformation-drawer" anchor="right" open={drawerStatus}>
         <DrawerContainerBox role="presentation" data-testid="add-transformation-drawer">
           <AddTransformationDrawerHeader closeClickHandler={closeClickHandler} />
           <AddTransformationWrapper>
@@ -116,7 +113,10 @@ export default function ({
                 <SelectedColumnCountWidget selectedColumnsCount={selectedColumns?.length} />
               </CountWidgetWrapper>
               <Divider />
-              <FunctionNameWidget transformationName={transformationName} />
+              <FunctionNameWidget
+                transformationName={transformationName}
+                transformationLink={transformationLink}
+              />
               <SelectColumnsWidget
                 handleSelectColumn={handleSelectColumn}
                 selectedColumns={selectedColumns}

@@ -36,6 +36,7 @@ export interface IMenuItem {
   icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
   toolName?: string;
   open?: boolean;
+  infoLink?: string;
 }
 
 export interface IMenuItemComponentProps {

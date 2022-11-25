@@ -85,7 +85,7 @@ export default function({
                         setSelectedMenuOptions(eachOption.options);
                         setAnchorElement([clickEvent.currentTarget]);
                       } else {
-                        submitMenuOption(eachOption.action, eachOption.dataType);
+                        submitMenuOption(eachOption.action, eachOption.dataType, '');
                       }
                     }}
                     data-testid={`toolbar-icon-button-${eachOption.title}`}
