@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ConnectionList from 'components/ConnectionList';
 import {
   connectionListDummyResFile,
@@ -44,19 +44,6 @@ describe('It Should test Connection List Component', () => {
       return Promise.resolve(mockDataForExploreConnection);
     });
 
-    const container = render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <ConnectionList />
-          </Route>
-        </Switch>
-      </Router>
-    );
-    expect(container).toBeDefined();
-  });
-
-  it('Should render Connection List Component', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -67,7 +54,7 @@ describe('It Should test Connection List Component', () => {
       </Router>
     );
 
-    const ele = screen.getByTestId(/data-sets-parent/i);
-    expect(ele).toBeInTheDocument();
+    const dataSetParentElement = screen.getByTestId(/data-sets-parent/i);
+    expect(dataSetParentElement).toBeInTheDocument();
   });
 });

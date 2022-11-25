@@ -29,4 +29,19 @@ export const useStyles = makeStyles({
     width: '100%',
     zIndex: 2000,
   },
+  columnViewDrawer: {
+    maxHeight: 'calc(100vh - 240px)',
+  },
+  columnViewContainer: {
+    display: 'flex',
+    fontFamily: 'Roboto',
+  },
+  gridTableWrapper: {
+    maxHeight: 'calc(100vh - 190px)',
+    overflowY: 'auto',
+    borderTop: '1px solid #3994ff',
+  },
+  columnInsightsDrawer: {
+    maxHeight: 'calc(100vh - 149px)',
+  },
 });

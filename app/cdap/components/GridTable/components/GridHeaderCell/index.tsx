@@ -14,36 +14,109 @@
  * the License.
  */
 
-import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
-import TypographyComponent from '../Typography';
+import { Box, TableCell, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
+import TypographyComponent from 'components/GridTable/components/Typography';
+import T from 'i18n-react';
+import styled from 'styled-components';
+import { blue, grey } from '@material-ui/core/colors';
 
-const StringIndicatorBox = styled(Box)({
-  display: 'flex',
-});
+const PREFIX = 'features.WranglerNewUI.GridTable';
 
-export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
+const StringIndicatorBox = styled(Box)`
+  display: flex;
+`;
+
+const TableHeaderCell = styled(TableCell)`
+  padding: 0px;
+  width: auto;
+  font-size: 14px;
+  border-right: 1px solid ${grey[300]};
+  border-bottom: 1px solid ${grey[300]};
+  cursor: pointer;
+`;
+
+const CustomizedBox = styled(Box)`
+  min-width: 216px;
+  padding: 10px 0px 10px 30px;
+  border-radius: 0px;
+  border: 0px;
+  background: #f1f8ff;
+`;
+
+const HighlightedBox = styled(CustomizedBox)`
+  outline: 2px solid ${blue[500]};
+  outline-offset: -2px;
+`;
+
+const CustomizedTypography = styled(Typography)`
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 400;
+  color: #000000;
+  margin-bottom: 5px;
+`;
+
+const getWrapperComponent = (isColumnHighlighted) => {
+  if (isColumnHighlighted) {
+    return HighlightedBox;
+  } else {
+    return CustomizedBox;
+  }
+};
+
+export default function GridHeaderCell({
+  label,
+  types,
+  key,
+  columnSelected,
+  setColumnSelected,
+  onColumnSelection,
+  eachHeaderIndex,
+}: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
 
-  const [data, setData] = useState<Record<string, string>>({
-    datatype1: types.length > 0 ? (types[0] as string) : null,
-    datatype2: types.length > 1 ? (types[1] as string) : null,
+  const isColumnHighlighted = label === columnSelected;
+
+  const [data, setData] = useState({
+    datatype1: types?.length > 0 ? types[0] : T.translate(`${PREFIX}.unknown`).toString(),
+    datatype2: types?.length > 1 ? types[1] : null,
   });
 
+  useEffect(() => {
+    setData({
+      datatype1: types?.length > 0 ? types[0] : T.translate(`${PREFIX}.unknown`).toString(),
+      datatype2: types?.length > 1 ? types[1] : null,
+    });
+  }, [label, types]);
+
+  const ColumnHeaderContent = getWrapperComponent(isColumnHighlighted);
+
   return (
-    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-container">
-      <Card className={classes.root} variant="outlined">
-        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
+    <TableHeaderCell
+      onClick={() => {
+        setColumnSelected(label);
+        onColumnSelection(label);
+      }}
+      className={classes.tableHeaderCell}
+      data-testid={`grid-header-cell-${eachHeaderIndex}`}
+    >
+      <ColumnHeaderContent variant="outlined">
+        <CustomizedTypography
+          component="span"
+          data-testid={`grid-header-column-name`}
+          variant="body1"
+        >
           {label}
-        </Typography>
+        </CustomizedTypography>
         <StringIndicatorBox>
           <TypographyComponent
             className={classes.dataTypeIndicator}
-            label={data?.datatype1 || 'Unknown'}
+            label={data?.datatype1 || T.translate(`${PREFIX}.unknown`).toString()}
           />
-          {data.datatype2 && (
+          {data?.datatype2 && (
             <StringIndicatorBox>
               <TypographyComponent className={classes.subDataTypeIndicator} label={'|'} />
               <TypographyComponent
@@ -53,7 +126,7 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
             </StringIndicatorBox>
           )}
         </StringIndicatorBox>
-      </Card>
-    </TableCell>
+      </ColumnHeaderContent>
+    </TableHeaderCell>
   );
 }

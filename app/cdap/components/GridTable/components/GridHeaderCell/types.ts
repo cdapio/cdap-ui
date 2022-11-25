@@ -19,4 +19,9 @@ import { IType } from 'components/GridTable/types';
 export interface IGridHeaderCellProps {
   label: string;
   types: Array<string | boolean | Record<string, IType>>;
+  key: string;
+  columnSelected: string;
+  setColumnSelected: (columnName: string) => void;
+  onColumnSelection: (columnName: string) => void;
+  eachHeaderIndex: number;
 }
