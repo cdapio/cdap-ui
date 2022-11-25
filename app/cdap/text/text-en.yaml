@@ -3432,45 +3432,69 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-    NoRecordScreen:
-      gridTable:
-        title: No rows left in this sample
-        subtitle: Remove some recipe steps to view some data
-  NewWranglerUI:
+    AddConnections:
+      referenceLabel: Add Connection
+    Breadcrumb:
+      labels:
+        connectionsList: Data Sources
+        wrangleHome: Home
+      params:
+        connectionsList: datasources
+        wrangeHome: home
     ColumnInsights: 
-      distribution: Distribution
-      viewFullChart: View Full Chart
-      columnInsightsHeadingText: Column Insights
-      quality: Quality
-      containsLetter: Contains Letter
-      characterCount: Character count
-      distinct: Distinct
-      null : "Null"
       barChartYLabel: Quantity
-      unknown: unknown
+      characterCount: Character count
+      columnInsightsHeadingText: Column Insights
+      containsLetter: Contains Letter
+      distinct: Distinct
+      distribution: Distribution
       empty: Empty
-      options:
-        labelString: String
-        labelBoolean: Boolean
-        labelInteger: Integer
-        labelLong: Long
-        labelShort: Short
-        labelFloat: Float
-        labelDouble: Double
-        labelDecimal: Decimal
-        labelBytes: Bytes
       error: 
         invalidError: The name you have entered is invalid. It must contain only letters, numbers, and
             underscores (_). Pick a new name.
         matchedColumnError: The name you have entered already exists.Please pick a new name. 
-    GridTable:
+      null : "Null"
+      options:
+        labelBoolean: Boolean
+        labelBytes: Bytes
+        labelDecimal: Decimal
+        labelDouble: Double
+        labelFloat: Float
+        labelInteger: Integer
+        labelLong: Long
+        labelShort: Short
+        labelString: String
+      quality: Quality
+      viewFullChart: View Full Chart
       unknown: unknown
-      missingNull: Missing/Null
-      containsLetterNumberLeadingTrailingSpaces: Contains letters, numbers, leading and trailing spaces
-      containsLetterNumber: Contains letters and numbers
-      containsLetterLeadingTrailing: Contains letters, leading and trailing spaces
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
+    GridTable:
       containsLetterLeading: Contains letters and leading spaces
-      containsLetterTrailing: Contains letters and trailing spaces
+      containsLetterLeadingTrailing: Contains letters, leading and trailing spaces
+      containsLetterNumber: Contains letters and numbers
+      containsLetterNumberLeadingTrailingSpaces: Contains letters, numbers, leading and trailing spaces
       containsLetterOnly: Contains letters
+      containsLetterTrailing: Contains letters and trailing spaces
       containsNumberOnly: Contains numbers      
+      missingNull: Missing/Null
+      unknown: unknown
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
+    NoRecordScreen:
+      gridTable:
+        subtitle: Remove some recipe steps to view some data
+        title: No rows left in this sample
 ...

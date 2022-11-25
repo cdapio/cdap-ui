@@ -263,7 +263,6 @@
     "vega-lite": "2.0.0-beta.16",
     "vega-tooltip": "0.4.3",
     "webpack-dev-server": "3.11.0",
-    "whatwg-fetch": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-1.0.0.tgz",
     "yml-loader": "2.1.0"
   },
   "resolutions": {

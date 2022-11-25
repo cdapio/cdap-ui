@@ -14,11 +14,11 @@
  * the License.
  */
 
-import { render, screen } from "@testing-library/react";
-import React from "react";
-import ColumnDataQuality from "components/ColumnInsightsPanel/components/ColumnDataQuality/index";
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import ColumnDataQuality from 'components/ColumnInsightsPanel/components/ColumnDataQuality/index';
 
-describe("It Should test ColumnDatQuality Component.", () => {
+describe('It Should test ColumnDatQuality Component.', () => {
   const mockDataQuality = {
     nullValueCount: 3,
     nullValuePercentage: 50,
@@ -27,49 +27,39 @@ describe("It Should test ColumnDatQuality Component.", () => {
   };
   const mockColumnInfoForDataQuality = {
     general: {
-      "non-null": 40,
+      'non-null': 40,
       null: 50,
     },
     types: {
       Text: 16.666668,
     },
   };
-  it("Should test whether ColumnDatQuality is rendered in the Screen and Quality Text is as expected. ", () => {
+  it('Should test whether ColumnDatQuality is rendered in the Screen and Quality Text is as expected. ', () => {
     render(
-      <ColumnDataQuality
-        dataQuality={mockDataQuality}
-        columnInfo={mockColumnInfoForDataQuality}
-      />
+      <ColumnDataQuality dataQuality={mockDataQuality} columnInfo={mockColumnInfoForDataQuality} />
     );
-    const columnDataQualityParent = screen.getByTestId(
-      /column-data-quality-parent/i
-    );
+    const columnDataQualityParent = screen.getByTestId(/column-data-quality-parent/i);
     expect(columnDataQualityParent).toBeInTheDocument();
 
     const qualityText = screen.getByTestId(/quality-text/i);
-    expect(qualityText).toHaveTextContent(
-      "features.NewWranglerUI.ColumnInsights.quality"
-    );
+    expect(qualityText).toHaveTextContent('features.WranglerNewUI.ColumnInsights.quality');
   });
 
-  it("Should test whether the quality Bar is in the Screen and the quality bar width based on the null values.", () => {
+  it('Should test whether the quality Bar is in the Screen and the quality bar width based on the null values.', () => {
     render(
-      <ColumnDataQuality
-        dataQuality={mockDataQuality}
-        columnInfo={mockColumnInfoForDataQuality}
-      />
+      <ColumnDataQuality dataQuality={mockDataQuality} columnInfo={mockColumnInfoForDataQuality} />
     );
     const qualityBar = screen.getByTestId(/quality-bar/i);
     expect(qualityBar).toBeInTheDocument();
 
     const filledQualityBar = screen.getByTestId(/filled-bar/i);
-    expect(filledQualityBar).toHaveStyle("width:40%");
+    expect(filledQualityBar).toHaveStyle('width:40%');
 
     const emptyQualityBar = screen.getByTestId(/empty-bar/i);
-    expect(emptyQualityBar).toHaveStyle("width:60%");
+    expect(emptyQualityBar).toHaveStyle('width:60%');
   });
 
-  it("Should test whether the quality Bar is in the Screen when a non-null value is not present.", () => {
+  it('Should test whether the quality Bar is in the Screen when a non-null value is not present.', () => {
     render(
       <ColumnDataQuality
         dataQuality={mockDataQuality}
@@ -87,10 +77,10 @@ describe("It Should test ColumnDatQuality Component.", () => {
     expect(qualityBar).toBeInTheDocument();
 
     const filledQualityBar = screen.getByTestId(/filled-bar/i);
-    expect(filledQualityBar).toHaveStyle("width:0%");
+    expect(filledQualityBar).toHaveStyle('width:0%');
   });
 
-  it("Should test whether ToggleButton is present in the Document.", () => {
+  it('Should test whether ToggleButton is present in the Document.', () => {
     render(
       <ColumnDataQuality
         dataQuality={mockDataQuality}

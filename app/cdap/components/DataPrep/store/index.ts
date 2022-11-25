@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import { combineReducers, createStore } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 
 export interface IDataPrepAction {
@@ -55,6 +55,18 @@ export interface IModelField {
   description?: string;
 }
 
+export interface IConnectorsWithIcons {
+  name: string;
+  type: string;
+  category: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+  SVG: JSX.Element;
+}
+
 // TODO Replace 'any' types with concrete ones
 export interface IDataPrepState {
   initialized?: boolean;
@@ -76,6 +88,7 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
+  connectorsWithIcons?: any;
 }
 
 const defaultInitialState: IDataPrepState = {
@@ -101,6 +114,7 @@ const defaultInitialState: IDataPrepState = {
   dataModelList: null,
   targetDataModel: null,
   targetModel: null,
+  connectorsWithIcons: [],
 };
 
 const errorInitialState = {
@@ -152,6 +166,11 @@ const dataprep = (state = defaultInitialState, action = defaultAction) => {
         data: action.payload.data,
         headers: action.payload.headers,
         loading: false,
+      });
+      break;
+    case DataPrepActions.setConnectorIcons:
+      stateCopy = Object.assign({}, state, {
+        connectorsWithIcons: action?.payload?.data,
       });
       break;
     case DataPrepActions.setDirectives:

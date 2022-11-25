@@ -29,6 +29,7 @@ interface IPayLoad {
   pipelineName?: string;
   workflowName?: string;
   pipelineCompositeTriggersEnabled?: boolean;
+  lifecycleManagementEditEnabled?: boolean;
   pipelineList?: IPipelineInfo[];
   selectedNamespace?: string;
   selectedTriggersType?: string;
@@ -69,6 +70,7 @@ const defaultInitialState = {
   expandedSchedule: null,
   configureError: null,
   pipelineCompositeTriggersEnabled: false,
+  lifecycleManagementEditEnabled: false,
 };
 
 const defaultInitialEnabledTriggersState = {
@@ -87,6 +89,7 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         pipelineName: action.payload.pipelineName,
         workflowName: action.payload.workflowName,
         pipelineCompositeTriggersEnabled: action.payload.pipelineCompositeTriggersEnabled,
+        lifecycleManagementEditEnabled: action.payload.lifecycleManagementEditEnabled,
       };
       break;
     case PipelineTriggersActions.changeNamespace:

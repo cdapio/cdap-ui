@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import Select from '@material-ui/core/Select';
@@ -22,6 +22,8 @@ import SidePanel from 'components/hydrator/components/SidePanel/SidePanel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
+import AvailablePluginsStore from 'services/AvailablePluginsStore';
+import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 
 interface ILeftPanelProps {
   onArtifactChange: (value: any) => void;
@@ -40,6 +42,9 @@ interface ILeftPanelProps {
 
 const StyledSelect = styled(Select)`
   overflow: hidden;
+  .MuiSelect-select:focus {
+    background-color: white;
+  }
 `;
 
 export const LeftPanel = ({
@@ -55,53 +60,66 @@ export const LeftPanel = ({
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [availablePlugins, setAvailablePlugins] = useState(AvailablePluginsStore.getState());
+  let unsub;
+  useEffect(() => {
+    unsub = AvailablePluginsStore.subscribe(() => {
+      const avp = AvailablePluginsStore.getState();
+      if (avp.plugins) {
+        setAvailablePlugins(avp);
+      }
+    });
+  }, []);
+
+  useOnUnmount(() => {
+    unsub();
+  });
 
   return (
-    <>
-      <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>
-        <div className="left-panel">
-          <div className="left-top-section">
-            <StyledSelect
-              value={selectedArtifact.label}
-              className="form-control"
-              onChange={(event: any) => onArtifactChange(event.currentTarget.dataset.name)}
-              MenuProps={{
-                getContentAnchorEl: null,
-                anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                },
-              }}
-              disabled={isEdit}
-            >
-              {artifacts.map((artifact) => {
-                return (
-                  <MenuItem value={artifact.label} key={artifact.label} data-name={artifact.name}>
-                    {artifact.label}
-                  </MenuItem>
-                );
-              })}
-            </StyledSelect>
-            <Button
-              onClick={() => setIsExpanded(!isExpanded)}
-              color="primary"
-              component="button"
-              className="btn-sm pull-right"
-            >
-              {isExpanded ? <ChevronLeft /> : <ChevronRight />}
-            </Button>
-          </div>
-          <div className="my-side-panel">
-            <SidePanel
-              itemGenericName={itemGenericName}
-              groups={groups}
-              groupGenericName={groupGenericName}
-              onPanelItemClick={(event, plugin) => onPanelItemClick(event, plugin)}
-              createPluginTemplate={createPluginTemplate}
-            />
-          </div>
+    <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>
+      <div className="left-panel">
+        <div className="left-top-section">
+          <StyledSelect
+            value={selectedArtifact.label}
+            className="form-control"
+            onChange={(event: any) => onArtifactChange(event.currentTarget.dataset.name)}
+            MenuProps={{
+              getContentAnchorEl: null,
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+              },
+            }}
+            disabled={isEdit}
+          >
+            {artifacts.map((artifact) => {
+              return (
+                <MenuItem value={artifact.label} key={artifact.label} data-name={artifact.name}>
+                  {artifact.label}
+                </MenuItem>
+              );
+            })}
+          </StyledSelect>
+          <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            color="primary"
+            component="button"
+            className="btn-sm pull-right"
+          >
+            {isExpanded ? <ChevronLeft /> : <ChevronRight />}
+          </Button>
+        </div>
+        <div className="my-side-panel">
+          <SidePanel
+            availablePlugins={availablePlugins}
+            itemGenericName={itemGenericName}
+            groups={groups}
+            groupGenericName={groupGenericName}
+            onPanelItemClick={(event, plugin) => onPanelItemClick(event, plugin)}
+            createPluginTemplate={createPluginTemplate}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };

@@ -22,6 +22,8 @@ const NewButton = styled(Button)`
   text-transform: none;
   font-weight: normal;
   color: ${(props) => props.textColor || '#666666'};
+  font-size: 13px;
+  letter-spacing: 0;
 `;
 
 export const PrimaryTextLowercaseButton = ({ children, disabled = false, ...props }) => {

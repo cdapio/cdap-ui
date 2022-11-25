@@ -87,12 +87,14 @@ export default class DataPrep extends Component {
         state.error.workspaceError.message !== this.state.workspaceError.message &&
         state.error.workspaceError.statusCode !== this.state.workspaceError.statusCode
       ) {
-        this.setState({ workspaceError: state.error.workspaceError }, () => {
-          this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, {
-            data: this.state.workspaceError.message,
-            statusCode: this.state.workspaceError.statusCode,
+        if (this.props.mode !== 'ROUTED_WORKSPACE') {
+          this.setState({ workspaceError: state.error.workspaceError }, () => {
+            this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, {
+              data: this.state.workspaceError.message,
+              statusCode: this.state.workspaceError.statusCode,
+            });
           });
-        });
+        }
       }
     });
   }

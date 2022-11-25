@@ -19,7 +19,7 @@ import T from 'i18n-react';
 import React from 'react';
 import RenderLabel from 'components/ColumnInsightsPanel/components/common/RenderLabel/index';
 
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 describe('It should test RenderLabel Component', () => {
   it('Should test whether RenderLabel Component is rendered and in the Document', () => {
     render(

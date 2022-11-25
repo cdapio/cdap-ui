@@ -23,7 +23,7 @@ import T from 'i18n-react';
 import styled from 'styled-components';
 import { blue, grey } from '@material-ui/core/colors';
 
-const PREFIX = 'features.NewWranglerUI.GridTable';
+const PREFIX = 'features.WranglerNewUI.GridTable';
 
 const StringIndicatorBox = styled(Box)`
   display: flex;

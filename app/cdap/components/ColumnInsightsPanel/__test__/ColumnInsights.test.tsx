@@ -14,16 +14,16 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import React from "react";
-import { Route, Router, Switch } from "react-router";
-import history from "services/history";
-import ColumnInsights from "components/ColumnInsightsPanel/index";
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import history from 'services/history';
+import ColumnInsights from 'components/ColumnInsightsPanel/index';
 
-describe("It Should test Column Insights Component", () => {
+describe('It Should test Column Insights Component', () => {
   const mockColumnData = {
     open: true,
-    columnName: "body_2",
+    columnName: 'body_2',
     distinctValues: 3,
     characterCount: {
       min: 0,
@@ -37,17 +37,17 @@ describe("It Should test Column Insights Component", () => {
     },
     dataQualityBar: {
       general: {
-        "non-null": 50,
+        'non-null': 50,
         null: 50,
       },
       types: {
         Text: 16.666668,
       },
     },
-    dataTypeString: "Contains letters and numbers",
+    dataTypeString: 'Contains letters and numbers',
     dataDistributionGraphData: [
       {
-        text: "undefined",
+        text: 'undefined',
         value: 3,
       },
       {
@@ -55,20 +55,20 @@ describe("It Should test Column Insights Component", () => {
         value: 1,
       },
       {
-        text: "11swd",
+        text: '11swd',
         value: 1,
       },
       {
-        text: "sxe",
+        text: 'sxe',
         value: 1,
       },
     ],
-    columnNamesList: ["body_0,body_1,body_2,body_3,body_4"],
+    columnNamesList: ['body_0,body_1,body_2,body_3,body_4'],
   };
 
   const mockColumnDataWithEmptyDataTypeString = {
     open: true,
-    columnName: "body_2",
+    columnName: 'body_2',
     distinctValues: 3,
     characterCount: {
       min: 0,
@@ -82,17 +82,17 @@ describe("It Should test Column Insights Component", () => {
     },
     dataQualityBar: {
       general: {
-        "non-null": 50,
+        'non-null': 50,
         null: 50,
       },
       types: {
         Text: 16.666668,
       },
     },
-    dataTypeString: "",
+    dataTypeString: '',
     dataDistributionGraphData: [
       {
-        text: "undefined",
+        text: 'undefined',
         value: 3,
       },
       {
@@ -100,17 +100,17 @@ describe("It Should test Column Insights Component", () => {
         value: 1,
       },
       {
-        text: "11swd",
+        text: '11swd',
         value: 1,
       },
       {
-        text: "sxe",
+        text: 'sxe',
         value: 1,
       },
     ],
-    columnNamesList: ["body_0,body_1,body_2,body_3,body_4"],
+    columnNamesList: ['body_0,body_1,body_2,body_3,body_4'],
   };
-  it("Should test whether the Column Insights Panel is rendered on the screen.", () => {
+  it('Should test whether the Column Insights Panel is rendered on the screen.', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -119,7 +119,7 @@ describe("It Should test Column Insights Component", () => {
               columnData={mockColumnData}
               renameColumnNameHandler={jest.fn()}
               dataTypeHandler={jest.fn()}
-              columnType={"String"}
+              columnType={'String'}
               onClose={jest.fn()}
             />
           </Route>
@@ -130,7 +130,7 @@ describe("It Should test Column Insights Component", () => {
     expect(columnInsightsPanel).toBeInTheDocument();
   });
 
-  it("Should test to close the Column Insights Panel by clicking on Close Icon and triggering the closeClickHandler()", () => {
+  it('Should test to close the Column Insights Panel by clicking on Close Icon and triggering the closeClickHandler()', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -139,7 +139,7 @@ describe("It Should test Column Insights Component", () => {
               columnData={mockColumnDataWithEmptyDataTypeString}
               renameColumnNameHandler={jest.fn()}
               dataTypeHandler={jest.fn()}
-              columnType={"String"}
+              columnType={'String'}
               onClose={jest.fn()}
             />
           </Route>

@@ -22,7 +22,7 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 interface IDataQualityProps {
   dataQuality: IDataQuality;
 }

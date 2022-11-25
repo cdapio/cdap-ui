@@ -14,17 +14,17 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import React from "react";
-import ColumnDataDistribution from "components/ColumnInsightsPanel/components/ColumnDataDistribution/index";
-import history from "services/history";
-import { Route, Router, Switch } from "react-router";
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import ColumnDataDistribution from 'components/ColumnInsightsPanel/components/ColumnDataDistribution/index';
+import history from 'services/history';
+import { Route, Router, Switch } from 'react-router';
 // import { mockGraphData } from 'components/ColumnInsights/mock/mockDataForColumnInsights';
 
-describe("It Should test Column Data Distribution Component", () => {
+describe('It Should test Column Data Distribution Component', () => {
   const mockGraphData = [
     {
-      text: "undefined",
+      text: 'undefined',
       value: 30,
     },
     {
@@ -32,11 +32,11 @@ describe("It Should test Column Data Distribution Component", () => {
       value: 80,
     },
     {
-      text: "hello",
+      text: 'hello',
       value: 1,
     },
     {
-      text: "set",
+      text: 'set',
       value: 90,
     },
     {
@@ -44,27 +44,27 @@ describe("It Should test Column Data Distribution Component", () => {
       value: 9,
     },
     {
-      text: "test",
+      text: 'test',
       value: 2,
     },
     {
-      text: "peek",
+      text: 'peek',
       value: 1,
     },
     {
-      text: "  ",
+      text: '  ',
       value: 1,
     },
     {
-      text: "",
+      text: '',
       value: 10,
     },
     {
-      text: "",
+      text: '',
       value: 1,
     },
   ];
-  it("Should test whether  Column Data Distribution Component is rendered in the screen and the Graph label is as expected.", () => {
+  it('Should test whether  Column Data Distribution Component is rendered in the screen and the Graph label is as expected.', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -76,11 +76,11 @@ describe("It Should test Column Data Distribution Component", () => {
     );
     const distributionText = screen.getByTestId(/distribution-text/i);
     expect(distributionText).toHaveTextContent(
-      `features.NewWranglerUI.ColumnInsights.distribution`
+      `features.WranglerNewUI.ColumnInsights.distribution`
     );
   });
 
-  it("Should test whether View Full Chart Text is as expected.", () => {
+  it('Should test whether View Full Chart Text is as expected.', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -92,11 +92,11 @@ describe("It Should test Column Data Distribution Component", () => {
     );
     const viewFullChartText = screen.getByTestId(/view-full-chart-text/i);
     expect(viewFullChartText).toHaveTextContent(
-      `features.NewWranglerUI.ColumnInsights.viewFullChart`
+      `features.WranglerNewUI.ColumnInsights.viewFullChart`
     );
   });
 
-  it("Should test whether Data Distribution Graph is rendered in the Screen.", () => {
+  it('Should test whether Data Distribution Graph is rendered in the Screen.', () => {
     render(
       <Router history={history}>
         <Switch>
@@ -106,9 +106,7 @@ describe("It Should test Column Data Distribution Component", () => {
         </Switch>
       </Router>
     );
-    const dataDistributionGraph = screen.getByTestId(
-      /data-distribution-graph/i
-    );
+    const dataDistributionGraph = screen.getByTestId(/data-distribution-graph/i);
     fireEvent.click(dataDistributionGraph);
     expect(dataDistributionGraph).toBeInTheDocument();
   });
