@@ -83,7 +83,7 @@ describe('It Should test ColumnDetails Component', () => {
     expect(inputField).toHaveValue('body_**');
     const invalidText = screen.getByTestId('invalid-text');
     expect(invalidText).toHaveTextContent(
-      'features.NewWranglerUI.ColumnInsights.error.invalidError'
+      'features.WranglerNewUI.ColumnInsights.error.invalidError'
     );
   });
   it('Should test inputField when onBlur event is triggered and the new column name is different', () => {

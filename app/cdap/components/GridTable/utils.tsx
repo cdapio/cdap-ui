@@ -17,7 +17,7 @@
 import { IValues } from 'components/GridTable/types';
 import T from 'i18n-react';
 
-const PREFIX = 'features.NewWranglerUI.GridTable';
+const PREFIX = 'features.WranglerNewUI.GridTable';
 
 /**
  * @description This function takes column name , rowsDataList and calculate the distinct values in the Column .

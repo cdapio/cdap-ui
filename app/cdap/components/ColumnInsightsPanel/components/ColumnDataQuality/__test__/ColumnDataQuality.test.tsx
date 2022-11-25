@@ -42,7 +42,7 @@ describe('It Should test ColumnDatQuality Component.', () => {
     expect(columnDataQualityParent).toBeInTheDocument();
 
     const qualityText = screen.getByTestId(/quality-text/i);
-    expect(qualityText).toHaveTextContent('features.NewWranglerUI.ColumnInsights.quality');
+    expect(qualityText).toHaveTextContent('features.WranglerNewUI.ColumnInsights.quality');
   });
 
   it('Should test whether the quality Bar is in the Screen and the quality bar width based on the null values.', () => {

@@ -23,7 +23,7 @@ import BarChart from 'react-bar-chart';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+export const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 
 interface IColumnDataDistributionProps {
   graphData: IGraphData[];

@@ -6,7 +6,7 @@ import { IconButton } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import DrawerWidgetHeading from 'components/ColumnInsightsPanel/components/DrawerWidgetHeading';
 
-const PREFIX = 'features.NewWranglerUI.ColumnInsights';
+const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 
 const DrawerContainerStyle = styled(Box)`
   width: 471px;
