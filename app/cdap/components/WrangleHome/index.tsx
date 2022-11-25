@@ -16,17 +16,24 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import DataPrepStore from 'components/DataPrep/store';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import { getWidgetData } from 'components/WidgetSVG/utils';
 import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations';
-import WrangleCard from 'components/WrangleHome/Components/WrangleCard';
-import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle';
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
+import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle/index';
 import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
 import { useStyles } from 'components/WrangleHome/styles';
 import T from 'i18n-react';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export default function() {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+
+  const [viewAllLink, toggleViewAllLink] = useState<boolean>(false);
 
   useEffect(() => {
     getWidgetData();
@@ -45,16 +52,28 @@ export default function() {
 
       <Box>
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title={T.translate('features.HomePage.labels.connectorTypes.title')} />
-          <Box className={classes.viewMore}>
-            {T.translate('features.HomePage.labels.common.viewAll')}
-          </Box>
+          <WrangleHomeTitle
+            title={T.translate('features.WranglerNewUI.HomePage.labels.connectorTypes.title')}
+          />
+          {viewAllLink && (
+            <Box className={classes.viewMore}>
+              <Link
+                color="inherit"
+                to={`/ns/${getCurrentNamespace()}/datasources/Select Dataset`}
+                data-testid="connector-types-view-all"
+              >
+                {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+              </Link>{' '}
+            </Box>
+          )}
         </Box>
-        <WrangleCard />
+        <WrangleCard toggleViewAllLink={toggleViewAllLink} />
         <Box className={classes.headerTitle}>
-          <WrangleHomeTitle title={T.translate('features.HomePage.labels.workspaces.title')} />
+          <WrangleHomeTitle
+            title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
+          />
           <Box className={classes.viewMore}>
-            {T.translate('features.HomePage.labels.common.viewAll')}
+            {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
           </Box>
         </Box>
         <OngoingDataExplorations />
