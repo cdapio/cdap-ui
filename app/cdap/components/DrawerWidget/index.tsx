@@ -65,7 +65,7 @@ export default function({
               className={classes.closeButtonStyle}
               onClick={closeClickHandler}
             >
-              <CloseRoundedIcon color="action" fontSize="large" />
+              <CloseRoundedIcon color="action" />
             </IconButton>
           </Box>
         </header>
