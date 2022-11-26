@@ -50,3 +50,23 @@ const getDirectiveForKeepOrDrop = (functionName: string, columnList: IHeaderName
   });
   return initialValue;
 };
+
+export const applyButtonEnabled = (
+  functionName: string,
+  transformationComponentValues: ITransformationComponentValues,
+  selectedColumns: IHeaderNamesList[]
+) => {
+  if (functionName === 'copyColumn') {
+    if (transformationComponentValues.copyColumnName == '') {
+      return true;
+    } else if (selectedColumns.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (selectedColumns.length === 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
