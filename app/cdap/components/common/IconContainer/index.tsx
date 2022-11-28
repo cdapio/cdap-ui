@@ -14,21 +14,25 @@
  * the License.
  */
 
-import React from 'react';
+import { Box } from '@material-ui/core';
+import styled from 'styled-components';
+import { grey } from '@material-ui/core/colors';
 
-// This image is an SVG and is not available in MUI Icons Store
-export const Underline = () => {
-  return (
-    <svg
-      width="67"
-      height="3"
-      viewBox="0 0 67 3"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      data-testid="underline-icon"
-    >
-      <path d="M0 0.530273H50L53 2.5318H3L0 0.530273Z" fill="#2196F3" />
-      <path d="M54 0.530273H63.5L66.5 2.5318H57L54 0.530273Z" fill="#2196F3" />
-    </svg>
-  );
-};
+export const ToolBarIconWrapper = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid ${grey[300]};
+  margin-top: 0;
+  padding-left: 18px;
+  padding-right: 15px;
+`;
+
+export const ToolBarInnerWrapper = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 0;
+  margin-right: 0;
+  width: 80%;
+`;

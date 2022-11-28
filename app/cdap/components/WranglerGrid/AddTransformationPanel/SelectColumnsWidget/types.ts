@@ -13,22 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { IHeaderNamesList } from 'components/WranglerGrid/AddTransformationPanel/types';
 
-import React from 'react';
-
-// This image is an SVG and is not available in MUI Icons Store
-export const Underline = () => {
-  return (
-    <svg
-      width="67"
-      height="3"
-      viewBox="0 0 67 3"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      data-testid="underline-icon"
-    >
-      <path d="M0 0.530273H50L53 2.5318H3L0 0.530273Z" fill="#2196F3" />
-      <path d="M54 0.530273H63.5L66.5 2.5318H57L54 0.530273Z" fill="#2196F3" />
-    </svg>
-  );
-};
+export interface ISelectColumnsWidgetProps {
+  selectedColumns: IHeaderNamesList[];
+  transformationName: string;
+  handleSelectColumn: (value: boolean) => void;
+}

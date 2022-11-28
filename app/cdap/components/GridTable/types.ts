@@ -27,7 +27,7 @@ export interface IPercentOfDataTypeValues {
 }
 
 interface ISummary {
-  statistics: IRecords;
+  statistics: IStatistics;
   validations: IRecords;
 }
 
@@ -42,9 +42,47 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | boolean | Record<string, IType>>;
+  type: string[];
 }
 
 export interface IType {
   [key: string]: string | number;
+}
+
+interface IGeneralObjectRecord {
+  [key: string]: number | string;
+}
+
+export interface IGeneral {
+  general?: IGeneralObjectRecord;
+  types?: IGeneralObjectRecord;
+}
+
+export interface IStatistics {
+  [key: string]: IGeneral;
+}
+
+export interface IAddTransformationItem {
+  option: string;
+  supportedDataType: string[];
+}
+
+export interface IRequestBody {
+  directives: string[];
+  insights?: IRecords;
+  limit: number;
+}
+
+export interface IGridParams {
+  directives: string[];
+  insights: IRecords;
+  workspaceId: string;
+  workspaceInfo: IRecords;
+  workspaceUri: string;
+}
+
+export interface IApiPayload {
+  payload: IRecords;
+  requestBody: IRequestBody;
+  gridParams: IGridParams;
 }
