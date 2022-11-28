@@ -80,9 +80,11 @@ public class FindAndReplace {
     public void clickOnTheParse() {
         try {
             WaitHelper.waitForPageToLoad();
-            WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("toolbar-icon-button-find-and-replace"));
+            WaitHelper.waitForElementToBeDisplayed
+                    (Helper.locateElementByTestId("toolbar-icon-button-find-and-replace"));
             WebElement ele = SeleniumDriver.getDriver()
-                    .findElement(By.xpath("//*[@data-testid='toolbar-icon-button-find-and-replace']"));
+                    .findElement(By.xpath
+                            ("//*[@data-testid='toolbar-icon-button-find-and-replace']"));
             JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
         } catch (Exception e) {
@@ -142,7 +144,7 @@ public class FindAndReplace {
             WaitHelper.waitForPageToLoad();
             WebElement old = SeleniumDriver.getDriver().findElement(By.xpath
                     ("//div[@data-testid='old-value-input-form']/input[@placeholder='Old Value']"));
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", old);
             old.sendKeys("NCMD");
         } catch (Exception e) {
@@ -179,7 +181,7 @@ public class FindAndReplace {
             WebElement replace = SeleniumDriver.getDriver().findElement(By.xpath
                     ("//div[@data-testid='new-value-input-form']/input[@placeholder='New value']"));
             Assert.assertTrue(ElementHelper.isElementDisplayed(replace));
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", replace);
             replace.sendKeys("Dhanu");
         } catch (Exception e) {
@@ -192,7 +194,7 @@ public class FindAndReplace {
         try {
             WaitHelper.waitForPageToLoad();
             WebElement element = Helper.locateElementByTestId("apply-step-button");
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", element);
         } catch (Exception e) {
             System.err.println("error:" + e);
