@@ -74,9 +74,14 @@ export default function({ datasetName, setOpenPipeline }) {
 
       <Breadcrumbs separator=" ">
         <IconButton>
-          <a href="https://cdap.atlassian.net/wiki/spaces/DOCS/overview">{HelpIcon}</a>
+          <a href="https://cdap.atlassian.net/wiki/spaces/DOCS/overview" target="_blank">
+            {HelpIcon}
+          </a>
         </IconButton>
-        <CreatePipelineButton onClick={() => setOpenPipeline(true)} data-testid='create-pipeline-button'>
+        <CreatePipelineButton
+          onClick={() => setOpenPipeline(true)}
+          data-testid="create-pipeline-button"
+        >
           {T.translate('features.WranglerNewUI.Breadcrumb.labels.createPipeline')}
         </CreatePipelineButton>
       </Breadcrumbs>

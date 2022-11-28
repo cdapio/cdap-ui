@@ -14,13 +14,13 @@
  *  the License.
  */
 
-import { render, screen } from "@testing-library/react";
-import BreadCrumb from "components/GridTable/components/Breadcrumb";
-import React from "react";
-import { Route, Router, Switch } from "react-router";
-import history from "services/history";
+import { render, screen } from '@testing-library/react';
+import BreadCrumb from 'components/GridTable/components/Breadcrumb';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import history from 'services/history';
 
-describe("Test Breadcrumb Component", () => {
+describe('Test Breadcrumb Component', () => {
   render(
     <Router history={history}>
       <Switch>
@@ -31,9 +31,7 @@ describe("Test Breadcrumb Component", () => {
     </Router>
   );
 
-  it("Should have the Home text in the Breadcrumb", () => {
-    expect(screen.getByTestId("breadcrumb-home-text")).toHaveTextContent(
-      "Home"
-    );
+  it('Should have the Home text in the Breadcrumb', () => {
+    expect(screen.getByTestId('breadcrumb-home-text')).toHaveTextContent('Home');
   });
 });

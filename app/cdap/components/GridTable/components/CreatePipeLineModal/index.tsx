@@ -170,29 +170,38 @@ export default function({ setOpenPipeline }: ICreatePipelineModalProps) {
     >
       <ModalTitle id="alert-dialog-title">
         <HeaderWrapper>
-          <HeaderTitle component="span" data-testid='create-pipeline-header-title'>
+          <HeaderTitle component="span" data-testid="create-pipeline-header-title">
             {T.translate('features.WranglerNewUI.CreatePipeline.labels.title')}
           </HeaderTitle>
-          <CloseIconStyle role="button" tabIndex={0} onClick={handleClose} component="span" data-testid='create-pipeline-close-icon'>
+          <CloseIconStyle
+            role="button"
+            tabIndex={0}
+            onClick={handleClose}
+            component="span"
+            data-testid="create-pipeline-close-icon"
+          >
             <CloseRoundedIcon />
           </CloseIconStyle>
         </HeaderWrapper>
       </ModalTitle>
       <DialogContent>
         <Divider />
-        <ModalTextStyle data-testid='create-pipeline-label-sub-title'>
+        <ModalTextStyle data-testid="create-pipeline-label-sub-title">
           {T.translate('features.WranglerNewUI.CreatePipeline.labels.subTitle')}
         </ModalTextStyle>
         <ModalActionGroup>
-          <BatchPipelineComponent onClick={() => generateLinks()} data-testid='create-pipeline-batch'>
+          <BatchPipelineComponent
+            onClick={() => generateLinks()}
+            data-testid="create-pipeline-batch"
+          >
             {BatchIcon}
-            <ModalTextStyle data-testid='create-pipeline-batch-pipeline'>
+            <ModalTextStyle data-testid="create-pipeline-batch-pipeline">
               {T.translate('features.WranglerNewUI.CreatePipeline.labels.batchPipeline')}
             </ModalTextStyle>
           </BatchPipelineComponent>
           <RealTimePipelineComponent>
             {RealtimePipelineIcon}
-            <ModalTextStyle data-testid='create-pipeline-realTimePipeline'>
+            <ModalTextStyle data-testid="create-pipeline-realTimePipeline">
               {T.translate('features.WranglerNewUI.CreatePipeline.labels.realTimePipeline')}
             </ModalTextStyle>
           </RealTimePipelineComponent>
