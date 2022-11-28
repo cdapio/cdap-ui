@@ -15,20 +15,100 @@
  */
 
 import { Card, TableCell, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGridTextCellStyles } from './styles';
 import { IGridTextCellProps } from './types';
+import MaskDataCustomSelection from 'components/WranglerGrid/TransformationComponents/MaskSelection';
 
-export default function GridTextCell({ cellValue }: IGridTextCellProps) {
+export default function GridTextCell({
+  cellValue,
+  cellIndex,
+  maskSelection,
+  rowNumber,
+  columnSelected,
+  applyTransformation,
+  cancelTransformation,
+  optionSelected,
+}: IGridTextCellProps) {
   const classes = useGridTextCellStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [textSelectionRange, setTextSelectionRange] = useState({
+    start: null,
+    end: null,
+  });
+
+  const mouseUpHandler = (event) => {
+    if (!maskSelection) {
+      return;
+    }
+
+    const currentSelection = window.getSelection().toString();
+    let startRange, endRange;
+
+    if (currentSelection.length) {
+      startRange = window.getSelection().getRangeAt(0).startOffset;
+      endRange = window.getSelection().getRangeAt(0).endOffset;
+      setAnchorEl(event.currentTarget);
+      setTextSelectionRange({
+        start: startRange,
+        end: endRange,
+      });
+    } else {
+      setTextSelectionRange({
+        start: null,
+        end: null,
+      });
+      setAnchorEl(null);
+      cancelTransformation();
+    }
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setTextSelectionRange({
+      start: null,
+      end: null,
+    });
+    cancelTransformation();
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
-    <TableCell className={classes.tableRowCell}>
-      <Card className={classes.root} variant="outlined">
-        <Typography className={classes.cell} data-testid={`grid-text-cell-${cellValue}`}>
-          {cellValue}
-        </Typography>
-      </Card>
-    </TableCell>
+    <>
+      <TableCell
+        className={
+          maskSelection
+            ? `${classes.tableRowCell} ${classes.highlightedColumn}`
+            : classes.tableRowCell
+        }
+        onMouseUp={mouseUpHandler}
+        data-testid={`grid-cellData-${cellIndex}`}
+      >
+        <Card
+          className={maskSelection ? `${classes.root} ${classes.highlightedColumn}` : classes.root}
+          variant="outlined"
+        >
+          <Typography
+            className={maskSelection ? classes.highlightCell : classes.cell}
+            data-testid={`grid-text-cell-${cellIndex}`}
+          >
+            {cellValue}
+          </Typography>
+        </Card>
+      </TableCell>
+      {optionSelected == 'mask-data-custom-selection' && anchorEl && (
+        <MaskDataCustomSelection
+          open={open}
+          anchorEl={anchorEl}
+          handleClose={handleClose}
+          setAnchorEl={setAnchorEl}
+          textSelectionRange={textSelectionRange}
+          columnSelected={columnSelected}
+          applyTransformation={applyTransformation}
+          rowNumber={rowNumber}
+        />
+      )}
+    </>
   );
 }
