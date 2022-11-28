@@ -50,10 +50,10 @@ const TransformationNameText = styled(SubHeadNormalFont)`
 `;
 
 export default function({ transformationName }: { transformationName: string }) {
-  const [transformedFunctionName, setTransformedName] = useState('');
+  const [transformedFunctionName, setTransformedFunctionName] = useState('');
   const getTransformedName = (transformationName: string) => {
     const finalName = transformationName.split('-').join(' ');
-    setTransformedName(finalName);
+    setTransformedFunctionName(finalName);
   };
 
   useEffect(() => {
