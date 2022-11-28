@@ -36,7 +36,8 @@ public class ColumnInsightsPanel {
     public void clickOnTheDataExplorationCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
+            ElementHelper.clickOnElement(
+                    Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
@@ -49,7 +50,8 @@ public class ColumnInsightsPanel {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("grid-header-cell-1"));
-            Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-insights-panel-parent")));
+            Assert.assertTrue(
+                    ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-insights-panel-parent")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
