@@ -3439,10 +3439,17 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        createPipeline: Create a Pipeline
         wrangleHome: Home
       params:
         wrangeHome: home
         connectionsList: datasources
+    CreatePipeline:
+      labels:
+        title: Create a Pipeline
+        subTitle: Choose the type of pipeline to create
+        batchPipeline: Batch Pipeline
+        realTimePipeline: Realtime Pipeline
     AddConnections:
       referenceLabel: Add Connection
     ImportData:
