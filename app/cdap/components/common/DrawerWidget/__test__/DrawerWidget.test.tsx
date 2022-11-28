@@ -21,15 +21,12 @@ import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
 describe('Test DrawerWidget Component', () => {
-
   it('Should render the DrawerWidget Component', () => {
-
     const container = render(
       <Router history={history}>
         <Switch>
           <Route>
-            <DrawerWidget
-              open dataTestId={'test-drawer-widget'}            />
+            <DrawerWidget open dataTestId={'test-drawer-widget'} />
           </Route>
         </Switch>
       </Router>
@@ -37,13 +34,11 @@ describe('Test DrawerWidget Component', () => {
 
     expect(container).toBeDefined();
 
-    const drawerWidgetElement = container.getByTestId("test-drawer-widget");
+    const drawerWidgetElement = container.getByTestId('test-drawer-widget');
     expect(drawerWidgetElement).toBeInTheDocument();
-
   });
 
   it('Should render the DrawerWidget Component with Back Icon and Divider', () => {
-
     const closeClickHandler = jest.fn();
 
     const container = render(
@@ -51,12 +46,14 @@ describe('Test DrawerWidget Component', () => {
         <Switch>
           <Route>
             <DrawerWidget
-              anchor='bottom'
+              anchor="bottom"
               closeClickHandler={closeClickHandler}
               headingText="Drawer Header"
               showBackIcon
               showDivider
-              open={true} dataTestId={'test-drawer-widget'}            />
+              open={true}
+              dataTestId={'test-drawer-widget'}
+            />
           </Route>
         </Switch>
       </Router>
@@ -64,24 +61,22 @@ describe('Test DrawerWidget Component', () => {
 
     expect(container).toBeDefined();
 
-    const drawerWidget = container.getByTestId("test-drawer-widget");
+    const drawerWidget = container.getByTestId('test-drawer-widget');
     expect(drawerWidget).toBeInTheDocument();
 
-    const backIcon = container.getByTestId("back-icon");
+    const backIcon = container.getByTestId('back-icon');
     expect(backIcon).toBeInTheDocument();
 
-    const divider = container.getByTestId("divider");
+    const divider = container.getByTestId('divider');
     expect(divider).toBeInTheDocument();
 
-    const closeIcon = container.getByTestId("close-icon");
+    const closeIcon = container.getByTestId('close-icon');
     expect(closeIcon).toBeInTheDocument();
 
     fireEvent.click(closeIcon);
     expect(closeClickHandler).toBeCalled();
 
-    const underlineIcon = container.getByTestId("underline-icon");
+    const underlineIcon = container.getByTestId('underline-icon');
     expect(underlineIcon).toBeInTheDocument();
-
   });
-
 });

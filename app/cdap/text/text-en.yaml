@@ -3432,21 +3432,93 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-    NoRecordScreen:
-      gridTable:
-        title: No rows left in this sample
-        subtitle: Remove some recipe steps to view some data
+    AddConnections:
+      referenceLabel: Add Connection
     Breadcrumb:
       labels:
         connectionsList: Data Sources
         wrangleHome: Home
       params:
         wrangeHome: home
-        connectionsList: datasources
-    AddConnections:
-      referenceLabel: Add Connection
-    ImportData:
-      referenceLabel: Import Data
+        connectionsList: datasources  
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
+    GridPage:
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          otherIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            column:
+              copyColumn: Copy column
+              deletecolumn: Delete column
+              keepColumn: Keep column
+            datatype:
+              string: string
+              boolean: boolean
+              integer: integer
+              long: long
+              short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
+            menu:
+              changeDatatype: Change data type
+            other:
+              sendToError: Send to error
+      addTransformationPanel:
+        addTransformation: Add Transformation Step
+        applyStep: Apply Step
+        columnsSelected: columns selected
+        columns: Columns
+        dataQuality: Data Quality
+        done: Done
+        function: Function
+        nullValues: Null Values
+        quickSelect: Quick select by clicking a column on the grid/columns panel
+        selectColumnPara: Select column(s) to apply this function
+        selectColumn: Select column
+        selectMultiColumns: Select columns
+      selectColumnListPanel:
+        columnsSelected: column selected
+        no: No
+        noColumns: No columns to show
+        noMatchColumnDatatype: Selected directive supported datatype does not match which the column's datatype
+        zero: '0' 
+      transformationUI:
+        common: 
+          nameNewColumn:  Name new column 
+          columnExist: This column name already exist
+          destinationColumn: Destination Column
+        findAndReplace: 
+          exactMatch: Exact Match
+          find: Find
+          ignoreCase: Ignore case
+          newValue: New value
+          oldValue: Old Value
+          replaceWith: Replace with
     HomePage:
       labels:
         common:
@@ -3457,8 +3529,20 @@ features:
           title: Start data exploration
         workspaces:
           title: Continue ongoing data explorations, pick up where you left off
-    ConnectionsList:
+    ImportData:
+      referenceLabel: Import Data
+    NoRecordScreen:
+      gridTable:
+        title: No rows left in this sample
+        subtitle: Remove some recipe steps to view some data   
+    Snackbar:
       labels:
-        loadToGrid: Wrangle
-        noConnections: No Connections to show
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for    
+        
 ...

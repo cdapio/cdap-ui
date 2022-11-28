@@ -19,7 +19,7 @@ import React, { createRef, RefObject, useEffect, useState } from 'react';
 import CustomTooltip from '../CustomTooltip';
 import { useStyles } from './styles';
 
-export default function OngoingDataExplorationCard({ item }) {
+export default function OngoingDataExplorationCard({ item, index }) {
   const classes = useStyles();
   const connectionNameRef: RefObject<HTMLInputElement> = createRef();
   const datasetNameRef: RefObject<HTMLInputElement> = createRef();
@@ -34,7 +34,11 @@ export default function OngoingDataExplorationCard({ item }) {
   });
 
   return (
-    <Grid container className={classes.gridContainer}>
+    <Grid
+      container
+      className={classes.gridContainer}
+      data-testid={`ongoing-data-exploration-card-${index}`}
+    >
       {item.map((eachItem, index) => {
         switch (eachItem.type) {
           case 'iconWithText':
