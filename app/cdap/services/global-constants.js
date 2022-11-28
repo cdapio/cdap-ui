@@ -378,6 +378,8 @@ const KEY_CODE = {
 const PIPELINE_LOGS_FILTER =
   'AND .origin=plugin OR MDC:eventType=lifecycle OR MDC:eventType=userLog';
 
+const SNAPSHOT_VERSION = '-SNAPSHOT';
+
 export {
   NUMBER_TYPES,
   NATIVE_NUMBER_TYPES,
@@ -392,4 +394,5 @@ export {
   KEY_CODE,
   PIPELINE_LOGS_FILTER,
   GENERATED_RUNTIMEARGS,
+  SNAPSHOT_VERSION
 };
