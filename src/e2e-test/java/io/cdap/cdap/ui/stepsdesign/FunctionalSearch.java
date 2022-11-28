@@ -69,12 +69,11 @@ public class FunctionalSearch {
         @Then("Click on the Search field and send the values")
         public void clickOnTheSearchField() {
             try {
-
-//                WebElement element = Helper.locateElementByTestId("function-search-input-field");
+                WaitHelper.waitForPageToLoad();
                 WebElement inputElement = SeleniumDriver.getDriver().findElement(By.xpath
                         ("//*[@data-testid='function-search-input-field']/input[@placeholder='Search for functions']"));
                 Assert.assertTrue(ElementHelper.isElementDisplayed(inputElement));
-                JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+                JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
                 executor.executeScript("arguments[0].click();", inputElement);
                 inputElement.sendKeys("lowercase");
             } catch (Exception e) {
@@ -84,7 +83,6 @@ public class FunctionalSearch {
     @Then("Click on the transformation from results")
     public void clickOnTheTransformationFromResults() {
         try {
-//            WebElement ele = Helper.locateElementByTestId("functions-search-recent-results");
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("search-result-lowercase"));
         } catch (Exception e) {
@@ -139,7 +137,7 @@ public class FunctionalSearch {
         try {
             WaitHelper.waitForPageToLoad();
             WebElement ele = SeleniumDriver.getDriver().findElement(By.xpath("//*[@data-testid='button_done']"));
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
         } catch (Exception e) {
             System.err.println("error:" + e);
