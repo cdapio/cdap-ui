@@ -158,6 +158,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           loading={this.state.saving}
           className="btn btn-primary"
           data-cy="save-runtime-args-btn"
+          data-testid="save-runtime-args-btn"
           onClick={this.saveRuntimeArgs}
           disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Save"
@@ -173,14 +174,22 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
           label="Run"
           data-cy="run-deployed-pipeline-modal-btn"
+          data-testid="run-deployed-pipeline-modal-btn"
         />
       );
     };
     return (
-      <div className={classes.container} data-cy="runtime-args-modeless">
+      <div
+        className={classes.container}
+        data-cy="runtime-args-modeless"
+        data-testid="runtime-args-modeless"
+      >
         {this.state.initialPropsLoading && (
           <div className={classes.loading}>
-            <LoadingSVGCentered data-cy="runtime-args-modeless-loading" />
+            <LoadingSVGCentered
+              data-cy="runtime-args-modeless-loading"
+              data-testid="runtime-args-modeless-loading"
+            />
           </div>
         )}
         {!this.state.initialPropsLoading && (
@@ -203,7 +212,11 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
               </div>
               <PipelineRunTimeArgsCounter />
             </div>
-            {this.state.error && <div className={classes.errorContainer}>{this.state.error}</div>}
+            {this.state.error && (
+              <div className={classes.errorContainer} data-testid="pipeline-runtime-args-error">
+                {this.state.error}
+              </div>
+            )}
           </>
         )}
       </div>
