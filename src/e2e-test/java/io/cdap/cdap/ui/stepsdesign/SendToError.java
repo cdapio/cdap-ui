@@ -29,130 +29,134 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class SendToError {
-        @Given("Navigate to Home Page")
-        public void navigateToTheHomePage() {
-            SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-            WaitHelper.waitForPageToLoad();
-        }
+    @Given("Navigate to Home Page")
+    public void navigateToTheHomePage() {
+        SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
+        WaitHelper.waitForPageToLoad();
+    }
 
-        @Then("Click on the Data Explorations card")
-        public void clickOnTheDataExplorationCard() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-1  "));
-                String url = SeleniumDriver.getDriver().getCurrentUrl();
-                Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
-        }
-
-        @Then("Verify if the Transformation Toolbar is displayed on the Grid Page")
-        public void verifyIfTheTransformationToolbarIsDisplayedOnTheGridPage() {
+    @Then("Click on the Data Explorations card")
+    public void clickOnTheDataExplorationCard() {
+        try {
             WaitHelper.waitForPageToLoad();
-            try {
-                boolean flag = true;
-                while (flag == true) {
-                    if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
-                        flag = true;
-                    } else {
-                        flag = false;
-                    }
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-1  "));
+            String url = SeleniumDriver.getDriver().getCurrentUrl();
+            Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
+
+    @Then("Verify if the Transformation Toolbar is displayed on the Grid Page")
+    public void verifyIfTheTransformationToolbarIsDisplayedOnTheGridPage() {
+        WaitHelper.waitForPageToLoad();
+        try {
+            boolean flag = true;
+            while (flag == true) {
+                if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+                    flag = true;
+                } else {
+                    flag = false;
                 }
-                Assert.assertTrue(
-                        Helper.isElementExists(Helper.getCssSelectorByDataTestId("transformations-toolbar-container")));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
             }
+            Assert.assertTrue(
+                    Helper.isElementExists(Helper.getCssSelectorByDataTestId("transformations-toolbar-container")));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the Other icon")
-        public void clickOnTheOtherIcon() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("toolbar-icon-button-Other"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the Other icon")
+    public void clickOnTheOtherIcon() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("toolbar-icon-button-Other"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the Send to error")
-        public void clickOnTheSendToErrorOption() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("toolbar-icon-button-send-to-error"));
-                WebElement ele=Helper.locateElementByTestId("toolbar-icon-button-send-to-error");
-                JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
-                executor.executeScript("arguments[0].click();", ele);
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the Send to error")
+    public void clickOnTheSendToErrorOption() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            WaitHelper.waitForElementToBeDisplayed(
+                    Helper.locateElementByTestId("toolbar-icon-button-send-to-error"));
+            WebElement ele = Helper.locateElementByTestId("toolbar-icon-button-send-to-error");
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
+            executor.executeScript("arguments[0].click();", ele);
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Verify if the user is on the Add transformation page")
-        public void verifyIfTheUserIsOnTheAddTransformationPanel() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                Assert.assertTrue(ElementHelper.isElementDisplayed(
-                        Helper.locateElementByTestId("add-transformation-panel")));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Verify if the user is on the Add transformation page")
+    public void verifyIfTheUserIsOnTheAddTransformationPanel() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            Assert.assertTrue(ElementHelper.isElementDisplayed(
+                    Helper.locateElementByTestId("add-transformation-panel")));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the Select Column button")
-        public void clickOnTheSelectColumnButton() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("select-column-button"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the Select Column button")
+    public void clickOnTheSelectColumnButton() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("select-column-button"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the radio button of any column")
-        public void clickOnTheRadioButtonOfAnyColumn() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("radio-input-1"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the radio button of any column")
+    public void clickOnTheRadioButtonOfAnyColumn() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("radio-input-1"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the Done button")
-        public void clickOnTheDoneButton() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                WebElement ele = SeleniumDriver.getDriver().findElement(By.xpath("//*[@data-testid='button_done']"));
-                JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
-                executor.executeScript("arguments[0].click();", ele);
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the Done button")
+    public void clickOnTheDoneButton() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            WebElement ele = SeleniumDriver.getDriver().findElement(
+                    By.xpath("//*[@data-testid='button_done']"));
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
+            executor.executeScript("arguments[0].click();", ele);
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
 
-        @Then("Click on the value input field")
-        public void clickOnTheValueInputField() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
-                js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-                WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-input-root"));
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("select-input-root"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Click on the value input field")
+    public void clickOnTheValueInputField() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+            WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-input-root"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("select-input-root"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
+    }
+
     @Then("enter value in the field")
     public void enterValueInField() {
         try {
             WaitHelper.waitForPageToLoad();
             JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
             js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-            WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("form-input-send-to-error-custom-input"));
+            WaitHelper.waitForElementToBeDisplayed(
+                    Helper.locateElementByTestId("form-input-send-to-error-custom-input"));
             WebElement ele = Helper.locateElementByTestId("send-to-error-custom-input");
-            JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
             ele.sendKeys("Jarred");
         } catch (Exception e) {
@@ -160,24 +164,24 @@ public class SendToError {
         }
     }
 
-        @Then("Select any value from the dropdown")
-        public void selectAnyValueFromTheDropdown() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-option-list-1"));
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("select-option-list-1"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
-        }
-
-        @Then("Click on the Apply step button")
-        public void clickOnTheApplyButton() {
-            try {
-                WaitHelper.waitForPageToLoad();
-                ElementHelper.clickOnElement(Helper.locateElementByTestId("apply-step-button"));
-            } catch (Exception e) {
-                System.err.println("error:" + e);
-            }
+    @Then("Select any value from the dropdown")
+    public void selectAnyValueFromTheDropdown() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-option-list-1"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("select-option-list-1"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
         }
     }
+
+    @Then("Click on the Apply step button")
+    public void clickOnTheApplyButton() {
+        try {
+            WaitHelper.waitForPageToLoad();
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("apply-step-button"));
+        } catch (Exception e) {
+            System.err.println("error:" + e);
+        }
+    }
+}
