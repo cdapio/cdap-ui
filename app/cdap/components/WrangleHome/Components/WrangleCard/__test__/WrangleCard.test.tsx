@@ -14,40 +14,31 @@
  * the License.
  */
 
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import WrangleCard from '../index';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
+import { updatedCardsMockResponse } from 'components/WrangleHome/Components/WrangleCard/mock/wrangleCardMockData';
+import history from 'services/history';
+import * as getUpdatedHelper from 'components/WrangleHome/services/getUpdatedConnectorCards';
 
-test('It renders Wrangler-Card ', () => {
-  jest.mock('components/Connections/Create/reducer', () => {
-    return Promise.resolve([
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'HeMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'BatMan',
-        type: 'js',
-      },
-      {
-        artifact: { name: 'words', scope: '', version: 'ten' },
-        category: 'hello',
-        classname: 'yolo',
-        description: 'hello',
-        name: 'SuperMan',
-        type: 'js',
-      },
-    ]);
+describe('Testing the Wrangle Card Component', () => {
+  test('It renders Wrangler-Card with getUpdatedConnectorCards mock', async () => {
+    jest
+      .spyOn(getUpdatedHelper, 'getUpdatedConnectorCards')
+      .mockReturnValue(Promise.resolve(updatedCardsMockResponse as any));
+
+    render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WrangleCard toggleViewAllLink={jest.fn()} />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    expect(getUpdatedHelper.getUpdatedConnectorCards).toBeCalledTimes(1);
+    const ele = screen.getByTestId(/wrangle-card-parent/i);
+    expect(ele).toBeInTheDocument();
   });
-  render(<WrangleCard />);
-  const ele = screen.getByTestId(/wrangle-card-parent/i);
-  expect(ele).toBeInTheDocument();
 });

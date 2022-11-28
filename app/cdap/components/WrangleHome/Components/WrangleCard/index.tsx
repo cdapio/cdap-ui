@@ -15,158 +15,88 @@
  */
 
 import { Box, Card, Typography } from '@material-ui/core';
-import { fetchConnectors } from 'components/Connections/Create/reducer';
+import DataPrepStore from 'components/DataPrep/store';
+import { useStyles } from 'components/WrangleHome/Components/WrangleCard/styles';
+import { IConnector, IWrangleCard } from 'components/WrangleHome/Components/WrangleCard/types';
+import { getUpdatedConnectorCards } from 'components/WrangleHome/services/getUpdatedConnectorCards';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { BigQuery } from 'components/WrangleHome/Components/WrangleCard/iconStore/BigQuerySVG';
-import { CloudSQLMySQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/CloudSQLMySQL';
-import { CloudSQLPostGreSQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/CloudSQLPostGreSQL';
-import { Database } from 'components/WrangleHome/Components/WrangleCard/iconStore/Database';
-import { GCS } from 'components/WrangleHome/Components/WrangleCard/iconStore/GCS';
-import { Kafka } from 'components/WrangleHome/Components/WrangleCard/iconStore/Kafka';
-import { MySQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/MySQL';
-import { Oracle } from 'components/WrangleHome/Components/WrangleCard/iconStore/Oracle';
-import { PostgreSQL } from 'components/WrangleHome/Components/WrangleCard/iconStore/PostgreSQL';
-import { S3 } from 'components/WrangleHome/Components/WrangleCard/iconStore/S3';
-import { Spanner } from 'components/WrangleHome/Components/WrangleCard/iconStore/Spanner';
-import { SQLServer } from 'components/WrangleHome/Components/WrangleCard/iconStore/SQLServer';
-import { useStyles } from 'components/WrangleHome/Components/WrangleCard/styles';
-import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
-import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
 
-export default function WrangleCard() {
-  const [connectorTypes, setConnectorTypes] = useState({
-    fetchedConnectorTypes: [],
+export default function({ toggleViewAllLink }: IWrangleCard) {
+  const [connectorsData, setConnectorsData] = useState<{ connectorTypes: IConnector[] }>({
+    connectorTypes: [],
   });
 
   // Fetching all the fetchedConnectorTypes and adding SVG its object to each connectorType and
   // then using unshift function to add an object for Imported Dataset to entire ConnectorTypes Array.
-  const getConnectorTypesNames = async () => {
-    let fetchedConnectorTypesFromAPI = await fetchConnectors();
-    const categorizedConnections = await getCategorizedConnections();
-    const connectorTypeWithConnections = [];
-    categorizedConnections.forEach((itemEach, key) => {
-      connectorTypeWithConnections.push(key);
-    });
-    fetchedConnectorTypesFromAPI = fetchedConnectorTypesFromAPI.map((connectorType) => {
-      if (connectorType.name === 'S3') {
-        return {
-          ...connectorType,
-          SVG: S3,
-        };
-      } else if (connectorType.name === 'Database') {
-        return {
-          ...connectorType,
-          SVG: Database,
-        };
-      } else if (connectorType.name === 'BigQuery') {
-        return {
-          ...connectorType,
-          SVG: BigQuery,
-        };
-      } else if (connectorType.name === 'GCS') {
-        return {
-          ...connectorType,
-          SVG: GCS,
-        };
-      } else if (connectorType.name === 'Spanner') {
-        return {
-          ...connectorType,
-          SVG: Spanner,
-        };
-      } else if (connectorType.name === 'Kafka') {
-        return {
-          ...connectorType,
-          SVG: Kafka,
-        };
-      } else if (connectorType.name === 'SQL Server') {
-        return {
-          ...connectorType,
-          SVG: SQLServer,
-        };
-      } else if (connectorType.name === 'MySQL') {
-        return {
-          ...connectorType,
-          SVG: MySQL,
-        };
-      } else if (connectorType.name === 'Oracle') {
-        return {
-          ...connectorType,
-          SVG: Oracle,
-        };
-      } else if (connectorType.name === 'PostgreSQL') {
-        return {
-          ...connectorType,
-          SVG: PostgreSQL,
-        };
-      } else if (connectorType.name === 'File') {
-        return {
-          ...connectorType,
-          SVG: ImportDatasetIcon,
-        };
-      } else if (connectorType.name === 'CloudSQLMySQL') {
-        return {
-          ...connectorType,
-          SVG: CloudSQLMySQL,
-        };
-      } else if (connectorType.name === 'CloudSQLPostgreSQL') {
-        return {
-          ...connectorType,
-          SVG: CloudSQLPostGreSQL,
-        };
-      } else {
-        return {
-          ...connectorType,
-          SVG: BigQuery,
-        };
-      }
-    });
-
-    /* remove the other connector Types based on getCategorized connections */
-
-    fetchedConnectorTypesFromAPI = fetchedConnectorTypesFromAPI.filter((obj) =>
-      connectorTypeWithConnections.find((each) => each === obj.name)
-    );
-
-    fetchedConnectorTypesFromAPI.unshift({
-      name: 'Imported Datasets',
-      type: 'default',
-      category: 'default',
-      description: 'All Connections from the List',
-      artifact: {
-        name: 'allConnections',
-        version: 'local',
-        scope: 'local',
-      },
-
-      SVG: ImportDatasetIcon,
-    });
-
-    setConnectorTypes({
-      fetchedConnectorTypes: fetchedConnectorTypesFromAPI,
-    });
-  };
-
-  useEffect(() => {
-    getConnectorTypesNames();
-  }, []);
 
   const classes = useStyles();
-  const fetchedConnectorTypes = connectorTypes.fetchedConnectorTypes;
+  const connectorTypes: IConnector[] = connectorsData.connectorTypes;
+
+  const updateState = (updatedState: { connectorTypes: IConnector[] }) => {
+    if (
+      updatedState.hasOwnProperty('connectorTypes') &&
+      Array.isArray(updatedState.connectorTypes) &&
+      updatedState.connectorTypes.length > 5
+    ) {
+      toggleViewAllLink(true);
+    } else {
+      toggleViewAllLink(false);
+    }
+    setConnectorsData(updatedState);
+  };
+
+  const [fetchedConnectorsData, setFetchedConnectorsData] = useState([]);
+
+  DataPrepStore.subscribe(() => {
+    const newState = DataPrepStore.getState();
+    setFetchedConnectorsData(newState.dataprep.connectorsWithIcons);
+  });
+
+  useEffect(() => {
+    getUpdatedConnectorCards(fetchedConnectorsData).then((res) => {
+      updateState(res);
+    });
+  }, [fetchedConnectorsData]);
+
+  let startIndex = 0;
+  let endIndex = 2;
+  // Here we are finding out the connections are exist in the app or not
+  if (connectorTypes?.length > 2) {
+    startIndex = 1; // This line is writtern to eliminate the add-connection cards's data from the array
+    endIndex = 5;
+  }
+
   return (
     <Box className={classes.wrapper} data-testid="wrangle-card-parent">
-      {fetchedConnectorTypes.map((item, index) => {
+      {/* Here we are only showing top 4 connectors on home page */}
+      {connectorTypes?.slice(startIndex, endIndex).map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
+            to={{
+              pathname:
+                startIndex === 0
+                  ? `/ns/${getCurrentNamespace()}/${item.link}`
+                  : index === 0
+                  ? `/ns/${getCurrentNamespace()}/${item.link}`
+                  : `/ns/${getCurrentNamespace()}/datasources/${item.name}`,
+              state: {
+                from: { addConnectionRequestFromNewUI: 'home' },
+              },
+            }}
             style={{ textDecoration: 'none' }}
-            data-testid={'item' + index}
+            data-testid={`wrangle-card-${item.name
+              .toLowerCase()
+              .split(' ')
+              .join('-')}`}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
                 {item.SVG}
-                <Typography className={classes.cardText}>{item.name}</Typography>
+                <Typography className={classes.cardText}>
+                  {item.displayName ?? item.name}
+                </Typography>
               </Box>
             </Card>
           </Link>

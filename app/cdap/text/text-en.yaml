@@ -3440,11 +3440,29 @@ features:
         wrangleHome: 'home'
     NoRecordScreen:
       gridTable:
-        subtitle: 'Remove some recipe steps to view some data'
-        title: 'No rows left in this sample'
+        title: No rows left in this sample
+        subtitle: Remove some recipe steps to view some data
       workspacesList:
         subtitle: 'Please start data exploration to view ongoing workspaces'
         title: 'No ongoing workspaces to display'
+    AddConnections:
+      referenceLabel: Add Connection
+    ImportData:
+      referenceLabel: Import Data
+    HomePage:
+      labels:
+        common:
+          viewAll: View All
+          addConnection: Add Connection
+          importData: Import Data
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
     OnGoingDataExplorations:
       labels:
        connectorType: connectorType
@@ -3461,3 +3479,5 @@ features:
        text: text
        workspaceId: workspaceId
        workspaceName: workspaceName
+
+...
