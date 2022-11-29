@@ -14,29 +14,24 @@
  *  the License.
  */
 
-import { Route, Router, Switch } from "react-router";
-import { render, screen } from "@testing-library/react";
-import React from "react";
-import InputCheckbox from "components/ParsingDrawer/Components/InputCheckbox";
-import history from "services/history";
+import { Route, Router, Switch } from 'react-router';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import InputCheckbox from 'components/ParsingDrawer/Components/InputCheckbox';
+import history from 'services/history';
 
-describe("Should Test the InputCheckbox Component", () => {
-  it("Should test whether InputCheckbox component is rendered or not", () => {
+describe('Should Test the InputCheckbox Component', () => {
+  it('Should test whether InputCheckbox component is rendered or not', () => {
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <InputCheckbox
-              label={"test"}
-              value={false}
-              onChange={jest.fn()}
-              className={""}
-            />
+            <InputCheckbox label={'test'} value={false} onChange={jest.fn()} className={''} />
           </Route>
         </Switch>
       </Router>
     );
-    const checkBoxElement = screen.getByTestId(/parsing-checkbox-test/i)
-    expect(checkBoxElement).toBeInTheDocument()
+    const checkBoxElement = screen.getByTestId(/parsing-checkbox-test/i);
+    expect(checkBoxElement).toBeInTheDocument();
   });
 });

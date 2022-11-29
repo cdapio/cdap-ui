@@ -27,7 +27,7 @@ describe('Test TabLabelCanBrowse Component', () => {
         count={mockConnectorTypeData.count}
         icon={mockConnectorTypeData.icon}
         index={0}
-        dataTestId='test'
+        dataTestId="test"
       />
     );
     const ele = screen.getByTestId(/test/i);

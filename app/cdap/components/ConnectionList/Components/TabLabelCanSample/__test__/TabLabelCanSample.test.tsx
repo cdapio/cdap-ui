@@ -14,23 +14,20 @@
  * the License.
  */
 
-import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import TabLabelCanSample from "../index";
-import {
-  mockConnectorTypeData,
-  mockEntityDataForNoWorkspace,
-} from "../mock/mockConnectorTypeData";
-import { Route, Router, Switch } from "react-router";
-import * as apiHelpers from "components/Connections/Browser/GenericBrowser/apiHelpers";
-import { createBrowserHistory } from "history";
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import TabLabelCanSample from '../index';
+import { mockConnectorTypeData, mockEntityDataForNoWorkspace } from '../mock/mockConnectorTypeData';
+import { Route, Router, Switch } from 'react-router';
+import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
+import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory({
-  basename: "/",
+  basename: '/',
 });
 
-describe("Test TabLabelCanSample Component", () => {
-  it("Should render TabLabelCanSample Component", () => {
+describe('Test TabLabelCanSample Component', () => {
+  it('Should render TabLabelCanSample Component', () => {
     render(
       <TabLabelCanSample
         label={mockConnectorTypeData.name}
@@ -38,14 +35,14 @@ describe("Test TabLabelCanSample Component", () => {
         initialConnectionId={undefined}
         toggleLoader={() => null}
         setIsErrorOnNoWorkSpace={jest.fn()}
-        dataTestId={"test"}
+        dataTestId={'test'}
       />
     );
     const ele = screen.getByTestId(/test/i);
     expect(ele).toBeInTheDocument();
   });
 
-  it("Should trigger setIsErrorOnNoWorkSpace function ", () => {
+  it('Should trigger setIsErrorOnNoWorkSpace function ', () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
     render(
       <TabLabelCanSample
@@ -54,7 +51,7 @@ describe("Test TabLabelCanSample Component", () => {
         initialConnectionId={undefined}
         toggleLoader={() => null}
         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-        dataTestId={"test"}
+        dataTestId={'test'}
       />
     );
     const ele = screen.getByTestId(/load-to-grid-wrapper/i);
@@ -62,20 +59,20 @@ describe("Test TabLabelCanSample Component", () => {
     expect(setIsErrorOnNoWorkSpace).toHaveBeenCalled();
   });
 
-  it("Should trigger onWorkspaceCreate Function", async () => {
+  it('Should trigger onWorkspaceCreate Function', async () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
 
-    jest.spyOn(apiHelpers, "createWorkspace").mockReturnValue(
+    jest.spyOn(apiHelpers, 'createWorkspace').mockReturnValue(
       Promise.resolve({
         entity: {
-          name: "sql_feature",
-          path: "/information_schema/sql_features",
-          type: "system table",
+          name: 'sql_feature',
+          path: '/information_schema/sql_features',
+          type: 'system table',
           canSample: true,
           canBrowse: false,
           properties: {},
         },
-        connection: "exl",
+        connection: 'exl',
         properties: {},
       })
     );
@@ -90,7 +87,7 @@ describe("Test TabLabelCanSample Component", () => {
               initialConnectionId="exl"
               toggleLoader={() => null}
               setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-              dataTestId={""}
+              dataTestId={''}
             />
           </Route>
         </Switch>

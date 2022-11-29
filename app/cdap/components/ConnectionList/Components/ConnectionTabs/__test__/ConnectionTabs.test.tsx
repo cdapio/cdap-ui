@@ -53,7 +53,6 @@ describe('Test ConnectionsTabs', () => {
     const ele = screen.getByTestId(/connection-tabs/i);
     expect(ele).toBeInTheDocument();
   });
-
 });
 
 describe('Should test whether handleChange function is triggered or not', () => {
