@@ -34,7 +34,11 @@ export default function OngoingDataExplorationCard({ item }) {
   });
 
   return (
-    <Grid container className={classes.gridContainer}>
+    <Grid
+      container
+      className={classes.gridContainer}
+      // data-testid={`ongoing-data-exploration-card-${index}`}
+    >
       {item.map((eachItem, index) => {
         switch (eachItem.type) {
           case 'iconWithText':
