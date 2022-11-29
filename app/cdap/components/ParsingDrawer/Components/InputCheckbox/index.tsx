@@ -39,7 +39,10 @@ export default function({ label, value, onChange, className }: IInputCheckboxPro
           onChange={onChange}
           checked={value}
           color="primary"
-          data-testid={`parsing-checkbox-${label}`}
+          data-testid={`parsing-checkbox-${label
+            .toString()
+            .split(' ')
+            .join('-')}`}
         />
       }
       label={<Label>{label}</Label>}

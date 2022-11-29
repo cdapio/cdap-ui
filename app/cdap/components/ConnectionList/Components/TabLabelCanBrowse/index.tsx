@@ -27,11 +27,13 @@ export default function TabLabelCanBrowse({
   count,
   index,
   icon,
+  dataTestId,
 }: {
   label: string;
   count: number;
   index: number;
   icon?: JSX.Element;
+  dataTestId: string;
 }) {
   const classes = useStyles();
 
