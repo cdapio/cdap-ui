@@ -16,20 +16,66 @@
 
 import { Breadcrumbs, Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import { grey } from '@material-ui/core/colors';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import DataPrepStore from 'components/DataPrep/store';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { getWidgetData } from 'components/WidgetSVG/utils';
-import { useStyles } from 'components/WorkspaceList/style';
 import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations';
 import { WORKSPACES } from 'components/WrangleHome/Components/OngoingDataExplorations/constants';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import styled from 'styled-components';
+
+const BreadcrumbsForWorkspaceList = styled(Breadcrumbs)`
+  margin-left: 30px;
+  text-decoration: none;
+`;
+
+const BreadcrumbsHomeLabel = styled(Box)`
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.15px;
+  font-weight: 400;
+`;
+
+const BreadcrumbsWorkspaceListLabel = styled(BreadcrumbsHomeLabel)`
+  color: ${grey[900]};
+`;
+
+const ContainerForLoader = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  opacity: 0.5;
+  background: white;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2000;
+`;
+
+const WorkspaceListContainer = styled(Box)`
+  margin-top: 30px;
+`;
+
+const WorkspaceListHeader = styled(Box)`
+  height: 48px;
+  border-bottom: 1px solid ${grey[300]};
+  display: flex;
+  align-items: center;
+`;
+
+const WorkspaceListWrapper = styled(Box)`
+  padding-bottom: 10px;
+`;
 
 export default function() {
   const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     if (
       !(
@@ -40,36 +86,32 @@ export default function() {
       getWidgetData();
     }
   }, []);
-  const classes = useStyles();
+
   return (
-    <Box className={classes.wrapper} data-testid="workspace-list-parent">
-      <Box className={classes.header} data-testid="workspace-list-body">
-        <Breadcrumbs
+    <WorkspaceListWrapper data-testid="workspace-list-parent">
+      <WorkspaceListHeader data-testid="workspace-list-body">
+        <BreadcrumbsForWorkspaceList
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
-          className={classes.breadcrumb}
         >
           <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
-            <Typography className={classes.text} data-testid="link-type-wrangle-home">
+            <BreadcrumbsHomeLabel data-testid="link-type-wrangle-home">
               {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
-            </Typography>
+            </BreadcrumbsHomeLabel>
           </Link>
-          <Typography
-            className={`${classes.text} ${classes.textWorkspaces}`}
-            data-testid="breadcrumb-label-workspaces"
-          >
+          <BreadcrumbsWorkspaceListLabel data-testid="breadcrumb-label-workspaces">
             {T.translate('features.WranglerNewUI.Breadcrumb.labels.workSpaces')}
-          </Typography>
-        </Breadcrumbs>
-      </Box>
-      <Box className={classes.explorationList}>
+          </BreadcrumbsWorkspaceListLabel>
+        </BreadcrumbsForWorkspaceList>
+      </WorkspaceListHeader>
+      <WorkspaceListContainer>
         <OngoingDataExplorations fromAddress={WORKSPACES} setLoading={setLoading} />
-      </Box>
+      </WorkspaceListContainer>
       {loading && (
-        <Box className={classes.loadingContainer} data-testid="workspace-loading-icon">
+        <ContainerForLoader data-testid="workspace-loading-icon">
           <LoadingSVG />
-        </Box>
+        </ContainerForLoader>
       )}
-    </Box>
+    </WorkspaceListWrapper>
   );
 }
