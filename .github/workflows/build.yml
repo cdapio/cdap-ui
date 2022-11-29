@@ -84,7 +84,7 @@ jobs:
         yarn run cdap-full-build-more-memory # Build UI
         yarn start &
         yarn run test:unit
-        mvn clean verify -P e2e-tests
+        mvn clean verify -P e2e-tests -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
     - name: Archive build artifacts
       uses: actions/upload-artifact@v2.2.2
