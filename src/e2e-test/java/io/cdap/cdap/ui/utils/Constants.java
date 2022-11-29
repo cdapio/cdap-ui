@@ -74,7 +74,6 @@ public class Constants {
   public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
 
   //Wrangle New UI
-  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
   public static final String SINK_PATH_VAL = "/tmp/cdap-ui-integration-fixtures";
   public static final String SOURCE_PATH_VAL = "file:/tmp/cdap-ui-integration-fixtures/airports.csv";
 }
