@@ -18,7 +18,7 @@ import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/uti
 
 describe('It should test getDirective function', () => {
   it('should call getDirective() when there is error in function name', () => {
-    expect(getDirective('', 'body_0')).toStrictEqual(null);
+    expect(getDirective('', 'body_0')).toStrictEqual(undefined);
   });
 
   it('should call getDirective() when function name is string .', () => {
