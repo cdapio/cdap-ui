@@ -98,6 +98,7 @@ export const useStyles = makeStyles({
   infoIcon: {
     display: 'flex',
     margin: 'auto 0px',
+    padding: 0,
   },
   infoText: {
     fontStyle: 'normal',

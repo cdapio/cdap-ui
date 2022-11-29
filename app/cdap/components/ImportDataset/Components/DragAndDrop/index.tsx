@@ -20,7 +20,7 @@ import classnames from 'classnames';
 import { useStyles } from 'components/ImportDataset/styles';
 import { Box, Divider, Typography, IconButton } from '@material-ui/core';
 import { UploadSVG } from 'components/ImportDataset/IconStore/UploadSVG';
-import { InfoIcon } from 'components/ImportDataset/IconStore/InfoIcon';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import T from 'i18n-react';
 import { IDragAndDrop } from 'components/ImportDataset/types';
@@ -59,9 +59,9 @@ export default function({ file, onDropHandler }: IDragAndDrop) {
             </div>
           </div>
           <div className={classes.infoIconText}>
-            <div className={classes.infoIcon}>
-              <InfoIcon />
-            </div>
+            <IconButton className={classes.infoIcon}>
+              <InfoOutlinedIcon />
+            </IconButton>
             <Typography variant="body1" className={classes.infoText} component="span">
               {T.translate('features.WranglerNewUI.ImportData.maxSizeText')}
             </Typography>
@@ -73,10 +73,7 @@ export default function({ file, onDropHandler }: IDragAndDrop) {
             <Typography className={classes.fileNameText} data-testid="file-name" component="span">
               {file.name}
             </Typography>
-            <Box
-              className={classes.delete_cursor_pointer}
-              data-testid="delete-svg"
-            >
+            <Box className={classes.delete_cursor_pointer} data-testid="delete-svg">
               <IconButton onClick={handleRemoveFile}>
                 <DeleteOutlinedIcon />
               </IconButton>
