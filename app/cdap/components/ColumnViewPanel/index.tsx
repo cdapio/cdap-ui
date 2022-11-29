@@ -26,7 +26,7 @@ export const HEADING_TEXT = T.translate('features.WranglerNewUI.ColumnViewPanel.
 
 export interface IColumnViewProps {
   columnData: IHeaderNamesList[];
-  closeClickHandler: () => void;
+  onClose: () => void;
   dataQuality: IDataQuality;
 }
 
@@ -40,15 +40,15 @@ const SelectColumnListWrapper = styled(Box)`
   padding: 0;
 `;
 
-export default function({ columnData, dataQuality, closeClickHandler }: IColumnViewProps) {
+export default function({ columnData, dataQuality, onClose }: IColumnViewProps) {
   const [searchValue, setSearchValue] = useState<string>('');
 
   return (
     <Fragment>
       <ColumnViewWidget
         headingText={HEADING_TEXT}
-        closeClickHandler={closeClickHandler}
-        searchedTermHandler={(searchValue: string) => setSearchValue(searchValue)}
+        onClose={onClose}
+        onSearchTermChange={(searchValue: string) => setSearchValue(searchValue)}
         searchValue={searchValue}
       >
         <SelectColumnListWrapper data-testid="select-column-list-parent">

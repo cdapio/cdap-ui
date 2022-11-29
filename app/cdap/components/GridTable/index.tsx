@@ -260,7 +260,7 @@ export default function GridTable() {
             <ColumnViewPanel
               columnData={headersNamesList}
               dataQuality={dataQuality}
-              closeClickHandler={() => setOpenColumnView(false)}
+              onClose={() => setOpenColumnView(false)}
             />
           </Box>
         )}

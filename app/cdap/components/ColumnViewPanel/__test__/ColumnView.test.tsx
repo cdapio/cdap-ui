@@ -87,7 +87,7 @@ describe('It Should test Column View Component', () => {
       <ColumnView
         columnData={mockColumnData}
         dataQuality={mockDataQuality}
-        closeClickHandler={() => jest.fn()}
+        onClose={() => jest.fn()}
       />
     );
     const columnViewParent = screen.getByTestId('column-view-panel-parent');
@@ -99,7 +99,7 @@ describe('It Should test Column View Component', () => {
       <ColumnView
         columnData={mockColumnData}
         dataQuality={mockDataQuality}
-        closeClickHandler={() => jest.fn()}
+        onClose={() => jest.fn()}
       />
     );
     const searchIcon = screen.getByTestId('search-icon');
