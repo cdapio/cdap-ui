@@ -53,12 +53,7 @@ export default function TabLabelCanBrowse({
   }, []);
 
   return refValue ? (
-    <CustomTooltip
-      title={label}
-      arrow
-      key={`tooltip-${index}`}
-      data-testid="connections-tab-ref-label-browse"
-    >
+    <CustomTooltip title={label} arrow key={`tooltip-${index}`} data-testid={dataTestId}>
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
           {icon && <Box>{icon}</Box>}

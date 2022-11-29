@@ -97,7 +97,7 @@ export default function TabLabelCanSample({
   return workspaceId ? (
     <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
+    <CustomTooltip title={label} arrow data-testid={dataTestId}>
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
@@ -119,7 +119,7 @@ export default function TabLabelCanSample({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
+    <Box className={classes.labelsContainerCanSample} data-testid={dataTestId}>
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
