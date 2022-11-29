@@ -14,10 +14,33 @@
  * the License.
  */
 
-import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
+export interface IConnector {
+  name: string;
+  type: string;
+  category: string;
+  description: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+  SVG: JSX.Element;
+  link: string;
+  displayName?: string;
+}
 
-export const getDirective = (functionName: string, selectedColumnName: string) => {
-  if (DATATYPE_OPTIONS.some((eachOption) => eachOption.value === functionName)) {
-    return `set-type :${selectedColumnName} ${functionName}`;
-  }
-};
+export interface IConnectorDetailPayload {
+  name: string;
+  type: string;
+  category: string;
+  description: string;
+  artifact: {
+    name: string;
+    version: string;
+    scope: string;
+  };
+}
+
+export interface IWrangleCard {
+  toggleViewAllLink: (x: boolean) => void;
+}

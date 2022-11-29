@@ -78,31 +78,31 @@ export default function({
   }, []);
 
   return (
-      <StyledDrawer open={columnsPopup} data-testid="select-column-panel" anchor="right">
-        <DrawerContainerBox role="presentation" data-testid="select-column-drawer">
-          <SelectColumnDrawerHeader closeClickHandler={closeSelectColumnsPopupWithoutColumn} />
-          <AddTransformationWrapper>
-            <AddTransformationBodyWrapper>
-              <SelectColumnsList
-                columnsList={columnsList}
-                selectedColumnsCount={selectedColumns.length}
-                setSelectedColumns={setSelectedColumns}
-                dataQuality={dataQualityValue}
-                transformationDataType={transformationDataType}
-                transformationName={transformationName}
-                selectedColumns={selectedColumns}
-              />
-            </AddTransformationBodyWrapper>
-            <AddTransformationButton
-              disabled={enableDoneButton(transformationName, selectedColumns)}
-              color="primary"
-              data-testid="button_done"
-              onClick={closeSelectColumnsPopup}
-            >
-              {T.translate(`${ADD_TRANSFORMATION_PREFIX}.done`)}
-            </AddTransformationButton>
-          </AddTransformationWrapper>
-        </DrawerContainerBox>
-      </StyledDrawer>
+    <StyledDrawer open={columnsPopup} data-testid="select-column-panel" anchor="right">
+      <DrawerContainerBox role="presentation" data-testid="select-column-drawer">
+        <SelectColumnDrawerHeader closeClickHandler={closeSelectColumnsPopupWithoutColumn} />
+        <AddTransformationWrapper>
+          <AddTransformationBodyWrapper>
+            <SelectColumnsList
+              columnsList={columnsList}
+              selectedColumnsCount={selectedColumns.length}
+              setSelectedColumns={setSelectedColumns}
+              dataQuality={dataQualityValue}
+              transformationDataType={transformationDataType}
+              transformationName={transformationName}
+              selectedColumns={selectedColumns}
+            />
+          </AddTransformationBodyWrapper>
+          <AddTransformationButton
+            disabled={enableDoneButton(transformationName, selectedColumns)}
+            color="primary"
+            data-testid="button_done"
+            onClick={closeSelectColumnsPopup}
+          >
+            {T.translate(`${ADD_TRANSFORMATION_PREFIX}.done`)}
+          </AddTransformationButton>
+        </AddTransformationWrapper>
+      </DrawerContainerBox>
+    </StyledDrawer>
   );
 }

@@ -63,14 +63,14 @@ const DrawerHeadWrapper = styled(Box)`
   flex-direction: column;
 `;
 
-export default function ({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
+export default function({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
   return (
     <DrawerContainerBox role="presentation" data-testid="add-transformation-drawer">
       <DrawerContainerInnerFlex>
         <FlexAlignCenter>
           <DrawerHeadWrapper>
             <HeadFont component="p" data-testid="drawer-heading">
-            {T.translate(`${ADD_TRANSFORMATION_PREFIX}.addTransformation`)}
+              {T.translate(`${ADD_TRANSFORMATION_PREFIX}.addTransformation`)}
             </HeadFont>
             {UnderLine}
           </DrawerHeadWrapper>

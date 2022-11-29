@@ -14,10 +14,20 @@
  * the License.
  */
 
-import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
+import React from 'react';
 
-export const getDirective = (functionName: string, selectedColumnName: string) => {
-  if (DATATYPE_OPTIONS.some((eachOption) => eachOption.value === functionName)) {
-    return `set-type :${selectedColumnName} ${functionName}`;
-  }
-};
+export const AddConnectionIcon = (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.307129" y="16.21" width="39.386" height="7" fill="#FFC107" />
+    <rect
+      x="16.5"
+      y="39.4033"
+      width="39.386"
+      height="7"
+      transform="rotate(-90 16.5 39.4033)"
+      fill="#43A047"
+    />
+    <rect x="16.5" y="16.21" width="23.1931" height="7" fill="#2196F3" />
+    <path d="M16.5 23.4033L16.5 0.0173569H23.5V16.2059L16.5 23.4033Z" fill="#E53935" />
+  </svg>
+);

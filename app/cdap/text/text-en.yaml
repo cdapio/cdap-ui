@@ -3432,6 +3432,19 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    AddConnections:
+      referenceLabel: Add Connection
+    Breadcrumb:
+      labels:
+        connectionsList: Data Sources
+        wrangleHome: Home
+      params:
+        connectionsList: datasources
+        wrangeHome: home
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
     GridPage :
       addTransformationPanel:
         addTransformation: Add Transformation Step
@@ -3471,17 +3484,29 @@ features:
         options:
           labels:
             datatype:
-              string: string
+              bytes: bytes
               boolean: boolean
+              double: double
+              decimal: decimal
+              float: float
               integer: integer
               long: long
               short: short
-              float: float
-              double: double
-              decimal: decimal
-              bytes: bytes
+              string: string
             menu:
               changeDatatype: Change data type
+    HomePage:
+      labels:
+        common:
+          viewAll: View All
+          addConnection: Add Connection
+          importData: Import Data
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
