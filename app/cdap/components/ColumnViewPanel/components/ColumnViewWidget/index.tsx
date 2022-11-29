@@ -24,8 +24,8 @@ import { ReactNode } from 'react';
 
 export interface IColumnViewWidget {
   headingText: ReactNode;
-  closeClickHandler: () => void;
-  searchedTermHandler: (searchedTerm: string) => void;
+  onClose: () => void;
+  onSearchTermChange: (searchedTerm: string) => void;
   children: JSX.Element;
   searchValue: string;
 }
@@ -109,8 +109,8 @@ const getInputStyle = (isFocused) => {
 
 export default function({
   headingText,
-  closeClickHandler,
-  searchedTermHandler,
+  onClose,
+  onSearchTermChange,
   children,
   searchValue,
 }: IColumnViewWidget) {
@@ -133,7 +133,7 @@ export default function({
         <HeaderRightIconWrapper>
           <SearchFormControl>
             <InputStyleWrapper
-              onChange={(e) => searchedTermHandler(e.target.value)}
+              onChange={(e) => onSearchTermChange(e.target.value)}
               inputRef={ref}
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
@@ -150,7 +150,7 @@ export default function({
           </SearchFormControl>
 
           <DividerLineStyles />
-          <CloseButtonStyle aria-label="close-icon" onClick={closeClickHandler}>
+          <CloseButtonStyle aria-label="close-icon" onClick={onClose}>
             <CloseRoundedIcon color="action" data-testid="column-view-panel-close" />
           </CloseButtonStyle>
         </HeaderRightIconWrapper>

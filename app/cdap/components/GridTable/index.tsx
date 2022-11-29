@@ -461,7 +461,7 @@ export default function GridTable() {
             <ColumnViewPanel
               columnData={headersNamesList}
               dataQuality={dataQuality}
-              closeClickHandler={() => handleColumnViewClose()}
+              onClose={() => handleColumnViewClose()}
               setColumnSelected={handleColumnSelect}
               onColumnSelection={(column) => onColumnSelection(column)}
               selectedColumn={columnSelected}
