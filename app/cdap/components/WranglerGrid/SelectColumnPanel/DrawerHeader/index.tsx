@@ -74,12 +74,16 @@ const DrawerHeadWrapper = styled(Box)`
   flex-direction: column;
 `;
 
-export default function ({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
+export default function({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
   return (
     <DrawerContainerBox role="presentation" data-testid="select-column-drawer">
       <DrawerContainerInnerFlex>
         <FlexAlignCenter>
-          <CustomizedIconButton onClick={closeClickHandler} aria-label="back-icon" data-testid="back-icon">
+          <CustomizedIconButton
+            onClick={closeClickHandler}
+            aria-label="back-icon"
+            data-testid="back-icon"
+          >
             <BackIcon />
           </CustomizedIconButton>
           <DrawerHeadWrapper>

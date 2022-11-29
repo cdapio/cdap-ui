@@ -16,7 +16,10 @@
 import React from 'react';
 import T from 'i18n-react';
 import { ISelectColumnsWidgetProps } from 'components/WranglerGrid/AddTransformationPanel/SelectColumnsWidget/types';
-import { multipleColumnSelected, ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import {
+  multipleColumnSelected,
+  ADD_TRANSFORMATION_PREFIX,
+} from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { SubHeadBoldFont, NormalFont } from 'components/common/TypographyText';
 import { SelectColumnButton } from 'components/common/ButtonWidget';
 import styled from 'styled-components';
