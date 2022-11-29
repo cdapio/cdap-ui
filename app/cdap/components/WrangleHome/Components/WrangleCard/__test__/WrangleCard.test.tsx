@@ -22,7 +22,6 @@ import history from 'services/history';
 
 describe('Testing the Wrangle Card Component', () => {
   test('It renders Wrangler-Card with getUpdatedConnectorCards mock', async () => {
-
     render(
       <Router history={history}>
         <Switch>
