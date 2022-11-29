@@ -157,17 +157,17 @@ const EnabledTriggerRowView = ({
         <HelperText>{T.translate(`${TRIGGER_PREFIX}.helperText`, { pipelineName })}</HelperText>
         <EventsList>
           <CheckboxItemContainer>
-            <Checkbox disabled checked={completed} color="primary" size="small" />
+            <Checkbox checked={completed} color="primary" size="small" />
             <span>{T.translate(`${TRIGGER_PREFIX}.Events.COMPLETED`)}</span>
           </CheckboxItemContainer>
 
           <CheckboxItemContainer>
-            <Checkbox disabled checked={killed} color="primary" size="small" />
+            <Checkbox checked={killed} color="primary" size="small" />
             <span>{T.translate(`${TRIGGER_PREFIX}.Events.KILLED`)}</span>
           </CheckboxItemContainer>
 
           <CheckboxItemContainer>
-            <Checkbox disabled checked={failed} color="primary" size="small" />
+            <Checkbox checked={failed} color="primary" size="small" />
             <span>{T.translate(`${TRIGGER_PREFIX}.Events.FAILED`)}</span>
           </CheckboxItemContainer>
         </EventsList>

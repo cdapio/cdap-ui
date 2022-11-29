@@ -41,7 +41,6 @@ export default class Popover extends PureComponent {
     onTogglePopover: PropTypes.func,
     modifiers: PropTypes.object,
     tag: PropTypes.string,
-    dataTestId: PropTypes.string,
   };
 
   eventEmitter = ee(ee);
@@ -184,7 +183,7 @@ export default class Popover extends PureComponent {
 
     return (
       <Manager className={this.props.className} tag={this.props.tag}>
-        <Target {...targetProps} tag="span" data-testid={this.props.dataTestId}>
+        <Target {...targetProps} tag="span">
           <TargetElement
             className={classnames({
               active: this.state.showPopover,

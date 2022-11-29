@@ -16,6 +16,7 @@
 
 package io.cdap.cdap.ui.utils;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import io.cdap.cdap.common.http.DefaultHttpRequestConfig;
@@ -28,6 +29,7 @@ import io.cdap.common.http.HttpResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -35,7 +37,7 @@ import javax.annotation.Nullable;
 public class HttpRequestHandler {
   public static HttpResponse makeHttpRequest(HttpMethod method, String urlStr,
                                              @Nullable Map<String, String> headers,
-                                             @Nullable String body,
+                                             @Nullable Map<String, String> body,
                                              @Nullable Long bodyLength) throws IOException {
     ContentProvider<? extends InputStream> reqBody = body != null
       ? buildHttpReqBody(body)
@@ -45,15 +47,18 @@ public class HttpRequestHandler {
       : null;
     HttpRequest request = new HttpRequest(method, new URL(urlStr), reqHeaders, reqBody, bodyLength);
     HttpResponse httpResponse = HttpRequests.execute(request, new DefaultHttpRequestConfig(false));
-
+    if (httpResponse.getResponseCode() != HttpURLConnection.HTTP_OK) {
+      throw new IOException(httpResponse.getResponseBodyAsString());
+    }
     return httpResponse;
   }
 
-  private static ContentProvider buildHttpReqBody(String body) {
+  private static ContentProvider buildHttpReqBody(Map<String, String> body) {
+    final String bodyStr = Joiner.on(",").withKeyValueSeparator("=").join(body);
     return new ContentProvider<InputStream>() {
       @Override
       public InputStream getInput() {
-        return new ByteArrayInputStream(body.getBytes());
+        return new ByteArrayInputStream(bodyStr.getBytes());
       }
     };
   }

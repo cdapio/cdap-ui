@@ -58,7 +58,6 @@ export interface IAbstractRowProps<S extends typeof AbstractRowStyles> extends W
   forwardedRef: () => void;
   errors: IErrorObj[];
   dataCy?: string;
-  dataTestId?: string;
   deleteDisabled?: boolean;
 }
 
@@ -111,7 +110,6 @@ export default class AbstractRow<
             [this.props.classes.disabledRoot]: this.props.disabled,
           })}
           data-cy={`${index}`}
-          data-testid={`${index}`}
         >
           {this.renderInput()}
 
@@ -121,17 +119,11 @@ export default class AbstractRow<
                 disabled={this.props.addRowDisabled}
                 onClick={this.props.addRow}
                 data-cy="add-row"
-                data-testid="add-row"
               >
                 <AddIcon fontSize="small" />
               </IconButton>
               {!this.props.deleteDisabled && (
-                <IconButton
-                  color="secondary"
-                  onClick={this.props.removeRow}
-                  data-cy="remove-row"
-                  data-testid="remove-row"
-                >
+                <IconButton color="secondary" onClick={this.props.removeRow} data-cy="remove-row">
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               )}

@@ -37,7 +37,6 @@ interface IRuntimeArgsKeyValuePairWrapperProps {
   runtimeArgs: any;
   onRuntimeArgsChange: (val: any) => void;
   dataCy?: string;
-  dataTestId?: string;
 }
 
 const LabelSpan = styled.span`
@@ -59,7 +58,6 @@ const RuntimeArgsKeyValuePairWrapper = ({
   runtimeArgs,
   onRuntimeArgsChange,
   dataCy = 'runtimeargs-deployed',
-  dataTestId = 'runtimeargs-deployed',
 }: IRuntimeArgsKeyValuePairWrapperProps) => {
   const [showGeneratedArgs, setShowGeneratedArgs] = useState(false);
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
@@ -139,7 +137,6 @@ const RuntimeArgsKeyValuePairWrapper = ({
             onChange={runtimeArgsChanged}
             value={argsPairs}
             dataCy={dataCy}
-            dataTestId={dataTestId}
             showGeneratedArgs={showGeneratedArgs}
           />
         </div>

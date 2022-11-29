@@ -183,7 +183,6 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
               buttonLabel={'saveAndRun'}
               className={'btn btn-primary'}
               dataCy={'preview-configure-run-btn'}
-              dataTestId={'preview-configure-run-btn'}
             />
             <ConfigModelessSaveBtn
               saveConfig={saveConfig}

@@ -179,7 +179,6 @@ export const ActionButtons = ({
                       disabled={!hasNodes}
                       onClick={hasNodes && startOrStopPreview}
                       data-cy="preview-top-run-btn"
-                      data-testid="preview-top-run-btn"
                     >
                       <div>
                         <IconPlay name="icon-play" disabled={!hasNodes}></IconPlay>
@@ -235,7 +234,6 @@ export const ActionButtons = ({
                 disabled={!previewEnabled}
                 onClick={previewEnabled && togglePreviewMode}
                 data-cy="pipeline-preview-btn"
-                data-testid="pipeline-preview-btn"
               >
                 <div>
                   <IconSVG name="icon-eye"></IconSVG>
@@ -286,7 +284,6 @@ export const ActionButtons = ({
                   disabled={!hasNodes}
                   onClick={!hasNodes || onSaveDraft}
                   data-cy="pipeline-draft-save-btn"
-                  date-testid="pipeline-draft-save-btn"
                 >
                   <div>
                     <IconSVG name="icon-savedraft"></IconSVG>
@@ -314,11 +311,7 @@ export const ActionButtons = ({
                 </BorderRightButton>
               </span>
             </CustomTooltip>
-            <CommonButton
-              onClick={onImport}
-              data-cy="pipeline-import-btn"
-              data-testid="pipeline-import-btn"
-            >
+            <CommonButton onClick={onImport} data-cy="pipeline-import-btn">
               <div>
                 <IconSVG name="icon-import"></IconSVG>
                 <ButtonLabel>Import</ButtonLabel>
