@@ -18,7 +18,7 @@ import { Box, TableBody, TableCell, TableRow } from '@material-ui/core';
 import DataQualityCircularProgressBar from 'components/ColumnViewPanel/components/DataQualityCircularProgressBar';
 import React from 'react';
 import styled from 'styled-components';
-import { ISelectColumnsTableRowProps } from '../SelectColumnsList';
+import { ISelectColumnsTableRowProps } from 'components/ColumnViewPanel/components/SelectColumnsList';
 
 const CommonCustomTableBodyCell = styled(TableCell)`
   padding-top: 10px;
