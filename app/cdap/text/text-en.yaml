@@ -3432,6 +3432,31 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    AddConnections:
+      referenceLabel: 'Add Connection'
+    ImportData:
+      referenceLabel: 'Import Data'
+    HomePage:
+      labels:
+        common:
+          viewAll: 'View All'
+        connectorTypes:
+          title: 'Start data exploration'
+        workspaces:
+          title: 'Continue ongoing data explorations, pick up where you left off'
+    ConnectionsList:
+      labels:
+        loadToGrid: 'Wrangle'
+    Breadcrumb:
+      labels:
+        connectionsList: 'Data Sources'
+        loadToGrid: 'Wrangle'
+        workSpaces: 'Workspaces'
+        wrangleHome: 'Home'
+      params:
+        connectionsList: 'datasources'
+        workSpaces: 'workspace-list'
+        wrangleHome: 'home'
     common:
       and: and
     ColumnViewPanel:
@@ -3458,24 +3483,6 @@ features:
       workspacesList:
         subtitle: 'Please start data exploration to view ongoing workspaces'
         title: 'No ongoing workspaces to display'
-    AddConnections:
-      referenceLabel: Add Connection
-    ImportData:
-      referenceLabel: Import Data
-    HomePage:
-      labels:
-        common:
-          viewAll: View All
-          addConnection: Add Connection
-          importData: Import Data
-        connectorTypes:
-          title: Start data exploration
-        workspaces:
-          title: Continue ongoing data explorations, pick up where you left off
-    ConnectionsList:
-      labels:
-        loadToGrid: Wrangle
-        noConnections: No Connections to show
     OnGoingDataExplorations:
       labels:
        connectorType: connectorType
