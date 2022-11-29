@@ -27,7 +27,7 @@ Feature: ParsingPanel
 #    Then Click on the Encoding field and Select the value
     Then Click on the Checkboxes
     Then Click on the close button
-#    Then Click on the Apply button
+    Then Verify if the Apply button is displayed
     Examples:
       | type | finalTab | finalFile |
       | File | 2 | 30 |

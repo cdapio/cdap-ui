@@ -86,9 +86,8 @@ public class ParsingPanel {
                         WebElement button = Helper.locateElementByTestId("connections-label-" + fFile);
                         System.out.println("label button found");
                         ElementHelper.hoverOverElement(button);
-//                     WaitHelper.waitForElementToBePresent(By.cssSelector("load-to-grid-wrapper"));
                         WebElement gridBtn = SeleniumDriver.getDriver().findElement(By.xpath
-                                ("//button[@data-testid='load-to-grid-wrapper']//p[@data-testid='load-to-grid-button']"));
+                      ("//button[@data-testid='load-to-grid-wrapper']//p[@data-testid='load-to-grid-button']"));
 //                     ElementHelper.hoverOverElement(gridBtn);
                         JavascriptExecutor executor = (JavascriptExecutor)SeleniumDriver.getDriver();
                         executor.executeScript("arguments[0].click();", gridBtn);
@@ -152,11 +151,11 @@ public class ParsingPanel {
             System.err.println("error: " + e);
         }
     }
-    @Then("Click on the Apply button")
+    @Then("Verify if the Apply button is displayed")
     public void clickOnTheApplyButton() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("parsing-apply-button"));
+            Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("parsing-apply-button")));
         } catch (Exception e) {
             System.err.println("error: " + e);
         }
