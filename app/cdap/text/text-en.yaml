@@ -3433,33 +3433,154 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-    NoRecordScreen:
-      gridTable:
-        title: No rows left in this sample
-        subtitle: Remove some recipe steps to view some data
+    AddConnections:
+      referenceLabel: Add Connection
     Breadcrumb:
       labels:
         connectionsList: Data Sources
         wrangleHome: Home
       params:
-        wrangeHome: home
         connectionsList: datasources
-    AddConnections:
-      referenceLabel: Add Connection
-    ImportData:
-      referenceLabel: Import Data
-    HomePage:
-      labels:
-        common:
-          viewAll: View All
-          addConnection: Add Connection
-          importData: Import Data
-        connectorTypes:
-          title: Start data exploration
-        workspaces:
-          title: Continue ongoing data explorations, pick up where you left off
+        wrangeHome: home
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    GridPage:
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          otherIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            column:
+              copyColumn: Copy column
+              deletecolumn: Delete column
+              keepColumn: Keep column
+            datatype:
+              bytes: bytes
+              boolean: boolean
+              double: double
+              decimal: decimal
+              float: float
+              integer: integer
+              long: long
+              string: string
+              short: short
+            menu:
+              changeDatatype: Change data type
+            fragment:
+              extract: Extract
+              usingPatterns: Using Patterns
+              usingDelimiters: Using Delimiters
+              usingPositions: Using Positions
+      addTransformationPanel:
+        addTransformation: Add Transformation Step
+        applyStep: Apply Step
+        columnsSelected: columns selected
+        columns: Columns
+        dataQuality: Data Quality
+        done: Done
+        function: Function
+        nullValues: Null Values
+        quickSelect: Quick select by clicking a column on the grid/columns panel
+        selectColumnPara: Select column(s) to apply this function
+        selectColumn: Select column
+        selectMultiColumns: Select columns
+      selectColumnListPanel:
+        columnsSelected: column selected
+        no: No
+        noColumns: No columns to show
+        noMatchColumnDatatype: Selected directive supported datatype does not match which the column's datatype
+        zero: '0' 
+      transformationUI:
+        common: 
+          columnExist: This column name already exist
+          destinationColumn: Destination Column
+          nameNewColumn:  Name new column 
+        extract:
+          digits: Digits
+          extractTextStart: Extract text that start with
+          extractTextEnd: and end with
+          extractNumber: Extract numbers with
+          extractDelimiterOptions:
+            comma: Comma
+            customDelimiter: Custom delimiter
+            pipe: Pipe
+            tab: Tab
+            whitespace: Whitespace
+          extractPatternOptions:
+            creditCard: Credit Card
+            date: Date
+            dateTime: Date Time
+            email: Email
+            urlAnchor: URL from HTML anchors
+            ip4Address: IPv4 address
+            isbnCode: ISBN codes
+            macAddress: Mac addresses
+            ndigitnumber: N digits number
+            usPhone: U.S. Phone numbers
+            ssn: SSN
+            startEndPattern: Start/End Patterns
+            time: Time
+            upsCode: UPS codes
+            url: URL
+            usZipCode: U.S. zip codes
+            custom: Custom
+          extractUsingPosition:
+            applyMask: Apply
+            extractPosition: Extract using postion
+            extractCharacter: Extract characters
+            exitMaskMode: Exit 'Extract' mode
+            fromThisColumnToNew: from this column to a new column
+          startPlaceholder: E.g. <
+          endPlaceholder: E.g. >
+          customRegexPlaceholder: 'E.g. [^(]+(([0-9]{4})).* '
+          selectDelimiter: Please select a delimiter
+          selectPattern: Select a pattern to extract from the column
+          writeYourRegex: Write your own Regex
+          examplePatternPlaceholder: E.g. 3
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
+    NoRecordScreen:
+      gridTable:
+        subtitle: Remove some recipe steps to view some data
+        title: No rows left in this sample
+    Snackbar:
+      labels:
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for
 ...

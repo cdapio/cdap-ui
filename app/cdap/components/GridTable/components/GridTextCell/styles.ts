@@ -44,4 +44,13 @@ export const useGridTextCellStyles = makeStyles({
     fontWeight: 400,
     color: '#5F6368',
   },
+  highlightCell: {
+    color: '#FFFFFF',
+    lineHeight: '21px',
+    fontSize: '14px',
+    fontWeight: 400,
+  },
+  highlightedColumn: {
+    backgroundColor: '#3b78e7',
+  },
 });
