@@ -46,7 +46,7 @@ import {
   PipelineTriggerHeader,
   SearchTriggerTextField,
 } from 'components/PipelineTriggers/shared.styles';
-import { InputAdornment, TextField } from '@material-ui/core';
+import { InputAdornment, TextField, Tooltip, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import {
   initialAvailablePipelineListState,
@@ -121,6 +121,18 @@ const TriggerConfigHeader = styled.div`
   font-size: 11px;
 `;
 
+const CustomTooltip = withStyles(() => {
+  return {
+    arrow: {
+      color: '#3c4355',
+    },
+    tooltip: {
+      fontSize: '13px',
+      backgroundColor: '#3c4355',
+    },
+  };
+})(Tooltip);
+
 interface IPipelineListCompositeTabViewProps {
   existingTriggers: ISchedule[];
   pipelineList: IPipelineInfo[];
@@ -150,6 +162,8 @@ const PipelineListCompositeTabView = ({
   setTab,
 }: IPipelineListCompositeTabViewProps) => {
   const [state, dispatch] = useReducer(triggerNameReducer, initialAvailablePipelineListState);
+  const emptyTriggerErrorMsg =
+    triggersGroupToAdd.length === 0 ? T.translate(`${PREFIX}.emptyCompositeTriggerError`) : '';
 
   useEffect(() => {
     dispatch({ type: 'SET_NAMESPACE' });
@@ -338,16 +352,20 @@ const PipelineListCompositeTabView = ({
           >
             {T.translate(`${PREFIX}.configComputeProfie`)}
           </PipelineTriggerComputeProfileButton>
-          <EnableGroupTriggerButton
-            color="primary"
-            disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
-            variant="contained"
-            onClick={() => addGroupTriggerClick()}
-            data-cy="enable-group-trigger-btn"
-            data-testid="enable-group-trigger-btn"
-          >
-            {T.translate(`${PREFIX}.addNewTrigger`)}
-          </EnableGroupTriggerButton>
+          <CustomTooltip arrow title={state.triggerNameError || emptyTriggerErrorMsg}>
+            <span>
+              <EnableGroupTriggerButton
+                color="primary"
+                disabled={state.isNameInvalid || triggersGroupToAdd.length === 0}
+                variant="contained"
+                onClick={() => addGroupTriggerClick()}
+                data-cy="enable-group-trigger-btn"
+                data-testid="enable-group-trigger-btn"
+              >
+                {T.translate(`${PREFIX}.addNewTrigger`)}
+              </EnableGroupTriggerButton>
+            </span>
+          </CustomTooltip>
         </ButtonsWrap>
         <PayloadConfigModal
           triggeringPipelineInfo={{
