@@ -26,8 +26,6 @@ public class ParsingPanel {
         ElementHelper.clickOnElement(Helper.locateElementByTestId("connector-type-" + type));
     }
 
-
-
     @Then("Click on the Wrangle button \\\"(.*)\\\" and \\\"(.*)\\\"")
     public void clickOnFirstTabOfTheSecondColumn2(int fTab, int fFile) {
         try {
