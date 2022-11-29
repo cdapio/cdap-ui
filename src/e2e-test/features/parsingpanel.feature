@@ -18,11 +18,16 @@
 Feature: ParsingPanel
 
   @ParsingPanel
-  Scenario: Go through the parsing panel functionality
+  Scenario Outline: Go through the parsing panel functionality
     Given Navigate to the Home Page
-    Then Click on the Connector type card
-    Then Click on the Wrangle button
+    Then Click on the Connector type card "<type>"
+    Then Click on the Wrangle button "<finalTab>" and "<finalFile>"
+    Then Verify if parsing panel is displayed
 #    Then Click on the Format field and Select the value
 #    Then Click on the Encoding field and Select the value
     Then Click on the Checkboxes
-    Then Click on the Apply button
+    Then Click on the close button
+#    Then Click on the Apply button
+  Examples:
+    | type | finalTab | finalFile |
+    | File | 2 | 30 |
