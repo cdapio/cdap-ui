@@ -28,11 +28,16 @@ const styles = () => {
 interface IMultiRowContainerProps extends WithStyles<typeof styles> {
   children: any[] | any;
   dataCy?: string;
+  dataTestId?: string;
 }
 
 function MultiRowContainer(props: IMultiRowContainerProps) {
   return (
-    <div className={props.classes.multiRowContainer} data-cy={props.dataCy}>
+    <div
+      className={props.classes.multiRowContainer}
+      data-cy={props.dataCy}
+      data-testid={props.dataTestId}
+    >
       {props.children}
     </div>
   );

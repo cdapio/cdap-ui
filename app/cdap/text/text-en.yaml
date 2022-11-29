@@ -2789,15 +2789,16 @@ features:
       selectedPipelines: 'Selected Pipelines:'
       selectButtonLabel: Select
       tabLabel: Set pipeline triggers
-      title: 'Set which pipeline triggers "{pipelineName}"'
-      triggerName: 'Trigger Name'
-      triggerType: 'Trigger Type'
-      triggerNameExists: 'Trigger Name already exists'
-      triggerNameRequired: 'Trigger Name is required'
-      triggerNameLengthLimit: 'Trigger Name should not be longer than 50 characters'
-      selectPipelineInstruction: 'Select the pipelines you want to add to the trigger: '
-      triggerAndType: 'Wait for all events (AND)'
-      triggerOrType: 'Trigger on any selected event (OR)'
+      title: "Set which pipeline triggers \"{pipelineName}\""
+      triggerName: "Trigger Name"
+      triggerType: "Trigger Type"
+      triggerNameExists: "Trigger Name already exists"
+      triggerNameRequired: "Trigger Name is required"
+      triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
+      emptyCompositeTriggerError: "Please select upstream pipelines for this trigger"
+      selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
+      triggerAndType: "Wait for all events (AND)"
+      triggerOrType: "Trigger on any selected event (OR)"
       viewNamespace: View pipelines in namespace
     viewPipeline: View Pipeline
     viewPipelineCapitalized: VIEW PIPELINE
