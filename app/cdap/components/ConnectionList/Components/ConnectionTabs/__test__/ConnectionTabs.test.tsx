@@ -54,20 +54,6 @@ describe('Test ConnectionsTabs', () => {
     expect(ele).toBeInTheDocument();
   });
 
-  it('Should render TabLabelCanBrowse with connectorTypes and count', () => {
-    render(
-      <ConnectionsTabs
-        tabsData={mockTabsDataWithBrowseIndex}
-        handleChange={() => null}
-        value="apple"
-        index={0}
-        connectionId={undefined}
-        setIsErrorOnNoWorkSpace={jest.fn()}
-      />
-    );
-    const ele = screen.getByTestId(/connections-tab-label-browse/i);
-    expect(ele).toBeInTheDocument();
-  });
 });
 
 describe('Should test whether handleChange function is triggered or not', () => {
@@ -83,7 +69,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         setIsErrorOnNoWorkSpace={jest.fn()}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connections-label-10/i);
     fireEvent.click(ele[0]);
     expect(handleChange).toHaveBeenCalled();
   });
@@ -100,7 +86,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         setIsErrorOnNoWorkSpace={jest.fn()}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connections-label-20/i);
     fireEvent.click(ele[0]);
     expect(handleChange).toHaveBeenCalledTimes(0);
   });
@@ -117,7 +103,7 @@ describe('Should test whether handleChange function is triggered or not', () => 
         setIsErrorOnNoWorkSpace={jest.fn()}
       />
     );
-    const ele = screen.getAllByTestId(/connections-tab-button/i);
+    const ele = screen.getAllByTestId(/connections-label-20/i);
     fireEvent.click(ele[0]);
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
