@@ -27,9 +27,10 @@ describe('Test TabLabelCanBrowse Component', () => {
         count={mockConnectorTypeData.count}
         icon={mockConnectorTypeData.icon}
         index={0}
+        dataTestId='test'
       />
     );
-    const ele = screen.getByTestId(/connections-tab-label-browse/i);
+    const ele = screen.getByTestId(/test/i);
     expect(ele).toBeInTheDocument();
   });
 });
