@@ -18,7 +18,7 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import classnames from 'classnames';
 import { useStyles } from 'components/ImportDataset/styles';
-import { Box, Divider, Typography } from '@material-ui/core';
+import { Box, Divider, Typography, IconButton } from '@material-ui/core';
 import { UploadSVG } from 'components/ImportDataset/IconStore/UploadSVG';
 import { InfoIcon } from 'components/ImportDataset/IconStore/InfoIcon';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
@@ -76,9 +76,10 @@ export default function({ file, onDropHandler }: IDragAndDrop) {
             <Box
               className={classes.delete_cursor_pointer}
               data-testid="delete-svg"
-              onClick={handleRemoveFile}
             >
-              <DeleteOutlinedIcon />
+              <IconButton onClick={handleRemoveFile}>
+                <DeleteOutlinedIcon />
+              </IconButton>
             </Box>
           </Box>
           <Divider />

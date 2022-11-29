@@ -43,7 +43,6 @@ export const useStyles = makeStyles(() => {
     },
     pointerStyles: {
       cursor: 'pointer',
-      fontSize: 24,
     },
     headingTextStyles: {
       fontStyle: 'normal',

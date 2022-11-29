@@ -30,6 +30,9 @@ export const useStyles = makeStyles({
   },
   delete_cursor_pointer: {
     cursor: 'pointer',
+    '& .MuiIconButton-root': {
+      padding: 0,
+    },
   },
   dropText: {
     fontStyle: 'normal',
