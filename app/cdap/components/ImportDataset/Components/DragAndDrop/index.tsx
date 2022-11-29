@@ -21,7 +21,7 @@ import { useStyles } from 'components/ImportDataset/styles';
 import { Box, Divider, Typography } from '@material-ui/core';
 import { UploadSVG } from 'components/ImportDataset/IconStore/UploadSVG';
 import { InfoIcon } from 'components/ImportDataset/IconStore/InfoIcon';
-import { DeleteSVG } from 'components/ImportDataset/IconStore/DeleteSVG';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import T from 'i18n-react';
 import { IDragAndDrop } from 'components/ImportDataset/types';
 
@@ -78,7 +78,7 @@ export default function({ file, onDropHandler }: IDragAndDrop) {
               data-testid="delete-svg"
               onClick={handleRemoveFile}
             >
-              <DeleteSVG />
+              <DeleteOutlinedIcon />
             </Box>
           </Box>
           <Divider />

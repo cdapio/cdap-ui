@@ -127,7 +127,7 @@ export default function({ handleClosePanel }: IImportDataset) {
     <DrawerWidget
       headingText={T.translate('features.WranglerNewUI.ImportData.referenceLabel')}
       openDrawer={drawerStatus}
-      showDivider={true}
+      showDivider={false}
       closeClickHandler={closeClickHandler}
     >
       <Box className={classes.bodyWrapper}>

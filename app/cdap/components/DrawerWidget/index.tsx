@@ -14,13 +14,21 @@
  * the License.
  */
 
-import { Box, Container, Drawer, Typography } from '@material-ui/core';
+import { Box, Container, Drawer, IconButton } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import { useStyles } from 'components/DrawerWidget/styles';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import DrawerWidgetHeading from 'components/DrawerWidget/DrawerWidgetHeading';
 import { IDrawerWidget } from 'components/DrawerWidget/types';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
+import styled from 'styled-components';
+
+const CloseButtonStyle = styled(IconButton)`
+  cursor: pointer;
+  &.MuiIconButton-root {
+    padding: 0px;
+  }
+`;
 
 export default function({
   headingText,
@@ -49,12 +57,13 @@ export default function({
           <Box className={classes.headerRightStyles}>
             {headerActionTemplate && <div>{headerActionTemplate}</div>}
             {showDivider && <div className={classes.dividerLineStyles} />}
-            <CloseRoundedIcon
-              className={classes.pointerStyles}
-              color="action"
-              onClick={closeClickHandler}
-              data-testid="drawer-widget-close-round-icon"
-            />
+            <CloseButtonStyle aria-label="close-icon" onClick={closeClickHandler}>
+              <CloseRoundedIcon
+                color="action"
+                data-testid="drawer-widget-close-round-icon"
+                className={classes.pointerStyles}
+              />
+            </CloseButtonStyle>
           </Box>
         </header>
         <Fragment>{children}</Fragment>
