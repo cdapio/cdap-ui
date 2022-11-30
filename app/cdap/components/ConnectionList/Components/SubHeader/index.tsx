@@ -36,7 +36,7 @@ export default function SubHeader() {
             to={`/ns/${getCurrentNamespace()}/home`}
             data-testid="breadcrumb-home-link"
           >
-            {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
+            {T.translate('features.WranglerNewUI.Breadcrumb.labels.wranglerHome')}
           </Link>
           <Typography>
             {' '}
