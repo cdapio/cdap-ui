@@ -381,7 +381,7 @@ export default function GridTable() {
           </TableBody>
         </Table>
       )}
-      {addTransformationFunction.option && (
+      {addTransformationFunction.option && gridData?.headers.length !== 0 && (
         <AddTransformationPanel
           transformationName={addTransformationFunction.option}
           transformationDataType={addTransformationFunction.supportedDataType}
