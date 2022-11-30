@@ -32,10 +32,17 @@ export default function({ setOpenImportDataPanel }: ISubHeaderProps) {
     <Box className={classes.breadCombContainer} data-testid="bread-comb-container-parent">
       <Box>
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
-            Home
+          <Link
+            color="inherit"
+            to={`/ns/${getCurrentNamespace()}/home`}
+            data-testid="breadcrumb-home-link"
+          >
+            {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
           </Link>
-          <Typography>Data Sources</Typography>
+          <Typography>
+            {' '}
+            {T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList')}
+          </Typography>
         </Breadcrumbs>
       </Box>
 
