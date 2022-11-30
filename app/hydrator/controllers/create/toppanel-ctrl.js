@@ -1450,12 +1450,12 @@ class HydratorPlusPlusTopPanelCtrl {
     }
 
     let uploadedFile = files[0];
-    this.HydratorUpgradeService.validateAndUpgradeConfigFile(uploadedFile);
+    this.HydratorUpgradeService.validateAndUpgradeConfigFile(uploadedFile, this.getParentVersion());
   }
 
   _checkAndShowConfirmationModalOnDirtyState(proceedCb) {
     let goTonextStep = true;
-    let isStoreDirty = this.HydratorPlusPlusConfigStore.getIsStateDirty();
+    let isStoreDirty = this.HydratorPlusPlusConfigStore.getIsStateDirty() && !this.isEdit;
     if (isStoreDirty) {
       return this.$uibModal
         .open({
