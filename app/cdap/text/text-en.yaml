@@ -3433,16 +3433,11 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-   ConnectionsList:
-    headerForLevelZero: "Data Connections"
-    labels:
-      loadToGrid: "Wrangle"
-      dataSources: "Data Sources"
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
-   ImportData:
+    ImportData:
       referenceLabel: "Import Data"
       dragAndDropTextLine1: "Drag and drop a file to be uploaded"
       dragAndDropTextLine2: "or Click here to select a file from your computer"
@@ -3457,8 +3452,6 @@ features:
         connectionsList: datasources
     AddConnections:
       referenceLabel: Add Connection
-    ImportData:
-      referenceLabel: Import Data
     HomePage:
       labels:
         common:
@@ -3470,7 +3463,9 @@ features:
         workspaces:
           title: Continue ongoing data explorations, pick up where you left off
     ConnectionsList:
+      headerForLevelZero: "Data Connections"
       labels:
         loadToGrid: Wrangle
+        dataSources: Data Sources
         noConnections: No Connections to show
 ...
