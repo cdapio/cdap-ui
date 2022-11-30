@@ -3462,4 +3462,15 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    common:
+      and: and
+    FooterPanel:
+      labels:
+        columns: columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
 ...
