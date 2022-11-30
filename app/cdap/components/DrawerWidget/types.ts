@@ -14,11 +14,14 @@
  * the License.
  */
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: string[];
-  columnSelected: string;
-  setColumnSelected: (columnName: string) => void;
-  onColumnSelection: (columnName: string) => void;
-  index: number;
+export interface IDrawerWidgetProps {
+  headingText: string;
+  openDrawer: boolean;
+  showDivider: boolean;
+  headerActionTemplate: JSX.Element;
+  children: JSX.Element;
+  closeClickHandler: () => void;
+  showBackIcon: boolean;
+  anchor: 'bottom' | 'left' | 'right' | 'top';
+  dataTestId: string;
 }
