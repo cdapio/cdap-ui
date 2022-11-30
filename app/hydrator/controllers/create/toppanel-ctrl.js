@@ -530,6 +530,8 @@ class HydratorPlusPlusTopPanelCtrl {
     );
     let exportConfig = this.HydratorPlusPlusConfigStore.getConfigForExport();
     delete exportConfig.__ui__;
+    delete exportConfig.$promise;
+    delete exportConfig.$resolved;
     // Only show export modal with pipeline JSON when running e2e tests
     if (window.Cypress) {
       this.myPipelineExportModalService.show(config, exportConfig);
@@ -544,6 +546,8 @@ class HydratorPlusPlusTopPanelCtrl {
     );
     let exportConfig = this.HydratorPlusPlusConfigStore.getConfigForExport();
     delete exportConfig.__ui__;
+    delete exportConfig.$promise;
+    delete exportConfig.$resolved;
     if (window.Cypress) {
       this.myPipelineExportModalService.show(config, exportConfig);
     } else {
