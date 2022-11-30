@@ -17,6 +17,9 @@
 export interface IParams {
   context: string;
   workspaceId: string;
+  namespace?: string;
+  wid?: string;
+  connectorType?: string;
 }
 
 export interface IRecords {
@@ -27,7 +30,7 @@ export interface IPercentOfDataTypeValues {
 }
 
 interface ISummary {
-  statistics: IRecords;
+  statistics: IStatistics;
   validations: IRecords;
 }
 
@@ -42,9 +45,69 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | boolean | Record<string, IType>>;
+  type: string[];
 }
 
 export interface IType {
   [key: string]: string | number;
+}
+
+export interface IGeneralObjectRecord {
+  [key: string]: number | string;
+}
+
+export interface IGeneral {
+  general?: IGeneralObjectRecord;
+  types?: IGeneralObjectRecord;
+}
+
+export interface IStatistics {
+  [key: string]: IGeneral;
+}
+
+export interface IDataQuality {
+  [key: string]: string;
+}
+
+export interface IRowData {
+  [key: string]: string;
+}
+
+export interface IMissingListData {
+  name: string;
+  values: Record<string, string>;
+}
+
+export interface IRequestBody {
+  directives: string[];
+  insights?: IRecords;
+  limit: number;
+}
+
+export interface IGridParams {
+  directives: string[];
+  insights: IRecords;
+  workspaceId: string;
+  workspaceInfo: IRecords;
+  workspaceUri: string;
+}
+
+export interface IApiPayload {
+  payload: IRecords;
+  requestBody: IRequestBody;
+  gridParams: IGridParams;
+}
+
+export interface IGridCellData {
+  [key: string]: string;
+}
+
+export interface IMissingList {
+  name: string;
+  values: Record<string, string>;
+}
+
+export interface IAddTransformationItem {
+  option: string;
+  supportedDataType: string[];
 }

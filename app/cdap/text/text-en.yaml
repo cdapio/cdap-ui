@@ -3462,4 +3462,180 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    GridPage:
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          otherIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            datatype:
+              string: string
+              boolean: boolean
+              integer: integer
+              long: long
+              short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
+            menu:
+              changeDatatype: Change data type
+              format: Format
+            fragment:
+              parse: Parse
+            parse:
+              parseCSV: CSV
+              parseAvro: Avro
+              parseExcel: Excel
+              parseJSON: JSON
+              parseXML: XML to JSON
+              parseLog: Log
+              parseSimpleDate: Simple Date
+              parseDateTime: Datetime
+              parseFixedLength: Fixed Length
+              parseHL7: HL7
+            format:
+              uppercase: UPPERCASE
+              lowercase: Lowercase
+              titlecase: TitleCase
+              concatenate: Concatenate
+              trim: Trim whitespace
+              ltrim: Trim leading whitespace
+              rtrim: Trim trailing whitespace
+              dateTime: Date time
+              dateTimeAsString: Date time as string
+      addTransformationPanel:
+        addTransformation: Add Transformation Step
+        applyStep: Apply Step
+        columnsSelected: columns selected
+        columns: Columns
+        dataQuality: Data Quality
+        done: Done
+        function: Function
+        nullValues: Null Values
+        quickSelect: Quick select by clicking a column on the grid/columns panel
+        selectColumnPara: Select column(s) to apply this function
+        selectColumn: Select column
+        selectMultiColumns: Select columns
+      selectColumnListPanel:
+        columnsSelected: column selected
+        no: No
+        noColumns: No columns to show
+        noMatchColumnDatatype: Selected directive supported datatype does not match which the column's datatype
+        zero: '0' 
+      transformationUI:
+        common: 
+          nameNewColumn:  Name new column 
+          columnExist: This column name already exist
+          destinationColumn: Destination Column
+        format:
+          options:
+            concatenate:
+              heading: Concatenate
+              labels:
+                add: Add
+                enterString: Enter string
+                copyToNewColumn: Copy to a new column
+                destinationColumn: Destination column
+              options:
+                atTheBegining: at the beginning of the content of each row
+                atTheEnd: at the end of the content of each row
+        parse:
+          options:
+            common:
+              customFormat: Custom Format
+              pleaseSelectTheDateFormat: Please select the date format
+              setFirstRowAsHeader: Set first row as header
+              yyyyMMddHHmmss: yyyy-MM-dd HH:mm:ss
+              ddMMyyHHmmss: dd/MM/yy HH:mm:ss
+              MMddyyyyHHmmssSSS: MM.dd.yyyy HH:mm:ss.SSS
+              EEEdMMMyyyyHHmmss: EEE, d MMM yyyy HH:mm:ss
+              yyyyMMddTHHmmssSSSWithRFCTimezone: yyyy,MM.dd'T'HH:mm:ss.SSS with RFC timezone
+            csv:
+              heading: 
+                pleaseSelectTheDelimiter: Please select the delimiter
+              options:
+                comma: Comma
+                tab: Tab
+                space: Space
+                pipe: Pipe
+                capA: ^A
+                capD: ^D
+                customDelimiter: Custom delimiter
+            log:
+              heading: 
+                selectLogsFormat: Please select the logs format
+              options:
+                common: Common
+                combined: Combined
+                combinedio: Combinedio
+                referer: Referer
+                agent: Agent
+                custom: Custom
+            excel:
+              heading: 
+                chooseSheetInExcel: Choose how you would like to specify the sheet in your Excel file
+                sheetNumberPlaceholder: Sheet number
+                sheetNamePlaceholder: Sheet name
+              options:
+                sheetName: Sheet Name
+                sheetNumber: Sheet Number
+            xmlToJSON:
+              heading: 
+                parseXMLToJSON: Parse as XML to JSON
+              labels: 
+                depth: Depth
+                depthPlaceholder: Enter depth
+            fixedLength:
+              heading:
+                parseAsFixedLength: Parse as Fixed length
+              labels: 
+                columnWidths: Column widths
+                columnWidthsPlaceholder: e.g. 3, 5, 2, 5, 15
+                padding: Padding
+                optionalPaddingParameter: Optional padding parameter
+            simpleDate:
+              options:        
+                MMddyyyy: MM/dd/yyyy
+                MMddyyyyFormat: MM-dd-yyyy
+                ddMMyyyy: dd/MM/yyyy
+                MMddyy: MM-dd-yy
+                yyyyMMdd: yyyy-MM-dd
+                MMddyyyyatHHmmssz: MM-dd-yyyy 'at' HH:mm:ss z
+                yyyyMMddTHHmmssSSSZ: yyyy,MM.dd'T'HH:mm:ss.SSSZ
+                EEEMMMdyy: EEE, MMM d, ''yy
+                hmma: h:mm a
+                Hmmaz: H:mm a, z
+            dateTime:
+              options:
+                MMddyyyyAtHHmmssWithTimezone: MM-dd-yyyy 'at' HH:mm:ss with timezone
+    Snackbar:
+      labels:
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for
+
 ...
