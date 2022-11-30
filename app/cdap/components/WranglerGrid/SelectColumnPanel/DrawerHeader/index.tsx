@@ -56,6 +56,9 @@ const CustomizedIconButton = styled(IconButton)`
   &.MuiIconButton-root:hover {
     background-color: transparent;
   }
+  & .MuiTouchRipple-root {
+    display: none;
+  }
 `;
 
 const FlexWrapper = styled(Box)`

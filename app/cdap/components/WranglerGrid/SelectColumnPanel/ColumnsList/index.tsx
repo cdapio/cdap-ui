@@ -80,6 +80,12 @@ const SelectColumnSearchBox = styled(Box)`
 
 const SearchIconButton = styled(IconButton)`
   padding-right: 0;
+  &.MuiIconButton-root:hover {
+    background-color: transparent;
+  }
+  & .MuiTouchRipple-root {
+    display: none;
+  }
 `;
 
 export default function({
