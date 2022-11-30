@@ -22,19 +22,20 @@ export interface IParams {
 export interface IRecords {
   [key: string]: string | boolean | Record<string, IType>;
 }
+
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
 }
 
 interface ISummary {
-  statistics: IRecords;
+  statistics: IGeneral | IStatistics;
   validations: IRecords;
 }
 
 export interface IExecuteAPIResponse {
   headers: string[];
   types: IRecords;
-  values: IRecords[];
+  values: IValues[];
   summary: ISummary;
   message: string;
 }
@@ -42,9 +43,26 @@ export interface IExecuteAPIResponse {
 export interface IHeaderNamesList {
   name: string;
   label: string;
-  type: Array<string | boolean | Record<string, IType>>;
+  type: string[];
 }
 
 export interface IType {
   [key: string]: string | number;
+}
+
+export interface IValues {
+  [key: string]: string;
+}
+
+export interface IGeneralObjectRecord {
+  [key: string]: number | string;
+}
+
+export interface IGeneral {
+  general?: IGeneralObjectRecord;
+  types?: IGeneralObjectRecord;
+}
+
+export interface IStatistics {
+  [key: string]: IGeneral;
 }

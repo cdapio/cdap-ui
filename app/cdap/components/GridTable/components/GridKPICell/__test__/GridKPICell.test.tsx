@@ -20,16 +20,17 @@ import GridKPICell from 'components/GridTable/components/GridKPICell';
 import React from 'react';
 
 describe('Test GridKPICell Component', () => {
-  const fakeArray = {
-    values: [
-      { label: 'pg_shadow', count: 10 },
-      { label: 'pg_shadow2', count: 6 },
-    ],
-  };
+  const fakeArray = [
+    { label: 'pg_shadow', count: 10 },
+    { label: 'pg_shadow2', count: 6 },
+    { label: 'test', count: 69 },
+  ];
 
-  render(<GridKPICell metricData={fakeArray} />);
+  beforeEach(() => {
+    render(<GridKPICell metricData={fakeArray} />);
+  });
 
   it('Should should have eachValue Count', () => {
-    expect(screen.getByTestId('grid-kpi-metric-value-pg_shadow')).toHaveTextContent('10');
+    expect(screen.getByTestId(/grid-kpi-metric-value-test/i)).toHaveTextContent('69');
   });
 });

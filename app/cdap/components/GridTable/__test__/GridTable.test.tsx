@@ -14,15 +14,14 @@
  *  the License.
  */
 
-import React from 'react';
-import GridTable from 'components/GridTable/index';
-import { render } from '@testing-library/react';
-import { Route, Router, Switch } from 'react-router';
-import { createBrowserHistory as createHistory } from 'history';
+import { render,screen } from '@testing-library/react';
 import MyDataPrepApi from 'api/dataprep';
+import GridTable from 'components/GridTable/index';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
 import rxjs from 'rxjs/operators';
-import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
 import history from 'services/history';
+import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
 
 describe('Testing Grid Table Component', () => {
   jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
@@ -41,7 +40,7 @@ describe('Testing Grid Table Component', () => {
       };
     });
 
-    const container = render(
+    render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -50,7 +49,7 @@ describe('Testing Grid Table Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined();
-    expect(container.getByTestId('grid-table-container')).toBeInTheDocument();
+    
+    expect(screen.getByTestId('grid-table-container')).toBeInTheDocument();
   });
 });

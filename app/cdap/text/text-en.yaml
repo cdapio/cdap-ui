@@ -3440,6 +3440,7 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        createPipeline: Create a Pipeline
         wrangleHome: Home
       params:
         wrangeHome: home

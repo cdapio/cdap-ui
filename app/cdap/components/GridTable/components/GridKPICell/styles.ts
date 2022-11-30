@@ -21,7 +21,6 @@ import { grey } from '@material-ui/core/colors';
 export const useGridKPICellStyles = makeStyles({
   root: {
     minWidth: '216px',
-    width: 'fit-content',
     backgroundColor: '#fff',
     padding: '10px 10px 0px 30px',
     borderRadius: '0px',
