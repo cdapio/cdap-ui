@@ -243,7 +243,10 @@ export default function ConnectionList() {
               );
           }
           return (
-            <Box className={classes.tabsContainerWithHeader}>
+            <Box
+              className={classes.tabsContainerWithHeader}
+              data-testid={`connection-tab-${index}`}
+            >
               <Box className={classes.tabHeaders}>{headerContent}</Box>
               <ConnectionsTabs
                 tabsData={each}
