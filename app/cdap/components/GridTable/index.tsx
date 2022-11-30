@@ -32,6 +32,7 @@ import {
   IRecords,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
+import OpenWorkspacesList from 'components/OpenWorkspacesList';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import T from 'i18n-react';
@@ -39,6 +40,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import styled from 'styled-components';
+
+const CustomizedBox = styled(Box)`
+  display: flex;
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -239,7 +245,10 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
-      <BreadCrumb datasetName={wid} />
+      <CustomizedBox>
+        <BreadCrumb datasetName={wid} />
+        <OpenWorkspacesList />
+      </CustomizedBox>
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
