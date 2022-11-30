@@ -35,9 +35,9 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { IExplorationCardDetails } from '../OngoingDataExplorationsCard/types';
 
 export default function() {
-  const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<IExplorationCardDetails[]>(
-    []
-  );
+  const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<
+    IExplorationCardDetails[][]
+  >([]);
 
   const getOngoingData = useCallback(async () => {
     const connectionsWithConnectorTypes: Map<
@@ -127,24 +127,26 @@ export default function() {
           responses
             ?.filter((eachResponse) => eachResponse)
             .forEach((workspace, index) => {
-              let dataQuality = 0;
+              let NullValuesPercentage = 0;
               workspace?.headers?.forEach((eachWorkspaceHeader) => {
                 const general = workspace.summary?.statistics[eachWorkspaceHeader]?.general;
-                // Here we are getting empty & non-null(renaming it as nonEmpty) values from general(API Response) and provinding default values for them
-                const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
-
-                // Round number to next lowest .1%
-                // Number.toFixed() can round up and leave .0 on integers
-                const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
-                dataQuality = dataQuality + nonNull;
+                // Adding null percentage to NullValuesPercentage if we get null percentage directly
+                if (general.null) {
+                  NullValuesPercentage = NullValuesPercentage + general.null;
+                }
+                // Adding NullValuesPercentage when we get non-null percentage but not NULL percentage from API
+                else {
+                  NullValuesPercentage = NullValuesPercentage + (100 - general['non-null']);
+                }
               });
-              const totalDataQuality = dataQuality / workspace.headers?.length ?? 1;
-              explorationData[index].dataQuality = totalDataQuality;
+              // calculating cumulative null values percentage
+              const totalNullValuesPercentage = NullValuesPercentage / workspace.headers?.length;
+              explorationData[index].dataQuality = totalNullValuesPercentage;
               explorationData[index].count = workspace.count;
-              const final = getUpdatedExplorationCards(explorationData);
-              setOnGoingExplorationsData(final);
             });
         }
+        const final = getUpdatedExplorationCards(explorationData);
+        setOnGoingExplorationsData(final);
       });
   }, []);
 
@@ -160,8 +162,7 @@ export default function() {
     <Box data-testid="ongoing-data-explore-parent">
       {filteredData &&
         Array.isArray(filteredData) &&
-        filteredData?.map((item, index) => {
-          console.log(item, 'item');
+        filteredData?.slice(0, 2).map((item, index) => {
           return (
             <Link
               to={{
@@ -174,13 +175,11 @@ export default function() {
               style={{ textDecoration: 'none' }}
               data-testid={`wrangler-home-ongoing-data-exploration-card-${index}`}
             >
-              {index <= 1 && (
-                <OngoingDataExplorationsCard
-                  explorationCardDetails={item}
-                  key={index}
-                  cardIndex={index}
-                />
-              )}
+              <OngoingDataExplorationsCard
+                explorationCardDetails={item}
+                key={index}
+                cardIndex={index}
+              />
             </Link>
           );
         })}

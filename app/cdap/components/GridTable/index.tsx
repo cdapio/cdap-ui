@@ -240,7 +240,7 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
-      <BreadCrumb datasetName={wid} />
+      <BreadCrumb workspaceName={wid} location={location} />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
