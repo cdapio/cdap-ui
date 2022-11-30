@@ -3441,6 +3441,7 @@ features:
       labels:
         common:
           viewAll: 'View All'
+          importData: Import Data
         connectorTypes:
           title: 'Start data exploration'
         workspaces:
