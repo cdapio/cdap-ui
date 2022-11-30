@@ -14,16 +14,21 @@
  * the License.
  */
 
-import { TableBody, Checkbox, Divider } from '@material-ui/core';
+import { TableBody, Checkbox, Divider, Box } from '@material-ui/core';
 import React from 'react';
 import T from 'i18n-react';
 import TableRowWidget from 'components/WranglerGrid/SelectColumnPanel/DataTable/TableRow';
 import { IColumnTableProps } from 'components/WranglerGrid/SelectColumnPanel/DataTable/types';
-import { ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import {
+  ADD_TRANSFORMATION_PREFIX,
+  SELECT_COLUMN_LIST_PREFIX,
+} from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { multipleColumnSelected } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { TableContainer, Table, TableHead, TableRow, TableCell } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import styled from 'styled-components';
+import { NormalFont, SubHeadBoldFont } from 'components/common/TypographyText';
+import { NoDataSVG } from 'components/GridTable/iconStore';
 
 const SelectColumnTableContainer = styled(TableContainer)`
   height: 100%;
@@ -62,6 +67,16 @@ const SelectColumnTableHeadCell = styled(TableCell)`
   }
 `;
 
+const FlexWrapper = styled(Box)`
+  display: flex;
+  height: 100%;
+  align-items: center;
+`;
+
+const CenterAlignBox = styled(Box)`
+  text-align: center;
+`;
+
 export default function({
   columns,
   transformationDataType,
@@ -71,7 +86,6 @@ export default function({
   isSingleSelection,
   handleDisableCheckbox,
   onMultipleSelection,
-  totalColumnCount,
   setSelectedColumns,
   transformationName,
 }: IColumnTableProps) {
@@ -99,37 +113,56 @@ export default function({
     }
   };
 
+  const columnsToDisplay = transformationDataType?.includes('all')
+    ? columns
+    : columns.filter((eachColumn) =>
+        transformationDataType?.includes(eachColumn?.type[0]?.toLowerCase())
+      );
+
   return (
     <SelectColumnTableContainer data-testid="column-table-parent">
-      <SelectColumnTable aria-label="recipe steps table">
-        <Divider />
-        <SelectColumnTableHead>
-          <SelectColumnTableRow>
-            <SelectColumnTableHeadCell>
-              {multipleColumnSelected?.filter((option) => option.value === transformationName)
-                .length > 0 && (
-                <Checkbox
-                  color="primary"
-                  checked={selectedColumns?.length ? true : false}
-                  onClick={handleChange}
-                  indeterminate={selectedColumns?.length ? true : false}
-                  data-testid="column-table-check-box"
-                />
-              )}
-            </SelectColumnTableHeadCell>
-            <SelectColumnTableHeadCell data-testid="panel-columns">
-              {T.translate(`${ADD_TRANSFORMATION_PREFIX}.columns`)}
-              {` (${columns.length})`}
-            </SelectColumnTableHeadCell>
-            <SelectColumnTableHeadCell data-testid="panel-values">
-              {T.translate(`${ADD_TRANSFORMATION_PREFIX}.nullValues`)}
-            </SelectColumnTableHeadCell>
-          </SelectColumnTableRow>
-        </SelectColumnTableHead>
-        <Divider />
-        <TableBody>
-          {columns.map((eachColumn, columnIndex) =>
-            transformationDataType?.includes('all') ? (
+      {columnsToDisplay.length === 0 ? (
+        <FlexWrapper>
+          <CenterAlignBox>
+            {NoDataSVG}
+            <SubHeadBoldFont component="p" data-testid="no-column-title">
+              {T.translate(`${SELECT_COLUMN_LIST_PREFIX}.noColumns`)}
+            </SubHeadBoldFont>
+            <NormalFont component="p" data-testid="no-column-subTitle">
+              {T.translate(`${SELECT_COLUMN_LIST_PREFIX}.noMatchColumnDatatype`)}
+            </NormalFont>
+          </CenterAlignBox>
+        </FlexWrapper>
+      ) : (
+        <SelectColumnTable aria-label="recipe steps table">
+          <Divider />
+          <SelectColumnTableHead>
+            <SelectColumnTableRow>
+              <SelectColumnTableHeadCell>
+                {multipleColumnSelected?.filter((option) => option.value === transformationName)
+                  .length > 0 && (
+                  <Checkbox
+                    color="primary"
+                    checked={selectedColumns?.length ? true : false}
+                    onClick={handleChange}
+                    indeterminate={selectedColumns?.length ? true : false}
+                    data-testid="column-table-check-box"
+                  />
+                )}
+              </SelectColumnTableHeadCell>
+              <SelectColumnTableHeadCell data-testid="panel-columns">
+                {T.translate(`${ADD_TRANSFORMATION_PREFIX}.columns`)}
+                {` (${columns.length})`}
+              </SelectColumnTableHeadCell>
+              <SelectColumnTableHeadCell data-testid="panel-values">
+                {T.translate(`${ADD_TRANSFORMATION_PREFIX}.nullValues`)}
+              </SelectColumnTableHeadCell>
+            </SelectColumnTableRow>
+          </SelectColumnTableHead>
+          <Divider />
+
+          <TableBody>
+            {columnsToDisplay.map((eachColumn, columnIndex) => (
               <TableRowWidget
                 onSingleSelection={onSingleSelection}
                 selectedColumns={selectedColumns}
@@ -140,23 +173,10 @@ export default function({
                 columnIndex={columnIndex}
                 columnDetail={eachColumn}
               />
-            ) : (
-              transformationDataType?.includes(eachColumn?.type[0]?.toLowerCase()) && (
-                <TableRowWidget
-                  onSingleSelection={onSingleSelection}
-                  selectedColumns={selectedColumns}
-                  dataQualityValue={dataQualityValue}
-                  isSingleSelection={isSingleSelection}
-                  handleDisableCheckbox={handleDisableCheckbox}
-                  onMultipleSelection={onMultipleSelection}
-                  columnIndex={columnIndex}
-                  columnDetail={eachColumn}
-                />
-              )
-            )
-          )}
-        </TableBody>
-      </SelectColumnTable>
+            ))}
+          </TableBody>
+        </SelectColumnTable>
+      )}
     </SelectColumnTableContainer>
   );
 }

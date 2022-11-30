@@ -331,6 +331,7 @@ export default function GridTable() {
             ? onMenuOptionSelection(option, datatype, infoLink)
             : null;
         }}
+        disableToolbarIcon={gridData?.headers?.length === 0 ? true : false}
       />
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
         <NoRecordScreen

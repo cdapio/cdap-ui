@@ -51,6 +51,11 @@ const BackIcon = styled(ChevronLeftRoundedIcon)`
 
 const CustomizedIconButton = styled(IconButton)`
   padding: 0px;
+  width: 26px;
+  justify-content: end;
+  &.MuiIconButton-root:hover {
+    background-color: transparent;
+  }
 `;
 
 const FlexWrapper = styled(Box)`
