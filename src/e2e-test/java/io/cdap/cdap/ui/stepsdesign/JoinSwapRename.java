@@ -60,7 +60,7 @@ public class JoinSwapRename {
                 }
             }
             Assert.assertTrue(
-                    Helper.isElementExists(Helper.getCssSelectorByDataTestId("transformations-toolbar-container")));
+                    Helper.isElementExists(Helper.getCssSelectorByDataTestId("nested-menu-container")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
