@@ -32,7 +32,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
 import { defaultIfEmpty, switchMap } from 'rxjs/operators';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { IExplorationCardDetails } from '../OngoingDataExplorationsCard/types';
+import { IExplorationCardDetails } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
 
 export default function() {
   const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<
@@ -72,7 +72,7 @@ export default function() {
     //  using these in params and requestBody to get Data quality from MyDataPrepApi.execute API
 
     MyDataPrepApi.getWorkspaceList({
-      context: 'default',
+      context: getCurrentNamespace(),
     })
       .pipe(
         switchMap((response: Record<string, unknown[]>) => {
@@ -84,7 +84,7 @@ export default function() {
 
           const workspaces = values.map((eachValue) => {
             const params = {
-              context: 'default',
+              context: getCurrentNamespace(),
               workspaceId: eachValue.workspaceId,
             };
             const requestBody = {
