@@ -16,7 +16,6 @@
 
 import * as React from 'react';
 import { SORT_ORDER } from 'components/PipelineList/DeployedPipelineView/store';
-import If from 'components/shared/If';
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import classnames from 'classnames';
@@ -47,14 +46,18 @@ const SortableHeaderView: React.SFC<ISortableHeaderProps> = ({
   }
 
   return (
-    <strong className={classnames({ sortable: !disabled })} onClick={handleClick}>
+    <strong
+      className={classnames({ sortable: !disabled })}
+      onClick={handleClick}
+      data-testid={columnName}
+    >
       {T.translate(`${PREFIX}.${columnName}`)}
 
-      <If condition={sortColumn === columnName}>
+      {sortColumn === columnName && (
         <span className="fa fa-lg">
           <IconSVG name={sortOrder === SORT_ORDER.asc ? 'icon-caret-down' : 'icon-caret-up'} />
         </span>
-      </If>
+      )}
     </strong>
   );
 };

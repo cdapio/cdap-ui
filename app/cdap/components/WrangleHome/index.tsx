@@ -78,14 +78,16 @@ export default function() {
         <WrangleCard toggleViewAllLink={toggleViewAllLink} />
         {showExplorations && (
           <Box className={classes.headerTitle}>
-            <WrangleHomeTitle title={T.translate('features.HomePage.labels.workspaces.title')} />
+            <WrangleHomeTitle
+              title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
+            />
             <Box className={classes.viewMore}>
               <Link
                 color="inherit"
                 to={`/ns/${getCurrentNamespace()}/workspace-list`}
                 data-testid="ongoing-explorations-view-all"
               >
-                {T.translate('features.HomePage.labels.common.viewAll')}
+                {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
               </Link>
             </Box>
           </Box>

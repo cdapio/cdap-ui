@@ -165,6 +165,7 @@ export default function({
               setLoading && setLoading(false);
             });
         }
+        setLoading(false);
       });
   }, []);
 
