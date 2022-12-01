@@ -18,10 +18,35 @@ import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/uti
 
 describe('It should test getDirective function', () => {
   it('should call getDirective() when there is error in function name', () => {
-    expect(getDirective('', 'body_0')).toStrictEqual(null);
+    expect(
+      getDirective('', 'body_0', {
+        copyColumnName: 'body_1',
+        customInput: '5',
+        copyToNewColumn: true,
+        columnNames: ['body_0', 'body_1'],
+      })
+    ).toStrictEqual(null);
   });
 
   it('should call getDirective() when function name is string .', () => {
-    expect(getDirective('string', 'body_0')).toStrictEqual(`set-type :body_0 string`);
+    expect(
+      getDirective('string', 'body_0', {
+        copyColumnName: 'body_1',
+        customInput: '5',
+        copyToNewColumn: true,
+        columnNames: ['body_0', 'body_1'],
+      })
+    ).toStrictEqual('set-type :body_0 string');
+  });
+
+  it('should call getDirective() when function name is CHARCOUNT .', () => {
+    expect(
+      getDirective('CHARCOUNT', 'body_0', {
+        copyColumnName: 'body_1',
+        customInput: '6',
+        copyToNewColumn: true,
+        columnNames: ['body_0', 'body_1'],
+      })
+    ).toStrictEqual('set-column :body_1 string:length(body_0)');
   });
 });

@@ -31,6 +31,7 @@ export const CALCULATE_OPTIONS = [
       newColumnName: string,
       copyToNew: boolean
     ) => `set-column :${newColumnName} string:length(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Add',
@@ -48,6 +49,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} ${column} + ${input}`
         : `set-column :${column} ${column} + ${input}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Subtract',
@@ -65,6 +67,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} ${column} - ${input}`
         : `set-column :${column} ${column} - ${input}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Multiply',
@@ -82,6 +85,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} ${column} * ${input}`
         : `set-column :${column} ${column} * ${input}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Divide',
@@ -99,6 +103,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} ${column} / ${input}`
         : `set-column :${column} ${column} / ${input}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Modulo',
@@ -116,6 +121,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} ${column} % ${input}`
         : `set-column :${column} ${column} % ${input}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Power of',
@@ -133,6 +139,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:pow(${column}, ${input})`
         : `set-column :${column} math:pow(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Square',
@@ -150,6 +157,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:pow(${column}, 2)`
         : `set-column :${column} math:pow(${column}, 2)`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Square root',
@@ -167,6 +175,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:sqrt(${column})`
         : `set-column :${column} math:sqrt(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Cube',
@@ -184,6 +193,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:pow(${column}, 3)`
         : `set-column :${column} math:pow(${column}, 3)`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Cube root',
@@ -201,6 +211,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:cbrt(${column})`
         : `set-column :${column} math:cbrt(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'log',
@@ -218,6 +229,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:log10(${column})`
         : `set-column :${column} math:log10(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Natural log',
@@ -235,6 +247,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:log(${column})`
         : `set-column :${column} math:log(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Absolute value',
@@ -252,6 +265,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:abs(${column})`
         : `set-column :${column} math:abs(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Ceil',
@@ -269,6 +283,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:ceil(${column})`
         : `set-column :${column} math:ceil(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Floor',
@@ -286,6 +301,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:floor(${column})`
         : `set-column :${column} math:floor(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Sin',
@@ -303,6 +319,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:sin(${column})`
         : `set-column :${column} math:sin(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Cos',
@@ -320,6 +337,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:cos(${column})`
         : `set-column :${column} math:cos(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Tan',
@@ -337,6 +355,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:tan(${column})`
         : `set-column :${column} math:tan(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'ARCSIN',
@@ -354,6 +373,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:asin(${column})`
         : `set-column :${column} math:asin(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'ARCCOS',
@@ -371,6 +391,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:acos(${column})`
         : `set-column :${column} math:acos(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'ARCTAN',
@@ -388,6 +409,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:atan(${column})`
         : `set-column :${column} math:atan(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Round',
@@ -405,6 +427,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:round(${column})`
         : `set-column :${column} math:round(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Random',
@@ -422,6 +445,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} math:random()`
         : `set-column :${column} math:random()`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal Add',
@@ -439,6 +463,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:add(${column}, ${input})`
         : `set-column :${column} decimal:add(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal Subtract',
@@ -456,6 +481,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:subtract(${column}, ${input})`
         : `set-column :${column} decimal:subtract(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal Multiply',
@@ -473,6 +499,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:multiply(${column}, ${input})`
         : `set-column :${column} decimal:multiply(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal Divide',
@@ -490,6 +517,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:divideq(${column}, ${input})`
         : `set-column :${column} decimal:divideq(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal Divider',
@@ -507,6 +535,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:divider(${column}, ${input})`
         : `set-column :${column} decimal:divider(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Precision',
@@ -524,6 +553,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:precision(${column})`
         : `set-column :${column} decimal:precision(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Scale',
@@ -541,6 +571,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:scale(${column})`
         : `set-column :${column} decimal:scale(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Unscaled',
@@ -558,6 +589,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:unscaled(${column})`
         : `set-column :${column} decimal:unscaled(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal left',
@@ -575,6 +607,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:decimal_left(${column}, ${input})`
         : `set-column :${column} decimal:decimal_left(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal right',
@@ -592,6 +625,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:decimal_right(${column}, ${input})`
         : `set-column :${column} decimal:decimal_right(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal power of',
@@ -609,6 +643,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:pow(${column}, ${input})`
         : `set-column :${column} decimal:pow(${column}, ${input})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal absolute value',
@@ -626,6 +661,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:abs(${column})`
         : `set-column :${column} decimal:abs(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal square',
@@ -643,6 +679,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:pow(${column}, 2)`
         : `set-column :${column} decimal:pow(${column}, 2)`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Decimal cube',
@@ -660,6 +697,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:pow(${column}, 3)`
         : `set-column :${column} decimal:pow(${column}, 3)`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Negate',
@@ -677,6 +715,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:negate(${column})`
         : `set-column :${column} decimal:negate(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Strip zero',
@@ -694,6 +733,7 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:strip_zero(${column})`
         : `set-column :${column} decimal:strip_zero(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
   {
     label: 'Sign',
@@ -711,5 +751,6 @@ export const CALCULATE_OPTIONS = [
       copyToNew
         ? `set-column :${newColumnName} decimal:sign(${column})`
         : `set-column :${column} decimal:sign(${column})`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
 ];

@@ -33,6 +33,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -43,6 +44,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -53,6 +55,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -63,6 +66,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -73,6 +77,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -83,6 +88,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -93,6 +99,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -103,6 +110,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -113,6 +121,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -123,6 +132,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -133,6 +143,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -143,6 +154,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -153,6 +165,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -163,6 +176,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -173,6 +187,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
     ],
     supportedDataType: NUMBER_TYPES,
@@ -192,6 +207,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -202,6 +218,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -212,6 +229,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -222,6 +240,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -232,6 +251,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -242,6 +262,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
     ],
     supportedDataType: NUMBER_TYPES,
@@ -261,6 +282,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: NATIVE_NUMBER_TYPES,
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
     ],
     supportedDataType: NUMBER_TYPES,
@@ -280,6 +302,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -290,6 +313,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -300,6 +324,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -310,6 +335,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -320,6 +346,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -330,6 +357,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -340,6 +368,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -350,6 +379,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -360,6 +390,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -370,6 +401,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -380,6 +412,7 @@ export const MATH_OPTIONS = [
         inputRequired: true,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -390,6 +423,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -400,6 +434,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -410,6 +445,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -420,6 +456,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -430,6 +467,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
       {
         label: T.translate(
@@ -440,6 +478,7 @@ export const MATH_OPTIONS = [
         inputRequired: false,
         component: 'Calculate',
         supportedDataType: ['bigdecimal'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
       },
     ],
     supportedDataType: NUMBER_TYPES,

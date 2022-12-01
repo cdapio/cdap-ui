@@ -22,5 +22,6 @@ export const OTHER_OPTIONS = [
     label: T.translate(`${PREFIX}.characterCount`).toString(),
     value: 'CHARCOUNT',
     supportedDataType: ['string'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
 ];

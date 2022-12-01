@@ -22,7 +22,7 @@ import SelectColumn from 'components/WranglerGrid/SelectColumnPanel';
 
 describe('It should test the SelectColumnsList Component', () => {
   it('should render the SelectColumnsList Component where transformationName=is parseCSV', () => {
-    const container = render(
+    render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -37,6 +37,7 @@ describe('It should test the SelectColumnsList Component', () => {
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined;
+    const selectColumnContainer = screen.getByTestId(/select-column-pane/i);
+    expect(selectColumnContainer).toBeInTheDocument();
   });
 });
