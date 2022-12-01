@@ -37,6 +37,9 @@ describe('It should test the AddTransformatio Component', () => {
         columnsList={mockColumnData}
         missingItemsList={undefined}
         onCancel={jest.fn()}
+        transformationLink={
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column'
+        }
       />
     );
 
@@ -53,6 +56,7 @@ describe('It should test the AddTransformatio Component', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column'}
     />
   );
 
@@ -77,6 +81,7 @@ it('Trigger handleApply() , closeSelectColumnsPopupWithoutColumn ', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column'}
     />
   );
 

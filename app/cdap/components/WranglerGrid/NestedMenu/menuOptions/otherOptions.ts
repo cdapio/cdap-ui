@@ -22,5 +22,6 @@ export const OTHER_OPTIONS = [
     value: 'customTransform',
     label: T.translate(`${PREFIX}.customTransform`).toString(),
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column',
   },
 ];
