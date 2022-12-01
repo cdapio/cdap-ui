@@ -18,16 +18,10 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
 import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
-import { updatedCardsMockResponse } from 'components/WrangleHome/Components/WrangleCard/mock/wrangleCardMockData';
 import history from 'services/history';
-import * as getUpdatedHelper from 'components/WrangleHome/services/getUpdatedConnectorCards';
 
 describe('Testing the Wrangle Card Component', () => {
   test('It renders Wrangler-Card with getUpdatedConnectorCards mock', async () => {
-    jest
-      .spyOn(getUpdatedHelper, 'getUpdatedConnectorCards')
-      .mockReturnValue(Promise.resolve(updatedCardsMockResponse as any));
-
     render(
       <Router history={history}>
         <Switch>
@@ -37,7 +31,6 @@ describe('Testing the Wrangle Card Component', () => {
         </Switch>
       </Router>
     );
-    expect(getUpdatedHelper.getUpdatedConnectorCards).toBeCalledTimes(1);
     const ele = screen.getByTestId(/wrangle-card-parent/i);
     expect(ele).toBeInTheDocument();
   });
