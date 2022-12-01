@@ -27,11 +27,13 @@ export default function TabLabelCanBrowse({
   count,
   index,
   icon,
+  connectorTypeIndex,
 }: {
   label: string;
   count: number;
   index: number;
   icon?: JSX.Element;
+  connectorTypeIndex: number;
 }) {
   const classes = useStyles();
 
@@ -55,7 +57,7 @@ export default function TabLabelCanBrowse({
       title={label}
       arrow
       key={`tooltip-${index}`}
-      data-testid="connections-tab-ref-label-browse"
+      data-testid={`connections-label-${index}${connectorTypeIndex}`}
     >
       <Box className={classes.labelContainerBox}>
         <Box className={classes.labelsContainer}>
@@ -78,7 +80,10 @@ export default function TabLabelCanBrowse({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelContainerBox} data-testid="connections-tab-label-browse">
+    <Box
+      className={classes.labelContainerBox}
+      data-testid={`connections-label-${index}${connectorTypeIndex}`}
+    >
       <Box className={classes.labelsContainer}>
         {icon && <Box>{icon}</Box>}
         <Typography variant="body1" className={classes.labelStyles} ref={myLabelRef}>

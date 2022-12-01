@@ -33,12 +33,16 @@ export default function TabLabelCanSample({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
+  index,
+  connectorTypeIndex,
 }: {
   label: string;
   entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+  index: number;
+  connectorTypeIndex: number;
 }) {
   const classes = useStyles();
 
@@ -95,7 +99,11 @@ export default function TabLabelCanSample({
   return workspaceId ? (
     <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
   ) : refValue ? (
-    <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
+    <CustomTooltip
+      title={label}
+      arrow
+      data-testid={`connections-label-${index}${connectorTypeIndex}`}
+    >
       <Box className={classes.labelsContainerCanSample}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
@@ -113,17 +121,24 @@ export default function TabLabelCanSample({
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
+    <Box
+      className={classes.labelsContainerCanSample}
+      data-testid={`connections-label-${index}${connectorTypeIndex}`}
+    >
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
       <button
         className="wranglingHover"
         onClick={() => onExplore(entity)}
-        data-testid="connections-tab-explore"
+        data-testid={`load-to-grid-wrapper`}
       >
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
+        <Typography
+          variant="body2"
+          className={classes.wrangleButton}
+          data-testid="load-to-grid-button"
+        >
           Wrangle
         </Typography>
       </button>

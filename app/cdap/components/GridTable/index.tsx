@@ -398,7 +398,11 @@ export default function GridTable() {
         setErrorOnTransformation={setErrorOnTransformation}
       />
       {schemaApplied && (
-        <ApplyButton variant="outlined" onClick={() => onConfirm(connectionPayload)}>
+        <ApplyButton
+          variant="outlined"
+          onClick={() => onConfirm(connectionPayload)}
+          data-testid="parsing-apply-button"
+        >
           {T.translate('features.WranglerNewUI.ImportSchema.Apply')}
         </ApplyButton>
       )}

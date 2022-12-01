@@ -91,7 +91,7 @@ export default function ConnectionsTabs({
             {tabsData.data.map((connectorType, connectorTypeIndex) => (
               <ConnectionTab
                 role="button"
-                data-testid={`${index}${connectorTypeIndex}-connection-tab`}
+                data-testid={`connection-tab-each-${index}${connectorTypeIndex}`}
                 onClick={() => {
                   if (index > 1) {
                     if (connectorType.canBrowse) {
@@ -108,6 +108,7 @@ export default function ConnectionsTabs({
                         label={connectorType.name}
                         count={index === 0 ? connectorType.count : undefined}
                         index={index}
+                        connectorTypeIndex={connectorTypeIndex}
                       />
                     ) : (
                       <TabLabelCanSample
@@ -116,6 +117,8 @@ export default function ConnectionsTabs({
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        index={index}
+                        connectorTypeIndex={connectorTypeIndex}
                       />
                     )
                   ) : (
@@ -124,6 +127,7 @@ export default function ConnectionsTabs({
                       count={index === 0 ? connectorType.count : undefined}
                       index={index}
                       icon={connectorType.icon}
+                      connectorTypeIndex={connectorTypeIndex}
                     />
                   )
                 }

@@ -150,7 +150,7 @@ export default function WrangleCard() {
           <Link
             to={`/ns/${getCurrentNamespace()}/datasources/${item.name}`}
             style={{ textDecoration: 'none' }}
-            data-testid={`connector-type-${index}`}
+            data-testid={`connector-type-${item.name}`}
           >
             <Card className={classes.card}>
               <Box className={classes.cardContent} key={index}>
