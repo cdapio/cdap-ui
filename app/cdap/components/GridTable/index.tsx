@@ -71,6 +71,7 @@ export default function GridTable() {
   >({
     option: '',
     supportedDataType: [],
+    infoLink: ''
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
   const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
@@ -264,10 +265,11 @@ export default function GridTable() {
   }, [gridData]);
 
   // ------------@onMenuOptionSelection Function is used to set option selected from toolbar and then calling of execute API
-  const onMenuOptionSelection = (option: string, supportedDataType: string[]) => {
+  const onMenuOptionSelection = (option: string, supportedDataType: string[], infoLink: string) => {
     setAddTransformationFunction({
       option,
       supportedDataType,
+      infoLink: infoLink
     });
   };
 
@@ -303,6 +305,7 @@ export default function GridTable() {
         setAddTransformationFunction({
           option: '',
           supportedDataType: [],
+          infoLink: ''
         });
       },
       (error) => {
@@ -315,6 +318,7 @@ export default function GridTable() {
         setAddTransformationFunction({
           option: '',
           supportedDataType: [],
+          infoLink: ''
         });
       }
     );
@@ -327,8 +331,8 @@ export default function GridTable() {
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
         columnType={'string'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
-        submitMenuOption={(option, datatype) => {
-          !transformationOptions.includes(option) ? onMenuOptionSelection(option, datatype) : null;
+        submitMenuOption={(option, datatype, infoLink) => {
+          !transformationOptions.includes(option) ? onMenuOptionSelection(option, datatype, infoLink) : null;
         }}
       />
 
@@ -385,6 +389,7 @@ export default function GridTable() {
                             setAddTransformationFunction({
                               option: '',
                               supportedDataType: [],
+                              infoLink: ''
                             });
                             setMaskSelection(false);
                           }}
@@ -407,6 +412,7 @@ export default function GridTable() {
             setAddTransformationFunction({
               option: '',
               supportedDataType: [],
+              infoLink: ''
             });
           }}
           applyTransformation={(directive: string) => {
@@ -416,7 +422,7 @@ export default function GridTable() {
             setMaskSelection(true);
             setColumnSelected(column);
           }}
-          transformationLink=""
+          transformationLink={addTransformationFunction.infoLink}
         />
       )}
       {snackbarIsOpen && (

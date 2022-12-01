@@ -27,21 +27,25 @@ export const SECURITY_OPTIONS = [
         value: 'mask-data-last-4-digit',
         label: T.translate(`${PREFIX}.last4`).toString(),
         supportedDataType: ['string'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074995/Mask+Number'
       },
       {
         value: 'mask-data-last-2-digit',
         label: T.translate(`${PREFIX}.last2`).toString(),
         supportedDataType: ['string'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074995/Mask+Number'
       },
       {
         value: 'mask-data-custom-selection',
         label: T.translate(`${PREFIX}.customSelection`).toString(),
         supportedDataType: ['string'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074995/Mask+Number'
       },
       {
         value: 'mask-data-shuffle',
         label: T.translate(`${PREFIX}.shuffle`).toString(),
         supportedDataType: ['string'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382075012/Mask+Shuffle'
       },
     ],
     supportedDataType: ['string'],
