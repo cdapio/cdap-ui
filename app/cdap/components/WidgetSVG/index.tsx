@@ -15,10 +15,10 @@
  */
 
 import { Avatar } from '@material-ui/core';
-import styled from 'styled-components';
 import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import { IWidgetSVGProps } from 'components/WidgetSVG/types';
 import React from 'react';
+import styled from 'styled-components';
 
 const StyledImageOutlined = styled(ImageOutlined)`
   font-size: 40px;
