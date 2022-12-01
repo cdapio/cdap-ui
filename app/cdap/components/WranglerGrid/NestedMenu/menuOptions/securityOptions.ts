@@ -19,9 +19,10 @@ import T from 'i18n-react';
 export const SECURITY_OPTIONS = [
   {
     value: 'hash',
-    label: T.translate(
+    label: `${T.translate(
       'features.WranglerNewUI.GridPage.transformations.options.labels.security.hash'
-    ).toString(),
+    )}`,
     supportedDataType: ['string'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140542/Hash'
   },
 ];

@@ -110,4 +110,5 @@ export interface IMissingList {
 export interface IAddTransformationItem {
   option: string;
   supportedDataType: string[];
+  infoLink: string;
 }
