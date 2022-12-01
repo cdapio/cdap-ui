@@ -34,12 +34,14 @@ export const PARSE_OPTIONS = [
             )?.directiveExpression
       }' ${transformationValues.firstRowAsHeader}`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382075022/Parse+as+CSV'
   },
   {
     value: 'parseAvro',
     label: T.translate(`${PREFIX}.parseAvro`).toString(),
     supportedDataType: ['all'],
     directive: (selectedColumn: string) => `parse-as-avro-file :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/391577976/Parse+AVRO+Encoded+Messages'
   },
   {
     value: 'parseExcel',
@@ -47,6 +49,7 @@ export const PARSE_OPTIONS = [
     supportedDataType: ['all'],
     directive: (selectedColumn: string, transformationValues: ITransformationComponentValues) =>
       `parse-as-excel :${selectedColumn} '${transformationValues.sheetValue}' ${transformationValues.firstRowAsHeader}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107832/Parse+as+Excel'
   },
   {
     value: 'parseJSON',
@@ -54,6 +57,7 @@ export const PARSE_OPTIONS = [
     supportedDataType: ['all'],
     directive: (selectedColumn: string, transformationValues: ITransformationComponentValues) =>
       `parse-as-json :${selectedColumn} ${transformationValues.depth}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107862/Parse+as+JSON'
   },
   {
     value: 'parseXML',
@@ -61,6 +65,7 @@ export const PARSE_OPTIONS = [
     supportedDataType: ['all'],
     directive: (selectedColumn: string, transformationValues: ITransformationComponentValues) =>
       `parse-xml-to-json :${selectedColumn} ${transformationValues.depth}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140609/Parse+XML+to+JSON'
   },
   {
     value: 'parseLog',
@@ -73,6 +78,7 @@ export const PARSE_OPTIONS = [
           : transformationValues.radioOption
       }'`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/381976753/Parse+as+Log+directive'
   },
   {
     value: 'parseSimpleDate',
@@ -85,6 +91,7 @@ export const PARSE_OPTIONS = [
           : transformationValues.radioOption
       }`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107884/Parse+as+Simple+Date+directive'
   },
   {
     value: 'parseDateTime',
@@ -97,6 +104,7 @@ export const PARSE_OPTIONS = [
           : transformationValues.radioOption
       }\"`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/1128988735/Parse+as+Datetime+directive'
   },
   {
     value: 'parseFixedLength',
@@ -104,11 +112,13 @@ export const PARSE_OPTIONS = [
     supportedDataType: ['all'],
     directive: (selectedColumn: string, transformationValues: ITransformationComponentValues) =>
       `parse-as-fixed-length :${selectedColumn} ${transformationValues.columnWidths} ${transformationValues.optionPaddingParam}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042272/Parse+as+Fixed+Length'
   },
   {
     value: 'parseHL7',
     label: T.translate(`${PREFIX}.parseHL7`).toString(),
     supportedDataType: ['all'],
     directive: (selectedColumn: string) => `parse-as-hl7 :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042279/Parse+as+HL7'
   },
 ];
