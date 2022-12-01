@@ -44,7 +44,6 @@ public class SnackBar {
             System.err.println("error:" + e);
         }
     }
-
     @Then("Click on the data exploration card")
     public void clickOnTheDataExplorationCard() {
         try {

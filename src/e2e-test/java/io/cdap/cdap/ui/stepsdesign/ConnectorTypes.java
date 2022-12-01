@@ -28,8 +28,12 @@ import org.junit.Assert;
 public class ConnectorTypes {
     @Given("Navigate to the Home Page")
     public void navigateToTheHomePage() {
+        try {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
+    } catch (Exception e) {
+            System.err.println("error: " + e);
+        }
     }
 
     @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")

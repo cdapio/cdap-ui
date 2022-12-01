@@ -55,4 +55,4 @@ Feature: Directives
     Then Click on delete icon of any step with "<stepId>"
     Examples:
       | stepId |
-      | 3 |
+      | 2 |
