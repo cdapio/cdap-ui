@@ -28,4 +28,5 @@ export interface IAddTransformationProps {
   missingItemsList: IStatistics;
   onCancel: () => void;
   applyTransformation: (directive: string) => void;
+  transformationLink: string;
 }

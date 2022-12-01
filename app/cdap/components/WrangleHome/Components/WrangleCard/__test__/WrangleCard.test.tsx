@@ -32,7 +32,7 @@ describe('Testing the Wrangle Card Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <WrangleCard toggleViewAllLink={jest.fn()} />
+            <WrangleCard />
           </Route>
         </Switch>
       </Router>

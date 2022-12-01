@@ -42,11 +42,18 @@ const CustomizedSvgIcon = styled(SvgIcon)`
     `}
 `;
 
+const IconCustommizedButton = styled(IconButton)`
+  &.MuiButtonBase-root.Mui-disabled {
+    opacity: 0.5;
+  }
+`;
+
 export default function({
   columnType,
   submitMenuOption,
   setShowBreadCrumb,
   showBreadCrumb,
+  disableToolbarIcon,
 }: ITransformationToolBarProps) {
   const [showName, setShowName] = useState<boolean>(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement[]>(null);
@@ -77,7 +84,8 @@ export default function({
                     .split(' ')
                     .join('-')}`}
                 >
-                  <IconButton
+                  <IconCustommizedButton
+                    disabled={disableToolbarIcon}
                     onClick={(clickEvent) => {
                       if (eachOption.options?.length) {
                         clickEvent.preventDefault();
@@ -85,7 +93,7 @@ export default function({
                         setSelectedMenuOptions(eachOption.options);
                         setAnchorElement([clickEvent.currentTarget]);
                       } else {
-                        submitMenuOption(eachOption.action, eachOption.dataType);
+                        submitMenuOption(eachOption.action, eachOption.dataType, '');
                       }
                     }}
                     data-testid={`toolbar-icon-button-${eachOption.title}`}
@@ -96,7 +104,7 @@ export default function({
                         flipped={eachOption.action === 'redo'}
                       />
                     )}
-                  </IconButton>
+                  </IconCustommizedButton>
                 </CustomTooltip>
                 {eachOption.options?.length > 0 && (
                   <NestedMenu
