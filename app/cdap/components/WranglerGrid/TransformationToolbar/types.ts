@@ -18,7 +18,7 @@ import { Dispatch, SetStateAction } from 'react';
 
 export interface ITransformationToolBarProps {
   columnType: string;
-  submitMenuOption: (value: string, dataType: string[]) => void;
+  submitMenuOption: (value: string, dataType: string[],infoLink?: string) => void;
   setShowBreadCrumb: Dispatch<SetStateAction<boolean>>;
   showBreadCrumb: boolean;
 }

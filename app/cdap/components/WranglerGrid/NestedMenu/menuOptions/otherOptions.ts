@@ -21,7 +21,8 @@ const PREFIX = 'features.WranglerNewUI.GridPage';
 export const OTHER_OPTIONS = [
   {
     value: 'set-counter',
-    label: T.translate(`${PREFIX}.transformations.options.labels.other.setCounter`).toString(),
+    label: `${T.translate(`${PREFIX}.transformations.options.labels.other.setCounter`)}`,
     supportedDataType: [T.translate(`${PREFIX}.toolbarIcons.labels.all`)],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107767/Increment+variable'
   },
 ];

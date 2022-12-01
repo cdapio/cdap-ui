@@ -51,7 +51,7 @@ const TransformationNameText = styled(SubHeadNormalFont)`
   text-transform: capitalize;
 `;
 
-export default function({ transformationName }: { transformationName: string }) {
+export default function({ transformationName, transformationLink }: { transformationName: string, transformationLink: string }) {
   return (
     <TransformationNameBox>
       <TransformationNameHeadWrapper>
@@ -64,13 +64,9 @@ export default function({ transformationName }: { transformationName: string }) 
         <TransformationNameText component="span" data-testid="selected-function-name">
           {transformationName}
         </TransformationNameText>
-        <Link
-          href="https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107767/Increment+variable+directive"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <InfoIconComponent />
-        </Link>
+        <a href={transformationLink} target="_blank">
+          <InfoIconComponent data-testid="info-link" />
+        </a>
       </TransformationNameTextInfoWrapper>
     </TransformationNameBox>
   );

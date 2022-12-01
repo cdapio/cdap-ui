@@ -36,8 +36,7 @@ describe('It should test the AddTransformatio Component', () => {
         transformationName={mockFunctionName}
         columnsList={mockColumnData}
         missingItemsList={undefined}
-        onCancel={jest.fn()}
-      />
+        onCancel={jest.fn()} transformationLink={''}      />
     );
 
     const selectColumnButton = screen.getAllByTestId('select-column-button');
@@ -52,8 +51,7 @@ describe('It should test the AddTransformatio Component', () => {
       transformationName={mockFunctionName}
       columnsList={mockColumnData}
       missingItemsList={undefined}
-      onCancel={jest.fn()}
-    />
+      onCancel={jest.fn()} transformationLink={''}    />
   );
 
   const selectColumnButton = screen.getAllByTestId('select-column-button');
@@ -76,8 +74,7 @@ it('Trigger handleApply() , closeSelectColumnsPopupWithoutColumn ', () => {
       transformationName={mockFunctionName}
       columnsList={mockColumnData}
       missingItemsList={undefined}
-      onCancel={jest.fn()}
-    />
+      onCancel={jest.fn()} transformationLink={''}    />
   );
 
   const selectColumnButton = screen.getAllByTestId('select-column-button');
