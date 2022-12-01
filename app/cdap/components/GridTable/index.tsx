@@ -47,6 +47,8 @@ import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 import Snackbar from 'components/Snackbar';
 import { applyDirectives, getAPIRequestPayload } from './services';
 import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
+import { NO_INPUT_REQUIRED_TRANSFORMATION } from 'components/GridTable/constants';
+import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/utils';
 
 const transformationOptions = ['undo', 'redo'];
 
@@ -80,6 +82,8 @@ export default function GridTable() {
     description: '',
     isSuccess: false,
   });
+  const [columnType, setColumnType] = useState('');
+  const [selectedColumn, setSelectedColumn] = useState('');
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -138,6 +142,11 @@ export default function GridTable() {
         setLoading(false);
         setGridData(response);
       });
+  };
+
+  const handleColumnSelect = (columnName) => {
+    setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
+    setColumnType(gridData?.types[columnName]);
   };
 
   useEffect(() => {
@@ -263,11 +272,18 @@ export default function GridTable() {
   }, [gridData]);
 
   const onMenuOptionSelection = (option: string, supportedDataType: string[], infoLink: string) => {
-    setAddTransformationFunction({
-      option,
-      supportedDataType,
-      infoLink,
-    });
+    if(selectedColumn){
+      if(NO_INPUT_REQUIRED_TRANSFORMATION.includes(option)){
+          const directive = getDirective(option, selectedColumn)
+          addDirectives(directive)
+      }
+    }else{
+      setAddTransformationFunction({
+        option,
+        supportedDataType,
+        infoLink,
+      });
+    }
   };
 
   const addDirectives = (directive: string) => {
@@ -303,6 +319,7 @@ export default function GridTable() {
           option: '',
           supportedDataType: [],
         });
+        setSelectedColumn('')
       },
       (error) => {
         setLoading(false);
@@ -315,6 +332,7 @@ export default function GridTable() {
           option: '',
           supportedDataType: [],
         });
+        setSelectedColumn('')
       }
     );
   };
@@ -325,7 +343,7 @@ export default function GridTable() {
       <ToolBarList
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
-        columnType={'string'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
+        columnType={columnType} // TODO: column type needs to be send dynamically after integrating with transfomations branch
         submitMenuOption={(option, datatype, infoLink) => {
           !transformationOptions.includes(option)
             ? onMenuOptionSelection(option, datatype, infoLink)
@@ -348,6 +366,8 @@ export default function GridTable() {
                     label={eachHeader.label}
                     types={eachHeader.type}
                     key={eachHeader.name}
+                    columnSelected={selectedColumn}
+                    setColumnSelected={handleColumnSelect}
                   />
                 ))}
             </TableRow>
