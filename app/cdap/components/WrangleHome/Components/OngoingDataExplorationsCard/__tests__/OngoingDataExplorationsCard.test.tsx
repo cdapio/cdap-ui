@@ -16,15 +16,15 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import OngoingDataExplorationCard from '../index';
-import { mockItems, mockItemsWithPercentage, mockItemsPercentageData } from '../mock/mock';
+import OngoingDataExplorationCard from 'components/WrangleHome/Components/OngoingDataExplorationsCard/index';
+import { mockItemsWithPercentage } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/mock/mock';
 
 describe('Test Ongoing Data Explrations Component', () => {
   it('Should render OngoingDataExplorationCard component', () => {
     render(
       <OngoingDataExplorationCard
-        explorationCardDetails={mockItemsWithPercentage[0]}
-        cardIndex={1}
+        explorationCardDetails={mockItemsWithPercentage}
+        cardIndex={1} 
       />
     );
     const ele = screen.getByTestId('ongoing-data-explorations-card-1');
