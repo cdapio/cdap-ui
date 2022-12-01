@@ -14,36 +14,43 @@
  * the License.
  */
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExplorations/index';
-import MyDataPrepApi from 'api/dataprep';
-import operators from 'rxjs/operators';
-import { Route, Router, Switch } from 'react-router';
-import { switchMapCallbackMock, getWorkspaceListSubscribeMock } from '../mock/mockoldData';
-import history from 'services/history';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import OngoingDataExploration from "components/WrangleHome/Components/OngoingDataExplorations/index";
+import MyDataPrepApi from "api/dataprep";
+import operators from "rxjs/operators";
+import { Route, Router, Switch } from "react-router";
+import {
+  switchMapCallbackMock,
+  getWorkspaceListSubscribeMock,
+} from "../mock/mockoldData";
+import history from "services/history";
 import {
   connectionListDummyResPostGresSql,
   connectionListDummyResFile,
-} from 'components/WrangleHome/Components/OngoingDataExplorations/mock/mock';
-import * as apiHelpers from 'components/Connections/Browser/SidePanel/apiHelpers';
+} from "components/WrangleHome/Components/OngoingDataExplorations/mock/mock";
+import * as apiHelpers from "components/Connections/Browser/SidePanel/apiHelpers";
 
 const testObj = {
-  connectionName: 'Upload',
-  workspaceName: 'Divami_Users_Emails.xlsx',
+  connectionName: "Upload",
+  workspaceName: "Divami_Users_Emails.xlsx",
   recipeSteps: 0,
   dataQuality: 100,
 };
 
-test('renders Ongoing Data Exploration component', async () => {
+test("renders Ongoing Data Exploration component", async () => {
   const dummyRes = new Map();
-  dummyRes.set('PostgreSql', connectionListDummyResPostGresSql);
-  dummyRes.set('File', connectionListDummyResFile);
-  jest.spyOn(apiHelpers, 'getCategorizedConnections').mockReturnValue(Promise.resolve(dummyRes));
-  jest.spyOn(operators as any, 'switchMap').mockImplementation((callback: Function) => {
-    callback(switchMapCallbackMock);
-  });
-  jest.spyOn(MyDataPrepApi, 'getWorkspaceList').mockImplementation(() => {
+  dummyRes.set("PostgreSql", connectionListDummyResPostGresSql);
+  dummyRes.set("File", connectionListDummyResFile);
+  jest
+    .spyOn(apiHelpers, "getCategorizedConnections")
+    .mockReturnValue(Promise.resolve(dummyRes));
+  jest
+    .spyOn(operators as any, "switchMap")
+    .mockImplementation((callback: Function) => {
+      callback(switchMapCallbackMock);
+    });
+  jest.spyOn(MyDataPrepApi, "getWorkspaceList").mockImplementation(() => {
     return {
       pipe: () => {
         return {
@@ -58,7 +65,12 @@ test('renders Ongoing Data Exploration component', async () => {
     <Router history={history}>
       <Switch>
         <Route>
-          <OngoingDataExploration />
+          <OngoingDataExploration
+            fromAddress={"Abhilash"}
+            cardCount={69}
+            setLoading={jest.fn()}
+            setShowExplorations={jest.fn()}
+          />
         </Route>
       </Switch>
     </Router>

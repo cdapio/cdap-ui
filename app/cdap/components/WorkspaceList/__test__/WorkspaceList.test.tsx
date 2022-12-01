@@ -48,7 +48,7 @@ describe('Test the Workspace List Component', () => {
   it('Should should have Workspaces Label in Breadcrumb', () => {
     const BreadcrumbLabelElement = screen.getByTestId(/breadcrumb-label-workspaces/i);
 
-    expect(BreadcrumbLabelElement).toHaveClass('MuiTypography-root');
+    expect(BreadcrumbLabelElement).toHaveClass('MuiBox-root');
 
     expect(BreadcrumbLabelElement).toHaveTextContent(
       'features.WranglerNewUI.Breadcrumb.labels.workSpaces'
@@ -58,7 +58,7 @@ describe('Test the Workspace List Component', () => {
   it('Should expect correct text as expected inside link', () => {
     const linkElement = screen.getByTestId(/link-type-wrangle-home/i);
 
-    expect(linkElement).toHaveClass('MuiTypography-root');
+    expect(linkElement).toHaveClass('MuiBox-root');
 
     expect(linkElement).toHaveTextContent(
       `${T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}`
