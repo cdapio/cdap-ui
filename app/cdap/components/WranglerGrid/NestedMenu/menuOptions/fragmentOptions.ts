@@ -27,16 +27,19 @@ export const FRAGMENT_OPTIONS = [
         value: 'delimited-text',
         label: T.translate(`${PREFIX}.explodeOptions.delimitedText`).toString(),
         supportedDataType: ['all'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042372/Split+to+Rows'
       },
       {
         value: 'array-flattening',
         label: T.translate(`${PREFIX}.explodeOptions.arrayByFlattening`).toString(),
         supportedDataType: ['all'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042221/Flatten'
       },
       {
         value: 'record-flattening',
         label: T.translate(`${PREFIX}.explodeOptions.recordByFlattening`).toString(),
         supportedDataType: ['all'],
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042221/Flatten+directive'
       },
     ],
     supportedDataType: ['all'],
