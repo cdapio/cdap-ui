@@ -65,6 +65,7 @@ export interface IStatistics {
 export interface IAddTransformationItem {
   option: string;
   supportedDataType: string[];
+  infoLink: string;
 }
 
 export interface IRequestBody {
