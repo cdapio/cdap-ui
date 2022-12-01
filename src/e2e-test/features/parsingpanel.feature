@@ -19,7 +19,7 @@ Feature: ParsingPanel
 
   @ParsingPanel
   Scenario Outline: Go through the parsing panel functionality
-    Given Navigate to the Home Page
+    Given Navigate to the Home Page to test parsing
     Then Click on the Connector type card "<type>"
     Then Click on the Wrangle button "<finalTab>" and "<finalFile>"
     Then Verify if grid page is displayed

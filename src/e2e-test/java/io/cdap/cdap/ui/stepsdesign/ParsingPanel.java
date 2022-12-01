@@ -14,8 +14,8 @@ import org.openqa.selenium.WebElement;
 
 
 public class ParsingPanel {
-    @Given("Navigate to the Home Page")
-    public void navigateToTheHomePage() {
+    @Given("Navigate to the Home Page to test parsing")
+    public void navigateToTheHomePageToTestParsing() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
