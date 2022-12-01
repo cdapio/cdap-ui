@@ -37,6 +37,7 @@ export interface IMenuItem {
   toolName?: string;
   open?: boolean;
   directive?: (string, ITransformationComponentValues?) => string;
+  infoLink?: string;
 }
 
 export interface IMenuItemComponentProps {

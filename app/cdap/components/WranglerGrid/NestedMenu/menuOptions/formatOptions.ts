@@ -26,18 +26,21 @@ export const FORMAT_OPTIONS: IMenuItem[] = [
     label: `${T.translate(`${PREFIX}.uppercase`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `uppercase :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074887/Change+Case+directive'
   },
   {
     value: 'lowercase',
     label: `${T.translate(`${PREFIX}.lowercase`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `lowercase :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074887/Change+Case+directive'
   },
   {
     value: 'titlecase',
     label: `${T.translate(`${PREFIX}.titlecase`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `titlecase :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074887/Change+Case+directive'
   },
   {
     value: 'concatenate',
@@ -56,24 +59,28 @@ export const FORMAT_OPTIONS: IMenuItem[] = [
         ? `set-column :${transformationComponentValues.copyColumnName} ${value}`
         : `set-column :${selectedColumn} ${value}`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107931/Set+Column'
   },
   {
     value: 'trim-whitespace',
     label: `${T.translate(`${PREFIX}.trim`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `trim :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042441/Trimming+Spaces+directive'
   },
   {
     value: 'trim-leading-whitespace',
     label: `${T.translate(`${PREFIX}.ltrim`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `ltrim :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042441/Trimming+Spaces+directive'
   },
   {
     value: 'trim-trailing-whitespace',
     label: `${T.translate(`${PREFIX}.rtrim`).toString()}`,
     supportedDataType: ['string'],
     directive: (selectedColumn: string) => `rtrim :${selectedColumn}`,
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042441/Trimming+Spaces+directive'
   },
   {
     value: 'dateTime',
@@ -89,6 +96,7 @@ export const FORMAT_OPTIONS: IMenuItem[] = [
           : transformationComponentValues.radioOption
       }`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140525/Format+Date+directive'
   },
   {
     value: 'dateTimeAsString',
@@ -104,5 +112,6 @@ export const FORMAT_OPTIONS: IMenuItem[] = [
           : transformationComponentValues.radioOption
       }`;
     },
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/1124401299/Format+Datetime+directive'
   },
 ];
