@@ -31,5 +31,6 @@ export const MENU_OPTIONS: IMenuItem[] = [
     value: 'filter',
     label: T.translate(`${PREFIX}.menu.filter`).toString(),
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/391610418/Filter+Row+directive',
   },
 ];
