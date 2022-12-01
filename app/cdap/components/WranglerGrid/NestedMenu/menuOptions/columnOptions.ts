@@ -20,17 +20,20 @@ const PREFIX = 'features.WranglerNewUI.GridPage.transformations.options.labels.c
 export const COLUMN_OPTIONS = [
   {
     value: 'rename',
-    label: T.translate(`${PREFIX}.rename`).toString(),
+    label: `${T.translate(`${PREFIX}.rename`)}`,
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107917/Rename'
   },
   {
     value: 'join-columns',
-    label: T.translate(`${PREFIX}.joinTwoColumn`).toString(),
+    label: `${T.translate(`${PREFIX}.joinTwoColumn`)}`,
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140577/Merge'
   },
   {
     value: 'swap-columns',
-    label: T.translate(`${PREFIX}.swapTwoColumn`).toString(),
+    label: `${T.translate(`${PREFIX}.swapTwoColumn`)}`,
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140743/Swap'
   },
 ];
