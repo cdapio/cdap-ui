@@ -21,21 +21,24 @@ export const COLUMN_OPTIONS = [
     value: 'copyColumn',
     label: T.translate(
       'features.WranglerNewUI.GridPage.transformations.options.labels.column.copyColumn'
-    ),
+    ).toString(),
     supportedDataType: [T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all')],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/381976593/Copy+directive',
   },
   {
     value: 'delete',
     label: T.translate(
       'features.WranglerNewUI.GridPage.transformations.options.labels.column.deletecolumn'
-    ),
+    ).toString(),
     supportedDataType: [T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all')],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042167/Drop+directive',
   },
   {
     value: 'keep',
     label: T.translate(
       'features.WranglerNewUI.GridPage.transformations.options.labels.column.keepColumn'
-    ),
+    ).toString(),
     supportedDataType: [T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all')],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074988/Keep',
   },
 ];

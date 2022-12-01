@@ -17,11 +17,27 @@
 import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/utils';
 
 describe('It should test getDirective function', () => {
+  const mockTransformationComponentValues = {
+    copyColumnName: 'body_8',
+    columnNames: ['body_0', 'body_1', 'body_2', 'body_3', 'body_4', 'body_5'],
+  };
+
+  const mockSelectedColumns = [
+    {
+      name: 'body_0',
+      label: 'body_0',
+      type: ['String'],
+    },
+  ];
   it('should call getDirective() when there is error in function name', () => {
-    expect(getDirective('', 'body_0')).toStrictEqual(null);
+    expect(
+      getDirective('', 'body_0', mockTransformationComponentValues, mockSelectedColumns)
+    ).toStrictEqual(null);
   });
 
   it('should call getDirective() when function name is string .', () => {
-    expect(getDirective('string', 'body_0')).toStrictEqual(`set-type :body_0 string`);
+    expect(
+      getDirective('string', 'body_0', mockTransformationComponentValues, mockSelectedColumns)
+    ).toStrictEqual(`set-type :body_0 string`);
   });
 });

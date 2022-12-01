@@ -37,6 +37,7 @@ describe('It should test the AddTransformatio Component', () => {
         columnsList={mockColumnData}
         missingItemsList={undefined}
         onCancel={jest.fn()}
+        transformationLink={''}
       />
     );
 
@@ -53,6 +54,7 @@ describe('It should test the AddTransformatio Component', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={''}
     />
   );
 
@@ -77,6 +79,7 @@ it('Trigger handleApply() , closeSelectColumnsPopupWithoutColumn ', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={''}
     />
   );
 

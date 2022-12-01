@@ -31,7 +31,10 @@ import { AddTransformationButton } from 'components/common/ButtonWidget';
 import FunctionNameWidget from 'components/WranglerGrid/AddTransformationPanel/FunctionNameWidget';
 import SelectColumnsWidget from 'components/WranglerGrid/AddTransformationPanel/SelectColumnsWidget';
 import SelectedColumnCountWidget from 'components/WranglerGrid/SelectColumnPanel/CountWidget';
-import { getDirective, applyButtonEnabled } from 'components/WranglerGrid/AddTransformationPanel/utils';
+import {
+  getDirective,
+  applyButtonEnabled,
+} from 'components/WranglerGrid/AddTransformationPanel/utils';
 import { Box, Divider } from '@material-ui/core';
 import styled from 'styled-components';
 import { enableDoneButton } from 'components/WranglerGrid/SelectColumnPanel/utils';
@@ -61,6 +64,7 @@ export default function({
   missingItemsList,
   onCancel,
   applyTransformation,
+  transformationLink,
 }: IAddTransformationProps) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [columnsPopup, setColumnsPopup] = useState<boolean>(false);
@@ -128,7 +132,10 @@ export default function({
                 <SelectedColumnCountWidget selectedColumnsCount={selectedColumns?.length} />
               </CountWidgetWrapper>
               <Divider />
-              <FunctionNameWidget transformationName={transformationName} />
+              <FunctionNameWidget
+                transformationName={transformationName}
+                transformationLink={transformationLink}
+              />
               <SelectColumnsWidget
                 handleSelectColumn={handleSelectColumn}
                 selectedColumns={selectedColumns}
@@ -149,7 +156,11 @@ export default function({
               )}
             </AddTransformationBodyWrapper>
             <AddTransformationButton
-              disabled={applyButtonEnabled(transformationName, transformationComponentValues, selectedColumns)}
+              disabled={applyButtonEnabled(
+                transformationName,
+                transformationComponentValues,
+                selectedColumns
+              )}
               color="primary"
               data-testid="apply-step-button"
               onClick={handleApply}
