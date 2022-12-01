@@ -17,13 +17,31 @@
 import { Box, Tooltip, TooltipProps } from '@material-ui/core';
 import * as React from 'react';
 import { useStyles } from './styles';
+import styled from 'styled-components';
+import T from 'i18n-react';
+
+const TooltipStyle = styled(Box)`
+  width: 100%;
+`;
+
+const TooltipUnsetStyle = styled(Box)`
+  width: unset;
+`;
+
+const getWrapperComponent = (tooltipText) => {
+  return tooltipText ? TooltipUnsetStyle : TooltipStyle;
+};
 
 export default function CustomTooltip(props: TooltipProps) {
   const classes = useStyles();
+  const TooltipWrapperComponent = getWrapperComponent(
+    props.title ===
+      T.translate('features.WranglerNewUI.FooterPanel.labels.columnViewPanel').toString()
+  );
 
   return (
-    <Box data-testid="tooltip-parent" className={classes.forEachTabLabelWidth}>
+    <TooltipWrapperComponent data-testid="tooltip-parent">
       <Tooltip arrow classes={classes} {...props} />
-    </Box>
+    </TooltipWrapperComponent>
   );
 }

@@ -14,4 +14,19 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+import T from 'i18n-react';
+
+export const headerData = [
+  {
+    textId: 'serial-no',
+    text: '#',
+  },
+  {
+    textId: 'recipe-steps',
+    text: T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'),
+  },
+  {
+    textId: '',
+    text: '',
+  },
+];

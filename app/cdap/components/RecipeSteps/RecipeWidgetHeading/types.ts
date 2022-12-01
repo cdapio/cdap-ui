@@ -14,4 +14,8 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+import React from 'react';
+
+export interface IDrawerWidgetHeadingProps {
+  headingText: React.ReactNode;
+}

@@ -14,4 +14,9 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+export interface IRecipeStepsProps {
+  setShowRecipePanel: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteRecipes: (new_arr: string[], remaining_arr: string[]) => void;
+}
+
+export interface IRecipeSteps {}

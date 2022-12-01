@@ -14,4 +14,7 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+export interface IRecipeStepTableProps {
+  recipeSteps: string[];
+  handleDeleteRecipeSteps: (new_arr: string[], remaining_arr: string[]) => void;
+}

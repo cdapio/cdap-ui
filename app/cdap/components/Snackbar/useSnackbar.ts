@@ -31,6 +31,7 @@ export default function() {
         })),
       5000
     );
+
     return () => {
       setSnackbar(() => ({
         open: false,

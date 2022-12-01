@@ -14,4 +14,32 @@
  * the License.
  */
 
-export const MISSING_NULL = 'Missing/Null';
+export const initialGridTableState = {
+  directivePanelIsOpen: false,
+  tableMetaInfo: {
+    columnCount: 0,
+    rowCount: 0,
+  },
+};
+
+enum IGridTableActions {
+  IS_DIRECTIVE_PANEL_OPEN,
+  TABLE_META_INFO,
+}
+
+export const reducer = (state, action) => {
+  switch (action.type) {
+    case IGridTableActions.IS_DIRECTIVE_PANEL_OPEN:
+      return {
+        ...state,
+        directivePanelIsOpen: action.payload,
+      };
+    case IGridTableActions.TABLE_META_INFO:
+      return {
+        ...state,
+        tableMetaInfo: action.payload,
+      };
+    default:
+      return state;
+  }
+};

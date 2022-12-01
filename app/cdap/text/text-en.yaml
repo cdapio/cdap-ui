@@ -3433,6 +3433,41 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    FooterPanel:
+      labels:
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        directives: Directives
+        recipeSteps: Recipe Steps
+        zoomPercent100: 100%
+    NoRecordScreen:
+      gridTable:
+        title: No rows left in this sample
+        subtitle: Remove some recipe steps to view some data
+    GridPage:
+      directivePanel:
+        moreInfoOnDirective: More info to this directive
+        usage: Usage
+        inputDirective: Input a directive
+    Snackbar:
+      labels:
+        datasetSuccess: Dataset loaded successfully 
+        failure: Failure
+        retrieveFailure: Failed to retrieve sample data for
+        sampleFailure: Failed to retrieve sample data
+        success: Success
+        undo: Undo
+        workspaceFailure: Failed to create workspace for
+    WranglerNewRecipeSteps:
+      labels:
+        recipe: Recipe
+        recipeSteps: Recipe steps
+        recipeCount: Recipe count
+      startWrangleTitle: Start Wrangling your data
+      startWrangleSubTitle: Select a column or function to add your first recipe step
+    WranglerParsingPanelDrawerWidget:
+      labels:
+        parsing: Parsing
     AddConnections:
       referenceLabel: Add Connection
     Breadcrumb:
@@ -3461,13 +3496,4 @@ features:
           title: Continue ongoing data explorations, pick up where you left off
     ImportData:
       referenceLabel: Import Data
-    NoRecordScreen:
-      gridTable:
-        subtitle: Remove some recipe steps to view some data
-        title: No rows left in this sample
-    Snackbar:
-      labels:
-        failure: Failure
-        success: Success
-        undo: Undo
 ...
