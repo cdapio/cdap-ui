@@ -342,7 +342,7 @@ export default function GridTable() {
         <Table aria-label="simple table" className="test">
           <TableHead>
             <TableRow>
-              {headersNamesList?.length &&
+              {headersNamesList && headersNamesList.length > 0 &&
                 headersNamesList.map((eachHeader) => (
                   <GridHeaderCell
                     label={eachHeader.label}
