@@ -30,6 +30,7 @@ describe('Testing render TransformationToolbar component', () => {
           jest.fn();
         }}
         showBreadCrumb={false}
+        disableToolbarIcon={false}
       />
     );
   });

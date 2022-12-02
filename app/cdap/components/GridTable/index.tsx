@@ -44,9 +44,9 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
-import AddTransformation from 'components/WranglerGrid/AddTransformationPanel';
 import Snackbar from 'components/Snackbar';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
+import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
 
 const transformationOptions = ['undo', 'redo'];
 
@@ -61,6 +61,7 @@ export default function GridTable() {
   >({
     option: '',
     supportedDataType: [],
+    infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
   const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
@@ -262,10 +263,11 @@ export default function GridTable() {
   }, [gridData]);
 
   // ------------@onMenuOptionSelection Function is used to set option selected from toolbar and then calling of execute API
-  const onMenuOptionSelection = (option: string, supportedDataType: string[]) => {
+  const onMenuOptionSelection = (option: string, supportedDataType: string[], infoLink: string) => {
     setAddTransformationFunction({
       option,
       supportedDataType,
+      infoLink,
     });
   };
 
@@ -301,6 +303,7 @@ export default function GridTable() {
         setAddTransformationFunction({
           option: '',
           supportedDataType: [],
+          infoLink: '',
         });
       },
       (error) => {
@@ -313,6 +316,7 @@ export default function GridTable() {
         setAddTransformationFunction({
           option: '',
           supportedDataType: [],
+          infoLink: '',
         });
       }
     );
@@ -324,10 +328,13 @@ export default function GridTable() {
       <ToolBarList
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
-        columnType={'int'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
-        submitMenuOption={(option, datatype) => {
-          !transformationOptions.includes(option) ? onMenuOptionSelection(option, datatype) : null;
+        columnType={'string'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
+        submitMenuOption={(option, datatype, infoLink) => {
+          !transformationOptions.includes(option)
+            ? onMenuOptionSelection(option, datatype, infoLink)
+            : null;
         }}
+        disableToolbarIcon={gridData?.headers?.length === 0 ? true : false}
       />
 
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
@@ -380,7 +387,7 @@ export default function GridTable() {
         </Table>
       )}
       {addTransformationFunction.option && (
-        <AddTransformation
+        <AddTransformationPanel
           transformationName={addTransformationFunction.option}
           transformationDataType={addTransformationFunction.supportedDataType}
           columnsList={headersNamesList}
@@ -389,11 +396,13 @@ export default function GridTable() {
             setAddTransformationFunction({
               option: '',
               supportedDataType: [],
+              infoLink: '',
             });
           }}
           applyTransformation={(directive: string) => {
             addDirectives(directive);
           }}
+          transformationLink={addTransformationFunction.infoLink}
         />
       )}
       {snackbarIsOpen && (

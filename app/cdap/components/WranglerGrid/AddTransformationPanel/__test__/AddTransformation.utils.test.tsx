@@ -16,12 +16,46 @@
 
 import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/utils';
 
-describe('It should test getDirective function', () => {
+describe('It should test utils function.', () => {
   it('should call getDirective() when there is error in function name', () => {
-    expect(getDirective('', 'body_0')).toStrictEqual(null);
+    expect(
+      getDirective('', 'body_0', {
+        exactMatch: false,
+        findPreviousValue: 'directive',
+        findReplaceValue: 'recipe',
+        ignoreCase: true,
+      })
+    ).toStrictEqual(null);
   });
 
   it('should call getDirective() when function name is string .', () => {
-    expect(getDirective('string', 'body_0')).toStrictEqual(`set-type :body_0 string`);
+    expect(
+      getDirective('string', 'body_0', {
+        exactMatch: false,
+        findPreviousValue: 'directive',
+        findReplaceValue: 'recipe',
+        ignoreCase: true,
+      })
+    ).toStrictEqual('set-type :body_0 string');
+  });
+  it('should call getDirective() when function name is find-and-replace .', () => {
+    expect(
+      getDirective('find-and-replace', 'body_0', {
+        exactMatch: false,
+        findPreviousValue: 'directive',
+        findReplaceValue: 'recipe',
+        ignoreCase: true,
+      })
+    ).toStrictEqual('find-and-replace :body_0 s/directive/recipe/Ig');
+  });
+  it('should call getDirective() when function name is find-and-replace ,exact match is true and ingnore case is false .', () => {
+    expect(
+      getDirective('find-and-replace', 'body_0', {
+        exactMatch: true,
+        findPreviousValue: 'directive',
+        findReplaceValue: 'recipe',
+        ignoreCase: false,
+      })
+    ).toStrictEqual('find-and-replace :body_0 s/^directive$/recipe/g');
   });
 });

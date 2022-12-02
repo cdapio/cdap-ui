@@ -31,5 +31,6 @@ export const MENU_OPTIONS: IMenuItem[] = [
     value: 'find-and-replace',
     label: 'Find and replace',
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107735/Find+and+Replace',
   },
 ];

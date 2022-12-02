@@ -49,7 +49,13 @@ const TransformationNameText = styled(SubHeadNormalFont)`
   text-transform: capitalize;
 `;
 
-export default function({ transformationName }: { transformationName: string }) {
+export default function({
+  transformationName,
+  transformationLink,
+}: {
+  transformationName: string;
+  transformationLink: string;
+}) {
   const [transformedFunctionName, setTransformedFunctionName] = useState('');
   const getTransformedName = (transformationName: string) => {
     const finalName = transformationName.split('-').join(' ');
@@ -72,7 +78,9 @@ export default function({ transformationName }: { transformationName: string }) 
         <TransformationNameText component="span" data-testid="selected-function-name">
           {transformedFunctionName}
         </TransformationNameText>
-        <InfoIconComponent data-testid="info-link" />
+        <a href={transformationLink} target="_blank">
+          <InfoIconComponent data-testid="info-link" />
+        </a>
       </TransformationNameTextInfoWrapper>
     </TransformationNameBox>
   );
