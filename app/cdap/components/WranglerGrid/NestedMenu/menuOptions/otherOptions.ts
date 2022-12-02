@@ -23,5 +23,6 @@ export const OTHER_OPTIONS = [
     value: 'define-variable',
     label: T.translate(`${PREFIX}.defineVariable`).toString(),
     supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382140645/Set+variable',
   },
 ];
