@@ -16,7 +16,7 @@
 
 import { Container } from '@material-ui/core';
 import DataPrepStore from 'components/DataPrep/store';
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import RecipeHeaderActionTemplate from 'components/RecipeSteps/RecipeHeaderActionTemplate';
 import RecipeStepsEmptyScreen from 'components/RecipeSteps/RecipeStepsEmptyScreen';
 import RecipeStepsTableComponent from 'components/RecipeSteps/RecipeStepsTableComponent';
@@ -30,7 +30,7 @@ const RecipeStepsBody = styled(Container)`
   padding: 0px;
 `;
 
-export default function({ setShowRecipePanel, deleteRecipes }: IRecipeStepsProps) {
+export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStepsProps) {
   const [recipeSteps, setRecipeSteps] = useState<string[]>([]);
 
   const { dataprep } = DataPrepStore.getState();
@@ -43,12 +43,12 @@ export default function({ setShowRecipePanel, deleteRecipes }: IRecipeStepsProps
     setShowRecipePanel(false);
   };
 
-  const handleDeleteRecipeSteps = (new_arr, remaining_arr) => {
-    deleteRecipes(new_arr, remaining_arr);
-  };
+  if (!(Array.isArray(recipeSteps) && recipeSteps.length)) {
+    return <RecipeStepsEmptyScreen />;
+  }
 
   return (
-    <Fragment>
+    <>
       <RecipeStepWidget
         headingText={T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipe')}
         onClose={closeClickHandler}
@@ -56,18 +56,12 @@ export default function({ setShowRecipePanel, deleteRecipes }: IRecipeStepsProps
         headerActionTemplate={<RecipeHeaderActionTemplate />}
       >
         <RecipeStepsBody>
-          {Array.isArray(recipeSteps) && recipeSteps.length ? (
-            <>
-              <RecipeStepsTableComponent
-                recipeSteps={recipeSteps}
-                handleDeleteRecipeSteps={handleDeleteRecipeSteps}
-              />
-            </>
-          ) : (
-            <RecipeStepsEmptyScreen />
-          )}
+          <RecipeStepsTableComponent
+            recipeSteps={recipeSteps}
+            onDeleteRecipeSteps={onDeleteRecipeSteps}
+          />
         </RecipeStepsBody>
       </RecipeStepWidget>
-    </Fragment>
+    </>
   );
 }

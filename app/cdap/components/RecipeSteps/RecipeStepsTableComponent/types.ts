@@ -16,5 +16,5 @@
 
 export interface IRecipeStepTableProps {
   recipeSteps: string[];
-  handleDeleteRecipeSteps: (new_arr: string[], remaining_arr: string[]) => void;
+  onDeleteRecipeSteps: (newRecipeStepList: string[], removedRecipeStepList: string[]) => void;
 }

@@ -95,8 +95,6 @@ export default function GridTable() {
   ]);
   const [snackbarState, setSnackbar] = useSnackbar();
 
-  useEffect(() => {}, []);
-
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
     setLoading(true);
@@ -346,14 +344,15 @@ export default function GridTable() {
     }
   }, [snackbarState]);
 
-  const applyDirectiveAPICall = (newDirective, action, removed_arr, from) => {
+  const applyDirectiveAPICall = (newDirectiveList, action, removedDirectiveList, from) => {
     setLoading(true);
     const { dataprep } = DataPrepStore.getState();
     const { workspaceId, workspaceUri, directives, insights } = dataprep;
     let gridParams = {};
-    const updatedDirectives = action === 'add' ? directives.concat(newDirective) : newDirective;
+    const updatedDirectives =
+      action === 'add' ? directives.concat(newDirectiveList) : newDirectiveList;
     const requestBody = directiveRequestBodyCreator(updatedDirectives);
-    const arr = JSON.parse(JSON.stringify(newDirective));
+    const arr = JSON.parse(JSON.stringify(newDirectiveList));
     requestBody.insights = insights;
 
     const workspaceInfo = {
@@ -393,7 +392,7 @@ export default function GridTable() {
               ? `Transformation ${arr} successfully added`
               : from === 'undo' || arr?.length === 0
               ? 'Transformation successfully deleted'
-              : `${removed_arr?.length} transformation successfully deleted from ${
+              : `${removedDirectiveList?.length} transformation successfully deleted from ${
                   arr[arr.length - 1]
                 }`,
         });
@@ -402,7 +401,7 @@ export default function GridTable() {
         setSnackbar({
           open: true,
           isSuccess: false,
-          message: `Failed to transform ${newDirective}`,
+          message: `Failed to transform ${newDirectiveList}`,
         });
         setLoading(false);
         setShowRecipePanel(false);
@@ -410,8 +409,8 @@ export default function GridTable() {
     );
   };
 
-  const deleteRecipes = (new_arr, remaining_arr) => {
-    applyDirectiveAPICall(new_arr, 'delete', remaining_arr, 'panel');
+  const onDeleteRecipeSteps = (newRecipeStepList, removedRecipeStepList) => {
+    applyDirectiveAPICall(newRecipeStepList, 'delete', removedRecipeStepList, 'panel');
     DataPrepStore.dispatch({
       type: DataPrepActions.setUndoDirective,
       payload: {
@@ -490,7 +489,7 @@ export default function GridTable() {
             <RecipeSteps
               showRecipePanel={showRecipePanel}
               setShowRecipePanel={setShowRecipePanel}
-              deleteRecipes={deleteRecipes}
+              onDeleteRecipeSteps={onDeleteRecipeSteps}
             />
           </RecipeStepPanel>
         )}

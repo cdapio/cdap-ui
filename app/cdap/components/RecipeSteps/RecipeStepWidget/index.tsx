@@ -16,7 +16,7 @@
 
 import { Box, IconButton } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import React, { Fragment, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 import RecipeWidgetHeading from 'components/RecipeSteps/RecipeWidgetHeading';
@@ -93,7 +93,7 @@ export default function({ headingText, onClose, showDivider, headerActionTemplat
           </CloseButtonStyle>
         </HeaderIconWrapper>
       </HeaderStyle>
-      <Fragment>{children}</Fragment>
+      <>{children}</>
     </DrawerContainerStyle>
   );
 }

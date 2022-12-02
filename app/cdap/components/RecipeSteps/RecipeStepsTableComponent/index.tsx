@@ -107,12 +107,9 @@ const RecipeStepLabel = styled(Typography)`
   color: #616161;
 `;
 
-export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTableProps) {
-  const handleDelete = (i) => {
-    handleDeleteRecipeSteps(
-      recipeSteps.filter((x, index) => index < i),
-      recipeSteps.filter((x, index) => index >= i)
-    );
+export default function({ recipeSteps, onDeleteRecipeSteps }: IRecipeStepTableProps) {
+  const onDelete = (i) => {
+    onDeleteRecipeSteps(recipeSteps.slice(0, i), recipeSteps.slice(i));
   };
 
   return (
@@ -145,7 +142,7 @@ export default function({ recipeSteps, handleDeleteRecipeSteps }: IRecipeStepTab
               </RecipeStepsBodyTableCell>
               <RecipeStepsTableRowStyle data-testid={`recipe-step-row-${eachStepIndex}-delete`}>
                 <RecipeStepsDeleteStyle
-                  onClick={() => handleDelete(eachStepIndex)}
+                  onClick={() => onDelete(eachStepIndex)}
                   data-testid={`recipe-step-${eachStepIndex}-delete`}
                 >
                   <StyledDeleteOutlineOutlinedIcon />

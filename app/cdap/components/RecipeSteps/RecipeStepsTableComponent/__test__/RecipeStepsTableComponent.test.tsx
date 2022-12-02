@@ -27,10 +27,7 @@ describe('It should test the Recipe Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeStepsTableComponent
-              recipeSteps={mockRecipe}
-              handleDeleteRecipeSteps={undefined}
-            />
+            <RecipeStepsTableComponent recipeSteps={mockRecipe} onDeleteRecipeSteps={undefined} />
           </Route>
         </Switch>
       </Router>
@@ -44,10 +41,7 @@ describe('It should test the Recipe Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeStepsTableComponent
-              recipeSteps={mockRecipe}
-              handleDeleteRecipeSteps={jest.fn()}
-            />
+            <RecipeStepsTableComponent recipeSteps={mockRecipe} onDeleteRecipeSteps={jest.fn()} />
           </Route>
         </Switch>
       </Router>
