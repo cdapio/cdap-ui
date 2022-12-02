@@ -28,9 +28,24 @@ import {
 import React from 'react';
 import { IRecipeStepTableProps } from 'components/RecipeSteps/RecipeStepsTableComponent/types';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineRounded';
-import { headerData } from 'components/RecipeSteps/RecipeStepsTableComponent/utils';
 import styled from 'styled-components';
 import { grey } from '@material-ui/core/colors';
+import T from 'i18n-react';
+
+const headerData = [
+  {
+    textId: 'serial-no',
+    text: '#',
+  },
+  {
+    textId: 'recipe-steps',
+    text: T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'),
+  },
+  {
+    textId: '',
+    text: '',
+  },
+];
 
 const RecipeStepsTableRow = styled(TableRow)`
   font-style: normal;
@@ -108,8 +123,8 @@ const RecipeStepLabel = styled(Typography)`
 `;
 
 export default function({ recipeSteps, onDeleteRecipeSteps }: IRecipeStepTableProps) {
-  const onDelete = (i) => {
-    onDeleteRecipeSteps(recipeSteps.slice(0, i), recipeSteps.slice(i));
+  const onDelete = (recipeStepIndex: number) => {
+    onDeleteRecipeSteps(recipeSteps.slice(0, recipeStepIndex), recipeSteps.slice(recipeStepIndex));
   };
 
   return (

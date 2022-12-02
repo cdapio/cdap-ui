@@ -14,9 +14,9 @@
  * the License.
  */
 
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { ReactNode } from 'react';
 import RecipeWidgetHeading from 'components/RecipeSteps/RecipeWidgetHeading';
@@ -73,8 +73,6 @@ const HeaderIconWrapper = styled(Box)`
 `;
 
 export default function({ headingText, onClose, showDivider, headerActionTemplate, children }) {
-  const ref = useRef(null);
-
   return (
     <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>
@@ -82,7 +80,7 @@ export default function({ headingText, onClose, showDivider, headerActionTemplat
           <RecipeWidgetHeading headingText={headingText} />
         </HeaderTextWithBackIcon>
         <HeaderIconWrapper>
-          {headerActionTemplate && <div>{headerActionTemplate}</div>}
+          {headerActionTemplate && <Typography component="div">{headerActionTemplate}</Typography>}
           {showDivider && <Divider />}
           <CloseButtonStyle
             data-testid="drawer-widget-close-round-icon"
