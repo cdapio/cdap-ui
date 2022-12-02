@@ -29,6 +29,8 @@ export const FRAGMENT_OPTIONS = [
           'features.WranglerNewUI.GridPage.transformations.options.labels.fragment.usingPatterns'
         ).toString(),
         supportedDataType: ['string'],
+        infoLink:
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074940/Extract+Regex+Groups',
       },
       {
         value: 'extract-using-delimiters',
@@ -36,6 +38,8 @@ export const FRAGMENT_OPTIONS = [
           'features.WranglerNewUI.GridPage.transformations.options.labels.fragment.usingDelimiters'
         ).toString(),
         supportedDataType: ['all'],
+        infoLink:
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074940/Extract+Regex+Groups',
       },
       {
         value: 'extract-using-positions',
@@ -43,6 +47,8 @@ export const FRAGMENT_OPTIONS = [
           'features.WranglerNewUI.GridPage.transformations.options.labels.fragment.usingPositions'
         ).toString(),
         supportedDataType: ['all'],
+        infoLink:
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074940/Extract+Regex+Groups',
       },
     ],
     supportedDataType: ['all'],

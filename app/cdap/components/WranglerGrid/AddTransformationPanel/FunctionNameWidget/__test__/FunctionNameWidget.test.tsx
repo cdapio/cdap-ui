@@ -20,12 +20,14 @@ import FunctionNameWidget from 'components/WranglerGrid/AddTransformationPanel/F
 
 describe('It should test FunctionNameWidget Component', () => {
   it('Should render the FunctionNameWidget Component', () => {
-    const container = render(<FunctionNameWidget transformationName={'uppercase'} />);
+    const container = render(
+      <FunctionNameWidget transformationName={'uppercase'} transformationLink={''} />
+    );
     expect(container).toBeDefined();
   });
 
   it('Should have text content as uppercase', () => {
-    render(<FunctionNameWidget transformationName={'uppercase'} />);
+    render(<FunctionNameWidget transformationName={'uppercase'} transformationLink={''} />);
     const functionNameElement = screen.getByTestId('selected-function-name');
     expect(functionNameElement).toHaveTextContent('uppercase');
   });
