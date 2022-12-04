@@ -25,8 +25,13 @@ import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 
 public class Zoom {
+    WebElement ele;
+    String prev;
+    String zoomIn;
+    String zoomOut;
     @Given("Navigate to the Home Page for Zoom")
     public void navigateToTheHomePageForZoom() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
@@ -75,7 +80,6 @@ public class Zoom {
         try {
             WaitHelper.waitForPageToLoad();
             Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId("footer-panel-zoom-tab")));
-            System.out.println("Zoom Element is displayed");
         } catch (Exception e) {
             System.err.println("error" + e);
         }
@@ -85,6 +89,8 @@ public class Zoom {
     public void clickOnTheZoom() {
         try {
             WaitHelper.waitForPageToLoad();
+              ele = Helper.locateElementByTestId("footer-panel-zoom-tab");
+              prev = ele.getText();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-zoom-tab"));
         } catch (Exception e) {
             System.err.println("error" + e);
@@ -95,7 +101,10 @@ public class Zoom {
     public void clickOnTheIncreasingZoomElement() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("zoom-list-menu-item-6"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("zoom-list-menu-item-2"));
+            ele = Helper.locateElementByTestId("footer-panel-zoom-tab");
+            zoomIn = ele.getText();
+            Assert.assertNotEquals(prev,zoomIn);
         } catch (Exception e) {
             System.err.println("error" + e);
         }
@@ -105,7 +114,10 @@ public class Zoom {
     public void clickOnTheDecreasingZoomElement() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("zoom-list-menu-item-0"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("zoom-list-menu-item-6"));
+            ele = Helper.locateElementByTestId("footer-panel-zoom-tab");
+            zoomOut = ele.getText();
+            Assert.assertNotEquals(zoomIn,zoomOut);
         } catch (Exception e) {
             System.err.println("error" + e);
         }
