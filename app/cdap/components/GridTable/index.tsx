@@ -487,7 +487,6 @@ export default function GridTable() {
         {showRecipePanel && (
           <RecipeStepPanel>
             <RecipeSteps
-              showRecipePanel={showRecipePanel}
               setShowRecipePanel={setShowRecipePanel}
               onDeleteRecipeSteps={onDeleteRecipeSteps}
             />
