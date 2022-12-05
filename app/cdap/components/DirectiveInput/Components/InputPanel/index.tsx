@@ -196,26 +196,34 @@ export default function({
     }
   };
 
+  const getResultRow = (searchItem, searchItemIndex) => {
+    if (searchItemIndex === selectedIndex) {
+      return (
+        <ActiveResultRow
+          key={searchItem.uniqueId}
+          onClick={() => handleListItemClick(searchItem)}
+          data-testid={`select-directive-list-option-${searchItemIndex}`}
+          role="button"
+        >
+          <SearchListItem searchItem={searchItem} />
+        </ActiveResultRow>
+      );
+    }
+    return (
+      <ResultRow
+        key={searchItem.uniqueId}
+        onClick={() => handleListItemClick(searchItem)}
+        data-testid={`select-directive-list-option-${searchItemIndex}`}
+      >
+        <SearchListItem searchItem={searchItem} />
+      </ResultRow>
+    );
+  };
+
   return (
     <SearchWrapper data-testid="input-panel-wraper">
       {searchResults.map((searchItem, searchItemIndex) =>
-        searchItemIndex === selectedIndex ? (
-          <ActiveResultRow
-            key={searchItem.uniqueId}
-            onClick={() => handleListItemClick(searchItem)}
-            data-testid={`select-directive-list-option-${searchItemIndex}`}
-          >
-            <SearchListItem searchItem={searchItem} />
-          </ActiveResultRow>
-        ) : (
-          <ResultRow
-            key={searchItem.uniqueId}
-            onClick={() => handleListItemClick(searchItem)}
-            data-testid={`select-directive-list-option-${searchItemIndex}`}
-          >
-            <SearchListItem searchItem={searchItem} />
-          </ResultRow>
-        )
+        getResultRow(searchItem, searchItemIndex)
       )}
     </SearchWrapper>
   );

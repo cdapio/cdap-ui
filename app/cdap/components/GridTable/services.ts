@@ -22,16 +22,13 @@ import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
 /**
- * 
+ *
  * @param params it is an object containing namespace and wid
  * @param newDirective it is either a single directive or an Array of directive / recipe steps
- * @returns constructed payload (object containing payload,requestBody,gridParams ) for the API call 
+ * @returns constructed payload (object containing payload,requestBody,gridParams ) for the API call
  */
 
-export const getAPIRequestPayload = (
-  params: IRecords,
-  newDirective: string | string[],
-) => {
+export const getAPIRequestPayload = (params: IRecords, newDirective: string | string[]) => {
   const { dataprep } = DataPrepStore.getState();
   const { workspaceId, workspaceUri, directives, insights } = dataprep;
   let gridParams = {} as IGridParams;
@@ -61,7 +58,7 @@ export const getAPIRequestPayload = (
 };
 
 /**
- * 
+ *
  * @param workspaceId here we get workspace ID of any data-set which is going to be loaded in GridPage.
  * @param directives it is an array of directives / recipe steps that gets applied on given workspace.
  * @returns data of a workspace after applying directives on it.
