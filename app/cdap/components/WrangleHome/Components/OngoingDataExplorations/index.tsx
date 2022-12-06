@@ -168,8 +168,8 @@ export default function() {
               to={{
                 pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[5].workspaceId}`}`,
                 state: {
-                  from: T.translate('features.Breadcrumb.labels.wrangleHome'),
-                  path: T.translate('features.Breadcrumb.params.wrangleHome'),
+                  from: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome'),
+                  path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
                 },
               }}
               style={{ textDecoration: 'none' }}

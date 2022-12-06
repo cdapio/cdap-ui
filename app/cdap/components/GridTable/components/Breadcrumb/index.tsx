@@ -27,9 +27,11 @@ export default function BreadCrumb({ workspaceName, location }) {
   const classes = useStyles();
 
   const sourcePath =
-    location?.state?.from === T.translate('features.Breadcrumb.labels.wrangleHome')
-      ? T.translate('features.Breadcrumb.params.wrangeHome')
-      : `${T.translate('features.Breadcrumb.params.connectionsList')}/${location?.state?.path}`;
+    location?.state?.from === T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')
+      ? T.translate('features.WranglerNewUI.Breadcrumb.params.wrangeHome')
+      : `${T.translate('features.WranglerNewUI.Breadcrumb.params.connectionsList')}/${
+          location?.state?.path
+        }`;
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
@@ -38,9 +40,10 @@ export default function BreadCrumb({ workspaceName, location }) {
           to={`/ns/${getCurrentNamespace()}/home`}
           data-testid="breadcrumb-home-text"
         >
-          {T.translate('features.Breadcrumb.labels.wrangleHome')}
+          {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
         </Link>
-        {location?.state?.from !== T.translate('features.Breadcrumb.labels.wrangleHome') && (
+        {location?.state?.from !==
+          T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome') && (
           <Link
             className={`${classes.breadcrumbLabel}`}
             to={`/ns/${getCurrentNamespace()}/${sourcePath}`}
