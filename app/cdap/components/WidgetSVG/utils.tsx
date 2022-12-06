@@ -23,92 +23,101 @@ import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import WidgetSVG from 'components/WidgetSVG';
 import {
-  IConnectorTypesWithSVG,
   IConnectorDetailsPayload,
   IConnectorTypes,
+  IConnectorTypesWithSVG,
 } from 'components/WidgetSVG/types';
-import { ImportDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/ImportDatasetIcon';
+import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
 import React from 'react';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+
+/**
+ * This will be triggered when a user visits home page
+ * Fetch all the connectors & it's corresponding icons from widget API
+ *
+ *  Will dispatch the connector with icons data to store at the end
+ */
 
 export const getWidgetData = async () => {
+  // fetching all the available connector types
   const connectorTypes: IConnectorTypesWithSVG[] = await fetchConnectors();
-  const connectorTypesData: IConnectorTypes[] = [];
-  const IConnectionWithConnectorType: IConnectorTypesWithSVG[] = [];
+  const connectorsTypesData: IConnectorTypes[] = [];
+  const connectionWithConnectorType: IConnectorTypesWithSVG[] = [];
   const allConnectorsPluginProperties: Map<
     string,
     IConnectorDetailsPayload[]
   > = getCategoriesToConnectorsMap(connectorTypes);
-  const connectorsPluginProperties: IConnectorDetailsPayload[] = [];
-  allConnectorsPluginProperties?.forEach((eachProperty) => {
+  const connectionPayload: IConnectorDetailsPayload[] = [];
+  allConnectorsPluginProperties?.forEach((eachProperty: IConnectorDetailsPayload[]) => {
     if (eachProperty.length) {
-      eachProperty.forEach((eachPropertyItem) => {
-        connectorsPluginProperties.push(eachPropertyItem);
+      eachProperty.forEach((item: IConnectorDetailsPayload) => {
+        connectionPayload.push(item);
       });
     }
   });
 
-  const connectionDetailsList = forkJoin(
-    connectorsPluginProperties.map((eachConnection) => {
-      const selectedConnector = {
-        artifact: eachConnection.artifact,
-        category: eachConnection.category,
-        name: eachConnection.name,
-        type: eachConnection.type,
+  const connectionDetailsData = await Promise.all(
+    connectionPayload.map(async (item: IConnectorDetailsPayload) => {
+      const selectedConnector: IConnectorTypes = {
+        artifact: item.artifact,
+        category: item.category,
+        name: item.name,
+        type: item.type,
       };
-      connectorTypesData.push(selectedConnector);
-      return fetchConnectionDetails(selectedConnector);
+      connectorsTypesData.push(selectedConnector);
+      return new Promise((resolve, reject) => {
+        const response = fetchConnectionDetails(selectedConnector);
+        if (response) {
+          resolve(response);
+        }
+      });
     })
-  ).subscribe((res) => res);
-  const connectorWidgetData =
-    Array.isArray(connectionDetailsList) &&
-    connectionDetailsList.length &&
-    connectionDetailsList.map(({ connectorWidgetJSON }) => connectorWidgetJSON);
+  );
+  const connectorWidgetJson =
+    Array.isArray(connectionDetailsData) &&
+    connectionDetailsData.length &&
+    connectionDetailsData.map(({ connectorWidgetJSON }) => connectorWidgetJSON);
 
-  connectorTypesData.map((eachConnectorType) => {
-    let connectorTypeHasWidget: boolean = false;
-
+  connectorsTypesData.map((connectorType: IConnectorTypes) => {
+    let connectorTypeHasWidget = false;
     // Getting widget icons for connector types
-
-    Array.isArray(connectorWidgetData) &&
-      connectorWidgetData.length &&
-      connectorWidgetData.map((eachConnector) => {
+    if (Array.isArray(connectorWidgetJson) && connectorWidgetJson.length) {
+      connectorWidgetJson.forEach((eachConnector) => {
         if (
           eachConnector['display-name'] &&
-          eachConnector['display-name'].includes(eachConnectorType.name)
+          eachConnector['display-name'].includes(connectorType.name)
         ) {
-          IConnectionWithConnectorType.push({
-            ...eachConnectorType,
+          connectionWithConnectorType.push({
+            ...connectorType,
             SVG: (
               <WidgetSVG
                 imageSource={eachConnector?.icon?.arguments?.data}
-                label={eachConnectorType.name}
+                label={connectorType.name}
               />
             ),
           });
           connectorTypeHasWidget = true;
         }
       });
-
+    }
     // Retaining the connector types which are not part of widget api
-
     if (!connectorTypeHasWidget) {
-      IConnectionWithConnectorType.push({
-        ...eachConnectorType,
-        SVG: <WidgetSVG label={eachConnectorType.name} />,
+      connectionWithConnectorType.push({
+        ...connectorType,
+        SVG: <WidgetSVG imageSource={undefined} label={connectorType.name} />,
       });
     }
   });
 
-  IConnectionWithConnectorType.push({
+  // appennd this as connector type for uploaded datasets won't be available from API.
+  connectionWithConnectorType.push({
     name: 'Imported Dataset',
-    SVG: ImportDatasetIcon,
+    SVG: importDatasetIcon,
   });
 
   DataPrepStore.dispatch({
     type: DataPrepActions.setConnectorIcons,
     payload: {
-      data: IConnectionWithConnectorType,
+      data: connectionWithConnectorType,
     },
   });
 };

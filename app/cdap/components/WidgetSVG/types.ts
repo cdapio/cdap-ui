@@ -15,14 +15,14 @@
  */
 
 export interface IArtifact {
-  name: string;
-  version: string;
-  scope: string;
+  name?: string;
+  version?: string;
+  scope?: string;
 }
 
 export interface IConnectorTypesWithSVG {
   name: string;
-  typ?: string;
+  type?: string;
   category?: string;
   description?: string;
   artifact?: IArtifact;
@@ -40,7 +40,7 @@ export interface IConnectorDetailsPayload {
 }
 
 export interface IWidgetSVGProps {
-  imageSource?: string;
+  imageSource: string;
   label: string;
 }
 
@@ -49,4 +49,8 @@ export interface IConnectorTypes {
   type: string;
   category: string;
   artifact: IArtifact;
+}
+
+export interface IAllConnectorPluginProps {
+  [index: string]: IConnectorDetailsPayload;
 }
