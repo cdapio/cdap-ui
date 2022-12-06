@@ -3441,7 +3441,7 @@ features:
         wrangleHome: Home
       params:
         connectionsList: datasources
-        wrangleHome: home
+        wranglerHome: home
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
