@@ -3440,8 +3440,9 @@ features:
         connectionsList: Data Sources
         wrangleHome: Home
       params:
+        wrangerHome: home
         connectionsList: datasources
-        wranglerHome: home
+        wrangleHome: home
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
