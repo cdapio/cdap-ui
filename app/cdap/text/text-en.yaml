@@ -3432,31 +3432,16 @@ features:
         title: Configure a pipeline
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
-  AddConnections:
-    referenceLabel: 'Add Connection'
-  ImportData:
-    referenceLabel: 'Import Data'
-  HomePage:
-    labels:
-      common:
-        viewAll: 'View All'
-      connectorTypes:
-        title: 'Start data exploration'
-      workspaces:
-        title: 'Continue ongoing data explorations, pick up where you left off'
-  ConnectionsList:
-    labels:
-      loadToGrid: 'Wrangle'
   WranglerNewUI:
     AddConnections:
       referenceLabel: Add Connection
     Breadcrumb:
       labels:
         connectionsList: Data Sources
-        wranglerHome: Home
+        wrangleHome: Home
       params:
         connectionsList: datasources
-        wranglerHome: home
+        wrangleHome: home
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
@@ -3480,11 +3465,6 @@ features:
       gridTable:
         subtitle: Remove some recipe steps to view some data
         title: No rows left in this sample
-    Snackbar:
-      labels:
-        failure: Failure
-        success: Success
-        undo: Undo
     OnGoingDataExplorations:
       labels:
        importedDataset: Imported Dataset
@@ -3501,4 +3481,10 @@ features:
        percentageWithText: percentageWithText
        workspaceId: workspaceId
        count: count
+    Snackbar:
+      labels:
+        failure: Failure
+        success: Success
+        undo: Undo
+
 ...
