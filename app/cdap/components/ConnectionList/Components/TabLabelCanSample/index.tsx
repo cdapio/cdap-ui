@@ -26,6 +26,7 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
+import T from 'i18n-react';
 
 export default function TabLabelCanSample({
   label,
@@ -93,7 +94,15 @@ export default function TabLabelCanSample({
   };
 
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: {
+          from: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList'),
+          path: 'File',
+        },
+      }}
+    />
   ) : refValue ? (
     <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
       <Box className={classes.labelsContainerCanSample}>
