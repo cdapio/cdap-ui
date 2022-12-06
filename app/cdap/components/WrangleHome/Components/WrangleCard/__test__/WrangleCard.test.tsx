@@ -17,7 +17,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import WrangleCard from 'components/WrangleHome/Components/WrangleCard';
+import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
 import { updatedCardsMockResponse } from 'components/WrangleHome/Components/WrangleCard/mock/wrangleCardMockData';
 import history from 'services/history';
 import * as getUpdatedHelper from 'components/WrangleHome/services/getUpdatedConnectorCards';
