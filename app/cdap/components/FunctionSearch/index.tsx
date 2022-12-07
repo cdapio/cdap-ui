@@ -46,16 +46,12 @@ interface ISearchResult {
   infoLink: string;
 }
 
-export default function({ transformationPanel }) {
-  const [searchResults, setSeachResults] = useState([]);
-  const [displayRecentSearches, setDisplayRecentSearches] = useState(false);
+export default function({ submitMenuOption }) {
+  const searchResults = [...FUNCTIONS_LIST];
+  const [displayRecentSearches, setDisplayRecentSearches] = useState(true);
   const [textFieldInput, setTextFieldInput] = useState('');
   const [selectedDirective, setSelectedDirective] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
-
-  const getDirectivesList = () => {
-    setSeachResults([...FUNCTIONS_LIST]);
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTextFieldInput(e.target.value);
@@ -73,7 +69,7 @@ export default function({ transformationPanel }) {
   const handleOptionClick = (selectedOption: ISearchResult) => {
     setTextFieldInput('');
     setSelectedDirective(selectedOption.value);
-    transformationPanel(
+    submitMenuOption(
       selectedOption.value,
       selectedOption.supportedDataType,
       selectedOption.infoLink
@@ -89,13 +85,6 @@ export default function({ transformationPanel }) {
     }
     setDisplayRecentSearches(false);
   };
-
-  useEffect(() => {
-    getDirectivesList();
-    if (textFieldInput === '') {
-      setDisplayRecentSearches(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (textFieldInput === '') {

@@ -50,55 +50,6 @@ export const ClearSearchIcon = styled(ClearRoundedIcon)`
   cursor: pointer;
 `;
 
-export const StyledPaperComponent = styled(Paper)`
-  margin-top: -2px;
-  margin-right: -2px;
-  border: 1px solid #dadce0; // this color not available in MUI colors
-  border-top: none;
-  border-radius: 0;
-  & MuiAutocomplete-noOptions {
-    padding: 0px;
-    margin: 0px;
-    border-radius: 0;
-  }
-  & ul#combo-box-demo-popup.MuiAutocomplete-listbox {
-    padding: 0px;
-    margin: 0px;
-    background: white;
-    border-radius: 0px;
-  }
-  ,
-  & div.MuiAutocomplete-noOptions {
-    background: white;
-  }
-`;
-
-export const StyledTextField = styled(TextField)`
-  outline: none;
-  height: 48px;
-  width: 490px;
-  right: 6px;
-  margin-left: 5px;
-  & .root {
-    color: red;
-    & input::placeholder {
-      font-size: 14px;
-    }
-  }
-  & .MuiOutlinedInput-root {
-    border-radius: 0px;
-    & fieldset {
-      border: 0px solid #dadce0 !important;
-    }
-    &:hover {
-      border: 0px solid #dadce0 !important;
-      outline: 0;
-    }
-    padding-nottom: 8px !important;
-    padding-right: 14px !important;
-  }
-`;
-
 export const DirectiveContainer = styled(Box)`
   padding: 15px 10px;
 `;
@@ -167,6 +118,55 @@ export const SearchResultsContainer = styled(Box)`
   white-space: nowrap;
   overflow: hidden;
   height: 71px;
+`;
+
+export const StyledPaperComponent = styled(Paper)`
+  margin-top: -2px;
+  margin-right: -2px;
+  border: 1px solid #dadce0; // this color not available in MUI colors
+  border-top: none;
+  border-radius: 0;
+  & MuiAutocomplete-noOptions {
+    padding: 0px;
+    margin: 0px;
+    border-radius: 0;
+  }
+  & ul#combo-box-demo-popup.MuiAutocomplete-listbox {
+    padding: 0px;
+    margin: 0px;
+    background: white;
+    border-radius: 0px;
+  }
+  ,
+  & div.MuiAutocomplete-noOptions {
+    background: white;
+  }
+`;
+
+export const StyledTextField = styled(TextField)`
+  outline: none;
+  height: 48px;
+  width: 490px;
+  right: 6px;
+  margin-left: 5px;
+  & .root {
+    color: red;
+    & input::placeholder {
+      font-size: 14px;
+    }
+  }
+  & .MuiOutlinedInput-root {
+    border-radius: 0px;
+    & fieldset {
+      border: 0px solid #dadce0 !important;
+    }
+    &:hover {
+      border: 0px solid #dadce0 !important;
+      outline: 0;
+    }
+    padding-nottom: 8px !important;
+    padding-right: 14px !important;
+  }
 `;
 
 export const Underline = (

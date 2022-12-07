@@ -116,7 +116,7 @@ export default function({
         })}
         <LastDividerBox> {showName ? LongDivider : Divider}</LastDividerBox>
         <SearchBoxWrapper>
-          <FunctionSearch transformationPanel={submitMenuOption} />
+          <FunctionSearch submitMenuOption={submitMenuOption} />
         </SearchBoxWrapper>
       </ToolBarInnerWrapper>
       <FunctionToggle setShowName={setShowName} showName={showName} />
