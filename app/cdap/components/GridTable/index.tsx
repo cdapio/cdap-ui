@@ -52,6 +52,7 @@ import styled from 'styled-components';
 import FooterPanel from 'components/FooterPanel';
 import { reducer, initialGridTableState } from 'components/GridTable/reducer';
 import useSnackbar from 'components/Snackbar/useSnackbar';
+import GridTableContainer from './components/GridTableContainer';
 
 const TableWrapper = styled(Box)`
   height: calc(100vh - 193px);
@@ -76,17 +77,32 @@ export default function GridTable() {
   enum IGridTableActions {
     IS_DIRECTIVE_PANEL_OPEN,
     TABLE_META_INFO,
+    LOADING_STATUS,
+    HEADER_NAMES,
+    ROWS_DATA,
+    SHOW_RECIPE_PANEL,
+    GRID_DATA,
+    MISSING_DATA_LIST,
+    INVALID_COUNT_ARRAY,
+    SET_GRID_DATA_LOADER_AND_SNACKBAR,
+    TABLE_META_INFO_AND_ROWS_DATA,
+    LOADER_AND_GRID_DATA,
+    LOADER_DIRECTIVE_OPEN_AND_SNACKBAR,
+    LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR,
   }
 
   const [gridTableState, dispatch] = useReducer(reducer, initialGridTableState);
-  const { directivePanelIsOpen, tableMetaInfo } = gridTableState;
+  const {
+    directivePanelIsOpen,
+    tableMetaInfo,
+    loading,
+    headersNamesList,
+    rowsDataList,
+    gridData,
+    missingDataList,
+  } = gridTableState;
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
-  const [rowsDataList, setRowsDataList] = useState<IRowData[]>([]);
   const [showRecipePanel, setShowRecipePanel] = useState<boolean>(false);
-  const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
-  const [missingDataList, setMissingDataList] = useState<IMissingListData[]>([]);
   const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
     {
       label: 'Invalid',
@@ -95,9 +111,16 @@ export default function GridTable() {
   ]);
   const [snackbarState, setSnackbar] = useSnackbar();
 
+  useEffect(() => {
+    console.log(gridTableState, '*()*()*()*()*()*(*(*()*(*()*()*(*(*(');
+  }, [gridTableState]);
+
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
-    setLoading(true);
+    dispatch({
+      type: IGridTableActions.LOADING_STATUS,
+      payload: true,
+    });
     if (directive) {
       const apiPayload: IApiPayload = getAPIRequestPayload(params, directive, '');
       addDirectiveAPICall(apiPayload);
@@ -108,6 +131,8 @@ export default function GridTable() {
     const gridParams: IGridParams = apiPayload.gridParams;
     applyDirectives(wid, gridParams.directives).subscribe(
       (response) => {
+        console.log(response, 'response');
+
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
@@ -119,11 +144,13 @@ export default function GridTable() {
           },
         });
 
-        setLoading(false);
-        setGridData(response);
         dispatch({
-          type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-          payload: false,
+          type: IGridTableActions.LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR,
+          payload: {
+            loading: false,
+            gridData: response,
+            directivePanelIsOpen: false,
+          },
         });
         setSnackbar({
           open: true,
@@ -132,10 +159,12 @@ export default function GridTable() {
         });
       },
       (err) => {
-        setLoading(false);
         dispatch({
-          type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-          payload: false,
+          type: IGridTableActions.LOADER_DIRECTIVE_OPEN_AND_SNACKBAR,
+          payload: {
+            loading: false,
+            directivePanelIsOpen: false,
+          },
         });
         setSnackbar({
           open: true,
@@ -148,7 +177,10 @@ export default function GridTable() {
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
-    setLoading(true);
+    dispatch({
+      type: IGridTableActions.LOADING_STATUS,
+      payload: true,
+    });
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
       payload: {
@@ -200,9 +232,27 @@ export default function GridTable() {
             ...gridParams,
           },
         });
-        setLoading(false);
-        setGridData(response);
+
+        dispatch({
+          type: IGridTableActions.LOADER_AND_GRID_DATA,
+          payload: {
+            loader: false,
+            gridData: response,
+          },
+        });
       });
+  };
+
+  const snackbarString = (action, arr, removedDirectiveListLength, from) => {
+    if (action === 'add') {
+      return `Transformation ${arr} successfully added`;
+    } else if (from === 'undo' || arr?.length === 0) {
+      return 'Transformation successfully deleted';
+    } else {
+      return `${removedDirectiveListLength} transformation successfully deleted from ${
+        arr[arr.length - 1]
+      }`;
+    }
   };
 
   useEffect(() => {
@@ -305,10 +355,16 @@ export default function GridTable() {
   const getGridTableData = async () => {
     const rawData: IExecuteAPIResponse = gridData;
     const headersData = createHeadersData(rawData.headers, rawData.types);
-    setHeadersNamesList(headersData);
+    dispatch({
+      type: IGridTableActions.HEADER_NAMES,
+      payload: headersData,
+    });
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
-      setMissingDataList(missingData);
+      dispatch({
+        type: IGridTableActions.MISSING_DATA_LIST,
+        payload: missingData,
+      });
     }
     const rowData: IRowData[] =
       rawData &&
@@ -318,14 +374,17 @@ export default function GridTable() {
         const { ...rest } = eachRow;
         return rest;
       }) as IRowData[]);
+
     dispatch({
-      type: IGridTableActions.TABLE_META_INFO,
+      type: IGridTableActions.TABLE_META_INFO_AND_ROWS_DATA,
       payload: {
-        columnCount: rawData?.headers?.length,
-        rowCount: rawData?.values?.length - 1,
+        tableMetaInfo: {
+          columnCount: rawData?.headers?.length,
+          rowCount: rawData?.values?.length - 1,
+        },
+        rowsDataList: rowData,
       },
     });
-    setRowsDataList(rowData);
   };
 
   const showRecipePanelHandler = () => {
@@ -345,7 +404,10 @@ export default function GridTable() {
   }, [snackbarState]);
 
   const applyDirectiveAPICall = (newDirectiveList, action, removedDirectiveList, from) => {
-    setLoading(true);
+    dispatch({
+      type: IGridTableActions.LOADING_STATUS,
+      payload: true,
+    });
     const { dataprep } = DataPrepStore.getState();
     const { workspaceId, workspaceUri, directives, insights } = dataprep;
     let gridParams = {};
@@ -381,20 +443,18 @@ export default function GridTable() {
             ...gridParams,
           },
         });
-        setLoading(false);
-        setGridData(response);
+        dispatch({
+          type: IGridTableActions.SET_GRID_DATA_LOADER_AND_SNACKBAR,
+          payload: {
+            loading: false,
+            gridData: response,
+          },
+        });
         setShowRecipePanel(false);
         setSnackbar({
           open: true,
           isSuccess: true,
-          message:
-            action === 'add'
-              ? `Transformation ${arr} successfully added`
-              : from === 'undo' || arr?.length === 0
-              ? 'Transformation successfully deleted'
-              : `${removedDirectiveList?.length} transformation successfully deleted from ${
-                  arr[arr.length - 1]
-                }`,
+          message: snackbarString(action, arr, removedDirectiveList.length, from),
         });
       },
       (err) => {
@@ -403,7 +463,12 @@ export default function GridTable() {
           isSuccess: false,
           message: `Failed to transform ${newDirectiveList}`,
         });
-        setLoading(false);
+        dispatch({
+          type: IGridTableActions.LOADING_STATUS,
+          payload: {
+            loading: false,
+          },
+        });
         setShowRecipePanel(false);
       }
     );
@@ -434,50 +499,11 @@ export default function GridTable() {
       <BreadCrumb datasetName={wid} />
       <TablePanelContainer>
         {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
-          <TableWrapper>
-            <Table aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  {headersNamesList?.length &&
-                    headersNamesList.map((eachHeader) => (
-                      <GridHeaderCell
-                        label={eachHeader.label}
-                        types={eachHeader.type}
-                        key={eachHeader.name}
-                      />
-                    ))}
-                </TableRow>
-                <TableRow>
-                  {missingDataList?.length &&
-                    headersNamesList.length &&
-                    headersNamesList.map((each, index) => {
-                      return missingDataList.map((item, itemIndex) => {
-                        if (item.name === each.name) {
-                          return <GridKPICell metricData={item} key={item.name} />;
-                        }
-                      });
-                    })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rowsDataList?.length &&
-                  rowsDataList.map((eachRow, rowIndex) => {
-                    return (
-                      <TableRow key={`row-${rowIndex}`}>
-                        {headersNamesList.map((eachKey, eachIndex) => {
-                          return (
-                            <GridTextCell
-                              cellValue={eachRow[eachKey.name] || '--'}
-                              key={`${eachKey.name}-${eachIndex}`}
-                            />
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableWrapper>
+          <GridTableContainer
+            headersNamesList={headersNamesList}
+            missingDataList={missingDataList}
+            rowsDataList={rowsDataList}
+          />
         ) : (
           <NoRecordScreen
             title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
