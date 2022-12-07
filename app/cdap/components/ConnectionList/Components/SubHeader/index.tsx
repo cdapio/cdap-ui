@@ -27,6 +27,16 @@ import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 
+const CONNECTION_LIST_BREADCRUMB_OPTIONS = [
+  {
+    link: `/ns/${getCurrentNamespace()}/home`,
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome').toString(),
+  },
+  {
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList').toString(),
+  },
+];
+
 interface ISubHeader {
   selectedConnection: string;
 }
@@ -81,16 +91,6 @@ const TypographyLabel = styled(Typography)`
 
 export default function({ selectedConnection }: ISubHeader) {
   const location = useLocation();
-
-  const CONNECTION_LIST_BREADCRUMB_OPTIONS = [
-    {
-      link: `/ns/${getCurrentNamespace()}/home`,
-      label: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome').toString(),
-    },
-    {
-      label: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList').toString(),
-    },
-  ];
 
   return (
     <BreadcrumbContainer data-testid="breadcrumb-container-parent">
