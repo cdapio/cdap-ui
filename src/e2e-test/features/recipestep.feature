@@ -15,7 +15,43 @@
 #
 
 @Integration_Tests
-Feature: Directives
+Feature: Wrangler BigQuery Connection Tests
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should successfully test BIGQUERY connection
+    When Open Connections page for BigQuery connection test
+    Then Test BigQuery connection with name "bigquery_randomtest5"
+    Then Verify for successful BigQuery test connection and message
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should show appropriate message when BigQuery connection fails
+    When Open Connections page
+    Then Test BigQuery connection with "unknown_bigquery_connection_name", "unknown_project", "unknown_path"
+    Then Verify BigQuery test connection failure and message
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should create BIGQUERY connection
+    When Open Connections page
+    Then Create BigQuery connection with name "bigquery_randomtest5"
+    Then Verify navigation to created BigQuery connection "bigquery_randomtest5"
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should show proper error message when trying to create existing BigQuery connection
+    When Open Connections page
+    Then Create BigQuery connection with name "bigquery_randomtest5"
+    Then Check for the BigQuery connection already exists error for "bigquery_randomtest5"
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should show appropriate error when navigating to incorrect BIGQUERY connection
+    When Open BigQuery connection 'bigquery_unknown_connection' page
+    Then Check for BigQuery connection 'bigquery_unknown_connection' not found message
+
+  @WRANGLER_BIGQUERY_CONNECTION_TEST
+  Scenario: Should be able navigate inside BIGQUERY connection & create workspace
+    When Open Connections page
+    Then Select BigQuery connection "bigquery_randomtest5"
+    Then Check BigQuery connection "bigquery_randomtest5" details: Instance, Database, Table
+    Then Verify URL navigation for BigQuery connection
 
   @RecipeStep
   Scenario Outline: Go through the recipe functionality
@@ -36,7 +72,6 @@ Feature: Directives
       | stepId |
       | 0 |
 
-
   Scenario Outline: Go through the recipe with multiple steps functionality
     Given Navigate to the Home page
     Then Click on the Data explorations card
@@ -56,5 +91,3 @@ Feature: Directives
     Examples:
       | stepId |
       | 2 |
-     
-      

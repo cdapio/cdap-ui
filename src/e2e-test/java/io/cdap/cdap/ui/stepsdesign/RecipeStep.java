@@ -25,9 +25,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -46,7 +46,7 @@ public class RecipeStep {
   public void clickOnTheDataExplorationsCard() {
     try {
       WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-1"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-0"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -65,7 +65,7 @@ public class RecipeStep {
         flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
       }
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
-    }catch (Exception e) {
+    } catch (Exception e) {
       System.err.println("error:" + e);
     }
   }
@@ -141,7 +141,7 @@ public class RecipeStep {
       WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
       Actions action = new Actions(SeleniumDriver.getDriver());
       action.moveToElement(ele).perform();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId +"-delete"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId + "-delete"));
       Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -159,7 +159,7 @@ public class RecipeStep {
   @Then("Verify if clicking on close icon of panel")
   public void verifyByClickingOnCloseIcon() {
     try {
-      WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(),20);
+      WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 20);
       ele.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("drawer-widget-close-round-icon")));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
     } catch (Exception e) {
