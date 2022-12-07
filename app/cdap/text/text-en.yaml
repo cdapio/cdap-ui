@@ -2803,6 +2803,7 @@ features:
       triggerNameExists: "Trigger Name already exists"
       triggerNameRequired: "Trigger Name is required"
       triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
+      emptyCompositeTriggerError: "Please select upstream pipelines for this trigger"
       selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
       triggerAndType: "Wait for all events (AND)"
       triggerOrType: "Trigger on any selected event (OR)"
@@ -3432,10 +3433,43 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
+    AddConnections:
+      referenceLabel: Add Connection
+    Breadcrumb:
+      labels:
+        connectionsList: Data Sources
+        wranglerHome: Home
+      params:
+        connectionsList: datasources
+        wranglerHome: home
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
-        title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+        title: No rows left in this sample
+    Snackbar:
+      labels:
+        failure: Failure
+        success: Success
+        undo: Undo
     GridPage:
       menuItems:
         divider: divider
@@ -3546,13 +3580,5 @@ features:
           copyToNewColumn: Copy to a new column
           enterValueTo: Please enter a value to
           examplePlaceholder: Enter value, e.g. 3
-    Snackbar:
-      labels:
-        datasetSuccess: Dataset loaded successfully 
-        failure: Failure
-        retrieveFailure: Failed to retrieve sample data for
-        sampleFailure: Failed to retrieve sample data
-        success: Success
-        undo: Undo
-        workspaceFailure: Failed to create workspace for
-...
+
+

@@ -14,5 +14,20 @@
  * the License.
  */
 
-export const addActionType = 'add';
-export const PREFIX = 'features.WranglerNewUI.Snackbar.labels';
+import { Avatar } from '@material-ui/core';
+import ImageOutlined from '@material-ui/icons/ImageOutlined';
+import { IWidgetSVGProps } from 'components/WidgetSVG/types';
+import React from 'react';
+import styled from 'styled-components';
+
+const StyledImageOutlined = styled(ImageOutlined)`
+  font-size: 40px;
+`;
+
+export default function({ imageSource, label }: IWidgetSVGProps) {
+  return imageSource ? (
+    <Avatar src={imageSource} variant="square" data-testid={`widget-api-image-${label}`} />
+  ) : (
+    <StyledImageOutlined data-testid={`default-widget-image-${label}`} />
+  );
+}

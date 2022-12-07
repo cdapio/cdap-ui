@@ -356,7 +356,7 @@ angular
           ></page500>
         </main>
 
-        <div class="alerts" id="alerts" data-cy="valium-banner-hydrator"></div>
+        <div class="alerts" id="alerts" data-cy="valium-banner-hydrator" data-testid="valium-banner-hydrator"></div>
         <loading-icon></loading-icon>
         <loading-indicator></loading-indicator>
         <status-alert-message></status-alert-message>

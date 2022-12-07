@@ -47,6 +47,7 @@ import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/serv
 import AddTransformation from 'components/WranglerGrid/AddTransformationPanel';
 import Snackbar from 'components/Snackbar';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 
 const transformationOptions = ['undo', 'redo'];
 
@@ -80,6 +81,7 @@ export default function GridTable() {
     isSuccess: false,
   });
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
+  const [snackbarState, setSnackbar] = useSnackbar();
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -137,6 +139,13 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setSnackbar({
+          open: true,
+          isSuccess: true,
+          message: T.translate(
+            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
+          ).toString(),
+        });
       });
   };
 
@@ -405,23 +414,22 @@ export default function GridTable() {
           transformationLink={addTransformationFunction.infoLink}
         />
       )}
-      {snackbarIsOpen && (
-        <Snackbar
-          handleCloseError={() => {
-            setSnackbarIsOpen(false);
-            setSnackbarData({
-              description: '',
-              isSuccess: false,
-            });
-          }}
-          description={snackbarData.description}
-          isSuccess={snackbarData.isSuccess}
-        />
-      )}
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
+      )}
+      {snackbarIsOpen && (
+        <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+          handleClose={() =>
+            setSnackbar(() => ({
+              open: false,
+            }))
+          }
+          open={snackbarState.open}
+          message={snackbarState.message}
+          isSuccess={snackbarState.isSuccess}
+        />
       )}
     </Box>
   );
