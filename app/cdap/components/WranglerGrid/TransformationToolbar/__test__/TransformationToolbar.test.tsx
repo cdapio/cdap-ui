@@ -47,10 +47,4 @@ describe('Testing render TransformationToolbar component', () => {
     fireEvent.click(iconButtonElement[0]);
     expect(iconButtonElement[0]).toBeInTheDocument();
   });
-
-  it('Should check if headerToggler component exists and triggers the click event', () => {
-    const headerToggler = screen.getByTestId(/toolbar-header-toggler/i);
-    fireEvent.click(headerToggler);
-    expect(headerToggler).toBeInTheDocument();
-  });
 });
