@@ -71,9 +71,12 @@ const StringIndicatorBox = styled(Box)({
   display: 'flex',
 });
 
-export default function GridHeaderCell({ label, types, columnSelected,
+export default function GridHeaderCell({
+  label,
+  types,
+  columnSelected,
   setColumnSelected,
- }: IGridHeaderCellProps) {
+}: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
   const isColumnHighlited = label === columnSelected;
   const [data, setData] = useState<Record<string, string>>({
@@ -81,24 +84,32 @@ export default function GridHeaderCell({ label, types, columnSelected,
     datatype2: types.length > 1 ? (types[1] as string) : null,
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setData({
       datatype1: types.length > 0 ? (types[0] as string) : null,
       datatype2: types.length > 1 ? (types[1] as string) : null,
-    })
-  },[types])
+    });
+  }, [types]);
 
   return (
-    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-container" onClick={() => {
-      setColumnSelected(label);
-    }}>
+    <TableCell
+      className={classes.tableHeaderCell}
+      data-testid="grid-header-cell-container"
+      onClick={() => {
+        setColumnSelected(label);
+      }}
+    >
       <div
         className={classes.headerHighlitedIcon}
         style={isColumnHighlited ? { display: 'inline' } : { display: 'none' }}
       >
         {headerSelectedIcon}
       </div>
-      <Card className={classes.root} variant="outlined" style={isColumnHighlited ? { background: '#FFFFFF' } : { background: '#F1F8FF' }}>
+      <Card
+        className={classes.root}
+        variant="outlined"
+        style={isColumnHighlited ? { background: '#FFFFFF' } : { background: '#F1F8FF' }}
+      >
         <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
           {label}
         </Typography>

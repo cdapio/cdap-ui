@@ -20,7 +20,7 @@ import T from 'i18n-react';
 import { ISelectColumnsListProps } from 'components/WranglerGrid/SelectColumnPanel/ColumnsList/types';
 import { IHeaderNamesList } from 'components/WranglerGrid/SelectColumnPanel/types';
 import ColumnTable from 'components/WranglerGrid/SelectColumnPanel/DataTable';
-import { multipleColumnSelected } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import SelectedColumnCountWidget from 'components/WranglerGrid/SelectColumnPanel/CountWidget';
 import { IMultipleSelectedFunctionDetail } from 'components/WranglerGrid/SelectColumnPanel/types';
 import { SELECT_COLUMN_LIST_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
@@ -79,7 +79,7 @@ const SelectColumnSearchBox = styled(Box)`
 `;
 
 const SearchIconButton = styled(IconButton)`
-  padding-right: 0;
+  padding: 5px;
   &.MuiIconButton-root:hover {
     background-color: transparent;
   }
@@ -105,7 +105,7 @@ export default function({
   const filteredColumnsOnType = getFilteredColumn(transformationDataType, columnsList);
 
   useEffect(() => {
-    const multiSelect: IMultipleSelectedFunctionDetail[] = multipleColumnSelected?.filter(
+    const multiSelect: IMultipleSelectedFunctionDetail[] = MULTI_SELECTION_COLUMN?.filter(
       (functionDetail: IMultipleSelectedFunctionDetail) =>
         functionDetail.value === transformationName
     );
@@ -137,7 +137,7 @@ export default function({
   };
 
   const handleDisableCheckbox = () => {
-    const multiSelect: IMultipleSelectedFunctionDetail[] = multipleColumnSelected.filter(
+    const multiSelect: IMultipleSelectedFunctionDetail[] = MULTI_SELECTION_COLUMN.filter(
       (functionDetail: IMultipleSelectedFunctionDetail) =>
         functionDetail.value === transformationName && functionDetail.isMoreThanTwo
     );

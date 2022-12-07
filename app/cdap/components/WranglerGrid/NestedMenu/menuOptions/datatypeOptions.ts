@@ -15,9 +15,8 @@
  */
 
 import T from 'i18n-react';
-
+import { TOOLBAR_ICONS_LABEL_ALL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
 const PREFIX = 'features.WranglerNewUI.GridPage.transformations.options.labels.datatype';
-
 export const DATATYPE_OPTIONS = [
   'string',
   'boolean',

@@ -31,7 +31,7 @@ export const useGridHeaderCellStyles = makeStyles({
     fontSize: '14px',
     border: '1px solid #E0E0E0',
     position: 'relative',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   subDataTypeIndicator: {
     marginLeft: '2px',

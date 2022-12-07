@@ -33,7 +33,7 @@ interface ISummary {
 
 export interface IExecuteAPIResponse {
   headers: string[];
-  types: {[key: string] : string};
+  types: { [key: string]: string };
   values: IRecords[];
   summary: ISummary;
   message: string;

@@ -18,7 +18,7 @@ import {
   IHeaderNamesList,
   IMultipleSelectedFunctionDetail,
 } from 'components/WranglerGrid/SelectColumnPanel/types';
-import { multipleColumnSelected } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPanel/constants';
 
 export const getColumnsSupportedType = (
   transformationDataType: string[],
@@ -48,14 +48,14 @@ export const getFilteredColumn = (
 
 export const enableDoneButton = (transformationName, selectedColumns) => {
   if (
-    multipleColumnSelected.filter(
+    MULTI_SELECTION_COLUMN.filter(
       (functionNameDetail: IMultipleSelectedFunctionDetail) =>
         functionNameDetail.value === transformationName && !functionNameDetail.isMoreThanTwo
     )?.length
   ) {
     return selectedColumns?.length === 2 ? false : true;
   } else if (
-    multipleColumnSelected.filter(
+    MULTI_SELECTION_COLUMN.filter(
       (functionNameDetail: IMultipleSelectedFunctionDetail) =>
         functionNameDetail.value === transformationName && functionNameDetail.isMoreThanTwo
     )?.length

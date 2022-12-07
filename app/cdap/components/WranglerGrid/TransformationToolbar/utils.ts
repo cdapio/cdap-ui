@@ -2,13 +2,13 @@ import { MENU_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/men
 import {
   ColumnIcon,
   FragmentIcon,
-  GridIcon,
   MathIcon,
   NullIcon,
-  OtherIcon,
   SecurityIcon,
   StructureIcon,
 } from 'components/WranglerGrid/TransformationToolbar/iconStore';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import GridOnOutlinedIcon from '@material-ui/icons/GridOnOutlined';
 import ReplayIcon from '@material-ui/icons/Replay';
 import { TOOLBAR_ICONS_LABEL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
 import T from 'i18n-react';
@@ -77,15 +77,15 @@ export const nestedMenuOptions: IMenuItem[] = [
   },
   {
     options: [],
-    iconSVG: OtherIcon,
-    title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),
-    toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),
+    icon: MoreHorizIcon,
+    title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.moreHorizIcon`).toString(),
+    toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.moreHorizIcon`).toString(),
     open: false,
   },
   {
     title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
     toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
-    iconSVG: GridIcon,
+    icon: GridOnOutlinedIcon,
     options: [],
     open: false,
   },

@@ -23,7 +23,7 @@ import {
   ADD_TRANSFORMATION_PREFIX,
   SELECT_COLUMN_LIST_PREFIX,
 } from 'components/WranglerGrid/SelectColumnPanel/constants';
-import { multipleColumnSelected } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { TableContainer, Table, TableHead, TableRow, TableCell } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import styled from 'styled-components';
@@ -91,7 +91,7 @@ export default function({
 }: IColumnTableProps) {
   const handleChange = () => {
     if (
-      multipleColumnSelected?.filter(
+      MULTI_SELECTION_COLUMN?.filter(
         (option) => option.value === transformationName && option.isMoreThanTwo === false
       ).length > 0
     ) {
@@ -139,7 +139,7 @@ export default function({
           <SelectColumnTableHead>
             <SelectColumnTableRow>
               <SelectColumnTableHeadCell>
-                {multipleColumnSelected?.filter((option) => option.value === transformationName)
+                {MULTI_SELECTION_COLUMN?.filter((option) => option.value === transformationName)
                   .length > 0 && (
                   <Checkbox
                     color="primary"

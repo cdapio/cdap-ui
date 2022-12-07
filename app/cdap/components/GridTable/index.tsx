@@ -272,12 +272,12 @@ export default function GridTable() {
   }, [gridData]);
 
   const onMenuOptionSelection = (option: string, supportedDataType: string[], infoLink: string) => {
-    if(selectedColumn){
-      if(NO_INPUT_REQUIRED_TRANSFORMATION.includes(option)){
-          const directive = getDirective(option, selectedColumn)
-          addDirectives(directive)
+    if (selectedColumn) {
+      if (NO_INPUT_REQUIRED_TRANSFORMATION.includes(option)) {
+        const directive = getDirective(option, selectedColumn);
+        addDirectives(directive);
       }
-    }else{
+    } else {
       setAddTransformationFunction({
         option,
         supportedDataType,
@@ -319,7 +319,8 @@ export default function GridTable() {
           option: '',
           supportedDataType: [],
         });
-        setSelectedColumn('')
+        setSelectedColumn('');
+        setColumnType('');
       },
       (error) => {
         setLoading(false);
@@ -332,7 +333,8 @@ export default function GridTable() {
           option: '',
           supportedDataType: [],
         });
-        setSelectedColumn('')
+        setSelectedColumn('');
+        setColumnType('');
       }
     );
   };
@@ -360,7 +362,8 @@ export default function GridTable() {
         <Table aria-label="simple table" className="test">
           <TableHead>
             <TableRow>
-              {headersNamesList && headersNamesList.length > 0 &&
+              {headersNamesList &&
+                headersNamesList.length > 0 &&
                 headersNamesList.map((eachHeader) => (
                   <GridHeaderCell
                     label={eachHeader.label}

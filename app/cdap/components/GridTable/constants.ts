@@ -17,13 +17,13 @@
 export const MISSING_NULL = 'Missing/Null';
 
 export const NO_INPUT_REQUIRED_TRANSFORMATION = [
-    'string',
-    'boolean',
-    'integer',
-    'long',
-    'short',
-    'float',
-    'double',
-    'decimal',
-    'bytes',
-]
+  'string',
+  'boolean',
+  'integer',
+  'long',
+  'short',
+  'float',
+  'double',
+  'decimal',
+  'bytes',
+];

@@ -29,7 +29,7 @@ describe('Testing Menu Item Component', () => {
     render(
       <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={'test'} />
     );
-    const parentElement = screen.getByTestId(/menu-item-string/i);
+    const parentElement = screen.getByTestId(/menu-item-parent/i);
     fireEvent.click(parentElement);
     expect(parentElement).toBeInTheDocument();
     expect(parentElement).toHaveClass(
@@ -47,7 +47,7 @@ describe('Testing Menu Item Component', () => {
     render(
       <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={''} />
     );
-    const parentElement = screen.getByTestId(/menu-item-string/i);
+    const parentElement = screen.getByTestId(/menu-item-parent/i);
     fireEvent.click(parentElement);
     expect(parentElement).toBeInTheDocument();
   });
@@ -55,7 +55,7 @@ describe('Testing Menu Item Component', () => {
     const dummyItem = {
       label: 'test',
       supportedDataType: ['all'],
-      value: 'divider',
+      value: T.translate('features.WranglerNewUI.GridPage.menuItems.divider'),
       options: ['all'],
     };
     render(
@@ -75,7 +75,7 @@ it('should render the heading element', () => {
   const dummyItem = {
     label: 'test',
     supportedDataType: [],
-    value: 'heading',
+    value: T.translate('features.WranglerNewUI.GridPage.menuItems.heading'),
     options: ['all'],
   };
   render(
