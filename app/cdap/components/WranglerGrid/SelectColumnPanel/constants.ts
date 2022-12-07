@@ -16,7 +16,7 @@
 
 import { IMultipleSelectedFunctionDetail } from 'components/WranglerGrid/SelectColumnPanel/types';
 
-export const multipleColumnSelected: IMultipleSelectedFunctionDetail[] = [
+export const MULTI_SELECTION_COLUMN: IMultipleSelectedFunctionDetail[] = [
   {
     value: 'join-columns',
     isMoreThanTwo: false,

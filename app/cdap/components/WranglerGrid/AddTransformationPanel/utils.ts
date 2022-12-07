@@ -17,6 +17,7 @@
 import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
 import { CALCULATE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/calculateOptions';
 import { ITransformationComponentValues } from 'components/WranglerGrid/AddTransformationPanel/types';
+import { IHeaderNamesList } from 'components/WranglerGrid/SelectColumnPanel/types';
 
 export const getDirective = (
   functionName: string,
@@ -40,5 +41,33 @@ export const getDirective = (
     }
   } else {
     return null;
+  }
+};
+
+export const applyButtonEnabled = (
+  functionName: string,
+  transformationComponentValues: ITransformationComponentValues,
+  selectedColumns: IHeaderNamesList[]
+) => {
+  if (CALCULATE_OPTIONS.some((eachOption) => eachOption.value === functionName)) {
+    const calculateOption = CALCULATE_OPTIONS.filter(
+      (eachOption) => eachOption.value === functionName
+    );
+    if (calculateOption[0]?.inputRequired && transformationComponentValues.customInput === '') {
+      return true;
+    } else if (
+      transformationComponentValues.copyToNewColumn &&
+      transformationComponentValues.copyColumnName === ''
+    ) {
+      return true;
+    } else if (selectedColumns.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (selectedColumns.length === 0) {
+    return true;
+  } else {
+    return false;
   }
 };

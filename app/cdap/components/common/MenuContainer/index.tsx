@@ -18,7 +18,7 @@ import { Menu } from '@material-ui/core';
 import styled from 'styled-components';
 import { grey } from '@material-ui/core/colors';
 
-export const MenuComponent = styled(Menu)`
+export const CustomizedMenuComponent = styled(Menu)`
   position: absolute !important;
   left: 0 !important;
   right: 0 !important;

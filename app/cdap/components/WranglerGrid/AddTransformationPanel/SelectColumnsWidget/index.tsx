@@ -17,7 +17,7 @@ import React from 'react';
 import T from 'i18n-react';
 import { ISelectColumnsWidgetProps } from 'components/WranglerGrid/AddTransformationPanel/SelectColumnsWidget/types';
 import {
-  multipleColumnSelected,
+  MULTI_SELECTION_COLUMN,
   ADD_TRANSFORMATION_PREFIX,
 } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { SubHeadBoldFont, NormalFont } from 'components/common/TypographyText';
@@ -73,7 +73,7 @@ export default function({
   handleSelectColumn,
 }: ISelectColumnsWidgetProps) {
   const selectButtonText =
-    multipleColumnSelected?.filter((el) => el.value === transformationName).length > 0
+    MULTI_SELECTION_COLUMN?.filter((el) => el.value === transformationName).length > 0
       ? T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectMultiColumns`).toString()
       : T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectColumn`).toString();
 
