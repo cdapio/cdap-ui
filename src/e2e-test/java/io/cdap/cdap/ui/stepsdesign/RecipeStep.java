@@ -55,7 +55,7 @@ public class RecipeStep {
   @Then("Verify if user is on the wrangle page")
   public void verifyIfUserIsOnTheWranglePage() {
     String url = SeleniumDriver.getDriver().getCurrentUrl();
-    Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
+    Assert.assertTrue(url.contains("/cdap/ns/default/wrangler-grid"));
   }
   @Then("Click on Directive button")
   public void clickOnDirectiveButton() {
@@ -103,7 +103,7 @@ public class RecipeStep {
   public void closeIcon() {
     try {
       SeleniumDriver.getDriver().navigate().refresh();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("close-directive-panel"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -138,7 +138,7 @@ public class RecipeStep {
   @Then("Click on delete icon of any step with \\\"(.,*)\\\"")
   public void verifyByClickingOnDeleteIcon(int stepId) {
     try {
-      WebElement ele = Helper.locateElementByTestId("recipe-steps-span" + stepId);
+      WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
       Actions action = new Actions(SeleniumDriver.getDriver());
       action.moveToElement(ele).perform();
       ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId +"-delete"));
