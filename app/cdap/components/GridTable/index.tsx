@@ -84,11 +84,11 @@ export default function GridTable() {
     GRID_DATA,
     MISSING_DATA_LIST,
     INVALID_COUNT_ARRAY,
-    SET_GRID_DATA_LOADER_AND_SNACKBAR,
+    SET_GRID_DATA_AND_LOADER,
     TABLE_META_INFO_AND_ROWS_DATA,
     LOADER_AND_GRID_DATA,
-    LOADER_DIRECTIVE_OPEN_AND_SNACKBAR,
-    LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR,
+    LOADER_AND_DIRECTIVE_OPEN,
+    LOADER_GRID_DATA_AND_DIRECTIVE,
   }
 
   const [gridTableState, dispatch] = useReducer(reducer, initialGridTableState);
@@ -110,10 +110,6 @@ export default function GridTable() {
     },
   ]);
   const [snackbarState, setSnackbar] = useSnackbar();
-
-  useEffect(() => {
-    console.log(gridTableState, '*()*()*()*()*()*(*(*()*(*()*()*(*(*(');
-  }, [gridTableState]);
 
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
@@ -145,7 +141,7 @@ export default function GridTable() {
         });
 
         dispatch({
-          type: IGridTableActions.LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR,
+          type: IGridTableActions.LOADER_GRID_DATA_AND_DIRECTIVE,
           payload: {
             loading: false,
             gridData: response,
@@ -160,7 +156,7 @@ export default function GridTable() {
       },
       (err) => {
         dispatch({
-          type: IGridTableActions.LOADER_DIRECTIVE_OPEN_AND_SNACKBAR,
+          type: IGridTableActions.LOADER_AND_DIRECTIVE_OPEN,
           payload: {
             loading: false,
             directivePanelIsOpen: false,
@@ -444,7 +440,7 @@ export default function GridTable() {
           },
         });
         dispatch({
-          type: IGridTableActions.SET_GRID_DATA_LOADER_AND_SNACKBAR,
+          type: IGridTableActions.SET_GRID_DATA_AND_LOADER,
           payload: {
             loading: false,
             gridData: response,

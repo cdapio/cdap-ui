@@ -18,61 +18,66 @@ import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
-import GridKPICell from '../GridKPICell';
-import GridTextCell from '../GridTextCell';
+import GridKPICell from 'components/GridTable/components/GridKPICell/index';
+import GridTextCell from 'components/GridTable/components/GridTextCell/index';
+import { IHeaderNamesList, IRowData, IMissingListData } from 'components/GridTable/types';
 
 const TableWrapper = styled(Box)`
   height: calc(100vh - 193px);
   overflow-y: auto;
 `;
 
-export default function({ headersNamesList, missingDataList, rowsDataList }) {
+interface IGridTableContainer {
+  headersNamesList: IHeaderNamesList[];
+  missingDataList: IMissingListData[];
+  rowsDataList: IRowData[];
+}
+
+export default function({ headersNamesList, missingDataList, rowsDataList }: IGridTableContainer) {
   return (
-    <>
-      <TableWrapper>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              {headersNamesList?.length &&
-                headersNamesList.map((eachHeader) => (
-                  <GridHeaderCell
-                    label={eachHeader.label}
-                    types={eachHeader.type}
-                    key={eachHeader.name}
-                  />
-                ))}
-            </TableRow>
-            <TableRow>
-              {missingDataList?.length &&
-                headersNamesList.length &&
-                headersNamesList.map((each, index) => {
-                  return missingDataList.map((item, itemIndex) => {
-                    if (item.name === each.name) {
-                      return <GridKPICell metricData={item} key={item.name} />;
-                    }
-                  });
-                })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rowsDataList?.length &&
-              rowsDataList.map((eachRow, rowIndex) => {
-                return (
-                  <TableRow key={`row-${rowIndex}`}>
-                    {headersNamesList.map((eachKey, eachIndex) => {
-                      return (
-                        <GridTextCell
-                          cellValue={eachRow[eachKey.name] || '--'}
-                          key={`${eachKey.name}-${eachIndex}`}
-                        />
-                      );
-                    })}
-                  </TableRow>
-                );
+    <TableWrapper>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            {headersNamesList?.length &&
+              headersNamesList.map((eachHeader) => (
+                <GridHeaderCell
+                  label={eachHeader.label}
+                  types={eachHeader.type}
+                  key={eachHeader.name}
+                />
+              ))}
+          </TableRow>
+          <TableRow>
+            {missingDataList?.length &&
+              headersNamesList.length &&
+              headersNamesList.map((each, index) => {
+                return missingDataList.map((item, itemIndex) => {
+                  if (item.name === each.name) {
+                    return <GridKPICell metricData={item} key={item.name} />;
+                  }
+                });
               })}
-          </TableBody>
-        </Table>
-      </TableWrapper>
-    </>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rowsDataList?.length &&
+            rowsDataList.map((eachRow, rowIndex) => {
+              return (
+                <TableRow key={`row-${rowIndex}`}>
+                  {headersNamesList.map((eachKey, eachIndex) => {
+                    return (
+                      <GridTextCell
+                        cellValue={eachRow[eachKey.name] || '--'}
+                        key={`${eachKey.name}-${eachIndex}`}
+                      />
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+        </TableBody>
+      </Table>
+    </TableWrapper>
   );
 }
