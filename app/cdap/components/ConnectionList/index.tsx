@@ -310,63 +310,64 @@ export default function() {
     setTabsLength(tabsData?.length);
   }, [tabsData?.length]);
 
+  // No data screen rendered when there are no connections established unders any connector type
+  const NoDataScreen = (
+    <NoRecordScreen
+      title={T.translate(`${PREFIX}.NoRecordScreen.connectionsList.title`)}
+      subtitle={T.translate(`${PREFIX}.NoRecordScreen.connectionsList.subtitle`)}
+    />
+  );
+
+  const ConnectionList = (
+    <FlexContainer>
+      <SelectDatasetWrapper>
+        {filteredData &&
+          Array.isArray(filteredData) &&
+          filteredData?.map((eachFilteredData: IFilteredData, index: number) => {
+            getConnectionId(eachFilteredData);
+            return (
+              <TabsContainerWithHeader>
+                <TabHeaderContainer>
+                  <Header
+                    levelIndex={index}
+                    eachFilteredData={eachFilteredData}
+                    headersRefs={headersRefs}
+                    columnIndex={index}
+                    tabsData={tabsData}
+                    filteredData={filteredData}
+                    searchHandler={searchHandler}
+                    makeCursorFocused={makeCursorFocused}
+                    handleSearch={handleSearch}
+                    refs={refs}
+                    handleClearSearch={handleClearSearch}
+                    data-testid={`header-for-level-${index}`}
+                  />
+                </TabHeaderContainer>
+                <ConnectionTabs
+                  tabsData={eachFilteredData}
+                  handleChange={handleSelectedTab}
+                  value={eachFilteredData.selectedTab}
+                  columnIndex={index}
+                  connectionId={connectionId || ' '}
+                  toggleLoader={(value: boolean, isError?: boolean) => toggleLoader(value, isError)}
+                  setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                />
+              </TabsContainerWithHeader>
+            );
+          })}
+      </SelectDatasetWrapper>
+      {tabsLength < 4 && (
+        <InfographicContainer>
+          <InfoGraph />
+        </InfographicContainer>
+      )}
+    </FlexContainer>
+  );
+
   return (
     <ConnectionsListContainer data-testid="data-sets-parent">
       <SubHeader selectedConnection={tabsData[0]?.selectedTab} />
-      {tabsData && Array.isArray(tabsData) && tabsData.length && tabsData[0]?.data?.length > 0 ? (
-        <FlexContainer>
-          <SelectDatasetWrapper>
-            {filteredData &&
-              Array.isArray(filteredData) &&
-              filteredData?.map((eachFilteredData: IFilteredData, index: number) => {
-                getConnectionId(eachFilteredData);
-                return (
-                  <TabsContainerWithHeader>
-                    <TabHeaderContainer>
-                      <Header
-                        levelIndex={index}
-                        eachFilteredData={eachFilteredData}
-                        headersRefs={headersRefs}
-                        columnIndex={index}
-                        tabsData={tabsData}
-                        filteredData={filteredData}
-                        searchHandler={searchHandler}
-                        makeCursorFocused={makeCursorFocused}
-                        handleSearch={handleSearch}
-                        refs={refs}
-                        handleClearSearch={handleClearSearch}
-                        data-testid={`header-for-level-${index}`}
-                      />
-                    </TabHeaderContainer>
-                    <ConnectionTabs
-                      tabsData={eachFilteredData}
-                      handleChange={handleSelectedTab}
-                      value={eachFilteredData.selectedTab}
-                      columnIndex={index}
-                      connectionId={connectionId || ' '}
-                      toggleLoader={(value: boolean, isError?: boolean) =>
-                        toggleLoader(value, isError)
-                      }
-                      setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-                    />
-                  </TabsContainerWithHeader>
-                );
-              })}
-          </SelectDatasetWrapper>
-          {tabsLength < 4 && (
-            <InfographicContainer>
-              <InfoGraph />
-            </InfographicContainer>
-          )}
-        </FlexContainer>
-      ) : (
-        loading && (
-          <NoRecordScreen
-            title={T.translate(`${PREFIX}.NoRecordScreen.connectionsList.title`)}
-            subtitle={T.translate(`${PREFIX}.NoRecordScreen.connectionsList.subtitle`)}
-          />
-        )
-      )}
+      {tabsData[0]?.data?.length > 0 ? ConnectionList : NoDataScreen}
 
       {loading && (
         <ContainerForLoader>

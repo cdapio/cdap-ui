@@ -78,6 +78,7 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
       enableInteractionInPopover={true}
       modifiers={popperModifiers}
       showPopover={showPopover}
+      dataTestId="actions-popover"
     >
       <ul>
         {actions.map((action, i) => {
@@ -98,6 +99,7 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
               className={classnames(action.className, { disabled: action.disabled })}
               onClick={onClick}
               title={action.title}
+              data-testid={action.label + '-on-popover'}
             >
               {action.label}
             </li>

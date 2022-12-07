@@ -70,6 +70,7 @@ public class PipelineHierarchy {
   @Then("Open transform panel")
   public void openTransformPanel() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("plugin-Transform-group-summary"));
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("plugin-Transform-group-details"));
   }
 
   @Then("Close {string} panel")
