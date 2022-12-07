@@ -45,11 +45,11 @@ enum IGridTableActions {
   GRID_DATA,
   MISSING_DATA_LIST,
   INVALID_COUNT_ARRAY,
-  SET_GRID_DATA_LOADER_AND_SNACKBAR,
+  SET_GRID_DATA_AND_LOADER,
   TABLE_META_INFO_AND_ROWS_DATA,
   LOADER_AND_GRID_DATA,
-  LOADER_DIRECTIVE_OPEN_AND_SNACKBAR,
-  LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR,
+  LOADER_AND_DIRECTIVE_OPEN,
+  LOADER_GRID_DATA_AND_DIRECTIVE,
 }
 
 export const reducer = (state, action) => {
@@ -99,7 +99,7 @@ export const reducer = (state, action) => {
         ...state,
         invalidCountArray: action.payload,
       };
-    case IGridTableActions.SET_GRID_DATA_LOADER_AND_SNACKBAR:
+    case IGridTableActions.SET_GRID_DATA_AND_LOADER:
       return {
         ...state,
         loading: action.payload.loading,
@@ -118,13 +118,13 @@ export const reducer = (state, action) => {
         gridData: action.payload.gridData,
       };
 
-    case IGridTableActions.LOADER_DIRECTIVE_OPEN_AND_SNACKBAR:
+    case IGridTableActions.LOADER_AND_DIRECTIVE_OPEN:
       return {
         ...state,
         loading: action.payload.loading,
         directivePanelIsOpen: action.payload.directivePanelIsOpen,
       };
-    case IGridTableActions.LOADER_GRID_DATA_DIRECTIVE_AND_SNACKBAR:
+    case IGridTableActions.LOADER_GRID_DATA_AND_DIRECTIVE:
       return {
         ...state,
         loading: action.payload.loading,
