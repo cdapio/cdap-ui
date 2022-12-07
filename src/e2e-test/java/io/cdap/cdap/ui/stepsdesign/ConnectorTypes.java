@@ -49,7 +49,7 @@ public class ConnectorTypes {
         System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
       } else if (connectionLabel.equals("Import Data")) {
         String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/wrangle");
+        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
       } else {
         String actualText = SeleniumDriver.getDriver().getCurrentUrl();
         Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/datasources/"
