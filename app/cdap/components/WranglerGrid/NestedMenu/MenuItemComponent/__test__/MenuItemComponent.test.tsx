@@ -56,7 +56,7 @@ describe('Testing Menu Item Component', () => {
     const dummyItem = {
       label: 'test',
       supportedDataType: ['all'],
-      value: T.translate('features.WranglerNewUI.GridPage.menuItems.divider'),
+      value: 'divider',
       options: ['all'],
     };
     render(
@@ -76,7 +76,7 @@ it('should render the heading element', () => {
   const dummyItem = {
     label: 'test',
     supportedDataType: [],
-    value: T.translate('features.WranglerNewUI.GridPage.menuItems.heading'),
+    value: 'heading',
     options: ['all'],
   };
   render(
