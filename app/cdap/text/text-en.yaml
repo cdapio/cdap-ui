@@ -3434,21 +3434,7 @@ features:
     Skip: Skipped
   WranglerNewUI:
     AddConnections:
-      referenceLabel: 'Add Connection'
-    ImportData:
-      referenceLabel: 'Import Data'
-    HomePage:
-      labels:
-        common:
-          viewAll: 'View All'
-          importData: Import Data
-        connectorTypes:
-          title: 'Start data exploration'
-        workspaces:
-          title: 'Continue ongoing data explorations, pick up where you left off'
-    ConnectionsList:
-      labels:
-        loadToGrid: 'Wrangle'
+      referenceLabel: Add Connection
     Breadcrumb:
       labels:
         connectionsList: 'Data Sources'
@@ -3461,6 +3447,10 @@ features:
         wrangleHome: 'home'
     common:
       and: and
+    ConnectionsList:
+      labels:
+        loadToGrid: Wrangle
+        noConnections: No Connections to show
     ColumnViewPanel:
       columns: 'Columns'
       nullValues: 'Null Values'
@@ -3478,6 +3468,21 @@ features:
         recipeSteps: Recipe Steps
         rows: rows
         zoomPercent100: 100%
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: 'Start data exploration'
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
@@ -3501,4 +3506,9 @@ features:
        text: text
        workspaceId: workspaceId
        workspaceName: workspaceName
+    Snackbar:
+      labels:
+        failure: Failure
+        success: Success
+        undo: Undo
 ...
