@@ -60,7 +60,11 @@ const DraftTableView: React.SFC<IProps> = ({ drafts, currentPage, pageLimit }) =
   }
 
   return (
-    <div className="draft-table grid-wrapper" data-cy="draft-pipeline-table">
+    <div
+      className="draft-table grid-wrapper"
+      data-cy="draft-pipeline-table"
+      data-testid="draft-pipeline-table"
+    >
       <div className="grid grid-container">
         {drafts && drafts.length > 0 && (
           <div className="grid-header">

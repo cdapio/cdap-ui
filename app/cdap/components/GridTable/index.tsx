@@ -37,7 +37,6 @@ import {
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import Snackbar from 'components/Snackbar';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
@@ -46,6 +45,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 import { applyDirectives, getAPIRequestPayload } from './services';
 
 const transformationOptions = ['undo', 'redo'];
@@ -80,6 +81,7 @@ export default function GridTable() {
     description: '',
     isSuccess: false,
   });
+  const [snackbarState, setSnackbar] = useSnackbar();
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -137,6 +139,13 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setSnackbar({
+          open: true,
+          isSuccess: true,
+          message: T.translate(
+            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
+          ).toString(),
+        });
       });
   };
 
@@ -401,14 +410,14 @@ export default function GridTable() {
       )}
       {snackbarIsOpen && (
         <Snackbar
-          handleCloseError={() => {
+          handleClose={() => {
             setSnackbarIsOpen(false);
             setSnackbarData({
               description: '',
               isSuccess: false,
             });
           }}
-          description={snackbarData.description}
+          message={snackbarData.description}
           isSuccess={snackbarData.isSuccess}
         />
       )}
@@ -417,6 +426,16 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }
