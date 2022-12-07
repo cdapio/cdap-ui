@@ -44,15 +44,14 @@ import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
-import Snackbar from 'components/Snackbar';
 import { applyDirectives, getAPIRequestPayload } from './services';
 import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
 import { NO_INPUT_REQUIRED_TRANSFORMATION } from 'components/GridTable/constants';
 import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/utils';
-
-const transformationOptions = ['undo', 'redo'];
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
+
+const transformationOptions = ['undo', 'redo'];
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
