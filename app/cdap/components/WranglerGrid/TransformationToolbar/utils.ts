@@ -1,36 +1,34 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ *  Copyright © 2022 Cask Data, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ *  use this file except in compliance with the License. You may obtain a copy of
+ *  the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under
+ *  the License.
  */
 
 import { MENU_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/menuOptions';
 import {
   ColumnIcon,
   FragmentIcon,
-  GridIcon,
   MathIcon,
   NullIcon,
-  OtherIcon,
   SecurityIcon,
   StructureIcon,
 } from 'components/WranglerGrid/TransformationToolbar/iconStore';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import GridOnOutlinedIcon from '@material-ui/icons/GridOnOutlined';
 import ReplayIcon from '@material-ui/icons/Replay';
 import { TOOLBAR_ICONS_LABEL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
 import T from 'i18n-react';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
-import { MATH_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/mathOptions';
-import { OTHER_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/otherOptions';
 
 export const nestedMenuOptions: IMenuItem[] = [
   {
@@ -80,7 +78,7 @@ export const nestedMenuOptions: IMenuItem[] = [
     open: false,
   },
   {
-    options: MATH_OPTIONS,
+    options: [],
     iconSVG: MathIcon,
     title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.mathIcon`).toString(),
     toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.mathIcon`).toString(),
@@ -94,16 +92,16 @@ export const nestedMenuOptions: IMenuItem[] = [
     open: false,
   },
   {
-    options: OTHER_OPTIONS,
-    iconSVG: OtherIcon,
-    title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),
-    toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),
+    options: [],
+    icon: MoreHorizIcon,
+    title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.moreHorizIcon`).toString(),
+    toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.moreHorizIcon`).toString(),
     open: false,
   },
   {
     title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
     toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
-    iconSVG: GridIcon,
+    icon: GridOnOutlinedIcon,
     options: [],
     open: false,
   },
