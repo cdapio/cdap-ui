@@ -86,6 +86,14 @@ export default function({ submitMenuOption }) {
     setDisplayRecentSearches(false);
   };
 
+  const triggerAddTransformationStep = (event, newInputValue) => {
+    const functionName = newInputValue.slice(0, newInputValue.indexOf('('));
+    if (event === null) {
+      const selectedOption = searchResults.find((eachOption) => eachOption.label === functionName);
+      handleOptionClick(selectedOption);
+    }
+  };
+
   useEffect(() => {
     if (textFieldInput === '') {
       setDisplayRecentSearches(true);
@@ -133,13 +141,7 @@ export default function({ submitMenuOption }) {
         clearOnEscape={true}
         inputValue={textFieldInput}
         onInputChange={(event, newInputValue) => {
-          const functionName = newInputValue.slice(0, newInputValue.indexOf('('));
-          if (event === null) {
-            const selectedOption = searchResults.find(
-              (eachOption) => eachOption.label === functionName
-            );
-            handleOptionClick(selectedOption);
-          }
+          triggerAddTransformationStep(event, newInputValue);
         }}
         renderOption={(option) => (
           <SearchResultsContainer
