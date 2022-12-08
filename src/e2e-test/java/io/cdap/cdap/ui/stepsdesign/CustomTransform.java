@@ -41,7 +41,7 @@ public class CustomTransform {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId
-                    ("ongoing-data-explore-card-link-0"));
+                    ("wrangler-home-ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
             System.out.println("Clicked on the data explorations card");

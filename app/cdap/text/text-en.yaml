@@ -3504,6 +3504,8 @@ features:
       params:
         connectionsList: datasources
         wranglerHome: home
+    common:
+      and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
@@ -3511,6 +3513,16 @@ features:
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     HomePage:
       labels:
         common:
@@ -3532,4 +3544,5 @@ features:
         failure: Failure
         success: Success
         undo: Undo
+    
 ...
