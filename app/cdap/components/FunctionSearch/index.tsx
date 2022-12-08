@@ -42,7 +42,7 @@ interface ISearchResult {
   description: string;
   value: string;
   label: string;
-  supportedDataType: string;
+  supportedDataType: string[];
   infoLink: string;
 }
 
@@ -132,6 +132,15 @@ export default function({ submitMenuOption }) {
         clearOnBlur={true}
         clearOnEscape={true}
         inputValue={textFieldInput}
+        onInputChange={(event, newInputValue) => {
+          const functionName = newInputValue.slice(0, newInputValue.indexOf('('));
+          if (event === null) {
+            const selectedOption = searchResults.find(
+              (eachOption) => eachOption.label === functionName
+            );
+            handleOptionClick(selectedOption);
+          }
+        }}
         renderOption={(option) => (
           <SearchResultsContainer
             key={option.directive}

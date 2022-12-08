@@ -56,7 +56,6 @@ export default function({
   transformationName: string;
   transformationLink: string;
 }) {
-  console.log(transformationLink, 'transformationLink');
   return (
     <TransformationNameBox>
       <TransformationNameHeadWrapper>
