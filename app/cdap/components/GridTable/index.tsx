@@ -302,10 +302,10 @@ export default function GridTable() {
             ...gridParams,
           },
         });
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: 'Transformation applied successfully',
+        setSnackbar({
+          open: true,
           isSuccess: true,
+          message: 'Transformation applied successfully',
         });
         setLoading(false);
         setGridData(response);
@@ -317,10 +317,10 @@ export default function GridTable() {
       },
       (error) => {
         setLoading(false);
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: error.message,
+        setSnackbar({
+          open: true,
           isSuccess: false,
+          message: error.message,
         });
         setAddTransformationFunction({
           option: '',
@@ -426,18 +426,16 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
-      {snackbarIsOpen && (
-        <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
-          handleClose={() =>
-            setSnackbar(() => ({
-              open: false,
-            }))
-          }
-          open={snackbarState.open}
-          message={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
-        />
-      )}
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }
