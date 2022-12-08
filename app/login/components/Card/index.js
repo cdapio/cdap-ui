@@ -37,13 +37,15 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 require('./Card.scss');
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 export default class Card extends Component {
   getHeader() {
     let closeButton;
     if (this.props.closeable) {
-      closeButton = <span className="fa fa-times" onClick={this.props.onClose} />;
+      closeButton = (
+        <span className="fa fa-times" onClick={this.props.onClose} />
+      );
     }
 
     const titleHeader = <h3 className="card-title">{this.props.title}</h3>;

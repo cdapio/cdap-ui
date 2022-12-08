@@ -43,10 +43,16 @@ export default function ProgramCards({ programs }) {
         };
 
         entity = parseMetadata(entity);
-        let uniqueId = uuidV4();
+        const uniqueId = uuidV4();
         entity.uniqueId = uniqueId;
 
-        return <EntityCard className="entity-card-container" entity={entity} key={uniqueId} />;
+        return (
+          <EntityCard
+            className="entity-card-container"
+            entity={entity}
+            key={uniqueId}
+          />
+        );
       })}
     </div>
   );

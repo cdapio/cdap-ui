@@ -27,7 +27,9 @@ export default class SortableTable extends Component {
     sortByHeader: '',
     sortOrder: 'asc',
     sortOnInitialLoad:
-      typeof this.props.sortOnInitialLoad !== 'boolean' ? true : this.props.sortOnInitialLoad,
+      typeof this.props.sortOnInitialLoad !== 'boolean'
+        ? true
+        : this.props.sortOnInitialLoad,
   };
 
   componentWillMount() {
@@ -35,7 +37,7 @@ export default class SortableTable extends Component {
       return;
     }
     let entities = this.state.entities;
-    let sortByHeader = this.getDefaultSortedHeader();
+    const sortByHeader = this.getDefaultSortedHeader();
     entities = orderBy(entities, [sortByHeader], [this.state.sortOrder]);
     this.setState({
       entities,
@@ -61,7 +63,7 @@ export default class SortableTable extends Component {
   }
 
   sortBy(header) {
-    let headerProp = header.property;
+    const headerProp = header.property;
     let entities = this.state.entities;
     let sortOrder = this.state.sortOrder;
     let sortByHeader = this.state.sortByHeader;
@@ -91,7 +93,9 @@ export default class SortableTable extends Component {
 
   renderSortableTableHeader(header) {
     if (this.state.sortByHeader !== header.property) {
-      return <span onClick={this.sortBy.bind(this, header)}>{header.label}</span>;
+      return (
+        <span onClick={this.sortBy.bind(this, header)}>{header.label}</span>
+      );
     }
     return (
       <span onClick={this.sortBy.bind(this, header)}>
@@ -106,7 +110,7 @@ export default class SortableTable extends Component {
   }
 
   render() {
-    let tableClasses = classnames('table', this.props.className);
+    const tableClasses = classnames('table', this.props.className);
     return (
       <table className={tableClasses}>
         <thead>

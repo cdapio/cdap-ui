@@ -49,12 +49,16 @@ export default class OneStepDeployPlugin extends Component {
   }
 
   buildSuccessInfo(pluginName) {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.PluginArtifact.success', { pluginName });
-    let subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
-    let buttonLabel = T.translate('features.Wizard.PluginArtifact.callToAction');
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
-    let successInfo = {
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.PluginArtifact.success', {
+      pluginName,
+    });
+    const subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
+    const buttonLabel = T.translate(
+      'features.Wizard.PluginArtifact.callToAction'
+    );
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const successInfo = {
       message,
       subtitle,
       buttonLabel,
@@ -99,7 +103,7 @@ export default class OneStepDeployPlugin extends Component {
     const marketPath = `/packages/${name}/${version}/${pluginJar}`;
     const marketHost = MarketStore.getState().selectedMarketHost;
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
     let cdapPath = `/v3/namespaces/${namespace}/artifacts/${pluginName}`;
     cdapPath = encodeURIComponent(cdapPath);
@@ -111,12 +115,14 @@ export default class OneStepDeployPlugin extends Component {
         marketHost,
         filename: pluginConfig,
       }).subscribe((res) => {
-        let pluginJson = res;
+        const pluginJson = res;
 
-        let artifactExtends = pluginJson.parents.reduce((prev, curr) => `${prev}/${curr}`);
-        let artifactPlugins = pluginJson.plugins || [];
+        const artifactExtends = pluginJson.parents.reduce(
+          (prev, curr) => `${prev}/${curr}`
+        );
+        const artifactPlugins = pluginJson.plugins || [];
 
-        let headers = {
+        const headers = {
           'Content-Type': 'application/octet-stream',
           'Artifact-Version': pluginVersion,
           'Artifact-Extends': artifactExtends,
@@ -126,14 +132,14 @@ export default class OneStepDeployPlugin extends Component {
         };
 
         if (window.CDAP_CONFIG.securityEnabled) {
-          let token = cookie.get('CDAP_Auth_Token');
+          const token = cookie.get('CDAP_Auth_Token');
           if (!isNil(token)) {
             headers.Authorization = `Bearer ${token}`;
           }
         }
 
         const marketUrl = encodeURIComponent(`${marketHost}${marketPath}`);
-        let fetchUrl = `/forwardMarketToCdap?source=${marketUrl}&target=${cdapPath}`;
+        const fetchUrl = `/forwardMarketToCdap?source=${marketUrl}&target=${cdapPath}`;
 
         fetch(fetchUrl, {
           method: 'GET',

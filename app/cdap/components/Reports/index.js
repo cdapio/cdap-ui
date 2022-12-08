@@ -87,13 +87,21 @@ export default class Reports extends Component {
             })}
           />
           <Switch>
-            <Route exact path="/ns/:namespace/reports" component={ReportsList} />
+            <Route
+              exact
+              path="/ns/:namespace/reports"
+              component={ReportsList}
+            />
             <Route
               exact
               path="/ns/:namespace/reports/details/:reportId"
               component={ReportsDetail}
             />
-            <Route exact path="/ns/:namespace/reports/delete-app" component={ReportsAppDelete} />
+            <Route
+              exact
+              path="/ns/:namespace/reports/delete-app"
+              component={ReportsAppDelete}
+            />
           </Switch>
         </div>
       </Provider>

@@ -44,7 +44,8 @@ export function togglePipeline(pipeline) {
   TriggeredPipelineStore.dispatch({
     type: TriggeredPipelineActions.setToggle,
     payload: {
-      expandedPipeline: pipeline === null ? null : `${pipeline.namespace}_${pipeline.application}`,
+      expandedPipeline:
+        pipeline === undefined ? undefined : `${pipeline.namespace}_${pipeline.application}`,
     },
   });
 

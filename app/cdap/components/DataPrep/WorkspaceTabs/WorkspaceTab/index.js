@@ -37,16 +37,18 @@ export default class WorkspaceTab extends Component {
   }
 
   componentDidUpdate() {
-    let workspaceElem = document.getElementById(this.props.workspace.workspaceId);
+    const workspaceElem = document.getElementById(
+      this.props.workspace.workspaceId
+    );
     if (!workspaceElem) {
       return;
     }
 
-    let nameElem = workspaceElem.querySelector('span.original-name');
+    const nameElem = workspaceElem.querySelector('span.original-name');
 
     if (nameElem) {
-      let nameBBox = nameElem.getBoundingClientRect();
-      let newState = nameBBox.width > MAX_NAME_WIDTH;
+      const nameBBox = nameElem.getBoundingClientRect();
+      const newState = nameBBox.width > MAX_NAME_WIDTH;
 
       if (this.state.overflow !== newState) {
         this.setState({ overflow: newState });
@@ -55,11 +57,15 @@ export default class WorkspaceTab extends Component {
   }
 
   renderName() {
-    return <span className="original-name">{this.props.workspace.workspaceName}</span>;
+    return (
+      <span className="original-name">
+        {this.props.workspace.workspaceName}
+      </span>
+    );
   }
 
   renderOverflow() {
-    let name = this.props.workspace.workspaceName;
+    const name = this.props.workspace.workspaceName;
 
     return (
       <span className="display-name">
@@ -71,7 +77,7 @@ export default class WorkspaceTab extends Component {
   }
 
   renderActiveWorkspace() {
-    let workspace = this.props.workspace;
+    const workspace = this.props.workspace;
 
     return (
       <div
@@ -83,7 +89,10 @@ export default class WorkspaceTab extends Component {
           {this.state.overflow ? this.renderOverflow() : this.renderName()}
         </span>
 
-        <span className="fa fa-fw delete-workspace float-right" onClick={this.props.onDelete}>
+        <span
+          className="fa fa-fw delete-workspace float-right"
+          onClick={this.props.onDelete}
+        >
           <IconSVG name="icon-close" />
         </span>
       </div>
@@ -91,17 +100,24 @@ export default class WorkspaceTab extends Component {
   }
 
   renderInactiveWorkspace() {
-    let workspace = this.props.workspace;
+    const workspace = this.props.workspace;
 
     return (
-      <div id={workspace.id} className="workspace-tab clearfix" title={workspace.workspaceName}>
+      <div
+        id={workspace.id}
+        className="workspace-tab clearfix"
+        title={workspace.workspaceName}
+      >
         <span className="display-name-container float-left">
           <Link to={`/ns/${this.namespace}/wrangler/${workspace.workspaceId}`}>
             {this.state.overflow ? this.renderOverflow() : this.renderName()}
           </Link>
         </span>
 
-        <span className="fa fa-fw delete-workspace float-right" onClick={this.props.onDelete}>
+        <span
+          className="fa fa-fw delete-workspace float-right"
+          onClick={this.props.onDelete}
+        >
           <IconSVG name="icon-close" />
         </span>
       </div>
@@ -109,7 +125,9 @@ export default class WorkspaceTab extends Component {
   }
 
   render() {
-    return this.props.active ? this.renderActiveWorkspace() : this.renderInactiveWorkspace();
+    return this.props.active
+      ? this.renderActiveWorkspace()
+      : this.renderInactiveWorkspace();
   }
 }
 

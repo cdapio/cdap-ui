@@ -40,7 +40,11 @@ const mapStateToFieldNameProps = (state, ownProps) => {
     name: objectQuery(state.keyValues.pairs, ownProps.index, 'key'),
     value: objectQuery(state.keyValues.pairs, ownProps.index, 'value'),
     provided: objectQuery(state.keyValues.pairs, ownProps.index, 'provided'),
-    notDeletable: objectQuery(state.keyValues.pairs, ownProps.index, 'notDeletable'),
+    notDeletable: objectQuery(
+      state.keyValues.pairs,
+      ownProps.index,
+      'notDeletable'
+    ),
     showReset: objectQuery(state.keyValues.pairs, ownProps.index, 'showReset'),
   };
 };
@@ -85,12 +89,15 @@ const mapDispatchToFieldNameProps = (dispatch, ownProps) => {
   };
 };
 
-let KeyValuePairCopy = connect(mapStateToFieldNameProps, mapDispatchToFieldNameProps)(KeyValuePair);
+const KeyValuePairCopy = connect(
+  mapStateToFieldNameProps,
+  mapDispatchToFieldNameProps
+)(KeyValuePair);
 
 export default class KeyValuePairs extends Component {
   constructor(props) {
     super(props);
-    var { keyValues } = props;
+    const { keyValues } = props;
     this.state = {
       pairs: cloneDeep(keyValues.pairs),
     };
@@ -101,7 +108,7 @@ export default class KeyValuePairs extends Component {
   }
 
   componentDidMount() {
-    var { onKeyValueChange } = this.props;
+    const { onKeyValueChange } = this.props;
     this.subscription = KeyValueStore.subscribe(() => {
       this.setState(KeyValueStore.getState().keyValues);
       if (typeof onKeyValueChange === 'function') {

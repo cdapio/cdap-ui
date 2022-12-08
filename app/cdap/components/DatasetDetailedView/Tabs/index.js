@@ -48,7 +48,7 @@ export default class DatasetDetailedViewTabs extends Component {
 
   render() {
     const baseLinkPath = `/ns/${this.props.params.namespace}/datasets/${this.props.params.datasetId}`;
-    const baseMatchPath = `/ns/:namespace/datasets/:datasetId`;
+    const baseMatchPath = '/ns/:namespace/datasets/:datasetId';
 
     return (
       <div className="overview-tab">
@@ -59,7 +59,7 @@ export default class DatasetDetailedViewTabs extends Component {
                 to={`${baseLinkPath}/schema`}
                 activeClassName="active"
                 isActive={(match, location) => {
-                  let basepath = `^${baseLinkPath}(/schema)?$`;
+                  const basepath = `^${baseLinkPath}(/schema)?$`;
                   return location.pathname.match(basepath);
                 }}
               >
@@ -70,7 +70,10 @@ export default class DatasetDetailedViewTabs extends Component {
 
           <NavItem>
             <div className="nav-link">
-              <RouterNavLink to={`${baseLinkPath}/programs`} activeClassName="active">
+              <RouterNavLink
+                to={`${baseLinkPath}/programs`}
+                activeClassName="active"
+              >
                 {T.translate(`${PREFIX}.programsWithCount`, {
                   count: this.state.entity.programs.length,
                 })}
@@ -81,7 +84,10 @@ export default class DatasetDetailedViewTabs extends Component {
           <If condition={Theme.showLineage !== false}>
             <NavItem>
               <div className="nav-link">
-                <RouterNavLink to={`${baseLinkPath}/lineage`} activeClassName="active">
+                <RouterNavLink
+                  to={`${baseLinkPath}/lineage`}
+                  activeClassName="active"
+                >
                   {T.translate(`${PREFIX}.lineage`)}
                 </RouterNavLink>
               </div>
@@ -90,7 +96,10 @@ export default class DatasetDetailedViewTabs extends Component {
 
           <NavItem>
             <div className="nav-link">
-              <RouterNavLink to={`${baseLinkPath}/properties`} activeClassName="active">
+              <RouterNavLink
+                to={`${baseLinkPath}/properties`}
+                activeClassName="active"
+              >
                 {T.translate(`${PREFIX}.properties`)}
               </RouterNavLink>
             </div>

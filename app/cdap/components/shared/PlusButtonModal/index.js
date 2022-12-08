@@ -87,11 +87,17 @@ export default class PlusButtonModal extends Component {
         <ModalHeader>
           <span className="float-left">
             <span className="plus-modal-header-text">
-              {this.state.viewMode === 'resourcecenter' ? resourceCenter : market}
+              {this.state.viewMode === 'resourcecenter'
+                ? resourceCenter
+                : market}
             </span>
           </span>
           <div className="float-right">
-            <div className="modal-close-btn" onClick={this.closeHandler} data-cy="hub-close-btn">
+            <div
+              className="modal-close-btn"
+              onClick={this.closeHandler}
+              data-cy="hub-close-btn"
+            >
               <IconSVG name="icon-close" />
             </div>
           </div>

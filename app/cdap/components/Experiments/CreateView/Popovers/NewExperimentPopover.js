@@ -35,7 +35,9 @@ const ExperimentName = ({ name, onNameChange }) => {
   return (
     <FormGroup row>
       <Col xs="12">
-        <Label className="control-label">{T.translate(`${PREFIX}.experimentName`)}</Label>
+        <Label className="control-label">
+          {T.translate(`${PREFIX}.experimentName`)}
+        </Label>
         <Input
           value={name}
           onChange={onNameChange}
@@ -54,7 +56,9 @@ const ExperimentDescription = ({ description, onDescriptionChange }) => {
   return (
     <FormGroup row>
       <Col xs="12">
-        <Label className="control-label">{T.translate('commons.descriptionLabel')}</Label>
+        <Label className="control-label">
+          {T.translate('commons.descriptionLabel')}
+        </Label>
         <Input
           type="textarea"
           value={description}
@@ -74,9 +78,13 @@ const ExperimentOutcome = ({ outcome, columns, onOutcomeChange }) => {
   return (
     <FormGroup row>
       <Col xs="12">
-        <Label className="control-label">{T.translate(`${PREFIX}.setOutcome`)}</Label>
+        <Label className="control-label">
+          {T.translate(`${PREFIX}.setOutcome`)}
+        </Label>
         <Input type="select" value={outcome} onChange={onOutcomeChange}>
-          <option key="default">{T.translate(`${PREFIX}.selectOutcome`)}</option>
+          <option key="default">
+            {T.translate(`${PREFIX}.selectOutcome`)}
+          </option>
           {columns.map((column, i) => (
             <option key={i}>{column}</option>
           ))}
@@ -93,7 +101,9 @@ ExperimentOutcome.propTypes = {
 
 const CreateExperimentBtn = ({ state, createExperiment }) => {
   const isAddExperimentBtnEnabled = () => {
-    return state.name.length && state.description.length && state.outcome.length;
+    return (
+      state.name.length && state.description.length && state.outcome.length
+    );
   };
   const renderBtnContent = () => {
     if (state.loading) {
@@ -123,7 +133,9 @@ const NewExperimentPopoverWrapper = ({ popover, isEdit }) => {
   return (
     <div className="new-experiment-popover">
       <div className="popover-container">
-        <strong className="popover-heading">{T.translate(`${PREFIX}.createNewExperiment`)}</strong>
+        <strong className="popover-heading">
+          {T.translate(`${PREFIX}.createNewExperiment`)}
+        </strong>
         <ExperimentOutcomeWrapper />
         <hr />
         <ExperimentNameWrapper />
@@ -138,8 +150,12 @@ NewExperimentPopoverWrapper.propTypes = {
   isEdit: PropTypes.bool,
 };
 const mapDispatchToCreateExperimentBtnProps = () => ({ createExperiment });
-const mapStateToCreateExperimentBtnProps = (state) => ({ state: { ...state.experiments_create } });
-const mapStateToNameProps = (state) => ({ name: state.experiments_create.name });
+const mapStateToCreateExperimentBtnProps = (state) => ({
+  state: { ...state.experiments_create },
+});
+const mapStateToNameProps = (state) => ({
+  name: state.experiments_create.name,
+});
 const mapDispatchToNameProps = () => ({ onNameChange: onExperimentNameChange });
 const mapStateToDescriptionProps = (state) => ({
   description: state.experiments_create.description,
@@ -151,7 +167,9 @@ const mapStateToOutcomeProps = (state) => ({
   outcome: state.experiments_create.outcome,
   columns: state.model_create.columns,
 });
-const mapDispatchToOutcomeProps = () => ({ onOutcomeChange: onExperimentOutcomeChange });
+const mapDispatchToOutcomeProps = () => ({
+  onOutcomeChange: onExperimentOutcomeChange,
+});
 const mapNEPWStateToProps = (state) => ({
   popover: state.experiments_create.popover,
   isEdit: state.experiments_create.isEdit,
@@ -161,7 +179,10 @@ const ExperiementDescriptionWrapper = connect(
   mapStateToDescriptionProps,
   mapDispatchToDescriptionToProps
 )(ExperimentDescription);
-const ExperimentNameWrapper = connect(mapStateToNameProps, mapDispatchToNameProps)(ExperimentName);
+const ExperimentNameWrapper = connect(
+  mapStateToNameProps,
+  mapDispatchToNameProps
+)(ExperimentName);
 const ExperimentOutcomeWrapper = connect(
   mapStateToOutcomeProps,
   mapDispatchToOutcomeProps

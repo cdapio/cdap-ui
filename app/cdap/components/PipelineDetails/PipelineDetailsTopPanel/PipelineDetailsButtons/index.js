@@ -26,7 +26,10 @@ import PipelineSummaryButton from 'components/PipelineDetails/PipelineDetailsTop
 import { PipelineHistoryButton } from './PipelineHistoryButton';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-boost';
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
 import introspectionQueryResultData from '../../../../../../graphql/fragments/fragmentTypes.json';
 import Cookies from 'universal-cookie';
 import SessionTokenStore from 'services/SessionTokenStore';
@@ -97,9 +100,13 @@ const mapStateToScheduleButton = (state, ownProps) => {
   };
 };
 
-const ConnectedConfigureButton = connect(mapStateToConfigureButton)(PipelineConfigureButton);
+const ConnectedConfigureButton = connect(mapStateToConfigureButton)(
+  PipelineConfigureButton
+);
 const ConnectedRunButton = connect(mapStateToRunButton)(PipelineRunButton);
-const ConnectedScheduleButton = connect(mapStateToScheduleButton)(PipelineScheduleButton);
+const ConnectedScheduleButton = connect(mapStateToScheduleButton)(
+  PipelineScheduleButton
+);
 
 export default function PipelineDetailsButtons({
   pipelineType,
@@ -155,8 +162,13 @@ export default function PipelineDetailsButtons({
             runError={runError}
             isLatestVersion={isLatestVersion}
           />
-          <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
-          {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
+          <PipelineSummaryButton
+            pipelineType={pipelineType}
+            pipelineName={pipelineName}
+          />
+          {lifecycleManagementEditEnabled && (
+            <PipelineHistoryButton pipelineName={pipelineName} />
+          )}
         </div>
       </Provider>
     </ApolloProvider>

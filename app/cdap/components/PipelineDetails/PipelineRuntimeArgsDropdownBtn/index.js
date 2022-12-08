@@ -80,11 +80,17 @@ export default class PipelineRuntimeArgsDropdownBtn extends Component {
     return (
       <ThemeWrapper>
         <fieldset disabled={this.props.disabled}>
-          <div className="arrow-btn-container" data-testid="arrow-btn-container">
+          <div
+            className="arrow-btn-container"
+            data-testid="arrow-btn-container"
+          >
             <div
-              className={classnames('btn pipeline-action-btn pipeline-run-btn', {
-                'btn-popover-open': this.state.showRunOptions,
-              })}
+              className={classnames(
+                'btn pipeline-action-btn pipeline-run-btn',
+                {
+                  'btn-popover-open': this.state.showRunOptions,
+                }
+              )}
               ref={this.dropdownButtonRef}
               onClick={() => {
                 if (!this.props.disabled) {

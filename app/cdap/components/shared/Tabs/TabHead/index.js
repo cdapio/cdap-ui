@@ -17,7 +17,7 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-var classnames = require('classnames');
+const classnames = require('classnames');
 require('./TabHead.scss');
 export default class TabHead extends Component {
   constructor(props) {

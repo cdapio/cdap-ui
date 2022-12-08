@@ -65,7 +65,9 @@ export default class DataPrepPlusButton extends Component {
     return (
       <Alert
         showAlert={this.state.showSuccessAlert}
-        message={T.translate('features.DataPrep.TopPanel.PlusButton.successMessage')}
+        message={T.translate(
+          'features.DataPrep.TopPanel.PlusButton.successMessage'
+        )}
         onClose={this.onAlertClose}
         type="success"
       />
@@ -77,8 +79,10 @@ export default class DataPrepPlusButton extends Component {
       return null;
     }
 
-    let input = {
-      headerLabel: T.translate('features.Resource-Center.Directive.modalheadertitle'),
+    const input = {
+      headerLabel: T.translate(
+        'features.Resource-Center.Directive.modalheadertitle'
+      ),
     };
 
     return (

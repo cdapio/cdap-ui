@@ -90,7 +90,7 @@ function MultiSelectBase({
   const [selectWidth, setSelectWidth] = useState(600);
 
   //  onChangeHandler takes array, turns it into string w/delimiter, and calls onChange on the string
-  const onChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeHandler = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const values = event.target.value as any; // it's expecting a string but multiple select returns an array
     const selectionsString = values.filter((val) => val).join(delimiter);
     setSelections(values);

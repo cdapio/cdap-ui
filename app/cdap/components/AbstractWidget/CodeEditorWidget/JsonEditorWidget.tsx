@@ -52,7 +52,7 @@ const JsonEditorWidgetView: React.FC<IJsonEditorProps> = ({
         mode="json"
         rows={rows}
         value={value}
-        onChange={onChange}
+        onChange={onChange as () => void}
         disabled={disabled}
         classes={{ root: classes.editorRoot }}
         dataCy={dataCy}

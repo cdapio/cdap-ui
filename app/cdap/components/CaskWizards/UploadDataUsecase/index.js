@@ -21,7 +21,12 @@ import UploadDataWizard from 'components/CaskWizards/UploadData';
 
 export default function UploadDataUsecaseWizard({ input, onClose, isOpen }) {
   return (
-    <UploadDataWizard isOpen={isOpen} input={input} onClose={onClose} buildSuccessInfo={() => {}} />
+    <UploadDataWizard
+      isOpen={isOpen}
+      input={input}
+      onClose={onClose}
+      buildSuccessInfo={() => {}}
+    />
   );
 }
 

@@ -42,8 +42,9 @@ export default class ProgramsTab extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
-    let entitiesMatch =
-      objectQuery(nextProps, 'entity', 'name') === objectQuery(this.props, 'entity', 'name');
+    const entitiesMatch =
+      objectQuery(nextProps, 'entity', 'name') ===
+      objectQuery(this.props, 'entity', 'name');
     if (!entitiesMatch) {
       this.setState({
         entity: nextProps.entity,
@@ -57,19 +58,19 @@ export default class ProgramsTab extends Component {
     this.statusSubscriptions.forEach((sub) => sub.unsubscribe());
   }
   setRunningPrograms() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
     this.state.entity.programs.forEach((program) => {
-      let params = {
+      const params = {
         namespace,
         appId: program.app,
         programType: convertProgramToApi(program.type),
         programId: program.name,
       };
-      let subscription = MyProgramApi.pollRuns(params)
+      const subscription = MyProgramApi.pollRuns(params)
         .combineLatest(MyProgramApi.pollStatus(params))
         .subscribe((res) => {
           let runningPrograms = this.state.runningPrograms;
-          let programState = runningPrograms.filter(
+          const programState = runningPrograms.filter(
             (prog) => prog.name === program.name && prog.app === program.app
           );
           if (programState.length) {
@@ -103,7 +104,7 @@ export default class ProgramsTab extends Component {
         .map((runningProgram) => runningProgram.status)
         .reduce((prev, curr) => prev + curr);
       programsForTable = this.state.entity.programs.map((program) => {
-        let matchedProg =
+        const matchedProg =
           this.state.runningPrograms.find(
             (prog) => prog.name === program.name && prog.app === program.app
           ) || null;
@@ -133,9 +134,12 @@ export default class ProgramsTab extends Component {
             <div className="message-section float-left">
               <strong> {title} </strong>
               <div>
-                {T.translate('features.Overview.ProgramTab.runningProgramLabel', {
-                  programCount: runningProgramsCount,
-                })}
+                {T.translate(
+                  'features.Overview.ProgramTab.runningProgramLabel',
+                  {
+                    programCount: runningProgramsCount,
+                  }
+                )}
               </div>
             </div>
             <ViewSwitch>

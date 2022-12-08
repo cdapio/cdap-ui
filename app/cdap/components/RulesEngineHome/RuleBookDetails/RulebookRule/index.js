@@ -54,7 +54,7 @@ const dropTarget = {
       return;
     }
 
-    let { componentRef } = component.handler.ref.current;
+    const { componentRef } = component.handler.ref.current;
     if (!componentRef) {
       return;
     }
@@ -91,8 +91,8 @@ const dropTarget = {
     monitor.getItem().index = hoverIndex;
   },
   drop: (props, monitor) => {
-    let dragIndex = monitor.getItem().index;
-    let hoverIndex = props.index;
+    const dragIndex = monitor.getItem().index;
+    const hoverIndex = props.index;
     props.onRuleSort(dragIndex, hoverIndex);
   },
 };
@@ -111,7 +111,14 @@ class RulebookRule extends Component {
   componentRef = null;
 
   render() {
-    let { index, rule, onRemove, connectDropTarget, connectDragSource, isDragging } = this.props;
+    const {
+      index,
+      rule,
+      onRemove,
+      connectDropTarget,
+      connectDragSource,
+      isDragging,
+    } = this.props;
     return connectDragSource(
       connectDropTarget(
         <div
@@ -128,7 +135,10 @@ class RulebookRule extends Component {
           <Col xs={2}>{rule.id}</Col>
           <Col xs={5}>{rule.description}</Col>
           <Col xs={1}>
-            <button className="btn btn-link remove-button" onClick={() => onRemove(rule.id)}>
+            <button
+              className="btn btn-link remove-button"
+              onClick={() => onRemove(rule.id)}
+            >
               {T.translate(`${PREFIX}.remove`)}
             </button>
           </Col>
@@ -137,9 +147,18 @@ class RulebookRule extends Component {
           </Col>
           <Col xs={2}>
             {isNil(rule.metric) ? null : (
-              <Sparklines data={rule.metric} svgWidth={SVGWIDTH} svgHeight={SVGHEIGHT} limit={10}>
-                <SparklinesBars style={{ fill: SPARKLINECOLOR, fillOpacity: '.15' }} />
-                <SparklinesLine style={{ stroke: SPARKLINECOLOR, fill: 'none' }} />
+              <Sparklines
+                data={rule.metric}
+                svgWidth={SVGWIDTH}
+                svgHeight={SVGHEIGHT}
+                limit={10}
+              >
+                <SparklinesBars
+                  style={{ fill: SPARKLINECOLOR, fillOpacity: '.15' }}
+                />
+                <SparklinesLine
+                  style={{ stroke: SPARKLINECOLOR, fill: 'none' }}
+                />
               </Sparklines>
             )}
           </Col>

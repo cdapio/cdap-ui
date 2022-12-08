@@ -19,7 +19,7 @@ import React from 'react';
 import VegaLiteChart from 'components/VegaLiteChart';
 import EmptyMetricMessage from 'components/Experiments/DetailedView/ExperimentMetricsDropdown/EmptyMetricMessage';
 
-var chartSpec = {
+const chartSpec = {
   data: {
     values: [],
   },
@@ -55,7 +55,13 @@ var chartSpec = {
   },
 };
 
-export default function MetricChartWithLegend({ xAxisTitle, values, height, width, colorRange }) {
+export default function MetricChartWithLegend({
+  xAxisTitle,
+  values,
+  height,
+  width,
+  colorRange,
+}) {
   let newChartSpec = {};
   if (Array.isArray(colorRange) && colorRange.length) {
     newChartSpec = {
@@ -71,12 +77,14 @@ export default function MetricChartWithLegend({ xAxisTitle, values, height, widt
     newChartSpec = chartSpec;
   }
 
-  let spec = {
+  const spec = {
     ...newChartSpec,
     height,
     width,
   };
-  xAxisTitle ? (spec.encoding.x.axis.title = xAxisTitle) : delete spec.encoding.x.axis.title;
+  xAxisTitle
+    ? (spec.encoding.x.axis.title = xAxisTitle)
+    : delete spec.encoding.x.axis.title;
   if (!values.length) {
     return (
       <EmptyMetricMessage

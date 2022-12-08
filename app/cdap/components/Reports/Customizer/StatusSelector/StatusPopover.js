@@ -19,7 +19,10 @@ import PropTypes from 'prop-types';
 import Popover from 'components/shared/Popover';
 import IconSVG from 'components/shared/IconSVG';
 import { connect } from 'react-redux';
-import { ReportsActions, STATUS_OPTIONS } from 'components/Reports/store/ReportsStore';
+import {
+  ReportsActions,
+  STATUS_OPTIONS,
+} from 'components/Reports/store/ReportsStore';
 import StatusViewer from 'components/Reports/Customizer/StatusSelector/StatusViewer';
 import StatusMapper from 'services/StatusMapper';
 import T from 'i18n-react';
@@ -45,9 +48,9 @@ class StatusPopoverView extends Component {
   };
 
   toggleOption = (option) => {
-    let index = this.state.selections.indexOf(option);
+    const index = this.state.selections.indexOf(option);
 
-    let newArr = [...this.state.selections];
+    const newArr = [...this.state.selections];
 
     if (index === -1) {
       newArr.push(option);
@@ -90,8 +93,18 @@ class StatusPopoverView extends Component {
         <div className="options">
           {STATUS_OPTIONS.map((option) => {
             return (
-              <div key={option} className="option" onClick={this.toggleOption.bind(this, option)}>
-                <IconSVG name={this.isSelected(option) ? 'icon-check-square' : 'icon-square-o'} />
+              <div
+                key={option}
+                className="option"
+                onClick={this.toggleOption.bind(this, option)}
+              >
+                <IconSVG
+                  name={
+                    this.isSelected(option)
+                      ? 'icon-check-square'
+                      : 'icon-square-o'
+                  }
+                />
                 <IconSVG name="icon-circle" className={option.toLowerCase()} />
 
                 <span>{StatusMapper.lookupDisplayStatus(option)}</span>

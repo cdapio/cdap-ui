@@ -47,7 +47,11 @@ class SaveButtonView extends Component {
     }
 
     return (
-      <SaveModal name={this.props.name} toggle={this.toggleModal} reportId={this.props.reportId} />
+      <SaveModal
+        name={this.props.name}
+        toggle={this.toggleModal}
+        reportId={this.props.reportId}
+      />
     );
   };
 

@@ -49,7 +49,7 @@ export default class Alert extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { showAlert, type, message, element } = nextProps;
+    const { showAlert, type, message, element } = nextProps;
     if (
       showAlert !== this.state.showAlert ||
       type !== this.state.type ||
@@ -70,7 +70,10 @@ export default class Alert extends Component {
   }
 
   resetTimeout = () => {
-    if (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) {
+    if (
+      this.state.type === ALERT_STATUS.Success ||
+      this.state.type === ALERT_STATUS.Info
+    ) {
       clearTimeout(this.alertTimeout);
       this.alertTimeout = setTimeout(this.onClose, CLOSE_TIMEOUT);
     }
@@ -113,7 +116,9 @@ export default class Alert extends Component {
        * the height: 100% overlay with the canEditPageWhileOpen prop. The long term fix should be using a toast.
        */
       <Modal
-        modalClassName={this.props.canEditPageWhileOpen ? 'can-edit-page-while-open' : ''}
+        modalClassName={
+          this.props.canEditPageWhileOpen ? 'can-edit-page-while-open' : ''
+        }
         isOpen={this.state.showAlert}
         toggle={() => {}}
         backdrop={false}
@@ -124,7 +129,11 @@ export default class Alert extends Component {
         <div className={this.state.type} data-cy="alert">
           {msgElem}
           {this.props.actionElements}
-          <IconSVG name="icon-close" onClick={this.onClose} dataCy="alert-close" />
+          <IconSVG
+            name="icon-close"
+            onClick={this.onClose}
+            dataCy="alert-close"
+          />
         </div>
       </Modal>
     );

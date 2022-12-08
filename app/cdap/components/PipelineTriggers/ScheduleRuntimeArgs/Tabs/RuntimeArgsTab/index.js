@@ -44,12 +44,12 @@ class RuntimArgsTab extends Component {
   };
 
   getRuntimeArgMapping = () => {
-    let { argsMapping } = ScheduleRuntimeArgsStore.getState().args;
-    let runTimeArgMapping = argsMapping.filter((arg) => {
+    const { argsMapping } = ScheduleRuntimeArgsStore.getState().args;
+    const runTimeArgMapping = argsMapping.filter((arg) => {
       if (!arg.key || !arg.value) {
         return false;
       }
-      let splitKey = arg.key.split(DEFAULTFIELDDELIMITER);
+      const splitKey = arg.key.split(DEFAULTFIELDDELIMITER);
       return splitKey.length > 1 ? false : true;
     });
     return runTimeArgMapping;
@@ -69,7 +69,9 @@ class RuntimArgsTab extends Component {
 
   renderEnabledRow(list) {
     return list.map((macro, i) => {
-      let matchingKeyValue = this.state.runTimeArgMapping.find((arg) => arg.value === macro);
+      const matchingKeyValue = this.state.runTimeArgMapping.find(
+        (arg) => arg.value === macro
+      );
       let key, value;
       if (matchingKeyValue) {
         key =
@@ -101,14 +103,18 @@ class RuntimArgsTab extends Component {
   }
 
   renderContent() {
-    let { triggeredPipelineInfo, disabled, argsMapping } = ScheduleRuntimeArgsStore.getState().args;
+    const {
+      triggeredPipelineInfo,
+      disabled,
+      argsMapping,
+    } = ScheduleRuntimeArgsStore.getState().args;
     let list = triggeredPipelineInfo.macros;
     if (disabled) {
       list = argsMapping.filter((arg) => arg.type === 'runtime');
     }
 
     if (!list.length) {
-      let emptyMessage = disabled
+      const emptyMessage = disabled
         ? `${PREFIX}.disabledNoRuntimeArgsMessage`
         : `${PREFIX}.noRuntimeArgsMessage`;
 
@@ -130,9 +136,15 @@ class RuntimArgsTab extends Component {
     return (
       <div className={this.props.classes.runTimeRowContainer}>
         <Row className="header">
-          <Col xs={6}> {T.translate(`${PREFIX}.TableHeaders.t_runtimeargs`)} </Col>
+          <Col xs={6}>
+            {' '}
+            {T.translate(`${PREFIX}.TableHeaders.t_runtimeargs`)}{' '}
+          </Col>
           <Col xs={1} />
-          <Col xs={5}> {T.translate(`${PREFIX}.TableHeaders.runtimeargs`)} </Col>
+          <Col xs={5}>
+            {' '}
+            {T.translate(`${PREFIX}.TableHeaders.runtimeargs`)}{' '}
+          </Col>
         </Row>
         {disabled ? this.renderDisabledRows(list) : this.renderEnabledRow(list)}
       </div>
@@ -140,7 +152,7 @@ class RuntimArgsTab extends Component {
   }
 
   render() {
-    let {
+    const {
       triggeringPipelineInfo,
       triggeredPipelineInfo,
       disabled,

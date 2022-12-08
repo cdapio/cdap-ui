@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { List, Map } from 'immutable';
 import {
@@ -32,7 +32,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import HttpExecutorActions from 'components/HttpExecutor/store/HttpExecutorActions';
-import If from 'components/shared/If';
 import { RequestMethod } from 'components/HttpExecutor';
 import RequestRow from 'components/HttpExecutor/RequestHistoryTab/RequestRow';
 import RequestSearch from 'components/HttpExecutor/RequestHistoryTab/RequestSearch';
@@ -150,12 +149,12 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
   requestLog,
   setRequestLog,
 }) => {
-  const [ClearAllDialogOpen, setClearAllDialogOpen] = React.useState(false);
-  const [searchText, setSearchText] = React.useState('');
+  const [ClearAllDialogOpen, setClearAllDialogOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   // Query through localstorage to populate RequestHistoryTab
   // requestLog maps timestamp date (e.g. April 5th) to a list of corresponding request histories, sorted by timestamp
-  React.useEffect(() => {
+  useEffect(() => {
     fetchFromLocalStorage();
   }, []);
 
@@ -166,7 +165,7 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
     const storedLogs = localStorage.getItem(REQUEST_HISTORY);
     if (storedLogs) {
       try {
-        const savedCalls = List(JSON.parse(storedLogs));
+        const savedCalls: List<IRequestHistory> = List(JSON.parse(storedLogs));
         savedCalls
           .sort((a: IRequestHistory, b: IRequestHistory) =>
             compareByTimestamp(a.timestamp, b.timestamp)
@@ -215,7 +214,7 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
           const filteredRequests = getFilteredRequestLogs(requests, searchText);
           return (
             <div key={dateID}>
-              <If condition={filteredRequests.size > 0}>
+              {filteredRequests.size > 0 && (
                 <StyledExpansionPanel key={dateID} defaultExpanded elevation={0}>
                   <StyledExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>{dateID}</Typography>
@@ -226,7 +225,7 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
                     ))}
                   </ExpansionPanelDetails>
                 </StyledExpansionPanel>
-              </If>
+              )}
             </div>
           );
         })}

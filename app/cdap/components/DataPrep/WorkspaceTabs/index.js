@@ -42,9 +42,9 @@ export default class WorkspaceTabs extends Component {
   constructor(props) {
     super(props);
 
-    let initialState = DataPrepStore.getState();
+    const initialState = DataPrepStore.getState();
 
-    let initialSplit = this.splitTabs(
+    const initialSplit = this.splitTabs(
       initialState.workspaces.list,
       INITIAL_MAX_TABS,
       initialState.dataprep.workspaceId
@@ -64,11 +64,14 @@ export default class WorkspaceTabs extends Component {
 
     this.getWorkspaceList = this.getWorkspaceList.bind(this);
     this.splitTabs = this.splitTabs.bind(this);
-    this.debouncedCalculateMaxTabs = debounce(this.calculateMaxTabs.bind(this), 300);
+    this.debouncedCalculateMaxTabs = debounce(
+      this.calculateMaxTabs.bind(this),
+      300
+    );
     this.shouldUpdate = false;
 
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState();
+      const state = DataPrepStore.getState();
 
       this.setState({
         activeWorkspace: state.dataprep.workspaceId,
@@ -110,15 +113,21 @@ export default class WorkspaceTabs extends Component {
     window.removeEventListener('resize', this.debouncedCalculateMaxTabs);
   }
 
-  splitTabs(workspaceList, maxTabs, activeWorkspaceId = this.state.activeWorkspace) {
-    let displayTabs = workspaceList.slice(0, maxTabs);
-    let dropdownTabs = workspaceList.slice(maxTabs);
+  splitTabs(
+    workspaceList,
+    maxTabs,
+    activeWorkspaceId = this.state.activeWorkspace
+  ) {
+    const displayTabs = workspaceList.slice(0, maxTabs);
+    const dropdownTabs = workspaceList.slice(maxTabs);
 
-    let activeWorkspaceIndex = findIndex(dropdownTabs, { id: activeWorkspaceId });
+    const activeWorkspaceIndex = findIndex(dropdownTabs, {
+      id: activeWorkspaceId,
+    });
 
     if (activeWorkspaceIndex !== -1) {
-      let activeWorkspace = dropdownTabs.splice(activeWorkspaceIndex, 1);
-      let lastWorkspaceFromDisplayedTabs = displayTabs.pop();
+      const activeWorkspace = dropdownTabs.splice(activeWorkspaceIndex, 1);
+      const lastWorkspaceFromDisplayedTabs = displayTabs.pop();
 
       displayTabs.push(activeWorkspace[0]);
       // If the workspace screen is small enough, it's possible that maxTabs will
@@ -138,12 +147,15 @@ export default class WorkspaceTabs extends Component {
   }
 
   calculateMaxTabs() {
-    let containerElem = document.getElementsByClassName('workspace-tabs')[0];
-    let boundingBox = containerElem.getBoundingClientRect();
+    const containerElem = document.getElementsByClassName('workspace-tabs')[0];
+    const boundingBox = containerElem.getBoundingClientRect();
 
-    let maxTabs = Math.floor((boundingBox.width - 200) / WORKSPACE_WIDTH);
+    const maxTabs = Math.floor((boundingBox.width - 200) / WORKSPACE_WIDTH);
 
-    let { displayTabs, dropdownTabs } = this.splitTabs(this.state.workspaceList, maxTabs);
+    const { displayTabs, dropdownTabs } = this.splitTabs(
+      this.state.workspaceList,
+      maxTabs
+    );
 
     this.setState({
       maxTabs,
@@ -157,7 +169,7 @@ export default class WorkspaceTabs extends Component {
   }
 
   handleDeleteWorkspace(workspaceId) {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
     MyDataPrepApi.delete({
       context: namespace,
@@ -186,18 +198,22 @@ export default class WorkspaceTabs extends Component {
       return null;
     }
 
-    let list = this.state.dropdownTabs;
+    const list = this.state.dropdownTabs;
 
     return (
       <div className="workspace-tab workspace-dropdown text-center">
         <UncontrolledPopover popperClassName="workspace-list-popover">
           {list.map((workspace) => {
             return (
-              <div key={workspace.workspaceId} className="workspace-list-dropdown-item">
+              <div
+                key={workspace.workspaceId}
+                className="workspace-list-dropdown-item"
+              >
                 <Link
                   to={`/ns/${this.namespace}/wrangler/${workspace.workspaceId}`}
                   className={classnames('workspace-link', {
-                    active: this.state.activeWorkspace === workspace.workspaceId,
+                    active:
+                      this.state.activeWorkspace === workspace.workspaceId,
                   })}
                 >
                   {workspace.workspaceName}
@@ -218,7 +234,7 @@ export default class WorkspaceTabs extends Component {
   }
 
   renderWorkspaceTabs() {
-    let displayWorkspace = this.state.displayTabs;
+    const displayWorkspace = this.state.displayTabs;
 
     return (
       <div className="workspace-tabs-list">
@@ -258,7 +274,10 @@ export default class WorkspaceTabs extends Component {
         confirmationElem={ConfirmationElement}
         confirmButtonText={T.translate(`${PREFIX}.DeleteModal.confirmButton`)}
         cancelButtonText={T.translate(`${PREFIX}.DeleteModal.cancelButton`)}
-        confirmFn={this.handleDeleteWorkspace.bind(this, this.state.deleteWorkspace.workspaceId)}
+        confirmFn={this.handleDeleteWorkspace.bind(
+          this,
+          this.state.deleteWorkspace.workspaceId
+        )}
         cancelFn={this.toggleDeleteWorkspace.bind(this, null)}
         isOpen={true}
         headerTitle={T.translate(`${PREFIX}.DeleteModal.header`)}

@@ -25,7 +25,9 @@ import MyRulesEngineApi from 'api/rulesengine';
 import NamespaceStore from 'services/NamespaceStore';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import DSVEditor from 'components/DSVEditor';
-import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
+import RulesEngineStore, {
+  RULESENGINEACTIONS,
+} from 'components/RulesEngineHome/RulesEngineStore';
 import uuidV4 from 'uuid/v4';
 import { preventPropagation } from 'services/helpers';
 import RulebooksPopover from 'components/RulesEngineHome/RulesTab/Rule/RulebooksPopover';
@@ -87,7 +89,7 @@ class Rule extends Component {
 
   componentDidMount() {
     this.rulesStoreSubscription = RulesEngineStore.subscribe(() => {
-      let { rules } = RulesEngineStore.getState();
+      const { rules } = RulesEngineStore.getState();
       if (rules.activeRuleId === this.props.rule.id) {
         this.fetchRuleDetails();
       } else {
@@ -125,7 +127,7 @@ class Rule extends Component {
     if (this.state.viewDetails) {
       return;
     }
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     this.setState({
       viewDetails: true,
       detailsLoading: true,
@@ -158,7 +160,7 @@ class Rule extends Component {
     this.setState({
       loading: true,
     });
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngineApi.deleteRule({
       namespace,
       ruleid: this.state.ruleDetails.id,
@@ -172,9 +174,12 @@ class Rule extends Component {
       },
       (err) => {
         this.setState({
-          errorMessage: T.translate(`${PREFIX}.ConfirmationModal.failedMessage`, {
-            id: this.state.ruleDetails.id,
-          }),
+          errorMessage: T.translate(
+            `${PREFIX}.ConfirmationModal.failedMessage`,
+            {
+              id: this.state.ruleDetails.id,
+            }
+          ),
           extendedMessage: JSON.stringify(err),
           loading: false,
         });
@@ -188,7 +193,7 @@ class Rule extends Component {
   }
 
   onRuleBookSelect = (rulebookid) => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngineApi.addRuleToRuleBook({
       namespace,
       rulebookid,
@@ -206,7 +211,7 @@ class Rule extends Component {
         </Col>
       );
     }
-    let rules = this.state.ruleDetails.action.map((action) => ({
+    const rules = this.state.ruleDetails.action.map((action) => ({
       uniqueId: uuidV4(),
       property: action,
     }));
@@ -215,11 +220,14 @@ class Rule extends Component {
         <Form onSubmit={preventPropagation}>
           <FormGroup row>
             <Col sm={12}>
-              <p className="description"> {this.state.ruleDetails.description}</p>
+              <p className="description">
+                {' '}
+                {this.state.ruleDetails.description}
+              </p>
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label sm={2}> {T.translate(`commons.when`)} </Label>
+            <Label sm={2}> {T.translate('commons.when')} </Label>
             <Col sm={10}>
               <textarea
                 value={this.state.ruleDetails.condition}
@@ -230,7 +238,7 @@ class Rule extends Component {
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label sm={2}> {T.translate(`commons.then`)} </Label>
+            <Label sm={2}> {T.translate('commons.then')} </Label>
             <Col sm={10}>
               <fieldset disabled={!this.state.edit}>
                 <DSVEditor
@@ -246,15 +254,21 @@ class Rule extends Component {
               <RulebooksPopover onChange={this.onRuleBookSelect} />
             </Col>
             <Col xs={6} className="text-right delete-btn-container">
-              <div className="btn btn-secondary" onClick={this.toggleConfirmationModal}>
+              <div
+                className="btn btn-secondary"
+                onClick={this.toggleConfirmationModal}
+              >
                 <IconSVG name="icon-trash" className="text-danger" />
               </div>
               <ConfirmationModal
                 headerTitle={T.translate(`${PREFIX}.ConfirmationModal.title`)}
                 toggleModal={this.toggleConfirmationModal}
-                confirmationText={T.translate(`${PREFIX}.ConfirmationModal.text`, {
-                  id: this.state.ruleDetails.id,
-                })}
+                confirmationText={T.translate(
+                  `${PREFIX}.ConfirmationModal.text`,
+                  {
+                    id: this.state.ruleDetails.id,
+                  }
+                )}
                 confirmFn={this.onDeleteRule}
                 cancelFn={this.toggleConfirmationModal}
                 isOpen={this.state.confirmationModalIsOpen}
@@ -287,7 +301,9 @@ class Rule extends Component {
             </div>
           </div>
         </Col>
-        <Col xs="5">{moment(this.props.rule.updated * 1000).format('MM-DD-YYYY')}</Col>
+        <Col xs="5">
+          {moment(this.props.rule.updated * 1000).format('MM-DD-YYYY')}
+        </Col>
         <Col xs="1">
           <IconSVG name="icon-bars" />
         </Col>

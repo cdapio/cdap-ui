@@ -79,7 +79,9 @@ const ConnectedCronInput = connect(
 export default function AdvancedView({ isDetailView }) {
   return (
     <div className="schedule-type-content">
-      <div className="schedule-advanced-header">{T.translate(`${PREFIX}.header`)}</div>
+      <div className="schedule-advanced-header">
+        {T.translate(`${PREFIX}.header`)}
+      </div>
       <div className="schedule-advanced-values">
         <ConnectedCronInput
           label={T.translate(`${PREFIX}.min`)}

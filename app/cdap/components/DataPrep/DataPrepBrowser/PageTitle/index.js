@@ -41,10 +41,17 @@ DataPrepBrowserPageTitle.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   connectionId: state[ownProps.browserStateName].connectionId,
   path:
-    isNilOrEmpty(ownProps.locationToPathInState) || !Array.isArray(ownProps.locationToPathInState)
+    isNilOrEmpty(ownProps.locationToPathInState) ||
+    !Array.isArray(ownProps.locationToPathInState)
       ? null
-      : objectQuery(state, ownProps.browserStateName, ...ownProps.locationToPathInState),
+      : objectQuery(
+          state,
+          ownProps.browserStateName,
+          ...ownProps.locationToPathInState
+        ),
 });
 
-const ConnectedDataPrepBrowserPageTitle = connect(mapStateToProps)(DataPrepBrowserPageTitle);
+const ConnectedDataPrepBrowserPageTitle = connect(mapStateToProps)(
+  DataPrepBrowserPageTitle
+);
 export default ConnectedDataPrepBrowserPageTitle;

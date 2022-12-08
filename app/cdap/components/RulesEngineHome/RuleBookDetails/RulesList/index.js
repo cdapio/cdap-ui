@@ -36,7 +36,7 @@ const PREFIX = 'features.RulesEngine.RulesList';
 
 const dropTarget = {
   drop: (props, monitor, component) => {
-    let item = monitor.getItem();
+    const item = monitor.getItem();
     component.addRuleToRulebook(item.rule);
   },
 };
@@ -75,7 +75,7 @@ class RulesList extends Component {
       this.props.onRuleAdd(rule);
       return;
     }
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngineApi.addRuleToRuleBook({
       namespace,
       rulebookid: this.props.rulebookid,
@@ -107,7 +107,7 @@ class RulesList extends Component {
   };
 
   render() {
-    let rules = this.state.rulebookRules;
+    const rules = this.state.rulebookRules;
     return this.props.connectDropTarget(
       <div
         className={classnames('rules-container', {
@@ -116,7 +116,8 @@ class RulesList extends Component {
       >
         <div className="title">
           {' '}
-          {T.translate(`${PREFIX}.rulesLabel`)} ({Array.isArray(rules) ? rules.length : 0}){' '}
+          {T.translate(`${PREFIX}.rulesLabel`)} (
+          {Array.isArray(rules) ? rules.length : 0}){' '}
         </div>
         <div className="rules">
           {!Array.isArray(rules) || (Array.isArray(rules) && !rules.length)
@@ -132,7 +133,9 @@ class RulesList extends Component {
                   />
                 );
               })}
-          <div className="drag-drop-placeholder">{T.translate(`${PREFIX}.dropContainerText`)}</div>
+          <div className="drag-drop-placeholder">
+            {T.translate(`${PREFIX}.dropContainerText`)}
+          </div>
         </div>
       </div>
     );

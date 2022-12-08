@@ -70,7 +70,7 @@ const VirtualScroll = ({
   const itmCount = typeof itemCount === 'function' ? itemCount() : itemCount;
   const totalHeight = itmCount * childHeight;
   const [list, setList] = useState<React.ReactNode>([]);
-  const [promise, setPromise] = useState(null);
+  const [promise, setPromise] = useState<any>(null);
   const [scrollingChildrenUnderFold, setScrollingChildrenUnderFold] = useState(childrenUnderFold);
 
   let startNode = Math.floor(scrollTop / childHeight) - scrollingChildrenUnderFold;

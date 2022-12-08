@@ -23,7 +23,7 @@ import { setExperimentDetailError } from 'components/Experiments/store/Experimen
 import history from 'services/history';
 
 const deleteExperiment = (experimentId, callback, errCallback) => {
-  let namespace = getCurrentNamespace();
+  const namespace = getCurrentNamespace();
   myExperimentsApi
     .deleteExperiment({
       namespace,
@@ -32,7 +32,8 @@ const deleteExperiment = (experimentId, callback, errCallback) => {
     .subscribe(
       () => history.push(`/ns/${namespace}/experiments`),
       (err) => {
-        let error = `Failed to delete the experiment '${experimentId}' - ${err.response || err}`;
+        const error = `Failed to delete the experiment '${experimentId}' - ${err.response ||
+          err}`;
         errCallback(error);
       }
     );
@@ -47,7 +48,12 @@ const deleteConfirmElement = (experimentId) => (
 export default function DeleteExperimentBtn({ experimentId }) {
   return (
     <DeleteEntityBtn
-      confirmFn={deleteExperiment.bind(null, experimentId, null, setExperimentDetailError)}
+      confirmFn={deleteExperiment.bind(
+        null,
+        experimentId,
+        null,
+        setExperimentDetailError
+      )}
       className="btn btn-link"
       headerTitle={'Delete Experiment'}
       confirmationElem={deleteConfirmElement(experimentId)}

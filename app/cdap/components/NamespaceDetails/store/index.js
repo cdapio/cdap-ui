@@ -40,7 +40,10 @@ const defaultInitialState = {
   loading: false,
 };
 
-const namespaceDetails = (state = defaultInitialState, action = defaultAction) => {
+const namespaceDetails = (
+  state = defaultInitialState,
+  action = defaultAction
+) => {
   switch (action.type) {
     case NamespaceDetailsActions.setData:
       return {

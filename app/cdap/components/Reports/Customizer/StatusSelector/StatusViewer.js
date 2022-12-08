@@ -25,7 +25,7 @@ const PREFIX = 'features.Reports.Customizer.StatusSelector';
 
 function StatusViewer(selections) {
   let text = T.translate(`${PREFIX}.selectOne`);
-  let numSelections = selections.length;
+  const numSelections = selections.length;
 
   if (numSelections > 0) {
     if (numSelections === STATUS_OPTIONS.length) {

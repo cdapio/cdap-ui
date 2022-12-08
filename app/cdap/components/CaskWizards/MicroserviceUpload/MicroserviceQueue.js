@@ -17,8 +17,8 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import {Col, FormGroup, Label, Form, Input} from 'reactstrap';
-import {defaultQueueTypes} from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueStore';
+import { Col, FormGroup, Label, Form, Input } from 'reactstrap';
+import { defaultQueueTypes } from 'services/WizardStores/MicroserviceUpload/MicroserviceQueueStore';
 import NamespaceStore from 'services/NamespaceStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 import IconSVG from 'components/shared/IconSVG';
@@ -48,14 +48,16 @@ export default class MicroserviceQueue extends Component {
     index: PropTypes.number,
     onChange: PropTypes.func,
     onAdd: PropTypes.func,
-    onRemove: PropTypes.func
+    onRemove: PropTypes.func,
   };
 
   renderFormGroupProperty(property, required = false, inputType = 'text') {
     return (
       <FormGroup row>
         <Col xs="3">
-          <Label className="control-label">{T.translate(`${PREFIX}.labels.${property}`)}</Label>
+          <Label className="control-label">
+            {T.translate(`${PREFIX}.labels.${property}`)}
+          </Label>
         </Col>
         <Col xs="8">
           <Input
@@ -65,27 +67,26 @@ export default class MicroserviceQueue extends Component {
             className="form-control"
           />
         </Col>
-        {
-          required ?
-            <IconSVG
-              name="icon-asterisk"
-              className="text-danger"
-            />
-          : null
-        }
+        {required ? (
+          <IconSVG name="icon-asterisk" className="text-danger" />
+        ) : null}
       </FormGroup>
     );
   }
 
   renderTMSProperties() {
-    let namespaces = NamespaceStore.getState().namespaces.map(namespace => namespace.name);
+    const namespaces = NamespaceStore.getState().namespaces.map(
+      (namespace) => namespace.name
+    );
     namespaces.push('system');
 
     return (
       <div>
         <FormGroup row>
           <Col xs="3">
-            <Label className="control-label">{T.translate(`${PREFIX}.labels.namespace`)}</Label>
+            <Label className="control-label">
+              {T.translate(`${PREFIX}.labels.namespace`)}
+            </Label>
           </Col>
           <Col xs="8">
             <SelectWithOptions
@@ -118,10 +119,18 @@ export default class MicroserviceQueue extends Component {
         {this.renderFormGroupProperty('connection', true)}
         {this.renderFormGroupProperty('sslKeystoreFilePath')}
         {this.renderFormGroupProperty('sslKeystorePassword', false, 'password')}
-        {this.renderFormGroupProperty('sslKeystoreKeyPassword', false, 'password')}
+        {this.renderFormGroupProperty(
+          'sslKeystoreKeyPassword',
+          false,
+          'password'
+        )}
         {this.renderFormGroupProperty('sslKeystoreType')}
         {this.renderFormGroupProperty('sslTruststoreFilePath')}
-        {this.renderFormGroupProperty('sslTruststorePassword', false, 'password')}
+        {this.renderFormGroupProperty(
+          'sslTruststorePassword',
+          false,
+          'password'
+        )}
         {this.renderFormGroupProperty('sslTruststoreType')}
       </div>
     );
@@ -162,7 +171,9 @@ export default class MicroserviceQueue extends Component {
           >
             <FormGroup row>
               <Col xs="3">
-                <Label className="control-label">{T.translate('commons.nameLabel')}</Label>
+                <Label className="control-label">
+                  {T.translate('commons.nameLabel')}
+                </Label>
               </Col>
               <Col xs="8">
                 <Input
@@ -173,14 +184,13 @@ export default class MicroserviceQueue extends Component {
                   className="form-control"
                 />
               </Col>
-              <IconSVG
-                name="icon-asterisk"
-                className="text-danger"
-              />
+              <IconSVG name="icon-asterisk" className="text-danger" />
             </FormGroup>
             <FormGroup row>
               <Col xs="3">
-                <Label className="control-label">{T.translate('commons.typeLabel')}</Label>
+                <Label className="control-label">
+                  {T.translate('commons.typeLabel')}
+                </Label>
               </Col>
               <Col xs="8">
                 <SelectWithOptions
@@ -189,10 +199,7 @@ export default class MicroserviceQueue extends Component {
                   onChange={this.props.onChange.bind(null, 'type')}
                 />
               </Col>
-              <IconSVG
-                name="icon-asterisk"
-                className="text-danger"
-              />
+              <IconSVG name="icon-asterisk" className="text-danger" />
             </FormGroup>
             {this.renderTypeProperties()}
           </Form>
@@ -208,10 +215,7 @@ export default class MicroserviceQueue extends Component {
             className="btn remove-row-btn btn-link"
             onClick={this.props.onRemove}
           >
-            <IconSVG
-              className="text-danger"
-              name="icon-trash"
-            />
+            <IconSVG className="text-danger" name="icon-trash" />
           </button>
         </div>
       </div>

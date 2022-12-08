@@ -87,7 +87,12 @@ export class AbstractNode<
       EndpointStyle: { radius: 20 },
       Connector: [
         'Flowchart',
-        { stub: [10, 15], alwaysRespectStubs: true, cornerRadius: 20, midpoint: 0.2 },
+        {
+          stub: [10, 15],
+          alwaysRespectStubs: true,
+          cornerRadius: 20,
+          midpoint: 0.2,
+        },
       ],
       paintStyle: endpointPaintStyles,
     };

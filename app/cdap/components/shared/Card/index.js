@@ -38,7 +38,7 @@ import { isDescendant } from 'services/helpers';
 import React, { Component } from 'react';
 require('./Card.scss');
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 export default class Card extends Component {
   container = null;
@@ -46,7 +46,12 @@ export default class Card extends Component {
   getHeader() {
     let closeButton;
     if (this.props.closeable) {
-      closeButton = <span className="fa fa-times card-close-btn" onClick={this.props.onClose} />;
+      closeButton = (
+        <span
+          className="fa fa-times card-close-btn"
+          onClick={this.props.onClose}
+        />
+      );
     }
 
     const titleHeader = <h3 className="card-title">{this.props.title}</h3>;
@@ -81,7 +86,10 @@ export default class Card extends Component {
   }
 
   onClickHandler(e) {
-    if (!this.container || (this.container && !isDescendant(this.container, e.target))) {
+    if (
+      !this.container ||
+      (this.container && !isDescendant(this.container, e.target))
+    ) {
       return;
     }
     if (this.props.onClick) {

@@ -25,7 +25,10 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import {
+  convertKeyValuePairsToMap,
+  convertMapToKeyValuePairs,
+} from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
@@ -41,7 +44,9 @@ const mapStateToProps = (state) => {
     virtualCores: driverResourcesCores
       ? driverResourcesCores.value
       : state.driverResources.virtualCores,
-    memoryMB: driverResourcesMemory ? driverResourcesMemory.value : state.driverResources.memoryMB,
+    memoryMB: driverResourcesMemory
+      ? driverResourcesMemory.value
+      : state.driverResources.memoryMB,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -53,7 +58,8 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES] =
+        e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_VIRTUAL_CORES,
@@ -68,7 +74,8 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY] =
+        e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_DRIVER_MEMORY_MB,
@@ -84,11 +91,18 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const DriverResources = ({ virtualCores, onVirtualCoresChange, memoryMB, onMemoryMBChange }) => {
+const DriverResources = ({
+  virtualCores,
+  onVirtualCoresChange,
+  memoryMB,
+  onMemoryMBChange,
+}) => {
   return (
     <div className="driver" data-cy="resources-config-tab-driver">
       <div className="resource-title-icon">
-        <span className="resource-title">{T.translate(`${PREFIX}.driver`)}</span>
+        <span className="resource-title">
+          {T.translate(`${PREFIX}.driver`)}
+        </span>
         <Popover
           target={() => <IconSVG name="icon-info-circle" />}
           showOn="Hover"
@@ -114,6 +128,9 @@ DriverResources.propTypes = {
   onMemoryMBChange: PropTypes.func,
 };
 
-const ConnectedDriverResources = connect(mapStateToProps, mapDispatchToProps)(DriverResources);
+const ConnectedDriverResources = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DriverResources);
 
 export default ConnectedDriverResources;

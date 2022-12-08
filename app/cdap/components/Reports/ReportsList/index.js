@@ -163,7 +163,9 @@ class ReportsListView extends Component {
     return (
       <div className="list-container empty">
         <div className="text-center">{T.translate(`${PREFIX}.noReports`)}</div>
-        <div className="text-center">{T.translate(`${PREFIX}.makeSelection`)}</div>
+        <div className="text-center">
+          {T.translate(`${PREFIX}.makeSelection`)}
+        </div>
       </div>
     );
   }
@@ -201,7 +203,9 @@ class ReportsListView extends Component {
           <Customizer />
 
           <div className="list-view">
-            <div className="section-title">{T.translate(`${PREFIX}.selectAReport`)}</div>
+            <div className="section-title">
+              {T.translate(`${PREFIX}.selectAReport`)}
+            </div>
 
             {this.renderTable()}
           </div>

@@ -17,22 +17,42 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace';
 
 export const MyPreferenceApi = {
   getSystemPreferences: apiCreator(dataSrc, 'GET', 'REQUEST', '/preferences'),
   setSystemPreferences: apiCreator(dataSrc, 'PUT', 'REQUEST', '/preferences'),
-  getNamespacePreferences: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/preferences`),
-  setNamespacePreferences: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basepath}/preferences`),
+  getNamespacePreferences: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/preferences`
+  ),
+  setNamespacePreferences: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basepath}/preferences`
+  ),
   getNamespacePreferencesResolved: apiCreator(
     dataSrc,
     'GET',
     'REQUEST',
     `${basepath}/preferences?resolved=true`
   ),
-  getAppPreferences: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/apps/:appId/preferences`),
-  setAppPreferences: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basepath}/apps/:appId/preferences`),
+  getAppPreferences: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/apps/:appId/preferences`
+  ),
+  setAppPreferences: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basepath}/apps/:appId/preferences`
+  ),
   getAppPreferencesResolved: apiCreator(
     dataSrc,
     'GET',

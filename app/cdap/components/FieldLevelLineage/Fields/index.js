@@ -31,10 +31,14 @@ function FieldsView({ datasetId, fields, searchValue }) {
   let content = null;
 
   const emptyContent = (
-    <div className="empty">{T.translate(`${PREFIX}.noFields`, { datasetId })}</div>
+    <div className="empty">
+      {T.translate(`${PREFIX}.noFields`, { datasetId })}
+    </div>
   );
 
-  const emptySearch = <div className="empty">{T.translate(`${PREFIX}.noSearchFields`)}</div>;
+  const emptySearch = (
+    <div className="empty">{T.translate(`${PREFIX}.noSearchFields`)}</div>
+  );
 
   const listContent = (
     <div className="fields-list-body">
@@ -67,7 +71,9 @@ function FieldsView({ datasetId, fields, searchValue }) {
       <div className="fields-list">
         <div className="fields-list-header field-row">
           <div className="operations" />
-          <div className="field-name">{T.translate(`${PREFIX}.Headers.fieldName`)}</div>
+          <div className="field-name">
+            {T.translate(`${PREFIX}.Headers.fieldName`)}
+          </div>
           <div className="operations" />
         </div>
 

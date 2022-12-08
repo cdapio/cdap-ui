@@ -34,14 +34,14 @@ class ComputeTabContent extends Component {
   };
 
   onProfileSelect = (profileName, customizations = {}) => {
-    let { runtimeArgs } = PipelineConfigurationsStore.getState();
-    let pairs = [...runtimeArgs.pairs];
-    let runtimeObj = convertKeyValuePairsToMap(pairs, true);
-    let existingProfile = runtimeObj[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY];
+    const { runtimeArgs } = PipelineConfigurationsStore.getState();
+    const pairs = [...runtimeArgs.pairs];
+    const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+    const existingProfile = runtimeObj[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY];
     if (!existingProfile) {
       runtimeObj[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY] = profileName;
       Object.keys(customizations).forEach((profileProp) => {
-        let key = `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProp}`;
+        const key = `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProp}`;
         runtimeObj[key] = customizations[profileProp];
       });
     } else {
@@ -56,15 +56,17 @@ class ComputeTabContent extends Component {
       }
       runtimeObj[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY] = profileName;
       Object.keys(customizations).forEach((profileProperty) => {
-        let key = `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProperty}`;
+        const key = `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProperty}`;
         runtimeObj[key] = customizations[profileProperty];
       });
     }
     // This is required to not override macros that are marked as provided and nonDeletable.
     let newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
     newRunTimePairs = newRunTimePairs.map((newRunTimeArg) => {
-      let existingPair =
-        pairs.find((p) => p.key === newRunTimeArg.key && p.value === newRunTimeArg.value) || {};
+      const existingPair =
+        pairs.find(
+          (p) => p.key === newRunTimeArg.key && p.value === newRunTimeArg.value
+        ) || {};
       return {
         ...existingPair,
         ...newRunTimeArg,
@@ -81,7 +83,9 @@ class ComputeTabContent extends Component {
         <ProfilesListViewInPipeline
           onProfileSelect={this.onProfileSelect}
           selectedProfile={this.props.selectedProfile}
-          tableTitle={'Select the compute profile you want to use to run this pipeline'}
+          tableTitle={
+            'Select the compute profile you want to use to run this pipeline'
+          }
         />
       </div>
     );
@@ -89,18 +93,21 @@ class ComputeTabContent extends Component {
 }
 
 const mapStateToProps = (state) => {
-  let selectedProfile = state.runtimeArgs.pairs.find(
+  const selectedProfile = state.runtimeArgs.pairs.find(
     (pair) => pair.key === CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY
   );
-  let profileCustomizations = state.runtimeArgs.pairs.filter(
+  const profileCustomizations = state.runtimeArgs.pairs.filter(
     (pair) => pair.key.indexOf(CLOUD.PROFILE_PROPERTIES_PREFERENCE) !== -1
   );
-  let customizationsMap = {};
+  const customizationsMap = {};
   profileCustomizations.forEach((customProp) => {
-    let propName = customProp.key.replace(`${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.`, '');
+    const propName = customProp.key.replace(
+      `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.`,
+      ''
+    );
     customizationsMap[propName] = customProp.value;
   });
-  let selectedProfileObj = {
+  const selectedProfileObj = {
     name: objectQuery(selectedProfile, 'value') || null,
     profileCustomizations: customizationsMap,
   };

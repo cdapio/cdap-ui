@@ -26,13 +26,16 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
  */
 export function getMetadataPageUrl(pageName: string, params: { [key: string]: string } = {}) {
   const urls = {
-    home: `/ns/:namespace/metadata`,
-    search: `/ns/:namespace/metadata/search/:query/result`,
-    summary: `/ns/:namespace/metadata/:entityType/:entityId/summary/search/:query`,
-    lineage: `/ns/:namespace/metadata/:entityType/:entityId/lineage/search/:query`,
+    home: '/ns/:namespace/metadata',
+    search: '/ns/:namespace/metadata/search/:query/result',
+    summary: '/ns/:namespace/metadata/:entityType/:entityId/summary/search/:query',
+    lineage: '/ns/:namespace/metadata/:entityType/:entityId/lineage/search/:query',
   };
   if (!urls[pageName]) {
     return null;
   }
-  return buildUrl(urls[pageName], { ...params, namespace: getCurrentNamespace() });
+  return buildUrl(urls[pageName], {
+    ...params,
+    namespace: getCurrentNamespace(),
+  });
 }

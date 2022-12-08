@@ -59,7 +59,11 @@ export default class TabGroup extends Component {
   render() {
     return (
       <div className="cask-tab-group cask-tab-head">
-        <TabHead layout={this.props.layout} className="group-title" onClick={this.toggleGroup}>
+        <TabHead
+          layout={this.props.layout}
+          className="group-title"
+          onClick={this.toggleGroup}
+        >
           <span className="fa-fw tab-header-icon">
             {this.state.opened ? (
               <IconSVG name="icon-caret-down" />
@@ -67,9 +71,13 @@ export default class TabGroup extends Component {
               <IconSVG name="icon-caret-right" />
             )}
           </span>
-          <span title={this.props.tabGroup.name}>{this.props.tabGroup.name}</span>
+          <span title={this.props.tabGroup.name}>
+            {this.props.tabGroup.name}
+          </span>
         </TabHead>
-        <div className="group-tabs">{this.state.opened ? this.renderSubTabs() : null}</div>
+        <div className="group-tabs">
+          {this.state.opened ? this.renderSubTabs() : null}
+        </div>
       </div>
     );
   }

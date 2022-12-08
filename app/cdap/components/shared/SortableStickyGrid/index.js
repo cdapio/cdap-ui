@@ -33,8 +33,10 @@ const SORT_ORDERS = {
 export default class SortableStickyGrid extends Component {
   constructor(props) {
     super(props);
-    let sortProperty = props.defaultSortProperty || objectQuery(props.gridHeaders, 0, 'property');
-    let sortOrder = SORT_ORDERS.asc;
+    const sortProperty =
+      props.defaultSortProperty ||
+      objectQuery(props.gridHeaders, 0, 'property');
+    const sortOrder = SORT_ORDERS.asc;
 
     this.state = {
       entities: orderBy(props.entities, [sortProperty], [sortOrder]),
@@ -66,13 +68,17 @@ export default class SortableStickyGrid extends Component {
   componentWillReceiveProps(nextProps) {
     if (!isEqual(this.props.entities, nextProps.entities)) {
       this.setState({
-        entities: orderBy(nextProps.entities, [this.state.sortProperty], [this.state.sortOrder]),
+        entities: orderBy(
+          nextProps.entities,
+          [this.state.sortProperty],
+          [this.state.sortOrder]
+        ),
       });
     }
   }
 
   componentDidUpdate() {
-    let highlightedElems = document.getElementsByClassName('highlighted');
+    const highlightedElems = document.getElementsByClassName('highlighted');
     if (highlightedElems.length) {
       highlightedElems[0].scrollIntoView();
     }
@@ -82,7 +88,10 @@ export default class SortableStickyGrid extends Component {
     let newSortProperty, newSortOrder;
     if (this.state.sortProperty === property) {
       newSortProperty = this.state.sortProperty;
-      newSortOrder = this.state.sortOrder === SORT_ORDERS.asc ? SORT_ORDERS.desc : SORT_ORDERS.asc;
+      newSortOrder =
+        this.state.sortOrder === SORT_ORDERS.asc
+          ? SORT_ORDERS.desc
+          : SORT_ORDERS.asc;
     } else {
       newSortProperty = property;
       newSortOrder = SORT_ORDERS.asc;
@@ -164,7 +173,10 @@ export default class SortableStickyGrid extends Component {
   }
 
   render() {
-    let gridClasses = classnames('grid-wrapper sortable-sticky-grid', this.props.className);
+    const gridClasses = classnames(
+      'grid-wrapper sortable-sticky-grid',
+      this.props.className
+    );
     return (
       <div className={gridClasses}>
         <div

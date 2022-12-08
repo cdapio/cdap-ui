@@ -56,7 +56,8 @@ export default class ProfileStatusToggle extends Component {
     });
 
     const profile = this.props.profile;
-    const action = PROFILE_STATUSES[profile.status] === 'enabled' ? 'disable' : 'enable';
+    const action =
+      PROFILE_STATUSES[profile.status] === 'enabled' ? 'disable' : 'enable';
     let apiObservable$;
     if (this.props.namespace === SYSTEM_NAMESPACE) {
       apiObservable$ = MyCloudApi.toggleSystemProfileStatus({
@@ -109,9 +110,12 @@ export default class ProfileStatusToggle extends Component {
     }
 
     const profile = this.props.profile;
-    const confirmationText = T.translate(`${PREFIX}.DetailView.disableConfirmation`, {
-      profile: profile.name,
-    });
+    const confirmationText = T.translate(
+      `${PREFIX}.DetailView.disableConfirmation`,
+      {
+        profile: profile.name,
+      }
+    );
 
     return (
       <ConfirmationModal
@@ -142,13 +146,19 @@ export default class ProfileStatusToggle extends Component {
     });
 
     return (
-      <Alert message={message} type="error" showAlert={true} onClose={this.closeAlertBanner} />
+      <Alert
+        message={message}
+        type="error"
+        showAlert={true}
+        onClose={this.closeAlertBanner}
+      />
     );
   }
 
   render() {
     const profile = this.props.profile;
-    const isNativeProfile = profile.name === extractProfileName(CLOUD.DEFAULT_PROFILE_NAME);
+    const isNativeProfile =
+      profile.name === extractProfileName(CLOUD.DEFAULT_PROFILE_NAME);
 
     if (isNativeProfile) {
       return null;

@@ -56,14 +56,14 @@ export default class JustAddedSection extends Component {
 
   componentWillMount() {
     this.searchStoreSubscription = SearchStore.subscribe(() => {
-      let overviewEntity = SearchStore.getState().search.overviewEntity;
+      const overviewEntity = SearchStore.getState().search.overviewEntity;
       if (isNil(overviewEntity)) {
         this.setState({
           selectedEntity: {},
         });
         return;
       }
-      let matchingEntity = this.state.entities
+      const matchingEntity = this.state.entities
         // The unique id check to make sure not to highlight entities in both Just added section and the normal grid view.
         .find(
           (entity) =>
@@ -102,15 +102,18 @@ export default class JustAddedSection extends Component {
     }
     this.unmounted = true;
 
-    if (this.statusPoll$ && typeof this.statusPoll$.unsubscribe === 'function') {
+    if (
+      this.statusPoll$ &&
+      typeof this.statusPoll$.unsubscribe === 'function'
+    ) {
       this.statusPoll$.unsubscribe();
     }
   }
 
   fetchEntities() {
     this.setState({ loading: true });
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let numColumns = SearchStore.getState().search.numColumns;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const numColumns = SearchStore.getState().search.numColumns;
     const params = {
       namespace,
       target: ['application', 'artifact', 'dataset'],
@@ -125,12 +128,19 @@ export default class JustAddedSection extends Component {
         return res.results
           .map(parseMetadata)
           .filter((entity) => {
-            let creationTime = objectQuery(entity, 'metadata', 'metadata', 'properties').find(
-              (property) => property.name === 'creation-time' && property.scope === SCOPES.SYSTEM
+            let creationTime = objectQuery(
+              entity,
+              'metadata',
+              'metadata',
+              'properties'
+            ).find(
+              (property) =>
+                property.name === 'creation-time' &&
+                property.scope === SCOPES.SYSTEM
             );
             creationTime = objectQuery(creationTime, 'value');
             creationTime = parseInt(creationTime, 10);
-            let thresholdTime = Date.now() - JUSTADDED_THRESHOLD_TIME;
+            const thresholdTime = Date.now() - JUSTADDED_THRESHOLD_TIME;
             return creationTime >= thresholdTime;
           })
           .map((entity) => {
@@ -200,7 +210,10 @@ export default class JustAddedSection extends Component {
   };
 
   pollApplicationInfo = (requestBody) => {
-    if (this.statusPoll$ && typeof this.statusPoll$.unsubscribe === 'function') {
+    if (
+      this.statusPoll$ &&
+      typeof this.statusPoll$.unsubscribe === 'function'
+    ) {
       this.statusPoll$.unsubscribe();
     }
 
@@ -208,32 +221,34 @@ export default class JustAddedSection extends Component {
       namespace: getCurrentNamespace(),
     };
 
-    this.statusPoll$ = MyAppApi.batchStatus(params, requestBody).subscribe((statusRes) => {
-      const applicationInfo = {};
+    this.statusPoll$ = MyAppApi.batchStatus(params, requestBody).subscribe(
+      (statusRes) => {
+        const applicationInfo = {};
 
-      statusRes.forEach((program) => {
-        const appId = program.appId;
-        if (!applicationInfo[appId]) {
-          applicationInfo[appId] = {
-            numPrograms: 0,
-            running: 0,
-            failed: 0,
-          };
-        }
+        statusRes.forEach((program) => {
+          const appId = program.appId;
+          if (!applicationInfo[appId]) {
+            applicationInfo[appId] = {
+              numPrograms: 0,
+              running: 0,
+              failed: 0,
+            };
+          }
 
-        applicationInfo[appId].numPrograms++;
+          applicationInfo[appId].numPrograms++;
 
-        if (program.status === 'RUNNING') {
-          applicationInfo[appId].running++;
-        } else if (program.status === 'FAILED') {
-          applicationInfo[appId].failed++;
-        }
-      });
+          if (program.status === 'RUNNING') {
+            applicationInfo[appId].running++;
+          } else if (program.status === 'FAILED') {
+            applicationInfo[appId].failed++;
+          }
+        });
 
-      this.setState({
-        applicationInfo,
-      });
-    });
+        this.setState({
+          applicationInfo,
+        });
+      }
+    );
   };
 
   onClick(entity) {
@@ -243,11 +258,15 @@ export default class JustAddedSection extends Component {
     this.props.clickHandler(entity);
   }
   render() {
-    if (this.props.currentPage !== 1 || this.state.entities.length === 0 || this.state.loading) {
+    if (
+      this.props.currentPage !== 1 ||
+      this.state.entities.length === 0 ||
+      this.state.loading
+    ) {
       return null;
     }
 
-    let content = this.state.entities.map((entity) => {
+    const content = this.state.entities.map((entity) => {
       let extraInfo;
       if (entity.type === 'application') {
         extraInfo = this.state.applicationInfo[entity.id];
@@ -256,7 +275,9 @@ export default class JustAddedSection extends Component {
       return (
         <EntityCard
           className={classnames('entity-card-container', {
-            active: entity.uniqueId === objectQuery(this.state.selectedEntity, 'uniqueId'),
+            active:
+              entity.uniqueId ===
+              objectQuery(this.state.selectedEntity, 'uniqueId'),
           })}
           key={entity.uniqueId}
           id={entity.uniqueId}
@@ -272,7 +293,9 @@ export default class JustAddedSection extends Component {
     return (
       <div className="just-added-container">
         <div className="subtitle just-added">
-          <span>{T.translate('features.EntityListView.JustAddedSection.subtitle')}</span>
+          <span>
+            {T.translate('features.EntityListView.JustAddedSection.subtitle')}
+          </span>
         </div>
 
         <div className="just-added-entities-list">{content}</div>

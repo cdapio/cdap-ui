@@ -22,7 +22,9 @@ import { listReports } from 'components/Reports/store/ActionCreator';
 import IconSVG from 'components/shared/IconSVG';
 import { DefaultSelection } from 'components/Reports/store/ActionCreator';
 import difference from 'lodash/difference';
-import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsStore';
+import ReportsStore, {
+  ReportsActions,
+} from 'components/Reports/store/ReportsStore';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
 
@@ -34,7 +36,7 @@ export default class ActionPopover extends Component {
   };
 
   delete = () => {
-    let params = {
+    const params = {
       reportId: this.props.report.id,
     };
 
@@ -44,7 +46,7 @@ export default class ActionPopover extends Component {
   };
 
   cloneCriteria = () => {
-    let params = {
+    const params = {
       'report-id': this.props.report.id,
     };
 
@@ -55,22 +57,22 @@ export default class ActionPopover extends Component {
         type: ReportsActions.clearSelection,
       });
 
-      let { request } = res;
+      const { request } = res;
 
-      let selectedFields = difference(request.fields, DefaultSelection);
+      const selectedFields = difference(request.fields, DefaultSelection);
 
-      let selections = {};
+      const selections = {};
       selectedFields.forEach((selection) => {
         selections[selection] = true;
       });
 
-      let timeRange = {
+      const timeRange = {
         selection: 'custom',
         start: request.start * 1000,
         end: request.end * 1000,
       };
 
-      let payload = {
+      const payload = {
         selections,
         timeRange,
       };
@@ -81,8 +83,8 @@ export default class ActionPopover extends Component {
         request.filters.forEach((filter) => {
           if (filter.fieldName === 'status') {
             // collapse status STOPPED and KILLED to STOPPED
-            let statusSelections = filter.whitelist;
-            let killedIndex = statusSelections.indexOf('KILLED');
+            const statusSelections = filter.whitelist;
+            const killedIndex = statusSelections.indexOf('KILLED');
 
             if (killedIndex !== -1) {
               statusSelections.splice(killedIndex, 1);
@@ -102,7 +104,7 @@ export default class ActionPopover extends Component {
 
             hasArtifactFilter = true;
           } else if (filter.fieldName === 'namespace') {
-            let namespaces = filter.whitelist;
+            const namespaces = filter.whitelist;
             namespaces.splice(namespaces.indexOf(getCurrentNamespace()), 1);
 
             payload.namespacesPick = namespaces;

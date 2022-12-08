@@ -54,7 +54,9 @@ export default class PlatformsDetails extends Component {
     return (
       <div className="platform-details">
         <div className="platform-header">
-          <strong>{T.translate('features.Administration.systemMetrics')}</strong>
+          <strong>
+            {T.translate('features.Administration.systemMetrics')}
+          </strong>
         </div>
         <div className="platform-content">
           <GenericDetails details={this.state.platformDetails} />

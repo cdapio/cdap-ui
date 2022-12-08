@@ -43,7 +43,7 @@ export default class PipelineStopPopover extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    let runs = nextProps.runs;
+    const runs = nextProps.runs;
 
     // Here 'nextProps.runs' refer to running runs, so the runs that were being stopped
     // won't even show up in the popover anymore, but we should still reset their states
@@ -53,7 +53,7 @@ export default class PipelineStopPopover extends Component {
         stopAllBtnLoading: false,
       });
     } else {
-      let runsBeingStopped = [...this.state.runsBeingStopped];
+      const runsBeingStopped = [...this.state.runsBeingStopped];
       this.state.runsBeingStopped.forEach((runid) => {
         if (runs.indexOf(runid) === -1) {
           runsBeingStopped.splice(runsBeingStopped.indexOf(runid), 1);
@@ -77,12 +77,15 @@ export default class PipelineStopPopover extends Component {
   };
 
   stopAllRuns = () => {
-    if (!Array.isArray(this.props.runs) || typeof this.props.stopRun !== 'function') {
+    if (
+      !Array.isArray(this.props.runs) ||
+      typeof this.props.stopRun !== 'function'
+    ) {
       return;
     }
 
     this.setState({ stopAllBtnLoading: true });
-    let stopRunObservables = this.props.runs.map((run) => {
+    const stopRunObservables = this.props.runs.map((run) => {
       return this.props.stopRun(run.runid);
     });
     Observable.forkJoin(stopRunObservables).subscribe(
@@ -143,7 +146,9 @@ export default class PipelineStopPopover extends Component {
         <fieldset disabled={this.state.stopAllBtnLoading}>
           <div className="stop-btn-popover-header">
             <strong>
-              {T.translate(`${PREFIX}.currentRuns`, { numRuns: this.props.runs.length })}
+              {T.translate(`${PREFIX}.currentRuns`, {
+                numRuns: this.props.runs.length,
+              })}
             </strong>
             <button className="stop-all-btn" onClick={this.stopAllRuns}>
               <IconSVG name="icon-stop" />
@@ -176,7 +181,8 @@ export default class PipelineStopPopover extends Component {
                     <tr
                       key={i}
                       className={classnames({
-                        'current-run-row': run.runid === this.props.currentRunId,
+                        'current-run-row':
+                          run.runid === this.props.currentRunId,
                       })}
                     >
                       <td>
@@ -199,7 +205,8 @@ export default class PipelineStopPopover extends Component {
                         </a>
                       </td>
                       <td>
-                        {this.state.runsBeingStopped.indexOf(run.runid) !== -1 ? (
+                        {this.state.runsBeingStopped.indexOf(run.runid) !==
+                        -1 ? (
                           <IconSVG name="icon-spinner" className="fa-spin" />
                         ) : (
                           <span

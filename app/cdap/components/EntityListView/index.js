@@ -17,7 +17,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchStore from 'components/EntityListView/SearchStore';
-import { search, updateQueryString } from 'components/EntityListView/SearchStore/ActionCreator';
+import {
+  search,
+  updateQueryString,
+} from 'components/EntityListView/SearchStore/ActionCreator';
 import HomeListView from 'components/EntityListView/ListView';
 import isNil from 'lodash/isNil';
 import EntityListHeader from 'components/EntityListView/EntityListHeader';
@@ -69,16 +72,29 @@ export default class EntityListView extends Component {
     // Maintaining a retryCounter outside the state as it doesn't affect the state/view directly.
     // We just need to retry for 5 times exponentially and then stop with a message.
     this.retryCounter = 0;
-    this.refreshSearchByCreationTime = this.refreshSearchByCreationTime.bind(this);
-    this.eventEmitter.on(globalEvents.APPUPLOAD, this.refreshSearchByCreationTime);
-    this.eventEmitter.on(globalEvents.PUBLISHPIPELINE, this.refreshSearchByCreationTime);
-    this.eventEmitter.on(globalEvents.ARTIFACTUPLOAD, this.refreshSearchByCreationTime);
+    this.refreshSearchByCreationTime = this.refreshSearchByCreationTime.bind(
+      this
+    );
+    this.eventEmitter.on(
+      globalEvents.APPUPLOAD,
+      this.refreshSearchByCreationTime
+    );
+    this.eventEmitter.on(
+      globalEvents.PUBLISHPIPELINE,
+      this.refreshSearchByCreationTime
+    );
+    this.eventEmitter.on(
+      globalEvents.ARTIFACTUPLOAD,
+      this.refreshSearchByCreationTime
+    );
   }
   componentDidMount() {
-    let namespaces = NamespaceStore.getState().namespaces.map((ns) => ns.name);
+    const namespaces = NamespaceStore.getState().namespaces.map(
+      (ns) => ns.name
+    );
     // for when we are already on the non-existing namespace
     if (namespaces.length) {
-      let selectedNamespace = NamespaceStore.getState().selectedNamespace;
+      const selectedNamespace = NamespaceStore.getState().selectedNamespace;
       if (namespaces.indexOf(selectedNamespace) === -1) {
         !this.unmounted &&
           this.setState({
@@ -87,8 +103,10 @@ export default class EntityListView extends Component {
       }
     }
     this.namespaceStoreSubscription = NamespaceStore.subscribe(() => {
-      let selectedNamespace = NamespaceStore.getState().selectedNamespace;
-      let namespaces = NamespaceStore.getState().namespaces.map((ns) => ns.name);
+      const selectedNamespace = NamespaceStore.getState().selectedNamespace;
+      const namespaces = NamespaceStore.getState().namespaces.map(
+        (ns) => ns.name
+      );
       if (namespaces.length && namespaces.indexOf(selectedNamespace) === -1) {
         !this.unmounted &&
           this.setState({
@@ -103,7 +121,7 @@ export default class EntityListView extends Component {
       }
     });
     this.searchStoreSubscription = SearchStore.subscribe(() => {
-      let {
+      const {
         results: entities,
         loading,
         limit,
@@ -128,9 +146,11 @@ export default class EntityListView extends Component {
     this.parseUrlAndUpdateStore();
   }
   parseUrlAndUpdateStore(nextProps) {
-    let props = nextProps || this.props;
-    let queryObject = this.getQueryObject(queryString.parse(props.location.search));
-    let pageSize = SearchStore.getState().search.limit;
+    const props = nextProps || this.props;
+    const queryObject = this.getQueryObject(
+      queryString.parse(props.location.search)
+    );
+    const pageSize = SearchStore.getState().search.limit;
     SearchStore.dispatch({
       type: SearchStoreActions.SETSORTFILTERSEARCHCURRENTPAGE,
       payload: {
@@ -145,13 +165,17 @@ export default class EntityListView extends Component {
     search();
   }
   componentWillReceiveProps(nextProps) {
-    let searchState = SearchStore.getState().search;
+    const searchState = SearchStore.getState().search;
     if (nextProps.currentPage !== searchState.currentPage) {
       // To enable explore fastaction on each card in entity list page.
-      ExploreTablesStore.dispatch(fetchTables(nextProps.match.params.namespace));
+      ExploreTablesStore.dispatch(
+        fetchTables(nextProps.match.params.namespace)
+      );
     }
 
-    let queryObject = this.getQueryObject(queryString.parse(nextProps.location.search));
+    const queryObject = this.getQueryObject(
+      queryString.parse(nextProps.location.search)
+    );
     if (
       nextProps.match.params.namespace !== this.props.match.params.namespace ||
       !isEqual(queryObject.filters, searchState.activeFilters) ||
@@ -163,7 +187,9 @@ export default class EntityListView extends Component {
       objectQuery(queryObject, 'overview', 'type') !==
         objectQuery(searchState, 'overviewEntity', 'type')
     ) {
-      if (nextProps.match.params.namespace !== this.props.match.params.namespace) {
+      if (
+        nextProps.match.params.namespace !== this.props.match.params.namespace
+      ) {
         NamespaceStore.dispatch({
           type: NamespaceActions.selectNamespace,
           payload: {
@@ -184,13 +210,22 @@ export default class EntityListView extends Component {
     if (this.namespaceStoreSubscription) {
       this.namespaceStoreSubscription();
     }
-    this.eventEmitter.off(globalEvents.APPUPLOAD, this.refreshSearchByCreationTime);
-    this.eventEmitter.off(globalEvents.PUBLISHPIPELINE, this.refreshSearchByCreationTime);
-    this.eventEmitter.off(globalEvents.ARTIFACTUPLOAD, this.refreshSearchByCreationTime);
+    this.eventEmitter.off(
+      globalEvents.APPUPLOAD,
+      this.refreshSearchByCreationTime
+    );
+    this.eventEmitter.off(
+      globalEvents.PUBLISHPIPELINE,
+      this.refreshSearchByCreationTime
+    );
+    this.eventEmitter.off(
+      globalEvents.ARTIFACTUPLOAD,
+      this.refreshSearchByCreationTime
+    );
     this.unmounted = true;
   }
   refreshSearchByCreationTime() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
     ExploreTablesStore.dispatch(fetchTables(namespace));
     SearchStore.dispatch({
       type: SearchStoreActions.SETACTIVESORT,
@@ -205,7 +240,7 @@ export default class EntityListView extends Component {
     if (isNil(query)) {
       query = {};
     }
-    let {
+    const {
       q = '*',
       sort = DEFAULT_SEARCH_SORT.sort,
       order = DEFAULT_SEARCH_SORT.order,
@@ -215,7 +250,7 @@ export default class EntityListView extends Component {
       overviewtype = null,
     } = query;
     const getSort = (sortOption, order, q) => {
-      let isValidSortOption = DEFAULT_SEARCH_SORT_OPTIONS.find(
+      const isValidSortOption = DEFAULT_SEARCH_SORT_OPTIONS.find(
         (sortOpt) => sortOpt.sort === sortOption && sortOpt.order === order
       );
       if (!isValidSortOption) {
@@ -230,7 +265,7 @@ export default class EntityListView extends Component {
       if (!Array.isArray(filters)) {
         filters = [filters];
       }
-      let validFilters = intersection(filters, DEFAULT_SEARCH_FILTERS);
+      const validFilters = intersection(filters, DEFAULT_SEARCH_FILTERS);
       if (!validFilters.length) {
         return DEFAULT_SEARCH_FILTERS;
       }
@@ -257,7 +292,7 @@ export default class EntityListView extends Component {
       }
       return null;
     };
-    let queryObject = {
+    const queryObject = {
       sort: getSort(sort, order, q),
       filters: getFilters(filter),
       page: getPageNum(page),
@@ -289,14 +324,17 @@ export default class EntityListView extends Component {
     search();
   }
   render() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let searchState = SearchStore.getState();
-    let currentPage = searchState.search.currentPage;
-    let query = searchState.search.query;
-    let searchText = searchState.search.query;
-    let numCursors = searchState.search.numCursors;
-    let offset = searchState.search.offset;
-    let { statusCode: errorStatusCode, message: errorMessage } = searchState.search.error;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const searchState = SearchStore.getState();
+    const currentPage = searchState.search.currentPage;
+    const query = searchState.search.query;
+    const searchText = searchState.search.query;
+    const numCursors = searchState.search.numCursors;
+    const offset = searchState.search.offset;
+    const {
+      statusCode: errorStatusCode,
+      message: errorMessage,
+    } = searchState.search.error;
     let errorContent;
     if (this.state.namespaceNotFound) {
       return (
@@ -304,21 +342,31 @@ export default class EntityListView extends Component {
           <div className="namespace-not-found">
             <h4>
               <strong>
-                {T.translate('features.EntityListView.NamespaceNotFound.optionsSubtitle')}
+                {T.translate(
+                  'features.EntityListView.NamespaceNotFound.optionsSubtitle'
+                )}
               </strong>
             </h4>
             <div>
-              {T.translate('features.EntityListView.NamespaceNotFound.createMessage')}
+              {T.translate(
+                'features.EntityListView.NamespaceNotFound.createMessage'
+              )}
               <span
                 className="open-namespace-wizard-link"
                 onClick={() => {
                   this.eventEmitter.emit(globalEvents.CREATENAMESPACE);
                 }}
               >
-                {T.translate('features.EntityListView.NamespaceNotFound.createLinkLabel')}
+                {T.translate(
+                  'features.EntityListView.NamespaceNotFound.createLinkLabel'
+                )}
               </span>
             </div>
-            <div>{T.translate('features.EntityListView.NamespaceNotFound.switchMessage')}</div>
+            <div>
+              {T.translate(
+                'features.EntityListView.NamespaceNotFound.switchMessage'
+              )}
+            </div>
           </div>
         </Page404>
       );
@@ -357,10 +405,16 @@ export default class EntityListView extends Component {
               numberOfEntities={this.state.total}
               numberOfPages={this.state.total / this.state.limit}
               currentPage={currentPage}
-              allEntitiesFetched={this.state.total < this.state.limit * (numCursors + 1) + offset}
+              allEntitiesFetched={
+                this.state.total < this.state.limit * (numCursors + 1) + offset
+              }
             />
           )}
-          <div className={classnames('entities-container', { 'error-holder': errorContent })}>
+          <div
+            className={classnames('entities-container', {
+              'error-holder': errorContent,
+            })}
+          >
             {!isNil(errorContent) ? (
               errorContent
             ) : (

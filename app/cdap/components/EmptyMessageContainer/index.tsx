@@ -14,15 +14,21 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-
 import React from 'react';
 import T from 'i18n-react';
 require('./EmptyMessageContainer.scss');
 
 const PREFIX = 'features.EmptyMessageContainer';
 
-export default function EmptyMessageContainer({ title = null, searchText = '', children }) {
+export default function EmptyMessageContainer({
+  title = null,
+  searchText = '',
+  children,
+}: {
+  title?: React.ReactNode | null | undefined;
+  searchText?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="empty-search-container">
       <div className="empty-search">
@@ -34,8 +40,3 @@ export default function EmptyMessageContainer({ title = null, searchText = '', c
     </div>
   );
 }
-EmptyMessageContainer.propTypes = {
-  title: PropTypes.node,
-  searchText: PropTypes.string,
-  children: PropTypes.node.isRequired,
-};

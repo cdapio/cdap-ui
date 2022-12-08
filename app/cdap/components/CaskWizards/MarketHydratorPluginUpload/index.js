@@ -45,18 +45,20 @@ export default class MarketHydratorPluginUpload extends Component {
 
   componentDidMount() {
     const args = this.props.input.action.arguments;
-    let config = find(args, { name: 'config' });
+    const config = find(args, { name: 'config' });
 
     const marketHost = MarketStore.getState().selectedMarketHost;
-    let params = {
+    const params = {
       entityName: this.props.input.package.name,
       entityVersion: this.props.input.package.version,
       marketHost,
       filename: config.value,
     };
     MyMarketApi.getSampleData(params).subscribe((res) => {
-      var jsonBlob = new Blob([res]);
-      var jsonFile = new File([jsonBlob], config.value, { type: 'text/json' });
+      const jsonBlob = new Blob([res]);
+      const jsonFile = new File([jsonBlob], config.value, {
+        type: 'text/json',
+      });
       PluginArtifactUploadStore.dispatch({
         type: PluginArtifactUploadActions.setJson,
         payload: {
@@ -91,13 +93,17 @@ export default class MarketHydratorPluginUpload extends Component {
   }
 
   buildSuccessInfo() {
-    let state = PluginArtifactUploadStore.getState();
-    let pluginName = state.upload.jar.fileMetadataObj.name;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.PluginArtifact.success', { pluginName });
-    let subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
-    let buttonLabel = T.translate('features.Wizard.PluginArtifact.callToAction');
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const state = PluginArtifactUploadStore.getState();
+    const pluginName = state.upload.jar.fileMetadataObj.name;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.PluginArtifact.success', {
+      pluginName,
+    });
+    const subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
+    const buttonLabel = T.translate(
+      'features.Wizard.PluginArtifact.callToAction'
+    );
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
     this.setState({
       successInfo: {
         message,
@@ -118,7 +124,9 @@ export default class MarketHydratorPluginUpload extends Component {
   }
 
   render() {
-    let wizardModalTitle = T.translate('features.Wizard.MarketHydratorPluginUpload.headerlabel');
+    const wizardModalTitle = T.translate(
+      'features.Wizard.MarketHydratorPluginUpload.headerlabel'
+    );
     return (
       <WizardModal
         title={wizardModalTitle}

@@ -76,18 +76,18 @@ export default class ImportRulebookWizard extends Component {
   };
 
   onSubmit = () => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
-    let url = `/namespaces/${namespace}/apps/yare/services/service/methods/rulebooks`;
-    let headers = {
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
+    const url = `/namespaces/${namespace}/apps/yare/services/service/methods/rulebooks`;
+    const headers = {
       'content-type': 'application/rules-engine',
     };
     if (window.CDAP_CONFIG.securityEnabled) {
-      let token = cookie.get('CDAP_Auth_Token');
+      const token = cookie.get('CDAP_Auth_Token');
       if (!isNil(token)) {
         headers.Authorization = `Bearer ${token}`;
       }
     }
-    let data = ImportRulebookStore.getState().upload.file.contents;
+    const data = ImportRulebookStore.getState().upload.file.contents;
     return UploadFile({
       url,
       fileContents: data,

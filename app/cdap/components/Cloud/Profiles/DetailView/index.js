@@ -51,7 +51,8 @@ export default class ProfileDetailView extends Component {
     provisioners: [],
     loading: true,
     error: null,
-    isSystem: objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
+    isSystem:
+      objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
   };
 
   static propTypes = {
@@ -65,17 +66,19 @@ export default class ProfileDetailView extends Component {
   }
 
   fetchAggregateMetrics = () => {
-    let { namespace } = this.props.match.params;
-    let { profile } = this.state;
-    let extraTags = {
+    const { namespace } = this.props.match.params;
+    const { profile } = this.state;
+    const extraTags = {
       profile: `${profile.name}`,
       programtype: 'Workflow',
     };
-    fetchAggregateProfileMetrics(namespace, profile, extraTags).subscribe((metricsMap) => {
-      this.setState({
-        ...metricsMap,
-      });
-    });
+    fetchAggregateProfileMetrics(namespace, profile, extraTags).subscribe(
+      (metricsMap) => {
+        this.setState({
+          ...metricsMap,
+        });
+      }
+    );
   };
 
   fetchMetrics = () => {
@@ -83,7 +86,7 @@ export default class ProfileDetailView extends Component {
   };
 
   getProfile = () => {
-    let { namespace, profileId } = this.props.match.params;
+    const { namespace, profileId } = this.props.match.params;
     let apiObservable$;
     if (namespace === SYSTEM_NAMESPACE) {
       apiObservable$ = MyCloudApi.getSystemProfile({ profile: profileId });
@@ -122,14 +125,16 @@ export default class ProfileDetailView extends Component {
       return <LoadingSVGCentered />;
     }
 
-    let closeBtnlinkObj = this.state.isSystem
+    const closeBtnlinkObj = this.state.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },
         }
       : () => history.back();
-    let breadCrumbLabel = this.state.isSystem ? 'Administration' : 'Namespace';
-    let breadCrumbAnchorLink = this.state.isSystem
+    const breadCrumbLabel = this.state.isSystem
+      ? 'Administration'
+      : 'Namespace';
+    const breadCrumbAnchorLink = this.state.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },

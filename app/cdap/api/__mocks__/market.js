@@ -12,14 +12,13 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 const MyMarketApi = {
-  __eDetail: {}
+  __eDetail: {},
 };
-
 
 MyMarketApi.getIcon = function getIcon() {
   return '/some/random/Image/path';
@@ -30,7 +29,7 @@ function setEntityDetail(entityDetail) {
 }
 
 MyMarketApi.get = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.__eDetail);
   });
@@ -39,4 +38,4 @@ MyMarketApi.get = function() {
 
 MyMarketApi.__setEntityDetail = setEntityDetail.bind(MyMarketApi);
 
-module.exports = {MyMarketApi};
+module.exports = { MyMarketApi };

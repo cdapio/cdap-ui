@@ -47,7 +47,9 @@ const mapDispatchToProps = (dispatch) => {
 const NumExecutors = ({ numExecutors, onChange }) => {
   return (
     <div className="label-with-toggle numExecutors form-group row">
-      <span className="toggle-label col-4">{T.translate(`${PREFIX}.numExecutors`)}</span>
+      <span className="toggle-label col-4">
+        {T.translate(`${PREFIX}.numExecutors`)}
+      </span>
       <div className="col-7">
         <SelectWithOptions
           className="form-control small-dropdown"
@@ -73,6 +75,9 @@ NumExecutors.propTypes = {
   onChange: PropTypes.func,
 };
 
-const ConnectedNumExecutors = connect(mapStateToProps, mapDispatchToProps)(NumExecutors);
+const ConnectedNumExecutors = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NumExecutors);
 
 export default ConnectedNumExecutors;

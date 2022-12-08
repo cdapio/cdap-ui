@@ -44,30 +44,35 @@ export default class PieChart extends Component {
     this.setState({ data: nextProps.data }, this.drawPie);
   }
   drawPie = () => {
-    if (isNil(this.state.data) || (Array.isArray(this.state.data) && !this.state.data.length)) {
+    if (
+      isNil(this.state.data) ||
+      (Array.isArray(this.state.data) && !this.state.data.length)
+    ) {
       return;
     }
-    var svg = d3Lib.select(`#${this.state.id} svg`),
+    const svg = d3Lib.select(`#${this.state.id} svg`),
       width = +svg.attr('width'),
       height = +svg.attr('height'),
       radius = Math.min(width, height) / 2,
       translateX = this.props.translateX || width / 2,
       translateY = this.props.translateY || height / 2,
-      g = svg.append('g').attr('transform', 'translate(' + translateX + ',' + translateY + ')');
+      g = svg
+        .append('g')
+        .attr('transform', 'translate(' + translateX + ',' + translateY + ')');
 
-    var pie = d3Lib
+    const pie = d3Lib
       .pie()
       .sort(null)
-      .value(function(d) {
+      .value((d) => {
         return d.count;
       });
 
-    var path = d3Lib
+    const path = d3Lib
       .arc()
       .outerRadius(radius - 10)
       .innerRadius(0);
 
-    var arc = g
+    const arc = g
       .selectAll('.arc')
       .data(pie(this.state.data))
       .enter()
@@ -83,7 +88,10 @@ export default class PieChart extends Component {
   render() {
     return (
       <div id={this.state.id}>
-        <svg width={this.props.width || '50'} height={this.props.height || '50'} />
+        <svg
+          width={this.props.width || '50'}
+          height={this.props.height || '50'}
+        />
       </div>
     );
   }

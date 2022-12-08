@@ -66,14 +66,14 @@ export default class ProgramTable extends Component {
   };
 
   componentWillMount() {
-    let entities = this.updateEntities(this.props.programs);
+    const entities = this.updateEntities(this.props.programs);
     this.setState({
       entities,
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    let entities = this.updateEntities(nextProps.programs);
+    const entities = this.updateEntities(nextProps.programs);
     this.setState({
       entities,
     });
@@ -96,8 +96,9 @@ export default class ProgramTable extends Component {
     return (
       <tbody>
         {entities.map((program) => {
-          let icon = EntityIconMap[program.programType];
-          let statusClass = program.status === 'RUNNING' ? 'text-success' : '';
+          const icon = EntityIconMap[program.programType];
+          const statusClass =
+            program.status === 'RUNNING' ? 'text-success' : '';
           return (
             <tr key={program.uniqueId}>
               <td>
@@ -119,7 +120,10 @@ export default class ProgramTable extends Component {
               </td>
               <td>
                 <div className="fast-actions-container text-center">
-                  <FastActions className="text-left btn-group" entity={program} />
+                  <FastActions
+                    className="text-left btn-group"
+                    entity={program}
+                  />
                 </div>
               </td>
             </tr>

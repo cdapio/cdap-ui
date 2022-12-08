@@ -32,9 +32,12 @@ const TableBodyView: React.FC<React.PropsWithChildren<ITableBodyProps>> = ({
   children,
   columnTemplate,
 }) => {
-  const childrenClone = React.Children.map(children, (child: React.ReactElement<any>) => {
-    return cloneElement(child, { columnTemplate });
-  });
+  const childrenClone = React.Children.map(
+    children as React.ReactElement<any>[],
+    (child: React.ReactElement<any>) => {
+      return cloneElement(child, { columnTemplate });
+    }
+  );
 
   return <div className={classes.gridBody}>{childrenClone}</div>;
 };

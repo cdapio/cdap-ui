@@ -21,16 +21,16 @@ const NODE_HEIGHT = 55;
 const NODE_WIDTH = 175;
 const nodeThemes = {
   data: {
-    bgColor: `var(--white)`,
+    bgColor: 'var(--white)',
     color: 'initial',
-    titleColor: `initial`,
-    typeColor: `var(--grey03)`,
+    titleColor: 'initial',
+    typeColor: 'var(--grey03)',
   },
   program: {
-    bgColor: `var(--grey03)`,
+    bgColor: 'var(--grey03)',
     color: 'var(--white)',
-    titleColor: `var(--white)`,
-    typeColor: `var(--white)`,
+    titleColor: 'var(--white)',
+    typeColor: 'var(--white)',
   },
 };
 export const DIAGRAM_WIDTH = 920;
@@ -58,7 +58,7 @@ export const Node = styled.div`
   padding: 10px 15px;
   cursor: pointer;
   background-color: ${(props) => nodeThemes[props.nodeType].bgColor};
-  color: ${(props) => nodeThemes[props.nodeType].color};
+  color: ${(props: { nodeType: string }) => nodeThemes[props.nodeType].color};
 `;
 
 export const EntityName = styled.h4`
@@ -68,14 +68,14 @@ export const EntityName = styled.h4`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 1.08em !important;
-  color: ${(props) => nodeThemes[props.nodeType].titleColor};
+  color: ${(props: { nodeType: string }) => nodeThemes[props.nodeType].titleColor};
 `;
 
 export const EntityType = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow-x: hidden;
-  color: ${(props) => nodeThemes[props.nodeType].typeColor};
+  color: ${(props: { nodeType: string }) => nodeThemes[props.nodeType].typeColor};
 `;
 
 export const EntityIcon = styled.span`

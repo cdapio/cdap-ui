@@ -24,7 +24,9 @@ require('./MetadataStep.scss');
 const mapStateToPipelineNameProps = (state) => {
   return {
     value: state.pipelinemetadata.name,
-    placeholder: T.translate('features.Wizard.PublishPipeline.pipelinenameplaceholder'),
+    placeholder: T.translate(
+      'features.Wizard.PublishPipeline.pipelinenameplaceholder'
+    ),
   };
 };
 const mapDispatchToPipelineProps = (dispatch) => {
@@ -40,7 +42,10 @@ const mapDispatchToPipelineProps = (dispatch) => {
   };
 };
 
-const PipelineName = connect(mapStateToPipelineNameProps, mapDispatchToPipelineProps)(Input);
+const PipelineName = connect(
+  mapStateToPipelineNameProps,
+  mapDispatchToPipelineProps
+)(Input);
 
 export default function MetadataStep() {
   return (
@@ -55,7 +60,9 @@ export default function MetadataStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.PublishPipeline.pipelinenameplaceholder')}
+              {T.translate(
+                'features.Wizard.PublishPipeline.pipelinenameplaceholder'
+              )}
             </Label>
           </Col>
           <Col xs="7">

@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import {MyMarketApi} from 'api/market';
+import { MyMarketApi } from 'api/market';
 import T from 'i18n-react';
 import AbstractWizard from 'components/AbstractWizard';
 import MarketStore from 'components/Market/store/market-store';
@@ -38,9 +38,9 @@ export default class MarketEntityModal extends Component {
       wizard: {
         actionIndex: null,
         actionType: null,
-        action: null
+        action: null,
       },
-      completedActions: []
+      completedActions: [],
     };
   }
 
@@ -50,29 +50,34 @@ export default class MarketEntityModal extends Component {
       packageName: this.props.entity.name,
       version: this.props.entity.version,
       marketHost,
-    }).subscribe((res) => {
-      this.setState({entityDetail: res});
-    }, (err) => {
-      console.log('Error', err);
-    });
+    }).subscribe(
+      (res) => {
+        this.setState({ entityDetail: res });
+      },
+      (err) => {
+        console.log('Error', err);
+      }
+    );
   }
   closeWizard(returnResult) {
     if (returnResult) {
       this.setState({
-        completedActions: this.state.completedActions.concat([this.state.wizard.actionIndex]),
+        completedActions: this.state.completedActions.concat([
+          this.state.wizard.actionIndex,
+        ]),
         wizard: {
           actionIndex: null,
           actionType: null,
-          action: null
-        }
+          action: null,
+        },
       });
       return;
     }
     this.setState({
       wizard: {
         actionIndex: null,
-        actionType: null
-      }
+        actionType: null,
+      },
     });
   }
   openWizard(actionIndex, actionType, action) {
@@ -80,17 +85,15 @@ export default class MarketEntityModal extends Component {
       wizard: {
         actionIndex,
         actionType,
-        action
-      }
+        action,
+      },
     });
   }
 
   getVersion() {
     const versionElem = (
       <span>
-        <strong>
-          {this.state.entityDetail.cdapVersion}
-        </strong>
+        <strong>{this.state.entityDetail.cdapVersion}</strong>
       </span>
     );
 
@@ -102,40 +105,44 @@ export default class MarketEntityModal extends Component {
     if (this.state.entityDetail.actions) {
       actions = (
         <div className="market-entity-actions">
-          {
-            this.state.entityDetail.actions.map((action, index) => {
-              let isCompletedAction = this.state.completedActions.indexOf(index) !== -1;
-              let actionName = T.translate('features.Market.action-types.' + action.type + '.name');
-              let actionIcon = getIcon(action.type);
-              return (
-                <div
-                  className="action-container text-center"
-                  key={uuidV4()}
-                  onClick={this.openWizard.bind(this, index, action.type, action)}
-                >
-                  <div
-                    className="action"
-                    key={index}
-                  >
-                    <div className="step text-center">
-                      <span className={classnames("tag tag-pill", {'completed' : isCompletedAction})}>{index + 1}</span>
-                    </div>
-                    <div className="action-icon">
-                      <div className={classnames("fa", actionIcon)}></div>
-                    </div>
-                    <div className="action-description">
-                      {action.label}
-                    </div>
-                    <button
-                      className={classnames("btn btn-link", {'btn-completed': isCompletedAction})}
+          {this.state.entityDetail.actions.map((action, index) => {
+            const isCompletedAction =
+              this.state.completedActions.indexOf(index) !== -1;
+            const actionName = T.translate(
+              'features.Market.action-types.' + action.type + '.name'
+            );
+            const actionIcon = getIcon(action.type);
+            return (
+              <div
+                className="action-container text-center"
+                key={uuidV4()}
+                onClick={this.openWizard.bind(this, index, action.type, action)}
+              >
+                <div className="action" key={index}>
+                  <div className="step text-center">
+                    <span
+                      className={classnames('tag tag-pill', {
+                        completed: isCompletedAction,
+                      })}
                     >
-                      { actionName }
-                    </button>
+                      {index + 1}
+                    </span>
                   </div>
+                  <div className="action-icon">
+                    <div className={classnames('fa', actionIcon)}></div>
+                  </div>
+                  <div className="action-description">{action.label}</div>
+                  <button
+                    className={classnames('btn btn-link', {
+                      'btn-completed': isCompletedAction,
+                    })}
+                  >
+                    {actionName}
+                  </button>
                 </div>
-              );
-            })
-          }
+              </div>
+            );
+          })}
         </div>
       );
     }
@@ -150,19 +157,16 @@ export default class MarketEntityModal extends Component {
         size="md"
       >
         <ModalHeader toggle={this.props.onCloseHandler.bind(this)}>
-          <span className="float-left">
-            { this.props.entity.label }
-          </span>
+          <span className="float-left">{this.props.entity.label}</span>
           <span className="version float-right">
             <span className="version-text">
               {T.translate('features.MarketEntityModal.version')}
             </span>
-            <span className="version-number">{ this.props.entity.version }</span>
+            <span className="version-number">{this.props.entity.version}</span>
             <span
               className="fa fa-times"
               onClick={this.props.onCloseHandler.bind(this)}
-            >
-            </span>
+            ></span>
           </span>
         </ModalHeader>
         <ModalBody>
@@ -177,23 +181,23 @@ export default class MarketEntityModal extends Component {
               <div className="entity-metadata">
                 <div>Author</div>
                 <span>
-                  <strong>
-                    {this.state.entityDetail.author}
-                  </strong>
+                  <strong>{this.state.entityDetail.author}</strong>
                 </span>
                 <div>Company</div>
                 <span>
-                  <strong>
-                    {this.state.entityDetail.org}
-                  </strong>
+                  <strong>{this.state.entityDetail.org}</strong>
                 </span>
                 <div>Created</div>
                 <span>
                   <strong>
-                    {(moment(this.state.entityDetail.created * 1000)).format('MM-DD-YYYY HH:mm A')}
+                    {moment(this.state.entityDetail.created * 1000).format(
+                      'MM-DD-YYYY HH:mm A'
+                    )}
                   </strong>
                 </span>
-                {this.state.entityDetail.cdapVersion ? <div>CDAP Version</div> : null}
+                {this.state.entityDetail.cdapVersion ? (
+                  <div>CDAP Version</div>
+                ) : null}
                 {this.getVersion()}
               </div>
             </div>
@@ -202,20 +206,25 @@ export default class MarketEntityModal extends Component {
           {actions}
 
           <AbstractWizard
-            isOpen={this.state.wizard.actionIndex !== null && this.state.wizard.actionType !== null}
+            isOpen={
+              this.state.wizard.actionIndex !== null &&
+              this.state.wizard.actionType !== null
+            }
             onClose={this.closeWizard.bind(this)}
             wizardType={this.state.wizard.actionType}
-            input={{action: this.state.wizard.action, package: this.props.entity}}
+            input={{
+              action: this.state.wizard.action,
+              package: this.props.entity,
+            }}
           />
         </ModalBody>
       </Modal>
     );
-
   }
 }
 
 MarketEntityModal.propTypes = {
   isOpen: PropTypes.bool,
   onCloseHandler: PropTypes.func,
-  entity: PropTypes.object
+  entity: PropTypes.object,
 };

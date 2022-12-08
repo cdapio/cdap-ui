@@ -63,7 +63,7 @@ const mapDispatchToFieldNameProps = (dispatch, ownProps) => {
   };
 };
 
-let HostPortRowWrapper = connect(
+const HostPortRowWrapper = connect(
   mapStateToFieldNameProps,
   mapDispatchToFieldNameProps
 )(HostPortRow);
@@ -77,7 +77,7 @@ export default class HostPortEditor extends Component {
     };
 
     this.sub = HostPortStore.subscribe(() => {
-      let rows = HostPortStore.getState().hostport.rows;
+      const rows = HostPortStore.getState().hostport.rows;
 
       this.setState({
         rows,
@@ -101,7 +101,7 @@ export default class HostPortEditor extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    let check = this.state.rows.length !== nextProps.values.length;
+    const check = this.state.rows.length !== nextProps.values.length;
 
     return check;
   }

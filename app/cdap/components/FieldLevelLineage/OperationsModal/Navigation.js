@@ -75,9 +75,6 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-const Navigation = connect(
-  mapStateToProps,
-  mapDispatch
-)(NavigationView);
+const Navigation = connect(mapStateToProps, mapDispatch)(NavigationView);
 
 export default Navigation;

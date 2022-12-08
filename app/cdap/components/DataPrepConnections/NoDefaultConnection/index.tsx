@@ -22,7 +22,7 @@ import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import DataprepBrowserTopPanel from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserTopPanel';
 import T from 'i18n-react';
 
-const PREFIX: string = 'features.DataPrepConnections.NoDefaultConnection';
+const PREFIX = 'features.DataPrepConnections.NoDefaultConnection';
 
 interface IPartialConnectionType {
   id?: string;

@@ -36,9 +36,10 @@ export default class StagePropertiesRow extends Component {
   };
 
   getConstructedKey = ({ stage, property }) => {
-    let { triggeringPipelineInfo } = ScheduleRuntimeArgsStore.getState().args;
+    const { triggeringPipelineInfo } = ScheduleRuntimeArgsStore.getState().args;
     if (stage && property) {
-      return `${this.props.pipelineName || triggeringPipelineInfo.id}:${stage}:${property}`;
+      return `${this.props.pipelineName ||
+        triggeringPipelineInfo.id}:${stage}:${property}`;
     }
     return null;
   };
@@ -64,7 +65,7 @@ export default class StagePropertiesRow extends Component {
   };
 
   onPipelineStageChange = (e) => {
-    let oldValue = this.state.triggeredPipelineMacro;
+    const oldValue = this.state.triggeredPipelineMacro;
     this.setState(
       {
         stage: e.target.value,
@@ -76,7 +77,7 @@ export default class StagePropertiesRow extends Component {
   };
 
   onTriggeredMacroChange = (e) => {
-    let oldValue = this.state.triggeredPipelineMacro;
+    const oldValue = this.state.triggeredPipelineMacro;
     this.setState(
       {
         triggeredPipelineMacro: e.target.value,
@@ -86,8 +87,13 @@ export default class StagePropertiesRow extends Component {
   };
 
   updateStore = (oldValue) => {
-    let constructedKey = this.getConstructedKey(this.state);
-    setArgMapping(constructedKey, this.state.triggeredPipelineMacro, 'properties', oldValue);
+    const constructedKey = this.getConstructedKey(this.state);
+    setArgMapping(
+      constructedKey,
+      this.state.triggeredPipelineMacro,
+      'properties',
+      oldValue
+    );
   };
 
   getDisplayForTriggeredPipelineMacro = () => {
@@ -101,22 +107,24 @@ export default class StagePropertiesRow extends Component {
     if (property === DEFAULTPROPERTYMESSAGE) {
       return DEFAULTPROPERTYMESSAGE;
     }
-    let { args } = ScheduleRuntimeArgsStore.getState();
-    let { stageWidgetJsonMap } = args;
+    const { args } = ScheduleRuntimeArgsStore.getState();
+    const { stageWidgetJsonMap } = args;
     let properties = [];
-    stageWidgetJsonMap[this.state.stage]['configuration-groups'].map((group) => {
-      properties = properties.concat(group.properties);
-    });
-    let matchProperty = properties.filter((prop) => prop.name === property);
+    stageWidgetJsonMap[this.state.stage]['configuration-groups'].map(
+      (group) => {
+        properties = properties.concat(group.properties);
+      }
+    );
+    const matchProperty = properties.filter((prop) => prop.name === property);
     return !matchProperty.length ? property : matchProperty[0].label;
   };
 
   render() {
-    let {
+    const {
       triggeringPipelineInfo,
       triggeredPipelineInfo,
     } = ScheduleRuntimeArgsStore.getState().args;
-    let stage = triggeringPipelineInfo.configStagesMap[this.state.stage];
+    const stage = triggeringPipelineInfo.configStagesMap[this.state.stage];
     let properties = [];
     if (stage) {
       properties = stage.properties;
@@ -132,7 +140,10 @@ export default class StagePropertiesRow extends Component {
       <Row>
         <Col xs={3}>
           <div className="select-dropdown">
-            <select value={this.state.stage} onChange={this.onPipelineStageChange}>
+            <select
+              value={this.state.stage}
+              onChange={this.onPipelineStageChange}
+            >
               {[{ id: DEFAULTSTAGEMESSAGE }]
                 .concat(triggeringPipelineInfo.configStages)
                 .map((stage) => {
@@ -147,10 +158,17 @@ export default class StagePropertiesRow extends Component {
         </Col>
         <Col xs={4}>
           <div className="select-dropdown">
-            <select onChange={this.onPropertyChange} value={this.state.property}>
+            <select
+              onChange={this.onPropertyChange}
+              value={this.state.property}
+            >
               {properties.map((prop, i) => {
                 return (
-                  <option key={i} value={prop.id} selected={prop.id === this.state.property}>
+                  <option
+                    key={i}
+                    value={prop.id}
+                    selected={prop.id === this.state.property}
+                  >
                     {prop.label}
                   </option>
                 );

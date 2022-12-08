@@ -37,9 +37,9 @@ class ColumnsTabRow extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let selectedChange = nextProps.selected !== this.state.selected;
-    let columnNameChange = nextProps.columnName !== this.state.columnName;
-    let rowInfoChange = !isEqual(nextProps.rowInfo, this.state.rowInfo);
+    const selectedChange = nextProps.selected !== this.state.selected;
+    const columnNameChange = nextProps.columnName !== this.state.columnName;
+    const rowInfoChange = !isEqual(nextProps.rowInfo, this.state.rowInfo);
     if (selectedChange || columnNameChange || rowInfoChange) {
       this.setState({
         columnName: nextProps.columnName,
@@ -50,8 +50,8 @@ class ColumnsTabRow extends Component {
   }
 
   toggleRowSelect(e) {
-    let newState = !this.state.selected;
-    let elem = document.getElementById(`column-${this.props.columnName}`);
+    const newState = !this.state.selected;
+    const elem = document.getElementById(`column-${this.props.columnName}`);
     if (newState) {
       elem.scrollIntoView();
     }
@@ -71,7 +71,12 @@ class ColumnsTabRow extends Component {
     const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
 
     return (
-      <CSSTransition in={this.props.isNew} timeout={4000} classNames="is-new" appear>
+      <CSSTransition
+        in={this.props.isNew}
+        timeout={4000}
+        classNames="is-new"
+        appear
+      >
         <tr
           className={classnames({
             selected: this.state.selected,

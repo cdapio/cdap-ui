@@ -81,8 +81,8 @@ export default class ProfileAssociations extends Component {
   };
 
   fetchMetricsForApp = (appid, metadata) => {
-    let { namespace, profile } = this.props;
-    let extraTags = {
+    const { namespace, profile } = this.props;
+    const extraTags = {
       program: objectQuery(metadata, 'program'),
       programtype: objectQuery(metadata, 'type') || 'Workflow',
       profile: `${profile.name}`,
@@ -91,7 +91,7 @@ export default class ProfileAssociations extends Component {
     };
     fetchAggregateProfileMetrics(namespace, profile, extraTags).subscribe(
       (metricsMap) => {
-        let { associationsMap } = this.state;
+        const { associationsMap } = this.state;
         Object.keys(metricsMap).forEach((metricKey) => {
           associationsMap[appid].metadata[metricKey] = metricsMap[metricKey];
         });
@@ -117,9 +117,9 @@ export default class ProfileAssociations extends Component {
   };
 
   componentDidMount() {
-    let { namespace, profile } = this.props;
-    let { scope } = profile;
-    let profileName = `profile:${scope}:${profile.name}`;
+    const { namespace, profile } = this.props;
+    const { scope } = profile;
+    const profileName = `profile:${scope}:${profile.name}`;
     let apiObservable$;
     if (namespace === SYSTEM_NAMESPACE) {
       apiObservable$ = MySearchApi.searchSystem({
@@ -136,13 +136,13 @@ export default class ProfileAssociations extends Component {
     }
     apiObservable$.subscribe(
       (res) => {
-        let associationsMap = this.convertMetadataToAssociations(res.results);
+        const associationsMap = this.convertMetadataToAssociations(res.results);
         this.setState({
           associationsMap,
         });
         // FIXME: We should probably look into batching this to one single call.
         Object.keys(associationsMap).forEach((appid) => {
-          let { metadata } = associationsMap[appid];
+          const { metadata } = associationsMap[appid];
           this.fetchMetricsForApp(appid, metadata);
         });
       },
@@ -153,7 +153,7 @@ export default class ProfileAssociations extends Component {
   }
 
   convertMetadataToAssociations = (metadata) => {
-    let appsMap = {};
+    const appsMap = {};
     metadata.forEach((m) => {
       const application = m.entity.details.application;
       let existingEntry = appsMap[application];
@@ -186,8 +186,9 @@ export default class ProfileAssociations extends Component {
       } else if (!isNilOrEmpty(m.entity.type)) {
         appsMap[application] = {
           ...existingEntry,
-          created: m.metadata.properties.find((property) => property.name === 'creation-time')
-            .value,
+          created: m.metadata.properties.find(
+            (property) => property.name === 'creation-time'
+          ).value,
           metadata: {
             ...existingEntry.metadata,
             type: m.entity.details.type,
@@ -232,9 +233,13 @@ export default class ProfileAssociations extends Component {
       <div className="grid-body">
         {Object.keys(associationsMap).map((app) => {
           const appObj = associationsMap[app];
-          const isReplicator = identifyReplicatorEntityFromMetadata(appObj.metadata);
-          const onedayMetrics = objectQuery(appObj, 'metadata', ONEDAYMETRICKEY) || {};
-          const overallMetrics = objectQuery(appObj, 'metadata', OVERALLMETRICKEY) || {};
+          const isReplicator = identifyReplicatorEntityFromMetadata(
+            appObj.metadata
+          );
+          const onedayMetrics =
+            objectQuery(appObj, 'metadata', ONEDAYMETRICKEY) || {};
+          const overallMetrics =
+            objectQuery(appObj, 'metadata', OVERALLMETRICKEY) || {};
           const pipelineUrl = window.getHydratorUrl({
             stateName: 'hydrator.detail',
             stateParams: {
@@ -246,13 +251,20 @@ export default class ProfileAssociations extends Component {
           return (
             <a
               className="grid-row"
-              href={isReplicator ? createReplicatorDetailUrl(appObj.name) : pipelineUrl}
+              href={
+                isReplicator
+                  ? createReplicatorDetailUrl(appObj.name)
+                  : pipelineUrl
+              }
               key={app}
             >
               <div>{appObj.name}</div>
               <div>{appObj.namespace}</div>
               <div>
-                {timeSinceCreated((Date.now() - parseInt(appObj.created, 10)) / 1000, true)}
+                {timeSinceCreated(
+                  (Date.now() - parseInt(appObj.created, 10)) / 1000,
+                  true
+                )}
               </div>
               {/*
                   We should set the defaults in the metrics call but since it is not certain that we get metrics
@@ -275,7 +287,7 @@ export default class ProfileAssociations extends Component {
   };
 
   render() {
-    let profileName = this.props.profile.label || this.props.profile.name;
+    const profileName = this.props.profile.label || this.props.profile.name;
 
     if (isNilOrEmpty(this.state.associationsMap)) {
       return (
@@ -288,7 +300,9 @@ export default class ProfileAssociations extends Component {
     return (
       <div className="profile-associations">
         <h5 className="section-label">
-          <strong>{T.translate(`${HEADERPREFIX}.label`, { profile: profileName })}</strong>
+          <strong>
+            {T.translate(`${HEADERPREFIX}.label`, { profile: profileName })}
+          </strong>
         </h5>
         <div className="grid grid-container">
           {this.renderGridHeader()}

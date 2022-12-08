@@ -27,7 +27,7 @@ import { preventPropagation } from 'services/helpers';
 
 require('./CopyableID.scss');
 
-const PREFIX = `features.CopyableID`;
+const PREFIX = 'features.CopyableID';
 
 export default class CopyableID extends Component {
   static propTypes = {

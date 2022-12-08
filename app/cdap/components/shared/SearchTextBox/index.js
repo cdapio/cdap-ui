@@ -17,15 +17,21 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-var classnames = require('classnames');
+const classnames = require('classnames');
 require('./SearchTextBox.scss');
 
-export default function SearchTextBox({value, defaultValue, onChange, className, placeholder}) {
+export default function SearchTextBox({
+  value,
+  defaultValue,
+  onChange,
+  className,
+  placeholder,
+}) {
   return (
     <div className="cask-search-textbox">
       <i className="fa fa-search"></i>
       <input
-        className={classnames("form-control", className)}
+        className={classnames('form-control', className)}
         onChange={onChange}
         value={value}
         placeholder={placeholder}
@@ -39,5 +45,5 @@ SearchTextBox.propTypes = {
   defaultValue: PropTypes.string,
   onChange: PropTypes.func,
   className: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
 };

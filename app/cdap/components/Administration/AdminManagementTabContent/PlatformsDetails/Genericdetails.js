@@ -27,7 +27,9 @@ export default function GenericDetails({ details, className }) {
   return (
     <div className={classnames(className, 'generic-details')}>
       {Object.keys(details)
-        .filter((detail) => ['name', 'url', 'version', 'logs'].indexOf(detail) === -1)
+        .filter(
+          (detail) => ['name', 'url', 'version', 'logs'].indexOf(detail) === -1
+        )
         .map((detail, i) => {
           return (
             <div key={i}>

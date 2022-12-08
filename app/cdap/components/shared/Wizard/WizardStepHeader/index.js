@@ -20,7 +20,10 @@ import React from 'react';
 import classnames from 'classnames';
 require('./WizardStepHeader.scss');
 
-export default function WizardStepHeader({ id, className, label, onClick, disabled }, context) {
+export default function WizardStepHeader(
+  { id, className, label, onClick, disabled },
+  context
+) {
   return (
     <div
       className={classnames('cask-wizard-step-header', {

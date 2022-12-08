@@ -29,7 +29,10 @@ import { MyCloudApi } from 'api/cloud';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { getProvisionersMap } from 'components/Cloud/Profiles/Store/Provisioners';
 import { preventPropagation } from 'services/helpers';
-import { extractProfileName, isSystemProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
+import {
+  extractProfileName,
+  isSystemProfile,
+} from 'components/Cloud/Profiles/Store/ActionCreator';
 import T from 'i18n-react';
 
 export const PROFILES_DROPDOWN_DOM_CLASS = 'profiles-list-dropdown';
@@ -126,12 +129,15 @@ class ProfilesForSchedule extends Component {
     if (!this.state.selectedProfile) {
       return;
     }
-    let profileName = extractProfileName(this.state.selectedProfile);
+    const profileName = extractProfileName(this.state.selectedProfile);
     let apiObservable$;
     if (isSystemProfile(this.state.selectedProfile)) {
       apiObservable$ = MyCloudApi.getSystemProfile({ profile: profileName });
     } else {
-      apiObservable$ = MyCloudApi.get({ namespace: getCurrentNamespace(), profile: profileName });
+      apiObservable$ = MyCloudApi.get({
+        namespace: getCurrentNamespace(),
+        profile: profileName,
+      });
     }
     apiObservable$.subscribe((profileDetails) => {
       this.setState({
@@ -157,8 +163,9 @@ class ProfilesForSchedule extends Component {
     if (!this.state.anchorEl) {
       return null;
     }
-    let isScheduled = this.props.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
-    let selectedProfile = {
+    const isScheduled =
+      this.props.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
+    const selectedProfile = {
       name: this.state.selectedProfile,
       profileCustomizations: this.state.profileCustomizations,
     };
@@ -173,13 +180,15 @@ class ProfilesForSchedule extends Component {
   };
 
   renderProfilesDropdown = () => {
-    let isScheduled = this.props.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
+    const isScheduled =
+      this.props.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
     let provisionerLabel;
     if (this.state.selectedProfile) {
-      let { profileDetails = {} } = this.state;
-      let { provisioner = {} } = profileDetails;
-      let { name: provisionerName } = provisioner;
-      provisionerLabel = this.state.provisionersMap[provisionerName] || provisionerName;
+      const { profileDetails = {} } = this.state;
+      const { provisioner = {} } = profileDetails;
+      const { name: provisionerName } = provisioner;
+      provisionerLabel =
+        this.state.provisionersMap[provisionerName] || provisionerName;
     }
 
     const getDropdownToggleLabel = () => {
@@ -188,7 +197,8 @@ class ProfilesForSchedule extends Component {
       }
 
       let profileLabel =
-        this.state.profileDetails.label || extractProfileName(this.state.selectedProfile);
+        this.state.profileDetails.label ||
+        extractProfileName(this.state.selectedProfile);
       if (provisionerLabel) {
         profileLabel += ` (${provisionerLabel})`;
       }
@@ -201,7 +211,10 @@ class ProfilesForSchedule extends Component {
 
     return (
       <div>
-        <StyledButton disabled={isScheduled} onClick={this.toggleProfileDropdown}>
+        <StyledButton
+          disabled={isScheduled}
+          onClick={this.toggleProfileDropdown}
+        >
           <StyledSpan>{getDropdownToggleLabel()}</StyledSpan>
           <IconSVG name="icon-caret-down" />
         </StyledButton>
@@ -227,8 +240,12 @@ class ProfilesForSchedule extends Component {
   render() {
     return (
       <div className="form-group row">
-        <label className="col-3 control-label">{T.translate(`${PREFIX}.computeProfiles`)}</label>
-        <div className="col-6 schedule-values-container">{this.renderProfilesDropdown()}</div>
+        <label className="col-3 control-label">
+          {T.translate(`${PREFIX}.computeProfiles`)}
+        </label>
+        <div className="col-6 schedule-values-container">
+          {this.renderProfilesDropdown()}
+        </div>
       </div>
     );
   }
@@ -242,6 +259,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ConnectedProfilesForSchedule = connect(mapStateToProps)(ProfilesForSchedule);
+const ConnectedProfilesForSchedule = connect(mapStateToProps)(
+  ProfilesForSchedule
+);
 
 export default ConnectedProfilesForSchedule;

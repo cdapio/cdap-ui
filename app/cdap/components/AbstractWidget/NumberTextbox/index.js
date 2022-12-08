@@ -12,7 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 import React from 'react';
 import { Input } from 'reactstrap';
@@ -22,13 +22,13 @@ require('./NumberTextbox.scss');
 
 export default function NumberTextbox({ ...props }) {
   let { onChange, value, widgetProps } = props;
-  let min = widgetProps.min || Number.MIN_SAFE_INTEGER;
-  let max = widgetProps.max || Number.MAX_SAFE_INTEGER;
-  let numberValue = parseInt(value, 10);
+  const min = widgetProps.min || Number.MIN_SAFE_INTEGER;
+  const max = widgetProps.max || Number.MAX_SAFE_INTEGER;
+  const numberValue = parseInt(value, 10);
   value = isNaN(numberValue) ? value : numberValue;
   return (
     <Input
-      className={`number-textbox-widget`}
+      className={'number-textbox-widget'}
       type="number"
       onChange={onChange}
       value={value}

@@ -52,7 +52,7 @@ import CardActionFeedback from 'components/shared/CardActionFeedback';
 
 require('./IngestDataFromDataPrep.scss');
 
-const PREFIX = `features.DataPrep.TopPanel.copyToCDAPDatasetBtn`;
+const PREFIX = 'features.DataPrep.TopPanel.copyToCDAPDatasetBtn';
 const fieldsetDataType = [
   {
     id: 'TPFSAvro',
@@ -89,7 +89,7 @@ export default class IngestDataFromDataPrep extends Component {
   state = this.getDefaultState();
 
   getDefaultState() {
-    let { headers } = DataPrepStore.getState().dataprep;
+    const { headers } = DataPrepStore.getState().dataprep;
     return {
       showModal: false,
       inputType: 'fileset',
@@ -109,7 +109,7 @@ export default class IngestDataFromDataPrep extends Component {
   }
 
   componentWillMount() {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     let corePlugins;
     MyArtifactApi.list({ namespace }).subscribe((res) => {
       corePlugins = find(res, { name: 'core-plugins' });
@@ -129,7 +129,7 @@ export default class IngestDataFromDataPrep extends Component {
           },
         };
       };
-      let sinks = {
+      const sinks = {
         TPFSAvro: getPluginConfig('TPFSAvro'),
         TPFSParquet: getPluginConfig('TPFSParquet'),
         TPFSOrc: getPluginConfig('TPFSOrc'),
@@ -142,7 +142,7 @@ export default class IngestDataFromDataPrep extends Component {
   }
 
   toggleModal = () => {
-    let state = Object.assign(this.getDefaultState(), {
+    const state = Object.assign(this.getDefaultState(), {
       showModal: !this.state.showModal,
       sinkPluginsForDataset: this.state.sinkPluginsForDataset,
       batchPipelineConfig: this.state.batchPipelineConfig,
@@ -188,19 +188,41 @@ export default class IngestDataFromDataPrep extends Component {
   };
 
   getAppConfigMacros() {
-    let { workspaceInfo, directives, headers } = DataPrepStore.getState().dataprep;
-    let pipelineConfig = cloneDeep(this.state.batchPipelineConfig);
-    let wranglerStage = pipelineConfig.config.stages.find((stage) => stage.name === 'Wrangler');
-    let dbStage = pipelineConfig.config.stages.find((stage) => stage.name === 'Database');
-    let kafkaStage = pipelineConfig.config.stages.find((stage) => stage.name === 'Kafka');
-    let databaseConfig = objectQuery(workspaceInfo, 'properties', 'databaseConfig');
-    let s3Stage = pipelineConfig.config.stages.find((stage) => stage.name === 'S3');
-    let gcsStage = pipelineConfig.config.stages.find((stage) => stage.name === 'GCS');
-    let bigqueryStage = pipelineConfig.config.stages.find(
+    const {
+      workspaceInfo,
+      directives,
+      headers,
+    } = DataPrepStore.getState().dataprep;
+    const pipelineConfig = cloneDeep(this.state.batchPipelineConfig);
+    const wranglerStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'Wrangler'
+    );
+    const dbStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'Database'
+    );
+    const kafkaStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'Kafka'
+    );
+    let databaseConfig = objectQuery(
+      workspaceInfo,
+      'properties',
+      'databaseConfig'
+    );
+    const s3Stage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'S3'
+    );
+    const gcsStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'GCS'
+    );
+    const bigqueryStage = pipelineConfig.config.stages.find(
       (stage) => stage.name === 'BigQueryTable'
     );
-    let spannerStage = pipelineConfig.config.stages.find((stage) => stage.name === 'Spanner');
-    let adlsStage = pipelineConfig.config.stages.find((stage) => stage.name === 'ADLS');
+    const spannerStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'Spanner'
+    );
+    const adlsStage = pipelineConfig.config.stages.find(
+      (stage) => stage.name === 'ADLS'
+    );
 
     let macroMap = {};
     if (databaseConfig) {
@@ -215,40 +237,58 @@ export default class IngestDataFromDataPrep extends Component {
       datasetName: this.state.datasetName,
       filename: objectQuery(workspaceInfo, 'properties', 'path') || '',
       directives: directives.join('\n'),
-      schema: objectQuery(wranglerStage, 'plugin', 'properties', 'schema') || '',
+      schema:
+        objectQuery(wranglerStage, 'plugin', 'properties', 'schema') || '',
       schemaRowField: isNil(this.state.rowKey) ? headers[0] : this.state.rowKey,
       query: objectQuery(dbStage, 'plugin', 'properties', 'importQuery') || '',
-      connectionString: objectQuery(dbStage, 'plugin', 'properties', 'connectionString') || '',
+      connectionString:
+        objectQuery(dbStage, 'plugin', 'properties', 'connectionString') || '',
       password: objectQuery(dbStage, 'plugin', 'properties', 'password') || '',
       userName: objectQuery(dbStage, 'plugin', 'properties', 'user') || '',
       topic: objectQuery(kafkaStage, 'plugin', 'properties', 'topic') || '',
-      kafkaBrokers: objectQuery(kafkaStage, 'plugin', 'properties', 'kafkaBrokers') || '',
+      kafkaBrokers:
+        objectQuery(kafkaStage, 'plugin', 'properties', 'kafkaBrokers') || '',
       accessID: objectQuery(s3Stage, 'plugin', 'properties', 'accessID') || '',
       path:
         objectQuery(s3Stage, 'plugin', 'properties', 'path') ||
         objectQuery(gcsStage, 'plugin', 'properties', 'path') ||
         '', // This is Goofed
-      accessKey: objectQuery(s3Stage, 'plugin', 'properties', 'accessKey') || '',
+      accessKey:
+        objectQuery(s3Stage, 'plugin', 'properties', 'accessKey') || '',
       bucket: objectQuery(gcsStage, 'plugin', 'properties', 'bucket') || '',
-      serviceFilePath: objectQuery(gcsStage, 'plugin', 'properties', 'serviceFilePath') || '',
+      serviceFilePath:
+        objectQuery(gcsStage, 'plugin', 'properties', 'serviceFilePath') || '',
       project: objectQuery(gcsStage, 'plugin', 'properties', 'project') || '',
-      bqBucket: objectQuery(bigqueryStage, 'plugin', 'properties', 'bucket') || '',
+      bqBucket:
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'bucket') || '',
       bqServiceFilePath:
-        objectQuery(bigqueryStage, 'plugin', 'properties', 'serviceFilePath') || '',
-      bqProject: objectQuery(bigqueryStage, 'plugin', 'properties', 'project') || '',
-      bqDataset: objectQuery(bigqueryStage, 'plugin', 'properties', 'dataset') || '',
-      bqTable: objectQuery(bigqueryStage, 'plugin', 'properties', 'table') || '',
-      bqSchema: objectQuery(bigqueryStage, 'plugin', 'properties', 'schema') || '',
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'serviceFilePath') ||
+        '',
+      bqProject:
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'project') || '',
+      bqDataset:
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'dataset') || '',
+      bqTable:
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'table') || '',
+      bqSchema:
+        objectQuery(bigqueryStage, 'plugin', 'properties', 'schema') || '',
       spannerServiceFilePath:
-        objectQuery(spannerStage, 'plugin', 'properties', 'serviceFilePath') || '',
-      spannerProject: objectQuery(spannerStage, 'plugin', 'properties', 'project') || '',
-      spannerInstance: objectQuery(spannerStage, 'plugin', 'properties', 'instance') || '',
-      spannerDatabase: objectQuery(spannerStage, 'plugin', 'properties', 'database') || '',
-      spannerTable: objectQuery(spannerStage, 'plugin', 'properties', 'table') || '',
-      spannerSchema: objectQuery(spannerStage, 'plugin', 'properties', 'schema') || '',
-      adlsProject: objectQuery(adlsStage, 'plugin', 'properties', 'project') || '',
+        objectQuery(spannerStage, 'plugin', 'properties', 'serviceFilePath') ||
+        '',
+      spannerProject:
+        objectQuery(spannerStage, 'plugin', 'properties', 'project') || '',
+      spannerInstance:
+        objectQuery(spannerStage, 'plugin', 'properties', 'instance') || '',
+      spannerDatabase:
+        objectQuery(spannerStage, 'plugin', 'properties', 'database') || '',
+      spannerTable:
+        objectQuery(spannerStage, 'plugin', 'properties', 'table') || '',
+      spannerSchema:
+        objectQuery(spannerStage, 'plugin', 'properties', 'schema') || '',
+      adlsProject:
+        objectQuery(adlsStage, 'plugin', 'properties', 'project') || '',
     });
-    var newMacorMap = {};
+    const newMacorMap = {};
     // This is to prevent from passing all the empty properties as payload while starting the pipeline.
     Object.keys(macroMap)
       .filter((key) => !isEmpty(macroMap[key]))
@@ -257,15 +297,15 @@ export default class IngestDataFromDataPrep extends Component {
   }
 
   addMacrosToPipelineConfig(pipelineConfig) {
-    let { dataprep } = DataPrepStore.getState();
-    let workspaceProps = objectQuery(dataprep, 'workspaceInfo', 'properties');
+    const { dataprep } = DataPrepStore.getState();
+    const workspaceProps = objectQuery(dataprep, 'workspaceInfo', 'properties');
 
-    let macroMap = this.getAppConfigMacros();
-    let dataFormatProperties = {
+    const macroMap = this.getAppConfigMacros();
+    const dataFormatProperties = {
       schema: '${schema}',
       name: '${datasetName}',
     };
-    let pluginsMap = {
+    const pluginsMap = {
       Wrangler: {
         directives: '${directives}',
         schema: '${schema}',
@@ -348,11 +388,13 @@ export default class IngestDataFromDataPrep extends Component {
 
   preparePipelineConfig() {
     let sink;
-    let { workspaceInfo } = DataPrepStore.getState().dataprep;
-    let { name: pipelineName } = workspaceInfo.properties;
-    let pipelineconfig = cloneDeep(this.state.batchPipelineConfig);
+    const { workspaceInfo } = DataPrepStore.getState().dataprep;
+    const { name: pipelineName } = workspaceInfo.properties;
+    const pipelineconfig = cloneDeep(this.state.batchPipelineConfig);
     if (this.state.inputType === 'fileset') {
-      sink = fieldsetDataType.find((dataType) => dataType.id === this.state.format);
+      sink = fieldsetDataType.find(
+        (dataType) => dataType.id === this.state.format
+      );
       if (sink) {
         sink = this.state.sinkPluginsForDataset[sink.id];
       }
@@ -361,10 +403,13 @@ export default class IngestDataFromDataPrep extends Component {
       sink = this.state.sinkPluginsForDataset['Table'];
     }
     pipelineconfig.config.stages.push(sink);
-    let { pipelineConfig: appConfig, macroMap } = this.addMacrosToPipelineConfig(pipelineconfig);
+    const {
+      pipelineConfig: appConfig,
+      macroMap,
+    } = this.addMacrosToPipelineConfig(pipelineconfig);
 
-    let connections = this.state.batchPipelineConfig.config.connections;
-    let sinkConnection = [
+    const connections = this.state.batchPipelineConfig.config.connections;
+    const sinkConnection = [
       {
         from: connections[0].to,
         to: sink.name,
@@ -378,19 +423,19 @@ export default class IngestDataFromDataPrep extends Component {
   }
 
   submitForm = () => {
-    let steps = cloneDeep(copyingSteps);
-    let { dataprep } = DataPrepStore.getState();
-    let workspaceProps = objectQuery(dataprep, 'workspaceInfo', 'properties');
+    const steps = cloneDeep(copyingSteps);
+    const { dataprep } = DataPrepStore.getState();
+    const workspaceProps = objectQuery(dataprep, 'workspaceInfo', 'properties');
     steps[0].status = 'running';
     this.setState({
       copyInProgress: true,
       copyingSteps: steps,
     });
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     let pipelineName;
     // FIXME: We need to fix backend to enable adding macro to pluginType and name in database.
     // Right now we don't support it and hence UI creates new pipeline based on jdbc plugin name.
-    let dbStage = this.state.batchPipelineConfig.config.stages.find(
+    const dbStage = this.state.batchPipelineConfig.config.stages.find(
       (dataType) => dataType.name === 'Database'
     );
     if (this.state.inputType === 'fileset') {
@@ -411,7 +456,7 @@ export default class IngestDataFromDataPrep extends Component {
         pipelineName = 'one_time_copy_to_fs_from_adls';
       }
     } else {
-      pipelineName = `one_time_copy_to_table`;
+      pipelineName = 'one_time_copy_to_table';
       if (workspaceProps.connection === 'database') {
         pipelineName = `one_time_copy_to_table_from_${dbStage.plugin.properties.jdbcPluginName}`;
       } else if (workspaceProps.connection === 'kafka') {
@@ -436,14 +481,14 @@ export default class IngestDataFromDataPrep extends Component {
     // Get list of pipelines to check if the pipeline is already published
     MyAppApi.list({ namespace })
       .mergeMap((res) => {
-        let appAlreadyDeployed = res.find((app) => app.id === pipelineName);
+        const appAlreadyDeployed = res.find((app) => app.id === pipelineName);
 
         if (!appAlreadyDeployed) {
-          let appConfigWithMacros = this.preparePipelineConfig();
+          const appConfigWithMacros = this.preparePipelineConfig();
           pipelineconfig = appConfigWithMacros.appConfig;
           macroMap = appConfigWithMacros.macroMap;
           pipelineconfig.name = pipelineName;
-          let params = {
+          const params = {
             namespace,
             appId: pipelineName,
           };
@@ -456,7 +501,7 @@ export default class IngestDataFromDataPrep extends Component {
         });
       })
       .mergeMap(() => {
-        let copyingSteps = [...this.state.copyingSteps];
+        const copyingSteps = [...this.state.copyingSteps];
         copyingSteps[0].status = 'success';
         copyingSteps[1].status = 'running';
         this.setState({
@@ -482,9 +527,9 @@ export default class IngestDataFromDataPrep extends Component {
         this.setState({
           copyTaskStarted: true,
         });
-        let count = 1;
+        const count = 1;
         const getDataset = (callback, errorCallback, count) => {
-          let params = {
+          const params = {
             namespace,
             datasetId: this.state.datasetName,
           };
@@ -500,10 +545,10 @@ export default class IngestDataFromDataPrep extends Component {
           });
         };
         return Observable.create((observer) => {
-          let successCallback = () => {
+          const successCallback = () => {
             observer.next();
           };
-          let errorCallback = () => {
+          const errorCallback = () => {
             observer.error(
               'Copy task timed out after 2 mins. Please check logs for more information.'
             );
@@ -514,8 +559,8 @@ export default class IngestDataFromDataPrep extends Component {
       .subscribe(
         () => {
           // Once workflow started successfully create a link to pipeline datasets tab for user reference.
-          let copyingSteps = [...this.state.copyingSteps];
-          let { selectedNamespace: namespaceId } = NamespaceStore.getState();
+          const copyingSteps = [...this.state.copyingSteps];
+          const { selectedNamespace: namespaceId } = NamespaceStore.getState();
           copyingSteps[1].status = 'success';
           let datasetUrl = window.getAbsUIUrl({
             namespaceId,
@@ -531,13 +576,13 @@ export default class IngestDataFromDataPrep extends Component {
         (err) => {
           console.log('err', err);
 
-          let copyingSteps = this.state.copyingSteps.map((step) => {
+          const copyingSteps = this.state.copyingSteps.map((step) => {
             if (step.status === 'running') {
               return Object.assign({}, step, { status: 'failure' });
             }
             return step;
           });
-          let state = {
+          const state = {
             copyingSteps,
           };
           if (!this.state.error) {
@@ -556,7 +601,7 @@ export default class IngestDataFromDataPrep extends Component {
 
   renderDatasetSpecificContent() {
     if (this.state.inputType === 'table') {
-      let { headers } = DataPrepStore.getState().dataprep;
+      const { headers } = DataPrepStore.getState().dataprep;
       return (
         <FormGroup row>
           <Label xs="4" className="text-right">
@@ -564,7 +609,11 @@ export default class IngestDataFromDataPrep extends Component {
             <span className="text-danger">*</span>
           </Label>
           <Col xs="6">
-            <Input type="select" onChange={this.handleRowkeyChange} value={this.state.rowKey}>
+            <Input
+              type="select"
+              onChange={this.handleRowkeyChange}
+              value={this.state.rowKey}
+            >
               {headers.map((header, index) => {
                 return (
                   <option value={header} key={index}>
@@ -574,7 +623,10 @@ export default class IngestDataFromDataPrep extends Component {
               })}
             </Input>
             <IconSVG id="row-key-info-icon" name="icon-info-circle" />
-            <UncontrolledTooltip target="row-key-info-icon" delay={{ show: 250, hide: 0 }}>
+            <UncontrolledTooltip
+              target="row-key-info-icon"
+              delay={{ show: 250, hide: 0 }}
+            >
               {T.translate(`${PREFIX}.Form.rowKeyTooltip`)}
             </UncontrolledTooltip>
           </Col>
@@ -589,7 +641,11 @@ export default class IngestDataFromDataPrep extends Component {
             <span className="text-danger">*</span>
           </Label>
           <Col xs="6">
-            <Input type="select" onChange={this.handleFormatChange} value={this.state.format}>
+            <Input
+              type="select"
+              onChange={this.handleFormatChange}
+              value={this.state.format}
+            >
               {fieldsetDataType.map((datatype, index) => {
                 return (
                   <option value={datatype.id} key={index}>
@@ -599,7 +655,10 @@ export default class IngestDataFromDataPrep extends Component {
               })}
             </Input>
             <IconSVG id="row-key-info-icon" name="icon-info-circle" />
-            <UncontrolledTooltip target="row-key-info-icon" delay={{ show: 250, hide: 0 }}>
+            <UncontrolledTooltip
+              target="row-key-info-icon"
+              delay={{ show: 250, hide: 0 }}
+            >
               {T.translate(`${PREFIX}.Form.formatTooltip`)}
             </UncontrolledTooltip>
           </Col>
@@ -640,7 +699,9 @@ export default class IngestDataFromDataPrep extends Component {
               })}
             >
               <span>{statusContainer(step.status)}</span>
-              <span>{step.status === 'failure' ? step.error : step.message}</span>
+              <span>
+                {step.status === 'failure' ? step.error : step.message}
+              </span>
             </div>
           );
         })}
@@ -654,8 +715,8 @@ export default class IngestDataFromDataPrep extends Component {
   }
 
   renderForm() {
-    let { dataprep } = DataPrepStore.getState();
-    let isTableOptionDisabled = objectQuery(
+    const { dataprep } = DataPrepStore.getState();
+    const isTableOptionDisabled = objectQuery(
       dataprep,
       'workspaceInfo',
       'properties',
@@ -703,9 +764,15 @@ export default class IngestDataFromDataPrep extends Component {
                 {T.translate(`${PREFIX}.Form.requiredLabel`)}
                 <span className="text-danger">*</span>
               </p>
-              <Input value={this.state.datasetName} onChange={this.handleDatasetNameChange} />
+              <Input
+                value={this.state.datasetName}
+                onChange={this.handleDatasetNameChange}
+              />
               <IconSVG id="dataset-name-info-icon" name="icon-info-circle" />
-              <UncontrolledTooltip target="dataset-name-info-icon" delay={{ show: 250, hide: 0 }}>
+              <UncontrolledTooltip
+                target="dataset-name-info-icon"
+                delay={{ show: 250, hide: 0 }}
+              >
                 {T.translate(`${PREFIX}.Form.datasetTooltip`)}
               </UncontrolledTooltip>
             </Col>
@@ -768,10 +835,14 @@ export default class IngestDataFromDataPrep extends Component {
             <div
               className={classnames('close-section float-right', {
                 disabled:
-                  this.state.copyInProgress && !this.state.copyTaskStarted && !this.state.error,
+                  this.state.copyInProgress &&
+                  !this.state.copyTaskStarted &&
+                  !this.state.error,
               })}
               onClick={
-                this.state.copyInProgress && !this.state.copyTaskStarted && !this.state.error
+                this.state.copyInProgress &&
+                !this.state.copyTaskStarted &&
+                !this.state.error
                   ? () => {}
                   : this.toggleModal
               }

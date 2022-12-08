@@ -21,12 +21,12 @@ import { genericNodeStyles } from 'components/DAG/Nodes/utilities';
 import If from 'components/shared/If';
 import ButtonBase from '@material-ui/core/ButtonBase';
 const styles = genericNodeStyles({
-  border: `1px solid #4586f3`,
+  border: '1px solid #4586f3',
   '&.drag-hover': {
     backgroundColor: 'rgba(69, 134, 243, 0.1)',
   },
 });
-interface ITransformNodeProps extends IAbstractNodeProps<typeof styles> {}
+type ITransformNodeProps = IAbstractNodeProps<typeof styles>;
 class TransformNodeComponent extends AbstractNode<ITransformNodeProps> {
   public type = 'transform';
   public alertEndpointRef: HTMLElement | null;

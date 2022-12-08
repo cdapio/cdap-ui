@@ -12,7 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 import PropTypes from 'prop-types';
 
@@ -63,7 +63,8 @@ const mapDispatchToFieldNameProps = (dispatch, ownProps) => {
         type: fieldToActionMap[fieldProp],
         payload: {
           index: ownProps.index,
-          [fieldProp]: fieldProp === 'isNullable' ? e.target.checked : e.target.value,
+          [fieldProp]:
+            fieldProp === 'isNullable' ? e.target.checked : e.target.value,
         },
       });
       if (fieldProp !== 'isNullable') {
@@ -75,7 +76,7 @@ const mapDispatchToFieldNameProps = (dispatch, ownProps) => {
   };
 };
 
-let FieldRowCopy = connect(
+const FieldRowCopy = connect(
   mapStateToFieldNameProps,
   mapDispatchToFieldNameProps
 )(FieldRow);
@@ -83,7 +84,7 @@ let FieldRowCopy = connect(
 export default class SimpleSchema extends Component {
   constructor(props) {
     super(props);
-    var { schema, onSchemaChange } = props;
+    const { schema, onSchemaChange } = props;
     this.state = {
       fields: [...schema.fields],
     };

@@ -39,36 +39,43 @@ export default class LoadingIndicator extends Component {
   };
 
   componentDidMount() {
-    this.loadingIndicatorStoreSubscription = LoadingIndicatorStore.subscribe(() => {
-      if (location.pathname.indexOf('/cdap/administration') !== -1) {
-        return;
-      }
-      let { status, services = [] } = LoadingIndicatorStore.getState().loading;
-      let showLoading;
-      if (
-        [BACKENDSTATUS.BACKENDUP, BACKENDSTATUS.NODESERVERUP, LOADINGSTATUS.HIDELOADING].indexOf(
-          status
-        ) !== -1
-      ) {
-        showLoading = false;
-      }
-      if (
-        [
-          LOADINGSTATUS.SHOWLOADING,
-          BACKENDSTATUS.NODESERVERDOWN,
-          BACKENDSTATUS.BACKENDDOWN,
-        ].indexOf(status) !== -1
-      ) {
-        showLoading = true;
-      }
-      if (this.state.showLoading !== showLoading) {
-        this.setState({
-          showLoading,
-          services,
+    this.loadingIndicatorStoreSubscription = LoadingIndicatorStore.subscribe(
+      () => {
+        if (location.pathname.indexOf('/cdap/administration') !== -1) {
+          return;
+        }
+        const {
           status,
-        });
+          services = [],
+        } = LoadingIndicatorStore.getState().loading;
+        let showLoading;
+        if (
+          [
+            BACKENDSTATUS.BACKENDUP,
+            BACKENDSTATUS.NODESERVERUP,
+            LOADINGSTATUS.HIDELOADING,
+          ].indexOf(status) !== -1
+        ) {
+          showLoading = false;
+        }
+        if (
+          [
+            LOADINGSTATUS.SHOWLOADING,
+            BACKENDSTATUS.NODESERVERDOWN,
+            BACKENDSTATUS.BACKENDDOWN,
+          ].indexOf(status) !== -1
+        ) {
+          showLoading = true;
+        }
+        if (this.state.showLoading !== showLoading) {
+          this.setState({
+            showLoading,
+            services,
+            status,
+          });
+        }
       }
-    });
+    );
   }
   componentWillUnmount() {
     this.loadingIndicatorStoreSubscription();
@@ -93,7 +100,10 @@ export default class LoadingIndicator extends Component {
         <span>
           View
           {this.state.status === BACKENDSTATUS.NODESERVERDOWN ? null : (
-            <a href="/cdap/administration"> {T.translate(`${PREFIX}.systemDashboard`)}</a>
+            <a href="/cdap/administration">
+              {' '}
+              {T.translate(`${PREFIX}.systemDashboard`)}
+            </a>
           )}
           &nbsp;dashboard
         </span>
@@ -102,7 +112,7 @@ export default class LoadingIndicator extends Component {
   }
   renderContent() {
     let message;
-    let { loading } = LoadingIndicatorStore.getState();
+    const { loading } = LoadingIndicatorStore.getState();
     if (loading.status === BACKENDSTATUS.BACKENDDOWN) {
       if (this.state.services.length === 1) {
         message = T.translate(`${PREFIX}.serviceDown`, {

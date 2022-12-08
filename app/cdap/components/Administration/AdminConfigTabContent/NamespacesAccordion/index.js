@@ -80,7 +80,10 @@ export default class NamespacesAccordion extends Component {
   eventEmitter = ee(ee);
 
   componentDidMount() {
-    this.eventEmitter.on(globalEvents.NAMESPACECREATED, this.fetchNamespacesAndGetData);
+    this.eventEmitter.on(
+      globalEvents.NAMESPACECREATED,
+      this.fetchNamespacesAndGetData
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -90,7 +93,10 @@ export default class NamespacesAccordion extends Component {
   }
 
   componentWillUnmount() {
-    this.eventEmitter.off(globalEvents.NAMESPACECREATED, this.fetchNamespacesAndGetData);
+    this.eventEmitter.off(
+      globalEvents.NAMESPACECREATED,
+      this.fetchNamespacesAndGetData
+    );
   }
 
   fetchNamespacesAndGetData = () => {
@@ -101,14 +107,16 @@ export default class NamespacesAccordion extends Component {
   };
 
   getNamespaceData(namespaces) {
-    let searchParams = {
+    const searchParams = {
       target: ['dataset', 'application'],
       query: '*',
       sort: 'entity-name asc',
       responseFormat: 'v6',
     };
 
-    let currentNamespaces = this.state.namespacesInfo.map((namespace) => namespace.name);
+    const currentNamespaces = this.state.namespacesInfo.map(
+      (namespace) => namespace.name
+    );
     let namespacesInfo = [];
     let hasNewNamespaces = false;
 
@@ -121,13 +129,18 @@ export default class NamespacesAccordion extends Component {
       searchParams.namespace = namespace.name;
       MySearchApi.search(searchParams).subscribe(
         (entities) => {
-          let { pipelineCount, customAppCount, datasetCount } = getCustomAppPipelineDatasetCounts(
-            entities
-          );
+          const {
+            pipelineCount,
+            customAppCount,
+            datasetCount,
+          } = getCustomAppPipelineDatasetCounts(entities);
 
           let namespaceIsHighlighted = false;
 
-          if (currentNamespaces.length && currentNamespaces.indexOf(namespace.name) === -1) {
+          if (
+            currentNamespaces.length &&
+            currentNamespaces.indexOf(namespace.name) === -1
+          ) {
             namespaceIsHighlighted = true;
             hasNewNamespaces = true;
           }
@@ -182,9 +195,14 @@ export default class NamespacesAccordion extends Component {
 
   renderLabel() {
     return (
-      <div className="admin-config-container-toggle" onClick={this.props.onExpand}>
+      <div
+        className="admin-config-container-toggle"
+        onClick={this.props.onExpand}
+      >
         <span className="admin-config-container-label">
-          <IconSVG name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'} />
+          <IconSVG
+            name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'}
+          />
           {this.state.loading ? (
             <h5>
               {T.translate(`${PREFIX}.label`)}
@@ -192,7 +210,9 @@ export default class NamespacesAccordion extends Component {
             </h5>
           ) : (
             <h5>
-              {T.translate(`${PREFIX}.labelWithCount`, { count: this.state.namespacesInfo.length })}
+              {T.translate(`${PREFIX}.labelWithCount`, {
+                count: this.state.namespacesInfo.length,
+              })}
             </h5>
           )}
         </span>
@@ -257,7 +277,10 @@ export default class NamespacesAccordion extends Component {
     return (
       <div className="admin-config-container-content namespaces-container-content">
         <If condition={Theme.showAddNamespace}>
-          <button className="btn btn-secondary" onClick={this.toggleNamespaceWizard}>
+          <button
+            className="btn btn-secondary"
+            onClick={this.toggleNamespaceWizard}
+          >
             {T.translate(`${PREFIX}.create`)}
           </button>
         </If>
@@ -267,9 +290,13 @@ export default class NamespacesAccordion extends Component {
           viewAllState={this.state.viewAll}
           toggleViewAll={this.toggleViewAll}
         />
-        <If condition={this.state.namespacesInfo.length}>{this.renderGrid()}</If>
+        <If condition={this.state.namespacesInfo.length}>
+          {this.renderGrid()}
+        </If>
         <If condition={!this.state.namespacesInfo.length}>
-          <div className="grid-wrapper text-center">{T.translate(`${PREFIX}.noNamespace`)}</div>
+          <div className="grid-wrapper text-center">
+            {T.translate(`${PREFIX}.noNamespace`)}
+          </div>
         </If>
         <ViewAllLabel
           arrayToLimit={this.state.namespacesInfo}

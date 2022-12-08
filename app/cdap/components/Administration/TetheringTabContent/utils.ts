@@ -44,7 +44,9 @@ export const areInputsValid = ({ selectedNamespaces, inputFields }) => {
       const msg =
         field.name === 'namespaces'
           ? T.translate(`${I18NPREFIX}.nsValidationError`)
-          : T.translate(`${I18NPREFIX}.inputValidationError`, { fieldName: field.name });
+          : T.translate(`${I18NPREFIX}.inputValidationError`, {
+              fieldName: field.name,
+            });
       errObj = {
         msg,
       };

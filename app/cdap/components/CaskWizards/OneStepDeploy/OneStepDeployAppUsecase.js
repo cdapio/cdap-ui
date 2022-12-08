@@ -21,7 +21,12 @@ import OneStepDeployApp from 'components/CaskWizards/OneStepDeploy/OneStepDeploy
 
 export default function OneStepDeployAppUsecase({ input, onClose, isOpen }) {
   return (
-    <OneStepDeployApp isOpen={isOpen} input={input} onClose={onClose} buildSuccessInfo={() => {}} />
+    <OneStepDeployApp
+      isOpen={isOpen}
+      input={input}
+      onClose={onClose}
+      buildSuccessInfo={() => {}}
+    />
   );
 }
 

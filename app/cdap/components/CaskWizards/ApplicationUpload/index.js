@@ -59,10 +59,12 @@ export default class ApplicationUploadWizard extends Component {
   }
   buildSuccessInfo(uploadResponse) {
     // uploadResponse has the format "Successfully deployed app {appName}"
-    let appName = uploadResponse.slice(uploadResponse.indexOf('app') + 4);
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.ApplicationUpload.success', { appName });
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const appName = uploadResponse.slice(uploadResponse.indexOf('app') + 4);
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.ApplicationUpload.success', {
+      appName,
+    });
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
     this.setState({
       successInfo: {
         message,
@@ -74,9 +76,9 @@ export default class ApplicationUploadWizard extends Component {
     });
   }
   render() {
-    let input = this.props.input;
-    let headerLabel = input.headerLabel;
-    let wizardModalTitle = headerLabel
+    const input = this.props.input;
+    const headerLabel = input.headerLabel;
+    const wizardModalTitle = headerLabel
       ? headerLabel
       : T.translate('features.Resource-Center.Application.modalheadertitle');
     return (

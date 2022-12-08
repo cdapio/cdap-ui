@@ -54,7 +54,8 @@ class KeyValuePair extends Component {
     let keyPlaceholder = '';
     if (!this.props.disabled) {
       keyPlaceholder =
-        this.props.keyPlaceholder || T.translate('commons.keyValPairs.keyPlaceholder');
+        this.props.keyPlaceholder ||
+        T.translate('commons.keyValPairs.keyPlaceholder');
     }
 
     return (
@@ -65,7 +66,9 @@ class KeyValuePair extends Component {
         onKeyDown={this.keyDown}
         onChange={this.props.onChange.bind(null, 'key')}
         placeholder={keyPlaceholder}
-        className={classnames('form-control key-input', { wider: this.props.disabled })}
+        className={classnames('form-control key-input', {
+          wider: this.props.disabled,
+        })}
         disabled={this.props.notDeletable || this.props.disabled}
       />
     );
@@ -77,7 +80,9 @@ class KeyValuePair extends Component {
         <input
           type="text"
           value=""
-          className={classnames('form-control value-input', { wider: this.props.disabled })}
+          className={classnames('form-control value-input', {
+            wider: this.props.disabled,
+          })}
           disabled
         />
       );
@@ -86,7 +91,8 @@ class KeyValuePair extends Component {
     let valuePlaceholder = '';
     if (!this.props.disabled) {
       valuePlaceholder =
-        this.props.valuePlaceholder || T.translate('commons.keyValPairs.valuePlaceholder');
+        this.props.valuePlaceholder ||
+        T.translate('commons.keyValPairs.valuePlaceholder');
     }
 
     return (
@@ -96,7 +102,9 @@ class KeyValuePair extends Component {
         onKeyDown={this.keyDown}
         onChange={this.props.onChange.bind(null, 'value')}
         placeholder={valuePlaceholder}
-        className={classnames('form-control value-input', { wider: this.props.disabled })}
+        className={classnames('form-control value-input', {
+          wider: this.props.disabled,
+        })}
         disabled={this.props.disabled}
       />
     );
@@ -142,7 +150,10 @@ class KeyValuePair extends Component {
 
   render() {
     return (
-      <div className="key-value-pair-preference" data-cy={`key-value-pair-${this.props.index}`}>
+      <div
+        className="key-value-pair-preference"
+        data-cy={`key-value-pair-${this.props.index}`}
+      >
         {this.renderKeyField()}
         {this.renderValueField()}
         {this.renderActionButtons()}

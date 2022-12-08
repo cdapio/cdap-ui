@@ -41,13 +41,17 @@ export default class PluginUploadWizard extends Component {
   }
 
   buildInfo() {
-    let state = PluginArtifactUploadStore.getState();
-    let pluginName = state.upload.jar.fileMetadataObj.name;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.PluginArtifact.success', { pluginName });
-    let subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
-    let buttonLabel = T.translate('features.Wizard.PluginArtifact.callToAction');
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const state = PluginArtifactUploadStore.getState();
+    const pluginName = state.upload.jar.fileMetadataObj.name;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.PluginArtifact.success', {
+      pluginName,
+    });
+    const subtitle = T.translate('features.Wizard.PluginArtifact.subtitle');
+    const buttonLabel = T.translate(
+      'features.Wizard.PluginArtifact.callToAction'
+    );
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
 
     return {
       message,

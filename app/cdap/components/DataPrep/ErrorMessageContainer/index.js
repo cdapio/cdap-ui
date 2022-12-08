@@ -25,7 +25,9 @@ export default function ErrorMessageContainer({ workspaceName, refreshFn }) {
 
   let errorMessageTitle = T.translate(`${prefix}.dataErrorMessageTitle`);
   if (workspaceName) {
-    errorMessageTitle = T.translate(`${prefix}.dataErrorMessageTitle2`, { workspaceName });
+    errorMessageTitle = T.translate(`${prefix}.dataErrorMessageTitle2`, {
+      workspaceName,
+    });
   }
 
   return (

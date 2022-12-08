@@ -28,7 +28,7 @@ import { objectQuery } from 'services/helpers';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import T from 'i18n-react';
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.SpannerBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.SpannerBrowser';
 
 interface IMatchParams {
   connectionId: string;
@@ -115,7 +115,11 @@ class SpannerDatabaseListView extends React.PureComponent<ISpannerDatabaseListVi
             <span> / </span>
             <span>{instanceId}</span>
           </div>
-          <div>{T.translate(`${PREFIX}.databaseCount`, { context: databaseList.length })}</div>
+          <div>
+            {T.translate(`${PREFIX}.databaseCount`, {
+              context: databaseList.length,
+            })}
+          </div>
         </div>
 
         <div className="list-table">
@@ -162,6 +166,6 @@ const mapStateToProps = (state): Partial<ISpannerDatabaseListViewProps> => {
   };
 };
 
-const SpannerDatabaseList = connect(mapStateToProps)(SpannerDatabaseListView);
+const SpannerDatabaseList: any = connect(mapStateToProps)(SpannerDatabaseListView);
 
 export default SpannerDatabaseList;

@@ -42,7 +42,9 @@ interface IGetSchemaWidgetProps {
   position?: Position;
 }
 
-interface IGetSchemaProps extends IWidgetProps<IGetSchemaWidgetProps>, WithStyles<typeof styles> {}
+export interface IGetSchemaProps
+  extends IWidgetProps<IGetSchemaWidgetProps>,
+    WithStyles<typeof styles> {}
 
 const GetSchemaWidgetView: React.FC<IGetSchemaProps> = ({ extraConfig, classes, widgetProps }) => {
   const validateProperties = objectQuery(extraConfig, 'validateProperties');

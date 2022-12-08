@@ -24,7 +24,10 @@ import NoEntitiesMessage from 'components/EntityListView/NoEntitiesMessage';
 import SearchStore from 'components/EntityListView/SearchStore';
 import SearchStoreActions from 'components/EntityListView/SearchStore/SearchStoreActions';
 import ListViewHeader from 'components/EntityListView/ListViewHeader';
-import { search, updateQueryString } from 'components/EntityListView/SearchStore/ActionCreator';
+import {
+  search,
+  updateQueryString,
+} from 'components/EntityListView/SearchStore/ActionCreator';
 import {
   DEFAULT_SEARCH_SORT_OPTIONS,
   DEFAULT_SEARCH_QUERY,
@@ -53,7 +56,10 @@ export default class HomeListView extends Component {
   }
 
   componentWillUnmount() {
-    if (this.statusPoll$ && typeof this.statusPoll$.unsubscribe === 'function') {
+    if (
+      this.statusPoll$ &&
+      typeof this.statusPoll$.unsubscribe === 'function'
+    ) {
       this.statusPoll$.unsubscribe();
     }
   }
@@ -103,7 +109,10 @@ export default class HomeListView extends Component {
   };
 
   pollApplicationInfo = (requestBody) => {
-    if (this.statusPoll$ && typeof this.statusPoll$.unsubscribe === 'function') {
+    if (
+      this.statusPoll$ &&
+      typeof this.statusPoll$.unsubscribe === 'function'
+    ) {
       this.statusPoll$.unsubscribe();
     }
 
@@ -111,32 +120,34 @@ export default class HomeListView extends Component {
       namespace: getCurrentNamespace(),
     };
 
-    this.statusPoll$ = MyAppApi.batchStatus(params, requestBody).subscribe((statusRes) => {
-      const applicationInfo = {};
+    this.statusPoll$ = MyAppApi.batchStatus(params, requestBody).subscribe(
+      (statusRes) => {
+        const applicationInfo = {};
 
-      statusRes.forEach((program) => {
-        const appId = program.appId;
-        if (!applicationInfo[appId]) {
-          applicationInfo[appId] = {
-            numPrograms: 0,
-            running: 0,
-            failed: 0,
-          };
-        }
+        statusRes.forEach((program) => {
+          const appId = program.appId;
+          if (!applicationInfo[appId]) {
+            applicationInfo[appId] = {
+              numPrograms: 0,
+              running: 0,
+              failed: 0,
+            };
+          }
 
-        applicationInfo[appId].numPrograms++;
+          applicationInfo[appId].numPrograms++;
 
-        if (program.status === 'RUNNING') {
-          applicationInfo[appId].running++;
-        } else if (program.status === 'FAILED') {
-          applicationInfo[appId].failed++;
-        }
-      });
+          if (program.status === 'RUNNING') {
+            applicationInfo[appId].running++;
+          } else if (program.status === 'FAILED') {
+            applicationInfo[appId].failed++;
+          }
+        });
 
-      this.setState({
-        applicationInfo,
-      });
-    });
+        this.setState({
+          applicationInfo,
+        });
+      }
+    );
   };
 
   onClick(entity) {
@@ -154,19 +165,20 @@ export default class HomeListView extends Component {
   }
   render() {
     let content;
-    let searchState = SearchStore.getState().search;
-    let query = searchState.query;
-    let activeFilters = searchState.activeFilters;
-    let filterOptions = searchState.filters;
-    let overviewEntity = searchState.overviewEntity;
-    let isEntityActive = (entity) => {
+    const searchState = SearchStore.getState().search;
+    const query = searchState.query;
+    const activeFilters = searchState.activeFilters;
+    const filterOptions = searchState.filters;
+    const overviewEntity = searchState.overviewEntity;
+    const isEntityActive = (entity) => {
       if (isNil(overviewEntity)) {
         return false;
       }
       return (
         entity.id === overviewEntity.id &&
         entity.type === overviewEntity.type &&
-        (overviewEntity.uniqueId === entity.uniqueId || isNil(overviewEntity.uniqueId)) // This will happen when the entity id and type comes from url and not through click
+        (overviewEntity.uniqueId === entity.uniqueId ||
+          isNil(overviewEntity.uniqueId)) // This will happen when the entity id and type comes from url and not through click
       );
     };
     if (this.state.loading) {
@@ -182,10 +194,11 @@ export default class HomeListView extends Component {
         <NoEntitiesMessage
           searchText={query}
           filtersAreApplied={() =>
-            activeFilters.length > 0 && activeFilters.length < filterOptions.length
+            activeFilters.length > 0 &&
+            activeFilters.length < filterOptions.length
           }
           clearSearchAndFilters={() => {
-            let searchState = SearchStore.getState().search;
+            const searchState = SearchStore.getState().search;
             SearchStore.dispatch({
               type: SearchStoreActions.SETSORTFILTERSEARCHCURRENTPAGE,
               payload: {
@@ -212,7 +225,9 @@ export default class HomeListView extends Component {
 
         return (
           <EntityCard
-            className={classnames('entity-card-container', { active: isEntityActive(entity) })}
+            className={classnames('entity-card-container', {
+              active: isEntityActive(entity),
+            })}
             id={entity.uniqueId}
             key={entity.uniqueId}
             onClick={this.onClick.bind(this, entity)}
@@ -224,7 +239,7 @@ export default class HomeListView extends Component {
       });
     }
 
-    let currentPage = SearchStore.getState().search.currentPage;
+    const currentPage = SearchStore.getState().search.currentPage;
     return (
       <div id={this.props.id} className={this.props.className}>
         {!this.props.showJustAddedSection ? null : (

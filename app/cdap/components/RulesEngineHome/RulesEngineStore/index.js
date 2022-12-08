@@ -131,7 +131,10 @@ const rules = (state = DEFAULTRULESSTATE, action = defaultAction) => {
   }
 };
 
-const integration = (state = DEFAULTINTEGRATIONSTATE, action = defaultAction) => {
+const integration = (
+  state = DEFAULTINTEGRATIONSTATE,
+  action = defaultAction
+) => {
   switch (action.type) {
     case RULESENGINEACTIONS.SETINTEGRATIONEMBEDDED:
       return Object.assign({}, state, { embedded: true });

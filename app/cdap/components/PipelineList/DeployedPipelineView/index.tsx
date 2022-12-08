@@ -45,17 +45,20 @@ import PaginationStepper from 'components/shared/PaginationStepper';
 import styled from 'styled-components';
 import { MyPipelineApi } from 'api/pipeline';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { IDeployedPipelineStore } from './store/index';
 
 const PaginationContainer = styled.div`
   margin-right: 50px;
 `;
 
 const Pagination = ({}) => {
-  const { prevDisabled, nextDisabled, shouldDisplay } = useSelector(({ deployed }) => ({
-    prevDisabled: !deployed.previousTokens.length,
-    nextDisabled: !deployed.nextPageToken,
-    shouldDisplay: deployed.hasMultiple,
-  }));
+  const { prevDisabled, nextDisabled, shouldDisplay } = useSelector(
+    ({ deployed }: IDeployedPipelineStore) => ({
+      prevDisabled: !deployed.previousTokens.length,
+      nextDisabled: !deployed.nextPageToken,
+      shouldDisplay: deployed.hasMultiple,
+    })
+  );
 
   if (!shouldDisplay) {
     return null;
@@ -152,7 +155,7 @@ const DeployedPipeline: React.FC = () => {
   );
   const latestOnly = lifecycleManagementEditEnabled ? 'true' : 'false';
   const { ready, search, pageToken, sortOrder, pageLimit } = useSelector(
-    ({ deployed }) => deployed
+    ({ deployed }: IDeployedPipelineStore) => deployed
   );
   const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
     errorPolicy: 'all',

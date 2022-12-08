@@ -39,18 +39,21 @@ const CONN_TYPE = {
 const LABEL_COL_CLASS = 'col-4 col-form-label text-right';
 const INPUT_COL_CLASS = 'col-8';
 
-const PREFIX = 'features.DataPrepConnections.AddConnections.Database.DatabaseDetail';
+const PREFIX =
+  'features.DataPrepConnections.AddConnections.Database.DatabaseDetail';
 
 export default class DatabaseDetail extends Component {
   constructor(props) {
     super(props);
 
-    let defaultPort = this.props.db['default.port'] || '';
+    const defaultPort = this.props.db['default.port'] || '';
 
-    let customId = uuidV4();
+    const customId = uuidV4();
 
     this.state = {
-      connType: !this.props.db.basicAllowed ? CONN_TYPE.advanced : CONN_TYPE.basic,
+      connType: !this.props.db.basicAllowed
+        ? CONN_TYPE.advanced
+        : CONN_TYPE.basic,
       name: '',
       hostname: 'localhost',
       port: this.props.mode === 'ADD' ? defaultPort : '',
@@ -76,16 +79,19 @@ export default class DatabaseDetail extends Component {
   }
 
   fetchDatabases() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let requestBody = {
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.DATABASE,
       properties: this.constructProperties(),
     };
 
-    MyDataPrepApi.getDatabaseList({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.getDatabaseList(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       (databaseList) => {
-        let list = databaseList.values.sort();
+        const list = databaseList.values.sort();
         let customId = this.state.customId;
 
         if (list.indexOf(customId) !== -1) {
@@ -97,7 +103,8 @@ export default class DatabaseDetail extends Component {
 
         this.setState({
           databaseList: list,
-          selectedDatabase: this.props.mode === 'EDIT' ? this.state.database : '',
+          selectedDatabase:
+            this.props.mode === 'EDIT' ? this.state.database : '',
           customId,
         });
       },
@@ -109,9 +116,9 @@ export default class DatabaseDetail extends Component {
 
   componentWillMount() {
     if (this.props.mode !== 'ADD') {
-      let name = this.props.mode === 'EDIT' ? this.props.connInfo.name : '';
+      const name = this.props.mode === 'EDIT' ? this.props.connInfo.name : '';
 
-      let {
+      const {
         connectionString = '',
         password = '',
         username = '',
@@ -176,10 +183,10 @@ export default class DatabaseDetail extends Component {
 
   constructProperties() {
     let properties;
-    let db = this.props.db;
+    const db = this.props.db;
 
     if (this.state.connType === CONN_TYPE.basic) {
-      let selectedDatabase =
+      const selectedDatabase =
         this.state.selectedDatabase === this.state.customId
           ? this.state.database
           : this.state.selectedDatabase;
@@ -208,8 +215,8 @@ export default class DatabaseDetail extends Component {
   }
 
   interpolateConnectionString(url) {
-    let state = this.state;
-    let required = this.props.db.pluginInfo.fields;
+    const state = this.state;
+    const required = this.props.db.pluginInfo.fields;
 
     let interpolatedUrl = url;
 
@@ -218,10 +225,16 @@ export default class DatabaseDetail extends Component {
         let fieldValue = state[field];
         if (field === 'database') {
           fieldValue =
-            state.selectedDatabase === state.customId ? state.database : state.selectedDatabase;
+            state.selectedDatabase === state.customId
+              ? state.database
+              : state.selectedDatabase;
         }
 
-        interpolatedUrl = replace(interpolatedUrl, '${' + field + '}', fieldValue);
+        interpolatedUrl = replace(
+          interpolatedUrl,
+          '${' + field + '}',
+          fieldValue
+        );
       });
     } else {
       interpolatedUrl = this.state.connectionString;
@@ -231,15 +244,18 @@ export default class DatabaseDetail extends Component {
   }
 
   addConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.DATABASE,
       properties: this.constructProperties(),
     };
 
-    MyDataPrepApi.createConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.createConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       () => {
         this.setState({ error: null });
         this.props.onAdd();
@@ -247,21 +263,23 @@ export default class DatabaseDetail extends Component {
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
   }
 
   editConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
     };
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       id: this.props.connectionId,
       type: ConnectionType.DATABASE,
@@ -271,13 +289,18 @@ export default class DatabaseDetail extends Component {
     MyDataPrepApi.updateConnection(params, requestBody).subscribe(
       () => {
         this.setState({ error: null });
-        this.eventEmitter.emit('DATAPREP_CONNECTION_EDIT_DATABASE', this.props.connectionId);
+        this.eventEmitter.emit(
+          'DATAPREP_CONNECTION_EDIT_DATABASE',
+          this.props.connectionId
+        );
         this.props.onAdd();
       },
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
@@ -286,15 +309,18 @@ export default class DatabaseDetail extends Component {
   testConnection() {
     this.setState({ testConnectionLoading: true });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.DATABASE,
       properties: this.constructProperties(),
     };
 
-    MyDataPrepApi.jdbcTestConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.jdbcTestConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       (res) => {
         this.setState({
           connectionResult: {
@@ -309,7 +335,7 @@ export default class DatabaseDetail extends Component {
       (err) => {
         console.log('Error testing database connection', err);
 
-        let errorMessage =
+        const errorMessage =
           objectQuery(err, 'response', 'message') ||
           objectQuery(err, 'response') ||
           T.translate(`${PREFIX}.defaultTestErrorMessage`);
@@ -328,7 +354,9 @@ export default class DatabaseDetail extends Component {
   renderUsername() {
     return (
       <div className="form-group row">
-        <label className={LABEL_COL_CLASS}>{T.translate(`${PREFIX}.username`)}</label>
+        <label className={LABEL_COL_CLASS}>
+          {T.translate(`${PREFIX}.username`)}
+        </label>
         <div className={INPUT_COL_CLASS}>
           <input
             type="text"
@@ -344,7 +372,9 @@ export default class DatabaseDetail extends Component {
   renderPassword() {
     return (
       <div className="form-group row">
-        <label className={LABEL_COL_CLASS}>{T.translate(`${PREFIX}.password`)}</label>
+        <label className={LABEL_COL_CLASS}>
+          {T.translate(`${PREFIX}.password`)}
+        </label>
         <div className={INPUT_COL_CLASS}>
           <WrappedWidgetWrapper
             widgetProperty={{
@@ -361,12 +391,16 @@ export default class DatabaseDetail extends Component {
   }
 
   renderTestButton() {
-    let disabled = this.state.testConnectionLoading;
+    const disabled = this.state.testConnectionLoading;
 
     return (
       <div className="form-group row">
         <div className="col-8 offset-4 col-offset-4 col-xs-offset-4">
-          <button className="btn btn-secondary" onClick={this.testConnection} disabled={disabled}>
+          <button
+            className="btn btn-secondary"
+            onClick={this.testConnection}
+            disabled={disabled}
+          >
             {T.translate(`${PREFIX}.testConnection`)}
           </button>
 
@@ -377,7 +411,9 @@ export default class DatabaseDetail extends Component {
           ) : null}
 
           {this.state.connectionResult ? (
-            <span className={`connection-check text-${this.state.connectionResult.type}`}>
+            <span
+              className={`connection-check text-${this.state.connectionResult.type}`}
+            >
               {this.state.connectionResult.message}
             </span>
           ) : null}
@@ -389,7 +425,9 @@ export default class DatabaseDetail extends Component {
   renderDatabase() {
     return (
       <div className="form-group row">
-        <label className={LABEL_COL_CLASS}>{T.translate(`${PREFIX}.database`)}</label>
+        <label className={LABEL_COL_CLASS}>
+          {T.translate(`${PREFIX}.database`)}
+        </label>
         <div className={INPUT_COL_CLASS}>
           <select
             className="form-control"
@@ -469,7 +507,9 @@ export default class DatabaseDetail extends Component {
   renderAdvanced() {
     const connStringUrl = objectQuery(this.props, 'db', 'pluginInfo', 'url');
     const placeholder = connStringUrl
-      ? T.translate(`${PREFIX}.Placeholders.connectionString`, { connectionString: connStringUrl })
+      ? T.translate(`${PREFIX}.Placeholders.connectionString`, {
+          connectionString: connStringUrl,
+        })
       : T.translate(`${PREFIX}.Placeholders.connectionStringDefault`);
 
     return (
@@ -500,7 +540,7 @@ export default class DatabaseDetail extends Component {
   }
 
   renderDriverInfo() {
-    let db = this.props.db;
+    const db = this.props.db;
 
     return (
       <div className="row driver-info">
@@ -554,7 +594,11 @@ export default class DatabaseDetail extends Component {
     return (
       <div className="row">
         <div className="col-8 offset-4 col-offset-4 col-xs-offset-4">
-          <button className="btn btn-primary" onClick={onClickFn} disabled={disabled}>
+          <button
+            className="btn btn-primary"
+            onClick={onClickFn}
+            disabled={disabled}
+          >
             {T.translate(`${PREFIX}.Buttons.${this.props.mode}`)}
           </button>
         </div>
@@ -569,18 +613,24 @@ export default class DatabaseDetail extends Component {
 
     return (
       <div className="form-group row">
-        <label className={LABEL_COL_CLASS}>{T.translate(`${PREFIX}.connType`)}</label>
+        <label className={LABEL_COL_CLASS}>
+          {T.translate(`${PREFIX}.connType`)}
+        </label>
         <div className={`${INPUT_COL_CLASS} connection-type`}>
           <span
             onClick={this.handleConnTypeChange.bind(this, CONN_TYPE.basic)}
-            className={classnames({ active: this.state.connType === CONN_TYPE.basic })}
+            className={classnames({
+              active: this.state.connType === CONN_TYPE.basic,
+            })}
           >
             {T.translate(`${PREFIX}.basic`)}
           </span>
           <span className="divider">|</span>
           <span
             onClick={this.handleConnTypeChange.bind(this, CONN_TYPE.advanced)}
-            className={classnames({ active: this.state.connType === CONN_TYPE.advanced })}
+            className={classnames({
+              active: this.state.connType === CONN_TYPE.advanced,
+            })}
           >
             {T.translate(`${PREFIX}.advanced`)}
           </span>

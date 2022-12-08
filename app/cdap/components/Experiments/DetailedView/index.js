@@ -30,7 +30,10 @@ import {
   resetNewlyTrainingModel,
   setAlgorithmsListForDetailedView,
 } from 'components/Experiments/store/ExperimentDetailActionCreator';
-import { MMDS_SORT_METHODS, MMDS_SORT_COLUMN } from 'components/Experiments/store';
+import {
+  MMDS_SORT_METHODS,
+  MMDS_SORT_COLUMN,
+} from 'components/Experiments/store';
 import ConnectedTopPanel from 'components/Experiments/DetailedView/TopPanel';
 import ModelsTableWrapper from 'components/Experiments/DetailedView/ModelsTable';
 import Mousetrap from 'mousetrap';
@@ -53,8 +56,8 @@ export default class ExperimentDetails extends Component {
     Mousetrap.bind('right', this.goToNextPage);
     Mousetrap.bind('left', this.goToPreviousPage);
     setAlgorithmsListForDetailedView();
-    let { experimentId } = this.props.match.params;
-    let {
+    const { experimentId } = this.props.match.params;
+    const {
       offset: modelsOffset,
       limit: modelsLimit,
       sortMethod: modelsSortMethod,
@@ -69,7 +72,9 @@ export default class ExperimentDetails extends Component {
     getExperimentDetails(experimentId);
     getModelsInExperiment(experimentId).subscribe(({ models }) => {
       models.forEach((model) =>
-        this.modelStatusObservables.push(pollModelStatus(experimentId, model.id))
+        this.modelStatusObservables.push(
+          pollModelStatus(experimentId, model.id)
+        )
       );
     });
   }
@@ -79,12 +84,14 @@ export default class ExperimentDetails extends Component {
     Mousetrap.unbind('right');
     resetExperimentDetailStore();
     if (this.modelStatusObservables.length) {
-      this.modelStatusObservables.forEach((statusObservable$) => statusObservable$.unsubscribe());
+      this.modelStatusObservables.forEach((statusObservable$) =>
+        statusObservable$.unsubscribe()
+      );
     }
   }
 
   showNewlyTrainingModel = () => {
-    let { newlyTrainingModel } = experimentDetailStore.getState();
+    const { newlyTrainingModel } = experimentDetailStore.getState();
     if (newlyTrainingModel) {
       return (
         <Alert
@@ -98,16 +105,22 @@ export default class ExperimentDetails extends Component {
   };
 
   goToNextPage = () => {
-    let { modelsOffset, modelsLimit, modelsTotalPages } = experimentDetailStore.getState();
-    let nextPage = modelsOffset === 0 ? 1 : Math.ceil((modelsOffset + 1) / modelsLimit);
+    const {
+      modelsOffset,
+      modelsLimit,
+      modelsTotalPages,
+    } = experimentDetailStore.getState();
+    const nextPage =
+      modelsOffset === 0 ? 1 : Math.ceil((modelsOffset + 1) / modelsLimit);
     if (nextPage < modelsTotalPages) {
       handleModelsPageChange({ selected: nextPage });
     }
   };
 
   goToPreviousPage = () => {
-    let { modelsOffset, modelsLimit } = experimentDetailStore.getState();
-    let prevPage = modelsOffset === 0 ? 1 : Math.ceil((modelsOffset + 1) / modelsLimit);
+    const { modelsOffset, modelsLimit } = experimentDetailStore.getState();
+    const prevPage =
+      modelsOffset === 0 ? 1 : Math.ceil((modelsOffset + 1) / modelsLimit);
     if (prevPage > 1) {
       handleModelsPageChange({ selected: prevPage - 2 });
     }
@@ -135,7 +148,7 @@ export default class ExperimentDetails extends Component {
       sortMethod = MMDS_SORT_METHODS.ASC;
       sortColumn = MMDS_SORT_COLUMN;
     } else {
-      let sortSplit = sort.split(' ');
+      const sortSplit = sort.split(' ');
       sortColumn = sortSplit[0] || MMDS_SORT_COLUMN;
       sortMethod = sortSplit[1] || MMDS_SORT_METHODS.ASC;
     }

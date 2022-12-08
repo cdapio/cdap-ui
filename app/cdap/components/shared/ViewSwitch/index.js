@@ -28,7 +28,7 @@ const cookie = new Cookies();
 export default class ViewSwitch extends Component {
   constructor(props) {
     super(props);
-    let defaultView = cookie.get('ViewSwitchDefault');
+    const defaultView = cookie.get('ViewSwitchDefault');
     this.state = {
       list: this.props.list,
       activeTab: defaultView || 'card',
@@ -52,7 +52,9 @@ export default class ViewSwitch extends Component {
           <Nav className="float-right" tabs>
             <NavItem>
               <NavLink
-                className={classnames({ active: this.state.activeTab === 'card' })}
+                className={classnames({
+                  active: this.state.activeTab === 'card',
+                })}
                 onClick={() => {
                   this.toggleView('card');
                 }}
@@ -62,7 +64,9 @@ export default class ViewSwitch extends Component {
             </NavItem>
             <NavItem>
               <NavLink
-                className={classnames({ active: this.state.activeTab === 'list' })}
+                className={classnames({
+                  active: this.state.activeTab === 'list',
+                })}
                 onClick={() => {
                   this.toggleView('list');
                 }}

@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import { connect, Provider } from 'react-redux';
-import MicroserviceUploadActions  from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadActions';
+import MicroserviceUploadActions from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadActions';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
 import MicroserviceUploadActionCreator from 'services/WizardStores/MicroserviceUpload/ActionCreator';
 import { Label, Form, FormGroup, Col, Input } from 'reactstrap';
@@ -33,7 +33,9 @@ const mapStateToInstanceNameProps = (state) => {
   return {
     value: state.general.instanceName,
     type: 'text',
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step1.instanceNamePlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step1.instanceNamePlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceDescritionProps = (state) => {
@@ -41,7 +43,9 @@ const mapStateToMicroserviceDescritionProps = (state) => {
     value: state.general.description,
     type: 'textarea',
     rows: '3',
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step1.descriptionPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step1.descriptionPlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceVersionProps = (state) => {
@@ -49,19 +53,21 @@ const mapStateToMicroserviceVersionProps = (state) => {
     value: state.general.version,
     type: 'number',
     min: 1,
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step1.versionPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step1.versionPlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceOptionProps = (state) => {
   return {
     value: state.general.microserviceOption,
-    options: state.general.defaultMicroserviceOptions
+    options: state.general.defaultMicroserviceOptions,
   };
 };
 const mapStateToNewMicroserviceNameProps = (state) => {
   return {
     value: state.general.newMicroserviceName,
-    showNewMicroserviceTextbox: state.general.showNewMicroserviceTextbox
+    showNewMicroserviceTextbox: state.general.showNewMicroserviceTextbox,
   };
 };
 const mapStateToGeneralStepSummaryProps = (state) => {
@@ -70,12 +76,12 @@ const mapStateToGeneralStepSummaryProps = (state) => {
     newMicroserviceName: state.general.newMicroserviceName,
     showNewMicroserviceTextbox: state.general.showNewMicroserviceTextbox,
     instanceName: state.general.instanceName,
-    version: state.general.version
+    version: state.general.version,
   };
 };
 const mapStateToGeneralStepReadOnlyProps = (state) => {
   return {
-    disabled: state.general.__readOnly
+    disabled: state.general.__readOnly,
   };
 };
 
@@ -84,17 +90,18 @@ const mapDispatchToInstanceNameProps = (dispatch) => {
     onChange: (e) => {
       dispatch({
         type: MicroserviceUploadActions.setInstanceName,
-        payload: {instanceName: e.target.value}
+        payload: { instanceName: e.target.value },
       });
-    }
+    },
   };
 };
 const mapDispatchToMicroserviceDescriptionProps = (dispatch) => {
   return {
-    onChange: (e) => (dispatch({
-      type: MicroserviceUploadActions.setDescription,
-      payload: {description: e.target.value}
-    }))
+    onChange: (e) =>
+      dispatch({
+        type: MicroserviceUploadActions.setDescription,
+        payload: { description: e.target.value },
+      }),
   };
 };
 const mapDispatchToToMicroserviceVersion = (dispatch) => {
@@ -102,9 +109,9 @@ const mapDispatchToToMicroserviceVersion = (dispatch) => {
     onChange: (e) => {
       dispatch({
         type: MicroserviceUploadActions.setVersion,
-        payload: {version: e.target.value}
+        payload: { version: e.target.value },
       });
-    }
+    },
   };
 };
 const mapDispatchToMicroserviceOptionProps = (dispatch) => {
@@ -112,24 +119,29 @@ const mapDispatchToMicroserviceOptionProps = (dispatch) => {
     onChange: (e) => {
       dispatch({
         type: MicroserviceUploadActions.setMicroserviceOption,
-        payload: {microserviceOption: e.target.value}
+        payload: { microserviceOption: e.target.value },
       });
-      return MicroserviceUploadActionCreator
-        .getMicroservicePluginProperties(e.target.value)
-        .subscribe((propertiesArr) => {
+      return MicroserviceUploadActionCreator.getMicroservicePluginProperties(
+        e.target.value
+      ).subscribe(
+        (propertiesArr) => {
           if (propertiesArr.length > 0 && propertiesArr[0].properties) {
             dispatch({
               type: MicroserviceUploadActions.setMicroservicePluginProperties,
-              payload: {pluginProperties: Object.keys(propertiesArr[0].properties)}
+              payload: {
+                pluginProperties: Object.keys(propertiesArr[0].properties),
+              },
             });
           }
-        }, () => {
+        },
+        () => {
           dispatch({
             type: MicroserviceUploadActions.setMicroservicePluginProperties,
-            payload: {pluginProperties: []}
+            payload: { pluginProperties: [] },
           });
-        });
-    }
+        }
+      );
+    },
   };
 };
 const mapDispatchToNewMicroserviceNameProps = (dispatch) => {
@@ -137,22 +149,30 @@ const mapDispatchToNewMicroserviceNameProps = (dispatch) => {
     onChange: (e) => {
       dispatch({
         type: MicroserviceUploadActions.setNewMicroserviceName,
-        payload: {newMicroserviceName: e.target.value}
+        payload: { newMicroserviceName: e.target.value },
       });
-    }
+    },
   };
 };
 
-let NewMicroserviceTextbox = ({showNewMicroserviceTextbox, value, onChange}) => {
-  if (!showNewMicroserviceTextbox) { return null; }
+let NewMicroserviceTextbox = ({
+  showNewMicroserviceTextbox,
+  value,
+  onChange,
+}) => {
+  if (!showNewMicroserviceTextbox) {
+    return null;
+  }
 
   return (
     <InputWithValidations
-      value = {value}
-      onChange = {onChange}
-      className = "new-microservice-textbox"
-      type = 'text'
-      placeholder = {T.translate('features.Wizard.MicroserviceUpload.Step1.newMicroservicePlaceholder')}
+      value={value}
+      onChange={onChange}
+      className="new-microservice-textbox"
+      type="text"
+      placeholder={T.translate(
+        'features.Wizard.MicroserviceUpload.Step1.newMicroservicePlaceholder'
+      )}
     />
   );
 };
@@ -160,17 +180,27 @@ let NewMicroserviceTextbox = ({showNewMicroserviceTextbox, value, onChange}) => 
 NewMicroserviceTextbox.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.function,
-  showNewMicroserviceTextbox: PropTypes.bool
+  showNewMicroserviceTextbox: PropTypes.bool,
 };
 
-let Summary = ({microserviceOption, newMicroserviceName, showNewMicroserviceTextbox, instanceName, version}) => {
+let Summary = ({
+  microserviceOption,
+  newMicroserviceName,
+  showNewMicroserviceTextbox,
+  instanceName,
+  version,
+}) => {
   let microserviceName = microserviceOption;
   if (showNewMicroserviceTextbox) {
     microserviceName = newMicroserviceName;
   }
   return (
     <span>
-      {T.translate('features.Wizard.MicroserviceUpload.Step1.summary', { microserviceName, instanceName, version })}
+      {T.translate('features.Wizard.MicroserviceUpload.Step1.summary', {
+        microserviceName,
+        instanceName,
+        version,
+      })}
     </span>
   );
 };
@@ -180,20 +210,16 @@ Summary.propTypes = {
   newMicroserviceName: PropTypes.string,
   showNewMicroserviceTextbox: PropTypes.string,
   instanceName: PropTypes.string,
-  version: PropTypes.number
+  version: PropTypes.number,
 };
 
-let Fieldset = ({disabled, children}) => {
-  return (
-    <fieldset disabled={disabled}>
-      {children}
-    </fieldset>
-  );
+const Fieldset = ({ disabled, children }) => {
+  return <fieldset disabled={disabled}>{children}</fieldset>;
 };
 
 Fieldset.propTypes = {
   disabled: PropTypes.bool,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 // FIXME: Should pass validationError to the InputWithValidations, or just switch
@@ -219,10 +245,7 @@ NewMicroserviceTextbox = connect(
   mapStateToNewMicroserviceNameProps,
   mapDispatchToNewMicroserviceNameProps
 )(NewMicroserviceTextbox);
-Summary = connect(
-  mapStateToGeneralStepSummaryProps,
-  null
-)(Summary);
+Summary = connect(mapStateToGeneralStepSummaryProps, null)(Summary);
 const CustomFieldset = connect(
   mapStateToGeneralStepReadOnlyProps,
   null
@@ -241,7 +264,11 @@ export default function GeneralInfoStep() {
         <CustomFieldset>
           <FormGroup row>
             <Col xs="3">
-              <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step1.instanceNameLabel')}</Label>
+              <Label className="control-label">
+                {T.translate(
+                  'features.Wizard.MicroserviceUpload.Step1.instanceNameLabel'
+                )}
+              </Label>
             </Col>
             <Col xs="7">
               <InputMicroserviceInstanceName />
@@ -250,7 +277,9 @@ export default function GeneralInfoStep() {
           </FormGroup>
           <FormGroup row>
             <Col xs="3">
-              <Label className="control-label">{T.translate('commons.descriptionLabel')}</Label>
+              <Label className="control-label">
+                {T.translate('commons.descriptionLabel')}
+              </Label>
             </Col>
             <Col xs="7">
               <InputMicroserviceDescription />
@@ -258,7 +287,11 @@ export default function GeneralInfoStep() {
           </FormGroup>
           <FormGroup row>
             <Col sm="3">
-              <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step1.versionLabel')}</Label>
+              <Label className="control-label">
+                {T.translate(
+                  'features.Wizard.MicroserviceUpload.Step1.versionLabel'
+                )}
+              </Label>
             </Col>
             <Col sm="7">
               <InputMicroserviceVersion />
@@ -267,7 +300,11 @@ export default function GeneralInfoStep() {
           </FormGroup>
           <FormGroup row>
             <Col xs="3">
-              <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step1.microserviceOptionLabel')}</Label>
+              <Label className="control-label">
+                {T.translate(
+                  'features.Wizard.MicroserviceUpload.Step1.microserviceOptionLabel'
+                )}
+              </Label>
             </Col>
             <Col xs="7">
               <SelectMicroserviceOption />
@@ -276,7 +313,9 @@ export default function GeneralInfoStep() {
             <i className="fa fa-asterisk text-danger float-left" />
           </FormGroup>
           <div className="step-summary">
-            <Label className="summary-label">{T.translate('features.Wizard.MicroserviceUpload.summaryLabel')}</Label>
+            <Label className="summary-label">
+              {T.translate('features.Wizard.MicroserviceUpload.summaryLabel')}
+            </Label>
             <Summary />
           </div>
         </CustomFieldset>

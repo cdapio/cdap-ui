@@ -48,7 +48,7 @@ export default class Overview extends Component {
   }
   componentDidMount() {
     this.searchStoreSubscription = SearchStore.subscribe(() => {
-      let searchState = SearchStore.getState().search;
+      const searchState = SearchStore.getState().search;
       if (isNil(searchState.overviewEntity)) {
         this.setState({
           entity: null,
@@ -64,9 +64,9 @@ export default class Overview extends Component {
         loading: true,
       });
       let { id: entityId, type: entityType } = searchState.overviewEntity;
-      let entityTypeLabel = entityType;
+      const entityTypeLabel = entityType;
       entityType = convertEntityTypeToApi(entityType);
-      let namespace = NamespaceStore.getState().selectedNamespace;
+      const namespace = NamespaceStore.getState().selectedNamespace;
 
       MyMetadataApi.getMetadata({
         namespace,
@@ -81,7 +81,10 @@ export default class Overview extends Component {
               errorContent: null,
               showOverview: true,
               loading: false,
-              tag: this.typeToComponentMap[objectQuery(searchState.overviewEntity, 'type')] || null,
+              tag:
+                this.typeToComponentMap[
+                  objectQuery(searchState.overviewEntity, 'type')
+                ] || null,
             },
             this.scrollEntityToView.bind(this)
           );
@@ -91,7 +94,10 @@ export default class Overview extends Component {
           if (err.statusCode === 404) {
             errorContent = this.get404ErrorMessage(entityId, entityTypeLabel);
           } else if (err.statusCode === 403) {
-            errorContent = this.getAuthorizationMessage(entityId, entityTypeLabel);
+            errorContent = this.getAuthorizationMessage(
+              entityId,
+              entityTypeLabel
+            );
           }
           this.setState({
             errorContent,
@@ -116,14 +122,17 @@ export default class Overview extends Component {
     this.mousetrap.reset();
   }
   scrollEntityToView() {
-    if (isNil(this.state.entity) || !objectQuery(this.state, 'entity', 'uniqueId')) {
+    if (
+      isNil(this.state.entity) ||
+      !objectQuery(this.state, 'entity', 'uniqueId')
+    ) {
       return;
     }
-    let el = document.getElementById(this.state.entity.uniqueId);
+    const el = document.getElementById(this.state.entity.uniqueId);
     if (isNil(el)) {
       return;
     }
-    let paginationContainer = document.querySelector('.entity-list-view');
+    const paginationContainer = document.querySelector('.entity-list-view');
     el.scrollIntoView();
     if (
       paginationContainer.scrollTop <
@@ -157,16 +166,23 @@ export default class Overview extends Component {
         </h4>
         <hr />
         <div className="message-container">
-          <span>{T.translate('features.EntityListView.emptyMessage.suggestion')}</span>
+          <span>
+            {T.translate('features.EntityListView.emptyMessage.suggestion')}
+          </span>
           <ul>
             <li>
-              <span>{T.translate('features.Overview.errorMessageSubtitle')}</span>
+              <span>
+                {T.translate('features.Overview.errorMessageSubtitle')}
+              </span>
             </li>
             <li>
               <span className="btn-link" onClick={this.hideOverview.bind(this)}>
                 {T.translate('features.Overview.overviewCloseLabel')}
               </span>
-              <span> {T.translate('features.Overview.overviewCloseLabel1')}</span>
+              <span>
+                {' '}
+                {T.translate('features.Overview.overviewCloseLabel1')}
+              </span>
             </li>
           </ul>
         </div>
@@ -186,16 +202,23 @@ export default class Overview extends Component {
         </h4>
         <hr />
         <div className="message-container">
-          <span>{T.translate('features.EntityListView.emptyMessage.suggestion')}</span>
+          <span>
+            {T.translate('features.EntityListView.emptyMessage.suggestion')}
+          </span>
           <ul>
             <li>
-              <span>{T.translate('features.Overview.errorMessageSubtitle')}</span>
+              <span>
+                {T.translate('features.Overview.errorMessageSubtitle')}
+              </span>
             </li>
             <li>
               <span className="btn-link" onClick={this.hideOverview.bind(this)}>
                 {T.translate('features.Overview.overviewCloseLabel')}
               </span>
-              <span> {T.translate('features.Overview.overviewCloseLabel1')}</span>
+              <span>
+                {' '}
+                {T.translate('features.Overview.overviewCloseLabel1')}
+              </span>
             </li>
           </ul>
         </div>
@@ -221,7 +244,7 @@ export default class Overview extends Component {
     }
   }
   render() {
-    let Tag = this.state.tag || 'div';
+    const Tag = this.state.tag || 'div';
     const renderContent = () => {
       if (this.state.errorContent) {
         return this.state.errorContent;
@@ -243,7 +266,9 @@ export default class Overview extends Component {
     };
     return (
       <div
-        className={classnames('overview-container', { 'show-overview': this.state.showOverview })}
+        className={classnames('overview-container', {
+          'show-overview': this.state.showOverview,
+        })}
       >
         <div id="overview-wrapper" className="overview-wrapper">
           {renderContent()}

@@ -231,7 +231,10 @@ export default class ColumnActionsDropdown extends Component {
       }
     );
     this.eventEmitter = ee(ee);
-    this.eventEmitter.on('CLOSE_POPOVER', this.toggleDropdown.bind(this, false));
+    this.eventEmitter.on(
+      'CLOSE_POPOVER',
+      this.toggleDropdown.bind(this, false)
+    );
     this.dropdownId = uuidV4();
   }
 
@@ -239,7 +242,7 @@ export default class ColumnActionsDropdown extends Component {
     this.singleWorkspaceMode = DataPrepStore.getState().dataprep.singleWorkspaceMode;
 
     this.sub = DataPrepStore.subscribe(() => {
-      let newState = DataPrepStore.getState().dataprep;
+      const newState = DataPrepStore.getState().dataprep;
       if (!isEqual(this.state.selectedHeaders, newState.selectedHeaders)) {
         this.setState({
           selectedHeaders: newState.selectedHeaders,
@@ -249,7 +252,10 @@ export default class ColumnActionsDropdown extends Component {
   }
 
   componentWillUnmount() {
-    this.eventEmitter.off('CLOSE_POPOVER', this.toggleDropdown.bind(this, false));
+    this.eventEmitter.off(
+      'CLOSE_POPOVER',
+      this.toggleDropdown.bind(this, false)
+    );
     if (this.documentClick$ && this.documentClick$.unsubscribe) {
       this.documentClick$.unsubscribe();
     }
@@ -263,7 +269,8 @@ export default class ColumnActionsDropdown extends Component {
     if (this.unmounted || toggleState === this.state.dropdownOpen) {
       return;
     }
-    let newState = typeof toggleState === 'boolean' ? toggleState : !this.state.dropdownOpen;
+    const newState =
+      typeof toggleState === 'boolean' ? toggleState : !this.state.dropdownOpen;
 
     this.setState({
       dropdownOpen: newState,
@@ -277,13 +284,18 @@ export default class ColumnActionsDropdown extends Component {
       if (this.singleWorkspaceMode) {
         element = document.getElementsByClassName('wrangler-modal')[0];
       }
-      this.documentClick$ = Observable.fromEvent(element, 'click').subscribe((e) => {
-        if (isDescendant(this.popover, e.target) || !this.state.dropdownOpen) {
-          return;
-        }
+      this.documentClick$ = Observable.fromEvent(element, 'click').subscribe(
+        (e) => {
+          if (
+            isDescendant(this.popover, e.target) ||
+            !this.state.dropdownOpen
+          ) {
+            return;
+          }
 
-        this.toggleDropdown();
-      });
+          this.toggleDropdown();
+        }
+      );
 
       Mousetrap.bind('esc', this.toggleDropdown);
     } else {
@@ -295,13 +307,13 @@ export default class ColumnActionsDropdown extends Component {
   }
 
   directiveClick(directive) {
-    let open = directive === this.state.open ? null : directive;
+    const open = directive === this.state.open ? null : directive;
 
     this.setState({ open });
   }
 
   renderMenu() {
-    let tableContainer = document.getElementById('dataprep-table-id');
+    const tableContainer = document.getElementById('dataprep-table-id');
     return (
       <Popover
         placement="bottom-start"
@@ -344,7 +356,8 @@ export default class ColumnActionsDropdown extends Component {
                 return data;
               }
               if (data.offsets.reference.right < data.offsets.popper.right) {
-                data.offsets.popper.left = data.offsets.reference.right - data.popper.width;
+                data.offsets.popper.left =
+                  data.offsets.reference.right - data.popper.width;
                 data.popper.left = data.offsets.popper.left;
                 data.placement = 'bottom-end';
                 data.originalPlacement = 'bottom-end';
@@ -370,15 +383,18 @@ export default class ColumnActionsDropdown extends Component {
                   </div>
                 );
               }
-              let Tag = directive.tag;
+              const Tag = directive.tag;
               let disabled = false;
               let column = this.props.column;
 
-              if (this.state.selectedHeaders.indexOf(this.props.column) !== -1) {
+              if (
+                this.state.selectedHeaders.indexOf(this.props.column) !== -1
+              ) {
                 column = this.state.selectedHeaders;
 
                 if (
-                  this.state.selectedHeaders.length !== directive.requiredColCount &&
+                  this.state.selectedHeaders.length !==
+                    directive.requiredColCount &&
                   directive.requiredColCount !== 0
                 ) {
                   disabled = true;
@@ -389,7 +405,11 @@ export default class ColumnActionsDropdown extends Component {
               return (
                 <div
                   key={directive.id}
-                  onClick={!disabled ? this.directiveClick.bind(this, directive.id) : undefined}
+                  onClick={
+                    !disabled
+                      ? this.directiveClick.bind(this, directive.id)
+                      : undefined
+                  }
                   className={classnames({ disabled: disabled })}
                 >
                   <Tag
@@ -412,7 +432,10 @@ export default class ColumnActionsDropdown extends Component {
 
   render() {
     return (
-      <span className="column-actions-dropdown-container" ref={(ref) => (this.popover = ref)}>
+      <span
+        className="column-actions-dropdown-container"
+        ref={(ref) => (this.popover = ref)}
+      >
         <button
           className={classnames('fa fa-caret-down', {
             expanded: this.state.dropdownOpen,
@@ -427,7 +450,9 @@ export default class ColumnActionsDropdown extends Component {
           modifiers={{
             flip: {
               enabled: false,
-              boundariesElement: document.querySelector('.dataprephome-wrapper'),
+              boundariesElement: document.querySelector(
+                '.dataprephome-wrapper'
+              ),
             },
             // FIXME (CDAP-15360): This offset is not being applied because the popover overlaps with its boundary.
             offset: {

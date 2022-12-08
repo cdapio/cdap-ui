@@ -20,11 +20,16 @@ import React from 'react';
 import T from 'i18n-react';
 import LoadingSVG from 'components/shared/LoadingSVG';
 
-const GRAPHPREFIX = `features.PipelineSummary.graphs`;
+const GRAPHPREFIX = 'features.PipelineSummary.graphs';
 
 require('./EmptyMessageContainer.scss');
 
-export default function EmptyMessageContainer({ xDomainType, label, loading, message }) {
+export default function EmptyMessageContainer({
+  xDomainType,
+  label,
+  loading,
+  message,
+}) {
   if (loading) {
     return (
       <div className="empty-runs-container">

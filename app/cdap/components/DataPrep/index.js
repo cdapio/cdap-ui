@@ -26,7 +26,10 @@ import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import DataPrepServiceControl from 'components/DataPrep/DataPrepServiceControl';
 import ee from 'event-emitter';
-import { setWorkspace, getWorkspaceList } from 'components/DataPrep/store/DataPrepActionCreator';
+import {
+  setWorkspace,
+  getWorkspaceList,
+} from 'components/DataPrep/store/DataPrepActionCreator';
 import WorkspaceTabs from 'components/DataPrep/WorkspaceTabs';
 import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
@@ -80,12 +83,14 @@ export default class DataPrep extends Component {
     this.checkBackendUp(this.props);
     checkDataPrepHigherVersion();
     this.storeSub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState();
+      const state = DataPrepStore.getState();
       // only update if the new error is different than existing one
       if (
         state.error.workspaceError &&
-        state.error.workspaceError.message !== this.state.workspaceError.message &&
-        state.error.workspaceError.statusCode !== this.state.workspaceError.statusCode
+        state.error.workspaceError.message !==
+          this.state.workspaceError.message &&
+        state.error.workspaceError.statusCode !==
+          this.state.workspaceError.statusCode
       ) {
         if (this.props.mode !== 'ROUTED_WORKSPACE') {
           this.setState({ workspaceError: state.error.workspaceError }, () => {
@@ -100,7 +105,10 @@ export default class DataPrep extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.workspaceId !== nextProps.workspaceId || this.props.mode !== nextProps.mode) {
+    if (
+      this.props.workspaceId !== nextProps.workspaceId ||
+      this.props.mode !== nextProps.mode
+    ) {
       this.init(nextProps);
     }
   }
@@ -108,7 +116,7 @@ export default class DataPrep extends Component {
   componentWillUnmount() {
     this._isMounted = false;
     if (this.props.onSubmit) {
-      let workspaceId = DataPrepStore.getState().dataprep.workspaceId;
+      const workspaceId = DataPrepStore.getState().dataprep.workspaceId;
       this.props.onSubmit({ workspaceId, onUnmount: true });
     }
     DataPrepStore.dispatch({
@@ -137,7 +145,7 @@ export default class DataPrep extends Component {
         DataPrepStore.dispatch({
           type: DataPrepActions.reset,
         });
-        let workspaceId = this.props.workspaceId;
+        const workspaceId = this.props.workspaceId;
         this.setCurrentWorkspace(workspaceId);
       }
     );
@@ -188,8 +196,8 @@ export default class DataPrep extends Component {
     }
     setWorkspace(workspaceId).subscribe(
       () => {
-        let { insights } = DataPrepStore.getState().dataprep;
-        let workspaceName = insights.name;
+        const { insights } = DataPrepStore.getState().dataprep;
+        const workspaceName = insights.name;
         if (this._isMounted) {
           this.setState({
             loading: false,
@@ -216,7 +224,7 @@ export default class DataPrep extends Component {
 
   onServiceStart() {
     this.setState({ backendDown: false });
-    let workspaceId = this.props.workspaceId;
+    const workspaceId = this.props.workspaceId;
     this.setCurrentWorkspace(workspaceId);
   }
 
@@ -239,7 +247,9 @@ export default class DataPrep extends Component {
   }
 
   renderBackendDown() {
-    return <DataPrepServiceControl onServiceStart={this.onServiceStart.bind(this)} />;
+    return (
+      <DataPrepServiceControl onServiceStart={this.onServiceStart.bind(this)} />
+    );
   }
 
   renderTabs() {
@@ -268,8 +278,8 @@ export default class DataPrep extends Component {
   }
 
   renderTogglePanel() {
-    let prefix = `features.DataPrep.sidePanelTooltip`;
-    let tooltip = this.state.sidePanelToggle
+    const prefix = 'features.DataPrep.sidePanelTooltip';
+    const tooltip = this.state.sidePanelToggle
       ? T.translate(`${prefix}.collapse`)
       : T.translate(`${prefix}.expand`);
     return (

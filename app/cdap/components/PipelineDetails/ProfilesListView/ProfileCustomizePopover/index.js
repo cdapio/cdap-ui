@@ -88,7 +88,12 @@ class ProfileCustomizePopover extends PureComponent {
   };
 
   render() {
-    const { name, provisioner, scope, label: profileLabel } = this.props.profile;
+    const {
+      name,
+      provisioner,
+      scope,
+      label: profileLabel,
+    } = this.props.profile;
     const profileName = getProfileNameWithScope(name, scope);
     const editablePropertiesFromProfile = provisioner.properties.filter(
       (property) => property.isEditable !== false

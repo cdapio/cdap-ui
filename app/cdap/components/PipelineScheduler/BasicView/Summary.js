@@ -36,13 +36,13 @@ const mapStateToMaxConcurrentRunsSummaryProps = (state) => {
 };
 
 const SummaryComponent = ({ state }) => {
-  let minuteMoment = moment()
+  const minuteMoment = moment()
     .minute(state.startingAtMinute)
     .format('mm');
-  let dateOfMonthMoment = moment()
+  const dateOfMonthMoment = moment()
     .date(state.dateOfMonthInterval)
     .format('Do');
-  let monthMoment = moment()
+  const monthMoment = moment()
     .month(state.monthInterval)
     .format('MMM');
 
@@ -58,10 +58,14 @@ const SummaryComponent = ({ state }) => {
         <span>
           {state.hourInterval === 1
             ? T.translate(`${PREFIX}.everyHour`)
-            : T.translate(`${PREFIX}.everyNumHours`, { num: state.hourInterval })}
+            : T.translate(`${PREFIX}.everyNumHours`, {
+                num: state.hourInterval,
+              })}
           {state.startingAtMinute === 0
             ? T.translate(`${PREFIX}.onTheHour`)
-            : T.translate(`${PREFIX}.numMinsPastTheHour`, { num: minuteMoment })}
+            : T.translate(`${PREFIX}.numMinsPastTheHour`, {
+                num: minuteMoment,
+              })}
         </span>
       );
     case INTERVAL_OPTIONS.DAILY:
@@ -104,7 +108,9 @@ const SummaryComponent = ({ state }) => {
     case INTERVAL_OPTIONS.MONTHLY:
       return (
         <span>
-          {T.translate(`${PREFIX}.everyDateOfMonth`, { date: dateOfMonthMoment })}
+          {T.translate(`${PREFIX}.everyDateOfMonth`, {
+            date: dateOfMonthMoment,
+          })}
           {T.translate(`${PREFIX}.atHourMinuteAMPM`, {
             hour: state.startingAtHour,
             min: minuteMoment,
@@ -138,7 +144,9 @@ const MaxConcurrentRunsSummary = ({ maxConcurrentRuns }) => {
     <span>
       {maxConcurrentRuns === 1
         ? T.translate(`${PREFIX}.cannotMaxConcurrentRuns`)
-        : T.translate(`${PREFIX}.canMaxConcurrentRuns`, { num: maxConcurrentRuns })}
+        : T.translate(`${PREFIX}.canMaxConcurrentRuns`, {
+            num: maxConcurrentRuns,
+          })}
     </span>
   );
 };
@@ -147,7 +155,10 @@ MaxConcurrentRunsSummary.propTypes = {
   maxConcurrentRuns: PropTypes.number,
 };
 
-const ConnectedSummaryComponent = connect(mapStateToSummaryProps, null)(SummaryComponent);
+const ConnectedSummaryComponent = connect(
+  mapStateToSummaryProps,
+  null
+)(SummaryComponent);
 const ConnectedMaxConcurrentRunsSummary = connect(
   mapStateToMaxConcurrentRunsSummaryProps,
   null
@@ -156,7 +167,9 @@ const ConnectedMaxConcurrentRunsSummary = connect(
 export default function Summary() {
   return (
     <div className="form-group row summary">
-      <label className="col-3 control-label">{T.translate(`${PREFIX}.label`)}</label>
+      <label className="col-3 control-label">
+        {T.translate(`${PREFIX}.label`)}
+      </label>
       <div className="col-8 schedule-values-container">
         <div>
           <span>{T.translate(`${PREFIX}.scheduledToRun`)}</span>

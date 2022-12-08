@@ -42,11 +42,15 @@ const Metadata = ({ name, description, srcpath, total, outcome }) => {
       </div>
       <div>
         <div>
-          <strong className="experiment-meta-label">{T.translate(`${PREFIX}.data`)}</strong>
+          <strong className="experiment-meta-label">
+            {T.translate(`${PREFIX}.data`)}
+          </strong>
           <div>{srcpath}</div>
         </div>
         <div>
-          <strong className="experiment-meta-label">{T.translate(`${PREFIX}.outcome`)}</strong>
+          <strong className="experiment-meta-label">
+            {T.translate(`${PREFIX}.outcome`)}
+          </strong>
           <div>{outcome}</div>
         </div>
       </div>

@@ -56,7 +56,7 @@ export default class RulesTab extends Component {
 
   componentDidMount() {
     this.rulesStoreSubscription = RulesEngineStore.subscribe(() => {
-      let { rules } = RulesEngineStore.getState();
+      const { rules } = RulesEngineStore.getState();
       if (Array.isArray(rules.list)) {
         this.setState({
           rules: rules.list,
@@ -86,7 +86,7 @@ export default class RulesTab extends Component {
       keys: ['id', 'description', 'action'],
     };
 
-    let fuse = new Fuse(this.state.rules, fuseOptions);
+    const fuse = new Fuse(this.state.rules, fuseOptions);
     return fuse.search(this.state.searchStr);
   }
 
@@ -96,16 +96,20 @@ export default class RulesTab extends Component {
     }
 
     if (!rules.length && !this.state.createRule) {
-      return <h4 className="text-center"> {T.translate(`${PREFIX}.norules`)} </h4>;
+      return (
+        <h4 className="text-center"> {T.translate(`${PREFIX}.norules`)} </h4>
+      );
     }
 
     return (
       <div className="rules-container">
         <Row>
-          <Col xs="6">{T.translate(`commons.nameLabel`)}</Col>
+          <Col xs="6">{T.translate('commons.nameLabel')}</Col>
           <Col xs="5">{T.translate(`${PREFIX}.date`)}</Col>
         </Row>
-        {this.state.createRule ? <CreateRule onClose={this.resetCreateRule} /> : null}
+        {this.state.createRule ? (
+          <CreateRule onClose={this.resetCreateRule} />
+        ) : null}
         {rules.map((rule) => {
           return <Rule rule={rule} key={rule.id} />;
         })}
@@ -114,7 +118,7 @@ export default class RulesTab extends Component {
   }
 
   render() {
-    let rules = this.getFilteredRules();
+    const rules = this.getFilteredRules();
 
     return (
       <div className="rules-tab">
@@ -123,7 +127,9 @@ export default class RulesTab extends Component {
           value={this.state.searchStr}
           onChange={this.updateSearchStr}
         />
-        <Button onClick={this.addRule}>{T.translate(`${PREFIX}.createRuleBtn`)}</Button>
+        <Button onClick={this.addRule}>
+          {T.translate(`${PREFIX}.createRuleBtn`)}
+        </Button>
         {this.renderRules(rules)}
       </div>
     );

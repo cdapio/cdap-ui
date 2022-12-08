@@ -28,7 +28,7 @@ export default class StatusAlertMessage extends Component {
   }
   componentWillMount() {
     this.sub = StatusAlertMessageStore.subscribe(() => {
-      let showMessage = StatusAlertMessageStore.getState().view;
+      const showMessage = StatusAlertMessageStore.getState().view;
       this.setState({
         showMessage,
       });

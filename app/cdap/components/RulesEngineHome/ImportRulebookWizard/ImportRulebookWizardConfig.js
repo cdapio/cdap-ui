@@ -20,7 +20,7 @@ import T from 'i18n-react';
 
 const PREFIX = 'features.RulesEngine.ImportRulebook';
 
-let commonSteps = [
+const commonSteps = [
   {
     id: 'upload',
     shorttitle: T.translate(`${PREFIX}.shorttitle`),

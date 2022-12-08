@@ -84,7 +84,7 @@ export default class Tags extends Component {
   getTags = () => {
     this.setState({ loading: false });
 
-    let tagsSubscription = MyMetadataApi.getTags(this.params).subscribe(
+    const tagsSubscription = MyMetadataApi.getTags(this.params).subscribe(
       (res) => {
         this.setState(
           {
@@ -146,7 +146,7 @@ export default class Tags extends Component {
       this.setState({
         loading: true,
       });
-      let addTagsSubscription = MyMetadataApi.addTags(this.params, [
+      const addTagsSubscription = MyMetadataApi.addTags(this.params, [
         this.state.currentInputTag,
       ]).subscribe(
         () => {
@@ -169,9 +169,9 @@ export default class Tags extends Component {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
 
-    let params = Object.assign({}, this.params, { key: tag });
+    const params = Object.assign({}, this.params, { key: tag });
 
-    let deleteTagsSubscription = MyMetadataApi.deleteTags(params).subscribe(
+    const deleteTagsSubscription = MyMetadataApi.deleteTags(params).subscribe(
       () => {
         this.getTags();
       },
@@ -190,12 +190,13 @@ export default class Tags extends Component {
       return;
     }
 
-    let tagsListElem = document.getElementsByClassName('tags-list')[0];
+    const tagsListElem = document.getElementsByClassName('tags-list')[0];
     if (!tagsListElem) {
       return;
     }
 
-    let tagsAreOverflowing = tagsListElem.clientWidth < tagsListElem.scrollWidth;
+    const tagsAreOverflowing =
+      tagsListElem.clientWidth < tagsListElem.scrollWidth;
 
     if (
       (tagsAreOverflowing && this.state.showAllTagsLabel) ||
@@ -237,10 +238,14 @@ export default class Tags extends Component {
 
   renderTagsPopover() {
     const labelElem = () => {
-      return <span className="all-tags-label">{T.translate(`${PREFIX}.allTags`)}</span>;
+      return (
+        <span className="all-tags-label">
+          {T.translate(`${PREFIX}.allTags`)}
+        </span>
+      );
     };
 
-    let tagsCount = this.state.userTags.length;
+    const tagsCount = this.state.userTags.length;
 
     return (
       <Popover
@@ -252,7 +257,9 @@ export default class Tags extends Component {
         showPopover={this.state.showAllTagsPopover}
       >
         <div className="tags-popover-header">
-          <strong>{T.translate(`${PREFIX}.labelWithCount`, { count: tagsCount })}</strong>
+          <strong>
+            {T.translate(`${PREFIX}.labelWithCount`, { count: tagsCount })}
+          </strong>
           <IconSVG name="icon-close" onClick={this.toggleAllTagsPopover} />
         </div>
         {this.renderUserTags()}
@@ -294,23 +301,33 @@ export default class Tags extends Component {
       return null;
     }
 
-    return this.state.showInputField ? this.renderInputField() : this.renderPlusButton();
+    return this.state.showInputField
+      ? this.renderInputField()
+      : this.renderPlusButton();
   }
 
   render() {
-    let tagsCount = this.state.userTags.length;
+    const tagsCount = this.state.userTags.length;
 
     return (
       <div className="tags-holder">
         {this.props.showCountLabel ? (
-          <strong>{`${T.translate(`${PREFIX}.labelWithCount`, { count: tagsCount })}:`}</strong>
+          <strong>{`${T.translate(`${PREFIX}.labelWithCount`, {
+            count: tagsCount,
+          })}:`}</strong>
         ) : null}
-        {!tagsCount && !this.state.loading ? <i>{T.translate(`${PREFIX}.notags`)}</i> : null}
+        {!tagsCount && !this.state.loading ? (
+          <i>{T.translate(`${PREFIX}.notags`)}</i>
+        ) : null}
         <span className="tags-list">{this.renderUserTags()}</span>
         {this.state.showAllTagsLabel ? this.renderTagsPopover() : null}
         {this.renderAddTag()}
         {this.state.loading ? (
-          <IconSVG name="icon-spinner" className="fa-lg fa-spin" data-testid="loading-icon" />
+          <IconSVG
+            name="icon-spinner"
+            className="fa-lg fa-spin"
+            data-testid="loading-icon"
+          />
         ) : null}
         {this.state.error ? (
           <Alert

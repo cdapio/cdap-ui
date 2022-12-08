@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2016 Cask Data, Inc.
  *
@@ -13,23 +14,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-var webpack = require('webpack');
-var path = require('path');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // the clean options to use
-let cleanOptions = {
+const cleanOptions = {
   verbose: true,
   dry: false,
 };
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = (mode) =>
+  mode === 'production' || mode === 'non-optimized-production';
 
-var plugins = [
+const loaderExclude = [
+  /node_modules/,
+  /bower_components/,
+  /packaged\/public\/dist/,
+  /packaged\/public\/cdap_dist/,
+  /packaged\/public\/common_dist/,
+  /lib/,
+];
+
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged\/public\/dist/',
+  '/packaged\/public\/cdap_dist/',
+  '/packaged\/public\/common_dist/',
+  '/lib/',
+];
+
+const plugins = [
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -46,6 +66,10 @@ var plugins = [
         : JSON.stringify('development'),
     },
   }),
+  new ESLintPlugin({
+    extensions: ['js'],
+    exclude: loaderExcludeStrings,
+  }),
 ];
 
 if (!isModeProduction(mode)) {
@@ -60,16 +84,9 @@ if (!isModeProduction(mode)) {
   );
 }
 
-const loaderExclude = [
-  /node_modules/,
-  /bower_components/,
-  /packaged\/public\/dist/,
-  /packaged\/public\/cdap_dist/,
-  /packaged\/public\/common_dist/,
-  /lib/,
-];
 
-var rules = [
+
+const rules = [
   {
     test: /\.s?css$/,
     use: ['style-loader', 'css-loader', 'sass-loader'],
@@ -77,16 +94,6 @@ var rules = [
   {
     test: /\.ya?ml$/,
     use: 'yml-loader',
-  },
-  {
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
-    exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
   },
   {
     test: /\.js$/,
@@ -131,7 +138,7 @@ var rules = [
     ],
   },
 ];
-var webpackConfig = {
+const webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/common',
   optimization: {

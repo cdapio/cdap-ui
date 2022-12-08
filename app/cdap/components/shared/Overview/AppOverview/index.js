@@ -55,7 +55,7 @@ export default class AppOverview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { entity } = nextProps;
+    const { entity } = nextProps;
     if (!isNil(entity)) {
       this.setState(
         {
@@ -69,8 +69,8 @@ export default class AppOverview extends Component {
     this.setState({
       loading: true,
     });
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let entityId = objectQuery(this.props, 'entity', 'id');
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const entityId = objectQuery(this.props, 'entity', 'id');
     const metadataParams = {
       namespace,
       entityType: 'apps',
@@ -79,7 +79,9 @@ export default class AppOverview extends Component {
     };
 
     if (entityId) {
-      this.metadataApiSubscription = MyMetadataApi.getProperties(metadataParams).combineLatest(
+      this.metadataApiSubscription = MyMetadataApi.getProperties(
+        metadataParams
+      ).combineLatest(
         MyAppApi.get({
           namespace,
           appId: this.props.entity.id,
@@ -90,17 +92,17 @@ export default class AppOverview extends Component {
         if (this.metadataApiSubscription.closed) {
           return;
         }
-        let entityDetail = res[1];
-        let properties = {};
+        const entityDetail = res[1];
+        const properties = {};
         res[0].properties.forEach((property) => {
           properties[property.name] = property.value;
         });
 
-        let programs = entityDetail.programs.map((prog) => {
+        const programs = entityDetail.programs.map((prog) => {
           prog.uniqueId = uuidV4();
           return prog;
         });
-        let datasets = entityDetail.datasets.map((dataset) => {
+        const datasets = entityDetail.datasets.map((dataset) => {
           dataset.entity = {
             details: {
               dataset: dataset.name,
@@ -153,14 +155,19 @@ export default class AppOverview extends Component {
     if (this.state.loading) {
       return <div className="fa fa-spinner fa-spin fa-3x" />;
     }
-    let artifactName = objectQuery(this.state, 'entityDetail', 'artifact', 'name');
-    let icon = EntityIconMap[artifactName] || EntityIconMap['application'];
-    let entityType =
+    const artifactName = objectQuery(
+      this.state,
+      'entityDetail',
+      'artifact',
+      'name'
+    );
+    const icon = EntityIconMap[artifactName] || EntityIconMap['application'];
+    const entityType =
       ['cdap-data-pipeline', 'cdap-data-streams'].indexOf(artifactName) !== -1
         ? artifactName
         : 'application';
 
-    let title = T.translate(`commons.entity.${entityType}.singular`);
+    const title = T.translate(`commons.entity.${entityType}.singular`);
 
     return (
       <div className="app-overview">

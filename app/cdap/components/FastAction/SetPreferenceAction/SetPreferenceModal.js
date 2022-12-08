@@ -54,7 +54,7 @@ export default class SetPreferenceModal extends Component {
       sortOrder: 'asc',
     };
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
     this.params = {};
 
@@ -71,14 +71,19 @@ export default class SetPreferenceModal extends Component {
         if (this.props.entity.type === 'application') {
           this.params.appId = this.props.entity.id;
           this.getSpecifiedPreferencesApi = MyPreferenceApi.getAppPreferences;
-          this.getInheritedPreferencesApi = MyPreferenceApi.getNamespacePreferencesResolved;
+          this.getInheritedPreferencesApi =
+            MyPreferenceApi.getNamespacePreferencesResolved;
           this.setPreferencesApi = MyPreferenceApi.setAppPreferences;
         } else {
           this.params.appId = this.props.entity.applicationId;
           this.params.programId = this.props.entity.id;
-          this.params.programType = convertProgramToApi(this.props.entity.programType);
-          this.getSpecifiedPreferencesApi = MyPreferenceApi.getProgramPreferences;
-          this.getInheritedPreferencesApi = MyPreferenceApi.getAppPreferencesResolved;
+          this.params.programType = convertProgramToApi(
+            this.props.entity.programType
+          );
+          this.getSpecifiedPreferencesApi =
+            MyPreferenceApi.getProgramPreferences;
+          this.getInheritedPreferencesApi =
+            MyPreferenceApi.getAppPreferencesResolved;
           this.setPreferencesApi = MyPreferenceApi.setProgramPreferences;
         }
       }
@@ -102,7 +107,9 @@ export default class SetPreferenceModal extends Component {
     if (this.subscription) {
       this.subscription();
     }
-    this.apiSubscriptions.forEach((apiSubscription) => apiSubscription.unsubscribe());
+    this.apiSubscriptions.forEach((apiSubscription) =>
+      apiSubscription.unsubscribe()
+    );
   }
 
   onKeyValueChange(keyValues) {
@@ -197,7 +204,7 @@ export default class SetPreferenceModal extends Component {
   getKeyValPair(prefObj) {
     // doing this to make sure that we iterate through the keys
     // in alphabetical order
-    let sortedPrefObjectKeys = [...Object.keys(prefObj)].sort();
+    const sortedPrefObjectKeys = [...Object.keys(prefObj)].sort();
     return sortedPrefObjectKeys.map((key) => {
       return {
         key: key,
@@ -208,8 +215,8 @@ export default class SetPreferenceModal extends Component {
   }
 
   getKeyValObject() {
-    let keyValArr = this.state.keyValues.pairs;
-    let keyValObj = {};
+    const keyValArr = this.state.keyValues.pairs;
+    const keyValObj = {};
     keyValArr.forEach((pair) => {
       if (pair.key.length > 0 && pair.value.length > 0) {
         keyValObj[pair.key] = pair.value;
@@ -233,23 +240,32 @@ export default class SetPreferenceModal extends Component {
       this.setState({ sortOrder });
     }
     this.setState({ sortByAttribute: attribute });
-    let newInheritedPreferences = orderBy(this.state.inheritedPreferences, attribute, sortOrder);
+    const newInheritedPreferences = orderBy(
+      this.state.inheritedPreferences,
+      attribute,
+      sortOrder
+    );
     this.setState({ inheritedPreferences: newInheritedPreferences });
   }
 
   oneFieldMissing() {
     if (this.state.keyValues.pairs) {
       return this.state.keyValues.pairs.some((keyValuePair) => {
-        let emptyKeyField = keyValuePair.key.length === 0;
-        let emptyValueField = keyValuePair.value.length === 0;
-        return (emptyKeyField && !emptyValueField) || (!emptyKeyField && emptyValueField);
+        const emptyKeyField = keyValuePair.key.length === 0;
+        const emptyValueField = keyValuePair.value.length === 0;
+        return (
+          (emptyKeyField && !emptyValueField) ||
+          (!emptyKeyField && emptyValueField)
+        );
       });
     }
     return false;
   }
 
   isTitleOverflowing() {
-    let modalTitle = document.querySelector('.specify-preferences-description h4');
+    const modalTitle = document.querySelector(
+      '.specify-preferences-description h4'
+    );
     if (modalTitle) {
       return modalTitle.offsetWidth < modalTitle.scrollWidth;
     }
@@ -340,7 +356,7 @@ export default class SetPreferenceModal extends Component {
   }
 
   renderInheritedPreferencesColumnHeader(column) {
-    let columnToAttribute = column.toLowerCase();
+    const columnToAttribute = column.toLowerCase();
     return (
       <th>
         <span
@@ -373,7 +389,7 @@ export default class SetPreferenceModal extends Component {
     const titleLabel = T.translate(`${PREFIX}.inheritedPrefsLabel`);
     const keyLabel = T.translate(`${PREFIX}.ColumnLabel.key`);
     const valueLabel = T.translate(`${PREFIX}.ColumnLabel.value`);
-    let numInheritedPreferences = this.state.inheritedPreferences.length;
+    const numInheritedPreferences = this.state.inheritedPreferences.length;
     return (
       <div>
         <div className="inherited-preferences-label">
@@ -392,19 +408,23 @@ export default class SetPreferenceModal extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.inheritedPreferences.map((inheritedPreference, index) => {
-                    return (
-                      <tr className="inherited-preference" key={index}>
-                        <td>{inheritedPreference.key}</td>
-                        <td>{inheritedPreference.value}</td>
-                      </tr>
-                    );
-                  })}
+                  {this.state.inheritedPreferences.map(
+                    (inheritedPreference, index) => {
+                      return (
+                        <tr className="inherited-preference" key={index}>
+                          <td>{inheritedPreference.key}</td>
+                          <td>{inheritedPreference.value}</td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
               </table>
             </div>
           ) : (
-            <div className="text-center">{T.translate(`${PREFIX}.noInheritedPrefs`)}</div>
+            <div className="text-center">
+              {T.translate(`${PREFIX}.noInheritedPrefs`)}
+            </div>
           )}
         </div>
       </div>
@@ -442,7 +462,10 @@ export default class SetPreferenceModal extends Component {
               {this.renderSpecifyPreferences()}
               <div className="clearfix">
                 {this.state.saving ? (
-                  <button className="btn btn-primary float-left saving" disabled="disabled">
+                  <button
+                    className="btn btn-primary float-left saving"
+                    disabled="disabled"
+                  >
                     <span className="fa fa-spinner fa-spin" />
                     <span>{savingLabel}</span>
                   </button>
@@ -461,7 +484,9 @@ export default class SetPreferenceModal extends Component {
                   <a onClick={this.resetFields}>{resetLink}</a>
                 </span>
                 <If condition={this.state.showResetMessage}>
-                  <span className="float-left text-success reset-success">Reset Successful</span>
+                  <span className="float-left text-success reset-success">
+                    Reset Successful
+                  </span>
                 </If>
                 {this.state.keyValues.pairs ? (
                   <span className="float-right num-rows">

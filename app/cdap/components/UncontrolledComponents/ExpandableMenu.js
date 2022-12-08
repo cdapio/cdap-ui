@@ -45,10 +45,21 @@ export default class ExpandableMenu extends Component {
       return null;
     }
     return (
-      <div className={classnames('expandable-menu menu-item expandable', this.props.className)}>
+      <div
+        className={classnames(
+          'expandable-menu menu-item expandable',
+          this.props.className
+        )}
+      >
         <div onClick={this.toggle} className="expandable-title">
           <span className="fa fa-fw">
-            <IconSVG name={this.state.showMenuItems ? 'icon-caret-down' : 'icon-caret-right'} />
+            <IconSVG
+              name={
+                this.state.showMenuItems
+                  ? 'icon-caret-down'
+                  : 'icon-caret-right'
+              }
+            />
           </span>
           {this.props.children[0]}
         </div>

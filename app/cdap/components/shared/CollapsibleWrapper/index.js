@@ -47,7 +47,9 @@ export default class CollapsibleWrapper extends Component {
   setViewLink = () => {
     if (this.contentRef) {
       this.setState({
-        showViewLink: this.contentRef.offsetWidth >= this.contentRef.parentElement.offsetWidth,
+        showViewLink:
+          this.contentRef.offsetWidth >=
+          this.contentRef.parentElement.offsetWidth,
       });
     }
   };
@@ -58,7 +60,10 @@ export default class CollapsibleWrapper extends Component {
 
   render() {
     return (
-      <div ref={(ref) => (this.contentRef = ref)} className="collapsable-wrapper">
+      <div
+        ref={(ref) => (this.contentRef = ref)}
+        className="collapsable-wrapper"
+      >
         <span
           className={classnames({
             'with-view-link': this.state.showViewLink,

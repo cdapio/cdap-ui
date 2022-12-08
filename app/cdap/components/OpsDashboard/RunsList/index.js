@@ -71,7 +71,8 @@ function renderBody(data) {
         let duration = run.end ? run.end - run.running : '--';
         duration = humanReadableDuration(duration);
 
-        const displayStatus = StatusMapper.lookupDisplayStatus(run.status) || '';
+        const displayStatus =
+          StatusMapper.lookupDisplayStatus(run.status) || '';
 
         let startTime = run.running || run.starting;
         startTime = humanReadableDate(startTime, false);
@@ -79,7 +80,10 @@ function renderBody(data) {
         const user = run.user || '--';
 
         const statusIcon = (
-          <IconSVG name="icon-circle" className={`${displayStatus.toLowerCase()}`} />
+          <IconSVG
+            name="icon-circle"
+            className={`${displayStatus.toLowerCase()}`}
+          />
         );
 
         return (
@@ -89,7 +93,9 @@ function renderBody(data) {
           >
             <div title={run.namespace}>{run.namespace}</div>
             <div title={run.application.name}>{run.application.name}</div>
-            <div>{T.translate(`commons.entity.${run.type.toLowerCase()}.singular`)}</div>
+            <div>
+              {T.translate(`commons.entity.${run.type.toLowerCase()}.singular`)}
+            </div>
             <div>{startTime}</div>
             <div>{duration}</div>
             <div title={user}>{user}</div>

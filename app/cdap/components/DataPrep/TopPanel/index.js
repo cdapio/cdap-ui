@@ -33,7 +33,9 @@ import classnames from 'classnames';
 
 const SchemaModal = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "SchemaModal"*/ 'components/DataPrep/TopPanel/SchemaModal'),
+    import(
+      /* webpackChunkName: "SchemaModal"*/ 'components/DataPrep/TopPanel/SchemaModal'
+    ),
   loading: LoadingSVGCentered,
 });
 const AddToPipelineModal = Loadable({
@@ -45,7 +47,9 @@ const AddToPipelineModal = Loadable({
 });
 const UpgradeModal = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "UpgradeModal" */ 'components/DataPrep/TopPanel/UpgradeModal'),
+    import(
+      /* webpackChunkName: "UpgradeModal" */ 'components/DataPrep/TopPanel/UpgradeModal'
+    ),
   loading: LoadingSVGCentered,
 });
 const IngestDataFromDataPrep = Loadable({
@@ -63,7 +67,7 @@ export default class DataPrepTopPanel extends Component {
   constructor(props) {
     super(props);
 
-    let initialState = DataPrepStore.getState().dataprep;
+    const initialState = DataPrepStore.getState().dataprep;
     this.state = {
       workspaceModal: false,
       schemaModal: false,
@@ -137,10 +141,10 @@ export default class DataPrepTopPanel extends Component {
 
   onSubmit = () => {
     if (this.props.onSubmit) {
-      let directives = DataPrepStore.getState().dataprep.directives;
-      let workspaceId = DataPrepStore.getState().dataprep.workspaceId;
-      let namespace = NamespaceStore.getState().selectedNamespace;
-      let requestObj = {
+      const directives = DataPrepStore.getState().dataprep.directives;
+      const workspaceId = DataPrepStore.getState().dataprep.workspaceId;
+      const namespace = NamespaceStore.getState().selectedNamespace;
+      const requestObj = {
         context: namespace,
         workspaceId,
       };
@@ -161,7 +165,8 @@ export default class DataPrepTopPanel extends Component {
         },
         (err) => {
           this.setState({
-            onSubmitError: objectQuery(err, 'response', 'message') || JSON.stringify(err),
+            onSubmitError:
+              objectQuery(err, 'response', 'message') || JSON.stringify(err),
             onSubmitLoading: false,
           });
         }
@@ -174,11 +179,15 @@ export default class DataPrepTopPanel extends Component {
       label: T.translate(`${PREFIX}.copyToCDAPDatasetBtn.btnLabel`),
       component: IngestDataFromDataPrep,
       iconName: 'icon-upload',
-      shouldRender: () => this.props.mode !== 'ROUTED_WORKSPACE' && Theme.showIngestData,
+      shouldRender: () =>
+        this.props.mode !== 'ROUTED_WORKSPACE' && Theme.showIngestData,
       disabled: () =>
         isNil(this.state.workspaceInfo) ||
-        objectQuery(this.state, 'workspaceInfo', 'properties', 'connection') === 'upload',
-      disabledTooltip: T.translate(`${PREFIX}.copyToCDAPDatasetBtn.disabledTooltip`),
+        objectQuery(this.state, 'workspaceInfo', 'properties', 'connection') ===
+          'upload',
+      disabledTooltip: T.translate(
+        `${PREFIX}.copyToCDAPDatasetBtn.disabledTooltip`
+      ),
     },
     {
       label: T.translate(`${PREFIX}.viewSchemaBtnLabel`),
@@ -207,8 +216,10 @@ export default class DataPrepTopPanel extends Component {
             {workspaceName}
           </div>
           <div className="row_column_count">
-            {T.translate('features.DataPrep.TopPanel.columns')}: {dataprep.headers.length} |{' '}
-            {T.translate('features.DataPrep.TopPanel.rows')}: {dataprep.data.length}
+            {T.translate('features.DataPrep.TopPanel.columns')}:{' '}
+            {dataprep.headers.length} |{' '}
+            {T.translate('features.DataPrep.TopPanel.rows')}:{' '}
+            {dataprep.data.length}
           </div>
         </div>
       </div>
@@ -227,7 +238,7 @@ export default class DataPrepTopPanel extends Component {
     const isDisabled = menuItem.disabled && menuItem.disabled();
 
     const getMenuItem = (menuItem) => {
-      let { label, component: Component } = menuItem;
+      const { label, component: Component } = menuItem;
       return (
         <div>
           {Component && !isDisabled ? (
@@ -272,14 +283,20 @@ export default class DataPrepTopPanel extends Component {
   renderMenu() {
     return (
       <Popover
-        target={() => <span>{T.translate('features.DataPrep.TopPanel.more')}</span>}
+        target={() => (
+          <span>{T.translate('features.DataPrep.TopPanel.more')}</span>
+        )}
         targetDimension={{ width: '31px', height: '31px' }}
         className="more-dropdown"
         placement="bottom"
       >
         <ul>
           {this.menu.map((menu, i) => {
-            return <React.Fragment key={i}>{this.renderMenuItem(menu)}</React.Fragment>;
+            return (
+              <React.Fragment key={i}>
+                {this.renderMenuItem(menu)}
+              </React.Fragment>
+            );
           })}
         </ul>
       </Popover>
@@ -292,12 +309,16 @@ export default class DataPrepTopPanel extends Component {
         className="btn btn-primary"
         onClick={this.onSubmit}
         disabled={
-          this.props.disabled || this.state.onSubmitLoading || isNil(this.state.workspaceInfo)
+          this.props.disabled ||
+          this.state.onSubmitLoading ||
+          isNil(this.state.workspaceInfo)
             ? 'disabled'
             : false
         }
       >
-        {this.state.onSubmitLoading ? <IconSVG name="icon-spinner" className="fa-spin" /> : null}
+        {this.state.onSubmitLoading ? (
+          <IconSVG name="icon-spinner" className="fa-spin" />
+        ) : null}
         <span>{T.translate(`${PREFIX}.applyBtnLabel`)}</span>
       </button>
     );
@@ -328,14 +349,21 @@ export default class DataPrepTopPanel extends Component {
             <span className="text-danger">{this.state.onSubmitError}</span>
           ) : null}
           {this.state.higherVersion ? this.renderUpgradeBtn() : null}
-          {this.props.mode === 'ROUTED_WORKSPACE' ? this.renderApplyBtn() : null}
+          {this.props.mode === 'ROUTED_WORKSPACE'
+            ? this.renderApplyBtn()
+            : null}
           {this.props.mode !== 'ROUTED_WORKSPACE' ? (
-            <button className="btn btn-primary" onClick={this.toggleAddToPipelineModal}>
+            <button
+              className="btn btn-primary"
+              onClick={this.toggleAddToPipelineModal}
+            >
               {T.translate(`${PREFIX}.addToPipelineBtnLabel`)}
             </button>
           ) : null}
           {this.renderMenu()}
-          {!this.props.mode === 'ROUTED_WORKSPACE' ? <DataPrepPlusButton /> : null}
+          {!this.props.mode === 'ROUTED_WORKSPACE' ? (
+            <DataPrepPlusButton />
+          ) : null}
           {this.renderAddToPipelineModal()}
           {this.renderSchemaModal()}
         </div>

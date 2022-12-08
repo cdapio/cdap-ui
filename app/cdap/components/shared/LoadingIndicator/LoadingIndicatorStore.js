@@ -39,7 +39,7 @@ const LOADINGSTATUS = {
 const loading = (state = defaultLoadingState, action = defaultAction) => {
   switch (action.type) {
     case 'STATUSUPDATE': {
-      let { status = state.status, services = [] } = action.payload;
+      const { status = state.status, services = [] } = action.payload;
       return Object.assign({}, state, {
         status,
         services,

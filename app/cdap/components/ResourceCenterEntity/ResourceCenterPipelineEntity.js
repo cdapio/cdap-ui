@@ -18,7 +18,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import PlusButtonStore from 'services/PlusButtonStore';
 import NamespaceStore from 'services/NamespaceStore';
-import { validateImportJSON, adjustConfigNode } from 'services/PipelineErrorFactory';
+import {
+  validateImportJSON,
+  adjustConfigNode,
+} from 'services/PipelineErrorFactory';
 import { objectQuery } from 'services/helpers';
 import IconSVG from 'components/shared/IconSVG';
 import { Input, Label } from 'reactstrap';
@@ -69,19 +72,22 @@ export default function ResourceCenterPipelineEntity({ onError }) {
       return;
     }
 
-    let uploadedFile = event.target.files[0];
+    const uploadedFile = event.target.files[0];
 
     if (uploadedFile.type !== 'application/json') {
-      onError(T.translate(`${PREFIX}.errorLabel`), T.translate(`${PREFIX}.nonJSONError`));
+      onError(
+        T.translate(`${PREFIX}.errorLabel`),
+        T.translate(`${PREFIX}.nonJSONError`)
+      );
       return;
     }
 
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsText(uploadedFile, 'UTF-8');
 
     reader.onload = (evt) => {
       let fileDataString = evt.target.result;
-      let error = validateImportJSON(fileDataString);
+      const error = validateImportJSON(fileDataString);
       if (error) {
         onError(T.translate(`${PREFIX}.errorLabel`), error);
         return;

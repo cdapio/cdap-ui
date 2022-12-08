@@ -26,13 +26,22 @@ const HEADERS_PREFIX = 'features.FieldLevelLineage.Headers';
 
 require('./LineageSummary.scss');
 
-export default function LineageSummary({ activeField, datasetId, summary, direction }) {
+export default function LineageSummary({
+  activeField,
+  datasetId,
+  summary,
+  direction,
+}) {
   let content = null;
   const datasetFieldTitle = `${datasetId}: ${activeField}`;
 
   const empty = (
     <div className="lineage-summary-empty-container">
-      <span>{T.translate(`${PREFIX}.Empty.${direction}`, { fieldId: datasetFieldTitle })}</span>
+      <span>
+        {T.translate(`${PREFIX}.Empty.${direction}`, {
+          fieldId: datasetFieldTitle,
+        })}
+      </span>
     </div>
   );
 
@@ -60,7 +69,11 @@ export default function LineageSummary({ activeField, datasetId, summary, direct
 
   return (
     <div className="lineage-summary-container">
-      <SectionTitle entityId={activeField} parentId={datasetId} direction={direction} />
+      <SectionTitle
+        entityId={activeField}
+        parentId={datasetId}
+        direction={direction}
+      />
 
       <div className="field-lineage-info">
         <Typography variant="caption" className="lineage-count">
@@ -71,8 +84,12 @@ export default function LineageSummary({ activeField, datasetId, summary, direct
       <div className="lineage-fields">
         <div className="lineage-row lineage-fields-header">
           <div className="index" />
-          <div className="dataset-name">{T.translate(`${HEADERS_PREFIX}.datasetName`)}</div>
-          <div className="field-name">{T.translate(`${HEADERS_PREFIX}.fieldName`)}</div>
+          <div className="dataset-name">
+            {T.translate(`${HEADERS_PREFIX}.datasetName`)}
+          </div>
+          <div className="field-name">
+            {T.translate(`${HEADERS_PREFIX}.fieldName`)}
+          </div>
         </div>
 
         {content}

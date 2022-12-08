@@ -48,8 +48,11 @@ export default class DataPrepBrowser extends Component {
 
   componentDidMount() {
     this.storeSubscription = DataPrepBrowserStore.subscribe(() => {
-      let { activeBrowser } = DataPrepBrowserStore.getState();
-      if (activeBrowser.name && this.state.activeBrowser.name !== activeBrowser.name) {
+      const { activeBrowser } = DataPrepBrowserStore.getState();
+      if (
+        activeBrowser.name &&
+        this.state.activeBrowser.name !== activeBrowser.name
+      ) {
         this.setState({
           activeBrowser,
         });
@@ -82,9 +85,9 @@ export default class DataPrepBrowser extends Component {
   }
 
   render() {
-    let activeBrowser = this.state.activeBrowser.name;
+    const activeBrowser = this.state.activeBrowser.name;
     if (Object.prototype.hasOwnProperty.call(browserMap, activeBrowser)) {
-      let Tag = browserMap[activeBrowser];
+      const Tag = browserMap[activeBrowser];
       return (
         <Provider store={DataPrepBrowserStore}>
           <React.Fragment>

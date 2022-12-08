@@ -17,7 +17,9 @@
 import React, { Component } from 'react';
 import RuleBook from 'components/RulesEngineHome/RuleBook';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
+import RulesEngineStore, {
+  RULESENGINEACTIONS,
+} from 'components/RulesEngineHome/RulesEngineStore';
 import Fuse from 'fuse.js';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
@@ -40,7 +42,7 @@ export default class RuleBooksTab extends Component {
 
   componentDidMount() {
     this.rulesStoreSubscription = RulesEngineStore.subscribe(() => {
-      let { rulebooks } = RulesEngineStore.getState();
+      const { rulebooks } = RulesEngineStore.getState();
       if (Array.isArray(rulebooks.list)) {
         this.setState({
           rulebooks: rulebooks.list,
@@ -97,7 +99,7 @@ export default class RuleBooksTab extends Component {
       keys: ['id', 'user', 'rules', 'description', 'source'],
     };
 
-    let fuse = new Fuse(this.state.rulebooks, fuseOptions);
+    const fuse = new Fuse(this.state.rulebooks, fuseOptions);
     return fuse.search(this.state.searchStr).map((rulebook) => {
       return <RuleBook key={rulebook.id} bookDetails={rulebook} />;
     });
@@ -106,7 +108,9 @@ export default class RuleBooksTab extends Component {
   render() {
     return (
       <div className="rule-books-tab">
-        <span className="rule-books-search-label">{T.translate(`${PREFIX}.searchLabel`)}</span>
+        <span className="rule-books-search-label">
+          {T.translate(`${PREFIX}.searchLabel`)}
+        </span>
         <InputGroup className="rule-books-search-group">
           <InputGroupAddon addonType="prepend">
             <div className="input-group-text">

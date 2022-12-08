@@ -80,7 +80,7 @@ export default class SetPreferenceAction extends Component {
 
   render() {
     const actionLabel = T.translate(`${PREFIX}.actionLabel`);
-    let iconClasses = classnames(
+    const iconClasses = classnames(
       { 'fa-lg': this.props.setAtLevel === PREFERENCES_LEVEL.NAMESPACE },
       { 'text-success': this.state.preferencesSaved }
     );

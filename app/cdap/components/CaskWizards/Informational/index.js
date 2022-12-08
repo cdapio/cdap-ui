@@ -39,7 +39,7 @@ export default class InformationalWizard extends Component {
   }
 
   prepareInputForSteps() {
-    let actionSteps = this.props.input.action.arguments[0].value;
+    const actionSteps = this.props.input.action.arguments[0].value;
 
     InformationalWizardStore.dispatch({
       type: InformationalActions.setSteps,
@@ -66,8 +66,8 @@ export default class InformationalWizard extends Component {
     });
   }
   render() {
-    let input = this.props.input;
-    let pkg = input.package || {};
+    const input = this.props.input;
+    const pkg = input.package || {};
 
     const getWizardContent = () => {
       return (
@@ -80,7 +80,7 @@ export default class InformationalWizard extends Component {
       );
     };
 
-    let wizardModalTitle =
+    const wizardModalTitle =
       (pkg.label ? pkg.label + ' | ' : '') +
       T.translate('features.Wizard.Informational.headerlabel');
     return (

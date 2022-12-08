@@ -14,8 +14,7 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import ThemeWrapper from 'components/ThemeWrapper';
 import CommentRounded from '@material-ui/icons/CommentRounded';
@@ -24,8 +23,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { Theme } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
 import { PipelineComments } from 'components/PipelineCanvasActions/PipelineComments';
-import { IPipelineComment } from 'components/PipelineCanvasActions/PipelineCommentsConstants';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { IComment } from 'components/AbstractWidget/Comment/CommentConstants';
 
 const useStyle = makeStyles<Theme, { toggle: boolean }>((theme) => {
   return {
@@ -76,8 +75,8 @@ interface IPipelineCommentsActionBtnProps {
   tooltip: string;
   shouldShowMarker: boolean;
   onCommentsToggle: (toggle: boolean) => void;
-  onChange: (comments: IPipelineComment[]) => void;
-  comments: IPipelineComment[];
+  onChange: (comments: IComment[]) => void;
+  comments: IComment[];
   disabled?: boolean;
 }
 
@@ -87,10 +86,10 @@ function PipelineCommentsActionBtn({
   comments = [],
   disabled,
 }: IPipelineCommentsActionBtnProps) {
-  const [localToggle, setLocalToggle] = React.useState(false);
-  const [showMarker, setShowMarker] = React.useState(comments.length > 0);
-  const [anchorId] = React.useState(`id-${uuidv4()}`);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [localToggle, setLocalToggle] = useState(false);
+  const [showMarker, setShowMarker] = useState(comments.length > 0);
+  const [anchorId] = useState(`id-${uuidv4()}`);
+  const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyle({ toggle: localToggle });
 
   const onClick = (e) => {
@@ -119,7 +118,7 @@ function PipelineCommentsActionBtn({
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShowMarker(Array.isArray(comments) && comments.length > 0);
   }, [comments]);
   return (
@@ -162,11 +161,3 @@ export default function ThemeWrappedPipelineComments(props) {
 }
 
 export { PipelineCommentsActionBtn };
-
-(ThemeWrappedPipelineComments as any).propTypes = {
-  tooltip: PropTypes.string,
-  onCommentsToggle: PropTypes.func,
-  onChange: PropTypes.func,
-  comments: PropTypes.object,
-  disabled: PropTypes.bool,
-};

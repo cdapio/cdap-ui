@@ -21,7 +21,7 @@ import NamespaceStore from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 
 export default function LineageTab({ entity }) {
-  let namespace = NamespaceStore.getState().selectedNamespace;
+  const namespace = NamespaceStore.getState().selectedNamespace;
 
   let url = window.getTrackerUrl({
     stateName: 'tracker.detail.entity.lineage',
@@ -32,10 +32,10 @@ export default function LineageTab({ entity }) {
       iframe: true,
     },
   });
-  let encodedSource = encodeURIComponent(url);
+  const encodedSource = encodeURIComponent(url);
   url += `&sourceUrl=${encodedSource}`;
 
-  let fllUrl = `/ns/${namespace}/datasets/${entity.id}/fields`;
+  const fllUrl = `/ns/${namespace}/datasets/${entity.id}/fields`;
 
   return (
     <div className="dataset-lineage-tab embed-responsive embed-responsive-16by9">

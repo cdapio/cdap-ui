@@ -103,11 +103,13 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
           <ToolBarFeatureLink
             featureFlag={true}
             featureName={Theme.featureNames.systemAdmin}
-            featureUrl={`/administration`}
+            featureUrl={'/administration'}
             // This is needed here when Authorization fails for all namespaces.
             // In this case navigating to Admin section doesn't have restriction (yet).
             onClick={() => {
-              this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, { reset: true });
+              this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, {
+                reset: true,
+              });
               this.eventEmitter.emit(globalEvents.CLOSEMARKET);
             }}
           />

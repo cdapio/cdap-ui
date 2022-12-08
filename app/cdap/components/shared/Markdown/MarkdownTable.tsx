@@ -80,7 +80,7 @@ interface IMarkdownWithoutStylesProps extends WithStyles<typeof styles> {
 }
 
 const MarkdownWithoutStyles: React.SFC<IMarkdownWithoutStylesProps> = ({ children, classes }) => {
-  const flatFilterMap = (child, nodeType = null) =>
+  const flatFilterMap = (child, nodeType: any = null) =>
     child
       .flat()
       .filter((c) => {

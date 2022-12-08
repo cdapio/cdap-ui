@@ -17,7 +17,12 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 import T from 'i18n-react';
 import uuidV4 from 'uuid/v4';
 
@@ -40,13 +45,15 @@ export default class PaginationDropdown extends Component {
   }
 
   render() {
-    let dropdownItems = [];
+    const dropdownItems = [];
 
     for (let i = 0; i < this.props.numberOfPages; i++) {
       dropdownItems.push(
         <div className="dropdownItems clearfix">
           <span className="page-number float-left">{i + 1}</span>
-          {this.props.currentPage === i + 1 ? <span className="fa fa-check float-right" /> : null}
+          {this.props.currentPage === i + 1 ? (
+            <span className="fa fa-check float-right" />
+          ) : null}
         </div>
       );
     }
@@ -68,7 +75,10 @@ export default class PaginationDropdown extends Component {
         <DropdownMenu onClick={(e) => e.stopPropagation()}>
           {dropdownItems.map((item, index) => {
             return (
-              <DropdownItem key={uuidV4()} onClick={this.props.onPageChange.bind(this, index + 1)}>
+              <DropdownItem
+                key={uuidV4()}
+                onClick={this.props.onPageChange.bind(this, index + 1)}
+              >
                 {item}
               </DropdownItem>
             );

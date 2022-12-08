@@ -46,7 +46,9 @@ Object.keys(components).forEach((key) => {
     }
 
     render() {
-      return <Tag isOpen={this.state.isOpen} toggle={this.toggle} {...this.props} />;
+      return (
+        <Tag isOpen={this.state.isOpen} toggle={this.toggle} {...this.props} />
+      );
     }
   }
 

@@ -33,8 +33,8 @@ import { Theme } from 'services/ThemeHelper';
 
 const mapErrorToMessage = (message) => {
   if (message.indexOf('invalid field name') !== -1) {
-    let splitMessage = message.split('field name: ');
-    let fieldName = objectQuery(splitMessage, 1) || message;
+    const splitMessage = message.split('field name: ');
+    const fieldName = objectQuery(splitMessage, 1) || message;
     return {
       message: T.translate(`${PREFIX}.invalidFieldNameMessage`, { fieldName }),
       remedies: `${T.translate(`${PREFIX}.invalidFieldNameRemedies1`)}`,
@@ -85,7 +85,7 @@ export default class AddToHydratorModal extends Component {
           });
         }
 
-        let batchUrl = window.getHydratorUrl({
+        const batchUrl = window.getHydratorUrl({
           stateName: 'hydrator.create',
           stateParams: {
             namespace,
@@ -104,7 +104,7 @@ export default class AddToHydratorModal extends Component {
         });
       },
       (err) => {
-        let { message, remedies = null } = mapErrorToMessage(err);
+        const { message, remedies = null } = mapErrorToMessage(err);
 
         if (remedies) {
           this.setState({
@@ -154,7 +154,9 @@ export default class AddToHydratorModal extends Component {
       <div className="message">
         <pre>
           <div className="remedy-message">
-            {objectQuery(this.state, 'error', 'remedies') ? this.state.error.remedies : null}
+            {objectQuery(this.state, 'error', 'remedies')
+              ? this.state.error.remedies
+              : null}
           </div>
           <span>
             {T.translate(`${PREFIX}.invalidFieldNameRemedies2`)}
@@ -186,19 +188,25 @@ export default class AddToHydratorModal extends Component {
       );
     } else {
       let realtimeDisabledTooltip;
-      let type = DataPrepStore.getState().dataprep.workspaceInfo.properties.connection;
+      const type = DataPrepStore.getState().dataprep.workspaceInfo.properties
+        .connection;
 
       if (!this.state.realtimeUrl) {
-        realtimeDisabledTooltip = T.translate(`${PREFIX}.realtimeDisabledTooltip`, {
-          type: T.translate(`${PREFIX}.${type}`),
-        });
+        realtimeDisabledTooltip = T.translate(
+          `${PREFIX}.realtimeDisabledTooltip`,
+          {
+            type: T.translate(`${PREFIX}.${type}`),
+          }
+        );
       }
 
       const realtimeUrl = disableRealtime ? null : this.state.realtimeUrl;
 
       content = (
         <div>
-          <div className="message">{T.translate(`${PREFIX}.addToPipelineModal.title`)}</div>
+          <div className="message">
+            {T.translate(`${PREFIX}.addToPipelineModal.title`)}
+          </div>
           <div className="action-buttons">
             <a
               href={this.state.error ? null : this.state.batchUrl}
@@ -216,12 +224,17 @@ export default class AddToHydratorModal extends Component {
               }).bind(this)}
             >
               <i className="fa icon-ETLBatch" />
-              <span>{T.translate(`${PREFIX}.addToPipelineModal.batchPipelineBtn`)}</span>
+              <span>
+                {T.translate(`${PREFIX}.addToPipelineModal.batchPipelineBtn`)}
+              </span>
             </a>
             <a
               href={realtimeUrl}
               className={classnames('btn btn-secondary', {
-                inactive: !this.state.realtimeUrl || this.state.error || disableRealtime,
+                inactive:
+                  !this.state.realtimeUrl ||
+                  this.state.error ||
+                  disableRealtime,
               })}
               onClick={(() => {
                 if (!this.state.realtimeUrl || disableRealtime) {
@@ -235,14 +248,18 @@ export default class AddToHydratorModal extends Component {
               title={realtimeDisabledTooltip}
             >
               <i className="fa icon-sparkstreaming" />
-              <span>{T.translate(`${PREFIX}.addToPipelineModal.realtimePipelineBtn`)}</span>
+              <span>
+                {T.translate(
+                  `${PREFIX}.addToPipelineModal.realtimePipelineBtn`
+                )}
+              </span>
             </a>
           </div>
         </div>
       );
     }
 
-    let showContent = !objectQuery(this.state, 'error', 'remedies');
+    const showContent = !objectQuery(this.state, 'error', 'remedies');
 
     return (
       <Modal
@@ -255,16 +272,23 @@ export default class AddToHydratorModal extends Component {
         <ModalHeader>
           <span>{T.translate(`${PREFIX}.addToPipelineBtnLabel`)}</span>
 
-          <div className="close-section float-right" onClick={this.props.toggle}>
+          <div
+            className="close-section float-right"
+            onClick={this.props.toggle}
+          >
             <span className="fa fa-times" />
           </div>
         </ModalHeader>
-        <ModalBody>{showContent ? content : this.renderInvalidFieldError()}</ModalBody>
+        <ModalBody>
+          {showContent ? content : this.renderInvalidFieldError()}
+        </ModalBody>
         <If condition={this.state.error}>
           <CardActionFeedback
             type="DANGER"
             message={T.translate(`${PREFIX}.addToPipelineModal.errorTitle`)}
-            extendedMessage={isString(this.state.error) ? this.state.error : null}
+            extendedMessage={
+              isString(this.state.error) ? this.state.error : null
+            }
           />
         </If>
       </Modal>

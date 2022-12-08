@@ -60,11 +60,21 @@ export default class Customizer extends Component {
 
   render() {
     return (
-      <div className={classnames('customizer-container', { collapsed: this.state.isCollapsed })}>
+      <div
+        className={classnames('customizer-container', {
+          collapsed: this.state.isCollapsed,
+        })}
+      >
         <div className="collapsed-toggle-container">
           <div className="toggle" onClick={this.toggleCollapsed}>
-            <IconSVG name={this.state.isCollapsed ? 'icon-caret-right' : 'icon-caret-down'} />
-            {this.state.isCollapsed ? T.translate(`${PREFIX}.show`) : T.translate(`${PREFIX}.hide`)}
+            <IconSVG
+              name={
+                this.state.isCollapsed ? 'icon-caret-right' : 'icon-caret-down'
+              }
+            />
+            {this.state.isCollapsed
+              ? T.translate(`${PREFIX}.show`)
+              : T.translate(`${PREFIX}.hide`)}
           </div>
         </div>
 

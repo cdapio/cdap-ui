@@ -65,7 +65,7 @@ export default class DeleteAction extends Component {
   action() {
     this.setState({ loading: true });
     let api;
-    let params = {
+    const params = {
       namespace: NamespaceStore.getState().selectedNamespace,
     };
     switch (this.props.entity.type) {
@@ -118,7 +118,11 @@ export default class DeleteAction extends Component {
 
     return (
       <span className="btn btn-secondary btn-sm">
-        <FastActionButton icon="icon-trash" action={this.toggleModal} id={tooltipID} />
+        <FastActionButton
+          icon="icon-trash"
+          action={this.toggleModal}
+          id={tooltipID}
+        />
         <Tooltip
           placement="top"
           className="fast-action-tooltip"
@@ -134,9 +138,12 @@ export default class DeleteAction extends Component {
           <ConfirmationModal
             headerTitle={headerTitle}
             toggleModal={this.toggleModal}
-            confirmationText={T.translate('features.FastAction.deleteConfirmation', {
-              entityId: this.props.entity.id,
-            })}
+            confirmationText={T.translate(
+              'features.FastAction.deleteConfirmation',
+              {
+                entityId: this.props.entity.id,
+              }
+            )}
             confirmButtonText={actionLabel}
             confirmFn={this.action}
             cancelFn={this.toggleModal}

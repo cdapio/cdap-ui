@@ -40,11 +40,13 @@ const RunStatus = ({ runs, currentRun, pipelineId }) => {
   } else {
     status = PROGRAM_STATUSES.DEPLOYED;
   }
-  let statusLabel = StatusMapper.lookupDisplayStatus(status);
-  let statusCSSClass = StatusMapper.getStatusIndicatorClass(statusLabel);
-  let statusIcon = StatusMapper.getStatusIndicatorIcon(statusLabel);
+  const statusLabel = StatusMapper.lookupDisplayStatus(status);
+  const statusCSSClass = StatusMapper.getStatusIndicatorClass(statusLabel);
+  const statusIcon = StatusMapper.getStatusIndicatorIcon(statusLabel);
 
-  let runningRuns = runs.filter((run) => run.status === PROGRAM_STATUSES.RUNNING);
+  const runningRuns = runs.filter(
+    (run) => run.status === PROGRAM_STATUSES.RUNNING
+  );
 
   return (
     <div className="run-info-container run-status-container">

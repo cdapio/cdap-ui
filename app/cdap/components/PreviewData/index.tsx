@@ -65,8 +65,8 @@ enum PreviewMode {
 }
 
 export interface ITableData {
-  inputs?: Array<[string, IRecords]>;
-  outputs?: Array<[string, IRecords]>;
+  inputs?: [string, IRecords][];
+  outputs?: [string, IRecords][];
   inputFieldCount?: number;
   outputFieldCount?: number;
 }

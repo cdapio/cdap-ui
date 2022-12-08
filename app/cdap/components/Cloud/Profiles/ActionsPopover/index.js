@@ -53,7 +53,9 @@ export default function ProfileActionsPopover({
           })}
           title={
             !isProfileDisabled
-              ? T.translate('features.Cloud.Profiles.common.disabledDeleteProfile')
+              ? T.translate(
+                  'features.Cloud.Profiles.common.disabledDeleteProfile'
+                )
               : ''
           }
           onClick={!isProfileDisabled ? null : onDeleteClick}

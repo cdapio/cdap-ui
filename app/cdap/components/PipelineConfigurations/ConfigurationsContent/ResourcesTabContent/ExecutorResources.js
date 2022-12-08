@@ -26,14 +26,18 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 import { GENERATED_RUNTIMEARGS, GLOBALS } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import {
+  convertKeyValuePairsToMap,
+  convertMapToKeyValuePairs,
+} from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
 const mapStateToProps = (state, ownProps) => {
   const executorResourcesMemory = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY
+    (pair) =>
+      pair.key === GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY
   );
   const executorResourcesCores = state.runtimeArgs.pairs.find(
     (pair) => pair.key === GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES
@@ -44,7 +48,9 @@ const mapStateToProps = (state, ownProps) => {
     virtualCores: executorResourcesCores
       ? executorResourcesCores.value
       : state.resources.virtualCores,
-    memoryMB: executorResourcesMemory ? executorResourcesMemory.value : state.resources.memoryMB,
+    memoryMB: executorResourcesMemory
+      ? executorResourcesMemory.value
+      : state.resources.memoryMB,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -56,7 +62,8 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES] =
+        e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
@@ -71,7 +78,8 @@ const mapDispatchToProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY] = e.target.value;
+      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY] =
+        e.target.value;
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_MB,
@@ -96,7 +104,8 @@ const ExecutorResources = ({
   onMemoryMBChange,
 }) => {
   const isMapReduce =
-    engine === ENGINE_OPTIONS.MAPREDUCE && GLOBALS.etlBatchPipelines.includes(pipelineType);
+    engine === ENGINE_OPTIONS.MAPREDUCE &&
+    GLOBALS.etlBatchPipelines.includes(pipelineType);
   return (
     <div className="executor" data-cy="resources-config-tab-executor">
       <div className="resource-title-icon">
@@ -134,6 +143,9 @@ ExecutorResources.propTypes = {
   onMemoryMBChange: PropTypes.func,
 };
 
-const ConnectedExecutorResources = connect(mapStateToProps, mapDispatchToProps)(ExecutorResources);
+const ConnectedExecutorResources = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ExecutorResources);
 
 export default ConnectedExecutorResources;

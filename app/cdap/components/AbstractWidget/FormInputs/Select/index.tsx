@@ -110,7 +110,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
   classes,
   ...restProps
 }: ISelectProps) => {
-  const onChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChangeHandler = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const v = event.target.value;
     if (typeof onChange === 'function') {
       onChange(v);

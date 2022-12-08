@@ -46,7 +46,7 @@ export default class RuntimeArgRow extends Component {
   };
 
   onValueChange = (e) => {
-    let oldValue = this.state.value;
+    const oldValue = this.state.value;
     this.setState(
       {
         value: e.target.value,
@@ -60,7 +60,10 @@ export default class RuntimeArgRow extends Component {
       setArgMapping(this.state.key, this.state.value, 'runtime', oldValue);
     }
   };
-  getDisplayValueForTriggeringPipelineMacro = (triggeringPipelineInfo, key = this.state.key) => {
+  getDisplayValueForTriggeringPipelineMacro = (
+    triggeringPipelineInfo,
+    key = this.state.key
+  ) => {
     if (triggeringPipelineInfo.macros.indexOf(key) === -1) {
       return [DEFAULTRUNTIMEARGSMESSAGE];
     }
@@ -75,11 +78,13 @@ export default class RuntimeArgRow extends Component {
     if (triggeredPipelineInfo.macros.indexOf(value) === -1) {
       return [DEFAULTTRIGGEREDMACROMESSAGE];
     }
-    return value ? [value, DEFAULTTRIGGEREDMACROMESSAGE] : [DEFAULTTRIGGEREDMACROMESSAGE];
+    return value
+      ? [value, DEFAULTTRIGGEREDMACROMESSAGE]
+      : [DEFAULTTRIGGEREDMACROMESSAGE];
   };
 
   render() {
-    let {
+    const {
       triggeringPipelineInfo,
       triggeredPipelineInfo,
     } = ScheduleRuntimeArgsStore.getState().args;
@@ -89,7 +94,9 @@ export default class RuntimeArgRow extends Component {
         <Col xs={6}>
           <div className="select-dropdown" data-cy="runtime-arg-of-trigger">
             <select value={this.state.key} onChange={this.onKeyChange}>
-              {this.getDisplayValueForTriggeringPipelineMacro(triggeringPipelineInfo)
+              {this.getDisplayValueForTriggeringPipelineMacro(
+                triggeringPipelineInfo
+              )
                 .concat(triggeringPipelineInfo.macros)
                 .map((macro) => {
                   return (

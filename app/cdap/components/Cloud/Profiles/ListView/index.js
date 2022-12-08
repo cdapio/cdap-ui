@@ -26,7 +26,9 @@ import orderBy from 'lodash/orderBy';
 import ViewAllLabel from 'components/shared/ViewAllLabel';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
-import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
+import ProfilesStore, {
+  PROFILE_STATUSES,
+} from 'components/Cloud/Profiles/Store';
 import {
   getProfiles,
   deleteProfile,
@@ -136,7 +138,7 @@ class ProfilesListView extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!isEqual(nextProps.profiles, this.props.profiles)) {
-      let orderedProfiles = orderBy(
+      const orderedProfiles = orderBy(
         nextProps.profiles,
         this.state.sortColumn,
         this.state.sortMethod
@@ -148,8 +150,10 @@ class ProfilesListView extends Component {
         orderedProfiles.length > NUM_PROFILES_TO_SHOW &&
         !this.state.viewAll
       ) {
-        let newProfileName = extractProfileName(this.props.newProfile);
-        let newProfileIndex = findIndex(orderedProfiles, { name: newProfileName });
+        const newProfileName = extractProfileName(this.props.newProfile);
+        const newProfileIndex = findIndex(orderedProfiles, {
+          name: newProfileName,
+        });
         if (newProfileIndex >= NUM_PROFILES_TO_SHOW) {
           viewAll = true;
         }
@@ -180,7 +184,9 @@ class ProfilesListView extends Component {
     if (this.state.sortColumn === field) {
       newSortColumn = this.state.sortColumn;
       newSortMethod =
-        this.state.sortMethod === SORT_METHODS.asc ? SORT_METHODS.desc : SORT_METHODS.asc;
+        this.state.sortMethod === SORT_METHODS.asc
+          ? SORT_METHODS.desc
+          : SORT_METHODS.asc;
     } else {
       newSortColumn = field;
       newSortMethod = SORT_METHODS.asc;
@@ -194,7 +200,8 @@ class ProfilesListView extends Component {
   };
 
   deleteProfile = (profile) => {
-    let namespace = profile.scope === SCOPES.SYSTEM ? SYSTEM_NAMESPACE : this.props.namespace;
+    const namespace =
+      profile.scope === SCOPES.SYSTEM ? SYSTEM_NAMESPACE : this.props.namespace;
 
     deleteProfile(namespace, profile.name, this.props.namespace).subscribe(
       () => {
@@ -275,7 +282,9 @@ class ProfilesListView extends Component {
           <div />
           <div />
           <div />
-          <div className="sub-title">{T.translate(`${PREFIX}.ListView.pipelineUsage`)}</div>
+          <div className="sub-title">
+            {T.translate(`${PREFIX}.ListView.pipelineUsage`)}
+          </div>
           <div />
           <div />
           <div />
@@ -313,10 +322,12 @@ class ProfilesListView extends Component {
   };
 
   renderProfilerow = (profile) => {
-    let namespace = profile.scope === SCOPES.SYSTEM ? SYSTEM_NAMESPACE : this.props.namespace;
-    let provisionerName = profile.provisioner.name;
-    profile.provisioner.label = this.state.provisionersMap[provisionerName] || provisionerName;
-    let profileStatus = PROFILE_STATUSES[profile.status];
+    const namespace =
+      profile.scope === SCOPES.SYSTEM ? SYSTEM_NAMESPACE : this.props.namespace;
+    const provisionerName = profile.provisioner.name;
+    profile.provisioner.label =
+      this.state.provisionersMap[provisionerName] || provisionerName;
+    const profileStatus = PROFILE_STATUSES[profile.status];
     let Tag = Link;
     const profileName = getProfileNameWithScope(profile.name, profile.scope);
     const isNativeProfile = profileName === CLOUD.DEFAULT_PROFILE_NAME;
@@ -347,7 +358,10 @@ class ProfilesListView extends Component {
         })}
         key={uuidV4()}
       >
-        <div className="default-star" onClick={this.setProfileAsDefault.bind(this, profileName)}>
+        <div
+          className="default-star"
+          onClick={this.setProfileAsDefault.bind(this, profileName)}
+        >
           {profileIsDefault ? (
             <IconSVG name="icon-star" className="default-profile" />
           ) : (
@@ -392,7 +406,10 @@ class ProfilesListView extends Component {
             namespace={this.props.namespace}
             profile={profile}
             disabled={isNativeProfile}
-            onDeleteClick={this.toggleDeleteConfirmationModal.bind(this, profile)}
+            onDeleteClick={this.toggleDeleteConfirmationModal.bind(
+              this,
+              profile
+            )}
           />
         </div>
       </Tag>
@@ -406,7 +423,9 @@ class ProfilesListView extends Component {
       profiles = profiles.slice(0, NUM_PROFILES_TO_SHOW);
     }
 
-    return <div className="grid-body">{profiles.map(this.renderProfilerow)}</div>;
+    return (
+      <div className="grid-body">{profiles.map(this.renderProfilerow)}</div>
+    );
   }
 
   renderDeleteConfirmationModal() {
@@ -414,9 +433,12 @@ class ProfilesListView extends Component {
       return null;
     }
 
-    const confirmationText = T.translate(`${PREFIX}.common.deleteConfirmation`, {
-      profile: this.state.profileToDelete.name,
-    });
+    const confirmationText = T.translate(
+      `${PREFIX}.common.deleteConfirmation`,
+      {
+        profile: this.state.profileToDelete.name,
+      }
+    );
 
     return (
       <ConfirmationModal
@@ -438,9 +460,11 @@ class ProfilesListView extends Component {
       return null;
     }
 
-    let error = this.props.error.response || this.props.error;
+    const error = this.props.error.response || this.props.error;
 
-    return <Alert message={error} type="error" showAlert={true} onClose={setError} />;
+    return (
+      <Alert message={error} type="error" showAlert={true} onClose={setError} />
+    );
   }
 
   render() {

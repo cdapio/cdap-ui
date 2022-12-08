@@ -29,7 +29,7 @@ require('./CardActionFeedback.scss');
 import isObject from 'lodash/isObject';
 import IconSVG from 'components/shared/IconSVG';
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 export const CARD_ACTION_TYPES = {
   SUCCESS: 'SUCCESS',
   DANGER: 'DANGER',
@@ -125,7 +125,7 @@ export default class CardActionFeedback extends Component {
       }
     }
 
-    let feedbackClass = classNames('card-action-feedback', this.props.type);
+    const feedbackClass = classNames('card-action-feedback', this.props.type);
 
     return (
       <div className={feedbackClass}>

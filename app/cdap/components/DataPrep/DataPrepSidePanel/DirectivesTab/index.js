@@ -27,12 +27,12 @@ export default class DirectivesTab extends Component {
   constructor(props) {
     super(props);
 
-    let store = DataPrepStore.getState().dataprep;
+    const store = DataPrepStore.getState().dataprep;
 
     this.state = {
       deleteHover: null,
       directives: store.directives.map((directive) => {
-        let obj = {
+        const obj = {
           name: directive,
           uniqueId: uuidV4(),
         };
@@ -43,11 +43,11 @@ export default class DirectivesTab extends Component {
     this.download = this.download.bind(this);
 
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState().dataprep;
+      const state = DataPrepStore.getState().dataprep;
 
       this.setState({
         directives: state.directives.map((directive) => {
-          let obj = {
+          const obj = {
             name: directive,
             uniqueId: uuidV4(),
           };
@@ -69,10 +69,10 @@ export default class DirectivesTab extends Component {
   }
 
   deleteDirective(index) {
-    let state = DataPrepStore.getState().dataprep;
-    let directives = state.directives;
+    const state = DataPrepStore.getState().dataprep;
+    const directives = state.directives;
 
-    let newDirectives = directives.slice(0, index);
+    const newDirectives = directives.slice(0, index);
 
     execute(newDirectives, true).subscribe(
       () => {},
@@ -85,11 +85,11 @@ export default class DirectivesTab extends Component {
   }
 
   download() {
-    let state = DataPrepStore.getState().dataprep;
-    let workspaceId = state.workspaceId,
+    const state = DataPrepStore.getState().dataprep;
+    const workspaceId = state.workspaceId,
       directives = state.directives;
 
-    let data = directives.join('\n'),
+    const data = directives.join('\n'),
       filename = `${workspaceId}-directives.txt`;
 
     fileDownload(data, filename);
@@ -100,7 +100,11 @@ export default class DirectivesTab extends Component {
       <div className="directives-tab">
         <div className="directives-tab-header">
           <span>#</span>
-          <span>{T.translate('features.DataPrep.DataPrepSidePanel.DirectivesTab.label')}</span>
+          <span>
+            {T.translate(
+              'features.DataPrep.DataPrepSidePanel.DirectivesTab.label'
+            )}
+          </span>
           <button className="btn btn-link float-right" onClick={this.download}>
             <span className="fa fa-download" />
           </button>
@@ -113,7 +117,10 @@ export default class DirectivesTab extends Component {
                 key={directive.uniqueId}
                 rowInfo={directive}
                 rowIndex={index}
-                isInactive={this.state.deleteHover !== null && index >= this.state.deleteHover}
+                isInactive={
+                  this.state.deleteHover !== null &&
+                  index >= this.state.deleteHover
+                }
                 handleDelete={this.deleteDirective.bind(this, index)}
                 handleMouseEnter={this.onMouseEnter.bind(this, index)}
                 handleMouseLeave={this.onMouseLeave.bind(this)}

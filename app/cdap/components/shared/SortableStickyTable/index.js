@@ -40,11 +40,13 @@ export default class SortableStickyTable extends SortableTable {
     );
   }
   render() {
-    let tableClasses = classnames('table', this.props.className);
+    const tableClasses = classnames('table', this.props.className);
     return (
       <div className="table-container">
         <table className={tableClasses}>{this.renderTableHeader()}</table>
-        <div className="table-scroll">{this.props.renderTableBody(this.state.entities)}</div>
+        <div className="table-scroll">
+          {this.props.renderTableBody(this.state.entities)}
+        </div>
       </div>
     );
   }

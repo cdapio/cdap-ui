@@ -28,7 +28,12 @@ export default function IconSVG(props) {
   const path = `${window.location.href}#symbol-defs_${name}`;
   const newPath = `${window.location.href}#symbol-defs_new_${name}`;
   return (
-    <svg className={iconClassName} data-cy={dataCy} data-testid={dataTestId} {...moreProps}>
+    <svg
+      className={iconClassName}
+      data-cy={dataCy}
+      data-testid={dataTestId}
+      {...moreProps}
+    >
       <use xlinkHref={path} />
       <use xlinkHref={newPath} />
       {tooltip && <title>{tooltip}</title>}

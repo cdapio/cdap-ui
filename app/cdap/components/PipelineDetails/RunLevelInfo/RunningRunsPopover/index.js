@@ -30,8 +30,8 @@ require('./RunningRunsPopover.scss');
 const PREFIX = 'features.PipelineDetails';
 
 export default function RunningRunsPopover({ runs, currentRunId, pipelineId }) {
-  let reversedRuns = reverseArrayWithoutMutating(runs);
-  let currentRunIndex = findIndex(reversedRuns, { runid: currentRunId });
+  const reversedRuns = reverseArrayWithoutMutating(runs);
+  const currentRunIndex = findIndex(reversedRuns, { runid: currentRunId });
 
   const runningRunsLabel = () => {
     return (
@@ -67,7 +67,9 @@ export default function RunningRunsPopover({ runs, currentRunId, pipelineId }) {
       enableInteractionInPopover={true}
     >
       <div>
-        <strong>{T.translate(`${PREFIX}.RunLevel.runsCurrentlyRunning`)}</strong>
+        <strong>
+          {T.translate(`${PREFIX}.RunLevel.runsCurrentlyRunning`)}
+        </strong>
       </div>
       <table className="running-runs-popover-table table">
         <thead>
@@ -82,10 +84,16 @@ export default function RunningRunsPopover({ runs, currentRunId, pipelineId }) {
             return (
               <tr
                 key={i}
-                className={classnames({ 'current-run-row': run.runid === currentRunId })}
+                className={classnames({
+                  'current-run-row': run.runid === currentRunId,
+                })}
                 onClick={navigateToRun.bind(null, run.runid)}
               >
-                <td>{run.runid === currentRunId ? <IconSVG name="icon-check" /> : null}</td>
+                <td>
+                  {run.runid === currentRunId ? (
+                    <IconSVG name="icon-check" />
+                  ) : null}
+                </td>
                 <td>{moment.unix(run.starting).calendar()}</td>
                 <td>
                   <Duration

@@ -80,7 +80,7 @@ MyProgramApi.setProgramStatus = function(status, isError) {
 };
 MyProgramApi.generalGetter = function(property) {
   return function() {
-    let subject = new Subject();
+    const subject = new Subject();
     setTimeout(() => {
       if (this.__isError) {
         subject.error(this[property]);

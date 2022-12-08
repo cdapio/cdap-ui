@@ -61,7 +61,9 @@ export default class PipelineScheduleButton extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let scheduleStatus = StatusMapper.lookupDisplayStatus(nextProps.scheduleStatus);
+    const scheduleStatus = StatusMapper.lookupDisplayStatus(
+      nextProps.scheduleStatus
+    );
     if (scheduleStatus !== this.state.scheduleStatus) {
       this.setState({ scheduleStatus });
       setScheduleButtonLoading(false);
@@ -91,23 +93,34 @@ export default class PipelineScheduleButton extends Component {
 
   renderScheduleButton() {
     if (
-      [StatusMapper.statusMap['SCHEDULED'], StatusMapper.statusMap['SUSPENDING']].indexOf(
-        this.state.scheduleStatus
-      ) !== -1
+      [
+        StatusMapper.statusMap['SCHEDULED'],
+        StatusMapper.statusMap['SUSPENDING'],
+      ].indexOf(this.state.scheduleStatus) !== -1
     ) {
       return (
-        <div className="btn pipeline-action-btn pipeline-scheduler-btn" ref={this.buttonRef}>
+        <div
+          className="btn pipeline-action-btn pipeline-scheduler-btn"
+          ref={this.buttonRef}
+        >
           <PrimaryTextLowercaseButton
             onClick={this.toggleScheduler.bind(this, true)}
-            disabled={this.state.scheduleStatus === StatusMapper.statusMap['SUSPENDING']}
+            disabled={
+              this.state.scheduleStatus === StatusMapper.statusMap['SUSPENDING']
+            }
           >
             <div className="btn-container">
               {this.props.scheduleButtonLoading ? (
                 <IconSVG name="icon-spinner" className="fa-spin" />
               ) : (
-                <IconSVG name="icon-runtimestarttime" className="unschedule-icon" />
+                <IconSVG
+                  name="icon-runtimestarttime"
+                  className="unschedule-icon"
+                />
               )}
-              <div className="button-label">{T.translate(`${PREFIX}.unschedule`)}</div>
+              <div className="button-label">
+                {T.translate(`${PREFIX}.unschedule`)}
+              </div>
             </div>
           </PrimaryTextLowercaseButton>
         </div>
@@ -116,14 +129,19 @@ export default class PipelineScheduleButton extends Component {
 
     return (
       <div
-        className={classnames('btn pipeline-action-btn pipeline-scheduler-btn', {
-          'btn-select': this.state.showScheduler,
-        })}
+        className={classnames(
+          'btn pipeline-action-btn pipeline-scheduler-btn',
+          {
+            'btn-select': this.state.showScheduler,
+          }
+        )}
         ref={this.buttonRef}
       >
         <PrimaryTextLowercaseButton
           onClick={this.toggleScheduler.bind(this, true)}
-          disabled={this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULING']}
+          disabled={
+            this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULING']
+          }
         >
           <div className="btn-container">
             {this.props.scheduleButtonLoading ? (
@@ -131,7 +149,9 @@ export default class PipelineScheduleButton extends Component {
             ) : (
               <IconSVG name="icon-runtimestarttime" className="schedule-icon" />
             )}
-            <div className="button-label">{T.translate(`${PREFIX}.schedule`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.schedule`)}
+            </div>
           </div>
         </PrimaryTextLowercaseButton>
       </div>
@@ -148,9 +168,12 @@ export default class PipelineScheduleButton extends Component {
 
     return (
       <div
-        className={classnames('pipeline-action-container pipeline-scheduler-container', {
-          active: this.state.showScheduler,
-        })}
+        className={classnames(
+          'pipeline-action-container pipeline-scheduler-container',
+          {
+            active: this.state.showScheduler,
+          }
+        )}
         data-cy="pipeline-scheduler-btn"
       >
         {this.renderScheduleError()}

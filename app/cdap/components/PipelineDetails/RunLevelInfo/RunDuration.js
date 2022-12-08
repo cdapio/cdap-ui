@@ -34,11 +34,17 @@ const RunDuration = ({ currentRun }) => {
   if (currentRun && currentRun.starting) {
     if (currentRun.end) {
       DurationComp = (
-        <span>{`${humanReadableDuration(currentRun.end - currentRun.starting)}`}</span>
+        <span>{`${humanReadableDuration(
+          currentRun.end - currentRun.starting
+        )}`}</span>
       );
     } else {
       DurationComp = (
-        <Duration targetTime={currentRun.starting} isMillisecond={false} showFullDuration={true} />
+        <Duration
+          targetTime={currentRun.starting}
+          isMillisecond={false}
+          showFullDuration={true}
+        />
       );
     }
   }

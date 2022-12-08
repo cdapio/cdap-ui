@@ -55,7 +55,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
   };
 
   updateBatchAndRealtimeConfigs = () => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyArtifactApi.list({ namespace })
       .combineLatest(
         MyRulesEngine.getRulebook({
@@ -64,13 +64,15 @@ export default class AddRulesEngineToPipelineModal extends Component {
         })
       )
       .subscribe((res) => {
-        let artifacts = res[0];
-        let rulebook = res[1].values[0];
-        let batchArtifacts = artifacts.filter((artifact) => artifact.name === 'cdap-data-pipeline');
-        let realtimeArtifacts = artifacts.filter(
+        const artifacts = res[0];
+        const rulebook = res[1].values[0];
+        const batchArtifacts = artifacts.filter(
+          (artifact) => artifact.name === 'cdap-data-pipeline'
+        );
+        const realtimeArtifacts = artifacts.filter(
           (artifact) => artifact.name === 'cdap-data-streams'
         );
-        let yareArtifact = artifacts.filter(
+        const yareArtifact = artifacts.filter(
           (artifact) => artifact.name === RulesEnginePluginArtifact
         );
         if (!yareArtifact.length) {
@@ -81,7 +83,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
         }
         let batchHighestArtifact, realtimeHighestArtifact;
         if (batchArtifacts.length > 1) {
-          let highestBatchArtifactVersion = findHighestVersion(
+          const highestBatchArtifactVersion = findHighestVersion(
             batchArtifacts.map((artifact) => artifact.version),
             true
           );
@@ -92,7 +94,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
           batchHighestArtifact = batchArtifacts[0];
         }
         if (realtimeArtifacts.length > 1) {
-          let highestRealtimeArtifactVersion = findHighestVersion(
+          const highestRealtimeArtifactVersion = findHighestVersion(
             realtimeArtifacts.map((artifact) => artifact.version),
             true
           );
@@ -102,7 +104,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
         } else {
           realtimeHighestArtifact = realtimeArtifacts[0];
         }
-        let rulesEnginePlugin = {
+        const rulesEnginePlugin = {
           name: 'RulesEngine',
           plugin: {
             name: 'RulesEngine',
@@ -115,14 +117,14 @@ export default class AddRulesEngineToPipelineModal extends Component {
             },
           },
         };
-        let batchConfig = {
+        const batchConfig = {
           artifact: batchHighestArtifact,
           config: {
             stages: [rulesEnginePlugin],
             connections: [],
           },
         };
-        let realtimeConfig = {
+        const realtimeConfig = {
           artifact: realtimeHighestArtifact,
           config: {
             stages: [rulesEnginePlugin],
@@ -130,7 +132,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
             connections: [],
           },
         };
-        let batchUrl = window.getHydratorUrl({
+        const batchUrl = window.getHydratorUrl({
           stateName: 'hydrator.create',
           stateParams: {
             namespace,
@@ -138,7 +140,7 @@ export default class AddRulesEngineToPipelineModal extends Component {
             artifactType: batchHighestArtifact.name,
           },
         });
-        let realtimeUrl = window.getHydratorUrl({
+        const realtimeUrl = window.getHydratorUrl({
           stateName: 'hydrator.create',
           stateParams: {
             namespace,
@@ -172,11 +174,17 @@ export default class AddRulesEngineToPipelineModal extends Component {
     if (!this.state.realtimeUrl) {
       return;
     }
-    window.localStorage.setItem(this.state.rulebookid, JSON.stringify(this.state.realtimeConfig));
+    window.localStorage.setItem(
+      this.state.rulebookid,
+      JSON.stringify(this.state.realtimeConfig)
+    );
   };
 
   handleOnBatchUrlClick = () => {
-    window.localStorage.setItem(this.state.rulebookid, JSON.stringify(this.state.batchConfig));
+    window.localStorage.setItem(
+      this.state.rulebookid,
+      JSON.stringify(this.state.batchConfig)
+    );
   };
 
   renderContent = () => {

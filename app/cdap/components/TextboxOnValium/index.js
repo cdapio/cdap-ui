@@ -61,10 +61,11 @@ export default class TextboxOnValium extends Component {
         // If a warning is already shown and the user has set the input text back to the original value,
         // we must allow this block to run
         if (
-          (this.state.originalValue !== this.state.textValue || this.state.isWarning) &&
+          (this.state.originalValue !== this.state.textValue ||
+            this.state.isWarning) &&
           this.props.onWarning
         ) {
-          let isWarning = this.props.onWarning(this.state.textValue);
+          const isWarning = this.props.onWarning(this.state.textValue);
           if (isWarning || (!isWarning && this.state.isWarning)) {
             this.setState({
               isWarning,
@@ -83,7 +84,10 @@ export default class TextboxOnValium extends Component {
       this.props.onChange(this.state.originalValue, true);
       return;
     }
-    this.props.onChange(this.state.textValue, this.state.originalValue === this.state.textValue);
+    this.props.onChange(
+      this.state.textValue,
+      this.state.originalValue === this.state.textValue
+    );
   }
   handleKeyPress(e) {
     if (e.nativeEvent.keyCode === 13) {
@@ -94,7 +98,11 @@ export default class TextboxOnValium extends Component {
       );
     }
     if (e.nativeEvent.keyCode === 27) {
-      this.props.onChange(this.state.originalValue, true, e.nativeEvent.keyCode);
+      this.props.onChange(
+        this.state.originalValue,
+        true,
+        e.nativeEvent.keyCode
+      );
     }
   }
   render() {

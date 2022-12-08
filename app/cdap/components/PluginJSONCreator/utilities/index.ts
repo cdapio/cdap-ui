@@ -178,7 +178,9 @@ export function parsePluginJSON(filename, pluginJSON) {
               widgetType: widgetObj['widget-type'],
               label: widgetObj.label,
               name: widgetObj.name,
-              ...(widgetObj['widget-category'] && { widgetCategory: widgetObj['widget-category'] }),
+              ...(widgetObj['widget-category'] && {
+                widgetCategory: widgetObj['widget-category'],
+              }),
             })
           );
 

@@ -86,7 +86,7 @@ const getComponent = (type) => {
   }
 };
 export default function HyperParamWidget({ type, config, onChange }) {
-  let { comp: Component, props = {} } = getComponent(type);
+  const { comp: Component, props = {} } = getComponent(type);
   return (
     <label className="hyper-param-widget">
       <span className="param-label">{config.label || config.name || ''}</span>

@@ -96,7 +96,12 @@ const MapTypeBase = ({
             setFieldType(newValue);
             onChange('type', newValue);
           }}
-          widgetProps={{ options: schemaTypes, dense: true, inline: true, native: true }}
+          widgetProps={{
+            options: schemaTypes,
+            dense: true,
+            inline: true,
+            native: true,
+          }}
           inputRef={(ref) => (inputEle.current = ref)}
         />
       </MapWrapper>

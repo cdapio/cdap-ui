@@ -32,13 +32,18 @@ import cdapavsc from 'services/cdapavscwrapper';
 import { SchemaEditor } from 'components/AbstractWidget/SchemaEditor';
 
 const mapErrorToMessage = (e) => {
-  let message = e.message;
+  const message = e.message;
   if (message.indexOf('invalid field name') !== -1) {
-    let splitMessage = e.message.split('field name: ');
-    let fieldName = objectQuery(splitMessage, 1) || e.message;
+    const splitMessage = e.message.split('field name: ');
+    const fieldName = objectQuery(splitMessage, 1) || e.message;
     return {
-      message: T.translate('features.DataPrep.TopPanel.invalidFieldNameMessage', { fieldName }),
-      remedies: `${T.translate('features.DataPrep.TopPanel.invalidFieldNameRemedies1')}`,
+      message: T.translate(
+        'features.DataPrep.TopPanel.invalidFieldNameMessage',
+        { fieldName }
+      ),
+      remedies: `${T.translate(
+        'features.DataPrep.TopPanel.invalidFieldNameRemedies1'
+      )}`,
     };
   }
   return { message: e.message };
@@ -98,7 +103,9 @@ export default class SchemaModal extends Component {
           loading: false,
           error:
             objectQuery(err, 'response', 'message') ||
-            T.translate('features.DataPrep.TopPanel.SchemaModal.defaultErrorMessage'),
+            T.translate(
+              'features.DataPrep.TopPanel.SchemaModal.defaultErrorMessage'
+            ),
         });
       }
     );
@@ -130,8 +137,8 @@ export default class SchemaModal extends Component {
   }
 
   download() {
-    let workspaceId = DataPrepStore.getState().dataprep.workspaceId;
-    let filename = `${workspaceId}-schema.json`;
+    const workspaceId = DataPrepStore.getState().dataprep.workspaceId;
+    const filename = `${workspaceId}-schema.json`;
     fileDownload(JSON.stringify([this.state.schema], null, 4), filename);
   }
 
@@ -150,24 +157,34 @@ export default class SchemaModal extends Component {
       content = (
         <div>
           <div className="remedy-message">
-            {objectQuery(this.state, 'error', 'remedies') ? this.state.error.remedies : null}
+            {objectQuery(this.state, 'error', 'remedies')
+              ? this.state.error.remedies
+              : null}
           </div>
           <span>
-            {T.translate('features.DataPrep.TopPanel.invalidFieldNameRemedies2')}
+            {T.translate(
+              'features.DataPrep.TopPanel.invalidFieldNameRemedies2'
+            )}
             <span
               className="btn-link"
               onClick={this.applyDirective.bind(this, 'cleanse-column-names')}
             >
               {T.translate('features.DataPrep.TopPanel.cleanseLinkLabel')}
             </span>
-            {T.translate('features.DataPrep.TopPanel.invalidFieldNameRemedies3')}
+            {T.translate(
+              'features.DataPrep.TopPanel.invalidFieldNameRemedies3'
+            )}
           </span>
         </div>
       );
     } else {
       content = (
         <fieldset disabled>
-          <SchemaEditor visibleRows={10} schema={this.state.schema} disabled={true} />
+          <SchemaEditor
+            visibleRows={10}
+            schema={this.state.schema}
+            disabled={true}
+          />
         </fieldset>
       );
     }
@@ -198,7 +215,11 @@ export default class SchemaModal extends Component {
         <If condition={this.state.error}>
           <CardActionFeedback
             type="DANGER"
-            message={!isNilOrEmpty(this.state.error) ? this.state.error.message : this.state.error}
+            message={
+              !isNilOrEmpty(this.state.error)
+                ? this.state.error.message
+                : this.state.error
+            }
             extendedMessage={this.state.remedies}
           />
         </If>

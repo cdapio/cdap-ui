@@ -14,8 +14,10 @@
  * the License.
  */
 
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
 import Shepherd from 'shepherd.js';
-import 'shepherd.js/dist/css/shepherd-theme-arrows-plain-buttons.css';
+require('shepherd.js/dist/css/shepherd-theme-arrows-plain-buttons.css');
 import 'services/GuidedTour/GuidedTour.scss';
 
 interface IStepButton {
@@ -25,7 +27,7 @@ interface IStepButton {
 }
 
 export interface ITourStep {
-  id: string;
+  id?: string;
   title?: string;
   text: string | string[];
   buttons?: IStepButton[];
@@ -40,10 +42,10 @@ export interface ITourStep {
   popperOptions?: object;
 }
 
-const GuidedTour = function() {
+const GuidedTour = function(this: any) {
   this.addSteps = (stepsArray: ITourStep[]) => {
     stepsArray.forEach((step, index) => {
-      const stepId: string = step.id;
+      const stepId: string = step.id as string;
 
       const stepObj: ITourStep = {
         ...step,
@@ -109,6 +111,7 @@ GuidedTour.prototype = new Shepherd.Tour({
     showCancelLink: true,
   },
 });
+
 GuidedTour.prototype.constructor = GuidedTour;
 
 export default GuidedTour;

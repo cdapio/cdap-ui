@@ -12,7 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 import PropTypes from 'prop-types';
 
 import React from 'react';
@@ -20,9 +20,26 @@ import { Input } from 'reactstrap';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 
 require('./FieldRow.scss');
-const defaultFieldTypes = ['', 'boolean', 'bytes', 'double', 'float', 'int', 'long', 'string'];
+const defaultFieldTypes = [
+  '',
+  'boolean',
+  'bytes',
+  'double',
+  'float',
+  'int',
+  'long',
+  'string',
+];
 
-const FieldRow = ({ className, name, type, isNullable, onKeyUp, onChange, onRemove }) => {
+const FieldRow = ({
+  className,
+  name,
+  type,
+  isNullable,
+  onKeyUp,
+  onChange,
+  onRemove,
+}) => {
   return (
     <tr className={className}>
       <td>
@@ -43,7 +60,11 @@ const FieldRow = ({ className, name, type, isNullable, onKeyUp, onChange, onRemo
         />
       </td>
       <td>
-        <input type="checkbox" checked={isNullable} onChange={onChange.bind(null, 'isNullable')} />
+        <input
+          type="checkbox"
+          checked={isNullable}
+          onChange={onChange.bind(null, 'isNullable')}
+        />
       </td>
       <td>
         <a onClick={onRemove} className="btn btn-sm btn-danger">

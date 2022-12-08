@@ -40,9 +40,16 @@ const TableHeaderView: React.FC<React.PropsWithChildren<ITableHeaderProps>> = ({
   children,
   columnTemplate,
 }) => {
-  const childrenClone = React.Children.map(children, (child: React.ReactElement<any>) => {
-    return cloneElement(child, { columnTemplate, hover: false, alignItems: 'end' });
-  });
+  const childrenClone = React.Children.map(
+    children as React.ReactElement<any>[],
+    (child: React.ReactElement<any>) => {
+      return cloneElement(child, {
+        columnTemplate,
+        hover: false,
+        alignItems: 'end',
+      });
+    }
+  );
   return <div className={classes.gridHeader}>{childrenClone}</div>;
 };
 

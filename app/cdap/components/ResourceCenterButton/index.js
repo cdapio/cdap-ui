@@ -35,12 +35,18 @@ export default class ResourceCenterButton extends Component {
     this.state = {
       showResourceCenter: false,
     };
-    this.eventemitter.on(globalEvents.OPENRESOURCECENTER, this.openResourceCenter);
-    this.eventemitter.on(globalEvents.CLOSERESOURCECENTER, this.closeResourceCenter);
+    this.eventemitter.on(
+      globalEvents.OPENRESOURCECENTER,
+      this.openResourceCenter
+    );
+    this.eventemitter.on(
+      globalEvents.CLOSERESOURCECENTER,
+      this.closeResourceCenter
+    );
   }
   componentDidMount() {
     this.plusButtonSubscription = PlusButtonStore.subscribe(() => {
-      let modalState = PlusButtonStore.getState().modalState;
+      const modalState = PlusButtonStore.getState().modalState;
       this.setState({
         showResourceCenter: modalState,
       });
@@ -50,8 +56,14 @@ export default class ResourceCenterButton extends Component {
     if (this.plusButtonSubscription) {
       this.plusButtonSubscription();
     }
-    this.eventemitter.off(globalEvents.OPENRESOURCECENTER, this.openResourceCenter);
-    this.eventemitter.off(globalEvents.CLOSERESOURCECENTER, this.closeResourceCenter);
+    this.eventemitter.off(
+      globalEvents.OPENRESOURCECENTER,
+      this.openResourceCenter
+    );
+    this.eventemitter.off(
+      globalEvents.CLOSERESOURCECENTER,
+      this.closeResourceCenter
+    );
   }
   openResourceCenter = () => {
     this.setState({
@@ -67,7 +79,10 @@ export default class ResourceCenterButton extends Component {
     return (
       <div>
         <div
-          className={classnames('cask-resourcecenter-button', this.props.className)}
+          className={classnames(
+            'cask-resourcecenter-button',
+            this.props.className
+          )}
           onClick={this.openResourceCenter.bind(this)}
         >
           <img

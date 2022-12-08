@@ -30,7 +30,9 @@ import {
 import T from 'i18n-react';
 import { DragDropContext } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
-import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
+import RulesEngineStore, {
+  RULESENGINEACTIONS,
+} from 'components/RulesEngineHome/RulesEngineStore';
 
 require('./RulesEngineWrapper.scss');
 const PREFIX = 'features.RulesEngine.Home';
@@ -46,7 +48,7 @@ class RulesEngineWrapper extends Component {
 
   componentDidMount() {
     this.rulesStoreSubscription = RulesEngineStore.subscribe(() => {
-      let { rulebooks } = RulesEngineStore.getState();
+      const { rulebooks } = RulesEngineStore.getState();
       if (rulebooks.activeTab && rulebooks.activeTab !== this.state.activeTab) {
         this.setState({
           activeTab: rulebooks.activeTab,
@@ -111,8 +113,12 @@ class RulesEngineWrapper extends Component {
             </NavItem>
           </Nav>
           <TabContent activeTab={this.state.activeTab}>
-            <TabPane tabId="1">{this.state.activeTab === '1' ? <RuleBooksTab /> : null}</TabPane>
-            <TabPane tabId="2">{this.state.activeTab === '2' ? <RulesTab /> : null}</TabPane>
+            <TabPane tabId="1">
+              {this.state.activeTab === '1' ? <RuleBooksTab /> : null}
+            </TabPane>
+            <TabPane tabId="2">
+              {this.state.activeTab === '2' ? <RulesTab /> : null}
+            </TabPane>
           </TabContent>
         </div>
         <div className="right-panel">

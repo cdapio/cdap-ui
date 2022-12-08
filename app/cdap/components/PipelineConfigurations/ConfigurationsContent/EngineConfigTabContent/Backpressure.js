@@ -27,7 +27,8 @@ const PREFIX = 'features.PipelineConfigurations.EngineConfig';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    backpressure: state.properties['system.spark.spark.streaming.backpressure.enabled'],
+    backpressure:
+      state.properties['system.spark.spark.streaming.backpressure.enabled'],
     disabled: ownProps.disabled,
   };
 };
@@ -45,7 +46,9 @@ const mapDispatchToProps = (dispatch) => {
 const Backpressure = ({ backpressure, disabled, onToggle }) => {
   return (
     <div className="label-with-toggle backpressure row">
-      <span className="toggle-label col-4">{T.translate(`${PREFIX}.backpressure`)}</span>
+      <span className="toggle-label col-4">
+        {T.translate(`${PREFIX}.backpressure`)}
+      </span>
       <div className="col-7 toggle-container">
         <ToggleSwitch
           isOn={backpressure}
@@ -70,6 +73,9 @@ Backpressure.propTypes = {
   onToggle: PropTypes.func,
 };
 
-const ConnectedBackpressure = connect(mapStateToProps, mapDispatchToProps)(Backpressure);
+const ConnectedBackpressure = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Backpressure);
 
 export default ConnectedBackpressure;

@@ -27,23 +27,43 @@ require('./ResourceCenter.scss');
 const WIZARD_MAP = {
   createApplicationWizard: {
     wizardType: 'create_app_rc',
-    input: { headerLabel: T.translate('features.Resource-Center.Application.modalheadertitle') },
+    input: {
+      headerLabel: T.translate(
+        'features.Resource-Center.Application.modalheadertitle'
+      ),
+    },
   },
   createArtifactWizard: {
     wizardType: 'create_artifact_rc',
-    input: { headerLabel: T.translate('features.Resource-Center.Artifact.modalheadertitle') },
+    input: {
+      headerLabel: T.translate(
+        'features.Resource-Center.Artifact.modalheadertitle'
+      ),
+    },
   },
   createPluginArtifactWizard: {
     wizardType: 'create_plugin_artifact_rc',
-    input: { headerLabel: T.translate('features.Resource-Center.Plugins.modalheadertitle') },
+    input: {
+      headerLabel: T.translate(
+        'features.Resource-Center.Plugins.modalheadertitle'
+      ),
+    },
   },
   createLibraryWizard: {
     wizardType: 'create_library_rc',
-    input: { headerLabel: T.translate('features.Resource-Center.Library.modalheadertitle') },
+    input: {
+      headerLabel: T.translate(
+        'features.Resource-Center.Library.modalheadertitle'
+      ),
+    },
   },
   createDirectiveArtifactWizard: {
     wizardType: 'create_directive_artifact_rc',
-    input: { headerLabel: T.translate('features.Resource-Center.Directive.modalheadertitle') },
+    input: {
+      headerLabel: T.translate(
+        'features.Resource-Center.Directive.modalheadertitle'
+      ),
+    },
   },
 };
 
@@ -55,7 +75,9 @@ export default class ResourceCenter extends Component {
       {
         // Plugin
         title: T.translate('features.Resource-Center.Plugins.label'),
-        description: T.translate('features.Resource-Center.Plugins.description'),
+        description: T.translate(
+          'features.Resource-Center.Plugins.description'
+        ),
         actionLabel: T.translate('features.Resource-Center.Plugins.actionbtn0'),
         iconClassName: 'icon-plug',
         wizardId: 'createPluginArtifactWizard',
@@ -63,15 +85,21 @@ export default class ResourceCenter extends Component {
       {
         // Driver
         title: T.translate('features.Resource-Center.Artifact.label'),
-        description: T.translate('features.Resource-Center.Artifact.description'),
-        actionLabel: T.translate('features.Resource-Center.Artifact.actionbtn0'),
+        description: T.translate(
+          'features.Resource-Center.Artifact.description'
+        ),
+        actionLabel: T.translate(
+          'features.Resource-Center.Artifact.actionbtn0'
+        ),
         iconClassName: 'icon-artifacts',
         wizardId: 'createArtifactWizard',
       },
       {
         // Library
         title: T.translate('features.Resource-Center.Library.label'),
-        description: T.translate('features.Resource-Center.Library.description'),
+        description: T.translate(
+          'features.Resource-Center.Library.description'
+        ),
         actionLabel: T.translate('features.Resource-Center.Library.actionbtn0'),
         iconClassName: 'icon-library',
         wizardId: 'createLibraryWizard',
@@ -79,8 +107,12 @@ export default class ResourceCenter extends Component {
       {
         // Directives
         title: T.translate('features.Resource-Center.Directive.label'),
-        description: T.translate('features.Resource-Center.Directive.description'),
-        actionLabel: T.translate('features.Resource-Center.Directive.actionbtn0'),
+        description: T.translate(
+          'features.Resource-Center.Directive.description'
+        ),
+        actionLabel: T.translate(
+          'features.Resource-Center.Directive.actionbtn0'
+        ),
         iconClassName: 'icon-directives',
         wizardId: 'createDirectiveArtifactWizard',
       },
@@ -89,8 +121,12 @@ export default class ResourceCenter extends Component {
     const application = {
       // Application
       title: T.translate('features.Resource-Center.Application.label'),
-      description: T.translate('features.Resource-Center.Application.description'),
-      actionLabel: T.translate('features.Resource-Center.Application.actionbtn0'),
+      description: T.translate(
+        'features.Resource-Center.Application.description'
+      ),
+      actionLabel: T.translate(
+        'features.Resource-Center.Application.actionbtn0'
+      ),
       iconClassName: 'icon-app',
       wizardId: 'createApplicationWizard',
     };
@@ -118,7 +154,7 @@ export default class ResourceCenter extends Component {
       return null;
     }
 
-    let activeWizardConfig = WIZARD_MAP[this.state.activeWizard];
+    const activeWizardConfig = WIZARD_MAP[this.state.activeWizard];
 
     return (
       <AbstractWizard

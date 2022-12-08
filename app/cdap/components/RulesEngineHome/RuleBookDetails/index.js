@@ -55,14 +55,15 @@ export default class RuleBookDetails extends Component {
   };
 
   updateState = () => {
-    let { rulebooks } = RulesEngineStore.getState();
+    const { rulebooks } = RulesEngineStore.getState();
     if (isNil(rulebooks.list)) {
       return;
     }
-    let rb = cloneDeep(rulebooks);
-    let activeRulebook = rb.activeRulebookId;
-    let createMode = rb.createRulebook;
-    let rulebookDetails = rb.list.find((rb) => rb.id === activeRulebook) || {};
+    const rb = cloneDeep(rulebooks);
+    const activeRulebook = rb.activeRulebookId;
+    const createMode = rb.createRulebook;
+    const rulebookDetails =
+      rb.list.find((rb) => rb.id === activeRulebook) || {};
     rulebookDetails.rules = rb.activeRulebookRules;
     // FIXME: This will fetch metrics whenever there is an update in the store.
     this.fetchRuleMetrics(rulebookDetails);
@@ -81,12 +82,12 @@ export default class RuleBookDetails extends Component {
     ) {
       return;
     }
-    let metrics = rulebookDetails.rules.map((rule) => {
+    const metrics = rulebookDetails.rules.map((rule) => {
       return `user.${rule.id}.fired`;
     });
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
-    let postBody = {};
-    postBody[`rule.metrics`] = {
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
+    const postBody = {};
+    postBody['rule.metrics'] = {
       tags: {
         namespace: namespace,
         app: '*',
@@ -98,14 +99,16 @@ export default class RuleBookDetails extends Component {
       },
     };
     MyMetricApi.query(null, postBody).subscribe((response) => {
-      let timeseries = response[`rule.metrics`].series;
-      let metricValues = {};
+      const timeseries = response['rule.metrics'].series;
+      const metricValues = {};
       timeseries.map((series) => {
         metricValues[series.metricName] = series.data.map((d) => d.value);
       });
-      let rulebookDetails = { ...this.state.rulebookDetails };
+      const rulebookDetails = { ...this.state.rulebookDetails };
       rulebookDetails.rules = rulebookDetails.rules.map((rule) => {
-        return Object.assign({}, rule, { metric: metricValues[`user.${rule.id}.fired`] });
+        return Object.assign({}, rule, {
+          metric: metricValues[`user.${rule.id}.fired`],
+        });
       });
       this.setState({ rulebookDetails });
     });
@@ -126,35 +129,38 @@ export default class RuleBookDetails extends Component {
     this.setState({
       onApplying: true,
     });
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
-    let rulebookid = this.state.rulebookDetails.id;
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
+    const rulebookid = this.state.rulebookDetails.id;
     MyRulesEngine.getRulebook({
       namespace,
       rulebookid,
     }).subscribe((res) => {
-      let rulebook = res.values[0];
+      const rulebook = res.values[0];
       this.props.onApply(rulebook, rulebookid);
     });
   };
 
   updateRulebook = (rules) => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
-    let urlparams = {
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
+    const urlparams = {
       namespace,
       rulebookid: this.state.rulebookDetails.id,
     };
-    let headers = { 'Content-Type': 'application/json' };
-    let postBody = {
+    const headers = { 'Content-Type': 'application/json' };
+    const postBody = {
       ...this.state.rulebookDetails,
       rules: rules.map((rule) => rule.id),
     };
-    MyRulesEngineApi.updateRulebook(urlparams, postBody, headers).subscribe(() => {
-      getRulesForActiveRuleBook();
-    }, setError);
+    MyRulesEngineApi.updateRulebook(urlparams, postBody, headers).subscribe(
+      () => {
+        getRulesForActiveRuleBook();
+      },
+      setError
+    );
   };
 
   removeRule = (ruleid) => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngine.removeRuleFromRuleBook({
       namespace,
       rulebookid: this.state.rulebookDetails.id,
@@ -165,7 +171,7 @@ export default class RuleBookDetails extends Component {
   };
 
   generateAggregateStats = () => {
-    let metricTotal = {};
+    const metricTotal = {};
     let total = 0;
     if (
       Array.isArray(this.state.rulebookDetails.rules) &&
@@ -184,7 +190,7 @@ export default class RuleBookDetails extends Component {
           total += point;
         });
       });
-      let angles = [];
+      const angles = [];
       Object.keys(metricTotal).forEach((metric) => {
         angles.push({ angle: metricTotal[metric] / total });
       });
@@ -211,7 +217,7 @@ export default class RuleBookDetails extends Component {
           {T.translate('commons.please')}
           <a onClick={() => this.setState({ createMode: true })}>
             {' '}
-            {T.translate(`commons.clickhere`)}{' '}
+            {T.translate('commons.clickhere')}{' '}
           </a>
           {T.translate(`${PREFIX}.addone`)}
         </div>
@@ -220,7 +226,7 @@ export default class RuleBookDetails extends Component {
   };
 
   render() {
-    let { integration } = RulesEngineStore.getState();
+    const { integration } = RulesEngineStore.getState();
     if (this.state.createMode) {
       return this.renderCreateRulebook();
     }
@@ -236,8 +242,8 @@ export default class RuleBookDetails extends Component {
     if (isNil(this.state.activeRuleBook)) {
       return this.renderEmptyView();
     }
-    let { rulebookDetails } = this.state;
-    let angles = this.generateAggregateStats();
+    const { rulebookDetails } = this.state;
+    const angles = this.generateAggregateStats();
     return (
       <div className="rule-book-details">
         <div className="rule-book-name-header">
@@ -246,7 +252,9 @@ export default class RuleBookDetails extends Component {
               {rulebookDetails.id}
             </strong>
             <p className="rule-book-version">
-              {T.translate(`${PREFIX}.version`, { version: rulebookDetails.version })}
+              {T.translate(`${PREFIX}.version`, {
+                version: rulebookDetails.version,
+              })}
             </p>
           </div>
           <div className="rulebook-menu-container">
@@ -260,7 +268,10 @@ export default class RuleBookDetails extends Component {
                 <span>{T.translate(`${PREFIX}.applyBtnLabel`)}</span>
               </button>
             ) : null}
-            <RulebookMenu rulebookid={rulebookDetails.id} embedded={integration.embedded} />
+            <RulebookMenu
+              rulebookid={rulebookDetails.id}
+              embedded={integration.embedded}
+            />
           </div>
         </div>
         <div className="rule-book-content">
@@ -272,12 +283,20 @@ export default class RuleBookDetails extends Component {
               </div>
               <div>
                 <strong>{T.translate(`${PREFIX}.lastmodified`)}: </strong>
-                <span>{moment(rulebookDetails.updated * 1000).format('MM-DD-YY HH:mm')}</span>
+                <span>
+                  {moment(rulebookDetails.updated * 1000).format(
+                    'MM-DD-YY HH:mm'
+                  )}
+                </span>
               </div>
-              <p className="rule-book-description">{rulebookDetails.description}</p>
+              <p className="rule-book-description">
+                {rulebookDetails.description}
+              </p>
             </div>
             <div>
-              {isNil(angles) ? null : <RadialChart data={angles} width={100} height={100} />}
+              {isNil(angles) ? null : (
+                <RadialChart data={angles} width={100} height={100} />
+              )}
             </div>
           </div>
           <RulesList

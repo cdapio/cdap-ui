@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2020 Cask Data, Inc.
  *
@@ -14,17 +15,17 @@
  * the License.
  */
 
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
-let cleanOptions = {
+const cleanOptions = {
   verbose: false,
   dry: false,
 };
 
-var webpackConfig = {
+const webpackConfig = {
   context: __dirname,
   mode: 'development',
   entry: {
@@ -65,7 +66,10 @@ var webpackConfig = {
         test: /\.m?js$/,
         use: ['babel-loader'],
         exclude: [/node_modules/, /lib/],
-        include: [path.join(__dirname, 'server'), path.join(__dirname, 'graphql')],
+        include: [
+          path.join(__dirname, 'server'),
+          path.join(__dirname, 'graphql'),
+        ],
       },
       {
         test: /\.(graphql|gql)$/,

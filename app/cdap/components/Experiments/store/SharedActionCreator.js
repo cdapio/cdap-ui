@@ -22,8 +22,8 @@ import AlgorithmsListStore, {
 import { Observable } from 'rxjs/Observable';
 
 const getAlgorithmLabel = (algorithm) => {
-  let algorithmsList = AlgorithmsListStore.getState();
-  let match = algorithmsList.find((algo) => algo.name === algorithm);
+  const algorithmsList = AlgorithmsListStore.getState();
+  const match = algorithmsList.find((algo) => algo.name === algorithm);
   if (match) {
     return match.label;
   }
@@ -31,10 +31,12 @@ const getAlgorithmLabel = (algorithm) => {
 };
 
 const getHyperParamLabel = (algorithm, hyperparam) => {
-  let algorithmsList = AlgorithmsListStore.getState();
-  let match = algorithmsList.find((algo) => algo.name === algorithm);
+  const algorithmsList = AlgorithmsListStore.getState();
+  const match = algorithmsList.find((algo) => algo.name === algorithm);
   if (match) {
-    let matchingHyperParameter = match.hyperparameters.find((hp) => hp.name === hyperparam);
+    const matchingHyperParameter = match.hyperparameters.find(
+      (hp) => hp.name === hyperparam
+    );
     if (matchingHyperParameter) {
       return matchingHyperParameter.label;
     }
@@ -43,7 +45,7 @@ const getHyperParamLabel = (algorithm, hyperparam) => {
 };
 
 const setAlgorithmsList = () => {
-  let algoList = AlgorithmsListStore.getState();
+  const algoList = AlgorithmsListStore.getState();
   if (algoList.length) {
     return Observable.of();
   }
@@ -53,7 +55,10 @@ const setAlgorithmsList = () => {
   });
 
   getAlgorithmsApi.subscribe((algorithmsList) => {
-    algorithmsList = algorithmsList.map((algo) => ({ ...algo, name: algo.algorithm }));
+    algorithmsList = algorithmsList.map((algo) => ({
+      ...algo,
+      name: algo.algorithm,
+    }));
     AlgorithmsListStore.dispatch({
       type: AlgorithmsStoreActions.SET_ALGORITHMS_LIST,
       payload: { algorithmsList },

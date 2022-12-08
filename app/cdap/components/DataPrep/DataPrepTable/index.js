@@ -23,7 +23,10 @@ import ee from 'event-emitter';
 import classnames from 'classnames';
 import ColumnActionsDropdown from 'components/DataPrep/ColumnActionsDropdown';
 require('./DataPrepTable.scss');
-import { execute, setWorkspace } from 'components/DataPrep/store/DataPrepActionCreator';
+import {
+  execute,
+  setWorkspace,
+} from 'components/DataPrep/store/DataPrepActionCreator';
 import TextboxOnValium from 'components/TextboxOnValium';
 import WarningContainer from 'components/shared/WarningContainer';
 import ColumnHighlighter from 'components/DataPrep/ColumnHighlighter';
@@ -36,7 +39,9 @@ import Page404 from 'components/404';
 // Lazy load polyfill in safari as InteresectionObservers are not implemented there yet.
 (async function() {
   typeof IntersectionObserver === 'undefined'
-    ? await import(/* webpackChunkName: "intersection-observer" */ 'intersection-observer')
+    ? await import(
+        /* webpackChunkName: "intersection-observer" */ 'intersection-observer'
+      )
     : Promise.resolve();
 })();
 
@@ -49,13 +54,18 @@ export default class DataPrepTable extends Component {
 
   constructor(props) {
     super(props);
-    let storeState = DataPrepStore.getState();
-    let workspaceId = storeState.dataprep.workspaceId;
-    let currentWorkspace =
-      storeState.workspaces.list.find((workspace) => workspace.workspaceId === workspaceId) || {};
-    let currentWorkspaceName = currentWorkspace.workspaceName;
+    const storeState = DataPrepStore.getState();
+    const workspaceId = storeState.dataprep.workspaceId;
+    const currentWorkspace =
+      storeState.workspaces.list.find(
+        (workspace) => workspace.workspaceId === workspaceId
+      ) || {};
+    const currentWorkspaceName = currentWorkspace.workspaceName;
     this.state = {
-      headers: storeState.dataprep.headers.map((header) => ({ name: header, edit: false })),
+      headers: storeState.dataprep.headers.map((header) => ({
+        name: header,
+        edit: false,
+      })),
       data: storeState.dataprep.data.map((d, i) =>
         Object.assign({}, d, { uniqueId: uuidV4(), scrollId: i })
       ),
@@ -71,7 +81,7 @@ export default class DataPrepTable extends Component {
     this.eventEmitter = ee(ee);
 
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState();
+      const state = DataPrepStore.getState();
       if (document.getElementById('dataprep-table-id')) {
         // Scroll to the top of the table to avoid un-necessary pagination
         document.getElementById('dataprep-table-id').scrollTop = 0;
@@ -81,7 +91,10 @@ export default class DataPrepTable extends Component {
         data: state.dataprep.data.map((d, i) =>
           Object.assign({}, d, { uniqueId: uuidV4(), scrollId: i })
         ),
-        headers: state.dataprep.headers.map((header) => ({ name: header, edit: false })),
+        headers: state.dataprep.headers.map((header) => ({
+          name: header,
+          edit: false,
+        })),
         loading: !state.dataprep.initialized && !state.error.dataError,
         directivesLength: state.dataprep.directives.length,
         workspaceId: state.dataprep.workspaceId,
@@ -98,27 +111,32 @@ export default class DataPrepTable extends Component {
   }
 
   componentDidMount() {
-    document.querySelectorAll(`#dataprep-table tbody tr`).forEach((entry) => {
+    document.querySelectorAll('#dataprep-table tbody tr').forEach((entry) => {
       this.io.observe(entry);
     });
   }
 
   componentDidUpdate() {
-    document.querySelectorAll(`#dataprep-table tbody tr`).forEach((entry) => {
+    document.querySelectorAll('#dataprep-table tbody tr').forEach((entry) => {
       this.io.observe(entry);
     });
   }
 
   toggleColumnSelect = (columnName) => {
-    let currentSelectedHeaders = this.state.selectedHeaders.slice();
+    const currentSelectedHeaders = this.state.selectedHeaders.slice();
     if (!this.columnIsSelected(columnName)) {
       currentSelectedHeaders.push(columnName);
-      let elem = document.querySelector(`#columns-tab-row-${columnName} .row-header`);
+      const elem = document.querySelector(
+        `#columns-tab-row-${columnName} .row-header`
+      );
       if (elem) {
         elem.scrollIntoView();
       }
     } else {
-      currentSelectedHeaders.splice(currentSelectedHeaders.indexOf(columnName), 1);
+      currentSelectedHeaders.splice(
+        currentSelectedHeaders.indexOf(columnName),
+        1
+      );
     }
     DataPrepStore.dispatch({
       type: DataPrepActions.setSelectedHeaders,
@@ -153,7 +171,7 @@ export default class DataPrepTable extends Component {
   };
 
   switchToEditColumnName = (head) => {
-    let newHeaders = this.state.headers.map((header) => {
+    const newHeaders = this.state.headers.map((header) => {
       if (header.name === head.name) {
         return Object.assign({}, header, {
           edit: !header.edit,
@@ -172,21 +190,31 @@ export default class DataPrepTable extends Component {
   };
 
   showWarningMessage(index, currentValue) {
-    const dupeNames = this.state.headers.filter((header) => header.name === currentValue);
+    const dupeNames = this.state.headers.filter(
+      (header) => header.name === currentValue
+    );
     const headers = this.state.headers;
     const matchedHeader = headers[index];
     if (dupeNames.length > 0 && headers[index].name !== currentValue) {
       matchedHeader.showDuplicateWarning = true;
       matchedHeader.editedColumnName = currentValue;
       this.setState({
-        headers: [...headers.slice(0, index), matchedHeader, ...headers.slice(index + 1)],
+        headers: [
+          ...headers.slice(0, index),
+          matchedHeader,
+          ...headers.slice(index + 1),
+        ],
       });
       return true;
     } else if (matchedHeader.showDuplicateWarning) {
       matchedHeader.showDuplicateWarning = false;
       delete matchedHeader.editedColumnName;
       this.setState({
-        headers: [...headers.slice(0, index), matchedHeader, ...headers.slice(index + 1)],
+        headers: [
+          ...headers.slice(0, index),
+          matchedHeader,
+          ...headers.slice(index + 1),
+        ],
       });
     }
 
@@ -194,14 +222,22 @@ export default class DataPrepTable extends Component {
       matchedHeader.showInvalidWarning = true;
       matchedHeader.editedColumnName = currentValue;
       this.setState({
-        headers: [...headers.slice(0, index), matchedHeader, ...headers.slice(index + 1)],
+        headers: [
+          ...headers.slice(0, index),
+          matchedHeader,
+          ...headers.slice(index + 1),
+        ],
       });
       return true;
     } else if (matchedHeader.showInvalidWarning) {
       matchedHeader.showInvalidWarning = false;
       delete matchedHeader.editedColumnName;
       this.setState({
-        headers: [...headers.slice(0, index), matchedHeader, ...headers.slice(index + 1)],
+        headers: [
+          ...headers.slice(0, index),
+          matchedHeader,
+          ...headers.slice(index + 1),
+        ],
       });
     }
 
@@ -213,8 +249,8 @@ export default class DataPrepTable extends Component {
       return;
     }
 
-    let headers = this.state.headers;
-    let matchedHeader = headers[index];
+    const headers = this.state.headers;
+    const matchedHeader = headers[index];
     if (!noChange) {
       this.applyDirective(`rename ${matchedHeader.name} ${changedValue}`);
       matchedHeader.name = changedValue;
@@ -224,7 +260,11 @@ export default class DataPrepTable extends Component {
     matchedHeader.showInvalidWarning = false;
     delete matchedHeader.editedColumnName;
     this.setState({
-      headers: [...headers.slice(0, index), matchedHeader, ...headers.slice(index + 1)],
+      headers: [
+        ...headers.slice(0, index),
+        matchedHeader,
+        ...headers.slice(index + 1),
+      ],
     });
   }
 
@@ -255,7 +295,8 @@ export default class DataPrepTable extends Component {
         id = id.split('-').pop();
         id = parseInt(id, 10);
         if (entry.isIntersecting) {
-          lastVisibleElement = id + 50 > this.state.windowSize ? id + DEFAULT_WINDOW_SIZE : id;
+          lastVisibleElement =
+            id + 50 > this.state.windowSize ? id + DEFAULT_WINDOW_SIZE : id;
         }
       }
       if (lastVisibleElement > this.state.windowSize) {
@@ -271,8 +312,8 @@ export default class DataPrepTable extends Component {
   );
 
   renderDataprepTable() {
-    let headers = [...this.state.headers];
-    let data = this.state.data;
+    const headers = [...this.state.headers];
+    const data = this.state.data;
     return (
       <table className="table table-bordered" id="dataprep-table">
         <thead className="thead-inverse">
@@ -309,18 +350,29 @@ export default class DataPrepTable extends Component {
                       ) : (
                         <div className="warning-container-wrapper float-left">
                           <TextboxOnValium
-                            onChange={this.handleSaveEditedColumnName.bind(this, index)}
+                            onChange={this.handleSaveEditedColumnName.bind(
+                              this,
+                              index
+                            )}
                             value={head.name}
-                            onWarning={this.showWarningMessage.bind(this, index)}
+                            onWarning={this.showWarningMessage.bind(
+                              this,
+                              index
+                            )}
                             allowSpace={false}
                             shouldSelect={true}
                           />
-                          {head.showDuplicateWarning || head.showInvalidWarning ? (
+                          {head.showDuplicateWarning ||
+                          head.showInvalidWarning ? (
                             <WarningContainer
                               message={
                                 head.showDuplicateWarning
-                                  ? T.translate(`${PREFIX}.copyToNewColumn.inputDuplicate`)
-                                  : T.translate(`${PREFIX}.invalidCharacterWarning`)
+                                  ? T.translate(
+                                      `${PREFIX}.copyToNewColumn.inputDuplicate`
+                                    )
+                                  : T.translate(
+                                      `${PREFIX}.invalidCharacterWarning`
+                                    )
                               }
                             >
                               <div className="warning-btns-container">
@@ -333,7 +385,9 @@ export default class DataPrepTable extends Component {
                                     true
                                   )}
                                 >
-                                  {T.translate('features.DataPrep.Directives.accept')}
+                                  {T.translate(
+                                    'features.DataPrep.Directives.accept'
+                                  )}
                                 </div>
                               </div>
                             </WarningContainer>
@@ -342,10 +396,13 @@ export default class DataPrepTable extends Component {
                       )}
                       <span
                         onClick={this.toggleColumnSelect.bind(this, head.name)}
-                        className={classnames('float-right fa column-header-checkbox', {
-                          'fa-square-o': !this.columnIsSelected(head.name),
-                          'fa-check-square': this.columnIsSelected(head.name),
-                        })}
+                        className={classnames(
+                          'float-right fa column-header-checkbox',
+                          {
+                            'fa-square-o': !this.columnIsSelected(head.name),
+                            'fa-check-square': this.columnIsSelected(head.name),
+                          }
+                        )}
                       />
                     </div>
                   </div>
@@ -385,14 +442,16 @@ export default class DataPrepTable extends Component {
       );
     }
 
-    let headers = this.state.headers;
-    let data = this.state.data;
+    const headers = this.state.headers;
+    const data = this.state.data;
 
     if (!this.state.workspaceId && !this.state.error) {
       return (
         <div className="dataprep-table empty">
           <div>
-            <h5 className="text-center">Please select or upload a file to wrangle data</h5>
+            <h5 className="text-center">
+              Please select or upload a file to wrangle data
+            </h5>
           </div>
         </div>
       );
@@ -408,7 +467,9 @@ export default class DataPrepTable extends Component {
       }
       let errorMessageTitle = T.translate(`${PREFIX}.dataErrorMessageTitle`);
       if (workspaceName) {
-        errorMessageTitle = T.translate(`${PREFIX}.dataErrorMessageTitle2`, { workspaceName });
+        errorMessageTitle = T.translate(`${PREFIX}.dataErrorMessageTitle2`, {
+          workspaceName,
+        });
       }
       if (this.state.error.message) {
         errorMessageTitle = this.state.error.message;
@@ -425,7 +486,9 @@ export default class DataPrepTable extends Component {
         <div className="dataprep-table empty">
           {this.state.directivesLength === 0 ? (
             <div>
-              <h5 className="text-center">{T.translate(`${PREFIX}.emptyWorkspace`)}</h5>
+              <h5 className="text-center">
+                {T.translate(`${PREFIX}.emptyWorkspace`)}
+              </h5>
             </div>
           ) : (
             <div>
@@ -435,7 +498,7 @@ export default class DataPrepTable extends Component {
         </div>
       );
     }
-    let { highlightColumns } = DataPrepStore.getState().dataprep;
+    const { highlightColumns } = DataPrepStore.getState().dataprep;
     return (
       <div
         className={classnames('dataprep-table', {

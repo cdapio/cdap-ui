@@ -59,7 +59,11 @@ function Comment({
   disabled = false,
 }: ICommentProps) {
   const isThereExistingComment = () =>
-    Array.isArray(comments) ? comments.length > 0 && comments[0].content.length > 0 : false;
+    Array.isArray(comments)
+      ? // CDAP-20181 this is written weird but it should be fine
+        // @ts-ignore
+        comments.length > 0 && comments[0].content.length > 0
+      : false;
   const classes = useStyles({ highlight: isThereExistingComment() });
   const [anchorRef, setAnchorRef] = React.useState(null);
   const [anchorId] = React.useState(`id-${uuidv4()}`);
@@ -90,7 +94,7 @@ function Comment({
 
   React.useEffect(() => {
     if (isOpen !== isCommentOpen) {
-      setIsCommentOpen(isOpen);
+      setIsCommentOpen(!!isOpen);
     }
   }, [isOpen]);
   React.useEffect(() => {
@@ -100,11 +104,11 @@ function Comment({
     <div className={classes.root} onClick={preventPropagation}>
       <CommentIcon onClick={toggleComments} id={anchorId} />
       <DynamicAnchoredComment
-        comments={localComments}
+        comments={localComments as any}
         commentsId={commentsId}
         anchorEl={anchorRef || anchorId}
         isOpen={isCommentOpen}
-        onClose={onClose}
+        onClose={onClose as any}
         onChange={onChange}
         disabled={disabled}
       />

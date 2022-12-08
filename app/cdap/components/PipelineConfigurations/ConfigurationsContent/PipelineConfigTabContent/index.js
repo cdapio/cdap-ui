@@ -29,8 +29,13 @@ const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
 
 function PipelineConfigTabContent({ pipelineType }) {
   return (
-    <div id="pipeline-config-tab-content" className="configuration-step-content">
-      <div className="step-content-heading">{T.translate(`${PREFIX}.contentHeading`)}</div>
+    <div
+      id="pipeline-config-tab-content"
+      className="configuration-step-content"
+    >
+      <div className="step-content-heading">
+        {T.translate(`${PREFIX}.contentHeading`)}
+      </div>
       {pipelineType === GLOBALS.etlDataStreams ? (
         <div>
           <BatchInterval />
@@ -52,6 +57,8 @@ const mapStateToProps = (state) => {
     pipelineType: state.pipelineVisualConfiguration.pipelineType,
   };
 };
-const ConnectedPipelineConfigTabContent = connect(mapStateToProps)(PipelineConfigTabContent);
+const ConnectedPipelineConfigTabContent = connect(mapStateToProps)(
+  PipelineConfigTabContent
+);
 
 export default ConnectedPipelineConfigTabContent;

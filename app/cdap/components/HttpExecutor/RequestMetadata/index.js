@@ -50,7 +50,7 @@ const mapDispatch = (dispatch) => {
 };
 
 function RequestMetadataView({ activeTab, onTabClick, method }) {
-  let bodyDisabled = ['GET', 'DELETE'].indexOf(method) !== -1;
+  const bodyDisabled = ['GET', 'DELETE'].indexOf(method) !== -1;
 
   return (
     <div className="request-metadata">
@@ -104,6 +104,9 @@ MetadataRequestBody.propTypes = {
   activeTab: PropTypes.number,
 };
 
-const RequestMetadata = connect(mapStateToProps, mapDispatch)(RequestMetadataView);
+const RequestMetadata = connect(
+  mapStateToProps,
+  mapDispatch
+)(RequestMetadataView);
 
 export default RequestMetadata;

@@ -100,7 +100,10 @@ const DEFAULT_ACTIVE_STEP = {
   step_name: CREATION_STEPS.DATAPREP_CONNECTIONS,
 };
 
-const experiments_create = (state = DEFAULT_EXPERIMENTS_CREATE_VALUE, action = defaultAction) => {
+const experiments_create = (
+  state = DEFAULT_EXPERIMENTS_CREATE_VALUE,
+  action = defaultAction
+) => {
   switch (action.type) {
     case ACTIONS.SET_EXPERIMENT_NAME:
       return {
@@ -134,7 +137,13 @@ const experiments_create = (state = DEFAULT_EXPERIMENTS_CREATE_VALUE, action = d
       };
     case ACTIONS.SET_EXPERIMENT_METADATA_FOR_EDIT:
     case ACTIONS.SET_EXPERIMENT_MODEL_FOR_EDIT: {
-      let { name, description, outcome, srcpath, workspaceId } = action.payload.experimentDetails;
+      const {
+        name,
+        description,
+        outcome,
+        srcpath,
+        workspaceId,
+      } = action.payload.experimentDetails;
       return {
         ...state,
         name,
@@ -164,7 +173,10 @@ const experiments_create = (state = DEFAULT_EXPERIMENTS_CREATE_VALUE, action = d
   }
 };
 
-const model_create = (state = DEFAULT_MODEL_CREATE_VALUE, action = defaultAction) => {
+const model_create = (
+  state = DEFAULT_MODEL_CREATE_VALUE,
+  action = defaultAction
+) => {
   switch (action.type) {
     case ACTIONS.SET_MODEL_ID:
       return {
@@ -217,7 +229,7 @@ const model_create = (state = DEFAULT_MODEL_CREATE_VALUE, action = defaultAction
         algorithmsList: action.payload.algorithmsList,
       };
     case ACTIONS.UPDATE_HYPER_PARAM: {
-      let { key, value } = action.payload;
+      const { key, value } = action.payload;
       return {
         ...state,
         algorithm: {
@@ -236,7 +248,7 @@ const model_create = (state = DEFAULT_MODEL_CREATE_VALUE, action = defaultAction
         schema: action.payload.schema || state.schema,
       };
     case ACTIONS.SET_EXPERIMENT_MODEL_FOR_EDIT: {
-      let { name, description, id: modelId } = action.payload.modelDetails;
+      const { name, description, id: modelId } = action.payload.modelDetails;
       return {
         ...state,
         name,
@@ -250,7 +262,9 @@ const model_create = (state = DEFAULT_MODEL_CREATE_VALUE, action = defaultAction
         ...state,
         validAlgorithmsList: state.algorithmsList.filter(
           (algo) =>
-            action.payload.validAlgorithmsList.map((al) => al.name).indexOf(algo.algorithm) !== -1
+            action.payload.validAlgorithmsList
+              .map((al) => al.name)
+              .indexOf(algo.algorithm) !== -1
         ),
       };
     case ACTIONS.SET_MODEL_TRAINED:
@@ -272,12 +286,12 @@ const model_create = (state = DEFAULT_MODEL_CREATE_VALUE, action = defaultAction
 
 const active_step = (state = DEFAULT_ACTIVE_STEP, action = defaultAction) => {
   const getActiveStep = (state) => {
-    let { override } = state.active_step;
+    const { override } = state.active_step;
     if (override) {
       return state.active_step;
     }
-    let { name, workspaceId } = state.experiments_create;
-    let { modelId, isSplitFinalized, algorithm } = state.model_create;
+    const { name, workspaceId } = state.experiments_create;
+    const { modelId, isSplitFinalized, algorithm } = state.model_create;
     if (!workspaceId) {
       if (name) {
         return {
@@ -349,7 +363,7 @@ const active_step = (state = DEFAULT_ACTIVE_STEP, action = defaultAction) => {
         step_name: action.payload.active_step,
       };
     case ACTIONS.SET_SPLIT_FINALIZED: {
-      let newState = {
+      const newState = {
         ...state,
         model_create: {
           ...state.model_create,
@@ -363,7 +377,13 @@ const active_step = (state = DEFAULT_ACTIVE_STEP, action = defaultAction) => {
       return getActiveStep(newState);
     }
     case ACTIONS.SET_EXPERIMENT_METADATA_FOR_EDIT: {
-      let { name, description, outcome, srcpath, workspaceId } = action.payload.experimentDetails;
+      const {
+        name,
+        description,
+        outcome,
+        srcpath,
+        workspaceId,
+      } = action.payload.experimentDetails;
       const newState = {
         experiments_create: {
           ...state.experiments_create,
@@ -379,14 +399,14 @@ const active_step = (state = DEFAULT_ACTIVE_STEP, action = defaultAction) => {
       return getActiveStep(newState);
     }
     case ACTIONS.SET_EXPERIMENT_MODEL_FOR_EDIT: {
-      let {
+      const {
         name: experimentName,
         description: experimentDescription,
         outcome,
         srcpath,
         workspaceId,
       } = action.payload.experimentDetails;
-      let {
+      const {
         name: modelName,
         description: modelDescription,
         id: modelId,

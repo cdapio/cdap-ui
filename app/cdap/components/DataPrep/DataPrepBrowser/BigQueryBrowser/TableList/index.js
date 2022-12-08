@@ -32,7 +32,7 @@ import T from 'i18n-react';
 import { objectQuery } from 'services/helpers';
 import history from 'services/history';
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.BigQueryBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.BigQueryBrowser';
 
 const TableListComp = ({ tableList, datasetId, createWorkspace }) => {
   if (!tableList.length) {
@@ -102,7 +102,7 @@ class TableListView extends Component {
       return;
     }
 
-    let { datasetId, connectionId } = this.props.match.params;
+    const { datasetId, connectionId } = this.props.match.params;
 
     listBigQueryTables(connectionId, datasetId);
   }
@@ -110,9 +110,9 @@ class TableListView extends Component {
   createWorkspace = (tableId) => {
     setBigQueryLoading();
 
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
       datasetId: this.props.datasetId,
@@ -124,8 +124,11 @@ class TableListView extends Component {
 
     MyDataPrepApi.readBigQueryTable(params).subscribe(
       (res) => {
-        let workspaceId = objectQuery(res, 'values', 0, 'id');
-        if (this.props.onWorkspaceCreate && typeof this.props.onWorkspaceCreate === 'function') {
+        const workspaceId = objectQuery(res, 'values', 0, 'id');
+        if (
+          this.props.onWorkspaceCreate &&
+          typeof this.props.onWorkspaceCreate === 'function'
+        ) {
           this.props.onWorkspaceCreate(workspaceId);
           return;
         }
@@ -142,10 +145,10 @@ class TableListView extends Component {
       return <LoadingSVGCentered />;
     }
 
-    let Tag = this.props.enableRouting ? Link : 'span';
-    let namespace = getCurrentNamespace();
+    const Tag = this.props.enableRouting ? Link : 'span';
+    const namespace = getCurrentNamespace();
 
-    let path = `/ns/${namespace}/connections/bigquery/${this.props.connectionId}`;
+    const path = `/ns/${namespace}/connections/bigquery/${this.props.connectionId}`;
 
     return (
       <div className="list-view-container">

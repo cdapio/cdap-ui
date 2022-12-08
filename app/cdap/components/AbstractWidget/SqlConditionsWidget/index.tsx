@@ -18,7 +18,6 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import { IWidgetProps } from 'components/AbstractWidget';
-import If from 'components/shared/If';
 import React from 'react';
 import Rule from 'components/AbstractWidget/SqlConditionsWidget/Rule';
 import ThemeWrapper from 'components/ThemeWrapper';
@@ -48,9 +47,9 @@ export interface IStage {
   stageName: string;
 }
 
-export interface IRule extends Array<IStage> {}
+export type IRule = IStage[];
 
-interface IRules extends Array<IRule> {}
+type IRules = IRule[];
 
 export interface IInputSchema {
   [key: string]: string[];
@@ -59,8 +58,8 @@ export interface IInputSchema {
 interface ISqlConditionsProps extends IWidgetProps<null>, WithStyles<typeof styles> {}
 
 interface ISqlConditionsWidgetState {
-  warning: string;
-  error: string;
+  warning?: string;
+  error?: string;
   stageList: string[];
   rules: IRules;
   mapInputSchema: IInputSchema;
@@ -70,9 +69,9 @@ class SqlConditionsWidgetView extends React.Component<
   ISqlConditionsProps,
   ISqlConditionsWidgetState
 > {
-  public state = {
-    warning: null,
-    error: null,
+  public state: ISqlConditionsWidgetState = {
+    warning: undefined,
+    error: undefined,
     stageList: [],
     rules: [],
     mapInputSchema: {},
@@ -102,10 +101,12 @@ class SqlConditionsWidgetView extends React.Component<
   private formatOutput = () => {
     this.checkRulesForValidStageNames();
     if (this.state.stageList.length < 2) {
-      this.props.onChange('');
+      if (typeof this.props.onChange === 'function') {
+        this.props.onChange('');
+      }
       return;
     }
-    const outputArr = [];
+    const outputArr: any[] = [];
     this.state.rules.forEach((rule) => {
       const ruleCheck = rule.filter((field) => {
         return !field.fieldName;
@@ -115,7 +116,9 @@ class SqlConditionsWidgetView extends React.Component<
       }
       outputArr.push(this.formatRule(rule));
     });
-    this.props.onChange(outputArr.join(' & '));
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(outputArr.join(' & '));
+    }
   };
 
   private formatRule(rule: IRule) {
@@ -126,7 +129,7 @@ class SqlConditionsWidgetView extends React.Component<
     if (this.state.stageList.length === 0) {
       return;
     }
-    const rules = [];
+    const rules: any[] = [];
     this.state.stageList.forEach((stage) => {
       rules.push({
         stageName: stage,
@@ -153,9 +156,9 @@ class SqlConditionsWidgetView extends React.Component<
   };
 
   private initializeOptions = () => {
-    const stageList = [];
+    const stageList: any[] = [];
     const mapInputSchema = {};
-    let error = null;
+    let error: string | undefined;
     const inputSchema = objectQuery(this.props, 'extraConfig', 'inputSchema') || [];
 
     inputSchema.forEach((input) => {
@@ -175,8 +178,8 @@ class SqlConditionsWidgetView extends React.Component<
 
   private init = () => {
     const { error, stageList, mapInputSchema } = this.initializeOptions();
-    let warning = null;
-    let rules = [];
+    let warning: any = null;
+    let rules: any[] = [];
     if (!this.props.value) {
       this.setState({ error, stageList, mapInputSchema }, this.addRule);
       return;
@@ -186,7 +189,7 @@ class SqlConditionsWidgetView extends React.Component<
       .split('&')
       .map((rule) => rule.trim());
     modelSplit.forEach((rule) => {
-      const rulesArr = [];
+      const rulesArr: any[] = [];
       rule.split('=').forEach((field) => {
         const splitField = field.trim().split('.');
         // Not including rule if stage has been disconnected
@@ -228,12 +231,12 @@ class SqlConditionsWidgetView extends React.Component<
     const { classes, disabled, errors } = this.props;
     return (
       <div className={classes.root}>
-        <If condition={this.state.error && this.state.stageList.length > 0}>
+        {this.state.error && this.state.stageList.length > 0 && (
           <div className={classnames(classes.textDanger, 'text-danger')}>{this.state.error}</div>
-        </If>
-        <If condition={this.state.warning && !this.state.error}>
+        )}
+        {this.state.warning && !this.state.error && (
           <div className="text-warning">{this.state.warning}</div>
-        </If>
+        )}
         <div className={classes.rulesContainer}>
           {this.state.rules.map((rule, i) => {
             const errorObj =
@@ -251,7 +254,7 @@ class SqlConditionsWidgetView extends React.Component<
                 rulesCount={this.state.rules.length}
                 inputSchema={this.state.mapInputSchema}
                 addRule={this.addRule}
-                disabled={disabled}
+                disabled={!!disabled}
                 updateRule={(changedRule: IRule) => this.updateRule(changedRule, i)}
                 deleteRule={this.deleteRule}
                 error={errorStr}
@@ -259,9 +262,9 @@ class SqlConditionsWidgetView extends React.Component<
             );
           })}
         </div>
-        <If condition={this.state.stageList.length === 0}>
+        {this.state.stageList.length === 0 && (
           <h4 className={classes.emptyMessage}>No input stages</h4>
-        </If>
+        )}
       </div>
     );
   }

@@ -58,14 +58,14 @@ function DynamicAnchor({
   disabled = false,
 }: IDynamicAnchorProps) {
   if (!comments || (Array.isArray(comments) && !comments.length)) {
-    comments = cloneDeep(DEFAULT_COMMENTS);
+    comments = cloneDeep(DEFAULT_COMMENTS) as any;
   }
   const classes = useStyles();
-  const [localComments, setLocalComments] = React.useState(comments);
-  const [localAnchorEl, setLocalAnchorEl] = React.useState(null);
+  const [localComments, setLocalComments] = React.useState<any>(comments);
+  const [localAnchorEl, setLocalAnchorEl] = React.useState<HTMLElement | any>(null);
 
   const isEmptyComment = (lc: IComment[]) => {
-    return Array.isArray(lc) && lc.length === 1 && lc[0].content.length === 0;
+    return Array.isArray(lc) && lc.length === 1 && lc[0].content?.length === 0;
   };
 
   const setAnchorElement = () => {
@@ -91,7 +91,7 @@ function DynamicAnchor({
     if (typeof onChange === 'function') {
       if (id === 0) {
         setLocalComments(cloneDeep(DEFAULT_COMMENTS));
-        onChange(commentsId, null);
+        onChange(commentsId, null as any);
         onClickAway();
       } else {
         const newComments = [...comments.slice(0, id), ...comments.slice(id + 1)];

@@ -84,7 +84,9 @@ export default class TimeRangePicker extends Component {
       hour = this.state.hour,
       minute = this.state.minute;
 
-    let initTime = this.state[type] ? this.state[type] : this.state[this.state.displayCalendar];
+    const initTime = this.state[type]
+      ? this.state[type]
+      : this.state[this.state.displayCalendar];
 
     if (initTime) {
       const time = new Date(initTime);
@@ -102,7 +104,7 @@ export default class TimeRangePicker extends Component {
   };
 
   changeHour = (e) => {
-    let hour = e.target.value;
+    const hour = e.target.value;
 
     this.setState(
       {
@@ -116,7 +118,7 @@ export default class TimeRangePicker extends Component {
   };
 
   changeMinute = (e) => {
-    let minute = e.target.value;
+    const minute = e.target.value;
 
     this.setState(
       {
@@ -161,7 +163,7 @@ export default class TimeRangePicker extends Component {
   };
 
   calculateDisplayTime = (timeObj) => {
-    let timeInfo = {
+    const timeInfo = {
       date: this.state.date,
       hour: this.state.hour,
       minute: this.state.minute,
@@ -272,7 +274,9 @@ export default class TimeRangePicker extends Component {
           <div className="time">
             <div
               className={classnames('time-wrapper', {
-                active: !this.props.displayOnly && this.state.displayCalendar === 'start',
+                active:
+                  !this.props.displayOnly &&
+                  this.state.displayCalendar === 'start',
               })}
               onClick={this.changeDisplay.bind(this, 'start')}
             >
@@ -285,7 +289,9 @@ export default class TimeRangePicker extends Component {
             <div className="time">
               <div
                 className={classnames('time-wrapper', {
-                  active: !this.props.displayOnly && this.state.displayCalendar === 'end',
+                  active:
+                    !this.props.displayOnly &&
+                    this.state.displayCalendar === 'end',
                 })}
                 onClick={this.changeDisplay.bind(this, 'end')}
               >

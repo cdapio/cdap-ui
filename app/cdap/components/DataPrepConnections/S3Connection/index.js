@@ -22,7 +22,9 @@ import NamespaceStore from 'services/NamespaceStore';
 import T from 'i18n-react';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import MyDataPrepApi from 'api/dataprep';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import CardActionFeedback, {
+  CARD_ACTION_TYPES,
+} from 'components/shared/CardActionFeedback';
 import { objectQuery } from 'services/helpers';
 import BtnWithLoading from 'components/shared/BtnWithLoading';
 import ee from 'event-emitter';
@@ -130,9 +132,9 @@ export default class S3Connection extends Component {
 
     this.setState({ loading: true });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
     };
@@ -143,7 +145,7 @@ export default class S3Connection extends Component {
           accessSecretKey = objectQuery(res, 'properties', 'accessSecretKey'),
           region = objectQuery(res, 'properties', 'region');
 
-        let name = this.props.mode === 'EDIT' ? res.name : '';
+        const name = this.props.mode === 'EDIT' ? res.name : '';
 
         this.setState({
           name,
@@ -172,15 +174,18 @@ export default class S3Connection extends Component {
   }
 
   addConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.S3,
       properties: this.constructProperties(),
     };
 
-    MyDataPrepApi.createConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.createConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       () => {
         this.setState({ error: null });
         this.props.onAdd();
@@ -189,21 +194,23 @@ export default class S3Connection extends Component {
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
   }
 
   editConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
     };
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       id: this.props.connectionId,
       type: ConnectionType.S3,
@@ -213,14 +220,19 @@ export default class S3Connection extends Component {
     MyDataPrepApi.updateConnection(params, requestBody).subscribe(
       () => {
         this.setState({ error: null });
-        this.eventEmitter.emit('DATAPREP_CONNECTION_EDIT_S3', this.props.connectionId);
+        this.eventEmitter.emit(
+          'DATAPREP_CONNECTION_EDIT_S3',
+          this.props.connectionId
+        );
         this.props.onAdd();
         this.props.close();
       },
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
@@ -236,9 +248,9 @@ export default class S3Connection extends Component {
       error: null,
     });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.S3,
       properties: {
@@ -248,7 +260,10 @@ export default class S3Connection extends Component {
       },
     };
 
-    MyDataPrepApi.s3TestConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.s3TestConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       (res) => {
         this.setState({
           connectionResult: {
@@ -261,7 +276,7 @@ export default class S3Connection extends Component {
       (err) => {
         console.log('Error testing S3 connection', err);
 
-        let errorMessage =
+        const errorMessage =
           objectQuery(err, 'response', 'message') ||
           objectQuery(err, 'response') ||
           T.translate(`${PREFIX}.defaultTestErrorMessage`);
@@ -292,7 +307,7 @@ export default class S3Connection extends Component {
   };
 
   renderTestButton() {
-    let disabled =
+    const disabled =
       !this.state.name ||
       !this.state.accessKeyId ||
       !this.state.accessSecretKey ||
@@ -311,7 +326,7 @@ export default class S3Connection extends Component {
   }
 
   renderAddConnectionButton() {
-    let disabled =
+    const disabled =
       !this.state.name ||
       !this.state.accessKeyId ||
       !this.state.accessSecretKey ||
@@ -325,7 +340,11 @@ export default class S3Connection extends Component {
 
     return (
       <ModalFooter>
-        <button className="btn btn-primary" onClick={onClickFn} disabled={disabled}>
+        <button
+          className="btn btn-primary"
+          onClick={onClickFn}
+          disabled={disabled}
+        >
           {T.translate(`${PREFIX}.Buttons.${this.props.mode}`)}
         </button>
 
@@ -377,7 +396,9 @@ export default class S3Connection extends Component {
                   widgetProperty={{
                     'widget-type': 'securekey-text',
                     'widget-attributes': {
-                      placeholder: T.translate(`${PREFIX}.Placeholders.accessKeyId`).toString(),
+                      placeholder: T.translate(
+                        `${PREFIX}.Placeholders.accessKeyId`
+                      ).toString(),
                     },
                   }}
                   value={this.state.accessKeyId}
@@ -400,7 +421,9 @@ export default class S3Connection extends Component {
                   widgetProperty={{
                     'widget-type': 'securekey-password',
                     'widget-attributes': {
-                      placeholder: T.translate(`${PREFIX}.Placeholders.accessSecretKey`).toString(),
+                      placeholder: T.translate(
+                        `${PREFIX}.Placeholders.accessSecretKey`
+                      ).toString(),
                     },
                   }}
                   value={this.state.accessSecretKey}

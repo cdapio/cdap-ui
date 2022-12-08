@@ -77,10 +77,10 @@ class AddModelToPipelineBtn extends Component {
   }
 
   setWorkspaceId = () => {
-    let { srcPath } = this.props;
+    const { srcPath } = this.props;
     createWorkspace(srcPath).subscribe((res) => {
       let workspaceId;
-      let { directives } = this.props;
+      const { directives } = this.props;
       workspaceId = res.values[0].id;
       this.setState({
         workspaceId,
@@ -90,7 +90,7 @@ class AddModelToPipelineBtn extends Component {
   };
 
   fetchArtifactForPipelines() {
-    let { experimentId, splitId } = this.props;
+    const { experimentId, splitId } = this.props;
     MyArtifactApi.list({
       namespace: getCurrentNamespace(),
     })
@@ -103,7 +103,10 @@ class AddModelToPipelineBtn extends Component {
       ])
       .subscribe(
         ([artifacts, splitDetails]) => {
-          let mmdsPluginsArtifact, datapipelineArtifact, wranglerArtifact, corepluginsArtifact;
+          let mmdsPluginsArtifact,
+            datapipelineArtifact,
+            wranglerArtifact,
+            corepluginsArtifact;
           artifacts.forEach((artifact) => {
             switch (artifact.name) {
               case MMDS_PLUGINS_ARTIFACT_NAME:
@@ -121,7 +124,7 @@ class AddModelToPipelineBtn extends Component {
                 break;
             }
           });
-          let schema = splitDetails.schema;
+          const schema = splitDetails.schema;
           if (
             isNilOrEmpty(mmdsPluginsArtifact) ||
             isNilOrEmpty(datapipelineArtifact) ||
@@ -151,8 +154,14 @@ class AddModelToPipelineBtn extends Component {
       );
   }
   generatePipelineConfig = () => {
-    let { experimentId, modelId, modelName, srcPath, directives } = this.props;
-    let {
+    const {
+      experimentId,
+      modelId,
+      modelName,
+      srcPath,
+      directives,
+    } = this.props;
+    const {
       mmdsPluginsArtifact,
       wranglerArtifact,
       datapipelineArtifact,
@@ -189,7 +198,10 @@ class AddModelToPipelineBtn extends Component {
   render() {
     const AnchorTag = this.state.disabled ? 'button' : 'a';
     return (
-      <fieldset className="add-model-to-pipeline" disabled={this.state.disabled}>
+      <fieldset
+        className="add-model-to-pipeline"
+        disabled={this.state.disabled}
+      >
         <AnchorTag
           className={classnames('btn btn-primary btn-sm', {
             disabled: this.state.disabled,
@@ -199,7 +211,10 @@ class AddModelToPipelineBtn extends Component {
         >
           <span>Create a scoring pipeline</span>
           {this.state.error ? (
-            <Popover target={() => <IconSVG name="icon-exclamation-triangle" />} showOn="Hover">
+            <Popover
+              target={() => <IconSVG name="icon-exclamation-triangle" />}
+              showOn="Hover"
+            >
               {this.state.error}
             </Popover>
           ) : null}
@@ -210,7 +225,7 @@ class AddModelToPipelineBtn extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  let modelObj = state.models.find((model) => model.id === ownProps.modelId);
+  const modelObj = state.models.find((model) => model.id === ownProps.modelId);
   return {
     experimentId: state.name,
     modelId: ownProps.modelId,
@@ -221,5 +236,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ConnectedAddModelToPipelineBtn = connect(mapStateToProps)(AddModelToPipelineBtn);
+const ConnectedAddModelToPipelineBtn = connect(mapStateToProps)(
+  AddModelToPipelineBtn
+);
 export default ConnectedAddModelToPipelineBtn;

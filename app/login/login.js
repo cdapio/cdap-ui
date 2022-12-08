@@ -49,7 +49,10 @@ class Login extends Component {
     }
     fetch('/login', {
       method: 'POST',
-      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password,
@@ -72,8 +75,11 @@ class Login extends Component {
           secure: isSecure,
           sameSite: 'strict',
         });
-        cookie.set('CDAP_Auth_User', this.state.username, { secure: isSecure, sameSite: 'strict' });
-        var queryObj = util.getQueryParams(location.search);
+        cookie.set('CDAP_Auth_User', this.state.username, {
+          secure: isSecure,
+          sameSite: 'strict',
+        });
+        const queryObj = util.getQueryParams(location.search);
         queryObj.redirectUrl = queryObj.redirectUrl || '/';
         window.location.href = queryObj.redirectUrl;
       });
@@ -100,7 +106,9 @@ class Login extends Component {
   render() {
     let footer;
     if (this.state.message) {
-      footer = <CardActionFeedback type="DANGER" message={this.state.message} />;
+      footer = (
+        <CardActionFeedback type="DANGER" message={this.state.message} />
+      );
     }
 
     return (
@@ -162,4 +170,7 @@ class Login extends Component {
   }
 }
 ReactDOM.render(<Login />, document.getElementById('login-form'));
-ReactDOM.render(<Footer showNamespace={false} />, document.getElementById('footer-container'));
+ReactDOM.render(
+  <Footer showNamespace={false} />,
+  document.getElementById('footer-container')
+);

@@ -46,8 +46,11 @@ export default class MarketPlaceEntity extends Component {
     }
 
     this.unsub = MarketStore.subscribe(() => {
-      let marketState = MarketStore.getState();
-      if (marketState.activeEntity !== this.props.entityId && this.state.expandedMode) {
+      const marketState = MarketStore.getState();
+      if (
+        marketState.activeEntity !== this.props.entityId &&
+        this.state.expandedMode
+      ) {
         this.setState({
           expandedMode: false,
         });
@@ -90,7 +93,7 @@ export default class MarketPlaceEntity extends Component {
       expandedMode: !this.state.expandedMode,
       actionsComplete: false,
     });
-    let payload = {
+    const payload = {
       entityId: this.props.entityId,
     };
     if (typeof displayCTA === 'boolean') {
@@ -114,22 +117,25 @@ export default class MarketPlaceEntity extends Component {
   }
   render() {
     const isEntityDetailAvailable = () => {
-      if (!this.state.entityDetail || !Array.isArray(this.state.entityDetail.actions)) {
+      if (
+        !this.state.entityDetail ||
+        !Array.isArray(this.state.entityDetail.actions)
+      ) {
         return false;
       }
       return true;
     };
 
     // FIXME: This could be moved to a utility function. This can be generic.
-    let style = {
+    const style = {
       position: 'absolute',
     };
     let positionClassName;
     let cardWidth = 420;
 
     if (this.packageCardRef) {
-      let parentRects = this.packageCardRef.parentElement.getBoundingClientRect();
-      let cardRects = this.packageCardRef.getBoundingClientRect();
+      const parentRects = this.packageCardRef.parentElement.getBoundingClientRect();
+      const cardRects = this.packageCardRef.getBoundingClientRect();
       if (isEntityDetailAvailable()) {
         if (this.state.entityDetail.actions.length > 1) {
           cardWidth = Math.max(
@@ -139,8 +145,10 @@ export default class MarketPlaceEntity extends Component {
         }
       }
       cardWidth = cardWidth - 20;
-      let shouldPositionLeft = () => parentRects.right > cardRects.left + (cardWidth - 20);
-      let shouldPositionRight = () => parentRects.left < cardRects.right - (cardWidth - 20);
+      const shouldPositionLeft = () =>
+        parentRects.right > cardRects.left + (cardWidth - 20);
+      const shouldPositionRight = () =>
+        parentRects.left < cardRects.right - (cardWidth - 20);
 
       if (shouldPositionLeft()) {
         positionClassName = 'position-left';
@@ -159,7 +167,10 @@ export default class MarketPlaceEntity extends Component {
                 onActionsComplete={this.switchCloseBtn.bind(this)}
               />
               <div className="text-right">
-                <button className="btn btn-secondary" onClick={this.toggleDetailedMode}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={this.toggleDetailedMode}
+                >
                   {this.state.actionsComplete
                     ? T.translate('features.MarketPlaceEntity.doneLabel')
                     : T.translate('features.MarketPlaceEntity.closeLabel')}
@@ -181,14 +192,20 @@ export default class MarketPlaceEntity extends Component {
                     '.name'
                 )}
               </button>
-              <button className="btn btn-secondary" onClick={this.toggleDetailedMode}>
+              <button
+                className="btn btn-secondary"
+                onClick={this.toggleDetailedMode}
+              >
                 {T.translate('features.MarketPlaceEntity.closeLabel')}
               </button>
               <AbstractWizard
                 isOpen={this.state.performSingleAction}
                 onClose={() => this.setState({ performSingleAction: false })}
                 wizardType={this.state.entityDetail.actions[0].type}
-                input={{ action: this.state.entityDetail.actions[0], package: this.props.entity }}
+                input={{
+                  action: this.state.entityDetail.actions[0],
+                  package: this.props.entity,
+                }}
                 displayCTA={MarketStore.getState().displayCTA}
               />
             </div>
@@ -200,7 +217,9 @@ export default class MarketPlaceEntity extends Component {
     };
 
     const getRightCard = () => {
-      let beta = classnames('package-icon-container', { beta: this.props.entity.beta });
+      const beta = classnames('package-icon-container', {
+        beta: this.props.entity.beta,
+      });
       const marketHost = MarketStore.getState().selectedMarketHost;
 
       return !this.state.expandedMode ? (
@@ -209,9 +228,13 @@ export default class MarketPlaceEntity extends Component {
           onClick={this.openDetailedMode.bind(this)}
           size="LG"
         >
-          <div className={this.props.entity.beta ? 'banners-shifted' : 'banners'}>
+          <div
+            className={this.props.entity.beta ? 'banners-shifted' : 'banners'}
+          >
             {this.props.entity.beta ? <ExperimentalBanner /> : null}
-            {this.props.entity.paid ? <PaidBanner expandedView={false} /> : null}
+            {this.props.entity.paid ? (
+              <PaidBanner expandedView={false} />
+            ) : null}
           </div>
           <div className={beta}>
             {this.state.imageError ? (
@@ -235,7 +258,9 @@ export default class MarketPlaceEntity extends Component {
           cardStyle={style}
           onClick={this.openDetailedMode.bind(this)}
         >
-          <div className={this.props.entity.beta ? 'banners-shifted' : 'banners'}>
+          <div
+            className={this.props.entity.beta ? 'banners-shifted' : 'banners'}
+          >
             {this.props.entity.beta ? <ExperimentalBanner /> : null}
             {this.props.entity.paid ? <PaidBanner expandedView={true} /> : null}
           </div>
@@ -252,12 +277,19 @@ export default class MarketPlaceEntity extends Component {
             </div>
 
             <div className="package-metadata-container text-left">
-              <strong className="package-label"> {this.props.entity.label} </strong>
+              <strong className="package-label">
+                {' '}
+                {this.props.entity.label}{' '}
+              </strong>
               <div className="package-metadata">
                 <If condition={this.props.entity.version}>
                   <div>
                     <span>
-                      <strong>{T.translate('features.MarketPlaceEntity.Metadata.version')}</strong>
+                      <strong>
+                        {T.translate(
+                          'features.MarketPlaceEntity.Metadata.version'
+                        )}
+                      </strong>
                     </span>
                     <span> {this.props.entity.version} </span>
                   </div>
@@ -272,10 +304,20 @@ export default class MarketPlaceEntity extends Component {
               <br />
               <p className="additional-charges-header">Additional Charges</p>
               <p>
-                {T.translate('features.MarketPlaceEntity.AdditionalCharges.description')}
-                <If condition={this.props.entity.paidLink && this.props.entity.paidLink !== ''}>
+                {T.translate(
+                  'features.MarketPlaceEntity.AdditionalCharges.description'
+                )}
+                <If
+                  condition={
+                    this.props.entity.paidLink &&
+                    this.props.entity.paidLink !== ''
+                  }
+                >
                   <a href={this.props.entity.paidLink} target="blank">
-                    {' ' + T.translate('features.MarketPlaceEntity.AdditionalCharges.moreInfo')}
+                    {' ' +
+                      T.translate(
+                        'features.MarketPlaceEntity.AdditionalCharges.moreInfo'
+                      )}
                   </a>
                 </If>
               </p>

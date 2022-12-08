@@ -20,8 +20,14 @@ import React from 'react';
 import IconSVG from 'components/shared/IconSVG';
 import { preventPropagation } from 'services/helpers';
 
-export default function FastActionButton({ icon, action, disabled, id, iconClasses }) {
-  let onButtonClick = (event) => {
+export default function FastActionButton({
+  icon,
+  action,
+  disabled,
+  id,
+  iconClasses,
+}) {
+  const onButtonClick = (event) => {
     preventPropagation(event);
     action(event);
     return false;
@@ -31,7 +37,11 @@ export default function FastActionButton({ icon, action, disabled, id, iconClass
     // have to create a wrapper, because disabled elements don't fire mouse events in Firefox
     // also set tooltip ID on this wrapper, so that the tooltip shows up even on a disabled button
     <span onClick={preventPropagation.bind(this)} id={id}>
-      <button className="btn btn-link" disabled={disabled} onClick={onButtonClick.bind(this)}>
+      <button
+        className="btn btn-link"
+        disabled={disabled}
+        onClick={onButtonClick.bind(this)}
+      >
         <IconSVG name={icon} className={iconClasses} />
       </button>
     </span>

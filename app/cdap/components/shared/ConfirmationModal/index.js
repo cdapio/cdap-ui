@@ -33,7 +33,9 @@ export default class ConfirmationModal extends Component {
     confirmButtonText: PropTypes.string,
     confirmationText: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.node])),
+      PropTypes.arrayOf(
+        PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+      ),
     ]),
     confirmFn: PropTypes.func,
     headerTitle: PropTypes.string,
@@ -53,8 +55,12 @@ export default class ConfirmationModal extends Component {
   };
 
   static defaultProps = {
-    confirmButtonText: T.translate('features.ConfirmationModal.confirmDefaultText'),
-    cancelButtonText: T.translate('features.ConfirmationModal.cancelDefaultText'),
+    confirmButtonText: T.translate(
+      'features.ConfirmationModal.confirmDefaultText'
+    ),
+    cancelButtonText: T.translate(
+      'features.ConfirmationModal.cancelDefaultText'
+    ),
     closeable: false,
     keyboard: true,
   };
@@ -77,7 +83,7 @@ export default class ConfirmationModal extends Component {
         </ModalBody>
       );
     }
-    let confirmation = this.props.confirmationElem
+    const confirmation = this.props.confirmationElem
       ? this.props.confirmationElem
       : this.props.confirmationText;
 
@@ -153,7 +159,10 @@ export default class ConfirmationModal extends Component {
         <ModalHeader>
           {this.props.headerTitle}
           <If condition={this.props.closeable}>
-            <div className="close-section float-right" onClick={this.props.toggleModal}>
+            <div
+              className="close-section float-right"
+              onClick={this.props.toggleModal}
+            >
               <IconSVG name="icon-close" />
             </div>
           </If>

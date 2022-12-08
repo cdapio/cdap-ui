@@ -31,7 +31,7 @@ interface ICSVWidgetProps extends IMultiRowWidgetProps {
   delimiter?: string;
 }
 
-interface ICSVProps extends IMultiRowProps<ICSVWidgetProps> {}
+type ICSVProps = IMultiRowProps<ICSVWidgetProps>;
 
 class CSVWidgetView extends AbstractMultiRowWidget<ICSVProps> {
   public renderRow = (id, index) => {

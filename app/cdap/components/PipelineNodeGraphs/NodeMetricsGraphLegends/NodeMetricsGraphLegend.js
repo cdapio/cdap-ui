@@ -28,15 +28,23 @@ export default function NodeMetricsGraphLegend({
   if (!showCheckbox) {
     return (
       <div className={classnames('rv-discrete-color-legend-item', orientation)}>
-        <span className="rv-discrete-color-legend-item__color" style={{ background: item.color }} />
-        <span className="rv-discrete-color-legend-item__title">{item.title}</span>
+        <span
+          className="rv-discrete-color-legend-item__color"
+          style={{ background: item.color }}
+        />
+        <span className="rv-discrete-color-legend-item__title">
+          {item.title}
+        </span>
       </div>
     );
   }
 
   return (
     <div
-      className={classnames('rv-discrete-color-legend-item pointer', orientation)}
+      className={classnames(
+        'rv-discrete-color-legend-item pointer',
+        orientation
+      )}
       onClick={onLegendClick.bind(null, item.title)}
     >
       <span
@@ -45,7 +53,10 @@ export default function NodeMetricsGraphLegend({
           'fa-check-square': itemChecked,
         })}
       />
-      <span className="rv-discrete-color-legend-item__color" style={{ background: item.color }} />
+      <span
+        className="rv-discrete-color-legend-item__color"
+        style={{ background: item.color }}
+      />
       <span className="rv-discrete-color-legend-item__title">{item.title}</span>
     </div>
   );

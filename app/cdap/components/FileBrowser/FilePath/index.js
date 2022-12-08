@@ -48,14 +48,14 @@ export default class FilePath extends Component {
   }
 
   processPath(props) {
-    let splitPath = props.fullpath.split('/').filter((directory) => {
+    const splitPath = props.fullpath.split('/').filter((directory) => {
       return directory.length > 0;
     });
     let bspath = this.props.baseStatePath;
     if (bspath[bspath.length - 1] !== '/') {
       bspath = `${bspath}/`;
     }
-    let paths = [
+    const paths = [
       {
         id: uuidV4(),
         name: 'Root',
@@ -64,7 +64,7 @@ export default class FilePath extends Component {
     ];
 
     splitPath.forEach((value, index) => {
-      let directoryPath = splitPath.slice(0, index + 1).join('/');
+      const directoryPath = splitPath.slice(0, index + 1).join('/');
 
       let link = this.props.baseStatePath;
       link = `${link}/${directoryPath}`;
@@ -85,8 +85,11 @@ export default class FilePath extends Component {
   handlePropagation(fullPath, e) {
     if (!this.props.enableRouting) {
       preventPropagation(e);
-      if (this.props.onPathChange && typeof this.props.onPathChange === 'function') {
-        let path = fullPath.slice(this.props.baseStatePath.length);
+      if (
+        this.props.onPathChange &&
+        typeof this.props.onPathChange === 'function'
+      ) {
+        const path = fullPath.slice(this.props.baseStatePath.length);
         this.props.onPathChange(path);
         return false;
       }
@@ -120,7 +123,7 @@ export default class FilePath extends Component {
   }
 
   renderBreadcrumb(links) {
-    let pathsTitle = links.map((path) => path.name).join('/') || '';
+    const pathsTitle = links.map((path) => path.name).join('/') || '';
     return (
       <div className="paths" title={pathsTitle}>
         {links.map((path, index) => {
@@ -128,12 +131,16 @@ export default class FilePath extends Component {
             <NavLinkWrapper
               key={path.id}
               to={path.link}
-              className={classnames({ 'active-directory': index === links.length - 1 })}
+              className={classnames({
+                'active-directory': index === links.length - 1,
+              })}
               onClick={this.handlePropagation.bind(this, path.link)}
               isNativeLink={!this.props.enableRouting}
             >
               <span>{path.name}</span>
-              {index !== links.length - 1 ? <span className="path-divider">/</span> : null}
+              {index !== links.length - 1 ? (
+                <span className="path-divider">/</span>
+              ) : null}
             </NavLinkWrapper>
           );
         })}
@@ -142,10 +149,10 @@ export default class FilePath extends Component {
   }
 
   renderCollapsedView() {
-    let splitIndex = this.state.paths.length - VIEW_LIMIT + 1;
+    const splitIndex = this.state.paths.length - VIEW_LIMIT + 1;
 
-    let collapsedLinks = this.state.paths.slice(0, splitIndex);
-    let displayLinks = this.state.paths.slice(splitIndex);
+    const collapsedLinks = this.state.paths.slice(0, splitIndex);
+    const displayLinks = this.state.paths.slice(splitIndex);
 
     const collapsed = this.renderCollapsedDropdown(collapsedLinks);
     const breadcrumb = this.renderBreadcrumb(displayLinks);

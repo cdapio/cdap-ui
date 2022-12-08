@@ -73,7 +73,13 @@ export default class LogAction extends Component {
       programId = this.props.entity.id,
       runId = this.state.runId;
 
-    const path = getLogViewerPageUrl(namespace, appId, programType, programId, runId);
+    const path = getLogViewerPageUrl(
+      namespace,
+      appId,
+      programType,
+      programId,
+      runId
+    );
 
     return path;
   }
@@ -94,14 +100,21 @@ export default class LogAction extends Component {
     const link = this.generateLink();
 
     const renderLog = (
-      <a href={link} target="_blank" className="btn btn-link" rel="noopener noreferrer">
+      <a
+        href={link}
+        target="_blank"
+        className="btn btn-link"
+        rel="noopener noreferrer"
+      >
         <IconSVG name="icon-file-text" />
       </a>
     );
 
     return (
       <span className="btn btn-secondary btn-sm">
-        <span id={tooltipID}>{this.state.runId ? renderLog : renderDisabled}</span>
+        <span id={tooltipID}>
+          {this.state.runId ? renderLog : renderDisabled}
+        </span>
 
         <Tooltip
           placement="top"

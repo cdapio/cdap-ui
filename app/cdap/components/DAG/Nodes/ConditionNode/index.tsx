@@ -26,7 +26,7 @@ require('./conditionNode.scss');
 const DIMENSION_OF_CONDITION_NODE = 105;
 
 const styles = genericNodeStyles({
-  border: `1px solid #4e5568`,
+  border: '1px solid #4e5568',
   width: `${DIMENSION_OF_CONDITION_NODE}px`,
   height: `${DIMENSION_OF_CONDITION_NODE}px`,
   '&.drag-hover': {
@@ -34,7 +34,7 @@ const styles = genericNodeStyles({
   },
 });
 
-interface IConditionNodeProps extends IAbstractNodeProps<typeof styles> {}
+type IConditionNodeProps = IAbstractNodeProps<typeof styles>;
 
 class ConditionNodeComponent extends AbstractNode<IConditionNodeProps> {
   public type = 'condition';
@@ -72,7 +72,12 @@ class ConditionNodeComponent extends AbstractNode<IConditionNodeProps> {
       overlays: [
         [
           'Label',
-          { label: 'Yes', id: 'yesLabel', location: [0, -1.0], cssClass: 'condition-label' },
+          {
+            label: 'Yes',
+            id: 'yesLabel',
+            location: [0, -1.0],
+            cssClass: 'condition-label',
+          },
         ],
       ],
     };

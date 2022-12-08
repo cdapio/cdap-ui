@@ -44,13 +44,17 @@ export default class DirectiveUploadWizard extends Component {
       return;
     }
 
-    let state = PluginArtifactUploadStore.getState();
-    let pluginName = state.upload.jar.fileMetadataObj.name;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.DirectiveUpload.success', { pluginName });
-    let subtitle = T.translate('features.Wizard.DirectiveUpload.subtitle');
-    let buttonLabel = T.translate('features.Wizard.DirectiveUpload.callToAction');
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const state = PluginArtifactUploadStore.getState();
+    const pluginName = state.upload.jar.fileMetadataObj.name;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.DirectiveUpload.success', {
+      pluginName,
+    });
+    const subtitle = T.translate('features.Wizard.DirectiveUpload.subtitle');
+    const buttonLabel = T.translate(
+      'features.Wizard.DirectiveUpload.callToAction'
+    );
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
 
     return {
       message,

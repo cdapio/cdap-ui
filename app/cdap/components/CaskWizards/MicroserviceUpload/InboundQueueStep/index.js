@@ -26,36 +26,38 @@ const mapStateToFetchSizeProps = (state) => {
   return {
     value: state.inboundQueues.fetch,
     type: 'number',
-    min: 1
+    min: 1,
   };
- };
+};
 
- const mapDispatchToFetchSizeProps = (dispatch) => {
+const mapDispatchToFetchSizeProps = (dispatch) => {
   return {
-    onChange: (e) => (dispatch({
-      type: MicroserviceUploadActions.setFetchSize,
-      payload: { fetchSize: e.target.value }
-    }))
+    onChange: (e) =>
+      dispatch({
+        type: MicroserviceUploadActions.setFetchSize,
+        payload: { fetchSize: e.target.value },
+      }),
   };
- };
+};
 
- const InputFetchSize = connect(
-   mapStateToFetchSizeProps,
-   mapDispatchToFetchSizeProps
- )(Input);
+const InputFetchSize = connect(
+  mapStateToFetchSizeProps,
+  mapDispatchToFetchSizeProps
+)(Input);
 
 const mapStateToInboundQueuesProps = (state) => {
   return {
-    values: state.inboundQueues.queues
+    values: state.inboundQueues.queues,
   };
 };
 
 const mapDispatchToInboundQueuesProps = (dispatch) => {
   return {
-    onChange: (values) => (dispatch({
-      type: MicroserviceUploadActions.setInboundQueues,
-      payload: { inboundQueues: values }
-    }))
+    onChange: (values) =>
+      dispatch({
+        type: MicroserviceUploadActions.setInboundQueues,
+        payload: { inboundQueues: values },
+      }),
   };
 };
 
@@ -77,7 +79,9 @@ export default function InboundQueueStep() {
         <FormGroup row className="inbound-queue-fetch-size">
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.MicroserviceUpload.Step5.fetchLabel')}
+              {T.translate(
+                'features.Wizard.MicroserviceUpload.Step5.fetchLabel'
+              )}
             </Label>
           </Col>
           <Col xs="7">

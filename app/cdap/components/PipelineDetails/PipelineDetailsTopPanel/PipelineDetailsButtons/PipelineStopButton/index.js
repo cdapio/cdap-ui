@@ -22,7 +22,10 @@ import Alert from 'components/shared/Alert';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS } from 'services/global-constants';
 import PipelineStopPopover from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons/PipelineStopButton/PipelineStopPopover';
-import { setStopButtonLoading, setStopError } from 'components/PipelineDetails/store/ActionCreator';
+import {
+  setStopButtonLoading,
+  setStopError,
+} from 'components/PipelineDetails/store/ActionCreator';
 import isEqual from 'lodash/isEqual';
 import T from 'i18n-react';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
@@ -47,7 +50,7 @@ export default class PipelineStopButton extends Component {
   activeStatuses = ['PENDING', 'STARTING', 'RUNNING'];
 
   componentWillReceiveProps(nextProps) {
-    let activeRuns = nextProps.runs.filter((run) => {
+    const activeRuns = nextProps.runs.filter((run) => {
       return this.activeStatuses.indexOf(run.status) !== -1;
     });
     if (!isEqual(this.state.activeRuns, activeRuns)) {
@@ -74,7 +77,7 @@ export default class PipelineStopButton extends Component {
   };
 
   stopRun = (runId = this.state.activeRuns[0].runid) => {
-    let params = {
+    const params = {
       graceful: 6 * 60 * 60,
       namespace: getCurrentNamespace(),
       appId: this.props.pipelineName,
@@ -123,12 +126,16 @@ export default class PipelineStopButton extends Component {
           {this.props.stopButtonLoading ? (
             <span>
               <IconSVG name="icon-spinner" className="fa-spin" />
-              <div className="button-label">{T.translate(`${PREFIX}.stopping`)}</div>
+              <div className="button-label">
+                {T.translate(`${PREFIX}.stopping`)}
+              </div>
             </span>
           ) : (
             <span>
               <IconSVG name="icon-stop" />
-              <div className="button-label">{T.translate(`${PREFIX}.stop`)}</div>
+              <div className="button-label">
+                {T.translate(`${PREFIX}.stop`)}
+              </div>
             </span>
           )}
         </div>

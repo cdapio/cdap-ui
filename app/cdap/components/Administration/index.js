@@ -50,7 +50,7 @@ class Administration extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.state !== this.props.location.state) {
-      let accordionToExpand =
+      const accordionToExpand =
         typeof nextProps.location.state === 'object'
           ? nextProps.location.state.accordionToExpand
           : null;
@@ -63,7 +63,7 @@ class Administration extends Component {
   getUptime() {
     MyServiceProviderApi.pollList().subscribe(
       (res) => {
-        let uptime = objectQuery(res, 'cdap', 'Uptime');
+        const uptime = objectQuery(res, 'cdap', 'Uptime');
         this.setState({
           uptime,
         });
@@ -93,7 +93,7 @@ class Administration extends Component {
       serviceprovider: 'cdap',
     }).subscribe(
       (res) => {
-        let platformsDetails = {
+        const platformsDetails = {
           ...this.prettifyPlatformDetails(res),
         };
         this.setState({ platformsDetails });
@@ -115,14 +115,22 @@ class Administration extends Component {
             exact
             path="/administration"
             render={() => {
-              return <AdminManagementTabContent platformsDetails={this.state.platformsDetails} />;
+              return (
+                <AdminManagementTabContent
+                  platformsDetails={this.state.platformsDetails}
+                />
+              );
             }}
           />
           <Route
             exact
             path="/administration/configuration"
             render={() => {
-              return <AdminConfigTabContent accordionToExpand={this.state.accordionToExpand} />;
+              return (
+                <AdminConfigTabContent
+                  accordionToExpand={this.state.accordionToExpand}
+                />
+              );
             }}
           />
           <Route

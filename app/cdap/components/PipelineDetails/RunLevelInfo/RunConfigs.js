@@ -87,7 +87,8 @@ export default class RunConfigs extends Component {
       });
     }
 
-    let runtimeArgs = objectQuery(this.props.currentRun, 'properties', 'runtimeArgs') || '';
+    let runtimeArgs =
+      objectQuery(this.props.currentRun, 'properties', 'runtimeArgs') || '';
     try {
       if (runtimeArgs === '') {
         runtimeArgs = {};
@@ -101,7 +102,9 @@ export default class RunConfigs extends Component {
     }
 
     this.runtimeArgsMap = JSON.stringify(runtimeArgs, null, 2);
-    runtimeArgs = getFilteredRuntimeArgs(convertMapToKeyValuePairsObj(runtimeArgs));
+    runtimeArgs = getFilteredRuntimeArgs(
+      convertMapToKeyValuePairsObj(runtimeArgs)
+    );
 
     this.setState({
       runtimeArgs,
@@ -158,9 +161,11 @@ export default class RunConfigs extends Component {
   };
 
   renderRunConfigsButton = () => {
-    let { runs, currentRun } = this.props;
-    let reversedRuns = reverseArrayWithoutMutating(runs);
-    let currentRunIndex = findIndex(reversedRuns, { runid: objectQuery(currentRun, 'runid') });
+    const { runs, currentRun } = this.props;
+    const reversedRuns = reverseArrayWithoutMutating(runs);
+    const currentRunIndex = findIndex(reversedRuns, {
+      runid: objectQuery(currentRun, 'runid'),
+    });
     const title = (
       <div className="runconfig-modeless-title">
         <div>
@@ -198,7 +203,9 @@ export default class RunConfigs extends Component {
               {this.renderRuntimeArgs()}
               <div className="runconfig-tab-footer">
                 {this.isRuntimeArgsEmpty() ? null : (
-                  <PipelineRunTimeArgsCounter runtimeArgs={this.state.runtimeArgs} />
+                  <PipelineRunTimeArgsCounter
+                    runtimeArgs={this.state.runtimeArgs}
+                  />
                 )}
               </div>
             </div>

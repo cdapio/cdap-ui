@@ -238,7 +238,12 @@ const CreateView = ({ classes, children }) => {
   );
 
   const configuratioGroupContextValue = React.useMemo(
-    () => ({ configurationGroups, setConfigurationGroups, groupToInfo, setGroupToInfo }),
+    () => ({
+      configurationGroups,
+      setConfigurationGroups,
+      groupToInfo,
+      setGroupToInfo,
+    }),
     [configurationGroups, groupToInfo]
   );
 

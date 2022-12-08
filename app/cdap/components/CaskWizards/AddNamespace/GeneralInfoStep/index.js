@@ -26,7 +26,9 @@ const mapStateToNamespaceNameProps = (state) => {
   return {
     value: state.general.name,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.name-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.GeneralInfoStep.name-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('name') === -1,
   };
 };
@@ -88,7 +90,9 @@ export default function GeneralInfoStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.name-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.GeneralInfoStep.name-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">
@@ -99,7 +103,9 @@ export default function GeneralInfoStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.GeneralInfoStep.description-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.GeneralInfoStep.description-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">

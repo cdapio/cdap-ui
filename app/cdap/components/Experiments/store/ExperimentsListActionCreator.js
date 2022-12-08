@@ -14,7 +14,10 @@
  * the License.
  */
 
-import experimentsStore, { ACTIONS, MMDS_SORT_METHODS } from 'components/Experiments/store';
+import experimentsStore, {
+  ACTIONS,
+  MMDS_SORT_METHODS,
+} from 'components/Experiments/store';
 import { setAlgorithmsList } from 'components/Experiments/store/SharedActionCreator';
 import { myExperimentsApi } from 'api/experiments';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -36,7 +39,12 @@ function setExperimentsListError(error = null) {
 
 function getExperimentsList() {
   setExperimentsLoading();
-  let { offset, limit, sortMethod, sortColumn } = experimentsStore.getState().experiments;
+  const {
+    offset,
+    limit,
+    sortMethod,
+    sortColumn,
+  } = experimentsStore.getState().experiments;
   myExperimentsApi
     .list({
       namespace: getCurrentNamespace(),
@@ -46,8 +54,10 @@ function getExperimentsList() {
     })
     .subscribe(
       (res) => {
-        let { experiments, totalRowCount: totalCount } = res;
-        experiments.forEach((experiment) => getModelsListInExperiment(experiment.name));
+        const { experiments, totalRowCount: totalCount } = res;
+        experiments.forEach((experiment) =>
+          getModelsListInExperiment(experiment.name)
+        );
         experimentsStore.dispatch({
           type: ACTIONS.SET_EXPERIMENTS_LIST,
           payload: {
@@ -57,7 +67,9 @@ function getExperimentsList() {
         });
       },
       (err) => {
-        setExperimentsListError(`Failed to get experiments: ${err.response || err}`);
+        setExperimentsListError(
+          `Failed to get experiments: ${err.response || err}`
+        );
       }
     );
 }
@@ -70,7 +82,7 @@ function getModelsListInExperiment(experimentId) {
     })
     .subscribe(
       (res) => {
-        let { models, totalRowCount: modelsCount } = res;
+        const { models, totalRowCount: modelsCount } = res;
         experimentsStore.dispatch({
           type: ACTIONS.SET_MODELS_IN_EXPERIMENT,
           payload: {
@@ -82,14 +94,15 @@ function getModelsListInExperiment(experimentId) {
       },
       (err) => {
         setExperimentsListError(
-          `Failed to get model count for the experiment '${experimentId}' - ${err.response || err}`
+          `Failed to get model count for the experiment '${experimentId}' - ${err.response ||
+            err}`
         );
       }
     );
 }
 
 function handlePageChange({ selected }) {
-  let { limit } = experimentsStore.getState().experiments;
+  const { limit } = experimentsStore.getState().experiments;
   experimentsStore.dispatch({
     type: ACTIONS.SET_PAGINATION,
     payload: {
@@ -101,10 +114,12 @@ function handlePageChange({ selected }) {
 }
 
 function handleExperimentsSort(field) {
-  let { sortColumn, sortMethod } = experimentsStore.getState().experiments;
-  let newSortField = field !== sortColumn ? field : sortColumn;
-  let newSortMethod =
-    MMDS_SORT_METHODS.ASC === sortMethod ? MMDS_SORT_METHODS.DESC : MMDS_SORT_METHODS.ASC;
+  const { sortColumn, sortMethod } = experimentsStore.getState().experiments;
+  const newSortField = field !== sortColumn ? field : sortColumn;
+  const newSortMethod =
+    MMDS_SORT_METHODS.ASC === sortMethod
+      ? MMDS_SORT_METHODS.DESC
+      : MMDS_SORT_METHODS.ASC;
   experimentsStore.dispatch({
     type: ACTIONS.SET_EXPERIMENTS_SORT,
     payload: {
@@ -120,7 +135,9 @@ const setAlgorithmsListForListView = () => {
   setAlgorithmsList().subscribe(
     () => {},
     (err) => {
-      setExperimentsListError(`Failed to get list of algorithms: ${err.response || err}`);
+      setExperimentsListError(
+        `Failed to get list of algorithms: ${err.response || err}`
+      );
     }
   );
 };
@@ -138,9 +155,14 @@ function updateQueryParameters({ limit, offset, sortMethod, sortColumn }) {
 }
 
 function updateQueryString() {
-  let { offset, limit, sortMethod, sortColumn } = experimentsStore.getState().experiments;
-  let newQuery = `offset=${offset}&limit=${limit}&sort=${sortColumn} ${sortMethod}`;
-  let obj = {
+  const {
+    offset,
+    limit,
+    sortMethod,
+    sortColumn,
+  } = experimentsStore.getState().experiments;
+  const newQuery = `offset=${offset}&limit=${limit}&sort=${sortColumn} ${sortMethod}`;
+  const obj = {
     title: document.title,
     url: `${location.pathname}?${newQuery}`,
   };

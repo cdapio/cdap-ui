@@ -41,15 +41,21 @@ CreateProfileBtn.propTypes = {
 };
 
 function getDisabledState(properties, profileName, profileDescription) {
-  let unfilledRequiredProperties = Object.keys(properties).filter(
+  const unfilledRequiredProperties = Object.keys(properties).filter(
     (prop) => properties[prop].required && isNilOrEmpty(properties[prop].value)
   );
-  return !(profileName.length && profileDescription.length && !unfilledRequiredProperties.length);
+  return !(
+    profileName.length &&
+    profileDescription.length &&
+    !unfilledRequiredProperties.length
+  );
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    disabled: ownProps.loading || getDisabledState(state.properties, state.name, state.description),
+    disabled:
+      ownProps.loading ||
+      getDisabledState(state.properties, state.name, state.description),
     loading: ownProps.loading,
     onClick: ownProps.onClick,
   };

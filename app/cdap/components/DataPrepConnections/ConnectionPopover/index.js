@@ -69,13 +69,16 @@ export default class ConnectionPopover extends Component {
   }
 
   toggleDeleteConfirmation() {
-    this.setState({ deleteConfirmation: !this.state.deleteConfirmation }, () => {
-      if (this.state.deleteConfirmation) {
-        Mousetrap.bind('enter', this.delete);
-      } else {
-        Mousetrap.unbind('enter');
+    this.setState(
+      { deleteConfirmation: !this.state.deleteConfirmation },
+      () => {
+        if (this.state.deleteConfirmation) {
+          Mousetrap.bind('enter', this.delete);
+        } else {
+          Mousetrap.unbind('enter');
+        }
       }
-    });
+    );
   }
 
   toggleEdit() {
@@ -89,10 +92,10 @@ export default class ConnectionPopover extends Component {
   delete = () => {
     this.setState({ loading: true });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let connectionId = this.props.connectionInfo.id;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const connectionId = this.props.connectionInfo.id;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId,
     };
@@ -107,7 +110,7 @@ export default class ConnectionPopover extends Component {
         this.props.onAction('delete', connectionId);
       },
       (err) => {
-        let errMessage =
+        const errMessage =
           objectQuery(err, 'message') ||
           objectQuery(err, 'response', 'message') ||
           objectQuery(err, 'response') ||
@@ -177,7 +180,10 @@ export default class ConnectionPopover extends Component {
           >
             {T.translate(`${PREFIX}.Confirmations.DatabaseDelete.deleteButton`)}
           </button>
-          <button className="btn btn-secondary" onClick={this.toggleDeleteConfirmation}>
+          <button
+            className="btn btn-secondary"
+            onClick={this.toggleDeleteConfirmation}
+          >
             {T.translate(`${PREFIX}.Confirmations.DatabaseDelete.cancel`)}
           </button>
         </ModalFooter>
@@ -197,7 +203,7 @@ export default class ConnectionPopover extends Component {
       return null;
     }
 
-    let Tag = COMPONENT_MAP[this.props.connectionInfo.type];
+    const Tag = COMPONENT_MAP[this.props.connectionInfo.type];
 
     return (
       <Tag
@@ -214,7 +220,7 @@ export default class ConnectionPopover extends Component {
       return null;
     }
 
-    let Tag = COMPONENT_MAP[this.props.connectionInfo.type];
+    const Tag = COMPONENT_MAP[this.props.connectionInfo.type];
 
     return (
       <Tag

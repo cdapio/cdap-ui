@@ -26,7 +26,9 @@ require('./Expiry.scss');
 
 function ExpiryView({ expiry }) {
   if (!expiry) {
-    return <span className="expiry-saved">{T.translate(`${PREFIX}.saved`)}</span>;
+    return (
+      <span className="expiry-saved">{T.translate(`${PREFIX}.saved`)}</span>
+    );
   }
 
   return (

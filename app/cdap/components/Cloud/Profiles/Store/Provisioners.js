@@ -29,7 +29,7 @@ const DEFAULT_STATE = {
 };
 
 export const fetchProvisioners = () => {
-  let returnObservable$ = MyCloudApi.getProvisioners();
+  const returnObservable$ = MyCloudApi.getProvisioners();
   returnObservable$.subscribe(
     (provisioners) => {
       store.dispatch({
@@ -49,8 +49,8 @@ export const fetchProvisioners = () => {
 const provisioners = (state = DEFAULT_STATE, action = defaultAction) => {
   switch (action.type) {
     case ACTIONS.SAVE_PROVISIONERS: {
-      let { provisioners } = action.payload;
-      let provisionersMap = {};
+      const { provisioners } = action.payload;
+      const provisionersMap = {};
       provisioners.forEach((provisioner) => {
         provisionersMap[provisioner.name] = provisioner.label;
       });
@@ -65,7 +65,7 @@ const provisioners = (state = DEFAULT_STATE, action = defaultAction) => {
 };
 
 export const getProvisionersMap = () => {
-  let { list } = store.getState();
+  const { list } = store.getState();
   const observableReturn = () =>
     Observable.create((observer) => {
       observer.next(store.getState());
@@ -77,6 +77,10 @@ export const getProvisionersMap = () => {
   }
 };
 
-const store = createStore(provisioners, DEFAULT_STATE, composeEnhancers('ProvisionersMapStore')());
+const store = createStore(
+  provisioners,
+  DEFAULT_STATE,
+  composeEnhancers('ProvisionersMapStore')()
+);
 
 export default store;

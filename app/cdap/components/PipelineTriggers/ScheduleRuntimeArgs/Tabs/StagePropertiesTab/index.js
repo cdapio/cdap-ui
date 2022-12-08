@@ -27,23 +27,25 @@ import classnames from 'classnames';
 const PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.Tabs.StageProps';
 
 export default function StagePropertiesTab() {
-  let {
+  const {
     triggeringPipelineInfo,
     triggeredPipelineInfo,
     argsMapping,
     disabled,
   } = ScheduleRuntimeArgsStore.getState().args;
-  let macrosWithConfigProperty = argsMapping
+  const macrosWithConfigProperty = argsMapping
     .filter((arg) => arg.type === 'properties')
     .map((arg) => arg.value);
 
   let list = macrosWithConfigProperty;
 
   if (!disabled) {
-    list = list.concat(difference(triggeredPipelineInfo.macros, macrosWithConfigProperty));
+    list = list.concat(
+      difference(triggeredPipelineInfo.macros, macrosWithConfigProperty)
+    );
   }
 
-  let emptyMessage = disabled
+  const emptyMessage = disabled
     ? `${PREFIX}.disabledNoStageConfigMessage`
     : `${PREFIX}.noRuntimeArgsMessage`;
 
@@ -75,7 +77,9 @@ export default function StagePropertiesTab() {
         <div>
           <Row className="header">
             <Col xs={3}>{T.translate(`${PREFIX}.TableHeaders.pluginName`)}</Col>
-            <Col xs={4}>{T.translate(`${PREFIX}.TableHeaders.pluginProperty`)}</Col>
+            <Col xs={4}>
+              {T.translate(`${PREFIX}.TableHeaders.pluginProperty`)}
+            </Col>
             <Col xs={1} />
             <Col xs={4}>{T.translate(`${PREFIX}.TableHeaders.runtimeArg`)}</Col>
           </Row>
@@ -84,7 +88,9 @@ export default function StagePropertiesTab() {
           list.map((macro) => {
             let keySplit = [];
             let pipelineName, pipelineStage, stageProperty, value;
-            let matchingKeyValue = argsMapping.find((arg) => arg.value === macro);
+            const matchingKeyValue = argsMapping.find(
+              (arg) => arg.value === macro
+            );
             if (
               matchingKeyValue &&
               matchingKeyValue.key &&

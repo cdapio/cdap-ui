@@ -38,8 +38,11 @@ export default class MarketPlaceUsecaseEntity extends Component {
       logoIcon: null,
     };
     this.unsub = MarketStore.subscribe(() => {
-      let state = MarketStore.getState();
-      if (state.activeEntity !== this.props.entityId && this.state.showActions) {
+      const state = MarketStore.getState();
+      if (
+        state.activeEntity !== this.props.entityId &&
+        this.state.showActions
+      ) {
         this.setState({
           showActions: false,
         });
@@ -104,7 +107,9 @@ export default class MarketPlaceUsecaseEntity extends Component {
         {this.props.entity.beta ? <ExperimentalBanner /> : null}
         <div className="title clearfix">
           <span className="float-left">{this.props.entity.label}</span>
-          <span className="float-right">Version: {this.props.entity.version}</span>
+          <span className="float-right">
+            Version: {this.props.entity.version}
+          </span>
         </div>
         <div className="entity-information">
           <div className="entity-modal-image">
@@ -118,20 +123,29 @@ export default class MarketPlaceUsecaseEntity extends Component {
             )}
           </div>
           <div className="entity-content">
-            <div className="entity-description">{this.props.entity.description}</div>
+            <div className="entity-description">
+              {this.props.entity.description}
+            </div>
             <div className="entity-metadata">
               <LicenseRow licenseInfo={this.props.entity.licenseInfo} />
-              <div>{T.translate('features.MarketPlaceEntity.Metadata.created')}</div>
+              <div>
+                {T.translate('features.MarketPlaceEntity.Metadata.created')}
+              </div>
               <span>
                 <strong>
-                  {moment(this.props.entity.created * 1000).format('MM-DD-YYYY HH:mm A')}
+                  {moment(this.props.entity.created * 1000).format(
+                    'MM-DD-YYYY HH:mm A'
+                  )}
                 </strong>
               </span>
             </div>
           </div>
         </div>
         <div className="actions-container">
-          <div className="arrow-container text-center" onClick={this.fetchEntityDetail.bind(this)}>
+          <div
+            className="arrow-container text-center"
+            onClick={this.fetchEntityDetail.bind(this)}
+          >
             {this.state.showActions ? (
               <span className="fa fa-angle-double-up" />
             ) : (

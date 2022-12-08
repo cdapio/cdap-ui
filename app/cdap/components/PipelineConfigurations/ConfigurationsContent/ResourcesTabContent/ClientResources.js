@@ -48,11 +48,18 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const ClientResources = ({ virtualCores, onVirtualCoresChange, memoryMB, onMemoryMBChange }) => {
+const ClientResources = ({
+  virtualCores,
+  onVirtualCoresChange,
+  memoryMB,
+  onMemoryMBChange,
+}) => {
   return (
     <div className="client">
       <div className="resource-title-icon">
-        <span className="resource-title">{T.translate(`${PREFIX}.client`)}</span>
+        <span className="resource-title">
+          {T.translate(`${PREFIX}.client`)}
+        </span>
         <Popover
           target={() => <IconSVG name="icon-info-circle" />}
           showOn="Hover"
@@ -78,6 +85,9 @@ ClientResources.propTypes = {
   onMemoryMBChange: PropTypes.func,
 };
 
-const ConnectedClientResources = connect(mapStateToProps, mapDispatchToProps)(ClientResources);
+const ConnectedClientResources = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ClientResources);
 
 export default ConnectedClientResources;

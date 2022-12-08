@@ -17,14 +17,24 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
-let basepath = '/namespaces';
+const dataSrc = DataSourceConfigurer.getInstance();
+const basepath = '/namespaces';
 
 export const MyNamespaceApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
   get: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:namespace`),
   pollList: apiCreator(dataSrc, 'GET', 'POLL', basepath),
   create: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basepath}/:namespace`),
-  setPreferences: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basepath}/:namespace/preferences`),
-  editProperties: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basepath}/:namespace/properties`),
+  setPreferences: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basepath}/:namespace/preferences`
+  ),
+  editProperties: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basepath}/:namespace/properties`
+  ),
 };

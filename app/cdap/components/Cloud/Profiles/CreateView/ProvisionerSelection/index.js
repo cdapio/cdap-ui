@@ -49,7 +49,8 @@ class ProfileCreateProvisionerSelection extends Component {
   };
 
   state = {
-    isSystem: objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
+    isSystem:
+      objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
   };
 
   componentDidMount() {
@@ -57,11 +58,11 @@ class ProfileCreateProvisionerSelection extends Component {
   }
 
   renderProvisionerBox(provisioner) {
-    let namespace = this.props.match.params.namespace;
-    let provisionerName = provisioner.label || provisioner.name;
+    const namespace = this.props.match.params.namespace;
+    const provisionerName = provisioner.label || provisioner.name;
     let src, icon;
     if (objectQuery(provisioner, 'icon', 'type')) {
-      let iconType = provisioner.icon.type;
+      const iconType = provisioner.icon.type;
       if (iconType === 'inline') {
         src = objectQuery(provisioner, 'icon', 'arguments', 'data');
       } else if (iconType === 'link') {
@@ -88,21 +89,25 @@ class ProfileCreateProvisionerSelection extends Component {
             {src ? <img src={src} /> : <IconSVG name={icon} />}
           </div>
           <div className="provisioner-label">{provisionerName}</div>
-          <div className="provisioner-description">{provisioner.description}</div>
+          <div className="provisioner-description">
+            {provisioner.description}
+          </div>
         </div>
       </Link>
     );
   }
 
   render() {
-    let linkObj = this.state.isSystem
+    const linkObj = this.state.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },
         }
       : () => history.back();
-    let breadCrumbLabel = this.state.isSystem ? 'Administration' : 'Namespace';
-    let breadCrumbAnchorLink = this.state.isSystem
+    const breadCrumbLabel = this.state.isSystem
+      ? 'Administration'
+      : 'Namespace';
+    const breadCrumbAnchorLink = this.state.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },

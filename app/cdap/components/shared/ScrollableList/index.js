@@ -45,7 +45,7 @@ export default class ScrollableList extends Component {
     this.computeHeight();
   }
   componentWillReceiveProps(nextProps) {
-    let { children: newChildren } = this.getItemsInWindow(
+    const { children: newChildren } = this.getItemsInWindow(
       this.state.startingIndex,
       nextProps.children
     );
@@ -55,35 +55,43 @@ export default class ScrollableList extends Component {
   }
   computeHeight() {
     let heightOfList = document.body.getBoundingClientRect().height;
-    let FOOTER_HEIGHT = 54;
+    const FOOTER_HEIGHT = 54;
 
     if (this.props.target) {
-      let targetTop = document.getElementById(this.props.target).getBoundingClientRect().top;
-      let bodyBottom = document.body.getBoundingClientRect().bottom - FOOTER_HEIGHT;
-      let scrollDownHeight = 20;
+      const targetTop = document
+        .getElementById(this.props.target)
+        .getBoundingClientRect().top;
+      const bodyBottom =
+        document.body.getBoundingClientRect().bottom - FOOTER_HEIGHT;
+      const scrollDownHeight = 20;
       heightOfList = bodyBottom - targetTop - scrollDownHeight;
     }
 
     if (document.getElementsByClassName('column-type-label').length > 0) {
-      let labelHeight = document
+      const labelHeight = document
         .getElementsByClassName('column-type-label')[0]
         .getBoundingClientRect().height;
       heightOfList = heightOfList - labelHeight;
     }
 
-    let numberOfElemsToDisplay = Math.floor(heightOfList / this.HEIGHT_OF_ELEM);
+    const numberOfElemsToDisplay = Math.floor(
+      heightOfList / this.HEIGHT_OF_ELEM
+    );
 
-    let numberOfActualElements = this.props.children.filter(
+    const numberOfActualElements = this.props.children.filter(
       (child) => child.props.className.indexOf('column-action-divider') === -1
     );
 
-    let nonDividerChildren = numberOfActualElements.slice(0, numberOfElemsToDisplay);
-    let actualLastIndex = findIndex(
+    const nonDividerChildren = numberOfActualElements.slice(
+      0,
+      numberOfElemsToDisplay
+    );
+    const actualLastIndex = findIndex(
       this.props.children,
       nonDividerChildren[nonDividerChildren.length - 1]
     );
 
-    let children = this.props.children.slice(0, actualLastIndex + 1);
+    const children = this.props.children.slice(0, actualLastIndex + 1);
 
     this.setState({
       children,
@@ -102,8 +110,11 @@ export default class ScrollableList extends Component {
       startIndex + this.state.numberOfElemsToDisplay
     );
 
-    let actualStartIndex = findIndex(children, nonDividerChildren[0]);
-    let actualLastIndex = findIndex(children, nonDividerChildren[nonDividerChildren.length - 1]);
+    const actualStartIndex = findIndex(children, nonDividerChildren[0]);
+    const actualLastIndex = findIndex(
+      children,
+      nonDividerChildren[nonDividerChildren.length - 1]
+    );
     return {
       children: children.slice(actualStartIndex, actualLastIndex + 1),
     };
@@ -112,8 +123,8 @@ export default class ScrollableList extends Component {
     if (!this.shouldScrollDown()) {
       return null;
     }
-    let startIndex = this.state.startingIndex + 1;
-    let { children: newChildren } = this.getItemsInWindow(startIndex);
+    const startIndex = this.state.startingIndex + 1;
+    const { children: newChildren } = this.getItemsInWindow(startIndex);
     this.setState({
       children: newChildren,
       startingIndex: startIndex,
@@ -123,8 +134,8 @@ export default class ScrollableList extends Component {
     if (!this.shouldScrollUp()) {
       return null;
     }
-    let startIndex = this.state.startingIndex - 1;
-    let { children: newChildren } = this.getItemsInWindow(startIndex);
+    const startIndex = this.state.startingIndex - 1;
+    const { children: newChildren } = this.getItemsInWindow(startIndex);
     this.setState({
       children: newChildren,
       startingIndex: startIndex,
@@ -139,11 +150,16 @@ export default class ScrollableList extends Component {
     }
   }
   shouldScrollDown() {
-    if (this.props.children.length === this.state.startingIndex + this.state.children.length) {
+    if (
+      this.props.children.length ===
+      this.state.startingIndex + this.state.children.length
+    ) {
       return false;
     }
-    let lastChildInWindow = this.state.children[this.state.children.length - 1].key;
-    let lastChild = this.props.children[this.props.children.length - 1].key;
+    const lastChildInWindow = this.state.children[
+      this.state.children.length - 1
+    ].key;
+    const lastChild = this.props.children[this.props.children.length - 1].key;
     if (lastChild === lastChildInWindow) {
       return false;
     }

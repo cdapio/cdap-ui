@@ -21,14 +21,18 @@ import enableSystemApp from 'services/ServiceEnablerUtilities';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import MyDataPrepApi from 'api/dataprep';
-import { i18nPrefix, MIN_DATAPREP_VERSION, artifactName } from 'components/DataPrep';
+import {
+  i18nPrefix,
+  MIN_DATAPREP_VERSION,
+  artifactName,
+} from 'components/DataPrep';
 import isObject from 'lodash/isObject';
 import { Theme } from 'services/ThemeHelper';
 import { objectQuery } from 'services/helpers';
 
 require('./DataPrepServiceControl.scss');
 
-const PREFIX = `features.DataPrepServiceControl`;
+const PREFIX = 'features.DataPrepServiceControl';
 
 export default class DataPrepServiceControl extends Component {
   state = {
@@ -52,10 +56,10 @@ export default class DataPrepServiceControl extends Component {
         this.props.onServiceStart();
       },
       (err) => {
-        let extendedMessage = isObject(err.extendedMessage)
+        const extendedMessage = isObject(err.extendedMessage)
           ? err.extendedMessage.response || err.extendedMessage.message
           : err.extendedMessage;
-        let statusCode = objectQuery(err, 'extendedMessage', 'statusCode');
+        const statusCode = objectQuery(err, 'extendedMessage', 'statusCode');
         // 409 = conflict in status, meaning when we are trying to start the app
         // when it is already running.
         if (
@@ -98,12 +102,20 @@ export default class DataPrepServiceControl extends Component {
       >
         <div className="service-control-container">
           <div className="image-container">
-            <img src="/cdap_assets/img/DataPrep_preview1.png" className="img-thumbnail" />
-            <img src="/cdap_assets/img/DataPrep_preview2.png" className="img-thumbnail" />
+            <img
+              src="/cdap_assets/img/DataPrep_preview1.png"
+              className="img-thumbnail"
+            />
+            <img
+              src="/cdap_assets/img/DataPrep_preview2.png"
+              className="img-thumbnail"
+            />
           </div>
           <div className="text-container">
             <div className="description-container">
-              <h2 className="text-left">{T.translate(`${PREFIX}.title`, { featureName })}</h2>
+              <h2 className="text-left">
+                {T.translate(`${PREFIX}.title`, { featureName })}
+              </h2>
               <div className="text-left action-container">
                 <button
                   className="btn btn-primary"

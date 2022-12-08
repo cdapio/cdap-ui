@@ -17,7 +17,8 @@
 export default [
   {
     name: 'CDAP Common',
-    description: `This is a common flag that developers can use to hide or show features. The flag is stored in browser's local storage with experiment ID as the name.`,
+    description:
+      "This is a common flag that developers can use to hide or show features. The flag is stored in browser's local storage with experiment ID as the name.",
     experimentId: 'cdap-common-experiment',
     screenshot: null,
     enabled: false,
@@ -31,14 +32,15 @@ export default [
   },
   {
     name: 'Data Ingestion',
-    description: `Easily transfer data between a source and a sink.`,
+    description: 'Easily transfer data between a source and a sink.',
     experimentId: 'data-ingestion',
     screenshot: '/cdap_assets/img/ingest-tile.svg',
     enabled: false,
   },
   {
     name: 'System Delay Notification',
-    description: `Persistent notification indicating if there is a delay in getting responses from backend. A health check is done every 12 seconds.`,
+    description:
+      'Persistent notification indicating if there is a delay in getting responses from backend. A health check is done every 12 seconds.',
     experimentId: 'system-delay-notification',
     screenshot: null,
     enabled: false,

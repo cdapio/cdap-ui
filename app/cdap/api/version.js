@@ -17,12 +17,17 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
-let basepath = '/version';
-let cdapComponentsVersionsPath = '/versions';
+const dataSrc = DataSourceConfigurer.getInstance();
+const basepath = '/version';
+const cdapComponentsVersionsPath = '/versions';
 const MyCDAPVersionApi = {
   get: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
-  getCDAPComponentVersions: apiCreator(dataSrc, 'GET', 'REQUEST', cdapComponentsVersionsPath),
+  getCDAPComponentVersions: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    cdapComponentsVersionsPath
+  ),
 };
 
 export default MyCDAPVersionApi;

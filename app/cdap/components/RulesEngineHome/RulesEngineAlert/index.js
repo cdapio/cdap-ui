@@ -32,7 +32,7 @@ export default class RulesEngineAlert extends Component {
 
   componentDidMount() {
     this.rulesStoreSubscription = RulesEngineStore.subscribe(() => {
-      let { error } = RulesEngineStore.getState();
+      const { error } = RulesEngineStore.getState();
       if (error.showError) {
         this.setState({
           alertMessage: error.message,

@@ -69,16 +69,16 @@ const HierarchyWidget = ({
   const allowedTypes = widgetProps.allowedTypes || [];
   const fieldValues = getFields(inputSchema, allowedTypes);
   const dropdownData = inputSchemaToFlat(fieldValues);
-  const dropdownOptions = [];
-  const arrayOfIds = [];
+  const dropdownOptions: any[] = [];
+  const arrayOfIds: any[] = [];
 
-  dropdownData.forEach((item) => {
+  dropdownData.forEach((item: any) => {
     if (item.type !== 'record' && item.type !== 'string') {
       arrayOfIds.push(item.id);
     }
   });
 
-  dropdownData.forEach((item) => {
+  dropdownData.forEach((item: any) => {
     const element = arrayOfIds.find((el) => el === item.parentId);
     if (!element) {
       dropdownOptions.push(item);
@@ -91,9 +91,9 @@ const HierarchyWidget = ({
         const responseParsed = JSON.parse(value);
         if (responseParsed.length !== 0) {
           const jsonToFlatData = jsonToFlat(responseParsed);
-          jsonToFlatData.map((record) => {
+          jsonToFlatData.map((record: any) => {
             if (record.path) {
-              const el = dropdownData.find((item) => item.name === record.name);
+              const el: any = dropdownData.find((item: any) => item.name === record.name);
               record.type = el.type;
             }
           });
@@ -118,7 +118,7 @@ const HierarchyWidget = ({
         setTree={setTree}
         setRecords={setRecords}
         dropdownOptions={dropdownOptions}
-        disabled={disabled}
+        disabled={!!disabled}
       />
       <IconWrapper
         disabled={disabled}
@@ -132,7 +132,9 @@ const HierarchyWidget = ({
             name: '',
           });
           setTree(flatToTree(newRecords));
-          onChange(JSON.stringify(toJsonHandler(newRecords)));
+          if (typeof onChange === 'function') {
+            onChange(JSON.stringify(toJsonHandler(newRecords)));
+          }
           setRecords(newRecords);
         }}
       >

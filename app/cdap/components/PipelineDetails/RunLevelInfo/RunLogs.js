@@ -64,7 +64,9 @@ const RunLogs = ({ currentRun, runs }) => {
     <ThemeWrapper>
       <span>
         <div
-          className={classnames('run-info-container run-logs-container', { active: isOpen })}
+          className={classnames('run-info-container run-logs-container', {
+            active: isOpen,
+          })}
           onClick={toggleLogs}
           data-cy="log-viewer-btn-toggle"
           data-testid="log-viewer-btn-toggle"

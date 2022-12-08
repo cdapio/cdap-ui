@@ -60,7 +60,9 @@ export default class PipelineSummaryButton extends Component {
         <PrimaryTextLowercaseButton onClick={() => this.toggleSummary(true)}>
           <div className="btn-container">
             <IconSVG name="icon-line-chart" className="summary-icon" />
-            <div className="button-label">{T.translate(`${PREFIX}.summary`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.summary`)}
+            </div>
           </div>
         </PrimaryTextLowercaseButton>
       </div>
@@ -68,15 +70,18 @@ export default class PipelineSummaryButton extends Component {
   }
 
   render() {
-    let pipelineType = this.props.pipelineType;
-    let programType = GLOBALS.programType[pipelineType];
-    let programId = GLOBALS.programId[pipelineType];
+    const pipelineType = this.props.pipelineType;
+    const programType = GLOBALS.programType[pipelineType];
+    const programId = GLOBALS.programId[pipelineType];
 
     return (
       <div
-        className={classnames('pipeline-action-container pipeline-summary-container', {
-          active: this.state.showSummary,
-        })}
+        className={classnames(
+          'pipeline-action-container pipeline-summary-container',
+          {
+            active: this.state.showSummary,
+          }
+        )}
       >
         {this.renderSummaryButton()}
         {this.state.showSummary && (

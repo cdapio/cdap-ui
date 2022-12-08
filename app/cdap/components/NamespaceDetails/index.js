@@ -18,7 +18,9 @@ import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
-import NamespaceDetailsStore, { NamespaceDetailsActions } from 'components/NamespaceDetails/store';
+import NamespaceDetailsStore, {
+  NamespaceDetailsActions,
+} from 'components/NamespaceDetails/store';
 import { getData } from 'components/NamespaceDetails/store/ActionCreator';
 import { EntityTopPanel } from 'components/EntityTopPanel';
 import Description from 'components/NamespaceDetails/Description';
@@ -43,12 +45,14 @@ const NamespaceDetailsComp = ({ loading }) => {
   if (loading) {
     return <LoadingSVGCentered />;
   }
-  let prevState = objectQuery(history.state, 'state', 'from');
+  const prevState = objectQuery(history.state, 'state', 'from');
   return (
     <div className="namespace-details-container">
       <EntityTopPanel
         title={`Namespace '${getCurrentNamespace()}'`}
-        closeBtnAnchorLink={prevState ? prevState.replace(/\/cdap/g, '') : () => history.back()}
+        closeBtnAnchorLink={
+          prevState ? prevState.replace(/\/cdap/g, '') : () => history.back()
+        }
       />
       <div className="namespace-details-content">
         <Description />
@@ -66,14 +70,17 @@ NamespaceDetailsComp.propTypes = {
   loading: PropTypes.bool,
 };
 
-const ConnectedNamespaceDetailsComp = connect(mapStateToProps)(NamespaceDetailsComp);
+const ConnectedNamespaceDetailsComp = connect(mapStateToProps)(
+  NamespaceDetailsComp
+);
 
 export default class NamespaceDetails extends Component {
   static propTypes = {
     match: PropTypes.object,
   };
   componentWillMount() {
-    let namespace = objectQuery(this.props, 'match', 'params', 'namespace') || null;
+    const namespace =
+      objectQuery(this.props, 'match', 'params', 'namespace') || null;
     NamespaceStore.dispatch({
       type: NamespaceActions.selectNamespace,
       payload: {

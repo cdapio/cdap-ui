@@ -25,12 +25,17 @@ import MarketStore from 'components/Market/store/market-store';
 import find from 'lodash/find';
 import T from 'i18n-react';
 
-export default function MarketArtifactUploadWizard({ input, onClose, isOpen, displayCTA }) {
+export default function MarketArtifactUploadWizard({
+  input,
+  onClose,
+  isOpen,
+  displayCTA,
+}) {
   const args = input.action.arguments;
-  let config = find(args, { name: 'config' });
+  const config = find(args, { name: 'config' });
   input.headerLabel = T.translate('features.Wizard.ArtifactUpload.headerlabel');
   const marketHost = MarketStore.getState().selectedMarketHost;
-  let params = {
+  const params = {
     entityName: input.package.name,
     entityVersion: input.package.version,
     marketHost,

@@ -22,7 +22,7 @@ import { IDataSource } from 'services/datasource/IDataSource';
 
 interface ISystemDelayStoreState {
   activeDataSources: IDataSource[];
-  showDelay: boolean;
+  showDelay?: boolean;
 }
 
 const defaultAction = {
@@ -30,11 +30,11 @@ const defaultAction = {
   payload: [],
 };
 
-const defaultInitialState = {
+const defaultInitialState: ISystemDelayStoreState = {
   activeDataSources: [],
 };
 
-const activeDataSources = (state = [], action: IAction = defaultAction) => {
+const activeDataSources = (state: any = [], action: IAction = defaultAction) => {
   switch (action.type) {
     case SystemDelayActions.registerDataSource: {
       return [...state, action.payload];

@@ -65,7 +65,9 @@ export default class ProfileCustomizeContent extends PureComponent {
       (provisionerSpec) => {
         this.setState({
           provisionerSpec,
-          filteredConfigurationGroup: this.getFilteredConfigurationGroup(provisionerSpec),
+          filteredConfigurationGroup: this.getFilteredConfigurationGroup(
+            provisionerSpec
+          ),
           loading: false,
         });
       },
@@ -156,14 +158,15 @@ export default class ProfileCustomizeContent extends PureComponent {
         </div>
       );
     }
-    let groups = this.state.filteredConfigurationGroup;
+    const groups = this.state.filteredConfigurationGroup;
 
     const propertiesFromProfileMap = {};
     this.props.provisioner.properties.forEach((property) => {
       propertiesFromProfileMap[property.name] = property;
     });
 
-    let profileName = this.props.profileLabel || extractProfileName(this.props.profileName);
+    const profileName =
+      this.props.profileLabel || extractProfileName(this.props.profileName);
 
     return (
       <div className="profile-customize-content">
@@ -172,7 +175,9 @@ export default class ProfileCustomizeContent extends PureComponent {
             <div className="profile-customize-name">
               <strong title={profileName}>{profileName}</strong>
               {editablePropertiesFromProfile.length ? (
-                <small>Customize the values for the runs started by this schedule</small>
+                <small>
+                  Customize the values for the runs started by this schedule
+                </small>
               ) : null}
             </div>
             <IconSVG name="icon-close" onClick={this.onClose} />
@@ -186,7 +191,8 @@ export default class ProfileCustomizeContent extends PureComponent {
                 .filter((property) => {
                   const isEditable =
                     !propertiesFromProfileMap[property.name] ||
-                    propertiesFromProfileMap[property.name].isEditable !== false;
+                    propertiesFromProfileMap[property.name].isEditable !==
+                      false;
                   return isEditable && property.show !== false;
                 })
                 .map((property) => {
@@ -221,7 +227,10 @@ export default class ProfileCustomizeContent extends PureComponent {
                           key={property.name}
                           property={property}
                           value={property.value}
-                          onChange={this.onPropertyUpdate.bind(this, property.name)}
+                          onChange={this.onPropertyUpdate.bind(
+                            this,
+                            property.name
+                          )}
                         />
                       );
                     })}
@@ -245,7 +254,11 @@ export default class ProfileCustomizeContent extends PureComponent {
               className={classnames('btn btn-primary', {
                 disabled: editablePropertiesFromProfile.length === 0,
               })}
-              onClick={editablePropertiesFromProfile.length === 0 ? undefined : this.onSave}
+              onClick={
+                editablePropertiesFromProfile.length === 0
+                  ? undefined
+                  : this.onSave
+              }
             >
               Done
             </div>

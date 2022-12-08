@@ -34,7 +34,7 @@ interface IDLPWidgetProps {
   delimiter?: string;
 }
 
-interface IDLPProps extends IMultiRowProps<IDLPWidgetProps> {}
+type IDLPProps = IMultiRowProps<IDLPWidgetProps>;
 
 class DLPWidgetView extends AbstractMultiRowWidget<IDLPProps> {
   public deconstructValues = (props) => {

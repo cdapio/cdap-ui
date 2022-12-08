@@ -41,12 +41,17 @@ const PREFIX = 'features.Experiments.CreateView';
 
 require('./MLAlgorithmSelection.scss');
 
-const MLAlgorithmsList = ({ algorithmsList, setModelAlgorithm, selectedAlgorithm, error }) => {
+const MLAlgorithmsList = ({
+  algorithmsList,
+  setModelAlgorithm,
+  selectedAlgorithm,
+  error,
+}) => {
   if (!objectQuery(algorithmsList, 'length')) {
     return null;
   }
   const getSelectedAlgorithm = (algorithm) => {
-    let hyperparameters = {};
+    const hyperparameters = {};
     algorithm.hyperparameters.forEach((hp) => {
       hyperparameters[hp.name] = hp.defaultVal;
     });
@@ -76,7 +81,10 @@ const MLAlgorithmsList = ({ algorithmsList, setModelAlgorithm, selectedAlgorithm
               name="algo-radio"
               value={algo.name}
               checked={selectedAlgorithm.name === algo.name}
-              onChange={setModelAlgorithm.bind(null, getSelectedAlgorithm(algo))}
+              onChange={setModelAlgorithm.bind(
+                null,
+                getSelectedAlgorithm(algo)
+              )}
             />
             <Label className="control-label">{algo.label}</Label>
           </div>
@@ -84,7 +92,12 @@ const MLAlgorithmsList = ({ algorithmsList, setModelAlgorithm, selectedAlgorithm
       })}
       <ConnectedAddModelBtn />
       {error ? (
-        <Alert message={error} type="error" showAlert={true} onClose={setModelCreateError} />
+        <Alert
+          message={error}
+          type="error"
+          showAlert={true}
+          onClose={setModelCreateError}
+        />
       ) : null}
     </div>
   );
@@ -151,11 +164,11 @@ const getComponent = (hyperParam) => {
       name: 'name',
     },
   };
-  let matchedType = BACKEND_PROPS_TO_REACT_PROPS[hyperParam.type];
+  const matchedType = BACKEND_PROPS_TO_REACT_PROPS[hyperParam.type];
   if (!matchedType) {
     return {};
   }
-  let config = {};
+  const config = {};
   Object.keys(matchedType).forEach((hyperParamProp) => {
     if (hyperParamProp.indexOf(',') !== -1) {
       config[matchedType[hyperParamProp]] = objectQuery.apply(null, [
@@ -184,8 +197,8 @@ const MLAlgorithmDetails = ({ algorithm, algorithmsList }) => {
         {algorithmsList
           .find((al) => al.name === algorithm.name)
           .hyperparameters.map((hyperParam) => {
-            let actualValue = algorithm.hyperparameters[hyperParam.name];
-            let config = {
+            const actualValue = algorithm.hyperparameters[hyperParam.name];
+            const config = {
               ...getComponent(hyperParam),
               label: getHyperParamLabel(algorithm.name, hyperParam.name),
               value: actualValue,
@@ -211,7 +224,11 @@ MLAlgorithmDetails.propTypes = {
 };
 const AddModelBtn = ({ algorithm, trainModel }) => {
   return (
-    <button className="btn btn-primary" disabled={!algorithm.name.length} onClick={trainModel}>
+    <button
+      className="btn btn-primary"
+      disabled={!algorithm.name.length}
+      onClick={trainModel}
+    >
       {T.translate(`${PREFIX}.trainModel`)}
     </button>
   );
@@ -221,7 +238,9 @@ AddModelBtn.propTypes = {
   trainModel: PropTypes.func,
 };
 
-const mapStateToAddModelBtnProps = (state) => ({ algorithm: state.model_create.algorithm });
+const mapStateToAddModelBtnProps = (state) => ({
+  algorithm: state.model_create.algorithm,
+});
 const mapDispatchToAddModelBtnProps = () => ({ trainModel });
 const mapStateToMLAlgorithmsListProps = (state) => ({
   algorithmsList: state.model_create.validAlgorithmsList,
@@ -238,7 +257,9 @@ const ConnectedMLAlgorithmsList = connect(
   mapStateToMLAlgorithmsListProps,
   mapDispatchToMLAlgorithmsListProps
 )(MLAlgorithmsList);
-const ConnectedMLAlgorithmDetails = connect(mapStateToMLAlgorithmDetailsProps)(MLAlgorithmDetails);
+const ConnectedMLAlgorithmDetails = connect(mapStateToMLAlgorithmDetailsProps)(
+  MLAlgorithmDetails
+);
 const ConnectedAddModelBtn = connect(
   mapStateToAddModelBtnProps,
   mapDispatchToAddModelBtnProps

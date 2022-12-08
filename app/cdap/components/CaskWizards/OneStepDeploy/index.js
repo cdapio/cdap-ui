@@ -63,9 +63,9 @@ export default class OneStepDeployWizard extends Component {
   }
 
   render() {
-    let input = this.props.input;
-    let pkg = input.package || {};
-    let actionType = input.action.type;
+    const input = this.props.input;
+    const pkg = input.package || {};
+    const actionType = input.action.type;
 
     const getWizardContent = () => {
       return (
@@ -84,7 +84,7 @@ export default class OneStepDeployWizard extends Component {
       );
     };
 
-    let wizardModalTitle =
+    const wizardModalTitle =
       (pkg.label ? pkg.label + ' | ' : '') +
       T.translate('features.Wizard.OneStepDeploy.headerlabel');
     return (

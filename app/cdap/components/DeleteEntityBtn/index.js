@@ -64,7 +64,11 @@ export default class DeleteEntityBtn extends Component {
     return (
       <span>
         <span className={this.props.className} onClick={this.toggleModal}>
-          {this.props.btnLabel ? this.props.btnLabel : <IconSVG name="icon-trash" />}
+          {this.props.btnLabel ? (
+            this.props.btnLabel
+          ) : (
+            <IconSVG name="icon-trash" />
+          )}
         </span>
         {this.state.showModal ? (
           <ConfirmationModal

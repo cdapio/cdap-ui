@@ -37,7 +37,7 @@ export default class ProgramMetrics extends Component {
   }
 
   componentWillMount() {
-    let params = {
+    const params = {
       namespace: NamespaceStore.getState().selectedNamespace,
       appId: this.props.entity.applicationId,
       programType: convertProgramToApi(this.props.entity.programType),
@@ -70,17 +70,25 @@ export default class ProgramMetrics extends Component {
     return (
       <div className="metrics-container">
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.program.status')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.program.status')}
+          </p>
           <p>
-            {this.state.loading ? loading : StatusMapper.lookupDisplayStatus(this.state.status)}
+            {this.state.loading
+              ? loading
+              : StatusMapper.lookupDisplayStatus(this.state.status)}
           </p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.program.runs')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.program.runs')}
+          </p>
           <p>{this.state.loading ? loading : this.state.numRuns}</p>
         </div>
         <div className="metric-item app-name">
-          <p className="metric-header">{T.translate('commons.entity.program.application')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.program.application')}
+          </p>
           <p>
             {this.state.loading ? (
               loading

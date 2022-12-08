@@ -109,7 +109,9 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
     });
   };
   public toggleonNamespacePreferenceEdit = () => {
-    this.setState({ onNamespacePreferenceEdit: !this.state.onNamespacePreferenceEdit });
+    this.setState({
+      onNamespacePreferenceEdit: !this.state.onNamespacePreferenceEdit,
+    });
   };
   public render() {
     const { classes, open, onClose, componentDidNavigate = () => null } = this.props;

@@ -109,7 +109,9 @@ export default class ServicesTable extends Component {
   fetchServiceStatus = (serviceid) => {
     const setDefaultStatus = (serviceid) => {
       let services = [...this.state.services];
-      let isServiceAlreadyExist = this.state.services.find((service) => service.name === serviceid);
+      const isServiceAlreadyExist = this.state.services.find(
+        (service) => service.name === serviceid
+      );
       if (!isServiceAlreadyExist) {
         services.push({
           name: serviceid,
@@ -126,9 +128,14 @@ export default class ServicesTable extends Component {
       this.setState({ services });
     };
 
-    const setDefaultInstance = (serviceid, { requested = '--', provisioned = '--' } = {}) => {
+    const setDefaultInstance = (
+      serviceid,
+      { requested = '--', provisioned = '--' } = {}
+    ) => {
       let services = [...this.state.services];
-      let isServiceAlreadyExist = this.state.services.find((service) => service.name === serviceid);
+      const isServiceAlreadyExist = this.state.services.find(
+        (service) => service.name === serviceid
+      );
       if (!isServiceAlreadyExist) {
         services.push({
           name: serviceid,
@@ -147,7 +154,7 @@ export default class ServicesTable extends Component {
       this.setState({ services });
     };
 
-    let serviceTimeout = setTimeout(
+    const serviceTimeout = setTimeout(
       () => setDefaultStatus(serviceid),
       WAITTIME_FOR_ALTERNATE_STATUS
     );
@@ -192,7 +199,9 @@ export default class ServicesTable extends Component {
     MyAppApi.list({ namespace: 'system' }).subscribe((apps) => {
       const requestPrograms = [];
       apps.forEach((app) => {
-        requestPrograms.push(MyAppApi.get({ namespace: 'system', appId: app.name }));
+        requestPrograms.push(
+          MyAppApi.get({ namespace: 'system', appId: app.name })
+        );
       });
 
       Observable.combineLatest(requestPrograms).subscribe((res) => {
@@ -216,36 +225,41 @@ export default class ServicesTable extends Component {
       };
     });
 
-    MyAppApi.batchStatus({ namespace: 'system' }, requestBody).subscribe((res) => {
-      const statuses = [];
-      // CDAP-15254: We need to make this rename until backend changes
-      // the name of the app from dataprep to wrangler
-      const getAppId = (appId) => (appId === 'dataprep' ? 'wrangler' : appId);
+    MyAppApi.batchStatus({ namespace: 'system' }, requestBody).subscribe(
+      (res) => {
+        const statuses = [];
+        // CDAP-15254: We need to make this rename until backend changes
+        // the name of the app from dataprep to wrangler
+        const getAppId = (appId) => (appId === 'dataprep' ? 'wrangler' : appId);
 
-      res.forEach((program) => {
-        const systemProgram = {
-          name: `${getAppId(program.appId)}.${program.programId}`,
-          provisioned: '--',
-          requested: '--',
-          status: program.status,
-          isSystemProgram: true,
-          programId: program.programId,
-          programType: program.programType,
-          appId: program.appId,
-        };
+        res.forEach((program) => {
+          const systemProgram = {
+            name: `${getAppId(program.appId)}.${program.programId}`,
+            provisioned: '--',
+            requested: '--',
+            status: program.status,
+            isSystemProgram: true,
+            programId: program.programId,
+            programType: program.programType,
+            appId: program.appId,
+          };
 
-        statuses.push(systemProgram);
-      });
+          statuses.push(systemProgram);
+        });
 
-      this.setState({
-        systemProgramsStatus: statuses,
-      });
-    });
+        this.setState({
+          systemProgramsStatus: statuses,
+        });
+      }
+    );
   };
 
   componentDidMount() {
     this.systemServicesSubscription = SystemServicesStore.subscribe(() => {
-      let { list: services, __error } = SystemServicesStore.getState().services;
+      const {
+        list: services,
+        __error,
+      } = SystemServicesStore.getState().services;
       if (__error) {
         this.fetchStatusFromIndividualServices();
         return;
@@ -278,17 +292,23 @@ export default class ServicesTable extends Component {
           {services.map((service) => {
             let logUrl = `/v3/system/services/${service.name}/logs`;
             if (service.isSystemProgram) {
-              logUrl = `/v3/namespaces/system/apps/${service.appId}/${convertProgramToApi(
-                service.programType
-              )}/${service.programId}/logs`;
+              logUrl = `/v3/namespaces/system/apps/${
+                service.appId
+              }/${convertProgramToApi(service.programType)}/${
+                service.programId
+              }/logs`;
             }
 
             logUrl = `${logUrl}?start=${start}`;
-            logUrl = `/downloadLogs?type=raw&backendPath=${encodeURIComponent(logUrl)}`;
+            logUrl = `/downloadLogs?type=raw&backendPath=${encodeURIComponent(
+              logUrl
+            )}`;
 
             const displayName = service.isSystemProgram
               ? startCase(service.name)
-              : T.translate(`${ADMINPREFIX}.${service.name.replace(/\./g, '_')}`);
+              : T.translate(
+                  `${ADMINPREFIX}.${service.name.replace(/\./g, '_')}`
+                );
 
             return (
               <tr key={service.name}>
@@ -297,10 +317,13 @@ export default class ServicesTable extends Component {
                     <IconSVG
                       name="icon-circle"
                       className={classnames({
-                        'text-success': ['OK', 'RUNNING'].indexOf(service.status) !== -1,
+                        'text-success':
+                          ['OK', 'RUNNING'].indexOf(service.status) !== -1,
                         'text-warning': service.status === 'STARTING',
                         'text-danger':
-                          ['OK', 'NOTOK', 'RUNNING', 'STARTING'].indexOf(service.status) === -1,
+                          ['OK', 'NOTOK', 'RUNNING', 'STARTING'].indexOf(
+                            service.status
+                          ) === -1,
                       })}
                     />
                   </span>
@@ -313,7 +336,9 @@ export default class ServicesTable extends Component {
                     <span>{service.provisioned || '--'}</span>
                   </td>
                   <td>
-                    <span className="requested-instances-holder">{service.requested || '--'}</span>
+                    <span className="requested-instances-holder">
+                      {service.requested || '--'}
+                    </span>
                   </td>
                 </If>
                 <td>

@@ -47,7 +47,10 @@ describe('Unit Tests for Utils', () => {
     });
 
     it('Should return false with an error object containig missing namespace error message', () => {
-      const { errors, allValid } = areInputsValid({ selectedNamespaces: [], inputFields });
+      const { errors, allValid } = areInputsValid({
+        selectedNamespaces: [],
+        inputFields,
+      });
       expect(errors.namespaces).toMatchObject({
         msg: T.translate(`${I18NPREFIX}.nsValidationError`),
       });
@@ -60,7 +63,9 @@ describe('Unit Tests for Utils', () => {
         inputFields: { ...inputFields, region: '' },
       });
       expect(errors.region).toMatchObject({
-        msg: T.translate(`${I18NPREFIX}.inputValidationError`, { fieldName: 'region' }),
+        msg: T.translate(`${I18NPREFIX}.inputValidationError`, {
+          fieldName: 'region',
+        }),
       });
       expect(allValid).toBe(false);
     });

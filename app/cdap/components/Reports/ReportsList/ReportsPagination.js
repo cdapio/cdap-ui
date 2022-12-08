@@ -24,7 +24,7 @@ import T from 'i18n-react';
 const PREFIX = 'features.Reports';
 
 function ReportsPaginationView({ totalCount, offset, limit }) {
-  let totalPages = Math.ceil(totalCount / limit);
+  const totalPages = Math.ceil(totalCount / limit);
   let currentPage;
 
   if (offset === 0) {

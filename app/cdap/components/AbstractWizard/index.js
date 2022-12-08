@@ -122,7 +122,7 @@ export default function AbstractWizard({
   if (!isOpen) {
     return null;
   }
-  let { tag: Tag, store } = WizardTypesMap[wizardType];
+  const { tag: Tag, store } = WizardTypesMap[wizardType];
   if (!Tag) {
     return <h1> Wizard Type {wizardType} not found </h1>;
   }

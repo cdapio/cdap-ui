@@ -87,7 +87,10 @@ export default class HomeErrorMessage extends Component {
         <span className="fa fa-exclamation-triangle" />
         <span>
           {T.translate('features.EntityListView.Errors.tryAgain')}
-          <Timer time={retryMap[this.state.retryCounter]} onDone={this.resetRetryCounter} />
+          <Timer
+            time={retryMap[this.state.retryCounter]}
+            onDone={this.resetRetryCounter}
+          />
           {T.translate('features.EntityListView.Errors.secondsLabel')}
           <br />
           {retryNow}
@@ -104,7 +107,10 @@ export default class HomeErrorMessage extends Component {
 
     const CHECK_ERROR_CODE = 500;
 
-    if (this.state.retryCounter > 5 && this.state.errorStatusCode >= CHECK_ERROR_CODE) {
+    if (
+      this.state.retryCounter > 5 &&
+      this.state.errorStatusCode >= CHECK_ERROR_CODE
+    ) {
       return timeOut;
     } else if (this.state.errorStatusCode >= CHECK_ERROR_CODE) {
       return tryAgainError;

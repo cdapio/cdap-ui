@@ -50,8 +50,8 @@ const WARNINGBARCOLOR = '#FDA639';
 const ERRORBARCOLOR = colorVariables.red01;
 const HOVER_STROKE_COLOR = 'black';
 const STROKE_WIDTH = 2;
-const PREFIX = `features.PipelineSummary.logsMetricsGraph`;
-const GRAPHPREFIX = `features.PipelineSummary.graphs`;
+const PREFIX = 'features.PipelineSummary.logsMetricsGraph';
+const GRAPHPREFIX = 'features.PipelineSummary.graphs';
 const COLOR_LEGEND = [
   {
     title: T.translate(`${PREFIX}.legend1`),
@@ -121,14 +121,14 @@ export default class LogsMetricsGraph extends Component {
     });
   }
   getDataClusters() {
-    let warnings = [];
-    let errors = [];
+    const warnings = [];
+    const errors = [];
     // Clustering by runs. Stack warnings and errors by clusters.
     []
       .concat(this.props.runs)
       .reverse()
       .forEach((run, i) => {
-        let { totalRunsCount, runsLimit, xDomainType } = this.props;
+        const { totalRunsCount, runsLimit, xDomainType } = this.props;
         let x;
         if (xDomainType === 'limit') {
           x = totalRunsCount > runsLimit ? totalRunsCount - runsLimit : 0;
@@ -163,7 +163,7 @@ export default class LogsMetricsGraph extends Component {
     if (errors.length === 1 || warnings.length === 1) {
       // FIXME: This is a hack. Something is not right with VerticalBarSeries
       // if it has only one data point. The width of rect element is not scaled correctly
-      let maxXValue = errors.length === 1 ? errors[0].x : warnings[0].x;
+      const maxXValue = errors.length === 1 ? errors[0].x : warnings[0].x;
       errors.push({
         x: maxXValue + 1,
         y: 0,
@@ -184,8 +184,8 @@ export default class LogsMetricsGraph extends Component {
     );
   }
   renderChart() {
-    let FPlot = makeVisFlexible(XYPlot);
-    let { errors, warnings } = this.getDataClusters();
+    const FPlot = makeVisFlexible(XYPlot);
+    const { errors, warnings } = this.getDataClusters();
     let xDomain = [];
     if (errors.length > 0 || warnings.length > 0) {
       xDomain = getXDomain(this.props);
@@ -199,14 +199,25 @@ export default class LogsMetricsGraph extends Component {
       };
     });
 
-    let { tickTotals, yDomain, tickFormat } = getYAxisProps(data);
+    const { tickTotals, yDomain, tickFormat } = getYAxisProps(data);
     let popOverData, logUrl;
     if (this.state.currentHoveredElement) {
       popOverData = this.props.runs.find(
         (run) => this.state.currentHoveredElement.runid === run.runid
       );
-      let { namespaceId, appId, programType, programId } = this.props.runContext;
-      logUrl = getLogViewerPageUrl(namespaceId, appId, programType, programId, popOverData.runid);
+      const {
+        namespaceId,
+        appId,
+        programType,
+        programId,
+      } = this.props.runContext;
+      logUrl = getLogViewerPageUrl(
+        namespaceId,
+        appId,
+        programType,
+        programId,
+        popOverData.runid
+      );
     }
     return (
       <div className="graph-plot-container">
@@ -223,7 +234,10 @@ export default class LogsMetricsGraph extends Component {
             className="logs-metrics-legend-container"
           />
           <HorizontalGridLines />
-          <XAxis tickTotal={getTicksTotal(this.props)} tickFormat={xTickFormat(this.props)} />
+          <XAxis
+            tickTotal={getTicksTotal(this.props)}
+            tickFormat={xTickFormat(this.props)}
+          />
           <YAxis tickTotal={tickTotals} tickFormat={tickFormat} />
           {warnings.length > 0 ? (
             <BarSeries
@@ -233,7 +247,10 @@ export default class LogsMetricsGraph extends Component {
               fillType="literal"
               style={{ strokeWidth: STROKE_WIDTH }}
               onValueMouseOver={(d) => {
-                if (objectQuery(this.state, 'currentHoveredElement', 'runid') === d.runid) {
+                if (
+                  objectQuery(this.state, 'currentHoveredElement', 'runid') ===
+                  d.runid
+                ) {
                   return;
                 }
                 this.setState({
@@ -256,7 +273,10 @@ export default class LogsMetricsGraph extends Component {
               fillType="literal"
               style={{ strokeWidth: STROKE_WIDTH }} // BarSeries currently doesn't have a way to customize strokeWidth
               onValueMouseOver={(d) => {
-                if (objectQuery(this.state, 'currentHoveredElement', 'runid') === d.runid) {
+                if (
+                  objectQuery(this.state, 'currentHoveredElement', 'runid') ===
+                  d.runid
+                ) {
                   return;
                 }
                 this.setState({
@@ -314,28 +334,46 @@ export default class LogsMetricsGraph extends Component {
               ) : null}
               <div>
                 <strong>{T.translate(`${PREFIX}.hint.startTime`)}: </strong>
-                <span>{moment(popOverData.starting * 1000).format('llll')}</span>
+                <span>
+                  {moment(popOverData.starting * 1000).format('llll')}
+                </span>
               </div>
             </Hint>
           ) : null}
           {this.props.xDomainType === 'limit' ? (
-            <div className="x-axis-title"> {T.translate(`${PREFIX}.xAxisTitle`)} </div>
+            <div className="x-axis-title">
+              {' '}
+              {T.translate(`${PREFIX}.xAxisTitle`)}{' '}
+            </div>
           ) : null}
-          <div className="y-axis-title">{T.translate(`${PREFIX}.yAxisTitle`)}</div>
+          <div className="y-axis-title">
+            {T.translate(`${PREFIX}.yAxisTitle`)}
+          </div>
         </FPlot>
       </div>
     );
   }
   renderTableBody(runs) {
-    let { namespaceId, appId, programType, programId } = this.props.runContext;
-    let runsLength = runs.length;
+    const {
+      namespaceId,
+      appId,
+      programType,
+      programId,
+    } = this.props.runContext;
+    const runsLength = runs.length;
 
     return (
       <table className="table">
         <tbody>
           {runs.map((run) => {
             const runid = run.runid;
-            const logUrl = getLogViewerPageUrl(namespaceId, appId, programType, programId, runid);
+            const logUrl = getLogViewerPageUrl(
+              namespaceId,
+              appId,
+              programType,
+              programId,
+              runid
+            );
 
             return (
               <tr>
@@ -363,7 +401,7 @@ export default class LogsMetricsGraph extends Component {
     );
   }
   renderTable() {
-    let entities = this.props.runs.map((run, i) => {
+    const entities = this.props.runs.map((run, i) => {
       return Object.assign({}, run, {
         index: i + 1,
         warnings: objectQuery(run, 'logsMetrics', 'system.app.log.warn') || 0,
@@ -398,18 +436,25 @@ export default class LogsMetricsGraph extends Component {
   }
   render() {
     return (
-      <div className="logs-metrics-graph" ref={(ref) => (this.containerRef = ref)}>
+      <div
+        className="logs-metrics-graph"
+        ref={(ref) => (this.containerRef = ref)}
+      >
         <div className="title-container">
           <div className="title">{T.translate(`${PREFIX}.title`)} </div>
           <div className="viz-switcher">
             <span
-              className={classnames('chart', { active: this.state.viewState === 'chart' })}
+              className={classnames('chart', {
+                active: this.state.viewState === 'chart',
+              })}
               onClick={() => this.setState({ viewState: 'chart' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.chart`)}
             </span>
             <span
-              className={classnames({ active: this.state.viewState === 'table' })}
+              className={classnames({
+                active: this.state.viewState === 'table',
+              })}
               onClick={() => this.setState({ viewState: 'table' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.table`)}

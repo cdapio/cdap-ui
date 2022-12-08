@@ -49,13 +49,13 @@ export default class DatabaseConnection extends Component {
     if (this.props.mode !== 'ADD') {
       this.setState({ loading: true });
 
-      let namespace = NamespaceStore.getState().selectedNamespace;
+      const namespace = NamespaceStore.getState().selectedNamespace;
 
       const namespaceParams = {
         context: namespace,
       };
 
-      let connectionParams = {
+      const connectionParams = {
         ...namespaceParams,
         connectionId: this.props.connectionId,
       };
@@ -67,12 +67,12 @@ export default class DatabaseConnection extends Component {
         )
         .subscribe(
           (res) => {
-            let connInfo = objectQuery(res, 0);
-            let driverName = connInfo.properties.name;
+            const connInfo = objectQuery(res, 0);
+            const driverName = connInfo.properties.name;
 
-            let pluginsList = objectQuery(res, 1, 'values');
+            const pluginsList = objectQuery(res, 1, 'values');
 
-            let matchedPlugin = find(pluginsList, (o) => {
+            const matchedPlugin = find(pluginsList, (o) => {
               return o.properties.name === driverName;
             });
 
@@ -85,12 +85,12 @@ export default class DatabaseConnection extends Component {
               return;
             }
 
-            let pluginAllowed = objectQuery(res, 2, 'values');
-            let matchedPluginAllowed = find(pluginAllowed, (o) => {
+            const pluginAllowed = objectQuery(res, 2, 'values');
+            const matchedPluginAllowed = find(pluginAllowed, (o) => {
               return o.label === matchedPlugin.label;
             });
 
-            let dbInfo = matchedPluginAllowed;
+            const dbInfo = matchedPluginAllowed;
             dbInfo.pluginInfo = matchedPlugin;
 
             this.setState({

@@ -55,11 +55,11 @@ const useStyle = makeStyles((theme) => {
   };
 });
 
-interface IConnectionWidgetProps {
+export interface IConnectionWidgetProps {
   connectionType?: string;
 }
 
-interface IConnectionProps extends IWidgetProps<IConnectionWidgetProps> {}
+type IConnectionProps = IWidgetProps<IConnectionWidgetProps>;
 
 const PREFIX = '${conn(';
 const SUFFIX = ')}';
@@ -92,7 +92,9 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
   function fetchConnectionsList() {
     setLoading(true);
 
-    ConnectionsApi.listConnections({ context: getCurrentNamespace() }).subscribe((res) => {
+    ConnectionsApi.listConnections({
+      context: getCurrentNamespace(),
+    }).subscribe((res) => {
       let connectionsList = res;
 
       if (connectionType) {

@@ -44,7 +44,13 @@ export default class PipelineSummary extends Component {
   constructor(props) {
     super(props);
     const RUNSFILTERPREFIX = `${PREFIX}.runsFilter`;
-    let { namespaceId, appId, programType, programId, pipelineConfig } = props;
+    const {
+      namespaceId,
+      appId,
+      programType,
+      programId,
+      pipelineConfig,
+    } = props;
     this.state = {
       runs: [],
       logsMetrics: [],
@@ -138,7 +144,7 @@ export default class PipelineSummary extends Component {
     if (!isBatchPipeline(this.props.pipelineType)) {
       return;
     }
-    let { namespaceId: namespace, appId, programId: workflowId } = this.props;
+    const { namespaceId: namespace, appId, programId: workflowId } = this.props;
     MyPipelineApi.getStatistics({
       namespace,
       appId,
@@ -171,7 +177,7 @@ export default class PipelineSummary extends Component {
         ...run,
         starting: run.starting,
       }));
-      let logsMetrics = runs.map((run) => ({
+      const logsMetrics = runs.map((run) => ({
         runid: run.runid,
         logsMetrics: run.logsMetrics || {},
         start: run.start,
@@ -219,7 +225,13 @@ export default class PipelineSummary extends Component {
       start: null,
       end: null,
     });
-    let { namespaceId, appId, programType, programId, pipelineConfig } = this.props;
+    const {
+      namespaceId,
+      appId,
+      programType,
+      programId,
+      pipelineConfig,
+    } = this.props;
     fetchSummary({
       namespaceId,
       appId,
@@ -230,8 +242,8 @@ export default class PipelineSummary extends Component {
     });
   }
   fetchRunsByTime(time, filterLabel) {
-    let end = Math.floor(Date.now() / 1000);
-    let start = end - time;
+    const end = Math.floor(Date.now() / 1000);
+    const start = end - time;
     this.setState({
       activeRunsFilter: filterLabel,
       filterType: 'time',
@@ -239,7 +251,13 @@ export default class PipelineSummary extends Component {
       start,
       end,
     });
-    let { namespaceId, appId, programType, programId, pipelineConfig } = this.props;
+    const {
+      namespaceId,
+      appId,
+      programType,
+      programId,
+      pipelineConfig,
+    } = this.props;
     fetchSummary({
       namespaceId,
       appId,
@@ -255,7 +273,9 @@ export default class PipelineSummary extends Component {
       <div className="stats-container">
         {isBatchPipeline(this.props.pipelineType) ? (
           <span>
-            <strong>{T.translate(`${PREFIX}.statsContainer.avgRunTime`)}: </strong>
+            <strong>
+              {T.translate(`${PREFIX}.statsContainer.avgRunTime`)}:{' '}
+            </strong>
             {humanReadableDuration(this.state.avgRunTime)}
           </span>
         ) : null}
@@ -293,7 +313,10 @@ export default class PipelineSummary extends Component {
                     return <DropdownItem tag="li" divider />;
                   }
                   return (
-                    <DropdownItem tag="li" onClick={dropdown.onClick.bind(this, dropdown.label)}>
+                    <DropdownItem
+                      tag="li"
+                      onClick={dropdown.onClick.bind(this, dropdown.label)}
+                    >
                       {dropdown.label}
                     </DropdownItem>
                   );

@@ -55,10 +55,12 @@ export default class ProfilePreview extends Component {
   }
 
   getProfileDetails() {
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
     let apiObservable$;
     if (this.props.profileScope === SCOPES.SYSTEM) {
-      apiObservable$ = MyCloudApi.getSystemProfile({ profile: this.props.profileName });
+      apiObservable$ = MyCloudApi.getSystemProfile({
+        profile: this.props.profileName,
+      });
     } else {
       apiObservable$ = MyCloudApi.get({
         namespace,
@@ -85,21 +87,23 @@ export default class ProfilePreview extends Component {
   }
 
   getProfileMetrics = () => {
-    let { profileName } = this.props;
-    let { profileDetails } = this.state;
+    const { profileName } = this.props;
+    const { profileDetails } = this.state;
     const extraTags = {
       profilescope: profileDetails.scope,
       programtype: 'Workflow',
       profile: `${profileName}`,
     };
-    fetchAggregateProfileMetrics(getCurrentNamespace(), profileDetails, extraTags).subscribe(
-      (metricsMap) => {
-        let oneDayMetrics = metricsMap[ONEDAYMETRICKEY];
-        this.setState({
-          metrics: oneDayMetrics,
-        });
-      }
-    );
+    fetchAggregateProfileMetrics(
+      getCurrentNamespace(),
+      profileDetails,
+      extraTags
+    ).subscribe((metricsMap) => {
+      const oneDayMetrics = metricsMap[ONEDAYMETRICKEY];
+      this.setState({
+        metrics: oneDayMetrics,
+      });
+    });
   };
   getProvisioners() {
     MyCloudApi.getProvisioners().subscribe(
@@ -124,10 +128,12 @@ export default class ProfilePreview extends Component {
         </div>
       );
     }
-    let profileNamespace =
-      this.state.profileDetails.scope === SCOPES.SYSTEM ? SYSTEM_NAMESPACE : getCurrentNamespace();
-    let profileDetailsLink = `${location.protocol}//${location.host}/cdap/ns/${profileNamespace}/profiles/details/${this.props.profileName}`;
-    let profileProvisionerLabel = getProvisionerLabel(
+    const profileNamespace =
+      this.state.profileDetails.scope === SCOPES.SYSTEM
+        ? SYSTEM_NAMESPACE
+        : getCurrentNamespace();
+    const profileDetailsLink = `${location.protocol}//${location.host}/cdap/ns/${profileNamespace}/profiles/details/${this.props.profileName}`;
+    const profileProvisionerLabel = getProvisionerLabel(
       this.state.profileDetails,
       this.state.provisioners
     );
@@ -140,7 +146,9 @@ export default class ProfilePreview extends Component {
           <strong title={profileLabel}>{profileLabel}</strong>
         </div>
         <div className="profile-descripion">
-          <p className="multi-line-text">{this.state.profileDetails.description}</p>
+          <p className="multi-line-text">
+            {this.state.profileDetails.description}
+          </p>
         </div>
         <div className="grid grid-container">
           <div className="grid-header">
@@ -162,12 +170,22 @@ export default class ProfilePreview extends Component {
           <div className="grid-body">
             <div className="grid-row">
               <div>
-                <span className="provisioner-name truncate-text">{profileProvisionerLabel}</span>
+                <span className="provisioner-name truncate-text">
+                  {profileProvisionerLabel}
+                </span>
               </div>
-              <div className="truncate-text">{this.state.profileDetails.scope}</div>
+              <div className="truncate-text">
+                {this.state.profileDetails.scope}
+              </div>
               <div>{this.state.metrics.runs || '--'}</div>
               <div>{getNodeHours(this.state.metrics.minutes || '--')}</div>
-              <div>{humanReadableDate(this.state.profileDetails.created, false, true)}</div>
+              <div>
+                {humanReadableDate(
+                  this.state.profileDetails.created,
+                  false,
+                  true
+                )}
+              </div>
               <div className={`profile-status ${profileStatus}`}>
                 {T.translate(`features.Cloud.Profiles.common.${profileStatus}`)}
               </div>

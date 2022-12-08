@@ -52,7 +52,12 @@ const mapDispatchToCheckpointingProps = (dispatch) => {
   };
 };
 
-const Checkpointing = ({ disableCheckpoints, checkpointDir, onToggle, onCheckpointDirChange }) => {
+const Checkpointing = ({
+  disableCheckpoints,
+  checkpointDir,
+  onToggle,
+  onCheckpointDirChange,
+}) => {
   const checkpointDirComponent = (
     <div className="label-with-toggle row">
       <span className="toggle-label col-4">

@@ -29,6 +29,10 @@ export default class AccordionContent extends PureComponent {
   };
 
   render() {
-    return <div className={`accordion-content ${this.props.size}`}>{this.props.children}</div>;
+    return (
+      <div className={`accordion-content ${this.props.size}`}>
+        {this.props.children}
+      </div>
+    );
   }
 }

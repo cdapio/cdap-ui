@@ -18,10 +18,15 @@ import { hot } from 'react-hot-loader/root';
 import 'react-hot-loader/patch';
 import './globals';
 
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} from 'apollo-cache-inmemory';
 import React, { Component } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
-import SessionTokenStore, { fetchSessionToken } from 'services/SessionTokenStore';
+import SessionTokenStore, {
+  fetchSessionToken,
+} from 'services/SessionTokenStore';
 import { Theme, applyTheme } from 'services/ThemeHelper';
 import { WINDOW_ON_BLUR, WINDOW_ON_FOCUS } from 'services/WindowManager';
 
@@ -60,7 +65,11 @@ import VersionActions from 'services/VersionStore/VersionActions';
 import VersionStore from 'services/VersionStore';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
-import { handlePageLevelError, objectQuery, setupExperiments } from 'services/helpers';
+import {
+  handlePageLevelError,
+  objectQuery,
+  setupExperiments,
+} from 'services/helpers';
 import history from 'services/history';
 // See ./graphql/fragements/README.md
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
@@ -80,7 +89,10 @@ const DAG = Loadable({
 });
 
 const Administration = Loadable({
-  loader: () => import(/* webpackChunkName: "Administration" */ 'components/Administration'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "Administration" */ 'components/Administration'
+    ),
   loading: LoadingSVGCentered,
 });
 
@@ -142,7 +154,10 @@ class CDAP extends Component {
       if (err.reset === true) {
         this.setState({ pageLevelError: false });
       } else {
-        this.setState({ pageLevelError: handlePageLevelError(err), loading: false });
+        this.setState({
+          pageLevelError: handlePageLevelError(err),
+          loading: false,
+        });
       }
     });
     this.eventEmitter.on(globalEvents.API_ERROR, (apiError) => {
@@ -260,16 +275,35 @@ class CDAP extends Component {
       <div className="container-fluid">
         <ErrorBoundary>
           <Switch>
-            <Route exact path="/" render={(props) => <RouteToNamespace {...props} />} />
-            <Route exact path="/notfound" render={(props) => <Page404 {...props} />} />
-            <Route path="/administration" render={(props) => <Administration {...props} />} />
-            <Route exact path="/ns" render={(props) => <RouteToNamespace {...props} />} />
+            <Route
+              exact
+              path="/"
+              render={(props) => <RouteToNamespace {...props} />}
+            />
+            <Route
+              exact
+              path="/notfound"
+              render={(props) => <Page404 {...props} />}
+            />
+            <Route
+              path="/administration"
+              render={(props) => <Administration {...props} />}
+            />
+            <Route
+              exact
+              path="/ns"
+              render={(props) => <RouteToNamespace {...props} />}
+            />
             <Route
               path="/ns/:namespace"
               history={history}
               render={(props) => <Home {...props} />}
             />
-            <Route exact path="/httpexecutor" render={(props) => <HttpExecutor {...props} />} />
+            <Route
+              exact
+              path="/httpexecutor"
+              render={(props) => <HttpExecutor {...props} />}
+            />
 
             <Route
               exact
@@ -360,7 +394,8 @@ class CDAP extends Component {
         </ErrorBoundary>
       </div>
     );
-    const isNamespaceNotFound = objectQuery(this.state, 'pageLevelError', 'errorCode') === 404;
+    const isNamespaceNotFound =
+      objectQuery(this.state, 'pageLevelError', 'errorCode') === 404;
     const isUserUnAuthorizedForNamespace =
       objectQuery(this.state, 'pageLevelError', 'errorCode') === 403;
     return (
@@ -381,10 +416,14 @@ class CDAP extends Component {
               // normally I would use the shorthand for this but since this file is .js there is an
               // unexpected token
               <React.Fragment>
-                {isNamespaceNotFound && <Page404 message={this.state.pageLevelError.message} />}
+                {isNamespaceNotFound && (
+                  <Page404 message={this.state.pageLevelError.message} />
+                )}
                 {/** We show authorization failure message when the specific namespace API returns 403 */}
                 {isUserUnAuthorizedForNamespace && (
-                  <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
+                  <AuthorizationErrorMessage
+                    message={this.state.pageLevelError.message}
+                  />
                 )}
 
                 {!isUserUnAuthorizedForNamespace &&
@@ -401,7 +440,9 @@ class CDAP extends Component {
                  */}
                 {!this.state.pageLevelError &&
                   (this.state.authorizationFailed ? (
-                    <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
+                    <AuthorizationErrorMessage
+                      message={this.state.pageLevelError.message}
+                    />
                   ) : (
                     container
                   ))}

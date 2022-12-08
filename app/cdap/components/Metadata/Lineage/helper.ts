@@ -163,6 +163,8 @@ export async function secondLineageParser(
   /* SETTING CONNECTIONS */
   response.relations.forEach((rel) => {
     uniqueNodes[rel.program].runs = uniqueNodes[rel.program].runs.concat(rel.runs);
+    // CDAP-20181 - unsure what to make the second argument of uniqBy here
+    // @ts-ignore
     uniqueNodes[rel.program].runs = uniqBy(uniqueNodes[rel.program].runs);
     const isUnknownOrBoth = rel.accesses.length > 1;
     if (!isUnknownOrBoth && rel.accesses[0] === 'read') {

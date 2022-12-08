@@ -17,7 +17,10 @@
 import { createStore } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 import { defaultAction } from 'services/helpers';
-import { MMDS_SORT_METHODS, MMDS_SORT_COLUMN } from 'components/Experiments/store';
+import {
+  MMDS_SORT_METHODS,
+  MMDS_SORT_COLUMN,
+} from 'components/Experiments/store';
 
 const ACTIONS = {
   SET_EXPERIMENT_DETAILS: 'SET_EXPERIMENT_DETAILS',
@@ -61,10 +64,13 @@ export const DEFAULT_EXPERIMENT_DETAILS = {
   error: null,
 };
 
-const experimentDetails = (state = DEFAULT_EXPERIMENT_DETAILS, action = defaultAction) => {
+const experimentDetails = (
+  state = DEFAULT_EXPERIMENT_DETAILS,
+  action = defaultAction
+) => {
   switch (action.type) {
     case ACTIONS.SET_EXPERIMENT_DETAILS: {
-      let {
+      const {
         name = '',
         description = '',
         srcpath = '',
@@ -113,7 +119,9 @@ const experimentDetails = (state = DEFAULT_EXPERIMENT_DETAILS, action = defaultA
         ...state,
         models,
         modelsTotalCount: action.payload.totalCount,
-        modelsTotalPages: Math.ceil(action.payload.totalCount / state.modelsLimit),
+        modelsTotalPages: Math.ceil(
+          action.payload.totalCount / state.modelsLimit
+        ),
         loading: false,
       };
     }
@@ -136,7 +144,9 @@ const experimentDetails = (state = DEFAULT_EXPERIMENT_DETAILS, action = defaultA
         ...state,
         models: state.models.map((model) => ({
           ...model,
-          active: !model.active ? model.id === action.payload.activeModelId : !model.active,
+          active: !model.active
+            ? model.id === action.payload.activeModelId
+            : !model.active,
           loading: false,
         })),
       };
@@ -149,7 +159,9 @@ const experimentDetails = (state = DEFAULT_EXPERIMENT_DETAILS, action = defaultA
       return {
         ...state,
         models: state.models.map((model) => {
-          let matchingSplit = action.payload.splits.find((split) => split.id === model.split);
+          const matchingSplit = action.payload.splits.find(
+            (split) => split.id === model.split
+          );
           if (matchingSplit) {
             return {
               ...model,
@@ -160,8 +172,8 @@ const experimentDetails = (state = DEFAULT_EXPERIMENT_DETAILS, action = defaultA
         }),
       };
     case ACTIONS.SET_MODEL_STATUS: {
-      let modelsWithError = [...state.modelsWithError];
-      let modelIndex = modelsWithError.indexOf(action.payload.modelId);
+      const modelsWithError = [...state.modelsWithError];
+      const modelIndex = modelsWithError.indexOf(action.payload.modelId);
       if (modelIndex !== -1) {
         modelsWithError.splice(modelIndex, 1);
       }

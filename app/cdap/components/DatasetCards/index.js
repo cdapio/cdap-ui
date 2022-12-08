@@ -25,9 +25,9 @@ import uuidV4 from 'uuid/v4';
 require('./DatasetCards.scss');
 
 export default function DatasetCards({ dataEntities }) {
-  let currentNamespace = NamespaceStore.getState().selectedNamespace;
-  let data = dataEntities.map((dataEntity) => {
-    let entity = parseMetadata(dataEntity);
+  const currentNamespace = NamespaceStore.getState().selectedNamespace;
+  const data = dataEntities.map((dataEntity) => {
+    const entity = parseMetadata(dataEntity);
     entity.uniqueId = uuidV4();
     return entity;
   });
@@ -37,11 +37,14 @@ export default function DatasetCards({ dataEntities }) {
         <Link
           key={dataEntity.id}
           to={{
-            pathname: `/ns/${currentNamespace}/${convertEntityTypeToApi(dataEntity.type)}/${
-              dataEntity.id
-            }`,
+            pathname: `/ns/${currentNamespace}/${convertEntityTypeToApi(
+              dataEntity.type
+            )}/${dataEntity.id}`,
             state: {
-              previousPathname: (location.pathname + location.search).replace(/\/cdap\//g, '/'),
+              previousPathname: (location.pathname + location.search).replace(
+                /\/cdap\//g,
+                '/'
+              ),
             },
           }}
         >

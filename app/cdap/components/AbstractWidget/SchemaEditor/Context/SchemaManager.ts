@@ -96,7 +96,7 @@ class SchemaManagerBase implements ISchemaManager {
 
   // Generic function to insert the newly created child id into the order array
   // to maintain order of fields.
-  private insertNewIdToOrder = (order = [], referenceId) => {
+  private insertNewIdToOrder = (order: any[] = [], referenceId) => {
     const id = uuidV4();
     // +1 to add next to the current element.
     const currentIndexOfChild = order.findIndex((c) => c === referenceId) + 1;
@@ -178,7 +178,7 @@ class SchemaManagerBase implements ISchemaManager {
     };
   };
 
-  private addSpecificTypesToTree = (tree: INode, fieldId: IFieldIdentifier) => {
+  private addSpecificTypesToTree = (tree: INode, fieldId: IFieldIdentifier): any => {
     switch (tree.type) {
       case AvroSchemaTypesEnum.ENUM:
         return this.addNewEnumSymbol(tree, fieldId);
@@ -194,11 +194,13 @@ class SchemaManagerBase implements ISchemaManager {
   private addToTree = (
     tree: INode,
     fieldId: IFieldIdentifier
-  ): {
-    tree: INode;
-    newTree: INode;
-    currentField: INode;
-  } => {
+  ):
+    | {
+        tree?: INode;
+        newTree?: INode;
+        currentField?: INode;
+      }
+    | any => {
     if (!tree) {
       return { tree: undefined, newTree: undefined, currentField: undefined };
     }
@@ -208,7 +210,9 @@ class SchemaManagerBase implements ISchemaManager {
     }
     // Traverse to the specific child tree in the main schema tree.
     const { tree: child, newTree, currentField } = this.addToTree(
-      tree.children[fieldId.ancestors[1]],
+      // CDAP-20181
+      // @ts-ignore
+      treee.children[fieldId.ancestors[1]],
       { id: fieldId.id, ancestors: fieldId.ancestors.slice(1) }
     );
     // Mutates the main schema tree. This a performance optimization that we need to
@@ -216,8 +220,11 @@ class SchemaManagerBase implements ISchemaManager {
     return {
       tree: {
         ...tree,
+        // CDAP-20181
+        // @ts-ignore
         children: {
           ...tree.children,
+          // @ts-ignore
           [child.id]: child,
         },
       },
@@ -244,7 +251,7 @@ class SchemaManagerBase implements ISchemaManager {
   private add = (fieldId: IFieldIdentifier): IOnChangeReturnType => {
     const currentIndex = this.flatTree.findIndex((f) => f.id === fieldId.id);
     const matchingEntry = this.flatTree[currentIndex];
-    let result: { tree: INode; newTree: INode; currentField: INode };
+    let result: { tree: INode; newTree: INode; currentField: INode } | any;
     let newFlatSubTree: IFlattenRowType[];
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
     // The result is the newly modified tree, the newly added tree and the current field
@@ -270,7 +277,7 @@ class SchemaManagerBase implements ISchemaManager {
     };
   };
 
-  private removeFromTree = (tree: INode, fieldId) => {
+  private removeFromTree = (tree: INode | any, fieldId) => {
     if (!tree) {
       return { tree: undefined };
     }
@@ -332,7 +339,7 @@ class SchemaManagerBase implements ISchemaManager {
     // If the user removed a complex type we need to remove the row
     // and all of its children.
     const childrenInBranch = branchCount(removedField);
-    let newFlatSubTree = [];
+    let newFlatSubTree: any = [];
     // Newly added row in case we need to maintain the structure of say, a record or an enum.
     if (newlyAddedField) {
       const customOptions = {
@@ -353,14 +360,16 @@ class SchemaManagerBase implements ISchemaManager {
   };
 
   private updateTree = (
-    tree: INode,
+    tree: INode | any,
     fieldId: IFieldIdentifier,
     { property, value }: Partial<IOnChangePayload>
-  ): {
-    tree: INode;
-    childrenCount: number;
-    newTree: INode;
-  } => {
+  ):
+    | {
+        tree: INode;
+        childrenCount: number;
+        newTree: INode;
+      }
+    | any => {
     if (!tree) {
       return { childrenCount: undefined, tree: undefined, newTree: undefined };
     }
@@ -371,10 +380,10 @@ class SchemaManagerBase implements ISchemaManager {
           ...value,
         };
       } else {
-        tree.children[fieldId.id][property] = value;
+        tree.children[fieldId.id][property as string] = value;
       }
       let childrenInBranch = 0;
-      let newChildTree: INode;
+      let newChildTree: INode | any;
       if (property === 'type') {
         childrenInBranch = branchCount(tree.children[fieldId.id]);
         tree.children[fieldId.id].children = initChildren(value);
@@ -382,6 +391,7 @@ class SchemaManagerBase implements ISchemaManager {
         tree.children[fieldId.id].internalType = getInternalType(tree.children[fieldId.id]);
         tree.children[fieldId.id].typeProperties = initTypeProperties(tree.children[fieldId.id]);
       }
+
       return {
         tree,
         childrenCount: childrenInBranch,
@@ -428,11 +438,11 @@ class SchemaManagerBase implements ISchemaManager {
         ...value,
       };
     } else {
-      this.flatTree[index][property] = value;
+      this.flatTree[index][property as string] = value;
     }
     const matchingEntry = this.flatTree[index];
     let result: { tree: INode; childrenCount: number; newTree: INode };
-    let newFlatSubTree: IFlattenRowType[];
+    let newFlatSubTree: IFlattenRowType[] | any;
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
     result = this.updateTree(this.schemaTree, idObj, { property, value });
     this.schemaTree = result.tree;
@@ -470,7 +480,7 @@ class SchemaManagerBase implements ISchemaManager {
    * @param fieldObj - id of the flattened row
    * @param schemaTree - Tree to find the root node.
    */
-  private getFieldObjFromTree = (fieldObj, schemaTree: INode): INode => {
+  private getFieldObjFromTree = (fieldObj, schemaTree: INode | any): INode => {
     if (fieldObj.id === schemaTree.id) {
       return schemaTree;
     }
@@ -552,7 +562,7 @@ class SchemaManagerBase implements ISchemaManager {
   public onChange = (
     fieldId: IFieldIdentifier,
     { type, property, value }: IOnChangePayload
-  ): IOnChangeReturnType => {
+  ): IOnChangeReturnType | any => {
     if (isNilOrEmpty(fieldId)) {
       return;
     }

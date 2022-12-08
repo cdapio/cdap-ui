@@ -29,12 +29,13 @@ require('./RuleBook.scss');
 const PREFIX = 'features.RulesEngine.Rulebook';
 
 export default function RuleBook({ bookDetails }) {
-  let { id, user: owner, updated, rules, description } = bookDetails;
-  let numOfRules = !isNil(rules) && typeof rules === 'string' ? rules.split(',').length : 0;
+  const { id, user: owner, updated, rules, description } = bookDetails;
+  const numOfRules =
+    !isNil(rules) && typeof rules === 'string' ? rules.split(',').length : 0;
   const onClick = () => {
     setActiveRulebook(id);
   };
-  let { rulebooks } = RulesEngineStore.getState();
+  const { rulebooks } = RulesEngineStore.getState();
 
   return (
     <div

@@ -17,12 +17,19 @@
 import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
-import { objectQuery, preventPropagation, isNilOrEmpty } from 'services/helpers';
+import {
+  objectQuery,
+  preventPropagation,
+  isNilOrEmpty,
+} from 'services/helpers';
 import IconSVG from 'components/shared/IconSVG';
 import ProfilePreview from 'components/Cloud/Profiles/Preview';
 import Popover from 'components/shared/Popover';
 import classnames from 'classnames';
-import { extractProfileName, getProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
+import {
+  extractProfileName,
+  getProfiles,
+} from 'components/Cloud/Profiles/Store/ActionCreator';
 import ProfilesStore from 'components/Cloud/Profiles/Store';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { CLOUD } from 'services/global-constants';
@@ -54,17 +61,22 @@ class RunLevelComputeProfile extends Component {
   }
 
   fetchProfilesForLabel = (props = this.props) => {
-    let { profiles, isProfileFetchInTrasit, profileName } = props;
-    if (!isNilOrEmpty(profileName) && !isProfileFetchInTrasit && !profiles.length) {
+    const { profiles, isProfileFetchInTrasit, profileName } = props;
+    if (
+      !isNilOrEmpty(profileName) &&
+      !isProfileFetchInTrasit &&
+      !profiles.length
+    ) {
       return getProfiles(getCurrentNamespace());
     }
     this.updateProfilesMap(props);
   };
 
   updateProfilesMap = ({ profiles }) => {
-    let profilesNameToLabelMap = {};
+    const profilesNameToLabelMap = {};
     profiles.forEach(
-      (profile) => (profilesNameToLabelMap[profile.name] = profile.label || profile.name)
+      (profile) =>
+        (profilesNameToLabelMap[profile.name] = profile.label || profile.name)
     );
     this.setState({
       profilesNameToLabelMap,
@@ -72,8 +84,8 @@ class RunLevelComputeProfile extends Component {
   };
 
   getProfileLabel = () => {
-    let profileName = extractProfileName(this.props.profileName);
-    let profileLabel = this.state.profilesNameToLabelMap[profileName];
+    const profileName = extractProfileName(this.props.profileName);
+    const profileLabel = this.state.profilesNameToLabelMap[profileName];
     return isNilOrEmpty(profileLabel) ? profileName : profileLabel;
   };
 
@@ -86,7 +98,11 @@ class RunLevelComputeProfile extends Component {
           })}
         >
           {!this.props.profileName ? (
-            <button className="btn btn-link" title={T.translate(`${PREFIX}.noInfo`)} disabled>
+            <button
+              className="btn btn-link"
+              title={T.translate(`${PREFIX}.noInfo`)}
+              disabled
+            >
               <IconSVG name="icon-cloud" />
               <span>--</span>
             </button>

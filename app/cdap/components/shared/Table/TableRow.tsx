@@ -85,7 +85,9 @@ const TableRowView: React.FC<React.PropsWithChildren<
 
   return (
     <div
-      className={classnames(classes.gridRow, className, { [classes.hover]: hover })}
+      className={classnames(classes.gridRow, className, {
+        [classes.hover]: hover,
+      })}
       style={style}
       {...rest}
     >

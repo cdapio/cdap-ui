@@ -12,7 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -44,9 +44,14 @@ const mapDispatchToStageLoggingProps = (dispatch) => {
 const StageLogging = ({ stageLogging, onToggle }) => {
   return (
     <div className="label-with-toggle stageLogging row">
-      <span className="toggle-label col-4">{T.translate(`${PREFIX}.stageLogging`)}</span>
+      <span className="toggle-label col-4">
+        {T.translate(`${PREFIX}.stageLogging`)}
+      </span>
       <div className="col-7 toggle-container">
-        <ToggleSwitch isOn={stageLogging} onToggle={onToggle.bind(null, !stageLogging)} />
+        <ToggleSwitch
+          isOn={stageLogging}
+          onToggle={onToggle.bind(null, !stageLogging)}
+        />
         <Popover
           target={() => <IconSVG name="icon-info-circle" />}
           showOn="Hover"

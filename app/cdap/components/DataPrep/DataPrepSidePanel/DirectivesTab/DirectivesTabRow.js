@@ -32,8 +32,12 @@ export default class DirectivesTabRow extends Component {
   }
 
   componentDidMount() {
-    let container = document.getElementById(`name-container-${this.props.rowInfo.uniqueId}`);
-    let content = document.getElementById(`name-content-${this.props.rowInfo.uniqueId}`);
+    const container = document.getElementById(
+      `name-container-${this.props.rowInfo.uniqueId}`
+    );
+    const content = document.getElementById(
+      `name-content-${this.props.rowInfo.uniqueId}`
+    );
 
     if (content.offsetWidth > container.offsetWidth) {
       this.setState({
@@ -63,7 +67,9 @@ export default class DirectivesTabRow extends Component {
           })}
           onClick={this.toggleExpand}
         >
-          <span id={`name-content-${this.props.rowInfo.uniqueId}`}>{this.props.rowInfo.name}</span>
+          <span id={`name-content-${this.props.rowInfo.uniqueId}`}>
+            {this.props.rowInfo.name}
+          </span>
         </span>
         <span className="float-right">
           <span

@@ -29,6 +29,7 @@ import Store, {
   PIPELINE_HISTORY_QUERY,
   setPageLimit,
   setVersions,
+  IPipelineHistoryStore,
 } from './PipelineHistoryStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
@@ -54,7 +55,9 @@ const PaginationContainer = styled.div`
 `;
 
 const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
-  const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
+  const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(
+    ({ versions }: IPipelineHistoryStore) => versions
+  );
   const [isRestoreLoading, setIsRestoreLoading] = useState(false);
   const [latestVersion, setLatestVersion] = useState(null);
 
@@ -76,7 +79,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
 
   const Pagination = ({}) => {
     const { prevDisabled, nextDisabled, pageCount, pageIndex, pageLimitOptions } = useSelector(
-      ({ versions }) => ({
+      ({ versions }: IPipelineHistoryStore) => ({
         prevDisabled: !versions.previousTokens.length,
         nextDisabled: !versions.nextPageToken,
         pageCount: versions.pipelineVersions.length,

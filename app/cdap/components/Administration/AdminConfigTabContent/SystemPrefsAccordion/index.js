@@ -19,7 +19,10 @@ import PropTypes from 'prop-types';
 import IconSVG from 'components/shared/IconSVG';
 import SetPreferenceModal from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
 import classnames from 'classnames';
-import { convertMapToKeyValuePairs, convertKeyValuePairsToMap } from 'services/helpers';
+import {
+  convertMapToKeyValuePairs,
+  convertKeyValuePairsToMap,
+} from 'services/helpers';
 import { MyPreferenceApi } from 'api/preference';
 import ViewAllLabel from 'components/shared/ViewAllLabel';
 import T from 'i18n-react';
@@ -79,13 +82,18 @@ export default class SystemPrefsAccordion extends Component {
   fetchNewPrefs = () => {
     MyPreferenceApi.getSystemPreferences().subscribe(
       (prefs) => {
-        let currentPrefs = convertKeyValuePairsToMap(this.state.prefsForDisplay);
+        const currentPrefs = convertKeyValuePairsToMap(
+          this.state.prefsForDisplay
+        );
         let hasNewPrefs = false;
 
         let newPrefsForDisplay = Object.entries(prefs).map(([key, value]) => {
           let prefIsHighlighted = false;
 
-          if (!(key in currentPrefs) || (key in currentPrefs && currentPrefs[key] !== value)) {
+          if (
+            !(key in currentPrefs) ||
+            (key in currentPrefs && currentPrefs[key] !== value)
+          ) {
             hasNewPrefs = true;
             prefIsHighlighted = true;
           }
@@ -137,9 +145,14 @@ export default class SystemPrefsAccordion extends Component {
 
   renderLabel() {
     return (
-      <div className="admin-config-container-toggle" onClick={this.props.onExpand}>
+      <div
+        className="admin-config-container-toggle"
+        onClick={this.props.onExpand}
+      >
         <span className="admin-config-container-label">
-          <IconSVG name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'} />
+          <IconSVG
+            name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'}
+          />
           {this.state.loading ? (
             <h5>
               {T.translate(`${PREFIX}.label`)}
@@ -162,7 +175,11 @@ export default class SystemPrefsAccordion extends Component {
 
   renderGrid() {
     if (!this.state.prefsForDisplay.length) {
-      return <div className="grid-wrapper text-center">{T.translate(`${PREFIX}.noPrefs`)}</div>;
+      return (
+        <div className="grid-wrapper text-center">
+          {T.translate(`${PREFIX}.noPrefs`)}
+        </div>
+      );
     }
 
     let prefs = [...this.state.prefsForDisplay];

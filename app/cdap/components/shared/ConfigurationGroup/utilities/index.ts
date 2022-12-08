@@ -70,23 +70,25 @@ export function processConfigurationGroups(
   }
 
   // filter out properties that are not listed by pluginProperties
-  const filteredConfigurationGroups = addPluginFunctions(configurationGroups || []).map((group) => {
-    return {
-      ...group,
-      properties: group.properties
-        .filter(
-          (property) =>
-            pluginProperties[property.name] ||
-            (property['widget-category'] && property['widget-category'] === 'plugin')
-        )
-        .map((property) => {
-          return {
-            ...property,
-            'widget-attributes': property['widget-attributes'] || {},
-          };
-        }),
-    };
-  });
+  const filteredConfigurationGroups = addPluginFunctions(configurationGroups || []).map(
+    (group: any) => {
+      return {
+        ...group,
+        properties: group.properties
+          .filter(
+            (property) =>
+              pluginProperties[property.name] ||
+              (property['widget-category'] && property['widget-category'] === 'plugin')
+          )
+          .map((property) => {
+            return {
+              ...property,
+              'widget-attributes': property['widget-attributes'] || {},
+            };
+          }),
+      };
+    }
+  );
 
   const defaultValues = {};
 
@@ -108,7 +110,7 @@ export function processConfigurationGroups(
 
   // Filter out properties defined as output in widget JSON
   const outputPropertiesName = {};
-  (widgetOuputs || []).forEach((output) => {
+  (widgetOuputs || []).forEach((output: any) => {
     outputPropertiesName[output.name] = true;
   });
   const pluginPropertiesName = Object.keys(pluginProperties).filter((propertyName) => {
@@ -141,11 +143,11 @@ export function processConfigurationGroups(
 }
 
 function addPluginFunctions(configurationGroups) {
-  const updatedConfigurationGroups = [];
+  const updatedConfigurationGroups: any[] = [];
 
   configurationGroups.forEach((group) => {
     const { label, description, hideByDefault } = group;
-    const newGroup = {
+    const newGroup: any = {
       label,
       description,
       hideByDefault,

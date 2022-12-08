@@ -28,7 +28,7 @@ import DataprepBrowserTopPanel from 'components/DataPrep/DataPrepBrowser/DataPre
 
 require('./BigQueryBrowser.scss');
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.BigQueryBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.BigQueryBrowser';
 
 export default class BiqQueryBrowser extends Component {
   static propTypes = {
@@ -71,7 +71,9 @@ export default class BiqQueryBrowser extends Component {
               <Route
                 exact
                 path="/ns/:namespace/connections/bigquery/:connectionId/datasets/:datasetId"
-                render={(routeProps) => <TableList {...routeProps} scope={this.props.scope} />}
+                render={(routeProps) => (
+                  <TableList {...routeProps} scope={this.props.scope} />
+                )}
               />
             </Switch>
           ) : (

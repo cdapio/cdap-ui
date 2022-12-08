@@ -46,7 +46,9 @@ export default class PluginArtifactUploadWizard extends Component {
   }
   onSubmit() {
     this.buildSuccessInfo();
-    return ArtifactUploadActionCreator.uploadArtifact(this.props.includeParents).mergeMap(() => {
+    return ArtifactUploadActionCreator.uploadArtifact(
+      this.props.includeParents
+    ).mergeMap(() => {
       this.props.onSubmit();
       return ArtifactUploadActionCreator.uploadConfigurationJson();
     });
@@ -65,13 +67,15 @@ export default class PluginArtifactUploadWizard extends Component {
     });
   }
   render() {
-    let input = this.props.input;
-    let pkg = input.package || {};
-    let headerLabel = input.headerLabel;
+    const input = this.props.input;
+    const pkg = input.package || {};
+    const headerLabel = input.headerLabel;
 
-    let wizardModalTitle =
+    const wizardModalTitle =
       (pkg.label ? pkg.label + ' | ' : '') +
-      (headerLabel ? headerLabel : T.translate('features.Wizard.Informational.headerlabel'));
+      (headerLabel
+        ? headerLabel
+        : T.translate('features.Wizard.Informational.headerlabel'));
     return (
       <WizardModal
         title={wizardModalTitle}

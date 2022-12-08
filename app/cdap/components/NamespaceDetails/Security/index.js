@@ -84,11 +84,15 @@ class NamespaceDetailsSecurity extends Component {
           </div>
           <div className="security-values">
             <strong>{T.translate(`${PREFIX}.principal`)}</strong>
-            <span title={this.props.principal}>{this.props.principal || '- -'}</span>
+            <span title={this.props.principal}>
+              {this.props.principal || '- -'}
+            </span>
           </div>
           <div className="security-values">
             <strong>{T.translate(`${PREFIX}.keytabURI`)}</strong>
-            <span title={this.props.keytabURI}>{this.props.keytabURI || '- -'}</span>
+            <span title={this.props.keytabURI}>
+              {this.props.keytabURI || '- -'}
+            </span>
           </div>
           {this.state.modalOpen ? (
             <AddNamespaceWizard
@@ -106,5 +110,7 @@ class NamespaceDetailsSecurity extends Component {
   }
 }
 
-const ConnectedNamespaceDetailsSecurity = connect(mapStateToProps)(NamespaceDetailsSecurity);
+const ConnectedNamespaceDetailsSecurity = connect(mapStateToProps)(
+  NamespaceDetailsSecurity
+);
 export default ConnectedNamespaceDetailsSecurity;

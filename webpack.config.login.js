@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2016 Cask Data, Inc.
  *
@@ -13,37 +14,44 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var StyleLintPlugin = require('stylelint-webpack-plugin');
-var path = require('path');
-var uuidV4 = require('uuid/v4');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-var TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const path = require('path');
+const uuidV4 = require('uuid/v4');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // the clean options to use
-let cleanOptions = {
+const cleanOptions = {
   verbose: true,
   dry: false,
 };
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = mode =>
+  mode === 'production' || mode === 'non-optimized-production';
 
-const getWebpackDllPlugins = (mode) => {
-  var sharedDllManifestFileName = 'shared-vendor-manifest.json';
+const getWebpackDllPlugins = mode => {
+  let sharedDllManifestFileName = 'shared-vendor-manifest.json';
   if (mode === 'development') {
     sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
   }
   return new webpack.DllReferencePlugin({
     context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
-    manifest: require(path.join(__dirname, 'packaged', 'public', 'dll', sharedDllManifestFileName)),
+    manifest: require(path.join(
+      __dirname,
+      'packaged',
+      'public',
+      'dll',
+      sharedDllManifestFileName
+    )),
   });
 };
-var plugins = [
+const plugins = [
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -104,7 +112,7 @@ const loaderExclude = [
   /lib/,
 ];
 
-var rules = [
+const rules = [
   {
     test: /\.s?css$/,
     use: ['style-loader', 'css-loader', 'sass-loader'],
@@ -159,7 +167,7 @@ var rules = [
     use: 'file-loader',
   },
 ];
-var webpackConfig = {
+let webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/login',
   entry: {

@@ -53,7 +53,9 @@ export default class MicroserviceUploadWizard extends Component {
         if (isEmpty(artifact)) {
           return Observable.of([]);
         }
-        return MicroserviceUploadActionCreator.listMicroservicePlugins(artifact);
+        return MicroserviceUploadActionCreator.listMicroservicePlugins(
+          artifact
+        );
       })
       .mergeMap((plugins) => {
         MicroserviceUploadStore.dispatch({
@@ -72,7 +74,9 @@ export default class MicroserviceUploadWizard extends Component {
           if (propertiesArr.length > 0 && propertiesArr[0].properties) {
             MicroserviceUploadStore.dispatch({
               type: MicroserviceUploadActions.setMicroservicePluginProperties,
-              payload: { pluginProperties: Object.keys(propertiesArr[0].properties) },
+              payload: {
+                pluginProperties: Object.keys(propertiesArr[0].properties),
+              },
             });
           }
         },
@@ -115,10 +119,10 @@ export default class MicroserviceUploadWizard extends Component {
     });
   }
   startMicroservice() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let appId = MicroserviceUploadStore.getState().general.instanceName;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const appId = MicroserviceUploadStore.getState().general.instanceName;
 
-    let params = {
+    const params = {
       namespace,
       appId,
       programType: 'workers',
@@ -132,13 +136,19 @@ export default class MicroserviceUploadWizard extends Component {
     });
   }
   buildSuccessInfo() {
-    let appName = MicroserviceUploadStore.getState().general.instanceName;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.MicroserviceUpload.success', { appName });
-    let buttonLabel = T.translate('features.Wizard.MicroserviceUpload.callToAction');
-    let links = [
+    const appName = MicroserviceUploadStore.getState().general.instanceName;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.MicroserviceUpload.success', {
+      appName,
+    });
+    const buttonLabel = T.translate(
+      'features.Wizard.MicroserviceUpload.callToAction'
+    );
+    const links = [
       {
-        linkLabel: T.translate('features.Wizard.MicroserviceUpload.secondaryCallToAction'),
+        linkLabel: T.translate(
+          'features.Wizard.MicroserviceUpload.secondaryCallToAction'
+        ),
         linkUrl: window.getAbsUIUrl({
           namespaceId: namespace,
           appId: appName,
@@ -162,9 +172,9 @@ export default class MicroserviceUploadWizard extends Component {
     });
   }
   render() {
-    let input = this.props.input;
-    let headerLabel = input.headerLabel;
-    let wizardModalTitle = headerLabel
+    const input = this.props.input;
+    const headerLabel = input.headerLabel;
+    const wizardModalTitle = headerLabel
       ? headerLabel
       : T.translate('features.Resource-Center.Application.modalheadertitle');
     return (

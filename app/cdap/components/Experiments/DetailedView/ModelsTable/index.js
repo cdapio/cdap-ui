@@ -31,7 +31,11 @@ import { humanReadableDate, roundDecimalToNDigits } from 'services/helpers';
 import { NUMBER_TYPES } from 'services/global-constants';
 import classnames from 'classnames';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
-import { objectQuery, humanReadableNumber, HUMANREADABLE_DECIMAL } from 'services/helpers';
+import {
+  objectQuery,
+  humanReadableNumber,
+  HUMANREADABLE_DECIMAL,
+} from 'services/helpers';
 import isEmpty from 'lodash/isEmpty';
 import ModelStatusIndicator from 'components/Experiments/DetailedView/ModelStatusIndicator';
 import { Link } from 'react-router-dom';
@@ -60,7 +64,7 @@ const MODELSTATES = [
   MODEL_STATUS.DATA_READY,
   MODEL_STATUS.SPLIT_FAILED,
 ];
-let tableHeaders = [
+const tableHeaders = [
   {
     label: T.translate(`${PREFIX}.modelName`),
     property: 'name',
@@ -121,7 +125,7 @@ const getNewHeadersBasedOnOutcome = (outcomeType) =>
     : addMetricsToHeaders(tableHeaders, categoricalMetrics);
 
 const addDetailedModelObject = (list) => {
-  let activeIndex = list.findIndex((model) => model.active);
+  const activeIndex = list.findIndex((model) => model.active);
   if (activeIndex !== -1) {
     return [
       ...list.slice(0, activeIndex + 1),
@@ -145,18 +149,24 @@ const wrapMetricWithTitleAttr = (content, property) => {
   const ROUNDABLE_METRIC = regressionMetrics.map((metric) => metric.property);
   if (ROUNDABLE_METRIC.indexOf(property) !== -1) {
     return wrapContentWithTitleAttr(
-      humanReadableNumber(roundDecimalToNDigits(content, 4), HUMANREADABLE_DECIMAL),
+      humanReadableNumber(
+        roundDecimalToNDigits(content, 4),
+        HUMANREADABLE_DECIMAL
+      ),
       property
     );
   }
   return wrapContentWithTitleAttr(content, property);
 };
 const renderMetrics = (newHeaders, model) => {
-  let commonHeadersLen = tableHeaders.length;
-  let len = newHeaders.length;
-  let metrics = newHeaders.slice(commonHeadersLen, len);
+  const commonHeadersLen = tableHeaders.length;
+  const len = newHeaders.length;
+  const metrics = newHeaders.slice(commonHeadersLen, len);
   return metrics.map((t) =>
-    wrapMetricWithTitleAttr(model.evaluationMetrics[t.property] || '--', t.property)
+    wrapMetricWithTitleAttr(
+      model.evaluationMetrics[t.property] || '--',
+      t.property
+    )
   );
 };
 
@@ -211,13 +221,14 @@ const renderDirectivesTables = (directives) => {
 };
 
 const constructModelTrainingLogs = (model, experimentId) => {
-  let splitId = objectQuery(model, 'splitDetails', 'id');
-  let startTime = Math.floor(model.createtime / 1000);
-  let endTime = model.trainedtime === -1 ? model.trainingtime : model.trainedtime;
+  const splitId = objectQuery(model, 'splitDetails', 'id');
+  const startTime = Math.floor(model.createtime / 1000);
+  let endTime =
+    model.trainedtime === -1 ? model.trainingtime : model.trainedtime;
   endTime = Math.floor(endTime / 1000);
   if (splitId) {
-    let baseUrl = `/logviewer/view?namespace=${getCurrentNamespace()}&appId=ModelManagementApp&programType=spark&programId=ModelManagerService`;
-    let queryParams = `&filter=${encodeURIComponent(
+    const baseUrl = `/logviewer/view?namespace=${getCurrentNamespace()}&appId=ModelManagementApp&programType=spark&programId=ModelManagerService`;
+    const queryParams = `&filter=${encodeURIComponent(
       `MDC:experiment="${experimentId}" AND MDC:model=${model.id}`
     )}&startTime=${startTime}&endTime=${endTime}`;
     return `${baseUrl}${queryParams}`;
@@ -225,8 +236,8 @@ const constructModelTrainingLogs = (model, experimentId) => {
 };
 
 const renderModelDetails = (model, newlyTrainingModel, experimentId) => {
-  let newlyTrainingModelId = objectQuery(newlyTrainingModel, 'modelId');
-  let props = {
+  const newlyTrainingModelId = objectQuery(newlyTrainingModel, 'modelId');
+  const props = {
     className: classnames('grid-row', {
       opened: model.detailedView,
       active: model.active,
@@ -242,11 +253,13 @@ const renderModelDetails = (model, newlyTrainingModel, experimentId) => {
       </div>
     );
   }
-  let directives = objectQuery(model, 'splitDetails', 'directives') || [];
-  let splitId = objectQuery(model, 'splitDetails', 'id');
+  const directives = objectQuery(model, 'splitDetails', 'directives') || [];
+  const splitId = objectQuery(model, 'splitDetails', 'id');
   let modelTrainingLogsUrl;
-  let directivesCount = Array.isArray(directives) ? directives.length : 0;
-  let featuresCount = Array.isArray(model.features) ? model.features.length : 0;
+  const directivesCount = Array.isArray(directives) ? directives.length : 0;
+  const featuresCount = Array.isArray(model.features)
+    ? model.features.length
+    : 0;
 
   modelTrainingLogsUrl = constructModelTrainingLogs(model, experimentId);
   return (
@@ -298,7 +311,11 @@ const renderModelDetails = (model, newlyTrainingModel, experimentId) => {
           {splitId ? (
             <div>
               <strong>{T.translate(`${PREFIX}.modelTrainingLogs`)}</strong>
-              <a href={modelTrainingLogsUrl} target="_blank" rel="noopener noreferrer">
+              <a
+                href={modelTrainingLogsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {' '}
                 Logs{' '}
               </a>
@@ -329,10 +346,10 @@ const renderModel = (
   statusIsLoading,
   statusIsError
 ) => {
-  let newHeaders = getNewHeadersBasedOnOutcome(outcomeType);
-  let newlyTrainingModelId = objectQuery(newlyTrainingModel, 'modelId');
+  const newHeaders = getNewHeadersBasedOnOutcome(outcomeType);
+  const newlyTrainingModelId = objectQuery(newlyTrainingModel, 'modelId');
   let Component = 'div';
-  let props = {
+  const props = {
     className: classnames('grid-row grid-link', {
       opened: model.detailedView,
       active: model.active,
@@ -340,7 +357,7 @@ const renderModel = (
     }),
     key: uuidV4(),
   };
-  let inSplitStep = MODELSTATES.indexOf(model.status) !== -1;
+  const inSplitStep = MODELSTATES.indexOf(model.status) !== -1;
   if (inSplitStep) {
     Component = Link;
     props.to = `/ns/${getCurrentNamespace()}/experiments/create?experimentId=${experimentId}&modelId=${
@@ -398,17 +415,17 @@ function renderGridBody(
   modelsLoading,
   modelsWithError
 ) {
-  let list = addDetailedModelObject([...models]);
+  const list = addDetailedModelObject([...models]);
   return list.map((model) => {
-    let { name, algorithm, hyperparameters } = model;
+    const { name, algorithm, hyperparameters } = model;
     model = {
       ...model,
       name,
       algorithmLabel: getAlgorithmLabel(algorithm),
       hyperparameters,
     };
-    let statusIsLoading = modelsLoading.indexOf(model.id) !== -1;
-    let statusIsError = modelsWithError.indexOf(model.id) !== -1;
+    const statusIsLoading = modelsLoading.indexOf(model.id) !== -1;
+    const statusIsError = modelsWithError.indexOf(model.id) !== -1;
 
     if (model.detailedView) {
       return renderModelDetails(model, newlyTrainingModel, experimentId);
@@ -434,9 +451,13 @@ function renderGrid(
   modelsLoading,
   modelsWithError
 ) {
-  let newHeaders = getNewHeadersBasedOnOutcome(outcomeType);
+  const newHeaders = getNewHeadersBasedOnOutcome(outcomeType);
   const renderSortIcon = (sortMethod) =>
-    sortMethod === 'asc' ? <IconSVG name="icon-caret-down" /> : <IconSVG name="icon-caret-up" />;
+    sortMethod === 'asc' ? (
+      <IconSVG name="icon-caret-down" />
+    ) : (
+      <IconSVG name="icon-caret-up" />
+    );
   return (
     <div
       className={classnames('grid grid-container', {
@@ -557,7 +578,9 @@ const mapStateToProps = (state) => {
     outcomeType: state.outcomeType,
     modelsTotalPages: state.modelsTotalPages,
     modelsCurrentPage:
-      state.modelsOffset === 0 ? 1 : Math.ceil((state.modelsOffset + 1) / state.modelsLimit),
+      state.modelsOffset === 0
+        ? 1
+        : Math.ceil((state.modelsOffset + 1) / state.modelsLimit),
     modelsTotalCount: state.modelsTotalCount,
     newlyTrainingModel: state.newlyTrainingModel,
     modelsSortMethod: state.modelsSortMethod,

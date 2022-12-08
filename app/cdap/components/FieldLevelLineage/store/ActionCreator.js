@@ -16,7 +16,10 @@
 
 import { MyMetadataApi } from 'api/metadata';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import Store, { Actions, TIME_OPTIONS } from 'components/FieldLevelLineage/store/Store';
+import Store, {
+  Actions,
+  TIME_OPTIONS,
+} from 'components/FieldLevelLineage/store/Store';
 import debounce from 'lodash/debounce';
 import { parseQueryString } from 'services/helpers';
 import { Theme } from 'services/ThemeHelper';
@@ -139,7 +142,7 @@ export function getFields(datasetId, prefix, start = 'now-7d', end = 'now') {
 
   const namespace = getCurrentNamespace();
 
-  let params = {
+  const params = {
     namespace,
     entityId: datasetId,
     start,

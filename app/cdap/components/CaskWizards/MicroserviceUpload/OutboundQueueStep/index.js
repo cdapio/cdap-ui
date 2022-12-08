@@ -14,8 +14,8 @@
  * the License.
  */
 import React from 'react';
-import {connect, Provider} from 'react-redux';
-import {Form} from 'reactstrap';
+import { connect, Provider } from 'react-redux';
+import { Form } from 'reactstrap';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
 import MicroserviceUploadActions from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadActions';
 import MicroserviceQueueEditor from 'components/CaskWizards/MicroserviceUpload/MicroserviceQueueEditor';
@@ -23,16 +23,17 @@ import { preventPropagation } from 'services/helpers';
 
 const mapStateToOutboundQueuesProps = (state) => {
   return {
-    values: state.outboundQueues.queues
+    values: state.outboundQueues.queues,
   };
 };
 
 const mapDispatchToOutboundQueuesProps = (dispatch) => {
   return {
-    onChange: (values) => (dispatch({
-      type: MicroserviceUploadActions.setOutboundQueues,
-      payload: { outboundQueues: values }
-    }))
+    onChange: (values) =>
+      dispatch({
+        type: MicroserviceUploadActions.setOutboundQueues,
+        payload: { outboundQueues: values },
+      }),
   };
 };
 

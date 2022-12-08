@@ -22,12 +22,16 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import enableSystemApp from 'services/ServiceEnablerUtilities';
 import CardActionFeedback from 'components/shared/CardActionFeedback';
 import ee from 'event-emitter';
-import { i18nPrefix, MIN_DATAPREP_VERSION, artifactName } from 'components/DataPrep';
+import {
+  i18nPrefix,
+  MIN_DATAPREP_VERSION,
+  artifactName,
+} from 'components/DataPrep';
 import MyDataPrepApi from 'api/dataprep';
 import isObject from 'lodash/isObject';
 import { Theme } from 'services/ThemeHelper';
 
-const PREFIX = `features.DataPrep.TopPanel.UpgradeModal`;
+const PREFIX = 'features.DataPrep.TopPanel.UpgradeModal';
 
 export default class UpgradeModal extends Component {
   constructor(props) {
@@ -69,7 +73,7 @@ export default class UpgradeModal extends Component {
         this.eventEmitter.emit('REFRESH_DATAPREP');
       },
       (err) => {
-        let extendedMessage = isObject(err.extendedMessage)
+        const extendedMessage = isObject(err.extendedMessage)
           ? err.extendedMessage.response || err.extendedMessage.message
           : err.extendedMessage;
         this.setState({

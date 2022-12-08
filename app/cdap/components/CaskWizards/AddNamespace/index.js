@@ -106,13 +106,15 @@ export default class AddNamespaceWizard extends Component {
   }
   buildSuccessInfo(responseText) {
     // responseText has the format "Namespace '{namespace}' created successfully."
-    let newNamespaceId = responseText.split("'")[1];
-    let currentNamespaceId = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate(`${PREFIX}.Status.creation-success-desc`, {
+    const newNamespaceId = responseText.split("'")[1];
+    const currentNamespaceId = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate(`${PREFIX}.Status.creation-success-desc`, {
       namespaceId: newNamespaceId,
     });
-    let buttonLabel = T.translate(`${PREFIX}.callToAction`, { namespaceId: newNamespaceId });
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const buttonLabel = T.translate(`${PREFIX}.callToAction`, {
+      namespaceId: newNamespaceId,
+    });
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
     this.setState({
       successInfo: {
         message,
@@ -134,7 +136,9 @@ export default class AddNamespaceWizard extends Component {
           <WizardModal
             title={
               this.props.context
-                ? `${this.props.context} | ${T.translate(`${PREFIX}.headerlabel`)}`
+                ? `${this.props.context} | ${T.translate(
+                    `${PREFIX}.headerlabel`
+                  )}`
                 : T.translate(`${PREFIX}.headerlabel`)
             }
             isOpen={this.state.showWizard}

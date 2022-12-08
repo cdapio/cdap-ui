@@ -54,7 +54,7 @@ export default class Tag extends Component {
   };
 
   render() {
-    let tagClasses = classnames('btn btn-secondary tag-btn', {
+    const tagClasses = classnames('btn btn-secondary tag-btn', {
       'system-tag': this.props.scope === SCOPES.SYSTEM,
       'user-tag': this.props.scope === SCOPES.USER,
     });

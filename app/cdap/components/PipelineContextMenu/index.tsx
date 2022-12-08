@@ -149,7 +149,7 @@ export default function PipelineContextMenu({
   ];
   const onWranglerSourceAddWrapper = (...props) => {
     setShowWranglerModal(!showWranglerModal);
-    onWranglerSourceAdd.apply(null, props);
+    onWranglerSourceAdd.apply(null, props as any);
   };
   return (
     <React.Fragment>

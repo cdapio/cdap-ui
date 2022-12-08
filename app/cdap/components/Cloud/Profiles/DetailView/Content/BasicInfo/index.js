@@ -47,7 +47,10 @@ export default class ProfileDetailViewBasicInfo extends Component {
     extendedDeleteErrMsg: '',
     deleteLoading: false,
     redirectToListView: false,
-    provisionerLabel: getProvisionerLabel(this.props.profile, this.props.provisioners),
+    provisionerLabel: getProvisionerLabel(
+      this.props.profile,
+      this.props.provisioners
+    ),
     oneDayMetrics: {
       runs: this.props.oneDayMetrics.runs,
       minutes: this.props.oneDayMetrics.minutes,
@@ -76,10 +79,13 @@ export default class ProfileDetailViewBasicInfo extends Component {
   componentWillReceiveProps(nextProps) {
     if (!isEqual(nextProps.provisioners, this.props.provisioners)) {
       this.setState({
-        provisionerLabel: getProvisionerLabel(nextProps.profile, nextProps.provisioners),
+        provisionerLabel: getProvisionerLabel(
+          nextProps.profile,
+          nextProps.provisioners
+        ),
       });
     }
-    let { oneDayMetrics, overallMetrics } = nextProps;
+    const { oneDayMetrics, overallMetrics } = nextProps;
     this.setState({
       oneDayMetrics,
       overallMetrics,
@@ -99,8 +105,14 @@ export default class ProfileDetailViewBasicInfo extends Component {
       deleteLoading: true,
     });
 
-    let namespace = this.props.isSystem ? SYSTEM_NAMESPACE : getCurrentNamespace();
-    deleteProfile(namespace, this.props.profile.name, getCurrentNamespace()).subscribe(
+    const namespace = this.props.isSystem
+      ? SYSTEM_NAMESPACE
+      : getCurrentNamespace();
+    deleteProfile(
+      namespace,
+      this.props.profile.name,
+      getCurrentNamespace()
+    ).subscribe(
       () => {
         this.setState({
           redirectToListView: true,
@@ -122,10 +134,15 @@ export default class ProfileDetailViewBasicInfo extends Component {
       return null;
     }
 
-    const confirmationText = T.translate(`${PREFIX}.common.deleteConfirmation`, {
-      profile: this.props.profile.name,
-    });
-    const confirmationElem = <span title={this.props.profile.name}>{confirmationText}</span>;
+    const confirmationText = T.translate(
+      `${PREFIX}.common.deleteConfirmation`,
+      {
+        profile: this.props.profile.name,
+      }
+    );
+    const confirmationElem = (
+      <span title={this.props.profile.name}>{confirmationText}</span>
+    );
 
     return (
       <ConfirmationModal
@@ -144,14 +161,16 @@ export default class ProfileDetailViewBasicInfo extends Component {
   }
 
   renderProfileInfoGrid() {
-    let profile = this.props.profile;
+    const profile = this.props.profile;
     return (
       <div className="grid-wrapper profile-info-grid">
         <div className="grid grid-container">
           <div className="grid-header">
             <div className="grid-row">
               <strong>{T.translate(`${PREFIX}.common.provisioner`)}</strong>
-              <strong>{T.translate(`${PREFIX}.common.totalWorkerCores`)}</strong>
+              <strong>
+                {T.translate(`${PREFIX}.common.totalWorkerCores`)}
+              </strong>
               <strong>{T.translate('commons.scope')}</strong>
               <strong>{T.translate(`${PREFIX}.common.last24HrRuns`)}</strong>
               <strong>{T.translate(`${PREFIX}.common.totalRuns`)}</strong>
@@ -173,8 +192,12 @@ export default class ProfileDetailViewBasicInfo extends Component {
               <div>{profile.scope}</div>
               <div>{this.state.oneDayMetrics.runs}</div>
               <div>{this.state.overallMetrics.runs}</div>
-              <div>{getNodeHours(this.state.oneDayMetrics.minutes || '--')}</div>
-              <div>{getNodeHours(this.state.overallMetrics.minutes || '--')}</div>
+              <div>
+                {getNodeHours(this.state.oneDayMetrics.minutes || '--')}
+              </div>
+              <div>
+                {getNodeHours(this.state.overallMetrics.minutes || '--')}
+              </div>
               <div>{humanReadableDate(profile.created, false)}</div>
             </div>
           </div>
@@ -191,15 +214,18 @@ export default class ProfileDetailViewBasicInfo extends Component {
   }
 
   render() {
-    let profile = this.props.profile;
-    let redirectToObj = this.props.isSystem
+    const profile = this.props.profile;
+    const redirectToObj = this.props.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },
         }
       : `/ns/${getCurrentNamespace()}/details`;
-    let namespace = this.props.isSystem ? SYSTEM_NAMESPACE : getCurrentNamespace();
-    const isNativeProfile = profile.name === extractProfileName(CLOUD.DEFAULT_PROFILE_NAME);
+    const namespace = this.props.isSystem
+      ? SYSTEM_NAMESPACE
+      : getCurrentNamespace();
+    const isNativeProfile =
+      profile.name === extractProfileName(CLOUD.DEFAULT_PROFILE_NAME);
 
     const actionsElem = () => {
       return (
@@ -230,7 +256,9 @@ export default class ProfileDetailViewBasicInfo extends Component {
             <ProfileStatusToggle
               profile={profile}
               namespace={namespace}
-              toggleProfileStatusCallback={this.props.toggleProfileStatusCallback}
+              toggleProfileStatusCallback={
+                this.props.toggleProfileStatusCallback
+              }
             />
             {this.renderDivider(isNativeProfile)}
             <ActionsPopover

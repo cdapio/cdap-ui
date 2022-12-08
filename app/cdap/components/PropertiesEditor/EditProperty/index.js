@@ -53,7 +53,7 @@ export default class EditProperty extends Component {
     if (!this.state.valueInput) {
       return;
     }
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
     const params = {
       namespace,
       entityType: this.props.entityType,
@@ -61,7 +61,7 @@ export default class EditProperty extends Component {
       scope: SCOPES.USER,
     };
 
-    let requestBody = {};
+    const requestBody = {};
     requestBody[this.props.property.name] = this.state.valueInput;
 
     MyMetadataApi.addProperties(params, requestBody).subscribe(
@@ -92,7 +92,9 @@ export default class EditProperty extends Component {
       <ModalFooter>
         <CardActionFeedback
           type="DANGER"
-          message={T.translate('features.PropertiesEditor.EditProperty.shortError')}
+          message={T.translate(
+            'features.PropertiesEditor.EditProperty.shortError'
+          )}
           extendedMessage={this.state.error}
         />
       </ModalFooter>
@@ -104,7 +106,7 @@ export default class EditProperty extends Component {
       return null;
     }
 
-    let disabled = this.state.valueInput.length === 0;
+    const disabled = this.state.valueInput.length === 0;
 
     return (
       <Modal
@@ -131,7 +133,9 @@ export default class EditProperty extends Component {
                 type="text"
                 id="edit-property-modal-value-input"
                 className="form-control"
-                placeholder={T.translate('features.PropertiesEditor.EditProperty.valuePlaceholder')}
+                placeholder={T.translate(
+                  'features.PropertiesEditor.EditProperty.valuePlaceholder'
+                )}
                 value={this.state.valueInput}
                 onChange={this.handleValueChange}
               />
@@ -139,7 +143,11 @@ export default class EditProperty extends Component {
           </div>
 
           <div className="text-right">
-            <button className="btn btn-primary" onClick={this.saveProperty} disabled={disabled}>
+            <button
+              className="btn btn-primary"
+              onClick={this.saveProperty}
+              disabled={disabled}
+            >
               {T.translate('features.PropertiesEditor.EditProperty.button')}
             </button>
           </div>

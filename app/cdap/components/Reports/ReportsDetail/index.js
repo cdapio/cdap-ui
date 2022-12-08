@@ -22,7 +22,9 @@ import Runs from 'components/Reports/ReportsDetail/Runs';
 import RunsPagination from 'components/Reports/ReportsDetail/RunsPagination';
 import SaveButton from 'components/Reports/ReportsDetail/SaveButton';
 import Expiry from 'components/Reports/ReportsDetail/Expiry';
-import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsStore';
+import ReportsStore, {
+  ReportsActions,
+} from 'components/Reports/store/ReportsStore';
 import { fetchRuns } from 'components/Reports/store/ActionCreator';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -57,7 +59,7 @@ class ReportsDetailView extends Component {
   }
 
   fetchStatus = () => {
-    let params = {
+    const params = {
       'report-id': this.props.match.params.reportId,
     };
 
@@ -87,8 +89,8 @@ class ReportsDetailView extends Component {
   };
 
   renderError = (isDetail) => {
-    let errorHeaderLabel = isDetail ? 'Error' : 'Report Generation Failed';
-    let error = isDetail ? this.props.detailError : this.props.error;
+    const errorHeaderLabel = isDetail ? 'Error' : 'Report Generation Failed';
+    const error = isDetail ? this.props.detailError : this.props.error;
 
     return (
       <div className="error-container">

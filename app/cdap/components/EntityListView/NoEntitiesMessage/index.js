@@ -30,7 +30,7 @@ export default function NoEntitiesMessage({
   filtersAreApplied,
   clearSearchAndFilters,
 }) {
-  let eventEmitter = ee(ee);
+  const eventEmitter = ee(ee);
 
   const openAddEntityModal = () => {
     PlusButtonStore.dispatch({
@@ -45,16 +45,25 @@ export default function NoEntitiesMessage({
     eventEmitter.emit(globalEvents.OPENMARKET);
   };
 
-  let namespace = NamespaceStore.getState().selectedNamespace;
-  let emptyMessage = T.translate('features.EntityListView.emptyMessage.default', { namespace });
+  const namespace = NamespaceStore.getState().selectedNamespace;
+  let emptyMessage = T.translate(
+    'features.EntityListView.emptyMessage.default',
+    { namespace }
+  );
   let clearText;
 
   if (searchText !== DEFAULT_SEARCH_QUERY) {
-    emptyMessage = T.translate('features.EntityListView.emptyMessage.search', { searchText });
-    clearText = T.translate('features.EntityListView.emptyMessage.clearText.search');
+    emptyMessage = T.translate('features.EntityListView.emptyMessage.search', {
+      searchText,
+    });
+    clearText = T.translate(
+      'features.EntityListView.emptyMessage.clearText.search'
+    );
   } else if (filtersAreApplied && filtersAreApplied()) {
     emptyMessage = T.translate('features.EntityListView.emptyMessage.filter');
-    clearText = T.translate('features.EntityListView.emptyMessage.clearText.filter');
+    clearText = T.translate(
+      'features.EntityListView.emptyMessage.clearText.filter'
+    );
   }
 
   return (
@@ -62,12 +71,16 @@ export default function NoEntitiesMessage({
       <strong>{emptyMessage}</strong>
       <hr />
       <div className="empty-message-suggestions">
-        <span>{T.translate('features.EntityListView.emptyMessage.suggestion')}</span>
+        <span>
+          {T.translate('features.EntityListView.emptyMessage.suggestion')}
+        </span>
         <br />
         {clearText ? (
           <span>
             <span className="action-item clear" onClick={clearSearchAndFilters}>
-              {T.translate('features.EntityListView.emptyMessage.clearText.clear')}
+              {T.translate(
+                'features.EntityListView.emptyMessage.clearText.clear'
+              )}
             </span>
             <span>{clearText}</span>
             <br />
@@ -76,12 +89,18 @@ export default function NoEntitiesMessage({
         <span className="action-item add-entity" onClick={openAddEntityModal}>
           {T.translate('features.EntityListView.emptyMessage.clearText.add')}
         </span>
-        <span>{T.translate('features.EntityListView.emptyMessage.clearText.entities')}</span>
+        <span>
+          {T.translate(
+            'features.EntityListView.emptyMessage.clearText.entities'
+          )}
+        </span>
         <br />
         <span className="action-item open-market" onClick={openCaskMarket}>
           {T.translate('features.EntityListView.emptyMessage.clearText.browse')}
         </span>
-        <span>{T.translate('features.EntityListView.emptyMessage.clearText.Market')}</span>
+        <span>
+          {T.translate('features.EntityListView.emptyMessage.clearText.Market')}
+        </span>
       </div>
     </div>
   );

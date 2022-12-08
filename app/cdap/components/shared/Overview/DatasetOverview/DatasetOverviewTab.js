@@ -17,7 +17,15 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+import {
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  Col,
+} from 'reactstrap';
 import ProgramTab from 'components/shared/Overview/Tabs/ProgramTab';
 import SchemaTab from 'components/shared/Overview/Tabs/SchemaTab/index.tsx';
 import classnames from 'classnames';
@@ -77,7 +85,9 @@ export default class DatasetOverviewTab extends Component {
             <TabPane tabId="1">
               <Row>
                 <Col sm="12">
-                  {this.state.activeTab === '1' ? <ProgramTab entity={this.state.entity} /> : null}
+                  {this.state.activeTab === '1' ? (
+                    <ProgramTab entity={this.state.entity} />
+                  ) : null}
                 </Col>
               </Row>
             </TabPane>
@@ -85,7 +95,9 @@ export default class DatasetOverviewTab extends Component {
             <TabPane tabId="2">
               <Row>
                 <Col sm="12">
-                  {this.state.activeTab === '2' ? <SchemaTab entity={this.state.entity} /> : null}
+                  {this.state.activeTab === '2' ? (
+                    <SchemaTab entity={this.state.entity} />
+                  ) : null}
                 </Col>
               </Row>
             </TabPane>

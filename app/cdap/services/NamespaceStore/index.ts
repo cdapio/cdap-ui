@@ -118,13 +118,16 @@ const fetchNamespaceList = async () => {
     console.log('Fetching namespace list fails: ', e);
     return Promise.reject();
   }
+  // CDAP-20181 -- no clue whats going on with this... it doesn't seem
+  // to do anything with the namespace?
+  // @ts-ignore
   return;
 };
 
 const fetchNamespaceDetails = async (namespace: string) => {
   const eventEmitter = ee(ee);
   try {
-    await MyNamespaceApi.get({ namespace }).toPromise();
+    return await MyNamespaceApi.get({ namespace }).toPromise();
   } catch (err) {
     if (err.statusCode > 400) {
       let message;

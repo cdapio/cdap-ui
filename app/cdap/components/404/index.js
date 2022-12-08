@@ -40,7 +40,9 @@ export default function Page404({ entityName, entityType, children, message }) {
 
   return (
     <div className="page-not-found">
-      <h1 className="error-main-title">{T.translate(`${I18N_PREFIX}.mainTitle`)}</h1>
+      <h1 className="error-main-title">
+        {T.translate(`${I18N_PREFIX}.mainTitle`)}
+      </h1>
       <h1>
         <strong>
           <If condition={typeof message === 'string'}>
@@ -49,10 +51,16 @@ export default function Page404({ entityName, entityType, children, message }) {
             </span>
           </If>
           <If condition={!message}>
-            <span data-cy="page-404-default-msg" data-testid="page-404-default-msg">
+            <span
+              data-cy="page-404-default-msg"
+              data-testid="page-404-default-msg"
+            >
               {isEmpty(entityType) || isEmpty(entityName)
                 ? T.translate(`${I18N_PREFIX}.genericMessage`)
-                : T.translate(`${I18N_PREFIX}.entityMessage`, { entityType, entityName })}
+                : T.translate(`${I18N_PREFIX}.entityMessage`, {
+                    entityType,
+                    entityName,
+                  })}
             </span>
           </If>
         </strong>
@@ -67,7 +75,9 @@ export default function Page404({ entityName, entityType, children, message }) {
           <div className="navigation-section">
             <div>
               {T.translate(`${I18N_PREFIX}.subtitleMessage2`)}
-              <a href={`/cdap/ns/${validNs}/`}>{T.translate(`${I18N_PREFIX}.homePageLabel`)}</a>
+              <a href={`/cdap/ns/${validNs}/`}>
+                {T.translate(`${I18N_PREFIX}.homePageLabel`)}
+              </a>
             </div>
             <div>
               {T.translate(`${I18N_PREFIX}.manageLabel`)}

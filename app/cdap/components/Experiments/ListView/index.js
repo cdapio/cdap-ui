@@ -56,24 +56,28 @@ export default class ExperimentsList extends Component {
   }
 
   goToNextPage = () => {
-    let { offset, limit, totalPages } = experimentsStore.getState().experiments;
-    let nextPage = offset === 0 ? 1 : Math.ceil((offset + 1) / limit);
+    const {
+      offset,
+      limit,
+      totalPages,
+    } = experimentsStore.getState().experiments;
+    const nextPage = offset === 0 ? 1 : Math.ceil((offset + 1) / limit);
     if (nextPage < totalPages) {
       handlePageChange({ selected: nextPage });
     }
   };
 
   goToPreviousPage = () => {
-    let { offset, limit } = experimentsStore.getState().experiments;
-    let prevPage = offset === 0 ? 1 : Math.ceil((offset + 1) / limit);
+    const { offset, limit } = experimentsStore.getState().experiments;
+    const prevPage = offset === 0 ? 1 : Math.ceil((offset + 1) / limit);
     if (prevPage > 1) {
       handlePageChange({ selected: prevPage - 2 });
     }
   };
 
   parseUrlAndUpdateStore = (nextProps) => {
-    let props = nextProps || this.props;
-    let { offset, limit, sortMethod, sortColumn } = this.getQueryObject(
+    const props = nextProps || this.props;
+    const { offset, limit, sortMethod, sortColumn } = this.getQueryObject(
       queryString.parse(props.location.search)
     );
     updateQueryParameters({ offset, limit, sortMethod, sortColumn });
@@ -83,7 +87,11 @@ export default class ExperimentsList extends Component {
     if (isNil(query)) {
       return {};
     }
-    let { offset = DEFAULT_EXPERIMENTS.offset, limit = DEFAULT_EXPERIMENTS.limit, sort } = query;
+    let {
+      offset = DEFAULT_EXPERIMENTS.offset,
+      limit = DEFAULT_EXPERIMENTS.limit,
+      sort,
+    } = query;
     let sortMethod, sortColumn;
     offset = parseInt(offset, 10);
     limit = parseInt(limit, 10);
@@ -97,7 +105,7 @@ export default class ExperimentsList extends Component {
       sortMethod = MMDS_SORT_METHODS.ASC;
       sortColumn = MMDS_SORT_COLUMN;
     } else {
-      let sortSplit = sort.split(' ');
+      const sortSplit = sort.split(' ');
       sortColumn = sortSplit[0] || MMDS_SORT_COLUMN;
       sortMethod = sortSplit[1] || MMDS_SORT_METHODS.ASC;
     }

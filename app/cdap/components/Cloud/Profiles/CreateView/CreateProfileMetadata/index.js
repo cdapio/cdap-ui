@@ -40,7 +40,9 @@ function ProfileName({ profileName }) {
         label: T.translate(`${PREFIX}.profileName`).toString(),
         name: 'profileName',
         'widget-attributes': {
-          placeholder: T.translate(`${PREFIX}.profileNamePlaceholder`).toString(),
+          placeholder: T.translate(
+            `${PREFIX}.profileNamePlaceholder`
+          ).toString(),
         },
       }}
       value={profileName}
@@ -71,7 +73,9 @@ function ProfileLabel({ profileLabel }) {
         label: T.translate(`${PREFIX}.profileLabel`).toString(),
         name: 'profileLabel',
         'widget-attributes': {
-          placeholder: T.translate(`${PREFIX}.profileLabelPlaceholder`).toString(),
+          placeholder: T.translate(
+            `${PREFIX}.profileLabelPlaceholder`
+          ).toString(),
         },
       }}
       value={profileLabel}
@@ -118,6 +122,12 @@ const mapDescriptionStateToProps = (state) => {
   };
 };
 
-const ConnectedProfileDescription = connect(mapDescriptionStateToProps)(ProfileDescription);
+const ConnectedProfileDescription = connect(mapDescriptionStateToProps)(
+  ProfileDescription
+);
 
-export { ConnectedProfileName, ConnectedProfileDescription, ConnectedProfileLabel };
+export {
+  ConnectedProfileName,
+  ConnectedProfileDescription,
+  ConnectedProfileLabel,
+};

@@ -24,7 +24,9 @@ export default function EmptyListView({ namespace }) {
     <EmptyMessageContainer title="You have landed on an invalid page">
       <ul>
         <li>
-          <Link to={`/ns/${namespace}/experiments?limit=10&offset=0`}>To browse</Link>
+          <Link to={`/ns/${namespace}/experiments?limit=10&offset=0`}>
+            To browse
+          </Link>
           <span> all the experiments</span>
         </li>
       </ul>

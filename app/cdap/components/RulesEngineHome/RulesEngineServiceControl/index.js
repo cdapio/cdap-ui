@@ -52,7 +52,7 @@ export default class RulesEngineServiceControl extends Component {
       i18nPrefix: PREFIX,
       featureName,
     }).subscribe(this.props.onServiceStart, (err) => {
-      let extendedMessage = isObject(err.extendedMessage)
+      const extendedMessage = isObject(err.extendedMessage)
         ? err.extendedMessage.response || err.extendedMessage.message
         : err.extendedMessage;
       this.setState({
@@ -101,8 +101,14 @@ export default class RulesEngineServiceControl extends Component {
     return (
       <div className="rules-engine-service-control">
         <div className="image-containers">
-          <img className="img-thumbnail" src="/cdap_assets/img/RulesEngine_preview_1.png" />
-          <img className="img-thumbnail" src="/cdap_assets/img/RulesEngine_preview_2.png" />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/RulesEngine_preview_1.png"
+          />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/RulesEngine_preview_2.png"
+          />
         </div>
         <div className="text-container">
           <h2> {T.translate(`${PREFIX}.title`, { featureName })} </h2>
@@ -115,23 +121,33 @@ export default class RulesEngineServiceControl extends Component {
             <ul>
               <li>
                 <span className="fa fa-laptop" />
-                <span>{T.translate(`${PREFIX}.benefits.b1`, { featureName })}</span>
+                <span>
+                  {T.translate(`${PREFIX}.benefits.b1`, { featureName })}
+                </span>
               </li>
               <li>
                 <IconSVG name="icon-edit" />
-                <span>{T.translate(`${PREFIX}.benefits.b2`, { featureName })}</span>
+                <span>
+                  {T.translate(`${PREFIX}.benefits.b2`, { featureName })}
+                </span>
               </li>
               <li>
                 <IconSVG name="icon-cogs" />
-                <span>{T.translate(`${PREFIX}.benefits.b3`, { featureName })}</span>
+                <span>
+                  {T.translate(`${PREFIX}.benefits.b3`, { featureName })}
+                </span>
               </li>
               <li>
                 <IconSVG name="icon-arrows-alt" />
-                <span>{T.translate(`${PREFIX}.benefits.b4`, { featureName })}</span>
+                <span>
+                  {T.translate(`${PREFIX}.benefits.b4`, { featureName })}
+                </span>
               </li>
               <li>
                 <span className="fa fa-university" />
-                <span>{T.translate(`${PREFIX}.benefits.b5`, { featureName })}</span>
+                <span>
+                  {T.translate(`${PREFIX}.benefits.b5`, { featureName })}
+                </span>
               </li>
             </ul>
           </div>

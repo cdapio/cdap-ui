@@ -30,9 +30,9 @@ export default class LicenseStep extends Component {
     };
   }
   componentWillMount() {
-    let { entityName, entityVersion, licenseFileName } = this.props;
+    const { entityName, entityVersion, licenseFileName } = this.props;
     const marketHost = MarketStore.getState().selectedMarketHost;
-    let params = {
+    const params = {
       entityName,
       entityVersion,
       marketHost,
@@ -57,10 +57,16 @@ export default class LicenseStep extends Component {
         <h2>{T.translate('features.Wizard.licenseStep.termsandconditions')}</h2>
         <pre className="license-text">{this.state.license}</pre>
         <div>
-          <div className="btn btn-primary agree-btn" onClick={this.props.onAgree.bind(this)}>
+          <div
+            className="btn btn-primary agree-btn"
+            onClick={this.props.onAgree.bind(this)}
+          >
             {T.translate('features.Wizard.licenseStep.agreeAndActionBtnLabel')}
           </div>
-          <div className="back-to-cdap-link" onClick={this.props.onReject.bind(this, false)}>
+          <div
+            className="back-to-cdap-link"
+            onClick={this.props.onReject.bind(this, false)}
+          >
             {T.translate('features.Wizard.licenseStep.backToCaskBtnLabel')}
           </div>
         </div>

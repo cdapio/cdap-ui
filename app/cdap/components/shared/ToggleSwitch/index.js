@@ -29,7 +29,9 @@ export default function ToggleSwitch({
   dataTestId = null,
 }) {
   return (
-    <div className={classnames('toggle-switch-container', { disabled: disabled })}>
+    <div
+      className={classnames('toggle-switch-container', { disabled: disabled })}
+    >
       <div
         className={classnames('toggle-switch', { on: isOn, off: !isOn })}
         onClick={onToggle}
@@ -38,7 +40,10 @@ export default function ToggleSwitch({
       >
         <div className="switch-button" />
         <div
-          className={classnames('label', 'truncate', { 'on-label': isOn, 'off-label': !isOn })}
+          className={classnames('label', 'truncate', {
+            'on-label': isOn,
+            'off-label': !isOn,
+          })}
           data-cy={isOn ? `toggle-${onLabel}` : `toggle-${offLabel}`}
         >
           {isOn ? onLabel : offLabel}

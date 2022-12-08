@@ -16,7 +16,7 @@
 
 import React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import { TextAlignProperty } from 'csstype';
+import * as CSS from 'csstype';
 
 const styles = (): StyleRules => {
   return {
@@ -34,7 +34,7 @@ const styles = (): StyleRules => {
 };
 
 interface ITableCellProps extends WithStyles<typeof styles> {
-  textAlign?: TextAlignProperty;
+  textAlign?: CSS.Property.TextAlign;
 }
 
 const TableCellView: React.FC<React.PropsWithChildren<

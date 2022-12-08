@@ -73,20 +73,24 @@ export default class AllTabContents extends Component {
       keys: ['categories'],
     };
 
-    let fuse = new Fuse(list, fuseOptions);
+    const fuse = new Fuse(list, fuseOptions);
     return fuse.search(filter);
   }
 
   onSearch(changeEvent) {
-    let searchStr = changeEvent.target.value;
+    const searchStr = changeEvent.target.value;
     //  it is a ui end filter, it only rerenders the plugins which name contains the string present in search bar.
-    var results = this.state.entities;
+    let results = this.state.entities;
     if (searchStr != '') {
       results = this.state.entities.filter(
-        (value) => value.label.toLowerCase().indexOf(searchStr.toLowerCase()) >= 0
+        (value) =>
+          value.label.toLowerCase().indexOf(searchStr.toLowerCase()) >= 0
       );
     }
-    this.setState({ searchStr: changeEvent.target.value, filterEntites: results });
+    this.setState({
+      searchStr: changeEvent.target.value,
+      filterEntites: results,
+    });
   }
 
   handleBodyRender() {
@@ -118,7 +122,9 @@ export default class AllTabContents extends Component {
     let searchBox;
     if (this.state.isError) {
       error = (
-        <h3 className="error-message">{T.translate('features.Market.connectErrorMessage')}</h3>
+        <h3 className="error-message">
+          {T.translate('features.Market.connectErrorMessage')}
+        </h3>
       );
       searchBox = null;
     } else {

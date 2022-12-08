@@ -43,28 +43,41 @@ const keyValues = (state = initialState, action = defaultAction) => {
   switch (action.type) {
     case KeyValueStoreActions.setKey:
       stateCopy = Object.assign({}, state);
-      if (action.payload.key === null || typeof action.payload.key === 'undefined') {
+      if (
+        action.payload.key === null ||
+        typeof action.payload.key === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.pairs[action.payload.index].key = action.payload.key;
       return stateCopy;
     case KeyValueStoreActions.setVal:
       stateCopy = Object.assign({}, state);
-      if (action.payload.value === null || typeof action.payload.value === 'undefined') {
+      if (
+        action.payload.value === null ||
+        typeof action.payload.value === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.pairs[action.payload.index].value = action.payload.value;
       return stateCopy;
     case KeyValueStoreActions.setProvided:
       stateCopy = Object.assign({}, state);
-      if (action.payload.provided === null || typeof action.payload.provided === 'undefined') {
+      if (
+        action.payload.provided === null ||
+        typeof action.payload.provided === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.pairs[action.payload.index].provided = action.payload.provided;
       return stateCopy;
     case KeyValueStoreActions.addPair:
       stateCopy = Object.assign({}, state);
-      stateCopy.pairs.splice(action.payload.index + 1, 0, getDefaultKeyValuePair());
+      stateCopy.pairs.splice(
+        action.payload.index + 1,
+        0,
+        getDefaultKeyValuePair()
+      );
       return stateCopy;
     case KeyValueStoreActions.deletePair:
       stateCopy = Object.assign({}, state);

@@ -43,7 +43,10 @@ const schema = (state = defaultSchema, action = defaultAction) => {
         return stateCopy;
       }
       stateCopy = Object.assign({}, state);
-      if (action.payload.name === null || typeof action.payload.name === 'undefined') {
+      if (
+        action.payload.name === null ||
+        typeof action.payload.name === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.fields[action.payload.index].name = action.payload.name;
@@ -54,7 +57,8 @@ const schema = (state = defaultSchema, action = defaultAction) => {
       return stateCopy;
     case SchemaStoreActions.setFieldIsNullable:
       stateCopy = Object.assign({}, state);
-      stateCopy.fields[action.payload.index].isNullable = action.payload.isNullable;
+      stateCopy.fields[action.payload.index].isNullable =
+        action.payload.isNullable;
       return stateCopy;
     case SchemaStoreActions.removeField:
       if (action.payload.keyCode === 13) {

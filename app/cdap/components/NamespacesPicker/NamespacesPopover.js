@@ -51,7 +51,7 @@ class NamespacesPopover extends Component {
   }
 
   getNamespaceList() {
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
 
     return NamespaceStore.getState()
       .namespaces.map((ns) => ns.name)
@@ -59,8 +59,8 @@ class NamespacesPopover extends Component {
   }
 
   namespaceClick = (ns) => {
-    let index = this.props.namespacesPick.indexOf(ns);
-    let namespacesPick = [...this.props.namespacesPick];
+    const index = this.props.namespacesPick.indexOf(ns);
+    const namespacesPick = [...this.props.namespacesPick];
     if (index === -1) {
       namespacesPick.push(ns);
     } else {
@@ -84,7 +84,9 @@ class NamespacesPopover extends Component {
     }
 
     const targetElem = (
-      <div className="monitor-more text-right">{T.translate(`${PREFIX}.monitorMore`)}</div>
+      <div className="monitor-more text-right">
+        {T.translate(`${PREFIX}.monitorMore`)}
+      </div>
     );
 
     return (
@@ -112,17 +114,25 @@ class NamespacesPopover extends Component {
                     <IconSVG name="icon-caret-square-o-down" />
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem className="toggle-option" onClick={this.selectAll}>
+                    <DropdownItem
+                      className="toggle-option"
+                      onClick={this.selectAll}
+                    >
                       {T.translate(`${PREFIX}.selectAll`)}
                     </DropdownItem>
-                    <DropdownItem className="toggle-option" onClick={this.clearAll}>
+                    <DropdownItem
+                      className="toggle-option"
+                      onClick={this.clearAll}
+                    >
                       {T.translate(`${PREFIX}.clearAll`)}
                     </DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
               </div>
 
-              <div className="namespace-section">{T.translate(`${PREFIX}.namespaceName`)}</div>
+              <div className="namespace-section">
+                {T.translate(`${PREFIX}.namespaceName`)}
+              </div>
             </div>
 
             <hr />
@@ -136,7 +146,7 @@ class NamespacesPopover extends Component {
               </div>
 
               {this.state.namespaces.map((ns) => {
-                let isPicked = this.props.namespacesPick.indexOf(ns) !== -1;
+                const isPicked = this.props.namespacesPick.indexOf(ns) !== -1;
 
                 return (
                   <div
@@ -145,7 +155,9 @@ class NamespacesPopover extends Component {
                     onClick={this.namespaceClick.bind(this, ns)}
                   >
                     <div className="checkbox-column">
-                      <IconSVG name={isPicked ? 'icon-check-square' : 'icon-square-o'} />
+                      <IconSVG
+                        name={isPicked ? 'icon-check-square' : 'icon-square-o'}
+                      />
                     </div>
                     <div className="namespace-section">{ns}</div>
                   </div>

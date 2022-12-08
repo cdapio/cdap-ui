@@ -85,7 +85,7 @@ function renderGridHeader(
   tableInfo: ITableInfo,
   fields: IField[],
   isTarget: boolean,
-  isExpanded: boolean = false
+  isExpanded = false
 ) {
   return (
     <FllTableHeader
@@ -101,8 +101,8 @@ function renderGridBody(
   fields: IField[],
   tableId: string,
   activeFields = new Set(),
-  hasUnrelatedFields: boolean = false,
-  isExpanded: boolean = false,
+  hasUnrelatedFields = false,
+  isExpanded = false,
   handleClick: () => void,
   classes
 ) {
@@ -139,7 +139,10 @@ function FllTable({ tableId, tableInfo, type, isActive, classes }: ITableProps) 
   if (!fields || fields.length === 0) {
     return (
       <div>
-        {T.translate('features.FieldLevelLineage.v2.FllTable.noRelatedTables', { type, target })}
+        {T.translate('features.FieldLevelLineage.v2.FllTable.noRelatedTables', {
+          type,
+          target,
+        })}
       </div>
     );
   }
@@ -192,17 +195,19 @@ function FllTable({ tableId, tableInfo, type, isActive, classes }: ITableProps) 
         { [classes.targetTable]: isTarget },
         { [classes.activeTable]: isActive }
       )}
+      // what is this hocus pocus? CDAP-20181
+      // @ts-ignore
       renderGridHeader={renderGridHeader.bind(
         null,
-        tableInfo,
-        fields,
+        tableInfo as any,
+        fields as any,
         isTarget,
         isExpanded,
         classes
       )}
       renderGridBody={renderGridBody.bind(
         this,
-        fields,
+        fields as any,
         tableId,
         activeFieldIds,
         hasUnrelatedFields,

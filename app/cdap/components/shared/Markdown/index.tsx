@@ -13,14 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import PropTypes from 'prop-types';
 import React, { createElement } from 'react';
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
 import marksy from 'marksy';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { MarkdownToReactMapping } from 'components/shared/Markdown/MarkdownToReactMapping';
 import prism from 'prismjs';
-import 'prismjs/components/prism-json.js';
-import 'prismjs/themes/prism.css';
+require('prismjs/components/prism-json.js');
+require('prismjs/themes/prism.css');
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 const useStyles = makeStyles(() => {
@@ -39,18 +42,18 @@ const Markdown = ({ markdown }: IMarkdownProps) => {
   const compile = marksy({
     createElement,
     elements: MarkdownToReactMapping,
-    highlight(language, code) {
+    highlight(language: string | number, code: any) {
       if (!prism.languages[language]) {
         return code;
       }
-      return prism.highlight(code, prism.languages[language]);
+      return prism.highlight(code, prism.languages[language], language as string);
     },
   });
   const compiled = compile(markdown);
   return <div className={classes.markdownRoot}>{compiled.tree}</div>;
 };
 
-function MarkdownWithStyles({ markdown }) {
+function MarkdownWithStyles({ markdown }: IMarkdownProps): JSX.Element | null {
   if (!markdown) {
     return null;
   }

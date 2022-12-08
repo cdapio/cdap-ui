@@ -28,7 +28,13 @@ const PREFIX = 'features.FieldLevelLineage.OperationsModal';
 
 require('./OperationsModal.scss');
 
-function OperationsModalView({ showOperations, loading, closeModal, fieldName, direction }) {
+function OperationsModalView({
+  showOperations,
+  loading,
+  closeModal,
+  fieldName,
+  direction,
+}) {
   if (!showOperations) {
     return null;
   }
@@ -49,7 +55,9 @@ function OperationsModalView({ showOperations, loading, closeModal, fieldName, d
       className="field-level-lineage-modal cdap-modal"
     >
       <ModalHeader>
-        <span>{T.translate(`${PREFIX}.Title.${direction}`, { fieldName })}</span>
+        <span>
+          {T.translate(`${PREFIX}.Title.${direction}`, { fieldName })}
+        </span>
 
         <div className="close-section float-right" onClick={closeModal}>
           <IconSVG name="icon-close" />

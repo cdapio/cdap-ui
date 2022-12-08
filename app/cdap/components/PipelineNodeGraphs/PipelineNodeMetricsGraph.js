@@ -33,12 +33,16 @@ import {
 } from 'components/PipelineSummary/RunsGraphHelpers';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import CopyableID from 'components/CopyableID';
-import { humanReadableDuration, isPluginSource, isPluginSink } from 'services/helpers';
+import {
+  humanReadableDuration,
+  isPluginSource,
+  isPluginSink,
+} from 'services/helpers';
 import NodeMetricsSingleDatapoint from 'components/PipelineNodeGraphs/NodeMetricsSingleDatapoint';
 import { objectQuery } from 'services/helpers';
 
 require('./PipelineNodeMetricsGraph.scss');
-const PREFIX = `features.PipelineSummary.pipelineNodesMetricsGraph`;
+const PREFIX = 'features.PipelineSummary.pipelineNodesMetricsGraph';
 const RECORDS_OUT_PATH_COLOR = '#97A0BA';
 const RECORDS_ERROR_PATH_COLOR = '#A40403';
 const RECORDS_IN_PATH_COLOR = '#58B7F6';
@@ -123,32 +127,36 @@ export default class PipelineNodeMetricsGraph extends Component {
           actualRecords: d.value,
         };
       });
-      formattedRecords = getGapFilledAccumulatedData(formattedRecords, numOfDataPoints).map(
-        (data, i) => ({
-          x: i,
-          y: data.y,
-          time: data.x * 1000,
-          actualRecords: data.actualRecords,
-        })
-      );
+      formattedRecords = getGapFilledAccumulatedData(
+        formattedRecords,
+        numOfDataPoints
+      ).map((data, i) => ({
+        x: i,
+        y: data.y,
+        time: data.x * 1000,
+        actualRecords: data.actualRecords,
+      }));
     }
     return formattedRecords;
   };
 
   filterData = ({ qid: data }) => {
-    let resolution = getResolution(data.resolution);
-    let recordsInRegex = new RegExp(/user.*.records.in/);
-    let recordsOutRegex = new RegExp(/user.*.records.out/);
-    let recordsErrorRegex = new RegExp(/user.*.records.error/);
-    let recordsOutPortsRegex = new RegExp(/user.*.records.out./);
+    const resolution = getResolution(data.resolution);
+    const recordsInRegex = new RegExp(/user.*.records.in/);
+    const recordsOutRegex = new RegExp(/user.*.records.out/);
+    const recordsErrorRegex = new RegExp(/user.*.records.error/);
+    const recordsOutPortsRegex = new RegExp(/user.*.records.out./);
 
-    let recordsInData = data.series.find((d) => recordsInRegex.test(d.metricName)) || [];
-    let recordsOutData = data.series.find((d) => recordsOutRegex.test(d.metricName)) || [];
-    let recordsErrorData = data.series.find((d) => recordsErrorRegex.test(d.metricName)) || [];
-    let recordsOutPortsData =
+    const recordsInData =
+      data.series.find((d) => recordsInRegex.test(d.metricName)) || [];
+    const recordsOutData =
+      data.series.find((d) => recordsOutRegex.test(d.metricName)) || [];
+    const recordsErrorData =
+      data.series.find((d) => recordsErrorRegex.test(d.metricName)) || [];
+    const recordsOutPortsData =
       data.series.filter((d) => recordsOutPortsRegex.test(d.metricName)) || [];
 
-    let newState = {
+    const newState = {
       recordsInData,
       recordsErrorData,
       resolution,
@@ -164,7 +172,9 @@ export default class PipelineNodeMetricsGraph extends Component {
   };
 
   getOutputRecordsForCharting() {
-    let { recordsOutData, recordsErrorData, recordsOutPortsData } = cloneDeep(this.state);
+    let { recordsOutData, recordsErrorData, recordsOutPortsData } = cloneDeep(
+      this.state
+    );
 
     if (!this.state.aggregate) {
       recordsOutData = this.formatData(
@@ -178,15 +188,23 @@ export default class PipelineNodeMetricsGraph extends Component {
       for (let i = 0; i < recordsOutPortsData.length; i++) {
         recordsOutPortsData[i] = this.formatData(
           recordsOutPortsData[i],
-          Array.isArray(recordsOutPortsData[i]) ? recordsOutPortsData[i].length : 0
+          Array.isArray(recordsOutPortsData[i])
+            ? recordsOutPortsData[i].length
+            : 0
         );
       }
     } else {
-      recordsOutData = (recordsOutData.data || []).length ? recordsOutData.data[0].value : 0;
-      recordsErrorData = (recordsErrorData.data || []).length ? recordsErrorData.data[0].value : 0;
+      recordsOutData = (recordsOutData.data || []).length
+        ? recordsOutData.data[0].value
+        : 0;
+      recordsErrorData = (recordsErrorData.data || []).length
+        ? recordsErrorData.data[0].value
+        : 0;
       for (let i = 0; i < recordsOutPortsData.length; i++) {
-        let portData = recordsOutPortsData[i];
-        recordsOutPortsData[i] = (portData.data || []).length ? portData.data[0].value : 0;
+        const portData = recordsOutPortsData[i];
+        recordsOutPortsData[i] = (portData.data || []).length
+          ? portData.data[0].value
+          : 0;
       }
     }
 
@@ -213,8 +231,8 @@ export default class PipelineNodeMetricsGraph extends Component {
     }
 
     for (let i = 0; i < recordsOutPortsData.length; i++) {
-      let portData = this.state.recordsOutPortsData[i];
-      let portName = capitalize(portData.metricName.split('.').pop());
+      const portData = this.state.recordsOutPortsData[i];
+      const portName = capitalize(portData.metricName.split('.').pop());
       outputRecordsObj = {
         ...outputRecordsObj,
         [portName]: {
@@ -240,11 +258,15 @@ export default class PipelineNodeMetricsGraph extends Component {
         Array.isArray(recordsErrorData) ? recordsErrorData.length : 0
       );
     } else {
-      recordsInData = (recordsInData.data || []).length ? recordsInData.data[0].value : 0;
-      recordsErrorData = (recordsErrorData.data || []).length ? recordsErrorData.data[0].value : 0;
+      recordsInData = (recordsInData.data || []).length
+        ? recordsInData.data[0].value
+        : 0;
+      recordsErrorData = (recordsErrorData.data || []).length
+        ? recordsErrorData.data[0].value
+        : 0;
     }
 
-    let inputRecordsObj = {
+    const inputRecordsObj = {
       recordsIn: {
         data: recordsInData,
         label: T.translate(`${PREFIX}.recordsInTitle`),
@@ -265,8 +287,14 @@ export default class PipelineNodeMetricsGraph extends Component {
   }
 
   fetchProcessTimeMetrics = () => {
-    let { namespace, app, programType, programId, runRecord } = this.props.runContext;
-    let postBody = {
+    const {
+      namespace,
+      app,
+      programType,
+      programId,
+      runRecord,
+    } = this.props.runContext;
+    const postBody = {
       qid: {
         metrics: this.props.metrics,
         tags: {
@@ -281,15 +309,15 @@ export default class PipelineNodeMetricsGraph extends Component {
       },
     };
     MyMetricApi.query(null, postBody).subscribe((res) => {
-      let data = res.qid.series;
+      const data = res.qid.series;
       let recordsOut, recordsIn, recordsError, recordsOutPorts;
       recordsOut = recordsIn = recordsError = 0;
       recordsOutPorts = {};
-      let processTimeMetrics = {};
+      const processTimeMetrics = {};
       data.forEach((d) => {
         let metricName = d.metricName;
-        let dataValue = (d.data || []).length ? d.data[0].value : 0;
-        let specificMetric = REGEXTOLABELLIST.find((metricObj) =>
+        const dataValue = (d.data || []).length ? d.data[0].value : 0;
+        const specificMetric = REGEXTOLABELLIST.find((metricObj) =>
           metricObj.regex.test(d.metricName)
         );
         if (specificMetric) {
@@ -303,8 +331,11 @@ export default class PipelineNodeMetricsGraph extends Component {
           recordsError += dataValue;
         }
         if (d.metricName.match(/user.*records.out./)) {
-          let portName = capitalize(d.metricName.split('.').pop());
-          let portColor = RECORDS_OUT_PORTS_PATH_COLORS[Object.keys(recordsOutPorts).length % 7];
+          const portName = capitalize(d.metricName.split('.').pop());
+          const portColor =
+            RECORDS_OUT_PORTS_PATH_COLORS[
+              Object.keys(recordsOutPorts).length % 7
+            ];
 
           recordsOutPorts[portName] = {
             value: dataValue,
@@ -325,8 +356,14 @@ export default class PipelineNodeMetricsGraph extends Component {
 
   fetchData = () => {
     this.fetchProcessTimeMetrics();
-    let { namespace, app, programType, programId, runRecord } = this.props.runContext;
-    let postBody = {
+    const {
+      namespace,
+      app,
+      programType,
+      programId,
+      runRecord,
+    } = this.props.runContext;
+    const postBody = {
       qid: {
         metrics: this.props.metrics,
         tags: {
@@ -336,8 +373,10 @@ export default class PipelineNodeMetricsGraph extends Component {
           run: runRecord.runid,
         },
         timeRange: {
-          start: objectQuery(this.props, 'runContext', 'runRecord', 'starting') || 0,
-          end: objectQuery(this.props, 'runContext', 'runRecord', 'end') || 'now',
+          start:
+            objectQuery(this.props, 'runContext', 'runRecord', 'starting') || 0,
+          end:
+            objectQuery(this.props, 'runContext', 'runRecord', 'end') || 'now',
         },
       },
     };
@@ -382,11 +421,14 @@ export default class PipelineNodeMetricsGraph extends Component {
 
   renderChart = (data, type) => {
     if (Array.isArray(data) && !data.length) {
-      return <EmptyMessageContainer message={T.translate(`${PREFIX}.nodata`)} />;
+      return (
+        <EmptyMessageContainer message={T.translate(`${PREFIX}.nodata`)} />
+      );
     }
 
-    let isMultiplePorts =
-      type === 'recordsout' && Object.keys(this.state.totalRecordsOutPorts).length > 0;
+    const isMultiplePorts =
+      type === 'recordsout' &&
+      Object.keys(this.state.totalRecordsOutPorts).length > 0;
 
     return (
       <NodeMetricsGraph
@@ -402,7 +444,9 @@ export default class PipelineNodeMetricsGraph extends Component {
 
   renderSingleMetric(data) {
     if (isNil(data)) {
-      return <EmptyMessageContainer message={T.translate(`${PREFIX}.nodata`)} />;
+      return (
+        <EmptyMessageContainer message={T.translate(`${PREFIX}.nodata`)} />
+      );
     }
 
     return <NodeMetricsSingleDatapoint data={data} />;
@@ -423,11 +467,17 @@ export default class PipelineNodeMetricsGraph extends Component {
       if (metric.match(/user.*.process.time.total/)) {
         totalProcessingTime = this.state.processTimeMetrics[metric] / 1000000;
       }
-      if (isPluginSource(this.props.plugin.type) && metric.match(/user.*.records.in/)) {
+      if (
+        isPluginSource(this.props.plugin.type) &&
+        metric.match(/user.*.records.in/)
+      ) {
         validRecords = this.state.processTimeMetrics[metric];
         return;
       }
-      if (isPluginSink(this.props.plugin.type) && metric.match(/user.*.records.out/)) {
+      if (
+        isPluginSink(this.props.plugin.type) &&
+        metric.match(/user.*.records.out/)
+      ) {
         validRecords = this.state.processTimeMetrics[metric];
         return;
       }
@@ -440,7 +490,9 @@ export default class PipelineNodeMetricsGraph extends Component {
       processRate = T.translate('commons.notAvailable');
       avgProcessingTime = T.translate('commons.notAvailable');
     } else {
-      processRate = parseFloat(validRecords / totalProcessingTime, 10).toFixed(3);
+      processRate = parseFloat(validRecords / totalProcessingTime, 10).toFixed(
+        3
+      );
       avgProcessingTime = (1 / processRate) * 1000000; // Because total processing time is in seconds
     }
     const renderMicroSeconds = (time) => {
@@ -452,26 +504,51 @@ export default class PipelineNodeMetricsGraph extends Component {
           'commons.milliSecondsShortLabel'
         )}`;
       }
-      return humanReadableDuration(time / 1000000) || T.translate('commons.notAvailable');
+      return (
+        humanReadableDuration(time / 1000000) ||
+        T.translate('commons.notAvailable')
+      );
     };
     return (
       <div className="process-time-table-container">
         <table className="table table-sm">
           <thead>
             <tr>
-              <th>{T.translate(`${PREFIX}.processTimeTable.recordOutPerSec`)}</th>
-              <th>{T.translate(`${PREFIX}.processTimeTable.minProcessTime`)}</th>
-              <th>{T.translate(`${PREFIX}.processTimeTable.maxProcessTime`)}</th>
-              <th>{T.translate(`${PREFIX}.processTimeTable.stddevProcessTime`)}</th>
-              <th>{T.translate(`${PREFIX}.processTimeTable.avgProcessTime`)}</th>
+              <th>
+                {T.translate(`${PREFIX}.processTimeTable.recordOutPerSec`)}
+              </th>
+              <th>
+                {T.translate(`${PREFIX}.processTimeTable.minProcessTime`)}
+              </th>
+              <th>
+                {T.translate(`${PREFIX}.processTimeTable.maxProcessTime`)}
+              </th>
+              <th>
+                {T.translate(`${PREFIX}.processTimeTable.stddevProcessTime`)}
+              </th>
+              <th>
+                {T.translate(`${PREFIX}.processTimeTable.avgProcessTime`)}
+              </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{processRate}</td>
-              <td>{renderMicroSeconds(this.state.processTimeMetrics[REGEXTOLABELLIST[0].id])}</td>
-              <td>{renderMicroSeconds(this.state.processTimeMetrics[REGEXTOLABELLIST[1].id])}</td>
-              <td>{renderMicroSeconds(this.state.processTimeMetrics[REGEXTOLABELLIST[2].id])}</td>
+              <td>
+                {renderMicroSeconds(
+                  this.state.processTimeMetrics[REGEXTOLABELLIST[0].id]
+                )}
+              </td>
+              <td>
+                {renderMicroSeconds(
+                  this.state.processTimeMetrics[REGEXTOLABELLIST[1].id]
+                )}
+              </td>
+              <td>
+                {renderMicroSeconds(
+                  this.state.processTimeMetrics[REGEXTOLABELLIST[2].id]
+                )}
+              </td>
               <td>{renderMicroSeconds(avgProcessingTime)}</td>
             </tr>
           </tbody>
@@ -485,7 +562,9 @@ export default class PipelineNodeMetricsGraph extends Component {
       return this.renderSingleMetric(data);
     }
 
-    return <div className="graph-container">{this.renderChart(data, type)}</div>;
+    return (
+      <div className="graph-container">{this.renderChart(data, type)}</div>
+    );
   }
 
   renderRecordsCount = (type) => {
@@ -502,7 +581,10 @@ export default class PipelineNodeMetricsGraph extends Component {
     }
 
     return (
-      <a className="toggle-records-count-popover" onClick={this.togglePortsRecordsCountPopover}>
+      <a
+        className="toggle-records-count-popover"
+        onClick={this.togglePortsRecordsCountPopover}
+      >
         {this.state.showPortsRecordsCountPopover ? (
           <span>{T.translate(`${PREFIX}.portRecordsCountPopover.hide`)}</span>
         ) : (
@@ -520,9 +602,13 @@ export default class PipelineNodeMetricsGraph extends Component {
     return (
       <div className="port-records-count-popover">
         <div className="popover-content">
-          <strong>{T.translate(`${PREFIX}.portRecordsCountPopover.title`)}</strong>
+          <strong>
+            {T.translate(`${PREFIX}.portRecordsCountPopover.title`)}
+          </strong>
           {Object.keys(this.state.totalRecordsOutPorts).map((key) => {
-            let colorStyle = { backgroundColor: this.state.totalRecordsOutPorts[key].color };
+            const colorStyle = {
+              backgroundColor: this.state.totalRecordsOutPorts[key].color,
+            };
             return (
               <div className="port-count-container">
                 <span className="port-legend-circle" style={colorStyle} />
@@ -550,18 +636,26 @@ export default class PipelineNodeMetricsGraph extends Component {
   };
 
   renderContent() {
-    let numPorts = Object.keys(this.state.totalRecordsOutPorts).length;
-    let onHoverFn = numPorts > 0 && numPorts <= 2 ? this.togglePortsRecordsCountPopover : null;
+    const numPorts = Object.keys(this.state.totalRecordsOutPorts).length;
+    const onHoverFn =
+      numPorts > 0 && numPorts <= 2
+        ? this.togglePortsRecordsCountPopover
+        : null;
 
     return (
       <div className="node-metrics-container">
         {isPluginSource(this.props.plugin.type) ? null : (
           <div>
             <div className="title-container graph-title">
-              <div className="title"> {T.translate(`${PREFIX}.recordsInTitle`)}</div>
+              <div className="title">
+                {' '}
+                {T.translate(`${PREFIX}.recordsInTitle`)}
+              </div>
               <div className="total-records">
                 {this.state.aggregate ||
-                isDataSeriesHaveSingleDatapoint(this.getInputRecordsForCharting()) ? null : (
+                isDataSeriesHaveSingleDatapoint(
+                  this.getInputRecordsForCharting()
+                ) ? null : (
                   <strong>
                     <span>{this.renderRecordsCount('totalRecordsIn')}</span>
                     {isPluginSink(this.props.plugin.type) ? (
@@ -579,12 +673,23 @@ export default class PipelineNodeMetricsGraph extends Component {
         {isPluginSink(this.props.plugin.type) ? null : (
           <div>
             <div className="title-container graph-title">
-              <div className="title"> {T.translate(`${PREFIX}.recordsOutTitle`)} </div>
-              <div className="total-records" onMouseEnter={onHoverFn} onMouseLeave={onHoverFn}>
+              <div className="title">
+                {' '}
+                {T.translate(`${PREFIX}.recordsOutTitle`)}{' '}
+              </div>
+              <div
+                className="total-records"
+                onMouseEnter={onHoverFn}
+                onMouseLeave={onHoverFn}
+              >
                 {this.state.aggregate ||
-                isDataSeriesHaveSingleDatapoint(this.getOutputRecordsForCharting()) ? null : (
+                isDataSeriesHaveSingleDatapoint(
+                  this.getOutputRecordsForCharting()
+                ) ? null : (
                   <span>
-                    <strong>{this.renderRecordsCount('totalRecordsOut')}</strong>
+                    <strong>
+                      {this.renderRecordsCount('totalRecordsOut')}
+                    </strong>
                     {this.renderPortsRecordsCount()}
                     <strong className="error-records-count">
                       {this.renderRecordsCount('totalRecordsError')}
@@ -594,7 +699,10 @@ export default class PipelineNodeMetricsGraph extends Component {
               </div>
               {this.rendePortsRecordsCountPopover()}
             </div>
-            {this.renderMetrics(this.getOutputRecordsForCharting(), 'recordsout')}
+            {this.renderMetrics(
+              this.getOutputRecordsForCharting(),
+              'recordsout'
+            )}
           </div>
         )}
       </div>
@@ -605,7 +713,7 @@ export default class PipelineNodeMetricsGraph extends Component {
     if (this.state.loading) {
       return <LoadingSVGCentered />;
     }
-    let runNumber =
+    const runNumber =
       findIndex([...this.props.runContext.runs].reverse(), {
         runid: this.props.runContext.runRecord.runid,
       }) + 1;

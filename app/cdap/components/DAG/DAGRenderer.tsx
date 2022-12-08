@@ -159,7 +159,7 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
     const endpoint = this.state.jsPlumbInstance.getEndpoint(endpointId);
 
     if (endpoint && endpoint.connections) {
-      Object.values(endpoint.connections).forEach((conn: IConnection) => {
+      Object.values(endpoint.connections as IConnection[]).forEach((conn: IConnection) => {
         const connectionObj: IConnection = this.getNewConnectionObj(
           fromJS({
             sourceId: conn.sourceId,
@@ -319,28 +319,31 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
       return '...loading';
     }
 
-    return React.Children.map(this.props.children, (child: React.ReactElement) => {
-      if (
-        typeof child === 'string' ||
-        typeof child === 'number' ||
-        child === null ||
-        typeof child === 'undefined' ||
-        typeof child === 'boolean'
-      ) {
-        return child;
-      }
+    return React.Children.map(
+      this.props.children as React.ReactElement[],
+      (child: React.ReactElement) => {
+        if (
+          typeof child === 'string' ||
+          typeof child === 'number' ||
+          child === null ||
+          typeof child === 'undefined' ||
+          typeof child === 'boolean'
+        ) {
+          return child;
+        }
 
-      // huh.. This is not how it should be.
-      return React.cloneElement(child as React.ReactElement, {
-        ...child.props,
-        id: child.props.id,
-        initNode: this.initNode,
-        addEndpoint: this.addEndpoint,
-        removeEndpoint: this.removeEndpoint,
-        key: child.props.id,
-        removeNode: this.props.removeNode,
-      });
-    });
+        // huh.. This is not how it should be.
+        return React.cloneElement(child as React.ReactElement, {
+          ...child.props,
+          id: child.props.id,
+          initNode: this.initNode,
+          addEndpoint: this.addEndpoint,
+          removeEndpoint: this.removeEndpoint,
+          key: child.props.id,
+          removeNode: this.props.removeNode,
+        });
+      }
+    );
   }
 
   public render() {

@@ -14,7 +14,9 @@
  * the License.
  */
 
-import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsStore';
+import ReportsStore, {
+  ReportsActions,
+} from 'components/Reports/store/ReportsStore';
 import moment from 'moment';
 import { MyReportsApi } from 'api/reports';
 import orderBy from 'lodash/orderBy';
@@ -25,10 +27,15 @@ import T from 'i18n-react';
 
 const PREFIX = 'features.Reports.ReportsDetail';
 
-export const DefaultSelection = ['artifactName', 'applicationName', 'program', 'programType'];
+export const DefaultSelection = [
+  'artifactName',
+  'applicationName',
+  'program',
+  'programType',
+];
 
 function getTimeRange() {
-  let state = ReportsStore.getState().timeRange;
+  const state = ReportsStore.getState().timeRange;
 
   let end = moment().format('x');
   let start;
@@ -61,12 +68,12 @@ function getTimeRange() {
 
 function getName(start, end) {
   const format = 'MMM D, YYYY HH:mma';
-  let startDate = moment(start * 1000).format(format);
-  let endDate = moment(end * 1000).format(format);
+  const startDate = moment(start * 1000).format(format);
+  const endDate = moment(end * 1000).format(format);
 
-  let statusSelections = ReportsStore.getState().status.statusSelections;
+  const statusSelections = ReportsStore.getState().status.statusSelections;
 
-  let statusLabel = getStatusSelectionsLabels(statusSelections).join(', ');
+  const statusLabel = getStatusSelectionsLabels(statusSelections).join(', ');
 
   return T.translate(`${PREFIX}.getReportName`, {
     statusLabel,
@@ -76,9 +83,9 @@ function getName(start, end) {
 }
 
 function getFilters() {
-  let filters = [];
+  const filters = [];
 
-  let selections = ReportsStore.getState().customizer;
+  const selections = ReportsStore.getState().customizer;
 
   // pipelines vs custom apps
   if (selections.pipelines && !selections.customApps) {
@@ -94,7 +101,7 @@ function getFilters() {
   }
 
   // status
-  let statusSelections = [...ReportsStore.getState().status.statusSelections];
+  const statusSelections = [...ReportsStore.getState().status.statusSelections];
 
   // expand status STOPPED with STOPPED and KILLED
   if (statusSelections.indexOf('STOPPED') !== -1) {
@@ -107,7 +114,7 @@ function getFilters() {
   });
 
   // namespaces
-  let namespacesPick = ReportsStore.getState().namespaces.namespacesPick;
+  const namespacesPick = ReportsStore.getState().namespaces.namespacesPick;
 
   filters.push({
     fieldName: 'namespace',
@@ -118,9 +125,9 @@ function getFilters() {
 }
 
 export function generateReport() {
-  let { start, end } = getTimeRange();
+  const { start, end } = getTimeRange();
 
-  let selections = ReportsStore.getState().customizer;
+  const selections = ReportsStore.getState().customizer;
 
   const FILTER_OUT = ['pipelines', 'customApps'];
 
@@ -129,14 +136,14 @@ export function generateReport() {
   );
   fields = DefaultSelection.concat(fields);
 
-  let requestBody = {
+  const requestBody = {
     name: getName(start, end),
     start,
     end,
     fields,
   };
 
-  let filters = getFilters();
+  const filters = getFilters();
   if (filters.length > 0) {
     requestBody.filters = filters;
   }
@@ -154,9 +161,9 @@ export function generateReport() {
 }
 
 export function listReports(id) {
-  let { offset, limit } = ReportsStore.getState().list;
+  const { offset, limit } = ReportsStore.getState().list;
 
-  let params = {
+  const params = {
     offset,
     limit,
   };
@@ -186,8 +193,11 @@ export function listReports(id) {
 }
 
 export function fetchRuns(reportId = ReportsStore.getState().details.reportId) {
-  let { runsOffset: offset, runsLimit: limit } = ReportsStore.getState().details;
-  let params = {
+  const {
+    runsOffset: offset,
+    runsLimit: limit,
+  } = ReportsStore.getState().details;
+  const params = {
     'report-id': reportId,
     offset,
     limit,
@@ -216,7 +226,7 @@ export function fetchRuns(reportId = ReportsStore.getState().details.reportId) {
 }
 
 export function handleRunsPageChange({ selected }) {
-  let { runsLimit } = ReportsStore.getState().details;
+  const { runsLimit } = ReportsStore.getState().details;
   ReportsStore.dispatch({
     type: ReportsActions.setRunsPagination,
     payload: {
@@ -227,7 +237,7 @@ export function handleRunsPageChange({ selected }) {
 }
 
 export function handleReportsPageChange({ selected }, id) {
-  let { limit } = ReportsStore.getState().list;
+  const { limit } = ReportsStore.getState().list;
   ReportsStore.dispatch({
     type: ReportsActions.setPagination,
     payload: {

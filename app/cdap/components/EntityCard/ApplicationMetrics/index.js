@@ -31,7 +31,9 @@ export default class ApplicationMetrics extends Component {
     return (
       <div className="metrics-container">
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.metrics.programs')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.metrics.programs')}
+          </p>
           <p>
             {!this.props.extraInfo
               ? loading
@@ -39,15 +41,23 @@ export default class ApplicationMetrics extends Component {
           </p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.metrics.running')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.metrics.running')}
+          </p>
           <p>
-            {!this.props.extraInfo ? loading : humanReadableNumber(this.props.extraInfo.running)}
+            {!this.props.extraInfo
+              ? loading
+              : humanReadableNumber(this.props.extraInfo.running)}
           </p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.metrics.failed')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.metrics.failed')}
+          </p>
           <p>
-            {!this.props.extraInfo ? loading : humanReadableNumber(this.props.extraInfo.failed)}
+            {!this.props.extraInfo
+              ? loading
+              : humanReadableNumber(this.props.extraInfo.failed)}
           </p>
         </div>
       </div>

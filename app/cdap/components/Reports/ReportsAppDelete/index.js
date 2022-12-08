@@ -44,7 +44,7 @@ export default class ReportsAppDelete extends Component {
   };
 
   pollStatus = () => {
-    let servicePoll = MyReportsApi.pollServiceStatus().subscribe((res) => {
+    const servicePoll = MyReportsApi.pollServiceStatus().subscribe((res) => {
       if (res.status === 'STOPPED') {
         servicePoll.unsubscribe();
         this.deleteApplication();
@@ -83,7 +83,9 @@ export default class ReportsAppDelete extends Component {
       return null;
     }
 
-    return <div className="error-container text-danger">{this.state.error}</div>;
+    return (
+      <div className="error-container text-danger">{this.state.error}</div>
+    );
   };
 
   renderFinish = () => {
@@ -100,7 +102,11 @@ export default class ReportsAppDelete extends Component {
         <h3>Are you sure you want to delete Reports app?</h3>
 
         <div className="button">
-          <button className="btn btn-danger" onClick={this.removeApp} disabled={this.state.loading}>
+          <button
+            className="btn btn-danger"
+            onClick={this.removeApp}
+            disabled={this.state.loading}
+          >
             Delete
           </button>
         </div>

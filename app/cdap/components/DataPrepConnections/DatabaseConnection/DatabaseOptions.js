@@ -35,7 +35,8 @@ import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import { Theme } from 'services/ThemeHelper';
 
-const PREFIX = 'features.DataPrepConnections.AddConnections.Database.DatabaseOptions';
+const PREFIX =
+  'features.DataPrepConnections.AddConnections.Database.DatabaseOptions';
 
 export default class DatabaseOptions extends Component {
   constructor(props) {
@@ -47,7 +48,9 @@ export default class DatabaseOptions extends Component {
       uploadArtifact: false,
     };
 
-    this.toggleArtifactUploadWizard = this.toggleArtifactUploadWizard.bind(this);
+    this.toggleArtifactUploadWizard = this.toggleArtifactUploadWizard.bind(
+      this
+    );
     this.fetchDrivers = this.fetchDrivers.bind(this);
     this.onWizardClose = this.onWizardClose.bind(this);
     this.eventEmitter = ee(ee);
@@ -66,9 +69,9 @@ export default class DatabaseOptions extends Component {
   }
 
   fetchDrivers() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
     };
 
@@ -76,10 +79,10 @@ export default class DatabaseOptions extends Component {
       .combineLatest(MyDataPrepApi.jdbcDrivers(params))
       .subscribe((res) => {
         let driversList = res[0].values;
-        let installedList = res[1].values;
+        const installedList = res[1].values;
 
         driversList = driversList.map((driver) => {
-          let matched = find(installedList, (o) => {
+          const matched = find(installedList, (o) => {
             return (
               o.label === driver.label &&
               o.properties.class === driver.class &&
@@ -127,16 +130,19 @@ export default class DatabaseOptions extends Component {
   }
 
   caskMarket(db) {
-    let jdbcConfig = window.CDAP_UI_CONFIG.dataprep.jdbcMarketMap[db.name];
+    const jdbcConfig = window.CDAP_UI_CONFIG.dataprep.jdbcMarketMap[db.name];
 
     this.eventEmitter.emit(globalEvents.OPENMARKET);
     this.sub = MarketStore.subscribe(() => {
-      let state = MarketStore.getState();
+      const state = MarketStore.getState();
 
       if (state.list.length === 0) {
         return;
       }
-      let entity = find(state.list, { name: jdbcConfig.name, version: jdbcConfig.version });
+      const entity = find(state.list, {
+        name: jdbcConfig.name,
+        version: jdbcConfig.version,
+      });
 
       this.sub();
 
@@ -163,7 +169,7 @@ export default class DatabaseOptions extends Component {
   }
 
   renderMarketOption(db) {
-    let jdbcConfig = window.CDAP_UI_CONFIG.dataprep.jdbcMarketMap[db.name];
+    const jdbcConfig = window.CDAP_UI_CONFIG.dataprep.jdbcMarketMap[db.name];
 
     if (!jdbcConfig) {
       return null;
@@ -187,7 +193,10 @@ export default class DatabaseOptions extends Component {
         <div className="db-installed">
           <span>{T.translate(`${PREFIX}.install`)}</span>
           {this.renderMarketOption(db)}
-          <span className="upload" onClick={this.toggleArtifactUploadWizard.bind(this, db)}>
+          <span
+            className="upload"
+            onClick={this.toggleArtifactUploadWizard.bind(this, db)}
+          >
             {T.translate(`${PREFIX}.upload`)}
           </span>
         </div>
@@ -257,9 +266,13 @@ export default class DatabaseOptions extends Component {
 
     return (
       <div className="database-options">
-        <div className="options-title">{T.translate(`${PREFIX}.optionsTitle`)}</div>
+        <div className="options-title">
+          {T.translate(`${PREFIX}.optionsTitle`)}
+        </div>
 
-        <div className="row">{this.state.drivers.map((db) => this.renderDBOption(db))}</div>
+        <div className="row">
+          {this.state.drivers.map((db) => this.renderDBOption(db))}
+        </div>
 
         {this.renderArtifactUploadWizard()}
       </div>

@@ -59,11 +59,11 @@ export default class GCSBrowser extends Component {
     const { connectionId } = DataPrepBrowserStore.getState().gcs;
     setGCSLoading();
 
-    let headers = {
+    const headers = {
       'Content-Type': file.type,
     };
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId,
       activeBucket: file.bucket,
@@ -77,11 +77,14 @@ export default class GCSBrowser extends Component {
 
     MyDataPrepApi.readGCSFile(params, null, headers).subscribe(
       (res) => {
-        let { id: workspaceId } = res.values[0];
+        const { id: workspaceId } = res.values[0];
         if (this.props.enableRouting) {
           history.push(`/ns/${namespace}/wrangler/${workspaceId}`);
         }
-        if (this.props.onWorkspaceCreate && typeof this.props.onWorkspaceCreate === 'function') {
+        if (
+          this.props.onWorkspaceCreate &&
+          typeof this.props.onWorkspaceCreate === 'function'
+        ) {
           this.props.onWorkspaceCreate(workspaceId);
         }
       },
@@ -99,13 +102,20 @@ export default class GCSBrowser extends Component {
           <Route
             path={`${BASEPATH}`}
             render={() => {
-              return <BrowserData {...this.props} onWorkspaceCreate={this.onWorkspaceCreate} />;
+              return (
+                <BrowserData
+                  {...this.props}
+                  onWorkspaceCreate={this.onWorkspaceCreate}
+                />
+              );
             }}
           />
         </Switch>
       );
     }
-    return <BrowserData {...this.props} onWorkspaceCreate={this.onWorkspaceCreate} />;
+    return (
+      <BrowserData {...this.props} onWorkspaceCreate={this.onWorkspaceCreate} />
+    );
   };
 
   render() {
@@ -126,11 +136,15 @@ export default class GCSBrowser extends Component {
             showPanelToggle={this.props.showPanelToggle}
           />
           <div
-            className={classnames('sub-panel', { 'routing-disabled': !this.props.enableRouting })}
+            className={classnames('sub-panel', {
+              'routing-disabled': !this.props.enableRouting,
+            })}
           >
             <div className="path-container">
               <GCSPath
-                baseStatePath={this.props.enableRouting ? this.props.match.url : '/'}
+                baseStatePath={
+                  this.props.enableRouting ? this.props.match.url : '/'
+                }
                 enableRouting={this.props.enableRouting}
               />
             </div>

@@ -42,7 +42,9 @@ function AppTypeSelectorView(props) {
         return (
           <div className="option" key={option}>
             <span onClick={props.onClick.bind(this, option)}>
-              <IconSVG name={props[option] ? 'icon-check-square' : 'icon-square-o'} />
+              <IconSVG
+                name={props[option] ? 'icon-check-square' : 'icon-square-o'}
+              />
 
               {T.translate(`${PREFIX}.Options.${option}`)}
             </span>
@@ -54,7 +56,7 @@ function AppTypeSelectorView(props) {
 }
 
 const mapStateToProps = (state) => {
-  let obj = {};
+  const obj = {};
 
   OPTIONS.forEach((option) => {
     obj[option] = state.customizer[option];
@@ -76,6 +78,9 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-const AppTypeSelector = connect(mapStateToProps, mapDispatch)(AppTypeSelectorView);
+const AppTypeSelector = connect(
+  mapStateToProps,
+  mapDispatch
+)(AppTypeSelectorView);
 
 export default AppTypeSelector;

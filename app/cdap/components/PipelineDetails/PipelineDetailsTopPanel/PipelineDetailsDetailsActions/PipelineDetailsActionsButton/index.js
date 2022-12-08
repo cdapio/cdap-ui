@@ -56,7 +56,9 @@ const sanitizeConfig = (pipeline) => {
   const pipelineClone = { ...pipeline };
 
   pipelineClone.config.stages.forEach((stage) => {
-    const keysToSanitize = Object.keys(stage).filter((k) => k.startsWith('_') || k.startsWith('$'));
+    const keysToSanitize = Object.keys(stage).filter(
+      (k) => k.startsWith('_') || k.startsWith('$')
+    );
     keysToSanitize.forEach((k) => {
       delete stage[k];
     });
@@ -111,7 +113,10 @@ export default class PipelineDetailsActionsButton extends Component {
   };
 
   duplicateConfigAndNavigate = () => {
-    duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+    duplicatePipeline(
+      this.props.pipelineName,
+      sanitizeConfig(this.pipelineConfig)
+    );
   };
 
   toggleDiscardConfirmation = () => {
@@ -130,7 +135,10 @@ export default class PipelineDetailsActionsButton extends Component {
       return;
     }
     if (!this.props.editDraftId) {
-      editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+      editPipeline(
+        this.props.pipelineName,
+        sanitizeConfig(this.pipelineConfig)
+      );
       return;
     }
     this.setState({
@@ -152,8 +160,8 @@ export default class PipelineDetailsActionsButton extends Component {
   };
 
   deletePipeline = () => {
-    let namespace = getCurrentNamespace();
-    let params = {
+    const namespace = getCurrentNamespace();
+    const params = {
       namespace,
       appId: this.props.pipelineName,
     };
@@ -221,11 +229,14 @@ export default class PipelineDetailsActionsButton extends Component {
   }
 
   getDeleteConfirmationElem = () => {
-    let triggeredPipelines = TriggeredPipelineStore.getState().triggered.triggeredPipelines;
-    let count = triggeredPipelines.length;
+    const triggeredPipelines = TriggeredPipelineStore.getState().triggered
+      .triggeredPipelines;
+    const count = triggeredPipelines.length;
 
     if (count > 0) {
-      let triggersText = triggeredPipelines.map((pipeline) => pipeline.application).join(', ');
+      const triggersText = triggeredPipelines
+        .map((pipeline) => pipeline.application)
+        .join(', ');
 
       return (
         <div>
@@ -234,7 +245,9 @@ export default class PipelineDetailsActionsButton extends Component {
             <em>{this.props.pipelineName}</em>
           </strong>
           {T.translate(`${PREFIX}.deleteConfirmation.trigger`)}
-          {T.translate(`${PREFIX}.deleteConfirmation.triggerPluralCheck`, { context: count })}
+          {T.translate(`${PREFIX}.deleteConfirmation.triggerPluralCheck`, {
+            context: count,
+          })}
           <em>{triggersText}</em>
           {T.translate(`${PREFIX}.deleteConfirmation.triggerDelete`)}
           <strong>
@@ -280,10 +293,15 @@ export default class PipelineDetailsActionsButton extends Component {
   render() {
     const ActionsBtnAndLabel = () => {
       return (
-        <div className="btn pipeline-action-btn pipeline-actions-btn" onClick={this.togglePopover}>
+        <div
+          className="btn pipeline-action-btn pipeline-actions-btn"
+          onClick={this.togglePopover}
+        >
           <div className="btn-container">
             <IconSVG name="icon-cog-empty" />
-            <div className="button-label">{T.translate(`${PREFIX}.actions`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.actions`)}
+            </div>
           </div>
         </div>
       );
@@ -291,9 +309,12 @@ export default class PipelineDetailsActionsButton extends Component {
 
     return (
       <div
-        className={classnames('pipeline-action-container pipeline-actions-container', {
-          active: this.state.showPopover,
-        })}
+        className={classnames(
+          'pipeline-action-container pipeline-actions-container',
+          {
+            active: this.state.showPopover,
+          }
+        )}
       >
         <Popover
           target={ActionsBtnAndLabel}
@@ -314,8 +335,12 @@ export default class PipelineDetailsActionsButton extends Component {
                 {T.translate(`${PREFIX}.edit`)}
               </StyledLi>
             )}
-            <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
-            <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>
+            <li onClick={this.duplicateConfigAndNavigate}>
+              {T.translate(`${PREFIX}.duplicate`)}
+            </li>
+            <li onClick={this.handlePipelineExport}>
+              {T.translate(`${PREFIX}.export`)}
+            </li>
             <hr />
             <li
               onClick={this.toggleDeleteConfirmationModal}

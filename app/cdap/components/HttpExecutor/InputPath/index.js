@@ -47,7 +47,7 @@ function InputPathView({ value, onChange }) {
       <div className="input-group">
         <div className="input-group-prepend">
           <div className="input-group-text">
-            {`\${router-protocol}://\${router-host}:\${router-port}/v3/`}
+            {'${router-protocol}://${router-host}:${router-port}/v3/'}
           </div>
         </div>
         <input

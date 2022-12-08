@@ -50,7 +50,10 @@ export default class ArtifactMetrics extends Component {
     };
 
     this.unsub = MyArtifactApi.listExtensions(extensionParams)
-      .combineLatest(MyAppApi.getDeployedApp(appsParams), MyArtifactApi.get(extensionParams))
+      .combineLatest(
+        MyAppApi.getDeployedApp(appsParams),
+        MyArtifactApi.get(extensionParams)
+      )
       .subscribe((res) => {
         this.setState({
           extensions: res[0].length,
@@ -70,15 +73,21 @@ export default class ArtifactMetrics extends Component {
     return (
       <div className="metrics-container">
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.artifact.extensions')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.artifact.extensions')}
+          </p>
           <p>{this.state.loading ? loading : this.state.extensions}</p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.artifact.applications')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.artifact.applications')}
+          </p>
           <p>{this.state.loading ? loading : this.state.apps}</p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.artifact.type')}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.artifact.type')}
+          </p>
           <p>{this.state.loading ? loading : this.state.type}</p>
         </div>
       </div>

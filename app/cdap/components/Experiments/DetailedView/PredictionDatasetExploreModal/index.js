@@ -86,7 +86,7 @@ export default class PredictionDatasetExploreModal extends Component {
   };
 
   render() {
-    let ActionButton = (tooltipId) => (
+    const ActionButton = (tooltipId) => (
       <div className="btn-link" onClick={this.toggleModal} id={tooltipId}>
         <span>Explore Predictions</span>
       </div>

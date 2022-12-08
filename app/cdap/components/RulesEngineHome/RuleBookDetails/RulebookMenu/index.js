@@ -47,7 +47,7 @@ export default class RulebookMenu extends Component {
   };
 
   deleteWorkbook = () => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngine.deleteRulebook({
       namespace,
       rulebookid: this.props.rulebookid,
@@ -58,13 +58,13 @@ export default class RulebookMenu extends Component {
   };
 
   downloadRulebook = () => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngine.getRulebook({
       namespace,
       rulebookid: this.props.rulebookid,
     }).subscribe((res) => {
-      let rulebook = res.values[0];
-      var blob = new Blob([rulebook]);
+      const rulebook = res.values[0];
+      const blob = new Blob([rulebook]);
       this.setState(
         {
           downloadUrl: URL.createObjectURL(blob),
@@ -106,7 +106,7 @@ export default class RulebookMenu extends Component {
 
   render() {
     const renderMenuItem = (menu) => {
-      let { label, iconName } = menu;
+      const { label, iconName } = menu;
       return (
         <div>
           {iconName ? <IconSVG name={iconName} /> : null}
@@ -121,7 +121,10 @@ export default class RulebookMenu extends Component {
     return (
       <div className="rule-book-menu">
         {this.props.embedded ? null : (
-          <button className="btn btn-primary" onClick={this.toggleRulesEngineToPipelineModal}>
+          <button
+            className="btn btn-primary"
+            onClick={this.toggleRulesEngineToPipelineModal}
+          >
             {T.translate(`${PREFIX}.createPipeline`)}
           </button>
         )}

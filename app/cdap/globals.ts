@@ -17,7 +17,7 @@
 declare global {
   /* tslint:disable:interface-name */
   interface Window {
-    getHydratorUrl: ({}) => string;
+    getHydratorUrl: (nav?: any) => string;
     angular;
     ReactStores;
     Cypress;

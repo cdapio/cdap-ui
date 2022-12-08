@@ -28,7 +28,7 @@ import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import T from 'i18n-react';
 import { objectQuery } from 'services/helpers';
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.BigQueryBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.BigQueryBrowser';
 
 class DatasetListView extends Component {
   static propTypes = {
@@ -45,7 +45,8 @@ class DatasetListView extends Component {
 
   state = {
     connectionId:
-      this.props.connectionId || objectQuery(this.props, 'match', 'params', 'connectionId'),
+      this.props.connectionId ||
+      objectQuery(this.props, 'match', 'params', 'connectionId'),
   };
 
   componentDidMount() {
@@ -60,7 +61,8 @@ class DatasetListView extends Component {
 
   componentDidUpdate() {
     const connectionId =
-      this.props.connectionId || objectQuery(this.props, 'match', 'params', 'connectionId');
+      this.props.connectionId ||
+      objectQuery(this.props, 'match', 'params', 'connectionId');
 
     if (connectionId !== this.state.connectionId) {
       listBiqQueryDatasets(connectionId);
@@ -98,12 +100,14 @@ class DatasetListView extends Component {
       );
     }
 
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
 
     return (
       <div className="list-view-container">
         <div className="sub-panel">
-          {T.translate(`${PREFIX}.datasetCount`, { context: datasetList.length })}
+          {T.translate(`${PREFIX}.datasetCount`, {
+            context: datasetList.length,
+          })}
         </div>
 
         <div className="list-table">
@@ -115,8 +119,8 @@ class DatasetListView extends Component {
 
           <div className="table-body">
             {datasetList.map((dataset) => {
-              let Tag = this.props.enableRouting ? Link : 'div';
-              let path = `/ns/${namespace}/connections/bigquery/${this.props.connectionId}/datasets/${dataset.name}`;
+              const Tag = this.props.enableRouting ? Link : 'div';
+              const path = `/ns/${namespace}/connections/bigquery/${this.props.connectionId}/datasets/${dataset.name}`;
 
               return (
                 <Tag

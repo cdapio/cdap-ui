@@ -23,7 +23,9 @@ import {
   getRules,
   setActiveRulebook,
 } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
-import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
+import RulesEngineStore, {
+  RULESENGINEACTIONS,
+} from 'components/RulesEngineHome/RulesEngineStore';
 import RulesEngineAlert from 'components/RulesEngineHome/RulesEngineAlert';
 import NamespaceStore from 'services/NamespaceStore';
 import MyRulesEngineApi from 'api/rulesengine';
@@ -97,7 +99,7 @@ export default class RulesEngineHome extends Component {
   };
 
   checkIfBackendUp() {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     MyRulesEngineApi.ping({ namespace }).subscribe(
       () => {
         this.setState({
@@ -124,7 +126,7 @@ export default class RulesEngineHome extends Component {
 
   render() {
     const featureName = Theme.featureNames.rulesEngine;
-    let pageTitle = (
+    const pageTitle = (
       <Helmet
         title={T.translate(`${PREFIX}.pageTitle`, {
           productName: Theme.productName,

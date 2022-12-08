@@ -46,7 +46,9 @@ export default class PipelineConfigureButton extends Component {
 
   getRuntimeArgumentsAndToggleModeless = (open) => {
     if (!this.state.showModeless) {
-      fetchAndUpdateRuntimeArgs().subscribe(this.toggleModeless.bind(this, open));
+      fetchAndUpdateRuntimeArgs().subscribe(
+        this.toggleModeless.bind(this, open)
+      );
     } else {
       this.toggleModeless(open);
     }
@@ -60,7 +62,10 @@ export default class PipelineConfigureButton extends Component {
 
   renderConfigureButton() {
     return (
-      <div className="btn pipeline-action-btn pipeline-configure-btn" ref={this.buttonRef}>
+      <div
+        className="btn pipeline-action-btn pipeline-configure-btn"
+        ref={this.buttonRef}
+      >
         <PrimaryTextLowercaseButton
           onClick={this.getRuntimeArgumentsAndToggleModeless.bind(this, true)}
           data-cy="pipeline-configure-btn"
@@ -68,7 +73,9 @@ export default class PipelineConfigureButton extends Component {
         >
           <div className="btn-container">
             <IconSVG name="icon-sliders" className="configure-icon" />
-            <div className="button-label">{T.translate(`${PREFIX}.configure`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.configure`)}
+            </div>
           </div>
         </PrimaryTextLowercaseButton>
       </div>
@@ -78,9 +85,12 @@ export default class PipelineConfigureButton extends Component {
   render() {
     return (
       <div
-        className={classnames('pipeline-action-container pipeline-configure-container', {
-          active: this.state.showModeless,
-        })}
+        className={classnames(
+          'pipeline-action-container pipeline-configure-container',
+          {
+            active: this.state.showModeless,
+          }
+        )}
       >
         {this.renderConfigureButton()}
         <PipelineConfigurations

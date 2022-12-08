@@ -60,7 +60,9 @@ const AboutPageModal: React.SFC<IAboutPageModalProps> = ({ cdapVersion, isOpen, 
               <img src={productLogoSrc} />
             </div>
             <span className="cdap-version">
-              {T.translate('features.AboutPage.version', { version: cdapVersion })}
+              {T.translate('features.AboutPage.version', {
+                version: cdapVersion,
+              })}
             </span>
           </div>
         </div>

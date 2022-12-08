@@ -29,7 +29,7 @@ const mapStateWithDNDFileProps = (state) => {
 const mapDispatchWithDNDFileProps = (dispatch) => {
   return {
     onDropHandler: (e) => {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (evt) => {
         dispatch({
           type: MicroserviceUploadActions.setJson,

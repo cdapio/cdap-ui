@@ -25,7 +25,10 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
+import {
+  convertKeyValuePairsToMap,
+  convertMapToKeyValuePairs,
+} from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
@@ -49,7 +52,9 @@ const mapDispatchToInstrumentationProps = (dispatch) => {
       const { runtimeArgs } = PipelineConfigurationsStore.getState();
       const pairs = [...runtimeArgs.pairs];
       const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION] = value.toString();
+      runtimeObj[
+        GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION
+      ] = value.toString();
       const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_INSTRUMENTATION,
@@ -68,9 +73,14 @@ const mapDispatchToInstrumentationProps = (dispatch) => {
 const Instrumentation = ({ instrumentation, onToggle }) => {
   return (
     <div className="label-with-toggle instrumentation row">
-      <span className="toggle-label col-4">{T.translate(`${PREFIX}.instrumentation`)}</span>
+      <span className="toggle-label col-4">
+        {T.translate(`${PREFIX}.instrumentation`)}
+      </span>
       <div className="col-7 toggle-container">
-        <ToggleSwitch isOn={instrumentation} onToggle={onToggle.bind(null, !instrumentation)} />
+        <ToggleSwitch
+          isOn={instrumentation}
+          onToggle={onToggle.bind(null, !instrumentation)}
+        />
         <Popover
           target={() => <IconSVG name="icon-info-circle" />}
           showOn="Hover"

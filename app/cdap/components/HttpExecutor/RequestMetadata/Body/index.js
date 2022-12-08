@@ -41,7 +41,12 @@ const mapDispatch = (dispatch) => {
 function BodyView({ value, onChange }) {
   return (
     <div className="request-body">
-      <textarea data-cy="request-body" className="form-control" value={value} onChange={onChange} />
+      <textarea
+        data-cy="request-body"
+        className="form-control"
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 }

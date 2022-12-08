@@ -22,13 +22,19 @@
  * Dagre-D3 issue: https://github.com/cpettitt/dagre-d3/issues/202
  **/
 
-SVGElement.prototype.getTransformToElement = SVGElement.prototype.getTransformToElement || function(toElement) {
-  return toElement.getScreenCTM().inverse().multiply(this.getScreenCTM());
-};
+SVGElement.prototype.getTransformToElement =
+  SVGElement.prototype.getTransformToElement ||
+  function(toElement) {
+    return toElement
+      .getScreenCTM()
+      .inverse()
+      .multiply(this.getScreenCTM());
+  };
 
 // 'includes' function of String is not available in older version of chromium browsers.
 if (!String.prototype.includes) {
-  String.prototype.includes = function() {'use strict';
+  String.prototype.includes = function() {
+    'use strict';
     return String.prototype.indexOf.apply(this, arguments) !== -1;
   };
 }
@@ -41,10 +47,10 @@ if (typeof Object.assign !== 'function') {
     }
 
     target = Object(target);
-    for (var index = 1; index < arguments.length; index++) {
-      var source = arguments[index];
+    for (let index = 1; index < arguments.length; index++) {
+      const source = arguments[index];
       if (source !== null) {
-        for (var key in source) {
+        for (const key in source) {
           if (Object.prototype.hasOwnProperty.call(source, key)) {
             target[key] = source[key];
           }

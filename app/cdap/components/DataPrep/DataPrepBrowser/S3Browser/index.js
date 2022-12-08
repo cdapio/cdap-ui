@@ -63,13 +63,16 @@ export default class S3Browser extends Component {
      * we need /bucket-1 alone for the api request
      */
     if (activeBucket.slice(1).split('/').length > 1) {
-      activeBucket = activeBucket.slice(0, activeBucket.slice(1).indexOf('/') + 1);
+      activeBucket = activeBucket.slice(
+        0,
+        activeBucket.slice(1).indexOf('/') + 1
+      );
     }
     setS3Loading();
-    let headers = {
+    const headers = {
       'Content-Type': file.type,
     };
-    let params = {
+    const params = {
       context: namespace,
       connectionId,
       activeBucket,
@@ -82,11 +85,14 @@ export default class S3Browser extends Component {
     }
     MyDataPrepApi.readS3File(params, null, headers).subscribe(
       (res) => {
-        let { id: workspaceId } = res.values[0];
+        const { id: workspaceId } = res.values[0];
         if (this.props.enableRouting) {
           history.push(`/ns/${namespace}/wrangler/${workspaceId}`);
         }
-        if (this.props.onWorkspaceCreate && typeof this.props.onWorkspaceCreate === 'function') {
+        if (
+          this.props.onWorkspaceCreate &&
+          typeof this.props.onWorkspaceCreate === 'function'
+        ) {
           this.props.onWorkspaceCreate(workspaceId);
         }
       },
@@ -104,13 +110,23 @@ export default class S3Browser extends Component {
           <Route
             path={`${BASEPATH}`}
             render={() => {
-              return <BucketDataView {...this.props} onWorkspaceCreate={this.onWorkspaceCreate} />;
+              return (
+                <BucketDataView
+                  {...this.props}
+                  onWorkspaceCreate={this.onWorkspaceCreate}
+                />
+              );
             }}
           />
         </Switch>
       );
     }
-    return <BucketDataView {...this.props} onWorkspaceCreate={this.onWorkspaceCreate} />;
+    return (
+      <BucketDataView
+        {...this.props}
+        onWorkspaceCreate={this.onWorkspaceCreate}
+      />
+    );
   };
 
   render() {
@@ -131,11 +147,15 @@ export default class S3Browser extends Component {
             showPanelToggle={this.props.showPanelToggle}
           />
           <div
-            className={classnames('sub-panel', { 'routing-disabled': !this.props.enableRouting })}
+            className={classnames('sub-panel', {
+              'routing-disabled': !this.props.enableRouting,
+            })}
           >
             <div className="path-container">
               <S3Path
-                baseStatePath={this.props.enableRouting ? this.props.match.url : '/'}
+                baseStatePath={
+                  this.props.enableRouting ? this.props.match.url : '/'
+                }
                 enableRouting={this.props.enableRouting}
               />
             </div>

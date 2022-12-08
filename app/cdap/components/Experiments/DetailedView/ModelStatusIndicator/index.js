@@ -70,7 +70,13 @@ const STATUS_ICON_MAP = {
 const getIconMap = (status) =>
   status in STATUS_ICON_MAP ? STATUS_ICON_MAP[status] : DEFAULT_STATUS_MAP;
 
-export default function ModelStatusIndicator({ status, loading, error, model, getModelStatus }) {
+export default function ModelStatusIndicator({
+  status,
+  loading,
+  error,
+  model,
+  getModelStatus,
+}) {
   if (loading) {
     return <IconSVG name="icon-spinner" className="fa-spin" />;
   }
@@ -89,14 +95,18 @@ export default function ModelStatusIndicator({ status, loading, error, model, ge
           <IconSVG className="text-danger" name="icon-exclamation-circle" />
           <span>Error</span>
         </span>
-        <UncontrolledTooltip placement="right" delay={0} target={`error-${model.id}`}>
+        <UncontrolledTooltip
+          placement="right"
+          delay={0}
+          target={`error-${model.id}`}
+        >
           {`Failed to get the status of the model '${model.name}'. Click to try loading the status again`}
         </UncontrolledTooltip>
       </span>
     );
   }
 
-  let iconMap = getIconMap(status);
+  const iconMap = getIconMap(status);
   return (
     <span className="model-status-indicator" title={status}>
       <IconSVG

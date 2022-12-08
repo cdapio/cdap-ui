@@ -20,7 +20,8 @@ import { MyArtifactApi } from 'api/artifact';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 
-const PREFIX = 'features.Administration.Configure.buttons.ReloadSystemArtifacts';
+const PREFIX =
+  'features.Administration.Configure.buttons.ReloadSystemArtifacts';
 
 export default class ReloadSystemArtifacts extends Component {
   state = {

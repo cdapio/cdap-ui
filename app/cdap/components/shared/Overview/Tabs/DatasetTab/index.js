@@ -25,7 +25,10 @@ import DatasetTable from 'components/DatasetTable';
 import NamespaceStore from 'services/NamespaceStore';
 import { MyMetricApi } from 'api/metric';
 import { MyDatasetApi } from 'api/dataset';
-import { humanReadableNumber, HUMANREADABLESTORAGE_NODECIMAL } from 'services/helpers';
+import {
+  humanReadableNumber,
+  HUMANREADABLESTORAGE_NODECIMAL,
+} from 'services/helpers';
 
 export default class DatasetTab extends Component {
   constructor(props) {
@@ -37,8 +40,9 @@ export default class DatasetTab extends Component {
     this.state.entity.datasets.forEach(this.addDatasetMetrics.bind(this));
   }
   componentWillReceiveProps(nextProps) {
-    let entitiesMatch =
-      objectQuery(nextProps, 'entity', 'name') === objectQuery(this.props, 'entity', 'name');
+    const entitiesMatch =
+      objectQuery(nextProps, 'entity', 'name') ===
+      objectQuery(this.props, 'entity', 'name');
     if (!entitiesMatch) {
       this.setState({
         entity: nextProps.entity,
@@ -57,7 +61,7 @@ export default class DatasetTab extends Component {
   }
 
   addDatasetMetrics(dataset) {
-    let currentNamespace = NamespaceStore.getState().selectedNamespace;
+    const currentNamespace = NamespaceStore.getState().selectedNamespace;
     const datasetParams = {
       namespace: currentNamespace,
       datasetId: this.props.entity.name,
@@ -84,14 +88,17 @@ export default class DatasetTab extends Component {
             if (metric.metricName === 'system.dataset.store.writes') {
               writes = metric.data[0].value;
             } else if (metric.metricName === 'system.dataset.store.bytes') {
-              bytes = humanReadableNumber(metric.data[0].value, HUMANREADABLESTORAGE_NODECIMAL);
+              bytes = humanReadableNumber(
+                metric.data[0].value,
+                HUMANREADABLESTORAGE_NODECIMAL
+              );
             } else if (metric.metricName === 'system.dataset.store.reads') {
               reads = metric.data[0].value;
             }
           });
         }
 
-        let entities = this.state.entitiesForTable.map((e) => {
+        const entities = this.state.entitiesForTable.map((e) => {
           if (e.name === dataset.name) {
             return Object.assign({}, e, {
               events: ops,

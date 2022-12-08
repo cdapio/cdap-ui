@@ -67,7 +67,7 @@ export default class StartStopAction extends Component {
 
   componentWillMount() {
     this.statusPoll$ = MyProgramApi.pollStatus(this.params).subscribe((res) => {
-      let programStatus = res.status;
+      const programStatus = res.status;
       if (!this.state.modal) {
         if (programStatus === 'STOPPED') {
           this.startStop = 'start';
@@ -98,7 +98,7 @@ export default class StartStopAction extends Component {
   }
 
   doStartStop() {
-    let params = Object.assign({}, this.params);
+    const params = Object.assign({}, this.params);
     params.action = this.startStop;
 
     this.setState({
@@ -165,7 +165,9 @@ export default class StartStopAction extends Component {
             headerTitle={headerText}
             toggleModal={this.toggleModal}
             confirmationText={confirmationText}
-            confirmButtonText={T.translate('features.FastAction.' + confirmBtnText)}
+            confirmButtonText={T.translate(
+              'features.FastAction.' + confirmBtnText
+            )}
             confirmFn={this.doStartStop}
             cancelFn={this.toggleModal}
             isLoading={this.state.actionStatus === 'loading'}

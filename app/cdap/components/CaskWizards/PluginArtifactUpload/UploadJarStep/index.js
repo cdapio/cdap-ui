@@ -41,16 +41,24 @@ const mapDispatchWithDNDFileProps = (dispatch) => {
     },
   };
 };
-const ArtifactUploader = connect(mapStateWithDNDFileProps, mapDispatchWithDNDFileProps)(FileDnD);
+const ArtifactUploader = connect(
+  mapStateWithDNDFileProps,
+  mapDispatchWithDNDFileProps
+)(FileDnD);
 
 export default function UploadJarStep(props, context) {
   return (
     <Provider store={PluginArtifactUploadStore}>
-      <div className="upload-step-container" data-cy="plugin-jar-upload-container">
+      <div
+        className="upload-step-container"
+        data-cy="plugin-jar-upload-container"
+      >
         {/* TODO: shouldn't do this, replace in 4.2} */
         context.isMarket ? (
           <h4 className="upload-instruction">
-            {T.translate('features.Wizard.ArtifactUpload.Step1.uploadHelperText')}
+            {T.translate(
+              'features.Wizard.ArtifactUpload.Step1.uploadHelperText'
+            )}
           </h4>
         ) : null}
         <ArtifactUploader />

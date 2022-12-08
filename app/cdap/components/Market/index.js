@@ -23,7 +23,10 @@ import MarketStore from 'components/Market/store/market-store.js';
 import T from 'i18n-react';
 import AllTabContents from 'components/Market/AllTab';
 import UsecaseTab from 'components/Market/UsecaseTab';
-import { CATEGORY_MAP, DEFAULT_CATEGORIES } from 'components/Market/CategoryMap';
+import {
+  CATEGORY_MAP,
+  DEFAULT_CATEGORIES,
+} from 'components/Market/CategoryMap';
 import { objectQuery } from 'services/helpers';
 import { Observable } from 'rxjs/Observable';
 
@@ -46,8 +49,8 @@ export default class Market extends Component {
 
   componentDidMount() {
     this.sub = MarketStore.subscribe(() => {
-      let activeFilter = MarketStore.getState().filter;
-      let filter = find(this.state.tabConfig.tabs, { filter: activeFilter });
+      const activeFilter = MarketStore.getState().filter;
+      const filter = find(this.state.tabConfig.tabs, { filter: activeFilter });
 
       if (filter && filter.id !== this.state.activeTab) {
         this.setState({
@@ -90,7 +93,9 @@ export default class Market extends Component {
       })
     );
     Observable.forkJoin(observables).subscribe((marketMetas) => {
-      const marketNames = marketMetas.map((marketMeta) => marketMeta.marketName);
+      const marketNames = marketMetas.map(
+        (marketMeta) => marketMeta.marketName
+      );
       this.setState({ marketNames }, () => {
         this.populateMarketPackages(markets[0]);
       });
@@ -122,9 +127,14 @@ export default class Market extends Component {
     MyMarketApi.getCategories({ marketHost }).subscribe(
       (categories) => {
         categories = categories.filter(
-          (category) => ['gcp', 'usecase', 'datapack'].indexOf(category.name) === -1
+          (category) =>
+            ['gcp', 'usecase', 'datapack'].indexOf(category.name) === -1
         );
-        this.processPackagesAndCategories(filteredPackages, categories, marketHost);
+        this.processPackagesAndCategories(
+          filteredPackages,
+          categories,
+          marketHost
+        );
       },
       () => {
         // If categories do not come from backend, revert back to get categories from existing packages
@@ -146,14 +156,19 @@ export default class Market extends Component {
 
         const remainingCategories = Object.keys(categoriesMap);
 
-        aggregateCategories = aggregateCategories.concat(remainingCategories).map((cat) => {
-          return {
-            name: cat,
-            hasIcon: false,
-          };
-        });
+        aggregateCategories = aggregateCategories
+          .concat(remainingCategories)
+          .map((cat) => {
+            return {
+              name: cat,
+              hasIcon: false,
+            };
+          });
 
-        this.processPackagesAndCategories(filteredPackages, aggregateCategories);
+        this.processPackagesAndCategories(
+          filteredPackages,
+          aggregateCategories
+        );
       }
     );
   };
@@ -162,7 +177,9 @@ export default class Market extends Component {
     const newState = {
       tabConfig: this.constructTabConfig(categories, marketHost),
     };
-    const searchFilter = find(newState.tabConfig.tabs, { filter: MarketStore.getState().filter });
+    const searchFilter = find(newState.tabConfig.tabs, {
+      filter: MarketStore.getState().filter,
+    });
 
     if (searchFilter) {
       newState.activeTab = searchFilter.id;
@@ -264,7 +281,8 @@ export default class Market extends Component {
         filter: category.name,
         name,
         icon,
-        content: category.name === 'usecase' ? <UsecaseTab /> : <AllTabContents />,
+        content:
+          category.name === 'usecase' ? <UsecaseTab /> : <AllTabContents />,
       };
 
       tabs.push(config);
@@ -275,14 +293,15 @@ export default class Market extends Component {
   }
 
   handleTabClick(id) {
-    let searchFilter = find(this.state.tabConfig.tabs, { id }).filter;
+    const searchFilter = find(this.state.tabConfig.tabs, { id }).filter;
 
     this.setState({ activeTab: id });
     MarketAction.setFilter(searchFilter);
   }
 
   handleMarketTabClick(id) {
-    const marketHost = find(this.state.marketsTabConfig.tabs, { id }).marketHost;
+    const marketHost = find(this.state.marketsTabConfig.tabs, { id })
+      .marketHost;
     this.populateMarketPackages(marketHost);
 
     // Reset states before rendering market UI.

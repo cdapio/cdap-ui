@@ -17,15 +17,20 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
-let appPath = '/namespaces/:namespace/apps/ModelManagementApp';
-let servicePath = `${appPath}/spark/ModelManagerService`;
-let basePath = `${servicePath}/methods`;
+const dataSrc = DataSourceConfigurer.getInstance();
+const appPath = '/namespaces/:namespace/apps/ModelManagementApp';
+const servicePath = `${appPath}/spark/ModelManagerService`;
+const basePath = `${servicePath}/methods`;
 
 export const myExperimentsApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/experiments`),
 
-  getExperiment: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/experiments/:experimentId`),
+  getExperiment: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/experiments/:experimentId`
+  ),
   getModelsInExperiment: apiCreator(
     dataSrc,
     'GET',
@@ -56,7 +61,12 @@ export const myExperimentsApi = {
     'POLL',
     `${basePath}/experiments/:experimentId/splits/:splitId/status`
   ),
-  getAlgorithms: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/algorithms`),
+  getAlgorithms: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/algorithms`
+  ),
   getModelStatus: apiCreator(
     dataSrc,
     'GET',
@@ -106,7 +116,12 @@ export const myExperimentsApi = {
     'REQUEST',
     `${basePath}/experiments/:experimentId/models/:modelId/split`
   ),
-  createExperiment: apiCreator(dataSrc, 'PUT', 'REQUEST', `${basePath}/experiments/:experimentId`),
+  createExperiment: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basePath}/experiments/:experimentId`
+  ),
   createSplit: apiCreator(
     dataSrc,
     'POST',
@@ -125,7 +140,17 @@ export const myExperimentsApi = {
   startService: apiCreator(dataSrc, 'POST', 'REQUEST', `${servicePath}/start`),
   stopService: apiCreator(dataSrc, 'POST', 'REQUEST', `${servicePath}/stop`),
   createApp: apiCreator(dataSrc, 'PUT', 'REQUEST', `${appPath}`),
-  getServiceStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${servicePath}/status`),
-  pollServiceStatus: apiCreator(dataSrc, 'GET', 'POLL', `${servicePath}/status`),
+  getServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${servicePath}/status`
+  ),
+  pollServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'POLL',
+    `${servicePath}/status`
+  ),
   ping: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/health`),
 };

@@ -44,7 +44,7 @@ export default class DataPrepCLI extends Component {
     this.execute = this.execute.bind(this);
 
     this.sub = DataPrepStore.subscribe(() => {
-      let { error, dataprep } = DataPrepStore.getState();
+      const { error, dataprep } = DataPrepStore.getState();
       let newState = {
         error: error.cliError,
       };

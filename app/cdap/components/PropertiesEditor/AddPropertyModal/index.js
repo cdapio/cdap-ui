@@ -69,25 +69,28 @@ export default class AddPropertyModal extends Component {
   }
 
   onSave() {
-    let uniqueCheck = this.props.existingProperties.filter((row) => {
+    const uniqueCheck = this.props.existingProperties.filter((row) => {
       return row.name === this.state.keyInput;
     });
 
     if (uniqueCheck.length > 0) {
       this.setState({
-        error: T.translate('features.PropertiesEditor.AddProperty.propertyExistError', {
-          key: this.state.keyInput,
-        }),
+        error: T.translate(
+          'features.PropertiesEditor.AddProperty.propertyExistError',
+          {
+            key: this.state.keyInput,
+          }
+        ),
       });
       return;
     }
 
-    let reqObj = {};
-    let key = this.state.keyInput;
+    const reqObj = {};
+    const key = this.state.keyInput;
     reqObj[key] = this.state.valueInput;
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let params = {
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const params = {
       namespace,
       entityType: this.props.entityType,
       entityId: this.props.entityId,
@@ -115,7 +118,9 @@ export default class AddPropertyModal extends Component {
       <ModalFooter>
         <CardActionFeedback
           type="DANGER"
-          message={T.translate('features.PropertiesEditor.AddProperty.shortError')}
+          message={T.translate(
+            'features.PropertiesEditor.AddProperty.shortError'
+          )}
           extendedMessage={this.state.error}
         />
       </ModalFooter>
@@ -127,7 +132,8 @@ export default class AddPropertyModal extends Component {
       return null;
     }
 
-    let disabled = this.state.keyInput.length === 0 || this.state.valueInput.length === 0;
+    const disabled =
+      this.state.keyInput.length === 0 || this.state.valueInput.length === 0;
 
     return (
       <Modal
@@ -155,7 +161,9 @@ export default class AddPropertyModal extends Component {
                 type="text"
                 id="add-property-modal-key-input"
                 className="form-control"
-                placeholder={T.translate('features.PropertiesEditor.AddProperty.keyPlaceholder')}
+                placeholder={T.translate(
+                  'features.PropertiesEditor.AddProperty.keyPlaceholder'
+                )}
                 value={this.state.keyInput}
                 onChange={this.handleKeyChange}
               />
@@ -165,7 +173,9 @@ export default class AddPropertyModal extends Component {
               <input
                 type="text"
                 className="form-control"
-                placeholder={T.translate('features.PropertiesEditor.AddProperty.valuePlaceholder')}
+                placeholder={T.translate(
+                  'features.PropertiesEditor.AddProperty.valuePlaceholder'
+                )}
                 value={this.state.valueInput}
                 onChange={this.handleValueChange}
               />
@@ -173,7 +183,11 @@ export default class AddPropertyModal extends Component {
           </div>
 
           <div className="text-right">
-            <button className="btn btn-primary" onClick={this.onSave} disabled={disabled}>
+            <button
+              className="btn btn-primary"
+              onClick={this.onSave}
+              disabled={disabled}
+            >
               {T.translate('features.PropertiesEditor.AddProperty.button')}
             </button>
           </div>

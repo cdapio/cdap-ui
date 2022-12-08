@@ -139,13 +139,19 @@ class ExperimentMetricsDropdown extends Component {
   };
   renderMetricBarChart = ({ id: metric, value: label, colorRange }) => {
     if (metric === 'algorithms') {
-      return <AlgorithmDistribution algorithms={this.props.algorithms.histo || []} />;
+      return (
+        <AlgorithmDistribution algorithms={this.props.algorithms.histo || []} />
+      );
     }
     if (metric === 'statuses') {
-      return <ModelStatusesDistribution modelStatuses={this.props.statuses.histo || []} />;
+      return (
+        <ModelStatusesDistribution
+          modelStatuses={this.props.statuses.histo || []}
+        />
+      );
     }
-    let values = this.props.evaluationMetrics[metric] || {};
-    let { width, height } = this.containerRef.getBoundingClientRect();
+    const values = this.props.evaluationMetrics[metric] || {};
+    const { width, height } = this.containerRef.getBoundingClientRect();
     return (
       <MetricChartWithLegend
         colorRange={colorRange}
@@ -163,7 +169,7 @@ class ExperimentMetricsDropdown extends Component {
       NUMBER_TYPES.indexOf(this.props.outcomeType) !== -1
         ? keys.concat(ExperimentMetricsDropdown.regressionKeys)
         : keys.concat(ExperimentMetricsDropdown.categoricalKeys);
-    let matchingKey = keys.find((key) => key.id === this.state.active);
+    const matchingKey = keys.find((key) => key.id === this.state.active);
     return (
       <div
         className="experiments-metrics-dropdown clearfix"
@@ -185,8 +191,8 @@ const mapStateToExperimentMetricsDropdownProps = (state) => {
   };
 };
 
-const ConnectedExperimentsDropdown = connect(mapStateToExperimentMetricsDropdownProps)(
-  ExperimentMetricsDropdown
-);
+const ConnectedExperimentsDropdown = connect(
+  mapStateToExperimentMetricsDropdownProps
+)(ExperimentMetricsDropdown);
 
 export default ConnectedExperimentsDropdown;

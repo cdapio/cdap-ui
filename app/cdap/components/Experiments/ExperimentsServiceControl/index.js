@@ -67,7 +67,7 @@ export default class ExperimentsServiceControl extends Component {
       i18nPrefix: PREFIX,
       featureName,
     }).subscribe(this.props.onServiceStart, (err) => {
-      let extendedMessage = isObject(err.extendedMessage)
+      const extendedMessage = isObject(err.extendedMessage)
         ? err.extendedMessage.response || err.extendedMessage.message
         : err.extendedMessage;
       this.setState({
@@ -104,7 +104,11 @@ export default class ExperimentsServiceControl extends Component {
     }
     return (
       <div className="action-container">
-        <button className="btn btn-primary" onClick={this.enableMMDS} disabled={this.state.loading}>
+        <button
+          className="btn btn-primary"
+          onClick={this.enableMMDS}
+          disabled={this.state.loading}
+        >
           {this.state.loading ? <LoadingSVG /> : null}
           <span className="btn-label">
             {T.translate(`${PREFIX}.enableBtnLabel`, { featureName })}
@@ -140,8 +144,14 @@ export default class ExperimentsServiceControl extends Component {
           })}
         />
         <div className="image-containers">
-          <img className="img-thumbnail" src="/cdap_assets/img/MMDS_preview1.png" />
-          <img className="img-thumbnail" src="/cdap_assets/img/MMDS_preview2.png" />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/MMDS_preview1.png"
+          />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/MMDS_preview2.png"
+          />
         </div>
         <div className="text-container">
           <h2> {T.translate(`${PREFIX}.title`, { featureName })} </h2>

@@ -41,12 +41,20 @@ function TypeSelectorView({
     <div className="type-selector">
       <div className="type-item" onClick={togglePipeline}>
         <IconSVG name={pipeline ? 'icon-check-square' : 'icon-square-o'} />
-        <span>{T.translate(`${PREFIX}.pipelinesWithCount`, { count: pipelineCount })}</span>
+        <span>
+          {T.translate(`${PREFIX}.pipelinesWithCount`, {
+            count: pipelineCount,
+          })}
+        </span>
       </div>
 
       <div className="type-item" onClick={toggleCustomApp}>
         <IconSVG name={customApp ? 'icon-check-square' : 'icon-square-o'} />
-        <span>{T.translate(`${PREFIX}.customAppsWithCount`, { count: customAppCount })}</span>
+        <span>
+          {T.translate(`${PREFIX}.customAppsWithCount`, {
+            count: customAppCount,
+          })}
+        </span>
       </div>
     </div>
   );

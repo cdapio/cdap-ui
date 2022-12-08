@@ -43,6 +43,8 @@ const mapStateToProps = (state) => ({
   experiment_name: state.name,
 });
 
-const ConnectedExperimentDetailPageTitle = connect(mapStateToProps)(ExperimentDetailPageTitle);
+const ConnectedExperimentDetailPageTitle = connect(mapStateToProps)(
+  ExperimentDetailPageTitle
+);
 
 export default ConnectedExperimentDetailPageTitle;

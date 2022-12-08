@@ -23,7 +23,11 @@ interface IFieldType {
 }
 
 function enumHandler(field) {
-  return { name: field.name, type: field.type.type, children: field.type.symbols };
+  return {
+    name: field.name,
+    type: field.type.type,
+    children: field.type.symbols,
+  };
 }
 
 function mapHandler(field) {
@@ -60,7 +64,11 @@ function recordHandler(field) {
 }
 
 function arrayHandler(field) {
-  return { name: field.name, type: field.type.type, children: [field.type.items] };
+  return {
+    name: field.name,
+    type: field.type.type,
+    children: [field.type.items],
+  };
 }
 
 function stringHandler(field) {
@@ -307,14 +315,20 @@ function iterateChildren(parentId, tree, result) {
       iterateChildren(uniqueId, tree[key], result);
       return;
     }
-    result.push({ id: uniqueId, name: key, parentId, type: 'string', path: tree[key] });
+    result.push({
+      id: uniqueId,
+      name: key,
+      parentId,
+      type: 'string',
+      path: tree[key],
+    });
   });
   return result;
 }
 
 // This function receives two arrays, one to push and one to loop, a unique id and a margin number,
 // it returns an array with flat rows
-export const getChildren = (childrenOfSelected, item, uniqueId, arrPrId) => {
+export const getChildren = (childrenOfSelected, item: any, uniqueId, arrPrId) => {
   const arrOfParentIds = arrPrId;
   arrOfParentIds.push(uniqueId);
   item.forEach((child) => {

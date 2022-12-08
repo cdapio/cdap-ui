@@ -23,7 +23,10 @@ import Typography from '@material-ui/core/Typography';
 import NamespaceStore from 'services/NamespaceStore';
 import SearchStore from 'components/EntityListView/SearchStore';
 import SearchStoreActions from 'components/EntityListView/SearchStore/SearchStoreActions';
-import { search, updateQueryString } from 'components/EntityListView/SearchStore/ActionCreator';
+import {
+  search,
+  updateQueryString,
+} from 'components/EntityListView/SearchStore/ActionCreator';
 import Mousetrap from 'mousetrap';
 
 require('./EntityListInfo.scss');
@@ -41,7 +44,7 @@ export default class EntityListInfo extends Component {
     Mousetrap.unbind('right');
   }
   goToNextPage() {
-    let { currentPage, total, limit } = SearchStore.getState().search;
+    const { currentPage, total, limit } = SearchStore.getState().search;
     if (currentPage === Math.ceil(total / limit)) {
       return;
     }
@@ -56,7 +59,7 @@ export default class EntityListInfo extends Component {
     updateQueryString();
   }
   goToPreviousPage() {
-    let { currentPage, limit } = SearchStore.getState().search;
+    const { currentPage, limit } = SearchStore.getState().search;
     if (currentPage === 1) {
       return;
     }
@@ -72,7 +75,12 @@ export default class EntityListInfo extends Component {
   }
 
   showPagination() {
-    const { currentPage, total, limit, loading } = SearchStore.getState().search;
+    const {
+      currentPage,
+      total,
+      limit,
+      loading,
+    } = SearchStore.getState().search;
     const prevDisabled = currentPage === 1;
     const nextDisabled = currentPage === Math.ceil(total / limit);
 
@@ -99,8 +107,10 @@ export default class EntityListInfo extends Component {
     );
   }
   render() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let title = T.translate('features.EntityListView.Info.title', { namespace });
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const title = T.translate('features.EntityListView.Info.title', {
+      namespace,
+    });
 
     return (
       <div className={this.props.className}>

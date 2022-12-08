@@ -40,7 +40,10 @@ export default class PlusButton extends Component {
         onClick: PropTypes.func,
       })
     ),
-    mode: PropTypes.oneOf([PlusButton.MODE.marketplace, PlusButton.MODE.resourcecenter]),
+    mode: PropTypes.oneOf([
+      PlusButton.MODE.marketplace,
+      PlusButton.MODE.resourcecenter,
+    ]),
   };
 
   eventemitter = ee(ee);
@@ -54,7 +57,7 @@ export default class PlusButton extends Component {
 
   componentDidMount() {
     this.plusButtonSubscription = PlusButtonStore.subscribe(() => {
-      let modalState = PlusButtonStore.getState().modalState;
+      const modalState = PlusButtonStore.getState().modalState;
       this.setState({
         showModal: modalState,
       });
@@ -125,7 +128,10 @@ export default class PlusButton extends Component {
     return (
       <Popover
         target={this.targetElement}
-        targetDimension={{ width: PLUSBUTTON_DIMENSION, height: PLUSBUTTON_DIMENSION }}
+        targetDimension={{
+          width: PLUSBUTTON_DIMENSION,
+          height: PLUSBUTTON_DIMENSION,
+        }}
         placement="bottom"
       >
         {this.renderResourceCenterMenu()}

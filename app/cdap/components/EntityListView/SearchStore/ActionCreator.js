@@ -28,9 +28,15 @@ import { Theme } from 'services/ThemeHelper';
 
 const search = () => {
   const namespace = getCurrentNamespace();
-  let { offset, limit, activeFilters, activeSort, query } = SearchStore.getState().search;
+  const {
+    offset,
+    limit,
+    activeFilters,
+    activeSort,
+    query,
+  } = SearchStore.getState().search;
 
-  let params = {
+  const params = {
     namespace: namespace,
     target: activeFilters,
     limit,
@@ -80,7 +86,10 @@ const searchRequest = (params) => {
       (response) => {
         const state = SearchStore.getState().search;
         const currentPage = state.currentPage;
-        if (response.total > 0 && Math.ceil(response.total / state.limit) < currentPage) {
+        if (
+          response.total > 0 &&
+          Math.ceil(response.total / state.limit) < currentPage
+        ) {
           SearchStore.dispatch({
             type: SearchStoreActions.SETERROR,
             payload: {
@@ -115,8 +124,14 @@ const updateQueryString = () => {
   let page = '';
   let queryParams = [];
 
-  let searchState = SearchStore.getState().search;
-  let { activeSort, activeFilters, query: searchQuery, currentPage, overviewEntity } = searchState;
+  const searchState = SearchStore.getState().search;
+  const {
+    activeSort,
+    activeFilters,
+    query: searchQuery,
+    currentPage,
+    overviewEntity,
+  } = searchState;
 
   // Generate sort params
   if (activeSort.sort !== 'none') {
@@ -152,7 +167,7 @@ const updateQueryString = () => {
     queryString += `&overviewid=${overviewEntity.id}&overviewtype=${overviewEntity.type}`;
   }
 
-  let obj = {
+  const obj = {
     title: Theme.productName,
     url: location.pathname + queryString,
   };

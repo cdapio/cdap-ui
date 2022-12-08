@@ -12,26 +12,26 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
-import {Subject} from 'rxjs/Subject';
+ */
+import { Subject } from 'rxjs/Subject';
 
 const MyExploreApi = {
   tables: [],
-  queries: []
+  queries: [],
 };
 
 MyExploreApi.__setTables = function(tables) {
   this.tables = tables;
 };
 MyExploreApi.fetchTables = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.tables);
   });
   return subject;
 };
 MyExploreApi.fetchQueries = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.queries);
   });

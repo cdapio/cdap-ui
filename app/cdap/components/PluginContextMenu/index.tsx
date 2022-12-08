@@ -75,13 +75,13 @@ export default function PluginContextMenu({
     onOpen(nodeId);
   };
   return (
-    <React.Fragment>
+    <>
       <ContextMenu
         selector={`[id="${nodeId}"]`}
         options={PluginContextMenuOptions}
         onOpen={onPluginContextMenuOpen}
       />
-    </React.Fragment>
+    </>
   );
 }
 

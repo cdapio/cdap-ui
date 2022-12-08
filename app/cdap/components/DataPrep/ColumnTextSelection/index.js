@@ -43,18 +43,25 @@ export default class ColumnTextSelection extends Component {
     this.applyDirective = this.applyDirective.bind(this);
   }
   componentDidMount() {
-    this.documentClick$ = Observable.fromEvent(document.body, 'click', false).subscribe((e) => {
-      let matchingClass = intersection(
+    this.documentClick$ = Observable.fromEvent(
+      document.body,
+      'click',
+      false
+    ).subscribe((e) => {
+      const matchingClass = intersection(
         e.target.className.split(' '),
         this.props.classNamesToExclude.concat([CELLHIGHLIGHTCLASSNAME])
       );
-      if (!matchingClass.length && ['TR', 'TBODY'].indexOf(e.target.nodeName) === -1) {
+      if (
+        !matchingClass.length &&
+        ['TR', 'TBODY'].indexOf(e.target.nodeName) === -1
+      ) {
         if (this.props.onClose) {
           this.props.onClose();
         }
       }
     });
-    let highlightedHeader = document.getElementById('highlighted-header');
+    const highlightedHeader = document.getElementById('highlighted-header');
     if (highlightedHeader) {
       highlightedHeader.scrollIntoView();
     }
@@ -94,14 +101,14 @@ export default class ColumnTextSelection extends Component {
     this.togglePopover();
   }
   mouseUpHandler(head, index) {
-    let currentSelection = window.getSelection().toString();
+    const currentSelection = window.getSelection().toString();
     let startRange, endRange;
 
     if (this.textSelection && currentSelection.length) {
       startRange = window.getSelection().getRangeAt(0).startOffset;
       endRange = window.getSelection().getRangeAt(0).endOffset;
       this.textSelection = false;
-      let textSelectionRange = {
+      const textSelectionRange = {
         start: startRange,
         end: endRange,
         index,
@@ -122,7 +129,11 @@ export default class ColumnTextSelection extends Component {
       this.newColName = this.props.columns[0] + '_copy';
     } else {
       if (this.state.showPopover) {
-        this.props.onSelect({ textSelectionRange: null, showPopover: true, rowNumber: null });
+        this.props.onSelect({
+          textSelectionRange: null,
+          showPopover: true,
+          rowNumber: null,
+        });
         this.togglePopover();
       }
     }
@@ -134,8 +145,8 @@ export default class ColumnTextSelection extends Component {
   }
 
   render() {
-    let { data, headers } = DataPrepStore.getState().dataprep;
-    let column = this.props.columns[0];
+    const { data, headers } = DataPrepStore.getState().dataprep;
+    const column = this.props.columns[0];
 
     const renderTableCell = (row, index, head, highlightColumn) => {
       if (head !== highlightColumn) {
@@ -155,14 +166,18 @@ export default class ColumnTextSelection extends Component {
           <div className={CELLHIGHLIGHTCLASSNAME}>
             {index === this.state.textSelectionRange.index ? (
               <span>
-                <span>{row[head].slice(0, this.state.textSelectionRange.start)}</span>
+                <span>
+                  {row[head].slice(0, this.state.textSelectionRange.start)}
+                </span>
                 <span id={`highlight-cell-${index}`}>
                   {row[head].slice(
                     this.state.textSelectionRange.start,
                     this.state.textSelectionRange.end
                   )}
                 </span>
-                <span>{row[head].slice(this.state.textSelectionRange.end)}</span>
+                <span>
+                  {row[head].slice(this.state.textSelectionRange.end)}
+                </span>
               </span>
             ) : (
               row[head]
@@ -187,7 +202,10 @@ export default class ColumnTextSelection extends Component {
       );
     };
     return (
-      <div id="cut-directive" className={classnames('dataprep-table', this.props.className)}>
+      <div
+        id="cut-directive"
+        className={classnames('dataprep-table', this.props.className)}
+      >
         <table className="table table-bordered">
           <colgroup>
             <col />

@@ -39,7 +39,8 @@ import T from 'i18n-react';
 
 const RECORDS_IN_COLOR = '#58B7F6';
 const RECORDS_OUT_COLOR = '#97A0BA';
-const PREFIX = `features.PipelineSummary.pipelineNodesMetricsGraph.NodeMetricsGraph`;
+const PREFIX =
+  'features.PipelineSummary.pipelineNodesMetricsGraph.NodeMetricsGraph';
 const metricTypeToColorMap = {
   recordsin: RECORDS_IN_COLOR,
   recordsout: RECORDS_OUT_COLOR,
@@ -95,10 +96,16 @@ export default class NodeMetricsGraph extends Component {
 
     this.data = this.props.data;
 
-    let dataToShow = Object.keys(this.data).map((dataKey) => this.data[dataKey].label);
+    let dataToShow = Object.keys(this.data).map(
+      (dataKey) => this.data[dataKey].label
+    );
 
-    if (this.props.isMultiplePorts && this.props.portsToShow && this.props.portsToShow.length) {
-      let portsToShow = this.props.portsToShow;
+    if (
+      this.props.isMultiplePorts &&
+      this.props.portsToShow &&
+      this.props.portsToShow.length
+    ) {
+      const portsToShow = this.props.portsToShow;
       // always show error records no matter what port the user clicks on
       if (portsToShow.indexOf('errors') === -1) {
         portsToShow.push('errors');
@@ -116,7 +123,7 @@ export default class NodeMetricsGraph extends Component {
     }
 
     this.xDomain = [0, 10];
-    let { tickFormat, yDomain } = getYAxisProps(this.data);
+    const { tickFormat, yDomain } = getYAxisProps(this.data);
     this.tickFormat = tickFormat;
     this.yDomain = yDomain;
     this.dummyData = [
@@ -137,8 +144,11 @@ export default class NodeMetricsGraph extends Component {
         },
       ];
     } else if (!Array.isArray(this.data) && typeof this.data === 'object') {
-      let dataObjects = Object.keys(this.data).map((key) => this.data[key]);
-      let objectWithMaxLength = maxBy(dataObjects, (dataObject) => dataObject.data.length);
+      const dataObjects = Object.keys(this.data).map((key) => this.data[key]);
+      const objectWithMaxLength = maxBy(
+        dataObjects,
+        (dataObject) => dataObject.data.length
+      );
       this.xDomain[1] = objectWithMaxLength.data.length;
       Object.keys(this.data).forEach((d) => {
         this.colorLegend.push({
@@ -150,14 +160,20 @@ export default class NodeMetricsGraph extends Component {
   }
 
   onLegendClick = (itemTitle) => {
-    let legendKey = findKey(this.data, (dataKey) => dataKey.label === itemTitle);
+    const legendKey = findKey(
+      this.data,
+      (dataKey) => dataKey.label === itemTitle
+    );
     if (!legendKey) {
       return;
     }
 
-    let legendItem = this.data[legendKey];
-    let newDataToShow = [...this.state.dataToShow];
-    let legendItemIndex = findIndex(newDataToShow, (dataKey) => dataKey === legendItem.label);
+    const legendItem = this.data[legendKey];
+    const newDataToShow = [...this.state.dataToShow];
+    const legendItemIndex = findIndex(
+      newDataToShow,
+      (dataKey) => dataKey === legendItem.label
+    );
     if (legendItemIndex !== -1) {
       newDataToShow.splice(legendItemIndex, 1);
     } else {
@@ -170,7 +186,7 @@ export default class NodeMetricsGraph extends Component {
 
   renderAreaChart(data, metricType) {
     if (!Array.isArray(data) && typeof data === 'object') {
-      let dataArrayToShow = Object.keys(data).filter(
+      const dataArrayToShow = Object.keys(data).filter(
         (key) => this.state.dataToShow.indexOf(data[key].label) !== -1
       );
       if (!dataArrayToShow.length) {
@@ -186,7 +202,7 @@ export default class NodeMetricsGraph extends Component {
       }
 
       return dataArrayToShow.map((key) => {
-        let dataToPlot = data[key].data;
+        const dataToPlot = data[key].data;
         if (!dataToPlot || !dataToPlot.length) {
           return null;
         }
@@ -214,7 +230,9 @@ export default class NodeMetricsGraph extends Component {
 
   renderLineChart = (data, metricType) => {
     const onValueMouseOver = (key, d) => {
-      this.state.currentHoveredElement ? delete this.state.currentHoveredElement['key'] : null;
+      this.state.currentHoveredElement
+        ? delete this.state.currentHoveredElement['key']
+        : null;
       if (isEqual(this.state.currentHoveredElement, d)) {
         return;
       }
@@ -264,7 +282,7 @@ export default class NodeMetricsGraph extends Component {
     if (Array.isArray(this.props.data) && !this.props.data.length) {
       return null;
     }
-    let FPlot = makeVisFlexible(XYPlot);
+    const FPlot = makeVisFlexible(XYPlot);
     if (isDataSeriesHaveSingleDatapoint(this.props.data)) {
       return (
         <div className="graph-plot-container single-datapoint-graph">
@@ -272,8 +290,9 @@ export default class NodeMetricsGraph extends Component {
         </div>
       );
     }
-    let metricLabel =
-      objectQuery(this.state, 'currentHoveredElement', 'key') || this.props.metricType;
+    const metricLabel =
+      objectQuery(this.state, 'currentHoveredElement', 'key') ||
+      this.props.metricType;
     return (
       <div className="graph-plot-container">
         <FPlot
@@ -307,11 +326,18 @@ export default class NodeMetricsGraph extends Component {
                       ? metricLabelMap[metricLabel].numOfRecordsLabel
                       : metricLabelMap['recordsOut'].numOfRecordsLabel}
                   </span>
-                  <span>{this.state.currentHoveredElement.actualRecords || '0'}</span>
+                  <span>
+                    {this.state.currentHoveredElement.actualRecords || '0'}
+                  </span>
                 </div>
                 <div>
                   <span>{T.translate(`${PREFIX}.ts`)}</span>
-                  <span>{humanReadableDate(this.state.currentHoveredElement.time, true)}</span>
+                  <span>
+                    {humanReadableDate(
+                      this.state.currentHoveredElement.time,
+                      true
+                    )}
+                  </span>
                 </div>
                 <div>
                   <span>{T.translate(`${PREFIX}.accumulatedRecords`)}</span>

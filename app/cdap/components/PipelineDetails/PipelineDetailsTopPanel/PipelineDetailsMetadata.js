@@ -27,7 +27,7 @@ import T from 'i18n-react';
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
 const mapStateToPipelineTagsProps = (state) => {
-  let { name } = state;
+  const { name } = state;
   return {
     entity: {
       id: name,
@@ -41,7 +41,7 @@ const mapStateToPipelineTagsProps = (state) => {
 const ConnectedPipelineTags = connect(mapStateToPipelineTagsProps)(Tags);
 
 const mapStateToPipelineDetailsMetadataProps = (state) => {
-  let { name, artifact, version, description } = state;
+  const { name, artifact, version, description } = state;
   return {
     name,
     artifactName: artifact.name,
@@ -50,7 +50,12 @@ const mapStateToPipelineDetailsMetadataProps = (state) => {
   };
 };
 
-const PipelineDetailsMetadata = ({ name, artifactName, version, description }) => {
+const PipelineDetailsMetadata = ({
+  name,
+  artifactName,
+  version,
+  description,
+}) => {
   return (
     <div className="pipeline-metadata">
       <div className="pipeline-type-name-version">
@@ -73,7 +78,9 @@ const PipelineDetailsMetadata = ({ name, artifactName, version, description }) =
             {description}
           </Popover>
         </span>
-        <span className="pipeline-version">{T.translate(`${PREFIX}.version`, { version })}</span>
+        <span className="pipeline-version">
+          {T.translate(`${PREFIX}.version`, { version })}
+        </span>
       </div>
       <div className="pipeline-tags">
         <ConnectedPipelineTags />
@@ -89,9 +96,9 @@ PipelineDetailsMetadata.propTypes = {
   description: PropTypes.string,
 };
 
-const ConnectedPipelineDetailsMetadata = connect(mapStateToPipelineDetailsMetadataProps)(
-  PipelineDetailsMetadata
-);
+const ConnectedPipelineDetailsMetadata = connect(
+  mapStateToPipelineDetailsMetadataProps
+)(PipelineDetailsMetadata);
 
 const ProvidedPipelineDetailsMetadata = () => {
   return (

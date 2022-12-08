@@ -22,7 +22,7 @@ import { objectQuery } from 'services/helpers';
 require('./MemorySelectWidget.scss');
 
 export default function MemorySelectWidget({ ...props }) {
-  let size = objectQuery(props, 'widgetProps', 'size') || 'large';
+  const size = objectQuery(props, 'widgetProps', 'size') || 'large';
   return (
     <div className={`memory-select-widget ${size}`}>
       <SelectWithOptions

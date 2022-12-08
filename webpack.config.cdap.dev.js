@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2016 Cask Data, Inc.
  *
@@ -14,20 +15,21 @@
  * the License.
  */
 
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var StyleLintPlugin = require('stylelint-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 const devMode = process.env.NODE_ENV;
 
 // the clean options to use
-let cleanOptions = {
+const cleanOptions = {
   verbose: true,
   dry: false,
   cleanStaleWebpackAssets: false, // reduces down from 2.7seconds to 2.2seconds
@@ -42,10 +44,19 @@ const loaderExclude = [
   /lib/,
 ];
 
-var mode = 'development'; // process.env.NODE_ENV || 'production';
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged\/public\/dist/',
+  '/packaged\/public\/cdap_dist/',
+  '/packaged\/public\/common_dist/',
+  '/lib/',
+];
+
+const mode = 'development'; // process.env.NODE_ENV || 'production';
 const getWebpackDllPlugins = (mode) => {
-  var sharedDllManifestFileName = 'shared-vendor-manifest.json';
-  var cdapDllManifestFileName = 'cdap-vendor-manifest.json';
+  let sharedDllManifestFileName = 'shared-vendor-manifest.json';
+  let cdapDllManifestFileName = 'cdap-vendor-manifest.json';
   if (mode === 'development') {
     sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
     cdapDllManifestFileName = 'cdap-vendor-development-manifest.json';
@@ -63,11 +74,17 @@ const getWebpackDllPlugins = (mode) => {
     }),
     new webpack.DllReferencePlugin({
       context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
-      manifest: require(path.join(__dirname, 'packaged', 'public', 'dll', cdapDllManifestFileName)),
+      manifest: require(path.join(
+        __dirname,
+        'packaged',
+        'public',
+        'dll',
+        cdapDllManifestFileName
+      )),
     }),
   ];
 };
-var plugins = [
+const plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   ...getWebpackDllPlugins(mode),
@@ -109,10 +126,15 @@ var plugins = [
     inject: false,
     mode: 'development.',
   }),
+  new ESLintPlugin({
+    extensions: ['js'],
+    exclude: loaderExcludeStrings,
+  }),
   new StyleLintPlugin({
     syntax: 'scss',
     files: ['**/*.scss'],
     lintDirtyModulesOnly: true,
+    fix: true,
   }),
   new ForkTsCheckerWebpackPlugin({
     tsconfig: __dirname + '/tsconfig.json',
@@ -120,25 +142,28 @@ var plugins = [
     tslintAutoFix: true,
     // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
     memoryLimit: 8192,
-  })
+  }),
 ];
-var rules = [
+
+const rules = [
   {
     test: /\.s?css$/,
-    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+    use: [
+      'style-loader',
+      'css-loader',
+      'postcss-loader',
+      {
+        loader: 'sass-loader',
+        options: {
+          includePaths: [path.resolve(__dirname, 'node_modules')],
+        },
+      },
+    ],
+    sideEffects: true,
   },
   {
     test: /\.ya?ml$/,
     use: 'yml-loader',
-  },
-  {
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
-    exclude: loaderExclude,
   },
   {
     test: /\.js$/,
@@ -187,7 +212,7 @@ var rules = [
   },
 ];
 
-var webpackConfig = {
+const webpackConfig = {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   context: __dirname + '/app/cdap',
@@ -195,7 +220,7 @@ var webpackConfig = {
     cdap: [
       'react-hot-loader/patch', // RHL patch
       '@babel/polyfill',
-      './cdap.js'
+      './cdap.js',
     ],
   },
   module: {
@@ -222,27 +247,27 @@ var webpackConfig = {
   plugins: plugins,
   // TODO: Need to investigate this more.
   optimization: {
-    moduleIds: "hashed",
+    moduleIds: 'hashed',
     runtimeChunk: {
-      name: "manifest",
+      name: 'manifest',
     },
     removeAvailableModules: false,
     removeEmptyChunks: false,
     splitChunks: {
       cacheGroups: {
         vendor: {
-          name: "node_vedors",
+          name: 'node_vedors',
           test: /[\\/]node_modules[\\/]/,
-          chunks: "all",
+          chunks: 'all',
           reuseExistingChunk: true,
         },
         fonts: {
-          name: "fonts",
+          name: 'fonts',
           test: /[\\/]app[\\/]cdap[\\/]styles[\\/]fonts[\\/]/,
-          chunks: "all",
+          chunks: 'all',
           reuseExistingChunk: true,
         },
-      }
+      },
     },
     minimize: true,
   },
@@ -259,7 +284,10 @@ var webpackConfig = {
   },
   devServer: {
     index: 'cdap.html',
-    contentBase: path.join(__dirname, '/packaged/public/cdap_dist/cdap_assets/'),
+    contentBase: path.join(
+      __dirname,
+      '/packaged/public/cdap_dist/cdap_assets/'
+    ),
     port: 8080,
     open: true,
     openPage: 'http://localhost:11011',
@@ -272,14 +300,17 @@ var webpackConfig = {
     proxy: {
       '/api': {
         target: 'http://localhost:11011',
-        pathRewrite: { '^/api': '' }
-      }
-    }
-  }
+        pathRewrite: { '^/api': '' },
+      },
+    },
+  },
 };
 
 const v8 = require('v8');
-console.log("Allocated ", v8.getHeapStatistics().total_available_size / 1024 / 1024);
+console.log(
+  'Allocated ',
+  v8.getHeapStatistics().total_available_size / 1024 / 1024
+);
 webpackConfig.optimization.minimizer = [];
 
 module.exports = webpackConfig;

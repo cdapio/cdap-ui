@@ -25,7 +25,10 @@ import ProfilesStore from 'components/Cloud/Profiles/Store';
 import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { connect, Provider } from 'react-redux';
 import { Label, Input } from 'reactstrap';
-import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
+import {
+  getProfiles,
+  resetProfiles,
+} from 'components/Cloud/Profiles/Store/ActionCreator';
 import { SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
 import If from 'components/shared/If';
@@ -51,16 +54,25 @@ class SystemProfilesAccordion extends Component {
 
   renderLabel() {
     return (
-      <div className="admin-config-container-toggle" onClick={this.props.onExpand}>
+      <div
+        className="admin-config-container-toggle"
+        onClick={this.props.onExpand}
+      >
         <span className="admin-config-container-label">
-          <IconSVG name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'} />
+          <IconSVG
+            name={this.props.expanded ? 'icon-caret-down' : 'icon-caret-right'}
+          />
           {this.props.loading ? (
             <h5>
               {T.translate(`${PREFIX}.label`)}
               <IconSVG name="icon-spinner" className="fa-spin" />
             </h5>
           ) : (
-            <h5>{T.translate(`${PREFIX}.labelWithCount`, { count: this.props.profilesCount })}</h5>
+            <h5>
+              {T.translate(`${PREFIX}.labelWithCount`, {
+                count: this.props.profilesCount,
+              })}
+            </h5>
           )}
         </span>
         <span className="admin-config-container-description">
@@ -106,9 +118,12 @@ class SystemProfilesAccordion extends Component {
   render() {
     return (
       <div
-        className={classnames('admin-config-container system-profiles-container', {
-          expanded: this.props.expanded,
-        })}
+        className={classnames(
+          'admin-config-container system-profiles-container',
+          {
+            expanded: this.props.expanded,
+          }
+        )}
       >
         {this.renderLabel()}
         {this.renderContent()}
@@ -124,7 +139,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ConnectedSystemProfilesAccordion = connect(mapStateToProps)(SystemProfilesAccordion);
+const ConnectedSystemProfilesAccordion = connect(mapStateToProps)(
+  SystemProfilesAccordion
+);
 
 export default function SystemProfilesAccordionFn(props) {
   return (

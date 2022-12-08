@@ -35,7 +35,7 @@ const mapStateToStepContentHeadingProps = (state, ownProps) => {
   };
 };
 const StepContentHeading = ({ pipelineType, engine }) => {
-  let engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
+  const engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
   return (
     <div className="step-content-heading">
       {T.translate(`${PREFIX}.contentHeading`, { engineDisplayLabel })}
@@ -48,7 +48,9 @@ StepContentHeading.propTypes = {
   engine: PropTypes.string,
 };
 
-const ConnectedStepContentHeading = connect(mapStateToStepContentHeadingProps)(StepContentHeading);
+const ConnectedStepContentHeading = connect(mapStateToStepContentHeadingProps)(
+  StepContentHeading
+);
 
 function ResourcesTabContent({ pipelineType }) {
   const isBatch = GLOBALS.etlBatchPipelines.includes(pipelineType);
@@ -79,6 +81,8 @@ const mapStateToProps = (state) => {
     pipelineType: state.pipelineVisualConfiguration.pipelineType,
   };
 };
-const ConnectedResourceTabContent = connect(mapStateToProps)(ResourcesTabContent);
+const ConnectedResourceTabContent = connect(mapStateToProps)(
+  ResourcesTabContent
+);
 
 export default ConnectedResourceTabContent;

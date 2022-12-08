@@ -23,7 +23,7 @@ export default class DataPrepErrorAlert extends Component {
   constructor(props) {
     super(props);
 
-    let state = DataPrepStore.getState().error;
+    const state = DataPrepStore.getState().error;
 
     this.state = {
       showError: state.showError,
@@ -35,7 +35,7 @@ export default class DataPrepErrorAlert extends Component {
 
   componentWillMount() {
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState().error;
+      const state = DataPrepStore.getState().error;
 
       this.setState({
         showError: state.showError,
@@ -72,7 +72,12 @@ export default class DataPrepErrorAlert extends Component {
     }
 
     return (
-      <Alert showAlert={true} type="error" message={errorMessage} onClose={this.dismissError} />
+      <Alert
+        showAlert={true}
+        type="error"
+        message={errorMessage}
+        onClose={this.dismissError}
+      />
     );
   }
 }

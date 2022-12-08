@@ -44,7 +44,7 @@ function renderAppType(summary) {
 
   const customAppLabel = T.translate(`${PREFIX}.customApp`);
 
-  let counts = {
+  const counts = {
     batch: 0,
     realtime: 0,
     [customAppLabel]: 0,
@@ -72,21 +72,21 @@ function renderAppType(summary) {
 }
 
 function renderDuration(summary) {
-  let { durations } = summary;
+  const { durations } = summary;
 
   if (!durations) {
     return null;
   }
 
-  let min = humanReadableDuration(durations.min);
-  let max = humanReadableDuration(durations.max);
-  let average = humanReadableDuration(Math.round(durations.average));
+  const min = humanReadableDuration(durations.min);
+  const max = humanReadableDuration(durations.max);
+  const average = humanReadableDuration(Math.round(durations.average));
 
   return T.translate(`${PREFIX}.runDuration`, { min, max, average });
 }
 
 function renderLastStarted(summary) {
-  let { starts } = summary;
+  const { starts } = summary;
 
   if (!starts) {
     return null;
@@ -103,7 +103,9 @@ function renderOwners(summary) {
     return null;
   }
 
-  return summary.owners.map((owner) => `${owner.user} (${owner.runs})`).join('; ');
+  return summary.owners
+    .map((owner) => `${owner.user} (${owner.runs})`)
+    .join('; ');
 }
 
 function renderStartMethod(summary) {
@@ -117,7 +119,9 @@ function renderStartMethod(summary) {
   };
 
   return summary.startMethods
-    .map((startMethod) => `${labelMap[startMethod.method]} (${startMethod.runs})`)
+    .map(
+      (startMethod) => `${labelMap[startMethod.method]} (${startMethod.runs})`
+    )
     .join('; ');
 }
 

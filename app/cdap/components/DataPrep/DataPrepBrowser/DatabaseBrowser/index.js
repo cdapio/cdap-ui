@@ -38,7 +38,7 @@ import history from 'services/history';
 
 require('./DatabaseBrowser.scss');
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.DatabaseBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.DatabaseBrowser';
 
 export default class DatabaseBrowser extends Component {
   static propTypes = {
@@ -61,9 +61,12 @@ export default class DatabaseBrowser extends Component {
   eventEmitter = ee(ee);
 
   componentDidMount() {
-    this.eventEmitter.on('DATAPREP_CONNECTION_EDIT_DATABASE', this.eventBasedFetchTable);
+    this.eventEmitter.on(
+      'DATAPREP_CONNECTION_EDIT_DATABASE',
+      this.eventBasedFetchTable
+    );
     this.storeSubscription = DataPrepBrowserStore.subscribe(() => {
-      let { database, activeBrowser } = DataPrepBrowserStore.getState();
+      const { database, activeBrowser } = DataPrepBrowserStore.getState();
       if (activeBrowser.name !== ConnectionType.DATABASE) {
         return;
       }
@@ -79,7 +82,10 @@ export default class DatabaseBrowser extends Component {
   }
 
   componentWillUnmount() {
-    this.eventEmitter.off('DATAPREP_CONNECTION_EDIT_DATABASE', this.eventBasedFetchTable);
+    this.eventEmitter.off(
+      'DATAPREP_CONNECTION_EDIT_DATABASE',
+      this.eventBasedFetchTable
+    );
 
     if (typeof this.storeSubscription === 'function') {
       this.storeSubscription();
@@ -88,7 +94,10 @@ export default class DatabaseBrowser extends Component {
 
   eventBasedFetchTable = (connectionId) => {
     if (this.state.connectionId === connectionId) {
-      setDatabaseAsActiveBrowser({ name: ConnectionType.DATABASE, id: connectionId });
+      setDatabaseAsActiveBrowser({
+        name: ConnectionType.DATABASE,
+        id: connectionId,
+      });
     }
   };
 
@@ -99,8 +108,8 @@ export default class DatabaseBrowser extends Component {
   };
 
   prepTable = (tableId) => {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let params = {
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const params = {
       context: namespace,
       connectionId: this.state.connectionId,
       tableId,
@@ -112,8 +121,11 @@ export default class DatabaseBrowser extends Component {
 
     DataPrepApi.readTable(params).subscribe(
       (res) => {
-        let workspaceId = res.values[0].id;
-        if (this.props.onWorkspaceCreate && typeof this.props.onWorkspaceCreate === 'function') {
+        const workspaceId = res.values[0].id;
+        if (
+          this.props.onWorkspaceCreate &&
+          typeof this.props.onWorkspaceCreate === 'function'
+        ) {
           this.props.onWorkspaceCreate(workspaceId);
           return;
         }
@@ -121,7 +133,9 @@ export default class DatabaseBrowser extends Component {
       },
       (err) => {
         let error = err;
-        let errorMessage = T.translate(`${PREFIX}.defaultErrorMessage`, { tableId });
+        const errorMessage = T.translate(`${PREFIX}.defaultErrorMessage`, {
+          tableId,
+        });
         if (isNil(objectQuery(err, 'response', 'message'))) {
           err = err || {};
           error = {
@@ -143,10 +157,15 @@ export default class DatabaseBrowser extends Component {
         <div className="empty-search-container">
           <div className="empty-search">
             <strong>
-              {T.translate(`${PREFIX}.EmptyMessage.title`, { searchText: this.state.search })}
+              {T.translate(`${PREFIX}.EmptyMessage.title`, {
+                searchText: this.state.search,
+              })}
             </strong>
             <hr />
-            <span> {T.translate(`${PREFIX}.EmptyMessage.suggestionTitle`)} </span>
+            <span>
+              {' '}
+              {T.translate(`${PREFIX}.EmptyMessage.suggestionTitle`)}{' '}
+            </span>
             <ul>
               <li>
                 <span
@@ -220,14 +239,19 @@ export default class DatabaseBrowser extends Component {
     let filteredTables = this.state.tables;
     if (this.state.search) {
       filteredTables = this.state.tables.filter(
-        (table) => table.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
+        (table) =>
+          table.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+          -1
       );
     }
 
     return (
       <div className="database-browser">
         <Provider store={DataPrepBrowserStore}>
-          <DataPrepBrowserPageTitle browserI18NName="DatabaseBrowser" browserStateName="database" />
+          <DataPrepBrowserPageTitle
+            browserI18NName="DatabaseBrowser"
+            browserStateName="database"
+          />
         </Provider>
         <DataprepBrowserTopPanel
           allowSidePanelToggle={true}
@@ -256,7 +280,9 @@ export default class DatabaseBrowser extends Component {
           </div>
         </div>
 
-        <div className="database-browser-content">{renderContents(filteredTables)}</div>
+        <div className="database-browser-content">
+          {renderContents(filteredTables)}
+        </div>
       </div>
     );
   }

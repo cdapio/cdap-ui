@@ -40,7 +40,8 @@ export default class AdminConfigTabContent extends Component {
   state = {
     namespaces: [],
     namespacesCountLoading: true,
-    expandedAccordion: this.props.accordionToExpand || ADMIN_CONFIG_ACCORDIONS.namespaces,
+    expandedAccordion:
+      this.props.accordionToExpand || ADMIN_CONFIG_ACCORDIONS.namespaces,
   };
 
   static propTypes = {
@@ -96,16 +97,32 @@ export default class AdminConfigTabContent extends Component {
         <NamespacesAccordion
           namespaces={this.state.namespaces}
           loading={this.state.namespacesCountLoading}
-          expanded={this.state.expandedAccordion === ADMIN_CONFIG_ACCORDIONS.namespaces}
-          onExpand={this.expandAccordion.bind(this, ADMIN_CONFIG_ACCORDIONS.namespaces)}
+          expanded={
+            this.state.expandedAccordion === ADMIN_CONFIG_ACCORDIONS.namespaces
+          }
+          onExpand={this.expandAccordion.bind(
+            this,
+            ADMIN_CONFIG_ACCORDIONS.namespaces
+          )}
         />
         <SystemProfilesAccordion
-          expanded={this.state.expandedAccordion === ADMIN_CONFIG_ACCORDIONS.systemProfiles}
-          onExpand={this.expandAccordion.bind(this, ADMIN_CONFIG_ACCORDIONS.systemProfiles)}
+          expanded={
+            this.state.expandedAccordion ===
+            ADMIN_CONFIG_ACCORDIONS.systemProfiles
+          }
+          onExpand={this.expandAccordion.bind(
+            this,
+            ADMIN_CONFIG_ACCORDIONS.systemProfiles
+          )}
         />
         <SystemPrefsAccordion
-          expanded={this.state.expandedAccordion === ADMIN_CONFIG_ACCORDIONS.systemPrefs}
-          onExpand={this.expandAccordion.bind(this, ADMIN_CONFIG_ACCORDIONS.systemPrefs)}
+          expanded={
+            this.state.expandedAccordion === ADMIN_CONFIG_ACCORDIONS.systemPrefs
+          }
+          onExpand={this.expandAccordion.bind(
+            this,
+            ADMIN_CONFIG_ACCORDIONS.systemPrefs
+          )}
         />
       </div>
     );

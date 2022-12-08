@@ -138,14 +138,22 @@ const StartingAtComponent = ({ intervalOption }) => {
       break;
   }
 
-  let shouldHideComponent =
-    [INTERVAL_OPTIONS['5MIN'], INTERVAL_OPTIONS['10MIN'], INTERVAL_OPTIONS['30MIN']].indexOf(
-      intervalOption
-    ) !== -1;
+  const shouldHideComponent =
+    [
+      INTERVAL_OPTIONS['5MIN'],
+      INTERVAL_OPTIONS['10MIN'],
+      INTERVAL_OPTIONS['30MIN'],
+    ].indexOf(intervalOption) !== -1;
 
   return (
-    <div className={classnames('form-group row', { invisible: shouldHideComponent })}>
-      <label className="col-3 control-label">{T.translate(`${PREFIX}.label`)}</label>
+    <div
+      className={classnames('form-group row', {
+        invisible: shouldHideComponent,
+      })}
+    >
+      <label className="col-3 control-label">
+        {T.translate(`${PREFIX}.label`)}
+      </label>
       <div className="col-4 schedule-values-container">{SelectComponent}</div>
     </div>
   );

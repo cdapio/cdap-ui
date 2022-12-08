@@ -70,7 +70,10 @@ export const SingleAttributeInput = ({
 
       const finalProps = {
         ...props,
-        ...(fieldType === 'IToggle' && { keyField: 'label', valueField: 'value' }),
+        ...(fieldType === 'IToggle' && {
+          keyField: 'label',
+          valueField: 'value',
+        }),
         ...(fieldType === 'IOption' && { keyField: 'id', valueField: 'label' }),
       };
 
@@ -115,7 +118,10 @@ export const SingleAttributeInput = ({
         ...props,
         ...(fieldType === 'string' && { widgetType: 'textbox' }),
         ...(fieldType === 'number' && { widgetType: 'number' }),
-        ...(fieldType === 'boolean' && { widgetType: 'select', options: ['true', 'false'] }),
+        ...(fieldType === 'boolean' && {
+          widgetType: 'select',
+          options: ['true', 'false'],
+        }),
       };
 
       return <PluginInput {...finalProps} />;

@@ -36,7 +36,7 @@ export default class Page500ErrorStack extends Component {
   };
 
   render() {
-    let { stack } = this.props;
+    const { stack } = this.props;
     return (
       <div className="page-500-error-stack">
         <div className="btn btn-link" onClick={this.toggleShowError}>

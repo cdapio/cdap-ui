@@ -28,7 +28,10 @@ import {
   DEFAULT_SEARCH_SORT_OPTIONS,
   DEFAULT_SEARCH_QUERY,
 } from 'components/EntityListView/SearchStore/SearchConstants';
-import { search, updateQueryString } from 'components/EntityListView/SearchStore/ActionCreator';
+import {
+  search,
+  updateQueryString,
+} from 'components/EntityListView/SearchStore/ActionCreator';
 import IconSVG from 'components/shared/IconSVG';
 
 require('./EntityListHeader.scss');
@@ -36,7 +39,7 @@ require('./EntityListHeader.scss');
 export default class EntityListHeader extends Component {
   constructor(props) {
     super(props);
-    let searchState = SearchStore.getState().search;
+    const searchState = SearchStore.getState().search;
     this.state = {
       isFilterExpanded: false,
       isSortExpanded: false,
@@ -51,7 +54,11 @@ export default class EntityListHeader extends Component {
 
   componentWillMount() {
     this.searchStoreSubscription = SearchStore.subscribe(() => {
-      let { query, activeFilters, activeSort } = SearchStore.getState().search;
+      const {
+        query,
+        activeFilters,
+        activeSort,
+      } = SearchStore.getState().search;
       this.setState({
         searchText: query === '*' ? '' : query,
         activeFilters,
@@ -69,20 +76,25 @@ export default class EntityListHeader extends Component {
   }
 
   handleFilterToggle() {
-    let newState = !this.state.isFilterExpanded;
+    const newState = !this.state.isFilterExpanded;
 
     this.setState({ isFilterExpanded: newState });
 
     if (newState) {
-      let element = document.getElementById('app-container');
+      const element = document.getElementById('app-container');
 
-      this.documentClick$ = Observable.fromEvent(element, 'click').subscribe((e) => {
-        if (isDescendant(this.dropdownButtonRef, e.target) || !this.state.isFilterExpanded) {
-          return;
+      this.documentClick$ = Observable.fromEvent(element, 'click').subscribe(
+        (e) => {
+          if (
+            isDescendant(this.dropdownButtonRef, e.target) ||
+            !this.state.isFilterExpanded
+          ) {
+            return;
+          }
+
+          this.handleFilterToggle();
         }
-
-        this.handleFilterToggle();
-      });
+      );
     } else {
       this.documentClick$.unsubscribe();
     }
@@ -126,7 +138,9 @@ export default class EntityListHeader extends Component {
     event.nativeEvent.stopImmediatePropagation();
     let activeFilters = SearchStore.getState().search.activeFilters;
     if (activeFilters.indexOf(option.id) !== -1) {
-      activeFilters = activeFilters.filter((entityFilter) => entityFilter !== option.id);
+      activeFilters = activeFilters.filter(
+        (entityFilter) => entityFilter !== option.id
+      );
     } else {
       activeFilters.push(option.id);
     }
@@ -167,8 +181,10 @@ export default class EntityListHeader extends Component {
   }
 
   render() {
-    let tooltipId = 'filter-tooltip-target-id';
-    const placeholder = T.translate('features.EntityListView.Header.search-placeholder');
+    const tooltipId = 'filter-tooltip-target-id';
+    const placeholder = T.translate(
+      'features.EntityListView.Header.search-placeholder'
+    );
     const sortDropdown = (
       <Dropdown
         isOpen={this.state.isSortExpanded}
@@ -235,7 +251,9 @@ export default class EntityListHeader extends Component {
                     data-cy={`${option.displayName}-input`}
                     data-testid={`${option.displayName}-input`}
                   />
-                  <label className="form-check-label">{option.displayName}</label>
+                  <label className="form-check-label">
+                    {option.displayName}
+                  </label>
                 </div>
               </DropdownItem>
             );

@@ -105,5 +105,8 @@ export const deleteTetheringConnection = async (
 ) => {
   await TetheringApi.deleteTethering({ peer }).toPromise();
   const connGroup = CONNECTION_GROUPS[connType];
-  dispatch({ type: IConnectionsActions.DELETE_CONNECTION, payload: { connGroup, peer } });
+  dispatch({
+    type: IConnectionsActions.DELETE_CONNECTION,
+    payload: { connGroup, peer },
+  });
 };

@@ -27,13 +27,13 @@ interface IField {
 
 const delimiter = ',';
 
-interface IInputFieldWidgetProps {
+export interface IInputFieldWidgetProps {
   multiselect?: boolean;
   allowedTypes?: string[];
   enableUnderline?: boolean;
 }
 
-interface IInputFieldProps extends IWidgetProps<IInputFieldWidgetProps> {}
+type IInputFieldProps = IWidgetProps<IInputFieldWidgetProps>;
 
 // We are assuming all incoming stages have the same schema
 function getFields(schemas: IStageSchema[], allowedTypes: string[]) {

@@ -18,7 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
-import { DashboardActions, ViewByOptions } from 'components/OpsDashboard/store/DashboardStore';
+import {
+  DashboardActions,
+  ViewByOptions,
+} from 'components/OpsDashboard/store/DashboardStore';
 import T from 'i18n-react';
 
 const PREFIX = 'features.OpsDashboard.RunsGraph.Legends.ViewBy';
@@ -69,6 +72,9 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-const ViewByOptionSelector = connect(mapStateToProps, mapDispatch)(ViewByOptionSelectorComp);
+const ViewByOptionSelector = connect(
+  mapStateToProps,
+  mapDispatch
+)(ViewByOptionSelectorComp);
 
 export default ViewByOptionSelector;

@@ -42,7 +42,9 @@ require('./DatasetDetailedView.scss');
 export default class DatasetDetailedView extends Component {
   constructor(props) {
     super(props);
-    let searchObj = queryString.parse(objectQuery(this.props, 'location', 'search'));
+    const searchObj = queryString.parse(
+      objectQuery(this.props, 'location', 'search')
+    );
     this.state = {
       entityDetail:
         objectQuery(this.props, 'location', 'state', 'entityDetail') |
@@ -61,9 +63,9 @@ export default class DatasetDetailedView extends Component {
   }
 
   componentWillMount() {
-    let selectedNamespace = NamespaceStore.getState().selectedNamespace;
+    const selectedNamespace = NamespaceStore.getState().selectedNamespace;
     let { namespace, datasetId } = this.props.match.params;
-    let previousPathName =
+    const previousPathName =
       objectQuery(this.props, 'location', 'state', 'previousPathname') ||
       `/ns/${selectedNamespace}?overviewid=${datasetId}&overviewtype=dataset`;
     if (!namespace) {
@@ -83,9 +85,18 @@ export default class DatasetDetailedView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { namespace: currentNamespace, datasetId: currentDatasetId } = this.props.match.params;
-    let { namespace: nextNamespace, datasetId: nextDatasetId } = nextProps.match.params;
-    if (currentNamespace === nextNamespace && currentDatasetId === nextDatasetId) {
+    const {
+      namespace: currentNamespace,
+      datasetId: currentDatasetId,
+    } = this.props.match.params;
+    const {
+      namespace: nextNamespace,
+      datasetId: nextDatasetId,
+    } = nextProps.match.params;
+    if (
+      currentNamespace === nextNamespace &&
+      currentDatasetId === nextDatasetId
+    ) {
       return;
     }
     let { namespace, datasetId } = nextProps.match.params;
@@ -109,7 +120,10 @@ export default class DatasetDetailedView extends Component {
   }
 
   fetchEntityDetails(namespace, datasetId) {
-    if (!this.state.entityDetail.schema || this.state.entityDetail.programs.length === 0) {
+    if (
+      !this.state.entityDetail.schema ||
+      this.state.entityDetail.programs.length === 0
+    ) {
       const datasetParams = {
         namespace,
         datasetId,
@@ -139,7 +153,7 @@ export default class DatasetDetailedView extends Component {
               return;
             }
 
-            let programs = res[1].map((programObj) => {
+            const programs = res[1].map((programObj) => {
               programObj.uniqueId = uuidV4();
               appId = programObj.application;
               programObj.app = appId;
@@ -155,7 +169,7 @@ export default class DatasetDetailedView extends Component {
               }
             });
 
-            let entityDetail = {
+            const entityDetail = {
               programs,
               schema: properties.schema,
               name: appId, // FIXME: Finalize on entity detail for fast action
@@ -192,7 +206,7 @@ export default class DatasetDetailedView extends Component {
 
   goToHome(action) {
     if (action === 'delete') {
-      let selectedNamespace = NamespaceStore.getState().selectedNamespace;
+      const selectedNamespace = NamespaceStore.getState().selectedNamespace;
       this.setState({
         selectedNamespace,
         routeToHome: true,
@@ -230,16 +244,21 @@ export default class DatasetDetailedView extends Component {
     }
 
     if (this.state.notFound) {
-      return <Page404 entityType="dataset" entityName={this.props.match.params.datasetId} />;
+      return (
+        <Page404
+          entityType="dataset"
+          entityName={this.props.match.params.datasetId}
+        />
+      );
     }
-    let previousPaths = [
+    const previousPaths = [
       {
         pathname: this.state.previousPathName,
         label: T.translate('commons.back'),
       },
     ];
 
-    let datasetId = this.props.match.params.datasetId;
+    const datasetId = this.props.match.params.datasetId;
 
     return (
       <div className="app-detailed-view dataset-detailed-view">
@@ -276,7 +295,9 @@ export default class DatasetDetailedView extends Component {
             );
           }}
         />
-        {this.state.routeToHome ? <Redirect to={`/ns/${this.state.selectedNamespace}`} /> : null}
+        {this.state.routeToHome ? (
+          <Redirect to={`/ns/${this.state.selectedNamespace}`} />
+        ) : null}
       </div>
     );
   }

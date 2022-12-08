@@ -21,7 +21,11 @@ import IconSVG from 'components/shared/IconSVG';
 import { Link } from 'react-router-dom';
 require('./BreadCrumb.scss');
 
-export default function BreadCrumb({ previousPaths, currentStateIcon, currentStateLabel }) {
+export default function BreadCrumb({
+  previousPaths,
+  currentStateIcon,
+  currentStateLabel,
+}) {
   return (
     <div className="bread-crumb">
       {previousPaths.map((previousPath) => (

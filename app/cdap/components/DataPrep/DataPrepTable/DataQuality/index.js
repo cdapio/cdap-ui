@@ -25,10 +25,10 @@ export default function DataQuality({ columnInfo }) {
     return null;
   }
 
-  let nonNull = columnInfo.general['non-null'] || 0,
+  const nonNull = columnInfo.general['non-null'] || 0,
     empty = columnInfo.general['empty'] || 0;
 
-  let filled = nonNull - empty;
+  const filled = nonNull - empty;
 
   return (
     <div className="quality-bar">

@@ -29,7 +29,7 @@ export default class AccordionPane extends PureComponent {
   };
 
   render() {
-    let { onTabPaneClick, activePane, size, id } = this.props;
+    const { onTabPaneClick, activePane, size, id } = this.props;
     return (
       <div
         className={classnames('accordion-pane', {

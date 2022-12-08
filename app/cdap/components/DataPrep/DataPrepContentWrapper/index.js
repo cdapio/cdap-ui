@@ -101,7 +101,10 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const SwitchWrapper = connect(mapStateToProps, mapDispatchToProps)(ContentSwitch);
+const SwitchWrapper = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ContentSwitch);
 const Switch = () => (
   <Provider store={ViewStore}>
     <SwitchWrapper />
@@ -115,7 +118,7 @@ export default class DataPrepContentWrapper extends Component {
 
   componentDidMount() {
     this.viewStoreSubscription = ViewStore.subscribe(() => {
-      let { view } = ViewStore.getState();
+      const { view } = ViewStore.getState();
       this.onSwitchChange(view);
     });
   }

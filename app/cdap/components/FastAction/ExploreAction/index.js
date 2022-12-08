@@ -86,12 +86,13 @@ export default class ExploreAction extends Component {
   }
   componentDidMount() {
     const updateDisabledProp = () => {
-      let { tables: explorableTables } = ExploreTablesStore.getState();
-      let entityId = this.props.entity.id.replace(/[\.\-]/g, '_');
-      let type = this.props.entity.type;
-      let match = explorableTables.filter((db) => {
+      const { tables: explorableTables } = ExploreTablesStore.getState();
+      const entityId = this.props.entity.id.replace(/[\.\-]/g, '_');
+      const type = this.props.entity.type;
+      const match = explorableTables.filter((db) => {
         return (
-          db.table === `${type}_${entityId.toLowerCase()}` || db.table === entityId.toLowerCase()
+          db.table === `${type}_${entityId.toLowerCase()}` ||
+          db.table === entityId.toLowerCase()
         );
       });
       if (match.length) {
@@ -104,15 +105,17 @@ export default class ExploreAction extends Component {
         });
       }
     };
-    this.subscription = ExploreTablesStore.subscribe(updateDisabledProp.bind(this));
+    this.subscription = ExploreTablesStore.subscribe(
+      updateDisabledProp.bind(this)
+    );
     updateDisabledProp();
     if (objectQuery(this.props.argsToAction, 'showQueriesCount')) {
-      let namespace = NamespaceStore.getState().selectedNamespace;
+      const namespace = NamespaceStore.getState().selectedNamespace;
       this.explroeQueriesSubscription$ = myExploreApi
         .fetchQueries({ namespace })
         .subscribe((res) => {
-          let runningQueries = res.filter((q) => {
-            let tablename = `${this.state.entity.databaseName}.${this.state.entity.tableName}`;
+          const runningQueries = res.filter((q) => {
+            const tablename = `${this.state.entity.databaseName}.${this.state.entity.tableName}`;
             return (
               (q.statement.indexOf(tablename) !== -1 ||
                 q.statement.indexOf(this.props.entity.id) !== -1) &&
@@ -145,8 +148,8 @@ export default class ExploreAction extends Component {
     }
   }
   render() {
-    let tooltipID = `explore-${this.props.entity.uniqueId}`;
-    let showRunningQueriesNotification =
+    const tooltipID = `explore-${this.props.entity.uniqueId}`;
+    const showRunningQueriesNotification =
       this.state.showRunningQueriesDoneLabel &&
       this.state.runningQueries &&
       objectQuery(this.props.argsToAction, 'showQueriesCount');
@@ -167,7 +170,9 @@ export default class ExploreAction extends Component {
           />
         )}
         {showRunningQueriesNotification ? (
-          <span className="fast-action-popover-container">{this.state.runningQueries}</span>
+          <span className="fast-action-popover-container">
+            {this.state.runningQueries}
+          </span>
         ) : null}
         <Tooltip
           placement="top"

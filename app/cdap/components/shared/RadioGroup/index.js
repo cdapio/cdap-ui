@@ -12,7 +12,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -20,7 +20,7 @@ import classnames from 'classnames';
 import uuidV4 from 'uuid/v4';
 
 export default function RadioGroup({ layout, options, value }) {
-  let groupName = 'radio-group-' + uuidV4();
+  const groupName = 'radio-group-' + uuidV4();
   return (
     <div
       className={classnames('widget-radio-group', {

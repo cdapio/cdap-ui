@@ -76,12 +76,12 @@ export default class DatasetTable extends Component {
     return (
       <tbody>
         {entities.map((dataEntity) => {
-          let currentNamespace = NamespaceStore.getState().selectedNamespace;
-          let icon = 'icon-datasets';
-          let type = 'Dataset';
-          let link = `/ns/${currentNamespace}/${convertEntityTypeToApi(dataEntity.type)}/${
-            dataEntity.id
-          }`;
+          const currentNamespace = NamespaceStore.getState().selectedNamespace;
+          const icon = 'icon-datasets';
+          const type = 'Dataset';
+          const link = `/ns/${currentNamespace}/${convertEntityTypeToApi(
+            dataEntity.type
+          )}/${dataEntity.id}`;
           return (
             // this is super ugly, but cannot wrap a link around a <tr> tag, so have to wrap it
             // around every <td>. Javascript solutions won't show the link when the user hovers
@@ -113,7 +113,10 @@ export default class DatasetTable extends Component {
               <td>
                 <Link to={link}>
                   <div className="fast-actions-container text-center">
-                    <FastActions className="text-left btn-group" entity={dataEntity} />
+                    <FastActions
+                      className="text-left btn-group"
+                      entity={dataEntity}
+                    />
                   </div>
                 </Link>
               </td>

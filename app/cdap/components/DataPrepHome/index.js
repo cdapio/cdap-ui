@@ -53,9 +53,13 @@ export default class DataPrepHome extends Component {
       backendCheck: true,
       isMinVersionMet: false,
       toggleConnectionsViewFlag:
-        isNil(this.props.workspaceId) && this.props.mode === 'ROUTED_WORKSPACE' ? true : false,
+        isNil(this.props.workspaceId) && this.props.mode === 'ROUTED_WORKSPACE'
+          ? true
+          : false,
       currentWorkspaceId:
-        objectQuery(this.props, 'match', 'params', 'workspaceId') || this.props.workspaceId || '',
+        objectQuery(this.props, 'match', 'params', 'workspaceId') ||
+        this.props.workspaceId ||
+        '',
     };
 
     this.namespace = getCurrentNamespace();
@@ -95,9 +99,11 @@ export default class DataPrepHome extends Component {
         (res) => {
           const appSpec = res[1];
 
-          let minimumVersion = new Version(MIN_DATAPREP_VERSION);
+          const minimumVersion = new Version(MIN_DATAPREP_VERSION);
 
-          if (minimumVersion.compareTo(new Version(appSpec.artifact.version)) > 0) {
+          if (
+            minimumVersion.compareTo(new Version(appSpec.artifact.version)) > 0
+          ) {
             console.log('dataprep minimum version not met');
 
             this.setState({
@@ -174,7 +180,7 @@ export default class DataPrepHome extends Component {
 
           return;
         }
-        let sortedWorkspace = orderBy(
+        const sortedWorkspace = orderBy(
           res.values,
           [(workspace) => workspace.workspaceName.toLowerCase()],
           ['asc']
@@ -186,11 +192,11 @@ export default class DataPrepHome extends Component {
           },
         });
 
-        let isCurrentWorkspaceIdValid = sortedWorkspace.find(
+        const isCurrentWorkspaceIdValid = sortedWorkspace.find(
           (ws) => ws.workspaceId === this.props.match.params.workspaceId
         );
         if (this.props.match.params.workspaceId && !isCurrentWorkspaceIdValid) {
-          let url = this.props.match.url.slice(
+          const url = this.props.match.url.slice(
             0,
             this.props.match.url.indexOf(this.props.match.params.workspaceId)
           );
@@ -238,7 +244,7 @@ export default class DataPrepHome extends Component {
   }
 
   updateWorkspaceList() {
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
 
     this.workspaceListRetries = 0;
     DataPrepStore.dispatch({
@@ -293,13 +299,16 @@ export default class DataPrepHome extends Component {
     return (
       <div
         className={classnames('dataprephome-wrapper', {
-          ['connections-toggle']: workspaceId && toggleConnectionsViewFlag === true,
+          ['connections-toggle']:
+            workspaceId && toggleConnectionsViewFlag === true,
         })}
       >
         {toggleConnectionsViewFlag ? (
           <Connections
             mode={mode || 'ROUTED_WORKSPACE'}
-            onWorkspaceCreate={mode === 'INMEMORY' ? null : this.onWorkspaceCreate}
+            onWorkspaceCreate={
+              mode === 'INMEMORY' ? null : this.onWorkspaceCreate
+            }
             allowDefaultConnection={true}
             connectionId={connectionId}
             initPath={path}
@@ -312,7 +321,9 @@ export default class DataPrepHome extends Component {
             workspaceId={workspaceId}
             onConnectionsToggle={this.toggleConnectionsView}
             onWorkspaceDelete={
-              this.props.mode === 'ROUTED_WORKSPACE' ? null : this.updateWorkspaceList
+              this.props.mode === 'ROUTED_WORKSPACE'
+                ? null
+                : this.updateWorkspaceList
             }
             onSubmit={this.props.onSubmit}
             mode={mode}
@@ -324,7 +335,7 @@ export default class DataPrepHome extends Component {
   }
 
   render() {
-    let pageTitle = (
+    const pageTitle = (
       <Helmet
         title={T.translate('features.DataPrep.pageTitle', {
           productName: Theme.productName,

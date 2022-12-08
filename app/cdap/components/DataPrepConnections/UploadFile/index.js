@@ -47,7 +47,8 @@ export default class ConnectionsUpload extends Component {
   }
 
   fileHandler(e) {
-    const isJSONOrXML = e[0].type === 'application/json' || e[0].type === 'text/xml';
+    const isJSONOrXML =
+      e[0].type === 'application/json' || e[0].type === 'text/xml';
 
     this.setState({
       file: e[0],
@@ -65,20 +66,20 @@ export default class ConnectionsUpload extends Component {
       return;
     }
 
-    let delimiter = this.state.recordDelimiter;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let fileName = this.state.file.name;
+    const delimiter = this.state.recordDelimiter;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const fileName = this.state.file.name;
 
-    let url = `/namespaces/system/apps/dataprep/services/service/methods/contexts/${namespace}/workspaces`;
+    const url = `/namespaces/system/apps/dataprep/services/service/methods/contexts/${namespace}/workspaces`;
 
-    let headers = {
+    const headers = {
       'Content-Type': 'application/data-prep',
       'X-Archive-Name': fileName,
       file: fileName,
     };
 
     if (window.CDAP_CONFIG.securityEnabled) {
-      let token = cookie.get('CDAP_Auth_Token');
+      const token = cookie.get('CDAP_Auth_Token');
       if (!isNil(token)) {
         headers.Authorization = `Bearer ${token}`;
       }
@@ -91,8 +92,8 @@ export default class ConnectionsUpload extends Component {
     UploadFile({ url, fileContents: this.state.file, headers }).subscribe(
       (res) => {
         try {
-          let parsed = JSON.parse(res);
-          let workspaceId = parsed.values[0].id;
+          const parsed = JSON.parse(res);
+          const workspaceId = parsed.values[0].id;
 
           if (this.props.onWorkspaceCreate) {
             this.props.onWorkspaceCreate(workspaceId);
@@ -112,13 +113,16 @@ export default class ConnectionsUpload extends Component {
   }
 
   render() {
-    let uploadDisabled = !this.state.file || this.state.file.size > FILE_SIZE_LIMIT;
+    const uploadDisabled =
+      !this.state.file || this.state.file.size > FILE_SIZE_LIMIT;
 
     let error;
     if (this.state.error) {
       error = (
         <div className="upload-error">
-          <span className="message">{T.translate(`${PREFIX}.fileSizeError`)}</span>
+          <span className="message">
+            {T.translate(`${PREFIX}.fileSizeError`)}
+          </span>
         </div>
       );
     }
@@ -139,11 +143,17 @@ export default class ConnectionsUpload extends Component {
 
           <div className="row upload-row">
             <div className="col-6">
-              <button className="btn btn-primary" onClick={this.upload} disabled={uploadDisabled}>
+              <button
+                className="btn btn-primary"
+                onClick={this.upload}
+                disabled={uploadDisabled}
+              >
                 {T.translate(`${PREFIX}.uploadButton`)}
               </button>
 
-              <span className="helper-text">{T.translate(`${PREFIX}.helperText`)}</span>
+              <span className="helper-text">
+                {T.translate(`${PREFIX}.helperText`)}
+              </span>
             </div>
 
             <div className="col-6">

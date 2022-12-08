@@ -158,7 +158,7 @@ const RichTooltip = ({
                 e.preventDefault();
               }}
             >
-              <ClickAwayListener onClickAway={onClose}>
+              <ClickAwayListener onClickAway={onClose as () => void}>
                 <Paper className={classes.popoverRoot}>
                   {arrow ? <span className={classes.arrow} ref={setArrowRef} /> : null}
                   <Box className={classes.content}>{content}</Box>

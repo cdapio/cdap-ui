@@ -32,7 +32,7 @@ const mapStateWithDNDFileProps = (state) => {
 const mapDispatchWithDNDFileProps = (dispatch) => {
   return {
     onDropHandler: (e) => {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (evt) => {
         dispatch({
           type: PluginArtifactUploadActions.setJson,
@@ -47,16 +47,24 @@ const mapDispatchWithDNDFileProps = (dispatch) => {
     },
   };
 };
-const ArtifactUploader = connect(mapStateWithDNDFileProps, mapDispatchWithDNDFileProps)(FileDnD);
+const ArtifactUploader = connect(
+  mapStateWithDNDFileProps,
+  mapDispatchWithDNDFileProps
+)(FileDnD);
 
 export default function UploadJsonStep(props, context) {
   return (
     <Provider store={PluginArtifactUploadStore}>
-      <div className="upload-step-container" data-cy="plugin-json-upload-container">
+      <div
+        className="upload-step-container"
+        data-cy="plugin-json-upload-container"
+      >
         {/* TODO: shouldn't do this, replace in 4.2} */
         context.isMarket ? (
           <h4 className="upload-instruction">
-            {T.translate('features.Wizard.PluginArtifact.Step1.uploadHelperText')}
+            {T.translate(
+              'features.Wizard.PluginArtifact.Step1.uploadHelperText'
+            )}
           </h4>
         ) : null}
         <ArtifactUploader />

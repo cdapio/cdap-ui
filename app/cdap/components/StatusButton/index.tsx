@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, ClickAwayListener } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import uuid from 'uuid';
+import uuid from 'uuid/v4';
 import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
 import {
@@ -32,7 +32,7 @@ import {
 
 import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 
-interface IStatusButtonProps {
+export interface IStatusButtonProps {
   status: SUPPORT;
   message?: string;
 }
@@ -134,6 +134,7 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         {Boolean(props.message) && <ChevronRight />}
       </StyledButton>
       <StyledPopper
+        // @ts-ignore
         id={allyId}
         open={Boolean(props.message) && Boolean(actionState)}
         placement="right-start"

@@ -22,7 +22,13 @@ import classnames from 'classnames';
 
 require('./WizardModal.scss');
 
-export default function WizardModal({ children, title, isOpen, toggle, className }) {
+export default function WizardModal({
+  children,
+  title,
+  isOpen,
+  toggle,
+  className,
+}) {
   return (
     <Modal
       isOpen={isOpen}

@@ -33,7 +33,10 @@ require('./ColumnsTab.scss');
 export default class ColumnsTab extends Component {
   constructor(props) {
     super(props);
-    let { dataprep: dataprepstate, columnsInformation: columnInfo } = DataPrepStore.getState();
+    const {
+      dataprep: dataprepstate,
+      columnsInformation: columnInfo,
+    } = DataPrepStore.getState();
 
     this.state = {
       columns: columnInfo.columns,
@@ -63,12 +66,15 @@ export default class ColumnsTab extends Component {
     this._isMounted = true;
     this.sub = DataPrepStore.subscribe(() => {
       if (this._isMounted) {
-        let { dataprep: dataprepstate, columnsInformation: columnInfo } = DataPrepStore.getState();
+        const {
+          dataprep: dataprepstate,
+          columnsInformation: columnInfo,
+        } = DataPrepStore.getState();
         this.setState({
           selectedHeaders: dataprepstate.selectedHeaders,
           columns: columnInfo.columns,
           headers: dataprepstate.headers.map((res) => {
-            let obj = {
+            const obj = {
               name: res,
               uniqueId: uuidV4(),
               isNew: dataprepstate.newHeaders.includes(res),
@@ -116,11 +122,14 @@ export default class ColumnsTab extends Component {
   }
 
   setSelect(columnName, selectStatus) {
-    let currentSelectedHeaders = this.state.selectedHeaders.slice();
+    const currentSelectedHeaders = this.state.selectedHeaders.slice();
     if (selectStatus) {
       currentSelectedHeaders.push(columnName);
     } else {
-      currentSelectedHeaders.splice(currentSelectedHeaders.indexOf(columnName), 1);
+      currentSelectedHeaders.splice(
+        currentSelectedHeaders.indexOf(columnName),
+        1
+      );
     }
     DataPrepStore.dispatch({
       type: DataPrepActions.setSelectedHeaders,
@@ -145,10 +154,16 @@ export default class ColumnsTab extends Component {
           <IconSVG name="icon-caret-square-o-down" />
         </DropdownToggle>
         <DropdownMenu>
-          <DropdownItem className="toggle-all-option" onClick={this.clearAllColumns}>
+          <DropdownItem
+            className="toggle-all-option"
+            onClick={this.clearAllColumns}
+          >
             {T.translate(`${PREFIX}.toggle.clearAll`)}
           </DropdownItem>
-          <DropdownItem className="toggle-all-option" onClick={this.selectAllColumns}>
+          <DropdownItem
+            className="toggle-all-option"
+            onClick={this.selectAllColumns}
+          >
             {T.translate(`${PREFIX}.toggle.selectAll`)}
           </DropdownItem>
         </DropdownMenu>
@@ -164,8 +179,11 @@ export default class ColumnsTab extends Component {
   }
 
   showDetail(rowId) {
-    let index = findIndex(this.state.headers, (header) => header.uniqueId === rowId);
-    let match = this.state.headers[index];
+    const index = findIndex(
+      this.state.headers,
+      (header) => header.uniqueId === rowId
+    );
+    const match = this.state.headers[index];
     let modifiedHeaders = this.state.headers.slice(0);
     if (match.expanded) {
       match.expanded = false;
@@ -210,8 +228,8 @@ export default class ColumnsTab extends Component {
 
     if (this.state.searchText.length > 0) {
       displayHeaders = displayHeaders.filter((head) => {
-        let headerLower = head.name.toLowerCase();
-        let search = this.state.searchText.toLowerCase();
+        const headerLower = head.name.toLowerCase();
+        const search = this.state.searchText.toLowerCase();
 
         return headerLower.indexOf(search) !== -1;
       });
@@ -223,10 +241,15 @@ export default class ColumnsTab extends Component {
           <div className="columns-tab empty-search-container">
             <div className="empty-search">
               <strong>
-                {T.translate(`${PREFIX}.EmptyMessage.title`, { searchText: this.state.searchText })}
+                {T.translate(`${PREFIX}.EmptyMessage.title`, {
+                  searchText: this.state.searchText,
+                })}
               </strong>
               <hr />
-              <span> {T.translate(`${PREFIX}.EmptyMessage.suggestionTitle`)} </span>
+              <span>
+                {' '}
+                {T.translate(`${PREFIX}.EmptyMessage.suggestionTitle`)}{' '}
+              </span>
               <ul>
                 <li>
                   <span
@@ -240,7 +263,9 @@ export default class ColumnsTab extends Component {
                   >
                     {T.translate(`${PREFIX}.EmptyMessage.clearLabel`)}
                   </span>
-                  <span>{T.translate(`${PREFIX}.EmptyMessage.suggestion1`)}</span>
+                  <span>
+                    {T.translate(`${PREFIX}.EmptyMessage.suggestion1`)}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -276,7 +301,9 @@ export default class ColumnsTab extends Component {
                     columnName={head.name}
                     index={head.index}
                     key={head.name}
-                    selected={this.state.selectedHeaders.indexOf(head.name) !== -1}
+                    selected={
+                      this.state.selectedHeaders.indexOf(head.name) !== -1
+                    }
                     setSelect={this.setSelect}
                     isNew={head.isNew}
                     ref={this.setNewRowRef.bind(this, head.isNew)}

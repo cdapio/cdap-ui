@@ -54,7 +54,7 @@ const styles = (theme): StyleRules => {
       marginTop: '15px',
 
       // 100% - padding - linkContainer height
-      height: `calc(100% - 30px - 35px)`,
+      height: 'calc(100% - 30px - 35px)',
     },
   };
 };

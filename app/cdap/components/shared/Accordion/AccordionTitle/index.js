@@ -41,7 +41,7 @@ export default class AccordionTitle extends PureComponent {
   };
 
   render() {
-    let { size } = this.props;
+    const { size } = this.props;
     return (
       <div className={`accordion-title ${size}`} onClick={this.onClickHandler}>
         <div>

@@ -32,11 +32,11 @@ const mapDispatchToDndProps = (dispatch) => {
       if (!e[0]) {
         return;
       }
-      var reader = new FileReader();
-      var filename = e[0].name;
+      const reader = new FileReader();
+      const filename = e[0].name;
       reader.readAsText(e[0], 'UTF-8');
       reader.onload = function(evt) {
-        var data = evt.target.result;
+        const data = evt.target.result;
         dispatch({
           type: IMPORTRULEBOOKACTIONS.UPLOADFILE,
           payload: {
@@ -50,7 +50,10 @@ const mapDispatchToDndProps = (dispatch) => {
     },
   };
 };
-const ImportRulebookFile = connect(mapStateToFileDnDProps, mapDispatchToDndProps)(FileDnD);
+const ImportRulebookFile = connect(
+  mapStateToFileDnDProps,
+  mapDispatchToDndProps
+)(FileDnD);
 
 export default function RulebookUploadStep() {
   return (

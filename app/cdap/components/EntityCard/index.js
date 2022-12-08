@@ -61,13 +61,20 @@ export default class EntityCard extends Component {
   renderEntityStatus() {
     switch (this.props.entity.type) {
       case 'application':
-        return <ApplicationMetrics entity={this.props.entity} extraInfo={this.props.extraInfo} />;
+        return (
+          <ApplicationMetrics
+            entity={this.props.entity}
+            extraInfo={this.props.extraInfo}
+          />
+        );
       case 'artifact':
         return <ArtifactMetrics entity={this.props.entity} />;
       case 'dataset':
         return <DatasetMetrics entity={this.props.entity} />;
       case 'program':
-        return <ProgramMetrics entity={this.props.entity} poll={this.props.poll} />;
+        return (
+          <ProgramMetrics entity={this.props.entity} poll={this.props.poll} />
+        );
       case 'view':
       default:
         return null;
@@ -111,7 +118,9 @@ export default class EntityCard extends Component {
     }
     const header = (
       <EntityCardHeader
-        className={this.props.entity.isHydrator ? 'datapipeline' : this.props.entity.type}
+        className={
+          this.props.entity.isHydrator ? 'datapipeline' : this.props.entity.type
+        }
         entity={this.props.entity}
         successMessage={this.state.successMessage}
       />
@@ -122,7 +131,7 @@ export default class EntityCard extends Component {
         header={header}
         id={
           this.props.entity.isHydrator
-            ? `entity-cards-datapipeline`
+            ? 'entity-cards-datapipeline'
             : `entity-cards-${this.props.entity.type}`
         }
         onClick={this.onClick.bind(this)}
@@ -134,7 +143,9 @@ export default class EntityCard extends Component {
             })}
           >
             <h4
-              className={classnames({ 'with-version': this.props.entity.version })}
+              className={classnames({
+                'with-version': this.props.entity.version,
+              })}
               title={this.props.entity.id}
               data-cy={`${this.props.entity.id}-header`}
               data-testid={`${this.props.entity.id}-header`}
@@ -178,7 +189,9 @@ export default class EntityCard extends Component {
       <div
         className={classnames(
           'entity-cards',
-          this.props.entity.isHydrator ? 'datapipeline' : this.props.entity.type,
+          this.props.entity.isHydrator
+            ? 'datapipeline'
+            : this.props.entity.type,
           this.props.className
         )}
         id={this.props.id}

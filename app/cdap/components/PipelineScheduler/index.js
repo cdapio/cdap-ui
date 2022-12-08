@@ -70,16 +70,16 @@ export default class PipelineScheduler extends Component {
     setScheduleStatus(this.props.scheduleStatus);
 
     this.schedulerStoreSubscription = PipelineSchedulerStore.subscribe(() => {
-      let state = PipelineSchedulerStore.getState();
-      let currentCron = state.cron;
-      let curretMaxConcurrentRuns = state.maxConcurrentRuns;
-      let currentProfileName = state.profiles.selectedProfile;
-      let currentBackendSchedule = state.currentBackendSchedule || {};
-      let constraintFromBackend =
+      const state = PipelineSchedulerStore.getState();
+      const currentCron = state.cron;
+      const curretMaxConcurrentRuns = state.maxConcurrentRuns;
+      const currentProfileName = state.profiles.selectedProfile;
+      const currentBackendSchedule = state.currentBackendSchedule || {};
+      const constraintFromBackend =
         (currentBackendSchedule.constraints || []).find((constraint) => {
           return constraint.type === 'CONCURRENCY';
         }) || {};
-      let profileNameFromBackend =
+      const profileNameFromBackend =
         objectQuery(
           state,
           'currentBackendSchedule',
@@ -87,7 +87,8 @@ export default class PipelineScheduler extends Component {
           CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY
         ) || null;
       if (
-        currentCron !== objectQuery(currentBackendSchedule, 'trigger', 'cronExpression') ||
+        currentCron !==
+          objectQuery(currentBackendSchedule, 'trigger', 'cronExpression') ||
         curretMaxConcurrentRuns !== constraintFromBackend.maxConcurrency ||
         currentProfileName !== profileNameFromBackend
       ) {
@@ -149,7 +150,7 @@ export default class PipelineScheduler extends Component {
   };
 
   saveSchedule = (shouldSchedule = false) => {
-    let {
+    const {
       cron,
       maxConcurrentRuns,
       currentBackendSchedule,
@@ -164,22 +165,26 @@ export default class PipelineScheduler extends Component {
       return;
     }
 
-    let savingState = shouldSchedule ? 'savingAndScheduling' : 'savingSchedule';
+    const savingState = shouldSchedule
+      ? 'savingAndScheduling'
+      : 'savingSchedule';
 
     this.setState({
       [savingState]: true,
     });
 
     let scheduleProperties = currentBackendSchedule.properties;
-    let newConstraints = currentBackendSchedule.constraints.map((constraint) => {
-      if (constraint.type === 'CONCURRENCY') {
-        return {
-          ...constraint,
-          maxConcurrency: maxConcurrentRuns,
-        };
+    const newConstraints = currentBackendSchedule.constraints.map(
+      (constraint) => {
+        if (constraint.type === 'CONCURRENCY') {
+          return {
+            ...constraint,
+            maxConcurrency: maxConcurrentRuns,
+          };
+        }
+        return constraint;
       }
-      return constraint;
-    });
+    );
     if (profiles.selectedProfile) {
       scheduleProperties = {
         ...scheduleProperties,
@@ -187,27 +192,28 @@ export default class PipelineScheduler extends Component {
       };
     }
     if (!isEmpty(profiles.profileCustomizations)) {
-      let profileCustomizations = {};
+      const profileCustomizations = {};
       Object.keys(profiles.profileCustomizations).forEach((profileProp) => {
-        profileCustomizations[`${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProp}`] =
-          profiles.profileCustomizations[profileProp];
+        profileCustomizations[
+          `${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${profileProp}`
+        ] = profiles.profileCustomizations[profileProp];
       });
       scheduleProperties = {
         ...scheduleProperties,
         ...profileCustomizations,
       };
     }
-    let newTrigger = {
+    const newTrigger = {
       ...currentBackendSchedule.trigger,
       cronExpression: cron,
     };
-    let newSchedule = {
+    const newSchedule = {
       ...currentBackendSchedule,
       properties: scheduleProperties,
       constraints: newConstraints,
       trigger: newTrigger,
     };
-    let { name: appId } = PipelineDetailStore.getState();
+    const { name: appId } = PipelineDetailStore.getState();
 
     MyScheduleApi.update(
       {
@@ -283,7 +289,11 @@ export default class PipelineScheduler extends Component {
           data-cy="save-start-schedule-btn"
           className="btn btn-primary start-schedule-btn"
           onClick={this.startScheduleAndClose}
-          disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
+          disabled={
+            buttonDisabled ||
+            this.state.savingSchedule ||
+            this.state.savingAndScheduling
+          }
         >
           <span>
             {this.state.isScheduleChanged
@@ -298,17 +308,24 @@ export default class PipelineScheduler extends Component {
           data-cy="save-schedule-btn"
           className="btn btn-secondary start-schedule-btn"
           onClick={this.saveSchedule.bind(this, false)}
-          disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
+          disabled={
+            buttonDisabled ||
+            this.state.savingSchedule ||
+            this.state.savingAndScheduling
+          }
         >
           <span>{T.translate(`${PREFIX}.saveSchedule`)}</span>
-          {this.state.savingSchedule ? <IconSVG name="icon-spinner" className="fa-spin" /> : null}
+          {this.state.savingSchedule ? (
+            <IconSVG name="icon-spinner" className="fa-spin" />
+          ) : null}
         </button>
       </div>
     );
   }
 
   render() {
-    let isScheduled = this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
+    const isScheduled =
+      this.state.scheduleStatus === StatusMapper.statusMap['SCHEDULED'];
     return (
       <Provider store={PipelineSchedulerStore}>
         <PipelineModeless

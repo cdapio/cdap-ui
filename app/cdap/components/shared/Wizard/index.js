@@ -38,11 +38,12 @@ const currentStepIndex = (arr, id) => {
   return findIndex(arr, (step) => id === step.id);
 };
 const canFinish = (id, wizardConfig) => {
-  let stepIndex = currentStepIndex(wizardConfig.steps, id);
+  const stepIndex = currentStepIndex(wizardConfig.steps, id);
   let canFinish = true;
-  for (var i = stepIndex + 1; i < wizardConfig.steps.length; i++) {
-    let reqsFields = Array.isArray(wizardConfig.steps[i].requiredFields);
-    canFinish = canFinish && (!reqsFields || (reqsFields && reqsFields.length === 0));
+  for (let i = stepIndex + 1; i < wizardConfig.steps.length; i++) {
+    const reqsFields = Array.isArray(wizardConfig.steps[i].requiredFields);
+    canFinish =
+      canFinish && (!reqsFields || (reqsFields && reqsFields.length === 0));
   }
   return canFinish;
 };
@@ -51,7 +52,8 @@ export default class Wizard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: this.props.activeStepId || this.props.wizardConfig.steps[0].id,
+      activeStep:
+        this.props.activeStepId || this.props.wizardConfig.steps[0].id,
       loading: false,
       loadingCTA: false,
       error: '',
@@ -61,7 +63,9 @@ export default class Wizard extends Component {
     };
 
     this.handleCallToActionClick = this.handleCallToActionClick.bind(this);
-    this.handleMainCallToActionClick = this.handleMainCallToActionClick.bind(this);
+    this.handleMainCallToActionClick = this.handleMainCallToActionClick.bind(
+      this
+    );
     this.eventEmitter = ee(ee);
   }
   componentWillMount() {
@@ -75,12 +79,15 @@ export default class Wizard extends Component {
     this.storeSubscription();
   }
   checkRequiredSteps() {
-    let state = this.props.store.getState();
-    let steps = Object.keys(state);
+    const state = this.props.store.getState();
+    const steps = Object.keys(state);
 
     // non-required steps are marked as complete by default
-    let requiredStepsCompleted = steps.every((key) => {
-      return (!state[key].__disabled && state[key].__complete) || state[key].__disabled;
+    const requiredStepsCompleted = steps.every((key) => {
+      return (
+        (!state[key].__disabled && state[key].__complete) ||
+        state[key].__disabled
+      );
     });
     if (this.state.requiredStepsCompleted != requiredStepsCompleted) {
       this.setState({
@@ -89,11 +96,11 @@ export default class Wizard extends Component {
     }
   }
   checkDisabledSteps() {
-    let state = this.props.store.getState();
-    let steps = Object.keys(state);
+    const state = this.props.store.getState();
+    const steps = Object.keys(state);
 
     // non-required steps are marked as complete by default
-    let disabledStepsEnabled = steps.every((key) => {
+    const disabledStepsEnabled = steps.every((key) => {
       return !state[key].__disabled;
     });
     if (this.state.disabledStepsEnabled != disabledStepsEnabled) {
@@ -123,10 +130,10 @@ export default class Wizard extends Component {
     this.goToDirectionStep(currentStepId, 'previous');
   }
   goToDirectionStep(currentStepId, direction) {
-    let state = this.props.store.getState();
-    let steps = this.props.wizardConfig.steps;
+    const state = this.props.store.getState();
+    const steps = this.props.wizardConfig.steps;
 
-    let currentStep = findIndex(steps, (step) => currentStepId === step.id);
+    const currentStep = findIndex(steps, (step) => currentStepId === step.id);
 
     let directionStepIndex;
     if (direction === 'next') {
@@ -154,7 +161,7 @@ export default class Wizard extends Component {
     this.setActiveStep(directionStepId);
   }
   submitForm() {
-    let onSubmitReturn = this.props.onSubmit(this.props.store);
+    const onSubmitReturn = this.props.onSubmit(this.props.store);
     this.setState({ loading: true });
     if (onSubmitReturn instanceof Observable) {
       onSubmitReturn.subscribe(
@@ -174,7 +181,9 @@ export default class Wizard extends Component {
             let message = err;
             if (typeof err === 'object') {
               // This is bad. There is no standard way to get error messages from backend.
-              message = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+              message =
+                objectQuery(err, 'response', 'message') ||
+                objectQuery(err, 'response');
               if (!message) {
                 message = JSON.stringify(message, null, 2);
               }
@@ -189,15 +198,15 @@ export default class Wizard extends Component {
     }
   }
   isStepComplete(stepId) {
-    let state = this.props.store.getState()[stepId];
+    const state = this.props.store.getState()[stepId];
     return state && state.__complete;
   }
   isStepDisabled(stepId) {
-    let state = this.props.store.getState()[stepId];
+    const state = this.props.store.getState()[stepId];
     return state && state.__disabled;
   }
   isStepReadOnly(stepId) {
-    let state = this.props.store.getState()[stepId];
+    const state = this.props.store.getState()[stepId];
     return state && state.__readOnly;
   }
 
@@ -211,7 +220,7 @@ export default class Wizard extends Component {
       this.handleCallToActionClick.bind(this);
     if (this.state.callToActionInfo.buttonOnClick) {
       this.setState({ loadingCTA: true });
-      let buttonClickReturn = this.state.callToActionInfo.buttonOnClick();
+      const buttonClickReturn = this.state.callToActionInfo.buttonOnClick();
       if (buttonClickReturn instanceof Observable) {
         buttonClickReturn.subscribe(
           () => {
@@ -236,9 +245,12 @@ export default class Wizard extends Component {
   }
 
   getNavigationButtons(matchedStep, btnsDisabled = false) {
-    let matchedIndex = currentStepIndex(this.props.wizardConfig.steps, matchedStep.id);
+    const matchedIndex = currentStepIndex(
+      this.props.wizardConfig.steps,
+      matchedStep.id
+    );
     let navButtons;
-    let nextButton = (
+    const nextButton = (
       <button
         className="btn btn-secondary"
         data-cy="wizard-next-btn"
@@ -249,7 +261,7 @@ export default class Wizard extends Component {
         <IconSVG name="icon-chevron-right" />
       </button>
     );
-    let prevButton = (
+    const prevButton = (
       <button
         className="btn btn-secondary"
         data-cy="wizard-previous-btn"
@@ -260,13 +272,15 @@ export default class Wizard extends Component {
         <span>{T.translate('features.Wizard.NavigationButtons.previous')}</span>
       </button>
     );
-    let finishButton = (
+    const finishButton = (
       <button
         className="btn btn-primary"
         data-cy="wizard-finish-btn"
         onClick={this.submitForm.bind(this)}
         disabled={
-          !this.state.requiredStepsCompleted || this.state.loading || btnsDisabled
+          !this.state.requiredStepsCompleted ||
+          this.state.loading ||
+          btnsDisabled
             ? 'disabled'
             : null
         }
@@ -278,7 +292,9 @@ export default class Wizard extends Component {
     if (matchedIndex === 0 && this.props.wizardConfig.steps.length > 1) {
       navButtons = (
         <span>
-          {canFinish(matchedStep.id, this.props.wizardConfig) ? finishButton : null}
+          {canFinish(matchedStep.id, this.props.wizardConfig)
+            ? finishButton
+            : null}
           {nextButton}
         </span>
       );
@@ -290,7 +306,9 @@ export default class Wizard extends Component {
       navButtons = (
         <span>
           {prevButton}
-          {canFinish(matchedStep.id, this.props.wizardConfig) ? finishButton : null}
+          {canFinish(matchedStep.id, this.props.wizardConfig)
+            ? finishButton
+            : null}
         </span>
       );
     }
@@ -302,7 +320,9 @@ export default class Wizard extends Component {
       navButtons = (
         <span>
           {prevButton}
-          {canFinish(matchedStep.id, this.props.wizardConfig) ? finishButton : null}
+          {canFinish(matchedStep.id, this.props.wizardConfig)
+            ? finishButton
+            : null}
           {nextButton}
         </span>
       );
@@ -315,7 +335,7 @@ export default class Wizard extends Component {
   }
 
   getStepHeaders() {
-    let stepHeaders = this.props.wizardConfig.steps.map((step) => (
+    const stepHeaders = this.props.wizardConfig.steps.map((step) => (
       <WizardStepHeader
         label={`${step.shorttitle}`}
         className={this.isStepComplete(step.id) ? 'completed' : null}
@@ -333,19 +353,24 @@ export default class Wizard extends Component {
     let stepContent = this.props.wizardConfig.steps
       .filter((step) => step.id === this.state.activeStep)
       .map((matchedStep) => {
-        let isStepReadOnly = this.isStepReadOnly(matchedStep.id);
+        const isStepReadOnly = this.isStepReadOnly(matchedStep.id);
 
         return (
           <WizardStepContent
             title={matchedStep.title}
             description={matchedStep.description}
             stepsCount={this.props.wizardConfig.steps.length}
-            currentStep={currentStepIndex(this.props.wizardConfig.steps, matchedStep.id) + 1}
+            currentStep={
+              currentStepIndex(this.props.wizardConfig.steps, matchedStep.id) +
+              1
+            }
           >
             {matchedStep.content}
             <div className="wizard-navigation">
               {isStepReadOnly ? (
-                <span className="step-helper-text">{matchedStep.helperText}</span>
+                <span className="step-helper-text">
+                  {matchedStep.helperText}
+                </span>
               ) : null}
               <span className="navigation-btn">
                 {this.getNavigationButtons(matchedStep, isStepReadOnly)}
@@ -360,7 +385,7 @@ export default class Wizard extends Component {
   }
 
   getCallsToAction() {
-    let callToActionInfo = this.state.callToActionInfo;
+    const callToActionInfo = this.state.callToActionInfo;
     return (
       <div>
         <div
@@ -389,7 +414,9 @@ export default class Wizard extends Component {
                 onClick={this.handleMainCallToActionClick}
               >
                 {callToActionInfo.buttonLabel}
-                {this.state.loadingCTA ? <IconSVG name="icon-spinner" className="fa-spin" /> : null}
+                {this.state.loadingCTA ? (
+                  <IconSVG name="icon-spinner" className="fa-spin" />
+                ) : null}
               </a>
             </If>
             <If condition={!callToActionInfo.buttonLabel}>
@@ -426,10 +453,12 @@ export default class Wizard extends Component {
       wizardFooter = this.getCallsToAction();
     }
     if (this.state.error) {
-      let footertitle = this.props.wizardConfig.footertitle;
+      const footertitle = this.props.wizardConfig.footertitle;
       let step;
       if (!footertitle) {
-        step = T.translate(`features.Wizard.${this.props.wizardType}.headerlabel`);
+        step = T.translate(
+          `features.Wizard.${this.props.wizardType}.headerlabel`
+        );
       } else {
         step = footertitle;
       }

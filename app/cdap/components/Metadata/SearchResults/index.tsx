@@ -121,7 +121,11 @@ const SearchResults: React.FC = () => {
   const sortByLabel = T.translate(`${I18N_PREFIX}.sortBy`);
   const metadataLabel = T.translate(`${I18N_PREFIX}.filters.metadata`);
   const entitiesLabel = T.translate(`${I18N_PREFIX}.filters.entities`);
-  const sortByOptions = [
+  const sortByOptions: {
+    name: React.ReactNode;
+    sort: string;
+    order: 'asc' | 'desc';
+  }[] = [
     {
       name: T.translate(`${I18N_PREFIX}.sortOptions.oldest`),
       sort: 'createDate',
@@ -201,7 +205,7 @@ const SearchResults: React.FC = () => {
     });
   }, []);
 
-  function onFilterChange(operation: Operations, filter: IFilterItem, isMetadata: false) {
+  function onFilterChange(operation: Operations, filter: IFilterItem, isMetadata = false) {
     const filtered = applyFilter(
       operation,
       filter,

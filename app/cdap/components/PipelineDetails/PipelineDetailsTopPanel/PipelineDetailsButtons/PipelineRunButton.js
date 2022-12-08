@@ -57,14 +57,16 @@ export default class PipelineRunButton extends Component {
     }
 
     if (!this.state.showRunOptions) {
-      let { isMissingKeyValues } = PipelineConfigurationsStore.getState();
+      const { isMissingKeyValues } = PipelineConfigurationsStore.getState();
       if (isMissingKeyValues) {
         this.toggleRunConfigOption();
       } else {
-        let { runtimeArgs } = this.props;
+        const { runtimeArgs } = this.props;
         // Arguments with empty values are assumed to be provided from the pipeline
-        runtimeArgs.pairs = runtimeArgs.pairs.filter((runtimeArg) => runtimeArg.value);
-        let runtimeArgsMap = convertKeyValuePairsToMap(runtimeArgs.pairs);
+        runtimeArgs.pairs = runtimeArgs.pairs.filter(
+          (runtimeArg) => runtimeArg.value
+        );
+        const runtimeArgsMap = convertKeyValuePairsToMap(runtimeArgs.pairs);
         runPipeline(runtimeArgsMap);
       }
     }
@@ -109,7 +111,9 @@ export default class PipelineRunButton extends Component {
           {this.props.runButtonLoading ? (
             <span className="text-success">
               <IconSVG name="icon-spinner" className="fa-spin" />
-              <div className="button-label">{T.translate(`${PREFIX}.starting`)}</div>
+              <div className="button-label">
+                {T.translate(`${PREFIX}.starting`)}
+              </div>
             </span>
           ) : (
             <span className="text-success">

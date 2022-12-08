@@ -56,7 +56,9 @@ const NamespaceDetailsMapping = ({
           </span>
           <span className="mapping-values">
             <strong>{T.translate(`${PREFIX}.hbaseNamespaceName`)}</strong>
-            <span title={hbaseNamespaceName}>{hbaseNamespaceName || '- -'}</span>
+            <span title={hbaseNamespaceName}>
+              {hbaseNamespaceName || '- -'}
+            </span>
           </span>
         </div>
         <div className="mapping-values-group">
@@ -66,7 +68,9 @@ const NamespaceDetailsMapping = ({
           </span>
           <span className="mapping-values">
             <strong>{T.translate(`${PREFIX}.schedulerQueueName`)}</strong>
-            <span title={schedulerQueueName}>{schedulerQueueName || '- -'}</span>
+            <span title={schedulerQueueName}>
+              {schedulerQueueName || '- -'}
+            </span>
           </span>
         </div>
       </div>
@@ -81,5 +85,7 @@ NamespaceDetailsMapping.propTypes = {
   schedulerQueueName: PropTypes.string,
 };
 
-const ConnectedNamespaceDetailsMapping = connect(mapStateToProps)(NamespaceDetailsMapping);
+const ConnectedNamespaceDetailsMapping = connect(mapStateToProps)(
+  NamespaceDetailsMapping
+);
 export default ConnectedNamespaceDetailsMapping;

@@ -24,8 +24,8 @@ import Popover from 'components/shared/Popover';
 require('./PropertyLock.scss');
 
 function PropertyLock({ isEditable, propertyName }) {
-  let iconName = !isEditable ? 'icon-lock_close' : 'icon-lock_open';
-  let title = isEditable
+  const iconName = !isEditable ? 'icon-lock_close' : 'icon-lock_open';
+  const title = isEditable
     ? 'Click to disallow editing the value of this property after the profile is created'
     : 'Click to allow editing the value of this property before running a program';
   const target = (
@@ -56,7 +56,7 @@ PropertyLock.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let { propertyName } = ownProps;
+  const { propertyName } = ownProps;
   return {
     isEditable: objectQuery(state, 'properties', propertyName, 'isEditable'),
     propertyName,

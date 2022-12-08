@@ -91,7 +91,9 @@ class EngineConfigTabContent extends Component {
             options={FORCE_DYNAMIC_EXECUTION_OPTIONS}
             className="dynamic-execution-select"
           />
-          {forceDynamicExecution === GLOBALS.dynamicExecutionForceOff && <NumExecutors />}
+          {forceDynamicExecution === GLOBALS.dynamicExecutionForceOff && (
+            <NumExecutors />
+          )}
         </React.Fragment>
       );
     }
@@ -119,11 +121,14 @@ class EngineConfigTabContent extends Component {
     return (
       <div
         id="engine-config-tab-content"
-        className={classnames('configuration-step-content configuration-content-container', {
-          'batch-content': isBatch,
-          'realtime-content': !isBatch,
-          'allow-force-dynamic-execution': Theme.allowForceDynamicExecution,
-        })}
+        className={classnames(
+          'configuration-step-content configuration-content-container',
+          {
+            'batch-content': isBatch,
+            'realtime-content': !isBatch,
+            'allow-force-dynamic-execution': Theme.allowForceDynamicExecution,
+          }
+        )}
       >
         <fieldset disabled={this.props.isDetailView}>
           <div className="step-content-heading">{heading}</div>
@@ -144,7 +149,12 @@ class EngineConfigTabContent extends Component {
 
 const mapStateToProps = (state) => {
   let forceDynamicExecution = '';
-  if (Object.prototype.hasOwnProperty.call(state.properties, SPARK_DYNAMIC_ALLOCATION)) {
+  if (
+    Object.prototype.hasOwnProperty.call(
+      state.properties,
+      SPARK_DYNAMIC_ALLOCATION
+    )
+  ) {
     if (state.properties[SPARK_DYNAMIC_ALLOCATION] === 'true') {
       forceDynamicExecution = GLOBALS.dynamicExecutionForceOn;
     } else if (state.properties[SPARK_DYNAMIC_ALLOCATION] === 'false') {
@@ -158,6 +168,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ConnectedEngineConfigTabContent = connect(mapStateToProps)(EngineConfigTabContent);
+const ConnectedEngineConfigTabContent = connect(mapStateToProps)(
+  EngineConfigTabContent
+);
 
 export default ConnectedEngineConfigTabContent;

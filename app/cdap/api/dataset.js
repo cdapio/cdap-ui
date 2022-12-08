@@ -17,13 +17,23 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/data/datasets';
 
 export const MyDatasetApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
   get: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:datasetId`),
-  getPrograms: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:datasetId/programs`),
+  getPrograms: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/:datasetId/programs`
+  ),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/:datasetId`),
-  truncate: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/:datasetId/admin/truncate`),
+  truncate: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${basepath}/:datasetId/admin/truncate`
+  ),
 };

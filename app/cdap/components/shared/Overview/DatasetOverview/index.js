@@ -48,7 +48,7 @@ export default class DatasetOverview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let { entity } = nextProps;
+    const { entity } = nextProps;
     if (!isNil(entity)) {
       this.setState(
         {
@@ -63,7 +63,7 @@ export default class DatasetOverview extends Component {
     this.setState({
       loading: true,
     });
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
     if (objectQuery(this.props, 'entity', 'id')) {
       const datasetParams = {
         namespace,
@@ -81,7 +81,7 @@ export default class DatasetOverview extends Component {
         .combineLatest(MyDatasetApi.getPrograms(datasetParams))
         .subscribe((res) => {
           let appId;
-          let programs = res[1].map((programObj) => {
+          const programs = res[1].map((programObj) => {
             programObj.uniqueId = uuidV4();
             appId = programObj.application;
             programObj.app = appId;
@@ -94,7 +94,7 @@ export default class DatasetOverview extends Component {
             properties[property.name] = property.value;
           });
 
-          let entityDetail = {
+          const entityDetail = {
             programs,
             schema: properties.schema,
             name: appId, // FIXME: Finalize on entity detail for fast action
@@ -143,8 +143,8 @@ export default class DatasetOverview extends Component {
       return <div className="fa fa-spinner fa-spin fa-3x" />;
     }
 
-    let title = T.translate('commons.entity.dataset.singular');
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const title = T.translate('commons.entity.dataset.singular');
+    const namespace = NamespaceStore.getState().selectedNamespace;
     return (
       <div className="app-overview dataset-overview">
         <OverviewHeader
@@ -155,7 +155,10 @@ export default class DatasetOverview extends Component {
             state: {
               entityDetail: this.state.entityDetail,
               entityMetadata: this.props.entity,
-              previousPathname: (location.pathname + location.search).replace(/\/cdap\//g, '/'),
+              previousPathname: (location.pathname + location.search).replace(
+                /\/cdap\//g,
+                '/'
+              ),
             },
           }}
           onClose={this.props.onClose}

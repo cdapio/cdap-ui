@@ -41,7 +41,7 @@ import ee from 'event-emitter';
 import { preventPropagation, objectQuery } from 'services/helpers';
 import colorVariables from 'styles/variables.scss';
 
-const PREFIX = `features.PipelineSummary.nodesMetricsGraph`;
+const PREFIX = 'features.PipelineSummary.nodesMetricsGraph';
 const RECORDS_IN_COLOR = colorVariables.blue04;
 // TODO: CDAP-17725
 const RECORDS_OUT_COLOR = '#97A0BA';
@@ -86,11 +86,11 @@ export default class NodesRecordsGraph extends Component {
     this.eventEmitter.off('CLOSE_HINT_TOOLTIP', this.closeTooltip);
   }
   constructData(props = this.props) {
-    let data = []
+    const data = []
       .concat(props.records)
       .reverse()
       .map((run, id) => {
-        let { totalRunsCount, runsLimit, xDomainType } = this.props;
+        const { totalRunsCount, runsLimit, xDomainType } = this.props;
         let x;
         if (xDomainType === 'limit') {
           x = totalRunsCount > runsLimit ? totalRunsCount - runsLimit : 0;
@@ -109,8 +109,8 @@ export default class NodesRecordsGraph extends Component {
     return data;
   }
   renderChart() {
-    let FPlot = makeVisFlexible(XYPlot);
-    let { yDomain, tickFormat } = getYAxisProps(this.state.data);
+    const FPlot = makeVisFlexible(XYPlot);
+    const { yDomain, tickFormat } = getYAxisProps(this.state.data);
     let popOverData;
     if (this.state.currentHoveredElement) {
       popOverData = this.props.records.find(
@@ -130,7 +130,10 @@ export default class NodesRecordsGraph extends Component {
           yDomain={yDomain}
           className="run-history-fp-plot"
         >
-          <XAxis tickTotal={getTicksTotal(this.props)} tickFormat={xTickFormat(this.props)} />
+          <XAxis
+            tickTotal={getTicksTotal(this.props)}
+            tickFormat={xTickFormat(this.props)}
+          />
           <YAxis tickFormat={tickFormat} />
           <HorizontalGridLines />
           <AreaSeries
@@ -138,13 +141,21 @@ export default class NodesRecordsGraph extends Component {
             color={getAreaColor(this.props.recordType)}
             fill={getAreaColor(this.props.recordType)}
             stroke={getAreaColor(this.props.recordType)}
-            data={this.state.data.map((datum) => ({ x: datum.x, y: datum.y, runid: datum.runid }))}
+            data={this.state.data.map((datum) => ({
+              x: datum.x,
+              y: datum.y,
+              runid: datum.runid,
+            }))}
             opacity={0.2}
           />
           <LineSeries
             color={getAreaColor(this.props.recordType)}
             stroke={getAreaColor(this.props.recordType)}
-            data={this.state.data.map((datum) => ({ x: datum.x, y: datum.y, runid: datum.runid }))}
+            data={this.state.data.map((datum) => ({
+              x: datum.x,
+              y: datum.y,
+              runid: datum.runid,
+            }))}
             strokeWidth={4}
           />
           <MarkSeries
@@ -155,7 +166,10 @@ export default class NodesRecordsGraph extends Component {
             stroke={MARK_SERIES_STROKE_COLOR}
             strokeWidth={1}
             onValueMouseOver={(d) => {
-              if (objectQuery(this.state.currentHoveredElement, 'runid') === d.runid) {
+              if (
+                objectQuery(this.state.currentHoveredElement, 'runid') ===
+                d.runid
+              ) {
                 return;
               }
               const newData = this.state.data.map((datum) => {
@@ -220,14 +234,21 @@ export default class NodesRecordsGraph extends Component {
               ) : null}
               <div>
                 <strong>{T.translate(`${PREFIX}.hint.startTime`)}: </strong>
-                <span>{moment(popOverData.starting * 1000).format('llll')}</span>
+                <span>
+                  {moment(popOverData.starting * 1000).format('llll')}
+                </span>
               </div>
             </Hint>
           ) : null}
           {this.props.xDomainType === 'limit' ? (
-            <div className="x-axis-title"> {T.translate(`${PREFIX}.xAxisTitle`)} </div>
+            <div className="x-axis-title">
+              {' '}
+              {T.translate(`${PREFIX}.xAxisTitle`)}{' '}
+            </div>
           ) : null}
-          <div className="y-axis-title">{T.translate(`${PREFIX}.yAxisTitle`)}</div>
+          <div className="y-axis-title">
+            {T.translate(`${PREFIX}.yAxisTitle`)}
+          </div>
         </FPlot>
       </div>
     );

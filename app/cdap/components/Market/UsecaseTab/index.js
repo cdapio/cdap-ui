@@ -42,7 +42,7 @@ export default class UsecaseTab extends Component {
       keys: ['categories'],
     };
 
-    let fuse = new Fuse(list, fuseOptions);
+    const fuse = new Fuse(list, fuseOptions);
     return fuse.search(filter);
   }
   render() {

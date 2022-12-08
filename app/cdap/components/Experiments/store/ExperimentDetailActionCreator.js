@@ -50,7 +50,8 @@ function getExperimentDetails(experimentId) {
       },
       (err) => {
         setExperimentDetailError(
-          `Failed to get details for the experiment '${experimentId}' - ${err.response || err}`
+          `Failed to get details for the experiment '${experimentId}' - ${err.response ||
+            err}`
         );
       }
     );
@@ -60,13 +61,13 @@ function getModelsInExperiment(experimentId) {
   experimentDetailsStore.dispatch({
     type: EXPERIMENTDETAILACTIONS.SET_LOADING,
   });
-  let {
+  const {
     modelsOffset: offset,
     modelsLimit: limit,
     modelsSortMethod,
     modelsSortColumn,
   } = experimentDetailsStore.getState();
-  let ModelsObservable$ = myExperimentsApi.getModelsInExperiment({
+  const ModelsObservable$ = myExperimentsApi.getModelsInExperiment({
     namespace: getCurrentNamespace(),
     experimentId,
     offset,
@@ -76,7 +77,7 @@ function getModelsInExperiment(experimentId) {
 
   ModelsObservable$.subscribe(
     (res) => {
-      let models = res.models;
+      const models = res.models;
       experimentDetailsStore.dispatch({
         type: EXPERIMENTDETAILACTIONS.SET_MODELS,
         payload: {
@@ -88,7 +89,8 @@ function getModelsInExperiment(experimentId) {
     },
     (err) => {
       setExperimentDetailError(
-        `Failed to get models in the experiment '${experimentId}' - ${err.response || err}`
+        `Failed to get models in the experiment '${experimentId}' - ${err.response ||
+          err}`
       );
     }
   );
@@ -96,7 +98,7 @@ function getModelsInExperiment(experimentId) {
 }
 
 function handleModelsPageChange({ selected }) {
-  let { modelsLimit, name: experimentId } = experimentDetailsStore.getState();
+  const { modelsLimit, name: experimentId } = experimentDetailsStore.getState();
   experimentDetailsStore.dispatch({
     type: EXPERIMENTDETAILACTIONS.SET_MODEL_PAGINATION,
     payload: {
@@ -108,14 +110,16 @@ function handleModelsPageChange({ selected }) {
 }
 
 function handleModelsSorting(field) {
-  let {
+  const {
     modelsSortMethod,
     modelsSortColumn,
     name: experimentId,
   } = experimentDetailsStore.getState();
-  let newSortField = field !== modelsSortColumn ? field : modelsSortColumn;
-  let newSortMethod =
-    MMDS_SORT_METHODS.ASC === modelsSortMethod ? MMDS_SORT_METHODS.DESC : MMDS_SORT_METHODS.ASC;
+  const newSortField = field !== modelsSortColumn ? field : modelsSortColumn;
+  const newSortMethod =
+    MMDS_SORT_METHODS.ASC === modelsSortMethod
+      ? MMDS_SORT_METHODS.DESC
+      : MMDS_SORT_METHODS.ASC;
   experimentDetailsStore.dispatch({
     type: EXPERIMENTDETAILACTIONS.SET_MODELS_SORT,
     payload: {
@@ -145,14 +149,14 @@ function updateQueryParametersForModels({
 }
 
 function updateQueryForModelsListView() {
-  let {
+  const {
     modelsOffset: offset,
     modelsLimit: limit,
     modelsSortMethod,
     modelsSortColumn,
   } = experimentDetailsStore.getState();
-  let newQuery = `offset=${offset}&limit=${limit}&sort=${modelsSortColumn} ${modelsSortMethod}`;
-  let obj = {
+  const newQuery = `offset=${offset}&limit=${limit}&sort=${modelsSortColumn} ${modelsSortMethod}`;
+  const obj = {
     title: document.title,
     url: `${location.pathname}?${newQuery}`,
   };
@@ -176,7 +180,8 @@ function getSplitsInExperiment(experimentId) {
       },
       (err) => {
         setExperimentDetailError(
-          `Failed to get splits in the experiment '${experimentId}' - ${err.response || err}`
+          `Failed to get splits in the experiment '${experimentId}' - ${err.response ||
+            err}`
         );
       }
     );
@@ -234,7 +239,7 @@ function getModelStatus(experimentId, modelId) {
 }
 
 function addModelsLoading(modelId) {
-  let modelsLoading = [...experimentDetailsStore.getState().modelsLoading];
+  const modelsLoading = [...experimentDetailsStore.getState().modelsLoading];
   if (modelsLoading.indexOf(modelId) === -1) {
     modelsLoading.push(modelId);
   }
@@ -247,8 +252,8 @@ function addModelsLoading(modelId) {
 }
 
 function removeModelsLoading(modelId) {
-  let modelsLoading = [...experimentDetailsStore.getState().modelsLoading];
-  let modelIndex = modelsLoading.indexOf(modelId);
+  const modelsLoading = [...experimentDetailsStore.getState().modelsLoading];
+  const modelIndex = modelsLoading.indexOf(modelId);
   if (modelIndex !== -1) {
     modelsLoading.splice(modelIndex, 1);
   }
@@ -261,7 +266,9 @@ function removeModelsLoading(modelId) {
 }
 
 function addModelsWithError(modelId) {
-  let modelsWithError = [...experimentDetailsStore.getState().modelsWithError];
+  const modelsWithError = [
+    ...experimentDetailsStore.getState().modelsWithError,
+  ];
   if (modelsWithError.indexOf(modelId) === -1) {
     modelsWithError.push(modelId);
   }
@@ -274,8 +281,9 @@ function addModelsWithError(modelId) {
 }
 
 function setActiveModel(activeModelId) {
-  let state = experimentDetailsStore.getState();
-  let { splitDetails } = state.models.find((model) => model.id === activeModelId) || {};
+  const state = experimentDetailsStore.getState();
+  const { splitDetails } =
+    state.models.find((model) => model.id === activeModelId) || {};
   if (!splitDetails) {
     getSplitsInExperiment(state.name);
   }
@@ -291,7 +299,9 @@ const setAlgorithmsListForDetailedView = () => {
   setAlgorithmsList().subscribe(
     () => {},
     (err) => {
-      setExperimentDetailError(`Failed to get list of algorithms: ${err.response || err}`);
+      setExperimentDetailError(
+        `Failed to get list of algorithms: ${err.response || err}`
+      );
     }
   );
 };

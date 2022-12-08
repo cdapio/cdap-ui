@@ -61,17 +61,20 @@ export default class ScheduleRuntimeArgs extends Component {
 
   componentDidMount() {
     this.sub = ScheduleRuntimeArgsStore.subscribe(() => {
-      let { triggeringPipelineInfo, argsMapping } = ScheduleRuntimeArgsStore.getState().args;
-      let { macros, configStages } = triggeringPipelineInfo;
+      const {
+        triggeringPipelineInfo,
+        argsMapping,
+      } = ScheduleRuntimeArgsStore.getState().args;
+      const { macros, configStages } = triggeringPipelineInfo;
 
       this.setState({ macros, configStages, argsMapping });
     });
 
-    let {
+    const {
       id: triggeringPipelineId,
       namespace: triggeringPipelineNS,
     } = this.props.triggeringPipelineInfo;
-    let {
+    const {
       id: triggeredPipelineId,
       namespace: triggeredPipelineNS,
     } = this.props.triggeredPipelineInfo;
@@ -83,7 +86,7 @@ export default class ScheduleRuntimeArgs extends Component {
         type: SCHEDULERUNTIMEARGSACTIONS.SETDISABLED,
       });
 
-      let { scheduleInfo } = this.props;
+      const { scheduleInfo } = this.props;
 
       let triggerProperties = objectQuery(
         scheduleInfo,
@@ -98,10 +101,13 @@ export default class ScheduleRuntimeArgs extends Component {
         return;
       }
 
-      let argsArray = [];
+      const argsArray = [];
 
-      let runtimeArgs = this.props.pipelineCompositeTriggersEnabled
-        ? filterPropertyMapping(triggerProperties.arguments, this.props.triggeringPipelineInfo)
+      const runtimeArgs = this.props.pipelineCompositeTriggersEnabled
+        ? filterPropertyMapping(
+            triggerProperties.arguments,
+            this.props.triggeringPipelineInfo
+          )
         : triggerProperties.arguments;
       if (runtimeArgs.length > 0) {
         runtimeArgs.forEach((args) => {
@@ -113,7 +119,7 @@ export default class ScheduleRuntimeArgs extends Component {
         });
       }
 
-      let pluginProperties = this.props.pipelineCompositeTriggersEnabled
+      const pluginProperties = this.props.pipelineCompositeTriggersEnabled
         ? filterPropertyMapping(
             triggerProperties.pluginProperties,
             this.props.triggeringPipelineInfo
@@ -121,7 +127,7 @@ export default class ScheduleRuntimeArgs extends Component {
         : triggerProperties.pluginProperties;
       if (pluginProperties.length > 0) {
         pluginProperties.forEach((properties) => {
-          let key = `${this.props.triggeringPipelineInfo.id}:${properties.stageName}:${properties.source}`;
+          const key = `${this.props.triggeringPipelineInfo.id}:${properties.stageName}:${properties.source}`;
 
           argsArray.push({
             key,
@@ -131,7 +137,9 @@ export default class ScheduleRuntimeArgs extends Component {
         });
       }
 
-      let profileCustomizations = getCustomizationMap(scheduleInfo.properties);
+      const profileCustomizations = getCustomizationMap(
+        scheduleInfo.properties
+      );
 
       setSelectedProfile(
         scheduleInfo.properties[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY],
@@ -149,15 +157,19 @@ export default class ScheduleRuntimeArgs extends Component {
   }
 
   configureAndEnableTrigger = () => {
-    let { argsMapping, selectedProfile } = ScheduleRuntimeArgsStore.getState().args;
-    let config = {};
+    const {
+      argsMapping,
+      selectedProfile,
+    } = ScheduleRuntimeArgsStore.getState().args;
+    const config = {};
     if (selectedProfile.name) {
-      let { name, profileCustomizations = {} } = selectedProfile;
-      let customProperties = Object.keys(profileCustomizations);
+      const { name, profileCustomizations = {} } = selectedProfile;
+      const customProperties = Object.keys(profileCustomizations);
       config[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY] = name;
       if (customProperties.length) {
         customProperties.forEach((prop) => {
-          config[`${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${prop}`] = profileCustomizations[prop];
+          config[`${CLOUD.PROFILE_PROPERTIES_PREFERENCE}.${prop}`] =
+            profileCustomizations[prop];
         });
       }
     }
@@ -167,9 +179,15 @@ export default class ScheduleRuntimeArgs extends Component {
   };
 
   isEnableTriggerDisabled = () => {
-    let { argsMapping, selectedProfile } = ScheduleRuntimeArgsStore.getState().args;
-    let profileName = objectQuery(selectedProfile, 'name');
-    return argsMapping.length === 0 && (isNil(profileName) || profileName.length === 0);
+    const {
+      argsMapping,
+      selectedProfile,
+    } = ScheduleRuntimeArgsStore.getState().args;
+    const profileName = objectQuery(selectedProfile, 'name');
+    return (
+      argsMapping.length === 0 &&
+      (isNil(profileName) || profileName.length === 0)
+    );
   };
 
   render() {
@@ -189,11 +207,19 @@ export default class ScheduleRuntimeArgs extends Component {
     );
 
     return (
-      <div className={classnames('schedule-runtime-args', { disabled: this.props.disabled })}>
+      <div
+        className={classnames('schedule-runtime-args', {
+          disabled: this.props.disabled,
+        })}
+      >
         <Provider store={ScheduleRuntimeArgsStore}>
           <fieldset disabled={this.props.disabled}>
             <ConfigurableTab
-              tabConfig={this.props.modalConfigTab ? this.props.modalConfigTab : Tabs.TabConfig}
+              tabConfig={
+                this.props.modalConfigTab
+                  ? this.props.modalConfigTab
+                  : Tabs.TabConfig
+              }
             />
           </fieldset>
         </Provider>

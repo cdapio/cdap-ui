@@ -48,7 +48,9 @@ export default class NodeMetricsGraphLegends extends Component {
     showLegendPopover: false,
   };
 
-  itemsWithoutErrorRecords = this.props.items.filter((item) => item.title !== recordsErrorTitle);
+  itemsWithoutErrorRecords = this.props.items.filter(
+    (item) => item.title !== recordsErrorTitle
+  );
 
   toggleLegendPopover = () => {
     this.setState({
@@ -57,12 +59,15 @@ export default class NodeMetricsGraphLegends extends Component {
   };
 
   renderRecordsErrorLegend(showCheckbox = false, orientation = 'horizontal') {
-    let recordsErrorItem = this.props.items.find((item) => item.title === recordsErrorTitle);
+    const recordsErrorItem = this.props.items.find(
+      (item) => item.title === recordsErrorTitle
+    );
     if (!recordsErrorItem) {
       return null;
     }
 
-    let itemChecked = this.props.checkedItems.indexOf(recordsErrorItem.title) !== -1;
+    const itemChecked =
+      this.props.checkedItems.indexOf(recordsErrorItem.title) !== -1;
 
     return (
       <NodeMetricsGraphLegend
@@ -90,7 +95,8 @@ export default class NodeMetricsGraphLegends extends Component {
     return (
       <div className="rv-discrete-color-legend horizontal">
         {this.itemsWithoutErrorRecords.map((item, i) => {
-          let itemChecked = this.props.checkedItems.indexOf(item.title) !== -1;
+          const itemChecked =
+            this.props.checkedItems.indexOf(item.title) !== -1;
 
           return (
             <NodeMetricsGraphLegend
@@ -108,7 +114,7 @@ export default class NodeMetricsGraphLegends extends Component {
   }
 
   renderPortsMetricsLegendsPopover() {
-    let checkedItemsWithoutErrorRecords = this.props.checkedItems.filter(
+    const checkedItemsWithoutErrorRecords = this.props.checkedItems.filter(
       (item) => item !== recordsErrorTitle
     );
     let itemToShowOnTop = this.itemsWithoutErrorRecords[0];
@@ -117,7 +123,7 @@ export default class NodeMetricsGraphLegends extends Component {
         (item) => item.title === checkedItemsWithoutErrorRecords[0]
       );
     }
-    let showCheckedItemsCount =
+    const showCheckedItemsCount =
       this.state.showLegendPopover ||
       checkedItemsWithoutErrorRecords.length === 0 ||
       checkedItemsWithoutErrorRecords.length >= 2;
@@ -125,7 +131,10 @@ export default class NodeMetricsGraphLegends extends Component {
     return (
       <div className="ports-legend-popover-with-errors">
         <div className="ports-legend-popover">
-          <div className="legend-popover-toggle" onClick={this.toggleLegendPopover}>
+          <div
+            className="legend-popover-toggle"
+            onClick={this.toggleLegendPopover}
+          >
             {showCheckedItemsCount ? (
               <span>
                 {T.translate(`${PREFIX}.checkedPortLegendsCount`, {
@@ -146,7 +155,8 @@ export default class NodeMetricsGraphLegends extends Component {
             <div className="legend-popover">
               <div className="popover-content rv-discrete-color-legend">
                 {this.itemsWithoutErrorRecords.map((item, i) => {
-                  let itemChecked = this.props.checkedItems.indexOf(item.title) !== -1;
+                  const itemChecked =
+                    this.props.checkedItems.indexOf(item.title) !== -1;
                   return (
                     <NodeMetricsGraphLegend
                       item={item}
@@ -172,7 +182,10 @@ export default class NodeMetricsGraphLegends extends Component {
   render() {
     if (!this.props.isMultiplePorts) {
       return this.renderNormalMetricsLegends();
-    } else if (this.props.isMultiplePorts && this.itemsWithoutErrorRecords.length <= 2) {
+    } else if (
+      this.props.isMultiplePorts &&
+      this.itemsWithoutErrorRecords.length <= 2
+    ) {
       return this.renderPortsMetricsLegends();
     }
     return this.renderPortsMetricsLegendsPopover();

@@ -29,37 +29,53 @@ import ee from 'event-emitter';
 require('./Home.scss');
 
 const EntityListView = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "EntityListView" */ 'components/EntityListView'
+    ),
   loading: LoadingSVGCentered,
 });
 const Connections = Loadable({
-  loader: () => import(/* webpackChunkName: "Connections" */ 'components/Connections'),
+  loader: () =>
+    import(/* webpackChunkName: "Connections" */ 'components/Connections'),
   loading: LoadingSVGCentered,
 });
 const DataPrepHome = Loadable({
-  loader: () => import(/* webpackChunkName: "DataPrepHome" */ 'components/DataPrepHome'),
+  loader: () =>
+    import(/* webpackChunkName: "DataPrepHome" */ 'components/DataPrepHome'),
   loading: LoadingSVGCentered,
 });
 const RulesEngineHome = Loadable({
-  loader: () => import(/* webpackChunkName: "RulesEngineHome" */ 'components/RulesEngineHome'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "RulesEngineHome" */ 'components/RulesEngineHome'
+    ),
   loading: LoadingSVGCentered,
 });
 const DatasetDetailedView = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "DatasetDetailedView" */ 'components/DatasetDetailedView'),
+    import(
+      /* webpackChunkName: "DatasetDetailedView" */ 'components/DatasetDetailedView'
+    ),
   loading: LoadingSVGCentered,
 });
 const Experiments = Loadable({
-  loader: () => import(/* webpackChunkName: "Experiments" */ 'components/Experiments'),
+  loader: () =>
+    import(/* webpackChunkName: "Experiments" */ 'components/Experiments'),
   loading: LoadingSVGCentered,
 });
 const NamespaceAdmin = Loadable({
-  loader: () => import(/* webpackChunkName: "NamespaceAdmin" */ 'components/NamespaceAdmin'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "NamespaceAdmin" */ 'components/NamespaceAdmin'
+    ),
   loading: LoadingSVGCentered,
 });
 const ProfileCreateView = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "ProfileCreateView" */ 'components/Cloud/Profiles/CreateView'),
+    import(
+      /* webpackChunkName: "ProfileCreateView" */ 'components/Cloud/Profiles/CreateView'
+    ),
   loading: LoadingSVGCentered,
 });
 const ProfileCreateProvisionerSelection = Loadable({
@@ -71,7 +87,9 @@ const ProfileCreateProvisionerSelection = Loadable({
 });
 const ProfileDetailView = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "ProfileDetailView" */ 'components/Cloud/Profiles/DetailView'),
+    import(
+      /* webpackChunkName: "ProfileDetailView" */ 'components/Cloud/Profiles/DetailView'
+    ),
   loading: LoadingSVGCentered,
 });
 const Reports = Loadable({
@@ -79,46 +97,59 @@ const Reports = Loadable({
   loading: LoadingSVGCentered,
 });
 const Operations = Loadable({
-  loader: () => import(/* webpackChunkName: "Operations" */ 'components/Operations'),
+  loader: () =>
+    import(/* webpackChunkName: "Operations" */ 'components/Operations'),
   loading: LoadingSVGCentered,
 });
 const PipelineList = Loadable({
-  loader: () => import(/* webpackChunkName: "PipelineList" */ 'components/PipelineList'),
+  loader: () =>
+    import(/* webpackChunkName: "PipelineList" */ 'components/PipelineList'),
   loading: LoadingSVGCentered,
 });
 const SecureKeys = Loadable({
-  loader: () => import(/* webpackChunkName: "SecureKeys" */ 'components/SecureKeys'),
+  loader: () =>
+    import(/* webpackChunkName: "SecureKeys" */ 'components/SecureKeys'),
   loading: LoadingSVGCentered,
 });
 
 const FieldLevelLineage = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "FieldLevelLineage" */ 'components/FieldLevelLineage/v2'),
+    import(
+      /* webpackChunkName: "FieldLevelLineage" */ 'components/FieldLevelLineage/v2'
+    ),
   loading: LoadingSVGCentered,
 });
 
 const Replicator = Loadable({
-  loader: () => import(/* webpackChunkName: "Replicator" */ 'components/Replicator'),
+  loader: () =>
+    import(/* webpackChunkName: "Replicator" */ 'components/Replicator'),
   loading: LoadingSVGCentered,
 });
 
 const Ingestion = Loadable({
-  loader: () => import(/* webpackChunkName: "Ingestion" */ 'components/Ingestion'),
+  loader: () =>
+    import(/* webpackChunkName: "Ingestion" */ 'components/Ingestion'),
   loading: LoadingSVGCentered,
 });
 const PluginJSONCreator = Loadable({
-  loader: () => import(/* webpackChunkName: "PluginJSONCreator" */ 'components/PluginJSONCreator'),
+  loader: () =>
+    import(
+      /* webpackChunkName: "PluginJSONCreator" */ 'components/PluginJSONCreator'
+    ),
   loading: LoadingSVGCentered,
 });
 
 const LogViewerPage = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "LogViewerPage" */ 'components/LogViewer/LogViewerPage'),
+    import(
+      /* webpackChunkName: "LogViewerPage" */ 'components/LogViewer/LogViewerPage'
+    ),
   loading: LoadingSVGCentered,
 });
 
 const Metadata = Loadable({
-  loader: () => import(/* webpackChunkMame: "Metadata" */ 'components/Metadata'),
+  loader: () =>
+    import(/* webpackChunkMame: "Metadata" */ 'components/Metadata'),
   loading: LoadingSVGCentered,
 });
 
@@ -140,7 +171,11 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
-          <Route exact path="/ns/:namespace/control" component={EntityListView} />
+          <Route
+            exact
+            path="/ns/:namespace/control"
+            component={EntityListView}
+          />
           <Route
             exact
             path="/ns/:namespace/datasets/:datasetId/fields"
@@ -148,14 +183,36 @@ export default class Home extends Component {
               return <FieldLevelLineage {...props} />;
             }}
           />
-          <Route path="/ns/:namespace/datasets/:datasetId" component={DatasetDetailedView} />
-          <Route exact path="/ns/:namespace/rulesengine" component={RulesEngineHome} />
-          <Route exact path="/ns/:namespace/wrangler" component={DataPrepHome} />
-          <Route exact path="/ns/:namespace/wrangler/:workspaceId" component={DataPrepHome} />
+          <Route
+            path="/ns/:namespace/datasets/:datasetId"
+            component={DatasetDetailedView}
+          />
+          <Route
+            exact
+            path="/ns/:namespace/rulesengine"
+            component={RulesEngineHome}
+          />
+          <Route
+            exact
+            path="/ns/:namespace/wrangler"
+            component={DataPrepHome}
+          />
+          <Route
+            exact
+            path="/ns/:namespace/wrangler/:workspaceId"
+            component={DataPrepHome}
+          />
           <Route path="/ns/:namespace/connections" component={Connections} />
-          <Route path="/ns/:namespace/connection-upload" component={Connections} />
+          <Route
+            path="/ns/:namespace/connection-upload"
+            component={Connections}
+          />
           <Route path="/ns/:namespace/experiments" component={Experiments} />
-          <Route exact path="/ns/:namespace/operations" component={Operations} />
+          <Route
+            exact
+            path="/ns/:namespace/operations"
+            component={Operations}
+          />
           <Route path="/ns/:namespace/details" component={NamespaceAdmin} />
           <Route path="/ns/:namespace/reports" component={Reports} />
           <Route
@@ -175,7 +232,10 @@ export default class Home extends Component {
           />
           <Route path="/ns/:namespace/pipelines" component={PipelineList} />
           <Route path="/ns/:namespace/securekeys" component={SecureKeys} />
-          <Route path="/ns/:namespace/kitchen" component={ConfigurationGroupKitchenSync} />
+          <Route
+            path="/ns/:namespace/kitchen"
+            component={ConfigurationGroupKitchenSync}
+          />
           <Route path="/ns/:namespace/replication" component={Replicator} />
           <Route
             exact
@@ -214,7 +274,10 @@ export default class Home extends Component {
               );
             }}
           />
-          <Route path="/ns/:namespace/plugincreation" component={PluginJSONCreator} />
+          <Route
+            path="/ns/:namespace/plugincreation"
+            component={PluginJSONCreator}
+          />
           <Route path="/ns/:namespace/metadata" component={Metadata} />
           <Route component={Page404} />
         </Switch>

@@ -233,7 +233,10 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
   const handleSave = () => {
     props.saveTransformationsAndColumns(
       props.tableInfo,
-      { tableName: props.tableInfo.table, columnTransformations: state.transformations },
+      {
+        tableName: props.tableInfo.table,
+        columnTransformations: state.transformations,
+      },
       returnSelectedList()
     );
 
@@ -403,7 +406,10 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
               addColumnsToTransforms: (opts: IColumnTransformation) =>
                 dispatch({ type: 'setColumnTransformation', payload: opts }),
               deleteColumnsFromTransforms: (colTransIndex: number) =>
-                dispatch({ type: 'removeColumnTransformation', payload: colTransIndex }),
+                dispatch({
+                  type: 'removeColumnTransformation',
+                  payload: colTransIndex,
+                }),
               transforms: state.transformations,
               tableInfo: props.tableInfo,
               tableAssessments: props.tableAssessments,

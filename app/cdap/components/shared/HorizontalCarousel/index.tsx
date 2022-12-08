@@ -38,7 +38,7 @@ const styles = (): StyleRules => {
       },
       '&:after': {
         content: '""',
-        borderLeft: `30px solid transparent`, // display flex does not allow honor end padding
+        borderLeft: '30px solid transparent', // display flex does not allow honor end padding
       },
 
       '& > *': {
@@ -106,7 +106,7 @@ class HorizontalCarouselView extends React.PureComponent<
 
     const carousel = this.carouselRef.current;
 
-    return carousel.scrollLeft === 0;
+    return carousel?.scrollLeft === 0;
   };
 
   private rightDisabled = () => {
@@ -114,7 +114,7 @@ class HorizontalCarouselView extends React.PureComponent<
       return true;
     }
 
-    const carousel = this.carouselRef.current;
+    const carousel = this.carouselRef.current!;
 
     return carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth;
   };
@@ -142,7 +142,7 @@ class HorizontalCarouselView extends React.PureComponent<
   });
 
   public componentDidMount() {
-    this.carouselRef.current.addEventListener('scroll', this.throttledSetArrowDisabled);
+    this.carouselRef.current?.addEventListener('scroll', this.throttledSetArrowDisabled);
     window.addEventListener('resize', this.throttledSetArrowDisabled);
   }
 
@@ -156,11 +156,11 @@ class HorizontalCarouselView extends React.PureComponent<
   }
 
   private scrollRight = () => {
-    this.carouselRef.current.scrollLeft += this.props.scrollAmount;
+    this.carouselRef.current!.scrollLeft += this.props.scrollAmount;
   };
 
   private scrollLeft = () => {
-    this.carouselRef.current.scrollLeft -= this.props.scrollAmount;
+    this.carouselRef.current!.scrollLeft -= this.props.scrollAmount;
   };
 
   public render() {

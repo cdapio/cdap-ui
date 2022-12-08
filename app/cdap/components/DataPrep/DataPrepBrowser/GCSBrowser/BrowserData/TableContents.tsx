@@ -60,7 +60,7 @@ interface IBucketData {
 interface ITableContentsProps {
   enableRouting: boolean;
   search: string;
-  data: Array<Partial<IBucketData>>;
+  data: Partial<IBucketData>[];
   onWorkspaceCreate: (file: string) => void;
   prefix: string;
   clearSearch: () => void;
@@ -68,7 +68,7 @@ interface ITableContentsProps {
 }
 interface ITableContentState {
   windowSize: number;
-  data: Array<Partial<IBucketData>>;
+  data: Partial<IBucketData>[];
 }
 
 export default class TableContents extends React.PureComponent<
@@ -83,13 +83,13 @@ export default class TableContents extends React.PureComponent<
   };
 
   public componentDidMount() {
-    Array.from(document.querySelectorAll(`#gcs-buckets-container .row`)).forEach((entry) => {
+    Array.from(document.querySelectorAll('#gcs-buckets-container .row')).forEach((entry) => {
       this.io.observe(entry);
     });
   }
 
   public componentDidUpdate() {
-    Array.from(document.querySelectorAll(`#gcs-buckets-container .row`)).forEach((entry) => {
+    Array.from(document.querySelectorAll('#gcs-buckets-container .row')).forEach((entry) => {
       this.io.observe(entry);
     });
   }
@@ -250,7 +250,7 @@ export default class TableContents extends React.PureComponent<
                 <ul>
                   <li>
                     <span className="link-text" onClick={clearSearch}>
-                      {T.translate(`features.EmptyMessageContainer.clearLabel`)}
+                      {T.translate('features.EmptyMessageContainer.clearLabel')}
                     </span>
                     <span>
                       {T.translate(`${PREFIX}.Content.EmptymessageContainer.suggestion1`)}

@@ -49,11 +49,15 @@ export default function FileDnD({
           <span>{file.name}</span>
         ) : (
           <span>
-            {uploadLabel ? uploadLabel : T.translate('features.FileDnD.uploadLabel')}
+            {uploadLabel
+              ? uploadLabel
+              : T.translate('features.FileDnD.uploadLabel')}
             <br />
             or
             <br />
-            {clickLabel ? clickLabel : T.translate('features.FileDnD.clickLabel')}
+            {clickLabel
+              ? clickLabel
+              : T.translate('features.FileDnD.clickLabel')}
           </span>
         )}
         {error ? <div className="text-danger">{error}</div> : null}

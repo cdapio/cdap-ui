@@ -17,7 +17,9 @@
 import React, { Component } from 'react';
 import RunsGraph from 'components/OpsDashboard/RunsGraph';
 import { Provider } from 'react-redux';
-import DashboardStore, { DashboardActions } from 'components/OpsDashboard/store/DashboardStore';
+import DashboardStore, {
+  DashboardActions,
+} from 'components/OpsDashboard/store/DashboardStore';
 import RunsList from 'components/OpsDashboard/RunsList';
 import { getData } from 'components/OpsDashboard/store/ActionCreator';
 import NamespacesPicker from 'components/NamespacesPicker';

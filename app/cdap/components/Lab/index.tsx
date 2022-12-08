@@ -67,7 +67,7 @@ const styles = (): StyleRules => {
   };
 };
 
-interface ILabProps extends WithStyles<typeof styles> {}
+type ILabProps = WithStyles<typeof styles>;
 
 class Lab extends React.Component<ILabProps, ILabState> {
   public componentDidMount() {

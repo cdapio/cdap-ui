@@ -44,7 +44,9 @@ const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refe
     if (!pipelines || (Array.isArray(pipelines) && pipelines.length === 0)) {
       return (
         <EmptyMessageContainer
-          title={T.translate(`${PREFIX}.EmptyList.EmptySearch.heading`, { search }).toString()}
+          title={T.translate(`${PREFIX}.EmptyList.EmptySearch.heading`, {
+            search,
+          }).toString()}
         >
           <ul>
             <li>

@@ -30,7 +30,9 @@ const mapStateToMicroserviceInstancesProps = (state) => {
     value: state.configure.instances,
     type: 'number',
     min: 1,
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step4.instancesPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step4.instancesPlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceVCoresProps = (state) => {
@@ -38,7 +40,9 @@ const mapStateToMicroserviceVCoresProps = (state) => {
     value: state.configure.vcores,
     type: 'number',
     min: 1,
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step4.vcoresPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step4.vcoresPlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceMemoryProps = (state) => {
@@ -46,7 +50,9 @@ const mapStateToMicroserviceMemoryProps = (state) => {
     value: state.configure.memory,
     type: 'number',
     min: 1,
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step4.memoryPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step4.memoryPlaceholder'
+    ),
   };
 };
 const mapStateToMicroserviceThresholdProps = (state) => {
@@ -54,7 +60,9 @@ const mapStateToMicroserviceThresholdProps = (state) => {
     value: state.configure.ethreshold,
     type: 'number',
     min: 1,
-    placeholder: T.translate('features.Wizard.MicroserviceUpload.Step4.thresholdPlaceholder')
+    placeholder: T.translate(
+      'features.Wizard.MicroserviceUpload.Step4.thresholdPlaceholder'
+    ),
   };
 };
 const mapStateToConfigureStepSummaryProps = (state) => {
@@ -67,50 +75,70 @@ const mapStateToConfigureStepSummaryProps = (state) => {
   };
 };
 
-
 const mapDispatchToMicroserviceInstancesProps = (dispatch) => {
   return {
     onChange: (e) => {
       dispatch({
         type: MicroserviceUploadActions.setInstances,
-        payload: {instances: e.target.value}
+        payload: { instances: e.target.value },
       });
-    }
+    },
   };
 };
 const mapDispatchToMicroserviceVCoresProps = (dispatch) => {
   return {
-    onChange: (e) => (dispatch({
-      type: MicroserviceUploadActions.setVCores,
-      payload: {vcores: e.target.value}
-    }))
+    onChange: (e) =>
+      dispatch({
+        type: MicroserviceUploadActions.setVCores,
+        payload: { vcores: e.target.value },
+      }),
   };
 };
 const mapDispatchToMicroserviceMemoryProps = (dispatch) => {
   return {
-    onChange: (e) => (dispatch({
-      type: MicroserviceUploadActions.setMemory,
-      payload: {memory: e.target.value}
-    }))
+    onChange: (e) =>
+      dispatch({
+        type: MicroserviceUploadActions.setMemory,
+        payload: { memory: e.target.value },
+      }),
   };
 };
 const mapDispatchToMicroserviceThresholdProps = (dispatch) => {
   return {
-    onChange: (e) => (dispatch({
-      type: MicroserviceUploadActions.setThreshold,
-      payload: {ethreshold: e.target.value}
-    }))
+    onChange: (e) =>
+      dispatch({
+        type: MicroserviceUploadActions.setThreshold,
+        payload: { ethreshold: e.target.value },
+      }),
   };
 };
 
-let Summary = ({instanceName, instances, vcores, memory, ethreshold}) => {
-  let instancesWithCount = T.translate('features.Wizard.MicroserviceUpload.Step4.summary.count.instances', { context: instances });
-  let vcoresWithCount = T.translate('features.Wizard.MicroserviceUpload.Step4.summary.count.vcores', { context: vcores });
-  let memoryWithCount = T.translate('features.Wizard.MicroserviceUpload.Step4.summary.count.memory', { context: memory });
-  let ethresholdWithCount = T.translate('features.Wizard.MicroserviceUpload.Step4.summary.count.ethreshold', { context: ethreshold });
+let Summary = ({ instanceName, instances, vcores, memory, ethreshold }) => {
+  const instancesWithCount = T.translate(
+    'features.Wizard.MicroserviceUpload.Step4.summary.count.instances',
+    { context: instances }
+  );
+  const vcoresWithCount = T.translate(
+    'features.Wizard.MicroserviceUpload.Step4.summary.count.vcores',
+    { context: vcores }
+  );
+  const memoryWithCount = T.translate(
+    'features.Wizard.MicroserviceUpload.Step4.summary.count.memory',
+    { context: memory }
+  );
+  const ethresholdWithCount = T.translate(
+    'features.Wizard.MicroserviceUpload.Step4.summary.count.ethreshold',
+    { context: ethreshold }
+  );
   return (
     <span>
-      {T.translate('features.Wizard.MicroserviceUpload.Step4.summary.text', { instanceName, instancesWithCount, vcoresWithCount, memoryWithCount, ethresholdWithCount })}
+      {T.translate('features.Wizard.MicroserviceUpload.Step4.summary.text', {
+        instanceName,
+        instancesWithCount,
+        vcoresWithCount,
+        memoryWithCount,
+        ethresholdWithCount,
+      })}
     </span>
   );
 };
@@ -120,7 +148,7 @@ Summary.propTypes = {
   instances: PropTypes.number,
   vcores: PropTypes.number,
   memory: PropTypes.number,
-  ethreshold: PropTypes.number
+  ethreshold: PropTypes.number,
 };
 
 // FIXME: Should pass validationError to the InputWithValidations, or just switch
@@ -142,11 +170,7 @@ const InputMicroserviceThreshold = connect(
   mapStateToMicroserviceThresholdProps,
   mapDispatchToMicroserviceThresholdProps
 )(InputWithValidations);
-Summary = connect(
-  mapStateToConfigureStepSummaryProps,
-  null
-)(Summary);
-
+Summary = connect(mapStateToConfigureStepSummaryProps, null)(Summary);
 
 export default function ConfigureStep() {
   return (
@@ -160,7 +184,11 @@ export default function ConfigureStep() {
       >
         <FormGroup row>
           <Col xs="3">
-            <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step4.instancesLabel')}</Label>
+            <Label className="control-label">
+              {T.translate(
+                'features.Wizard.MicroserviceUpload.Step4.instancesLabel'
+              )}
+            </Label>
           </Col>
           <Col xs="7">
             <InputMicroserviceInstances />
@@ -170,7 +198,11 @@ export default function ConfigureStep() {
 
         <FormGroup row>
           <Col xs="3">
-            <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step4.vcoresLabel')}</Label>
+            <Label className="control-label">
+              {T.translate(
+                'features.Wizard.MicroserviceUpload.Step4.vcoresLabel'
+              )}
+            </Label>
           </Col>
           <Col xs="7">
             <InputMicroserviceVCores />
@@ -180,7 +212,11 @@ export default function ConfigureStep() {
 
         <FormGroup row>
           <Col xs="3">
-            <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step4.memoryLabel')}</Label>
+            <Label className="control-label">
+              {T.translate(
+                'features.Wizard.MicroserviceUpload.Step4.memoryLabel'
+              )}
+            </Label>
           </Col>
           <Col xs="7">
             <InputMicroserviceMemory />
@@ -190,7 +226,11 @@ export default function ConfigureStep() {
 
         <FormGroup row>
           <Col xs="3">
-            <Label className="control-label">{T.translate('features.Wizard.MicroserviceUpload.Step4.thresholdLabel')}</Label>
+            <Label className="control-label">
+              {T.translate(
+                'features.Wizard.MicroserviceUpload.Step4.thresholdLabel'
+              )}
+            </Label>
           </Col>
           <Col xs="7">
             <InputMicroserviceThreshold />
@@ -198,7 +238,9 @@ export default function ConfigureStep() {
           <i className="fa fa-asterisk text-danger float-left" />
         </FormGroup>
         <div className="step-summary">
-          <Label className="summary-label">{T.translate('features.Wizard.MicroserviceUpload.summaryLabel')}</Label>
+          <Label className="summary-label">
+            {T.translate('features.Wizard.MicroserviceUpload.summaryLabel')}
+          </Label>
           <Summary />
         </div>
       </Form>

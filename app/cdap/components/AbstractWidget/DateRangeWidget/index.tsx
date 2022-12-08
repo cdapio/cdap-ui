@@ -21,7 +21,9 @@ import ExpandableTimeRange from 'components/shared/TimeRangePicker/ExpandableTim
 import { IWidgetProps } from 'components/AbstractWidget';
 import { WithStyles } from '@material-ui/core/styles/withStyles';
 
-interface IDateRangeWidgetProps extends IWidgetProps<null>, WithStyles<typeof DatePickerStyles> {}
+export interface IDateRangeWidgetProps
+  extends IWidgetProps<null>,
+    WithStyles<typeof DatePickerStyles> {}
 
 const DateRangeWidget: React.FC<IDateRangeWidgetProps> = ({
   value,

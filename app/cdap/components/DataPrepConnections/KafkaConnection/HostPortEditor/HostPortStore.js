@@ -32,14 +32,20 @@ const hostport = (state = initialState, action = defaultAction) => {
   switch (action.type) {
     case HostPortActions.setHost:
       stateCopy = Object.assign({}, state);
-      if (action.payload.host === null || typeof action.payload.host === 'undefined') {
+      if (
+        action.payload.host === null ||
+        typeof action.payload.host === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.rows[action.payload.index].host = action.payload.host;
       return stateCopy;
     case HostPortActions.setPort:
       stateCopy = Object.assign({}, state);
-      if (action.payload.port === null || typeof action.payload.port === 'undefined') {
+      if (
+        action.payload.port === null ||
+        typeof action.payload.port === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.rows[action.payload.index].port = action.payload.port;

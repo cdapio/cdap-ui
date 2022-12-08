@@ -66,7 +66,7 @@ export const ActionButton = styled(Button)`
   width: 40px;
   height: 30px;
 
-  ${({ active }) => active && `background-color: ${buttonActive};`}
+  ${({ active }: { active?: boolean }) => active && `background-color: ${buttonActive};`}
 `;
 
 const CustomTooltip = withStyles(() => {

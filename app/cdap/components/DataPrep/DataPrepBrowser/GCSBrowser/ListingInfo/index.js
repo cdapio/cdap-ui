@@ -25,13 +25,18 @@ const ListingInfo = ({ bucketData, loading, truncated }) => {
   if (loading) {
     return <span>.</span>;
   }
-  let dirsCount = bucketData.filter((file) => file.directory).length;
-  let filesCount = bucketData.length - dirsCount;
+  const dirsCount = bucketData.filter((file) => file.directory).length;
+  const filesCount = bucketData.length - dirsCount;
   if (truncated) {
     return (
       <div className="truncated-listing-info-container">
         <Popover
-          target={() => <IconSVG name="icon-exclamation-triangle" className="text-warning" />}
+          target={() => (
+            <IconSVG
+              name="icon-exclamation-triangle"
+              className="text-warning"
+            />
+          )}
           showOn="Hover"
           placement="left"
           tag="span"
@@ -52,10 +57,13 @@ const ListingInfo = ({ bucketData, loading, truncated }) => {
   return (
     <span>
       {' '}
-      {T.translate('features.DataPrep.DataPrepBrowser.GCSBrowser.TopPanel.ListingInfo.label', {
-        filesCount,
-        dirsCount,
-      })}{' '}
+      {T.translate(
+        'features.DataPrep.DataPrepBrowser.GCSBrowser.TopPanel.ListingInfo.label',
+        {
+          filesCount,
+          dirsCount,
+        }
+      )}{' '}
     </span>
   );
 };

@@ -178,7 +178,7 @@ class SchemaValidatorProvider extends React.Component<ISchemaValidatorProviderPr
 
   public render() {
     return (
-      <SchemaValidatorContext.Provider value={this.state}>
+      <SchemaValidatorContext.Provider value={this.state as any}>
         {this.props.children}
       </SchemaValidatorContext.Provider>
     );

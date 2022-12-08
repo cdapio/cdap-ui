@@ -72,13 +72,17 @@ export default class LibraryUploadWizard extends Component {
   }
 
   buildSuccessInfo() {
-    let state = ArtifactUploadStore.getState();
-    let artifactName = state.configure.name;
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.LibraryUpload.success', { artifactName });
-    let subtitle = T.translate('features.Wizard.LibraryUpload.subtitle');
-    let buttonLabel = T.translate('features.Wizard.LibraryUpload.callToAction');
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const state = ArtifactUploadStore.getState();
+    const artifactName = state.configure.name;
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.LibraryUpload.success', {
+      artifactName,
+    });
+    const subtitle = T.translate('features.Wizard.LibraryUpload.subtitle');
+    const buttonLabel = T.translate(
+      'features.Wizard.LibraryUpload.callToAction'
+    );
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
     this.setState({
       successInfo: {
         message,
@@ -108,13 +112,15 @@ export default class LibraryUploadWizard extends Component {
     });
   }
   render() {
-    let input = this.props.input;
-    let pkg = input.package || {};
-    let headerLabel = input.headerLabel;
+    const input = this.props.input;
+    const pkg = input.package || {};
+    const headerLabel = input.headerLabel;
 
-    let wizardModalTitle =
+    const wizardModalTitle =
       (pkg.label ? pkg.label + ' | ' : '') +
-      (headerLabel ? headerLabel : T.translate('features.Wizard.LibraryUpload.headerlabel'));
+      (headerLabel
+        ? headerLabel
+        : T.translate('features.Wizard.LibraryUpload.headerlabel'));
     return (
       <WizardModal
         title={wizardModalTitle}

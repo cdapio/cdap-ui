@@ -35,7 +35,7 @@ let StepsList = ({ steps }) => {
   const regex = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
   const urlifiedSteps = steps.map((step) => {
     return step.replace(regex, (url) => {
-      let anchorLink = document.createElement('a');
+      const anchorLink = document.createElement('a');
       anchorLink.href = url;
       return `<a href="${url}" title="${url}" target="_blank"> ${anchorLink.hostname.replace(
         /^www./g,
@@ -50,7 +50,10 @@ let StepsList = ({ steps }) => {
         return (
           <li key={index}>
             <span className="step-number">{index + 1}</span>
-            <span className="step-text" dangerouslySetInnerHTML={createMarkup(step)} />
+            <span
+              className="step-text"
+              dangerouslySetInnerHTML={createMarkup(step)}
+            />
           </li>
         );
       })}

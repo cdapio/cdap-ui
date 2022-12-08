@@ -25,20 +25,26 @@ const PREFIX = 'features.NamespacesPicker';
 
 require('./NamespacesPicker.scss');
 
-export function NamespacesPickerBase({ namespacesPick, setNamespacesPick, className }) {
+export function NamespacesPickerBase({
+  namespacesPick,
+  setNamespacesPick,
+  className,
+}) {
   let monitorTitle;
 
   if (namespacesPick.length === 0) {
     monitorTitle = (
       <div className="namespace-list-monitor">
-        {T.translate(`${PREFIX}.monitorNamespace`, { namespace: getCurrentNamespace() })}
+        {T.translate(`${PREFIX}.monitorNamespace`, {
+          namespace: getCurrentNamespace(),
+        })}
       </div>
     );
   } else {
-    let namespacesList = [getCurrentNamespace()].concat(namespacesPick);
+    const namespacesList = [getCurrentNamespace()].concat(namespacesPick);
 
-    let namespaces = namespacesList.map((ns) => `'${ns}'`).join('; ');
-    let title = namespacesList.join('\n');
+    const namespaces = namespacesList.map((ns) => `'${ns}'`).join('; ');
+    const title = namespacesList.join('\n');
 
     monitorTitle = (
       <div className="namespace-list-monitor" title={title}>

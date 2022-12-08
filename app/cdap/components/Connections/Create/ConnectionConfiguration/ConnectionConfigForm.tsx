@@ -77,7 +77,11 @@ export function ConnectionConfigForm({
         (!values.hasOwnProperty(fieldName) || values[fieldName] === '' || values[fieldName] == null)
       ) {
         fieldErrors[fieldName] = [
-          { msg: T.translate(`${I18NPREFIX}.inputValidationError`, { fieldName }) },
+          {
+            msg: T.translate(`${I18NPREFIX}.inputValidationError`, {
+              fieldName,
+            }),
+          },
         ];
       }
     }

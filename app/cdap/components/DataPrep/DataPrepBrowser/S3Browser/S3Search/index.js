@@ -25,7 +25,9 @@ import T from 'i18n-react';
 const SearchBox = ({ search, onChange }) => {
   return (
     <Input
-      placeholder={T.translate('features.DataPrep.DataPrepBrowser.S3Browser.Search.placeholder')}
+      placeholder={T.translate(
+        'features.DataPrep.DataPrepBrowser.S3Browser.Search.placeholder'
+      )}
       value={search}
       onChange={onChange}
     />

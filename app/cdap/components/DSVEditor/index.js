@@ -60,12 +60,15 @@ const mapDispatchToFieldNameProps = (dispatch, ownProps) => {
   };
 };
 
-let DSVRowWrapper = connect(mapStateToFieldNameProps, mapDispatchToFieldNameProps)(DSVRow);
+const DSVRowWrapper = connect(
+  mapStateToFieldNameProps,
+  mapDispatchToFieldNameProps
+)(DSVRow);
 
 export default class DSVEditor extends Component {
   constructor(props) {
     super(props);
-    let { values } = props;
+    const { values } = props;
 
     this.state = {
       rows: values,
@@ -75,9 +78,9 @@ export default class DSVEditor extends Component {
   }
 
   componentDidMount() {
-    let { values, onChange } = this.props;
+    const { values, onChange } = this.props;
     this.sub = this.DSVStore.subscribe(() => {
-      let rows = this.DSVStore.getState().DSV.rows;
+      const rows = this.DSVStore.getState().DSV.rows;
       if (typeof onChange === 'function') {
         onChange(rows);
       }
@@ -99,7 +102,7 @@ export default class DSVEditor extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    let check = this.state.rows.length !== nextProps.values.length;
+    const check = this.state.rows.length !== nextProps.values.length;
     return check;
   }
 

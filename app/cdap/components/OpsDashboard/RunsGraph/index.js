@@ -92,10 +92,16 @@ class RunsGraphView extends Component {
   };
 
   renderGraph(props = this.props) {
-    let containerElem = document.getElementById(RUNS_GRAPH_CONTAINER);
+    const containerElem = document.getElementById(RUNS_GRAPH_CONTAINER);
 
-    let width = containerElem.offsetWidth;
-    renderGraph('#runs-graph', width, GRAPH_HEIGHT, props.data, props.viewByOption);
+    const width = containerElem.offsetWidth;
+    renderGraph(
+      '#runs-graph',
+      width,
+      GRAPH_HEIGHT,
+      props.data,
+      props.viewByOption
+    );
   }
 
   renderDisabledArrowToolitp(showTooltip, arrowId) {
@@ -145,7 +151,9 @@ class RunsGraphView extends Component {
                 className={classnames({
                   active: this.props.isLast24Hours,
                 })}
-                onClick={!this.props.isLast24Hours ? this.last24Hour : undefined}
+                onClick={
+                  !this.props.isLast24Hours ? this.last24Hour : undefined
+                }
               >
                 {T.translate(`${PREFIX}.last24Hours`)}
               </div>

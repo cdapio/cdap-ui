@@ -25,7 +25,7 @@ interface INumberWidgetProps {
   max?: number;
 }
 
-interface INumberProps extends IWidgetProps<INumberWidgetProps> {}
+type INumberProps = IWidgetProps<INumberWidgetProps>;
 
 const NumberWidget: React.FC<INumberProps> = ({
   value,

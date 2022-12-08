@@ -26,7 +26,9 @@ const mapStateToPrincipalProps = (state) => {
   return {
     value: state.security.principal,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.SecurityStep.principal-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.SecurityStep.principal-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('principal') === -1,
   };
 };
@@ -47,7 +49,9 @@ const mapStateTokeytabURIProps = (state) => {
   return {
     value: state.security.keyTab,
     type: 'text',
-    placeholder: T.translate('features.Wizard.Add-Namespace.SecurityStep.keytab-uri-placeholder'),
+    placeholder: T.translate(
+      'features.Wizard.Add-Namespace.SecurityStep.keytab-uri-placeholder'
+    ),
     disabled: state.editableFields.fields.indexOf('keyTab') === -1,
   };
 };
@@ -86,7 +90,9 @@ export default function PreferencesStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.SecurityStep.principal-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.SecurityStep.principal-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">
@@ -96,7 +102,9 @@ export default function PreferencesStep() {
         <FormGroup row>
           <Col xs="3">
             <Label className="control-label">
-              {T.translate('features.Wizard.Add-Namespace.SecurityStep.keytab-uri-label')}
+              {T.translate(
+                'features.Wizard.Add-Namespace.SecurityStep.keytab-uri-label'
+              )}
             </Label>
           </Col>
           <Col xs="7">

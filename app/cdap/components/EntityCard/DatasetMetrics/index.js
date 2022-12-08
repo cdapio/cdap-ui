@@ -36,7 +36,7 @@ export default class DatasetMetrics extends Component {
   }
 
   componentWillMount() {
-    let currentNamespace = NamespaceStore.getState().selectedNamespace;
+    const currentNamespace = NamespaceStore.getState().selectedNamespace;
     const datasetParams = {
       namespace: currentNamespace,
       datasetId: this.props.entity.id,
@@ -77,16 +77,32 @@ export default class DatasetMetrics extends Component {
     return (
       <div className="metrics-container">
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.dataset.programs')}</p>
-          <p>{this.state.loading ? loading : humanReadableNumber(this.state.programs)}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.dataset.programs')}
+          </p>
+          <p>
+            {this.state.loading
+              ? loading
+              : humanReadableNumber(this.state.programs)}
+          </p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.dataset.operations')}</p>
-          <p>{this.state.loading ? loading : humanReadableNumber(this.state.ops)}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.dataset.operations')}
+          </p>
+          <p>
+            {this.state.loading ? loading : humanReadableNumber(this.state.ops)}
+          </p>
         </div>
         <div className="metric-item">
-          <p className="metric-header">{T.translate('commons.entity.dataset.writes')}</p>
-          <p>{this.state.loading ? loading : humanReadableNumber(this.state.writes)}</p>
+          <p className="metric-header">
+            {T.translate('commons.entity.dataset.writes')}
+          </p>
+          <p>
+            {this.state.loading
+              ? loading
+              : humanReadableNumber(this.state.writes)}
+          </p>
         </div>
       </div>
     );

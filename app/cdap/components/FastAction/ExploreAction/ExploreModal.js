@@ -53,9 +53,18 @@ export default class ExploreModal extends Component {
     this.subscriptions.map((subscriber) => subscriber.unsubscribe());
   }
   componentWillReceiveProps(nextProps) {
-    let { databaseName: existingDatabaseName, tableName: existingTableName } = this.props.entity;
-    let { databaseName: newDatabaseName, tableName: newTablename } = nextProps.entity;
-    if (existingDatabaseName !== newDatabaseName || existingTableName !== newTablename) {
+    const {
+      databaseName: existingDatabaseName,
+      tableName: existingTableName,
+    } = this.props.entity;
+    const {
+      databaseName: newDatabaseName,
+      tableName: newTablename,
+    } = nextProps.entity;
+    if (
+      existingDatabaseName !== newDatabaseName ||
+      existingTableName !== newTablename
+    ) {
       this.setState({
         queryString: `SELECT * FROM ${nextProps.entity.databaseName}.${nextProps.entity.tableName} LIMIT 500`,
       });
@@ -78,35 +87,40 @@ export default class ExploreModal extends Component {
     });
   }
   getValidQueries(queries) {
-    let updatedQueries = queries.filter((q) => {
+    const updatedQueries = queries.filter((q) => {
       return (
-        q.statement.indexOf(`${this.props.entity.databaseName}.${this.props.entity.tableName}`) !==
-          -1 || q.statement.indexOf(`${this.props.entity.id}`) !== -1 // For queries run before 4.1
+        q.statement.indexOf(
+          `${this.props.entity.databaseName}.${this.props.entity.tableName}`
+        ) !== -1 || q.statement.indexOf(`${this.props.entity.id}`) !== -1 // For queries run before 4.1
       );
     });
     let updatedStateQueries = [...updatedQueries];
     let intersectingQueries = [];
     if (this.state.queries.length) {
       updatedStateQueries = this.state.queries.map((query) => {
-        let matchedQuery = updatedQueries.find((q) => q.query_handle === query.query_handle);
+        const matchedQuery = updatedQueries.find(
+          (q) => q.query_handle === query.query_handle
+        );
         if (matchedQuery) {
           return Object.assign(query, {}, matchedQuery);
         }
         return query;
       });
       intersectingQueries = updatedQueries.filter(
-        (q) => !this.state.queries.filter((qq) => qq.query_handle === q.query_handle).length
+        (q) =>
+          !this.state.queries.filter((qq) => qq.query_handle === q.query_handle)
+            .length
       );
     }
 
     return [...intersectingQueries, ...updatedStateQueries];
   }
   submitQuery() {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     this.setState({
       loading: true,
     });
-    let queriesSubscription$ = myExploreApi
+    const queriesSubscription$ = myExploreApi
       .submitQuery({ namespace }, { query: this.state.queryString })
       .mergeMap((res) => {
         this.sessionQueryHandles.push(res.handle);
@@ -134,23 +148,25 @@ export default class ExploreModal extends Component {
     if (!this._mounted) {
       return;
     }
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
-    let queriesSubscription$ = myExploreApi.fetchQueries({ namespace }).subscribe(
-      (res = []) => {
-        if (!res.length) {
-          return;
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
+    const queriesSubscription$ = myExploreApi
+      .fetchQueries({ namespace })
+      .subscribe(
+        (res = []) => {
+          if (!res.length) {
+            return;
+          }
+          const queries = this.getValidQueries(res);
+          this.updateState({
+            queries,
+          });
+        },
+        (error) => {
+          this.updateState({
+            error: isObject(error) ? error.response : error,
+          });
         }
-        let queries = this.getValidQueries(res);
-        this.updateState({
-          queries,
-        });
-      },
-      (error) => {
-        this.updateState({
-          error: isObject(error) ? error.response : error,
-        });
-      }
-    );
+      );
     this.subscriptions.push(queriesSubscription$);
   }
   componentWillMount() {
@@ -158,7 +174,7 @@ export default class ExploreModal extends Component {
     this.fetchAndUpdateQueries();
   }
   showPreview(query) {
-    let queryHandle = query.query_handle;
+    const queryHandle = query.query_handle;
     let queries = this.state.queries;
     let matchIndex;
     queries.forEach((q, index) => {
@@ -172,7 +188,7 @@ export default class ExploreModal extends Component {
       this.updateState({ queries });
       return;
     }
-    let previewSubscription$ = myExploreApi
+    const previewSubscription$ = myExploreApi
       .getQuerySchema({ queryHandle })
       .mergeMap((res) => {
         queries = insertAt(queries, matchIndex, {
@@ -196,7 +212,9 @@ export default class ExploreModal extends Component {
           }
           return q;
         });
-        queries[matchIndex + 1] = Object.assign(queries[matchIndex + 1], { preview: res });
+        queries[matchIndex + 1] = Object.assign(queries[matchIndex + 1], {
+          preview: res,
+        });
         this.updateState({ queries });
       });
     this.subscriptions.push(previewSubscription$);
@@ -205,7 +223,7 @@ export default class ExploreModal extends Component {
   getDownloadUrl(query) {
     let path = `/v3/data/explore/queries/${query.query_handle}/download`;
     path = encodeURIComponent(path);
-    let url = `/downloadLogs?backendPath=${path}&type=download&method=POST&filename=${query.query_handle}.csv`;
+    const url = `/downloadLogs?backendPath=${path}&type=download&method=POST&filename=${query.query_handle}.csv`;
     return url;
   }
 
@@ -213,7 +231,7 @@ export default class ExploreModal extends Component {
     if (currentQuery.is_active === false) {
       event.preventDefault();
     } else {
-      let queries = this.state.queries;
+      const queries = this.state.queries;
       queries.forEach((query, index) => {
         if (currentQuery == query) {
           currentQuery.is_active = false;
@@ -224,13 +242,15 @@ export default class ExploreModal extends Component {
     }
   }
   onModalToggle() {
-    let runningQueries = this.state.queries.filter((query) => query.status === 'RUNNING');
+    const runningQueries = this.state.queries.filter(
+      (query) => query.status === 'RUNNING'
+    );
     this.props.onClose(runningQueries.length);
   }
 
   render() {
     const renderQueryRow = (query) => {
-      let id = `explore-${uuidV4()}`;
+      const id = `explore-${uuidV4()}`;
       return (
         <tr key={id}>
           <td> {humanReadableDate(query.timestamp, true)} </td>
@@ -251,9 +271,15 @@ export default class ExploreModal extends Component {
                 <button className="btn btn-secondary" disabled="disabled">
                   <i id={`download-${id}`} className="fa fa-download" />
                   {!query.is_active ? (
-                    <UncontrolledTooltip target={`download-${id}`} placement="left" delay={300}>
+                    <UncontrolledTooltip
+                      target={`download-${id}`}
+                      placement="left"
+                      delay={300}
+                    >
                       <div className="text-left">
-                        {T.translate('features.FastAction.downloadDisabledMessage')}
+                        {T.translate(
+                          'features.FastAction.downloadDisabledMessage'
+                        )}
                       </div>
                     </UncontrolledTooltip>
                   ) : null}
@@ -270,18 +296,27 @@ export default class ExploreModal extends Component {
               <button
                 className="btn btn-secondary"
                 onClick={this.showPreview.bind(this, query)}
-                disabled={!query.is_active || query.status !== 'FINISHED' ? 'disabled' : null}
+                disabled={
+                  !query.is_active || query.status !== 'FINISHED'
+                    ? 'disabled'
+                    : null
+                }
               >
                 <i className="fa fa-eye" id={`explore-${id}`} delay={300} />
                 {!query.is_active ? (
                   <UncontrolledTooltip target={`explore-${id}`} placement="top">
                     <div className="text-left">
-                      {T.translate('features.FastAction.previewDisabledMessage')}
+                      {T.translate(
+                        'features.FastAction.previewDisabledMessage'
+                      )}
                     </div>
                   </UncontrolledTooltip>
                 ) : null}
               </button>
-              <button className="btn btn-secondary" onClick={this.setQueryString.bind(this, query)}>
+              <button
+                className="btn btn-secondary"
+                onClick={this.setQueryString.bind(this, query)}
+              >
                 <i className="fa fa-clone" />
               </button>
             </div>
@@ -306,7 +341,9 @@ export default class ExploreModal extends Component {
                   return (
                     <tr key={`A-${uuidV4()}`}>
                       {!row.columns
-                        ? T.translate('features.FastAction.viewEvents.noResults')
+                        ? T.translate(
+                            'features.FastAction.viewEvents.noResults'
+                          )
                         : row.columns.map((column) => {
                             let content = column;
 
@@ -325,7 +362,9 @@ export default class ExploreModal extends Component {
             </table>
           </div>
         ) : (
-          <div className="text-center">{T.translate(`${PREFIX}.noResults`)}</div>
+          <div className="text-center">
+            {T.translate(`${PREFIX}.noResults`)}
+          </div>
         );
       };
       return (
@@ -363,14 +402,18 @@ export default class ExploreModal extends Component {
             />
             <div className="clearfix">
               {this.state.error ? (
-                <span className="float-left text-danger">{this.state.error}</span>
+                <span className="float-left text-danger">
+                  {this.state.error}
+                </span>
               ) : null}
               <button
                 className="btn btn-primary float-right"
                 onClick={this.submitQuery}
                 disabled={this.state.loading ? 'disabled' : null}
               >
-                {this.state.loading ? <span className="fa fa-spinner fa-spin" /> : null}
+                {this.state.loading ? (
+                  <span className="fa fa-spinner fa-spin" />
+                ) : null}
                 <span>Execute</span>
               </button>
             </div>
@@ -378,10 +421,16 @@ export default class ExploreModal extends Component {
               <table className="table table-bordered queries-table">
                 <thead>
                   <tr>
-                    <th className="query-timestamp">{T.translate(`${PREFIX}.startTime`)}</th>
+                    <th className="query-timestamp">
+                      {T.translate(`${PREFIX}.startTime`)}
+                    </th>
                     <th>{T.translate(`${PREFIX}.SQLQuery`)}</th>
-                    <th className="query-status">{T.translate(`${PREFIX}.status`)}</th>
-                    <th className="query-actions">{T.translate(`${PREFIX}.actions`)}</th>
+                    <th className="query-status">
+                      {T.translate(`${PREFIX}.status`)}
+                    </th>
+                    <th className="query-actions">
+                      {T.translate(`${PREFIX}.actions`)}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

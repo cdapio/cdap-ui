@@ -82,8 +82,8 @@ export default class Duration extends Component {
         this.calculateTimeCallback.bind(this, duration)
       );
     } else {
-      let duration = targetTime - new Date().valueOf();
-      let isPast = duration < 0;
+      const duration = targetTime - new Date().valueOf();
+      const isPast = duration < 0;
 
       this.setState(
         {
@@ -98,7 +98,7 @@ export default class Duration extends Component {
     let delay = ONE_SECOND_MS;
 
     if (!this.props.showFullDuration) {
-      let absDuration = Math.abs(duration);
+      const absDuration = Math.abs(duration);
 
       if (absDuration > ONE_HOUR_SECONDS) {
         delay = 15 * ONE_MIN_SECONDS;
@@ -119,6 +119,8 @@ export default class Duration extends Component {
       return <span className="duration-display">--</span>;
     }
 
-    return <span className="duration-display">{this.state.displayDuration}</span>;
+    return (
+      <span className="duration-display">{this.state.displayDuration}</span>
+    );
   }
 }

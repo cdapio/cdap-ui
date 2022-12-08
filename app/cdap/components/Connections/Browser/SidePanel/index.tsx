@@ -130,7 +130,7 @@ export function ConnectionsBrowserSidePanel({
       }
     }
     connectorTypes = orderBy(connectorTypes, ['name'], ['asc']);
-    connectorTypes = sortedUniqBy(connectorTypes, (ct) => ct.name);
+    connectorTypes = sortedUniqBy(connectorTypes, (ct: any) => ct.name);
 
     setState({
       categorizedConnections,

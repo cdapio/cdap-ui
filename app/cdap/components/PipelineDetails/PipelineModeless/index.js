@@ -87,14 +87,21 @@ export default function PipelineModeless({
           timeout={transitionDuration}
         >
           <div className={className}>
-            {arrow ? <div className="pipeline-modeless-arrow" ref={setArrowRef} /> : null}
+            {arrow ? (
+              <div className="pipeline-modeless-arrow" ref={setArrowRef} />
+            ) : null}
             {isDeployed ? (
               <ClickAwayListener onClickAway={onClose}>
-                <Paper className="pipeline-modeless-container" variant="outlined">
+                <Paper
+                  className="pipeline-modeless-container"
+                  variant="outlined"
+                >
                   <div className="pipeline-modeless-header">
                     <div className="pipeline-modeless-title">{title}</div>
                     {!!secondaryTitle && (
-                      <div className="secondary-title text-right">{secondaryTitle}</div>
+                      <div className="secondary-title text-right">
+                        {secondaryTitle}
+                      </div>
                     )}
                     <div className="btn-group">
                       <button
@@ -115,7 +122,9 @@ export default function PipelineModeless({
                 <div className="pipeline-modeless-header">
                   <div className="pipeline-modeless-title">{title}</div>
                   {!!secondaryTitle && (
-                    <div className="secondary-title text-right">{secondaryTitle}</div>
+                    <div className="secondary-title text-right">
+                      {secondaryTitle}
+                    </div>
                   )}
                   <div className="btn-group">
                     <button

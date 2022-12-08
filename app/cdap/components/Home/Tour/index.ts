@@ -55,7 +55,9 @@ const steps: ITourStep[] = [
     id: 'preparation',
     title: featureNames.dataPrep,
     text: [
-      T.translate(`${PREFIX}.Preparation.text`, { featureName: featureNames.dataPrep }).toString(),
+      T.translate(`${PREFIX}.Preparation.text`, {
+        featureName: featureNames.dataPrep,
+      }).toString(),
       '<img class="img-fluid" src="/cdap_assets/img/nux/Dataprep_NUX.png" />',
     ],
     attachTo: '#navbar-preparation > div right',
@@ -66,7 +68,9 @@ const steps: ITourStep[] = [
     id: 'metadata',
     title: featureNames.metadata,
     text: [
-      T.translate(`${PREFIX}.Metadata.text`, { featureName: featureNames.metadata }).toString(),
+      T.translate(`${PREFIX}.Metadata.text`, {
+        featureName: featureNames.metadata,
+      }).toString(),
       '<img class="img-fluid" src="/cdap_assets/img/nux/Metadata_NUX.png" />',
     ],
     attachTo: '#navbar-metadata > div right',

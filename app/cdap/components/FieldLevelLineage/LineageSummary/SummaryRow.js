@@ -29,7 +29,11 @@ export default function SummaryRow({ entity, index }) {
       <div className="index">{index + 1}</div>
 
       <div className="dataset-name truncate">
-        <Link to={linkPath} className="field-link" title={entity.dataset.dataset}>
+        <Link
+          to={linkPath}
+          className="field-link"
+          title={entity.dataset.dataset}
+        >
           {entity.dataset.dataset}
         </Link>
       </div>
@@ -38,7 +42,11 @@ export default function SummaryRow({ entity, index }) {
         {entity.fields.map((field, i) => {
           return (
             <div className="field-row truncate" key={i}>
-              <Link to={`${linkPath}&field=${field}`} className="field-link" title={field}>
+              <Link
+                to={`${linkPath}&field=${field}`}
+                className="field-link"
+                title={field}
+              >
                 {field}
               </Link>
             </div>

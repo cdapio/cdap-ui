@@ -40,7 +40,11 @@ import {
   getTimeResolution,
   getYAxisProps,
 } from 'components/PipelineSummary/RunsGraphHelpers';
-import { humanReadableDuration, preventPropagation, objectQuery } from 'services/helpers';
+import {
+  humanReadableDuration,
+  preventPropagation,
+  objectQuery,
+} from 'services/helpers';
 import CopyableID from 'components/CopyableID';
 import SortableStickyTable from 'components/shared/SortableStickyTable';
 import ee from 'event-emitter';
@@ -51,7 +55,7 @@ import colorVariables from 'styles/variables.scss';
 import { PROGRAM_STATUSES } from 'services/global-constants';
 
 require('./RunsHistoryGraph.scss');
-require('react-vis/dist/styles/plot.scss');
+// require('react-vis/dist/styles/plot.scss');
 
 const MARKSERIESSTROKECOLOR = colorVariables.grey03;
 const FAILEDRUNCOLOR = colorVariables.red01;
@@ -61,8 +65,8 @@ const PENDINGSTATUSSTROKECOLOR = colorVariables.blue02;
 const RUNNINGSTATUSCOLOR = colorVariables.blue02;
 const LINECOLOR = colorVariables.grey06;
 const HOVERCOLOR = 'black';
-const PREFIX = `features.PipelineSummary.runsHistoryGraph`;
-const GRAPHPREFIX = `features.PipelineSummary.graphs`;
+const PREFIX = 'features.PipelineSummary.runsHistoryGraph';
+const GRAPHPREFIX = 'features.PipelineSummary.graphs';
 const COLORLEGENDS = [
   {
     title: StatusMapper.lookupDisplayStatus(PROGRAM_STATUSES.FAILED),
@@ -150,11 +154,11 @@ export default class RunsHistoryGraph extends Component {
     this.eventEmitter.off('CLOSE_HINT_TOOLTIP', this.closeTooltip);
   }
   constructData(props = this.props) {
-    let data = []
+    const data = []
       .concat(props.runs)
       .reverse()
       .map((run, id) => {
-        let { totalRunsCount, runsLimit, xDomainType } = this.props;
+        const { totalRunsCount, runsLimit, xDomainType } = this.props;
         let x;
         if (xDomainType === 'limit') {
           x = totalRunsCount > runsLimit ? totalRunsCount - runsLimit : 0;
@@ -208,9 +212,9 @@ export default class RunsHistoryGraph extends Component {
     );
   }
   navigateToPipeline(runid) {
-    let anchor = document.getElementById('placeholder-anchor-runs-history');
-    let { namespaceId: namespace, appId: pipelineId } = this.props.runContext;
-    let url = window.getHydratorUrl({
+    const anchor = document.getElementById('placeholder-anchor-runs-history');
+    const { namespaceId: namespace, appId: pipelineId } = this.props.runContext;
+    const url = window.getHydratorUrl({
       stateName: 'hydrator.detail',
       stateParams: {
         namespace,
@@ -221,9 +225,9 @@ export default class RunsHistoryGraph extends Component {
     anchor.click();
   }
   renderChart() {
-    let FPlot = makeVisFlexible(XYPlot);
-    let { tickTotals, yDomain, tickFormat } = getYAxisProps(this.state.data);
-    let yAxisResolution = getTimeResolution(yDomain.y);
+    const FPlot = makeVisFlexible(XYPlot);
+    const { tickTotals, yDomain, tickFormat } = getYAxisProps(this.state.data);
+    const yAxisResolution = getTimeResolution(yDomain.y);
     let xDomain = [];
     if (this.state.data.length > 0) {
       xDomain = getXDomain(this.props);
@@ -257,7 +261,10 @@ export default class RunsHistoryGraph extends Component {
             items={COLORLEGENDS}
             className="run-history-legend-container"
           />
-          <XAxis tickTotal={getTicksTotal(this.props)} tickFormat={xTickFormat(this.props)} />
+          <XAxis
+            tickTotal={getTicksTotal(this.props)}
+            tickFormat={xTickFormat(this.props)}
+          />
           <YAxis tickTotal={tickTotals} tickFormat={tickFormat} />
           <HorizontalGridLines />
           <LineSeries stroke={LINECOLOR} data={this.state.data} />
@@ -267,7 +274,10 @@ export default class RunsHistoryGraph extends Component {
             fillType="literal"
             data={this.state.data}
             onValueMouseOver={(d) => {
-              if (objectQuery(this.state.currentHoveredElement, 'runid') === d.runid) {
+              if (
+                objectQuery(this.state.currentHoveredElement, 'runid') ===
+                d.runid
+              ) {
                 return;
               }
               const newData = this.state.data.map((datum) => {
@@ -336,9 +346,13 @@ export default class RunsHistoryGraph extends Component {
                   <span
                     className={classnames({
                       'text-danger':
-                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(popOverData.status) !== -1,
+                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(
+                          popOverData.status
+                        ) !== -1,
                       'text-success':
-                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(popOverData.status) === -1,
+                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(
+                          popOverData.status
+                        ) === -1,
                     })}
                   >
                     {StatusMapper.lookupDisplayStatus(popOverData.status)}
@@ -353,12 +367,17 @@ export default class RunsHistoryGraph extends Component {
               ) : null}
               <div>
                 <strong>{T.translate(`${PREFIX}.hint.startTime`)}: </strong>
-                <span>{moment(popOverData.starting * 1000).format('llll')}</span>
+                <span>
+                  {moment(popOverData.starting * 1000).format('llll')}
+                </span>
               </div>
             </Hint>
           ) : null}
           {this.props.xDomainType === 'limit' ? (
-            <div className="x-axis-title"> {T.translate(`${PREFIX}.xAxisTitle`)} </div>
+            <div className="x-axis-title">
+              {' '}
+              {T.translate(`${PREFIX}.xAxisTitle`)}{' '}
+            </div>
           ) : null}
           <div className="y-axis-title">
             {T.translate(`${PREFIX}.yAxisTitle`, {
@@ -370,14 +389,14 @@ export default class RunsHistoryGraph extends Component {
     );
   }
   renderTableBody(runs) {
-    let runsLength = runs.length;
+    const runsLength = runs.length;
 
     return (
       <table className="table">
         <tbody>
           {runs.map((run) => {
-            let startTime = moment(run.starting * 1000).format('llll');
-            let duration = humanReadableDuration(run.duration || 0);
+            const startTime = moment(run.starting * 1000).format('llll');
+            const duration = humanReadableDuration(run.duration || 0);
 
             return (
               <tr>
@@ -388,8 +407,14 @@ export default class RunsHistoryGraph extends Component {
                 <td>
                   <span
                     className={classnames({
-                      'text-danger': ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(run.status) !== -1,
-                      'text-success': ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(run.status) === -1,
+                      'text-danger':
+                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(
+                          run.status
+                        ) !== -1,
+                      'text-success':
+                        ['FAILED', 'KILLED', 'RUN_FAILED'].indexOf(
+                          run.status
+                        ) === -1,
                     })}
                   >
                     {StatusMapper.lookupDisplayStatus(run.status)}
@@ -408,7 +433,9 @@ export default class RunsHistoryGraph extends Component {
     return (
       <SortableStickyTable
         tableHeaders={tableHeaders}
-        entities={this.props.runs.map((run, i) => Object.assign({}, run, { index: i + 1 }))}
+        entities={this.props.runs.map((run, i) =>
+          Object.assign({}, run, { index: i + 1 })
+        )}
         renderTableBody={this.renderTableBody}
       />
     );
@@ -432,18 +459,25 @@ export default class RunsHistoryGraph extends Component {
   }
   render() {
     return (
-      <div className="runs-history-graph" ref={(ref) => (this.containerRef = ref)}>
+      <div
+        className="runs-history-graph"
+        ref={(ref) => (this.containerRef = ref)}
+      >
         <div className="title-container">
           <div className="title">{T.translate(`${PREFIX}.title`)} </div>
           <div className="viz-switcher">
             <span
-              className={classnames('chart', { active: this.state.viewState === 'chart' })}
+              className={classnames('chart', {
+                active: this.state.viewState === 'chart',
+              })}
               onClick={() => this.setState({ viewState: 'chart' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.chart`)}
             </span>
             <span
-              className={classnames({ active: this.state.viewState === 'table' })}
+              className={classnames({
+                active: this.state.viewState === 'table',
+              })}
               onClick={() => this.setState({ viewState: 'table' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.table`)}

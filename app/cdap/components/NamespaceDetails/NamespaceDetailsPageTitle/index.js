@@ -39,5 +39,7 @@ NamespaceDetailsPageTitle.propTypes = {
 const mapStateToProps = (state) => ({
   namespace_name: state.name,
 });
-const ConnectedNamespaceDetailsPageTitle = connect(mapStateToProps)(NamespaceDetailsPageTitle);
+const ConnectedNamespaceDetailsPageTitle = connect(mapStateToProps)(
+  NamespaceDetailsPageTitle
+);
 export default ConnectedNamespaceDetailsPageTitle;

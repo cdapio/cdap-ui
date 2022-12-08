@@ -32,7 +32,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const NamespaceDetailsEntityCounts = ({ customAppCount, pipelineCount, datasetCount }) => {
+const NamespaceDetailsEntityCounts = ({
+  customAppCount,
+  pipelineCount,
+  datasetCount,
+}) => {
   return (
     <React.Fragment>
       <hr />

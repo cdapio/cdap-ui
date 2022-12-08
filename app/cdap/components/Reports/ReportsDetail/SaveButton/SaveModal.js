@@ -18,7 +18,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { MyReportsApi } from 'api/reports';
-import ReportsStore, { ReportsActions } from 'components/Reports/store/ReportsStore';
+import ReportsStore, {
+  ReportsActions,
+} from 'components/Reports/store/ReportsStore';
 import T from 'i18n-react';
 
 const PREFIX = 'features.Reports.ReportsDetail';
@@ -42,15 +44,15 @@ export default class SaveModal extends Component {
   };
 
   save = () => {
-    let params = {
+    const params = {
       reportId: this.props.reportId,
     };
 
-    let detailParams = {
+    const detailParams = {
       'report-id': this.props.reportId,
     };
 
-    let body = {
+    const body = {
       name: this.state.name,
     };
 
@@ -85,7 +87,9 @@ export default class SaveModal extends Component {
       return null;
     }
 
-    return <div className="error-container text-danger">{this.state.error}</div>;
+    return (
+      <div className="error-container text-danger">{this.state.error}</div>
+    );
   }
 
   render() {
@@ -101,13 +105,18 @@ export default class SaveModal extends Component {
         <ModalHeader>
           <span>{T.translate(`${PREFIX}.saveReport`)}</span>
 
-          <div className="close-section float-right" onClick={this.props.toggle}>
+          <div
+            className="close-section float-right"
+            onClick={this.props.toggle}
+          >
             <span className="fa fa-times" />
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="field-row">
-            <label className="control-label">{T.translate('features.Reports.reportName')}</label>
+            <label className="control-label">
+              {T.translate('features.Reports.reportName')}
+            </label>
 
             <input
               type="text"

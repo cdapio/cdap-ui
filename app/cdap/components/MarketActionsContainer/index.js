@@ -42,7 +42,9 @@ export default class MarketActionsContainer extends Component {
   closeWizard(returnResult) {
     if (returnResult) {
       this.setState({
-        completedActions: this.state.completedActions.concat([this.state.wizard.actionIndex]),
+        completedActions: this.state.completedActions.concat([
+          this.state.wizard.actionIndex,
+        ]),
         wizard: {
           actionIndex: null,
           actionType: null,
@@ -67,9 +69,13 @@ export default class MarketActionsContainer extends Component {
   openWizard(actionIndex, actionType, action) {
     // have to do this because the type returned from the backend is the same,
     // whether this action is in an usecase or in the 'Datapacks' tab
-    let usecases = ['load_datapack', 'one_step_deploy_plugin', 'one_step_deploy_app'];
+    const usecases = [
+      'load_datapack',
+      'one_step_deploy_plugin',
+      'one_step_deploy_app',
+    ];
 
-    let isLastStep = actionIndex === this.props.actions.length - 1;
+    const isLastStep = actionIndex === this.props.actions.length - 1;
 
     if (usecases.indexOf(actionType) !== -1 && !isLastStep) {
       actionType += '_usecase';
@@ -91,9 +97,12 @@ export default class MarketActionsContainer extends Component {
     return (
       <div className="market-entity-actions">
         {this.props.actions.map((action, index) => {
-          let isCompletedAction = this.state.completedActions.indexOf(index) !== -1;
-          let actionName = T.translate('features.Market.action-types.' + action.type + '.name');
-          let actionIcon = getIcon(action.type);
+          const isCompletedAction =
+            this.state.completedActions.indexOf(index) !== -1;
+          const actionName = T.translate(
+            'features.Market.action-types.' + action.type + '.name'
+          );
+          const actionIcon = getIcon(action.type);
           return (
             <div
               className="action-container text-center"
@@ -102,7 +111,11 @@ export default class MarketActionsContainer extends Component {
             >
               <div className="action" key={index}>
                 <div className="step text-center">
-                  <span className={classnames('tag tag-pill', { completed: isCompletedAction })}>
+                  <span
+                    className={classnames('tag tag-pill', {
+                      completed: isCompletedAction,
+                    })}
+                  >
                     {index + 1}
                   </span>
                 </div>
@@ -115,7 +128,9 @@ export default class MarketActionsContainer extends Component {
                   {action.label}
                 </div>
                 <button
-                  className={classnames('btn btn-link', { 'btn-completed': isCompletedAction })}
+                  className={classnames('btn btn-link', {
+                    'btn-completed': isCompletedAction,
+                  })}
                 >
                   {actionName}
                 </button>
@@ -124,13 +139,17 @@ export default class MarketActionsContainer extends Component {
           );
         })}
         <AbstractWizard
-          isOpen={this.state.wizard.actionIndex !== null && this.state.wizard.actionType !== null}
+          isOpen={
+            this.state.wizard.actionIndex !== null &&
+            this.state.wizard.actionType !== null
+          }
           onClose={this.closeWizard.bind(this)}
           wizardType={this.state.wizard.actionType}
           input={{
             action: this.state.wizard.action,
             package: this.context.entity,
-            isLastStepInMarket: this.state.wizard.actionIndex === this.props.actions.length - 1,
+            isLastStepInMarket:
+              this.state.wizard.actionIndex === this.props.actions.length - 1,
           }}
           displayCTA={MarketStore.getState().displayCTA}
         />

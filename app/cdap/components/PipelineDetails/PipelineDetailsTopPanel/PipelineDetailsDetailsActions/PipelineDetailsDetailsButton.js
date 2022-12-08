@@ -24,7 +24,7 @@ import T from 'i18n-react';
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
 export default function PipelineDetailsDetailsButton({ pipelineName }) {
-  let context = {
+  const context = {
     namespaceId: getCurrentNamespace(),
     appId: pipelineName,
   };
@@ -35,7 +35,9 @@ export default function PipelineDetailsDetailsButton({ pipelineName }) {
         <div className="btn pipeline-action-btn pipeline-details-btn">
           <div className="btn-container">
             <IconSVG name="icon-info-circle" />
-            <div className="button-label">{T.translate(`${PREFIX}.details`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.details`)}
+            </div>
           </div>
         </div>
       </AbsLinkTo>

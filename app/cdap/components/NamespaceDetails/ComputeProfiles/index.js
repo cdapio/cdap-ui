@@ -43,7 +43,9 @@ class NamespaceDetailsComputeProfiles extends Component {
     } else {
       label = (
         <strong>
-          {T.translate(`${PREFIX}.labelWithCount`, { count: this.props.profilesCount })}
+          {T.translate(`${PREFIX}.labelWithCount`, {
+            count: this.props.profilesCount,
+          })}
         </strong>
       );
     }
@@ -74,7 +76,9 @@ class NamespaceDetailsComputeProfiles extends Component {
         </If>
 
         {this.props.profilesCount ? (
-          <p className="create-new-profile-description">{T.translate(`${PREFIX}.description`)}</p>
+          <p className="create-new-profile-description">
+            {T.translate(`${PREFIX}.description`)}
+          </p>
         ) : null}
       </div>
     );
@@ -99,7 +103,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ConnectedComputeProfilesSection = connect(mapStateToProps)(NamespaceDetailsComputeProfiles);
+const ConnectedComputeProfilesSection = connect(mapStateToProps)(
+  NamespaceDetailsComputeProfiles
+);
 
 export default function NamespaceDetailsComputeProfilesFn() {
   return (

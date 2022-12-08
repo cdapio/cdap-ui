@@ -26,7 +26,10 @@ export default function EmptyMetricMessage({ mainMessage, popoverMessage }) {
     <div className="empty-message">
       <Popover
         target={() => <IconSVG name="icon-info-circle" />}
-        targetDimension={{ width: POPOVER_ICON_DIMENSION, height: POPOVER_ICON_DIMENSION }}
+        targetDimension={{
+          width: POPOVER_ICON_DIMENSION,
+          height: POPOVER_ICON_DIMENSION,
+        }}
         placement="bottom"
       >
         {popoverMessage}

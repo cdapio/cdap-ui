@@ -27,12 +27,14 @@ const AlgorithmDistribution = ({ algorithms }) => {
   if (!algorithms.length) {
     return (
       <EmptyMetricMessage
-        mainMessage={`Algorithm Distribution Unavailable`}
-        popoverMessage={`Atleast one model has to be trained to get Algorithms distribution`}
+        mainMessage={'Algorithm Distribution Unavailable'}
+        popoverMessage={
+          'Atleast one model has to be trained to get Algorithms distribution'
+        }
       />
     );
   }
-  let algos = algorithms.map((algo) => {
+  const algos = algorithms.map((algo) => {
     return {
       ...algo,
       value: getAlgorithmLabel(algo.bin),
@@ -40,7 +42,11 @@ const AlgorithmDistribution = ({ algorithms }) => {
     };
   });
   return (
-    <PieChartWithLegends data={algos} width={HEIGHT_OF_PIE_CHART} height={HEIGHT_OF_PIE_CHART} />
+    <PieChartWithLegends
+      data={algos}
+      width={HEIGHT_OF_PIE_CHART}
+      height={HEIGHT_OF_PIE_CHART}
+    />
   );
 };
 

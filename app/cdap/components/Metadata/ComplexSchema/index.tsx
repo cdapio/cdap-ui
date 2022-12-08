@@ -45,8 +45,10 @@ const SchemaTable = styled.table`
 
 const FieldRow = styled.tr`
   box-shadow: 2px 0 2px 0 rgb(1 0 0 / 20%);
-  ${({ hasError }) => hasError && `border: solid 2px var(--danger);`}
-  ${({ isNotNested }) => isNotNested && `box-shadow: none; border-top: solid 1px var(--grey06);`}
+  ${({ hasError }: { hasError: string; isNotNested: boolean }) =>
+    hasError && 'border: solid 2px var(--danger);'}
+  ${({ isNotNested }: { hasError: string; isNotNested: boolean }) =>
+    isNotNested && 'box-shadow: none; border-top: solid 1px var(--grey06);'}
 `;
 
 const FieldInput = styled(Input)`
@@ -110,7 +112,9 @@ const ComplexSchema: React.FC<IComplexSchemaProps> = ({ schema, inputProps }) =>
     setSchemaState(updatedState);
     if (typeof inputProps.parentFormatOutput === 'function') {
       setTimeout(
-        inputProps.parentFormatOutput.bind(null, { updateDefault: updatedState.updateDefault }),
+        inputProps.parentFormatOutput.bind(null, {
+          updateDefault: updatedState.updateDefault,
+        }),
         0
       );
     }
@@ -146,10 +150,10 @@ const ComplexSchema: React.FC<IComplexSchemaProps> = ({ schema, inputProps }) =>
                       <FieldInput
                         id={field.id}
                         value={field.name}
-                        aria-label={T.translate(`${I18N_PREFIX}.schemaName`)}
+                        aria-label={T.translate(`${I18N_PREFIX}.schemaName`).toString()}
                         data-cy={`schema-row-field-name-input-${index}}`}
                         data-testid={`schema-row-field-name-input-${index}}`}
-                        placeholder={T.translate(`${I18N_PREFIX}.fieldName`)}
+                        placeholder={T.translate(`${I18N_PREFIX}.fieldName`).toString()}
                         disabled={inputProps.isDisabled}
                       />
                     </td>

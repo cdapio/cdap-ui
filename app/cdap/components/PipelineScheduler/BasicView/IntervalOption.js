@@ -57,7 +57,9 @@ const SelectIntervalOption = connect(
 export default function IntervalOption() {
   return (
     <div className="form-group row" data-cy="schedule-run-repeats">
-      <label className="col-3 control-label">{T.translate(`${PREFIX}.heading`)}</label>
+      <label className="col-3 control-label">
+        {T.translate(`${PREFIX}.heading`)}
+      </label>
       <div className="col-4 schedule-values-container">
         <SelectIntervalOption className="form-control" />
       </div>

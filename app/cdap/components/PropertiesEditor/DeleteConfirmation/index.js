@@ -42,7 +42,7 @@ export default class DeleteConfirmation extends Component {
 
   deleteProperty() {
     this.setState({ loading: true });
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
     const params = {
       namespace,
       key: this.props.property.name,
@@ -71,7 +71,9 @@ export default class DeleteConfirmation extends Component {
   render() {
     let error;
     if (this.state.error) {
-      error = T.translate('features.PropertiesEditor.DeleteConfirmation.shortError');
+      error = T.translate(
+        'features.PropertiesEditor.DeleteConfirmation.shortError'
+      );
     }
 
     return (
@@ -79,7 +81,9 @@ export default class DeleteConfirmation extends Component {
         <span className="fa fa-trash" onClick={this.toggleModal} />
 
         <ConfirmationModal
-          headerTitle={T.translate('features.PropertiesEditor.DeleteConfirmation.headerTitle')}
+          headerTitle={T.translate(
+            'features.PropertiesEditor.DeleteConfirmation.headerTitle'
+          )}
           toggleModal={this.toggleModal}
           confirmationText={T.translate(
             'features.PropertiesEditor.DeleteConfirmation.confirmationText',

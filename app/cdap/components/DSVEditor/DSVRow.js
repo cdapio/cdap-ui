@@ -42,10 +42,16 @@ export default class DSVRow extends Component {
 
     return (
       <div className="action-buttons-container text-right">
-        <button className="btn add-row-btn btn-link" onClick={this.props.addRow}>
+        <button
+          className="btn add-row-btn btn-link"
+          onClick={this.props.addRow}
+        >
           <i className="fa fa-plus" />
         </button>
-        <button className="btn remove-row-btn btn-link" onClick={this.props.removeRow}>
+        <button
+          className="btn remove-row-btn btn-link"
+          onClick={this.props.removeRow}
+        >
           <i className="fa fa-trash text-danger" />
         </button>
       </div>
@@ -53,11 +59,17 @@ export default class DSVRow extends Component {
   }
 
   render() {
-    let placeholder = this.props.placeholder || T.translate('commons.DSVEditor.placeholder');
+    const placeholder =
+      this.props.placeholder || T.translate('commons.DSVEditor.placeholder');
 
     return (
       <div className="dsv-row-container">
-        <div className={classnames({ disabled: this.props.disabled }, 'dsv-input-container')}>
+        <div
+          className={classnames(
+            { disabled: this.props.disabled },
+            'dsv-input-container'
+          )}
+        >
           <input
             type="text"
             value={this.props.property}

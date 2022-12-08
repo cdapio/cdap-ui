@@ -211,8 +211,8 @@ describe('Configuration Group Parser', () => {
   it('should put all properties under Generic group when widget json does not exist', () => {
     const { defaultValues, configurationGroups } = processConfigurationGroups(
       pluginProperties,
-      null,
-      null
+      undefined,
+      undefined
     );
 
     expect(defaultValues).toStrictEqual({});
@@ -234,7 +234,9 @@ describe('Configuration Group Parser', () => {
 
     expect(Object.keys(defaultValues).length).toBe(2);
     expect(defaultValues).toEqual(
-      expect.not.objectContaining({ nonExistingProperty: 'this default value should not exist' })
+      expect.not.objectContaining({
+        nonExistingProperty: 'this default value should not exist',
+      })
     );
     expect(configurationGroups.length).toBe(3);
     expect(configurationGroups[0].label).toBe('Required');

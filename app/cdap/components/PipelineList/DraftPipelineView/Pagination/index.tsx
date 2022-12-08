@@ -25,7 +25,7 @@ interface IPaginationProps {
   currentPage: number;
   numPipelines: number;
   pageLimit: number;
-  shouldDisplay: boolean;
+  shouldDisplay?: boolean;
 }
 
 const PaginationContainer = styled.div`

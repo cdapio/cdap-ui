@@ -21,7 +21,8 @@ import { connect } from 'react-redux';
 import ProfilesListViewInPipeline from 'components/PipelineDetails/ProfilesListView';
 import { setSelectedProfile } from 'components/PipelineTriggers/ScheduleRuntimeArgs/ScheduleRuntimeArgsActions';
 
-const PREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs.Tabs.ComputeConfig';
+const PREFIX =
+  'features.PipelineTriggers.ScheduleRuntimeArgs.Tabs.ComputeConfig';
 
 function ComputeConfigTab({ selectedProfile, disabled }) {
   return (

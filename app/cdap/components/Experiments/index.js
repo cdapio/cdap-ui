@@ -25,13 +25,17 @@ import ExperimentsList from 'components/Experiments/ListView';
 
 const ExperimentsCreateView = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "ExperimentsCreateView" */ 'components/Experiments/CreateView'),
+    import(
+      /* webpackChunkName: "ExperimentsCreateView" */ 'components/Experiments/CreateView'
+    ),
   loading: LoadingSVGCentered,
 });
 
 const ExperimentDetailedView = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "ExperimentsDetailedView" */ 'components/Experiments/DetailedView'),
+    import(
+      /* webpackChunkName: "ExperimentsDetailedView" */ 'components/Experiments/DetailedView'
+    ),
   loading: LoadingSVGCentered,
 });
 
@@ -46,7 +50,7 @@ export default class Experiments extends Component {
   };
 
   checkIfMMDSRunning = () => {
-    let namespace = getCurrentNamespace();
+    const namespace = getCurrentNamespace();
 
     myExperimentsApi.list({ namespace }).subscribe(
       () => {
@@ -87,8 +91,16 @@ export default class Experiments extends Component {
     return (
       <div>
         <Switch>
-          <Route exact path="/ns/:namespace/experiments" component={ExperimentsList} />
-          <Route exact path="/ns/:namespace/experiments/create" component={ExperimentsCreateView} />
+          <Route
+            exact
+            path="/ns/:namespace/experiments"
+            component={ExperimentsList}
+          />
+          <Route
+            exact
+            path="/ns/:namespace/experiments/create"
+            component={ExperimentsCreateView}
+          />
           <Route
             exact
             path="/ns/:namespace/experiments/:experimentId"

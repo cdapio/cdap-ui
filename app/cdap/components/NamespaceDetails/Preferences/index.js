@@ -50,7 +50,10 @@ const PREFERENCES_TABLE_HEADERS = [
 class NamespaceDetailsPreferences extends Component {
   state = {
     modalOpen: false,
-    prefs: this.getPrefsForDisplay(this.props.namespacePrefs, this.props.systemPrefs),
+    prefs: this.getPrefsForDisplay(
+      this.props.namespacePrefs,
+      this.props.systemPrefs
+    ),
     newNamespacePrefsKeys: [],
     viewAll: false,
   };
@@ -67,21 +70,25 @@ class NamespaceDetailsPreferences extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let newNamespacePrefsKeys = [];
-    let currentPrefsKeys = this.state.prefs.map((pref) => pref.key);
+    const newNamespacePrefsKeys = [];
+    const currentPrefsKeys = this.state.prefs.map((pref) => pref.key);
 
     Object.keys(nextProps.namespacePrefs).forEach((nextNSPrefKey) => {
-      let nextNSPrefKeyIndex = currentPrefsKeys.indexOf(nextNSPrefKey);
+      const nextNSPrefKeyIndex = currentPrefsKeys.indexOf(nextNSPrefKey);
       if (
         nextNSPrefKeyIndex === -1 ||
         (nextNSPrefKeyIndex !== -1 &&
-          this.state.prefs[nextNSPrefKeyIndex].value !== nextProps.namespacePrefs[nextNSPrefKey])
+          this.state.prefs[nextNSPrefKeyIndex].value !==
+            nextProps.namespacePrefs[nextNSPrefKey])
       ) {
         newNamespacePrefsKeys.push(nextNSPrefKey);
       }
     });
 
-    let prefs = this.getPrefsForDisplay(nextProps.namespacePrefs, nextProps.systemPrefs);
+    const prefs = this.getPrefsForDisplay(
+      nextProps.namespacePrefs,
+      nextProps.systemPrefs
+    );
     let viewAll = this.state.viewAll;
 
     if (!viewAll && newNamespacePrefsKeys.length && prefs.length >= 5) {
@@ -110,7 +117,7 @@ class NamespaceDetailsPreferences extends Component {
   }
 
   componentDidUpdate() {
-    let highlightedElems = document.getElementsByClassName('highlighted');
+    const highlightedElems = document.getElementsByClassName('highlighted');
     if (highlightedElems.length) {
       highlightedElems[0].scrollIntoView();
     }
@@ -121,13 +128,15 @@ class NamespaceDetailsPreferences extends Component {
   }
 
   getPrefsForDisplay(namespacePrefs, systemPrefs) {
-    let prefs = { ...systemPrefs, ...namespacePrefs };
-    let sortedPrefObjectKeys = [...Object.keys(prefs)].sort();
+    const prefs = { ...systemPrefs, ...namespacePrefs };
+    const sortedPrefObjectKeys = [...Object.keys(prefs)].sort();
     return sortedPrefObjectKeys.map((prefKey) => {
       return {
         key: prefKey,
         scope:
-          prefKey in namespacePrefs ? T.translate('features.NamespaceDetails.namespace') : 'System',
+          prefKey in namespacePrefs
+            ? T.translate('features.NamespaceDetails.namespace')
+            : 'System',
         value: prefs[prefKey],
       };
     });
@@ -152,7 +161,9 @@ class NamespaceDetailsPreferences extends Component {
     } else {
       label = (
         <strong>
-          {T.translate(`${PREFIX}.labelWithCount`, { count: this.state.prefs.length })}
+          {T.translate(`${PREFIX}.labelWithCount`, {
+            count: this.state.prefs.length,
+          })}
         </strong>
       );
     }
@@ -169,7 +180,11 @@ class NamespaceDetailsPreferences extends Component {
 
   renderPreferencesTable() {
     if (!this.state.prefs.length) {
-      return <div className="text-center">{T.translate(`${PREFIX}.noPreferences`)}</div>;
+      return (
+        <div className="text-center">
+          {T.translate(`${PREFIX}.noPreferences`)}
+        </div>
+      );
     }
 
     let prefs = [...this.state.prefs];
@@ -202,7 +217,10 @@ class NamespaceDetailsPreferences extends Component {
       <tbody>
         {prefs.map((pref, index) => {
           return (
-            <tr className={classnames({ highlighted: pref.highlighted })} key={index}>
+            <tr
+              className={classnames({ highlighted: pref.highlighted })}
+              key={index}
+            >
               <td title={pref.key}>{pref.key}</td>
               <td>{pref.scope}</td>
               <td title={pref.value}>{pref.value}</td>
@@ -246,5 +264,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ConnectedNamespaceDetailsPreferences = connect(mapStateToProps)(NamespaceDetailsPreferences);
+const ConnectedNamespaceDetailsPreferences = connect(mapStateToProps)(
+  NamespaceDetailsPreferences
+);
 export default ConnectedNamespaceDetailsPreferences;

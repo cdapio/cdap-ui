@@ -31,7 +31,7 @@ export default class DataPrepSidePanel extends Component {
   constructor(props) {
     super(props);
 
-    let storeState = DataPrepStore.getState().dataprep;
+    const storeState = DataPrepStore.getState().dataprep;
 
     this.state = {
       activeTab: 1,
@@ -44,7 +44,7 @@ export default class DataPrepSidePanel extends Component {
 
   componentDidMount() {
     this.sub = DataPrepStore.subscribe(() => {
-      let state = DataPrepStore.getState().dataprep;
+      const state = DataPrepStore.getState().dataprep;
 
       this.setState({
         headers: state.headers,
@@ -65,7 +65,11 @@ export default class DataPrepSidePanel extends Component {
 
   renderColumns() {
     if (this.state.headers.length === 0) {
-      return <h5 className="empty-message text-center">{T.translate(`${PREFIX}.noColumns`)}</h5>;
+      return (
+        <h5 className="empty-message text-center">
+          {T.translate(`${PREFIX}.noColumns`)}
+        </h5>
+      );
     }
 
     return (
@@ -77,7 +81,11 @@ export default class DataPrepSidePanel extends Component {
 
   renderDirectives() {
     if (this.state.directives.length === 0) {
-      return <h5 className="empty-message text-center">{T.translate(`${PREFIX}.noDirectives`)}</h5>;
+      return (
+        <h5 className="empty-message text-center">
+          {T.translate(`${PREFIX}.noDirectives`)}
+        </h5>
+      );
     }
 
     return (
@@ -117,7 +125,9 @@ export default class DataPrepSidePanel extends Component {
         <div className="tabs">
           <div className="tabs-headers">
             <div
-              className={classnames('tab', { active: this.state.activeTab === 1 })}
+              className={classnames('tab', {
+                active: this.state.activeTab === 1,
+              })}
               onClick={this.setActiveTab.bind(this, 1)}
             >
               {T.translate(`${PREFIX}.columnsTabLabel`, {
@@ -125,7 +135,9 @@ export default class DataPrepSidePanel extends Component {
               })}
             </div>
             <div
-              className={classnames('tab', { active: this.state.activeTab === 2 })}
+              className={classnames('tab', {
+                active: this.state.activeTab === 2,
+              })}
               onClick={this.setActiveTab.bind(this, 2)}
             >
               {T.translate(`${PREFIX}.directivesTabLabel`, {
@@ -134,7 +146,9 @@ export default class DataPrepSidePanel extends Component {
             </div>
             <If condition={Theme.showWranglerDatamodelViewer}>
               <div
-                className={classnames('tab', { active: this.state.activeTab === 3 })}
+                className={classnames('tab', {
+                  active: this.state.activeTab === 3,
+                })}
                 onClick={this.setActiveTab.bind(this, 3)}
               >
                 {T.translate(`${PREFIX}.targetTabLabel`)}

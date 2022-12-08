@@ -96,14 +96,22 @@ export default class Pagination extends Component {
   }
 
   render() {
-    let pageChangeRightClass = classNames('change-page-panel', 'change-page-panel-right', {
-      pressed: this.state.rightPressed,
-      'last-page': this.state.currentPage + 1 > this.state.totalPages,
-    });
-    let pageChangeLeftClass = classNames('change-page-panel', 'change-page-panel-left', {
-      pressed: this.state.leftPressed,
-      'first-page': this.state.currentPage - 1 === 0,
-    });
+    const pageChangeRightClass = classNames(
+      'change-page-panel',
+      'change-page-panel-right',
+      {
+        pressed: this.state.rightPressed,
+        'last-page': this.state.currentPage + 1 > this.state.totalPages,
+      }
+    );
+    const pageChangeLeftClass = classNames(
+      'change-page-panel',
+      'change-page-panel-left',
+      {
+        pressed: this.state.leftPressed,
+        'first-page': this.state.currentPage - 1 === 0,
+      }
+    );
     Mousetrap.bind('right', this.goToNext);
     Mousetrap.bind('left', this.goToPrev);
 

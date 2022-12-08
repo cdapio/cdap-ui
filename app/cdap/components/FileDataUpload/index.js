@@ -72,11 +72,17 @@ export default class FileDataUpload extends Component {
 
   render() {
     return (
-      <div className="file-data-upload-container text-center" onClick={this.onContainerClick}>
+      <div
+        className="file-data-upload-container text-center"
+        onClick={this.onContainerClick}
+      >
         {!this.state.textarea || this.state.file.name ? (
           <div className="file-data-metadata-container">
             <div className="file-data-metadata">
-              <div className="upload-data" onClick={(e) => this.preventPropagation(e)}>
+              <div
+                className="upload-data"
+                onClick={(e) => this.preventPropagation(e)}
+              >
                 <Dropzone
                   className="dropzone"
                   onDrop={(e) => {
@@ -84,7 +90,8 @@ export default class FileDataUpload extends Component {
                     this.props.onDataUpload(e[0]);
                   }}
                 >
-                  {this.state.file.name && this.state.file.name.length ? null : (
+                  {this.state.file.name &&
+                  this.state.file.name.length ? null : (
                     <i className="plus-button fa fa-upload" />
                   )}
                 </Dropzone>

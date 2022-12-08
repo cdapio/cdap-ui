@@ -65,7 +65,11 @@ function OperationsModalView() {
       className="field-level-lineage-modal cdap-modal"
     >
       <ModalHeader>
-        <span>{T.translate(`${PREFIX}.Title.${direction}`, { fieldName: activeField.name })}</span>
+        <span>
+          {T.translate(`${PREFIX}.Title.${direction}`, {
+            fieldName: activeField.name,
+          })}
+        </span>
 
         <div className="close-section float-right" onClick={closeModal}>
           <IconSVG name="icon-close" />

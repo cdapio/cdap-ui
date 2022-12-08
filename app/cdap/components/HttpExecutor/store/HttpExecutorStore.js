@@ -75,7 +75,15 @@ const setResponse = (state, action) => {
 };
 
 const addRequestLog = (state) => {
-  const { method, path, body, headers, response, statusCode, requestLog } = state;
+  const {
+    method,
+    path,
+    body,
+    headers,
+    response,
+    statusCode,
+    requestLog,
+  } = state;
 
   const newCall = {
     method,
@@ -143,8 +151,13 @@ const deleteRequestLog = (state, request) => {
   // Delete the request log from local state
   const dateID = getDateID(new Date(request.timestamp));
   const requestsGroup = getRequestsByDate(requestLog, dateID);
-  const requestToDelete = requestsGroup.findIndex((req) => req.id === request.id);
-  const newRequestLog = requestLog.set(dateID, requestsGroup.delete(requestToDelete));
+  const requestToDelete = requestsGroup.findIndex(
+    (req) => req.id === request.id
+  );
+  const newRequestLog = requestLog.set(
+    dateID,
+    requestsGroup.delete(requestToDelete)
+  );
 
   // Delete the specified request log from local storage
   const storedLogs = newRequestLog
@@ -178,7 +191,8 @@ const http = (state = defaultInitialState, action = defaultAction) => {
       return {
         ...state,
         method: action.payload.method,
-        activeTab: ['GET', 'DELETE'].indexOf(action.payload.method) !== -1 ? 0 : 1,
+        activeTab:
+          ['GET', 'DELETE'].indexOf(action.payload.method) !== -1 ? 0 : 1,
       };
     case HttpExecutorActions.setPath:
       return {
@@ -218,7 +232,8 @@ const http = (state = defaultInitialState, action = defaultAction) => {
       return {
         ...state,
         method: action.payload.method,
-        activeTab: ['GET', 'DELETE'].indexOf(action.payload.method) !== -1 ? 0 : 1,
+        activeTab:
+          ['GET', 'DELETE'].indexOf(action.payload.method) !== -1 ? 0 : 1,
         path: action.payload.path,
         response: action.payload.response,
         statusCode: action.payload.statusCode,

@@ -75,7 +75,7 @@ const getAlgoDistribution = (models) => {
   }
   let modelsMap = {};
   models.forEach((model) => {
-    let algo = model.algorithm;
+    const algo = model.algorithm;
     if (!algo) {
       return;
     }
@@ -102,9 +102,9 @@ const getAlgoDistribution = (models) => {
 };
 
 const renderGrid = (experiments, sortMethod, sortColumn) => {
-  let list = experiments.map((entity) => {
-    let models = entity.models || [];
-    let modelsCount = entity.modelsCount;
+  const list = experiments.map((entity) => {
+    const models = entity.models || [];
+    const modelsCount = entity.modelsCount;
     return {
       name: entity.name,
       description: entity.description,
@@ -115,7 +115,11 @@ const renderGrid = (experiments, sortMethod, sortColumn) => {
     };
   });
   const renderSortIcon = (sortMethod) =>
-    sortMethod === 'asc' ? <IconSVG name="icon-caret-down" /> : <IconSVG name="icon-caret-up" />;
+    sortMethod === 'asc' ? (
+      <IconSVG name="icon-caret-down" />
+    ) : (
+      <IconSVG name="icon-caret-up" />
+    );
 
   return (
     <div className="grid grid-container">
@@ -150,7 +154,9 @@ const renderGrid = (experiments, sortMethod, sortColumn) => {
                 <h5>
                   <div className="experiment-list-name">{experiment.name}</div>
                 </h5>
-                <div className="experiment-list-description">{experiment.description}</div>
+                <div className="experiment-list-description">
+                  {experiment.description}
+                </div>
               </div>
               <div>{experiment.numOfModels}</div>
               <div>
@@ -158,7 +164,11 @@ const renderGrid = (experiments, sortMethod, sortColumn) => {
                   '--'
                 ) : (
                   // This is to align with empty content beneath if happens.
-                  <PieChart data={experiment.algorithmTypes} translateX={15} translateY={25} />
+                  <PieChart
+                    data={experiment.algorithmTypes}
+                    translateX={15}
+                    translateY={25}
+                  />
                 )}
               </div>
               <div>{experiment.testData}</div>
@@ -174,7 +184,7 @@ const getDataForGroupedChart = (experiments) => {
   if (!experiments.length) {
     return null;
   }
-  let data = [];
+  const data = [];
   experiments.map((experiment) => {
     data.push({
       name: experiment.name,
@@ -217,7 +227,7 @@ function ExperimentsListViewContent({
   if (loading) {
     return <LoadingSVGCentered />;
   }
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   const featureName = Theme.featureNames.analytics;
 
   if (!list.length) {
@@ -256,7 +266,9 @@ function ExperimentsListViewContent({
           title={T.translate(`${PREFIX}.experiments`, { context: totalCount })}
         />
       </div>
-      <div className="grid-wrapper">{renderGrid(list, sortMethod, sortColumn)}</div>
+      <div className="grid-wrapper">
+        {renderGrid(list, sortMethod, sortColumn)}
+      </div>
     </div>
   );
 }
@@ -287,6 +299,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ExperimentsListViewWrapper = connect(mapStateToProps)(ExperimentsListView);
+const ExperimentsListViewWrapper = connect(mapStateToProps)(
+  ExperimentsListView
+);
 
 export default ExperimentsListViewWrapper;

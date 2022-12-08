@@ -67,7 +67,10 @@ class SplitInfo extends Component {
           </strong>
         </div>
         <div className="split-info-graph-wrapper">
-          <SplitInfoGraph splitInfo={this.state.splitInfo} activeColumn={this.state.activeColumn} />
+          <SplitInfoGraph
+            splitInfo={this.state.splitInfo}
+            activeColumn={this.state.activeColumn}
+          />
         </div>
         <SplitInfoTable
           splitInfo={this.state.splitInfo}

@@ -70,7 +70,9 @@ export default class OverviewHeader extends Component {
             View Details
           </Link>
         ) : null}
-        {this.props.onClose ? <IconSVG name="icon-close" onClick={this.props.onClose} /> : null}
+        {this.props.onClose ? (
+          <IconSVG name="icon-close" onClick={this.props.onClose} />
+        ) : null}
       </div>
     );
   }

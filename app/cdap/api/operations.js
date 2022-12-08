@@ -16,7 +16,7 @@
 
 import { apiCreator } from 'services/resource-helper';
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 
 export const MyOperationsApi = {
   getDashboard: apiCreator(dataSrc, 'GET', 'REQUEST', '/dashboard'),

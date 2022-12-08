@@ -36,7 +36,7 @@ const ExperimentMetadataWrapper = ({
   algorithm,
   active_step,
 }) => {
-  let isAlgorithmEmpty = () => isNil(algorithm) || !algorithm.length;
+  const isAlgorithmEmpty = () => isNil(algorithm) || !algorithm.length;
   return (
     <div className="experiment-metadata">
       <div>
@@ -100,7 +100,10 @@ const mapStateToProps = (state) => ({
         (algo) => algo.name === state.model_create.algorithm.name
       ).label,
 });
-const ConnectedExperimentMetadata = connect(mapStateToProps, null)(ExperimentMetadataWrapper);
+const ConnectedExperimentMetadata = connect(
+  mapStateToProps,
+  null
+)(ExperimentMetadataWrapper);
 
 export default function ExperimentMetadata() {
   return (

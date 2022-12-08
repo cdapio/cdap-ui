@@ -17,7 +17,7 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/data/explore/tables';
 const queriesPath = '/namespaces/:namespace/data/explore/queries';
 const queryHandleApi = '/data/explore/queries/:queryHandle';
@@ -25,10 +25,30 @@ const myExploreApi = {
   fetchTables: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
   fetchQueries: apiCreator(dataSrc, 'GET', 'POLL', queriesPath),
   submitQuery: apiCreator(dataSrc, 'POST', 'REQUEST', queriesPath),
-  getQuerySchema: apiCreator(dataSrc, 'GET', 'REQUEST', queryHandleApi + '/schema'),
-  getQueryPreview: apiCreator(dataSrc, 'POST', 'REQUEST', queryHandleApi + '/preview'),
-  pollQueryStatus: apiCreator(dataSrc, 'GET', 'POLL', queryHandleApi + '/status'),
-  download: apiCreator(dataSrc, 'POST', 'REQUEST', queryHandleApi + '/download'),
+  getQuerySchema: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    queryHandleApi + '/schema'
+  ),
+  getQueryPreview: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    queryHandleApi + '/preview'
+  ),
+  pollQueryStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'POLL',
+    queryHandleApi + '/status'
+  ),
+  download: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    queryHandleApi + '/download'
+  ),
 };
 
 export default myExploreApi;

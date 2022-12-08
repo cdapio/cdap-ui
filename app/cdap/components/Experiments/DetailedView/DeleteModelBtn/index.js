@@ -25,7 +25,7 @@ import NamespaceStore from 'services/NamespaceStore';
 import { myExperimentsApi } from 'api/experiments';
 
 const deleteModel = (experimentId, model, callback, errCallback) => {
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   myExperimentsApi
     .deleteModelInExperiment({
       namespace,
@@ -38,7 +38,9 @@ const deleteModel = (experimentId, model, callback, errCallback) => {
         callback();
       },
       (err) => {
-        let error = `Failed to delete the model '${model.name}' - ${err.response || err}`;
+        const error = `Failed to delete the model '${
+          model.name
+        }' - ${err.response || err}`;
         errCallback(error);
       }
     );
@@ -53,7 +55,13 @@ const deleteConfirmElement = (model) => (
 export default function DeleteModelBtn({ experimentId, model }) {
   return (
     <DeleteEntityBtn
-      confirmFn={deleteModel.bind(null, experimentId, model, null, setExperimentDetailError)}
+      confirmFn={deleteModel.bind(
+        null,
+        experimentId,
+        model,
+        null,
+        setExperimentDetailError
+      )}
       headerTitle={'Delete Model'}
       confirmationElem={deleteConfirmElement(model)}
     />

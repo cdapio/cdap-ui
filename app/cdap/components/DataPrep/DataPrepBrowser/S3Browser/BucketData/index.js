@@ -42,7 +42,9 @@ const TableHeader = ({ enableRouting }) => {
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Name`)}</div>
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Owner`)}</div>
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Size`)}</div>
-        <div className="col-3">{T.translate(`${PREFIX}.Headers.LastModified`)}</div>
+        <div className="col-3">
+          {T.translate(`${PREFIX}.Headers.LastModified`)}
+        </div>
       </div>
     );
   }
@@ -70,11 +72,16 @@ const BucketData = ({
 
   const filteredData = data.filter((d) => {
     if (search && search.length && d.name) {
-      let isSearchTextInName = d.name.indexOf(search);
+      const isSearchTextInName = d.name.indexOf(search);
       if (d.type && d.type === 'bucket') {
-        return isSearchTextInName !== -1 || (d.owner && d.owner.indexOf(search) !== -1);
+        return (
+          isSearchTextInName !== -1 ||
+          (d.owner && d.owner.indexOf(search) !== -1)
+        );
       }
-      return isSearchTextInName !== -1 || (d.path && d.path.indexOf(search) !== -1);
+      return (
+        isSearchTextInName !== -1 || (d.path && d.path.indexOf(search) !== -1)
+      );
     }
     return true;
   });
@@ -102,7 +109,7 @@ const BucketData = ({
 BucketData.propTypes = props;
 
 const mapStateToProps = (state, ownProps) => {
-  let { enableRouting = true, onWorkspaceCreate = () => {} } = ownProps;
+  const { enableRouting = true, onWorkspaceCreate = () => {} } = ownProps;
   return {
     data: state.s3.activeBucketDetails,
     search: state.s3.search,
@@ -122,6 +129,9 @@ const mapDispatchToProps = () => {
   };
 };
 
-const BucketDataWrapper = connect(mapStateToProps, mapDispatchToProps)(BucketData);
+const BucketDataWrapper = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BucketData);
 
 export default BucketDataWrapper;

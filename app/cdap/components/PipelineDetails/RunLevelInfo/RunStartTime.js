@@ -34,7 +34,9 @@ const RunStartTime = ({ currentRun }) => {
       <div>
         <strong>{T.translate(`${PREFIX}.startTime`)}</strong>
       </div>
-      <span>{currentRun ? `${humanReadableDate(currentRun.starting)}` : '--'}</span>
+      <span>
+        {currentRun ? `${humanReadableDate(currentRun.starting)}` : '--'}
+      </span>
     </div>
   );
 };

@@ -74,7 +74,7 @@ export default class SpotlightSearch extends Component {
     }
 
     this.setState({ showSearch: true });
-    let app = document.getElementById('app-container');
+    const app = document.getElementById('app-container');
     app.addEventListener('click', this.handleCloseSearch);
     document.body.addEventListener('keyup', this.handleCloseSearch);
   }
@@ -84,10 +84,14 @@ export default class SpotlightSearch extends Component {
     //  1. Event object is null
     //  2. Escape key was pressed
     //  3. Target of the event is not the spotlightSearch
-    if (event && event.keyCode !== 27 && event.target === this.spotlightSearch) {
+    if (
+      event &&
+      event.keyCode !== 27 &&
+      event.target === this.spotlightSearch
+    ) {
       return;
     }
-    let app = document.getElementById('app-container');
+    const app = document.getElementById('app-container');
     document.body.removeEventListener('keyup', this.handleCloseSearch);
     app.removeEventListener('click', this.handleCloseSearch);
 
@@ -106,7 +110,7 @@ export default class SpotlightSearch extends Component {
       return;
     }
 
-    let query = this.spotlightSearch.value;
+    const query = this.spotlightSearch.value;
     if (query.length === 0) {
       return;
     }
@@ -131,7 +135,7 @@ export default class SpotlightSearch extends Component {
       return null;
     }
 
-    let dropdown = (
+    const dropdown = (
       <Dropdown
         isOpen={this.state.showResult}
         toggle={this.handleResultToggle.bind(this)}
@@ -146,7 +150,9 @@ export default class SpotlightSearch extends Component {
                 <DropdownItem
                   key={uuidV4()}
                   tag="a"
-                  className={classnames({ hover: this.state.focusIndex === index })}
+                  className={classnames({
+                    hover: this.state.focusIndex === index,
+                  })}
                 >
                   <span className="icon">
                     <span className={entity.icon} />
@@ -192,7 +198,7 @@ export default class SpotlightSearch extends Component {
       event.preventDefault();
       let focusIndex = this.state.focusIndex;
 
-      let limit =
+      const limit =
         this.state.searchResults.total > VIEW_RESULT_LIMIT
           ? VIEW_RESULT_LIMIT
           : this.state.searchResults.total - 1;
@@ -202,7 +208,11 @@ export default class SpotlightSearch extends Component {
       // Check focus index, and go to entity.
       // If focusIndex is 5, then show modal
       if (this.state.focusIndex === VIEW_RESULT_LIMIT) {
-        this.setState({ showModal: true, showSearch: false, showResult: false });
+        this.setState({
+          showModal: true,
+          showSearch: false,
+          showResult: false,
+        });
       }
     }
   }
@@ -229,7 +239,12 @@ export default class SpotlightSearch extends Component {
     let spotlightSearch;
 
     if (!this.state.showSearch) {
-      spotlightSearch = <span className="fa fa-search not-open" onClick={this.handleSearchClick} />;
+      spotlightSearch = (
+        <span
+          className="fa fa-search not-open"
+          onClick={this.handleSearchClick}
+        />
+      );
     } else {
       spotlightSearch = (
         <div className="form-group input-group">
@@ -249,7 +264,11 @@ export default class SpotlightSearch extends Component {
     }
 
     return (
-      <div className={classnames('spotlight-search-container', { open: this.state.showSearch })}>
+      <div
+        className={classnames('spotlight-search-container', {
+          open: this.state.showSearch,
+        })}
+      >
         {spotlightSearch}
         {this.handleRenderResult()}
         {this.handleRenderModal()}

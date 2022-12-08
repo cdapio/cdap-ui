@@ -62,8 +62,12 @@ export default class PropertiesEditor extends Component {
       })
       .subscribe((res) => {
         this.setState({
-          systemProperties: res.filter((property) => property.scope === SCOPES.SYSTEM),
-          userProperties: res.filter((property) => property.scope === SCOPES.USER),
+          systemProperties: res.filter(
+            (property) => property.scope === SCOPES.SYSTEM
+          ),
+          userProperties: res.filter(
+            (property) => property.scope === SCOPES.USER
+          ),
           activeEdit: null,
           newValue: '',
         });
@@ -108,7 +112,9 @@ export default class PropertiesEditor extends Component {
       return (
         <tr
           key={row.id}
-          className={classnames({ 'text-success': row.name === this.state.editedKey })}
+          className={classnames({
+            'text-success': row.name === this.state.editedKey,
+          })}
         >
           <td>{row.name}</td>
           <td>{row.value}</td>
@@ -142,9 +148,15 @@ export default class PropertiesEditor extends Component {
         <table className="table">
           <thead>
             <tr>
-              <th className="key">{T.translate('features.PropertiesEditor.name')}</th>
-              <th className="value">{T.translate('features.PropertiesEditor.value')}</th>
-              <th className="scope">{T.translate('features.PropertiesEditor.scope')}</th>
+              <th className="key">
+                {T.translate('features.PropertiesEditor.name')}
+              </th>
+              <th className="value">
+                {T.translate('features.PropertiesEditor.value')}
+              </th>
+              <th className="scope">
+                {T.translate('features.PropertiesEditor.scope')}
+              </th>
               <th className="actions" />
             </tr>
           </thead>

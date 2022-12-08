@@ -19,13 +19,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 require('./ConfigureButton.scss');
 
-function ConfigureButton({label, onClick, iconClass}) {
-
+function ConfigureButton({ label, onClick, iconClass }) {
   return (
-    <div
-      className="configure-button"
-      onClick={onClick}
-    >
+    <div className="configure-button" onClick={onClick}>
       <div className="btn-icon">
         <i className={iconClass} />
       </div>
@@ -36,11 +32,11 @@ function ConfigureButton({label, onClick, iconClass}) {
   );
 }
 
-ConfigureButton.propTypes  = {
+ConfigureButton.propTypes = {
   label: PropTypes.string,
   onClick: PropTypes.func,
   iconClass: PropTypes.string,
-  iconComponent: PropTypes.element
+  iconComponent: PropTypes.element,
 };
 
 export default ConfigureButton;

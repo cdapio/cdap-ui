@@ -21,7 +21,10 @@ import NamespaceStore from 'services/NamespaceStore';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import FilePath from 'components/FileBrowser/FilePath';
-import { preventPropagation as preventPropagationService, objectQuery } from 'services/helpers';
+import {
+  preventPropagation as preventPropagationService,
+  objectQuery,
+} from 'services/helpers';
 import DataPrepBrowserStore from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';
 import {
   setError,
@@ -79,9 +82,9 @@ export default class FileBrowser extends Component {
   componentDidMount() {
     this._isMounted = true;
     if (!this.props.enableRouting) {
-      let path = this.getFilePath();
+      const path = this.getFilePath();
       this.dataprepSubscription = DataPrepStore.subscribe(() => {
-        let path = this.getFilePath();
+        const path = this.getFilePath();
         if (!isNil(path) && path !== this.state.path) {
           goToPath(path);
         }
@@ -92,7 +95,7 @@ export default class FileBrowser extends Component {
     }
 
     this.browserStoreSubscription = DataPrepBrowserStore.subscribe(() => {
-      let { file, activeBrowser } = DataPrepBrowserStore.getState();
+      const { file, activeBrowser } = DataPrepBrowserStore.getState();
       if (activeBrowser.name !== ConnectionType.FILE) {
         return;
       }
@@ -127,7 +130,7 @@ export default class FileBrowser extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.props.enableRouting) {
       // When routing is disabled location, match are not entirely right.
-      let path = this.getFilePath();
+      const path = this.getFilePath();
       if (!isNil(path) && path !== this.state.path) {
         goToPath(path);
       }
@@ -137,12 +140,15 @@ export default class FileBrowser extends Component {
   }
 
   getFilePath() {
-    let { workspaceInfo } = DataPrepStore.getState().dataprep;
+    const { workspaceInfo } = DataPrepStore.getState().dataprep;
     let filePath = objectQuery(workspaceInfo, 'properties', 'path');
     filePath = !isEmpty(filePath)
       ? filePath.slice(0, lastIndexOf(filePath, '/') + 1)
       : this.state.path;
-    if (isEmpty(filePath) || objectQuery(workspaceInfo, 'properties', 'connection') !== 'file') {
+    if (
+      isEmpty(filePath) ||
+      objectQuery(workspaceInfo, 'properties', 'connection') !== 'file'
+    ) {
       filePath = BASEPATH;
     }
     return filePath;
@@ -169,7 +175,7 @@ export default class FileBrowser extends Component {
       return;
     } else {
       if (objectQuery(props, 'match', 'url')) {
-        let pathname = window.location.pathname.replace(/\/cdap/, '');
+        const pathname = window.location.pathname.replace(/\/cdap/, '');
         hdfsPath = pathname.slice(props.match.url.length);
         hdfsPath = hdfsPath || this.props.initialDirectoryPath || BASEPATH;
       }
@@ -229,7 +235,10 @@ export default class FileBrowser extends Component {
       (res) => {
         const workspaceId = res.values[0].id;
 
-        if (this.props.onWorkspaceCreate && typeof this.props.onWorkspaceCreate === 'function') {
+        if (
+          this.props.onWorkspaceCreate &&
+          typeof this.props.onWorkspaceCreate === 'function'
+        ) {
           this.props.onWorkspaceCreate(workspaceId);
           return;
         }
@@ -268,7 +277,10 @@ export default class FileBrowser extends Component {
 
   renderRowContent(row) {
     let isSelected = false;
-    if (this.state.path === this.getFilePath() && row.name === this.getFileName()) {
+    if (
+      this.state.path === this.getFilePath() &&
+      row.name === this.getFileName()
+    ) {
       isSelected = true;
     }
 
@@ -297,7 +309,9 @@ export default class FileBrowser extends Component {
           <span title={row.type}>{row.type}</span>
         </div>
         <div className="col-1">
-          <span title={row.displaySize}>{row.directory ? '--' : row.displaySize}</span>
+          <span title={row.displaySize}>
+            {row.directory ? '--' : row.displaySize}
+          </span>
         </div>
         <div className="col-2">
           <span title={row['last-modified']}>{row['last-modified']}</span>
@@ -364,7 +378,9 @@ export default class FileBrowser extends Component {
       <div className="empty-search-container">
         <div className="empty-search">
           <strong>
-            {T.translate(`${PREFIX}.EmptyMessage.title`, { searchText: this.state.search })}
+            {T.translate(`${PREFIX}.EmptyMessage.title`, {
+              searchText: this.state.search,
+            })}
           </strong>
           <hr />
           <span> {T.translate(`${PREFIX}.EmptyMessage.suggestionTitle`)} </span>
@@ -397,7 +413,9 @@ export default class FileBrowser extends Component {
       return (
         <div className="empty-search-container">
           <div className="empty-search text-center">
-            <strong>{T.translate(`${PREFIX}.EmptyMessage.noFilesOrDirectories`)}</strong>
+            <strong>
+              {T.translate(`${PREFIX}.EmptyMessage.noFilesOrDirectories`)}
+            </strong>
           </div>
         </div>
       );
@@ -407,8 +425,8 @@ export default class FileBrowser extends Component {
 
     if (this.state.search.length > 0) {
       displayContent = this.state.contents.filter((content) => {
-        let contentName = content.name.toLowerCase();
-        let searchText = this.state.search.toLowerCase();
+        const contentName = content.name.toLowerCase();
+        const searchText = this.state.search.toLowerCase();
 
         return contentName.indexOf(searchText) !== -1;
       });
@@ -422,7 +440,7 @@ export default class FileBrowser extends Component {
       displayContent,
       [
         (content) => {
-          let sortedItem = content[this.state.sort];
+          const sortedItem = content[this.state.sort];
           if (typeof sortedItem !== 'string') {
             return sortedItem;
           }
@@ -523,7 +541,9 @@ export default class FileBrowser extends Component {
               <input
                 type="text"
                 className="form-control"
-                placeholder={T.translate(`${PREFIX}.TopPanel.searchPlaceholder`)}
+                placeholder={T.translate(
+                  `${PREFIX}.TopPanel.searchPlaceholder`
+                )}
                 value={this.state.search}
                 onChange={this.handleSearch}
                 autoFocus={this.state.searchFocus}

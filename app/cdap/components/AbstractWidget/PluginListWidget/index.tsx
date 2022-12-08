@@ -35,7 +35,7 @@ interface IPluginListWidgetProps {
   placeholder?: string;
 }
 
-interface IPluginListProps extends IWidgetProps<IPluginListWidgetProps> {}
+type IPluginListProps = IWidgetProps<IPluginListWidgetProps>;
 
 interface IPlugin {
   name: string;

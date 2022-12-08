@@ -76,12 +76,13 @@ export default class SpotlightModal extends Component {
 
   handleUpDownArrow(direction) {
     if (direction === 'UP') {
-      let focusIndex = this.state.focusIndex === 0 ? 0 : this.state.focusIndex - 1;
+      const focusIndex =
+        this.state.focusIndex === 0 ? 0 : this.state.focusIndex - 1;
       this.setState({ focusIndex });
     } else if (direction === 'DOWN') {
-      let totalResults = this.state.searchResults.results.length;
+      const totalResults = this.state.searchResults.results.length;
 
-      let focusIndex =
+      const focusIndex =
         this.state.focusIndex === totalResults - 1
           ? this.state.focusIndex
           : this.state.focusIndex + 1;
@@ -97,7 +98,9 @@ export default class SpotlightModal extends Component {
   };
 
   handleEnter() {
-    let entity = parseMetadata(this.state.searchResults.results[this.state.focusIndex]);
+    const entity = parseMetadata(
+      this.state.searchResults.results[this.state.focusIndex]
+    );
 
     // Redirect to entity once we have entity detail page
     // Right now console logging entity for identification purposes
@@ -110,10 +113,10 @@ export default class SpotlightModal extends Component {
       return;
     }
 
-    let offset = (page - 1) * PAGE_SIZE;
+    const offset = (page - 1) * PAGE_SIZE;
 
-    let query = 'tags:' + this.props.tag;
-    let target = this.props.target ? this.props.target : [];
+    const query = 'tags:' + this.props.tag;
+    const target = this.props.target ? this.props.target : [];
 
     // removed sort, cannot search and sort at the same time
     MySearchApi.search({
@@ -142,11 +145,11 @@ export default class SpotlightModal extends Component {
       );
     }
 
-    let currentNamespace = NamespaceStore.getState().selectedNamespace;
-    let searchResultsToBeRendered = this.state.searchResults.results
+    const currentNamespace = NamespaceStore.getState().selectedNamespace;
+    const searchResultsToBeRendered = this.state.searchResults.results
       .map(parseMetadata)
       .map((entity, index) => {
-        let entityTypeLabel = convertEntityTypeToApi(entity.type);
+        const entityTypeLabel = convertEntityTypeToApi(entity.type);
         let entityUrl = `/ns/${currentNamespace}/${entityTypeLabel}/${entity.id}`;
 
         if (entityTypeLabel === 'apps') {
@@ -157,7 +160,11 @@ export default class SpotlightModal extends Component {
         }
         // (CDAP-16788) We have removed app detailed view. So if it is not a pipeline don't
         // navigate anywhere.
-        if ([GLOBALS.etlDataPipeline, GLOBALS.etlDataStreams].indexOf(getType(entity)) === -1) {
+        if (
+          [GLOBALS.etlDataPipeline, GLOBALS.etlDataStreams].indexOf(
+            getType(entity)
+          ) === -1
+        ) {
           entityUrl = '';
         }
         let description = entity.metadata.metadata.properties.find(
@@ -165,7 +172,7 @@ export default class SpotlightModal extends Component {
         );
         description = description ? description.value : null;
 
-        let entityTags = entity.metadata.metadata.tags || [];
+        const entityTags = entity.metadata.metadata.tags || [];
 
         return (
           <NavLinkWrapper

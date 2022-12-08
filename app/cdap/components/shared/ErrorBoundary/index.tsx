@@ -87,5 +87,7 @@ export default class ErrorBoundary extends Component {
         />
       );
     }
+
+    return null;
   }
 }

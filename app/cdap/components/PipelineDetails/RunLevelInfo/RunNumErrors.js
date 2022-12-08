@@ -36,7 +36,9 @@ const RunNumErrorsComp = ({ logsMetrics, currentRun }) => {
         <strong>{T.translate(`${PREFIX}.errors`)}</strong>
       </div>
       <span>
-        {currentRun && currentRun.starting ? `${logsMetrics['system.app.log.error'] || 0}` : '--'}
+        {currentRun && currentRun.starting
+          ? `${logsMetrics['system.app.log.error'] || 0}`
+          : '--'}
       </span>
     </div>
   );

@@ -40,7 +40,7 @@ export const ActionConfig: IAction[] = [
     links: [
       {
         label: T.translate(`${PREFIX}.Ingestion.linkLabel`).toString(),
-        url: `/cdap/ns/:namespace/ingestion`,
+        url: '/cdap/ns/:namespace/ingestion',
       },
     ],
     experiment: 'data-ingestion',
@@ -52,7 +52,7 @@ export const ActionConfig: IAction[] = [
     links: [
       {
         label: T.translate(`${PREFIX}.Wrangler.linkLabel`).toString(),
-        url: `/cdap/ns/:namespace/wrangler`,
+        url: '/cdap/ns/:namespace/wrangler',
       },
     ],
   },

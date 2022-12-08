@@ -33,7 +33,7 @@ import EmptyMessageContainer from 'components/PipelineSummary/EmptyMessageContai
 require('./NodesMetricsGraph.scss');
 
 const PREFIX = 'features.PipelineSummary.nodesMetricsGraph';
-const GRAPHPREFIX = `features.PipelineSummary.graphs`;
+const GRAPHPREFIX = 'features.PipelineSummary.graphs';
 
 const getTableHeaders = (recordType) => [
   {
@@ -80,8 +80,8 @@ export default class NodesMetricsGraph extends Component {
     if (!Object.keys(this.props.nodesMap).length) {
       return;
     }
-    let activeNode = Object.keys(this.props.nodesMap).pop();
-    let activeNodeRuns = this.props.nodesMap[activeNode].map((run, i) => ({
+    const activeNode = Object.keys(this.props.nodesMap).pop();
+    const activeNodeRuns = this.props.nodesMap[activeNode].map((run, i) => ({
       ...run,
       index: i + 1,
     }));
@@ -91,10 +91,12 @@ export default class NodesMetricsGraph extends Component {
     });
   }
   setActiveNode(activeNode) {
-    let activeNodeRuns = objectQuery(this.state.nodesMap, activeNode).map((run, i) => ({
-      ...run,
-      index: i + 1,
-    }));
+    const activeNodeRuns = objectQuery(this.state.nodesMap, activeNode).map(
+      (run, i) => ({
+        ...run,
+        index: i + 1,
+      })
+    );
     this.setState({
       activeNode,
       activeNodeRuns,
@@ -104,7 +106,7 @@ export default class NodesMetricsGraph extends Component {
     if (!Object.keys(this.state.nodesMap)) {
       return null;
     }
-    let nodes = Object.keys(this.state.nodesMap);
+    const nodes = Object.keys(this.state.nodesMap);
     return (
       <UncontrolledDropdown className="runs-dropdown">
         <DropdownToggle caret>
@@ -114,7 +116,10 @@ export default class NodesMetricsGraph extends Component {
         <CustomDropdownMenu>
           {nodes.map((node) => {
             return (
-              <DropdownItem tag="li" onClick={this.setActiveNode.bind(this, node)}>
+              <DropdownItem
+                tag="li"
+                onClick={this.setActiveNode.bind(this, node)}
+              >
                 {node}
               </DropdownItem>
             );
@@ -135,7 +140,7 @@ export default class NodesMetricsGraph extends Component {
     return <EmptyMessageContainer loading={true} />;
   }
   renderTableBody(records) {
-    let recordsLength = records.length;
+    const recordsLength = records.length;
     return (
       <table className="table">
         <tbody>
@@ -191,19 +196,28 @@ export default class NodesMetricsGraph extends Component {
   }
   render() {
     return (
-      <div className="nods-metrics-graph" ref={(ref) => (this.containerRef = ref)}>
+      <div
+        className="nods-metrics-graph"
+        ref={(ref) => (this.containerRef = ref)}
+      >
         <div className="title-container">
-          <div className="title">{T.translate(`${PREFIX}.${this.props.recordType}.title`)} </div>
+          <div className="title">
+            {T.translate(`${PREFIX}.${this.props.recordType}.title`)}{' '}
+          </div>
           <div className="viz-switcher">
             {this.renderNodesDropdown()}
             <span
-              className={classnames('chart', { active: this.state.viewState === 'chart' })}
+              className={classnames('chart', {
+                active: this.state.viewState === 'chart',
+              })}
               onClick={() => this.setState({ viewState: 'chart' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.chart`)}
             </span>
             <span
-              className={classnames({ active: this.state.viewState === 'table' })}
+              className={classnames({
+                active: this.state.viewState === 'table',
+              })}
               onClick={() => this.setState({ viewState: 'table' })}
             >
               {T.translate(`${GRAPHPREFIX}.vizSwitcher.table`)}

@@ -85,7 +85,11 @@ export const PipelineHistoryTableRow = ({
             description: res.description,
             artifact: res.artifact,
             config,
-            change: { description: T.translate(`${PREFIX}.restoreChangeSummary`, { date }) },
+            change: {
+              description: T.translate(`${PREFIX}.restoreChangeSummary`, {
+                date,
+              }),
+            },
             // restore should not create new schedule
             'app.deploy.update.schedules': false,
             parentVersion: latestVersion,

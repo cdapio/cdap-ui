@@ -39,12 +39,14 @@ const ModelStatusesDistribution = ({ modelStatuses }) => {
   if (!modelStatuses.length) {
     return (
       <EmptyMetricMessage
-        mainMessage={`Model Status Distribution Unavailable`}
-        popoverMessage={`Atleast one model has to be trained to get Model Status distribution`}
+        mainMessage={'Model Status Distribution Unavailable'}
+        popoverMessage={
+          'Atleast one model has to be trained to get Model Status distribution'
+        }
       />
     );
   }
-  let statuses = modelStatuses.map((status) => {
+  const statuses = modelStatuses.map((status) => {
     return {
       ...status,
       value: status.bin,
@@ -52,7 +54,11 @@ const ModelStatusesDistribution = ({ modelStatuses }) => {
     };
   });
   return (
-    <PieChartWithLegends data={statuses} width={HEIGHT_OF_PIE_CHART} height={HEIGHT_OF_PIE_CHART} />
+    <PieChartWithLegends
+      data={statuses}
+      width={HEIGHT_OF_PIE_CHART}
+      height={HEIGHT_OF_PIE_CHART}
+    />
   );
 };
 

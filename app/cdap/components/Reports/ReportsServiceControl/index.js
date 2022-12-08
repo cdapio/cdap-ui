@@ -67,7 +67,7 @@ export default class ReportsServiceControl extends Component {
       i18nPrefix: PREFIX,
       featureName,
     }).subscribe(this.props.onServiceStart, (err) => {
-      let extendedMessage = isObject(err.extendedMessage)
+      const extendedMessage = isObject(err.extendedMessage)
         ? err.extendedMessage.response || err.extendedMessage.message
         : err.extendedMessage;
       this.setState({
@@ -140,8 +140,14 @@ export default class ReportsServiceControl extends Component {
           })}
         />
         <div className="image-containers">
-          <img className="img-thumbnail" src="/cdap_assets/img/Reports_preview1.png" />
-          <img className="img-thumbnail" src="/cdap_assets/img/Reports_preview2.png" />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/Reports_preview1.png"
+          />
+          <img
+            className="img-thumbnail"
+            src="/cdap_assets/img/Reports_preview2.png"
+          />
         </div>
         <div className="text-container">
           <h2> {T.translate(`${PREFIX}.title`, { featureName })} </h2>

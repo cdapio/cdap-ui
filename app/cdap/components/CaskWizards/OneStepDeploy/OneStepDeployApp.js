@@ -48,11 +48,13 @@ export default class OneStepDeployApp extends Component {
 
   buildSuccessInfo(fetchResponse) {
     // fetchResponse has the format "Successfully deployed app {appName}"
-    let appName = fetchResponse.slice(fetchResponse.indexOf('app') + 4);
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let message = T.translate('features.Wizard.ApplicationUpload.success', { appName });
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
-    let successInfo = {
+    const appName = fetchResponse.slice(fetchResponse.indexOf('app') + 4);
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const message = T.translate('features.Wizard.ApplicationUpload.success', {
+      appName,
+    });
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const successInfo = {
       message,
       linkLabel,
       linkUrl: `${window.getAbsUIUrl({
@@ -81,12 +83,12 @@ export default class OneStepDeployApp extends Component {
     const marketHost = MarketStore.getState().selectedMarketHost;
     const marketUrl = encodeURIComponent(`${marketHost}${marketPath}`);
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
     let cdapPath = `/v3/namespaces/${namespace}/apps`;
     cdapPath = encodeURIComponent(cdapPath);
 
-    let headers = {
+    const headers = {
       'Content-Type': 'application/octet-stream',
       'X-Archive-Name': jarName,
       'Session-Token': SessionStore.getState(),
@@ -94,13 +96,13 @@ export default class OneStepDeployApp extends Component {
     };
 
     if (window.CDAP_CONFIG.securityEnabled) {
-      let token = cookie.get('CDAP_Auth_Token');
+      const token = cookie.get('CDAP_Auth_Token');
       if (!isNil(token)) {
         headers.Authorization = `Bearer ${token}`;
       }
     }
 
-    let fetchUrl = `/forwardMarketToCdap?source=${marketUrl}&target=${cdapPath}`;
+    const fetchUrl = `/forwardMarketToCdap?source=${marketUrl}&target=${cdapPath}`;
 
     return Observable.create((observer) => {
       fetch(fetchUrl, {

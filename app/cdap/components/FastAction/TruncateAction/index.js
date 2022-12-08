@@ -74,7 +74,7 @@ export default class TruncateAction extends Component {
   action() {
     this.setState({ loading: true });
     let api;
-    let params = {
+    const params = {
       namespace: NamespaceStore.getState().selectedNamespace,
     };
     switch (this.props.entity.type) {
@@ -111,7 +111,7 @@ export default class TruncateAction extends Component {
     const type = getType(this.props.entity);
     const headerTitle = `${actionLabel} ${type}`;
     const tooltipID = `truncate-${this.props.entity.uniqueId}`;
-    let truncateActionClassNames = 'icon-cut';
+    const truncateActionClassNames = 'icon-cut';
     return (
       <span className="btn btn-secondary btn-sm">
         <FastActionButton
@@ -134,9 +134,12 @@ export default class TruncateAction extends Component {
           <ConfirmationModal
             headerTitle={headerTitle}
             toggleModal={this.toggleModal}
-            confirmationText={T.translate('features.FastAction.truncateConfirmation', {
-              entityId: this.props.entity.id,
-            })}
+            confirmationText={T.translate(
+              'features.FastAction.truncateConfirmation',
+              {
+                entityId: this.props.entity.id,
+              }
+            )}
             confirmButtonText={actionLabel}
             confirmFn={this.action}
             cancelFn={this.toggleModal}

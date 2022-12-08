@@ -35,7 +35,9 @@ function TopPanelView({ bucketInfo }) {
         {T.translate(`${PREFIX}.title`, { count: bucketInfo.runsList.length })}
       </div>
 
-      <div className="time-info">{T.translate(`${PREFIX}.timeRange`, { date, hour, ampm })}</div>
+      <div className="time-info">
+        {T.translate(`${PREFIX}.timeRange`, { date, hour, ampm })}
+      </div>
     </div>
   );
 }

@@ -30,7 +30,7 @@ const mapStateWithDNDFileProps = (state) => {
 const mapDispatchWithDNDFileProps = (dispatch) => {
   return {
     onDropHandler: (e) => {
-      let { version } = getArtifactNameAndVersion(e[0].name.split('.jar')[0]);
+      const { version } = getArtifactNameAndVersion(e[0].name.split('.jar')[0]);
       dispatch({
         type: ArtifactUploadActions.setVersion,
         payload: { version },
@@ -44,7 +44,10 @@ const mapDispatchWithDNDFileProps = (dispatch) => {
     },
   };
 };
-const ArtifactUploader = connect(mapStateWithDNDFileProps, mapDispatchWithDNDFileProps)(FileDnD);
+const ArtifactUploader = connect(
+  mapStateWithDNDFileProps,
+  mapDispatchWithDNDFileProps
+)(FileDnD);
 
 export default function UploadStep() {
   return (

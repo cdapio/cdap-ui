@@ -18,7 +18,9 @@ import { MyNamespaceApi } from 'api/namespace';
 import { MyPreferenceApi } from 'api/preference';
 import { MySearchApi } from 'api/search';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import NamespaceDetailsStore, { NamespaceDetailsActions } from 'components/NamespaceDetails/store';
+import NamespaceDetailsStore, {
+  NamespaceDetailsActions,
+} from 'components/NamespaceDetails/store';
 import { Observable } from 'rxjs/Observable';
 import { getCustomAppPipelineDatasetCounts } from 'services/metadata-parser';
 
@@ -29,7 +31,7 @@ function enableLoading() {
 }
 
 function getNamespacePrefs() {
-  let namespace = getCurrentNamespace();
+  const namespace = getCurrentNamespace();
 
   MyPreferenceApi.getNamespacePreferences({ namespace }).subscribe(
     (res) => {
@@ -45,11 +47,11 @@ function getNamespacePrefs() {
 }
 
 function getNamespaceProperties() {
-  let namespace = getCurrentNamespace();
+  const namespace = getCurrentNamespace();
 
   MyNamespaceApi.get({ namespace }).subscribe(
     (res) => {
-      let config = res.config;
+      const config = res.config;
 
       NamespaceDetailsStore.dispatch({
         type: NamespaceDetailsActions.setData,
@@ -72,9 +74,9 @@ function getNamespaceProperties() {
 function getData() {
   enableLoading();
 
-  let namespace = getCurrentNamespace();
+  const namespace = getCurrentNamespace();
 
-  let searchParams = {
+  const searchParams = {
     namespace,
     target: ['dataset', 'application'],
     query: '*',
@@ -89,10 +91,12 @@ function getData() {
     MySearchApi.search(searchParams)
   ).subscribe(
     (res) => {
-      let [namespaceInfo, namespacePrefs, resolvedPrefs, entities] = res;
+      const [namespaceInfo, namespacePrefs, resolvedPrefs, entities] = res;
 
-      let systemPrefs = {};
-      if (Object.keys(resolvedPrefs).length > Object.keys(namespacePrefs).length) {
+      const systemPrefs = {};
+      if (
+        Object.keys(resolvedPrefs).length > Object.keys(namespacePrefs).length
+      ) {
         Object.keys(resolvedPrefs).forEach((resolvedPrefKey) => {
           if (!(resolvedPrefKey in namespacePrefs)) {
             systemPrefs[resolvedPrefKey] = resolvedPrefs[resolvedPrefKey];
@@ -100,11 +104,13 @@ function getData() {
         });
       }
 
-      let { pipelineCount, customAppCount, datasetCount } = getCustomAppPipelineDatasetCounts(
-        entities
-      );
+      const {
+        pipelineCount,
+        customAppCount,
+        datasetCount,
+      } = getCustomAppPipelineDatasetCounts(entities);
 
-      let config = namespaceInfo.config;
+      const config = namespaceInfo.config;
 
       NamespaceDetailsStore.dispatch({
         type: NamespaceDetailsActions.setData,

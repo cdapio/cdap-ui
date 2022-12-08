@@ -69,7 +69,10 @@ export default class Popover extends PureComponent {
   hidePopoverEventHandler = (popoverId) => {
     if (
       this.id !== popoverId &&
-      !isDescendant(document.getElementById(this.id), document.getElementById(popoverId)) &&
+      !isDescendant(
+        document.getElementById(this.id),
+        document.getElementById(popoverId)
+      ) &&
       this.state.showPopover
     ) {
       this.setState(
@@ -112,7 +115,7 @@ export default class Popover extends PureComponent {
     Mousetrap.unbind('esc');
   };
   togglePopover = (e) => {
-    let newState = !this.state.showPopover;
+    const newState = !this.state.showPopover;
 
     this.setState(
       {
@@ -125,25 +128,28 @@ export default class Popover extends PureComponent {
       if (this.props.showOn !== 'Hover') {
         this.eventEmitter.emit('POPOVER_OPEN', this.id);
       }
-      this.documentClick$ = Observable.fromEvent(document, 'click', { capture: true }).subscribe(
-        (e) => {
-          let parent = document.getElementById(this.id);
-          let child = e.target;
-          if (this.props.enableInteractionInPopover && isDescendant(parent, child)) {
-            // Just return instead of stopping propagation.
-            // This will allow to nest popovers and close the inner popover
-            // while clicking on the outer one.
-            return;
-          }
-          this.cleanUpDocumentClickEventHandler();
-          this.setState(
-            {
-              showPopover: false,
-            },
-            this.updateParentOnToggle
-          );
+      this.documentClick$ = Observable.fromEvent(document, 'click', {
+        capture: true,
+      }).subscribe((e) => {
+        const parent = document.getElementById(this.id);
+        const child = e.target;
+        if (
+          this.props.enableInteractionInPopover &&
+          isDescendant(parent, child)
+        ) {
+          // Just return instead of stopping propagation.
+          // This will allow to nest popovers and close the inner popover
+          // while clicking on the outer one.
+          return;
         }
-      );
+        this.cleanUpDocumentClickEventHandler();
+        this.setState(
+          {
+            showPopover: false,
+          },
+          this.updateParentOnToggle
+        );
+      });
 
       Mousetrap.bind('esc', this.togglePopover);
     } else {
@@ -169,7 +175,7 @@ export default class Popover extends PureComponent {
   };
 
   render() {
-    let targetProps = {
+    const targetProps = {
       style: this.props.targetDimension,
     };
     if (this.props.showOn === 'Click') {

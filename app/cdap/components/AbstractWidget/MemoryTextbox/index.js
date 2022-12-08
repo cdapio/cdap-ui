@@ -35,16 +35,16 @@ export default function MemoryTextbox({ ...props }) {
   }
   min = Math.floor(min / 1024);
   max = Math.floor(max / 1024);
-  let numberValue = parseInt(value, 10);
+  const numberValue = parseInt(value, 10);
   value = isNaN(numberValue) ? value : numberValue;
-  let memoryInGB = Math.floor(value / 1024);
+  const memoryInGB = Math.floor(value / 1024);
   return (
-    <div className={`memory-textbox-widget`}>
+    <div className={'memory-textbox-widget'}>
       <Input
-        className={`number-textbox-widget`}
+        className={'number-textbox-widget'}
         type="number"
         onChange={(e) => {
-          let valueInMB = Math.floor(e.target.value * 1024);
+          const valueInMB = Math.floor(e.target.value * 1024);
           onChange(valueInMB);
         }}
         value={memoryInGB}

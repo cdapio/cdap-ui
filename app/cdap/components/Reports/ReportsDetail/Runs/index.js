@@ -57,8 +57,8 @@ function getType(run) {
 }
 
 function renderHeader(headers) {
-  let nameLabel = T.translate('commons.nameLabel');
-  let typeLabel = T.translate('commons.typeLabel');
+  const nameLabel = T.translate('commons.nameLabel');
+  const typeLabel = T.translate('commons.typeLabel');
 
   return (
     <div className="grid-header">
@@ -68,7 +68,7 @@ function renderHeader(headers) {
         <div title={typeLabel}>{typeLabel}</div>
 
         {headers.map((head) => {
-          let headerLabel = T.translate(`${PREFIX}.${head}`);
+          const headerLabel = T.translate(`${PREFIX}.${head}`);
 
           return <div title={headerLabel}>{headerLabel}</div>;
         })}
@@ -81,8 +81,8 @@ function renderBody(runs, headers) {
   return (
     <div className="grid-body">
       {runs.map((run, i) => {
-        let name = getName(run);
-        let type = getType(run);
+        const name = getName(run);
+        const type = getType(run);
         return (
           <div key={i} className="grid-row">
             <div title={name}>{name}</div>
@@ -101,9 +101,11 @@ function renderBody(runs, headers) {
               } else if (head === 'startMethod') {
                 value = capitalize(value);
               } else if (head === 'runtimeArgs') {
-                let keyValuePairs = Object.entries(value).map((keyValuePair) => {
-                  return `${keyValuePair[0]} = ${keyValuePair[1]}`;
-                });
+                const keyValuePairs = Object.entries(value).map(
+                  (keyValuePair) => {
+                    return `${keyValuePair[0]} = ${keyValuePair[1]}`;
+                  }
+                );
 
                 value = keyValuePairs.join(', ');
 
@@ -130,7 +132,7 @@ function getHeaders(request) {
     return [];
   }
 
-  let headers = difference(request.fields, DefaultSelection);
+  const headers = difference(request.fields, DefaultSelection);
 
   return headers;
 }
@@ -146,13 +148,13 @@ class RunsView extends Component {
   }
 
   adjustGridColumnsWidth(request) {
-    let headers = getHeaders(request);
+    const headers = getHeaders(request);
 
     if (!headers.length) {
       return;
     }
 
-    let runtimeArgsIndex = headers.indexOf('runtimeArgs');
+    const runtimeArgsIndex = headers.indexOf('runtimeArgs');
 
     if (runtimeArgsIndex === -1) {
       return;
@@ -166,12 +168,16 @@ class RunsView extends Component {
       columns in total, then the css of the grid-row element would be:
       grid-template-columns: repeat(4, minmax(10px, 1fr)) 300px repeat(2, minmax(10px, 1fr))
     */
-    const reportRunsGridRowClass = '.reports-runs-container .grid.grid-container .grid-row';
-    const reportRunsGridRowElements = document.querySelectorAll(reportRunsGridRowClass);
+    const reportRunsGridRowClass =
+      '.reports-runs-container .grid.grid-container .grid-row';
+    const reportRunsGridRowElements = document.querySelectorAll(
+      reportRunsGridRowClass
+    );
     const dynamicColWidth = 'minmax(10px, 1fr)';
     const runtimeArgsColWidth = '300px';
     const numColsAfterRuntimeArgsCol = headers.length - runtimeArgsIndex - 1;
-    const gridTemplateColumnsStyle = `repeat(${runtimeArgsIndex + 2}, ${dynamicColWidth})
+    const gridTemplateColumnsStyle = `repeat(${runtimeArgsIndex +
+      2}, ${dynamicColWidth})
        ${runtimeArgsColWidth}
        repeat(${numColsAfterRuntimeArgsCol}, ${dynamicColWidth})
       `;
@@ -182,8 +188,8 @@ class RunsView extends Component {
   }
 
   render() {
-    let { runs, request } = this.props;
-    let headers = getHeaders(request);
+    const { runs, request } = this.props;
+    const headers = getHeaders(request);
 
     return (
       <div className="reports-runs-container">

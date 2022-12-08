@@ -32,7 +32,9 @@ export default function PipelineResources({
   return (
     <div className="resource-holder">
       <div className="resource-group row">
-        <span className="col-4 control-label">{T.translate(`${PREFIX}.cpu`)}</span>
+        <span className="col-4 control-label">
+          {T.translate(`${PREFIX}.cpu`)}
+        </span>
         <SelectWithOptions
           className="small-dropdown form-control"
           options={CORE_OPTIONS}
@@ -42,7 +44,9 @@ export default function PipelineResources({
         />
       </div>
       <div className="resource-group row">
-        <span className="col-4 control-label">{T.translate(`${PREFIX}.memory`)}</span>
+        <span className="col-4 control-label">
+          {T.translate(`${PREFIX}.memory`)}
+        </span>
         <input
           className="memoryMB-input form-control"
           type="number"

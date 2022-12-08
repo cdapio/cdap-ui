@@ -25,7 +25,11 @@
   (in Studio view) or to PipelineDetailStore (in Detail view)
 */
 
-import { defaultAction, composeEnhancers, arrayOfStringsMatchTargetPrefix } from 'services/helpers';
+import {
+  defaultAction,
+  composeEnhancers,
+  arrayOfStringsMatchTargetPrefix,
+} from 'services/helpers';
 import { createStore } from 'redux';
 import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
 import range from 'lodash/range';
@@ -63,7 +67,8 @@ const ACTIONS = {
   SET_BACKPRESSURE: 'SET_BACKPRESSURE',
   SET_CUSTOM_CONFIG: 'SET_CUSTOM_CONFIG',
   SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS: 'SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS',
-  SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS: 'SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS',
+  SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS:
+    'SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS',
   SET_NUM_EXECUTORS: 'SET_NUM_EXECUTORS',
   SET_INSTRUMENTATION: 'SET_INSTRUMENTATION',
   SET_STAGE_LOGGING: 'SET_STAGE_LOGGING',
@@ -144,7 +149,10 @@ const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
     Object.prototype.hasOwnProperty.call(properties, SPARK_DYNAMIC_ALLOCATION)
   ) {
     if (properties[SPARK_DYNAMIC_ALLOCATION] === 'true') {
-      managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING];
+      managedProperties = [
+        SPARK_DYNAMIC_ALLOCATION,
+        SPARK_DYNAMIC_ALLOCATION_SHUFFLE_TRACKING,
+      ];
     } else if (properties[SPARK_DYNAMIC_ALLOCATION] === 'false') {
       managedProperties = [SPARK_DYNAMIC_ALLOCATION, SPARK_EXECUTOR_INSTANCES];
     }
@@ -159,9 +167,12 @@ const getCustomConfigFromProperties = (properties = {}, pipelineType) => {
 };
 
 const getCustomConfigForDisplay = (properties, engine, pipelineType) => {
-  let currentCustomConfig = getCustomConfigFromProperties(properties, pipelineType);
-  let customConfigForDisplay = {};
-  for (let key in currentCustomConfig) {
+  const currentCustomConfig = getCustomConfigFromProperties(
+    properties,
+    pipelineType
+  );
+  const customConfigForDisplay = {};
+  for (const key in currentCustomConfig) {
     if (Object.prototype.hasOwnProperty.call(currentCustomConfig, key)) {
       let newKey = key;
       const mapReduceKey = 'system.mapreduce.';
@@ -178,13 +189,14 @@ const getCustomConfigForDisplay = (properties, engine, pipelineType) => {
 };
 
 const getEngineDisplayLabel = (engine, pipelineType) => {
-  return engine === ENGINE_OPTIONS.MAPREDUCE && GLOBALS.etlBatchPipelines.includes(pipelineType)
+  return engine === ENGINE_OPTIONS.MAPREDUCE &&
+    GLOBALS.etlBatchPipelines.includes(pipelineType)
     ? 'MapReduce'
     : 'Apache Spark';
 };
 
 const checkForReset = (runtimeArgs, resolvedMacros) => {
-  let runtimeArgsPairs = runtimeArgs.pairs;
+  const runtimeArgsPairs = runtimeArgs.pairs;
   runtimeArgsPairs.forEach((runtimeArg) => {
     if (!runtimeArg.notDeletable) {
       return;
@@ -192,7 +204,7 @@ const checkForReset = (runtimeArgs, resolvedMacros) => {
     if (runtimeArg.provided) {
       runtimeArg.showReset = false;
     } else {
-      let runtimeArgKey = runtimeArg.key;
+      const runtimeArgKey = runtimeArg.key;
       if (Object.prototype.hasOwnProperty.call(resolvedMacros, runtimeArgKey)) {
         if (resolvedMacros[runtimeArgKey] !== runtimeArg.value) {
           runtimeArg.showReset = true;
@@ -206,30 +218,32 @@ const checkForReset = (runtimeArgs, resolvedMacros) => {
 };
 
 const resetRuntimeArgToResolvedValue = (index, runtimeArgs, resolvedMacros) => {
-  let runtimeArgKey = runtimeArgs.pairs[index].key;
+  const runtimeArgKey = runtimeArgs.pairs[index].key;
   runtimeArgs.pairs[index].value = resolvedMacros[runtimeArgKey];
   return runtimeArgs;
 };
 
 const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
-  let providedMacros = {};
-  let runtimeArgsMap = {};
+  const providedMacros = {};
+  const runtimeArgsMap = {};
 
   // holds provided macros in an object here even though we don't need the value,
   // because object hash is faster than Array.indexOf
   if (currentRuntimeArgs.pairs) {
     currentRuntimeArgs.pairs.forEach((currentPair) => {
-      let key = currentPair.key;
+      const key = currentPair.key;
       runtimeArgsMap[key] = currentPair.value || '';
       if (currentPair.notDeletable && currentPair.provided) {
         providedMacros[key] = currentPair.value;
       }
     });
-    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.filter((keyValuePair) => {
-      return Object.keys(macrosMap).indexOf(keyValuePair.key) === -1;
-    });
+    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.filter(
+      (keyValuePair) => {
+        return Object.keys(macrosMap).indexOf(keyValuePair.key) === -1;
+      }
+    );
   }
-  let macros = Object.keys(macrosMap).map((macroKey) => {
+  const macros = Object.keys(macrosMap).map((macroKey) => {
     return {
       key: macroKey,
       value: runtimeArgsMap[macroKey] || '',
@@ -242,24 +256,33 @@ const getRuntimeArgsForDisplay = (currentRuntimeArgs, macrosMap) => {
   currentRuntimeArgs.pairs = macros.concat(currentRuntimeArgs.pairs);
   // concat an empty cell if all runtimeargs are generated and no user entered
   const numOfGeneratedRuntimeArgs = currentRuntimeArgs.pairs.filter((pair) =>
-    arrayOfStringsMatchTargetPrefix(Object.values(GENERATED_RUNTIMEARGS), pair.key)
+    arrayOfStringsMatchTargetPrefix(
+      Object.values(GENERATED_RUNTIMEARGS),
+      pair.key
+    )
   ).length;
   if (
     numOfGeneratedRuntimeArgs > 0 &&
     currentRuntimeArgs.pairs.length === numOfGeneratedRuntimeArgs
   ) {
-    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(getDefaultKeyValuePair());
+    currentRuntimeArgs.pairs = currentRuntimeArgs.pairs.concat(
+      getDefaultKeyValuePair()
+    );
   }
   return currentRuntimeArgs;
 };
 
 const checkIfMissingKeyValues = (runtimeArguments, customConfig) => {
   return (
-    keyValuePairsHaveMissingValues(runtimeArguments) || keyValuePairsHaveMissingValues(customConfig)
+    keyValuePairsHaveMissingValues(runtimeArguments) ||
+    keyValuePairsHaveMissingValues(customConfig)
   );
 };
 
-const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) => {
+const configure = (
+  state = DEFAULT_CONFIGURE_OPTIONS,
+  action = defaultAction
+) => {
   switch (action.type) {
     case ACTIONS.INITIALIZE_CONFIG:
       return {
@@ -274,16 +297,22 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
     case ACTIONS.SET_RUNTIME_ARGS:
       return {
         ...state,
-        runtimeArgs: checkForReset(action.payload.runtimeArgs, state.resolvedMacros),
+        runtimeArgs: checkForReset(
+          action.payload.runtimeArgs,
+          state.resolvedMacros
+        ),
         isMissingKeyValues: checkIfMissingKeyValues(
           action.payload.runtimeArgs,
           state.customConfigKeyValuePairs
         ),
       };
     case ACTIONS.SET_RESOLVED_MACROS: {
-      let resolvedMacros = action.payload.resolvedMacros;
-      let runtimeArgs = getRuntimeArgsForDisplay(cloneDeep(state.runtimeArgs), resolvedMacros);
-      let isMissingKeyValues = checkIfMissingKeyValues(
+      const resolvedMacros = action.payload.resolvedMacros;
+      const runtimeArgs = getRuntimeArgsForDisplay(
+        cloneDeep(state.runtimeArgs),
+        resolvedMacros
+      );
+      const isMissingKeyValues = checkIfMissingKeyValues(
         runtimeArgs,
         state.customConfigKeyValuePairs
       );
@@ -312,12 +341,14 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
     case ACTIONS.SET_BATCH_INTERVAL_RANGE:
       return {
         ...state,
-        batchInterval: action.payload.batchIntervalRange + state.batchInterval.slice(-1),
+        batchInterval:
+          action.payload.batchIntervalRange + state.batchInterval.slice(-1),
       };
     case ACTIONS.SET_BATCH_INTERVAL_UNIT:
       return {
         ...state,
-        batchInterval: state.batchInterval.slice(0, -1) + action.payload.batchIntervalUnit,
+        batchInterval:
+          state.batchInterval.slice(0, -1) + action.payload.batchIntervalUnit,
       };
     case ACTIONS.SET_MEMORY_MB:
       return {
@@ -372,29 +403,41 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
         ...state,
         properties: {
           ...state.properties,
-          'system.spark.spark.streaming.backpressure.enabled': action.payload.backpressure,
+          'system.spark.spark.streaming.backpressure.enabled':
+            action.payload.backpressure,
         },
       };
     case ACTIONS.SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS:
       return {
         ...state,
         customConfigKeyValuePairs: action.payload.keyValues,
-        isMissingKeyValues: checkIfMissingKeyValues(state.runtimeArgs, action.payload.keyValues),
+        isMissingKeyValues: checkIfMissingKeyValues(
+          state.runtimeArgs,
+          action.payload.keyValues
+        ),
       };
     case ACTIONS.SET_CUSTOM_CONFIG: {
       // Need to remove previous custom configs from config.properties before setting new ones
-      let currentProperties = { ...state.properties };
-      let currentCustomConfigs = getCustomConfigFromProperties(currentProperties);
+      const currentProperties = { ...state.properties };
+      const currentCustomConfigs = getCustomConfigFromProperties(
+        currentProperties
+      );
       Object.keys(currentCustomConfigs).forEach((customConfigKey) => {
-        if (Object.prototype.hasOwnProperty.call(currentProperties, customConfigKey)) {
+        if (
+          Object.prototype.hasOwnProperty.call(
+            currentProperties,
+            customConfigKey
+          )
+        ) {
           delete currentProperties[customConfigKey];
         }
       });
 
       // Need to add system.mapreduce or system.spark to beginning of the keys that the user added
-      let newCustomConfigs = {};
+      const newCustomConfigs = {};
       Object.keys(action.payload.customConfig).forEach((newCustomConfigKey) => {
-        let newCustomConfigValue = action.payload.customConfig[newCustomConfigKey];
+        const newCustomConfigValue =
+          action.payload.customConfig[newCustomConfigKey];
         if (
           GLOBALS.etlBatchPipelines.includes(action.payload.pipelineType) &&
           state.engine === ENGINE_OPTIONS.MAPREDUCE
@@ -416,18 +459,26 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
     }
     case ACTIONS.SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS: {
       // Need to remove previous custom configs from config.properties before setting new ones
-      let currentProperties = { ...state.properties };
-      let currentCustomConfigs = getCustomConfigFromProperties(currentProperties);
+      const currentProperties = { ...state.properties };
+      const currentCustomConfigs = getCustomConfigFromProperties(
+        currentProperties
+      );
       Object.keys(currentCustomConfigs).forEach((customConfigKey) => {
-        if (Object.prototype.hasOwnProperty.call(currentProperties, customConfigKey)) {
+        if (
+          Object.prototype.hasOwnProperty.call(
+            currentProperties,
+            customConfigKey
+          )
+        ) {
           delete currentProperties[customConfigKey];
         }
       });
 
       // Need to add system.mapreduce or system.spark to beginning of the keys that the user added
-      let newCustomConfigs = {};
+      const newCustomConfigs = {};
       Object.keys(action.payload.customConfig).forEach((newCustomConfigKey) => {
-        let newCustomConfigValue = action.payload.customConfig[newCustomConfigKey];
+        const newCustomConfigValue =
+          action.payload.customConfig[newCustomConfigKey];
         if (
           GLOBALS.etlBatchPipelines.includes(action.payload.pipelineType) &&
           state.engine === ENGINE_OPTIONS.MAPREDUCE
@@ -446,11 +497,14 @@ const configure = (state = DEFAULT_CONFIGURE_OPTIONS, action = defaultAction) =>
           ...newCustomConfigs,
         },
         customConfigKeyValuePairs: action.payload.keyValues,
-        isMissingKeyValues: checkIfMissingKeyValues(state.runtimeArgs, action.payload.keyValues),
+        isMissingKeyValues: checkIfMissingKeyValues(
+          state.runtimeArgs,
+          action.payload.keyValues
+        ),
       };
     }
     case ACTIONS.SET_NUM_EXECUTORS: {
-      let numExecutorsValue = action.payload.numExecutors;
+      const numExecutorsValue = action.payload.numExecutors;
       return {
         ...state,
         properties: {

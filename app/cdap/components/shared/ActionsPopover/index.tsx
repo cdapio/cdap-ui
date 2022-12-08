@@ -96,7 +96,9 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
           return (
             <li
               key={i}
-              className={classnames(action.className, { disabled: action.disabled })}
+              className={classnames(action.className, {
+                disabled: action.disabled,
+              })}
               onClick={onClick}
               title={action.title}
               data-testid={action.label + '-on-popover'}

@@ -55,7 +55,7 @@ export default function GroupedBarChart({
   heightOffset,
   tooltipOptions,
 }) {
-  let newSpec = {
+  const newSpec = {
     ...chartSpec,
     encoding: {
       ...chartSpec.encoding,

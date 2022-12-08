@@ -22,7 +22,11 @@ import isNil from 'lodash/isNil';
 export default class StateWrapper extends PureComponent {
   static propTypes = {
     comp: PropTypes.any,
-    value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]),
+    value: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     onChange: PropTypes.func,
     updateAllProperties: PropTypes.func,
     widgetProps: PropTypes.object,
@@ -57,8 +61,19 @@ export default class StateWrapper extends PureComponent {
   };
 
   render() {
-    let { comp: Comp, widgetProps, extraConfig, disabled, errors, dataCy, dataTestId } = this.props;
-    const value = typeof this.state.value === 'function' ? this.state.value() : this.state.value;
+    const {
+      comp: Comp,
+      widgetProps,
+      extraConfig,
+      disabled,
+      errors,
+      dataCy,
+      dataTestId,
+    } = this.props;
+    const value =
+      typeof this.state.value === 'function'
+        ? this.state.value()
+        : this.state.value;
     /*
       TL;DR - Get new value for input widget during each render.
       When a function is passed instead of state each re-render gets the upto date value.

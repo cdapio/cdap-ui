@@ -31,7 +31,7 @@ const directiveComponentMap = {
 export default class ColumnHighlighter extends Component {
   constructor(props) {
     super(props);
-    let { highlightColumns } = DataPrepStore.getState().dataprep;
+    const { highlightColumns } = DataPrepStore.getState().dataprep;
     this.state = {
       highlightColumns: highlightColumns,
     };
@@ -39,8 +39,9 @@ export default class ColumnHighlighter extends Component {
   }
   componentDidMount() {
     this.datastoreSubscription = DataPrepStore.subscribe(() => {
-      let highlightColumns = DataPrepStore.getState().dataprep.highlightColumns;
-      let { directive } = highlightColumns;
+      const highlightColumns = DataPrepStore.getState().dataprep
+        .highlightColumns;
+      const { directive } = highlightColumns;
       if (!isNil(directive)) {
         this.setState({
           highlightColumns,
@@ -70,8 +71,8 @@ export default class ColumnHighlighter extends Component {
     });
   }
   render() {
-    let { directive, columns } = this.state.highlightColumns;
-    let Tag = directiveComponentMap[directive];
+    const { directive, columns } = this.state.highlightColumns;
+    const Tag = directiveComponentMap[directive];
 
     if (isNil(Tag)) {
       return null;

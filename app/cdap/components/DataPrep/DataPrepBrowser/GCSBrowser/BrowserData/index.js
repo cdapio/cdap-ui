@@ -43,7 +43,9 @@ const TableHeader = ({ enableRouting }) => {
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Name`)}</div>
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Type`)}</div>
         <div className="col-3">{T.translate(`${PREFIX}.Headers.Size`)}</div>
-        <div className="col-3">{T.translate(`${PREFIX}.Headers.LastModified`)}</div>
+        <div className="col-3">
+          {T.translate(`${PREFIX}.Headers.LastModified`)}
+        </div>
       </div>
     );
   }
@@ -81,11 +83,16 @@ const BrowserData = ({
 
   const filteredData = data.filter((d) => {
     if (search && search.length && d.name) {
-      let isSearchTextInName = d.name.indexOf(search);
+      const isSearchTextInName = d.name.indexOf(search);
       if (d.type && d.type === 'bucket') {
-        return isSearchTextInName !== -1 || (d.owner && d.owner.indexOf(search) !== -1);
+        return (
+          isSearchTextInName !== -1 ||
+          (d.owner && d.owner.indexOf(search) !== -1)
+        );
       }
-      return isSearchTextInName !== -1 || (d.path && d.path.indexOf(search) !== -1);
+      return (
+        isSearchTextInName !== -1 || (d.path && d.path.indexOf(search) !== -1)
+      );
     }
     return true;
   });
@@ -113,7 +120,7 @@ const BrowserData = ({
 BrowserData.propTypes = props;
 
 const mapStateToProps = (state, ownProps) => {
-  let { enableRouting = true, onWorkspaceCreate = () => {} } = ownProps;
+  const { enableRouting = true, onWorkspaceCreate = () => {} } = ownProps;
   return {
     data: state.gcs.activeBucketDetails,
     search: state.gcs.search,
@@ -133,6 +140,9 @@ const mapDispatchToProps = () => {
   };
 };
 
-const BrowserDataWrapper = connect(mapStateToProps, mapDispatchToProps)(BrowserData);
+const BrowserDataWrapper = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BrowserData);
 
 export default BrowserDataWrapper;

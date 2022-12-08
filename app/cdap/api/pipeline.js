@@ -19,7 +19,8 @@ import { apiCreator } from 'services/resource-helper';
 
 const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/apps/:appId';
-const artifactBasePath = `/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties`;
+const artifactBasePath =
+  '/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties';
 const statsPath = `${basepath}/workflows/:workflowId/statistics?start=0`;
 const schedulePath = `${basepath}/schedules/:scheduleId`;
 const programPath = `${basepath}/:programType/:programName`;
@@ -35,8 +36,9 @@ const extensionsFetchBase =
   '/namespaces/:namespace/artifacts/:pipelineType/versions/:version/extensions';
 const pluginFetchBase = `${extensionsFetchBase}/:extensionType`;
 const pluginsFetchPath = `${pluginFetchBase}?scope=system`;
-var pipelineV1AppPath = '/namespaces/system/apps/pipeline/services/studio/methods/v1';
-var pipelineV1AppContextPath = `${pipelineV1AppPath}/contexts/:context`;
+const pipelineV1AppPath =
+  '/namespaces/system/apps/pipeline/services/studio/methods/v1';
+const pipelineV1AppContextPath = `${pipelineV1AppPath}/contexts/:context`;
 
 export const MyPipelineApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', '/namespaces/:namespace/apps'),
@@ -44,22 +46,47 @@ export const MyPipelineApi = {
 
   schedule: apiCreator(dataSrc, 'POST', 'REQUEST', `${schedulePath}/resume`),
   suspend: apiCreator(dataSrc, 'POST', 'REQUEST', `${schedulePath}/suspend`),
-  getScheduleStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${schedulePath}/status`),
+  getScheduleStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${schedulePath}/status`
+  ),
 
   getStatistics: apiCreator(dataSrc, 'GET', 'REQUEST', statsPath),
   getMetadataEndpoints: apiCreator(dataSrc, 'GET', 'REQUEST', metadataPath),
-  getRunDetails: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/runs/:runid`),
+  getRunDetails: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${programPath}/runs/:runid`
+  ),
   getRuns: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/runs`),
   pollRuns: apiCreator(dataSrc, 'GET', 'POLL', `${programPath}/runs`),
   getRunsCount: apiCreator(dataSrc, 'POST', 'REQUEST', `${runsCountPath}`),
   pollRunsCount: apiCreator(dataSrc, 'POST', 'POLL', `${runsCountPath}`),
-  getNextRunTime: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/nextruntime)`),
-  batchGetNextRunTime: apiCreator(dataSrc, 'POST', 'REQUEST', batchNextRuntimePath),
+  getNextRunTime: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${programPath}/nextruntime)`
+  ),
+  batchGetNextRunTime: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    batchNextRuntimePath
+  ),
   fetchMacros: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/plugins`),
   fetchWidgetJson: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
   fetchPlugins: apiCreator(dataSrc, 'GET', 'REQUEST', pluginsFetchPath),
   get: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
-  getAppVersion: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions/:version`),
+  getAppVersion: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/versions/:version`
+  ),
   pollStatistics: apiCreator(dataSrc, 'GET', 'REQUEST', statsPath),
   getBatchRuns: apiCreator(dataSrc, 'POST', 'REQUEST', batchRunsPath),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', basepath),
@@ -67,9 +94,24 @@ export const MyPipelineApi = {
   getPluginProperties: apiCreator(dataSrc, 'GET', 'REQUEST', pluginsPath),
   getExtensions: apiCreator(dataSrc, 'GET', 'REQUEST', extensionsPath),
 
-  getDrafts: apiCreator(dataSrc, 'GET', 'REQUEST', `${pipelineV1AppContextPath}/drafts`),
-  getDraft: apiCreator(dataSrc, 'GET', 'REQUEST', `${pipelineV1AppContextPath}/drafts/:draftId`),
-  saveDraft: apiCreator(dataSrc, 'PUT', 'REQUEST', `${pipelineV1AppContextPath}/drafts/:draftId`),
+  getDrafts: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${pipelineV1AppContextPath}/drafts`
+  ),
+  getDraft: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${pipelineV1AppContextPath}/drafts/:draftId`
+  ),
+  saveDraft: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${pipelineV1AppContextPath}/drafts/:draftId`
+  ),
   deleteDraft: apiCreator(
     dataSrc,
     'DELETE',

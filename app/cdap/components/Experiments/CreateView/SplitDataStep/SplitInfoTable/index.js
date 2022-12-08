@@ -121,7 +121,9 @@ export default class SplitInfoTable extends Component {
   onToggleSelectedType = (e) => {
     if (this.state.selectedTypes.indexOf(e.target.name) !== -1) {
       this.setState({
-        selectedTypes: this.state.selectedTypes.filter((type) => type !== e.target.name),
+        selectedTypes: this.state.selectedTypes.filter(
+          (type) => type !== e.target.name
+        ),
       });
     } else {
       this.setState({
@@ -237,7 +239,10 @@ export default class SplitInfoTable extends Component {
       return type;
     };
     const getStats = ({ name: fieldName }) => {
-      let stat = findLast(this.state.splitInfo.stats, (stat) => stat.field === fieldName);
+      let stat = findLast(
+        this.state.splitInfo.stats,
+        (stat) => stat.field === fieldName
+      );
       stat = {
         numTotal: objectQuery(stat, 'numTotal', 'total') || '--',
         numNull: objectQuery(stat, 'numNull', 'total') || '--',
@@ -262,7 +267,8 @@ export default class SplitInfoTable extends Component {
       }
       return field;
     };
-    const typeMatchFilter = (field) => this.state.selectedTypes.indexOf(getFieldType(field)) !== -1;
+    const typeMatchFilter = (field) =>
+      this.state.selectedTypes.indexOf(getFieldType(field)) !== -1;
     const categoricalFields = schema.fields
       .filter(
         (field) =>
@@ -348,11 +354,15 @@ export default class SplitInfoTable extends Component {
           />
         </div>
         <div className="split-info-numerical-table">
-          <div className="split-table-header">{T.translate(`${PREFIX}.numerical`)}</div>
+          <div className="split-table-header">
+            {T.translate(`${PREFIX}.numerical`)}
+          </div>
           {this.renderNumericalTable(numericalFields)}
         </div>
         <div className="split-info-categorical-table">
-          <div className="split-table-header">{T.translate(`${PREFIX}.categorical`)}</div>
+          <div className="split-table-header">
+            {T.translate(`${PREFIX}.categorical`)}
+          </div>
           {this.renderCategoricalTable(categoricalFields)}
         </div>
       </div>
@@ -362,7 +372,10 @@ export default class SplitInfoTable extends Component {
   render() {
     return (
       <div className="split-info-table">
-        <div className="split-info-collapsable-section" onClick={this.toggleCollapse}>
+        <div
+          className="split-info-collapsable-section"
+          onClick={this.toggleCollapse}
+        >
           {this.state.collapsed ? (
             <IconSVG name="icon-caret-right" />
           ) : (

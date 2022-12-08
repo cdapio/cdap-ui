@@ -86,7 +86,9 @@ const ActionButtonView: React.FC<IActionButtonProps> = ({
 
   return (
     <div
-      className={classnames(classes.root, { [classes.disabled]: loading || disabled })}
+      className={classnames(classes.root, {
+        [classes.disabled]: loading || disabled,
+      })}
       onClick={handleClick}
     >
       <div className={classes.icon}>{loading ? loadingIcon : icon}</div>

@@ -109,7 +109,10 @@ const SecureKeysView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   // Failure Alert component status closes only when user manually closes it.
   // Reset status when an Alert component is closed.
   const onAlertClose = () => {
-    dispatch({ type: 'SET_SECURE_KEY_STATUS', secureKeyStatus: SecureKeyStatus.Normal });
+    dispatch({
+      type: 'SET_SECURE_KEY_STATUS',
+      secureKeyStatus: SecureKeyStatus.Normal,
+    });
   };
 
   const onEditDialogClose = () => {
@@ -121,13 +124,19 @@ const SecureKeysView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   };
 
   const alertSuccess = () => {
-    dispatch({ type: 'SET_SECURE_KEY_STATUS', secureKeyStatus: SecureKeyStatus.Success });
+    dispatch({
+      type: 'SET_SECURE_KEY_STATUS',
+      secureKeyStatus: SecureKeyStatus.Success,
+    });
 
     fetchSecureKeys();
   };
 
   const alertFailure = () => {
-    dispatch({ type: 'SET_SECURE_KEY_STATUS', secureKeyStatus: SecureKeyStatus.Failure });
+    dispatch({
+      type: 'SET_SECURE_KEY_STATUS',
+      secureKeyStatus: SecureKeyStatus.Failure,
+    });
   };
 
   const openDeleteDialog = (keyIndex) => {

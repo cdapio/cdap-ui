@@ -22,7 +22,10 @@ import { preventPropagation } from 'services/helpers';
 import DSVEditor from 'components/DSVEditor';
 import MyRulesEngine from 'api/rulesengine';
 import NamespaceStore from 'services/NamespaceStore';
-import { getRules, setError } from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
+import {
+  getRules,
+  setError,
+} from 'components/RulesEngineHome/RulesEngineStore/RulesEngineActions';
 import isEmpty from 'lodash/isEmpty';
 import T from 'i18n-react';
 
@@ -88,7 +91,7 @@ export default class CreateRule extends Component {
   };
 
   createRule = () => {
-    let { selectedNamespace: namespace } = NamespaceStore.getState();
+    const { selectedNamespace: namespace } = NamespaceStore.getState();
     let config = {};
     let { name: id, when, then, description } = this.state;
     then = then.map((clause) => clause.property);
@@ -113,25 +116,35 @@ export default class CreateRule extends Component {
           </Col>
           <Col xs="6">{T.translate(`${PREFIX}.form.today`)}</Col>
           <Col xs="12">
-            <Form onSubmit={preventPropagation} className="when-then-clause-container">
+            <Form
+              onSubmit={preventPropagation}
+              className="when-then-clause-container"
+            >
               <FormGroup row>
-                <Label sm={2}> {T.translate(`${PREFIX}.form.description`)} </Label>
+                <Label sm={2}>
+                  {' '}
+                  {T.translate(`${PREFIX}.form.description`)}{' '}
+                </Label>
                 <Col sm={9} className="when-then-value">
                   <textarea
                     value={this.state.description}
                     onChange={this.onDescriptionChange}
-                    placeholder={T.translate(`${PREFIX}.form.descriptionplaceholder`)}
+                    placeholder={T.translate(
+                      `${PREFIX}.form.descriptionplaceholder`
+                    )}
                     className="form-control"
                     row={10}
                   />
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label sm={2}> {T.translate(`commons.when`)} </Label>
+                <Label sm={2}> {T.translate('commons.when')} </Label>
                 <Col sm={9} className="when-then-value">
                   <textarea
                     value={this.state.when}
-                    placeholder={T.translate(`${PREFIX}.form.whenClausePlaceholder`)}
+                    placeholder={T.translate(
+                      `${PREFIX}.form.whenClausePlaceholder`
+                    )}
                     onChange={this.onConditionChange}
                     className="form-control"
                     row={15}
@@ -139,17 +152,21 @@ export default class CreateRule extends Component {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label sm={2}> {T.translate(`commons.then`)} </Label>
+                <Label sm={2}> {T.translate('commons.then')} </Label>
                 <Col sm={9} className="when-then-value">
                   <DSVEditor
                     values={this.state.then}
                     onChange={this.onRulesChange}
-                    placeholder={T.translate(`${PREFIX}.form.actionplaceholder`)}
+                    placeholder={T.translate(
+                      `${PREFIX}.form.actionplaceholder`
+                    )}
                   />
                 </Col>
               </FormGroup>
               <p className="fields-required-text">
-                <i>{T.translate('features.RulesEngine.shared.allFieldsRequired')}</i>
+                <i>
+                  {T.translate('features.RulesEngine.shared.allFieldsRequired')}
+                </i>
               </p>
             </Form>
           </Col>

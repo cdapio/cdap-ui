@@ -63,5 +63,7 @@ ConfigModelessSaveBtn.propTypes = {
   dataCy: PropTypes.string,
 };
 
-const ConnectedConfigModelessSaveBtn = connect(mapStateToProps)(ConfigModelessSaveBtn);
+const ConnectedConfigModelessSaveBtn = connect(mapStateToProps)(
+  ConfigModelessSaveBtn
+);
 export default ConnectedConfigModelessSaveBtn;

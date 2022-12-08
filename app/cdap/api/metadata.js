@@ -16,17 +16,38 @@
 
 import { apiCreator } from 'services/resource-helper';
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
-let dataSrc = DataSourceConfigurer.getInstance();
-let basepath = '/namespaces/:namespace/:entityType/:entityId/metadata';
-let lineagePath = '/namespaces/:namespace/datasets/:entityId/lineage/fields';
-let fieldLineagePath = '/namespaces/:namespace/datasets/:entityId/lineage/allfieldlineage';
+const dataSrc = DataSourceConfigurer.getInstance();
+const basepath = '/namespaces/:namespace/:entityType/:entityId/metadata';
+const lineagePath = '/namespaces/:namespace/datasets/:entityId/lineage/fields';
+const fieldLineagePath =
+  '/namespaces/:namespace/datasets/:entityId/lineage/allfieldlineage';
 
 export const MyMetadataApi = {
   getMetadata: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
-  getProperties: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/properties?responseFormat=v6`),
-  addProperties: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/properties`),
-  deleteProperty: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/properties/:key`),
-  getTags: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/tags?responseFormat=v6`),
+  getProperties: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/properties?responseFormat=v6`
+  ),
+  addProperties: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${basepath}/properties`
+  ),
+  deleteProperty: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${basepath}/properties/:key`
+  ),
+  getTags: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/tags?responseFormat=v6`
+  ),
   addTags: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/tags`),
   deleteTags: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/tags/:key`),
   getArtifactProperties: apiCreator(
@@ -38,7 +59,17 @@ export const MyMetadataApi = {
 
   // Field Level Lineage
   getFields: apiCreator(dataSrc, 'GET', 'REQUEST', lineagePath),
-  getFieldLineage: apiCreator(dataSrc, 'GET', 'REQUEST', `${lineagePath}/:fieldName`),
-  getFieldOperations: apiCreator(dataSrc, 'GET', 'REQUEST', `${lineagePath}/:fieldName/operations`),
+  getFieldLineage: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${lineagePath}/:fieldName`
+  ),
+  getFieldOperations: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${lineagePath}/:fieldName/operations`
+  ),
   getAllFieldLineage: apiCreator(dataSrc, 'GET', 'REQUEST', fieldLineagePath),
 };

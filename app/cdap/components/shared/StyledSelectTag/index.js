@@ -20,7 +20,11 @@ import IconSVG from 'components/shared/IconSVG';
 
 require('./StyledSelectTag.scss');
 
-export default function StyledSelectTag({ keys, onChange, defaultEmptyMessage = 'No Values' }) {
+export default function StyledSelectTag({
+  keys,
+  onChange,
+  defaultEmptyMessage = 'No Values',
+}) {
   const renderOptions = () => {
     if (Array.isArray(keys) && keys.length) {
       return keys.map((key) => {
@@ -36,7 +40,10 @@ export default function StyledSelectTag({ keys, onChange, defaultEmptyMessage = 
   };
   return (
     <div className="styled-select-wrapper">
-      <select className="styled-select-tag" onChange={onChange ? onChange : () => {}}>
+      <select
+        className="styled-select-tag"
+        onChange={onChange ? onChange : () => {}}
+      >
         {renderOptions()}
       </select>
       <IconSVG name="icon-caret-down" />

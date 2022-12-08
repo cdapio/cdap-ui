@@ -17,8 +17,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { setTimeRange, setCustomTimeRange } from 'components/FieldLevelLineage/store/ActionCreator';
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
+import {
+  setTimeRange,
+  setCustomTimeRange,
+} from 'components/FieldLevelLineage/store/ActionCreator';
 import { TIME_OPTIONS } from 'components/FieldLevelLineage/store/Store';
 import ExpandableTimeRange from 'components/TimeRangePicker/ExpandableTimeRange';
 import T from 'i18n-react';

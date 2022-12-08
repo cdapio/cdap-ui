@@ -15,7 +15,7 @@
  */
 
 import * as Selection from '@simonwep/selection-js';
-import React from 'react';
+import React, { useEffect } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 require('./SelectionBox.scss');
 
@@ -63,7 +63,7 @@ const Box = withStyles(() => {
 
 export default function SelectionBoxWrapper() {
   // const [selection, setSelection]
-  React.useEffect(() => {
+  useEffect(() => {
     const selection = Selection.create({
       // Class for the selection-area
       class: 'selection-box-selection-container',
@@ -75,7 +75,7 @@ export default function SelectionBoxWrapper() {
       boundaries: ['.box-wrapper'],
     })
       .on('start', ({ inst }) => {
-        const container = document.querySelector(`.box-wrapper`);
+        const container = document.querySelector('.box-wrapper');
         if (container) {
           Array.prototype.slice
             .apply(container.children)
@@ -99,8 +99,8 @@ export default function SelectionBoxWrapper() {
       });
   }, []);
   return (
-    <Container className={`box-wrapper`}>
-      {Array.apply(null, { length: 100 }).map(() => (
+    <Container className={'box-wrapper'}>
+      {new Array(100).fill(undefined).map(() => (
         <Box />
       ))}
     </Container>

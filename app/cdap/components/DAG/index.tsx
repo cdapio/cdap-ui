@@ -35,6 +35,9 @@ import {
   conditionTrueConnectionStyle,
   conditionFalseConnectionStyle,
 } from 'components/DAG/JSPlumbSettings';
+// todo update this package and fix type CDAP-20180
+// not sure why this one complained because we have the immutable type
+// @ts-ignore
 import { fromJS } from 'immutable';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import ReactPanZoom from '@ajainarayanan/react-pan-zoom';
@@ -125,7 +128,7 @@ const styles = (): StyleRules => {
     },
   };
 };
-interface IDAGProps extends WithStyles<typeof styles> {}
+type IDAGProps = WithStyles<typeof styles>;
 class DAG extends React.PureComponent<IDAGProps> {
   public state = {
     dx: 0,

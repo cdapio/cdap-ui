@@ -17,25 +17,25 @@ import React from 'react';
 import KeyValuePairs from 'components/shared/KeyValuePairs';
 import MicroserviceUploadActions from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadActions';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
-import {Provider, connect} from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import T from 'i18n-react';
 
 require('./PropertiesStep.scss');
 
 const mapStateToKeyValProps = (state) => {
-    return {
-      keyValues : state.properties.keyValues
-    };
+  return {
+    keyValues: state.properties.keyValues,
   };
+};
 
 const mapDispatchToKeyValProps = (dispatch) => {
   return {
     onKeyValueChange: (keyValues) => {
       dispatch({
         type: MicroserviceUploadActions.setProperties,
-        payload: { keyValues }
+        payload: { keyValues },
       });
-    }
+    },
   };
 };
 
@@ -49,7 +49,9 @@ export default function PropertiesStep() {
     <div className="microservice-properties">
       <Provider store={MicroserviceUploadStore}>
         <KeyValuePairsWrapper
-          keyPlaceholder={T.translate('features.Wizard.MicroserviceUpload.Step7.keyPlaceholder')}
+          keyPlaceholder={T.translate(
+            'features.Wizard.MicroserviceUpload.Step7.keyPlaceholder'
+          )}
         />
       </Provider>
     </div>

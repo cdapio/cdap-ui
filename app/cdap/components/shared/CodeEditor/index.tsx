@@ -142,12 +142,14 @@ class CodeEditorView extends React.Component<ICodeEditorProps> {
       <div className={classes.root}>
         <div
           className={`${className}`}
-          style={{ height: `${this.props.rows * CodeEditorView.LINE_HEIGHT}px` }}
+          style={{
+            height: `${(this.props.rows as number) * CodeEditorView.LINE_HEIGHT}px`,
+          }}
           ref={(ref) => (this.aceRef = ref)}
         >
           {value}
         </div>
-        <If condition={this.props.showPrettyPrintButton}>
+        {this.props.showPrettyPrintButton && (
           <Button
             className={classes.button}
             variant="outlined"
@@ -161,7 +163,7 @@ class CodeEditorView extends React.Component<ICodeEditorProps> {
           >
             Tidy
           </Button>
-        </If>
+        )}
       </div>
     );
   }

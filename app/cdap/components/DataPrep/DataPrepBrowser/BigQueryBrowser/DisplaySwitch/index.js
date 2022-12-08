@@ -22,7 +22,11 @@ import { connect } from 'react-redux';
 
 const DisplaySwitchView = ({ datasetId, onWorkspaceCreate, scope }) => {
   return datasetId ? (
-    <TableList enableRouting={false} onWorkspaceCreate={onWorkspaceCreate} scope={scope} />
+    <TableList
+      enableRouting={false}
+      onWorkspaceCreate={onWorkspaceCreate}
+      scope={scope}
+    />
   ) : (
     <DatasetList enableRouting={false} />
   );

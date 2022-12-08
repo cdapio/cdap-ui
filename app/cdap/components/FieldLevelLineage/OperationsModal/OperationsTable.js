@@ -100,7 +100,14 @@ export default class OperationsTable extends Component {
   }
 
   renderHeader() {
-    const headers = ['input', 'inputFields', 'operation', 'description', 'outputFields', 'output'];
+    const headers = [
+      'input',
+      'inputFields',
+      'operation',
+      'description',
+      'outputFields',
+      'output',
+    ];
 
     return (
       <div className="grid-header">

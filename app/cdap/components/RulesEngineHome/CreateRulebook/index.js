@@ -48,7 +48,7 @@ export default class CreateRulebook extends Component {
   };
 
   onRulesAdd = (rule) => {
-    let isRuleAlreadyExist = this.state.rules.find((r) => rule.id === r.id);
+    const isRuleAlreadyExist = this.state.rules.find((r) => rule.id === r.id);
     if (isRuleAlreadyExist) {
       return;
     }
@@ -82,7 +82,9 @@ export default class CreateRulebook extends Component {
               onChange={this.onNameChangeHandler}
               placeholder={T.translate(`${PREFIX}.nameplaceholder`)}
             />
-            <p className="rule-book-version">{T.translate(`${PREFIX}.version`, { version: 1 })}</p>
+            <p className="rule-book-version">
+              {T.translate(`${PREFIX}.version`, { version: 1 })}
+            </p>
           </div>
           <div className="rule-book-metadata">
             <div>
@@ -102,17 +104,23 @@ export default class CreateRulebook extends Component {
             placeholder={T.translate(`${PREFIX}.descriptionplaceholder`)}
           />
           <p className="fields-required-text">
-            <i>{T.translate('features.RulesEngine.shared.allFieldsRequired')}</i>
+            <i>
+              {T.translate('features.RulesEngine.shared.allFieldsRequired')}
+            </i>
           </p>
           <div className="button-container">
             <Button
               color="secondary"
               onClick={this.createRulebook}
-              disabled={isEmpty(this.state.name) || isEmpty(this.state.description)}
+              disabled={
+                isEmpty(this.state.name) || isEmpty(this.state.description)
+              }
             >
               {T.translate(`${PREFIX}.createBtnLabel`)}
             </Button>
-            <span className="create-next">{T.translate(`${PREFIX}.createBtnNext`)}</span>
+            <span className="create-next">
+              {T.translate(`${PREFIX}.createBtnNext`)}
+            </span>
           </div>
         </div>
       </div>

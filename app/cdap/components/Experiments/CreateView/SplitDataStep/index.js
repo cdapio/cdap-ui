@@ -37,11 +37,11 @@ const PREFIX = 'features.Experiments.CreateView';
 
 require('./SplitDataStep.scss');
 const getSplitLogsUrl = (experimentId, splitInfo) => {
-  let splitId = splitInfo.id;
-  let startTime = splitInfo.start;
-  let endTime = splitInfo.end;
-  let baseUrl = `/logviewer/view?namespace=${getCurrentNamespace()}&appId=ModelManagementApp&programType=spark&programId=ModelManagerService`;
-  let queryParams = `&filter=${encodeURIComponent(
+  const splitId = splitInfo.id;
+  const startTime = splitInfo.start;
+  const endTime = splitInfo.end;
+  const baseUrl = `/logviewer/view?namespace=${getCurrentNamespace()}&appId=ModelManagementApp&programType=spark&programId=ModelManagerService`;
+  const queryParams = `&filter=${encodeURIComponent(
     `MDC:experiment="${experimentId}" AND MDC:split=${splitId}`
   )}&startTime=${startTime}&endTime=${endTime}`;
   return `${baseUrl}${queryParams}`;
@@ -51,7 +51,11 @@ const getSplitFailedElem = (experimentId, splitInfo) => {
   return (
     <span className="split-error-container">
       {T.translate(`${PREFIX}.failedToSplit`, { experimentId })}
-      <a href={getSplitLogsUrl(experimentId, splitInfo)} target="_blank" rel="noopener noreferrer">
+      <a
+        href={getSplitLogsUrl(experimentId, splitInfo)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {T.translate(`${PREFIX}.logs`)}
       </a>
       {T.translate(`${PREFIX}.moreInfo`)}
@@ -71,7 +75,8 @@ class SplitDataStep extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const isCurrentSplitStatusFailed = nextProps.splitInfo.status === SPLIT_STATUS.FAILED;
+    const isCurrentSplitStatusFailed =
+      nextProps.splitInfo.status === SPLIT_STATUS.FAILED;
     const isStartingSplitFailed =
       this.props.splitInfo.status === SPLIT_STATUS.CREATING && nextProps.error;
     if (isCurrentSplitStatusFailed || isStartingSplitFailed) {
@@ -88,9 +93,10 @@ class SplitDataStep extends Component {
   };
 
   renderSplitBtn() {
-    let isSplitCreated = Object.keys(this.props.splitInfo).length;
-    let splitStatus = (this.props.splitInfo || {}).status;
-    let isSplitComplete = [SPLIT_STATUS.COMPLETE, SPLIT_STATUS.FAILED].indexOf(splitStatus) !== -1;
+    const isSplitCreated = Object.keys(this.props.splitInfo).length;
+    const splitStatus = (this.props.splitInfo || {}).status;
+    const isSplitComplete =
+      [SPLIT_STATUS.COMPLETE, SPLIT_STATUS.FAILED].indexOf(splitStatus) !== -1;
 
     if (!isSplitCreated || (isSplitCreated && isSplitComplete)) {
       return (
@@ -132,7 +138,11 @@ class SplitDataStep extends Component {
 
   renderSplitInfo() {
     const isSplitFailed = this.props.splitInfo.status === SPLIT_STATUS.FAILED;
-    if (isEmpty(this.props.splitInfo) || !this.props.splitInfo.id || isSplitFailed) {
+    if (
+      isEmpty(this.props.splitInfo) ||
+      !this.props.splitInfo.id ||
+      isSplitFailed
+    ) {
       return null;
     }
 
@@ -157,7 +167,10 @@ class SplitDataStep extends Component {
     if (this.props.splitInfo.id) {
       return (
         <Alert
-          element={getSplitFailedElem(this.props.experimentId, this.props.splitInfo)}
+          element={getSplitFailedElem(
+            this.props.experimentId,
+            this.props.splitInfo
+          )}
           type="error"
           showAlert={true}
           onClose={this.closeSplitFailedAlert}
@@ -192,15 +205,17 @@ class SplitDataStep extends Component {
 }
 
 const mapStateToSplitDataStepProps = (state) => {
-  let { model_create, experiments_create } = state;
-  let { splitInfo = {}, error } = model_create;
+  const { model_create, experiments_create } = state;
+  const { splitInfo = {}, error } = model_create;
   return {
     splitInfo,
     experimentId: experiments_create.name,
     error,
   };
 };
-const ConnectedSplitDataStep = connect(mapStateToSplitDataStepProps)(SplitDataStep);
+const ConnectedSplitDataStep = connect(mapStateToSplitDataStepProps)(
+  SplitDataStep
+);
 
 function ProvidedSplitDataStep() {
   return (

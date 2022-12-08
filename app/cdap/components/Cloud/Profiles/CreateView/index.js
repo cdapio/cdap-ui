@@ -20,7 +20,11 @@ import { Form } from 'reactstrap';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link, Redirect } from 'react-router-dom';
 import { MyCloudApi } from 'api/cloud';
-import { objectQuery, preventPropagation, isNilOrEmpty } from 'services/helpers';
+import {
+  objectQuery,
+  preventPropagation,
+  isNilOrEmpty,
+} from 'services/helpers';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { connect, Provider } from 'react-redux';
 import ProvisionerInfoStore from 'components/Cloud/Store';
@@ -68,8 +72,13 @@ class ProfileCreateView extends Component {
     redirectToNamespace: false,
     redirectToAdmin: false,
     creatingProfile: false,
-    isSystem: objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
-    selectedProvisioner: objectQuery(this.props.match, 'params', 'provisionerId'),
+    isSystem:
+      objectQuery(this.props.match, 'params', 'namespace') === SYSTEM_NAMESPACE,
+    selectedProvisioner: objectQuery(
+      this.props.match,
+      'params',
+      'provisionerId'
+    ),
     filteredConfigurationGroup: [],
     showAlert: false,
     alertType: null,
@@ -77,13 +86,13 @@ class ProfileCreateView extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    let { selectedProvisioner } = this.state;
+    const { selectedProvisioner } = this.state;
     initializeProperties(nextProps.provisionerJsonSpecMap[selectedProvisioner]);
     this.setFilteredConfigurationGroup(nextProps);
   }
 
   componentDidMount() {
-    let { selectedProvisioner } = this.state;
+    const { selectedProvisioner } = this.state;
     fetchProvisionerSpec(selectedProvisioner);
   }
 
@@ -93,7 +102,12 @@ class ProfileCreateView extends Component {
 
   getProvisionerLabel = () => {
     const { selectedProvisioner } = this.state;
-    const label = objectQuery(this.props, 'provisionerJsonSpecMap', selectedProvisioner, 'label');
+    const label = objectQuery(
+      this.props,
+      'provisionerJsonSpecMap',
+      selectedProvisioner,
+      'label'
+    );
     const provisionerLabel = isNilOrEmpty(label) ? '' : `${label}`;
     return provisionerLabel;
   };
@@ -102,7 +116,12 @@ class ProfileCreateView extends Component {
     this.setState({
       creatingProfile: true,
     });
-    let { label, name, description, properties } = CreateProfileStore.getState();
+    let {
+      label,
+      name,
+      description,
+      properties,
+    } = CreateProfileStore.getState();
 
     /**
      * TODO: https://issues.cask.co/browse/CDAP-15211
@@ -121,7 +140,7 @@ class ProfileCreateView extends Component {
         visibilityMap[propertyInfo.name] = propertyInfo.show !== false;
       }
     }
-    let jsonBody = {
+    const jsonBody = {
       description,
       label,
       provisioner: {
@@ -138,7 +157,7 @@ class ProfileCreateView extends Component {
       },
     };
     let apiObservable$ = MyCloudApi.create;
-    let apiQueryParams = {
+    const apiQueryParams = {
       namespace: getCurrentNamespace(),
       profile: name,
     };
@@ -158,7 +177,7 @@ class ProfileCreateView extends Component {
           });
         }
 
-        let profilePrefix = this.state.isSystem ? SCOPES.SYSTEM : SCOPES.USER;
+        const profilePrefix = this.state.isSystem ? SCOPES.SYSTEM : SCOPES.USER;
         name = `${profilePrefix}:${name}`;
         highlightNewProfile(name);
       },
@@ -183,7 +202,12 @@ class ProfileCreateView extends Component {
       selectedProvisioner,
       'configuration-groups'
     );
-    const filters = objectQuery(props, 'provisionerJsonSpecMap', selectedProvisioner, 'filters');
+    const filters = objectQuery(
+      props,
+      'provisionerJsonSpecMap',
+      selectedProvisioner,
+      'filters'
+    );
     if (!configurationGroups) {
       this.setState({
         filteredConfigurationGroup: [],
@@ -240,7 +264,7 @@ class ProfileCreateView extends Component {
     if (group.show === false) {
       return null;
     }
-    let { properties } = CreateProfileStore.getState();
+    const { properties } = CreateProfileStore.getState();
     const extraConfig = {
       namespace: this.state.isSystem ? SYSTEM_NAMESPACE : getCurrentNamespace(),
     };
@@ -274,7 +298,9 @@ class ProfileCreateView extends Component {
     if (this.state.filteredConfigurationGroup.length === 0) {
       return null;
     }
-    return this.state.filteredConfigurationGroup.map((group) => this.renderGroup(group));
+    return this.state.filteredConfigurationGroup.map((group) =>
+      this.renderGroup(group)
+    );
   };
 
   resetAlert = () => {
@@ -294,13 +320,15 @@ class ProfileCreateView extends Component {
         <Redirect
           to={{
             pathname: '/administration/configuration',
-            state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },
+            state: {
+              accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles,
+            },
           }}
         />
       );
     }
 
-    let linkObj = this.state.isSystem
+    const linkObj = this.state.isSystem
       ? {
           pathname: '/administration/configuration',
           state: { accordionToExpand: ADMIN_CONFIG_ACCORDIONS.systemProfiles },

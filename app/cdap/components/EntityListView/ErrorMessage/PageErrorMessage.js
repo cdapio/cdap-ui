@@ -23,20 +23,26 @@ import T from 'i18n-react';
 require('./PageErrorMessage.scss');
 
 export default function PageErrorMessage({ pageNum, query }) {
-  let selectedNamespace = NamespaceStore.getState().selectedNamespace;
+  const selectedNamespace = NamespaceStore.getState().selectedNamespace;
   let page1Url = `/ns/${selectedNamespace}?page=1`;
   page1Url = query ? `${page1Url}&q=${query}` : page1Url;
   return (
     <div className="page-error-message empty-message">
       <h2>
         <span className="fa fa-exclamation-triangle" />
-        {T.translate('features.EntityListView.PageErrorMessage.errorMessage', { pageNum })}
+        {T.translate('features.EntityListView.PageErrorMessage.errorMessage', {
+          pageNum,
+        })}
       </h2>
       <div>
         <span>
-          {T.translate('features.EntityListView.PageErrorMessage.suggestionMessage1')}
+          {T.translate(
+            'features.EntityListView.PageErrorMessage.suggestionMessage1'
+          )}
           <Link to={page1Url}>
-            {T.translate('features.EntityListView.PageErrorMessage.suggestionMessage2')}
+            {T.translate(
+              'features.EntityListView.PageErrorMessage.suggestionMessage2'
+            )}
           </Link>
         </span>
       </div>

@@ -33,7 +33,7 @@ export default function BtnWithLoading({
 }) {
   return (
     <button
-      className={classnames(`btn btn-with-loading`, className, {
+      className={classnames('btn btn-with-loading', className, {
         'darker-loading-bars': darker,
       })}
       onClick={onClick}

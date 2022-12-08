@@ -19,7 +19,10 @@ import PropTypes from 'prop-types';
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import Popover from 'components/shared/Popover';
-import { SECURE_KEY_PREFIX, SECURE_KEY_SUFFIX } from 'services/global-constants';
+import {
+  SECURE_KEY_PREFIX,
+  SECURE_KEY_SUFFIX,
+} from 'services/global-constants';
 
 require('./DetailsInfo.scss');
 
@@ -44,7 +47,9 @@ export default class ProfileDetailViewDetailsInfo extends Component {
   renderViewDetailsLabel() {
     return (
       <span className="view-details-label" onClick={this.toggleViewDetails}>
-        <IconSVG name={this.state.viewDetails ? 'icon-caret-down' : 'icon-caret-right'} />
+        <IconSVG
+          name={this.state.viewDetails ? 'icon-caret-down' : 'icon-caret-right'}
+        />
         <span>
           {this.state.viewDetails
             ? T.translate(`${PREFIX}.hideDetails`)
@@ -87,7 +92,7 @@ export default class ProfileDetailViewDetailsInfo extends Component {
   convertValueBasedOnWidget = (widgetType, value) => {
     // Since memory-textbox is specifically used for RAM this conversion is safe.
     if (widgetType == 'memory-textbox') {
-      let numberValue = parseInt(value, 10);
+      const numberValue = parseInt(value, 10);
       if (isNaN(numberValue)) {
         return value;
       }
@@ -118,14 +123,17 @@ export default class ProfileDetailViewDetailsInfo extends Component {
     return (
       <div className="details-table">
         {profile.provisioner.properties.map((property) => {
-          let propertyLabel =
+          const propertyLabel =
             (propertyToLabelWidgetMap[property.name] &&
               propertyToLabelWidgetMap[property.name].label) ||
             property.name;
           const widgetType =
             propertyToLabelWidgetMap[property.name] &&
             propertyToLabelWidgetMap[property.name].widget;
-          let value = this.convertValueBasedOnWidget(widgetType, property.value);
+          let value = this.convertValueBasedOnWidget(
+            widgetType,
+            property.value
+          );
 
           if (property.name === 'accountKey') {
             value = this.getSecureKeyValue(value);

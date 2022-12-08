@@ -46,7 +46,10 @@ export default class VegaLiteChart extends Component {
     document.body.onresize = null;
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ data: nextProps.data || [] }, this.renderChart.bind(this, true));
+    this.setState(
+      { data: nextProps.data || [] },
+      this.renderChart.bind(this, true)
+    );
   }
 
   renderChart = (isResize) => {
@@ -93,7 +96,10 @@ export default class VegaLiteChart extends Component {
         .initialize(el)
         .renderer('svg')
         .hover();
-      if (this.props.tooltipOptions && Object.keys(this.props.tooltipOptions).length) {
+      if (
+        this.props.tooltipOptions &&
+        Object.keys(this.props.tooltipOptions).length
+      ) {
         vegaTooltip.vega(this.view, this.props.tooltipOptions);
       } else {
         vegaTooltip.vega(this.view);

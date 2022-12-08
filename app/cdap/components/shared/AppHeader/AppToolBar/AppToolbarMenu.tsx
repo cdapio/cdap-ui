@@ -70,11 +70,11 @@ const styles = (theme) => ({
     padding: '0 4px',
   },
   linkStyles: {
-    color: 'inherit' as 'inherit',
+    color: 'inherit' as const,
   },
 });
 
-interface IAppToolbarMenuProps extends WithStyles<typeof styles> {}
+type IAppToolbarMenuProps = WithStyles<typeof styles>;
 
 class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarState> {
   public state = {
@@ -174,7 +174,9 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
-              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              style={{
+                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+              }}
             >
               <Paper>
                 <ClickAwayListener onClickAway={this.closeSettings}>

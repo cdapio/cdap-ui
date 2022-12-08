@@ -26,7 +26,9 @@ import LoadingSVG from 'components/shared/LoadingSVG';
 import HostPortEditor from 'components/DataPrepConnections/KafkaConnection/HostPortEditor';
 import uuidV4 from 'uuid/v4';
 import ee from 'event-emitter';
-import CardActionFeedback, { CARD_ACTION_TYPES } from 'components/shared/CardActionFeedback';
+import CardActionFeedback, {
+  CARD_ACTION_TYPES,
+} from 'components/shared/CardActionFeedback';
 import BtnWithLoading from 'components/shared/BtnWithLoading';
 import { ConnectionType } from 'components/DataPrepConnections/ConnectionType';
 
@@ -75,9 +77,9 @@ export default class KafkaConnection extends Component {
 
     this.setState({ loading: true });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
     };
@@ -86,8 +88,8 @@ export default class KafkaConnection extends Component {
       (res) => {
         const brokers = objectQuery(res, 'properties', 'brokers');
 
-        let name = this.props.mode === 'EDIT' ? res.name : '';
-        let brokersList = this.parseBrokers(brokers);
+        const name = this.props.mode === 'EDIT' ? res.name : '';
+        const brokersList = this.parseBrokers(brokers);
 
         this.setState({
           name,
@@ -106,12 +108,12 @@ export default class KafkaConnection extends Component {
   }
 
   parseBrokers(brokers) {
-    let brokersList = [];
+    const brokersList = [];
 
     brokers.split(',').forEach((broker) => {
-      let split = broker.trim().split(':');
+      const split = broker.trim().split(':');
 
-      let obj = {
+      const obj = {
         host: split[0] || '',
         port: split[1] || '',
         uniqueId: uuidV4(),
@@ -146,9 +148,9 @@ export default class KafkaConnection extends Component {
   }
 
   addConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.KAFKA,
       properties: {
@@ -156,7 +158,10 @@ export default class KafkaConnection extends Component {
       },
     };
 
-    MyDataPrepApi.createConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.createConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       () => {
         this.setState({ error: null });
         this.props.onAdd();
@@ -165,21 +170,23 @@ export default class KafkaConnection extends Component {
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
   }
 
   editConnection() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let params = {
+    const params = {
       context: namespace,
       connectionId: this.props.connectionId,
     };
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       id: this.props.connectionId,
       type: ConnectionType.KAFKA,
@@ -191,14 +198,19 @@ export default class KafkaConnection extends Component {
     MyDataPrepApi.updateConnection(params, requestBody).subscribe(
       () => {
         this.setState({ error: null });
-        this.eventEmitter.emit('DATAPREP_CONNECTION_EDIT_KAFKA', this.props.connectionId);
+        this.eventEmitter.emit(
+          'DATAPREP_CONNECTION_EDIT_KAFKA',
+          this.props.connectionId
+        );
         this.props.onAdd();
         this.props.close();
       },
       (err) => {
         console.log('err', err);
 
-        let error = objectQuery(err, 'response', 'message') || objectQuery(err, 'response');
+        const error =
+          objectQuery(err, 'response', 'message') ||
+          objectQuery(err, 'response');
         this.setState({ error });
       }
     );
@@ -214,9 +226,9 @@ export default class KafkaConnection extends Component {
       error: null,
     });
 
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
-    let requestBody = {
+    const requestBody = {
       name: this.state.name,
       type: ConnectionType.KAFKA,
       properties: {
@@ -224,7 +236,10 @@ export default class KafkaConnection extends Component {
       },
     };
 
-    MyDataPrepApi.kafkaTestConnection({ context: namespace }, requestBody).subscribe(
+    MyDataPrepApi.kafkaTestConnection(
+      { context: namespace },
+      requestBody
+    ).subscribe(
       (res) => {
         this.setState({
           connectionResult: {
@@ -237,7 +252,7 @@ export default class KafkaConnection extends Component {
       (err) => {
         console.log('Error testing kafka connection', err);
 
-        let errorMessage =
+        const errorMessage =
           objectQuery(err, 'response', 'message') ||
           objectQuery(err, 'response') ||
           T.translate(`${PREFIX}.defaultTestErrorMessage`);
@@ -267,7 +282,10 @@ export default class KafkaConnection extends Component {
           <span className="asterisk">*</span>
         </label>
         <div className={INPUT_COL_CLASS}>
-          <HostPortEditor values={this.state.brokersList} onChange={this.handleBrokersChange} />
+          <HostPortEditor
+            values={this.state.brokersList}
+            onChange={this.handleBrokersChange}
+          />
         </div>
       </div>
     );
@@ -290,7 +308,11 @@ export default class KafkaConnection extends Component {
 
     return (
       <ModalFooter>
-        <button className="btn btn-primary" onClick={onClickFn} disabled={disabled}>
+        <button
+          className="btn btn-primary"
+          onClick={onClickFn}
+          disabled={disabled}
+        >
           {T.translate(`${PREFIX}.Buttons.${this.props.mode}`)}
         </button>
 

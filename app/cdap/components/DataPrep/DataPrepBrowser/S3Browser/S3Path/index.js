@@ -28,9 +28,11 @@ class S3Path extends FilePath {
     if (path[path.length - 1] === '/') {
       path = path.slice(0, path.length - 1);
     }
-    let parts = path.split(/\//);
-    let individualPaths = [];
-    let pathname = this.props.baseStatePath || window.location.pathname.replace(/\/cdap/, '');
+    const parts = path.split(/\//);
+    const individualPaths = [];
+    const pathname =
+      this.props.baseStatePath ||
+      window.location.pathname.replace(/\/cdap/, '');
     if (path === '/') {
       individualPaths.push({
         name: 'Root',

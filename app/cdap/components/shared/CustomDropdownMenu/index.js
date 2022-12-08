@@ -23,10 +23,17 @@ import { DropdownContext } from 'reactstrap';
 const CustomDropdownMenu = (props) => {
   const context = useContext(DropdownContext);
   let { className, right, children, tag: Tag } = props;
-  const classes = classNames(className, 'dropdown-menu', { 'dropdown-menu-right': right });
+  const classes = classNames(className, 'dropdown-menu', {
+    'dropdown-menu-right': right,
+  });
   Tag = Tag || 'ul';
   return (
-    <Tag tabIndex="-1" aria-hidden={!context.isOpen} role="menu" className={classes}>
+    <Tag
+      tabIndex="-1"
+      aria-hidden={!context.isOpen}
+      role="menu"
+      className={classes}
+    >
       {children}
     </Tag>
   );

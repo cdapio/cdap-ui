@@ -32,7 +32,7 @@ import { NUMBER_TYPES } from 'services/global-constants';
 import { MODEL_STATUS } from 'components/Experiments/store/ModelStatus';
 
 function onExperimentNameChange(e) {
-  let value = e.target.value;
+  const value = e.target.value;
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_EXPERIMENT_NAME,
     payload: { name: value },
@@ -40,7 +40,7 @@ function onExperimentNameChange(e) {
 }
 
 function onExperimentDescriptionChange(e) {
-  let value = e.target.value;
+  const value = e.target.value;
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_EXPERIMENT_DESCRIPTION,
     payload: { description: value },
@@ -48,7 +48,7 @@ function onExperimentDescriptionChange(e) {
 }
 
 function onExperimentOutcomeChange(e) {
-  let value = e.target.value;
+  const value = e.target.value;
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_EXPERIMENT_OUTCOME,
     payload: { outcome: value },
@@ -84,7 +84,7 @@ function setVisiblePopover(popover = POPOVER_TYPES.EXPERIMENT) {
 }
 
 function setExperimentCreated(experimentId) {
-  let url = `${location.pathname}?experimentId=${experimentId}`;
+  const url = `${location.pathname}?experimentId=${experimentId}`;
   history.replaceState({ url }, document.title, url);
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_VISIBLE_POPOVER,
@@ -102,7 +102,7 @@ function setExperimentLoading(value = true) {
 }
 
 function onModelNameChange(e) {
-  let value = e.target.value;
+  const value = e.target.value;
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_MODEL_NAME,
     payload: { name: value },
@@ -110,7 +110,7 @@ function onModelNameChange(e) {
 }
 
 function onModelDescriptionChange(e) {
-  let value = e.target.value;
+  const value = e.target.value;
   createExperimentStore.dispatch({
     type: CREATEEXPERIMENTACTIONS.SET_MODEL_DESCRIPTION,
     payload: { description: value },
@@ -139,7 +139,7 @@ function setWorkspace(workspaceId) {
 }
 
 function updateSchema(fields) {
-  let schema = {
+  const schema = {
     name: 'avroSchema',
     type: 'record',
     fields,
@@ -169,18 +169,19 @@ function setSplitDetails(experimentId, splitId) {
       },
       (err) => {
         setModelCreateError(
-          `Failed to get split details of the experiment '${experimentId}' - ${err.response || err}`
+          `Failed to get split details of the experiment '${experimentId}' - ${err.response ||
+            err}`
         );
       }
     );
 }
 
 function createExperiment() {
-  let { model_create, experiments_create } = createExperimentStore.getState();
-  let { name, description, outcome, srcpath } = experiments_create;
-  let { directives } = model_create;
-  let requestBody = directiveRequestBodyCreator(directives);
-  let experiment = {
+  const { model_create, experiments_create } = createExperimentStore.getState();
+  const { name, description, outcome, srcpath } = experiments_create;
+  const { directives } = model_create;
+  const requestBody = directiveRequestBodyCreator(directives);
+  const experiment = {
     name,
     description,
     outcome,
@@ -197,8 +198,10 @@ function createExperiment() {
   )
     .mergeMap((schema) => {
       // The outcome will always be simple type. So ["null", "anything"] should give correct outcomeType at the end.
-      let outcomeType = schema
-        .map((field) => (Array.isArray(field.type) ? field : { ...field, type: [field.type] }))
+      const outcomeType = schema
+        .map((field) =>
+          Array.isArray(field.type) ? field : { ...field, type: [field.type] }
+        )
         .find((field) => field.name === experiment.outcome)
         .type.filter((t) => t !== 'null')
         .pop();
@@ -212,8 +215,12 @@ function createExperiment() {
         experiment
       );
     })
-    .subscribe(setExperimentCreated.bind(null, experiments_create.name), (err) =>
-      setExperimentCreateError(`Failed to create the experiment '${name}' - ${err.response || err}`)
+    .subscribe(
+      setExperimentCreated.bind(null, experiments_create.name),
+      (err) =>
+        setExperimentCreateError(
+          `Failed to create the experiment '${name}' - ${err.response || err}`
+        )
     );
 }
 
@@ -224,25 +231,27 @@ function pollForSplitStatus(experimentId, modelId) {
       experimentId,
       modelId,
     };
-    let splitStatusPoll = myExperimentsApi.pollModel(params).subscribe((modelDetails) => {
-      let { status, split } = modelDetails;
-      if (status === 'Splitting') {
-        return;
-      }
-      if (status === 'Data Ready' || status === 'Split Failed') {
-        splitStatusPoll.unsubscribe();
-        return callback(split);
-      }
-      // TODO: Should this be called on split failed?
-      errorCallback();
-    });
+    const splitStatusPoll = myExperimentsApi
+      .pollModel(params)
+      .subscribe((modelDetails) => {
+        const { status, split } = modelDetails;
+        if (status === 'Splitting') {
+          return;
+        }
+        if (status === 'Data Ready' || status === 'Split Failed') {
+          splitStatusPoll.unsubscribe();
+          return callback(split);
+        }
+        // TODO: Should this be called on split failed?
+        errorCallback();
+      });
   };
   return Observable.create((observer) => {
     const successCallback = (split) => {
       observer.next(split);
     };
     const failureCallback = () => {
-      observer.error(`Couldn't create split`);
+      observer.error("Couldn't create split");
     };
     getStatusOfSplit(successCallback, failureCallback);
   });
@@ -267,9 +276,9 @@ function overrideCreationStep(step) {
 
 */
 function createSplitAndUpdateStatus() {
-  let { model_create, experiments_create } = createExperimentStore.getState();
-  let { directives, schema, modelId, name: modelName } = model_create;
-  let splitInfo = {
+  const { model_create, experiments_create } = createExperimentStore.getState();
+  const { directives, schema, modelId, name: modelName } = model_create;
+  const splitInfo = {
     schema,
     directives,
     type: 'random',
@@ -301,7 +310,8 @@ function createSplitAndUpdateStatus() {
       setSplitDetails.bind(null, experiments_create.name),
       (err) => {
         setModelCreateError(
-          `Failed to create split for the model '${modelName}' - ${err.response || err}`
+          `Failed to create split for the model '${modelName}' - ${err.response ||
+            err}`
         );
         createExperimentStore.dispatch({
           type: CREATEEXPERIMENTACTIONS.SET_SPLIT_INFO,
@@ -317,8 +327,8 @@ function createSplitAndUpdateStatus() {
 }
 
 function updateModel() {
-  let { experiments_create, model_create } = createExperimentStore.getState();
-  let { directives } = model_create;
+  const { experiments_create, model_create } = createExperimentStore.getState();
+  const { directives } = model_create;
   const params = {
     namespace: getCurrentNamespace(),
     experimentId: experiments_create.name,
@@ -332,7 +342,9 @@ function updateModel() {
       }
       return myExperimentsApi.deleteSplitInModel(params);
     })
-    .flatMap(() => myExperimentsApi.updateDirectivesInModel(params, { directives }))
+    .flatMap(() =>
+      myExperimentsApi.updateDirectivesInModel(params, { directives })
+    )
     .subscribe(() => {
       createExperimentStore.dispatch({
         type: CREATEEXPERIMENTACTIONS.MODEL_UPDATE,
@@ -341,9 +353,9 @@ function updateModel() {
 }
 
 function createModel() {
-  let { experiments_create, model_create } = createExperimentStore.getState();
-  let { directives } = model_create;
-  let model = {
+  const { experiments_create, model_create } = createExperimentStore.getState();
+  const { directives } = model_create;
+  const model = {
     name: model_create.name,
     description: model_create.description,
     directives,
@@ -364,12 +376,13 @@ function createModel() {
           payload: { modelId },
         });
         setExperimentLoading(false);
-        let url = `${location.pathname}${location.search}&modelId=${modelId}`;
+        const url = `${location.pathname}${location.search}&modelId=${modelId}`;
         history.replaceState({ url }, document.title, url);
       },
       (err) => {
         setExperimentCreateError(
-          `Failed to create the model '${model_create.name}' - ${err.response || err}`
+          `Failed to create the model '${model_create.name}' - ${err.response ||
+            err}`
         );
         setExperimentLoading(false);
       }
@@ -377,12 +390,12 @@ function createModel() {
 }
 
 function trainModel() {
-  let { experiments_create, model_create } = createExperimentStore.getState();
-  let { name: experimentId } = experiments_create;
-  let { modelId, name: modelName } = model_create;
-  let formattedExperimentName = experimentId.replace(/[^\w]/g, '');
-  let formattedModelName = modelName.replace(/[^\w]/g, '');
-  let postBody = {
+  const { experiments_create, model_create } = createExperimentStore.getState();
+  const { name: experimentId } = experiments_create;
+  const { modelId, name: modelName } = model_create;
+  const formattedExperimentName = experimentId.replace(/[^\w]/g, '');
+  const formattedModelName = modelName.replace(/[^\w]/g, '');
+  const postBody = {
     algorithm: model_create.algorithm.name,
     hyperparameters: model_create.algorithm.hyperparameters,
     predictionsDataset: `${formattedExperimentName}_${formattedModelName}_dataset`,
@@ -407,13 +420,15 @@ function trainModel() {
         });
       },
       (err) => {
-        setModelCreateError(`Failed to train the model '${modelName}': ${err.response || err}`);
+        setModelCreateError(
+          `Failed to train the model '${modelName}': ${err.response || err}`
+        );
       }
     );
 }
 
 function createWorkspace(filePath) {
-  let params = {
+  const params = {
     context: getCurrentNamespace(),
     path: filePath,
     lines: 10000,
@@ -421,7 +436,7 @@ function createWorkspace(filePath) {
     scope: 'mmds',
   };
 
-  let headers = {
+  const headers = {
     'Content-Type': 'text/plain', // FIXME: THIS IS A HACK. NEED TO GET THIS FROM EXPERIMENT
   };
 
@@ -429,7 +444,7 @@ function createWorkspace(filePath) {
   // switching between steps we don't have the file content type
   // Need to store that somehow in the model/experiment
   // JIRA: CDAP-13815
-  let filePathLength = filePath.length;
+  const filePathLength = filePath.length;
   if (filePathLength > 5 && filePath.substr(filePathLength - 5) === '.json') {
     headers['Content-Type'] = 'application/json';
   }
@@ -442,12 +457,12 @@ function applyDirectives(workspaceId, directives) {
     context: getCurrentNamespace(),
     workspaceId,
   }).mergeMap((res) => {
-    let workspaceInfo = res.values[0];
-    let params = {
+    const workspaceInfo = res.values[0];
+    const params = {
       workspaceId,
       namespace: getCurrentNamespace(),
     };
-    let requestBody = directiveRequestBodyCreator(directives);
+    const requestBody = directiveRequestBodyCreator(directives);
     requestBody.insights = workspaceInfo.properties;
     return MyDataPrepApi.execute(params, requestBody);
   });
@@ -479,7 +494,7 @@ const getExperimentForEdit = (experimentId) => {
       return createWorkspace(exp.srcpath);
     })
     .mergeMap((res) => {
-      let workspaceId = res.values[0].id;
+      const workspaceId = res.values[0].id;
       experiment.workspaceId = workspaceId;
       directives = experiment.directives;
       setDirectives(directives);
@@ -487,7 +502,7 @@ const getExperimentForEdit = (experimentId) => {
     })
     .mergeMap(() => {
       // Get schema with workspaceId and directives
-      let requestBody = directiveRequestBodyCreator(directives);
+      const requestBody = directiveRequestBodyCreator(directives);
       return MyDataPrepApi.getSchema(
         {
           namespace,
@@ -498,7 +513,7 @@ const getExperimentForEdit = (experimentId) => {
     })
     .subscribe(
       (fields) => {
-        let schema = {
+        const schema = {
           name: 'avroSchema',
           type: 'record',
           fields,
@@ -515,7 +530,9 @@ const getExperimentForEdit = (experimentId) => {
         // The error message returned from backend for this request is at err.response.message instead of just err.response
         const error = err.response.message || err.response || err;
         setExperimentLoading(false);
-        setExperimentCreateError(`Failed to retrieve the experiment '${experimentId}' - ${error}`);
+        setExperimentCreateError(
+          `Failed to retrieve the experiment '${experimentId}' - ${error}`
+        );
       }
     );
 };
@@ -548,7 +565,7 @@ const getExperimentModelSplitForCreate = (experimentId, modelId) => {
       return createWorkspace(exp.srcpath);
     })
     .mergeMap((res) => {
-      let workspaceId = res.values[0].id;
+      const workspaceId = res.values[0].id;
       experiment.workspaceId = workspaceId;
       return myExperimentsApi.getModel({
         namespace: getCurrentNamespace(),
@@ -563,9 +580,9 @@ const getExperimentModelSplitForCreate = (experimentId, modelId) => {
     })
     .mergeMap(() => {
       // Get schema with workspaceId and directives
-      let { directives } = model;
+      const { directives } = model;
       setDirectives(directives);
-      let requestBody = directiveRequestBodyCreator(directives);
+      const requestBody = directiveRequestBodyCreator(directives);
       return MyDataPrepApi.getSchema(
         {
           context: getCurrentNamespace(),
@@ -611,7 +628,7 @@ const getExperimentModelSplitForCreate = (experimentId, modelId) => {
 };
 
 function setExperimentModelForEdit(experiment, model, splitInfo) {
-  let payload = {
+  const payload = {
     experimentDetails: experiment,
     modelDetails: model,
   };
@@ -625,11 +642,11 @@ function setExperimentModelForEdit(experiment, model, splitInfo) {
 }
 
 function setAlgorithmList() {
-  let { experiments_create } = createExperimentStore.getState();
-  let outcome = experiments_create.outcome;
-  let { model_create } = createExperimentStore.getState();
-  let { directives, algorithmsList } = model_create;
-  let requestBody = directiveRequestBodyCreator(directives);
+  const { experiments_create } = createExperimentStore.getState();
+  const outcome = experiments_create.outcome;
+  const { model_create } = createExperimentStore.getState();
+  const { directives, algorithmsList } = model_create;
+  const requestBody = directiveRequestBodyCreator(directives);
   MyDataPrepApi.getSchema(
     {
       context: getCurrentNamespace(),
@@ -639,7 +656,7 @@ function setAlgorithmList() {
   ).subscribe(
     (fields) => {
       updateSchema(fields);
-      let outcomeType = fields
+      const outcomeType = fields
         .find((field) => field.name === outcome)
         .type.filter((t) => t !== 'null')
         .pop();
@@ -654,7 +671,9 @@ function setAlgorithmList() {
       });
     },
     (err) => {
-      setExperimentCreateError(`Failed to find algorithms for outcome: ${err.response || err}`);
+      setExperimentCreateError(
+        `Failed to find algorithms for outcome: ${err.response || err}`
+      );
     }
   );
 }
@@ -693,7 +712,9 @@ function fetchAlgorithmsList() {
         });
       },
       (err) => {
-        setExperimentCreateError(`Failed to fetch algorithms: ${err.response || err}`);
+        setExperimentCreateError(
+          `Failed to fetch algorithms: ${err.response || err}`
+        );
       }
     );
 }
@@ -720,7 +741,9 @@ function setAlgorithmsListForCreateView() {
   setAlgorithmsList().subscribe(
     () => {},
     (err) => {
-      setExperimentCreateError(`Failed to get list of algorithms: ${err.response || err}`);
+      setExperimentCreateError(
+        `Failed to get list of algorithms: ${err.response || err}`
+      );
     }
   );
 }

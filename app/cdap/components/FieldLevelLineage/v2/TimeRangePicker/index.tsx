@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useContext } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -48,8 +48,8 @@ function TimeRangePicker({ classes }) {
     FllContext
   );
 
-  const onSelect = (e: React.ChangeEvent<{ value: string }>) => {
-    const range = e.target.value;
+  const onSelect = (e: ChangeEvent<{ value: unknown }>) => {
+    const range = e.target.value as string;
     setTimeRange(range);
   };
 

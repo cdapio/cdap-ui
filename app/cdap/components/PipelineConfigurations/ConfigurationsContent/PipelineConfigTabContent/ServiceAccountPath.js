@@ -41,11 +41,16 @@ const mapDispatchToServiceAccountPathProps = (dispatch) => {
   };
 };
 
-const ServiceAccountPath = ({ serviceAccountPath, onServiceAccountPathChange }) => {
+const ServiceAccountPath = ({
+  serviceAccountPath,
+  onServiceAccountPathChange,
+}) => {
   return (
     <React.Fragment>
       <div className="label-with-toggle row">
-        <span className="toggle-label col-4">{T.translate(`${PREFIX}.serviceAccountPath`)}</span>
+        <span className="toggle-label col-4">
+          {T.translate(`${PREFIX}.serviceAccountPath`)}
+        </span>
         <div className="col-7">
           <input
             type="text"

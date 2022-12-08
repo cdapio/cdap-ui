@@ -57,10 +57,16 @@ export default class HostPortRow extends Component {
         </div>
 
         <div className="action-buttons-container text-right">
-          <button className="btn add-row-btn btn-link" onClick={this.props.addRow}>
+          <button
+            className="btn add-row-btn btn-link"
+            onClick={this.props.addRow}
+          >
             <i className="fa fa-plus" />
           </button>
-          <button className="btn remove-row-btn btn-link" onClick={this.props.removeRow}>
+          <button
+            className="btn remove-row-btn btn-link"
+            onClick={this.props.removeRow}
+          >
             <i className="fa fa-trash text-danger" />
           </button>
         </div>

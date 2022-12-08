@@ -37,8 +37,11 @@ export default class OverviewMetaSection extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    let { entity } = nextProps;
-    if (!isNil(entity) && entity.id !== objectQuery(this.state, 'entity', 'id')) {
+    const { entity } = nextProps;
+    if (
+      !isNil(entity) &&
+      entity.id !== objectQuery(this.state, 'entity', 'id')
+    ) {
       this.setState({
         entity,
       });
@@ -47,7 +50,9 @@ export default class OverviewMetaSection extends Component {
 
   getFullCreationTime(creationTime) {
     // Sample formatted time string: Deployed on 02/16/2017, at 03:40 pm
-    let formattedTime = moment(parseInt(creationTime)).format('[ on] MM/DD/YYYY, [at] hh:mm a');
+    const formattedTime = moment(parseInt(creationTime)).format(
+      '[ on] MM/DD/YYYY, [at] hh:mm a'
+    );
     return formattedTime;
   }
 
@@ -81,7 +86,12 @@ export default class OverviewMetaSection extends Component {
   }
 
   render() {
-    let creationTime = objectQuery(this.props, 'entity', 'properties', 'creation-time');
+    const creationTime = objectQuery(
+      this.props,
+      'entity',
+      'properties',
+      'creation-time'
+    );
     const renderCreationTime = (creationTime) => {
       return this.props.showFullCreationTime ? (
         <span>{this.getFullCreationTime(creationTime)}</span>
@@ -89,10 +99,15 @@ export default class OverviewMetaSection extends Component {
         <TimeAgo date={parseInt(creationTime, 10)} />
       );
     };
-    let description = objectQuery(this.props, 'entity', 'properties', 'description');
+    const description = objectQuery(
+      this.props,
+      'entity',
+      'properties',
+      'description'
+    );
     // have to generate new uniqueId here, because we don't want the fast actions here to
     // trigger the tooltips on the card view
-    let entity = Object.assign({}, this.props.entity, {
+    const entity = Object.assign({}, this.props.entity, {
       uniqueId: `meta-${uuidV4()}`,
     });
     return (

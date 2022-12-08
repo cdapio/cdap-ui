@@ -54,7 +54,9 @@ function ColumnsSelectorView(props) {
         return (
           <div key={option} className="option">
             <span onClick={props.onClick.bind(this, option)}>
-              <IconSVG name={props[option] ? 'icon-check-square' : 'icon-square-o'} />
+              <IconSVG
+                name={props[option] ? 'icon-check-square' : 'icon-square-o'}
+              />
 
               {T.translate(`${PREFIX}.Options.${option}`)}
             </span>
@@ -66,7 +68,7 @@ function ColumnsSelectorView(props) {
 }
 
 const mapStateToProps = (state) => {
-  let obj = {};
+  const obj = {};
 
   OPTIONS.forEach((option) => {
     obj[option] = state.customizer[option];
@@ -88,6 +90,9 @@ const mapDispatch = (dispatch) => {
   };
 };
 
-const ColumnsSelector = connect(mapStateToProps, mapDispatch)(ColumnsSelectorView);
+const ColumnsSelector = connect(
+  mapStateToProps,
+  mapDispatch
+)(ColumnsSelectorView);
 
 export default ColumnsSelector;

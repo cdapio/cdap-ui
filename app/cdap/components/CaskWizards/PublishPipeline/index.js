@@ -46,8 +46,10 @@ export default class PublishPipelineWizard extends Component {
     this.eventEmitter = ee(ee);
   }
   componentWillMount() {
-    let action = this.props.input.action;
-    let filename = head(action.arguments.filter((arg) => arg.name === 'config')).value;
+    const action = this.props.input.action;
+    const filename = head(
+      action.arguments.filter((arg) => arg.name === 'config')
+    ).value;
     const marketHost = MarketStore.getState().selectedMarketHost;
     PublishPipelineActionCreator.fetchPipelineConfig({
       entityName: this.props.input.package.name,
@@ -86,9 +88,13 @@ export default class PublishPipelineWizard extends Component {
     });
   }
   buildSuccessInfo(pipelineName, namespace, draftId) {
-    let message = T.translate('features.Wizard.PublishPipeline.success', { pipelineName });
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
-    let buttonLabel = T.translate('features.Wizard.PublishPipeline.callToAction.customize');
+    const message = T.translate('features.Wizard.PublishPipeline.success', {
+      pipelineName,
+    });
+    const linkLabel = T.translate('features.Wizard.GoToHomePage');
+    const buttonLabel = T.translate(
+      'features.Wizard.PublishPipeline.callToAction.customize'
+    );
     this.setState({
       successInfo: {
         message: message,
@@ -116,22 +122,27 @@ export default class PublishPipelineWizard extends Component {
     });
   }
   publishPipeline() {
-    let action = this.props.input.action;
-    let artifact = head(action.arguments.filter((arg) => arg.name === 'artifact')).value;
+    const action = this.props.input.action;
+    let artifact = head(
+      action.arguments.filter((arg) => arg.name === 'artifact')
+    ).value;
     if (artifact.scope) {
       // CDAP-17500 - This is a side effect of moving to new draft API.
       // The new draft API doesn't accept scope that is not capital case. So
       // a `scope: 'system'` is ignored and publishing the pipeline fails.
       artifact = { ...artifact, scope: artifact.scope.toUpperCase() };
     }
-    let { name, pipelineConfig } = PublishPipelineWizardStore.getState().pipelinemetadata;
-    let draftConfig = {
+    const {
+      name,
+      pipelineConfig,
+    } = PublishPipelineWizardStore.getState().pipelinemetadata;
+    const draftConfig = {
       artifact,
       config: pipelineConfig,
       name: name,
       __ui__: {},
     };
-    let currentNamespace = NamespaceStore.getState().selectedNamespace;
+    const currentNamespace = NamespaceStore.getState().selectedNamespace;
     let draftId;
     if (this.props.input.action.type === 'create_pipeline_draft') {
       draftId = uuidV4();
@@ -149,7 +160,10 @@ export default class PublishPipelineWizard extends Component {
     }
     // this is the case when this is used in an usecase, so
     // PublishPipelineUsecase passes the CTA info to this component
-    if (this.props.input.action.type === 'create_pipeline' && this.props.buildSuccessInfo) {
+    if (
+      this.props.input.action.type === 'create_pipeline' &&
+      this.props.buildSuccessInfo
+    ) {
       return MyPipelineApi.publish(
         {
           namespace: currentNamespace,
@@ -160,7 +174,7 @@ export default class PublishPipelineWizard extends Component {
           config: pipelineConfig,
         }
       ).map((res) => {
-        let successInfo = this.props.buildSuccessInfo(name, currentNamespace);
+        const successInfo = this.props.buildSuccessInfo(name, currentNamespace);
         this.setState({
           successInfo,
         });
@@ -170,9 +184,9 @@ export default class PublishPipelineWizard extends Component {
     }
   }
   render() {
-    let input = this.props.input || {};
-    let pkg = input.package || {};
-    let wizardModalTitle =
+    const input = this.props.input || {};
+    const pkg = input.package || {};
+    const wizardModalTitle =
       (pkg.label ? pkg.label + ' | ' : '') +
       T.translate('features.Wizard.PublishPipeline.headerlabel');
     return (

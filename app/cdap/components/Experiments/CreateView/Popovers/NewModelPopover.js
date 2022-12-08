@@ -32,7 +32,9 @@ const ModelName = ({ modelName, onModelNameChange }) => {
   return (
     <FormGroup row>
       <Col xs="12">
-        <Label className="control-label">{T.translate(`${PREFIX}.modelName`)}</Label>
+        <Label className="control-label">
+          {T.translate(`${PREFIX}.modelName`)}
+        </Label>
       </Col>
       <Col xs="12">
         <Input value={modelName} onChange={onModelNameChange} />
@@ -49,10 +51,16 @@ const ModelDescription = ({ modelDescription, onModelDescriptionChange }) => {
   return (
     <FormGroup row>
       <Col xs="12">
-        <Label className="control-label">{T.translate(`${PREFIX}.modelDescription`)}</Label>
+        <Label className="control-label">
+          {T.translate(`${PREFIX}.modelDescription`)}
+        </Label>
       </Col>
       <Col xs="12">
-        <Input type="textarea" value={modelDescription} onChange={onModelDescriptionChange} />
+        <Input
+          type="textarea"
+          value={modelDescription}
+          onChange={onModelDescriptionChange}
+        />
       </Col>
     </FormGroup>
   );
@@ -63,9 +71,14 @@ ModelDescription.propTypes = {
 };
 
 const CreateModelBtn = ({ state, createModel }) => {
-  const isAddModelBtnEnabled = () => state.name.length && state.description.length;
+  const isAddModelBtnEnabled = () =>
+    state.name.length && state.description.length;
   return (
-    <button className="btn btn-primary" onClick={createModel} disabled={!isAddModelBtnEnabled()}>
+    <button
+      className="btn btn-primary"
+      onClick={createModel}
+      disabled={!isAddModelBtnEnabled()}
+    >
       Create Model
     </button>
   );
@@ -97,7 +110,10 @@ const NewModelPopoverWrapper = ({ popover, experimentName }) => {
     <div className="new-model-popover">
       <FormGroup row>
         <Col xs="12">
-          <Label className="control-label"> Create model under the experiment </Label>
+          <Label className="control-label">
+            {' '}
+            Create model under the experiment{' '}
+          </Label>
         </Col>
         <Col xs="12">
           <Input disabled value={experimentName} />
@@ -116,13 +132,17 @@ NewModelPopoverWrapper.propTypes = {
   experimentName: PropTypes.string,
 };
 
-const mapStateToModelNameProps = (state) => ({ modelName: state.model_create.name });
+const mapStateToModelNameProps = (state) => ({
+  modelName: state.model_create.name,
+});
 const mapDispatchToModelNameProps = () => ({ onModelNameChange });
 const mapStateToModelDescriptionProps = (state) => ({
   modelDescription: state.model_create.description,
 });
 const mapDispatchToModelDescriptionProps = () => ({ onModelDescriptionChange });
-const mapStateToCreateModelBtnProps = (state) => ({ state: state.model_create });
+const mapStateToCreateModelBtnProps = (state) => ({
+  state: state.model_create,
+});
 const mapDispatchToCreateModelBtnProps = () => ({ createModel });
 const mapStateToExperimentMetadataProps = (state) => ({
   experimentOutcome: state.experiments_create.outcome,
@@ -144,7 +164,11 @@ const ConnectedCreateModelBtn = connect(
   mapStateToCreateModelBtnProps,
   mapDispatchToCreateModelBtnProps
 )(CreateModelBtn);
-const ConnectedExperimentMetadata = connect(mapStateToExperimentMetadataProps)(ExperimentMetadata);
-const ConnectedNewModelPopoverWrapper = connect(mapNMPWStateToProps)(NewModelPopoverWrapper);
+const ConnectedExperimentMetadata = connect(mapStateToExperimentMetadataProps)(
+  ExperimentMetadata
+);
+const ConnectedNewModelPopoverWrapper = connect(mapNMPWStateToProps)(
+  NewModelPopoverWrapper
+);
 
 export default ConnectedNewModelPopoverWrapper;

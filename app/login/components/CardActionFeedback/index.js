@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 require('./CardActionFeedback.scss');
 
-var classNames = require('classnames');
+const classNames = require('classnames');
 
 export default class CardActionFeedback extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ export default class CardActionFeedback extends Component {
   }
 
   getIcon() {
-    let icon = classNames(
+    const icon = classNames(
       'fa',
       { 'fa-check': this.props.type === 'SUCCESS' },
       { 'fa-exclamation': this.props.type === 'DANGER' },
@@ -93,7 +93,7 @@ export default class CardActionFeedback extends Component {
       }
     }
 
-    let feedbackClass = classNames('card-action-feedback', this.props.type);
+    const feedbackClass = classNames('card-action-feedback', this.props.type);
 
     return (
       <div className={feedbackClass}>

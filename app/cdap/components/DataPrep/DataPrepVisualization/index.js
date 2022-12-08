@@ -73,8 +73,8 @@ export default class DataPrepVisualization extends Component {
   };
 
   renderVoyager = () => {
-    let { insights, data } = DataPrepStore.getState().dataprep;
-    let visualization = insights.visualization || {};
+    const { insights, data } = DataPrepStore.getState().dataprep;
+    const visualization = insights.visualization || {};
     this.voyagerInstance = CreateVoyager(
       this.containerRef,
       {
@@ -85,7 +85,9 @@ export default class DataPrepVisualization extends Component {
       }
     );
     if (Object.keys(visualization).length) {
-      this.voyagerInstance.setApplicationState(this.addDatasetToVoyagerState(visualization, data));
+      this.voyagerInstance.setApplicationState(
+        this.addDatasetToVoyagerState(visualization, data)
+      );
     }
     this.voyagerStateSubscription = this.voyagerInstance.onStateChange(
       debounce((voyagerState) => {
@@ -95,7 +97,7 @@ export default class DataPrepVisualization extends Component {
   };
 
   updateVizProperties = () => {
-    let voyagerState = this.voyagerInstance.getApplicationState();
+    const voyagerState = this.voyagerInstance.getApplicationState();
     setVisualizationState(this.removeDatasetFromVoyagerState(voyagerState));
     updateWorkspaceProperties();
     window.removeEventListener('beforeunload', this.updateVizProperties);
@@ -109,9 +111,9 @@ export default class DataPrepVisualization extends Component {
     window.addEventListener('beforeunload', this.updateVizProperties);
     let localData = [...DataPrepStore.getState().dataprep.data];
     this.datapreSubscription = DataPrepStore.subscribe(() => {
-      let { dataprep } = DataPrepStore.getState();
-      let insights = dataprep.insights || {};
-      let visualization = insights.visualization || {};
+      const { dataprep } = DataPrepStore.getState();
+      const insights = dataprep.insights || {};
+      const visualization = insights.visualization || {};
       if (
         !localData ||
         dataprep.data.length !== localData.length ||
@@ -123,7 +125,10 @@ export default class DataPrepVisualization extends Component {
           });
         } else {
           this.voyagerInstance.setApplicationState(
-            this.addDatasetToVoyagerState(visualization, cloneDeep(dataprep.data))
+            this.addDatasetToVoyagerState(
+              visualization,
+              cloneDeep(dataprep.data)
+            )
           );
         }
         localData = cloneDeep(dataprep.data);
@@ -152,8 +157,15 @@ export default class DataPrepVisualization extends Component {
 
   render() {
     return (
-      <div className="datapre-visualization" ref={(ref) => (this.containerRef = ref)}>
-        {this.state.loading ? <LoadingSVGCentered /> : <div id="dataprep-viz" />}
+      <div
+        className="datapre-visualization"
+        ref={(ref) => (this.containerRef = ref)}
+      >
+        {this.state.loading ? (
+          <LoadingSVGCentered />
+        ) : (
+          <div id="dataprep-viz" />
+        )}
       </div>
     );
   }

@@ -66,7 +66,11 @@ function StatusLegends() {
 function renderLegendsByOption(viewByOption) {
   return (
     <div className="legends-by-option">
-      {viewByOption === ViewByOptions.startMethod ? <StartMethodLegends /> : <StatusLegends />}
+      {viewByOption === ViewByOptions.startMethod ? (
+        <StartMethodLegends />
+      ) : (
+        <StatusLegends />
+      )}
     </div>
   );
 }

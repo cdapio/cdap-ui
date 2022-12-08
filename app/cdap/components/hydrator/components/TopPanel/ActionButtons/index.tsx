@@ -332,7 +332,7 @@ export const ActionButtons = ({
                 type="file"
                 accept=".json"
                 onChange={handleFile}
-                onClick={(e) => (e.target.value = null)}
+                onClick={(e: any) => (e.target.value = null)}
               />
             </label>
             <CustomTooltip

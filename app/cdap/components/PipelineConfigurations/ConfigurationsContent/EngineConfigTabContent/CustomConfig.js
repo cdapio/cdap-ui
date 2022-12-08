@@ -43,7 +43,7 @@ const mapDispatchToCustomConfigKeyValuesProps = (dispatch, ownProps) => {
         type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG_KEY_VALUE_PAIRS,
         payload: { keyValues },
       });
-      let customConfigObj = convertKeyValuePairsObjToMap(keyValues);
+      const customConfigObj = convertKeyValuePairsObjToMap(keyValues);
       dispatch({
         type: PipelineConfigurationsActions.SET_CUSTOM_CONFIG,
         payload: {
@@ -79,8 +79,8 @@ const CustomConfig = ({
   engine,
   customConfigKeyValuePairs,
 }) => {
-  let engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
-  let numberOfCustomConfigFilled = customConfigKeyValuePairs.pairs.filter(
+  const engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
+  const numberOfCustomConfigFilled = customConfigKeyValuePairs.pairs.filter(
     (pair) => !isEmpty(pair.key) && !isEmpty(pair.value)
   ).length;
 
@@ -92,7 +92,9 @@ const CustomConfig = ({
           onClick={toggleCustomConfig}
           data-cy="engine-config-tab-custom"
         >
-          <IconSVG name={showCustomConfig ? 'icon-caret-down' : 'icon-caret-right'} />
+          <IconSVG
+            name={showCustomConfig ? 'icon-caret-down' : 'icon-caret-right'}
+          />
           {T.translate(`${PREFIX}.showCustomConfig`)}
         </a>
         <Popover
@@ -127,10 +129,14 @@ const CustomConfig = ({
             showOn="Hover"
             placement="right"
           >
-            {T.translate(`${PREFIX}.customConfigTooltip`, { engineDisplayLabel })}
+            {T.translate(`${PREFIX}.customConfigTooltip`, {
+              engineDisplayLabel,
+            })}
           </Popover>
           <span className="float-right num-rows">
-            {T.translate(`${PREFIX}.customConfigCount`, { context: numberOfCustomConfigFilled })}
+            {T.translate(`${PREFIX}.customConfigCount`, {
+              context: numberOfCustomConfigFilled,
+            })}
           </span>
         </div>
       </div>
@@ -139,12 +145,20 @@ const CustomConfig = ({
 
   return (
     <div className="add-custom-config">
-      {isDetailView ? <DetailViewCustomConfigLabel /> : <StudioViewCustomConfigLabel />}
+      {isDetailView ? (
+        <DetailViewCustomConfigLabel />
+      ) : (
+        <StudioViewCustomConfigLabel />
+      )}
       {isDetailView || showCustomConfig ? (
         <div>
           <div className="custom-config-labels key-value-pair-labels">
-            <span className="key-label">{T.translate('commons.nameLabel')}</span>
-            <span className="value-label">{T.translate('commons.keyValPairs.valueLabel')}</span>
+            <span className="key-label">
+              {T.translate('commons.nameLabel')}
+            </span>
+            <span className="value-label">
+              {T.translate('commons.keyValPairs.valueLabel')}
+            </span>
           </div>
           <div className="custom-config-values key-value-pair-values">
             <ConnectedCustomConfigKeyValuePairs pipelineType={pipelineType} />
@@ -164,6 +178,8 @@ CustomConfig.propTypes = {
   customConfigKeyValuePairs: PropTypes.object,
 };
 
-const ConnectedCustomConfig = connect(mapStateToCustomConfigProps)(CustomConfig);
+const ConnectedCustomConfig = connect(mapStateToCustomConfigProps)(
+  CustomConfig
+);
 
 export default ConnectedCustomConfig;
