@@ -20,6 +20,11 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import FooterPanel from 'components/FooterPanel';
+import NoRecordScreen from 'components/NoRecordScreen';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import T from 'i18n-react';
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
@@ -27,10 +32,6 @@ import GridTextCell from 'components/GridTable/components/GridTextCell';
 import DirectiveInput from 'components/DirectiveInput';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
 import { useStyles } from 'components/GridTable/styles';
-import NoRecordScreen from 'components/NoRecordScreen';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import T from 'i18n-react';
 import React, { useEffect, useState, useReducer } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
@@ -49,7 +50,6 @@ import {
   IMissingListData,
 } from 'components/GridTable/types';
 import styled from 'styled-components';
-import FooterPanel from 'components/FooterPanel';
 import { reducer, initialGridTableState } from 'components/GridTable/reducer';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import GridTableContainer from './components/GridTableContainer';
@@ -257,7 +257,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload as IParams, wid as string);
+    getWorkSpaceData(payload, wid);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -267,7 +267,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]] as string[],
+          type: [columnTypesList[eachColumnName]],
         };
       });
     }
@@ -305,12 +305,11 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item as string;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue =
-          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -542,6 +541,48 @@ export default function GridTable() {
           open={snackbarState.open}
         />
       )}
+      <Table aria-label="simple table" className="test">
+        <TableHead>
+          <TableRow>
+            {headersNamesList?.length &&
+              headersNamesList.map((eachHeader) => (
+                <GridHeaderCell
+                  label={eachHeader.label}
+                  types={eachHeader.type}
+                  key={eachHeader.name}
+                />
+              ))}
+          </TableRow>
+          <TableRow>
+            {missingDataList?.length &&
+              headersNamesList.length &&
+              headersNamesList.map((each, index) => {
+                return missingDataList.map((item, itemIndex) => {
+                  if (item.name === each.name) {
+                    return <GridKPICell metricData={item} key={item.name} />;
+                  }
+                });
+              })}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rowsDataList?.length &&
+            rowsDataList.map((eachRow, rowIndex) => {
+              return (
+                <TableRow key={`row-${rowIndex}`}>
+                  {headersNamesList.map((eachKey, eachIndex) => {
+                    return (
+                      <GridTextCell
+                        cellValue={eachRow[eachKey.name] || '--'}
+                        key={`${eachKey.name}-${eachIndex}`}
+                      />
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+        </TableBody>
+      </Table>
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />

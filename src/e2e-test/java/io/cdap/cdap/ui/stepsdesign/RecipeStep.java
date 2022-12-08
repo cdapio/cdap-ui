@@ -25,9 +25,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -46,7 +46,7 @@ public class RecipeStep {
   public void clickOnTheDataExplorationsCard() {
     try {
       WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-1"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -65,7 +65,7 @@ public class RecipeStep {
         flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
       }
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
-    }catch (Exception e) {
+    } catch (Exception e) {
       System.err.println("error:" + e);
     }
   }
@@ -73,10 +73,7 @@ public class RecipeStep {
   @Then("Verify if the directive panel is displayed")
   public void directivePanelIsDisplayed() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-directive-input-search"));
       WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
       Assert.assertTrue(ElementHelper.isElementDisplayed(panel));
     } catch (Exception e) {
@@ -112,10 +109,7 @@ public class RecipeStep {
   @Then("Click on 'Recipe steps' button")
   public void clickOnRecipeStepButton() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -125,10 +119,7 @@ public class RecipeStep {
   @Then("Verify if recipe panel is displayed")
   public void recipePanelIsDisplayed() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("column-view-panel-parent"));
       Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-view-panel-parent")));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -141,7 +132,7 @@ public class RecipeStep {
       WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
       Actions action = new Actions(SeleniumDriver.getDriver());
       action.moveToElement(ele).perform();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId +"-delete"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId + "-delete"));
       Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -159,7 +150,7 @@ public class RecipeStep {
   @Then("Verify if clicking on close icon of panel")
   public void verifyByClickingOnCloseIcon() {
     try {
-      WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(),20);
+      WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 20);
       ele.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("drawer-widget-close-round-icon")));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
     } catch (Exception e) {

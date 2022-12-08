@@ -24,6 +24,8 @@ import T from 'i18n-react';
 import { IRecipeStepsProps } from 'components/RecipeSteps/types';
 import RecipeStepWidget from 'components/RecipeSteps/RecipeStepWidget';
 import styled from 'styled-components';
+import { getTableDisplayName } from 'components/Replicator/utilities';
+import { getTransformedTableData } from 'components/Administration/TetheringTabContent/TetheringTable/utils';
 
 const RecipeStepsBody = styled(Container)`
   height: calc(100% - 100px);
@@ -43,9 +45,18 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
     setShowRecipePanel(false);
   };
 
-  if (!(Array.isArray(recipeSteps) && recipeSteps.length)) {
+  const getRecipeStepsTable = () => {
+    return (
+      <RecipeStepsTableComponent
+        recipeSteps={recipeSteps}
+        onDeleteRecipeSteps={onDeleteRecipeSteps}
+      />
+    );
+  };
+
+  const getNoDataScreen = () => {
     return <RecipeStepsEmptyScreen />;
-  }
+  };
 
   return (
     <>
@@ -56,10 +67,9 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
         headerActionTemplate={<RecipeHeaderActionTemplate />}
       >
         <RecipeStepsBody>
-          <RecipeStepsTableComponent
-            recipeSteps={recipeSteps}
-            onDeleteRecipeSteps={onDeleteRecipeSteps}
-          />
+          {Array.isArray(recipeSteps) && recipeSteps.length
+            ? getRecipeStepsTable()
+            : getNoDataScreen()}
         </RecipeStepsBody>
       </RecipeStepWidget>
     </>

@@ -3433,13 +3433,6 @@ features:
       success: You have successfully created the pipeline "{pipelineName}".
     Skip: Skipped
   WranglerNewUI:
-    FooterPanel:
-      labels:
-        message: Current data - {rowCount} rows and {columnCount} columns
-        columnViewPanel: Column View Panel
-        directives: Directives
-        recipeSteps: Recipe Steps
-        zoomPercent100: 100%
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
@@ -3477,6 +3470,8 @@ features:
       params:
         connectionsList: datasources
         wranglerHome: home
+    common:
+      and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
@@ -3484,6 +3479,16 @@ features:
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     HomePage:
       labels:
         common:
