@@ -28,8 +28,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 public class ConnectionList {
-    @Given("Navigate to Home Page")
-    public void navigateToTheHomePage() {
+    @Given("Navigate to Home Page for Connection list page")
+    public void navigateToTheHomePageForConnectionListPage() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
@@ -38,39 +38,41 @@ public class ConnectionList {
     public void clickOnTheConnectionTypeCard(String testId) {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("connector-type-" + testId));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + testId));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/datasources/"));
+            Assert.assertTrue(url.contains("cdap/ns/default/datasources/"));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
     }
 
-    @Then("Verify if the Wrangle button is visible")
-    public void clickOnFirstTabOfTheSecondColumn() {
-        try {
-            SeleniumDriver.getDriver().navigate().refresh();
-            for (int i = 1; i <= 10; i++) {
-                WebElement ele = Helper.locateElementByTestId("connections-tab-column" + i + "-item0");
-                if (ElementHelper.isElementDisplayed(ele)) {
-                    System.out.println("element found at index = " + i);
-                    Actions action = new Actions(SeleniumDriver.getDriver());
-                    action.moveToElement(ele).build().perform();
-                    Helper.waitSeconds(10);
-                    if (Helper.isElementExists("connections-tab-label-can-simple-" + i)) {
-                        Helper.isElementExists("wrangle-text");
-                        System.out.println("wrangle text is visible");
-                        break;
-                    } else {
-                        ele.click();
-                        System.out.println("folder clicked");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("error: " + e);
-        }
-    }
+//    @Then("Verify if the Wrangle button is visible")
+//    public void clickOnFirstTabOfTheSecondColumn() {
+//        try {
+//            SeleniumDriver.getDriver().navigate().refresh();
+//            for (int i = 1; i <= 10; i++) {
+//                WebElement ele = Helper.locateElementByTestId("connections-tab-column" + i + "-item0");
+//                if (ElementHelper.isElementDisplayed(ele)) {
+//                    System.out.println("element found at index = " + i);
+//                    Actions action = new Actions(SeleniumDriver.getDriver());
+//                    action.moveToElement(ele).build().perform();
+//                    Helper.waitSeconds(10);
+//                    if (Helper.isElementExists("connections-tab-ref-label-simple" + i)) {
+//                        Helper.isElementExists("wrangle-text");
+//                        System.out.println("wrangle text is visible");
+//                        break;
+//                    } else {
+//                        ele.click();
+//                        System.out.println("folder clicked");
+//                    }
+//                } else {
+//                    System.err.println("Element not found");
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.err.println("error: " + e);
+//        }
+//    }
 
     @Then("Click on the Add connection button")
     public void clickOnTheAddConnectionButton() {
