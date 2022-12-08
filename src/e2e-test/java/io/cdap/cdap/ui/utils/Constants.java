@@ -81,4 +81,6 @@ public class Constants {
   public static final String ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT = "Analytics";
   public static final String CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT = "Conditions and Actions";
   public static final String ERROR_HANDLERS_AND_ALERTS_PLUGINS_GROUP_LOCATOR_TEXT = "Error Handlers and Alerts";
+  
+  public static final String PIPELINE_TYPE = "cdap-data-pipeline";
 }

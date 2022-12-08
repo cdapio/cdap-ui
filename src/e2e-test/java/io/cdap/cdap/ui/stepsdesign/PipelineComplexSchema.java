@@ -167,15 +167,13 @@ public class PipelineComplexSchema {
 
   @Then("Type in pipeline name and description")
   public void typeInPipelineNameAndDescription() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-metadata"));
-    ElementHelper.sendKeys(Helper.locateElementByCssSelector("#pipeline-name-input"), pipelineName);
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
+    Commands.fillInPipelineName(pipelineName);
+    Commands.dismissTopBanner();
   }
 
   @Then("Click on Deploy the pipeline")
   public void clickOnDeployThePipeline() throws InterruptedException {
-    ElementHelper.clickOnElementUsingJsExecutor(Helper.locateElementByTestId("deploy-pipeline-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("deploy-pipeline-btn"));
 
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(

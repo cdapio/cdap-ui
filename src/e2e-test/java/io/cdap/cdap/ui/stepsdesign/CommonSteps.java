@@ -56,7 +56,7 @@ public class CommonSteps {
       }
     }
     // wait for rendering to finish otherwise elements are not attached to dom
-    Helper.waitSeconds(3);
+    Helper.waitSeconds(4);
   }
 
   private static void tryOpenStudioPage() {
@@ -115,6 +115,13 @@ public class CommonSteps {
   @Then("Cleanup pipeline graph control")
   public void cleanupPipelineGraphControl() {
     Commands.pipelineCleanUpGraphControl();
+  }
+
+  @Then("Zoom in ten times on pipeline canvas")
+  public void zoomInTenTimes() {
+    for (int i = 0; i < 10; ++i) {
+      Commands.clickZoomInButton();
+    }
   }
 
   @Then("Fit pipeline to screen")
