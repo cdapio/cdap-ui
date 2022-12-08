@@ -20,11 +20,36 @@ export const initialGridTableState = {
     columnCount: 0,
     rowCount: 0,
   },
+  loading: false,
+  headersNamesList: [],
+  rowsDataList: [],
+  showRecipePanel: false,
+  gridData: {},
+  missingDataList: [],
+  invalidCountArray: [
+    {
+      label: 'Invalid',
+      count: '0',
+    },
+  ],
+  snackbarState: {},
 };
 
 enum IGridTableActions {
   IS_DIRECTIVE_PANEL_OPEN,
   TABLE_META_INFO,
+  LOADING_STATUS,
+  HEADER_NAMES,
+  ROWS_DATA,
+  SHOW_RECIPE_PANEL,
+  GRID_DATA,
+  MISSING_DATA_LIST,
+  INVALID_COUNT_ARRAY,
+  SET_GRID_DATA_AND_LOADER,
+  TABLE_META_INFO_AND_ROWS_DATA,
+  LOADER_AND_GRID_DATA,
+  LOADER_AND_DIRECTIVE_OPEN,
+  LOADER_GRID_DATA_AND_DIRECTIVE,
 }
 
 export const reducer = (state, action) => {
@@ -38,6 +63,73 @@ export const reducer = (state, action) => {
       return {
         ...state,
         tableMetaInfo: action.payload,
+      };
+    case IGridTableActions.LOADING_STATUS:
+      return {
+        ...state,
+        loading: action.payload,
+      };
+    case IGridTableActions.HEADER_NAMES:
+      return {
+        ...state,
+        headersNamesList: action.payload,
+      };
+    case IGridTableActions.ROWS_DATA:
+      return {
+        ...state,
+        rowsDataList: action.payload,
+      };
+    case IGridTableActions.SHOW_RECIPE_PANEL:
+      return {
+        ...state,
+        showRecipePanel: action.payload,
+      };
+    case IGridTableActions.GRID_DATA:
+      return {
+        ...state,
+        gridData: action.payload,
+      };
+    case IGridTableActions.MISSING_DATA_LIST:
+      return {
+        ...state,
+        missingDataList: action.payload,
+      };
+    case IGridTableActions.INVALID_COUNT_ARRAY:
+      return {
+        ...state,
+        invalidCountArray: action.payload,
+      };
+    case IGridTableActions.SET_GRID_DATA_AND_LOADER:
+      return {
+        ...state,
+        loading: action.payload.loading,
+        gridData: action.payload.gridData,
+      };
+    case IGridTableActions.TABLE_META_INFO_AND_ROWS_DATA:
+      return {
+        ...state,
+        tableMetaInfo: action.payload.tableMetaInfo,
+        rowsDataList: action.payload.rowsDataList,
+      };
+    case IGridTableActions.LOADER_AND_GRID_DATA:
+      return {
+        ...state,
+        loading: action.payload.loading,
+        gridData: action.payload.gridData,
+      };
+
+    case IGridTableActions.LOADER_AND_DIRECTIVE_OPEN:
+      return {
+        ...state,
+        loading: action.payload.loading,
+        directivePanelIsOpen: action.payload.directivePanelIsOpen,
+      };
+    case IGridTableActions.LOADER_GRID_DATA_AND_DIRECTIVE:
+      return {
+        ...state,
+        loading: action.payload.loading,
+        gridData: action.payload.gridData,
+        directivePanelIsOpen: action.payload.directivePanelIsOpen,
       };
     default:
       return state;

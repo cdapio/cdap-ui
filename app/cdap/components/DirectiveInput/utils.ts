@@ -16,12 +16,10 @@
 
 import Fuse from 'fuse.js';
 import uuidV4 from 'uuid/v4';
-import { IDirectivesList } from 'components/DirectiveInput/types';
+import { IDirectivesList, IDirectiveUsage } from 'components/DirectiveInput/types';
 
 /**
- * @param  {string} directiveInput
- * @param  {IDirectivesList[]} directivesList
- * @returns {array}
+ * @returns {IDirectiveUsage[]}
  * most appropriate match is returned from directives list so it can be used to show how the directive is used
  */
 export const formatDirectiveUsageData = (
@@ -49,7 +47,6 @@ export const formatDirectiveUsageData = (
 };
 
 /**
- * @param  {string} searchString
  * @returns {string}
  * after the directive selection, the input typed is used to show dropdown of column list
  */
@@ -67,8 +64,6 @@ export const getLastWordOfSearchItem = (searchString: string) => {
 };
 
 /**
- * @param  {string} inputText
- * @param  {string} newString
  * @returns {string}
  * On enter or on clicking list item, need to catch value and do amendments in input tag value according to directive syntax
  */

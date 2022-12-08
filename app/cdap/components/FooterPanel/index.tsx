@@ -70,7 +70,7 @@ const Label = styled(Typography)`
   line-height: 40px;
 `;
 
-const ReciepeStepsBox = styled(Box)`
+const RecipeStepsBox = styled(Box)`
   text-align: center;
   padding: 9.5px 12px;
   gap: 8px;
@@ -167,7 +167,7 @@ export default function({
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
-      <ReciepeStepsBox
+      <RecipeStepsBox
         data-testid="footer-panel-recipe-steps-tab"
         onClick={handleShowRecipePanelHandler}
       >
@@ -177,7 +177,7 @@ export default function({
         <OutlinedLabel data-testid="footerpanel-outlined-label">
           <>{recipeStepsCount}</>
         </OutlinedLabel>
-      </ReciepeStepsBox>
+      </RecipeStepsBox>
     </TabsWrapper>
   );
 }

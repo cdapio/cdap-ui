@@ -21,8 +21,52 @@ import T from 'i18n-react';
 import { PREFIX } from 'components/DirectiveInput/constants';
 
 describe('Testing Directive Usage Component', () => {
+  const dummyUsage = {
+    item: {
+      directive: 'json-path',
+      usage: "json-path :source :destination 'json-path'",
+      description: 'Parses JSON elements using a DSL (a JSON path expression).',
+      excluded: false,
+      alias: false,
+      scope: 'SYSTEM',
+      arguments: {
+        directive: 'json-path',
+        tokens: [
+          {
+            ordinal: 0,
+            optional: false,
+            name: 'source',
+            type: 'COLUMN_NAME',
+          },
+          {
+            ordinal: 1,
+            optional: false,
+            name: 'destination',
+            type: 'COLUMN_NAME',
+          },
+          {
+            ordinal: 2,
+            optional: false,
+            name: 'json-path',
+            type: 'TEXT',
+          },
+        ],
+      },
+      categories: ['parser', 'json'],
+    },
+    matches: [
+      {
+        indices: [[0, 0]],
+        value: 'json-path',
+        key: 'directive',
+        arrayIndex: 0,
+      },
+    ],
+    score: 0.001,
+    uniqueId: '94dc4bd4-8030-4bea-9197-993429227df0',
+  };
   beforeEach(() => {
-    render(<DirectiveUsage directiveUsage={undefined} />);
+    render(<DirectiveUsage directiveUsage={dummyUsage} />);
   });
 
   it('Should check if the parent wrapper is rendered', () => {

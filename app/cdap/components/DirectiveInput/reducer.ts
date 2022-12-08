@@ -22,9 +22,11 @@ export const initialDirectiveInputState = {
   directiveUsageList: [],
   directivesList: [],
   isDirectivePaste: false,
+  directiveColumns: [],
+  enterCount: 0,
 };
 
-enum IDirectiveActions {
+export enum IDirectiveActions {
   INPUT_DIRECTIVE,
   DIRECTIVE_SET,
   APPLIED_DIRECTIVE,
@@ -32,6 +34,11 @@ enum IDirectiveActions {
   DIRECTIVE_USAGE_LIST,
   DIRECTIVE_LIST,
   DIRECTIVE_PASTE,
+  DIRECTIVES_COLUMNS_LIST,
+  DIRECTIVES_APPLIED_SET_COUNT,
+  DIRECTIVES_SYNTAX,
+  SET_NO_DIRECTIVE,
+  SET_ENTER_COUNT,
 }
 
 export const reducer = (state, action) => {
@@ -71,6 +78,38 @@ export const reducer = (state, action) => {
       return {
         ...state,
         isDirectivePaste: action.payload,
+      };
+
+    case IDirectiveActions.DIRECTIVES_COLUMNS_LIST:
+      return {
+        ...state,
+        directiveColumns: action.payload.directiveColumns,
+        enterCount: action.payload.enterCount,
+      };
+
+    case IDirectiveActions.DIRECTIVES_APPLIED_SET_COUNT:
+      return {
+        ...state,
+        appliedDirective: action.payload.appliedDirective,
+        directiveColumnCount: action.payload.directiveColumnCount,
+        isDirectiveSet: action.payload.isDirectiveSet,
+      };
+    case IDirectiveActions.DIRECTIVES_APPLIED_SET_COUNT:
+      return {
+        ...state,
+        directiveUsageList: action.payload.directiveUsageList,
+        isDirectiveSet: action.payload.isDirectiveSet,
+      };
+    case IDirectiveActions.SET_NO_DIRECTIVE:
+      return {
+        ...state,
+        inputDirective: action.payload.inputDirective,
+        enterCount: action.payload.enterCount,
+      };
+    case IDirectiveActions.SET_ENTER_COUNT:
+      return {
+        ...state,
+        enterCount: action.payload,
       };
 
     default:

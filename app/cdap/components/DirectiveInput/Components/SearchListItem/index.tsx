@@ -45,10 +45,10 @@ export default function({ searchItem }: ISearchListItemProps) {
   return (
     <SearchWrapper data-testid="search-list-item-parent-wrapper">
       <LargeLabel data-testid="select-directive-list-label" variant="body1">
-        {searchItem?.item?.directive || searchItem?.item?.label}
+        {searchItem.item.directive || searchItem.item.label}
       </LargeLabel>
       <SmallLabel data-testid="select-directive-list-description" variant="body1">
-        {searchItem?.item?.description}
+        {searchItem.item.description}
       </SmallLabel>
     </SearchWrapper>
   );
