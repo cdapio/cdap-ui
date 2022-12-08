@@ -14,17 +14,44 @@
  * the License.
  */
 
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { IconButton } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
+import {
+  ColumnViewBox,
+  DirectivesBox,
+  Label,
+  LargeBox,
+  OutlinedLabel,
+  ReciepeStepsBox,
+  TabsWrapper,
+  TransformatedIconButton,
+  ZoomBox,
+} from 'components/FooterPanel/styles';
 import T from 'i18n-react';
 import React from 'react';
-import styled from 'styled-components';
 
 export const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
+
+const ColumnIcon = (
+  <svg
+    width="20"
+    height="18"
+    viewBox="0 0 20 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    data-testid="column-icon"
+  >
+    <path
+      d="M1 6.65385L1 3.3718C1 2.93657 1.21071 2.51917 1.58579 2.21142C1.96086 1.90366 2.46957 1.73077 3 1.73077L17 1.73077C17.5304 1.73077 18.0391 1.90366 18.4142 2.21142C18.7893 2.51917 19 2.93657 19 3.3718V6.65385M1 6.65385L1 14.859C1 15.2942 1.21071 15.7116 1.58579 16.0194C1.96086 16.3271 2.46957 16.5 3 16.5H17C17.5304 16.5 18.0391 16.3271 18.4142 16.0194C18.7893 15.7116 19 15.2942 19 14.859V6.65385M1 6.65385L19 6.65385M1 11.5769H19"
+      stroke="#757575"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 interface IGridMetaInfo {
   rowCount: number;
@@ -38,93 +65,10 @@ interface IFooterPanelProps {
   setDirectivePanelIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ColumnViewBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 8px 32px;
-  gap: 8px;
-  width: 88px;
-  height: 40px;
-  border-left: 1px solid #3994ff66;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-  border-right: 1px solid #3994ff66;
-  cursor: pointer;
-`;
-
-const DirectivesBox = styled(Box)`
-  text-align: center;
-  gap: 8px;
-  width: 9.5%;
-  height: 40px;
-  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-  border-left: 1px solid rgba(57, 148, 255, 0.4);
-  cursor: pointer;
-`;
-
-const Label = styled(Typography)`
-  line-height: 40px;
-`;
-
-const RecipeStepsBox = styled(Box)`
-  text-align: center;
-  padding: 9.5px 12px;
-  gap: 8px;
-  width: 13.5%;
-  height: 40px;
-  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-  border-left: 1px solid rgba(57, 148, 255, 0.4);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const TabsWrapper = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: space-between;
-  background-color: #f3f6f9;
-  height: 40px;
-  box-shadow: 0px -2px 2px #0000001a;
-  width: 100%;
-  position: absolute;
-  bottom: 54px;
-`;
-
-const TransformatedIconButton = styled(IconButton)`
-  transform: rotate(90deg);
-`;
-
-const OutlinedLabel = styled(Label)`
-  background-color: ${grey[600]};
-  line-height: 21px;
-  width: 20px;
-  color: #ffffff;
-  border-radius: 4px;
-`;
-
-const ZoomBox = styled(Box)`
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  width: 10.5%;
-  height: 40px;
-  background: linear-gradient(180deg, #4681f400 0.85%, #4681f433 118.78%);
-  border-left: 1px solid rgba(57, 148, 255, 0.4);
-  cursor: pointer;
-`;
-
-const LargeBox = styled(Box)`
-  width: 65%;
-  padding: 0px 32px;
-`;
+export interface ITableMetaInfoTabProps {
+  rowCount: number;
+  columnCount: number;
+}
 
 export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
@@ -144,7 +88,7 @@ export default function({
         <ColumnViewBox data-testid="footer-panel-column-view-panel-tab">{ColumnIcon}</ColumnViewBox>
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
-        <Label data-testid="footerpanel-simple-message">
+        <Label data-testid="footerpanel-simple-label">
           {T.translate(`${PREFIX}.message`, { rowCount, columnCount })}
         </Label>
       </LargeBox>
@@ -152,7 +96,7 @@ export default function({
         <IconButton aria-label="zoom">
           <ZoomInIcon />
         </IconButton>
-        <Label data-testid="footerpanel-simple-zoom-label">
+        <Label data-testid="footerpanel-simple-label">
           <>{`${T.translate(`${PREFIX}.zoomPercent100`)}`}</>
         </Label>
         <TransformatedIconButton aria-label="arrow">
@@ -167,7 +111,7 @@ export default function({
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
-      <RecipeStepsBox
+      <ReciepeStepsBox
         data-testid="footer-panel-recipe-steps-tab"
         onClick={handleShowRecipePanelHandler}
       >
@@ -177,7 +121,7 @@ export default function({
         <OutlinedLabel data-testid="footerpanel-outlined-label">
           <>{recipeStepsCount}</>
         </OutlinedLabel>
-      </RecipeStepsBox>
+      </ReciepeStepsBox>
     </TabsWrapper>
   );
 }
