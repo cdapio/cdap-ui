@@ -16,29 +16,32 @@
 
 import { Box, Tooltip, TooltipProps } from '@material-ui/core';
 import * as React from 'react';
+import { useStyles } from './styles';
 import styled from 'styled-components';
-import { makeStyles } from '@material-ui/styles';
+import T from 'i18n-react';
 
-export const useStyles = makeStyles((theme) => ({
-  arrow: {
-    color: '#000000',
-  },
-  tooltip: {
-    backgroundColor: '#000000',
-    fontSize: '16px',
-  },
-}));
-
-const TooltipContainer = styled(Box)`
+const TooltipStyle = styled(Box)`
   width: 100%;
 `;
 
+const TooltipUnsetStyle = styled(Box)`
+  width: unset;
+`;
+
+const getWrapperComponent = (tooltipText) => {
+  return tooltipText ? TooltipUnsetStyle : TooltipStyle;
+};
+
 export default function CustomTooltip(props: TooltipProps) {
   const classes = useStyles();
+  const TooltipWrapperComponent = getWrapperComponent(
+    props.title ===
+      T.translate('features.WranglerNewUI.FooterPanel.labels.columnViewPanel').toString()
+  );
 
   return (
-    <TooltipContainer data-testid="tooltip-parent">
+    <TooltipWrapperComponent data-testid="tooltip-parent">
       <Tooltip arrow classes={classes} {...props} />
-    </TooltipContainer>
+    </TooltipWrapperComponent>
   );
 }
