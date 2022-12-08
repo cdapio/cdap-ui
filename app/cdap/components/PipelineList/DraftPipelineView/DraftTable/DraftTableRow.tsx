@@ -81,7 +81,12 @@ export const DraftTableRow = ({ draft }: IProps) => {
   }, []);
 
   return (
-    <a href={link} className="grid-row" data-cy={`draft-${draft.name}`}>
+    <a
+      href={link}
+      className="grid-row"
+      data-cy={`draft-${draft.name}`}
+      data-testid={`draft-${draft.name}`}
+    >
       <div title={draft.name}>{draft.name}</div>
       {lifecycleManagementEditEnabled ? <div>{editStageMessage}</div> : <div></div>}
       <div>{T.translate(`${PREFIX}.${draft.artifact.name}`)}</div>
