@@ -32,13 +32,13 @@ describe('It Should test FunctionSeach Component.', () => {
   });
 
   it('Should test whether FunctionSearch Component is rendered .', () => {
-    render(<FunctionSearch transformationPanel={jest.fn()} />);
+    render(<FunctionSearch submitMenuOption={jest.fn()} />);
     const searchBox = screen.getByTestId(/search-box/i);
     expect(searchBox).toBeInTheDocument();
   });
 
   it('Should trigger input field onchange when we search in the Search Box ', () => {
-    const { container } = render(<FunctionSearch transformationPanel={jest.fn()} />);
+    const { container } = render(<FunctionSearch submitMenuOption={jest.fn()} />);
     const searchInputField = container.querySelector('input');
     expect(searchInputField).toBeInTheDocument();
 
@@ -50,7 +50,7 @@ describe('It Should test FunctionSeach Component.', () => {
   });
 
   it('Should clear the input field search.', () => {
-    const { container } = render(<FunctionSearch transformationPanel={jest.fn()} />);
+    const { container } = render(<FunctionSearch submitMenuOption={jest.fn()} />);
     const searchInputField = container.querySelector('input');
 
     fireEvent.change(searchInputField, { target: { value: 'uppercase' } });
@@ -63,7 +63,7 @@ describe('It Should test FunctionSeach Component.', () => {
   });
 
   it('It should search and click on directive option', () => {
-    const { container } = render(<FunctionSearch transformationPanel={jest.fn()} />);
+    const { container } = render(<FunctionSearch submitMenuOption={jest.fn()} />);
     const searchInputField = container.querySelector('input');
 
     fireEvent.change(searchInputField, { target: { value: 'uppercase' } });
