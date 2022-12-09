@@ -50,7 +50,6 @@ import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/serv
 import AddTransformation from 'components/WranglerGrid/AddTransformationPanel';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 
-
 const transformationOptions = ['undo', 'redo'];
 
 export default function GridTable() {
@@ -432,18 +431,17 @@ export default function GridTable() {
           <LoadingSVG />
         </div>
       )}
-      
-        <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
-          handleClose={() =>
-            setSnackbar(() => ({
-              open: false,
-            }))
-          }
-          open={snackbarState.open}
-          message={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
-        />
-      
+
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }

@@ -3448,9 +3448,6 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
-    GridTable:
-      snackbarLabels:
-        datasetSuccess: Dataset loaded successfully 
     FooterPanel:
       labels:
         columns: columns
@@ -3461,27 +3458,9 @@ features:
         recipeSteps: Recipe Steps
         rows: rows
         zoomPercent100: 100%
-    HomePage:
-      labels:
-        common:
-          addConnection: Add Connection
-          importData: Import Data
-          viewAll: View All
-        connectorTypes:
-          title: Start data exploration
-        workspaces:
-          title: Continue ongoing data explorations, pick up where you left off
-    ImportData:
-      referenceLabel: Import Data
-    NoRecordScreen:
-      gridTable:
-        subtitle: Remove some recipe steps to view some data
-        title: No rows left in this sample
-    Snackbar:
-      labels:
-        failure: Failure
-        success: Success
-        undo: Undo
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
     GridPage:
       menuItems:
         divider: divider
@@ -3497,6 +3476,7 @@ features:
           gridIcon: Grid
           invalidIcon: Invalid
           mathIcon: Math
+          moreHorizIcon: Other
           nullIcon: 'Null'
           otherIcon: Other
           redoIcon: Redo
@@ -3592,5 +3572,27 @@ features:
           copyToNewColumn: Copy to a new column
           enterValueTo: Please enter a value to
           examplePlaceholder: Enter value, e.g. 3
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
+    NoRecordScreen:
+      gridTable:
+        subtitle: Remove some recipe steps to view some data
+        title: No rows left in this sample
+    Snackbar:
+      labels:
+        failure: Failure
+        success: Success
+        undo: Undo
+
 
 
