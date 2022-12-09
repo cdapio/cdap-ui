@@ -131,7 +131,7 @@ export default function OngoingDataExplorationCard({ item }) {
                     }
                     data-testid="ongoing-data-card-percentage"
                   >
-                    {percent}
+                    {Math.round(percent)}
                   </Typography>
                   <Typography
                     variant="body2"
