@@ -3480,6 +3480,7 @@ features:
           gridIcon: Grid
           invalidIcon: Invalid
           mathIcon: Math
+          moreHorizIcon: Other
           nullIcon: 'Null'
           otherIcon: Other
           redoIcon: Redo
