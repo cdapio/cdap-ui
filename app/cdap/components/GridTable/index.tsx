@@ -83,11 +83,6 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
-  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    description: '',
-    isSuccess: false,
-  });
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
   const [snackbarState, setSnackbar] = useSnackbar();
