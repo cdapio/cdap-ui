@@ -2803,7 +2803,6 @@ features:
       triggerNameExists: "Trigger Name already exists"
       triggerNameRequired: "Trigger Name is required"
       triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
-      emptyCompositeTriggerError: "Please select upstream pipelines for this trigger"
       selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
       triggerAndType: "Wait for all events (AND)"
       triggerOrType: "Trigger on any selected event (OR)"
@@ -3438,10 +3437,14 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
-        wranglerHome: Home
+        loadToGrid: Wrangle
+        wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
-        wranglerHome: home
+        wrangleHome: home
+      ariaLabels:
+        breadcrumb: breadcrumb
     common:
       and: and
     ConnectionsList:
