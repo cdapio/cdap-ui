@@ -111,11 +111,12 @@ export default function OngoingDataExploration() {
             to={{
               pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
               state: {
-                from: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome'),
-                path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangeHome'),
+                from: T.translate('features.WranglerNewUI.Breadcrumb.labels.wranglerHome'),
+                path: T.translate('features.WranglerNewUI.Breadcrumb.params.wranglerHome'),
               },
             }}
             style={{ textDecoration: 'none' }}
+            data-testid={`wrangler-home-ongoing-data-exploration-card-${index}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

@@ -31,7 +31,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `encode base64 :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode',
       },
       {
         value: 'encode-base32',
@@ -42,7 +42,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `encode base32 :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode',
       },
       {
         value: 'encode-hex',
@@ -53,7 +53,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `encode hex :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode',
       },
       {
         value: 'encode-url',
@@ -64,7 +64,8 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `url-encode :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042451/URL+Encode+directive'
+        infoLink:
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042451/URL+Encode+directive',
       },
     ],
     supportedDataType: [
@@ -86,7 +87,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `decode base64 :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode',
       },
       {
         value: 'decode-base32',
@@ -97,7 +98,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `decode base32 :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode',
       },
       {
         value: 'decode-hex',
@@ -108,7 +109,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `decode hex :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382107710/Decode',
       },
       {
         value: 'decode-url',
@@ -119,7 +120,7 @@ export const SECURITY_OPTIONS = [
           T.translate('features.WranglerNewUI.GridPage.toolbarIcons.labels.all').toString(),
         ],
         directive: (selectedColumn: string) => `url-decode :${selectedColumn}`,
-        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382075162/URL+Decode'
+        infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382075162/URL+Decode',
       },
     ],
     supportedDataType: [
