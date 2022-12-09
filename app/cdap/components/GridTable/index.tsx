@@ -382,14 +382,14 @@ export default function GridTable() {
         <TableHead>
           <TableRow>
             {headersNamesList &&
-                headersNamesList.length > 0 &&
+              headersNamesList.length > 0 &&
               headersNamesList.map((eachHeader) => (
                 <GridHeaderCell
                   label={eachHeader.label}
                   types={eachHeader.type}
                   key={eachHeader.name}
-                    columnSelected={selectedColumn}
-                    setColumnSelected={handleColumnSelect}
+                  columnSelected={selectedColumn}
+                  setColumnSelected={handleColumnSelect}
                 />
               ))}
           </TableRow>
