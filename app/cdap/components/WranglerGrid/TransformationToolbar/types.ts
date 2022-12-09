@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -16,9 +14,11 @@ import { Dispatch, SetStateAction } from 'react';
  * the License.
  */
 
+import { Dispatch, SetStateAction } from 'react';
 export interface ITransformationToolBarProps {
   columnType: string;
   submitMenuOption: (value: string, dataType: string[], infoLink?: string) => void;
   setShowBreadCrumb: Dispatch<SetStateAction<boolean>>;
   showBreadCrumb: boolean;
+  disableToolbarIcon: boolean;
 }
