@@ -20,6 +20,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import FooterPanel from 'components/FooterPanel';
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
@@ -37,6 +38,8 @@ import {
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
@@ -45,8 +48,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-import Snackbar from 'components/Snackbar';
-import useSnackbar from 'components/Snackbar/useSnackbar';
 import { applyDirectives, getAPIRequestPayload } from './services';
 
 const transformationOptions = ['undo', 'redo'];
@@ -55,6 +56,10 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
+  const [tableMetaInfo, setTableMetaInfo] = useState({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -155,7 +160,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload as IParams, wid as string);
+    getWorkSpaceData(payload, wid);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -165,7 +170,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]] as string[],
+          type: [columnTypesList[eachColumnName]],
         };
       });
     }
@@ -203,12 +208,11 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item as string;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue =
-          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -264,6 +268,10 @@ export default function GridTable() {
         return rest;
       });
 
+    setTableMetaInfo({
+      columnCount: rawData.headers?.length,
+      rowCount: rawData.values?.length - 1,
+    });
     setRowsDataList(rowData);
   };
 
@@ -390,6 +398,7 @@ export default function GridTable() {
           </TableBody>
         </Table>
       )}
+      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {addTransformationFunction.option && gridData?.headers.length !== 0 && (
         <AddTransformationPanel
           transformationName={addTransformationFunction.option}
