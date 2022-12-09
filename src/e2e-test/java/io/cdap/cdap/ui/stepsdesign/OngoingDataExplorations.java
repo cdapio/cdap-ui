@@ -24,11 +24,13 @@ import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class OngoingDataExplorations {
-    @Given("Navigate to the Home Page")
-    public void navigateToTheHomePage() {
+    @Given("Navigate to the Home Page to test ongoing data explorations")
+    public void navigateToTheHomePageToTestOngoingDataExplorations() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
@@ -36,12 +38,12 @@ public class OngoingDataExplorations {
     public void clickOnTheDataExplorationsCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            WebElement ele = Helper.locateElementByTestId("home-ongoing-explorations-text-0");
-            String homeText = ele.getText();
-            System.out.println(homeText);
+//            WebElement ele = Helper.locateElementByTestId("home-ongoing-explorations-text-0");
+//            String homeText = ele.getText();
+//            System.out.println(homeText);
             ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
+            Assert.assertTrue(url.contains("cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
         System.err.println("ERROR: " + e);
         }
@@ -50,7 +52,11 @@ public class OngoingDataExplorations {
     public void clickOnTheHomeLink() {
         WaitHelper.waitForPageToLoad();
         try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-text"));
+//            ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-home"));
+            WebElement ele = SeleniumDriver.getDriver().findElement
+                    (By.xpath("//*[@data-testid = 'breadcrumb-home-home']"));
+            JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
+            executor.executeScript("arguments[0].click();", ele);
             System.out.println("the home link is clicked");
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
@@ -60,7 +66,7 @@ public class OngoingDataExplorations {
     public void checkIfTheUserIsOnTheHomePage() {
         try {
             String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
+            Assert.assertTrue(actualText.contains("cdap/ns/default/home"));
             System.out.println("The assertion for home url is passed");
         } catch (Exception e) {
         System.err.println("ERROR: " + e);
