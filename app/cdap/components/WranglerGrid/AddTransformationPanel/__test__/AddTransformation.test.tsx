@@ -37,6 +37,9 @@ describe('It should test the AddTransformatio Component', () => {
         columnsList={mockColumnData}
         missingItemsList={undefined}
         onCancel={jest.fn()}
+        transformationLink={
+          'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/391610418/Filter+Row+directive'
+        }
       />
     );
 
@@ -53,6 +56,9 @@ describe('It should test the AddTransformatio Component', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={
+        'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/391610418/Filter+Row+directive'
+      }
     />
   );
 
@@ -77,6 +83,9 @@ it('Trigger handleApply() , closeSelectColumnsPopupWithoutColumn ', () => {
       columnsList={mockColumnData}
       missingItemsList={undefined}
       onCancel={jest.fn()}
+      transformationLink={
+        'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/391610418/Filter+Row+directive'
+      }
     />
   );
 

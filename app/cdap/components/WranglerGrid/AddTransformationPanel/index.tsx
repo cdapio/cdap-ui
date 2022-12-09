@@ -64,6 +64,7 @@ export default function({
   missingItemsList,
   onCancel,
   applyTransformation,
+  transformationLink,
 }: IAddTransformationProps) {
   const [drawerStatus, setDrawerStatus] = useState<boolean>(true);
   const [columnsPopup, setColumnsPopup] = useState<boolean>(false);
@@ -126,7 +127,10 @@ export default function({
                 <SelectedColumnCountWidget selectedColumnsCount={selectedColumns?.length} />
               </CountWidgetWrapper>
               <Divider />
-              <FunctionNameWidget transformationName={transformationName} />
+              <FunctionNameWidget
+                transformationName={transformationName}
+                transformationLink={transformationLink}
+              />
               <SelectColumnsWidget
                 handleSelectColumn={handleSelectColumn}
                 selectedColumns={selectedColumns}

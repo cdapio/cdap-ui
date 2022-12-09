@@ -18,10 +18,38 @@ import { getDirective } from 'components/WranglerGrid/AddTransformationPanel/uti
 
 describe('It should test getDirective function', () => {
   it('should call getDirective() when there is error in function name', () => {
-    expect(getDirective('', 'body_0')).toStrictEqual(null);
+    expect(
+      getDirective('', 'body_0', {
+        customInput: '',
+        ignoreCase: true,
+        filterOptionSelected: 'TEXTEXACTLY',
+        filterOptionValue: 'dw',
+        filterRadioOption: 'KEEP',
+      })
+    ).toStrictEqual(null);
   });
 
   it('should call getDirective() when function name is string .', () => {
-    expect(getDirective('string', 'body_0')).toStrictEqual(`set-type :body_0 string`);
+    expect(
+      getDirective('string', 'body_0', {
+        customInput: '',
+        ignoreCase: true,
+        filterOptionSelected: 'TEXTEXACTLY',
+        filterOptionValue: 'dw',
+        filterRadioOption: 'KEEP',
+      })
+    ).toStrictEqual('set-type :body_0 string');
+  });
+
+  it('should call getDirective() when function name is filter .', () => {
+    expect(
+      getDirective('filter', 'body_0', {
+        customInput: '',
+        ignoreCase: true,
+        filterOptionSelected: 'TEXTEXACTLY',
+        filterOptionValue: 'dw',
+        filterRadioOption: 'KEEP',
+      })
+    ).toStrictEqual('filter-rows-on regex-not-match body_0 ^(?i)dw$');
   });
 });
