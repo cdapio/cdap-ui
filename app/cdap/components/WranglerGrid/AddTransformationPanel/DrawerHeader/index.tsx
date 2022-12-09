@@ -24,7 +24,7 @@ import T from 'i18n-react';
 import { ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { blue } from '@material-ui/core/colors';
 
-interface ISelectColumnDrawerHeaderProps {
+interface IDrawerHeaderProps {
   closeClickHandler: () => void;
 }
 
@@ -63,7 +63,7 @@ const DrawerHeadWrapper = styled(Box)`
   flex-direction: column;
 `;
 
-export default function({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
+export default function({ closeClickHandler }: IDrawerHeaderProps) {
   return (
     <DrawerContainerBox role="presentation" data-testid="add-transformation-drawer">
       <DrawerContainerInnerFlex>

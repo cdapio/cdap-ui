@@ -20,7 +20,7 @@ const PREFIX = 'features.WranglerNewUI.GridPage.transformations.options.labels.o
 export const OTHER_OPTIONS = [
   {
     value: 'send-to-error',
-    label: T.translate(`${PREFIX}.sendToError`).toString(),
+    label: `${T.translate(`${PREFIX}.sendToError`)}`,
     supportedDataType: ['all'],
     infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042332/Send+to+Error',
   },

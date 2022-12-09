@@ -20,7 +20,7 @@ import T from 'i18n-react';
 import { ISelectColumnsListProps } from 'components/WranglerGrid/SelectColumnPanel/ColumnsList/types';
 import { IHeaderNamesList } from 'components/WranglerGrid/SelectColumnPanel/types';
 import ColumnTable from 'components/WranglerGrid/SelectColumnPanel/DataTable';
-import { multipleColumnSelected } from 'components/WranglerGrid/SelectColumnPanel/constants';
+import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import SelectedColumnCountWidget from 'components/WranglerGrid/SelectColumnPanel/CountWidget';
 import { IMultipleSelectedFunctionDetail } from 'components/WranglerGrid/SelectColumnPanel/types';
 import { SELECT_COLUMN_LIST_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
@@ -65,6 +65,8 @@ const SelectColumnInnerWrapper = styled(Box)`
 
 const FlexWrapper = styled(Box)`
   display: flex;
+  height: 100%;
+  align-items: center;
 `;
 
 const CenterAlignBox = styled(Box)`
@@ -77,7 +79,13 @@ const SelectColumnSearchBox = styled(Box)`
 `;
 
 const SearchIconButton = styled(IconButton)`
-  padding-right: 0;
+  padding: 5px;
+  &.MuiIconButton-root:hover {
+    background-color: transparent;
+  }
+  & .MuiTouchRipple-root {
+    display: none;
+  }
 `;
 
 export default function({
@@ -97,7 +105,7 @@ export default function({
   const filteredColumnsOnType = getFilteredColumn(transformationDataType, columnsList);
 
   useEffect(() => {
-    const multiSelect: IMultipleSelectedFunctionDetail[] = multipleColumnSelected?.filter(
+    const multiSelect: IMultipleSelectedFunctionDetail[] = MULTI_SELECTION_COLUMN?.filter(
       (functionDetail: IMultipleSelectedFunctionDetail) =>
         functionDetail.value === transformationName
     );
@@ -129,7 +137,7 @@ export default function({
   };
 
   const handleDisableCheckbox = () => {
-    const multiSelect: IMultipleSelectedFunctionDetail[] = multipleColumnSelected.filter(
+    const multiSelect: IMultipleSelectedFunctionDetail[] = MULTI_SELECTION_COLUMN.filter(
       (functionDetail: IMultipleSelectedFunctionDetail) =>
         functionDetail.value === transformationName && functionDetail.isMoreThanTwo
     );
@@ -161,16 +169,7 @@ export default function({
 
   return (
     <SelectColumnWrapper data-testid="select-column-list-parent">
-      <SelectColumnInnerWrapper>
-        <SelectedColumnCountWidget selectedColumnsCount={selectedColumnsCount} />
-        <SelectColumnSearchBox>
-          <SelectColumnSearchInput data-testid="input_id" onChange={handleSearch} ref={ref} />
-          <SearchIconButton onClick={handleFocus} data-testid="click-handle-focus">
-            <SearchIconComponent />
-          </SearchIconButton>
-        </SelectColumnSearchBox>
-      </SelectColumnInnerWrapper>
-      {columnsAsPerType.length === 0 ? (
+      {columnsAsPerType.length === 0 && (
         <FlexWrapper>
           <CenterAlignBox>
             {NoDataSVG}
@@ -182,20 +181,36 @@ export default function({
             </NormalFont>
           </CenterAlignBox>
         </FlexWrapper>
-      ) : (
-        <ColumnTable
-          dataQualityValue={dataQuality}
-          onSingleSelection={onSingleSelection}
-          handleDisableCheckbox={handleDisableCheckbox}
-          onMultipleSelection={onMultipleSelection}
-          columns={columnsAsPerType.length === 0 ? [] : columns}
-          transformationDataType={transformationDataType}
-          isSingleSelection={isSingleSelection}
-          selectedColumns={selectedColumns}
-          totalColumnCount={columnsAsPerType?.length}
-          setSelectedColumns={setSelectedColumns}
-          transformationName={transformationName}
-        />
+      )}
+      {columnsAsPerType.length > 0 && (
+        <>
+          <SelectColumnInnerWrapper>
+            <SelectedColumnCountWidget selectedColumnsCount={selectedColumnsCount} />
+            <SelectColumnSearchBox>
+              <SelectColumnSearchInput
+                data-testid="input-search-id"
+                onChange={handleSearch}
+                ref={ref}
+              />
+              <SearchIconButton onClick={handleFocus} data-testid="click-handle-focus">
+                <SearchIconComponent />
+              </SearchIconButton>
+            </SelectColumnSearchBox>
+          </SelectColumnInnerWrapper>
+          <ColumnTable
+            dataQualityValue={dataQuality}
+            onSingleSelection={onSingleSelection}
+            handleDisableCheckbox={handleDisableCheckbox}
+            onMultipleSelection={onMultipleSelection}
+            columns={columnsAsPerType.length === 0 ? [] : columns}
+            transformationDataType={transformationDataType}
+            isSingleSelection={isSingleSelection}
+            selectedColumns={selectedColumns}
+            totalColumnCount={columnsAsPerType?.length}
+            setSelectedColumns={setSelectedColumns}
+            transformationName={transformationName}
+          />
+        </>
       )}
     </SelectColumnWrapper>
   );

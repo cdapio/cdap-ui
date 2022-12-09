@@ -14,7 +14,7 @@
  *  the License.
  */
 
-import { IconButton, SvgIcon } from '@material-ui/core';
+import { Box, IconButton, SvgIcon } from '@material-ui/core';
 import { default as React, useState } from 'react';
 import NestedMenu from 'components/WranglerGrid/NestedMenu';
 import { ITransformationToolBarProps } from 'components/WranglerGrid/TransformationToolbar/types';
@@ -65,12 +65,13 @@ export default function({
   };
 
   return (
-    <ToolBarIconWrapper data-testid="transformations-toolbar-container">
+    <ToolBarIconWrapper data-testid="transformations-toolbar-container" showName={showName}>
       <ToolBarInnerWrapper data-testid="nested-menu-container">
         {nestedMenuOptions?.map((eachOption, optionIndex) => {
           return (
             <>
               <FunctionBoxWrapper
+                showName={showName}
                 data-testid={`toolbar-icon-${eachOption.title
                   .toLowerCase()
                   .split(' ')
@@ -93,12 +94,12 @@ export default function({
                         setSelectedMenuOptions(eachOption.options);
                         setAnchorElement([clickEvent.currentTarget]);
                       } else {
-                        submitMenuOption(eachOption.action, eachOption.dataType, '');
+                        submitMenuOption(eachOption.action, eachOption.dataType);
                       }
                     }}
-                    data-testid={`toolbar-icon-button-${eachOption.title}`}
+                    data-testid="toolbar-icon-button"
                   >
-                    {eachOption.iconSVG ?? (
+                    {eachOption?.iconSVG ?? (
                       <CustomizedSvgIcon
                         component={eachOption.icon}
                         flipped={eachOption.action === 'redo'}

@@ -15,6 +15,7 @@
  */
 
 import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
+import { TOOLBAR_ICONS_LABEL_ALL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
 import T from 'i18n-react';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
 
@@ -25,6 +26,6 @@ export const MENU_OPTIONS: IMenuItem[] = [
     value: 'changeDatatype',
     label: T.translate(`${PREFIX}.menu.changeDatatype`).toString(),
     options: DATATYPE_OPTIONS,
-    supportedDataType: ['all'],
+    supportedDataType: [TOOLBAR_ICONS_LABEL_ALL_PREFIX],
   },
 ];

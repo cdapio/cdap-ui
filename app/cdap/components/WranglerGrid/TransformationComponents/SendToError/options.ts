@@ -17,6 +17,7 @@
 import T from 'i18n-react';
 
 const directive = 'send-to-error';
+const PREFIX = 'features.WranglerNewUI.GridPage.transformationUI.sendToError';
 
 const conditionToFnMap = {
   ISNUMBER: 'isNumber',
@@ -65,8 +66,6 @@ const otherOptionsDirective = (column: string, filterAction: string) => {
     return `${directive} ${condition}`;
   }
 };
-
-const PREFIX = 'features.WranglerNewUI.GridPage.transformationUI.sendToError';
 
 export const SEND_TO_ERROR_PLACEHOLDER = {
   EMPTY: '',

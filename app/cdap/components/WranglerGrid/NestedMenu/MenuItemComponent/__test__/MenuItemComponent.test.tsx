@@ -13,6 +13,7 @@
  *  License for the specific language governing permissions and limitations under
  *  the License.
  */
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import MenuComponent from 'components/WranglerGrid/NestedMenu/MenuItemComponent/index';
@@ -29,10 +30,12 @@ describe('Testing Menu Item Component', () => {
     render(
       <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={'test'} />
     );
-    const parentElement = screen.getByTestId(/toolbar-icon-label-string/i);
+    const parentElement = screen.getByTestId(/menu-item-parent/i);
     fireEvent.click(parentElement);
     expect(parentElement).toBeInTheDocument();
-    expect(parentElement).toHaveClass('MuiTypography-root');
+    expect(parentElement).toHaveClass(
+      'MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button'
+    );
   });
 
   it('Should render default component in columntype null case', () => {
@@ -45,7 +48,7 @@ describe('Testing Menu Item Component', () => {
     render(
       <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={''} />
     );
-    const parentElement = screen.getByTestId(/toolbar-icon-label-string/i);
+    const parentElement = screen.getByTestId(/menu-item-parent/i);
     fireEvent.click(parentElement);
     expect(parentElement).toBeInTheDocument();
   });
@@ -53,7 +56,7 @@ describe('Testing Menu Item Component', () => {
     const dummyItem = {
       label: 'test',
       supportedDataType: ['all'],
-      value: T.translate('features.WranglerNewUI.GridPage.menuItems.divider'),
+      value: 'divider',
       options: ['all'],
     };
     render(
@@ -73,7 +76,7 @@ it('should render the heading element', () => {
   const dummyItem = {
     label: 'test',
     supportedDataType: [],
-    value: T.translate('features.WranglerNewUI.GridPage.menuItems.heading'),
+    value: 'heading',
     options: ['all'],
   };
   render(

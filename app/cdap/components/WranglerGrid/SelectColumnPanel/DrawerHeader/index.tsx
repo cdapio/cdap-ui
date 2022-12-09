@@ -26,7 +26,7 @@ import grey from '@material-ui/core/colors/grey';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
 import { blue } from '@material-ui/core/colors';
 
-interface ISelectColumnDrawerHeaderProps {
+interface IDrawerHeaderProps {
   closeClickHandler: () => void;
 }
 
@@ -51,6 +51,14 @@ const BackIcon = styled(ChevronLeftRoundedIcon)`
 
 const CustomizedIconButton = styled(IconButton)`
   padding: 0px;
+  width: 26px;
+  justify-content: end;
+  &.MuiIconButton-root:hover {
+    background-color: transparent;
+  }
+  & .MuiTouchRipple-root {
+    display: none;
+  }
 `;
 
 const FlexWrapper = styled(Box)`
@@ -74,7 +82,7 @@ const DrawerHeadWrapper = styled(Box)`
   flex-direction: column;
 `;
 
-export default function({ closeClickHandler }: ISelectColumnDrawerHeaderProps) {
+export default function({ closeClickHandler }: IDrawerHeaderProps) {
   return (
     <DrawerContainerBox role="presentation" data-testid="select-column-drawer">
       <DrawerContainerInnerFlex>

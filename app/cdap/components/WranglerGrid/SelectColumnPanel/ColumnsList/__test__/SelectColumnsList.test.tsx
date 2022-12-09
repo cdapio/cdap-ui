@@ -63,7 +63,7 @@ describe('It should test the SelectColumnsList Component', () => {
       </Router>
     );
 
-    const inputSearchElement = screen.getByTestId('input_id');
+    const inputSearchElement = screen.getByTestId('input-search-id');
     fireEvent.change(inputSearchElement, { target: { value: '123' } });
     fireEvent.change(inputSearchElement, { target: { value: 'hello' } });
     fireEvent.change(inputSearchElement, { target: { value: null } });
@@ -94,7 +94,7 @@ describe('It should test the SelectColumnsList Component', () => {
       </Router>
     );
 
-    const inputSearchElement = screen.getByTestId('input_id');
+    const inputSearchElement = screen.getByTestId('input-search-id');
     fireEvent.change(inputSearchElement, { target: { value: '123' } });
     fireEvent.change(inputSearchElement, { target: { value: 'hello' } });
     fireEvent.change(inputSearchElement, { target: { value: null } });
@@ -127,7 +127,7 @@ describe('It should test the SelectColumnsList Component', () => {
       </Router>
     );
 
-    const inputSearchElement = screen.getByTestId('input_id');
+    const inputSearchElement = screen.getByTestId('input-search-id');
     fireEvent.change(inputSearchElement, { target: { value: '123' } });
     expect(inputSearchElement).toHaveValue('123');
   });

@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 /*
  * Copyright © 2022 Cask Data, Inc.
  *
@@ -13,8 +15,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-import { Dispatch, SetStateAction } from 'react';
 
 export interface ITransformationToolBarProps {
   columnType: string;

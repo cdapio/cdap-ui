@@ -31,6 +31,8 @@ export const DATATYPE_OPTIONS = [
   return {
     value: dataType,
     label: T.translate(`${PREFIX}.${dataType}`).toString(),
-    supportedDataType: [T.translate(`${TOOLBAR_ICONS_LABEL_ALL_PREFIX}`).toString()],
+    supportedDataType: ['all'],
+    infoLink: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042346/Set+Type+directive',
+    description: `Changes the column values to ${dataType} type`,
   };
 });

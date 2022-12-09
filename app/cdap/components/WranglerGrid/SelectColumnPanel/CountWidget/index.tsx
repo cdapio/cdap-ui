@@ -23,9 +23,7 @@ export default function({ selectedColumnsCount }: { selectedColumnsCount: number
   const text = selectedColumnsCount
     ? selectedColumnsCount > 10
       ? selectedColumnsCount
-      : `${T.translate(`${SELECT_COLUMN_LIST_PREFIX}.zero`)}${selectedColumnsCount} ${T.translate(
-          `${SELECT_COLUMN_LIST_PREFIX}.columnsSelected`
-        )}`
+      : `${selectedColumnsCount} ${T.translate(`${SELECT_COLUMN_LIST_PREFIX}.columnsSelected`)}`
     : `${T.translate(`${SELECT_COLUMN_LIST_PREFIX}.no`)} ${T.translate(
         `${SELECT_COLUMN_LIST_PREFIX}.columnsSelected`
       )}`;

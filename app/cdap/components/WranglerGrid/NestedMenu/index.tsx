@@ -51,27 +51,27 @@ export default function({
     event.preventDefault();
     event.stopPropagation();
     if (origin === 'parentMenu') {
+      // When icon is clicked from toolbar the list appears is parent menu
       if (menuItem.hasOwnProperty('options') && menuItem?.options?.length > 0) {
-        const updatedAnchors = anchorElement.splice(1, 0, event.currentTarget);
+        const updatedAnchors = anchorElement.splice(1, 0, event.currentTarget); // When item from parent menu list is clicked it's option needs to set next to it
         setAnchorElement((prev) => anchorElement);
         setMenuComponentOptions([menuItem?.options]);
       } else {
-        submitMenuOption(menuItem.value, menuItem.supportedDataType, menuItem.infoLink);
+        submitMenuOption(menuItem.value, menuItem.supportedDataType, menuItem.infoLink); // When item from parent menu list is clicked and it does not have further options then we proceed with closing menu and next functionality
         setAnchorElement(null);
         menuToggleHandler(title);
       }
     } else {
+      // When submenu item is clicked and if it has further options we show it's item next to submenu list
       if (menuItem.hasOwnProperty('options') && menuItem?.options?.length > 0) {
-        let referenceIndex = -1;
-        menuComponentOptions.forEach((menuOptions, menuOptionsIndex) => {
-          menuOptions.forEach((eachOption, optionsIndex) => {
-            if (eachOption.value === menuItem.value) {
-              referenceIndex = menuOptionsIndex;
-            }
-          });
+        const referenceIndex = menuComponentOptions.findIndex((menuOptions) => {
+          const index = menuOptions.findIndex((eachOption) => (eachOption.value = menuItem.value));
+          return index >= 0 ? true : false;
         });
+
         if (referenceIndex >= 0 && !anchorElement.includes(event.currentTarget)) {
-          const insertPosition = referenceIndex + 2;
+          // if array of anchor element does not have the current item clicked then we will insert it
+          const insertPosition = referenceIndex + 2; // +2 because 0, when clicked on icon, 1 when clicked on parent menu item, it means now whatever will come at position 2
           anchorElement.splice(insertPosition, 0, event.currentTarget);
           const updatedAnchors = anchorElement.slice(0, insertPosition + 1);
           menuComponentOptions.splice(updatedAnchors.length - 2, 0, menuItem?.options);
@@ -80,9 +80,10 @@ export default function({
           );
           setAnchorElement(updatedAnchors);
         } else if (anchorElement.includes(event.currentTarget)) {
+          // if array of anchor element have current item then we have to remove it and reposition it to it's parent
           const currentTargetIndex = findIndex(
             anchorElement,
-            (anchor) => anchor === event.currentTarget
+            (anchor) => anchor == event.currentTarget
           );
           menuComponentOptions.splice(currentTargetIndex, 0, menuItem?.options);
           setAnchorElement((prev) => prev.slice(0, currentTargetIndex + 1));

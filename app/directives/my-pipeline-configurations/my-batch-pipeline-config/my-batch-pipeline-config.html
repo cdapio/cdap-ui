@@ -243,8 +243,8 @@
         </fieldset>
         <div ng-if="BatchPipelineConfigCtrl.allowForceDynamicExecution">
           <label for="force-dynamic-execution" class="step-content-heading">Dynamic Execution</label>
-          <select name="force-dynamic-execution" 
-              id="force-dynamic-execution" 
+          <select name="force-dynamic-execution"
+              id="force-dynamic-execution"
               class="form-control dynamic-execution-select"
               ng-model="BatchPipelineConfigCtrl.forceDynamicExecution"
               ng-change="BatchPipelineConfigCtrl.onForceDynamicEngineChange()">
@@ -334,6 +334,7 @@
           </button>
           <button
             data-cy="preview-configure-run-btn"
+            data-testid="preview-configure-run-btn"
             class="btn btn-primary apply-action"
             ng-if="BatchPipelineConfigCtrl.showPreviewConfig"
             ng-disabled="BatchPipelineConfigCtrl.buttonsAreDisabled()"
