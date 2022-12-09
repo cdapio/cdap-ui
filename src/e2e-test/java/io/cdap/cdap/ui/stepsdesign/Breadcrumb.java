@@ -49,7 +49,7 @@ public class Breadcrumb {
           WaitHelper.waitForPageToLoad();
           String actualText = SeleniumDriver.getDriver().getCurrentUrl();
           Assert.assertEquals(actualText,
-                  "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
+                "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
         }
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -75,7 +75,7 @@ public class Breadcrumb {
       WaitHelper.waitForPageToLoad();
       Helper.waitSeconds(30);
       ElementHelper.clickOnElement(Helper.locateElementByTestId
-              ("wrangler-home-ongoing-data-exploration-card-" + testId));
+            ("wrangler-home-ongoing-data-exploration-card-" + testId));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
