@@ -80,11 +80,6 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
-  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    description: '',
-    isSuccess: false,
-  });
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const [snackbarState, setSnackbar] = useSnackbar();
 
@@ -329,10 +324,8 @@ export default function GridTable() {
         setLoading(false);
         setSnackbar({
           open: true,
-          isSuccess: true,
-          message: T.translate(
-            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
-          ).toString(),
+          isSuccess: false,
+          message: error.message
         });
         setAddTransformationFunction({
           option: '',
