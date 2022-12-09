@@ -80,6 +80,11 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
+  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
+  const [snackbarData, setSnackbarData] = useState({
+    description: '',
+    isSuccess: false,
+  });
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const [snackbarState, setSnackbar] = useSnackbar();
 
@@ -325,7 +330,7 @@ export default function GridTable() {
         setSnackbar({
           open: true,
           isSuccess: false,
-          message: error.message
+          message: error.message,
         });
         setAddTransformationFunction({
           option: '',
