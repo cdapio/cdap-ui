@@ -20,6 +20,17 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import FooterPanel from 'components/FooterPanel';
+import NoRecordScreen from 'components/NoRecordScreen';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
+import { objectQuery } from 'services/helpers';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
@@ -35,18 +46,9 @@ import {
   IRecords,
   IStatistics,
 } from 'components/GridTable/types';
-import NoRecordScreen from 'components/NoRecordScreen';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import T from 'i18n-react';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { flatMap } from 'rxjs/operators';
-import { objectQuery } from 'services/helpers';
+import TransformationToolbar from 'components/WranglerGrid/TransformationToolbar';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
 import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
-import Snackbar from 'components/Snackbar';
-import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 
 const transformationOptions = ['undo', 'redo'];
 
@@ -54,6 +56,10 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IParams;
   const classes = useStyles();
+  const [tableMetaInfo, setTableMetaInfo] = useState({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -74,12 +80,9 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
-  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    description: '',
-    isSuccess: false,
-  });
+  const [showGridTable, setShowGridTable] = useState(false);
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
+  const [snackbarState, setSnackbar] = useSnackbar();
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -137,6 +140,13 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setSnackbar({
+          open: true,
+          isSuccess: true,
+          message: T.translate(
+            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
+          ).toString(),
+        });
       });
   };
 
@@ -146,7 +156,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload as IParams, wid as string);
+    getWorkSpaceData(payload, wid);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -156,7 +166,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]] as string[],
+          type: [columnTypesList[eachColumnName]],
         };
       });
     }
@@ -194,12 +204,11 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item as string;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue =
-          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -255,11 +264,16 @@ export default function GridTable() {
         return rest;
       });
 
+    setTableMetaInfo({
+      columnCount: rawData.headers?.length,
+      rowCount: rawData.values?.length - 1,
+    });
     setRowsDataList(rowData);
   };
 
   useEffect(() => {
     getGridTableData();
+    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
   // ------------@onMenuOptionSelection Function is used to set option selected from toolbar and then calling of execute API
@@ -293,10 +307,10 @@ export default function GridTable() {
             ...gridParams,
           },
         });
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: 'Transformations applied successfully',
+        setSnackbar({
+          open: true,
           isSuccess: true,
+          message: 'Transformation applied successfully',
         });
         setLoading(false);
         setGridData(response);
@@ -308,10 +322,10 @@ export default function GridTable() {
       },
       (error) => {
         setLoading(false);
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: error.message,
+        setSnackbar({
+          open: true,
           isSuccess: false,
+          message: error.message,
         });
         setAddTransformationFunction({
           option: '',
@@ -325,7 +339,7 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <ToolBarList
+      <TransformationToolbar
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
         columnType={'string'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
@@ -336,62 +350,11 @@ export default function GridTable() {
         }}
         disableToolbarIcon={gridData?.headers?.length === 0 ? true : false}
       />
-
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
           subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
         />
-      ) : (
-        <Table aria-label="simple table" className="test">
-          <TableHead>
-            <TableRow>
-              {headersNamesList?.length &&
-                headersNamesList.map((eachHeader) => (
-                  <GridHeaderCell
-                    label={eachHeader.label}
-                    types={eachHeader.type}
-                    key={eachHeader.name}
-                  />
-                ))}
-            </TableRow>
-            <TableRow>
-              {missingDataList?.length &&
-                headersNamesList.length &&
-                headersNamesList.map((each, index) => {
-                  return missingDataList.map((item, itemIndex) => {
-                    if (item.name === each.name) {
-                      return (
-                        <GridKPICell
-                          metricData={item}
-                          key={item.name}
-                          cellIndex={`${index}${itemIndex}`}
-                        />
-                      );
-                    }
-                  });
-                })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rowsDataList?.length &&
-              rowsDataList.map((eachRow, rowIndex) => {
-                return (
-                  <TableRow key={`row-${rowIndex}`}>
-                    {headersNamesList.map((eachKey, eachIndex) => {
-                      return (
-                        <GridTextCell
-                          cellValue={eachRow[eachKey.name] || '--'}
-                          key={`${eachKey.name}-${eachIndex}`}
-                          cellIndex={`${rowIndex}${eachIndex}`}
-                        />
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
       )}
       {addTransformationFunction.option && (
         <AddTransformationPanel
@@ -412,24 +375,66 @@ export default function GridTable() {
           transformationLink={addTransformationFunction.infoLink}
         />
       )}
-      {snackbarIsOpen && (
-        <Snackbar
-          handleCloseError={() => {
-            setSnackbarIsOpen(false);
-            setSnackbarData({
-              description: '',
-              isSuccess: false,
-            });
-          }}
-          description={snackbarData.description}
-          isSuccess={snackbarData.isSuccess}
-        />
+      {showGridTable && (
+        <Table aria-label="simple table" className="test">
+          <TableHead>
+            <TableRow>
+              {headersNamesList?.length &&
+                headersNamesList.map((eachHeader) => (
+                  <GridHeaderCell
+                    label={eachHeader.label}
+                    types={eachHeader.type}
+                    key={eachHeader.name}
+                  />
+                ))}
+            </TableRow>
+            <TableRow>
+              {missingDataList?.length &&
+                headersNamesList.length &&
+                headersNamesList.map((each, index) => {
+                  return missingDataList.map((item, itemIndex) => {
+                    if (item.name === each.name) {
+                      return <GridKPICell metricData={item} key={item.name} />;
+                    }
+                  });
+                })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rowsDataList?.length &&
+              rowsDataList.map((eachRow, rowIndex) => {
+                return (
+                  <TableRow key={`row-${rowIndex}`}>
+                    {headersNamesList.map((eachKey, eachIndex) => {
+                      return (
+                        <GridTextCell
+                          cellValue={eachRow[eachKey.name] || '--'}
+                          key={`${eachKey.name}-${eachIndex}`}
+                        />
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
       )}
+      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
       )}
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }
