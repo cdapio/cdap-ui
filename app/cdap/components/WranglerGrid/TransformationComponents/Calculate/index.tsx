@@ -58,12 +58,15 @@ export default function({
     CALCULATE_OPTIONS?.length > 0
       ? CALCULATE_OPTIONS.filter((option) => option?.value === transformationName)
       : [];
+
   useEffect(() => {
     setTransformationComponentsValue({ ...transformationComponentValues, customInput });
   }, [customInput]);
+
   useEffect(() => {
     setTransformationComponentsValue({ ...transformationComponentValues, copyToNewColumn });
   }, [copyToNewColumn]);
+  
   useEffect(() => {
     if (
       transformationComponentValues?.columnNames?.filter((name: string) => name === column).length

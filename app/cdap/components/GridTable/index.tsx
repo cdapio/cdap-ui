@@ -46,9 +46,9 @@ import {
   IRecords,
   IStatistics,
 } from 'components/GridTable/types';
+import TransformationToolbar from 'components/WranglerGrid/TransformationToolbar';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
-import AddTransformation from 'components/WranglerGrid/AddTransformationPanel';
-import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
+import AddTransformationPanel from 'components/WranglerGrid/AddTransformationPanel';
 
 const transformationOptions = ['undo', 'redo'];
 
@@ -80,11 +80,7 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
-  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    description: '',
-    isSuccess: false,
-  });
+  const [showGridTable, setShowGridTable] = useState(false);
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const [snackbarState, setSnackbar] = useSnackbar();
 
@@ -277,6 +273,7 @@ export default function GridTable() {
 
   useEffect(() => {
     getGridTableData();
+    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
   // ------------@onMenuOptionSelection Function is used to set option selected from toolbar and then calling of execute API
@@ -313,9 +310,7 @@ export default function GridTable() {
         setSnackbar({
           open: true,
           isSuccess: true,
-          message: T.translate(
-            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
-          ).toString(),
+          message: 'Transformation applied successfully',
         });
         setLoading(false);
         setGridData(response);
@@ -344,10 +339,10 @@ export default function GridTable() {
   return (
     <Box data-testid="grid-table-container">
       <BreadCrumb datasetName={wid} />
-      <ToolBarList
+      <TransformationToolbar
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
-        columnType={'int'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
+        columnType={'string'} // TODO: column type needs to be send dynamically after integrating with transfomations branch
         submitMenuOption={(option, datatype, infoLink) => {
           !transformationOptions.includes(option)
             ? onMenuOptionSelection(option, datatype, infoLink)
@@ -355,58 +350,14 @@ export default function GridTable() {
         }}
         disableToolbarIcon={gridData?.headers?.length === 0 ? true : false}
       />
-
       {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
           subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
         />
       )}
-      <Table aria-label="simple table" className="test">
-        <TableHead>
-          <TableRow>
-            {headersNamesList?.length &&
-              headersNamesList.map((eachHeader) => (
-                <GridHeaderCell
-                  label={eachHeader.label}
-                  types={eachHeader.type}
-                  key={eachHeader.name}
-                />
-              ))}
-          </TableRow>
-          <TableRow>
-            {missingDataList?.length &&
-              headersNamesList.length &&
-              headersNamesList.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name === each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
-              })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rowsDataList?.length &&
-            rowsDataList.map((eachRow, rowIndex) => {
-              return (
-                <TableRow key={`row-${rowIndex}`}>
-                  {headersNamesList.map((eachKey, eachIndex) => {
-                    return (
-                      <GridTextCell
-                        cellValue={eachRow[eachKey.name] || '--'}
-                        key={`${eachKey.name}-${eachIndex}`}
-                      />
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
-      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {addTransformationFunction.option && (
-        <AddTransformation
+        <AddTransformationPanel
           transformationName={addTransformationFunction.option}
           transformationDataType={addTransformationFunction.supportedDataType}
           columnsList={headersNamesList}
@@ -424,12 +375,56 @@ export default function GridTable() {
           transformationLink={addTransformationFunction.infoLink}
         />
       )}
+      {showGridTable && (
+        <Table aria-label="simple table" className="test">
+          <TableHead>
+            <TableRow>
+              {headersNamesList?.length &&
+                headersNamesList.map((eachHeader) => (
+                  <GridHeaderCell
+                    label={eachHeader.label}
+                    types={eachHeader.type}
+                    key={eachHeader.name}
+                  />
+                ))}
+            </TableRow>
+            <TableRow>
+              {missingDataList?.length &&
+                headersNamesList.length &&
+                headersNamesList.map((each, index) => {
+                  return missingDataList.map((item, itemIndex) => {
+                    if (item.name === each.name) {
+                      return <GridKPICell metricData={item} key={item.name} />;
+                    }
+                  });
+                })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rowsDataList?.length &&
+              rowsDataList.map((eachRow, rowIndex) => {
+                return (
+                  <TableRow key={`row-${rowIndex}`}>
+                    {headersNamesList.map((eachKey, eachIndex) => {
+                      return (
+                        <GridTextCell
+                          cellValue={eachRow[eachKey.name] || '--'}
+                          key={`${eachKey.name}-${eachIndex}`}
+                        />
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      )}
+      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
       )}
-
       <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
         handleClose={() =>
           setSnackbar(() => ({
