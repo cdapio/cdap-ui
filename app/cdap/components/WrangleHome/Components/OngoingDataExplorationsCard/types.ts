@@ -27,4 +27,5 @@ export interface IExplorationCardDetails {
 export interface IOngoingDataExplorationsCard {
   explorationCardDetails: IExplorationCardDetails[];
   cardIndex: number;
+  fromAddress?: string;
 }

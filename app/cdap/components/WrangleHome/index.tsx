@@ -17,6 +17,7 @@
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { getWidgetData } from 'components/WidgetSVG/utils';
+import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations/index';
 import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
 import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle/index';
 import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
@@ -25,11 +26,15 @@ import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import OngoingDataExplorations from './Components/OngoingDataExplorations';
+
+export const CARD_COUNT = 2;
 
 export default function() {
   const classes = useStyles();
-  const [loading, setLoading] = useState(false);
+  const [showExplorations, setShowExplorations] = useState<boolean>(false);
+  useEffect(() => {
+    getWidgetData();
+  }, []);
 
   const [viewAllLink, toggleViewAllLink] = useState<boolean>(false);
 
@@ -38,7 +43,10 @@ export default function() {
   }, []);
 
   return (
-    <Box className={classes.wrapper} data-testid="wrangler-home-new-parent">
+    <Box
+      className={`${classes.wrapper} ${showExplorations && classes.wrapperWithBottomSpace}`}
+      data-testid="wrangler-home-new-parent"
+    >
       <Box className={classes.subHeader}>
         <Typography className={classes.welcomeCard}>
           Hello! <br />
@@ -66,15 +74,20 @@ export default function() {
           )}
         </Box>
         <WrangleCard toggleViewAllLink={toggleViewAllLink} />
-        <Box className={classes.headerTitle}>
-          <WrangleHomeTitle
-            title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
-          />
-          <Box className={classes.viewMore}>
-            {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+        {Boolean(showExplorations) && (
+          <Box className={classes.headerTitle}>
+            <WrangleHomeTitle
+              title={T.translate('features.WranglerNewUI.HomePage.labels.workspaces.title')}
+            />
           </Box>
-        </Box>
-        <OngoingDataExplorations />
+        )}
+        <OngoingDataExplorations
+          fromAddress={T.translate(
+            'features.WranglerNewUI.Breadcrumb.labels.wrangleHome'
+          ).toString()}
+          setShowExplorations={setShowExplorations}
+          cardCount={CARD_COUNT}
+        />
       </Box>
     </Box>
   );

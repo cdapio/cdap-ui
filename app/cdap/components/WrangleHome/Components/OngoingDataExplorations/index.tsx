@@ -17,11 +17,13 @@
 import { Box } from '@material-ui/core/';
 import MyDataPrepApi from 'api/dataprep';
 import { getCategorizedConnections } from 'components/Connections/Browser/SidePanel/apiHelpers';
+import NoRecordScreen from 'components/NoRecordScreen';
 import {
   IConnectionWithConnectorType,
   IExistingExplorationCard,
   IConnectionsList,
   IWorkspace,
+  IOngoingDataExplorationsProps,
 } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
 import { getUpdatedExplorationCards } from 'components/WrangleHome/Components/OngoingDataExplorations/utils';
 import OngoingDataExplorationsCard from 'components/WrangleHome/Components/OngoingDataExplorationsCard';
@@ -33,8 +35,18 @@ import { of } from 'rxjs/observable/of';
 import { defaultIfEmpty, switchMap } from 'rxjs/operators';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { IExplorationCardDetails } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
+import styled from 'styled-components';
 
-export default function() {
+const OngoingExplorationCardLink = styled(Link)`
+  text-decoration: none !important;
+`;
+
+export default function({
+  cardCount,
+  fromAddress,
+  setLoading,
+  setShowExplorations,
+}: IOngoingDataExplorationsProps) {
   const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<
     IExplorationCardDetails[][]
   >([]);
@@ -147,6 +159,11 @@ export default function() {
         }
         const final = getUpdatedExplorationCards(explorationData);
         setOnGoingExplorationsData(final);
+        setShowExplorations &&
+          setShowExplorations(
+            Boolean(final) && Array.isArray(final) && final.length ? true : false
+          );
+        setLoading && setLoading(false);
       });
   }, []);
 
@@ -160,27 +177,27 @@ export default function() {
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {filteredData &&
-        Array.isArray(filteredData) &&
-        filteredData?.slice(0, 2).map((item, index) => {
+      {!!filteredData.length &&
+        filteredData?.slice(0, cardCount && cardCount).map((eachExplorationCardData, cardIndex) => {
           return (
-            <Link
+            <OngoingExplorationCardLink
               to={{
-                pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[5].workspaceId}`}`,
+                pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${eachExplorationCardData[5].workspaceId}`}`,
                 state: {
-                  from: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome'),
+                  from: fromAddress,
                   path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
                 },
               }}
               style={{ textDecoration: 'none' }}
-              data-testid={`wrangler-home-ongoing-data-exploration-card-${index}`}
+              data-testid={`wrangler-home-ongoing-data-exploration-card-${cardIndex}`}
             >
               <OngoingDataExplorationsCard
-                explorationCardDetails={item}
-                key={index}
-                cardIndex={index}
+                key={`ongoing-data-exploration-card-${cardIndex}`}
+                explorationCardDetails={eachExplorationCardData}
+                cardIndex={cardIndex}
+                fromAddress={fromAddress}
               />
-            </Link>
+            </OngoingExplorationCardLink>
           );
         })}
     </Box>

@@ -14,7 +14,7 @@
  *  the License.
  */
 
-import { ReactElement, ReactNode } from 'react';
+import { ReactNode, Dispatch, SetStateAction } from 'react';
 
 export interface IResponseData {
   count: number;
@@ -106,4 +106,11 @@ export interface IConnectionsList {
 export interface IConnectionWithConnectorType {
   name: string;
   connectorType: string;
+}
+
+export interface IOngoingDataExplorationsProps {
+  cardCount?: number;
+  fromAddress?: string;
+  setLoading?: Dispatch<SetStateAction<boolean>>;
+  setShowExplorations?: Dispatch<SetStateAction<boolean>>;
 }
