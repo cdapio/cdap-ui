@@ -35,11 +35,11 @@ public class FindAndReplace {
         WaitHelper.waitForPageToLoad();
     }
 
-    @Then("Click on the Data Explorations card")
-    public void clickOnTheDataExplorationCard() {
+    @Then("Click on the Data Explorations card for find and replace")
+    public void clickOnTheDataExplorationCardForFindAndReplace() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-0"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
