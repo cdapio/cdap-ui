@@ -77,7 +77,7 @@ jobs:
       run: |
         corepack enable
         corepack prepare yarn@3.3.0 --activate
-        yarn --immutable
+        yarn install --immutable
         yarn run bower-root # Install Bower dependencies
 
     - name: Start CDAP-UI and run the tests
