@@ -69,9 +69,9 @@ jobs:
         python3 sandbox_starter.py
         
     - name: Install UI Dependencies
-      run: |       
-        npm install -g yarn # Install Yarn globally
-        yarn set version 3.2.0
+      run: |
+        corepack enable
+        corepack prepare yarn@3.2.0 --activate
         yarn --immutable
         yarn run bower-root # Install Bower dependencies
 
