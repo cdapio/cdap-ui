@@ -19,7 +19,7 @@ import React from 'react';
 import TransformationComponents from 'components/WranglerGrid/TransformationComponents/index';
 import { TRANSFORMATION_COMPONENTS } from 'components/WranglerGrid/TransformationComponents/constants';
 
-describe('Test TransformationComponents', () => {
+describe('It should test TransformationComponents', () => {
   it('Should render TransformationComponent', () => {
     render(
       <TransformationComponents
