@@ -20,7 +20,7 @@ Feature: Find and Replace
   @FindAndReplace
   Scenario: Go through the find and replace functionality
     Given Navigate to Home Page of Wrangle
-    Then Click on the Data Explorations card
+    Then Click on the Data Explorations card for find and replace
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
     Then Click on the Structure icon
     Then Click on the Find and Replace
