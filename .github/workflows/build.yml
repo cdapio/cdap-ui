@@ -14,12 +14,13 @@
 
 name: Build with Unit and Integration Tests
 
-# on:
-#   workflow_run:
-#     workflows:
-#       - Trigger build
-#     types:
-#       - completed
+
+on:
+  # workflow_run:
+  #   workflows:
+  #     - Trigger build
+  #   types:
+  #     - completed
 
 jobs:
   build:
