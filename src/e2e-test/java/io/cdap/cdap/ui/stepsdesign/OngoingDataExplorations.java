@@ -54,7 +54,7 @@ public class OngoingDataExplorations {
         try {
 //            ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-home"));
             WebElement ele = SeleniumDriver.getDriver().findElement
-                    (By.xpath("//*[@data-testid = 'breadcrumb-home-home']"));
+                    (By.xpath("//*[@data-testid = 'breadcrumb-home-text']"));
             JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
             System.out.println("the home link is clicked");
