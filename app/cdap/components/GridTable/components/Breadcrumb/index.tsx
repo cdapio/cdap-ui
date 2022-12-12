@@ -38,7 +38,7 @@ export default function BreadCrumb({ workspaceName, location }) {
         <Link
           className={`${classes.breadcrumbLabel} ${classes.home}`}
           to={`/ns/${getCurrentNamespace()}/home`}
-          data-testid="breadcrumb-home-Home"
+          data-testid="breadcrumb-home-text"
         >
           {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
         </Link>

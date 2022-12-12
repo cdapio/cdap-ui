@@ -25,7 +25,7 @@ describe('Test Breadcrumb Component', () => {
     <Router history={history}>
       <Switch>
         <Route>
-          <BreadCrumb datasetName="abc" />
+          <BreadCrumb workspaceName="abc" location="Home" />
         </Route>
       </Switch>
     </Router>
