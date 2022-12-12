@@ -77,6 +77,8 @@ jobs:
       run: |
         corepack enable
         corepack prepare yarn@3.3.0 --activate
+        yarn --version
+        echo 'test test test'
         yarn install --immutable
         yarn run bower-root # Install Bower dependencies
 
