@@ -19,28 +19,40 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
-import { objectQuery } from 'services/helpers';
-import Breadcrumb from './components/Breadcrumb';
-import GridHeaderCell from './components/GridHeaderCell';
-import GridKPICell from './components/GridKPICell';
-import GridTextCell from './components/GridTextCell';
-import Box from '@material-ui/core/Box';
-import { useStyles } from './styles';
-import { flatMap } from 'rxjs/operators';
-import { IExecuteAPIResponse, IRecords, IParams, IHeaderNamesList } from './types';
+import FooterPanel from 'components/FooterPanel';
+import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
+import GridKPICell from 'components/GridTable/components/GridKPICell';
+import GridTextCell from 'components/GridTable/components/GridTextCell';
+import { useStyles } from 'components/GridTable/styles';
+import {
+  IExecuteAPIResponse,
+  IHeaderNamesList,
+  IParams,
+  IRecords,
+} from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
-import T from 'i18n-react';
-import { IWorkspace } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
+import LoadingSVG from 'components/shared/LoadingSVG';
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
+import { objectQuery } from 'services/helpers';
+
+import Box from '@material-ui/core/Box';
+import { IWorkspace } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
+import { useLocation } from 'react-router';
+import Breadcrumb from './components/Breadcrumb';
 
 export default function GridTable() {
   const { wid } = useParams<IParams>();
   const params = useParams<IParams>();
   const classes = useStyles();
+  const [tableMetaInfo, setTableMetaInfo] = useState({
+    columnCount: 0,
+    rowCount: 0,
+  });
   const location = useLocation();
 
   const [loading, setLoading] = useState(false);
@@ -235,6 +247,10 @@ export default function GridTable() {
         return rest;
       });
 
+    setTableMetaInfo({
+      columnCount: rawData.headers?.length,
+      rowCount: rawData.values?.length - 1,
+    });
     setRowsDataList(rowData);
   };
 
@@ -293,6 +309,7 @@ export default function GridTable() {
             })}
         </TableBody>
       </Table>
+      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
