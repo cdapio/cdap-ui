@@ -350,7 +350,10 @@ export const SidePanel = ({
             <Chip label={plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
-          <StyledAccordionDetails className="item">
+          <StyledAccordionDetails
+            className="item"
+            data-testid={`plugin-${group.name}-group-details`}
+          >
             <ItemBodyWrapper className="item-body-wrapper">
               <div
                 className={`item-body ${sidePanelViewType === 'icon' ? 'view-icon' : 'view-list'}`}

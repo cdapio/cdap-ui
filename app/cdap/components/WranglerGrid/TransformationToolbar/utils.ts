@@ -29,7 +29,6 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import { TOOLBAR_ICONS_LABEL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
 import T from 'i18n-react';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
-import { OTHER_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/otherOptions';
 
 export const nestedMenuOptions: IMenuItem[] = [
   {
@@ -93,7 +92,7 @@ export const nestedMenuOptions: IMenuItem[] = [
     open: false,
   },
   {
-    options: OTHER_OPTIONS,
+    options: [],
     iconSVG: OtherIcon,
     title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),
     toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.otherIcon`).toString(),

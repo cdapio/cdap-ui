@@ -85,8 +85,8 @@
       </div>
     </div>
   </div>
-  
-  <div ng-if="true"> 
+
+  <div ng-if="true">
     <div class="btn-group action-buttons"
         ng-if="!HydratorPlusPlusTopPanelCtrl.previewMode">
       <div class="btn border-right"
@@ -96,7 +96,8 @@
           tooltip-class="toppanel-tooltip"
           tooltip-enable="!HydratorPlusPlusTopPanelCtrl.isPreviewEnabled"
           ng-disabled="!HydratorPlusPlusTopPanelCtrl.isPreviewEnabled"
-          data-cy="pipeline-preview-btn">
+          data-cy="pipeline-preview-btn"
+          data-testid="pipeline-preview-btn">
         <div class="btn-container">
           <span class="fa icon-eye"></span>
           <div class="button-label">Preview</div>
@@ -136,7 +137,8 @@
           tooltip-class="toppanel-tooltip"
           tooltip-append-to-body="true"
           ng-disabled="!HydratorPlusPlusTopPanelCtrl.hasNodes"
-          data-cy="pipeline-draft-save-btn">
+          data-cy="pipeline-draft-save-btn"
+          data-testid="pipeline-draft-save-btn">
         <div class="btn-container">
           <span class="fa icon-savedraft"></span>
           <div class="button-label">Save</div>
@@ -159,7 +161,8 @@
       </div>
       <div class="btn margin-left"
           ng-click="HydratorPlusPlusTopPanelCtrl.onImport()"
-          data-cy="pipeline-import-btn">
+          data-cy="pipeline-import-btn"
+          data-testid="pipeline-import-btn">
         <div class="btn-container">
           <span class="fa icon-import"></span>
           <div class="button-label">Import</div>
@@ -213,7 +216,8 @@
             tooltip-class="toppanel-tooltip"
             tooltip-enable="!HydratorPlusPlusTopPanelCtrl.hasNodes"
             ng-disabled="HydratorPlusPlusTopPanelCtrl.previewLoading || !HydratorPlusPlusTopPanelCtrl.hasNodes"
-            data-cy="preview-top-run-btn">
+            data-cy="preview-top-run-btn"
+            data-testid="preview-top-run-btn">
         <div class="btn-container">
           <span class="fa fa-play text-success"></span>
           <div class="button-label">Run</div>

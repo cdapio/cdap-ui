@@ -25,7 +25,7 @@ import styled from 'styled-components';
 
 const PREFIX = 'features.WranglerNewUI.GridPage.transformationUI.findAndReplace';
 
-const CustomizedLabel = styled(NormalFont)`
+const StyledLabel = styled(NormalFont)`
   font-style: normal;
   margin-top: 10px;
   line-height: 150%;
@@ -81,7 +81,7 @@ export default function({
     <Box>
       <FormGroup>
         <Box>
-          <CustomizedLabel>{T.translate(`${PREFIX}.find`)}</CustomizedLabel>
+          <StyledLabel>{T.translate(`${PREFIX}.find`)}</StyledLabel>
         </Box>
         <FormInputFieldComponent
           formInputValue={oldValue}
@@ -113,7 +113,7 @@ export default function({
       </FormGroup>
       <FormGroup>
         <Box>
-          <CustomizedLabel>{T.translate(`${PREFIX}.replaceWith`)}</CustomizedLabel>
+          <StyledLabel>{T.translate(`${PREFIX}.replaceWith`)}</StyledLabel>
         </Box>
         <FormInputFieldComponent
           formInputValue={newValue}
