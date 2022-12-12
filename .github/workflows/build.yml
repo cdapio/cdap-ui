@@ -14,19 +14,19 @@
 
 name: Build with Unit and Integration Tests
 
-on:
-  workflow_run:
-    workflows:
-      - Trigger build
-    types:
-      - completed
+# on:
+#   workflow_run:
+#     workflows:
+#       - Trigger build
+#     types:
+#       - completed
 
 jobs:
   build:
 
     runs-on: k8s-runner-e2e
 
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    # if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
 
     # Cancel ongoing runs
     concurrency: 
@@ -34,7 +34,7 @@ jobs:
 
     steps:
     # Pinned 1.0.0 version
-    - uses: haya14busa/action-workflow_run-status@967ed83efa565c257675ed70cfe5231f062ddd94
+    # - uses: haya14busa/action-workflow_run-status@967ed83efa565c257675ed70cfe5231f062ddd94
     - uses: actions/checkout@v2.3.4
       with:
         ref: ${{ github.event.workflow_run.head_sha }}
@@ -72,7 +72,7 @@ jobs:
       run: |       
         npm install -g yarn # Install Yarn globally
         yarn set version 3.2.0
-        yarn --frozen-lockfile
+        yarn --immutable
         yarn run bower-root # Install Bower dependencies
 
     - name: Start CDAP-UI and run the tests
