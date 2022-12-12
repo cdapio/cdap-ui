@@ -19,26 +19,12 @@ import {
   IExistingExplorationCard,
   IOnGoingDataExplorationsData,
 } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
-import {
-  CONNECTION_NAME,
-  CONNECTOR_TYPE,
-  COUNT,
-  DATA_QUALITY,
-  ICON,
-  ICON_WITH_TEXT,
-  PERCENTAGE_WITH_TEXT,
-  RECIPE_STEPS_KEY,
-  TEXT,
-  WORKPSACE_NAME,
-  WORKSPACE_ID,
-} from 'components/WrangleHome/Components/OngoingDataExplorations/constants';
 import T from 'i18n-react';
 
 const PREFIX = 'features.WranglerNewUI.OnGoingDataExplorations.labels';
 
 export const getUpdatedExplorationCards = (
-  existingExplorationCards: IExistingExplorationCard[],
-  cardCount: number
+  existingExplorationCards: IExistingExplorationCard[]
 ) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List
 
@@ -54,63 +40,54 @@ export const getUpdatedExplorationCards = (
     return matchingConnector?.SVG;
   };
 
-  const getUpdatedOngoingExplorationData = (keys, eachExplorationCard) => {
-    const onGoingDatExplorationData = {} as IOnGoingDataExplorationsData;
-    switch (keys) {
-      case CONNECTOR_TYPE:
-        onGoingDatExplorationData.icon = getIconForConnector(eachExplorationCard[keys]);
-        onGoingDatExplorationData.label = eachExplorationCard[keys];
-        onGoingDatExplorationData.type = ICON;
-        break;
-      case CONNECTION_NAME:
-        onGoingDatExplorationData.label = eachExplorationCard[keys];
-        onGoingDatExplorationData.type = ICON_WITH_TEXT;
-        break;
-      case WORKPSACE_NAME:
-        onGoingDatExplorationData.label = eachExplorationCard[keys];
-        onGoingDatExplorationData.type = TEXT;
-        break;
-      case RECIPE_STEPS_KEY:
-        onGoingDatExplorationData.label = [
-          eachExplorationCard[keys],
-          T.translate(`${PREFIX}.recipeSteps`),
-        ].join(' ');
-        onGoingDatExplorationData.type = TEXT;
-        break;
-      case DATA_QUALITY:
-        onGoingDatExplorationData.label = Number(eachExplorationCard[keys]);
-        onGoingDatExplorationData.percentageSymbol = '%';
-        onGoingDatExplorationData.subText = T.translate(`${PREFIX}.nullValues`);
-        onGoingDatExplorationData.type = PERCENTAGE_WITH_TEXT;
-        break;
-      case WORKSPACE_ID:
-        onGoingDatExplorationData.workspaceId = eachExplorationCard[keys];
-        break;
-      case COUNT:
-        onGoingDatExplorationData.count = eachExplorationCard[keys];
-        break;
-    }
-    return onGoingDatExplorationData;
-  };
-
   if (
     existingExplorationCards &&
     Array.isArray(existingExplorationCards) &&
     existingExplorationCards.length
   ) {
-    existingExplorationCards
-      .filter((eachItem) => eachItem.count !== 0)
-      .filter((_, itemIndex) => (cardCount && itemIndex < cardCount) || !cardCount)
-      .forEach((eachExplorationCard) => {
-        const eachExplorationCardsData = [];
-        Object.keys(eachExplorationCard).forEach((keys) => {
-          eachExplorationCardsData.push(
-            getUpdatedOngoingExplorationData(keys, eachExplorationCard)
-          );
-        });
-
-        updatedExplorationCards.push(eachExplorationCardsData);
+    existingExplorationCards.forEach((eachExplorationCard) => {
+      const eachExplorationCardData = [];
+      Object.keys(eachExplorationCard).forEach((keys) => {
+        const onGoingDatExplorationData = {} as IOnGoingDataExplorationsData;
+        switch (keys) {
+          case 'connectorType':
+            onGoingDatExplorationData.icon = getIconForConnector(eachExplorationCard[keys]);
+            onGoingDatExplorationData.label = eachExplorationCard[keys];
+            onGoingDatExplorationData.type = 'icon';
+            break;
+          case 'connectionName':
+            onGoingDatExplorationData.label = eachExplorationCard[keys];
+            onGoingDatExplorationData.type = 'iconWithText';
+            break;
+          case 'workspaceName':
+            onGoingDatExplorationData.label = eachExplorationCard[keys];
+            onGoingDatExplorationData.type = 'text';
+            break;
+          case 'recipeSteps':
+            onGoingDatExplorationData.label = [
+              eachExplorationCard[keys],
+              T.translate(`${PREFIX}.recipeSteps`),
+            ].join(' ');
+            onGoingDatExplorationData.type = 'text';
+            break;
+          case 'dataQuality':
+            onGoingDatExplorationData.label = Number(eachExplorationCard[keys]);
+            onGoingDatExplorationData.percentageSymbol = '%';
+            onGoingDatExplorationData.subText = T.translate(`${PREFIX}.nullValues`);
+            onGoingDatExplorationData.type = 'percentageWithText';
+            break;
+          case 'workspaceId':
+            onGoingDatExplorationData.workspaceId = eachExplorationCard[keys];
+            break;
+          case 'count':
+            onGoingDatExplorationData.count = eachExplorationCard[keys];
+            break;
+        }
+        eachExplorationCardData.push(onGoingDatExplorationData);
       });
+
+      updatedExplorationCards.push(eachExplorationCardData);
+    });
   }
 
   return updatedExplorationCards;
