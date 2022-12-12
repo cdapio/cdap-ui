@@ -145,8 +145,6 @@ if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
       tsconfig: __dirname + '/tsconfig.json',
-      tslint: __dirname + '/tslint.json',
-      tslintAutoFix: true,
       watch: ["./app/cdap"], // optional but improves performance (less stat calls)
       memoryLimit: 4096,
     })
