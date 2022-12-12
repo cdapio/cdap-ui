@@ -104,7 +104,13 @@ export default class StagePropertiesRow extends Component {
     let { args } = ScheduleRuntimeArgsStore.getState();
     let { stageWidgetJsonMap } = args;
     let properties = [];
-    stageWidgetJsonMap[this.state.stage]['configuration-groups'].map((group) => {
+    const configurationGroups =
+      stageWidgetJsonMap[this.state.stage] &&
+      stageWidgetJsonMap[this.state.stage]['configuration-groups'];
+    if (!configurationGroups) {
+      return property;
+    }
+    configurationGroups.map((group) => {
       properties = properties.concat(group.properties);
     });
     let matchProperty = properties.filter((prop) => prop.name === property);
@@ -115,7 +121,11 @@ export default class StagePropertiesRow extends Component {
     let {
       triggeringPipelineInfo,
       triggeredPipelineInfo,
+      stageWidgetJsonMap,
     } = ScheduleRuntimeArgsStore.getState().args;
+    const configurableStages = triggeringPipelineInfo.configStages.filter(
+      (stage) => !!stageWidgetJsonMap[stage.id]
+    );
     let stage = triggeringPipelineInfo.configStagesMap[this.state.stage];
     let properties = [];
     if (stage) {
@@ -133,15 +143,13 @@ export default class StagePropertiesRow extends Component {
         <Col xs={3}>
           <div className="select-dropdown">
             <select value={this.state.stage} onChange={this.onPipelineStageChange}>
-              {[{ id: DEFAULTSTAGEMESSAGE }]
-                .concat(triggeringPipelineInfo.configStages)
-                .map((stage) => {
-                  return (
-                    <option key={stage.id} value={stage.id}>
-                      {stage.id}
-                    </option>
-                  );
-                })}
+              {[{ id: DEFAULTSTAGEMESSAGE }].concat(configurableStages).map((stage) => {
+                return (
+                  <option key={stage.id} value={stage.id}>
+                    {stage.id}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </Col>
