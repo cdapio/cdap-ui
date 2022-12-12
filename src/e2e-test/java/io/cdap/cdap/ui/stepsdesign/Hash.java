@@ -29,14 +29,14 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 public class Hash {
-    @Given("Navigate to Home Page")
-    public void navigateToHomePage() {
+    @Given("Navigate to Home Page for Hash")
+    public void navigateToHomePageForHash() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }
 
-    @Then("Click on the Data Explorations card")
-    public void dataExplorationsCard() {
+    @Then("Click on the Data Explorations card for Hash")
+    public void dataExplorationsCardForHash() {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));

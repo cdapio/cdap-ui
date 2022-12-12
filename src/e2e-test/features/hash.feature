@@ -19,8 +19,8 @@ Feature: HashTransformation
 
   @HashTransformation
   Scenario Outline: Go through the Hash Transformation functionality
-    Given Navigate to Home Page
-    Then Click on the Data Explorations card
+    Given Navigate to Home Page for Hash
+    Then Click on the Data Explorations card for Hash
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
     Then Click on Security icon
     Then Click on the Hash
