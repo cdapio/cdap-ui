@@ -24,4 +24,4 @@ Feature: Workspaces List
     Then Check if the user is on workspace list
     Then Select & Click on the WorkSpace
     Then Click on the Workspace link
-#    Then Check if the user is on workspace list
+    Then Check if the user is on workspace list
