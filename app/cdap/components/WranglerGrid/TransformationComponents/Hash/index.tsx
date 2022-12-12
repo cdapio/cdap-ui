@@ -34,7 +34,7 @@ interface IHashProps {
   functionName: string;
 }
 
-const CustomizedLabel = styled(SubHeadBoldFont)`
+const StyledLabel = styled(SubHeadBoldFont)`
   font-style: normal;
   margin-top: 10px;
   line-height: 150%;
@@ -73,7 +73,7 @@ export default function({
   return (
     <FormGroup data-testid="hash-container">
       <Box>
-        <CustomizedLabel>{T.translate(`${PREFIX}.selectHashAlgorithm`)}</CustomizedLabel>
+        <StyledLabel>{T.translate(`${PREFIX}.selectHashAlgorithm`)}</StyledLabel>
       </Box>
       <SelectInputComponent
         optionSelected={selectedAlgorithm}
