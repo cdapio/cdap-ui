@@ -78,9 +78,9 @@ jobs:
         corepack enable
         corepack prepare yarn@3.3.0 --activate
         yarn --version
-        echo 'test test test'
         yarn install --immutable
-        yarn run bower-root # Install Bower dependencies
+        npm install -g bower
+        bower install --allow-root #bower stuff
 
     - name: Start CDAP-UI and run the tests
       env:
