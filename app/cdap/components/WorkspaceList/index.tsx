@@ -22,7 +22,6 @@ import DataPrepStore from 'components/DataPrep/store';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { getWidgetData } from 'components/WidgetSVG/utils';
 import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations';
-import { WORKSPACES } from 'components/WrangleHome/Components/OngoingDataExplorations/constants';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -105,7 +104,7 @@ export default function() {
         </BreadcrumbsForWorkspaceList>
       </WorkspaceListHeader>
       <WorkspaceListContainer>
-        <OngoingDataExplorations fromAddress={WORKSPACES} setLoading={setLoading} />
+        <OngoingDataExplorations fromAddress={'Workspaces'} setLoading={setLoading} />
       </WorkspaceListContainer>
       {loading && (
         <ContainerForLoader data-testid="workspace-loading-icon">

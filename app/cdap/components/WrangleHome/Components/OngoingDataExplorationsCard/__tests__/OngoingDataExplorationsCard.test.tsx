@@ -22,10 +22,7 @@ import { mockItemsWithPercentage } from 'components/WrangleHome/Components/Ongoi
 describe('Test Ongoing Data Explrations Component', () => {
   it('Should render OngoingDataExplorationCard component', () => {
     render(
-      <OngoingDataExplorationCard
-        explorationCardDetails={mockItemsWithPercentage}
-        cardIndex={1} 
-      />
+      <OngoingDataExplorationCard explorationCardDetails={mockItemsWithPercentage} cardIndex={1} />
     );
     const ele = screen.getByTestId('ongoing-data-explorations-card-1');
     expect(ele).toBeInTheDocument();
