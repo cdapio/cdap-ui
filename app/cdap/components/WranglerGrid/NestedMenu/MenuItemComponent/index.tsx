@@ -20,7 +20,6 @@ import { menuArrowIcon } from 'components/WranglerGrid/TransformationToolbar/ico
 import T from 'i18n-react';
 import { NormalFont, MenuHeadText } from 'components/common/TypographyText';
 import { ShortDivider } from 'components/common/Divider';
-
 import { SvgIconTypeMap } from '@material-ui/core';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 

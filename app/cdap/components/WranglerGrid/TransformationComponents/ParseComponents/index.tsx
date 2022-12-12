@@ -32,6 +32,7 @@ const FuntionSectionWrapperStyles = styled(Box)`
   align-items: center;
   margin-bottom: 10px;
 `;
+
 export default function({ sectionHeading, children }: IParseComponentProps) {
   return (
     <SectionWrapper data-testid="parse-component-parent">

@@ -14,9 +14,9 @@
  *  the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import { render } from '@testing-library/react';
 import ParseExcelComponent from 'components/WranglerGrid/TransformationComponents/ParseComponents/ParseExcelComponent/index';
+import React from 'react';
 
 describe('It should test ParseExcelComponent', () => {
   it('Should render ParseExcelComponent', () => {

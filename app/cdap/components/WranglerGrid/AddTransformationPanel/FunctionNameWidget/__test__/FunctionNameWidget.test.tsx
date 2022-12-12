@@ -20,7 +20,9 @@ import FunctionNameWidget from 'components/WranglerGrid/AddTransformationPanel/F
 
 describe('It should test FunctionNameWidget Component', () => {
   it('Should render the FunctionNameWidget Component', () => {
-    const container = render(<FunctionNameWidget transformationName={'uppercase'} transformationLink={''} />);
+    const container = render(
+      <FunctionNameWidget transformationName={'uppercase'} transformationLink={''} />
+    );
     expect(container).toBeDefined();
   });
 

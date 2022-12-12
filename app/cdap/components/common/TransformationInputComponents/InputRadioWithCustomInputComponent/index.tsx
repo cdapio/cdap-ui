@@ -14,8 +14,7 @@
  * the License.
  */
 
-import { FormControl, Input, Radio, RadioGroup } from '@material-ui/core';
-import React from 'react';
+import { FormControl, Radio, RadioGroup } from '@material-ui/core';
 import {
   FormControlLabelComponent,
   FormControlLabelRadioComponent,
@@ -23,6 +22,7 @@ import {
 } from 'components/common/FormComponents';
 import { InputComponent } from 'components/common/InputFieldComponent';
 import { ISubMenuOption } from 'components/WranglerGrid/TransformationComponents/ParseComponents/types';
+import React from 'react';
 
 interface IObject {
   [key: string]: string;

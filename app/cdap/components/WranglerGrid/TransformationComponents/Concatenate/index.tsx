@@ -30,8 +30,8 @@ import {
 } from 'components/WranglerGrid/TransformationComponents/ParseComponents/types';
 import React, { useEffect, useState } from 'react';
 import {
-  CustomizedFormControlRadio,
-  CustomizedFormLabel,
+  StyledFormControlRadio,
+  StyledFormLabel,
 } from 'components/WranglerGrid/TransformationComponents/Concatenate/styles';
 
 export default function({
@@ -73,7 +73,7 @@ export default function({
   return (
     <>
       <FormGroup>
-        <CustomizedFormLabel data-testid='concentrate-form-label'>{ADD}</CustomizedFormLabel>
+        <StyledFormLabel data-testid="concentrate-form-label">{ADD}</StyledFormLabel>
         <FormControl>
           <FormInputFieldComponent
             formInputValue={stringValue}
@@ -83,7 +83,7 @@ export default function({
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => setStringValue(e.target.value),
               color: 'primary',
               placeholder: ENTER_STRING,
-              'data-testid':'concentrate-input-text'
+              'data-testid': 'concentrate-input-text',
             }}
           />
           <RadioGroup
@@ -93,7 +93,7 @@ export default function({
             data-testid="concentrate-radio-group"
           >
             {CONCATENATE_OPTIONS.map((eachRadio: ISubMenuOption) => (
-              <CustomizedFormControlRadio
+              <StyledFormControlRadio
                 value={eachRadio.value}
                 control={<Radio color="primary" />}
                 label={eachRadio.label}

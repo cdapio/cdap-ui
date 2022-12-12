@@ -14,9 +14,9 @@
  *  the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import { render, screen } from '@testing-library/react';
 import ParseXMLToJSONComponent from 'components/WranglerGrid/TransformationComponents/ParseComponents/ParseXMLToJSONComponent/index';
+import React from 'react';
 
 describe('It should test ParseComponents', () => {
   it('Should render ParseComponents', () => {

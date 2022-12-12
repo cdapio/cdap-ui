@@ -49,7 +49,13 @@ const TransformationNameText = styled(SubHeadNormalFont)`
   text-transform: capitalize;
 `;
 
-export default function({ transformationName, transformationLink }: { transformationName: string, transformationLink: string }) {
+export default function({
+  transformationName,
+  transformationLink,
+}: {
+  transformationName: string;
+  transformationLink: string;
+}) {
   return (
     <TransformationNameBox>
       <TransformationNameHeadWrapper>
