@@ -16,6 +16,10 @@ name: Build with Unit and Integration Tests
 
 
 on:
+  push:
+    branches: [ build/add-google-style-guide ]
+  pull_request:
+    branches: [ build/add-google-style-guide ]
   # workflow_run:
   #   workflows:
   #     - Trigger build
