@@ -3439,7 +3439,7 @@ features:
         subtitle: Remove some recipe steps to view some data
     GridPage:
       directivePanel:
-        moreInfoOnDirective: More info to this directive
+        moreInfoOnDirective: More info about this directive
         usage: Usage
         inputDirective: Input a directive
     Snackbar:

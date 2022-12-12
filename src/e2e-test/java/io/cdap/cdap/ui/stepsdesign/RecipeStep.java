@@ -46,7 +46,7 @@ public class RecipeStep {
   public void clickOnTheDataExplorationsCard() {
     try {
       WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-0"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -73,10 +73,7 @@ public class RecipeStep {
   @Then("Verify if the directive panel is displayed")
   public void directivePanelIsDisplayed() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-directive-input-search"));
       WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
       Assert.assertTrue(ElementHelper.isElementDisplayed(panel));
     } catch (Exception e) {
@@ -112,10 +109,7 @@ public class RecipeStep {
   @Then("Click on 'Recipe steps' button")
   public void clickOnRecipeStepButton() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -125,10 +119,7 @@ public class RecipeStep {
   @Then("Verify if recipe panel is displayed")
   public void recipePanelIsDisplayed() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("column-view-panel-parent"));
       Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-view-panel-parent")));
     } catch (Exception e) {
       System.err.println("error:" + e);
