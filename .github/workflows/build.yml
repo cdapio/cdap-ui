@@ -76,7 +76,7 @@ jobs:
     - name: Install UI Dependencies
       run: |
         corepack enable
-        corepack prepare yarn@3.2.0 --activate
+        corepack prepare yarn@3.3.0 --activate
         yarn --immutable
         yarn run bower-root # Install Bower dependencies
 
