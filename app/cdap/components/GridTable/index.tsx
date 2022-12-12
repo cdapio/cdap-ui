@@ -20,6 +20,17 @@ import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import FooterPanel from 'components/FooterPanel';
+import NoRecordScreen from 'components/NoRecordScreen';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import { flatMap } from 'rxjs/operators';
+import { objectQuery } from 'services/helpers';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 import BreadCrumb from 'components/GridTable/components/Breadcrumb';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
@@ -35,17 +46,8 @@ import {
   IRecords,
   IStatistics,
 } from 'components/GridTable/types';
-import NoRecordScreen from 'components/NoRecordScreen';
-import LoadingSVG from 'components/shared/LoadingSVG';
-import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import T from 'i18n-react';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { flatMap } from 'rxjs/operators';
-import { objectQuery } from 'services/helpers';
 import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
 import AddTransformation from 'components/WranglerGrid/AddTransformationPanel';
-import Snackbar from 'components/Snackbar';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 
 const transformationOptions = ['undo', 'redo'];
@@ -54,6 +56,10 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IParams;
   const classes = useStyles();
+  const [tableMetaInfo, setTableMetaInfo] = useState({
+    columnCount: 0,
+    rowCount: 0,
+  });
 
   const [loading, setLoading] = useState(false);
   const [addTransformationFunction, setAddTransformationFunction] = useState<
@@ -64,11 +70,6 @@ export default function GridTable() {
     infoLink: '',
   });
   const [dataQuality, setDataQuality] = useState<IStatistics>();
-  const [snackbarIsOpen, setSnackbarIsOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    description: '',
-    isSuccess: false,
-  });
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
   const [rowsDataList, setRowsDataList] = useState([]);
@@ -80,6 +81,8 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [showGridTable, setShowGridTable] = useState(false);
+  const [snackbarState, setSnackbar] = useSnackbar();
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -137,6 +140,13 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
+        setSnackbar({
+          open: true,
+          isSuccess: true,
+          message: T.translate(
+            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
+          ).toString(),
+        });
       });
   };
 
@@ -146,7 +156,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload as IParams, wid as string);
+    getWorkSpaceData(payload, wid);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -156,7 +166,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]] as string[],
+          type: [columnTypesList[eachColumnName]],
         };
       });
     }
@@ -194,12 +204,11 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item as string;
+            mostFrequentItemValue = item;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue =
-          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
+        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -255,11 +264,16 @@ export default function GridTable() {
         return rest;
       });
 
+    setTableMetaInfo({
+      columnCount: rawData.headers?.length,
+      rowCount: rawData.values?.length - 1,
+    });
     setRowsDataList(rowData);
   };
 
   useEffect(() => {
     getGridTableData();
+    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
   // ------------@onMenuOptionSelection Function is used to set option selected from toolbar and then calling of execute API
@@ -293,10 +307,10 @@ export default function GridTable() {
             ...gridParams,
           },
         });
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: 'Transformation applied successfully',
+        setSnackbar({
+          open: true,
           isSuccess: true,
+          message: 'Transformation applied successfully',
         });
         setLoading(false);
         setGridData(response);
@@ -308,10 +322,10 @@ export default function GridTable() {
       },
       (error) => {
         setLoading(false);
-        setSnackbarIsOpen(true);
-        setSnackbarData({
-          description: error.message,
+        setSnackbar({
+          open: true,
           isSuccess: false,
+          message: error.message,
         });
         setAddTransformationFunction({
           option: '',
@@ -336,12 +350,32 @@ export default function GridTable() {
         }}
       />
 
-      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 ? (
+      {Array.isArray(gridData?.headers) && gridData?.headers.length === 0 && (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
           subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
         />
-      ) : (
+      )}
+      {addTransformationFunction.option && (
+        <AddTransformation
+          transformationName={addTransformationFunction.option}
+          transformationDataType={addTransformationFunction.supportedDataType}
+          columnsList={headersNamesList}
+          missingItemsList={dataQuality}
+          onCancel={() => {
+            setAddTransformationFunction({
+              option: '',
+              supportedDataType: [],
+              infoLink: '',
+            });
+          }}
+          applyTransformation={(directive: string) => {
+            addDirectives(directive);
+          }}
+          transformationLink={addTransformationFunction.infoLink}
+        />
+      )}
+      {showGridTable && (
         <Table aria-label="simple table" className="test">
           <TableHead>
             <TableRow>
@@ -385,43 +419,22 @@ export default function GridTable() {
           </TableBody>
         </Table>
       )}
-      {addTransformationFunction.option && (
-        <AddTransformation
-          transformationName={addTransformationFunction.option}
-          transformationDataType={addTransformationFunction.supportedDataType}
-          columnsList={headersNamesList}
-          missingItemsList={dataQuality}
-          onCancel={() => {
-            setAddTransformationFunction({
-              option: '',
-              supportedDataType: [],
-              infoLink: '',
-            });
-          }}
-          applyTransformation={(directive: string) => {
-            addDirectives(directive);
-          }}
-          transformationLink={addTransformationFunction.infoLink}
-        />
-      )}
-      {snackbarIsOpen && (
-        <Snackbar
-          handleCloseError={() => {
-            setSnackbarIsOpen(false);
-            setSnackbarData({
-              description: '',
-              isSuccess: false,
-            });
-          }}
-          description={snackbarData.description}
-          isSuccess={snackbarData.isSuccess}
-        />
-      )}
+      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
       {loading && (
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
       )}
+      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
+        handleClose={() =>
+          setSnackbar(() => ({
+            open: false,
+          }))
+        }
+        open={snackbarState.open}
+        message={snackbarState.message}
+        isSuccess={snackbarState.isSuccess}
+      />
     </Box>
   );
 }
