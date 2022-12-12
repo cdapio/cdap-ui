@@ -28,7 +28,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
-public class FindAndReplace {
+public class TransformationsFindAndReplace {
   @Given("Navigate to Home Page of Wrangle")
   public void navigateToTheHomePage() {
     SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
