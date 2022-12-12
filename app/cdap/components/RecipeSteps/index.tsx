@@ -41,7 +41,7 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
     setRecipeSteps(dataprep.directives);
   }, [dataprep]);
 
-  const closeClickHandler = () => {
+  const onCloseClick = () => {
     setShowRecipePanel(false);
   };
 
@@ -62,7 +62,7 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
     <>
       <RecipeStepWidget
         headingText={T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipe')}
-        onClose={closeClickHandler}
+        onClose={onCloseClick}
         showDivider={true}
         headerActionTemplate={<RecipeHeaderActionTemplate />}
       >
