@@ -20,7 +20,6 @@ import { useStyles } from 'components/WrangleHome/Components/OngoingDataExplorat
 import CustomTooltip from 'components/WrangleHome/Components/CustomTooltip';
 import { IOngoingDataExplorationsCard } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
 import { getExplorationDatacard } from './utils';
-import { WORKSPACES } from '../OngoingDataExplorations/constants';
 
 export default function({
   explorationCardDetails,
@@ -44,7 +43,7 @@ export default function({
     <Grid
       container
       className={`${classes.explorationCardWrapper} ${
-        fromAddress === WORKSPACES ? classes.gridContainerWorkspaces : classes.gridContainerHome
+        fromAddress === 'Workspaces' ? classes.gridContainerWorkspaces : classes.gridContainerHome
       }`}
       data-testid={`ongoing-data-explorations-card-${cardIndex}`}
     >
