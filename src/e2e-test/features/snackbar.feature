@@ -15,16 +15,10 @@
 #
 
 @Integration_Tests
-Feature: Navigating through the connector types
-  @ConnectorTypes
-  Scenario Outline: Navigate to all the connector types
+Feature: Snackbar
 
-    Given Navigate to the Home Page
-    Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>"
-
-  Examples:
-    | connectionLabel | connectionTestId |
-    | PostgreSQL | postgresql |
-    | File | file |
-    | Import Data | import-data |
-   
+  @Snackbar
+  Scenario: Check the Snackbar in the Wrangle Page
+    Given Navigate to Home Page
+    Then Click on the data exploration card
+    Then Click on the Snackbar close icon

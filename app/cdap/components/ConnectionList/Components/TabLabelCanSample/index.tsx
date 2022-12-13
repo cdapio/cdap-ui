@@ -26,6 +26,8 @@ import { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import useStyles from './styles';
+import { useLocation } from 'react-router';
+import T from 'i18n-react';
 
 export default function TabLabelCanSample({
   label,
@@ -33,14 +35,18 @@ export default function TabLabelCanSample({
   initialConnectionId,
   toggleLoader,
   setIsErrorOnNoWorkSpace,
+  dataTestId,
 }: {
   label: string;
   entity: IRecords;
   initialConnectionId: string;
   toggleLoader: (value: boolean, isError?: boolean) => void;
   setIsErrorOnNoWorkSpace: React.Dispatch<React.SetStateAction<boolean>>;
+  dataTestId: string;
 }) {
   const classes = useStyles();
+
+  const location = useLocation();
 
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
@@ -92,28 +98,42 @@ export default function TabLabelCanSample({
       });
   };
 
+  const indexOfSelectedDataset = location?.pathname?.lastIndexOf('/');
+  const requiredPath =
+    indexOfSelectedDataset && location.pathname.slice(indexOfSelectedDataset + 1);
+
   return workspaceId ? (
-    <Redirect to={`/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`} />
+    <Redirect
+      to={{
+        pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${workspaceId}`,
+        state: {
+          from: T.translate('features.WranglerNewUI.Breadcrumb.labels.connectionsList'),
+          path: requiredPath,
+        },
+      }}
+    />
   ) : refValue ? (
     <CustomTooltip title={label} arrow data-testid="connections-tab-ref-label-simple">
-      <Box className={classes.labelsContainerCanSample}>
+      <Box className={classes.labelsContainerCanSample} data-testid={dataTestId}>
         <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
           {label}
         </Typography>
-        <button
-          className="wranglingHover"
-          onClick={() => onExplore(entity)}
-          data-testid="connections-tab-ref-explore"
-        >
-          <WrangleIcon />
-          <Typography variant="body2" className={classes.wrangleButton}>
-            Wrangle
-          </Typography>
+        <button className="wranglingHover" onClick={() => onExplore(entity)}>
+          <Box className="wranglingHover">
+            <WrangleIcon />
+            <Typography
+              variant="body2"
+              className={classes.wrangleButton}
+              data-testid="dataset-name-with-tooltip"
+            >
+              {T.translate('features.WranglerNewUI.Breadcrumb.labels.loadToGrid')}
+            </Typography>
+          </Box>
         </button>
       </Box>
     </CustomTooltip>
   ) : (
-    <Box className={classes.labelsContainerCanSample} data-testid="connections-tab-label-simple">
+    <Box className={classes.labelsContainerCanSample} data-testid={dataTestId}>
       <Typography variant="body2" className={classes.labelStylesCanSample} ref={myLabelRef}>
         {label}
       </Typography>
@@ -123,8 +143,12 @@ export default function TabLabelCanSample({
         data-testid="connections-tab-explore"
       >
         <WrangleIcon />
-        <Typography variant="body2" className={classes.wrangleButton}>
-          Wrangle
+        <Typography
+          variant="body2"
+          className={classes.wrangleButton}
+          data-testid="dataset-name-without-tooltip"
+        >
+          {T.translate('features.WranglerNewUI.Breadcrumb.labels.loadToGrid')}
         </Typography>
       </button>
     </Box>

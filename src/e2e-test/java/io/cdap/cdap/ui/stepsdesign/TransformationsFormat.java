@@ -39,7 +39,7 @@ public class TransformationsFormat {
     public void clickOnTheDataExplorationCard() {
         try {
             WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-explore-card-link-0"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
             String url = SeleniumDriver.getDriver().getCurrentUrl();
             Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
         } catch (Exception e) {
