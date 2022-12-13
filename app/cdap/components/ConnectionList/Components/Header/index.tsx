@@ -82,6 +82,16 @@ export default function({
   refs,
   handleClearSearch,
 }: IHeaderContentProps) {
+  console.log(
+    refs,
+    'rrrreeeefffssss',
+    filteredData,
+    'dataaaa',
+    eachFilteredData,
+    'eachhhhhData',
+    headersRefs,
+    'headderRReffs'
+  );
   const HeaderForConnectors = (
     <HeaderContainer>
       <Typography variant="body2" component="div">
