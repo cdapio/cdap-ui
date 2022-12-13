@@ -343,6 +343,7 @@ export default function GridTable() {
 
   return (
     <Box data-testid="grid-table-container">
+      <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
       <ToolBarList
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
@@ -353,7 +354,6 @@ export default function GridTable() {
             : null;
         }}
       />
-      <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
       {!showGridTable && (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
