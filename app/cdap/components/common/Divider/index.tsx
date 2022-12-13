@@ -14,11 +14,10 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { Divider } from '@material-ui/core';
+import styled from 'styled-components';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  columnSelected: string;
-  setColumnSelected: (value: string) => void;
-}
+export const ShortDivider = styled(Divider)`
+  width: 159px;
+  background: #dadce0;
+`;

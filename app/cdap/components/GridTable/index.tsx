@@ -32,17 +32,32 @@ import {
   IParams,
   IRecords,
 } from 'components/GridTable/types';
-import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import Snackbar from 'components/Snackbar';
-import useSnackbar from 'components/Snackbar/useSnackbar';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
+
+import styled from 'styled-components';
+
+import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
+import Snackbar from 'components/Snackbar';
+import useSnackbar from 'components/Snackbar/useSnackbar';
+import { useLocation } from 'react-router';
+
+export const TableWrapper = styled(Box)`
+  width: 100%;
+`;
+
+const GridTableWrapper = styled(Box)`
+  max-width: 100%;
+  overflow-x: auto;
+  max-height: 76vh;
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -60,6 +75,7 @@ export default function GridTable() {
   const [rowsDataList, setRowsDataList] = useState([]);
   const [gridData, setGridData] = useState({} as IExecuteAPIResponse);
   const [missingDataList, setMissingDataList] = useState([]);
+  const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const [showGridTable, setShowGridTable] = useState(false);
   const [invalidCountArray, setInvalidCountArray] = useState([
     {
@@ -68,9 +84,12 @@ export default function GridTable() {
     },
   ]);
   const [snackbarState, setSnackbar] = useSnackbar();
+  const [columnType, setColumnType] = useState('');
+  const [selectedColumn, setSelectedColumn] = useState('');
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
+
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -262,75 +281,115 @@ export default function GridTable() {
     setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
+  const handleColumnSelect = (columnName) => {
+    setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
+    setColumnType(gridData?.types[columnName]);
+  };
+
+  useEffect(() => {
+    if (snackbarState.open) {
+      setTimeout(() => {
+        setSnackbar(() => ({
+          open: false,
+        }));
+      }, 5000);
+    }
+  }, [snackbarState.open]);
+
   return (
-    <Box data-testid="grid-table-container">
-      <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
-      {!showGridTable && (
-        <NoRecordScreen
-          title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-          subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-        />
+    <>
+      {showBreadCrumb && (
+        <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
       )}
-      {showGridTable && (
-        <Table aria-label="simple table" className="test">
-          <TableHead>
-            <TableRow>
-              {headersNamesList?.length &&
-                headersNamesList.map((eachHeader) => (
-                  <GridHeaderCell
-                    label={eachHeader.label}
-                    types={eachHeader.type}
-                    key={eachHeader.name}
-                  />
-                ))}
-            </TableRow>
-            <TableRow>
-              {missingDataList?.length &&
-                headersNamesList.length &&
-                headersNamesList.map((each, index) => {
-                  return missingDataList.map((item, itemIndex) => {
-                    if (item.name === each.name) {
-                      return <GridKPICell metricData={item} key={item.name} />;
-                    }
-                  });
-                })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rowsDataList?.length &&
-              rowsDataList.map((eachRow, rowIndex) => {
-                return (
-                  <TableRow key={`row-${rowIndex}`}>
-                    {headersNamesList.map((eachKey, eachIndex) => {
-                      return (
-                        <GridTextCell
-                          cellValue={eachRow[eachKey.name] || '--'}
-                          key={`${eachKey.name}-${eachIndex}`}
-                        />
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      )}
-      <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
-      {loading && (
-        <div className={classes.loadingContainer}>
-          <LoadingSVG />
-        </div>
-      )}
-      <Snackbar // TODO: This snackbar is just for the feature demo purpose. Will be removed in the further development.
-        handleClose={() =>
+      <ToolBarList
+        setShowBreadCrumb={setShowBreadCrumb}
+        showBreadCrumb={showBreadCrumb}
+        columnType={columnType}
+        submitMenuOption={(option, datatype) => {
           setSnackbar(() => ({
-            open: false,
-          }))
-        }
-        open={snackbarState.open}
-        message={snackbarState.message}
-        isSuccess={snackbarState.isSuccess}
+            open: true,
+            isSuccess: true,
+            message: 'Function Selected',
+          }));
+          return false;
+          // TODO: will integrate with add transformation panel later
+        }}
+        disableToolbarIcon={gridData?.headers?.length > 0 ? false : true}
       />
-    </Box>
+      <GridTableWrapper data-testid="grid-table-container">
+        {!showGridTable && (
+          <NoRecordScreen
+            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+          />
+        )}
+        {showGridTable && (
+          <TableWrapper>
+            <Table aria-label="simple table" className="test">
+              <TableHead>
+                <TableRow>
+                  {headersNamesList?.length &&
+                    headersNamesList.map((eachHeader) => (
+                      <GridHeaderCell
+                        label={eachHeader.label}
+                        types={eachHeader.type}
+                        key={eachHeader.name}
+                        columnSelected={selectedColumn}
+                        setColumnSelected={handleColumnSelect}
+                      />
+                    ))}
+                </TableRow>
+                <TableRow>
+                  {missingDataList?.length &&
+                    headersNamesList.length &&
+                    headersNamesList.map((each, index) => {
+                      return missingDataList.map((item, itemIndex) => {
+                        if (item.name === each.name) {
+                          return <GridKPICell metricData={item} key={item.name} />;
+                        }
+                      });
+                    })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rowsDataList?.length &&
+                  rowsDataList.map((eachRow, rowIndex) => {
+                    return (
+                      <TableRow key={`row-${rowIndex}`}>
+                        {headersNamesList.map((eachKey, eachIndex) => {
+                          return (
+                            <GridTextCell
+                              cellValue={eachRow[eachKey.name] || '--'}
+                              key={`${eachKey.name}-${eachIndex}`}
+                            />
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableWrapper>
+        )}
+        <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
+        {loading && (
+          <div className={classes.loadingContainer}>
+            <LoadingSVG />
+          </div>
+        )}
+      </GridTableWrapper>
+      {
+        <Snackbar
+          handleClose={() =>
+            setSnackbar(() => ({
+              open: false,
+            }))
+          }
+          open={snackbarState.open}
+          message={snackbarState.message}
+          isSuccess={snackbarState.isSuccess}
+        />
+      }
+    </>
   );
 }
