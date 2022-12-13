@@ -86,7 +86,7 @@ export default function({ item, index, onMenuClick, columnType }: IMenuItemCompo
         disabled={menuItemDisableProp as boolean}
         title={item.label}
         onClick={(onClickEvent) => onMenuClick(onClickEvent, item)}
-        data-testid="menu-item-parent"
+        data-testid={`menu-item-${item.value}-${index}`}
       >
         <NormalFont component="div">{item.label}</NormalFont>
         {item?.options?.length > 0 && <StyledChevronRightRoundedIcon />}
