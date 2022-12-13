@@ -14,7 +14,6 @@
  * the License.
  */
 
-import { GCSIcon } from 'components/ConnectionList/icons';
 import React from 'react';
 
 export const mockTabsDataWithBrowseIndex = {
@@ -32,7 +31,6 @@ export const mockTabsDataWithBrowseIndex = {
       },
       canBrowse: true,
       count: 1,
-      icon: <GCSIcon />,
     },
   ],
   showTabs: true,

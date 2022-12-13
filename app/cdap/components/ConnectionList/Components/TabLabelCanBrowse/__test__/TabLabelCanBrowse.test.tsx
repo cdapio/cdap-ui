@@ -17,7 +17,6 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import TabLabelCanBrowse from 'components/ConnectionList/Components/TabLabelCanBrowse';
-import { GCSIcon } from 'components/ConnectionList/IconStore/CGSIcon';
 
 const mockConnectorTypeData = {
   name: 'File',
@@ -32,7 +31,6 @@ const mockConnectorTypeData = {
   },
   canBrowse: true,
   count: 1,
-  icon: <GCSIcon />,
 };
 
 describe('Test TabLabelCanBrowse Component', () => {
@@ -41,7 +39,6 @@ describe('Test TabLabelCanBrowse Component', () => {
       <TabLabelCanBrowse
         label={mockConnectorTypeData.name}
         count={mockConnectorTypeData.count}
-        icon={mockConnectorTypeData.icon}
         columnIndex={0}
         dataTestID={0}
       />
@@ -60,7 +57,6 @@ describe('Test TabLabelCanBrowse Component', () => {
       <TabLabelCanBrowse
         label={mockConnectorTypeData.name}
         count={mockConnectorTypeData.count}
-        icon={mockConnectorTypeData.icon}
         columnIndex={0}
         dataTestID={0}
       />

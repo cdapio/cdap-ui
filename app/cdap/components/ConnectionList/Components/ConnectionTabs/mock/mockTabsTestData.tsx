@@ -14,7 +14,6 @@
  * the License.
  */
 
-import { GCSIcon } from 'components/ConnectionList/icons';
 import React from 'react';
 
 export const mockTabsTestData = {
@@ -31,7 +30,6 @@ export const mockTabsTestData = {
         scope: 'SYSTEM',
       },
       count: 1,
-      icon: <GCSIcon />,
     },
     {
       name: 'PostgreSQL',
@@ -45,7 +43,6 @@ export const mockTabsTestData = {
         scope: 'SYSTEM',
       },
       count: 1,
-      icon: <GCSIcon />,
     },
   ],
   showTabs: true,

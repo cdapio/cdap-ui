@@ -16,7 +16,6 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import ConnectionTabs from 'components/ConnectionList/Components/ConnectionTabs';
-import { GCSIcon } from 'components/ConnectionList/IconStore/CGSIcon';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import history from 'services/history';
@@ -35,7 +34,6 @@ export const mockTabsTestData = {
         scope: 'SYSTEM',
       },
       count: 1,
-      icon: <GCSIcon />,
     },
     {
       name: 'PostgreSQL',
@@ -49,7 +47,6 @@ export const mockTabsTestData = {
         scope: 'SYSTEM',
       },
       count: 1,
-      icon: <GCSIcon />,
     },
   ],
   showTabs: true,
@@ -72,7 +69,6 @@ const mockTabsDataWithBrowse = {
       },
       canBrowse: true,
       count: 1,
-      icon: <GCSIcon />,
     },
     {
       name: 'PostgreSQL',
@@ -86,7 +82,6 @@ const mockTabsDataWithBrowse = {
         scope: 'SYSTEM',
       },
       count: 1,
-      icon: <GCSIcon />,
     },
   ],
   showTabs: true,
@@ -109,7 +104,6 @@ export const mockTabsDataWithBrowseIndex = {
       },
       canBrowse: true,
       count: 1,
-      icon: <GCSIcon />,
     },
   ],
   showTabs: true,
