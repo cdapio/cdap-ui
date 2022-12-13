@@ -37,6 +37,25 @@ const JsonDiffContainer = styled.div`
   }
 `;
 
+const RedSpan = styled.span`
+  display: block;
+  background-color: #feebe9;
+`;
+
+const GreenSpan = styled.span`
+  display: block;
+  background-color: #e6ffec;
+`;
+
+const NormalSpan = styled.span`
+  display: block;
+`;
+
+const EmptyLineSpan = styled.span`
+  display: block;
+  background-color: #e8e8e8;
+`;
+
 interface IJsonDiffProps {
   anchorEl: any;
   isOpen: boolean;
@@ -56,8 +75,81 @@ const JsonDiff = ({
   latestConfig,
   selectedConfig,
 }: IJsonDiffProps) => {
-  const result = diff(selectedConfig, latestConfig);
-  console.log(result);
+  const JsonDiffContent = () => {
+    if (!selectedConfig || !latestConfig) {
+      return;
+    }
+    const selectedConfigArray = JSON.stringify(selectedConfig, null, 2).split('\n');
+    const latestConfigArray = JSON.stringify(latestConfig, null, 2).split('\n');
+    const result = diff(selectedConfigArray, latestConfigArray);
+    const coloredSelectedConfig = [];
+    const coloredLatestConfig = [];
+    const selectedConfigLineNums = [];
+    const latestConfigLineNums = [];
+    let selectedConfigIdx = 0;
+    let latestConfigIdx = 0;
+    for (const array of result) {
+      if (array.length === 1) {
+        // line is same
+        coloredSelectedConfig.push(styleSpanNormal(selectedConfigArray[selectedConfigIdx]));
+        coloredLatestConfig.push(styleSpanNormal(latestConfigArray[latestConfigIdx]));
+        selectedConfigLineNums.push(styleSpanNormal(selectedConfigIdx));
+        latestConfigLineNums.push(styleSpanNormal(latestConfigIdx));
+        selectedConfigIdx++;
+        latestConfigIdx++;
+        continue;
+      }
+      if (array[0] === '+') {
+        // left should append empty line
+        coloredSelectedConfig.push(<EmptyLineSpan> </EmptyLineSpan>);
+        coloredLatestConfig.push(styleSpanStringGreen(latestConfigArray[latestConfigIdx]));
+        selectedConfigLineNums.push(styleSpanNormal(' '));
+        latestConfigLineNums.push(styleSpanNormal(latestConfigIdx));
+        latestConfigIdx++;
+        continue;
+      }
+      if (array[0] === '-') {
+        coloredSelectedConfig.push(styleSpanStringRed(selectedConfigArray[selectedConfigIdx]));
+        coloredLatestConfig.push(<EmptyLineSpan> </EmptyLineSpan>);
+        selectedConfigLineNums.push(styleSpanNormal(selectedConfigIdx));
+        latestConfigLineNums.push(styleSpanNormal(' '));
+        selectedConfigIdx++;
+      }
+    }
+    return (
+      <>
+        <div>
+          <b>Older Version: </b>
+          <pre>
+            <div style={{ float: 'left', width: 'auto' }}>
+              {selectedConfigLineNums.map((x) => x)}
+            </div>
+            <div style={{ width: 'auto' }}>{coloredSelectedConfig.map((x) => x)}</div>
+          </pre>
+        </div>
+        <div>
+          <b>Latest Version: </b>
+          <pre>
+            <div style={{ float: 'left', width: 'auto' }}>{latestConfigLineNums.map((x) => x)}</div>
+            <div style={{ width: 'auto' }}>{coloredLatestConfig.map((x) => x)}</div>
+          </pre>
+        </div>
+      </>
+    );
+  };
+
+  const styleSpanStringGreen = (val: string) => {
+    return <GreenSpan>{val}</GreenSpan>;
+  };
+
+  const styleSpanStringRed = (val: string) => {
+    return <RedSpan>{val}</RedSpan>;
+  };
+
+  const styleSpanNormal = (val: string | number) => {
+    return <NormalSpan>{val}</NormalSpan>;
+  };
+
   return (
     <PipelineModeless
       title={T.translate(`${PREFIX}.viewDiffTitle`)}
@@ -69,18 +161,7 @@ const JsonDiff = ({
     >
       {loading && <LoadingSVGCentered />}
       {error && <h2>{error}</h2>}
-      {!loading && !error && (
-        <JsonDiffContainer>
-          <div>
-            <b>Older Version: </b>
-            <pre>{JSON.stringify(selectedConfig, null, 2)}</pre>
-          </div>
-          <div>
-            <b>Latest Version: </b>
-            <pre>{JSON.stringify(latestConfig, null, 2)}</pre>
-          </div>
-        </JsonDiffContainer>
-      )}
+      {!loading && !error && <JsonDiffContainer>{JsonDiffContent()}</JsonDiffContainer>}
     </PipelineModeless>
   );
 };
