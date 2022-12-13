@@ -14,25 +14,23 @@
  * the License.
  */
 
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import BreadCumb from 'components/ConnectionList/Components/SubHeader/index';
-import { Router, Route, Switch } from 'react-router';
-import history from 'services/history';
+import { render, screen } from '@testing-library/react';
 import T from 'i18n-react';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
+import history from 'services/history';
+import SubHeader from 'components/ConnectionList/Components/SubHeader';
 
 test('renders BreadCumb Component', () => {
   render(
     <Router history={history}>
       <Switch>
         <Route>
-          <BreadCumb selectedConnection={'hello'} />  ̰
+          <SubHeader selectedConnection={'Google'} />
         </Route>
       </Switch>
     </Router>
   );
-  const ele = screen.getByTestId(/breadcrumb-container-parent/i);
-  expect(ele).toBeInTheDocument();
 
   const clickEle = screen.getByTestId(/sub-header-handle-add-connection/i);
   expect(clickEle).toHaveTextContent(

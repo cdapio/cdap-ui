@@ -75,8 +75,5 @@ describe('Test DrawerWidget Component', () => {
 
     fireEvent.click(closeIcon);
     expect(closeClickHandler).toBeCalled();
-
-    const underlineIcon = container.getByTestId('underline-icon');
-    expect(underlineIcon).toBeInTheDocument();
   });
 });

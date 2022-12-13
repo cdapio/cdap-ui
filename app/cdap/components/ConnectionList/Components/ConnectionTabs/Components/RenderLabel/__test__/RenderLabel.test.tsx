@@ -16,7 +16,7 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import RenderLabel from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel/index';
+import RenderLabel from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
 
 describe('Test RenderLabel component', () => {
   it('Should render RenderLabel Component with columnIndex as 0', () => {

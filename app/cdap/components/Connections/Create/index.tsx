@@ -193,7 +193,7 @@ export function CreateConnection({
         const value: string | boolean = featRequestingFrom ? featRequestingFrom : false;
         if (value) {
           value === 'home'
-            ? setRedirectUrl(`/ns/${getCurrentNamespace()}/home`)
+            ? setRedirectUrl(`/ns/${getCurrentNamespace()}/wrangle`)
             : setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/${value}`);
         } else {
           setRedirectUrl(`${getConnectionPath(name)}`);
@@ -260,7 +260,7 @@ export function CreateConnection({
       const value: string | boolean = featRequestingFrom ? featRequestingFrom : false;
       if (value) {
         return value === 'home'
-          ? setRedirectUrl(`/ns/${getCurrentNamespace()}/home`)
+          ? setRedirectUrl(`/ns/${getCurrentNamespace()}/wrangle`)
           : setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/${value}`);
       } else {
         navigateToConnectionList(dispatch);

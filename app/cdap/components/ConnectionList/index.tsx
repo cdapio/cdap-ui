@@ -17,11 +17,15 @@
 import { Box } from '@material-ui/core';
 import { blue, grey } from '@material-ui/core/colors';
 import ConnectionTabs from 'components/ConnectionList/Components/ConnectionTabs';
-import { IConnectionTabType } from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
 import Header from 'components/ConnectionList/Components/Header';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
 import { InfoGraph } from 'components/ConnectionList/IconStore/InfoGraph';
-import { IFilteredData, ITabData, ITabsDataResponse } from 'components/ConnectionList/types';
+import {
+  IConnectionTabType,
+  IFilteredData,
+  ITabData,
+  ITabsDataResponse,
+} from 'components/ConnectionList/types';
 import {
   getDataForTabsHelper,
   getDisplayNamesForConnectorTypes,
@@ -141,8 +145,7 @@ export default function() {
   });
 
   const getConnectionsTabData = async () => {
-    let connectorTypes: ITabData[] = [];
-    connectorTypes = fetchedConnectorsData;
+    let connectorTypes: ITabData[] = fetchedConnectorsData;
     let allConnectionsTotalLength = 0;
     // Fetching all the connections list inside each connector type
     const categorizedConnections = await getCategorizedConnections();
@@ -152,11 +155,13 @@ export default function() {
     });
 
     // filtering all the connections which got connections inside them
-    connectorTypes = connectorTypes.filter((obj) =>
+    const connectorTypesFilteredData = connectorTypes.filter((obj) =>
       connectorTypeWithConnections.find((item) => item == obj.name)
     );
-    connectorTypes = [...new Map(connectorTypes.map((item) => [item.name, item])).values()];
-    connectorTypes = connectorTypes.filter((eachConnectionType: ITabData) => {
+    const connectorTypesMappedData = [
+      ...new Map(connectorTypesFilteredData.map((item) => [item.name, item])).values(),
+    ];
+    connectorTypes = connectorTypesMappedData.filter((eachConnectionType: ITabData) => {
       return [eachConnectionType.name];
     });
     // Mapping connector types and corresponding connections

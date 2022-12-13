@@ -22,8 +22,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const PREFIX = 'features.WranglerNewUI.Breadcrumb';
-
 export interface IBreadcrumbItemProps {
   link?: string;
   label: string;
@@ -58,23 +56,31 @@ const StyledTypography = styled(Typography)`
   color: ${grey[900]};
 `;
 
+const getBreadcrumbLabel = (breadcrumbData: IBreadcrumbItemProps) => {
+  if (breadcrumbData.link) {
+    return (
+      <StyledLink
+        to={breadcrumbData.link}
+        data-testid={`breadcrumb-home-${breadcrumbData.label
+          .toLowerCase()
+          .split(' ')
+          .join('-')}`}
+      >
+        {breadcrumbData.label}
+      </StyledLink>
+    );
+  }
+  return (
+    <StyledTypography color="textPrimary" data-testid="breadcrumb-workspace-name">
+      {breadcrumbData.label}
+    </StyledTypography>
+  );
+};
+
 export default function({ breadcrumbsList }: IBreadcrumbProps) {
   return (
     <StyledBreadcrumb separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-      {breadcrumbsList.map((eachBreadcrumb) =>
-        eachBreadcrumb.link ? (
-          <StyledLink
-            to={eachBreadcrumb.link}
-            data-testid={`breadcrumb-home-${eachBreadcrumb.label}`}
-          >
-            {eachBreadcrumb.label}
-          </StyledLink>
-        ) : (
-          <StyledTypography color="textPrimary" data-testid="breadcrumb-workspace-name">
-            {eachBreadcrumb.label}
-          </StyledTypography>
-        )
-      )}
+      {breadcrumbsList?.map((eachBreadcrumb) => getBreadcrumbLabel(eachBreadcrumb))}
     </StyledBreadcrumb>
   );
 }
