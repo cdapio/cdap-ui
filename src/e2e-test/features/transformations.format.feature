@@ -20,7 +20,7 @@ Feature: TransformationsFormat
   @SetCounter
   Scenario: Go through the Transformations Uppercase Format functionality
     Given Navigate to Home Page of Wrangle for Format
-    Then Click on the Data Explorations card
+    Then Click on the Data Explorations card for format
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
     Then Click on the Structure icon
     Then Click on the Format
@@ -33,7 +33,7 @@ Feature: TransformationsFormat
 
   Scenario: Go through the Transformations lowercase Format functionality
     Given Navigate to Home Page of Wrangle for Format
-    Then Click on the Data Explorations card
+    Then Click on the Data Explorations card for format
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
     Then Click on the Structure icon
     Then Click on the Format

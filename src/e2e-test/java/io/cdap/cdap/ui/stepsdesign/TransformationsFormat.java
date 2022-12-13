@@ -35,8 +35,8 @@ public class TransformationsFormat {
         WaitHelper.waitForPageToLoad();
     }
 
-    @Then("Click on the Data Explorations card")
-    public void clickOnTheDataExplorationCard() {
+    @Then("Click on the Data Explorations card for format")
+    public void clickOnTheDataExplorationCardToTestFormat() {
         try {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
