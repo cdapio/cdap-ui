@@ -128,7 +128,6 @@ describe('Test ConnectionsTabs', () => {
         tabsData={mockTabsTestData}
         handleChange={() => null}
         value="apple"
-        // index={0}
         connectionId={undefined}
         setIsErrorOnNoWorkSpace={jest.fn()}
         columnIndex={0}

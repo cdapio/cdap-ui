@@ -44,10 +44,6 @@ export interface IHeaderContentProps extends IHeaderCustomTooltipLabelProps {
   handleClearSearch: (e: MouseEvent<HTMLInputElement>, index: number) => void;
 }
 
-export interface IHeaderCustomTooltipProps extends IHeaderCustomTooltipLabelProps {
-  tabsData: IFilteredData[];
-}
-
 export interface IHeaderSearchProps {
   eachFilteredData: IFilteredData;
   columnIndex: number;

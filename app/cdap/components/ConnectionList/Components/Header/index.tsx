@@ -96,7 +96,6 @@ export default function({
         <HeaderLabelWrapper
           headersRefs={headersRefs}
           columnIndex={columnIndex}
-          tabsData={tabsData}
           filteredData={filteredData}
         />
         <IconButton

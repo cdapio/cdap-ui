@@ -132,7 +132,7 @@ export default function({
 
   return (
     <Box data-testid="connections-tabs-parent" {...{ ref: refValue }}>
-      {tabsData?.showTabs && (
+      {tabsData.showTabs && (
         <ConnectionTabsWrapper data-testid="connection-tabs">
           <ConnectionTabsContainer
             value={value}

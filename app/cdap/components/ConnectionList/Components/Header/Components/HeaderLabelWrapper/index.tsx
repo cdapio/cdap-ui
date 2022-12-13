@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import { IHeaderCustomTooltipProps } from 'components/ConnectionList/types';
+import { IHeaderCustomTooltipLabelProps } from 'components/ConnectionList/types';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -35,14 +35,13 @@ const RenderLabel = styled(Typography)`
 export default function({
   headersRefs,
   columnIndex,
-  tabsData,
   filteredData,
-}: IHeaderCustomTooltipProps) {
+}: IHeaderCustomTooltipLabelProps) {
   const tooltipRequired =
     headersRefs?.current[columnIndex]?.offsetWidth < headersRefs?.current[columnIndex]?.scrollWidth;
 
   return (
-    <CustomTooltip title={tooltipRequired ? tabsData[columnIndex - 1].selectedTab : ''} arrow>
+    <CustomTooltip title={tooltipRequired ? filteredData[columnIndex - 1].selectedTab : ''} arrow>
       <RenderLabel
         variant="body2"
         ref={(element) => {

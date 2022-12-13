@@ -14,7 +14,6 @@
  * the License.
  */
 
-import { GCSIcon } from 'components/ConnectionList/icons';
 import React from 'react';
 
 export const mockConnectorTypeData = {
@@ -30,5 +29,5 @@ export const mockConnectorTypeData = {
   },
   canBrowse: true,
   count: 1,
-  icon: <GCSIcon />,
+  icon: '',
 };
