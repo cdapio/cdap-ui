@@ -3529,34 +3529,34 @@ features:
           options:
             common:
               customFormat: Custom Format
+              ddMMyyHHmmss: dd/MM/yy HH:mm:ss
+              EEEdMMMyyyyHHmmss: EEE, d MMM yyyy HH:mm:ss
+              MMddyyyyHHmmssSSS: MM.dd.yyyy HH:mm:ss.SSS
               pleaseSelectTheDateFormat: Please select the date format
               setFirstRowAsHeader: Set first row as header
               yyyyMMddHHmmss: yyyy-MM-dd HH:mm:ss
-              ddMMyyHHmmss: dd/MM/yy HH:mm:ss
-              MMddyyyyHHmmssSSS: MM.dd.yyyy HH:mm:ss.SSS
-              EEEdMMMyyyyHHmmss: EEE, d MMM yyyy HH:mm:ss
               yyyyMMddTHHmmssSSSWithRFCTimezone: yyyy,MM.dd'T'HH:mm:ss.SSS with RFC timezone
             csv:
               heading: 
                 pleaseSelectTheDelimiter: Please select the delimiter
               options:
                 comma: Comma
-                tab: Tab
-                space: Space
-                pipe: Pipe
                 capA: ^A
                 capD: ^D
                 customDelimiter: Custom delimiter
+                pipe: Pipe
+                space: Space
+                tab: Tab
             log:
               heading: 
                 selectLogsFormat: Please select the logs format
               options:
+                agent: Agent
                 common: Common
                 combined: Combined
                 combinedio: Combinedio
-                referer: Referer
-                agent: Agent
                 custom: Custom
+                referer: Referer
             excel:
               heading: 
                 chooseSheetInExcel: Choose how you would like to specify the sheet in your Excel file
@@ -3577,30 +3577,30 @@ features:
               labels: 
                 columnWidths: Column widths
                 columnWidthsPlaceholder: e.g. 3, 5, 2, 5, 15
-                padding: Padding
                 optionalPaddingParameter: Optional padding parameter
+                padding: Padding
             simpleDate:
               options:        
-                MMddyyyy: MM/dd/yyyy
-                MMddyyyyFormat: MM-dd-yyyy
                 ddMMyyyy: dd/MM/yyyy
-                MMddyy: MM-dd-yy
-                yyyyMMdd: yyyy-MM-dd
-                MMddyyyyatHHmmssz: MM-dd-yyyy 'at' HH:mm:ss z
-                yyyyMMddTHHmmssSSSZ: yyyy,MM.dd'T'HH:mm:ss.SSSZ
                 EEEMMMdyy: EEE, MMM d, ''yy
                 hmma: h:mm a
                 Hmmaz: H:mm a, z
+                MMddyy: MM-dd-yy
+                MMddyyyyatHHmmssz: MM-dd-yyyy 'at' HH:mm:ss z
+                MMddyyyy: MM/dd/yyyy
+                MMddyyyyFormat: MM-dd-yyyy
+                yyyyMMddTHHmmssSSSZ: yyyy,MM.dd'T'HH:mm:ss.SSSZ
+                yyyyMMdd: yyyy-MM-dd
             dateTime:
               options:
                 MMddyyyyAtHHmmssWithTimezone: MM-dd-yyyy 'at' HH:mm:ss with timezone
     FooterPanel:
       labels:
         columns: columns
-        message: Current data - {rowCount} rows and {columnCount} columns
         columnViewPanel: Column View Panel
         currentData: Current data
         directives: Directives
+        message: Current data - {rowCount} rows and {columnCount} columns
         recipeSteps: Recipe Steps
         rows: rows
         zoomPercent100: 100%
