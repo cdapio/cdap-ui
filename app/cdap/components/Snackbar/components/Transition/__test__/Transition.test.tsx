@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { screen, render } from '@testing-library/react';
-import Transition from 'components/Snackbar/Components/Transition/index';
+import Transition from 'components/Snackbar/components/Transition';
 import { Router, Switch, Route } from 'react-router';
 import history from 'services/history';
 
@@ -26,12 +26,7 @@ describe('Test Transition Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <Transition
-              handleClose={jest.fn}
-              isSuccess={false}
-              transitionAction={''}
-              messageToDisplay={''}
-            />
+            <Transition handleClose={jest.fn} isSuccess={false} transitionAction="" />
           </Route>
         </Switch>
       </Router>
@@ -45,12 +40,7 @@ describe('Test Transition Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <Transition
-              handleClose={() => jest.fn()}
-              isSuccess={true}
-              transitionAction={'add'}
-              messageToDisplay={''}
-            />
+            <Transition handleClose={() => jest.fn()} isSuccess={true} transitionAction="add" />
           </Route>
         </Switch>
       </Router>

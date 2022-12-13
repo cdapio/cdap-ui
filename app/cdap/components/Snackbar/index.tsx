@@ -14,55 +14,56 @@
  * the License.
  */
 
-import Snackbar from '@material-ui/core/Snackbar';
-import Transition from 'components/Snackbar/Components/Transition/index';
-import { useStyles } from 'components/Snackbar/styles';
-import { ISnackbarProps } from 'components/Snackbar/types';
-import React, { useEffect, useState } from 'react';
+import { green, red } from '@material-ui/core/colors';
+import Snackbar, { SnackbarProps } from '@material-ui/core/Snackbar';
+import Transition from 'components/Snackbar/components/Transition';
+import React from 'react';
+import styled from 'styled-components';
+
+export interface ISnackbarProps extends SnackbarProps {
+  handleClose: () => void;
+  isSuccess?: boolean;
+  snackbarAction?: string;
+}
+
+export interface ISnackbar {
+  open: boolean;
+  message?: string;
+  isSuccess?: boolean;
+}
+
+const CustomizedSnackbar = styled(Snackbar)`
+  border-radius: 4px;
+  width: 100%;
+  top: 48px;
+  background-color: ${(props) => (props.isSuccess ? green[600] : red[600])};
+  padding: 15px 18px 14px 18px;
+  display: block;
+  min-height: 76px;
+  left: 0;
+  z-index: 9;
+`;
 
 export default function({
-  handleCloseError,
-  description = '',
+  message = '',
   isSuccess,
   snackbarAction,
+  open,
+  handleClose,
 }: ISnackbarProps) {
-  const classes = useStyles();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsOpen(true);
-    const timer = setTimeout(() => {
-      setIsOpen(false);
-      handleCloseError();
-    }, 5000);
-    return () => {
-      setIsOpen(true);
-      clearTimeout(timer);
-    };
-  }, []);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    handleCloseError();
-  };
-
   return (
-    <Snackbar
+    <CustomizedSnackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      open={isOpen}
-      classes={{
-        anchorOriginTopLeft: classes.anchor,
-        root: classes.root,
-      }}
+      open={open}
+      isSuccess={isSuccess}
       TransitionComponent={() => (
         <Transition
-          handleClose={() => handleClose()}
+          handleClose={handleClose}
           isSuccess={isSuccess}
-          messageToDisplay={description}
+          message={message}
           transitionAction={snackbarAction}
         />
       )}
-      className={isSuccess ? classes.success : classes.error}
       data-testid="snackbar-alert"
     />
   );
