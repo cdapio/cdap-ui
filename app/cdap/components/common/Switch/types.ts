@@ -14,11 +14,14 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { Dispatch, SetStateAction } from 'react';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  columnSelected: string;
-  setColumnSelected: (value: string) => void;
+interface IInputProps {
+  [key: string]: string;
+}
+
+export interface ISwitchProps {
+  setShow: Dispatch<SetStateAction<boolean>>;
+  show: boolean;
+  inputProps?: IInputProps;
 }

@@ -56,7 +56,7 @@ const StyledTypography = styled(Typography)`
   color: ${grey[900]};
 `;
 
-const getBreadcrumbLabel = (breadcrumbData:IBreadcrumbItemProps) => {
+const getBreadcrumbLabel = (breadcrumbData: IBreadcrumbItemProps) => {
   if (breadcrumbData.link) {
     return (
       <StyledLink

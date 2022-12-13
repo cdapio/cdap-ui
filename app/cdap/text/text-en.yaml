@@ -3451,6 +3451,43 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    GridPage:
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          moreHorizIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            datatype:
+              string: string
+              boolean: boolean
+              integer: integer
+              long: long
+              short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
+            menu:
+              changeDatatype: Change data type
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
@@ -3485,5 +3522,6 @@ features:
         failure: Failure
         success: Success
         undo: Undo
+
     
 ...
