@@ -25,6 +25,7 @@ interface IPipelineHistoryTableProps {
   pipelineVersions: IPipelineVersion[];
   setRestoreLoading: (val: boolean) => void;
   latestVersion: string;
+  anchorEl: any;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
@@ -34,6 +35,7 @@ export const PipelineHistoryTable = ({
   pipelineVersions,
   setRestoreLoading,
   latestVersion,
+  anchorEl,
 }: IPipelineHistoryTableProps) => {
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -51,6 +53,7 @@ export const PipelineHistoryTable = ({
               setRestoreLoading={setRestoreLoading}
               setErrorMessage={setErrorMessage}
               latestVersion={latestVersion}
+              anchorEl={anchorEl}
             />
           );
         })}
@@ -74,6 +77,7 @@ export const PipelineHistoryTable = ({
             <div className="grid-row">
               <strong>{T.translate(`${PREFIX}.date`)}</strong>
               <strong>{T.translate(`${PREFIX}.summary`)}</strong>
+              <strong />
               <strong />
               <strong />
             </div>

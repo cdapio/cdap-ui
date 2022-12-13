@@ -2711,6 +2711,8 @@ features:
       summary: Summary
       unfinish: Not yet implemented
       view: View
+      viewDiff: Diff
+      viewDiffTitle: Compare Versions
       restore: Restore
       rowsPerPage: "Rows per page: "
       restoreFailError: Cannot restore (deploy) selected version

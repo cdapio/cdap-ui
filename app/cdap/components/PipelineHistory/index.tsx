@@ -150,6 +150,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
               pipelineVersions={pipelineVersions}
               setRestoreLoading={setIsRestoreLoading}
               latestVersion={latestVersion}
+              anchorEl={anchorEl}
             />
           )}
           <Pagination />

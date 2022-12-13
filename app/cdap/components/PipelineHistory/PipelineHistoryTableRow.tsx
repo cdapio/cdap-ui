@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import T from 'i18n-react';
@@ -22,6 +22,8 @@ import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 import { SNAPSHOT_VERSION } from 'services/global-constants';
 import styled from 'styled-components';
+import JsonDiff from 'components/shared/JsonDiff';
+import { Observable } from 'rxjs/Observable';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -31,6 +33,7 @@ interface IPipelineHistoryTableRowProps {
   latestVersion: string;
   description?: string;
   date: string;
+  anchorEl: any;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
@@ -51,6 +54,7 @@ export const PipelineHistoryTableRow = ({
   latestVersion,
   description,
   date,
+  anchorEl,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
@@ -60,6 +64,44 @@ export const PipelineHistoryTableRow = ({
       pipelineId: pipelineName,
     },
   });
+
+  const [diffOpen, setDiffOpen] = useState(false);
+  const [viewDiffLoading, setViewDiffLoading] = useState(false);
+  const [viewDiffError, setViewDiffError] = useState(null);
+  const [latestConfig, setLatestConfig] = useState(null);
+  const [selectedConfig, setSelectedConfig] = useState(null);
+  const closeDiffView = () => {
+    setDiffOpen(false);
+  };
+
+  const fetchConfigAndDisplayDiff = () => {
+    setViewDiffLoading(true);
+    setDiffOpen(true);
+    setViewDiffError(null);
+    Observable.forkJoin(
+      MyPipelineApi.getAppVersion({
+        namespace,
+        appId: pipelineName,
+        version: latestVersion,
+      }),
+      MyPipelineApi.getAppVersion({
+        namespace,
+        appId: pipelineName,
+        version: appVersion,
+      })
+    ).subscribe(
+      (res: any) => {
+        setLatestConfig(JSON.parse(res[0].configuration));
+        setSelectedConfig(JSON.parse(res[1].configuration));
+      },
+      (err) => {
+        setViewDiffError(err);
+      },
+      () => {
+        setViewDiffLoading(false);
+      }
+    );
+  };
 
   const viewVersion = () => {
     window.localStorage.setItem('pipelineHistoryVersion', appVersion);
@@ -133,18 +175,37 @@ export const PipelineHistoryTableRow = ({
               {T.translate(`${PREFIX}.view`)}
             </PrimaryTextLowercaseButton>
             {appVersion !== latestVersion && (
-              <PrimaryTextLowercaseButton
-                textColor="#0000EE"
-                onClick={() => {
-                  restoreVersion();
-                }}
-              >
-                {T.translate(`${PREFIX}.restore`)}
-              </PrimaryTextLowercaseButton>
+              <>
+                <PrimaryTextLowercaseButton
+                  textColor="#0000EE"
+                  onClick={() => {
+                    fetchConfigAndDisplayDiff();
+                  }}
+                >
+                  {T.translate(`${PREFIX}.viewDiff`)}
+                </PrimaryTextLowercaseButton>
+                <PrimaryTextLowercaseButton
+                  textColor="#0000EE"
+                  onClick={() => {
+                    restoreVersion();
+                  }}
+                >
+                  {T.translate(`${PREFIX}.restore`)}
+                </PrimaryTextLowercaseButton>
+              </>
             )}
           </>
         )}
       </div>
+      <JsonDiff
+        anchorEl={anchorEl}
+        isOpen={diffOpen}
+        onClose={closeDiffView}
+        loading={viewDiffLoading}
+        error={viewDiffError}
+        latestConfig={latestConfig}
+        selectedConfig={selectedConfig}
+      />
     </>
   );
 };
