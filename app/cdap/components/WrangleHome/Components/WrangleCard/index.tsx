@@ -17,11 +17,11 @@
 import { Box, Card, Typography } from '@material-ui/core';
 import DataPrepStore from 'components/DataPrep/store';
 import { useStyles } from 'components/WrangleHome/Components/WrangleCard/styles';
-import { IConnector, IWrangleCard } from 'components/WrangleHome/Components/WrangleCard/types';
 import { getUpdatedConnectorCards } from 'components/WrangleHome/services/getUpdatedConnectorCards';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { IConnector, IWrangleCard } from 'components/WrangleHome/Components/WrangleCard/types';
 
 export default function({ toggleViewAllLink }: IWrangleCard) {
   const [connectorsData, setConnectorsData] = useState<{ connectorTypes: IConnector[] }>({
