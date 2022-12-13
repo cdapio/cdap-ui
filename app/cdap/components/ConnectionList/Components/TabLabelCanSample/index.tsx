@@ -26,9 +26,8 @@ import React, { createRef, Ref, useContext, useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
-
 import { Dispatch, SetStateAction } from 'react';
-import { IConnectionTabType } from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
+import { IConnectionTabType } from 'components/ConnectionList/types';
 
 export interface ITabLabelCanSampleItemProps {
   label: string;

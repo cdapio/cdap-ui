@@ -18,12 +18,10 @@ import Box from '@material-ui/core/Box';
 import { blue } from '@material-ui/core/colors';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import RenderLabel, {
-  IConnectionTabType,
-} from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
-import { IConnectionTabsProps } from 'components/ConnectionList/types';
+import { IConnectionTabsProps, IConnectionTabType } from 'components/ConnectionList/types';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import RenderLabel from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
 
 const ConnectionTabsContainer = styled(Tabs)`
   & .canBrowseHover {
@@ -140,7 +138,7 @@ export default function({
             variant="scrollable"
             scrollButtons="auto"
           >
-            {tabsData?.data?.map((eachTabData: IConnectionTabType, eachTabIndex: number) => (
+            {tabsData.data.map((eachTabData: IConnectionTabType, eachTabIndex: number) => (
               <ConnectionTab
                 role="button"
                 data-testid={`connections-tab-column${columnIndex}-item${eachTabIndex}`}

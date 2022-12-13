@@ -15,10 +15,6 @@
  */
 
 import { ChangeEvent, Dispatch, MouseEvent, MutableRefObject, SetStateAction } from 'react';
-import {
-  IConnectionTabPluginArtifact,
-  IConnectionTabType,
-} from 'components/ConnectionList/Components/ConnectionTabs/Components/RenderLabel';
 
 export interface IFilteredData {
   data: ITabData[];
@@ -96,4 +92,58 @@ interface IProperties {
 export interface ITabsDataResponseSampleProperties {
   properties: IProperties;
   type: string;
+}
+
+export interface IRenderLabelProps {
+  columnIndex: number;
+  connectorType: IConnectionTabType;
+  connectionIdProp: string;
+  toggleLoader: (value: boolean, isError?: boolean) => void;
+  setIsErrorOnNoWorkSpace: Dispatch<SetStateAction<boolean>>;
+  dataTestID: number;
+}
+
+export interface IConnectionTabType {
+  connectionId?: string;
+  connectionType?: string;
+  createdTimeMillis?: number;
+  description?: string;
+  isDefault?: boolean;
+  name: string;
+  displayName?: string;
+  plugin?: IConnectionTabPlugin;
+  preConfigured?: boolean;
+  updatedTimeMillis?: number;
+  canBrowse?: boolean;
+  canSample?: boolean;
+  path?: string;
+  type?: string;
+  properties?: Record<string, string>;
+  count?: number;
+  icon?: JSX.Element;
+  SVG?: JSX.Element;
+}
+
+export interface IConnectionTabPlugin {
+  artifact: IConnectionTabPluginArtifact;
+  category: string;
+  name: string;
+  properties: IConnectionTabPluginProperties;
+  type: string;
+}
+
+export interface IConnectionTabPluginArtifact {
+  scope: string;
+  name: string;
+  version: string;
+}
+
+export interface IConnectionTabPluginProperties {
+  host: string;
+  port: string;
+  jdbcPluginName: string;
+  database: string;
+  connectionArgument: string;
+  password: string;
+  user: string;
 }
