@@ -54,16 +54,17 @@ public class CalculateTransformation {
     @Then("Click on Calculate option")
     public void clickOnCalculateOption() {
         try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("toolbar-icon-button-Math"));
+            Helper.waitSeconds(5);
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("toolbar-icon-math"));
             WaitHelper.waitForElementToBeEnabled(
-                    Helper.locateElementByTestId("menu-item-button-algebra")
+                    Helper.locateElementByTestId("menu-item-algebra-0")
             );
-            WebElement ele = Helper.locateElementByTestId("menu-item-button-algebra");
+            WebElement ele = Helper.locateElementByTestId("menu-item-algebra-0");
             JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
             executor.executeScript("arguments[0].click();", ele);
             WaitHelper.waitForElementToBeDisplayed(
-                    Helper.locateElementByTestId("menu-item-button-ADD"));
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("menu-item-button-ADD"));
+                    Helper.locateElementByTestId("menu-item-ADD-0"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("menu-item-ADD-0"));
             Assert.assertTrue(ElementHelper.isElementDisplayed
                     (Helper.locateElementByTestId("add-transformation-drawer")));
         } catch (Exception e) {
