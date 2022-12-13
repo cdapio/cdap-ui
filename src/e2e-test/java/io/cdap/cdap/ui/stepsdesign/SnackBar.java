@@ -47,7 +47,7 @@ public class SnackBar {
       WaitHelper.waitForPageToLoad();
       List<String> productName = new ArrayList<String>();
       List<WebElement> allProductsName = SeleniumDriver.getDriver().findElements(
-              By.xpath(".//*[@data-testid='wrangler-home-ongoing-data-exploration-card']"));
+          By.xpath(".//*[@data-testid='wrangler-home-ongoing-data-exploration-card']"));
       ElementHelper.clickOnElement(allProductsName.get(0));
       String url = SeleniumDriver.getDriver().getCurrentUrl();
       Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
@@ -60,10 +60,11 @@ public class SnackBar {
   public void verifyTheSnackbarPopUpIsComingOrNot() {
     try {
       WaitHelper.waitForPageToLoad();
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("snackbar-alert"));
+      Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("snackbar-close-icon"));
       WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("snackbar-close-icon"));
-      WebElement ele = SeleniumDriver.getDriver().findElement
-              (By.xpath("//*[@data-testid = 'snackbar-close-icon']"));
+      WebElement ele = SeleniumDriver.getDriver().findElement(By.xpath("//*[@data-testid = 'snackbar-close-icon']"));
       ElementHelper.clickOnElement(ele);
     } catch (Exception e) {
       System.err.println("error:" + e);
