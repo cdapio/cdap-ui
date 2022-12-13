@@ -18,7 +18,6 @@ import { Box, Container, Drawer, DrawerProps, IconButton, Typography } from '@ma
 import grey from '@material-ui/core/colors/grey';
 import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import { Underline } from 'components/common/DrawerWidget/IconStore/Underline';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
@@ -119,7 +118,7 @@ export default function({
             <Label data-testid="widget-heading-text" component="span">
               {headingText}
             </Label>
-            <Underline />
+            <img src="/cdap_assets/img/underline" />
           </LabelContainer>
         </HeaderActions>
         <HeaderActions>
