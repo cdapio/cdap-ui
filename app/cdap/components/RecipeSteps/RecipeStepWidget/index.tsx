@@ -32,10 +32,11 @@ export interface IColumnViewWidget {
 
 const DrawerContainerStyle = styled(Box)`
   width: 460px;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 232px);
   border-right: 1px solid #e0e0e0;
   padding-left: 20px;
   padding-right: 20px;
+  overflow-y: scroll;
 `;
 
 const HeaderStyle = styled.header`
@@ -95,4 +96,3 @@ export default function({ headingText, onClose, showDivider, headerActionTemplat
     </DrawerContainerStyle>
   );
 }
-

@@ -71,7 +71,7 @@ const TablePanelContainer = styled(Box)`
 const GridTableWrapper = styled(Box)`
   max-width: 100%;
   overflow-x: auto;
-  max-height: 76vh;
+  max-height: 70vh;
 `;
 
 const RecipeStepPanel = styled(Box)`
