@@ -49,7 +49,9 @@ export const RuntimeTabContent = (props: IRuntimeTabContentProps) => {
         If a stage in your pipeline provides the value of an argument, you can skip that argument by
         marking it as provided.
       </div>
-      {initFinish && <RuntimeArgsTabContent dataCy="runtimeargs-preview" />}
+      {initFinish && (
+        <RuntimeArgsTabContent dataCy="runtimeargs-preview" dataTestId="runtimeargs-preview" />
+      )}
     </div>
   );
 };

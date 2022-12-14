@@ -27,17 +27,20 @@ public class Constants {
     String.valueOf(TEST_TIMEOUT_TIME / 1000) +
     "seconds";
 
-  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/wrangle";
   public static final String BASE_URL = "http://localhost:11011";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
   public static final String CDAP_URL = BASE_URL + "/cdap";
-  public static final String CONFIGURATION_URL = "http://localhost:11011/cdap/administration/configuration";
+  public static final String CONFIGURATION_URL = BASE_URL + "/cdap/administration/configuration";
   public static final String NAMESPACE_URL = BASE_URL + "/cdap/ns";
-  public static final String BASE_STUDIO_URL = "http://localhost:11011/cdap/ns/default/";
-  public static final String SYSTEM_PROFILES_CREATE_URL = "http://localhost:11011/cdap/ns/system/profiles/create";
-  public static final String PIPELINE_STUDIO_URL = "http://localhost:11011/pipelines/ns/default/studio";
+  public static final String BASE_STUDIO_URL = BASE_URL + "/cdap/ns/default/";
+  public static final String SYSTEM_PROFILES_CREATE_URL = BASE_URL + "/cdap/ns/system/profiles/create";
+  public static final String PIPELINE_STUDIO_URL = BASE_URL + "/pipelines/ns/default/studio";
+  public static final String PIPELINE_LIST_URL = CDAP_URL + "/ns/default/pipelines";
+  public static final String PIPELINE_DRAFTS_URL = BASE_STUDIO_URL + "pipelines/drafts";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
+  public static final String DOWNLOADS_DIR = "target/downloads/";
   public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
 
   public static final String DEFAULT_GCS_CONNECTION_NAME = "gcs_" + String.valueOf(getRandomArbitrary(1, 10000));
@@ -58,6 +61,7 @@ public class Constants {
   public static final String DEFAULT_SPANNER_CONNECTION_NAME = "spanner_" +
     String.valueOf(getRandomArbitrary(1, 10000));
 
+  public static final String RUNTIME_ARGS_PREVIEW_SELECTOR = "runtimeargs-preview";
   public static final String RUNTIME_ARGS_DEPLOYED_SELECTOR = "runtimeargs-deployed";
   public static final String RUNTIME_ARGS_KEY_SELECTOR = "runtimeargs-key";
   public static final String RUNTIME_ARGS_VALUE_SELECTOR = "runtimeargs-value";
@@ -69,6 +73,6 @@ public class Constants {
   public static final String DEFAULT_GCP_PROJECTID = System.getenv("GCP_PROJECTID");
   public static final String DEFAULT_GCP_SERVICEACCOUNT_PATH = System.getenv("GCP_SERVICE_ACCOUNT_PATH");
 
-  //Wrangle New UI
-  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
+  public static final String SINK_PATH_VAL = "/tmp/cdap-ui-integration-fixtures";
+  public static final String SOURCE_PATH_VAL = "file:/tmp/cdap-ui-integration-fixtures/airports.csv";
 }

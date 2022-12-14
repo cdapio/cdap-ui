@@ -3437,10 +3437,16 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        loadToGrid: Wrangle
         wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
-        wrangeHome: home
         connectionsList: datasources
+        wrangleHome: home
+      ariaLabels:
+        breadcrumb: breadcrumb
+    common:
+      and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
@@ -3461,7 +3467,7 @@ features:
           invalidIcon: Invalid
           mathIcon: Math
           nullIcon: 'Null'
-          otherIcon: Other
+          moreHorizIcon: Other
           redoIcon: Redo
           securityIcon: Security
           structureIcon: Structure
@@ -3510,12 +3516,25 @@ features:
           nameNewColumn:  Name new column 
           columnExist: A column with the same name already exists. Pick a new name.
           destinationColumn: Destination Column
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     HomePage:
       labels:
         common:
-          viewAll: View All
           addConnection: Add Connection
           importData: Import Data
+          viewAll: View All
         connectorTypes:
           title: Start data exploration
         workspaces:
@@ -3524,14 +3543,13 @@ features:
       referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
-        title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+        title: No rows left in this sample
     Snackbar:
       labels:
-        datasetSuccess: Dataset loaded successfully 
         failure: Failure
-        retrieveFailure: Failed to retrieve sample data for
-        sampleFailure: Failed to retrieve sample data
         success: Success
         undo: Undo
-        workspaceFailure: Failed to create workspace for
+
+    
+...

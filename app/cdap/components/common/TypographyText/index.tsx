@@ -13,10 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 import { Typography } from '@material-ui/core';
 import { grey, green, red } from '@material-ui/core/colors';
 import styled from 'styled-components';
+
+export const TableCellText = styled(Typography)`
+  font-weight: 400;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+`;
 
 export const NormalFont = styled(Typography)`
   color: ${grey[600]};
@@ -56,14 +65,4 @@ export const MenuHeadText = styled(Typography)`
   font-size: 14px;
   font-weight: 600;
   padding: 0px 20px;
-`;
-
-export const TableCellText = styled(Typography)`
-  font-weight: 400;
-  max-width: 190px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  margin-bottom: 5px;
-  text-transform: capitalize;
 `;
