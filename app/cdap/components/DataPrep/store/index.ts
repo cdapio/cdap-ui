@@ -89,7 +89,7 @@ export interface IDataPrepState {
   dataModelList?: IDataModel[];
   targetDataModel?: IDataModel;
   targetModel?: IModel;
-  connectorsWithIcons?: IConnectorTypesWithSVG[];
+  connectorsWithIcons?: any;
 }
 
 const defaultInitialState: IDataPrepState = {

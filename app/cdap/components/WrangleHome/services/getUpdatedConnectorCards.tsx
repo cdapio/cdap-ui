@@ -33,7 +33,7 @@ export const getUpdatedConnectorCards = async (connectorTypesWithIcons) => {
   // Fetching all the connections inside each connector type
   const categorizedConnections = await getCategorizedConnections();
 
-  // Here we are appending connector type's icon to each connector based on it's name
+  // Here we appending connector type's icon to each connector based on it's name
   const getIconForConnector = (connectorName: string) => {
     const matchingConnector = connectorTypesWithIcons.find(
       (eachConnector) => eachConnector.name === connectorName
