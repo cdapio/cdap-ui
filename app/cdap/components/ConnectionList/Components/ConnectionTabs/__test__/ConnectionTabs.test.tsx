@@ -14,14 +14,14 @@
  * the License.
  */
 
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { Route, Router } from 'react-router-dom';
-import history from 'services/history';
 import ConnectionsTabs from '../index';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { mockTabsDataWithBrowse } from '../mock/mockTabsDataWithBrowse';
 import { mockTabsDataWithBrowseIndex } from '../mock/mockTabsDataWithBrowseIndex';
 import { mockTabsTestData } from '../mock/mockTabsTestData';
+import { Router, Route } from 'react-router-dom';
+import history from 'services/history';
 
 describe('Test ConnectionsTabs', () => {
   it('Should render Connections Tabs Parent Component', () => {

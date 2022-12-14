@@ -17,20 +17,11 @@
 export interface IParams {
   context: string;
   workspaceId: string;
-  namespace?: string;
-  wid?: string;
-  connectorType?: string;
 }
 
 export interface IRecords {
-  wid?: string;
-  payload?: IParams;
-  body?: string;
-  path?: string;
-  canBrowse?: boolean;
-  name?: string;
+  [key: string]: string | boolean | Record<string, IType>;
 }
-
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
 }
@@ -45,6 +36,7 @@ export interface IExecuteAPIResponse {
   types: { [key: string]: string };
   values: IRecords[];
   summary: ISummary;
+  message: string;
 }
 
 export interface IHeaderNamesList {

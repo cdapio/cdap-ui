@@ -34,6 +34,7 @@ import {
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
@@ -47,7 +48,6 @@ import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
-import { IWorkspace } from 'components/WrangleHome/Components/OngoingDataExplorations/types';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
@@ -60,8 +60,8 @@ const GridTableWrapper = styled(Box)`
 `;
 
 export default function GridTable() {
-  const { wid } = useParams<IParams>();
-  const params = useParams<IParams>();
+  const { wid } = useParams() as IRecords;
+  const params = useParams() as IRecords;
   const classes = useStyles();
   const location = useLocation();
   const [tableMetaInfo, setTableMetaInfo] = useState({
@@ -100,7 +100,7 @@ export default function GridTable() {
     });
     MyDataPrepApi.getWorkspace(payload)
       .pipe(
-        flatMap((res: IWorkspace) => {
+        flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
           setWorkspaceName(res?.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
