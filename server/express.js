@@ -221,7 +221,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     var data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
-      authorization: req.headers.authorization,
       cdap: {
         standaloneWebsiteSDKDownload:
           uiSettings['standalone.website.sdk.download'] === 'true' || false,
