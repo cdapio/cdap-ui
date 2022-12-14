@@ -14,11 +14,23 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
-
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  columnSelected: string;
-  setColumnSelected: (value: string) => void;
-}
+import T from 'i18n-react';
+import { TOOLBAR_ICONS_LABEL_ALL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
+const PREFIX = 'features.WranglerNewUI.GridPage.transformations.options.labels.datatype';
+export const DATATYPE_OPTIONS = [
+  'string',
+  'boolean',
+  'integer',
+  'long',
+  'short',
+  'float',
+  'double',
+  'decimal',
+  'bytes',
+].map((dataType) => {
+  return {
+    value: dataType,
+    label: T.translate(`${PREFIX}.${dataType}`).toString(),
+    supportedDataType: [T.translate(`${TOOLBAR_ICONS_LABEL_ALL_PREFIX}`).toString()],
+  };
+});

@@ -14,11 +14,12 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
+import { Dispatch, SetStateAction } from 'react';
 
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  columnSelected: string;
-  setColumnSelected: (value: string) => void;
+export interface ITransformationToolBarProps {
+  columnType: string;
+  submitMenuOption: (value: string, dataType: string[]) => void;
+  setShowBreadCrumb: Dispatch<SetStateAction<boolean>>;
+  showBreadCrumb: boolean;
+  disableToolbarIcon: boolean;
 }

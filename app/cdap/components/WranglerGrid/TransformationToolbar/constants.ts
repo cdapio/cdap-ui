@@ -14,11 +14,5 @@
  * the License.
  */
 
-import { IType } from 'components/GridTable/types';
-
-export interface IGridHeaderCellProps {
-  label: string;
-  types: Array<string | boolean | Record<string, IType>>;
-  columnSelected: string;
-  setColumnSelected: (value: string) => void;
-}
+export const TOOLBAR_ICONS_LABEL_ALL_PREFIX = 'all';
+export const TOOLBAR_ICONS_LABEL_PREFIX = 'features.WranglerNewUI.GridPage.toolbarIcons.labels';
