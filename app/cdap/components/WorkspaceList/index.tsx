@@ -93,7 +93,7 @@ export default function() {
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
         >
-          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
+          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/wrangle`}>
             <BreadcrumbsHomeLabel data-testid="link-type-wrangle-home">
               {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
             </BreadcrumbsHomeLabel>

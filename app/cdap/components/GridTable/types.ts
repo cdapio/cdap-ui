@@ -42,7 +42,7 @@ interface ISummary {
 
 export interface IExecuteAPIResponse {
   headers: string[];
-  types: IRecords;
+  types: { [key: string]: string };
   values: IRecords[];
   summary: ISummary;
 }
@@ -51,4 +51,8 @@ export interface IHeaderNamesList {
   name: string;
   label: string;
   type: string[];
+}
+
+export interface IType {
+  [key: string]: string | number;
 }

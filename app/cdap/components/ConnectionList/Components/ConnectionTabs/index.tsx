@@ -114,6 +114,7 @@ export default function ConnectionsTabs({
                         initialConnectionId={connectionIdProp}
                         toggleLoader={props.toggleLoader}
                         setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+                        dataTestId={`connectionlist-connectiontabs-label-loop-${index}-${connectorTypeIndex}`}
                       />
                     )
                   ) : (
@@ -127,8 +128,7 @@ export default function ConnectionsTabs({
                 }
                 value={connectorType.name}
                 disableTouchRipple
-                key={`${connectorType.name}=${connectorTypeIndex}`}
-                id={connectorType.name}
+                key={`${connectorType.name}-${connectorTypeIndex}`}
                 className={index > 1 && !connectorType.canBrowse ? classes.wrangleTab : null}
               />
             ))}
