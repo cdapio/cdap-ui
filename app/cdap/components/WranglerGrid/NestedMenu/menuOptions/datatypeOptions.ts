@@ -14,26 +14,23 @@
  * the License.
  */
 
-import { makeStyles } from '@material-ui/styles';
-
-export const useStyles = makeStyles({
-  footerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
-    width: '100%',
-    position: 'absolute',
-    bottom: 54,
-  },
-  tabsWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'space-between',
-    backgroundColor: '#f3f6f9',
-    height: 40,
-    boxShadow: '0px -2px 2px #0000001a',
-    width: '100%',
-  },
+import T from 'i18n-react';
+import { TOOLBAR_ICONS_LABEL_ALL_PREFIX } from 'components/WranglerGrid/TransformationToolbar/constants';
+const PREFIX = 'features.WranglerNewUI.GridPage.transformations.options.labels.datatype';
+export const DATATYPE_OPTIONS = [
+  'string',
+  'boolean',
+  'integer',
+  'long',
+  'short',
+  'float',
+  'double',
+  'decimal',
+  'bytes',
+].map((dataType) => {
+  return {
+    value: dataType,
+    label: T.translate(`${PREFIX}.${dataType}`).toString(),
+    supportedDataType: [T.translate(`${TOOLBAR_ICONS_LABEL_ALL_PREFIX}`).toString()],
+  };
 });

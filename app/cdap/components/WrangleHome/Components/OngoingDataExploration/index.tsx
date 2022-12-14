@@ -14,16 +14,17 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
 import { Box } from '@material-ui/core/';
-import { generateDataForExplorationCard } from './utils';
 import MyDataPrepApi from 'api/dataprep';
+import { IResponseData } from 'components/WrangleHome/Components/OngoingDataExploration/types';
+import { generateDataForExplorationCard } from 'components/WrangleHome/Components/OngoingDataExploration/utils';
+import OngoingDataExplorationCard from 'components/WrangleHome/Components/OngoingDataExplorationCard';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getCurrentNamespace } from 'services/NamespaceStore';
-import OngoingDataExplorationCard from '../OngoingDataExplorationCard';
-import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { IResponseData } from './types';
+import { switchMap } from 'rxjs/operators';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export default function OngoingDataExploration() {
   const [ongoingExpDatas, setOngoingExpDatas] = useState([]);
@@ -107,9 +108,15 @@ export default function OngoingDataExploration() {
       {finalArray.map((item, index) => {
         return (
           <Link
-            to={`/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`}
+            to={{
+              pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${item[4].workspaceId}`}`,
+              state: {
+                from: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome'),
+                path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
+              },
+            }}
             style={{ textDecoration: 'none' }}
-            data-testid={`ongoing-data-exploration${index}`}
+            data-testid={`wrangler-home-ongoing-data-exploration-card-${index}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

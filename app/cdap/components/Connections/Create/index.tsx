@@ -34,6 +34,7 @@ import {
   testConnection,
   IConnectorDetails,
   getSelectedConnectorDisplayName,
+  ILocation,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { Redirect } from 'react-router';
@@ -45,6 +46,7 @@ import Alert from 'components/shared/Alert';
 import { ConnectionsContext, IConnectionMode } from 'components/Connections/ConnectionsContext';
 import { constructErrors } from 'components/shared/ConfigurationGroup/utilities';
 import { ConnectionConfigurationMode } from 'components/Connections/types';
+import { useLocation } from 'react-router';
 
 const PREFIX = 'features.DataPrepConnections.ConnectionManagement';
 
@@ -60,6 +62,7 @@ const useStyle = makeStyle(() => {
     },
   };
 });
+
 export function CreateConnection({
   onToggle = null,
   initialConfig = {},
@@ -85,6 +88,8 @@ export function CreateConnection({
   const [testInProgress, setTestInProgress] = useState(false);
   const [testResponseMessages, setTestResponseMessages] = useState(undefined);
   const [redirectUrl, setRedirectUrl] = useState(null);
+  const location: ILocation = useLocation();
+  const featRequestingFrom = location?.state?.from?.addConnectionRequestFromNewUI;
 
   const init = async () => {
     try {
@@ -180,7 +185,19 @@ export function CreateConnection({
       }
 
       if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
-        setRedirectUrl(`${getConnectionPath(name)}`);
+        /**
+         * This following code is checking whether the add connection request is coming from New UI
+         * If the request is from New UI, the redirection is set to New UI URL
+         * Otherwise, the redirection is set to Old UI URL as existed
+         */
+        const value: string | boolean = featRequestingFrom ? featRequestingFrom : false;
+        if (value) {
+          value === 'home'
+            ? setRedirectUrl(`/ns/${getCurrentNamespace()}/wrangle`)
+            : setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/${value}`);
+        } else {
+          setRedirectUrl(`${getConnectionPath(name)}`);
+        }
       }
 
       if (typeof onToggle === 'function') {
@@ -234,8 +251,21 @@ export function CreateConnection({
 
   function onClose() {
     if (connectionMode === IConnectionMode.ROUTED && enableRouting) {
-      navigateToConnectionList(dispatch);
-      return;
+      /**
+       * This following code is checking whether the add connection request is coming from New UI
+       * If the request is from New UI, the redirection is set to New UI URL
+       * Otherwise, the redirection is set to Old UI URL as existed
+       */
+
+      const value: string | boolean = featRequestingFrom ? featRequestingFrom : false;
+      if (value) {
+        return value === 'home'
+          ? setRedirectUrl(`/ns/${getCurrentNamespace()}/wrangle`)
+          : setRedirectUrl(`/ns/${getCurrentNamespace()}/datasources/${value}`);
+      } else {
+        navigateToConnectionList(dispatch);
+        return;
+      }
     }
 
     onToggle();

@@ -30,7 +30,9 @@ export const useGridHeaderCellStyles = makeStyles({
     width: 'auto',
     borderTop: '1px solid #E0E0E0',
     fontSize: '14px',
-    borderRight: '1px solid #E0E0E0',
+    border: '1px solid #E0E0E0',
+    position: 'relative',
+    cursor: 'pointer',
   },
   subDataTypeIndicator: {
     marginLeft: '2px',
@@ -51,5 +53,10 @@ export const useGridHeaderCellStyles = makeStyles({
     fontWeight: 400,
     color: '#000000',
     marginBottom: '5px',
+  },
+  headerHighlitedIcon: {
+    position: 'absolute',
+    top: '10px',
+    left: '11px',
   },
 });

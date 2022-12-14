@@ -14,6 +14,7 @@
  *  the License.
  */
 
+import { IArtifact } from 'components/WidgetSVG/types';
 export interface IResponseData {
   count: number;
   message: string;
@@ -40,11 +41,6 @@ export interface ISampleSpec {
   connectionName: string;
   path: string;
   relatedPlugins: IPlugin;
-}
-interface IArtifact {
-  name: string;
-  version: string;
-  scope: string;
 }
 
 export interface IPlugin {
@@ -77,4 +73,13 @@ export interface IMassagedObject {
   percentageSymbol: string;
   subText: string;
   workspaceId: string;
+}
+
+export interface IOngoingExplorationCard {
+  connectionName: string;
+  count: number;
+  dataQuality: string;
+  recipeSteps: number;
+  workspaceId: string;
+  workspaceName: string;
 }

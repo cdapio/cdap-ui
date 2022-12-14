@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { ImportDatasetIcon } from '../../WrangleCard/iconStore/ImportDatasetIcon';
+import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
 
 export const mockOldData = [
   {
@@ -29,7 +29,7 @@ export const mockOldData = [
 export const expectedResult = [
   [
     {
-      icon: ImportDatasetIcon,
+      icon: importDatasetIcon,
       label: 'postgres1',
       type: 'iconWithText',
     },
