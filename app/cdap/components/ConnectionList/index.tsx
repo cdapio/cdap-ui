@@ -183,12 +183,12 @@ export default function() {
       (eachConnectorType: ITabData) => eachConnectorType.count > 0
     );
 
-    setLoading(false);
     setTabsData((prev: IFilteredData[]) => {
       const tempData = [...prev];
       tempData[0].data = firstLevelData;
       return tempData;
     });
+    setLoading(false);
   };
 
   const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {

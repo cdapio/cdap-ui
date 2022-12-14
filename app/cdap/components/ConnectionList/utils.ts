@@ -50,6 +50,7 @@ export const getDataForTabsHelper = (
   tempData[index + 1][`showTabs`] = true;
   tempData[index + 1][`selectedTab`] = null;
   tempData[index + 1][`toggleSearch`] = false;
+  tempData[index][`toggleSearch`] = false;
   return tempData.slice(0, index + 2);
 };
 
