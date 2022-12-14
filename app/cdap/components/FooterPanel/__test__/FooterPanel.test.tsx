@@ -45,7 +45,7 @@ describe('Test Footer Panel Component', () => {
     // Label inside OutlinedLabelElement to be 42
     expect(outlinedLabelElement).toHaveTextContent('42');
 
-    const simpleLabelElement = screen.getAllByTestId(/footerpanel-simple-label/i);
+    const simpleLabelElement = screen.getAllByTestId(/footerpanel-simple-message/i);
 
     // Check if the row count and column count is same as provided props 66 and 6
     expect(simpleLabelElement[0]).toHaveTextContent(`${T.translate(`${PREFIX}.message`, 66)}`);
