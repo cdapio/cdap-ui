@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { diffString, diff } from 'json-diff';
+import { diff } from 'json-diff';
 import T from 'i18n-react';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import styled from 'styled-components';
@@ -82,6 +82,10 @@ const JsonDiff = ({
     const selectedConfigArray = JSON.stringify(selectedConfig, null, 2).split('\n');
     const latestConfigArray = JSON.stringify(latestConfig, null, 2).split('\n');
     const result = diff(selectedConfigArray, latestConfigArray);
+    if (!result) {
+      // two json are the same
+      return <h3 style={{ textAlign: 'center' }}>{T.translate(`${PREFIX}.noDiffText`)}</h3>;
+    }
     const coloredSelectedConfig = [];
     const coloredLatestConfig = [];
     const selectedConfigLineNums = [];
@@ -109,6 +113,7 @@ const JsonDiff = ({
         continue;
       }
       if (array[0] === '-') {
+        // right should append empty line
         coloredSelectedConfig.push(styleSpanStringRed(selectedConfigArray[selectedConfigIdx]));
         coloredLatestConfig.push(<EmptyLineSpan> </EmptyLineSpan>);
         selectedConfigLineNums.push(styleSpanNormal(selectedConfigIdx));
@@ -119,7 +124,7 @@ const JsonDiff = ({
     return (
       <>
         <div>
-          <b>Older Version: </b>
+          <b>{T.translate(`${PREFIX}.older`)}</b>
           <pre>
             <div style={{ float: 'left', width: 'auto' }}>
               {selectedConfigLineNums.map((x) => x)}
@@ -128,7 +133,7 @@ const JsonDiff = ({
           </pre>
         </div>
         <div>
-          <b>Latest Version: </b>
+          <b>{T.translate(`${PREFIX}.latest`)}</b>
           <pre>
             <div style={{ float: 'left', width: 'auto' }}>{latestConfigLineNums.map((x) => x)}</div>
             <div style={{ width: 'auto' }}>{coloredLatestConfig.map((x) => x)}</div>
