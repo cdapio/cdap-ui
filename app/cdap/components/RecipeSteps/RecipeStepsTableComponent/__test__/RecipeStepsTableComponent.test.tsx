@@ -53,3 +53,4 @@ describe('It should test the Recipe Component', () => {
     expect(recipeStepsSpan).toContainHTML('a-column');
   });
 });
+

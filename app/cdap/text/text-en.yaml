@@ -2803,7 +2803,6 @@ features:
       triggerNameExists: "Trigger Name already exists"
       triggerNameRequired: "Trigger Name is required"
       triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
-      emptyCompositeTriggerError: "Please select upstream pipelines for this trigger"
       selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
       triggerAndType: "Wait for all events (AND)"
       triggerOrType: "Trigger on any selected event (OR)"
@@ -3437,11 +3436,6 @@ features:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
-    GridPage:
-      directivePanel:
-        moreInfoOnDirective: More info about this directive
-        usage: Usage
-        inputDirective: Input a directive
     Snackbar:
       labels:
         datasetSuccess: Dataset loaded successfully 
@@ -3466,16 +3460,61 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
-        wranglerHome: Home
+        loadToGrid: Wrangle
+        wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
-        wranglerHome: home
+        wrangleHome: home
+      ariaLabels:
+        breadcrumb: breadcrumb
     common:
       and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    GridPage:
+      directivePanel:
+        moreInfoOnDirective: More info about this directive
+        usage: Usage
+        inputDirective: Input a directive
+      menuItems:
+        divider: divider
+        heading: heading
+      gridHeader:
+        ariaLabels:
+          functionsName: Functions Name Switch
+      toolbarIcons:
+        labels:
+          all: all
+          columnIcon: Column
+          fragmentIcon: Fragment
+          gridIcon: Grid
+          invalidIcon: Invalid
+          mathIcon: Math
+          nullIcon: 'Null'
+          moreHorizIcon: Other
+          redoIcon: Redo
+          securityIcon: Security
+          structureIcon: Structure
+          toggleDescription: Function names
+          undoIcon: Undo
+      transformations:
+        options:
+          labels:
+            datatype:
+              string: string
+              boolean: boolean
+              integer: integer
+              long: long
+              short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
+            menu:
+              changeDatatype: Change data type
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
@@ -3501,4 +3540,5 @@ features:
           title: Continue ongoing data explorations, pick up where you left off
     ImportData:
       referenceLabel: Import Data
+    
 ...

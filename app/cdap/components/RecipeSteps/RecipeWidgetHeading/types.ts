@@ -19,3 +19,4 @@ import React from 'react';
 export interface IDrawerWidgetHeadingProps {
   headingText: React.ReactNode;
 }
+

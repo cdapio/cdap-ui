@@ -37,3 +37,4 @@ describe('It should test DrawerWidgetHeading Component', () => {
     expect(headingLabelElement).toHaveTextContent('test-heading');
   });
 });
+
