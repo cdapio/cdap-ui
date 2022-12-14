@@ -175,37 +175,46 @@ export default function({
     (eachWorkspace) => eachWorkspace[6].count !== 0
   );
 
-  return (
-    <Box data-testid="ongoing-data-explore-parent">
-      {filteredData && Array.isArray(filteredData) && filteredData.length ? (
-        filteredData?.slice(0, cardCount && cardCount).map((eachExplorationCardData, cardIndex) => {
-          return (
-            <OngoingExplorationCardLink
-              to={{
-                pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${eachExplorationCardData[5].workspaceId}`}`,
-                state: {
-                  from: fromAddress,
-                  path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
-                },
-              }}
-              style={{ textDecoration: 'none' }}
-              data-testid={`wrangler-home-ongoing-data-exploration-card-${cardIndex}`}
-            >
-              <OngoingDataExplorationsCard
-                key={`ongoing-data-exploration-card-${cardIndex}`}
-                explorationCardDetails={eachExplorationCardData}
-                cardIndex={cardIndex}
-                fromAddress={fromAddress}
-              />
-            </OngoingExplorationCardLink>
-          );
-        })
-      ) : fromAddress === 'Workspaces' ? (
+  const getOngoingDataExplorationsCards = (filteredData: IExplorationCardDetails[][]) => {
+    const isFilteredDataPresent =
+      filteredData && Array.isArray(filteredData) && filteredData.length;
+    if (!isFilteredDataPresent && fromAddress === 'Workspaces') {
+      return (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.workspacesList.title')}
           subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.workspacesList.subtitle')}
         />
-      ) : null}
+      );
+    }
+    return filteredData
+      ?.slice(0, cardCount && cardCount)
+      .map((eachExplorationCardData, cardIndex) => {
+        return (
+          <OngoingExplorationCardLink
+            to={{
+              pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${eachExplorationCardData[5].workspaceId}`}`,
+              state: {
+                from: fromAddress,
+                path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
+              },
+            }}
+            style={{ textDecoration: 'none' }}
+            data-testid={`wrangler-home-ongoing-data-exploration-card-${cardIndex}`}
+          >
+            <OngoingDataExplorationsCard
+              key={`ongoing-data-exploration-card-${cardIndex}`}
+              explorationCardDetails={eachExplorationCardData}
+              cardIndex={cardIndex}
+              fromAddress={fromAddress}
+            />
+          </OngoingExplorationCardLink>
+        );
+      });
+  };
+
+  return (
+    <Box data-testid="ongoing-data-explore-parent">
+      {getOngoingDataExplorationsCards(filteredData)}
     </Box>
   );
 }
