@@ -20,8 +20,8 @@ import React from 'react';
 
 describe('Testing GridTextCell Component', () => {
   const cellValue = 'testing';
-  render(<GridTextCell cellValue={cellValue} />);
+  render(<GridTextCell cellValue={cellValue} dataTestId="test-id" />);
   it('Should display cellValue as expected', () => {
-    expect(screen.getByTestId('grid-text-cell-testing')).toHaveTextContent('testing');
+    expect(screen.getByTestId('grid-text-cell-container-testing')).toHaveTextContent('testing');
   });
 });

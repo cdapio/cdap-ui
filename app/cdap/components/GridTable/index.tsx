@@ -21,33 +21,37 @@ import Breadcrumb from 'components/Breadcrumb';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
+import DirectiveInput from 'components/DirectiveInput';
 import FooterPanel from 'components/FooterPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
+import { initialGridTableState, reducer } from 'components/GridTable/reducer';
+import { applyDirectives, getAPIRequestPayload } from 'components/GridTable/services';
 import { useStyles } from 'components/GridTable/styles';
 import {
+  IApiPayload,
   IExecuteAPIResponse,
+  IGridParams,
   IHeaderNamesList,
   IParams,
   IRecords,
+  IStatistics,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import Snackbar from 'components/Snackbar';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 import T from 'i18n-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-
 import styled from 'styled-components';
-
 import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
-import Snackbar from 'components/Snackbar';
-import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
+import useSnackbar from 'components/Snackbar/useSnackbar';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
@@ -59,15 +63,12 @@ const GridTableWrapper = styled(Box)`
   max-height: 76vh;
 `;
 
+
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
   const location = useLocation();
-  const [tableMetaInfo, setTableMetaInfo] = useState({
-    columnCount: 0,
-    rowCount: 0,
-  });
 
   const [workspaceName, setWorkspaceName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -83,10 +84,39 @@ export default function GridTable() {
       count: '0',
     },
   ]);
-  const [snackbarState, setSnackbar] = useSnackbar();
+
+  const { dataprep } = DataPrepStore.getState();
+  const [gridTableState, dispatch] = useReducer(reducer, initialGridTableState);
+  enum IGridTableActions {
+    IS_FIRST_WRANGLE,
+    CONNECTOR_TYPE,
+    IS_DIRECTIVE_PANEL_OPEN,
+    IS_SNACKBAR_OPEN,
+    SNACKBAR_DATA,
+    TABLE_META_INFO,
+  }
+  const {
+    isFirstWrangle,
+    connectorType,
+    directivePanelIsOpen,
+    snackbarIsOpen,
+    snackbarData,
+    tableMetaInfo,
+  } = gridTableState;
+
+  useEffect(() => {
+    dispatch({
+      type: IGridTableActions.IS_FIRST_WRANGLE,
+      payload: true,
+    });
+    dispatch({
+      type: IGridTableActions.CONNECTOR_TYPE,
+      payload: dataprep.connectorType,
+    });
+  }, []);
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
-
+  
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
 
@@ -145,12 +175,13 @@ export default function GridTable() {
         });
         setLoading(false);
         setGridData(response);
-        setSnackbar({
-          open: true,
-          isSuccess: true,
-          message: T.translate(
-            `features.WranglerNewUI.GridTable.snackbarLabels.datasetSuccess`
-          ).toString(),
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: 'Data loaded successfully',
+            isSuccess: true,
+            open: true
+          },
         });
       });
   };
@@ -223,7 +254,7 @@ export default function GridTable() {
   };
 
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
-  const createMissingData = (statistics: IRecords) => {
+  const createMissingData = (statistics: IStatistics) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -268,33 +299,103 @@ export default function GridTable() {
         const { body, ...rest } = eachRow;
         return rest;
       });
-
-    setTableMetaInfo({
-      columnCount: rawData.headers?.length,
-      rowCount: rawData.values?.length - 1,
+    dispatch({
+      type: IGridTableActions.TABLE_META_INFO,
+      payload: {
+        columnCount: rawData.headers?.length,
+        rowCount: rawData.values?.length - 1,
+      },
     });
     setRowsDataList(rowData);
   };
+
+  const isParsingPanel =
+    dataprep?.insights?.name &&
+    isFirstWrangle &&
+    connectorType === 'File' &&
+    Array.isArray(gridData?.headers) &&
+    gridData?.headers.length !== 0;
 
   useEffect(() => {
     getGridTableData();
     setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
+  const addDirectives = (directive: string) => {
+    setLoading(true);
+    if (directive) {
+      const apiPayload: IApiPayload = getAPIRequestPayload(params, directive, '');
+      addDirectiveAPICall(apiPayload);
+    }
+  };
+
+  useEffect(() => {
+    if (snackbarData.open) {
+      setTimeout(() => {
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            open: false,
+            isSuccess: false,
+            message: ''
+          },
+        });
+      }, 5000);
+    }
+  }, [snackbarData.open]);
+
+  const addDirectiveAPICall = (apiPayload: IApiPayload) => {
+    const gridParams: IGridParams = apiPayload.gridParams;
+    applyDirectives(wid, gridParams.directives).subscribe(
+      (response) => {
+        DataPrepStore.dispatch({
+          type: DataPrepActions.setWorkspace,
+          payload: {
+            data: response.values,
+            values: response.values,
+            headers: response.headers,
+            types: response.types,
+            ...gridParams,
+          },
+        });
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: 'Directive applied successfully',
+            isSuccess: true,
+            open: true
+          },
+        });
+        setLoading(false);
+        setGridData(response);
+        dispatch({
+          type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+          payload: false,
+        });
+      },
+      (err) => {
+        setLoading(false);
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: 'Directive not applied',
+            isSuccess: true,
+            open: true
+          },
+        });
+        dispatch({
+          type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+          payload: false,
+        });
+      }
+    );
+  };
+
   const handleColumnSelect = (columnName) => {
     setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
     setColumnType(gridData?.types[columnName]);
   };
 
-  useEffect(() => {
-    if (snackbarState.open) {
-      setTimeout(() => {
-        setSnackbar(() => ({
-          open: false,
-        }));
-      }, 5000);
-    }
-  }, [snackbarState.open]);
 
   return (
     <>
@@ -306,90 +407,129 @@ export default function GridTable() {
         showBreadCrumb={showBreadCrumb}
         columnType={columnType}
         submitMenuOption={(option, datatype) => {
-          setSnackbar(() => ({
-            open: true,
-            isSuccess: true,
-            message: 'Function Selected',
-          }));
+          dispatch({
+            type: IGridTableActions.SNACKBAR_DATA,
+            payload: {
+              message: 'Function selected',
+              isSuccess: true,
+              open: true
+            },
+          });
           return false;
           // TODO: will integrate with add transformation panel later
         }}
         disableToolbarIcon={gridData?.headers?.length > 0 ? false : true}
       />
       <GridTableWrapper data-testid="grid-table-container">
+        <TableWrapper>
         {!showGridTable && (
-          <NoRecordScreen
-            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-          />
-        )}
-        {showGridTable && (
+            <NoRecordScreen
+              title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+              subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+            />
+          )}
+          {showGridTable && (
           <TableWrapper>
-            <Table aria-label="simple table" className="test">
-              <TableHead>
-                <TableRow>
-                  {headersNamesList?.length &&
-                    headersNamesList.map((eachHeader) => (
-                      <GridHeaderCell
-                        label={eachHeader.label}
-                        types={eachHeader.type}
-                        key={eachHeader.name}
+              <Table aria-label="simple table" className="test">
+                <TableHead>
+                  <TableRow>
+                    {headersNamesList?.length &&
+                      headersNamesList.map((eachHeader, index) => (
+                        <GridHeaderCell
+                          label={eachHeader.label}
+                          types={eachHeader.type}
+                          key={eachHeader.name}
                         columnSelected={selectedColumn}
                         setColumnSelected={handleColumnSelect}
-                      />
-                    ))}
-                </TableRow>
-                <TableRow>
-                  {missingDataList?.length &&
-                    headersNamesList.length &&
-                    headersNamesList.map((each, index) => {
-                      return missingDataList.map((item, itemIndex) => {
-                        if (item.name === each.name) {
-                          return <GridKPICell metricData={item} key={item.name} />;
-                        }
-                      });
+                          index={index}
+                    />
+                      ))}
+                  </TableRow>
+                  <TableRow>
+                    {missingDataList?.length &&
+                      headersNamesList.length &&
+                      headersNamesList.map((each, index) => {
+                        return missingDataList.map((item, itemIndex) => {
+                          if (item.name === each.name) {
+                            return <GridKPICell metricData={item} key={item.name} />;
+                          }
+                        });
+                      })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rowsDataList?.length &&
+                    rowsDataList.map((eachRow, rowIndex) => {
+                      return (
+                        <TableRow key={`row-${rowIndex}`}>
+                          {headersNamesList.map((eachKey, eachIndex) => {
+                            return (
+                              <GridTextCell
+                                cellValue={eachRow[eachKey.name] || '--'}
+                                key={`${eachKey.name}-${eachIndex}`}
+                                dataTestId={`table-cell-${rowIndex}${eachIndex}`}
+                          />
+                            );
+                          })}
+                        </TableRow>
+                      );
                     })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rowsDataList?.length &&
-                  rowsDataList.map((eachRow, rowIndex) => {
-                    return (
-                      <TableRow key={`row-${rowIndex}`}>
-                        {headersNamesList.map((eachKey, eachIndex) => {
-                          return (
-                            <GridTextCell
-                              cellValue={eachRow[eachKey.name] || '--'}
-                              key={`${eachKey.name}-${eachIndex}`}
-                            />
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
+                </TableBody>
+              </Table>
           </TableWrapper>
-        )}
-        <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
-        {loading && (
+          )}
+      </TableWrapper>
+
+      {directivePanelIsOpen && (
+        <DirectiveInput
+          columnNamesList={headersNamesList}
+          onDirectiveInputHandler={(directive) => {
+            addDirectives(directive);
+            dispatch({
+              type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+              payload: false,
+            });
+          }}
+          onClose={() =>
+            dispatch({
+              type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+              payload: false,
+            })
+          }
+          openDirectivePanel={directivePanelIsOpen}
+        />
+      )}
+      <FooterPanel
+        recipeStepsCount={0}
+        gridMetaInfo={tableMetaInfo}
+        setDirectivePanelIsOpen={(boolean_value) =>
+          dispatch({
+            type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+            payload: boolean_value,
+          })
+        }
+      />
+          {loading && (
           <div className={classes.loadingContainer}>
             <LoadingSVG />
           </div>
         )}
       </GridTableWrapper>
-      {
         <Snackbar
           handleClose={() =>
-            setSnackbar(() => ({
+            dispatch({
+            type: IGridTableActions.SNACKBAR_DATA,
+            payload: {
               open: false,
-            }))
+              isSuccess: false,
+              message: ''
+            },
+            })
           }
-          open={snackbarState.open}
-          message={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
+          open={snackbarData.open}
+          message={snackbarData.message}
+          isSuccess={snackbarData.isSuccess}
         />
-      }
     </>
   );
 }

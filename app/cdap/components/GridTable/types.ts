@@ -48,3 +48,23 @@ export interface IHeaderNamesList {
 export interface IType {
   [key: string]: string | number;
 }
+
+export interface IRequestBody {
+  directives: string[];
+  insights?: IRecords;
+  limit: number;
+}
+
+export interface IGridParams {
+  directives: string[];
+  insights: IRecords;
+  workspaceId: string;
+  workspaceInfo: IRecords;
+  workspaceUri: string;
+}
+
+export interface IApiPayload {
+  payload: IRecords;
+  requestBody: IRequestBody;
+  gridParams: IGridParams;
+}

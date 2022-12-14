@@ -3451,6 +3451,16 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     GridPage:
       menuItems:
         divider: divider
@@ -3488,19 +3498,13 @@ features:
               bytes: bytes
             menu:
               changeDatatype: Change data type
+      directivePanel:
+        moreInfoOnDirective: More info about this directive
+        usage: Usage
+        inputDirective: Input a directive
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
-    FooterPanel:
-      labels:
-        columns: columns
-        message: Current data - {rowCount} rows and {columnCount} columns
-        columnViewPanel: Column View Panel
-        currentData: Current data
-        directives: Directives
-        recipeSteps: Recipe Steps
-        rows: rows
-        zoomPercent100: 100%
     HomePage:
       labels:
         common:
@@ -3515,13 +3519,14 @@ features:
       referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
-        subtitle: Remove some recipe steps to view some data
         title: No rows left in this sample
+        subtitle: Remove some recipe steps to view some data
     Snackbar:
       labels:
         failure: Failure
         success: Success
         undo: Undo
 
+    
     
 ...

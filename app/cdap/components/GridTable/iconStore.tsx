@@ -22,6 +22,7 @@ export const NoDataSVG = (
     viewBox="0 0 161 132"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    data-testid="no-data-svg"
   >
     <path
       d="M0.989014 10.4531C0.989014 4.93028 5.46617 0.453125 10.989 0.453125H134.125C139.647 0.453125 144.125 4.93028 144.125 10.4531V33.7068H0.989014V10.4531Z"
