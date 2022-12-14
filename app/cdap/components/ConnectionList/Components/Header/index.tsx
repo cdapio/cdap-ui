@@ -30,7 +30,6 @@ const ConnectionListHeaderWrapper = styled(Box)`
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  padding-right: 18px;
   padding-left: 30px;
 `;
 
@@ -46,7 +45,6 @@ const ConnectionListSearchWrapper = styled(Box)`
   background-color: #fff;
   align-items: center;
   height: 50px;
-  padding-right: 20px;
   padding-left: 18px;
   text-decoration: none;
 `;
