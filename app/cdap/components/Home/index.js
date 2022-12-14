@@ -152,7 +152,7 @@ export default class Home extends Component {
       <div>
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
-          <Route exact path="/ns/:namespace/home" component={WrangleHome} />
+          <Route exact path="/ns/:namespace/wrangle" component={WrangleHome} />
           <Route
             exact
             path="/ns/:namespace/datasources/:connectorType"

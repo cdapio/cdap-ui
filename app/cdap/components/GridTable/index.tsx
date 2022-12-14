@@ -17,6 +17,7 @@
 import { Button, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MyDataPrepApi from 'api/dataprep';
+import Breadcrumb from 'components/Breadcrumb';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
@@ -51,17 +52,27 @@ import {
 } from 'components/GridTable/types';
 import styled from 'styled-components';
 import { reducer, initialGridTableState } from 'components/GridTable/reducer';
+import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
+import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import useSnackbar from 'components/Snackbar/useSnackbar';
+import { useLocation } from 'react-router';
 import GridTableContainer from './components/GridTableContainer';
 
-const TableWrapper = styled(Box)`
+export const TableWrapper = styled(Box)`
   height: calc(100vh - 193px);
   overflow-y: auto;
+  width: 100%;
 `;
 
 const TablePanelContainer = styled(Box)`
   display: flex;
   font-family: Roboto;
+`;
+
+const GridTableWrapper = styled(Box)`
+  max-width: 100%;
+  overflow-x: auto;
+  max-height: 76vh;
 `;
 
 const RecipeStepPanel = styled(Box)`
@@ -73,6 +84,8 @@ export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
   const classes = useStyles();
+  const location = useLocation();
+
   const { dataprep } = DataPrepStore.getState();
   enum IGridTableActions {
     IS_DIRECTIVE_PANEL_OPEN,
@@ -102,6 +115,9 @@ export default function GridTable() {
     missingDataList,
   } = gridTableState;
 
+  const [workspaceName, setWorkspaceName] = useState('');
+  const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
+  const [showGridTable, setShowGridTable] = useState(false);
   const [showRecipePanel, setShowRecipePanel] = useState<boolean>(false);
   const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
     {
@@ -110,6 +126,8 @@ export default function GridTable() {
     },
   ]);
   const [snackbarState, setSnackbar] = useSnackbar();
+  const [columnType, setColumnType] = useState('');
+  const [selectedColumn, setSelectedColumn] = useState('');
 
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
@@ -188,6 +206,7 @@ export default function GridTable() {
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
+          setWorkspaceName(res?.workspaceName);
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -257,7 +276,7 @@ export default function GridTable() {
       context: params.namespace,
       workspaceId: params.wid,
     };
-    getWorkSpaceData(payload, wid);
+    getWorkSpaceData(payload as IParams, wid as string);
   }, [wid]);
 
   // ------------@createHeadersData Function is used for creating data of Table Header
@@ -267,7 +286,7 @@ export default function GridTable() {
         return {
           name: eachColumnName,
           label: eachColumnName,
-          type: [columnTypesList[eachColumnName]],
+          type: [columnTypesList[eachColumnName]] as string[],
         };
       });
     }
@@ -305,11 +324,12 @@ export default function GridTable() {
           }
           if (mostFrequentItem < mostFrequentItemCount) {
             mostFrequentItem = mostFrequentItemCount;
-            mostFrequentItemValue = item;
+            mostFrequentItemValue = item as string;
           }
         });
         mostFrequentItemCount = 0;
-        mostFrequentItemValue = mostFrequentItemValue === '' ? item : mostFrequentItemValue;
+        mostFrequentItemValue =
+          mostFrequentItemValue === '' ? (item as string) : mostFrequentItemValue;
       });
     }
     mostFrequentDataItem.name = mostFrequentItemValue;
@@ -481,7 +501,13 @@ export default function GridTable() {
 
   useEffect(() => {
     getGridTableData();
+    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
+
+  const handleColumnSelect = (columnName) => {
+    setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
+    setColumnType(gridData?.types[columnName]);
+  };
 
   const handleCloseSnackbar = () => {
     setSnackbar(() => ({
@@ -489,50 +515,96 @@ export default function GridTable() {
     }));
   };
 
+  useEffect(() => {
+    if (snackbarState.open) {
+      setTimeout(() => {
+        setSnackbar(() => ({
+          open: false,
+        }));
+      }, 5000);
+    }
+  }, [snackbarState.open]);
+
   return (
-    <Box data-testid="grid-table-container">
-      <BreadCrumb datasetName={wid} />
-      <TablePanelContainer>
-        {Array.isArray(gridData?.headers) && gridData?.headers.length > 0 ? (
-          <GridTableContainer
-            headersNamesList={headersNamesList}
-            missingDataList={missingDataList}
-            rowsDataList={rowsDataList}
-          />
-        ) : (
-          <NoRecordScreen
-            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-          />
-        )}
-        {showRecipePanel && (
-          <RecipeStepPanel>
-            <RecipeSteps
-              setShowRecipePanel={setShowRecipePanel}
-              onDeleteRecipeSteps={onDeleteRecipeSteps}
+    <>
+      {showBreadCrumb && (
+        <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
+      )}
+      <ToolBarList
+        setShowBreadCrumb={setShowBreadCrumb}
+        showBreadCrumb={showBreadCrumb}
+        columnType={columnType}
+        submitMenuOption={(option, datatype) => {
+          setSnackbar(() => ({
+            open: true,
+            isSuccess: true,
+            message: 'Function Selected',
+          }));
+          return false;
+          // TODO: will integrate with add transformation panel later
+        }}
+        disableToolbarIcon={gridData?.headers?.length > 0 ? false : true}
+      />
+      <GridTableWrapper data-testid="grid-table-container">
+        <TablePanelContainer>
+          {!showGridTable && (
+            <NoRecordScreen
+              title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+              subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
             />
-          </RecipeStepPanel>
+          )}
+          {showGridTable && (
+            <GridTableContainer
+              headersNamesList={headersNamesList}
+              missingDataList={missingDataList}
+              rowsDataList={rowsDataList}
+            />
+          )}
+          {showRecipePanel && (
+            <RecipeStepPanel>
+              <RecipeSteps
+                setShowRecipePanel={setShowRecipePanel}
+                onDeleteRecipeSteps={onDeleteRecipeSteps}
+              />
+            </RecipeStepPanel>
+          )}
+        </TablePanelContainer>
+        {directivePanelIsOpen && (
+          <DirectiveInput
+            columnNamesList={headersNamesList}
+            onDirectiveInputHandler={(directive) => {
+              addDirectives(directive);
+              dispatch({
+                type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+                payload: false,
+              });
+            }}
+            onClose={() =>
+              dispatch({
+                type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+                payload: false,
+              })
+            }
+            openDirectivePanel={directivePanelIsOpen}
+          />
         )}
-      </TablePanelContainer>
-      {directivePanelIsOpen && (
-        <DirectiveInput
-          columnNamesList={headersNamesList}
-          onDirectiveInputHandler={(directive) => {
-            addDirectives(directive);
+        <FooterPanel
+          recipeStepsCount={directives?.length}
+          gridMetaInfo={tableMetaInfo}
+          handleShowRecipePanelHandler={showRecipePanelHandler}
+          setDirectivePanelIsOpen={(boolean_value) => {
             dispatch({
               type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-              payload: false,
+              payload: boolean_value,
             });
           }}
-          onClose={() =>
-            dispatch({
-              type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-              payload: false,
-            })
-          }
-          openDirectivePanel={directivePanelIsOpen}
         />
-      )}
+        {loading && (
+          <div className={classes.loadingContainer}>
+            <LoadingSVG />
+          </div>
+        )}
+      </GridTableWrapper>
       {snackbarState.open && (
         <Snackbar
           handleClose={handleCloseSnackbar}
@@ -541,64 +613,6 @@ export default function GridTable() {
           open={snackbarState.open}
         />
       )}
-      <Table aria-label="simple table" className="test">
-        <TableHead>
-          <TableRow>
-            {headersNamesList?.length &&
-              headersNamesList.map((eachHeader) => (
-                <GridHeaderCell
-                  label={eachHeader.label}
-                  types={eachHeader.type}
-                  key={eachHeader.name}
-                />
-              ))}
-          </TableRow>
-          <TableRow>
-            {missingDataList?.length &&
-              headersNamesList.length &&
-              headersNamesList.map((each, index) => {
-                return missingDataList.map((item, itemIndex) => {
-                  if (item.name === each.name) {
-                    return <GridKPICell metricData={item} key={item.name} />;
-                  }
-                });
-              })}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rowsDataList?.length &&
-            rowsDataList.map((eachRow, rowIndex) => {
-              return (
-                <TableRow key={`row-${rowIndex}`}>
-                  {headersNamesList.map((eachKey, eachIndex) => {
-                    return (
-                      <GridTextCell
-                        cellValue={eachRow[eachKey.name] || '--'}
-                        key={`${eachKey.name}-${eachIndex}`}
-                      />
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-        </TableBody>
-      </Table>
-      {loading && (
-        <div className={classes.loadingContainer}>
-          <LoadingSVG />
-        </div>
-      )}
-      <FooterPanel
-        recipeStepsCount={directives?.length}
-        gridMetaInfo={tableMetaInfo}
-        handleShowRecipePanelHandler={showRecipePanelHandler}
-        setDirectivePanelIsOpen={(boolean_value) => {
-          dispatch({
-            type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-            payload: boolean_value,
-          });
-        }}
-      />
-    </Box>
+    </>
   );
 }
