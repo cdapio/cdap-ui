@@ -46,3 +46,4 @@ describe('It should test the RecipeHeaderActionTemplate Component', () => {
     expect(downloadComponent).toBeInTheDocument();
   });
 });
+
