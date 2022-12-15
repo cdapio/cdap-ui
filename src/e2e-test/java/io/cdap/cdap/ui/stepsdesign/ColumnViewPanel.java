@@ -27,93 +27,96 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class ColumnViewPanel {
-    @Then("Verify if the column view button is displayed on the Grid Page")
-    public void verifyColumnViewButtonDisplayed() {
-        try {
-            WaitHelper.waitForPageToLoad();
-            boolean flag = true;
-            while (flag == true) {
-                if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
-                    flag = true;
-                } else {
-                    flag = false;
-                }
-            }
-            Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId
-                    ("footer-panel-column-view-panel-tab")));
-        } catch (Exception e) {
-            System.err.println("error:" + e);
+  @Then("Verify if the column view button is displayed on the Grid Page")
+  public void verifyColumnViewButtonDisplayed() {
+    try {
+      WaitHelper.waitForPageToLoad();
+      boolean flag = true;
+      while (flag == true) {
+        if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+          flag = true;
+        } else {
+          flag = false;
         }
-    }
-
-    @Then("Click on columnView button")
-    public void clickColumnButton() {
-        try {
-            WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
-            Assert.assertTrue(ElementHelper.isElementDisplayed
-                    (Helper.locateElementByTestId("column-view-panel-parent")));
-        } catch (Exception e) {
-            System.err.println("error:" + e);
-        }
-
-    }
-    @Then("Verify column names of that file displayed in panel")
-    public void verifyColumnsName() {
-        try {
-            WaitHelper.waitForPageToLoad();
-            String text = Helper.locateElementByTestId("grid-header-cell-body_0").getText();
-            String paneltext = Helper.locateElementByTestId("each-column-label-type-0").getText();
-            if (text.contains(paneltext)) {
-                System.out.println("The column name is present in the panel");
-            }
-        } catch (Exception e) {
-            System.err.println("error:" + e);
-        }
-    }
-    @Then("Enter any existing name of the columns in the search field {string}")
-    public void verifySearchField(String columnName) {
-        try {
-            WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("search-icon"));
-            WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 10);
-            ele.until(ExpectedConditions.elementToBeClickable(Helper.locateElementByTestId
-                    ("search-term-input"))).click();
-            Helper.locateElementByTestId("search-term-input").sendKeys(columnName);
-            Assert.assertTrue(ElementHelper.isElementDisplayed
-                    (Helper.locateElementByTestId("each-column-label-type-0")));
-        } catch (Exception e) {
-            System.err.println("error:" + e);
-        }
-    }
-    @Then("Verify if the search result is displayed as {string}")
-    public void verifySearchResult(String columnName) {
-      try {
-       String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
-          if (columnName.equals(text))
-          {
-              System.out.println("The column name is displayed as per search");
-          }
-      } catch (Exception e) {
-          System.err.println("error:" + e);
       }
+      Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId
+              ("footer-panel-column-view-panel-tab")));
+    } catch (Exception e) {
+      System.err.println("error:" + e);
     }
-    @Then("Click on cross icon")
-    public void clickOnCrossIcon() {
-        try {
-            WaitHelper.waitForPageToLoad();
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("column-view-panel-close"));
-        } catch (Exception e) {
-            System.err.println("error:" + e);
-        }
+  }
+
+  @Then("Click on columnView button")
+  public void clickColumnButton() {
+    try {
+      WaitHelper.waitForPageToLoad();
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
+      Assert.assertTrue(ElementHelper.isElementDisplayed
+              (Helper.locateElementByTestId("column-view-panel-parent")));
+    } catch (Exception e) {
+      System.err.println("error:" + e);
     }
-    @Then("Again click on columnView button and verify if the panel is closed")
-    public void verifyPanelClosed() {
-        try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
-            Assert.assertFalse((Helper.isElementExists("column-view-panel-parent")));
-        } catch (Exception e) {
-            System.err.println("error:" + e);
-        }
+  }
+
+  @Then("Verify column names of that file displayed in panel")
+  public void verifyColumnsName() {
+    try {
+      WaitHelper.waitForPageToLoad();
+      String text = Helper.locateElementByTestId("grid-header-cell-body_0").getText();
+      String paneltext = Helper.locateElementByTestId("each-column-label-type-0").getText();
+      if (text.contains(paneltext)) {
+        System.out.println("The column name is present in the panel");
+      }
+    } catch (Exception e) {
+      System.err.println("error:" + e);
     }
+  }
+
+  @Then("Enter any existing name of the columns in the search field {string}")
+  public void verifySearchField(String columnName) {
+    try {
+      WaitHelper.waitForPageToLoad();
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("search-icon"));
+      WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 10);
+      ele.until(ExpectedConditions.elementToBeClickable(Helper.locateElementByTestId
+              ("search-term-input"))).click();
+      Helper.locateElementByTestId("search-term-input").sendKeys(columnName);
+      Assert.assertTrue(ElementHelper.isElementDisplayed
+              (Helper.locateElementByTestId("each-column-label-type-0")));
+    } catch (Exception e) {
+      System.err.println("error:" + e);
+    }
+  }
+
+  @Then("Verify if the search result is displayed as {string}")
+  public void verifySearchResult(String columnName) {
+    try {
+      String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
+      if (columnName.equals(text)) {
+          System.out.println("The column name is displayed as per search");
+      }
+    } catch (Exception e) {
+      System.err.println("error:" + e);
+    }
+  }
+
+  @Then("Click on cross icon")
+  public void clickOnCrossIcon() {
+    try {
+      WaitHelper.waitForPageToLoad();
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("column-view-panel-close"));
+    } catch (Exception e) {
+      System.err.println("error:" + e);
+    }
+  }
+
+  @Then("Again click on columnView button and verify if the panel is closed")
+  public void verifyPanelClosed() {
+    try {
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-column-view-panel-tab"));
+      Assert.assertFalse((Helper.isElementExists("column-view-panel-parent")));
+    } catch (Exception e) {
+      System.err.println("error:" + e);
+    }
+  }
 }
