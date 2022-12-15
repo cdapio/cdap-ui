@@ -16,14 +16,15 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
+import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.cdap.ui.utils.Helper;
 import org.junit.Assert;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 public class ColumnViewPanel {
     @Then("Verify if the column view button is displayed on the Grid Page")
@@ -76,7 +77,8 @@ public class ColumnViewPanel {
             WaitHelper.waitForPageToLoad();
             ElementHelper.clickOnElement(Helper.locateElementByTestId("search-icon"));
             WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 10);
-                    ele.until(ExpectedConditions.elementToBeClickable(Helper.locateElementByTestId("search-term-input"))).click();
+            ele.until(ExpectedConditions.elementToBeClickable(Helper.locateElementByTestId
+                    ("search-term-input"))).click();
             Helper.locateElementByTestId("search-term-input").sendKeys(columnName);
             Assert.assertTrue(ElementHelper.isElementDisplayed
                     (Helper.locateElementByTestId("each-column-label-type-0")));
@@ -87,7 +89,7 @@ public class ColumnViewPanel {
     @Then("Verify if the search result is displayed as {string}")
     public void verifySearchResult(String columnName) {
       try {
-          String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
+       String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
           if (columnName.equals(text))
           {
               System.out.println("The column name is displayed as per search");
