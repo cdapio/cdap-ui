@@ -26,12 +26,6 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
 public class WorkspaceList {
-  @Given("Navigate to the Wrangle Home Page")
-  public void navigateToTheWrangleHomePage() {
-    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-    WaitHelper.waitForPageToLoad();
-  }
-
   @Then("Click on the View all option")
   public void clickOnTheViewAllOption() {
     try {
@@ -64,7 +58,7 @@ public class WorkspaceList {
           flag = false;
         }
       }
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-data-sources-text"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-workspaces"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
