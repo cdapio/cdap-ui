@@ -16,9 +16,7 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.e2e.utils.SeleniumDriver;
-import io.cucumber.java.en.Given;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import io.cdap.e2e.utils.ElementHelper;
@@ -28,23 +26,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ColumnViewPanel {
-//    @Given("Navigate to Home Page")
-//    public void navigateToHomePage() {
-//        SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-//        WaitHelper.waitForPageToLoad();
-//
-//    }
-//    @Then("Click on the Data Explorations card")
-//    public void dataExplorationsCard() {
-//        try {
-//            WaitHelper.waitForPageToLoad();
-//            ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration0"));
-//            String url=SeleniumDriver.getDriver().getCurrentUrl();
-//            Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
-//        } catch (Exception e) {
-//            System.err.println("error:" + e);
-//        }
-//    }
     @Then("Verify if the column view button is displayed on the Grid Page")
     public void verifyColumnViewButtonDisplayed() {
         try {
@@ -85,8 +66,6 @@ public class ColumnViewPanel {
             if (text.contains(paneltext)) {
                 System.out.println("The column name is present in the panel");
             }
-//            Assert.assertTrue(ElementHelper.isElementDisplayed
-//                    (Helper.locateElementByTestId("each-column-label-type-0")));
         } catch (Exception e) {
             System.err.println("error:" + e);
         }
