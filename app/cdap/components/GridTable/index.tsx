@@ -144,8 +144,6 @@ export default function GridTable() {
     const gridParams: IGridParams = apiPayload.gridParams;
     applyDirectives(wid, gridParams.directives).subscribe(
       (response) => {
-        console.log(response, 'response');
-
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {
