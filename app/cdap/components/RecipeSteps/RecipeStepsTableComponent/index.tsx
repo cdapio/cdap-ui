@@ -39,7 +39,9 @@ const headerData = [
   },
   {
     textId: 'recipe-steps',
-    text: T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'),
+    text: T.translate(
+      'features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'
+    ).toString(),
   },
   {
     textId: '',
@@ -170,4 +172,3 @@ export default function({ recipeSteps, onDeleteRecipeSteps }: IRecipeStepTablePr
     </TableContainer>
   );
 }
-

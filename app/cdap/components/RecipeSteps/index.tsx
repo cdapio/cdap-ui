@@ -16,16 +16,14 @@
 
 import { Container } from '@material-ui/core';
 import DataPrepStore from 'components/DataPrep/store';
-import React, { useEffect, useState } from 'react';
 import RecipeHeaderActionTemplate from 'components/RecipeSteps/RecipeHeaderActionTemplate';
 import RecipeStepsEmptyScreen from 'components/RecipeSteps/RecipeStepsEmptyScreen';
 import RecipeStepsTableComponent from 'components/RecipeSteps/RecipeStepsTableComponent';
-import T from 'i18n-react';
-import { IRecipeStepsProps } from 'components/RecipeSteps/types';
 import RecipeStepWidget from 'components/RecipeSteps/RecipeStepWidget';
+import { IRecipeStepsProps } from 'components/RecipeSteps/types';
+import T from 'i18n-react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { getTableDisplayName } from 'components/Replicator/utilities';
-import { getTransformedTableData } from 'components/Administration/TetheringTabContent/TetheringTable/utils';
 
 const RecipeStepsBody = styled(Container)`
   height: calc(100% - 100px);
@@ -61,7 +59,9 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
   return (
     <>
       <RecipeStepWidget
-        headingText={T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipe')}
+        headingText={T.translate(
+          'features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipe'
+        ).toString()}
         onClose={onCloseClick}
         showDivider={true}
         headerActionTemplate={<RecipeHeaderActionTemplate />}
@@ -75,4 +75,3 @@ export default function({ setShowRecipePanel, onDeleteRecipeSteps }: IRecipeStep
     </>
   );
 }
-
