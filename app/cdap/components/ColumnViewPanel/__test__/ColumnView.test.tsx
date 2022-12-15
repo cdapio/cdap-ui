@@ -93,20 +93,4 @@ describe('It Should test Column View Component', () => {
     const columnViewParent = screen.getByTestId('column-view-panel-parent');
     expect(columnViewParent).toBeInTheDocument();
   });
-
-  it('It Should trigger searchTermHandler Function', () => {
-    render(
-      <ColumnView
-        columnData={mockColumnData}
-        dataQuality={mockDataQuality}
-        onClose={() => jest.fn()}
-      />
-    );
-    const searchIcon = screen.getByTestId('search-icon');
-    fireEvent.click(searchIcon);
-
-    const searchInput = screen.getByTestId('search-term-input');
-    fireEvent.change(searchInput);
-    expect(searchInput).toBeInTheDocument();
-  });
 });

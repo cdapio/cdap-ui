@@ -55,7 +55,6 @@ export default function({
         >
           <Box>
             {eachFilteredColumn?.label}
-
             <br />
             {eachFilteredColumn?.type}
           </Box>

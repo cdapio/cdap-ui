@@ -23,7 +23,7 @@ import styled from 'styled-components';
 import { ReactNode } from 'react';
 
 export interface IColumnViewWidget {
-  headingText: ReactNode;
+  headingText: string;
   onClose: () => void;
   onSearchTermChange: (searchedTerm: string) => void;
   children: JSX.Element;
