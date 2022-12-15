@@ -50,7 +50,7 @@ public class OngoingDataExplorations {
     public void clickOnTheHomeLink() {
         WaitHelper.waitForPageToLoad();
         try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-text"));
+            ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-home"));
             System.out.println("the home link is clicked");
         } catch (Exception e) {
             System.err.println("ERROR: " + e);
@@ -60,7 +60,7 @@ public class OngoingDataExplorations {
     public void checkIfTheUserIsOnTheHomePage() {
         try {
             String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-            Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
+            Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/wrangle");
             System.out.println("The assertion for home url is passed");
         } catch (Exception e) {
         System.err.println("ERROR: " + e);
