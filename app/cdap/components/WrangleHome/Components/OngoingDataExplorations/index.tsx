@@ -34,9 +34,8 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
 import { defaultIfEmpty, switchMap } from 'rxjs/operators';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { IExplorationCardDetails } from '../OngoingDataExplorationsCard/types';
+import { IExplorationCardDetails } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
 import styled from 'styled-components';
-import { WORKSPACES } from 'components/WrangleHome/Components/OngoingDataExplorations/constants';
 
 const OngoingExplorationCardLink = styled(Link)`
   text-decoration: none !important;
@@ -48,9 +47,9 @@ export default function({
   setLoading,
   setShowExplorations,
 }: IOngoingDataExplorationsProps) {
-  const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<IExplorationCardDetails[]>(
-    []
-  );
+  const [onGoingExplorationsData, setOnGoingExplorationsData] = useState<
+    IExplorationCardDetails[][]
+  >([]);
 
   const getOngoingData = useCallback(async () => {
     const connectionsWithConnectorTypes: Map<
@@ -85,7 +84,7 @@ export default function({
     //  using these in params and requestBody to get Data quality from MyDataPrepApi.execute API
 
     MyDataPrepApi.getWorkspaceList({
-      context: 'default',
+      context: getCurrentNamespace(),
     })
       .pipe(
         switchMap((response: Record<string, unknown[]>) => {
@@ -97,7 +96,7 @@ export default function({
 
           const workspaces = values.map((eachValue) => {
             const params = {
-              context: 'default',
+              context: getCurrentNamespace(),
               workspaceId: eachValue.workspaceId,
             };
             const requestBody = {
@@ -140,32 +139,31 @@ export default function({
           responses
             ?.filter((eachResponse) => eachResponse)
             .forEach((workspace, index) => {
-              let dataQuality = 0;
+              let NullValuesPercentage = 0;
               workspace?.headers?.forEach((eachWorkspaceHeader) => {
                 const general = workspace.summary?.statistics[eachWorkspaceHeader]?.general;
-                // Here we are getting empty & non-null(renaming it as nonEmpty) values from general(API Response) and provinding default values for them
-                const { empty: empty = 0, 'non-null': nonEmpty = 100 } = general;
-
-                // Round number to next lowest .1%
-                // Number.toFixed() can round up and leave .0 on integers
-                const nonNull = Math.floor((nonEmpty - empty) * 10) / 10;
-                dataQuality = dataQuality + nonNull;
+                // Adding null percentage to NullValuesPercentage if we get null percentage directly
+                if (general.null) {
+                  NullValuesPercentage = NullValuesPercentage + general.null;
+                }
+                // Adding NullValuesPercentage when we get non-null percentage but not NULL percentage from API
+                else {
+                  NullValuesPercentage = NullValuesPercentage + (100 - general['non-null']);
+                }
               });
-              const totalDataQuality = dataQuality / workspace.headers?.length ?? 1;
-              explorationData[index].dataQuality = totalDataQuality;
+              // calculating cumulative null values percentage
+              const totalNullValuesPercentage = NullValuesPercentage / workspace.headers?.length;
+              explorationData[index].dataQuality = totalNullValuesPercentage;
               explorationData[index].count = workspace.count;
-              const final = getUpdatedExplorationCards(explorationData, cardCount);
-
-              // if we have setShowExplorations, then we should send data to parent element as the exploration state is then maintained in parent as well for showing or hiding the title of the parent component
-              setShowExplorations &&
-                setShowExplorations(
-                  Boolean(final) && Array.isArray(final) && final.length ? true : false
-                );
-              setOnGoingExplorationsData(final);
-              setLoading && setLoading(false);
             });
         }
-        setLoading(false);
+        const final = getUpdatedExplorationCards(explorationData);
+        setOnGoingExplorationsData(final);
+        setShowExplorations &&
+          setShowExplorations(
+            Boolean(final) && Array.isArray(final) && final.length ? true : false
+          );
+        setLoading && setLoading(false);
       });
   }, []);
 
@@ -177,36 +175,46 @@ export default function({
     (eachWorkspace) => eachWorkspace[6].count !== 0
   );
 
-  return (
-    <Box data-testid="ongoing-data-explore-parent">
-      {filteredData && Array.isArray(filteredData) && filteredData.length ? (
-        filteredData.map((eachExplorationCardData, cardIndex) => {
-          return (
-            <OngoingExplorationCardLink
-              to={{
-                pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${eachExplorationCardData[5].workspaceId}`}`,
-                state: {
-                  from: fromAddress,
-                  path: T.translate('features.WranglerNewUI.Breadcrumb.labels.workSpaces'),
-                },
-              }}
-              data-testid={`wrangler-home-ongoing-data-exploration-card-${cardIndex}`}
-            >
-              <OngoingDataExplorationsCard
-                key={`ongoing-data-exploration-card-${cardIndex}`}
-                explorationCardDetails={eachExplorationCardData}
-                cardIndex={cardIndex}
-                fromAddress={fromAddress}
-              />
-            </OngoingExplorationCardLink>
-          );
-        })
-      ) : fromAddress === WORKSPACES ? (
+  const getOngoingDataExplorationsCards = (filteredData: IExplorationCardDetails[][]) => {
+    const isFilteredDataPresent =
+      filteredData && Array.isArray(filteredData) && filteredData.length;
+    if (!isFilteredDataPresent && fromAddress === 'Workspaces') {
+      return (
         <NoRecordScreen
           title={T.translate('features.WranglerNewUI.NoRecordScreen.workspacesList.title')}
           subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.workspacesList.subtitle')}
         />
-      ) : null}
+      );
+    }
+    return filteredData
+      ?.slice(0, cardCount && cardCount)
+      .map((eachExplorationCardData, cardIndex) => {
+        return (
+          <OngoingExplorationCardLink
+            to={{
+              pathname: `/ns/${getCurrentNamespace()}/wrangler-grid/${`${eachExplorationCardData[5].workspaceId}`}`,
+              state: {
+                from: fromAddress,
+                path: T.translate('features.WranglerNewUI.Breadcrumb.params.wrangleHome'),
+              },
+            }}
+            style={{ textDecoration: 'none' }}
+            data-testid={`wrangler-home-ongoing-data-exploration-card-${cardIndex}`}
+          >
+            <OngoingDataExplorationsCard
+              key={`ongoing-data-exploration-card-${cardIndex}`}
+              explorationCardDetails={eachExplorationCardData}
+              cardIndex={cardIndex}
+              fromAddress={fromAddress}
+            />
+          </OngoingExplorationCardLink>
+        );
+      });
+  };
+
+  return (
+    <Box data-testid="ongoing-data-explore-parent">
+      {getOngoingDataExplorationsCards(filteredData)}
     </Box>
   );
 }

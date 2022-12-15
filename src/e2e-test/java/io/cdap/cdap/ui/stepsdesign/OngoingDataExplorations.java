@@ -27,8 +27,8 @@ import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 public class OngoingDataExplorations {
-    @Given("Navigate to the Home Page")
-    public void navigateToTheHomePage() {
+    @Given("Navigate to the Home Page for Ongoing data explorations")
+    public void navigateToTheHomePageForOngoingDataExploration() {
         SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
         WaitHelper.waitForPageToLoad();
     }

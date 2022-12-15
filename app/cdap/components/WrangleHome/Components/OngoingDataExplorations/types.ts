@@ -110,7 +110,7 @@ export interface IConnectionWithConnectorType {
 
 export interface IOngoingDataExplorationsProps {
   cardCount?: number;
-  fromAddress: string;
+  fromAddress?: string;
   setLoading?: Dispatch<SetStateAction<boolean>>;
   setShowExplorations?: Dispatch<SetStateAction<boolean>>;
 }

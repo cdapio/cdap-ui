@@ -14,20 +14,28 @@
  *  the License.
  */
 
-import { Breadcrumbs, Typography } from '@material-ui/core';
+import { Breadcrumbs } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { grey } from '@material-ui/core/colors';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Breadcrumb from 'components/Breadcrumb';
 import DataPrepStore from 'components/DataPrep/store';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { getWidgetData } from 'components/WidgetSVG/utils';
 import OngoingDataExplorations from 'components/WrangleHome/Components/OngoingDataExplorations';
-import { WORKSPACES } from 'components/WrangleHome/Components/OngoingDataExplorations/constants';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
+
+export const WORKSPACE_LIST_BREADCRUMB_OPTIONS = [
+  {
+    link: `/ns/${getCurrentNamespace()}/wrangle`,
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome').toString(),
+  },
+  {
+    label: T.translate('features.WranglerNewUI.Breadcrumb.labels.workSpaces').toString(),
+  },
+];
 
 const BreadcrumbsForWorkspaceList = styled(Breadcrumbs)`
   margin-left: 30px;
@@ -90,22 +98,10 @@ export default function() {
   return (
     <WorkspaceListWrapper data-testid="workspace-list-parent">
       <WorkspaceListHeader data-testid="workspace-list-body">
-        <BreadcrumbsForWorkspaceList
-          separator={<NavigateNextIcon fontSize="small" />}
-          aria-label="breadcrumb"
-        >
-          <Link color="inherit" to={`/ns/${getCurrentNamespace()}/home`}>
-            <BreadcrumbsHomeLabel data-testid="link-type-wrangle-home">
-              {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
-            </BreadcrumbsHomeLabel>
-          </Link>
-          <BreadcrumbsWorkspaceListLabel data-testid="breadcrumb-label-workspaces">
-            {T.translate('features.WranglerNewUI.Breadcrumb.labels.workSpaces')}
-          </BreadcrumbsWorkspaceListLabel>
-        </BreadcrumbsForWorkspaceList>
+        <Breadcrumb breadcrumbsList={WORKSPACE_LIST_BREADCRUMB_OPTIONS} />
       </WorkspaceListHeader>
       <WorkspaceListContainer>
-        <OngoingDataExplorations fromAddress={WORKSPACES} setLoading={setLoading} />
+        <OngoingDataExplorations fromAddress={'Workspaces'} setLoading={setLoading} />
       </WorkspaceListContainer>
       {loading && (
         <ContainerForLoader data-testid="workspace-loading-icon">

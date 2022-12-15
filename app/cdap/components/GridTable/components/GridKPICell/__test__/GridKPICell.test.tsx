@@ -30,6 +30,6 @@ describe('Test GridKPICell Component', () => {
   render(<GridKPICell metricData={fakeArray} />);
 
   it('Should should have eachValue Count', () => {
-    expect(screen.getAllByTestId('grid-kpi-metric-value-pg_shadow')[0]).toHaveTextContent('10');
+    expect(screen.getByTestId('grid-kpi-metric-value-pg_shadow')).toHaveTextContent('10');
   });
 });

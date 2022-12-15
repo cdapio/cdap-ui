@@ -26,34 +26,30 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
 public class ConnectorTypes {
-    @Given("Navigate to the Home Page")
-    public void navigateToTheHomePage() {
-        SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-        WaitHelper.waitForPageToLoad();
-    }
+  @Given("Navigate to the Home Page")
+  public void navigateToTheHomePage() {
+    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
+    WaitHelper.waitForPageToLoad();
+  }
 
-    @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
-    public void clickOnConnections(String connectionLabel, String connectionTestId) {
-        try {
-            ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-            System.out.println(connectionLabel + " Element is found successfully");
-            System.out.println("Clicked on " + connectionLabel + " Element");
-            WaitHelper.waitForPageToLoad();
-            if (connectionLabel.equals("Add Connections")) {
-                String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-                Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
-                System.out.println("Navigated to " + connectionLabel + " Page - Old UI");
-            } else if (connectionLabel.equals("Import Data")) {
-                String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-                Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
-            } else {
-                String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-                Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/datasources/"
-                        + connectionLabel);
-                System.out.println("Navigated to Data Source page with connection " + connectionLabel + " selected");
-            }
-        } catch (Exception e) {
-            System.err.println("error: " + e);
-        }
+  @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
+  public void clickOnConnections(String connectionLabel, String connectionTestId) {
+    try {
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+      WaitHelper.waitForPageToLoad();
+      if (connectionLabel.equals("Add Connections")) {
+        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
+      } else if (connectionLabel.equals("Import Data")) {
+        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
+      } else {
+        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/datasources/"
+                + connectionLabel);
+      }
+    } catch (Exception e) {
+      System.err.println("error: " + e);
     }
+  }
 }

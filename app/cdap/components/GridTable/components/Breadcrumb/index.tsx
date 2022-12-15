@@ -17,16 +17,13 @@
 import { Box, Typography } from '@material-ui/core';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import { useStyles } from 'components/GridTable/components/Breadcrumb/styles';
-import { getSourcePath } from 'components/GridTable/components/Breadcrumb/utils';
-import T from 'i18n-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useStyles } from './styles';
 
-export default function BreadCrumb({ workspaceName, location }) {
+export default function BreadCrumb({ datasetName }) {
   const classes = useStyles();
-
   return (
     <Box className={classes.breadCombContainer}>
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
@@ -35,21 +32,16 @@ export default function BreadCrumb({ workspaceName, location }) {
           to={`/ns/${getCurrentNamespace()}/home`}
           data-testid="breadcrumb-home-text"
         >
-          {T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome')}
+          Home
         </Link>
-        {location?.state?.from !==
-          T.translate('features.WranglerNewUI.Breadcrumb.labels.wrangleHome') && (
-          <Link
-            className={`${classes.breadcrumbLabel}`}
-            to={`/ns/${getCurrentNamespace()}/${getSourcePath(location)}`}
-            data-testid="breadcrumb-data-sources-text"
-          >
-            {location?.state?.from}
-          </Link>
-        )}
-        <Typography color="textPrimary" data-testid="breadcrumb-workspace-name">
-          {workspaceName}
-        </Typography>
+        <Link
+          className={`${classes.breadcrumbLabel} ${classes.dataset}`}
+          to={`/ns/${getCurrentNamespace()}/datasources/${`select-dataset`}`}
+          data-testid="breadcrumb-data-sources-text"
+        >
+          Data Sources
+        </Link>
+        <Typography color="textPrimary">{datasetName}</Typography>
       </Breadcrumbs>
     </Box>
   );
