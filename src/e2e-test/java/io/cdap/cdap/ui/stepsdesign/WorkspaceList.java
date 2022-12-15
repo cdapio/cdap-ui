@@ -67,7 +67,7 @@ public class WorkspaceList {
     try {
       WaitHelper.waitForPageToLoad();
       String url = SeleniumDriver.getDriver().getCurrentUrl();
-      Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/workspace-list"));
+      Assert.assertTrue(url.contains("cdap/ns/default/workspace-list"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
