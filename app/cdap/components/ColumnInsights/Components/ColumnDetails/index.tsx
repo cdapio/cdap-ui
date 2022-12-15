@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, TextField } from '@material-ui/core';
 import { grey, red } from '@material-ui/core/colors';
 import EditIcon from '@material-ui/icons/Edit';
 import RenderLabel from 'components/ColumnInsights/Components/common/RenderLabel';
@@ -30,8 +30,8 @@ interface IColumnDetailsProps {
   characterCount: string;
   distinctValues: number;
   dataTypeString: string;
-  renameColumnNameHandler: (oldColumnName: string, newColumnName: string) => void;
-  dataTypeHandler: (dataType: string) => void;
+  onColumnNameChange: (oldColumnName: string, newColumnName: string) => void;
+  onColumnDataTypeChange: (dataType: string) => void;
   columnType: string;
   columnHeaderList: string[];
 }
@@ -62,13 +62,19 @@ const ColumnInsightsDetailsCountBox = styled(Box)`
   margin-bottom: 7px;
 `;
 
+const StyledTextField = styled(TextField)`
+  & .MuiOutlinedInput-input {
+    padding: 11.5px 14px;
+  }
+`;
+
 export default function({
   columnName,
   characterCount,
   distinctValues,
   dataTypeString,
-  renameColumnNameHandler,
-  dataTypeHandler,
+  onColumnNameChange,
+  onColumnDataTypeChange,
   columnType,
   columnHeaderList,
 }: IColumnDetailsProps) {
@@ -111,14 +117,14 @@ export default function({
 
   const handleDataTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDataTypeValue(e.target.value);
-    dataTypeHandler(e.target.value);
+    onColumnDataTypeChange(e.target.value);
   };
 
   const editHandler = () => {
     setCanEdit(true);
   };
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleColumnNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     checkForInvalidInput(e.target.value);
     setInputValue(e.target.value);
   };
@@ -129,7 +135,9 @@ export default function({
       !errorMessage.hasError &&
       e.keyCode === 13
     ) {
-      renameColumnNameHandler(columnName, (e.target as HTMLInputElement).value);
+      onColumnNameChange(columnName, (e.target as HTMLInputElement).value);
+      setCanEdit(false);
+    } else if ((e.target as HTMLInputElement).value === columnName && e.keyCode === 13) {
       setCanEdit(false);
     } else {
       setCanEdit(true);
@@ -140,12 +148,15 @@ export default function({
     <ColumnDetailsContainer data-testid="column-details-parent">
       <CustomizedColumnNameEditBox>
         {canEdit ? (
-          <input
+          <StyledTextField
             value={inputValue}
-            onChange={(e) => onChangeHandler(e)}
+            onChange={handleColumnNameChange}
             onKeyDown={(e) => onEnter(e)}
             data-testid="column-name-edit-input"
             autoFocus
+            variant="outlined"
+            error={errorMessage.hasError}
+            helperText={T.translate(errorMessage.message).toString()}
           />
         ) : (
           <RenderLabel fontSize={16} dataTestId={'column-name'}>
@@ -156,12 +167,6 @@ export default function({
           <EditIcon />
         </CustomizedIconButton>
       </CustomizedColumnNameEditBox>
-      {errorMessage.hasError && (
-        <RenderLabel fontSize={14} color={`${red[600]}`} dataTestId={'invalid-text'}>
-          <> {T.translate(errorMessage.message).toString()}</>
-        </RenderLabel>
-      )}
-
       <InputSelect
         defaultValue={defaultValueProvided[0]?.value}
         value={dataTypeValue}
@@ -174,17 +179,16 @@ export default function({
         <ColumnInsightsDetailsCountBox>
           <RenderLabel fontSize={14}>
             <>
-              {T.translate(`${PREFIX}.characterCount`).toString()} {characterCount}
+              {T.translate(`${PREFIX}.characterCount`, {
+                characterCount,
+              }).toString()}
             </>
           </RenderLabel>
 
           <RenderLabel fontSize={14}>
-            <>
-              {T.translate(`${PREFIX}.distinct`).toString()} {distinctValues}
-            </>
+            <>{T.translate(`${PREFIX}.distinct`, { distinctValues }).toString()}</>
           </RenderLabel>
         </ColumnInsightsDetailsCountBox>
-
         <RenderLabel fontSize={14}>
           <>{T.translate(`${dataTypeString}`).toString()}</>
         </RenderLabel>

@@ -162,13 +162,13 @@ export default function GridTable() {
     setColumnType(types[columnName]);
   };
 
-  const renameColumnNameHandler = (oldColumnName: string, newColumnName: string) => {
+  const onColumnNameChange = (oldColumnName: string, newColumnName: string) => {
     const directive = `rename ${oldColumnName} ${newColumnName}`;
     setColumnSelected(newColumnName);
-    applyDirectiveAPICall(directive, 'add', [], 'insightsPanel');
+    applyDirectiveAPICall(directive);
   };
 
-  const applyDirectiveAPICall = (newDirective: string, action, removed_arr, from) => {
+  const applyDirectiveAPICall = (newDirective: string) => {
     setLoading(true);
     const { dataprep } = DataPrepStore.getState();
     const { workspaceId, workspaceUri, directives, insights } = dataprep;
@@ -345,9 +345,9 @@ export default function GridTable() {
     setRowsDataList(rowData);
   };
 
-  const dataTypeHandler = (dataType: string) => {
+  const onColumnDataTypeChange = (dataType: string) => {
     const newDirective = `set-type ${columnSelected} ${dataType}`;
-    applyDirectiveAPICall(newDirective, 'add', [], 'insightsPanel');
+    applyDirectiveAPICall(newDirective);
   };
 
   const onColumnSelection = (columnName: string) => {
@@ -410,8 +410,8 @@ export default function GridTable() {
             <ColumnInsights
               columnType={columnType}
               columnData={insightDrawer}
-              renameColumnNameHandler={renameColumnNameHandler}
-              dataTypeHandler={dataTypeHandler}
+              onColumnNameChange={onColumnNameChange}
+              onColumnDataTypeChange={onColumnDataTypeChange}
               onClose={() => {
                 setInsightDrawer({
                   open: false,

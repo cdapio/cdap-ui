@@ -26,8 +26,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />
@@ -45,8 +45,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />
@@ -63,8 +63,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />
@@ -93,8 +93,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />
@@ -114,8 +114,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />
@@ -135,8 +135,8 @@ describe('It Should test ColumnDetails Component', () => {
         characterCount={'0-8'}
         distinctValues={3}
         dataTypeString={'Contains letters and numbers'}
-        renameColumnNameHandler={jest.fn()}
-        dataTypeHandler={jest.fn()}
+        onColumnNameChange={jest.fn()}
+        onColumnDataTypeChange={jest.fn()}
         columnType={'String'}
         columnHeaderList={['body_0,body_1,body_2,body_3,body_4']}
       />

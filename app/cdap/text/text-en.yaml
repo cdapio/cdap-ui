@@ -3449,10 +3449,10 @@ features:
     ColumnInsights:
       barChartYLabel: Quantity
       containsLetter: Contains Letter 
-      characterCount: Character count
+      characterCount: "Character count {characterCount}"
       columnInsightsHeadingText: Column Insights
       distribution: Distribution
-      distinct: Distinct
+      distinct: "Distinct {distinctValues}"
       error:
         invalidError:
           The name you have entered is invalid. It must contain only letters, numbers, and

@@ -28,8 +28,8 @@ import Box from '@material-ui/core/Box';
 const PREFIX = 'features.WranglerNewUI.ColumnInsights';
 interface IColumnInsightsProps {
   columnData: IColumnData;
-  renameColumnNameHandler: (oldColumnName: string, newColumnName: string) => void;
-  dataTypeHandler: (dataType: string) => void;
+  onColumnNameChange: (oldColumnName: string, newColumnName: string) => void;
+  onColumnDataTypeChange: (dataType: string) => void;
   columnType: string;
   onClose: () => void;
 }
@@ -64,8 +64,8 @@ const ColumnInsightsContainer = styled(Box)`
 
 export default function({
   columnData,
-  renameColumnNameHandler,
-  dataTypeHandler,
+  onColumnNameChange,
+  onColumnDataTypeChange,
   columnType,
   onClose,
 }: IColumnInsightsProps) {
@@ -94,9 +94,9 @@ export default function({
       <ColumnInsightsContainer>
         <ColumnDetails
           columnName={columnDetail?.columnName}
-          dataTypeHandler={dataTypeHandler}
+          onColumnDataTypeChange={onColumnDataTypeChange}
           columnType={columnType}
-          renameColumnNameHandler={renameColumnNameHandler}
+          onColumnNameChange={onColumnNameChange}
           distinctValues={columnDetail?.distinctValues}
           characterCount={`${columnDetail?.characterCount?.min}-${columnDetail?.characterCount?.max}`}
           dataTypeString={columnDetail?.dataTypeString}

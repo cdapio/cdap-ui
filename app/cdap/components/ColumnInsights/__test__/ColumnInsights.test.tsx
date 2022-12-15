@@ -52,8 +52,8 @@ describe('It Should test Column Insights Component', () => {
           <Route>
             <ColumnInsights
               columnData={mockColumnDataWithEmptyDataTypeString}
-              renameColumnNameHandler={jest.fn()}
-              dataTypeHandler={jest.fn()}
+              onColumnNameChange={jest.fn()}
+              onDataTypeChange={jest.fn()}
               columnType={'String'}
               onClose={jest.fn()}
             />
