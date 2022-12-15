@@ -28,10 +28,14 @@ export const getWrangleGridBreadcrumbOptions = (workspaceName, location) => {
   ];
 
   const requestFromAddress = location?.state?.from;
-  const sourcePath =
-    requestFromAddress === T.translate(`${PREFIX}.labels.wrangleHome`)
-      ? 'wrangle'
-      : `datasources/${location?.state?.path}`;
+  let sourcePath;
+  if (requestFromAddress !== 'Workspaces') {
+    sourcePath =
+      requestFromAddress === T.translate(`${PREFIX}.labels.wrangleHome`)
+        ? 'wrangle'
+        : `datasources/${location?.state?.path}`;
+  }
+  sourcePath = 'workspace-list';
 
   const intermediateBreadcrumb = {
     link: `/ns/${getCurrentNamespace()}/${sourcePath}`,
