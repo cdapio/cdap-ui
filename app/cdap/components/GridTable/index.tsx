@@ -71,7 +71,7 @@ const TablePanelContainer = styled(Box)`
 const GridTableWrapper = styled(Box)`
   max-width: 100%;
   overflow-x: auto;
-  max-height: 70vh;
+  max-height: calc(100vh - 190px);
 `;
 
 const RecipeStepPanel = styled(Box)`
@@ -144,8 +144,6 @@ export default function GridTable() {
     const gridParams: IGridParams = apiPayload.gridParams;
     applyDirectives(wid, gridParams.directives).subscribe(
       (response) => {
-        console.log(response, 'response');
-
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspace,
           payload: {

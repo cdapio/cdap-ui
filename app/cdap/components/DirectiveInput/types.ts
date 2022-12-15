@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { IRecords, IHeaderNamesList } from 'components/GridTable/types';
+import { IHeaderNamesList } from 'components/GridTable/types';
 
 export interface IDirectiveInputProps {
   columnNamesList: IHeaderNamesList[];

@@ -118,11 +118,7 @@ export default function({
       dispatch({
         type: IDirectiveActions.DIRECTIVES_APPLIED_SET_COUNT,
         payload: {
-          directiveColumnCount: TWO_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)
-            ? 2
-            : MULTIPLE_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)
-            ? 0
-            : 1,
+          directiveColumnCount: getDirectiveColumnCount(firstIndexInputTextValue),
           isDirectiveSet: true,
           appliedDirective: [firstIndexInputTextValue],
         },
@@ -147,6 +143,16 @@ export default function({
       type: IDirectiveActions.INPUT_DIRECTIVE,
       payload: value,
     });
+  };
+
+  const getDirectiveColumnCount = (firstIndexInputTextValue) => {
+    if (TWO_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
+      return 2;
+    } else if (MULTIPLE_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
+      return 0;
+    } else {
+      return 1;
+    }
   };
 
   useEffect(() => {

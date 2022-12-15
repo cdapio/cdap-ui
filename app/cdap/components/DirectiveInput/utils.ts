@@ -16,7 +16,7 @@
 
 import Fuse from 'fuse.js';
 import uuidV4 from 'uuid/v4';
-import { IDirectivesList, IDirectiveUsage } from 'components/DirectiveInput/types';
+import { IDirectivesList } from 'components/DirectiveInput/types';
 
 /**
  * @returns {IDirectiveUsage[]}
