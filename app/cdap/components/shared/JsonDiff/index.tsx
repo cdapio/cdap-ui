@@ -57,17 +57,15 @@ const EmptyLineSpan = styled.span`
 `;
 
 interface IJsonDiffProps {
-  anchorEl: any;
   isOpen: boolean;
   onClose: () => void;
-  loading: boolean;
+  loading?: boolean;
   error: string;
   latestConfig: object;
   selectedConfig: object;
 }
 
 const JsonDiff = ({
-  anchorEl,
   isOpen,
   onClose,
   loading,
@@ -161,7 +159,7 @@ const JsonDiff = ({
       open={isOpen}
       onClose={onClose}
       placement="bottom-end"
-      anchorEl={anchorEl}
+      fullScreen={true}
       style={{ width: '100%', top: '100px' }}
     >
       {loading && <LoadingSVGCentered />}

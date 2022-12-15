@@ -24,6 +24,7 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import React from 'react';
 import PipelineCommentsActionBtn from '../PipelineCommentsActionBtn';
 import { ActionButton, ActionButtonGroup, CanvasButtonTooltip } from './styles';
+import { PipelineVersionsDiffButton } from '../PipelineVersionsDiff';
 
 interface IPipelineCanvasActionBtnsProps {
   setPipelineComments: () => void;
@@ -134,6 +135,7 @@ export const PipelineCanvasActionBtns = ({
           </CanvasButtonTooltip>
         </>
       )}
+      <PipelineVersionsDiffButton />
       <PipelineCommentsActionBtn
         tooltip="Show/Hide Pipeline Comments"
         comments={pipelineComments}

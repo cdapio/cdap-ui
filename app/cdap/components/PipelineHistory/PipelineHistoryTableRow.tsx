@@ -33,7 +33,6 @@ interface IPipelineHistoryTableRowProps {
   latestVersion: string;
   description?: string;
   date: string;
-  anchorEl: any;
 }
 
 const PREFIX = 'features.PipelineHistory.table';
@@ -54,7 +53,6 @@ export const PipelineHistoryTableRow = ({
   latestVersion,
   description,
   date,
-  anchorEl,
 }: IPipelineHistoryTableRowProps) => {
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
@@ -198,7 +196,6 @@ export const PipelineHistoryTableRow = ({
         )}
       </div>
       <JsonDiff
-        anchorEl={anchorEl}
         isOpen={diffOpen}
         onClose={closeDiffView}
         loading={viewDiffLoading}
