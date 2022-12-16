@@ -21,7 +21,7 @@ Feature: Pipeline Hierarchy - Hierarchy Widgets
   Scenario: Render file and duplicate record
     When Open Pipeline Studio Page
     Then Add "File" node to canvas
-    Then Open transform panel
+    Then Open "Transform" panel
     Then Add "CloneRecord" node to canvas
     Then Cleanup pipeline graph control
     Then Fit pipeline to screen

@@ -25,8 +25,11 @@ import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 
@@ -42,9 +45,10 @@ public class Commands implements CdfHelper {
   public static NodeInfo simpleSinkNode = new NodeInfo("BigQueryMultiTable", "batchsink", "2");
 
   public static void addNodeToCanvas(NodeInfo node) {
+    WaitHelper.waitForElementToBeDisplayed(
+      Helper.locateElementByTestId("plugin-" + node.getNodeName() + "-" + node.getNodeType()));
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("plugin-" + node.getNodeName() + "-" + node.getNodeType()))
+      Helper.locateElementByTestId("plugin-" + node.getNodeName() + "-" + node.getNodeType())
     );
   }
 
@@ -167,28 +171,30 @@ public class Commands implements CdfHelper {
     SeleniumDriver.getDriver().switchTo().alert().accept();
   }
 
-  public static void toggleTransformPanel() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("plugin-Transform-group-summary")
-    );
+  public static void openPluginGroupPanel(String pluginGroup) {
+    try {
+      ElementHelper.clickOnElement(
+        Helper.locateElementByXPath(
+          "//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']"));
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("plugin-" + pluginGroup + "-group-details"));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      Assert.assertTrue(Helper.isElementExists(
+      By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='true']")));
+    }
   }
 
-  public static void toggleAnalyticsPanel() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("plugin-Analytics-group-summary")
-    );
-  }
-
-  public static void toggleConditionsAndActionsPanel() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("plugin-Conditions and Actions-group-summary")
-    );
-  }
-
-  public static void toggleSinkPanel() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("plugin-Sink-group-summary")
-    );
+  public static void closePluginGroupPanel(String pluginGroup) {
+    try {
+      ElementHelper.clickOnElement(
+        Helper.locateElementByXPath(
+          "//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='true']"));
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByXPath(
+        "//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']")
+      );
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      Assert.assertTrue(Helper.isElementExists(
+        By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']")));
+    }
   }
 
   public static void clickUndoButton() {
@@ -223,13 +229,13 @@ public class Commands implements CdfHelper {
   public static void createSimplePipeline() {
     addNodeToCanvas(simpleSourceNode);
 
-    toggleTransformPanel();
+    openPluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(simpleTransformNode);
-    toggleTransformPanel();
+    closePluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
 
-    toggleSinkPanel();
+    openPluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(simpleSinkNode);
-    toggleSinkPanel();
+    closePluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
 
     connectTwoNodes(simpleSourceNode, simpleTransformNode);
     connectTwoNodes(simpleTransformNode, simpleSinkNode);
@@ -257,23 +263,23 @@ public class Commands implements CdfHelper {
     addNodeToCanvas(sourceNode1);
     addNodeToCanvas(sourceNode2);
 
-    toggleTransformPanel();
+    openPluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(transformNode1);
     addNodeToCanvas(transformNode2);
-    toggleTransformPanel();
+    closePluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
 
-    toggleAnalyticsPanel();
+    openPluginGroupPanel(Constants.ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(joinerNode);
-    toggleAnalyticsPanel();
+    closePluginGroupPanel(Constants.ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT);
 
-    toggleConditionsAndActionsPanel();
+    openPluginGroupPanel(Constants.CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(conditionNode);
-    toggleConditionsAndActionsPanel();
+    closePluginGroupPanel(Constants.CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT);
 
-    toggleSinkPanel();
+    openPluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
     addNodeToCanvas(sinkNode1);
     addNodeToCanvas(sinkNode2);
-    toggleSinkPanel();
+    closePluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
 
     pipelineCleanUpGraphControl();
     fitPipelineToScreen();
