@@ -61,15 +61,4 @@ public class WorkspaceList {
       System.err.println("error:" + e);
     }
   }
-
-//  @Then("Check if the user is on workspace list")
-//  public void checkIfTheUserIsOnTheWorkspaceListOrNot() {
-//    try {
-//      WaitHelper.waitForPageToLoad();
-//      String url = SeleniumDriver.getDriver().getCurrentUrl();
-//      Assert.assertTrue(url.contains("cdap/ns/default/workspace-list"));
-//    } catch (Exception e) {
-//      System.err.println("error:" + e);
-//    }
-//  }
 }

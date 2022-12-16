@@ -21,7 +21,5 @@ Feature: Workspaces List
   Scenario: Navigating through the Workspaces list
     Given Navigate to Home Page
     Then Click on the View all option
-#    Then Check if the user is on workspace list
     Then Select & Click on the WorkSpace
     Then Click on the Workspace link
-#    Then Check if the user is on workspace list
