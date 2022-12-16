@@ -28,13 +28,21 @@ const JsonDiffContainer = styled.div`
   width: 100%;
   height: calc(80vh - 50px);
   overflow: auto;
-  div {
-    width: 45%;
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 1em;
-    margin-top: 0.5em;
-  }
+`;
+
+const ConfigBlock = styled.div`
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 1em;
+  margin-top: 0.5em;
+  width: 45%;
+`;
+
+const NumColumn = styled.div`
+  float: left;
+  width: auto;
+  text-align: right;
+  margin-right: 1em;
 `;
 
 const RedSpan = styled.span`
@@ -123,20 +131,20 @@ const JsonDiffContent = (selectedConfig: object, latestConfig: object) => {
   }
   return (
     <>
-      <div>
+      <ConfigBlock>
         <b>{T.translate(`${PREFIX}.older`)}</b>
         <pre>
-          <div style={{ float: 'left', width: 'auto' }}>{selectedConfigLineNums.map((x) => x)}</div>
-          <div style={{ width: 'auto' }}>{coloredSelectedConfig.map((x) => x)}</div>
+          <NumColumn>{selectedConfigLineNums.map((x) => x)}</NumColumn>
+          <div>{coloredSelectedConfig.map((x) => x)}</div>
         </pre>
-      </div>
-      <div>
+      </ConfigBlock>
+      <ConfigBlock>
         <b>{T.translate(`${PREFIX}.latest`)}</b>
         <pre>
-          <div style={{ float: 'left', width: 'auto' }}>{latestConfigLineNums.map((x) => x)}</div>
-          <div style={{ width: 'auto' }}>{coloredLatestConfig.map((x) => x)}</div>
+          <NumColumn>{latestConfigLineNums.map((x) => x)}</NumColumn>
+          <div>{coloredLatestConfig.map((x) => x)}</div>
         </pre>
-      </div>
+      </ConfigBlock>
     </>
   );
 };
