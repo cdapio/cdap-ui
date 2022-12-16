@@ -142,11 +142,11 @@ const JsonDiffContent = (selectedConfig: object, latestConfig: object) => {
 };
 
 const styleSpanStringGreen = (val: string) => {
-  return <GreenSpan>{'+ ' + val}</GreenSpan>;
+  return <GreenSpan>{'+' + val.slice(1)}</GreenSpan>;
 };
 
 const styleSpanStringRed = (val: string) => {
-  return <RedSpan>{'- ' + val}</RedSpan>;
+  return <RedSpan>{'-' + val.slice(1)}</RedSpan>;
 };
 
 const styleSpanNormal = (val: string | number) => {
