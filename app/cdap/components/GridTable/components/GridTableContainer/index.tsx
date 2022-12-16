@@ -25,6 +25,7 @@ import { IHeaderNamesList, IRowData, IMissingListData } from 'components/GridTab
 const TableWrapper = styled(Box)`
   max-height: calc(100vh - 200px);
   overflow-y: auto;
+  min-width: calc(100vw - 460px);
 `;
 
 interface IGridTableContainer {
