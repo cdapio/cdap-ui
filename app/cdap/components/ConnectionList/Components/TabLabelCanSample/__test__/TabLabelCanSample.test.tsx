@@ -20,37 +20,43 @@ import TabLabelCanSample from '../index';
 import { mockConnectorTypeData, mockEntityDataForNoWorkspace } from '../mock/mockConnectorTypeData';
 import { Route, Router, Switch } from 'react-router';
 import * as apiHelpers from 'components/Connections/Browser/GenericBrowser/apiHelpers';
-import { createBrowserHistory } from 'history';
-
-const history = createBrowserHistory({
-  basename: '/',
-});
+import history from 'services/history';
 
 describe('Test TabLabelCanSample Component', () => {
   it('Should render TabLabelCanSample Component', () => {
     render(
-      <TabLabelCanSample
-        label={mockConnectorTypeData.name}
-        entity={mockConnectorTypeData}
-        initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={jest.fn()}
-      />
+      <Router history={history}>
+        <Route>
+          <TabLabelCanSample
+            label={mockConnectorTypeData.name}
+            entity={mockConnectorTypeData}
+            initialConnectionId={undefined}
+            toggleLoader={() => null}
+            setIsErrorOnNoWorkSpace={jest.fn()}
+            dataTestId={'connections-tab-ref-label-simple'}
+          />
+        </Route>
+      </Router>
     );
-    const ele = screen.getByTestId(/connections-tab-label-simple/i);
+    const ele = screen.getByTestId(/connections-tab-ref-label-simple/i);
     expect(ele).toBeInTheDocument();
   });
 
   it('Should trigger setIsErrorOnNoWorkSpace function ', () => {
     const setIsErrorOnNoWorkSpace = jest.fn();
     render(
-      <TabLabelCanSample
-        label={mockConnectorTypeData.name}
-        entity={mockConnectorTypeData}
-        initialConnectionId={undefined}
-        toggleLoader={() => null}
-        setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
-      />
+      <Router history={history}>
+        <Route>
+          <TabLabelCanSample
+            label={mockConnectorTypeData.name}
+            entity={mockConnectorTypeData}
+            initialConnectionId={undefined}
+            toggleLoader={() => null}
+            setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+            dataTestId={'tab-label-can-sample'}
+          />
+        </Route>
+      </Router>
     );
     const ele = screen.getByTestId(/connections-tab-explore/i);
     fireEvent.click(ele);
@@ -85,6 +91,7 @@ describe('Test TabLabelCanSample Component', () => {
               initialConnectionId="exl"
               toggleLoader={() => null}
               setIsErrorOnNoWorkSpace={setIsErrorOnNoWorkSpace}
+              dataTestId={'test'}
             />
           </Route>
         </Switch>
