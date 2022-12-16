@@ -32,16 +32,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RecipeStep {
-  @Given("Navigate to the Home page")
-  public void navigateToHomePage() {
-    try {
-      SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-      WaitHelper.waitForPageToLoad();
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
-  }
-
   @Then("Click on the Data explorations card")
   public void clickOnTheDataExplorationsCard() {
     try {
