@@ -20,7 +20,6 @@ import T from 'i18n-react';
 import classnames from 'classnames';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import { setSort } from 'components/RecipeList/store/ActionCreator';
 import { SortOrder } from './types';
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
@@ -29,30 +28,17 @@ interface ISortableHeaderProps {
   sortColumn: string;
   sortOrder: SortOrder;
   columnName: string;
-  disabled: boolean;
-  setSort: (columnName: string) => void;
+  setSort: () => void;
 }
 
-const SortableHeaderView: React.SFC<ISortableHeaderProps> = ({
+const SortableHeader: React.SFC<ISortableHeaderProps> = ({
   sortColumn,
   sortOrder,
   columnName,
-  disabled,
   setSort,
 }) => {
-  const handleClick = () => {
-    if (disabled) {
-      return;
-    }
-    setSort(columnName);
-  };
-
   return (
-    <strong
-      className={classnames({ sortable: !disabled })}
-      onClick={handleClick}
-      data-testid={`recipelist-${columnName}`}
-    >
+    <strong className={'sortable'} onClick={setSort} data-testid={`recipelist-${columnName}`}>
       {T.translate(`${PREFIX}.${columnName}`)}
 
       {sortColumn === columnName &&
@@ -64,21 +50,5 @@ const SortableHeaderView: React.SFC<ISortableHeaderProps> = ({
     </strong>
   );
 };
-
-const mapStateToProps = (state, ownProp) => {
-  return {
-    sortColumn: state.recipeList.sortColumn,
-    sortOrder: state.recipeList.sortedOrder,
-    columnName: ownProp.columnName,
-  };
-};
-
-const mapDispatch = () => {
-  return {
-    setSort,
-  };
-};
-
-const SortableHeader = connect(mapStateToProps, mapDispatch)(SortableHeaderView);
 
 export default SortableHeader;

@@ -23,7 +23,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import fileDownload from 'js-file-download';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
-import { reset } from 'components/RecipeList/store/ActionCreator';
+import { IState, reset } from './reducer';
 
 interface IRecipeTableRowProps {
   recipe: IRecipe;
@@ -33,6 +33,8 @@ interface IRecipeTableRowProps {
   viewHandler: (selectedRecipe: IRecipe) => void;
   editHandler: (selectedRecipe: IRecipe) => void;
   selectHandler: (selectedRecipe: IRecipe) => void;
+  state: IState;
+  dispatch: (action: any) => void;
 }
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
@@ -45,6 +47,8 @@ export const RecipeTableRow = ({
   viewHandler,
   editHandler,
   selectHandler,
+  state,
+  dispatch,
 }: IRecipeTableRowProps) => {
   const [showPopover, setShowPopover] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -116,7 +120,7 @@ export const RecipeTableRow = ({
       () => {
         setDeleteLoading(false);
         toggleDeleteConfirmation();
-        reset();
+        reset(dispatch, state);
       },
       (err) => {
         setDeleteErrMsg(T.translate(`${PREFIX}.common.deleteError`));

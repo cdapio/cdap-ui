@@ -14,22 +14,19 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { RecipesTable } from './RecipesTable';
 import PaginationStepper from 'components/shared/PaginationStepper';
 import { RecipeTableDiv, PaginationContainer } from './styles';
 import { IRecipe, SortBy, SortOrder } from './types';
 import {
+  reducer,
   nextPage,
   prevPage,
   reset,
   getSavedRecipes,
-  setInitialState,
-} from 'components/RecipeList/store/ActionCreator';
-import { useSelector } from 'react-redux';
-import Store from 'components/RecipeList/store';
-
-import { Provider } from 'react-redux';
+  defaultInitialState,
+} from './reducer';
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
 
@@ -42,9 +39,9 @@ interface IRecipeListProps {
   sortBy?: SortBy;
   sortOrder?: SortOrder;
   pageSize?: number;
-  viewHandler?: (IRecipe) => void;
-  editHandler?: (IRecipe) => void;
-  selectHandler?: (IRecipe) => void;
+  viewHandler?: (selectedRecipe: IRecipe) => void;
+  editHandler?: (selectedRecipe: IRecipe) => void;
+  selectHandler?: (selectedRecipe: IRecipe) => void;
 }
 
 const RecipeList = ({
@@ -60,24 +57,24 @@ const RecipeList = ({
   editHandler,
   selectHandler,
 }: IRecipeListProps) => {
-  const [selectedRecipeId, setSelectedRecipeId] = useState('');
+  const [state, dispatch] = useReducer(reducer, {
+    ...defaultInitialState,
+    pageLimit: pageSize,
+    sortColumn: sortBy,
+    sortedOrder: sortOrder,
+  });
 
-  const { sortedOrder, sortColumn, recipes } = useSelector(({ recipeList }) => recipeList);
+  const { recipes } = state;
 
   const Pagination = ({}) => {
-    const { prevDisabled, nextDisabled } = useSelector(({ recipeList }) => ({
-      prevDisabled: !recipeList.previousTokens.length,
-      nextDisabled: !recipeList.nextPageToken,
-    }));
-
     return (
       <PaginationContainer className="float-left">
         <div>
           <PaginationStepper
-            onNext={nextPage}
-            onPrev={prevPage}
-            nextDisabled={nextDisabled}
-            prevDisabled={prevDisabled}
+            onNext={() => nextPage(dispatch, state)}
+            onPrev={() => prevPage(dispatch, state)}
+            nextDisabled={!state.nextPageToken}
+            prevDisabled={!state.previousTokens.length}
           />
         </div>
       </PaginationContainer>
@@ -103,19 +100,15 @@ const RecipeList = ({
   };
 
   useEffect(() => {
-    setInitialState(pageSize, sortBy, sortOrder);
-    getSavedRecipes();
-  }, []);
-
-  // on unmount
-  React.useEffect(() => {
-    return () => {
-      reset();
-    };
+    getSavedRecipes(dispatch, state);
   }, []);
 
   return (
-    <RecipeTableDiv isShowAllColumns={isShowAllColumns} isShowActions={isShowActions}>
+    <RecipeTableDiv
+      showallcolumns={isShowAllColumns ? 1 : 0}
+      showactions={isShowActions ? 1 : 0}
+      data-testid="recipe-table-container"
+    >
       {isOpen && (
         <>
           <RecipesTable
@@ -126,6 +119,8 @@ const RecipeList = ({
             viewHandler={viewRecipeHandler}
             editHandler={editRecipeHanlder}
             selectHandler={selectRecipeHanlder}
+            state={state}
+            dispatch={dispatch}
           />
           {showPagination && <Pagination />}
         </>
@@ -140,28 +135,26 @@ const RecipeListOuter = ({
   viewHandler = null,
   editHandler = null,
   selectHandler = null,
-  showActions = true,
+  isShowActions = true,
   showPagination = true,
   sortBy = SortBy.NAME,
   sortOrder = SortOrder.ASCENDING,
   pageSize = 10,
   enableSorting = true,
 }) => (
-  <Provider store={Store}>
-    <RecipeList
-      isOpen={isOpen}
-      isShowAllColumns={isShowAllColumns}
-      viewHandler={viewHandler}
-      editHandler={editHandler}
-      selectHandler={selectHandler}
-      isShowActions={showActions}
-      showPagination={showPagination}
-      sortBy={sortBy}
-      sortOrder={sortOrder}
-      pageSize={pageSize}
-      enableSorting={enableSorting}
-    />
-  </Provider>
+  <RecipeList
+    isOpen={isOpen}
+    isShowAllColumns={isShowAllColumns}
+    viewHandler={viewHandler}
+    editHandler={editHandler}
+    selectHandler={selectHandler}
+    isShowActions={isShowActions}
+    showPagination={showPagination}
+    sortBy={sortBy}
+    sortOrder={sortOrder}
+    pageSize={pageSize}
+    enableSorting={enableSorting}
+  />
 );
 
 export default RecipeListOuter;

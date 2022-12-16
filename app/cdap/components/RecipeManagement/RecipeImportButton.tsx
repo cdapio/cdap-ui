@@ -61,7 +61,7 @@ export const RecipeImportButton = () => {
       <RecipeListOuter
         isOpen={isOpen}
         isShowAllColumns={false}
-        showActions={false}
+        isShowActions={false}
         selectHandler={handleSelectRecipe}
         sortBy={SortBy.NAME}
         sortOrder={SortOrder.ASCENDING}

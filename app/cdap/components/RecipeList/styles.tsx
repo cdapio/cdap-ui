@@ -27,8 +27,7 @@ export const RecipeTableDiv = styled(({ ...props }) => <div {...props} />)`
       max-height: 100%;
       .grid-header > .grid-row {       
         background: #F5F5F5;
-        box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.12);
-        
+        box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.12);       
 
         .sortable {
           cursor: pointer;
@@ -36,8 +35,8 @@ export const RecipeTableDiv = styled(({ ...props }) => <div {...props} />)`
       }
       .grid-row {
         grid-template-columns: ${(props) => {
-          if (props.isShowAllColumns) {
-            return props.isShowActions ? '1fr 100px 1fr 200px 80px' : '1fr 100px 1fr 200px';
+          if (props.showallcolumns) {
+            return props.showactions ? '1fr 100px 1fr 200px 80px' : '1fr 100px 1fr 200px';
           } else {
             return '1fr 100px 200px';
           }
@@ -61,10 +60,10 @@ export const RecipeTableDiv = styled(({ ...props }) => <div {...props} />)`
         &:hover {
           background-color: $row-hover-color;
           text-decoration: none;
-          cursor : ${(props) => (props.isShowAllColumns ? 'auto' : 'pointer')};
+          cursor : ${(props) => (props.showallcolumns ? 'auto' : 'pointer')};
         }
         ${(props) =>
-          props.isShowActions &&
+          props.showactions &&
           css`
             > * {
               &:last-child {

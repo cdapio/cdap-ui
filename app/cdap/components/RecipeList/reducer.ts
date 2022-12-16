@@ -14,13 +14,12 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
-import { composeEnhancers } from 'services/helpers';
-import { Reducer, Store as StoreInterface } from 'redux';
 import { IAction } from 'services/redux-helpers';
-import { IRecipe, SortOrder } from '../types';
+import { IRecipe, SortOrder } from './types';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import MyDataPrepApi from 'api/dataprep';
 
-interface IState {
+export interface IState {
   deleteError?: string;
   sortColumn: string;
   sortedOrder: SortOrder;
@@ -32,10 +31,6 @@ interface IState {
   ready: boolean;
 }
 
-interface IStore {
-  recipeList: IState;
-}
-
 const Actions = {
   setRecipes: 'SET_RECIPES',
   prevPage: 'RECIPE_PREV_PAGE',
@@ -45,7 +40,7 @@ const Actions = {
   setInitValues: 'RECIPE_SET_INIT_VALUES',
 };
 
-const defaultInitialState: IState = {
+export const defaultInitialState: IState = {
   recipes: null,
   ready: false,
   nextPageToken: null,
@@ -56,8 +51,7 @@ const defaultInitialState: IState = {
   sortedOrder: SortOrder.ASCENDING,
 };
 
-const recipeList: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
-  // alert('in Reducer');
+export const reducer = (state: IState, action: IAction) => {
   switch (action.type) {
     case Actions.setInitValues:
       return {
@@ -108,15 +102,70 @@ const recipeList: Reducer<IState> = (state = defaultInitialState, action: IActio
   }
 };
 
-const Store: StoreInterface<IStore> = createStore(
-  combineReducers({
-    recipeList,
-  }),
-  {
-    recipeList: defaultInitialState,
-  },
-  composeEnhancers('RecipesStore')()
-);
+export function reset(dispatch, state) {
+  dispatch({
+    type: Actions.reset,
+  });
+  getSavedRecipes(dispatch, { ...defaultInitialState, pageLimit: state.pageLimit });
+}
 
-export default Store;
-export { Actions, IStore };
+export function getSavedRecipes(dispatch, state) {
+  const { pageToken, sortedOrder, sortColumn, pageLimit } = state;
+
+  MyDataPrepApi.getRecipeList({
+    context: getCurrentNamespace(),
+    pageToken,
+    sortBy: sortColumn,
+    pageSize: pageLimit,
+    sortOrder: sortedOrder,
+  }).subscribe((recipesResponse) => {
+    dispatch({
+      type: Actions.setRecipes,
+      payload: {
+        recipes: recipesResponse.values,
+        nextPageToken: recipesResponse.nextPageToken,
+      },
+    });
+  });
+}
+
+export function prevPage(dispatch, state) {
+  const { previousTokens } = state;
+  if (!previousTokens.length) {
+    return;
+  }
+  dispatch({
+    type: Actions.prevPage,
+  });
+  getSavedRecipes(dispatch, { ...state, pageToken: previousTokens[previousTokens.length - 1] });
+}
+
+export function nextPage(dispatch, state) {
+  const { nextPageToken } = state;
+  if (!nextPageToken) {
+    return;
+  }
+  dispatch({
+    type: Actions.nextPage,
+  });
+  getSavedRecipes(dispatch, { ...state, pageToken: nextPageToken });
+}
+
+export function setSort(dispatch, state, columnName: string) {
+  const currentColumn = state.sortColumn;
+  const currentSortOrder = state.sortedOrder;
+
+  let sortOrder = SortOrder.ASCENDING;
+  if (currentColumn === columnName && currentSortOrder === SortOrder.ASCENDING) {
+    sortOrder = SortOrder.DESCENDING;
+  }
+
+  dispatch({
+    type: Actions.setSort,
+    payload: {
+      sortColumn: columnName,
+      sortOrder,
+    },
+  });
+  getSavedRecipes(dispatch, { ...state, sortColumn: columnName, sortedOrder: sortOrder });
+}

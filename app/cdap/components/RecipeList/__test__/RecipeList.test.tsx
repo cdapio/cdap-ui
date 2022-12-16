@@ -15,23 +15,24 @@
  */
 
 import React from 'react';
-import RecipeListOuter from 'components/RecipeList';
-import { SortBy, SortOrder } from 'components/RecipeList/types';
-import Box from '@material-ui/core/Box';
+import { render, screen } from '@testing-library/react';
+// import WranglerHomeNew from '../index';
+import RecipeList from '../index';
+import { Route, Router, Switch } from 'react-router';
+import history from 'services/history';
 
-export const LastUpdatedRecipes = () => {
-  return (
-    <Box mb={4}>
-      <RecipeListOuter
-        isOpen={true}
-        isShowAllColumns={true}
-        isShowActions={false}
-        showPagination={false}
-        sortBy={SortBy.UPDATED}
-        sortOrder={SortOrder.DESCENDING}
-        pageSize={2}
-        enableSorting={false}
-      />
-    </Box>
-  );
-};
+describe('It renders Recipes list ', () => {
+  test('renders RecipeList component', () => {
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <RecipeList />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const ele = screen.getByTestId(/recipe-table-container/i);
+    expect(ele).toBeInTheDocument();
+  });
+});

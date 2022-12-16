@@ -59,7 +59,7 @@ const ViewAllRecipies = () => {
         <RecipeListOuter
           isOpen={true}
           isShowAllColumns={true}
-          showActions={true}
+          isShowActions={true}
           viewHandler={viewRecipeHandler}
           editHandler={handleEditRecipe}
           pageSize={12}
