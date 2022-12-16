@@ -93,7 +93,7 @@ public class ColumnViewPanel {
     try {
       String text = Helper.locateElementByTestId("each-column-label-type-0").getText();
       if (columnName.equals(text)) {
-          System.out.println("The column name is displayed as per search");
+        System.out.println("The column name is displayed as per search");
       }
     } catch (Exception e) {
       System.err.println("error:" + e);
