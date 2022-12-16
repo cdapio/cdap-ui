@@ -25,6 +25,7 @@ interface IRecipeTableProps {
   allRecipies: IRecipe[];
   isShowAllColumns: boolean;
   isShowActions: boolean;
+  enableSorting: boolean;
   viewHandler: (selectedRecipe: IRecipe) => void;
   editHandler: (selectedRecipe: IRecipe) => void;
   selectHandler?: (selectedRecipe: IRecipe) => void;
@@ -36,6 +37,7 @@ export const RecipesTable = ({
   allRecipies,
   isShowAllColumns,
   isShowActions,
+  enableSorting,
   viewHandler,
   editHandler,
   selectHandler,
@@ -45,10 +47,18 @@ export const RecipesTable = ({
       return (
         <div className="grid-header">
           <div className="grid-row">
-            <SortableHeader columnName={'name'}></SortableHeader>
+            {enableSorting ? (
+              <SortableHeader columnName={'name'}></SortableHeader>
+            ) : (
+              <strong>{T.translate(`${PREFIX}.name`)}</strong>
+            )}
             <strong>{T.translate(`${PREFIX}.steps`)}</strong>
             {isShowAllColumns && <strong>{T.translate(`${PREFIX}.description`)}</strong>}
-            <SortableHeader columnName={'updated'}></SortableHeader>
+            {enableSorting ? (
+              <SortableHeader columnName={'updated'}></SortableHeader>
+            ) : (
+              <strong>{T.translate(`${PREFIX}.updated`)}</strong>
+            )}
             {isShowActions && <strong></strong>}
           </div>
         </div>

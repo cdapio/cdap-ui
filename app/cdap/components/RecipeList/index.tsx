@@ -38,6 +38,7 @@ interface IRecipeListProps {
   isShowAllColumns?: boolean;
   isShowActions?: boolean;
   showPagination?: boolean;
+  enableSorting?: boolean;
   sortBy?: SortBy;
   sortOrder?: SortOrder;
   pageSize?: number;
@@ -51,6 +52,7 @@ const RecipeList = ({
   isShowAllColumns,
   isShowActions,
   showPagination,
+  enableSorting,
   sortBy,
   sortOrder,
   pageSize,
@@ -120,6 +122,7 @@ const RecipeList = ({
             allRecipies={recipes}
             isShowAllColumns={isShowAllColumns}
             isShowActions={isShowActions}
+            enableSorting={enableSorting}
             viewHandler={viewRecipeHandler}
             editHandler={editRecipeHanlder}
             selectHandler={selectRecipeHanlder}
@@ -142,6 +145,7 @@ const RecipeListOuter = ({
   sortBy = SortBy.NAME,
   sortOrder = SortOrder.ASCENDING,
   pageSize = 10,
+  enableSorting = true,
 }) => (
   <Provider store={Store}>
     <RecipeList
@@ -155,6 +159,7 @@ const RecipeListOuter = ({
       sortBy={sortBy}
       sortOrder={sortOrder}
       pageSize={pageSize}
+      enableSorting={enableSorting}
     />
   </Provider>
 );

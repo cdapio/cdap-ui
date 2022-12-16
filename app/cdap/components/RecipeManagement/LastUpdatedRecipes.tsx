@@ -30,6 +30,7 @@ export const LastUpdatedRecipes = () => {
         sortBy={SortBy.UPDATED}
         sortOrder={SortOrder.DESCENDING}
         pageSize={2}
+        enableSorting={false}
       />
     </Box>
   );
