@@ -30,7 +30,7 @@ export const useStyles = makeStyles({
     zIndex: 2000,
   },
   columnViewDrawer: {
-    maxHeight: 'calc(100vh - 240px)',
+    maxHeight: 'calc(100% - 40px)',
   },
   columnViewContainer: {
     display: 'flex',

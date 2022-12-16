@@ -54,14 +54,15 @@ import { useLocation } from 'react-router';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
-  max-height: calc(100vh - 190px);
+  max-height: calc(100vh - 240px);
   overflow-y: auto;
 `;
 
 const GridTableWrapper = styled(Box)`
   max-width: 100%;
+  overflow: hidden;
   overflow-x: auto;
-  max-height: 76vh;
+  max-height: calc(100% - 100px);
 `;
 
 export default function GridTable() {

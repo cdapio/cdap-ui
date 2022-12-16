@@ -85,7 +85,7 @@ const SelectColumnsListSection = styled.section`
   line-height: 150%;
   letter-spacing: 0.15px;
   color: #5f6368;
-  height: calc(100vh - 211px);
+  height: calc(100vh - 258px);
   overflow: scroll;
 `;
 
