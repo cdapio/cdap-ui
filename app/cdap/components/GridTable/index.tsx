@@ -21,7 +21,6 @@ import Breadcrumb from 'components/Breadcrumb';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import ColumnViewPanel from 'components/ColumnViewPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
@@ -44,17 +43,22 @@ import { objectQuery } from 'services/helpers';
 import FooterPanel from 'components/FooterPanel';
 import { IDataQuality } from 'components/ColumnViewPanel/components/SelectColumnsList';
 import { IFooterMetaInfo } from 'components/GridTable/types';
-
 import styled from 'styled-components';
-
 import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
+import ColumnViewPanel from 'components/ColumnViewPanel';
 
-export const TableWrapper = styled(Box)`
+const TableWrapperWithBreadcrumb = styled(Box)`
   width: 100%;
   max-height: calc(100vh - 240px);
+  overflow-y: auto;
+`;
+
+const TableWrapperWithoutBreadcrumb = styled(Box)`
+  width: 100%;
+  max-height: calc(100vh - 192px);
   overflow-y: auto;
 `;
 
@@ -62,8 +66,20 @@ const GridTableWrapper = styled(Box)`
   max-width: 100%;
   overflow: hidden;
   overflow-x: auto;
-  max-height: calc(100% - 100px);
+  max-height: calc(100% - 90px);
 `;
+
+const StyledColumnViewContainer = styled(Box)`
+  display: flex;
+`;
+
+const StyledColumnViewDrawer = styled(Box)`
+  max-height: calc(100% - 40px);
+`;
+
+const getStyledTableWrapper = (showBreadCrumb) => {
+  return showBreadCrumb ? TableWrapperWithBreadcrumb : TableWrapperWithoutBreadcrumb;
+};
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -94,6 +110,8 @@ export default function GridTable() {
   const [snackbarState, setSnackbar] = useSnackbar();
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
+
+  const StyledTableWrapper = getStyledTableWrapper(showBreadCrumb);
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -326,15 +344,15 @@ export default function GridTable() {
         disableToolbarIcon={gridData?.headers?.length > 0 ? false : true}
       />
       <GridTableWrapper data-testid="grid-table-container">
-        <Box className={classes.columnViewContainer}>
+        <StyledColumnViewContainer>
           {openColumnView && (
-            <Box className={classes.columnViewDrawer}>
+            <StyledColumnViewDrawer>
               <ColumnViewPanel
                 columnData={headersNamesList}
                 dataQuality={dataQuality}
                 onClose={() => setOpenColumnView(false)}
               />
-            </Box>
+            </StyledColumnViewDrawer>
           )}
           {!showGridTable && (
             <NoRecordScreen
@@ -343,7 +361,7 @@ export default function GridTable() {
             />
           )}
           {showGridTable && (
-            <TableWrapper>
+            <StyledTableWrapper>
               <Table aria-label="simple table" className="test">
                 <TableHead>
                   <TableRow>
@@ -388,9 +406,9 @@ export default function GridTable() {
                     })}
                 </TableBody>
               </Table>
-            </TableWrapper>
+            </StyledTableWrapper>
           )}
-        </Box>
+        </StyledColumnViewContainer>
         <FooterPanel
           recipeStepsCount={0}
           gridMetaInfo={tableMetaInfo}
