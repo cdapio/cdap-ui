@@ -122,3 +122,4 @@ export default function({ recipeStepsCount, gridMetaInfo, onColumnViewPanelOpen 
     </TabsWrapper>
   );
 }
+
