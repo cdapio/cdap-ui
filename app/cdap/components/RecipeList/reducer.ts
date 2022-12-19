@@ -167,5 +167,10 @@ export function setSort(dispatch, state, columnName: string) {
       sortOrder,
     },
   });
-  getSavedRecipes(dispatch, { ...state, sortColumn: columnName, sortedOrder: sortOrder });
+  getSavedRecipes(dispatch, {
+    ...state,
+    sortColumn: columnName,
+    sortedOrder: sortOrder,
+    pageToken: null,
+  });
 }
