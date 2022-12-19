@@ -14,154 +14,148 @@
  * the License.
  */
 
-import { Grid, Box, Typography } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
+import CustomTooltip from 'components/WrangleHome/Components/CustomTooltip';
+import {
+  GridForConnectorIcon,
+  GridForExplorationCard,
+  IconWithoutTextTypography,
+  IconWithTextTypography,
+  NullValueCountContainer,
+  PercentageSymbolGreen,
+  PercentageSymbolRed,
+  QualityTextContainer,
+  StyledTyporgraphy,
+  TypographyWithGreenColorText,
+  TypographyWithRedColorText,
+} from 'components/WrangleHome/Components/OngoingDataExplorationsCard/styledComponents';
 import React from 'react';
-import CustomTooltip from '../CustomTooltip';
+import { IExplorationCardDetails } from './types';
 
-const getIconComponent = (explorationCardIndex, classes, eachExplorationCard) => (
-  <Grid item xs={3} key={explorationCardIndex} className={classes.connectorIcon}>
+const getIconComponent = (explorationCardIndex, eachExplorationCard) => (
+  <GridForConnectorIcon item xs={3} key={explorationCardIndex}>
     <Box>{eachExplorationCard.icon}</Box>
-  </Grid>
+  </GridForConnectorIcon>
 );
 
 const getIconWithTextComponent = (
-  explorationCardIndex,
-  classes,
-  eachExplorationCard,
-  connectionRefValue,
-  connectionNameRef
+  explorationCardIndex: React.Key,
+  eachExplorationCard: IExplorationCardDetails,
+  connectionRefValue: boolean,
+  connectionNameRef: React.RefObject<HTMLInputElement>
 ) => (
-  <Grid item xs={3} className={classes.explorationCard} key={explorationCardIndex}>
+  <GridForExplorationCard item xs={3} key={explorationCardIndex}>
     {connectionRefValue ? (
       <CustomTooltip title={eachExplorationCard.label} arrow>
-        <Typography
-          variant="body1"
-          ref={connectionNameRef}
-          className={classes.iconWithText}
-          component="p"
-        >
+        <IconWithTextTypography variant="body1" ref={connectionNameRef} component="p">
           {eachExplorationCard.label}
-        </Typography>
+        </IconWithTextTypography>
       </CustomTooltip>
     ) : (
-      <Typography variant="body1" ref={connectionNameRef} className={classes.iconWithText}>
+      <IconWithTextTypography variant="body1" ref={connectionNameRef}>
         {eachExplorationCard.label}
-      </Typography>
+      </IconWithTextTypography>
     )}
-  </Grid>
+  </GridForExplorationCard>
 );
 
 const gettextIncludingRecipeStepsComponent = (
-  classes,
-  explorationCardIndex,
-  eachExplorationCard
+  explorationCardIndex: React.Key,
+  eachExplorationCard: IExplorationCardDetails
 ) => (
-  <Grid item xs={3} className={classes.explorationCard} key={explorationCardIndex}>
-    <Typography variant="body1" className={classes.textWithoutIcon} component="p">
+  <GridForExplorationCard item xs={3} key={explorationCardIndex}>
+    <IconWithoutTextTypography variant="body1" component="p">
       {eachExplorationCard.label}
-    </Typography>
-  </Grid>
+    </IconWithoutTextTypography>
+  </GridForExplorationCard>
 );
 
 const getTextComponent = (
-  classes,
   explorationCardIndex,
   eachExplorationCard,
   cardIndex,
   datasetNameRefValue,
   datasetNameRef
 ) => (
-  <Grid
+  <GridForExplorationCard
     item
     xs={3}
-    className={classes.explorationCard}
     key={explorationCardIndex}
     data-testid={`home-ongoing-explorations-${eachExplorationCard.type}-${cardIndex}`}
   >
     {datasetNameRefValue ? (
       <CustomTooltip title={eachExplorationCard.label} arrow>
-        <Typography
-          variant="body1"
-          ref={datasetNameRef}
-          className={classes.textWithoutIcon}
-          component="p"
-        >
+        <IconWithoutTextTypography variant="body1" ref={datasetNameRef} component="p">
           {eachExplorationCard.label}
-        </Typography>
+        </IconWithoutTextTypography>
       </CustomTooltip>
     ) : (
-      <Typography variant="body1" ref={datasetNameRef} className={classes.textWithoutIcon}>
+      <IconWithoutTextTypography variant="body1" ref={datasetNameRef}>
         {eachExplorationCard.label}
-      </Typography>
+      </IconWithoutTextTypography>
     )}
-  </Grid>
+  </GridForExplorationCard>
 );
 
-const getPercentageWithTextComponent = (
-  classes,
-  explorationCardIndex,
-  percent,
-  eachExplorationCard
-) => (
-  <Grid
-    item
-    xs={3}
-    className={classes.explorationCard}
-    key={explorationCardIndex}
-    data-testid="ongoing-data-exploration-card-percentage-nan"
-  >
-    <Box className={classes.percent}>
-      <Typography
-        variant="body2"
-        className={percent > 0 ? classes.percentageStyleRed : classes.percentageStyleGreen}
-        data-testid="ongoing-data-card-percentage"
-        component="p"
-      >
-        {Math.round(percent)}
-      </Typography>
-      <Typography
-        variant="body2"
-        className={percent > 0 ? classes.percentageSymbolRed : classes.percentageSymbolGreen}
-        data-testid="ongoing-data-percentage-symbol"
-        component="p"
-      >
-        {eachExplorationCard.percentageSymbol}
-      </Typography>
-    </Box>
-    <Box className={classes.dataQualityTextContainer}>
-      <Typography variant="body1" className={classes.dataQualityText} component="p">
-        {eachExplorationCard.subText}
-      </Typography>
-    </Box>
-  </Grid>
-);
+const getPercentageWithTextComponent = (explorationCardIndex, percent, eachExplorationCard) => {
+  const NullValueCountText =
+    percent > 0 ? TypographyWithRedColorText : TypographyWithGreenColorText;
+  const PercentageSymbol = percent > 0 ? PercentageSymbolRed : PercentageSymbolGreen;
+  return (
+    <GridForExplorationCard
+      item
+      xs={3}
+      key={explorationCardIndex}
+      data-testid="ongoing-data-exploration-card-percentage-nan"
+    >
+      <NullValueCountContainer>
+        <NullValueCountText
+          variant="body2"
+          data-testid="ongoing-data-card-percentage"
+          component="p"
+        >
+          {Math.round(percent)}
+        </NullValueCountText>
+        <PercentageSymbol
+          variant="body2"
+          data-testid="ongoing-data-percentage-symbol"
+          component="p"
+        >
+          {eachExplorationCard.percentageSymbol}
+        </PercentageSymbol>
+      </NullValueCountContainer>
+      <QualityTextContainer>
+        <StyledTyporgraphy variant="body1" component="p">
+          {eachExplorationCard.subText}
+        </StyledTyporgraphy>
+      </QualityTextContainer>
+    </GridForExplorationCard>
+  );
+};
 
 export const getExplorationDatacard = (
-  eachExplorationCard,
-  explorationCardIndex,
-  classes,
-  connectionRefValue,
-  connectionNameRef,
-  cardIndex,
-  datasetNameRefValue,
-  datasetNameRef
+  eachExplorationCard: IExplorationCardDetails,
+  explorationCardIndex: number,
+  connectionRefValue: boolean,
+  connectionNameRef: React.RefObject<HTMLInputElement>,
+  cardIndex: number,
+  datasetNameRefValue: boolean,
+  datasetNameRef: React.RefObject<HTMLInputElement>
 ) => {
   switch (eachExplorationCard.type) {
     case 'icon':
-      return getIconComponent(explorationCardIndex, classes, eachExplorationCard);
+      return getIconComponent(explorationCardIndex, eachExplorationCard);
     case 'iconWithText':
       return getIconWithTextComponent(
         explorationCardIndex,
-        classes,
         eachExplorationCard,
         connectionRefValue,
         connectionNameRef
       );
     case 'text':
       return eachExplorationCard.label.includes('Recipe steps')
-        ? gettextIncludingRecipeStepsComponent(classes, explorationCardIndex, eachExplorationCard)
+        ? gettextIncludingRecipeStepsComponent(explorationCardIndex, eachExplorationCard)
         : getTextComponent(
-            classes,
             explorationCardIndex,
             eachExplorationCard,
             cardIndex,
@@ -171,7 +165,6 @@ export const getExplorationDatacard = (
     case 'percentageWithText': {
       return Number(eachExplorationCard.label) >= 0 && !isNaN(Number(eachExplorationCard.label)) ? (
         getPercentageWithTextComponent(
-          classes,
           explorationCardIndex,
           Number(eachExplorationCard.label),
           eachExplorationCard

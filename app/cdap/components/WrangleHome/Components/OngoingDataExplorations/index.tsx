@@ -82,7 +82,6 @@ export default function({
 
     // Getting the workspace name, path ,workspaceId and name from MyDataPrepApi.getWorkspaceList API and
     //  using these in params and requestBody to get Data quality from MyDataPrepApi.execute API
-
     MyDataPrepApi.getWorkspaceList({
       context: getCurrentNamespace(),
     })
@@ -157,11 +156,15 @@ export default function({
               explorationData[index].count = workspace.count;
             });
         }
-        const final = getUpdatedExplorationCards(explorationData);
-        setOnGoingExplorationsData(final);
+        const ongoingDataExplorationsCardsData = getUpdatedExplorationCards(explorationData);
+        setOnGoingExplorationsData(ongoingDataExplorationsCardsData);
         setShowExplorations &&
           setShowExplorations(
-            Boolean(final) && Array.isArray(final) && final.length ? true : false
+            Boolean(ongoingDataExplorationsCardsData) &&
+              Array.isArray(ongoingDataExplorationsCardsData) &&
+              ongoingDataExplorationsCardsData.length
+              ? true
+              : false
           );
         setLoading && setLoading(false);
       });
@@ -171,13 +174,17 @@ export default function({
     getOngoingData();
   }, []);
 
-  const filteredData = onGoingExplorationsData.filter(
+  const filteredOnGoingExplorationsData = onGoingExplorationsData.filter(
     (eachWorkspace) => eachWorkspace[6].count !== 0
   );
 
-  const getOngoingDataExplorationsCards = (filteredData: IExplorationCardDetails[][]) => {
+  const getOngoingDataExplorationsCards = (
+    filteredOnGoingExplorationsData: IExplorationCardDetails[][]
+  ) => {
     const isFilteredDataPresent =
-      filteredData && Array.isArray(filteredData) && filteredData.length;
+      filteredOnGoingExplorationsData &&
+      Array.isArray(filteredOnGoingExplorationsData) &&
+      filteredOnGoingExplorationsData.length;
     if (!isFilteredDataPresent && fromAddress === 'Workspaces') {
       return (
         <NoRecordScreen
@@ -186,7 +193,7 @@ export default function({
         />
       );
     }
-    return filteredData
+    return filteredOnGoingExplorationsData
       ?.slice(0, cardCount && cardCount)
       .map((eachExplorationCardData, cardIndex) => {
         return (
@@ -214,7 +221,7 @@ export default function({
 
   return (
     <Box data-testid="ongoing-data-explore-parent">
-      {getOngoingDataExplorationsCards(filteredData)}
+      {getOngoingDataExplorationsCards(filteredOnGoingExplorationsData)}
     </Box>
   );
 }

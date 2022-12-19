@@ -14,7 +14,6 @@
  *  the License.
  */
 
-import { Breadcrumbs } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import { grey } from '@material-ui/core/colors';
 import Breadcrumb from 'components/Breadcrumb';
@@ -36,22 +35,6 @@ export const WORKSPACE_LIST_BREADCRUMB_OPTIONS = [
     label: T.translate('features.WranglerNewUI.Breadcrumb.labels.workSpaces').toString(),
   },
 ];
-
-const BreadcrumbsForWorkspaceList = styled(Breadcrumbs)`
-  margin-left: 30px;
-  text-decoration: none;
-`;
-
-const BreadcrumbsHomeLabel = styled(Box)`
-  font-size: 14px;
-  line-height: 21px;
-  letter-spacing: 0.15px;
-  font-weight: 400;
-`;
-
-const BreadcrumbsWorkspaceListLabel = styled(BreadcrumbsHomeLabel)`
-  color: ${grey[900]};
-`;
 
 const ContainerForLoader = styled(Box)`
   display: flex;

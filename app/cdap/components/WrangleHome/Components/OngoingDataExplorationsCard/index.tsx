@@ -14,19 +14,19 @@
  * the License.
  */
 
-import React, { createRef, RefObject, useEffect, useState } from 'react';
-import { Box, Grid, Typography } from '@material-ui/core/';
-import { useStyles } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/styles';
-import CustomTooltip from 'components/WrangleHome/Components/CustomTooltip';
+import {
+  GridContainerAtHomePage,
+  GridContainerAtWorkspaceListPage,
+} from 'components/WrangleHome/Components/OngoingDataExplorationsCard/styledComponents';
 import { IOngoingDataExplorationsCard } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
-import { getExplorationDatacard } from './utils';
+import { getExplorationDatacard } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/utils';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 
 export default function({
   explorationCardDetails,
   cardIndex,
   fromAddress,
 }: IOngoingDataExplorationsCard) {
-  const classes = useStyles();
   const connectionNameRef: RefObject<HTMLInputElement> = createRef();
   const datasetNameRef: RefObject<HTMLInputElement> = createRef();
   const [connectionRefValue, setconnectionRefValue] = useState(false);
@@ -39,19 +39,18 @@ export default function({
     setdatasetNameRef(datasetNameRef?.current?.offsetWidth < datasetNameRef?.current?.scrollWidth);
   });
 
+  const OnGoingDataExplorationsContainer =
+    fromAddress === 'Workspaces' ? GridContainerAtWorkspaceListPage : GridContainerAtHomePage;
+
   return (
-    <Grid
+    <OnGoingDataExplorationsContainer
       container
-      className={`${classes.explorationCardWrapper} ${
-        fromAddress === 'Workspaces' ? classes.gridContainerWorkspaces : classes.gridContainerHome
-      }`}
       data-testid={`ongoing-data-explorations-card-${cardIndex}`}
     >
       {explorationCardDetails?.map((eachExplorationCard, explorationCardIndex) =>
         getExplorationDatacard(
           eachExplorationCard,
           explorationCardIndex,
-          classes,
           connectionRefValue,
           connectionNameRef,
           cardIndex,
@@ -59,6 +58,6 @@ export default function({
           datasetNameRef
         )
       )}
-    </Grid>
+    </OnGoingDataExplorationsContainer>
   );
 }

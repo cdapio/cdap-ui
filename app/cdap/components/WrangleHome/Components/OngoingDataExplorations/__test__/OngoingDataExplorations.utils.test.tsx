@@ -14,8 +14,7 @@
  * the License.
  */
 
-import { mockOldData } from '../mock/mockOldData';
-import { getUpdatedExplorationCards } from '../utils';
+import { getUpdatedExplorationCards } from 'components/WrangleHome/Components/OngoingDataExplorations/utils';
 
 describe('Test the Utility Functions', () => {
   it('Should test the result for empty array', () => {
