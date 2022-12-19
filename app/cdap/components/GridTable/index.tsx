@@ -412,7 +412,7 @@ export default function GridTable() {
         <FooterPanel
           recipeStepsCount={0}
           gridMetaInfo={tableMetaInfo}
-          setOpenColumnViewHandler={() => setOpenColumnView((prev) => !prev)}
+          onColumnViewPanelOpen={() => setOpenColumnView((prev) => !prev)}
         />
         {loading && (
           <div className={classes.loadingContainer}>

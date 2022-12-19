@@ -14,14 +14,10 @@
  * the License.
  */
 
-import { Box, IconButton, Typography } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import { IconButton } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-// import { ColumnIcon } from 'components/FooterPanel/IconStore/ColumnIcon';
-import styled from 'styled-components';
-
 import {
   ColumnViewBox,
   DirectivesBox,
@@ -32,12 +28,8 @@ import {
   TabsWrapper,
   TransformatedIconButton,
   ZoomBox,
-  CommonColumnViewBox,
-  DisabledColumnViewBox,
-  NormalColumnViewBox,
-  getColumnViewBoxStyle,
+  getColumnViewBoxStyle
 } from 'components/FooterPanel/styles';
-
 import T from 'i18n-react';
 import React from 'react';
 
@@ -70,7 +62,7 @@ interface IGridMetaInfo {
 interface IFooterPanelProps {
   recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
-  setOpenColumnViewHandler: () => void;
+  onColumnViewPanelOpen: () => void;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -82,11 +74,7 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function({
-  recipeStepsCount,
-  gridMetaInfo,
-  setOpenColumnViewHandler,
-}: IFooterPanelProps) {
+export default function({ recipeStepsCount, gridMetaInfo, onColumnViewPanelOpen }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
   const isDisabled = gridMetaInfo?.rowCount === 0 ? true : false;
   const ColumnViewBoxStyleWrapper = getColumnViewBoxStyle(isDisabled);
@@ -95,12 +83,12 @@ export default function({
     <TabsWrapper data-testid="footer-panel-wrapper">
       <CustomTooltip title={`${T.translate(`${PREFIX}.columnViewPanel`)}`}>
         <ColumnViewBoxStyleWrapper
-          data-testid="footer-panel-column-view-panel-tab"
-          onClick={setOpenColumnViewHandler}
-          disabled={gridMetaInfo?.rowCount === 0 ? true : false}
-        >
-          {ColumnIcon}
-        </ColumnViewBoxStyleWrapper>
+         data-testid="footer-panel-column-view-panel-tab"
+                 onClick={onColumnViewPanelOpen}
+                 disabled={gridMetaInfo?.rowCount === 0 ? true : false}
+                 >
+                  {ColumnIcon}
+                  </ColumnViewBoxStyleWrapper>
       </CustomTooltip>
       <LargeBox data-testid="footer-panel-meta-info-tab">
         <Label data-testid="footerpanel-simple-message">
