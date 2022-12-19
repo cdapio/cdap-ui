@@ -16,7 +16,6 @@
 
 import React, { useState } from 'react';
 import T from 'i18n-react';
-import moment from 'moment';
 import { IRecipe } from './types';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import MyDataPrepApi from 'api/dataprep';
@@ -24,15 +23,16 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import fileDownload from 'js-file-download';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { IState, reset } from './reducer';
+import { format, TYPES } from 'services/DataFormatter';
 
 interface IRecipeTableRowProps {
   recipe: IRecipe;
   createdTimeMillis?: any;
   isShowAllColumns: boolean;
   isShowActions: boolean;
-  viewHandler: (selectedRecipe: IRecipe) => void;
-  editHandler: (selectedRecipe: IRecipe) => void;
-  selectHandler: (selectedRecipe: IRecipe) => void;
+  onViewRecipe: (selectedRecipe: IRecipe) => void;
+  onEditRecipe: (selectedRecipe: IRecipe) => void;
+  onSelectRecipe: (selectedRecipe: IRecipe) => void;
   state: IState;
   dispatch: (action: any) => void;
 }
@@ -44,9 +44,9 @@ export const RecipeTableRow = ({
   recipe,
   isShowAllColumns,
   isShowActions,
-  viewHandler,
-  editHandler,
-  selectHandler,
+  onViewRecipe,
+  onEditRecipe,
+  onSelectRecipe,
   state,
   dispatch,
 }: IRecipeTableRowProps) => {
@@ -55,10 +55,6 @@ export const RecipeTableRow = ({
   const [isDeleteLoading, setDeleteLoading] = useState(false);
   const [deleteErrMsg, setDeleteErrMsg] = useState(null);
   const [extendedDeleteErrMsg, setExtendedDeleteErrMsg] = useState(null);
-
-  const getDateID = (date: Date) => {
-    return moment(date).format(DATE_FORMAT);
-  };
 
   const handleActionsClick = (e) => {
     e.preventDefault();
@@ -78,17 +74,17 @@ export const RecipeTableRow = ({
   };
 
   const selectRecipeHandler = () => {
-    getRecipeDetailsById(selectHandler);
+    getRecipeDetailsById(onSelectRecipe);
   };
 
   const handleRecipeView = () => {
     setShowPopover(!showPopover);
-    getRecipeDetailsById(viewHandler);
+    getRecipeDetailsById(onViewRecipe);
   };
 
   const handleRecipeEdit = () => {
     setShowPopover(!showPopover);
-    getRecipeDetailsById(editHandler);
+    getRecipeDetailsById(onEditRecipe);
   };
 
   const handleDownloadRecipe = () => {
@@ -185,7 +181,7 @@ export const RecipeTableRow = ({
         <div>{recipe.recipeName}</div>
         <div>{recipe.recipeStepsCount}</div>
         {isShowAllColumns && <div>{recipe.description}</div>}
-        <div>{getDateID(recipe.updatedTimeMillis)}</div>
+        <div>{format(recipe.updatedTimeMillis, TYPES.TIMESTAMP_MILLIS)}</div>
         {isShowActions && (
           <span onClick={handleActionsClick}>
             <ActionsPopover
