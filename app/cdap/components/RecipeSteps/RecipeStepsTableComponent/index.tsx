@@ -96,6 +96,7 @@ const RecipeStepsDeleteStyle = styled(IconButton)`
   width: 18px;
   height: 20px;
   cursor: pointer;
+  float: right;
 `;
 
 const RecipeStepsTableRowStyle = styled(TableCell)`
