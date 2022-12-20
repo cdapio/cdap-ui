@@ -15,20 +15,19 @@
  */
 
 import { IAction } from 'services/redux-helpers';
-import { IRecipe, SortOrder } from './types';
+import { IRecipe, SortOrder, SortBy } from './types';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 
 export interface IState {
   deleteError?: string;
-  sortColumn: string;
+  sortColumn: SortBy;
   sortedOrder: SortOrder;
   previousTokens: string[];
   nextPageToken: string;
   pageToken: string;
   pageLimit: number;
   recipes: IRecipe[];
-  ready: boolean;
 }
 
 const Actions = {
@@ -37,29 +36,20 @@ const Actions = {
   nextPage: 'RECIPE_NEXT_PAGE',
   setSort: 'RECIPE_SET_SORT',
   reset: 'RECIPE_RESET',
-  setInitValues: 'RECIPE_SET_INIT_VALUES',
 };
 
 export const defaultInitialState: IState = {
   recipes: null,
-  ready: false,
   nextPageToken: null,
   previousTokens: [],
   pageToken: null,
   pageLimit: 10,
-  sortColumn: 'name',
-  sortedOrder: SortOrder.ASCENDING,
+  sortColumn: SortBy.UPDATED,
+  sortedOrder: SortOrder.DESCENDING,
 };
 
 export const reducer = (state: IState, action: IAction) => {
   switch (action.type) {
-    case Actions.setInitValues:
-      return {
-        ...state,
-        sortColumn: action.payload.sortBy,
-        sortedOrder: action.payload.sortOrder,
-        pageLimit: action.payload.pageSize,
-      };
     case Actions.setSort:
       return {
         ...state,
@@ -67,8 +57,8 @@ export const reducer = (state: IState, action: IAction) => {
         sortedOrder: action.payload.sortOrder,
         pageToken: null,
         previousTokens: [],
-        nextPageToken: null,
-        ready: false,
+        recipes: action.payload.recipes,
+        nextPageToken: action.payload.nextPageToken,
       };
     case Actions.prevPage:
       const lastTokenIdx = state.previousTokens.length - 1;
@@ -76,54 +66,55 @@ export const reducer = (state: IState, action: IAction) => {
       return {
         ...state,
         previousTokens: state.previousTokens.slice(0, lastTokenIdx),
-        nextPageToken: state.pageToken,
         pageToken: lastToken,
-        ready: false,
+        recipes: action.payload.recipes,
+        nextPageToken: action.payload.nextPageToken,
       };
     case Actions.nextPage:
       return {
         ...state,
         previousTokens: [...state.previousTokens, state.pageToken],
-        nextPageToken: null,
         pageToken: state.nextPageToken,
-        ready: false,
+        recipes: action.payload.recipes,
+        nextPageToken: action.payload.nextPageToken,
       };
     case Actions.setRecipes:
       return {
         ...state,
         recipes: action.payload.recipes,
         nextPageToken: action.payload.nextPageToken,
-        ready: true,
       };
     case Actions.reset:
-      return { ...defaultInitialState, pageLimit: state.pageLimit };
+      return {
+        ...defaultInitialState,
+        pageLimit: state.pageLimit,
+        recipes: action.payload.recipes,
+        nextPageToken: action.payload.nextPageToken,
+      };
     default:
       return state;
   }
 };
 
 export function reset(dispatch, state) {
-  dispatch({
-    type: Actions.reset,
+  getRecipes({ ...defaultInitialState, pageLimit: state.pageLimit }).subscribe((res) => {
+    dispatch({
+      type: Actions.reset,
+      payload: {
+        recipes: res.values,
+        nextPageToken: res.nextPageToken,
+      },
+    });
   });
-  getSavedRecipes(dispatch, { ...defaultInitialState, pageLimit: state.pageLimit });
 }
 
 export function getSavedRecipes(dispatch, state) {
-  const { pageToken, sortedOrder, sortColumn, pageLimit } = state;
-
-  MyDataPrepApi.getRecipeList({
-    context: getCurrentNamespace(),
-    pageToken,
-    sortBy: sortColumn,
-    pageSize: pageLimit,
-    sortOrder: sortedOrder,
-  }).subscribe((recipesResponse) => {
+  getRecipes({ ...state }).subscribe((res) => {
     dispatch({
       type: Actions.setRecipes,
       payload: {
-        recipes: recipesResponse.values,
-        nextPageToken: recipesResponse.nextPageToken,
+        recipes: res.values,
+        nextPageToken: res.nextPageToken,
       },
     });
   });
@@ -134,10 +125,17 @@ export function prevPage(dispatch, state) {
   if (!previousTokens.length) {
     return;
   }
-  dispatch({
-    type: Actions.prevPage,
-  });
-  getSavedRecipes(dispatch, { ...state, pageToken: previousTokens[previousTokens.length - 1] });
+  getRecipes({ ...state, pageToken: previousTokens[previousTokens.length - 1] }).subscribe(
+    (res) => {
+      dispatch({
+        type: Actions.prevPage,
+        payload: {
+          recipes: res.values,
+          nextPageToken: res.nextPageToken,
+        },
+      });
+    }
+  );
 }
 
 export function nextPage(dispatch, state) {
@@ -145,10 +143,16 @@ export function nextPage(dispatch, state) {
   if (!nextPageToken) {
     return;
   }
-  dispatch({
-    type: Actions.nextPage,
+
+  getRecipes({ ...state, pageToken: nextPageToken }).subscribe((res) => {
+    dispatch({
+      type: Actions.nextPage,
+      payload: {
+        recipes: res.values,
+        nextPageToken: res.nextPageToken,
+      },
+    });
   });
-  getSavedRecipes(dispatch, { ...state, pageToken: nextPageToken });
 }
 
 export function setSort(dispatch, state, columnName: string) {
@@ -160,18 +164,32 @@ export function setSort(dispatch, state, columnName: string) {
     sortOrder = SortOrder.DESCENDING;
   }
 
-  dispatch({
-    type: Actions.setSort,
-    payload: {
-      sortColumn: columnName,
-      sortOrder,
-    },
-  });
-  getSavedRecipes(dispatch, {
+  getRecipes({
     ...state,
     sortColumn: columnName,
     sortedOrder: sortOrder,
     pageToken: null,
+  }).subscribe((res) => {
+    dispatch({
+      type: Actions.setSort,
+      payload: {
+        sortColumn: columnName,
+        sortOrder,
+        recipes: res.values,
+        nextPageToken: res.nextPageToken,
+      },
+    });
+  });
+}
+
+function getRecipes(state) {
+  const { pageToken, sortedOrder, sortColumn, pageLimit } = state;
+  return MyDataPrepApi.getRecipeList({
+    context: getCurrentNamespace(),
+    pageToken,
+    sortBy: sortColumn,
+    pageSize: pageLimit,
+    sortOrder: sortedOrder,
   });
 }
 

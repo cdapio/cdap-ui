@@ -15,9 +15,7 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
 import T from 'i18n-react';
-import classnames from 'classnames';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { SortOrder } from './types';

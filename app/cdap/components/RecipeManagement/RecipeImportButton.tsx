@@ -63,8 +63,8 @@ export const RecipeImportButton = () => {
         showAllColumns={false}
         showActions={false}
         selectHandler={handleSelectRecipe}
-        sortBy={SortBy.NAME}
-        sortOrder={SortOrder.ASCENDING}
+        sortBy={SortBy.UPDATED}
+        sortOrder={SortOrder.DESCENDING}
         pageSize={6}
       />
     </Box>

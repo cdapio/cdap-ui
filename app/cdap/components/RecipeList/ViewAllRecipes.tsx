@@ -63,8 +63,8 @@ const ViewAllRecipies = () => {
           viewHandler={viewRecipeHandler}
           editHandler={handleEditRecipe}
           pageSize={12}
-          sortBy={SortBy.NAME}
-          sortOrder={SortOrder.ASCENDING}
+          sortBy={SortBy.UPDATED}
+          sortOrder={SortOrder.DESCENDING}
         />
       </Box>
     </>

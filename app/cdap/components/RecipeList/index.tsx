@@ -19,16 +19,7 @@ import { RecipesTable } from './RecipesTable';
 import PaginationStepper from 'components/shared/PaginationStepper';
 import { RecipeTableDiv, PaginationContainer } from './styles';
 import { IRecipe, SortBy, SortOrder } from './types';
-import {
-  reducer,
-  nextPage,
-  prevPage,
-  reset,
-  getSavedRecipes,
-  defaultInitialState,
-} from './reducer';
-
-const PREFIX = 'features.WranglerNewUI.Recipe';
+import { reducer, nextPage, prevPage, getSavedRecipes, defaultInitialState } from './reducer';
 
 interface IRecipeListProps {
   isOpen: boolean;
