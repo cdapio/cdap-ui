@@ -48,12 +48,12 @@ export const RecipesTable = ({
   dispatch,
 }: IRecipeTableProps) => {
   const renderSortableHeaderColumn = (columnName: string) => {
-    const { sortColumn, sortedOrder } = state;
+    const { sortColumn, sortOrder } = state;
 
     return (
       <SortableHeader
         sortColumn={sortColumn}
-        sortOrder={sortedOrder}
+        sortOrder={sortOrder}
         columnName={columnName}
         setSort={() => {
           setSort(dispatch, state, columnName);

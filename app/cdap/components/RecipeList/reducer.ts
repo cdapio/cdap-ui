@@ -22,7 +22,7 @@ import MyDataPrepApi from 'api/dataprep';
 export interface IState {
   deleteError?: string;
   sortColumn: SortBy;
-  sortedOrder: SortOrder;
+  sortOrder: SortOrder;
   previousTokens: string[];
   nextPageToken: string;
   pageToken: string;
@@ -45,7 +45,7 @@ export const defaultInitialState: IState = {
   pageToken: null,
   pageLimit: 10,
   sortColumn: SortBy.UPDATED,
-  sortedOrder: SortOrder.DESCENDING,
+  sortOrder: SortOrder.DESCENDING,
 };
 
 export const reducer = (state: IState, action: IAction) => {
@@ -54,7 +54,7 @@ export const reducer = (state: IState, action: IAction) => {
       return {
         ...state,
         sortColumn: action.payload.sortColumn,
-        sortedOrder: action.payload.sortOrder,
+        sortOrder: action.payload.sortOrder,
         pageToken: null,
         previousTokens: [],
         recipes: action.payload.recipes,
@@ -97,27 +97,11 @@ export const reducer = (state: IState, action: IAction) => {
 };
 
 export function reset(dispatch, state) {
-  getRecipes({ ...defaultInitialState, pageLimit: state.pageLimit }).subscribe((res) => {
-    dispatch({
-      type: Actions.reset,
-      payload: {
-        recipes: res.values,
-        nextPageToken: res.nextPageToken,
-      },
-    });
-  });
+  getRecipes({ ...defaultInitialState, pageLimit: state.pageLimit }, Actions.reset, dispatch);
 }
 
 export function getSavedRecipes(dispatch, state) {
-  getRecipes({ ...state }).subscribe((res) => {
-    dispatch({
-      type: Actions.setRecipes,
-      payload: {
-        recipes: res.values,
-        nextPageToken: res.nextPageToken,
-      },
-    });
-  });
+  getRecipes({ ...state }, Actions.setRecipes, dispatch);
 }
 
 export function prevPage(dispatch, state) {
@@ -125,16 +109,10 @@ export function prevPage(dispatch, state) {
   if (!previousTokens.length) {
     return;
   }
-  getRecipes({ ...state, pageToken: previousTokens[previousTokens.length - 1] }).subscribe(
-    (res) => {
-      dispatch({
-        type: Actions.prevPage,
-        payload: {
-          recipes: res.values,
-          nextPageToken: res.nextPageToken,
-        },
-      });
-    }
+  getRecipes(
+    { ...state, pageToken: previousTokens[previousTokens.length - 1] },
+    Actions.prevPage,
+    dispatch
   );
 }
 
@@ -143,53 +121,46 @@ export function nextPage(dispatch, state) {
   if (!nextPageToken) {
     return;
   }
-
-  getRecipes({ ...state, pageToken: nextPageToken }).subscribe((res) => {
-    dispatch({
-      type: Actions.nextPage,
-      payload: {
-        recipes: res.values,
-        nextPageToken: res.nextPageToken,
-      },
-    });
-  });
+  getRecipes({ ...state, pageToken: nextPageToken }, Actions.nextPage, dispatch);
 }
 
 export function setSort(dispatch, state, columnName: string) {
   const currentColumn = state.sortColumn;
-  const currentSortOrder = state.sortedOrder;
-
+  const currentSortOrder = state.sortOrder;
   let sortOrder = SortOrder.ASCENDING;
   if (currentColumn === columnName && currentSortOrder === SortOrder.ASCENDING) {
     sortOrder = SortOrder.DESCENDING;
   }
+  getRecipes(
+    {
+      ...state,
+      sortColumn: columnName,
+      sortOrder,
+      pageToken: null,
+    },
+    Actions.setSort,
+    dispatch
+  );
+}
 
-  getRecipes({
-    ...state,
-    sortColumn: columnName,
-    sortedOrder: sortOrder,
-    pageToken: null,
+function getRecipes(state, actionType, dispatch) {
+  const { pageToken, sortOrder, sortColumn, pageLimit } = state;
+  MyDataPrepApi.getRecipeList({
+    context: getCurrentNamespace(),
+    pageToken,
+    sortBy: sortColumn,
+    pageSize: pageLimit,
+    sortOrder,
   }).subscribe((res) => {
     dispatch({
-      type: Actions.setSort,
+      type: actionType,
       payload: {
-        sortColumn: columnName,
+        sortColumn,
         sortOrder,
         recipes: res.values,
         nextPageToken: res.nextPageToken,
       },
     });
-  });
-}
-
-function getRecipes(state) {
-  const { pageToken, sortedOrder, sortColumn, pageLimit } = state;
-  return MyDataPrepApi.getRecipeList({
-    context: getCurrentNamespace(),
-    pageToken,
-    sortBy: sortColumn,
-    pageSize: pageLimit,
-    sortOrder: sortedOrder,
   });
 }
 

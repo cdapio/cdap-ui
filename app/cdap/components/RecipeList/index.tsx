@@ -52,7 +52,7 @@ const RecipeList = ({
     ...defaultInitialState,
     pageLimit: pageSize,
     sortColumn: sortBy,
-    sortedOrder: sortOrder,
+    sortOrder,
   });
 
   const { recipes } = state;
