@@ -13,9 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 interface ISelectionRange {
   [key: string]: string;
 }
+
 export interface IUsingPosition {
   anchorEl: JSX.Element;
   setAnchorEl: React.Dispatch<React.SetStateAction<JSX.Element>>;

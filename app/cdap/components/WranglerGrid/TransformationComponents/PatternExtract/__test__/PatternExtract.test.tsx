@@ -14,12 +14,12 @@
  *  the License.
  */
 
-import { render, screen } from "@testing-library/react";
-import React from "react";
-import PatternExtract from "components/WranglerGrid/TransformationComponents/PatternExtract/index";
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import PatternExtract from 'components/WranglerGrid/TransformationComponents/PatternExtract/index';
 
-describe("Testing PatternExtract component", () => {
-  it("should test default render of PatternExtract", () => {
+describe('Testing PatternExtract component', () => {
+  it('should test default render of PatternExtract', () => {
     render(
       <PatternExtract
         setTransformationComponentsValue={jest.fn()}
@@ -28,6 +28,6 @@ describe("Testing PatternExtract component", () => {
     );
 
     const parentWrapper = screen.getByTestId(/pattern-extract-wrapper/i);
-    expect(parentWrapper).toBeInTheDocument()
+    expect(parentWrapper).toBeInTheDocument();
   });
 });

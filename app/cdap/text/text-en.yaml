@@ -2803,7 +2803,6 @@ features:
       triggerNameExists: "Trigger Name already exists"
       triggerNameRequired: "Trigger Name is required"
       triggerNameLengthLimit: "Trigger Name should not be longer than 50 characters"
-      emptyCompositeTriggerError: "Please select upstream pipelines for this trigger"
       selectPipelineInstruction: "Select the pipelines you want to add to the trigger: "
       triggerAndType: "Wait for all events (AND)"
       triggerOrType: "Trigger on any selected event (OR)"
@@ -3438,10 +3437,16 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        loadToGrid: Wrangle
         wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
-        wrangeHome: home
+        wrangleHome: home
+      ariaLabels:
+        breadcrumb: breadcrumb
+    common:
+      and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
@@ -3462,7 +3467,7 @@ features:
           invalidIcon: Invalid
           mathIcon: Math
           nullIcon: 'Null'
-          otherIcon: Other
+          moreHorizIcon: Other
           redoIcon: Redo
           securityIcon: Security
           structureIcon: Structure
@@ -3471,20 +3476,16 @@ features:
       transformations:
         options:
           labels:
-            column:
-              copyColumn: Copy column
-              deletecolumn: Delete column
-              keepColumn: Keep column
             datatype:
-              bytes: bytes
+              string: string
               boolean: boolean
-              double: double
-              decimal: decimal
-              float: float
               integer: integer
               long: long
-              string: string
               short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
             menu:
               changeDatatype: Change data type
             fragment:
@@ -3558,6 +3559,19 @@ features:
           selectPattern: Select a pattern to extract from the column
           writeYourRegex: Write your own Regex
           examplePatternPlaceholder: E.g. 3
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     HomePage:
       labels:
         common:
@@ -3576,11 +3590,9 @@ features:
         title: No rows left in this sample
     Snackbar:
       labels:
-        datasetSuccess: Dataset loaded successfully 
         failure: Failure
-        retrieveFailure: Failed to retrieve sample data for
-        sampleFailure: Failed to retrieve sample data
         success: Success
         undo: Undo
-        workspaceFailure: Failed to create workspace for
+
+    
 ...

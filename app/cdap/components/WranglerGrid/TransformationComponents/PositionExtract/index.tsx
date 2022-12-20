@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Typography, Popover, Button, Box } from '@material-ui/core';
+import { Popover, Button, Box } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import NewColumnInput from 'components/common/TransformationInputComponents/NewColumnInput';
 import T from 'i18n-react';

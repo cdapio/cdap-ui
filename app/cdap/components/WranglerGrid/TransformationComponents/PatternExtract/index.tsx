@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { FormControl, FormGroup, MenuItem } from '@material-ui/core';
+import { FormGroup } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { USING_PATTERN_OPTIONS } from 'components/WranglerGrid/TransformationComponents/PatternExtract/options';
 import FormInputFieldComponent from 'components/common/TransformationInputComponents/FormInputFieldComponent';

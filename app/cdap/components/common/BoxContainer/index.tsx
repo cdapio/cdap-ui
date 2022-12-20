@@ -75,3 +75,12 @@ export const NewColumnWrapper = styled(Box)`
   width: 100%;
   display: flex;
 `;
+
+export const DividerBoxToggler = styled(Box)`
+  margin: 0px 16px;
+`;
+
+export const ExpandAndFunctionToggleContainer = styled(Box)`
+  display: flex;
+  justify-content: center;
+`;

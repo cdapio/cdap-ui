@@ -30,7 +30,6 @@ describe('Testing render TransformationToolbar component', () => {
           jest.fn();
         }}
         showBreadCrumb={false}
-        disableToolbarIcon={false}
       />
     );
   });
@@ -46,5 +45,11 @@ describe('Testing render TransformationToolbar component', () => {
     const iconButtonElement = screen.getAllByTestId(/toolbar-icon-button/i);
     fireEvent.click(iconButtonElement[0]);
     expect(iconButtonElement[0]).toBeInTheDocument();
+  });
+
+  it('Should check if headerToggler component exists and triggers the click event', () => {
+    const headerToggler = screen.getByTestId(/toolbar-header-toggler/i);
+    fireEvent.click(headerToggler);
+    expect(headerToggler).toBeInTheDocument();
   });
 });

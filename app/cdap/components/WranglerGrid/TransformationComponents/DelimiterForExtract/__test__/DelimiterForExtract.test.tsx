@@ -14,28 +14,25 @@
  *  the License.
  */
 
-import { render, screen } from "@testing-library/react";
-import React from "react";
-import DelimiterForExtract from "components/WranglerGrid/TransformationComponents/DelimiterForExtract/index";
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import DelimiterForExtract from 'components/WranglerGrid/TransformationComponents/DelimiterForExtract/index';
 import T from 'i18n-react';
 
+describe('Testing DelimiterForExtractcomponent', () => {
+  const PREFIX = 'features.WranglerNewUI.GridPage.transformationUI.extract';
 
-describe("Testing DelimiterForExtractcomponent", () => {
-    const PREFIX = 'features.WranglerNewUI.GridPage.transformationUI.extract';
-
-  it("should test default render of DelimiterForExtract", () => {
+  it('should test default render of DelimiterForExtract', () => {
     render(
       <DelimiterForExtract
         setTransformationComponentsValue={jest.fn()}
         transformationComponentValues={undefined}
       />
     );
-    const parentElement = screen.getByTestId(
-      /delimiter-extract-parent-wrapper/i
-    );
+    const parentElement = screen.getByTestId(/delimiter-extract-parent-wrapper/i);
     expect(parentElement).toBeInTheDocument();
 
-    const subHeadElement = screen.getByTestId(/delimiter-sub-head/i)
-    expect(subHeadElement).toHaveTextContent(`${T.translate(`${PREFIX}.selectDelimiter`)}`)
+    const subHeadElement = screen.getByTestId(/delimiter-sub-head/i);
+    expect(subHeadElement).toHaveTextContent(`${T.translate(`${PREFIX}.selectDelimiter`)}`);
   });
 });

@@ -14,22 +14,20 @@
  *  the License.
  */
 
-import { fireEvent, render, screen } from "@testing-library/react";
-import React from "react";
-import CustomPattern from "components/WranglerGrid/TransformationComponents/PatternExtract/CustomPattern/index";
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import CustomPattern from 'components/WranglerGrid/TransformationComponents/PatternExtract/CustomPattern/index';
 
-describe("Testing CustomPattern component", () => {
-  it("should test default render of CustomPattern", () => {
-    render(
-      <CustomPattern customInput={undefined} setCustomInput={jest.fn()} />
-    );
+describe('Testing CustomPattern component', () => {
+  it('should test default render of CustomPattern', () => {
+    render(<CustomPattern customInput={undefined} setCustomInput={jest.fn()} />);
 
-    const parentWrapperElement = screen.getByTestId(/custom-pattern-wrapper/i)
-    expect(parentWrapperElement).toBeInTheDocument()
+    const parentWrapperElement = screen.getByTestId(/custom-pattern-wrapper/i);
+    expect(parentWrapperElement).toBeInTheDocument();
 
-    const inputElement = screen.getByTestId(/custom-input-regex/i)
-    expect(inputElement).toBeInTheDocument()
-    fireEvent.change(inputElement, {target:{value: 'apple'}})
-    expect(inputElement).toHaveValue('apple')
+    const inputElement = screen.getByTestId(/custom-input-regex/i);
+    expect(inputElement).toBeInTheDocument();
+    fireEvent.change(inputElement, { target: { value: 'apple' } });
+    expect(inputElement).toHaveValue('apple');
   });
 });
