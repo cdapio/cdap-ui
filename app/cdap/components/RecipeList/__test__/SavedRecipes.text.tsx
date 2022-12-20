@@ -15,23 +15,14 @@
  */
 
 import React from 'react';
-import RecipeListOuter from 'components/RecipeList';
-import { SortBy, SortOrder } from 'components/RecipeList/types';
-import Box from '@material-ui/core/Box';
+import { render, screen } from '@testing-library/react';
 
-export const LastUpdatedRecipes = () => {
-  return (
-    <Box mb={4} data-testid="last-updated-recipes-homepage">
-      <RecipeListOuter
-        isOpen={true}
-        showAllColumns={true}
-        showActions={false}
-        showPagination={false}
-        sortBy={SortBy.UPDATED}
-        sortOrder={SortOrder.DESCENDING}
-        pageSize={2}
-        enableSorting={false}
-      />
-    </Box>
-  );
-};
+import { LastUpdatedRecipes } from 'components/RecipeManagement/LastUpdatedRecipes';
+
+describe('Test Last updated recipes in Home page', () => {
+  it('Should render LastUpdatedRecipes component', () => {
+    render(<LastUpdatedRecipes></LastUpdatedRecipes>);
+    const ele = screen.getByTestId(/last-updated-recipes-homepage/i);
+    expect(ele).toBeInTheDocument();
+  });
+});

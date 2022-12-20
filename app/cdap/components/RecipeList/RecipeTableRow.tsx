@@ -28,8 +28,8 @@ import { format, TYPES } from 'services/DataFormatter';
 interface IRecipeTableRowProps {
   recipe: IRecipe;
   createdTimeMillis?: any;
-  isShowAllColumns: boolean;
-  isShowActions: boolean;
+  showAllColumns: boolean;
+  showActions: boolean;
   onViewRecipe: (selectedRecipe: IRecipe) => void;
   onEditRecipe: (selectedRecipe: IRecipe) => void;
   onSelectRecipe: (selectedRecipe: IRecipe) => void;
@@ -38,12 +38,11 @@ interface IRecipeTableRowProps {
 }
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
-const DATE_FORMAT = 'MM-DD-YYYY HH:mm A';
 
 export const RecipeTableRow = ({
   recipe,
-  isShowAllColumns,
-  isShowActions,
+  showAllColumns,
+  showActions,
   onViewRecipe,
   onEditRecipe,
   onSelectRecipe,
@@ -177,12 +176,12 @@ export const RecipeTableRow = ({
 
   return (
     <>
-      <div className="grid-row" onClick={!isShowAllColumns ? selectRecipeHandler : undefined}>
+      <div className="grid-row" onClick={!showAllColumns ? selectRecipeHandler : undefined}>
         <div>{recipe.recipeName}</div>
         <div>{recipe.recipeStepsCount}</div>
-        {isShowAllColumns && <div>{recipe.description}</div>}
+        {showAllColumns && <div>{recipe.description}</div>}
         <div>{format(recipe.updatedTimeMillis, TYPES.TIMESTAMP_MILLIS)}</div>
-        {isShowActions && (
+        {showActions && (
           <span onClick={handleActionsClick}>
             <ActionsPopover
               actions={actions}

@@ -58,8 +58,8 @@ const ViewAllRecipies = () => {
       <Box ml={4} mr={4}>
         <RecipeListOuter
           isOpen={true}
-          isShowAllColumns={true}
-          isShowActions={true}
+          showAllColumns={true}
+          showActions={true}
           viewHandler={viewRecipeHandler}
           editHandler={handleEditRecipe}
           pageSize={12}

@@ -24,8 +24,8 @@ import { IState, setSort } from './reducer';
 
 interface IRecipeTableProps {
   allRecipies: IRecipe[];
-  isShowAllColumns: boolean;
-  isShowActions: boolean;
+  showAllColumns: boolean;
+  showActions: boolean;
   enableSorting: boolean;
   viewHandler: (selectedRecipe: IRecipe) => void;
   editHandler: (selectedRecipe: IRecipe) => void;
@@ -38,8 +38,8 @@ const PREFIX = 'features.WranglerNewUI.Recipe';
 
 export const RecipesTable = ({
   allRecipies,
-  isShowAllColumns,
-  isShowActions,
+  showAllColumns,
+  showActions,
   enableSorting,
   viewHandler,
   editHandler,
@@ -49,15 +49,15 @@ export const RecipesTable = ({
 }: IRecipeTableProps) => {
   const renderSortableHeaderColumn = (columnName: string) => {
     const { sortColumn, sortedOrder } = state;
-    const setSorting = () => {
-      setSort(dispatch, state, columnName);
-    };
+
     return (
       <SortableHeader
         sortColumn={sortColumn}
         sortOrder={sortedOrder}
         columnName={columnName}
-        setSort={setSorting}
+        setSort={() => {
+          setSort(dispatch, state, columnName);
+        }}
       ></SortableHeader>
     );
   };
@@ -73,13 +73,13 @@ export const RecipesTable = ({
               <strong>{T.translate(`${PREFIX}.name`)}</strong>
             )}
             <strong>{T.translate(`${PREFIX}.steps`)}</strong>
-            {isShowAllColumns && <strong>{T.translate(`${PREFIX}.description`)}</strong>}
+            {showAllColumns && <strong>{T.translate(`${PREFIX}.description`)}</strong>}
             {enableSorting ? (
               renderSortableHeaderColumn('updated')
             ) : (
               <strong>{T.translate(`${PREFIX}.updated`)}</strong>
             )}
-            {isShowActions && <strong></strong>}
+            {showActions && <strong></strong>}
           </div>
         </div>
       );
@@ -87,7 +87,7 @@ export const RecipesTable = ({
   };
 
   const renderTableBody = () => {
-    if (!allRecipies || (Array.isArray(allRecipies) && allRecipies.length === 0)) {
+    if (!allRecipies || allRecipies.length === 0) {
       return (
         <EmptyMessageContainer title={T.translate(`${PREFIX}.emptyListMessage`)}>
           <></>
@@ -101,11 +101,11 @@ export const RecipesTable = ({
             <RecipeTableRow
               key={recipe.recipeId.recipeId}
               recipe={recipe}
-              isShowAllColumns={isShowAllColumns}
+              showAllColumns={showAllColumns}
               onViewRecipe={viewHandler}
               onEditRecipe={editHandler}
               onSelectRecipe={selectHandler}
-              isShowActions={isShowActions}
+              showActions={showActions}
               state={state}
               dispatch={dispatch}
             />

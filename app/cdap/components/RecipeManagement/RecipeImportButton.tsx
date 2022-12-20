@@ -60,8 +60,8 @@ export const RecipeImportButton = () => {
       {renderRecipeImportBtn()}
       <RecipeListOuter
         isOpen={isOpen}
-        isShowAllColumns={false}
-        isShowActions={false}
+        showAllColumns={false}
+        showActions={false}
         selectHandler={handleSelectRecipe}
         sortBy={SortBy.NAME}
         sortOrder={SortOrder.ASCENDING}

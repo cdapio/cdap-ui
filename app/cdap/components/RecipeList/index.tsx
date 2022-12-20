@@ -32,8 +32,8 @@ const PREFIX = 'features.WranglerNewUI.Recipe';
 
 interface IRecipeListProps {
   isOpen: boolean;
-  isShowAllColumns?: boolean;
-  isShowActions?: boolean;
+  showAllColumns?: boolean;
+  showActions?: boolean;
   showPagination?: boolean;
   enableSorting?: boolean;
   sortBy?: SortBy;
@@ -46,8 +46,8 @@ interface IRecipeListProps {
 
 const RecipeList = ({
   isOpen,
-  isShowAllColumns,
-  isShowActions,
+  showAllColumns,
+  showActions,
   showPagination,
   enableSorting,
   sortBy,
@@ -105,16 +105,16 @@ const RecipeList = ({
 
   return (
     <RecipeTableDiv
-      showallcolumns={isShowAllColumns ? 1 : 0}
-      showactions={isShowActions ? 1 : 0}
+      showallcolumns={showAllColumns ? true : false}
+      showactions={showActions ? true : false}
       data-testid="recipe-table-container"
     >
       {isOpen && (
         <>
           <RecipesTable
             allRecipies={recipes}
-            isShowAllColumns={isShowAllColumns}
-            isShowActions={isShowActions}
+            showAllColumns={showAllColumns}
+            showActions={showActions}
             enableSorting={enableSorting}
             viewHandler={viewRecipeHandler}
             editHandler={editRecipeHanlder}
@@ -131,11 +131,11 @@ const RecipeList = ({
 
 const RecipeListOuter = ({
   isOpen = true,
-  isShowAllColumns = true,
+  showAllColumns = true,
   viewHandler = null,
   editHandler = null,
   selectHandler = null,
-  isShowActions = true,
+  showActions = true,
   showPagination = true,
   sortBy = SortBy.NAME,
   sortOrder = SortOrder.ASCENDING,
@@ -144,11 +144,11 @@ const RecipeListOuter = ({
 }) => (
   <RecipeList
     isOpen={isOpen}
-    isShowAllColumns={isShowAllColumns}
+    showAllColumns={showAllColumns}
     viewHandler={viewHandler}
     editHandler={editHandler}
     selectHandler={selectHandler}
-    isShowActions={isShowActions}
+    showActions={showActions}
     showPagination={showPagination}
     sortBy={sortBy}
     sortOrder={sortOrder}
