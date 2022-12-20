@@ -22,7 +22,7 @@ import MyDataPrepApi from 'api/dataprep';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import fileDownload from 'js-file-download';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
-import { IState, reset } from './reducer';
+import { IState, reset, getRecipeDetailsById, deleteRecipe } from './reducer';
 import { format, TYPES } from 'services/DataFormatter';
 
 interface IRecipeTableRowProps {
@@ -63,32 +63,23 @@ export const RecipeTableRow = ({
     setShowPopover(!showPopover);
   };
 
-  const getRecipeDetailsById = (responseHandler) => {
-    MyDataPrepApi.getRecipeById({
-      context: getCurrentNamespace(),
-      recipeId: recipe.recipeId.recipeId,
-    }).subscribe((res) => {
-      responseHandler(res);
-    });
-  };
-
   const selectRecipeHandler = () => {
-    getRecipeDetailsById(onSelectRecipe);
+    getRecipeDetailsById(recipe.recipeId.recipeId, onSelectRecipe);
   };
 
   const handleRecipeView = () => {
     setShowPopover(!showPopover);
-    getRecipeDetailsById(onViewRecipe);
+    getRecipeDetailsById(recipe.recipeId.recipeId, onViewRecipe);
   };
 
   const handleRecipeEdit = () => {
     setShowPopover(!showPopover);
-    getRecipeDetailsById(onEditRecipe);
+    getRecipeDetailsById(recipe.recipeId.recipeId, onEditRecipe);
   };
 
   const handleDownloadRecipe = () => {
     setShowPopover(!showPopover);
-    getRecipeDetailsById(downloadRecipe);
+    getRecipeDetailsById(recipe.recipeId.recipeId, downloadRecipe);
   };
 
   const downloadRecipe = (res) => {
@@ -108,21 +99,19 @@ export const RecipeTableRow = ({
 
   const handleDeleteRecipe = () => {
     setDeleteLoading(true);
-    MyDataPrepApi.deleteRecipe({
-      context: getCurrentNamespace(),
-      recipeId: recipe.recipeId.recipeId,
-    }).subscribe(
-      () => {
-        setDeleteLoading(false);
-        toggleDeleteConfirmation();
-        reset(dispatch, state);
-      },
-      (err) => {
-        setDeleteErrMsg(T.translate(`${PREFIX}.common.deleteError`));
-        setExtendedDeleteErrMsg(err.message);
-        setDeleteLoading(false);
-      }
-    );
+    deleteRecipe(recipe.recipeId.recipeId, deleteResponseHandler, deleteErrorHandler);
+  };
+
+  const deleteResponseHandler = () => {
+    setDeleteLoading(false);
+    toggleDeleteConfirmation();
+    reset(dispatch, state);
+  };
+
+  const deleteErrorHandler = (err) => {
+    setDeleteErrMsg(T.translate(`${PREFIX}.common.deleteError`));
+    setExtendedDeleteErrMsg(err.message);
+    setDeleteLoading(false);
   };
 
   const renderDeleteConfirmation = () => {

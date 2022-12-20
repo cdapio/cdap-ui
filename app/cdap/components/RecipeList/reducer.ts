@@ -174,3 +174,32 @@ export function setSort(dispatch, state, columnName: string) {
     pageToken: null,
   });
 }
+
+export const getRecipeDetailsById = (recipeId, responseHandler) => {
+  MyDataPrepApi.getRecipeById({
+    context: getCurrentNamespace(),
+    recipeId,
+  }).subscribe((res) => {
+    if (responseHandler) {
+      responseHandler(res);
+    }
+  });
+};
+
+export const deleteRecipe = (recipeId, responseHandler, errorHandler) => {
+  MyDataPrepApi.deleteRecipe({
+    context: getCurrentNamespace(),
+    recipeId,
+  }).subscribe(
+    () => {
+      if (responseHandler) {
+        responseHandler();
+      }
+    },
+    (err) => {
+      if (errorHandler) {
+        errorHandler(err);
+      }
+    }
+  );
+};
