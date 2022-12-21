@@ -44,7 +44,6 @@ public class PipelineDraft {
   public static final Gson GSON = new Gson();
   public static final String DUMMY_PROJECT = "DummyProject";
   public static final String DUMMY_DATASET = "DummyDataset";
-  public static final String PIPELINE_TYPE = "cdap-data-pipeline";
 
   public static String pipelineName = "";
   public static String newPipelineDraftName = "";
@@ -67,11 +66,7 @@ public class PipelineDraft {
   @Then("Fill in pipeline name")
   public void fillInPipelineName() {
     pipelineName = "Test_Draft_Pipeline_" + UUID.randomUUID();
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-metadata"));
-    ElementHelper.clearElementValue(Helper.locateElementByCssSelector("#pipeline-name-input"));
-    ElementHelper.sendKeys(Helper.locateElementByCssSelector("#pipeline-name-input"), pipelineName);
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
+    Commands.fillInPipelineName(pipelineName);
   }
 
   @Then("Check url for draftId string")
@@ -84,7 +79,7 @@ public class PipelineDraft {
   @Then("Verify the exported pipeline")
   public void verifyExportedJsonPipeline() throws IOException {
     Reader reader = Files.newBufferedReader(Paths.get(
-      Constants.DOWNLOADS_DIR + pipelineName + "-" + PIPELINE_TYPE + ".json"));
+      Constants.DOWNLOADS_DIR + pipelineName + "-" + Constants.PIPELINE_TYPE + ".json"));
     JsonObject jsonObject = GSON.fromJson(reader, JsonObject.class);
     JsonArray stages = jsonObject.getAsJsonObject("config").getAsJsonArray("stages");
     String datasetProject = "";

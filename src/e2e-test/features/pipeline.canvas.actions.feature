@@ -38,7 +38,7 @@ Feature: Pipeline Canvas - Actions
     When Open Pipeline Studio Page
     Then Create a complex pipeline
     Then Verify sink nodes are visible
-    Then Zoom in ten times
+    Then Zoom in ten times on pipeline canvas
     Then Verify sink nodes are invisible
     Then Fit pipeline to screen
     Then Verify sink nodes are visible

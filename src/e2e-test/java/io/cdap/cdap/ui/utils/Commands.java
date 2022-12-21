@@ -40,9 +40,20 @@ import java.util.List;
 
 public class Commands implements CdfHelper {
 
+  // Simple Pipeline Nodes
   public static NodeInfo simpleSourceNode = new NodeInfo("BigQueryTable", "batchsource", "0");
   public static NodeInfo simpleTransformNode = new NodeInfo("Wrangler", "transform", "1");
   public static NodeInfo simpleSinkNode = new NodeInfo("BigQueryMultiTable", "batchsink", "2");
+
+  // Complex Pipeline Nodes
+  public static NodeInfo complexSourceNode1 = new NodeInfo("Spanner", "batchsource", "0");
+  public static NodeInfo complexSourceNode2 = new NodeInfo("Spanner", "batchsource", "1");
+  public static NodeInfo complexTransformNode1 = new NodeInfo("JavaScript", "transform", "2");
+  public static NodeInfo complexTransformNode2 = new NodeInfo("JavaScript", "transform", "3");
+  public static NodeInfo complexJoinerNode = new NodeInfo("Joiner", "batchjoiner", "4");
+  public static NodeInfo complexConditionNode = new NodeInfo("Conditional", "condition", "5");
+  public static NodeInfo complexSinkNode1 = new NodeInfo("BigQueryMultiTable", "batchsink", "6");
+  public static NodeInfo complexSinkNode2 = new NodeInfo("BigQueryMultiTable", "batchsink", "7");
 
   public static void addNodeToCanvas(NodeInfo node) {
     WaitHelper.waitForElementToBeDisplayed(
@@ -242,58 +253,40 @@ public class Commands implements CdfHelper {
   }
 
   public static void createComplexPipeline() {
-    // Two BigQuery sources
-    NodeInfo sourceNode1 = new NodeInfo("Spanner", "batchsource", "0");
-    NodeInfo sourceNode2 = new NodeInfo("Spanner", "batchsource", "1");
-
-    // Two javascript transforms
-    NodeInfo transformNode1 = new NodeInfo("JavaScript", "transform", "2");
-    NodeInfo transformNode2 = new NodeInfo("JavaScript", "transform", "3");
-
-    // One joiner
-    NodeInfo joinerNode = new NodeInfo("Joiner", "batchjoiner", "4");
-
-    // One condition node
-    NodeInfo conditionNode = new NodeInfo("Conditional", "condition", "5");
-
-    // Two BigQuery sinks
-    NodeInfo sinkNode1 = new NodeInfo("BigQueryMultiTable", "batchsink", "6");
-    NodeInfo sinkNode2 = new NodeInfo("BigQueryMultiTable", "batchsink", "7");
-
-    addNodeToCanvas(sourceNode1);
-    addNodeToCanvas(sourceNode2);
+    addNodeToCanvas(complexSourceNode1);
+    addNodeToCanvas(complexSourceNode2);
 
     openPluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
-    addNodeToCanvas(transformNode1);
-    addNodeToCanvas(transformNode2);
+    addNodeToCanvas(complexTransformNode1);
+    addNodeToCanvas(complexTransformNode2);
     closePluginGroupPanel(Constants.TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT);
 
     openPluginGroupPanel(Constants.ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT);
-    addNodeToCanvas(joinerNode);
+    addNodeToCanvas(complexJoinerNode);
     closePluginGroupPanel(Constants.ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT);
 
     openPluginGroupPanel(Constants.CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT);
-    addNodeToCanvas(conditionNode);
+    addNodeToCanvas(complexConditionNode);
     closePluginGroupPanel(Constants.CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT);
 
     openPluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
-    addNodeToCanvas(sinkNode1);
-    addNodeToCanvas(sinkNode2);
+    addNodeToCanvas(complexSinkNode1);
+    addNodeToCanvas(complexSinkNode2);
     closePluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
 
     pipelineCleanUpGraphControl();
     fitPipelineToScreen();
 
-    connectTwoNodes(sourceNode1, transformNode1);
-    connectTwoNodes(sourceNode2, transformNode2);
+    connectTwoNodes(complexSourceNode1, complexTransformNode1);
+    connectTwoNodes(complexSourceNode2, complexTransformNode2);
 
-    connectTwoNodes(transformNode1, joinerNode);
-    connectTwoNodes(transformNode2, joinerNode);
+    connectTwoNodes(complexTransformNode1, complexJoinerNode);
+    connectTwoNodes(complexTransformNode2, complexJoinerNode);
 
-    connectTwoNodes(joinerNode, conditionNode);
+    connectTwoNodes(complexJoinerNode, complexConditionNode);
 
-    connectTwoNodes(conditionNode, sinkNode1);
-    connectTwoNodes(conditionNode, sinkNode2);
+    connectTwoNodes(complexConditionNode, complexSinkNode1);
+    connectTwoNodes(complexConditionNode, complexSinkNode2);
 
     pipelineCleanUpGraphControl();
     fitPipelineToScreen();
@@ -345,5 +338,19 @@ public class Commands implements CdfHelper {
         + draftId, null, null, null
     );
     return response.getResponseCode();
+  }
+
+  public static void fillInPipelineName(String pipelineName) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-metadata"));
+    ElementHelper.clearElementValue(Helper.locateElementByCssSelector("#pipeline-name-input"));
+    ElementHelper.sendKeys(Helper.locateElementByCssSelector("#pipeline-name-input"), pipelineName);
+    ElementHelper.clickOnElement(
+      Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
+  }
+  
+  public static void dismissTopBanner() {
+    ElementHelper.clickOnElement(Helper.locateElementByXPath(
+      "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']"));
+    WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("valium-banner-hydrator"));
   }
 }
