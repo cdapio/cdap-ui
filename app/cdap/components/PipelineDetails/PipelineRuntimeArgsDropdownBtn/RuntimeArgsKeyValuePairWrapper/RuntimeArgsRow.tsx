@@ -120,6 +120,7 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
       <div className={this.props.classes.inputContainer}>
         <TextField
           data-cy="runtimeargs-key"
+          data-testid="runtimeargs-key"
           label={this.props.keyPlaceholder}
           onChange={this.handleChange.bind(this, 'key')}
           value={this.state.key}
@@ -140,6 +141,7 @@ class RuntimeArgsRowView extends AbstractRow<IRuntimeArgsRowProps, IKeyValueStat
 
         <TextField
           data-cy="runtimeargs-value"
+          data-testid="runtimeargs-value"
           label={this.props.valuePlaceholder}
           onChange={this.handleChange.bind(this, 'value')}
           value={this.state.value}

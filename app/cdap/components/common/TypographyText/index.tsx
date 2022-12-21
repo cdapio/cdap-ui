@@ -52,7 +52,7 @@ export const SuccessText = styled(Typography)`
 `;
 
 export const MenuHeadText = styled(Typography)`
-  color: ${grey[600]};
+  <<<<<<<headcolor: ${grey[600]};
   font-size: 14px;
   font-weight: 600;
   padding: 10px 20px;
@@ -66,4 +66,6 @@ export const TableCellText = styled(Typography)`
   font-size: 14px;
   margin-bottom: 5px;
   text-transform: capitalize;
+  color: grey[600];
+  padding: 0px 20px;
 `;

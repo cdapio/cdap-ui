@@ -24,7 +24,6 @@ Feature: Navigating through the connector types
 
   Examples:
     | connectionLabel | connectionTestId |
-    | Add Connections | add-connection |
     | PostgreSQL | postgresql |
     | File | file |
     | Import Data | import-data |

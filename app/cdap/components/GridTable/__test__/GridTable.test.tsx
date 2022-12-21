@@ -14,15 +14,15 @@
  *  the License.
  */
 
-import React from 'react';
-import GridTable from 'components/GridTable/index';
 import { render } from '@testing-library/react';
-import { Route, Router, Switch } from 'react-router';
-import { createBrowserHistory as createHistory } from 'history';
 import MyDataPrepApi from 'api/dataprep';
+import GridTable from 'components/GridTable/index';
+import React from 'react';
+import { Route, Router, Switch } from 'react-router';
 import rxjs from 'rxjs/operators';
-import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
 import history from 'services/history';
+import { mockForFlatMap, mockForGetWorkspace } from '../mock/mockDataForGrid';
+import * as BreadcrumbOptions from 'components/GridTable/utils';
 
 describe('Testing Grid Table Component', () => {
   jest.spyOn(rxjs, 'flatMap' as any).mockImplementation((callback: any) => {
@@ -40,6 +40,10 @@ describe('Testing Grid Table Component', () => {
         },
       };
     });
+
+    jest
+      .spyOn(BreadcrumbOptions, 'getWrangleGridBreadcrumbOptions')
+      .mockReturnValue([{ label: 'yolo', link: 'abcd' }]);
 
     const container = render(
       <Router history={history}>

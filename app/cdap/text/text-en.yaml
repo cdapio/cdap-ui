@@ -3437,26 +3437,20 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        loadToGrid: Wrangle
         wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
-        wrangeHome: home
+        wrangleHome: home
+      ariaLabels:
+        breadcrumb: breadcrumb
+    common:
+      and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
-    HomePage:
-      labels:
-        common:
-          addConnection: Add Connection
-          importData: Import Data
-          viewAll: View All
-        connectorTypes:
-          title: Start data exploration
-        workspaces:
-          title: Continue ongoing data explorations, pick up where you left off
-    ImportData:
-      referenceLabel: Import Data
     GridPage:
       menuItems:
         divider: divider
@@ -3473,7 +3467,7 @@ features:
           invalidIcon: Invalid
           mathIcon: Math
           nullIcon: 'Null'
-          otherIcon: Other
+          moreHorizIcon: Other
           redoIcon: Redo
           securityIcon: Security
           structureIcon: Structure
@@ -3482,20 +3476,16 @@ features:
       transformations:
         options:
           labels:
-            column:
-              copyColumn: Copy column
-              deletecolumn: Delete column
-              keepColumn: Keep column
             datatype:
-              bytes: bytes
+              string: string
               boolean: boolean
-              double: double
-              decimal: decimal
-              float: float
               integer: integer
               long: long
-              string: string
               short: short
+              float: float
+              double: double
+              decimal: decimal
+              bytes: bytes
             menu:
               changeDatatype: Change data type
             nullMissing:
@@ -3510,8 +3500,6 @@ features:
               removeNull: remove-null
               replace: Replace
               replaceNullMissing: replace-null-missing
-            other:
-              sendToError: Send to error
       addTransformationPanel:
         addTransformation: Add Transformation Step
         applyStep: Apply Step
@@ -3535,20 +3523,39 @@ features:
         fillNullOrEmpty:
           fillNullEmpty: Fill null or empty cell
           fillInputPlaceholder: Enter a value 
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
+    HomePage:
+      labels:
+        common:
+          addConnection: Add Connection
+          importData: Import Data
+          viewAll: View All
+        connectorTypes:
+          title: Start data exploration
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
+    ImportData:
+      referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
         subtitle: Remove some recipe steps to view some data
         title: No rows left in this sample
     Snackbar:
       labels:
-        datasetSuccess: Dataset loaded successfully 
         failure: Failure
-        retrieveFailure: Failed to retrieve sample data for
-        sampleFailure: Failed to retrieve sample data
         success: Success
         undo: Undo
-        workspaceFailure: Failed to create workspace for
 
-
-
-...
+    
