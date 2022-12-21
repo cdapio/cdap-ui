@@ -84,3 +84,12 @@ export const PaginationContainer = styled.div`
     margin-right: 10px;
   }
 `;
+
+export const NoDataText = styled.span`
+  margin: 15px 0;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;

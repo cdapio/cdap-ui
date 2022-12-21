@@ -16,10 +16,9 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-// import WranglerHomeNew from '../index';
-import RecipeList from '../index';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
+import ViewAllRecipies from '../ViewAllRecipes';
 
 describe('It renders Recipes list ', () => {
   test('renders RecipeList component', () => {
@@ -27,7 +26,7 @@ describe('It renders Recipes list ', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeList />
+            <ViewAllRecipies></ViewAllRecipies>
           </Route>
         </Switch>
       </Router>

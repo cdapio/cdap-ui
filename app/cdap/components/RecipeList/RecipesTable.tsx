@@ -18,7 +18,6 @@ import React from 'react';
 import T from 'i18n-react';
 import { RecipeTableRow } from './RecipeTableRow';
 import { IRecipe } from './types';
-import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from './SortableHeader';
 import { IState, setSort } from './reducer';
 
@@ -63,37 +62,28 @@ export const RecipesTable = ({
   };
 
   const renderTableHeader = () => {
-    if (allRecipies && allRecipies.length > 0) {
-      return (
-        <div className="grid-header">
-          <div className="grid-row">
-            {enableSorting ? (
-              renderSortableHeaderColumn('name')
-            ) : (
-              <strong>{T.translate(`${PREFIX}.name`)}</strong>
-            )}
-            <strong>{T.translate(`${PREFIX}.steps`)}</strong>
-            {showAllColumns && <strong>{T.translate(`${PREFIX}.description`)}</strong>}
-            {enableSorting ? (
-              renderSortableHeaderColumn('updated')
-            ) : (
-              <strong>{T.translate(`${PREFIX}.updated`)}</strong>
-            )}
-            {showActions && <strong></strong>}
-          </div>
+    return (
+      <div className="grid-header">
+        <div className="grid-row">
+          {enableSorting ? (
+            renderSortableHeaderColumn('name')
+          ) : (
+            <strong>{T.translate(`${PREFIX}.name`)}</strong>
+          )}
+          <strong>{T.translate(`${PREFIX}.steps`)}</strong>
+          {showAllColumns && <strong>{T.translate(`${PREFIX}.description`)}</strong>}
+          {enableSorting ? (
+            renderSortableHeaderColumn('updated')
+          ) : (
+            <strong>{T.translate(`${PREFIX}.updated`)}</strong>
+          )}
+          {showActions && <strong></strong>}
         </div>
-      );
-    }
+      </div>
+    );
   };
 
   const renderTableBody = () => {
-    if (!allRecipies || allRecipies.length === 0) {
-      return (
-        <EmptyMessageContainer title={T.translate(`${PREFIX}.emptyListMessage`)}>
-          <></>
-        </EmptyMessageContainer>
-      );
-    }
     return (
       <div className="grid-body">
         {allRecipies.map((recipe) => {

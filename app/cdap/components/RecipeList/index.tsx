@@ -17,9 +17,10 @@
 import React, { useEffect, useReducer } from 'react';
 import { RecipesTable } from './RecipesTable';
 import PaginationStepper from 'components/shared/PaginationStepper';
-import { RecipeTableDiv, PaginationContainer } from './styles';
+import { RecipeTableDiv, PaginationContainer, NoDataText } from './styles';
 import { IRecipe, SortBy, SortOrder } from './types';
 import { reducer, nextPage, prevPage, getSavedRecipes, defaultInitialState } from './reducer';
+import T from 'i18n-react';
 
 interface IRecipeListProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ interface IRecipeListProps {
   editHandler?: (selectedRecipe: IRecipe) => void;
   selectHandler?: (selectedRecipe: IRecipe) => void;
 }
+const PREFIX = 'features.WranglerNewUI.Recipe';
 
 const RecipeList = ({
   isOpen,
@@ -100,7 +102,11 @@ const RecipeList = ({
       showactions={showActions ? true : false}
       data-testid="recipe-table-container"
     >
-      {isOpen && (
+      {!recipes ||
+        (recipes.length === 0 && (
+          <NoDataText>{T.translate(`${PREFIX}.emptyListMessage`)}</NoDataText>
+        ))}
+      {isOpen && recipes && recipes.length > 0 && (
         <>
           <RecipesTable
             allRecipies={recipes}
