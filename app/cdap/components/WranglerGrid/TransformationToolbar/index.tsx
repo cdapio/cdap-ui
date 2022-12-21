@@ -14,25 +14,28 @@
  *  the License.
  */
 
-import { IconButton, SvgIcon } from '@material-ui/core';
+import { Box, IconButton, SvgIcon } from '@material-ui/core';
 import { default as React, useState } from 'react';
 import NestedMenu from 'components/WranglerGrid/NestedMenu';
 import { ITransformationToolBarProps } from 'components/WranglerGrid/TransformationToolbar/types';
 import { Divider, LongDivider } from 'components/WranglerGrid/TransformationToolbar/iconStore';
+import FunctionToggle from 'components/WranglerGrid/FunctionNameToggle';
 import { nestedMenuOptions } from 'components/WranglerGrid/TransformationToolbar/utils';
+import ExpandButton from 'components/common/ExpandButton';
 import { NormalFont } from 'components/common/TypographyText';
 import {
   LastDividerBox,
   DividerBox,
   FunctionBoxWrapper,
   SearchBoxWrapper,
+  ExpandAndFunctionToggleContainer,
 } from 'components/common/BoxContainer';
 import { ToolBarIconWrapper, ToolBarInnerWrapper } from 'components/common/IconContainer';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import styled, { css } from 'styled-components';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
 
-const CustomizedSvgIcon = styled(SvgIcon)`
+const StyledSvgIcon = styled(SvgIcon)`
   font-size: 28px;
   ${(props) =>
     props.flipped &&
@@ -42,11 +45,18 @@ const CustomizedSvgIcon = styled(SvgIcon)`
     `}
 `;
 
+const StyledIconButton = styled(IconButton)`
+  &.MuiButtonBase-root.Mui-disabled {
+    opacity: 0.5;
+  }
+`;
+
 export default function({
   columnType,
   submitMenuOption,
   setShowBreadCrumb,
   showBreadCrumb,
+  disableToolbarIcon,
 }: ITransformationToolBarProps) {
   const [showName, setShowName] = useState<boolean>(false);
   const [anchorElement, setAnchorElement] = useState<HTMLElement[]>(null);
@@ -58,12 +68,13 @@ export default function({
   };
 
   return (
-    <ToolBarIconWrapper data-testid="transformations-toolbar-container">
+    <ToolBarIconWrapper data-testid="transformations-toolbar-container" showName={showName}>
       <ToolBarInnerWrapper data-testid="nested-menu-container">
         {nestedMenuOptions?.map((eachOption, optionIndex) => {
           return (
             <>
               <FunctionBoxWrapper
+                showName={showName}
                 data-testid={`toolbar-icon-${eachOption.title
                   .toLowerCase()
                   .split(' ')
@@ -77,7 +88,8 @@ export default function({
                     .split(' ')
                     .join('-')}`}
                 >
-                  <IconButton
+                  <StyledIconButton
+                    disabled={disableToolbarIcon}
                     onClick={(clickEvent) => {
                       if (eachOption.options?.length) {
                         clickEvent.preventDefault();
@@ -88,15 +100,15 @@ export default function({
                         submitMenuOption(eachOption.action, eachOption.dataType);
                       }
                     }}
-                    data-testid={`toolbar-icon-button-${eachOption.title}`}
+                    data-testid="toolbar-icon-button"
                   >
-                    {eachOption.iconSVG ?? (
-                      <CustomizedSvgIcon
+                    {eachOption?.iconSVG ?? (
+                      <StyledSvgIcon
                         component={eachOption.icon}
                         flipped={eachOption.action === 'redo'}
                       />
                     )}
-                  </IconButton>
+                  </StyledIconButton>
                 </CustomTooltip>
                 {eachOption.options?.length > 0 && (
                   <NestedMenu
@@ -132,6 +144,14 @@ export default function({
           {/* TODO Search functionality UI component will be added here */}
         </SearchBoxWrapper>
       </ToolBarInnerWrapper>
+      <ExpandAndFunctionToggleContainer>
+        <FunctionToggle setShowName={setShowName} showName={showName} />
+        <ExpandButton
+          open={showBreadCrumb}
+          onClick={() => setShowBreadCrumb(!showBreadCrumb)}
+          dataTestId="toolbar-header-toggler"
+        />
+      </ExpandAndFunctionToggleContainer>
     </ToolBarIconWrapper>
   );
 }
