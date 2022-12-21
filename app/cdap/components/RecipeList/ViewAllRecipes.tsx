@@ -16,7 +16,7 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import RecipeListOuter from 'components/RecipeList';
+import RecipeList from 'components/RecipeList';
 
 import Box from '@material-ui/core/Box';
 import { SortBy, SortOrder } from './types';
@@ -56,7 +56,7 @@ const ViewAllRecipies = () => {
       </Box>
 
       <Box ml={4} mr={4}>
-        <RecipeListOuter
+        <RecipeList
           isOpen={true}
           showAllColumns={true}
           showActions={true}
@@ -65,6 +65,8 @@ const ViewAllRecipies = () => {
           pageSize={12}
           sortBy={SortBy.UPDATED}
           sortOrder={SortOrder.DESCENDING}
+          showPagination={true}
+          enableSorting={true}
         />
       </Box>
     </>

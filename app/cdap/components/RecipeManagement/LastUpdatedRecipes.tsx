@@ -15,14 +15,14 @@
  */
 
 import React from 'react';
-import RecipeListOuter from 'components/RecipeList';
+import RecipeList from 'components/RecipeList';
 import { SortBy, SortOrder } from 'components/RecipeList/types';
 import Box from '@material-ui/core/Box';
 
 export const LastUpdatedRecipes = () => {
   return (
     <Box mb={4} data-testid="last-updated-recipes-homepage">
-      <RecipeListOuter
+      <RecipeList
         isOpen={true}
         showAllColumns={true}
         showActions={false}

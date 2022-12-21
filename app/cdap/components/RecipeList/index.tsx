@@ -120,32 +120,4 @@ const RecipeList = ({
   );
 };
 
-const RecipeListOuter = ({
-  isOpen = true,
-  showAllColumns = true,
-  viewHandler = null,
-  editHandler = null,
-  selectHandler = null,
-  showActions = true,
-  showPagination = true,
-  sortBy = SortBy.NAME,
-  sortOrder = SortOrder.ASCENDING,
-  pageSize = 10,
-  enableSorting = true,
-}) => (
-  <RecipeList
-    isOpen={isOpen}
-    showAllColumns={showAllColumns}
-    viewHandler={viewHandler}
-    editHandler={editHandler}
-    selectHandler={selectHandler}
-    showActions={showActions}
-    showPagination={showPagination}
-    sortBy={sortBy}
-    sortOrder={sortOrder}
-    pageSize={pageSize}
-    enableSorting={enableSorting}
-  />
-);
-
-export default RecipeListOuter;
+export default RecipeList;

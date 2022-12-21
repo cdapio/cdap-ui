@@ -17,7 +17,7 @@
 import React, { useRef, useState } from 'react';
 import T from 'i18n-react';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
-import RecipeListOuter from 'components/RecipeList';
+import RecipeList from 'components/RecipeList';
 import IconSVG from 'components/shared/IconSVG';
 import { SortBy, SortOrder } from 'components/RecipeList/types';
 import Box from '@material-ui/core/Box';
@@ -58,7 +58,7 @@ export const RecipeImportButton = () => {
   return (
     <Box m={2}>
       {renderRecipeImportBtn()}
-      <RecipeListOuter
+      <RecipeList
         isOpen={isOpen}
         showAllColumns={false}
         showActions={false}
@@ -66,6 +66,8 @@ export const RecipeImportButton = () => {
         sortBy={SortBy.UPDATED}
         sortOrder={SortOrder.DESCENDING}
         pageSize={6}
+        showPagination={true}
+        enableSorting={true}
       />
     </Box>
   );
