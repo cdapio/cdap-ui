@@ -16,13 +16,17 @@
 
 import { MenuItem } from '@material-ui/core';
 import React from 'react';
-import { menuArrowIcon } from 'components/WranglerGrid/TransformationToolbar/iconStore';
-import T from 'i18n-react';
+import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
 import { NormalFont, MenuHeadText } from 'components/common/TypographyText';
 import { ShortDivider } from 'components/common/Divider';
-
 import { SvgIconTypeMap } from '@material-ui/core';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
+import styled from 'styled-components';
+
+const StyledChevronRightRoundedIcon = styled(ChevronRightRoundedIcon)`
+  font-size: 24px;
+`;
 
 export interface IMenuItem {
   label?: string;
@@ -32,7 +36,7 @@ export interface IMenuItem {
   title?: string;
   action?: string;
   dataType?: string[];
-  iconSVG?: JSX.Element;
+  iconSVG?: JSX.Element | OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
   icon?: OverridableComponent<SvgIconTypeMap<{}, 'svg'>>;
   toolName?: string;
   open?: boolean;
@@ -47,15 +51,28 @@ export interface IMenuItemComponentProps {
 }
 
 export default function({ item, index, onMenuClick, columnType }: IMenuItemComponentProps) {
-  let menuItemDisableProp;
-  menuItemDisableProp = columnType
-    ? !(item?.supportedDataType?.includes(columnType) || item?.supportedDataType?.includes('all'))
-    : (menuItemDisableProp = false);
+  const includesCheck = !(
+    item?.supportedDataType?.includes(columnType) || item?.supportedDataType?.includes('all')
+  );
+  const filteredDataOptionCheck = DATATYPE_OPTIONS.filter(
+    (el) =>
+      (el.value === item.value && item.value === columnType.toLowerCase()) ||
+      (item.value === 'integer' && columnType.toLowerCase() === 'int')
+  ).length;
 
-  if (item?.value === T.translate('features.WranglerNewUI.GridPage.menuItems.divider')) {
+  const getMenuItemDisablProp = () => {
+    if (columnType) {
+      return includesCheck || filteredDataOptionCheck;
+    }
+    return false;
+  };
+
+  const menuItemDisableProp = getMenuItemDisablProp();
+
+  if (item?.value === 'divider') {
     return <ShortDivider key={index} data-testid="menu-item-divider" />;
   }
-  if (item?.value === T.translate('features.WranglerNewUI.GridPage.menuItems.heading')) {
+  if (item?.value === 'heading') {
     return (
       <MenuHeadText key={index} data-testid="menu-item-heading">
         {item.label}
@@ -65,15 +82,13 @@ export default function({ item, index, onMenuClick, columnType }: IMenuItemCompo
     return (
       <MenuItem
         key={index}
-        disabled={menuItemDisableProp}
+        disabled={menuItemDisableProp as boolean}
         title={item.label}
         onClick={(onClickEvent) => onMenuClick(onClickEvent, item)}
-        data-testid={`toolbar-icon-button-${item.value}`}
+        data-testid="menu-item-parent"
       >
-        <NormalFont component="div" data-testid={`toolbar-icon-label-${item.value}`}>
-          {item.label}
-        </NormalFont>
-        {item?.options?.length > 0 && menuArrowIcon}
+        <NormalFont component="div">{item.label}</NormalFont>
+        {item?.options?.length > 0 && <StyledChevronRightRoundedIcon />}
       </MenuItem>
     );
   }

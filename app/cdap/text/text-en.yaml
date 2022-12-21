@@ -3437,7 +3437,9 @@ features:
     Breadcrumb:
       labels:
         connectionsList: Data Sources
+        loadToGrid: Wrangle
         wrangleHome: Home
+        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
         wrangeHome: home
@@ -3445,6 +3447,16 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    FooterPanel:
+      labels:
+        columns: columns
+        message: Current data - {rowCount} rows and {columnCount} columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     GridPage:
       menuItems:
         divider: divider
@@ -3524,6 +3536,9 @@ features:
             tab: Tab
             whitespace: Whitespace
           selectDelimiter: Please select a delimiter
+    GridTable:
+      snackbarLabels:
+        datasetSuccess: Dataset loaded successfully 
     HomePage:
       labels:
         common:
@@ -3542,10 +3557,9 @@ features:
         title: No rows left in this sample
     Snackbar:
       labels:
-        datasetSuccess: Dataset loaded successfully 
         failure: Failure
-        retrieveFailure: Failed to retrieve sample data for
-        sampleFailure: Failed to retrieve sample data
         success: Success
         undo: Undo
-        workspaceFailure: Failed to create workspace for
+
+    
+...
