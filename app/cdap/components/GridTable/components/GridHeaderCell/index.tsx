@@ -35,6 +35,7 @@ export default function GridHeaderCell({
   types,
   columnSelected,
   setColumnSelected,
+  index,
 }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
   const isColumnHighlited = label === columnSelected;
@@ -52,7 +53,10 @@ export default function GridHeaderCell({
       }}
     >
       <StyledCard className={classes.root} variant="outlined" bgVariant={isColumnHighlited}>
-        <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
+        <Typography
+          className={classes.columnHeader}
+          data-testid={`grid-header-cell-${index}-label`}
+        >
           {label}
         </Typography>
         <StringIndicatorBox>
