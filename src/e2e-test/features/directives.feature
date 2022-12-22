@@ -29,4 +29,4 @@ Feature: Directives
     Then Enter command in the panel with the data "<id>"
     Examples:
       | id | index |
-      | 12 | 0     |
+      | 11 | 0     |
