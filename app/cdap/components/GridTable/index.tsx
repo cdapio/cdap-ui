@@ -505,6 +505,7 @@ export default function GridTable() {
               payload: boolean_value,
             })
           }
+          directivePanelIsOpen={directivePanelIsOpen}
         />
         {loading && (
           <div className={classes.loadingContainer}>
