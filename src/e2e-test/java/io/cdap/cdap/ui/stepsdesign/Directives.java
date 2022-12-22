@@ -44,7 +44,7 @@ public class Directives {
 
   @Then("Click on the Directives button")
   public void clickOnDirectivesButton() {
-    if(Helper.isElementExists(By.cssSelector("loading-indicator"))) {
+    if (Helper.isElementExists(By.cssSelector("loading-indicator"))) {
       WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
     }
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
