@@ -63,7 +63,6 @@ const GridTableWrapper = styled(Box)`
   max-height: 76vh;
 `;
 
-
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
   const params = useParams() as IRecords;
@@ -116,7 +115,7 @@ export default function GridTable() {
   }, []);
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
-  
+
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
 
@@ -180,7 +179,7 @@ export default function GridTable() {
           payload: {
             message: 'Data loaded successfully',
             isSuccess: true,
-            open: true
+            open: true,
           },
         });
       });
@@ -337,7 +336,7 @@ export default function GridTable() {
           payload: {
             open: false,
             isSuccess: false,
-            message: ''
+            message: '',
           },
         });
       }, 5000);
@@ -363,7 +362,7 @@ export default function GridTable() {
           payload: {
             message: 'Directive applied successfully',
             isSuccess: true,
-            open: true
+            open: true,
           },
         });
         setLoading(false);
@@ -380,7 +379,7 @@ export default function GridTable() {
           payload: {
             message: 'Directive not applied',
             isSuccess: true,
-            open: true
+            open: true,
           },
         });
         dispatch({
@@ -395,7 +394,6 @@ export default function GridTable() {
     setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
     setColumnType(gridData?.types[columnName]);
   };
-
 
   return (
     <>
@@ -412,7 +410,7 @@ export default function GridTable() {
             payload: {
               message: 'Function selected',
               isSuccess: true,
-              open: true
+              open: true,
             },
           });
           return false;
@@ -422,14 +420,14 @@ export default function GridTable() {
       />
       <GridTableWrapper data-testid="grid-table-container">
         <TableWrapper>
-        {!showGridTable && (
+          {!showGridTable && (
             <NoRecordScreen
               title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
               subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
             />
           )}
           {showGridTable && (
-          <TableWrapper>
+            <TableWrapper>
               <Table aria-label="simple table" className="test">
                 <TableHead>
                   <TableRow>
@@ -439,10 +437,10 @@ export default function GridTable() {
                           label={eachHeader.label}
                           types={eachHeader.type}
                           key={eachHeader.name}
-                        columnSelected={selectedColumn}
-                        setColumnSelected={handleColumnSelect}
+                          columnSelected={selectedColumn}
+                          setColumnSelected={handleColumnSelect}
                           index={index}
-                    />
+                        />
                       ))}
                   </TableRow>
                   <TableRow>
@@ -468,7 +466,7 @@ export default function GridTable() {
                                 cellValue={eachRow[eachKey.name] || '--'}
                                 key={`${eachKey.name}-${eachIndex}`}
                                 dataTestId={`table-cell-${rowIndex}${eachIndex}`}
-                          />
+                              />
                             );
                           })}
                         </TableRow>
@@ -476,60 +474,59 @@ export default function GridTable() {
                     })}
                 </TableBody>
               </Table>
-          </TableWrapper>
+            </TableWrapper>
           )}
-      </TableWrapper>
-
-      {directivePanelIsOpen && (
-        <DirectiveInput
-          columnNamesList={headersNamesList}
-          onDirectiveInputHandler={(directive) => {
-            addDirectives(directive);
+        </TableWrapper>
+        {directivePanelIsOpen && (
+          <DirectiveInput
+            columnNamesList={headersNamesList}
+            onDirectiveInputHandler={(directive) => {
+              addDirectives(directive);
+              dispatch({
+                type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+                payload: false,
+              });
+            }}
+            onClose={() =>
+              dispatch({
+                type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
+                payload: false,
+              })
+            }
+            openDirectivePanel={directivePanelIsOpen}
+          />
+        )}
+        <FooterPanel
+          recipeStepsCount={0}
+          gridMetaInfo={tableMetaInfo}
+          setDirectivePanelIsOpen={(boolean_value) =>
             dispatch({
               type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-              payload: false,
-            });
-          }}
-          onClose={() =>
-            dispatch({
-              type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-              payload: false,
+              payload: boolean_value,
             })
           }
-          openDirectivePanel={directivePanelIsOpen}
         />
-      )}
-      <FooterPanel
-        recipeStepsCount={0}
-        gridMetaInfo={tableMetaInfo}
-        setDirectivePanelIsOpen={(boolean_value) =>
-          dispatch({
-            type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
-            payload: boolean_value,
-          })
-        }
-      />
-          {loading && (
+        {loading && (
           <div className={classes.loadingContainer}>
             <LoadingSVG />
           </div>
         )}
       </GridTableWrapper>
-        <Snackbar
-          handleClose={() =>
-            dispatch({
+      <Snackbar
+        handleClose={() =>
+          dispatch({
             type: IGridTableActions.SNACKBAR_DATA,
             payload: {
               open: false,
               isSuccess: false,
-              message: ''
+              message: '',
             },
-            })
-          }
-          open={snackbarData.open}
-          message={snackbarData.message}
-          isSuccess={snackbarData.isSuccess}
-        />
+          })
+        }
+        open={snackbarData.open}
+        message={snackbarData.message}
+        isSuccess={snackbarData.isSuccess}
+      />
     </>
   );
 }
