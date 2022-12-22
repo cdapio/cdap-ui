@@ -19,7 +19,7 @@ Feature: Directives
 
   @Directives
   Scenario Outline: Go through the directives functionality
-    Given Navigate to the Home page to test directives
+    Given Navigate to the Wrangler Home page
     Then Click on the Data explorations card with index "<index>"
     Then Verify if user is on the wrangle page
     Then Click on the Directives button

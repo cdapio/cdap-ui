@@ -55,7 +55,7 @@ Feature: Wrangler BigQuery Connection Tests
 
   @FooterPanel
     Scenario: Checking the footer panel is on the grid table
-    When Navigate to Home Page
+    When Navigate to the Wrangler Home page
     Then Click on the Data Explorations card
     Then Verify if the Footer Panel is displayed
     Then Verify if the elements on the Footer Panel are displayed

@@ -31,16 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SnackBar {
-  @Given("Navigate to Home Page")
-  public void navigateToHomePage() {
-    try {
-      SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-      WaitHelper.waitForPageToLoad();
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
-  }
-
   @Then("Click on the data exploration card")
   public void clickOnTheDataExplorationCard() {
     try {

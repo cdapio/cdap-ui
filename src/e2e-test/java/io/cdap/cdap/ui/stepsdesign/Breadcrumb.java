@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 public class Breadcrumb {
-  @Given("Navigate to the home page to test breadcrumb")
+  @Given("Navigate to the Wrangler Home page")
   public void navigateToTheHomePageBreadcrumb() throws Exception {
     SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
     WaitHelper.waitForPageToLoad();
