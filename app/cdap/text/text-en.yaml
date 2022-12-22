@@ -17,6 +17,7 @@ commons:
   DSVEditor:
     placeholder: value
   dataset: Dataset
+  download: Download
   edit: Edit
   entity:
     application:
@@ -94,6 +95,7 @@ commons:
   then: Then
   tracker: Cask Tracker
   typeLabel: Type
+  view: View
   when: When
   wrangler: Cask Wrangler
   yesLabel: Yes
@@ -3515,12 +3517,31 @@ features:
           title: Start data exploration
         workspaces:
           title: Continue ongoing data explorations, pick up where you left off
+        recipes:
+          title: Saved recipes
     ImportData:
       referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
         title: No rows left in this sample
         subtitle: Remove some recipe steps to view some data
+    Recipe:
+      description: Description
+      common:
+        deleteConfirmation: Are you sure you want to delete the recipe *_{recipeName}_*?
+        deleteError: There was a problem deleting the recipe
+        deleteTitle: Delete recipe
+      createdDate: Created date
+      emptyListMessage: No Recipes created in this namespace
+      home: Home        
+      import: Import
+      list: Recipe list
+      name: Recipe name 
+      savedRecipes: Saved Recipes    
+      steps: Steps
+      updated: Last updated
+      view: View
+      viewAll: View All        
     Snackbar:
       labels:
         failure: Failure
