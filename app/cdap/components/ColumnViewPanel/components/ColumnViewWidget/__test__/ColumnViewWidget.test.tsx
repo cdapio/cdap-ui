@@ -17,14 +17,18 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import ColumnViewWidget from 'components/ColumnViewPanel/components/ColumnViewWidget/index';
+import { act } from 'react-dom/test-utils';
 
 describe('It should test ColumnViewWidget Component', () => {
-  it('Should render Column View Widget Component and click on search icon for the input to be in the screen', () => {
+
+  const mockSearchTermFunction = jest.fn()
+
+  it('Should render Column View Widget Component and click on search icon for the input to be in the screen', async () => {
     render(
       <ColumnViewWidget
         headingText={'Column View'}
         onClose={jest.fn()}
-        onSearchTermChange={jest.fn()}
+        onSearchTermChange={mockSearchTermFunction}
         children={<></>}
         searchValue={''}
       />
@@ -32,9 +36,9 @@ describe('It should test ColumnViewWidget Component', () => {
 
     const searchIcon = screen.getByTestId('search-icon');
     fireEvent.click(searchIcon);
-
     const searchInput = screen.getByTestId('search-term-input');
-    fireEvent.change(searchInput);
-    expect(searchInput).toBeInTheDocument();
+    fireEvent.change(searchInput, {target:{value:'test'}});
+    expect(mockSearchTermFunction).toBeCalled()
+    expect(searchInput).toHaveValue('test')
   });
 });
