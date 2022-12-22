@@ -50,10 +50,7 @@ public class RecipeStep {
   @Then("Click on Directive button")
   public void clickOnDirectiveButton() {
     try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
     } catch (Exception e) {
       System.err.println("error:" + e);
@@ -65,7 +62,7 @@ public class RecipeStep {
     try {
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-directive-input-search"));
       WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
-      Assert.assertTrue(ElementHelper.isElementDisplayed(panel));
+      Assert.assertTrue(panel.isDisplayed());
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -79,8 +76,7 @@ public class RecipeStep {
       panel.sendKeys(command);
       String check = panel.getText();
       panel.sendKeys(Keys.ENTER);
-      SeleniumDriver.getDriver().manage().window().maximize();
-      SeleniumDriver.getDriver().navigate().refresh();
+      Helper.reloadPage();
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
