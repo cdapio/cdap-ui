@@ -31,7 +31,7 @@ describe('To Test Grid Header Cell Component', () => {
         setColumnSelected={jest.fn}
       />
     );
-    const ele = screen.getByTestId(`grid-header-cell-abc`);
+    const ele = screen.getByTestId(`grid-header-cell-69-label`);
     expect(ele).toHaveTextContent('abc');
   });
   it('Renders Component with empty types array to trigger Null', () => {
@@ -44,7 +44,7 @@ describe('To Test Grid Header Cell Component', () => {
         setColumnSelected={jest.fn}
       />
     );
-    const ele = screen.getByTestId(`grid-header-cell-abc`);
+    const ele = screen.getByTestId(`grid-header-cell-0-label`);
     expect(ele).toHaveTextContent('abc');
   });
 });
