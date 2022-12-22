@@ -22,7 +22,7 @@ export const initialGridTableState = {
   snackbarData: {
     open: false,
     isSuccess: false,
-    message: ''
+    message: '',
   },
   tableMetaInfo: {
     columnCount: 0,

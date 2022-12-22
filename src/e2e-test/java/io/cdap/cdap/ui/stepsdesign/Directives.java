@@ -64,8 +64,7 @@ public class Directives {
     panel.sendKeys("uppercase:" + columnName);
     panel.sendKeys(Keys.ENTER);
     WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
-    SeleniumDriver.getDriver().manage().window().maximize();
-    SeleniumDriver.getDriver().navigate().refresh();
+    Helper.reloadPage();
     WebElement ele = Helper.locateElementByTestId("table-cell-" + id);
     String newText = ele.getText();
     Assert.assertEquals(capital, newText);
