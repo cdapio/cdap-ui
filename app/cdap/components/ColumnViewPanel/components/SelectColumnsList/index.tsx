@@ -20,11 +20,10 @@ import NoRecordScreen from 'components/NoRecordScreen';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { IHeaderNamesList } from 'components/GridTable/types';
 
 const COLUMNS = T.translate('features.WranglerNewUI.ColumnViewPanel.columns');
 const NULL_VALUES = T.translate('features.WranglerNewUI.ColumnViewPanel.nullValues');
-
-import { IHeaderNamesList } from 'components/GridTable/types';
 
 export interface ISelectColumnsListProps {
   columnData: IHeaderNamesList[];
@@ -86,7 +85,7 @@ const SelectColumnsListSection = styled.section`
   line-height: 150%;
   letter-spacing: 0.15px;
   color: #5f6368;
-  height: calc(100vh - 211px);
+  height: calc(100vh - 258px);
   overflow: scroll;
 `;
 

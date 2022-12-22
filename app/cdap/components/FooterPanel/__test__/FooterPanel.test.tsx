@@ -15,8 +15,7 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import { PREFIX } from 'components/FooterPanel';
-import FooterPanel from 'components/FooterPanel/index';
+import FooterPanel,{ PREFIX } from 'components/FooterPanel/index';
 import T from 'i18n-react';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
@@ -28,11 +27,7 @@ describe('Test Footer Panel Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <FooterPanel
-              recipeStepsCount={42}
-              gridMetaInfo={{ rowCount: 66, columnCount: 6 }}
-              setOpenColumnViewHandler={jest.fn()}
-            />
+            <FooterPanel recipeStepsCount={42} gridMetaInfo={{ rowCount: 66, columnCount: 6 }} onColumnViewPanelOpen={jest.fn()}/>
           </Route>
         </Switch>
       </Router>

@@ -27,7 +27,7 @@ const UnderlineIcon = (
 );
 
 interface IDrawerWidgetHeading {
-  headingText: ReactNode;
+  headingText: string;
 }
 
 const HeadingTextIconWrapper = styled(Typography)`
