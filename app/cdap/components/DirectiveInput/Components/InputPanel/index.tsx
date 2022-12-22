@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Cask Data, Inc.
+ * Copyright © 2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,10 +14,14 @@
  * the License.
  */
 
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import MyDataPrepApi from 'api/dataprep';
+import SearchListItem from 'components/DirectiveInput/Components/SearchListItem';
 import { defaultFuseOptions } from 'components/DirectiveInput/constants';
 import { IDirectiveUsage } from 'components/DirectiveInput/types';
+import { getFormattedSyntax, getLastWordOfSearchItem } from 'components/DirectiveInput/utils';
+import { IHeaderNamesList } from 'components/GridTable/types';
 import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
@@ -27,10 +31,6 @@ import globalEvents from 'services/global-events';
 import NamespaceStore from 'services/NamespaceStore';
 import styled from 'styled-components';
 import uuidV4 from 'uuid/v4';
-import { grey } from '@material-ui/core/colors';
-import { IHeaderNamesList } from 'components/GridTable/types';
-import { getFormattedSyntax, getLastWordOfSearchItem } from 'components/DirectiveInput/utils';
-import SearchListItem from 'components/DirectiveInput/Components/SearchListItem';
 
 interface IInputPanelProps {
   setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
