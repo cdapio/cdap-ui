@@ -17,8 +17,11 @@
 import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { UnderLine } from 'components/RecipeSteps/IconStore/Underline';
-import { IDrawerWidgetHeadingProps } from 'components/RecipeSteps/RecipeWidgetHeading/types';
 import styled from 'styled-components';
+
+interface IDrawerWidgetHeadingProps {
+  headingText: string;
+}
 
 const DrawerWidgetTitleIconWrapper = styled(Box)`
   display: flex;
@@ -45,4 +48,3 @@ export default function({ headingText }: IDrawerWidgetHeadingProps) {
     </DrawerWidgetTitleIconWrapper>
   );
 }
-

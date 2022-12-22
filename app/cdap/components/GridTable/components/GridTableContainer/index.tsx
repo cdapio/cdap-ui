@@ -23,8 +23,9 @@ import GridTextCell from 'components/GridTable/components/GridTextCell/index';
 import { IHeaderNamesList, IRowData, IMissingListData } from 'components/GridTable/types';
 
 const TableWrapper = styled(Box)`
-  height: calc(100vh - 193px);
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
+  min-width: calc(100vw - 460px);
 `;
 
 interface IGridTableContainer {

@@ -15,29 +15,25 @@
  */
 
 import { Box, IconButton } from '@material-ui/core';
-import InputPanel from 'components/DirectiveInput/Components/InputPanel';
-import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
-import {
-  IDirectiveInputProps,
-  IDirectivesList,
-  IDirectiveUsage,
-} from 'components/DirectiveInput/types';
-import { formatDirectiveUsageData } from 'components/DirectiveInput/utils';
-import T from 'i18n-react';
-import React, { useEffect, useRef, useState, useReducer } from 'react';
-import styled from 'styled-components';
-import {
-  PREFIX,
-  TWO_COLUMN_DIRECTIVE,
-  MULTIPLE_COLUMN_DIRECTIVE,
-} from 'components/DirectiveInput/constants';
 import { grey } from '@material-ui/core/colors';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
+import InputPanel from 'components/DirectiveInput/Components/InputPanel';
 import {
-  reducer,
-  initialDirectiveInputState,
+  MULTIPLE_COLUMN_DIRECTIVE,
+  PREFIX,
+  TWO_COLUMN_DIRECTIVE,
+} from 'components/DirectiveInput/constants';
+import {
   IDirectiveActions,
+  initialDirectiveInputState,
+  reducer,
 } from 'components/DirectiveInput/reducer';
+import { IDirectiveInputProps, IDirectiveUsage } from 'components/DirectiveInput/types';
+import { formatDirectiveUsageData } from 'components/DirectiveInput/utils';
+import T from 'i18n-react';
+import React, { useEffect, useReducer, useRef } from 'react';
+import styled from 'styled-components';
 
 const InputParentWrapper = styled(Box)`
   display: block;
@@ -122,11 +118,7 @@ export default function({
       dispatch({
         type: IDirectiveActions.DIRECTIVES_APPLIED_SET_COUNT,
         payload: {
-          directiveColumnCount: TWO_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)
-            ? 2
-            : MULTIPLE_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)
-            ? 0
-            : 1,
+          directiveColumnCount: getDirectiveColumnCount(firstIndexInputTextValue),
           isDirectiveSet: true,
           appliedDirective: [firstIndexInputTextValue],
         },
@@ -151,6 +143,16 @@ export default function({
       type: IDirectiveActions.INPUT_DIRECTIVE,
       payload: value,
     });
+  };
+
+  const getDirectiveColumnCount = (firstIndexInputTextValue) => {
+    if (TWO_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
+      return 2;
+    } else if (MULTIPLE_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
+      return 0;
+    } else {
+      return 1;
+    }
   };
 
   useEffect(() => {

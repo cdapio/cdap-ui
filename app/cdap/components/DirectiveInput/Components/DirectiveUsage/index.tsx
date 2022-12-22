@@ -80,7 +80,6 @@ export default function({ directiveUsage }: IDirectiveUsageProps) {
             href={`${moreInfoOnDirective[directiveUsage.item.directive]}`}
             target="_blank"
           >
-            {' '}
             <MUIIconStyle data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>

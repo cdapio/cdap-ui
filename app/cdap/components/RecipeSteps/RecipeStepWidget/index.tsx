@@ -21,21 +21,21 @@ import styled from 'styled-components';
 import { ReactNode } from 'react';
 import RecipeWidgetHeading from 'components/RecipeSteps/RecipeWidgetHeading';
 
-export interface IColumnViewWidget {
-  headingText: ReactNode;
+interface IRecipeStepWidgetProps {
+  headingText: string;
   onClose: () => void;
-  onSearchTermChange: (searchedTerm: string) => void;
-  children: JSX.Element;
-  searchValue: string;
   showDivider: boolean;
+  headerActionTemplate: JSX.Element;
+  children: JSX.Element;
 }
 
 const DrawerContainerStyle = styled(Box)`
   width: 460px;
-  height: calc(100vh - 190px);
+  height: calc(100vh - 232px);
   border-right: 1px solid #e0e0e0;
   padding-left: 20px;
   padding-right: 20px;
+  overflow-y: scroll;
 `;
 
 const HeaderStyle = styled.header`
@@ -72,7 +72,13 @@ const HeaderIconWrapper = styled(Box)`
   align-items: center;
 `;
 
-export default function({ headingText, onClose, showDivider, headerActionTemplate, children }) {
+export default function({
+  headingText,
+  onClose,
+  showDivider,
+  headerActionTemplate,
+  children,
+}: IRecipeStepWidgetProps) {
   return (
     <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>
@@ -95,4 +101,3 @@ export default function({ headingText, onClose, showDivider, headerActionTemplat
     </DrawerContainerStyle>
   );
 }
-

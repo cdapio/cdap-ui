@@ -39,7 +39,9 @@ const headerData = [
   },
   {
     textId: 'recipe-steps',
-    text: T.translate('features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'),
+    text: T.translate(
+      'features.WranglerNewUI.WranglerNewRecipeSteps.labels.recipeSteps'
+    ).toString(),
   },
   {
     textId: '',
@@ -94,6 +96,7 @@ const RecipeStepsDeleteStyle = styled(IconButton)`
   width: 18px;
   height: 20px;
   cursor: pointer;
+  float: right;
 `;
 
 const RecipeStepsTableRowStyle = styled(TableCell)`
@@ -170,4 +173,3 @@ export default function({ recipeSteps, onDeleteRecipeSteps }: IRecipeStepTablePr
     </TableContainer>
   );
 }
-

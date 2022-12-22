@@ -17,7 +17,7 @@
 import React from 'react';
 import DirectiveInput from 'components/DirectiveInput/index';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { getFormattedSyntax } from '../utils';
+import { getFormattedSyntax } from 'components/DirectiveInput/utils';
 
 describe('Testing Directive Input Component', () => {
   beforeEach(() => {
