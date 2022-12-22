@@ -19,12 +19,15 @@ import React from 'react';
 import LabelItemCanSample from 'components/ConnectionList/Components/LabelItemCanSample/index';
 
 describe('Test TabLabelCanBrowse Component', () => {
+
+  const mockExploreFunction = jest.fn()
+  
   it('Should render TabLabelCanBrowse Component', () => {
     render(
       <LabelItemCanSample
         label={''}
         myLabelRef={jest.fn()}
-        onExplore={jest.fn()}
+        onExplore={mockExploreFunction}
         entity={undefined}
         buttonTestId={'test-button'}
         buttonElement={undefined}
@@ -33,10 +36,10 @@ describe('Test TabLabelCanBrowse Component', () => {
     );
     const buttonElement = screen.getByTestId(/test-button/i);
     fireEvent.click(buttonElement);
-    expect(buttonElement).toBeInTheDocument();
+    expect(mockExploreFunction).toHaveBeenCalled()
 
     const canSimpleElement = screen.getByTestId(/connections-tab-label-can-simple-0/i);
     fireEvent.doubleClick(canSimpleElement);
-    expect(canSimpleElement).toBeInTheDocument();
+    expect(mockExploreFunction).toHaveBeenCalled()
   });
 });
