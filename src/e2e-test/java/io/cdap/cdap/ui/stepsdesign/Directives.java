@@ -62,7 +62,7 @@ public class Directives {
     String capital = text.toUpperCase();
     WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
     panel.click();
-    WebElement column = Helper.locateElementByTestId("grid-header-cell-2-label");
+    WebElement column = Helper.locateElementByTestId("grid-header-cell-1-label");
     String columnName = column.getText();
     panel.sendKeys("uppercase:" + columnName);
     panel.sendKeys(Keys.ENTER);
