@@ -14,27 +14,44 @@
  * the License.
  */
 
-import { Box, Card, styled, TableCell, Typography } from '@material-ui/core';
+import { Box, Card, TableCell, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import TypographyComponent from '../Typography';
 import { useGridHeaderCellStyles } from './styles';
 import { IGridHeaderCellProps } from './types';
+import styled from 'styled-components';
 
-const StringIndicatorBox = styled(Box)({
-  display: 'flex',
-});
+const StringIndicatorBox = styled(Box)`
+  display: 'flex';
+`;
 
-export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
+const StyledCard = styled(Card)`
+  display: 'flex';
+  background-color: ${(props) => (props.bgVariant ? '#FFFFFF' : '#F1F8FF')};
+`;
+
+export default function GridHeaderCell({
+  label,
+  types,
+  columnSelected,
+  setColumnSelected,
+}: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
-
+  const isColumnHighlited = label === columnSelected;
   const [data, setData] = useState<Record<string, string>>({
     datatype1: types.length > 0 ? (types[0] as string) : null,
     datatype2: types.length > 1 ? (types[1] as string) : null,
   });
 
   return (
-    <TableCell className={classes.tableHeaderCell} data-testid="grid-header-cell-container">
-      <Card className={classes.root} variant="outlined">
+    <TableCell
+      className={classes.tableHeaderCell}
+      data-testid="grid-header-cell-container"
+      onClick={() => {
+        setColumnSelected(label);
+      }}
+    >
+      <StyledCard className={classes.root} variant="outlined" bgVariant={isColumnHighlited}>
         <Typography className={classes.columnHeader} data-testid={`grid-header-cell-${label}`}>
           {label}
         </Typography>
@@ -53,7 +70,7 @@ export default function GridHeaderCell({ label, types }: IGridHeaderCellProps) {
             </StringIndicatorBox>
           )}
         </StringIndicatorBox>
-      </Card>
+      </StyledCard>
     </TableCell>
   );
 }

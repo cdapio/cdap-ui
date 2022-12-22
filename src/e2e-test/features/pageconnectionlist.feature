@@ -19,7 +19,7 @@ Feature: Connection list
 
   @ConnectionList
   Scenario Outline: Go through the Connection List functionality
-    Given Navigate to Home Page for Connection list page
+    Given Navigate to Home Page
     Then Click on the Connector type card with "<testId>"
     Then Click on the Add connection button
     Then Click on the Cross icon

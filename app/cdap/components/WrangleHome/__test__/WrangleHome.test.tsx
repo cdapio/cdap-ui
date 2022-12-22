@@ -16,20 +16,22 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import WranglerHomeNew from 'components/WrangleHome/index';
+import WranglerHomeNew from '../index';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
 
-test('renders Wrangler-Home-New component', () => {
-  render(
-    <Router history={history}>
-      <Switch>
-        <Route>
-          <WranglerHomeNew />
-        </Route>
-      </Switch>
-    </Router>
-  );
-  const ele = screen.getByTestId(/wrangler-home-new-parent/i);
-  expect(ele).toBeInTheDocument();
+describe('It renders Wrangle Home ', () => {
+  test('renders Wrangler-Home-New component', () => {
+    const container = render(
+      <Router history={history}>
+        <Switch>
+          <Route>
+            <WranglerHomeNew />
+          </Route>
+        </Switch>
+      </Router>
+    );
+    const ele = screen.getByTestId(/wrangler-home-new-parent/i);
+    expect(ele).toBeInTheDocument();
+  });
 });

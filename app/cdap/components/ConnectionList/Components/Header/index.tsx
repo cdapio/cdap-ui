@@ -15,33 +15,46 @@
  */
 
 import { Box, IconButton, Typography } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import Close from '@material-ui/icons/Close';
 import SearchRounded from '@material-ui/icons/SearchRounded';
-import HeaderLabelWrapper from 'components/ConnectionList/Components/Header/Components/HeaderLabelWrapper';
+import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import { IHeaderContentProps } from 'components/ConnectionList/types';
-import React, { ChangeEvent, Fragment, MouseEvent } from 'react';
-import styled from 'styled-components';
 import T from 'i18n-react';
+import React, { ChangeEvent, MouseEvent } from 'react';
+import styled from 'styled-components';
 
 const PREFIX = 'features.WranglerNewUI';
 
 const ConnectionListHeaderWrapper = styled(Box)`
-  display: ${(props) => (props.toggleSearch ? 'none' : 'flex')};
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  padding-right: 18px;
   padding-left: 30px;
 `;
 
+const ConnectionListHeaderWrapperWhileSearching = styled(ConnectionListHeaderWrapper)`
+  display: none;
+`;
+
+const ConnectionListHeaderWrapperWhileNotSearching = styled(ConnectionListHeaderWrapper)`
+  display: flex;
+`;
+
 const ConnectionListSearchWrapper = styled(Box)`
-  display: ${(props) => (props.toggleSearch ? 'flex' : 'none')};
   background-color: #fff;
   align-items: center;
   height: 50px;
-  padding-right: 20px;
   padding-left: 18px;
   text-decoration: none;
+`;
+
+const ConnectionListSearchWrapperWhileSearching = styled(ConnectionListSearchWrapper)`
+  display: flex;
+`;
+
+const ConnectionListSearchWrapperWhileNotSearching = styled(ConnectionListSearchWrapper)`
+  display: none;
 `;
 
 const HeaderContainer = styled(Box)`
@@ -61,13 +74,36 @@ const RenderInput = styled.input`
   width: 100%;
   background-color: #ffffff;
   border: none;
-  height: ${(props) => (props.inputHeight ? props.inputHeight : '35px')};
+  height: 21px;
   outline: 0;
+`;
+
+const RenderLabel = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: ${grey[900]};
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const SearchInput = styled(RenderInput)`
   margin-left: 9px;
 `;
+
+const getConnectionListHeaderWrapper = (toggleSearch: Boolean) => {
+  return toggleSearch
+    ? ConnectionListHeaderWrapperWhileSearching
+    : ConnectionListHeaderWrapperWhileNotSearching;
+};
+
+const getConnectionListSearchWrapper = (toggleSearch: Boolean) => {
+  return toggleSearch
+    ? ConnectionListSearchWrapperWhileSearching
+    : ConnectionListSearchWrapperWhileNotSearching;
+};
 
 export default function({
   levelIndex,
@@ -82,16 +118,12 @@ export default function({
   refs,
   handleClearSearch,
 }: IHeaderContentProps) {
-  console.log(
-    refs,
-    'rrrreeeefffssss',
-    filteredData,
-    'dataaaa',
-    eachFilteredData,
-    'eachhhhhData',
-    headersRefs,
-    'headderRReffs'
-  );
+  const HeaderWrapper = getConnectionListHeaderWrapper(eachFilteredData.toggleSearch);
+  const SearchWrapper = getConnectionListSearchWrapper(eachFilteredData.toggleSearch);
+
+  const tooltipRequired =
+    headersRefs?.current[columnIndex]?.offsetWidth < headersRefs?.current[columnIndex]?.scrollWidth;
+
   const HeaderForConnectors = (
     <HeaderContainer>
       <Typography variant="body2" component="div">
@@ -102,28 +134,34 @@ export default function({
 
   const HeaderForDatasets = (
     <>
-      <ConnectionListHeaderWrapper toggleSearch={eachFilteredData.toggleSearch}>
-        <HeaderLabelWrapper
-          headersRefs={headersRefs}
-          columnIndex={columnIndex}
-          filteredData={filteredData}
-        />
+      <HeaderWrapper>
+        <CustomTooltip
+          title={tooltipRequired ? filteredData[columnIndex - 1].selectedTab : ''}
+          arrow
+        >
+          <RenderLabel
+            variant="body2"
+            ref={(element) => {
+              headersRefs.current[columnIndex] = element;
+            }}
+          >
+            {filteredData[columnIndex - 1]?.selectedTab}
+          </RenderLabel>
+        </CustomTooltip>
         <IconButton
           onClick={() => searchHandler(columnIndex)}
           data-testid={`search-icon-${columnIndex}`}
         >
           <SearchRounded />
         </IconButton>
-      </ConnectionListHeaderWrapper>
-      <ConnectionListSearchWrapper
-        toggleSearch={eachFilteredData.toggleSearch}
-        onMouseOver={() => makeCursorFocused(columnIndex)}
-      >
+      </HeaderWrapper>
+      <SearchWrapper onMouseOver={() => makeCursorFocused(columnIndex)}>
         <SearchRounded />
         <SearchInput
           inputHeight="21px"
           type="text"
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e, columnIndex)}
+          onBlur={(e: ChangeEvent<HTMLInputElement>) => handleSearch(e, columnIndex)}
           ref={(e: HTMLInputElement) => {
             refs.current[columnIndex] = e;
           }}
@@ -137,9 +175,9 @@ export default function({
         >
           <Close />
         </IconButton>
-      </ConnectionListSearchWrapper>
+      </SearchWrapper>
     </>
   );
 
-  return <Fragment>{!!levelIndex ? HeaderForDatasets : HeaderForConnectors}</Fragment>;
+  return !!levelIndex ? HeaderForDatasets : HeaderForConnectors;
 }
