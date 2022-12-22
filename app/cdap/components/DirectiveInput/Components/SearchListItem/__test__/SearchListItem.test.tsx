@@ -34,13 +34,11 @@ describe('Testing SearchListItem  Component', () => {
 
   it('should check if the label is as expected', () => {
     const labelElement = screen.getByTestId(/select-directive-list-label/i);
-    expect(labelElement).toBeInTheDocument();
     expect(labelElement).toHaveTextContent('batman');
   });
 
   it('should check if the tesxt is rendered as expected', () => {
     const textElement = screen.getByTestId(/select-directive-list-description/i);
-    expect(textElement).toBeInTheDocument();
     expect(textElement).toHaveTextContent('heMan');
   });
 });

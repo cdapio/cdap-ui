@@ -44,5 +44,7 @@ describe('To Test Grid Header Cell Component', () => {
         setColumnSelected={jest.fn}
       />
     );
+    const ele = screen.getByTestId(`grid-header-cell-abc`);
+    expect(ele).toHaveTextContent('abc');
   });
 });

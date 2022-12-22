@@ -24,6 +24,7 @@ import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -43,7 +44,9 @@ public class Directives {
 
   @Then("Click on the Directives button")
   public void clickOnDirectivesButton() {
+    if (Helper.isElementExists(By.cssSelector("loading-indicator"))) {
       WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
+    }
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
   }
   @Then("Verify and Click the directive panel")
