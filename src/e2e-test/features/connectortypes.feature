@@ -19,7 +19,7 @@ Feature: Navigating through the connector types
   @ConnectorTypes
   Scenario Outline: Navigate to all the connector types
 
-    Given Navigate to the Home Page
+    Given Navigate to the Wrangler Home page
     Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>"
 
   Examples:

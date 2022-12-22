@@ -19,7 +19,7 @@ Feature: TransformationToolbar
 
   @TransformationToolbar
   Scenario Outline: Go through the Transformation Toolbar
-    Given Navigate to Home Page to test toolbar
+    Given Navigate to the Wrangler Home page
     Then Click on the Ongoing Data Explorations card for tool bar
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
     Then Click on the Undo icon

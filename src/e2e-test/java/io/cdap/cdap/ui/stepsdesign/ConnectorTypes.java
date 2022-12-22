@@ -26,12 +26,6 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
 public class ConnectorTypes {
-  @Given("Navigate to the Home Page")
-  public void navigateToTheHomePage() {
-    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-    WaitHelper.waitForPageToLoad();
-  }
-
   @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
   public void clickOnConnections(String connectionLabel, String connectionTestId) {
     try {

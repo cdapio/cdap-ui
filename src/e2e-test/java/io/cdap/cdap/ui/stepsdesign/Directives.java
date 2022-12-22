@@ -28,21 +28,11 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 public class Directives {
-  @Given("Navigate to the Home page to test directives")
-  public void navigateToHomePageDirectives() {
-    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-    WaitHelper.waitForPageToLoad();
-  }
-
   @Then("Click on the Data explorations card with index \\\"(.*)\\\"")
   public void clickOnTheDataExplorationsCard(int index) {
-    try {
-      WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId
+    WaitHelper.waitForPageToLoad();
+    ElementHelper.clickOnElement(Helper.locateElementByTestId
               ("wrangler-home-ongoing-data-exploration-card-" + index));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
 
   @Then("Verify if user is on the wrangle page")
@@ -53,58 +43,36 @@ public class Directives {
 
   @Then("Click on the Directives button")
   public void clickOnDirectivesButton() {
-    try {
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
+      WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
   @Then("Verify and Click the directive panel")
   public void verifyAndClickTheDirectivePanel() {
-    try {
       WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
-      Assert.assertTrue(ElementHelper.isElementDisplayed(panel));
+      Assert.assertTrue(panel.isDisplayed());
       panel.click();
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
 
   @Then("Enter command in the panel with the data \\\"(.*)\\\"")
   public void checkCommandFunction(int id) {
-    try {
-      String text = Helper.locateElementByTestId("table-cell-" + id).getText();
-      String capital = text.toUpperCase();
-      WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
-      panel.click();
-      WebElement column = Helper.locateElementByTestId("grid-header-cell-2-label");
-      String columnName = column.getText();
-      panel.sendKeys("uppercase:" + columnName);
-      panel.sendKeys(Keys.ENTER);
-      boolean flag = true;
-      while (flag == true) {
-        flag = Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"));
-      }
-      SeleniumDriver.getDriver().manage().window().maximize();
-      SeleniumDriver.getDriver().navigate().refresh();
-      WebElement ele = Helper.locateElementByTestId("table-cell-" + id);
-      String newText = ele.getText();
-      Assert.assertEquals(capital, newText);
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    String text = Helper.locateElementByTestId("table-cell-" + id).getText();
+    String capital = text.toUpperCase();
+    WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
+    panel.click();
+    WebElement column = Helper.locateElementByTestId("grid-header-cell-2-label");
+    String columnName = column.getText();
+    panel.sendKeys("uppercase:" + columnName);
+    panel.sendKeys(Keys.ENTER);
+    WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
+    SeleniumDriver.getDriver().manage().window().maximize();
+    SeleniumDriver.getDriver().navigate().refresh();
+    WebElement ele = Helper.locateElementByTestId("table-cell-" + id);
+    String newText = ele.getText();
+    Assert.assertEquals(capital, newText);
   }
 
   @Then("Click on Close icon of panel")
   public void closeIcon() {
-    try {
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("close-directive-panel"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("close-directive-panel"));
   }
 }

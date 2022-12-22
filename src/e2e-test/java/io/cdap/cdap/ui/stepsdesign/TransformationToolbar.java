@@ -31,11 +31,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 public class TransformationToolbar {
-  @Given("Navigate to Home Page to test toolbar")
-  public void navigateToTheHomePageToToolBar() {
-    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-    WaitHelper.waitForPageToLoad();
-  }
   @Then("Click on the Ongoing Data Explorations card for tool bar")
   public void clickOnTheOngoingDataExplorationCardForToolBar() {
     try {
