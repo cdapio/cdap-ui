@@ -146,7 +146,6 @@ export default function GridTable() {
     });
   }, []);
 
-  // const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
     dispatch({
@@ -435,7 +434,6 @@ export default function GridTable() {
     gridData?.headers.length !== 0;
 
   const showRecipePanelHandler = () => {
-    // setShowRecipePanel((prev) => !prev);
     dispatch({
       type: IGridTableActions.SHOW_RECIPE_PANEL,
       payload: !showRecipePanel,
@@ -489,7 +487,6 @@ export default function GridTable() {
             gridData: response,
           },
         });
-        // setShowRecipePanel(false);
         dispatch({
           type: IGridTableActions.SHOW_RECIPE_PANEL,
           payload: false,
@@ -522,7 +519,6 @@ export default function GridTable() {
           type: IGridTableActions.SHOW_RECIPE_PANEL,
           payload: false,
         });
-        // setShowRecipePanel(false);
       }
     );
   };
@@ -543,18 +539,15 @@ export default function GridTable() {
       type: IGridTableActions.SHOW_GRID_TABLE,
       payload: Array.isArray(gridData?.headers) && gridData?.headers.length !== 0,
     });
-    // setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
   const getColumnSelectPayload = (columnName) => (selectedColumn === columnName ? '' : columnName);
 
   const handleColumnSelect = (columnName) => {
-    // setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
     dispatch({
       type: IGridTableActions.SELECTED_COLUMN,
       payload: getColumnSelectPayload(columnName),
     });
-    // setColumnType(gridData?.types[columnName]);
     dispatch({
       type: IGridTableActions.COLUMN_TYPE,
       payload: gridData?.types[columnName],
@@ -597,7 +590,6 @@ export default function GridTable() {
             payload: isBreadCrumbOpen,
           });
         }}
-        // setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
         columnType={columnType}
         submitMenuOption={(option, datatype) => {

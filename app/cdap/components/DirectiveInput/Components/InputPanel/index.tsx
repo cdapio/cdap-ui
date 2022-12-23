@@ -26,14 +26,14 @@ import ee from 'event-emitter';
 import Fuse from 'fuse.js';
 import reverse from 'lodash/reverse';
 import Mousetrap from 'mousetrap';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState, KeyboardEvent } from 'react';
 import globalEvents from 'services/global-events';
 import NamespaceStore from 'services/NamespaceStore';
 import styled from 'styled-components';
 import uuidV4 from 'uuid/v4';
 
 interface IInputPanelProps {
-  setDirectivesList: React.Dispatch<React.SetStateAction<[]>>;
+  setDirectivesList: Dispatch<SetStateAction<[]>>;
   isDirectiveSet: boolean;
   columnNamesList: IHeaderNamesList[];
   onSearchItemClick: (value: string) => void;
@@ -113,7 +113,7 @@ export default function({
   });
 
   // Used for navigating above in search list
-  const handleUpArrow = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleUpArrow = (event: KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (selectedIndex !== 0) {
       setSelectedIndex(selectedIndex - 1);
@@ -121,7 +121,7 @@ export default function({
   };
 
   // Used for navigating below in search list
-  const handleDownArrow = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleDownArrow = (event: KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (selectedIndex !== searchResults.length - 1) {
       setSelectedIndex(selectedIndex + 1);
@@ -140,7 +140,7 @@ export default function({
   };
 
   // Used for filling input with active item in search list
-  const handleTabKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTabKey = (event: KeyboardEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (inputText.length === 0 || inputText.split(' ').length !== 1) {
       return;
@@ -185,7 +185,7 @@ export default function({
   };
 
   // Function called when item is clicked in search list
-  const handleListItemClick = (listItem) => {
+  const handleListItemClick = (listItem: IDirectiveUsage) => {
     if (!isDirectiveSet) {
       onSearchItemClick(listItem.item.directive);
       getDirectiveSyntax([listItem], true);
@@ -196,7 +196,7 @@ export default function({
     }
   };
 
-  const getResultRow = (searchItem, searchItemIndex) => {
+  const getResultRow = (searchItem: IDirectiveUsage, searchItemIndex: number) => {
     if (searchItemIndex === selectedIndex) {
       return (
         <ActiveResultRow

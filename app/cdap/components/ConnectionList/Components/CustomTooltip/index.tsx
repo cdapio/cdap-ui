@@ -34,10 +34,7 @@ const getWrapperComponent = (tooltipText) => {
 
 export default function CustomTooltip(props: TooltipProps) {
   const classes = useStyles();
-  const TooltipWrapperComponent = getWrapperComponent(
-    props.title ===
-      T.translate('features.WranglerNewUI.FooterPanel.labels.columnViewPanel').toString()
-  );
+  const TooltipWrapperComponent = getWrapperComponent(props.title === 'Column View Panel');
 
   return (
     <TooltipWrapperComponent data-testid="tooltip-parent">

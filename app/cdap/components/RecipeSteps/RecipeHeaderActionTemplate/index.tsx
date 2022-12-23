@@ -23,10 +23,6 @@ import styled from 'styled-components';
 import grey from '@material-ui/core/colors/grey';
 import SaveAltOutlinedIcon from '@material-ui/icons/SaveAltOutlined';
 
-const DownloadMenuActionWrapper = styled(Box)`
-  display: flex;
-`;
-
 const DownloadButtonStyle = styled(IconButton)`
   cursor: pointer;
   &.MuiIconButton-root {
@@ -37,6 +33,10 @@ const DownloadButtonStyle = styled(IconButton)`
 const DownloadIconStyle = styled(SaveAltOutlinedIcon)`
   width: 20px;
   height: 20px;
+`;
+
+const DownloadMenuActionWrapper = styled(Box)`
+  display: flex;
 `;
 
 const KebabMenuButtonStyle = styled(IconButton)`
@@ -76,4 +76,3 @@ export default function() {
     </DownloadMenuActionWrapper>
   );
 }
-

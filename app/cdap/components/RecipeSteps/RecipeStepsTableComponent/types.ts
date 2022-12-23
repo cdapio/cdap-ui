@@ -18,4 +18,3 @@ export interface IRecipeStepTableProps {
   recipeSteps: string[];
   onDeleteRecipeSteps: (newRecipeStepList: string[], removedRecipeStepList: string[]) => void;
 }
-

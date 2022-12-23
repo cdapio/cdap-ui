@@ -30,7 +30,7 @@ import {
   ZoomBox,
 } from 'components/FooterPanel/styles';
 import T from 'i18n-react';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 export const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
 
@@ -62,7 +62,7 @@ interface IFooterPanelProps {
   recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
   onRecipePanelButtonClick: () => void;
-  setDirectivePanelIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDirectivePanelIsOpen: Dispatch<SetStateAction<boolean>>;
   directivePanelIsOpen: boolean;
 }
 

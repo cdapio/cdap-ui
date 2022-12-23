@@ -46,4 +46,3 @@ describe('It should test the RecipeStepsEmptyScreen Component', () => {
     );
   });
 });
-

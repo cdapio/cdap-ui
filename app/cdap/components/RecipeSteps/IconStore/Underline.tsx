@@ -23,4 +23,3 @@ export const UnderLine = (
     <path d="M54 0H63.5L66.5 2H57L54 0Z" fill={blue[500]} />
   </svg>
 );
-

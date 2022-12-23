@@ -18,4 +18,3 @@ export interface IRecipeStepsProps {
   setShowRecipePanel: (isRecipePanelOpen: boolean) => void;
   onDeleteRecipeSteps: (newRecipeStepList: string[], removedRecipeStepList: string[]) => void;
 }
-
