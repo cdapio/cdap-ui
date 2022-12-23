@@ -91,7 +91,7 @@ public class RecipeStep {
 
   @Then("Click on delete icon of any step with \\\"(.,*)\\\"")
   public void verifyByClickingOnDeleteIcon(int stepId) {
-      WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
+      WebElement ele = Helper.locateElementByTestId("recipe-steps-span" + stepId);
       Actions action = new Actions(SeleniumDriver.getDriver());
       action.moveToElement(ele).perform();
       ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId + "-delete"));
