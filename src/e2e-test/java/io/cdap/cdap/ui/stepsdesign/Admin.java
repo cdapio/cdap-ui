@@ -16,13 +16,10 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -30,12 +27,6 @@ import org.openqa.selenium.WebElement;
 
 
 public class Admin {
-
-  @When("Open configuration page")
-  public void openCdap() {
-    SeleniumDriver.openPage(Constants.CONFIGURATION_URL);
-    WaitHelper.waitForPageToLoad();
-  }
 
   @Then("Click on \"System Preferences\" accordion")
   public void openSystemPreferences() {

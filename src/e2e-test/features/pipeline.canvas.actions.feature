@@ -38,13 +38,13 @@ Feature: Pipeline Canvas - Actions
     When Open Pipeline Studio Page
     Then Create a complex pipeline
     Then Verify sink nodes are visible
-    Then Zoom in seven times
+    Then Zoom in ten times on pipeline canvas
     Then Verify sink nodes are invisible
-    Then Click fit to screen
+    Then Fit pipeline to screen
     Then Verify sink nodes are visible
     Then Move minimap
     Then Verify source nodes are invisible
-    Then Click fit to screen
+    Then Fit pipeline to screen
     Then Verify source nodes are visible
     Then Use shift click to delete two transform nodes
     Then Verify transform nodes do not exist

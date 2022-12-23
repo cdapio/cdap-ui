@@ -20,9 +20,10 @@ Feature: Logviewer - Validate log viewer functionalities
   @LOGVIEWER_TEST
   Scenario: Deploy and run pipeline till complete
     When Deploy and test pipeline "logs_generator" with timestamp with pipeline JSON file "logs_generator.json"
-    Then Run Pipeline
+    Then Run the pipeline
     Then Check pipeline is running
 
+  @LOGVIEWER_TEST
   Scenario: Log viewer should show
     Then Click on log viewer button
     Then Log viewer container should exist
@@ -32,6 +33,7 @@ Feature: Logviewer - Validate log viewer functionalities
     Then Download should exist
     Then Log viewer close should exist
 
+  @LOGVIEWER_TEST
   Scenario: Log level popover should work
     Then Click on log level toggle
     Then Log level "ERROR" should exist
@@ -46,6 +48,7 @@ Feature: Logviewer - Validate log viewer functionalities
     Then Log level "TRACE" checkmark should not exist
     Then Click on log level toggle
 
+  @LOGVIEWER_TEST
   Scenario: Log viewer content should contain correct information
     Then Log viewer content should contain message "is started by user"
     Then Log viewer content should not contain message "This is a WARN"
@@ -56,11 +59,13 @@ Feature: Logviewer - Validate log viewer functionalities
     Then Log level popover should not show
     Then Log viewer content should contain message "DEBUG"
 
+  @LOGVIEWER_TEST
   Scenario: Log viewer should fetch next logs when scroll to bottom
     Then Scroll up to center
     Then Scroll to latest should be enabled
     Then Debug message should update
 
+  @LOGVIEWER_TEST
   Scenario: Log viewer should fetch previous logs when scroll to top
     Then Scroll up to center
     Then Click on scroll to latest button
