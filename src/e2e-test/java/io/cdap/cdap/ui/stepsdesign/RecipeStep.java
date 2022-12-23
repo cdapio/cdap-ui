@@ -34,12 +34,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class RecipeStep {
   @Then("Click on the Data explorations card")
   public void clickOnTheDataExplorationsCard() {
-    try {
       WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+      ElementHelper.clickOnElement(Helper.locateElementByTestId
+      ("wrangler-home-ongoing-data-exploration-card-0"));
   }
 
   @Then("Verify if user is on the wrangle page")
@@ -49,106 +46,70 @@ public class RecipeStep {
   }
   @Then("Click on Directive button")
   public void clickOnDirectiveButton() {
-    try {
-      WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
+    if (Helper.isElementExists(By.cssSelector("loading-indicator"))) {
+    WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("loading-indicator"));
     }
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-directives-tab"));
   }
 
   @Then("Verify if the directive panel is displayed")
   public void directivePanelIsDisplayed() {
-    try {
-      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("select-directive-input-search"));
-      WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
-      Assert.assertTrue(panel.isDisplayed());
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId
+            ("select-directive-input-search"));
+    WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
+    Assert.assertTrue(panel.isDisplayed());
   }
 
   @Then("Enter command in the panel with the data {string}")
   public void checkCommandFunction(String command) {
-    try {
-      WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
-      panel.click();
-      panel.sendKeys(command);
-      String check = panel.getText();
-      panel.sendKeys(Keys.ENTER);
-      Helper.reloadPage();
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    WebElement panel = Helper.locateElementByTestId("select-directive-input-search");
+    panel.click();
+    panel.sendKeys(command);
+    String check = panel.getText();
+    panel.sendKeys(Keys.ENTER);
+    Helper.reloadPage();
   }
 
   @Then("click on close icon")
   public void closeIcon() {
-    try {
-      SeleniumDriver.getDriver().navigate().refresh();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    Helper.reloadPage();
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
   }
 
   @Then("Click on 'Recipe steps' button")
   public void clickOnRecipeStepButton() {
-    try {
-      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("footer-panel-recipe-steps-tab"));
   }
 
   @Then("Verify if recipe panel is displayed")
   public void recipePanelIsDisplayed() {
-    try {
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("column-view-panel-parent"));
-      Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("column-view-panel-parent")));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+      Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId
+              ("column-view-panel-parent")));
   }
 
   @Then("Click on delete icon of any step with \\\"(.,*)\\\"")
   public void verifyByClickingOnDeleteIcon(int stepId) {
-    try {
-      WebElement ele = Helper.locateElementByTestId("recipe-step-row-" + stepId);
+      WebElement ele = Helper.locateElementByTestId("recipe-steps-span" + stepId);
       Actions action = new Actions(SeleniumDriver.getDriver());
       action.moveToElement(ele).perform();
       ElementHelper.clickOnElement(Helper.locateElementByTestId("recipe-step-" + stepId + "-delete"));
       Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
   @Then("Verify if user clicks on download icon of recipe panel")
   public void clickOnDownloadIcon() {
-    try {
       ElementHelper.clickOnElement(Helper.locateElementByTestId("header-action-download-icon"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
 
   @Then("Verify if clicking on close icon of panel")
   public void verifyByClickingOnCloseIcon() {
-    try {
       WebDriverWait ele = new WebDriverWait(SeleniumDriver.getDriver(), 20);
       ele.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("drawer-widget-close-round-icon")));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("drawer-widget-close-round-icon"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
   @Then("verify if recipe step is Deleted with \\\"(.,*)\\\"")
   public void verifyIfRecipeStepDeleted(int stepId) {
-    try {
-      Assert.assertFalse(Helper.isElementExists("recipe-step-row-" + stepId));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    Assert.assertFalse(Helper.isElementExists("recipe-step-row-" + stepId));
   }
 }
