@@ -15,25 +15,25 @@
  */
 
 import { Box, IconButton } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
-import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
 import InputPanel from 'components/DirectiveInput/Components/InputPanel';
-import {
-  MULTIPLE_COLUMN_DIRECTIVE,
-  PREFIX,
-  TWO_COLUMN_DIRECTIVE,
-} from 'components/DirectiveInput/constants';
-import {
-  IDirectiveActions,
-  initialDirectiveInputState,
-  reducer,
-} from 'components/DirectiveInput/reducer';
+import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
 import { IDirectiveInputProps, IDirectiveUsage } from 'components/DirectiveInput/types';
 import { formatDirectiveUsageData } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useRef, useState, useReducer } from 'react';
 import styled from 'styled-components';
+import {
+  PREFIX,
+  TWO_COLUMN_DIRECTIVE,
+  MULTIPLE_COLUMN_DIRECTIVE,
+} from 'components/DirectiveInput/constants';
+import { grey } from '@material-ui/core/colors';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import {
+  reducer,
+  initialDirectiveInputState,
+  IDirectiveActions,
+} from 'components/DirectiveInput/reducer';
 
 const InputParentWrapper = styled(Box)`
   display: block;
@@ -178,26 +178,17 @@ export default function({
 
   const onDirectiveComplete = () => {
     if (
-      isDirectiveSet &&
-      directiveColumns.length >= 1 &&
-      directiveColumnCount === 0 &&
-      enterCount + 1 > directiveColumns.length + appliedDirective.length
+      (isDirectiveSet &&
+        directiveColumns.length >= 1 &&
+        directiveColumnCount === 0 &&
+        enterCount + 1 > directiveColumns.length + appliedDirective.length) ||
+      (isDirectiveSet &&
+        directiveColumns.length === 2 &&
+        directiveColumnCount === 2 &&
+        enterCount + 1 > directiveColumns.length + appliedDirective.length) ||
+      enterCount + 1 > directiveColumns.length + appliedDirective.length ||
+      isDirectivePaste
     ) {
-      // This condition means if we can select multiple column for directive
-      onDirectiveInputHandler(inputDirective);
-    } else if (
-      isDirectiveSet &&
-      directiveColumns.length === 2 &&
-      directiveColumnCount === 2 &&
-      enterCount + 1 > directiveColumns.length + appliedDirective.length
-    ) {
-      // This condition means if we can select atleast two column for directive
-      onDirectiveInputHandler(inputDirective);
-    } else if (enterCount + 1 > directiveColumns.length + appliedDirective.length) {
-      // This condition means if we can select single column from list and any number of postfix can be entered
-      onDirectiveInputHandler(inputDirective);
-    } else if (isDirectivePaste) {
-      // If we are copy pasting directive this condition is executed
       onDirectiveInputHandler(inputDirective);
     }
     return enterCount + 1;

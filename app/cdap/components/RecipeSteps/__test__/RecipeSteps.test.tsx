@@ -26,14 +26,13 @@ describe('It should test the Recipe Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeSteps setShowRecipePanel={jest.fn()} onDeleteRecipeSteps={jest.fn()}  />
+            <RecipeSteps setShowRecipePanel={jest.fn()} onDeleteRecipeSteps={jest.fn()} />
           </Route>
         </Switch>
       </Router>
     );
 
-    const parentElement = screen.getByTestId(/column-view-panel-parent/i)
-    expect(parentElement).toBeInTheDocument()
-    
+    const parentElement = screen.getByTestId(/column-view-panel-parent/i);
+    expect(parentElement).toBeInTheDocument();
   });
 });

@@ -87,7 +87,11 @@ export default function GridTable() {
 
   const { dataprep } = DataPrepStore.getState();
   enum IGridTableActions {
+    IS_FIRST_WRANGLE,
+    CONNECTOR_TYPE,
     IS_DIRECTIVE_PANEL_OPEN,
+    IS_SNACKBAR_OPEN,
+    SNACKBAR_DATA,
     TABLE_META_INFO,
     LOADING_STATUS,
     HEADER_NAMES,
@@ -101,33 +105,48 @@ export default function GridTable() {
     LOADER_AND_GRID_DATA,
     LOADER_AND_DIRECTIVE_OPEN,
     LOADER_GRID_DATA_AND_DIRECTIVE,
+    SET_WORKSPACE_NAME,
+    SHOW_BREADCRUMB,
+    SHOW_GRID_TABLE,
+    COLUMN_TYPE,
+    SELECTED_COLUMN,
   }
 
   const [gridTableState, dispatch] = useReducer(reducer, initialGridTableState);
   const {
+    isFirstWrangle,
+    connectorType,
     directivePanelIsOpen,
+    snackbarIsOpen,
+    snackbarData,
     tableMetaInfo,
     loading,
     headersNamesList,
     rowsDataList,
     gridData,
     missingDataList,
+    workspaceName,
+    showBreadCrumb,
+    showGridTable,
+    invalidCountArray,
+    columnType,
+    selectedColumn,
+    n,
+    showRecipePanel,
   } = gridTableState;
 
-  const [workspaceName, setWorkspaceName] = useState('');
-  const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
-  const [showGridTable, setShowGridTable] = useState(false);
-  const [showRecipePanel, setShowRecipePanel] = useState<boolean>(false);
-  const [invalidCountArray, setInvalidCountArray] = useState<Array<Record<string, string>>>([
-    {
-      label: 'Invalid',
-      count: '0',
-    },
-  ]);
-  const [snackbarState, setSnackbar] = useSnackbar();
-  const [columnType, setColumnType] = useState('');
-  const [selectedColumn, setSelectedColumn] = useState('');
+  useEffect(() => {
+    dispatch({
+      type: IGridTableActions.IS_FIRST_WRANGLE,
+      payload: true,
+    });
+    dispatch({
+      type: IGridTableActions.CONNECTOR_TYPE,
+      payload: dataprep.connectorType,
+    });
+  }, []);
 
+  // const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(true);
   const { directives } = dataprep;
   const addDirectives = (directive: string) => {
     dispatch({
@@ -163,10 +182,13 @@ export default function GridTable() {
             directivePanelIsOpen: false,
           },
         });
-        setSnackbar({
-          open: true,
-          isSuccess: true,
-          message: T.translate(`Transformation successfully added`).toString(),
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: T.translate(`Transformation successfully added`).toString(),
+            isSuccess: true,
+            open: true,
+          },
         });
       },
       (err) => {
@@ -177,10 +199,13 @@ export default function GridTable() {
             directivePanelIsOpen: false,
           },
         });
-        setSnackbar({
-          open: true,
-          isSuccess: false,
-          message: `Failed to add transformation`,
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: `Failed to add transformation`,
+            isSuccess: false,
+            open: true,
+          },
         });
       }
     );
@@ -203,7 +228,10 @@ export default function GridTable() {
       .pipe(
         flatMap((res: IValues) => {
           const { dataprep } = DataPrepStore.getState();
-          setWorkspaceName(res?.workspaceName);
+          dispatch({
+            type: IGridTableActions.SET_WORKSPACE_NAME,
+            payload: res?.workspaceName,
+          });
           if (dataprep.workspaceId !== workspaceId) {
             return;
           }
@@ -399,21 +427,20 @@ export default function GridTable() {
     });
   };
 
-  const showRecipePanelHandler = () => {
-    setShowRecipePanel((prev) => !prev);
-  };
+  const isParsingPanel =
+    dataprep?.insights?.name &&
+    isFirstWrangle &&
+    connectorType === 'File' &&
+    Array.isArray(gridData?.headers) &&
+    gridData?.headers.length !== 0;
 
-  useEffect(() => {
-    if (snackbarState.open) {
-      setTimeout(() => {
-        setSnackbar({
-          open: false,
-          isSuccess: false,
-          message: ``,
-        });
-      }, 5000);
-    }
-  }, [snackbarState]);
+  const showRecipePanelHandler = () => {
+    // setShowRecipePanel((prev) => !prev);
+    dispatch({
+      type: IGridTableActions.SHOW_RECIPE_PANEL,
+      payload: !showRecipePanel,
+    });
+  };
 
   const applyDirectiveAPICall = (newDirectiveList, action, removedDirectiveList, from) => {
     dispatch({
@@ -462,18 +489,28 @@ export default function GridTable() {
             gridData: response,
           },
         });
-        setShowRecipePanel(false);
-        setSnackbar({
-          open: true,
-          isSuccess: true,
-          message: snackbarString(action, arr, removedDirectiveList.length, from),
+        // setShowRecipePanel(false);
+        dispatch({
+          type: IGridTableActions.SHOW_RECIPE_PANEL,
+          payload: false,
+        });
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: snackbarString(action, arr, removedDirectiveList.length, from),
+            isSuccess: true,
+            open: true,
+          },
         });
       },
       (err) => {
-        setSnackbar({
-          open: true,
-          isSuccess: false,
-          message: `Failed to transform ${newDirectiveList}`,
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            message: `Failed to transform ${newDirectiveList}`,
+            isSuccess: false,
+            open: true,
+          },
         });
         dispatch({
           type: IGridTableActions.LOADING_STATUS,
@@ -481,7 +518,11 @@ export default function GridTable() {
             loading: false,
           },
         });
-        setShowRecipePanel(false);
+        dispatch({
+          type: IGridTableActions.SHOW_RECIPE_PANEL,
+          payload: false,
+        });
+        // setShowRecipePanel(false);
       }
     );
   };
@@ -498,29 +539,51 @@ export default function GridTable() {
 
   useEffect(() => {
     getGridTableData();
-    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
+    dispatch({
+      type: IGridTableActions.SHOW_GRID_TABLE,
+      payload: Array.isArray(gridData?.headers) && gridData?.headers.length !== 0,
+    });
+    // setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
   }, [gridData]);
 
+  const getColumnSelectPayload = (columnName) => (selectedColumn === columnName ? '' : columnName);
+
   const handleColumnSelect = (columnName) => {
-    setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
-    setColumnType(gridData?.types[columnName]);
+    // setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
+    dispatch({
+      type: IGridTableActions.SELECTED_COLUMN,
+      payload: getColumnSelectPayload(columnName),
+    });
+    // setColumnType(gridData?.types[columnName]);
+    dispatch({
+      type: IGridTableActions.COLUMN_TYPE,
+      payload: gridData?.types[columnName],
+    });
   };
 
   const handleCloseSnackbar = () => {
-    setSnackbar(() => ({
-      open: false,
-    }));
+    dispatch({
+      type: IGridTableActions.SNACKBAR_DATA,
+      payload: {
+        open: false,
+        isSuccess: false,
+        message: '',
+      },
+    });
   };
 
   useEffect(() => {
-    if (snackbarState.open) {
+    if (snackbarData.open) {
       setTimeout(() => {
-        setSnackbar(() => ({
-          open: false,
-        }));
+        dispatch({
+          type: IGridTableActions.SNACKBAR_DATA,
+          payload: {
+            open: false,
+          },
+        });
       }, 5000);
     }
-  }, [snackbarState.open]);
+  }, [snackbarData.open]);
 
   return (
     <>
@@ -528,15 +591,24 @@ export default function GridTable() {
         <Breadcrumb breadcrumbsList={getWrangleGridBreadcrumbOptions(workspaceName, location)} />
       )}
       <ToolBarList
-        setShowBreadCrumb={setShowBreadCrumb}
+        setShowBreadCrumb={(isBreadCrumbOpen: boolean) => {
+          dispatch({
+            type: IGridTableActions.SHOW_BREADCRUMB,
+            payload: isBreadCrumbOpen,
+          });
+        }}
+        // setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
         columnType={columnType}
         submitMenuOption={(option, datatype) => {
-          setSnackbar(() => ({
-            open: true,
-            isSuccess: true,
-            message: 'Function Selected',
-          }));
+          dispatch({
+            type: IGridTableActions.SNACKBAR_DATA,
+            payload: {
+              open: true,
+              isSuccess: true,
+              message: 'Function Selected',
+            },
+          });
           return false;
           // TODO: will integrate with add transformation panel later
         }}
@@ -560,7 +632,12 @@ export default function GridTable() {
           {showRecipePanel && (
             <RecipeStepPanel>
               <RecipeSteps
-                setShowRecipePanel={setShowRecipePanel}
+                setShowRecipePanel={(isRecipePanelOpen: boolean) => {
+                  dispatch({
+                    type: IGridTableActions.SHOW_RECIPE_PANEL,
+                    payload: isRecipePanelOpen,
+                  });
+                }}
                 onDeleteRecipeSteps={onDeleteRecipeSteps}
               />
             </RecipeStepPanel>
@@ -588,13 +665,14 @@ export default function GridTable() {
         <FooterPanel
           recipeStepsCount={directives?.length}
           gridMetaInfo={tableMetaInfo}
-          handleShowRecipePanelHandler={showRecipePanelHandler}
+          onRecipePanelButtonClick={showRecipePanelHandler}
           setDirectivePanelIsOpen={(boolean_value) => {
             dispatch({
               type: IGridTableActions.IS_DIRECTIVE_PANEL_OPEN,
               payload: boolean_value,
             });
           }}
+          directivePanelIsOpen={directivePanelIsOpen}
         />
         {loading && (
           <div className={classes.loadingContainer}>
@@ -602,12 +680,12 @@ export default function GridTable() {
           </div>
         )}
       </GridTableWrapper>
-      {snackbarState.open && (
+      {snackbarData.open && (
         <Snackbar
           handleClose={handleCloseSnackbar}
-          message={snackbarState.message}
-          isSuccess={snackbarState.isSuccess}
-          open={snackbarState.open}
+          message={snackbarData.message}
+          isSuccess={snackbarData.isSuccess}
+          open={snackbarData.open}
         />
       )}
     </>

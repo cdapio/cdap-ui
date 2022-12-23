@@ -37,19 +37,22 @@ describe('It should test the Recipe Component', () => {
   });
 
   it('renders Recipe Component and triggers button and following functionality', () => {
-    const mockDeleteFunction = jest.fn()
+    const mockDeleteFunction = jest.fn();
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeStepsTableComponent recipeSteps={mockRecipe} onDeleteRecipeSteps={mockDeleteFunction} />
+            <RecipeStepsTableComponent
+              recipeSteps={mockRecipe}
+              onDeleteRecipeSteps={mockDeleteFunction}
+            />
           </Route>
         </Switch>
       </Router>
     );
     const deleteElement = screen.getAllByTestId(/recipe-step-0-delete/i);
     fireEvent.click(deleteElement[0]);
-    expect(mockDeleteFunction).toBeCalled()
+    expect(mockDeleteFunction).toBeCalled();
     const recipeStepsSpan = screen.getByTestId(/recipe-steps-span0/i);
     expect(recipeStepsSpan).toContainHTML('a-column');
   });

@@ -15,7 +15,7 @@
  */
 
 export interface IRecipeStepsProps {
-  setShowRecipePanel: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowRecipePanel: (isRecipePanelOpen: boolean) => void;
   onDeleteRecipeSteps: (newRecipeStepList: string[], removedRecipeStepList: string[]) => void;
 }
 

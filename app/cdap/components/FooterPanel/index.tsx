@@ -61,8 +61,9 @@ interface IGridMetaInfo {
 interface IFooterPanelProps {
   recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
-  handleShowRecipePanelHandler: () => void;
+  onRecipePanelButtonClick: () => void;
   setDirectivePanelIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  directivePanelIsOpen: boolean;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -77,8 +78,9 @@ export interface IRecipeStepsTabProps {
 export default function({
   recipeStepsCount,
   gridMetaInfo,
-  handleShowRecipePanelHandler,
+  onRecipePanelButtonClick,
   setDirectivePanelIsOpen,
+  directivePanelIsOpen,
 }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
@@ -105,7 +107,7 @@ export default function({
       </ZoomBox>
       <DirectivesBox
         data-testid="footer-panel-directives-tab"
-        onClick={() => setDirectivePanelIsOpen(true)}
+        onClick={() => setDirectivePanelIsOpen(!directivePanelIsOpen)}
       >
         <Label data-testid="footerpanel-simple-directives-label">
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
@@ -113,7 +115,7 @@ export default function({
       </DirectivesBox>
       <ReciepeStepsBox
         data-testid="footer-panel-recipe-steps-tab"
-        onClick={handleShowRecipePanelHandler}
+        onClick={onRecipePanelButtonClick}
       >
         <Label data-testid="footerpanel-recipe-steps-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>

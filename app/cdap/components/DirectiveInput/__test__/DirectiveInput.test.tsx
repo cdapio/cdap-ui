@@ -20,8 +20,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { getFormattedSyntax } from 'components/DirectiveInput/utils';
 
 describe('Testing Directive Input Component', () => {
-
-  const mockCLoseFunction = jest.fn()
+  const mockCLoseFunction = jest.fn();
 
   beforeEach(() => {
     render(
@@ -51,6 +50,6 @@ describe('Testing Directive Input Component', () => {
   it('Should check cross icon is functioning as expected ', () => {
     const closeIconElement = screen.getByTestId(/close-directive-panel/i);
     fireEvent.click(closeIconElement);
-    expect(mockCLoseFunction).toBeCalled()
+    expect(mockCLoseFunction).toBeCalled();
   });
 });

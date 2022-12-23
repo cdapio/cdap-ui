@@ -17,18 +17,27 @@
 import MyDataPrepApi from 'api/dataprep';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import DataPrepStore from 'components/DataPrep/store';
-import { IRecords, IGridParams, IRequestBody, IApiPayload } from 'components/GridTable/types';
+import {
+  IRecords,
+  IGridParams,
+  IRequestBody,
+  IApiPayload,
+  IType,
+} from 'components/GridTable/types';
 import { objectQuery } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 
 /**
- *
- * @param params it is an object containing namespace and wid
- * @param newDirective it is either a single directive or an Array of directive / recipe steps
- * @returns constructed payload (object containing payload,requestBody,gridParams ) for the API call
+ * @param  {IRecords} params
+ * @param  {string|string[]} newDirective directive value
+ * @param  {string} action?
+ * @returns payload which is used for api calls
  */
-
-export const getAPIRequestPayload = (params: IRecords, newDirective: string | string[]) => {
+export const getAPIRequestPayload = (
+  params: IRecords,
+  newDirective: string | string[],
+  action?: string
+) => {
   const { dataprep } = DataPrepStore.getState();
   const { workspaceId, workspaceUri, directives, insights } = dataprep;
   let gridParams = {} as IGridParams;
@@ -58,13 +67,14 @@ export const getAPIRequestPayload = (params: IRecords, newDirective: string | st
 };
 
 /**
- *
- * @param workspaceId here we get workspace ID of any data-set which is going to be loaded in GridPage.
- * @param directives it is an array of directives / recipe steps that gets applied on given workspace.
- * @returns data of a workspace after applying directives on it.
+ * @param  {IRecords} workspaceId
+ * @param  {string[]} directives
+ * @return api response
  */
-
-export const applyDirectives = (workspaceId, directives) => {
+export const applyDirectives = (
+  workspaceId: string | boolean | Record<string, IType>,
+  directives: string[]
+) => {
   return MyDataPrepApi.getWorkspace({
     context: getCurrentNamespace(),
     workspaceId,

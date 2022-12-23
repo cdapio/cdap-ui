@@ -20,6 +20,12 @@ export const initialGridTableState = {
     columnCount: 0,
     rowCount: 0,
   },
+  snackbarIsOpen: false,
+  snackbarData: {
+    open: false,
+    isSuccess: false,
+    message: '',
+  },
   loading: false,
   headersNamesList: [],
   rowsDataList: [],
@@ -33,10 +39,19 @@ export const initialGridTableState = {
     },
   ],
   snackbarState: {},
+  workspaceName: '',
+  showBreadCrumb: true,
+  showGridTable: false,
+  columnType: '',
+  selectedColumn: '',
 };
 
 enum IGridTableActions {
+  IS_FIRST_WRANGLE,
+  CONNECTOR_TYPE,
   IS_DIRECTIVE_PANEL_OPEN,
+  IS_SNACKBAR_OPEN,
+  SNACKBAR_DATA,
   TABLE_META_INFO,
   LOADING_STATUS,
   HEADER_NAMES,
@@ -50,14 +65,39 @@ enum IGridTableActions {
   LOADER_AND_GRID_DATA,
   LOADER_AND_DIRECTIVE_OPEN,
   LOADER_GRID_DATA_AND_DIRECTIVE,
+  SET_WORKSPACE_NAME,
+  SHOW_BREADCRUMB,
+  SHOW_GRID_TABLE,
+  COLUMN_TYPE,
+  SELECTED_COLUMN,
 }
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case IGridTableActions.IS_FIRST_WRANGLE:
+      return {
+        ...state,
+        isFirstWrangle: action.payload,
+      };
+    case IGridTableActions.CONNECTOR_TYPE:
+      return {
+        ...state,
+        connectorType: action.payload,
+      };
     case IGridTableActions.IS_DIRECTIVE_PANEL_OPEN:
       return {
         ...state,
         directivePanelIsOpen: action.payload,
+      };
+    case IGridTableActions.IS_SNACKBAR_OPEN:
+      return {
+        ...state,
+        snackbarIsOpen: action.payload,
+      };
+    case IGridTableActions.SNACKBAR_DATA:
+      return {
+        ...state,
+        snackbarData: action.payload,
       };
     case IGridTableActions.TABLE_META_INFO:
       return {
@@ -131,6 +171,33 @@ export const reducer = (state, action) => {
         gridData: action.payload.gridData,
         directivePanelIsOpen: action.payload.directivePanelIsOpen,
       };
+    case IGridTableActions.SET_WORKSPACE_NAME:
+      return {
+        ...state,
+        workspaceName: action.payload,
+      };
+
+    case IGridTableActions.SHOW_BREADCRUMB:
+      return {
+        ...state,
+        showBreadCrumb: action.payload,
+      };
+    case IGridTableActions.SHOW_GRID_TABLE:
+      return {
+        ...state,
+        showGridTable: action.payload,
+      };
+    case IGridTableActions.COLUMN_TYPE:
+      return {
+        ...state,
+        columnType: action.payload,
+      };
+    case IGridTableActions.SELECTED_COLUMN:
+      return {
+        ...state,
+        selectedColumn: action.payload,
+      };
+
     default:
       return state;
   }

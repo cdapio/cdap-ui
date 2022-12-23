@@ -31,8 +31,9 @@ describe('Test Footer Panel Component', () => {
             <FooterPanel
               recipeStepsCount={42}
               gridMetaInfo={{ rowCount: 66, columnCount: 6 }}
-              handleShowRecipePanelHandler={jest.fn()}
+              onRecipePanelButtonClick={jest.fn()}
               setDirectivePanelIsOpen={jest.fn()}
+              directivePanelIsOpen={false}
             />
           </Route>
         </Switch>

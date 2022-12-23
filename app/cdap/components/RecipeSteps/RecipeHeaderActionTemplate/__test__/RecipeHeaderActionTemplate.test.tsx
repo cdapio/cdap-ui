@@ -22,7 +22,7 @@ import history from 'services/history';
 
 describe('It should test the RecipeHeaderActionTemplate Component', () => {
   it('renders RecipeHeaderActionTemplate component and triggers handleDownload', () => {
-  jest.mock('js-file-download', () => {
+    jest.mock('js-file-download', () => {
       return {
         __esModule: true,
         default: jest.fn(console.trace),
