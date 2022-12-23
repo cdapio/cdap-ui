@@ -22,15 +22,18 @@ import history from 'services/history';
 
 describe('It should test the Recipe Component', () => {
   it('renders Recipe Component', () => {
-    const container = render(
+    render(
       <Router history={history}>
         <Switch>
           <Route>
-            <RecipeSteps setShowRecipePanel={jest.fn()} showRecipePanel={false} />
+            <RecipeSteps setShowRecipePanel={jest.fn()} onDeleteRecipeSteps={jest.fn()}  />
           </Route>
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined();
+
+    const parentElement = screen.getByTestId(/column-view-panel-parent/i)
+    expect(parentElement).toBeInTheDocument()
+    
   });
 });

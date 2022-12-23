@@ -24,8 +24,8 @@ public class Constants {
   public static final int TEST_TIMEOUT_TIME = 10000;
   public static final int RETRY_INTERVAL = 2000;
   public static final String TEST_TIMEOUT_MESSAGE = "Timed out after" +
-      String.valueOf(TEST_TIMEOUT_TIME / 1000) +
-      "seconds";
+    String.valueOf(TEST_TIMEOUT_TIME / 1000) +
+    "seconds";
 
   public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/wrangle";
   public static final String BASE_URL = "http://localhost:11011";
