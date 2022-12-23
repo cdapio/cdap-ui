@@ -44,7 +44,7 @@ describe('Testing Directive Input Component', () => {
     getFormattedSyntax('test: apple', 'test : test');
     expect(inputElement).toBeInTheDocument();
     fireEvent.change(inputElement, { target: { value: 'test' } });
-    fireEvent.keyDown(inputElement, { charCode: 13 });
+    fireEvent.keyDown(inputElement, { key: 'Enter', code: 'Enter'});
     expect(inputElement).toHaveAttribute('value', 'test');
   });
 
