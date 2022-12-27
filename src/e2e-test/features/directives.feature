@@ -20,13 +20,13 @@ Feature: Directives
   @Directives
   Scenario Outline: Go through the directives functionality
     Given Navigate to the Wrangler Home page
-    Then Click on the Data explorations card with index "<index>"
+    Then Click on the Exploration card with "<testId>"
     Then Verify if user is on the wrangle page
     Then Click on the Directives button
-    Then Click on Close icon of panel
+    Then Click on Close icon of directive panel
     Then Click on the Directives button
     Then Verify and Click the directive panel
     Then Enter command in the panel with the data "<id>"
     Examples:
-      | id | index |
+      | id | testId |
       | 11 | 0     |
