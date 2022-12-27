@@ -29,12 +29,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 public class Directives {
-  @Then("Click on the Data explorations card with index \\\"(.*)\\\"")
-  public void clickOnTheDataExplorationsCard(int index) {
-    WaitHelper.waitForPageToLoad();
-    ElementHelper.clickOnElement(Helper.locateElementByTestId
-              ("wrangler-home-ongoing-data-exploration-card-" + index));
-  }
 
   @Then("Verify if user is on the wrangle page")
   public void verifyIfUserIsOnTheWranglePage() {
@@ -73,7 +67,7 @@ public class Directives {
     Assert.assertEquals(capital, newText);
   }
 
-  @Then("Click on Close icon of panel")
+  @Then("Click on Close icon of directive panel")
   public void closeIcon() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("close-directive-panel"));
   }
