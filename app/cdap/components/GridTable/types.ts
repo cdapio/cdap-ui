@@ -51,8 +51,8 @@ export interface IType {
 
 export interface IRequestBody {
   directives: string[];
-  insights?: IRecords;
   limit: number;
+  insights?: IRecords;
 }
 
 export interface IGridParams {

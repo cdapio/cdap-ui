@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import SearchListItem from 'components/DirectiveInput/Components/SearchListItem/index';
+import SearchListItem from 'components/DirectiveInput/Components/SearchListItem';
 
 describe('Testing SearchListItem  Component', () => {
   beforeEach(() => {

@@ -30,22 +30,6 @@ const DirectiveWrapper = styled(Box)`
   padding: 10px;
 `;
 
-const MUIIconStyle = styled(InfoOutlinedIcon)`
-  color: #79b7ff;
-`;
-
-const UsageText = styled(Typography)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0.15;
-  color: #ffffff;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-`;
-
 const DividerLine = styled(Divider)`
   &.MuiDivider-root {
     background-color: #ffffff;
@@ -66,6 +50,22 @@ const InfoLink = styled(Link)`
     text-decoration: none;
     color: #79b7ff;
   }
+`;
+
+const MUIIconStyle = styled(InfoOutlinedIcon)`
+  color: #79b7ff;
+`;
+
+const UsageText = styled(Typography)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.15;
+  color: #ffffff;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 
 export default function({ directiveUsage }: IDirectiveUsageProps) {

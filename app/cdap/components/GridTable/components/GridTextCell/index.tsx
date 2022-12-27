@@ -16,8 +16,8 @@
 
 import { Card, TableCell, Typography } from '@material-ui/core';
 import React from 'react';
-import { useGridTextCellStyles } from './styles';
-import { IGridTextCellProps } from './types';
+import { useGridTextCellStyles } from 'components/GridTable/components/GridTextCell/styles';
+import { IGridTextCellProps } from 'components/GridTable/components/GridTextCell/types';
 
 export default function GridTextCell({ cellValue, dataTestId }: IGridTextCellProps) {
   const classes = useGridTextCellStyles();

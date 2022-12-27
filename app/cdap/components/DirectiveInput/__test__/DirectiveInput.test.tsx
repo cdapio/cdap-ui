@@ -15,13 +15,12 @@
  */
 
 import React from 'react';
-import DirectiveInput from 'components/DirectiveInput/index';
+import DirectiveInput from 'components/DirectiveInput';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getFormattedSyntax } from 'components/DirectiveInput/utils';
 
 describe('Testing Directive Input Component', () => {
-
-  const mockCLoseFunction = jest.fn()
+  const mockCLoseFunction = jest.fn();
 
   beforeEach(() => {
     render(
@@ -44,13 +43,13 @@ describe('Testing Directive Input Component', () => {
     getFormattedSyntax('test: apple', 'test : test');
     expect(inputElement).toBeInTheDocument();
     fireEvent.change(inputElement, { target: { value: 'test' } });
-    fireEvent.keyDown(inputElement, { key: 'Enter', code: 'Enter'});
+    fireEvent.keyDown(inputElement, { key: 'Enter', code: 'Enter' });
     expect(inputElement).toHaveAttribute('value', 'test');
   });
 
   it('Should check cross icon is functioning as expected ', () => {
     const closeIconElement = screen.getByTestId(/close-directive-panel/i);
     fireEvent.click(closeIconElement);
-    expect(mockCLoseFunction).toBeCalled()
+    expect(mockCLoseFunction).toBeCalled();
   });
 });

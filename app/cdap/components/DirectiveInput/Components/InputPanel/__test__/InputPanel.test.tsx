@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import InputPanel from 'components/DirectiveInput/Components/InputPanel/index';
+import InputPanel from 'components/DirectiveInput/Components/InputPanel';
 import MyDataPrepApi from 'api/dataprep';
 
 describe('Testing Input Panel Component', () => {
@@ -55,9 +55,9 @@ describe('Testing Input Panel Component', () => {
   it('Should check if the parent wrapper is rendered with selectedDirective as true', () => {
     jest.spyOn(MyDataPrepApi, 'getUsage').mockImplementation(() => {
       return {
-            subscribe: (callback) => {
-              callback(Promise.resolve({value:'test'}));
-            },
+        subscribe: (callback) => {
+          callback(Promise.resolve({ value: 'test' }));
+        },
       };
     });
     render(

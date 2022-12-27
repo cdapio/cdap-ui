@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage/index';
+import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
 import T from 'i18n-react';
 import { PREFIX } from 'components/DirectiveInput/constants';
 
