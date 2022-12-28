@@ -26,7 +26,7 @@ export const formatDirectiveUsageData = (
   directiveInput: string,
   directivesList: IDirectivesList[]
 ) => {
-  const inputSplit: string[] = directiveInput.replace(/^\s+/g, '').split(' ');
+  const splittedInputValue: string[] = directiveInput.replace(/^\s+/g, '').split(' ');
   const fuseOptions = {
     includeScore: true,
     includeMatches: true,
@@ -40,7 +40,7 @@ export const formatDirectiveUsageData = (
     keys: ['directive'],
   };
   const fuse = new Fuse(directivesList, fuseOptions);
-  return fuse.search(inputSplit[0]).map((row) => {
+  return fuse.search(splittedInputValue[0]).map((row) => {
     row.uniqueId = uuidV4();
     return row;
   });
@@ -53,8 +53,8 @@ export const formatDirectiveUsageData = (
 export const getLastWordOfSearchItem = (searchString: string) => {
   const lastWord = searchString.split(' ');
   if (lastWord[lastWord.length - 1].includes(',')) {
-    const newSplit = lastWord[lastWord.length - 1].split(',:'); // Special case when syntax is drop :col [,:col]* after every : we write column name so to make column drop down appear again
-    return newSplit[newSplit.length - 1];
+    const splittedValue = lastWord[lastWord.length - 1].split(',:'); // Special case when syntax is drop :col [,:col]* after every : we write column name so to make column drop down appear again
+    return splittedValue[splittedValue.length - 1];
   } else {
     const characterToSearch = lastWord[lastWord.length - 1].includes(':')
       ? lastWord[lastWord.length - 1].slice(1)
@@ -71,11 +71,13 @@ export const getFormattedSyntax = (inputText: string, newString: string) => {
   const lastWord = inputText.split(' ');
   if (lastWord[lastWord.length - 1].includes(',')) {
     // Special case when syntax is drop :col [,:col]* after every : we write column name so to make column drop down appear again
-    const newSplit = lastWord[lastWord.length - 1].split(',');
-    const newSplitInput = newSplit.slice(0, newSplit.length - 1).concat(`:${newString}`);
+    const splittedValue = lastWord[lastWord.length - 1].split(',');
+    const splittedValueInput = splittedValue
+      .slice(0, splittedValue.length - 1)
+      .concat(`:${newString}`);
     const formattedInput = inputText
       .slice(0, inputText.length - lastWord.slice(-1)[0].length)
-      .concat(`${newSplitInput}`);
+      .concat(`${splittedValueInput}`);
     return formattedInput;
   } else if (lastWord[lastWord.length - 1].includes(':')) {
     // When syntax is uppercase :col after every : we write column name so to make column drop down appear

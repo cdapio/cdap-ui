@@ -15,25 +15,29 @@
  */
 
 import { Box, IconButton } from '@material-ui/core';
-import InputPanel from 'components/DirectiveInput/Components/InputPanel';
+import { grey } from '@material-ui/core/colors';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
+import InputPanel from 'components/DirectiveInput/Components/InputPanel';
+import {
+  MULTIPLE_COLUMN_DIRECTIVE,
+  PREFIX,
+  TWO_COLUMN_DIRECTIVE,
+} from 'components/DirectiveInput/constants';
+import {
+  IDirectiveActions,
+  initialDirectiveInputState,
+  reducer,
+} from 'components/DirectiveInput/reducer';
 import { IDirectiveInputProps, IDirectiveUsage } from 'components/DirectiveInput/types';
 import { formatDirectiveUsageData } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
-import React, { useEffect, useRef, useState, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef, KeyboardEvent } from 'react';
 import styled from 'styled-components';
-import {
-  PREFIX,
-  TWO_COLUMN_DIRECTIVE,
-  MULTIPLE_COLUMN_DIRECTIVE,
-} from 'components/DirectiveInput/constants';
-import { grey } from '@material-ui/core/colors';
-import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import {
-  reducer,
-  initialDirectiveInputState,
-  IDirectiveActions,
-} from 'components/DirectiveInput/reducer';
+
+const CloseIconButton = styled(IconButton)`
+  color: #ffffff;
+`;
 
 const DirectiveBox = styled(Box)`
   background-color: #ffffff;
@@ -44,21 +48,6 @@ const DirectiveBox = styled(Box)`
 
 const DirectiveUsageWrapper = styled(Box)`
   background: ${grey[700]};
-`;
-
-const LabelComponent = styled.label`
-  color: #94ec98;
-  font-size: 14px;
-  margin-bottom: 0;
-`;
-
-const InputComponent = styled.input`
-  width: 95%;
-  margin-left: 5px;
-  outline: 0;
-  border: 0;
-  background: transparent;
-  color: #ffffff;
 `;
 
 const InputParentWrapper = styled(Box)`
@@ -79,8 +68,19 @@ const SearchBarWrapper = styled(Box)`
   align-items: center;
 `;
 
-const CloseIconButton = styled(IconButton)`
+const StyledInput = styled.input`
+  width: 95%;
+  margin-left: 5px;
+  outline: 0;
+  border: 0;
+  background: transparent;
   color: #ffffff;
+`;
+
+const StyledLabel = styled.label`
+  color: #94ec98;
+  font-size: 14px;
+  margin-bottom: 0;
 `;
 
 export default function({
@@ -102,7 +102,7 @@ export default function({
   } = directiveInput;
   const directiveRef = useRef();
 
-  const handleDirectiveChange = (value) => {
+  const handleDirectiveChange = (value: string) => {
     if (!value) {
       dispatch({
         type: IDirectiveActions.SET_NO_DIRECTIVE,
@@ -114,7 +114,11 @@ export default function({
     }
     const inputText = value.split(' ');
     const firstIndexInputTextValue = inputText[0];
-    if (directivesList.findIndex((el) => el.directive == firstIndexInputTextValue) !== -1) {
+    if (
+      directivesList.findIndex(
+        (el: { directive: string }) => el.directive == firstIndexInputTextValue
+      ) !== -1
+    ) {
       dispatch({
         type: IDirectiveActions.DIRECTIVES_APPLIED_SET_COUNT,
         payload: {
@@ -145,7 +149,7 @@ export default function({
     });
   };
 
-  const getDirectiveColumnCount = (firstIndexInputTextValue) => {
+  const getDirectiveColumnCount = (firstIndexInputTextValue: string) => {
     if (TWO_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
       return 2;
     } else if (MULTIPLE_COLUMN_DIRECTIVE.includes(firstIndexInputTextValue)) {
@@ -162,7 +166,7 @@ export default function({
     });
   }, [inputDirective]);
 
-  const handleKeyDownEvent = (KeyboardEvent: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownEvent = (KeyboardEvent: KeyboardEvent<HTMLInputElement>) => {
     if ((KeyboardEvent.ctrlKey || KeyboardEvent.metaKey) && KeyboardEvent.keyCode == 86) {
       dispatch({
         type: IDirectiveActions.DIRECTIVE_PASTE,
@@ -228,13 +232,13 @@ export default function({
           )}
           <SearchBarWrapper>
             <InputWrapper>
-              <LabelComponent
+              <StyledLabel
                 htmlFor="directive-input-search"
                 data-testid="select-directive-input-label"
               >
                 $
-              </LabelComponent>
-              <InputComponent
+              </StyledLabel>
+              <StyledInput
                 id="directive-input-search" // is is needed for catching keyboard events while navigating through search list
                 autoComplete="OFF"
                 placeholder={T.translate(`${PREFIX}.inputDirective`).toString()}

@@ -68,7 +68,7 @@ export default function({
   inputDirective,
 }: IInputPanelProps) {
   const [searchResults, setSearchResults] = useState<IDirectiveUsage[]>([]);
-  const [inputText, setInputText] = useState<string>('');
+  const [inputText, setInputText] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const eventEmitter = ee(ee);
   const [fuse, setFuse] = useState(new Fuse([], { ...defaultFuseOptions }));
@@ -185,7 +185,7 @@ export default function({
   };
 
   // Function called when item is clicked in search list
-  const handleListItemClick = (listItem) => {
+  const handleListItemClick = (listItem: IDirectiveUsage) => {
     if (!isDirectiveSet) {
       onSearchItemClick(listItem.item.directive);
       getDirectiveSyntax([listItem], true);
@@ -196,7 +196,7 @@ export default function({
     }
   };
 
-  const getResultRow = (searchItem, searchItemIndex) => {
+  const getResultRow = (searchItem: IDirectiveUsage, searchItemIndex: number) => {
     if (searchItemIndex === selectedIndex) {
       return (
         <ActiveResultRow
