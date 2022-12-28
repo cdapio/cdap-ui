@@ -17,19 +17,12 @@
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
-import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
@@ -44,11 +37,6 @@ public class PipelineCanvasActions {
 
     Assert.assertFalse(undoSelector.isEnabled());
     Assert.assertFalse(redoSelector.isEnabled());
-  }
-
-  @Then("Create a simple pipeline")
-  public void createASimplePipeline() {
-    Commands.createSimplePipeline();
   }
 
   @Then("Verify redo button disabled but undo button enabled")
@@ -68,7 +56,7 @@ public class PipelineCanvasActions {
   }
 
   @Then("Verify there's no pipeline connection")
-  public void verifyThereSNoPipelineConnection() {
+  public void verifyThereIsNoPipelineConnection() {
     List<WebElement> elements = Commands.findElementsByCssSelector(".jsplumb-connector");
     Assert.assertEquals(elements.size(), 0);
   }
@@ -79,7 +67,7 @@ public class PipelineCanvasActions {
   }
 
   @Then("Verify there's one connection")
-  public void verifyThereSOneConnection() {
+  public void verifyThereIsOneConnection() {
     List<WebElement> elements = Commands.findElementsByCssSelector(".jsplumb-connector");
     Assert.assertEquals(elements.size(), 1);
   }
@@ -115,39 +103,16 @@ public class PipelineCanvasActions {
     Assert.assertEquals(elements.size(), 2);
   }
 
-  @Then("Create a complex pipeline")
-  public void createAComplexPipeline() {
-    Commands.createComplexPipeline();
-  }
-
   @Then("Verify sink nodes are visible")
   public void verifySinkNodesAreVisible() {
-    WebElement sink1Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-7");
-    WebElement sink2Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-6");
-
-    Assert.assertTrue(sink1Selector.isDisplayed());
-    Assert.assertTrue(sink2Selector.isDisplayed());
-  }
-
-  @Then("Zoom in seven times")
-  public void zoomInFiveTimes() {
-    for (int i = 0; i < 10; ++i) {
-      Commands.clickZoomInButton();
-    }
+    Assert.assertTrue(Commands.getNode(Commands.complexSinkNode1).isDisplayed());
+    Assert.assertTrue(Commands.getNode(Commands.complexSinkNode2).isDisplayed());
   }
 
   @Then("Verify sink nodes are invisible")
   public void verifySinkNodesAreInvisible() {
-    WebElement sink1Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-7");
-    WebElement sink2Selector = Helper.locateElementByTestId("plugin-node-BigQueryMultiTable-batchsink-6");
-
-    Assert.assertFalse(sink1Selector.isDisplayed());
-    Assert.assertFalse(sink2Selector.isDisplayed());
-  }
-
-  @Then("Click fit to screen")
-  public void clickFitToScreen() {
-    Commands.fitPipelineToScreen();
+    Assert.assertFalse(Commands.getNode(Commands.complexSinkNode1).isDisplayed());
+    Assert.assertFalse(Commands.getNode(Commands.complexSinkNode2).isDisplayed());
   }
 
   @Then("Move minimap")
@@ -158,27 +123,24 @@ public class PipelineCanvasActions {
 
   @Then("Verify source nodes are invisible")
   public void verifySourceNodesAreInvisible() {
-    WebElement source1Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-0");
-    WebElement source2Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-1");
-
-    Assert.assertFalse(source1Selector.isDisplayed());
-    Assert.assertFalse(source2Selector.isDisplayed());
+    Assert.assertFalse(Commands.getNode(Commands.complexSourceNode1).isDisplayed());
+    Assert.assertFalse(Commands.getNode(Commands.complexSourceNode2).isDisplayed());
   }
 
   @Then("Verify source nodes are visible")
   public void verifySourceNodesAreVisible() {
-    WebElement source1Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-0");
-    WebElement source2Selector = Helper.locateElementByTestId("plugin-node-Spanner-batchsource-1");
-
-    Assert.assertTrue(source1Selector.isDisplayed());
-    Assert.assertTrue(source2Selector.isDisplayed());
+    Assert.assertTrue(Commands.getNode(Commands.complexSourceNode1).isDisplayed());
+    Assert.assertTrue(Commands.getNode(Commands.complexSourceNode2).isDisplayed());
   }
 
   @Then("Use shift click to delete two transform nodes")
   public void useShiftClickToDeleteTwoTransformNodes() {
-    WebElement transform1Selector = Helper.locateElementByTestId("plugin-node-name-JavaScript-transform-2");
-    WebElement transform2Selector = Helper.locateElementByTestId("plugin-node-name-JavaScript-transform-3");
-
+    WebElement transform1Selector = Helper.locateElementByCssSelector(
+      Helper.getNodeNameSelectorFromNodeIdentifier(Commands.complexTransformNode1)
+    );
+    WebElement transform2Selector = Helper.locateElementByCssSelector(
+      Helper.getNodeNameSelectorFromNodeIdentifier(Commands.complexTransformNode2)
+    );
     Actions actions = new Actions(SeleniumDriver.getDriver());
     actions.keyDown(Keys.SHIFT)
       .click(transform1Selector)
@@ -191,28 +153,18 @@ public class PipelineCanvasActions {
 
   @Then("Verify transform nodes do not exist")
   public void verifyTransformNodesDoNotExist() {
-    try {
-      Helper.locateElementByTestId("plugin-node-JavaScript-transform-2");
-    } catch (NoSuchElementException e) {
-      // DO NOTHING
-    }
-
-    try {
-      Helper.locateElementByTestId("plugin-node-JavaScript-transform-3");
-    } catch (NoSuchElementException e) {
-      // DO NOTHING
-    }
+    Assert.assertFalse(Helper.isElementExists(
+      Helper.getNodeSelectorFromNodeIdentifier(Commands.complexTransformNode1)));
+    Assert.assertFalse(Helper.isElementExists(
+      Helper.getNodeSelectorFromNodeIdentifier(Commands.complexTransformNode2)));
   }
 
   @Then("Undo delete nodes")
   public void undoDeleteNodes() {
     Commands.clickUndoButton();
     Commands.clickUndoButton();
-
-    WebElement transform1Selector = Helper.locateElementByTestId("plugin-node-JavaScript-transform-2");
-    WebElement transform2Selector = Helper.locateElementByTestId("plugin-node-JavaScript-transform-3");
-
-    Assert.assertTrue(transform1Selector.isDisplayed());
-    Assert.assertTrue(transform2Selector.isDisplayed());
+    
+    Assert.assertTrue(Commands.getNode(Commands.complexTransformNode1).isDisplayed());
+    Assert.assertTrue(Commands.getNode(Commands.complexTransformNode2).isDisplayed());
   }
 }

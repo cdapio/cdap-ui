@@ -131,6 +131,10 @@ const InputK8sServiceAccountEmail = connect(
 )(InputWithValidations);
 
 export default function ResourcesStep() {
+  const shouldDisplayServiceAccountEmailField =
+    window.CDAP_CONFIG.cdap.k8sWorkloadIdentityEnabled === 'true' &&
+    window.CDAP_CONFIG.cdap.namespaceCreationHookEnabled === 'true';
+
   return (
     <Provider store={AddNamespaceStore}>
       <Form
@@ -170,18 +174,20 @@ export default function ResourcesStep() {
             <InputK8sMemoryLimit />
           </Col>
         </FormGroup>
-        <FormGroup row>
-          <Col xs="4">
-            <Label className="control-label">
-              {T.translate(
-                'features.Wizard.Add-Namespace.ResourcesStep.service-account-email-label'
-              )}
-            </Label>
-          </Col>
-          <Col xs="7">
-            <InputK8sServiceAccountEmail />
-          </Col>
-        </FormGroup>
+        {shouldDisplayServiceAccountEmailField && (
+          <FormGroup row>
+            <Col xs="4">
+              <Label className="control-label">
+                {T.translate(
+                  'features.Wizard.Add-Namespace.ResourcesStep.service-account-email-label'
+                )}
+              </Label>
+            </Col>
+            <Col xs="7">
+              <InputK8sServiceAccountEmail />
+            </Col>
+          </FormGroup>
+        )}
       </Form>
     </Provider>
   );
