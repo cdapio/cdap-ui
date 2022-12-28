@@ -44,20 +44,6 @@ public class Logviewer {
     Helper.deployAndTestPipeline(pipelineJSONfile, pipelineName + System.currentTimeMillis());
   }
 
-  @Then("Check pipeline is running")
-  public void isRunning() {
-    WaitHelper.waitForElementToBeDisplayed(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("Running"))
-    );
-  }
-
-  @Then("Run Pipeline")
-  public void runPipeline() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("pipeline-run-btn"))
-    );
-  }
-
   @Then("Click on log viewer button")
   public void clickLogViewer() {
     ElementHelper.clickOnElement(
@@ -140,8 +126,8 @@ public class Logviewer {
   @Then("Log viewer content should contain message {string}")
   public void logViewerContentMessageExists(String message) {
     Assert.assertTrue(
-      Helper.isElementExists(By.xpath("//*[contains(text(), '" + message + "')]"),
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("log-viewer-content"))
+      Helper.isElementExists(
+        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
       )
     );
   }
@@ -149,8 +135,8 @@ public class Logviewer {
   @Then("Log viewer content should not contain message {string}")
   public void logViewerContentMessageNotExists(String message) {
     Assert.assertFalse(
-      Helper.isElementExists(By.xpath("//*[contains(text(), '" + message + "')]"),
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("log-viewer-content"))
+      Helper.isElementExists(
+        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
       )
     );
   }

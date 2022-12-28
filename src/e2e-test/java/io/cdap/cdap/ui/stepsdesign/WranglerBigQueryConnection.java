@@ -18,7 +18,6 @@ package io.cdap.cdap.ui.stepsdesign;
 
 
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
@@ -27,19 +26,12 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 public class WranglerBigQueryConnection {
     public static final String TYPE_BIGQUERY = "BigQuery";
     public static final String DEFAULT_BIGQUERY_INSTANCE = "cdap_gcp_ui_test";
 
     public static final String DEFAULT_BIGQUERY_TABLE = "users";
-
-    @When("Open Connections page for BigQuery connection test")
-    public static void openConnectionsPage() {
-        SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "connections");
-        WaitHelper.waitForPageToLoad();
-    }
 
     @When("Open BigQuery connection {string} page")
     public static void openBigQueryConnectionPage(String connectionName) {

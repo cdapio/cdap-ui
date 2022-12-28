@@ -17,19 +17,21 @@
 @Integration_Tests
 Feature: Pipeline Draft
 
+  @PIPELINE_DRAFT_TEST
   Scenario: Save or edit a pipeline draft successfully
     When Open Pipeline Studio Page
-    Then Create simple pipeline
-    Then Open source node property
+    Then Create a simple pipeline
+    Then Open source node property in simple pipeline
     Then Add DummyProject as dataset project
     Then Add DummyDataset as dataset
-    Then Close source node property
+    Then Close node property
     Then Fill in pipeline name
     Then Check url for draftId string
     Then Reload the page
     Then Export the pipeline
     Then Verify the exported pipeline
 
+  @PIPELINE_DRAFT_TEST
   Scenario: Delete draft upon deploying
     When Open Pipeline Studio Page
     Then import pipeline from json "fll_wrangler-test-pipeline.json"
@@ -39,7 +41,7 @@ Feature: Pipeline Draft
     Then Check url for draft pipeline name
     Then Verify the deployed pipeline no longer exists in the drafts page
 
-
+  @PIPELINE_DRAFT_TEST
   Scenario: Edit the draft uploaded using old api
     When Open Pipeline Studio Page
     Then Upload draft pipeline from json "old_userstore_draft.json"
@@ -51,10 +53,10 @@ Feature: Pipeline Draft
     Then Navigate to pipeline drafts page and sort by latest
     Then Ensure draft pipeline name is updated and exists with the same id in the backend
 
-
+  @PIPELINE_DRAFT_TEST
   Scenario: Delete drafts using either old or the new API
     When Open Pipeline Studio Page
-    Then Create simple pipeline
+    Then Create a simple pipeline
     Then Fill in pipeline name
     Then Check url for draftId string
     Then Navigate to pipeline drafts page and sort by latest
