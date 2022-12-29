@@ -14,8 +14,6 @@
  * the License.
  */
 
-import { Box, IconButton } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import DirectiveUsage from 'components/DirectiveInput/Components/DirectiveUsage';
 import InputPanel from 'components/DirectiveInput/Components/InputPanel';
@@ -32,56 +30,17 @@ import {
 import { IDirectiveInputProps, IDirectiveUsage } from 'components/DirectiveInput/types';
 import { formatDirectiveUsageData } from 'components/DirectiveInput/utils';
 import T from 'i18n-react';
-import React, { useEffect, useReducer, useRef, KeyboardEvent } from 'react';
-import styled from 'styled-components';
-
-const CloseIconButton = styled(IconButton)`
-  color: #ffffff;
-`;
-
-const DirectivesContainer = styled(Box)`
-  background-color: #ffffff;
-  position: fixed;
-  bottom: 93px;
-  width: 100%;
-`;
-
-const DirectiveUsageWrapper = styled(Box)`
-  background: ${grey[700]};
-`;
-
-const InputParentWrapper = styled(Box)`
-  display: block;
-  box-shadow: -3px -4px 15px rgba(68, 132, 245, 0.25);
-`;
-
-const InputWrapper = styled(Box)`
-  width: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-const SearchBarWrapper = styled(Box)`
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const StyledInput = styled.input`
-  width: 95%;
-  margin-left: 5px;
-  outline: 0;
-  border: 0;
-  background: transparent;
-  color: #ffffff;
-`;
-
-const StyledLabel = styled.label`
-  color: #94ec98;
-  font-size: 14px;
-  margin-bottom: 0;
-`;
+import React, { KeyboardEvent, useEffect, useReducer, useRef } from 'react';
+import {
+  CloseIconButton,
+  DirectivesContainer,
+  DirectiveUsageWrapper,
+  InputParentWrapper,
+  InputWrapper,
+  SearchBarWrapper,
+  StyledInput,
+  StyledLabel,
+} from 'components/DirectiveInput/styledComponents';
 
 export default function({
   columnNamesList,
