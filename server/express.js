@@ -221,7 +221,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     var data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
-      authorization: req.headers.authorization,
       cdap: {
         standaloneWebsiteSDKDownload:
           uiSettings['standalone.website.sdk.download'] === 'true' || false,
@@ -230,6 +229,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         proxyBaseUrl: cdapConfig['dashboard.proxy.base.url'],
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
         ui: uiSettings['ui'],
+        k8sWorkloadIdentityEnabled: cdapConfig['master.environment.k8s.workload.identity.enabled'],
+        namespaceCreationHookEnabled: cdapConfig['namespaces.creation.hook.enabled'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',

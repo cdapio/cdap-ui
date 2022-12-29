@@ -23,13 +23,11 @@ import com.google.gson.JsonObject;
 import io.cdap.cdap.ui.utils.Commands;;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
@@ -46,23 +44,11 @@ public class PipelineDraft {
   public static final Gson GSON = new Gson();
   public static final String DUMMY_PROJECT = "DummyProject";
   public static final String DUMMY_DATASET = "DummyDataset";
-  public static final String PIPELINE_TYPE = "cdap-data-pipeline";
 
   public static String pipelineName = "";
   public static String newPipelineDraftName = "";
   public static String oldApiPipelineDraftName = "";
   public static String draftId = "";
-
-
-  @When("Create simple pipeline")
-  public void createSimplePipeline() {
-    Commands.createSimplePipeline();
-  }
-
-  @Then(" Open source node property")
-  public void openSourceNodeProperty() {
-    CdfStudioActions.navigateToPluginPropertiesPage(Commands.simpleSourceNode.getNodeName());
-  }
 
   @Then("Add DummyProject as dataset project")
   public void addProject() throws InterruptedException {
@@ -77,19 +63,10 @@ public class PipelineDraft {
     ElementHelper.replaceElementValue(datasetField, DUMMY_DATASET);
   }
 
-  @Then("Close source node property")
-  public void closeSourceNodeProperty() {
-    CdfPluginPropertiesActions.clickCloseButton();
-  }
-
   @Then("Fill in pipeline name")
   public void fillInPipelineName() {
     pipelineName = "Test_Draft_Pipeline_" + UUID.randomUUID();
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-metadata"));
-    ElementHelper.clearElementValue(Helper.locateElementByCssSelector("#pipeline-name-input"));
-    ElementHelper.sendKeys(Helper.locateElementByCssSelector("#pipeline-name-input"), pipelineName);
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
+    Commands.fillInPipelineName(pipelineName);
   }
 
   @Then("Check url for draftId string")
@@ -99,22 +76,10 @@ public class PipelineDraft {
     Assert.assertTrue(hasDraftId);
   }
 
-  @Then("Reload the page")
-  public void reloadPage() {
-    Helper.reloadPage();
-  }
-
-  @Then("Export the pipeline")
-  public void exportPipeline() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-export-btn"));
-    // Wait for the download to finish
-    Helper.waitSeconds(3);
-  }
-
   @Then("Verify the exported pipeline")
   public void verifyExportedJsonPipeline() throws IOException {
     Reader reader = Files.newBufferedReader(Paths.get(
-      Constants.DOWNLOADS_DIR + pipelineName + "-" + PIPELINE_TYPE + ".json"));
+      Constants.DOWNLOADS_DIR + pipelineName + "-" + Constants.PIPELINE_TYPE + ".json"));
     JsonObject jsonObject = GSON.fromJson(reader, JsonObject.class);
     JsonArray stages = jsonObject.getAsJsonObject("config").getAsJsonArray("stages");
     String datasetProject = "";

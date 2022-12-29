@@ -34,21 +34,6 @@ import java.util.List;
 
 public class PipelineRuntimeMacros {
 
-  @When("Upload pipeline from file {string}")
-  public void uploadPipelineFromFile(String filename) {
-    Helper.uploadPipelineFromFile(filename);
-  }
-
-  @When("Enter preview mode")
-  public void enterPreviewMode() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-preview-btn"));
-  }
-
-  @When("Start preview run")
-  public void startPreviewRun() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("preview-top-run-btn"));
-  }
-
   @Then("Preview runtime arguments dialog is shown")
   public void runtimeArgumentsDialogIsShown() {
     Assert.assertTrue(ElementHelper.isElementDisplayed(
@@ -136,13 +121,6 @@ public class PipelineRuntimeMacros {
   @When("Click run button from preview runtime arguments")
   public void clickRunButtonFromRuntimeArguments() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("preview-configure-run-btn"));
-  }
-
-  @Then("Pipeline banner is shown with message {string}")
-  public void pipelineBannerIsShownWithMessage(String message) {
-    WaitHelper.waitForElementToBePresent(By.cssSelector(Helper.getCssSelectorByDataTestId("valium-banner-hydrator")));
-    Assert.assertTrue(
-      ElementHelper.getElementText(Helper.locateElementByTestId("valium-banner-hydrator")).contains(message));
   }
 
   @Then("Deployed runtime arguments dialog is shown")
@@ -275,11 +253,6 @@ public class PipelineRuntimeMacros {
   public void waitForRuntimeArgumentsDialogToClose() {
     WebElement dialog = Helper.locateElementByTestId(Constants.RUNTIME_ARGS_DEPLOYED_SELECTOR);
     WaitHelper.waitForElementToBeHidden(dialog);
-  }
-
-  @When("Deployed pipeline is run")
-  public void deployedPipelineIsRun() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-run-btn"));
   }
 
   @Then("Deployed runtime arguments dialog shows message {string}")

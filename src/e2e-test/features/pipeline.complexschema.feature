@@ -20,10 +20,9 @@ Feature: Pipeline Complex Schema
   @PIPELINE_COMPLEX_SCHEMA_TEST
   Scenario: Should initialize with 1 empty row
     When Open Pipeline Studio Page
-    Then Close "Source" panel
-    Then Open transform panel
+    Then Open "Transform" panel
     Then Add Projection Node
-    Then Click on Projection node property button
+    Then Open "Projection" node property
     Then Verify there is one empty row
 
   @PIPELINE_COMPLEX_SCHEMA_TEST
