@@ -223,7 +223,7 @@ export default function({
 
   return (
     <SearchWrapper data-testid="input-panel-wraper">
-      {searchResults.forEach((searchItem, searchItemIndex) =>
+      {searchResults.map((searchItem, searchItemIndex) =>
         getResultRow(searchItem, searchItemIndex)
       )}
     </SearchWrapper>
