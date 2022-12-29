@@ -52,7 +52,7 @@ const InfoLink = styled(Link)`
   }
 `;
 
-const MUIIconStyle = styled(InfoOutlinedIcon)`
+const StyledOutlinedIcon = styled(InfoOutlinedIcon)`
   color: #79b7ff;
 `;
 
@@ -80,7 +80,7 @@ export default function({ directiveUsage }: IDirectiveUsageProps) {
             href={`${moreInfoOnDirective[directiveUsage.item.directive]}`}
             target="_blank"
           >
-            <MUIIconStyle data-testid="info-icon" />
+            <StyledOutlinedIcon data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
         )}

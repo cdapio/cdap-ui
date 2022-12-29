@@ -149,12 +149,12 @@ export default function({
   };
 
   useEffect(() => {
-    searchMatch(inputDirective);
+    getSearchMatch(inputDirective);
     setInputText(inputDirective);
   }, [inputDirective]);
 
   // Function called on every change in input to change search list to most appropriate matched list
-  const searchMatch = (searchString: string) => {
+  const getSearchMatch = (searchString: string) => {
     let searchList = [];
     const spaceIndex = searchString.includes(' '); // As soon as directive is entered, we need column list to appear hence we are checking if space is present in it,
     if (fuse && searchString.length > 0) {
@@ -214,6 +214,7 @@ export default function({
         key={searchItem.uniqueId}
         onClick={() => handleListItemClick(searchItem)}
         data-testid={`select-directive-list-option-${searchItemIndex}`}
+        role="button"
       >
         <SearchListItem searchItem={searchItem} />
       </ResultRow>
@@ -222,7 +223,7 @@ export default function({
 
   return (
     <SearchWrapper data-testid="input-panel-wraper">
-      {searchResults.map((searchItem, searchItemIndex) =>
+      {searchResults.forEach((searchItem, searchItemIndex) =>
         getResultRow(searchItem, searchItemIndex)
       )}
     </SearchWrapper>

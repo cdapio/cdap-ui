@@ -106,6 +106,7 @@ export default function({
       <DirectivesBox
         data-testid="footer-panel-directives-tab"
         onClick={() => setDirectivePanelIsOpen(!directivePanelIsOpen)}
+        role="button"
       >
         <Label data-testid="footerpanel-simple-label">
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>

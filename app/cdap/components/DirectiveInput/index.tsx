@@ -39,7 +39,7 @@ const CloseIconButton = styled(IconButton)`
   color: #ffffff;
 `;
 
-const DirectiveBox = styled(Box)`
+const DirectivesContainer = styled(Box)`
   background-color: #ffffff;
   position: fixed;
   bottom: 93px;
@@ -199,7 +199,7 @@ export default function({
   };
 
   return (
-    <DirectiveBox data-testid="directive-input-main-container">
+    <DirectivesContainer data-testid="directive-input-main-container">
       <InputParentWrapper data-testid="directive-input-parent">
         <InputPanel
           inputDirective={inputDirective}
@@ -255,6 +255,6 @@ export default function({
           </SearchBarWrapper>
         </DirectiveUsageWrapper>
       </InputParentWrapper>
-    </DirectiveBox>
+    </DirectivesContainer>
   );
 }
