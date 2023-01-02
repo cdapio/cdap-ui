@@ -36,7 +36,7 @@ import {
   IHeaderNamesList,
   IParams,
   IRecords,
-  IStatistics,
+  IGeneralStatistics
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
@@ -253,7 +253,7 @@ export default function GridTable() {
   };
 
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
-  const createMissingData = (statistics: IStatistics) => {
+  const createMissingData = (statistics: Record<string, IGeneralStatistics>) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -378,7 +378,7 @@ export default function GridTable() {
           type: IGridTableActions.SNACKBAR_DATA,
           payload: {
             message: 'Directive not applied',
-            isSuccess: true,
+            isSuccess: false,
             open: true,
           },
         });

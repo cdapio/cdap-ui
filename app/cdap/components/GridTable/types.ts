@@ -27,7 +27,7 @@ export interface IPercentOfDataTypeValues {
 }
 
 interface ISummary {
-  statistics: IRecords;
+  statistics: Record<string, IGeneralStatistics>;
   validations: IRecords;
 }
 
@@ -67,4 +67,9 @@ export interface IApiPayload {
   payload: IRecords;
   requestBody: IRequestBody;
   gridParams: IGridParams;
+}
+
+export interface IGeneralStatistics {
+  general?: Record<string, string | number>;
+  types?: Record<string, string | number>;
 }

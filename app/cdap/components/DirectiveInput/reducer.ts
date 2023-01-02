@@ -102,9 +102,10 @@ export const reducer = (state, action) => {
       };
     case IDirectiveActions.SET_NO_DIRECTIVE:
       return {
-        ...state,
-        inputDirective: action.payload.inputDirective,
-        enterCount: action.payload.enterCount,
+        ...initialDirectiveInputState,
+        inputDirective: false,
+        enterCount: 0
+        
       };
     case IDirectiveActions.SET_ENTER_COUNT:
       return {

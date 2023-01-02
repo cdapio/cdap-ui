@@ -14,7 +14,7 @@
  * the License.
  */
 
-export const moreInfoOnDirective = {
+export const MORE_INFO_ON_DIRECTIVE_LINK = {
   encode: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042182/Encode',
   uppercase: 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382074887/Change+Case+directive',
   'send-to-error': 'https://cdap.atlassian.net/wiki/spaces/DOCS/pages/382042332/Send+to+Error',

@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { Box, Divider, Typography, Link, IconButton } from '@material-ui/core';
-import { moreInfoOnDirective, PREFIX } from 'components/DirectiveInput/constants';
+import { Box, Divider, Typography, Link } from '@material-ui/core';
+import { MORE_INFO_ON_DIRECTIVE_LINK, PREFIX } from 'components/DirectiveInput/constants';
 import { IDirectiveUsage } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
 import React from 'react';
@@ -56,7 +56,7 @@ const StyledOutlinedIcon = styled(InfoOutlinedIcon)`
   color: #79b7ff;
 `;
 
-const UsageText = styled(Typography)`
+const StyledUsageText = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -71,20 +71,20 @@ const UsageText = styled(Typography)`
 export default function({ directiveUsage }: IDirectiveUsageProps) {
   return (
     <DirectiveWrapper data-testid="directive-usage-text-wrapper">
-      <UsageText variant="body1" data-testid="directive-usage-text">
+      <StyledUsageText variant="body1" data-testid="directive-usage-text">
         {`${T.translate(`${PREFIX}.usage`)} : `}
         {directiveUsage.item.usage || directiveUsage.usage}
-        {moreInfoOnDirective[directiveUsage.item.directive] && (
+        {MORE_INFO_ON_DIRECTIVE_LINK[directiveUsage.item.directive] && (
           <InfoLink
             data-testid="info-link"
-            href={`${moreInfoOnDirective[directiveUsage.item.directive]}`}
+            href={`${MORE_INFO_ON_DIRECTIVE_LINK[directiveUsage.item.directive]}`}
             target="_blank"
           >
             <StyledOutlinedIcon data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
         )}
-      </UsageText>
+      </StyledUsageText>
       <DividerLine />
     </DirectiveWrapper>
   );
