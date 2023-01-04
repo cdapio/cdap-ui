@@ -39,6 +39,11 @@ public class Logviewer {
     Helper.copyFile(Constants.FIXTURES_DIR + "airports.csv", Constants.PIPELINE_FILES_DIR + "airports.csv");
   }
 
+  @When("Deploy and test pipeline {string} with timestamp with pipeline JSON file {string}")
+  public void deployAndTestPipeline(String pipelineName, String pipelineJSONfile) {
+    Helper.deployAndTestPipeline(pipelineJSONfile, pipelineName + System.currentTimeMillis());
+  }
+
   @Then("Click on log viewer button")
   public void clickLogViewer() {
     ElementHelper.clickOnElement(

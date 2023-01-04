@@ -9,6 +9,7 @@
   "router.server.address": "127.0.0.1",
   "dashboard.bind.port": "11011",
   "enable.preview": "true",
+  "feature.pipeline.composite.triggers.enabled": "true",
   "dashboard.router.check.timeout.secs": "0",
   "market.base.url": "https://hub.cdap.io/dev/v2",
   "ui.theme.file": "config/themes/default.json",

@@ -16,28 +16,12 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
+
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
-import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.UUID;
 
 public class PipelineTriggers {
 
@@ -45,19 +29,26 @@ public class PipelineTriggers {
   public static String pipeline2Name = "trigger_test_pipeline_2";
   public static String simpleTriggerName = "simple_trigger_test";
 
+  @Then("Deploy pipeline {string} with pipeline JSON file {string}")
+  public void deployPipelineFromJson(String pipelineName, String pipelineJSONfile) {
+    Helper.deployAndTestPipeline(pipelineJSONfile, pipelineName);
+  }
+
   @Then("Open inbound trigger and set and delete a simple trigger when pipeline1 succeeds")
   public void openInboundTriggerAndSetAndDeleteASimpleTrigger() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
-    WebElement triggerNameInputField = Helper.locateElementByTestId("trigger-name-text-field");
+    WebElement triggerNameInputField = Helper.locateElementByCssSelector(
+      "div[data-testid='trigger-name-text-field'] input"
+    );
     ElementHelper.clearElementValue(triggerNameInputField);
     ElementHelper.sendKeys(triggerNameInputField, simpleTriggerName);
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(pipeline1Name + "-enable-trigger-btn"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("enable-group-trigger-btn"));
     Helper.isElementExists(Helper.getCssSelectorByDataTestId(simpleTriggerName + "-collapsed"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId(simpleTriggerName + "-collapsed"));
     Helper.isElementExists(Helper.getCssSelectorByDataTestId(simpleTriggerName + "-expanded"));
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("disable-group-trigger-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(simpleTriggerName + "-disable-trigger-btn"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete"));
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("enabled-triggers-tab"));
     Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId(simpleTriggerName + "-collapsed")));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
   }
