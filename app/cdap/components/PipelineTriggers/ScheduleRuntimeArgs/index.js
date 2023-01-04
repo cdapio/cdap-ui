@@ -180,6 +180,7 @@ export default class ScheduleRuntimeArgs extends Component {
           onClick={this.configureAndEnableTrigger}
           disabled={this.isEnableTriggerDisabled()}
           data-cy="configure-and-enable-trigger-btn"
+          data-testid="configure-and-enable-trigger-btn"
         >
           {this.props.pipelineCompositeTriggersEnabled
             ? T.translate(`${PREFIX}.configure_select_btn`)
