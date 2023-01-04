@@ -1944,10 +1944,15 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
-    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
-      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+    discardModal:
+      continue: Continue
+      discard: Discard
+      text: An edit draft exists for this pipeline. Click 'Discard' to discard the changes 
+        that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+      title: Edit draft exists
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
+      outdatedDraftActionButton: Export and Rebase
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
         This draft is outdated and please export the draft for manual reconciliation.
 

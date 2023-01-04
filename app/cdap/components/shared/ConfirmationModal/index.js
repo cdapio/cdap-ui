@@ -29,7 +29,7 @@ export default class ConfirmationModal extends Component {
   static propTypes = {
     cancelButtonText: PropTypes.string,
     cancelFn: PropTypes.func,
-    confirmationElem: PropTypes.element,
+    confirmationElem: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     confirmButtonText: PropTypes.string,
     confirmationText: PropTypes.oneOfType([
       PropTypes.string,
