@@ -18,7 +18,7 @@ import React from 'react';
 import ConfirmationModal from '../ConfirmationModal';
 import T from 'i18n-react';
 
-const PREFIX = 'features.LifeCycleManagement';
+const PREFIX = 'features.LifeCycleManagement.discardModal';
 
 interface IDiscardDraftModalProps {
   isOpen: boolean;
@@ -35,14 +35,14 @@ export const DiscardDraftModal = ({
 }: IDiscardDraftModalProps) => {
   return (
     <ConfirmationModal
-      headerTitle="Edit draft exists"
+      headerTitle={T.translate(`${PREFIX}.title`)}
       isOpen={isOpen}
-      cancelFn={continueFn}
-      cancelButtonText="Continue"
-      confirmButtonText="Discard"
+      cancelFn={discardFn}
+      cancelButtonText={T.translate(`${PREFIX}.discard`)}
+      confirmButtonText={T.translate(`${PREFIX}.continue`)}
       toggleModal={toggleModal}
-      confirmationElem={T.translate(`${PREFIX}.discardModalText`)}
-      confirmFn={discardFn}
+      confirmationElem={T.translate(`${PREFIX}.text`)}
+      confirmFn={continueFn}
       closeable={true}
     />
   );
