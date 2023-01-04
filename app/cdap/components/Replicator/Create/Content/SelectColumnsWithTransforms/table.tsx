@@ -56,7 +56,11 @@ import TransformDelete from './TransformDelete';
 import { SUPPORT } from '../Assessment/TablesAssessment/Mappings/Supported';
 
 // uses the last created rename directive on that column to show the target column name
-const useLastRenameOrRowName = (columnName: string, targetColumnName: string, transforms: IColumnTransformation[]) => {
+const useLastRenameOrRowName = (
+  columnName: string,
+  targetColumnName: string,
+  transforms: IColumnTransformation[]
+) => {
   const renameDir = transforms
     .slice()
     .reverse()

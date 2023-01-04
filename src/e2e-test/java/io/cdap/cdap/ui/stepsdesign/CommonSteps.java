@@ -87,6 +87,11 @@ public class CommonSteps {
     Helper.uploadPipelineFromFile(filename);
   }
 
+  @When("Deploy and test pipeline {string} with timestamp with pipeline JSON file {string}")
+  public void deployAndTestPipeline(String pipelineName, String pipelineJSONfile) {
+    Helper.deployAndTestPipeline(pipelineJSONfile, pipelineName + System.currentTimeMillis());
+  }
+
   @When("Enter preview mode")
   public void enterPreviewMode() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-preview-btn"));

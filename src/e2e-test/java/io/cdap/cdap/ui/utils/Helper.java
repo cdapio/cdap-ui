@@ -222,7 +222,7 @@ public class Helper implements CdfHelper {
     );
 
     Assert.assertEquals(statusText, "Deployed");
-    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName));
+    Assert.assertTrue(urlHasString("/view/" + pipelineName));
   }
 
   public static void cleanupPipelines(String pipelineName) {

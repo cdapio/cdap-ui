@@ -288,6 +288,7 @@ const PipelineListCompositeTabView = ({
             placeholder="Enter the Trigger Name..."
             error={state.isNameInvalid}
             helperText={state.triggerNameError}
+            data-testid="trigger-name-text-field"
           />
         </div>
 
