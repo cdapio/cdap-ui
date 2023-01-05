@@ -89,7 +89,7 @@ const TypographyLabel = styled(Typography)`
   line-height: 21px;
 `;
 
-export default function({ selectedConnection }: ISubHeader) {
+export default function SubHeader({ selectedConnection }: ISubHeader) {
   const location = useLocation();
 
   return (

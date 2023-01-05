@@ -28,7 +28,13 @@ export interface ITabLabelCanBrowseProps {
   dataTestID: number;
 }
 
-export default function({ label, count, columnIndex, icon, dataTestID }: ITabLabelCanBrowseProps) {
+export default function TabLabelCanBrowse({
+  label,
+  count,
+  columnIndex,
+  icon,
+  dataTestID,
+}: ITabLabelCanBrowseProps) {
   const myLabelRef: Ref<HTMLSpanElement> = createRef();
   const [refValue, setRefValue] = useState(false);
 

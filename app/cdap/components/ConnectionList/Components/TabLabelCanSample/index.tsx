@@ -52,7 +52,7 @@ const WrangleTypography = styled(Typography)`
   padding-left: 10px;
 `;
 
-export default function({
+export default function TabLabelCanSample({
   label,
   entity,
   initialConnectionId,

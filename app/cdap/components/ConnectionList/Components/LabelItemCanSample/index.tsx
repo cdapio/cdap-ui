@@ -60,7 +60,7 @@ const WrangleButton = styled.button`
   }
 `;
 
-export default function({
+export default function LabelItemCanSample({
   label,
   myLabelRef,
   onExplore,

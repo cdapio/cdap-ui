@@ -105,7 +105,7 @@ const getConnectionListSearchWrapper = (toggleSearch: Boolean) => {
     : ConnectionListSearchWrapperWhileNotSearching;
 };
 
-export default function({
+export default function Header({
   levelIndex,
   eachFilteredData,
   headersRefs,

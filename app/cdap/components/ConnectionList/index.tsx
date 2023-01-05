@@ -106,7 +106,7 @@ const TabHeaderContainer = styled(Box)`
     },    
 `;
 
-export default function() {
+export default function ConnectionList() {
   const { connectorType } = useParams() as IRecords;
   const loc = useLocation();
   const queryParams = new URLSearchParams(loc.search);

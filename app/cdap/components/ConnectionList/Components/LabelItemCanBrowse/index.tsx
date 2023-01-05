@@ -73,7 +73,7 @@ const RenderTabLabel = styled(RenderCount)`
   pointer-events: none;
 `;
 
-export default function({
+export default function LabelItemCanBrowse({
   icon,
   label,
   count,

@@ -96,7 +96,7 @@ const ConnectionTabsWrapper = styled(Box)`
   height: calc(100vh - 200px);
 `;
 
-export default function({
+export default function ConnectionTabs({
   tabsData,
   handleChange,
   value,

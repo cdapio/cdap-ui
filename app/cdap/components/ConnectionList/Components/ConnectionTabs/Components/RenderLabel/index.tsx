@@ -19,7 +19,7 @@ import TabLabelCanSample from 'components/ConnectionList/Components/TabLabelCanS
 import { IRenderLabelProps } from 'components/ConnectionList/types';
 import React from 'react';
 
-export default function({
+export default function RenderLabel({
   columnIndex,
   connectorType,
   connectionIdProp,
