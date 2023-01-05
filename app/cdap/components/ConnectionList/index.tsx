@@ -43,7 +43,6 @@ import T from 'i18n-react';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
-import { flatMap } from 'rxjs/operators';
 import styled from 'styled-components';
 
 const PREFIX = 'features.WranglerNewUI';
@@ -114,7 +113,10 @@ export default function() {
   const pathFromUrl = queryParams.get('path') || '/';
   const refs = useRef([]);
   const headersRefs = useRef([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingConnectorsData, setLoadingConnectorsData] = useState({
+    loading: true,
+    fetchedConnectorsData: [],
+  });
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
   const [tabsData, setTabsData] = useState<IFilteredData[]>([
     {
@@ -126,9 +128,11 @@ export default function() {
   ]);
   const [filteredData, setFilteredData] = useState<IFilteredData>(cloneDeep(tabsData));
   const toggleLoader = (value: boolean, isError?: boolean) => {
-    setLoading(value);
+    setLoadingConnectorsData((prev) => ({
+      ...prev,
+      loading: value,
+    }));
   };
-  const [fetchedConnectorsData, setFetchedConnectorsData] = useState([]);
   let connectionId;
 
   useEffect(() => {
@@ -140,11 +144,15 @@ export default function() {
    */
   DataPrepStore.subscribe(() => {
     const newState = DataPrepStore.getState();
-    setFetchedConnectorsData(newState.dataprep.connectorsWithIcons);
+    // setFetchedConnectorsData(newState.dataprep.connectorsWithIcons);
+    setLoadingConnectorsData((prev) => ({
+      ...prev,
+      fetchedConnectorsData: newState.dataprep.connectorsWithIcons,
+    }));
   });
 
   const getConnectionsTabData = async () => {
-    let connectorTypes: ITabData[] = fetchedConnectorsData;
+    let connectorTypes: ITabData[] = loadingConnectorsData.fetchedConnectorsData;
     let allConnectionsTotalLength = 0;
     // Fetching all the connections list inside each connector type
     const categorizedConnections = await getCategorizedConnections();
@@ -187,7 +195,11 @@ export default function() {
       tempData[0].data = firstLevelData;
       return tempData;
     });
-    setLoading(false);
+    // setLoading(false);
+    setLoadingConnectorsData((prev) => ({
+      ...prev,
+      loading: false,
+    }));
   };
 
   const getCategorizedConnectionsforSelectedTab = async (selectedValue: string, index: number) => {
@@ -295,7 +307,7 @@ export default function() {
 
   useEffect(() => {
     getConnectionsTabData();
-  }, [fetchedConnectorsData]);
+  }, [loadingConnectorsData.fetchedConnectorsData]);
 
   useEffect(() => {
     setFilteredData(cloneDeep(tabsData));
@@ -369,7 +381,7 @@ export default function() {
       <SubHeader selectedConnection={tabsData[0]?.selectedTab} />
       {tabsData[0]?.data?.length > 0 ? ConnectionList : NoDataScreen}
 
-      {loading && (
+      {loadingConnectorsData.loading && (
         <ContainerForLoader>
           <LoadingSVG />
         </ContainerForLoader>
