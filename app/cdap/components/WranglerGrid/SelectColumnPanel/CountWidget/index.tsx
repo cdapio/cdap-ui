@@ -19,14 +19,14 @@ import T from 'i18n-react';
 import { SELECT_COLUMN_LIST_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
 import { NormalFont } from 'components/common/TypographyText';
 
-export default function({ selectedColumnsCount }: { selectedColumnsCount: number }) {
-  const text = selectedColumnsCount
-    ? selectedColumnsCount > 10
-      ? selectedColumnsCount
-      : `${selectedColumnsCount} ${T.translate(`${SELECT_COLUMN_LIST_PREFIX}.columnsSelected`)}`
-    : `${T.translate(`${SELECT_COLUMN_LIST_PREFIX}.no`)} ${T.translate(
-        `${SELECT_COLUMN_LIST_PREFIX}.columnsSelected`
-      )}`;
+export default function CountWidget({ selectedColumnsCount }: { selectedColumnsCount: number }) {
+  const getDisplayText = () => {
+    return T.translate(`${SELECT_COLUMN_LIST_PREFIX}.selectedColumnsCount`, {
+      context: selectedColumnsCount,
+    });
+  };
+
+  const text = getDisplayText();
 
   return (
     <NormalFont component="p" data-testid="no-column-title">

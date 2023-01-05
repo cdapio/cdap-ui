@@ -18,7 +18,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import history from 'services/history';
 import React from 'react';
 import { Route, Router, Switch } from 'react-router';
-import SelectColumnsList from 'components/WranglerGrid/SelectColumnPanel/ColumnsList';
+import ColumnsList from 'components/WranglerGrid/SelectColumnPanel/ColumnsList';
 
 describe('It should test the SelectColumnsList Component', () => {
   it('should render the SelectColumnsList Component', () => {
@@ -26,7 +26,7 @@ describe('It should test the SelectColumnsList Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <SelectColumnsList
+            <ColumnsList
               selectedColumnsCount={1}
               setSelectedColumns={() => jest.fn()}
               dataQuality={[]}
@@ -34,6 +34,11 @@ describe('It should test the SelectColumnsList Component', () => {
               columnsList={[]}
               transformationName={''}
               selectedColumns={[]}
+              filteredColumnsOnTransformationType={[
+                { label: 'hello', type: ['test'], name: 'hello' },
+                { label: 'hello', type: ['test'], name: 'hello' },
+              ]}
+              isSingleSelection={false}
             />
           </Route>
         </Switch>
@@ -41,15 +46,16 @@ describe('It should test the SelectColumnsList Component', () => {
     );
     expect(screen.getByTestId(/select-column-list-parent/i)).toBeInTheDocument();
   });
-  it('should render the SelectColumnsList Component with some input value along with label and null and trigger input ', () => {
+  it('should trigger foucus function and focus the input element as expected ', () => {
+    const mockSetSelected = jest.fn();
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <SelectColumnsList
+            <ColumnsList
               columnsList={[]}
               selectedColumnsCount={0}
-              setSelectedColumns={jest.fn()}
+              setSelectedColumns={mockSetSelected}
               dataQuality={[
                 { label: 'hello', value: '' },
                 { label: 'world', value: '' },
@@ -57,60 +63,31 @@ describe('It should test the SelectColumnsList Component', () => {
               transformationDataType={['all', 'test']}
               transformationName={''}
               selectedColumns={[]}
-            />
-          </Route>
-        </Switch>
-      </Router>
-    );
-
-    const inputSearchElement = screen.getByTestId('input-search-id');
-    fireEvent.change(inputSearchElement, { target: { value: '123' } });
-    fireEvent.change(inputSearchElement, { target: { value: 'hello' } });
-    fireEvent.change(inputSearchElement, { target: { value: null } });
-    const searchIconElement = screen.getByTestId(/click-handle-focus/i);
-    fireEvent.click(searchIconElement);
-    expect(searchIconElement).toBeInTheDocument();
-  });
-
-  it('should render the SelectColumnsList Component with some input value along with label and null and trigger searchIconClick', () => {
-    render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <SelectColumnsList
-              columnsList={[{ label: 'hello', type: ['test'], name: 'hello' }]}
-              selectedColumnsCount={1}
-              setSelectedColumns={jest.fn()}
-              dataQuality={[
-                { label: 'hello', value: '' },
-                { label: 'world', value: '' },
+              filteredColumnsOnTransformationType={[
+                { label: 'hello', type: ['test'], name: 'hello' },
+                { label: 'hello', type: ['test'], name: 'hello' },
               ]}
-              transformationDataType={['test']}
-              transformationName={'join-columns'}
-              selectedColumns={[]}
+              isSingleSelection={false}
             />
           </Route>
         </Switch>
       </Router>
     );
 
-    const inputSearchElement = screen.getByTestId('input-search-id');
-    fireEvent.change(inputSearchElement, { target: { value: '123' } });
-    fireEvent.change(inputSearchElement, { target: { value: 'hello' } });
-    fireEvent.change(inputSearchElement, { target: { value: null } });
-
     const searchIconElement = screen.getByTestId(/click-handle-focus/i);
+    const inputElement = screen.getByTestId(/input-search-id/i);
+    expect(inputElement).not.toHaveFocus();
     fireEvent.click(searchIconElement);
-    expect(searchIconElement).toBeInTheDocument();
+    expect(inputElement).toHaveFocus();
   });
 
-  it('should render the SelectColumnsList Component while changing text input with some input value along with label and null', () => {
+  it('should render the SelectColumnsList Component while changing text input with some input value ', () => {
     const getSelectedColumns = jest.fn();
     render(
       <Router history={history}>
         <Switch>
           <Route>
-            <SelectColumnsList
+            <ColumnsList
               columnsList={[]}
               selectedColumnsCount={0}
               setSelectedColumns={getSelectedColumns}
@@ -121,6 +98,11 @@ describe('It should test the SelectColumnsList Component', () => {
               transformationDataType={['all', 'test']}
               transformationName={''}
               selectedColumns={[]}
+              filteredColumnsOnTransformationType={[
+                { label: 'hello', type: ['test'], name: 'hello' },
+                { label: 'hello', type: ['test'], name: 'hello' },
+              ]}
+              isSingleSelection={false}
             />
           </Route>
         </Switch>
@@ -130,35 +112,8 @@ describe('It should test the SelectColumnsList Component', () => {
     const inputSearchElement = screen.getByTestId('input-search-id');
     fireEvent.change(inputSearchElement, { target: { value: '123' } });
     expect(inputSearchElement).toHaveValue('123');
-  });
-  it('should render the SelectColumnsList Component with selectedColumnsCount is 0 and data quality array and trigger the single selection function and to click the radio button', () => {
-    const mockSetSelected = jest.fn();
-    render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <SelectColumnsList
-              selectedColumnsCount={0}
-              columnsList={[
-                { label: 'hello', type: ['a', 'b'], name: 'test' },
-                { label: 'hello', type: ['a', 'b'], name: 'test' },
-              ]}
-              setSelectedColumns={mockSetSelected}
-              dataQuality={[
-                { label: 'hello', value: '' },
-                { label: 'world', value: '' },
-              ]}
-              transformationDataType={['TEST', 'all']}
-              transformationName={''}
-              selectedColumns={[]}
-            />
-          </Route>
-        </Switch>
-      </Router>
-    );
-    const radioInputElement = screen.getAllByTestId('radio-input-0');
-    fireEvent.click(radioInputElement[0], { target: { checked: true } });
-    expect(radioInputElement[0]).toBeInTheDocument();
+    fireEvent.change(inputSearchElement, { target: { value: '' } });
+    expect(inputSearchElement).toHaveTextContent('');
   });
 
   it('should render the SelectColumnsList Component with selectedColumnsCount is 0 and data quality array and trigger the multiple selection function', () => {
@@ -167,7 +122,7 @@ describe('It should test the SelectColumnsList Component', () => {
       <Router history={history}>
         <Switch>
           <Route>
-            <SelectColumnsList
+            <ColumnsList
               selectedColumnsCount={0}
               columnsList={[
                 { label: 'hello', type: ['a', 'b'], name: 'test' },
@@ -180,15 +135,22 @@ describe('It should test the SelectColumnsList Component', () => {
               ]}
               transformationDataType={['TEST', 'all']}
               transformationName={'join-columns'}
-              selectedColumns={[]}
+              selectedColumns={[
+                { label: 'hello', type: ['test'], name: 'hello' },
+                { label: 'hello', type: ['test'], name: 'hello' },
+              ]}
+              filteredColumnsOnTransformationType={[
+                { label: 'hello', type: ['test'], name: 'hello' },
+                { label: 'hello', type: ['test'], name: 'hello' },
+              ]}
+              isSingleSelection={false}
             />
           </Route>
         </Switch>
       </Router>
     );
     const checkboxInputElement = screen.getAllByTestId('check-box-input-0');
-    fireEvent.click(checkboxInputElement[0], { target: { checked: false } });
-    fireEvent.click(checkboxInputElement[0], { target: { checked: true } });
-    expect(checkboxInputElement[0]).toBeInTheDocument();
+    fireEvent.change(checkboxInputElement[0], { target: { checked: true } });
+    expect(checkboxInputElement[0]).toHaveProperty('checked', true);
   });
 });

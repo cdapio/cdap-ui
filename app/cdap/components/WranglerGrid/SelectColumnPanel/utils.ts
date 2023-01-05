@@ -20,48 +20,61 @@ import {
 } from 'components/WranglerGrid/SelectColumnPanel/types';
 import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPanel/constants';
 
-export const getColumnsSupportedType = (
-  transformationDataType: string[],
-  columnsList: IHeaderNamesList[]
-) => {
-  return transformationDataType?.length > 0 && transformationDataType?.includes('all')
-    ? transformationDataType?.filter((supportedType: string) => supportedType === 'all')
-    : columnsList?.filter((columnDetail: IHeaderNamesList) => {
-        return transformationDataType?.some((dataTypeCollection: string | string[]) => {
-          return dataTypeCollection?.includes(columnDetail?.type[0]?.toLowerCase());
-        });
-      });
-};
-
+/**
+ * @param  {string[]} transformationDataType
+ * @param  {IHeaderNamesList[]} columnsList
+ * @return {IHeaderNamesList[]} This function is used to return the list of column based on the transformation/option selected
+ * For Example ADD, this can be performed on column whose datatype is int/float/double so this function will return only those
+ * columns whose dataype int/float/double
+ */
 export const getFilteredColumn = (
-  transformationDataType: string[],
-  columnsList: IHeaderNamesList[]
+  transformationDataType: string[], // list of data types that are supported by the selected transformation
+  columnsList: IHeaderNamesList[] // list of all existing columns
 ) => {
-  return transformationDataType?.length > 0 && transformationDataType?.includes('all')
-    ? columnsList
-    : columnsList?.filter((columnDetail: IHeaderNamesList) => {
-        return transformationDataType?.some((dataTypeCollection: string | string[]) => {
-          return dataTypeCollection?.includes(columnDetail?.type[0]?.toLowerCase());
-        });
-      });
+  if (transformationDataType.length && transformationDataType.includes('all')) {
+    return columnsList;
+  }
+
+  return columnsList.filter((columnDetail: IHeaderNamesList) =>
+    transformationDataType.some((dataTypeCollection: string) =>
+      dataTypeCollection.includes(columnDetail.type[0].toLowerCase())
+    )
+  );
 };
 
-export const enableDoneButton = (transformationName, selectedColumns) => {
-  if (
-    MULTI_SELECTION_COLUMN.filter(
-      (functionNameDetail: IMultipleSelectedFunctionDetail) =>
-        functionNameDetail.value === transformationName && !functionNameDetail.isMoreThanTwo
-    )?.length
-  ) {
-    return selectedColumns?.length === 2 ? false : true;
-  } else if (
-    MULTI_SELECTION_COLUMN.filter(
-      (functionNameDetail: IMultipleSelectedFunctionDetail) =>
-        functionNameDetail.value === transformationName && functionNameDetail.isMoreThanTwo
-    )?.length
-  ) {
-    return selectedColumns?.length >= 1 ? false : true;
-  } else {
-    return selectedColumns?.length >= 1 ? false : true;
+/**
+ * @param  {string} transformationName
+ * @param  {IHeaderNamesList[]} selectedColumns
+ * @return {boolean} This function is used to enable done button which can be enabled only when atleast one column is selected
+ * In case of join and swap two column needs to be selected while in delete/keep more than two selections are posible
+ */
+export const enableDoneButton = (
+  transformationName: string,
+  selectedColumns: IHeaderNamesList[]
+) => {
+  const indexForTwoColumnSelection = MULTI_SELECTION_COLUMN.findIndex(
+    (functionNameDetail: IMultipleSelectedFunctionDetail) =>
+      functionNameDetail.value === transformationName && !functionNameDetail.isMoreThanTwo
+  );
+  const indexForMultipleColumnSelection = MULTI_SELECTION_COLUMN.findIndex(
+    (functionNameDetail: IMultipleSelectedFunctionDetail) =>
+      functionNameDetail.value === transformationName && functionNameDetail.isMoreThanTwo
+  );
+  if (indexForTwoColumnSelection > -1) {
+    return selectedColumns.length !== 2; // implies that the button should be enabled on when two columns are selected
   }
+  if (indexForMultipleColumnSelection > -1) {
+    return !(selectedColumns.length >= 1); // implies that even if one column is selected the button should be enabled (more than two column selection)
+  }
+  return !(selectedColumns.length >= 1); // implies case of single selection of radio button only one needs to be selected to enable button
 };
+
+/**
+ * @param  {string} transformationName
+ * @return {boolean} This function is used to check whether transformation selected can be applied on single column or multiple column can be selected
+ */
+export const getIsSingleSelectionCheck = (transformationName: string) =>
+  !MULTI_SELECTION_COLUMN.some(
+    (functionDetail: IMultipleSelectedFunctionDetail) =>
+      functionDetail.value.toLowerCase() === transformationName.toLowerCase()
+  );

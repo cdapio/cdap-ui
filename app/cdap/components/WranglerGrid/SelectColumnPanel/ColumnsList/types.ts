@@ -14,18 +14,17 @@
  * the License.
  */
 
-import React from 'react';
-import {
-  IHeaderNamesList,
-  IDataQualityItem,
-} from 'components/WranglerGrid/SelectColumnPanel/types';
+import { IHeaderNamesList } from 'components/WranglerGrid/SelectColumnPanel/types';
+import { Dispatch, SetStateAction } from 'react';
 
-export interface ISelectColumnsListProps {
+export interface IColumnsListProps {
   transformationDataType: string[];
   selectedColumnsCount: number;
   columnsList: IHeaderNamesList[];
-  setSelectedColumns: React.Dispatch<React.SetStateAction<IHeaderNamesList[]>>;
-  dataQuality: IDataQualityItem[];
+  setSelectedColumns: Dispatch<SetStateAction<IHeaderNamesList[]>>;
+  dataQuality: Array<Record<string, string | number>>;
   transformationName: string;
   selectedColumns: IHeaderNamesList[];
+  filteredColumnsOnTransformationType: IHeaderNamesList[];
+  isSingleSelection: boolean;
 }

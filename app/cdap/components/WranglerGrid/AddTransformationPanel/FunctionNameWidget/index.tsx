@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 import React from 'react';
 import T from 'i18n-react';
 import { TickIcon } from 'components/WranglerGrid/AddTransformationPanel/SelectColumnsWidget';

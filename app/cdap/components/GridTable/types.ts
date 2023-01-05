@@ -87,3 +87,8 @@ export interface IApiPayload {
   requestBody: IRequestBody;
   gridParams: IGridParams;
 }
+
+export interface IGeneralStatistics {
+  general?: Record<string, string | number>;
+  types?: Record<string, string | number>;
+}

@@ -21,8 +21,9 @@ import { Route, Router, Switch } from 'react-router';
 import SelectColumn from 'components/WranglerGrid/SelectColumnPanel';
 
 describe('It should test the SelectColumnsList Component', () => {
-  it('should render the SelectColumnsList Component where transformationName=is parseCSV', () => {
-    const container = render(
+  it('should render the SelectColumnsList Component where transformationName=is parseCSV and click on close button', () => {
+    const mockCancelFunction = jest.fn();
+    render(
       <Router history={history}>
         <Switch>
           <Route>
@@ -31,12 +32,16 @@ describe('It should test the SelectColumnsList Component', () => {
               transformationDataType={[]}
               columnsList={[]}
               missingItemsList={undefined}
-              onCancel={() => jest.fn()}
+              onCancel={mockCancelFunction}
             />
           </Route>
         </Switch>
       </Router>
     );
-    expect(container).toBeDefined;
+    expect(screen.getByTestId(/select-column-panel/i)).toBeInTheDocument();
+
+    const closeButton = screen.getByTestId(/select-column-drawer-close-icon-button/i);
+    fireEvent.click(closeButton);
+    expect(mockCancelFunction).toBeCalled();
   });
 });

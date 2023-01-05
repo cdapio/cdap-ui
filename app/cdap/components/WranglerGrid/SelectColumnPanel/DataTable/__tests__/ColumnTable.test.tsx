@@ -19,92 +19,89 @@ import React from 'react';
 import DataTable from 'components/WranglerGrid/SelectColumnPanel/DataTable';
 import T from 'i18n-react';
 
-describe('It should test FunctionNameWidget Component', () => {
-  it('Should render the FunctionNameWidget Component', () => {
+const mockColumnList = [
+  { name: 'body_1', type: ['all'], label: 'body_1' },
+  { name: 'body_2', type: ['all'], label: 'body_2' },
+  { name: 'body_3', type: ['all'], label: 'body_3' },
+  { name: 'body_4', type: ['string'], label: 'body_4' },
+  { name: 'body_5', type: ['int'], label: 'body_5' },
+];
+
+describe('It should test DataTable Component', () => {
+  const mockSetSelected = jest.fn();
+
+  it('Should render the DataTable Component checking its table head named Columns', () => {
     render(
       <DataTable
-        columns={[
-          { name: 'a', type: ['test'], label: 'test' },
-          { name: 'a', type: ['test'], label: 'test' },
-        ]}
+        columns={mockColumnList}
         transformationDataType={['all']}
-        onSingleSelection={() => jest.fn()}
+        handleSingleSelection={() => jest.fn()}
         selectedColumns={[]}
         dataQualityValue={[]}
         isSingleSelection={false}
         handleDisableCheckbox={() => false}
-        onMultipleSelection={() => jest.fn()}
-        totalColumnCount={0}
-        setSelectedColumns={() => jest.fn()}
+        handleMultipleSelection={() => jest.fn()}
+        totalColumnCount={5}
+        setSelectedColumns={mockSetSelected}
         transformationName={'swap-columns'}
       />
     );
     const checkBoxElement = screen.getByTestId(/column-table-check-box/i);
-    fireEvent.click(checkBoxElement);
-    expect(checkBoxElement).toBeInTheDocument();
-    expect(screen.getByTestId(/column-table-parent/i)).toBeInTheDocument();
+    fireEvent.change(checkBoxElement, { target: { checked: true } });
+    expect(checkBoxElement).toHaveProperty('checked', true);
     expect(screen.getByTestId(/panel-columns/i)).toHaveTextContent(
       `${T.translate('features.WranglerNewUI.GridPage.addTransformationPanel.columns')}`
     );
   });
 
-  it('Should render the FunctionNameWidget Component with data type as test', () => {
-    const f = [
-      { name: 'string', label: 'string', type: ['test1', 'mock'] },
-      { name: 'string', label: 'string', type: ['test2', 'mock'] },
-      { name: 'string', label: 'string', type: ['Abhilash', 'IronMan'] },
-    ];
+  it('Should render the DataTable Component checking its table head named Null Values', () => {
     render(
       <DataTable
-        columns={[{ name: 'a', type: ['test'], label: 'test' }]}
-        transformationDataType={['test']}
-        onSingleSelection={() => jest.fn()}
-        selectedColumns={f}
-        dataQualityValue={[]}
-        isSingleSelection={false}
-        handleDisableCheckbox={() => false}
-        onMultipleSelection={() => jest.fn()}
-        totalColumnCount={0}
-        setSelectedColumns={() => jest.fn()}
-        transformationName={'swap-columns'}
-      />
-    );
-    const checkBoxElement = screen.getByTestId(/column-table-check-box/i);
-    fireEvent.click(checkBoxElement);
-    expect(screen.getByTestId(/panel-values/i)).toHaveTextContent(
-      `${T.translate('features.WranglerNewUI.GridPage.addTransformationPanel.nullValues')}`
-    );
-    expect(screen.getByTestId(/column-table-parent/i)).toBeInTheDocument();
-  });
-
-  it('Should trigger the checkboxs handleChange when colums length is greater than 2', () => {
-    const f = [
-      { name: 'string', label: 'string', type: ['test1', 'mock'] },
-      { name: 'string', label: 'string', type: ['test2', 'mock'] },
-      { name: 'string', label: 'string', type: ['Abhilash', 'IronMan'] },
-    ];
-    const handleChange = jest.fn();
-    render(
-      <DataTable
-        columns={[
-          { name: 'a', type: ['test'], label: 'test' },
-          { name: 'a', type: ['test'], label: 'test' },
-          { name: 'a', type: ['test'], label: 'test' },
-        ]}
-        transformationDataType={['test']}
-        onSingleSelection={() => jest.fn()}
+        columns={mockColumnList}
+        transformationDataType={['all']}
+        handleSingleSelection={() => jest.fn()}
         selectedColumns={[]}
         dataQualityValue={[]}
         isSingleSelection={false}
         handleDisableCheckbox={() => false}
-        onMultipleSelection={() => jest.fn()}
+        handleMultipleSelection={() => jest.fn()}
         totalColumnCount={0}
-        setSelectedColumns={() => jest.fn()}
+        setSelectedColumns={mockSetSelected}
         transformationName={'swap-columns'}
       />
     );
     const checkBoxElement = screen.getByTestId(/column-table-check-box/i);
-    fireEvent.click(checkBoxElement);
-    expect(checkBoxElement).toBeInTheDocument();
+    fireEvent.change(checkBoxElement, { target: { checked: true } });
+    expect(checkBoxElement).toHaveProperty('checked', true);
+    expect(screen.getByTestId(/panel-values/i)).toHaveTextContent(
+      `${T.translate('features.WranglerNewUI.GridPage.addTransformationPanel.nullValues')}`
+    );
+  });
+
+  it('Should trigger the checkboxs handleChange when colums length is greater than 2', () => {
+    const selectedColumns = [
+      { name: 'body_1', type: ['all'], label: 'body_1' },
+      { name: 'body_2', type: ['all'], label: 'body_2' },
+    ];
+    render(
+      <DataTable
+        columns={mockColumnList}
+        transformationDataType={['all']}
+        handleSingleSelection={() => jest.fn()}
+        selectedColumns={selectedColumns}
+        dataQualityValue={[]}
+        isSingleSelection={false}
+        handleDisableCheckbox={() => false}
+        handleMultipleSelection={() => jest.fn()}
+        totalColumnCount={0}
+        setSelectedColumns={mockSetSelected}
+        transformationName={'swap-columns'}
+      />
+    );
+    const checkBoxElement = screen.getByTestId(/column-table-check-box/i);
+    fireEvent.change(checkBoxElement, { target: { checked: true } });
+    expect(checkBoxElement).toHaveProperty('checked', true);
+    fireEvent.change(checkBoxElement, { target: { checked: false } });
+    expect(checkBoxElement).toHaveProperty('checked', false);
   });
 });

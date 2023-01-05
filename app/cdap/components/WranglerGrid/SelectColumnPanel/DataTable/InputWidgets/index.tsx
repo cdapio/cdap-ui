@@ -14,38 +14,55 @@
  * the License.
  */
 
+import { Checkbox, Radio } from '@material-ui/core';
+import { IInputWidgetsProps } from 'components/WranglerGrid/SelectColumnPanel/DataTable/types';
 import React from 'react';
-import RadioInput from 'components/WranglerGrid/SelectColumnPanel/DataTable/RadioInput';
-import CheckboxInput from 'components/WranglerGrid/SelectColumnPanel/DataTable/CheckboxInput';
-import { IInputWidgetProps } from 'components/WranglerGrid/SelectColumnPanel/DataTable/types';
+import styled from 'styled-components';
 
-export default function({
+const StyledRadio = styled(Radio)`
+  &.MuiRadio-root {
+    padding: 0;
+    vertical-align: text-top;
+  }
+`;
+
+const StyledCheckbox = styled(Checkbox)`
+  padding: 0;
+  vertical-align: text-top;
+`;
+
+export default function InputWidgets({
   isSingleSelection,
   selectedColumns,
-  onSingleSelection,
+  handleSingleSelection,
   columnDetail,
-  handleDisableCheckbox,
-  onMultipleSelection,
+  isCheckboxDisabled,
+  handleMultipleSelection,
   columnIndex,
-}: IInputWidgetProps) {
+}: IInputWidgetsProps) {
+  const isColumnSelected = selectedColumns.some((column) => column.label === columnDetail.label);
+
+  const onRadioInputChange = () => handleSingleSelection(columnDetail);
+  const onCheckBoxInputChange = (event) => handleMultipleSelection(event, columnDetail);
+
+  if (isSingleSelection) {
+    return (
+      <StyledRadio
+        color="primary"
+        onChange={onRadioInputChange}
+        checked={isColumnSelected}
+        data-testid={`radio-input-${columnIndex}`}
+      />
+    );
+  }
+
   return (
-    <>
-      {isSingleSelection ? (
-        <RadioInput
-          selectedColumns={selectedColumns}
-          onSingleSelection={onSingleSelection}
-          columnDetail={columnDetail}
-          columnIndex={columnIndex}
-        />
-      ) : (
-        <CheckboxInput
-          selectedColumns={selectedColumns}
-          columnDetail={columnDetail}
-          handleDisableCheckbox={handleDisableCheckbox}
-          onMultipleSelection={onMultipleSelection}
-          columnIndex={columnIndex}
-        />
-      )}
-    </>
+    <StyledCheckbox
+      color="primary"
+      checked={isColumnSelected}
+      onChange={onCheckBoxInputChange}
+      disabled={!isColumnSelected && isCheckboxDisabled()}
+      data-testid={`check-box-input-${columnIndex}`}
+    />
   );
 }

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, Container, IconButton } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 import React from 'react';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import styled from 'styled-components';
@@ -22,31 +22,17 @@ import { FlexAlignCenter, PointerBox } from 'components/common/BoxContainer';
 import { HeadFont } from 'components/common/TypographyText';
 import T from 'i18n-react';
 import { ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
-import { blue } from '@material-ui/core/colors';
+import { StyledIconButton } from 'components/WranglerGrid/SelectColumnPanel/DrawerHeader';
 
 interface IDrawerHeaderProps {
   closeClickHandler: () => void;
 }
 
-export const UnderLine = (
-  <svg
-    width="67"
-    height="2"
-    viewBox="0 0 67 2"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    data-testid="underline"
-  >
-    <path d="M0 0H50L53 2H3L0 0Z" fill={blue[500]} />
-    <path d="M54 0H63.5L66.5 2H57L54 0Z" fill={blue[500]} />
-  </svg>
-);
-
 const FlexWrapper = styled(Box)`
   display: flex;
 `;
 
-const DrawerContainerBox = styled(Container)`
+const DrawerContainer = styled(Container)`
   padding-left: 0;
   padding-right: 0;
 `;
@@ -65,27 +51,28 @@ const DrawerHeadWrapper = styled(Box)`
 
 export default function({ closeClickHandler }: IDrawerHeaderProps) {
   return (
-    <DrawerContainerBox role="presentation" data-testid="add-transformation-drawer">
+    <DrawerContainer role="presentation" data-testid="add-transformation-drawer">
       <DrawerContainerInnerFlex>
         <FlexAlignCenter>
           <DrawerHeadWrapper>
             <HeadFont component="p" data-testid="drawer-heading">
               {T.translate(`${ADD_TRANSFORMATION_PREFIX}.addTransformation`)}
             </HeadFont>
-            {UnderLine}
           </DrawerHeadWrapper>
         </FlexAlignCenter>
         <FlexWrapper>
-          <PointerBox>
+          <StyledIconButton
+            onClick={closeClickHandler}
+            data-testid="add-transformation-close-button"
+          >
             <CloseRoundedIcon
               color="action"
               fontSize="large"
-              onClick={closeClickHandler}
               data-testid="add-transformation-drawer-close-icon"
             />
-          </PointerBox>
+          </StyledIconButton>
         </FlexWrapper>
       </DrawerContainerInnerFlex>
-    </DrawerContainerBox>
+    </DrawerContainer>
   );
 }

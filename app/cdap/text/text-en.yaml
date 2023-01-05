@@ -3473,11 +3473,15 @@ features:
         function: Function
         nullValues: Null Values
         quickSelect: Quick select by clicking a column on the grid/columns panel
-        selectColumnPara: Select column(s) to apply this function
+        selectColumnHeading: Select Column to Apply This Function
+        selectMultiColumnsHeading: Select Column(s) to Apply This Function
         selectColumn: Select column
         selectMultiColumns: Select columns
       selectColumnListPanel:
-        columnsSelected: column selected
+        selectedColumnsCount:
+          0: "No columns selected"
+          1: "{context} column selected"
+          _: "{context} columns selected" 
         no: No
         noColumns: No columns to show
         noMatchColumnDatatype: Selected directive supported datatype does not match which the column's datatype

@@ -78,16 +78,27 @@ export default function({
   transformationName,
   handleSelectColumn,
 }: ISelectColumnsWidgetProps) {
-  const selectButtonText =
-    MULTI_SELECTION_COLUMN?.filter((el) => el.value === transformationName).length > 0
-      ? T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectMultiColumns`).toString()
-      : T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectColumn`).toString();
+  const isMultipleSelection = MULTI_SELECTION_COLUMN.findIndex(
+    (el) => el.value === transformationName
+  );
 
-  const singleColumnSelect = (
-    <>
+  const getButtonText = () => {
+    if (isMultipleSelection > -1) {
+      return T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectMultiColumns`).toString();
+    }
+    return T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectColumn`).toString();
+  };
+
+  const selectButtonText = getButtonText();
+
+  return (
+    <TransformationNameBox>
       <TransformationNameHeadWrapper>
         <SubHeadBoldFont component="p" data-testid="select-column-title">
-          {T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectColumnPara`)}
+          {isMultipleSelection === -1 &&
+            T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectColumnHeading`)}
+          {isMultipleSelection > -1 &&
+            T.translate(`${ADD_TRANSFORMATION_PREFIX}.selectMultiColumnsHeading`)}
         </SubHeadBoldFont>
         {selectedColumns.length > 0 && TickIcon}
       </TransformationNameHeadWrapper>
@@ -96,15 +107,15 @@ export default function({
           {T.translate(`${ADD_TRANSFORMATION_PREFIX}.quickSelect`)}
         </NormalFont>
       </TransformationNameTextInfoWrapper>
-      {Array.isArray(selectedColumns) && selectedColumns.length ? (
+      {selectedColumns.length > 0 &&
         selectedColumns.map((item, index) => (
           <TransformationNameTextInfoWrapper padding="5px 0">
             <NormalFont component="p" data-testid="selected-function-name">{`${index + 1}. ${
               item.label
             }`}</NormalFont>
           </TransformationNameTextInfoWrapper>
-        ))
-      ) : (
+        ))}
+      {selectedColumns.length === 0 && (
         <SelectColumnButton
           onClick={() => handleSelectColumn(false)}
           disabled={false}
@@ -113,8 +124,6 @@ export default function({
           {selectButtonText}
         </SelectColumnButton>
       )}
-    </>
+    </TransformationNameBox>
   );
-
-  return <TransformationNameBox>{singleColumnSelect}</TransformationNameBox>;
 }

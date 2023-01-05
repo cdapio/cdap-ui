@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { IStatistics, IParams } from 'components/GridTable/types';
+import { IGeneralStatistics, IParams } from 'components/GridTable/types';
 
 export interface IRecords {
   wid?: string;
@@ -35,15 +35,17 @@ export interface IAddTransformationProps {
   transformationDataType: string[];
   transformationName: string;
   columnsList: IHeaderNamesList[];
-  missingItemsList: IStatistics;
+  missingItemsList: Record<string, IGeneralStatistics>;
   onCancel: () => void;
 }
 
 export interface IMultipleSelectedFunctionDetail {
-  value: string;
+  value:
+    | 'join-columns'
+    | 'swap-columns'
+    | 'delete'
+    | 'array-flattening'
+    | 'record-flattening'
+    | 'keep';
   isMoreThanTwo: boolean;
-}
-
-export interface IDataQualityItem {
-  [key: string]: string | number;
 }

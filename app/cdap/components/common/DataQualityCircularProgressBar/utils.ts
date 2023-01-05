@@ -14,21 +14,23 @@
  * the License.
  */
 
-import {
-  IHeaderNamesList,
-  IDataQualityItem,
-} from 'components/WranglerGrid/SelectColumnPanel/types';
-import { IStatistics, IGeneral } from 'components/GridTable/types';
+import { IHeaderNamesList } from 'components/WranglerGrid/SelectColumnPanel/types';
+import { IGeneralStatistics } from 'components/GridTable/types';
 
+/**
+ * @param  {Record<string, IGeneralStatistics>} statistics
+ * @param  {IHeaderNamesList[]} columnList
+ * @return {Record<string, string>} This function is used to calculate data quality that is percentage of null values present in the table with respect to column
+ */
 export const getDataQuality = (
-  statistics: IStatistics | IGeneral,
+  statistics: Record<string, IGeneralStatistics>,
   columnList: IHeaderNamesList[]
 ) => {
-  const dataQuality: IDataQualityItem[] = [];
-  columnList?.forEach((columnName: IHeaderNamesList) => {
-    const generalValues: IDataQualityItem = statistics[columnName.name]?.general;
-    if (generalValues?.null) {
-      const nullCount = generalValues?.null || 0;
+  const dataQuality: Array<Record<string, string | number>> = [];
+  columnList.forEach((columnName: IHeaderNamesList) => {
+    const generalValues: Record<string, string | number> = statistics[columnName.name].general;
+    if (generalValues.null) {
+      const nullCount = generalValues.null || 0;
       dataQuality.push({
         label: columnName.name,
         value: nullCount,

@@ -15,39 +15,48 @@
  */
 
 import { fireEvent, render, screen } from '@testing-library/react';
-import React, { ChangeEvent } from 'react';
 import InputWidgets from 'components/WranglerGrid/SelectColumnPanel/DataTable/InputWidgets';
+import React from 'react';
 
 describe('It should render ', () => {
-  it('Should render component with isSingleSelection false', () => {
-    const container = render(
+  it('Should render Checkbox Component when "isSingleSelection" is false', () => {
+    render(
       <InputWidgets
         isSingleSelection={false}
-        selectedColumns={[]}
-        onSingleSelection={() => jest.fn()}
-        columnDetail={undefined}
+        selectedColumns={[
+          { name: 'body_2', type: ['all'], label: 'body_2' },
+          { name: 'body_1', type: ['all'], label: 'body_1' },
+        ]}
+        handleSingleSelection={() => jest.fn()}
+        columnDetail={{ name: 'body_2', type: ['all'], label: 'body_2' }}
         handleDisableCheckbox={() => false}
-        onMultipleSelection={() => jest.fn()}
+        handleMultipleSelection={() => jest.fn()}
         columnIndex={0}
+        isCheckboxDisabled={() => false}
       />
     );
-
-    expect(container).toBeDefined();
+    const checkBoxElement = screen.getByTestId(/check-box-input-0/i);
+    expect(screen.getByTestId(/check-box-input-0/i)).toBeInTheDocument();
+    fireEvent.change(checkBoxElement, { target: { checked: true } });
+    expect((checkBoxElement as HTMLInputElement).checked).toEqual(true);
   });
 
-  it('Should render component with isSingleSelection true', () => {
-    const container = render(
+  it('Should render Radio Componene when "isSingleSelection" is true', () => {
+    render(
       <InputWidgets
         isSingleSelection={true}
-        selectedColumns={[]}
-        onSingleSelection={() => jest.fn()}
-        columnDetail={undefined}
+        selectedColumns={[{ name: 'body_2', type: ['all'], label: 'body_2' }]}
+        handleSingleSelection={() => jest.fn()}
+        columnDetail={{ name: 'body_2', type: ['all'], label: 'body_2' }}
         handleDisableCheckbox={() => false}
-        onMultipleSelection={() => jest.fn()}
+        handleMultipleSelection={() => jest.fn()}
         columnIndex={0}
+        isCheckboxDisabled={() => false}
       />
     );
-
-    expect(container).toBeDefined();
+    const radioInputElement = screen.getByTestId(/radio-input-0/i);
+    expect(screen.getByTestId(/radio-input-0/i)).toBeInTheDocument();
+    fireEvent.change(radioInputElement, { target: { checked: true } });
+    expect((radioInputElement as HTMLInputElement).checked).toEqual(true);
   });
 });

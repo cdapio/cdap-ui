@@ -15,27 +15,16 @@
  */
 
 import React from 'react';
-import InputWidget from 'components/WranglerGrid/SelectColumnPanel/DataTable/InputWidgets';
+import InputWidgets from 'components/WranglerGrid/SelectColumnPanel/DataTable/InputWidgets';
 import DataQualityCircularProgressBar from 'components/common/DataQualityCircularProgressBar';
-import { ITableRowProps } from 'components/WranglerGrid/SelectColumnPanel/DataTable/types';
+import { ITableRowWidgetProps } from 'components/WranglerGrid/SelectColumnPanel/DataTable/types';
 import { TableCellText } from 'components/common/TypographyText';
-import { TableRow, TableCell } from '@material-ui/core';
+import { TableCell } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import styled from 'styled-components';
+import { StyledTableRow } from 'components/WranglerGrid/SelectColumnPanel/DataTable';
 
-const SelectColumnTableRow = styled(TableRow)`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  letter-spacing: 0.15px;
-  color: ${grey[700]};
-  display: grid;
-  grid-template-columns: 8% 45% 45%;
-  align-items: center;
-  height: 100%;
-`;
-
-const SelectColumnTableBodyCell = styled(TableCell)`
+const StyledTableBodyCell = styled(TableCell)`
   &.MuiTableCell-body {
     font-weight: 400;
     font-size: 16px;
@@ -45,48 +34,51 @@ const SelectColumnTableBodyCell = styled(TableCell)`
     padding: 5px;
     height: 64px;
   }
+  &:nth-child(2) {
+    padding-left: 0px;
+  }
 `;
 
-const SelectColumnInputTableBodyCell = styled(SelectColumnTableBodyCell)`
+const StyledInputTableBodyCell = styled(StyledTableBodyCell)`
   &.MuiTableCell-body {
     padding-left: 11px;
   }
 `;
 
 export default function({
-  onSingleSelection,
+  handleSingleSelection,
   selectedColumns,
   dataQualityValue,
   isSingleSelection,
   handleDisableCheckbox,
-  onMultipleSelection,
+  handleMultipleSelection,
   columnIndex,
   columnDetail,
-}: ITableRowProps) {
+}: ITableRowWidgetProps) {
   return (
-    <SelectColumnTableRow key={`column-${columnIndex}`}>
-      <SelectColumnInputTableBodyCell>
-        <InputWidget
+    <StyledTableRow key={`column-${columnIndex}`}>
+      <StyledInputTableBodyCell>
+        <InputWidgets
           isSingleSelection={isSingleSelection}
           selectedColumns={selectedColumns}
-          onSingleSelection={onSingleSelection}
+          handleSingleSelection={handleSingleSelection}
           columnDetail={columnDetail}
-          handleDisableCheckbox={handleDisableCheckbox}
-          onMultipleSelection={onMultipleSelection}
+          isCheckboxDisabled={handleDisableCheckbox}
+          handleMultipleSelection={handleMultipleSelection}
           columnIndex={columnIndex}
         />
-      </SelectColumnInputTableBodyCell>
-      <SelectColumnTableBodyCell>
+      </StyledInputTableBodyCell>
+      <StyledTableBodyCell>
         <TableCellText component="div">{columnDetail.label}</TableCellText>
         <TableCellText component="div">{columnDetail.type}</TableCellText>
-      </SelectColumnTableBodyCell>
-      <SelectColumnTableBodyCell>
-        {dataQualityValue?.length && (
+      </StyledTableBodyCell>
+      <StyledTableBodyCell>
+        {dataQualityValue.length && (
           <DataQualityCircularProgressBar
-            dataQualityPercentValue={Number(dataQualityValue[columnIndex]?.value)}
+            dataQualityPercentValue={parseInt(dataQualityValue[columnIndex].value.toString())}
           />
         )}
-      </SelectColumnTableBodyCell>
-    </SelectColumnTableRow>
+      </StyledTableBodyCell>
+    </StyledTableRow>
   );
 }

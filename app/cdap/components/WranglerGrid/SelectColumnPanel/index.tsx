@@ -15,12 +15,11 @@
  */
 
 import T from 'i18n-react';
-import React, { Fragment, useState, useEffect } from 'react';
-import SelectColumnsList from 'components/WranglerGrid/SelectColumnPanel/ColumnsList';
+import React, { useState, useEffect } from 'react';
+import ColumnsList from 'components/WranglerGrid/SelectColumnPanel/ColumnsList';
 import {
   IAddTransformationProps,
   IHeaderNamesList,
-  IDataQualityItem,
 } from 'components/WranglerGrid/SelectColumnPanel/types';
 import { getDataQuality } from 'components/common/DataQualityCircularProgressBar/utils';
 import { ADD_TRANSFORMATION_PREFIX } from 'components/WranglerGrid/SelectColumnPanel/constants';
@@ -31,8 +30,18 @@ import {
 import { AddTransformationButton } from 'components/common/ButtonWidget';
 import styled from 'styled-components';
 import { Container, Drawer } from '@material-ui/core';
-import { enableDoneButton } from 'components/WranglerGrid/SelectColumnPanel/utils';
-import SelectColumnDrawerHeader from 'components/WranglerGrid/SelectColumnPanel/DrawerHeader';
+import {
+  enableDoneButton,
+  getFilteredColumn,
+  getIsSingleSelectionCheck,
+} from 'components/WranglerGrid/SelectColumnPanel/utils';
+import DrawerHeader from 'components/WranglerGrid/SelectColumnPanel/DrawerHeader';
+
+export const DrawerContainer = styled(Container)`
+  width: 500px;
+  height: 100%;
+  padding-left: 30px;
+`;
 
 export const StyledDrawer = styled(Drawer)`
   & .MuiDrawer-paper {
@@ -41,22 +50,23 @@ export const StyledDrawer = styled(Drawer)`
   }
 `;
 
-export const DrawerContainerBox = styled(Container)`
-  width: 460px;
-  height: 100%;
-  padding-left: 30px;
-`;
-
-export default function({
+export default function SelectColumnPanel({
   transformationDataType,
   transformationName,
   columnsList,
   missingItemsList,
   onCancel,
 }: IAddTransformationProps) {
-  const [columnsPopup, setColumnsPopup] = useState<boolean>(true);
+  const [columnsPopup, setColumnsPopup] = useState(true);
   const [selectedColumns, setSelectedColumns] = useState<IHeaderNamesList[]>([]);
-  const [dataQualityValue, setDataQualityValue] = useState<IDataQualityItem[]>([]);
+  const [dataQualityValue, setDataQualityValue] = useState<Array<Record<string, string | number>>>(
+    []
+  );
+  const filteredColumnsOnTransformationType: IHeaderNamesList[] = getFilteredColumn(
+    transformationDataType,
+    columnsList
+  );
+  const isSingleSelection = getIsSingleSelectionCheck(transformationName);
 
   const closeSelectColumnsPopup = () => {
     setColumnsPopup(false);
@@ -70,7 +80,7 @@ export default function({
   };
 
   useEffect(() => {
-    const getPreparedDataQuality: IDataQualityItem[] = getDataQuality(
+    const getPreparedDataQuality: Array<Record<string, string | number>> = getDataQuality(
       missingItemsList,
       columnsList
     );
@@ -79,11 +89,14 @@ export default function({
 
   return (
     <StyledDrawer open={columnsPopup} data-testid="select-column-panel" anchor="right">
-      <DrawerContainerBox role="presentation" data-testid="select-column-drawer">
-        <SelectColumnDrawerHeader closeClickHandler={closeSelectColumnsPopupWithoutColumn} />
+      <DrawerContainer data-testid="select-column-drawer">
+        <DrawerHeader
+          closeClickHandler={closeSelectColumnsPopupWithoutColumn}
+          isSingleSelection={isSingleSelection}
+        />
         <AddTransformationWrapper>
           <AddTransformationBodyWrapper>
-            <SelectColumnsList
+            <ColumnsList
               columnsList={columnsList}
               selectedColumnsCount={selectedColumns.length}
               setSelectedColumns={setSelectedColumns}
@@ -91,18 +104,20 @@ export default function({
               transformationDataType={transformationDataType}
               transformationName={transformationName}
               selectedColumns={selectedColumns}
+              filteredColumnsOnTransformationType={filteredColumnsOnTransformationType}
+              isSingleSelection={isSingleSelection}
             />
           </AddTransformationBodyWrapper>
           <AddTransformationButton
             disabled={enableDoneButton(transformationName, selectedColumns)}
             color="primary"
-            data-testid="button_done"
+            data-testid="button-done"
             onClick={closeSelectColumnsPopup}
           >
             {T.translate(`${ADD_TRANSFORMATION_PREFIX}.done`)}
           </AddTransformationButton>
         </AddTransformationWrapper>
-      </DrawerContainerBox>
+      </DrawerContainer>
     </StyledDrawer>
   );
 }
