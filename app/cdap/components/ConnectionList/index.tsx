@@ -116,7 +116,6 @@ export default function() {
   const headersRefs = useRef([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isErrorOnNoWorkspace, setIsErrorOnNoWorkSpace] = useState<boolean>(false);
-  const [tabsLength, setTabsLength] = useState<number>(0);
   const [tabsData, setTabsData] = useState<IFilteredData[]>([
     {
       data: [],
@@ -311,10 +310,6 @@ export default function() {
     getCategorizedConnectionsforSelectedTab(connectorType as string, 0);
   }, [connectorType]);
 
-  useEffect(() => {
-    setTabsLength(tabsData?.length);
-  }, [tabsData?.length]);
-
   // No data screen rendered when there are no connections established unders any connector type
   const NoDataScreen = (
     <NoRecordScreen
@@ -361,7 +356,7 @@ export default function() {
             );
           })}
       </SelectDatasetWrapper>
-      {tabsLength < 4 && (
+      {tabsData?.length < 4 && (
         <InfographicContainer>
           <InfoGraph />
         </InfographicContainer>
