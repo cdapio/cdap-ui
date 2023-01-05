@@ -19,7 +19,6 @@ import { blue, grey } from '@material-ui/core/colors';
 import ConnectionTabs from 'components/ConnectionList/Components/ConnectionTabs';
 import Header from 'components/ConnectionList/Components/Header';
 import SubHeader from 'components/ConnectionList/Components/SubHeader';
-import { InfoGraph } from 'components/ConnectionList/IconStore/InfoGraph';
 import {
   IConnectionTabType,
   IFilteredData,
@@ -368,11 +367,6 @@ export default function ConnectionList() {
             );
           })}
       </SelectDatasetWrapper>
-      {tabsData?.length < 4 && (
-        <InfographicContainer>
-          <InfoGraph />
-        </InfographicContainer>
-      )}
     </FlexContainer>
   );
 
@@ -380,7 +374,6 @@ export default function ConnectionList() {
     <ConnectionsListContainer data-testid="data-sets-parent">
       <SubHeader selectedConnection={tabsData[0]?.selectedTab} />
       {tabsData[0]?.data?.length > 0 ? ConnectionList : NoDataScreen}
-
       {loadingConnectorsData.loading && (
         <ContainerForLoader>
           <LoadingSVG />

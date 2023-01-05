@@ -16,7 +16,7 @@
 
 import { Box, Tooltip, TooltipProps } from '@material-ui/core';
 import * as React from 'react';
-import { useStyles } from './styles';
+import { useStyles } from 'components/ConnectionList/Components/CustomTooltip/styles';
 import styled from 'styled-components';
 import T from 'i18n-react';
 

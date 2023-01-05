@@ -18,7 +18,6 @@ import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import TabLabelItem from 'components/ConnectionList/Components/LabelItemCanSample';
-import { WrangleIcon } from 'components/ConnectionList/IconStore/WrangleIcon';
 import { createWorkspace } from 'components/Connections/Browser/GenericBrowser/apiHelpers';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import T from 'i18n-react';
@@ -136,7 +135,7 @@ export default function TabLabelCanSample({
           buttonTestId="connections-tab-ref-explore"
           buttonElement={
             <Box className="wranglingHover">
-              <WrangleIcon />
+              <img src="/cdap_assets/img/WrangleIcon.svg" />
               <WrangleTypography
                 color="primary"
                 variant="body2"

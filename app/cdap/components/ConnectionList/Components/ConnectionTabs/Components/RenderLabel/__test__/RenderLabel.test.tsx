@@ -96,7 +96,7 @@ describe('Test RenderLabel component', () => {
   it('Should render RenderLabel Component with columnIndex as undefined', () => {
     render(
       <RenderLabel
-        columnIndex={undefined}
+        columnIndex={2}
         connectorType={{
           name: 'Test',
           connectionId: 'Test',
@@ -124,5 +124,8 @@ describe('Test RenderLabel component', () => {
         dataTestID={0}
       />
     );
+
+    const ele = screen.getByTestId(/connections-tab-ref-label-simple/i);
+    expect(ele).toBeInTheDocument();
   });
 });
