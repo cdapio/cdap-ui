@@ -76,6 +76,7 @@ export const PipelineHistoryTable = ({
               <strong>{T.translate(`${PREFIX}.summary`)}</strong>
               <strong />
               <strong />
+              <strong />
             </div>
           </div>
         )}

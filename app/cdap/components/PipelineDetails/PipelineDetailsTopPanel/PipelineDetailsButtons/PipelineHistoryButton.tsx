@@ -45,6 +45,7 @@ export const PipelineHistoryButton = ({ pipelineName }: IPipelineHistoryButtonPr
       <div className="btn pipeline-action-btn" ref={buttonRef}>
         <PrimaryTextLowercaseButton
           onClick={toggleButton}
+          id="pipeline-history-btn"
           data-cy="pipeline-history-btn"
           data-testid="pipeline-history-btn"
         >

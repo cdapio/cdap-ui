@@ -2716,6 +2716,9 @@ features:
       summary: Summary
       unfinish: Not yet implemented
       view: View
+      viewDiff: Diff
+      viewDiffTitle: Compare Versions
+      noDiffText: Selected version has the same configuration as the latest version.
       restore: Restore
       rowsPerPage: "Rows per page: "
       restoreFailError: Cannot restore (deploy) selected version
