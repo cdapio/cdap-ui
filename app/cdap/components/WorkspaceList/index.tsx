@@ -65,7 +65,7 @@ const WorkspaceListWrapper = styled(Box)`
 `;
 
 export default function() {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (

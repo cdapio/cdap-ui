@@ -30,7 +30,7 @@ import {
   TypographyWithRedColorText,
 } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/styledComponents';
 import React from 'react';
-import { IExplorationCardDetails } from './types';
+import { IExplorationCardDetails } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
 
 const getIconComponent = (explorationCardIndex, eachExplorationCard) => (
   <GridForConnectorIcon item xs={3} key={explorationCardIndex}>

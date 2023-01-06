@@ -27,9 +27,7 @@ export const getUpdatedExplorationCards = (
   existingExplorationCards: IExistingExplorationCard[]
 ) => {
   // Massaging the data to map the API response to the Ongoing Data Exploration List
-
   const updatedExplorationCards = [];
-
   const { dataprep } = DataPrepStore.getState();
   const { connectorsWithIcons } = dataprep;
 

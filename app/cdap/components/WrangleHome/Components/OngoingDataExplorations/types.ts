@@ -98,9 +98,9 @@ export interface IConnectionsList {
   description: string;
   isDefault: boolean;
   name: string;
-  plugin?: IPluginObject;
   preConfigured: boolean;
   updatedTimeMillis: number;
+  plugin?: IPluginObject;
 }
 
 export interface IConnectionWithConnectorType {
