@@ -373,6 +373,7 @@ export const TopPanel = ({
       autoFocus={true}
       onChange={(e) => onSummaryChange(e.target.value)}
       value={changeSummary}
+      data-testid="change-summary-input"
     />
   );
   return (

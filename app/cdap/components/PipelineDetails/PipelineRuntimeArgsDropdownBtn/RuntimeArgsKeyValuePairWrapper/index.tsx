@@ -83,11 +83,7 @@ const RuntimeArgsKeyValuePairWrapper = ({
   const DetailViewRuntimeArgsLabel = () => {
     return (
       <LabelSpan>
-        <a
-          onClick={toggleGeneratedArgs}
-          data-cy="generated-runtimeargs"
-          data-testid="generated-runtimeargs"
-        >
+        <a onClick={toggleGeneratedArgs} data-testid="generated-runtimeargs">
           <IconSVG name={showGeneratedArgs ? 'icon-caret-down' : 'icon-caret-right'} />
           {T.translate(`${PREFIX}.showReservedKeys`)}
         </a>
@@ -98,7 +94,7 @@ const RuntimeArgsKeyValuePairWrapper = ({
         >
           {T.translate(`${PREFIX}.tooltipLabel`)}
         </Popover>
-        <span>
+        <span data-testid="generated-runtimeargs-count">
           <span className="float-right num-rows">
             {T.translate(`${PREFIX}.numOfGeneratedRuntimeArgs`, {
               context: numOfGeneratedRuntimeArgs,

@@ -120,7 +120,6 @@ public class PipelineDraft {
   @Then("Deploy the last saved pipeline")
   public void deployTheNewestDraftPipeline() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId(("draft-" + pipelineName)));
-
     ElementHelper.clickOnElement(Helper.locateElementByTestId("deploy-pipeline-btn"));
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(

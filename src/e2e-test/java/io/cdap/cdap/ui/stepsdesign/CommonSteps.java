@@ -202,4 +202,62 @@ public class CommonSteps {
     Commands.dismissStudioLeaveConfirmationModal();
     WaitHelper.waitForPageToLoad();
   }
+
+  @Then("Save draft and navigate to draft list")
+  public void saveDraftAndNavigate() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-draft-save-btn"));
+    try {
+      SeleniumDriver.openPage(Constants.PIPELINE_DRAFTS_URL);
+      WaitHelper.waitForPageToLoad();
+    } catch (UnhandledAlertException e) {
+      try {
+        Alert alert = SeleniumDriver.getDriver().switchTo().alert();
+        alert.accept();
+      } catch (NoAlertPresentException ex) {
+        SeleniumDriver.getDriver().switchTo().newWindow(WindowType.TAB);
+        SeleniumDriver.openPage(Constants.PIPELINE_DRAFTS_URL);
+        WaitHelper.waitForPageToLoad();
+      }
+    }
+  }
+
+  @When("Open pipeline list page")
+  public void openPipelineList() {
+    SeleniumDriver.openPage(Constants.PIPELINE_LIST_URL);
+    WaitHelper.waitForPageToLoad();
+  }
+
+  @When("Open pipeline draft list page")
+  public void openPipelineDraftList() {
+    SeleniumDriver.openPage(Constants.PIPELINE_DRAFTS_URL);
+    WaitHelper.waitForPageToLoad();
+  }
+
+  @Then("Open pipeline configure")
+  public void openPipelineConfigure() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-configure-btn"));
+  }
+
+  @Then("Click on {string} tab in pipeline configure")
+  public void clickConfigureTab(String tabName) {
+    // Available names: 'Pipeline config', 'Compute config', 'Engine config', 'Transformation Pushdown', 'Resources',
+    // 'Pipeline alert'
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("tab-head-" + tabName));
+  }
+
+  @Then("Toggle instrumentation settings in pipeline config")
+  public void toggleInstrumentation() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(
+      "switch-null", Helper.locateElementByTestId("tab-content-Pipeline config")));
+  }
+
+  @Then("Save pipeline configure")
+  public void savePipelineConfigure() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("config-apply-close"));
+  }
+
+  @Then("Go to pipeline {string} details")
+  public void openPipelineDetails(String pipelineName) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("deployed-" + pipelineName));
+  }
 }

@@ -68,7 +68,12 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
   }, []);
 
   return (
-    <a href={pipelineLink} onClick={saveDraftIdToLocalStorage} className="grid-row">
+    <a
+      href={pipelineLink}
+      onClick={saveDraftIdToLocalStorage}
+      className="grid-row"
+      data-testid={'deployed-' + pipeline.name}
+    >
       <div className="name" title={pipeline.name} data-testid="pipeline-name">
         {pipeline.name}
       </div>

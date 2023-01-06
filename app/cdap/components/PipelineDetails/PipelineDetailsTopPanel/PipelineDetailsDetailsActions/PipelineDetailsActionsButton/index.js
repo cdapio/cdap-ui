@@ -280,7 +280,11 @@ export default class PipelineDetailsActionsButton extends Component {
   render() {
     const ActionsBtnAndLabel = () => {
       return (
-        <div className="btn pipeline-action-btn pipeline-actions-btn" onClick={this.togglePopover}>
+        <div
+          className="btn pipeline-action-btn pipeline-actions-btn"
+          onClick={this.togglePopover}
+          data-testid="pipeline-actions-btn"
+        >
           <div className="btn-container">
             <IconSVG name="icon-cog-empty" />
             <div className="button-label">{T.translate(`${PREFIX}.actions`)}</div>
@@ -310,6 +314,7 @@ export default class PipelineDetailsActionsButton extends Component {
               <StyledLi
                 isLatestVersion={this.props.isLatestVersion}
                 onClick={this.handlePipelineEdit}
+                data-testid="pipeline-edit-btn"
               >
                 {T.translate(`${PREFIX}.edit`)}
               </StyledLi>
