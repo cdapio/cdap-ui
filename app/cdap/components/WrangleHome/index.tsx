@@ -26,7 +26,7 @@ import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-
+import { LastUpdatedRecipes } from 'components/RecipeManagement/LastUpdatedRecipes';
 export const CARD_COUNT = 2;
 
 export default function() {
@@ -97,6 +97,7 @@ export default function() {
           setShowExplorations={setShowExplorations}
           cardCount={CARD_COUNT}
         />
+        <LastUpdatedRecipes></LastUpdatedRecipes>
       </Box>
     </Box>
   );

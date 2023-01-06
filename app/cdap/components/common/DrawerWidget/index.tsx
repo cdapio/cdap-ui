@@ -27,7 +27,9 @@ export interface IDrawerWidgetProps extends DrawerProps {
   headerActionTemplate?: ReactNode | JSX.Element;
   closeClickHandler?: () => void;
   showBackIcon?: boolean;
+  onBackIconClick?: () => void;
   dataTestId: string;
+  showHeaderSeparator?: boolean;
 }
 
 const BackIcon = styled(ChevronLeftRoundedIcon)`
@@ -102,15 +104,21 @@ export default function({
   children,
   closeClickHandler,
   showBackIcon,
+  onBackIconClick,
   anchor = 'right',
   dataTestId,
+  showHeaderSeparator = true,
 }: IDrawerWidgetProps) {
   return (
     <CustomizedDrawer anchor={anchor} open={open} data-testid={dataTestId}>
       <DrawerHeader>
         <HeaderActions>
           {showBackIcon && (
-            <CustomizedIconButton aria-label="back-icon" data-testid="back-icon">
+            <CustomizedIconButton
+              aria-label="back-icon"
+              data-testid="back-icon"
+              onClick={onBackIconClick}
+            >
               <BackIcon />
             </CustomizedIconButton>
           )}
@@ -118,7 +126,7 @@ export default function({
             <Label data-testid="widget-heading-text" component="span">
               {headingText}
             </Label>
-            <img src="/cdap_assets/img/underline" />
+            {showHeaderSeparator && <img src="/cdap_assets/img/underline" />}
           </LabelContainer>
         </HeaderActions>
         <HeaderActions>

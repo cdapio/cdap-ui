@@ -20,7 +20,7 @@ Feature: Widget Code editor Tests
   @WIDGET_CODE_EDITOR_TEST
   Scenario: Should render default value the first time
     When Open Pipeline Studio Page
-    Then Toggle Transform panel
+    Then Open "Transform" panel
     Then Add JS node to canvas
     Then Open JS node properties
     Then Get JS editor value and compare with default JS editor value
@@ -29,7 +29,7 @@ Feature: Widget Code editor Tests
   @WIDGET_CODE_EDITOR_TEST
   Scenario: Should not jump the cursor position on selecting text and replacing them
     When Open Pipeline Studio Page
-    Then Toggle Transform panel
+    Then Open "Transform" panel
     Then Add JS node to canvas
     Then Open JS node properties
     Then Replace and verify JS editor value and cursor position
