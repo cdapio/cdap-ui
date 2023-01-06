@@ -3527,18 +3527,25 @@ features:
         success: Success
         undo: Undo
     Recipe:
-        description: Description
+        applyRecipe: Apply        
+        applyRecipeHeading: Apply steps from a Recipe
+        applyRecipeSuccess: Recipe steps applied successfully
+        applyRecipeFailed: Failed to apply recipe steps - {errorDetails}
+        cancel: Cancel
         common:
           deleteConfirmation: Are you sure you want to delete the recipe *_{recipeName}_*?
           deleteError: There was a problem deleting the recipe
           deleteTitle: Delete recipe
         createdDate: Created date
+        description: Description
         emptyListMessage: No Recipes created in this namespace
         home: Home        
         import: Import
         list: Recipe list
         name: Recipe name 
-        savedRecipes: Saved Recipes    
+        recipeSteps: Recipe steps
+        savedRecipes: Saved Recipes  
+        selectRecipeToApply: Select a recipe to apply its steps  
         steps: Steps
         updated: Last updated
         view: View
