@@ -18,7 +18,6 @@ package io.cdap.cdap.ui.stepsdesign;
 
 
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
@@ -27,19 +26,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Wait;
 
 public class WranglerGCSConnection {
     public static final String TYPE_GCS = "GCS";
     public static final String  DEFAULT_GCS_FOLDER = "000cdap-gcp-ui-test";
     public static final String  DEFAULT_GCS_FILE = "purchase_bad.csv";
-
-    @When("Open Connections page for GCS connection test")
-    public static void openConnectionsPage() {
-        SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "connections");
-        WaitHelper.waitForPageToLoad();
-    }
 
     @When("Open GCS connection {string} page")
     public static void openGCSConnectionPage(String connectionName) {
