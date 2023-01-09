@@ -9,7 +9,13 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { getTestIdString } from 'components/common/InlayDrawerWidget/index';
 import { PREFIX } from 'components/common/InlayDrawerWidget/InlayDrawerWidget.stories';
 import T from 'i18n-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  MouseEvent as ReactMouseEvent,
+  KeyboardEvent,
+} from 'react';
 import styled from 'styled-components';
 
 export interface IActionsOptions {
@@ -46,8 +52,9 @@ export default function MenuListComposition({
   const [open, setOpen] = useState(false);
 
   const anchorRef = useRef(null);
+  const prevOpen = useRef(open);
 
-  const handleClose = (event) => {
+  const handleClose = (event: ReactMouseEvent<Document, MouseEvent>) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
@@ -55,7 +62,7 @@ export default function MenuListComposition({
     setOpen(false);
   };
 
-  function handleListKeyDown(event) {
+  function handleListKeyDown(event: KeyboardEvent<HTMLUListElement>) {
     if (event.key === 'Tab') {
       event.preventDefault();
       setOpen(false);
@@ -67,7 +74,6 @@ export default function MenuListComposition({
   };
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = useRef(open);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
@@ -98,7 +104,7 @@ export default function MenuListComposition({
                     const testId = getTestIdString(eachOption.label);
                     return (
                       <StyledMenuItem
-                        onClick={(event) => {
+                        onClick={(event: ReactMouseEvent<Document, MouseEvent>) => {
                           eachOption.clickHandler();
                           handleClose(event);
                         }}
