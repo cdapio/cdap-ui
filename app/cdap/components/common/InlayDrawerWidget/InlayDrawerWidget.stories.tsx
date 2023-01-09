@@ -19,7 +19,10 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import InlayDrawerWidget from 'components/common/InlayDrawerWidget';
 import { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
+import T from 'i18n-react';
 import React, { useState } from 'react';
+
+export const PREFIX = 'features.WranglerNewUI.Drawer';
 
 storiesOf('InlayDrawerWidget', module)
   .addDecorator(withKnobs)
@@ -46,17 +49,17 @@ storiesOf('InlayDrawerWidget', module)
 
       const actionsOptions: IActionsOptions[] = [
         {
-          label: 'Save',
+          label: T.translate(`${PREFIX}.save`).toString(),
           value: 'save',
           clickHandler: onSaveButtonClick,
         },
         {
-          label: 'Apply',
+          label: T.translate(`${PREFIX}.apply`).toString(),
           value: 'apply',
           clickHandler: onApplyButtonClick,
         },
         {
-          label: 'Download',
+          label: T.translate(`${PREFIX}.download`).toString(),
           value: 'download',
           clickHandler: onDownloadClick,
         },
@@ -71,7 +74,7 @@ storiesOf('InlayDrawerWidget', module)
             position={'left'}
             actionsOptions={actionsOptions}
           >
-            <div>Child component is rendered here</div>
+            <div>{T.translate(`${PREFIX}.childComponentMessage`)}</div>
           </InlayDrawerWidget>
         )
       );

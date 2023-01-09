@@ -3453,6 +3453,12 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    Drawer:
+     actionsButtonLabel: ACTIONS
+     childComponentMessage: Child Component will  be displayed here
+     save: Save
+     apply: Apply
+     download: Download
     GridPage:
       menuItems:
         divider: divider

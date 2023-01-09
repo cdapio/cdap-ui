@@ -19,7 +19,7 @@ import grey from '@material-ui/core/colors/grey';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import MenuListComposition, { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 interface IRecipeStepWidgetProps {
   headingText: string;
@@ -55,7 +55,7 @@ const HeaderStyle = styled.header`
 const StyledIconButton = styled(IconButton)`
   cursor: pointer;
   display: flex;
-  justify-content: flex-end !important;
+  justify-content: flex-end;
 `;
 
 const Divider = styled.div`

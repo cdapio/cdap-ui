@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { getTestIdString } from 'components/common/InlayDrawerWidget/index';
+import { PREFIX } from 'components/common/InlayDrawerWidget/InlayDrawerWidget.stories';
+import T from 'i18n-react';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -82,7 +84,7 @@ export default function MenuListComposition({
         onClick={handleToggle}
         endIcon={<ArrowDropDownIcon />}
       >
-        ACTIONS
+        {T.translate(`${PREFIX}.actionsButtonLabel`)}
       </ActionButton>
       <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
         {({ TransitionProps }) => (
