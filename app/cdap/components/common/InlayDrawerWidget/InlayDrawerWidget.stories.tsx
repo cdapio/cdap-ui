@@ -60,13 +60,35 @@ storiesOf('InlayDrawerWidget', module)
         },
       ];
 
+      const onSaveButtonClick = () => alert('save clicked');
+      const onApplyButtonClick = () => alert('save clicked');
+      const onDownloadClick = () => alert('save clicked');
+
+      const actionsOptions = [
+        {
+          label: 'Save',
+          value: 'save',
+          clickHandler: onSaveButtonClick,
+        },
+        {
+          label: 'Apply',
+          value: 'apply',
+          clickHandler: onApplyButtonClick,
+        },
+        {
+          label: 'Download',
+          value: 'download',
+          clickHandler: onDownloadClick,
+        },
+      ];
+
       return (
         <InlayDrawerWidget
           headingText={'Inlay Drawer'}
           onClose={handleDrawerCloseIconClick}
           showDivider={true}
-          templateActions={templateActions}
           position={'left'}
+          actionsOptions={actionsOptions}
         >
           <div>Child component is rendered here</div>
         </InlayDrawerWidget>

@@ -15,17 +15,18 @@
  */
 
 import { Box, IconButton, Typography } from '@material-ui/core';
+import grey from '@material-ui/core/colors/grey';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
+import MenuListComposition from 'components/common/InlayDrawerWidget/Menu';
 import React from 'react';
 import styled, { css } from 'styled-components';
-import grey from '@material-ui/core/colors/grey';
 
 interface IRecipeStepWidgetProps {
   headingText: string;
   onClose: () => void;
   showDivider: boolean;
   children: JSX.Element;
-  templateActions: any;
+  actionsOptions: any;
   position?: 'left' | 'right';
 }
 
@@ -109,29 +110,12 @@ const StyledButton = styled(IconButton)`
   }
 `;
 
-const getTestIdString = (label) =>
+export const getTestIdString = (label) =>
   label
     .trim()
     .split(' ')
     .join('-')
     .toLowerCase();
-
-const TemplateActions = ({ templateActions }) => {
-  return (
-    <DownloadMenuActionWrapper data-testid="header-action-template-parent">
-      {templateActions.map((eachTemplateAction) => {
-        const { iconClickHandler: onIconButtonClick } = eachTemplateAction;
-        const IconComponent = eachTemplateAction.getIconComponent();
-        const testId = getTestIdString(eachTemplateAction.name);
-        return (
-          <StyledButton data-testid={`button-${testId}`} onClick={onIconButtonClick}>
-            <IconComponent />
-          </StyledButton>
-        );
-      })}
-    </DownloadMenuActionWrapper>
-  );
-};
 
 /**
  *
@@ -139,7 +123,7 @@ const TemplateActions = ({ templateActions }) => {
  * @param onClose - handles event triggered when close icon is clicked
  * @param showDivider - when set to true, displays a divider to the left side of the close icon, generally used to separate close icon from other action icons
  * @param children - the child component to be rendered as body in this panel
- * @param templateActions - an array of object, that defines the action icons to generate the actions template
+ * @param actionsOptions - the options to be rendered inside the actions dropdown, an array of objects
  * @param position - the position of the panel, either left or right, based on how components are positioned in parent. by default position is right
  * @returns InlayDrawerWidget component
  */
@@ -148,7 +132,7 @@ export default function InlayDrawerWidget({
   onClose,
   showDivider,
   children,
-  templateActions,
+  actionsOptions,
   position = 'right',
 }: IRecipeStepWidgetProps) {
   const Container = position === 'left' ? LeftContainer : RightContainer;
@@ -159,7 +143,7 @@ export default function InlayDrawerWidget({
           {headingText}
         </DrawerWidgetTitleLabel>
         <HeaderIconWrapper>
-          {templateActions.length && <TemplateActions templateActions={templateActions} />}
+          {actionsOptions.length && <MenuListComposition dropdownOptions={actionsOptions} />}
           {showDivider && <Divider />}
           <StyledIconButton
             data-testid="drawer-widget-close-round-icon"
