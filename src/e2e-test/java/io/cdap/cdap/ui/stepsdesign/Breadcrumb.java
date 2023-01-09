@@ -37,20 +37,20 @@ public class Breadcrumb {
   public void clickOnTheConnectorType(String connectionLabel, String connectionTestId) {
     try {
       WaitHelper.waitForElementToBeEnabled(
-      Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+          Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
       WaitHelper.waitForPageToLoad();
-        if (connectionLabel.equals("Add Connections")) {
-          ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-          WaitHelper.waitForPageToLoad();
-          String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-          Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
-        } else {
-          WaitHelper.waitForPageToLoad();
-          String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-          Assert.assertEquals(actualText,
-                "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
-        }
+      if (connectionLabel.equals("Add Connections")) {
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+        WaitHelper.waitForPageToLoad();
+        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
+      } else {
+        WaitHelper.waitForPageToLoad();
+        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+        Assert.assertEquals(actualText,
+            "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
+      }
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -74,8 +74,7 @@ public class Breadcrumb {
     try {
       WaitHelper.waitForPageToLoad();
       Helper.waitSeconds(30);
-      ElementHelper.clickOnElement(Helper.locateElementByTestId
-            ("wrangler-home-ongoing-data-exploration-card-" + testId));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-" + testId));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
@@ -83,15 +82,15 @@ public class Breadcrumb {
 
   @Then("Click on the Home link of wrangle page")
   public void clickOnTheHomeLink() {
-  try {
-    SeleniumDriver.getDriver().manage().window().maximize();
-    Helper.waitSeconds(50);
-    String url = SeleniumDriver.getDriver().getCurrentUrl();
-    Assert.assertTrue(url.contains("cdap/ns/default/wrangler-grid"));
-    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("breadcrumb-home-home"));
-    WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("breadcrumb-home-home"));
-    WebElement ele = Helper.locateElementByTestId("breadcrumb-home-home");
-    ElementHelper.clickOnElement(ele);
+    try {
+      SeleniumDriver.getDriver().manage().window().maximize();
+      Helper.waitSeconds(50);
+      String url = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertTrue(url.contains("cdap/ns/default/wrangler-grid"));
+      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("breadcrumb-home-home"));
+      WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("breadcrumb-home-home"));
+      WebElement ele = Helper.locateElementByTestId("breadcrumb-home-home");
+      ElementHelper.clickOnElement(ele);
     } catch (Exception e) {
       System.err.println("error:" + e);
     }

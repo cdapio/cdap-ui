@@ -117,7 +117,6 @@ export default function OngoingDataExploration() {
             }}
             data-testid={`ongoing-data-exploration-card-${index}`}
             style={{ textDecoration: 'none' }}
-            data-testid={`wrangler-home-ongoing-data-exploration-card-${index}`}
           >
             {index <= 1 && <OngoingDataExplorationCard item={item} key={index} />}
           </Link>

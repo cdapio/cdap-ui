@@ -14,7 +14,6 @@
  * the License.
  */
 
-
 package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.utils.Constants;
@@ -36,50 +35,53 @@ public class TransformationToolbar {
     SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
     WaitHelper.waitForPageToLoad();
   }
+
   @Then("Click on the Ongoing Data Explorations card for tool bar")
   public void clickOnTheOngoingDataExplorationCardForToolBar() {
     try {
       WaitHelper.waitForPageToLoad();
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-0"));
       String url = SeleniumDriver.getDriver().getCurrentUrl();
       Assert.assertTrue(url.contains("cdap/ns/default/wrangler-grid"));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
   }
+
   @Then("Verify if the Transformation Toolbar is displayed on the Grid Page")
   public void verifyIfTheTransformationToolbarIsDisplayedOnTheGridPage() {
     try {
       WaitHelper.waitForPageToLoad();
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("transformations-toolbar-container"));
-      Assert.assertTrue(Helper.isElementExists
-      (Helper.getCssSelectorByDataTestId("transformations-toolbar-container")));
+      Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId("transformations-toolbar-container")));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
   }
+
   @Then("Verify if all icons are displayed on Toolbar with \\\"(.*)\\\"")
   public void verifyAllTheIconsAreDisplayedOnToolbar(String testId) {
     try {
       WaitHelper.waitForPageToLoad();
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("toolbar-icon-"
-              + testId));
+          + testId));
       Assert.assertTrue(Helper.isElementExists(Helper.getCssSelectorByDataTestId("toolbar-icon-"
-                    + testId)));
+          + testId)));
     } catch (Exception e) {
       System.err.println("error:" + e);
     }
   }
+
   @Then("Click on the function names toggle with testId as \\\"(.*)\\\" and \\\"(.*)\\\"")
   public void clickOnTheSliderButton(String testId, String iconLabelName) {
     try {
       Helper.waitSeconds(5);
-      WaitHelper.waitForElementToBeEnabled
-              (Helper.locateElementByTestId("transformations-toolbar-icons-function-name-toggler"));
+      WaitHelper.waitForElementToBeEnabled(
+          Helper.locateElementByTestId("transformations-toolbar-icons-function-name-toggler"));
       WebElement toggle = Helper.locateElementByTestId("transformations-toolbar-icons-function-name-toggler");
       WaitHelper.waitForElementToBeDisplayed(toggle);
-      WebElement ele = Helper.locateElementByXPath
-        ("//input[@data-testid='transformations-toolbar-icons-function-name-toggler']");
+      WebElement ele = Helper
+          .locateElementByXPath("//input[@data-testid='transformations-toolbar-icons-function-name-toggler']");
       Actions action = new Actions(SeleniumDriver.getDriver());
       WaitHelper.waitForPageToLoad();
       action.moveToElement(ele).perform();
@@ -93,13 +95,14 @@ public class TransformationToolbar {
       System.err.println("error: " + e);
     }
   }
+
   @Then("Verify by Clicking on the Up and Down arrow icon")
   public void clickOnTheUpAndDownArrowButton() {
     try {
       WaitHelper.waitForPageToLoad();
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("toolbar-header-toggler"));
       WebElement ele = SeleniumDriver.getDriver().findElement(
-              By.xpath("//*[@data-testid='toolbar-header-toggler']"));
+          By.xpath("//*[@data-testid='toolbar-header-toggler']"));
       JavascriptExecutor executor = (JavascriptExecutor) SeleniumDriver.getDriver();
       executor.executeScript("arguments[0].click();", ele);
     } catch (Exception e) {

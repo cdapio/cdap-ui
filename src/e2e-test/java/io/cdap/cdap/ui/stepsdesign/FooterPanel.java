@@ -31,8 +31,8 @@ public class FooterPanel {
   @Then("Click on the Data Explorations card")
   public void clickOnTheDataExplorationCard() {
     try {
-      if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("wrangler-home-ongoing-data-exploration-card-0"))) {
-        ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangler-home-ongoing-data-exploration-card-0"));
+      if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("ongoing-data-exploration-card-0"))) {
+        ElementHelper.clickOnElement(Helper.locateElementByTestId("ongoing-data-exploration-card-0"));
         waitForLoading();
         url = SeleniumDriver.getDriver().getCurrentUrl();
         System.out.println("The page URL is:" + url);
