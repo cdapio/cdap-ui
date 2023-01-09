@@ -24,59 +24,57 @@ import React, { useState } from 'react';
 
 export const PREFIX = 'features.WranglerNewUI.Drawer';
 
-storiesOf('InlayDrawerWidget', module)
-  .addDecorator(withKnobs)
-  .add(
-    'Default Inlay Drawer',
-    withInfo({
-      text: 'Default Drawer',
-    })(() => {
-      const [open, setOpen] = useState(true);
+storiesOf('InlayDrawerWidget', module).add(
+  'Default Inlay Drawer',
+  withInfo({
+    text: 'Default Drawer',
+  })(() => {
+    const [open, setOpen] = useState(true);
 
-      const handleDrawerCloseIconClick = () => {
-        setOpen(false);
-      };
+    const handleDrawerCloseIconClick = () => {
+      setOpen(false);
+    };
 
-      const onSaveButtonClick = () => {
-        // do nothing - TODO: event handler for save button click
-      };
-      const onApplyButtonClick = () => {
-        // do nothing - TODO: event handler for apply button click
-      };
-      const onDownloadClick = () => {
-        // do nothing - TODO: event handler for download button click
-      };
+    const onSaveButtonClick = () => {
+      // do nothing - TODO: event handler for save button click
+    };
+    const onApplyButtonClick = () => {
+      // do nothing - TODO: event handler for apply button click
+    };
+    const onDownloadClick = () => {
+      // do nothing - TODO: event handler for download button click
+    };
 
-      const actionsOptions: IActionsOptions[] = [
-        {
-          label: T.translate(`${PREFIX}.buttonLabels.save`).toString(),
-          value: 'save',
-          clickHandler: onSaveButtonClick,
-        },
-        {
-          label: T.translate(`${PREFIX}.buttonLabels.apply`).toString(),
-          value: 'apply',
-          clickHandler: onApplyButtonClick,
-        },
-        {
-          label: T.translate(`${PREFIX}.buttonLabels.download`).toString(),
-          value: 'download',
-          clickHandler: onDownloadClick,
-        },
-      ];
+    const actionsOptions: IActionsOptions[] = [
+      {
+        label: T.translate(`${PREFIX}.buttonLabels.save`).toString(),
+        value: 'save',
+        clickHandler: onSaveButtonClick,
+      },
+      {
+        label: T.translate(`${PREFIX}.buttonLabels.apply`).toString(),
+        value: 'apply',
+        clickHandler: onApplyButtonClick,
+      },
+      {
+        label: T.translate(`${PREFIX}.buttonLabels.download`).toString(),
+        value: 'download',
+        clickHandler: onDownloadClick,
+      },
+    ];
 
-      return (
-        open && (
-          <InlayDrawerWidget
-            headingText={T.translate(`${PREFIX}.labels.headerText`).toString()}
-            onClose={handleDrawerCloseIconClick}
-            showDivider={true}
-            position={'left'}
-            actionsOptions={actionsOptions}
-          >
-            <div>{T.translate(`${PREFIX}.messages.childComponentMessage`)}</div>
-          </InlayDrawerWidget>
-        )
-      );
-    })
-  );
+    return (
+      open && (
+        <InlayDrawerWidget
+          headingText={T.translate(`${PREFIX}.labels.headerText`).toString()}
+          onClose={handleDrawerCloseIconClick}
+          showDivider={true}
+          position={'left'}
+          actionsOptions={actionsOptions}
+        >
+          <div>{T.translate(`${PREFIX}.messages.childComponentMessage`)}</div>
+        </InlayDrawerWidget>
+      )
+    );
+  })
+);
