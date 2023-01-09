@@ -40,24 +40,6 @@ const Container = styled(Box)`
   border-left: 1px solid ${grey[300]};
 `;
 
-const LeftContainer = styled(Container)`
-  border-left: none;
-  border-right: 1px solid ${grey[300]};
-`;
-
-const HeaderStyle = styled.header`
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const StyledIconButton = styled(IconButton)`
-  cursor: pointer;
-  display: flex;
-  justify-content: flex-end;
-`;
-
 const Divider = styled.div`
   width: 1px;
   height: 28px;
@@ -66,11 +48,6 @@ const Divider = styled.div`
   margin-right: 10px;
   margin-top: 0px;
   margin-bottom: 0px;
-`;
-
-const HeaderIconWrapper = styled(Box)`
-  display: flex;
-  align-items: center;
 `;
 
 const DrawerWidgetTitleLabel = styled(Typography)`
@@ -84,12 +61,28 @@ const DrawerWidgetTitleLabel = styled(Typography)`
   }
 `;
 
-export const getTestIdString = (label: string) =>
-  label
-    .trim()
-    .split(' ')
-    .join('-')
-    .toLowerCase();
+const HeaderIconWrapper = styled(Box)`
+  display: flex;
+  align-items: center;
+`;
+
+const HeaderStyle = styled.header`
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LeftContainer = styled(Container)`
+  border-left: none;
+  border-right: 1px solid ${grey[300]};
+`;
+
+const StyledIconButton = styled(IconButton)`
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const getContainerComponent = (position: 'left' | 'right') => {
   if (position === 'left') {
@@ -97,6 +90,13 @@ const getContainerComponent = (position: 'left' | 'right') => {
   }
   return Container;
 };
+
+export const getTestIdString = (label: string) =>
+  label
+    .trim()
+    .split(' ')
+    .join('-')
+    .toLowerCase();
 
 /**
  *
@@ -117,6 +117,7 @@ export default function InlayDrawerWidget({
   position = 'right',
 }: IRecipeStepWidgetProps) {
   const PanelContainer = getContainerComponent(position);
+
   return (
     <PanelContainer role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>

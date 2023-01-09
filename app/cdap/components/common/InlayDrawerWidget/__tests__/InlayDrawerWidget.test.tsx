@@ -1,8 +1,7 @@
-import React from 'react';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import InlayDrawerWidget from 'components/common/InlayDrawerWidget';
 import { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
-import grey from '@material-ui/core/colors/grey';
+import React from 'react';
 
 const handleDrawerCloseIconClick = jest.fn();
 const onSaveButtonClick = jest.fn();

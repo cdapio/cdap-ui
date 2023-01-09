@@ -18,16 +18,16 @@ export interface IActionsOptions {
   clickHandler: () => void;
 }
 
-const StyledContainer = styled.div`
-  display: flex;
-`;
-
 const ActionButton = styled(Button)`
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
   letter-spacing: 1.25px;
   text-align: center;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
 `;
 
 const StyledMenuItem = styled(MenuItem)`
@@ -44,11 +44,8 @@ export default function MenuListComposition({
   dropdownOptions,
 }: Record<string, IActionsOptions[]>) {
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
 
-  const handleToggle = () => {
-    setOpen((prev) => !prev);
-  };
+  const anchorRef = useRef(null);
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -64,6 +61,10 @@ export default function MenuListComposition({
       setOpen(false);
     }
   }
+
+  const handleToggle = () => {
+    setOpen((prev) => !prev);
+  };
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(open);
