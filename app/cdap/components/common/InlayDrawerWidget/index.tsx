@@ -41,7 +41,7 @@ const Container = styled(Box)`
 `;
 
 const LeftContainer = styled(Container)`
-  ${Container}
+  border-left: none;
   border-right: 1px solid ${grey[300]};
 `;
 
@@ -135,7 +135,7 @@ export default function InlayDrawerWidget({
           </StyledIconButton>
         </HeaderIconWrapper>
       </HeaderStyle>
-      <>{children}</>
+      {children}
     </PanelContainer>
   );
 }
