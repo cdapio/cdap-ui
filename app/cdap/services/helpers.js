@@ -845,6 +845,34 @@ const flattenObj = (ob) => {
 };
 
 /**
+ * Unflatten a string and put into an object given a separator
+ * key = a.b.c 
+ * value = d
+ * => {a : {b : {c : d}}}
+ * 
+ * @param {object} obj - the object to put back to
+ * @param {string} stringKey - string key to be unflatten
+ * @param {string} value - value of the key
+ * @param {string} separator 
+ */
+const unflatternStringToObj = (obj, stringKey, value, separator = ".") => {
+  const arr = stringKey.split(separator);
+  let temp = obj;
+  arr.forEach((key, index) => {
+    if (key in temp) {
+      temp = temp[key];
+    } else {
+      if (index != arr.length - 1) {
+        temp[key] = {};
+        temp = temp[key];
+      } else {
+        temp[key] = value;
+      }
+    }
+  });
+};
+
+/**
  * 
  * @param {string[]} arr - a string array to search
  * @param {string} target - target string
@@ -926,6 +954,7 @@ export {
   cleanseObject,
   cleanseAndCompareTwoObjects,
   flattenObj,
+  unflatternStringToObj,
   arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
 };

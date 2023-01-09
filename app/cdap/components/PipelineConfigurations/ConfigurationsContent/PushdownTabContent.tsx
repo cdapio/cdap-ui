@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2018-2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,7 +22,12 @@ import PipelineConfigurationsStore, {
 
 import PushdownConfig from 'components/PushdownConfig';
 import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs, flattenObj } from 'services/helpers';
+import {
+  convertKeyValuePairsToMap,
+  convertMapToKeyValuePairs,
+  flattenObj,
+  unflatternStringToObj,
+} from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const getPushdownEnabledValue = (state) => {
@@ -34,11 +39,29 @@ const getPushdownEnabledValue = (state) => {
     : state.pushdownEnabled;
 };
 
+const getTransformationPushdownValue = (state) => {
+  if (state.transformationPushdown) {
+    return state.transformationPushdown;
+  }
+  const transformationPushdownKeyValuePair = state.runtimeArgs.pairs.filter((pair) =>
+    pair.key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+  );
+  const pushdownObject = {};
+  transformationPushdownKeyValuePair.forEach((pair) => {
+    // unflattern the runtimeargs key and put it in pushdown object
+    const trimmedKey = pair.key.substring(
+      GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX.length
+    );
+    unflatternStringToObj(pushdownObject, trimmedKey, pair.value);
+  });
+  return pushdownObject;
+};
+
 export default function PushdownTabContent({}) {
   const value = useSelector(
     (state) => ({
       pushdownEnabled: getPushdownEnabledValue(state),
-      transformationPushdown: state.transformationPushdown,
+      transformationPushdown: getTransformationPushdownValue(state),
     }),
     shallowEqual
   );
@@ -53,27 +76,35 @@ export default function PushdownTabContent({}) {
   const dispatch = useDispatch();
   const onChange = useCallback(
     ({ pushdownEnabled, transformationPushdown }) => {
-      const { runtimeArgs } = PipelineConfigurationsStore.getState();
-      const pairs = [...runtimeArgs.pairs];
-      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
-      const flattenedTransformationPushdown = flattenObj(transformationPushdown);
-      for (const key of Object.keys(flattenedTransformationPushdown)) {
-        if (
-          flattenedTransformationPushdown[key] !== undefined &&
-          flattenedTransformationPushdown[key] !== null
-        ) {
-          runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX + key] = String(
-            flattenedTransformationPushdown[key]
-          );
-        }
-      }
-      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_PUSHDOWN_CONFIG,
         payload: { pushdownEnabled, transformationPushdown },
       });
       if (lifecycleManagementEditEnabled) {
+        const { runtimeArgs } = PipelineConfigurationsStore.getState();
+        const pairs = [...runtimeArgs.pairs];
+        const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+        // delete previous tranformation pushdown key valur pairs from runtimeargs
+        // so that we are not keeping outdated configs in the runtimeargs
+        const previousTransformationPushdownKeyValuePair = runtimeArgs.pairs.filter((pair) =>
+          pair.key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+        );
+        previousTransformationPushdownKeyValuePair.forEach((pair) => {
+          delete runtimeObj[pair.key];
+        });
+        runtimeObj[GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED] = pushdownEnabled.toString();
+        // if pushdown is not enabled, do not add any pushdown configs to runtimeargs
+        if (pushdownEnabled) {
+          const flattenedTransformationPushdown = flattenObj(transformationPushdown);
+          for (const key of Object.keys(flattenedTransformationPushdown)) {
+            if (flattenedTransformationPushdown[key] != null) {
+              runtimeObj[
+                GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX + key
+              ] = String(flattenedTransformationPushdown[key]);
+            }
+          }
+        }
+        const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
         dispatch({
           type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
           payload: { runtimeArgs: { pairs: newRunTimePairs } },

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2018-2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -26,8 +26,8 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 import { GENERATED_RUNTIMEARGS, GLOBALS } from 'services/global-constants';
-import { convertKeyValuePairsToMap, convertMapToKeyValuePairs } from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { getUpdatedRuntimeArgsPair } from '../helper';
 
 const PREFIX = 'features.PipelineConfigurations.Resources';
 
@@ -53,31 +53,35 @@ const mapDispatchToProps = (dispatch) => {
   );
   return {
     onVirtualCoresChange: (e) => {
-      const { runtimeArgs } = PipelineConfigurationsStore.getState();
-      const pairs = [...runtimeArgs.pairs];
-      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES] = e.target.value;
-      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
         payload: { virtualCores: e.target.value },
       });
-      dispatch({
-        type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
-        payload: { runtimeArgs: { pairs: newRunTimePairs } },
-      });
+      if (lifecycleManagementEditEnabled) {
+        const { runtimeArgs } = PipelineConfigurationsStore.getState();
+        const newRunTimePairs = getUpdatedRuntimeArgsPair(
+          runtimeArgs,
+          GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_CORES,
+          e.target.value
+        );
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
     onMemoryMBChange: (e) => {
-      const { runtimeArgs } = PipelineConfigurationsStore.getState();
-      const pairs = [...runtimeArgs.pairs];
-      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY] = e.target.value;
-      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_MEMORY_MB,
         payload: { memoryMB: e.target.value },
       });
       if (lifecycleManagementEditEnabled) {
+        const { runtimeArgs } = PipelineConfigurationsStore.getState();
+        const newRunTimePairs = getUpdatedRuntimeArgsPair(
+          runtimeArgs,
+          GENERATED_RUNTIMEARGS.SYSTEM_EXECUTOR_RESOURCES_MEMORY,
+          e.target.value
+        );
         dispatch({
           type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
           payload: { runtimeArgs: { pairs: newRunTimePairs } },
