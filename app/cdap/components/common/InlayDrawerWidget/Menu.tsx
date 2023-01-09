@@ -102,7 +102,7 @@ export default function MenuListComposition({
         endIcon={<ArrowDropDownIcon />}
         data-testid="inlay-drawer-actions-menu"
       >
-        {T.translate(`${PREFIX}.actionsButtonLabel`)}
+        {T.translate(`${PREFIX}.buttonLabels.actions`)}
       </ActionButton>
       <Popper open={open} anchorEl={anchorRef.current} transition disablePortal>
         {({ TransitionProps }) => (

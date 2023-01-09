@@ -3454,11 +3454,15 @@ features:
         loadToGrid: Wrangle
         noConnections: No Connections to show
     Drawer:
-     actionsButtonLabel: ACTIONS
-     childComponentMessage: Child Component will  be displayed here
-     save: Save
-     apply: Apply
-     download: Download
+      buttonLabels: 
+        actions: ACTIONS
+        apply: Apply
+        download: Download
+        save: Save
+      labels: 
+        headerText: Inlay Drawer
+      messages:
+        childComponentMessage: Child Component will  be displayed here
     GridPage:
       menuItems:
         divider: divider

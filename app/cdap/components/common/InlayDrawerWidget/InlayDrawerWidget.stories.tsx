@@ -49,17 +49,17 @@ storiesOf('InlayDrawerWidget', module)
 
       const actionsOptions: IActionsOptions[] = [
         {
-          label: T.translate(`${PREFIX}.save`).toString(),
+          label: T.translate(`${PREFIX}.buttonLabels.save`).toString(),
           value: 'save',
           clickHandler: onSaveButtonClick,
         },
         {
-          label: T.translate(`${PREFIX}.apply`).toString(),
+          label: T.translate(`${PREFIX}.buttonLabels.apply`).toString(),
           value: 'apply',
           clickHandler: onApplyButtonClick,
         },
         {
-          label: T.translate(`${PREFIX}.download`).toString(),
+          label: T.translate(`${PREFIX}.buttonLabels.download`).toString(),
           value: 'download',
           clickHandler: onDownloadClick,
         },
@@ -68,13 +68,13 @@ storiesOf('InlayDrawerWidget', module)
       return (
         open && (
           <InlayDrawerWidget
-            headingText={'Inlay Drawer'}
+            headingText={T.translate(`${PREFIX}.labels.headerText`).toString()}
             onClose={handleDrawerCloseIconClick}
             showDivider={true}
             position={'left'}
             actionsOptions={actionsOptions}
           >
-            <div>{T.translate(`${PREFIX}.childComponentMessage`)}</div>
+            <div>{T.translate(`${PREFIX}.messages.childComponentMessage`)}</div>
           </InlayDrawerWidget>
         )
       );
