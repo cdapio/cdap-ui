@@ -17,7 +17,7 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import MenuListComposition, { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
+import Menu, { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -33,10 +33,9 @@ interface IRecipeStepWidgetProps {
 const Container = styled(Box)`
   width: 500px;
   height: calc(100vh - 232px);
-  min-height: 300px;
   padding-left: 20px;
   padding-right: 10px;
-  overflow-y: scroll;
+  overflow: scroll;
   border-left: 1px solid ${grey[300]};
 `;
 
@@ -126,7 +125,7 @@ export default function InlayDrawerWidget({
           {headingText}
         </DrawerWidgetTitleLabel>
         <HeaderIconWrapper>
-          {actionsOptions.length && <MenuListComposition dropdownOptions={actionsOptions} />}
+          {actionsOptions.length && <Menu dropdownOptions={actionsOptions} />}
           {showDivider && <Divider />}
           <StyledIconButton
             data-testid="drawer-widget-close-round-icon"

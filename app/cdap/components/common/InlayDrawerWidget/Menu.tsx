@@ -56,9 +56,7 @@ const StyledMenuItem = styled(MenuItem)`
   }
 `;
 
-export default function MenuListComposition({
-  dropdownOptions,
-}: Record<string, IActionsOptions[]>) {
+export default function Menu({ dropdownOptions }: Record<string, IActionsOptions[]>) {
   const [open, setOpen] = useState(false);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
