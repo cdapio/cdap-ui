@@ -83,6 +83,7 @@ export default function MenuListComposition({
         aria-haspopup="true"
         onClick={handleToggle}
         endIcon={<ArrowDropDownIcon />}
+        data-testid="inlay-drawer-actions-menu"
       >
         {T.translate(`${PREFIX}.actionsButtonLabel`)}
       </ActionButton>
@@ -101,6 +102,7 @@ export default function MenuListComposition({
                           handleClose(event);
                         }}
                         data-testid={`menu-item-${testId}`}
+                        key={`menu-item-${testId}`}
                       >
                         {eachOption.label}
                       </StyledMenuItem>
