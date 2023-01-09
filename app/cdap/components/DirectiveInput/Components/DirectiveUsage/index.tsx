@@ -14,13 +14,13 @@
  * the License.
  */
 
-import { Box, Divider, Typography, Link } from '@material-ui/core';
+import { Box, Divider, Link, Typography } from '@material-ui/core';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { MORE_INFO_ON_DIRECTIVE_LINK, PREFIX } from 'components/DirectiveInput/constants';
 import { IDirectiveUsage } from 'components/DirectiveInput/types';
 import T from 'i18n-react';
 import React from 'react';
 import styled from 'styled-components';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 export interface IDirectiveUsageProps {
   directiveUsage: IDirectiveUsage;
@@ -56,7 +56,7 @@ const StyledOutlinedIcon = styled(InfoOutlinedIcon)`
   color: #79b7ff;
 `;
 
-const StyledUsageText = styled(Typography)`
+const DirectivesUsageText = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -71,7 +71,7 @@ const StyledUsageText = styled(Typography)`
 export default function({ directiveUsage }: IDirectiveUsageProps) {
   return (
     <DirectiveWrapper data-testid="directive-usage-text-wrapper">
-      <StyledUsageText variant="body1" data-testid="directive-usage-text">
+      <DirectivesUsageText variant="body1" data-testid="directive-usage-text">
         {`${T.translate(`${PREFIX}.usage`)} : `}
         {directiveUsage.item.usage || directiveUsage.usage}
         {MORE_INFO_ON_DIRECTIVE_LINK[directiveUsage.item.directive] && (
@@ -84,7 +84,7 @@ export default function({ directiveUsage }: IDirectiveUsageProps) {
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
         )}
-      </StyledUsageText>
+      </DirectivesUsageText>
       <DividerLine />
     </DirectiveWrapper>
   );

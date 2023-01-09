@@ -36,7 +36,7 @@ import {
   IHeaderNamesList,
   IParams,
   IRecords,
-  IGeneralStatistics
+  IGeneralStatistics,
 } from 'components/GridTable/types';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
