@@ -14,15 +14,12 @@
  * the License.
  */
 
-import grey from '@material-ui/core/colors/grey';
-import MoreVertOutlinedIcon from '@material-ui/icons/MoreVertOutlined';
-import SaveAltOutlinedIcon from '@material-ui/icons/SaveAltOutlined';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import InlayDrawerWidget from 'components/common/InlayDrawerWidget';
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { IActionsOptions } from './Menu';
 
 storiesOf('InlayDrawerWidget', module)
   .addDecorator(withKnobs)
@@ -31,40 +28,23 @@ storiesOf('InlayDrawerWidget', module)
     withInfo({
       text: 'Default Drawer',
     })(() => {
-      const DownloadIconStyle = styled(SaveAltOutlinedIcon)`
-        width: 20px;
-        height: 20px;
-      `;
+      const [open, setOpen] = useState(true);
 
-      const KebabMenuIconStyle = styled(MoreVertOutlinedIcon)`
-        width: 20px;
-        height: 20px;
-        font-size: 26px;
-        color: ${grey[600]};
-      `;
+      const handleDrawerCloseIconClick = () => {
+        setOpen(false);
+      };
 
-      const handleDownloadIconClick = () => alert('download icon clicked');
-      const handleKebabMenuIconClick = () => alert('kebab menu icon clicked');
-      const handleDrawerCloseIconClick = () => alert('drawer close icon clicked');
+      const onSaveButtonClick = () => {
+        // do nothing - TODO: event handler for save button click
+      };
+      const onApplyButtonClick = () => {
+        // do nothing - TODO: event handler for apply button click
+      };
+      const onDownloadClick = () => {
+        // do nothing - TODO: event handler for download button click
+      };
 
-      const templateActions = [
-        {
-          name: 'download-icon',
-          getIconComponent: () => DownloadIconStyle,
-          iconClickHandler: handleDownloadIconClick,
-        },
-        {
-          name: 'kebab-menu-icon',
-          getIconComponent: () => KebabMenuIconStyle,
-          iconClickHandler: handleKebabMenuIconClick,
-        },
-      ];
-
-      const onSaveButtonClick = () => alert('save clicked');
-      const onApplyButtonClick = () => alert('save clicked');
-      const onDownloadClick = () => alert('save clicked');
-
-      const actionsOptions = [
+      const actionsOptions: IActionsOptions[] = [
         {
           label: 'Save',
           value: 'save',
@@ -83,15 +63,17 @@ storiesOf('InlayDrawerWidget', module)
       ];
 
       return (
-        <InlayDrawerWidget
-          headingText={'Inlay Drawer'}
-          onClose={handleDrawerCloseIconClick}
-          showDivider={true}
-          position={'left'}
-          actionsOptions={actionsOptions}
-        >
-          <div>Child component is rendered here</div>
-        </InlayDrawerWidget>
+        open && (
+          <InlayDrawerWidget
+            headingText={'Inlay Drawer'}
+            onClose={handleDrawerCloseIconClick}
+            showDivider={true}
+            position={'left'}
+            actionsOptions={actionsOptions}
+          >
+            <div>Child component is rendered here</div>
+          </InlayDrawerWidget>
+        )
       );
     })
   );

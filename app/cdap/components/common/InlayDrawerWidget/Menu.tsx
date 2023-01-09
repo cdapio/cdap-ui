@@ -10,6 +10,12 @@ import { getTestIdString } from 'components/common/InlayDrawerWidget/index';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+export interface IActionsOptions {
+  label: string;
+  value: string;
+  clickHandler: () => void;
+}
+
 const StyledContainer = styled.div`
   display: flex;
 `;
@@ -32,7 +38,9 @@ const StyledMenuItem = styled(MenuItem)`
   }
 `;
 
-export default function MenuListComposition({ dropdownOptions }) {
+export default function MenuListComposition({
+  dropdownOptions,
+}: Record<string, IActionsOptions[]>) {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
 

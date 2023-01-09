@@ -17,7 +17,7 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
-import MenuListComposition from 'components/common/InlayDrawerWidget/Menu';
+import MenuListComposition, { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
 import React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -26,12 +26,8 @@ interface IRecipeStepWidgetProps {
   onClose: () => void;
   showDivider: boolean;
   children: JSX.Element;
-  actionsOptions: any;
+  actionsOptions: IActionsOptions[];
   position?: 'left' | 'right';
-}
-
-export interface ITemplateActionMethod {
-  string: string | (() => JSX.Element);
 }
 
 const borderLeftDrawer = css`
