@@ -24,19 +24,13 @@ describe('It should test the SelectColumnsList Component', () => {
   it('should render the SelectColumnsList Component where transformationName=is parseCSV and click on close button', () => {
     const mockCancelFunction = jest.fn();
     render(
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <SelectColumn
-              transformationName="parseCSV"
-              transformationDataType={[]}
-              columnsList={[]}
-              missingItemsList={undefined}
-              onCancel={mockCancelFunction}
-            />
-          </Route>
-        </Switch>
-      </Router>
+      <SelectColumn
+        transformationName="parseCSV"
+        transformationDataType={[]}
+        columnsList={[]}
+        missingItemsList={undefined}
+        onCancel={mockCancelFunction}
+      />
     );
     expect(screen.getByTestId(/select-column-panel/i)).toBeInTheDocument();
 

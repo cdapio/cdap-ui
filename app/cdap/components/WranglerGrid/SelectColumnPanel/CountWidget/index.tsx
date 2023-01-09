@@ -26,11 +26,9 @@ export default function CountWidget({ selectedColumnsCount }: { selectedColumnsC
     });
   };
 
-  const text = getDisplayText();
-
   return (
     <NormalFont component="p" data-testid="no-column-title">
-      {text}
+      {getDisplayText()}
     </NormalFont>
   );
 }

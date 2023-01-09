@@ -86,7 +86,7 @@ export default function DataTable({
   selectedColumns,
   dataQualityValue,
   isSingleSelection,
-  handleDisableCheckbox,
+  isCheckboxDisabled,
   handleMultipleSelection,
   setSelectedColumns,
   transformationName,
@@ -178,7 +178,7 @@ export default function DataTable({
                 selectedColumns={selectedColumns}
                 dataQualityValue={dataQualityValue}
                 isSingleSelection={isSingleSelection}
-                handleDisableCheckbox={handleDisableCheckbox}
+                isCheckboxDisabled={isCheckboxDisabled}
                 handleMultipleSelection={handleMultipleSelection}
                 columnIndex={columnIndex}
                 columnDetail={eachColumn}

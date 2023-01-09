@@ -39,7 +39,7 @@ describe('It should test DataTable Component', () => {
         selectedColumns={[]}
         dataQualityValue={[]}
         isSingleSelection={false}
-        handleDisableCheckbox={() => false}
+        isCheckboxDisabled={() => false}
         handleMultipleSelection={() => jest.fn()}
         totalColumnCount={5}
         setSelectedColumns={mockSetSelected}
@@ -63,7 +63,7 @@ describe('It should test DataTable Component', () => {
         selectedColumns={[]}
         dataQualityValue={[]}
         isSingleSelection={false}
-        handleDisableCheckbox={() => false}
+        isCheckboxDisabled={() => false}
         handleMultipleSelection={() => jest.fn()}
         totalColumnCount={0}
         setSelectedColumns={mockSetSelected}
@@ -91,7 +91,7 @@ describe('It should test DataTable Component', () => {
         selectedColumns={selectedColumns}
         dataQualityValue={[]}
         isSingleSelection={false}
-        handleDisableCheckbox={() => false}
+        isCheckboxDisabled={() => false}
         handleMultipleSelection={() => jest.fn()}
         totalColumnCount={0}
         setSelectedColumns={mockSetSelected}

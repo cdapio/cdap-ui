@@ -54,7 +54,7 @@ export default function ColumnsList({
     setColumns(filteredColumnsOnTransformationType);
   }, []);
 
-  // This function is used to handle multiple column selection
+  // handle multiple column selection
   const handleMultipleSelection = (
     event: ChangeEvent<HTMLInputElement>,
     column: IHeaderNamesList
@@ -65,24 +65,22 @@ export default function ColumnsList({
       const indexOfUnchecked = selectedColumns.findIndex(
         (columnDetail) => columnDetail.label === column.label
       );
-      indexOfUnchecked > -1 &&
+      if (indexOfUnchecked > -1) {
         setSelectedColumns(() => selectedColumns.filter((_, index) => index !== indexOfUnchecked));
+      }
     }
   };
 
-  // This function is used to disable checkbox when the selection limit is reached for e.g. in join and swap we can select only two column
-  const handleDisableCheckbox = () => {
+  // disable checkbox when the selection limit is reached for e.g. in join and swap we can select only two column
+  const isCheckboxDisabled = () => {
     const multiSelect = MULTI_SELECTION_COLUMN.findIndex(
       (functionDetail: IMultipleSelectedFunctionDetail) =>
         functionDetail.value === transformationName && functionDetail.isMoreThanTwo
     );
-    if (selectedColumns.length < 2 || multiSelect > -1) {
-      return false;
-    }
-    return true;
+    return !(selectedColumns.length < 2 || multiSelect > -1);
   };
 
-  // This function is used to search a column by it's name from the column list
+  // search a column by it's name from the column list
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) {
       let columnValue: IHeaderNamesList[] = [];
@@ -97,7 +95,7 @@ export default function ColumnsList({
     }
   };
 
-  // This function is used to focus input field when a search icon is clicked
+  // focus input field when a search icon is clicked
   const handleFocus = () => {
     ref?.current?.focus();
   };
@@ -131,7 +129,7 @@ export default function ColumnsList({
           <DataTable
             dataQualityValue={dataQuality}
             handleSingleSelection={(column) => setSelectedColumns([column])}
-            handleDisableCheckbox={handleDisableCheckbox}
+            isCheckboxDisabled={isCheckboxDisabled}
             handleMultipleSelection={handleMultipleSelection}
             columns={filteredColumnsOnTransformationType.length === 0 ? [] : columns}
             transformationDataType={transformationDataType}

@@ -45,12 +45,12 @@ const StyledInputTableBodyCell = styled(StyledTableBodyCell)`
   }
 `;
 
-export default function({
+export default function TableRowWidget({
   handleSingleSelection,
   selectedColumns,
   dataQualityValue,
   isSingleSelection,
-  handleDisableCheckbox,
+  isCheckboxDisabled,
   handleMultipleSelection,
   columnIndex,
   columnDetail,
@@ -63,7 +63,7 @@ export default function({
           selectedColumns={selectedColumns}
           handleSingleSelection={handleSingleSelection}
           columnDetail={columnDetail}
-          isCheckboxDisabled={handleDisableCheckbox}
+          isCheckboxDisabled={isCheckboxDisabled}
           handleMultipleSelection={handleMultipleSelection}
           columnIndex={columnIndex}
         />

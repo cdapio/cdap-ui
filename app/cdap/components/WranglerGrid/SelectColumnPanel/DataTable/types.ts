@@ -23,7 +23,7 @@ interface ICommonInputProps {
   handleMultipleSelection: (event: ChangeEvent<HTMLInputElement>, value: IHeaderNamesList) => void;
   isSingleSelection: boolean;
   selectedColumns: IHeaderNamesList[];
-  handleDisableCheckbox?: () => boolean;
+  isCheckboxDisabled?: () => boolean;
 }
 
 export interface IDataTableProps extends ICommonInputProps {

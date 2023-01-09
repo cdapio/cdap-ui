@@ -23,7 +23,7 @@ import { MULTI_SELECTION_COLUMN } from 'components/WranglerGrid/SelectColumnPane
 /**
  * @param  {string[]} transformationDataType
  * @param  {IHeaderNamesList[]} columnsList
- * @return {IHeaderNamesList[]} This function is used to return the list of column based on the transformation/option selected
+ * @return {IHeaderNamesList[]} returns the list of column based on the transformation/option selected
  * For Example ADD, this can be performed on column whose datatype is int/float/double so this function will return only those
  * columns whose dataype int/float/double
  */
@@ -45,7 +45,7 @@ export const getFilteredColumn = (
 /**
  * @param  {string} transformationName
  * @param  {IHeaderNamesList[]} selectedColumns
- * @return {boolean} This function is used to enable done button which can be enabled only when atleast one column is selected
+ * @return {boolean} enables done button only when atleast one column is selected
  * In case of join and swap two column needs to be selected while in delete/keep more than two selections are posible
  */
 export const enableDoneButton = (
@@ -71,7 +71,7 @@ export const enableDoneButton = (
 
 /**
  * @param  {string} transformationName
- * @return {boolean} This function is used to check whether transformation selected can be applied on single column or multiple column can be selected
+ * @return {boolean} checks whether transformation selected can be applied on single column or multiple column can be selected
  */
 export const getIsSingleSelectionCheck = (transformationName: string) =>
   !MULTI_SELECTION_COLUMN.some(

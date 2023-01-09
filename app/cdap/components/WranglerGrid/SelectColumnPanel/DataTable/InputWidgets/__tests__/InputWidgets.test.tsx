@@ -29,7 +29,7 @@ describe('It should render ', () => {
         ]}
         handleSingleSelection={() => jest.fn()}
         columnDetail={{ name: 'body_2', type: ['all'], label: 'body_2' }}
-        handleDisableCheckbox={() => false}
+        isCheckboxDisabled={() => false}
         handleMultipleSelection={() => jest.fn()}
         columnIndex={0}
         isCheckboxDisabled={() => false}
@@ -48,7 +48,7 @@ describe('It should render ', () => {
         selectedColumns={[{ name: 'body_2', type: ['all'], label: 'body_2' }]}
         handleSingleSelection={() => jest.fn()}
         columnDetail={{ name: 'body_2', type: ['all'], label: 'body_2' }}
-        handleDisableCheckbox={() => false}
+        isCheckboxDisabled={() => false}
         handleMultipleSelection={() => jest.fn()}
         columnIndex={0}
         isCheckboxDisabled={() => false}
