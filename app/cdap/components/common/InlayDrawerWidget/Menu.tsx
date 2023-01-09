@@ -94,7 +94,7 @@ export default function MenuListComposition({
       >
         {T.translate(`${PREFIX}.actionsButtonLabel`)}
       </ActionButton>
-      <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+      <Popper open={open} anchorEl={anchorRef.current} transition disablePortal>
         {({ TransitionProps }) => (
           <Grow {...TransitionProps}>
             <Paper>
