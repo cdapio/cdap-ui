@@ -42,10 +42,10 @@ const getIconComponent = (
 );
 
 const getIconWithTextComponent = (
-  explorationCardIndex: React.Key,
+  explorationCardIndex: number,
   eachExplorationCard: IExplorationCardDetails,
   connectionRefValue: boolean,
-  connectionNameRef: React.RefObject<HTMLInputElement>
+  connectionNameRef: RefObject<HTMLInputElement>
 ) => {
   const ExplorationCardLabel = (
     <IconWithTextTypography variant="body1" ref={connectionNameRef} component="p">
@@ -67,7 +67,7 @@ const getIconWithTextComponent = (
 };
 
 const gettextIncludingRecipeStepsComponent = (
-  explorationCardIndex: React.Key,
+  explorationCardIndex: number,
   eachExplorationCard: IExplorationCardDetails
 ) => (
   <GridForExplorationCard item xs={3} key={explorationCardIndex}>
@@ -152,10 +152,10 @@ export const getExplorationDatacard = (
   eachExplorationCard: IExplorationCardDetails,
   explorationCardIndex: number,
   connectionRefValue: boolean,
-  connectionNameRef: React.RefObject<HTMLInputElement>,
+  connectionNameRef: RefObject<HTMLInputElement>,
   cardIndex: number,
   datasetNameRefValue: boolean,
-  datasetNameRef: React.RefObject<HTMLInputElement>
+  datasetNameRef: RefObject<HTMLInputElement>
 ) => {
   switch (eachExplorationCard.type) {
     case 'icon':

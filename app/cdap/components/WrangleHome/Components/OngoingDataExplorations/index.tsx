@@ -66,6 +66,7 @@ export default function({
       connectionsWithConnectorTypeData.push(...connections);
     }
 
+    // return corresponding connector name for the given connection name param
     const findConnectorType = (connection: string) => {
       if (connection) {
         const matchedConnection: IConnectionWithConnectorType = connectionsWithConnectorTypeData.find(
