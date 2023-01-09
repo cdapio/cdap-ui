@@ -18,8 +18,8 @@ import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import InlayDrawerWidget from 'components/common/InlayDrawerWidget';
+import { IActionsOptions } from 'components/common/InlayDrawerWidget/Menu';
 import React, { useState } from 'react';
-import { IActionsOptions } from './Menu';
 
 storiesOf('InlayDrawerWidget', module)
   .addDecorator(withKnobs)

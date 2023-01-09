@@ -27,34 +27,22 @@ interface IRecipeStepWidgetProps {
   showDivider: boolean;
   children: JSX.Element;
   actionsOptions: IActionsOptions[];
-  position?: 'left' | 'right';
+  position: 'left' | 'right';
 }
 
-const borderLeftDrawer = css`
-  border-left: 1px solid ${grey[300]};
-`;
-
-const borderRightDrawer = css`
-  border-right: 1px solid ${grey[300]};
-`;
-
-const drawerContainerStyles = css`
+const Container = styled(Box)`
   width: 500px;
   height: calc(100vh - 232px);
   min-height: 300px;
   padding-left: 20px;
   padding-right: 10px;
   overflow-y: scroll;
+  border-left: 1px solid ${grey[300]};
 `;
 
-const LeftContainer = styled(Box)`
-  ${drawerContainerStyles}
-  ${borderRightDrawer}
-`;
-
-const RightContainer = styled(Box)`
-  ${drawerContainerStyles}
-  ${borderLeftDrawer}
+const LeftContainer = styled(Container)`
+  ${Container}
+  border-right: 1px solid ${grey[300]};
 `;
 
 const HeaderStyle = styled.header`
@@ -95,23 +83,20 @@ const DrawerWidgetTitleLabel = styled(Typography)`
     color: grey[900];
   }
 `;
-const DownloadMenuActionWrapper = styled(Box)`
-  display: flex;
-`;
 
-const StyledButton = styled(IconButton)`
-  cursor: pointer;
-  &.MuiIconButton-root {
-    padding: 10px;
-  }
-`;
-
-export const getTestIdString = (label) =>
+export const getTestIdString = (label: string) =>
   label
     .trim()
     .split(' ')
     .join('-')
     .toLowerCase();
+
+const getContainerComponent = (position: 'left' | 'right') => {
+  if (position === 'left') {
+    return LeftContainer;
+  }
+  return Container;
+};
 
 /**
  *
@@ -131,9 +116,9 @@ export default function InlayDrawerWidget({
   actionsOptions,
   position = 'right',
 }: IRecipeStepWidgetProps) {
-  const Container = position === 'left' ? LeftContainer : RightContainer;
+  const PanelContainer = getContainerComponent(position);
   return (
-    <Container role="presentation" data-testid="column-view-panel-parent">
+    <PanelContainer role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>
         <DrawerWidgetTitleLabel data-testid="drawer-widget-heading">
           {headingText}
@@ -151,6 +136,6 @@ export default function InlayDrawerWidget({
         </HeaderIconWrapper>
       </HeaderStyle>
       <>{children}</>
-    </Container>
+    </PanelContainer>
   );
 }
