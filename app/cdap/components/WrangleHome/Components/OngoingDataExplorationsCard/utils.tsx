@@ -29,10 +29,13 @@ import {
   TypographyWithGreenColorText,
   TypographyWithRedColorText,
 } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/styledComponents';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { IExplorationCardDetails } from 'components/WrangleHome/Components/OngoingDataExplorationsCard/types';
 
-const getIconComponent = (explorationCardIndex, eachExplorationCard) => (
+const getIconComponent = (
+  explorationCardIndex: number,
+  eachExplorationCard: IExplorationCardDetails
+) => (
   <GridForConnectorIcon item xs={3} key={explorationCardIndex}>
     <Box>{eachExplorationCard.icon}</Box>
   </GridForConnectorIcon>
@@ -43,21 +46,25 @@ const getIconWithTextComponent = (
   eachExplorationCard: IExplorationCardDetails,
   connectionRefValue: boolean,
   connectionNameRef: React.RefObject<HTMLInputElement>
-) => (
-  <GridForExplorationCard item xs={3} key={explorationCardIndex}>
-    {connectionRefValue ? (
-      <CustomTooltip title={eachExplorationCard.label} arrow>
-        <IconWithTextTypography variant="body1" ref={connectionNameRef} component="p">
-          {eachExplorationCard.label}
-        </IconWithTextTypography>
-      </CustomTooltip>
-    ) : (
-      <IconWithTextTypography variant="body1" ref={connectionNameRef}>
-        {eachExplorationCard.label}
-      </IconWithTextTypography>
-    )}
-  </GridForExplorationCard>
-);
+) => {
+  const ExplorationCardLabel = (
+    <IconWithTextTypography variant="body1" ref={connectionNameRef} component="p">
+      {eachExplorationCard.label}
+    </IconWithTextTypography>
+  );
+
+  const IconTextWithCustomToolTip = (
+    <CustomTooltip title={eachExplorationCard.label} arrow>
+      {ExplorationCardLabel}
+    </CustomTooltip>
+  );
+
+  return (
+    <GridForExplorationCard item xs={3} key={explorationCardIndex}>
+      {connectionRefValue ? IconTextWithCustomToolTip : ExplorationCardLabel}
+    </GridForExplorationCard>
+  );
+};
 
 const gettextIncludingRecipeStepsComponent = (
   explorationCardIndex: React.Key,
@@ -71,33 +78,41 @@ const gettextIncludingRecipeStepsComponent = (
 );
 
 const getTextComponent = (
-  explorationCardIndex,
-  eachExplorationCard,
-  cardIndex,
-  datasetNameRefValue,
-  datasetNameRef
-) => (
-  <GridForExplorationCard
-    item
-    xs={3}
-    key={explorationCardIndex}
-    data-testid={`home-ongoing-explorations-${eachExplorationCard.type}-${cardIndex}`}
-  >
-    {datasetNameRefValue ? (
-      <CustomTooltip title={eachExplorationCard.label} arrow>
-        <IconWithoutTextTypography variant="body1" ref={datasetNameRef} component="p">
-          {eachExplorationCard.label}
-        </IconWithoutTextTypography>
-      </CustomTooltip>
-    ) : (
-      <IconWithoutTextTypography variant="body1" ref={datasetNameRef}>
-        {eachExplorationCard.label}
-      </IconWithoutTextTypography>
-    )}
-  </GridForExplorationCard>
-);
+  explorationCardIndex: number,
+  eachExplorationCard: IExplorationCardDetails,
+  cardIndex: number,
+  datasetNameRefValue: boolean,
+  datasetNameRef: RefObject<HTMLInputElement>
+) => {
+  const ExplorationCardLabel = (
+    <IconWithoutTextTypography variant="body1" ref={datasetNameRef} component="p">
+      {eachExplorationCard.label}
+    </IconWithoutTextTypography>
+  );
 
-const getPercentageWithTextComponent = (explorationCardIndex, percent, eachExplorationCard) => {
+  const ExplorationCardLabelWithCustomToolTip = (
+    <CustomTooltip title={eachExplorationCard.label} arrow>
+      {ExplorationCardLabel}
+    </CustomTooltip>
+  );
+
+  return (
+    <GridForExplorationCard
+      item
+      xs={3}
+      key={explorationCardIndex}
+      data-testid={`home-ongoing-explorations-${eachExplorationCard.type}-${cardIndex}`}
+    >
+      {datasetNameRefValue ? ExplorationCardLabelWithCustomToolTip : ExplorationCardLabel}
+    </GridForExplorationCard>
+  );
+};
+
+const getPercentageWithTextComponent = (
+  explorationCardIndex: number,
+  percent: number,
+  eachExplorationCard: IExplorationCardDetails
+) => {
   const NullValueCountText =
     percent > 0 ? TypographyWithRedColorText : TypographyWithGreenColorText;
   const PercentageSymbol = percent > 0 ? PercentageSymbolRed : PercentageSymbolGreen;

@@ -31,12 +31,12 @@ export const CARD_COUNT = 2;
 
 export default function() {
   const classes = useStyles();
-  const [showExplorations, setShowExplorations] = useState<boolean>(false);
+  const [showExplorations, setShowExplorations] = useState(false);
   useEffect(() => {
     getWidgetData();
   }, []);
 
-  const [viewAllLink, toggleViewAllLink] = useState<boolean>(false);
+  const [viewAllLink, toggleViewAllLink] = useState(false);
 
   useEffect(() => {
     getWidgetData();
