@@ -42,7 +42,7 @@ const ActionButton = styled(Button)`
   text-align: center;
 `;
 
-const StyledContainer = styled.div`
+export const FlexContainer = styled.div`
   display: flex;
 `;
 
@@ -93,7 +93,7 @@ export default function MenuListComposition({
   }, [open]);
 
   return (
-    <StyledContainer>
+    <FlexContainer>
       <ActionButton
         ref={anchorRef}
         aria-controls={open ? 'menu-list-grow' : undefined}
@@ -131,6 +131,6 @@ export default function MenuListComposition({
           </Grow>
         )}
       </Popper>
-    </StyledContainer>
+    </FlexContainer>
   );
 }
