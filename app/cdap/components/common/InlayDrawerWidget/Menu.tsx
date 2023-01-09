@@ -61,7 +61,6 @@ export default function MenuListComposition({
       event.preventDefault();
       setOpen(false);
     }
-    ``;
   }
 
   const handleToggle = () => {
