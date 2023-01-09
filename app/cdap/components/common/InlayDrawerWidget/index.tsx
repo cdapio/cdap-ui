@@ -17,7 +17,8 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import grey from '@material-ui/core/colors/grey';
 
 interface IRecipeStepWidgetProps {
   headingText: string;
@@ -25,21 +26,38 @@ interface IRecipeStepWidgetProps {
   showDivider: boolean;
   children: JSX.Element;
   templateActions: any;
-  position: 'left' | 'right';
+  position?: 'left' | 'right';
 }
 
 export interface ITemplateActionMethod {
   string: string | (() => JSX.Element);
 }
 
-const DrawerContainerStyle = styled(Box)`
+const borderLeftDrawer = css`
+  border-left: 1px solid ${grey[300]};
+`;
+
+const borderRightDrawer = css`
+  border-right: 1px solid ${grey[300]};
+`;
+
+const drawerContainerStyles = css`
   width: 500px;
   height: calc(100vh - 232px);
   min-height: 300px;
-  border-right: 1px solid #e0e0e0;
   padding-left: 20px;
   padding-right: 10px;
   overflow-y: scroll;
+`;
+
+const LeftContainer = styled(Box)`
+  ${drawerContainerStyles}
+  ${borderRightDrawer}
+`;
+
+const RightContainer = styled(Box)`
+  ${drawerContainerStyles}
+  ${borderLeftDrawer}
 `;
 
 const HeaderStyle = styled.header`
@@ -107,7 +125,7 @@ const TemplateActions = ({ templateActions }) => {
         const testId = getTestIdString(eachTemplateAction.name);
         return (
           <StyledButton data-testid={`button-${testId}`} onClick={onIconButtonClick}>
-            <IconComponent data-testid={`icon-${testId}`} />
+            <IconComponent />
           </StyledButton>
         );
       })}
@@ -115,15 +133,27 @@ const TemplateActions = ({ templateActions }) => {
   );
 };
 
+/**
+ *
+ * @param headingText - text to be displayed as header of the panel
+ * @param onClose - handles event triggered when close icon is clicked
+ * @param showDivider - when set to true, displays a divider to the left side of the close icon, generally used to separate close icon from other action icons
+ * @param children - the child component to be rendered as body in this panel
+ * @param templateActions - an array of object, that defines the action icons to generate the actions template
+ * @param position - the position of the panel, either left or right, based on how components are positioned in parent. by default position is right
+ * @returns InlayDrawerWidget component
+ */
 export default function InlayDrawerWidget({
   headingText,
   onClose,
   showDivider,
   children,
   templateActions,
+  position = 'right',
 }: IRecipeStepWidgetProps) {
+  const Container = position === 'left' ? LeftContainer : RightContainer;
   return (
-    <DrawerContainerStyle role="presentation" data-testid="column-view-panel-parent">
+    <Container role="presentation" data-testid="column-view-panel-parent">
       <HeaderStyle>
         <DrawerWidgetTitleLabel data-testid="drawer-widget-heading">
           {headingText}
@@ -141,6 +171,6 @@ export default function InlayDrawerWidget({
         </HeaderIconWrapper>
       </HeaderStyle>
       <>{children}</>
-    </DrawerContainerStyle>
+    </Container>
   );
 }
