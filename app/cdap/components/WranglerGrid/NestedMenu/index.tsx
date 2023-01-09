@@ -64,8 +64,10 @@ export default function({
     } else {
       // When submenu item is clicked and if it has further options we show it's item next to submenu list
       if (menuItem.hasOwnProperty('options') && menuItem?.options?.length > 0) {
-        const referenceIndex = menuComponentOptions.findIndex((menuOptions) => {
-          const index = menuOptions.findIndex((eachOption) => (eachOption.value = menuItem.value));
+        const referenceIndex = menuComponentOptions.findIndex((eachMenuComponentOption) => {
+          const index = eachMenuComponentOption.findIndex(
+            (eachOption) => (eachOption.value = menuItem.value)
+          );
           return index >= 0 ? true : false;
         });
 
@@ -83,7 +85,7 @@ export default function({
           // if array of anchor element have current item then we have to remove it and reposition it to it's parent
           const currentTargetIndex = findIndex(
             anchorElement,
-            (anchor) => anchor == event.currentTarget
+            (anchor) => anchor === event.currentTarget
           );
           menuComponentOptions.splice(currentTargetIndex, 0, menuItem?.options);
           setAnchorElement((prev) => prev.slice(0, currentTargetIndex + 1));

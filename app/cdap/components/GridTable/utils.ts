@@ -38,8 +38,9 @@ export const getWrangleGridBreadcrumbOptions = (workspaceName, location) => {
     label: requestFromAddress,
   };
 
-  requestFromAddress !== T.translate(`${PREFIX}.labels.wrangleHome`) &&
+  if (requestFromAddress !== T.translate(`${PREFIX}.labels.wrangleHome`)) {
     finalBreadcrumbList.push(intermediateBreadcrumb);
+  }
 
   finalBreadcrumbList.push({
     label: workspaceName?.toString(),

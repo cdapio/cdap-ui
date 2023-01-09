@@ -15,14 +15,16 @@
  */
 
 import { importDatasetIcon } from 'components/WrangleHome/Components/WrangleCard/iconStore/importDataset';
+import { IOngoingExplorationCard } from '../types';
 
-export const mockOldData = [
+export const mockOldData: IOngoingExplorationCard[] = [
   {
     connectionName: 'postgres1',
     workspaceName: 'sql_implementation_info',
     recipeSteps: 0,
-    dataQuality: 63.32000000000001,
+    dataQuality: '63.32000000000001',
     workspaceId: '0cbc0f7b-c554-4bbb-ad3a-74fe147dfe3b',
+    count: 2,
   },
 ];
 
