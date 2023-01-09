@@ -16,7 +16,7 @@
 
 import React from 'react';
 import MenuItemComponent, { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
-import { CustomizedMenuComponent } from 'components/common/MenuContainer';
+import { StyledMenuComponent } from 'components/common/MenuContainer';
 
 import { Dispatch, SetStateAction } from 'react';
 
@@ -38,7 +38,7 @@ export default function({
   setMenuComponentOptions,
 }: IMenuComponentProps) {
   return (
-    <CustomizedMenuComponent
+    <StyledMenuComponent
       id="long-menu"
       keepMounted
       anchorEl={anchorElement}
@@ -67,6 +67,6 @@ export default function({
           onMenuClick={submitOption}
         />
       ))}
-    </CustomizedMenuComponent>
+    </StyledMenuComponent>
   );
 }

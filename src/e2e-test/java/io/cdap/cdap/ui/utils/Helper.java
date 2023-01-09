@@ -33,14 +33,16 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,20 +146,27 @@ public class Helper implements CdfHelper {
   }
 
   public static boolean isElementExists(String cssSelector) {
-    return SeleniumDriver.getDriver()
-      .findElements(By.cssSelector(cssSelector)).size() > 0;
+    return isElementExists(By.cssSelector(cssSelector));
   }
 
   public static boolean isElementExists(By by) {
-    return SeleniumDriver.getDriver().findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(SeleniumDriver.getDriver().findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(By by, WebElement withinElement) {
-    return withinElement.findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(withinElement.findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(String cssSelector, WebElement withinElement) {
-    return withinElement.findElements(By.cssSelector(cssSelector)).size() > 0;
+    return isElementExists(By.cssSelector(cssSelector), withinElement);
   }
 
   public static String getCssSelectorByDataTestId(String dataTestId) {
@@ -166,6 +175,13 @@ public class Helper implements CdfHelper {
 
   public static String getNodeSelectorFromNodeIdentifier(NodeInfo node) {
     return "[data-testid=\"plugin-node-" +
+      node.getNodeName() + "-" +
+      node.getNodeType() + "-" +
+      node.getNodeId() + "\"]";
+  }
+
+  public static String getNodeNameSelectorFromNodeIdentifier(NodeInfo node) {
+    return "[data-testid=\"plugin-node-name-" +
       node.getNodeName() + "-" +
       node.getNodeType() + "-" +
       node.getNodeId() + "\"]";
@@ -194,15 +210,10 @@ public class Helper implements CdfHelper {
     WaitHelper.waitForPageToLoad();
     Helper.uploadPipelineFromFile(filename);
 
-    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
-    ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
+    Commands.fillInPipelineName(pipelineName);
+    Commands.dismissTopBanner();
 
-    WebElement pipelineNameInput = locateElementById("pipeline-name-input");
-    ElementHelper.clearElementValue(pipelineNameInput);
-    ElementHelper.sendKeys(pipelineNameInput, pipelineName);
-    pipelineNameInput.sendKeys(Keys.RETURN);
-
-    ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
+    ElementHelper.clickOnElement(locateElementByCssSelector(
       getCssSelectorByDataTestId("deploy-pipeline-btn")));
 
     String statusText = ElementHelper.getElementText(
@@ -378,5 +389,14 @@ public class Helper implements CdfHelper {
       .filter(p -> p.getName().equals(queryParam))
       .collect(Collectors.toList());
     return queryParameters.get(0).getValue();
+  }
+
+  public static void rightClickOnElement(WebElement element) {
+    rightClickOnElement(element, 0, 0);
+  }
+
+  public static void rightClickOnElement(WebElement element, int xOffset, int yOffset) {
+    Actions actions = new Actions(SeleniumDriver.getDriver());
+    actions.moveToElement(element, xOffset, yOffset).contextClick().perform();
   }
 }

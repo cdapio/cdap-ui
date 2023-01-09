@@ -19,7 +19,7 @@ Feature: Admin - Validate profile setting
 
   @ADMIN_TEST
   Scenario: Show error message if user tries to set profile at the instance level
-    When Open configuration page
+    When Open Configuration Page
     Then Click on "System Preferences" accordion
     Then Click on "Edit System Preferences" button
     Then Add "system.profile.name" as key
@@ -30,7 +30,7 @@ Feature: Admin - Validate profile setting
 
   @ADMIN_TEST
   Scenario: Allow user to save valid preference at instance level after fixing error
-    When Open configuration page
+    When Open Configuration Page
     Then Click on "System Preferences" accordion
     Then Click on "Edit System Preferences" button
     Then Add "name" as key

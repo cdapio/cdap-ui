@@ -16,18 +16,17 @@
 
 import { Typography } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import DataPrepStore from 'components/DataPrep/store';
-import LoadingSVG from 'components/shared/LoadingSVG';
 import { getWidgetData } from 'components/WidgetSVG/utils';
-import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
 import WrangleCard from 'components/WrangleHome/Components/WrangleCard/index';
 import WrangleHomeTitle from 'components/WrangleHome/Components/WrangleHomeTitle/index';
 import { GradientLine, HeaderImage } from 'components/WrangleHome/icons';
 import { useStyles } from 'components/WrangleHome/styles';
 import T from 'i18n-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import OngoingDataExploration from 'components/WrangleHome/Components/OngoingDataExploration/index';
+import { LastUpdatedRecipes } from 'components/RecipeManagement/LastUpdatedRecipes';
 
 export default function() {
   const classes = useStyles();
@@ -77,6 +76,22 @@ export default function() {
           </Box>
         </Box>
         <OngoingDataExploration />
+
+        <Box className={classes.headerTitle}>
+          <WrangleHomeTitle
+            title={T.translate('features.WranglerNewUI.HomePage.labels.recipes.title')}
+          />
+          <Box className={classes.viewMore}>
+            <Link
+              color="inherit"
+              to={`/ns/${getCurrentNamespace()}/recipes`}
+              data-testid="view-all-recipes"
+            >
+              {T.translate('features.WranglerNewUI.HomePage.labels.common.viewAll')}
+            </Link>{' '}
+          </Box>
+        </Box>
+        <LastUpdatedRecipes></LastUpdatedRecipes>
       </Box>
     </Box>
   );

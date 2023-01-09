@@ -34,6 +34,7 @@ Feature: Nuxtour - Validate Nuxtour functionalities
     Then Click Nuxtour Complete button
     Then Welcome tour should close
 
+  @NUXTOUR_TEST
   Scenario: Verify Previour and Cancel button for the tour
     When Open CDAP welcome page
     Then Welcome nux tour should exist
@@ -44,12 +45,14 @@ Feature: Nuxtour - Validate Nuxtour functionalities
     Then Click Nuxtour Cancel button
     Then Welcome tour should close
 
+  @NUXTOUR_TEST
   Scenario: Verify No thanks button
     When Open CDAP welcome page
     Then Welcome nux tour should exist
     Then Click No thanks button
     Then Welcome tour should close
 
+  @NUXTOUR_TEST
   Scenario: Verify checkbox opt out future tours
     When Open CDAP welcome page
     Then Welcome nux tour should exist

@@ -17,35 +17,6 @@
 import { Box, Container } from '@material-ui/core';
 import styled from 'styled-components';
 
-export const FlexJustifyAlignCenter = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const LastDividerBox = styled(Box)`
-  margin: 0px 0px 0px 4px;
-`;
-
-export const DividerBox = styled(Box)`
-  margin: 0px 4px;
-`;
-
-export const FunctionBoxWrapper = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: -webkit-fill-available;
-  & .MuiIconButton-root {
-    padding-bottom: 8px;
-  }
-`;
-
-export const SearchBoxWrapper = styled(Box)`
-  min-width: 490px;
-`;
-
 export const PointerBox = styled(Box)`
   cursor: pointer;
 `;
@@ -65,4 +36,48 @@ export const AddTransformationWrapper = styled(Container)`
 export const AddTransformationBodyWrapper = styled(Box)`
   height: calc(100% - 40px);
   overflow-y: auto;
+`;
+
+export const FlexJustifyAlignCenter = styled(Box)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+`;
+
+export const LastDividerBox = styled(Box)`
+  margin: 0px 0px 0px 4px;
+`;
+
+export const DividerBox = styled(Box)`
+  margin: 0px 4px;
+`;
+
+export const DividerBoxToggler = styled(Box)`
+  margin: 0px 16px;
+`;
+
+export const FunctionBoxWrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: ${(props) => (props.showName ? 12 : 0)}px;
+  padding-right: ${(props) => (props.showName ? 12 : 0)}px;
+  padding-bottom: 4px;
+  width: -webkit-fill-available;
+  & .MuiIconButton-root {
+    padding: 5px;
+    display: flex;
+    margin: auto;
+  }
+`;
+
+export const ExpandAndFunctionToggleContainer = styled(Box)`
+  display: flex;
+  justify-content: center;
+`;
+
+export const SearchBoxWrapper = styled(Box)`
+  min-width: 490px;
 `;

@@ -40,6 +40,7 @@ export const NullIcon = (
     />
   </svg>
 );
+
 export const InvalidIcon = (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -77,6 +78,7 @@ export const ColumnIcon = (
     />
   </svg>
 );
+
 export const StructureIcon = (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -109,6 +111,7 @@ export const StructureIcon = (
     />
   </svg>
 );
+
 export const FragmentIcon = (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -123,6 +126,7 @@ export const FragmentIcon = (
     />
   </svg>
 );
+
 export const MathIcon = (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="3" y="2.5" width="18" height="20" rx="1" stroke="#757575" strokeWidth="2" />
@@ -132,6 +136,7 @@ export const MathIcon = (
     <rect x="14.8462" y="12.5" width="2.07282" height="6.73595" rx="1.03641" fill="#757575" />
   </svg>
 );
+
 export const SecurityIcon = (
   <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path

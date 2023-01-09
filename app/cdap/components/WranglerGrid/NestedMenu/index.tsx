@@ -22,7 +22,7 @@ import { NestedMenuComponent } from 'components/common/MenuContainer';
 
 import { Dispatch, SetStateAction } from 'react';
 export interface INestedMenuProps {
-  submitMenuOption: (value: string, dataType: string[], infoLink: string) => void;
+  submitMenuOption: (value: string, dataType: string[], infoLink?: string) => void;
   columnType: string;
   menuOptions: IMenuItem[];
   title: string;

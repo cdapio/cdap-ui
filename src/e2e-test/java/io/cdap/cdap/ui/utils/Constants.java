@@ -27,7 +27,7 @@ public class Constants {
     String.valueOf(TEST_TIMEOUT_TIME / 1000) +
     "seconds";
 
-  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/home";
+  public static final String WRANGLE_HOME_URL = "http://localhost:11011/cdap/ns/default/wrangle";
   public static final String BASE_URL = "http://localhost:11011";
   public static final String BASE_SERVER_URL = "http://localhost:11015";
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
@@ -75,4 +75,13 @@ public class Constants {
 
   public static final String SINK_PATH_VAL = "/tmp/cdap-ui-integration-fixtures";
   public static final String SOURCE_PATH_VAL = "file:/tmp/cdap-ui-integration-fixtures/airports.csv";
+
+  public static final String SOURCE_PLUGINS_GROUP_LOCATOR_TEXT = "Source";
+  public static final String SINK_PLUGINS_GROUP_LOCATOR_TEXT = "Sink";
+  public static final String TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT = "Transform";
+  public static final String ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT = "Analytics";
+  public static final String CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT = "Conditions and Actions";
+  public static final String ERROR_HANDLERS_AND_ALERTS_PLUGINS_GROUP_LOCATOR_TEXT = "Error Handlers and Alerts";
+  
+  public static final String PIPELINE_TYPE = "cdap-data-pipeline";
 }

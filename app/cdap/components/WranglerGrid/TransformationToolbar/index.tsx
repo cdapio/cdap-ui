@@ -19,20 +19,23 @@ import { default as React, useState } from 'react';
 import NestedMenu from 'components/WranglerGrid/NestedMenu';
 import { ITransformationToolBarProps } from 'components/WranglerGrid/TransformationToolbar/types';
 import { Divider, LongDivider } from 'components/WranglerGrid/TransformationToolbar/iconStore';
+import FunctionToggle from 'components/WranglerGrid/FunctionNameToggle';
 import { nestedMenuOptions } from 'components/WranglerGrid/TransformationToolbar/utils';
+import ExpandButton from 'components/common/ExpandButton';
 import { NormalFont } from 'components/common/TypographyText';
 import {
   LastDividerBox,
   DividerBox,
   FunctionBoxWrapper,
   SearchBoxWrapper,
+  ExpandAndFunctionToggleContainer,
 } from 'components/common/BoxContainer';
 import { ToolBarIconWrapper, ToolBarInnerWrapper } from 'components/common/IconContainer';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import styled, { css } from 'styled-components';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
 
-const CustomizedSvgIcon = styled(SvgIcon)`
+const StyledSvgIcon = styled(SvgIcon)`
   font-size: 28px;
   ${(props) =>
     props.flipped &&
@@ -42,7 +45,7 @@ const CustomizedSvgIcon = styled(SvgIcon)`
     `}
 `;
 
-const IconCustommizedButton = styled(IconButton)`
+const StyledIconButton = styled(IconButton)`
   &.MuiButtonBase-root.Mui-disabled {
     opacity: 0.5;
   }
@@ -85,7 +88,7 @@ export default function({
                     .split(' ')
                     .join('-')}`}
                 >
-                  <IconCustommizedButton
+                  <StyledIconButton
                     disabled={disableToolbarIcon}
                     onClick={(clickEvent) => {
                       if (eachOption.options?.length) {
@@ -100,12 +103,12 @@ export default function({
                     data-testid="toolbar-icon-button"
                   >
                     {eachOption?.iconSVG ?? (
-                      <CustomizedSvgIcon
+                      <StyledSvgIcon
                         component={eachOption.icon}
                         flipped={eachOption.action === 'redo'}
                       />
                     )}
-                  </IconCustommizedButton>
+                  </StyledIconButton>
                 </CustomTooltip>
                 {eachOption.options?.length > 0 && (
                   <NestedMenu
@@ -141,6 +144,14 @@ export default function({
           {/* TODO Search functionality UI component will be added here */}
         </SearchBoxWrapper>
       </ToolBarInnerWrapper>
+      <ExpandAndFunctionToggleContainer>
+        <FunctionToggle setShowName={setShowName} showName={showName} />
+        <ExpandButton
+          open={showBreadCrumb}
+          onClick={() => setShowBreadCrumb(!showBreadCrumb)}
+          dataTestId="toolbar-header-toggler"
+        />
+      </ExpandAndFunctionToggleContainer>
     </ToolBarIconWrapper>
   );
 }

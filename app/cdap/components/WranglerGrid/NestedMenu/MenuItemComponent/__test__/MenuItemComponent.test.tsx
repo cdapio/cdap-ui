@@ -13,7 +13,6 @@
  *  License for the specific language governing permissions and limitations under
  *  the License.
  */
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import MenuComponent from 'components/WranglerGrid/NestedMenu/MenuItemComponent/index';

@@ -17,7 +17,6 @@
 import { MenuItem } from '@material-ui/core';
 import React from 'react';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
-import T from 'i18n-react';
 import { NormalFont, MenuHeadText } from 'components/common/TypographyText';
 import { ShortDivider } from 'components/common/Divider';
 import { SvgIconTypeMap } from '@material-ui/core';
