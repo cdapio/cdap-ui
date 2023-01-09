@@ -61,7 +61,7 @@ const StyledIconButton = styled(IconButton)`
 const Divider = styled.div`
   width: 1px;
   height: 28px;
-  background-color: #dadce0;
+  background-color: ${grey[300]};
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 0px;
@@ -80,7 +80,7 @@ const DrawerWidgetTitleLabel = styled(Typography)`
     font-size: 20px;
     line-height: 150%;
     letter-spacing: 0.15;
-    color: grey[900];
+    color: ${grey[900]};
   }
 `;
 
