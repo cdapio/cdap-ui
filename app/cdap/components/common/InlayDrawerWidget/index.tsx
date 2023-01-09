@@ -108,6 +108,7 @@ export const getTestIdString = (label: string) =>
  * @param position - the position of the panel, either left or right, based on how components are positioned in parent. by default position is right
  * @returns InlayDrawerWidget component
  */
+
 export default function InlayDrawerWidget({
   headingText,
   onClose,
