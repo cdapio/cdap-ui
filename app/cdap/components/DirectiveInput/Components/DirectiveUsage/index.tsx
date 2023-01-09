@@ -80,6 +80,7 @@ export default function({ directiveUsage }: IDirectiveUsageProps) {
             href={`${MORE_INFO_ON_DIRECTIVE_LINK[directiveUsage.item.directive]}`}
             target="_blank"
           >
+            g
             <StyledOutlinedIcon data-testid="info-icon" />
             {T.translate(`${PREFIX}.moreInfoOnDirective`)}
           </InfoLink>
