@@ -18,7 +18,7 @@
   Purpose: To generate absolute URLs to navigate between CDAP and Extensions (Hydrator & Tracker)
     as they are separate web apps with independent UI routing
   I/P: Context/Naviation object that has,
-    - uiApp - cdap, hydrator or tracker
+    - uiApp - cdap, hydrator
     - namespaceId, appId, entityType, entityId & runId to generate the complete URL if
       appropriate context is available.
 
@@ -29,7 +29,7 @@
 
   Note:
     This is attached to the window object as this needs to be used in both CDAP (react app) and
-    in hydrator & tracker (angular apps). For now it is attached to window as its a pure function
+    in hydrator (angular apps). For now it is attached to window as its a pure function
     without any side effects. Moving forward once we have everything in react we should use this
     as a proper utility function in es6 module system.
 */
@@ -158,14 +158,14 @@ window.getDataPrepUrl = function(navigationObj = {}) {
 window.getTrackerUrl = function(navigationObj = {}) {
   let { stateName, stateParams } = navigationObj;
   let uiApp = 'metadata';
-  let baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
+  let baseUrl = `${location.protocol}//${location.host}/cdap/ns/:namespace/${uiApp}`;
   let stateToUrlMap = {
     tracker: '',
     'tracker.detail': '',
     'tracker.detail.entity': '/entity/:entityType/:entityId',
     'tracker.detail.entity.metadata': '/entity/:entityType/:entityId/metadata',
-    'tracker.detail.entity.lineage': '/entity/:entityType/:entityId/lineage',
-    'tracker.detail.entity.summary': '/entity/:entityType/:entityId/summary',
+    'tracker.detail.entity.lineage': '/:entityType/:entityId/lineage',
+    'tracker.detail.entity.summary': '/:entityType/:entityId/summary',
   };
   let url = baseUrl + stateToUrlMap[stateName || 'tracker'];
   url = buildCustomUrl(url, stateParams);

@@ -19,8 +19,8 @@ angular.module(PKG.name + '.feature.tracker')
     const reactAppUrl = {
       home: `/cdap/ns/<namespace>/metadata`,
       search: `/cdap/ns/<namespace>/metadata/search/<query>/result`,
-      summary: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/summary/search/<query>`,
-      lineage: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/lineage/search/<query>`,
+      summary: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/summary`,
+      lineage: `/cdap/ns/<namespace>/metadata/<entityType>/<entityId>/lineage`,
     };
     const productName = window.CaskCommon.ThemeHelper.Theme.productName;
 
@@ -32,19 +32,6 @@ angular.module(PKG.name + '.feature.tracker')
     });
 
     $stateProvider
-      .state('home', {
-        url: '/',
-        template: '<ui-view/>',
-        resolve: {
-          sessionToken: function() {
-            window.CaskCommon.SessionTokenStore.fetchSessionToken();
-          },
-          rNsList: function (myNamespace) {
-            return myNamespace.getList();
-          }
-        },
-        controller: 'TrackerHomeController'
-      })
       .state('ns', {
         url: '/ns/:namespace',
         abstract: true,
@@ -77,56 +64,6 @@ angular.module(PKG.name + '.feature.tracker')
           },
         },
       })
-
-      .state('tracker.home', {
-        url: '',
-        data: {
-          authorizedRoles: MYAUTH_ROLE.all,
-          highlightTab: 'search'
-        },
-        templateUrl: '/assets/features/tracker/templates/main.html',
-        controller: 'TrackerMainController',
-        onEnter: function($stateParams) {
-          // Redirect to react page when the feature is turned on
-          if (window.CaskCommon.ThemeHelper.Theme.isMetadataInReact) {
-            window.location.href = reactAppUrl.home.replace('<namespace>', $stateParams.namespace);
-          } else {
-            document.title = `${productName} | Search`;
-          }
-        },
-        controllerAs: 'MainController'
-      })
-
-      .state('tracker.detail', {
-        url: '',
-        data: {
-          authorizedRoles: MYAUTH_ROLE.all,
-          highlightTab: 'search'
-        },
-        templateUrl: '/assets/features/tracker/templates/container.html',
-        controller: 'TrackerContainerController',
-        controllerAs: 'ContainerController'
-      })
-
-        .state('tracker.detail.result', {
-          url: '/search/:searchQuery/result',
-          templateUrl: '/assets/features/tracker/templates/results.html',
-          controller: 'TrackerResultsController',
-          controllerAs: 'ResultsController',
-          onEnter: function($stateParams) {
-          // Redirect to react page when the feature is turned on
-          if (window.CaskCommon.ThemeHelper.Theme.isMetadataInReact) {
-            const searchUrl = reactAppUrl.search.replace('<namespace>', $stateParams.namespace);
-            window.location.href = searchUrl.replace('<query>', $stateParams.searchQuery);
-          } else {
-            document.title = `${productName} | Search | Results`;
-          }
-          },
-          data: {
-            authorizedRoles: MYAUTH_ROLE.all,
-            highlightTab: 'search'
-          }
-        })
 
         .state('tracker.detail.entity', {
           url: '/entity/:entityType/:entityId?searchTerm',

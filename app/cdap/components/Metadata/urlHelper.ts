@@ -28,8 +28,8 @@ export function getMetadataPageUrl(pageName: string, params: { [key: string]: st
   const urls = {
     home: `/ns/:namespace/metadata`,
     search: `/ns/:namespace/metadata/search/:query/result`,
-    summary: `/ns/:namespace/metadata/:entityType/:entityId/summary/search/:query`,
-    lineage: `/ns/:namespace/metadata/:entityType/:entityId/lineage/search/:query`,
+    summary: `/ns/:namespace/metadata/:entityType/:entityId/summary`,
+    lineage: `/ns/:namespace/metadata/:entityType/:entityId/lineage`,
   };
   if (!urls[pageName]) {
     return null;

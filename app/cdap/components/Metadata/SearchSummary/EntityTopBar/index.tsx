@@ -37,7 +37,6 @@ const Container = styled.div`
 
 const EntityDetail = styled.div`
   padding: 0 30px 0 10px;
-  width: 200px;
   border-left: 1px solid var(--grey05);
 `;
 
@@ -81,7 +80,6 @@ const EntityTopBar: React.FC<IEntityTopBarProps> = ({
     if (defaultTab !== newValue) {
       setRedirectUrl(
         getMetadataPageUrl(newValue === 1 ? 'lineage' : 'summary', {
-          query,
           entityType,
           entityId,
         })
