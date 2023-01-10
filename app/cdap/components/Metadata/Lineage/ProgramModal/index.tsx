@@ -31,7 +31,8 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { duration } from 'moment';
 import { dateTimeFormat } from 'services/DataFormatter';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
-import { INodeDisplay } from 'components/Metadata/Lineage/helper';
+import { INodeDisplay, navigateToRun } from 'components/Metadata/Lineage/helper';
+import { ClickableRunId } from '../styles';
 
 const I18N_PREFIX = 'features.MetadataLineage.programRunInfo';
 
@@ -141,7 +142,11 @@ const ProgramModal: React.FC<IProgramModalProps> = ({ node, onClose }) => {
             >
               <Grid item>
                 <h5>{T.translate(`${I18N_PREFIX}.runId`)}</h5>
-                {node.runs[activeRunIndex]}
+                <ClickableRunId
+                  onClick={() => navigateToRun(node.applicationId, node.runs[activeRunIndex])}
+                >
+                  {node.runs[activeRunIndex]}
+                </ClickableRunId>
               </Grid>
               <RunsColumn item>
                 <h5>{T.translate(`${I18N_PREFIX}.runs`)}</h5>
