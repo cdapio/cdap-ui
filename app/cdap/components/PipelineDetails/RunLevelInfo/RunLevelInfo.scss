@@ -208,6 +208,7 @@ $border-color: $grey-05;
       text-align: left;
       padding: 10px 0;
       height: calc(100% - 45px);
+      max-height: 700px;
       overflow-y: auto;
       margin-bottom: 10px;
 
