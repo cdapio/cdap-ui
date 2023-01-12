@@ -17,7 +17,10 @@
 import * as React from 'react';
 
 import { List, Map } from 'immutable';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -59,7 +62,10 @@ interface IWidgetCollectionProps extends WithStyles<typeof styles> {
   groupID: string;
 }
 
-const WidgetCollectionView: React.FC<IWidgetCollectionProps> = ({ classes, groupID }) => {
+const WidgetCollectionView: React.FC<IWidgetCollectionProps> = ({
+  classes,
+  groupID,
+}) => {
   const {
     groupToWidgets,
     setGroupToWidgets,
@@ -121,38 +127,46 @@ const WidgetCollectionView: React.FC<IWidgetCollectionProps> = ({ classes, group
   return React.useMemo(
     () => (
       <div className={classes.widgetWrapper}>
-        <div className={classes.addWidgetLabel}>Widgets</div>
-        <div className={classes.widgetContainer}>
-          <If condition={activeWidgets.size === 0}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={addWidgetToGroup(0)}
-              data-cy="add-properties-btn"
-            >
-              Add Properties
-            </Button>
-          </If>
-          {activeWidgets.map((widgetID, widgetIndex) => {
-            return (
-              <div key={widgetID}>
-                <WidgetPanel
-                  widgetID={widgetID}
-                  widgetIndex={widgetIndex}
-                  openWidgetIndex={openWidgetIndex}
-                  setOpenWidgetIndex={setOpenWidgetIndex}
-                  addWidgetToGroup={addWidgetToGroup(widgetIndex)}
-                  deleteWidgetFromGroup={deleteWidgetFromGroup(widgetIndex)}
-                />
-                <If condition={activeWidgets && widgetIndex < activeWidgets.size - 1}>
-                  <div className={classes.widgetDivider}>
-                    <Divider />
+        <>
+          <div className={classes.addWidgetLabel}>Widgets</div>
+          <div className={classes.widgetContainer}>
+            <>
+              <If condition={activeWidgets.size === 0}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={addWidgetToGroup(0)}
+                  data-cy="add-properties-btn"
+                >
+                  Add Properties
+                </Button>
+              </If>
+              {activeWidgets.map((widgetID, widgetIndex) => {
+                return (
+                  <div key={widgetID}>
+                    <WidgetPanel
+                      widgetID={widgetID}
+                      widgetIndex={widgetIndex}
+                      openWidgetIndex={openWidgetIndex}
+                      setOpenWidgetIndex={setOpenWidgetIndex}
+                      addWidgetToGroup={addWidgetToGroup(widgetIndex)}
+                      deleteWidgetFromGroup={deleteWidgetFromGroup(widgetIndex)}
+                    />
+                    <If
+                      condition={
+                        activeWidgets && widgetIndex < activeWidgets.size - 1
+                      }
+                    >
+                      <div className={classes.widgetDivider}>
+                        <Divider />
+                      </div>
+                    </If>
                   </div>
-                </If>
-              </div>
-            );
-          })}
-        </div>
+                );
+              })}
+            </>
+          </div>
+        </>
       </div>
     ),
     [activeWidgets, widgetInfo, widgetToAttributes, openWidgetIndex]

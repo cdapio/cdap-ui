@@ -22,7 +22,7 @@ interface IToggleFeatureProps {
   experimentId: string;
 }
 
-const ToggleFeature: React.SFC<IToggleFeatureProps> = ({
+const ToggleFeature: React.FC<IToggleFeatureProps> = ({
   defaultComponent,
   experimentalComponent,
   experimentId,

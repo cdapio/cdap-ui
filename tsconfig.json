@@ -1,11 +1,18 @@
 {
   "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "sourceMap": true,
+    "target": "es2018",
     "outDir": "./cdap_dist",
     "allowJs": true,
     "strictPropertyInitialization": false,
     "checkJs": false,
     "module": "esnext",
-    "target": "es5",
     "noImplicitThis": false,
     "jsx": "react",
     "skipLibCheck": true,
@@ -14,7 +21,6 @@
     "noImplicitReturns": false,
     "moduleResolution": "node",
     "declaration": false,
-    "sourceMap": true,
     "importHelpers": false,
     "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
@@ -24,6 +30,7 @@
       "dom",
       "es2017"
     ],
+    "types": ["node", "jest"],
     "typeRoots": [
       "./typings",
       "./node_modules/@types"
@@ -62,8 +69,9 @@
   "exclude": [
     "node_modules",
     "server/**/*.js",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "src",
     "test"
-  ],
-  "extends": "./node_modules/gts/tsconfig-google.json",
+  ]
 }

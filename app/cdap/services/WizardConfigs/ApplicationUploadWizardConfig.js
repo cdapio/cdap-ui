@@ -28,7 +28,7 @@ let commonSteps = [
   },
 ];
 
-const ApplicationUploadWizardConfig = {
+export const ApplicationUploadWizardConfig = {
   steps: commonSteps,
 };
 

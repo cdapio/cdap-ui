@@ -75,7 +75,7 @@ const RESULT_LIMIT = 5;
 
 export const DatasetSelectedEvent = 'dataset.selected';
 
-const DatasetSelectorView: React.SFC<IDatasetSelectorProps> = ({
+const DatasetSelectorView: React.FC<IDatasetSelectorProps> = ({
   value,
   onChange,
   classes,

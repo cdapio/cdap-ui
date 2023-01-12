@@ -21,21 +21,44 @@ const path = require('path');
 const uuidV4 = require('uuid/v4');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 // the clean options to use
 const cleanOptions = {
   verbose: true,
   dry: false,
 };
+
+const loaderExclude = [
+  /node_modules/,
+  /bower_components/,
+  /packaged\/public\/dist/,
+  /packaged\/public\/cdap_dist/,
+  /packaged\/public\/common_dist/,
+  /packaged/,
+  /lib/,
+];
+
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
+  '/packaged/',
+  '/lib/',
+];
+
 const mode = process.env.NODE_ENV || 'production';
-const isModeProduction = mode =>
+const isModeProduction = (mode) =>
   mode === 'production' || mode === 'non-optimized-production';
 
-const getWebpackDllPlugins = mode => {
+const getWebpackDllPlugins = (mode) => {
   let sharedDllManifestFileName = 'shared-vendor-manifest.json';
   if (mode === 'development') {
     sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
@@ -58,6 +81,7 @@ const plugins = [
     caching: true,
     flattening: true,
   }),
+  PnpWebpackPlugin,
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   getWebpackDllPlugins(mode),
@@ -89,26 +113,23 @@ const plugins = [
     syntax: 'scss',
     files: ['**/*.scss'],
   }),
+  new ESLintPlugin({
+    extensions: ['js', 'jsx'],
+    exclude: loaderExcludeStrings,
+  }),
 ];
 
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
-
-const loaderExclude = [
-  /node_modules/,
-  /bower_components/,
-  /packaged\/public\/dist/,
-  /packaged\/public\/cdap_dist/,
-  /packaged\/public\/common_dist/,
-  /lib/,
-];
 
 const rules = [
   {
@@ -120,33 +141,23 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    enforce: 'pre',
     test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
+    use: ['babel-loader'],
     exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
-  },
-  {
-    test: /\.js$/,
-    use: 'babel-loader',
-    exclude: loaderExclude,
+    include: [path.join(__dirname, 'app')],
   },
   {
     test: /\.tsx?$/,
     use: [
-      'babel-loader',
       {
         loader: 'ts-loader',
         options: {
           transpileOnly: true,
-          experimentalWatchApi: true,
         },
       },
     ],
     exclude: loaderExclude,
+    include: [path.join(__dirname, 'app')],
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -166,6 +177,9 @@ const rules = [
   },
 ];
 let webpackConfig = {
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/login',
   entry: {

@@ -29,7 +29,7 @@ interface ITagProps {
   target?: '_blank';
 }
 
-const LicenseRow: React.SFC<ILicenseRowProps> = ({ licenseInfo }) => {
+const LicenseRow: React.FC<ILicenseRowProps> = ({ licenseInfo }) => {
   if (!licenseInfo) {
     return null;
   }

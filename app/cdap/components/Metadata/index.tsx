@@ -23,7 +23,7 @@ import SearchSummary from 'components/Metadata/SearchSummary';
 import Lineage from 'components/Metadata/Lineage';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 export const basepath = '/ns/:namespace/metadata';
 
@@ -34,7 +34,10 @@ const Metadata: React.FC = () => {
   const query = params.query || '';
   const entity = params.entity || '';
 
-  function checkFeatureFlag(componentToRender: JSX.Element, urlToRedirect: string) {
+  function checkFeatureFlag(
+    componentToRender: JSX.Element,
+    urlToRedirect: string
+  ) {
     if (!Theme.isMetadataInReact) {
       window.location.href = urlToRedirect;
     } else {
@@ -49,12 +52,17 @@ const Metadata: React.FC = () => {
         <Route
           exact
           path={basepath}
-          render={() => checkFeatureFlag(<MetadataHome />, `/metadata/ns/${namespace}`)}
+          render={() =>
+            checkFeatureFlag(<MetadataHome />, `/metadata/ns/${namespace}`)
+          }
         />
         <Route
           path={`${basepath}/search/:query/result`}
           render={() =>
-            checkFeatureFlag(<SearchResults />, `/metadata/ns/${namespace}/search/${query}/result`)
+            checkFeatureFlag(
+              <SearchResults />,
+              `/metadata/ns/${namespace}/search/${query}/result`
+            )
           }
         />
         <Route

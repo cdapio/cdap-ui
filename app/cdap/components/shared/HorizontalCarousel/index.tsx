@@ -15,7 +15,10 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -72,6 +75,7 @@ const styles = (): StyleRules => {
 
 interface IHorizontalCarouselProps extends WithStyles<typeof styles> {
   scrollAmount: number;
+  children?: React.ReactNode;
 }
 
 interface IHorizontalCarouselState {
@@ -92,11 +96,14 @@ class HorizontalCarouselView extends React.PureComponent<
   }
 
   private isScrollable = () => {
-    if (!this.carouselRef || !this.carouselRef.current) {
+    if (!this.carouselRef?.current) {
       return false;
     }
 
-    return this.carouselRef.current.scrollWidth > this.carouselRef.current.clientWidth;
+    return (
+      this.carouselRef.current.scrollWidth >
+      this.carouselRef.current.clientWidth
+    );
   };
 
   private leftDisabled = () => {
@@ -123,7 +130,10 @@ class HorizontalCarouselView extends React.PureComponent<
     const leftDisabled = this.leftDisabled();
     const rightDisabled = this.rightDisabled();
 
-    if (this.state.leftDisabled !== leftDisabled || this.state.rightDisabled !== rightDisabled) {
+    if (
+      this.state.leftDisabled !== leftDisabled ||
+      this.state.rightDisabled !== rightDisabled
+    ) {
       this.setState({
         leftDisabled,
         rightDisabled,
@@ -142,7 +152,10 @@ class HorizontalCarouselView extends React.PureComponent<
   });
 
   public componentDidMount() {
-    this.carouselRef.current?.addEventListener('scroll', this.throttledSetArrowDisabled);
+    this.carouselRef.current?.addEventListener(
+      'scroll',
+      this.throttledSetArrowDisabled
+    );
     window.addEventListener('resize', this.throttledSetArrowDisabled);
   }
 

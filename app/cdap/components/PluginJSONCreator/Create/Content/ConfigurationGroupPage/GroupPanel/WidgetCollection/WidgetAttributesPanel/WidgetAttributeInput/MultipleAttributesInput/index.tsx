@@ -143,7 +143,9 @@ const MultipleAttributesInputView = ({
   localWidgetToAttributes,
   setLocalWidgetToAttributes,
 }) => {
-  const cleanSupportedTypes = Array.from(processSupportedTypes(supportedTypes).values());
+  const cleanSupportedTypes = Array.from(
+    processSupportedTypes(supportedTypes).values()
+  );
   const [selectedType, setSelectedType] = React.useState(null);
 
   // On initial load, set 'selectedType' based on the existing widgetToAttributes values.
@@ -159,15 +161,13 @@ const MultipleAttributesInputView = ({
    * and decide what should be 'selectedType' for the component.
    */
   function getInitialType() {
-    if (
-      !localWidgetToAttributes ||
-      !localWidgetToAttributes.get(widgetID) ||
-      !multiSupportedTypes
-    ) {
+    if (!localWidgetToAttributes?.get(widgetID) || !multiSupportedTypes) {
       return cleanSupportedTypes[0];
     }
 
-    const existingAttributeValues = localWidgetToAttributes.get(widgetID).get(field);
+    const existingAttributeValues = localWidgetToAttributes
+      .get(widgetID)
+      .get(field);
     let newType;
     if (!existingAttributeValues || existingAttributeValues.isEmpty()) {
       newType = cleanSupportedTypes[0];
@@ -184,7 +184,9 @@ const MultipleAttributesInputView = ({
   const switchSelectedType = (e) => {
     setSelectedType(e.target.value);
     // When user switches the 'selectedType', attribute values should reset to an empty array.
-    setLocalWidgetToAttributes(localWidgetToAttributes.setIn([widgetID, field], List([])));
+    setLocalWidgetToAttributes(
+      localWidgetToAttributes.setIn([widgetID, field], List([]))
+    );
   };
 
   const multiSupportedTypes = cleanSupportedTypes.length > 1;
@@ -205,7 +207,7 @@ const MultipleAttributesInputView = ({
           >
             {cleanSupportedTypes.map((type, index) => (
               <MenuItem key={index} value={type as string}>
-                {type}
+                {type as React.ReactNode}
               </MenuItem>
             ))}
           </Select>
@@ -228,7 +230,10 @@ const MultipleAttributesInputView = ({
         />
       </If>
       <If
-        condition={selectedType === SupportedType.String || selectedType === SupportedType.Number}
+        condition={
+          selectedType === SupportedType.String ||
+          selectedType === SupportedType.Number
+        }
       >
         <AttributeRowsInput
           widgetID={widgetID}

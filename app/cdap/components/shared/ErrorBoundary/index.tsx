@@ -14,8 +14,7 @@
  * the License.
  */
 
-import React, { Component, ReactChild } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import Page404 from 'components/404';
 import Page500 from 'components/500';
 
@@ -28,14 +27,22 @@ interface IError {
 interface IErrorInfo {
   entityName: string;
   entityType: string;
-  children: ReactChild;
+  children: React.ReactNode;
   message: string;
   componentStack: any;
 }
-export default class ErrorBoundary extends Component {
-  public static propTypes = {
-    children: PropTypes.node,
-  };
+
+interface IErrorInfoState {
+  error: boolean;
+  message: string;
+  info: IErrorInfo;
+  statusCode: Number;
+}
+
+export default class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  IErrorInfoState
+> {
   public state = {
     error: false,
     message: '',
@@ -47,7 +54,7 @@ export default class ErrorBoundary extends Component {
     let err: { message: string; statusCode: number };
     let message: string;
     let statusCode: number;
-    let stackTrace: any;
+
     if (error instanceof Error) {
       message = error.message;
       statusCode = DEFAULT_STATUS_CODE;
@@ -62,7 +69,7 @@ export default class ErrorBoundary extends Component {
       }
     }
 
-    stackTrace = info.componentStack;
+    const stackTrace = info.componentStack;
     this.setState({
       error: true,
       message,
@@ -75,7 +82,13 @@ export default class ErrorBoundary extends Component {
       return this.props.children;
     }
     if (this.state.statusCode === 500) {
-      return <Page500 message={this.state.message} stack={this.state.info} refreshFn={null} />;
+      return (
+        <Page500
+          message={this.state.message}
+          stack={this.state.info}
+          refreshFn={null}
+        />
+      );
     }
     if (this.state.statusCode === 404) {
       return (
@@ -83,7 +96,6 @@ export default class ErrorBoundary extends Component {
           message={this.state.message}
           entityType={this.state.info.entityType}
           entityName={this.state.info.entityName}
-          children={null}
         />
       );
     }

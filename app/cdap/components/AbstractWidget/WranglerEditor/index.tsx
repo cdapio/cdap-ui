@@ -16,6 +16,7 @@
 import * as React from 'react';
 
 import { Modal, ModalBody } from 'reactstrap';
+//@ts-ignore
 import { WithStyles, withStyles } from '@material-ui/styles';
 import { objectQuery, preventPropagation } from 'services/helpers';
 
@@ -66,7 +67,9 @@ interface IWranglerEditorWidgetAttributes {
 
 interface IWranglerEditorProps
   extends IWidgetProps<IWranglerEditorWidgetAttributes>,
-    WithStyles<typeof styles> {}
+    WithStyles<typeof styles> {
+  classes: any;
+}
 
 /**
  * Code editor doesn't play well with prop updates. The wrangler modal
@@ -83,7 +86,10 @@ interface IWranglerEditorState {
   reloadCodeEditor: boolean;
 }
 
-class WranglerEditor extends React.PureComponent<IWranglerEditorProps, IWranglerEditorState> {
+class WranglerEditor extends React.PureComponent<
+  IWranglerEditorProps,
+  IWranglerEditorState
+> {
   public state = {
     showDataprepModal: false,
     reloadCodeEditor: false,
@@ -113,7 +119,11 @@ class WranglerEditor extends React.PureComponent<IWranglerEditorProps, IWrangler
     preventPropagation(e);
   };
 
-  public updateDirectivesAndCloseModal = ({ workspaceId, directives, schema }) => {
+  public updateDirectivesAndCloseModal = ({
+    workspaceId,
+    directives,
+    schema,
+  }) => {
     if (!workspaceId || !directives) {
       this.closeDataprepModal();
       return;
@@ -180,7 +190,10 @@ class WranglerEditor extends React.PureComponent<IWranglerEditorProps, IWrangler
           >
             <div className="modal-header">
               <h5 className="modal-title">Wrangle</h5>
-              <button className={classes.modalBtnClose} onClick={this.closeDataprepModal}>
+              <button
+                className={classes.modalBtnClose}
+                onClick={this.closeDataprepModal}
+              >
                 <IconSVG name="icon-close" />
               </button>
             </div>

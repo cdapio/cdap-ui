@@ -30,7 +30,7 @@ interface ITabIconProps {
   iconObj?: IIcon;
 }
 
-const TabIcon: React.SFC<ITabIconProps> = ({ iconObj }) => {
+const TabIcon: React.FC<ITabIconProps> = ({ iconObj }) => {
   if (!iconObj) {
     return null;
   }

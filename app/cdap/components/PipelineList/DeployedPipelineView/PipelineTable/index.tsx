@@ -35,7 +35,7 @@ interface IProps {
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineTableView: React.SFC<IProps> = ({ pipelines, search, onClear, refetch }) => {
+const PipelineTableView: React.FC<IProps> = ({ pipelines, search, onClear, refetch }) => {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );

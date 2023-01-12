@@ -26,34 +26,19 @@ import { ErrorNode } from 'components/DAG/Nodes/ErrorNode';
 import { ConditionNode } from 'components/DAG/Nodes/ConditionNode';
 import { SplitterNode } from 'components/DAG/Nodes/SplitterNode';
 import { DAGRenderer } from 'components/DAG/DAGRenderer';
-import {
-  defaultJsPlumbSettings,
-  defaultConnectionStyle,
-  selectedConnectionStyle,
-  dashedConnectionStyle,
-  solidConnectionStyle,
-  conditionTrueConnectionStyle,
-  conditionFalseConnectionStyle,
-} from 'components/DAG/JSPlumbSettings';
+import { defaultJsPlumbSettings } from 'components/DAG/JSPlumbSettings';
 // todo update this package and fix type CDAP-20180
 // not sure why this one complained because we have the immutable type
 // @ts-ignore
 import { fromJS } from 'immutable';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 import ReactPanZoom from '@ajainarayanan/react-pan-zoom';
 import IconSVG from 'components/shared/IconSVG';
 
-const registerTypes = {
-  connections: {
-    basic: defaultConnectionStyle,
-    conditionFalse: conditionFalseConnectionStyle,
-    conditionTrue: conditionTrueConnectionStyle,
-    dashed: dashedConnectionStyle,
-    selected: selectedConnectionStyle,
-    solid: solidConnectionStyle,
-  },
-  endpoints: {},
-};
+const RPZ: any = ReactPanZoom;
 
 const styles = (): StyleRules => {
   return {
@@ -163,7 +148,13 @@ class DAG extends React.PureComponent<IDAGProps> {
     condition: ConditionNode,
     splittertransform: SplitterNode,
   };
-  public getButton = (type, label, className, addNode, showAlertAndError = false) => (
+  public getButton = (
+    type,
+    label,
+    className,
+    addNode,
+    showAlertAndError = false
+  ) => (
     <Button
       className={className}
       variant="contained"
@@ -280,7 +271,7 @@ class DAG extends React.PureComponent<IDAGProps> {
                       {this.renderNodeBtns(classes, context)}
                       {this.renderContainerActions(classes)}
                       <div className={classes.panContainer}>
-                        <ReactPanZoom
+                        <RPZ
                           zoom={this.state.zoom}
                           pandx={this.state.dx}
                           pandy={this.state.dy}
@@ -294,13 +285,17 @@ class DAG extends React.PureComponent<IDAGProps> {
                             removeNode={context.removeNode}
                             jsPlumbSettings={defaultJsPlumbSettings}
                           >
-                            {context.nodes.map((node, i) => {
-                              const nodeObj = node.toJS();
-                              const Component = this.nodeTypeToComponentMap[nodeObj.type];
-                              return <Component {...nodeObj} key={i} />;
-                            })}
+                            {
+                              context.nodes.map((node, i) => {
+                                const nodeObj = node.toJS();
+                                const Component = this.nodeTypeToComponentMap[
+                                  nodeObj.type
+                                ];
+                                return <Component {...nodeObj} key={i} />;
+                              }) as any
+                            }
                           </DAGRenderer>
-                        </ReactPanZoom>
+                        </RPZ>
                       </div>
                     </div>
                   );

@@ -49,7 +49,7 @@ export default class OperationsTable extends Component {
   }
 
   joinEndpoints(endpoints) {
-    if (!endpoints || !endpoints.endPoint) {
+    if (!endpoints?.endPoint) {
       return '--';
     }
 

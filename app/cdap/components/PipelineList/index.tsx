@@ -30,7 +30,7 @@ import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineList: React.SFC = () => {
+const PipelineList: React.FC = () => {
   const namespace = getCurrentNamespace();
   const basepath = `/ns/${namespace}/pipelines`;
 

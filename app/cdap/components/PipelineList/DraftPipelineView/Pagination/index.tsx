@@ -32,7 +32,7 @@ const PaginationContainer = styled.div`
   margin-right: 50px;
 `;
 
-const PaginationView: React.SFC<IPaginationProps> = ({
+const PaginationView: React.FC<IPaginationProps> = ({
   setPage,
   currentPage,
   numPipelines,

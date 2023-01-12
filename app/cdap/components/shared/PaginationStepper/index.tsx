@@ -27,7 +27,7 @@ interface IPaginationStepperProps {
   nextDisabled: boolean;
 }
 
-const PaginationStepper: React.SFC<IPaginationStepperProps> = ({
+const PaginationStepper: React.FC<IPaginationStepperProps> = ({
   onPrev,
   onNext,
   prevDisabled,

@@ -48,9 +48,9 @@ const loaderExclude = [
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
-  '/packaged\/public\/dist/',
-  '/packaged\/public\/cdap_dist/',
-  '/packaged\/public\/common_dist/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
   '/packaged/',
   '/lib/',
 ];
@@ -141,17 +141,24 @@ const plugins = [
     mode: isModeProduction(mode) ? '' : 'development.',
   }),
 ];
+
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
 
 const rules = [
+  {
+    test: /\.json$/,
+    loader: 'json-loader',
+  },
   {
     test: /\.s?css$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
@@ -161,10 +168,23 @@ const rules = [
     use: 'yml-loader',
   },
   {
+    test: /\.m?js/,
+    type: 'javascript/auto',
+  },
+  {
+    test: /\.m?jsx?$/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
     test: /\.js$/,
     use: ['babel-loader'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],
+    resolve: {
+      fullySpecified: false,
+    },
   },
   {
     test: /\.tsx?$/,
@@ -192,8 +212,8 @@ const rules = [
     ],
   },
   {
-    test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: 'url-loader',
+    test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    use: [{ loader: 'file-loader' }],
   },
   {
     test: /\.svg/,
@@ -222,8 +242,7 @@ if (mode === 'development') {
       port: 35799,
       appendScriptTag: true,
       delay: 500,
-      ignore: loaderExclude
-        // '/node_modules/|/bower_components/|/packaged/public/dist/|/packaged/public/cdap_dist/|/packaged/public/common_dist/|/lib/',
+      ignore: loaderExclude,
     })
   );
 }
@@ -232,7 +251,7 @@ const webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/cdap',
   entry: {
-    cdap: ['@babel/polyfill', './cdap.js'],
+    cdap: ['@babel/polyfill', 'react-hot-loader/patch', './cdap.js'],
   },
   module: {
     rules,
@@ -255,10 +274,13 @@ const webpackConfig = {
   plugins: plugins,
   // TODO: Need to investigate this more.
   optimization: {
-    splitChunks: false,
+    splitChunks: {
+      chunks: 'all',
+    },
+    chunkIds: 'named',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
+    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.scss', '.json'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

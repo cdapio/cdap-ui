@@ -43,9 +43,9 @@ const loaderExclude = [
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
-  '/packaged\/public\/dist/',
-  '/packaged\/public\/cdap_dist/',
-  '/packaged\/public\/common_dist/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
   '/lib/',
 ];
 
@@ -75,14 +75,14 @@ const plugins = [
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
-
-
 
 const rules = [
   {

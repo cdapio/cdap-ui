@@ -47,7 +47,7 @@ const POPPER_MODIFIERS = {
   },
 };
 
-const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
+const ActionsPopover: React.FC<IActionsPopoverProps> = ({
   actions,
   targetElem,
   showPopover,

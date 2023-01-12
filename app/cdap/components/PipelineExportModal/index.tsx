@@ -29,7 +29,7 @@ interface IProps {
   onExport: (config: any) => void;
 }
 
-const PipelineExportModal: React.SFC<IProps> = ({ isOpen, onClose, pipelineConfig, onExport }) => {
+const PipelineExportModal: React.FC<IProps> = ({ isOpen, onClose, pipelineConfig, onExport }) => {
   return (
     <Modal
       isOpen={isOpen}

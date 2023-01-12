@@ -37,7 +37,7 @@ interface IProps extends WithStyles<typeof styles> {
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineCountView: React.SFC<IProps> = ({
+const PipelineCountView: React.FC<IProps> = ({
   pipelines = [],
   pipelinesLoading,
   classes,

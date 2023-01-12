@@ -24,7 +24,7 @@ interface IProps {
   pipeline: IPipeline;
 }
 
-const PipelineTags: React.SFC<IProps> = ({ pipeline }) => {
+const PipelineTags: React.FC<IProps> = ({ pipeline }) => {
   return (
     <div className="tags">
       <Tags

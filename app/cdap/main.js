@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader';
 import 'react-hot-loader/patch';
 import './globals';
 
@@ -75,7 +75,7 @@ import history from 'services/history';
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
 
 require('../ui-utils/url-generator');
-require('font-awesome-sass-loader!./styles/font-awesome.config.js');
+// require('font-awesome-sass-loader!./styles/font-awesome.config.js');
 require('./styles/lib-styles.scss');
 require('./styles/common.scss');
 require('./styles/main.scss');

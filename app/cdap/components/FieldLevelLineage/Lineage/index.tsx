@@ -21,7 +21,7 @@ import OutgoingLineage from 'components/FieldLevelLineage/LineageSummary/Outgoin
 import OperationsModal from 'components/FieldLevelLineage/OperationsModal';
 import './Lineage.scss';
 
-const Lineage: React.SFC = () => {
+const Lineage: React.FC = () => {
   return (
     <div className="field-level-lineage-container">
       <div className="row">

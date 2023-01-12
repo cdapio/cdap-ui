@@ -137,10 +137,12 @@ const plugins = [
     fix: true,
   }),
   new ForkTsCheckerWebpackPlugin({
-    tsconfig: __dirname + '/tsconfig.json',
-    // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-    memoryLimit: 8192,
-  }),
+    async: true,
+    typescript: {
+      configFile: __dirname + '/tsconfig.json',
+      memoryLimit: 8192
+    }
+ })
 ];
 
 const rules = [

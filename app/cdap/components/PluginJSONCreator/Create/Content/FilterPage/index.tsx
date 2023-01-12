@@ -116,36 +116,44 @@ const FilterPage = () => {
   return React.useMemo(
     () => (
       <div>
-        <Heading type={HeadingTypes.h3} label="Filters" />
-        <br />
-        <If condition={filters.size === 0}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addFilter(0)}
-            data-cy="add-filter-btn"
-          >
-            Add Filters
-          </Button>
-        </If>
+        <>
+          <Heading type={HeadingTypes.h3} label="Filters" />
+          <br />
+          <If condition={filters.size === 0}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addFilter(0)}
+              data-cy="add-filter-btn"
+            >
+              Add Filters
+            </Button>
+          </If>
 
-        {filters.map((filterID: string, filterIndex: number) => {
-          return (
-            <FilterPanel
-              filterIndex={filterIndex}
-              key={filterID}
-              filterID={filterID}
-              addFilter={addFilter(filterIndex)}
-              deleteFilter={deleteFilter(filterIndex)}
-              filterExpanded={activeFilterIndex === filterIndex}
-              switchEditFilter={switchEditFilter(filterIndex)}
-            />
-          );
-        })}
-        <StepButtons nextDisabled={false} />
+          {filters.map((filterID: string, filterIndex: number) => {
+            return (
+              <FilterPanel
+                filterIndex={filterIndex}
+                key={filterID}
+                filterID={filterID}
+                addFilter={addFilter(filterIndex)}
+                deleteFilter={deleteFilter(filterIndex)}
+                filterExpanded={activeFilterIndex === filterIndex}
+                switchEditFilter={switchEditFilter(filterIndex)}
+              />
+            );
+          })}
+          <StepButtons nextDisabled={false} />
+        </>
       </div>
     ),
-    [filters, filterToName, filterToCondition, filterToShowlist, activeFilterIndex]
+    [
+      filters,
+      filterToName,
+      filterToCondition,
+      filterToShowlist,
+      activeFilterIndex,
+    ]
   );
 };
 

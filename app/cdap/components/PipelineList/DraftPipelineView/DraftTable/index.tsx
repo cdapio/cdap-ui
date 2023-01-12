@@ -33,7 +33,7 @@ require('./DraftTable.scss');
 
 const PREFIX = 'features.PipelineList';
 
-const DraftTableView: React.SFC<IProps> = ({ drafts, currentPage, pageLimit }) => {
+const DraftTableView: React.FC<IProps> = ({ drafts, currentPage, pageLimit }) => {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );

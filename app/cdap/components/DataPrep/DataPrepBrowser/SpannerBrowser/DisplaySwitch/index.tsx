@@ -27,7 +27,7 @@ interface ISpannerDisplaySwitchProps {
   onWorkspaceCreate: () => void;
 }
 
-const SpannerDisplaySwitchView: React.SFC<ISpannerDisplaySwitchProps> = (props) => {
+const SpannerDisplaySwitchView: React.FC<ISpannerDisplaySwitchProps> = (props) => {
   const { instanceId, databaseId, onWorkspaceCreate, scope } = props;
 
   if (databaseId) {

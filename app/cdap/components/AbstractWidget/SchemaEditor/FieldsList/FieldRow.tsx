@@ -33,7 +33,10 @@ import { SchemaValidatorConsumer } from 'components/AbstractWidget/SchemaEditor/
 import If from 'components/shared/If';
 import ErrorIcon from '@material-ui/icons/ErrorOutline';
 import classnames from 'classnames';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -102,7 +105,9 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
   }
 
   public onChange = (property: string, value) => {
-    if (['name', 'type', 'nullable', 'typeProperties'].indexOf(property) === -1) {
+    if (
+      ['name', 'type', 'nullable', 'typeProperties'].indexOf(property) === -1
+    ) {
       return;
     }
     const { onChange, field } = this.props;
@@ -240,7 +245,10 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
     return (
       <SchemaValidatorConsumer>
         {({ errorMap = {} }) => {
-          const hasError = errorMap.hasOwnProperty(this.props.field.id);
+          const hasError = Object.hasOwnProperty.call(
+            errorMap,
+            this.props.field.id
+          );
           return (
             <FieldWrapper
               ancestors={ancestors}
@@ -254,13 +262,19 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
                 <If condition={hasError}>
                   <Tooltip
                     classes={{ tooltip: classes.tooltip }}
-                    title={errorMap[this.props.field.id]}
+                    title={errorMap[this.props.field.id] as any}
                     placement="right"
                   >
-                    <ErrorIcon data-cy="error-icon" className={classes.errorIcon} />
+                    <ErrorIcon
+                      data-cy="error-icon"
+                      className={classes.errorIcon}
+                    />
                   </Tooltip>
                 </If>
-                <If condition={typeof this.state.collapsed === 'boolean'} invisible>
+                <If
+                  condition={typeof this.state.collapsed === 'boolean'}
+                  invisible
+                >
                   <If condition={this.state.collapsed}>
                     <KeyboardArrowRightIcon
                       onClick={this.onToggleCollapse}

@@ -17,10 +17,12 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CreateConnectionModal from 'components/Connections/CreateConnectionModal';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
 import clsx from 'clsx';
 
-const useStyle = makeStyles<Theme>((theme) => {
+const useStyle = makeStyles(() => {
   return {
     root: {
       backgroundColor: 'white',

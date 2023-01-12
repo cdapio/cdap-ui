@@ -22,7 +22,7 @@ import './TopPanel.scss';
 
 const PREFIX = 'features.FieldLevelLineage.TopPanel';
 
-const TopPanel: React.SFC = () => {
+const TopPanel: React.FC = () => {
   return (
     <div className="top-panel row">
       <div className="col-4">

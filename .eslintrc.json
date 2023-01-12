@@ -50,9 +50,8 @@
     "import"
   ],
   "extends": [
-    "eslint:recommended",
     "plugin:react/recommended",
-    "./node_modules/gts/"
+    "./__dev__/gts/eslintrc.json"
   ],
   "settings": {
     "react": {
@@ -61,9 +60,19 @@
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx", ".js", ".jsx"]
     },
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "mjs": "never",
+        "jsx": "never",
+        "scss": "never"
+      }
+    ],
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".mjs", ".scss", ".css"]
       },
       "typescript": {
         "alwaysTryTypes": true
