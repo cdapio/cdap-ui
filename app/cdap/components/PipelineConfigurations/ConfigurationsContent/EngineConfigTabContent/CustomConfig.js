@@ -34,16 +34,13 @@ import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatur
 
 const PREFIX = 'features.PipelineConfigurations.EngineConfig';
 
-const getCustomConfigValue = (state) => {
+const getCustomConfigValue = (customConfigKeyValuePairs, runtimeArgs) => {
   // we want to try getting the custom config from runtimeargs
   // only when the state of custom config store is {key: '', value: ''}
-  if (
-    state.customConfigKeyValuePairs.pairs.length > 1 ||
-    state.customConfigKeyValuePairs.pairs[0].key != ''
-  ) {
-    return state.customConfigKeyValuePairs;
+  if (customConfigKeyValuePairs.pairs.length > 1 || customConfigKeyValuePairs.pairs[0].key != '') {
+    return customConfigKeyValuePairs;
   }
-  const customSparkConfigKeyValuePairs = state.runtimeArgs.pairs.filter((pair) =>
+  const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
     pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
   );
   const customSparkConfigPairs = cloneDeep(customSparkConfigKeyValuePairs);
@@ -56,21 +53,12 @@ const getCustomConfigValue = (state) => {
     value: '',
   });
   const keyValues = { pairs: customSparkConfigPairs };
-  const customConfigObj = convertKeyValuePairsObjToMap(keyValues);
-  PipelineConfigurationsStore.dispatch({
-    type: PipelineConfigurationsActions.SET_CUSTON_CONFIG_AND_KEY_VALUE_PAIRS,
-    payload: {
-      keyValues,
-      customConfig: customConfigObj,
-      pipelineType: state.pipelineVisualConfiguration.pipelineType,
-    },
-  });
   return keyValues;
 };
 
 const mapStateToCustomConfigKeyValuesProps = (state) => {
   return {
-    keyValues: getCustomConfigValue(state),
+    keyValues: getCustomConfigValue(state.customConfigKeyValuePairs, state.runtimeArgs),
   };
 };
 
@@ -141,10 +129,12 @@ const CustomConfig = ({
   engine,
   customConfigKeyValuePairs,
 }) => {
+  const { runtimeArgs } = PipelineConfigurationsStore.getState();
   let engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
-  let numberOfCustomConfigFilled = customConfigKeyValuePairs.pairs.filter(
-    (pair) => !isEmpty(pair.key) && !isEmpty(pair.value)
-  ).length;
+  let numberOfCustomConfigFilled = getCustomConfigValue(
+    customConfigKeyValuePairs,
+    runtimeArgs
+  ).pairs.filter((pair) => !isEmpty(pair.key) && !isEmpty(pair.value)).length;
 
   const StudioViewCustomConfigLabel = () => {
     return (
