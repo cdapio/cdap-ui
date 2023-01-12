@@ -13,21 +13,28 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-FROM node:12.20.1
+FROM node:16
 # It would be easier to use cypress/base:12.19.0
 # However, this uses a Debian that doesn't support OpenJDK 8
 # So build our own Cypress + OpenJDK 8 builder
 # TODO When CDAP moves to Java 11, update this
 
+RUN apt-get update && \
+   apt install -y software-properties-common
+
+# Add OpenJDK registry
+RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
+RUN add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
+
 # Install OpenJDK-8
 RUN apt-get update && \
-   apt-get install -y openjdk-8-jdk && \
+   apt-get install -y adoptopenjdk-8-hotspot && \
    apt-get install -y ant && \
    apt-get clean;
 
 # Fix certificate issues
 RUN apt-get update && \
-   apt-get install ca-certificates-java && \
+   apt-get install -y ca-certificates-java && \
    apt-get clean && \
    update-ca-certificates -f;
 
