@@ -55,7 +55,7 @@ Feature: Wrangler BigQuery Connection Tests
 
   @Breadcrumb
   Scenario Outline: Go through the Breadcrumb functionality
-    Given Navigate to the home page to test breadcrumb
+    Given Navigate to the Wrangle home page
     Then  Click on the Connector type with "<connectionLabel>" and "<connectionTestId>"
     Then Click on the Home link button
     Then Click on the Exploration card with "<testId>"

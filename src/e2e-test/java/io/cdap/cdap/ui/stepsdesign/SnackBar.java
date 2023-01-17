@@ -16,58 +16,17 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SnackBar {
-  @Given("Navigate to Home Page")
-  public void navigateToHomePage() {
-    try {
-      SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-      WaitHelper.waitForPageToLoad();
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
-  }
-
-  @Then("Click on the data exploration card")
-  public void clickOnTheDataExplorationCard() {
-    try {
-      WaitHelper.waitForPageToLoad();
-      List<String> productName = new ArrayList<String>();
-      List<WebElement> allProductsName = SeleniumDriver.getDriver().findElements(
-          By.xpath(".//*[@data-testid='wrangler-home-ongoing-data-exploration-card']"));
-      ElementHelper.clickOnElement(allProductsName.get(0));
-      String url = SeleniumDriver.getDriver().getCurrentUrl();
-      Assert.assertTrue(url.contains("http://localhost:11011/cdap/ns/default/wrangler-grid"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
-  }
-
   @Then("Click on the Snackbar close icon")
   public void verifyTheSnackbarPopUpIsComingOrNot() {
-    try {
-      WaitHelper.waitForPageToLoad();
-      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("snackbar-alert"));
-      Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
-      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("snackbar-close-icon"));
-      WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("snackbar-close-icon"));
-      WebElement ele = SeleniumDriver.getDriver().findElement(By.xpath("//*[@data-testid = 'snackbar-close-icon']"));
-      ElementHelper.clickOnElement(ele);
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("snackbar-alert"));
+    Assert.assertTrue(ElementHelper.isElementDisplayed(Helper.locateElementByTestId("snackbar-alert")));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("snackbar-close-icon"));
   }
 }

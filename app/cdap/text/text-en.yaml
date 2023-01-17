@@ -3437,29 +3437,59 @@ features:
     AddConnections:
       referenceLabel: Add Connection
     Breadcrumb:
+      ariaLabels:
+        breadcrumb: breadcrumb
       labels:
         connectionsList: Data Sources
+        createPipeline: Create a Pipeline
         loadToGrid: Wrangle
         wrangleHome: Home
-        createPipeline: Create a Pipeline
       params:
         connectionsList: datasources
         wrangleHome: home
-      ariaLabels:
-        breadcrumb: breadcrumb
     common:
       and: and
     ConnectionsList:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    FooterPanel:
+      labels:
+        columns: columns
+        columnViewPanel: Column View Panel
+        currentData: Current data
+        directives: Directives
+        message: Current data - {rowCount} rows and {columnCount} columns
+        recipeSteps: Recipe Steps
+        rows: rows
+        zoomPercent100: 100%
     GridPage:
-      menuItems:
-        divider: divider
-        heading: heading
       gridHeader:
         ariaLabels:
           functionsName: Functions Name Switch
+      menuItems:
+        divider: divider
+        heading: heading
+      selectColumnListPanel:
+        applyStep: Apply Step
+        columnsSelected: column selected
+        columnType: Column Type
+        columns: Columns
+        dataQuality: Data Quality
+        done: Done
+        nullValues: Null Values
+        selectColumnHeading: Select Column to Apply This Function
+        selectMultiColumnsHeading: Select Column(s) to Apply This Function
+        selectColumn: Select column
+        selectMultiColumns: Select columns
+        selectedColumnsCount:
+          0: "No columns selected"
+          1: "{context} column selected"
+          _: "{context} columns selected" 
+        noColumns: No columns to show
+        noMatchColumnDatatype: Selected directive supported datatype does not match with the column's datatype
+        noMatchInSearchMode: No columns match the specified search term
+        zero: '0'
       toolbarIcons:
         labels:
           all: all
@@ -3479,30 +3509,20 @@ features:
         options:
           labels:
             datatype:
-              string: string
               boolean: boolean
+              bytes: bytes
+              double: double
+              decimal: decimal
+              float: float
               integer: integer
               long: long
               short: short
-              float: float
-              double: double
-              decimal: decimal
-              bytes: bytes
+              string: string
             menu:
               changeDatatype: Change data type
     GridTable:
       snackbarLabels:
         datasetSuccess: Dataset loaded successfully 
-    FooterPanel:
-      labels:
-        columns: columns
-        message: Current data - {rowCount} rows and {columnCount} columns
-        columnViewPanel: Column View Panel
-        currentData: Current data
-        directives: Directives
-        recipeSteps: Recipe Steps
-        rows: rows
-        zoomPercent100: 100%
     HomePage:
       labels:
         common:
@@ -3511,21 +3531,16 @@ features:
           viewAll: View All
         connectorTypes:
           title: Start data exploration
-        workspaces:
-          title: Continue ongoing data explorations, pick up where you left off
         recipes:
           title: Saved recipes
+        workspaces:
+          title: Continue ongoing data explorations, pick up where you left off
     ImportData:
       referenceLabel: Import Data
     NoRecordScreen:
       gridTable:
         subtitle: Remove some recipe steps to view some data
         title: No rows left in this sample
-    Snackbar:
-      labels:
-        failure: Failure
-        success: Success
-        undo: Undo
     Recipe:
         applyRecipe: Apply        
         applyRecipeHeading: Apply steps from a Recipe
@@ -3549,7 +3564,10 @@ features:
         steps: Steps
         updated: Last updated
         view: View
-        viewAll: View All        
-
-    
+        viewAll: View All      
+    Snackbar:
+      labels:
+        failure: Failure
+        success: Success
+        undo: Undo
 ...

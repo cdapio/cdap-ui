@@ -20,14 +20,14 @@ export interface IParams {
 }
 
 export interface IRecords {
-  [key: string]: string | boolean | Record<string, IType>;
+  [key: string]: string | boolean | Record<string, Record<string, string | number>>;
 }
 export interface IPercentOfDataTypeValues {
   [key: string]: number;
 }
 
 interface ISummary {
-  statistics: IRecords;
+  statistics: Record<string, IGeneralStatistics>;
   validations: IRecords;
 }
 
@@ -45,6 +45,12 @@ export interface IHeaderNamesList {
   type: string[];
 }
 
-export interface IType {
-  [key: string]: string | number;
+export interface IGeneralStatistics {
+  general?: Record<string, string | number>;
+  types?: Record<string, string | number>;
+}
+
+export interface IAddTransformationItem {
+  option: string;
+  supportedDataType: string[];
 }

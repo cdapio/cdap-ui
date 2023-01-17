@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 import MenuComponent from 'components/WranglerGrid/NestedMenu/MenuComponent';
 import MenuItemComponent, { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
 import { findIndex } from 'lodash';
-import { NestedMenuComponent } from 'components/common/MenuContainer';
+import { NestedMenuComponent } from 'components/WranglerV2/MenuContainer';
 
 import { Dispatch, SetStateAction } from 'react';
 export interface INestedMenuProps {

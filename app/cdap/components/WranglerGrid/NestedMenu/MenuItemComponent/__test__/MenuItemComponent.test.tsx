@@ -19,6 +19,8 @@ import MenuComponent from 'components/WranglerGrid/NestedMenu/MenuItemComponent/
 import T from 'i18n-react';
 
 describe('Testing Menu Item Component', () => {
+  const mockOnMenuFunction = jest.fn();
+
   it('Should render default component', () => {
     const dummyItem = {
       label: 'test',
@@ -27,14 +29,19 @@ describe('Testing Menu Item Component', () => {
       options: [],
     };
     render(
-      <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={'test'} />
+      <MenuComponent
+        item={dummyItem}
+        index={0}
+        onMenuClick={mockOnMenuFunction}
+        columnType={'test'}
+      />
     );
-    const parentElement = screen.getByTestId(/menu-item-parent/i);
+    const parentElement = screen.getByTestId(/menu-item-string/i);
     fireEvent.click(parentElement);
-    expect(parentElement).toBeInTheDocument();
     expect(parentElement).toHaveClass(
       'MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button'
     );
+    expect(mockOnMenuFunction).toBeCalled();
   });
 
   it('Should render default component in columntype null case', () => {
@@ -45,11 +52,11 @@ describe('Testing Menu Item Component', () => {
       options: [],
     };
     render(
-      <MenuComponent item={dummyItem} index={0} onMenuClick={() => jest.fn()} columnType={''} />
+      <MenuComponent item={dummyItem} index={0} onMenuClick={mockOnMenuFunction} columnType={''} />
     );
-    const parentElement = screen.getByTestId(/menu-item-parent/i);
+    const parentElement = screen.getByTestId(/menu-item-string/i);
     fireEvent.click(parentElement);
-    expect(parentElement).toBeInTheDocument();
+    expect(mockOnMenuFunction).toBeCalled();
   });
   it('Should render the item list divider element', () => {
     const dummyItem = {

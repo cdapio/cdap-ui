@@ -22,13 +22,13 @@ import { mockItems, mockItemsWithPercentage, mockItemsPercentageData } from '../
 describe('Test Ongoing Data Explrations Component', () => {
   it('Should render OngoingDataExplorationCard component', () => {
     render(<OngoingDataExplorationCard item={mockItems} />);
-    const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card/i);
-    expect(ele).toBeInTheDocument();
+    const cardComponent = screen.getAllByTestId(/wrangler-home-ongoing-data-exploration-card/i);
+    expect(cardComponent[0]).toBeInTheDocument();
   });
 
   it('Should render OngoingDataExplorationCard percentage non nan code', () => {
     render(<OngoingDataExplorationCard item={mockItemsWithPercentage} />);
-    const ele = screen.getByTestId(/ongoing-data-exploration-card-percentage-nan/i);
+    const ele = screen.getByTestId(/wrangler-home-ongoing-data-exploration-card-iconWithText-0/i);
     expect(ele).toBeInTheDocument();
   });
 

@@ -16,40 +16,28 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 
 public class ConnectorTypes {
-  @Given("Navigate to the Home Page")
-  public void navigateToTheHomePage() {
-    SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
-    WaitHelper.waitForPageToLoad();
-  }
-
-  @Then("Click on the \\\"(.*)\\\" connection with test id \\\"(.*)\\\"")
+  @Then("Click on the {string} connection with test id {string}")
   public void clickOnConnections(String connectionLabel, String connectionTestId) {
-    try {
-      ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-      WaitHelper.waitForPageToLoad();
-      if (connectionLabel.equals("Add Connections")) {
-        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
-      } else if (connectionLabel.equals("Import Data")) {
-        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
-      } else {
-        String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-        Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/datasources/"
-                + connectionLabel);
-      }
-    } catch (Exception e) {
-      System.err.println("error: " + e);
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+    WaitHelper.waitForPageToLoad();
+    if (connectionLabel.equals("Add Connections")) {
+      String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
+    } else if (connectionLabel.equals("Import Data")) {
+      String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/home");
+    } else {
+      String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/datasources/"
+              + connectionLabel);
     }
   }
 }

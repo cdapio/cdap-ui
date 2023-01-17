@@ -24,6 +24,8 @@ const dummyData = [{ label: 'test', supportedDataType: ['test'], value: 'test', 
 describe('Testing render FunctionNameToggle component', () => {
   const PREFIX = 'features.WranglerNewUI.GridPage';
 
+  const mockSubmitFunction = jest.fn();
+
   it('Should render component with all the parent elements and child elements', () => {
     render(
       <MenuComponent
@@ -32,7 +34,7 @@ describe('Testing render FunctionNameToggle component', () => {
         setAnchorElement={() => {
           jest.fn();
         }}
-        submitOption={() => jest.fn()}
+        submitOption={mockSubmitFunction}
         columnType={''}
         setMenuComponentOptions={() => jest.fn()}
       />
@@ -41,8 +43,8 @@ describe('Testing render FunctionNameToggle component', () => {
     const menuComponentParent = screen.getByTestId(/menu-component-parent/i);
     expect(menuComponentParent).toBeInTheDocument();
 
-    const test = screen.getByTestId(/menu-item-parent/i);
+    const test = screen.getByTestId(/menu-item-test/i);
     fireEvent.click(test);
-    expect(test).toBeInTheDocument();
+    expect(mockSubmitFunction).toBeCalled();
   });
 });

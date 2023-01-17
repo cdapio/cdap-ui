@@ -19,6 +19,6 @@ Feature: Snackbar
 
   @Snackbar
   Scenario: Check the Snackbar in the Wrangle Page
-    Given Navigate to Home Page
-    Then Click on the data exploration card
+    Given Navigate to the Wrangle home page
+    Then Click on the Data Explorations card
     Then Click on the Snackbar close icon

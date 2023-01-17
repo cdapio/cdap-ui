@@ -21,14 +21,10 @@ import NoRecordScreen from '..';
 describe('It Should test NoRecordScreen Component', () => {
   it('to render and check if the title sent from props', () => {
     render(<NoRecordScreen title={'testing'} subtitle={'subTitle'} />);
-    expect(screen.getByTestId('box-title')).toHaveTextContent('testing');
+    expect(screen.getByTestId('no-record-screen-title')).toHaveTextContent('testing');
   });
   it('to render and check if the subtitle sent from props', () => {
     render(<NoRecordScreen title={'testing'} subtitle={'subTitle'} />);
-    expect(screen.getByTestId('box-sub-title')).toHaveTextContent('subTitle');
-  });
-  it('to render and check if the svg is rendered', () => {
-    const dom = render(<NoRecordScreen title={'testing'} subtitle={'subTitle'} />);
-    expect(dom.container.querySelector('#filter0_d_1939_20466')).toBeInTheDocument();
+    expect(screen.getByTestId('no-record-screen-sub-title')).toHaveTextContent('subTitle');
   });
 });

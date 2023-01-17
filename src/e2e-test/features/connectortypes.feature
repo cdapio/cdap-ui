@@ -19,12 +19,11 @@ Feature: Navigating through the connector types
   @ConnectorTypes
   Scenario Outline: Navigate to all the connector types
 
-    Given Navigate to the Home Page
+    Given Navigate to the Wrangle home page
     Then Click on the "<connectionLabel>" connection with test id "<connectionTestId>"
 
   Examples:
     | connectionLabel | connectionTestId |
-    | PostgreSQL | postgresql |
-    | File | file |
+    | BigQuery        | bigquery         |
     | Import Data | import-data |
    
