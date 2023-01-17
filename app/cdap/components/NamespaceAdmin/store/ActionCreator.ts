@@ -192,3 +192,18 @@ export function reset() {
     type: NamespaceAdminActions.reset,
   });
 }
+
+// I tried not to add this function
+// and use namespaces from NamespaceStore.getState()
+// but async will cause reload sometimes not getting the data before rendering
+export const getNamespacesList = () => {
+  MyNamespaceApi.list().subscribe((res: any[]) => {
+    const namespaces = res.map((namespace) => namespace.name);
+    Store.dispatch({
+      type: NamespaceAdminActions.setNamespaceList,
+      payload: {
+        namespaces,
+      },
+    });
+  });
+};

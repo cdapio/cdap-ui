@@ -15,30 +15,83 @@
  */
 
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
+import { INamespaceAdmin } from './store';
+import styled from 'styled-components';
+import T from 'i18n-react';
+import { FormControl, MenuItem, Select } from '@material-ui/core';
 
-const useStyle = makeStyles((theme) => {
-  return {
-    root: {
-      marginTop: '15px',
-      marginBottom: '15px',
-    },
-  };
-});
+const PREFIX = 'features.NamespaceAdmin.description';
+
+const StyledDescription = styled.div`
+  margin-top: 10px;
+  margin-bottom: 15px;
+`;
+
+const StyledNamespaceDropdown = styled.div`
+  margin-top: 15px;
+  display: flex;
+
+  span {
+    font-size: 18px;
+    font-weight: 700;
+    width: 250px;
+  }
+`;
+
+const StyledSelect = styled(Select)`
+  min-width: 150px;
+  font-size: 16px;
+`;
 
 interface IDescriptionProps {
+  namespace: string;
+  namespaces: string[];
   description: string;
 }
 
-const DescriptionView: React.FC<IDescriptionProps> = ({ description }) => {
-  const classes = useStyle();
+const DescriptionView: React.FC<IDescriptionProps> = ({ namespace, namespaces, description }) => {
+  const onNamespaceChange = (event) => {
+    window.location.href = `/cdap/ns/${event.target.value}/details`;
+  };
 
-  return <div className={classes.root}>{description}</div>;
+  return (
+    <>
+      <StyledNamespaceDropdown>
+        <span>{T.translate(`${PREFIX}.title`, { name: namespace })}</span>
+        <span>
+          <FormControl variant="standard">
+            <StyledSelect
+              value={namespace}
+              onChange={onNamespaceChange}
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                },
+                transformOrigin: {
+                  vertical: 'top',
+                  horizontal: 'left',
+                },
+                getContentAnchorEl: null,
+              }}
+            >
+              {namespaces.map((ns) => (
+                <MenuItem value={ns}>{ns}</MenuItem>
+              ))}
+            </StyledSelect>
+          </FormControl>
+        </span>
+      </StyledNamespaceDropdown>
+      <StyledDescription>{description}</StyledDescription>
+    </>
+  );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: INamespaceAdmin) => {
   return {
+    namespace: state.namespace,
+    namespaces: state.namespaces,
     description: state.description,
   };
 };
