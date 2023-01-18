@@ -53,8 +53,12 @@ const StyledSelect = styled(Select)`
 `;
 
 export const NamespaceAdminToppanel = () => {
-  const namespace = useSelector((state) => state.namespace);
-  const namespaces = useSelector((state) => state.namespaces);
+  const { namespace, namespaces } = useSelector((state) => {
+    return {
+      namespace: state.namespace,
+      namespaces: state.namespaces,
+    };
+  });
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const toggleWizard = () => {
     setIsWizardOpen(!isWizardOpen);
