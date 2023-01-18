@@ -20,20 +20,15 @@ import styled from 'styled-components';
 import CreateIcon from '@material-ui/icons/Create';
 import AbstractWizard from 'components/AbstractWizard';
 import T from 'i18n-react';
+import { FormControl, MenuItem, Select } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 const PREFIX = 'features.NamespaceAdmin.toppanel';
 
 const StyledToppanel = styled.div`
   display: flex;
-  border-bottom: 1px solid #e4e4e4;
-  div {
-    margin-left: 16.19px;
-    margin-top: 12.5px;
-    margin-bottom: 11.5px;
-    width: 148px;
-    font-size: 18px;
-    border-right: 1px solid #e4e4e4;
-  }
+  height: 50px;
+  background: #eeeeee;
   span {
     padding-top: 2px;
     padding-left: 2px;
@@ -44,18 +39,58 @@ const StyledToppanel = styled.div`
   }
 `;
 
+const StyledTitle = styled.div`
+  margin-left: 16.19px;
+  padding-top: 12px;
+  width: 200px;
+  font-size: 18px;
+  border-right: 1px solid #e4e4e4;
+`;
+
+const StyledSelect = styled(Select)`
+  min-width: 150px;
+  font-size: 16px;
+`;
+
 export const NamespaceAdminToppanel = () => {
+  const namespace = useSelector((state) => state.namespace);
+  const namespaces = useSelector((state) => state.namespaces);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const toggleWizard = () => {
     setIsWizardOpen(!isWizardOpen);
   };
 
+  const onNamespaceChange = (event) => {
+    window.location.href = `/cdap/ns/${event.target.value}/details`;
+  };
+
   return (
     <>
       <StyledToppanel>
-        <div>{T.translate(`${PREFIX}.datafusion`)}</div>
-        <div>{T.translate(`${PREFIX}.namespaces`)}</div>
-
+        <StyledTitle>{T.translate(`${PREFIX}.title`, { name: namespace })}</StyledTitle>
+        <StyledTitle>
+          <FormControl variant="standard">
+            <StyledSelect
+              value={namespace}
+              onChange={onNamespaceChange}
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                },
+                transformOrigin: {
+                  vertical: 'top',
+                  horizontal: 'left',
+                },
+                getContentAnchorEl: null,
+              }}
+            >
+              {namespaces.map((ns) => (
+                <MenuItem value={ns}>{ns}</MenuItem>
+              ))}
+            </StyledSelect>
+          </FormControl>
+        </StyledTitle>
         <PrimaryTextButton
           children={
             <>

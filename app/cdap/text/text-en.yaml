@@ -2027,8 +2027,6 @@ features:
   MarketEntityModal:
     version: "Version :"
   NamespaceAdmin:
-    description:
-      title: Namespace '{name}'
     metrics:
       connections: connections
       datasets: datasets
@@ -2037,8 +2035,7 @@ features:
       preferences: preferences
       profiles: profiles
     toppanel:
-      datafusion: Data Fusion
-      namespaces: Namespaces
+      title: Namespace '{name}'
       addNamespaceButton: Add new namespace
   NamespaceDetails:
     computeProfiles:
