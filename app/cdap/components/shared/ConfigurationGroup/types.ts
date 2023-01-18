@@ -19,6 +19,7 @@ export interface IWidgetProperty {
   label?: string;
   'widget-type'?: string;
   'widget-attributes'?: any;
+  description?: string;
 }
 
 export interface IConfigurationGroup {
@@ -87,6 +88,9 @@ export interface IPluginProperty {
   required?: boolean;
   macroSupported?: boolean;
   description?: string;
+  label?: string;
+  'widget-type'?: string;
+  'widget-attributes'?: any;
 }
 
 export type PluginProperties = Record<string, IPluginProperty>;

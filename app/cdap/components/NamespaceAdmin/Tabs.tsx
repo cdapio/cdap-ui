@@ -22,6 +22,7 @@ import ComputeProfiles from 'components/NamespaceAdmin/ComputeProfiles';
 import Preferences from 'components/NamespaceAdmin/Preferences';
 import Drivers from 'components/NamespaceAdmin/Drivers';
 import Connections from 'components/NamespaceAdmin/Connections';
+import { SourceControlManagement } from './SourceControlManagement';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -96,6 +97,15 @@ const Tabs: React.FC = () => {
         >
           Drivers
         </NavLink>
+        <span className={classes.separator}>|</span>
+        <NavLink
+          exact
+          to={`${baseNSPath}/scm`}
+          className={classes.link}
+          activeClassName={classes.activeLink}
+        >
+          Source Control Management
+        </NavLink>
       </div>
       <div className={classes.content}>
         <Switch>
@@ -103,6 +113,7 @@ const Tabs: React.FC = () => {
           <Route exact path={`${basepath}/preferences`} component={Preferences} />
           <Route exact path={`${basepath}/connections`} component={Connections} />
           <Route exact path={`${basepath}/drivers`} component={Drivers} />
+          <Route exact path={`${basepath}/scm`} component={SourceControlManagement} />
         </Switch>
       </div>
     </div>

@@ -14,6 +14,7 @@
  * the License.
  */
 
+import { ISourceControlManagementConfig } from 'components/NamespaceAdmin/SourceControlManagement/types';
 import { createStore, Reducer } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 
@@ -25,6 +26,7 @@ export const NamespaceAdminActions = {
   setPreferences: 'SET_PREFERENCES',
   setDrivers: 'SET_DRIVERS',
   setConnections: 'SET_CONNECTIONS',
+  setSourceControlManagementConfig: 'SET_SOURCE_CONTROL_MANAGEMENT_CONFIG',
   reset: 'NAMESPACE_ADMIN_RESET',
 };
 
@@ -83,6 +85,7 @@ interface INamespaceAdmin {
   preferences: IPreference[];
   drivers: IDriver[];
   connections: IConnection[];
+  sourceControlManagementConfig: ISourceControlManagementConfig;
 }
 
 type INamespaceAdminState = Partial<INamespaceAdmin>;
@@ -99,6 +102,7 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   preferences: [],
   drivers: [],
   connections: [],
+  sourceControlManagementConfig: null,
 };
 
 const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
@@ -137,6 +141,11 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
       return {
         ...state,
         connections: action.payload.connections,
+      };
+    case NamespaceAdminActions.setSourceControlManagementConfig:
+      return {
+        ...state,
+        sourceControlManagementConfig: action.payload.sourceControlManagementConfig,
       };
     case NamespaceAdminActions.reset:
       return {
