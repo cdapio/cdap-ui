@@ -14,23 +14,23 @@
  *  the License.
  */
 
-import { Box, IconButton, SvgIcon } from '@material-ui/core';
+import { IconButton, SvgIcon } from '@material-ui/core';
 import { default as React, useState } from 'react';
 import NestedMenu from 'components/WranglerGrid/NestedMenu';
 import { ITransformationToolBarProps } from 'components/WranglerGrid/TransformationToolbar/types';
 import { Divider, LongDivider } from 'components/WranglerGrid/TransformationToolbar/iconStore';
-import FunctionToggle from 'components/WranglerGrid/FunctionNameToggle';
 import { nestedMenuOptions } from 'components/WranglerGrid/TransformationToolbar/utils';
-import ExpandButton from 'components/common/ExpandButton';
-import { NormalFont } from 'components/common/TypographyText';
+import FunctionToggle from 'components/WranglerGrid/FunctionNameToggle';
+import ExpandButton from 'components/WranglerV2/ExpandButton';
+import { NormalFont } from 'components/WranglerV2/Label';
 import {
   LastDividerBox,
   DividerBox,
   FunctionBoxWrapper,
   SearchBoxWrapper,
   ExpandAndFunctionToggleContainer,
-} from 'components/common/BoxContainer';
-import { ToolBarIconWrapper, ToolBarInnerWrapper } from 'components/common/IconContainer';
+} from 'components/WranglerV2/BoxContainer';
+import { ToolBarIconWrapper, ToolBarInnerWrapper } from 'components/WranglerV2/IconContainer';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import styled, { css } from 'styled-components';
 import { IMenuItem } from 'components/WranglerGrid/NestedMenu/MenuItemComponent';
@@ -133,7 +133,7 @@ export default function({
                   </NormalFont>
                 )}
               </FunctionBoxWrapper>
-              {(optionIndex === 3 || optionIndex === 1 || optionIndex === 8) && (
+              {(optionIndex === 3 || optionIndex === 1) && (
                 <DividerBox> {showName ? LongDivider : Divider}</DividerBox>
               )}
             </>

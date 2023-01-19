@@ -14,26 +14,29 @@
  * the License.
  */
 
-import React from 'react';
+import { Box, Typography } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import { NoDataSVG } from 'components/GridTable/iconStore';
-import { useStyles } from './styles';
-import { Box } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import { INoDataScreenProps } from './types';
+import { useStyles } from 'components/NoRecordScreen/styles';
+import { INoDataScreenProps } from 'components/NoRecordScreen/types';
+import { NormalFont, SubHeadBoldFont } from 'components/WranglerV2/Label';
+import React from 'react';
+import styled from 'styled-components';
+
+export const Container = styled(Box)`
+  text-align: center;
+`;
 
 export default function({ title, subtitle }: INoDataScreenProps) {
   const classes = useStyles();
   return (
-    <Box className={classes.noRecordWrapper}>
-      <Box className={classes.innerWrapper}>
-        {NoDataSVG}
-        <Typography data-testid="box-title" className={classes.mainHeaderMessage}>
-          {title}
-        </Typography>
-        <Typography data-testid="box-sub-title" className={classes.subHeaderMessage}>
-          {subtitle}
-        </Typography>
-      </Box>
-    </Box>
+    <Container>
+      <SubHeadBoldFont component="p" data-testid="no-record-screen-title">
+        {title}
+      </SubHeadBoldFont>
+      <NormalFont component="p" data-testid="no-record-screen-sub-title">
+        {subtitle}
+      </NormalFont>
+    </Container>
   );
 }

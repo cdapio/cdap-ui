@@ -98,11 +98,4 @@ export const nestedMenuOptions: IMenuItem[] = [
     toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.moreHorizIcon`).toString(),
     open: false,
   },
-  {
-    title: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
-    toolName: T.translate(`${TOOLBAR_ICONS_LABEL_PREFIX}.gridIcon`).toString(),
-    icon: GridOnOutlinedIcon,
-    options: [],
-    open: false,
-  },
 ];

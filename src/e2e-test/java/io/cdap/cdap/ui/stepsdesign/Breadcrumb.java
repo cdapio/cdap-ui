@@ -27,73 +27,44 @@ import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 public class Breadcrumb {
-  @Given("Navigate to the home page to test breadcrumb")
+  @Given("Navigate to the Wrangle home page")
   public void navigateToTheHomePageBreadcrumb() throws Exception {
     SeleniumDriver.openPage(Constants.WRANGLE_HOME_URL);
     WaitHelper.waitForPageToLoad();
   }
 
-  @Then("Click on the Connector type with \\\"(.*)\\\" and \\\"(.*)\\\"")
+  @Then("Click on the Connector type with {string} and {string}")
   public void clickOnTheConnectorType(String connectionLabel, String connectionTestId) {
-    try {
-      WaitHelper.waitForElementToBeEnabled(
-      Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
+    WaitHelper.waitForPageToLoad();
+    if (connectionLabel.equals("Add Connections")) {
       ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-      WaitHelper.waitForPageToLoad();
-        if (connectionLabel.equals("Add Connections")) {
-          ElementHelper.clickOnElement(Helper.locateElementByTestId("wrangle-card-" + connectionTestId));
-          WaitHelper.waitForPageToLoad();
-          String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-          Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
-        } else {
-          WaitHelper.waitForPageToLoad();
-          String actualText = SeleniumDriver.getDriver().getCurrentUrl();
-          Assert.assertEquals(actualText,
-                "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
-        }
-    } catch (Exception e) {
-      System.err.println("error:" + e);
+      String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertEquals(actualText, "http://localhost:11011/cdap/ns/default/connections/create");
+    } else {
+      String actualText = SeleniumDriver.getDriver().getCurrentUrl();
+      Assert.assertEquals(actualText,
+              "http://localhost:11011/cdap/ns/default/datasources/" + connectionLabel);
     }
   }
 
   @Then("Click on the Home link button")
   public void clickOnTheHomeLinkButton() {
-    try {
-      WaitHelper.waitForPageToLoad();
-      Helper.waitSeconds(30);
-      WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("breadcrumb-home-home"));
-      WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("breadcrumb-home-home"));
       ElementHelper.clickOnElement(Helper.locateElementByTestId("breadcrumb-home-home"));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
 
-  @Then("Click on the Exploration card with \\\"(.*)\\\"")
-  public void clickOnTheExplorationCard(int testId) {
-    try {
+  @Then("Click on the Exploration card with {string}")
+  public void clickOnTheExplorationCard(String testId) {
       WaitHelper.waitForPageToLoad();
-      Helper.waitSeconds(30);
       ElementHelper.clickOnElement(Helper.locateElementByTestId
             ("wrangler-home-ongoing-data-exploration-card-" + testId));
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
   }
 
   @Then("Click on the Home link of wrangle page")
   public void clickOnTheHomeLink() {
-  try {
+    WaitHelper.waitForPageToLoad();
     SeleniumDriver.getDriver().manage().window().maximize();
-    Helper.waitSeconds(50);
-    String url = SeleniumDriver.getDriver().getCurrentUrl();
-    Assert.assertTrue(url.contains("cdap/ns/default/wrangler-grid"));
-    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("breadcrumb-home-home"));
-    WaitHelper.waitForElementToBeClickable(Helper.locateElementByTestId("breadcrumb-home-home"));
-    WebElement ele = Helper.locateElementByTestId("breadcrumb-home-home");
-    ElementHelper.clickOnElement(ele);
-    } catch (Exception e) {
-      System.err.println("error:" + e);
-    }
+    Assert.assertTrue(Helper.urlHasString("cdap/ns/default/wrangler-grid"));
+    ElementHelper.clickOnElementUsingJsExecutor(Helper.locateElementByTestId("breadcrumb-home-home"));
   }
 }

@@ -23,7 +23,7 @@ import { applyRecipe } from 'components/RecipeManagement/helper';
 import { directiveRequestBodyCreator } from 'components/DataPrep/helper';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import Snackbar from 'components/Snackbar';
-import DrawerWidget from 'components/common/DrawerWidget';
+import DrawerWidget from 'components/WranglerV2/DrawerWidget';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import styled from 'styled-components';
 import { format, TYPES } from 'services/DataFormatter';

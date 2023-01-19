@@ -17,8 +17,8 @@
 import { MenuItem } from '@material-ui/core';
 import React from 'react';
 import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
-import { NormalFont, MenuHeadText } from 'components/common/TypographyText';
-import { ShortDivider } from 'components/common/Divider';
+import { NormalFont, MenuHeadText } from 'components/WranglerV2/Label';
+import { ShortDivider } from 'components/WranglerV2/Divider';
 import { SvgIconTypeMap } from '@material-ui/core';
 import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import { DATATYPE_OPTIONS } from 'components/WranglerGrid/NestedMenu/menuOptions/datatypeOptions';
@@ -84,7 +84,7 @@ export default function({ item, index, onMenuClick, columnType }: IMenuItemCompo
         disabled={menuItemDisableProp as boolean}
         title={item.label}
         onClick={(onClickEvent) => onMenuClick(onClickEvent, item)}
-        data-testid="menu-item-parent"
+        data-testid={`menu-item-${item.value}`}
       >
         <NormalFont component="div">{item.label}</NormalFont>
         {item?.options?.length > 0 && <StyledChevronRightRoundedIcon />}

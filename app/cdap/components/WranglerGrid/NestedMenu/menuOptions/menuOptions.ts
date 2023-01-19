@@ -26,6 +26,6 @@ export const MENU_OPTIONS: IMenuItem[] = [
     value: 'changeDatatype',
     label: T.translate(`${PREFIX}.menu.changeDatatype`).toString(),
     options: DATATYPE_OPTIONS,
-    supportedDataType: [TOOLBAR_ICONS_LABEL_ALL_PREFIX],
+    supportedDataType: ['all'],
   },
 ];

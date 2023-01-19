@@ -36,50 +36,49 @@ const dummyData2 = [
 ];
 
 describe('Testing nested menu component', () => {
+  const mockAnchorFunction = jest.fn();
+  const mockToggleFunction = jest.fn();
+  const mockMenuFunction = jest.fn();
+
   it('should test default render of nested menu', () => {
     render(
       <NestedMenu
-        submitMenuOption={() => {
-          jest.fn();
-        }}
+        submitMenuOption={mockMenuFunction}
         columnType={'test'}
         menuOptions={dummyData1}
         title={'hello'}
         anchorElement={[]}
-        setAnchorElement={() => jest.fn()}
+        setAnchorElement={mockAnchorFunction}
         open={true}
-        menuToggleHandler={() => jest.fn()}
+        menuToggleHandler={mockToggleFunction}
       />
     );
 
-    const parentElement = screen.getByTestId(/menu-item-parent/i);
+    const parentElement = screen.getByTestId(/menu-item-test/i);
     fireEvent.click(parentElement);
     fireEvent.click(screen.getByTestId(/nested-menu-parent-root/i));
-    expect(screen.getByTestId(/nested-menu-parent-root/i)).toBeInTheDocument();
-    expect(parentElement).toBeInTheDocument();
     expect(parentElement).toHaveClass(
       'MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button'
     );
+    expect(mockAnchorFunction).toBeCalled();
   });
 
   it('should test default render of nested menu with options as empty', () => {
     render(
       <NestedMenu
-        submitMenuOption={() => {
-          jest.fn();
-        }}
+        submitMenuOption={mockMenuFunction}
         columnType={'test'}
         menuOptions={dummyData2}
         title={'hello'}
         anchorElement={[]}
-        setAnchorElement={() => jest.fn()}
+        setAnchorElement={mockAnchorFunction}
         open={false}
-        menuToggleHandler={() => jest.fn()}
+        menuToggleHandler={mockToggleFunction}
       />
     );
 
-    const parentElement = screen.getByTestId(/menu-item-parent/i);
+    const parentElement = screen.getByTestId(/menu-item-test/i);
     fireEvent.click(parentElement);
-    expect(parentElement).toBeInTheDocument();
+    expect(mockMenuFunction).toBeCalled();
   });
 });

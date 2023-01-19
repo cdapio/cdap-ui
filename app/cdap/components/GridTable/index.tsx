@@ -31,33 +31,38 @@ import {
   IHeaderNamesList,
   IParams,
   IRecords,
+  IAddTransformationItem,
+  IGeneralStatistics,
 } from 'components/GridTable/types';
+import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
+import SelectColumnPanel from 'components/WranglerGrid/SelectColumnPanel';
 import NoRecordScreen from 'components/NoRecordScreen';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { IValues } from 'components/WrangleHome/Components/OngoingDataExploration/types';
-import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
 import T from 'i18n-react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { flatMap } from 'rxjs/operators';
 import { objectQuery } from 'services/helpers';
-
 import styled from 'styled-components';
-
 import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
+import { FlexWrapper } from 'components/WranglerGrid/SelectColumnPanel/styles';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
 `;
 
 const GridTableWrapper = styled(Box)`
+  height: calc(100% - 115px);
+  max-height: 76vh;
   max-width: 100%;
   overflow-x: auto;
-  max-height: 76vh;
+  width: 100%;
 `;
+const transformationOptions = ['undo', 'redo'];
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -68,7 +73,6 @@ export default function GridTable() {
     columnCount: 0,
     rowCount: 0,
   });
-
   const [workspaceName, setWorkspaceName] = useState('');
   const [loading, setLoading] = useState(false);
   const [headersNamesList, setHeadersNamesList] = useState<IHeaderNamesList[]>([]);
@@ -83,13 +87,19 @@ export default function GridTable() {
       count: '0',
     },
   ]);
+  const [addTransformationFunction, setAddTransformationFunction] = useState<
+    IAddTransformationItem
+  >({
+    option: '',
+    supportedDataType: [],
+  });
+  const [dataQuality, setDataQuality] = useState<Record<string, IGeneralStatistics>>();
   const [snackbarState, setSnackbar] = useSnackbar();
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
-
     setLoading(true);
     DataPrepStore.dispatch({
       type: DataPrepActions.setWorkspaceId,
@@ -223,7 +233,7 @@ export default function GridTable() {
   };
 
   // ------------@createMissingData Function is used for preparing data for second row of Table which shows Missing/Null Value
-  const createMissingData = (statistics: IRecords) => {
+  const createMissingData = (statistics: Record<string, IGeneralStatistics>) => {
     const statisticObjectToArray = Object.entries(statistics);
     const metricArray = [];
     statisticObjectToArray.forEach(([key, value]) => {
@@ -259,6 +269,7 @@ export default function GridTable() {
     if (rawData && rawData.summary && rawData.summary.statistics) {
       const missingData = createMissingData(gridData?.summary.statistics);
       setMissingDataList(missingData);
+      setDataQuality(gridData?.summary?.statistics);
     }
     const rowData =
       rawData &&
@@ -276,15 +287,22 @@ export default function GridTable() {
     setRowsDataList(rowData);
   };
 
-  useEffect(() => {
-    getGridTableData();
-    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
-  }, [gridData]);
-
   const handleColumnSelect = (columnName) => {
     setSelectedColumn((prevColumn) => (prevColumn === columnName ? '' : columnName));
     setColumnType(gridData?.types[columnName]);
   };
+
+  const onMenuOptionSelection = (option: string, supportedDataType: string[]) => {
+    setAddTransformationFunction({
+      option,
+      supportedDataType,
+    });
+  };
+
+  useEffect(() => {
+    getGridTableData();
+    setShowGridTable(Array.isArray(gridData?.headers) && gridData?.headers.length !== 0);
+  }, [gridData]);
 
   useEffect(() => {
     if (snackbarState.open) {
@@ -305,23 +323,19 @@ export default function GridTable() {
         setShowBreadCrumb={setShowBreadCrumb}
         showBreadCrumb={showBreadCrumb}
         columnType={columnType}
-        submitMenuOption={(option, datatype) => {
-          setSnackbar(() => ({
-            open: true,
-            isSuccess: true,
-            message: 'Function Selected',
-          }));
-          return false;
-          // TODO: will integrate with add transformation panel later
-        }}
-        disableToolbarIcon={gridData?.headers?.length > 0 ? false : true}
+        submitMenuOption={(option, datatype) =>
+          !transformationOptions.includes(option) ? onMenuOptionSelection(option, datatype) : null
+        }
+        disableToolbarIcon={!Boolean(gridData?.headers?.length)}
       />
       <GridTableWrapper data-testid="grid-table-container">
         {!showGridTable && (
-          <NoRecordScreen
-            title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
-            subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
-          />
+          <FlexWrapper>
+            <NoRecordScreen
+              title={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.title')}
+              subtitle={T.translate('features.WranglerNewUI.NoRecordScreen.gridTable.subtitle')}
+            />
+          </FlexWrapper>
         )}
         {showGridTable && (
           <TableWrapper>
@@ -372,6 +386,20 @@ export default function GridTable() {
           </TableWrapper>
         )}
         <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
+        {addTransformationFunction.option && (
+          <SelectColumnPanel
+            transformationName={addTransformationFunction.option}
+            transformationDataType={addTransformationFunction.supportedDataType}
+            columnsList={headersNamesList}
+            missingItemsList={dataQuality}
+            onCancel={() => {
+              setAddTransformationFunction({
+                option: '',
+                supportedDataType: [],
+              });
+            }}
+          />
+        )}
         {loading && (
           <div className={classes.loadingContainer}>
             <LoadingSVG />

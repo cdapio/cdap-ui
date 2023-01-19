@@ -19,14 +19,14 @@ Feature: TransformationToolbar
 
   @TransformationToolbar
   Scenario Outline: Go through the Transformation Toolbar
-    Given Navigate to Home Page to test toolbar
-    Then Click on the Ongoing Data Explorations card for tool bar
+    Given Navigate to the Wrangle home page
+    Then Click on the Data Explorations card
     Then Verify if the Transformation Toolbar is displayed on the Grid Page
-    Then Click on the Undo icon
     Then Click on the Snackbar close icon
     Then Verify if all icons are displayed on Toolbar with "<testId>"
-    Then Click on the function names toggle with testId as "<testId>" and "<iconLabelName>"
     Then Verify by Clicking on the Up and Down arrow icon
+    Then Click on the function names toggle with testId as "<testId>" and "<iconLabelName>"
+
     Examples:
       | testId | iconLabelName |
       | undo |  Undo |

@@ -16,9 +16,9 @@
 
 import React from 'react';
 import T from 'i18n-react';
-import SwitchInputComponent from 'components/common/Switch';
-import { NormalFont } from 'components/common/TypographyText';
-import { DividerBoxToggler, FlexJustifyAlignCenter } from 'components/common/BoxContainer';
+import SwitchInputComponent from 'components/WranglerV2/Switch';
+import { NormalFont } from 'components/WranglerV2/Label';
+import { DividerBoxToggler, FlexJustifyAlignCenter } from 'components/WranglerV2/BoxContainer';
 import { Divider } from 'components/WranglerGrid/TransformationToolbar/iconStore';
 
 const PREFIX = 'features.WranglerNewUI.GridPage';
@@ -39,7 +39,7 @@ export default function({ setShowName, showName }: IFunctionNameToggleProps) {
         show={showName}
         inputProps={{
           'aria-label': T.translate(`${PREFIX}.gridHeader.ariaLabels.functionsName`).toString(),
-          'data-testid': 'transformations-toolbar-icons-function-name-toggler',
+          'data-testid': 'transformations-toolbar-icons-function-name-toggler-button',
         }}
       />
       <DividerBoxToggler> {Divider}</DividerBoxToggler>
