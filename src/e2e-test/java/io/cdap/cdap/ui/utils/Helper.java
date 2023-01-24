@@ -441,4 +441,30 @@ public class Helper implements CdfHelper {
     }
     return jsonObject;
   }
+
+  public static String getCssSelectorForWidgetRow(String rowIndex, String propertyName) {
+    return Helper.getCssSelectorByDataTestId(propertyName) + " " + Helper.getCssSelectorByDataTestId(rowIndex);
+  }
+
+  public static String getCssSelectorForKeyInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("key") + " input";
+  }
+
+  public static String getCssSelectorForValueInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("value") + " input";
+  }
+
+  public static void clickAddRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("add-row")));
+  }
+
+  public static void clickRemoveRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("remove-row")));
+  }
 }
