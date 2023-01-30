@@ -46,14 +46,16 @@ export function getNamespaceDetail(namespace) {
     });
   });
 
-  MyPipelineApi.list({ namespace, artifactName: PIPELINE_ARTIFACTS }).subscribe((pipelines) => {
-    Store.dispatch({
-      type: NamespaceAdminActions.setPipelinesCount,
-      payload: {
-        pipelinesCount: pipelines && Array.isArray(pipelines) ? pipelines.length : 0,
-      },
-    });
-  });
+  MyPipelineApi.list({ namespace, artifactName: PIPELINE_ARTIFACTS, latestOnly: true }).subscribe(
+    (pipelines) => {
+      Store.dispatch({
+        type: NamespaceAdminActions.setPipelinesCount,
+        payload: {
+          pipelinesCount: pipelines && Array.isArray(pipelines) ? pipelines.length : 0,
+        },
+      });
+    }
+  );
 
   MyDatasetApi.list({ namespace }).subscribe((datasets) => {
     Store.dispatch({
