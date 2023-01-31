@@ -16,6 +16,7 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
+import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
@@ -63,6 +64,11 @@ public class CommonSteps {
     SeleniumDriver.openPage(Constants.PIPELINE_STUDIO_URL);
     WaitHelper.waitForPageToLoad();
     Helper.setNewSchemaEditor(false);
+  }
+
+  @When("Toggle Transform Panel")
+  public static void toggleTransformPanel() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("plugin-Transform-group-summary"));
   }
 
   @When("Open Connections Page")
@@ -259,5 +265,22 @@ public class CommonSteps {
   @Then("Go to pipeline {string} details")
   public void openPipelineDetails(String pipelineName) {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("deployed-" + pipelineName));
+  }
+
+  @Then("Add Projection node to canvas")
+  public void addProjectionNodeToCanvas() {
+    NodeInfo projectionNode = new NodeInfo("Projection", "transform", "0");
+    Commands.addNodeToCanvas(projectionNode);
+  }
+
+  @Then("Open Projection node properties")
+  public void openProjectionNodeProperties() {
+    NodeInfo projectionNode = new NodeInfo("Projection", "transform", "0");
+    CdfStudioActions.navigateToPluginPropertiesPage(projectionNode.getNodeName());
+  }
+
+  @Then("Close Projection node properties")
+  public void closeProjectionNodeProperties() {
+    Commands.closeConfigPopover();
   }
 }

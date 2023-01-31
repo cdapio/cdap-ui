@@ -111,6 +111,7 @@ export class KeyValueRow extends AbstractRow<IKeyValueRowProps, IKeyValueState> 
           disabled={this.props.disabled}
           inputRef={this.props.forwardedRef}
           data-cy="key"
+          data-testid="key"
         />
 
         <Input
@@ -122,6 +123,7 @@ export class KeyValueRow extends AbstractRow<IKeyValueRowProps, IKeyValueState> 
           onKeyDown={this.handleKeyDown}
           disabled={this.props.disabled}
           data-cy="value"
+          data-testid="value"
         />
       </div>
     );
