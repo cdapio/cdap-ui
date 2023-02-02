@@ -7,7 +7,7 @@
   "dashboard.ssl.disable.cert.check": "false",
   "ssl.external.enabled": "false",
   "router.server.address": "127.0.0.1",
-  "dashboard.bind.port": "11011",
+  "dashboard.bind.port": "11012",
   "enable.preview": "true",
   "feature.pipeline.composite.triggers.enabled": "true",
   "dashboard.router.check.timeout.secs": "0",

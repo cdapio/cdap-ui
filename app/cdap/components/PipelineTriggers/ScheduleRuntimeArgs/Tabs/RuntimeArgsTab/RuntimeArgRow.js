@@ -87,7 +87,11 @@ export default class RuntimeArgRow extends Component {
     return (
       <Row>
         <Col xs={6}>
-          <div className="select-dropdown" data-cy="runtime-arg-of-trigger">
+          <div
+            className="select-dropdown"
+            data-cy="runtime-arg-of-trigger"
+            data-testid="runtime-arg-of-trigger"
+          >
             <select value={this.state.key} onChange={this.onKeyChange}>
               {this.getDisplayValueForTriggeringPipelineMacro(triggeringPipelineInfo)
                 .concat(triggeringPipelineInfo.macros)
@@ -105,7 +109,11 @@ export default class RuntimeArgRow extends Component {
           <span>{T.translate('commons.as')}</span>
         </Col>
         <Col xs={5}>
-          <div className="select-dropdown" data-cy="runtime-arg-of-triggered">
+          <div
+            className="select-dropdown"
+            data-cy="runtime-arg-of-triggered"
+            data-testid="runtime-arg-of-triggered"
+          >
             <select value={this.state.value} onChange={this.onValueChange}>
               {this.getDisplayValueForTriggeredPipelineMacro(
                 triggeredPipelineInfo,

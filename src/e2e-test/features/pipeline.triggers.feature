@@ -24,3 +24,11 @@ Feature: Pipeline Triggers
     Then Open inbound trigger and set and delete a simple trigger when pipeline1 succeeds
     Then Cleanup pipeline "trigger_test_pipeline_1"
     Then Cleanup pipeline "trigger_test_pipeline_2"
+
+  @PIPELINE_TRIGGERS_TEST
+  Scenario: Deploy two pipelines and enable trigger for pipeline2 when pipeline1 succeeds with a complex trigger and disabling it
+    When Deploy pipeline "trigger_test_pipeline_1" with pipeline JSON file "pipeline_with_macros.json"
+    When Deploy pipeline "trigger_test_pipeline_2" with pipeline JSON file "pipeline_with_macros.json"
+    Then Open inbound trigger and set and delete a comnplex trigger when pipeline1 succeeds
+    Then Cleanup pipeline "trigger_test_pipeline_1"
+    Then Cleanup pipeline "trigger_test_pipeline_2"
