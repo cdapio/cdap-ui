@@ -173,7 +173,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         hsts: {
           includeSubDomains: true,
           preload: true,
-        }
+        },
+        // Hub icons are cross-origin but don't supply CORS headers
+        // TODO credentialless will also work but isn't supported by FF and Safari
+        crossOriginEmbedderPolicy: false
       })
     );
   }
