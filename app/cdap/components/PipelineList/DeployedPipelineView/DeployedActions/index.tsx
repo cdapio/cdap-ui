@@ -246,47 +246,37 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     window.location.href = link;
   };
 
-  private actions: IAction[] = this.props.lifecycleManagementEditEnabled
-    ? [
-        {
-          label: T.translate('commons.edit'),
-          actionFn: this.handlePipelineEdit,
-        },
-        {
-          label: T.translate('commons.duplicate'),
-          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
-        },
-        {
-          label: T.translate('commons.export'),
-          actionFn: this.handlePipelineExport,
-        },
-        {
-          label: 'separator',
-        },
-        {
-          label: T.translate('commons.delete'),
-          actionFn: this.showDeleteConfirmation,
-          className: 'delete',
-        },
-      ]
-    : [
-        {
-          label: T.translate('commons.duplicate'),
-          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
-        },
-        {
-          label: T.translate('commons.export'),
-          actionFn: this.handlePipelineExport,
-        },
-        {
-          label: 'separator',
-        },
-        {
-          label: T.translate('commons.delete'),
-          actionFn: this.showDeleteConfirmation,
-          className: 'delete',
-        },
-      ];
+  private getActionsList = () => {
+    const actions: IAction[] = [
+      {
+        label: T.translate('commons.duplicate'),
+        actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
+      },
+      {
+        label: T.translate('commons.export'),
+        actionFn: this.handlePipelineExport,
+      },
+      {
+        label: 'separator',
+      },
+      {
+        label: T.translate('commons.delete'),
+        actionFn: this.showDeleteConfirmation,
+        className: 'delete',
+      },
+    ];
+    if (this.props.lifecycleManagementEditEnabled) {
+      actions.splice(0, 0, {
+        label: T.translate('commons.edit'),
+        actionFn: this.handlePipelineEdit,
+        disabled: this.props.pipeline.artifact.name !== 'cdap-data-pipeline',
+        disabledTooltip: T.translate('commons.editTooltip.notBatch').toString(),
+      });
+    }
+    return actions;
+  };
+
+  private actions: IAction[] = this.getActionsList();
 
   public render() {
     return (

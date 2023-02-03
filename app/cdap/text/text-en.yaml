@@ -18,6 +18,9 @@ commons:
     placeholder: value
   dataset: Dataset
   edit: Edit
+  editTooltip:
+    notLatest: Edit is not allowed for past versions
+    notBatch: Edit is currently not supported for non batch pipelines
   entity:
     application:
       plural: Applications
