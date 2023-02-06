@@ -2876,6 +2876,8 @@ features:
       Content:
         SelectColumns:
           primaryKeyDescription: Must include primary key
+        SelectTables:
+          genericErrorMessage: "Something went wrong!"
   Reports:
     Customizer:
       clear: Clear Selection

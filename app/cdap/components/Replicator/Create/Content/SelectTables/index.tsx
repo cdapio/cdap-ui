@@ -15,7 +15,10 @@
  */
 
 import * as React from 'react';
+import T from 'i18n-react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import Alert from 'components/shared/Alert';
+import { ALERT_STATUS } from 'services/AlertStatus';
 import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
 import { MyReplicatorApi } from 'api/replicator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -26,6 +29,7 @@ import orderBy from 'lodash/orderBy';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import SelectColumns from 'components/Replicator/Create/Content/SelectColumns';
 import SelectColumnsWithTransforms from 'components/Replicator/Create/Content/SelectColumnsWithTransforms';
+import { ErrorType } from 'components/Replicator/constants';
 import { extractErrorMessage, isUnknownDatabaseError } from 'services/helpers';
 import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -44,6 +48,8 @@ import {
   IDMLStore,
   ITableInfo,
 } from 'components/Replicator/types';
+
+const PREFIX = `features.Replication.Create.Content.SelectTables`;
 
 const styles = (theme): StyleRules => {
   return {
@@ -439,9 +445,29 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     });
   };
 
+  private onErrorSnackbarClose = (): void => {
+    this.setState({ error: null });
+  };
+
+  public setErrorToast = (error: ErrorType | string): void => {
+    this.setState({ error });
+  };
+
   private renderError = () => {
     if (!this.state.error) {
       return null;
+    }
+
+    if (this.state.error === ErrorType.tableAssessmentError) {
+      return (
+        <Alert
+          showAlert={!!this.state.error}
+          message={T.translate(`${PREFIX}.genericErrorMessage`)}
+          onClose={this.onErrorSnackbarClose}
+          type={ALERT_STATUS.Error}
+          autoCloseTimeout={5000}
+        />
+      );
     }
 
     return (
@@ -506,6 +532,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
         tableAssessments={this.props.tableAssessments[this.state.openTable.table]}
         initialSelected={this.getInitialSelected()}
         toggle={this.openTable.bind(this, null)}
+        setErrorToast={this.setErrorToast}
         onSave={this.onColumnsSelection}
         assessmentLoading={this.props.assessmentLoading}
         transformations={this.props.transformations}
@@ -517,7 +544,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
   };
 
   private renderContent = () => {
-    if (this.state.error) {
+    if (this.state.error && this.state.error !== ErrorType.tableAssessmentError) {
       return null;
     }
 
