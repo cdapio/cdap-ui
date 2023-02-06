@@ -35,6 +35,20 @@ Feature: Pipeline Edit
 
   @PIPELINE_EDIT_TEST
   @ignore
+  Scenario: Pipeline configuration should save to runtime arguments
+    When Open pipeline list page
+    Then Go to pipeline "pipeline_edit_test" details
+    When Run down arrow is clicked
+    Then Generated runtime arguments should be empty
+    Then Open pipeline configure
+    Then Click on "Pipeline config" tab in pipeline configure
+    Then Toggle instrumentation settings in pipeline config
+    Then Save pipeline configure
+    When Run down arrow is clicked
+    Then Generated runtime arguments should not be empty
+
+  @PIPELINE_EDIT_TEST
+  @ignore
   Scenario: Discarding a draft should delete it from draft list
     When Open pipeline list page
     Then Go to pipeline "pipeline_edit_test" details
@@ -68,18 +82,5 @@ Feature: Pipeline Edit
     Then Click Continue draft
     Then Verify changes were saved
 
-  @PIPELINE_EDIT_TEST
-  @ignore
-  Scenario: Pipeline configuration should save to runtime arguments
-    When Open pipeline list page
-    Then Go to pipeline "pipeline_edit_test" details
-    When Run down arrow is clicked
-    Then Generated runtime arguments should be empty
-    Then Open pipeline configure
-    Then Click on "Pipeline config" tab in pipeline configure
-    Then Toggle instrumentation settings in pipeline config
-    Then Save pipeline configure
-    When Run down arrow is clicked
-    Then Generated runtime arguments should not be empty
     
 
