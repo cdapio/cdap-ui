@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -12,31 +12,14 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-@import "~styles/variables.scss";
+import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
+import { apiCreator } from 'services/resource-helper';
 
-.pipeline-actions-container {
-  .popper {
-    z-index: 999;
-    min-width: 100px;
-    // TODO: increase width to 140px when scm enabled
-    width: 100px;
+const dataSrc = DataSourceConfigurer.getInstance();
+const basePath = '/namespaces/:namespace/repository';
 
-    ul {
-      padding: 10px;
-
-      li {
-        padding: 8px 4px 8px 0;
-
-        &.delete-action {
-          color: $red-02;
-        }
-      }
-
-      hr {
-        margin: 2px;
-      }
-    }
-  }
-}
+export const MyRepositoryApi = {
+  push: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/:appId/push`),
+};

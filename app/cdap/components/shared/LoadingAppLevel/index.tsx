@@ -21,10 +21,11 @@ import LoadingSVG from '../LoadingSVG';
 interface ILoadingAppLevelProps {
   message?: string;
   subtitle?: string;
+  style?: any;
   isopen: boolean;
 }
 
-const style = {
+const defaultStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -39,10 +40,10 @@ const style = {
   pb: 3,
 };
 
-export const LoadingAppLevel = ({ message, subtitle, isopen }: ILoadingAppLevelProps) => {
+export const LoadingAppLevel = ({ message, subtitle, isopen, style }: ILoadingAppLevelProps) => {
   return (
     <Modal open={isopen}>
-      <Box sx={{ ...style }}>
+      <Box sx={{ ...defaultStyle, ...style }}>
         <LoadingSVG />
         <h2> {message || 'Loading...'} </h2>
         <h4>{subtitle}</h4>

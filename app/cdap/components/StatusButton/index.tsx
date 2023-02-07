@@ -35,6 +35,7 @@ import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 interface IStatusButtonProps {
   status: SUPPORT;
   message?: string;
+  title?: string;
 }
 
 const CloseButton: React.FC<{ handleClick: () => void }> = (props) => (
@@ -145,12 +146,20 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
             <StyledBox>
               {actionState === 'click' && <CloseButton handleClick={handleClose} />}
               <Box>
-                <span>{icon} The column is not supported</span>
+                {props.title ? (
+                  <span>
+                    {icon} {props.title}
+                  </span>
+                ) : (
+                  <span>{icon} The column is not supported</span>
+                )}
               </Box>
-              <Box>
-                <BoldP>Reason: </BoldP>
-                <StyledP>{props.message}</StyledP>
-              </Box>
+              {props.message && (
+                <Box>
+                  <BoldP>Reason: </BoldP>
+                  <StyledP>{props.message}</StyledP>
+                </Box>
+              )}
             </StyledBox>
           </ClickAwayListener>
         </div>
