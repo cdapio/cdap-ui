@@ -20,7 +20,6 @@ import React, { Component } from 'react';
 import DeleteAction from 'components/FastAction/DeleteAction';
 import TruncateAction from 'components/FastAction/TruncateAction';
 import StartStopAction from 'components/FastAction/StartStopAction';
-import ExploreAction from 'components/FastAction/ExploreAction';
 import SetPreferenceAction from 'components/FastAction/SetPreferenceAction';
 import LogAction from 'components/FastAction/LogAction';
 import { objectQuery } from 'services/helpers';
@@ -56,14 +55,6 @@ export default class FastAction extends Component {
           <StartStopAction
             entity={this.props.entity}
             onSuccess={this.props.onSuccess}
-            argsToAction={objectQuery(this.props.argsToAction)}
-          />
-        );
-      case 'explore':
-        return (
-          <ExploreAction
-            entity={this.props.entity}
-            opened={this.props.opened}
             argsToAction={objectQuery(this.props.argsToAction)}
           />
         );
