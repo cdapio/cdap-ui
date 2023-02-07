@@ -20,6 +20,11 @@ import { apiCreator } from 'services/resource-helper';
 const dataSrc = DataSourceConfigurer.getInstance();
 const basePath = '/namespaces/:namespace/repository';
 
-export const MyRepositoryApi = {
+export const SourceControlApi = {
   push: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/:appId/push`),
+  pull: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/:appId/pull`),
+  list: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/apps`),
+  setConfig: apiCreator(dataSrc, 'PUT', 'REQUEST', basePath),
+  getConfig: apiCreator(dataSrc, 'GET', 'REQUEST', basePath),
+  deleteConfig: apiCreator(dataSrc, 'DELETE', 'REQUEST', basePath),
 };

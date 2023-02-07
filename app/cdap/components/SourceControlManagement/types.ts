@@ -14,9 +14,33 @@
  * the License.
  */
 
-export interface ILocalPipeline {
+import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
+
+export interface IRepositoryPipeline {
   name: string;
   fileHash: string;
   error: string;
   success: boolean;
+}
+
+export interface IPushResponse {
+  name: string;
+  version: string;
+  fileHash: string;
+}
+
+export interface IPipeline {
+  type: string;
+  name: string;
+  version: string;
+  description: string;
+  artifact: IArtifactObj;
+  change: {
+    author: string;
+    description: string;
+    creationTimeMillis: number;
+  };
+  sourceControlMeta: {
+    fileHash: string;
+  };
 }

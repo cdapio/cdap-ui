@@ -22,6 +22,8 @@ import { Provider } from 'react-redux';
 import SourceControlManagementSyncStore from './store';
 import styled from 'styled-components';
 import T from 'i18n-react';
+import { RemotePipelineListView } from './RemotePipelineListView';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -37,13 +39,19 @@ const SourceControlManagementSyncView = () => {
     setTabIndex(newValue);
   };
 
+  const closeAndBackLink = `/ns/${getCurrentNamespace()}/details/scm`;
+
   return (
     <Provider store={SourceControlManagementSyncStore}>
       <EntityTopPanel
         title={T.translate(`${PREFIX}.syncButton`).toString()}
-        closeBtnAnchorLink={() => history.back()}
+        closeBtnAnchorLink={() => {
+          window.location.href = closeAndBackLink;
+        }}
         breadCrumbAnchorLabel={T.translate('commons.namespaceAdmin').toString()}
-        onBreadCrumbClick={() => history.back()}
+        onBreadCrumbClick={() => {
+          window.location.href = closeAndBackLink;
+        }}
       />
       <StyledDiv>
         <Tabs
@@ -56,7 +64,9 @@ const SourceControlManagementSyncView = () => {
           <Tab label={T.translate(`${PREFIX}.pull.tab`)} />
         </Tabs>
       </StyledDiv>
-      <StyledDiv>{tabIndex === 0 && <LocalPipelineListView />}</StyledDiv>
+      <StyledDiv>
+        {tabIndex === 0 ? <LocalPipelineListView /> : <RemotePipelineListView />}
+      </StyledDiv>
     </Provider>
   );
 };

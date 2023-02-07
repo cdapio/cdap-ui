@@ -35,32 +35,12 @@ import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import T from 'i18n-react';
 import { CommitModal } from './CommitModal';
 import cloneDeep from 'lodash/cloneDeep';
-import styled from 'styled-components';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { LocalPipelineTable } from './PipelineTable';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
+import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
 
 const PREFIX = 'features.SourceControlManagement.push';
-
-const StyledSelectionStatusDiv = styled.div`
-  display: flex;
-  text-align: center;
-  margin: 10px 2px;
-
-  div {
-    margin-right: 10px;
-    padding-top: 4px;
-  }
-`;
-
-const LocalPipelineListContainer = styled.div`
-  height: calc(100% - 150px);
-  margin: 5px 10px;
-`;
-
-const PushFailStatusDiv = styled.div`
-  color: #d15668;
-`;
 
 export const LocalPipelineListView = () => {
   const {
@@ -98,6 +78,7 @@ export const LocalPipelineListView = () => {
     ).subscribe({
       next(res: any) {
         const currentPipeline = pushedPipelines.find((pipeline) => pipeline.name === res.name);
+        // TODO: CDAP-20429 no changes made will also be 200, need to give different warning
         if (res.statusCode !== 200) {
           currentPipeline.error = res.message;
           currentPipeline.success = false;
@@ -105,16 +86,38 @@ export const LocalPipelineListView = () => {
           currentPipeline.success = true;
           currentPipeline.fileHash = res.fileHash;
         }
+        setLocalPipelines(pushedPipelines);
       },
       complete() {
-        setLocalPipelines(pushedPipelines);
         setLoadingMessage(null);
       },
     });
   };
 
+  const LocalPipelineTableComp = () => {
+    if (localPipelines.length > 0) {
+      return (
+        <>
+          <LocalPipelineTable
+            localPipelines={localPipelines}
+            selectedPipelines={selectedPipelines}
+            showFailedOnly={showFailedOnly}
+          />
+          <PrimaryContainedButton
+            onClick={toggleCommitModal}
+            size="large"
+            disabled={!selectedPipelines.length}
+          >
+            {T.translate(`${PREFIX}.pushButton`)}
+          </PrimaryContainedButton>
+        </>
+      );
+    }
+    return <div>{T.translate(`${PREFIX}.emptyPipelineListMessage`, { query: nameFilter })}</div>;
+  };
+
   return (
-    <LocalPipelineListContainer>
+    <PipelineListContainer>
       <SearchBox nameFilter={nameFilter} setNameFilter={setNameFilter} />
       {selectedPipelines.length > 0 && (
         <StyledSelectionStatusDiv>
@@ -126,13 +129,13 @@ export const LocalPipelineListView = () => {
           </div>
           {pushFailedCount > 0 && (
             <>
-              <PushFailStatusDiv>
+              <FailStatusDiv>
                 {pushFailedCount === 1
                   ? T.translate(`${PREFIX}.pipelinePushedFail`)
                   : T.translate(`${PREFIX}.pipelinesPushedFail`, {
                       count: pushFailedCount.toString(),
                     })}
-              </PushFailStatusDiv>
+              </FailStatusDiv>
               <PrimaryTextButton onClick={toggleShowFailedOnly}>
                 {showFailedOnly ? T.translate('commons.hide') : T.translate('commons.show')}
               </PrimaryTextButton>
@@ -140,36 +143,13 @@ export const LocalPipelineListView = () => {
           )}
         </StyledSelectionStatusDiv>
       )}
-      {ready ? (
-        <>
-          {localPipelines.length ? (
-            <>
-              <LocalPipelineTable
-                localPipelines={localPipelines}
-                selectedPipelines={selectedPipelines}
-                showFailedOnly={showFailedOnly}
-              />
-              <PrimaryContainedButton
-                onClick={toggleCommitModal}
-                size="large"
-                disabled={!selectedPipelines.length}
-              >
-                {T.translate(`${PREFIX}.pushButton`)}
-              </PrimaryContainedButton>
-            </>
-          ) : (
-            <div>{T.translate(`${PREFIX}.emptyPipelineListMessage`, { query: nameFilter })}</div>
-          )}
-        </>
-      ) : (
-        <LoadingSVGCentered />
-      )}
+      {ready ? LocalPipelineTableComp() : <LoadingSVGCentered />}
       <CommitModal
         isOpen={commitModalOpen}
         onToggle={toggleCommitModal}
         onSubmit={onPushSubmit}
         loadingMessage={loadingMessage}
       />
-    </LocalPipelineListContainer>
+    </PipelineListContainer>
   );
 };

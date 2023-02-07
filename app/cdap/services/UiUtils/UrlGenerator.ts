@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2022-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -178,5 +178,77 @@ export const getOldCDAPUrl = (navigationObj: any = {}) => {
   };
   let url = baseUrl + stateToUrlMap[stateName || 'pipelines'];
   url = buildCustomUrl(url, stateParams);
+  return url;
+};
+
+const buildCustomUrl = (url, params = {}) => {
+  const queryParams = {};
+  for (const key in params) {
+    if (!Object.prototype.hasOwnProperty.call(params, key)) {
+      continue;
+    }
+    const val = params[key];
+
+    const regexp = new RegExp(':' + key + '(\\W|$)', 'g');
+    if (regexp.test(url)) {
+      url = url.replace(regexp, (match, p1) => {
+        return val + p1;
+      });
+    } else {
+      queryParams[key] = val;
+    }
+  }
+
+  url = addCustomQueryParams(url, queryParams);
+
+  return url;
+};
+
+const addCustomQueryParams = (url, params = {}) => {
+  if (!params) {
+    return url;
+  }
+  const parts = [];
+
+  const forEachSorted = (obj, iterator) => {
+    const keys = Object.keys(params).sort();
+    keys.forEach((key) => {
+      iterator.call(obj[key], key);
+    });
+    return keys;
+  };
+
+  const encodeUriQuery = (val, pctEncodeSpaces = false) => {
+    return encodeURIComponent(val)
+      .replace(/%40/gi, '@')
+      .replace(/%3A/gi, ':')
+      .replace(/%24/g, '$')
+      .replace(/%2C/gi, ',')
+      .replace(/%3B/gi, ';')
+      .replace(/%20/g, pctEncodeSpaces ? '%20' : '+');
+  };
+
+  forEachSorted(params, (value, key) => {
+    if (value === null || typeof value === 'undefined') {
+      return;
+    }
+    if (!Array.isArray(value)) {
+      value = [value];
+    }
+
+    value.forEach((v) => {
+      if (typeof v === 'object' && v !== null) {
+        if (value.toString() === '[object Date]') {
+          v = v.toISOString();
+        } else {
+          v = JSON.stringify(v);
+        }
+      }
+      parts.push(encodeUriQuery(key) + '=' + encodeUriQuery(v));
+    });
+  });
+  if (parts.length > 0) {
+    url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
+  }
   return url;
 };

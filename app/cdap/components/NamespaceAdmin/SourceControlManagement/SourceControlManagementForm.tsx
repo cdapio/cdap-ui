@@ -23,7 +23,7 @@ import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButt
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 import { authKeys, providers, scmAuthType } from './constants';
 import { defaultSourceControlManagement, sourceControlManagementFormReducer } from './reducer';
-import { addOrValidateSourceControlManagement } from '../store/ActionCreator';
+import { addOrValidateSourceControlManagementForm } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { EntityTopPanel } from 'components/EntityTopPanel';
 import Alert from 'components/shared/Alert';
@@ -154,7 +154,11 @@ const SourceControlManagementForm = ({
     if (!validateForm()) {
       return;
     }
-    addOrValidateSourceControlManagement(getCurrentNamespace(), formState.config, true).subscribe(
+    addOrValidateSourceControlManagementForm(
+      getCurrentNamespace(),
+      formState.config,
+      true
+    ).subscribe(
       () => {
         formStateDispatch({
           type: 'SET_SUCCESS',
@@ -172,7 +176,7 @@ const SourceControlManagementForm = ({
   };
 
   const onSubmit = () => {
-    addOrValidateSourceControlManagement(getCurrentNamespace(), formState.config).subscribe(
+    addOrValidateSourceControlManagementForm(getCurrentNamespace(), formState.config).subscribe(
       () => {
         onToggle();
       },

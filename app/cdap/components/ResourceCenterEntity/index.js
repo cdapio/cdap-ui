@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2017 Cask Data, Inc.
+ * Copyright © 2016-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import IconSVG from 'components/shared/IconSVG';
 import classnames from 'classnames';
+import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 
 require('./ResourceCenterEntity.scss');
 
@@ -39,13 +40,13 @@ export default function ResourceCenterEntity({
         ) : (
           <div className="entity-image empty" />
         )}
-        <button
+        <PrimaryContainedButton
           id={(actionLabel + '-' + title).toLowerCase()}
           className="btn btn-primary"
           onClick={onClick}
         >
           {actionLabel}
-        </button>
+        </PrimaryContainedButton>
       </div>
       <div className="content-container">
         <div className="content-text">
