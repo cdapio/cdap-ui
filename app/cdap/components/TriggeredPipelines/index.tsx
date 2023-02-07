@@ -79,6 +79,7 @@ const TriggeredPipelinesView = ({
   return (
     <CollapsibleSidebar
       data-cy="outbound-triggers-toggle"
+      data-testid="outbound-triggers-toggle"
       position="right"
       toggleTabLabel={T.translate(`${tabText}`, { count })}
       backdrop={false}

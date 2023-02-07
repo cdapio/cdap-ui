@@ -115,8 +115,8 @@ const EnabledCompositeTriggerRowView = ({
         <PipelineName>{compositeTrigger.trigger.type}</PipelineName>
         <DisableCompositeTriggerBtn
           onClick={handleConfirmModalOpen}
-          data-cy="disable-group-trigger-btn"
-          data-testid="disable-group-trigger-btn"
+          data-cy={`${compositeTrigger.name}-disable-trigger-btn`}
+          data-testid={`${compositeTrigger.name}-disable-trigger-btn`}
         >
           <DeleteOutlineIcon />
         </DisableCompositeTriggerBtn>

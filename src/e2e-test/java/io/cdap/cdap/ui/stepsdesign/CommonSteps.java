@@ -197,6 +197,16 @@ public class CommonSteps {
       ElementHelper.getElementText(Helper.locateElementByTestId("valium-banner-hydrator")).contains(message));
   }
 
+  @Then("Cleanup pipeline {string}")
+  public void cleanupPipeline(String pipelineName) {
+    Helper.cleanupPipelines(pipelineName);
+  }
+
+  @Then("Visit pipeline {string}")
+  public void visitPipeline(String pipelineName) {
+    Helper.gotoDeployedPipeline(pipelineName);
+  }
+
   @Then("Reload the page")
   public void reloadPage() {
     Helper.reloadPage();

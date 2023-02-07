@@ -239,7 +239,7 @@ public class Helper implements CdfHelper {
     );
 
     Assert.assertEquals(statusText, "Deployed");
-    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName));
+    Assert.assertTrue(urlHasString("/view/" + pipelineName));
   }
 
   public static void cleanupPipelines(String pipelineName) {
@@ -347,7 +347,7 @@ public class Helper implements CdfHelper {
     // wait for rendering to finish otherwise elements are not attached to dom
     Helper.waitSeconds(2);
   }
-  
+
   public static boolean urlHasString(String targetString) {
     String strUrl = SeleniumDriver.getDriver().getCurrentUrl();
     return strUrl.contains(targetString);
@@ -466,5 +466,9 @@ public class Helper implements CdfHelper {
     ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
       getCssSelectorForWidgetRow(rowIndex, propertyName)
         + " " + Helper.getCssSelectorByDataTestId("remove-row")));
+  }
+
+  public static void gotoDeployedPipeline(String pipelineName) {
+    SeleniumDriver.openPage(Constants.BASE_PIPELINES_URL + "/view/" + pipelineName);
   }
 }
