@@ -59,12 +59,12 @@ export default class ConfirmationModal extends Component {
     keyboard: true,
   };
 
-  componentWillMount() {
-    Mousetrap.bind('enter', this.props.confirmFn);
-  }
-
-  componentWillUnmount() {
-    Mousetrap.unbind('enter');
+  componentDidUpdate() {
+    if (this.props.isOpen) {
+      Mousetrap.bind('enter', this.props.confirmFn);
+    } else {
+      Mousetrap.unbind('enter');
+    }
   }
 
   renderModalBody() {
