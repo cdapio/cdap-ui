@@ -82,7 +82,7 @@ interface IOnePoint0SpecJSON extends IThemeJSON {
     'wrangler-data-model'?: boolean;
     'wrangler-datamodel-viewer'?: boolean;
     pipelines?: boolean;
-    pipelineStudio?: boolean;
+    'pipeline-studio'?: boolean;
     analytics?: boolean;
     'rules-engine'?: boolean;
     metadata?: boolean;
@@ -435,6 +435,7 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showReloadSystemArtifacts: true,
       showSqlPipeline: true,
       showCDC: false,
+      onPremTetheredInstance: false,
     };
     if (isNilOrEmpty(featuresJson)) {
       return features;
