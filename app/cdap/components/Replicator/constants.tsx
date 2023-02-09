@@ -25,6 +25,5 @@ export const PROGRAM_INFO = {
 };
 
 export enum ErrorType {
-  generic = 'generic',
   tableAssessmentError = 'tableAssessmentError',
 }
