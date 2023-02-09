@@ -299,7 +299,7 @@ export default class Tags extends Component {
 
   getNoTagsText() {
     if (this.props.viewOnly) {
-      return T.translate(`${PREFIX}.notagsViewonly`);
+      return T.translate(`${PREFIX}.noTagsViewonly`);
     }
 
     return T.translate(`${PREFIX}.notags`);
