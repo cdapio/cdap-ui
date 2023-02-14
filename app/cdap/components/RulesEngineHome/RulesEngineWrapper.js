@@ -81,7 +81,7 @@ class RulesEngineWrapper extends Component {
               <div onClick={this.toggleTab.bind(this, '1')}>
                 <NavLink
                   className={classnames({
-                    active: this.state.activeTab == '1',
+                    active: this.state.activeTab === '1',
                   })}
                 >
                   <strong>
@@ -98,7 +98,7 @@ class RulesEngineWrapper extends Component {
               <div onClick={this.toggleTab.bind(this, '2')}>
                 <NavLink
                   className={classnames({
-                    active: this.state.activeTab == '2',
+                    active: this.state.activeTab === '2',
                   })}
                 >
                   <strong>

@@ -166,7 +166,7 @@ export default class ServicesTable extends Component {
           clearTimeout(serviceTimeout);
           let services = [...this.state.services];
           services = services.map((service) => {
-            if (service.name == serviceid) {
+            if (service.name === serviceid) {
               service.status = res.staus;
             }
             return service;

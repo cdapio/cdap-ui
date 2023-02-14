@@ -255,13 +255,12 @@ const renderModelDetails = (model, newlyTrainingModel, experimentId) => {
   }
   const directives = objectQuery(model, 'splitDetails', 'directives') || [];
   const splitId = objectQuery(model, 'splitDetails', 'id');
-  let modelTrainingLogsUrl;
   const directivesCount = Array.isArray(directives) ? directives.length : 0;
   const featuresCount = Array.isArray(model.features)
     ? model.features.length
     : 0;
 
-  modelTrainingLogsUrl = constructModelTrainingLogs(model, experimentId);
+  const modelTrainingLogsUrl = constructModelTrainingLogs(model, experimentId);
   return (
     <div {...props}>
       <div className="content-wrapper">

@@ -38,6 +38,7 @@ const createProfileStore = (state = STORE_DEFAULT, action = defaultAction) => {
       const { label = '' } = action.payload;
       return {
         ...state,
+        // eslint-disable-next-line no-useless-escape
         name: label.replace(/\ +/g, '_').toLowerCase(),
         label,
       };

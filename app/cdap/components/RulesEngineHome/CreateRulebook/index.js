@@ -65,7 +65,8 @@ export default class CreateRulebook extends Component {
 
   createRulebook = () => {
     let config = {};
-    let { name, description, rules } = this.state;
+    const { name, description } = this.state;
+    let { rules } = this.state;
     rules = rules.map((rule) => rule.id);
     config = { id: name, description, rules };
     createNewRuleBook(config);

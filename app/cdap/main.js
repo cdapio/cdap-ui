@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { hot } from 'react-hot-loader';
-import 'react-hot-loader/patch';
+import { hot } from 'react-hot-loader/root';
+// import 'react-hot-loader/patch';
 import './globals';
 
 import {

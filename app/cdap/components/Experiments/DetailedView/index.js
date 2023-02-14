@@ -133,8 +133,8 @@ export default class ExperimentDetails extends Component {
     let {
       offset = DEFAULT_EXPERIMENT_DETAILS.modelsOffset,
       limit = DEFAULT_EXPERIMENT_DETAILS.modelsLimit,
-      sort,
     } = query;
+    const sort = query.sort;
     let sortMethod, sortColumn;
     offset = parseInt(offset, 10);
     limit = parseInt(limit, 10);

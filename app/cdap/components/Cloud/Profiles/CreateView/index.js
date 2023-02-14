@@ -116,12 +116,9 @@ class ProfileCreateView extends Component {
     this.setState({
       creatingProfile: true,
     });
-    let {
-      label,
-      name,
-      description,
-      properties,
-    } = CreateProfileStore.getState();
+    const createProfileStoreState = CreateProfileStore.getState();
+    const { label, description, properties } = createProfileStoreState;
+    let { name } = createProfileStoreState;
 
     /**
      * TODO: https://issues.cask.co/browse/CDAP-15211

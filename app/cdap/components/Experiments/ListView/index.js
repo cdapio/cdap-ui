@@ -90,8 +90,8 @@ export default class ExperimentsList extends Component {
     let {
       offset = DEFAULT_EXPERIMENTS.offset,
       limit = DEFAULT_EXPERIMENTS.limit,
-      sort,
     } = query;
+    const sort = query.sort;
     let sortMethod, sortColumn;
     offset = parseInt(offset, 10);
     limit = parseInt(limit, 10);

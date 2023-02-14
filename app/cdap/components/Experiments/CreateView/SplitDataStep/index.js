@@ -94,7 +94,7 @@ class SplitDataStep extends Component {
 
   renderSplitBtn() {
     const isSplitCreated = Object.keys(this.props.splitInfo).length;
-    const splitStatus = (this.props.splitInfo || {}).status;
+    const splitStatus = (this.props.splitInfo || {})?.status;
     const isSplitComplete =
       [SPLIT_STATUS.COMPLETE, SPLIT_STATUS.FAILED].indexOf(splitStatus) !== -1;
 

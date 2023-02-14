@@ -45,7 +45,7 @@ export default function FileDnD({
       <input {...getInputProps()} />
       <div className="file-metadata-container text-center">
         <i className="fa fa-upload fa-3x" />
-        {file && file.name && file.name.length ? (
+        {file?.name?.length ? (
           <span>{file.name}</span>
         ) : (
           <span>

@@ -89,7 +89,7 @@ export default class Wizard extends Component {
         state[key].__disabled
       );
     });
-    if (this.state.requiredStepsCompleted != requiredStepsCompleted) {
+    if (this.state.requiredStepsCompleted !== requiredStepsCompleted) {
       this.setState({
         requiredStepsCompleted,
       });
@@ -103,7 +103,7 @@ export default class Wizard extends Component {
     const disabledStepsEnabled = steps.every((key) => {
       return !state[key].__disabled;
     });
-    if (this.state.disabledStepsEnabled != disabledStepsEnabled) {
+    if (this.state.disabledStepsEnabled !== disabledStepsEnabled) {
       // We're not really using this property in the component, this setState
       // is just to rerender the component so that the disabled/enabled tabs are
       // shown correctly
@@ -143,7 +143,7 @@ export default class Wizard extends Component {
     }
     let directionStepId = steps[directionStepIndex].id;
 
-    while (state[directionStepId] && state[directionStepId].__disabled) {
+    while (state[directionStepId]?.__disabled) {
       if (direction === 'next') {
         directionStepIndex += 1;
         if (directionStepIndex === steps.length) {
@@ -199,15 +199,15 @@ export default class Wizard extends Component {
   }
   isStepComplete(stepId) {
     const state = this.props.store.getState()[stepId];
-    return state && state.__complete;
+    return state?.__complete;
   }
   isStepDisabled(stepId) {
     const state = this.props.store.getState()[stepId];
-    return state && state.__disabled;
+    return state?.__disabled;
   }
   isStepReadOnly(stepId) {
     const state = this.props.store.getState()[stepId];
-    return state && state.__readOnly;
+    return state?.__readOnly;
   }
 
   handleCallToActionClick() {
@@ -358,6 +358,7 @@ export default class Wizard extends Component {
         return (
           <WizardStepContent
             title={matchedStep.title}
+            key={`key-${matchedStep.title}`}
             description={matchedStep.description}
             stepsCount={this.props.wizardConfig.steps.length}
             currentStep={

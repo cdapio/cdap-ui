@@ -63,7 +63,7 @@ export default class AddNamespaceWizard extends Component {
         type: AddNamespaceActions.setProperties,
       });
     }
-    if (this.props.editableFields && this.props.editableFields.length) {
+    if (this.props.editableFields?.length) {
       AddNamespaceStore.dispatch({
         payload: { editableFields: this.props.editableFields },
         type: AddNamespaceActions.setEditableFields,

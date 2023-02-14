@@ -21,7 +21,7 @@ import React from 'react';
 require('./DataQuality.scss');
 
 export default function DataQuality({ columnInfo }) {
-  if (!columnInfo || !columnInfo.general) {
+  if (!columnInfo?.general) {
     return null;
   }
 

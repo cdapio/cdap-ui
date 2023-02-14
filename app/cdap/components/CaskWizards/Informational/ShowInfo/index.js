@@ -31,7 +31,7 @@ let StepsList = ({ steps }) => {
   function createMarkup(content) {
     return { __html: content };
   }
-
+  // eslint-disable-next-line no-useless-escape
   const regex = /(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/g;
   const urlifiedSteps = steps.map((step) => {
     return step.replace(regex, (url) => {

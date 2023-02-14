@@ -235,7 +235,8 @@ export default class DataPrepTopPanel extends Component {
     if (menuItem.label === 'divider') {
       return <hr />;
     }
-    const isDisabled = menuItem.disabled && menuItem.disabled();
+    const isDisabled =
+      typeof menuItem.disabled === 'function' && menuItem.disabled();
 
     const getMenuItem = (menuItem) => {
       const { label, component: Component } = menuItem;

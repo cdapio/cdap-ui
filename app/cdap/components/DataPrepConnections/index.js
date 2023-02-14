@@ -1278,18 +1278,19 @@ export default class DataPrepConnections extends Component {
         />
       );
     }
-    let { enableRouting, ...attributes } = this.props;
+    let { enableRouting } = this.props;
+    const { ...attributes } = this.props;
     enableRouting = this.props.singleWorkspaceMode
       ? false
       : this.props.enableRouting;
     let setActiveConnection;
-    let {
+    const {
       activeConnectionType,
       activeConnectionid,
-      defaultConnection,
       connectionTypes,
       connectionsList,
     } = this.state;
+    let { defaultConnection } = this.state;
     const defaultConnectionObj = find(connectionsList, {
       id: defaultConnection,
     });

@@ -79,9 +79,8 @@ class AddModelToPipelineBtn extends Component {
   setWorkspaceId = () => {
     const { srcPath } = this.props;
     createWorkspace(srcPath).subscribe((res) => {
-      let workspaceId;
       const { directives } = this.props;
-      workspaceId = res.values[0].id;
+      const workspaceId = res.values[0].id;
       this.setState({
         workspaceId,
       });

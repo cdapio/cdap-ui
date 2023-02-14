@@ -82,7 +82,7 @@ const BrowserData = ({
   }
 
   const filteredData = data.filter((d) => {
-    if (search && search.length && d.name) {
+    if (search?.length && d.name) {
       const isSearchTextInName = d.name.indexOf(search);
       if (d.type && d.type === 'bucket') {
         return (

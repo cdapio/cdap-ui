@@ -87,6 +87,7 @@ export default class ExploreAction extends Component {
   componentDidMount() {
     const updateDisabledProp = () => {
       const { tables: explorableTables } = ExploreTablesStore.getState();
+      // eslint-disable-next-line no-useless-escape
       const entityId = this.props.entity.id.replace(/[\.\-]/g, '_');
       const type = this.props.entity.type;
       const match = explorableTables.filter((db) => {

@@ -256,7 +256,7 @@ export default class ColumnActionsDropdown extends Component {
       'CLOSE_POPOVER',
       this.toggleDropdown.bind(this, false)
     );
-    if (this.documentClick$ && this.documentClick$.unsubscribe) {
+    if (this.documentClick$.unsubscribe) {
       this.documentClick$.unsubscribe();
     }
     this.sub();

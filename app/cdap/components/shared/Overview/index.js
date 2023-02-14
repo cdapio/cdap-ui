@@ -63,9 +63,11 @@ export default class Overview extends Component {
         showOverview: true,
         loading: true,
       });
-      let { id: entityId, type: entityType } = searchState.overviewEntity;
-      const entityTypeLabel = entityType;
-      entityType = convertEntityTypeToApi(entityType);
+      const entityId = searchState.overviewEntity.id;
+      const entityTypeLabel = searchState.overviewEntity.entityType;
+      const entityType = convertEntityTypeToApi(
+        searchState.overviewEntity.entityType
+      );
       const namespace = NamespaceStore.getState().selectedNamespace;
 
       MyMetadataApi.getMetadata({

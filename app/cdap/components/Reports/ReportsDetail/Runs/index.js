@@ -38,7 +38,7 @@ function getName(run) {
 
   let name = run.applicationName;
 
-  if (PIPELINES.indexOf(run.artifactName) == -1) {
+  if (PIPELINES.indexOf(run.artifactName) === -1) {
     name = `${name} - ${run.program}`;
   }
 
@@ -70,7 +70,11 @@ function renderHeader(headers) {
         {headers.map((head) => {
           const headerLabel = T.translate(`${PREFIX}.${head}`);
 
-          return <div title={headerLabel}>{headerLabel}</div>;
+          return (
+            <div key={`key-${headerLabel}`} title={headerLabel}>
+              {headerLabel}
+            </div>
+          );
         })}
       </div>
     </div>
@@ -118,7 +122,11 @@ function renderBody(runs, headers) {
                 );
               }
 
-              return <div title={value || '--'}>{value || '--'}</div>;
+              return (
+                <div key={`key-${value}`} title={value || '--'}>
+                  {value || '--'}
+                </div>
+              );
             })}
           </div>
         );

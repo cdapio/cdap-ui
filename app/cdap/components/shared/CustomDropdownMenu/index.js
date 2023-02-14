@@ -22,7 +22,8 @@ import { DropdownContext } from 'reactstrap';
 
 const CustomDropdownMenu = (props) => {
   const context = useContext(DropdownContext);
-  let { className, right, children, tag: Tag } = props;
+  const { className, right, children } = props;
+  let { tag: Tag } = props;
   const classes = classNames(className, 'dropdown-menu', {
     'dropdown-menu-right': right,
   });

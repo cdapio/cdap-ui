@@ -168,7 +168,7 @@ const RulesEngineStore = createStore(
     integration,
   }),
   DEFAULTRULESENGINESTATE,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default RulesEngineStore;

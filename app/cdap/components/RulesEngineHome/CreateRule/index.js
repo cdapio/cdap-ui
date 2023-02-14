@@ -93,7 +93,8 @@ export default class CreateRule extends Component {
   createRule = () => {
     const { selectedNamespace: namespace } = NamespaceStore.getState();
     let config = {};
-    let { name: id, when, then, description } = this.state;
+    const { name: id, when, description } = this.state;
+    let then = this.state.then;
     then = then.map((clause) => clause.property);
     config = { id, description, when, then };
     MyRulesEngine.createRule({ namespace }, config).subscribe(() => {

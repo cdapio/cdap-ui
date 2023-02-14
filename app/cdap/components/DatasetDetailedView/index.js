@@ -64,7 +64,8 @@ export default class DatasetDetailedView extends Component {
 
   componentWillMount() {
     const selectedNamespace = NamespaceStore.getState().selectedNamespace;
-    let { namespace, datasetId } = this.props.match.params;
+    let { namespace } = this.props.match.params;
+    const { datasetId } = this.props.match.params;
     const previousPathName =
       objectQuery(this.props, 'location', 'state', 'previousPathname') ||
       `/ns/${selectedNamespace}?overviewid=${datasetId}&overviewtype=dataset`;
@@ -99,7 +100,8 @@ export default class DatasetDetailedView extends Component {
     ) {
       return;
     }
-    let { namespace, datasetId } = nextProps.match.params;
+    let { namespace } = this.nextProps.match.params;
+    const { datasetId } = this.nextProps.match.params;
     if (!namespace) {
       namespace = NamespaceStore.getState().selectedNamespace;
     }

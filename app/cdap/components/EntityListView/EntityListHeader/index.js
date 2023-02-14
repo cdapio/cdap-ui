@@ -67,7 +67,7 @@ export default class EntityListHeader extends Component {
     });
   }
   componentWillUnmount() {
-    if (this.documentClick$ && this.documentClick$.unsubscribe) {
+    if (this.documentClick$?.unsubscribe) {
       this.documentClick$.unsubscribe();
     }
     if (this.searchStoreSubscription) {

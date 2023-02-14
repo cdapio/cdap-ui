@@ -91,7 +91,7 @@ export default class ProfileDetailViewDetailsInfo extends Component {
 
   convertValueBasedOnWidget = (widgetType, value) => {
     // Since memory-textbox is specifically used for RAM this conversion is safe.
-    if (widgetType == 'memory-textbox') {
+    if (widgetType === 'memory-textbox') {
       const numberValue = parseInt(value, 10);
       if (isNaN(numberValue)) {
         return value;
@@ -124,12 +124,8 @@ export default class ProfileDetailViewDetailsInfo extends Component {
       <div className="details-table">
         {profile.provisioner.properties.map((property) => {
           const propertyLabel =
-            (propertyToLabelWidgetMap[property.name] &&
-              propertyToLabelWidgetMap[property.name].label) ||
-            property.name;
-          const widgetType =
-            propertyToLabelWidgetMap[property.name] &&
-            propertyToLabelWidgetMap[property.name].widget;
+            propertyToLabelWidgetMap[property.name]?.label || property.name;
+          const widgetType = propertyToLabelWidgetMap[property.name]?.widget;
           let value = this.convertValueBasedOnWidget(
             widgetType,
             property.value

@@ -24,13 +24,14 @@ require('./MemoryTextbox.scss');
 // MemoryTextbox explicitly displays memory in GB even though it gets the value from
 // backend in MB. we are "big data". We don't talk in Mb we only start with Gb -_-
 export default function MemoryTextbox({ ...props }) {
-  let { onChange, value, widgetProps } = props;
+  const { onChange, widgetProps } = props;
+  let value = props.value;
   let min = Number.MIN_SAFE_INTEGER;
   let max = Number.MAX_SAFE_INTEGER;
-  if (widgetProps && widgetProps.min) {
+  if (widgetProps?.min) {
     min = widgetProps.min;
   }
-  if (widgetProps && widgetProps.max) {
+  if (widgetProps?.max) {
     max = widgetProps.max;
   }
   min = Math.floor(min / 1024);

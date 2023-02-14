@@ -55,7 +55,7 @@ const view = (state = DEFAULTVIEW, action = defaultAction) => {
 const ViewStore = createStore(
   combineReducers({ view }),
   DEFAULTSTORESTATE,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 function ContentSwitch({ onSwitchChange, activeTab }) {

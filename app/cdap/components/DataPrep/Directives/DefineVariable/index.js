@@ -109,7 +109,7 @@ export default class DefineVariableDirective extends Component {
         directive = `${condition} ${variableName} ${column} =$ "${textValue}" ? ${selectedColumn} : ${variableName}`;
         break;
       case 'TEXTEXACTLY':
-        directive = `${condition} ${variableName} ${column} == "${textValue}" ? ${selectedColumn} : ${variableName}`;
+        directive = `${condition} ${variableName} ${column}==="${textValue}" ? ${selectedColumn} : ${variableName}`;
         break;
       case 'TEXTREGEX':
         directive = `${condition} ${variableName} ${column} =~ ${textValue} ? ${selectedColumn} : ${variableName}`;

@@ -106,7 +106,7 @@ export default class MarkAsError extends Component {
   state = {
     selectedCondition: conditionsOptions[0],
     conditionValue: '',
-    customCondition: `${this.props.column} == 0`,
+    customCondition: `${this.props.column}===0`,
     ignoreCase: false,
   };
 

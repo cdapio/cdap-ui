@@ -205,6 +205,7 @@ const MLAlgorithmDetails = ({ algorithm, algorithmsList }) => {
             };
             return (
               <HyperParamWidget
+                key={`${hyperParam.type}-${actualValue}`}
                 type={hyperParam.type}
                 config={config}
                 onChange={(e) => {

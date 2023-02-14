@@ -231,7 +231,7 @@ export default class SetPreferenceModal extends Component {
 
   toggleSorted(attribute) {
     let sortOrder = 'asc';
-    if (this.state.sortByAttribute != attribute) {
+    if (this.state.sortByAttribute !== attribute) {
       this.setState({ sortOrder });
     } else {
       if (this.state.sortOrder === 'asc') {

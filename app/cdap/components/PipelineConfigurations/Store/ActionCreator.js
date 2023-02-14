@@ -205,15 +205,14 @@ const updatePipeline = () => {
   const detailStoreState = PipelineDetailStore.getState();
   const { name, description, artifact, principal } = detailStoreState;
   const { stages, connections, comments } = detailStoreState.config;
-
-  let {
+  const pipelineConfigurationsStoreState = PipelineConfigurationsStore.getState();
+  const {
     batchInterval,
     engine,
     resources,
     driverResources,
     clientResources,
     postActions,
-    properties,
     processTimingEnabled,
     stageLoggingEnabled,
     disableCheckpoints,
@@ -224,7 +223,8 @@ const updatePipeline = () => {
     serviceAccountPath,
     pushdownEnabled,
     transformationPushdown,
-  } = PipelineConfigurationsStore.getState();
+  } = pipelineConfigurationsStoreState;
+  let properties = pipelineConfigurationsStoreState.properties;
 
   properties = Object.keys(properties).reduce(
     (obj, key) => ((obj[key] = properties[key].toString()), obj),

@@ -81,7 +81,7 @@ export default class AllTabContents extends Component {
     const searchStr = changeEvent.target.value;
     //  it is a ui end filter, it only rerenders the plugins which name contains the string present in search bar.
     let results = this.state.entities;
-    if (searchStr != '') {
+    if (searchStr !== '') {
       results = this.state.entities.filter(
         (value) =>
           value.label.toLowerCase().indexOf(searchStr.toLowerCase()) >= 0

@@ -59,7 +59,7 @@ export default function NoEntitiesMessage({
     clearText = T.translate(
       'features.EntityListView.emptyMessage.clearText.search'
     );
-  } else if (filtersAreApplied && filtersAreApplied()) {
+  } else if (typeof filtersAreApplied === 'function' && filtersAreApplied()) {
     emptyMessage = T.translate('features.EntityListView.emptyMessage.filter');
     clearText = T.translate(
       'features.EntityListView.emptyMessage.clearText.filter'

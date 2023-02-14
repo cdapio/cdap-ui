@@ -79,8 +79,8 @@ export default class DatasetTab extends Component {
     MyMetricApi.query(metricsParams)
       .combineLatest(MyDatasetApi.getPrograms(datasetParams))
       .subscribe((res) => {
-        let ops = 'n/a',
-          writes = 0,
+        const ops = 'n/a';
+        let writes = 0,
           bytes = 0,
           reads = 0;
         if (res[0].series.length > 0) {

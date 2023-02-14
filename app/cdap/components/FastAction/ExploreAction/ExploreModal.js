@@ -233,7 +233,7 @@ export default class ExploreModal extends Component {
     } else {
       const queries = this.state.queries;
       queries.forEach((query, index) => {
-        if (currentQuery == query) {
+        if (currentQuery === query) {
           currentQuery.is_active = false;
           queries[index] = currentQuery;
           this.updateState(this.state.queries);
