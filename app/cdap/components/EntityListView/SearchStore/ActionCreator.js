@@ -20,8 +20,6 @@ import { parseMetadata } from 'services/metadata-parser';
 import uuidV4 from 'uuid/v4';
 import SearchStore from 'components/EntityListView/SearchStore';
 import SearchStoreActions from 'components/EntityListView/SearchStore/SearchStoreActions';
-import ExploreTablesStore from 'services/ExploreTables/ExploreTablesStore';
-import { fetchTables } from 'services/ExploreTables/ActionCreator';
 import { DEFAULT_SEARCH_QUERY } from 'components/EntityListView/SearchStore/SearchConstants';
 import isNil from 'lodash/isNil';
 import { Theme } from 'services/ThemeHelper';
@@ -45,8 +43,6 @@ const search = () => {
     delete params.cursorRequested;
     params.query = params.query + '*';
   }
-
-  ExploreTablesStore.dispatch(fetchTables(namespace));
 
   searchRequest(params);
 };

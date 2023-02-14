@@ -27,8 +27,6 @@ import NamespaceActions from 'services/NamespaceStore/NamespaceActions';
 import SearchStoreActions from 'components/EntityListView/SearchStore/SearchStoreActions';
 import globalEvents from 'services/global-events';
 import ee from 'event-emitter';
-import ExploreTablesStore from 'services/ExploreTables/ExploreTablesStore';
-import { fetchTables } from 'services/ExploreTables/ActionCreator';
 import PageErrorMessage from 'components/EntityListView/ErrorMessage/PageErrorMessage';
 import HomeErrorMessage from 'components/EntityListView/ErrorMessage';
 import Overview from 'components/shared/Overview';
@@ -146,11 +144,6 @@ export default class EntityListView extends Component {
   }
   componentWillReceiveProps(nextProps) {
     let searchState = SearchStore.getState().search;
-    if (nextProps.currentPage !== searchState.currentPage) {
-      // To enable explore fastaction on each card in entity list page.
-      ExploreTablesStore.dispatch(fetchTables(nextProps.match.params.namespace));
-    }
-
     let queryObject = this.getQueryObject(queryString.parse(nextProps.location.search));
     if (
       nextProps.match.params.namespace !== this.props.match.params.namespace ||
@@ -190,8 +183,6 @@ export default class EntityListView extends Component {
     this.unmounted = true;
   }
   refreshSearchByCreationTime() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    ExploreTablesStore.dispatch(fetchTables(namespace));
     SearchStore.dispatch({
       type: SearchStoreActions.SETACTIVESORT,
       payload: {
