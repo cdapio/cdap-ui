@@ -269,6 +269,15 @@ const MyDataPrepApi = {
 
   // Connection types
   listConnectionTypes: apiCreator(dataSrc, 'GET', 'REQUEST', connectionTypesPath),
+
+  // Recipe Management
+  createRecipe: apiCreator(dataSrc, 'POST', 'REQUEST', `${contextPathV2}/recipes`),
+  getRecipeByName: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${contextPathV2}/recipes/name/:recipeName`
+  ),
 };
 
 export default MyDataPrepApi;

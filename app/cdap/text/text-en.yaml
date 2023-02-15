@@ -3564,10 +3564,26 @@ features:
         steps: Steps
         updated: Last updated
         view: View
-        viewAll: View All      
+        viewAll: View All
+    RecipeForm:
+      labels:
+        cancel: Cancel
+        createRecipeNameLabel: Name of new recipe
+        description: Description of recipe
+        descriptionPlaceholder: Input a description to identify it later
+        editRecipeNameLabel: Name of recipe
+        errorMessage: Something went wrong!
+        namePlaceholder: Input a name to identify it later
+        recipeFormInfo: steps will be saved as a recpe. You can access this saved recipe from the recipes section on Wrangler Home page.
+        recipeSaveSuccessMessage: Steps successfully saved as a recipe!
+        sameNameErrorMessage: Another recipe with same name exists. Please input another name
+        save: Save
+        saveRecipe: Save as recipe
+        validationErrorMessage: Recipe name should contain only alphanumeric characters or spaces      
     Snackbar:
       labels:
         failure: Failure
         success: Success
         undo: Undo
 ...
+
