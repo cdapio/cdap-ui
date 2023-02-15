@@ -34,6 +34,7 @@ interface IRecipeListProps {
   viewHandler?: (selectedRecipe: IRecipe) => void;
   editHandler?: (selectedRecipe: IRecipe) => void;
   selectHandler?: (selectedRecipe: IRecipe) => void;
+  isRecipeListUpdated: boolean;
 }
 const PREFIX = 'features.WranglerNewUI.Recipe';
 
@@ -49,6 +50,7 @@ const RecipeList = ({
   viewHandler,
   editHandler,
   selectHandler,
+  isRecipeListUpdated,
 }: IRecipeListProps) => {
   const [state, dispatch] = useReducer(reducer, {
     ...defaultInitialState,
@@ -95,6 +97,12 @@ const RecipeList = ({
   useEffect(() => {
     getSavedRecipes(dispatch, state);
   }, []);
+
+  useEffect(() => {
+    if (isRecipeListUpdated) {
+      getSavedRecipes(dispatch, state);
+    }
+  }, [isRecipeListUpdated]);
 
   return (
     <RecipeTableDiv

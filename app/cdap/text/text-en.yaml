@@ -3553,6 +3553,7 @@ features:
           deleteTitle: Delete recipe
         createdDate: Created date
         description: Description
+        editRecipe: Edit Recipe
         emptyListMessage: No Recipes created in this namespace
         home: Home        
         import: Import
@@ -3564,7 +3565,22 @@ features:
         steps: Steps
         updated: Last updated
         view: View
-        viewAll: View All      
+        viewAll: View All
+    RecipeForm:
+      labels:
+        cancel: Cancel
+        description: Description of recipe
+        descriptionPlaceholder: Input a description to identify it later
+        edit: Edit
+        editFormTitle: Edit Recipe
+        editRecipeNameLabel: Name of recipe
+        errorMessage: Something went wrong!
+        namePlaceholder: Input a name to identify it later
+        recipeSaveSuccessMessage: Steps successfully saved as a recipe!
+        recipeUpdateSuccessMessage: Steps successfully updated as a recipe!
+        sameNameErrorMessage: Another recipe with same name exists. Please input another name
+        save: Save
+        validationErrorMessage: Recipe name should contain only alphanumeric characters or spaces   
     Snackbar:
       labels:
         failure: Failure

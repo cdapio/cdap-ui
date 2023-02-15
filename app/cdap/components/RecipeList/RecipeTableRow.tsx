@@ -15,14 +15,12 @@
  */
 
 import React, { useState } from 'react';
-import T from 'i18n-react';
-import { IRecipe } from './types';
-import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
-import MyDataPrepApi from 'api/dataprep';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 import fileDownload from 'js-file-download';
+import T from 'i18n-react';
+import { IRecipe } from 'components/RecipeList/types';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
-import { IState, reset, getRecipeDetailsById, deleteRecipe } from './reducer';
+import { IState, reset, getRecipeDetailsById, deleteRecipe } from 'components/RecipeList/reducer';
 import { format, TYPES } from 'services/DataFormatter';
 
 interface IRecipeTableRowProps {
@@ -38,6 +36,13 @@ interface IRecipeTableRowProps {
 }
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
+
+export const getTestIdString = (label: string) => {
+  return label
+    .toLowerCase()
+    .split(' ')
+    .join('-');
+};
 
 export const RecipeTableRow = ({
   recipe,
@@ -165,13 +170,20 @@ export const RecipeTableRow = ({
 
   return (
     <>
-      <div className="grid-row" onClick={!showAllColumns ? selectRecipeHandler : undefined}>
+      <div
+        className="grid-row"
+        onClick={!showAllColumns && selectRecipeHandler}
+        data-testid={`${getTestIdString(recipe.recipeName)}-recipe-row`}
+      >
         <div>{recipe.recipeName}</div>
         <div>{recipe.recipeStepsCount}</div>
         {showAllColumns && <div>{recipe.description}</div>}
         <div>{format(recipe.updatedTimeMillis, TYPES.TIMESTAMP_MILLIS)}</div>
         {showActions && (
-          <span onClick={handleActionsClick}>
+          <span
+            onClick={handleActionsClick}
+            data-testid={`kebab-icon-${getTestIdString(recipe.recipeName)}`}
+          >
             <ActionsPopover
               actions={actions}
               showPopover={showPopover}
