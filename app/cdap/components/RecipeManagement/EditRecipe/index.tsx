@@ -198,7 +198,6 @@ export default function({
    * (whether recipe name already exists or not and recipe name without alphanumeric characters)
    * and based on the result we are showing the helper text
    */
-
   const validateIfRecipeNameExists = useRef(
     debounce((formData: IRecipeData) => {
       if (formData.recipeName && !recipeNameRegEx.test(formData.recipeName)) {
