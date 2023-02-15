@@ -217,7 +217,6 @@ export const ApplyRecipeView = ({
         showDivider={false}
         open={isOpen}
         dataTestId={'apply-recipe-drawer-widget'}
-        showHeaderSeparator={false}
         children={selectedRecipe === null ? renderRecipeList() : renderRecipeDetailsWithApply()}
       />
     </>

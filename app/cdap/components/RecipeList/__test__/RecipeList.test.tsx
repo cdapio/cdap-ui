@@ -18,7 +18,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Route, Router, Switch } from 'react-router';
 import history from 'services/history';
-import ViewAllRecipies from '../ViewAllRecipes';
+import ViewAllRecipies from 'components/RecipeList/ViewAllRecipes';
 
 describe('It renders Recipes list ', () => {
   test('renders RecipeList component', () => {

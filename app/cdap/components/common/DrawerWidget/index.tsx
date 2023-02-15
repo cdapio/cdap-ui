@@ -29,7 +29,6 @@ export interface IDrawerWidgetProps extends DrawerProps {
   showBackIcon?: boolean;
   onBackIconClick?: () => void;
   dataTestId: string;
-  showHeaderSeparator?: boolean;
 }
 
 const BackIcon = styled(ChevronLeftRoundedIcon)`
@@ -64,16 +63,15 @@ const Divider = styled.div`
 
 const DrawerContainer = styled(Container)`
   height: 100%;
-  padding: 0px 30px;
+  padding: 0 20px;
 `;
 
 const DrawerHeader = styled.header`
-  height: 60px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 15px;
-  padding-right: 18px;
+  padding: 0 20px;
 `;
 
 const HeaderActions = styled(Box)`
@@ -107,7 +105,6 @@ export default function({
   onBackIconClick,
   anchor = 'right',
   dataTestId,
-  showHeaderSeparator = true,
 }: IDrawerWidgetProps) {
   return (
     <CustomizedDrawer anchor={anchor} open={open} data-testid={dataTestId}>
@@ -126,7 +123,6 @@ export default function({
             <Label data-testid="widget-heading-text" component="span">
               {headingText}
             </Label>
-            {showHeaderSeparator && <img src="/cdap_assets/img/underline" />}
           </LabelContainer>
         </HeaderActions>
         <HeaderActions>

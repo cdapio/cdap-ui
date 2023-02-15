@@ -3542,6 +3542,7 @@ features:
         subtitle: Remove some recipe steps to view some data
         title: No rows left in this sample
     Recipe:
+        actions: Actions
         applyRecipe: Apply        
         applyRecipeHeading: Apply steps from a Recipe
         applyRecipeSuccess: Recipe steps applied successfully
@@ -3551,8 +3552,14 @@ features:
           deleteConfirmation: Are you sure you want to delete the recipe *_{recipeName}_*?
           deleteError: There was a problem deleting the recipe
           deleteTitle: Delete recipe
+          tableHeaders:
+            recipeStep: Recipe steps 
+            serialNo: S.No.    
         createdDate: Created date
+        delete: Delete
         description: Description
+        download: Download
+        edit: Edit
         emptyListMessage: No Recipes created in this namespace
         home: Home        
         import: Import
@@ -3562,6 +3569,7 @@ features:
         savedRecipes: Saved Recipes  
         selectRecipeToApply: Select a recipe to apply its steps  
         steps: Steps
+        recipeDetails: Recipe details
         updated: Last updated
         view: View
         viewAll: View All      

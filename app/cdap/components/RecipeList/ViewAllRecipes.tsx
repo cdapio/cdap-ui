@@ -14,32 +14,103 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import T from 'i18n-react';
-import RecipeList from 'components/RecipeList';
-
-import Box from '@material-ui/core/Box';
-import { SortBy, SortOrder } from './types';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import RecipeList from 'components/RecipeList';
+import { SortBy, SortOrder } from 'components/RecipeList/types';
+import RecipeDetails from 'components/RecipeManagement/RecipeDetails';
+import { IRecipe, ActionType } from 'components/RecipeList/types';
+import DrawerWidget from 'components/common/DrawerWidget';
+import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
+
+const ActionsWrapper = styled(Box)`
+  display: flex;
+  align-items: center;
+`;
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
+const actions: IAction[] = [
+  {
+    label: T.translate(`${PREFIX}.edit`),
+  },
+  {
+    label: T.translate(`${PREFIX}.download`),
+  },
+  {
+    label: T.translate(`${PREFIX}.delete`),
+  },
+];
 
 const redirectToObj = `/ns/${getCurrentNamespace()}/wrangle`;
 
-const ViewAllRecipies = () => {
+export default function ViewAllRecipies() {
+  const [actionType, setActionType] = useState('');
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [showPopover, setShowPopover] = useState(false);
+  const [recipe, setRecipe] = useState<IRecipe>();
+  const isViewRecipeAction = actionType === ActionType.VIEW_RECIPE;
   const viewRecipeHandler = (selectedObject: any) => {
-    // To do : Integrate view recipe details panel
+    toggleOpen();
+    setRecipe(selectedObject);
+    setActionType(ActionType.VIEW_RECIPE);
+  };
+
+  const togglePopover = () => {
+    setShowPopover(!showPopover);
   };
 
   const handleEditRecipe = (selectedObject: any) => {
     // To do : Integrate Edit recipe details panel
   };
 
+  const toggleOpen = () => setIsPanelOpen(!isPanelOpen);
+
+  const getChildComponent = () => {
+    if (isViewRecipeAction) {
+      return <RecipeDetails selectedRecipe={recipe} />;
+    }
+
+    // TODO: Here we will render Edit Recipe Component once we integrate edit recipe
+    return null;
+  };
+
   return (
     <>
+      <DrawerWidget
+        anchor="right"
+        closeClickHandler={toggleOpen}
+        headingText={
+          isViewRecipeAction
+            ? T.translate(`${PREFIX}.recipeDetails`)
+            : T.translate(`${PREFIX}.editRecipe`)
+        }
+        showBackIcon={false}
+        showDivider={isViewRecipeAction}
+        open={isPanelOpen}
+        headerActionTemplate={
+          isViewRecipeAction && (
+            <ActionsWrapper>
+              <ActionsPopover
+                actions={actions}
+                showPopover={showPopover}
+                togglePopover={togglePopover}
+              />
+            </ActionsWrapper>
+          )
+        }
+        dataTestId={`${actionType
+          .toLowerCase()
+          .split(' ')
+          .join('-')}-drawer-widget`}
+      >
+        {getChildComponent()}
+      </DrawerWidget>
       <Box ml={4} m={2}>
         <Breadcrumbs separator="›" aria-label="breadcrumb">
           <Link underline="hover" key="2" color="inherit" to={redirectToObj}>
@@ -71,6 +142,4 @@ const ViewAllRecipies = () => {
       </Box>
     </>
   );
-};
-
-export default ViewAllRecipies;
+}
