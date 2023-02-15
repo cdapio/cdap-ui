@@ -37,7 +37,6 @@ const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';
  * should only allow alpha numeric and should not allow special characters
  * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
  */
-
 const recipeNameRegEx = /^[a-z\d\s]+$/i;
 export const noErrorState: IRecipeNameErrorData = {
   isRecipeNameError: false,
