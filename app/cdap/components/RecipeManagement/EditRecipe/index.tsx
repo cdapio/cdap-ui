@@ -42,7 +42,6 @@ const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';
  * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
  */
 const recipeNameRegEx = /^[a-z\d\s]+$/i;
-
 const noErrorState: IRecipeNameErrorData = {
   isRecipeNameError: false,
   recipeNameErrorMessage: '',
@@ -65,7 +64,6 @@ export default function({
       recipe_id: '',
     },
   });
-
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [recipeFormData, setRecipeFormData] = useState({
     recipeName: '',
@@ -167,8 +165,6 @@ export default function({
     nameErrorData: IRecipeNameErrorData = recipeNameErrorData
   ) => {
     const shouldDisableSaveButton =
-      formData.recipeName === '' ||
-      formData.description === '' ||
       formData.recipeName?.trim().length === 0 ||
       formData.description?.trim().length === 0 ||
       nameErrorData.isRecipeNameError;
