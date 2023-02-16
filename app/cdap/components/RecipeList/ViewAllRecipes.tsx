@@ -22,13 +22,13 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getTestIdString } from 'components/RecipeList/RecipeTableRow';
 import RecipeList from 'components/RecipeList';
 import { SortBy, SortOrder } from 'components/RecipeList/types';
 import RecipeDetails from 'components/RecipeManagement/RecipeDetails';
 import { IRecipe, ActionType } from 'components/RecipeList/types';
 import DrawerWidget from 'components/common/DrawerWidget';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
-import { getTestIdString } from 'components/RecipeList/RecipeTableRow';
 
 const ActionsWrapper = styled(Box)`
   display: flex;
@@ -36,6 +36,7 @@ const ActionsWrapper = styled(Box)`
 `;
 
 const PREFIX = 'features.WranglerNewUI.Recipe';
+
 const actions: IAction[] = [
   {
     label: T.translate(`${PREFIX}.edit`),
@@ -55,7 +56,11 @@ export default function ViewAllRecipies() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [recipe, setRecipe] = useState<IRecipe>();
+
   const isViewRecipeAction = actionType === ActionType.VIEW_RECIPE;
+
+  const toggleOpen = () => setIsPanelOpen(!isPanelOpen);
+
   const viewRecipeHandler = (selectedObject: any) => {
     toggleOpen();
     setRecipe(selectedObject);
@@ -69,8 +74,6 @@ export default function ViewAllRecipies() {
   const handleEditRecipe = (selectedObject: any) => {
     // To do : Integrate Edit recipe details panel
   };
-
-  const toggleOpen = () => setIsPanelOpen(!isPanelOpen);
 
   const getChildComponent = () => {
     if (isViewRecipeAction) {

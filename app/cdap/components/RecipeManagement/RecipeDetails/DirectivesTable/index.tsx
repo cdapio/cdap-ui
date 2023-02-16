@@ -62,9 +62,7 @@ const StyledTableBodyCell = styled(TableCell)`
 `;
 
 export default function DirectivesTable({ directives }: { directives: string[] }) {
-  const getSerialNumber = (recipeStepIndex: number) => {
-    return String(recipeStepIndex + 1).padStart(2, '0');
-  };
+  const getSerialNumber = (recipeStepIndex: number) => String(recipeStepIndex + 1).padStart(2, '0');
 
   return (
     <Table columnTemplate="0.5fr 2fr">
