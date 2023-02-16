@@ -42,6 +42,7 @@ export const Label = styled(Typography)`
   font-weight: 400;
   letter-spacing: 0.4px;
   line-height: 20px;
+  margin-bottom: 2px;
 `;
 
 export const ErrorLabel = styled(Label)`
@@ -60,7 +61,7 @@ export const StyledTextField = styled(TextField)`
     margin-right: 0px;
   }
   .MuiOutlinedInput-input {
-    padding: 12px 14px;
+    padding: 12px 18px;
     font-size: 14px;
     line-height: 150%;
     letter-spacing: 0.15px;
@@ -89,7 +90,7 @@ export const StyledTextAreaAutosize = styled(TextareaAutosize)`
   height: 100px;
   letter-spacing: 0.15px;
   line-height: 150%;
-  padding: 10.5px 14px;
+  padding: 10.5px 18px;
   resize: none;
   width: 460px;
   :focus-visible {
