@@ -38,6 +38,12 @@ const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';
  * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
  */
 const recipeNameRegEx = /^[a-z\d\s]+$/i;
+
+/*
+ * TODO: This static data has to be removed when we have actual API data,
+ * then directly we will get that data from store as directives
+ */
+const recipeSteps = ['uppercase: body1', 'titlecase: body2'];
 export const noErrorState: IRecipeNameErrorData = {
   isRecipeNameError: false,
   recipeNameErrorMessage: '',
@@ -49,7 +55,6 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
     description: '',
   });
   const [recipeNameErrorData, setRecipeNameErrorDataState] = useState(noErrorState);
-
   const [isSaveDisabled, setIsSaveDisabled] = useState(true);
   const [apiParams, setApiParams] = useState({
     getRecipeByNameParams: {
@@ -60,12 +65,6 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
       context: '',
     },
   });
-
-  /*
-   * TODO: This static data has to be removed when we have actual API data,
-   * then directly we will get that data from store as directives
-   */
-  const recipeSteps = ['uppercase: body1', 'titlecase: body2'];
 
   const { response: recipeByNameResponse, error: recipeByNameError } = useFetch(
     MyDataPrepApi.getRecipeByName,
@@ -147,8 +146,6 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
     nameErrorData: IRecipeNameErrorData = recipeNameErrorData
   ) => {
     const shouldDisableSaveButton =
-      formData.recipeName === '' ||
-      formData.description === '' ||
       formData.recipeName?.trim().length === 0 ||
       formData.description?.trim().length === 0 ||
       nameErrorData.isRecipeNameError;
