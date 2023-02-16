@@ -75,7 +75,7 @@ export default function ViewAllRecipies() {
     // To do : Integrate Edit recipe details panel
   };
 
-  const getChildComponent = () => {
+  const getDrawerWidgetChildComponent = () => {
     if (isViewRecipeAction) {
       return <RecipeDetails selectedRecipe={recipe} />;
     }
@@ -110,7 +110,7 @@ export default function ViewAllRecipies() {
         }
         dataTestId={`${getTestIdString(actionType)}-drawer-widget`}
       >
-        {getChildComponent()}
+        {getDrawerWidgetChildComponent()}
       </DrawerWidget>
       <Box ml={4} m={2}>
         <Breadcrumbs separator="›" aria-label="breadcrumb">
