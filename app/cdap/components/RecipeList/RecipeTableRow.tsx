@@ -35,6 +35,11 @@ interface IRecipeTableRowProps {
   dispatch: (action: any) => void;
 }
 
+/**
+ * this function accepts a space-seprated string and coversts it to a lowercase hyphenated string
+ * @param label - any space-separated string
+ * @returns - a lowercase hyphenated string
+ */
 export const getTestIdString = (label: string) => {
   return label
     .toLowerCase()
