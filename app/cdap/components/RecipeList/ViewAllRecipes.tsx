@@ -28,6 +28,7 @@ import RecipeDetails from 'components/RecipeManagement/RecipeDetails';
 import { IRecipe, ActionType } from 'components/RecipeList/types';
 import DrawerWidget from 'components/common/DrawerWidget';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
+import { getTestIdString } from 'components/RecipeList/RecipeTableRow';
 
 const ActionsWrapper = styled(Box)`
   display: flex;
@@ -104,10 +105,7 @@ export default function ViewAllRecipies() {
             </ActionsWrapper>
           )
         }
-        dataTestId={`${actionType
-          .toLowerCase()
-          .split(' ')
-          .join('-')}-drawer-widget`}
+        dataTestId={`${getTestIdString(actionType)}-drawer-widget`}
       >
         {getChildComponent()}
       </DrawerWidget>
