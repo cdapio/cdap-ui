@@ -119,7 +119,7 @@ export const SaveButton = styled(PrimaryContainedButton)`
 
 export const CreateRecipeFormButtonWrapper = styled.div`
   float: left;
-  margin-top: 100px;
+  margin-top: 78px;
   padding-bottom: 20px;
 `;
 
