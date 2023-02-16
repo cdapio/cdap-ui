@@ -29,13 +29,12 @@ import RecipeDetails from 'components/RecipeManagement/RecipeDetails';
 import { IRecipe, ActionType } from 'components/RecipeList/types';
 import DrawerWidget from 'components/common/DrawerWidget';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
+import { PREFIX } from 'components/RecipeList';
 
 const ActionsWrapper = styled(Box)`
   display: flex;
   align-items: center;
 `;
-
-const PREFIX = 'features.WranglerNewUI.Recipe';
 
 const actions: IAction[] = [
   {

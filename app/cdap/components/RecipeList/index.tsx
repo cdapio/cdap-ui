@@ -35,7 +35,7 @@ interface IRecipeListProps {
   editHandler?: (selectedRecipe: IRecipe) => void;
   selectHandler?: (selectedRecipe: IRecipe) => void;
 }
-const PREFIX = 'features.WranglerNewUI.Recipe';
+export const PREFIX = 'features.WranglerNewUI.Recipe';
 
 const RecipeList = ({
   isOpen,

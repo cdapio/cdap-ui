@@ -22,6 +22,7 @@ import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { IRecipe } from 'components/RecipeList/types';
 import { IState, reset, getRecipeDetailsById, deleteRecipe } from 'components/RecipeList/reducer';
 import { format, TYPES } from 'services/DataFormatter';
+import { PREFIX } from 'components/RecipeList';
 
 interface IRecipeTableRowProps {
   recipe: IRecipe;
@@ -46,8 +47,6 @@ export const getTestIdString = (label: string) => {
     .split(' ')
     .join('-');
 };
-
-const PREFIX = 'features.WranglerNewUI.Recipe';
 
 export const RecipeTableRow = ({
   recipe,
