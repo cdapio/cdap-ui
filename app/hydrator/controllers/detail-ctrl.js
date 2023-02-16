@@ -15,12 +15,13 @@
  */
 
 angular.module(PKG.name + '.feature.hydrator')
-  .controller('HydratorPlusPlusDetailCtrl', function(rPipelineDetail, $scope, $stateParams, PipelineAvailablePluginsActions, GLOBALS, myHelpers) {
+  .controller('HydratorPlusPlusDetailCtrl', function(rPipelineDetail, $scope, $stateParams, PipelineAvailablePluginsActions, GLOBALS, myHelpers, HydratorPlusPlusHydratorService, DAGPlusPlusNodesStore) {
     // FIXME: This should essentially be moved to a scaffolding service that will do stuff for a state/view
     const pipelineDetailsActionCreator = window.CaskCommon.PipelineDetailActionCreator;
     const pipelineMetricsActionCreator = window.CaskCommon.PipelineMetricsActionCreator;
     const pipelineConfigurationsActionCreator = window.CaskCommon.PipelineConfigurationsActionCreator;
-
+    this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
+    this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.pipelineType = rPipelineDetail.artifact.name;
     this.appInfo = {namespace: $stateParams.namespace, pipelineId: $stateParams.pipelineId};
     const programType = GLOBALS.programType[this.pipelineType];
@@ -144,6 +145,10 @@ angular.module(PKG.name + '.feature.hydrator')
       // When current run id changes reset the metrics in the DAG.
       if (currentRun && currentRun.runid !== latestRun.runid) {
         pipelineMetricsActionCreator.reset();
+        let pipelineConfig = window.CaskCommon.PipelineDetailStore.getState().config;
+        let nodes = this.HydratorPlusPlusHydratorService.getNodesFromStages(pipelineConfig.stages);
+        this.DAGPlusPlusNodesStore.setNodes(nodes);
+        this.DAGPlusPlusNodesStore.setConnections(pipelineConfig.connections);
       }
 
       currentRun = latestRun;

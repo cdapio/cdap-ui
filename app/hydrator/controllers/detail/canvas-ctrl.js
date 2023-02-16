@@ -28,6 +28,7 @@ angular.module(PKG.name + '.feature.hydrator')
     this.currentRunTimeCounter = null;
     this.metrics = {};
     this.logsMetrics = {};
+    this.runId = '';
     try {
       rPipelineDetail.config = JSON.parse(rPipelineDetail.configuration);
     } catch (e) {
@@ -181,6 +182,7 @@ angular.module(PKG.name + '.feature.hydrator')
         });
         let reversedRuns = window.CaskCommon.CDAPHelpers.reverseArrayWithoutMutating(runs);
         let runNumber = _.findIndex(reversedRuns, {runid: this.currentRun.runid});
+        this.runId = this.currentRun.runid;
         this.currentRunIndex = runNumber + 1;
         this.totalRuns = runs.length;
       }
