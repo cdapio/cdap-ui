@@ -2026,6 +2026,17 @@ features:
         moreInfo: More Info.
   MarketEntityModal:
     version: "Version :"
+  NamespaceAdmin:
+    metrics:
+      connections: connections
+      datasets: datasets
+      drivers: drivers
+      pipelines: pipelines
+      preferences: preferences
+      profiles: profiles
+    toppanel:
+      title: Namespace '{name}'
+      addNamespaceButton: Add new namespace
   NamespaceDetails:
     computeProfiles:
       create: Create New

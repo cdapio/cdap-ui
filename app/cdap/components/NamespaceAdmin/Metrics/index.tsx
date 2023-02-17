@@ -16,9 +16,12 @@
 
 import React from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import MetricColumn from 'components/NamespaceAdmin/Metrics/MetricColumn';
 import { connect } from 'react-redux';
 import ProfileMetric from 'components/NamespaceAdmin/Metrics/ProfileMetric';
+import { MetricCard } from './MetricCard';
+import T from 'i18n-react';
+
+const PREFIX = 'features.NamespaceAdmin.metrics';
 
 const useStyle = makeStyles((theme) => {
   const border = `1px solid ${theme.palette.grey[100]}`;
@@ -32,7 +35,7 @@ const useStyle = makeStyles((theme) => {
     },
     content: {
       display: 'grid',
-      gridTemplateColumns: '3fr 2fr 2fr 2fr 2fr',
+      gridTemplateColumns: '2fr 2fr 2fr 2fr 2fr 2fr',
 
       '& > div:not(:last-child)': {
         borderRight: `1px solid ${theme.palette.grey[300]}`,
@@ -61,18 +64,15 @@ const MetricsView: React.FC<IMetricsProps> = ({
   connectionsCount,
 }) => {
   const classes = useStyle();
-
   return (
     <div className={classes.root}>
       <div className={classes.content}>
-        <div className={classes.entitySection}>
-          <MetricColumn title="pipelines" metric={pipelinesCount} />
-          <MetricColumn title="datasets" metric={datasetsCount} />
-        </div>
-        <ProfileMetric />
-        <MetricColumn title="preferences" metric={preferencesCount} />
-        <MetricColumn title="connections" metric={connectionsCount} />
-        <MetricColumn title="drivers" metric={driversCount} />
+        <MetricCard title={T.translate(`${PREFIX}.pipelines`)} metric={pipelinesCount} />
+        <MetricCard title={T.translate(`${PREFIX}.datasets`)} metric={datasetsCount} />
+        <ProfileMetric title={T.translate(`${PREFIX}.profiles`)} />
+        <MetricCard title={T.translate(`${PREFIX}.preferences`)} metric={preferencesCount} />
+        <MetricCard title={T.translate(`${PREFIX}.connections`)} metric={connectionsCount} />
+        <MetricCard title={T.translate(`${PREFIX}.drivers`)} metric={driversCount} />
       </div>
     </div>
   );

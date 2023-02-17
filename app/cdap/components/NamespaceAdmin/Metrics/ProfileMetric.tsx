@@ -15,18 +15,18 @@
  */
 
 import React from 'react';
-import MetricColumn from 'components/NamespaceAdmin/Metrics/MetricColumn';
 import { connect, Provider } from 'react-redux';
 import ProfilesStore from 'components/Cloud/Profiles/Store';
+import { MetricCard } from './MetricCard';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    title: 'profiles',
+    title: ownProps.title,
     metric: state.profiles.length,
   };
 };
 
-const ConnectedProfileMetric = connect(mapStateToProps)(MetricColumn);
+const ConnectedProfileMetric = connect(mapStateToProps)(MetricCard);
 
 export default function ProfileMetrics(props) {
   return (

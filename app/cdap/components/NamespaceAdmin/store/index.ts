@@ -25,6 +25,7 @@ export const NamespaceAdminActions = {
   setPreferences: 'SET_PREFERENCES',
   setDrivers: 'SET_DRIVERS',
   setConnections: 'SET_CONNECTIONS',
+  setNamespaceList: 'SET_NAMESPACE_LIST',
   reset: 'NAMESPACE_ADMIN_RESET',
 };
 
@@ -71,8 +72,9 @@ export interface IConnection {
   plugin: IPlugin;
 }
 
-interface INamespaceAdmin {
+export interface INamespaceAdmin {
   namespace: string;
+  namespaces: string[];
   generation: number;
   description: string;
   exploreAsPrincipal: string;
@@ -89,6 +91,7 @@ type INamespaceAdminState = Partial<INamespaceAdmin>;
 
 const defaultInitialState: Partial<INamespaceAdminState> = {
   namespace: null,
+  namespaces: [],
   generation: null,
   description: null,
   exploreAsPrincipal: null,
@@ -137,6 +140,11 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
       return {
         ...state,
         connections: action.payload.connections,
+      };
+    case NamespaceAdminActions.setNamespaceList:
+      return {
+        ...state,
+        namespaces: action.payload.namespaces,
       };
     case NamespaceAdminActions.reset:
       return {

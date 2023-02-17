@@ -15,29 +15,24 @@
  */
 
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
+import { INamespaceAdmin } from './store';
+import styled from 'styled-components';
 
-const useStyle = makeStyles((theme) => {
-  return {
-    root: {
-      marginTop: '15px',
-      marginBottom: '15px',
-    },
-  };
-});
+const StyledDescription = styled.div`
+  margin-top: 15px;
+  margin-bottom: 15px;
+`;
 
 interface IDescriptionProps {
   description: string;
 }
 
 const DescriptionView: React.FC<IDescriptionProps> = ({ description }) => {
-  const classes = useStyle();
-
-  return <div className={classes.root}>{description}</div>;
+  return <StyledDescription>{description}</StyledDescription>;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: INamespaceAdmin) => {
   return {
     description: state.description,
   };
