@@ -103,7 +103,14 @@ export function evaluateFilter(
     ...getTypedPropertyValues(propertyValues, propertiesFromBackend),
   };
 
-  return jexl.evalSync(`${filter.condition.expression}`, typedPropertyValues);
+  // Some upgrade scenarios leave useConnection as null,
+  // which prevents the connection properties from being shown
+  // Modify any expression which depends on useConnection equaling false
+  const expressionHandleUseConnectionNull = filter.condition.expression.replace(
+    'useConnection == false',
+    'useConnection != true'
+  );
+  return jexl.evalSync(expressionHandleUseConnectionNull, typedPropertyValues);
 }
 
 /**
