@@ -3579,7 +3579,7 @@ features:
         sameNameErrorMessage: Another recipe with same name exists. Please input another name
         save: Save
         saveRecipe: Save as recipe
-        validationErrorMessage: Recipe name should contain only alphanumeric characters or spaces      
+        validationErrorMessage: Recipe name should contain only alphanumeric characters or spaces in between      
     Snackbar:
       labels:
         failure: Failure

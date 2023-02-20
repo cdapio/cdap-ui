@@ -27,6 +27,12 @@ export interface IRecipeFormProps {
   recipeFormAction: string;
   recipeFormData: IRecipeFormData | IRecipeData;
   recipeNameErrorMessage: string;
+  regEx: IRecipeFormFieldsRegEx;
+}
+
+export interface IRecipeFormFieldsRegEx {
+  recipeNameRegEx: RegExp;
+  descriptionRegEx: RegExp;
 }
 
 export interface IRecipeFormData {

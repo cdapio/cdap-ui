@@ -31,14 +31,22 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import useFetch from 'services/react/customHooks/useFetch';
 
 const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';
+const REGEX = {
+  /*
+   * This regular expression which validates the recipe name
+   * should only allow alpha numeric and should not allow special characters
+   * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
+   */
+  recipeNameRegEx: /^(?=\S)[a-z\d\s]+$/i,
 
-/*
- * This regular expression which validates the recipe name
- * should only allow alpha numeric and should not allow special characters
- * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
- */
-const recipeNameRegEx = /^[a-z\d\s]+$/i;
-
+  /*
+   * This regular expression which validates description
+   * should not allow white space character at the beginning
+   * but can have any characters after that
+   * for e.g. (  desc!@) - will not be allowed , (desc!@) - will be allowed
+   */
+  descriptionRegEx: /^(?!\s).*$/i,
+};
 /*
  * TODO: This static data has to be removed when we have actual API data,
  * then directly we will get that data from store as directives
@@ -146,8 +154,10 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
     nameErrorData: IRecipeNameErrorData = recipeNameErrorData
   ) => {
     const shouldDisableSaveButton =
-      formData.recipeName?.trim().length === 0 ||
-      formData.description?.trim().length === 0 ||
+      !formData.recipeName ||
+      !formData.description ||
+      !REGEX.recipeNameRegEx.test(formData.recipeName) ||
+      !REGEX.descriptionRegEx.test(formData.description) ||
       nameErrorData.isRecipeNameError;
     setIsSaveDisabled(shouldDisableSaveButton);
   };
@@ -162,10 +172,17 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
       ...recipeFormData,
       recipeName: event.target.value,
     });
-    validateIfRecipeNameExists.current({
-      recipeName: event.target.value,
-      description: recipeFormData.description,
-    });
+    if (event.target.value && !REGEX.recipeNameRegEx.test(event.target.value)) {
+      updateRecipeNameErrorData({
+        isRecipeNameError: true,
+        recipeNameErrorMessage: T.translate(`${PREFIX}.validationErrorMessage`).toString(),
+      });
+    } else {
+      validateIfRecipeNameExists.current({
+        recipeName: event.target.value,
+        description: recipeFormData.description,
+      });
+    }
   };
 
   const onRecipeDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -173,6 +190,9 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
       ...recipeFormData,
       description: event.target.value,
     });
+    if (event.target.value && !REGEX.descriptionRegEx.test(event.target.value)) {
+      setIsSaveDisabled(true);
+    }
   };
 
   const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -198,23 +218,16 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
    */
   const validateIfRecipeNameExists = useRef(
     debounce((formData: IRecipeFormData) => {
-      if (formData.recipeName && !recipeNameRegEx.test(formData.recipeName)) {
-        updateRecipeNameErrorData({
-          isRecipeNameError: true,
-          recipeNameErrorMessage: T.translate(`${PREFIX}.validationErrorMessage`).toString(),
+      if (formData.recipeName) {
+        setApiParams({
+          ...apiParams,
+          getRecipeByNameParams: {
+            context: getCurrentNamespace(),
+            recipeName: formData.recipeName,
+          },
         });
       } else {
-        if (formData.recipeName) {
-          setApiParams({
-            ...apiParams,
-            getRecipeByNameParams: {
-              context: getCurrentNamespace(),
-              recipeName: formData.recipeName,
-            },
-          });
-        } else {
-          updateRecipeNameErrorData(noErrorState);
-        }
+        updateRecipeNameErrorData(noErrorState);
       }
     }, 500)
   );
@@ -230,6 +243,7 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
       isSaveDisabled={isSaveDisabled}
       recipeFormAction={ActionType.CREATE_RECIPE}
       onRecipeDescriptionChange={onRecipeDescriptionChange}
+      regEx={REGEX}
     />
   );
 }
