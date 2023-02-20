@@ -42,7 +42,7 @@ const REGEX = {
    * should only allow alpha numeric and should not allow special characters
    * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
    */
-  recipeNameRegEx: /^(?=\S)[a-z\d\s]+$/i,
+  recipeNameRegEx: /^[a-zA-Z\d]+(\s[a-zA-Z\d]+)*$/,
 
   /*
    * This regular expression which validates description
@@ -50,7 +50,7 @@ const REGEX = {
    * but can have any characters after that
    * for e.g. (  desc!@) - will not be allowed , (desc!@) - will be allowed
    */
-  descriptionRegEx: /^(?!\s).*$/i,
+  descriptionRegEx: /^\S(.*\S)?$/i,
 };
 
 const noErrorState: IRecipeNameErrorData = {
