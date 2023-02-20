@@ -25,7 +25,7 @@ import FooterPanel from 'components/FooterPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
-import { useStyles } from 'components/GridTable/styles';
+import { TableGridContainer, useStyles } from 'components/GridTable/styles';
 import {
   IExecuteAPIResponse,
   IHeaderNamesList,
@@ -54,6 +54,15 @@ import RecipeStepsPanel from 'components/RecipeStepsPanel';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
+`;
+
+export const TableWrapperWithOpenPanel = styled.div`
+  width: calc(100% - 500px);
+  overflow: scroll;
+`;
+
+export const RecipeStepsPanelContainer = styled(RecipeStepsPanel)`
+  width: 500px;
 `;
 
 const GridTableWrapper = styled(Box)`
@@ -316,6 +325,8 @@ export default function GridTable() {
     }
   }, [snackbarState.open]);
 
+  const TableWrapperContainer = showRecipePanel ? TableWrapperWithOpenPanel : TableWrapper;
+
   return (
     <>
       {showBreadCrumb && (
@@ -340,54 +351,56 @@ export default function GridTable() {
           </FlexWrapper>
         )}
         {showGridTable && (
-          <TableWrapper>
-            <Table aria-label="simple table" className="test">
-              <TableHead>
-                <TableRow>
-                  {headersNamesList?.length &&
-                    headersNamesList.map((eachHeader) => (
-                      <GridHeaderCell
-                        label={eachHeader.label}
-                        types={eachHeader.type}
-                        key={eachHeader.name}
-                        columnSelected={selectedColumn}
-                        setColumnSelected={handleColumnSelect}
-                      />
-                    ))}
-                </TableRow>
-                <TableRow>
-                  {missingDataList?.length &&
-                    headersNamesList.length &&
-                    headersNamesList.map((each, index) => {
-                      return missingDataList.map((item, itemIndex) => {
-                        if (item.name === each.name) {
-                          return <GridKPICell metricData={item} key={item.name} />;
-                        }
-                      });
+          <TableGridContainer>
+            <TableWrapperContainer>
+              <Table aria-label="simple table" className="test">
+                <TableHead>
+                  <TableRow>
+                    {headersNamesList?.length &&
+                      headersNamesList.map((eachHeader) => (
+                        <GridHeaderCell
+                          label={eachHeader.label}
+                          types={eachHeader.type}
+                          key={eachHeader.name}
+                          columnSelected={selectedColumn}
+                          setColumnSelected={handleColumnSelect}
+                        />
+                      ))}
+                  </TableRow>
+                  <TableRow>
+                    {missingDataList?.length &&
+                      headersNamesList.length &&
+                      headersNamesList.map((each, index) => {
+                        return missingDataList.map((item, itemIndex) => {
+                          if (item.name === each.name) {
+                            return <GridKPICell metricData={item} key={item.name} />;
+                          }
+                        });
+                      })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rowsDataList?.length &&
+                    rowsDataList.map((eachRow, rowIndex) => {
+                      return (
+                        <TableRow key={`row-${rowIndex}`}>
+                          {headersNamesList.map((eachKey, eachIndex) => {
+                            return (
+                              <GridTextCell
+                                cellValue={eachRow[eachKey.name] || '--'}
+                                key={`${eachKey.name}-${eachIndex}`}
+                              />
+                            );
+                          })}
+                        </TableRow>
+                      );
                     })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rowsDataList?.length &&
-                  rowsDataList.map((eachRow, rowIndex) => {
-                    return (
-                      <TableRow key={`row-${rowIndex}`}>
-                        {headersNamesList.map((eachKey, eachIndex) => {
-                          return (
-                            <GridTextCell
-                              cellValue={eachRow[eachKey.name] || '--'}
-                              key={`${eachKey.name}-${eachIndex}`}
-                            />
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableWrapper>
+                </TableBody>
+              </Table>
+            </TableWrapperContainer>
+            {showRecipePanel && <RecipeStepsPanel />}
+          </TableGridContainer>
         )}
-        {showRecipePanel && <RecipeStepsPanel />}
         <FooterPanel
           recipeStepsCount={0}
           gridMetaInfo={tableMetaInfo}
