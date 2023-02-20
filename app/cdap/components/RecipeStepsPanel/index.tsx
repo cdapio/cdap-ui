@@ -1,7 +1,11 @@
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import React from 'react';
 
-export default function RecipeStepsPanel() {
+interface IRecipeStepsPanelProps {
+  onDrawerCloseIconClick: () => void;
+}
+
+export default function RecipeStepsPanel({ onDrawerCloseIconClick }) {
   const onSaveButtonClick = () => {
     // do nothing
   };
@@ -11,10 +15,6 @@ export default function RecipeStepsPanel() {
   };
 
   const onDownloadButtonClick = () => {
-    // do nothing
-  };
-
-  const handleDrawerCloseIconClick = () => {
     // do nothing
   };
 
@@ -41,10 +41,9 @@ export default function RecipeStepsPanel() {
       <InlayDrawerWidget
         actionsOptions={actionsOptions}
         headingText={'Header Text'}
-        onClose={handleDrawerCloseIconClick}
+        onClose={onDrawerCloseIconClick}
         position="right"
         showDivider={true}
-        disableActionsButton={true}
       />
     </>
   );

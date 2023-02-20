@@ -398,7 +398,9 @@ export default function GridTable() {
                 </TableBody>
               </Table>
             </TableWrapperContainer>
-            {showRecipePanel && <RecipeStepsPanel />}
+            {showRecipePanel && (
+              <RecipeStepsPanel onDrawerCloseIconClick={() => setShowRecipePanel(false)} />
+            )}
           </TableGridContainer>
         )}
         <FooterPanel
