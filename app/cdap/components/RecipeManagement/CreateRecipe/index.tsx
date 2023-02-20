@@ -172,17 +172,10 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
       ...recipeFormData,
       recipeName: event.target.value,
     });
-    if (event.target.value && !REGEX.recipeNameRegEx.test(event.target.value)) {
-      updateRecipeNameErrorData({
-        isRecipeNameError: true,
-        recipeNameErrorMessage: T.translate(`${PREFIX}.validationErrorMessage`).toString(),
-      });
-    } else {
-      validateIfRecipeNameExists.current({
-        recipeName: event.target.value,
-        description: recipeFormData.description,
-      });
-    }
+    validateIfRecipeNameExists.current({
+      recipeName: event.target.value,
+      description: recipeFormData.description,
+    });
   };
 
   const onRecipeDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -218,16 +211,23 @@ export default function CreateRecipe({ setShowRecipeForm, setSnackbar }: ICreate
    */
   const validateIfRecipeNameExists = useRef(
     debounce((formData: IRecipeFormData) => {
-      if (formData.recipeName) {
-        setApiParams({
-          ...apiParams,
-          getRecipeByNameParams: {
-            context: getCurrentNamespace(),
-            recipeName: formData.recipeName,
-          },
+      if (formData.recipeName && !REGEX.recipeNameRegEx.test(formData.recipeName)) {
+        updateRecipeNameErrorData({
+          isRecipeNameError: true,
+          recipeNameErrorMessage: T.translate(`${PREFIX}.validationErrorMessage`).toString(),
         });
       } else {
-        updateRecipeNameErrorData(noErrorState);
+        if (formData.recipeName) {
+          setApiParams({
+            ...apiParams,
+            getRecipeByNameParams: {
+              context: getCurrentNamespace(),
+              recipeName: formData.recipeName,
+            },
+          });
+        } else {
+          updateRecipeNameErrorData(noErrorState);
+        }
       }
     }, 500)
   );
