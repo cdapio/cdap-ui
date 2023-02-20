@@ -52,6 +52,8 @@ import { useLocation } from 'react-router';
 import { FlexWrapper } from 'components/WranglerGrid/SelectColumnPanel/styles';
 import RecipeStepsPanel from 'components/RecipeStepsPanel';
 
+const transformationOptions = ['undo', 'redo'];
+
 export const TableWrapper = styled(Box)`
   width: 100%;
 `;
@@ -66,13 +68,16 @@ export const RecipeStepsPanelContainer = styled(RecipeStepsPanel)`
 `;
 
 const GridTableWrapper = styled(Box)`
-  height: calc(100% - 115px);
+  height: calc(100% - 139px);
   max-height: 76vh;
   max-width: 100%;
   overflow-x: auto;
   width: 100%;
 `;
-const transformationOptions = ['undo', 'redo'];
+
+const GridTableWrapperWithoutBreadcrumb = styled(GridTableWrapper)`
+  height: calc(100% - 90px);
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -326,6 +331,7 @@ export default function GridTable() {
   }, [snackbarState.open]);
 
   const TableWrapperContainer = showRecipePanel ? TableWrapperWithOpenPanel : TableWrapper;
+  const GridWrapper = showBreadCrumb ? GridTableWrapper : GridTableWrapperWithoutBreadcrumb;
 
   return (
     <>
@@ -341,7 +347,7 @@ export default function GridTable() {
         }
         disableToolbarIcon={!Boolean(gridData?.headers?.length)}
       />
-      <GridTableWrapper data-testid="grid-table-container">
+      <GridWrapper data-testid="grid-table-container">
         {!showGridTable && (
           <FlexWrapper>
             <NoRecordScreen
@@ -427,7 +433,7 @@ export default function GridTable() {
             <LoadingSVG />
           </div>
         )}
-      </GridTableWrapper>
+      </GridWrapper>
       {
         <Snackbar
           handleClose={() =>

@@ -34,6 +34,6 @@ export const useStyles = makeStyles({
 
 export const TableGridContainer = styled.div`
   display: flex;
-  height: calc(100vh - 230px);
+  height: 100%;
   overflow: scroll;
 `;
