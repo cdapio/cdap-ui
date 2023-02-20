@@ -50,6 +50,7 @@ import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
 import { FlexWrapper } from 'components/WranglerGrid/SelectColumnPanel/styles';
+import RecipeStepsPanel from 'components/RecipeStepsPanel';
 
 export const TableWrapper = styled(Box)`
   width: 100%;
@@ -97,6 +98,7 @@ export default function GridTable() {
   const [snackbarState, setSnackbar] = useSnackbar();
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
+  const [showRecipePanel, setShowRecipePanel] = useState(false);
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -385,7 +387,12 @@ export default function GridTable() {
             </Table>
           </TableWrapper>
         )}
-        <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
+        {showRecipePanel && <RecipeStepsPanel />}
+        <FooterPanel
+          recipeStepsCount={0}
+          gridMetaInfo={tableMetaInfo}
+          handleRecipePanel={() => setShowRecipePanel(!showRecipePanel)}
+        />
         {addTransformationFunction.option && (
           <SelectColumnPanel
             transformationName={addTransformationFunction.option}
