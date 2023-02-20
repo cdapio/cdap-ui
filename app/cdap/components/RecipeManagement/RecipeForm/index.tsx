@@ -44,6 +44,7 @@ export default function RecipeForm({
   isSaveDisabled,
   recipeFormAction,
   onRecipeDescriptionChange,
+  regEx,
 }: IRecipeFormProps) {
   const StyledLabel = isRecipeNameError ? ErrorLabel : Label;
   const StyledTextField = isRecipeNameError ? ErrorTextField : NormalTextField;
@@ -78,6 +79,7 @@ export default function RecipeForm({
             required
             value={recipeFormData.recipeName}
             variant="outlined"
+            pattern={regEx.recipeNameRegEx}
           />
         </FormFieldWrapper>
         <FormFieldWrapper>
@@ -99,6 +101,7 @@ export default function RecipeForm({
               placeholder={T.translate(`${PREFIX}.descriptionPlaceholder`)}
               required
               value={recipeFormData.description}
+              pattern={regEx.descriptionRegEx}
             />
           </FormControl>
         </FormFieldWrapper>

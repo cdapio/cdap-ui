@@ -36,12 +36,23 @@ const StyledEditFormWrapper = styled.div`
 
 const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';
 
-/*
- * This regular expression which validates the recipe name
- * should only allow alpha numeric and should not allow special characters
- * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
- */
-const recipeNameRegEx = /^[a-z\d\s]+$/i;
+const REGEX = {
+  /*
+   * This regular expression which validates the recipe name
+   * should only allow alpha numeric and should not allow special characters
+   * for e.g. recipe1 - will be allowed , recipe@ - will not be allowed
+   */
+  recipeNameRegEx: /^(?=\S)[a-z\d\s]+$/i,
+
+  /*
+   * This regular expression which validates description
+   * should not allow white space character at the beginning
+   * but can have any characters after that
+   * for e.g. (  desc!@) - will not be allowed , (desc!@) - will be allowed
+   */
+  descriptionRegEx: /^(?!\s).*$/i,
+};
+
 const noErrorState: IRecipeNameErrorData = {
   isRecipeNameError: false,
   recipeNameErrorMessage: '',
@@ -165,8 +176,10 @@ export default function({
     nameErrorData: IRecipeNameErrorData = recipeNameErrorData
   ) => {
     const shouldDisableSaveButton =
-      formData.recipeName?.trim().length === 0 ||
-      formData.description?.trim().length === 0 ||
+      !formData.recipeName ||
+      !formData.description ||
+      !REGEX.recipeNameRegEx.test(formData.recipeName) ||
+      !REGEX.descriptionRegEx.test(formData.description) ||
       nameErrorData.isRecipeNameError;
     setIsSaveDisabled(shouldDisableSaveButton);
   };
@@ -196,7 +209,7 @@ export default function({
    */
   const validateIfRecipeNameExists = useRef(
     debounce((formData: IRecipeData) => {
-      if (formData.recipeName && !recipeNameRegEx.test(formData.recipeName)) {
+      if (formData.recipeName && !REGEX.recipeNameRegEx.test(formData.recipeName)) {
         updateRecipeNameErrorData({
           isRecipeNameError: true,
           recipeNameErrorMessage: T.translate(`${PREFIX}.validationErrorMessage`).toString(),
@@ -233,6 +246,9 @@ export default function({
       ...recipeFormData,
       description: event.target.value,
     });
+    if (event.target.value && !REGEX.descriptionRegEx.test(event.target.value)) {
+      setIsSaveDisabled(true);
+    }
   };
 
   return (
@@ -248,6 +264,7 @@ export default function({
           recipeFormData={recipeFormData}
           recipeFormAction={ActionType.EDIT_RECIPE}
           recipeNameErrorMessage={recipeNameErrorData.recipeNameErrorMessage}
+          regEx={REGEX}
         />
       )}
     </StyledEditFormWrapper>
