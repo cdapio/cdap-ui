@@ -31,7 +31,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import useFetch from 'services/react/customHooks/useFetch';
 
 const StyledEditFormWrapper = styled.div`
-  margin-top: 30px;
+  margin-top: 31px;
 `;
 
 const PREFIX = 'features.WranglerNewUI.RecipeForm.labels';

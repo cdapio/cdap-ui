@@ -21,9 +21,9 @@ import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedBu
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 
 export const buttonStyles = css`
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
-  line-height: 150%;
+  line-height: 36px;
   letter-spacing: 0.15px;
 `;
 
