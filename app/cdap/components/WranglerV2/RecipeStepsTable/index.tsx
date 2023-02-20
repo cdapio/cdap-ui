@@ -31,6 +31,7 @@ interface IRecipeStepsColumnCellProps {
 
 interface IRecipeStepsTableProps {
   recipeSteps: string[];
+  Container: StyledComponent<typeof TableContainer, {}>;
 }
 
 export const RecipeStepCellWrapper = styled.div`
@@ -97,12 +98,12 @@ const RecipeStepsColumnCell = ({ BodyCell, prefix, handleClick }: IRecipeStepsCo
       <BodyCell />
     </div>
     <IconButton onClick={handleClick}>
-      <DeleteOutlineIcon fontSize='medium' />
+      <DeleteOutlineIcon fontSize="medium" />
     </IconButton>
   </RecipeStepCellWrapper>
 );
 
-export default function RecipeStepsTable({ recipeSteps }: IRecipeStepsTableProps) {
+export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStepsTableProps) {
   const rows: IRow[] = recipeSteps.map((recipeStep: string, index: number) => ({
     serialNumber: String(index + 1).padStart(2, '0'),
     recipeStep,
@@ -143,7 +144,7 @@ export default function RecipeStepsTable({ recipeSteps }: IRecipeStepsTableProps
     <DataTable
       rows={rows}
       columns={columns}
-      Container={RecipeStepsTableContainer}
+      Container={Container}
       getTableHeaderCell={getTableHeaderCell}
     />
   );

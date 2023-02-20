@@ -1,11 +1,30 @@
-import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import React from 'react';
+
+import styled from 'styled-components';
+
+import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
+import RecipeStepsTable, {
+  RecipeStepsTableContainer,
+} from 'components/WranglerV2/RecipeStepsTable';
+
+const mockRecipe = [
+  "Delete Column 'body1'",
+  "Parse Column 'body2' with delimiter 'comma' and set first row as header",
+  "Change data type 'body2' to string",
+  "Parse Column 'body2' with delimiter 'comma'",
+];
 
 interface IRecipeStepsPanelProps {
   onDrawerCloseIconClick: () => void;
 }
 
-export default function RecipeStepsPanel({ onDrawerCloseIconClick }) {
+const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
+  &&& {
+    max-height: calc(100vh - 361px);
+  }
+`;
+
+export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStepsPanelProps) {
   const onSaveButtonClick = () => {
     // do nothing
   };
@@ -40,11 +59,15 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }) {
     <>
       <InlayDrawerWidget
         actionsOptions={actionsOptions}
-        headingText={'Header Text'}
+        headingText={'Recipe'}
         onClose={onDrawerCloseIconClick}
         position="right"
         showDivider={true}
-      />
+      >
+        {Boolean(mockRecipe.length) && (
+          <RecipeStepsTable recipeSteps={mockRecipe} Container={RecipeStepsPanelTableContainer} />
+        )}
+      </InlayDrawerWidget>
     </>
   );
 }
