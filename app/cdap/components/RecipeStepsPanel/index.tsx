@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import isEqual from 'lodash/isEqual';
 import styled from 'styled-components';
 
 import DataPrepStore from 'components/DataPrep/store';
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import RecipeStepsTable, {
-  RecipeStepsTableContainer,
+  RecipeStepsTableContainer
 } from 'components/WranglerV2/RecipeStepsTable';
 
 interface IRecipeStepsPanelProps {
@@ -24,7 +25,7 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
   const [recipeSteps, setRecipeSteps] = useState([]);
 
   useEffect(() => {
-    if (JSON.stringify(recipeSteps) !== JSON.stringify(dataprep.directives)) {
+    if (!isEqual(recipeSteps, dataprep.directives)) {
       setRecipeSteps(dataprep.directives);
     }
   }, [dataprep.directives]);
