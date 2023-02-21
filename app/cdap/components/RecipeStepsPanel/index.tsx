@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import isEqual from 'lodash/isEqual';
 import styled from 'styled-components';
 
 import DataPrepStore from 'components/DataPrep/store';
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import RecipeStepsTable, {
-  RecipeStepsTableContainer
+  RecipeStepsTableContainer,
 } from 'components/WranglerV2/RecipeStepsTable';
 
 interface IRecipeStepsPanelProps {
@@ -22,13 +21,7 @@ const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
 export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStepsPanelProps) {
   const { dataprep } = DataPrepStore.getState();
 
-  const [recipeSteps, setRecipeSteps] = useState([]);
-
-  useEffect(() => {
-    if (!isEqual(recipeSteps, dataprep.directives)) {
-      setRecipeSteps(dataprep.directives);
-    }
-  }, [dataprep.directives]);
+  const recipeSteps = dataprep.directives;
 
   const onSaveButtonClick = () => {
     // do nothing

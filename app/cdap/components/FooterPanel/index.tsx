@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { IconButton } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -80,13 +80,7 @@ export default function({ gridMetaInfo, handleRecipePanel }: IFooterPanelProps) 
 
   const { dataprep } = DataPrepStore.getState();
 
-  const [recipeStepsCount, setRecipeStepsCount] = useState(0);
-
-  useEffect(() => {
-    if (recipeStepsCount !== dataprep.directives.length) {
-      setRecipeStepsCount(dataprep.directives.length);
-    }
-  }, [dataprep.directives]);
+  const recipeStepsCount = dataprep.directives.length;
 
   return (
     <TabsWrapper data-testid="footer-panel-wrapper">
@@ -114,7 +108,10 @@ export default function({ gridMetaInfo, handleRecipePanel }: IFooterPanelProps) 
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
-      <ReciepeStepsBox data-testid="footer-panel-recipe-steps-tab" onClick={handleRecipePanel}>
+      <ReciepeStepsBox
+        data-testid="footer-panel-recipe-steps-tab"
+        onClick={Boolean(recipeStepsCount) && handleRecipePanel}
+      >
         <Label data-testid="footerpanel-simple-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
         </Label>

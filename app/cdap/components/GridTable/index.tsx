@@ -410,7 +410,6 @@ export default function GridTable() {
           </TableGridContainer>
         )}
         <FooterPanel
-          recipeStepsCount={0}
           gridMetaInfo={tableMetaInfo}
           handleRecipePanel={() => setShowRecipePanel(!showRecipePanel)}
         />
