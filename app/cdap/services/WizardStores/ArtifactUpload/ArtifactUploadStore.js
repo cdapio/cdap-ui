@@ -128,15 +128,10 @@ const configure = (state = defaultConfigureState, action = defaultAction) => {
   });
 };
 
-const ArtifactUploadStoreWrapper = () => {
-  return createStore(
+export default ArtifactUploadStore =  createStore(
     combineReducers({
       upload,
       configure,
     }),
     defaultInitialState
   );
-};
-
-const ArtifactUploadStore = ArtifactUploadStoreWrapper();
-export default ArtifactUploadStore;
