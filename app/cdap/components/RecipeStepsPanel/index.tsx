@@ -1,18 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
+import DataPrepStore from 'components/DataPrep/store';
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import RecipeStepsTable, {
   RecipeStepsTableContainer,
 } from 'components/WranglerV2/RecipeStepsTable';
-
-const mockRecipe = [
-  "Delete Column 'body1'",
-  "Parse Column 'body2' with delimiter 'comma' and set first row as header",
-  "Change data type 'body2' to string",
-  "Parse Column 'body2' with delimiter 'comma'",
-];
 
 interface IRecipeStepsPanelProps {
   onDrawerCloseIconClick: () => void;
@@ -25,6 +19,16 @@ const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
 `;
 
 export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStepsPanelProps) {
+  const { dataprep } = DataPrepStore.getState();
+
+  const [recipeSteps, setRecipeSteps] = useState([]);
+
+  useEffect(() => {
+    if (JSON.stringify(recipeSteps) !== JSON.stringify(dataprep.directives)) {
+      setRecipeSteps(dataprep.directives);
+    }
+  }, [dataprep.directives]);
+
   const onSaveButtonClick = () => {
     // do nothing
   };
@@ -64,8 +68,8 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
         position="right"
         showDivider={true}
       >
-        {Boolean(mockRecipe.length) && (
-          <RecipeStepsTable recipeSteps={mockRecipe} Container={RecipeStepsPanelTableContainer} />
+        {Boolean(recipeSteps.length) && (
+          <RecipeStepsTable recipeSteps={recipeSteps} Container={RecipeStepsPanelTableContainer} />
         )}
       </InlayDrawerWidget>
     </>

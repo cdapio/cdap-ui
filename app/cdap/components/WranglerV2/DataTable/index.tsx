@@ -23,7 +23,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import styled, { css, StyledComponent } from 'styled-components';

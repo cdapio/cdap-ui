@@ -114,7 +114,7 @@ export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStep
   };
 
   const getRecipeStepCell = ({ value, row }: { value: string; row: IRow }) => () => {
-    const prefix = value.split("'")[0];
+    const prefix = value.split(' ')[0];
     const suffix = value.substr(prefix.length);
     const BodyCell = getTableBodyCell({ value: suffix });
 

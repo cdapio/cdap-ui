@@ -16,7 +16,9 @@
 
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-import RecipeStepsTable from '.';
+import RecipeStepsTable, {
+  RecipeStepsTableContainer,
+} from 'components/WranglerV2/RecipeStepsTable';
 
 export default {
   title: 'RecipeStepsTable',
@@ -24,10 +26,10 @@ export default {
 } as ComponentMeta<typeof RecipeStepsTable>;
 
 const mockRecipe = [
-  "Delete Column 'body1'",
-  "Parse Column 'body2' with delimiter 'comma' and set first row as header",
-  "Change data type 'body2' to string",
-  "Parse Column 'body2' with delimiter 'comma'",
+  "delete-column 'body1'",
+  "parse-column 'body2' with delimiter 'comma' and set first row as header",
+  "change-data-type 'body2' to string",
+  "parse-column 'body2' with delimiter 'comma'",
 ];
 
 const Template: ComponentStory<typeof RecipeStepsTable> = (args) => <RecipeStepsTable {...args} />;
@@ -36,4 +38,5 @@ export const RecipeStepsPanel = Template.bind({});
 
 RecipeStepsPanel.args = {
   recipeSteps: mockRecipe,
+  Container: RecipeStepsTableContainer,
 };
