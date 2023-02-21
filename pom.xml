@@ -46,7 +46,7 @@
       Only update this when releasing a new UI pack.
     -->
     <ui.pack.version>4.3.4_p7</ui.pack.version>
-    <guava.version>27.0.1-jre</guava.version>
+    <guava.version>31.1-jre</guava.version>
     <testSourceLocation>${project.basedir}/src/test/java/</testSourceLocation>
   </properties>
 
