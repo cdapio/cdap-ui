@@ -21,7 +21,7 @@ import styled from 'styled-components';
 export const Container = styled(Box)`
   background-color: #fff;
   border-left: 1px solid ${grey[300]};
-  height: calc(100vh - 232px);
+  height: 100%;
   overflow: scroll;
   padding-bottom: 20px;
   padding-left: 20px;
