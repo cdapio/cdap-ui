@@ -32,16 +32,12 @@ const StyledCard = styled(Card)`
 
 export default function GridHeaderCell({
   label,
-  types,
+  type,
   columnSelected,
   setColumnSelected,
 }: IGridHeaderCellProps) {
   const classes = useGridHeaderCellStyles();
   const isColumnHighlited = label === columnSelected;
-  const [data, setData] = useState<Record<string, string>>({
-    datatype1: types.length > 0 ? (types[0] as string) : null,
-    datatype2: types.length > 1 ? (types[1] as string) : null,
-  });
 
   return (
     <TableCell
@@ -56,19 +52,7 @@ export default function GridHeaderCell({
           {label}
         </Typography>
         <StringIndicatorBox>
-          <TypographyComponent
-            className={classes.dataTypeIndicator}
-            label={data?.datatype1 || 'Unknown'}
-          />
-          {data.datatype2 && (
-            <StringIndicatorBox>
-              <TypographyComponent className={classes.subDataTypeIndicator} label={'|'} />
-              <TypographyComponent
-                className={classes.subDataTypeIndicator}
-                label={data?.datatype2}
-              />
-            </StringIndicatorBox>
-          )}
+          <TypographyComponent className={classes.dataTypeIndicator} label={type || 'Unknown'} />
         </StringIndicatorBox>
       </StyledCard>
     </TableCell>
