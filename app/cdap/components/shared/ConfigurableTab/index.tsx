@@ -92,6 +92,7 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
           active: isActive,
         })}
         data-cy={`tab-content-${tab.name}`}
+        data-testid={`tab-content-${tab.name}`}
         key={tab.name}
         hidden={!isActive}
       >
@@ -137,6 +138,7 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
                   onClick={() => this.setTab(tab.id)}
                   activeTab={this.isActiveTab(tab.id)}
                   dataCy={`tab-head-${tab.name}`}
+                  dataTestid={`tab-head-${tab.name}`}
                 >
                   <TabIcon iconObj={tab.icon} />
                   <span title={tab.name}>{tab.name}</span>

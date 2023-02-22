@@ -158,7 +158,7 @@ export const NameAndDescription = ({
           )}
         </MetadataLeft>
       </HydratorMetadata>
-      <EditStatus>{editStatus}</EditStatus>
+      <EditStatus data-testid="pipeline-edit-status">{editStatus}</EditStatus>
     </>
   );
 };

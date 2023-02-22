@@ -17,8 +17,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import OverviewMetaSection from 'components/shared/Overview/OverviewMetaSection';
-import ExploreTablesStore from 'services/ExploreTables/ExploreTablesStore';
-import { fetchTables } from 'services/ExploreTables/ActionCreator';
 import { objectQuery } from 'services/helpers';
 import NamespaceStore from 'services/NamespaceStore';
 import { MyDatasetApi } from 'api/dataset';
@@ -75,7 +73,6 @@ export default class DatasetDetailedView extends Component {
     this.setState({
       previousPathName,
     });
-    ExploreTablesStore.dispatch(fetchTables(namespace));
 
     this.fetchEntityDetails(namespace, datasetId);
     if (this.state.entityDetail.id) {
@@ -105,7 +102,6 @@ export default class DatasetDetailedView extends Component {
     if (!namespace) {
       namespace = NamespaceStore.getState().selectedNamespace;
     }
-    ExploreTablesStore.dispatch(fetchTables(namespace));
 
     this.setState(
       {

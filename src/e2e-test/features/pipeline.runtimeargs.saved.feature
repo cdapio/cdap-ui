@@ -29,7 +29,7 @@ Feature: Pipeline - Runtime Args - It must be possible to deploy a pipeline and 
     And Enter deployed runtime argument value "/tmp/cdap-ui-integration-fixtures" in row "1"
     And Save deployed arguments button is clicked
     And Wait for runtime arguments dialog to close
-    And Deployed pipeline is run
+    Then Run the pipeline
     Then Deployed pipeline status is "Succeeded"
 
   @PIPELINE_RUNTIME_ARGS_TEST

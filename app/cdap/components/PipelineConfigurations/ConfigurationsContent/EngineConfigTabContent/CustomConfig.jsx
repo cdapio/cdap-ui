@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2018-2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,23 +20,63 @@ import { connect } from 'react-redux';
 import IconSVG from 'components/shared/IconSVG';
 import KeyValuePairs from 'components/shared/KeyValuePairs';
 import Popover from 'components/shared/Popover';
-import {
+import PipelineConfigurationsStore, {
   getEngineDisplayLabel,
   ACTIONS as PipelineConfigurationsActions,
 } from 'components/PipelineConfigurations/Store';
+import {
+  convertKeyValuePairsToMap,
+  convertMapToKeyValuePairs,
+} from 'services/helpers';
 import { convertKeyValuePairsObjToMap } from 'components/shared/KeyValuePairs/KeyValueStoreActions';
 import T from 'i18n-react';
 import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
+import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.EngineConfig';
 
+const getCustomConfigValue = (customConfigKeyValuePairs, runtimeArgs) => {
+  // we want to try getting the custom config from runtimeargs
+  // only when the state of custom config store is {key: '', value: ''}
+  if (
+    customConfigKeyValuePairs.pairs.length > 1 ||
+    customConfigKeyValuePairs.pairs[0].key !== ''
+  ) {
+    return customConfigKeyValuePairs;
+  }
+  const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
+    pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
+  );
+  const customSparkConfigPairs = cloneDeep(customSparkConfigKeyValuePairs);
+  customSparkConfigPairs.forEach((pair) => {
+    const trimmedKey = pair.key.substring(
+      GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX.length
+    );
+    pair.key = trimmedKey;
+  });
+  customSparkConfigPairs.push({
+    key: '',
+    value: '',
+  });
+  const keyValues = { pairs: customSparkConfigPairs };
+  return keyValues;
+};
+
 const mapStateToCustomConfigKeyValuesProps = (state) => {
   return {
-    keyValues: state.customConfigKeyValuePairs,
+    keyValues: getCustomConfigValue(
+      state.customConfigKeyValuePairs,
+      state.runtimeArgs
+    ),
   };
 };
 
 const mapDispatchToCustomConfigKeyValuesProps = (dispatch, ownProps) => {
+  const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
+    'lifecycle.management.edit.enabled'
+  );
   return {
     onKeyValueChange: (keyValues) => {
       dispatch({
@@ -51,6 +91,30 @@ const mapDispatchToCustomConfigKeyValuesProps = (dispatch, ownProps) => {
           pipelineType: ownProps.pipelineType,
         },
       });
+      if (lifecycleManagementEditEnabled) {
+        const { runtimeArgs } = PipelineConfigurationsStore.getState();
+        const pairs = [...runtimeArgs.pairs];
+        const runtimeObj = convertKeyValuePairsToMap(pairs, true);
+        // delete previous tranformation pushdown key valur pairs from runtimeargs
+        // so that we are not keeping outdated configs in the runtimeargs
+        const previousCustomConfigKeyValuePair = runtimeArgs.pairs.filter(
+          (pair) =>
+            pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
+        );
+        previousCustomConfigKeyValuePair.forEach((pair) => {
+          delete runtimeObj[pair.key];
+        });
+        keyValues.pairs.forEach((pair) => {
+          runtimeObj[
+            GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX + pair.key
+          ] = String(pair.value);
+        });
+        const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
+        dispatch({
+          type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
+          payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      }
     },
   };
 };
@@ -79,10 +143,12 @@ const CustomConfig = ({
   engine,
   customConfigKeyValuePairs,
 }) => {
+  const { runtimeArgs } = PipelineConfigurationsStore.getState();
   const engineDisplayLabel = getEngineDisplayLabel(engine, pipelineType);
-  const numberOfCustomConfigFilled = customConfigKeyValuePairs.pairs.filter(
-    (pair) => !isEmpty(pair.key) && !isEmpty(pair.value)
-  ).length;
+  const numberOfCustomConfigFilled = getCustomConfigValue(
+    customConfigKeyValuePairs,
+    runtimeArgs
+  ).pairs.filter((pair) => !isEmpty(pair.key) && !isEmpty(pair.value)).length;
 
   const StudioViewCustomConfigLabel = () => {
     return (

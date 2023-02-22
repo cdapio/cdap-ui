@@ -71,6 +71,7 @@ class CSVRow extends AbstractRow<ICSVRowProps, ICSVRowState> {
         disabled={this.props.disabled}
         inputRef={this.props.forwardedRef}
         data-cy="key"
+        data-testid="key"
       />
     );
   };

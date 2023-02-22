@@ -46,7 +46,7 @@
       Only update this when releasing a new UI pack.
     -->
     <ui.pack.version>4.3.4_p7</ui.pack.version>
-    <guava.version>27.0.1-jre</guava.version>
+    <guava.version>31.1-jre</guava.version>
     <testSourceLocation>${project.basedir}/src/test/java/</testSourceLocation>
   </properties>
 
@@ -598,6 +598,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M7</version>
             <configuration>
               <skipTests>true</skipTests>
             </configuration>
@@ -605,6 +606,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.0.0-M7</version>
             <configuration>
               <includes>
                 <include>TestRunner.java</include>

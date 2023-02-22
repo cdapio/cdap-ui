@@ -21,5 +21,8 @@ MyNamespaceApi.get = function() {};
 MyNamespaceApi.pollList = function() {};
 MyNamespaceApi.create = function() {};
 MyNamespaceApi.setPreferences = function() {};
+MyNamespaceApi.setSourceControlManagement = function() {};
+MyNamespaceApi.getSourceControlManagement = function() {};
+MyNamespaceApi.deleteSourceControlManagement = function() {};
 
 module.exports = MyNamespaceApi;

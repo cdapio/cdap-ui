@@ -28,12 +28,8 @@ describe('Metadata url helper', () => {
     });
     it('return the parsed url', () => {
       expect(
-        getMetadataPageUrl('lineage', {
-          entityType: 'type',
-          entityId: 'id',
-          query: 'logs',
-        })
-      ).toBe('/ns/default/metadata/type/id/lineage/search/logs');
+        getMetadataPageUrl('lineage', { entityType: 'type', entityId: 'id' })
+      ).toBe('/ns/default/metadata/type/id/lineage');
     });
   });
 });

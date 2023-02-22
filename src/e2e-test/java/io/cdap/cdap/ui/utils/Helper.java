@@ -18,6 +18,10 @@ package io.cdap.cdap.ui.utils;
 
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
@@ -33,14 +37,16 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +135,10 @@ public class Helper implements CdfHelper {
       .findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
+  public static WebElement locateElementByTestId(String testId, WebElement withinElement) {
+    return withinElement.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
       .findElement(By.id(elementId));
@@ -143,21 +153,37 @@ public class Helper implements CdfHelper {
       .findElement(By.xpath(xpath));
   }
 
-  public static boolean isElementExists(String cssSelector) {
+  public static List<WebElement> locateElementsByXPath(String xpath) {
+    return SeleniumDriver.getDriver().findElements(By.xpath(xpath));
+  }
+
+  public static List<WebElement> locateElementsByTestId(String testId) {
     return SeleniumDriver.getDriver()
-      .findElements(By.cssSelector(cssSelector)).size() > 0;
+      .findElements(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
+  public static boolean isElementExists(String cssSelector) {
+    return isElementExists(By.cssSelector(cssSelector));
   }
 
   public static boolean isElementExists(By by) {
-    return SeleniumDriver.getDriver().findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(SeleniumDriver.getDriver().findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(By by, WebElement withinElement) {
-    return withinElement.findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(withinElement.findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(String cssSelector, WebElement withinElement) {
-    return withinElement.findElements(By.cssSelector(cssSelector)).size() > 0;
+    return isElementExists(By.cssSelector(cssSelector), withinElement);
   }
 
   public static String getCssSelectorByDataTestId(String dataTestId) {
@@ -166,6 +192,13 @@ public class Helper implements CdfHelper {
 
   public static String getNodeSelectorFromNodeIdentifier(NodeInfo node) {
     return "[data-testid=\"plugin-node-" +
+      node.getNodeName() + "-" +
+      node.getNodeType() + "-" +
+      node.getNodeId() + "\"]";
+  }
+
+  public static String getNodeNameSelectorFromNodeIdentifier(NodeInfo node) {
+    return "[data-testid=\"plugin-node-name-" +
       node.getNodeName() + "-" +
       node.getNodeType() + "-" +
       node.getNodeId() + "\"]";
@@ -194,15 +227,10 @@ public class Helper implements CdfHelper {
     WaitHelper.waitForPageToLoad();
     Helper.uploadPipelineFromFile(filename);
 
-    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
-    ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
+    Commands.fillInPipelineName(pipelineName);
+    Commands.dismissTopBanner();
 
-    WebElement pipelineNameInput = locateElementById("pipeline-name-input");
-    ElementHelper.clearElementValue(pipelineNameInput);
-    ElementHelper.sendKeys(pipelineNameInput, pipelineName);
-    pipelineNameInput.sendKeys(Keys.RETURN);
-
-    ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
+    ElementHelper.clickOnElement(locateElementByCssSelector(
       getCssSelectorByDataTestId("deploy-pipeline-btn")));
 
     String statusText = ElementHelper.getElementText(
@@ -211,7 +239,7 @@ public class Helper implements CdfHelper {
     );
 
     Assert.assertEquals(statusText, "Deployed");
-    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName));
+    Assert.assertTrue(urlHasString("/view/" + pipelineName));
   }
 
   public static void cleanupPipelines(String pipelineName) {
@@ -319,7 +347,7 @@ public class Helper implements CdfHelper {
     // wait for rendering to finish otherwise elements are not attached to dom
     Helper.waitSeconds(2);
   }
-  
+
   public static boolean urlHasString(String targetString) {
     String strUrl = SeleniumDriver.getDriver().getCurrentUrl();
     return strUrl.contains(targetString);
@@ -378,5 +406,69 @@ public class Helper implements CdfHelper {
       .filter(p -> p.getName().equals(queryParam))
       .collect(Collectors.toList());
     return queryParameters.get(0).getValue();
+  }
+
+  public static void rightClickOnElement(WebElement element) {
+    rightClickOnElement(element, 0, 0);
+  }
+
+  public static void rightClickOnElement(WebElement element, int xOffset, int yOffset) {
+    Actions actions = new Actions(SeleniumDriver.getDriver());
+    actions.moveToElement(element, xOffset, yOffset).contextClick().perform();
+  }
+
+
+  public static void setCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "window.Cypress = {}; window.Cypress.on = function() {}");
+  }
+
+  public static void removeCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "delete window.Cypress");
+  }
+
+  public static JsonObject getJSONObject(String jsonString) {
+    JsonParser jsonParser = new JsonParser();
+    JsonObject jsonObject = new JsonObject();
+    try {
+      JsonElement parsedJSONElement = jsonParser.parse(jsonString);
+      jsonObject = parsedJSONElement.getAsJsonObject();
+    } catch (JsonSyntaxException jse) {
+      Assert.fail(jse.getMessage());
+    }
+    return jsonObject;
+  }
+
+  public static String getCssSelectorForWidgetRow(String rowIndex, String propertyName) {
+    return Helper.getCssSelectorByDataTestId(propertyName) + " " + Helper.getCssSelectorByDataTestId(rowIndex);
+  }
+
+  public static String getCssSelectorForKeyInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("key") + " input";
+  }
+
+  public static String getCssSelectorForValueInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("value") + " input";
+  }
+
+  public static void clickAddRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("add-row")));
+  }
+
+  public static void clickRemoveRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("remove-row")));
+  }
+
+  public static void gotoDeployedPipeline(String pipelineName) {
+    SeleniumDriver.openPage(Constants.BASE_PIPELINES_URL + "/view/" + pipelineName);
   }
 }

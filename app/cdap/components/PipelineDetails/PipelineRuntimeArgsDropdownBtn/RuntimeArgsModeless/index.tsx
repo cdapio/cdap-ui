@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2018-2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -103,7 +103,7 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
   public saveRuntimeArgs = (e) => {
     preventPropagation(e);
     this.toggleSaving();
-    updatePreferences(true).subscribe(
+    updatePreferences().subscribe(
       () => {
         this.setState(
           {

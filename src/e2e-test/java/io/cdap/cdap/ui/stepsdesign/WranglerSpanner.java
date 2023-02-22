@@ -18,7 +18,6 @@ package io.cdap.cdap.ui.stepsdesign;
 
 
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
@@ -33,12 +32,6 @@ public class WranglerSpanner {
     public static final String DEFAULT_SPANNER_INSTANCE = "cdap-gcp-ui-test";
     public static final String DEFAULT_SPANNER_DATABASE = "test";
     public static final String DEFAULT_SPANNER_TABLE = "users";
-
-    @When("Open Connections page")
-    public static void openConnectionsPage() {
-        SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "connections");
-        WaitHelper.waitForPageToLoad();
-    }
 
     @When("Open connection {string} page")
     public static void openSpannerConnectionPage(String connectionName) {

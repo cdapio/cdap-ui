@@ -110,11 +110,14 @@ export default class StagePropertiesRow extends Component {
     const { args } = ScheduleRuntimeArgsStore.getState();
     const { stageWidgetJsonMap } = args;
     let properties = [];
-    stageWidgetJsonMap[this.state.stage]['configuration-groups'].map(
-      (group) => {
-        properties = properties.concat(group.properties);
-      }
-    );
+    const configurationGroups =
+      stageWidgetJsonMap[this.state.stage]?.['configuration-groups'];
+    if (!configurationGroups) {
+      return property;
+    }
+    configurationGroups.map((group) => {
+      properties = properties.concat(group.properties);
+    });
     const matchProperty = properties.filter((prop) => prop.name === property);
     return !matchProperty.length ? property : matchProperty[0].label;
   };
@@ -123,7 +126,11 @@ export default class StagePropertiesRow extends Component {
     const {
       triggeringPipelineInfo,
       triggeredPipelineInfo,
+      stageWidgetJsonMap,
     } = ScheduleRuntimeArgsStore.getState().args;
+    const configurableStages = triggeringPipelineInfo.configStages.filter(
+      (stage) => !!stageWidgetJsonMap[stage.id]
+    );
     const stage = triggeringPipelineInfo.configStagesMap[this.state.stage];
     let properties = [];
     if (stage) {
@@ -145,7 +152,7 @@ export default class StagePropertiesRow extends Component {
               onChange={this.onPipelineStageChange}
             >
               {[{ id: DEFAULTSTAGEMESSAGE }]
-                .concat(triggeringPipelineInfo.configStages)
+                .concat(configurableStages)
                 .map((stage) => {
                   return (
                     <option key={stage.id} value={stage.id}>

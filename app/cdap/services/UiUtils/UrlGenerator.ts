@@ -114,14 +114,14 @@ export const getDataPrepUrl = (navigationObj: any = {}) => {
 export const getTrackerUrl = (navigationObj: any = {}) => {
   const { stateName, stateParams } = navigationObj;
   const uiApp = 'metadata';
-  const baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
+  const baseUrl = `${location.protocol}//${location.host}/cdap/ns/:namespace/${uiApp}`;
   const stateToUrlMap = {
     tracker: '',
     'tracker.detail': '',
     'tracker.detail.entity': '/entity/:entityType/:entityId',
     'tracker.detail.entity.metadata': '/entity/:entityType/:entityId/metadata',
-    'tracker.detail.entity.lineage': '/entity/:entityType/:entityId/lineage',
-    'tracker.detail.entity.summary': '/entity/:entityType/:entityId/summary',
+    'tracker.detail.entity.lineage': '/:entityType/:entityId/lineage',
+    'tracker.detail.entity.summary': '/:entityType/:entityId/summary',
   };
   let url = baseUrl + stateToUrlMap[stateName || 'tracker'];
   url = buildCustomUrl(url, stateParams);

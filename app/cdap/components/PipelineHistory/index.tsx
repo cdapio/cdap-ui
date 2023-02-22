@@ -145,6 +145,7 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
         onClose={toggle}
         anchorEl={anchorEl}
         title={T.translate(`${PREFIX}.header`) + ` "${pipelineName}"`}
+        data-testid="pipeline-history-modal"
       >
         <PipelineHistoryTableDiv className="grid-wrapper pipeline-history-list-table">
           {ready && (

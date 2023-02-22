@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Cask Data, Inc.
+ * Copyright © 2018-2022 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,11 +25,8 @@ import PipelineConfigurationsStore, {
 } from 'components/PipelineConfigurations/Store';
 import T from 'i18n-react';
 import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
-import {
-  convertKeyValuePairsToMap,
-  convertMapToKeyValuePairs,
-} from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { getUpdatedRuntimeArgsPair } from '../helper';
 
 const PREFIX = 'features.PipelineConfigurations.PipelineConfig';
 
@@ -49,18 +46,17 @@ const mapDispatchToInstrumentationProps = (dispatch) => {
   );
   return {
     onToggle: (value) => {
-      const { runtimeArgs } = PipelineConfigurationsStore.getState();
-      const pairs = [...runtimeArgs.pairs];
-      const runtimeObj = convertKeyValuePairsToMap(pairs, true);
-      runtimeObj[
-        GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION
-      ] = value.toString();
-      const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
       dispatch({
         type: PipelineConfigurationsActions.SET_INSTRUMENTATION,
         payload: { instrumentation: value },
       });
       if (lifecycleManagementEditEnabled) {
+        const { runtimeArgs } = PipelineConfigurationsStore.getState();
+        const newRunTimePairs = getUpdatedRuntimeArgsPair(
+          runtimeArgs,
+          GENERATED_RUNTIMEARGS.PIPELINE_INSTRUMENTATION,
+          value
+        );
         dispatch({
           type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
           payload: { runtimeArgs: { pairs: newRunTimePairs } },

@@ -29,7 +29,7 @@ export default class ConfirmationModal extends Component {
   static propTypes = {
     cancelButtonText: PropTypes.string,
     cancelFn: PropTypes.func,
-    confirmationElem: PropTypes.element,
+    confirmationElem: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     confirmButtonText: PropTypes.string,
     confirmationText: PropTypes.oneOfType([
       PropTypes.string,
@@ -65,12 +65,12 @@ export default class ConfirmationModal extends Component {
     keyboard: true,
   };
 
-  componentWillMount() {
-    Mousetrap.bind('enter', this.props.confirmFn);
-  }
-
-  componentWillUnmount() {
-    Mousetrap.unbind('enter');
+  componentDidUpdate() {
+    if (this.props.isOpen) {
+      Mousetrap.bind('enter', this.props.confirmFn);
+    } else {
+      Mousetrap.unbind('enter');
+    }
   }
 
   renderModalBody() {

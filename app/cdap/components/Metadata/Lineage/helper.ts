@@ -17,6 +17,7 @@ import uniqBy from 'lodash/uniqBy';
 import dagre from 'dagre';
 import { MySearchApi } from 'api/search';
 import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const iconMap = new Map([
   ['Flow', 'icon-tigon'],
@@ -240,7 +241,6 @@ function getNodeProperties(uniqueNodes: IUniqueNodes, query: string, node: INode
     link = getMetadataPageUrl('summary', {
       entityType: nodeInfo.entityType,
       entityId: nodeInfo.entityId,
-      query,
     });
   } else if (nodeInfo.nodeType === 'program') {
     displayType = nodeInfo.label;
@@ -344,3 +344,15 @@ export function getScale(graph: dagre.graphlib.Graph) {
     };
   }
 }
+
+export const navigateToRun = (appId, runId) => {
+  let runIdUrl = window.getHydratorUrl({
+    stateName: 'hydrator.detail',
+    stateParams: {
+      namespace: getCurrentNamespace(),
+      pipelineId: appId,
+    },
+  });
+  runIdUrl += `?runid=${runId}`;
+  window.location.href = runIdUrl;
+};

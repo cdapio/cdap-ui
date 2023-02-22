@@ -59,11 +59,6 @@ const DatasetDetailedView = Loadable({
     ),
   loading: LoadingSVGCentered,
 });
-const Experiments = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "Experiments" */ 'components/Experiments'),
-  loading: LoadingSVGCentered,
-});
 const NamespaceAdmin = Loadable({
   loader: () =>
     import(
@@ -207,7 +202,6 @@ export default class Home extends Component {
             path="/ns/:namespace/connection-upload"
             component={Connections}
           />
-          <Route path="/ns/:namespace/experiments" component={Experiments} />
           <Route
             exact
             path="/ns/:namespace/operations"

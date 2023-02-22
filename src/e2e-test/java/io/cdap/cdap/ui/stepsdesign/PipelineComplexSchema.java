@@ -18,21 +18,14 @@ package io.cdap.cdap.ui.stepsdesign;
 
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
 
 import java.util.Date;
 
@@ -53,37 +46,9 @@ public class PipelineComplexSchema {
   private final NodeInfo projectionNode = new NodeInfo("Projection", "transform", "0");
   private static final String pipelineName = "Test_macros_pipeline_" + new Date().getTime();
 
-  @When("Open Pipeline Studio Page")
-  public void openPipelineStudioPage() {
-    try {
-      tryOpenStudioPage();
-    } catch (UnhandledAlertException e) {
-      try {
-        Alert alert = SeleniumDriver.getDriver().switchTo().alert();
-        alert.accept();
-      } catch (NoAlertPresentException ex) {
-        SeleniumDriver.getDriver().switchTo().newWindow(WindowType.TAB);
-        tryOpenStudioPage();
-      }
-    }
-    // wait for rendering to finish otherwise elements are not attached to dom
-    Helper.waitSeconds(2);
-  }
-
-  private static void tryOpenStudioPage() {
-    SeleniumDriver.openPage(Constants.PIPELINE_STUDIO_URL);
-    WaitHelper.waitForPageToLoad();
-    Helper.setNewSchemaEditor(false);
-  }
-
   @Then("Add Projection Node")
   public void addProjectionNode() {
     Commands.addNodeToCanvas(projectionNode);
-  }
-
-  @Then("Click on Projection node property button")
-  public void clickOnProjectionNodePropertyButton() {
-    CdfStudioActions.navigateToPluginPropertiesPage(projectionNode.getNodeName());
   }
 
   @Then("Verify there is one empty row")
@@ -153,11 +118,6 @@ public class PipelineComplexSchema {
     Assert.assertEquals(anotherFieldElement.getAttribute("value"), "another_field");
   }
 
-  @Then("Open source node property")
-  public void openSourceNodeProperty() {
-    CdfStudioActions.navigateToPluginPropertiesPage("BigQuery");
-  }
-
   @Then("Configure source node property")
   public void configureSourceNodeProperty() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("schema-action-button"));
@@ -173,11 +133,6 @@ public class PipelineComplexSchema {
     Commands.sendKeysToInputElementByTestId("table", "users");
 
     Commands.clearInputAndSendKeysToElementByTestId("serviceFilePath", "gcp_service_account_path");
-  }
-
-  @Then("Open transform node property")
-  public void openTransformNodeProperty() {
-    CdfStudioActions.navigateToPluginPropertiesPage(Commands.simpleTransformNode.getNodeName());
   }
 
   @Then("Verify transform node macro")
@@ -212,15 +167,13 @@ public class PipelineComplexSchema {
 
   @Then("Type in pipeline name and description")
   public void typeInPipelineNameAndDescription() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-metadata"));
-    ElementHelper.sendKeys(Helper.locateElementByCssSelector("#pipeline-name-input"), pipelineName);
-    ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("pipeline-metadata-ok-btn"));
+    Commands.fillInPipelineName(pipelineName);
+    Commands.dismissTopBanner();
   }
 
   @Then("Click on Deploy the pipeline")
   public void clickOnDeployThePipeline() throws InterruptedException {
-    ElementHelper.clickOnElementUsingJsExecutor(Helper.locateElementByTestId("deploy-pipeline-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("deploy-pipeline-btn"));
 
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(

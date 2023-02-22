@@ -20,6 +20,7 @@ import { MyDatasetApi } from 'api/dataset';
 import { MyPreferenceApi } from 'api/preference';
 import { MyMetadataApi } from 'api/metadata';
 import { MyArtifactApi } from 'api/artifact';
+import { MySecureKeyApi } from 'api/securekey';
 import MyCDAPVersionApi from 'api/version';
 import Store, {
   IConnection,
@@ -30,7 +31,14 @@ import { objectQuery, PIPELINE_ARTIFACTS } from 'services/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS, SCOPES } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
+import { catchError, combineLatest, map, mergeMap, switchMap } from 'rxjs/operators';
 import { ConnectionsApi } from 'api/connections';
+import {
+  ISourceControlManagement,
+  ISourceControlManagementConfig,
+} from '../SourceControlManagement/types';
+import { defaultSourceControlManagement } from '../SourceControlManagement/reducer';
+import { of } from 'rxjs/observable/of';
 
 export function getNamespaceDetail(namespace) {
   MyNamespaceApi.get({ namespace }).subscribe((res) => {
@@ -46,14 +54,16 @@ export function getNamespaceDetail(namespace) {
     });
   });
 
-  MyPipelineApi.list({ namespace, artifactName: PIPELINE_ARTIFACTS }).subscribe((pipelines) => {
-    Store.dispatch({
-      type: NamespaceAdminActions.setPipelinesCount,
-      payload: {
-        pipelinesCount: pipelines && Array.isArray(pipelines) ? pipelines.length : 0,
-      },
-    });
-  });
+  MyPipelineApi.list({ namespace, artifactName: PIPELINE_ARTIFACTS, latestOnly: true }).subscribe(
+    (pipelines) => {
+      Store.dispatch({
+        type: NamespaceAdminActions.setPipelinesCount,
+        payload: {
+          pipelinesCount: pipelines && Array.isArray(pipelines) ? pipelines.length : 0,
+        },
+      });
+    }
+  );
 
   MyDatasetApi.list({ namespace }).subscribe((datasets) => {
     Store.dispatch({
@@ -186,6 +196,110 @@ export function deleteConnection(conn: IConnection) {
     getConnections(getCurrentNamespace());
   });
 }
+
+export const getSourceControlManagement = (namespace) => {
+  const params = { namespace };
+  MyNamespaceApi.getSourceControlManagement(params)
+    .pipe(
+      switchMap((res: any) => {
+        const config = res.config;
+        return Observable.forkJoin(
+          of(config),
+          MySecureKeyApi.getSecureData({ ...params, key: config.auth.tokenName }).pipe(
+            // still want to store config even if token is not found
+            catchError((err) => {
+              Store.dispatch({
+                type: NamespaceAdminActions.setSourceControlManagementConfig,
+                payload: {
+                  sourceControlManagementConfig: config,
+                },
+              });
+              throw err;
+            })
+          )
+        );
+      }),
+      // config does not exist
+      catchError((err) => {
+        Store.dispatch({
+          type: NamespaceAdminActions.setSourceControlManagementConfig,
+          payload: {
+            sourceControlManagementConfig: null,
+          },
+        });
+        throw err;
+      })
+    )
+    .subscribe((res) => {
+      // after getting the saved config, we need to fetch the token using the tokenName
+      const [config, token] = res;
+      config.auth.token = token;
+      Store.dispatch({
+        type: NamespaceAdminActions.setSourceControlManagementConfig,
+        payload: {
+          sourceControlManagementConfig: config,
+        },
+      });
+    });
+};
+
+export const addOrValidateSourceControlManagement = (
+  namespace,
+  formState: ISourceControlManagementConfig,
+  validate: boolean = false
+) => {
+  const params = { namespace };
+  if (validate) {
+    // validate the connection
+    // TODO: currently it requires to save the token to secure store first.
+    // In the future we might want to test connection on the fly
+    return MySecureKeyApi.put(
+      { ...params, key: formState.auth.tokenName },
+      {
+        data: formState.auth.token,
+      }
+    ).pipe(
+      switchMap(() => {
+        return MyNamespaceApi.setSourceControlManagement(
+          params,
+          getBodyForSubmit(formState, validate)
+        );
+      }),
+      catchError((err) => {
+        throw err;
+      })
+    );
+  }
+  return Observable.forkJoin(
+    MyNamespaceApi.setSourceControlManagement(params, getBodyForSubmit(formState)),
+    MySecureKeyApi.put(
+      { ...params, key: formState.auth.tokenName },
+      {
+        data: formState.auth.token,
+      }
+    )
+  ).map(() => getSourceControlManagement(namespace));
+};
+
+export const deleteSourceControlManagement = (
+  namespace,
+  formState: ISourceControlManagementConfig
+) => {
+  const params = { namespace };
+  return Observable.forkJoin(
+    MyNamespaceApi.deleteSourceControlManagement(params),
+    MySecureKeyApi.delete({ ...params, key: formState.auth.tokenName })
+  ).map(() => {
+    getSourceControlManagement(namespace);
+  });
+};
+
+const getBodyForSubmit = (formState, validate = false) => {
+  return {
+    test: validate,
+    config: formState,
+  };
+};
 
 export function reset() {
   Store.dispatch({

@@ -61,7 +61,11 @@ export default class PayloadConfigModal extends Component {
         <ModalHeader className="clearfix">
           <span className="pull-left">{T.translate(`${PREFIX}.title`)}</span>
           <div className="btn-group pull-right">
-            <a className="btn" onClick={this.props.onToggle}>
+            <a
+              className="btn"
+              onClick={this.props.onToggle}
+              data-testid="close-payload-config-modal"
+            >
               <IconSVG name="icon-close" className="fa" />
             </a>
           </div>

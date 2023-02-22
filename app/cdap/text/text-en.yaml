@@ -9,6 +9,7 @@ commons:
   cdap: CDAP
   clickhere: click here
   close: Close
+  connectionSuccess: Successfully connected.
   delete: Delete
   deprecated: Deprecated
   descriptionLabel: Description
@@ -81,10 +82,12 @@ commons:
   market: Hub
   milliSecondsShortLabel: ms
   nameLabel: Name
+  namespaceAdmin: Namespace Admin
   noLabel: No
   notAvailable: 'N/A'
   please: Please
   pipelines: Pipelines
+  requiredFieldMissingMsg: Required field cannot be empty
   resource-center: Add entity
   schemaLabel: Schema
   scope: Scope
@@ -1944,10 +1947,15 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
-    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
-      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+    discardModal:
+      continue: Continue
+      discard: Discard
+      text: An edit draft exists for this pipeline. Click 'Discard' to discard the changes 
+        that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+      title: Edit draft exists
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
+      outdatedDraftActionButton: Export and Rebase
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
         This draft is outdated and please export the draft for manual reconciliation.
 
@@ -3095,6 +3103,49 @@ features:
       symbolName: Symbol name
   ServiceEnableUtility:
     serviceNotFound: Cannot find {artifactName} artifact
+  SourceControlManagement:
+    configModal:
+      auth:
+        label: Authentication type
+        helperText: Choose method for authentication
+        pat:
+          label: Personal access token (PAT)
+          token: Token
+          tokenHelperText: If you can’t find the secret containing git token, open a tutorial to learn how to create a new one. 
+          tokenName: Token name
+          tokenNameHelperText: Name your token
+          username: User name
+          usernameHelperText: (Optional) Add a username to your token
+      authHeader: Authentication
+      basicHeader: Basic
+      branch:
+        label: Default branch
+        helperText: (Optional) If not set, it will use the default branch from the github repository
+      cancel: Cancel
+      linkConfirm: Save & Close
+      pathPrefix:
+        label: Path prefix
+        helperText: (Optional) Add Namespace description here
+      provider: 
+        label: Provider
+        helperText: Select Source Control Management tool
+      repoUrl:
+        label: Repository URL
+        helperText: Git repo URL of the form git@<host>/repo.git
+      title: Configure Source Control Management
+      validate:
+        button: validate
+        errorMessage:  
+          0: No errors found       
+          1: "{context} required field is missing"
+          _: "{context} required fields are missing"
+    info: Source Control Management allows management of pipelines in a version control system tool of choice to implement development process such as - code reviews, promotion / demotion between environments for the pipelines.
+    linkButton: Link Repository
+    title: Source Control Management
+    unlinkButton: Unlink Repository
+    unlinkConfirm: Delete
+    unlinkText: Do you want to delete the current Source Control Management configuration? This will also delete the mappings between pipelines in the current namespace and the corresponding repository.
+    unlinkTitle: Unlink Repository
   SpotlightSearch:
     SpotlightModal:
       headerTagResults: Entities with the tag "{tag}"

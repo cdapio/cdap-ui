@@ -25,7 +25,7 @@ const useStyle = makeStyle<Theme>((theme) => {
       alignSelf: 'center',
     },
     linkContainer: {
-      color: (theme.palette as any).blue[100],
+      color: 'rgba(0, 0, 0, 0.6)',
       cursor: 'pointer',
       '& :hover': {
         textDecoration: 'underline',
@@ -71,10 +71,9 @@ export function EntityBreadCrumb({
   return (
     <div className={classes.root}>
       <Tag to={breadCrumbAnchorLink} onClick={onClickHandler} className={classes.linkContainer}>
-        <span className={classes.arrowLeft}>&laquo;</span>
         <span>{breadCrumbAnchorLabel}</span>
       </Tag>
-      <span className={classes.divider}> | </span>
+      <span className={classes.divider}> {'>'} </span>
     </div>
   );
 }

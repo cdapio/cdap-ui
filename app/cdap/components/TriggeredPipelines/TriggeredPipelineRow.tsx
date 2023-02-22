@@ -93,6 +93,11 @@ export const TriggeredPipelineRow = ({
           ? `${schedule.application}-triggered-expanded`
           : `${schedule.application}-triggered-collapsed`
       }
+      data-testid={
+        isExpanded
+          ? `${schedule.application}-triggered-expanded`
+          : `${schedule.application}-triggered-collapsed`
+      }
     >
       <StyledAccordionSummary>
         <StyledPipelineName>{schedule.application}</StyledPipelineName>

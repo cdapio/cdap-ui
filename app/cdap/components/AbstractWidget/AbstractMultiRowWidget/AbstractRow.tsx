@@ -139,7 +139,11 @@ export default class AbstractRow<
           )}
         </div>
         {errorMsg && (
-          <div className={this.props.classes.errorText} data-cy={`error-text-${index}`}>
+          <div
+            className={this.props.classes.errorText}
+            data-cy={`error-text-${index}`}
+            data-testid={`error-text-${index}`}
+          >
             {errorMsg}
           </div>
         )}

@@ -25,7 +25,7 @@ import {
   REQUEST_ORIGIN_MARKET,
 } from 'server/url-helper';
 import url from 'url';
-import csp from 'helmet-csp';
+import helmet from 'helmet';
 import proxy from 'express-http-proxy';
 import path from 'path';
 import express from 'express';
@@ -38,9 +38,7 @@ import uuidV4 from 'uuid/v4';
 import bodyParser from 'body-parser';
 import ejs from 'ejs';
 import fs from 'fs';
-import hsts from 'hsts';
 import * as uiThemeWrapper from 'server/uiThemeWrapper';
-import frameguard from 'frameguard';
 import * as sessionToken from 'server/token';
 import log4js from 'log4js';
 
@@ -140,12 +138,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(
-    hsts({
-      maxAge: 60 * 60 * 24 * 365, // one year in seconds
-    })
-  );
-  app.use(frameguard({ action: 'sameorigin' }));
 
   if (!isModeDevelopment()) {
     const proxyBaseUrl = cdapConfig['dashboard.proxy.base.url'];
@@ -166,21 +158,32 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       res.locals.nonce = uuidV4();
       next();
     });
+    // Set security headers, including CSP, HSTS, X-Frame-Options, X-Content-Type-Options,
+    // Referrer-Policy, etc.
     app.use(
-      csp({
-        directives: {
-          imgSrc: [`'self' data: ${cspWhiteListUrls}`],
-          scriptSrc: [
-            (req, res) => `'nonce-${res.locals.nonce}'`,
-            "'unsafe-inline'",
-            "'unsafe-eval'",
-            "'strict-dynamic' https: http:",
-          ],
-          baseUri: ["'self'"],
-          objectSrc: ["'none'"],
-          workerSrc: ["'self' blob:"],
-          reportUri: 'https://csp.withgoogle.com/csp/cdap/6.0',
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            imgSrc: [`'self' data: ${cspWhiteListUrls}`],
+            scriptSrc: [
+              (req, res) => `'nonce-${res.locals.nonce}'`,
+              "'unsafe-inline'",
+              "'unsafe-eval'",
+              "'strict-dynamic' https: http:",
+            ],
+            baseUri: ["'self'"],
+            objectSrc: ["'none'"],
+            workerSrc: ["'self' blob:"],
+            reportUri: 'https://csp.withgoogle.com/csp/cdap',
+          },
         },
+        hsts: {
+          includeSubDomains: true,
+          preload: true,
+        },
+        // Hub icons are cross-origin but don't supply CORS headers
+        // TODO credentialless will also work but isn't supported by FF and Safari
+        crossOriginEmbedderPolicy: false,
       })
     );
   }
@@ -210,7 +213,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         gaScript1.setAttribute('async', 'true');
         gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
         document.body.appendChild(gaScript1);
-        
+
         let gaScript2 = document.createElement('script');
         gaScript2.setAttribute('type', 'text/javascript');
         gaScript2.innerHTML = "window.dataLayer = window.dataLayer || [];function gtag(){window.dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${aTag}');"
@@ -228,7 +231,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     const data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
-      authorization: req.headers.authorization,
       cdap: {
         standaloneWebsiteSDKDownload:
           uiSettings['standalone.website.sdk.download'] === 'true' || false,
@@ -237,6 +239,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         proxyBaseUrl: cdapConfig['dashboard.proxy.base.url'],
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
         ui: uiSettings['ui'],
+        k8sWorkloadIdentityEnabled:
+          cdapConfig['master.environment.k8s.workload.identity.enabled'],
+        namespaceCreationHookEnabled:
+          cdapConfig['namespaces.creation.hook.enabled'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
@@ -674,7 +680,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
                 err +
                 ' for API : "/v3/namespaces"'
             );
-            res.status((response?.statusCode) || 502).send(err);
+            res.status(response?.statusCode || 502).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }

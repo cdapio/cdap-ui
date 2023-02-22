@@ -23,65 +23,29 @@ import SearchSummary from 'components/Metadata/SearchSummary';
 import Lineage from 'components/Metadata/Lineage';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
-import { useParams } from 'react-router-dom';
 
 export const basepath = '/ns/:namespace/metadata';
 
 const Metadata: React.FC = () => {
   const pageTitle = `${Theme.productName} | Search`;
   const namespace = getCurrentNamespace();
-  const params = useParams() as any;
-  const query = params.query || '';
-  const entity = params.entity || '';
-
-  function checkFeatureFlag(
-    componentToRender: JSX.Element,
-    urlToRedirect: string
-  ) {
-    if (!Theme.isMetadataInReact) {
-      window.location.href = urlToRedirect;
-    } else {
-      return componentToRender;
-    }
-  }
 
   return (
     <>
       <Helmet title={pageTitle} />
       <Switch>
-        <Route
-          exact
-          path={basepath}
-          render={() =>
-            checkFeatureFlag(<MetadataHome />, `/metadata/ns/${namespace}`)
-          }
-        />
+        <Route exact path={basepath} render={() => <MetadataHome />} />
         <Route
           path={`${basepath}/search/:query/result`}
-          render={() =>
-            checkFeatureFlag(
-              <SearchResults />,
-              `/metadata/ns/${namespace}/search/${query}/result`
-            )
-          }
+          render={() => <SearchResults />}
         />
         <Route
-          path={`${basepath}/:entityType/:entityId/summary/search/:query`}
-          render={() =>
-            checkFeatureFlag(
-              <SearchSummary />,
-              `/metadata/ns/${namespace}/entity/datasets/${entity}/summary?searchTerm=${query}`
-            )
-          }
+          path={`${basepath}/:entityType/:entityId/summary`}
+          render={() => <SearchSummary />}
         />
         <Route
-          path={`${basepath}/:entityType/:entityId/lineage/search/:query`}
-          render={() =>
-            checkFeatureFlag(
-              <Lineage />,
-              `/metadata/ns/${namespace}/entity/datasets/${entity}/lineage?searchTerm=${query}`
-            )
-          }
+          path={`${basepath}/:entityType/:entityId/lineage`}
+          render={() => <Lineage />}
         />
         <Route
           render={() => {

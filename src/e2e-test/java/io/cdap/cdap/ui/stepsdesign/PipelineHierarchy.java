@@ -19,13 +19,8 @@ package io.cdap.cdap.ui.stepsdesign;
 import com.google.common.base.Strings;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.cdap.ui.utils.Commands;
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
-import io.cdap.e2e.pages.actions.CdfStudioActions;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
-import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -67,32 +62,9 @@ public class PipelineHierarchy {
     Commands.addNodeToCanvas(fileSource);
   }
 
-  @Then("Open transform panel")
-  public void openTransformPanel() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("plugin-Transform-group-summary"));
-    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("plugin-Transform-group-details"));
-  }
-
-  @Then("Close {string} panel")
-  public void closePluginGroupPanel(String pluginGroupName) {
-    ElementHelper.clickIfDisplayed(Helper.locatorOfPluginGroupExpanded(pluginGroupName));
-    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByLocator(
-      Helper.locatorOfPluginGroupCollapsed(pluginGroupName)));
-  }
-
   @Then("Add \"CloneRecord\" node to canvas")
   public void addCloneRecordNodeToCanvas() {
     Commands.addNodeToCanvas(cloneRecord);
-  }
-
-  @Then("Cleanup pipeline graph control")
-  public void cleanupPipelineGraphControl() {
-    Commands.pipelineCleanUpGraphControl();
-  }
-
-  @Then("Fit pipeline to screen")
-  public void fitPipelineToScreen() {
-    Commands.fitPipelineToScreen();
   }
 
   @Then("Connect the two added nodes")
@@ -100,24 +72,9 @@ public class PipelineHierarchy {
     Commands.connectTwoNodes(fileSource, cloneRecord);
   }
 
-  @Then("Open {string} node property")
-  public void openNodeProperty(String nodeName) {
-    CdfStudioActions.navigateToPluginPropertiesPage(nodeName);
-  }
-
-  @Then("Close node property")
-  public void closeNodeProperty() {
-    CdfPluginPropertiesActions.clickCloseButton();
-  }
-
   @Then("Add field at row {string} and name {string}")
   public void addFieldToNodeProperty(String row, String name) {
     addField(row, name, "");
-  }
-
-  @Then("Click on \"Get Schema\" button")
-  public void getSchema() {
-    CdfPluginPropertiesActions.clickGetSchemaButton();
   }
 
   @Then("Verify field mapping exists")
@@ -132,12 +89,5 @@ public class PipelineHierarchy {
     ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
       "div" + propertySelector + " div" + Helper.getCssSelectorByDataTestId("add")
     ));
-  }
-
-  @Then("Exit Studio Page")
-  public void exitStudioPage() {
-    SeleniumDriver.openPage(Constants.BASE_URL);
-    Commands.dismissStudioLeaveConfirmationModal();
-    WaitHelper.waitForPageToLoad();
   }
 }

@@ -56,7 +56,11 @@ import TransformDelete from './TransformDelete';
 import { SUPPORT } from '../Assessment/TablesAssessment/Mappings/Supported';
 
 // uses the last created rename directive on that column to show the target column name
-const useLastRenameOrRowName = (columnName: string, transforms: IColumnTransformation[]) => {
+const useLastRenameOrRowName = (
+  columnName: string,
+  targetColumnName: string,
+  transforms: IColumnTransformation[]
+) => {
   const renameDir = transforms
     .slice()
     .reverse()
@@ -68,7 +72,7 @@ const useLastRenameOrRowName = (columnName: string, transforms: IColumnTransform
     return renameDir.directive.split(' ')[2];
   }
 
-  return columnName;
+  return targetColumnName;
 };
 
 export const renderTable = ({
@@ -286,13 +290,13 @@ export const renderTable = ({
                 </Grid>
                 <GridCell item xs={4}>
                   <NoPaddingSpanLeft>
-                    {useLastRenameOrRowName(row.name, transforms)}
+                    {useLastRenameOrRowName(row.name, row.targetName, transforms)}
                   </NoPaddingSpanLeft>
                 </GridCell>
               </GridCellContainer>
               <GridCellContainer item xs={2} container direction="row">
                 <GridCell item xs={3}>
-                  <NoPaddingSpanLeft> {row.type.toLowerCase()}</NoPaddingSpanLeft>
+                  <NoPaddingSpanLeft> {row.sourceType.toLowerCase()}</NoPaddingSpanLeft>
                 </GridCell>
                 <Grid item xs={5}>
                   <span></span>

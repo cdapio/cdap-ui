@@ -85,7 +85,7 @@ class RuntimArgsTab extends Component {
       }
 
       return (
-        <div data-cy={`row-${i}`}>
+        <div data-cy={`row-${i}`} data-testid={`row-${i}`}>
           <RuntimeArgRow mkey={key} mvalue={value} />
         </div>
       );
@@ -95,7 +95,7 @@ class RuntimArgsTab extends Component {
   renderDisabledRows(list) {
     return list.map((arg, i) => {
       return (
-        <div data-cy={`row-${i}`}>
+        <div data-cy={`row-${i}`} data-testid={`row-${i}`}>
           <RuntimeArgRow mkey={arg.key} mvalue={arg.value} />
         </div>
       );

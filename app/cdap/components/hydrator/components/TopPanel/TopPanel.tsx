@@ -157,6 +157,7 @@ interface ITopPanelProps {
   isEdit: boolean;
   saveChangeSummary: (changeSummary: string) => any;
   getParentVersion: () => any;
+  stateParams: any;
 }
 
 export const TopPanel = ({
@@ -208,12 +209,18 @@ export const TopPanel = ({
   isEdit,
   saveChangeSummary,
   getParentVersion,
+  stateParams,
 }: ITopPanelProps) => {
   const sheculdeInfo = getScheduleInfo();
   const [isChangeSummaryOpen, setIsChangeSummaryOpen] = useState<boolean>(false);
   const [changeSummary, setChangeSummary] = useState('');
   const [parentConfig, setParentConfig] = useState({ ...getConfigForExport().config });
   const [editStatus, setEditStatus] = useState(null);
+
+  const params = {
+    namespace: getCurrentNamespace(),
+    appId: state.metadata.name,
+  };
 
   const initialError = {
     errorMessage: null,
@@ -223,6 +230,18 @@ export const TopPanel = ({
   const exportDraftAndRedirect = () => {
     downloadFile(getConfigForExport());
     window.onbeforeunload = null;
+    // if there is a draft saved, delete it
+    if (stateParams.draftId) {
+      MyPipelineApi.deleteDraft({
+        context: getCurrentNamespace(),
+        draftId: stateParams.draftId,
+      }).subscribe({
+        error(err) {
+          // tslint:disable:no-console
+          console.log('Cannot delete draft');
+        },
+      });
+    }
     editPipeline(state.metadata.name);
   };
 
@@ -235,7 +254,7 @@ export const TopPanel = ({
             exportDraftAndRedirect();
           }}
         >
-          Export
+          {T.translate(`${PREFIX}.errors.outdatedDraftActionButton`)}
         </ErrorExportButton>
       </div>
     );
@@ -275,10 +294,6 @@ export const TopPanel = ({
   const publishPipeline = () => {
     if (isEdit) {
       // check for if parentVersion is still good
-      const params = {
-        namespace: getCurrentNamespace(),
-        appId: state.metadata.name,
-      };
       MyPipelineApi.get(params).subscribe(
         (res) => {
           // check for if edit has new changes
@@ -308,10 +323,6 @@ export const TopPanel = ({
     if (!isEdit) {
       return;
     }
-    const params = {
-      namespace: getCurrentNamespace(),
-      appId: state.metadata.name,
-    };
 
     // first time execute before interval
     MyPipelineApi.get(params).subscribe(
@@ -362,6 +373,7 @@ export const TopPanel = ({
       autoFocus={true}
       onChange={(e) => onSummaryChange(e.target.value)}
       value={changeSummary}
+      data-testid="change-summary-input"
     />
   );
   return (

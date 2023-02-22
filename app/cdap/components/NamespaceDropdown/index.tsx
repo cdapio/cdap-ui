@@ -115,7 +115,7 @@ export default class NamespaceDropdown extends React.PureComponent<
       });
     } else {
       // have to set this, because the Namespace store gets reset when we visit other apps
-      // e.g. Hydrator or Tracker
+      // e.g. Hydrator
       localStorage.setItem('CurrentNamespace', selectedNamespace);
       this.setState({
         currentNamespace: NamespaceStore.getState().selectedNamespace,

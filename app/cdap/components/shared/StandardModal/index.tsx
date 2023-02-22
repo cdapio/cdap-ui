@@ -19,7 +19,7 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import { CSSTransition } from 'react-transition-group';
 import IconSVG from 'components/shared/IconSVG';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classnames from 'classnames';
 
 const styles = (): StyleRules => {
@@ -52,7 +52,7 @@ const styles = (): StyleRules => {
 interface IStandardModalProps extends WithStyles<typeof styles> {
   open: boolean;
   toggle: () => void;
-  headerText: string;
+  headerText: string | ReactNode;
   children: any;
 }
 
