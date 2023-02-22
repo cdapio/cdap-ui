@@ -14,8 +14,10 @@
  * the License.
  */
 
-import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
+
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+
 import RecipeStepsTable, {
   RecipeStepsTableContainer,
 } from 'components/WranglerV2/RecipeStepsTable';
