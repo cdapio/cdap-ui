@@ -105,24 +105,8 @@ const RecipeStepsColumnCell = ({ BodyCell, prefix, handleClick }: IRecipeStepsCo
   </RecipeStepCellWrapper>
 );
 
-const deleteDirective = (state, index) => {
-  const directives = state.directives;
-
-  const newDirectives = directives.slice(0, index);
-
-  execute(newDirectives, true).subscribe(
-    () => {},
-    (err) => {
-      // Should not ever come to this.. this is only if backend
-      // fails somehow
-      console.log('Error deleting directives', err);
-    }
-  );
-};
-
 export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStepsTableProps) {
-  const dataprep = useSelector((state) => state.dataprep);
-  const { directives } = dataprep;
+  const directives = useSelector((state) => state.dataprep.directives);
 
   const rows: IRow[] = recipeSteps.map((recipeStep: string, index: number) => ({
     serialNumber: String(index + 1).padStart(2, '0'),
@@ -131,7 +115,16 @@ export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStep
 
   const handleDeleteIconClick = (row: IRow) => {
     const matchingIndex = directives.findIndex((directive) => row.recipeStep === directive);
-    deleteDirective(dataprep, matchingIndex);
+    const newDirectives = directives.slice(0, matchingIndex);
+
+    execute(newDirectives, true).subscribe(
+      () => {},
+      (err) => {
+        // Should not ever come to this.. this is only if backend
+        // fails somehow
+        console.log('Error deleting directives', err);
+      }
+    );
   };
 
   const getRecipeStepCell = ({ value, row }: { value: string; row: IRow }) => () => {

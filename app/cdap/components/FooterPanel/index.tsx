@@ -108,7 +108,7 @@ export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelPro
       </DirectivesBox>
       <ReciepeStepsButton
         data-testid="footer-panel-recipe-steps-tab"
-        onClick={Boolean(directives.length) ? handleRecipePanelMode : null}
+        onClick={handleRecipePanelMode}
         disableRipple
       >
         <Label data-testid="footerpanel-simple-label">
