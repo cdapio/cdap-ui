@@ -17,7 +17,7 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import InlayDrawerWidget, { IMenuItem } from 'components/InlayDrawerWidget';
+import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 
 export default {
   title: 'InlayDrawerWidget',
