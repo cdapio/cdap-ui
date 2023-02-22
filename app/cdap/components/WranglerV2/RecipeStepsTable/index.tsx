@@ -20,8 +20,10 @@ import { IconButton, TableContainer, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import styled, { StyledComponent } from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import DataTable, { DataTableContainer, IColumn, IRow } from 'components/WranglerV2/DataTable';
+import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 
 interface IRecipeStepsColumnCellProps {
   BodyCell: () => JSX.Element;
@@ -103,14 +105,33 @@ const RecipeStepsColumnCell = ({ BodyCell, prefix, handleClick }: IRecipeStepsCo
   </RecipeStepCellWrapper>
 );
 
+const deleteDirective = (state, index) => {
+  const directives = state.directives;
+
+  const newDirectives = directives.slice(0, index);
+
+  execute(newDirectives, true).subscribe(
+    () => {},
+    (err) => {
+      // Should not ever come to this.. this is only if backend
+      // fails somehow
+      console.log('Error deleting directives', err);
+    }
+  );
+};
+
 export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStepsTableProps) {
+  const dataprep = useSelector((state) => state.dataprep);
+  const { directives } = dataprep;
+
   const rows: IRow[] = recipeSteps.map((recipeStep: string, index: number) => ({
     serialNumber: String(index + 1).padStart(2, '0'),
     recipeStep,
   }));
 
   const handleDeleteIconClick = (row: IRow) => {
-    // do nothing
+    const matchingIndex = directives.findIndex((directive) => row.recipeStep === directive);
+    deleteDirective(dataprep, matchingIndex);
   };
 
   const getRecipeStepCell = ({ value, row }: { value: string; row: IRow }) => () => {
