@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import InlayDrawerWidget, { IMenuItem } from 'components/InlayDrawerWidget';
+import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 
 const handleDrawerCloseIconClick = jest.fn();
 const onSaveButtonClick = jest.fn();

@@ -29,7 +29,7 @@ import {
   StyledHeader,
   StyledIconButton,
   StyledMenuItem,
-} from 'components/InlayDrawerWidget/styles';
+} from 'components/WranglerV2/InlayDrawerWidget/styles';
 
 export interface IMenuItem {
   clickHandler: () => void;
