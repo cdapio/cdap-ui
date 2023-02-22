@@ -15,7 +15,10 @@
  */
 
 import { providers, scmAuthType } from './constants';
-import { ISourceControlManagement, ISourceControlManagementConfig } from './types';
+import {
+  ISourceControlManagement,
+  ISourceControlManagementConfig,
+} from './types';
 
 export const defaultSourceControlManagement: ISourceControlManagement = {
   loading: false,
@@ -34,7 +37,10 @@ export const defaultSourceControlManagement: ISourceControlManagement = {
   },
 };
 
-export const sourceControlManagementFormReducer = (state: ISourceControlManagement, action) => {
+export const sourceControlManagementFormReducer = (
+  state: ISourceControlManagement,
+  action
+) => {
   switch (action.type) {
     case 'INIT':
       if (action.payload.config) {
@@ -44,13 +50,14 @@ export const sourceControlManagementFormReducer = (state: ISourceControlManageme
         };
       }
       return defaultSourceControlManagement;
-    case 'SET_VALUE':
+    case 'SET_VALUE': {
       const newConfig: ISourceControlManagementConfig = { ...state.config };
       newConfig[action.payload.key] = action.payload.value;
       return {
         ...state,
         config: newConfig,
       };
+    }
     case 'SET_LOADING':
       return {
         ...state,

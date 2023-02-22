@@ -9089,13 +9089,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camelize@npm:1.0.0":
-  version: 1.0.0
-  resolution: "camelize@npm:1.0.0"
-  checksum: 769f8d10071f57b974d9a51dc02f589dd7fb07ea6a7ecde1a57b52ae68657ba61fe85c60d50661b76c7dbb76b6474fbfd3356aee33cf5f025cd7fd6fb2811b73
-  languageName: node
-  linkType: hard
-
 "camelize@npm:^1.0.0":
   version: 1.0.1
   resolution: "camelize@npm:1.0.1"
@@ -9359,9 +9352,8 @@ __metadata:
     gulp-svgmin: 2.2.0
     gulp-terser: 1.2.0
     gulp-wrapper: 1.0.0
-    helmet-csp: 2.7.1
+    helmet: ^6.0.1
     history: 4.10.1
-    hsts: 2.2.0
     html-webpack-plugin: 5.3.2
     i18n-react: 0.7.0
     ifvisible.js: 1.0.6
@@ -10423,13 +10415,6 @@ __metadata:
   dependencies:
     safe-buffer: 5.2.1
   checksum: afb9d545e296a5171d7574fcad634b2fdf698875f4006a9dd04a3e1333880c5c0c98d47b560d01216fb6505a54a2ba6a843ee3a02ec86d7e911e8315255f56c3
-  languageName: node
-  linkType: hard
-
-"content-security-policy-builder@npm:2.0.0":
-  version: 2.0.0
-  resolution: "content-security-policy-builder@npm:2.0.0"
-  checksum: c8499fa7b806227679e35252d693cc7a0232435280fa322f1b6a35f6b80a5125a8cd7c67939da12d2e7f301c76471cf5420fe3fb59aec475e81c4d5cc2328744
   languageName: node
   linkType: hard
 
@@ -11658,13 +11643,6 @@ __metadata:
   dependencies:
     assert-plus: ^1.0.0
   checksum: 3634c249570f7f34e3d34f866c93f866c5b417f0dd616275decae08147dcdf8fccfaa5947380ccfb0473998ea3a8057c0b4cd90c875740ee685d0624b2983598
-  languageName: node
-  linkType: hard
-
-"dasherize@npm:2.0.0":
-  version: 2.0.0
-  resolution: "dasherize@npm:2.0.0"
-  checksum: 3a8d57e0abffb6e63afa82431ef1fc782d01aef32610b9c5617720216e6c1b1c24d2192893b2fb1ba7e5e3e4bcec9e2cb8deaf1bd51f017cf385c82953d28240
   languageName: node
   linkType: hard
 
@@ -16246,15 +16224,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"helmet-csp@npm:2.7.1":
-  version: 2.7.1
-  resolution: "helmet-csp@npm:2.7.1"
-  dependencies:
-    camelize: 1.0.0
-    content-security-policy-builder: 2.0.0
-    dasherize: 2.0.0
-    platform: 1.3.5
-  checksum: 52a7d79f18412b8e358ca90a869e7acebb9de99cfea667ce1a53c755e5ca012d41ea7cbe8689550a05525316b529d760df92705fe62ca9cd163e7bc20cb6e8bb
+"helmet@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "helmet@npm:6.0.1"
+  checksum: 1ca20d0b7888b6208130bbb50d183e68d53bb5fa0caead2106226d6d53216dfc893b4b5c07528304e342884f75d87702003b80884b065cb5dcbc705fb4a6ad52
   languageName: node
   linkType: hard
 
@@ -16368,15 +16341,6 @@ __metadata:
   version: 1.0.0
   resolution: "hsla-regex@npm:1.0.0"
   checksum: 9aa6eb9ff6c102d2395435aa5d1d91eae20043c4b1497c543d8db501c05f3edacd9a07fb34a987059d7902dba415af4cb4e610f751859ae8e7525df4ffcd085f
-  languageName: node
-  linkType: hard
-
-"hsts@npm:2.2.0":
-  version: 2.2.0
-  resolution: "hsts@npm:2.2.0"
-  dependencies:
-    depd: 2.0.0
-  checksum: e8d265c30b58d731f5b22da0e7ce29505e0ad68cb4d319c163ac3796d777f8d011d1fe2f6a9bf6443689bba78308f271e95e764fb1c2652181bd28c3b3fbd978
   languageName: node
   linkType: hard
 
@@ -22868,13 +22832,6 @@ __metadata:
   dependencies:
     find-up: ^5.0.0
   checksum: b167bb8dac7bbf22b1d5e30ec223e6b064b84b63010c9d49384619a36734caf95ed23ad23d4f9bd975e8e8082b60a83395f43a89bb192df53a7c25a38ecb57d9
-  languageName: node
-  linkType: hard
-
-"platform@npm:1.3.5":
-  version: 1.3.5
-  resolution: "platform@npm:1.3.5"
-  checksum: c5026f06f1dd4797aef72c3188b599012ce8162906aec28f9e75fc7af96eb08cc11c4f799778652dcd046cd67e49342cec51d3ed590a8b7120d115474b78f63f
   languageName: node
   linkType: hard
 
