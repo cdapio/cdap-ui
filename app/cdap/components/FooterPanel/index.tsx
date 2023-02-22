@@ -20,9 +20,9 @@ import { IconButton } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import T from 'i18n-react';
+import { useSelector } from 'react-redux';
 
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
-import DataPrepStore from 'components/DataPrep/store';
 import {
   ColumnViewBox,
   DirectivesBox,
@@ -78,9 +78,7 @@ export interface IRecipeStepsTabProps {
 export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
-  const { dataprep } = DataPrepStore.getState();
-
-  const recipeStepsCount = dataprep.directives.length;
+  const directives = useSelector((state) => state.dataprep.directives);
 
   return (
     <TabsWrapper data-testid="footer-panel-wrapper">
@@ -110,15 +108,13 @@ export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelPro
       </DirectivesBox>
       <ReciepeStepsButton
         data-testid="footer-panel-recipe-steps-tab"
-        onClick={Boolean(recipeStepsCount) ? handleRecipePanelMode : null}
+        onClick={Boolean(directives.length) ? handleRecipePanelMode : null}
         disableRipple
       >
         <Label data-testid="footerpanel-simple-label">
           {`${T.translate(`${PREFIX}.recipeSteps`)}`}
         </Label>
-        <OutlinedLabel data-testid="footerpanel-outlined-label">
-          <>{recipeStepsCount}</>
-        </OutlinedLabel>
+        <OutlinedLabel data-testid="footerpanel-outlined-label">{directives.length}</OutlinedLabel>
       </ReciepeStepsButton>
     </TabsWrapper>
   );

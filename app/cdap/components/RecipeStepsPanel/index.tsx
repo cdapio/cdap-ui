@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import DataPrepStore from 'components/DataPrep/store';
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import RecipeStepsTable, {
   RecipeStepsTableContainer,
@@ -19,9 +19,7 @@ const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
 `;
 
 export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStepsPanelProps) {
-  const { dataprep } = DataPrepStore.getState();
-
-  const recipeSteps = dataprep.directives;
+  const directives = useSelector((state) => state.dataprep.directives);
 
   const onSaveButtonClick = () => {
     // do nothing
@@ -61,8 +59,8 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
       position="right"
       showDivider={true}
     >
-      {Boolean(recipeSteps.length) && (
-        <RecipeStepsTable recipeSteps={recipeSteps} Container={RecipeStepsPanelTableContainer} />
+      {Boolean(directives.length) && (
+        <RecipeStepsTable recipeSteps={directives} Container={RecipeStepsPanelTableContainer} />
       )}
     </InlayDrawerWidget>
   );
