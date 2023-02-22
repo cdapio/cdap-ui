@@ -411,7 +411,7 @@ export default function GridTable() {
         )}
         <FooterPanel
           gridMetaInfo={tableMetaInfo}
-          handleRecipePanel={() => setShowRecipePanel(!showRecipePanel)}
+          handleRecipePanelMode={() => setShowRecipePanel(!showRecipePanel)}
         />
         {addTransformationFunction.option && (
           <SelectColumnPanel

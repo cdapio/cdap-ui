@@ -63,7 +63,7 @@ interface IGridMetaInfo {
 
 interface IFooterPanelProps {
   gridMetaInfo: IGridMetaInfo;
-  handleRecipePanel: () => void;
+  handleRecipePanelMode: () => void;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -75,7 +75,7 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function({ gridMetaInfo, handleRecipePanel }: IFooterPanelProps) {
+export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
   const { dataprep } = DataPrepStore.getState();
@@ -110,7 +110,7 @@ export default function({ gridMetaInfo, handleRecipePanel }: IFooterPanelProps) 
       </DirectivesBox>
       <ReciepeStepsBox
         data-testid="footer-panel-recipe-steps-tab"
-        onClick={Boolean(recipeStepsCount) && handleRecipePanel}
+        onClick={Boolean(recipeStepsCount) && handleRecipePanelMode}
       >
         <Label data-testid="footerpanel-simple-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
