@@ -26,7 +26,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 // the clean options to use
 const cleanOptions = {
@@ -81,7 +81,6 @@ const plugins = [
     caching: true,
     flattening: true,
   }),
-  PnpWebpackPlugin,
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   getWebpackDllPlugins(mode),
@@ -141,7 +140,7 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: ['babel-loader'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],
@@ -183,7 +182,7 @@ let webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/login',
   entry: {
-    login: ['@babel/polyfill', './login.js'],
+    login: ['@babel/polyfill', './login.jsx'],
   },
   module: {
     rules,

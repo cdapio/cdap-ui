@@ -22,6 +22,8 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
+
 // the clean options to use
 const cleanOptions = {
   verbose: true,
@@ -86,6 +88,12 @@ if (!isModeProduction(mode)) {
 
 const rules = [
   {
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
     test: /\.s?css$/,
     use: ['style-loader', 'css-loader', 'sass-loader'],
   },
@@ -137,6 +145,9 @@ const rules = [
   },
 ];
 const webpackConfig = {
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/common',
   optimization: {
@@ -200,7 +211,7 @@ const webpackConfig = {
     },
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',
