@@ -7,6 +7,7 @@ import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerW
 import RecipeStepsTable, {
   RecipeStepsTableContainer,
 } from 'components/WranglerV2/RecipeStepsTable';
+import NoRecordScreen from 'components/NoRecordScreen';
 
 interface IRecipeStepsPanelProps {
   onDrawerCloseIconClick: () => void;
@@ -61,6 +62,12 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
     >
       {Boolean(directives.length) && (
         <RecipeStepsTable recipeSteps={directives} Container={RecipeStepsPanelTableContainer} />
+      )}
+      {!Boolean(directives.length) && (
+        <NoRecordScreen
+          title="Start Wrangling your data"
+          subtitle="Select a column or function to add your first recipe step"
+        />
       )}
     </InlayDrawerWidget>
   );

@@ -29,6 +29,8 @@ export const Container = styled(Box)`
   padding-top: 20px;
   position: relative;
   width: 500px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Divider = styled.div`
