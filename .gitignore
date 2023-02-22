@@ -30,3 +30,5 @@ sandboxjs/node_modules/
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
+.pnp.*
+yarn-error.log
