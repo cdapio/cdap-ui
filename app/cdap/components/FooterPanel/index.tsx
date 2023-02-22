@@ -29,7 +29,7 @@ import {
   Label,
   LargeBox,
   OutlinedLabel,
-  ReciepeStepsBox,
+  ReciepeStepsButton,
   TabsWrapper,
   TransformatedIconButton,
   ZoomBox,
@@ -108,17 +108,18 @@ export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelPro
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
-      <ReciepeStepsBox
+      <ReciepeStepsButton
         data-testid="footer-panel-recipe-steps-tab"
-        onClick={Boolean(recipeStepsCount) && handleRecipePanelMode}
+        onClick={Boolean(recipeStepsCount) ? handleRecipePanelMode : null}
+        disableRipple
       >
         <Label data-testid="footerpanel-simple-label">
-          <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
+          {`${T.translate(`${PREFIX}.recipeSteps`)}`}
         </Label>
         <OutlinedLabel data-testid="footerpanel-outlined-label">
           <>{recipeStepsCount}</>
         </OutlinedLabel>
-      </ReciepeStepsBox>
+      </ReciepeStepsButton>
     </TabsWrapper>
   );
 }
