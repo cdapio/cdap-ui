@@ -41,7 +41,7 @@ const ConnectionList = Loadable({
   loading: LoadingSVGCentered,
 });
 const WrangleGrid = Loadable({
-  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridTable'),
+  loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/GridContainer'),
   loading: LoadingSVGCentered,
 });
 const Connections = Loadable({
