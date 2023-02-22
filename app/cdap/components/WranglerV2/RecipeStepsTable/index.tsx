@@ -97,7 +97,7 @@ const RecipeStepsColumnCell = ({ BodyCell, prefix, handleClick }: IRecipeStepsCo
       <BodyCell />
     </div>
     <IconButton onClick={handleClick}>
-      <DeleteOutlineIcon fontSize='medium' />
+      <DeleteOutlineIcon fontSize="medium" />
     </IconButton>
   </RecipeStepCellWrapper>
 );
