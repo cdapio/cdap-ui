@@ -3453,6 +3453,16 @@ features:
       labels:
         loadToGrid: Wrangle
         noConnections: No Connections to show
+    Drawer:
+      buttonLabels: 
+        actions: ACTIONS
+        apply: Apply
+        download: Download
+        save: Save
+      labels: 
+        headerText: Inlay Drawer
+      messages:
+        childComponentMessage: Child Component will  be displayed here
     FooterPanel:
       labels:
         columns: columns
