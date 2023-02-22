@@ -281,7 +281,10 @@ export default function GridTable({ handleTransformationUpload, storeData }) {
               </Table>
             </TableWrapperContainer>
             {showRecipePanel && (
-              <RecipeStepsPanel onDrawerCloseIconClick={() => setShowRecipePanel(false)} />
+              <RecipeStepsPanel
+                onDrawerCloseIconClick={() => setShowRecipePanel(false)}
+                setSnackbar={setSnackbar}
+              />
             )}
           </TableGridContainer>
         )}

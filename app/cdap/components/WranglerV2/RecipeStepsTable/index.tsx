@@ -19,11 +19,12 @@ import React from 'react';
 import { IconButton, TableContainer, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import styled, { StyledComponent } from 'styled-components';
 import { useSelector } from 'react-redux';
+import styled, { StyledComponent } from 'styled-components';
 
-import DataTable, { DataTableContainer, IColumn, IRow } from 'components/WranglerV2/DataTable';
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
+import DataTable, { DataTableContainer, IColumn, IRow } from 'components/WranglerV2/DataTable';
+import { ISnackbar } from 'components/Snackbar';
 
 interface IRecipeStepsColumnCellProps {
   BodyCell: () => JSX.Element;
@@ -34,6 +35,7 @@ interface IRecipeStepsColumnCellProps {
 interface IRecipeStepsTableProps {
   recipeSteps: string[];
   Container: StyledComponent<typeof TableContainer, {}>;
+  setSnackbar: (value: ISnackbar) => void;
 }
 
 export const RecipeStepCellWrapper = styled.div`
@@ -105,7 +107,11 @@ const RecipeStepsColumnCell = ({ BodyCell, prefix, handleClick }: IRecipeStepsCo
   </RecipeStepCellWrapper>
 );
 
-export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStepsTableProps) {
+export default function RecipeStepsTable({
+  recipeSteps,
+  Container,
+  setSnackbar,
+}: IRecipeStepsTableProps) {
   const directives = useSelector((state) => state.dataprep.directives);
 
   const rows: IRow[] = recipeSteps.map((recipeStep: string, index: number) => ({
@@ -118,11 +124,21 @@ export default function RecipeStepsTable({ recipeSteps, Container }: IRecipeStep
     const newDirectives = directives.slice(0, matchingIndex);
 
     execute(newDirectives, true).subscribe(
-      () => {},
+      () => {
+        setSnackbar({
+          open: true,
+          isSuccess: true,
+          message: `Directive "${row.recipeStep}" deleted successfully`,
+        });
+      },
       (err) => {
-        // Should not ever come to this.. this is only if backend
-        // fails somehow
+        // Should not ever come to this.. this is only if backend fails somehow
         console.log('Error deleting directives', err);
+        setSnackbar({
+          open: true,
+          isSuccess: false,
+          message: `Directive "${row.recipeStep}" could not be deleted`,
+        });
       }
     );
   };

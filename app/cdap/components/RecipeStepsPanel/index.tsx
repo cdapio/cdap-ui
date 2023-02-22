@@ -3,14 +3,16 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import NoRecordScreen from 'components/NoRecordScreen';
+import { ISnackbar } from 'components/Snackbar';
 import InlayDrawerWidget, { IMenuItem } from 'components/WranglerV2/InlayDrawerWidget';
 import RecipeStepsTable, {
   RecipeStepsTableContainer,
 } from 'components/WranglerV2/RecipeStepsTable';
-import NoRecordScreen from 'components/NoRecordScreen';
 
 interface IRecipeStepsPanelProps {
   onDrawerCloseIconClick: () => void;
+  setSnackbar: (value: ISnackbar) => void;
 }
 
 const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
@@ -19,7 +21,10 @@ const RecipeStepsPanelTableContainer = styled(RecipeStepsTableContainer)`
   }
 `;
 
-export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStepsPanelProps) {
+export default function RecipeStepsPanel({
+  onDrawerCloseIconClick,
+  setSnackbar,
+}: IRecipeStepsPanelProps) {
   const directives = useSelector((state) => state.dataprep.directives);
 
   const onSaveButtonClick = () => {
@@ -61,7 +66,11 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
       showDivider={true}
     >
       {Boolean(directives.length) && (
-        <RecipeStepsTable recipeSteps={directives} Container={RecipeStepsPanelTableContainer} />
+        <RecipeStepsTable
+          recipeSteps={directives}
+          Container={RecipeStepsPanelTableContainer}
+          setSnackbar={setSnackbar}
+        />
       )}
       {!Boolean(directives.length) && (
         <NoRecordScreen
