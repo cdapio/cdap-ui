@@ -54,18 +54,16 @@ export default function RecipeStepsPanel({ onDrawerCloseIconClick }: IRecipeStep
   ];
 
   return (
-    <>
-      <InlayDrawerWidget
-        actionsOptions={actionsOptions}
-        headingText={'Recipe'}
-        onClose={onDrawerCloseIconClick}
-        position="right"
-        showDivider={true}
-      >
-        {Boolean(recipeSteps.length) && (
-          <RecipeStepsTable recipeSteps={recipeSteps} Container={RecipeStepsPanelTableContainer} />
-        )}
-      </InlayDrawerWidget>
-    </>
+    <InlayDrawerWidget
+      actionsOptions={actionsOptions}
+      headingText={'Recipe'}
+      onClose={onDrawerCloseIconClick}
+      position="right"
+      showDivider={true}
+    >
+      {Boolean(recipeSteps.length) && (
+        <RecipeStepsTable recipeSteps={recipeSteps} Container={RecipeStepsPanelTableContainer} />
+      )}
+    </InlayDrawerWidget>
   );
 }
