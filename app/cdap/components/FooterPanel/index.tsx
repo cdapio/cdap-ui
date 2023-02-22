@@ -14,10 +14,15 @@
  * the License.
  */
 
+import React from 'react';
+
 import { IconButton } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import T from 'i18n-react';
+
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
+import DataPrepStore from 'components/DataPrep/store';
 import {
   ColumnViewBox,
   DirectivesBox,
@@ -29,8 +34,6 @@ import {
   TransformatedIconButton,
   ZoomBox,
 } from 'components/FooterPanel/styles';
-import T from 'i18n-react';
-import React from 'react';
 
 export const PREFIX = 'features.WranglerNewUI.FooterPanel.labels';
 
@@ -59,8 +62,8 @@ interface IGridMetaInfo {
 }
 
 interface IFooterPanelProps {
-  recipeStepsCount: number;
   gridMetaInfo: IGridMetaInfo;
+  handleRecipePanel: () => void;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -72,8 +75,12 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
+export default function({ gridMetaInfo, handleRecipePanel }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
+
+  const { dataprep } = DataPrepStore.getState();
+
+  const recipeStepsCount = dataprep.directives.length;
 
   return (
     <TabsWrapper data-testid="footer-panel-wrapper">
@@ -101,7 +108,10 @@ export default function({ recipeStepsCount, gridMetaInfo }: IFooterPanelProps) {
           <>{`${T.translate(`${PREFIX}.directives`)}`}</>
         </Label>
       </DirectivesBox>
-      <ReciepeStepsBox data-testid="footer-panel-recipe-steps-tab">
+      <ReciepeStepsBox
+        data-testid="footer-panel-recipe-steps-tab"
+        onClick={Boolean(recipeStepsCount) && handleRecipePanel}
+      >
         <Label data-testid="footerpanel-simple-label">
           <>{`${T.translate(`${PREFIX}.recipeSteps`)}`}</>
         </Label>

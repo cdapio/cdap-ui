@@ -25,7 +25,7 @@ import FooterPanel from 'components/FooterPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
-import { useStyles } from 'components/GridTable/styles';
+import { TableGridContainer, useStyles } from 'components/GridTable/styles';
 import {
   IExecuteAPIResponse,
   IHeaderNamesList,
@@ -50,19 +50,34 @@ import Snackbar from 'components/Snackbar';
 import useSnackbar from 'components/Snackbar/useSnackbar';
 import { useLocation } from 'react-router';
 import { FlexWrapper } from 'components/WranglerGrid/SelectColumnPanel/styles';
+import RecipeStepsPanel from 'components/RecipeStepsPanel';
+
+const transformationOptions = ['undo', 'redo'];
 
 export const TableWrapper = styled(Box)`
   width: 100%;
 `;
 
+export const TableWrapperWithOpenPanel = styled.div`
+  width: calc(100% - 500px);
+  overflow: scroll;
+`;
+
+export const RecipeStepsPanelContainer = styled(RecipeStepsPanel)`
+  width: 500px;
+`;
+
 const GridTableWrapper = styled(Box)`
-  height: calc(100% - 115px);
+  height: calc(100% - 139px);
   max-height: 76vh;
   max-width: 100%;
   overflow-x: auto;
   width: 100%;
 `;
-const transformationOptions = ['undo', 'redo'];
+
+const GridTableWrapperWithoutBreadcrumb = styled(GridTableWrapper)`
+  height: calc(100% - 90px);
+`;
 
 export default function GridTable() {
   const { wid } = useParams() as IRecords;
@@ -97,6 +112,7 @@ export default function GridTable() {
   const [snackbarState, setSnackbar] = useSnackbar();
   const [columnType, setColumnType] = useState('');
   const [selectedColumn, setSelectedColumn] = useState('');
+  const [showRecipePanel, setShowRecipePanel] = useState(false);
 
   const getWorkSpaceData = (payload: IParams, workspaceId: string) => {
     let gridParams = {};
@@ -314,6 +330,9 @@ export default function GridTable() {
     }
   }, [snackbarState.open]);
 
+  const TableWrapperContainer = showRecipePanel ? TableWrapperWithOpenPanel : TableWrapper;
+  const GridWrapper = showBreadCrumb ? GridTableWrapper : GridTableWrapperWithoutBreadcrumb;
+
   return (
     <>
       {showBreadCrumb && (
@@ -328,7 +347,7 @@ export default function GridTable() {
         }
         disableToolbarIcon={!Boolean(gridData?.headers?.length)}
       />
-      <GridTableWrapper data-testid="grid-table-container">
+      <GridWrapper data-testid="grid-table-container">
         {!showGridTable && (
           <FlexWrapper>
             <NoRecordScreen
@@ -338,54 +357,62 @@ export default function GridTable() {
           </FlexWrapper>
         )}
         {showGridTable && (
-          <TableWrapper>
-            <Table aria-label="simple table" className="test">
-              <TableHead>
-                <TableRow>
-                  {headersNamesList?.length &&
-                    headersNamesList.map((eachHeader) => (
-                      <GridHeaderCell
-                        label={eachHeader.label}
-                        types={eachHeader.type}
-                        key={eachHeader.name}
-                        columnSelected={selectedColumn}
-                        setColumnSelected={handleColumnSelect}
-                      />
-                    ))}
-                </TableRow>
-                <TableRow>
-                  {missingDataList?.length &&
-                    headersNamesList.length &&
-                    headersNamesList.map((each, index) => {
-                      return missingDataList.map((item, itemIndex) => {
-                        if (item.name === each.name) {
-                          return <GridKPICell metricData={item} key={item.name} />;
-                        }
-                      });
+          <TableGridContainer>
+            <TableWrapperContainer>
+              <Table aria-label="simple table" className="test">
+                <TableHead>
+                  <TableRow>
+                    {headersNamesList?.length &&
+                      headersNamesList.map((eachHeader) => (
+                        <GridHeaderCell
+                          label={eachHeader.label}
+                          types={eachHeader.type}
+                          key={eachHeader.name}
+                          columnSelected={selectedColumn}
+                          setColumnSelected={handleColumnSelect}
+                        />
+                      ))}
+                  </TableRow>
+                  <TableRow>
+                    {missingDataList?.length &&
+                      headersNamesList.length &&
+                      headersNamesList.map((each, index) => {
+                        return missingDataList.map((item, itemIndex) => {
+                          if (item.name === each.name) {
+                            return <GridKPICell metricData={item} key={item.name} />;
+                          }
+                        });
+                      })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rowsDataList?.length &&
+                    rowsDataList.map((eachRow, rowIndex) => {
+                      return (
+                        <TableRow key={`row-${rowIndex}`}>
+                          {headersNamesList.map((eachKey, eachIndex) => {
+                            return (
+                              <GridTextCell
+                                cellValue={eachRow[eachKey.name] || '--'}
+                                key={`${eachKey.name}-${eachIndex}`}
+                              />
+                            );
+                          })}
+                        </TableRow>
+                      );
                     })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rowsDataList?.length &&
-                  rowsDataList.map((eachRow, rowIndex) => {
-                    return (
-                      <TableRow key={`row-${rowIndex}`}>
-                        {headersNamesList.map((eachKey, eachIndex) => {
-                          return (
-                            <GridTextCell
-                              cellValue={eachRow[eachKey.name] || '--'}
-                              key={`${eachKey.name}-${eachIndex}`}
-                            />
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableWrapper>
+                </TableBody>
+              </Table>
+            </TableWrapperContainer>
+            {showRecipePanel && (
+              <RecipeStepsPanel onDrawerCloseIconClick={() => setShowRecipePanel(false)} />
+            )}
+          </TableGridContainer>
         )}
-        <FooterPanel recipeStepsCount={0} gridMetaInfo={tableMetaInfo} />
+        <FooterPanel
+          gridMetaInfo={tableMetaInfo}
+          handleRecipePanel={() => setShowRecipePanel(!showRecipePanel)}
+        />
         {addTransformationFunction.option && (
           <SelectColumnPanel
             transformationName={addTransformationFunction.option}
@@ -405,7 +432,7 @@ export default function GridTable() {
             <LoadingSVG />
           </div>
         )}
-      </GridTableWrapper>
+      </GridWrapper>
       {
         <Snackbar
           handleClose={() =>
