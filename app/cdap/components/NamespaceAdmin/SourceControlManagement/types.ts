@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 Cask Data, Inc.
+ * Copyright © 2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -12,33 +12,26 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-const MyNamespaceApi = {};
+export interface ISourceControlManagement {
+  loading: boolean;
+  error: string;
+  success: boolean;
+  config: ISourceControlManagementConfig;
+}
 
-MyNamespaceApi.list = function() {
+export interface ISourceControlManagementConfig {
+  provider: string;
+  link: string;
+  defaultBranch: string;
+  pathPrefix: string;
+  auth: ISourceControlManagementAuth;
+}
 
-};
-MyNamespaceApi.get = function() {
-
-};
-MyNamespaceApi.pollList = function() {
-
-};
-MyNamespaceApi.create = function() {
-
-};
-MyNamespaceApi.setPreferences = function() {
-
-};
-MyNamespaceApi.setSourceControlManagement = function() {
-
-};
-MyNamespaceApi.getSourceControlManagement = function() {
-    
-};
-MyNamespaceApi.deleteSourceControlManagement = function() {
-    
-};
-
-module.exports = MyNamespaceApi;
+export interface ISourceControlManagementAuth {
+  type: string;
+  token: string;
+  tokenName: string;
+  username?: string;
+}

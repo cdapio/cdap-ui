@@ -45,6 +45,7 @@ const useStyle = makeStyle<Theme>((theme) => {
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: '0 50px',
+      fontSize: '1.25rem',
     },
     titleContainer: {
       display: 'flex',
