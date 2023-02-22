@@ -31,7 +31,7 @@ import { getPluginDisplayName } from 'components/Ingestion/helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
 import VersionActions from 'services/VersionStore/VersionActions';
-import MyCDAPVersionApi from 'api/version.js';
+import MyCDAPVersionApi from 'api/version';
 import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 
 const styles = (theme): StyleRules => {

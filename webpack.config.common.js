@@ -67,7 +67,7 @@ const plugins = [
     },
   }),
   new ESLintPlugin({
-    extensions: ['js'],
+    extensions: ['js', 'jsx'],
     exclude: loaderExcludeStrings,
   }),
 ];
@@ -94,7 +94,7 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: 'babel-loader',
     exclude: loaderExclude,
   },

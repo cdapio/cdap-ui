@@ -21,7 +21,7 @@ import Card from 'components/shared/Card';
 import moment from 'moment';
 require('./MarketPlaceUsecaseEntity.scss');
 import MarketActionsContainer from 'components/MarketActionsContainer';
-import MarketStore from 'components/Market/store/market-store.js';
+import MarketStore from 'components/Market/store/market-store';
 import ExperimentalBanner from 'components/ExperimentalBanner';
 import classnames from 'classnames';
 import LicenseRow from 'components/MarketPlaceUsecaseEntity/LicenseRow';

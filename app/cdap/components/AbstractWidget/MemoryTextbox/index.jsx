@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
+// import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import { Input } from 'reactstrap';
 import React from 'react';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 
 require('./MemoryTextbox.scss');
 
@@ -57,11 +57,11 @@ export default function MemoryTextbox({ ...props }) {
   );
 }
 
-MemoryTextbox.propTypes = WIDGET_PROPTYPES;
-MemoryTextbox.defaultProps = DEFAULT_WIDGET_PROPS;
-MemoryTextbox.getWidgetAttributes = () => {
-  return {
-    min: { type: 'number', required: false },
-    max: { type: 'number', required: false },
-  };
-};
+// MemoryTextbox.propTypes = WIDGET_PROPTYPES;
+// MemoryTextbox.defaultProps = DEFAULT_WIDGET_PROPS;
+// MemoryTextbox.getWidgetAttributes = () => {
+//   return {
+//     min: { type: 'number', required: false },
+//     max: { type: 'number', required: false },
+//   };
+// };

@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import MarketPlaceEntity from 'components/MarketPlaceEntity';
 import T from 'i18n-react';
-import MarketStore from 'components/Market/store/market-store.js';
+import MarketStore from 'components/Market/store/market-store';
 import Fuse from 'fuse.js';
 import classnames from 'classnames';
 import IconSVG from 'components/shared/IconSVG';

@@ -178,7 +178,7 @@ const rules = [
     },
   },
   {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: ['babel-loader'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],

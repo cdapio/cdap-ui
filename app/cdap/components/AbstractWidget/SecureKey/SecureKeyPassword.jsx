@@ -14,17 +14,17 @@
  * the License.
  */
 
-import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
+// import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import React from 'react';
 import SecureKey from 'components/AbstractWidget/SecureKey';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 
 export default function SecureKeyPassword(props) {
   return <SecureKey inputTextType="password" {...props} />;
 }
 
-SecureKeyPassword.propTypes = WIDGET_PROPTYPES;
-SecureKeyPassword.defaultProps = DEFAULT_WIDGET_PROPS;
-SecureKeyPassword.getWidgetAttributes = () => {
-  return {};
-};
+// SecureKeyPassword.propTypes = WIDGET_PROPTYPES;
+// SecureKeyPassword.defaultProps = DEFAULT_WIDGET_PROPS;
+// SecureKeyPassword.getWidgetAttributes = () => {
+//   return {};
+// };

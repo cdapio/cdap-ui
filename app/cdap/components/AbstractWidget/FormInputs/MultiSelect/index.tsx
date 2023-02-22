@@ -17,8 +17,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { IWidgetProps } from 'components/AbstractWidget';
-import { Tooltip, Checkbox, ListItemText, MenuItem, Box, Chip, Select } from '@material-ui/core';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+import {
+  Tooltip,
+  Checkbox,
+  ListItemText,
+  MenuItem,
+  Box,
+  Chip,
+  Select,
+} from '@material-ui/core';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import ThemeWrapper from 'components/ThemeWrapper';
@@ -79,7 +87,8 @@ function MultiSelectBase({
     return typeof opt === 'string' ? { id: opt, label: opt } : opt;
   });
 
-  const showSelectionCount = objectQuery(widgetProps, 'showSelectionCount') || false;
+  const showSelectionCount =
+    objectQuery(widgetProps, 'showSelectionCount') || false;
   const emptyPlaceholder = objectQuery(widgetProps, 'emptyPlaceholder') || '';
 
   const initSelection = value.toString().split(delimiter);
@@ -90,7 +99,9 @@ function MultiSelectBase({
   const [selectWidth, setSelectWidth] = useState(600);
 
   //  onChangeHandler takes array, turns it into string w/delimiter, and calls onChange on the string
-  const onChangeHandler = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+  const onChangeHandler = (
+    event: React.ChangeEvent<{ name?: string; value: unknown }>
+  ) => {
     const values = event.target.value as any; // it's expecting a string but multiple select returns an array
     const selectionsString = values.filter((val) => val).join(delimiter);
     setSelections(values);
@@ -114,7 +125,10 @@ function MultiSelectBase({
   }, [value]);
 
   function renderValue(values: any) {
-    if (selections.length === 0 || (selections.length === 1 && selections[0] === '')) {
+    if (
+      selections.length === 0 ||
+      (selections.length === 1 && selections[0] === '')
+    ) {
       return emptyPlaceholder;
     }
 
@@ -137,7 +151,9 @@ function MultiSelectBase({
         shownSelections.push(selections[i]);
       } else {
         additionalSelectionCount = `...${selections.length - i} more`;
-        additionalSelectionText = selections.slice(i, selections.length).join(', ');
+        additionalSelectionText = selections
+          .slice(i, selections.length)
+          .join(', ');
         break;
       }
     }
@@ -182,7 +198,11 @@ function MultiSelectBase({
       ref={ref}
     >
       {options.map((opt) => (
-        <MenuItem value={opt.id} key={opt.id} data-cy={`multioption-${opt.label}`}>
+        <MenuItem
+          value={opt.id}
+          key={opt.id}
+          data-cy={`multioption-${opt.label}`}
+        >
           <Checkbox checked={selectionsSet.has(opt.id)} color="primary" />
           <ListItemText primary={opt.label} />
         </MenuItem>
@@ -200,13 +220,13 @@ export default function MultiSelect(props) {
   );
 }
 
-(MultiSelect as any).propTypes = WIDGET_PROPTYPES;
-(MultiSelect as any).getWidgetAttributes = () => {
-  return {
-    options: { type: 'IOption[]|string[]', required: true },
-    showSelectionCount: { type: 'boolean', required: false },
-    delimiter: { type: 'string', required: false },
-    // including additional property that was found from the docs
-    default: { type: 'string', required: false },
-  };
-};
+// (MultiSelect as any).propTypes = WIDGET_PROPTYPES;
+// (MultiSelect as any).getWidgetAttributes = () => {
+//   return {
+//     options: { type: 'IOption[]|string[]', required: true },
+//     showSelectionCount: { type: 'boolean', required: false },
+//     delimiter: { type: 'string', required: false },
+//     // including additional property that was found from the docs
+//     default: { type: 'string', required: false },
+//   };
+// };

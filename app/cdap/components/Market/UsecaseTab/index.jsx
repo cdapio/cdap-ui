@@ -15,7 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import MarketStore from 'components/Market/store/market-store.js';
+import MarketStore from 'components/Market/store/market-store';
 import Fuse from 'fuse.js';
 import MarketPlaceUsecaseEntity from 'components/MarketPlaceUsecaseEntity';
 require('./UsecaseTab.scss');

@@ -21,14 +21,20 @@ import enableSystemApp from 'services/ServiceEnablerUtilities';
 import T from 'i18n-react';
 import classnames from 'classnames';
 import MyDataPrepApi from 'api/dataprep';
-import {
-  i18nPrefix,
-  MIN_DATAPREP_VERSION,
-  artifactName,
-} from 'components/DataPrep';
+
 import isObject from 'lodash/isObject';
 import { Theme } from 'services/ThemeHelper';
 import { objectQuery } from 'services/helpers';
+
+const i18nPrefix = 'features.DataPrep.Upgrade';
+const MIN_DATAPREP_VERSION = '4.0.0-SNAPSHOT';
+const artifactName = 'wrangler-service';
+// the variables above were circular dependencies - leaving for debugging if necessary
+// import {
+//   i18nPrefix,
+//   MIN_DATAPREP_VERSION,
+//   artifactName,
+// } from 'components/DataPrep';
 
 require('./DataPrepServiceControl.scss');
 

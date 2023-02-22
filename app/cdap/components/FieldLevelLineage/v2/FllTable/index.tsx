@@ -15,14 +15,20 @@
  */
 
 import React, { useContext } from 'react';
-import SortableStickyGrid from 'components/shared/SortableStickyGrid/index.js';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid/index';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import { IField, ITableInfo } from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
+import {
+  IField,
+  ITableInfo,
+} from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
 import FllField from 'components/FieldLevelLineage/v2/FllTable/FllField';
-import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
+import {
+  FllContext,
+  IContextState,
+} from 'components/FieldLevelLineage/v2/Context/FllContext';
 import ExpandableField from 'components/FieldLevelLineage/v2/FllTable/FllExpandableField';
 import If from 'components/shared/If';
 import FllTableHeader from 'components/FieldLevelLineage/v2/FllTable/FllTableHeader';

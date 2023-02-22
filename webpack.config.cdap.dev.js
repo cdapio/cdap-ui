@@ -166,7 +166,7 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: ['react-hot-loader/webpack', 'babel-loader?cacheDirectory'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],

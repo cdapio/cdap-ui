@@ -16,12 +16,13 @@
 
 import React from 'react';
 import { Input } from 'reactstrap';
-import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 require('./NumberTextbox.scss');
 
 export default function NumberTextbox({ ...props }) {
-  let { onChange, value, widgetProps } = props;
+  let value = props.value;
+  const { onChange, widgetProps } = props;
   const min = widgetProps.min || Number.MIN_SAFE_INTEGER;
   const max = widgetProps.max || Number.MAX_SAFE_INTEGER;
   const numberValue = parseInt(value, 10);
@@ -37,5 +38,5 @@ export default function NumberTextbox({ ...props }) {
     />
   );
 }
-NumberTextbox.propTypes = WIDGET_PROPTYPES;
-NumberTextbox.defaultProps = DEFAULT_WIDGET_PROPS;
+// NumberTextbox.propTypes = WIDGET_PROPTYPES;
+// NumberTextbox.defaultProps = DEFAULT_WIDGET_PROPS;

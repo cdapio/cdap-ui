@@ -17,9 +17,9 @@
 import React, { Component } from 'react';
 import ConfigurableTab from 'components/shared/ConfigurableTab';
 import { MyMarketApi } from 'api/market';
-import MarketAction from './action/market-action.js';
+import MarketAction from './action/market-action';
 import find from 'lodash/find';
-import MarketStore from 'components/Market/store/market-store.js';
+import MarketStore from 'components/Market/store/market-store';
 import T from 'i18n-react';
 import AllTabContents from 'components/Market/AllTab';
 import UsecaseTab from 'components/Market/UsecaseTab';

@@ -269,7 +269,7 @@ gulp.task('fonts', () => {
     .src([
       // './bower_components/bootstrap/dist/fonts/*',
       './app/styles/fonts/*',
-      './node_modules/font-awesome/fonts/*',
+      // './node_modules/font-awesome/fonts/*',
     ])
     .pipe(gulp.dest('./packaged/public/dist/assets/fonts'));
 });

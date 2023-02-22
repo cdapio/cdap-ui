@@ -16,11 +16,14 @@
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import InputBase from '@material-ui/core/InputBase';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 import { MyDatasetApi } from 'api/dataset';
 import classnames from 'classnames';
 import { IWidgetProps } from 'components/AbstractWidget';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import If from 'components/shared/If';
 import ThemeWrapper from 'components/ThemeWrapper';
 import ee from 'event-emitter';
@@ -89,7 +92,9 @@ const DatasetSelectorView: React.FC<IDatasetSelectorProps> = ({
   const placeholder = objectQuery(widgetProps, 'placeholder');
 
   React.useEffect(() => {
-    MyDatasetApi.list({ namespace: getCurrentNamespace() }).subscribe(setDatasets);
+    MyDatasetApi.list({ namespace: getCurrentNamespace() }).subscribe(
+      setDatasets
+    );
   }, []);
 
   function handleChange(e) {
@@ -219,9 +224,9 @@ function DatasetSelector(props) {
 
 export default DatasetSelector;
 
-(DatasetSelector as any).propTypes = WIDGET_PROPTYPES;
-(DatasetSelector as any).getWidgetAttributes = () => {
-  return {
-    placeholder: { type: 'string', required: false },
-  };
-};
+// (DatasetSelector as any).propTypes = WIDGET_PROPTYPES;
+// (DatasetSelector as any).getWidgetAttributes = () => {
+//   return {
+//     placeholder: { type: 'string', required: false },
+//   };
+// };

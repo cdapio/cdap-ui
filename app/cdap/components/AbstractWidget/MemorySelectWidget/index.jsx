@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
+// import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import React from 'react';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 require('./MemorySelectWidget.scss');
 
@@ -36,10 +36,10 @@ export default function MemorySelectWidget({ ...props }) {
   );
 }
 
-MemorySelectWidget.propTypes = WIDGET_PROPTYPES;
-MemorySelectWidget.defaultProps = DEFAULT_WIDGET_PROPS;
-MemorySelectWidget.getWidgetAttributes = () => {
-  return {
-    size: { type: 'Size', required: false },
-  };
-};
+// MemorySelectWidget.propTypes = WIDGET_PROPTYPES;
+// MemorySelectWidget.defaultProps = DEFAULT_WIDGET_PROPS;
+// MemorySelectWidget.getWidgetAttributes = () => {
+//   return {
+//     size: { type: 'Size', required: false },
+//   };
+// };

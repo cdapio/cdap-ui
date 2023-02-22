@@ -36,13 +36,13 @@ require('./SecureKeyTextarea.scss');
 const PREFIX = 'features.AbstractWidget.SecureKeyTextarea';
 
 export default class SecureKeyTextarea extends Component {
-  static propTypes = {
+  propTypes = {
     ...WIDGET_PROPTYPES,
     inputTextType: PropTypes.oneOf(['textarea', 'text', 'password']),
     dataCy: PropTypes.string,
     dataTestId: PropTypes.string,
   };
-  static defaultProps = DEFAULT_WIDGET_PROPS;
+  defaultProps = DEFAULT_WIDGET_PROPS;
 
   documentClick$ = null;
   containerRef = null;

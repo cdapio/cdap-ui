@@ -14,7 +14,27 @@
  * the License.
  */
 
-import { AvroSchemaTypesEnum } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
+enum AvroSchemaTypesEnum {
+  ARRAY = 'array',
+  BOOLEAN = 'boolean',
+  BYTES = 'bytes',
+  DATE = 'date',
+  DATETIME = 'datetime',
+  DECIMAL = 'decimal',
+  DOUBLE = 'double',
+  ENUM = 'enum',
+  FLOAT = 'float',
+  INT = 'int',
+  LONG = 'long',
+  MAP = 'map',
+  RECORD = 'record',
+  STRING = 'string',
+  TIME = 'time',
+  TIMESTAMP = 'timestamp',
+  UNION = 'union',
+  TIMESTAMPMICROS = 'timestamp-micros',
+  TIMEMICROS = 'time-micros',
+}
 /**
  * Contains types used in parsing an avro schema.
  * TODO: This is a work in progress. We don't use these types yet fully

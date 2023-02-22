@@ -15,8 +15,6 @@
  */
 import { combineReducers, createStore } from 'redux';
 import ArtifactUploadActions from 'services/WizardStores/ArtifactUpload/ArtifactUploadActions';
-import ArtifactUploadWizardConfig from 'services/WizardConfigs/ArtifactUploadWizardConfig';
-import head from 'lodash/head';
 
 const defaultAction = {
   type: '',
@@ -81,11 +79,19 @@ const upload = (state = defaultUploadState, action = defaultAction) => {
 const configure = (state = defaultConfigureState, action = defaultAction) => {
   let stateCopy;
   let configurationStepRequiredFields = [];
-  if (ArtifactUploadWizardConfig) {
-    configurationStepRequiredFields = head(
-      ArtifactUploadWizardConfig.steps.filter((step) => step.id === 'configuration')
-    ).requiredFields;
-  }
+  /*
+   * circular dependency - leaving for potential debugging later
+   * import ArtifactUploadWizardConfig from 'services/WizardConfigs/ArtifactUploadWizardConfig';
+   * import head from 'lodash/head';
+   *  if (ArtifactUploadWizardConfig) {
+   *    configurationStepRequiredFields = head(
+   *      ArtifactUploadWizardConfig.steps.filter((step) => step.id === 'configuration')
+   *    ).requiredFields;
+   *  }
+   * 
+   */
+  configurationStepRequiredFields = ['name', 'type', 'parentArtifact', 'classname', 'version'];
+
   switch (action.type) {
     case ArtifactUploadActions.setName:
       stateCopy = Object.assign({}, state, {
@@ -128,10 +134,15 @@ const configure = (state = defaultConfigureState, action = defaultAction) => {
   });
 };
 
-export default ArtifactUploadStore =  createStore(
+const ArtifactUploadStoreWrapper = () => {
+  return createStore(
     combineReducers({
       upload,
       configure,
     }),
     defaultInitialState
   );
+};
+
+const ArtifactUploadStore = ArtifactUploadStoreWrapper();
+export default ArtifactUploadStore;

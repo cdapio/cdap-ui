@@ -14,11 +14,18 @@
  * the License.
  */
 
-import { getDefaultKeyValuePair } from 'components/shared/KeyValuePairs/KeyValueStore';
 import {
   convertMapToKeyValuePairs,
   convertKeyValuePairsToMap,
 } from 'services/helpers';
+import uuidV4 from 'uuid/v4';
+
+const getDefaultKeyValuePair = () => ({
+  key: '',
+  value: '',
+  uniqueId: uuidV4(),
+  provided: null,
+});
 
 const KeyValueStoreActions = {
   setKey: 'SET-KEY',

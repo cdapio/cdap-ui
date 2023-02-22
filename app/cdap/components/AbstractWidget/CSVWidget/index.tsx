@@ -23,7 +23,7 @@ import AbstractMultiRowWidget, {
 
 import CSVRow from 'components/AbstractWidget/CSVWidget/CSVRow';
 import ThemeWrapper from 'components/ThemeWrapper';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 
 interface ICSVWidgetProps extends IMultiRowWidgetProps {
@@ -35,7 +35,11 @@ type ICSVProps = IMultiRowProps<ICSVWidgetProps>;
 
 class CSVWidgetView extends AbstractMultiRowWidget<ICSVProps> {
   public renderRow = (id, index) => {
-    const valuePlaceholder = objectQuery(this.props, 'widgetProps', 'value-placeholder');
+    const valuePlaceholder = objectQuery(
+      this.props,
+      'widgetProps',
+      'value-placeholder'
+    );
 
     return (
       <CSVRow
@@ -65,11 +69,11 @@ export default function CSVWidget(props) {
   );
 }
 
-(CSVWidget as any).propTypes = WIDGET_PROPTYPES;
-(CSVWidget as any).getWidgetAttributes = () => {
-  return {
-    'value-placeholder': { type: 'string', required: false },
-    delimiter: { type: 'string', required: false },
-    default: { type: 'string', required: false },
-  };
-};
+// (CSVWidget as any).propTypes = WIDGET_PROPTYPES;
+// (CSVWidget as any).getWidgetAttributes = () => {
+//   return {
+//     'value-placeholder': { type: 'string', required: false },
+//     delimiter: { type: 'string', required: false },
+//     default: { type: 'string', required: false },
+//   };
+// };

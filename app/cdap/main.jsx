@@ -73,6 +73,10 @@ import {
 import history from 'services/history';
 // See ./graphql/fragements/README.md
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
+import '@fortawesome/fontawesome-free/js/fontawesome';
+import '@fortawesome/fontawesome-free/js/solid';
+import '@fortawesome/fontawesome-free/js/regular';
+import '@fortawesome/fontawesome-free/js/brands';
 
 require('../ui-utils/url-generator');
 // require('font-awesome-sass-loader!./styles/font-awesome.config.js');
