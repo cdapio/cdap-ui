@@ -47,6 +47,8 @@ export const DirectivesBox = styled(Box)`
 `;
 
 export const Label = styled(Typography)`
+  font-size: 14px;
+  font-weight: 400;
   line-height: 40px;
 `;
 
@@ -89,6 +91,8 @@ export const OutlinedLabel = styled(Label)`
   color: #ffffff;
   border-radius: 4px;
   margin-left: 8px;
+  font-size: 14px;
+  font-weight: 400;
 `;
 
 export const ZoomBox = styled(Box)`
