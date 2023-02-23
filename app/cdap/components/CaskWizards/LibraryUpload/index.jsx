@@ -27,7 +27,7 @@ import T from 'i18n-react';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 
-require('components/CaskWizards/ArtifactUpload/ArtifactUpload.scss');
+import 'components/CaskWizards/ArtifactUpload/ArtifactUpload.scss';
 
 export default class LibraryUploadWizard extends Component {
   constructor(props) {

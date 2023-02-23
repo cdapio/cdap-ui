@@ -20,7 +20,7 @@ import ArtifactUploadStore from 'services/WizardStores/ArtifactUpload/ArtifactUp
 import ArtifactUploadActions from 'services/WizardStores/ArtifactUpload/ArtifactUploadActions';
 import { getArtifactNameAndVersion } from 'services/helpers';
 import FileDnD from 'components/FileDnD';
-require('components/CaskWizards/ArtifactUpload/UploadStep/UploadStep.scss');
+import 'components/CaskWizards/ArtifactUpload/UploadStep/UploadStep.scss';
 
 const mapStateWithDNDFileProps = (state) => {
   return {
