@@ -46,7 +46,11 @@ const Markdown = ({ markdown }: IMarkdownProps) => {
       if (!prism.languages[language]) {
         return code;
       }
-      return prism.highlight(code, prism.languages[language], language as string);
+      return prism.highlight(
+        code,
+        prism.languages[language],
+        language as string
+      );
     },
   });
   const compiled = compile(markdown);

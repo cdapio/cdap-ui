@@ -16,13 +16,16 @@
 
 import * as React from 'react';
 import DraftTable from 'components/PipelineList/DraftPipelineView/DraftTable';
-import { getDrafts, reset } from 'components/PipelineList/DraftPipelineView/store/ActionCreator';
+import {
+  getDrafts,
+  reset,
+} from 'components/PipelineList/DraftPipelineView/store/ActionCreator';
 import { Provider } from 'react-redux';
 import Store from 'components/PipelineList/DraftPipelineView/store';
 import DraftCount from 'components/PipelineList/DraftPipelineView/DraftCount';
 import Pagination from 'components/PipelineList/DraftPipelineView/Pagination';
 
-import './DraftPipelineView.scss';
+require('./DraftPipelineView.scss');
 
 export default class DraftPipelineView extends React.PureComponent {
   public componentDidMount() {

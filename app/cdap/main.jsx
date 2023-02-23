@@ -78,11 +78,11 @@ import '@fortawesome/fontawesome-free/js/solid';
 import '@fortawesome/fontawesome-free/js/regular';
 import '@fortawesome/fontawesome-free/js/brands';
 
-import '../ui-utils/url-generator';
+require('../ui-utils/url-generator');
 // require('font-awesome-sass-loader!./styles/font-awesome.config.js');
-import './styles/lib-styles.scss';
-import './styles/common.scss';
-import './styles/main.scss';
+require('./styles/lib-styles.scss');
+require('./styles/common.scss');
+require('./styles/main.scss');
 T.setTexts(require('./text/text-en.yaml'));
 
 const cookie = new Cookies();

@@ -19,7 +19,7 @@ import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import classnames from 'classnames';
 
-import './ActionsPopover.scss';
+require('./ActionsPopover.scss');
 
 export interface IAction {
   readonly label: string | React.ReactNode | 'separator';

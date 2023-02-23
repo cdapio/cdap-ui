@@ -18,7 +18,7 @@ import * as React from 'react';
 import Tags from 'components/shared/Tags';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 
-import './PipelineTags.scss';
+require('./PipelineTags.scss');
 
 interface IProps {
   pipeline: IPipeline;

@@ -132,8 +132,8 @@ if (!isModeProduction(mode)) {
 
 const rules = [
   {
-    test: /\.s?css$/,
-    use: ['style-loader', 'css-loader', 'sass-loader'],
+    test: /\.(sa|sc|c)ss$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
     test: /\.ya?ml$/,
@@ -171,8 +171,16 @@ const rules = [
     ],
   },
   {
-    test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: 'file-loader',
+  },
+  {
+    test: /\.svg$/,
+    use: [
+      {
+        loader: 'webpack5-svg-sprite-loader',
+      },
+    ],
   },
 ];
 let webpackConfig = {
@@ -206,7 +214,7 @@ let webpackConfig = {
   },
   plugins: plugins,
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

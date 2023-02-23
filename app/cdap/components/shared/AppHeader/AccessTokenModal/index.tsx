@@ -14,15 +14,13 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CardActionFeedback from 'components/shared/CardActionFeedback';
 import SessionStore from 'services/SessionTokenStore';
 import T from 'i18n-react';
 
-import './AccessTokenModal.scss';
+require('./AccessTokenModal.scss');
 
 interface IAccessTokenModalProps {
   isOpen: boolean;
@@ -99,7 +97,9 @@ export default class AccessTokenModal extends Component<
           return response.json();
         } else {
           this.setState({
-            error: T.translate('features.AccessTokenModal.login.error').toString(),
+            error: T.translate(
+              'features.AccessTokenModal.login.error'
+            ).toString(),
             loading: false,
           });
           return Promise.reject();
@@ -121,7 +121,9 @@ export default class AccessTokenModal extends Component<
       this.state.loading;
     return (
       <div>
-        <span>{T.translate('features.AccessTokenModal.login.textContent')}</span>
+        <span>
+          {T.translate('features.AccessTokenModal.login.textContent')}
+        </span>
         <div className="username-password">
           <input
             type="text"
@@ -143,7 +145,11 @@ export default class AccessTokenModal extends Component<
           />
         </div>
         <div className="text-xs-left submit-button">
-          <button className="btn btn-primary" onClick={this.onSubmit} disabled={disabled}>
+          <button
+            className="btn btn-primary"
+            onClick={this.onSubmit}
+            disabled={disabled}
+          >
             {T.translate('features.AccessTokenModal.login.submit')}
           </button>
         </div>
@@ -189,12 +195,17 @@ export default class AccessTokenModal extends Component<
       >
         <ModalHeader>
           <span>{T.translate('features.AccessTokenModal.modalHeader')}</span>
-          <div className="close-section float-xs-right" onClick={this.toggleModal}>
+          <div
+            className="close-section float-xs-right"
+            onClick={this.toggleModal}
+          >
             <span className="fa fa-times" />
           </div>
         </ModalHeader>
         <ModalBody>
-          {this.state.accessToken.length > 0 ? this.renderAccessToken() : this.renderLogin()}
+          {this.state.accessToken.length > 0
+            ? this.renderAccessToken()
+            : this.renderLogin()}
         </ModalBody>
         {this.renderFeedback()}
       </Modal>

@@ -94,8 +94,8 @@ const rules = [
     },
   },
   {
-    test: /\.s?css$/,
-    use: ['style-loader', 'css-loader', 'sass-loader'],
+    test: /\.(sa|sc|c)ss$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
     test: /\.ya?ml$/,
@@ -136,10 +136,10 @@ const rules = [
     use: 'url-loader',
   },
   {
-    test: /\.svg/,
+    test: /\.svg$/,
     use: [
       {
-        loader: 'svg-sprite-loader',
+        loader: 'webpack5-svg-sprite-loader',
       },
     ],
   },
@@ -211,7 +211,7 @@ const webpackConfig = {
     },
   },
   resolve: {
-    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

@@ -1,4 +1,4 @@
-const colors = require('styles/colors.scss');
+const colors = require('../../styles/colors.scss');
 
 export const primary = '#1a73e8';
 

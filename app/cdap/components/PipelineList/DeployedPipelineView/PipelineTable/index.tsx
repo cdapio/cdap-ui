@@ -23,7 +23,7 @@ import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import EmptyMessageContainer from 'components/EmptyMessageContainer';
 import SortableHeader from 'components/PipelineList/DeployedPipelineView/PipelineTable/SortableHeader';
 import If from 'components/shared/If';
-import './PipelineTable.scss';
+require('./PipelineTable.scss');
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 interface IProps {
@@ -35,7 +35,12 @@ interface IProps {
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineTableView: React.FC<IProps> = ({ pipelines, search, onClear, refetch }) => {
+const PipelineTableView: React.FC<IProps> = ({
+  pipelines,
+  search,
+  onClear,
+  refetch,
+}) => {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
@@ -53,7 +58,9 @@ const PipelineTableView: React.FC<IProps> = ({ pipelines, search, onClear, refet
               <span className="link-text" onClick={onClear}>
                 {T.translate(`${PREFIX}.EmptyList.EmptySearch.clear`)}
               </span>
-              <span>{T.translate(`${PREFIX}.EmptyList.EmptySearch.search`)}</span>
+              <span>
+                {T.translate(`${PREFIX}.EmptyList.EmptySearch.search`)}
+              </span>
             </li>
           </ul>
         </EmptyMessageContainer>

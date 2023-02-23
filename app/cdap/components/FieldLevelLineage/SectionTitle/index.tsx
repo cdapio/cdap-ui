@@ -17,7 +17,7 @@
 import * as React from 'react';
 import T from 'i18n-react';
 
-import './SectionTitle.scss';
+require('./SectionTitle.scss');
 
 const PREFIX = 'features.FieldLevelLineage.SectionTitle';
 

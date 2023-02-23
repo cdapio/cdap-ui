@@ -36,7 +36,7 @@ import { categorizeGraphQlErrors } from 'services/helpers';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
 
-import './DeployedPipelineView.scss';
+require('./DeployedPipelineView.scss');
 const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 
 import PaginationStepper from 'components/shared/PaginationStepper';

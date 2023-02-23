@@ -25,7 +25,7 @@ import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
 import ErrorBoundary from 'components/shared/ErrorBoundary';
 
-import './PipelineList.scss';
+require('./PipelineList.scss');
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const PREFIX = 'features.PipelineList';

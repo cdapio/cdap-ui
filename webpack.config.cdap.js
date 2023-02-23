@@ -160,7 +160,7 @@ const rules = [
     loader: 'json-loader',
   },
   {
-    test: /\.s?css$/,
+    test: /\.(sa|sc|c)ss$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
@@ -212,14 +212,14 @@ const rules = [
     ],
   },
   {
-    test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [{ loader: 'file-loader' }],
   },
   {
-    test: /\.svg/,
+    test: /\.svg$/,
     use: [
       {
-        loader: 'svg-sprite-loader',
+        loader: 'webpack5-svg-sprite-loader',
       },
     ],
   },
@@ -280,7 +280,16 @@ const webpackConfig = {
     chunkIds: 'named',
   },
   resolve: {
-    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.scss', '.json'],
+    extensions: [
+      '.mjs',
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '.scss',
+      '.json',
+      '.svg',
+    ],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

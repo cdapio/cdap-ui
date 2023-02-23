@@ -18,7 +18,7 @@ import * as React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
-import './PipelineExportModal.scss';
+require('./PipelineExportModal.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
@@ -29,7 +29,12 @@ interface IProps {
   onExport: (config: any) => void;
 }
 
-const PipelineExportModal: React.FC<IProps> = ({ isOpen, onClose, pipelineConfig, onExport }) => {
+const PipelineExportModal: React.FC<IProps> = ({
+  isOpen,
+  onClose,
+  pipelineConfig,
+  onExport,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -60,7 +65,10 @@ const PipelineExportModal: React.FC<IProps> = ({ isOpen, onClose, pipelineConfig
         </fieldset>
       </ModalBody>
       <ModalFooter>
-        <div className="btn btn-primary" onClick={onExport.bind(null, pipelineConfig)}>
+        <div
+          className="btn btn-primary"
+          onClick={onExport.bind(null, pipelineConfig)}
+        >
           {T.translate(`${PREFIX}.export`)}
         </div>
         <div className="btn btn-secondary close-button" onClick={onClose}>
