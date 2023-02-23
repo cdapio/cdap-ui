@@ -21,6 +21,8 @@ import styled from 'styled-components';
 export const Container = styled(Box)`
   background-color: #fff;
   border-left: 1px solid ${grey[300]};
+  display: flex;
+  flex-direction: column;
   height: 100%;
   overflow: scroll;
   padding-bottom: 20px;
@@ -29,8 +31,6 @@ export const Container = styled(Box)`
   padding-top: 20px;
   position: relative;
   width: 500px;
-  display: flex;
-  flex-direction: column;
 `;
 
 export const Divider = styled.div`
