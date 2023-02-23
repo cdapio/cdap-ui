@@ -37,12 +37,14 @@ require('./PipelineDetailsActionsButton.scss');
 const PREFIX = 'features.PipelineDetails.TopPanel';
 
 const StyledLi = styled.li`
-  ${({ isLatestVersion }) =>
-    !isLatestVersion &&
-    `opacity: 0.5;
-    &:hover {
+  ${({ isLatestVersion, isBatchPipeline }) =>
+    (!isLatestVersion || !isBatchPipeline) &&
+    `&:hover {
       background: white !important;
       cursor: not-allowed !important;
+    }
+    span {
+        opacity: 0.5;
     }`}
 `;
 
@@ -126,7 +128,7 @@ export default class PipelineDetailsActionsButton extends Component {
   };
 
   handlePipelineEdit = () => {
-    if (!this.props.isLatestVersion) {
+    if (!this.props.isLatestVersion || this.props.artifact.name !== 'cdap-data-pipeline') {
       return;
     }
     if (!this.props.editDraftId) {
@@ -293,6 +295,9 @@ export default class PipelineDetailsActionsButton extends Component {
       );
     };
 
+    const editEnabled =
+      this.props.isLatestVersion && this.props.artifact.name === 'cdap-data-pipeline';
+
     return (
       <div
         className={classnames('pipeline-action-container pipeline-actions-container', {
@@ -313,10 +318,29 @@ export default class PipelineDetailsActionsButton extends Component {
             {this.props.lifecycleManagementEditEnabled && (
               <StyledLi
                 isLatestVersion={this.props.isLatestVersion}
+                isBatchPipeline={this.props.artifact.name === 'cdap-data-pipeline'}
                 onClick={this.handlePipelineEdit}
                 data-testid="pipeline-edit-btn"
               >
-                {T.translate(`${PREFIX}.edit`)}
+                {!this.props.isLatestVersion && (
+                  <Popover
+                    target={() => <span>{T.translate(`${PREFIX}.edit`)}</span>}
+                    showOn="Hover"
+                    placement="left"
+                  >
+                    {T.translate('commons.editTooltip.notLatest')}
+                  </Popover>
+                )}
+                {this.props.artifact.name !== 'cdap-data-pipeline' && (
+                  <Popover
+                    target={() => <span>{T.translate(`${PREFIX}.edit`)}</span>}
+                    showOn="Hover"
+                    placement="left"
+                  >
+                    {T.translate('commons.editTooltip.notBatch')}
+                  </Popover>
+                )}
+                {editEnabled && <span>{T.translate(`${PREFIX}.edit`)}</span>}
               </StyledLi>
             )}
             <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
