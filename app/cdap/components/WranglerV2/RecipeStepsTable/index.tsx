@@ -137,7 +137,6 @@ export default function RecipeStepsTable({
       },
       (err) => {
         // Should not ever come to this.. this is only if backend fails somehow
-        console.log('Error deleting directives', err);
         setSnackbar({
           open: true,
           isSuccess: false,

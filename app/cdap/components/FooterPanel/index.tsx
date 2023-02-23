@@ -63,7 +63,7 @@ interface IGridMetaInfo {
 
 interface IFooterPanelProps {
   gridMetaInfo: IGridMetaInfo;
-  toggleRecipePanelMode: () => void;
+  onRecipeStepsButtonClick: () => void;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -75,7 +75,7 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function({ gridMetaInfo, toggleRecipePanelMode }: IFooterPanelProps) {
+export default function FooterPanel({ gridMetaInfo, onRecipeStepsButtonClick }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
   const directives = useSelector((state) => state.dataprep.directives);
@@ -108,7 +108,7 @@ export default function({ gridMetaInfo, toggleRecipePanelMode }: IFooterPanelPro
       </DirectivesBox>
       <ReciepeStepsButton
         data-testid="footer-panel-recipe-steps-tab-button"
-        onClick={toggleRecipePanelMode}
+        onClick={onRecipeStepsButtonClick}
         disableRipple
       >
         <Label data-testid="footerpanel-simple-label">

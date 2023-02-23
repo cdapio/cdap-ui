@@ -16,8 +16,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
-import Box from '@material-ui/core/Box';
+import { Box, Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import T from 'i18n-react';
 import { useLocation, useParams } from 'react-router';
 import styled from 'styled-components';
@@ -299,7 +298,7 @@ export default function GridTable({ handleTransformationUpload, storeData }) {
 
         <FooterPanel
           gridMetaInfo={tableMetaInfo}
-          toggleRecipePanelMode={() => setShowRecipePanel(!showRecipePanel)}
+          onRecipeStepsButtonClick={() => setShowRecipePanel(!showRecipePanel)}
         />
         {addTransformationFunction.option && (
           <SelectColumnPanel
