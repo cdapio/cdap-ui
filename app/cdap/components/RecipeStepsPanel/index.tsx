@@ -47,15 +47,15 @@ export default function RecipeStepsPanel({
   const directives = useSelector((state) => state.dataprep.directives);
 
   const onSaveButtonClick = () => {
-    // TODO: integrate save recipe form when save option is selection in Actions
+    // TODO: integrate save recipe form when save option is selected in Actions
   };
 
   const onApplyButtonClick = () => {
-    // TODO: integrate apply/import recipe when apply option is selection in Actions
+    // TODO: integrate apply/import recipe feature when apply option is selected in Actions
   };
 
   const onDownloadButtonClick = () => {
-    // TODO: integrate download recipe when download option is selection in Actions
+    // TODO: integrate download recipe feature when download option is selected in Actions
   };
 
   const actionsOptions: IMenuItem[] = [
