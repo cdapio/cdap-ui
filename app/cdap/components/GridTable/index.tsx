@@ -14,15 +14,21 @@
  * the License.
  */
 
+import React, { useEffect, useState } from 'react';
+
 import { Table, TableBody, TableHead, TableRow } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import T from 'i18n-react';
+import { useLocation, useParams } from 'react-router';
+import styled from 'styled-components';
+
 import Breadcrumb from 'components/Breadcrumb';
 import { setWorkspace } from 'components/DataPrep/store/DataPrepActionCreator';
 import FooterPanel from 'components/FooterPanel';
 import GridHeaderCell from 'components/GridTable/components/GridHeaderCell';
 import GridKPICell from 'components/GridTable/components/GridKPICell';
 import GridTextCell from 'components/GridTable/components/GridTextCell';
-import { TableGridContainer, useStyles } from 'components/GridTable/styles';
+import { useStyles } from 'components/GridTable/styles';
 import { IAddTransformationItem, IGeneralStatistics, IRecords } from 'components/GridTable/types';
 import { getWrangleGridBreadcrumbOptions } from 'components/GridTable/utils';
 import NoRecordScreen from 'components/NoRecordScreen';
@@ -33,12 +39,16 @@ import useSnackbar from 'components/Snackbar/useSnackbar';
 import SelectColumnPanel from 'components/WranglerGrid/SelectColumnPanel';
 import { FlexWrapper } from 'components/WranglerGrid/SelectColumnPanel/styles';
 import ToolBarList from 'components/WranglerGrid/TransformationToolbar';
-import T from 'i18n-react';
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
-import styled from 'styled-components';
 
-const transformationOptions = ['undo', 'redo'];
+export const RecipeStepsPanelContainer = styled(RecipeStepsPanel)`
+  width: 500px;
+`;
+
+export const TableGridContainer = styled.div`
+  display: flex;
+  height: 100%;
+  overflow: scroll;
+`;
 
 export const TableWrapper = styled(Box)`
   width: 100%;
@@ -49,10 +59,6 @@ export const TableWrapperWithOpenPanel = styled.div`
   overflow: scroll;
 `;
 
-export const RecipeStepsPanelContainer = styled(RecipeStepsPanel)`
-  width: 500px;
-`;
-
 const GridTableWrapper = styled(Box)`
   height: calc(100% - 139px);
   max-height: 76vh;
@@ -60,6 +66,7 @@ const GridTableWrapper = styled(Box)`
   overflow-x: auto;
   width: 100%;
 `;
+const transformationOptions = ['undo', 'redo'];
 
 const GridTableWrapperWithoutBreadcrumb = styled(GridTableWrapper)`
   height: calc(100% - 90px);
@@ -202,6 +209,7 @@ export default function GridTable({ handleTransformationUpload, storeData }) {
 
   const TableWrapperContainer = showRecipePanel ? TableWrapperWithOpenPanel : TableWrapper;
   const GridWrapper = showBreadCrumb ? GridTableWrapper : GridTableWrapperWithoutBreadcrumb;
+
   const tableMetaInfo = {
     columnCount: dataprep.headers.length,
     rowCount: dataprep.data.length,
@@ -291,7 +299,7 @@ export default function GridTable({ handleTransformationUpload, storeData }) {
 
         <FooterPanel
           gridMetaInfo={tableMetaInfo}
-          handleRecipePanelMode={() => setShowRecipePanel(!showRecipePanel)}
+          toggleRecipePanelMode={() => setShowRecipePanel(!showRecipePanel)}
         />
         {addTransformationFunction.option && (
           <SelectColumnPanel

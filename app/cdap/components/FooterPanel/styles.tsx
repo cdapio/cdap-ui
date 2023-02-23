@@ -16,7 +16,12 @@
 
 import { Box, Button, IconButton, Typography } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const footerLabelStyles = css`
+  font-size: 14px;
+  font-weight: 400;
+`;
 
 export const ColumnViewBox = styled(Box)`
   display: flex;
@@ -47,8 +52,7 @@ export const DirectivesBox = styled(Box)`
 `;
 
 export const Label = styled(Typography)`
-  font-size: 14px;
-  font-weight: 400;
+  ${footerLabelStyles}
   line-height: 40px;
 `;
 
@@ -84,15 +88,14 @@ export const TransformatedIconButton = styled(IconButton)`
   transform: rotate(90deg);
 `;
 
-export const OutlinedLabel = styled(Label)`
+export const ContainedLabel = styled(Label)`
+  ${footerLabelStyles}
   background-color: ${grey[600]};
   line-height: 21px;
   width: 20px;
   color: #ffffff;
   border-radius: 4px;
   margin-left: 8px;
-  font-size: 14px;
-  font-weight: 400;
 `;
 
 export const ZoomBox = styled(Box)`

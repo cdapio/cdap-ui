@@ -19,12 +19,14 @@ import React from 'react';
 import { IconButton, TableContainer, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import T from 'i18n-react';
 import { useSelector } from 'react-redux';
 import styled, { StyledComponent } from 'styled-components';
 
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
-import DataTable, { DataTableContainer, IColumn, IRow } from 'components/WranglerV2/DataTable';
+import { PREFIX } from 'components/RecipeStepsPanel';
 import { ISnackbar } from 'components/Snackbar';
+import DataTable, { DataTableContainer, IColumn, IRow } from 'components/WranglerV2/DataTable';
 
 interface IRecipeStepsColumnCellProps {
   BodyCell: () => JSX.Element;
@@ -128,7 +130,9 @@ export default function RecipeStepsTable({
         setSnackbar({
           open: true,
           isSuccess: true,
-          message: `Directive "${row.recipeStep}" deleted successfully`,
+          message: T.translate(`${PREFIX}.deleteDirectiveSuccess`, {
+            recipeStep: row.recipeStep,
+          }).toString(),
         });
       },
       (err) => {
@@ -137,7 +141,9 @@ export default function RecipeStepsTable({
         setSnackbar({
           open: true,
           isSuccess: false,
-          message: `Directive "${row.recipeStep}" could not be deleted`,
+          message: T.translate(`${PREFIX}.deleteDirectiveFailure`, {
+            recipeStep: row.recipeStep,
+          }).toString(),
         });
       }
     );

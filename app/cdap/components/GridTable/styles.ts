@@ -15,7 +15,6 @@
  */
 
 import { makeStyles } from '@material-ui/core';
-import styled from 'styled-components';
 
 export const useStyles = makeStyles({
   loadingContainer: {
@@ -31,9 +30,3 @@ export const useStyles = makeStyles({
     zIndex: 2000,
   },
 });
-
-export const TableGridContainer = styled.div`
-  display: flex;
-  height: 100%;
-  overflow: scroll;
-`;

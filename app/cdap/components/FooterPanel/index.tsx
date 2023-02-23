@@ -25,10 +25,10 @@ import { useSelector } from 'react-redux';
 import CustomTooltip from 'components/ConnectionList/Components/CustomTooltip';
 import {
   ColumnViewBox,
+  ContainedLabel,
   DirectivesBox,
   Label,
   LargeBox,
-  OutlinedLabel,
   ReciepeStepsButton,
   TabsWrapper,
   TransformatedIconButton,
@@ -63,7 +63,7 @@ interface IGridMetaInfo {
 
 interface IFooterPanelProps {
   gridMetaInfo: IGridMetaInfo;
-  handleRecipePanelMode: () => void;
+  toggleRecipePanelMode: () => void;
 }
 
 export interface ITableMetaInfoTabProps {
@@ -75,7 +75,7 @@ export interface IRecipeStepsTabProps {
   recipeStepsCount: number;
 }
 
-export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelProps) {
+export default function({ gridMetaInfo, toggleRecipePanelMode }: IFooterPanelProps) {
   const { rowCount, columnCount } = gridMetaInfo;
 
   const directives = useSelector((state) => state.dataprep.directives);
@@ -107,14 +107,16 @@ export default function({ gridMetaInfo, handleRecipePanelMode }: IFooterPanelPro
         </Label>
       </DirectivesBox>
       <ReciepeStepsButton
-        data-testid="footer-panel-recipe-steps-tab"
-        onClick={handleRecipePanelMode}
+        data-testid="footer-panel-recipe-steps-tab-button"
+        onClick={toggleRecipePanelMode}
         disableRipple
       >
         <Label data-testid="footerpanel-simple-label">
           {`${T.translate(`${PREFIX}.recipeSteps`)}`}
         </Label>
-        <OutlinedLabel data-testid="footerpanel-outlined-label">{directives.length}</OutlinedLabel>
+        <ContainedLabel data-testid="footerpanel-outlined-label">
+          {directives.length}
+        </ContainedLabel>
       </ReciepeStepsButton>
     </TabsWrapper>
   );

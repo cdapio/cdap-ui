@@ -3574,7 +3574,16 @@ features:
         steps: Steps
         updated: Last updated
         view: View
-        viewAll: View All      
+        viewAll: View All  
+    RecipeStepsPanel:
+      drawerHeader: Recipe
+      saveOption: Save
+      applyOption: Apply
+      downloadOption: Download
+      noRecordsTitle: Start Wrangling your data
+      noRecordsSubtitle: Select a column or function to add your first recipe step
+      deleteDirectiveSuccess: Directive {recipeStep} deleted successfully
+      deleteDirectiveFailure: Directive {recipeStep} could not be deleted
     Snackbar:
       labels:
         failure: Failure
