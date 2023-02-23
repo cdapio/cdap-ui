@@ -16,21 +16,41 @@
 
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 
-var basepath = '/namespaces/:namespace';
-var profilesPath = `${basepath}/profiles`;
-var systemProfilesPath = `/profiles`;
-var provisionersPath = '/provisioners';
+const basepath = '/namespaces/:namespace';
+const profilesPath = `${basepath}/profiles`;
+const systemProfilesPath = '/profiles';
+const provisionersPath = '/provisioners';
 
 export const MyCloudApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', profilesPath),
-  getSystemProfiles: apiCreator(dataSrc, 'GET', 'REQUEST', `${systemProfilesPath}`),
+  getSystemProfiles: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${systemProfilesPath}`
+  ),
   create: apiCreator(dataSrc, 'PUT', 'REQUEST', `${profilesPath}/:profile`),
-  createSystemProfile: apiCreator(dataSrc, 'PUT', 'REQUEST', `${systemProfilesPath}/:profile`),
+  createSystemProfile: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${systemProfilesPath}/:profile`
+  ),
   get: apiCreator(dataSrc, 'GET', 'REQUEST', `${profilesPath}/:profile`),
-  getSystemProfile: apiCreator(dataSrc, 'GET', 'REQUEST', `${systemProfilesPath}/:profile`),
-  deleteSystemProfile: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${systemProfilesPath}/:profile`),
+  getSystemProfile: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${systemProfilesPath}/:profile`
+  ),
+  deleteSystemProfile: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${systemProfilesPath}/:profile`
+  ),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${profilesPath}/:profile`),
   toggleSystemProfileStatus: apiCreator(
     dataSrc,
@@ -38,7 +58,12 @@ export const MyCloudApi = {
     'REQUEST',
     `${systemProfilesPath}/:profile/:action`
   ),
-  toggleProfileStatus: apiCreator(dataSrc, 'POST', 'REQUEST', `${profilesPath}/:profile/:action`),
+  toggleProfileStatus: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${profilesPath}/:profile/:action`
+  ),
 
   getProvisioners: apiCreator(dataSrc, 'GET', 'REQUEST', `${provisionersPath}`),
   getProvisionerDetailSpec: apiCreator(

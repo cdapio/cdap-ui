@@ -32,7 +32,7 @@ import T from 'i18n-react';
 import MyDataPrepApi from 'api/dataprep';
 import history from 'services/history';
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.SpannerBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.SpannerBrowser';
 
 interface IMatchParams {
   connectionId: string;
@@ -213,6 +213,6 @@ const mapStateToProps = (state): Partial<ISpannerTableListViewProps> => {
   };
 };
 
-const SpannerTableList = connect(mapStateToProps)(SpannerTableListView);
+const SpannerTableList: any = connect(mapStateToProps)(SpannerTableListView);
 
 export default SpannerTableList;

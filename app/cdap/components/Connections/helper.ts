@@ -23,7 +23,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
  * @param path - Connection navigation path
  * @returns Connection router path
  */
-export function getConnectionPath(name: string, path: string = '/') {
+export function getConnectionPath(name: string, path = '/') {
   if (!name || name.trim() === '') {
     return null;
   }

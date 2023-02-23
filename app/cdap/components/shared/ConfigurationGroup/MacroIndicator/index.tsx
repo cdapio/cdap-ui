@@ -68,7 +68,11 @@ const MacroIndicatorView: React.FC<IMacroIndicatorProps> = ({
       disabled={disabled}
       tabIndex={-1}
     >
-      <span className={classnames(classes.macroIconContainer, { [classes.macroActive]: isActive })}>
+      <span
+        className={classnames(classes.macroIconContainer, {
+          [classes.macroActive]: isActive,
+        })}
+      >
         {isActive ? <Lens fontSize="large" /> : <RadioButtonUnchecked fontSize="large" />}
         <strong className={classes.macroM}>M</strong>
       </span>

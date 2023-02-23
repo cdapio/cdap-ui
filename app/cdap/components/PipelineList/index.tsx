@@ -25,12 +25,12 @@ import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
 import ErrorBoundary from 'components/shared/ErrorBoundary';
 
-import './PipelineList.scss';
+require('./PipelineList.scss');
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const PREFIX = 'features.PipelineList';
 
-const PipelineList: React.SFC = () => {
+const PipelineList: React.FC = () => {
   const namespace = getCurrentNamespace();
   const basepath = `/ns/${namespace}/pipelines`;
 
@@ -44,13 +44,23 @@ const PipelineList: React.SFC = () => {
       <div className="pipeline-list-view">
         <Helmet title={pageTitle} />
         <h4 className="view-header" data-cy="pipeline-list-view-header">
-          <NavLink exact to={basepath} className="option" activeClassName="active">
+          <NavLink
+            exact
+            to={basepath}
+            className="option"
+            activeClassName="active"
+          >
             {T.translate(`${PREFIX}.deployed`)}
           </NavLink>
 
           <span className="separator">|</span>
 
-          <NavLink exact to={`${basepath}/drafts`} className="option" activeClassName="active">
+          <NavLink
+            exact
+            to={`${basepath}/drafts`}
+            className="option"
+            activeClassName="active"
+          >
             {T.translate(`${PREFIX}.draft`)}
           </NavLink>
         </h4>
@@ -69,7 +79,11 @@ const PipelineList: React.SFC = () => {
               );
             }}
           />
-          <Route exact path="/ns/:namespace/pipelines/drafts" component={DraftPipelineView} />
+          <Route
+            exact
+            path="/ns/:namespace/pipelines/drafts"
+            component={DraftPipelineView}
+          />
         </Switch>
       </div>
     </FeatureProvider>

@@ -96,7 +96,7 @@ export default class AbstractRow<
 
   public render() {
     const { errors, value, dataCy, index } = this.props;
-    let errorMsg = null;
+    let errorMsg: string | null = null;
     if (errors && value) {
       const errorObj = errors.find((error: IErrorObj) => error.element === value);
       if (errorObj) {

@@ -12,17 +12,17 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
-import {Subject} from 'rxjs/Subject';
+ */
+import { Subject } from 'rxjs/Subject';
 const MyDatasetApi = {
   __list: [],
   __programs: [],
-  isError: false
+  isError: false,
 };
 
 MyDatasetApi.generalGetter = function(property) {
   return function() {
-    let subject = new Subject();
+    const subject = new Subject();
     setTimeout(() => {
       if (this.__isError) {
         subject.error(this[property]);
@@ -44,4 +44,4 @@ MyDatasetApi.__setPrograms = function(programs, isError) {
   this.__isError = isError;
   this.__programs = programs;
 };
-export {MyDatasetApi};
+export { MyDatasetApi };

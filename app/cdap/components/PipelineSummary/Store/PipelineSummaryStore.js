@@ -30,7 +30,10 @@ const defaultRunsSummary = {
   nodeMetricsLoading: false,
 };
 
-const pipelinerunssummary = (state = defaultRunsSummary, action = defaultAction) => {
+const pipelinerunssummary = (
+  state = defaultRunsSummary,
+  action = defaultAction
+) => {
   switch (action.type) {
     case PIPELINESSUMMARYACTIONS.SETRUNS:
       return Object.assign({}, state, {

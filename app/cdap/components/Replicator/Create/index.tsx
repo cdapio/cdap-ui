@@ -90,23 +90,23 @@ interface ICreateProps extends WithStyles<typeof styles> {
 export interface ICreateState {
   name: string;
   description: string;
-  sourcePluginInfo: IPluginInfo;
-  sourcePluginWidget: IWidgetJson;
-  targetPluginInfo: IPluginInfo;
-  targetPluginWidget: IWidgetJson;
-  sourceConfig: IPluginConfig;
-  targetConfig: IPluginConfig;
-  tables: ITablesStore;
-  columns: IColumnsStore;
-  dmlBlacklist: IDMLStore;
+  sourcePluginInfo: IPluginInfo | null;
+  sourcePluginWidget: IWidgetJson | null;
+  targetPluginInfo: IPluginInfo | null;
+  targetPluginWidget: IWidgetJson | null;
+  sourceConfig: IPluginConfig | null;
+  targetConfig: IPluginConfig | null;
+  tables: ITablesStore | null;
+  columns: IColumnsStore | null;
+  dmlBlacklist: IDMLStore | null;
   offsetBasePath: string;
-  numInstances: number;
+  numInstances: number | null;
   parentArtifact: {
     name: string;
     version: string;
     scope: string;
-  };
-  draftId: string;
+  } | null;
+  draftId: string | null;
   isInvalidSource: boolean;
   loading: boolean;
   activeStep: number;
@@ -127,7 +127,7 @@ export interface ICreateState {
     checkTransformations?: boolean
   ) => void;
   setAdvanced: (numInstances) => void;
-  checkIfTinkEnabled: () => void;
+  checkIfTinkEnabled?: () => void;
   getReplicatorConfig: () => any;
   saveDraft: () => Observable<any>;
   setColumns: (columns, callback) => void;
@@ -149,7 +149,7 @@ export interface ICreateState {
       [colName: string]: ITableAssessmentColumn;
     };
   };
-  error: object | string | null;
+  error: object | string | null | any;
 }
 
 export type ICreateContext = Partial<ICreateState>;
@@ -227,7 +227,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
   public saveTransformationsAndColumns = (
     table: ITableInfo,
     transformations?: ITransformation,
-    columns?: ISelectedList
+    columns?: ISelectedList | any
   ) => {
     const tableKey = generateTableKey(table);
     const setValues: {
@@ -235,10 +235,10 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       transformations?: { [tableName: string]: ITransformation };
       columns?: IColumnsStore;
     } = {
-      tables: this.state.tables,
+      tables: this.state.tables as ITablesStore,
     };
 
-    if (!this.state.tables.get(tableKey)) {
+    if (!this.state.tables?.get(tableKey)) {
       setValues.tables.set(tableKey, Map(table));
     }
 
@@ -248,9 +248,9 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       setValues.transformations = stateTransformations;
     }
     const prevColumns = this.state.columns;
-    let newColumns = prevColumns.set(tableKey, columns);
+    let newColumns = prevColumns?.set(tableKey, columns);
     if (!columns || columns.size === 0) {
-      newColumns = newColumns.delete(tableKey);
+      newColumns = newColumns?.delete(tableKey);
     }
 
     setValues.columns = newColumns;
@@ -267,7 +267,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
   public handleAssessTable = (
     table: ITableInfo,
     transformations: IColumnTransformation[],
-    columns?: ISelectedList
+    columns?: ISelectedList | any
   ) => {
     this.setState(
       {
@@ -281,12 +281,12 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
         // this is a temporary representation of the replication state
         // we don't want to add to replication state until this assessment
         // comes back without errors
-        const replicatorConfig = this.getReplicatorConfig();
-        const existingTable = replicatorConfig.tables.find((tbl) => {
+        const replicatorConfig: any = this.getReplicatorConfig();
+        const existingTable: any = replicatorConfig.tables.find((tbl) => {
           return tbl.table === table.table;
         });
         // add columns
-        const columnArr = [];
+        const columnArr: any[] = [];
         if (columns && columns.size > 0) {
           columns.forEach((column) => {
             const columnObj: any = {
@@ -439,7 +439,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     const source = this.constructStageSpec('source');
     const target = this.constructStageSpec('target');
 
-    const stages = [];
+    const stages: any[] = [];
     if (source) {
       stages.push(source);
     }
@@ -448,7 +448,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
       stages.push(target);
     }
 
-    const connections = [];
+    const connections: any[] = [];
 
     if (source && target) {
       connections.push({
@@ -524,7 +524,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
         extensionType: 'transform',
       };
 
-      MyArtifactApi.fetchPluginTypes(systemParams).subscribe((types: Array<{ name: string }>) => {
+      MyArtifactApi.fetchPluginTypes(systemParams).subscribe((types: { name: string }[]) => {
         for (const plugin of types) {
           if (plugin.name === 'tink') {
             this.setState({
@@ -537,7 +537,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     });
   };
 
-  public state = {
+  public state: ICreateState = {
     name: '',
     description: '',
     sourcePluginInfo: null,
@@ -616,7 +616,7 @@ class CreateView extends React.PureComponent<ICreateProps, ICreateContext> {
     window.localStorage.removeItem(cloneId);
 
     try {
-      const pipelineConfig = JSON.parse(pipelineConfigStr);
+      const pipelineConfig = JSON.parse(pipelineConfigStr as string);
       const stateObj = await convertConfigToState(pipelineConfig, this.state.parentArtifact);
       const newState = {
         ...stateObj,

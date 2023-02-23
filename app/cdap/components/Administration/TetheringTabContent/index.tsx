@@ -32,6 +32,7 @@ import CdfTetheringConnections from './CdfTetheringConnections';
 import Alert from 'components/shared/Alert';
 
 const PREFIX = 'features.Administration';
+
 const I18NPREFIX = `${PREFIX}.Tethering`;
 
 const AdminTetheringTabContainer = styled.div`

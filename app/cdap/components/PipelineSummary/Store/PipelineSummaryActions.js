@@ -44,8 +44,8 @@ function setRuns(runs) {
 }
 
 function fetchMetrics({ namespaceId, appId, programType, programId }, metrics) {
-  let { runs } = PipelineSummaryStore.getState().pipelinerunssummary;
-  let postBody = {};
+  const { runs } = PipelineSummaryStore.getState().pipelinerunssummary;
+  const postBody = {};
   runs.forEach((run) => {
     postBody[`qid_${run.runid}`] = {
       tags: {
@@ -64,17 +64,22 @@ function fetchMetrics({ namespaceId, appId, programType, programId }, metrics) {
 }
 
 function updateMetrics(metrics, mapKey = 'metrics') {
-  let modMetrics = {};
+  const modMetrics = {};
   Object.keys(metrics).forEach((key) => {
-    let runId = key.replace('qid_', '');
+    const runId = key.replace('qid_', '');
     modMetrics[runId] = { [mapKey]: {} };
     metrics[key].series.forEach((metricObj) => {
-      modMetrics[runId][mapKey][metricObj.metricName] = objectQuery(metricObj, 'data', 0, 'value');
+      modMetrics[runId][mapKey][metricObj.metricName] = objectQuery(
+        metricObj,
+        'data',
+        0,
+        'value'
+      );
     });
   });
   let { runs } = PipelineSummaryStore.getState().pipelinerunssummary;
   runs = runs.map((run) => {
-    let runid = run.runid;
+    const runid = run.runid;
     return Object.assign({}, run, modMetrics[runid]);
   });
   PipelineSummaryStore.dispatch({
@@ -86,15 +91,19 @@ function updateMetrics(metrics, mapKey = 'metrics') {
 }
 
 function updateNodeMetrics(pipelineConfig) {
-  let { runs } = PipelineSummaryStore.getState().pipelinerunssummary;
+  const { runs } = PipelineSummaryStore.getState().pipelinerunssummary;
   let nodesMap = {
     recordsin: {},
     recordsout: {},
   };
-  const sourcePluginTypes = ['batchsource', 'realtimesource', 'streamingsource'];
+  const sourcePluginTypes = [
+    'batchsource',
+    'realtimesource',
+    'streamingsource',
+  ];
   const sinkPluginTypes = ['batchsink', 'realtimesink', 'sparksink'];
-  let sourcePlugins = [];
-  let sinkPlugins = [];
+  const sourcePlugins = [];
+  const sinkPlugins = [];
   pipelineConfig.config.stages.forEach((stage) => {
     nodesMap.recordsin[stage.name] = [];
     nodesMap.recordsout[stage.name] = [];
@@ -126,39 +135,50 @@ function updateNodeMetrics(pipelineConfig) {
       }
   */
   const getNodesMetricsMapRecords = (run, nodesMap, type = '.records.in') => {
-    let cleanUpRegex = /\user.|\.records\.out|\.records\.in/gi;
-    let getNodeLabel = (node) => node.replace(cleanUpRegex, () => '');
-    let nodesCount = Object.keys(nodesMap);
-    let metricsCount = Object.keys(run.nodesMetrics);
-    let defaultMetrics = {};
+    const cleanUpRegex = /\user.|\.records\.out|\.records\.in/gi;
+    const getNodeLabel = (node) => node.replace(cleanUpRegex, () => '');
+    const nodesCount = Object.keys(nodesMap);
+    const metricsCount = Object.keys(run.nodesMetrics);
+    const defaultMetrics = {};
     Object.keys(nodesMap).map((n) => (defaultMetrics[`user.${n}${type}`] = 0));
     let nodesWithMetrics = run.nodesMetrics;
     if (!nodesCount.length || nodesCount.length !== metricsCount.length) {
       nodesWithMetrics = Object.assign({}, defaultMetrics, run.nodesMetrics);
     }
     return Object.keys(nodesWithMetrics)
-      .filter((node) => node.indexOf(type) !== -1 && !isNil(nodesMap[getNodeLabel(node)]))
+      .filter(
+        (node) =>
+          node.indexOf(type) !== -1 && !isNil(nodesMap[getNodeLabel(node)])
+      )
       .map((node) => ({
         [getNodeLabel(node)]: run.nodesMetrics[node] || 0,
       }));
   };
   const addRunRecordTo = (map, node, run) => {
-    let nodeLabel = Object.keys(node).pop();
-    let runRecord = Object.assign({}, run, {
+    const nodeLabel = Object.keys(node).pop();
+    const runRecord = Object.assign({}, run, {
       numberOfRecords: node[nodeLabel],
     });
     map[nodeLabel].push(runRecord);
   };
   runs.forEach((run) => {
-    getNodesMetricsMapRecords(run, nodesMap.recordsin, '.records.in').forEach((nodeMetricMap) =>
+    getNodesMetricsMapRecords(
+      run,
+      nodesMap.recordsin,
+      '.records.in'
+    ).forEach((nodeMetricMap) =>
       addRunRecordTo(nodesMap.recordsin, nodeMetricMap, cloneDeep(run))
     );
-    getNodesMetricsMapRecords(run, nodesMap.recordsout, '.records.out').forEach((nodeMetricMap) =>
+    getNodesMetricsMapRecords(
+      run,
+      nodesMap.recordsout,
+      '.records.out'
+    ).forEach((nodeMetricMap) =>
       addRunRecordTo(nodesMap.recordsout, nodeMetricMap, cloneDeep(run))
     );
   });
-  let recordsInNonSourcePluginsMap = {};
-  let recordsOutNoneSinkPluginsMap = {};
+  const recordsInNonSourcePluginsMap = {};
+  const recordsOutNoneSinkPluginsMap = {};
   Object.keys(nodesMap.recordsin)
     .filter((node) => sourcePlugins.indexOf(node) === -1)
     .forEach((node) => {
@@ -219,7 +239,7 @@ function fetchSummary({
   );
   MyProgramApi.runs(params).subscribe((runs) => {
     setRuns(runs);
-    let logMetrics = [
+    const logMetrics = [
       'system.app.log.error',
       'system.app.log.warn',
       'system.app.log.info',

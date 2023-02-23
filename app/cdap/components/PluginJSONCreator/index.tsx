@@ -27,7 +27,7 @@ const PluginJSONCreator: React.FC = () => {
   const pageTitle = `${Theme.productName} | Plugin JSON`;
 
   return (
-    <React.Fragment>
+    <>
       <Helmet title={pageTitle} />
       <Switch>
         <Route path={basepath} component={Create} />
@@ -37,7 +37,7 @@ const PluginJSONCreator: React.FC = () => {
           }}
         />
       </Switch>
-    </React.Fragment>
+    </>
   );
 };
 

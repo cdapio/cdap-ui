@@ -28,12 +28,12 @@ import { applyGraphQLMiddleware } from 'gql/graphql';
 import { getHostName } from 'server/config/hostname';
 import middleware404 from 'server/middleware-404';
 
-var cdapConfig,
+let cdapConfig,
   securityConfig,
   allowedOrigin = [],
   wsConnections = {},
-  hostname,
-  hostIP = ip.address();
+  hostname;
+const hostIP = ip.address();
 
 /**
  * Configuring the logger. In order to use the logger anywhere
@@ -49,7 +49,7 @@ if (!process.env.LOG4JS_CONFIG) {
 }
 
 // Get a log handle.
-var log = log4js.getLogger('default');
+const log = log4js.getLogger('default');
 
 function getFullURL(host) {
   let nodejsport = cdapConfig['dashboard.bind.port'];
@@ -58,7 +58,7 @@ function getFullURL(host) {
   if (isSSLEnabled) {
     nodejsport = cdapConfig['dashboard.ssl.bind.port'];
   }
-  let baseUrl = `${nodejsprotocol}://${host}`;
+  const baseUrl = `${nodejsprotocol}://${host}`;
   return nodejsport ? `${baseUrl}:${nodejsport}` : baseUrl;
 }
 async function setAllowedOrigin() {
@@ -87,7 +87,11 @@ async function setAllowedOrigin() {
     allowedOrigin.push(getFullURL(whitelistedDomain));
   }
   if (['localhost', '127.0.0.1', '0.0.0.0'].indexOf(nodejsserver) !== -1) {
-    allowedOrigin.push(getFullURL('127.0.0.1'), getFullURL('0.0.0.0'), getFullURL('localhost'));
+    allowedOrigin.push(
+      getFullURL('127.0.0.1'),
+      getFullURL('0.0.0.0'),
+      getFullURL('localhost')
+    );
   }
   if (whitelistedOrigin) {
     allowedOrigin.push(whitelistedOrigin);
@@ -96,7 +100,7 @@ async function setAllowedOrigin() {
 
 log.info('Starting CDAP UI ...');
 getCDAPConfig()
-  .then(function(c) {
+  .then((c) => {
     /**
      * In order for the sandbox to refresh the conf/cdap-config.json you need
      * to run 'cdap config-tool --cdap' in the sandbox folder.
@@ -140,19 +144,23 @@ getCDAPConfig()
     }
   })
 
-  .then(function(s) {
+  .then((s) => {
     securityConfig = s;
     setAllowedOrigin();
     return getApp(Object.assign({}, cdapConfig, securityConfig));
   })
 
-  .then(function(app) {
+  .then((app) => {
     // handles /graphql route
-    applyGraphQLMiddleware(app, Object.assign({}, cdapConfig, securityConfig), log);
+    applyGraphQLMiddleware(
+      app,
+      Object.assign({}, cdapConfig, securityConfig),
+      log
+    );
     // handles all unmatched routes
     app.use(middleware404.render404);
 
-    var port, server;
+    let port, server;
     if (cdapConfig['ssl.external.enabled'] === 'true') {
       if (cdapConfig['dashboard.ssl.disable.cert.check'] === 'true') {
         // For self signed certs: see https://github.com/mikeal/request/issues/418
@@ -172,6 +180,7 @@ getCDAPConfig()
           'SSL key/cert files read failed. Please fix the key/ssl certificate files and restart node server -  ',
           e
         );
+        // eslint-disable-next-line no-process-exit
         process.exit(1);
       }
       port = cdapConfig['dashboard.ssl.bind.port'];
@@ -179,15 +188,15 @@ getCDAPConfig()
       server = http.createServer(app);
       port = cdapConfig['dashboard.bind.port'];
     }
-    server.listen(port, cdapConfig['dashboard.bind.address'], function() {
+    server.listen(port, cdapConfig['dashboard.bind.address'], () => {
       log.info('CDAP UI listening on port %s', port);
     });
 
     return server;
   })
 
-  .then(async function(server) {
-    var sockServer = sockjs.createServer({
+  .then(async (server) => {
+    const sockServer = sockjs.createServer({
       log: function(lvl, msg) {
         log.trace(msg);
       },
@@ -215,21 +224,23 @@ getCDAPConfig()
      *    to the client as if no authentication exists.
      */
     let authToken, userid;
-    sockServer.on('connection', function(c) {
+    sockServer.on('connection', (c) => {
       if (!c) {
         log.error('Connection requested, but no connection available');
         return;
       }
       log.debug('[SOCKET OPEN] Connection to client "' + c.id + '" opened');
       // @ts-ignore
-      var a = new Aggregator(c, { ...cdapConfig, ...securityConfig });
+      let a = new Aggregator(c, { ...cdapConfig, ...securityConfig });
       if (cdapConfig['security.authentication.mode'] === 'PROXY') {
         c.authToken = authToken;
         c.userid = userid;
       }
       wsConnections[c.id] = c;
-      c.on('close', function() {
-        log.debug('Cleaning out aggregator: ' + JSON.stringify(a.connection.id));
+      c.on('close', () => {
+        log.debug(
+          'Cleaning out aggregator: ' + JSON.stringify(a.connection.id)
+        );
         a = null;
         c.end();
         c.destroy();
@@ -238,10 +249,11 @@ getCDAPConfig()
     });
 
     sockServer.installHandlers(server, { prefix: '/_sock' });
-    server.addListener('upgrade', function(req, socket) {
+    server.addListener('upgrade', (req, socket) => {
       if (cdapConfig['security.authentication.mode'] === 'PROXY') {
         authToken = req.headers.authorization;
-        const userIdProperty = cdapConfig['security.authentication.proxy.user.identity.header'];
+        const userIdProperty =
+          cdapConfig['security.authentication.proxy.user.identity.header'];
         userid = req.headers[userIdProperty];
       }
       if (allowedOrigin.indexOf(req.headers.origin) === -1) {
@@ -255,16 +267,27 @@ getCDAPConfig()
     function gracefulShutdown() {
       log.info('Caught SIGTERM. Closing http & ws server');
       server.close();
-      if (typeof wsConnections === 'object' && Object.keys(wsConnections).length) {
-        log.debug(`Closing ${Object.keys(wsConnections).length} open websocket connections`)
+      if (
+        typeof wsConnections === 'object' &&
+        Object.keys(wsConnections).length
+      ) {
+        log.debug(
+          `Closing ${
+            Object.keys(wsConnections).length
+          } open websocket connections`
+        );
         Object.values(wsConnections).forEach((connection) => {
-          log.debug('Ending and destroying all graceful shutdown: ' + connection.readyState);
+          log.debug(
+            'Ending and destroying all graceful shutdown: ' +
+              connection.readyState
+          );
           connection.end();
           connection.destroy();
         });
         log.debug('Closed all open websocket connections');
         wsConnections = {};
       }
+      // eslint-disable-next-line no-process-exit
       process.exit(0);
     }
     process.on('SIGTERM', gracefulShutdown);

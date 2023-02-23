@@ -82,7 +82,9 @@ function FllField({ field, isActive, classes }: IFieldProps) {
       onClick={isTarget && !showingOneField ? handleFieldClick : undefined}
       onMouseEnter={toggleHoverState.bind(this, true)}
       onMouseLeave={toggleHoverState.bind(this, false)}
-      className={classnames('grid-row', 'grid-link', classes.root, { activeField: isActive })}
+      className={classnames('grid-row', 'grid-link', classes.root, {
+        activeField: isActive,
+      })}
       id={field.id}
       data-fieldname={field.name}
       data-hovering={isHovering}

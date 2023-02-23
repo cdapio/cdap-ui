@@ -37,7 +37,7 @@ interface IKeyValueDropdownWidgetProps extends IMultiRowWidgetProps {
   showDelimiter?: boolean;
 }
 
-interface IKeyValueDropdownProps extends IMultiRowProps<IKeyValueDropdownWidgetProps> {}
+type IKeyValueDropdownProps = IMultiRowProps<IKeyValueDropdownWidgetProps>;
 
 class KeyValueDropdownWidgetView extends AbstractMultiRowWidget<IKeyValueDropdownProps> {
   public renderRow = (id, index) => {

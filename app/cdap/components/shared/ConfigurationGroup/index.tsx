@@ -17,7 +17,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import { IWidgetJson, PluginProperties } from './types';
+import { IConfigurationGroup, IWidgetJson, PluginProperties } from './types';
 import {
   addCurrentValueToShownProperty,
   processConfigurationGroups,
@@ -84,13 +84,15 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
   validateProperties,
   lockedProperties,
 }) => {
-  const [configurationGroups, setConfigurationGroups] = useState([]);
+  const [configurationGroups, setConfigurationGroups] = useState<IConfigurationGroup[]>([]);
   const referenceValueForUnMount = useRef<{
     configurationGroups?: IFilteredConfigurationGroup[];
     values?: Record<string, string>;
   }>({});
-  const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState([]);
-  const [orphanErrors, setOrphanErrors] = useState([]);
+  const [filteredConfigurationGroups, setFilteredConfigurationGroups] = useState<
+    IFilteredConfigurationGroup[]
+  >([]);
+  const [orphanErrors, setOrphanErrors] = useState<any[]>([]);
   // a state to remember the properties values after each user interaction
   const [currentValues, setCurrentValues] = useState(values);
 
@@ -130,7 +132,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
     try {
       newFilteredConfigurationGroup = filterByCondition(
         configGroup,
-        widgetJson,
+        widgetJson as IWidgetJson,
         pluginProperties,
         // pass currentValues instead of newValues for conditions like this:
         // {useConnection === false && serviceAccountType === 'filePath'}
@@ -161,7 +163,12 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
 
   function handleValueChanges(changedValues, params: { [key: string]: boolean } = {}) {
     let fcg = filteredConfigurationGroups;
-    fcg = filterByCondition(configurationGroups, widgetJson, pluginProperties, changedValues);
+    fcg = filterByCondition(
+      configurationGroups,
+      widgetJson as IWidgetJson,
+      pluginProperties,
+      changedValues
+    );
     // update currentValues state with whatever changed
     setCurrentValues((newValues) => {
       return replaceDifferenceInObjects(newValues, changedValues);
@@ -264,7 +271,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
             return null;
           }
 
-          const errorObjs = getPropertyError(property.name);
+          const errorObjs = getPropertyError(property.name) || undefined;
 
           return (
             <PropertyRow
@@ -274,7 +281,7 @@ const ConfigurationGroupView: React.FC<IConfigurationGroupProps> = ({
               value={values[property.name]}
               onChange={handleValueChanges}
               extraConfig={extraConfig}
-              disabled={disabled}
+              disabled={!!disabled}
               locked={lockedProperties && lockedProperties[property.name]}
               errors={errorObjs}
             />

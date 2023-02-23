@@ -134,12 +134,7 @@ export const getDefaultLinks = () => {
  * namespace and target are the target namespace and dataset name
  */
 
-export function getLinks(
-  namespace: string,
-  target: string,
-  ents: IFllEntity[],
-  isCause: boolean = true
-) {
+export function getLinks(namespace: string, target: string, ents: IFllEntity[], isCause = true) {
   const tables: ITablesList = {};
   const links: ILink[] = [];
   const targetFieldsWithOps = new Set(); // Keep track of all target fields with operations/lineage
@@ -224,7 +219,10 @@ export function getFieldsAndLinks(d) {
     incoming: incomingLineage.targetFieldsWithOps,
     outgoing: outgoingLineage.targetFieldsWithOps,
   };
-  const links: ILinkSet = { incoming: incomingLineage.links, outgoing: outgoingLineage.links };
+  const links: ILinkSet = {
+    incoming: incomingLineage.links,
+    outgoing: outgoingLineage.links,
+  };
   return { causeTables, impactTables, links, targetFieldsWithOps };
 }
 

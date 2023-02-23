@@ -17,7 +17,14 @@
 import { combineReducers, createStore } from 'redux';
 import { defaultAction, composeEnhancers } from 'services/helpers';
 
-export const TIME_OPTIONS = ['CUSTOM', 'last7d', 'last14d', 'lastMonth', 'last6M', 'lastYear'];
+export const TIME_OPTIONS = [
+  'CUSTOM',
+  'last7d',
+  'last14d',
+  'lastMonth',
+  'last6M',
+  'lastYear',
+];
 
 const Actions = {
   setFields: 'FLL_SET_FIELDS',

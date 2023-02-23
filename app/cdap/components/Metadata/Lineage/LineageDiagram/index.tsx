@@ -70,7 +70,12 @@ const LineageDiagram: React.FC<ILineageDiagramProps> = ({
           },
           Connector: [
             'Flowchart',
-            { gap: 0, stub: [10, 15], alwaysRespectStubs: true, cornerRadius: 0 },
+            {
+              gap: 0,
+              stub: [10, 15],
+              alwaysRespectStubs: true,
+              cornerRadius: 0,
+            },
           ],
           ConnectionOverlays: [['Arrow', { location: 1, direction: 1, width: 10, length: 10 }]],
           Endpoints: ['Blank', 'Blank'],

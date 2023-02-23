@@ -27,7 +27,7 @@ interface ISpannerDisplaySwitchProps {
   onWorkspaceCreate: () => void;
 }
 
-const SpannerDisplaySwitchView: React.SFC<ISpannerDisplaySwitchProps> = (props) => {
+const SpannerDisplaySwitchView: React.FC<ISpannerDisplaySwitchProps> = (props) => {
   const { instanceId, databaseId, onWorkspaceCreate, scope } = props;
 
   if (databaseId) {
@@ -47,6 +47,6 @@ const mapStateToProps = (state): Partial<ISpannerDisplaySwitchProps> => {
   };
 };
 
-const SpannerDisplaySwitch = connect(mapStateToProps)(SpannerDisplaySwitchView);
+const SpannerDisplaySwitch: any = connect(mapStateToProps)(SpannerDisplaySwitchView);
 
 export default SpannerDisplaySwitch;

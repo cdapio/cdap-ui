@@ -24,30 +24,32 @@ import {
 import SearchStore from 'components/EntityListView/SearchStore';
 
 export default function ListViewHeader() {
-  let searchState = SearchStore.getState().search;
-  let activeFilters = searchState.activeFilters;
-  let activeSort = searchState.activeSort;
-  let searchText = searchState.query;
-  let filterOptions = DEFAULT_SEARCH_FILTER_OPTIONS;
+  const searchState = SearchStore.getState().search;
+  const activeFilters = searchState.activeFilters;
+  const activeSort = searchState.activeSort;
+  const searchText = searchState.query;
+  const filterOptions = DEFAULT_SEARCH_FILTER_OPTIONS;
 
   const getActiveFilterStrings = () => {
     return activeFilters.map((filter) => {
       return T.translate(`commons.entity.${filter}.plural`);
     });
   };
-  let text = {
+  const text = {
     search: T.translate('features.EntityListView.Info.subtitle.search'),
     filteredBy: T.translate('features.EntityListView.Info.subtitle.filteredBy'),
     sortedBy: T.translate('features.EntityListView.Info.subtitle.sortedBy'),
     displayAll: T.translate('features.EntityListView.Info.subtitle.displayAll'),
-    displaySome: T.translate('features.EntityListView.Info.subtitle.displaySome'),
+    displaySome: T.translate(
+      'features.EntityListView.Info.subtitle.displaySome'
+    ),
   };
 
-  let i18nResolved_activeFilters = getActiveFilterStrings();
-  let allFiltersSelected =
+  const i18nResolved_activeFilters = getActiveFilterStrings();
+  const allFiltersSelected =
     i18nResolved_activeFilters.length === 0 ||
     i18nResolved_activeFilters.length === filterOptions.length;
-  let activeFilterString = i18nResolved_activeFilters.join(', ');
+  const activeFilterString = i18nResolved_activeFilters.join(', ');
   let subtitle;
 
   if (searchText !== DEFAULT_SEARCH_QUERY) {

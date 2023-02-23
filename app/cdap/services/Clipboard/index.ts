@@ -66,7 +66,7 @@ function useDocumentExecCopy(text: string) {
       reject('Unable to copy: ' + e.message);
     }
     document.body.removeChild(textarea);
-    resolve();
+    resolve(undefined);
   });
   return promise;
 }

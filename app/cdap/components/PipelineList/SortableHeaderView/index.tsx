@@ -20,7 +20,7 @@ import IconSVG from 'components/shared/IconSVG';
 import T from 'i18n-react';
 import classnames from 'classnames';
 
-interface ISortableHeaderProps {
+export interface ISortableHeaderProps {
   sortColumn: string;
   sortOrder: SORT_ORDER;
   columnName: string;
@@ -30,7 +30,7 @@ interface ISortableHeaderProps {
 
 const PREFIX = 'features.PipelineList';
 
-const SortableHeaderView: React.SFC<ISortableHeaderProps> = ({
+const SortableHeaderView: React.FC<ISortableHeaderProps> = ({
   sortColumn,
   sortOrder,
   columnName,

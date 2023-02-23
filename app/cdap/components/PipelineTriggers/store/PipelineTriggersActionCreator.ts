@@ -370,7 +370,7 @@ export function addToTriggerGroup(
   PipelineTriggersStore.dispatch({
     type: PipelineTriggersActions.setTriggersGroup,
     payload: {
-      triggersGroupToAdd: newTriggersGroupToAdd,
+      triggersGroupToAdd: newTriggersGroupToAdd as any,
       triggersGroupRunArgsToAdd: triggersGroupRunArgs,
     },
   });

@@ -45,7 +45,7 @@ export default function CommentMenu({ onEdit, onDelete }: ICommentMenuProps) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
-  const toggleSettingsMenu = (e = { ...defaultEventObject, currentTarget: null }) => {
+  const toggleSettingsMenu = (e: any = { ...defaultEventObject, currentTarget: null }) => {
     setAnchorEl(e.currentTarget);
     setIsSettingsOpen(!isSettingsOpen);
     preventPropagation(e);

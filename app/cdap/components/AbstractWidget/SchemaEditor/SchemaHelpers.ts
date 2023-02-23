@@ -28,7 +28,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { objectQuery } from 'services/helpers';
 import { isObject } from 'vega-lite/build/src/util';
 
-const displayTypes: Array<ISimpleType | IComplexTypeNames | ILogicalTypeNames> = [
+const displayTypes: (ISimpleType | IComplexTypeNames | ILogicalTypeNames)[] = [
   AvroSchemaTypesEnum.ARRAY,
   AvroSchemaTypesEnum.ENUM,
   AvroSchemaTypesEnum.MAP,

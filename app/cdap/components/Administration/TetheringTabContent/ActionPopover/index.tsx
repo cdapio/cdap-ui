@@ -55,14 +55,14 @@ const StyledPopover = styled(Popover)`
 `;
 
 const ListItem = styled.li`
-  ${(styles) =>
+  ${(styles: { disabled?: boolean; red?: boolean }) =>
     styles.disabled &&
     css`
       cursor: not-allowed;
       opacity: 0.5;
     `}
 
-  ${(styles) =>
+  ${(styles: { disabled?: boolean; red?: boolean }) =>
     styles.red &&
     css`
       color: ${(props) => props.theme.palette.red[100]};
@@ -118,7 +118,7 @@ const ActionsPopover = ({
               <hr />
             </>
           )}
-          <ListItem red={true} onClick={toggleModalOpen} data-testid={dataTestIds.delete}>
+          <ListItem red onClick={toggleModalOpen} data-testid={dataTestIds.delete}>
             {T.translate(`${PREFIX}.Actions.delete`)}
           </ListItem>
         </ul>

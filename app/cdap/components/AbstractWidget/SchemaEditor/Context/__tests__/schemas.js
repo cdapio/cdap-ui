@@ -75,22 +75,26 @@ const schemaWithNestedRecordName = {
         type: {
           type: 'record',
           name: 'Record1',
-          fields: [{
-            name: 'Record1',
-            type: {
-              type: 'record',
-              name: 'Record1.Record1',
-              fields: [{
-                name: 'stringfield',
-                type: 'string'
-              }]
-            }
-          }]
-        }
-      }
-    ]
-  }
-}
+          fields: [
+            {
+              name: 'Record1',
+              type: {
+                type: 'record',
+                name: 'Record1.Record1',
+                fields: [
+                  {
+                    name: 'stringfield',
+                    type: 'string',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ],
+  },
+};
 
 export {
   schemaWithMap,

@@ -21,14 +21,17 @@ import { MySearchApi } from 'api/search';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import SearchBar from 'components/Metadata/SearchBar';
 import ResultList from 'components/Metadata/SearchResults/ResultList';
-import Filters, { IFilterItem, Operations } from 'components/Metadata/SearchResults/Filters';
+import Filters, {
+  IFilterItem,
+  Operations,
+} from 'components/Metadata/SearchResults/Filters';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import orderBy from 'lodash/orderBy';
 import PaginationWithTitle from 'components/shared/PaginationWithTitle';
 import Helmet from 'react-helmet';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Theme } from 'services/ThemeHelper';
 import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
@@ -121,7 +124,11 @@ const SearchResults: React.FC = () => {
   const sortByLabel = T.translate(`${I18N_PREFIX}.sortBy`);
   const metadataLabel = T.translate(`${I18N_PREFIX}.filters.metadata`);
   const entitiesLabel = T.translate(`${I18N_PREFIX}.filters.entities`);
-  const sortByOptions = [
+  const sortByOptions: {
+    name: React.ReactNode;
+    sort: string;
+    order: 'asc' | 'desc';
+  }[] = [
     {
       name: T.translate(`${I18N_PREFIX}.sortOptions.oldest`),
       sort: 'createDate',
@@ -190,7 +197,9 @@ const SearchResults: React.FC = () => {
       if (results.length > 0) {
         const parsedResponse = parseResult(query, results, metadataFilters);
         setFullResults(parsedResponse.results);
-        setSearchResults(orderBy(parsedResponse.results, [sortBy.sort], [sortBy.order]));
+        setSearchResults(
+          orderBy(parsedResponse.results, [sortBy.sort], [sortBy.order])
+        );
         setMetadataFiltersMatched(getMatchedFiltersCount(metadataFilters));
         const updatedEntitiyFilter = Object.assign(entityFilters[0], {
           count: parsedResponse.count,
@@ -201,7 +210,11 @@ const SearchResults: React.FC = () => {
     });
   }, []);
 
-  function onFilterChange(operation: Operations, filter: IFilterItem, isMetadata: false) {
+  function onFilterChange(
+    operation: Operations,
+    filter: IFilterItem,
+    isMetadata = false
+  ) {
     const filtered = applyFilter(
       operation,
       filter,
@@ -248,7 +261,9 @@ const SearchResults: React.FC = () => {
           </Loader>
         )}
         {fullResults.length === 0 && !loading && (
-          <NoResults>{T.translate(`${I18N_PREFIX}.emptyResults`, { query })}</NoResults>
+          <NoResults>
+            {T.translate(`${I18N_PREFIX}.emptyResults`, { query })}
+          </NoResults>
         )}
         {fullResults.length > 0 && !loading && (
           <>
@@ -283,7 +298,12 @@ const SearchResults: React.FC = () => {
                     onChange={onChangeSort}
                   >
                     {sortByOptions.map((option) => (
-                      <MenuItem value={`${option.sort}-${option.order}`}>{option.name}</MenuItem>
+                      <MenuItem
+                        key={`${option.sort}-${option.order}`}
+                        value={`${option.sort}-${option.order}`}
+                      >
+                        {option.name}
+                      </MenuItem>
                     ))}
                   </Select>
                 </SortByControl>

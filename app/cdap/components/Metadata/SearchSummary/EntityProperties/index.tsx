@@ -186,7 +186,7 @@ const EntityProperties: React.FC<IEntityPropertiesProps> = ({
         role="tabpanel"
         hidden={propertyTypeTab === 1}
         aria-labelledby={'0'}
-        id={`tabpanel-business`}
+        id={'tabpanel-business'}
       >
         <form onSubmit={addProperty}>
           <PropertiesTable>
@@ -222,16 +222,16 @@ const EntityProperties: React.FC<IEntityPropertiesProps> = ({
                   <InputText
                     onChange={onPropertyInputChange.bind(this, true)}
                     value={propertyKeyToAdd}
-                    placeholder={T.translate(`${I18N_PREFIX}.enterPropertyKey`)}
-                    aria-label={T.translate(`${I18N_PREFIX}.propertyKey`)}
+                    placeholder={T.translate(`${I18N_PREFIX}.enterPropertyKey`).toString()}
+                    aria-label={T.translate(`${I18N_PREFIX}.propertyKey`).toString()}
                   />
                 </InputCell>
                 <InputCell>
                   <InputText
                     onChange={onPropertyInputChange.bind(this, false)}
                     value={propertyValueToAdd}
-                    placeholder={T.translate(`${I18N_PREFIX}.enterPropertyValue`)}
-                    aria-label={T.translate(`${I18N_PREFIX}.propertyValue`)}
+                    placeholder={T.translate(`${I18N_PREFIX}.enterPropertyValue`).toString()}
+                    aria-label={T.translate(`${I18N_PREFIX}.propertyValue`).toString()}
                   />
                 </InputCell>
                 <InputCell>
@@ -248,7 +248,7 @@ const EntityProperties: React.FC<IEntityPropertiesProps> = ({
         role="tabpanel"
         hidden={propertyTypeTab === 0}
         aria-labelledby={'1'}
-        id={`tabpanel-system`}
+        id={'tabpanel-system'}
       >
         {!properties.properties.isSystemEmpty && (
           <PropertiesTable>

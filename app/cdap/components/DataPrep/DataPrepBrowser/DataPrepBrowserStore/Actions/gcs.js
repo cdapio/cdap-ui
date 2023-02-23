@@ -22,13 +22,13 @@ import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 
 const setGCSAsActiveBrowser = (payload) => {
-  let { gcs, activeBrowser } = DataPrepBrowserStore.getState();
+  const { gcs, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId, path } = payload;
+  const { id: connectionId, path } = payload;
 
   if (gcs.connectionId === connectionId) {
     if (path && path !== gcs.prefix) {
@@ -46,8 +46,8 @@ const setGCSAsActiveBrowser = (payload) => {
 
   setGCSLoading();
 
-  let namespace = NamespaceStore.getState().selectedNamespace;
-  let params = {
+  const namespace = NamespaceStore.getState().selectedNamespace;
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -84,11 +84,11 @@ const setGCSPrefix = (prefix) => {
 };
 
 const fetchGCSDetails = (path = '') => {
-  let { connectionId, loading } = DataPrepBrowserStore.getState().gcs;
+  const { connectionId, loading } = DataPrepBrowserStore.getState().gcs;
   if (!loading) {
     setGCSLoading();
   }
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   let params = {
     context: namespace,
     connectionId,
@@ -125,4 +125,10 @@ const setGCSSearch = (search) => {
   });
 };
 
-export { setGCSAsActiveBrowser, setGCSPrefix, fetchGCSDetails, setGCSLoading, setGCSSearch };
+export {
+  setGCSAsActiveBrowser,
+  setGCSPrefix,
+  fetchGCSDetails,
+  setGCSLoading,
+  setGCSSearch,
+};

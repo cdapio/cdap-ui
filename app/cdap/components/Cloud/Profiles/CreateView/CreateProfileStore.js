@@ -35,9 +35,10 @@ const STORE_DEFAULT = {
 const createProfileStore = (state = STORE_DEFAULT, action = defaultAction) => {
   switch (action.type) {
     case ACTIONS.updateProfileLabel: {
-      let { label = '' } = action.payload;
+      const { label = '' } = action.payload;
       return {
         ...state,
+        // eslint-disable-next-line no-useless-escape
         name: label.replace(/\ +/g, '_').toLowerCase(),
         label,
       };

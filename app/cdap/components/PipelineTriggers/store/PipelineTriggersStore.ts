@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, Store } from 'redux';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
 import {
   IPipelineInfo,
@@ -45,7 +45,7 @@ interface IPayLoad {
 
 interface IAction {
   type: string;
-  payload: IPayLoad;
+  payload?: IPayLoad;
 }
 
 const defaultAction: IAction = {
@@ -64,6 +64,7 @@ const defaultInitialState = {
     targets: new Map<string, ITriggeringPipelineId>(),
   },
   enabledTriggers: [],
+  workflowName: null,
   pipelineName: '',
   pipelineType: '',
   expandedPipeline: null,
@@ -79,7 +80,10 @@ const defaultInitialEnabledTriggersState = {
   disableError: null,
 };
 
-const triggers = (state = defaultInitialState, action = defaultAction) => {
+const triggers = (
+  state: typeof defaultInitialState = defaultInitialState,
+  action: IAction = defaultAction
+) => {
   let stateCopy;
 
   switch (action.type) {
@@ -168,7 +172,10 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
   return Object.assign({}, state, stateCopy);
 };
 
-const enabledTriggers = (state = defaultInitialEnabledTriggersState, action = defaultAction) => {
+const enabledTriggers = (
+  state: typeof defaultInitialEnabledTriggersState = defaultInitialEnabledTriggersState,
+  action: IAction = defaultAction
+) => {
   let stateCopy;
 
   switch (action.type) {
@@ -208,7 +215,13 @@ const enabledTriggers = (state = defaultInitialEnabledTriggersState, action = de
   return Object.assign({}, state, stateCopy);
 };
 
-const PipelineTriggersStore = createStore(
+const PipelineTriggersStore: Store<
+  {
+    triggers: typeof defaultInitialState;
+    enabledTriggers: typeof defaultInitialEnabledTriggersState;
+  },
+  IAction
+> = createStore(
   combineReducers({
     triggers,
     enabledTriggers,

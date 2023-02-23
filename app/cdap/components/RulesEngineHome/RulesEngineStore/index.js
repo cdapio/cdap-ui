@@ -131,7 +131,10 @@ const rules = (state = DEFAULTRULESSTATE, action = defaultAction) => {
   }
 };
 
-const integration = (state = DEFAULTINTEGRATIONSTATE, action = defaultAction) => {
+const integration = (
+  state = DEFAULTINTEGRATIONSTATE,
+  action = defaultAction
+) => {
   switch (action.type) {
     case RULESENGINEACTIONS.SETINTEGRATIONEMBEDDED:
       return Object.assign({}, state, { embedded: true });
@@ -165,7 +168,7 @@ const RulesEngineStore = createStore(
     integration,
   }),
   DEFAULTRULESENGINESTATE,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default RulesEngineStore;

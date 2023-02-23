@@ -41,7 +41,7 @@ MyMetadataApi.__setTags = function(tags, isError) {
 };
 
 MyMetadataApi.addTags = function(params, tag) {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     this.__tags = this.__tags.concat(
       tag.map((tagVal) => {
@@ -58,7 +58,7 @@ MyMetadataApi.addTags = function(params, tag) {
 
 MyMetadataApi.generalGetter = function(property) {
   return function() {
-    let subject = new Subject();
+    const subject = new Subject();
     setTimeout(() => {
       if (this.__isError) {
         subject.error(this[property]);

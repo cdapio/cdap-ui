@@ -17,13 +17,28 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/previews';
 
 export const MyPreviewApi = {
-  getStageData: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/:previewId/tracers`),
+  getStageData: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${basepath}/:previewId/tracers`
+  ),
 
   // logs
-  nextLogs: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:previewId/logs/next`),
-  prevLogs: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:previewId/logs/prev`),
+  nextLogs: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/:previewId/logs/next`
+  ),
+  prevLogs: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/:previewId/logs/prev`
+  ),
 };

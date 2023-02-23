@@ -28,7 +28,9 @@ const SiblingCommunicationConsumer = SiblingCommunicationContext.Consumer;
  *
  * In this case the provider broadcasts the current hovered parent-sibling line and that gets highlighted.
  */
-class SiblingCommunicationProvider extends React.Component {
+class SiblingCommunicationProvider extends React.Component<{
+  children: React.ReactNode;
+}> {
   public setActiveParent = (id) => {
     this.setState({
       activeParent: id,

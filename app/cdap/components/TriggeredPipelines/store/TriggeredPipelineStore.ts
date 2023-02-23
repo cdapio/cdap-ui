@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, Store } from 'redux';
 import TriggeredPipelineActions from 'components/TriggeredPipelines/store/TriggeredPipelineActions';
 import { IPipelineInfo, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 
@@ -34,13 +34,13 @@ const defaultAction: IAction = {
   payload: {},
 };
 
-const defaultInitialState = {
+const defaultInitialState: IPayLoad = {
   triggeredPipelines: [],
-  expandedPipeline: null,
-  expandedPipelineInfo: null,
+  expandedPipeline: undefined,
+  expandedPipelineInfo: undefined,
 };
 
-const triggered = (state = defaultInitialState, action = defaultAction) => {
+const triggered = (state: IPayLoad = defaultInitialState, action = defaultAction): IPayLoad => {
   switch (action.type) {
     case TriggeredPipelineActions.setTriggered:
       return {
@@ -52,7 +52,7 @@ const triggered = (state = defaultInitialState, action = defaultAction) => {
       return {
         ...state,
         expandedPipeline: action.payload.expandedPipeline,
-        expandedPipelineInfo: null,
+        expandedPipelineInfo: undefined,
       };
 
     case TriggeredPipelineActions.setPipelineInfo:
@@ -67,7 +67,7 @@ const triggered = (state = defaultInitialState, action = defaultAction) => {
   }
 };
 
-const TriggeredPipelineStore = createStore(
+const TriggeredPipelineStore: Store<IPayLoad, IAction> = createStore(
   combineReducers({
     triggered,
   }),

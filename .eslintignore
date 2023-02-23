@@ -13,5 +13,6 @@ logviewer/
 services/
 styles/
 tracker/
+build/
 pom.xml
 .*

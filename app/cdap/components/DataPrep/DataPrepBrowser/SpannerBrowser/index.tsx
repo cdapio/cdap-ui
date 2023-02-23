@@ -28,7 +28,7 @@ import DataprepBrowserTopPanel from 'components/DataPrep/DataPrepBrowser/DataPre
 
 require('./SpannerBrowser.scss');
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.SpannerBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.SpannerBrowser';
 
 interface ISpannerBrowserProps {
   toggle: (e: React.MouseEvent<HTMLElement>) => void;

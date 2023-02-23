@@ -14,7 +14,7 @@
  * the License.
  */
 
-import MarketStore from '../store/market-store.js';
+import MarketStore from '../store/market-store';
 
 function setList(list) {
   MarketStore.dispatch({

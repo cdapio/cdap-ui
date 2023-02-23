@@ -63,7 +63,9 @@ function FllHeader({ type, total, classes }: IHeaderProps) {
     first = firstCause;
     header = isTarget
       ? T.translate('features.FieldLevelLineage.v2.FllHeader.TargetHeader')
-      : T.translate('features.FieldLevelLineage.v2.FllHeader.InputHeader', { target });
+      : T.translate('features.FieldLevelLineage.v2.FllHeader.InputHeader', {
+          target,
+        });
   }
 
   last = first + numTables - 1 <= total ? first + numTables - 1 : total;

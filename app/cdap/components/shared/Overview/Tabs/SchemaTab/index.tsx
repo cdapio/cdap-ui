@@ -51,8 +51,8 @@ interface ISchemaTabProps {
 interface ISchemaTabState {
   entity: IEntity;
   tooltipOpen: boolean;
-  schema: ISchemaType;
-  schemaRowCount: number;
+  schema?: ISchemaType;
+  schemaRowCount?: number;
 }
 
 export default class SchemaTab extends Component<ISchemaTabProps, ISchemaTabState> {
@@ -61,13 +61,13 @@ export default class SchemaTab extends Component<ISchemaTabProps, ISchemaTabStat
     window.addEventListener('resize', this.calculateSchemaRowCount);
   }
 
-  public containerRef = null;
+  public containerRef: any = undefined;
 
-  public state = {
+  public state: ISchemaTabState = {
     entity: this.props.entity,
     tooltipOpen: false,
-    schema: null,
-    schemaRowCount: null,
+    schema: undefined,
+    schemaRowCount: undefined,
   };
 
   public componentDidMount() {

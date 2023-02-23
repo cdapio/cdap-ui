@@ -17,7 +17,7 @@
 import * as React from 'react';
 require('./AuthRefresher.scss');
 
-const AuthRefresher: React.SFC = () => {
+const AuthRefresher: React.FC = () => {
   const url = (window as any).CDAP_CONFIG.authRefreshURL;
   if (url === false) {
     return null;

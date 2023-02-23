@@ -32,7 +32,7 @@ interface IMultipleValuesWidgetProps {
   delimiter?: string;
 }
 
-interface IMulipleValuesProps extends IMultiRowProps<IMultipleValuesWidgetProps> {}
+type IMulipleValuesProps = IMultiRowProps<IMultipleValuesWidgetProps>;
 
 class MultipleValuesWidgetView extends AbstractMultiRowWidget<IMulipleValuesProps> {
   public renderRow = (id, index) => {

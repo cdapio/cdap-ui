@@ -34,9 +34,9 @@ function setStateFromCron(cron = PipelineSchedulerStore.getState().cron) {
   if (!cron) {
     return;
   }
-  let cronValues = cron.split(' ');
+  const cronValues = cron.split(' ');
   let payload = {};
-  let converted12HourFormat = moment().hour(parseInt(cronValues[1]), 10);
+  const converted12HourFormat = moment().hour(parseInt(cronValues[1]), 10);
 
   // Every 5 min
   if (
@@ -123,7 +123,9 @@ function setStateFromCron(cron = PipelineSchedulerStore.getState().cron) {
       startingAtMinute: parseInt(cronValues[0], 10),
       startingAtHour: parseInt(converted12HourFormat.format('h'), 10),
       startingAtAMPM: converted12HourFormat.format('A'),
-      daysOfWeekInterval: cronValues[4].split(',').map((val) => parseInt(val), 10),
+      daysOfWeekInterval: cronValues[4]
+        .split(',')
+        .map((val) => parseInt(val), 10),
     };
   }
 
@@ -143,7 +145,10 @@ function setStateFromCron(cron = PipelineSchedulerStore.getState().cron) {
   }
 
   // Yearly
-  else if (wholeArrayIsNumeric(cronValues.slice(0, 4)) && cronValues[4] === '*') {
+  else if (
+    wholeArrayIsNumeric(cronValues.slice(0, 4)) &&
+    cronValues[4] === '*'
+  ) {
     payload = {
       intervalOption: INTERVAL_OPTIONS.YEARLY,
       startingAtMinute: parseInt(cronValues[0], 10),
@@ -171,8 +176,8 @@ function setStateFromCron(cron = PipelineSchedulerStore.getState().cron) {
 }
 
 function getCronFromState() {
-  let state = PipelineSchedulerStore.getState();
-  let converted24HourFormat = moment(
+  const state = PipelineSchedulerStore.getState();
+  const converted24HourFormat = moment(
     state.startingAtHour.toString() + state.startingAtAMPM,
     'hA'
   ).format('H');
@@ -214,7 +219,7 @@ function getCronFromState() {
 }
 
 function updateCron() {
-  let cron = getCronFromState();
+  const cron = getCronFromState();
   PipelineSchedulerStore.dispatch({
     type: PipelineSchedulerActions.SET_CRON,
     payload: {
@@ -234,7 +239,7 @@ function setSelectedProfile(selectedProfile, profileCustomizations = {}) {
 }
 
 function getTimeBasedSchedule() {
-  let { name: appId } = PipelineDetailStore.getState();
+  const { name: appId } = PipelineDetailStore.getState();
   const namespace = getCurrentNamespace();
   const scheduleName = GLOBALS.defaultScheduleId;
 
@@ -243,8 +248,9 @@ function getTimeBasedSchedule() {
     MyPreferenceApi.getAppPreferencesResolved({ namespace, appId })
   ).subscribe(
     (res) => {
-      let [currentBackendSchedule, appPrefs] = res;
-      let profileFromPreferences = appPrefs[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY];
+      const [currentBackendSchedule, appPrefs] = res;
+      const profileFromPreferences =
+        appPrefs[CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY];
       PipelineSchedulerStore.dispatch({
         type: PipelineSchedulerActions.SET_CURRENT_BACKEND_SCHEDULE,
         payload: {
@@ -255,7 +261,10 @@ function getTimeBasedSchedule() {
       setStateFromCron();
     },
     (err) => {
-      console.log('Failed to fetch dataPipelineSchedule Schedule from backend: ', err);
+      console.log(
+        'Failed to fetch dataPipelineSchedule Schedule from backend: ',
+        err
+      );
     }
   );
 }

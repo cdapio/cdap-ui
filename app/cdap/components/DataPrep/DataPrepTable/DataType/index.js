@@ -32,11 +32,17 @@ export default class DataType extends Component {
     };
 
     this.eventEmitter = ee(ee);
-    this.eventEmitter.on('DATAPREP_DATA_TYPE_CHANGED', this.changeDataTypeColor);
+    this.eventEmitter.on(
+      'DATAPREP_DATA_TYPE_CHANGED',
+      this.changeDataTypeColor
+    );
   }
 
   componentWillUnmount() {
-    this.eventEmitter.off('DATAPREP_DATA_TYPE_CHANGED', this.changeDataTypeColor);
+    this.eventEmitter.off(
+      'DATAPREP_DATA_TYPE_CHANGED',
+      this.changeDataTypeColor
+    );
   }
 
   changeDataTypeColor = (columnName) => {
@@ -48,11 +54,12 @@ export default class DataType extends Component {
   };
 
   render() {
-    let types = DataPrepStore.getState().dataprep.types;
+    const types = DataPrepStore.getState().dataprep.types;
     return (
       <div
         className={classnames('col-type', {
-          'data-type-updated': this.state.highlightedDataType === this.props.columnName,
+          'data-type-updated':
+            this.state.highlightedDataType === this.props.columnName,
         })}
       >
         {types[this.props.columnName] || T.translate(`${PREFIX}.unknown`)}

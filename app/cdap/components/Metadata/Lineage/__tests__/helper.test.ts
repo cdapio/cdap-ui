@@ -127,10 +127,18 @@ describe('Lineage helper', () => {
       },
       data: {
         'dataset.default.logs_data_sink': {
-          entityId: { dataset: 'logs_data_sink', namespace: 'default', entity: 'DATASET' },
+          entityId: {
+            dataset: 'logs_data_sink',
+            namespace: 'default',
+            entity: 'DATASET',
+          },
         },
         'dataset.default.logs_data_source': {
-          entityId: { dataset: 'logs_data_source', namespace: 'default', entity: 'DATASET' },
+          entityId: {
+            dataset: 'logs_data_source',
+            namespace: 'default',
+            entity: 'DATASET',
+          },
         },
       },
     };

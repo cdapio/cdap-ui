@@ -21,11 +21,11 @@ import T from 'i18n-react';
 
 const PREFIX = 'features.DataPrep.DataPrepSidePanel.ColumnsTab.ColumnDetail';
 export default function ColumnsTabDetail({ columnInfo }) {
-  let { types } = columnInfo;
+  const { types } = columnInfo;
   if (!types) {
     return null;
   }
-  let headers = Object.keys(types);
+  const headers = Object.keys(types);
   return (
     <tr className="column-tab-details">
       <td colSpan="6">
@@ -33,13 +33,15 @@ export default function ColumnsTabDetail({ columnInfo }) {
           <thead>
             <tr>
               <th>{T.translate(`${PREFIX}.Header.inferredType`)}</th>
-              <th className="text-right">{T.translate(`${PREFIX}.Header.percentageChange`)}</th>
+              <th className="text-right">
+                {T.translate(`${PREFIX}.Header.percentageChange`)}
+              </th>
             </tr>
           </thead>
 
           <tbody>
             {headers.map((head) => {
-              let chance = Number(Math.round(types[head] + 'e2') + 'e-2');
+              const chance = Number(Math.round(types[head] + 'e2') + 'e-2');
 
               return (
                 <tr key={head}>

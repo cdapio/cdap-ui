@@ -82,12 +82,14 @@ const JoinTypeWidgetView: React.FC<IJoinTypeWidgetProps> = ({
 }) => {
   const [joinType, setJoinType] = useState(DROP_DOWN_OPTIONS[1]);
   const [selectedCount, setSelectedCount] = useState(0);
-  const [inputs, setInputs] = useState([]);
+  const [inputs, setInputs] = useState<any[]>([]);
   const inputSchema = objectQuery(extraConfig, 'inputSchema') || [];
 
   const formatOutput = () => {
     const outputArr = inputs.filter((schema) => schema.selected).map((schema) => schema.name);
-    onChange(outputArr.join(','));
+    if (typeof onChange === 'function') {
+      onChange(outputArr.join(','));
+    }
     setSelectedCount(outputArr.length);
   };
 
@@ -161,7 +163,7 @@ const JoinTypeWidgetView: React.FC<IJoinTypeWidgetProps> = ({
             options={DROP_DOWN_OPTIONS}
             value={joinType}
             onChange={joinTypeChange}
-            disabled={disabled}
+            disabled={!!disabled}
           />
           <If condition={joinType === 'Outer'}>
             <div className={classes.checkboxesGroup}>

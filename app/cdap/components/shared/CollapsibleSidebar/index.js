@@ -43,7 +43,7 @@ export default class CollapsibleSidebar extends Component {
   }
 
   onToggleClick() {
-    let newState = !this.state.expanded;
+    const newState = !this.state.expanded;
     if (this.props.onlyOneCanOpen && newState) {
       this.eventEmitter.emit('CLOSE_ALL_COLLAPSIBLE_SIDEBAR');
     }
@@ -80,14 +80,23 @@ export default class CollapsibleSidebar extends Component {
         )}
         onClick={this.closeSidebar}
       >
-        <div className={classnames('collapsible-content', { 'show-content': this.state.expanded })}>
+        <div
+          className={classnames('collapsible-content', {
+            'show-content': this.state.expanded,
+          })}
+        >
           <div
             data-cy={this.props['data-cy']}
             data-testid={this.props['data-testid']}
-            className={classnames('collapsible-toggle-tab text-center', this.props.toggleTabClass)}
+            className={classnames(
+              'collapsible-toggle-tab text-center',
+              this.props.toggleTabClass
+            )}
             onClick={this.onToggleClick}
           >
-            <span className="toggle-tab-label">{this.props.toggleTabLabel}</span>
+            <span className="toggle-tab-label">
+              {this.props.toggleTabLabel}
+            </span>
           </div>
 
           <div className="collapsible-body" onClick={preventPropagation}>

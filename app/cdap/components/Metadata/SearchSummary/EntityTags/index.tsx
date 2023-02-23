@@ -61,7 +61,7 @@ interface IEntityTagsProps {
 }
 
 const EntityTags: React.FC<IEntityTagsProps> = ({ searchParams, onSearch, properties }) => {
-  const enterTagPlaceholder = T.translate(`${I18N_PREFIX}.enterTagPlaceholder`);
+  const enterTagPlaceholder = T.translate(`${I18N_PREFIX}.enterTagPlaceholder`).toString();
   const [tagNameToAdd, setTagNameToAdd] = useState('');
   const [invalidTagFormat, setInvalidTagFormat] = useState(false);
   const [hasDuplicateTag, setHasDuplicateTag] = useState(false);

@@ -39,21 +39,22 @@ export default class UncontrolledPopover extends Component {
     }
   }
   togglePopover() {
-    let newState = !this.state.dropdownOpen;
+    const newState = !this.state.dropdownOpen;
     this.setState({
       dropdownOpen: newState,
     });
 
     if (this.props.documentElement && newState) {
-      this.documentClick$ = Observable.fromEvent(this.props.documentElement, 'click').subscribe(
-        (e) => {
-          if (isDescendant(this.popover, e.target) || !this.state.dropdownOpen) {
-            return;
-          }
-
-          this.togglePopover();
+      this.documentClick$ = Observable.fromEvent(
+        this.props.documentElement,
+        'click'
+      ).subscribe((e) => {
+        if (isDescendant(this.popover, e.target) || !this.state.dropdownOpen) {
+          return;
         }
-      );
+
+        this.togglePopover();
+      });
       Mousetrap.bind('esc', this.togglePopover);
     } else {
       if (this.documentClick$) {
@@ -79,8 +80,8 @@ export default class UncontrolledPopover extends Component {
     );
   }
   render() {
-    let iconName = this.props.icon || 'fa-caret-square-o-down';
-    let Tag = this.props.tag || 'span';
+    const iconName = this.props.icon || 'fa-caret-square-o-down';
+    const Tag = this.props.tag || 'span';
     if (this.props.popoverElement) {
       return (
         <Tag

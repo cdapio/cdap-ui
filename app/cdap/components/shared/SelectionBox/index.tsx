@@ -14,8 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import * as Selection from '@simonwep/selection-js';
 require('./SelectionBox.scss');
 
@@ -46,9 +45,9 @@ export default function SelectionBox(props: ISelectionBoxProps) {
     onSelectionEnd,
     toggleSelection,
   } = props;
-  const [selection, setSelection] = React.useState(null);
+  const [selection, setSelection] = useState<Selection | undefined>(undefined);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setSelection(
       Selection.create({
         // Class for the selection-area
@@ -63,7 +62,7 @@ export default function SelectionBox(props: ISelectionBoxProps) {
     );
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!selection) {
       return;
     }
@@ -74,7 +73,7 @@ export default function SelectionBox(props: ISelectionBoxProps) {
     }
   }, [toggleSelection]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!selection) {
       return;
     }
@@ -84,8 +83,9 @@ export default function SelectionBox(props: ISelectionBoxProps) {
         onSelectionStart();
       }
     });
+
     selection.on('move', ({ selected, changed: { added, removed } }) => {
-      const selectedNodes = [];
+      const selectedNodes: any = [];
       for (const el of selected) {
         selectedNodes.push(el.id);
       }
@@ -93,6 +93,7 @@ export default function SelectionBox(props: ISelectionBoxProps) {
         onSelectionMove({ selected: selectedNodes });
       }
     });
+
     selection.on('stop', () => {
       if (onSelectionEnd) {
         onSelectionEnd();
@@ -107,13 +108,3 @@ export default function SelectionBox(props: ISelectionBoxProps) {
   }, [selection]);
   return null;
 }
-
-(SelectionBox as any).propTypes = {
-  boundaries: PropTypes.string.isRequired,
-  selectables: PropTypes.string.isRequired,
-  selectionClass: PropTypes.string,
-  onSelectionStart: PropTypes.func,
-  onSelectionMove: PropTypes.func,
-  onSelectionEnd: PropTypes.func,
-  toggleSelection: PropTypes.bool,
-};

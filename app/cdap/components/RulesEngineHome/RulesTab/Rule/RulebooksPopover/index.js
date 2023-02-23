@@ -35,17 +35,19 @@ export default class RulebooksPopover extends Component {
   };
 
   componentDidMount() {
-    this.documentClick$ = Observable.fromEvent(document, 'click').subscribe((e) => {
-      if (!this.popover) {
-        return;
-      }
+    this.documentClick$ = Observable.fromEvent(document, 'click').subscribe(
+      (e) => {
+        if (!this.popover) {
+          return;
+        }
 
-      if (isDescendant(this.popover, e.target) || !this.state.showPopover) {
-        return;
-      }
+        if (isDescendant(this.popover, e.target) || !this.state.showPopover) {
+          return;
+        }
 
-      this.togglePopover();
-    });
+        this.togglePopover();
+      }
+    );
   }
 
   togglePopover = () => {
@@ -65,7 +67,7 @@ export default class RulebooksPopover extends Component {
     if (!this.state.showPopover) {
       return null;
     }
-    let { rulebooks } = RulesEngineStore.getState();
+    const { rulebooks } = RulesEngineStore.getState();
     if (!rulebooks.list.length) {
       return (
         <div className="sub-menu empty">
@@ -77,7 +79,11 @@ export default class RulebooksPopover extends Component {
       <div className="sub-menu">
         {rulebooks.list.map((rb, i) => {
           return (
-            <div onClick={this.onRulebookSelect.bind(this, rb.id)} key={i} title={rb.id}>
+            <div
+              onClick={this.onRulebookSelect.bind(this, rb.id)}
+              key={i}
+              title={rb.id}
+            >
               {rb.id}
             </div>
           );
@@ -93,7 +99,10 @@ export default class RulebooksPopover extends Component {
         onClick={this.togglePopover}
         ref={(ref) => (this.popover = ref)}
       >
-        <div className="btn btn-secondary"> {T.translate(`${PREFIX}.addToRulebookbtn`)} </div>
+        <div className="btn btn-secondary">
+          {' '}
+          {T.translate(`${PREFIX}.addToRulebookbtn`)}{' '}
+        </div>
         {this.renderPopover()}
       </div>
     );

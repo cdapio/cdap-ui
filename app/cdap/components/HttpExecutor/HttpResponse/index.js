@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
 function HttpResponseView({ response }) {
   let viewResponse = response;
 
-  let type = typeof response;
+  const type = typeof response;
 
   if (type === 'object') {
     viewResponse = JSON.stringify(response, null, 2);

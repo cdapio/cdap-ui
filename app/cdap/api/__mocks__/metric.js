@@ -12,12 +12,12 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 /*
   TODO: This is just a stub(mock) for jest to not invoke the actual socket connection.
   This needs to be exported as a singleton class. Will do when we actually need to mock a function.
 */
 export default {
-  query: () => {}
+  query: () => {},
 };

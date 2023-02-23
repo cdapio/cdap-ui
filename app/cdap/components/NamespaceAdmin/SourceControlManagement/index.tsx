@@ -29,6 +29,7 @@ import { UnlinkSourceControlModal } from './UnlinkSourceControlModal';
 import StyledPasswordWrapper from 'components/AbstractWidget/FormInputs/Password';
 import { ISourceControlManagementConfig } from './types';
 import SourceControlManagementForm from './SourceControlManagementForm';
+import { INamespaceAdminState } from '../store';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -42,9 +43,10 @@ const StyledInfo = styled.div`
 export const SourceControlManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
-  const sourceControlManagementConfig: ISourceControlManagementConfig = useSelector(
-    (state) => state.sourceControlManagementConfig
-  );
+  const sourceControlManagementConfig = useSelector<
+    INamespaceAdminState,
+    ISourceControlManagementConfig
+  >((state) => state.sourceControlManagementConfig);
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
@@ -68,21 +70,34 @@ export const SourceControlManagement = () => {
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
         <PrimaryContainedButton
-          children={T.translate(`${PREFIX}.linkButton`)}
           onClick={toggleForm}
           style={{ marginBottom: '15px' }}
-        />
+        >
+          {T.translate(`${PREFIX}.linkButton`)}
+        </PrimaryContainedButton>
       )}
       {sourceControlManagementConfig && (
         <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 100px">
           <TableHeader>
             <TableRow>
-              <TableCell>{T.translate(`${PREFIX}.configModal.provider.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.repoUrl.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.auth.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.auth.pat.token`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.branch.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.pathPrefix.label`)}</TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.provider.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.repoUrl.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.auth.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.auth.pat.token`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.branch.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.pathPrefix.label`)}
+              </TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -93,13 +108,19 @@ export const SourceControlManagement = () => {
             >
               <TableCell>{sourceControlManagementConfig.provider}</TableCell>
               <TableCell>
-                <a href={sourceControlManagementConfig.link} target="_blank">
+                <a
+                  href={sourceControlManagementConfig.link}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   {sourceControlManagementConfig.link}
                 </a>
               </TableCell>
               <TableCell>{sourceControlManagementConfig.auth.type}</TableCell>
               <TableCell>
-                <StyledPasswordWrapper value={sourceControlManagementConfig.auth.token} />
+                <StyledPasswordWrapper
+                  value={sourceControlManagementConfig.auth.token}
+                />
               </TableCell>
               <TableCell>
                 {sourceControlManagementConfig.defaultBranch

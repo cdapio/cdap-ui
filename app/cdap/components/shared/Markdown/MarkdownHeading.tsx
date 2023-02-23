@@ -61,7 +61,7 @@ const styles = (theme): StyleRules => {
 };
 
 interface IMarkdownHeadingProps extends WithStyles<typeof styles>, IHeadingProps {}
-const MarkdownHeading: React.SFC<IMarkdownHeadingProps> = ({ classes, ...props }) => {
+const MarkdownHeading: React.FC<IMarkdownHeadingProps> = ({ classes, ...props }) => {
   const style = classes[`${props.type}Styles`];
   if (typeof window.angular !== 'undefined' && window.angular.version) {
     return (

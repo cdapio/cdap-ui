@@ -22,13 +22,16 @@ import Helmet from 'react-helmet';
 import { MySearchApi } from 'api/search';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import SearchBar from 'components/Metadata/SearchBar';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { processProperties } from 'components/Metadata/SearchSummary/helper';
 import EntityTopBar from 'components/Metadata/SearchSummary/EntityTopBar';
 import EntityTags from 'components/Metadata/SearchSummary/EntityTags';
 import EntitySchema from 'components/Metadata/SearchSummary/EntitySchema';
 import EntityProperties from 'components/Metadata/SearchSummary/EntityProperties';
-import { ISearchMetadata, IPropertiesResponse } from 'components/Metadata/SearchSummary/helper';
+import {
+  ISearchMetadata,
+  IPropertiesResponse,
+} from 'components/Metadata/SearchSummary/helper';
 import { Theme } from 'services/ThemeHelper';
 import { getMetadataPageUrl } from 'components/Metadata/urlHelper';
 
@@ -68,7 +71,9 @@ const SearchSummary: React.FC = () => {
   const entityType = params.entityType;
   const [redirectUrl, setRedirectUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [externalDatasetProperties, setExternalDatasetProperties] = useState({});
+  const [externalDatasetProperties, setExternalDatasetProperties] = useState(
+    {}
+  );
   const [properties, setProperties] = useState<IPropertiesResponse>({
     systemTags: [],
     hasExternalDataset: false,
@@ -91,14 +96,16 @@ const SearchSummary: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    MySearchApi.properties(searchParams).subscribe((response: ISearchMetadata) => {
-      setLoading(false);
-      const processedProperties = processProperties(response);
-      setProperties(processedProperties);
-      if (processedProperties.hasExternalDataset) {
-        fetchExternalDatasetProperties();
+    MySearchApi.properties(searchParams).subscribe(
+      (response: ISearchMetadata) => {
+        setLoading(false);
+        const processedProperties = processProperties(response);
+        setProperties(processedProperties);
+        if (processedProperties.hasExternalDataset) {
+          fetchExternalDatasetProperties();
+        }
       }
-    });
+    );
   }, []);
 
   function fetchExternalDatasetProperties() {

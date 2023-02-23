@@ -177,13 +177,17 @@ const AssessmentView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
         <React.Fragment>
           <div className={classes.headerLinks}>
             <span
-              className={classnames(classes.link, { [classes.active]: view === VIEWS.tables })}
+              className={classnames(classes.link, {
+                [classes.active]: view === VIEWS.tables,
+              })}
               onClick={() => setView(VIEWS.tables)}
             >
               Schema issues ({schemaErrorCount})
             </span>
             <span
-              className={classnames(classes.link, { [classes.active]: view === VIEWS.features })}
+              className={classnames(classes.link, {
+                [classes.active]: view === VIEWS.features,
+              })}
               onClick={() => setView(VIEWS.features)}
             >
               Missing features ({assessment.features.length})

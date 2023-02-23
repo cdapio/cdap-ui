@@ -35,7 +35,11 @@ export const reducer = (state, action) => {
       }
       return { ...state, currentStage: state.currentStage - 1 };
     case 'next':
-      return { ...state, currentStage: state.currentStage + 1, values: action.payload.values };
+      return {
+        ...state,
+        currentStage: state.currentStage + 1,
+        values: action.payload.values,
+      };
     case 'select':
       return {
         ...state,

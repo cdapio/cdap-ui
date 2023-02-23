@@ -28,8 +28,15 @@ interface IFilterShowlistInputProps {
   filterID: string;
 }
 
-const FilterShowlistInput: React.FC<IFilterShowlistInputProps> = ({ filterID }) => {
-  const { filterToShowlist, setFilterToShowlist, showToInfo, setShowToInfo } = useFilterState();
+const FilterShowlistInput: React.FC<IFilterShowlistInputProps> = ({
+  filterID,
+}) => {
+  const {
+    filterToShowlist,
+    setFilterToShowlist,
+    showToInfo,
+    setShowToInfo,
+  } = useFilterState();
 
   function setShowProperty(showID: string, property: string) {
     return (val) => {
@@ -70,7 +77,10 @@ const FilterShowlistInput: React.FC<IFilterShowlistInputProps> = ({ filterID }) 
       } else {
         // If there is only one widget left in the showlist, do not delete it.
         // Instead, reset its name and type.
-        const newShowToInfo = showToInfo.set(showToDelete, Map({ name: '', type: '' }));
+        const newShowToInfo = showToInfo.set(
+          showToDelete,
+          Map({ name: '', type: '' })
+        );
         setShowToInfo(newShowToInfo);
       }
     };
@@ -79,25 +89,32 @@ const FilterShowlistInput: React.FC<IFilterShowlistInputProps> = ({ filterID }) 
   return React.useMemo(
     () => (
       <If condition={filterToShowlist.has(filterID)}>
-        <Heading type={HeadingTypes.h6} label="Add widgets to configure" />
-        {filterToShowlist.get(filterID).map((showID: string, showIndex: number) => {
-          if (!showToInfo.has(showID)) {
-            return null;
-          }
-          const show = showToInfo.get(showID);
-          return (
-            <div key={showID} data-cy={`show-${showIndex}`}>
-              <ShowPropertyRow
-                showName={show.get('name')}
-                showType={show.get('type')}
-                setShowName={setShowProperty(showID, 'name')}
-                setShowType={setShowProperty(showID, 'type')}
-                addShowToFilter={addShowToFilter(filterID, showIndex)}
-                deleteShowFromFilter={deleteShowFromFilter(filterID, showIndex)}
-              />
-            </div>
-          );
-        })}
+        <>
+          <Heading type={HeadingTypes.h6} label="Add widgets to configure" />
+          {filterToShowlist
+            .get(filterID)
+            .map((showID: string, showIndex: number) => {
+              if (!showToInfo.has(showID)) {
+                return null;
+              }
+              const show = showToInfo.get(showID);
+              return (
+                <div key={showID} data-cy={`show-${showIndex}`}>
+                  <ShowPropertyRow
+                    showName={show.get('name')}
+                    showType={show.get('type')}
+                    setShowName={setShowProperty(showID, 'name')}
+                    setShowType={setShowProperty(showID, 'type')}
+                    addShowToFilter={addShowToFilter(filterID, showIndex)}
+                    deleteShowFromFilter={deleteShowFromFilter(
+                      filterID,
+                      showIndex
+                    )}
+                  />
+                </div>
+              );
+            })}
+        </>
       </If>
     ),
     [filterToShowlist, showToInfo]

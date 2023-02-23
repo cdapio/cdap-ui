@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2016 Cask Data, Inc.
  *
@@ -13,23 +14,44 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-var webpack = require('webpack');
-var path = require('path');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 // the clean options to use
-let cleanOptions = {
+const cleanOptions = {
   verbose: true,
   dry: false,
 };
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = (mode) =>
+  mode === 'production' || mode === 'non-optimized-production';
 
-var plugins = [
+const loaderExclude = [
+  /node_modules/,
+  /bower_components/,
+  /packaged\/public\/dist/,
+  /packaged\/public\/cdap_dist/,
+  /packaged\/public\/common_dist/,
+  /lib/,
+];
+
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
+  '/lib/',
+];
+
+const plugins = [
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -46,50 +68,41 @@ var plugins = [
         : JSON.stringify('development'),
     },
   }),
+  new ESLintPlugin({
+    extensions: ['js', 'jsx'],
+    exclude: loaderExcludeStrings,
+  }),
 ];
 
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      tslint: __dirname + '/tslint.json',
-      tslintAutoFix: true,
-      // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
 
-const loaderExclude = [
-  /node_modules/,
-  /bower_components/,
-  /packaged\/public\/dist/,
-  /packaged\/public\/cdap_dist/,
-  /packaged\/public\/common_dist/,
-  /lib/,
-];
-
-var rules = [
+const rules = [
   {
-    test: /\.s?css$/,
-    use: ['style-loader', 'css-loader', 'sass-loader'],
+    test: /\.m?js/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
+    test: /\.(sa|sc|c)ss$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
     test: /\.ya?ml$/,
     use: 'yml-loader',
   },
   {
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
-    exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
-  },
-  {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: 'babel-loader',
     exclude: loaderExclude,
   },
@@ -123,15 +136,18 @@ var rules = [
     use: 'url-loader',
   },
   {
-    test: /\.svg/,
+    test: /\.svg$/,
     use: [
       {
-        loader: 'svg-sprite-loader',
+        loader: 'webpack5-svg-sprite-loader',
       },
     ],
   },
 ];
-var webpackConfig = {
+const webpackConfig = {
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/common',
   optimization: {
@@ -195,7 +211,7 @@ var webpackConfig = {
     },
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

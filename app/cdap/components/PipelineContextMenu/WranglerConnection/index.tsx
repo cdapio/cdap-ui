@@ -38,7 +38,7 @@ const styles = (theme) => ({
     border: 0,
     background: 'transparent',
     borderLeft: `1px solid ${theme.palette.grey['300']}`,
-    fontWeight: 'bold' as 'bold',
+    fontWeight: 'bold' as const,
     fontSize: '1.5rem',
     '&:hover': {
       background: theme.palette.blue['40'],

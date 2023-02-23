@@ -32,7 +32,10 @@ const DSV = (state = initialState, action = defaultAction) => {
   switch (action.type) {
     case DSVActions.setProperty:
       stateCopy = Object.assign({}, state);
-      if (action.payload.property === null || typeof action.payload.property === 'undefined') {
+      if (
+        action.payload.property === null ||
+        typeof action.payload.property === 'undefined'
+      ) {
         return stateCopy;
       }
       stateCopy.rows[action.payload.index].property = action.payload.property;

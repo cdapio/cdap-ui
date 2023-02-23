@@ -127,7 +127,8 @@ export const EllipsisIconButton = styled(IconButton)`
 export const PluginButton = styled(Button)`
   color: #666666;
   text-transform: none;
-  min-height: ${(props) => (props.sidePanelViewType === 'icon' ? '85px' : '0')};
+  min-height: ${(props: { sidePanelViewType: string }) =>
+    props.sidePanelViewType === 'icon' ? '85px' : '0'};
   &:hover {
     ${EllipsisIconButton} {
       visibility: visible;

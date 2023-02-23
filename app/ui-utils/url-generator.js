@@ -34,7 +34,7 @@
     as a proper utility function in es6 module system.
 */
 window.getAbsUIUrl = function(navigationObj = {}) {
-  let {
+  const {
     uiApp = 'cdap',
     redirectUrl,
     clientId,
@@ -46,7 +46,7 @@ window.getAbsUIUrl = function(navigationObj = {}) {
   } = navigationObj;
   let baseUrl = `${location.protocol}//${location.host}/${uiApp}`;
   if (uiApp === 'login') {
-    baseUrl += `?`;
+    baseUrl += '?';
   }
   if (redirectUrl) {
     baseUrl += `redirectUrl=${encodeURIComponent(redirectUrl)}`;
@@ -69,16 +69,16 @@ window.getAbsUIUrl = function(navigationObj = {}) {
   return baseUrl;
 };
 function buildCustomUrl(url, params = {}) {
-  let queryParams = {};
-  for (let key in params) {
+  const queryParams = {};
+  for (const key in params) {
     if (!Object.prototype.hasOwnProperty.call(params, key)) {
       continue;
     }
-    let val = params[key];
+    const val = params[key];
 
-    let regexp = new RegExp(':' + key + '(\\W|$)', 'g');
+    const regexp = new RegExp(':' + key + '(\\W|$)', 'g');
     if (regexp.test(url)) {
-      url = url.replace(regexp, function(match, p1) {
+      url = url.replace(regexp, (match, p1) => {
         return val + p1;
       });
     } else {
@@ -94,10 +94,10 @@ function addCustomQueryParams(url, params = {}) {
   if (!params) {
     return url;
   }
-  var parts = [];
+  const parts = [];
 
   function forEachSorted(obj, iterator, context) {
-    var keys = Object.keys(params).sort();
+    const keys = Object.keys(params).sort();
     keys.forEach((key) => {
       iterator.call(context, obj[key], key);
     });
@@ -114,7 +114,7 @@ function addCustomQueryParams(url, params = {}) {
       .replace(/%20/g, pctEncodeSpaces ? '%20' : '+');
   }
 
-  forEachSorted(params, function(value, key) {
+  forEachSorted(params, (value, key) => {
     if (value === null || typeof value === 'undefined') {
       return;
     }
@@ -140,12 +140,12 @@ function addCustomQueryParams(url, params = {}) {
 }
 
 window.getDataPrepUrl = function(navigationObj = {}) {
-  let { stateName, stateParams } = navigationObj;
+  const { stateName, stateParams } = navigationObj;
 
-  let uiApp = 'cdap';
-  let baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
+  const uiApp = 'cdap';
+  const baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
 
-  let stateToUrlMap = {
+  const stateToUrlMap = {
     connections: '/connections',
     workspaces: '/wrangler',
   };
@@ -156,10 +156,10 @@ window.getDataPrepUrl = function(navigationObj = {}) {
 };
 
 window.getTrackerUrl = function(navigationObj = {}) {
-  let { stateName, stateParams } = navigationObj;
-  let uiApp = 'metadata';
-  let baseUrl = `${location.protocol}//${location.host}/cdap/ns/:namespace/${uiApp}`;
-  let stateToUrlMap = {
+  const { stateName, stateParams } = navigationObj;
+  const uiApp = 'metadata';
+  const baseUrl = `${location.protocol}//${location.host}/cdap/ns/:namespace/${uiApp}`;
+  const stateToUrlMap = {
     tracker: '',
     'tracker.detail': '',
     'tracker.detail.entity': '/entity/:entityType/:entityId',
@@ -172,10 +172,10 @@ window.getTrackerUrl = function(navigationObj = {}) {
   return url;
 };
 window.getHydratorUrl = function(navigationObj = {}) {
-  let { stateName, stateParams } = navigationObj;
-  let uiApp = stateName === 'hydrator.list' ? 'cdap' : 'pipelines';
-  let baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
-  let stateToUrlMap = {
+  const { stateName, stateParams } = navigationObj;
+  const uiApp = stateName === 'hydrator.list' ? 'cdap' : 'pipelines';
+  const baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
+  const stateToUrlMap = {
     hydrator: '',
     'hydrator.create': '/studio',
     'hydrator.detail': '/view/:pipelineId',
@@ -186,10 +186,10 @@ window.getHydratorUrl = function(navigationObj = {}) {
   return url;
 };
 window.getOldCDAPUrl = function(navigationObj = {}) {
-  let { stateName, stateParams } = navigationObj;
-  let uiApp = 'oldcdap';
-  let baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
-  let stateToUrlMap = {
+  const { stateName, stateParams } = navigationObj;
+  const uiApp = 'oldcdap';
+  const baseUrl = `${location.protocol}//${location.host}/${uiApp}/ns/:namespace`;
+  const stateToUrlMap = {
     'datasets.detail.overview.status': '/datasets/:datasetId/overview/status',
     'datasets.detail.overview.explore': '/datasets/:datasetId/overview/explore',
     'streams.detail.overview.status': '/streams/:streamId/overview/status',
@@ -198,9 +198,11 @@ window.getOldCDAPUrl = function(navigationObj = {}) {
     'apps.detail.overview.programs': '/apps/:appId/overview/programs',
     'mapreduce.detail': '/apps/:appId/programs/mapreduce/:programId/runs',
     'workflows.detail': '/apps/:appId/programs/workflows/:programId/runs',
-    'workflows.detail.run': '/apps/:appId/programs/workflows/:programId/runs/:runId',
+    'workflows.detail.run':
+      '/apps/:appId/programs/workflows/:programId/runs/:runId',
     'workers.detail': '/apps/:appId/programs/workers/:programId/runs',
-    'workers.detail.run': '/apps/:appId/programs/workers/:programId/runs/:runId',
+    'workers.detail.run':
+      '/apps/:appId/programs/workers/:programId/runs/:runId',
     'spark.detail': '/apps/:appId/programs/spark/:programId/runs',
     'spark.detail.run': '/apps/:appId/programs/spark/:programId/runs/:runId',
     'flows.detail': '/apps/:appId/programs/flows/:programId/runs',

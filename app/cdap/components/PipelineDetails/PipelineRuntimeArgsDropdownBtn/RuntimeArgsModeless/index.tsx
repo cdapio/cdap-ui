@@ -24,12 +24,19 @@ import {
 import BtnWithLoading from 'components/shared/BtnWithLoading';
 import PipelineRunTimeArgsCounter from 'components/PipelineDetails/PipelineRuntimeArgsCounter';
 import { connect } from 'react-redux';
-import { convertKeyValuePairsToMap, preventPropagation } from 'services/helpers';
+import {
+  convertKeyValuePairsToMap,
+  preventPropagation,
+} from 'services/helpers';
 import Popover from 'components/shared/Popover';
 import T from 'i18n-react';
-import If from 'components/shared/If';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+  // CDAP-20181
+  // @ts-ignore
+} from '@material-ui/styles/withStyles';
 
 const styles = (theme): StyleRules => {
   return {
@@ -68,6 +75,7 @@ interface IRuntimeArgsModelessProps extends WithStyles<typeof styles> {
   runtimeArgs: any;
   onClose: () => void;
   isLatestVersion: boolean;
+  classes: any;
 }
 
 const I18N_PREFIX =
@@ -120,7 +128,9 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
     this.toggleSavingAndRun();
     const { runtimeArgs } = this.props;
     // Arguments with empty values are assumed to be provided from the pipeline
-    runtimeArgs.pairs = runtimeArgs.pairs.filter((runtimeArg) => runtimeArg.value);
+    runtimeArgs.pairs = runtimeArgs.pairs.filter(
+      (runtimeArg) => runtimeArg.value
+    );
     const runtimeArgsMap = convertKeyValuePairsToMap(runtimeArgs.pairs);
     runPipeline(runtimeArgsMap, false).subscribe(
       () => {
@@ -160,7 +170,11 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           data-cy="save-runtime-args-btn"
           data-testid="save-runtime-args-btn"
           onClick={this.saveRuntimeArgs}
-          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
+          disabled={
+            !this.props.isLatestVersion ||
+            this.state.saving ||
+            this.state.savingAndRun
+          }
           label="Save"
         />
       );
@@ -171,7 +185,11 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
           loading={this.state.savingAndRun}
           className="btn btn-secondary"
           onClick={this.runPipelineWithArguments}
-          disabled={!this.props.isLatestVersion || this.state.saving || this.state.savingAndRun}
+          disabled={
+            !this.props.isLatestVersion ||
+            this.state.saving ||
+            this.state.savingAndRun
+          }
           label="Run"
           data-cy="run-deployed-pipeline-modal-btn"
           data-testid="run-deployed-pipeline-modal-btn"
@@ -213,7 +231,10 @@ class RuntimeArgsModeless extends PureComponent<IRuntimeArgsModelessProps> {
               <PipelineRunTimeArgsCounter />
             </div>
             {this.state.error && (
-              <div className={classes.errorContainer} data-testid="pipeline-runtime-args-error">
+              <div
+                className={classes.errorContainer}
+                data-testid="pipeline-runtime-args-error"
+              >
                 {this.state.error}
               </div>
             )}

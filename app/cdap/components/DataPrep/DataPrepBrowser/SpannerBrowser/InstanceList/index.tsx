@@ -27,7 +27,7 @@ import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';
 
-const PREFIX = `features.DataPrep.DataPrepBrowser.SpannerBrowser`;
+const PREFIX = 'features.DataPrep.DataPrepBrowser.SpannerBrowser';
 
 interface IMatchParams {
   connectionId: string;
@@ -112,7 +112,9 @@ class SpannerInstanceListView extends React.PureComponent<ISpannerInstanceListVi
     return (
       <div className="list-view-container">
         <div className="sub-panel">
-          {T.translate(`${PREFIX}.instanceCount`, { context: instanceList.length })}
+          {T.translate(`${PREFIX}.instanceCount`, {
+            context: instanceList.length,
+          })}
         </div>
 
         <div className="list-table">
@@ -157,6 +159,6 @@ const mapStateToProps = (state): Partial<ISpannerInstanceListViewProps> => {
   };
 };
 
-const SpannerInstanceList = connect(mapStateToProps)(SpannerInstanceListView);
+const SpannerInstanceList: any = connect(mapStateToProps)(SpannerInstanceListView);
 
 export default SpannerInstanceList;

@@ -23,7 +23,6 @@ import ee from 'event-emitter';
 import { getDefaultEmptyAvroSchema } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
 import PropTypes from 'prop-types';
 import LoadingSVG from 'components/shared/LoadingSVG';
-import If from 'components/shared/If';
 import Textbox from 'components/AbstractWidget/FormInputs/TextBox';
 import { RefreshableSchemaEditor } from 'components/PluginSchemaEditor/RefreshableSchemaEditor';
 import ConfigurableTab, {
@@ -34,7 +33,6 @@ import ConfigurableTab, {
 import classnames from 'classnames';
 import { objectQuery, isNilOrEmptyString } from 'services/helpers';
 import Alert from 'components/shared/Alert';
-import { isObject } from 'vega-lite/build/src/util';
 import { isMacro } from 'services/helpers';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import isEqual from 'lodash/isEqual';
@@ -493,7 +491,10 @@ class PluginSchemaEditorBase extends React.PureComponent<
       } else {
         // For all other plugins if there is no schema and if it is not disabled show default empty schema.
         incomingSchemas = [
-          { name: 'etlSchemaBody', schema: JSON.stringify(getDefaultEmptyAvroSchema()) },
+          {
+            name: 'etlSchemaBody',
+            schema: JSON.stringify(getDefaultEmptyAvroSchema()),
+          },
         ];
       }
     }
@@ -579,7 +580,7 @@ class PluginSchemaEditorBase extends React.PureComponent<
         })}
       >
         <div className={classes.title}>{schemaTitle || 'Schema'}</div>
-        <If condition={this.actions && this.actions.length > 0}>
+        {this.actions && this.actions.length > 0 && (
           <Select
             classes={{ root: classes.actionsDropdown }}
             value={''}
@@ -596,7 +597,7 @@ class PluginSchemaEditorBase extends React.PureComponent<
             }}
             dataCy="schema-actions-dropdown"
           />
-        </If>
+        )}
       </div>
     );
   };
@@ -610,11 +611,11 @@ class PluginSchemaEditorBase extends React.PureComponent<
         data-cy={`${this.props.schemaTitle}`}
       >
         {this.renderHeader()}
-        <If condition={this.state.loading}>
+        {this.state.loading && (
           <div className={classes.loadingContainer}>
             <LoadingSVG />
           </div>
-        </If>
+        )}
         <Alert
           showAlert={!isNilOrEmptyString(this.state.error)}
           message={this.state.error}

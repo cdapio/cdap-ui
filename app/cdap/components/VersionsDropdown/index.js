@@ -17,8 +17,13 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import {MyAppApi} from 'api/app';
+import {
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
+import { MyAppApi } from 'api/app';
 import NamespaceStore from 'services/NamespaceStore';
 
 export default class VersionsDropdown extends Component {
@@ -28,43 +33,41 @@ export default class VersionsDropdown extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       dropdownOpen: false,
-      versions: []
+      versions: [],
     };
   }
   fetchVersions() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
-    let appId = this.props.entity.id;
-    MyAppApi
-      .getVersions({
-        namespace,
-        appId
-      })
-      .subscribe((res) => {
-        let versions = res.map(version => {
-          if (version === '-SNAPSHOT') {
-            return '1.0.0-SNAPSHOT';
-          }
-          return version;
-        });
-        this.setState({
-          versions
-        });
+    const namespace = NamespaceStore.getState().selectedNamespace;
+    const appId = this.props.entity.id;
+    MyAppApi.getVersions({
+      namespace,
+      appId,
+    }).subscribe((res) => {
+      const versions = res.map((version) => {
+        if (version === '-SNAPSHOT') {
+          return '1.0.0-SNAPSHOT';
+        }
+        return version;
       });
+      this.setState({
+        versions,
+      });
+    });
   }
   componentWillMount() {
     this.fetchVersions();
   }
   componentWillReceiveProps(newProps) {
-    let {entity} = newProps;
+    const { entity } = newProps;
     if (this.props.entity.id !== entity.id) {
       this.setState({
-        entity
+        entity,
       });
     }
   }
   toggle() {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: !this.state.dropdownOpen,
     });
   }
 
@@ -72,21 +75,17 @@ export default class VersionsDropdown extends Component {
     return (
       <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
         <DropdownToggle caret>
-          {this.state.versions.length ? this.state.versions[0]: 'N/A'}
+          {this.state.versions.length ? this.state.versions[0] : 'N/A'}
         </DropdownToggle>
         <DropdownMenu>
-          {
-            this.state.versions.map( version => {
-              return (
-                <DropdownItem>{version}</DropdownItem>
-              );
-            })
-          }
+          {this.state.versions.map((version) => {
+            return <DropdownItem>{version}</DropdownItem>;
+          })}
         </DropdownMenu>
       </ButtonDropdown>
     );
   }
 }
 VersionsDropdown.propTypes = {
-  entity: PropTypes.object
+  entity: PropTypes.object,
 };

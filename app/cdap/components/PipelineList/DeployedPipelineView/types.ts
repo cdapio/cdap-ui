@@ -19,10 +19,10 @@ export interface IPipeline {
   artifact: {
     name: string;
   };
-  runs: Array<{
+  runs: {
     status: string;
     starting: string | number;
-  }>;
+  }[];
   totalRuns: number;
   nextRuntime: {
     id: string;

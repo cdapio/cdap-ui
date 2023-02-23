@@ -18,14 +18,24 @@ import moment from 'moment';
 import { DAY_IN_SEC } from 'components/OpsDashboard/store/ActionCreator';
 import uniqWith from 'lodash/uniqWith';
 
-export function parseDashboardData(rawData, startTime, duration, pipeline, customApp) {
-  let { buckets, timeArray } = setBuckets(startTime, duration);
+export function parseDashboardData(
+  rawData,
+  startTime,
+  duration,
+  pipeline,
+  customApp
+) {
+  const { buckets, timeArray } = setBuckets(startTime, duration);
 
   let pipelineCount = 0,
     customAppCount = 0;
 
   rawData.forEach((runInfo) => {
-    if (['cdap-data-pipeline', 'cdap-data-streams'].indexOf(runInfo.artifact.name) !== -1) {
+    if (
+      ['cdap-data-pipeline', 'cdap-data-streams'].indexOf(
+        runInfo.artifact.name
+      ) !== -1
+    ) {
       pipelineCount++;
 
       if (!pipeline) {
@@ -39,8 +49,8 @@ export function parseDashboardData(rawData, startTime, duration, pipeline, custo
       }
     }
 
-    let startTime = getBucket(runInfo.start * 1000);
-    let endTime = getBucket(runInfo.end * 1000);
+    const startTime = getBucket(runInfo.start * 1000);
+    const endTime = getBucket(runInfo.end * 1000);
     let runningTime;
 
     if (buckets[startTime]) {
@@ -54,7 +64,7 @@ export function parseDashboardData(rawData, startTime, duration, pipeline, custo
 
       if (runInfo.running && runInfo.start) {
         // aggregate delay
-        let delay = runInfo.running - runInfo.start;
+        const delay = runInfo.running - runInfo.start;
         buckets[startTime].delay += delay;
       }
     }
@@ -84,12 +94,15 @@ export function parseDashboardData(rawData, startTime, duration, pipeline, custo
       // or the program is still running, but we shouldn't show it as
       // running past the bucket of current time
       if (endIndex === -1) {
-        let currentTimeBucketIndex = timeArray.indexOf(getBucket(Date.now()));
-        endIndex = currentTimeBucketIndex === -1 ? timeArray.length - 1 : currentTimeBucketIndex;
+        const currentTimeBucketIndex = timeArray.indexOf(getBucket(Date.now()));
+        endIndex =
+          currentTimeBucketIndex === -1
+            ? timeArray.length - 1
+            : currentTimeBucketIndex;
       }
 
       for (let i = startIndex; i <= endIndex; i++) {
-        let time = timeArray[i];
+        const time = timeArray[i];
 
         if (buckets[time]) {
           buckets[time].running++;
@@ -105,7 +118,7 @@ export function parseDashboardData(rawData, startTime, duration, pipeline, custo
     });
   });
 
-  let data = Object.keys(buckets).map((time) => {
+  const data = Object.keys(buckets).map((time) => {
     return {
       ...buckets[time],
       time,
@@ -130,13 +143,13 @@ function getBucket(time) {
 }
 
 function setBuckets(startTime, duration) {
-  let buckets = {};
-  let timeArray = [];
+  const buckets = {};
+  const timeArray = [];
 
-  let start = startTime * 1000;
+  const start = startTime * 1000;
 
   // hourly or per 5 minutes
-  let numBuckets = duration === DAY_IN_SEC ? 24 : 12;
+  const numBuckets = duration === DAY_IN_SEC ? 24 : 12;
 
   for (let i = 0; i < numBuckets; i++) {
     let time = moment(start).startOf('hour');

@@ -83,7 +83,7 @@ const FieldWrapperBase = ({
    */
   const spacing = (ancestors.length - 1) * INDENTATION_SPACING;
   const firstColumn = '20px';
-  const thirdColumn = `96px`;
+  const thirdColumn = '96px';
   const errorColumn = '10px';
   const secondColumn = `calc(100% - (${firstColumn} + ${thirdColumn} + ${errorColumn}))`;
   let customStyles: React.CSSProperties = {

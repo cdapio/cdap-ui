@@ -52,7 +52,7 @@ export default class DataPrepAutoComplete extends Component {
   }
 
   componentDidMount() {
-    let directiveInput = document.getElementById('directive-input');
+    const directiveInput = document.getElementById('directive-input');
     this.mousetrap = new Mousetrap(directiveInput);
 
     this.mousetrap.bind('esc', this.props.toggle);
@@ -78,7 +78,7 @@ export default class DataPrepAutoComplete extends Component {
   }
 
   getUsage() {
-    let namespace = NamespaceStore.getState().selectedNamespace;
+    const namespace = NamespaceStore.getState().selectedNamespace;
 
     MyDataPrepApi.getUsage({ context: namespace }).subscribe((res) => {
       const fuseOptions = {
@@ -103,7 +103,7 @@ export default class DataPrepAutoComplete extends Component {
       return;
     }
 
-    let eventObject = {
+    const eventObject = {
       target: { value: `${row.item.directive} ` },
     };
 
@@ -121,7 +121,9 @@ export default class DataPrepAutoComplete extends Component {
       return;
     }
 
-    this.setState({ activeSelectionIndex: this.state.activeSelectionIndex - 1 });
+    this.setState({
+      activeSelectionIndex: this.state.activeSelectionIndex - 1,
+    });
   }
 
   handleDownArrow(e) {
@@ -130,11 +132,16 @@ export default class DataPrepAutoComplete extends Component {
     } else {
       e.returnValue = false;
     }
-    if (this.state.activeSelectionIndex === this.state.activeResults.length - 1) {
+    if (
+      this.state.activeSelectionIndex ===
+      this.state.activeResults.length - 1
+    ) {
       return;
     }
 
-    this.setState({ activeSelectionIndex: this.state.activeSelectionIndex + 1 });
+    this.setState({
+      activeSelectionIndex: this.state.activeSelectionIndex + 1,
+    });
   }
 
   handleEnterKey() {
@@ -142,24 +149,34 @@ export default class DataPrepAutoComplete extends Component {
       return;
     }
 
-    let selectedDirective = this.state.activeResults[this.state.activeSelectionIndex];
+    const selectedDirective = this.state.activeResults[
+      this.state.activeSelectionIndex
+    ];
 
-    let inputSplit = this.state.input.split(' '),
-      directiveSplit = selectedDirective ? selectedDirective.item.directive.split(' ') : [];
+    const inputSplit = this.state.input.split(' '),
+      directiveSplit = selectedDirective
+        ? selectedDirective.item.directive.split(' ')
+        : [];
 
-    let splitLengthCheck = inputSplit.length < directiveSplit.length,
+    const splitLengthCheck = inputSplit.length < directiveSplit.length,
       stringLengthCheck =
-        selectedDirective && this.state.input.length <= selectedDirective.item.directive.length;
+        selectedDirective &&
+        this.state.input.length <= selectedDirective.item.directive.length;
 
     if (selectedDirective && (splitLengthCheck || stringLengthCheck)) {
-      this.handleRowClick(this.state.activeResults[this.state.activeSelectionIndex]);
+      this.handleRowClick(
+        this.state.activeResults[this.state.activeSelectionIndex]
+      );
     } else {
       this.props.execute([this.state.input]);
     }
   }
 
   handleTabKey(e) {
-    if (this.state.input.length === 0 || this.state.input.split(' ').length !== 1) {
+    if (
+      this.state.input.length === 0 ||
+      this.state.input.split(' ').length !== 1
+    ) {
       return;
     }
 
@@ -175,7 +192,7 @@ export default class DataPrepAutoComplete extends Component {
   searchMatch(query) {
     let results = [];
     let input = query;
-    let spaceIndex = input.indexOf(' ');
+    const spaceIndex = input.indexOf(' ');
     if (spaceIndex !== -1) {
       input = input.slice(0, spaceIndex);
     }
@@ -232,9 +249,12 @@ export default class DataPrepAutoComplete extends Component {
               <div className="directive-title">
                 <strong>{row.item.directive}</strong>
               </div>
-              <div className="directive-description">{row.item.description}</div>
+              <div className="directive-description">
+                {row.item.description}
+              </div>
 
-              {this.state.matchedmatched || this.state.activeResults.length === 1 ? (
+              {this.state.matchedmatched ||
+              this.state.activeResults.length === 1 ? (
                 <div className="directive-usage">
                   <span>Usage: </span>
                   <pre>{row.item.usage}</pre>

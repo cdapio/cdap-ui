@@ -15,20 +15,26 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/styles/withStyles';
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
+import { WithStyles, StyleRules } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core';
 import ThemeWrapper from 'components/ThemeWrapper';
 import {
   SchemaManager,
   ISchemaManager,
   IOnChangeReturnType,
 } from 'components/AbstractWidget/SchemaEditor/Context/SchemaManager';
-import { ISchemaType, IFieldType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
+import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import {
   IFlattenRowType,
   IFieldIdentifier,
   IOnChangePayload,
 } from 'components/AbstractWidget/SchemaEditor/EditorTypes';
-import { FieldsList, FieldsListBase } from 'components/AbstractWidget/SchemaEditor/FieldsList';
+import {
+  FieldsList,
+  FieldsListBase,
+} from 'components/AbstractWidget/SchemaEditor/FieldsList';
 import {
   SchemaValidatorConsumer,
   SchemaValidatorProvider,
@@ -72,7 +78,10 @@ interface ISchemaEditorState {
   resetErrors: boolean;
 }
 
-class SchemaEditorBase extends React.Component<ISchemaEditorProps, ISchemaEditorState> {
+class SchemaEditorBase extends React.Component<
+  ISchemaEditorProps,
+  ISchemaEditorState
+> {
   private schema: ISchemaManager = null;
   private validate;
   constructor(props) {
@@ -89,7 +98,10 @@ class SchemaEditorBase extends React.Component<ISchemaEditorProps, ISchemaEditor
   }
   public componentDidMount() {
     if (this.validate) {
-      this.validate(this.schema.getFlatSchema()[1], this.schema.getSchemaTree());
+      this.validate(
+        this.schema.getFlatSchema()[1],
+        this.schema.getSchemaTree()
+      );
     }
   }
 
@@ -118,7 +130,11 @@ class SchemaEditorBase extends React.Component<ISchemaEditorProps, ISchemaEditor
       this.setState(newState as ISchemaEditorState);
     }
   }
-  public onChange = (validate, fieldId: IFieldIdentifier, onChangePayload: IOnChangePayload) => {
+  public onChange = (
+    validate,
+    fieldId: IFieldIdentifier,
+    onChangePayload: IOnChangePayload
+  ) => {
     const { fieldIdToFocus } = this.schema.onChange(fieldId, onChangePayload);
     this.setState({
       flat: this.schema.getFlatSchema(),
@@ -142,7 +158,10 @@ class SchemaEditorBase extends React.Component<ISchemaEditorProps, ISchemaEditor
     const { classes } = this.props;
     return (
       <div>
-        <SchemaValidatorProvider errors={this.state.errors} reset={this.state.resetErrors}>
+        <SchemaValidatorProvider
+          errors={this.state.errors}
+          reset={this.state.resetErrors}
+        >
           <div className={classes.schemaContainer}>
             <SchemaValidatorConsumer>
               {({ validate }) => {

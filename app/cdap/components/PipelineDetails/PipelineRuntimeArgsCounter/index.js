@@ -32,13 +32,19 @@ const getTotalRuntimeArgsCount = (runtimeArgs) => {
 };
 
 function PipelineRuntimeArgsCounter({ runtimeArgs }) {
-  let runtimeArgsCount = getTotalRuntimeArgsCount(runtimeArgs);
+  const runtimeArgsCount = getTotalRuntimeArgsCount(runtimeArgs);
   if (runtimeArgsCount === 0) {
-    return <span className="pipeline-runtime-args-counter">No runtime arguments</span>;
+    return (
+      <span className="pipeline-runtime-args-counter">
+        No runtime arguments
+      </span>
+    );
   }
   return (
     <span className="pipeline-runtime-args-counter">
-      {`${runtimeArgsCount} runtime argument${runtimeArgsCount === 1 ? '' : 's'}`}
+      {`${runtimeArgsCount} runtime argument${
+        runtimeArgsCount === 1 ? '' : 's'
+      }`}
     </span>
   );
 }
@@ -48,8 +54,12 @@ PipelineRuntimeArgsCounter.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    runtimeArgs: getFilteredRuntimeArgs(ownProps.runtimeArgs || state.runtimeArgs),
+    runtimeArgs: getFilteredRuntimeArgs(
+      ownProps.runtimeArgs || state.runtimeArgs
+    ),
   };
 };
-const ConnectedPipelinRuntimeArgsCounter = connect(mapStateToProps)(PipelineRuntimeArgsCounter);
+const ConnectedPipelinRuntimeArgsCounter = connect(mapStateToProps)(
+  PipelineRuntimeArgsCounter
+);
 export default ConnectedPipelinRuntimeArgsCounter;

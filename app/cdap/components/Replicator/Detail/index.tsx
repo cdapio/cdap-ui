@@ -330,7 +330,7 @@ class DetailView extends React.PureComponent<IDetailProps, IDetailContext> {
         targetPlugin$,
         targetWidget$
       ).subscribe(
-        ([sourcePluginInfo, sourcePluginWidget, targetPluginInfo, targetPluginWidget]) => {
+        ([sourcePluginInfo, sourcePluginWidget, targetPluginInfo, targetPluginWidget]: any) => {
           this.setState({
             sourcePluginInfo,
             sourcePluginWidget,

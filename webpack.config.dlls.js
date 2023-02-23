@@ -12,9 +12,9 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-var cdapdllconfig = require('./webpack.config.cdap.dll.js');
-var shareddllconfig = require('./webpack.config.shared.dll.js');
+const cdapdllconfig = require('./webpack.config.cdap.dll.js');
+const shareddllconfig = require('./webpack.config.shared.dll.js');
 
 module.exports = [cdapdllconfig, shareddllconfig];

@@ -23,6 +23,6 @@ jest.mock('services/NamespaceStore', () => ({
 describe('Unit Tests for Helpers: "getConnectionPath"', () => {
   it('Should return the connection path', () => {
     expect(getConnectionPath('', '/')).toBe(null);
-    expect(getConnectionPath('foo', '/root')).toBe(`/ns/default/connections/foo?path=/root`);
+    expect(getConnectionPath('foo', '/root')).toBe('/ns/default/connections/foo?path=/root');
   });
 });

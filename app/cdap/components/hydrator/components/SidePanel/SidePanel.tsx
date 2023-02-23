@@ -274,7 +274,6 @@ export const SidePanel = ({
               >
                 <EllipsisIconButton
                   aria-label={`show more ${label}`}
-                  component="span"
                   onClick={handleClickShowDetails}
                 >
                   {MoreIconButton}
@@ -296,6 +295,9 @@ export const SidePanel = ({
               </div>
             )}
             {sidePanelViewType === 'list' && (
+              // seems to be a known issue https://github.com/mui/material-ui/issues/14971
+              // with this type
+              // @ts-ignore
               <PluginListItem>
                 {plugin.showCustomIcon && (
                   <ListCustomIcon className="fa">

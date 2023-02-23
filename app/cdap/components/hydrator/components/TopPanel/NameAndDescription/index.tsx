@@ -99,7 +99,7 @@ export const NameAndDescription = ({
                 id="pipeline-name-input"
                 variant="outlined"
                 placeholder="Name your pipeline"
-                onKeyUp={onEnterOnMetadata}
+                onKeyUp={onEnterOnMetadata as any}
                 onChange={handleNameChange}
                 value={name}
               />

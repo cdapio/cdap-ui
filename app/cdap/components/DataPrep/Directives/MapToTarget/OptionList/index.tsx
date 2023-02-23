@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type Option = IDataModel | IModel | IModelField;
+type IOption = IDataModel | IModel | IModelField;
 
 interface IOptionListProps {
   loading: boolean;
@@ -92,8 +92,8 @@ export const OptionList = (props: IOptionListProps) => {
     return null;
   }
 
-  let options: Option[];
-  let onOptionClick: (option: Option) => void;
+  let options: IOption[];
+  let onOptionClick: (option: IOption) => void;
   if (model) {
     options = model.fields;
     onOptionClick = onFieldSelect;

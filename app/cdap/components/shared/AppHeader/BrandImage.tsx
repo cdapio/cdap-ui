@@ -30,7 +30,7 @@ interface IBrandImageProps extends WithStyles<typeof imageStyle> {
   context: INamespaceLinkContext;
 }
 
-const BrandImage: React.SFC<IBrandImageProps> = ({ classes, context }) => {
+const BrandImage: React.FC<IBrandImageProps> = ({ classes, context }) => {
   const brandLogoSrc = Theme.productLogoNavbar || '/cdap_assets/img/company_logo-20-all.png';
   const { isNativeLink } = context;
   const namespace = getCurrentNamespace();

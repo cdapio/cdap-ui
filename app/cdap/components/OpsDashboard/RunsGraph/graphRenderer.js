@@ -26,46 +26,52 @@ import numeral from 'numeral';
 const AXIS_BUFFER = 1.1;
 const MIN_Y_AXIS = 1;
 
-export function renderGraph(selector, containerWidth, containerHeight, data, viewByOption) {
-  let margin = {
+export function renderGraph(
+  selector,
+  containerWidth,
+  containerHeight,
+  data,
+  viewByOption
+) {
+  const margin = {
     top: 45,
     right: 60,
     bottom: 40,
     left: 60,
   };
-  let width = containerWidth - margin.left - margin.right,
+  const width = containerWidth - margin.left - margin.right,
     height = containerHeight - margin.top - margin.bottom;
 
-  let svg = d3
+  const svg = d3
     .select(selector)
     .attr('height', containerHeight)
     .attr('width', containerWidth);
 
   // Clear out existing graph
-  let groupElem = d3.select(`${selector} > .graph-group-container`);
+  const groupElem = d3.select(`${selector} > .graph-group-container`);
   groupElem.remove();
 
   // Start graph render
-  let chart = svg
+  const chart = svg
     .append('g')
     .attr('class', 'graph-group-container')
     .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-  let x = d3
+  const x = d3
     .scaleBand()
     .rangeRound([0, width])
     .paddingInner(0)
     .paddingOuter(0);
 
-  let dateX = d3
+  const dateX = d3
     .scaleBand()
     .rangeRound([0, width])
     .paddingInner(0)
     .paddingOuter(0);
 
-  let yLeft = d3.scaleLinear().range([height, 0]);
+  const yLeft = d3.scaleLinear().range([height, 0]);
 
-  let yRight = d3.scaleLinear().range([height, 0]);
+  const yRight = d3.scaleLinear().range([height, 0]);
 
   // SETTING DOMAINS
   x.domain(data.map((d) => d.time));
@@ -77,7 +83,9 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   if (viewByOption === ViewByOptions.startMethod) {
     yLeftMax = d3.max(data, (d) => d.manual + d.schedule);
   } else {
-    yLeftMax = d3.max(data, (d) => Math.max(d.running, d.successful + d.failed));
+    yLeftMax = d3.max(data, (d) =>
+      Math.max(d.running, d.successful + d.failed)
+    );
   }
 
   let yRightMax = d3.max(data, (d) => d.delay);
@@ -89,19 +97,19 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   yRight.domain([0, yRightMax * AXIS_BUFFER]).nice();
 
   // RENDER AXIS
-  let barPadding = 2;
-  let stepWidth = x.bandwidth();
-  let barWidth = (stepWidth - barPadding * 6) / 2;
+  const barPadding = 2;
+  const stepWidth = x.bandwidth();
+  const barWidth = (stepWidth - barPadding * 6) / 2;
 
   // X Axis
-  let xAxis = d3
+  const xAxis = d3
     .axisBottom(x)
     .tickSizeInner(-height)
     .tickSizeOuter(0)
     .tickFormat(d3.timeFormat('%-I %p'));
 
-  let axisOffset = barWidth + barPadding * 2;
-  let xAxisGroup = chart
+  const axisOffset = barWidth + barPadding * 2;
+  const xAxisGroup = chart
     .append('g')
     .attr('class', 'axis axis-x')
     .attr('transform', `translate(${axisOffset}, ${height})`)
@@ -122,38 +130,41 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   // X Axis Legend
   // need to add some pixels show the legend doesn't appear outside
   // the graph container
-  let legendYOffset = margin.top + 2;
-  let localTimeZone = moment.tz(moment.tz.guess()).format('z');
+  const legendYOffset = margin.top + 2;
+  const localTimeZone = moment.tz(moment.tz.guess()).format('z');
 
   chart
     .append('g')
     .attr('class', 'legend axis-x-legend')
     .append('text')
-    .attr('transform', `translate(${width / 2}, ${containerHeight - legendYOffset})`)
+    .attr(
+      'transform',
+      `translate(${width / 2}, ${containerHeight - legendYOffset})`
+    )
     .text(`Time (${localTimeZone})`);
 
   // Dates axis
-  let dateMap = {};
+  const dateMap = {};
   data.forEach((d) => {
-    let time = parseInt(d.time, 10);
-    let key = moment(time).format('ddd. MMM D, YYYY');
+    const time = parseInt(d.time, 10);
+    const key = moment(time).format('ddd. MMM D, YYYY');
     if (!dateMap[key]) {
       dateMap[key] = 0;
     }
     dateMap[key]++;
   });
 
-  let dates = Object.keys(dateMap);
-  let firstDateIndex = Math.floor(dateMap[dates[0]] / 2) || 1;
-  let secondDateIndex = Math.floor(dateMap[dates[0]] + dateMap[dates[1]] / 2);
+  const dates = Object.keys(dateMap);
+  const firstDateIndex = Math.floor(dateMap[dates[0]] / 2) || 1;
+  const secondDateIndex = Math.floor(dateMap[dates[0]] + dateMap[dates[1]] / 2);
 
-  let dateAxis = d3
+  const dateAxis = d3
     .axisTop(dateX)
     .tickFormat(d3.timeFormat('%a. %b %e, %Y'))
     .tickSizeInner(0)
     .tickSizeOuter(0);
 
-  let dateAxisGroup = chart
+  const dateAxisGroup = chart
     .append('g')
     .attr('class', 'axis axis-date')
     .call(dateAxis);
@@ -169,14 +180,14 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   dateAxisGroup.select('.domain').remove();
 
   // Separator between two dates
-  let datesSeparatorIndex = dateMap[dates[0]];
+  const datesSeparatorIndex = dateMap[dates[0]];
 
   xAxisGroup
     .select(`.tick:nth-child(${datesSeparatorIndex})`)
     .select('line')
     .attr('stroke-width', '2');
 
-  let tickOffset = stepWidth / 2 - barPadding;
+  const tickOffset = stepWidth / 2 - barPadding;
 
   dateAxisGroup
     .select(`.tick:nth-child(${datesSeparatorIndex})`)
@@ -187,14 +198,17 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
     .attr('y2', -30);
 
   // Last updated axis
-  let currentTime = humanReadableDate(Date.now(), true);
-  let lastUpdatedYOffset = -35;
+  const currentTime = humanReadableDate(Date.now(), true);
+  const lastUpdatedYOffset = -35;
 
   chart
     .append('g')
     .attr('class', 'axis-last-updated')
     .append('text')
-    .attr('transform', `translate(${width + margin.right}, ${lastUpdatedYOffset})`)
+    .attr(
+      'transform',
+      `translate(${width + margin.right}, ${lastUpdatedYOffset})`
+    )
     .text(`Last updated ${currentTime} ${localTimeZone}`);
 
   // Y Axis Left
@@ -212,7 +226,11 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
     .append('g')
     .attr('class', 'legend axis-y-left-legend')
     .append('text')
-    .attr('transform', `translate(-${legendOffset + ticksFontSize * 2}, ${height / 2}) rotate(-90)`)
+    .attr(
+      'transform',
+      `translate(-${legendOffset + ticksFontSize * 2}, ${height /
+        2}) rotate(-90)`
+    )
     .text('# of runs');
 
   // Y Axis Right
@@ -235,14 +253,17 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
     .append('text')
     .attr(
       'transform',
-      `translate(${width + legendOffset + ticksFontSize * 3}, ${height / 2}) rotate(-90)`
+      `translate(${width + legendOffset + ticksFontSize * 3}, ${height /
+        2}) rotate(-90)`
     )
     .text('Delay (seconds)');
 
   // BUCKETS STYLING LAYER
-  let bottomBucketsLayer = chart.append('g').attr('class', 'bottom-buckets-layer');
+  const bottomBucketsLayer = chart
+    .append('g')
+    .attr('class', 'bottom-buckets-layer');
 
-  let bottomLayer = bottomBucketsLayer
+  const bottomLayer = bottomBucketsLayer
     .selectAll('rect')
     .data(data)
     .enter();
@@ -261,9 +282,9 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   // RENDER BAR GRAPH
 
   if (viewByOption === ViewByOptions.startMethod) {
-    let barStartMethod = chart.append('g').attr('class', 'bar-start-method');
+    const barStartMethod = chart.append('g').attr('class', 'bar-start-method');
 
-    let startMethod = barStartMethod
+    const startMethod = barStartMethod
       .selectAll('rect')
       .data(data)
       .enter();
@@ -287,9 +308,9 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
       .attr('height', (d) => height - yLeft(d.manual));
   } else {
     // Running
-    let barRunning = chart.append('g').attr('class', 'bar-running');
+    const barRunning = chart.append('g').attr('class', 'bar-running');
 
-    let runningStats = barRunning
+    const runningStats = barRunning
       .selectAll('rect')
       .data(data)
       .enter();
@@ -303,13 +324,13 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
       .attr('height', (d) => height - yLeft(d.running));
 
     // Statistics
-    let statisticsOffsetX = barWidth + barPadding;
-    let barStatistics = chart
+    const statisticsOffsetX = barWidth + barPadding;
+    const barStatistics = chart
       .append('g')
       .attr('class', 'bar-statistics')
       .attr('transform', `translate(${statisticsOffsetX}, 0)`);
 
-    let statistics = barStatistics
+    const statistics = barStatistics
       .selectAll('rect')
       .data(data)
       .enter();
@@ -334,9 +355,11 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
   }
 
   // HOVER AND CLICK HANDLER
-  let clickHandlersLayer = chart.append('g').attr('class', 'click-handlers-layer');
+  const clickHandlersLayer = chart
+    .append('g')
+    .attr('class', 'click-handlers-layer');
 
-  let handlerLayer = clickHandlersLayer
+  const handlerLayer = clickHandlersLayer
     .selectAll('rect')
     .data(data)
     .enter();
@@ -350,7 +373,7 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
     .attr('x', (d) => x(d.time))
     .attr('height', height);
 
-  let bottomLayerBuckets = d3.selectAll('.bottom-layer-bucket').nodes();
+  const bottomLayerBuckets = d3.selectAll('.bottom-layer-bucket').nodes();
 
   d3.selectAll('.handler-bucket').on('click', (data, i) => {
     // Need to do this to unselect previously selected bucket
@@ -368,14 +391,14 @@ export function renderGraph(selector, containerWidth, containerHeight, data, vie
 
   // RENDER LINE GRAPH
 
-  let line = d3
+  const line = d3
     .line()
     .x((d) => x(d.time))
     .y((d) => yRight(d.delay));
 
-  let offsetX = barWidth + barPadding * 2;
+  const offsetX = barWidth + barPadding * 2;
 
-  let pathGroup = chart
+  const pathGroup = chart
     .append('g')
     .attr('class', 'line-graph')
     .attr('transform', `translate(${offsetX}, 0)`);

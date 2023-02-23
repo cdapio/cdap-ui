@@ -19,9 +19,9 @@ import HttpExecutorStore from 'components/HttpExecutor/store/HttpExecutorStore';
 import { MyBlankPathApi } from 'api/blankpath';
 
 export function execute() {
-  let state = HttpExecutorStore.getState().http;
+  const state = HttpExecutorStore.getState().http;
 
-  let { method, path, body, headers } = state;
+  const { method, path, body, headers } = state;
 
   let api;
 
@@ -51,7 +51,7 @@ export function execute() {
     }
   }
 
-  let requestHeaders = {};
+  const requestHeaders = {};
 
   if (headers.pairs && headers.pairs.length > 0) {
     headers.pairs.forEach((header) => {

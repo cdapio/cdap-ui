@@ -18,11 +18,11 @@ import * as React from 'react';
 import TimePicker from 'components/FieldLevelLineage/TimePicker';
 import Typography from '@material-ui/core/Typography';
 import T from 'i18n-react';
-import './TopPanel.scss';
+require('./TopPanel.scss');
 
 const PREFIX = 'features.FieldLevelLineage.TopPanel';
 
-const TopPanel: React.SFC = () => {
+const TopPanel: React.FC = () => {
   return (
     <div className="top-panel row">
       <div className="col-4">

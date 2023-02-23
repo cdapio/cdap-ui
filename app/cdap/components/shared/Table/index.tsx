@@ -25,7 +25,7 @@ const styles = (): StyleRules => {
   };
 };
 
-interface ITableProps extends WithStyles<typeof styles> {
+export interface ITableProps extends WithStyles<typeof styles> {
   columnTemplate: string;
   dataCy?: string;
 }
@@ -36,9 +36,12 @@ const TableView: React.FC<React.PropsWithChildren<ITableProps>> = ({
   columnTemplate,
   dataCy,
 }) => {
-  const childrenClone = React.Children.map(children, (child: React.ReactElement<any>) => {
-    return cloneElement(child, { columnTemplate });
-  });
+  const childrenClone = React.Children.map(
+    children as React.ReactElement<any>[],
+    (child: React.ReactElement<any>) => {
+      return cloneElement(child, { columnTemplate });
+    }
+  );
 
   return (
     <div className={classes.grid} data-cy={dataCy} data-testid={dataCy}>

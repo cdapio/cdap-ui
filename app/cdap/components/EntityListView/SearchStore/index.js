@@ -74,7 +74,7 @@ const getPageSize = (element) => {
   // 140 = cardHeight (128) + (5 x 2 top bottom margins) + (1 x 2 border widths)
   const cardHeightWithMarginAndBorder = 140;
 
-  let entityListViewEle = element;
+  const entityListViewEle = element;
 
   if (!entityListViewEle.length) {
     return {};
@@ -82,21 +82,33 @@ const getPageSize = (element) => {
 
   // Subtract 65px to account for entity-list-info's height (45px) and paddings (20px)
   // minus 10px of padding from top and bottom (10px each)
-  let containerHeight = entityListViewEle[0].offsetHeight - 65 - 10;
-  let containerWidth = entityListViewEle[0].offsetWidth;
+  const containerHeight = entityListViewEle[0].offsetHeight - 65 - 10;
+  const containerWidth = entityListViewEle[0].offsetWidth;
   let numColumns = 1;
 
   // different screen sizes
   // consistent with media queries in style sheet
   if (containerWidth >= sevenColumnWidth) {
     numColumns = 7;
-  } else if (containerWidth >= sixColumnWidth && containerWidth < sevenColumnWidth) {
+  } else if (
+    containerWidth >= sixColumnWidth &&
+    containerWidth < sevenColumnWidth
+  ) {
     numColumns = 6;
-  } else if (containerWidth >= fiveColumnWidth && containerWidth < sixColumnWidth) {
+  } else if (
+    containerWidth >= fiveColumnWidth &&
+    containerWidth < sixColumnWidth
+  ) {
     numColumns = 5;
-  } else if (containerWidth >= fourColumnWidth && containerWidth < fiveColumnWidth) {
+  } else if (
+    containerWidth >= fourColumnWidth &&
+    containerWidth < fiveColumnWidth
+  ) {
     numColumns = 4;
-  } else if (containerWidth >= threeColumnWidth && containerWidth < fourColumnWidth) {
+  } else if (
+    containerWidth >= threeColumnWidth &&
+    containerWidth < fourColumnWidth
+  ) {
     numColumns = 3;
   }
 
@@ -116,7 +128,7 @@ const getPageSize = (element) => {
 const search = (state = defaultSearchState, action = defaultAction) => {
   switch (action.type) {
     case SearchStoreActions.SETRESULTS: {
-      let { results, total, limit, cursor } = action.payload.response;
+      const { results, total, limit, cursor } = action.payload.response;
       return Object.assign({}, state, {
         results: results,
         total,
@@ -148,16 +160,20 @@ const search = (state = defaultSearchState, action = defaultAction) => {
         currentPage: 1,
         offset: 0,
         activeSort:
-          action.payload.query !== '*' ? DEFAULT_SEARCH_SORT_OPTIONS[0] : state.activeSort,
+          action.payload.query !== '*'
+            ? DEFAULT_SEARCH_SORT_OPTIONS[0]
+            : state.activeSort,
         overviewEntity:
-          ['', '*'].indexOf(action.payload.query) !== -1 ? state.overviewEntity : null,
+          ['', '*'].indexOf(action.payload.query) !== -1
+            ? state.overviewEntity
+            : null,
       });
     case SearchStoreActions.LOADING:
       return Object.assign({}, state, {
         loading: action.payload.loading || false,
       });
     case SearchStoreActions.SETPAGESIZE: {
-      let { limit = DEFAULT_SEARCH_PAGE_SIZE, numColumns = 10 } = getPageSize(
+      const { limit = DEFAULT_SEARCH_PAGE_SIZE, numColumns = 10 } = getPageSize(
         action.payload.element
       );
       return Object.assign({}, state, {
@@ -194,7 +210,9 @@ const search = (state = defaultSearchState, action = defaultAction) => {
       return Object.assign({}, state, {
         query: action.payload.query === '' ? '*' : action.payload.query,
         activeSort:
-          action.payload.query !== '*' ? DEFAULT_SEARCH_SORT_OPTIONS[0] : action.payload.activeSort,
+          action.payload.query !== '*'
+            ? DEFAULT_SEARCH_SORT_OPTIONS[0]
+            : action.payload.activeSort,
         activeFilters: action.payload.activeFilters,
         currentPage: action.payload.currentPage,
         offset: action.payload.offset,

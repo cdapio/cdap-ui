@@ -48,7 +48,10 @@ const OutputPageView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
           value={outputWidgetType}
           onChange={setOutputWidgetType}
           label={'Schema type'}
-          options={Object.values(SchemaType).map((mode) => ({ id: mode, label: mode }))}
+          options={Object.values(SchemaType).map((mode) => ({
+            id: mode,
+            label: mode,
+          }))}
           layout={'inline'}
         />
       </div>

@@ -58,5 +58,5 @@ export interface IConnections {
 export const ConnectionsContext = React.createContext<IConnections>({
   mode: IConnectionMode.ROUTED,
   disabledTypes: {},
-  selectedPlugin: null,
+  selectedPlugin: undefined,
 });

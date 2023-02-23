@@ -58,8 +58,9 @@ const getTransformationPushdownValue = (state) => {
 };
 
 export default function PushdownTabContent({}) {
+  // unfortunately the store being used is still js so we can't grab the type
   const value = useSelector(
-    (state) => ({
+    (state: any) => ({
       pushdownEnabled: getPushdownEnabledValue(state),
       transformationPushdown: getTransformationPushdownValue(state),
     }),
@@ -68,7 +69,7 @@ export default function PushdownTabContent({}) {
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
-  const stages = useSelector((state) => state.stages);
+  const stages = useSelector((state: any) => state.stages);
   const cloudArtifact = useMemo(
     () => stages.map((x) => x.plugin.artifact).find((artifact) => artifact.name === 'google-cloud'),
     [stages]

@@ -18,7 +18,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 
-const NewButton = styled(Button)`
+const NewButton = styled(Button)<{ textColor?: string }>`
   text-transform: none;
   font-weight: normal;
   color: ${(props) => props.textColor || '#666666'};

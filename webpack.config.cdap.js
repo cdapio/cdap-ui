@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2016 Cask Data, Inc.
  *
@@ -14,23 +15,24 @@
  * the License.
  */
 
-var webpack = require('webpack');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var path = require('path');
-var LiveReloadPlugin = require('webpack-livereload-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var StyleLintPlugin = require('stylelint-webpack-plugin');
-var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-var uuidV4 = require('uuid/v4');
-var TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const uuidV4 = require('uuid/v4');
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // the clean options to use
-let cleanOptions = {
+const cleanOptions = {
   verbose: true,
-  dry: false,
+  dry: true,
 };
 
 const loaderExclude = [
@@ -39,14 +41,26 @@ const loaderExclude = [
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,
+  /packaged/,
   /lib/,
 ];
 
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
+  '/packaged/',
+  '/lib/',
+];
+
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = (mode) =>
+  mode === 'production' || mode === 'non-optimized-production';
 const getWebpackDllPlugins = (mode) => {
-  var sharedDllManifestFileName = 'shared-vendor-manifest.json';
-  var cdapDllManifestFileName = 'cdap-vendor-manifest.json';
+  let sharedDllManifestFileName = 'shared-vendor-manifest.json';
+  let cdapDllManifestFileName = 'cdap-vendor-manifest.json';
   if (mode === 'development') {
     sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
     cdapDllManifestFileName = 'cdap-vendor-development-manifest.json';
@@ -64,11 +78,18 @@ const getWebpackDllPlugins = (mode) => {
     }),
     new webpack.DllReferencePlugin({
       context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
-      manifest: require(path.join(__dirname, 'packaged', 'public', 'dll', cdapDllManifestFileName)),
+      manifest: require(path.join(
+        __dirname,
+        'packaged',
+        'public',
+        'dll',
+        cdapDllManifestFileName
+      )),
     }),
   ];
 };
-var plugins = [
+
+const plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   ...getWebpackDllPlugins(mode),
@@ -106,6 +127,10 @@ var plugins = [
     syntax: 'scss',
     files: ['**/*.scss'],
   }),
+  new ESLintPlugin({
+    extensions: ['js', 'jsx'],
+    exclude: loaderExcludeStrings,
+  }),
   new HtmlWebpackPlugin({
     title: 'CDAP',
     template: './cdap.html',
@@ -116,21 +141,26 @@ var plugins = [
     mode: isModeProduction(mode) ? '' : 'development.',
   }),
 ];
+
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      tslint: __dirname + '/tslint.json',
-      tslintAutoFix: true,
-      // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
 
-var rules = [
+const rules = [
   {
-    test: /\.s?css$/,
+    test: /\.json$/,
+    loader: 'json-loader',
+  },
+  {
+    test: /\.(sa|sc|c)ss$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
@@ -138,24 +168,27 @@ var rules = [
     use: 'yml-loader',
   },
   {
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
-    exclude: loaderExclude,
+    test: /\.m?js/,
+    type: 'javascript/auto',
   },
   {
-    test: /\.js$/,
+    test: /\.m?jsx?$/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
+    test: /\.js$|jsx/,
     use: ['babel-loader'],
     exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
+    include: [path.join(__dirname, 'app')],
+    resolve: {
+      fullySpecified: false,
+    },
   },
   {
     test: /\.tsx?$/,
     use: [
-      'babel-loader',
       {
         loader: 'ts-loader',
         options: {
@@ -164,7 +197,7 @@ var rules = [
       },
     ],
     exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
+    include: [path.join(__dirname, 'app')],
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -180,13 +213,13 @@ var rules = [
   },
   {
     test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: 'url-loader',
+    use: [{ loader: 'file-loader' }],
   },
   {
-    test: /\.svg/,
+    test: /\.svg$/,
     use: [
       {
-        loader: 'svg-sprite-loader',
+        loader: 'webpack5-svg-sprite-loader',
       },
     ],
   },
@@ -209,17 +242,16 @@ if (mode === 'development') {
       port: 35799,
       appendScriptTag: true,
       delay: 500,
-      ignore:
-        '/node_modules/|/bower_components/|/packaged/public/dist/|/packaged/public/cdap_dist/|/packaged/public/common_dist/|/lib/',
+      ignore: loaderExclude,
     })
   );
 }
 
-var webpackConfig = {
+const webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/cdap',
   entry: {
-    cdap: ['@babel/polyfill', './cdap.js'],
+    cdap: ['@babel/polyfill', 'react-hot-loader/patch', './cdap.js'],
   },
   module: {
     rules,
@@ -242,10 +274,22 @@ var webpackConfig = {
   plugins: plugins,
   // TODO: Need to investigate this more.
   optimization: {
-    splitChunks: false,
+    splitChunks: {
+      chunks: 'all',
+    },
+    chunkIds: 'named',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
+    extensions: [
+      '.mjs',
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '.scss',
+      '.json',
+      '.svg',
+    ],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

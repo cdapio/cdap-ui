@@ -17,8 +17,8 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
-let basepath = '/:path';
+const dataSrc = DataSourceConfigurer.getInstance();
+const basepath = '/:path';
 
 export const MyBlankPathApi = {
   get: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),

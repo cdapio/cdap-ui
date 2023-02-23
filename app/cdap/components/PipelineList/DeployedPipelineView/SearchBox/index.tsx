@@ -22,7 +22,7 @@ import T from 'i18n-react';
 
 interface ISearchBoxProps {
   value: string;
-  onChange: () => void;
+  onChange: (e: any) => void;
 }
 const PREFIX = 'features.PipelineList';
 

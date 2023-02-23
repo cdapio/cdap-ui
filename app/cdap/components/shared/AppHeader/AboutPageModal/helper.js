@@ -20,20 +20,30 @@ export function getMode() {
   if (window.CDAP_CONFIG.isEnterprise) {
     return T.translate('features.Navbar.ProductDropdown.modes.distributed');
   }
-  let sandboxMode = window.CDAP_CONFIG.sandboxMode;
-  if (sandboxMode === 'azure' || sandboxMode === 'aws' || sandboxMode === 'gcp') {
+  const sandboxMode = window.CDAP_CONFIG.sandboxMode;
+  if (
+    sandboxMode === 'azure' ||
+    sandboxMode === 'aws' ||
+    sandboxMode === 'gcp'
+  ) {
     return T.translate('features.Navbar.ProductDropdown.modes.cloudSandbox');
   }
   return T.translate('features.Navbar.ProductDropdown.modes.localSandbox');
 }
 
 export function getModeWithCloudProvider() {
-  let mode = getMode();
-  let cloudProvider = getCloudProvider();
+  const mode = getMode();
+  const cloudProvider = getCloudProvider();
   if (cloudProvider === '') {
     return mode;
   }
-  return mode + ' ' + T.translate('features.AboutPage.providers.forLabel') + ' ' + cloudProvider;
+  return (
+    mode +
+    ' ' +
+    T.translate('features.AboutPage.providers.forLabel') +
+    ' ' +
+    cloudProvider
+  );
 }
 
 function getCloudProvider() {

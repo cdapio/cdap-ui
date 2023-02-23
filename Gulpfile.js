@@ -14,7 +14,7 @@
  * the License.
  */
 
-var gulp = require('gulp'),
+const gulp = require('gulp'),
   plug = require('gulp-load-plugins')(),
   pkg = require('./package.json'),
   del = require('del'),
@@ -22,7 +22,7 @@ var gulp = require('gulp'),
   autoprefixer = require('autoprefixer');
 
 function getEs6Directives(isNegate) {
-  var es6directives = [
+  const es6directives = [
     'dag-plus',
     'plugin-templates',
     'my-global-navbar',
@@ -40,17 +40,17 @@ function getEs6Directives(isNegate) {
     'my-link-button',
   ];
 
-  return es6directives.map(function(directive) {
+  return es6directives.map((directive) => {
     return (isNegate ? '!' : '') + './app/directives/' + directive + '/**/*.js';
   });
 }
 function getExtensionBuildPipeline(extension) {
-  var PKG = JSON.stringify({
+  const PKG = JSON.stringify({
     name: pkg.name,
     v: pkg.version,
   });
 
-  var source = [
+  let source = [
     './app/' + extension + '/main.js',
     './app/services/**/*.js',
     './app/directives/**/*.js',
@@ -76,12 +76,12 @@ function getExtensionBuildPipeline(extension) {
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 }
 function getBabelBuildPipeline() {
-  var PKG = JSON.stringify({
+  const PKG = JSON.stringify({
     name: pkg.name,
     v: pkg.version,
   });
 
-  var source = getEs6Directives();
+  const source = getEs6Directives();
   return gulp
     .src(source)
     .pipe(plug.plumber())
@@ -97,13 +97,15 @@ function getBabelBuildPipeline() {
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 }
 
-gulp.task('css:library', function() {
+gulp.task('css:library', () => {
   return merge(
     gulp.src([
       './bower_components/angular/angular-csp.css',
       './bower_components/angular-loading-bar/build/loading-bar.min.css',
       './bower_components/angular-motion/dist/angular-motion.min.css',
-      './node_modules/font-awesome/css/font-awesome.min.css',
+      './node_modules/@fortawesome-fontawesome-free/css/fontawesome.css',
+      './node_modules/@fortawesome-fontawesome-free/css/brands.css',
+      './node_modules/@fortawesome-fontawesome-free/css/solid.css',
       './bower_components/c3/c3.min.css',
       './bower_components/angular-gridster/dist/angular-gridster.min.css',
       './bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
@@ -114,8 +116,10 @@ gulp.task('css:library', function() {
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 });
 
-gulp.task('css:application', function() {
-  var processor = [autoprefixer({ overrideBrowserslist: ['> 1%'], cascade: true })];
+gulp.task('css:application', () => {
+  const processor = [
+    autoprefixer({ overrideBrowserslist: ['> 1%'], cascade: true }),
+  ];
 
   return gulp
     .src([
@@ -132,7 +136,7 @@ gulp.task('css:application', function() {
     .pipe(plug.livereload({ port: 35728 }));
 });
 
-gulp.task('css:lint', function() {
+gulp.task('css:lint', () => {
   return gulp
     .src([
       './app/styles/common.less',
@@ -155,7 +159,7 @@ gulp.task('css:lint', function() {
 
 gulp.task('css:app', gulp.series('css:application', 'css:lint'));
 
-gulp.task('js:lib', function() {
+gulp.task('js:lib', () => {
   return gulp
     .src([
       './bower_components/angular/angular.js',
@@ -238,7 +242,7 @@ gulp.task('js:lib', function() {
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 });
 
-gulp.task('js:aceworkers', function(cb) {
+gulp.task('js:aceworkers', (cb) => {
   gulp
     .src([
       /** FIXME: (CDAP-15419): Unify ace-builds dependency */
@@ -252,51 +256,65 @@ gulp.task('js:aceworkers', function(cb) {
       './bower_components/ace-builds/src-min-noconflict/mode-scala.js',
       './bower_components/ace-builds/src-min-noconflict/mode-plain_text.js',
     ])
-    .pipe(gulp.dest('./packaged/public/dist/assets/bundle/ace-editor-worker-scripts/'));
+    .pipe(
+      gulp.dest(
+        './packaged/public/dist/assets/bundle/ace-editor-worker-scripts/'
+      )
+    );
   cb();
 });
 
-gulp.task('fonts', function() {
+gulp.task('fonts', () => {
   return gulp
     .src([
       // './bower_components/bootstrap/dist/fonts/*',
       './app/styles/fonts/*',
-      './node_modules/font-awesome/fonts/*',
+      // './node_modules/font-awesome/fonts/*',
     ])
     .pipe(gulp.dest('./packaged/public/dist/assets/fonts'));
 });
 
 gulp.task('css:lib', gulp.series('css:library', 'fonts'));
 // Build using watch
-gulp.task('watch:js:app:hydrator', function() {
-  return getExtensionBuildPipeline('hydrator').pipe(plug.livereload({ port: 35728 }));
+gulp.task('watch:js:app:hydrator', () => {
+  return getExtensionBuildPipeline('hydrator').pipe(
+    plug.livereload({ port: 35728 })
+  );
 });
 
-gulp.task('watch:js:app:tracker', function() {
-  return getExtensionBuildPipeline('tracker').pipe(plug.livereload({ port: 35728 }));
+gulp.task('watch:js:app:tracker', () => {
+  return getExtensionBuildPipeline('tracker').pipe(
+    plug.livereload({ port: 35728 })
+  );
 });
 
-gulp.task('watch:js:app:babel', function() {
+gulp.task('watch:js:app:babel', () => {
   return getBabelBuildPipeline().pipe(plug.livereload({ port: 35728 }));
 });
 
 // Build once.
-gulp.task('js:app:hydrator', function() {
+gulp.task('js:app:hydrator', () => {
   return getExtensionBuildPipeline('hydrator');
 });
 
-gulp.task('js:app:tracker', function() {
+gulp.task('js:app:tracker', () => {
   return getExtensionBuildPipeline('tracker');
 });
 
-gulp.task('js:app:babel', function() {
+gulp.task('js:app:babel', () => {
   return getBabelBuildPipeline();
 });
 
-gulp.task('js:app', gulp.series('js:app:babel', 'js:app:hydrator', 'js:app:tracker'));
+gulp.task(
+  'js:app',
+  gulp.series('js:app:babel', 'js:app:hydrator', 'js:app:tracker')
+);
 
-gulp.task('watch:js:app', gulp.series('watch:js:app:hydrator', 'watch:js:app:tracker'));
-gulp.task('polyfill', function() {
+gulp.task(
+  'watch:js:app',
+  gulp.series('watch:js:app:hydrator', 'watch:js:app:tracker')
+);
+gulp.task('polyfill', () => {
   return gulp
     .src(['./app/polyfill.js', './app/ui-utils/url-generator.js'])
     .pipe(plug.babel())
@@ -304,11 +322,13 @@ gulp.task('polyfill', function() {
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 });
 
-gulp.task('img', function() {
-  return gulp.src('./app/styles/img/**/*').pipe(gulp.dest('./packaged/public/dist/assets/img'));
+gulp.task('img', () => {
+  return gulp
+    .src('./app/styles/img/**/*')
+    .pipe(gulp.dest('./packaged/public/dist/assets/img'));
 });
 
-gulp.task('html:partials', function() {
+gulp.task('html:partials', () => {
   return gulp
     .src([
       './app/{hydrator,tracker}/**/*.html',
@@ -320,7 +340,7 @@ gulp.task('html:partials', function() {
     .pipe(plug.livereload({ port: 35728 }));
 });
 
-gulp.task('html:main', function() {
+gulp.task('html:main', () => {
   return gulp
     .src(['./app/tracker/tracker.html', './app/hydrator/hydrator.html'])
     .pipe(plug.htmlmin({ removeComments: true }))
@@ -329,7 +349,7 @@ gulp.task('html:main', function() {
 
 gulp.task('html', gulp.series('html:main', 'html:partials'));
 
-gulp.task('tpl', function() {
+gulp.task('tpl', () => {
   return gulp
     .src(['./app/directives/**/*.html', './app/services/**/*.html'])
     .pipe(plug.htmlmin({ removeComments: true }))
@@ -349,7 +369,10 @@ gulp.task('tpl', function() {
 
 gulp.task('js', gulp.series('js:lib', 'js:aceworkers', 'js:app', 'polyfill'));
 
-gulp.task('watch:js', gulp.series('watch:js:app', 'watch:js:app:babel', 'polyfill'));
+gulp.task(
+  'watch:js',
+  gulp.series('watch:js:app', 'watch:js:app:babel', 'polyfill')
+);
 
 gulp.task('css', gulp.series('css:lib', 'css:app'));
 
@@ -357,7 +380,7 @@ gulp.task('style', gulp.series('css'));
 
 gulp.task('build', gulp.series('js', 'css', 'img', 'tpl', 'html'));
 
-gulp.task('lint', function() {
+gulp.task('lint', () => {
   return gulp
     .src([
       './app/**/*.js',
@@ -377,7 +400,7 @@ gulp.task('jshint', gulp.series('lint'));
 
 gulp.task('hint', gulp.series('lint'));
 
-gulp.task('clean', function(cb) {
+gulp.task('clean', (cb) => {
   del.sync(['./packaged/public/dist/*']);
   cb();
 });
@@ -385,7 +408,7 @@ gulp.task('clean', function(cb) {
 /*
   minification
  */
-gulp.task('js:minification', function() {
+gulp.task('js:minification', () => {
   return gulp
     .src('./packaged/public/dist/assets/bundle/{app,lib}.js')
     .pipe(plug.terser())
@@ -394,7 +417,7 @@ gulp.task('js:minification', function() {
 
 gulp.task('js:minify', gulp.series('js:minification', 'js'));
 
-gulp.task('css:minification', function() {
+gulp.task('css:minification', () => {
   return gulp
     .src('./packaged/public/dist/assets/bundle/*.css')
     .pipe(plug.cssnano({ safe: true }))
@@ -403,7 +426,7 @@ gulp.task('css:minification', function() {
 
 gulp.task('css:minify', gulp.series('css:minification', 'css'));
 
-gulp.task('fonts:minification', function() {
+gulp.task('fonts:minification', () => {
   return gulp
     .src('./packaged/public/dist/assets/fonts/*.svg')
     .pipe(
@@ -423,7 +446,7 @@ gulp.task('fonts:minification', function() {
 
 gulp.task('fonts:minify', gulp.series('fonts:minification', 'fonts'));
 
-gulp.task('img:minification', function() {
+gulp.task('img:minification', () => {
   return gulp
     .src('./packaged/public/dist/assets/img/*.svg')
     .pipe(
@@ -443,12 +466,15 @@ gulp.task('img:minification', function() {
 
 gulp.task('img:minify', gulp.series('img:minification', 'img'));
 
-gulp.task('minify', gulp.series('js:minify', 'css:minify', 'fonts:minify', 'img:minify'));
+gulp.task(
+  'minify',
+  gulp.series('js:minify', 'css:minify', 'fonts:minify', 'img:minify')
+);
 
 /*
   rev'd assets
  */
-gulp.task('revision:manifest', function() {
+gulp.task('revision:manifest', () => {
   return gulp
     .src(['./packaged/public/dist/assets/bundle/*'])
     .pipe(plug.rev())
@@ -460,19 +486,22 @@ gulp.task('revision:manifest', function() {
 
 gulp.task('rev:manifest', gulp.series('revision:manifest', 'minify', 'tpl'));
 
-gulp.task('revision:replace', function() {
-  var rev = require('./packaged/public/dist/assets/bundle/manifest.json'),
+gulp.task('revision:replace', () => {
+  let rev = require('./packaged/public/dist/assets/bundle/manifest.json'),
     out = gulp.src('./packaged/public/dist/*.html'),
     p = '/assets/bundle/';
-  for (var f in rev) {
+  for (const f in rev) {
     out = out.pipe(plug.replace(p + f, p + rev[f]));
   }
   return out.pipe(gulp.dest('./packaged/public/dist'));
 });
 
-gulp.task('rev:replace', gulp.series('html:main', 'rev:manifest', 'revision:replace'));
+gulp.task(
+  'rev:replace',
+  gulp.series('html:main', 'rev:manifest', 'revision:replace')
+);
 
-gulp.task('revision:manifest:dev', function() {
+gulp.task('revision:manifest:dev', () => {
   return gulp
     .src(['./packaged/public/dist/assets/bundle/*'])
     .pipe(plug.rev())
@@ -484,17 +513,20 @@ gulp.task('revision:manifest:dev', function() {
 
 gulp.task('rev:manifest:dev', gulp.series('revision:manifest:dev', 'tpl'));
 
-gulp.task('revision:replace:dev', function() {
-  var rev = require('./packaged/public/dist/assets/bundle/manifest.json'),
+gulp.task('revision:replace:dev', () => {
+  let rev = require('./packaged/public/dist/assets/bundle/manifest.json'),
     out = gulp.src('./packaged/public/dist/*.html'),
     p = '/assets/bundle/';
-  for (var f in rev) {
+  for (const f in rev) {
     out = out.pipe(plug.replace(p + f, p + rev[f]));
   }
   return out.pipe(gulp.dest('./packaged/public/dist'));
 });
 
-gulp.task('rev:replace:dev', gulp.series('revision:replace:dev', 'html:main', 'rev:manifest:dev'));
+gulp.task(
+  'rev:replace:dev',
+  gulp.series('revision:replace:dev', 'html:main', 'rev:manifest:dev')
+);
 
 gulp.task('distribute', gulp.series('clean', 'build', 'rev:replace'));
 
@@ -503,10 +535,10 @@ gulp.task('default', gulp.series('lint', 'build', 'rev:replace:dev'));
 /*
   watch
  */
-gulp.task('watcher', function(cb) {
+gulp.task('watcher', (cb) => {
   plug.livereload.listen({ port: 35728 });
 
-  var jsAppSource = [
+  let jsAppSource = [
     './app/**/*.js',
     '!./app/cdap/**/*.js',
     '!./app/login/**/*.js',
@@ -517,13 +549,19 @@ gulp.task('watcher', function(cb) {
 
   gulp.watch(jsAppSource, gulp.series('jshint', 'watch:js:app'));
 
-  var jsAppBabelSource = [];
+  let jsAppBabelSource = [];
   jsAppBabelSource = jsAppBabelSource.concat(getEs6Directives(false));
   gulp.watch(jsAppBabelSource, gulp.series('jshint', 'watch:js:app:babel'));
 
   gulp.watch('./app/**/*.{less,css}', gulp.series('css'));
-  gulp.watch(['./app/directives/**/*.html', './app/services/**/*.html'], gulp.series('tpl'));
-  gulp.watch(['./app/hydrator/**/*.html', './app/tracker/**/*.html'], gulp.series('html:partials'));
+  gulp.watch(
+    ['./app/directives/**/*.html', './app/services/**/*.html'],
+    gulp.series('tpl')
+  );
+  gulp.watch(
+    ['./app/hydrator/**/*.html', './app/tracker/**/*.html'],
+    gulp.series('html:partials')
+  );
   cb();
 });
 

@@ -47,7 +47,7 @@ const PipelineTriggers = ({
   pipelineType,
 }: IPipelineTriggersViewProps) => {
   const initState = PipelineTriggersStore.getState().triggers;
-  const count = initState.enabledTriggersCount || 0;
+  const count = initState.enabledTriggers.length || 0;
   let updateOnce = false;
   const [activeTab, setActiveTab] = useState(count === 0 ? 1 : 0);
   const [tabText, setTabText] = useState(`${PREFIX}.collapsedTabLabel`);

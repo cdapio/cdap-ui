@@ -17,13 +17,16 @@
 import * as React from 'react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS } from 'services/global-constants';
-import { validateImportJSON, adjustConfigNode } from 'services/PipelineErrorFactory';
+import {
+  validateImportJSON,
+  adjustConfigNode,
+} from 'services/PipelineErrorFactory';
 import { Input, Label } from 'reactstrap';
 import uuidV4 from 'uuid/v4';
 import { objectQuery } from 'services/helpers';
 import T from 'i18n-react';
 import Alert from 'components/shared/Alert';
-import './EmptyList.scss';
+require('./EmptyList.scss');
 
 const PREFIX = 'features.PipelineList.EmptyList';
 const PIPELINE_STUDIO_STATE = 'hydrator.create';
@@ -122,13 +125,17 @@ class EmptyList extends React.PureComponent<IProps, IState> {
           <hr />
 
           <div className="call-to-actions">
-            <div className="subheading">{T.translate(`${PREFIX}.actionTitle`)}</div>
+            <div className="subheading">
+              {T.translate(`${PREFIX}.actionTitle`)}
+            </div>
 
             <div className="action-row">
               <a href={pipelineCreateLink} className="action-cta">
                 {T.translate(`${PREFIX}.create`)}
               </a>
-              <span className="message">{T.translate(`${PREFIX}.aPipeline`)}</span>
+              <span className="message">
+                {T.translate(`${PREFIX}.aPipeline`)}
+              </span>
             </div>
 
             <div className="action-row">
@@ -141,7 +148,9 @@ class EmptyList extends React.PureComponent<IProps, IState> {
                   onChange={this.importHandler}
                 />
               </Label>
-              <span className="message">{T.translate(`${PREFIX}.aPipeline`)}</span>
+              <span className="message">
+                {T.translate(`${PREFIX}.aPipeline`)}
+              </span>
             </div>
           </div>
         </div>

@@ -12,19 +12,19 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 const MyDataPrepApi = {
   explorerValues: {
-    values: []
+    values: [],
   },
-  isError: false
+  isError: false,
 };
 
 MyDataPrepApi.generalGetter = function(property) {
   return function() {
-    let subject = new Subject();
+    const subject = new Subject();
     setTimeout(() => {
       if (this.__isError) {
         subject.error(this[property]);

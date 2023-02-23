@@ -18,7 +18,7 @@ import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreatorAbsPath } from 'services/resource-helper';
 import { REQUEST_ORIGIN_MARKET } from 'services/datasource/requestTypes';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepaths = window.CDAP_CONFIG.marketUrls;
 // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
 const requestOptions = {
@@ -30,26 +30,32 @@ function getVerifiedMarketHost(host) {
 }
 
 export const MyMarketApi = {
-  list: apiCreatorAbsPath(dataSrc, 'GET', 'REQUEST', `:marketHost/packages.json`, requestOptions),
+  list: apiCreatorAbsPath(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    ':marketHost/packages.json',
+    requestOptions
+  ),
   getMetaData: apiCreatorAbsPath(
     dataSrc,
     'GET',
     'REQUEST',
-    `:marketHost/metadata.json`,
+    ':marketHost/metadata.json',
     requestOptions
   ),
   getCategories: apiCreatorAbsPath(
     dataSrc,
     'GET',
     'REQUEST',
-    `:marketHost/categories.json`,
+    ':marketHost/categories.json',
     requestOptions
   ),
   get: apiCreatorAbsPath(
     dataSrc,
     'GET',
     'REQUEST',
-    `:marketHost/packages/:packageName/:version/spec.json`,
+    ':marketHost/packages/:packageName/:version/spec.json',
     requestOptions
   ),
   getCategoryIcon: (category, marketHost) => {
@@ -64,7 +70,7 @@ export const MyMarketApi = {
     dataSrc,
     'GET',
     'REQUEST',
-    `:marketHost/packages/:entityName/:entityVersion/:filename`,
+    ':marketHost/packages/:entityName/:entityVersion/:filename',
     requestOptions
   ),
 };

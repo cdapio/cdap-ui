@@ -26,7 +26,7 @@ import { InternalTypesEnum } from 'components/AbstractWidget/SchemaEditor/Schema
 function FlatSchemaBase(
   schemaTree: INode,
   options: ISchemaManagerOptions,
-  ancestors = [],
+  ancestors: any[] = [],
   isParentCollapsed = false
 ) {
   const result: IFlattenRowType[] = [];
@@ -45,7 +45,7 @@ function FlatSchemaBase(
     typeProperties,
     ancestors,
     nullable,
-    collapsed,
+    collapsed: !!collapsed,
     hidden: isParentCollapsed,
   });
   if (hasChildren) {
@@ -53,12 +53,14 @@ function FlatSchemaBase(
     if (Array.isArray(children.order) && children.order.length) {
       iterable = children.order;
       for (const childId of iterable) {
-        result.push(...FlatSchemaBase(children[childId], options, ancestors.concat(id), collapsed));
+        result.push(
+          ...FlatSchemaBase(children[childId], options, ancestors.concat(id), !!collapsed)
+        );
       }
     } else {
       iterable = children;
       for (const [_, value] of Object.entries<INode>(iterable)) {
-        result.push(...FlatSchemaBase(value, options, ancestors.concat(id), collapsed));
+        result.push(...FlatSchemaBase(value, options, ancestors.concat(id), !!collapsed));
       }
     }
   }
@@ -72,7 +74,7 @@ function FlatSchemaBase(
  * @param options Options to flatten.
  * @param ancestors Ancestors of the current tree. The main schema tree will have no ancestors.
  */
-function FlatSchema(schemaTree: INode, options: ISchemaManagerOptions, ancestors = []) {
+function FlatSchema(schemaTree: INode, options: ISchemaManagerOptions, ancestors: any = []) {
   return FlatSchemaBase(schemaTree, options, ancestors);
 }
 export { FlatSchema };

@@ -16,14 +16,14 @@
 
 import { apiCreator } from 'services/resource-helper';
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 
-let appPath = '/namespaces/system/apps/ReportGenerationApp';
-let programPath = `${appPath}/spark/ReportGenerationSpark`;
+const appPath = '/namespaces/system/apps/ReportGenerationApp';
+const programPath = `${appPath}/spark/ReportGenerationSpark`;
 
-let methodsPath = `${programPath}/methods`;
-let reportsPath = `${methodsPath}/reports`;
-let basepath = `${reportsPath}/:reportId`;
+const methodsPath = `${programPath}/methods`;
+const reportsPath = `${methodsPath}/reports`;
+const basepath = `${reportsPath}/:reportId`;
 
 export const MyReportsApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', reportsPath),
@@ -37,10 +37,21 @@ export const MyReportsApi = {
   getApp: apiCreator(dataSrc, 'GET', 'REQUEST', appPath),
   startService: apiCreator(dataSrc, 'POST', 'REQUEST', `${programPath}/start`),
   stopService: apiCreator(dataSrc, 'POST', 'REQUEST', `${programPath}/stop`),
-  getServiceStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/status`),
-  pollServiceStatus: apiCreator(dataSrc, 'GET', 'POLL', `${programPath}/status`, {
-    interval: 2000,
-  }),
+  getServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${programPath}/status`
+  ),
+  pollServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'POLL',
+    `${programPath}/status`,
+    {
+      interval: 2000,
+    }
+  ),
   createApp: apiCreator(dataSrc, 'PUT', 'REQUEST', appPath),
   ping: apiCreator(dataSrc, 'GET', 'REQUEST', `${methodsPath}/health`),
   deleteApp: apiCreator(dataSrc, 'DELETE', 'REQUEST', appPath),

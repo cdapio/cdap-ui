@@ -29,12 +29,12 @@ export function useScroll<T extends HTMLElement = HTMLDivElement>(): [number, Mu
     const scrollContainer = ref.current;
 
     if (scrollContainer === undefined) {
-      return;
+      return undefined;
     }
     setScrollTop(scrollContainer.scrollTop);
     scrollContainer.addEventListener('scroll', onScroll);
     return () => scrollContainer.removeEventListener('scroll', onScroll);
   }, []);
 
-  return [scrollTop, ref];
+  return [scrollTop, ref as any];
 }

@@ -19,19 +19,26 @@ import { apiCreator } from 'services/resource-helper';
 
 const dataSrc = DataSourceConfigurer.getInstance();
 
-const pluginPath = '/namespaces/:namespace/artifacts/:parentArtifact/versions/:version/extensions';
+const pluginPath =
+  '/namespaces/:namespace/artifacts/:parentArtifact/versions/:version/extensions';
 const appPath = '/namespaces/:namespace/apps/:appName';
 const programPath = `${appPath}/workers/DeltaWorker`;
 const deltaAppPath = '/namespaces/system/apps/delta';
 const servicePath = `${deltaAppPath}/services/assessor/methods/v1/contexts/:namespace`;
 const draftPath = `${servicePath}/drafts/:draftId`;
 const workerPath = `${appPath}/workers/DeltaWorker`;
-const artifactBasePath = `/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties`;
+const artifactBasePath =
+  '/namespaces/:namespace/artifacts/:artifactName/versions/:artifactVersion/properties';
 const validatePipelinePath = `${servicePath}/assessPipeline`;
 
 export const MyReplicatorApi = {
   getDeltaApp: apiCreator(dataSrc, 'GET', 'REQUEST', deltaAppPath),
-  getPlugins: apiCreator(dataSrc, 'GET', 'REQUEST', `${pluginPath}/:pluginType`),
+  getPlugins: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${pluginPath}/:pluginType`
+  ),
   batchGetPluginsWidgets: apiCreator(
     dataSrc,
     'POST',
@@ -46,21 +53,76 @@ export const MyReplicatorApi = {
   deleteDraft: apiCreator(dataSrc, 'DELETE', 'REQUEST', draftPath),
   getDraft: apiCreator(dataSrc, 'GET', 'REQUEST', draftPath),
   listTables: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/listTables`),
-  getTableInfo: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/describeTable`),
+  getTableInfo: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${draftPath}/describeTable`
+  ),
   getReplicator: apiCreator(dataSrc, 'GET', 'REQUEST', appPath),
-  assessPipeline: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessPipeline`),
-  validatePipeline: apiCreator(dataSrc, 'POST', 'REQUEST', validatePipelinePath),
-  assessTable: apiCreator(dataSrc, 'POST', 'REQUEST', `${draftPath}/assessTable`),
-  getTargetTableInfo: apiCreator(dataSrc, 'POST', 'REQUEST', `${servicePath}/assessTable`),
-  fetchArtifactProperties: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
+  assessPipeline: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${draftPath}/assessPipeline`
+  ),
+  validatePipeline: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    validatePipelinePath
+  ),
+  assessTable: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${draftPath}/assessTable`
+  ),
+  getTargetTableInfo: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${servicePath}/assessTable`
+  ),
+  fetchArtifactProperties: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    artifactBasePath
+  ),
 
   // Detail
   pollStatus: apiCreator(dataSrc, 'GET', 'POLL', `${workerPath}/runs?limit=1`),
-  pollTableStatus: apiCreator(dataSrc, 'POST', 'POLL', `${servicePath}/getState`),
-  pollMetrics: apiCreator(dataSrc, 'POST', 'REQUEST', `/metrics/query?:queryParams`),
+  pollTableStatus: apiCreator(
+    dataSrc,
+    'POST',
+    'POLL',
+    `${servicePath}/getState`
+  ),
+  pollMetrics: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/metrics/query?:queryParams'
+  ),
 
   // To be replaced with GraphQL
-  list: apiCreator(dataSrc, 'GET', 'REQUEST', '/namespaces/:namespace/apps?artifactName=delta-app'),
-  batchStatus: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/status'),
-  batchAppDetail: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/appdetail'),
+  list: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    '/namespaces/:namespace/apps?artifactName=delta-app'
+  ),
+  batchStatus: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/namespaces/:namespace/status'
+  ),
+  batchAppDetail: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/namespaces/:namespace/appdetail'
+  ),
 };

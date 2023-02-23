@@ -33,5 +33,7 @@ NamespaceDetailsDescription.propTypes = {
   description: PropTypes.string,
 };
 
-const ConnectedNamespaceDetailsDescription = connect(mapStateToProps)(NamespaceDetailsDescription);
+const ConnectedNamespaceDetailsDescription = connect(mapStateToProps)(
+  NamespaceDetailsDescription
+);
 export default ConnectedNamespaceDetailsDescription;

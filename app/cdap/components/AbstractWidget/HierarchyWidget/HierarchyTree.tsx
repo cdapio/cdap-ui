@@ -16,22 +16,14 @@
 
 import * as React from 'react';
 import { IHierarchyProps } from 'components/AbstractWidget/HierarchyWidget';
-import HierarchyTreeNode from './HierarchyTreeNode/index';
+import HierarchyTreeNode, { INodeProps } from './HierarchyTreeNode/index';
 
-export interface ITreeProps {
-  id: number;
-  parentId?: number;
-  children?: ITreeProps[];
-  name: string;
-  path?: string[];
-  type: string;
-}
 interface IHierarchyTreeProps extends IHierarchyProps {
-  data: ITreeProps[];
+  data: INodeProps[];
   setRecords: (value) => void | React.Dispatch<any>;
   setTree: (value) => void | React.Dispatch<any>;
-  records: ITreeProps[];
-  dropdownOptions: ITreeProps[];
+  records: INodeProps[];
+  dropdownOptions: INodeProps[];
   disabled: boolean;
 }
 
@@ -46,7 +38,7 @@ const HierarchyTree = ({
 }: IHierarchyTreeProps) => {
   return (
     <div>
-      {data.map((tree: ITreeProps) => (
+      {data.map((tree: INodeProps) => (
         <HierarchyTreeNode
           node={tree}
           records={records}

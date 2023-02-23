@@ -182,7 +182,13 @@ const setRuns = (runs) => {
   });
 };
 
-const getRunDetails = ({ namespace, appId, programType, programName, runid }) => {
+const getRunDetails = ({
+  namespace,
+  appId,
+  programType,
+  programName,
+  runid,
+}) => {
   return MyPipelineApi.getRunDetails({
     namespace,
     appId,
@@ -193,7 +199,7 @@ const getRunDetails = ({ namespace, appId, programType, programName, runid }) =>
 };
 
 const getRuns = (params) => {
-  let runsFetch = MyPipelineApi.getRuns(params);
+  const runsFetch = MyPipelineApi.getRuns(params);
   runsFetch.subscribe(
     (runs) => {
       setRuns(runs);
@@ -205,35 +211,43 @@ const getRuns = (params) => {
   return runsFetch;
 };
 
-const pollRunsCount = ({ appId, programType, programName: programId, namespace }) => {
-  let postBody = [
+const pollRunsCount = ({
+  appId,
+  programType,
+  programName: programId,
+  namespace,
+}) => {
+  const postBody = [
     {
       appId,
       programType,
       programId,
     },
   ];
-  return MyPipelineApi.pollRunsCount({ namespace }, postBody).subscribe((runsCountArray) => {
-    let runsCount = runsCountArray[0].runCount;
-    PipelineDetailStore.dispatch({
-      type: ACTIONS.SET_RUNS_COUNT,
-      payload: {
-        runsCount,
-      },
-    });
-  });
+  return MyPipelineApi.pollRunsCount({ namespace }, postBody).subscribe(
+    (runsCountArray) => {
+      const runsCount = runsCountArray[0].runCount;
+      PipelineDetailStore.dispatch({
+        type: ACTIONS.SET_RUNS_COUNT,
+        payload: {
+          runsCount,
+        },
+      });
+    }
+  );
 };
 
 const pollRuns = (params) => {
   return MyPipelineApi.pollRuns(params).subscribe(
     (runs) => {
       // When there are new runs, always set current run to most recent run
-      let { runs: currentRuns } = PipelineDetailStore.getState();
+      const { runs: currentRuns } = PipelineDetailStore.getState();
       /**
        *  If there is a run id in the url then stick to that runid.
        *  Even if the user starts a new run.
        */
-      let isRunIdAvailableInURLAsQueryParam = location.search.indexOf('runid') === -1;
+      const isRunIdAvailableInURLAsQueryParam =
+        location.search.indexOf('runid') === -1;
 
       // Oh my :|
       if (
@@ -250,10 +264,10 @@ const pollRuns = (params) => {
       }
 
       // Find if there are any new runs started
-      let difference = differenceBy(runs, currentRuns, 'runid');
+      const difference = differenceBy(runs, currentRuns, 'runid');
       // Update any existing runs, say 'status', in UI
       let newRuns = currentRuns.map((run) => {
-        let updatedRun = find(runs, ['runid', run.runid]);
+        const updatedRun = find(runs, ['runid', run.runid]);
         return !updatedRun ? run : updatedRun;
       });
       // If there are any new runs add it to the existing runs we have
@@ -296,7 +310,12 @@ const getStatistics = (params) => {
   );
 };
 
-const getMetadataEndpoints = async ({ namespace, appId, workflowType, runId }) => {
+const getMetadataEndpoints = async ({
+  namespace,
+  appId,
+  workflowType,
+  runId,
+}) => {
   try {
     const endPointsRes = await MyPipelineApi.getMetadataEndpoints({
       namespace,

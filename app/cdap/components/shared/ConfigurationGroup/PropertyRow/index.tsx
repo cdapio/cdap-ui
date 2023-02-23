@@ -105,7 +105,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       this.props.extraConfig.properties !== nextProps.extraConfig.properties;
     // Comparison of array of objects
     const isArrayEqual = (x: IErrorObj[], y: IErrorObj[]) => isEmpty(xorWith(x, y, isEqual));
-    const errorChange = isArrayEqual(nextProps.errors, this.props.errors);
+    const errorChange = isArrayEqual(nextProps.errors, this.props.errors as IErrorObj[]);
 
     return rule || !errorChange;
   }
@@ -133,13 +133,16 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
       this.handleChange(this.state.prevValue);
     }
 
-    this.setState({ isMacroTextbox: newValue, [valueStateToBeUpdated]: this.props.value });
+    this.setState({
+      isMacroTextbox: newValue,
+      [valueStateToBeUpdated]: this.props.value,
+    });
   };
 
   private handleChange = (value) => {
     const newValues = {
       ...this.props.extraConfig.properties,
-      [this.props.widgetProperty.name]: value,
+      [this.props.widgetProperty.name as string]: value,
     };
     this.props.onChange(newValues);
   };
@@ -179,7 +182,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
 
     if (this.state.isMacroTextbox && widgetCategory !== PLUGIN) {
       const currentWidget = updatedWidgetProperty[WIDGET_TYPE];
-      if (EditorTypeWidgets.indexOf(currentWidget) === -1) {
+      if (EditorTypeWidgets.indexOf(currentWidget as string) === -1) {
         updatedWidgetProperty[WIDGET_TYPE] = 'textbox';
         updatedWidgetProperty['widget-attributes'] = {};
       }
@@ -203,7 +206,9 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
         <div
           data-cy={cypressId}
           data-testid={cypressId}
-          className={classnames(classes.row, { [classes.macroRow]: this.state.isMacroTextbox })}
+          className={classnames(classes.row, {
+            [classes.macroRow]: this.state.isMacroTextbox,
+          })}
         >
           <WidgetWrapper
             widgetProperty={updatedWidgetProperty}

@@ -24,27 +24,97 @@ const serviceMethodsBasepath = `${appPath}/services/service/methods`;
 const rbbasepath = `${serviceMethodsBasepath}/rulebooks/:rulebookid`;
 
 const MyRulesEngineApi = {
-  getRulebooks: apiCreator(dataSrc, 'GET', 'REQUEST', `${serviceMethodsBasepath}/rulebooks`),
-  getRules: apiCreator(dataSrc, 'GET', 'REQUEST', `${serviceMethodsBasepath}/rules`),
-  createRule: apiCreator(dataSrc, 'POST', 'REQUEST', `${serviceMethodsBasepath}/rules`),
-  getRuleDetails: apiCreator(dataSrc, 'GET', 'REQUEST', `${serviceMethodsBasepath}/rules/:ruleid`),
-  addRuleToRuleBook: apiCreator(dataSrc, 'PUT', 'REQUEST', `${rbbasepath}/rules/:ruleid`),
-  removeRuleFromRuleBook: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${rbbasepath}/rules/:ruleid`),
-  getRulesForRuleBook: apiCreator(dataSrc, 'GET', 'REQUEST', `${rbbasepath}/rules`),
-  createRulebook: apiCreator(dataSrc, 'POST', 'REQUEST', `${serviceMethodsBasepath}/rulebooks`),
+  getRulebooks: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rulebooks`
+  ),
+  getRules: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rules`
+  ),
+  createRule: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rules`
+  ),
+  getRuleDetails: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rules/:ruleid`
+  ),
+  addRuleToRuleBook: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${rbbasepath}/rules/:ruleid`
+  ),
+  removeRuleFromRuleBook: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${rbbasepath}/rules/:ruleid`
+  ),
+  getRulesForRuleBook: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${rbbasepath}/rules`
+  ),
+  createRulebook: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rulebooks`
+  ),
   getRulebook: apiCreator(dataSrc, 'GET', 'REQUEST', `${rbbasepath}`),
   updateRulebook: apiCreator(dataSrc, 'PUT', 'REQUEST', `${rbbasepath}`),
   deleteRulebook: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${rbbasepath}`),
-  deleteRule: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${serviceMethodsBasepath}/rules/:ruleid`),
+  deleteRule: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${serviceMethodsBasepath}/rules/:ruleid`
+  ),
 
   // Yare service management
   getApp: apiCreator(dataSrc, 'GET', 'REQUEST', `${appPath}`),
-  startService: apiCreator(dataSrc, 'POST', 'REQUEST', `${serviceBasepath}/start`),
-  stopService: apiCreator(dataSrc, 'POST', 'REQUEST', `${serviceBasepath}/stop`),
-  getServiceStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${serviceBasepath}/status`),
-  pollServiceStatus: apiCreator(dataSrc, 'GET', 'POLL', `${serviceBasepath}/status`),
+  startService: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${serviceBasepath}/start`
+  ),
+  stopService: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${serviceBasepath}/stop`
+  ),
+  getServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${serviceBasepath}/status`
+  ),
+  pollServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'POLL',
+    `${serviceBasepath}/status`
+  ),
   createApp: apiCreator(dataSrc, 'PUT', 'REQUEST', `${appPath}`),
-  ping: apiCreator(dataSrc, 'GET', 'REQUEST', `${serviceMethodsBasepath}/health`),
+  ping: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${serviceMethodsBasepath}/health`
+  ),
 };
 
 export default MyRulesEngineApi;

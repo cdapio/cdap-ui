@@ -526,7 +526,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     return (
       <>
         <div className={`grid-wrapper ${classes.gridWrapper}`}>
-          <div className={`grid grid-container grid-compact`}>
+          <div className={'grid grid-container grid-compact'}>
             <div className="grid-header">
               <div className="grid-row grouping-row">
                 <div className={`${classes.tableHeaderEvents} ${classes.groupHeader}`}>

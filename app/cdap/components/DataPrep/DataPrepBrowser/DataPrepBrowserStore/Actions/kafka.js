@@ -22,13 +22,13 @@ import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 
 const setKafkaAsActiveBrowser = (payload) => {
-  let { kafka, activeBrowser } = DataPrepBrowserStore.getState();
+  const { kafka, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId } = payload;
+  const { id: connectionId } = payload;
 
   if (kafka.connectionId === connectionId) {
     return;
@@ -43,9 +43,9 @@ const setKafkaAsActiveBrowser = (payload) => {
 
   setKafkaInfoLoading();
 
-  let namespace = NamespaceStore.getState().selectedNamespace;
+  const namespace = NamespaceStore.getState().selectedNamespace;
 
-  let params = {
+  const params = {
     context: namespace,
     connectionId,
   };

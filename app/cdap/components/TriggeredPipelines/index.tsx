@@ -35,7 +35,7 @@ import {
 } from 'components/PipelineTriggers/shared.styles';
 import { IPipelineInfo, ISchedule } from 'components/PipelineTriggers/store/ScheduleTypes';
 
-const PREFIX = `features.TriggeredPipelines`;
+const PREFIX = 'features.TriggeredPipelines';
 
 const mapStateToProps = (state) => {
   return {

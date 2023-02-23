@@ -1,15 +1,28 @@
 {
   "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "sourceMap": true,
+    "target": "es2018",
     "outDir": "./cdap_dist",
     "allowJs": true,
+    "strictPropertyInitialization": false,
     "checkJs": false,
     "module": "esnext",
-    "target": "es5",
+    "noImplicitThis": false,
     "jsx": "react",
     "skipLibCheck": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "noImplicitReturns": false,
     "moduleResolution": "node",
-    "sourceMap": true,
+    "declaration": false,
     "importHelpers": false,
+    "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "lib": [
@@ -17,6 +30,7 @@
       "dom",
       "es2017"
     ],
+    "types": ["node", "jest"],
     "typeRoots": [
       "./typings",
       "./node_modules/@types"
@@ -43,6 +57,7 @@
       ]
     }
   },
+  "plugins": [{ "name": "typescript-plugin-css-modules" }],
   "include": [
     "app/cdap/**/*.js",
     "app/cdap/**/*.ts",
@@ -53,6 +68,10 @@
   ],
   "exclude": [
     "node_modules",
-    "server/**/*.js"
+    "server/**/*.js",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "src",
+    "test"
   ]
 }

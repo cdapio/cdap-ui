@@ -15,8 +15,7 @@
  */
 import { combineReducers, createStore } from 'redux';
 import PublishPipelineAction from 'services/WizardStores/PublishPipeline/PublishPipelineActions';
-import PublishPipelineWizardConfig from 'services/WizardConfigs/PublishPipelineWizardConfig';
-import head from 'lodash/head';
+
 
 const defaultAction = {
   type: '',
@@ -39,9 +38,14 @@ const isComplete = (state, requiredFields) => {
   });
   return !emptyFieldsInState.length ? true : false;
 };
-const pipelineMetadataStepRequiredFields = head(
-  PublishPipelineWizardConfig.steps.filter((step) => step.id === 'pipelinemetadata')
-).requiredFields;
+
+// circular dependency - leaving this for potential debugging
+// import PublishPipelineWizardConfig from 'services/WizardConfigs/PublishPipelineWizardConfig';
+// import head from 'lodash/head';
+// const pipelineMetadataStepRequiredFields = head(
+//   PublishPipelineWizardConfig.steps.filter((step) => step.id === 'pipelinemetadata')
+// ).requiredFields;
+const pipelineMetadataStepRequiredFields = ['name'];
 
 const pipelinemetadata = (state = defaultMetadata, action = defaultAction) => {
   let stateCopy;

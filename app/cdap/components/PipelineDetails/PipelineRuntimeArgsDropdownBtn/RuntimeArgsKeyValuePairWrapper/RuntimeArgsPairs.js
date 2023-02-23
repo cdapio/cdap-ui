@@ -25,7 +25,9 @@ import {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    keyValues: getFilteredRuntimeArgs(ownProps.runtimeArgs || state.runtimeArgs),
+    keyValues: getFilteredRuntimeArgs(
+      ownProps.runtimeArgs || state.runtimeArgs
+    ),
     onPaste: ownProps.onPaste,
   };
 };
@@ -43,6 +45,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const ConnectedRuntimeArgsPairs = connect(mapStateToProps, mapDispatchToProps)(KeyValuePairs);
+const ConnectedRuntimeArgsPairs = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KeyValuePairs);
 
 export default ConnectedRuntimeArgsPairs;

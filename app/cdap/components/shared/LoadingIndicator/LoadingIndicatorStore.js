@@ -39,7 +39,7 @@ const LOADINGSTATUS = {
 const loading = (state = defaultLoadingState, action = defaultAction) => {
   switch (action.type) {
     case 'STATUSUPDATE': {
-      let { status = state.status, services = [] } = action.payload;
+      const { status = state.status, services = [] } = action.payload;
       return Object.assign({}, state, {
         status,
         services,
@@ -55,7 +55,7 @@ const LoadingIndicatorStore = createStore(
     loading,
   }),
   { loading: defaultLoadingState },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default LoadingIndicatorStore;

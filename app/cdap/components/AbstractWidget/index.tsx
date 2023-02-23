@@ -21,17 +21,6 @@ import { IErrorObj } from 'components/shared/ConfigurationGroup/utilities';
 import StateWrapper from 'components/AbstractWidget/StateWrapper';
 require('./AbstractWidget.scss');
 
-export const DEFAULT_WIDGET_PROPS: IAbstractWidgetProps = {
-  widgetProps: {},
-  value: '',
-  disabled: false,
-  type: 'textbox',
-  // tslint:disable:no-empty
-  onChange: () => {},
-  updateAllProperties: () => {},
-  // tslint:enable:no-empty
-};
-
 export interface IStageSchema {
   name: string;
   schema: string;
@@ -64,14 +53,27 @@ interface IAbstractWidgetProps extends IWidgetProps {
   type: string;
 }
 
-export default class AbstractWidget extends React.PureComponent<IAbstractWidgetProps> {
+export const DEFAULT_WIDGET_PROPS: IAbstractWidgetProps = {
+  widgetProps: {},
+  value: '',
+  disabled: false,
+  type: 'textbox',
+  // tslint:disable:no-empty
+  onChange: () => {},
+  updateAllProperties: () => {},
+  // tslint:enable:no-empty
+};
+
+export default class AbstractWidget extends React.PureComponent<
+  IAbstractWidgetProps
+> {
   public static defaultProps = DEFAULT_WIDGET_PROPS;
 
   public render() {
     const Comp = AbstractWidgetFactory[this.props.type];
 
     return (
-      <div className={`abstract-widget-wrapper`}>
+      <div className={'abstract-widget-wrapper'}>
         <StateWrapper
           comp={Comp}
           onChange={this.props.onChange}

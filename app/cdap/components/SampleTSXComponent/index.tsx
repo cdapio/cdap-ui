@@ -30,7 +30,7 @@ interface IFCProps {
   prop2: string;
 }
 
-const FunctionalComponent: React.SFC<IFCProps> = ({ prop1, prop2 }) => {
+const FunctionalComponent: React.FC<IFCProps> = ({ prop1, prop2 }) => {
   return (
     <React.Fragment>
       <h4> Stateless component </h4>

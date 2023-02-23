@@ -38,7 +38,7 @@ interface IAboutPageModalProps {
   toggle: () => void;
 }
 
-const AboutPageModal: React.SFC<IAboutPageModalProps> = ({ cdapVersion, isOpen, toggle }) => {
+const AboutPageModal: React.FC<IAboutPageModalProps> = ({ cdapVersion, isOpen, toggle }) => {
   const mode = getModeWithCloudProvider();
   const productLogoSrc = Theme.productLogoAbout || '/cdap_assets/img/CDAP_darkgray.png';
   return (
@@ -60,7 +60,9 @@ const AboutPageModal: React.SFC<IAboutPageModalProps> = ({ cdapVersion, isOpen, 
               <img src={productLogoSrc} />
             </div>
             <span className="cdap-version">
-              {T.translate('features.AboutPage.version', { version: cdapVersion })}
+              {T.translate('features.AboutPage.version', {
+                version: cdapVersion,
+              })}
             </span>
           </div>
         </div>

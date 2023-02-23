@@ -43,7 +43,7 @@ export interface ICreateConnectionState {
 export interface IConnectorDetails {
   connectorProperties: Record<string, any>;
   connectorWidgetJSON: unknown;
-  connectorDoc: unknown;
+  connectorDoc: string;
   connectorError: string;
 }
 

@@ -25,7 +25,10 @@ import { SiblingCommunicationProvider } from 'components/AbstractWidget/SchemaEd
 import { IOnChangeReturnType } from 'components/AbstractWidget/SchemaEditor/Context/SchemaManager';
 import VirtualScroll from 'components/shared/VirtualScroll';
 import { SchemaValidatorConsumer } from 'components/AbstractWidget/SchemaEditor/SchemaValidator';
-import withstyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withstyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 const styles = (): StyleRules => {
   return {
     errorHighlight: {
@@ -44,10 +47,16 @@ interface IFieldsListProps extends WithStyles<typeof styles> {
   visibleRowCount?: number;
   disabled?: boolean;
   value: IFlattenRowType[];
-  onChange: (id: IFieldIdentifier, onChangePayload: IOnChangePayload) => IOnChangeReturnType;
+  onChange: (
+    id: IFieldIdentifier,
+    onChangePayload: IOnChangePayload
+  ) => IOnChangeReturnType;
 }
 
-class FieldsListBase extends React.Component<IFieldsListProps, IFieldsListState> {
+class FieldsListBase extends React.Component<
+  IFieldsListProps,
+  IFieldsListState
+> {
   public static visibleNodeCount = 20;
   public static childrenUnderFold = 5;
   public static heightOfRow = 34;
@@ -55,11 +64,16 @@ class FieldsListBase extends React.Component<IFieldsListProps, IFieldsListState>
   public state: IFieldsListState = {
     rows: this.props.value || [],
     currentRowToFocus: null,
-    visibleRowCount: this.props.visibleRowCount || FieldsListBase.visibleNodeCount,
+    visibleRowCount:
+      this.props.visibleRowCount || FieldsListBase.visibleNodeCount,
   };
   public componentWillReceiveProps(nextProps: IFieldsListProps) {
-    const ids = nextProps.value.map((r) => `${r.id}-${r.hidden}-${r.collapsed}`).join(',');
-    const existingids = this.state.rows.map((r) => `${r.id}-${r.hidden}-${r.collapsed}`).join(',');
+    const ids = nextProps.value
+      .map((r) => `${r.id}-${r.hidden}-${r.collapsed}`)
+      .join(',');
+    const existingids = this.state.rows
+      .map((r) => `${r.id}-${r.hidden}-${r.collapsed}`)
+      .join(',');
     const { visibleRowCount } = nextProps;
     if (ids !== existingids || visibleRowCount !== this.state.visibleRowCount) {
       this.setState({
@@ -69,7 +83,10 @@ class FieldsListBase extends React.Component<IFieldsListProps, IFieldsListState>
     }
   }
 
-  public onChange = (field: IFieldIdentifier, onChangePayload: IOnChangePayload) => {
+  public onChange = (
+    field: IFieldIdentifier,
+    onChangePayload: IOnChangePayload
+  ) => {
     const { fieldIdToFocus } = this.props.onChange(field, onChangePayload);
     if (typeof fieldIdToFocus === 'string') {
       this.setState({
@@ -110,9 +127,11 @@ class FieldsListBase extends React.Component<IFieldsListProps, IFieldsListState>
       <SiblingCommunicationProvider>
         <SchemaValidatorConsumer>
           {({ errorMap = {} }) => {
-            if (errorMap.hasOwnProperty(this.state.rows[0].id)) {
+            if (Object.hasOwnProperty.call(errorMap, this.state.rows[0].id)) {
               return (
-                <div className={classes.errorHighlight}>{errorMap[this.state.rows[0].id]}</div>
+                <div className={classes.errorHighlight}>
+                  {errorMap[this.state.rows[0].id] as any}
+                </div>
               );
             }
           }}

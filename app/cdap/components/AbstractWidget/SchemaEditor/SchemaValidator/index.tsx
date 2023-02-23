@@ -47,12 +47,16 @@ interface ISchemaValidatorProviderBaseState {
   error: string;
 }
 interface ISchemaValidatorContext {
-  validate: (id: string, avroSchema: ISchemaType) => ISchemaValidatorProviderBaseState;
+  validate: (
+    id: string,
+    avroSchema: ISchemaType
+  ) => ISchemaValidatorProviderBaseState;
   errorMap: Record<string, ISchemaValidatorProviderBaseState>;
 }
 interface ISchemaValidatorProviderProps {
   errors?: Record<string, string>;
   reset?: boolean;
+  children?: React.ReactNode;
 }
 
 const SchemaValidatorContext = React.createContext<ISchemaValidatorContext>({
@@ -61,7 +65,9 @@ const SchemaValidatorContext = React.createContext<ISchemaValidatorContext>({
 });
 const SchemaValidatorConsumer = SchemaValidatorContext.Consumer;
 
-class SchemaValidatorProvider extends React.Component<ISchemaValidatorProviderProps> {
+class SchemaValidatorProvider extends React.Component<
+  ISchemaValidatorProviderProps
+> {
   public defaultState = {
     errorMap: {},
   };
@@ -120,7 +126,11 @@ class SchemaValidatorProvider extends React.Component<ISchemaValidatorProviderPr
       return;
     }
     const validateSchema = (tree) => {
-      const avroSchema = generateSchemaFromComplexType(tree.type, tree, tree.nullable);
+      const avroSchema = generateSchemaFromComplexType(
+        tree.type,
+        tree,
+        tree.nullable
+      );
       try {
         cdapavsc.parse(avroSchema, { wrapUnions: true });
       } catch (e) {
@@ -152,11 +162,12 @@ class SchemaValidatorProvider extends React.Component<ISchemaValidatorProviderPr
         return;
       }
       field.ancestors.forEach((ancestorId) => {
-        if (errorMap.hasOwnProperty(ancestorId)) {
+        if (Object.hasOwnProperty.call(errorMap, ancestorId)) {
           delete errorMap[ancestorId];
         }
       });
-      if (errorMap.hasOwnProperty(field.id)) {
+
+      if (Object.hasOwnProperty.call(errorMap, field.id)) {
         delete errorMap[field.id];
       }
       this.setState({ errorMap });
@@ -178,7 +189,7 @@ class SchemaValidatorProvider extends React.Component<ISchemaValidatorProviderPr
 
   public render() {
     return (
-      <SchemaValidatorContext.Provider value={this.state}>
+      <SchemaValidatorContext.Provider value={this.state as any}>
         {this.props.children}
       </SchemaValidatorContext.Provider>
     );

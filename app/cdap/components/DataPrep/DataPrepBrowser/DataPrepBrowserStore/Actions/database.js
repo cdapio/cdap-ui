@@ -31,13 +31,13 @@ const setDatabaseInfoLoading = () => {
 };
 
 const setDatabaseAsActiveBrowser = (payload) => {
-  let { database, activeBrowser } = DataPrepBrowserStore.getState();
+  const { database, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId } = payload;
+  const { id: connectionId } = payload;
 
   if (database.connectionId === connectionId) {
     return;
@@ -52,9 +52,9 @@ const setDatabaseAsActiveBrowser = (payload) => {
 
   setDatabaseInfoLoading();
 
-  let namespace = NamespaceStore.getState().selectedNamespace;
+  const namespace = NamespaceStore.getState().selectedNamespace;
 
-  let params = {
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -86,4 +86,8 @@ const setDatabaseProperties = (payload) => {
   });
 };
 
-export { setDatabaseInfoLoading, setDatabaseAsActiveBrowser, setDatabaseProperties };
+export {
+  setDatabaseInfoLoading,
+  setDatabaseAsActiveBrowser,
+  setDatabaseProperties,
+};

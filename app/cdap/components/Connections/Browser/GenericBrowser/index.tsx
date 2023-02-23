@@ -27,7 +27,7 @@ import debounce from 'lodash/debounce';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { useLocation, useRouteMatch, useParams } from 'react-router-dom';
+import { useLocation, useRouteMatch, Redirect } from 'react-router-dom';
 import Breadcrumb from 'components/Connections/Browser/GenericBrowser/Breadcrumb';
 import SearchField from 'components/Connections/Browser/GenericBrowser/SearchField';
 import { BrowserTable } from 'components/Connections/Browser/GenericBrowser/BrowserTable';
@@ -40,7 +40,6 @@ import ParsingConfigModal from 'components/Connections/Browser/ParsingConfigModa
 import keyBy from 'lodash/keyBy';
 
 const PREFIX = 'features.DataPrep.DataPrepBrowser.GenericBrowser';
-import { Redirect } from 'react-router';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 import EntityCount from './EntityCount';
 
@@ -70,22 +69,24 @@ const useStyle = makeStyle(() => {
 
 export function GenericBrowser({ initialConnectionId, onEntityChange, selectedParent }) {
   const loc = useLocation();
-  const rmatch = useRouteMatch({ path: '/ns/:namespace/connections/:connectionid' });
+  const rmatch = useRouteMatch({
+    path: '/ns/:namespace/connections/:connectionid',
+  });
   const queryParams = new URLSearchParams(loc.search);
   const pathFromUrl = queryParams.get('path') || '/';
   const [currentConnection, setCurrentConnection] = useState(initialConnectionId);
-  const [entities, setEntities] = useState([]);
+  const [entities, setEntities] = useState<unknown[]>([]);
   const [propertyHeaders, setPropertyHeaders] = useState([]);
   const [sampleProperties, setSampleProperties] = useState({});
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [path, setPath] = useState(pathFromUrl);
   const [searchString, setSearchString] = useState('');
   const [searchStringDisplay, setSearchStringDisplay] = useState('');
   const [workspaceId, setWorkspaceId] = useState(null);
   const [showConfigModal, setShowConfigModal] = useState(false);
-  const [selectedEntity, setSelectedEntity] = useState(null);
+  const [selectedEntity, setSelectedEntity] = useState<{ type: string } | null>(null);
   const [parsingConfigErrorMessage, setParsingConfigErrorMessage] = useState(null);
   const classes = useStyle();
   const { onWorkspaceCreate, onEntitySelect, selectedPlugin, showParsingConfig } = useContext(
@@ -112,6 +113,8 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
         onEntityChange(null);
       }
     } catch (e) {
+      // unsure how to type this e.response
+      // @ts-ignore CDAP-20181
       setError(`Failed to explore connection. Error: "${e.response}"`);
       setTotalCount(0);
     } finally {
@@ -199,6 +202,8 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
         await createWorkspaceInternal(selectedEntity, parseConfig);
         setShowConfigModal(false);
       } catch (e) {
+        // unsure how to type this catch
+        // @ts-ignore CDAP-20181
         setParsingConfigErrorMessage(e);
       }
     }
@@ -216,7 +221,8 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
       const plugin = spec?.relatedPlugins?.[0];
       const properties = plugin?.properties;
       const schema = plugin?.schema;
-
+      // CDAP-20181
+      // @ts-ignore
       onEntitySelect({
         properties,
         schema,
@@ -256,7 +262,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
 
   const lowerSearchString = searchString.trim().toLocaleLowerCase();
   const filteredEntities = lowerSearchString.length
-    ? entities.filter((e) => e.name.toLocaleLowerCase().includes(lowerSearchString))
+    ? entities.filter((e: any) => e.name.toLocaleLowerCase().includes(lowerSearchString))
     : entities;
 
   const isEmpty =
@@ -308,7 +314,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
             {currentConnection && searchString.length > 0 && (
               <li>
                 <span className="link-text" onClick={clearSearchString}>
-                  {T.translate(`features.EmptyMessageContainer.clearLabel`)}
+                  {T.translate('features.EmptyMessageContainer.clearLabel')}
                 </span>
                 <span>{T.translate(`${PREFIX}.EmptyMessageContainer.suggestion1`)}</span>
               </li>
@@ -340,8 +346,8 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
           onCancel={onCancelParsingConfig}
           errorMessage={parsingConfigErrorMessage}
           sampleProperties={
-            sampleProperties[selectedEntity.type]
-              ? sampleProperties[selectedEntity.type].properties
+            sampleProperties[selectedEntity?.type || 0]
+              ? sampleProperties[selectedEntity?.type || 0].properties
               : []
           }
         />

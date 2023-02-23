@@ -139,7 +139,7 @@ const PipelineCompositeTriggerRow = ({
 
   const configureGroupTriggers = (mapping: ITriggerPropertyMapping[], propertiesConfig = {}) => {
     const validateResult = validateTriggerMappping(mapping, triggersGroupRunArgsToAdd);
-    if (!!validateResult) {
+    if (validateResult) {
       dispatch({ type: 'INVALID_MAPPING', error: validateResult });
     } else {
       addToTriggerGroupClick(mapping);

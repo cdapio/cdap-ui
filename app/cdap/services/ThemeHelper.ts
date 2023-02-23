@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+// @ts-nocheck - this whole file needs to be looked at and theres tons
+// of type errors because of objects that might be undefined
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
 import cssVars from 'css-vars-ponyfill';
 import { objectQuery, isNilOrEmpty } from 'services/helpers';
 import isColor from 'is-color';
@@ -131,24 +134,24 @@ export function applyTheme() {
   }
 
   function apply1Point0Styles() {
-    const stylesJSON = window.CDAP_UI_THEME.styles;
+    const stylesJSON = window.CDAP_UI_THEME.styles || {};
     const stylesToApply: IOnePoint0SpecJSON['styles'] = {};
-    if ('brand-primary-color' in stylesJSON && isColor(stylesJSON['brand-primary-color'])) {
+    if ('brand-primary-color' in stylesJSON && isColor(stylesJSON['brand-primary-color'] || '')) {
       stylesToApply['brand-primary-color'] = stylesJSON['brand-primary-color'];
     }
-    if ('navbar-color' in stylesJSON && isColor(stylesJSON['navbar-color'])) {
+    if ('navbar-color' in stylesJSON && isColor(stylesJSON['navbar-color'] || '')) {
       stylesToApply['navbar-color'] = stylesJSON['navbar-color'];
     }
     // TODO: Validate fonts more rigorously
     if ('font-family' in stylesJSON && typeof stylesJSON['font-family'] === 'string') {
       stylesToApply['font-family'] = stylesJSON['font-family'];
     }
-    if ('page-name-color' in stylesJSON && isColor(stylesJSON['page-name-color'])) {
+    if ('page-name-color' in stylesJSON && isColor(stylesJSON['page-name-color'] || '')) {
       stylesToApply['page-name-color'] = stylesJSON['page-name-color'];
     }
     if (
       'plugin-reference-heading-bg-color' in stylesJSON &&
-      isColor(stylesJSON['plugin-reference-heading-bg-color'])
+      isColor(stylesJSON['plugin-reference-heading-bg-color'] || '')
     ) {
       stylesToApply['plugin-reference-heading-bg-color'] =
         stylesJSON['plugin-reference-heading-bg-color'];
@@ -250,7 +253,7 @@ function getTheme(): IThemeObj {
   // Need to specify this here to show default/customized title when a CDAP page
   // is not active in the browser, since the <Helmet> titles of the pages won't
   // take effect until the page is active/rendered
-  document.title = theme.productName;
+  document.title = theme.productName || '';
   return theme;
 }
 
@@ -258,19 +261,19 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
   const theme: IThemeObj = {};
 
   function getContent(): IThemeObj {
-    const contentJson = themeJSON.content;
+    const contentJson = themeJSON.content || {};
     const content: IThemeObj = {
       productName: 'CDAP',
       productDescription: `CDAP is an open source framework that simplifies
       data application development, data integration, and data management.`,
-      productEdition: null,
+      productEdition: undefined,
       productLogoNavbar: '/cdap_assets/img/company_logo-20-all.png',
       productLogoAbout: '/cdap_assets/img/CDAP_darkgray.png',
-      productDocumentationLink: null,
+      productDocumentationLink: undefined,
       favicon: '/cdap_assets/img/favicon.png',
       footerText: 'Licensed under the Apache License, Version 2.0',
       footerLink: 'https://www.apache.org/licenses/LICENSE-2.0',
-      wranglerDataModelUrl: null,
+      wranglerDataModelUrl: undefined,
       featureNames: {
         analytics: 'Analytics',
         controlCenter: 'Control Center',
@@ -312,8 +315,11 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
     if ('footer-link' in contentJson) {
       content.footerLink = contentJson['footer-link'];
     }
+
     if ('product-logo-navbar' in contentJson) {
-      const productLogoNavbar = window.CDAP_UI_THEME.content['product-logo-navbar'];
+      const productLogoNavbar = window.CDAP_UI_THEME.content['product-logo-navbar'] || {
+        type: undefined,
+      };
       if (productLogoNavbar.type) {
         const productLogoNavbarType = productLogoNavbar.type;
         if (productLogoNavbarType === 'inline') {
@@ -437,9 +443,11 @@ function parse1Point0Spec(themeJSON: IOnePoint0SpecJSON): IThemeObj {
       showCDC: false,
       onPremTetheredInstance: false,
     };
+
     if (isNilOrEmpty(featuresJson)) {
       return features;
     }
+
     if ('dashboard' in featuresJson && isBoolean(featuresJson.dashboard)) {
       features.showDashboard = featuresJson.dashboard;
     }

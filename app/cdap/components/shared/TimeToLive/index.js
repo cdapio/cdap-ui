@@ -21,19 +21,16 @@ import { Input, Label } from 'reactstrap';
 require('./TimeToLive.scss');
 import uuidV4 from 'uuid/v4';
 
-export default function TimeToLive({value, onChange}) {
+export default function TimeToLive({ value, onChange }) {
   const getOptions = (count) => {
-    return Array.apply(null, {length: count})
-      .map((e, i) => (
-        <option key={uuidV4()}>
-          {i}
-        </option>
-      ));
+    return Array.apply(null, { length: count }).map((e, i) => (
+      <option key={uuidV4()}>{i}</option>
+    ));
   };
-  const [months=0, days=0, hours=0, mins=0, sec=0] = value.split(',');
+  const [months = 0, days = 0, hours = 0, mins = 0, sec = 0] = value.split(',');
   const localOnChange = (type, e) => {
-    let state = [months, days, hours, mins, sec];
-    let stateMap = {months: 0, days: 1, hours: 2, mins: 3, sec: 4};
+    const state = [months, days, hours, mins, sec];
+    const stateMap = { months: 0, days: 1, hours: 2, mins: 3, sec: 4 };
     state[stateMap[type]] = e.target.value;
     // FIXME: How can I not do this? Looks ........ bad.
     e.target.ttlValue = state.join(',');
@@ -113,5 +110,5 @@ export default function TimeToLive({value, onChange}) {
 
 TimeToLive.propTypes = {
   value: PropTypes.string,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };

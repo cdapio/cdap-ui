@@ -18,7 +18,9 @@ import { MyOperationsApi } from 'api/operations';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import moment from 'moment';
 import { parseDashboardData } from 'components/OpsDashboard/RunsGraph/DataParser';
-import DashboardStore, { DashboardActions } from 'components/OpsDashboard/store/DashboardStore';
+import DashboardStore, {
+  DashboardActions,
+} from 'components/OpsDashboard/store/DashboardStore';
 
 // We are subtracting 1 second, as we don't want to get the runs scheduled
 // for the bucket after the rightmost bucket we are showing
@@ -43,7 +45,7 @@ export function getData(
 ) {
   enableLoading();
 
-  let state = DashboardStore.getState().dashboard;
+  const state = DashboardStore.getState().dashboard;
 
   if (!start) {
     start = moment()
@@ -53,16 +55,16 @@ export function getData(
     start = Math.floor(parseInt(start, 10) / 1000);
   }
 
-  let namespacesList = [...namespaces, getCurrentNamespace()];
+  const namespacesList = [...namespaces, getCurrentNamespace()];
 
-  let params = {
+  const params = {
     start,
     duration, // 24 hours in minutes
     namespace: namespacesList,
   };
 
   MyOperationsApi.getDashboard(params).subscribe((res) => {
-    let { pipelineCount, customAppCount, data } = parseDashboardData(
+    const { pipelineCount, customAppCount, data } = parseDashboardData(
       res,
       start,
       duration,
@@ -86,7 +88,7 @@ export function getData(
 }
 
 export function next() {
-  let state = DashboardStore.getState().dashboard;
+  const state = DashboardStore.getState().dashboard;
 
   let start = moment(state.startTime * 1000);
 
@@ -104,7 +106,7 @@ export function next() {
 }
 
 export function prev() {
-  let state = DashboardStore.getState().dashboard;
+  const state = DashboardStore.getState().dashboard;
 
   let start = moment(state.startTime * 1000);
 
@@ -128,7 +130,7 @@ export function prev() {
 }
 
 export function setNamespacesPick(namespacesPick) {
-  let state = DashboardStore.getState().dashboard;
+  const state = DashboardStore.getState().dashboard;
 
   getData(state.startTime, state.duration, namespacesPick);
 }

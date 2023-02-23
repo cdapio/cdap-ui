@@ -17,7 +17,7 @@
 import * as React from 'react';
 import T from 'i18n-react';
 
-import './SectionTitle.scss';
+require('./SectionTitle.scss');
 
 const PREFIX = 'features.FieldLevelLineage.SectionTitle';
 
@@ -27,7 +27,7 @@ interface IProps {
   direction: 'self' | 'incoming' | 'outgoing';
 }
 
-const SectionTitle: React.SFC<IProps> = ({ direction, entityId, parentId }) => {
+const SectionTitle: React.FC<IProps> = ({ direction, entityId, parentId }) => {
   let parent;
   if (parentId) {
     parent = <span>{parentId}:</span>;

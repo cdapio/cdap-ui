@@ -22,13 +22,13 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 
 const setBigQueryAsActiveBrowser = (payload, getDatasets = false) => {
-  let { bigquery, activeBrowser } = DataPrepBrowserStore.getState();
+  const { bigquery, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId } = payload;
+  const { id: connectionId } = payload;
 
   if (bigquery.connectionId === connectionId) {
     return;
@@ -43,8 +43,8 @@ const setBigQueryAsActiveBrowser = (payload, getDatasets = false) => {
     },
   });
 
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -70,8 +70,8 @@ const setBigQueryAsActiveBrowser = (payload, getDatasets = false) => {
 
 const listBiqQueryDatasets = (connectionId) => {
   setBigQueryLoading();
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -93,8 +93,8 @@ const listBiqQueryDatasets = (connectionId) => {
 
 const listBigQueryTables = (connectionId, datasetId) => {
   setBigQueryLoading();
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
     datasetId,
@@ -122,4 +122,9 @@ const setBigQueryLoading = () => {
   });
 };
 
-export { setBigQueryAsActiveBrowser, listBiqQueryDatasets, listBigQueryTables, setBigQueryLoading };
+export {
+  setBigQueryAsActiveBrowser,
+  listBiqQueryDatasets,
+  listBigQueryTables,
+  setBigQueryLoading,
+};

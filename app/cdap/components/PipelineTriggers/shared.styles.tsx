@@ -125,21 +125,21 @@ export const StyledAccordion = styled(Accordion)`
 
 export const StyledAccordionSummary = styled((props: AccordionSummaryProps) => (
   <AccordionSummary expandIcon={<ArrowRightIcon />} {...props} />
-))(() => ({
-  flexDirection: 'row-reverse',
-  'margin-left': '-15px',
-  'min-height': '0',
-  padding: '0',
-  '& .MuiAccordionSummary-expandIcon.Mui-expanded': {
-    transform: 'rotate(90deg)',
-  },
-  '& .MuiAccordionSummary-content': {
-    marginLeft: '5px',
-  },
-  '& .MuiAccordionSummary-content.Mui-expanded': {
-    fontWeight: 'bold',
-  },
-}));
+))`
+  flexdirection: 'row-reverse';
+  margin-left: '-15px';
+  min-height: '0';
+  padding: '0';
+  & .MuiAccordionSummary-expandIcon.Mui-expanded {
+    transform: 'rotate(90deg)';
+  }
+  & .MuiAccordionSummary-content {
+    marginleft: '5px';
+  }
+  & .MuiAccordionSummary-content.Mui-expanded {
+    fontweight: 'bold';
+  }
+`;
 
 export const StyledAccordionDetails = styled(AccordionDetails)`
   padding: 5px;

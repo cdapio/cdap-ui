@@ -38,12 +38,12 @@ function initializeProperties(provisionerJson = {}) {
   if (Object.keys(provisionerProperties).length) {
     return;
   }
-  let configs = provisionerJson['configuration-groups'] || [];
-  let properties = {};
+  const configs = provisionerJson['configuration-groups'] || [];
+  const properties = {};
   const values = {};
   configs.forEach((config) => {
     config.properties.forEach((prop) => {
-      let widgetAttributes = prop['widget-attributes'] || {};
+      const widgetAttributes = prop['widget-attributes'] || {};
       const value = widgetAttributes.default || '';
       properties[prop.name] = {
         value,

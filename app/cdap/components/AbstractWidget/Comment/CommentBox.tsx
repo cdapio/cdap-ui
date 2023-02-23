@@ -61,12 +61,12 @@ interface ICommentStyleProps {
 
 interface ICommentBoxProps {
   comment?: IComment;
-  onSave?: (comment?: IComment) => void;
-  onDelete?: () => void;
+  onSave: (comment?: IComment) => void;
+  onDelete: () => void;
   focus?: boolean;
   disabled?: boolean;
   onClose?: () => void;
-  onClickAway?: () => void;
+  onClickAway: () => void;
 }
 
 export default function CommentBox({
@@ -78,14 +78,14 @@ export default function CommentBox({
   onClose,
   onClickAway,
 }: ICommentBoxProps) {
-  const isThereExistingComment = comment.content && comment.content.length > 0 ? true : false;
+  const isThereExistingComment = comment?.content && comment.content.length > 0 ? true : false;
   const [editMode, setEditMode] = React.useState(!isThereExistingComment && !disabled);
   const [localComment, setLocalComment] = React.useState(comment);
 
   const classes = useStyles({ editMode });
 
   const onCommentChange = (value: string) => {
-    if (!localComment.content || !localComment.content.length) {
+    if (!localComment?.content || !localComment?.content.length) {
       setLocalComment({
         ...comment,
         content: value,
@@ -101,7 +101,7 @@ export default function CommentBox({
   const onSaveComment = () => {
     onSave({
       ...comment,
-      content: localComment.content,
+      content: localComment?.content,
     });
   };
   const onResetComment = () => {
@@ -115,7 +115,7 @@ export default function CommentBox({
   };
   React.useEffect(() => {
     setLocalComment(comment);
-    const commentExists = comment.content && comment.content.length > 0 ? true : false;
+    const commentExists = comment?.content && comment.content.length > 0 ? true : false;
     setEditMode(!commentExists && !disabled);
   }, [comment]);
 
@@ -135,10 +135,10 @@ export default function CommentBox({
         <CardHeader
           avatar={<AccountCircleOutlinedIcon />}
           action={CommentMenuLocal}
-          title={humanReadableDate(comment.createDate, true) || '--'}
+          title={humanReadableDate(comment?.createDate, true) || '--'}
         />
         <CardContent className={classes.contentRoot}>
-          <Markdown markdown={`${localComment.content}`} />
+          <Markdown markdown={`${localComment?.content}`} />
         </CardContent>
       </Card>
     );
@@ -149,7 +149,7 @@ export default function CommentBox({
         <CardContent className={classes.contentRoot}>
           <TextareaAutosize
             className={classes.textarea}
-            value={localComment.content}
+            value={localComment?.content}
             placeholder="Add a comment"
             rowsMax={10}
             rowsMin={3}
@@ -161,7 +161,9 @@ export default function CommentBox({
           <Button
             variant="contained"
             color="primary"
-            disabled={typeof localComment.content === 'string' && localComment.content.length === 0}
+            disabled={
+              typeof localComment?.content === 'string' && localComment?.content.length === 0
+            }
             onClick={() => {
               onSaveComment();
               setEditMode(false);
@@ -171,11 +173,11 @@ export default function CommentBox({
           </Button>
           <Button
             onClick={() => {
-              if (isObject(comment) && !comment.content.length && typeof onClose === 'function') {
+              if (isObject(comment) && !comment?.content?.length && typeof onClose === 'function') {
                 onClose();
                 return;
               }
-              setLocalComment({ ...localComment, content: comment.content });
+              setLocalComment({ ...localComment, content: comment?.content });
               onResetComment();
               setEditMode(false);
             }}

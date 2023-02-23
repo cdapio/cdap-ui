@@ -38,7 +38,8 @@ export default class Timer extends Component {
   componentWillReceiveProps(nextProps) {
     if (!isNil(nextProps.time) && this.props.time !== nextProps.time) {
       clearTimeout(this.currentTimer);
-      !this.unmounted && this.setState({ time: nextProps.time }, this.startTimer.bind(this));
+      !this.unmounted &&
+        this.setState({ time: nextProps.time }, this.startTimer.bind(this));
     }
   }
 
@@ -49,7 +50,7 @@ export default class Timer extends Component {
     this.unmounted = true;
   }
   startTimer() {
-    let newTime = this.state.time - 1;
+    const newTime = this.state.time - 1;
     if (this.unmounted) {
       return;
     }
