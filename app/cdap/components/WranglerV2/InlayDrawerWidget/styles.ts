@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { Box, Button, IconButton, MenuItem, Typography } from '@material-ui/core';
+import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import styled from 'styled-components';
 
@@ -88,6 +88,15 @@ export const MenuButton = styled(Button)`
     line-height: 24px;
     text-align: center;
   }
+
+  .MuiButton-label {
+    color: ${grey[600]};
+  }
+
+  .MuiButton-endIcon {
+    color: #000000;
+    opacity: 0.54;
+  }
 `;
 
 export const StyledIconButton = styled(IconButton)`
@@ -101,6 +110,13 @@ export const StyledMenuItem = styled(MenuItem)`
     font-weight: 400;
     letter-spacing: 0.5px;
     line-height: 24px;
+    padding: 12px 16px;
     text-align: left;
+  }
+`;
+
+export const StyledMenu = styled(Menu)`
+  .MuiMenu-paper {
+    width: 164px;
   }
 `;

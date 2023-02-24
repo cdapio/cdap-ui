@@ -61,5 +61,4 @@ DefaultInlayDrawerWidget.args = {
   onClose: handleDrawerCloseIconClick,
   position: 'left',
   showDivider: true,
-  disableActionsButton: true,
 };
