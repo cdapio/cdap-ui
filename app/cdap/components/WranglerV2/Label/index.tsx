@@ -30,14 +30,20 @@ export const MenuHeadText = styled(Typography)`
 `;
 
 export const NormalFont = styled(Typography)`
-  ${labelStyles}
+  color: ${grey[700]};
+  font-size: 14px;
   font-weight: 400;
+  letter-spacing: 0.1px;
+  line-height: 22px;
 `;
 
 export const SubHeadBoldFont = styled(Typography)`
-  color: ${grey[700]};
-  font-size: 16px;
-  font-weight: 600;
+  color: ${grey[900]};
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  line-height: 32px;
+  margin-bottom: 6px;
 `;
 
 export const TableCellText = styled(Typography)`
