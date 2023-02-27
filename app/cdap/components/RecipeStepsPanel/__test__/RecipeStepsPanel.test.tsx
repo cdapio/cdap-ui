@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { fireEvent, render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, Router } from 'react-router-dom';
 
