@@ -102,7 +102,7 @@ export default function DataTable({
   getTableHeaderCell,
 }: IDataTableProps) {
   return (
-    <Container component={Paper}>
+    <Container component={Paper} data-testid="data-table">
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
