@@ -462,7 +462,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
       return (
         <Alert
           showAlert={!!this.state.error}
-          message={T.translate(`${PREFIX}.genericErrorMessage`)}
+          message={T.translate(`${PREFIX}.genericErrorMessage`).toString()}
           onClose={this.onErrorSnackbarClose}
           type={ALERT_STATUS.Error}
           autoCloseTimeout={5000}
@@ -478,10 +478,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
           <span>{this.state.error}</span>
           {isUnknownDatabaseError(this.state.error) && (
             <div>
-              <span>
-                Please manually put in the correct database name and table name below, or go back to
-                "Configure source" tab and put in the correct "Database Name".
-              </span>
+              <span>{T.translate(`${PREFIX}.unknownDatabaseErrorMessage`)}</span>
             </div>
           )}
         </div>
@@ -558,7 +555,9 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
               <div className="grid-row grouping-row">
                 <div className={`${classes.tableHeaderEvents} ${classes.groupHeader}`}>
                   <hr className={classes.groupLine} />
-                  <div className={classes.groupText}>Events to replicate</div>
+                  <div className={classes.groupText}>
+                    {T.translate(`${PREFIX}.eventsToReplicate`)}
+                  </div>
                 </div>
               </div>
               <div className="grid-row">
@@ -575,7 +574,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                   />
                 </div>
                 <div>Table name</div>
-                <div className={classes.count}>Columns to replicate</div>
+                <div className={classes.count}>{T.translate(`${PREFIX}.columnsToReplicate`)}</div>
                 <div />
                 <div>
                   <Checkbox
@@ -615,7 +614,9 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                 const tableDML = this.state.dmlBlacklist.get(key) || Set<DML>();
 
                 const isTableInvalid = checked && this.isTableSelectionInvalid(row);
-                const errorDescription = !isTableInvalid ? null : 'Select events to replicate';
+                const errorDescription = !isTableInvalid
+                  ? null
+                  : T.translate(`${PREFIX}.selectEventsToReplicate`).toString();
 
                 return (
                   <div
@@ -646,7 +647,9 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                       onClick={this.openTable.bind(this, row)}
                     >
                       <span className={classes.openOverviewLink}>
-                        {columns && columns.size > 0 ? columns.size : 'All'}
+                        {columns && columns.size > 0
+                          ? columns.size
+                          : T.translate(`${PREFIX}.all`).toString()}
                       </span>
                     </div>
                     <div />
@@ -663,7 +666,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                             })}
                           />
                         }
-                        label="Inserts"
+                        label={T.translate(`${PREFIX}.inserts`).toString()}
                       />
                     </div>
                     <div>
@@ -679,7 +682,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                             })}
                           />
                         }
-                        label="Updates"
+                        label={T.translate(`${PREFIX}.updates`).toString()}
                       />
                     </div>
                     <div>
@@ -695,7 +698,7 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
                             })}
                           />
                         }
-                        label="Deletes"
+                        label={T.translate(`${PREFIX}.deletes`).toString()}
                       />
                     </div>
                   </div>
@@ -719,21 +722,25 @@ class SelectTablesView extends React.PureComponent<ISelectTablesProps, ISelectTa
     }
 
     const { classes } = this.props;
+    const { selectedTables, tables } = this.state;
 
     return (
       <>
         <div className={classes.root}>
-          <Heading type={HeadingTypes.h3} label="Select tables, columns, and events to replicate" />
+          <Heading type={HeadingTypes.h3} label={T.translate(`${PREFIX}.heading`).toString()} />
           <div className={classes.subHeadingContainer}>
             <div className={classes.subHeadingText}>
-              {this.state.selectedTables.size} of {this.state.tables.length} tables selected
+              {T.translate(`${PREFIX}.numberOfTablesSelected`, {
+                selectedTablesSize: selectedTables.size,
+                totalTablesSize: tables.length,
+              })}
             </div>
 
             <div>
               <SearchBox
                 value={this.state.search}
                 onChange={this.handleSearchChange}
-                placeholder="Search tables by name"
+                placeholder={T.translate(`${PREFIX}.searchboxPlaceholder`).toString()}
               />
             </div>
           </div>
