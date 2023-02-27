@@ -121,7 +121,10 @@ export default function InlayDrawerWidget({
                     <StyledMenuItem
                       data-testid={`menu-item-${testId}`}
                       key={`menu-item-${testId}`}
-                      onClick={eachOption.clickHandler}
+                      onClick={() => {
+                        eachOption.clickHandler();
+                        handleClose();
+                      }}
                     >
                       {eachOption.label}
                     </StyledMenuItem>

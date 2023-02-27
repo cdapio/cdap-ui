@@ -17,6 +17,7 @@
 import React from 'react';
 
 import T from 'i18n-react';
+import fileDownload from 'js-file-download';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -44,7 +45,9 @@ export default function RecipeStepsPanel({
   onDrawerCloseIconClick,
   setSnackbar,
 }: IRecipeStepsPanelProps) {
-  const directives = useSelector((state) => state.dataprep.directives);
+  const dataprep = useSelector((state) => state.dataprep);
+
+  const directives = dataprep.directives;
 
   const onSaveButtonClick = () => {
     // TODO: integrate save recipe form when save option is selected in Actions
@@ -55,7 +58,18 @@ export default function RecipeStepsPanel({
   };
 
   const onDownloadButtonClick = () => {
-    // TODO: integrate download recipe feature when download option is selected in Actions
+    const workspaceId = dataprep.workspaceId;
+
+    const data = directives.join('\n');
+    const filename = `${workspaceId}-directives.txt`;
+
+    fileDownload(data, filename);
+
+    setSnackbar({
+      open: true,
+      message: T.translate(`${PREFIX}.recipeStepsDowloadMessage`).toString(),
+      isSuccess: true,
+    });
   };
 
   const actionsOptions: IMenuItem[] = [

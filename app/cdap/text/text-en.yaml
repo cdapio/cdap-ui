@@ -3583,6 +3583,7 @@ features:
       drawerHeader: Recipe
       noRecordsSubtitle: Select a column or function to add your first recipe step
       noRecordsTitle: Start Wrangling your data
+      recipeStepsDowloadMessage: Recipe Steps downloaded successfully
       saveOption: Save
     Snackbar:
       labels:
