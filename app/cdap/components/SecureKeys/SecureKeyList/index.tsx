@@ -123,14 +123,16 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
 
   const filteredSecureKeys = secureKeys.filter(
     (key) =>
-      key
-        .get('name')
-        .toLowerCase()
-        .includes(searchText.toLowerCase()) ||
-      key
-        .get('description')
-        .toLowerCase()
-        .includes(searchText.toLowerCase())
+      (key.get('name') &&
+        key
+          .get('name')
+          .toLowerCase()
+          .includes(searchText.toLowerCase())) ||
+      (key.get('description') &&
+        key
+          .get('description')
+          .toLowerCase()
+          .includes(searchText.toLowerCase()))
   );
 
   return (
