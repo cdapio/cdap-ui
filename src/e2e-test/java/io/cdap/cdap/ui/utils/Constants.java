@@ -38,6 +38,7 @@ public class Constants {
   public static final String PIPELINE_STUDIO_URL = BASE_URL + "/pipelines/ns/default/studio";
   public static final String PIPELINE_LIST_URL = CDAP_URL + "/ns/default/pipelines";
   public static final String PIPELINE_DRAFTS_URL = BASE_STUDIO_URL + "pipelines/drafts";
+  public static final String SECURE_KEY_MANAGER_URL = BASE_URL + "/ns/default/securekeys";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
   public static final String DOWNLOADS_DIR = "target/downloads/";
   public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
