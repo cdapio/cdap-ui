@@ -50,6 +50,7 @@ export const RecipeStepsTableContainer: StyledComponent<typeof TableContainer, {
 )`
   &&& {
     width: 460px;
+    border-collapse: collapse;
   }
   .MuiTableCell-root:first-child {
     width: 64px;
@@ -79,6 +80,11 @@ export const RecipeStepsTableContainer: StyledComponent<typeof TableContainer, {
         }
       }
     }
+  }
+  .MuiTableHead-root {
+    position: sticky;
+    top: 0;
+    z-index: 999;
   }
 `;
 
