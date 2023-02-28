@@ -145,6 +145,7 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
           variant="contained"
           onClick={() => setCreateDialogOpen(true)}
           data-cy="create-secure-key"
+          data-testid="create-secure-key"
         >
           Add secure key
         </Button>
@@ -162,7 +163,7 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
               <CustomTableCell></CustomTableCell>
             </TableRow>
           </TableHead>
-          <TableBody data-cy="secure-key-list">
+          <TableBody data-cy="secure-key-list" data-testid="secure-key-list">
             {filteredSecureKeys.map((keyMetadata, keyIndex) => {
               const keyID = keyMetadata.get('name');
               return (
@@ -173,6 +174,7 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
                   className={classes.row}
                   onClick={() => openEditDialog(keyIndex)}
                   data-cy={`secure-key-row-${keyMetadata.get('name')}`}
+                  data-testid={`secure-key-row-${keyMetadata.get('name')}`}
                 >
                   <CustomTableCell className={classes.nameCell}>{keyID}</CustomTableCell>
                   <CustomTableCell className={classes.descriptionCell}>
