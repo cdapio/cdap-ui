@@ -3162,6 +3162,7 @@ features:
     allTags: All Tags
     labelWithCount: Tags ({count})
     notags: No tags found. Click to add a new business tag.
+    noTagsViewonly: No tags found.
 
   TriggeredPipelines:
     collapsedTabLabel: "Outbound triggers ({count})"
