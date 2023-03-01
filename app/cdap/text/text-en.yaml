@@ -76,6 +76,7 @@ commons:
       singular: Workflow
   export: Export
   formatLabel: Format
+  hide: Hide
   hydrator: Cask Hydrator
   keyValPairs:
     keyLabel: Key
@@ -96,6 +97,7 @@ commons:
   scope: Scope
   secondsShortLabel: secs
   secShortLabel: sec
+  show: Show
   status: Status
   then: Then
   tracker: Cask Tracker
@@ -3144,6 +3146,28 @@ features:
           _: "{context} required fields are missing"
     info: Source Control Management allows management of pipelines in a version control system tool of choice to implement development process such as - code reviews, promotion / demotion between environments for the pipelines.
     linkButton: Link Repository
+    pull:
+      tab: Remote pipelines
+    push:
+      commitPlaceHolder: Write commit message here
+      commitTitle: Enter Commit Message
+      emptyPipelineListMessage: There are no pipelines in current namespace or no pipelines matching the search query "{query}"
+      pipelinePushedFail: "Failed to push 1 pipeline"
+      pipelinesPushedFail: "Failed to push {count} pipelines"
+      pipelinesSelected: "{selected} of {total} pipelines selected"
+      pushAppMessage: Pushing {appId} to remote repository now...
+      pushButton: Push to remote
+      pushSuccess: Successfully pushed pipeline {pipelineName}
+      searchLabel: Search by batch pipeline name
+      tab: Local pipelines
+      table:
+        pipelineName: Pipeline name
+        lastSyncTime: Last sync time
+        gitStatus: Git status
+        filePathInGitRepo: File path in Git repo
+        pushFail: This pipeline cannot be pushed
+        synced: Synced
+    syncButton: Sync Pipelines
     title: Source Control Management
     unlinkButton: Unlink Repository
     unlinkConfirm: Delete

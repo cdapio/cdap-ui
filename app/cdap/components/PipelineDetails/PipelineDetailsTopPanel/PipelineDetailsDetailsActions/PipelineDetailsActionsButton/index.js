@@ -31,6 +31,7 @@ import downloadFile from 'services/download-file';
 import { santizeStringForHTMLID } from 'services/helpers';
 import { deleteEditDraft } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
+import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
 import styled from 'styled-components';
 require('./PipelineDetailsActionsButton.scss');
 
@@ -80,8 +81,10 @@ export default class PipelineDetailsActionsButton extends Component {
     config: PropTypes.object,
     version: PropTypes.string,
     lifecycleManagementEditEnabled: PropTypes.bool,
+    sourceControlManagementEnabled: PropTypes.bool,
     editDraftId: PropTypes.string,
     isLatestVersion: PropTypes.bool,
+    showCommitModal: PropTypes.bool,
   };
 
   state = {
@@ -89,6 +92,7 @@ export default class PipelineDetailsActionsButton extends Component {
     showDeleteConfirmationModal: false,
     showPopover: false,
     showDiscardConfirmation: false,
+    showCommitModal: false,
   };
 
   togglePopover = (showPopover = !this.state.showPopover) => {
@@ -207,6 +211,12 @@ export default class PipelineDetailsActionsButton extends Component {
     });
   };
 
+  toggleCommitModal = () => {
+    this.setState({
+      showCommitModal: !this.state.showCommitModal,
+    });
+  };
+
   renderExportPipelineModal() {
     if (!this.state.showExportModal) {
       return null;
@@ -279,6 +289,16 @@ export default class PipelineDetailsActionsButton extends Component {
     );
   }
 
+  renderCommitModal = () => {
+    return (
+      <CommitModal
+        isOpen={this.state.showCommitModal}
+        onToggle={this.toggleCommitModal}
+        pipelineName={this.props.pipelineName}
+      />
+    );
+  };
+
   render() {
     const ActionsBtnAndLabel = () => {
       return (
@@ -343,10 +363,20 @@ export default class PipelineDetailsActionsButton extends Component {
                 {editEnabled && <span>{T.translate(`${PREFIX}.edit`)}</span>}
               </StyledLi>
             )}
-            <li onClick={this.duplicateConfigAndNavigate}>{T.translate(`${PREFIX}.duplicate`)}</li>
-            <li onClick={this.handlePipelineExport}>{T.translate(`${PREFIX}.export`)}</li>
+            <li role="button" onClick={this.duplicateConfigAndNavigate}>
+              {T.translate(`${PREFIX}.duplicate`)}
+            </li>
+            <li role="button" onClick={this.handlePipelineExport}>
+              {T.translate(`${PREFIX}.export`)}
+            </li>
+            {this.props.sourceControlManagementEnabled && (
+              <li role="button" onClick={this.toggleCommitModal}>
+                {T.translate('features.SourceControlManagement.push.pushButton')}
+              </li>
+            )}
             <hr />
             <li
+              role="button"
               onClick={this.toggleDeleteConfirmationModal}
               className="delete-action"
               data-testid="delete-pipeline"
@@ -367,6 +397,7 @@ export default class PipelineDetailsActionsButton extends Component {
           )}
           continueFn={this.continueSameDraft}
         />
+        {this.renderCommitModal()}
       </div>
     );
   }

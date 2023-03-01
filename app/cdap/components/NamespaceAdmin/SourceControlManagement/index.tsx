@@ -29,6 +29,9 @@ import { UnlinkSourceControlModal } from './UnlinkSourceControlModal';
 import StyledPasswordWrapper from 'components/AbstractWidget/FormInputs/Password';
 import { ISourceControlManagementConfig } from './types';
 import SourceControlManagementForm from './SourceControlManagementForm';
+import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { Link } from 'react-router-dom';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -67,14 +70,12 @@ export const SourceControlManagement = () => {
     <>
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
-        <PrimaryContainedButton
-          children={T.translate(`${PREFIX}.linkButton`)}
-          onClick={toggleForm}
-          style={{ marginBottom: '15px' }}
-        />
+        <PrimaryContainedButton onClick={toggleForm} style={{ marginBottom: '15px' }}>
+          {T.translate(`${PREFIX}.linkButton`)}
+        </PrimaryContainedButton>
       )}
       {sourceControlManagementConfig && (
-        <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 100px">
+        <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 120px 100px">
           <TableHeader>
             <TableRow>
               <TableCell>{T.translate(`${PREFIX}.configModal.provider.label`)}</TableCell>
@@ -83,6 +84,7 @@ export const SourceControlManagement = () => {
               <TableCell>{T.translate(`${PREFIX}.configModal.auth.pat.token`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.branch.label`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.pathPrefix.label`)}</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHeader>
@@ -110,6 +112,11 @@ export const SourceControlManagement = () => {
                 {sourceControlManagementConfig.pathPrefix
                   ? sourceControlManagementConfig.pathPrefix
                   : '--'}
+              </TableCell>
+              <TableCell>
+                <Link to={`/ns/${getCurrentNamespace()}/scm/sync`}>
+                  <PrimaryTextButton>{T.translate(`${PREFIX}.syncButton`)}</PrimaryTextButton>
+                </Link>
               </TableCell>
               <TableCell>
                 <ActionsPopover actions={actions} />

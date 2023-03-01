@@ -32,6 +32,7 @@ import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
 import downloadFile from 'services/download-file';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
+import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
 
 interface IProps {
@@ -40,6 +41,7 @@ interface IProps {
   clearDeleteError: () => void;
   refetch: () => void;
   lifecycleManagementEditEnabled?: boolean;
+  sourceControlManagementEnabled?: boolean;
   draftId: string;
 }
 
@@ -53,6 +55,7 @@ interface IState {
   triggeredPipelines: ITriggeredPipeline[];
   showPopover?: boolean;
   showDiscardConfirmation: boolean;
+  showCommitModal: boolean;
 }
 
 class DeployedActionsView extends React.PureComponent<IProps, IState> {
@@ -62,6 +65,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     triggeredPipelines: [],
     showPopover: false,
     showDiscardConfirmation: false,
+    showCommitModal: false,
   };
 
   private pipelineConfig = {};
@@ -218,6 +222,22 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     });
   };
 
+  private toggleCommitModal = () => {
+    this.setState({
+      showCommitModal: !this.state.showCommitModal,
+    });
+  };
+
+  private renderCommitModal = () => {
+    return (
+      <CommitModal
+        isOpen={this.state.showCommitModal}
+        onToggle={this.toggleCommitModal}
+        pipelineName={this.props.pipeline.name}
+      />
+    );
+  };
+
   private discardAndStartNewEdit = () => {
     this.toggleDiscardConfirmation();
     editPipeline(this.props.pipeline.name);
@@ -265,6 +285,13 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
         className: 'delete',
       },
     ];
+    if (this.props.sourceControlManagementEnabled) {
+      // insert after export
+      actions.splice(2, 0, {
+        label: T.translate('features.SourceControlManagement.push.pushButton'),
+        actionFn: this.toggleCommitModal,
+      });
+    }
     if (this.props.lifecycleManagementEditEnabled) {
       actions.splice(0, 0, {
         label: T.translate('commons.edit'),
@@ -303,6 +330,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
           discardFn={deleteEditDraft.bind(null, this.props.draftId, this.discardAndStartNewEdit)}
           continueFn={this.continueSameDraft}
         />
+        {this.renderCommitModal()}
       </div>
     );
   }

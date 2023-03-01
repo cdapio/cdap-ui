@@ -46,6 +46,9 @@ const PipelineDetailsDetailsActions = ({
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
+  const sourceControlManagementEnabled = useFeatureFlagDefaultFalse(
+    'source.control.management.git.enabled'
+  );
   const isLatestVersion = change ? change.latest : true;
   return (
     <div className="pipeline-details-buttons pipeline-details-details-actions">
@@ -56,6 +59,7 @@ const PipelineDetailsDetailsActions = ({
         config={config}
         version={version}
         lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+        sourceControlManagementEnabled={sourceControlManagementEnabled}
         editDraftId={editDraftId}
         isLatestVersion={isLatestVersion}
       />
