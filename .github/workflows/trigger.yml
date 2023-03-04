@@ -1,4 +1,4 @@
-# Copyright © 2022 Cask Data, Inc.
+# Copyright © 2021 Cask Data, Inc.
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
@@ -11,16 +11,16 @@
 
 # This workflow will trigger build.yml only when needed.
 # This way we don't flood main workflow run list
-# Note that node.js.yml from develop will be used even for PR builds
-# Also it will have access to the proper secrets
+# Note that build.yml from develop will be used even for PR builds
+# Also it will have access to the proper GITHUB_SECRET
 
 name: Trigger build
 
 on:
   push:
-    branches: [ develop, release/**, feature/wrangler-2022 ]
+    branches: [ develop, release/** ]
   pull_request:
-    branches: [ develop, release/**, feature/wrangler-2022 ]
+    branches: [ develop, release/** ]
     types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
 
@@ -38,8 +38,10 @@ jobs:
     if: >
       github.event_name == 'workflow_dispatch'
       || github.event_name == 'push'
-      || github.event_name == 'pull_request'
+      || (contains(github.event.pull_request.labels.*.name, 'build')
+         && (github.event.action != 'labeled' || github.event.label.name == 'build')
+         )
 
     steps:
       - name: Trigger build
-        run: echo UI build will be triggered now
+        run: echo Maven build will be triggered now
