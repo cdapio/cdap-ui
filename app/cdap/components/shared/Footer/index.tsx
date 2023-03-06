@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface IFooterProps {
-  showNamespace: boolean;
+  showNamespace?: boolean;
 }
 
 const nonNamespacePages = ['Operations', 'Reports', 'Administration'];

@@ -28,6 +28,7 @@ import { WINDOW_ON_BLUR, WINDOW_ON_FOCUS } from 'services/WindowManager';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import AppHeader from 'components/shared/AppHeader';
+import { AppControlContext } from 'components/Shell/contexts/AppControlContext';
 import AuthRefresher from 'components/AuthRefresher';
 import AuthorizationErrorMessage from 'components/AuthorizationErrorMessage';
 import Cookies from 'universal-cookie';
@@ -129,6 +130,7 @@ class CDAP extends Component {
       pageLevelError: false,
       isNamespaceFetchInFlight: false,
       apiError: false,
+      hasAppShell: false,
     };
     this.eventEmitter = ee(ee);
     this.eventEmitter.on(WINDOW_ON_FOCUS, this.onWindowFocus);
@@ -160,6 +162,19 @@ class CDAP extends Component {
       this.namespaceSub.unsubscribe();
     }
   }
+
+  setAppControlToShell = (hasShell) => {
+    this.setState({ hasShell }, () => {
+      const page = document.getElementById('app-container');
+      if (hasShell) {
+        page.classList.add('no-header');
+        page.classList.add('no-footer');
+      } else {
+        page.classList.remove('no-header');
+        page.classList.remove('no-footer');
+      }
+    });
+  };
 
   onWindowBlur = () => {
     StatusFactory.stopPollingForBackendStatus();
@@ -363,53 +378,57 @@ class CDAP extends Component {
     const isNamespaceNotFound = objectQuery(this.state, 'pageLevelError', 'errorCode') === 404;
     const isUserUnAuthorizedForNamespace =
       objectQuery(this.state, 'pageLevelError', 'errorCode') === 403;
+    const { setAppControlToShell } = this;
+
     return (
       <Router history={history}>
         <ApolloProvider client={client}>
-          <div className="cdap-container">
-            <Helmet title={Theme.productName} />
-            <AppHeader />
-            <LoadingIndicator />
-            <StatusAlertMessage />
-            {this.state.apiError && <ApiErrorDialog />}
-            {this.state.isNamespaceFetchInFlight && (
-              <div className="loading-svg">
-                <LoadingSVG />
-              </div>
-            )}
-            {!this.state.isNamespaceFetchInFlight && (
-              // normally I would use the shorthand for this but since this file is .js there is an
-              // unexpected token
-              <React.Fragment>
-                {isNamespaceNotFound && <Page404 message={this.state.pageLevelError.message} />}
-                {/** We show authorization failure message when the specific namespace API returns 403 */}
-                {isUserUnAuthorizedForNamespace && (
-                  <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
-                )}
-
-                {!isUserUnAuthorizedForNamespace &&
-                  !isNamespaceNotFound &&
-                  this.state.pageLevelError && (
-                    <Page500
-                      message={this.state.pageLevelError.message}
-                      refreshFn={this.retrieveNamespace}
-                    />
-                  )}
-                {/**
-                 * We show authorization failure message when the backend return empty
-                 * namespace. This indicates the user has access to no namespace.
-                 */}
-                {!this.state.pageLevelError &&
-                  (this.state.authorizationFailed ? (
+          <AppControlContext.Provider value={{ setAppControlToShell }}>
+            <div className="cdap-container">
+              <Helmet title={Theme.productName} />
+              {!this.state.hasShell && <AppHeader />}
+              <LoadingIndicator />
+              <StatusAlertMessage />
+              {this.state.apiError && <ApiErrorDialog />}
+              {this.state.isNamespaceFetchInFlight && (
+                <div className="loading-svg">
+                  <LoadingSVG />
+                </div>
+              )}
+              {!this.state.isNamespaceFetchInFlight && (
+                // normally I would use the shorthand for this but since this file is .js there is an
+                // unexpected token
+                <React.Fragment>
+                  {isNamespaceNotFound && <Page404 message={this.state.pageLevelError.message} />}
+                  {/** We show authorization failure message when the specific namespace API returns 403 */}
+                  {isUserUnAuthorizedForNamespace && (
                     <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
-                  ) : (
-                    container
-                  ))}
-              </React.Fragment>
-            )}
-            <Footer />
-            <AuthRefresher />
-          </div>
+                  )}
+
+                  {!isUserUnAuthorizedForNamespace &&
+                    !isNamespaceNotFound &&
+                    this.state.pageLevelError && (
+                      <Page500
+                        message={this.state.pageLevelError.message}
+                        refreshFn={this.retrieveNamespace}
+                      />
+                    )}
+                  {/**
+                   * We show authorization failure message when the backend return empty
+                   * namespace. This indicates the user has access to no namespace.
+                   */}
+                  {!this.state.pageLevelError &&
+                    (this.state.authorizationFailed ? (
+                      <AuthorizationErrorMessage message={this.state.pageLevelError.message} />
+                    ) : (
+                      container
+                    ))}
+                </React.Fragment>
+              )}
+              {!this.state.hasShell && <Footer />}
+              <AuthRefresher />
+            </div>
+          </AppControlContext.Provider>
         </ApolloProvider>
       </Router>
     );

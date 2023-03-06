@@ -57,12 +57,28 @@ body {
   font-family: var(--font-family);
 
   #app-container {
-    margin-top: 48px;
+    margin-top: $height-of-header;
     overflow-y: auto;
     height: calc(100vh - (#{$height-of-footer} + #{$height-of-header})); // Header + footer heights
+
+    &.no-header {
+      margin-top: 0;
+      height: calc(100vh - #{$height-of-header});
+    }
+
+    &.no-footer {
+      height: calc(100vh - #{$height-of-footer});
+      .container-fluid {
+        padding-bottom: 0;
+      }
+    }
+
+    &.no-header.no-footer {
+      height: 100vh;
+    }
   }
   .container-fluid {
-    padding-bottom: 52px; // footer height
+    padding-bottom: $height-of-footer; // footer height
   }
 
   $maxGridHeight: 210px;
