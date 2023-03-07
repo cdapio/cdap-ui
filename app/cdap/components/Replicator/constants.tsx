@@ -23,3 +23,7 @@ export const PROGRAM_INFO = {
   programType: 'workers',
   programId: 'DeltaWorker',
 };
+
+export enum ErrorType {
+  tableAssessmentError = 'tableAssessmentError',
+}

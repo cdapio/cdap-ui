@@ -32,6 +32,7 @@ import {
   IColumnTransformation,
   IDeltaConfig,
 } from 'components/Replicator/types';
+import { ErrorType } from 'components/Replicator/constants';
 import { useDebounce } from 'services/react/customHooks/useDebounce';
 
 import { ISelectColumnsProps, ReplicateSelect } from './types';
@@ -164,7 +165,10 @@ const SelectColumnsView = (props: ISelectColumnsProps) => {
         });
       },
       error: (err) => {
+        dispatch({ type: 'setLoading', payload: false });
         dispatch({ type: 'setError', payload: err });
+        props.toggle();
+        props.setErrorToast(ErrorType.tableAssessmentError);
       },
       complete: () => {
         dispatch({ type: 'setLoading', payload: false });

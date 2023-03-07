@@ -2878,6 +2878,20 @@ features:
       Content:
         SelectColumns:
           primaryKeyDescription: Must include primary key
+        SelectTables:
+          heading: "Select tables, columns, and events to replicate"
+          genericErrorMessage: Something went wrong
+          unknownDatabaseErrorMessage: "Please manually put in the correct database name and table name below, or go back to \"Configure source\" tab and put in the correct \"Database Name\"."
+          eventsToReplicate: Events to replicate
+          columnsToReplicate: Columns to replicate
+          selectEventsToReplicate: Select events to replicate
+          all: All
+          inserts: Inserts
+          updates: Updates
+          deletes: Deletes
+          numberOfTablesSelected: "{selectedTablesSize} of {totalTablesSize} tables selected"
+          searchboxPlaceholder: Search tables by name
+
   Reports:
     Customizer:
       clear: Clear Selection
