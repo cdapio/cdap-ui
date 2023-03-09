@@ -369,7 +369,8 @@ export const TopPanel = ({
 
   const confirmationElem = (
     <StyledTextarea
-      rowsMin={3}
+      minRows={3}
+      maxRows={7}
       autoFocus={true}
       onChange={(e) => onSummaryChange(e.target.value)}
       value={changeSummary}
