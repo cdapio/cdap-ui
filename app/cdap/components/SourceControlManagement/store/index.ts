@@ -14,19 +14,33 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, Store as StoreInterface } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 import { IAction } from 'services/redux-helpers';
-import { ILocalPipeline } from '../types';
+import { IRepositoryPipeline } from '../types';
 
 interface IPushViewState {
   ready: boolean;
-  localPipelines: ILocalPipeline[];
+  localPipelines: IRepositoryPipeline[];
   nameFilter: string;
   selectedPipelines: string[];
   commitModalOpen: boolean;
   loadingMessage: string;
   showFailedOnly: boolean;
+}
+
+interface IPullViewState {
+  ready: boolean;
+  remotePipelines: IRepositoryPipeline[];
+  nameFilter: string;
+  selectedPipelines: string[];
+  loadingMessage: string;
+  showFailedOnly: boolean;
+}
+
+interface IStore {
+  push: IPushViewState;
+  pull: IPullViewState;
 }
 
 export const PushToGitActions = {
@@ -40,12 +54,31 @@ export const PushToGitActions = {
   toggleShowFailedOnly: 'LOCAL_PIPELINES_TOGGLE_SHOW_FAILED_ONLY',
 };
 
+export const PullFromGitActions = {
+  setRemotePipelines: 'REMOTE_PIPELINES_SET',
+  reset: 'REMOTE_PIPELINES_RESET',
+  setNameFilter: 'REMOTE_PIPELINES_SET_NAME_FILTER',
+  applySearch: 'REMOTE_PIPELINES_APPLY_SERACH',
+  setSelectedPipelines: 'REMOTE_PIPELINES_SET_SELECTED_PIPELINES',
+  setLoadingMessage: 'REMOTE_PIPELINES_SET_LOADING_MESSAGE',
+  toggleShowFailedOnly: 'REMOTE_PIPELINES_TOGGLE_SHOW_FAILED_ONLY',
+};
+
 const defaultPushViewState: IPushViewState = {
   ready: false,
   localPipelines: [],
   nameFilter: '',
   selectedPipelines: [],
   commitModalOpen: false,
+  loadingMessage: null,
+  showFailedOnly: false,
+};
+
+const defaultPullViewState: IPullViewState = {
+  ready: false,
+  remotePipelines: [],
+  nameFilter: '',
+  selectedPipelines: [],
   loadingMessage: null,
   showFailedOnly: false,
 };
@@ -96,12 +129,55 @@ const push = (state = defaultPushViewState, action: IAction) => {
   }
 };
 
-const SourceControlManagementSyncStore = createStore(
+const pull = (state = defaultPullViewState, action: IAction) => {
+  switch (action.type) {
+    case PullFromGitActions.setRemotePipelines:
+      return {
+        ...state,
+        remotePipelines: action.payload.remotePipelines,
+        ready: true,
+      };
+    case PullFromGitActions.setNameFilter:
+      return {
+        ...state,
+        nameFilter: action.payload.nameFilter,
+      };
+    case PullFromGitActions.applySearch:
+      return {
+        ...defaultPushViewState,
+        nameFilter: state.nameFilter,
+        selectedPipelines: state.selectedPipelines,
+      };
+    case PullFromGitActions.setSelectedPipelines:
+      return {
+        ...state,
+        selectedPipelines: action.payload.selectedPipelines,
+      };
+    case PullFromGitActions.setLoadingMessage:
+      return {
+        ...state,
+        loadingMessage: action.payload.loadingMessage,
+      };
+    case PullFromGitActions.toggleShowFailedOnly:
+      return {
+        ...state,
+        showFailedOnly: !state.showFailedOnly,
+      };
+    case PullFromGitActions.reset:
+      return defaultPullViewState;
+    default:
+      return state;
+  }
+};
+
+const SourceControlManagementSyncStore: StoreInterface<IStore> = createStore(
   combineReducers({
     push,
+    pull,
   }),
   {
     push: defaultPushViewState,
+    pull: defaultPullViewState,
   },
   composeEnhancers('SourceControlManagementSyncStore')()
 );

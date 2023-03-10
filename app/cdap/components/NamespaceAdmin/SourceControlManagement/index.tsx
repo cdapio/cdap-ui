@@ -31,7 +31,11 @@ import { ISourceControlManagementConfig } from './types';
 import SourceControlManagementForm from './SourceControlManagementForm';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Link } from 'react-router-dom';
+import { validateSourceControlManagement } from '../store/ActionCreator';
+import Alert from 'components/shared/Alert';
+import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
+
+const PrimaryTextLoadingButton = ButtonLoadingHoc(PrimaryTextButton);
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -45,6 +49,8 @@ const StyledInfo = styled.div`
 export const SourceControlManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const sourceControlManagementConfig: ISourceControlManagementConfig = useSelector(
     (state) => state.sourceControlManagementConfig
   );
@@ -66,8 +72,31 @@ export const SourceControlManagement = () => {
     },
   ];
 
+  const validateConfigAndRedirect = () => {
+    setLoading(true);
+    const namespace = getCurrentNamespace();
+    validateSourceControlManagement(namespace).subscribe(
+      () => {
+        window.location.href = `/ns/${namespace}/scm/sync`;
+      },
+      (err) => {
+        setErrorMessage(T.translate(`${PREFIX}.invalidConfig`, { error: err.message }));
+        setLoading(false);
+      },
+      () => {
+        setLoading(false);
+      }
+    );
+  };
+
   return (
     <>
+      <Alert
+        showAlert={errorMessage !== null}
+        message={errorMessage}
+        type="error"
+        onClose={() => setErrorMessage(null)}
+      />
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
         <PrimaryContainedButton onClick={toggleForm} style={{ marginBottom: '15px' }}>
@@ -114,9 +143,9 @@ export const SourceControlManagement = () => {
                   : '--'}
               </TableCell>
               <TableCell>
-                <Link to={`/ns/${getCurrentNamespace()}/scm/sync`}>
-                  <PrimaryTextButton>{T.translate(`${PREFIX}.syncButton`)}</PrimaryTextButton>
-                </Link>
+                <PrimaryTextLoadingButton onClick={validateConfigAndRedirect} loading={loading}>
+                  {T.translate(`${PREFIX}.syncButton`)}
+                </PrimaryTextLoadingButton>
               </TableCell>
               <TableCell>
                 <ActionsPopover actions={actions} />

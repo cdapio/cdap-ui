@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2017 Cask Data, Inc.
+ * Copyright © 2016-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -105,19 +105,19 @@ $horizontal-tab-height: 45px;
             n column layout : (n-1 * 10px);
         */
 
-        @media (min-width: 1601px) {
+        @media (min-width: 2601px) {
           .resourcecenter-entity-card {
             width: calc((100% - (4 * 10px)) / 4);
           }
         }
 
-        @media (min-width: 1201px) and (max-width: 1600px) {
+        @media (min-width: 1401px) and (max-width: 2600px) {
           .resourcecenter-entity-card {
             width: calc((100% - (3 * 10px)) / 3);
           }
         }
 
-        @media (min-width: 992px) and (max-width: 1200px) {
+        @media (min-width: 992px) and (max-width: 1400px) {
           .resourcecenter-entity-card {
             width: calc((100% - (2 * 10px)) / 2);
           }

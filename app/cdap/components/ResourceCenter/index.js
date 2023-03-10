@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2017 Cask Data, Inc.
+ * Copyright © 2016-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,6 +21,7 @@ import ResourceCenterPipelineEntity from 'components/ResourceCenterEntity/Resour
 import AbstractWizard from 'components/AbstractWizard';
 import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 require('./ResourceCenter.scss');
 
@@ -131,7 +132,7 @@ export default class ResourceCenter extends Component {
   }
   render() {
     return (
-      <div>
+      <FeatureProvider>
         <div className="cask-resource-center">
           <ResourceCenterPipelineEntity onError={this.props.onError} />
           {this.state.entities.map((entity, index) => (
@@ -146,7 +147,7 @@ export default class ResourceCenter extends Component {
           ))}
         </div>
         {this.getWizardToBeDisplayed()}
-      </div>
+      </FeatureProvider>
     );
   }
 }

@@ -14,6 +14,8 @@
  * the License.
  */
 
+// TODO: create a unified searchbox component for the entire project
+
 import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import React from 'react';
 import SearchIcon from '@material-ui/icons/Search';
@@ -30,7 +32,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const StyledDiv = styled.div`
-  margin-bottom: 12px;
+  margin: 12px 12px;
 `;
 
 interface ISearchBoxProps {

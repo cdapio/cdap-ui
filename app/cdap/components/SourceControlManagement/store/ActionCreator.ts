@@ -14,24 +14,25 @@
  * the License.
  */
 
-import { MyPipelineApi } from 'api/pipeline';
-import { BATCH_PIPELINE_TYPE } from 'services/helpers';
-import SourceControlManagementSyncStore, { PushToGitActions } from '.';
+import T from 'i18n-react';
 import debounce from 'lodash/debounce';
-import { MyRepositoryApi } from 'api/repository';
 import { catchError, concatMap, map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
-import { ILocalPipeline } from '../types';
-import T from 'i18n-react';
+import { MyPipelineApi } from 'api/pipeline';
+import { BATCH_PIPELINE_TYPE } from 'services/helpers';
+import SourceControlManagementSyncStore, { PullFromGitActions, PushToGitActions } from '.';
+import { SourceControlApi } from 'api/sourcecontrol';
+import { IPipeline, IPushResponse, IRepositoryPipeline } from '../types';
 
+// push actions
 export const getNamespacePipelineList = (namespace, nameFilter = null) => {
   MyPipelineApi.list({
     namespace,
     artifactName: BATCH_PIPELINE_TYPE,
     nameFilter,
-  }).subscribe((res) => {
-    let pipelines = Array.isArray(res) ? res : res?.applications;
-    pipelines = pipelines.map((pipeline) => {
+  }).subscribe((res: IPipeline[] | { applications: IPipeline[] }) => {
+    const pipelines = Array.isArray(res) ? res : res?.applications;
+    const nsPipelines = pipelines.map((pipeline) => {
       return {
         name: pipeline.name,
         fileHash: pipeline.sourceControlMeta?.fileHash,
@@ -39,11 +40,11 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
         success: null,
       };
     });
-    setLocalPipelines(pipelines);
+    setLocalPipelines(nsPipelines);
   });
 };
 
-export const setLocalPipelines = (pipelines: ILocalPipeline[]) => {
+export const setLocalPipelines = (pipelines: IRepositoryPipeline[]) => {
   SourceControlManagementSyncStore.dispatch({
     type: PushToGitActions.setLocalPipelines,
     payload: {
@@ -86,8 +87,13 @@ export const pushSelectedPipelines = (namespace, apps, payload, loadingMessageDi
         namespace,
         appId,
       };
-      return MyRepositoryApi.push(params, payload).pipe(
-        map((res: object) => ({ ...res, statusCode: 200 })),
+      return SourceControlApi.push(params, payload).pipe(
+        map((res: IPushResponse | string) => {
+          if (typeof res === 'string') {
+            return { message: res, name: appId, statusCode: 200 };
+          }
+          return { ...res, statusCode: 200 };
+        }),
         catchError((err) => {
           return of({ ...err, name: appId });
         })
@@ -138,5 +144,114 @@ export const toggleShowFailedOnly = () => {
 export const reset = () => {
   SourceControlManagementSyncStore.dispatch({
     type: PushToGitActions.reset,
+  });
+};
+
+// pull actions
+export const getRemotePipelineList = (namespace) => {
+  SourceControlApi.list({
+    namespace,
+  }).subscribe((res: IRepositoryPipeline[] | { apps: IRepositoryPipeline[] }) => {
+    const pipelines = Array.isArray(res) ? res : res?.apps;
+    const remotePipelines = pipelines.map((pipeline) => {
+      return {
+        name: pipeline.name,
+        fileHash: pipeline.fileHash,
+        error: null,
+        success: null,
+      };
+    });
+    setRemotePipelines(remotePipelines);
+  });
+};
+
+export const setRemotePipelines = (pipelines: IRepositoryPipeline[]) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setRemotePipelines,
+    payload: {
+      remotePipelines: pipelines,
+    },
+  });
+};
+
+export const setRemoteNameFilter = (nameFilter: string) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setNameFilter,
+    payload: {
+      nameFilter,
+    },
+  });
+};
+
+export const setSelectedRemotePipelines = (selectedPipelines: string[]) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setSelectedPipelines,
+    payload: {
+      selectedPipelines,
+    },
+  });
+};
+
+export const setRemoteLoadingMessage = (loadingMessage) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setLoadingMessage,
+    payload: {
+      loadingMessage,
+    },
+  });
+};
+
+export const resetPullStatus = () => {
+  const pipelines = [...SourceControlManagementSyncStore.getState().pull.remotePipelines];
+  pipelines.forEach((pipeline) => {
+    (pipeline.error = null), (pipeline.success = null);
+  });
+  setRemotePipelines(pipelines);
+};
+
+export const countPullFailedPipelines = () => {
+  return SourceControlManagementSyncStore.getState().pull.remotePipelines.filter(
+    (pipeline) => pipeline.error
+  ).length;
+};
+
+export const toggleRemoteShowFailedOnly = () => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.toggleShowFailedOnly,
+  });
+};
+
+export const pullAndDeploySelectedRemotePipelines = (
+  namespace,
+  apps: string[],
+  loadingMessageDispatcher: (message: string) => void
+) => {
+  return of(...apps).pipe(
+    concatMap((appId) => {
+      loadingMessageDispatcher(
+        T.translate('features.SourceControlManagement.pull.pullAppMessage', { appId }).toString()
+      );
+      const params = {
+        namespace,
+        appId,
+      };
+      return SourceControlApi.pull(params).pipe(
+        map((res: IPipeline | string) => {
+          if (typeof res === 'string') {
+            return { message: res, name: appId, statusCode: 200 };
+          }
+          return { ...res, statusCode: 200 };
+        }),
+        catchError((err) => {
+          return of({ ...err, name: appId });
+        })
+      );
+    })
+  );
+};
+
+export const resetRemote = () => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.reset,
   });
 };

@@ -3007,6 +3007,7 @@ features:
     HydratorPipeline:
       actionbtn0: Create
       actionbtn1: Import
+      actionbtn2: Pull from remote
       description: A pipeline allows you to create, manage, and operate complex batch and real-time workflows intuitively.
       errorLabel: "There was a problem with the pipeline you were trying to upload"
       label: Pipeline
@@ -3159,12 +3160,21 @@ features:
           1: "{context} required field is missing"
           _: "{context} required fields are missing"
     info: Source Control Management allows management of pipelines in a version control system tool of choice to implement development process such as - code reviews, promotion / demotion between environments for the pipelines.
+    invalidConfig: "{error}. Please validate saved source control management configurations."
     linkButton: Link Repository
     pull:
+      emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
+      modalTitle: Pull pipeline from remote repository
+      pipelinePulledFail: "Failed to pull 1 pipeline"
+      pipelinesPulledFail: "Failed to pull {count} pipelines"
+      pipelinesSelected: "{selected} of {total} pipelines selected"
+      pullAppMessage: Pulling {appId} from remote repository now...
+      pullButton: Pull to namespace
       tab: Remote pipelines
     push:
       commitPlaceHolder: Write commit message here
       commitTitle: Enter Commit Message
+      emptyCommitMessage: Commit Message cannot be empty.
       emptyPipelineListMessage: There are no pipelines in current namespace or no pipelines matching the search query "{query}"
       pipelinePushedFail: "Failed to push 1 pipeline"
       pipelinesPushedFail: "Failed to push {count} pipelines"
@@ -3174,13 +3184,14 @@ features:
       pushSuccess: Successfully pushed pipeline {pipelineName}
       searchLabel: Search by batch pipeline name
       tab: Local pipelines
-      table:
-        pipelineName: Pipeline name
-        lastSyncTime: Last sync time
-        gitStatus: Git status
-        filePathInGitRepo: File path in Git repo
-        pushFail: This pipeline cannot be pushed
-        synced: Synced
+    table:
+      pipelineName: Pipeline name
+      lastSyncTime: Last sync time
+      gitStatus: Git status
+      filePathInGitRepo: File path in Git repo
+      pullFail: Failed to pull this pipeline from remote.
+      pushFail: Failed to push this pipeline to remote.
+      synced: Synced
     syncButton: Sync Pipelines
     title: Source Control Management
     unlinkButton: Unlink Repository

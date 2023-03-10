@@ -61,26 +61,24 @@ export const CommitModal = ({
       selectedPipelines,
       payload,
       setPushLoadingMessage
-    ).subscribe(
-      (res: any) => {
-        if (res.statusCode !== 200) {
-          setPushError(res.message);
-          setPushSuccess(false);
-        } else {
-          setPushSuccess(true);
-        }
-      },
-      (err) => {
-        // most likely it will never arrive here, since the request error
-        // will also get throwed into above next subscription
-      },
-      () => {
-        setPushLoadingMessage(null);
+    ).subscribe((res: any) => {
+      // TODO: no changes made will also be 200, need to give different warning
+      if (res.statusCode !== 200) {
+        setPushError(res.message);
+        setPushSuccess(false);
+      } else {
+        setPushSuccess(true);
       }
-    );
+      setPushLoadingMessage(null);
+    });
   };
 
   const confirmFn = () => {
+    if (!commitMessage) {
+      setPushError(T.translate(`${PREFIX}.emptyCommitMessage`));
+      setPushSuccess(false);
+      return;
+    }
     // the submit function of namespace admin is slightly different
     // passing a onSubmit function to override the native onSubmit
     if (typeof onSubmit === 'function') {
