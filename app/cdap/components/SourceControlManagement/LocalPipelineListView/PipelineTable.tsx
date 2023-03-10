@@ -29,12 +29,14 @@ interface IRepositoryPipelineTableProps {
   localPipelines: IRepositoryPipeline[];
   selectedPipelines: string[];
   showFailedOnly: boolean;
+  enableMultipleSelection?: boolean;
 }
 
 export const LocalPipelineTable = ({
   localPipelines,
   selectedPipelines,
   showFailedOnly,
+  enableMultipleSelection = false,
 }: IRepositoryPipelineTableProps) => {
   const isSelected = (name: string) => selectedPipelines.indexOf(name) !== -1;
 
@@ -48,6 +50,14 @@ export const LocalPipelineTable = ({
   };
 
   const handleClick = (event: React.MouseEvent, name: string) => {
+    if (enableMultipleSelection) {
+      handleMultipleSelection(name);
+      return;
+    }
+    handleSingleSelection(name);
+  };
+
+  const handleMultipleSelection = (name: string) => {
     const selectedIndex = selectedPipelines.indexOf(name);
     const newSelected = [...selectedPipelines];
 
@@ -60,20 +70,31 @@ export const LocalPipelineTable = ({
     setSelectedPipelines(newSelected);
   };
 
+  const handleSingleSelection = (name: string) => {
+    const selectedIndex = selectedPipelines.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = [name];
+    }
+    setSelectedPipelines(newSelected);
+  };
+
   return (
     <TableBox>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox
-                color="primary"
-                indeterminate={
-                  selectedPipelines.length > 0 && selectedPipelines.length < localPipelines.length
-                }
-                checked={selectedPipelines.length === localPipelines.length}
-                onChange={handleSelectAllClick}
-              />
+              {enableMultipleSelection && (
+                <Checkbox
+                  color="primary"
+                  indeterminate={
+                    selectedPipelines.length > 0 && selectedPipelines.length < localPipelines.length
+                  }
+                  checked={selectedPipelines.length === localPipelines.length}
+                  onChange={handleSelectAllClick}
+                />
+              )}
             </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
