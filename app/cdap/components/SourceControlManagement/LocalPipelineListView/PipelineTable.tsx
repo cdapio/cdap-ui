@@ -98,9 +98,7 @@ export const LocalPipelineTable = ({
             </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
-            <StyledTableCell>{T.translate(`${PREFIX}.lastSyncTime`)}</StyledTableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.gitStatus`)}</StyledTableCell>
-            <StyledTableCell>{T.translate(`${PREFIX}.filePathInGitRepo`)}</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -137,11 +135,9 @@ export const LocalPipelineTable = ({
                   )}
                 </StatusCell>
                 <StyledTableCell>{pipeline.name}</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
                 <StyledTableCell>
-                  {pipeline.fileHash ? T.translate(`${PREFIX}.synced`) : '--'}
+                  {pipeline.fileHash ? T.translate(`${PREFIX}.connected`) : '--'}
                 </StyledTableCell>
-                <StyledTableCell></StyledTableCell>
               </StyledTableRow>
             );
           })}

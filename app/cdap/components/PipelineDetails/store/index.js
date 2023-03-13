@@ -86,11 +86,16 @@ const DEFAULT_PIPELINE_DETAILS = {
   scheduleError: '',
   stopButtonLoading: true,
   stopError: '',
+
+  // lcm
   change: {},
   editDraftId: null,
 
   // endpoints for plugin metadata
   metadataEndpoints: [],
+
+  // source control meta
+  sourceControlMeta: null,
 };
 
 const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultAction) => {
@@ -118,6 +123,7 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
         config: { ...newPipelineConfig },
         version: pipeline.appVersion,
         change: pipeline.change,
+        sourceControlMeta: pipeline.sourceControlMeta,
       };
     }
     case ACTIONS.SET_OPTIONAL_PROPERTY:

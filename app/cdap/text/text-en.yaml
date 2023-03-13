@@ -3185,10 +3185,9 @@ features:
       searchLabel: Search by batch pipeline name
       tab: Local pipelines
     table:
+      connected: Connected to Git
       pipelineName: Pipeline name
-      lastSyncTime: Last sync time
-      gitStatus: Git status
-      filePathInGitRepo: File path in Git repo
+      gitStatus: Pushed to Git
       pullFail: Failed to pull this pipeline from remote.
       pushFail: Failed to push this pipeline to remote.
       synced: Synced

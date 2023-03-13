@@ -22,6 +22,7 @@ import AbstractWizard from 'components/AbstractWizard';
 import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import ThemeWrapper from 'components/ThemeWrapper';
 
 require('./ResourceCenter.scss');
 
@@ -133,20 +134,22 @@ export default class ResourceCenter extends Component {
   render() {
     return (
       <FeatureProvider>
-        <div className="cask-resource-center">
-          <ResourceCenterPipelineEntity onError={this.props.onError} />
-          {this.state.entities.map((entity, index) => (
-            <ResourceCenterEntity
-              title={entity.title}
-              description={entity.description}
-              actionLabel={entity.actionLabel}
-              iconClassName={entity.iconClassName}
-              key={index}
-              onClick={this.toggleWizard.bind(this, entity.wizardId)}
-            />
-          ))}
-        </div>
-        {this.getWizardToBeDisplayed()}
+        <ThemeWrapper>
+          <div className="cask-resource-center">
+            <ResourceCenterPipelineEntity onError={this.props.onError} />
+            {this.state.entities.map((entity, index) => (
+              <ResourceCenterEntity
+                title={entity.title}
+                description={entity.description}
+                actionLabel={entity.actionLabel}
+                iconClassName={entity.iconClassName}
+                key={index}
+                onClick={this.toggleWizard.bind(this, entity.wizardId)}
+              />
+            ))}
+          </div>
+          {this.getWizardToBeDisplayed()}
+        </ThemeWrapper>
       </FeatureProvider>
     );
   }
