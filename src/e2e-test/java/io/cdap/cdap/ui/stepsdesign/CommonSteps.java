@@ -83,6 +83,12 @@ public class CommonSteps {
     WaitHelper.waitForPageToLoad();
   }
 
+  @When("Open Source Control Management Page")
+  public void openSourceControlManagementPage() {
+    SeleniumDriver.openPage(Constants.SOURCE_CONTROL_MANAGEMENT_URL);
+    WaitHelper.waitForPageToLoad();
+  }
+
   @When("Create a simple pipeline")
   public void createSimplePipeline() {
     Commands.createSimplePipeline();

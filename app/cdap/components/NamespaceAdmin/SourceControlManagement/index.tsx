@@ -99,7 +99,11 @@ export const SourceControlManagement = () => {
       />
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
-        <PrimaryContainedButton onClick={toggleForm} style={{ marginBottom: '15px' }}>
+        <PrimaryContainedButton
+          onClick={toggleForm}
+          style={{ marginBottom: '15px' }}
+          data-testid="link-repository-button"
+        >
           {T.translate(`${PREFIX}.linkButton`)}
         </PrimaryContainedButton>
       )}
@@ -122,14 +126,18 @@ export const SourceControlManagement = () => {
             <TableRow
               key={`${sourceControlManagementConfig.provider}-${sourceControlManagementConfig.link}`}
             >
-              <TableCell>{sourceControlManagementConfig.provider}</TableCell>
-              <TableCell>
+              <TableCell data-testid="repository-provider">
+                {sourceControlManagementConfig.provider}
+              </TableCell>
+              <TableCell data-testid="repository-link">
                 <a href={sourceControlManagementConfig.link} target="_blank">
                   {sourceControlManagementConfig.link}
                 </a>
               </TableCell>
-              <TableCell>{sourceControlManagementConfig.auth.type}</TableCell>
-              <TableCell>
+              <TableCell data-testid="repository-auth-type">
+                {sourceControlManagementConfig.auth.type}
+              </TableCell>
+              <TableCell data-testid="repository-auth-token">
                 <StyledPasswordWrapper value={sourceControlManagementConfig.auth.token} />
               </TableCell>
               <TableCell>
