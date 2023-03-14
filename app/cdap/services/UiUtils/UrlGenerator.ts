@@ -213,7 +213,7 @@ const addCustomQueryParams = (url, params = {}) => {
   const forEachSorted = (obj, iterator) => {
     const keys = Object.keys(params).sort();
     keys.forEach((key) => {
-      iterator.call(obj[key], key);
+      iterator(obj[key], key);
     });
     return keys;
   };
