@@ -79,6 +79,10 @@ jobs:
         SCM_TEST_REPO_PAT: ${{ secrets.SCM_TEST_REPO_PAT }}
       run: |
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
+        echo "Printing secrets.SCM_TEST_REPO_URL"
+        echo ${{ secrets.SCM_TEST_REPO_URL }}
+        echo "Printing $SCM_TEST_REPO_URL"
+        echo $SCM_TEST_REPO_URL
         yarn run cdap-full-build-more-memory # Build UI
         yarn start &
         yarn run test:unit

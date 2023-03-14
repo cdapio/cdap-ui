@@ -24,11 +24,14 @@ import io.cucumber.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class SourceControlManagement {
+  private static final Logger LOG = LoggerFactory.getLogger(SourceControlManagement.class);
 
   @Then("Click on \"Link Repository\" button")
   public void openAddRepositoryButton() {
@@ -119,6 +122,8 @@ public class SourceControlManagement {
   public void addTestRepositoryConfiguration() {
     WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
     ElementHelper.clearElementValue(repoUrlInput);
+    LOG.debug("SCM Test Repo Url in env: " + System.getenv("SCM_TEST_REPO_URL"));
+    LOG.debug("SCM Test Repo Url in constants: " + Constants.DEFAULT_SCM_TEST_REPO_URL);
     ElementHelper.sendKeys(repoUrlInput, Constants.DEFAULT_SCM_TEST_REPO_URL);
 
     WebElement tokenNameInput = Helper.locateElementByTestId("tokenName");
