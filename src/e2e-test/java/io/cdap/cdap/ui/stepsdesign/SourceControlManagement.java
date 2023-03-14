@@ -88,11 +88,11 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("validate-repo-config-button"));
   }
 
-  @Then("Verify failure in validation")
-  public void verifyFailureInValidation() {
+  @Then("Verify {string} message in validation")
+  public void verifyFailureInValidation(String errorMessage) {
     WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("alert"));
     Assert.assertTrue(Helper.locateElementByTestId("alert").getText()
-        .contains("Failed to list remotes in remote repository."));
+        .contains(errorMessage));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("alert-close"));
   }
 
@@ -101,7 +101,7 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("save-repo-config-button"));
   }
 
-  @Then("Verify saved repo config")
+  @Then("Verify saved fake repo config")
   public void verifySavedRepoConfig() {
     WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("actions-popover"));
     Assert.assertTrue(Helper.locateElementByTestId("repository-provider")
@@ -135,6 +135,28 @@ public class SourceControlManagement {
     WebElement tokenInput = Helper.locateElementByTestId("token");
     ElementHelper.clearElementValue(tokenInput);
     ElementHelper.sendKeys(tokenInput, Constants.FAKE_TOKEN);
+  }
+
+  @Then("Add test repository configuration")
+  public void addTestRepositoryConfiguration() {
+    WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
+    ElementHelper.clearElementValue(repoUrlInput);
+    ElementHelper.sendKeys(repoUrlInput, PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
+
+    WebElement tokenNameInput = Helper.locateElementByTestId("tokenName");
+    ElementHelper.clearElementValue(tokenNameInput);
+    ElementHelper.sendKeys(tokenNameInput, Constants.FAKE_TOKEN_NAME);
+
+    WebElement tokenInput = Helper.locateElementByTestId("token");
+    ElementHelper.clearElementValue(tokenInput);
+    ElementHelper.sendKeys(tokenInput, PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
+  }
+
+  @Then("Add non-existing branch")
+  public void addNonExistingBranch() {
+    WebElement defaultBranchInput = Helper.locateElementByTestId("defaultBranch");
+    ElementHelper.clearElementValue(defaultBranchInput);
+    ElementHelper.sendKeys(defaultBranchInput, Constants.FAKE_DEFAULT_BRANCH);
   }
 
   @Then("Verify UI directed to initial page")
