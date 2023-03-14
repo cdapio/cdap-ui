@@ -17,14 +17,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
+import T from 'i18n-react';
+import styled from 'styled-components';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import Tags from 'components/shared/Tags';
 import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
-import T from 'i18n-react';
+import { Chip } from '@material-ui/core';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
+
+const StyledSpan = styled.span`
+  margin-left: 50px;
+`;
+
+const StyledChip = styled(Chip)`
+  height: 20px;
+`;
 
 const mapStateToPipelineTagsProps = (state) => {
   let { name } = state;
@@ -41,16 +51,23 @@ const mapStateToPipelineTagsProps = (state) => {
 const ConnectedPipelineTags = connect(mapStateToPipelineTagsProps)(Tags);
 
 const mapStateToPipelineDetailsMetadataProps = (state) => {
-  let { name, artifact, version, description } = state;
+  let { name, artifact, version, description, sourceControlMeta } = state;
   return {
     name,
     artifactName: artifact.name,
     version,
     description,
+    sourceControlMeta,
   };
 };
 
-const PipelineDetailsMetadata = ({ name, artifactName, version, description }) => {
+const PipelineDetailsMetadata = ({
+  name,
+  artifactName,
+  version,
+  description,
+  sourceControlMeta,
+}) => {
   return (
     <div className="pipeline-metadata">
       <div className="pipeline-type-name-version">
@@ -73,6 +90,14 @@ const PipelineDetailsMetadata = ({ name, artifactName, version, description }) =
             {description}
           </Popover>
         </span>
+        {sourceControlMeta && sourceControlMeta.fileHash && (
+          <StyledSpan>
+            <StyledChip
+              variant="outlined"
+              label={T.translate('features.SourceControlManagement.table.connected')}
+            />
+          </StyledSpan>
+        )}
         <span className="pipeline-version">{T.translate(`${PREFIX}.version`, { version })}</span>
       </div>
       <div className="pipeline-tags">
@@ -87,6 +112,7 @@ PipelineDetailsMetadata.propTypes = {
   artifactName: PropTypes.string,
   version: PropTypes.string,
   description: PropTypes.string,
+  sourceControlMeta: PropTypes.object,
 };
 
 const ConnectedPipelineDetailsMetadata = connect(mapStateToPipelineDetailsMetadataProps)(

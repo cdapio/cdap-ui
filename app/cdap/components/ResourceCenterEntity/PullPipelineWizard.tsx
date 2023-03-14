@@ -23,8 +23,8 @@ import { RemotePipelineListView } from 'components/SourceControlManagement/Remot
 import StandardModal from 'components/shared/StandardModal';
 import Alert from 'components/shared/Alert';
 
-interface IAction<T = string, TPayload = any> extends Action {
-  type: T;
+interface IAction<Type = string, TPayload = any> extends Action {
+  type: Type;
   payload?: TPayload;
 }
 
