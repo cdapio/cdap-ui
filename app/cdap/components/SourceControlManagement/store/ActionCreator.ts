@@ -30,18 +30,23 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
     namespace,
     artifactName: BATCH_PIPELINE_TYPE,
     nameFilter,
-  }).subscribe((res: IPipeline[] | { applications: IPipeline[] }) => {
-    const pipelines = Array.isArray(res) ? res : res?.applications;
-    const nsPipelines = pipelines.map((pipeline) => {
-      return {
-        name: pipeline.name,
-        fileHash: pipeline.sourceControlMeta?.fileHash,
-        error: null,
-        success: null,
-      };
-    });
-    setLocalPipelines(nsPipelines);
-  });
+  }).subscribe(
+    (res: IPipeline[] | { applications: IPipeline[] }) => {
+      const pipelines = Array.isArray(res) ? res : res?.applications;
+      const nsPipelines = pipelines.map((pipeline) => {
+        return {
+          name: pipeline.name,
+          fileHash: pipeline.sourceControlMeta?.fileHash,
+          error: null,
+          success: null,
+        };
+      });
+      setLocalPipelines(nsPipelines);
+    },
+    (err) => {
+      setLocalPipelines([]);
+    }
+  );
 };
 
 export const setLocalPipelines = (pipelines: IRepositoryPipeline[]) => {
@@ -151,18 +156,23 @@ export const reset = () => {
 export const getRemotePipelineList = (namespace) => {
   SourceControlApi.list({
     namespace,
-  }).subscribe((res: IRepositoryPipeline[] | { apps: IRepositoryPipeline[] }) => {
-    const pipelines = Array.isArray(res) ? res : res?.apps;
-    const remotePipelines = pipelines.map((pipeline) => {
-      return {
-        name: pipeline.name,
-        fileHash: pipeline.fileHash,
-        error: null,
-        success: null,
-      };
-    });
-    setRemotePipelines(remotePipelines);
-  });
+  }).subscribe(
+    (res: IRepositoryPipeline[] | { apps: IRepositoryPipeline[] }) => {
+      const pipelines = Array.isArray(res) ? res : res?.apps;
+      const remotePipelines = pipelines.map((pipeline) => {
+        return {
+          name: pipeline.name,
+          fileHash: pipeline.fileHash,
+          error: null,
+          success: null,
+        };
+      });
+      setRemotePipelines(remotePipelines);
+    },
+    (err) => {
+      setRemotePipelines([]);
+    }
+  );
 };
 
 export const setRemotePipelines = (pipelines: IRepositoryPipeline[]) => {
