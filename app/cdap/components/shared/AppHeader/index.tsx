@@ -57,6 +57,7 @@ const styles = (theme) => {
 
 interface IMyAppHeaderProps extends WithStyles<typeof styles> {
   nativeLink: boolean;
+  inShell?: boolean;
 }
 
 class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderState> {
@@ -147,7 +148,7 @@ class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderSta
     }
     return (
       <AppBar
-        position="fixed"
+        position={this.props.inShell ? 'static' : 'fixed'}
         className={classnames(classes.grow, classes.appbar)}
         data-cy="app-navbar"
         data-testid="app-navbar"
@@ -155,6 +156,7 @@ class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderSta
         <NamespaceLinkContext.Provider value={namespaceLinkContext}>
           <AppToolbar onMenuIconClick={this.toggleDrawer} nativeLink={this.props.nativeLink} />
           <AppDrawer
+            inShell={this.props.inShell}
             open={this.state.toggleDrawer}
             onClose={this.toggleDrawer}
             componentDidNavigate={this.componentDidNavigate}
@@ -180,15 +182,21 @@ const AppHeaderWithStyles = withStyles(styles)(MyAppHeader);
  * As we move slowly everything to react we will remmove this check and
  * let the root pass on the theme to the children.
  */
-export default function CustomHeader({ nativeLink }) {
+
+interface ICustomHeaderProps {
+  nativeLink?: boolean;
+  inShell?: boolean;
+}
+
+export default function CustomHeader({ nativeLink, inShell = false }: ICustomHeaderProps) {
   if (typeof window.angular !== 'undefined' && window.angular.version) {
     return (
       <ThemeWrapper>
-        <AppHeaderWithStyles nativeLink={nativeLink} />
+        <AppHeaderWithStyles nativeLink={nativeLink} inShell={inShell} />
       </ThemeWrapper>
     );
   }
-  return <AppHeaderWithStyles nativeLink={nativeLink} />;
+  return <AppHeaderWithStyles nativeLink={nativeLink} inShell={inShell} />;
 }
 // Apparently this is needed for ngReact
 (CustomHeader as any).propTypes = {

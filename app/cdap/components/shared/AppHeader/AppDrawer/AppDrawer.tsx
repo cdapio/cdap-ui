@@ -83,6 +83,7 @@ interface IAppDrawerProps extends WithStyles<typeof styles> {
   onClose: () => void;
   componentDidNavigate: () => void;
   context: INamespaceLinkContext;
+  inShell?: boolean;
 }
 
 class AppDrawer extends React.PureComponent<IAppDrawerProps> {
@@ -112,7 +113,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
     this.setState({ onNamespacePreferenceEdit: !this.state.onNamespacePreferenceEdit });
   };
   public render() {
-    const { classes, open, onClose, componentDidNavigate = () => null } = this.props;
+    const { classes, open, onClose, inShell, componentDidNavigate = () => null } = this.props;
     const { isNativeLink, namespace } = this.props.context;
     const nsurl = `ns/${namespace}`;
     return (
@@ -123,7 +124,8 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
         disableEnforceFocus={true}
         disableEscapeKeyDown={this.state.onNamespacePreferenceEdit}
         ModalProps={{
-          keepMounted: true,
+          keepMounted: !inShell,
+          disablePortal: !!inShell,
         }}
         classes={{
           paper: classes.drawerPaper,
