@@ -32,6 +32,7 @@ public class Constants {
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
   public static final String CDAP_URL = BASE_URL + "/cdap";
   public static final String CONFIGURATION_URL = BASE_URL + "/cdap/administration/configuration";
+  public static final String SOURCE_CONTROL_MANAGEMENT_URL = BASE_URL + "/cdap/ns/default/details/scm";
   public static final String NAMESPACE_URL = BASE_URL + "/cdap/ns";
   public static final String BASE_STUDIO_URL = BASE_URL + "/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = BASE_URL + "/cdap/ns/system/profiles/create";
@@ -84,4 +85,8 @@ public class Constants {
   public static final String ERROR_HANDLERS_AND_ALERTS_PLUGINS_GROUP_LOCATOR_TEXT = "Error Handlers and Alerts";
   
   public static final String PIPELINE_TYPE = "cdap-data-pipeline";
+
+  public static final String FAKE_REPO_LINK = "https://example.com";
+  public static final String FAKE_TOKEN_NAME = "fake_token";
+  public static final String FAKE_TOKEN = "fake token value";
 }

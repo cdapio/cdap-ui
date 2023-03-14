@@ -343,10 +343,11 @@ const SourceControlManagementForm = ({
           onClick={validateConnection}
           loading={formState.loading}
           disabled={formState.loading}
+          data-testid="validate-repo-config-button"
         >
           {T.translate(`${PREFIX}.validate.button`)}
         </PrimaryOutlinedLoadingButton>
-        <PrimaryContainedButton onClick={handleSubmit}>
+        <PrimaryContainedButton onClick={handleSubmit} data-testid="save-repo-config-button">
           {T.translate(`${PREFIX}.linkConfirm`)}
         </PrimaryContainedButton>
       </StyledButtonGroup>
