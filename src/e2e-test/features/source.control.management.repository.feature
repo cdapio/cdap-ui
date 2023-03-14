@@ -26,6 +26,14 @@ Feature: Source Control Management - Repository Config CRUD operations
     Then Verify failure in validation
 
   @SOURCE_CONTROL_MANAGEMENT_TEST
+  Scenario: Should show success message when trying to validate valid repo config
+    When Open Source Control Management Page
+    Then Click on "Link Repository" button
+    Then Add test repository configuration
+    Then Click on "Validate" button
+    Then Verify success in validation
+
+  @SOURCE_CONTROL_MANAGEMENT_TEST
   Scenario: Should save repo config
     When Open Source Control Management Page
     Then Click on "Link Repository" button

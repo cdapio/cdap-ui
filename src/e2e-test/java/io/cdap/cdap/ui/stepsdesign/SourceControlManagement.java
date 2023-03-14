@@ -114,4 +114,27 @@ public class SourceControlManagement {
   public void verifyUIDirectedToInitialPage() {
     Assert.assertTrue(Helper.locateElementByTestId("link-repository-button").isDisplayed());
   }
+
+  @Then("Add test repository configuration")
+  public void addTestRepositoryConfiguration() {
+    WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
+    ElementHelper.clearElementValue(repoUrlInput);
+    ElementHelper.sendKeys(repoUrlInput, Constants.DEFAULT_SCM_TEST_REPO_URL);
+
+    WebElement tokenNameInput = Helper.locateElementByTestId("tokenName");
+    ElementHelper.clearElementValue(tokenNameInput);
+    ElementHelper.sendKeys(tokenNameInput, Constants.FAKE_TOKEN_NAME);
+
+    WebElement tokenInput = Helper.locateElementByTestId("token");
+    ElementHelper.clearElementValue(tokenInput);
+    ElementHelper.sendKeys(tokenInput, Constants.DEFAULT_SCM_TEST_REPO_PAT);
+  }
+
+  @Then("Verify success in validation")
+  public void verifySuccessInValidation() {
+    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("alert"));
+    Assert.assertTrue(Helper.locateElementByTestId("alert").getText()
+        .contains("Successfully connected."));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("alert-close"));
+  }
 }

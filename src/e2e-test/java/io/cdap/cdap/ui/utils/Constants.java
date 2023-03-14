@@ -89,4 +89,6 @@ public class Constants {
   public static final String FAKE_REPO_LINK = "https://example.com";
   public static final String FAKE_TOKEN_NAME = "fake_token";
   public static final String FAKE_TOKEN = "fake token value";
+  public static final String DEFAULT_SCM_TEST_REPO_URL = System.getenv("SCM_TEST_REPO_URL");
+  public static final String DEFAULT_SCM_TEST_REPO_PAT = System.getenv("SCM_TEST_REPO_PAT");
 }
