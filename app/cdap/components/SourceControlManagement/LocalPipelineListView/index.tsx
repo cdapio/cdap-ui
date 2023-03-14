@@ -39,6 +39,8 @@ import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { LocalPipelineTable } from './PipelineTable';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
+import { SUPPORT } from 'components/StatusButton/constants';
+import { IListResponse } from '../types';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
@@ -76,14 +78,11 @@ export const LocalPipelineListView = () => {
       payload,
       setLoadingMessage
     ).subscribe({
-      next(res: any) {
+      next(res: IListResponse) {
         const currentPipeline = pushedPipelines.find((pipeline) => pipeline.name === res.name);
-        // TODO: CDAP-20429 no changes made will also be 200, need to give different warning
-        if (res.statusCode !== 200) {
-          currentPipeline.error = res.message;
-          currentPipeline.success = false;
-        } else {
-          currentPipeline.success = true;
+        currentPipeline.status = res.status;
+        currentPipeline.error = res.message;
+        if (res.fileHash) {
           currentPipeline.fileHash = res.fileHash;
         }
         setLocalPipelines(pushedPipelines);

@@ -23,6 +23,7 @@ import { BATCH_PIPELINE_TYPE } from 'services/helpers';
 import SourceControlManagementSyncStore, { PullFromGitActions, PushToGitActions } from '.';
 import { SourceControlApi } from 'api/sourcecontrol';
 import { IPipeline, IPushResponse, IRepositoryPipeline } from '../types';
+import { SUPPORT } from 'components/StatusButton/constants';
 
 // push actions
 export const getNamespacePipelineList = (namespace, nameFilter = null) => {
@@ -38,7 +39,7 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
           name: pipeline.name,
           fileHash: pipeline.sourceControlMeta?.fileHash,
           error: null,
-          success: null,
+          status: null,
         };
       });
       setLocalPipelines(nsPipelines);
@@ -95,12 +96,17 @@ export const pushSelectedPipelines = (namespace, apps, payload, loadingMessageDi
       return SourceControlApi.push(params, payload).pipe(
         map((res: IPushResponse | string) => {
           if (typeof res === 'string') {
-            return { message: res, name: appId, statusCode: 200 };
+            return { message: res, name: appId, status: SUPPORT.partial };
           }
-          return { ...res, statusCode: 200 };
+          return {
+            message: null,
+            name: appId,
+            status: SUPPORT.yes,
+            fileHash: res.fileHash,
+          };
         }),
         catchError((err) => {
-          return of({ ...err, name: appId });
+          return of({ message: err.message, name: appId, status: SUPPORT.no });
         })
       );
     })
@@ -129,7 +135,7 @@ export const toggleCommitModal = () => {
 export const resetPushStatus = () => {
   const pipelines = [...SourceControlManagementSyncStore.getState().push.localPipelines];
   pipelines.forEach((pipeline) => {
-    (pipeline.error = null), (pipeline.success = null);
+    (pipeline.error = null), (pipeline.status = null);
   });
   setLocalPipelines(pipelines);
 };
@@ -164,7 +170,7 @@ export const getRemotePipelineList = (namespace) => {
           name: pipeline.name,
           fileHash: pipeline.fileHash,
           error: null,
-          success: null,
+          status: null,
         };
       });
       setRemotePipelines(remotePipelines);
@@ -214,7 +220,7 @@ export const setRemoteLoadingMessage = (loadingMessage) => {
 export const resetPullStatus = () => {
   const pipelines = [...SourceControlManagementSyncStore.getState().pull.remotePipelines];
   pipelines.forEach((pipeline) => {
-    (pipeline.error = null), (pipeline.success = null);
+    (pipeline.error = null), (pipeline.status = null);
   });
   setRemotePipelines(pipelines);
 };
@@ -248,12 +254,16 @@ export const pullAndDeploySelectedRemotePipelines = (
       return SourceControlApi.pull(params).pipe(
         map((res: IPipeline | string) => {
           if (typeof res === 'string') {
-            return { message: res, name: appId, statusCode: 200 };
+            return { message: res, name: appId, status: SUPPORT.partial };
           }
-          return { ...res, statusCode: 200 };
+          return {
+            message: null,
+            name: appId,
+            status: SUPPORT.yes,
+          };
         }),
         catchError((err) => {
-          return of({ ...err, name: appId });
+          return of({ message: err.message, name: appId, status: SUPPORT.no });
         })
       );
     })

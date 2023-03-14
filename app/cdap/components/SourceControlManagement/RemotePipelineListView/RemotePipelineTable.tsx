@@ -20,7 +20,7 @@ import { Checkbox, Table, TableBody, TableCell, TableRow, TableHead } from '@mat
 import { setSelectedRemotePipelines } from '../store/ActionCreator';
 import { IRepositoryPipeline } from '../types';
 import StatusButton from 'components/StatusButton';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
+import { SUPPORT } from 'components/StatusButton/constants';
 import { StyledTableCell, StyledTableRow, TableBox } from '../styles';
 
 const PREFIX = 'features.SourceControlManagement.table';
@@ -77,12 +77,12 @@ export const RemotePipelineTable = ({
                   <Checkbox color="primary" checked={isPipelineSelected} />
                 </TableCell>
                 <TableCell style={{ width: '40px' }}>
-                  {pipeline.success !== null && (
+                  {pipeline.status !== null && (
                     <StatusButton
-                      status={pipeline.success ? SUPPORT.yes : SUPPORT.no}
-                      message={pipeline.success ? null : pipeline.error}
+                      status={pipeline.status}
+                      message={pipeline.status === SUPPORT.yes ? null : pipeline.error}
                       title={
-                        pipeline.success
+                        pipeline.status === SUPPORT.yes
                           ? T.translate(`${PREFIX}.pullSuccess`, {
                               pipelineName: pipeline.name,
                             }).toLocaleString()

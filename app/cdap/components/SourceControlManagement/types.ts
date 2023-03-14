@@ -15,12 +15,13 @@
  */
 
 import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
+import { SUPPORT } from 'components/StatusButton/constants';
 
 export interface IRepositoryPipeline {
   name: string;
   fileHash: string;
   error: string;
-  success: boolean;
+  status: SUPPORT;
 }
 
 export interface IPushResponse {
@@ -43,4 +44,11 @@ export interface IPipeline {
   sourceControlMeta: {
     fileHash: string;
   };
+}
+
+export interface IListResponse {
+  status: SUPPORT;
+  name: string;
+  message: string;
+  fileHash?: string;
 }
