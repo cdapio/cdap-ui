@@ -51,6 +51,10 @@ const ACTIONS = {
   // Metadata Endpoints Actions
   SET_METADATA_ENDPOINTS: 'SET_METADATA_ENDPOINTS',
 
+  // Source Control Management
+  SET_PULL_LOADING: 'SET_PULL_LOADING',
+  SET_PULL_STATUS: 'SET_PULL_STATUS',
+
   RESET: 'RESET',
 };
 
@@ -96,6 +100,8 @@ const DEFAULT_PIPELINE_DETAILS = {
 
   // source control meta
   sourceControlMeta: null,
+  pullLoading: false,
+  pullStatus: null,
 };
 
 const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultAction) => {
@@ -254,6 +260,16 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
       return {
         ...state,
         editDraftId: action.payload.draftId,
+      };
+    case ACTIONS.SET_PULL_LOADING:
+      return {
+        ...state,
+        pullLoading: action.payload.pullLoading,
+      };
+    case ACTIONS.SET_PULL_STATUS:
+      return {
+        ...state,
+        pullStatus: action.payload.pullStatus,
       };
     case ACTIONS.RESET:
       return DEFAULT_PIPELINE_DETAILS;

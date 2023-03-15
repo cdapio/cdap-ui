@@ -45,6 +45,14 @@ $close-btn-size: 13px;
       .info {
         background-color: $brand-info;
       }
+      .warning {
+        padding: 10px;
+        display: flex;
+        color: white;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $brand-warning;
+      }
       .message {
         max-width: calc(100% - #{$close-btn-size});
         padding-right: 5px;

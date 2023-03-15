@@ -86,7 +86,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
         currentPipeline.status = res.status;
         currentPipeline.error = res.message;
         setRemotePipelines(pulledPipelines);
-        if (redirectOnSubmit) {
+        if (res.status === SUPPORT.yes && redirectOnSubmit) {
           const link = getHydratorUrl({
             stateName: 'hydrator.detail',
             stateParams: {

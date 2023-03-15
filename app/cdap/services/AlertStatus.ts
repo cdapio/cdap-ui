@@ -19,6 +19,7 @@ enum ALERT_STATUS {
   Success = 'success',
   Error = 'error',
   Info = 'info',
+  Warning = 'warning',
 }
 
 export { ALERT_STATUS };
