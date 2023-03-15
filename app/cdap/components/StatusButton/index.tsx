@@ -18,8 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, ClickAwayListener } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import uuid from 'uuid';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
-
+import { SUPPORT } from './constants';
 import {
   PositionedIconButton,
   CloseIconScaled,

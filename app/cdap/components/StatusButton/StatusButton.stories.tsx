@@ -16,7 +16,7 @@
 
 import React from 'react';
 import StatusButton from './index';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
+import { SUPPORT } from './constants';
 
 export default {
   component: StatusButton,

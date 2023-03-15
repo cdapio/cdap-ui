@@ -39,6 +39,8 @@ import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
+import { SUPPORT } from 'components/StatusButton/constants';
+import { IListResponse } from '../types';
 
 const PREFIX = 'features.SourceControlManagement.pull';
 
@@ -79,16 +81,10 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
       selectedPipelines,
       setRemoteLoadingMessage
     ).subscribe({
-      next(res: any) {
+      next(res: IListResponse) {
         const currentPipeline = pulledPipelines.find((pipeline) => pipeline.name === res.name);
-        // TODO: CDAP-20429 no changes will also return 200, need to throw a different warning message
-        if (res.statusCode !== 200) {
-          currentPipeline.error = res.message;
-          currentPipeline.success = false;
-        } else {
-          currentPipeline.success = true;
-          currentPipeline.fileHash = res.sourceControlMeta?.fileHash;
-        }
+        currentPipeline.status = res.status;
+        currentPipeline.error = res.message;
         setRemotePipelines(pulledPipelines);
         if (redirectOnSubmit) {
           const link = getHydratorUrl({

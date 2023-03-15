@@ -20,7 +20,7 @@ import { setSelectedPipelines } from '../store/ActionCreator';
 import { IRepositoryPipeline } from '../types';
 import T from 'i18n-react';
 import StatusButton from 'components/StatusButton';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
+import { SUPPORT } from 'components/StatusButton/constants';
 import { StyledTableCell, StyledTableRow, TableBox, StatusCell } from '../styles';
 
 const PREFIX = 'features.SourceControlManagement.table';
@@ -120,12 +120,12 @@ export const LocalPipelineTable = ({
                   <Checkbox color="primary" checked={isPipelineSelected} />
                 </TableCell>
                 <StatusCell>
-                  {pipeline.success !== null && (
+                  {pipeline.status !== null && (
                     <StatusButton
-                      status={pipeline.success ? SUPPORT.yes : SUPPORT.no}
-                      message={pipeline.success ? null : pipeline.error}
+                      status={pipeline.status}
+                      message={pipeline.status === SUPPORT.yes ? null : pipeline.error}
                       title={
-                        pipeline.success
+                        pipeline.status === SUPPORT.yes
                           ? T.translate(`${PREFIX}.pushSuccess`, {
                               pipelineName: pipeline.name,
                             }).toLocaleString()
