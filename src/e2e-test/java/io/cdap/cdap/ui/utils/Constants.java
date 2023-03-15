@@ -89,6 +89,7 @@ public class Constants {
   public static final String FAKE_REPO_LINK = "https://example.com";
   public static final String FAKE_TOKEN_NAME = "fake_token";
   public static final String FAKE_TOKEN = "fake token value";
+  public static final String FAKE_DEFAULT_BRANCH = "noneExistingBranch";
   public static final String GIT_BRANCH_PROP_NAME = "gitBranchName";
   public static final String GIT_REPO_URL_PROP_NAME = "gitRepositoryUrl";
   public static final String GIT_PAT_PROP_NAME = "gitPAT";

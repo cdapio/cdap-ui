@@ -48,36 +48,31 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("link-repository-button"));
   }
 
-  @Then("Add {string} as Repository URL")
-  public void addInputLabel(String repoUrl) {
+  public void addRepoUrl(String repoUrl) {
     WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
     ElementHelper.clearElementValue(repoUrlInput);
     ElementHelper.sendKeys(repoUrlInput, repoUrl);
   }
 
-  @Then("Add {string} as Token Name")
-  public void addAsTokenName(String tokenName) {
+  public void addTokenName(String tokenName) {
     WebElement profileLabelInput = Helper.locateElementByTestId("tokenName");
     ElementHelper.clearElementValue(profileLabelInput);
     ElementHelper.sendKeys(profileLabelInput, tokenName);
   }
 
-  @Then("Add {string} as Token")
-  public void addAsToken(String token) {
+  public void addToken(String token) {
     WebElement profileLabelInput = Helper.locateElementByTestId("token");
     ElementHelper.clearElementValue(profileLabelInput);
     ElementHelper.sendKeys(profileLabelInput, token);
   }
 
-  @Then("Add {string} as Path Prefix")
-  public void addAsPathPrefix(String path) {
+  public void addPathPrefix(String path) {
     WebElement input = Helper.locateElementByTestId("pathPrefix");
     ElementHelper.clearElementValue(input);
     ElementHelper.sendKeys(input, path);
   }
 
-  @Then("Add {string} as default branch")
-  public void addAsDefaultBranch(String branch) {
+  public void addDefaultBranch(String branch) {
     WebElement input = Helper.locateElementByTestId("defaultBranch");
     ElementHelper.clearElementValue(input);
     ElementHelper.sendKeys(input, branch);
@@ -88,11 +83,10 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("validate-repo-config-button"));
   }
 
-  @Then("Verify failure in validation")
-  public void verifyFailureInValidation() {
+  @Then("Verify {string} message in validation")
+  public void verifyAlertMessageInValidation(String alertMessage) {
     WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("alert"));
-    Assert.assertTrue(Helper.locateElementByTestId("alert").getText()
-        .contains("Failed to list remotes in remote repository."));
+    Assert.assertTrue(Helper.locateElementByTestId("alert").getText().contains(alertMessage));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("alert-close"));
   }
 
@@ -101,15 +95,12 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("save-repo-config-button"));
   }
 
-  @Then("Verify saved repo config")
+  @Then("Verify saved fake repo config")
   public void verifySavedRepoConfig() {
     WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("actions-popover"));
-    Assert.assertTrue(Helper.locateElementByTestId("repository-provider")
-        .getText().contains("GITHUB"));
-    Assert.assertTrue(Helper.locateElementByTestId("repository-link")
-        .getText().contains(Constants.FAKE_REPO_LINK));
-    Assert.assertTrue(Helper.locateElementByTestId("repository-auth-type")
-        .getText().contains("PAT"));
+    Assert.assertTrue(Helper.locateElementByTestId("repository-provider").getText().contains("GITHUB"));
+    Assert.assertTrue(Helper.locateElementByTestId("repository-link").getText().contains(Constants.FAKE_REPO_LINK));
+    Assert.assertTrue(Helper.locateElementByTestId("repository-auth-type").getText().contains("PAT"));
     Assert.assertTrue(Helper.locateElementByTestId("repository-auth-token")
         .findElement(By.cssSelector("input")).getAttribute("value")
         .contains(Constants.FAKE_TOKEN));
@@ -124,17 +115,23 @@ public class SourceControlManagement {
 
   @Then("Add fake repository configuration")
   public void addFakeRepositoryConfiguration() {
-    WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
-    ElementHelper.clearElementValue(repoUrlInput);
-    ElementHelper.sendKeys(repoUrlInput, Constants.FAKE_REPO_LINK);
+    addRepoUrl(Constants.FAKE_REPO_LINK);
+    addTokenName(Constants.FAKE_TOKEN_NAME);
+    addToken(Constants.FAKE_TOKEN);
+  }
 
-    WebElement tokenNameInput = Helper.locateElementByTestId("tokenName");
-    ElementHelper.clearElementValue(tokenNameInput);
-    ElementHelper.sendKeys(tokenNameInput, Constants.FAKE_TOKEN_NAME);
+  @Then("Add test repository configuration")
+  public void addTestRepositoryConfiguration() {
+    addRepoUrl(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
+    addTokenName(Constants.FAKE_TOKEN_NAME);
+    addToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
+  }
 
-    WebElement tokenInput = Helper.locateElementByTestId("token");
-    ElementHelper.clearElementValue(tokenInput);
-    ElementHelper.sendKeys(tokenInput, Constants.FAKE_TOKEN);
+  @Then("Add non-existing branch")
+  public void addNonExistingBranch() {
+    WebElement defaultBranchInput = Helper.locateElementByTestId("defaultBranch");
+    ElementHelper.clearElementValue(defaultBranchInput);
+    ElementHelper.sendKeys(defaultBranchInput, Constants.FAKE_DEFAULT_BRANCH);
   }
 
   @Then("Verify UI directed to initial page")
@@ -164,11 +161,11 @@ public class SourceControlManagement {
   @When("Initialize the repository config")
   public void initializeRepoConfig() {
     openAddRepositoryButton();
-    addInputLabel(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
-    addAsToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
-    addAsTokenName("e2e-test-token");
-    addAsDefaultBranch(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME));
-    addAsPathPrefix(PluginPropertyUtils.pluginProp(Constants.GIT_PATH_PREFIX_PROP_NAME));
+    addRepoUrl(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
+    addToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
+    addTokenName("e2e-test-token");
+    addDefaultBranch(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME));
+    addPathPrefix(PluginPropertyUtils.pluginProp(Constants.GIT_PATH_PREFIX_PROP_NAME));
     clickOnSaveButton();
   }
 

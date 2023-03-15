@@ -37,7 +37,7 @@ public class BeforeActions {
   }
 
   @Before(order = 1, value = "@SOURCE_CONTROL_MANAGEMENT_TEST")
-  public void setGitBranchConfig() throws IOException {
+  public void setGitBranchConfig() {
     if (Strings.isNullOrEmpty(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME))) {
       String branchName =  "cdf-e2e-test-" + UUID.randomUUID();
       PluginPropertyUtils.addPluginProp(Constants.GIT_BRANCH_PROP_NAME, branchName);
