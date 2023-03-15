@@ -37,7 +37,7 @@ export default class Alert extends Component {
     message: PropTypes.string,
     element: PropTypes.node,
     onClose: PropTypes.func,
-    type: PropTypes.oneOf(['success', 'error', 'info']),
+    type: PropTypes.oneOf(['success', 'error', 'info', 'warning']),
     canEditPageWhileOpen: PropTypes.bool,
     actionElements: PropTypes.element,
     autoCloseTimeout: PropTypes.number,
@@ -78,7 +78,7 @@ export default class Alert extends Component {
       return;
     }
 
-    if (this.state.type === ALERT_STATUS.Success || this.state.type === ALERT_STATUS.Info) {
+    if (this.state.type !== ALERT_STATUS.Error) {
       clearTimeout(this.alertTimeout);
       this.alertTimeout = setTimeout(this.onClose, CLOSE_TIMEOUT);
     }

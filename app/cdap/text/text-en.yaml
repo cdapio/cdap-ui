@@ -3170,7 +3170,10 @@ features:
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pullAppMessage: Pulling {appId} from remote repository now...
       pullButton: Pull to namespace
+      pullChipTooltip: Click to pull the latest from Git
+      pullSuccess: Pipeline {pipelineName} updated
       tab: Remote pipelines
+      upToDate: Pipeline is already up to date.
     push:
       commitPlaceHolder: Write commit message here
       commitTitle: Enter Commit Message

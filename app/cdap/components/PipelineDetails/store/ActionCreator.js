@@ -14,10 +14,13 @@
  * the License.
  */
 
-import { MyPipelineApi } from 'api/pipeline';
-import PipelineDetailStore, { ACTIONS } from 'components/PipelineDetails/store';
 import differenceBy from 'lodash/differenceBy';
 import find from 'lodash/find';
+import T from 'i18n-react';
+import { MyPipelineApi } from 'api/pipeline';
+import { SourceControlApi } from 'api/sourcecontrol';
+import PipelineDetailStore, { ACTIONS } from 'components/PipelineDetails/store';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 const init = (pipeline) => {
   PipelineDetailStore.dispatch({
@@ -393,6 +396,64 @@ const setEditDraftId = (draftId) => {
   });
 };
 
+const pullPipeline = (namespace, appId) => {
+  setPullLoading(true);
+  const params = {
+    namespace,
+    appId,
+  };
+  const PREFIX = 'features.SourceControlManagement.pull';
+  SourceControlApi.pull(params).subscribe(
+    (res) => {
+      if (typeof res === 'string') {
+        setPullStatus({
+          alertType: 'warning',
+          message: T.translate(`${PREFIX}.upToDate`),
+        });
+        setPullLoading(false);
+        return;
+      }
+      setPullStatus({
+        alertType: 'success',
+        message: T.translate(`${PREFIX}.pullSuccess`, { pipelineName: appId }),
+      });
+      setPullLoading(false);
+      window.location.href = getHydratorUrl({
+        stateName: 'hydrator.detail',
+        stateParams: {
+          namespace: params.namespace,
+          pipelineId: params.appId,
+        },
+      });
+    },
+    (err) => {
+      setPullStatus({
+        alertType: 'error',
+        message: err.message,
+      });
+      setPullLoading(false);
+    }
+  );
+};
+
+const setPullLoading = (pullLoading) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_PULL_LOADING,
+    payload: {
+      pullLoading,
+    },
+  });
+};
+
+const setPullStatus = (pullStatus) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_PULL_STATUS,
+    payload: {
+      pullStatus,
+    },
+  });
+};
+
 const reset = () => {
   PipelineDetailStore.dispatch({
     type: ACTIONS.RESET,
@@ -440,5 +501,7 @@ export {
   setStopButtonLoading,
   setStopError,
   setEditDraftId,
+  pullPipeline,
+  setPullStatus,
   reset,
 };

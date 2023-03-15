@@ -23,6 +23,7 @@ import Alert from 'components/shared/Alert';
 import { pushSelectedPipelines } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { SUPPORT } from 'components/StatusButton/constants';
+import { IListResponse } from '../types';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
@@ -62,8 +63,7 @@ export const CommitModal = ({
       selectedPipelines,
       payload,
       setPushLoadingMessage
-    ).subscribe((res: any) => {
-      // TODO: no changes made will also be 200, need to give different warning
+    ).subscribe((res: IListResponse) => {
       if (res.status !== SUPPORT.yes) {
         setPushError(res.message);
         setPushSuccess(false);
