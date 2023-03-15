@@ -192,6 +192,14 @@ const getRunDetails = ({ namespace, appId, programType, programName, runid }) =>
   });
 };
 
+const getAppVersion = ({ namespace, appId, version }) => {
+  return MyPipelineApi.getAppVersion({
+    namespace,
+    appId,
+    version,
+  });
+};
+
 const getRuns = (params) => {
   let runsFetch = MyPipelineApi.getRuns(params);
   runsFetch.subscribe(
@@ -424,6 +432,7 @@ export {
   setCurrentRunId,
   getRuns,
   getRunDetails,
+  getAppVersion,
   pollRuns,
   pollRunsCount,
   getNextRunTime,

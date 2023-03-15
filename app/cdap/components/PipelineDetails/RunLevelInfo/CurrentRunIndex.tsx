@@ -19,10 +19,13 @@ import { connect } from 'react-redux';
 import IconSVG from 'components/shared/IconSVG';
 import { reverseArrayWithoutMutating, objectQuery } from 'services/helpers';
 import findIndex from 'lodash/findIndex';
-import { setCurrentRunId } from 'components/PipelineDetails/store/ActionCreator';
+import {
+  getAppVersion,
+  init,
+  setCurrentRunId,
+} from 'components/PipelineDetails/store/ActionCreator';
 import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
 
@@ -80,17 +83,25 @@ const CurrentRunIndex = ({ runs, currentRun, runsCount, pipelineName }: ICurrent
   }
 
   const setRunIdAndNavigate = (runid, runIndex) => {
-    setCurrentRunId(runid);
-    const pipelineLink = getHydratorUrl({
-      stateName: 'hydrator.detail',
-      stateParams: {
+    if (reversedRuns[runIndex].version) {
+      getAppVersion({
         namespace: getCurrentNamespace(),
-        pipelineId: pipelineName,
-        runid,
-      },
-    });
-    window.localStorage.setItem('pipelineHistoryVersion', reversedRuns[runIndex].version);
-    window.location.href = pipelineLink;
+        appId: pipelineName,
+        version: reversedRuns[runIndex].version,
+      }).subscribe(
+        (res) => {
+          init(res);
+        },
+        (err) => {
+          console.log(err);
+        },
+        () => {
+          setCurrentRunId(runid);
+        }
+      );
+      return;
+    }
+    setCurrentRunId(runid);
   };
 
   return (
