@@ -43,6 +43,12 @@ def enable_features(path):
             conf_root.append(property_tag)
         new_conf = ET.ElementTree(conf_root)
         new_conf.write(path)
+        # update cdap.json
+        with open('../server/config/development/cdap.json','r+') as file:
+            file_data = json.load(file)
+            file_data.update(feature_flags)
+            file.seek(0)
+            json.dump(file_data, file, indent = 2)
 
 # Start CDAP sandbox
 print("Downloading CDAP sandbox")
