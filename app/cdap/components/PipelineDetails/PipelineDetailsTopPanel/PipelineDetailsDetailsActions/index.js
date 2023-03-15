@@ -17,10 +17,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import T from 'i18n-react';
 import PipelineDetailsActionsButton from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsDetailsActions/PipelineDetailsActionsButton';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 require('./PipelineDetailsDetailsActions.scss');
+
+const StyledLinkToLatest = styled.a`
+  padding-top: 22px;
+  font-size: 10px;
+  cursor: pointer;
+`;
 
 const mapDetailsStateToProps = (state) => {
   return {
@@ -52,6 +62,21 @@ const PipelineDetailsDetailsActions = ({
   const isLatestVersion = change ? change.latest : true;
   return (
     <div className="pipeline-details-buttons pipeline-details-details-actions">
+      {!isLatestVersion && (
+        <StyledLinkToLatest
+          onClick={() => {
+            window.location.href = getHydratorUrl({
+              stateName: 'hydrator.detail',
+              stateParams: {
+                namespace: getCurrentNamespace(),
+                pipelineId: pipelineName,
+              },
+            });
+          }}
+        >
+          {T.translate('features.LifeCycleManagement.returnToLatest')}
+        </StyledLinkToLatest>
+      )}
       <PipelineDetailsActionsButton
         pipelineName={pipelineName}
         description={description}

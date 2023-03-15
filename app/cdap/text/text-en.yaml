@@ -1963,6 +1963,7 @@ features:
       outdatedDraftActionButton: Export and Rebase
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
         This draft is outdated and please export the draft for manual reconciliation.
+    returnToLatest: return to the latest version
 
   LoadingIndicator:
     contactadmin: It could take a few minutes for the system to self-heal.
