@@ -21,6 +21,7 @@ import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cucumber.java.Before;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +38,7 @@ public class BeforeActions {
   }
 
   @Before(order = 1, value = "@SOURCE_CONTROL_MANAGEMENT_TEST")
-  public void setGitBranchConfig() {
-    if (Strings.isNullOrEmpty(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME))) {
-      String branchName =  "cdf-e2e-test-" + UUID.randomUUID();
-      PluginPropertyUtils.addPluginProp(Constants.GIT_BRANCH_PROP_NAME, branchName);
-    }
-
+  public void createGitBranchConfig() throws GitAPIException, IOException {
     String gitRepoUrl = System.getenv("SCM_TEST_REPO_URL");
     if (!Strings.isNullOrEmpty(gitRepoUrl)) {
       PluginPropertyUtils.addPluginProp(Constants.GIT_REPO_URL_PROP_NAME, gitRepoUrl);
@@ -52,5 +48,12 @@ public class BeforeActions {
     if (!Strings.isNullOrEmpty(gitPAT)) {
       PluginPropertyUtils.addPluginProp(Constants.GIT_PAT_PROP_NAME, gitPAT);
     }
+    
+    if (Strings.isNullOrEmpty(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME))) {
+      String branchName =  "cdf-e2e-test-" + UUID.randomUUID();
+      PluginPropertyUtils.addPluginProp(Constants.GIT_BRANCH_PROP_NAME, branchName);
+    }
+
+    Helper.createSCMRemoteBranch();
   }
 }

@@ -21,7 +21,6 @@ Feature: Source Control Management - Pulling and pushing applications
   Scenario: Should successfully push a pipeline to git from pipeline list page
     When Open Source Control Management Page
     When Initialize the repository config
-    When Create branch in remote repository
     When Deploy and test pipeline "test_pipeline2_fll_airport" with pipeline JSON file "fll_airport_pipeline2.json"
     Then Click push button in Actions dropdown
     Then Commit changes with message "upload pipeline to Git"
@@ -29,4 +28,3 @@ Feature: Source Control Management - Pulling and pushing applications
     Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
     When Open Source Control Management Page
     Then Delete the repo config
-    Then Cleanup the branch which is created for testing

@@ -30,6 +30,7 @@ Feature: Source Control Management - Repository Configuration CRUD operations
     When Open Source Control Management Page
     Then Click on "Link Repository" button
     Then Add test repository configuration
+    Then Add created test branch
     Then Click on "Validate" button
     Then Verify "Successfully connected." message in validation
 
