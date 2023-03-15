@@ -22,6 +22,7 @@ import { TextareaAutosize } from '@material-ui/core';
 import Alert from 'components/shared/Alert';
 import { pushSelectedPipelines } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { SUPPORT } from 'components/StatusButton/constants';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
@@ -63,7 +64,7 @@ export const CommitModal = ({
       setPushLoadingMessage
     ).subscribe((res: any) => {
       // TODO: no changes made will also be 200, need to give different warning
-      if (res.statusCode !== 200) {
+      if (res.status !== SUPPORT.yes) {
         setPushError(res.message);
         setPushSuccess(false);
       } else {
@@ -110,6 +111,7 @@ export const CommitModal = ({
               setCommitMessage(e.target.value);
             }}
             style={{ width: '100%' }}
+            data-testid="commit-message-input"
           />
         }
         closeable={true}

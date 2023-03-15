@@ -370,7 +370,7 @@ export default class PipelineDetailsActionsButton extends Component {
               {T.translate(`${PREFIX}.export`)}
             </li>
             {this.props.sourceControlManagementEnabled && (
-              <li role="button" onClick={this.toggleCommitModal}>
+              <li role="button" onClick={this.toggleCommitModal} data-testid="push-pipeline">
                 {T.translate('features.SourceControlManagement.push.pushButton')}
               </li>
             )}
