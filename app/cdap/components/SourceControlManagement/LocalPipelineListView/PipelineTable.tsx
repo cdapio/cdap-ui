@@ -115,11 +115,16 @@ export const LocalPipelineTable = ({
                 key={pipeline.name}
                 selected={isPipelineSelected}
                 onClick={(e) => handleClick(e, pipeline.name)}
+                data-testid={`local-${pipeline.name}`}
               >
                 <TableCell padding="checkbox">
                   <Checkbox color="primary" checked={isPipelineSelected} />
                 </TableCell>
-                <StatusCell>
+                <StatusCell
+                  data-testid={
+                    pipeline.status === SUPPORT.yes ? 'push-success-status' : 'push-failure-status'
+                  }
+                >
                   {pipeline.status !== null && (
                     <StatusButton
                       status={pipeline.status}

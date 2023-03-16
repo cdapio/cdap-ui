@@ -60,8 +60,8 @@ const SourceControlManagementSyncView = () => {
           textColor="primary"
           indicatorColor="primary"
         >
-          <Tab label={T.translate(`${PREFIX}.push.tab`)} />
-          <Tab label={T.translate(`${PREFIX}.pull.tab`)} />
+          <Tab data-testid="local-pipeline-tab" label={T.translate(`${PREFIX}.push.tab`)} />
+          <Tab data-testid="remote-pipeline-tab" label={T.translate(`${PREFIX}.pull.tab`)} />
         </Tabs>
       </StyledDiv>
       <StyledDiv>

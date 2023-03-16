@@ -178,7 +178,11 @@ export default function ResourceCenterPipelineEntity({
             </StyledButton>
           </label>
           {sourceControlManagementEnabled && (
-            <StyledButton onClick={pullPipelineBtnHandler} loading={pullPipelineModalState.loading}>
+            <StyledButton
+              onClick={pullPipelineBtnHandler}
+              loading={pullPipelineModalState.loading}
+              data-testid="pull-pipeline-button"
+            >
               {T.translate(`${PREFIX}.actionbtn2`)}
             </StyledButton>
           )}

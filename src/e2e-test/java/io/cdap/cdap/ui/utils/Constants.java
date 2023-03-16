@@ -33,6 +33,7 @@ public class Constants {
   public static final String CDAP_URL = BASE_URL + "/cdap";
   public static final String CONFIGURATION_URL = BASE_URL + "/cdap/administration/configuration";
   public static final String SOURCE_CONTROL_MANAGEMENT_URL = BASE_URL + "/cdap/ns/default/details/scm";
+  public static final String SOURCE_CONTROL_SYNC_URL = BASE_URL + "/cdap/ns/default/scm/sync";
   public static final String NAMESPACE_URL = BASE_URL + "/cdap/ns";
   public static final String BASE_STUDIO_URL = BASE_URL + "/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = BASE_URL + "/cdap/ns/system/profiles/create";

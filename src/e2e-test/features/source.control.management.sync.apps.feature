@@ -28,3 +28,28 @@ Feature: Source Control Management - Pulling and pushing applications
     Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
     When Open Source Control Management Page
     Then Delete the repo config
+
+  @SOURCE_CONTROL_MANAGEMENT_TEST
+  Scenario: Remote pipeline tab loads pipelines from git
+    # Setup
+    When Open Source Control Management Page
+    When Initialize the repository config
+    When Deploy and test pipeline "test_pipeline2_fll_airport" with pipeline JSON file "fll_airport_pipeline2.json"
+    # Test push from SCM sync page
+    When Open Source Control Sync Page
+    When Select "test_pipeline2_fll_airport" pipeline and push
+    Then Commit changes with message "upload pipeline to Git"
+    Then Push success indicator is shown for pipeline "test_pipeline2_fll_airport"
+    When Select remote pipelines tab
+    Then Verify pipeline list size 1
+    Then Verify "test_pipeline2_fll_airport" pipeline exist in list
+    # Test pull from SCM sync page
+    Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
+    When Open Source Control Sync Page
+    When Select remote pipelines tab
+    Then Select "test_pipeline2_fll_airport" pipeline and pull
+    Then Pull success indicator is shown for pipeline "test_pipeline2_fll_airport"
+    # Clean up
+    Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
+    When Open Source Control Management Page
+    Then Delete the repo config

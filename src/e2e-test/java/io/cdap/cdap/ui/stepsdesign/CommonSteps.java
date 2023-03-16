@@ -89,6 +89,12 @@ public class CommonSteps {
     WaitHelper.waitForPageToLoad();
   }
 
+  @When("Open Source Control Sync Page")
+  public void openRemotePipelinesPage() {
+    SeleniumDriver.openPage(Constants.SOURCE_CONTROL_SYNC_URL);
+    WaitHelper.waitForPageToLoad();
+  }
+
   @When("Create a simple pipeline")
   public void createSimplePipeline() {
     Commands.createSimplePipeline();
