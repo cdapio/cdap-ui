@@ -15,13 +15,13 @@
  */
 
 import React, { ReactNode } from 'react';
+import styled from 'styled-components';
+import T from 'i18n-react';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import T from 'i18n-react';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 import { SNAPSHOT_VERSION } from 'services/global-constants';
-import styled from 'styled-components';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -104,6 +104,7 @@ export const PipelineHistoryTableRow = ({
 
   const isLatest = appVersion === latestVersion;
   const dateLabel = isLatest ? T.translate(`${PREFIX}.latest`) : T.translate(`${PREFIX}.older`);
+  const displayedDesc = description.length > 190 ? description.slice(0, 190) + '...' : description;
 
   return (
     <>
@@ -114,7 +115,7 @@ export const PipelineHistoryTableRow = ({
             <li data-testid="pipeline-history-date-label">{dateLabel}</li>
           </VersionDateLabel>
         </div>
-        <div data-testid="pipeline-history-description">{description}</div>
+        <div data-testid="pipeline-history-description">{displayedDesc}</div>
         {appVersion !== SNAPSHOT_VERSION && (
           <>
             <PrimaryTextLowercaseButton
