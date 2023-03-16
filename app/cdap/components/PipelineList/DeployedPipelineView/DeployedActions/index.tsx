@@ -18,6 +18,8 @@ import * as React from 'react';
 import {
   deleteEditDraft,
   deletePipeline,
+  pullPipeline,
+  setPullStatus,
 } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
@@ -33,7 +35,10 @@ import T from 'i18n-react';
 import downloadFile from 'services/download-file';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
 import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
+import Alert from 'components/shared/Alert';
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
+const SCM_PREFIX = 'features.SourceControlManagement';
 
 interface IProps {
   pipeline: IPipeline;
@@ -43,6 +48,11 @@ interface IProps {
   lifecycleManagementEditEnabled?: boolean;
   sourceControlManagementEnabled?: boolean;
   draftId: string;
+  pullLoading: boolean;
+  pullStatus: {
+    alertType: string;
+    message: string;
+  };
 }
 
 interface ITriggeredPipeline {
@@ -254,6 +264,11 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     this.toggleDiscardConfirmation();
   };
 
+  private handlePipelinePull = () => {
+    this.togglePopover();
+    pullPipeline(getCurrentNamespace(), this.props.pipeline.name);
+  };
+
   private continueSameDraft = () => {
     const link = window.getHydratorUrl({
       stateName: 'hydrator.create',
@@ -288,8 +303,15 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     if (this.props.sourceControlManagementEnabled) {
       // insert after export
       actions.splice(2, 0, {
-        label: T.translate('features.SourceControlManagement.push.pushButton'),
+        label: 'separator',
+      });
+      actions.splice(3, 0, {
+        label: T.translate(`${SCM_PREFIX}.push.pushButton`),
         actionFn: this.toggleCommitModal,
+      });
+      actions.splice(4, 0, {
+        label: T.translate(`${SCM_PREFIX}.pull.pullButton`),
+        actionFn: this.handlePipelinePull,
       });
     }
     if (this.props.lifecycleManagementEditEnabled) {
@@ -304,6 +326,28 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
   };
 
   private actions: IAction[] = this.getActionsList();
+
+  public renderPullLoadingAndStatus = () => {
+    return (
+      <div>
+        <LoadingAppLevel
+          isopen={this.props.pullLoading}
+          message={T.translate(`${SCM_PREFIX}.pull.pullAppMessage`, {
+            appId: this.props.pipeline.name,
+          }).toLocaleString()}
+          style={{ width: '500px' }}
+        />
+        {this.props.pullStatus && (
+          <Alert
+            showAlert={this.props.pullStatus !== null}
+            message={this.props.pullStatus.message}
+            type={this.props.pullStatus.alertType}
+            onClose={() => setPullStatus(null)}
+          />
+        )}
+      </div>
+    );
+  };
 
   public render() {
     return (
@@ -331,6 +375,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
           continueFn={this.continueSameDraft}
         />
         {this.renderCommitModal()}
+        {this.renderPullLoadingAndStatus()}
       </div>
     );
   }
@@ -340,6 +385,8 @@ const mapStateToProps = (state, ownProp) => {
   return {
     deleteError: state.deployed.deleteError,
     pipeline: ownProp.pipeline,
+    pullLoading: state.deployed.pullLoading,
+    pullStatus: state.deployed.pullStatus,
   };
 };
 

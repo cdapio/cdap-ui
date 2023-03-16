@@ -93,6 +93,7 @@ const CurrentRunIndex = ({ runs, currentRun, runsCount, pipelineName }: ICurrent
           init(res);
         },
         (err) => {
+          // tslint:disable-next-line:no-console
           console.log(err);
         },
         () => {

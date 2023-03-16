@@ -40,6 +40,11 @@ interface IState {
   pipelines: IPipeline[];
   ready: boolean;
   drafts: IDraft[];
+  pullLoading: boolean;
+  pullStatus: {
+    alertType: string;
+    message: string;
+  };
 }
 
 interface IStore {
@@ -58,6 +63,9 @@ const Actions = {
   setPipelines: 'DEPLOYED_PIPELINE_SET_PIPELINES',
   updatePipelines: 'DEPLOYED_PIPELINE_UPDATE_PIPELINES',
   setDrafts: 'DEPLOYED_PIPELINE_SET_DRAFTS',
+  // Source Control Management
+  setPullLoading: 'DEPLOYED_PIPELINE_SET_PULL_LOADING',
+  setPullStatus: 'DEPLOYED_PIPELINE_SET_PULL_STATUS',
 };
 
 const defaultInitialState: IState = {
@@ -74,6 +82,8 @@ const defaultInitialState: IState = {
   hasMultiple: false,
   ready: false,
   drafts: [],
+  pullLoading: false,
+  pullStatus: null,
 };
 
 const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
@@ -151,6 +161,16 @@ const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction)
       return {
         ...state,
         drafts: action.payload.drafts,
+      };
+    case Actions.setPullLoading:
+      return {
+        ...state,
+        pullLoading: action.payload.pullLoading,
+      };
+    case Actions.setPullStatus:
+      return {
+        ...state,
+        pullStatus: action.payload.pullStatus,
       };
     case Actions.reset:
       return defaultInitialState;
