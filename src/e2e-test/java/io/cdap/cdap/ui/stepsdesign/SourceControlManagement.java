@@ -160,4 +160,61 @@ public class SourceControlManagement {
     addPathPrefix(PluginPropertyUtils.pluginProp(Constants.GIT_PATH_PREFIX_PROP_NAME));
     clickOnSaveButton();
   }
+
+  @When("Select remote pipelines tab")
+  public void selectRemotePipelinesTab() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-pipeline-tab"));
+    WaitHelper.waitForPageToLoad();
+  }
+
+  @When("Select local pipelines tab")
+  public void selectLocalPipelinesTab() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("local-pipeline-tab"));
+    WaitHelper.waitForPageToLoad();
+  }
+
+  @Then("Verify pipeline list size {int}")
+  public void verifyPipelineList(int size) {
+    Assert.assertEquals(
+        Helper.locateElementsByXPath("//table[@data-testid=\"remote-pipelines-table\"]/tbody/tr").size(),
+        size
+    );
+  }
+
+  @Then("Verify {string} pipeline exist in list")
+  public void verifyPipelineList(String pipeline) {
+    Assert.assertTrue(
+        Helper.isElementExists(Helper.getCssSelectorByDataTestId("remote-" + pipeline))
+    );
+  }
+
+  @When("Select {string} pipeline and push")
+  public void pushPipelineInRemotePage(String pipeline) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("local-" + pipeline));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-push-button"));
+  }
+
+  @Then("Push success indicator is shown for pipeline {string}")
+  public void verifyPushSuccessInLocalTable(String pipeline) {
+    String pushStatusXpath = String.format(
+        "//*[@data-testid=\"local-%s\"]//*[@data-testid=\"push-success-status\"]",
+        pipeline
+    );
+    ElementHelper.isElementDisplayed(Helper.locateElementByXPath(pushStatusXpath));
+  }
+
+  @When("Select {string} pipeline and pull")
+  public void pullPipelineInRemotePage(String pipeline) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-" + pipeline));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-pull-button"));
+  }
+
+  @Then("Pull success indicator is shown for pipeline {string}")
+  public void verifyPullSuccessInRemoteTable(String pipeline) {
+    String pushStatusXpath = String.format(
+        "//*[@data-testid=\"remote-%s\"]//*[@data-testid=\"pull-success-status\"]",
+        pipeline
+    );
+    ElementHelper.isElementDisplayed(Helper.locateElementByXPath(pushStatusXpath));
+  }
 }

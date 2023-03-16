@@ -106,6 +106,7 @@ export const LocalPipelineListView = () => {
             onClick={toggleCommitModal}
             size="large"
             disabled={!selectedPipelines.length}
+            data-testid="remote-push-button"
           >
             {T.translate(`${PREFIX}.pushButton`)}
           </PrimaryContainedButton>

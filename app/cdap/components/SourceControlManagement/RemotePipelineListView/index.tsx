@@ -115,6 +115,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
           <PrimaryContainedButton
             size="large"
             disabled={!selectedPipelines.length}
+            data-testid="remote-pull-button"
             onClick={onPullSubmit}
           >
             {T.translate(`${PREFIX}.pullButton`)}

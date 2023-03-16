@@ -50,7 +50,7 @@ export const RemotePipelineTable = ({
 
   return (
     <TableBox>
-      <Table stickyHeader>
+      <Table data-testid="remote-pipelines-table" stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox"></TableCell>
@@ -72,11 +72,17 @@ export const RemotePipelineTable = ({
                 key={pipeline.name}
                 selected={isPipelineSelected}
                 onClick={(e) => handleClick(e, pipeline.name)}
+                data-testid={`remote-${pipeline.name}`}
               >
                 <TableCell padding="checkbox">
                   <Checkbox color="primary" checked={isPipelineSelected} />
                 </TableCell>
-                <TableCell style={{ width: '40px' }}>
+                <TableCell
+                  style={{ width: '40px' }}
+                  data-testid={
+                    pipeline.status === SUPPORT.yes ? 'pull-success-status' : 'pull-failure-status'
+                  }
+                >
                   {pipeline.status !== null && (
                     <StatusButton
                       status={pipeline.status}
