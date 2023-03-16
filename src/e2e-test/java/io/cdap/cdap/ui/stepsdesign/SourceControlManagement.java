@@ -16,7 +16,6 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
-import io.cdap.cdap.common.utils.DirUtils;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
@@ -24,55 +23,45 @@ import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.RefSpec;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  *
  */
 public class SourceControlManagement {
-  private static final int GIT_COMMAND_TIMEOUT_SECONDS = 10;
 
   @Then("Click on \"Link Repository\" button")
   public void openAddRepositoryButton() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("link-repository-button"));
   }
 
-  public void addRepoUrl(String repoUrl) {
+  private void addRepoUrl(String repoUrl) {
     WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
     ElementHelper.clearElementValue(repoUrlInput);
     ElementHelper.sendKeys(repoUrlInput, repoUrl);
   }
 
-  public void addTokenName(String tokenName) {
+  private void addTokenName(String tokenName) {
     WebElement profileLabelInput = Helper.locateElementByTestId("tokenName");
     ElementHelper.clearElementValue(profileLabelInput);
     ElementHelper.sendKeys(profileLabelInput, tokenName);
   }
 
-  public void addToken(String token) {
+  private void addToken(String token) {
     WebElement profileLabelInput = Helper.locateElementByTestId("token");
     ElementHelper.clearElementValue(profileLabelInput);
     ElementHelper.sendKeys(profileLabelInput, token);
   }
 
-  public void addPathPrefix(String path) {
+  private void addPathPrefix(String path) {
     WebElement input = Helper.locateElementByTestId("pathPrefix");
     ElementHelper.clearElementValue(input);
     ElementHelper.sendKeys(input, path);
   }
 
-  public void addDefaultBranch(String branch) {
+  private void addDefaultBranch(String branch) {
     WebElement input = Helper.locateElementByTestId("defaultBranch");
     ElementHelper.clearElementValue(input);
     ElementHelper.sendKeys(input, branch);
@@ -127,11 +116,14 @@ public class SourceControlManagement {
     addToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
   }
 
+  @Then("Add created test branch")
+  public void addCreatedTestBranch() {
+    addDefaultBranch(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME));
+  }
+
   @Then("Add non-existing branch")
   public void addNonExistingBranch() {
-    WebElement defaultBranchInput = Helper.locateElementByTestId("defaultBranch");
-    ElementHelper.clearElementValue(defaultBranchInput);
-    ElementHelper.sendKeys(defaultBranchInput, Constants.FAKE_DEFAULT_BRANCH);
+    addDefaultBranch(Constants.NON_EXISTS_DEFAULT_BRANCH);
   }
 
   @Then("Verify UI directed to initial page")
@@ -167,51 +159,5 @@ public class SourceControlManagement {
     addDefaultBranch(PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME));
     addPathPrefix(PluginPropertyUtils.pluginProp(Constants.GIT_PATH_PREFIX_PROP_NAME));
     clickOnSaveButton();
-  }
-
-  @When("Create branch in remote repository")
-  public void createRemoteBranch() throws IOException, GitAPIException {
-    Path tempDir = Files.createTempDirectory("e2e-clone-repo");
-    CredentialsProvider creds = getCredentialsProvider();
-    try (Git git = cloneRemote(tempDir, creds)) {
-      String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
-      git.checkout().setCreateBranch(true).setName(branch).call();
-      git.push()
-        .setRefSpecs(new RefSpec(branch + ":" + branch))
-        .setTimeout(GIT_COMMAND_TIMEOUT_SECONDS)
-        .setCredentialsProvider(creds)
-        .call();
-    }
-    DirUtils.deleteDirectoryContents(tempDir.toFile());
-  }
-
-  @Then("Cleanup the branch which is created for testing")
-  public void cleanupTestBranch() throws IOException, GitAPIException {
-    Path tempDir = Files.createTempDirectory("e2e-clone-repo");
-    CredentialsProvider creds = getCredentialsProvider();
-    try (Git git = cloneRemote(tempDir, creds)) {
-      String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
-      //delete branch on remote
-      git.push()
-        .setRefSpecs(new RefSpec(":" + "refs/heads/" + branch))
-        .setTimeout(GIT_COMMAND_TIMEOUT_SECONDS)
-        .setCredentialsProvider(creds)
-        .call();
-    }
-    DirUtils.deleteDirectoryContents(tempDir.toFile());
-  }
-
-  private CredentialsProvider getCredentialsProvider() {
-    return new UsernamePasswordCredentialsProvider("oauth2",
-                                                   PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
-  }
-
-  private Git cloneRemote(Path dir, CredentialsProvider creds) throws GitAPIException {
-    return Git.cloneRepository()
-      .setURI(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME))
-      .setDirectory(dir.toFile())
-      .setTimeout(GIT_COMMAND_TIMEOUT_SECONDS)
-      .setCredentialsProvider(creds)
-      .call();
   }
 }

@@ -19,6 +19,7 @@ package io.cdap.cdap.ui.stepsdesign;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cucumber.java.After;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,12 +33,17 @@ import java.nio.file.Paths;
 public class AfterActions {
 
   @After(order = 0)
-  public static void cleanupDownloadDirectory() throws IOException {
+  public static void cleanupDownloadDirectory() {
     Path downloadsDirPath = Paths.get(Constants.DOWNLOADS_DIR);
     if (Files.exists(downloadsDirPath)) {
       File downloadsDir = new File(Constants.DOWNLOADS_DIR);
       System.out.println(downloadsDir);
       Helper.cleanupDirectory(downloadsDir);
     }
+  }
+
+  @After(order = 1, value = "@SOURCE_CONTROL_MANAGEMENT_TEST")
+  public void cleanUpTestBranch() throws IOException, GitAPIException {
+    Helper.cleanupSCMTestBranch();
   }
 }
