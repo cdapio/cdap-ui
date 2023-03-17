@@ -44,12 +44,23 @@ export const CommitModal = ({
 }: ICommitModalProps) => {
   const [commitMessage, setCommitMessage] = useState(null);
   const [pushError, setPushError] = useState(null);
-  const [pushSuccess, setPushSuccess] = useState(null);
+  const [pushStatus, setPushStatus] = useState(null);
   const [pushLoadingMessage, setPushLoadingMessage] = useState(null);
 
   const resetPushErrorAndSuccess = () => {
     setPushError(null);
-    setPushSuccess(null);
+    setPushStatus(null);
+  };
+
+  const getAlertTypeFromStatus = (status: SUPPORT) => {
+    switch (status) {
+      case SUPPORT.yes:
+        return 'success';
+      case SUPPORT.no:
+        return 'error';
+      case SUPPORT.partial:
+        return 'warning';
+    }
   };
 
   const handlePipelinePush = () => {
@@ -64,12 +75,8 @@ export const CommitModal = ({
       payload,
       setPushLoadingMessage
     ).subscribe((res: IListResponse) => {
-      if (res.status !== SUPPORT.yes) {
-        setPushError(res.message);
-        setPushSuccess(false);
-      } else {
-        setPushSuccess(true);
-      }
+      setPushError(res.message);
+      setPushStatus(res.status);
       setPushLoadingMessage(null);
     });
   };
@@ -77,7 +84,7 @@ export const CommitModal = ({
   const confirmFn = () => {
     if (!commitMessage) {
       setPushError(T.translate(`${PREFIX}.emptyCommitMessage`));
-      setPushSuccess(false);
+      setPushStatus(SUPPORT.no);
       return;
     }
     // the submit function of namespace admin is slightly different
@@ -92,9 +99,9 @@ export const CommitModal = ({
   return (
     <>
       <Alert
-        showAlert={pushSuccess !== null}
-        message={pushSuccess ? T.translate(`${PREFIX}.pushSuccess`, { pipelineName }) : pushError}
-        type={pushSuccess ? 'success' : 'error'}
+        showAlert={pushStatus !== null}
+        message={pushError || T.translate(`${PREFIX}.pushSuccess`, { pipelineName })}
+        type={getAlertTypeFromStatus(pushStatus)}
         onClose={resetPushErrorAndSuccess}
       />
       <ConfirmationModal
@@ -116,6 +123,7 @@ export const CommitModal = ({
         }
         closeable={true}
         confirmFn={confirmFn}
+        disableAction={!commitMessage}
       />
       <LoadingAppLevel
         isopen={loadingMessage !== null || pushLoadingMessage !== null}

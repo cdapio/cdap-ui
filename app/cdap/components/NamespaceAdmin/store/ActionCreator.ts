@@ -301,7 +301,10 @@ export const deleteSourceControlManagement = (
   const params = { namespace };
   return Observable.forkJoin(
     MyNamespaceApi.deleteSourceControlManagement(params),
-    MySecureKeyApi.delete({ ...params, key: formState.auth.tokenName })
+    MySecureKeyApi.delete({ ...params, key: formState.auth.tokenName }).pipe(
+      // whether token is deleted doesn't really matter
+      catchError(() => of(null))
+    )
   ).map(() => {
     getAndSetSourceControlManagement(namespace);
   });
