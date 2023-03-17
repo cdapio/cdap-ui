@@ -18,7 +18,6 @@
 Feature: Pipeline Edit
 
   @PIPELINE_EDIT_TEST
-  @ignore
   Scenario: Edit a simple pipeline
     When Deploy and test pipeline "pipeline_edit_test" with pipeline JSON file "logs_generator.json"
     Then Check Pipeline History Button exists
@@ -34,7 +33,6 @@ Feature: Pipeline Edit
     Then Restore an older version should work
 
   @PIPELINE_EDIT_TEST
-  @ignore
   Scenario: Pipeline configuration should save to runtime arguments
     When Open pipeline list page
     Then Go to pipeline "pipeline_edit_test" details
@@ -48,7 +46,6 @@ Feature: Pipeline Edit
     Then Generated runtime arguments should not be empty
 
   @PIPELINE_EDIT_TEST
-  @ignore
   Scenario: Discarding a draft should delete it from draft list
     When Open pipeline list page
     Then Go to pipeline "pipeline_edit_test" details
@@ -65,7 +62,6 @@ Feature: Pipeline Edit
     Then Draft "pipeline_edit_test" should not exist
 
   @PIPELINE_EDIT_TEST
-  @ignore
   Scenario: Continuing a draft should resume at last saved point
     When Open pipeline list page
     Then Go to pipeline "pipeline_edit_test" details
