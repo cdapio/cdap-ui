@@ -757,6 +757,43 @@ features:
           string: String
           decimal: Decimal
         title: Change data type
+        decimalConfig:
+          applyButton: APPLY
+          cancelButton: CANCEL
+          scaleLabel: Scale
+          scaleHelpButton: Tooltip for scale input
+          scaleHelperText: Define scale here
+          scaleTooltip: Specifies the scale of the decimal. If zero or positive, the scale is the number of digits to the right of the decimal point. If negative, the unscaled value of the number is multiplied by ten to the power of the negation of the scale.
+          roundingLabel: Rounding
+          roundingHelpButton: Tooltip for rounding mode
+          roundingHelperText: Rounding modes
+          roundingDisabledTooltip: Rounding mode is disabled when scale is not specified.
+          roundingTooltip: Specifies a rounding behavior for numerical operations. Each rounding mode indicates how the least significant returned digit of a rounded result is to be calculated. If scale is specified and rounding mode is not specified, then rounding mode defaults to HALF_EVEN.
+          roundingOptions:
+            CEILING:
+              label: Ceiling
+              description: Rounding mode to round towards positive infinity.
+            DOWN:
+              label: Down
+              description: Rounding mode to round towards zero.
+            FLOOR:
+              label: Floor
+              description: Rounding mode to round towards negative infinity.
+            HALF_DOWN:
+              label: Half down
+              description: Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round down.
+            HALF_EVEN:
+              label: Half even
+              description: Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round towards the even neighbor.
+            HALF_UP:
+              label: Half up
+              description: Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.
+            UNNECESSARY:
+              label: Unnecessary
+              description: Rounding mode to assert that the requested operation has an exact result, hence no rounding is necessary.
+            UP:
+              label: Up
+              description: Rounding mode to round away from zero.
       ColumnActions:
         label: Column names
         actions:
