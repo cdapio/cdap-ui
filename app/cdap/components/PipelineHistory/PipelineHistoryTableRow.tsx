@@ -104,7 +104,7 @@ export const PipelineHistoryTableRow = ({
 
   const isLatest = appVersion === latestVersion;
   const dateLabel = isLatest ? T.translate(`${PREFIX}.latest`) : T.translate(`${PREFIX}.older`);
-  const displayedDesc = description.length > 190 ? description.slice(0, 190) + '...' : description;
+  const displayedDesc = description?.length > 190 ? description.slice(0, 190) + '...' : description;
 
   return (
     <>
