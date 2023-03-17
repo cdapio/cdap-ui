@@ -122,7 +122,7 @@ const PipelineDetailsMetadata = ({
             target={() => (
               <StyledChip
                 variant="outlined"
-                label={T.translate(`${SCM_PREFIX}.table.connected`)}
+                label={T.translate(`${SCM_PREFIX}.table.gitStatus`)}
                 onClick={() => pullPipeline(getCurrentNamespace(), name)}
               />
             )}
