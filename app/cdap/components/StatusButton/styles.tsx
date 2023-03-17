@@ -51,6 +51,7 @@ export const StyledButton = styled(Button)`
 
 export const StyledP = styled.p`
   margin-bottom: 0;
+  word-break: break-word;
 `;
 
 export const BoldP = styled.p`
