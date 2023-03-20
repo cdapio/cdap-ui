@@ -76,7 +76,6 @@ commons:
       singular: Workflow
   export: Export
   formatLabel: Format
-  hide: Hide
   hydrator: Cask Hydrator
   keyValPairs:
     keyLabel: Key
@@ -97,7 +96,8 @@ commons:
   scope: Scope
   secondsShortLabel: secs
   secShortLabel: sec
-  show: Show
+  showAll: Show all pipelines
+  showFailed: Show failed only
   status: Status
   then: Then
   tracker: Cask Tracker
@@ -3132,27 +3132,27 @@ features:
         pat:
           label: Personal access token (PAT)
           token: Token
-          tokenHelperText: If you can’t find the secret containing git token, open a tutorial to learn how to create a new one. 
+          tokenHelperText: Refer to the user guide or help page of your source control tool to generate the token
           tokenName: Token name
           tokenNameHelperText: Name your token
           username: User name
-          usernameHelperText: (Optional) Add a username to your token
+          usernameHelperText: Add a username to your token
       authHeader: Authentication
       basicHeader: Basic
       branch:
         label: Default branch
-        helperText: (Optional) If not set, it will use the default branch from the github repository
+        helperText: If not set, it will use the default branch from the github repository
       cancel: Cancel
       linkConfirm: Save & Close
       pathPrefix:
         label: Path prefix
-        helperText: (Optional) Add Namespace description here
+        helperText: Add prefix to the pipeline name as the filename that will be saved in the github repository
       provider: 
         label: Provider
         helperText: Select Source Control Management tool
       repoUrl:
         label: Repository URL
-        helperText: Git repo URL of the form git@<host>/repo.git
+        helperText: Enter Git repository URL of the form https://github.com/<host>/<repo>
       title: Configure Source Control Management
       validate:
         button: validate

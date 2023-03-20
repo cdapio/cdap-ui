@@ -24,7 +24,6 @@ import { pushSelectedPipelines } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { IListResponse } from '../types';
-import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 
 const PREFIX = 'features.SourceControlManagement.push';
 

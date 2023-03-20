@@ -21,7 +21,13 @@ import { IRepositoryPipeline } from '../types';
 import T from 'i18n-react';
 import StatusButton from 'components/StatusButton';
 import { SUPPORT } from 'components/StatusButton/constants';
-import { StyledTableCell, StyledTableRow, TableBox, StatusCell } from '../styles';
+import {
+  StyledTableCell,
+  StyledTableRow,
+  TableBox,
+  StatusCell,
+  StyledFixedWidthCell,
+} from '../styles';
 
 const PREFIX = 'features.SourceControlManagement.table';
 
@@ -98,7 +104,7 @@ export const LocalPipelineTable = ({
             </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
-            <StyledTableCell>{T.translate(`${PREFIX}.gitStatus`)}</StyledTableCell>
+            <StyledFixedWidthCell>{T.translate(`${PREFIX}.gitStatus`)}</StyledFixedWidthCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -140,9 +146,9 @@ export const LocalPipelineTable = ({
                   )}
                 </StatusCell>
                 <StyledTableCell>{pipeline.name}</StyledTableCell>
-                <StyledTableCell>
+                <StyledFixedWidthCell>
                   {pipeline.fileHash ? T.translate(`${PREFIX}.connected`) : '--'}
-                </StyledTableCell>
+                </StyledFixedWidthCell>
               </StyledTableRow>
             );
           })}

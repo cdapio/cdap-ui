@@ -148,7 +148,9 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
                       })}
                 </FailStatusDiv>
                 <PrimaryTextButton onClick={toggleRemoteShowFailedOnly}>
-                  {showFailedOnly ? T.translate('commons.hide') : T.translate('commons.show')}
+                  {showFailedOnly
+                    ? T.translate('commons.showAll')
+                    : T.translate('commons.showFailed')}
                 </PrimaryTextButton>
               </>
             )}
