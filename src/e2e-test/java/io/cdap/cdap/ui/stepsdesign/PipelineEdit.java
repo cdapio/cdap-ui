@@ -103,6 +103,11 @@ public class PipelineEdit {
     Assert.assertEquals(testString, getPipelineDetails("referenceName"));
   }
 
+  @Then("Pipeline source node {string} property should be {string}")
+  public void pipelineShowDetails(String propertyName, String value) {
+    Assert.assertEquals(value, getPipelineDetails(propertyName));
+  }
+
   @Then("History should show correct number of entries and info")
   public void countHistoryVersions() {
     openHistoryModalIfNotOpen();
@@ -117,6 +122,13 @@ public class PipelineEdit {
     Assert.assertEquals(olderVersion, rows.get(1).findElement(By.cssSelector(
       Helper.getCssSelectorByDataTestId("pipeline-history-date-label")
     )).getText());
+  }
+
+  @Then("History should show {} entries")
+  public void countHistoryVersions(int versionCount) {
+    openHistoryModalIfNotOpen();
+    List<WebElement> rows = Helper.locateElementsByTestId("pipeline-history-row");
+    Assert.assertEquals(versionCount, rows.size());
   }
 
   @Then("View older version should show different details")
@@ -224,5 +236,16 @@ public class PipelineEdit {
       );
       Helper.waitSeconds();
     }
+  }
+
+  @Then("Edit pipeline and verify changes")
+  public void editPipelineAndVerifyChanges() {
+    clickEdit();
+    editRedirectToStudio();
+    openFileSourceProperty();
+    modifyReferenceName();
+    deployWithChanges();
+    pipelineShowLatestDetails();
+    countHistoryVersions();
   }
 }
