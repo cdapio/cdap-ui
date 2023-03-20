@@ -24,10 +24,6 @@ import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
 import { Chip } from '@material-ui/core';
-import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
-import Alert from 'components/shared/Alert';
-import { pullPipeline, setPullStatus } from '../store/ActionCreator';
-import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
 const SCM_PREFIX = 'features.SourceControlManagement';
@@ -55,23 +51,13 @@ const mapStateToPipelineTagsProps = (state) => {
 const ConnectedPipelineTags = connect(mapStateToPipelineTagsProps)(Tags);
 
 const mapStateToPipelineDetailsMetadataProps = (state) => {
-  const {
-    name,
-    artifact,
-    version,
-    description,
-    sourceControlMeta,
-    pullLoading,
-    pullStatus,
-  } = state;
+  const { name, artifact, version, description, sourceControlMeta } = state;
   return {
     name,
     artifactName: artifact.name,
     version,
     description,
     sourceControlMeta,
-    pullLoading,
-    pullStatus,
   };
 };
 
@@ -83,11 +69,6 @@ interface IPipelineDetailsMetadata {
   sourceControlMeta: {
     fileHash: string;
   };
-  pullLoading: boolean;
-  pullStatus: {
-    alertType: string;
-    message: string;
-  };
 }
 
 const PipelineDetailsMetadata = ({
@@ -96,44 +77,7 @@ const PipelineDetailsMetadata = ({
   version,
   description,
   sourceControlMeta,
-  pullLoading,
-  pullStatus,
 }: IPipelineDetailsMetadata) => {
-  const SourceControlStatusChip = () => {
-    return (
-      <StyledSpan>
-        <LoadingAppLevel
-          isopen={pullLoading}
-          message={T.translate(`${SCM_PREFIX}.pull.pullAppMessage`, {
-            appId: name,
-          }).toLocaleString()}
-          style={{ width: '500px' }}
-        />
-        {pullStatus && (
-          <Alert
-            showAlert={pullStatus !== null}
-            message={pullStatus.message}
-            type={pullStatus.alertType}
-            onClose={() => setPullStatus(null)}
-          />
-        )}
-        {sourceControlMeta && sourceControlMeta.fileHash && (
-          <Popover
-            target={() => (
-              <StyledChip
-                variant="outlined"
-                label={T.translate(`${SCM_PREFIX}.table.gitStatus`)}
-                onClick={() => pullPipeline(getCurrentNamespace(), name)}
-              />
-            )}
-            showOn="Hover"
-          >
-            {T.translate(`${SCM_PREFIX}.pull.pullChipTooltip`)}
-          </Popover>
-        )}
-      </StyledSpan>
-    );
-  };
   return (
     <div className="pipeline-metadata">
       <div className="pipeline-type-name-version">
@@ -156,7 +100,11 @@ const PipelineDetailsMetadata = ({
             {description}
           </Popover>
         </span>
-        <SourceControlStatusChip />
+        {sourceControlMeta && sourceControlMeta.fileHash && (
+          <StyledSpan>
+            <StyledChip variant="outlined" label={T.translate(`${SCM_PREFIX}.table.gitStatus`)} />
+          </StyledSpan>
+        )}
         <span className="pipeline-version">{T.translate(`${PREFIX}.version`, { version })}</span>
       </div>
       <div className="pipeline-tags">

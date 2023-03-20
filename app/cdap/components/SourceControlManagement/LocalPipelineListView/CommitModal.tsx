@@ -24,6 +24,7 @@ import { pushSelectedPipelines } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { IListResponse } from '../types';
+import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
@@ -48,8 +49,13 @@ export const CommitModal = ({
   const [pushLoadingMessage, setPushLoadingMessage] = useState(null);
 
   const resetPushErrorAndSuccess = () => {
-    setPushError(null);
     setPushStatus(null);
+    setPushError(null);
+  };
+
+  const toggleModal = () => {
+    setCommitMessage(null);
+    onToggle();
   };
 
   const getAlertTypeFromStatus = (status: SUPPORT) => {
@@ -68,7 +74,6 @@ export const CommitModal = ({
     const payload = {
       commitMessage,
     };
-    onToggle();
     pushSelectedPipelines(
       getCurrentNamespace(),
       selectedPipelines,
@@ -79,6 +84,7 @@ export const CommitModal = ({
       setPushStatus(res.status);
       setPushLoadingMessage(null);
     });
+    toggleModal();
   };
 
   const confirmFn = () => {
@@ -105,9 +111,9 @@ export const CommitModal = ({
         onClose={resetPushErrorAndSuccess}
       />
       <ConfirmationModal
-        cancelFn={onToggle}
+        cancelFn={toggleModal}
         isOpen={isOpen}
-        toggleModal={onToggle}
+        toggleModal={toggleModal}
         headerTitle={T.translate(`${PREFIX}.commitTitle`)}
         confirmationElem={
           <TextareaAutosize
@@ -119,6 +125,7 @@ export const CommitModal = ({
             }}
             style={{ width: '100%' }}
             data-testid="commit-message-input"
+            value={commitMessage}
           />
         }
         closeable={true}
