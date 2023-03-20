@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class Commands implements CdfHelper {
 
@@ -384,5 +383,13 @@ public class Commands implements CdfHelper {
       }
     }
     return stageJSON;
+  }
+
+  public static void waitForLoading() {
+    if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+      WaitHelper.waitForElementToBeHidden(
+        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
+      );
+    }
   }
 }

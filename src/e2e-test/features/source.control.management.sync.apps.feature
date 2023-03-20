@@ -53,3 +53,29 @@ Feature: Source Control Management - Pulling and pushing applications
     Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
     When Open Source Control Management Page
     Then Delete the repo config
+
+  @PIPELINE_EDIT_TEST
+  @SOURCE_CONTROL_MANAGEMENT_TEST
+  Scenario: Edit a simple pipeline and restore a version from git
+    # Setup Repo config
+    When Open Source Control Management Page
+    When Initialize the repository config
+    When Deploy and test pipeline "pipeline_edit_test" with pipeline JSON file "logs_generator.json"
+    # Push version 1 of the pipeline to git.
+    Then Click push button in Actions dropdown
+    Then Commit changes with message "upload pipeline to Git"
+    Then Banner is shown with message "Successfully pushed pipeline pipeline_edit_test"
+    # Edit the pipeline to create a new LCM version.
+    Then Edit pipeline and verify changes
+    # Pull version 1 back from git.
+    Then Click pull button in Actions dropdown
+    Then Pipeline source node "referenceName" property should be "logs_data_source"
+    Then History should show 3 entries
+    # Pulling again should show a warning.
+    Then Click pull button in Actions dropdown
+    Then Banner is shown with message "Pipeline is already up to date"
+    Then History should show 3 entries
+    # Clean up.
+    Then Clean up pipeline "pipeline_edit_test" which is created for testing
+    When Open Source Control Management Page
+    Then Delete the repo config

@@ -16,6 +16,7 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
+import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
@@ -31,6 +32,7 @@ import org.openqa.selenium.WebElement;
  *
  */
 public class SourceControlManagement {
+  private static final int ALERT_DISPLAY_TIMEOUT = 7;
 
   @Then("Click on \"Link Repository\" button")
   public void openAddRepositoryButton() {
@@ -132,9 +134,17 @@ public class SourceControlManagement {
   }
 
   @Then("Click push button in Actions dropdown")
-  public void clickEdit() {
+  public void clickPushAction () {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-actions-btn"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("push-pipeline"));
+  }
+
+  @Then("Click pull button in Actions dropdown")
+  public void clickPullAction() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-actions-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("pull-pipeline"));
+    Commands.waitForLoading();
+    WaitHelper.waitForPageToLoad();
   }
 
   @Then("Commit changes with message {string}")
@@ -146,8 +156,10 @@ public class SourceControlManagement {
 
   @Then("Banner is shown with message {string}")
   public void pipelineBannerIsShownWithMessage(String message) {
-    WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("alert"));
+    WebElement alert = Helper.locateElementByTestId("alert");
+    WaitHelper.waitForElementToBeDisplayed(alert);
     Assert.assertTrue(ElementHelper.getElementText(Helper.locateElementByTestId("alert")).contains(message));
+    WaitHelper.waitForElementToBeHidden(alert, ALERT_DISPLAY_TIMEOUT);
   }
 
   @When("Initialize the repository config")
