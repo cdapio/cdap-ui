@@ -20,7 +20,16 @@ import T from 'i18n-react';
 import { DecimalOptions } from 'components/DataPrep/Directives/ChangeDataType/DecimalOptions';
 
 const PREFIX = 'features.DataPrep.Directives.ChangeDataType.decimalConfig';
-const ROUNDING_OPTIONS = ['CEILING', 'DOWN', 'FLOOR', 'HALF_DOWN', 'HALF_EVEN', 'HALF_UP', 'UNNECESSARY', 'UP'];
+const ROUNDING_OPTIONS = [
+  'CEILING',
+  'DOWN',
+  'FLOOR',
+  'HALF_DOWN',
+  'HALF_EVEN',
+  'HALF_UP',
+  'UNNECESSARY',
+  'UP',
+];
 
 describe('DecimalOptions component', () => {
   const SCALE_LABEL = T.translate(`${PREFIX}.scaleLabel`).toString();
