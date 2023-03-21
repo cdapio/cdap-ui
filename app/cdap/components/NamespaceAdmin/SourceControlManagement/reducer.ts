@@ -28,8 +28,10 @@ export const defaultSourceControlManagement: ISourceControlManagement = {
     pathPrefix: '',
     auth: {
       type: scmAuthType[0].id,
-      tokenName: '',
       token: '',
+      patConfig: {
+        passwordName: '',
+      },
     },
   },
 };

@@ -202,7 +202,7 @@ export const getSourceControlManagement = (namespace) => {
       const config = res.config;
       return Observable.forkJoin(
         of(config),
-        MySecureKeyApi.getSecureData({ ...params, key: config.auth.tokenName }).pipe(
+        MySecureKeyApi.getSecureData({ ...params, key: config.auth.patConfig.passwordName }).pipe(
           // return a null token if token is not found
           catchError(() => {
             return of(...[config, null]);
@@ -225,7 +225,7 @@ export const getSourceControlManagement = (namespace) => {
 
 export const getAndSetSourceControlManagement = (namespace) => {
   getSourceControlManagement(namespace).subscribe((res) => {
-    // after getting the saved config, we need to fetch the token using the tokenName
+    // after getting the saved config, we need to fetch the token using the passwordName
     const [config, token] = res;
     config.auth.token = token;
     Store.dispatch({
@@ -250,7 +250,7 @@ export const addOrValidateSourceControlManagementForm = (
     // TODO: currently it requires to save the token to secure store first.
     // In the future we might want to test connection on the fly
     return MySecureKeyApi.put(
-      { ...params, key: formState.auth.tokenName },
+      { ...params, key: formState.auth.patConfig.passwordName },
       {
         data: formState.auth.token,
       }
@@ -269,7 +269,7 @@ export const addOrValidateSourceControlManagementForm = (
   return Observable.forkJoin(
     MyNamespaceApi.setSourceControlManagement(params, getBodyForSubmit(formState)),
     MySecureKeyApi.put(
-      { ...params, key: formState.auth.tokenName },
+      { ...params, key: formState.auth.patConfig.passwordName },
       {
         data: formState.auth.token,
       }
@@ -301,7 +301,7 @@ export const deleteSourceControlManagement = (
   const params = { namespace };
   return Observable.forkJoin(
     MyNamespaceApi.deleteSourceControlManagement(params),
-    MySecureKeyApi.delete({ ...params, key: formState.auth.tokenName }).pipe(
+    MySecureKeyApi.delete({ ...params, key: formState.auth.patConfig.passwordName }).pipe(
       // whether token is deleted doesn't really matter
       catchError(() => of(null))
     )
