@@ -328,7 +328,8 @@ export const TopPanel = ({
     // first time execute before interval
     MyPipelineApi.get(params).subscribe(
       (res) => {
-        setParentConfig(JSON.parse(res.configuration));
+        // add description in case it is missing from configuration
+        setParentConfig({ ...JSON.parse(res.configuration), description: res.description });
         if (res.appVersion === getParentVersion()) {
           setEditStatus('Editing in progress');
           return;
