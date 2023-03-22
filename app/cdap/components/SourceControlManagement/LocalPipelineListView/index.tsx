@@ -39,7 +39,6 @@ import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { LocalPipelineTable } from './PipelineTable';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
-import { SUPPORT } from 'components/StatusButton/constants';
 import { IListResponse } from '../types';
 
 const PREFIX = 'features.SourceControlManagement.push';
@@ -137,7 +136,9 @@ export const LocalPipelineListView = () => {
                     })}
               </FailStatusDiv>
               <PrimaryTextButton onClick={toggleShowFailedOnly}>
-                {showFailedOnly ? T.translate('commons.hide') : T.translate('commons.show')}
+                {showFailedOnly
+                  ? T.translate('commons.showAll')
+                  : T.translate('commons.showFailed')}
               </PrimaryTextButton>
             </>
           )}

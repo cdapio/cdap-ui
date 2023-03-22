@@ -28,6 +28,10 @@ export const StyledTableCell = styled(TableCell)`
   font-size: 14px;
 `;
 
+export const StyledFixedWidthCell = styled(StyledTableCell)`
+  width: 200px;
+`;
+
 export const StyledTableRow = styled(TableRow)`
   &&.Mui-selected {
     background-color: ${(props) => props.theme.palette.blue[500]};
