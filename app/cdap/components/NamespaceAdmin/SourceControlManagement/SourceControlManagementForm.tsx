@@ -21,7 +21,7 @@ import { ISourceControlManagementConfig } from './types';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
-import { authKeys, providers, scmAuthType } from './constants';
+import { authKeys, patConfigKeys, providers, scmAuthType } from './constants';
 import { defaultSourceControlManagement, sourceControlManagementFormReducer } from './reducer';
 import { addOrValidateSourceControlManagementForm } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -94,10 +94,10 @@ const SourceControlManagementForm = ({
     if (!formState.config?.link) {
       count++;
     }
-    if (!formState.config?.auth.token) {
+    if (!formState.config?.auth?.token) {
       count++;
     }
-    if (!formState.config?.auth.tokenName) {
+    if (!formState.config?.auth?.patConfig?.passwordName) {
       count++;
     }
     return count;
@@ -126,6 +126,21 @@ const SourceControlManagementForm = ({
       payload.key = 'auth';
       payload.value = newAuth;
     }
+
+    // for patConfig object
+    if (patConfigKeys.includes(key)) {
+      const newPatConfig = { ...formState.config.auth.patConfig };
+      newPatConfig[key] = value;
+
+      const newAuth = {
+        ...formState.config.auth,
+        patConfig: newPatConfig,
+      };
+
+      payload.key = 'auth';
+      payload.value = newAuth;
+    }
+
     formStateDispatch({
       type: 'SET_VALUE',
       payload,
@@ -289,7 +304,7 @@ const SourceControlManagementForm = ({
           {formState.config?.auth?.type === scmAuthType[0].id && (
             <>
               <PropertyRow
-                value={formState.config?.auth?.tokenName}
+                value={formState.config?.auth?.patConfig?.passwordName}
                 property={{
                   name: 'tokenName',
                   description: T.translate(`${PREFIX}.auth.pat.tokenNameHelperText`).toString(),
@@ -297,10 +312,10 @@ const SourceControlManagementForm = ({
                   required: true,
                 }}
                 onChange={(val) => {
-                  handleValueChange(val, 'tokenName');
+                  handleValueChange(val, 'passwordName');
                 }}
                 errors={
-                  !formState.config?.auth?.tokenName && formState.error
+                  !formState.config?.auth?.patConfig?.passwordName && formState.error
                     ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
                     : []
                 }
