@@ -17,8 +17,21 @@
 import uuidV4 from 'uuid/v4';
 import ee from 'event-emitter';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/observable/dom/ajax';
+import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import { Subject } from 'rxjs/Subject';
 import WindowManager, { WINDOW_ON_BLUR, WINDOW_ON_FOCUS } from 'services/WindowManager';
 import { objectQuery } from 'services/helpers';
 import SystemDelayStore from 'services/SystemDelayStore';
@@ -116,7 +129,7 @@ interface IPollingMap {
   [index: string]: IBinding;
 }
 
-interface IHandlerData {
+export interface IHandlerData {
   statusCode: number;
   resource: IResource;
 }
@@ -128,14 +141,14 @@ function createHandlerData(ajaxResponse, bindingInfo) {
   };
 }
 
-export default class Datasource implements IDataSource {
+export default class DataSource implements IDataSource {
   public eventEmitter: ee;
   public polling: IPollingMap;
-  public genericResponseHandlers: [(IHandlerData) => boolean];
+  public genericResponseHandlers: Array<(IHandlerData) => boolean>;
   public pausedPolling: boolean;
   public loadingIndicatorStoreSubscription: Subscription;
 
-  constructor(genericResponseHandlers: [() => boolean] = [() => true]) {
+  constructor(genericResponseHandlers: Array<(IHandlerData) => boolean> = [() => true]) {
     this.eventEmitter = ee(ee);
     this.polling = {};
     this.genericResponseHandlers = genericResponseHandlers;
