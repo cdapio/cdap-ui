@@ -260,11 +260,13 @@ export default class Overview extends Component {
         return <div />;
       }
 
-      return React.createElement(Tag, {
-        entity: this.state.entity,
-        onClose: this.hideOverview.bind(this),
-        onCloseAndRefresh: this.closeAndRefresh.bind(this),
-      });
+      return (
+        <Tag
+          entity={this.state.entity}
+          onClose={this.hideOverview.bind(this)}
+          onCloseAndRefresh={this.closeAndRefresh.bind(this)}
+        />
+      );
     };
     return (
       <div

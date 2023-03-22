@@ -14,7 +14,7 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Popover from 'components/shared/Popover';
 import PlusButtonModal from 'components/shared/PlusButtonModal';
@@ -32,19 +32,19 @@ export default class PlusButton extends Component {
     resourcecenter: 'resourcecenter',
   };
 
-  static propTypes = {
-    contextItems: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        to: PropTypes.string,
-        onClick: PropTypes.func,
-      })
-    ),
-    mode: PropTypes.oneOf([
-      PlusButton.MODE.marketplace,
-      PlusButton.MODE.resourcecenter,
-    ]),
-  };
+  // static propTypes = {
+  //   contextItems: PropTypes.arrayOf(
+  //     PropTypes.shape({
+  //       label: PropTypes.string,
+  //       to: PropTypes.string,
+  //       onClick: PropTypes.func,
+  //     })
+  //   ),
+  //   mode: PropTypes.oneOf([
+  //     PlusButton.MODE.marketplace,
+  //     PlusButton.MODE.resourcecenter,
+  //   ]),
+  // };
 
   eventemitter = ee(ee);
   constructor(props) {

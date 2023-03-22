@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import RuleBook from 'components/RulesEngineHome/RuleBook';
-import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Input, InputGroup } from 'reactstrap';
 import RulesEngineStore, {
   RULESENGINEACTIONS,
 } from 'components/RulesEngineHome/RulesEngineStore';
@@ -112,11 +112,11 @@ export default class RuleBooksTab extends Component {
           {T.translate(`${PREFIX}.searchLabel`)}
         </span>
         <InputGroup className="rule-books-search-group">
-          <InputGroupAddon addonType="prepend">
-            <div className="input-group-text">
-              <IconSVG name="icon-search" />
-            </div>
-          </InputGroupAddon>
+          {/* <InputGroupAddon addonType="prepend"> */}
+          <div className="input-group-text">
+            <IconSVG name="icon-search" />
+          </div>
+          {/* </InputGroupAddon> */}
           <Input
             placeholder={T.translate(`${PREFIX}.searchplaceholder`)}
             value={this.state.searchStr}

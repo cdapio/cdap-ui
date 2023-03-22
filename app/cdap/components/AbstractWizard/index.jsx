@@ -14,8 +14,6 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
-
 import React from 'react';
 import PublishPipelineWizard from 'components/CaskWizards/PublishPipeline';
 import PublishPipelineUsecaseWizard from 'components/CaskWizards/PublishPipelineUsecase';
@@ -126,20 +124,16 @@ export default function AbstractWizard({
   if (!Tag) {
     return <h1> Wizard Type {wizardType} not found </h1>;
   }
-  return React.createElement(Tag, {
-    isOpen,
-    onClose,
-    store,
-    input,
-    backdrop,
-    displayCTA,
-  });
+  return (
+    <Tag
+      {...{
+        isOpen,
+        onClose,
+        store,
+        input,
+        backdrop,
+        displayCTA,
+      }}
+    />
+  );
 }
-AbstractWizard.propTypes = {
-  isOpen: PropTypes.bool,
-  wizardType: PropTypes.string,
-  onClose: PropTypes.func,
-  input: PropTypes.any,
-  backdrop: PropTypes.bool,
-  displayCTA: PropTypes.bool,
-};

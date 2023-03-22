@@ -157,11 +157,7 @@ export const OptionList = (props: IOptionListProps) => {
           />
           <UncontrolledTooltip
             target={`map-to-target-option-${option.uuid}`}
-            modifiers={{
-              preventOverflow: {
-                boundariesElement: 'window',
-              },
-            }}
+            // modifiers={[{name: 'preventOverflow', options: {boundariesElement: 'window'}]}
             placement="right"
             delay={{ show: 500, hide: 0 }}
           >
