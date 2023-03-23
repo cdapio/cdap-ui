@@ -28,6 +28,7 @@ import T from 'i18n-react';
 import { preventPropagation } from 'services/helpers';
 import { UncontrolledTooltip } from 'components/UncontrolledComponents';
 import If from 'components/shared/If';
+import { DecimalOptions } from 'components/DataPrep/Directives/ChangeDataType/DecimalOptions';
 
 const PREFIX = 'features.DataPrep.Directives.ChangeDataType';
 
@@ -36,14 +37,18 @@ require('./ChangeDataType.scss');
 const DATATYPE_OPTIONS = [
   'string',
   'boolean',
+  'decimal',
   'integer',
   'long',
   'short',
   'float',
   'double',
-  'decimal',
   'bytes',
 ];
+
+const DATATYPES_WITH_SUBMENU = {
+  decimal: DecimalOptions,
+}
 
 const DISABLED_TYPE = ['localdate', 'localtime', 'zoneddatetime'];
 
@@ -55,6 +60,7 @@ export default class ChangeDataTypeDirective extends Component {
     this.columnType = this.columnType === 'bigdecimal' ? 'decimal' : this.columnType;
 
     this.state = {
+      showSubmenu: false,
       selectedChangeDataType: null,
       isDisabled: DISABLED_TYPE.indexOf(this.columnType) !== -1,
     };
@@ -62,6 +68,12 @@ export default class ChangeDataTypeDirective extends Component {
     window.addEventListener('resize', this.offsetCalcDebounce);
 
     this.eventEmitter = ee(ee);
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (!props.isOpen) {
+      return { ...state, showSubmenu: false };
+    }
   }
 
   componentDidUpdate() {
@@ -82,12 +94,8 @@ export default class ChangeDataTypeDirective extends Component {
     window.removeEventListener('resize', this.offsetCalcDebounce);
   }
 
-  applyDirective(option) {
-    if (this.columnType.toUpperCase() === option.toUpperCase()) {
-      return;
-    }
-
-    let directive = `set-type :${this.props.column} ${option}`;
+  applyDirective(option, extraArgs='') {
+    let directive = `set-type :${this.props.column} ${option} ${extraArgs}`;
     execute([directive]).subscribe(
       () => {
         this.eventEmitter.emit('DATAPREP_DATA_TYPE_CHANGED', this.props.column);
@@ -106,6 +114,32 @@ export default class ChangeDataTypeDirective extends Component {
     );
   }
 
+  openSubmenu(option) {
+    this.setState({ showSubmenu: DATATYPES_WITH_SUBMENU[option] });
+  }
+
+  closeSubmenu(event) {
+    event.stopPropagation();
+    this.setState({ showSubmenu: false });
+  }
+
+  handleOptionSelect(option) {
+    if (DATATYPES_WITH_SUBMENU[option]) {
+      return this.openSubmenu(option);
+    }
+    return this.applyDirective(option);
+  }
+
+  renderSubmenu() {
+    const SubmenuComponent = this.state.showSubmenu;
+    if (!SubmenuComponent) { return null; }
+
+    return (<SubmenuComponent
+      onApply={this.applyDirective.bind(this)}
+      onCancel={this.closeSubmenu.bind(this)}
+    />);
+  }
+
   renderDetail() {
     if (!this.props.isOpen || this.props.isDisabled || this.state.isDisabled) {
       return null;
@@ -115,13 +149,19 @@ export default class ChangeDataTypeDirective extends Component {
         {this.props.options.map((option, i) => {
           return (
             <div
-              className={classnames('option', {
-                disabled: this.columnType.toUpperCase() === option.toUpperCase(),
-              })}
+              className='option clearfix'
               key={i}
-              onClick={this.applyDirective.bind(this, option)}
+              onClick={this.handleOptionSelect.bind(this, option)}
             >
-              {T.translate(`${PREFIX}.Options.${option}`)}
+              <span>{T.translate(`${PREFIX}.Options.${option}`)}</span>
+              { !!DATATYPES_WITH_SUBMENU[option] &&
+                <>
+                  <span className="float-right">
+                    <span className="fa fa-caret-right" />
+                  </span>
+                  {this.renderSubmenu()}
+                </>
+              }
             </div>
           );
         })}
