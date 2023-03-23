@@ -37,11 +37,17 @@ describe('DecimalOptions component', () => {
   const FLOOR = T.translate(`${PREFIX}.roundingOptions.FLOOR.label`).toString();
   const APPLY = T.translate(`${PREFIX}.applyButton`).toString();
 
-  let submenu, onApply, onCancel;
+  let submenu;
+  let onApply;
+  let onCancel;
 
   beforeEach(() => {
-    onApply = jest.fn((option: string, extraArgs?: string): void => {});
-    onCancel = jest.fn((event: React.MouseEvent<HTMLElement>): void => {});
+    onApply = jest.fn((option: string, extraArgs?: string): void => {
+      return;
+    });
+    onCancel = jest.fn((event: React.MouseEvent<HTMLElement>): void => {
+      return;
+    });
     submenu = render(<DecimalOptions onApply={onApply} onCancel={onCancel} />);
   });
 

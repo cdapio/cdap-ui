@@ -18,11 +18,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 
-import {
-  ISubmenuProps,
-  SubmenuContainer,
-} from 'components/DataPrep/Directives/ChangeDataType/submenu';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
@@ -36,6 +31,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+
+import {
+  ISubmenuProps,
+  SubmenuContainer,
+} from 'components/DataPrep/Directives/ChangeDataType/submenu';
+import {
+  FormContainer,
+  ButtonsContainer,
+} from 'components/DataPrep/Directives/ChangeDataType/styles';
 
 const PREFIX = 'features.DataPrep.Directives.ChangeDataType.decimalConfig';
 const ROUNDING_PREFIX = `${PREFIX}.roundingOptions`;
@@ -108,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const DecimalOptions: React.FC<ISubmenuProps> = ({ onApply, onCancel }) => {
+export const DecimalOptions = ({ onApply, onCancel }: ISubmenuProps): JSX.Element => {
   const [scale, setScale] = useState<string>('');
   const [rounding, setRounding] = useState<string>('');
 
@@ -236,58 +240,3 @@ export const DecimalOptions: React.FC<ISubmenuProps> = ({ onApply, onCancel }) =
     </SubmenuContainer>
   );
 };
-
-const FormContainer = styled.div`
-  width: fit-content;
-  padding: 16px;
-
-  .MuiFormControl-root {
-    margin-bottom: 16px;
-
-    .MuiFormHelperText-root {
-      font-size: 12px;
-    }
-
-    fieldset legend {
-      font-size: 13px;
-    }
-  }
-
-  .MuiOutlinedInput-root {
-    width: 300px;
-    height: 39px;
-    font-size: 13px;
-  }
-
-  .MuiOutlinedInput-input {
-    padding: 13px 14px;
-    width: 100%;
-    padding-right: 0;
-  }
-
-  .MuiInputLabel-formControl.MuiInputLabel-shrink {
-    transform: translate(14px, -7px) scale(1);
-  }
-
-  .MuiInputLabel-outlined {
-    transform: translate(14px, 13px) scale(1);
-  }
-
-  .MuiInputLabel-root {
-    font-size: 13px;
-  }
-
-  .MuiSelect-root {
-    position: relative;
-  }
-
-  .MuiSelect-icon.MuiSelect-iconOutlined {
-    right: 50px;
-    top: calc(50% - 10px);
-  }
-`;
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  gap: 10px;
-`;
