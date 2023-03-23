@@ -195,7 +195,25 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
      * Add Google analytics tag if ui.analyticsTag is present in the config
      */
     const aTag = cdapConfig['ui.analyticsTag'];
-    if (aTag) {
+    const GTM = cdapConfig['ui.GTM'];
+    // favor gtm over regular analytics
+    if (GTM) {
+      res.header({
+        'Content-Type': 'text/javascript',
+        'Cache-Control': 'no-store, must-revalidate',
+      });
+      res.send(`
+        let gaHeaderScript = document.createElement('script');
+        gaHeaderScript.setAttribute('type', 'text/javascript');
+        gaHeaderScript.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM}');"
+        document.head.appendChild(gaHeaderScript);
+
+        let gaScript1 = document.createElement('script');
+        gaScript1.setAttribute('async', 'true');
+        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
+        document.body.appendChild(gaScript1);
+      `);
+    } else if (aTag) {
       res.header({
         'Content-Type': 'text/javascript',
         'Cache-Control': 'no-store, must-revalidate',
@@ -251,7 +269,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
       featureFlags: cdapConfig.featureFlags,
-      analyticsTag: cdapConfig.analyticsTag,
+      analyticsTag: cdapConfig['ui.analyticsTag'],
+      googleTagManager: cdapConfig['ui.GTM'],
     });
 
     res.header({
