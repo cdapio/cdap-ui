@@ -59,6 +59,12 @@ public class Commands implements CdfHelper {
   public static NodeInfo complexSinkNode1 = new NodeInfo("BigQueryMultiTable", "batchsink", "6");
   public static NodeInfo complexSinkNode2 = new NodeInfo("BigQueryMultiTable", "batchsink", "7");
 
+  // Joiner Pipeline Nodes
+  public static NodeInfo joinerSourceNode1 = new NodeInfo("BigQueryTable", "batchsource", "0");
+  public static NodeInfo joinerSourceNode2 = new NodeInfo("BigQueryTable", "batchsource", "1");
+  public static NodeInfo joinerJoinerNode = new NodeInfo("Joiner", "batchjoiner", "2");
+  public static NodeInfo joinerSinkNode = new NodeInfo("BigQueryTable", "batchsink", "3");
+
   public static void addNodeToCanvas(NodeInfo node) {
     WaitHelper.waitForElementToBeDisplayed(
       Helper.locateElementByTestId("plugin-" + node.getNodeName() + "-" + node.getNodeType()));
@@ -296,6 +302,25 @@ public class Commands implements CdfHelper {
     fitPipelineToScreen();
   }
 
+  public static void createJoinerPipeline() {
+    addNodeToCanvas(joinerSourceNode1);
+    addNodeToCanvas(joinerSourceNode2);
+    openPluginGroupPanel(Constants.ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT);
+    addNodeToCanvas(joinerJoinerNode);
+    openPluginGroupPanel(Constants.SINK_PLUGINS_GROUP_LOCATOR_TEXT);
+    addNodeToCanvas(joinerSinkNode);
+
+    pipelineCleanUpGraphControl();
+    fitPipelineToScreen();
+
+    connectTwoNodes(joinerSourceNode1, joinerJoinerNode);
+    connectTwoNodes(joinerSourceNode2, joinerJoinerNode);
+    connectTwoNodes(joinerJoinerNode, joinerSinkNode);
+
+    pipelineCleanUpGraphControl();
+    fitPipelineToScreen();
+  }
+
   public static void takeScreenshot() {
     takeScreenshot(String.format("%s", new Date()), "", "");
   }
@@ -390,6 +415,14 @@ public class Commands implements CdfHelper {
       WaitHelper.waitForElementToBeHidden(
         Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
       );
+    }
+  }
+
+  public static void tryToCloseAlert() {
+    try {
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("alert-close"));
+    } catch (NoSuchElementException e) {
+      // do nothing
     }
   }
 }

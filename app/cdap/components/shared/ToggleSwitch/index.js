@@ -40,6 +40,7 @@ export default function ToggleSwitch({
         <div
           className={classnames('label', 'truncate', { 'on-label': isOn, 'off-label': !isOn })}
           data-cy={isOn ? `toggle-${onLabel}` : `toggle-${offLabel}`}
+          data-testid={isOn ? `toggle-${onLabel}` : `toggle-${offLabel}`}
         >
           {isOn ? onLabel : offLabel}
         </div>

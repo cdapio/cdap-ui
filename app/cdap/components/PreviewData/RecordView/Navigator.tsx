@@ -70,15 +70,16 @@ const RecordNavigatorBase: React.FC<IRecordNavigatorProps> = ({
   }, []);
 
   return (
-    <div className={classes.root} data-cy="record-navigator">
+    <div className={classes.root} data-cy="record-navigator" data-testid="record-navigator">
       <IconButton
         onClick={!prevDisabled ? prevOperation : undefined}
         disabled={prevDisabled}
         data-cy="previous-record-btn"
+        data-testid="previous-record-btn"
       >
         <ArrowLeftIcon fontSize="large" />
       </IconButton>
-      <span className={classes.select} data-cy="record-dropdown">
+      <span className={classes.select} data-cy="record-dropdown" data-testid="record-dropdown">
         <Select
           value={`Record ${selectedRecord}`}
           onChange={(e) => updateRecord(e)}
@@ -89,6 +90,7 @@ const RecordNavigatorBase: React.FC<IRecordNavigatorProps> = ({
         onClick={!nextDisabled ? nextOperation : undefined}
         disabled={nextDisabled}
         data-cy="next-record-btn"
+        data-testid="next-record-btn"
       >
         <ArrowRightIcon fontSize="large" />
       </IconButton>

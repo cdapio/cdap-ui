@@ -111,6 +111,7 @@ const FieldRow: React.FC<IFieldRowProps> = ({
               variant="body1"
               display="inline"
               data-cy={`${field.name}-field-selector-name`}
+              data-testid={`${field.name}-field-selector-name`}
             >
               {field.name}
             </Typography>
@@ -122,6 +123,7 @@ const FieldRow: React.FC<IFieldRowProps> = ({
                 color="primary"
                 onClick={selectedChange}
                 data-cy={`${field.name}-field-selector-checkbox`}
+                data-testid={`${field.name}-field-selector-checkbox`}
               />
             </span>
             <TextField
@@ -133,6 +135,7 @@ const FieldRow: React.FC<IFieldRowProps> = ({
               onChange={aliasChange}
               disabled={!field.selected || disabled}
               data-cy={`${field.name}-field-selector-alias-textbox`}
+              data-testid={`${field.name}-field-selector-alias-textbox`}
             />
           </div>
           <If condition={validationError !== ''}>
