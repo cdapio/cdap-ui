@@ -65,6 +65,9 @@ angular.module(PKG.name + '.feature.hydrator')
     };
 
     this.setActiveNode = function() {
+      // need to use new config and nodes
+      pipelineConfig = this.PipelineDetailStore.getState().config;
+      nodes = this.HydratorPlusPlusHydratorService.getNodesFromStages(pipelineConfig.stages);
       var nodeId = this.DAGPlusPlusNodesStore.getActiveNodeId();
       if (!nodeId) {
         return;

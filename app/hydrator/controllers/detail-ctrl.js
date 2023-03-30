@@ -146,6 +146,9 @@ angular.module(PKG.name + '.feature.hydrator')
       if (currentRun && currentRun.runid !== latestRun.runid) {
         pipelineMetricsActionCreator.reset();
         let pipelineConfig = window.CaskCommon.PipelineDetailStore.getState().config;
+        // set new available plugins
+        const pluginsToFetchDetailsFor = pipelineConfig.stages.concat(pipelineConfig.postActions || []);
+        PipelineAvailablePluginsActions.fetchPluginsForDetails($stateParams.namespace, pluginsToFetchDetailsFor);
         let nodes = this.HydratorPlusPlusHydratorService.getNodesFromStages(pipelineConfig.stages);
         this.DAGPlusPlusNodesStore.setNodes(nodes);
         this.DAGPlusPlusNodesStore.setConnections(pipelineConfig.connections);
