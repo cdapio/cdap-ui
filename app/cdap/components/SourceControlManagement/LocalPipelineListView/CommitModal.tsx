@@ -33,6 +33,7 @@ interface ICommitModalProps {
   onSubmit?: (commitMessage: string) => void;
   loadingMessage?: string;
   pipelineName?: string;
+  updateFileHash?: (fileHash: string) => void;
 }
 
 export const CommitModal = ({
@@ -41,6 +42,7 @@ export const CommitModal = ({
   onSubmit,
   loadingMessage = null,
   pipelineName,
+  updateFileHash,
 }: ICommitModalProps) => {
   const [commitMessage, setCommitMessage] = useState(null);
   const [pushError, setPushError] = useState(null);
@@ -82,7 +84,11 @@ export const CommitModal = ({
       setPushError(res.message);
       setPushStatus(res.status);
       setPushLoadingMessage(null);
+      if (res.fileHash && typeof updateFileHash === 'function') {
+        updateFileHash(res.fileHash);
+      }
     });
+    setCommitMessage(null);
     toggleModal();
   };
 
@@ -96,6 +102,7 @@ export const CommitModal = ({
     // passing a onSubmit function to override the native onSubmit
     if (typeof onSubmit === 'function') {
       onSubmit(commitMessage);
+      setCommitMessage(null);
       return;
     }
     handlePipelinePush();
