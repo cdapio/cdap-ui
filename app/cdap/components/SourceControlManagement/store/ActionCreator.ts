@@ -25,6 +25,8 @@ import { SourceControlApi } from 'api/sourcecontrol';
 import { IPipeline, IPushResponse, IRepositoryPipeline } from '../types';
 import { SUPPORT } from 'components/StatusButton/constants';
 
+const PREFIX = 'features.SourceControlManagement';
+
 // push actions
 export const getNamespacePipelineList = (namespace, nameFilter = null) => {
   MyPipelineApi.list({
@@ -114,7 +116,7 @@ export const pushSelectedPipelines = (namespace, apps, payload, loadingMessageDi
 };
 
 const pushAppMessage = (appId) => {
-  return T.translate('features.SourceControlManagement.push.pushAppMessage', { appId }).toString();
+  return T.translate(`${PREFIX}.push.pushAppMessage`, { appId }).toString();
 };
 
 export const setLoadingMessage = (loadingMessage) => {
@@ -177,6 +179,7 @@ export const getRemotePipelineList = (namespace) => {
     },
     (err) => {
       setRemotePipelines([]);
+      setPullViewErrorMsg(err.message || T.translate(`${PREFIX}.pull.pipelinesListedFail`));
     }
   );
 };
@@ -186,6 +189,15 @@ export const setRemotePipelines = (pipelines: IRepositoryPipeline[]) => {
     type: PullFromGitActions.setRemotePipelines,
     payload: {
       remotePipelines: pipelines,
+    },
+  });
+};
+
+export const setPullViewErrorMsg = (errorMsg: string = '') => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setPullViewErrorMsg,
+    payload: {
+      pullViewErrorMsg: errorMsg,
     },
   });
 };
@@ -244,9 +256,7 @@ export const pullAndDeploySelectedRemotePipelines = (
 ) => {
   return of(...apps).pipe(
     concatMap((appId) => {
-      loadingMessageDispatcher(
-        T.translate('features.SourceControlManagement.pull.pullAppMessage', { appId }).toString()
-      );
+      loadingMessageDispatcher(T.translate(`${PREFIX}.pull.pullAppMessage`, { appId }).toString());
       const params = {
         namespace,
         appId,
