@@ -36,6 +36,7 @@ interface IPullViewState {
   selectedPipelines: string[];
   loadingMessage: string;
   showFailedOnly: boolean;
+  pullViewErrorMsg: string;
 }
 
 interface IStore {
@@ -62,6 +63,7 @@ export const PullFromGitActions = {
   setSelectedPipelines: 'REMOTE_PIPELINES_SET_SELECTED_PIPELINES',
   setLoadingMessage: 'REMOTE_PIPELINES_SET_LOADING_MESSAGE',
   toggleShowFailedOnly: 'REMOTE_PIPELINES_TOGGLE_SHOW_FAILED_ONLY',
+  setPullViewErrorMsg: 'REMOTE_PIPELINES_SET_ERROR_MSG',
 };
 
 const defaultPushViewState: IPushViewState = {
@@ -81,6 +83,7 @@ const defaultPullViewState: IPullViewState = {
   selectedPipelines: [],
   loadingMessage: null,
   showFailedOnly: false,
+  pullViewErrorMsg: '',
 };
 
 const push = (state = defaultPushViewState, action: IAction) => {
@@ -141,6 +144,11 @@ const pull = (state = defaultPullViewState, action: IAction) => {
       return {
         ...state,
         nameFilter: action.payload.nameFilter,
+      };
+    case PullFromGitActions.setPullViewErrorMsg:
+      return {
+        ...state,
+        pullViewErrorMsg: action.payload.pullViewErrorMsg,
       };
     case PullFromGitActions.applySearch:
       return {
