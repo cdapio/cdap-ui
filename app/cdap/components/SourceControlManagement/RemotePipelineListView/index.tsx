@@ -26,6 +26,7 @@ import {
   getRemotePipelineList,
   pullAndDeploySelectedRemotePipelines,
   resetPullStatus,
+  setPullViewErrorMsg,
   resetRemote,
   setRemoteLoadingMessage,
   setRemoteNameFilter,
@@ -41,6 +42,7 @@ import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { IListResponse } from '../types';
+import Alert from 'components/shared/Alert';
 
 const PREFIX = 'features.SourceControlManagement.pull';
 
@@ -56,6 +58,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
     selectedPipelines,
     loadingMessage,
     showFailedOnly,
+    pullViewErrorMsg,
   } = useSelector(({ pull }) => pull);
 
   const pullFailedCount = countPullFailedPipelines();
@@ -128,6 +131,12 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
 
   return (
     <>
+      <Alert
+        showAlert={!!pullViewErrorMsg}
+        message={pullViewErrorMsg}
+        type={'error'}
+        onClose={() => setPullViewErrorMsg()}
+      />
       <PipelineListContainer>
         <SearchBox nameFilter={nameFilter} setNameFilter={setRemoteNameFilter} />
         {selectedPipelines.length > 0 && (

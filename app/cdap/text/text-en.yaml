@@ -3204,6 +3204,7 @@ features:
       emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
       modalTitle: Pull pipeline from remote repository
       pipelinePulledFail: "Failed to pull 1 pipeline"
+      pipelinesListedFail: "Failed to list remote pipelines"
       pipelinesPulledFail: "Failed to pull {count} pipelines"
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pullAppMessage: Pulling {appId} from remote repository now...
