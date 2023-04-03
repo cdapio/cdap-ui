@@ -54,6 +54,7 @@ const ACTIONS = {
   // Source Control Management
   SET_PULL_LOADING: 'SET_PULL_LOADING',
   SET_PULL_STATUS: 'SET_PULL_STATUS',
+  SET_SOURCE_CONTROL_META: 'SET_SOURCE_CONTROL_META',
 
   RESET: 'RESET',
 };
@@ -270,6 +271,11 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
       return {
         ...state,
         pullStatus: action.payload.pullStatus,
+      };
+    case ACTIONS.SET_SOURCE_CONTROL_META:
+      return {
+        ...state,
+        sourceControlMeta: action.payload.sourceControlMeta,
       };
     case ACTIONS.RESET:
       return DEFAULT_PIPELINE_DETAILS;

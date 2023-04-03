@@ -462,6 +462,17 @@ const setPullStatus = (pullStatus) => {
   });
 };
 
+const setSourceControlMeta = (fileHash) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_SOURCE_CONTROL_META,
+    payload: {
+      sourceControlMeta: {
+        fileHash,
+      },
+    },
+  });
+};
+
 const reset = () => {
   PipelineDetailStore.dispatch({
     type: ACTIONS.RESET,
@@ -512,5 +523,6 @@ export {
   setEditDraftId,
   pullPipeline,
   setPullStatus,
+  setSourceControlMeta,
   reset,
 };
