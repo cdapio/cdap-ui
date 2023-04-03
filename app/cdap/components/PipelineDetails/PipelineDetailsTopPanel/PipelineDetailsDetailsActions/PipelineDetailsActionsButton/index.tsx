@@ -35,7 +35,11 @@ import { CommitModal } from 'components/SourceControlManagement/LocalPipelineLis
 import styled from 'styled-components';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
 import Alert from 'components/shared/Alert';
-import { pullPipeline, setPullStatus } from 'components/PipelineDetails/store/ActionCreator';
+import {
+  pullPipeline,
+  setPullStatus,
+  setSourceControlMeta,
+} from 'components/PipelineDetails/store/ActionCreator';
 require('./PipelineDetailsActionsButton.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
@@ -306,6 +310,7 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
         isOpen={this.state.showCommitModal}
         onToggle={this.toggleCommitModal}
         pipelineName={this.props.pipelineName}
+        updateFileHash={setSourceControlMeta}
       />
     );
   };
