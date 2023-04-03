@@ -339,7 +339,7 @@ const SourceControlManagementForm = ({
                 }
               />
               <PropertyRow
-                value={formState.config?.auth?.username}
+                value={formState.config?.auth?.patConfig?.username}
                 property={{
                   name: 'username',
                   description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
