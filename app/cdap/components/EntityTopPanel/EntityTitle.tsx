@@ -36,6 +36,7 @@ const useStyle = makeStyle<Theme, { multiline: boolean }>((theme) => {
     },
     entityTypeText: {
       verticalAlign: 'middle',
+      marginLeft: '5px',
     },
   };
 });

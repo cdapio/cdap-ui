@@ -18,13 +18,20 @@ import * as React from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
 import { Theme } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 const useStyle = makeStyle<Theme>((theme) => {
   return {
     root: {
-      alignSelf: 'center',
+      alignSelf: 'stretch',
+      display: 'flex',
+      alignItems: 'stretch',
     },
     linkContainer: {
+      height: '100%',
+      display: 'inline-flex',
+      alignItems: 'center',
       color: 'rgba(0, 0, 0, 0.6)',
       cursor: 'pointer',
       '& :hover': {
@@ -35,7 +42,15 @@ const useStyle = makeStyle<Theme>((theme) => {
       marginRight: '5px',
     },
     divider: {
+      height: '100%',
       margin: '0 10px',
+      display: 'inline-flex',
+      alignItems: 'center',
+    },
+    backDivider: {
+      height: '100%',
+      margin: '0 10px',
+      borderRight: '1px #cccccc solid',
     },
   };
 });
@@ -71,9 +86,16 @@ export function EntityBreadCrumb({
   return (
     <div className={classes.root}>
       <Tag to={breadCrumbAnchorLink} onClick={onClickHandler} className={classes.linkContainer}>
+        {historyBack && <ChevronLeftIcon fontSize="inherit" />}
         <span>{breadCrumbAnchorLabel}</span>
       </Tag>
-      <span className={classes.divider}> {'>'} </span>
+      {historyBack ? (
+        <span className={classes.backDivider} />
+      ) : (
+        <span className={classes.divider}>
+          <ChevronRightIcon fontSize="inherit" />
+        </span>
+      )}
     </div>
   );
 }
