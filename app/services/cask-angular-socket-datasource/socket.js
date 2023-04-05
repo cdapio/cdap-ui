@@ -14,10 +14,12 @@
  * the License.
  */
 
+import * as sockjs from 'sockjs-client';
+
 angular.module(PKG.name+'.services')
 
-.factory('SockJS', function ($window) {
-  return $window.SockJS;
+.factory('SockJS', function () {
+  return sockjs;
 })
 
 .constant('MYSOCKET_EVENT', {

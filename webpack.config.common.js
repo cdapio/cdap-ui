@@ -21,6 +21,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const path = require('path');
+
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
@@ -58,6 +61,7 @@ const plugins = [
     caching: true,
     flattening: true,
   }),
+  new NodePolyfillPlugin(),
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   // by default minify it.
@@ -102,22 +106,13 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$|jsx/,
-    use: 'babel-loader',
-    exclude: loaderExclude,
-  },
-  {
-    test: /\.tsx?$/,
-    use: [
-      'babel-loader',
-      {
-        loader: 'ts-loader',
-        options: {
-          transpileOnly: true,
-        },
-      },
-    ],
-    exclude: loaderExclude,
+    // Match js, jsx, ts & tsx files
+    test: /\.[jt]sx?$/,
+    loader: 'esbuild-loader',
+    options: {
+      // JavaScript version to compile to
+      target: 'chrome88',
+    },
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -160,7 +155,10 @@ const webpackConfig = {
     'common-lib-new': [
       '@babel/polyfill',
       'classnames',
-      'reactstrap',
+      // 'react',
+      // 'react-dom',
+      // 'bootstrap',
+      // 'reactstrap',
       'i18n-react',
       'sockjs-client',
       'react-dropzone',
@@ -185,47 +183,48 @@ const webpackConfig = {
     filename: '[name].js',
     chunkFilename: '[name].[chunkhash].js',
     path: __dirname + '/packaged/public/common_dist',
-    library: 'CaskCommon',
-    libraryTarget: 'umd',
+    library: { name: 'CaskCommon', type: 'umd' },
     publicPath: '/common_assets/',
     globalObject: 'window',
   },
-  externals: {
-    react: {
-      root: 'React',
-      commonjs2: 'react',
-      commonjs: 'react',
-      amd: 'react',
-    },
-    'react-dom': {
-      root: 'ReactDOM',
-      commonjs2: 'react-dom',
-      commonjs: 'react-dom',
-      amd: 'react-dom',
-    },
-    'react-addons-css-transition-group': {
-      commonjs: 'react-addons-css-transition-group',
-      commonjs2: 'react-addons-css-transition-group',
-      amd: 'react-addons-css-transition-group',
-      root: ['React', 'addons', 'CSSTransitionGroup'],
-    },
-  },
+  // externals: {
+  //   react: {
+  //     root: 'React',
+  //     commonjs2: 'react',
+  //     commonjs: 'react',
+  //     amd: 'react',
+  //   },
+  //   'react-dom': {
+  //     root: 'ReactDOM',
+  //     commonjs2: 'react-dom',
+  //     commonjs: 'react-dom',
+  //     amd: 'react-dom',
+  //   },
+  //   'react-addons-css-transition-group': {
+  //     commonjs: 'react-addons-css-transition-group',
+  //     commonjs2: 'react-addons-css-transition-group',
+  //     amd: 'react-addons-css-transition-group',
+  //     root: ['React', 'addons', 'CSSTransitionGroup'],
+  //   },
+  // },
   resolve: {
     extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {
-      components: __dirname + '/app/cdap/components',
-      services: __dirname + '/app/cdap/services',
-      api: __dirname + '/app/cdap/api',
-      wrangler: __dirname + '/app/wrangler',
-      styles: __dirname + '/app/cdap/styles',
+      components: path.resolve(__dirname + '/app/cdap/components'),
+      services: path.resolve(__dirname + '/app/cdap/services'),
+      api: path.resolve(__dirname + '/app/cdap/api'),
+      wrangler: path.resolve(__dirname + '/app/wrangler'),
+      styles: path.resolve(__dirname + '/app/cdap/styles'),
     },
+    plugins: [PnpWebpackPlugin],
   },
   plugins,
 };
 
-if (!isModeProduction(mode)) {
-  webpackConfig.devtool = 'source-maps';
-}
+// if (!isModeProduction(mode)) {
+  webpackConfig.devtool = 'source-map';
+// }
+
 if (isModeProduction(mode)) {
   webpackConfig.optimization.minimizer = [
     new TerserPlugin({

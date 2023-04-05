@@ -20,6 +20,111 @@ const gulp = require('gulp'),
   del = require('del'),
   merge = require('merge-stream'),
   autoprefixer = require('autoprefixer');
+const webpackStream = require('webpack-stream');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const path = require('path');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const webpack = require('webpack');
+// const angular = require.resolve('angular');
+
+const webpackConfig = {
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
+  mode: 'development',
+  // optimization: {
+  //   splitChunks: {
+  //     minChunks: Infinity,
+  //   },
+  // },
+  target: 'web',
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'webpack5-svg-sprite-loader',
+          },
+        ],
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: 'ignore-loader',
+      },
+      {
+        test: /\.yaml/,
+        use: 'ignore-loader',
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
+      {
+        // Match js, jsx, ts & tsx files
+        test: /\.[jt]sx?$/,
+        loader: 'esbuild-loader',
+        options: {
+          // JavaScript version to compile to
+          target: 'chrome88',
+        },
+      },
+    ],
+  },
+  resolve: {
+    fallback: {
+      fs: false,
+      // React: require.resolve('react'),
+      SockJS: require.resolve('sockjs-client'),
+      ngStorage: require.resolve('angular-storage'),
+      ngCookies: require.resolve('angular-cookies'),
+      cdap: 'kdjf',
+      // tls: require.resolve('tls'),
+      // net: require.resolve('net'),
+      //   path: false,
+      //   zlib: false,
+      //   http: require.resolve('http'),
+      //   https: false,
+      //   events: require.resolve('events'),
+      //   buffer: require.resolve('buffer'),
+      //   assert: require.resolve('assert'),
+      //   // require: require.resolve('require'),
+      //   'stream-browserify': require.resolve('stream-browserify'),
+      //   url: require.resolve('url'),
+      //   util: require.resolve('util'),
+      //   stream: require.resolve('stream'),
+      //   crypto: require.resolve('crypto'),
+    },
+    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.json'],
+    alias: {
+      components: path.resolve(__dirname + '/app/cdap/components'),
+      services: path.resolve(__dirname + '/app/cdap/services'),
+      api: path.resolve(__dirname + '/app/cdap/api'),
+      wrangler: path.resolve(__dirname + '/app/wrangler'),
+      styles: path.resolve(__dirname + '/app/cdap/styles'),
+    },
+    plugins: [PnpWebpackPlugin],
+  },
+  plugins: [
+    new NodePolyfillPlugin(),
+    new webpack.DefinePlugin({
+      PKG: { name: JSON.stringify('cdap-ui') },
+      // cdap: (function() {
+      //   console.log(...arguments);
+      // })(),
+      // angular: angular,
+    }),
+  ],
+  devtool: 'eval-source-map',
+};
 
 function getEs6Directives(isNegate) {
   const es6directives = [
@@ -61,19 +166,27 @@ function getExtensionBuildPipeline(extension) {
   ];
   source = source.concat(getEs6Directives(true));
 
-  return gulp
-    .src(source)
-    .pipe(plug.plumber())
-    .pipe(
-      plug.wrapper({
-        header: '\n(function (PKG){ /* ${filename} */\n',
-        footer: '\n})(' + PKG + ');\n',
-      })
-    )
-    .pipe(plug.babel())
-    .pipe(plug.ngAnnotate())
-    .pipe(plug.concat(extension + '.js'))
-    .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
+  return (
+    gulp
+      .src(source)
+      .pipe(plug.plumber())
+      .pipe(
+        plug.wrapper({
+          header: '\n(function (PKG){ /* ${filename} */\n',
+          footer: '\n})(' + PKG + ');\n',
+        })
+      )
+      .pipe(
+        webpackStream(webpackConfig, null, (err, stats) => {
+          /* Use stats to do more things if needed */
+        })
+      )
+
+      // .pipe(plug.ngAnnotate())
+      // .pipe(plug.babel())
+      .pipe(plug.concat(extension + '.js'))
+      .pipe(gulp.dest('./packaged/public/dist/assets/bundle'))
+  );
 }
 function getBabelBuildPipeline() {
   const PKG = JSON.stringify({
@@ -82,19 +195,26 @@ function getBabelBuildPipeline() {
   });
 
   const source = getEs6Directives();
-  return gulp
-    .src(source)
-    .pipe(plug.plumber())
-    .pipe(
-      plug.wrapper({
-        header: '\n(function (PKG){ /* ${filename} */\n',
-        footer: '\n})(' + PKG + ');\n',
-      })
-    )
-    .pipe(plug.babel())
-    .pipe(plug.ngAnnotate())
-    .pipe(plug.concat('common.es6.js'))
-    .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
+  return (
+    gulp
+      .src(source)
+      .pipe(plug.plumber())
+      .pipe(
+        plug.wrapper({
+          header: '\n(function (PKG){ /* ${filename} */\n',
+          footer: '\n})(' + PKG + ');\n',
+        })
+      )
+      .pipe(
+        webpackStream(webpackConfig, null, (err, stats) => {
+          /* Use stats to do more things if needed */
+        })
+      )
+      // .pipe(plug.babel())
+      // .pipe(plug.ngAnnotate())
+      // .pipe(plug.concat('common.es6.js'))
+      .pipe(gulp.dest('./packaged/public/dist/assets/bundle'))
+  );
 }
 
 gulp.task('css:library', () => {
@@ -103,9 +223,9 @@ gulp.task('css:library', () => {
       './bower_components/angular/angular-csp.css',
       './bower_components/angular-loading-bar/build/loading-bar.min.css',
       './bower_components/angular-motion/dist/angular-motion.min.css',
-      './node_modules/@fortawesome-fontawesome-free/css/fontawesome.css',
-      './node_modules/@fortawesome-fontawesome-free/css/brands.css',
-      './node_modules/@fortawesome-fontawesome-free/css/solid.css',
+      // './node_modules/@fortawesome-fontawesome-free/css/fontawesome.css',
+      // './node_modules/@fortawesome-fontawesome-free/css/brands.css',
+      // './node_modules/@fortawesome-fontawesome-free/css/solid.css',
       './bower_components/c3/c3.min.css',
       './bower_components/angular-gridster/dist/angular-gridster.min.css',
       './bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
@@ -127,7 +247,7 @@ gulp.task('css:application', () => {
       './app/styles/themes/*.less',
       './app/directives/**/*.less',
       './app/hydrator/**/*.less',
-      './app/tracker/**/*.less',
+      // './app/tracker/**/*.less',
     ])
     .pipe(plug.less())
     .pipe(plug.concat('app.css'))
@@ -162,14 +282,8 @@ gulp.task('css:app', gulp.series('css:application', 'css:lint'));
 gulp.task('js:lib', () => {
   return gulp
     .src([
-      './bower_components/angular/angular.js',
-
-      './bower_components/angular-sanitize/angular-sanitize.js',
-      './bower_components/angular-animate/angular-animate.js',
-      './bower_components/angular-resource/angular-resource.js',
-
-      './bower_components/angular-ui-router/release/angular-ui-router.js',
-
+      require.resolve('angular'),
+      './bower_components/d3/d3.js',
       './bower_components/angular-strap/dist/modules/compiler.js',
       './bower_components/angular-strap/dist/modules/dimensions.js',
       './bower_components/angular-strap/dist/modules/tooltip.js',
@@ -196,48 +310,49 @@ gulp.task('js:lib', () => {
       './bower_components/angular-strap/dist/modules/timepicker.js',
       './bower_components/angular-strap/dist/modules/timepicker.tpl.js',
 
-      './bower_components/angular-breadcrumb/release/angular-breadcrumb.js',
-
-      './bower_components/ngstorage/ngStorage.js',
-      './bower_components/angular-loading-bar/build/loading-bar.js',
-
-      './bower_components/d3/d3.js',
       './bower_components/d3-timeline/src/d3-timeline.js',
-      './bower_components/lodash/lodash.js',
-      './bower_components/graphlib/dist/graphlib.core.js',
-      './bower_components/dagre/dist/dagre.core.js',
-      './bower_components/dagre-d3/dist/dagre-d3.core.js',
-      './bower_components/moment/moment.js',
-      './bower_components/angular-moment/angular-moment.js',
-      './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-
-      './bower_components/node-uuid/uuid.js',
-
-      './bower_components/angular-cookies/angular-cookies.min.js',
-      './node_modules/redux/dist/redux.min.js',
-      './node_modules/redux-thunk/dist/redux-thunk.min.js',
-      './bower_components/ace-builds/src-min-noconflict/ace.js',
+      require.resolve('ngstorage'),
+      require.resolve('angular-animate'),
+      require.resolve('angular-sanitize'),
+      require.resolve('angular-resource'),
+      require.resolve('angular-breadcrumb'),
+      require.resolve('angular-cookies'),
+      require.resolve('angular-ui-router'),
+      require.resolve('angular-loading-bar'),
+      require.resolve('angular-strap'),
+      require.resolve('lodash'),
+      require.resolve('dagre-d3'),
+      require.resolve('moment'),
+      require.resolve('angular-moment'),
+      require.resolve('node-uuid'),
+      require.resolve('redux'),
+      require.resolve('redux-thunk'),
+      require.resolve('ace-builds'),
       './bower_components/angular-ui-ace/ui-ace.js',
-      './bower_components/jsPlumb/dist/js/jsPlumb-2.0.6-min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      require.resolve('jsplumb'),
       './bower_components/angular-gridster/dist/angular-gridster.min.js',
-      './bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js',
+      require.resolve('angular-cron-jobs'),
       './bower_components/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js',
       './bower_components/marked/marked.min.js',
-      './bower_components/angular-marked/dist/angular-marked.min.js',
-
-      './bower_components/js-beautify/js/lib/beautify.js',
-      './bower_components/angular-file-saver/dist/angular-file-saver.bundle.js',
+      require.resolve('angular-marked'),
+      require.resolve('js-beautify'),
       './bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
-      './bower_components/angular-inview/angular-inview.js',
-      './bower_components/esprima/esprima.js',
-      './node_modules/react/umd/react.production.min.js',
-      './node_modules/react-dom/umd/react-dom.production.min.js',
-      './node_modules/ngreact/ngReact.min.js',
-
-      './node_modules/svg4everybody/dist/svg4everybody.min.js',
-      './node_modules/sockjs-client/dist/sockjs.js',
+      './bower_components/angular-file-saver/dist/angular-file-saver.bundle.js',
+      require.resolve('angular-inview'),
+      require.resolve('esprima'),
+      // require.resolve('react'),
+      require.resolve('react-dom'),
+      require.resolve('ngreact'),
+      require.resolve('svg4everybody'),
+      // require.resolve('sockjs'),
     ])
     .pipe(plug.replace('glyphicon', 'fa'))
+    .pipe(
+      webpackStream(webpackConfig, null, (e, ee) => {
+        // console.log(e, ee);
+      })
+    )
     .pipe(plug.concat('lib.js'))
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));
 });
@@ -246,15 +361,8 @@ gulp.task('js:aceworkers', (cb) => {
   gulp
     .src([
       /** FIXME: (CDAP-15419): Unify ace-builds dependency */
-      './bower_components/ace-builds/src-min-noconflict/ace.js',
-      './bower_components/ace-builds/src-min-noconflict/mode-javascript.js',
-      './bower_components/ace-builds/src-min-noconflict/worker-javascript.js',
-      './node_modules/ace-builds/src-min-noconflict/mode-json.js',
-      './node_modules/ace-builds/src-min-noconflict/worker-json.js',
-      './bower_components/ace-builds/src-min-noconflict/mode-python.js',
-      './bower_components/ace-builds/src-min-noconflict/mode-sql.js',
-      './bower_components/ace-builds/src-min-noconflict/mode-scala.js',
-      './bower_components/ace-builds/src-min-noconflict/mode-plain_text.js',
+
+      require.resolve('ace-builds'),
     ])
     .pipe(
       gulp.dest(
@@ -267,9 +375,9 @@ gulp.task('js:aceworkers', (cb) => {
 gulp.task('fonts', () => {
   return gulp
     .src([
-      // './bower_components/bootstrap/dist/fonts/*',
+      './bower_components/bootstrap/dist/fonts/*',
       './app/styles/fonts/*',
-      // './node_modules/font-awesome/fonts/*',
+      require.resolve('@fortawesome/fontawesome-free'),
     ])
     .pipe(gulp.dest('./packaged/public/dist/assets/fonts'));
 });
@@ -282,11 +390,11 @@ gulp.task('watch:js:app:hydrator', () => {
   );
 });
 
-gulp.task('watch:js:app:tracker', () => {
-  return getExtensionBuildPipeline('tracker').pipe(
-    plug.livereload({ port: 35728 })
-  );
-});
+// gulp.task('watch:js:app:tracker', () => {
+//   return getExtensionBuildPipeline('tracker').pipe(
+//     plug.livereload({ port: 35728 })
+//   );
+// });
 
 gulp.task('watch:js:app:babel', () => {
   return getBabelBuildPipeline().pipe(plug.livereload({ port: 35728 }));
@@ -297,9 +405,9 @@ gulp.task('js:app:hydrator', () => {
   return getExtensionBuildPipeline('hydrator');
 });
 
-gulp.task('js:app:tracker', () => {
-  return getExtensionBuildPipeline('tracker');
-});
+// gulp.task('js:app:tracker', () => {
+//   return getExtensionBuildPipeline('tracker');
+// });
 
 gulp.task('js:app:babel', () => {
   return getBabelBuildPipeline();
@@ -307,12 +415,16 @@ gulp.task('js:app:babel', () => {
 
 gulp.task(
   'js:app',
-  gulp.series('js:app:babel', 'js:app:hydrator', 'js:app:tracker')
+  gulp.series('js:app:babel', 'js:app:hydrator'
+  // 'js:app:tracker'
+  )
 );
 
 gulp.task(
   'watch:js:app',
-  gulp.series('watch:js:app:hydrator', 'watch:js:app:tracker')
+  gulp.series('watch:js:app:hydrator'
+  // 'watch:js:app:tracker'
+  )
 );
 gulp.task('polyfill', () => {
   return gulp
@@ -331,8 +443,8 @@ gulp.task('img', () => {
 gulp.task('html:partials', () => {
   return gulp
     .src([
-      './app/{hydrator,tracker}/**/*.html',
-      '!./app/tracker/tracker.html',
+      './app/{hydrator}/**/*.html',
+      // '!./app/tracker/tracker.html',
       '!./app/hydrator/hydrator.html',
     ])
     .pipe(plug.htmlmin({ removeComments: true }))
@@ -342,7 +454,9 @@ gulp.task('html:partials', () => {
 
 gulp.task('html:main', () => {
   return gulp
-    .src(['./app/tracker/tracker.html', './app/hydrator/hydrator.html'])
+    .src([
+      // './app/tracker/tracker.html',
+      './app/hydrator/hydrator.html'])
     .pipe(plug.htmlmin({ removeComments: true }))
     .pipe(gulp.dest('./packaged/public/dist'));
 });
@@ -559,7 +673,9 @@ gulp.task('watcher', (cb) => {
     gulp.series('tpl')
   );
   gulp.watch(
-    ['./app/hydrator/**/*.html', './app/tracker/**/*.html'],
+    ['./app/hydrator/**/*.html',
+    // './app/tracker/**/*.html'
+  ],
     gulp.series('html:partials')
   );
   cb();

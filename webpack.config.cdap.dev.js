@@ -47,9 +47,9 @@ const loaderExclude = [
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
-  '/packaged\/public\/dist/',
-  '/packaged\/public\/cdap_dist/',
-  '/packaged\/public\/common_dist/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
   '/lib/',
 ];
 
@@ -140,9 +140,9 @@ const plugins = [
     async: true,
     typescript: {
       configFile: __dirname + '/tsconfig.json',
-      memoryLimit: 8192
-    }
- })
+      memoryLimit: 8192,
+    },
+  }),
 ];
 
 const rules = [
@@ -214,6 +214,7 @@ const rules = [
 
 const webpackConfig = {
   mode: 'development',
+  target: 'web',
   devtool: 'eval-cheap-module-source-map',
   context: __dirname + '/app/cdap',
   entry: {

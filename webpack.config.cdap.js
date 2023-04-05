@@ -28,6 +28,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+// const angular = require('angular');
 
 // the clean options to use
 const cleanOptions = {
@@ -43,6 +46,7 @@ const loaderExclude = [
   /packaged\/public\/common_dist/,
   /packaged/,
   /lib/,
+  /cask-sharedcomponents.js/,
 ];
 
 const loaderExcludeStrings = [
@@ -53,6 +57,7 @@ const loaderExcludeStrings = [
   '/packaged/public/common_dist/',
   '/packaged/',
   '/lib/',
+  '/cask-shared-components.js',
 ];
 
 const mode = process.env.NODE_ENV || 'production';
@@ -90,6 +95,7 @@ const getWebpackDllPlugins = (mode) => {
 };
 
 const plugins = [
+  new NodePolyfillPlugin(),
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   ...getWebpackDllPlugins(mode),
@@ -231,6 +237,7 @@ if (isModeProduction(mode)) {
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
         __DEVTOOLS__: false,
+        // angular,
       },
     })
   );
@@ -279,6 +286,9 @@ const webpackConfig = {
     },
     chunkIds: 'named',
   },
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
   resolve: {
     extensions: [
       '.mjs',
@@ -290,6 +300,7 @@ const webpackConfig = {
       '.json',
       '.svg',
     ],
+    plugins: [PnpWebpackPlugin],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',
@@ -300,9 +311,9 @@ const webpackConfig = {
   },
 };
 
-if (!isModeProduction(mode)) {
-  webpackConfig.devtool = 'source-maps';
-}
+// if (!isModeProduction(mode)) {
+  webpackConfig.devtool = 'eval-source-map';
+// }
 
 if (isModeProduction(mode)) {
   webpackConfig.optimization.minimizer = [

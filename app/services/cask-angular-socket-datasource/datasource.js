@@ -14,6 +14,8 @@
  * the License.
  */
 
+// import uuid from 'uuid';
+
 var socketDataSource = angular.module(PKG.name+'.services');
 
   /**
@@ -50,7 +52,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
    */
 
   socketDataSource.factory('uuid', function ($window) {
-    return $window.uuid;
+    return uuid;
   });
 
 
@@ -58,7 +60,9 @@ var socketDataSource = angular.module(PKG.name+'.services');
 
     this.defaultPollInterval = 10;
 
-    this.$get = function($rootScope, caskWindowManager, mySocket, MYSOCKET_EVENT, $q, MyPromise, uuid, EventPipe) {
+    this.$get = function($rootScope, caskWindowManager, mySocket, MYSOCKET_EVENT, $q, MyPromise,
+      // uuid,
+      EventPipe, $window) {
       var CDAP_API_VERSION = 'v3';
       // FIXME (CDAP-14836): Right now this is scattered across node and client. Need to consolidate this.
       const REQUEST_ORIGIN_ROUTER = 'ROUTER';
@@ -223,7 +227,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
         var generatedResource = {};
         const intervalTime = resource.interval || (resource.options &&  resource.options.interval) || $rootScope.defaultPollInterval;
         var promise = new MyPromise(function(resolve, reject) {
-          const resourceId = uuid.v4();
+          const resourceId = $window.uuid.v4();
           generatedResource = {
             id: resourceId,
             json: resource.json,
@@ -311,7 +315,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
         var deferred = $q.defer();
 
         resource.suppressErrors = true;
-        resource.id = uuid.v4();
+        resource.id = $window.uuid.v4();
         this.bindings[resource.id] = {
           resource: resource,
           callback: function (result) {
@@ -373,7 +377,7 @@ var socketDataSource = angular.module(PKG.name+'.services');
             generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
           }
           generatedResource.url = buildUrl(resource.url, resource.params || {});
-          generatedResource.id = uuid.v4();
+          generatedResource.id = $window.uuid.v4();
           self.bindings[generatedResource.id] = {
             type: 'REQUEST',
             callback: cb,

@@ -13,9 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+// const angular = require('angular');
+// const ngAnimate = require('angular-animate')
+// const ngSanitize = require('angular-sanitize');
+// const $cookies = require('angular-cookies');
+// const ngResource = require('angular-resource');
+import CaskCommon from
+// = require(
+  '../common/cask-shared-components';
+// );
+// const sockjs = require('sockjs');
+// window.SockJS = sockjs;
 
-console.time(PKG.name);
-
+import uuid from 'uuid';
+window.uuid = uuid;
+if (!window.CaskCommon) {
+  window.CaskCommon = CaskCommon;
+}
+console.log(window.CDAP_CONFIG);
+// console.time(PKG.name);
+console.log('THUG', this || 'that');
 angular
   .module(PKG.name, [
 
@@ -26,11 +43,12 @@ angular
     angular.module(PKG.name+'.commons', [
 
       angular.module(PKG.name+'.services', [
-        'ngAnimate',
-        'ngSanitize',
-        'ngResource',
+        // 'ngAnimate',
+        // ngSanitize,
+        // 'ngSanitize',
+        // 'ngResource',
         'ngStorage',
-        'ui.router',
+        // 'ui.router',
         'ngCookies'
       ]).name,
 
@@ -74,6 +92,7 @@ angular
   .value('THROTTLE_MILLISECONDS', 1000) // throttle infinite scroll
 
   .run(function ($rootScope, $state, $stateParams) {
+    console.log('THUG', this || 'that');;
     // It's very handy to add references to $state and $stateParams to the $rootScope
     // so that you can access them from any scope within your applications.For example,
     // <li ng-class="{ active: $state.includes('contacts.list') }"> will set the <li>
@@ -86,21 +105,26 @@ angular
   })
 
   .run(function() {
+    console.log('THUG', this || 'that');;
     window.CaskCommon.ThemeHelper.applyTheme();
   })
 
   .config(function (MyDataSourceProvider) {
+    console.log('THUG', this || 'that');;
     MyDataSourceProvider.defaultInterval = 5;
   })
 
   .config(function ($locationProvider) {
+    console.log('THUG', this || 'that');;
     $locationProvider.html5Mode(true);
   })
 
   .run(function ($rootScope) {
+    console.log('THUG', this || 'that');;
     $rootScope.defaultPollInterval = 10000;
   })
   .run(function($rootScope, MY_CONFIG, myAuth, MYAUTH_EVENT) {
+    console.log('THUG', this || 'that');;
     $rootScope.$on('$stateChangeStart', function () {
       if (MY_CONFIG.securityEnabled) {
         if (!myAuth.isAuthenticated()) {
@@ -110,6 +134,7 @@ angular
     });
   })
   .run(function($rootScope, myHelpers, MYAUTH_EVENT) {
+    console.log('THUG', this || 'that');;
     $rootScope.$on(MYAUTH_EVENT.logoutSuccess, function() {
       window.location.href = myHelpers.getAbsUIUrl({
         uiApp: 'login',
@@ -120,9 +145,11 @@ angular
   })
 
   .run(function(myNamespace) {
+    console.log('THUG', this || 'that');;
     myNamespace.getList();
   })
   .config(function($httpProvider) {
+    console.log('THUG', this || 'that');;
     $httpProvider.interceptors.push(function($rootScope, myHelpers) {
       return {
         'request': function(config) {
@@ -160,6 +187,7 @@ angular
   })
 
   .config(function ($alertProvider) {
+    console.log('THUG', this || 'that');;
     angular.extend($alertProvider.defaults, {
       animation: 'am-fade-and-scale',
       container: '#alerts',
@@ -168,12 +196,14 @@ angular
   })
 
   .config(function ($uibTooltipProvider) {
+    console.log('THUG', this || 'that');;
     $uibTooltipProvider.setTriggers({
       'customShow': 'customHide'
     });
   })
 
   .config(function ($compileProvider) {
+    console.log('THUG', this || 'that');;
     $compileProvider.aHrefSanitizationWhitelist(
       /^\s*(https?|ftp|mailto|tel|file|blob):/
     );
@@ -182,16 +212,19 @@ angular
   })
 
   .config(function (cfpLoadingBarProvider) {
+    console.log('THUG', this || 'that');;
     cfpLoadingBarProvider.includeSpinner = false;
   })
 
   .config(function (caskThemeProvider) {
+    console.log('THUG', this || 'that');;
     caskThemeProvider.setThemes([
-      'cdap'  // customized theme
+      'cdapb'  // customized theme
     ]);
   })
 
   .config(['markedProvider', function (markedProvider) {
+    console.log('THUG', this || 'that');;
     markedProvider.setOptions({
       gfm: true,
       tables: true
@@ -199,10 +232,12 @@ angular
   }])
 
   .run(function() {
+    console.log('THUG', this || 'that');;
     window.CaskCommon.StatusFactory.startPollingForBackendStatus();
   })
 
   .run(function (MYSOCKET_EVENT, myAlert, EventPipe) {
+    console.log('THUG', this || 'that');;
 
     EventPipe.on(MYSOCKET_EVENT.message, function (data) {
       if (data.statusCode > 399 && !data.resource.suppressErrors) {
@@ -233,6 +268,7 @@ angular
    *  setting the className based events from $state and caskTheme
    */
   .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
+    console.log('THUG', this || 'that');;
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
     getVersion();
@@ -270,6 +306,7 @@ angular
     $scope.copyrightYear = new Date().getFullYear();
 
     function getVersion() {
+    console.log('THUG', this || 'that');;
       $http({
         method: 'GET',
         url: '/api/v3/version'
@@ -290,12 +327,14 @@ angular
     }
 
     $scope.$on(CASK_THEME_EVENT.changed, function (event, newClassName) {
+    console.log('THUG', this || 'that');;
       if (!event.defaultPrevented) {
         $scope.bodyClass = $scope.bodyClass.replace(activeThemeClass, newClassName);
         activeThemeClass = newClassName;
       }
     });
     $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState) {
+    console.log('THUG', this || 'that');;
       var classes = [];
       if (toState.data && toState.data.bodyClass) {
         classes = [toState.data.bodyClass];
@@ -331,6 +370,7 @@ angular
 
     console.timeEnd(PKG.name);
   }).directive('initStores', function() {
+    console.log('THUG', this || 'that');;
     return {
       restrict: 'E',
       scope: {

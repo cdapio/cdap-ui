@@ -14,6 +14,8 @@
  * the License.
  */
 
+import {GLOBALS, PROGRAM_STATUSES} from '../cdap/services/global-constants';
+
 angular.module(PKG.name + '.services')
-  .constant('GLOBALS', window.CaskCommon.GLOBALS)
-  .constant('PROGRAM_STATUSES', window.CaskCommon.PROGRAM_STATUSES);
+  .constant('GLOBALS', GLOBALS)
+  .constant('PROGRAM_STATUSES', PROGRAM_STATUSES);

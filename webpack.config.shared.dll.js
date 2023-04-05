@@ -69,7 +69,7 @@ const webpackConfig = {
       'redux',
       'lodash',
       'classnames',
-      'reactstrap',
+      // 'reactstrap',
       'i18n-react',
       'universal-cookie',
       'whatwg-fetch',

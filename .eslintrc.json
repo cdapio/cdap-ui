@@ -2,7 +2,8 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
-    "sourceType": "module",
+    "sourceType": "script",
+    "allowImportExportEverywhere": true,
     "ecmaFeatures": {
       "jsx": true,
       "spread": true
@@ -30,7 +31,7 @@
     "react/no-deprecated": "off"
   },
   "globals": {
-    "angular": false,
+    "angular": true,
     "PKG": true,
     "getAbsUIUrl": true,
     "_": true,
@@ -47,12 +48,14 @@
     "react",
     "babel",
     "prettier",
-    "import"
+    "import",
+    "@typescript-eslint"
   ],
   "extends": [
     "plugin:react/recommended",
     "./__dev__/gts/eslintrc.json"
   ],
+
   "settings": {
     "react": {
       "version": "detect"
@@ -72,6 +75,26 @@
     ],
     "import/resolver": {
       "node": {
+        "paths": {
+          "components/*": [
+            "./app/cdap/components/*"
+          ],
+          "services/*": [
+            "./app/cdap/services/*"
+          ],
+          "api/*": [
+            "./app/cdap/api/*"
+          ],
+          "lib/*": [
+            "./app/cdap/lib/*"
+          ],
+          "styles/*": [
+            "./app/cdap/styles/*"
+          ],
+          "test-utils": [
+            "./jest/test-utils"
+          ]
+        },
         "extensions": [".js", ".jsx", ".ts", ".tsx", ".mjs", ".scss", ".css"]
       },
       "typescript": {
