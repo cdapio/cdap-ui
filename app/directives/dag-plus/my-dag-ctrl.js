@@ -1816,6 +1816,7 @@ angular.module(PKG.name + '.commons')
         conditionNodes = [];
         splitterNodesPorts = {};
         init();
+        vm.initPipelineComments();
       }
     }, true);
   });
