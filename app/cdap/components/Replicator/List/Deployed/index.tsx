@@ -95,6 +95,7 @@ const DeployedView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
       const batchDetailBody = list.map((replicator) => {
         return {
           appId: replicator.name,
+          version: replicator.version,
         };
       });
 
