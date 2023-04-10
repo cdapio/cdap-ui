@@ -29,10 +29,11 @@ import { convertKeyValuePairsObjToMap } from 'components/shared/KeyValuePairs/Ke
 import T from 'i18n-react';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
-import { GENERATED_RUNTIMEARGS } from 'services/global-constants';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const PREFIX = 'features.PipelineConfigurations.EngineConfig';
+
+const CUSTOM_SPARK_KEY_PREFIX = 'system.spark.';
 
 const getCustomConfigValue = (customConfigKeyValuePairs, runtimeArgs) => {
   // we want to try getting the custom config from runtimeargs
@@ -41,11 +42,11 @@ const getCustomConfigValue = (customConfigKeyValuePairs, runtimeArgs) => {
     return customConfigKeyValuePairs;
   }
   const customSparkConfigKeyValuePairs = runtimeArgs.pairs.filter((pair) =>
-    pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
+    pair.key.startsWith(CUSTOM_SPARK_KEY_PREFIX)
   );
   const customSparkConfigPairs = cloneDeep(customSparkConfigKeyValuePairs);
   customSparkConfigPairs.forEach((pair) => {
-    const trimmedKey = pair.key.substring(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX.length);
+    const trimmedKey = pair.key.substring(CUSTOM_SPARK_KEY_PREFIX.length);
     pair.key = trimmedKey;
   });
   customSparkConfigPairs.push({
@@ -87,13 +88,13 @@ const mapDispatchToCustomConfigKeyValuesProps = (dispatch, ownProps) => {
         // delete previous tranformation pushdown key valur pairs from runtimeargs
         // so that we are not keeping outdated configs in the runtimeargs
         const previousCustomConfigKeyValuePair = runtimeArgs.pairs.filter((pair) =>
-          pair.key.startsWith(GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX)
+          pair.key.startsWith(CUSTOM_SPARK_KEY_PREFIX)
         );
         previousCustomConfigKeyValuePair.forEach((pair) => {
           delete runtimeObj[pair.key];
         });
         keyValues.pairs.forEach((pair) => {
-          runtimeObj[GENERATED_RUNTIMEARGS.CUSTOM_SPARK_KEY_PREFIX + pair.key] = String(pair.value);
+          runtimeObj[CUSTOM_SPARK_KEY_PREFIX + pair.key] = String(pair.value);
         });
         const newRunTimePairs = convertMapToKeyValuePairs(runtimeObj);
         dispatch({
