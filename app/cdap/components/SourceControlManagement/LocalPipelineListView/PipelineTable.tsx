@@ -16,6 +16,7 @@
 
 import React from 'react';
 import { Checkbox, Table, TableBody, TableCell, TableRow, TableHead } from '@material-ui/core';
+import InfoIcon from '@material-ui/icons/Info';
 import { setSelectedPipelines } from '../store/ActionCreator';
 import { IRepositoryPipeline } from '../types';
 import T from 'i18n-react';
@@ -27,6 +28,7 @@ import {
   TableBox,
   StatusCell,
   StyledFixedWidthCell,
+  StyledPopover,
 } from '../styles';
 
 const PREFIX = 'features.SourceControlManagement.table';
@@ -104,7 +106,14 @@ export const LocalPipelineTable = ({
             </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
-            <StyledFixedWidthCell>{T.translate(`${PREFIX}.gitStatus`)}</StyledFixedWidthCell>
+            <StyledFixedWidthCell>
+              <div>
+                {T.translate(`${PREFIX}.gitStatus`)}
+                <StyledPopover target={() => <InfoIcon />} showOn="Hover">
+                  {T.translate(`${PREFIX}.gitStatusHelperText`)}
+                </StyledPopover>
+              </div>
+            </StyledFixedWidthCell>
           </TableRow>
         </TableHead>
         <TableBody>
