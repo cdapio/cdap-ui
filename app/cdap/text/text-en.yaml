@@ -3165,13 +3165,13 @@ features:
     configModal:
       auth:
         label: Authentication type
-        helperText: Choose method for authentication
+        helperText: Choose method for authentication. Currently only PAT is available
         pat:
           label: Personal access token (PAT)
           token: Token
-          tokenHelperText: Refer to the user guide or help page of your source control tool to generate the token
+          tokenHelperText: Refer to the "Creating a personal access token" guide in github docs to generate the token
           tokenName: Token name
-          tokenNameHelperText: Name your token
+          tokenNameHelperText: Give personal access token a name for secure store. The name can contain lower case alphabets, numbers, _, and -
           username: User name
           usernameHelperText: Add a username to your token
       authHeader: Authentication
@@ -3183,21 +3183,21 @@ features:
       linkConfirm: Save & Close
       pathPrefix:
         label: Path prefix
-        helperText: Add prefix to the pipeline name as the filename that will be saved in the github repository
+        helperText: Add prefix to the pipeline name as the filename that will be saved in the github repository. For example, if you have a pipeline "DataFusionQuickstart" and your prefix is "myNamespace", then the file will be saved as "myNamespace/DataFusionQuickstart.json"
       provider: 
         label: Provider
         helperText: Select Source Control Management tool
       repoUrl:
         label: Repository URL
         helperText: Enter Git repository URL of the form https://github.com/<host>/<repo>
-      title: Configure Source Control Management
+      title: Source Control Management
       validate:
         button: validate
         errorMessage:  
           0: No errors found       
           1: "{context} required field is missing"
           _: "{context} required fields are missing"
-    info: Source Control Management allows management of pipelines in a version control system tool of choice to implement development process such as - code reviews, promotion / demotion between environments for the pipelines.
+    info: Source control management allows you to connect namespace with the repository of your source control system repository to efficiently manage development process of the deployed pipelines.
     invalidConfig: "{error}. Please validate saved source control management configurations."
     linkButton: Link Repository
     pull:
@@ -3230,6 +3230,7 @@ features:
       connected: Connected
       pipelineName: Pipeline name
       gitStatus: Connected to Git
+      gitStatusHelperText: This status indicates that the pipeline has been pushed to or pulled from the git repository in the past. It does not necessarily mean the content is up to date.
       pullFail: Failed to pull this pipeline from remote.
       pushFail: Failed to push this pipeline to remote.
       synced: Synced

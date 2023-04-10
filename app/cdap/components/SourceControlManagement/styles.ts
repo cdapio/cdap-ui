@@ -16,6 +16,7 @@
 
 import styled from 'styled-components';
 import { TableCell, TableRow, TableContainer, Table } from '@material-ui/core';
+import Popover from 'components/shared/Popover';
 
 export const TableBox = styled(TableContainer)`
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
@@ -30,6 +31,13 @@ export const StyledTableCell = styled(TableCell)`
 
 export const StyledFixedWidthCell = styled(StyledTableCell)`
   width: 200px;
+  div {
+    display: flex;
+  }
+`;
+
+export const StyledPopover = styled(Popover)`
+  margin-left: 10px;
 `;
 
 export const StyledTableRow = styled(TableRow)`

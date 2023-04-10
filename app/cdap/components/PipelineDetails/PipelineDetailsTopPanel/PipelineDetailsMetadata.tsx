@@ -30,6 +30,7 @@ const SCM_PREFIX = 'features.SourceControlManagement';
 
 const StyledSpan = styled.span`
   margin-left: 50px;
+  display: flex;
 `;
 
 const StyledChip = styled(Chip)`
@@ -103,6 +104,13 @@ const PipelineDetailsMetadata = ({
         {sourceControlMeta && sourceControlMeta.fileHash && (
           <StyledSpan>
             <StyledChip variant="outlined" label={T.translate(`${SCM_PREFIX}.table.gitStatus`)} />
+            <Popover
+              target={() => <IconSVG name="icon-info-circle" />}
+              showOn="Hover"
+              placement="bottom"
+            >
+              {T.translate(`${SCM_PREFIX}.table.gitStatusHelperText`)}
+            </Popover>
           </StyledSpan>
         )}
         <span className="pipeline-version">{T.translate(`${PREFIX}.version`, { version })}</span>
