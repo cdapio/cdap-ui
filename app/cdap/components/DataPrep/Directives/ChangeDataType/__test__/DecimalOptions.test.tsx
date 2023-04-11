@@ -99,7 +99,7 @@ describe('DecimalOptions component', () => {
     expect(onApply.mock.calls).toHaveLength(1);
     expect(onApply.mock.calls[0]).toHaveLength(2);
     expect(onApply.mock.calls[0][0]).toBe('decimal');
-    expect(onApply.mock.calls[0][1]).toBe('4 FLOOR');
+    expect(onApply.mock.calls[0][1]).toBe("4 'FLOOR'");
   });
 
   it('should default rouding mode to HALF_EVEN if scale is specified and rounding mode is not specified', () => {
@@ -110,7 +110,7 @@ describe('DecimalOptions component', () => {
     expect(onApply.mock.calls).toHaveLength(1);
     expect(onApply.mock.calls[0]).toHaveLength(2);
     expect(onApply.mock.calls[0][0]).toBe('decimal');
-    expect(onApply.mock.calls[0][1]).toBe('2 HALF_EVEN');
+    expect(onApply.mock.calls[0][1]).toBe("2 'HALF_EVEN'");
   });
 
   it('should not add any extra args if scale is not specified', () => {

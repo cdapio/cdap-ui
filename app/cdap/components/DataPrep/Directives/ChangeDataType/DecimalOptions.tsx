@@ -131,7 +131,7 @@ export const DecimalOptions = ({ onApply, onCancel }: ISubmenuProps): JSX.Elemen
 
   function applyDirective() {
     const option = 'decimal';
-    const extraArgs = scale !== '' ? `${scale} ${rounding || 'HALF_EVEN'}` : '';
+    const extraArgs = scale !== '' ? `${scale} '${rounding || 'HALF_EVEN'}'` : '';
     return onApply(option, extraArgs);
   }
 
