@@ -13,32 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import DataSourceWebsockets from 'services/datasource/DataSourceWebsockets';
-import DataSourceHttp from 'services/datasource/DataSourceHttp';
+import DataSource, { IHandlerData } from './index';
+import { IDataSource } from './IDataSource';
 import RedirectToLogin from 'services/redirect-to-login';
-import { objectQuery } from 'services/helpers';
-
-export function isHttpEnabled() {
-  const featureFlags = objectQuery(window, 'CDAP_CONFIG', 'featureFlags');
-  if (featureFlags && featureFlags['network.client.useHttp'] === 'false') {
-    return false;
-  }
-  return true;
-}
 
 const DatasourceConfigurer = {
-  getInstance(handlers = []) {
+  getInstance(handlers: Array<(data: IHandlerData) => boolean> = []): IDataSource {
     if (Array.isArray(handlers)) {
-      let dataSource;
-      if (isHttpEnabled()) {
-        dataSource = new DataSourceHttp([...handlers, RedirectToLogin]);
-      } else {
-        dataSource = new DataSourceWebsockets(([...handlers, RedirectToLogin]));
-      }
-      return dataSource;
+      return new DataSource([...handlers, RedirectToLogin as (data: IHandlerData) => boolean]);
     } else {
+      // tslint:disable-next-line:no-console
       console.trace();
-      throw "'handlers' for Datasource should be an array";
+      throw new Error("'handlers' for Datasource should be an array");
     }
   },
 };
