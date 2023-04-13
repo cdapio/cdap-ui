@@ -100,10 +100,10 @@ export function removePipelineFromGroup(pipelineToRemove: IProgramStatusTrigger)
       triggersGroupToAdd: updatedTriggersGroup,
       triggersGroupRunArgsToAdd: {
         arguments: triggersGroupRunArgs.arguments.filter(
-          (triggerArg) => !checkPipelineId(triggerArg.pipelineId, pipelineToRemove)
+          (triggerArg) => !checkPipelineId(triggerArg.pipeline, pipelineToRemove)
         ),
         pluginProperties: triggersGroupRunArgs.pluginProperties.filter(
-          (plugin) => !checkPipelineId(plugin.pipelineId, pipelineToRemove)
+          (plugin) => !checkPipelineId(plugin.pipeline, pipelineToRemove)
         ),
         targets: updatedTargetMapping,
       },
@@ -114,7 +114,7 @@ export function removePipelineFromGroup(pipelineToRemove: IProgramStatusTrigger)
 const checkPipelineId = (pipelineId: ITriggeringPipelineId, pipeline: IProgramStatusTrigger) => {
   return (
     pipelineId.namespace === pipeline.programId.namespace &&
-    pipelineId.pipelineName === pipeline.programId.application
+    pipelineId.name === pipeline.programId.application
   );
 };
 
@@ -344,13 +344,13 @@ export function addToTriggerGroup(
   if (!!mapping && !!triggersGroupRunArgs) {
     mapping.forEach((map) => {
       const keySplit = map.key.split(':');
-      const currentPipelineId = {
+      const currentPipelineId: ITriggeringPipelineId = {
         namespace: selectedNamespace,
-        pipelineName: triggeringPipelineInfo.id,
+        name: triggeringPipelineInfo.id,
       };
       if (keySplit.length > 1) {
         triggersGroupRunArgs.pluginProperties.push({
-          pipelineId: currentPipelineId,
+          pipeline: currentPipelineId,
           stageName: keySplit[1],
           source: keySplit[2],
           target: map.value,
@@ -358,7 +358,7 @@ export function addToTriggerGroup(
         triggersGroupRunArgs.targets.set(map.value || keySplit[2], currentPipelineId);
       } else {
         triggersGroupRunArgs.arguments.push({
-          pipelineId: currentPipelineId,
+          pipeline: currentPipelineId,
           source: map.key,
           target: map.value,
         });
@@ -432,7 +432,7 @@ export function validateTriggerMappping(
 
     if (triggersGroupRunArgsToAdd.targets.has(targetToAdd)) {
       const pipelineId = triggersGroupRunArgsToAdd.targets.get(targetToAdd);
-      return `Argument mapping of "${targetToAdd}" already selected in pipeline: "${pipelineId.pipelineName}" of namespace: "${pipelineId.namespace}"`;
+      return `Argument mapping of "${targetToAdd}" already selected in pipeline: "${pipelineId.name}" of namespace: "${pipelineId.namespace}"`;
     }
   }
   return null;
