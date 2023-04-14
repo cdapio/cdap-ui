@@ -109,12 +109,12 @@ export interface ICompositeTriggerRunArgsWithTargets extends ICompositeTriggerRu
 export interface IRuntimeArgumentMapping {
   source: string;
   target: string;
-  pipelineId: ITriggeringPipelineId;
+  pipeline: ITriggeringPipelineId;
 }
 
 export interface ITriggeringPipelineId {
   namespace: string;
-  pipelineName: string;
+  name: string;
 }
 
 export interface IPluginPropertyMapping extends IRuntimeArgumentMapping {
