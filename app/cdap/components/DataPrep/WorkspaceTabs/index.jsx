@@ -77,7 +77,7 @@ export default class WorkspaceTabs extends Component {
         activeWorkspace: state.dataprep.workspaceId,
         workspaceList: state.workspaces.list,
       });
-      this.calculateMaxTabs();
+      //this.calculateMaxTabs();
     });
   }
 

@@ -183,7 +183,7 @@ export const Popover = ({
     }
   };
 
-  const targetProps = {
+  const targetProps: { [key: string]: any } = {
     style: targetDimension,
   };
 
