@@ -23,12 +23,16 @@ import T from 'i18n-react';
 const styles = (theme) => {
   return {
     root: {
-      height: 60,
       background: theme.palette.white[50],
       display: 'grid',
-      gridTemplateColumns: 'auto 342px',
+      gridTemplateColumns: 'auto 190px',
+      marginBottom: '10px',
+      padding: '5px 0',
     },
     picker: {
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
       marginTop: '2px',
     },
   };
