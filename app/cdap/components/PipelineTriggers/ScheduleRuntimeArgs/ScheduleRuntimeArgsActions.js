@@ -141,9 +141,9 @@ function bulkSetArgMapping(argsArray) {
 function filterPropertyMapping(args, triggeringPipelineInfo) {
   return args.filter(
     (arg) =>
-      arg.pipelineId &&
-      arg.pipelineId.namespace === triggeringPipelineInfo.namespace &&
-      arg.pipelineId.pipelineName === triggeringPipelineInfo.id
+      arg.pipeline &&
+      arg.pipeline.namespace === triggeringPipelineInfo.namespace &&
+      arg.pipeline.name === triggeringPipelineInfo.id
   );
 }
 
