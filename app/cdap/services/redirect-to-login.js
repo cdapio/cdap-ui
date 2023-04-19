@@ -27,7 +27,7 @@ export default function RedirectToLogin(data) {
     cookie.remove('CDAP_Auth_User', { path: '/' });
     window.location.href = window.getAbsUIUrl({
       uiApp: 'login',
-      redirectUrl: location.href,
+      redirectUrl: location.pathname,
       clientId: 'cdap',
     });
   }
