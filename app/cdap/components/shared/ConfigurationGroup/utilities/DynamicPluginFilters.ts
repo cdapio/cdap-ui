@@ -101,7 +101,7 @@ export function evaluateFilter(
 
   // convert string 'true' to boolean
   const featureFlags = { ...window?.CDAP_CONFIG?.featureFlags };
-  for (const key in featureFlags) {
+  for (const key of Object.keys(featureFlags)) {
     featureFlags[key] = featureFlags[key] === 'true';
   }
   const typedPropertyValues = {
