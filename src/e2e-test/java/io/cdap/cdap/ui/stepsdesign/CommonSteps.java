@@ -187,9 +187,10 @@ public class CommonSteps {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-run-btn"));
   }
 
-  @Then("Check pipeline is running")
-  public void isPipelineRunning() {
-    WaitHelper.waitForElementToBePresent(By.cssSelector(Helper.getCssSelectorByDataTestId("Running")));
+  @Then("Deployed pipeline status is {string}")
+  public void deployedPipelineStatusIsString(String status) {
+    WaitHelper.waitForElementToBePresent(
+      By.cssSelector(Helper.getCssSelectorByDataTestId(status)));
   }
 
   @Then("Export the pipeline")
