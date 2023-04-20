@@ -113,7 +113,7 @@ angular
     $rootScope.$on(MYAUTH_EVENT.logoutSuccess, function() {
       window.location.href = myHelpers.getAbsUIUrl({
         uiApp: 'login',
-        redirectUrl: location.pathname,
+        redirectUrl: location.href,
         clientId: 'hydrator'
       });
     });

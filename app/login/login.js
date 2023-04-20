@@ -73,15 +73,9 @@ class Login extends Component {
           sameSite: 'strict',
         });
         cookie.set('CDAP_Auth_User', this.state.username, { secure: isSecure, sameSite: 'strict' });
-        const queryObj = util.getQueryParams(location.search);
-        let validRedirectUrl;
-        // Require that redirectUrl be a relative path to avoid open redirects
-        if (queryObj.redirectUrl && queryObj.redirectUrl.startsWith('/')) {
-          validRedirectUrl = queryObj.redirectUrl;
-        } else {
-          validRedirectUrl = '/';
-        }
-        window.location.href = validRedirectUrl;
+        var queryObj = util.getQueryParams(location.search);
+        queryObj.redirectUrl = queryObj.redirectUrl || '/';
+        window.location.href = queryObj.redirectUrl;
       });
   }
   onUsernameUpdate(e) {
