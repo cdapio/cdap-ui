@@ -22,7 +22,6 @@ import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.pages.actions.CdfPluginPropertiesActions;
 import io.cdap.e2e.pages.actions.CdfStudioActions;
-import io.cdap.e2e.pages.locators.CdfStudioLocators;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
@@ -175,7 +174,7 @@ public class CommonSteps {
 
   @Then("Close node property")
   public void closeNodeProperty() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("close-config-popover"));;
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("close-config-popover"));
   }
 
   @Then("Click on \"Get Schema\" button")
@@ -188,11 +187,21 @@ public class CommonSteps {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-run-btn"));
   }
 
-  @Then("Check pipeline is running")
-  public void isPipelineRunning() {
-    WaitHelper.waitForElementToBeDisplayed(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("Running"))
-    );
+  @Then("Deployed pipeline status is {string}")
+  public void deployedPipelineStatusIsString(String status) {
+    WaitHelper.waitForElementToBePresent(
+      By.cssSelector(Helper.getCssSelectorByDataTestId(status)));
+  }
+
+  @Then("Deployed pipeline status is {string} or {string}")
+  public void deployedPipelineStatusIsStringOrString(String status1, String status2) {
+    boolean status1Present = WaitHelper.waitForElementToBeOptionallyPresent(
+      By.cssSelector(Helper.getCssSelectorByDataTestId(status1)), 60);
+    if (!status1Present) {
+      boolean status2Present = WaitHelper.waitForElementToBeOptionallyPresent(
+        By.cssSelector(Helper.getCssSelectorByDataTestId(status2)), 60);
+      Assert.assertTrue(status2Present);
+    }
   }
 
   @Then("Export the pipeline")

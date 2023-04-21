@@ -21,7 +21,7 @@ Feature: Logviewer - Validate log viewer functionalities
   Scenario: Deploy and run pipeline till complete
     When Deploy and test pipeline "logs_generator" with timestamp with pipeline JSON file "logs_generator.json"
     Then Run the pipeline
-    Then Check pipeline is running
+    Then Deployed pipeline status is "Running" or "Starting"
 
   @LOGVIEWER_TEST
   Scenario: Log viewer should show

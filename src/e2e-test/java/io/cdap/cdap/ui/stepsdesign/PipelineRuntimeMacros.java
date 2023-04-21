@@ -20,7 +20,6 @@ import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -140,12 +139,6 @@ public class PipelineRuntimeMacros {
   @When("Deployed run button is clicked")
   public void deployedRunButtonIsClicked() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("run-deployed-pipeline-modal-btn"));
-  }
-
-  @Then("Deployed pipeline status is {string}")
-  public void deployedPipelineStatusIsString(String status) {
-    WaitHelper.waitForElementToBePresent(
-      By.cssSelector(Helper.getCssSelectorByDataTestId(status)));
   }
 
   @When("Close the runtime argument dialog")
