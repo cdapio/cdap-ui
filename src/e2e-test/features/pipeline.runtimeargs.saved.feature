@@ -58,6 +58,9 @@ Feature: Pipeline - Runtime Args - It must be possible to deploy a pipeline and 
     And Add a deployed runtime argument from row "3"
     And Enter deployed runtime argument key "runtime_args_key4" in row "4"
     And Enter deployed runtime argument value "runtime_args_value4" in row "4"
+    And Add a deployed runtime argument from row "4"
+    And Enter deployed runtime argument key "system.spark.testkey" in row "5"
+    And Enter deployed runtime argument value "system.spark.testvalue" in row "5"
     And Save deployed arguments button is clicked
     And Wait for runtime arguments dialog to close
     And Run down arrow is clicked
@@ -68,6 +71,8 @@ Feature: Pipeline - Runtime Args - It must be possible to deploy a pipeline and 
     And Deployed runtime argument row "3" value field is "runtime_args_value3"
     And Deployed runtime argument row "4" key field is "runtime_args_key4"
     And Deployed runtime argument row "4" value field is "runtime_args_value4"
+    And Deployed runtime argument row "5" key field is "system.spark.testkey"
+    And Deployed runtime argument row "5" value field is "system.spark.testvalue"
 
   @PIPELINE_RUNTIME_ARGS_TEST
   Scenario: Removing a runtime argument should shift the others
