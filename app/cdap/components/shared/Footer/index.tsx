@@ -14,13 +14,14 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Theme } from 'services/ThemeHelper';
-import If from 'components/shared/If';
 import { objectQuery } from 'services/helpers';
 import NamespaceStore, { getCurrentNamespace } from 'services/NamespaceStore';
 import { makeStyles } from '@material-ui/core/styles';
-import PageTitleStore, { getCurrentPageTitle } from 'services/PageTitleStore/PageTitleStore';
+import PageTitleStore, {
+  getCurrentPageTitle,
+} from 'services/PageTitleStore/PageTitleStore';
 import ThemeWrapper from 'components/ThemeWrapper';
 
 const useStyles = makeStyles((theme) => ({
@@ -69,14 +70,20 @@ interface IFooterProps {
 }
 
 const nonNamespacePages = ['Operations', 'Reports', 'Administration'];
-const Footer: React.FC<IFooterProps> = ({ showNamespace }) => {
+const Footer = ({ showNamespace }: IFooterProps) => {
   const footerText = Theme.footerText;
   const footerUrl = Theme.footerLink;
   // 'project-id-30-characters-name1/instance-id-30-characters-name';
-  const instanceMetadataId = objectQuery(window, 'CDAP_CONFIG', 'instanceMetadataId');
-  const [selectedNamespace, setSelectedNamespace] = React.useState(getCurrentNamespace());
+  const instanceMetadataId = objectQuery(
+    window,
+    'CDAP_CONFIG',
+    'instanceMetadataId'
+  );
+  const [selectedNamespace, setSelectedNamespace] = useState(
+    getCurrentNamespace()
+  );
   const classes = useStyles();
-  React.useEffect(() => {
+  useEffect(() => {
     const namespaceSub = NamespaceStore.subscribe(() =>
       setSelectedNamespace(getCurrentNamespace())
     );
@@ -95,9 +102,11 @@ const Footer: React.FC<IFooterProps> = ({ showNamespace }) => {
   return (
     <ThemeWrapper>
       <footer className={classes.root}>
-        <If condition={showNamespace !== false}>
-          <p className={classes.selectedNamespace}>Namespace: {selectedNamespace}</p>
-        </If>
+        {showNamespace && (
+          <p className={classes.selectedNamespace}>
+            Namespace: {selectedNamespace}
+          </p>
+        )}
         <p className={classes.footerText}>
           <a
             href={footerUrl}
@@ -108,9 +117,11 @@ const Footer: React.FC<IFooterProps> = ({ showNamespace }) => {
             {footerText}
           </a>
         </p>
-        <If condition={instanceMetadataId}>
-          <p className={classes.instanceMetadataId}>Instance Id: {instanceMetadataId}</p>
-        </If>
+        {instanceMetadataId && (
+          <p className={classes.instanceMetadataId}>
+            Instance Id: {instanceMetadataId}
+          </p>
+        )}
       </footer>
     </ThemeWrapper>
   );

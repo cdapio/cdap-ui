@@ -79,6 +79,21 @@ const webpackConfig = {
       },
     ],
   },
+  externals: {
+    // Use external version of React
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'react',
+      root: 'React',
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'react-dom',
+      root: 'ReactDOM',
+    },
+  },
   resolve: {
     fallback: {
       fs: false,
@@ -312,7 +327,8 @@ gulp.task('js:lib', () => {
 
       './bower_components/d3-timeline/src/d3-timeline.js',
       require.resolve('ngstorage'),
-      require.resolve('angular-animate'),
+      // './bower_components/angular-animate/angular-animate.js',
+      // require.resolve('angular-animate'),
       require.resolve('angular-sanitize'),
       require.resolve('angular-resource'),
       require.resolve('angular-breadcrumb'),
@@ -342,7 +358,7 @@ gulp.task('js:lib', () => {
       require.resolve('angular-inview'),
       require.resolve('esprima'),
       // require.resolve('react'),
-      require.resolve('react-dom'),
+      // require.resolve('react-dom'),
       require.resolve('ngreact'),
       require.resolve('svg4everybody'),
       // require.resolve('sockjs'),
@@ -415,15 +431,18 @@ gulp.task('js:app:babel', () => {
 
 gulp.task(
   'js:app',
-  gulp.series('js:app:babel', 'js:app:hydrator'
-  // 'js:app:tracker'
+  gulp.series(
+    'js:app:babel',
+    'js:app:hydrator'
+    // 'js:app:tracker'
   )
 );
 
 gulp.task(
   'watch:js:app',
-  gulp.series('watch:js:app:hydrator'
-  // 'watch:js:app:tracker'
+  gulp.series(
+    'watch:js:app:hydrator'
+    // 'watch:js:app:tracker'
   )
 );
 gulp.task('polyfill', () => {
@@ -456,7 +475,8 @@ gulp.task('html:main', () => {
   return gulp
     .src([
       // './app/tracker/tracker.html',
-      './app/hydrator/hydrator.html'])
+      './app/hydrator/hydrator.html',
+    ])
     .pipe(plug.htmlmin({ removeComments: true }))
     .pipe(gulp.dest('./packaged/public/dist'));
 });
@@ -673,9 +693,10 @@ gulp.task('watcher', (cb) => {
     gulp.series('tpl')
   );
   gulp.watch(
-    ['./app/hydrator/**/*.html',
-    // './app/tracker/**/*.html'
-  ],
+    [
+      './app/hydrator/**/*.html',
+      // './app/tracker/**/*.html'
+    ],
     gulp.series('html:partials')
   );
   cb();
