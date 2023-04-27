@@ -193,17 +193,6 @@ public class CommonSteps {
       By.cssSelector(Helper.getCssSelectorByDataTestId(status)));
   }
 
-  @Then("Deployed pipeline status is {string} or {string}")
-  public void deployedPipelineStatusIsStringOrString(String status1, String status2) {
-    boolean status1Present = WaitHelper.waitForElementToBeOptionallyPresent(
-      By.cssSelector(Helper.getCssSelectorByDataTestId(status1)), 60);
-    if (!status1Present) {
-      boolean status2Present = WaitHelper.waitForElementToBeOptionallyPresent(
-        By.cssSelector(Helper.getCssSelectorByDataTestId(status2)), 60);
-      Assert.assertTrue(status2Present);
-    }
-  }
-
   @Then("Export the pipeline")
   public void exportPipeline() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-export-btn"));
