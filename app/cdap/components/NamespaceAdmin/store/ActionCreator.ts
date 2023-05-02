@@ -277,23 +277,6 @@ export const addOrValidateSourceControlManagementForm = (
   ).map(() => getAndSetSourceControlManagement(namespace));
 };
 
-// This validation function directly reads config from api and validate
-export const validateSourceControlManagement = (namespace) => {
-  return getSourceControlManagement(namespace).pipe(
-    switchMap((res: any) => {
-      const [config, token] = res;
-      config.auth.token = token;
-      return MyNamespaceApi.setSourceControlManagement(
-        { namespace },
-        getBodyForSubmit(config, true)
-      );
-    }),
-    catchError((err) => {
-      throw err;
-    })
-  );
-};
-
 export const deleteSourceControlManagement = (
   namespace,
   formState: ISourceControlManagementConfig
