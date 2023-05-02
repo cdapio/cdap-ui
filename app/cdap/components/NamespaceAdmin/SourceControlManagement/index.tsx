@@ -31,7 +31,7 @@ import { ISourceControlManagementConfig } from './types';
 import SourceControlManagementForm from './SourceControlManagementForm';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { validateSourceControlManagement } from '../store/ActionCreator';
+import { getSourceControlManagement } from '../store/ActionCreator';
 import Alert from 'components/shared/Alert';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 
@@ -75,7 +75,7 @@ export const SourceControlManagement = () => {
   const validateConfigAndRedirect = () => {
     setLoading(true);
     const namespace = getCurrentNamespace();
-    validateSourceControlManagement(namespace).subscribe(
+    getSourceControlManagement(namespace).subscribe(
       () => {
         window.location.href = `/ns/${namespace}/scm/sync`;
       },
