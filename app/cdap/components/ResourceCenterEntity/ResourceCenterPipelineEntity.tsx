@@ -26,7 +26,7 @@ import IconSVG from 'components/shared/IconSVG';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import { defaultState, PullPipelineWizard, reducer } from './PullPipelineWizard';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
-import { validateSourceControlManagement } from 'components/NamespaceAdmin/store/ActionCreator';
+import { getSourceControlManagement } from 'components/NamespaceAdmin/store/ActionCreator';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
@@ -113,7 +113,7 @@ export default function ResourceCenterPipelineEntity({
 
   const pullPipelineBtnHandler = () => {
     dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    validateSourceControlManagement(namespace).subscribe(
+    getSourceControlManagement(namespace).subscribe(
       () => {
         dispatch({ type: 'TOGGLE_MODAL' });
       },
