@@ -32,7 +32,7 @@ export function getGenericIssuesTableStyles(theme): StyleRules {
         maxHeight: '100%',
 
         '& .grid-row': {
-          gridTemplateColumns: '1fr 2fr 1fr 1fr',
+          gridTemplateColumns: '1fr 2fr 2fr 1fr',
           gridColumnGap: '50px',
         },
       },
