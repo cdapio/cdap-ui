@@ -170,7 +170,7 @@ export function GenericBrowser({ initialConnectionId, onEntityChange, selectedPa
 
   const onCreateWorkspace = async (entity, parseConfig = {}) => {
     try {
-      createWorkspaceInternal(entity, parseConfig);
+      await createWorkspaceInternal(entity, parseConfig);
     } catch (e) {
       setError(`Failed to create workspace. Error: ${e}`);
       setLoading(false);
