@@ -104,7 +104,6 @@ gulp.task('css:library', function() {
       './node_modules/@bower_components/angular-loading-bar/build/loading-bar.min.css',
       './node_modules/@bower_components/angular-motion/dist/angular-motion.min.css',
       './node_modules/font-awesome/css/font-awesome.min.css',
-      './node_modules/@bower_components/c3/c3.min.css',
       './node_modules/@bower_components/angular-gridster/dist/angular-gridster.min.css',
       './node_modules/@bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
     ]),
