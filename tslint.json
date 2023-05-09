@@ -65,7 +65,6 @@
   "linterOptions": {
     "exclude": [
       "node_modules",
-      "bower_components",
       "dist",
       "cdap_dist",
       "login_dist",
