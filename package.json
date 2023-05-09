@@ -4,7 +4,7 @@
   "description": "Front-end for CDAP",
   "license": "Apache-2.0",
   "scripts": {
-    "postinstall": "scripts/symlink-legacy-bower-deps.js",
+    "postinstall": "node scripts/symlink-legacy-bower-deps.js",
     "dev": "concurrently \"yarn start\" \"gulp watch\" \"yarn cdap-dev-build-w\" \"yarn build-dev-common-w\"",
     "start": "yarn run build-server && NODE_ENV=development node ./packaged/server_dist/index.js",
     "cdap-prod-build": "NODE_ENV=production parallel-webpack",
@@ -279,7 +279,6 @@
     "@bower_components/angular-strap": "mgcrea/angular-strap#2.3.10",
     "@bower_components/angular-ui-ace": "angular-ui/ui-ace#bower",
     "@bower_components/angular-ui-router": "angular-ui/angular-ui-router-bower#0.3.0",
-    "@bower_components/angularjs-dropdown-multiselect": "dotansimha/angularjs-dropdown-multiselect#1.5.2",
     "@bower_components/blob-polyfill": "bjornstar/blob-polyfill#~1.0.20150320",
     "@bower_components/bootstrap": "twbs/bootstrap#3.3.6",
     "@bower_components/c3": "masayuki0812/c3#0.4.10",
