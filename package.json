@@ -4,7 +4,6 @@
   "description": "Front-end for CDAP",
   "license": "Apache-2.0",
   "scripts": {
-    "postinstall": "node scripts/symlink-legacy-bower-deps.js",
     "dev": "concurrently \"yarn start\" \"gulp watch\" \"yarn cdap-dev-build-w\" \"yarn build-dev-common-w\"",
     "start": "yarn run build-server && NODE_ENV=development node ./packaged/server_dist/index.js",
     "cdap-prod-build": "NODE_ENV=production parallel-webpack",
