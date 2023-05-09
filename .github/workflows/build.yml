@@ -68,7 +68,6 @@ jobs:
       run: |       
         npm install -g yarn # Install Yarn globally
         yarn --frozen-lockfile
-        yarn run bower-root # Install Bower dependencies
 
     - name: Start CDAP-UI and run the tests
       env:
