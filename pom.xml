@@ -160,8 +160,6 @@
                   <exclude>**/*.stylelintrc</exclude>
                   <exclude>**/*.svg</exclude>
                   <exclude>**/*__mocks__/**</exclude>
-                  <exclude>**/bower_components/**</exclude>
-                  <exclude>**/*.bowerrc</exclude>
                   <exclude>**/node_modules/**</exclude>
                   <exclude>**/coverage/**</exclude>
                   <exclude>**/dist/**</exclude>
@@ -238,15 +236,6 @@
                 </goals>
                 <configuration>
                   <arguments>install --silent --frozen-lockfile</arguments>
-                </configuration>
-              </execution>
-              <execution>
-                <id>bower-install</id>
-                <goals>
-                  <goal>bower</goal>
-                </goals>
-                <configuration>
-                  <arguments>install --allow-root</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -536,6 +525,5 @@
         </plugins>
       </build>
     </profile>
-
   </profiles>
 </project>

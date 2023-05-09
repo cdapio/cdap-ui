@@ -62,7 +62,6 @@ angular
       'ui.ace',
       'gridster',
       'angular-cron-jobs',
-      'angularjs-dropdown-multiselect',
       'hc.marked',
       'ngFileSaver',
       'infinite-scroll',
