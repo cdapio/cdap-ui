@@ -185,6 +185,15 @@ const setRuns = (runs) => {
   });
 };
 
+const setVersionHasRun = (versionHasRun) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_VERSION_HAS_RUN,
+    payload: {
+      versionHasRun: versionHasRun,
+    },
+  });
+};
+
 const getRunDetails = ({ namespace, appId, programType, programName, runid }) => {
   return MyPipelineApi.getRunDetails({
     namespace,
@@ -214,6 +223,12 @@ const getRuns = (params) => {
     }
   );
   return runsFetch;
+};
+
+const getRunsForVersion = (params) => {
+  MyPipelineApi.getVersionedRuns(params).subscribe((runs) => {
+    setVersionHasRun(runs.length > 0);
+  });
 };
 
 const pollRunsCount = ({ appId, programType, programName: programId, namespace }) => {
@@ -502,7 +517,9 @@ export {
   setNumRecordsPreview,
   setMaxConcurrentRuns,
   setCurrentRunId,
+  setVersionHasRun,
   getRuns,
+  getRunsForVersion,
   getRunDetails,
   getAppVersion,
   pollRuns,
