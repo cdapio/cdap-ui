@@ -248,7 +248,8 @@ public class Helper implements CdfHelper {
     WaitHelper.waitForPageToLoad();
     Helper.uploadPipelineFromFile(filename);
 
-    SeleniumDriver.getWaitDriver().until(ExpectedConditions.elementToBeClickable(By.cssSelector(getCssSelectorByDataTestId("pipeline-metadata"))));
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(By.cssSelector(getCssSelectorByDataTestId("pipeline-metadata"))));
     Commands.fillInPipelineName(pipelineName);
     Commands.dismissTopBanner();
 
