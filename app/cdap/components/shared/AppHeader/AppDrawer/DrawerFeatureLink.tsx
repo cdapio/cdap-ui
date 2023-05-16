@@ -41,7 +41,7 @@ const styles = (theme) => {
     listItemText: appDrawerListItemTextStyles(theme),
     listItem: appDrawerListItemStyles(theme),
     nestListPadding: {
-      paddingLeft: theme.Spacing(6),
+      paddingLeft: theme.spacing(6),
     },
     listItemWithSubmenu: {
       cursor: 'pointer',

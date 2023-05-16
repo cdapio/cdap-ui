@@ -14,26 +14,33 @@
  * the License.
  */
 // const angular = require('angular');
-const ngAnimate = require('angular-animate');
+// const ngAnimate = require('angular-animate');
 // const ngSanitize = require('angular-sanitize');
 // const $cookies = require('angular-cookies');
 // const ngResource = require('angular-resource');
-import CaskCommon from '../common/cask-shared-components';
-// );
-// const sockjs = require('sockjs');
-// window.SockJS = sockjs;
-
-import uuid from 'uuid';
-window.uuid = uuid;
+const CaskCommon = require('../common/cask-shared-components');
 if (!window.CaskCommon) {
   window.CaskCommon = CaskCommon;
 }
-console.log(window.CDAP_CONFIG);
+
+const uuid = require('uuid');
+window.uuid = uuid;
+
+
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+// import { Hydrator } from './main';
+// import reactstrap from 'reactstrap';
+
+// export default () => ReactDOM.render((Hydrator()), document.getElementById('main-react'));
+// PKG = {
+//   name: 'cdap-ui'
+// };
 // console.time(PKG.name);
 angular
   .module(PKG.name, [
 
-    angular.module(PKG.name+'.features', [
+    angular.module(PKG.name +'.features', [
       PKG.name+'.feature.hydrator',
     ]).name,
 
@@ -41,11 +48,10 @@ angular
 
       angular.module(PKG.name+'.services', [
         'ngAnimate',
-        // ngSanitize,
-        // 'ngSanitize',
-        // 'ngResource',
+        'ngSanitize',
+        'ngResource',
         'ngStorage',
-        // 'ui.router',
+        'ui.router',
         'ngCookies'
       ]).name,
 
@@ -72,7 +78,7 @@ angular
 
       'mgcrea.ngStrap.modal',
 
-      'ncy-angular-breadcrumb',
+      // 'ncy-angular-breadcrumb',
       'angularMoment',
       'ui.ace',
       'gridster',
@@ -263,6 +269,7 @@ angular
       };
     });
     this.eventEmitter.on(globalEvents.PAGE_LEVEL_ERROR, (error) => {
+
       // If we already have no namespace error thrown it trumps all other 404s
       // and UI should show that the user does not have access to the namespace
       // instead of specific 404s which will be misleading.
@@ -356,7 +363,7 @@ angular
       template: `
         <my-global-navbar></my-global-navbar>
         <main class="container" id="app-container">
-          <div ng-if="!BodyCtrl.pageLevelError" ui-view></div>
+          <div ng-if="!BodyCtrl.pageLevelError" ui-view=""></div>
           <page403
             ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 403"
             message="BodyCtrl.pageLevelError.message"

@@ -113,6 +113,7 @@ angular.module(PKG.name + '.feature.hydrator')
               return defer.promise;
             },
             rResetPreviousPageLevelError: function () {
+
               window.CaskCommon.ee.emit(
                 window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, { reset: true });
             },
@@ -230,6 +231,7 @@ angular.module(PKG.name + '.feature.hydrator')
                 window.CaskCommon.ee.emit(window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, error);
               };
 
+
               myPipelineApi.fetchArtifacts({
                 namespace: $stateParams.namespace
               }).$promise.then((artifactsFromBackend) => {
@@ -255,6 +257,9 @@ angular.module(PKG.name + '.feature.hydrator')
                   return showNoArtifactsError();
                 }
 
+                if (!$stateParams.artifactType) {
+                  $stateParams.artifactType = getValidUISupportedArtifact(artifactsFromBackend).name;
+                }
                 if (!isArtifactValid(artifactsFromBackend, $stateParams.artifactType)) {
                   chooseDefaultArtifact();
                 } else {
@@ -297,7 +302,7 @@ angular.module(PKG.name + '.feature.hydrator')
             }
           },
           views: {
-            '': {
+            'gizmo': {
               templateUrl: '/assets/features/hydrator/templates/create/studio.html',
               controller: 'HydratorPlusPlusStudioCtrl as HydratorPlusPlusStudioCtrl'
             },
@@ -427,6 +432,7 @@ angular.module(PKG.name + '.feature.hydrator')
                 );
             },
             rResetPreviousPageLevelError: function () {
+
               window.CaskCommon.ee.emit(
                 window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, { reset: true });
             },

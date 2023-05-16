@@ -187,7 +187,7 @@ const AppHeaderWithStyles = withStyles(styles)(MyAppHeader);
  * let the root pass on the theme to the children.
  */
 export default function CustomHeader({ nativeLink }) {
-  if (typeof window.angular !== 'undefined' && window.angular.version) {
+  if (window.location.href.match('pipelines/ns/default/studio')) {
     return (
       <ThemeWrapper>
         <AppHeaderWithStyles nativeLink={nativeLink} />

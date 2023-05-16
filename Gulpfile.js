@@ -30,6 +30,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpack = require('webpack');
 // const angular = require.resolve('angular');
 
@@ -88,20 +89,40 @@ const webpackConfig = {
       root: 'React',
     },
     'react-dom': {
-      commonjs: 'react-dom',
-      commonjs2: 'react-dom',
-      amd: 'react-dom',
       root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom',
+    },
+    'react-redux': {
+      root: 'react-redux',
+      commonjs2: 'react-redux',
+      commonjs: 'react-redux',
+      amd: 'react-redux',
+    },
+    // reactstrap: 'reactstrap',
+    'react-popper': {
+      root: 'react-popper',
+      commonjs2: 'react-popper',
+      commonjs: 'react-popper',
+      amd: 'react-popper',
+    },
+    'react-transition-group': {
+      root: 'react-transition-group',
+      commonjs2: 'react-transition-group',
+      commonjs: 'react-transition-group',
+      amd: 'react-transition-group',
     },
   },
   resolve: {
     fallback: {
       fs: false,
       // React: require.resolve('react'),
+      // ReactDOM: require.resolve('react-dom'),
       SockJS: require.resolve('sockjs-client'),
       ngStorage: require.resolve('angular-storage'),
       ngCookies: require.resolve('angular-cookies'),
-      cdap: 'kdjf',
+      // reactstrap: require.resolve('reactstrap'),
       // tls: require.resolve('tls'),
       // net: require.resolve('net'),
       //   path: false,
@@ -137,6 +158,19 @@ const webpackConfig = {
       // })(),
       // angular: angular,
     }),
+    new CircularDependencyPlugin({
+      // exclude detection of files based on a RegExp
+      exclude: /a\.js|node_modules/,
+      // include specific files based on a RegExp
+      include: /dir/,
+      // add errors to webpack instead of warnings
+      failOnError: true,
+      // allow import cycles that include an asyncronous import,
+      // e.g. via import(/* webpackMode: "weak" */ './file.js')
+      allowAsyncCycles: false,
+      // set the current working directory for displaying module paths
+      cwd: process.cwd(),
+    }),
   ],
   devtool: 'eval-source-map',
 };
@@ -164,6 +198,10 @@ function getEs6Directives(isNegate) {
     return (isNegate ? '!' : '') + './app/directives/' + directive + '/**/*.js';
   });
 }
+
+
+// seems to bundle source and getes6 directives into bundle files.
+
 function getExtensionBuildPipeline(extension) {
   const PKG = JSON.stringify({
     name: pkg.name,
@@ -184,7 +222,7 @@ function getExtensionBuildPipeline(extension) {
   return (
     gulp
       .src(source)
-      .pipe(plug.plumber())
+      .pipe(plug.plumber()) // looks unnecessary
       .pipe(
         plug.wrapper({
           header: '\n(function (PKG){ /* ${filename} */\n',
@@ -203,6 +241,9 @@ function getExtensionBuildPipeline(extension) {
       .pipe(gulp.dest('./packaged/public/dist/assets/bundle'))
   );
 }
+
+
+
 function getBabelBuildPipeline() {
   const PKG = JSON.stringify({
     name: pkg.name,
@@ -213,9 +254,10 @@ function getBabelBuildPipeline() {
   return (
     gulp
       .src(source)
-      .pipe(plug.plumber())
+      .pipe(plug.plumber()) // probably unnecessary
       .pipe(
         plug.wrapper({
+          // self executes this code: with header and footer i guess?
           header: '\n(function (PKG){ /* ${filename} */\n',
           footer: '\n})(' + PKG + ');\n',
         })
@@ -227,7 +269,7 @@ function getBabelBuildPipeline() {
       )
       // .pipe(plug.babel())
       // .pipe(plug.ngAnnotate())
-      // .pipe(plug.concat('common.es6.js'))
+      .pipe(plug.concat('common.es6.js'))
       .pipe(gulp.dest('./packaged/public/dist/assets/bundle'))
   );
 }
@@ -669,9 +711,31 @@ gulp.task('default', gulp.series('lint', 'build', 'rev:replace:dev'));
 /*
   watch
  */
+// tasks jshint -- unnecessary can be replaced by lint or whatever in webpack
+// watch:js:app --
+// -- js:app:babel
+// -- -- gets files without es6 directives and the runs webpack on them (most of the functionality has been shifted to webpack already)
+// -- js:app:hydrator
+// -- -- does the same thing as app:babel but bundles it as hydrator.js into 
+// watch:js:app:babel
+// css -- replace with css loader
+// -- does css:app
+// -- -- './app/styles/common.less', './app/styles/themes/*.less', './app/directives/**/*.less', './app/hydrator/**/*.less',
+// -- -- less(), postcss with overrideBrowserslist: '> 1%', cascade true
+// -- -- adds to packaged/public/dist/assets/bundle/app.css
+// -- css:lib - client libs, angular-csp, loading bar, motion, gridster, cron-jobs, c3.min.css - from bower
+// -- -- app/styles/bootstrap.less
+// -- -- ./packaged/public/dist/assets/bundle/lib.css
+// -- uses less, postcss and adds some css from bower packages
+// tpl -- removes comments from './app/directives/**/*.html', './app/services/**/*.html'
+// -- https://github.com/pchudzik/angular-template-cache then uses template cache to add
+// -- all templates to singular file packaged/public/dist/assets/bundle/tps.js
+// html:partials -- minifies html, removes comments, puts into packages/public/dist/assets/features
 gulp.task('watcher', (cb) => {
   plug.livereload.listen({ port: 35728 });
 
+
+  //file names
   let jsAppSource = [
     './app/**/*.js',
     '!./app/cdap/**/*.js',
@@ -681,17 +745,24 @@ gulp.task('watcher', (cb) => {
   ];
   jsAppSource = jsAppSource.concat(getEs6Directives(true));
 
+
+  // watches the above files without the directives
   gulp.watch(jsAppSource, gulp.series('jshint', 'watch:js:app'));
+  // filenames**
 
   let jsAppBabelSource = [];
   jsAppBabelSource = jsAppBabelSource.concat(getEs6Directives(false));
+  // watches the above files without the directives
   gulp.watch(jsAppBabelSource, gulp.series('jshint', 'watch:js:app:babel'));
 
+  // does css watching
   gulp.watch('./app/**/*.{less,css}', gulp.series('css'));
+  // watches the html files directives and services
   gulp.watch(
     ['./app/directives/**/*.html', './app/services/**/*.html'],
     gulp.series('tpl')
   );
+  // watches the other html files
   gulp.watch(
     [
       './app/hydrator/**/*.html',

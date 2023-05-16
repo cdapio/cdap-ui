@@ -18,7 +18,7 @@ import T from 'i18n-react';
 
 T.setTexts(require('../cdap/text/text-en.yaml'));
 // calling react from the below component
-
+// import useReact from '../cdap/components/hydrator/react-loader';
 if (
   window.location.href.indexOf('/metadata/') === -1 &&
   window.location.href.indexOf('/pipelines/') !== -1

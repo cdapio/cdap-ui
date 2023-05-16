@@ -199,6 +199,7 @@ export default class Datasource implements IDataSource {
       } else {
         bindingInfo.rx.complete();
       }
+      debugger;
     };
   }
 

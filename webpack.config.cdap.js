@@ -290,6 +290,11 @@ const webpackConfig = {
     plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   resolve: {
+    fallback: {
+      React: require.resolve('react'),
+      ReactDom: require.resolve('react-dom'),
+      reactstrap: require.resolve('reactstrap'),
+    },
     extensions: [
       '.mjs',
       '.ts',
@@ -312,7 +317,7 @@ const webpackConfig = {
 };
 
 // if (!isModeProduction(mode)) {
-  webpackConfig.devtool = 'eval-source-map';
+webpackConfig.devtool = 'eval-source-map';
 // }
 
 if (isModeProduction(mode)) {

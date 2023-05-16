@@ -14,6 +14,8 @@
  * the License.
  */
 
+// @ts-nocheck
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import PlusButtonStore from 'services/PlusButtonStore';

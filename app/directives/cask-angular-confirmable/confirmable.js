@@ -48,7 +48,7 @@ function caskConfirmableDirective ($modal, $sce) {
         var confirmableContent = $sce.getTrustedHtml(attrs.confirmableContent);
         modal = $modal({
           scope: modalScope,
-          template: 'cask-angular-confirmable/confirm-modal.html',
+          template: require('./confirm-modal.html'),
           title: attrs.confirmableTitle || 'Confirmation',
           content: confirmableContent || 'Are you sure?',
           placement: 'center',

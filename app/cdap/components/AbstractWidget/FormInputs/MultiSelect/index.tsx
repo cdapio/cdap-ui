@@ -45,7 +45,7 @@ interface IMultiSelectWidgetProps {
 const styles = (theme) => {
   return {
     root: {
-      margin: theme.Spacing(2),
+      margin: theme.spacing(2),
     },
     // unable to use styled component for Tooltip
     tooltip: {

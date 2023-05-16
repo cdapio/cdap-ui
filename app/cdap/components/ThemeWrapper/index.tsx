@@ -74,7 +74,7 @@ const Theme = createTheme({
     yellow,
     white,
   },
-  navbarBgColor: 'var(--navbar-color)',
+  navbarBgColor: 'rgba(51, 51, 51, 1)',
   buttonLink: {
     '&:hover': {
       color: 'inherit',
@@ -94,7 +94,7 @@ const Theme = createTheme({
   },
   typography: {
     fontSize: 13,
-    fontFamily: 'var(--font-family)',
+    fontFamily: '',
     useNextVariants: true,
   },
   zIndex: {
@@ -107,10 +107,12 @@ const Theme = createTheme({
       },
     },
   },
-  Spacing: (factor) => [0, 4, 8, 16, 24, 32, 40, 48, 56, 64][factor],
+  spacing: (factor) => [0, 4, 8, 16, 24, 32, 40, 48, 56, 64][factor],
 } as ThemeOptions);
 
-export default class ThemeWrapper extends React.PureComponent<IThemeWraperProps> {
+export default class ThemeWrapper extends React.PureComponent<
+  IThemeWraperProps
+> {
   public render() {
     let Component;
     if (this.props.component) {
@@ -122,14 +124,18 @@ export default class ThemeWrapper extends React.PureComponent<IThemeWraperProps>
     if (this.props.children) {
       return (
         <MuiThemeProvider theme={Theme}>
-          <StyledThemeProvider theme={Theme}>{this.props.children}</StyledThemeProvider>
+          <StyledThemeProvider theme={Theme}>
+            {this.props.children}
+          </StyledThemeProvider>
         </MuiThemeProvider>
       );
     }
     if (this.props.render) {
       return (
         <MuiThemeProvider theme={Theme}>
-          <StyledThemeProvider theme={Theme}>{this.props.render()}</StyledThemeProvider>
+          <StyledThemeProvider theme={Theme}>
+            {this.props.render()}
+          </StyledThemeProvider>
         </MuiThemeProvider>
       );
     }

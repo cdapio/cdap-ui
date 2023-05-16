@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import apStore, {AVAILABLE_PLUGINS_ACTIONS} from '../../../../cdap/services/AvailablePluginsStore';
+
+const aps = require('../../../../cdap/services/AvailablePluginsStore');
+
 
 angular.module(`${PKG.name}.feature.hydrator`)
-  .constant('AVAILABLE_PLUGINS_ACTIONS', AVAILABLE_PLUGINS_ACTIONS)
-  .factory('AvailablePluginsStore', () => apStore);
+  .constant('AVAILABLE_PLUGINS_ACTIONS', aps.AVAILABLE_PLUGINS_ACTIONS)
+  .factory('AvailablePluginsStore', () => aps.apStore);

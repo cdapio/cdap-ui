@@ -16,6 +16,8 @@
 
 class HydratorPlusPlusLeftPanelCtrl {
   constructor($rootScope, HydratorPlusPlusLeftPanelStore, $scope, $stateParams, rVersion, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, rArtifacts, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS) {
+    console.log('FUCK FUCK LEFT PANEL CONTROL')
+    debugger;
     this.$state = $state;
     this.$scope = $scope;
     this.$stateParams = $stateParams;
@@ -139,6 +141,8 @@ class HydratorPlusPlusLeftPanelCtrl {
   }
 
   init() {
+    console.log('INIT LEFT PANEL');
+    debugger;
     this.PipelineAvailablePluginsActions.fetchPlugins(
       {
         namespace: this.$stateParams.namespace,

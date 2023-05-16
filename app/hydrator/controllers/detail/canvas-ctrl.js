@@ -44,6 +44,7 @@ angular.module(PKG.name + '.feature.hydrator')
         this.pageLevelError = null;
       }
       else {
+        console.log('\n\n\n\n\n PAGE LEVEL ERROR IN CANVAS CTRL', error)
         this.pageLevelError = myHelpers.handlePageLevelError(error);
       }
     });

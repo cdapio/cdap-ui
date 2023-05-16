@@ -95,7 +95,7 @@ const styles = (theme): StyleRules => {
     },
     title: {
       fontSize: '15px',
-      paddingLeft: `${theme.Spacing(3)}px`,
+      paddingLeft: `${theme.spacing(3)}px`,
       gridColumnStart: '1',
       width: '100px',
       overflow: 'hidden',

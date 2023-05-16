@@ -33,7 +33,6 @@ angular.module(PKG.name+'.services')
   this.prefix = '/_sock';
 
   this.$get = function (MYSOCKET_EVENT, SockJS, $log, EventPipe) {
-
     var self = this,
         socket = null,
         buffer = [],
@@ -43,7 +42,7 @@ angular.module(PKG.name+'.services')
       $log.log('[mySocket] init');
 
       attempt = attempt || 1;
-      socket = new SockJS(self.prefix);
+      socket = SockJS;
 
       socket.onmessage = function (event) {
         try {

@@ -15,7 +15,6 @@
  */
 
 class HydratorPlusPlusStudioCtrl {
-  // Holy cow. Much DI. Such angular.
   constructor(HydratorPlusPlusConfigActions, $stateParams, rConfig, $rootScope, $scope, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, HydratorPlusPlusConsoleActions, rSelectedArtifact, rArtifacts, myLocalStorage, HydratorPlusPlusConfigStore, $window, HydratorPlusPlusConsoleTabService, HydratorUpgradeService) {
     'ngInject';
     // This is required because before we fireup the actions related to the store, the store has to be initialized to register for any events.
@@ -81,7 +80,6 @@ class HydratorPlusPlusStudioCtrl {
         HydratorUpgradeService.openUpgradeModal(rConfig.config, false);
       }
     }
-
     if ($stateParams.resourceCenterId) {
       let jsonData = $window.localStorage.getItem($stateParams.resourceCenterId);
       if (!jsonData) {

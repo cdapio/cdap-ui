@@ -62,11 +62,11 @@ const styles = (theme): StyleRules => {
       display: 'grid',
       width: '100%',
       gridTemplateColumns: 'repeat(7, 1fr)',
-      paddingTop: `${theme.Spacing(2)}px`,
+      paddingTop: `${theme.spacing(2)}px`,
     },
     pageTitle: {
       fontSize: '20px',
-      paddingLeft: `${theme.Spacing(3)}px`,
+      paddingLeft: `${theme.spacing(3)}px`,
       gridColumnStart: '1',
       gridColumnEnd: '2',
       display: 'flex',

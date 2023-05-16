@@ -30,7 +30,7 @@ import transform from 'lodash/transform';
 import isArray from 'lodash/isArray';
 // We don't use webpack alias here because this is used in Footer which is used in login app
 // And for login 'components/Lab/..' aliases to components folder inside login app.
-import experimentsList from '../components/Lab/experiment-list.tsx';
+import experimentsList from '../components/Lab/experiment-list';
 /*
   Purpose: Query a json object or an array of json objects
   Return: Returns undefined if property is not defined(never set) and
@@ -65,7 +65,7 @@ import experimentsList from '../components/Lab/experiment-list.tsx';
     8. query(obj1, 0, 'p5') => null
  */
 
-function objectQuery(obj) {
+const objectQuery = function (obj, ...args: any): (any) {
   if (!isObject(obj)) {
     return null;
   }
@@ -87,9 +87,9 @@ function humanReadableNumber(num, type) {
 
   switch (type) {
     case HUMANREADABLESTORAGE:
-      return convertBytesToHumanReadable(num);
+      return convertBytesToHumanReadable(num, undefined, undefined);
     case HUMANREADABLESTORAGE_NODECIMAL:
-      return convertBytesToHumanReadable(num, HUMANREADABLESTORAGE_NODECIMAL);
+      return convertBytesToHumanReadable(num, HUMANREADABLESTORAGE_NODECIMAL, undefined);
     case HUMANREADABLE_DECIMAL:
       return numeral(num).format('0,0[.]0000');
     default:
@@ -245,7 +245,7 @@ function getArtifactNameAndVersion(nameWithVersion) {
   let regExpRule = new RegExp('\\-(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:[.\\-](.*))?$');
   let version = regExpRule.exec(nameWithVersion);
   if (version && Array.isArray(version)) {
-    version = version[0].slice(1);
+    version = version[0].slice(1) as any;
   } else {
     // when version is the filename i.e 1.2.3.jar or ojdbc8.jar
     let nameIsVersionRegEx = new RegExp('(\\d+)(?:\\.(\\d+))?(?:\\.(\\d+))?(?:[.\\-](.*))?$');
@@ -259,7 +259,7 @@ function getArtifactNameAndVersion(nameWithVersion) {
     : nameWithVersion;
   // if version is not present, default it to 1.0.0
   if (!version) {
-    version = '1.0.0';
+    version = '1.0.0' as any;
   }
   return { version, name };
 }
@@ -294,7 +294,7 @@ const defaultEventObject = {
 
 function preventPropagation(e = defaultEventObject) {
   e.stopPropagation();
-  e.nativeEvent ? e.nativeEvent.stopImmediatePropagation() : e.stopImmediatePropagation();
+  e.nativeEvent ? e.nativeEvent.stopImmediatePropagation() : (e as any).stopImmediatePropagation();
   e.preventDefault();
 }
 
@@ -349,8 +349,8 @@ const isBatchPipeline = (pipelineType) => {
 };
 
 const composeEnhancers = (storeTitle) =>
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  typeof window === 'object' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
         name: storeTitle,
       })
     : compose;
@@ -399,7 +399,7 @@ const convertKeyValuePairsToMap = (keyValuePairs, ignoreNonNilValues = false) =>
 const roundDecimalToNDigits = (num, digits = 2) => {
   let newNum = num;
   if (typeof num !== 'number') {
-    newNum = parseFloat(num, 10);
+    newNum = parseFloat(num);
   }
   if (isNaN(num)) {
     return num;
@@ -518,8 +518,8 @@ function isUnknownDatabaseError(err) {
   return typeof err === 'string' && err.toLowerCase().startsWith('unknown database');
 }
 
-function connectWithStore(store, WrappedComponent, ...args) {
-  const ConnectedWrappedComponent = connect(...args)(WrappedComponent);
+function connectWithStore(store, WrappedComponent, mapStateToProps) {
+  const ConnectedWrappedComponent = connect(mapStateToProps)(WrappedComponent);
   // eslint-disable-next-line react/display-name
   return function(props) {
     return <ConnectedWrappedComponent {...props} store={store} />;

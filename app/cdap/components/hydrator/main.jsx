@@ -33,7 +33,7 @@ export const Hydrator = () => {
 
   // I didn't want to add more to the window but this is the cost
   // of doing business since angular uses global loading all over
-  const useReactStore = false;
+  const useReactStore = true;
   if (useReactStore) {
     store = configureStores;
     window.ReactStores = store;

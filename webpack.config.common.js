@@ -155,10 +155,10 @@ const webpackConfig = {
     'common-lib-new': [
       '@babel/polyfill',
       'classnames',
-      // 'react',
-      // 'react-dom',
-      // 'bootstrap',
-      // 'reactstrap',
+      'react',
+      'react-dom',
+      'bootstrap',
+      'reactstrap',
       'i18n-react',
       'sockjs-client',
       'react-dropzone',
@@ -187,26 +187,36 @@ const webpackConfig = {
     publicPath: '/common_assets/',
     globalObject: 'window',
   },
-  // externals: {
-  //   react: {
-  //     root: 'React',
-  //     commonjs2: 'react',
-  //     commonjs: 'react',
-  //     amd: 'react',
-  //   },
-  //   'react-dom': {
-  //     root: 'ReactDOM',
-  //     commonjs2: 'react-dom',
-  //     commonjs: 'react-dom',
-  //     amd: 'react-dom',
-  //   },
-  //   'react-addons-css-transition-group': {
-  //     commonjs: 'react-addons-css-transition-group',
-  //     commonjs2: 'react-addons-css-transition-group',
-  //     amd: 'react-addons-css-transition-group',
-  //     root: ['React', 'addons', 'CSSTransitionGroup'],
-  //   },
-  // },
+  externals: {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react',
+    },
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs2: 'react-dom',
+      commonjs: 'react-dom',
+      amd: 'react-dom',
+    },
+    'react-addons-css-transition-group': {
+      commonjs: 'react-addons-css-transition-group',
+      commonjs2: 'react-addons-css-transition-group',
+      amd: 'react-addons-css-transition-group',
+      root: ['React', 'addons', 'CSSTransitionGroup'],
+    },
+    // reactstrap: {
+    //   root: ['reactstrap', 'React'],
+    //   commonjs2: 'react',
+    //   commonjs: 'react',
+    //   amd: 'react',
+    // },
+    'react-transition-group': 'react-transition-group',
+    'react-popper': 'react-popper',
+    'react-redux': 'react-redux',
+    'react-dropzone': 'react-dropzone',
+  },
   resolve: {
     extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {

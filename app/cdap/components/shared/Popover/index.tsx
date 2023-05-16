@@ -112,7 +112,9 @@ export const Popover = ({
   const hidePopoverEventHandler = (popoverId) => {
     if (
       id !== popoverId &&
-      !document.getElementById(id).contains(document.getElementById(popoverId)) &&
+      !document
+        .getElementById(id)
+        .contains(document.getElementById(popoverId)) &&
       show
     ) {
       setShowPopover(false);
@@ -207,6 +209,7 @@ export const Popover = ({
       ...convertModifiers(modifiers),
     ],
   });
+  const PopoverTargetElement = PopoverTarget;
 
   return (
     // <Manager>
@@ -218,7 +221,7 @@ export const Popover = ({
         ref={setReferenceElement}
       >
         {/* {React.cloneElement(PopoverTarget(), { */}
-        <PopoverTarget {...PopoverTarget.arguments} className={classnames({ active: show })} />
+        <PopoverTargetElement className={classnames({ active: show })} />
         {/* })} */}
       </span>
 

@@ -16,6 +16,7 @@
 
 class HydratorPlusPlusCreateCanvasCtrl {
   constructor(DAGPlusPlusNodesStore, HydratorPlusPlusConfigStore, HydratorPlusPlusHydratorService, $uibModal, GLOBALS, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusPreviewStore, $scope) {
+    console.log('does it get here? hydrator plus plus')
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.HydratorPlusPlusConfigStore = HydratorPlusPlusConfigStore;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
