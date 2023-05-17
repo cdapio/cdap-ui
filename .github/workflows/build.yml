@@ -20,6 +20,12 @@ on:
       - Trigger build
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name on which workflow will be triggered"
+        required: true
+        default: "develop"
 
 jobs:
   build:
