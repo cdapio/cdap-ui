@@ -53,10 +53,6 @@ const mapDispatchToProps = (dispatch) => {
   );
   return {
     onVirtualCoresChange: (e) => {
-      dispatch({
-        type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
-        payload: { virtualCores: e.target.value },
-      });
       if (lifecycleManagementEditEnabled) {
         const { runtimeArgs } = PipelineConfigurationsStore.getState();
         const newRunTimePairs = getUpdatedRuntimeArgsPair(
@@ -68,13 +64,15 @@ const mapDispatchToProps = (dispatch) => {
           type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
           payload: { runtimeArgs: { pairs: newRunTimePairs } },
         });
+      } else {
+        // modify the default state if LCM is not enabled
+        dispatch({
+          type: PipelineConfigurationsActions.SET_MEMORY_VIRTUAL_CORES,
+          payload: { virtualCores: e.target.value },
+        });
       }
     },
     onMemoryMBChange: (e) => {
-      dispatch({
-        type: PipelineConfigurationsActions.SET_MEMORY_MB,
-        payload: { memoryMB: e.target.value },
-      });
       if (lifecycleManagementEditEnabled) {
         const { runtimeArgs } = PipelineConfigurationsStore.getState();
         const newRunTimePairs = getUpdatedRuntimeArgsPair(
@@ -85,6 +83,12 @@ const mapDispatchToProps = (dispatch) => {
         dispatch({
           type: PipelineConfigurationsActions.SET_RUNTIME_ARGS,
           payload: { runtimeArgs: { pairs: newRunTimePairs } },
+        });
+      } else {
+        // modify the default state if LCM is not enabled
+        dispatch({
+          type: PipelineConfigurationsActions.SET_MEMORY_MB,
+          payload: { memoryMB: e.target.value },
         });
       }
     },
