@@ -36,25 +36,26 @@ jobs:
 
     steps:
     # Pinned 1.0.0 version
-    - uses: haya14busa/action-workflow_run-status@967ed83efa565c257675ed70cfe5231f062ddd94
-    - uses: actions/checkout@v2.3.4
+    - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
+      if: github.event_name != 'workflow_dispatch'
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.workflow_run.head_sha }}
         submodules: recursive
 
     # installing node 16.16
     - name: Use Node.js 16.16
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3.6.0
       with:
         node-version: 16.16
 
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3.3.0
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
     - name: Checkout cdap repo
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v3
       with:
         repository: cdapio/cdap
         path: cdap
@@ -91,7 +92,7 @@ jobs:
         mvn clean verify -P e2e-tests -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
     - name: Archive build artifacts
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@v3.1.2
       if: always()
       with:
         name: Build debug files
