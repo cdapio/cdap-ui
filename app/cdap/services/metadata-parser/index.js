@@ -108,6 +108,7 @@ function createApplicationObj(entityObj) {
     icon = EntityIconMap[GLOBALS.etlDataStreams];
   }
 
+  const metaDataProperties = entityObj.metadata.properties
   return {
     id: entityObj.entity.details.application,
     type: entityObj.entity.type.toLowerCase(),
@@ -117,11 +118,8 @@ function createApplicationObj(entityObj) {
     icon,
     isHydrator: entityIsPipeline(entityObj),
     appVersion:
-      entityObj.metadata.properties &&
-      Array.isArray(entityObj.metadata.properties)
-        ? entityObj.metadata.properties.find(
-            (property) => property.name == "version"
-          ).value
+      metaDataProperties && Array.isArray(metaDataProperties)
+        ? metaDataProperties.find((property) => property.name === 'version').value
         : null,
   };
 }
