@@ -133,7 +133,9 @@ function bulkSetArgMapping(argsArray) {
 }
 
 /**
- * Method to get the information of member trigger of an AND or OR pipeline trigger group.
+ * Method to get the trigger property information of member trigger of an AND or OR pipeline trigger group.
+ * For pre 6.8 triggers, we skip checking 'pipeline' info
+ *
  * @param args - triggering pipeline argument/plugin mapping.
  * @param triggeringPipelineInfo - the triggering pipeline ID info.
  * @returns all the args that belong to the triggering pipeline.
@@ -141,9 +143,10 @@ function bulkSetArgMapping(argsArray) {
 function filterPropertyMapping(args, triggeringPipelineInfo) {
   return args.filter(
     (arg) =>
-      arg.pipeline &&
-      arg.pipeline.namespace === triggeringPipelineInfo.namespace &&
-      arg.pipeline.name === triggeringPipelineInfo.id
+      !arg.pipeline ||
+      (arg.pipeline &&
+        arg.pipeline.namespace === triggeringPipelineInfo.namespace &&
+        arg.pipeline.name === triggeringPipelineInfo.id)
   );
 }
 
