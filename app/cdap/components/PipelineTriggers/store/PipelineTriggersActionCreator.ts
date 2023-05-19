@@ -614,18 +614,26 @@ function _filterPipelineList(
  * @param existingSchedules - the existing enabled trigger schedules.
  */
 function _transformSchedule(existingSchedules: ISchedule[]) {
+  // Only get the PROGRAM_STATUS, AND, OR types schedules
+  const filteredTriggerSchedules = existingSchedules.filter(
+    (schedule) =>
+      schedule.trigger.type === PipelineTriggersTypes.programStatus ||
+      schedule.trigger.type === PipelineTriggersTypes.andType ||
+      schedule.trigger.type === PipelineTriggersTypes.orType
+  );
+
   const pipelineCompositeTriggersEnabled = PipelineTriggersStore.getState().triggers
     .pipelineCompositeTriggersEnabled;
 
   if (!pipelineCompositeTriggersEnabled) {
-    return existingSchedules;
+    return filteredTriggerSchedules;
   }
 
-  const enabledGroupSchedule = existingSchedules.filter(
+  const enabledCompositeTriggers = filteredTriggerSchedules.filter(
     (schedule) => schedule.trigger.type !== PipelineTriggersTypes.programStatus
   );
 
-  const transformedSchedules = existingSchedules
+  const transformedSchedules = filteredTriggerSchedules
     .filter((schedule) => schedule.trigger.type === PipelineTriggersTypes.programStatus)
     .map((schedule) => {
       const transformedSchedule = {
@@ -640,5 +648,5 @@ function _transformSchedule(existingSchedules: ISchedule[]) {
       return transformedSchedule;
     });
 
-  return [...transformedSchedules, ...enabledGroupSchedule];
+  return [...transformedSchedules, ...enabledCompositeTriggers];
 }
