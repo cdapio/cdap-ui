@@ -112,9 +112,17 @@ function createApplicationObj(entityObj) {
     id: entityObj.entity.details.application,
     type: entityObj.entity.type.toLowerCase(),
     metadata: entityObj,
+    // this is artifact version, not app version
     version,
     icon,
     isHydrator: entityIsPipeline(entityObj),
+    appVersion:
+      entityObj.metadata.properties &&
+      Array.isArray(entityObj.metadata.properties)
+        ? entityObj.metadata.properties.find(
+            (property) => property.name == "version"
+          ).value
+        : null,
   };
 }
 
