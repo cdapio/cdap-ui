@@ -108,13 +108,19 @@ function createApplicationObj(entityObj) {
     icon = EntityIconMap[GLOBALS.etlDataStreams];
   }
 
+  const metaDataProperties = entityObj.metadata.properties
   return {
     id: entityObj.entity.details.application,
     type: entityObj.entity.type.toLowerCase(),
     metadata: entityObj,
+    // this is artifact version, not app version
     version,
     icon,
     isHydrator: entityIsPipeline(entityObj),
+    appVersion:
+      metaDataProperties && Array.isArray(metaDataProperties)
+        ? metaDataProperties.find((property) => property.name === 'version').value
+        : null,
   };
 }
 

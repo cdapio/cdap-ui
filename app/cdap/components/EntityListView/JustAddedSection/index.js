@@ -163,6 +163,7 @@ export default class JustAddedSection extends Component {
       .map((app) => {
         return {
           appId: app.id,
+          version: app.appVersion,
         };
       });
 
