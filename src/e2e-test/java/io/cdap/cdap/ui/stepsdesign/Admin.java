@@ -25,7 +25,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
-
 public class Admin {
 
   @Then("Click on \"System Preferences\" accordion")
