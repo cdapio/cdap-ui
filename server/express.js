@@ -18,6 +18,7 @@
 import { ping } from 'server/config/router-check';
 import { extractUISettings } from 'server/config/parser';
 import q from 'q';
+import crypto from 'crypto';
 import {
   constructUrl,
   isVerifiedMarketHost,
@@ -85,7 +86,7 @@ export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
 
 function makeApp(authAddress, cdapConfig, uiSettings) {
   var app = express();
-  const serverNonce = Math.random().toFixed(16).split('.')[1];
+  const serverNonce = crypto.randomUUID();
   const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
   const cookieSettings = { secure: isSecure, httpOnly: true, sameSite: 'strict' };
 
