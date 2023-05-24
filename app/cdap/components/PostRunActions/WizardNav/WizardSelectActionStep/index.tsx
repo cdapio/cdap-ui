@@ -24,7 +24,6 @@ export interface IWizardSelectActionStepProps {
 }
 
 const ActionButton = styled.button`
-  flex-grow: 1;
   box-shadow: 1px 4px 7px -5px rgb(0 0 0 / 65%);
   border: 1px solid #ddd;
   margin: 10px;
@@ -32,7 +31,7 @@ const ActionButton = styled.button`
 
 const ActionsList = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-flow: wrap;
   margin: 10px 0;
 `;
