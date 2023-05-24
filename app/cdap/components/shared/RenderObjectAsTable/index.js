@@ -26,7 +26,7 @@ const RenderObjectAsTable = ({ obj }) => {
           return (
             <tr key={i}>
               <td>{node}</td>
-              <td>{obj[node]}</td>
+              <td data-testid={node}>{obj[node]}</td>
             </tr>
           );
         })}
