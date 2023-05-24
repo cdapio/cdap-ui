@@ -17,6 +17,9 @@
 @Integration_Tests
 Feature: Pipeline Triggers
 
+  Background:
+    Given No pipelines are deployed
+
   @PIPELINE_TRIGGERS_TEST
   Scenario: Deploy two pipelines and enable trigger for pipeline2 when pipeline1 succeeds with a simple trigger and disabling it
     When Deploy pipeline "trigger_test_pipeline_1" with pipeline JSON file "pipeline_with_macros.json"

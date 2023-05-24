@@ -223,19 +223,33 @@ public class Helper implements CdfHelper {
     String filePath = pipelineJSONFile.getAbsolutePath();
     uploadFile.sendKeys(filePath);
 
-    SeleniumDriver.getWaitDriver().until(ExpectedConditions.stalenessOf(element));
+    try {
+      SeleniumDriver.getWaitDriver().until(ExpectedConditions.stalenessOf(element));
+    } catch (Exception e) {
+      // pass
+    }
   }
 
   public static void deployAndTestPipeline(String filename, String pipelineName) {
     SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "pipelines");
     WaitHelper.waitForPageToLoad();
-    ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
-    ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
+
+    WebElement resourceCenterButton = locateElementById("resource-center-btn");
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(resourceCenterButton));
+    ElementHelper.clickOnElement(resourceCenterButton);
+
+    WebElement createPipelineLink = locateElementById("create-pipeline-link");
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(createPipelineLink));
+    ElementHelper.clickOnElement(createPipelineLink);
     Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("studio"));
 
     WaitHelper.waitForPageToLoad();
     Helper.uploadPipelineFromFile(filename);
 
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(By.cssSelector(getCssSelectorByDataTestId("pipeline-metadata"))));
     Commands.fillInPipelineName(pipelineName);
     Commands.dismissTopBanner();
 
@@ -488,7 +502,7 @@ public class Helper implements CdfHelper {
     if (Strings.isNullOrEmpty(branch)) {
       throw new IllegalArgumentException("SCM testing default branch is not specified");
     }
-    
+
     Path tempDir = Files.createTempDirectory("e2e-clone-repo");
     CredentialsProvider creds = getCredentialsProvider();
     try (Git git = cloneRemote(tempDir, creds)) {
@@ -522,7 +536,7 @@ public class Helper implements CdfHelper {
     if (Strings.isNullOrEmpty(token)) {
       throw new IllegalArgumentException("SCM testing token is not specified");
     }
-    
+
     return new UsernamePasswordCredentialsProvider("oauth2", token);
   }
 
@@ -531,7 +545,7 @@ public class Helper implements CdfHelper {
     if (Strings.isNullOrEmpty(url)) {
       throw new IllegalArgumentException("SCM testing repo url is not specified");
     }
-    
+
     return Git.cloneRepository()
         .setURI(url)
         .setDirectory(dir.toFile())

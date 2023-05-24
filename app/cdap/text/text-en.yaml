@@ -2480,8 +2480,10 @@ features:
       currentIndex: '({currentRunIndex} of {numRuns})'
       currentRunIndex: 'Run {currentRunIndex} of {numRuns}'
       errors: Errors
+      goToLatestRun: Go to latest run
       logs: Logs
       noRuns: No Runs
+      noRunsDesc: The version you are currently viewing has no runs, click below link to navigate to the version that has the latest run.
       noRuntimeArgsForRun: No runtime arguments available for this run.
       pipelineNeverRun: 'This pipeline has never been run.'
       RunComputeProfile:

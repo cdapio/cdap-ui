@@ -66,6 +66,7 @@ export default class HomeListView extends Component {
       .map((app) => {
         return {
           appId: app.id,
+          version: app.appVersion,
         };
       });
 
