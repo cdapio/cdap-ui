@@ -1,4 +1,4 @@
-# Copyright © 2022 Cask Data, Inc.
+# Copyright © 2023 Cask Data, Inc.
 #  Licensed under the Apache License, Version 2.0 (the "License"); you may not
 #  use this file except in compliance with the License. You may obtain a copy of
 #  the License at
@@ -12,28 +12,47 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Build with Unit and Integration Tests
+name: Scheduled Unit and Integration Tests
 
 on:
-  workflow_run:
-    workflows:
-      - Trigger build
-    types:
-      - completed
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name on which workflow will be triggered"
+        required: true
+        default: "develop"
 
 jobs:
-  build:
-    runs-on: k8s-runner-e2e
+  set-branch-matrix:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configuration for workflow dispatch event
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        echo 'CHECKOUT_REF={"include":[{"ref":"${{ github.event.inputs.branch }}"}]}' >> $GITHUB_ENV 
 
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    - name: Configuration for schedule event
+      if: github.event_name == 'schedule'
+      run: |
+        echo "CHECKOUT_REF={"include":[{"ref":"develop"}, {"ref":"release/6.8"}, {"ref":"release/6.9"}]}" >> $GITHUB_ENV 
+    outputs:
+      matrix: ${{ env.CHECKOUT_REF }}
+
+  build:
+    needs: set-branch-matrix
+    runs-on: k8s-runner-e2e
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.set-branch-matrix.outputs.matrix) }}
 
     steps:
     # Pinned 1.0.0 version
-    - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
-      if: github.event_name != 'workflow_dispatch'
+
     - uses: actions/checkout@v3
       with:
-        ref: ${{ github.event.workflow_run.head_sha }}
+        ref: ${{ matrix.ref }}
         submodules: recursive
 
     # installing node 16.16
