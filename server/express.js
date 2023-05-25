@@ -18,6 +18,7 @@
 import { ping } from 'server/config/router-check';
 import { extractUISettings } from 'server/config/parser';
 import q from 'q';
+import crypto from 'crypto';
 import {
   constructUrl,
   isVerifiedMarketHost,
@@ -85,6 +86,7 @@ export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
 
 function makeApp(authAddress, cdapConfig, uiSettings) {
   var app = express();
+  const serverNonce = crypto.randomUUID();
   const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
   const cookieSettings = { secure: isSecure, httpOnly: true, sameSite: 'strict' };
 
@@ -157,14 +159,23 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       helmet({
         contentSecurityPolicy: {
           directives: {
-            imgSrc: [`'self' data: ${cspWhiteListUrls}`],
+            imgSrc: [`'self' data: ${cspWhiteListUrls}`, 'www.googletagmanager.com', 'https://www.gstatic.com', 'https://ssl.gstatic.com', 'https://www.google-analytics.com'],
+            connectSrc: [`'self'`, 'https://www.google-analytics.com', 'https://ampcid.google.com'],
+            fontSrc: [`'self'`, `'unsafe-inline'`, 'https://fonts.gstatic.com', 'data:'],
             scriptSrc: [
               (req, res) => `'nonce-${res.locals.nonce}'`,
               `'unsafe-inline'`,
+              `nonce-${serverNonce}`,
               `'unsafe-eval'`,
               `'strict-dynamic' https: http:`,
+              'https://tagmanager.google.com',
+              'https://www.googletagmanager.com',
+              'https://ssl.google-analytics.com',
+              'https://www.google-analytics.com'
             ],
             baseUri: [`'self'`],
+            styleSrc: [`'self'`, `'unsafe-inline'`,
+            'https://tagmanager.google.com', 'https://fonts.googleapis.com'],
             objectSrc: [`'none'`],
             workerSrc: [`'self' blob:`],
             reportUri: `https://csp.withgoogle.com/csp/cdap`,
@@ -192,11 +203,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   app.get('/analytics.js', (req, res) => {
     /**
-     * Add Google analytics tag if ui.analyticsTag is present in the config
+     * Add Google analytics tag manager if ui.GTM is present in the config
      */
-    const aTag = cdapConfig['ui.analyticsTag'];
     const GTM = cdapConfig['ui.GTM'];
-    // favor gtm over regular analytics
     if (GTM) {
       res.header({
         'Content-Type': 'text/javascript',
@@ -204,33 +213,11 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       });
       res.send(`
         let gaHeaderScript = document.createElement('script');
+        gaHeaderScript.setAttribute('nonce', '${serverNonce}');
         gaHeaderScript.setAttribute('type', 'text/javascript');
-        gaHeaderScript.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM}');"
+        gaHeaderScript.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;var n=d.querySelector('[nonce]');n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM}');"
         document.head.appendChild(gaHeaderScript);
-
-        let gaScript1 = document.createElement('script');
-        gaScript1.setAttribute('async', 'true');
-        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
-        document.body.appendChild(gaScript1);
       `);
-    } else if (aTag) {
-      res.header({
-        'Content-Type': 'text/javascript',
-        'Cache-Control': 'no-store, must-revalidate',
-      });
-      res.send(
-        `
-        let gaScript1 = document.createElement('script');
-        gaScript1.setAttribute('async', 'true');
-        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
-        document.body.appendChild(gaScript1);
-
-        let gaScript2 = document.createElement('script');
-        gaScript2.setAttribute('type', 'text/javascript');
-        gaScript2.innerHTML = "window.dataLayer = window.dataLayer || [];function gtag(){window.dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${aTag}');"
-        document.body.appendChild(gaScript2);
-        `
-      );
     } else {
       res.sendStatus(404);
     }
