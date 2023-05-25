@@ -15,8 +15,6 @@
 name: Build with Unit and Integration Tests
 
 on:
-  schedule:
-    - cron: '0 8 * * *'
   workflow_run:
     workflows:
       - Trigger build
@@ -30,44 +28,19 @@ on:
         default: "develop"
 
 jobs:
-  set-branch-matrix:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Configuration for workflow run event
-      if: github.event_name == 'workflow_run'
-      run: |
-        echo 'CHECKOUT_REF={"include":[{"ref":"${{ github.event.workflow_run.head_sha }}"}]}' >> $GITHUB_ENV 
-    
-    - name: Configuration for workflow dispatch event
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        echo 'CHECKOUT_REF={"include":[{"ref":"${{ github.event.inputs.branch }}"}]}' >> $GITHUB_ENV 
-
-    - name: Configuration for schedule event
-      if: github.event_name == 'schedule'
-      run: |
-        echo "CHECKOUT_REF={"include":[{"ref":"develop"}, {"ref":"release/6.8"}, {"ref":"release/6.9"}]}" >> $GITHUB_ENV 
-    outputs:
-      matrix: ${{ env.CHECKOUT_REF }}
-
   build:
-    needs: set-branch-matrix
+
     runs-on: k8s-runner-e2e
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.set-branch-matrix.outputs.matrix) }}
 
     if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
 
     steps:
     # Pinned 1.0.0 version
-
     - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
-      if: github.event_name == 'workflow_run'
-
+      if: github.event_name != 'workflow_dispatch'
     - uses: actions/checkout@v3
       with:
-        ref: ${{ matrix.ref }}
+        ref: ${{ github.event.workflow_run.head_sha }}
         submodules: recursive
 
     # installing node 16.16
