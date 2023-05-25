@@ -214,6 +214,8 @@ public class Helper implements CdfHelper {
   }
 
   public static void uploadPipelineFromFile(String filename) {
+    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
+    WebElement element = locateElementByLocator(By.xpath(pipelineNameXPathSelector));
     WebElement uploadFile = SeleniumDriver.getDriver()
       .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
 
@@ -221,10 +223,8 @@ public class Helper implements CdfHelper {
     String filePath = pipelineJSONFile.getAbsolutePath();
     uploadFile.sendKeys(filePath);
 
-    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     try {
-      SeleniumDriver.getWaitDriver().until(ExpectedConditions
-          .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
+      SeleniumDriver.getWaitDriver().until(ExpectedConditions.stalenessOf(element));
     } catch (Exception e) {
       // pass
     }
@@ -255,6 +255,8 @@ public class Helper implements CdfHelper {
 
     ElementHelper.clickOnElement(locateElementByCssSelector(
       getCssSelectorByDataTestId("deploy-pipeline-btn")));
+
+    WaitHelper.waitForPageToLoad();
 
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(
