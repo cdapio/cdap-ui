@@ -79,6 +79,13 @@ export const findNodeWithNodeId = (nodes: Node[], nodeId: string) => {
   return nodes.find((node) => node.id === nodeId);
 };
 
+export const checkIfNodeMoved = (node: Node) => {
+  return (
+    node.position.x !== parseInt(node.data.node._uiPosition.left, 10) ||
+    node.position.y !== parseInt(node.data.node._uiPosition.top, 10)
+  );
+};
+
 export async function getCopiedElementsFromClipBoard(): Promise<ISelectedElements | undefined> {
   let clipText;
   try {

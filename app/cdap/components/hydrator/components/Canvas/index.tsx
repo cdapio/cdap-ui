@@ -30,6 +30,7 @@ import ReactFlow, {
   useKeyPress,
   MarkerType,
   ConnectionLineType,
+  Node,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import uuidV4 from 'uuid/v4';
@@ -39,6 +40,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
 import PipelineContextMenu from 'components/PipelineContextMenu';
 import {
+  checkIfNodeMoved,
   connectionIsValid,
   findNodeWithNodeId,
   getCopiedElementsFromClipBoard,
@@ -60,7 +62,7 @@ interface ICanvasProps {
   isDisabled: boolean;
   previewMode: boolean;
   updateNodes: (nodes: any[]) => void;
-  updateConnections: (connections: any[]) => void;
+  updateConnections: (connections: any[], addStateToHistory?: boolean) => void;
   onPropertiesClick: (node: any) => void;
   onMetricsClick: (event: any, node: any, portName?: any) => void;
   getAngularConnections: () => any;
@@ -86,7 +88,7 @@ interface ICanvasProps {
   metricsDisabled: boolean;
   redoStates: any[];
   undoStates: any[];
-  updateNodePositions: (nodePositions: INodePosition[]) => void;
+  updateNodePositions: (nodePosition: INodePosition) => void;
 }
 
 const nodeTypes = { plugin: PluginNode, pluginWithAlertAndError: PluginNodeWithAlertAndError };
@@ -264,7 +266,7 @@ const Canvas = ({
         !selectedNodesId.includes(conn.to) &&
         !selectedEdgesId.find((edge) => edge.includes(conn.from) && edge.includes(conn.to))
     );
-    updateConnections(newConnections);
+    updateConnections(newConnections, false);
     setSelectedElements({
       nodes: [],
       edges: [],
@@ -314,6 +316,10 @@ const Canvas = ({
         newNode.data.node.id = newName;
         newNode.position.x += 30;
         newNode.position.y += 30;
+        newNode.data.node._uiPosition = {
+          top: newNode.position.y + 'px',
+          left: newNode.position.x + 'px',
+        };
         newNode.selected = true;
         return newNode;
       });
@@ -370,6 +376,18 @@ const Canvas = ({
     setTimeout(() => {
       reactFlowInstance.fitView();
     }, 200);
+  };
+
+  const updateNodesUIPosition = (node: Node) => {
+    updateNodePositions({
+      id: node.data.node.id,
+      position: {
+        _uiPosition: {
+          top: node.position.y + 'px',
+          left: node.position.x + 'px',
+        },
+      },
+    });
   };
 
   // delete selection box
@@ -502,34 +520,19 @@ const Canvas = ({
         nodesDraggable={!isDisabled}
         nodesConnectable={!isDisabled}
         onSelectionChange={onSelectionChange}
-        onlyRenderVisibleElements={true}
-        onNodeDragStop={(e, node: any) => {
-          updateNodePositions([
-            {
-              id: node.data.node.id,
-              position: {
-                _uiPosition: {
-                  top: node.position.y + 'px',
-                  left: node.position.x + 'px',
-                },
-              },
-            },
-          ]);
+        onNodeDragStop={(e, node: Node, nodes: Node[]) => {
+          nodes.forEach((node) => {
+            if (checkIfNodeMoved(node)) {
+              updateNodesUIPosition(node);
+            }
+          });
         }}
         onSelectionDragStop={(e, nodes) => {
-          updateNodePositions(
-            nodes.map((node) => {
-              return {
-                id: node.data.node.id,
-                position: {
-                  _uiPosition: {
-                    top: node.position.y + 'px',
-                    left: node.position.x + 'px',
-                  },
-                },
-              };
-            })
-          );
+          nodes.forEach((node) => {
+            if (checkIfNodeMoved(node)) {
+              updateNodesUIPosition(node);
+            }
+          });
         }}
       >
         <Background />
@@ -538,12 +541,18 @@ const Canvas = ({
             nodeColor={(n) => {
               return getPluginColor(n.data.node.type);
             }}
+            pannable
           />
         )}
         <Controls position="top-right" style={{ marginTop: '100px' }} showInteractive={!isDisabled}>
           {!isDisabled && (
             <>
-              <ControlButton title="Align" onClick={alignGraph}>
+              <ControlButton
+                title="Align"
+                onClick={alignGraph}
+                data-cy="pipeline-clean-up-graph-control"
+                data-testid="pipeline-clean-up-graph-control"
+              >
                 <IconSVG name="icon-clean" />
               </ControlButton>
               <ControlButton

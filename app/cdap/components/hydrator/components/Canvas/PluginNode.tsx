@@ -342,7 +342,11 @@ export const PluginNode = ({
               <IconDiv className={classnames('node-icon fa', node.icon)}></IconDiv>
             )}
             <div>
-              <label htmlFor="text" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
+              <label
+                htmlFor="text"
+                style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
+                data-testid={`plugin-node-name-${node.plugin.name}-${node.type}-${idx}`}
+              >
                 {node.plugin.label}
               </label>
               {isEntered ? (

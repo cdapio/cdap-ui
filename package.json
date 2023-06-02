@@ -241,7 +241,7 @@
     "react-timeago": "4.4.0",
     "react-transition-group": "4.3.0",
     "react-vis": "1.11.7",
-    "reactflow": "^11.1.1",
+    "reactflow": "11.7.0",
     "reactstrap": "8.4.0",
     "redux": "4.0.5",
     "redux-thunk": "2.3.0",

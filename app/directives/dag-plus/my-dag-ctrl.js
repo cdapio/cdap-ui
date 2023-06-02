@@ -1361,15 +1361,20 @@ angular.module(PKG.name + '.commons')
       HydratorPlusPlusConfigStore.setNodes(nodes);
     };
   
-    vm.updateNodesStoreConnections = (connections) => {
-      DAGPlusPlusNodesStore.updateConnections(connections);
+    vm.updateNodesStoreConnections = (connections, addStateToHistory = true) => {
+      // below condition is for deleting multiple selections using reactflow
+      // updateConnections() will add a past history, we do not want to do that
+      // since setNodes() has already added a past history
+      if (addStateToHistory) {
+        DAGPlusPlusNodesStore.updateConnections(connections);
+      } else {
+        DAGPlusPlusNodesStore.setConnections(connections)
+      }
       HydratorPlusPlusConfigStore.setConnections(connections);
     };
 
-    vm.updateNodePositions = (nodePositions) => {
-      nodePositions.map(nodePosition => {
-        DAGPlusPlusNodesStore.updateNode(nodePosition.id, nodePosition.position)
-      })
+    vm.updateNodePositions = (nodePosition) => {
+      DAGPlusPlusNodesStore.updateNode(nodePosition.id, nodePosition.position)
     }
 
     vm.onNodeClick = function(node) {

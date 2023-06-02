@@ -57,8 +57,8 @@ public class PipelineCanvasActions {
 
   @Then("Verify there's no pipeline connection")
   public void verifyThereIsNoPipelineConnection() {
-    List<WebElement> elements = Commands.findElementsByCssSelector(".jsplumb-connector");
-    Assert.assertEquals(elements.size(), 0);
+    List<WebElement> elements = Commands.findElementsByCssSelector(".react-flow__edge-path");
+    Assert.assertEquals(0, elements.size());
   }
 
   @Then("Redo one connection")
@@ -68,8 +68,8 @@ public class PipelineCanvasActions {
 
   @Then("Verify there's one connection")
   public void verifyThereIsOneConnection() {
-    List<WebElement> elements = Commands.findElementsByCssSelector(".jsplumb-connector");
-    Assert.assertEquals(elements.size(), 1);
+    List<WebElement> elements = Commands.findElementsByCssSelector(".react-flow__edge-path");
+    Assert.assertEquals(1, elements.size());
   }
 
   @Then("Undo everything")
@@ -99,8 +99,8 @@ public class PipelineCanvasActions {
 
     Assert.assertTrue(exportSelector.isEnabled());
 
-    List<WebElement> elements = Commands.findElementsByCssSelector(".jsplumb-connector");
-    Assert.assertEquals(elements.size(), 2);
+    List<WebElement> elements = Commands.findElementsByCssSelector(".react-flow__edge-path");
+    Assert.assertEquals(2, elements.size());
   }
 
   @Then("Verify sink nodes are visible")
@@ -117,7 +117,7 @@ public class PipelineCanvasActions {
 
   @Then("Move minimap")
   public void moveMinimap() {
-    WebElement minimapViewportBoxSelector = Helper.locateElementByTestId("minimap-viewport-box");
+    WebElement minimapViewportBoxSelector = Helper.locateElementByTestId("rf__minimap");
     ElementHelper.dragAndDropByOffset(minimapViewportBoxSelector, 70, 60);
   }
 
@@ -133,7 +133,7 @@ public class PipelineCanvasActions {
     Assert.assertTrue(Commands.getNode(Commands.complexSourceNode2).isDisplayed());
   }
 
-  @Then("Use shift click to delete two transform nodes")
+  @Then("Use meta click to delete two transform nodes")
   public void useShiftClickToDeleteTwoTransformNodes() {
     WebElement transform1Selector = Helper.locateElementByCssSelector(
       Helper.getNodeNameSelectorFromNodeIdentifier(Commands.complexTransformNode1)
@@ -142,10 +142,10 @@ public class PipelineCanvasActions {
       Helper.getNodeNameSelectorFromNodeIdentifier(Commands.complexTransformNode2)
     );
     Actions actions = new Actions(SeleniumDriver.getDriver());
-    actions.keyDown(Keys.SHIFT)
+    actions.keyDown(Keys.META)
       .click(transform1Selector)
       .click(transform2Selector)
-      .keyUp(Keys.SHIFT)
+      .keyUp(Keys.META)
       .sendKeys(Keys.DELETE)
       .build()
       .perform();
@@ -161,7 +161,6 @@ public class PipelineCanvasActions {
 
   @Then("Undo delete nodes")
   public void undoDeleteNodes() {
-    Commands.clickUndoButton();
     Commands.clickUndoButton();
     
     Assert.assertTrue(Commands.getNode(Commands.complexTransformNode1).isDisplayed());
