@@ -342,13 +342,15 @@ export const PluginNode = ({
               <IconDiv className={classnames('node-icon fa', node.icon)}></IconDiv>
             )}
             <div>
-              <label
-                htmlFor="text"
-                style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}
+              <div
+                className="node-name"
+                title={node.plugin.label}
                 data-testid={`plugin-node-name-${node.plugin.name}-${node.type}-${idx}`}
               >
-                {node.plugin.label}
-              </label>
+                <label htmlFor="text" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                  {node.plugin.label}
+                </label>
+              </div>
               {isEntered ? (
                 <PrimaryOutlinedButton
                   onClick={() => {

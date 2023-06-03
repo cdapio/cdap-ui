@@ -280,7 +280,7 @@ const Canvas = ({
     const newConnections = getAngularConnections().filter(
       (conn) => nodeId !== conn.from && nodeId !== conn.to
     );
-    updateConnections(newConnections);
+    updateConnections(newConnections, false);
   };
 
   const pasteCopiedElements = () => {
@@ -501,6 +501,7 @@ const Canvas = ({
   return (
     <div id="diagram-container" style={{ height: '92vh', marginLeft: '80px' }}>
       <ReactFlow
+        id="dag-container"
         nodes={nodes}
         edges={edges}
         minZoom={-5}
