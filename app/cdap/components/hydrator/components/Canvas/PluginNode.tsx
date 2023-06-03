@@ -357,6 +357,8 @@ export const PluginNode = ({
                     onPropertiesClick(node);
                   }}
                   size="small"
+                  data-cy="node-properties-btn"
+                  data-testid="node-properties-btn"
                 >
                   Properties
                 </PrimaryOutlinedButton>
