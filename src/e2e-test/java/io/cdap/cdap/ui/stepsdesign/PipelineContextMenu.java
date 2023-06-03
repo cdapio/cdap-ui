@@ -51,9 +51,9 @@ public class PipelineContextMenu {
       put("Fit To Screen", "menu-item-fit-to-screen");
       put("Align", "menu-item-align-nodes");
       put("Paste", "menu-item-pipeline-node-paste");
-      put("defaultZoomLevel", "matrix(1, 0, 0, 1, 0, 0)");
-      put("firstZoomLevel", "matrix(1.1, 0, 0, 1.1, 0, 0)");
-      put("secondZoomLevel", "matrix(1.2, 0, 0, 1.2, 0, 0)");
+      put("defaultZoomLevel", "matrix(1, 0, 0, 1,");
+      put("firstZoomLevel", "matrix(1.2, 0, 0, 1.2,");
+      put("secondZoomLevel", "matrix(1.44, 0, 0, 1.44,");
     }
   };
 
@@ -75,14 +75,12 @@ public class PipelineContextMenu {
   public void deleteSourceNodeThroughContextMenu() {
     Helper.rightClickOnElement(Commands.getNode(Commands.simpleSourceNode));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("menu-item-plugin delete"));
-
   }
 
   @Then("Delete transform node through context menu")
   public void deleteTransformNodeThroughContextMenu() {
     Helper.rightClickOnElement(CdfStudioLocators.locatePluginNodeInCanvas("Wrangler"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("menu-item-plugin delete"));
-
   }
 
   @Then("Delete sink node through context menu")
@@ -142,8 +140,9 @@ public class PipelineContextMenu {
 
   @Then("Verify {string} zoom level")
   public void verifyZoomLevel(String zoomLevel) {
-    Assert.assertEquals(canvasContextMenuHelperMap.get(zoomLevel + "ZoomLevel"),
-                        Helper.locateElementByCssSelector("#dag-container").getCssValue("transform"));
+    Assert.assertTrue(Helper.locateElementByCssSelector("div[class='react-flow__viewport react-flow__container']")
+                        .getCssValue("transform").startsWith(
+                          canvasContextMenuHelperMap.get(zoomLevel + "ZoomLevel")));
   }
 
   @Then("Verify complex pipeline nodes are visible")

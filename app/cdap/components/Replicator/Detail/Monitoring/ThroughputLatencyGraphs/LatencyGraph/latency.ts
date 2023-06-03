@@ -77,7 +77,7 @@ export function renderLatencyGraph(
 
   const x = d3
     .scaleBand()
-    .domain(data.map((d) => d.time))
+    .domain(data.map((d: any) => d.time))
     .range([0, width])
     .padding(0.1);
 
@@ -119,7 +119,7 @@ export function renderLatencyGraph(
     .style('fill', COLOR_MAP.tick);
 
   const xAxis = d3
-    .axisBottom(x)
+    .axisBottom<any>(x)
     .tickSizeOuter(0)
     .tickFormat(timeFormatMonthDate);
   const xAxisGroup = chart
@@ -146,16 +146,16 @@ export function renderLatencyGraph(
     .style('fill', COLOR_MAP.tick);
 
   // GRAPH
-  const area = d3
+  const area: any = d3
     .area()
-    .x((d) => x(d.time))
-    .y1((d) => y(d.latency))
+    .x((d: any) => x(d.time))
+    .y1((d: any) => y(d.latency))
     .y0(y(0));
 
-  const line = d3
+  const line: any = d3
     .line()
-    .x((d) => x(d.time))
-    .y((d) => y(d.latency));
+    .x((d: any) => x(d.time))
+    .y((d: any) => y(d.latency));
 
   const areaGroup = chart
     .append('g')
@@ -210,12 +210,12 @@ export function renderLatencyGraph(
     .attr('height', height)
     .attr('width', barWidth)
     .attr('opacity', 0)
-    .attr('x', (d) => x(d.time))
+    .attr('x', (d: any) => x(d.time))
     .on('mouseover', (d) => {
       const tooltipTopOffset = 75;
       const tooltipLeftOffset = 100;
       const top = y(d.latency) - tooltipTopOffset + 'px';
-      let left = x(d.time) + tooltipLeftOffset;
+      let left: any = x(d.time) + tooltipLeftOffset;
       if (left + tooltipWidth >= width) {
         left = left - (left + tooltipWidth - width);
       }

@@ -897,6 +897,15 @@ const PIPELINE_ARTIFACTS = [
   'cdap-data-streams',
 ];
 
+/**
+ * 
+ * @param {number} num 
+ * @returns a comma separated string representation of the number
+ */
+const commaSeparatedNumber = (num) => {
+  return parseInt(num, 10).toLocaleString('en');
+}
+
 export {
   openLinkInNewTab,
   objectQuery,
@@ -959,5 +968,6 @@ export {
   unflatternStringToObj,
   arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
-  BATCH_PIPELINE_TYPE
+  BATCH_PIPELINE_TYPE,
+  commaSeparatedNumber
 };

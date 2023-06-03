@@ -96,8 +96,7 @@ public class Commands implements CdfHelper {
 
   public static void fitPipelineToScreen() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(
-        Helper.getCssSelectorByDataTestId("pipeline-fit-to-screen-control"))
+      Helper.locateElementByCssSelector(".react-flow__controls-fitview")
     );
   }
 
@@ -226,7 +225,7 @@ public class Commands implements CdfHelper {
 
   public static void clickZoomInButton() {
     ElementHelper.clickOnElement(
-      Helper.locateElementByTestId("pipeline-zoom-in-control")
+      Helper.locateElementByCssSelector(".react-flow__controls-zoomin")
     );
   }
 

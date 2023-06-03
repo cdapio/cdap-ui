@@ -180,7 +180,7 @@ export function renderScatterPlot(
   function getTooltipPosition(d) {
     const topOffset = 10;
     const top = y(d.latency) - (margin.top + margin.bottom) - topOffset + 'px';
-    let left = x(d.eventsPerMin) + margin.left;
+    let left: any = x(d.eventsPerMin) + margin.left;
     if (left + tooltipWidth >= width) {
       left = left - (left + tooltipWidth - width);
     }

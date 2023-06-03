@@ -196,6 +196,7 @@ class DAGPlusPlusNodesStore {
   setNodes(nodes) {
     const sanitize =  window.CaskCommon.CDAPHelpers.santizeStringForHTMLID;
     this.adjacencyMap = {};
+    this.addStateToHistory();
     nodes.forEach(node => {
       if (!node.name) {
         node.name = node.label + '-' + this.uuid.v4();

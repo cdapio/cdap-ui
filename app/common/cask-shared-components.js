@@ -149,8 +149,10 @@ var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/L
 var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
 var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
+var CanvasReact = require('../cdap/components/hydrator/components/Canvas').WrapperCanvas;
 
 export {
+  CanvasReact,
   TopPanelReact,
   PipelineCanvasActionBtns,
   LeftPanelReact,
