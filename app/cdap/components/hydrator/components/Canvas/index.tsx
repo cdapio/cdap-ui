@@ -55,43 +55,49 @@ import { IPipelineComment } from 'components/PipelineCanvasActions/PipelineComme
 import IconSVG from 'components/shared/IconSVG';
 import { copyToClipBoard } from 'services/Clipboard';
 import { INodePosition, ISelectedElements } from './types';
+import { PipelineDiffNode } from './PipelineDiffNode';
 
 interface ICanvasProps {
   angularNodes: any;
   angularConnections: any;
-  isDisabled: boolean;
-  previewMode: boolean;
-  updateNodes: (nodes: any[]) => void;
-  updateConnections: (connections: any[], addStateToHistory?: boolean) => void;
-  onPropertiesClick: (node: any) => void;
-  onMetricsClick: (event: any, node: any, portName?: any) => void;
-  getAngularConnections: () => any;
-  getAngularNodes: () => any;
-  setSelectedNodes: (nodes: any[]) => void;
-  setSelectedConnections: (connections: any[]) => void;
-  onKeyboardCopy: () => void;
-  setPluginActiveForComment: (nodeId: string) => void;
-  getActivePluginForComment: () => string;
-  setPluginComments: (nodeId: string, comments: any) => void;
-  getPluginConfiguration: () => any;
-  getCustomIconSrc: (node: any) => string;
-  shouldShowAlertsPort: (node: any) => boolean;
-  shouldShowErrorsPort: (node: any) => boolean;
-  undoActions: () => void;
-  redoActions: () => void;
-  pipelineComments: IPipelineComment[];
-  setPipelineComments: (val: any) => void;
-  onPreviewData: (event: any, node: any) => void;
-  cleanUpGraph: () => void;
-  pipelineArtifactType: 'cdap-data-pipeline' | 'cdap-data-streams';
-  metricsData: any;
-  metricsDisabled: boolean;
-  redoStates: any[];
-  undoStates: any[];
-  updateNodePositions: (nodePosition: INodePosition) => void;
+  isDisabled?: boolean;
+  previewMode?: boolean;
+  updateNodes?: (nodes: any[]) => void;
+  updateConnections?: (connections: any[], addStateToHistory?: boolean) => void;
+  onPropertiesClick?: (node: any) => void;
+  onMetricsClick?: (event: any, node: any, portName?: any) => void;
+  getAngularConnections?: () => any;
+  getAngularNodes?: () => any;
+  setSelectedNodes?: (nodes: any[]) => void;
+  setSelectedConnections?: (connections: any[]) => void;
+  onKeyboardCopy?: () => void;
+  setPluginActiveForComment?: (nodeId: string) => void;
+  getActivePluginForComment?: () => string;
+  setPluginComments?: (nodeId: string, comments: any) => void;
+  getPluginConfiguration?: () => any;
+  getCustomIconSrc?: (node: any) => string;
+  shouldShowAlertsPort?: (node: any) => boolean;
+  shouldShowErrorsPort?: (node: any) => boolean;
+  undoActions?: () => void;
+  redoActions?: () => void;
+  pipelineComments?: IPipelineComment[];
+  setPipelineComments?: (val: any) => void;
+  onPreviewData?: (event: any, node: any) => void;
+  cleanUpGraph?: () => void;
+  pipelineArtifactType?: 'cdap-data-pipeline' | 'cdap-data-streams';
+  metricsData?: any;
+  metricsDisabled?: boolean;
+  redoStates?: any[];
+  undoStates?: any[];
+  updateNodePositions?: (nodePosition: INodePosition) => void;
+  isPipelineDiff?: boolean;
 }
 
-const nodeTypes = { plugin: PluginNode, pluginWithAlertAndError: PluginNodeWithAlertAndError };
+const nodeTypes = {
+  plugin: PluginNode,
+  pluginWithAlertAndError: PluginNodeWithAlertAndError,
+  pluginPipelineDiff: PipelineDiffNode,
+};
 
 // This is to overwrite the styles of pipeline comments button
 const StyledControlButton = styled(ControlButton)`
@@ -154,6 +160,7 @@ const Canvas = ({
   redoStates,
   undoStates,
   updateNodePositions,
+  isPipelineDiff,
 }: ICanvasProps) => {
   const reactFlowInstance = useReactFlow();
   const deletePressed = useKeyPress(['Backspace', 'Delete']);
@@ -165,6 +172,20 @@ const Canvas = ({
   });
 
   const convertAngularNodeToReactNode = (node: any) => {
+    if (isPipelineDiff) {
+      const data = { node };
+      const reactflowNode = {
+        id: node.name,
+        data,
+        type: 'pluginPipelineDiff',
+        position: {
+          x: parseInt(node._uiPosition?.left, 10) || 150,
+          y: parseInt(node._uiPosition?.top, 10) || 150,
+        },
+        selected: false,
+      };
+      return reactflowNode;
+    }
     const data = {
       node,
       onPropertiesClick,
@@ -258,9 +279,9 @@ const Canvas = ({
     const { selectedNodesId, selectedEdgesId } = getSelectedNodesAndConnections();
     setNodes((nds) => nds.filter((node) => !selectedNodesId.includes(node.id)));
     setEdges((eds) => eds.filter((edge) => !selectedEdgesId.includes(edge.id)));
-    const newNodes = getAngularNodes().filter((node) => !selectedNodesId.includes(node.name));
+    const newNodes = angularNodes.filter((node) => !selectedNodesId.includes(node.name));
     updateNodes(newNodes);
-    const newConnections = getAngularConnections().filter(
+    const newConnections = angularConnections.filter(
       (conn) =>
         !selectedNodesId.includes(conn.from) &&
         !selectedNodesId.includes(conn.to) &&
@@ -275,9 +296,9 @@ const Canvas = ({
 
   const deleteSelectedNodeId = (nodeId: string) => {
     setNodes((nds) => nds.filter((node) => node.id !== nodeId));
-    const newNodes = getAngularNodes().filter((node) => node.name !== nodeId);
+    const newNodes = angularNodes.filter((node) => node.name !== nodeId);
     updateNodes(newNodes);
-    const newConnections = getAngularConnections().filter(
+    const newConnections = angularConnections.filter(
       (conn) => nodeId !== conn.from && nodeId !== conn.to
     );
     updateConnections(newConnections, false);
@@ -369,7 +390,7 @@ const Canvas = ({
   const alignGraph = () => {
     cleanUpGraph();
     setNodes((nds) => {
-      return [].concat(getNodesForDisplay(getAngularNodes(), nds, true));
+      return [].concat(getNodesForDisplay(angularNodes, nds, true));
     });
     // setting a timeout for fitview after nodes positions are updated
     // not sure if there's a better way
@@ -416,20 +437,20 @@ const Canvas = ({
 
   useEffect(() => {
     setNodes((nds) => {
-      return [].concat(getNodesForDisplay(getAngularNodes(), nds));
+      return [].concat(getNodesForDisplay(angularNodes, nds));
     });
-  }, [JSON.stringify(getAngularNodes()), previewMode, metricsData]);
+  }, [JSON.stringify(angularNodes), previewMode, metricsData]);
 
   useEffect(() => {
     setEdges(() => {
-      return [].concat(getConnectionsForDisplay(getAngularConnections(), getAngularNodes()));
+      return [].concat(getConnectionsForDisplay(angularConnections, angularNodes));
     });
-  }, [JSON.stringify(getAngularConnections())]);
+  }, [JSON.stringify(angularConnections)]);
 
   const getSelectedConnections = () => {
     const { edges } = selectedElements;
     const selectedEdgesId = new Set(edges.map((edge) => edge.id));
-    const selectedConnections = getAngularConnections().filter((conn) => {
+    const selectedConnections = angularConnections.filter((conn) => {
       return (
         selectedEdgesId.has(`${conn.from}-${conn.to}`) ||
         selectedEdgesId.has(`${conn.to}-${conn.from}`)
@@ -441,14 +462,14 @@ const Canvas = ({
   const getSelectedNodes = () => {
     const { nodes } = selectedElements;
     const selectedNodesId = new Set(nodes.map((node) => node.id));
-    const selectedNodes = getAngularNodes().filter((node) => {
+    const selectedNodes = angularNodes.filter((node) => {
       return selectedNodesId.has(node.name);
     });
     return selectedNodes;
   };
 
   const addConnections = (params) => {
-    const connections = getAngularConnections().concat({
+    const connections = angularConnections.concat({
       id: params.id,
       from: params.source,
       to: params.target,
@@ -518,8 +539,8 @@ const Canvas = ({
         deleteKeyCode={null}
         connectionLineStyle={ConnectionLineStyle}
         connectionLineType={ConnectionLineType.SmoothStep}
-        nodesDraggable={!isDisabled}
-        nodesConnectable={!isDisabled}
+        nodesDraggable={!isDisabled && !isPipelineDiff}
+        nodesConnectable={!isDisabled && !isPipelineDiff}
         onSelectionChange={onSelectionChange}
         onNodeDragStop={(e, node: Node, nodes: Node[]) => {
           nodes.forEach((node) => {
@@ -546,7 +567,7 @@ const Canvas = ({
           />
         )}
         <Controls position="top-right" style={{ marginTop: '100px' }} showInteractive={!isDisabled}>
-          {!isDisabled && (
+          {!isDisabled && !isPipelineDiff && (
             <>
               <ControlButton
                 title="Align"
@@ -576,17 +597,19 @@ const Canvas = ({
               </ControlButton>
             </>
           )}
-          <StyledControlButton title="Pipeline Comments">
-            <PipelineCommentsActionBtn
-              tooltip=""
-              comments={pipelineComments}
-              onChange={setPipelineComments}
-              disabled={isDisabled}
-            />
-          </StyledControlButton>
+          {!isPipelineDiff && (
+            <StyledControlButton title="Pipeline Comments">
+              <PipelineCommentsActionBtn
+                tooltip=""
+                comments={pipelineComments}
+                onChange={setPipelineComments}
+                disabled={isDisabled}
+              />
+            </StyledControlButton>
+          )}
         </Controls>
       </ReactFlow>
-      {!isDisabled && (
+      {!isDisabled && !isPipelineDiff && (
         <PipelineContextMenu
           onWranglerSourceAdd={onWranglerSourceAdd}
           onNodesCopy={copySelectedElements}
@@ -637,6 +660,7 @@ export const WrapperCanvas = ({
   redoStates,
   undoStates,
   updateNodePositions,
+  isPipelineDiff,
 }: ICanvasProps) => {
   return (
     <ReactFlowProvider>
@@ -673,6 +697,7 @@ export const WrapperCanvas = ({
         redoStates={redoStates}
         undoStates={undoStates}
         updateNodePositions={updateNodePositions}
+        isPipelineDiff={isPipelineDiff}
       />
     </ReactFlowProvider>
   );

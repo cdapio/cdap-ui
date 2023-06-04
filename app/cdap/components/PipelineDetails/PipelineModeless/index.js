@@ -39,6 +39,7 @@ export default function PipelineModeless({
   placement = 'bottom',
   popoverClassName = '',
   isDeployed = true,
+  style,
 }) {
   let anchorElCb;
   if (typeof anchorEl === 'string') {
@@ -60,6 +61,7 @@ export default function PipelineModeless({
         popoverClassName
       )}
       open={open}
+      style={style}
       anchorEl={anchorElCb || anchorEl}
       placement={placement}
       modifiers={{
@@ -152,4 +154,5 @@ PipelineModeless.propTypes = {
   placement: PropTypes.string,
   popoverClassName: PropTypes.string,
   isDeployed: PropTypes.bool,
+  style: PropTypes.any,
 };
