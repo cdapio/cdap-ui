@@ -109,6 +109,18 @@ const StyledControlButton = styled(ControlButton)`
   }
 `;
 
+const StyledCanvasContainer = styled.div`
+  ${(props) =>
+    !props.isDisabled && !props.isPipelineDiff
+      ? `
+          height: 92vh;
+          margin-left: 80px;
+        `
+      : `
+          height: 85vh
+        `}
+`;
+
 const getConnectionsForDisplay = (connections, nodes) => {
   return connections.map((conn) => {
     const reactFlowConn: any = {
@@ -415,21 +427,21 @@ const Canvas = ({
   // it requires some adjustments to reuse the onKeyboardDelete function in dag-plus-ctrl
   // writing the logic here to directly delete
   useEffect(() => {
-    if (isDisabled || !deletePressed) {
+    if (isDisabled || !deletePressed || isPipelineDiff) {
       return;
     }
     deleteSelectedElements();
   }, [deletePressed]);
 
   useEffect(() => {
-    if (isDisabled || !copyPressed) {
+    if (isDisabled || !copyPressed || isPipelineDiff) {
       return;
     }
     copySelectedElements();
   }, [copyPressed]);
 
   useEffect(() => {
-    if (isDisabled || !pastePressed) {
+    if (isDisabled || !pastePressed || isPipelineDiff) {
       return;
     }
     pasteCopiedElements();
@@ -520,7 +532,11 @@ const Canvas = ({
   };
 
   return (
-    <div id="diagram-container" style={{ height: '92vh', marginLeft: '80px' }}>
+    <StyledCanvasContainer
+      id="diagram-container"
+      isDisabled={isDisabled}
+      isPipelineDiff={isPipelineDiff}
+    >
       <ReactFlow
         id="dag-container"
         nodes={nodes}
@@ -623,7 +639,7 @@ const Canvas = ({
           reactFlowCopyDeleteDisabled={!selectedElements.nodes.length}
         />
       )}
-    </div>
+    </StyledCanvasContainer>
   );
 };
 

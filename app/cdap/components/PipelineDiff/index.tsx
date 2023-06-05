@@ -31,10 +31,11 @@ const StyledContainer = styled.div`
 `;
 
 export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version }) => {
-  const [nodes, setNodes] = useState([]);
-  const [connections, setConnections] = useState([]);
+  const [nodesAndConnections, setNodesAndConnections] = useState({ nodes: [], connections: [] });
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchConfigAndDisplayGraph = () => {
+    setIsLoading(true);
     MyPipelineApi.getAppVersion({
       namespace,
       appId,
@@ -54,8 +55,12 @@ export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version }) => 
         };
       });
       console.log(nodes);
-      setNodes(nodes);
-      setConnections(connections);
+      setNodesAndConnections({ nodes, connections });
+      // TODO: currently without the timeout the graph edges renders weirdly
+      // need to figure out the cause
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
     });
   };
 
@@ -73,12 +78,13 @@ export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version }) => 
       style={{ width: '100%', top: '100px' }}
     >
       <StyledContainer>
-        <WrapperCanvas
-          angularNodes={nodes}
-          angularConnections={connections}
-          isPipelineDiff={true}
-        />
-        ;
+        {!isLoading && (
+          <WrapperCanvas
+            angularNodes={nodesAndConnections.nodes}
+            angularConnections={nodesAndConnections.connections}
+            isPipelineDiff={true}
+          />
+        )}
       </StyledContainer>
     </PipelineModeless>
   );

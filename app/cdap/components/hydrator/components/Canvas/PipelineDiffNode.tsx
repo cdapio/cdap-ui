@@ -57,9 +57,6 @@ const CaretHandle = styled(Handle)`
   height: 14px;
   background-color: #4e5568;
   border-radius: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   div {
     width: 0;
     height: 0;
