@@ -16,7 +16,6 @@
 
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import PropTypes from 'prop-types';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import PipelineSchedulerStore, {
   ACTIONS as PipelineSchedulerActions,
@@ -354,19 +353,3 @@ export default class PipelineScheduler extends Component {
     );
   }
 }
-
-PipelineScheduler.propTypes = {
-  actionCreator: PropTypes.object,
-  schedule: PropTypes.string,
-  maxConcurrentRuns: PropTypes.number,
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
-  anchorEl: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
-  isDetailView: PropTypes.bool,
-  pipelineName: PropTypes.string,
-  scheduleStatus: PropTypes.string,
-  schedulePipeline: PropTypes.func,
-  suppressAnimation: PropTypes.bool,
-  suspendSchedule: PropTypes.func,
-  isLatestVersion: PropTypes.bool,
-};

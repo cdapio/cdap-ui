@@ -33,8 +33,10 @@
  *   ]
  * }
  **/
+import jsbeautify from 'js-beautify';
+
 angular.module(PKG.name + '.commons')
-  .controller('MyValidatorsCtrl', function($scope, myHydratorValidatorsApi, EventPipe, HydratorPlusPlusConfigStore, myHelpers, NonStorePipelineErrorFactory, GLOBALS, js_beautify, HydratorPlusPlusHydratorService, ValidatorFactory) {
+  .controller('MyValidatorsCtrl', function($scope, myHydratorValidatorsApi, EventPipe, HydratorPlusPlusConfigStore, myHelpers, NonStorePipelineErrorFactory, GLOBALS, HydratorPlusPlusHydratorService, ValidatorFactory) {
     var vm = this;
 
     vm.validators = [];
@@ -228,7 +230,7 @@ angular.module(PKG.name + '.commons')
 
       var validatorProperties = {
         validators: validatorsList,
-        validationScript: js_beautify(fn, { indent_size: 2 })
+        validationScript: jsbeautify(fn, { indent_size: 2 })
       };
 
       if ($scope.model.properties !== validatorProperties) {

@@ -34,12 +34,14 @@ const AngularTemplateCacheWebpackPlugin = require('angular-templatecache-webpack
 const Path = require('path');
 const FS = require('fs');
 
-const uhh = [
+const outdatedWayOfDoingThings = [
+  // require.resolve('angular'),
   './bower_components/angular/angular.js',
 
   './bower_components/angular-sanitize/angular-sanitize.js',
   './bower_components/angular-animate/angular-animate.js',
   './bower_components/angular-resource/angular-resource.js',
+  // require.resolve('@uirouter/react-hybrid'),
   require.resolve('angular-ui-router'),
   // './bower_components/angular-ui-router/release/angular-ui-router.js',
 
@@ -127,14 +129,15 @@ const uhh = [
 ];
 
 const traverseDirectory = (directory, files, fileType) => {
-  console.log(files, fileType)
+  // console.log(files, fileType);
   if (FS.statSync(directory).isFile() && directory.match(fileType)) {
     files.push(directory);
     return;
   }
   FS.readdirSync(directory).forEach((file) => {
     const absPath = Path.join(directory, file);
-    if (FS.statSync(absPath).isDirectory()) return traverseDirectory(absPath, files, fileType);
+    if (FS.statSync(absPath).isDirectory())
+      return traverseDirectory(absPath, files, fileType);
     else if (
       file.match(fileType) &&
       !file.match(/module.js|main.js|hydrator.html/)
@@ -159,6 +162,7 @@ const oldFiles = {
       '/app/lib/global-lib.js',
       '/app/hydrator/module.js',
       '/app/hydrator',
+      '/app/cdap/components/hydrator/angular', // load last
     ],
     fileMatch: /.js/,
   },
@@ -172,7 +176,6 @@ const returnOldFiles = (type) => {
   fileList.forEach((file) => {
     traverseDirectory(path.resolve(__dirname + file), files, match);
   });
-
   return files;
 };
 
@@ -221,6 +224,24 @@ const returnPipelineFiles = () => {
   }); // for hydrator.js
 };
 
+const styleFiles = () => {
+  return [
+    '/app/styles/common.less',
+    '/app/styles/themes/*.less',
+    '/app/directives/**/*.less',
+    '/app/hydrator/**/*.less',
+    '/bower_components/angular/angular-csp.css',
+    '/bower_components/angular-loading-bar/build/loading-bar.min.css',
+    '/bower_components/angular-motion/dist/angular-motion.min.css',
+    '/bower_components/c3/c3.min.css',
+    '/bower_components/angular-gridster/dist/angular-gridster.min.css',
+    '/bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
+    '/app/styles/bootstrap.less',
+  ].map((item) => {
+    return path.resolve(__dirname + item);
+  });
+};
+
 const loaderExclude = [
   /node_modules/,
   /bower_components/,
@@ -246,7 +267,7 @@ const loaderExcludeStrings = [
 const webpackConfig = {
   entry: [
     '@babel/polyfill',
-    ...uhh,
+    ...outdatedWayOfDoingThings,
     ...returnOldFiles('js'), // loads all these files because they're never required so webpack doesn't see them.
   ],
   output: {
@@ -273,9 +294,23 @@ const webpackConfig = {
           },
         ],
       },
+      // {
+      //   test: /\.(sa|sc|c|le)ss$/,
+      //   use: 'ignore-loader',
+      // },
       {
-        test: /\.(sa|sc|c|le)ss$/,
-        use: 'ignore-loader',
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader'],
+        // include: styleFiles(),
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+        // include: styleFiles(),
       },
       {
         test: /\.yaml/,
@@ -290,6 +325,9 @@ const webpackConfig = {
       {
         test: /\.html$/i,
         loader: 'html-loader',
+        options: {
+          minimize: true,
+        },
       },
 
       {
@@ -392,7 +430,18 @@ const webpackConfig = {
       //   stream: require.resolve('stream'),
       //   crypto: require.resolve('crypto'),
     },
-    extensions: ['.mjs', '.ts', '.tsx', '.js', '.jsx', '.json', '.html'],
+    extensions: [
+      '.mjs',
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '.json',
+      '.html',
+      '.less',
+      '.scss',
+      '.css',
+    ],
     alias: {
       components: path.resolve(__dirname + '/app/cdap/components'),
       services: path.resolve(__dirname + '/app/cdap/services'),
@@ -439,6 +488,12 @@ const webpackConfig = {
           from: './app/hydrator/hydrator.html',
           to: path.resolve(__dirname + '/packaged/public/dist/hydrator.html'),
         },
+        // {
+        //   from: './app/hydrator/templates/**/*.html',
+        //   to: path.resolve(
+        //     __dirname + '/packaged/public/dist/assets/features/hydrator'
+        //   ),
+        // },
         // {
         //   from: path.resolve(
         //     __dirname,

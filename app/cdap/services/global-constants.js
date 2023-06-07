@@ -380,6 +380,7 @@ const PIPELINE_LOGS_FILTER =
 
 const SNAPSHOT_VERSION = '-SNAPSHOT';
 
+export const uiSupportedArtifacts = [GLOBALS.etlDataPipeline, GLOBALS.etlDataStreams, GLOBALS.eltSqlPipeline];
 export {
   NUMBER_TYPES,
   NATIVE_NUMBER_TYPES,

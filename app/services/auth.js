@@ -120,21 +120,27 @@ module.factory('myAuthPromise', function myAuthPromiseFactory (MY_CONFIG, $q, $h
     var deferred = $q.defer();
 
     if(MY_CONFIG.securityEnabled) {
+      const url = `${document.location.origin}/login`;
 
-      $http({
-        url: '/login',
+      fetch(url, {
         method: 'POST',
-        data: credentials
+        body: credentials,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        }
       })
-      .success(function (data) {
+      .then((res) =>{
+        return res.json();
+      })
+      .then(function (data) {
         deferred.resolve(angular.extend(data, {
           username: credentials.username
         }));
       })
-      .error(function (data, status) {
+      .catch(function (err) {
         deferred.reject({
-          data: data,
-          statusCode: status
+          data: err.message,
+          statusCode: err.statusCode
         });
       });
 

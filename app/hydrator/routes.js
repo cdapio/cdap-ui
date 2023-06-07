@@ -16,6 +16,21 @@
 
 angular.module(PKG.name + '.feature.hydrator')
   .config(function($stateProvider, $urlRouterProvider, MYAUTH_ROLE, GLOBALS) {
+  //   .config(['$routeProvider',
+  //   function config($routeProvider) {
+  //     $routeProvider.
+  //       when('/phones', {
+  //         template: '<phone-list></phone-list>'
+  //       }).
+  //       when('/phones/:phoneId', {
+  //         template: '<phone-detail></phone-detail>'
+  //       }).
+  //       otherwise('/phones');
+  //   }
+  // ]);
+
+
+
     const theme = window.CaskCommon.ThemeHelper.Theme;
     const productName = theme.productName;
     const featureName = theme.featureNames.pipelines;
@@ -30,7 +45,7 @@ angular.module(PKG.name + '.feature.hydrator')
       uiSupportedArtifacts.push(GLOBALS.eltSqlPipeline);
     }
 
-    $urlRouterProvider.otherwise(() => {
+    $urlRouterProvider.otherwise(($location) => {
       //Unmatched route, will show 404
       window.CaskCommon.ee.emit(
         window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, { statusCode: 404 });
@@ -40,7 +55,7 @@ angular.module(PKG.name + '.feature.hydrator')
     $stateProvider
       .state('home', {
         url: '/',
-        template: '<ui-view/>',
+        template: '<ui-view />',
         resolve: {
           sessionToken: function() {
             window.CaskCommon.SessionTokenStore.fetchSessionToken();
@@ -50,7 +65,8 @@ angular.module(PKG.name + '.feature.hydrator')
           }
         },
         controller: 'HydratorHomeController'
-      })
+      });
+      $stateProvider
       .state('hydrator', {
         url: '/ns/:namespace',
         abstract: true,
@@ -81,7 +97,8 @@ angular.module(PKG.name + '.feature.hydrator')
           authorizedRoles: MYAUTH_ROLE.all,
           highlightTab: 'development'
         }
-      })
+      });
+      $stateProvider
         .state('hydrator.create', {
           url: '/studio?artifactType&draftId&workspaceId&configParams&rulesengineid&resourceCenterId&cloneId&isEdit',
           onEnter: function() {
@@ -113,11 +130,10 @@ angular.module(PKG.name + '.feature.hydrator')
               return defer.promise;
             },
             rResetPreviousPageLevelError: function () {
-
               window.CaskCommon.ee.emit(
                 window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, { reset: true });
             },
-            rConfig: function(rCDAPVersion, $stateParams, mySettings, $q, myHelpers, $window, HydratorPlusPlusHydratorService, myPipelineApi) {
+            rConfig: function(rCDAPVersion,$state, $stateParams, mySettings, $q, myHelpers, $window, HydratorPlusPlusHydratorService, myPipelineApi) {
               var defer = $q.defer();
               const processDraft = (draft) => {
                 if (angular.isObject(draft)) {
@@ -231,7 +247,6 @@ angular.module(PKG.name + '.feature.hydrator')
                 window.CaskCommon.ee.emit(window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, error);
               };
 
-
               myPipelineApi.fetchArtifacts({
                 namespace: $stateParams.namespace
               }).$promise.then((artifactsFromBackend) => {
@@ -302,37 +317,36 @@ angular.module(PKG.name + '.feature.hydrator')
             }
           },
           views: {
-            'gizmo': {
-              templateUrl: '/assets/features/hydrator/templates/create/studio.html',
-              controller: 'HydratorPlusPlusStudioCtrl as HydratorPlusPlusStudioCtrl'
+            '': {
+
             },
             'canvas@hydrator.create': {
-              templateUrl: '/assets/features/hydrator/templates/create/canvas.html',
+              template: require('../hydrator/templates/create/canvas.html').default,
               controller: 'HydratorPlusPlusCreateCanvasCtrl',
               controllerAs: 'CanvasCtrl'
             },
             'leftpanel@hydrator.create': {
-              templateUrl: '/assets/features/hydrator/templates/create/leftpanel.html',
+              template: require('../hydrator/templates/create/leftpanel.html').default,
               controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
             },
             'reactleftpanel@hydrator.create': {
-              templateUrl: '/assets/features/hydrator/templates/create/reactleftpanel.html',
+              template: require('../hydrator/templates/create/reactleftpanel.html').default,
               controller: 'HydratorPlusPlusLeftPanelCtrl as HydratorPlusPlusLeftPanelCtrl'
             },
             'toppanel@hydrator.create': {
-              templateUrl: '/assets/features/hydrator/templates/create/toppanel.html',
+              template: require('../hydrator/templates/create/toppanel.html').default,
               controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
             },
             'reacttoppanel@hydrator.create': {
-              templateUrl: '/assets/features/hydrator/templates/create/reacttoppanel.html',
+              template: require('../hydrator/templates/create/reacttoppanel.html').default,
               controller: 'HydratorPlusPlusTopPanelCtrl as HydratorPlusPlusTopPanelCtrl'
             },
           },
           onExit: function($uibModalStack) {
             $uibModalStack.dismissAll();
           }
-        })
-
+        });
+        $stateProvider
         .state('hydrator.detail', {
           url: '/view/:pipelineId?runid',
           data: {
@@ -432,7 +446,6 @@ angular.module(PKG.name + '.feature.hydrator')
                 );
             },
             rResetPreviousPageLevelError: function () {
-
               window.CaskCommon.ee.emit(
                 window.CaskCommon.globalEvents.PAGE_LEVEL_ERROR, { reset: true });
             },
@@ -443,15 +456,15 @@ angular.module(PKG.name + '.feature.hydrator')
           },
           views: {
             '': {
-              templateUrl: '/assets/features/hydrator/templates/detail.html',
+              template: require('../hydrator/templates/detail.html'),
               controller: 'HydratorPlusPlusDetailCtrl',
               controllerAs: 'DetailCtrl'
             },
             'toppanel@hydrator.detail': {
-              templateUrl: '/assets/features/hydrator/templates/detail/top-panel.html'
+              template: require('../hydrator/templates/detail/top-panel.html'),
             },
             'canvas@hydrator.detail': {
-              templateUrl: '/assets/features/hydrator/templates/detail/canvas.html',
+              template: require('../hydrator/templates/detail/canvas.html'),
               controller: 'HydratorPlusPlusDetailCanvasCtrl',
               controllerAs: 'CanvasCtrl'
             }

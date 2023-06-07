@@ -14,10 +14,11 @@
  * the License.
  */
 
+import {AVAILABLE_PLUGINS_ACTIONS} from '../../../../cdap/services/AvailablePluginsStore';
 const popoverTemplate = '/assets/features/hydrator/templates/create/popovers/leftpanel-plugin-popover.html';
 
 class PipelineAvailablePluginsActions {
-  constructor(myPipelineApi, GLOBALS, $q, HydratorPlusPlusLeftPanelStore, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, DAGPlusPlusFactory, $filter, myHelpers, LEFTPANELSTORE_ACTIONS, mySettings, HydratorPlusPlusNodeService, $rootScope) {
+  constructor(myPipelineApi, GLOBALS, $q, HydratorPlusPlusLeftPanelStore, AvailablePluginsStore, DAGPlusPlusFactory, $filter, myHelpers, LEFTPANELSTORE_ACTIONS, mySettings, HydratorPlusPlusNodeService, $rootScope) {
     this.api = myPipelineApi;
     this.GLOBALS = GLOBALS;
     this.$q = $q;
@@ -153,7 +154,7 @@ class PipelineAvailablePluginsActions {
       const key = this.myHelpers.objectQuery(pluginProperties, '0');
       return key ? key.split('.')[1] : '';
     };
-
+    var that = this;
     this.api.fetchAllPluginsProperties({ namespace }, reqBody)
       .$promise
       .then((res) => {
@@ -162,7 +163,7 @@ class PipelineAvailablePluginsActions {
           if (pluginProperties.length === 0) { return; }
 
           const pluginKey = getKeyFromPluginProps(pluginProperties);
-          const key = `${pluginKey}-${this._getArtifactKey(plugin)}`;
+          const key = `${pluginKey}-${that._getArtifactKey(plugin)}`;
 
           availablePluginsMap[key].doc = plugin.properties[`doc.${pluginKey}`];
 
@@ -179,8 +180,8 @@ class PipelineAvailablePluginsActions {
           availablePluginsMap[key].widgets = parsedWidgets;
         });
 
-        this.store.dispatch({
-          type: this.actions.setPluginsMap,
+        that.store.dispatch({
+          type: that.actions.setPluginsMap,
           payload: {
             pluginsMap: availablePluginsMap
           }

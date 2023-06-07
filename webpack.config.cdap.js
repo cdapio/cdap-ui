@@ -205,6 +205,13 @@ const rules = [
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],
   },
+  // {
+  //   test: /\.html$/i,
+  //   loader: 'html-loader',
+  //   options: {
+  //     minimize: true,
+  //   },
+  // },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [

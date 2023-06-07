@@ -14,9 +14,7 @@
  * the License.
  */
 
-const aps = require('../../../../cdap/services/AvailablePluginsStore');
-
-
+import aps from '../../../../cdap/services/AvailablePluginsStore';
 angular.module(`${PKG.name}.feature.hydrator`)
   .constant('AVAILABLE_PLUGINS_ACTIONS', aps.AVAILABLE_PLUGINS_ACTIONS)
-  .factory('AvailablePluginsStore', () => aps.apStore);
+  .factory('AvailablePluginsStore', () => aps);

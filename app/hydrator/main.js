@@ -18,6 +18,7 @@
 // const ngSanitize = require('angular-sanitize');
 // const $cookies = require('angular-cookies');
 // const ngResource = require('angular-resource');
+// import { UI_ROUTER_REACT_HYBRID } from '@uirouter/react-hybrid';
 const CaskCommon = require('../common/cask-shared-components');
 if (!window.CaskCommon) {
   window.CaskCommon = CaskCommon;
@@ -51,7 +52,9 @@ angular
         'ngSanitize',
         'ngResource',
         'ngStorage',
-        'ui.router',
+        // [
+          'ui.router',
+        // UI_ROUTER_REACT_HYBRID],
         'ngCookies'
       ]).name,
 
@@ -121,15 +124,6 @@ angular
   .run(function ($rootScope) {
     $rootScope.defaultPollInterval = 10000;
   })
-  .run(function($rootScope, MY_CONFIG, myAuth, MYAUTH_EVENT) {
-    $rootScope.$on('$stateChangeStart', function () {
-      if (MY_CONFIG.securityEnabled) {
-        if (!myAuth.isAuthenticated()) {
-          $rootScope.$broadcast(MYAUTH_EVENT.logoutSuccess);
-        }
-      }
-    });
-  })
   .run(function($rootScope, myHelpers, MYAUTH_EVENT) {
     $rootScope.$on(MYAUTH_EVENT.logoutSuccess, function() {
       window.location.href = myHelpers.getAbsUIUrl({
@@ -143,42 +137,42 @@ angular
   .run(function(myNamespace) {
     myNamespace.getList();
   })
-  .config(function($httpProvider) {
-    $httpProvider.interceptors.push(function($rootScope, myHelpers) {
-      return {
-        'request': function(config) {
-          var extendConfig = {
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest',
-            }
-          };
-          if (
-              $rootScope.currentUser && !myHelpers.objectQuery(config, 'data', 'profile_view')
-             ) {
+  // .config(function($httpProvider) {
+  //   $httpProvider.interceptors.push(function($rootScope, myHelpers) {
+  //     return {
+  //       'request': function(config) {
+  //         var extendConfig = {
+  //           headers: {
+  //             'X-Requested-With': 'XMLHttpRequest',
+  //           }
+  //         };
+  //         if (
+  //             $rootScope.currentUser && !myHelpers.objectQuery(config, 'data', 'profile_view')
+  //            ) {
 
-            config = angular.extend(config, extendConfig, {
-              user: $rootScope.currentUser || null,
-              headers: {
-                'Content-Type': 'application/json',
-              }
-            });
+  //           config = angular.extend(config, extendConfig, {
+  //             user: $rootScope.currentUser || null,
+  //             headers: {
+  //               'Content-Type': 'application/json',
+  //             }
+  //           });
 
-            // This check is added because of HdInsight gateway security.
-            // If we set Authorization to null, it strips off their Auth token
-            if (window.CDAP_CONFIG.securityEnabled && $rootScope.currentUser.token) {
-              // Accessing stuff from $rootScope is bad. This is done as to resolve circular dependency.
-              // $http <- myAuthPromise <- myAuth <- $http <- $templateFactory <- $view <- $state
-              extendConfig.headers.Authorization = 'Bearer ' + $rootScope.currentUser.token;
-            }
+  //           // This check is added because of HdInsight gateway security.
+  //           // If we set Authorization to null, it strips off their Auth token
+  //           if (window.CDAP_CONFIG.securityEnabled && $rootScope.currentUser.token) {
+  //             // Accessing stuff from $rootScope is bad. This is done as to resolve circular dependency.
+  //             // $http <- myAuthPromise <- myAuth <- $http <- $templateFactory <- $view <- $state
+  //             extendConfig.headers.Authorization = 'Bearer ' + $rootScope.currentUser.token;
+  //           }
 
-            extendConfig.headers.sessionToken = window.CaskCommon.SessionTokenStore.default.getState();
-          }
-          angular.extend(config, extendConfig);
-          return config;
-        }
-      };
-    });
-  })
+  //           extendConfig.headers.sessionToken = window.CaskCommon.SessionTokenStore.default.getState();
+  //         }
+  //         angular.extend(config, extendConfig);
+  //         return config;
+  //       }
+  //     };
+  //   });
+  // })
 
   .config(function ($alertProvider) {
     angular.extend($alertProvider.defaults, {
@@ -253,7 +247,9 @@ angular
    * attached to the <body> tag, mostly responsible for
    *  setting the className based events from $state and caskTheme
    */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
+  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers,
+    // $http
+    ) {
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
     getVersion();
@@ -292,12 +288,16 @@ angular
     $scope.copyrightYear = new Date().getFullYear();
 
     function getVersion() {
-      $http({
-        method: 'GET',
-        url: '/api/v3/version'
+      fetch(`${document.location.origin}/api/v3/version`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        }
       })
+        .then((res) => {
+          return res.json();
+        })
         .then(function(res) {
-          var data = res.data;
+          var data = res;
 
           $scope.version = data.version;
           $rootScope.cdapVersion = $scope.version;
@@ -363,11 +363,15 @@ angular
       template: `
         <my-global-navbar></my-global-navbar>
         <main class="container" id="app-container">
-          <div ng-if="!BodyCtrl.pageLevelError" ui-view=""></div>
+          <div ng-if="!BodyCtrl.pageLevelError">
+            <div id="LeftPanelCtrl" ng-controler="HydratorPlusPlusLeftPanelCtrl">
+              <studio-routes></studio-routes>
+            </div>
+          </div>
           <page403
             ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 403"
             message="BodyCtrl.pageLevelError.message"
-          ></page403>
+          ></page403> 
           <page404
             ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 404"
             message="BodyCtrl.pageLevelError.message"
@@ -387,4 +391,4 @@ angular
         <api-error-dialog ng-if="BodyCtrl.apiError"></api-error-dialog>
       `
     };
-  });
+  })

@@ -14,7 +14,6 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
@@ -31,18 +30,6 @@ const PREFIX =
   'features.PipelineTriggers.ScheduleRuntimeArgs.PayloadConfigModal';
 
 export default class PayloadConfigModal extends Component {
-  static propTypes = {
-    isOpen: PropTypes.bool,
-    triggeringPipelineInfo: PropTypes.object,
-    triggeredPipelineInfo: PropTypes.string,
-    onConfigureSchedule: PropTypes.func,
-    disabled: PropTypes.bool,
-    scheduleInfo: PropTypes.object,
-    configureError: PropTypes.string,
-    onToggle: PropTypes.func,
-    pipelineCompositeTriggersEnabled: PropTypes.bool,
-    modalConfigTab: PropTypes.object,
-  };
 
   renderModal = () => {
     if (!this.props.isOpen) {

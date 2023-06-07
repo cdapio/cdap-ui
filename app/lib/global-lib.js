@@ -15,27 +15,6 @@
  */
 
 angular.module(`${PKG.name}.commons`)
-  .factory('d3', function ($window) {
-    return $window.d3;
-  })
-  .factory('c3', function ($window) {
-    return $window.c3;
-  })
-  .factory('Redux', function($window) {
-    return $window.Redux;
-  })
-  .factory('ReduxThunk', function($window) {
-    return $window.ReduxThunk;
-  })
-  .factory('js_beautify', function ($window) {
-    return $window.js_beautify;
-  })
-  .factory('esprima', function ($window) {
-    return $window.esprima;
-  })
   .factory('avsc', function () {
     return window.CaskCommon.cdapavscwrapper;
-  })
-  .factory('moment', function($window) {
-    return $window.moment;
   });

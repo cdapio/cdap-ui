@@ -14,7 +14,6 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
 import React from 'react';
 import IconSVG from 'components/shared/IconSVG';
 import Popper from '@material-ui/core/Popper';
@@ -146,19 +145,18 @@ export default function PipelineModeless({
     </Popper>
   );
 }
-
-PipelineModeless.propTypes = {
-  title: PropTypes.node,
-  secondaryTitle: PropTypes.node,
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
-  anchorEl: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
-  arrow: PropTypes.bool,
-  suppressAnimation: PropTypes.bool,
-  className: PropTypes.string,
-  fullScreen: PropTypes.bool,
-  children: PropTypes.node,
-  placement: PropTypes.string,
-  popoverClassName: PropTypes.string,
-  isDeployed: PropTypes.bool,
-};
+// PipelineModeless.propTypes = {
+//   title: PropTypes.node,
+//   secondaryTitle: PropTypes.node,
+//   onClose: PropTypes.func,
+//   open: PropTypes.bool,
+//   anchorEl: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
+//   arrow: PropTypes.bool,
+//   suppressAnimation: PropTypes.bool,
+//   className: PropTypes.string,
+//   fullScreen: PropTypes.bool,
+//   children: PropTypes.node,
+//   placement: PropTypes.string,
+//   popoverClassName: PropTypes.string,
+//   isDeployed: PropTypes.bool,
+// };

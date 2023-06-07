@@ -66,6 +66,7 @@
     "app/cdap/**/*.tsx",
     "./node_modules/@types/**/*.d.ts",
     "./node_modules/jsplumb/index.d.ts",
+    "./globals.d.ts"
   ],
   "exclude": [
     "node_modules",

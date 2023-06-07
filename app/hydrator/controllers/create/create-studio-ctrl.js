@@ -39,7 +39,6 @@ class HydratorPlusPlusStudioCtrl {
       return isValidArtifact.length ? isValidArtifact[0]: rArtifacts[0];
     };
     let artifact = getValidArtifact();
-
     if (rConfig.valid && rConfig.config) {
       const modifiedConfig = angular.copy(rConfig.config);
 

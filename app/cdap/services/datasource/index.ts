@@ -200,7 +200,9 @@ export default class DataSource implements IDataSource {
         handler(createHandlerData(ajaxResponse, bindingInfo))
       );
       const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
-      this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+      if (errorCode !== null) {
+        this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+      }
 
       const parsedResponse = parseResponse(ajaxResponse, bindingInfo);
 
@@ -212,7 +214,6 @@ export default class DataSource implements IDataSource {
       } else {
         bindingInfo.rx.complete();
       }
-      debugger;
     };
   }
 
@@ -431,6 +432,7 @@ export default class DataSource implements IDataSource {
   }
 
   public startClientPoll = (resourceId) => {
+    console.log('goose resourceID client poll', resourceId);
     const interval = objectQuery(this.polling, resourceId, 'resource', 'intervalTime');
     debugLog(`Setting timeout for ${resourceId} with interval ${interval}`);
     const intervalTimer = setTimeout(() => {

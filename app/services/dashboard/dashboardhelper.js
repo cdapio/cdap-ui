@@ -29,7 +29,6 @@ angular.module(PKG.name + '.services')
           widget.metric
         )
       }, function (res) {
-
         widget.formattedData = formatData(res, widget);
       }).__pollId__;
     }

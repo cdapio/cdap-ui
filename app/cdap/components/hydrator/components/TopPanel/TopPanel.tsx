@@ -157,7 +157,6 @@ interface ITopPanelProps {
   isEdit: boolean;
   saveChangeSummary: (changeSummary: string) => any;
   getParentVersion: () => any;
-  stateParams: any;
 }
 
 export const TopPanel = ({
@@ -209,7 +208,6 @@ export const TopPanel = ({
   isEdit,
   saveChangeSummary,
   getParentVersion,
-  stateParams,
 }: ITopPanelProps) => {
   const sheculdeInfo = getScheduleInfo();
   const [isChangeSummaryOpen, setIsChangeSummaryOpen] = useState<boolean>(false);
@@ -231,10 +229,11 @@ export const TopPanel = ({
     downloadFile(getConfigForExport());
     window.onbeforeunload = null;
     // if there is a draft saved, delete it
-    if (stateParams.draftId) {
+    const urlParams = new URLSearchParams(window.location.href);
+    if (urlParams.has('draftId')) {
       MyPipelineApi.deleteDraft({
         context: getCurrentNamespace(),
-        draftId: stateParams.draftId,
+        draftId: urlParams.get('draftId'),
       }).subscribe({
         error(err) {
           // tslint:disable:no-console

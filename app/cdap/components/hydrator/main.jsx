@@ -16,6 +16,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { configureStores } from './reducers';
+import T from 'i18n-react';
+import texts from '../../../cdap/text/text-en.yaml';
+T.setTexts(texts);
 
 export const Hydrator = () => {
   let store;

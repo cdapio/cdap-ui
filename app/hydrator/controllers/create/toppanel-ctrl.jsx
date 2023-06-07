@@ -14,9 +14,10 @@
  * the License.
  */
 
-class HydratorPlusPlusTopPanelCtrl {
+import { uiSupportedArtifacts } from 'services/global-constants';
+
+export class HydratorPlusPlusTopPanelCtrl {
   constructor(
-    $stateParams,
     HydratorPlusPlusConfigStore,
     HydratorPlusPlusConfigActions,
     $uibModal,
@@ -26,7 +27,6 @@ class HydratorPlusPlusTopPanelCtrl {
     HydratorPlusPlusConsoleStore,
     myPipelineExportModalService,
     $timeout,
-    $scope,
     HydratorPlusPlusPreviewStore,
     HydratorPlusPlusPreviewActions,
     $interval,
@@ -37,7 +37,6 @@ class HydratorPlusPlusTopPanelCtrl {
     PREVIEWSTORE_ACTIONS,
     $q,
     NonStorePipelineErrorFactory,
-    rArtifacts,
     $window,
     myPreviewLogsApi,
     DAGPlusPlusNodesStore,
@@ -76,7 +75,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.$q = $q;
     this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
-    this.artifacts = rArtifacts;
+    this.artifacts = [];
     this.$rootScope = $rootScope;
     this.uuid = uuid;
     this.macrosMap = {};
@@ -84,11 +83,11 @@ class HydratorPlusPlusTopPanelCtrl {
     this.userRuntimeArgumentsMap = {};
     this.runtimeArguments = {};
     this.doesPreviewHaveEmptyMacros = true;
-    this.$stateParams = $stateParams;
     this.HydratorUpgradeService = HydratorUpgradeService;
     this.startingPipeline = false;
     this.enablePipelineUpdate = false;
-    this.pollingService = new MyPollingService($scope);
+    this.$scope = $rootScope.$new(true, undefined);
+    this.pollingService = new MyPollingService(this.$scope);
 
     this.closeLogs = this.closeLogs.bind(this);
     this.saveMetadataV2 = this.saveMetadataV2.bind(this);
@@ -137,9 +136,10 @@ class HydratorPlusPlusTopPanelCtrl {
     this.showSchedule =
       this.state.artifact.name === this.GLOBALS.etlDataPipeline &&
       themeShowSchedule;
-    this.isEdit = this.$stateParams.isEdit ? this.$stateParams.isEdit === "true" : false;
+    const urlParams = new URLSearchParams(window.location.href);
+    this.isEdit = urlParams.get('isEdit') === 'true';
 
-    if ($stateParams.isClone) {
+    if (urlParams.get('isClone')) {
       this.openMetadata();
     }
 
@@ -206,6 +206,7 @@ class HydratorPlusPlusTopPanelCtrl {
     } else {
       this.setDefault();
     }
+    this.getAllArtifacts();
 
     let unsub = this.previewStore.subscribe(() => {
       let state = this.previewStore.getState().preview;
@@ -227,7 +228,7 @@ class HydratorPlusPlusTopPanelCtrl {
       });
     }
 
-    $scope.$on("$destroy", () => {
+    this.$scope.$on("$destroy", () => {
       unsub();
       this.stopPreview(true);
       this.previewStore.dispatch(this.previewActions.togglePreviewMode(false));
@@ -236,6 +237,33 @@ class HydratorPlusPlusTopPanelCtrl {
       this.$timeout.cancel(this.focusTimeout);
       this.$timeout.cancel(this.fetchMacrosTimeout);
     });
+  }
+
+  getAllArtifacts() {
+    var that = this;
+
+    return fetch(`/api/v3/namespaces/${window.location.pathname.split('/')[3]}/artifacts?scope=SYSTEM`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (!res.length) {
+          return;
+        } else {
+          const filteredRes = res
+            .filter(artifact => artifact.version === window.CaskCommon.VersionStore.getState().version)
+            .filter(r => uiSupportedArtifacts.indexOf(r.name) !== -1 )
+            .map(r => {
+              r.label = that.HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
+              return r;
+            });
+          that.artifacts = filteredRes;
+          // that.selectedArtifact = filteredRes[0];
+          // // that.selectedArtifact = filteredRes.filter( ar => ar.name === that.configStoreArtifact.name)[0];
+          // that.artifactToRevert = that.selectedArtifact;
+          return that.selectedArtifact;
+        }
+      });
   }
 
   setDefault() {

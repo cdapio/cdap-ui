@@ -30,7 +30,8 @@
     extensions: []
   }
 */
-
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 let leftpanelactions, _DAGPlusPlusFactory, _GLOBALS, _myHelpers, _filter, _hydratorNodeService;
 let popoverTemplate = '/assets/features/hydrator/templates/create/popovers/leftpanel-plugin-popover.html';
 let getInitialState = () => {
@@ -206,29 +207,28 @@ var extensions = (state = getInitialState().extensions, action = {}) => {
   }
 };
 
-var LeftPanelStore = (LEFTPANELSTORE_ACTIONS, Redux, ReduxThunk, GLOBALS, DAGPlusPlusFactory, myHelpers, $filter, HydratorPlusPlusNodeService) => {
+var LeftPanelStore = (LEFTPANELSTORE_ACTIONS, GLOBALS, DAGPlusPlusFactory, myHelpers, $filter, HydratorPlusPlusNodeService) => {
   leftpanelactions = LEFTPANELSTORE_ACTIONS;
   _GLOBALS = GLOBALS;
   _myHelpers = myHelpers;
   _DAGPlusPlusFactory = DAGPlusPlusFactory;
   _filter = $filter;
   _hydratorNodeService = HydratorPlusPlusNodeService;
-  let {combineReducers, applyMiddleware} = Redux;
 
   let combineReducer = combineReducers({
     plugins,
     extensions
   });
 
-  return Redux.createStore(
+  return createStore(
     combineReducer,
     getInitialState(),
     window.CaskCommon.CDAPHelpers.composeEnhancers('LeftPanelStore')(
-      applyMiddleware(ReduxThunk.default)
+      applyMiddleware(thunk)
     )
   );
 };
-LeftPanelStore.$inject = ['LEFTPANELSTORE_ACTIONS', 'Redux', 'ReduxThunk', 'GLOBALS', 'DAGPlusPlusFactory', 'myHelpers', '$filter', 'HydratorPlusPlusNodeService'];
+LeftPanelStore.$inject = ['LEFTPANELSTORE_ACTIONS', 'GLOBALS', 'DAGPlusPlusFactory', 'myHelpers', '$filter', 'HydratorPlusPlusNodeService'];
 
 angular.module(`${PKG.name}.feature.hydrator`)
   .constant('LEFTPANELSTORE_ACTIONS', {
