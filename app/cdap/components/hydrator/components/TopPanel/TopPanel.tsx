@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2022-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,6 +30,7 @@ import T from 'i18n-react';
 import { editPipeline } from 'services/PipelineUtils';
 import downloadFile from 'services/download-file';
 import { cleanseAndCompareTwoObjects } from 'services/helpers';
+import ThemeWrapper from 'components/ThemeWrapper';
 
 export interface IGlobalObj {
   etlRealtime?: string;
@@ -326,7 +327,8 @@ export const TopPanel = ({
     // first time execute before interval
     MyPipelineApi.get(params).subscribe(
       (res) => {
-        setParentConfig(JSON.parse(res.configuration));
+        // add description in case it is missing from configuration
+        setParentConfig({ ...JSON.parse(res.configuration), description: res.description });
         if (res.appVersion === getParentVersion()) {
           setEditStatus('Editing in progress');
           return;
@@ -368,7 +370,8 @@ export const TopPanel = ({
 
   const confirmationElem = (
     <StyledTextarea
-      rowsMin={3}
+      minRows={3}
+      maxRows={7}
       autoFocus={true}
       onChange={(e) => onSummaryChange(e.target.value)}
       value={changeSummary}
@@ -376,7 +379,7 @@ export const TopPanel = ({
     />
   );
   return (
-    <>
+    <ThemeWrapper>
       {errorState.errorMessage && (
         <ErrorBanner
           error={errorState.errorMessage}
@@ -478,6 +481,6 @@ export const TopPanel = ({
         confirmationElem={confirmationElem}
         confirmFn={updatePipeline}
       />
-    </>
+    </ThemeWrapper>
   );
 };

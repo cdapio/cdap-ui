@@ -32,6 +32,10 @@ export interface ISourceControlManagementConfig {
 export interface ISourceControlManagementAuth {
   type: string;
   token: string;
-  tokenName: string;
+  patConfig: ISourceControlManagementAuthPatConfig;
+}
+
+export interface ISourceControlManagementAuthPatConfig {
+  passwordName: string;
   username?: string;
 }

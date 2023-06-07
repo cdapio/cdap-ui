@@ -55,6 +55,7 @@ function Password({
   disabled,
   classes,
   dataCy,
+  dataTestId,
 }: IPasswordProps) {
   const [pwdVisibility, setPwdVisibility] = useState<boolean>(false);
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +93,7 @@ function Password({
       }
       inputProps={{
         'data-cy': dataCy,
+        'data-testid': dataTestId,
       }}
     />
   );

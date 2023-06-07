@@ -14,10 +14,13 @@
  * the License.
  */
 
-import { MyPipelineApi } from 'api/pipeline';
-import PipelineDetailStore, { ACTIONS } from 'components/PipelineDetails/store';
 import differenceBy from 'lodash/differenceBy';
 import find from 'lodash/find';
+import T from 'i18n-react';
+import { MyPipelineApi } from 'api/pipeline';
+import { SourceControlApi } from 'api/sourcecontrol';
+import PipelineDetailStore, { ACTIONS } from 'components/PipelineDetails/store';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 const init = (pipeline) => {
   PipelineDetailStore.dispatch({
@@ -182,6 +185,15 @@ const setRuns = (runs) => {
   });
 };
 
+const setVersionHasRun = (versionHasRun) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_VERSION_HAS_RUN,
+    payload: {
+      versionHasRun: versionHasRun,
+    },
+  });
+};
+
 const getRunDetails = ({
   namespace,
   appId,
@@ -198,6 +210,14 @@ const getRunDetails = ({
   });
 };
 
+const getAppVersion = ({ namespace, appId, version }) => {
+  return MyPipelineApi.getAppVersion({
+    namespace,
+    appId,
+    version,
+  });
+};
+
 const getRuns = (params) => {
   const runsFetch = MyPipelineApi.getRuns(params);
   runsFetch.subscribe(
@@ -209,6 +229,12 @@ const getRuns = (params) => {
     }
   );
   return runsFetch;
+};
+
+const getRunsForVersion = (params) => {
+  MyPipelineApi.getVersionedRuns(params).subscribe((runs) => {
+    setVersionHasRun(runs.length > 0);
+  });
 };
 
 const pollRunsCount = ({
@@ -412,6 +438,75 @@ const setEditDraftId = (draftId) => {
   });
 };
 
+const pullPipeline = (namespace, appId) => {
+  setPullLoading(true);
+  const params = {
+    namespace,
+    appId,
+  };
+  const PREFIX = 'features.SourceControlManagement.pull';
+  SourceControlApi.pull(params).subscribe(
+    (res) => {
+      if (typeof res === 'string') {
+        setPullStatus({
+          alertType: 'warning',
+          message: T.translate(`${PREFIX}.upToDate`),
+        });
+        setPullLoading(false);
+        return;
+      }
+      setPullStatus({
+        alertType: 'success',
+        message: T.translate(`${PREFIX}.pullSuccess`, { pipelineName: appId }),
+      });
+      setPullLoading(false);
+      window.location.href = getHydratorUrl({
+        stateName: 'hydrator.detail',
+        stateParams: {
+          namespace: params.namespace,
+          pipelineId: params.appId,
+        },
+      });
+    },
+    (err) => {
+      setPullStatus({
+        alertType: 'error',
+        message: err.message,
+      });
+      setPullLoading(false);
+    }
+  );
+};
+
+const setPullLoading = (pullLoading) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_PULL_LOADING,
+    payload: {
+      pullLoading,
+    },
+  });
+};
+
+const setPullStatus = (pullStatus) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_PULL_STATUS,
+    payload: {
+      pullStatus,
+    },
+  });
+};
+
+const setSourceControlMeta = (fileHash) => {
+  PipelineDetailStore.dispatch({
+    type: ACTIONS.SET_SOURCE_CONTROL_META,
+    payload: {
+      sourceControlMeta: {
+        fileHash,
+      },
+    },
+  });
+};
+
 const reset = () => {
   PipelineDetailStore.dispatch({
     type: ACTIONS.RESET,
@@ -441,8 +536,11 @@ export {
   setNumRecordsPreview,
   setMaxConcurrentRuns,
   setCurrentRunId,
+  setVersionHasRun,
   getRuns,
+  getRunsForVersion,
   getRunDetails,
+  getAppVersion,
   pollRuns,
   pollRunsCount,
   getNextRunTime,
@@ -459,5 +557,8 @@ export {
   setStopButtonLoading,
   setStopError,
   setEditDraftId,
+  pullPipeline,
+  setPullStatus,
+  setSourceControlMeta,
   reset,
 };

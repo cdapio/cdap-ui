@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016-2017 Cask Data, Inc.
+ * Copyright © 2016-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,6 +21,8 @@ import ResourceCenterPipelineEntity from 'components/ResourceCenterEntity/Resour
 import AbstractWizard from 'components/AbstractWizard';
 import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import ThemeWrapper from 'components/ThemeWrapper';
 
 require('./ResourceCenter.scss');
 
@@ -167,22 +169,24 @@ export default class ResourceCenter extends Component {
   }
   render() {
     return (
-      <div>
-        <div className="cask-resource-center">
-          <ResourceCenterPipelineEntity onError={this.props.onError} />
-          {this.state.entities.map((entity, index) => (
-            <ResourceCenterEntity
-              title={entity.title}
-              description={entity.description}
-              actionLabel={entity.actionLabel}
-              iconClassName={entity.iconClassName}
-              key={index}
-              onClick={this.toggleWizard.bind(this, entity.wizardId)}
-            />
-          ))}
-        </div>
-        {this.getWizardToBeDisplayed()}
-      </div>
+      <FeatureProvider>
+        <ThemeWrapper>
+          <div className="cask-resource-center">
+            <ResourceCenterPipelineEntity onError={this.props.onError} />
+            {this.state.entities.map((entity, index) => (
+              <ResourceCenterEntity
+                title={entity.title}
+                description={entity.description}
+                actionLabel={entity.actionLabel}
+                iconClassName={entity.iconClassName}
+                key={index}
+                onClick={this.toggleWizard.bind(this, entity.wizardId)}
+              />
+            ))}
+          </div>
+          {this.getWizardToBeDisplayed()}
+        </ThemeWrapper>
+      </FeatureProvider>
     );
   }
 }

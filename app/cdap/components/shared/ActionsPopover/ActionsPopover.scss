@@ -39,7 +39,7 @@ $popover-width: 100px;
   }
 
   .popper {
-    width: $popover-width;
+    width: auto;
     min-width: $popover-width;
     padding: 0;
     z-index: 1;

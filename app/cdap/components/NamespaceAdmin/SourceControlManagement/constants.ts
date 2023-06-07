@@ -26,4 +26,6 @@ export const providers = {
   github: 'GITHUB',
 };
 
-export const authKeys = ['type', 'tokenName', 'token', 'username'];
+export const authKeys = ['type', 'token'];
+
+export const patConfigKeys = ['passwordName', 'username'];

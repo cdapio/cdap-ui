@@ -306,6 +306,14 @@ export default class Tags extends Component {
       : this.renderPlusButton();
   }
 
+  getNoTagsText() {
+    if (this.props.viewOnly) {
+      return T.translate(`${PREFIX}.noTagsViewonly`);
+    }
+
+    return T.translate(`${PREFIX}.notags`);
+  }
+
   render() {
     const tagsCount = this.state.userTags.length;
 
@@ -318,6 +326,9 @@ export default class Tags extends Component {
         ) : null}
         {!tagsCount && !this.state.loading ? (
           <i>{T.translate(`${PREFIX}.notags`)}</i>
+        ) : null}
+        {!tagsCount && !this.state.loading ? (
+          <i>{this.getNoTagsText()}</i>
         ) : null}
         <span className="tags-list">{this.renderUserTags()}</span>
         {this.state.showAllTagsLabel ? this.renderTagsPopover() : null}

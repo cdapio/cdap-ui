@@ -90,7 +90,10 @@ export default function PipelineModeless({
               <div className="pipeline-modeless-arrow" ref={setArrowRef} />
             ) : null}
             {isDeployed ? (
-              <ClickAwayListener onClickAway={onClose}>
+              <ClickAwayListener
+                mouseEvent="onPointerDown"
+                onClickAway={onClose}
+              >
                 <Paper
                   className="pipeline-modeless-container"
                   variant="outlined"

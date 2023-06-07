@@ -99,8 +99,14 @@ export function evaluateFilter(
     return true;
   }
 
+  // convert string 'true' to boolean
+  const featureFlags = { ...window?.CDAP_CONFIG?.featureFlags };
+  for (const key of Object.keys(featureFlags)) {
+    featureFlags[key] = featureFlags[key] === 'true';
+  }
   const typedPropertyValues = {
     ...getTypedPropertyValues(propertyValues, propertiesFromBackend),
+    featureFlags,
   };
 
   // Some upgrade scenarios leave useConnection as null,

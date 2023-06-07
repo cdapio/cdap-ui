@@ -32,7 +32,7 @@ export default function GenericDetails({ details, className }) {
         )
         .map((detail, i) => {
           return (
-            <div key={i}>
+            <div key={i} data-testid={`generic-details-${detail}`}>
               <strong>{capitalize(detail)}</strong>
               <RenderObjectAsTable obj={details[detail]} />
             </div>

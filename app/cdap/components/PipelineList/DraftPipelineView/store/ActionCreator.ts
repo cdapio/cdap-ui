@@ -99,7 +99,9 @@ export function deleteDraft(draft: IDraft) {
       return MyUserStoreApi.set({}, res.property);
     });
   }
-  deleteObservable$.subscribe(getDrafts);
+  return deleteObservable$.map(() => {
+    getDrafts();
+  });
 }
 
 export function setSort(columnName: string) {

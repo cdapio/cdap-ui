@@ -17,7 +17,8 @@
 @import "../../../../styles/variables.scss";
 
 .pipeline-details-details-actions {
-  justify-content: center;
+  justify-content: end;
+  margin-right: 80px;
   .pipeline-details-container {
     .pipeline-details-btn {
       .icon-info-circle {

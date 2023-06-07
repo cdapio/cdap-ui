@@ -29,7 +29,13 @@ import { UnlinkSourceControlModal } from './UnlinkSourceControlModal';
 import StyledPasswordWrapper from 'components/AbstractWidget/FormInputs/Password';
 import { ISourceControlManagementConfig } from './types';
 import SourceControlManagementForm from './SourceControlManagementForm';
-import { INamespaceAdminState } from '../store';
+import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getSourceControlManagement } from '../store/ActionCreator';
+import Alert from 'components/shared/Alert';
+import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
+
+const PrimaryTextLoadingButton = ButtonLoadingHoc(PrimaryTextButton);
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -43,10 +49,11 @@ const StyledInfo = styled.div`
 export const SourceControlManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
-  const sourceControlManagementConfig = useSelector<
-    INamespaceAdminState,
-    ISourceControlManagementConfig
-  >((state) => state.sourceControlManagementConfig);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const sourceControlManagementConfig: ISourceControlManagementConfig = useSelector(
+    (state) => state.sourceControlManagementConfig
+  );
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
@@ -65,19 +72,45 @@ export const SourceControlManagement = () => {
     },
   ];
 
+  const validateConfigAndRedirect = () => {
+    setLoading(true);
+    const namespace = getCurrentNamespace();
+    getSourceControlManagement(namespace).subscribe(
+      () => {
+        window.location.href = `/ns/${namespace}/scm/sync`;
+      },
+      (err) => {
+        setErrorMessage(
+          T.translate(`${PREFIX}.invalidConfig`, { error: err.message })
+        );
+        setLoading(false);
+      },
+      () => {
+        setLoading(false);
+      }
+    );
+  };
+
   return (
     <>
+      <Alert
+        showAlert={errorMessage !== null}
+        message={errorMessage}
+        type="error"
+        onClose={() => setErrorMessage(null)}
+      />
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
         <PrimaryContainedButton
           onClick={toggleForm}
           style={{ marginBottom: '15px' }}
+          data-testid="link-repository-button"
         >
           {T.translate(`${PREFIX}.linkButton`)}
         </PrimaryContainedButton>
       )}
       {sourceControlManagementConfig && (
-        <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 100px">
+        <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 120px 100px">
           <TableHeader>
             <TableRow>
               <TableCell>
@@ -99,6 +132,7 @@ export const SourceControlManagement = () => {
                 {T.translate(`${PREFIX}.configModal.pathPrefix.label`)}
               </TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHeader>
 
@@ -106,18 +140,22 @@ export const SourceControlManagement = () => {
             <TableRow
               key={`${sourceControlManagementConfig.provider}-${sourceControlManagementConfig.link}`}
             >
-              <TableCell>{sourceControlManagementConfig.provider}</TableCell>
-              <TableCell>
+              <TableCell data-testid="repository-provider">
+                {sourceControlManagementConfig.provider}
+              </TableCell>
+              <TableCell data-testid="repository-link">
                 <a
                   href={sourceControlManagementConfig.link}
-                  rel="noopener noreferrer"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {sourceControlManagementConfig.link}
                 </a>
               </TableCell>
-              <TableCell>{sourceControlManagementConfig.auth.type}</TableCell>
-              <TableCell>
+              <TableCell data-testid="repository-auth-type">
+                {sourceControlManagementConfig.auth.type}
+              </TableCell>
+              <TableCell data-testid="repository-auth-token">
                 <StyledPasswordWrapper
                   value={sourceControlManagementConfig.auth.token}
                 />
@@ -131,6 +169,14 @@ export const SourceControlManagement = () => {
                 {sourceControlManagementConfig.pathPrefix
                   ? sourceControlManagementConfig.pathPrefix
                   : '--'}
+              </TableCell>
+              <TableCell>
+                <PrimaryTextLoadingButton
+                  onClick={validateConfigAndRedirect}
+                  loading={loading}
+                >
+                  {T.translate(`${PREFIX}.syncButton`)}
+                </PrimaryTextLoadingButton>
               </TableCell>
               <TableCell>
                 <ActionsPopover actions={actions} />

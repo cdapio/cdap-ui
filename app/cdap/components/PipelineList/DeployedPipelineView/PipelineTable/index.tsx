@@ -44,7 +44,9 @@ const PipelineTableView: React.FC<IProps> = ({
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
-
+  const sourceControlManagementEnabled = useFeatureFlagDefaultFalse(
+    'source.control.management.git.enabled'
+  );
   function renderBody() {
     if (!pipelines || (Array.isArray(pipelines) && pipelines.length === 0)) {
       return (
@@ -76,6 +78,7 @@ const PipelineTableView: React.FC<IProps> = ({
               pipeline={pipeline}
               refetch={refetch}
               lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+              sourceControlManagementEnabled={sourceControlManagementEnabled}
             />
           );
         })}

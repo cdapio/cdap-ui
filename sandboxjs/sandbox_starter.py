@@ -1,4 +1,4 @@
-# Copyright © 2022 Cask Data, Inc.
+# Copyright © 2022-2023 Cask Data, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License. You may obtain a copy of
@@ -18,6 +18,7 @@ import requests
 import subprocess
 import zipfile
 import json
+import xml.etree.ElementTree as ET
 
 def run_shell_command(cmd):
     process = subprocess.run(cmd.split(" "), stderr=subprocess.PIPE)
@@ -25,10 +26,34 @@ def run_shell_command(cmd):
         print("Process completed with error: ", process.stderr)
     assert process.returncode == 0
 
+def enable_features(path):
+    print("Enabling feature flags")
+    conf_root = ET.parse(path).getroot()
+    with open('features.json') as feature_flags_file:
+        feature_flags = json.load(feature_flags_file)
+        for feature in feature_flags:
+            value = feature_flags[feature]
+            name_tag = ET.Element("name")
+            name_tag.text = feature
+            value_tag = ET.Element("value")
+            value_tag.text = value
+            property_tag = ET.Element("property")
+            property_tag.append(name_tag)
+            property_tag.append(value_tag)
+            conf_root.append(property_tag)
+        new_conf = ET.ElementTree(conf_root)
+        new_conf.write(path)
+        # update cdap.json
+        with open('../server/config/development/cdap.json','r+') as file:
+            file_data = json.load(file)
+            file_data.update(feature_flags)
+            file.seek(0)
+            json.dump(file_data, file, indent = 2)
+
 # Start CDAP sandbox
 print("Downloading CDAP sandbox")
 with open('sandbox_version.json') as sandbox_info_file:
-  sandbox_info = json.load(sandbox_info_file)
+    sandbox_info = json.load(sandbox_info_file)
 sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/{}/cdap-sandbox-{}.zip".format(sandbox_info["release"], sandbox_info["version"])
 sandbox_dir = sandbox_url.split("/")[-1].split(".zip")[0]
 r = requests.get(sandbox_url)
@@ -39,6 +64,7 @@ print("Start the sandbox")
 run_shell_command(f"chmod +x ../../sandbox/{sandbox_dir}/bin/cdap")
 my_env = os.environ.copy()
 my_env["_JAVA_OPTIONS"] = "-Xmx24G"
+enable_features(f"../../sandbox/{sandbox_dir}/conf/cdap-site.xml")
 sandbox_start_cmd = "../../sandbox/" + sandbox_dir + "/bin/cdap sandbox start"
 process = subprocess.Popen(sandbox_start_cmd, shell=True, env=my_env)
 process.communicate()

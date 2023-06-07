@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 Cask Data, Inc.
+ * Copyright © 2021-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import { Box, Button, IconButton, Popper } from '@material-ui/core';
 
 export const StyledPopper = styled(Popper)`
-  z-index: 5;
+  z-index: 1200;
   overflow-x: unset;
   overflow-y: unset;
   &::before {
@@ -51,6 +51,7 @@ export const StyledButton = styled(Button)`
 
 export const StyledP = styled.p`
   margin-bottom: 0;
+  word-break: break-word;
 `;
 
 export const BoldP = styled.p`

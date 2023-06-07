@@ -234,6 +234,7 @@ export default class NamespacesAccordion extends Component {
                 highlighted: namespace.highlighted,
               })}
               key={uuidV4()}
+              data-testid="namespace-row"
             >
               {GRID_HEADERS.map((header) => {
                 return <div key={uuidV4()}>{namespace[header.property]}</div>;
@@ -280,6 +281,7 @@ export default class NamespacesAccordion extends Component {
           <button
             className="btn btn-secondary"
             onClick={this.toggleNamespaceWizard}
+            data-testid="create-namespace-btn"
           >
             {T.translate(`${PREFIX}.create`)}
           </button>
@@ -320,6 +322,7 @@ export default class NamespacesAccordion extends Component {
         className={classnames('admin-config-container namespaces-container', {
           expanded: this.props.expanded,
         })}
+        data-testid="namespaces-accordion"
       >
         {this.renderLabel()}
         {this.renderContent()}

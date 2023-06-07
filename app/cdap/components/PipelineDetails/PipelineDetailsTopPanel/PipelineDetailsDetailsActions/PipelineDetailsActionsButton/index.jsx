@@ -14,8 +14,8 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
@@ -31,18 +31,29 @@ import downloadFile from 'services/download-file';
 import { santizeStringForHTMLID } from 'services/helpers';
 import { deleteEditDraft } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
+import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
 import styled from 'styled-components';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
+import Alert from 'components/shared/Alert';
+import {
+  pullPipeline,
+  setPullStatus,
+  setSourceControlMeta,
+} from 'components/PipelineDetails/store/ActionCreator';
 require('./PipelineDetailsActionsButton.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
+const SCM_PREFIX = 'features.SourceControlManagement';
 
 const StyledLi = styled.li`
-  ${({ isLatestVersion }) =>
-    !isLatestVersion &&
-    `opacity: 0.5;
-    &:hover {
+  ${({ isLatestVersion, isBatchPipeline }) =>
+    (!isLatestVersion || !isBatchPipeline) &&
+    `&:hover {
       background: white !important;
       cursor: not-allowed !important;
+    }
+    span {
+        opacity: 0.5;
     }`}
 `;
 
@@ -54,7 +65,6 @@ const StyledLi = styled.li`
  */
 const sanitizeConfig = (pipeline) => {
   const pipelineClone = { ...pipeline };
-
   pipelineClone.config.stages.forEach((stage) => {
     const keysToSanitize = Object.keys(stage).filter(
       (k) => k.startsWith('_') || k.startsWith('$')
@@ -72,39 +82,50 @@ const sanitizeConfig = (pipeline) => {
   return pipelineClone;
 };
 
-export default class PipelineDetailsActionsButton extends Component {
-  static propTypes = {
-    pipelineName: PropTypes.string,
-    description: PropTypes.string,
-    artifact: PropTypes.object,
-    config: PropTypes.object,
-    version: PropTypes.string,
-    lifecycleManagementEditEnabled: PropTypes.bool,
-    editDraftId: PropTypes.string,
-    isLatestVersion: PropTypes.bool,
+interface IPipelineDetailsActionsButtonProps {
+  pipelineName: string;
+  description: string;
+  artifact: any;
+  config: any;
+  version: string;
+  lifecycleManagementEditEnabled?: boolean;
+  sourceControlManagementEnabled?: boolean;
+  editDraftId?: string;
+  isLatestVersion?: boolean;
+  showCommitModal?: boolean;
+  pullLoading?: boolean;
+  pullStatus?: {
+    alertType: string;
+    message: string;
   };
+}
 
-  state = {
+class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButtonProps> {
+  public state = {
     showExportModal: false,
     showDeleteConfirmationModal: false,
     showPopover: false,
     showDiscardConfirmation: false,
+    showCommitModal: false,
+    loading: false,
+    deleteErrMsg: '',
+    extendedDeleteErrMsg: '',
   };
 
-  togglePopover = (showPopover = !this.state.showPopover) => {
+  public togglePopover = (showPopover = !this.state.showPopover) => {
     this.setState({
       showPopover,
     });
   };
 
-  componentWillReceiveProps(nextProps) {
+  public componentWillReceiveProps(nextProps) {
     this.pipelineConfig = {
       ...this.pipelineConfig,
       config: cloneDeep(nextProps.config),
     };
   }
 
-  pipelineConfig = {
+  public pipelineConfig = {
     name: this.props.pipelineName,
     description: this.props.description,
     artifact: this.props.artifact,
@@ -112,26 +133,24 @@ export default class PipelineDetailsActionsButton extends Component {
     version: this.props.version,
   };
 
-  duplicateConfigAndNavigate = () => {
-    duplicatePipeline(
-      this.props.pipelineName,
-      sanitizeConfig(this.pipelineConfig)
-    );
+
+  public duplicateConfigAndNavigate = () => {
+    duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
   };
 
-  toggleDiscardConfirmation = () => {
+  public toggleDiscardConfirmation = () => {
     this.setState({
       showDiscardConfirmation: !this.state.showDiscardConfirmation,
     });
   };
 
-  discardAndStartNewEdit = () => {
+  public discardAndStartNewEdit = () => {
     this.toggleDiscardConfirmation();
     editPipeline(this.props.pipelineName);
   };
 
-  handlePipelineEdit = () => {
-    if (!this.props.isLatestVersion) {
+  public handlePipelineEdit = () => {
+    if (!this.props.isLatestVersion || this.props.artifact.name !== 'cdap-data-pipeline') {
       return;
     }
     if (!this.props.editDraftId) {
@@ -147,7 +166,7 @@ export default class PipelineDetailsActionsButton extends Component {
     this.toggleDiscardConfirmation();
   };
 
-  continueSameDraft = () => {
+  public continueSameDraft = () => {
     const link = window.getHydratorUrl({
       stateName: 'hydrator.create',
       stateParams: {
@@ -159,7 +178,8 @@ export default class PipelineDetailsActionsButton extends Component {
     window.location.href = link;
   };
 
-  deletePipeline = () => {
+
+  public deletePipeline = () => {
     const namespace = getCurrentNamespace();
     const params = {
       namespace,
@@ -189,9 +209,9 @@ export default class PipelineDetailsActionsButton extends Component {
     );
   };
 
-  handlePipelineExport = () => {
+  public handlePipelineExport = () => {
     if (window.Cypress) {
-      this.showExportModal();
+      this.toggleExportModal();
       return;
     }
     // Unless we are running an e2e test, just export the pipeline JSON
@@ -201,11 +221,11 @@ export default class PipelineDetailsActionsButton extends Component {
     downloadFile(this.pipelineConfig, closePopoverCb);
   };
 
-  toggleExportModal = () => {
+  public toggleExportModal = () => {
     this.setState({ showExportModal: !this.state.showExportModal });
   };
 
-  toggleDeleteConfirmationModal = () => {
+  public toggleDeleteConfirmationModal = () => {
     this.setState({
       showDeleteConfirmationModal: !this.state.showDeleteConfirmationModal,
       deleteErrMsg: '',
@@ -213,7 +233,13 @@ export default class PipelineDetailsActionsButton extends Component {
     });
   };
 
-  renderExportPipelineModal() {
+  public toggleCommitModal = () => {
+    this.setState({
+      showCommitModal: !this.state.showCommitModal,
+    });
+  };
+
+  public renderExportPipelineModal() {
     if (!this.state.showExportModal) {
       return null;
     }
@@ -228,15 +254,13 @@ export default class PipelineDetailsActionsButton extends Component {
     );
   }
 
-  getDeleteConfirmationElem = () => {
-    const triggeredPipelines = TriggeredPipelineStore.getState().triggered
-      .triggeredPipelines;
+
+  public getDeleteConfirmationElem = () => {
+    const triggeredPipelines = TriggeredPipelineStore.getState().triggered.triggeredPipelines;
     const count = triggeredPipelines.length;
 
     if (count > 0) {
-      const triggersText = triggeredPipelines
-        .map((pipeline) => pipeline.application)
-        .join(', ');
+      const triggersText = triggeredPipelines.map((pipeline) => pipeline.application).join(', ');
 
       return (
         <div>
@@ -269,7 +293,7 @@ export default class PipelineDetailsActionsButton extends Component {
     );
   };
 
-  renderDeleteConfirmationModal() {
+  public renderDeleteConfirmationModal() {
     if (!this.state.showDeleteConfirmationModal) {
       return null;
     }
@@ -290,12 +314,49 @@ export default class PipelineDetailsActionsButton extends Component {
     );
   }
 
-  render() {
+  public renderCommitModal = () => {
+    return (
+      <CommitModal
+        isOpen={this.state.showCommitModal}
+        onToggle={this.toggleCommitModal}
+        pipelineName={this.props.pipelineName}
+        updateFileHash={setSourceControlMeta}
+      />
+    );
+  };
+
+  public handlePipelinePull = () => {
+    this.togglePopover();
+    pullPipeline(getCurrentNamespace(), this.props.pipelineName);
+  };
+
+  public renderPullLoadingAndStatus = () => {
+    return (
+      <div>
+        <LoadingAppLevel
+          isopen={this.props.pullLoading}
+          message={T.translate(`${SCM_PREFIX}.pull.pullAppMessage`, {
+            appId: this.props.pipelineName,
+          }).toLocaleString()}
+          style={{ width: '500px' }}
+        />
+        {this.props.pullStatus && (
+          <Alert
+            showAlert={this.props.pullStatus !== null}
+            message={this.props.pullStatus.message}
+            type={this.props.pullStatus.alertType}
+            onClose={() => setPullStatus(null)}
+          />
+        )}
+      </div>
+    );
+  };
+
+  public render() {
     const ActionsBtnAndLabel = () => {
       return (
         <div
           className="btn pipeline-action-btn pipeline-actions-btn"
-          onClick={this.togglePopover}
           data-testid="pipeline-actions-btn"
         >
           <div className="btn-container">
@@ -307,6 +368,9 @@ export default class PipelineDetailsActionsButton extends Component {
         </div>
       );
     };
+
+    const editEnabled =
+      this.props.isLatestVersion && this.props.artifact.name === 'cdap-data-pipeline';
 
     return (
       <div
@@ -331,20 +395,52 @@ export default class PipelineDetailsActionsButton extends Component {
             {this.props.lifecycleManagementEditEnabled && (
               <StyledLi
                 isLatestVersion={this.props.isLatestVersion}
+                isBatchPipeline={this.props.artifact.name === 'cdap-data-pipeline'}
                 onClick={this.handlePipelineEdit}
                 data-testid="pipeline-edit-btn"
               >
-                {T.translate(`${PREFIX}.edit`)}
+                {!this.props.isLatestVersion && (
+                  <Popover
+                    target={() => <span>{T.translate(`${PREFIX}.edit`)}</span>}
+                    showOn="Hover"
+                    placement="left"
+                  >
+                    {T.translate('commons.editTooltip.notLatest')}
+                  </Popover>
+                )}
+                {this.props.artifact.name !== 'cdap-data-pipeline' && (
+                  <Popover
+                    target={() => <span>{T.translate(`${PREFIX}.edit`)}</span>}
+                    showOn="Hover"
+                    placement="left"
+                  >
+                    {T.translate('commons.editTooltip.notBatch')}
+                  </Popover>
+                )}
+                {editEnabled && <span>{T.translate(`${PREFIX}.edit`)}</span>}
               </StyledLi>
             )}
-            <li onClick={this.duplicateConfigAndNavigate}>
+
+            <li role="button" onClick={this.duplicateConfigAndNavigate}>
               {T.translate(`${PREFIX}.duplicate`)}
             </li>
-            <li onClick={this.handlePipelineExport}>
+            <li role="button" onClick={this.handlePipelineExport}>
               {T.translate(`${PREFIX}.export`)}
             </li>
+            {this.props.sourceControlManagementEnabled && (
+              <div>
+                <hr />
+                <li role="button" onClick={this.toggleCommitModal} data-testid="push-pipeline">
+                  {T.translate(`${SCM_PREFIX}.push.pushButton`)}
+                </li>
+                <li role="button" onClick={this.handlePipelinePull} data-testid="pull-pipeline">
+                  {T.translate(`${SCM_PREFIX}.pull.pullButton`)}
+                </li>
+              </div>
+            )}
             <hr />
             <li
+              role="button"
               onClick={this.toggleDeleteConfirmationModal}
               className="delete-action"
               data-testid="delete-pipeline"
@@ -365,7 +461,19 @@ export default class PipelineDetailsActionsButton extends Component {
           )}
           continueFn={this.continueSameDraft}
         />
+        {this.renderCommitModal()}
+        {this.renderPullLoadingAndStatus()}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { pullLoading, pullStatus } = state;
+  return {
+    pullLoading,
+    pullStatus,
+  };
+};
+
+export default connect(mapStateToProps)(PipelineDetailsActionsButton);

@@ -48,9 +48,15 @@ const ACTIONS = {
 
   // lifecycle management draftid
   SET_EDIT_DRAFT_ID: 'SET_EDIT_DRAFT_ID',
+  SET_VERSION_HAS_RUN: 'SET_VERSION_HAS_RUN',
 
   // Metadata Endpoints Actions
   SET_METADATA_ENDPOINTS: 'SET_METADATA_ENDPOINTS',
+
+  // Source Control Management
+  SET_PULL_LOADING: 'SET_PULL_LOADING',
+  SET_PULL_STATUS: 'SET_PULL_STATUS',
+  SET_SOURCE_CONTROL_META: 'SET_SOURCE_CONTROL_META',
 
   RESET: 'RESET',
 };
@@ -87,11 +93,19 @@ const DEFAULT_PIPELINE_DETAILS = {
   scheduleError: '',
   stopButtonLoading: true,
   stopError: '',
+
+  // lcm
   change: {},
   editDraftId: null,
+  versionHasRun: true,
 
   // endpoints for plugin metadata
   metadataEndpoints: [],
+
+  // source control meta
+  sourceControlMeta: null,
+  pullLoading: false,
+  pullStatus: null,
 };
 
 const pipelineDetails = (
@@ -122,6 +136,7 @@ const pipelineDetails = (
         config: { ...newPipelineConfig },
         version: pipeline.appVersion,
         change: pipeline.change,
+        sourceControlMeta: pipeline.sourceControlMeta,
       };
     }
     case ACTIONS.SET_OPTIONAL_PROPERTY:
@@ -254,6 +269,26 @@ const pipelineDetails = (
       return {
         ...state,
         editDraftId: action.payload.draftId,
+      };
+    case ACTIONS.SET_VERSION_HAS_RUN:
+      return {
+        ...state,
+        versionHasRun: action.payload.versionHasRun,
+      };
+    case ACTIONS.SET_PULL_LOADING:
+      return {
+        ...state,
+        pullLoading: action.payload.pullLoading,
+      };
+    case ACTIONS.SET_PULL_STATUS:
+      return {
+        ...state,
+        pullStatus: action.payload.pullStatus,
+      };
+    case ACTIONS.SET_SOURCE_CONTROL_META:
+      return {
+        ...state,
+        sourceControlMeta: action.payload.sourceControlMeta,
       };
     case ACTIONS.RESET:
       return DEFAULT_PIPELINE_DETAILS;

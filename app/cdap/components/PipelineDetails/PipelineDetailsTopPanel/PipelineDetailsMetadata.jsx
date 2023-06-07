@@ -14,17 +14,28 @@
  * the License.
  */
 
-import PropTypes from 'prop-types';
 import React from 'react';
 import { connect, Provider } from 'react-redux';
+import T from 'i18n-react';
+import styled from 'styled-components';
 import PipelineDetailStore from 'components/PipelineDetails/store';
 import Tags from 'components/shared/Tags';
 import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
-import T from 'i18n-react';
+import { Chip } from '@material-ui/core';
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
+const SCM_PREFIX = 'features.SourceControlManagement';
+
+const StyledSpan = styled.span`
+  margin-left: 50px;
+  display: flex;
+`;
+
+const StyledChip = styled(Chip)`
+  height: 20px;
+`;
 
 const mapStateToPipelineTagsProps = (state) => {
   const { name } = state;
@@ -41,21 +52,33 @@ const mapStateToPipelineTagsProps = (state) => {
 const ConnectedPipelineTags = connect(mapStateToPipelineTagsProps)(Tags);
 
 const mapStateToPipelineDetailsMetadataProps = (state) => {
-  const { name, artifact, version, description } = state;
+  const { name, artifact, version, description, sourceControlMeta } = state;
   return {
     name,
     artifactName: artifact.name,
     version,
     description,
+    sourceControlMeta,
   };
 };
+
+interface IPipelineDetailsMetadata {
+  name: string;
+  artifactName: string;
+  version: string;
+  description: string;
+  sourceControlMeta: {
+    fileHash: string,
+  };
+}
 
 const PipelineDetailsMetadata = ({
   name,
   artifactName,
   version,
   description,
-}) => {
+  sourceControlMeta,
+}: IPipelineDetailsMetadata) => {
   return (
     <div className="pipeline-metadata">
       <div className="pipeline-type-name-version">
@@ -78,6 +101,21 @@ const PipelineDetailsMetadata = ({
             {description}
           </Popover>
         </span>
+        {sourceControlMeta && sourceControlMeta.fileHash && (
+          <StyledSpan>
+            <StyledChip
+              variant="outlined"
+              label={T.translate(`${SCM_PREFIX}.table.gitStatus`)}
+            />
+            <Popover
+              target={() => <IconSVG name="icon-info-circle" />}
+              showOn="Hover"
+              placement="bottom"
+            >
+              {T.translate(`${SCM_PREFIX}.table.gitStatusHelperText`)}
+            </Popover>
+          </StyledSpan>
+        )}
         <span className="pipeline-version">
           {T.translate(`${PREFIX}.version`, { version })}
         </span>
@@ -87,13 +125,6 @@ const PipelineDetailsMetadata = ({
       </div>
     </div>
   );
-};
-
-PipelineDetailsMetadata.propTypes = {
-  name: PropTypes.string,
-  artifactName: PropTypes.string,
-  version: PropTypes.string,
-  description: PropTypes.string,
 };
 
 const ConnectedPipelineDetailsMetadata = connect(

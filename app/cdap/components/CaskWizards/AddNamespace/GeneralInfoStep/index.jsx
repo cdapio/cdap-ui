@@ -95,7 +95,7 @@ export default function GeneralInfoStep() {
               )}
             </Label>
           </Col>
-          <Col xs="7">
+          <Col xs="7" data-testid="create-namespace-name">
             <InputNamespaceName />
           </Col>
           <span className="fa fa-asterisk text-danger float-left" />

@@ -16,7 +16,7 @@
 
 import React from 'react';
 import StatusButton from './index';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
+import { SUPPORT } from './constants';
 
 // TODO - sean: use more storybook functionality: withknobs, actions etc
 export const Success = () => <StatusButton status={SUPPORT.yes} />;

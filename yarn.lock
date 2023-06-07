@@ -6015,51 +6015,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uirouter/angularjs@npm:1.0.29":
-  version: 1.0.29
-  resolution: "@uirouter/angularjs@npm:1.0.29"
-  dependencies:
-    "@uirouter/core": 6.0.7
-  peerDependencies:
-    angular: ">=1.2.0"
-  checksum: 5bc4c280fbaca6115ed0a4f32b3d8af1442513bef201f72cd075e47952f3d8235e7eb25451588f42d863e84de3f133d20d451a79682566d3d0e84ee305c97c6e
-  languageName: node
-  linkType: hard
-
-"@uirouter/core@npm:6.0.7":
-  version: 6.0.7
-  resolution: "@uirouter/core@npm:6.0.7"
-  checksum: adf87e1a599ab7e06d51473ce3d7a787b87594142bdf992f9f95989d14f434eaa8c56621edfea96d4ccdb84abed205ef4b9a0a375345f3402edb4aa44c460a09
-  languageName: node
-  linkType: hard
-
-"@uirouter/react-hybrid@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@uirouter/react-hybrid@npm:1.0.5"
-  dependencies:
-    "@uirouter/angularjs": 1.0.29
-    "@uirouter/core": 6.0.7
-    "@uirouter/react": 1.0.7
-  peerDependencies:
-    angular: ^1.5.0
-    react: ">=15.0.0"
-  checksum: 29081286d009c6c05cbf3721d141654d6666dde070452dfbf403fdb18c2ec88057183d6a2895e30b10fc7837c00354885368e986298dff8be0304a8e622274c6
-  languageName: node
-  linkType: hard
-
-"@uirouter/react@npm:1.0.7":
-  version: 1.0.7
-  resolution: "@uirouter/react@npm:1.0.7"
-  dependencies:
-    "@uirouter/core": 6.0.7
-    classnames: ^2.3.1
-    prop-types: ^15.6.1
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 5241d326e2501489d3f9dc5b7d3e9b9eb4416b0629c47cd578b5c5404befe2f3c587a4ee07310dbc5cbad509b6acdec38ec2baeed5e9f88578603c92d6b2ebcd
-  languageName: node
-  linkType: hard
-
 "@webassemblyjs/ast@npm:1.11.1":
   version: 1.11.1
   resolution: "@webassemblyjs/ast@npm:1.11.1"
@@ -9659,7 +9614,6 @@ __metadata:
     "@types/webpack": ^5.28.0
     "@typescript-eslint/eslint-plugin": ^5.45.1
     "@typescript-eslint/parser": ^5.45.1
-    "@uirouter/react-hybrid": ^1.0.5
     "@zeit/ncc": 0.20.4
     ace-builds: 1.4.7
     angular: 1.4.3
@@ -10112,7 +10066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.3, classnames@npm:^2.3.1":
+"classnames@npm:^2.2.3":
   version: 2.3.2
   resolution: "classnames@npm:2.3.2"
   checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e

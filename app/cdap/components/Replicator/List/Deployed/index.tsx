@@ -18,7 +18,6 @@ import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { MyReplicatorApi } from 'api/replicator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { PluginType } from 'components/Replicator/constants';
 import { objectQuery } from 'services/helpers';
 import Status from 'components/shared/Status';
 import { Link } from 'react-router-dom';
@@ -65,7 +64,7 @@ const DeployedView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   const [replicatorNameDelete, setReplicatorNameDelete] = React.useState(null);
   const [redirect, setRedirect] = React.useState<string>();
 
-  // TODO: Replace with GraphQL
+  // TODO: CDAP-20533 Replace with GraphQL
   function fetchList() {
     const params = {
       namespace: getCurrentNamespace(),
@@ -96,6 +95,7 @@ const DeployedView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
       const batchDetailBody = list.map((replicator) => {
         return {
           appId: replicator.name,
+          version: replicator.version,
         };
       });
 
@@ -139,34 +139,37 @@ const DeployedView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   React.useEffect(fetchList, []);
 
   function getPipelineConfig(replicationName) {
-    const replicationObj = objectQuery(configMap, replicationName);
-
-    const replicationConfig = {
-      name: replicationObj.name,
-      artifact: replicationObj.artifact,
-      config: replicationObj.config,
+    const params = {
+      namespace: getCurrentNamespace(),
+      appName: replicationName,
     };
-
-    return replicationConfig;
+    return MyReplicatorApi.getReplicator(params);
   }
 
   function exportPipeline(replicationName) {
-    const replicationConfig = getPipelineConfig(replicationName);
-    DownloadFile(replicationConfig);
+    getPipelineConfig(replicationName).subscribe((res) => {
+      const replicationConfig = {
+        name: res.name,
+        artifact: res.artifact,
+        config: JSON.parse(res.configuration),
+      };
+      DownloadFile(replicationConfig);
+    });
   }
 
   function duplicatePipeline(replicationName) {
-    const replicationObj = getPipelineConfig(replicationName);
-    const replicationConfig = {
-      ...replicationObj,
-      name: '',
-    };
+    getPipelineConfig(replicationName).subscribe((res) => {
+      const replicationConfig = {
+        ...res,
+        name: '',
+        config: JSON.parse(res.configuration),
+      };
+      const cloneId = res.name;
+      window.localStorage.setItem(cloneId, JSON.stringify(replicationConfig));
 
-    const cloneId = replicationObj.name;
-    window.localStorage.setItem(cloneId, JSON.stringify(replicationConfig));
-
-    const createViewLink = `/ns/${getCurrentNamespace()}/replication/create?cloneId=${cloneId}`;
-    setRedirect(createViewLink);
+      const createViewLink = `/ns/${getCurrentNamespace()}/replication/create?cloneId=${cloneId}`;
+      setRedirect(createViewLink);
+    });
   }
 
   if (redirect) {

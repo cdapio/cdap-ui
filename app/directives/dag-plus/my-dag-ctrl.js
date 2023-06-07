@@ -1805,4 +1805,18 @@ angular.module(PKG.name + '.commons')
 
     $scope.$on('$destroy', cleanupOnDestroy);
     vm.initPipelineComments();
+
+    $scope.$watch('runId', function() {
+      // Watch for runId change to update pipeline graph with 
+      // corresponding version
+      if ($scope.runId) {
+        // prevent duplicated rendering on first time page landing
+        vm.instance.reset();
+        normalNodes = [];
+        conditionNodes = [];
+        splitterNodesPorts = {};
+        init();
+        vm.initPipelineComments();
+      }
+    }, true);
   });

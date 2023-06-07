@@ -890,6 +890,8 @@ const arrayOfStringsMatchTargetPrefix = (arr, target) => {
   return false
 }
 
+const BATCH_PIPELINE_TYPE = 'cdap-data-pipeline'
+
 const PIPELINE_ARTIFACTS = [
   'cdap-data-pipeline',
   'cdap-data-streams',
@@ -957,4 +959,5 @@ export {
   unflatternStringToObj,
   arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
+  BATCH_PIPELINE_TYPE
 };

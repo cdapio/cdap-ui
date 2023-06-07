@@ -80,8 +80,14 @@ class Login extends Component {
           sameSite: 'strict',
         });
         const queryObj = util.getQueryParams(location.search);
-        queryObj.redirectUrl = queryObj.redirectUrl || '/';
-        window.location.href = queryObj.redirectUrl;
+        let validRedirectUrl;
+        // Require that redirectUrl be a relative path to avoid open redirects
+        if (queryObj.redirectUrl?.startsWith('/')) {
+          validRedirectUrl = queryObj.redirectUrl;
+        } else {
+          validRedirectUrl = '/';
+        }
+        window.location.href = validRedirectUrl;
       });
   }
   onUsernameUpdate(e) {

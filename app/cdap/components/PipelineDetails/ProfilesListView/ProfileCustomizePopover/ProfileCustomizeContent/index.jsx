@@ -210,7 +210,10 @@ export default class ProfileCustomizeContent extends PureComponent {
                   }
                   return {
                     ...property,
-                    value: this.latestValues[property.name],
+                    value:
+                      this.latestValues[property.name] ||
+                      this.props.customizations[property.name] ||
+                      property['widget-attributes'].default,
                   };
                 });
               return (

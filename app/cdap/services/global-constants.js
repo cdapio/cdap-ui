@@ -354,7 +354,6 @@ const GENERATED_RUNTIMEARGS = {
   PIPELINE_INSTRUMENTATION: 'app.pipeline.instrumentation',
   PIPELINE_PUSHDOWN_ENABLED: 'app.pipeline.pushdownEnabled',
   PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX: 'app.pipeline.pushdown.',
-  CUSTOM_SPARK_KEY_PREFIX: 'system.spark.',
   SYSTEM_DRIVER_RESOURCES_MEMORY: 'task.driver.system.resources.memory',
   SYSTEM_DRIVER_RESOURCES_CORES: 'task.driver.system.resources.cores',
   SYSTEM_EXECUTOR_RESOURCES_MEMORY: 'task.executor.system.resources.memory',

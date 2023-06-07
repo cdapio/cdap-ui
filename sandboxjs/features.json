@@ -1,0 +1,4 @@
+{
+  "feature.source.control.management.git.enabled": "true",
+  "feature.lifecycle.management.edit.enabled": "true"
+}

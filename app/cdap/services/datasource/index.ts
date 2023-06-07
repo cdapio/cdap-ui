@@ -241,7 +241,7 @@ export default class DataSource implements IDataSource {
         // Prefer parsedResponse.message because that is what is returned from the API
         const errorMessage =
           // objectQuery(ajaxResponse, 'response', 'message') || ajaxResponse.message;
-          parsedResponse.message || parsedResponse || ajaxResponse.message;
+          parsedResponse?.message || parsedResponse || ajaxResponse.message;
         bindingInfo.rx.error({
           statusCode: ajaxResponse.status,
           message: errorMessage,

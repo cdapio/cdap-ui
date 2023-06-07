@@ -34,7 +34,11 @@ interface IDescriptionProps {
 const DescriptionView: React.FC<IDescriptionProps> = ({ description }) => {
   const classes = useStyle();
 
-  return <div className={classes.root}>{description}</div>;
+  return (
+    <div className={classes.root} data-testid="namespace-description">
+      {description}
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {

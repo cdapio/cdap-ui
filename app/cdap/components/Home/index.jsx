@@ -148,6 +148,14 @@ const Metadata = Loadable({
   loading: LoadingSVGCentered,
 });
 
+const SourceControlManagementSyncView = Loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "SourceControlManagementSyncView" */ 'components/SourceControlManagement'
+    ),
+  loading: LoadingSVGCentered,
+});
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -273,6 +281,7 @@ export default class Home extends Component {
             component={PluginJSONCreator}
           />
           <Route path="/ns/:namespace/metadata" component={Metadata} />
+          <Route path="/ns/:namespace/scm/sync" component={SourceControlManagementSyncView} />
           <Route component={Page404} />
         </Switch>
       </div>

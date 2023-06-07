@@ -94,7 +94,7 @@ export default class AdminTabSwitch extends React.PureComponent<IAdminTabSwitchP
   public renderUptimeVersion() {
     return (
       <span className="uptime-version-container">
-        <span>
+        <span data-testid="system-uptime-container" data-uptime={this.props.uptime}>
           {this.props.uptime
             ? T.translate(`${PREFIX}.uptimeLabel`, {
                 time: humanReadableDuration(Math.ceil(this.props.uptime / 1000)),

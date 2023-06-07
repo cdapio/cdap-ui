@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 public class Commands implements CdfHelper {
 
@@ -354,8 +353,12 @@ public class Commands implements CdfHelper {
   }
 
   public static void dismissTopBanner() {
-    ElementHelper.clickOnElement(Helper.locateElementByXPath(
-      "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']"));
+    try {
+      ElementHelper.clickOnElement(Helper.locateElementByXPath(
+          "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']"));
+    } catch (NoSuchElementException e) {
+      // pass
+    }
     WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("valium-banner-hydrator"));
   }
 
@@ -384,5 +387,13 @@ public class Commands implements CdfHelper {
       }
     }
     return stageJSON;
+  }
+
+  public static void waitForLoading() {
+    if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
+      WaitHelper.waitForElementToBeHidden(
+        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
+      );
+    }
   }
 }

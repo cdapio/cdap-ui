@@ -268,7 +268,7 @@ const PipelineListCompositeTabView = ({
       <div>
         <div>
           <TriggerConfigHeader>{T.translate(`${PREFIX}.triggerType`)}</TriggerConfigHeader>
-          <SelectorDropdown>
+          <SelectorDropdown data-testid="composite-trigger-type">
             <select
               className="form-control"
               value={selectedTriggersType}

@@ -21,12 +21,12 @@ import { ISourceControlManagementConfig } from './types';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
-import { authKeys, providers, scmAuthType } from './constants';
+import { authKeys, patConfigKeys, providers, scmAuthType } from './constants';
 import {
   defaultSourceControlManagement,
   sourceControlManagementFormReducer,
 } from './reducer';
-import { addOrValidateSourceControlManagement } from '../store/ActionCreator';
+import { addOrValidateSourceControlManagementForm } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { EntityTopPanel } from 'components/EntityTopPanel';
 import Alert from 'components/shared/Alert';
@@ -97,10 +97,10 @@ const SourceControlManagementForm = ({
     if (!formState.config?.link) {
       count++;
     }
-    if (!formState.config?.auth.token) {
+    if (!formState.config?.auth?.token) {
       count++;
     }
-    if (!formState.config?.auth.tokenName) {
+    if (!formState.config?.auth?.patConfig?.passwordName) {
       count++;
     }
     return count;
@@ -129,6 +129,21 @@ const SourceControlManagementForm = ({
       payload.key = 'auth';
       payload.value = newAuth;
     }
+
+    // for patConfig object
+    if (patConfigKeys.includes(key)) {
+      const newPatConfig = { ...formState.config.auth.patConfig };
+      newPatConfig[key] = value;
+
+      const newAuth = {
+        ...formState.config.auth,
+        patConfig: newPatConfig,
+      };
+
+      payload.key = 'auth';
+      payload.value = newAuth;
+    }
+
     formStateDispatch({
       type: 'SET_VALUE',
       payload,
@@ -157,7 +172,7 @@ const SourceControlManagementForm = ({
     if (!validateForm()) {
       return;
     }
-    addOrValidateSourceControlManagement(
+    addOrValidateSourceControlManagementForm(
       getCurrentNamespace(),
       formState.config,
       true
@@ -179,7 +194,7 @@ const SourceControlManagementForm = ({
   };
 
   const onSubmit = () => {
-    addOrValidateSourceControlManagement(
+    addOrValidateSourceControlManagementForm(
       getCurrentNamespace(),
       formState.config
     ).subscribe(
@@ -317,7 +332,7 @@ const SourceControlManagementForm = ({
           {formState.config?.auth?.type === scmAuthType[0].id && (
             <>
               <PropertyRow
-                value={formState.config?.auth?.tokenName}
+                value={formState.config?.auth?.patConfig?.passwordName}
                 property={{
                   name: 'tokenName',
                   description: T.translate(
@@ -327,10 +342,11 @@ const SourceControlManagementForm = ({
                   required: true,
                 }}
                 onChange={(val) => {
-                  handleValueChange(val, 'tokenName');
+                  handleValueChange(val, 'passwordName');
                 }}
                 errors={
-                  !formState.config?.auth?.tokenName && formState.error
+                  !formState.config?.auth?.patConfig?.passwordName &&
+                  formState.error
                     ? [
                         {
                           msg: T.translate(
@@ -368,7 +384,7 @@ const SourceControlManagementForm = ({
                 }
               />
               <PropertyRow
-                value={formState.config?.auth?.username}
+                value={formState.config?.auth?.patConfig?.username}
                 property={{
                   name: 'username',
                   description: T.translate(
@@ -389,10 +405,14 @@ const SourceControlManagementForm = ({
           onClick={validateConnection}
           loading={formState.loading}
           disabled={formState.loading}
+          data-testid="validate-repo-config-button"
         >
           {T.translate(`${PREFIX}.validate.button`)}
         </PrimaryOutlinedLoadingButton>
-        <PrimaryContainedButton onClick={handleSubmit}>
+        <PrimaryContainedButton
+          onClick={handleSubmit}
+          data-testid="save-repo-config-button"
+        >
           {T.translate(`${PREFIX}.linkConfirm`)}
         </PrimaryContainedButton>
       </StyledButtonGroup>

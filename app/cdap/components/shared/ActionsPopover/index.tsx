@@ -27,6 +27,7 @@ export interface IAction {
   disabled?: boolean;
   className?: string;
   title?: string;
+  disabledTooltip?: string;
 }
 
 interface IActionsPopoverProps {
@@ -103,7 +104,13 @@ const ActionsPopover: React.FC<IActionsPopoverProps> = ({
               title={action.title}
               data-testid={action.label + '-on-popover'}
             >
-              {action.label}
+              {action.disabled && action.disabledTooltip ? (
+                <Popover target={() => <>{action.label}</>} showOn="Hover" placement="right">
+                  {action.disabledTooltip}
+                </Popover>
+              ) : (
+                <>{action.label}</>
+              )}
             </li>
           );
         })}
