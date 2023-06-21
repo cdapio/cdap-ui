@@ -14,148 +14,11 @@
  * the License.
  */
 
-import { IconButton } from '@material-ui/core';
-import { MyPipelineApi } from 'api/pipeline';
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
-import { WrapperCanvas } from 'components/hydrator/components/Canvas';
-import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
-import React, { useEffect, useState } from 'react';
-import { getNodesFromStages } from 'services/helpers';
+import React from 'react';
 import styled from 'styled-components';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-
-const usePipelineGraph = (namespace, appId, version) => {
-  const [nodesAndConnections, setNodesAndConnections] = useState({
-    nodes: [],
-    connections: [],
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const fetchConfigAndDisplayGraph = () => {
-    setIsLoading(true);
-    MyPipelineApi.getAppVersion({
-      namespace,
-      appId,
-      version,
-    }).subscribe((res: any) => {
-      const config = JSON.parse(res.configuration);
-      let nodes = getNodesFromStages(config.stages);
-      const connections = config.connections;
-      const graph = getGraphLayout(nodes, connections, 200);
-      nodes = nodes.map((node) => {
-        return {
-          ...node,
-          _uiPosition: {
-            top: graph._nodes[node.name].y + 'px',
-            left: graph._nodes[node.name].x + 'px',
-          },
-        };
-      });
-      console.log(nodes);
-      setNodesAndConnections({ nodes, connections });
-      // TODO: currently without the timeout the graph edges renders weirdly
-      // need to figure out the cause
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-    });
-  };
-
-  useEffect(() => {
-    fetchConfigAndDisplayGraph();
-  }, []);
-  return { nodesAndConnections, isLoading };
-};
-
-const StyledTitleBar = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background: lightgray;
-  height: 40px;
-  padding: 0 30px;
-`;
-
-const TitleBar = ({ isOpen, title, onClick }) => {
-  return (
-    <StyledTitleBar>
-      <div style={{ flexGrow: 1 }}>{title}</div>
-      <IconButton onClick={onClick}>
-        {isOpen ? <VisibilityIcon /> : <VisibilityOffIcon />}
-      </IconButton>
-    </StyledTitleBar>
-  );
-};
-
-const StyledDiffContainer = styled.div`
-  width: 100%;
-  height: 0px;
-  flex-grow: ${(props) => (props.isOpen ? 1 : 0)};
-`;
-
-const DiffWindow = ({ defaultOpen, children, title }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  return (
-    <>
-      <TitleBar title={title} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-      <StyledDiffContainer isOpen={isOpen}>{children}</StyledDiffContainer>
-    </>
-  );
-};
-
-const StyledDiffWindowList = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
-
-const DiffWindowList = ({ namespace, appId, version, latestVersion }) => {
-  const {
-    nodesAndConnections: { nodes: oldVersionNodes, connections: oldVersionConnections },
-    isLoading: isOldLoading,
-  } = usePipelineGraph(namespace, appId, version);
-
-  const {
-    nodesAndConnections: { nodes: currentVersionNodes, connections: currentVersionConnections },
-    isLoading: isCurrentLoading,
-  } = usePipelineGraph(namespace, appId, latestVersion);
-
-  return (
-    <StyledDiffWindowList>
-      <DiffWindow title={'Old Version'} defaultOpen={true}>
-        {!isOldLoading && (
-          <WrapperCanvas
-            angularNodes={oldVersionNodes}
-            angularConnections={oldVersionConnections}
-            isPipelineDiff={true}
-            backgroundId={'older-pipeline'}
-          />
-        )}
-      </DiffWindow>
-      <DiffWindow title={'Current Version'} defaultOpen={true}>
-        {!isCurrentLoading && (
-          <WrapperCanvas
-            angularNodes={currentVersionNodes}
-            angularConnections={currentVersionConnections}
-            isPipelineDiff={true}
-            backgroundId={'current-pipeline'}
-          />
-        )}
-      </DiffWindow>
-      <DiffWindow title={'Diff'} defaultOpen={false}>
-        {/* TODO DIFF TABLE */}
-      </DiffWindow>
-    </StyledDiffWindowList>
-  );
-};
-
-const StyledDiffList = styled.div`
-  background: white;
-  border: 1px solid black;
-  height: 100%;
-  width: 400px;
-`;
+import { DiffWindow } from './DiffWindow';
+import { DiffList } from './DiffList';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -175,8 +38,8 @@ export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version, lates
       innerStyle={{ height: '100%' }}
     >
       <StyledContainer>
-        <StyledDiffList />
-        <DiffWindowList {...{ namespace, appId, version, latestVersion }} />
+        <DiffList />
+        <DiffWindow {...{ namespace, appId, version, latestVersion }} />
       </StyledContainer>
     </PipelineModeless>
   );
