@@ -91,6 +91,7 @@ interface ICanvasProps {
   undoStates?: any[];
   updateNodePositions?: (nodePosition: INodePosition) => void;
   isPipelineDiff?: boolean;
+  backgroundId?: string;
 }
 
 const nodeTypes = {
@@ -173,6 +174,7 @@ const Canvas = ({
   undoStates,
   updateNodePositions,
   isPipelineDiff,
+  backgroundId,
 }: ICanvasProps) => {
   const reactFlowInstance = useReactFlow();
   const deletePressed = useKeyPress(['Backspace', 'Delete']);
@@ -532,11 +534,12 @@ const Canvas = ({
   };
 
   return (
-    <StyledCanvasContainer
-      id="diagram-container"
-      isDisabled={isDisabled}
-      isPipelineDiff={isPipelineDiff}
-    >
+    // <StyledCanvasContainer
+    //   id="diagram-container"
+    //   isDisabled={isDisabled}
+    //   isPipelineDiff={isPipelineDiff}
+    // >
+    <>
       <ReactFlow
         id="dag-container"
         nodes={nodes}
@@ -573,7 +576,7 @@ const Canvas = ({
           });
         }}
       >
-        <Background />
+        <Background id={backgroundId} />
         {nodes.length > 5 && (
           <MiniMap
             nodeColor={(n) => {
@@ -582,7 +585,7 @@ const Canvas = ({
             pannable
           />
         )}
-        <Controls position="top-right" style={{ marginTop: '100px' }} showInteractive={!isDisabled}>
+        <Controls position="top-right" showInteractive={!isDisabled}>
           {!isDisabled && !isPipelineDiff && (
             <>
               <ControlButton
@@ -639,7 +642,8 @@ const Canvas = ({
           reactFlowCopyDeleteDisabled={!selectedElements.nodes.length}
         />
       )}
-    </StyledCanvasContainer>
+      {/* </StyledCanvasContainer> */}
+    </>
   );
 };
 
@@ -677,6 +681,7 @@ export const WrapperCanvas = ({
   undoStates,
   updateNodePositions,
   isPipelineDiff,
+  backgroundId,
 }: ICanvasProps) => {
   return (
     <ReactFlowProvider>
@@ -714,6 +719,7 @@ export const WrapperCanvas = ({
         undoStates={undoStates}
         updateNodePositions={updateNodePositions}
         isPipelineDiff={isPipelineDiff}
+        backgroundId={backgroundId}
       />
     </ReactFlowProvider>
   );

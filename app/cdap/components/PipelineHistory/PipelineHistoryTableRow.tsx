@@ -164,6 +164,7 @@ export const PipelineHistoryTableRow = ({
           namespace={namespace}
           appId={pipelineName}
           version={appVersion}
+          latestVersion={latestVersion}
         />
       )}
     </>
