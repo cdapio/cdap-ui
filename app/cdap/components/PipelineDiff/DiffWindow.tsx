@@ -18,7 +18,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { WrapperCanvas } from 'components/hydrator/components/Canvas';
 import { DiffAccordion } from './DiffAccordion';
-import { usePipelineGraph } from './usePipelineGraph';
 
 const StyledDiffWindow = styled.div`
   flex-grow: 1;
@@ -27,34 +26,25 @@ const StyledDiffWindow = styled.div`
   height: 100%;
 `;
 
-export const DiffWindow = ({ namespace, appId, version, latestVersion }) => {
-  const {
-    nodesAndConnections: { nodes: oldVersionNodes, connections: oldVersionConnections },
-    isLoading: isOldLoading,
-  } = usePipelineGraph(namespace, appId, version);
-
-  const {
-    nodesAndConnections: { nodes: currentVersionNodes, connections: currentVersionConnections },
-    isLoading: isCurrentLoading,
-  } = usePipelineGraph(namespace, appId, latestVersion);
-
+export const DiffWindow = React.memo<any>((props) => {
+  const { oldVersion, currentVersion, isLoading } = props;
   return (
     <StyledDiffWindow>
       <DiffAccordion title={'Old Version'} defaultOpen={true}>
-        {!isOldLoading && (
+        {!isLoading && (
           <WrapperCanvas
-            angularNodes={oldVersionNodes}
-            angularConnections={oldVersionConnections}
+            angularNodes={oldVersion.nodes}
+            angularConnections={oldVersion.connections}
             isPipelineDiff={true}
             backgroundId={'older-pipeline'}
           />
         )}
       </DiffAccordion>
       <DiffAccordion title={'Current Version'} defaultOpen={true}>
-        {!isCurrentLoading && (
+        {!isLoading && (
           <WrapperCanvas
-            angularNodes={currentVersionNodes}
-            angularConnections={currentVersionConnections}
+            angularNodes={currentVersion.nodes}
+            angularConnections={currentVersion.connections}
             isPipelineDiff={true}
             backgroundId={'current-pipeline'}
           />
@@ -65,4 +55,4 @@ export const DiffWindow = ({ namespace, appId, version, latestVersion }) => {
       </DiffAccordion>
     </StyledDiffWindow>
   );
-};
+});

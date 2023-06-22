@@ -15,10 +15,13 @@
  */
 
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { DiffWindow } from './DiffWindow';
 import { DiffList } from './DiffList';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store from './store';
+import { fetchPipelineConfig } from './store/diffSlice';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -26,21 +29,43 @@ const StyledContainer = styled.div`
   height: 100%;
 `;
 
+const DiffContentContainer = ({ namespace, appId, version, latestVersion }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchPipelineConfig(namespace, appId, version, latestVersion, dispatch);
+  }, []);
+
+  const { topPipeline, bottomPipeline, isLoading, diffList } = useSelector((state) => {
+    return {
+      topPipeline: state.pipelineDiff.topPipeline,
+      bottomPipeline: state.pipelineDiff.bottomPipeline,
+      isLoading: state.pipelineDiff.isLoading,
+      diffList: state.pipelineDiff.diffList,
+    };
+  });
+  return (
+    <StyledContainer>
+      <DiffList diffList={diffList} />
+      <DiffWindow oldVersion={topPipeline} currentVersion={bottomPipeline} isLoading={isLoading} />
+    </StyledContainer>
+  );
+};
+
 export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version, latestVersion }) => {
   return (
-    <PipelineModeless
-      title="pipeline difference"
-      open={isOpen}
-      onClose={onClose}
-      placement="bottom-end"
-      fullScreen={true}
-      style={{ width: '100%', top: '100px', bottom: 0 }}
-      innerStyle={{ height: '100%' }}
-    >
-      <StyledContainer>
-        <DiffList />
-        <DiffWindow {...{ namespace, appId, version, latestVersion }} />
-      </StyledContainer>
-    </PipelineModeless>
+    <Provider store={store}>
+      <PipelineModeless
+        title="pipeline difference"
+        open={isOpen}
+        onClose={onClose}
+        placement="bottom-end"
+        fullScreen={true}
+        style={{ width: '100%', top: '100px', bottom: 0 }}
+        innerStyle={{ height: '100%' }}
+      >
+        <DiffContentContainer {...{ namespace, appId, version, latestVersion }} />
+      </PipelineModeless>
+    </Provider>
   );
 };
