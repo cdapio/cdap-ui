@@ -22,11 +22,14 @@ import { computePipelineDiff, getReactflowPipelineGraph } from './pipelineUtil';
 const initialState = {
   isLoading: false,
 
+  // TODO: type pipelines
   topPipeline: {
     config: null,
     nodes: [],
     connections: [],
   },
+
+  // TODO: type pipelines
   bottomPipeline: {
     config: null,
     nodes: [],
@@ -35,6 +38,7 @@ const initialState = {
   diffList: [],
 };
 
+// TODO: type if not inferreds
 const diffSlice = createSlice({
   name: 'pipelineDiff',
   initialState,
@@ -57,6 +61,7 @@ export const { pipelinesLoading, pipelinesReceived } = actions;
 
 export default reducer;
 
+// TODO: type
 export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion, dispatch) {
   dispatch(pipelinesLoading());
   Observable.forkJoin(

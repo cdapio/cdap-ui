@@ -17,6 +17,7 @@
 import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getNodesFromStages } from 'services/helpers';
 
+// TODO: add config type
 export function getReactflowPipelineGraph(config) {
   let nodes = getNodesFromStages(config.stages);
   const connections = config.connections;

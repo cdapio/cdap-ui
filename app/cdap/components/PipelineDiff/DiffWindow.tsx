@@ -27,6 +27,7 @@ const StyledDiffWindow = styled.div`
 `;
 
 export const DiffWindow = React.memo<any>((props) => {
+  // TODO: Add types for pipelines
   const { oldVersion, currentVersion, isLoading } = props;
   return (
     <StyledDiffWindow>

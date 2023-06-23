@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { MouseEventHandler, PropsWithChildren, useState } from 'react';
 
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
@@ -31,7 +31,13 @@ const StyledTitleBar = styled.div`
   padding: 0 30px;
 `;
 
-const TitleBar = ({ isOpen, title, onClick }) => {
+interface ITitleBar {
+  isOpen: boolean;
+  title: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}
+
+const TitleBar = ({ isOpen, title, onClick }: ITitleBar) => {
   return (
     <StyledTitleBar>
       <div style={{ flexGrow: 1 }}>{title}</div>
@@ -48,7 +54,16 @@ const StyledDiffContainer = styled.div`
   flex-grow: ${(props) => (props.isOpen ? 1 : 0)};
 `;
 
-export const DiffAccordion = ({ defaultOpen, children, title }) => {
+interface IDiffAccordion {
+  defaultOpen: boolean;
+  title: string;
+}
+
+export const DiffAccordion = ({
+  defaultOpen,
+  children,
+  title,
+}: PropsWithChildren<IDiffAccordion>) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <>
