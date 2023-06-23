@@ -76,19 +76,20 @@ export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion,
     const bottomPipelineConfig = JSON.parse(bottomRes.configuration);
 
     const diffList = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
-    const a = {
-      topPipeline: {
-        ...getReactflowPipelineGraph(topPipelineConfig),
-        config: topPipelineConfig,
-      },
-      bottomPipeline: {
-        ...getReactflowPipelineGraph(bottomPipelineConfig),
-        config: bottomPipelineConfig,
-      },
-      diffList,
-    };
     setTimeout(() => {
-      dispatch(pipelinesReceived(a));
+      dispatch(
+        pipelinesReceived({
+          topPipeline: {
+            ...getReactflowPipelineGraph(topPipelineConfig),
+            config: topPipelineConfig,
+          },
+          bottomPipeline: {
+            ...getReactflowPipelineGraph(bottomPipelineConfig),
+            config: bottomPipelineConfig,
+          },
+          diffList,
+        })
+      );
     }, 300);
   });
 }

@@ -56,7 +56,7 @@ export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version, lates
   return (
     <Provider store={store}>
       <PipelineModeless
-        title="pipeline difference"
+        title="pipeline difference" // TODO: i18n
         open={isOpen}
         onClose={onClose}
         placement="bottom-end"

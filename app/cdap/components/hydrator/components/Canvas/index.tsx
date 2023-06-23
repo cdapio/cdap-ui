@@ -534,11 +534,6 @@ const Canvas = ({
   };
 
   return (
-    // <StyledCanvasContainer
-    //   id="diagram-container"
-    //   isDisabled={isDisabled}
-    //   isPipelineDiff={isPipelineDiff}
-    // >
     <>
       <ReactFlow
         id="dag-container"
@@ -642,7 +637,6 @@ const Canvas = ({
           reactFlowCopyDeleteDisabled={!selectedElements.nodes.length}
         />
       )}
-      {/* </StyledCanvasContainer> */}
     </>
   );
 };
