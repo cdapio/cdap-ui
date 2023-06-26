@@ -19,18 +19,25 @@ import styled from 'styled-components';
 import { WrapperCanvas } from 'components/hydrator/components/Canvas';
 import { DiffAccordion } from './DiffAccordion';
 
-const StyledDiffWindow = styled.div`
+const DiffWindowRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
 `;
 
-export const DiffWindow = React.memo<any>((props) => {
-  // TODO: Add types for pipelines
+interface IDiffWindowProps {
+  oldVersion: any;
+  currentVersion: any;
+  isLoading: boolean;
+}
+
+export const DiffWindow = (props: IDiffWindowProps) => {
   const { oldVersion, currentVersion, isLoading } = props;
+
   return (
-    <StyledDiffWindow>
+    <DiffWindowRoot>
+      {/* TODO: i18n */}
       <DiffAccordion title={'Old Version'} defaultOpen={true}>
         {!isLoading && (
           <WrapperCanvas
@@ -41,6 +48,8 @@ export const DiffWindow = React.memo<any>((props) => {
           />
         )}
       </DiffAccordion>
+
+      {/* TODO: i18n */}
       <DiffAccordion title={'Current Version'} defaultOpen={true}>
         {!isLoading && (
           <WrapperCanvas
@@ -51,9 +60,11 @@ export const DiffWindow = React.memo<any>((props) => {
           />
         )}
       </DiffAccordion>
+
+      {/* TODO: i18n */}
       <DiffAccordion title={'Diff'} defaultOpen={false}>
         {/* TODO DIFF TABLE */}
       </DiffAccordion>
-    </StyledDiffWindow>
+    </DiffWindowRoot>
   );
-});
+};

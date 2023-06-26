@@ -14,22 +14,35 @@
  * the License.
  */
 
-import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
+import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import { DiffWindow } from './DiffWindow';
 import { DiffList } from './DiffList';
-import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './store';
 import { fetchPipelineConfig } from './store/diffSlice';
 
-const StyledContainer = styled.div`
+const DiffContentContainerRoot = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
 `;
 
-const DiffContentContainer = ({ namespace, appId, version, latestVersion }) => {
+interface IDiffContentContainerProps {
+  namespace: any;
+  appId: any;
+  version: any;
+  latestVersion: any;
+}
+
+const DiffContentContainer = ({
+  namespace,
+  appId,
+  version,
+  latestVersion,
+}: IDiffContentContainerProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,14 +58,30 @@ const DiffContentContainer = ({ namespace, appId, version, latestVersion }) => {
     };
   });
   return (
-    <StyledContainer>
+    <DiffContentContainerRoot>
       <DiffList diffList={diffList} />
       <DiffWindow oldVersion={topPipeline} currentVersion={bottomPipeline} isLoading={isLoading} />
-    </StyledContainer>
+    </DiffContentContainerRoot>
   );
 };
 
-export const PipelineDiff = ({ isOpen, onClose, namespace, appId, version, latestVersion }) => {
+interface IPipelineDiffProps {
+  isOpen: boolean;
+  onClose: (event: React.MouseEvent<Document>) => void;
+  namespace: any;
+  appId: any;
+  version: any;
+  latestVersion: any;
+}
+
+export const PipelineDiff = ({
+  isOpen,
+  onClose,
+  namespace,
+  appId,
+  version,
+  latestVersion,
+}: IPipelineDiffProps) => {
   return (
     <Provider store={store}>
       <PipelineModeless

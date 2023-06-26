@@ -21,8 +21,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
 
-// TODO: adjust colors to fit the app
-const StyledTitleBar = styled.div`
+const DiffAccordionTitleBarRoot = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
@@ -31,24 +30,24 @@ const StyledTitleBar = styled.div`
   padding: 0 30px;
 `;
 
-interface ITitleBar {
+interface IDiffAccordionTitleBar {
   isOpen: boolean;
   title: string;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const TitleBar = ({ isOpen, title, onClick }: ITitleBar) => {
+const DiffAccordionTitleBar = ({ isOpen, title, onClick }: IDiffAccordionTitleBar) => {
   return (
-    <StyledTitleBar>
+    <DiffAccordionTitleBarRoot>
       <div style={{ flexGrow: 1 }}>{title}</div>
       <IconButton onClick={onClick}>
         {isOpen ? <VisibilityIcon /> : <VisibilityOffIcon />}
       </IconButton>
-    </StyledTitleBar>
+    </DiffAccordionTitleBarRoot>
   );
 };
 
-const StyledDiffContainer = styled.div`
+const DiffAccordionContent = styled.div`
   width: 100%;
   height: 0px;
   flex-grow: ${(props) => (props.isOpen ? 1 : 0)};
@@ -67,8 +66,8 @@ export const DiffAccordion = ({
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
     <>
-      <TitleBar title={title} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-      <StyledDiffContainer isOpen={isOpen}>{children}</StyledDiffContainer>
+      <DiffAccordionTitleBar title={title} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+      <DiffAccordionContent isOpen={isOpen}>{children}</DiffAccordionContent>
     </>
   );
 };

@@ -63,7 +63,7 @@ export default reducer;
 
 // TODO: type
 export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion, dispatch) {
-  dispatch(pipelinesLoading());
+  dispatch(actions.pipelinesLoading());
   Observable.forkJoin(
     MyPipelineApi.getAppVersion({
       namespace,
@@ -81,9 +81,11 @@ export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion,
     const bottomPipelineConfig = JSON.parse(bottomRes.configuration);
 
     const diffList = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
+    // TODO: currently without the timeout the graph edges renders weirdly
+    // need to figure out the cause
     setTimeout(() => {
       dispatch(
-        pipelinesReceived({
+        actions.pipelinesReceived({
           topPipeline: {
             ...getReactflowPipelineGraph(topPipelineConfig),
             config: topPipelineConfig,
