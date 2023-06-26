@@ -16,13 +16,19 @@
 
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import { DiffWindow } from './DiffWindow';
 import { DiffList } from './DiffList';
-import store from './store';
-import { fetchPipelineConfig } from './store/diffSlice';
+import { store } from './store';
+import { useAppDispatch } from './store/hooks';
+import { fetchExtraPluginProperties, fetchPipelineConfig } from './util/fetch';
+import { actions } from './store/diffSlice';
+import { computePipelineDiff } from './util/diff';
+import { delay, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs/Observable';
 
 const DiffContentContainerRoot = styled.div`
   display: flex;
@@ -43,24 +49,53 @@ const DiffContentContainer = ({
   version,
   latestVersion,
 }: IDiffContentContainerProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    fetchPipelineConfig(namespace, appId, version, latestVersion, dispatch);
+    dispatch(actions.fetchPipelinesPending());
+    fetchPipelineConfig({
+      namespace,
+      appId,
+      topVersion: version,
+      bottomVersion: latestVersion,
+    })
+      .pipe(
+        switchMap((configs) => {
+          const topPipelineStages = configs.topPipelineConfig.stages;
+          const bottomPipelineStages = configs.bottomPipelineConfig.stages;
+          const stages = topPipelineStages.concat(bottomPipelineStages);
+          return Observable.forkJoin(
+            of(configs),
+            fetchExtraPluginProperties({ namespace, stages })
+          );
+        }),
+        switchMap(([{ topPipelineConfig, bottomPipelineConfig }, { availablePluginsMap }]) => {
+          const { diffMap } = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
+          return of({
+            topPipelineConfig,
+            bottomPipelineConfig,
+            availablePluginsMap,
+            diffMap,
+          });
+        }),
+        // TODO: currently without the timeout the graph edges renders weirdly
+        // need to figure out the cause
+        delay(300)
+      )
+      .subscribe(
+        (res) => {
+          dispatch(actions.fetchPipelinesFulfilled(res));
+        },
+        (error) => {
+          dispatch(actions.fetchPipelinesRejected(error));
+        }
+      );
   }, []);
 
-  const { topPipeline, bottomPipeline, isLoading, diffList } = useSelector((state) => {
-    return {
-      topPipeline: state.pipelineDiff.topPipeline,
-      bottomPipeline: state.pipelineDiff.bottomPipeline,
-      isLoading: state.pipelineDiff.isLoading,
-      diffList: state.pipelineDiff.diffList,
-    };
-  });
   return (
     <DiffContentContainerRoot>
-      <DiffList diffList={diffList} />
-      <DiffWindow oldVersion={topPipeline} currentVersion={bottomPipeline} isLoading={isLoading} />
+      <DiffList />
+      <DiffWindow />
     </DiffContentContainerRoot>
   );
 };

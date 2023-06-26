@@ -55,49 +55,46 @@ import { IPipelineComment } from 'components/PipelineCanvasActions/PipelineComme
 import IconSVG from 'components/shared/IconSVG';
 import { copyToClipBoard } from 'services/Clipboard';
 import { INodePosition, ISelectedElements } from './types';
-import { PipelineDiffNode } from './PipelineDiffNode';
 
 interface ICanvasProps {
   angularNodes: any;
   angularConnections: any;
-  isDisabled?: boolean;
-  previewMode?: boolean;
-  updateNodes?: (nodes: any[]) => void;
-  updateConnections?: (connections: any[], addStateToHistory?: boolean) => void;
-  onPropertiesClick?: (node: any) => void;
-  onMetricsClick?: (event: any, node: any, portName?: any) => void;
-  getAngularConnections?: () => any;
-  getAngularNodes?: () => any;
-  setSelectedNodes?: (nodes: any[]) => void;
-  setSelectedConnections?: (connections: any[]) => void;
-  onKeyboardCopy?: () => void;
-  setPluginActiveForComment?: (nodeId: string) => void;
-  getActivePluginForComment?: () => string;
-  setPluginComments?: (nodeId: string, comments: any) => void;
-  getPluginConfiguration?: () => any;
-  getCustomIconSrc?: (node: any) => string;
-  shouldShowAlertsPort?: (node: any) => boolean;
-  shouldShowErrorsPort?: (node: any) => boolean;
-  undoActions?: () => void;
-  redoActions?: () => void;
-  pipelineComments?: IPipelineComment[];
-  setPipelineComments?: (val: any) => void;
-  onPreviewData?: (event: any, node: any) => void;
-  cleanUpGraph?: () => void;
-  pipelineArtifactType?: 'cdap-data-pipeline' | 'cdap-data-streams';
-  metricsData?: any;
-  metricsDisabled?: boolean;
-  redoStates?: any[];
-  undoStates?: any[];
-  updateNodePositions?: (nodePosition: INodePosition) => void;
-  isPipelineDiff?: boolean;
+  isDisabled: boolean;
+  previewMode: boolean;
+  updateNodes: (nodes: any[]) => void;
+  updateConnections: (connections: any[], addStateToHistory?: boolean) => void;
+  onPropertiesClick: (node: any) => void;
+  onMetricsClick: (event: any, node: any, portName?: any) => void;
+  getAngularConnections: () => any;
+  getAngularNodes: () => any;
+  setSelectedNodes: (nodes: any[]) => void;
+  setSelectedConnections: (connections: any[]) => void;
+  onKeyboardCopy: () => void;
+  setPluginActiveForComment: (nodeId: string) => void;
+  getActivePluginForComment: () => string;
+  setPluginComments: (nodeId: string, comments: any) => void;
+  getPluginConfiguration: () => any;
+  getCustomIconSrc: (node: any) => string;
+  shouldShowAlertsPort: (node: any) => boolean;
+  shouldShowErrorsPort: (node: any) => boolean;
+  undoActions: () => void;
+  redoActions: () => void;
+  pipelineComments: IPipelineComment[];
+  setPipelineComments: (val: any) => void;
+  onPreviewData: (event: any, node: any) => void;
+  cleanUpGraph: () => void;
+  pipelineArtifactType: 'cdap-data-pipeline' | 'cdap-data-streams';
+  metricsData: any;
+  metricsDisabled: boolean;
+  redoStates: any[];
+  undoStates: any[];
+  updateNodePositions: (nodePosition: INodePosition) => void;
   backgroundId?: string;
 }
 
 const nodeTypes = {
   plugin: PluginNode,
   pluginWithAlertAndError: PluginNodeWithAlertAndError,
-  pluginPipelineDiff: PipelineDiffNode,
 };
 
 // This is to overwrite the styles of pipeline comments button
@@ -112,7 +109,7 @@ const StyledControlButton = styled(ControlButton)`
 
 const StyledCanvasContainer = styled.div`
   ${(props) =>
-    !props.isDisabled && !props.isPipelineDiff
+    !props.isDisabled
       ? `
           height: 92vh;
           margin-left: 80px;
@@ -173,7 +170,6 @@ const Canvas = ({
   redoStates,
   undoStates,
   updateNodePositions,
-  isPipelineDiff,
   backgroundId,
 }: ICanvasProps) => {
   const reactFlowInstance = useReactFlow();
@@ -186,20 +182,6 @@ const Canvas = ({
   });
 
   const convertAngularNodeToReactNode = (node: any) => {
-    if (isPipelineDiff) {
-      const data = { node };
-      const reactflowNode = {
-        id: node.name,
-        data,
-        type: 'pluginPipelineDiff',
-        position: {
-          x: parseInt(node._uiPosition?.left, 10) || 150,
-          y: parseInt(node._uiPosition?.top, 10) || 150,
-        },
-        selected: false,
-      };
-      return reactflowNode;
-    }
     const data = {
       node,
       onPropertiesClick,
@@ -429,21 +411,21 @@ const Canvas = ({
   // it requires some adjustments to reuse the onKeyboardDelete function in dag-plus-ctrl
   // writing the logic here to directly delete
   useEffect(() => {
-    if (isDisabled || !deletePressed || isPipelineDiff) {
+    if (isDisabled || !deletePressed) {
       return;
     }
     deleteSelectedElements();
   }, [deletePressed]);
 
   useEffect(() => {
-    if (isDisabled || !copyPressed || isPipelineDiff) {
+    if (isDisabled || !copyPressed) {
       return;
     }
     copySelectedElements();
   }, [copyPressed]);
 
   useEffect(() => {
-    if (isDisabled || !pastePressed || isPipelineDiff) {
+    if (isDisabled || !pastePressed) {
       return;
     }
     pasteCopiedElements();
@@ -534,7 +516,7 @@ const Canvas = ({
   };
 
   return (
-    <>
+    <StyledCanvasContainer id="diagram-container" isDisabled={isDisabled}>
       <ReactFlow
         id="dag-container"
         nodes={nodes}
@@ -553,8 +535,8 @@ const Canvas = ({
         deleteKeyCode={null}
         connectionLineStyle={ConnectionLineStyle}
         connectionLineType={ConnectionLineType.SmoothStep}
-        nodesDraggable={!isDisabled && !isPipelineDiff}
-        nodesConnectable={!isDisabled && !isPipelineDiff}
+        nodesDraggable={!isDisabled}
+        nodesConnectable={!isDisabled}
         onSelectionChange={onSelectionChange}
         onNodeDragStop={(e, node: Node, nodes: Node[]) => {
           nodes.forEach((node) => {
@@ -580,8 +562,8 @@ const Canvas = ({
             pannable
           />
         )}
-        <Controls position="top-right" showInteractive={!isDisabled}>
-          {!isDisabled && !isPipelineDiff && (
+        <Controls position="top-right" style={{ marginTop: '100px' }} showInteractive={!isDisabled}>
+          {!isDisabled && (
             <>
               <ControlButton
                 title="Align"
@@ -611,19 +593,18 @@ const Canvas = ({
               </ControlButton>
             </>
           )}
-          {!isPipelineDiff && (
-            <StyledControlButton title="Pipeline Comments">
-              <PipelineCommentsActionBtn
-                tooltip=""
-                comments={pipelineComments}
-                onChange={setPipelineComments}
-                disabled={isDisabled}
-              />
-            </StyledControlButton>
-          )}
+
+          <StyledControlButton title="Pipeline Comments">
+            <PipelineCommentsActionBtn
+              tooltip=""
+              comments={pipelineComments}
+              onChange={setPipelineComments}
+              disabled={isDisabled}
+            />
+          </StyledControlButton>
         </Controls>
       </ReactFlow>
-      {!isDisabled && !isPipelineDiff && (
+      {!isDisabled && (
         <PipelineContextMenu
           onWranglerSourceAdd={onWranglerSourceAdd}
           onNodesCopy={copySelectedElements}
@@ -637,7 +618,7 @@ const Canvas = ({
           reactFlowCopyDeleteDisabled={!selectedElements.nodes.length}
         />
       )}
-    </>
+    </StyledCanvasContainer>
   );
 };
 
@@ -674,7 +655,6 @@ export const WrapperCanvas = ({
   redoStates,
   undoStates,
   updateNodePositions,
-  isPipelineDiff,
   backgroundId,
 }: ICanvasProps) => {
   return (
@@ -712,7 +692,6 @@ export const WrapperCanvas = ({
         redoStates={redoStates}
         undoStates={undoStates}
         updateNodePositions={updateNodePositions}
-        isPipelineDiff={isPipelineDiff}
         backgroundId={backgroundId}
       />
     </ReactFlowProvider>

@@ -15,10 +15,12 @@
  */
 
 import { configureStore } from '@reduxjs/toolkit';
-import pipelineDiffReducer from './diffSlice';
-
-export default configureStore({
+import { reducer as pipelineDiffReducer } from './diffSlice';
+export const store = configureStore({
   reducer: {
     pipelineDiff: pipelineDiffReducer,
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

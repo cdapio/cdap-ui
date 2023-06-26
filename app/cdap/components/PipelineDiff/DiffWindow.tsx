@@ -16,34 +16,48 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { WrapperCanvas } from 'components/hydrator/components/Canvas';
 import { DiffAccordion } from './DiffAccordion';
+import { DiffCanvasWrapper } from './DiffCanvas';
+import { useAppSelector } from './store/hooks';
+import { RootState } from './store';
+import { grey } from '@material-ui/core/colors';
 
 const DiffWindowRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: ${grey[100]};
 `;
 
-interface IDiffWindowProps {
-  oldVersion: any;
-  currentVersion: any;
-  isLoading: boolean;
-}
-
-export const DiffWindow = (props: IDiffWindowProps) => {
-  const { oldVersion, currentVersion, isLoading } = props;
+export const DiffWindow = () => {
+  const {
+    topPipelineConfig,
+    bottomPipelineConfig,
+    diffMap,
+    availablePluginsMap,
+    isLoading,
+    error,
+  } = useAppSelector((state: RootState) => {
+    return {
+      topPipelineConfig: state.pipelineDiff.topPipelineConfig,
+      bottomPipelineConfig: state.pipelineDiff.bottomPipelineConfig,
+      diffMap: state.pipelineDiff.diffMap,
+      availablePluginsMap: state.pipelineDiff.availablePluginsMap,
+      isLoading: state.pipelineDiff.isLoading,
+      error: state.pipelineDiff.error,
+    };
+  });
 
   return (
     <DiffWindowRoot>
       {/* TODO: i18n */}
       <DiffAccordion title={'Old Version'} defaultOpen={true}>
-        {!isLoading && (
-          <WrapperCanvas
-            angularNodes={oldVersion.nodes}
-            angularConnections={oldVersion.connections}
-            isPipelineDiff={true}
+        {!isLoading && !error && (
+          <DiffCanvasWrapper
+            config={topPipelineConfig}
+            diffMap={diffMap}
+            availablePluginsMap={availablePluginsMap}
             backgroundId={'older-pipeline'}
           />
         )}
@@ -51,11 +65,11 @@ export const DiffWindow = (props: IDiffWindowProps) => {
 
       {/* TODO: i18n */}
       <DiffAccordion title={'Current Version'} defaultOpen={true}>
-        {!isLoading && (
-          <WrapperCanvas
-            angularNodes={currentVersion.nodes}
-            angularConnections={currentVersion.connections}
-            isPipelineDiff={true}
+        {!isLoading && !error && (
+          <DiffCanvasWrapper
+            config={bottomPipelineConfig}
+            diffMap={diffMap}
+            availablePluginsMap={availablePluginsMap}
             backgroundId={'current-pipeline'}
           />
         )}

@@ -80,4 +80,10 @@ export const MyPipelineApi = {
   ),
 
   getAppVersions: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions`),
+  fetchAllPluginsProperties: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/namespaces/:namespace/artifactproperties'
+  ),
 };

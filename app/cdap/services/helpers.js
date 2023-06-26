@@ -906,7 +906,7 @@ const commaSeparatedNumber = (num) => {
   return parseInt(num, 10).toLocaleString('en');
 }
 
-const getPluginIcon = (plugin) => {
+export const getPluginIcon = (plugin) => {
   const iconMap = {
     'script': 'icon-script',
     'scriptfilter': 'icon-scriptfilter',
@@ -1044,14 +1044,13 @@ const getPluginIcon = (plugin) => {
 
 const getNodesFromStages = (stages) => {
   return stages.map(stage => {
-    let nodeInfo = {
+    return {
       ...stage,
       type: stage.plugin.type,
       label: stage.plugin.label,
       icon: getPluginIcon(stage.plugin.name),
       id: santizeStringForHTMLID(stage.id) || `${santizeStringForHTMLID(stage.name)}${this.uuid.v4()}`,
     };
-    return nodeInfo;
   });
 }
 
