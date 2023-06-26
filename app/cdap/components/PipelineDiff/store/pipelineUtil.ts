@@ -14,8 +14,17 @@
  * the License.
  */
 
+import { diff } from 'json-diff';
 import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getNodesFromStages } from 'services/helpers';
+import { TRecursivePartial } from '../types';
+import {
+  IPipeline,
+  TStageMap,
+  TConnectionMap,
+  IPipelineStage,
+  IPipelineConnection,
+} from '../types';
 
 // TODO: add config type
 export function getReactflowPipelineGraph(config) {
@@ -34,6 +43,78 @@ export function getReactflowPipelineGraph(config) {
   return { nodes, connections };
 }
 
-export function computePipelineDiff(pipeline1, pipeline2) {
-  return [];
+function preprocessPipeline(pipeline: IPipeline) {
+  const stageMap: TStageMap = {};
+  const connectionMap: TConnectionMap = {};
+  const stageNameToPluginName = {};
+
+  for (const stage of pipeline.stages) {
+    const stageMapKey = `${stage.plugin.name}__${stage.name}`;
+    stageMap[stageMapKey] = stage;
+    stageNameToPluginName[stage.name] = stage.plugin.name;
+  }
+
+  for (const connection of pipeline.connections) {
+    const fromName = `${stageNameToPluginName[connection.from]}__${connection.from}`;
+    const toName = `${stageNameToPluginName[connection.to]}__${connection.to}`;
+    // TODO: I am not sure if the users are allowed to use % in their names, other character
+    // that is guarenteed to be not used is preferred
+    const connectionMapKey = `${fromName}%${toName}`;
+    connectionMap[connectionMapKey] = connection;
+  }
+  return { stageMap, connectionMap };
+}
+
+/**
+ * Given two pipelines, return the difference between them
+ * @param pipeline1 first pipeline
+ * @param pipeline2 second pipeline
+ * @returns edit actions applied to pipeline1 to get pipeline2
+ */
+export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) {
+  const { stageMap: stageMap1, connectionMap: connectionMap1 } = preprocessPipeline(pipeline1);
+  const { stageMap: stageMap2, connectionMap: connectionMap2 } = preprocessPipeline(pipeline2);
+
+  const stagesDiffMap: {
+    [name: string]: TRecursivePartial<IPipelineStage>;
+  } = diff(stageMap1, stageMap2);
+
+  const connectionsDiffMap: {
+    [name: string]: TRecursivePartial<IPipelineConnection>;
+  } = diff(connectionMap1, connectionMap2);
+
+  const stagesDiffList: Array<['+' | '-' | '~', string, TRecursivePartial<IPipelineStage>]> = [];
+  for (const stage in stagesDiffMap) {
+    if (stage.match(/__added$/)) {
+      stagesDiffList.push(['+', stage.replace(/__added$/, ''), stagesDiffMap[stage]]);
+    } else if (stage.match(/__deleted$/)) {
+      stagesDiffList.push(['-', stage.replace(/__deleted$/, ''), stagesDiffMap[stage]]);
+    } else {
+      stagesDiffList.push(['~', stage, stagesDiffMap[stage]]);
+    }
+  }
+  const connectionsDiffList: Array<[
+    '+' | '-' | '~',
+    string,
+    TRecursivePartial<IPipelineConnection>
+  ]> = [];
+  for (const connection in connectionsDiffMap) {
+    if (connection.match(/__added$/)) {
+      connectionsDiffList.push([
+        '+',
+        connection.replace(/__added$/, ''),
+        connectionsDiffMap[connection],
+      ]);
+    } else if (connection.match(/__deleted$/)) {
+      connectionsDiffList.push([
+        '-',
+        connection.replace(/__deleted$/, ''),
+        connectionsDiffMap[connection],
+      ]);
+    } else {
+      connectionsDiffList.push(['~', connection, connectionsDiffMap[connection]]);
+    }
+  }
+  // TODO: return stagesDiffList AND connectionsDiffList
+  return { stagesDiffList, connectionsDiffList };
 }

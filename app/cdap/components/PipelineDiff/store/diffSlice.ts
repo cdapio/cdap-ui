@@ -35,10 +35,13 @@ const initialState = {
     nodes: [],
     connections: [],
   },
-  diffList: [],
+  diffList: {
+    stagesDiffList: [],
+    connectionsDiffList: [],
+  },
 };
 
-// TODO: type if not inferreds
+// TODO: type if not inferred
 const diffSlice = createSlice({
   name: 'pipelineDiff',
   initialState,
