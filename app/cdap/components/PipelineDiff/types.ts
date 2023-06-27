@@ -14,8 +14,8 @@
  * the License.
  */
 
-export type TRecursivePartial<T> = {
-  [P in keyof T]?: TRecursivePartial<T[P]>;
+export type TDeepPartial<T> = {
+  [P in keyof T]?: TDeepPartial<T[P]>;
 };
 export interface IPipelineConnection {
   from: string;

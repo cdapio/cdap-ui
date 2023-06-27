@@ -17,7 +17,7 @@
 import { diff } from 'json-diff';
 import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getNodesFromStages } from 'services/helpers';
-import { TRecursivePartial } from '../types';
+import { TDeepPartial } from '../types';
 import {
   IPipeline,
   TStageMap,
@@ -76,14 +76,14 @@ export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) 
   const { stageMap: stageMap2, connectionMap: connectionMap2 } = preprocessPipeline(pipeline2);
 
   const stagesDiffMap: {
-    [name: string]: TRecursivePartial<IPipelineStage>;
+    [name: string]: TDeepPartial<IPipelineStage>;
   } = diff(stageMap1, stageMap2);
 
   const connectionsDiffMap: {
-    [name: string]: TRecursivePartial<IPipelineConnection>;
+    [name: string]: TDeepPartial<IPipelineConnection>;
   } = diff(connectionMap1, connectionMap2);
 
-  const stagesDiffList: Array<['+' | '-' | '~', string, TRecursivePartial<IPipelineStage>]> = [];
+  const stagesDiffList: Array<['+' | '-' | '~', string, TDeepPartial<IPipelineStage>]> = [];
   for (const stage in stagesDiffMap) {
     if (stage.match(/__added$/)) {
       stagesDiffList.push(['+', stage.replace(/__added$/, ''), stagesDiffMap[stage]]);
@@ -96,7 +96,7 @@ export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) 
   const connectionsDiffList: Array<[
     '+' | '-' | '~',
     string,
-    TRecursivePartial<IPipelineConnection>
+    TDeepPartial<IPipelineConnection>
   ]> = [];
   for (const connection in connectionsDiffMap) {
     if (connection.match(/__added$/)) {
