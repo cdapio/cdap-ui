@@ -20,11 +20,12 @@ import { getNodesFromStages } from 'services/helpers';
 import { TDeepPartial } from '../types';
 import {
   IPipeline,
-  TStageMap,
-  TConnectionMap,
+  IStageMap,
+  IConnectionMap,
   IPipelineStage,
   IPipelineConnection,
 } from '../types';
+import { JSONDiffList } from '../types';
 
 // TODO: add config type
 export function getReactflowPipelineGraph(config) {
@@ -44,8 +45,8 @@ export function getReactflowPipelineGraph(config) {
 }
 
 function preprocessPipeline(pipeline: IPipeline) {
-  const stageMap: TStageMap = {};
-  const connectionMap: TConnectionMap = {};
+  const stageMap: IStageMap = {};
+  const connectionMap: IConnectionMap = {};
   const stageNameToPluginName = {};
 
   for (const stage of pipeline.stages) {
@@ -65,6 +66,10 @@ function preprocessPipeline(pipeline: IPipeline) {
   return { stageMap, connectionMap };
 }
 
+function jsonObjectDiff<T1>(obj1: T1, obj2: T1) {
+  return diff(obj1, obj2) as { [name: string]: TDeepPartial<T1> };
+}
+
 /**
  * Given two pipelines, return the difference between them
  * @param pipeline1 first pipeline
@@ -75,15 +80,10 @@ export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) 
   const { stageMap: stageMap1, connectionMap: connectionMap1 } = preprocessPipeline(pipeline1);
   const { stageMap: stageMap2, connectionMap: connectionMap2 } = preprocessPipeline(pipeline2);
 
-  const stagesDiffMap: {
-    [name: string]: TDeepPartial<IPipelineStage>;
-  } = diff(stageMap1, stageMap2);
+  const stagesDiffMap = jsonObjectDiff(stageMap1, stageMap2);
+  const connectionsDiffMap = jsonObjectDiff(connectionMap1, connectionMap2);
 
-  const connectionsDiffMap: {
-    [name: string]: TDeepPartial<IPipelineConnection>;
-  } = diff(connectionMap1, connectionMap2);
-
-  const stagesDiffList: Array<['+' | '-' | '~', string, TDeepPartial<IPipelineStage>]> = [];
+  const stagesDiffList: JSONDiffList<IPipelineStage> = [];
   for (const stage in stagesDiffMap) {
     if (stage.match(/__added$/)) {
       stagesDiffList.push(['+', stage.replace(/__added$/, ''), stagesDiffMap[stage]]);
@@ -93,11 +93,7 @@ export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) 
       stagesDiffList.push(['~', stage, stagesDiffMap[stage]]);
     }
   }
-  const connectionsDiffList: Array<[
-    '+' | '-' | '~',
-    string,
-    TDeepPartial<IPipelineConnection>
-  ]> = [];
+  const connectionsDiffList: JSONDiffList<IPipelineConnection> = [];
   for (const connection in connectionsDiffMap) {
     if (connection.match(/__added$/)) {
       connectionsDiffList.push([

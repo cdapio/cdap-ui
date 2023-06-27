@@ -21,24 +21,25 @@ export interface IPipelineConnection {
   from: string;
   to: string;
 }
-interface IPipelinePlugin {
-  label: string;
-  name: string;
-  properties: any;
-  type: string;
-}
 export interface IPipelineStage {
   id: string;
   name: string;
-  plugin: IPipelinePlugin;
+  plugin: {
+    label: string;
+    name: string;
+    properties: any;
+    type: string;
+  };
 }
 export interface IPipeline {
   stages: IPipelineStage[];
   connections: IPipelineConnection[];
 }
-export interface TStageMap {
+export interface IStageMap {
   [name: string]: IPipelineStage;
 }
-export interface TConnectionMap {
+export interface IConnectionMap {
   [name: string]: IPipelineConnection;
 }
+export type DiffIndicator = '+' | '-' | '~';
+export type JSONDiffList<TData> = Array<[DiffIndicator, string, TDeepPartial<TData>]>;

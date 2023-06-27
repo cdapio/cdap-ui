@@ -906,7 +906,7 @@ const commaSeparatedNumber = (num) => {
   return parseInt(num, 10).toLocaleString('en');
 }
 
-const getPluginIcon = (plugin) => {
+export const getPluginIcon = (plugin) => {
   const iconMap = {
     'script': 'icon-script',
     'scriptfilter': 'icon-scriptfilter',
