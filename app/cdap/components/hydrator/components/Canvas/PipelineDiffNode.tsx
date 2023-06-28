@@ -96,38 +96,36 @@ export const PipelineDiffNode = ({ data }: IPipelineDiffNodeProp) => {
   const { node, idx } = data;
 
   return (
-    <>
-      <StyledDiv id={node.id}>
-        <div>
-          <FlexDiv>
-            <IconDiv className={classnames('node-icon fa', node.icon)}></IconDiv>
-            <div>
-              <div
-                className="node-name"
-                title={node.plugin.label}
-                data-testid={`plugin-node-name-${node.plugin.name}-${node.type}-${idx}`}
-              >
-                <label htmlFor="text" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                  {node.plugin.label}
-                </label>
-              </div>
-
-              <label style={{ fontSize: '10px' }}>{node.plugin.artifact.version}</label>
+    <StyledDiv id={node.id}>
+      <div>
+        <FlexDiv>
+          <IconDiv className={classnames('node-icon fa', node.icon)}></IconDiv>
+          <div>
+            <div
+              className="node-name"
+              title={node.plugin.label}
+              data-testid={`plugin-node-name-${node.plugin.name}-${node.type}-${idx}`}
+            >
+              <label htmlFor="text" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                {node.plugin.label}
+              </label>
             </div>
-          </FlexDiv>
-          <TargetHandle type="target" position={Position.Left} />
-          <CaretHandle
-            id="source_right"
-            type="source"
-            position={Position.Right}
-            data-cy={`plugin-endpoint-${node.plugin.name}-${node.type}-right`}
-            data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-right`}
-            className={`plugin-endpoint_${node.id}-right`}
-          >
-            <div></div>
-          </CaretHandle>
-        </div>
-      </StyledDiv>
-    </>
+
+            <label style={{ fontSize: '10px' }}>{node.plugin.artifact.version}</label>
+          </div>
+        </FlexDiv>
+        <TargetHandle type="target" position={Position.Left} />
+        <CaretHandle
+          id="source_right"
+          type="source"
+          position={Position.Right}
+          data-cy={`plugin-endpoint-${node.plugin.name}-${node.type}-right`}
+          data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-right`}
+          className={`plugin-endpoint_${node.id}-right`}
+        >
+          <div></div>
+        </CaretHandle>
+      </div>
+    </StyledDiv>
   );
 };
