@@ -29,7 +29,10 @@ import classnames from 'classnames';
 import { DiffIndicator, IPipelineConnection, IPipelineStage, JSONDiffList } from '../types';
 import { getPluginIcon } from 'services/helpers';
 
-const DiffIcon = ({ diffType }: { diffType: DiffIndicator }) => {
+interface IDiffIconProps {
+  diffType: DiffIndicator;
+}
+const DiffIcon = ({ diffType }: IDiffIconProps) => {
   if (diffType === '+') {
     return <AddBoxOutlinedIcon style={{ color: 'green' }} />;
   } else if (diffType === '-') {
