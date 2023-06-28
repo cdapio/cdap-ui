@@ -58,7 +58,7 @@ interface IDiffAccordion {
   title: string;
 }
 
-// TODO: Use MUI Accordion rather than custom component
+// TODO: CDAP-20715: Use MUI Accordion rather than custom component
 export const DiffAccordion = ({
   defaultOpen,
   children,
