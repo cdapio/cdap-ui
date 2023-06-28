@@ -17,7 +17,7 @@
 import { diff } from 'json-diff';
 import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getNodesFromStages } from 'services/helpers';
-import { TDeepPartial } from '../types';
+import { DeepPartial } from '../types';
 import {
   IPipeline,
   IStageMap,
@@ -67,7 +67,7 @@ function preprocessPipeline(pipeline: IPipeline) {
 }
 
 function jsonObjectDiff<T1>(obj1: T1, obj2: T1) {
-  return diff(obj1, obj2) as { [name: string]: TDeepPartial<T1> };
+  return diff(obj1, obj2) as { [name: string]: DeepPartial<T1> };
 }
 
 /**

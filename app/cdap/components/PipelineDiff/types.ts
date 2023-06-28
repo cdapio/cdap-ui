@@ -14,8 +14,8 @@
  * the License.
  */
 
-export type TDeepPartial<T> = {
-  [P in keyof T]?: TDeepPartial<T[P]>;
+export type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>;
 };
 export interface IPipelineConnection {
   from: string;
@@ -42,4 +42,4 @@ export interface IConnectionMap {
   [name: string]: IPipelineConnection;
 }
 export type DiffIndicator = '+' | '-' | '~';
-export type JSONDiffList<TData> = Array<[DiffIndicator, string, TDeepPartial<TData>]>;
+export type JSONDiffList<TData> = Array<[DiffIndicator, string, DeepPartial<TData>]>;
