@@ -39,7 +39,7 @@ export const PipelineHistoryTableDiv = styled.div`
       }
 
       .grid-row {
-        grid-template-columns: 300px 300px 1fr 1fr;
+        grid-template-columns: 300px 300px 1fr 1fr 1fr;
 
         > div {
           padding-top: 5px;

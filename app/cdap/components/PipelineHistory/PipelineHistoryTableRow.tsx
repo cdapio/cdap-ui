@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { MyPipelineApi } from 'api/pipeline';
@@ -22,6 +22,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import { PrimaryTextLowercaseButton } from 'components/shared/Buttons/PrimaryTextLowercaseButton';
 import { SNAPSHOT_VERSION } from 'services/global-constants';
+import { PipelineDiff } from 'components/PipelineDiff';
 
 interface IPipelineHistoryTableRowProps {
   pipelineName: string;
@@ -48,6 +49,7 @@ export const PipelineHistoryTableRow = ({
   description,
   date,
 }: IPipelineHistoryTableRowProps) => {
+  const [diffOpen, setDiffOpen] = useState(false);
   const namespace = getCurrentNamespace();
   const pipelineLink = getHydratorUrl({
     stateName: 'hydrator.detail',
@@ -56,6 +58,10 @@ export const PipelineHistoryTableRow = ({
       pipelineId: pipelineName,
     },
   });
+
+  const closeDiffView = () => {
+    setDiffOpen(false);
+  };
 
   const viewVersion = () => {
     window.localStorage.setItem('pipelineHistoryVersion', appVersion);
@@ -138,9 +144,29 @@ export const PipelineHistoryTableRow = ({
                 {T.translate(`${PREFIX}.restore`)}
               </PrimaryTextLowercaseButton>
             )}
+            {appVersion !== latestVersion && (
+              <PrimaryTextLowercaseButton
+                textColor="#0000EE"
+                onClick={() => {
+                  setDiffOpen(true);
+                }}
+              >
+                Diff
+              </PrimaryTextLowercaseButton>
+            )}
           </>
         )}
       </div>
+      {diffOpen && (
+        <PipelineDiff
+          isOpen={diffOpen}
+          onClose={closeDiffView}
+          namespace={namespace}
+          appId={pipelineName}
+          version={appVersion}
+          latestVersion={latestVersion}
+        />
+      )}
     </>
   );
 };

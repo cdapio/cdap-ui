@@ -39,6 +39,8 @@ export default function PipelineModeless({
   placement = 'bottom',
   popoverClassName = '',
   isDeployed = true,
+  style,
+  innerStyle = {},
 }) {
   let anchorElCb;
   if (typeof anchorEl === 'string') {
@@ -60,6 +62,7 @@ export default function PipelineModeless({
         popoverClassName
       )}
       open={open}
+      style={style}
       anchorEl={anchorElCb || anchorEl}
       placement={placement}
       modifiers={{
@@ -83,7 +86,7 @@ export default function PipelineModeless({
       {({ TransitionProps }) => (
         <Grow
           {...TransitionProps}
-          style={{ transformOrigin: 'center top' }}
+          style={{ transformOrigin: 'center top', ...innerStyle }}
           timeout={transitionDuration}
         >
           <div className={className}>
@@ -152,4 +155,6 @@ PipelineModeless.propTypes = {
   placement: PropTypes.string,
   popoverClassName: PropTypes.string,
   isDeployed: PropTypes.bool,
+  style: PropTypes.object,
+  innerStyle: PropTypes.object,
 };
