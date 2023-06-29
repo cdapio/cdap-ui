@@ -49,18 +49,24 @@ const DiffContentContainer = ({
     fetchPipelineConfig(namespace, appId, version, latestVersion, dispatch);
   }, []);
 
-  const { topPipeline, bottomPipeline, isLoading, diffList } = useSelector((state) => {
+  const { topPipeline, bottomPipeline, isLoading, diffList, error } = useSelector((state) => {
     return {
       topPipeline: state.pipelineDiff.topPipeline,
       bottomPipeline: state.pipelineDiff.bottomPipeline,
       isLoading: state.pipelineDiff.isLoading,
+      error: state.pipelineDiff.error,
       diffList: state.pipelineDiff.diffList,
     };
   });
   return (
     <DiffContentContainerRoot>
       <DiffList diffList={diffList} />
-      <DiffWindow oldVersion={topPipeline} currentVersion={bottomPipeline} isLoading={isLoading} />
+      <DiffWindow
+        oldVersion={topPipeline}
+        currentVersion={bottomPipeline}
+        isLoading={isLoading}
+        error={error}
+      />
     </DiffContentContainerRoot>
   );
 };

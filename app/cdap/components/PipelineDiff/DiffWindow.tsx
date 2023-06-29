@@ -30,16 +30,18 @@ interface IDiffWindowProps {
   oldVersion: any;
   currentVersion: any;
   isLoading: boolean;
+  error: any;
 }
 
 export const DiffWindow = (props: IDiffWindowProps) => {
-  const { oldVersion, currentVersion, isLoading } = props;
+  const { oldVersion, currentVersion, isLoading, error } = props;
 
   return (
     <DiffWindowRoot>
       {/* TODO: i18n */}
       <DiffAccordion title={'Old Version'} defaultOpen={true}>
-        {!isLoading && (
+        {!isLoading && !error && (
+          // TODO: CDAP-20716: Implement new canvas component
           <WrapperCanvas
             angularNodes={oldVersion.nodes}
             angularConnections={oldVersion.connections}
@@ -51,7 +53,8 @@ export const DiffWindow = (props: IDiffWindowProps) => {
 
       {/* TODO: i18n */}
       <DiffAccordion title={'Current Version'} defaultOpen={true}>
-        {!isLoading && (
+        {!isLoading && !error && (
+          // TODO: CDAP-20716: Implement new canvas component
           <WrapperCanvas
             angularNodes={currentVersion.nodes}
             angularConnections={currentVersion.connections}

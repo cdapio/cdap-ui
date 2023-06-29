@@ -155,6 +155,6 @@ PipelineModeless.propTypes = {
   placement: PropTypes.string,
   popoverClassName: PropTypes.string,
   isDeployed: PropTypes.bool,
-  style: PropTypes.any,
-  innerStyle: PropTypes.any,
+  style: PropTypes.object,
+  innerStyle: PropTypes.object,
 };

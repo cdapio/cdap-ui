@@ -21,7 +21,7 @@ import { computePipelineDiff, getReactflowPipelineGraph } from './pipelineUtil';
 
 const initialState = {
   isLoading: false,
-
+  error: null,
   // TODO: type pipelines
   topPipeline: {
     config: null,
@@ -46,27 +46,33 @@ const diffSlice = createSlice({
   name: 'pipelineDiff',
   initialState,
   reducers: {
-    pipelinesLoading(state) {
+    fetchPipelinesPending(state) {
       state.isLoading = true;
+      state.error = '';
     },
-    pipelinesReceived(state, action) {
+    fetchPipelinesFulfilled(state, action) {
       const { topPipeline, bottomPipeline, diffList } = action.payload;
       state.topPipeline = topPipeline;
       state.bottomPipeline = bottomPipeline;
       state.diffList = diffList;
       state.isLoading = false;
+      state.error = '';
+    },
+    fetchPipelinesRejected(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
     },
   },
 });
 
 const { actions, reducer } = diffSlice;
-export const { pipelinesLoading, pipelinesReceived } = actions;
+export const { fetchPipelinesPending, fetchPipelinesFulfilled, fetchPipelinesRejected } = actions;
 
 export default reducer;
 
 // TODO: type
 export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion, dispatch) {
-  dispatch(actions.pipelinesLoading());
+  dispatch(actions.fetchPipelinesPending());
   Observable.forkJoin(
     MyPipelineApi.getAppVersion({
       namespace,
@@ -78,28 +84,34 @@ export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion,
       appId,
       version: bottomVersion,
     })
-  ).subscribe((res: any[]) => {
-    const [topRes, bottomRes] = res;
-    const topPipelineConfig = JSON.parse(topRes.configuration);
-    const bottomPipelineConfig = JSON.parse(bottomRes.configuration);
+  ).subscribe(
+    (res: any[]) => {
+      const [topRes, bottomRes] = res;
+      const topPipelineConfig = JSON.parse(topRes.configuration);
+      const bottomPipelineConfig = JSON.parse(bottomRes.configuration);
 
-    const diffList = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
-    // TODO: currently without the timeout the graph edges renders weirdly
-    // need to figure out the cause
-    setTimeout(() => {
-      dispatch(
-        actions.pipelinesReceived({
-          topPipeline: {
-            ...getReactflowPipelineGraph(topPipelineConfig),
-            config: topPipelineConfig,
-          },
-          bottomPipeline: {
-            ...getReactflowPipelineGraph(bottomPipelineConfig),
-            config: bottomPipelineConfig,
-          },
-          diffList,
-        })
-      );
-    }, 300);
-  });
+      const diffList = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
+      // TODO: currently without the timeout the graph edges renders weirdly
+      // need to figure out the cause
+      setTimeout(() => {
+        dispatch(
+          actions.fetchPipelinesFulfilled({
+            topPipeline: {
+              ...getReactflowPipelineGraph(topPipelineConfig),
+              config: topPipelineConfig,
+            },
+            bottomPipeline: {
+              ...getReactflowPipelineGraph(bottomPipelineConfig),
+              config: bottomPipelineConfig,
+            },
+            diffList,
+          })
+        );
+      }, 300);
+    },
+    (error) => {
+      console.log('Unable to load pipeline details:', error);
+      dispatch(fetchPipelinesRejected(error));
+    }
+  );
 }
