@@ -31,7 +31,7 @@ export interface IPipelineStage {
     type: string;
   };
 }
-export interface IPipeline {
+export interface IPipelineConfig {
   stages: IPipelineStage[];
   connections: IPipelineConnection[];
 }

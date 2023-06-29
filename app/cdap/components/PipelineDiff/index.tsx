@@ -16,13 +16,14 @@
 
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import { DiffWindow } from './DiffWindow';
 import { DiffList } from './DiffList';
-import store from './store';
+import { store } from './store';
 import { fetchPipelineConfig } from './store/diffSlice';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 
 const DiffContentContainerRoot = styled.div`
   display: flex;
@@ -43,13 +44,13 @@ const DiffContentContainer = ({
   version,
   latestVersion,
 }: IDiffContentContainerProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     fetchPipelineConfig(namespace, appId, version, latestVersion, dispatch);
   }, []);
 
-  const { topPipeline, bottomPipeline, isLoading, diffList, error } = useSelector((state) => {
+  const { topPipeline, bottomPipeline, isLoading, diffList, error } = useAppSelector((state) => {
     return {
       topPipeline: state.pipelineDiff.topPipeline,
       bottomPipeline: state.pipelineDiff.bottomPipeline,

@@ -18,23 +18,43 @@ import { createSlice } from '@reduxjs/toolkit';
 import { MyPipelineApi } from 'api/pipeline';
 import { Observable } from 'rxjs/Observable';
 import { computePipelineDiff, getReactflowPipelineGraph } from './pipelineUtil';
+import { IPipelineConfig, IPipelineConnection, IPipelineStage, JSONDiffList } from '../types';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch } from '.';
 
-const initialState = {
+interface IPipelineState {
+  config: IPipelineConfig | null;
+  nodes: any[];
+  connections: any[];
+}
+interface IDiffState {
+  isLoading: boolean;
+  error: any;
+
+  topPipeline: IPipelineState;
+  bottomPipeline: IPipelineState;
+
+  diffList: {
+    stagesDiffList: JSONDiffList<IPipelineStage>;
+    connectionsDiffList: JSONDiffList<IPipelineConnection>;
+  };
+}
+
+const initialState: IDiffState = {
   isLoading: false,
   error: null,
-  // TODO: type pipelines
+
   topPipeline: {
     config: null,
     nodes: [],
     connections: [],
   },
-
-  // TODO: type pipelines
   bottomPipeline: {
     config: null,
     nodes: [],
     connections: [],
   },
+
   diffList: {
     stagesDiffList: [],
     connectionsDiffList: [],
@@ -50,7 +70,10 @@ const diffSlice = createSlice({
       state.isLoading = true;
       state.error = '';
     },
-    fetchPipelinesFulfilled(state, action) {
+    fetchPipelinesFulfilled(
+      state,
+      action: PayloadAction<Pick<IDiffState, 'topPipeline' | 'bottomPipeline' | 'diffList'>>
+    ) {
       const { topPipeline, bottomPipeline, diffList } = action.payload;
       state.topPipeline = topPipeline;
       state.bottomPipeline = bottomPipeline;
@@ -70,8 +93,13 @@ export const { fetchPipelinesPending, fetchPipelinesFulfilled, fetchPipelinesRej
 
 export default reducer;
 
-// TODO: type
-export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion, dispatch) {
+export function fetchPipelineConfig(
+  namespace: any,
+  appId: any,
+  topVersion: any,
+  bottomVersion: any,
+  dispatch: AppDispatch
+) {
   dispatch(actions.fetchPipelinesPending());
   Observable.forkJoin(
     MyPipelineApi.getAppVersion({
@@ -87,8 +115,8 @@ export function fetchPipelineConfig(namespace, appId, topVersion, bottomVersion,
   ).subscribe(
     (res: any[]) => {
       const [topRes, bottomRes] = res;
-      const topPipelineConfig = JSON.parse(topRes.configuration);
-      const bottomPipelineConfig = JSON.parse(bottomRes.configuration);
+      const topPipelineConfig: IPipelineConfig = JSON.parse(topRes.configuration);
+      const bottomPipelineConfig: IPipelineConfig = JSON.parse(bottomRes.configuration);
 
       const diffList = computePipelineDiff(topPipelineConfig, bottomPipelineConfig);
       // TODO: currently without the timeout the graph edges renders weirdly

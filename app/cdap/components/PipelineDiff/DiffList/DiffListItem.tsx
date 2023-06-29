@@ -57,10 +57,10 @@ function fromAndToStageName(connectionName: string) {
 }
 
 interface IPluginDiffListItemProps {
-  jsonDiffItem: JSONDiffList<IPipelineStage>[number];
+  diffItem: JSONDiffList<IPipelineStage>[number];
 }
-export const PluginDiffListItem = ({ jsonDiffItem }: IPluginDiffListItemProps) => {
-  const [diffType, stageName] = jsonDiffItem;
+export const PluginDiffListItem = ({ diffItem }: IPluginDiffListItemProps) => {
+  const [diffType, stageName] = diffItem;
   const [pluginName, nodeName] = pluginAndNodeName(stageName);
   return (
     <ListItem button>
@@ -76,10 +76,10 @@ export const PluginDiffListItem = ({ jsonDiffItem }: IPluginDiffListItemProps) =
 };
 
 interface IConnectionDiffListItemProps {
-  jsonDiffItem: JSONDiffList<IPipelineConnection>[number];
+  diffItem: JSONDiffList<IPipelineConnection>[number];
 }
-export const ConnectionDiffListItem = ({ jsonDiffItem }: IConnectionDiffListItemProps) => {
-  const [diffType, connectionName] = jsonDiffItem;
+export const ConnectionDiffListItem = ({ diffItem }: IConnectionDiffListItemProps) => {
+  const [diffType, connectionName] = diffItem;
   const [fromStageName, toStageName] = fromAndToStageName(connectionName);
   const [fromPluginName, fromNodeName] = pluginAndNodeName(fromStageName);
   const [toPluginName, toNodeName] = pluginAndNodeName(toStageName);

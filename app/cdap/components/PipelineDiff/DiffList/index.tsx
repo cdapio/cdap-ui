@@ -38,17 +38,16 @@ interface IDiffListProps {
 }
 
 export const DiffList = ({ diffList }: IDiffListProps) => {
-  console.log({ diffList });
   return (
     <DiffListRoot elevation={3}>
       <List dense={true}>
         <ListSubheader>Plugins</ListSubheader>
         {diffList.stagesDiffList.map((diffItem, index) => {
-          return <PluginDiffListItem jsonDiffItem={diffItem} key={index} />;
+          return <PluginDiffListItem diffItem={diffItem} key={index} />;
         })}
         <ListSubheader>Connections</ListSubheader>
         {diffList.connectionsDiffList.map((diffItem, index) => {
-          return <ConnectionDiffListItem jsonDiffItem={diffItem} key={index} />;
+          return <ConnectionDiffListItem diffItem={diffItem} key={index} />;
         })}
       </List>
     </DiffListRoot>

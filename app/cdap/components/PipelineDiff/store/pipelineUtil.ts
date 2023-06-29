@@ -19,7 +19,7 @@ import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getNodesFromStages } from 'services/helpers';
 import { DeepPartial } from '../types';
 import {
-  IPipeline,
+  IPipelineConfig,
   IStageMap,
   IConnectionMap,
   IPipelineStage,
@@ -44,7 +44,7 @@ export function getReactflowPipelineGraph(config) {
   return { nodes, connections };
 }
 
-function preprocessPipeline(pipeline: IPipeline) {
+function preprocessPipeline(pipeline: IPipelineConfig) {
   const stageMap: IStageMap = {};
   const connectionMap: IConnectionMap = {};
   const stageNameToPluginName = {};
@@ -76,7 +76,7 @@ function jsonObjectDiff<T1>(obj1: T1, obj2: T1) {
  * @param pipeline2 second pipeline
  * @returns edit actions applied to pipeline1 to get pipeline2
  */
-export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) {
+export function computePipelineDiff(pipeline1: IPipelineConfig, pipeline2: IPipelineConfig) {
   const { stageMap: stageMap1, connectionMap: connectionMap1 } = preprocessPipeline(pipeline1);
   const { stageMap: stageMap2, connectionMap: connectionMap2 } = preprocessPipeline(pipeline2);
 
@@ -111,6 +111,5 @@ export function computePipelineDiff(pipeline1: IPipeline, pipeline2: IPipeline) 
       connectionsDiffList.push(['~', connection, connectionsDiffMap[connection]]);
     }
   }
-  // TODO: return stagesDiffList AND connectionsDiffList
   return { stagesDiffList, connectionsDiffList };
 }

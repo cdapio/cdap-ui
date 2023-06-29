@@ -13,15 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { useDispatch, useSelector } from 'react-redux';
+import { TypedUseSelectorHook } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
 
-import { configureStore } from '@reduxjs/toolkit';
-import pipelineDiffReducer from './diffSlice';
-
-export const store = configureStore({
-  reducer: {
-    pipelineDiff: pipelineDiffReducer,
-  },
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
