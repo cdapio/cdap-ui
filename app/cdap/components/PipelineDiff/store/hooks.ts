@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { useDispatch, useSelector } from 'react-redux';
+// import { TypedUseSelectorHook } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
 
-import styled from 'styled-components';
+export const useAppDispatch: () => AppDispatch = useDispatch;
+// TODO: TypedUseSelectorHook returns any, investigate reason
+// export const useAppSelector: TypedUseSelectorHook<RootState>= useSelector;
 
-const DiffListRoot = styled.div`
-  background: white;
-  border: 1px solid black;
-  height: 100%;
-  width: 400px;
-`;
-
-// TODO: CDAP-20688
-export const DiffList = DiffListRoot;
+export const useAppSelector: <Select>(
+  selector: (state: RootState) => Select
+) => Select = useSelector;

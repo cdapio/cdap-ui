@@ -16,36 +16,48 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { WrapperCanvas } from 'components/hydrator/components/Canvas';
 import { DiffAccordion } from './DiffAccordion';
+import { DiffCanvasWrapper } from './DiffCanvas';
+import { useAppSelector } from './store/hooks';
+import { RootState } from './store';
+import { grey } from '@material-ui/core/colors';
 
 const DiffWindowRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: ${grey[100]};
 `;
 
-interface IDiffWindowProps {
-  oldVersion: any;
-  currentVersion: any;
-  isLoading: boolean;
-  error: any;
-}
-
-export const DiffWindow = (props: IDiffWindowProps) => {
-  const { oldVersion, currentVersion, isLoading, error } = props;
+export const DiffWindow = () => {
+  const {
+    topPipelineConfig,
+    bottomPipelineConfig,
+    diffMap,
+    availablePluginsMap,
+    isLoading,
+    error,
+  } = useAppSelector((state: RootState) => {
+    return {
+      topPipelineConfig: state.pipelineDiff.topPipelineConfig,
+      bottomPipelineConfig: state.pipelineDiff.bottomPipelineConfig,
+      diffMap: state.pipelineDiff.diffMap,
+      availablePluginsMap: state.pipelineDiff.availablePluginsMap,
+      isLoading: state.pipelineDiff.isLoading,
+      error: state.pipelineDiff.error,
+    };
+  });
 
   return (
     <DiffWindowRoot>
       {/* TODO: i18n */}
       <DiffAccordion title={'Old Version'} defaultOpen={true}>
         {!isLoading && !error && (
-          // TODO: CDAP-20716: Implement new canvas component
-          <WrapperCanvas
-            angularNodes={oldVersion.nodes}
-            angularConnections={oldVersion.connections}
-            isPipelineDiff={true}
+          <DiffCanvasWrapper
+            config={topPipelineConfig}
+            diffMap={diffMap}
+            availablePluginsMap={availablePluginsMap}
             backgroundId={'older-pipeline'}
           />
         )}
@@ -54,11 +66,10 @@ export const DiffWindow = (props: IDiffWindowProps) => {
       {/* TODO: i18n */}
       <DiffAccordion title={'Current Version'} defaultOpen={true}>
         {!isLoading && !error && (
-          // TODO: CDAP-20716: Implement new canvas component
-          <WrapperCanvas
-            angularNodes={currentVersion.nodes}
-            angularConnections={currentVersion.connections}
-            isPipelineDiff={true}
+          <DiffCanvasWrapper
+            config={bottomPipelineConfig}
+            diffMap={diffMap}
+            availablePluginsMap={availablePluginsMap}
             backgroundId={'current-pipeline'}
           />
         )}
