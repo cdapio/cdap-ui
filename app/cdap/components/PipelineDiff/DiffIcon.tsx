@@ -14,23 +14,47 @@
  * the License.
  */
 import React, { ComponentProps } from 'react';
-import EditIcon from '@material-ui/icons/Edit';
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import IndeterminateCheckBoxOutlinedIcon from '@material-ui/icons/IndeterminateCheckBoxOutlined';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
+import { SvgIcon } from '@material-ui/core';
 import { DiffIndicator } from './types';
 import { getPluginDiffColors } from './util/helpers';
-import { SvgIcon } from '@material-ui/core';
+import styled from 'styled-components';
+
+const DiffIconContainer = styled(SvgIcon)`
+  border: 2px solid ${({ color }) => color};
+  border-radius: 3px;
+  background-color: white;
+  line-height: 1;
+`;
+
+const ModifiedIcon = styled.circle`
+  fill: ${({ color }) => color};
+`;
 
 type IconProps = ComponentProps<typeof SvgIcon>;
 interface IDiffIconProps extends Omit<IconProps, 'color'> {
   diffType: DiffIndicator;
+  className?: string;
 }
-export function DiffIcon({ diffType, style, ...props }: IDiffIconProps) {
+export function DiffIcon({ diffType, className, ...props }: IDiffIconProps) {
   const color = getPluginDiffColors(diffType).primary;
   if (diffType === DiffIndicator.ADDED) {
-    return <AddBoxOutlinedIcon style={{ color, ...style }} {...props} />;
+    return (
+      <DiffIconContainer color={color} className={className}>
+        <AddIcon style={{ color }} {...props} />
+      </DiffIconContainer>
+    );
   } else if (diffType === DiffIndicator.DELETED) {
-    return <IndeterminateCheckBoxOutlinedIcon style={{ color, ...style }} {...props} />;
+    return (
+      <DiffIconContainer color={color} className={className}>
+        <RemoveIcon style={{ color }} {...props} />
+      </DiffIconContainer>
+    );
   }
-  return <EditIcon style={{ color, ...style }} {...props} />;
+  return (
+    <DiffIconContainer color={color} className={className}>
+      <ModifiedIcon cx={'50%'} cy={'50%'} r={'4'} color={color} {...props} />
+    </DiffIconContainer>
+  );
 }
