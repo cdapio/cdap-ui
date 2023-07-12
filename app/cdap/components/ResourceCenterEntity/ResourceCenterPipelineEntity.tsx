@@ -121,9 +121,7 @@ export default function ResourceCenterPipelineEntity({
         dispatch({
           type: 'SET_ERROR',
           payload: {
-            error: T.translate('features.SourceControlManagement.invalidConfig', {
-              error: err.message,
-            }).toLocaleString(),
+            error: err.message,
           },
         });
         dispatch({ type: 'SET_LOADING', payload: { loading: false } });
