@@ -195,6 +195,8 @@ public class PipelineEdit {
 
   @Then("Generated runtime arguments should be empty")
   public void checkRuntimeArgsEmpty() {
+    WaitHelper.waitForElementToBePresent(
+      By.cssSelector(Helper.getCssSelectorByDataTestId("generated-runtimeargs-count")));
     Assert.assertTrue(Helper.locateElementByTestId("generated-runtimeargs-count").getText().charAt(0) == '0');
     ElementHelper.clickOnElement(Helper.locateElementByTestId("generated-runtimeargs"));
     List<WebElement> keys = Helper.locateElementsByTestId("runtimeargs-key");
@@ -209,6 +211,8 @@ public class PipelineEdit {
 
   @Then("Generated runtime arguments should not be empty")
   public void checkRuntimeArgsNotEmpty() {
+    WaitHelper.waitForElementToBePresent(
+      By.cssSelector(Helper.getCssSelectorByDataTestId("generated-runtimeargs-count")));
     Assert.assertFalse(Helper.locateElementByTestId("generated-runtimeargs-count").getText().charAt(0) == '0');
     ElementHelper.clickOnElement(Helper.locateElementByTestId("generated-runtimeargs"));
     List<WebElement> keys = Helper.locateElementsByTestId("runtimeargs-key");
