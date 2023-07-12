@@ -3200,7 +3200,6 @@ features:
           1: "{context} required field is missing"
           _: "{context} required fields are missing"
     info: Source control management allows you to connect namespace with the repository of your source control system repository to efficiently manage development process of the deployed pipelines.
-    invalidConfig: "{error}. Please validate saved source control management configurations."
     linkButton: Link Repository
     pull:
       emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
