@@ -17,7 +17,7 @@ import React from 'react';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import MuiListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 
 import styled from 'styled-components';
@@ -43,6 +43,9 @@ const CustomIconImg = styled.img`
   height: 100%;
 `;
 
+const ListItemText = styled(MuiListItemText)`
+  flex: 1;
+`;
 interface IPluginDiffListItemProps {
   nodeName: string;
   customIconSrc?: string;
