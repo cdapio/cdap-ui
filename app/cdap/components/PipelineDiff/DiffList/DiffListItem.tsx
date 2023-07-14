@@ -126,7 +126,7 @@ export const ConnectionDiffListItem = ({
       </ListItemIcon>
       <ListItemText primary={toNodeName} />
       <IconButton edge="end" size="small">
-        <DiffIcon diffType={diffType} />
+        <DiffIcon diffType={diffType} fontSize="small"/>
       </IconButton>
     </ListItem>
   );

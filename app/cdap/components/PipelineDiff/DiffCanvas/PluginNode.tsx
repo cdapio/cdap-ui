@@ -23,9 +23,10 @@ import { getPluginDiffColors } from '../util/helpers';
 import { DiffIcon } from '../DiffIcon';
 
 const NodeRoot = styled.div`
+  position: relative;
   height: 110px;
   width: 200px;
-  border: 3px solid ${({ color }) => color};
+  border: 2px solid ${({ color }) => color};
   border-radius: 5px;
   background: white;
   display: flex;
@@ -55,6 +56,7 @@ const IconRoot = styled.div`
 const TitleContainer = styled.div`
   flex-grow: 1;
   padding-top: 10px;
+  min-width: 0;
 `;
 
 const TitleLabel = styled.label`
@@ -63,6 +65,7 @@ const TitleLabel = styled.label`
   font-size: 14px;
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
 `;
 
 const SubtitleLabel = styled(TitleLabel)`
@@ -70,12 +73,11 @@ const SubtitleLabel = styled(TitleLabel)`
   color: ${({ color }) => color};
 `;
 
-const DiffIconContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding: 0 10px 10px 10px;
+const DiffIconRoot = styled(DiffIcon)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
 `;
 
 const HandleRoot = styled(Handle)`
@@ -123,9 +125,7 @@ export const DefaultPluginNode = ({
           <SubtitleLabel color={primaryLight}>{data.plugin.artifact.version}</SubtitleLabel>
         </TitleContainer>
       </HeaderRoot>
-      <DiffIconContainer>
-        {diffIndicator && <DiffIcon diffType={diffIndicator} fontSize="large" />}
-      </DiffIconContainer>
+      {diffIndicator && <DiffIconRoot diffType={diffIndicator} fontSize="large" />}
       <HandleRoot type="target" position={Position.Left} />
       <HandleRoot type="source" id="source_right" position={Position.Right} />
       {children}

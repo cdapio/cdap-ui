@@ -35,6 +35,7 @@ const DiffListRoot = styled(Paper)`
   &.MuiPaper-root {
     height: 100%;
     width: 400px;
+    min-width: 400px;
   }
 `;
 
