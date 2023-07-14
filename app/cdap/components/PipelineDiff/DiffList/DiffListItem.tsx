@@ -16,8 +16,8 @@
 import React from 'react';
 
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import MuiListItemIcon from '@material-ui/core/ListItemIcon';
+import MuiListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 
 import styled from 'styled-components';
@@ -43,6 +43,15 @@ const CustomIconImg = styled.img`
   height: 100%;
 `;
 
+const ListItemText = styled(MuiListItemText)`
+  flex: 1;
+`;
+
+const ListItemIcon = styled(MuiListItemIcon)`
+  min-width: 18px;
+  margin-left: 5px;
+  margin-right: 5px;
+`;
 interface IPluginDiffListItemProps {
   nodeName: string;
   customIconSrc?: string;
@@ -106,9 +115,6 @@ export const ConnectionDiffListItem = ({
         )}
       </ListItemIcon>
       <ListItemText primary={fromNodeName} />
-      <IconButton size="small">
-        <DiffIcon diffType={diffType} fontSize="small" />
-      </IconButton>
       <ListItemIcon>
         {toCustomIconSrc ? (
           <CustomIconImgContainer>
@@ -119,6 +125,9 @@ export const ConnectionDiffListItem = ({
         )}
       </ListItemIcon>
       <ListItemText primary={toNodeName} />
+      <IconButton edge="end" size="small">
+        <DiffIcon diffType={diffType} fontSize="small"/>
+      </IconButton>
     </ListItem>
   );
 };

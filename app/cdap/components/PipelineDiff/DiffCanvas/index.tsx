@@ -28,6 +28,7 @@ import { DefaultPluginNode, PluginNodeWithAlertError } from './PluginNode';
 import { getReactflowPipelineGraph } from '../util/reactflowGraph';
 import { AvailablePluginsMap, IPipelineConfig, IPipelineDiffMap, NodeType } from '../types';
 import { IPipelineNodeData } from '../store/diffSlice';
+import { getPluginDiffColors } from '../util/helpers';
 
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   defaultNode: DefaultPluginNode,
@@ -49,11 +50,19 @@ const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
       edges={connections}
       nodesConnectable={false}
       nodesDraggable={false}
+      minZoom={-5}
       elementsSelectable={false}
       nodeTypes={nodeTypes}
       fitView
     >
-      {nodes.length > 5 && <MiniMap pannable />}
+      {nodes.length > 5 && (
+        <MiniMap
+          pannable
+          nodeColor={(node: PipelineNode) =>
+            getPluginDiffColors(node.data.diffItem?.diffIndicator).primaryLightest
+          }
+        />
+      )}
       <Controls position="top-right" showInteractive={false} />
       <Background id={backgroundId} />
     </ReactFlow>
