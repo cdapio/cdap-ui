@@ -14,47 +14,58 @@
  * the License.
  */
 import React, { ComponentProps } from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
 import { SvgIcon } from '@material-ui/core';
 import { DiffIndicator } from './types';
 import { getPluginDiffColors } from './util/helpers';
-import styled from 'styled-components';
-
-const DiffIconContainer = styled(SvgIcon)`
-  border: 2px solid ${({ color }) => color};
-  border-radius: 3px;
-  background-color: white;
-  line-height: 1;
-`;
-
-const ModifiedIcon = styled.circle`
-  fill: ${({ color }) => color};
-`;
 
 type IconProps = ComponentProps<typeof SvgIcon>;
+interface IIconProps extends IconProps {
+  fill?: string;
+}
+const AddIcon = ({ fill, ...props }: IIconProps) => {
+  return (
+    <SvgIcon {...props}>
+      <path
+        fill={fill ?? 'white'}
+        d="M 19 3 H 5 c -1.11 0 -2 0.9 -2 2 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z"
+      />
+      <path d="M 19 3 H 5 c -1.11 0 -2 0.9 -2 2 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z m 0 16 H 5 V 5 h 14 v 14 Z m -8 -2 h 2 v -4 h 4 v -2 h -4 V 7 h -2 v 4 H 7 v 2 h 4 Z" />
+    </SvgIcon>
+  );
+};
+
+const DeletedIcon = ({ fill, ...props }: IIconProps) => {
+  return (
+    <SvgIcon {...props}>
+      <path
+        fill={fill ?? 'white'}
+        d="M 19 3 H 5 c -1.11 0 -2 0.9 -2 2 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z"
+      />
+      <path d="M 19 3 H 5 c -1.1 0 -2 0.9 -2 2 v 14 c 0 1.1 0.9 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z m 0 16 H 5 V 5 h 14 v 14 Z M 7 11 h 10 v 2 H 7 Z" />
+    </SvgIcon>
+  );
+};
+const ModifiedIcon = ({ fill, ...props }: IIconProps) => {
+  return (
+    <SvgIcon {...props}>
+      <path
+        fill={fill ?? 'white'}
+        d="M 19 3 H 5 c -1.11 0 -2 0.9 -2 2 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z"
+      />
+      <path d="M 19 3 H 5 c -1.11 0 -2 0.9 -2 2 v 14 c 0 1.1 0.89 2 2 2 h 14 c 1.1 0 2 -0.9 2 -2 V 5 c 0 -1.1 -0.9 -2 -2 -2 Z m 0 16 H 5 V 5 h 14 v 14 Z M 15 12 c 0 1.66 -1.34 3 -3 3 s -3 -1.34 -3 -3 s 1.34 -3 3 -3 s 3 1.34 3 3 Z" />
+    </SvgIcon>
+  );
+};
 interface IDiffIconProps extends Omit<IconProps, 'color'> {
   diffType: DiffIndicator;
-  className?: string;
 }
-export function DiffIcon({ diffType, className, ...props }: IDiffIconProps) {
+
+export function DiffIcon({ diffType, ...props }: IDiffIconProps) {
   const color = getPluginDiffColors(diffType).primary;
   if (diffType === DiffIndicator.ADDED) {
-    return (
-      <DiffIconContainer color={color} className={className}>
-        <AddIcon style={{ color }} {...props} />
-      </DiffIconContainer>
-    );
+    return <AddIcon style={{ color }} {...props} />;
   } else if (diffType === DiffIndicator.DELETED) {
-    return (
-      <DiffIconContainer color={color} className={className}>
-        <RemoveIcon style={{ color }} {...props} />
-      </DiffIconContainer>
-    );
+    return <DeletedIcon style={{ color }} {...props} />;
   }
-  return (
-    <DiffIconContainer color={color} className={className}>
-      <ModifiedIcon cx={'50%'} cy={'50%'} r={'4'} color={color} {...props} />
-    </DiffIconContainer>
-  );
+  return <ModifiedIcon style={{ color }} {...props} />;
 }

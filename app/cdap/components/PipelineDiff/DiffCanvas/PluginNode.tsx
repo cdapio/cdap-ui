@@ -78,6 +78,7 @@ const DiffIconRoot = styled(DiffIcon)`
   top: 0;
   right: 0;
   transform: translate(50%, -50%);
+  font-size: 2.3rem;
 `;
 
 const HandleRoot = styled(Handle)`
@@ -125,7 +126,7 @@ export const DefaultPluginNode = ({
           <SubtitleLabel color={primaryLight}>{data.plugin.artifact.version}</SubtitleLabel>
         </TitleContainer>
       </HeaderRoot>
-      {diffIndicator && <DiffIconRoot diffType={diffIndicator} fontSize="large" />}
+      {diffIndicator && <DiffIconRoot diffType={diffIndicator} />}
       <HandleRoot type="target" position={Position.Left} />
       <HandleRoot type="source" id="source_right" position={Position.Right} />
       {children}
