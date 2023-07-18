@@ -347,6 +347,9 @@ angular.module(PKG.name + '.commons')
       vm.undoStates = DAGPlusPlusNodesStore.getUndoStates();
       vm.redoStates = DAGPlusPlusNodesStore.getRedoStates();
 
+      if (initTimeout) {
+        $timeout.cancel(initTimeout);
+      }
       initTimeout = $timeout(function () {
         initNodes();
         addConnections();
