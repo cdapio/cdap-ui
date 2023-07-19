@@ -23,26 +23,26 @@ import { getPluginDiffColors } from '../util/helpers';
 import { DiffIcon } from '../DiffIcon';
 
 const NodeRoot = styled.div`
-  position: relative;
-  height: 110px;
-  width: 200px;
-  border: 2px solid ${({ color }) => color};
-  border-radius: 5px;
   background: white;
+  border-radius: 5px;
+  border: 2px solid ${({ color }) => color};
   display: flex;
   flex-direction: column;
+  height: 110px;
+  position: relative;
+  width: 200px;
 `;
 
 const HeaderRoot = styled.div`
-  width: 100%;
   display: flex;
+  width: 100%;
 `;
 
 const CustomIconRoot = styled.img`
   &&& {
-    width: 25px;
     height: 25px;
     margin: 10px;
+    width: 25px;
   }
 `;
 
@@ -55,39 +55,40 @@ const IconRoot = styled.div`
 
 const TitleContainer = styled.div`
   flex-grow: 1;
-  padding-top: 10px;
   min-width: 0;
+  padding-top: 10px;
 `;
 
 const TitleLabel = styled.label`
-  display: block;
   color: ${({ color }) => color};
+  display: block;
   font-size: 14px;
-  text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 const SubtitleLabel = styled(TitleLabel)`
-  font-size: 10px;
   color: ${({ color }) => color};
+  font-size: 10px;
 `;
 
 const DiffIconRoot = styled(DiffIcon)`
+  font-size: 2.3rem;
   position: absolute;
-  top: 0;
   right: 0;
+  top: 0;
   transform: translate(50%, -50%);
 `;
 
 const HandleRoot = styled(Handle)`
-  width: 14px;
-  height: 14px;
+  align-items: center;
   background-color: #4e5568;
   border-radius: 100%;
   display: flex;
-  align-items: center;
+  height: 14px;
   justify-content: center;
+  width: 14px;
 `;
 
 const AlertHandleRoot = styled(HandleRoot)`
@@ -99,10 +100,10 @@ const ErrorHandleRoot = styled(HandleRoot)`
 `;
 
 const BottomHandleLabel = styled.span`
+  color: ${({ color }) => color};
   font-size: 11px;
   position: absolute;
   top: -16px;
-  color: ${({ color }) => color};
 `;
 
 export const DefaultPluginNode = ({
@@ -125,7 +126,7 @@ export const DefaultPluginNode = ({
           <SubtitleLabel color={primaryLight}>{data.plugin.artifact.version}</SubtitleLabel>
         </TitleContainer>
       </HeaderRoot>
-      {diffIndicator && <DiffIconRoot diffType={diffIndicator} fontSize="large" />}
+      {diffIndicator && <DiffIconRoot diffType={diffIndicator} />}
       <HandleRoot type="target" position={Position.Left} />
       <HandleRoot type="source" id="source_right" position={Position.Right} />
       {children}
