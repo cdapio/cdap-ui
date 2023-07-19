@@ -15,34 +15,15 @@
  */
 
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import MetricColumn from 'components/NamespaceAdmin/Metrics/MetricColumn';
+import { Box, styled } from '@material-ui/core';
 import { connect } from 'react-redux';
 import ProfileMetric from 'components/NamespaceAdmin/Metrics/ProfileMetric';
+import MetricCard from 'components/NamespaceAdmin/Metrics/MetricCard';
 
-const useStyle = makeStyles((theme) => {
-  const border = `1px solid ${theme.palette.grey[100]}`;
-
-  return {
-    root: {
-      borderTop: border,
-      borderBottom: border,
-      paddingTop: '15px',
-      paddingBottom: '15px',
-    },
-    content: {
-      display: 'grid',
-      gridTemplateColumns: '3fr 2fr 2fr 2fr 2fr',
-
-      '& > div:not(:last-child)': {
-        borderRight: `1px solid ${theme.palette.grey[300]}`,
-      },
-    },
-    entitySection: {
-      display: 'grid',
-      gridTemplateColumns: '50% 50%',
-    },
-  };
+const CardsContainer = styled(Box)({
+  display: 'grid',
+  gridAutoFlow: 'column',
+  columnGap: '20px',
 });
 
 interface IMetricsProps {
@@ -60,21 +41,17 @@ const MetricsView: React.FC<IMetricsProps> = ({
   driversCount,
   connectionsCount,
 }) => {
-  const classes = useStyle();
-
   return (
-    <div className={classes.root}>
-      <div className={classes.content}>
-        <div className={classes.entitySection}>
-          <MetricColumn title="pipelines" metric={pipelinesCount} />
-          <MetricColumn title="datasets" metric={datasetsCount} />
-        </div>
+    <Box pt={2} pb={2}>
+      <CardsContainer>
+        <MetricCard title="pipelines" metric={pipelinesCount}></MetricCard>
+        <MetricCard title="datasets" metric={datasetsCount}></MetricCard>
         <ProfileMetric />
-        <MetricColumn title="preferences" metric={preferencesCount} />
-        <MetricColumn title="connections" metric={connectionsCount} />
-        <MetricColumn title="drivers" metric={driversCount} />
-      </div>
-    </div>
+        <MetricCard title="preferences" metric={preferencesCount}></MetricCard>
+        <MetricCard title="connections" metric={connectionsCount}></MetricCard>
+        <MetricCard title="drivers" metric={driversCount}></MetricCard>
+      </CardsContainer>
+    </Box>
   );
 };
 
