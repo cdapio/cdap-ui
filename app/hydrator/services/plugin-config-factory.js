@@ -33,8 +33,9 @@ class HydratorPlusPlusPluginConfigFactory {
       return this.$q.when(cache);
     }
 
+    const namespace = window.location.pathname.split('/')[3];
     return this.myPipelineApi.fetchArtifactProperties({
-      namespace: this.$state.params.namespace || this.$state.params.nsadmin,
+      namespace,
       artifactName: artifactName,
       artifactVersion: artifactVersion,
       scope: artifactScope,
@@ -62,8 +63,9 @@ class HydratorPlusPlusPluginConfigFactory {
       );
   }
   fetchDocJson(artifactName, artifactVersion, artifactScope, key) {
+    const namespace = window.location.pathname.split('/')[3];
     return this.myPipelineApi.fetchArtifactProperties({
-      namespace: this.$state.params.namespace,
+      namespace,
       artifactName: artifactName,
       artifactVersion: artifactVersion,
       scope: artifactScope,

@@ -35,6 +35,7 @@ class PipelineAvailablePluginsActions {
     }
     this.mySettings = mySettings;
     this.hydratorNodeService = HydratorPlusPlusNodeService;
+    this.$rootScope = $rootScope;
   }
 
   fetchPlugins(extensionsParams, promise) {
@@ -152,9 +153,21 @@ class PipelineAvailablePluginsActions {
 
     const getKeyFromPluginProps = (pluginProperties) => {
       const key = this.myHelpers.objectQuery(pluginProperties, '0');
-      return key ? key.split('.')[1] : '';
+      return key ? key.split('.')[1] : '';s
     };
     var that = this;
+    // fetch(`/api/v3/namespaces/${namespace}/artifactproperties`, {
+    //   method: 'POST',
+    //   body: reqBody,
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //     'X-Requested-With': 'XMLHttpRequest',
+    //     Authorization: 'Bearer ' + this.$rootScope.currentUser.token,
+    //   }
+    // }).then((res) => {
+    //   return res.json();
+    // })
     this.api.fetchAllPluginsProperties({ namespace }, reqBody)
       .$promise
       .then((res) => {

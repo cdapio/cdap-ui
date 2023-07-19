@@ -14,16 +14,23 @@
  * the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { LeftPanel } from 'components/hydrator/components/LeftPanel/LeftPanel';
 import { TopPanel } from 'components/hydrator/components/TopPanel/TopPanel';
+import { WrapperCanvas } from 'components/hydrator/components/Canvas';
+import PipelineDetailsRunLevelInfo from 'components/PipelineDetails/RunLevelInfo';
 
 export interface IStudioCreateState {
   topPanelCtrl: any;
   leftPanelCtrl: any;
+  canvasCtrl: any;
+  studioCtrl: any;
+  dagCtrl: any;
+  counter: number;
+  metadataExpanded: any;
 }
 
-export const Studio = ({leftPanelCtrl, topPanelCtrl}: IStudioCreateState) => {
+export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metadataExpanded}: IStudioCreateState) => {
   return (
     <div>
       <div className="react-version">
@@ -78,7 +85,7 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl}: IStudioCreateState) => {
               viewLogs={topPanelCtrl.viewLogs}
               onCloseLog={topPanelCtrl.closeLogs}
               timerLabel={topPanelCtrl.timerLabel}
-              namespace={topPanelCtrl.$state.params.namespace}
+              namespace={topPanelCtrl.$rootScope.$stateParams.namespace}
               getScheduleInfo={topPanelCtrl.getScheduleInfo}
               actionCreator={topPanelCtrl.HydratorPlusPlusConfigActions}
               applyRuntimeArguments={topPanelCtrl.applyRuntimeArgumentsFromReactStore}
@@ -95,21 +102,52 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl}: IStudioCreateState) => {
             />
           </div>
           <div className="right-wrapper">
-            {/* <div
-              className="canvas"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  <my-dag-plus ng-class="{'canvas-scroll': CanvasCtrl.state.setScroll}"
-                    nodes="CanvasCtrl.nodes"
-                    connections="CanvasCtrl.connections"
-                    context="CanvasCtrl"
-                    node-delete="CanvasCtrl.deleteNode",
-                    separation="200"
-                    preview-mode="CanvasCtrl.previewMode"
-                  ></my-dag-plus>
-                `,
-              }}
-            /> */}
+          {/* <my-dag-plus
+  data-is-disabled="true"
+  ng-class="{'canvas-scroll': CanvasCtrl.setScroll}"
+  context="CanvasCtrl"
+  show-metrics="true"
+  metrics-data="CanvasCtrl.metrics"
+  metrics-popover-template="/assets/features/hydrator/templates/partial/metrics-popover.html"
+  disable-metrics-click="CanvasCtrl.totalRuns > 0 ? false : true"
+  run-id="CanvasCtrl.runId"
+> */}
+            
+            {/* <PipelineDetailsRunLevelInfo></PipelineDetailsRunLevelInfo> */}
+            <WrapperCanvas
+              angularNodes={dagCtrl.getNodes()}
+              angularConnections={dagCtrl.getConnections()}
+              isDisabled={dagCtrl.isDisabled}
+              previewMode={canvasCtrl.preview}
+              updateNodes={dagCtrl.updateNodesStoreNodes}
+              updateConnections={dagCtrl.updateNodesStoreConnections}
+              onPropertiesClick={dagCtrl.onNodeClick}
+              onMetricsClick={dagCtrl.onMetricsClick}
+              getAngularConnections={dagCtrl.getConnections}
+              getAngularNodes={dagCtrl.getNodes}
+              setSelectedNodes={dagCtrl.setSelectedNodes}
+              setSelectedConnections={dagCtrl.setSelectedConnections}
+              onKeyboardCopy={dagCtrl.onKeyboardCopy}
+              setPluginActiveForComment={dagCtrl.setPluginActiveForComment}
+              getActivePluginForComment={dagCtrl.getActivePluginForComment}
+              setPluginComments={dagCtrl.setComments}
+              getPluginConfiguration={dagCtrl.getPluginConfiguration}
+              getCustomIconSrc={dagCtrl.getCustomIconSrc}
+              shouldShowAlertsPort={dagCtrl.shouldShowAlertsPort}
+              shouldShowErrorsPort={dagCtrl.shouldShowErrorsPort}
+              undoActions={dagCtrl.undoActions}
+              redoActions={dagCtrl.redoActions}
+              pipelineComments={dagCtrl.pipelineComments}
+              setPipelineComments={dagCtrl.setPipelineComments}
+              onPreviewData={dagCtrl.onPreviewData}
+              cleanUpGraph={dagCtrl.cleanUpGraph}
+              pipelineArtifactType={dagCtrl.pipelineArtifactType}
+              metricsData={{}}
+              metricsDisabled={true}
+              redoStates={dagCtrl.redoStates}
+              undoStates={dagCtrl.undoStates}
+              updateNodePositions={dagCtrl.updateNodePositions}
+            ></WrapperCanvas>
 
           </div>
         </div>

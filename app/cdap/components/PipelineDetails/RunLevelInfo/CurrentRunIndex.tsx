@@ -102,6 +102,10 @@ const CurrentRunIndex = ({
   };
 
   useEffect(() => {
+    if (artifactName === '') {
+      return;
+    }
+
     const params = {
       namespace,
       appId: pipelineName,
@@ -114,7 +118,7 @@ const CurrentRunIndex = ({
       getRunsForVersion(params);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [artifactName]);
 
   if (!reversedRuns || currentRunIndex === -1) {
     return (

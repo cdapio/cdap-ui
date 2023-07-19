@@ -14,9 +14,11 @@
  * the License.
  */
 
-class HydratorPlusPlusStudioCtrl {
-  constructor(HydratorPlusPlusConfigActions, $stateParams, rConfig, $rootScope, $scope, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, HydratorPlusPlusConsoleActions, rSelectedArtifact, rArtifacts, myLocalStorage, HydratorPlusPlusConfigStore, $window, HydratorPlusPlusConsoleTabService, HydratorUpgradeService) {
+export class HydratorPlusPlusStudioCtrl {
+  constructor(HydratorPlusPlusConfigActions, ConfigResolver, $rootScope, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, HydratorPlusPlusConsoleActions, MySelectedArtifact, FetchArtifacts, myLocalStorage, HydratorPlusPlusConfigStore, $window, HydratorPlusPlusConsoleTabService, HydratorUpgradeService) {
     'ngInject';
+    const $scope = $rootScope.$new(true, undefined);
+    const $stateParams = $rootScope.$stateParams;
     // This is required because before we fireup the actions related to the store, the store has to be initialized to register for any events.
     this.myLocalStorage = myLocalStorage;
     this.myLocalStorage
@@ -31,54 +33,62 @@ class HydratorPlusPlusStudioCtrl {
       $window.onbeforeunload = null;
     });
 
-    let getValidArtifact = () => {
-      let isValidArtifact;
-      if (rArtifacts.length) {
-        isValidArtifact = rArtifacts.filter(r => r.name === rSelectedArtifact);
-      }
-      return isValidArtifact.length ? isValidArtifact[0]: rArtifacts[0];
-    };
-    let artifact = getValidArtifact();
-    if (rConfig.valid && rConfig.config) {
-      const modifiedConfig = angular.copy(rConfig.config);
-
-      if (!modifiedConfig.artifact) {
-        modifiedConfig.artifact = artifact;
-      }
-
-      // remove backendProperties from rConfig to force re-fetching of properties
-      if (modifiedConfig.config && modifiedConfig.config.stages) {
-        modifiedConfig.config.stages.forEach((stage) => {
-          if (stage._backendProperties) {
-            delete stage._backendProperties;
+    FetchArtifacts().then((rArtifacts) => {
+      MySelectedArtifact.then((rSelectedArtifact) => {
+        let getValidArtifact = () => {
+          let isValidArtifact;
+          if (rArtifacts.length) {
+            isValidArtifact = rArtifacts.filter(r => r.name === rSelectedArtifact);
+          }
+          return isValidArtifact.length ? isValidArtifact[0]: rArtifacts[0];
+        };
+        let artifact = getValidArtifact();
+        ConfigResolver.then((rConfig) => {
+          if (rConfig.valid && rConfig.config) {
+            const modifiedConfig = angular.copy(rConfig.config);
+      
+            if (!modifiedConfig.artifact) {
+              modifiedConfig.artifact = artifact;
+            }
+      
+            // remove backendProperties from rConfig to force re-fetching of properties
+            if (modifiedConfig.config && modifiedConfig.config.stages) {
+              modifiedConfig.config.stages.forEach((stage) => {
+                if (stage._backendProperties) {
+                  delete stage._backendProperties;
+                }
+              });
+            }
+      
+            HydratorPlusPlusConfigActions.initializeConfigStore(modifiedConfig);
+            let configJson = modifiedConfig;
+            configJson = HydratorPlusPlusHydratorService.getNodesAndConnectionsFromConfig(modifiedConfig, true);
+            configJson['__ui__'] = Object.assign({}, modifiedConfig.__ui__, {
+              nodes: configJson.nodes.map( (node) => {
+                node.properties = node.plugin.properties;
+                node.label = node.plugin.label;
+                return node;
+              })
+            });
+            configJson.config = {
+              connections : configJson.connections,
+              comments: configJson.comments,
+            };
+      
+            DAGPlusPlusNodesActionsFactory.createGraphFromConfig(configJson.__ui__.nodes, configJson.config.connections, configJson.config.comments);
+          } else {
+            let config = {};
+            config.artifact = artifact;
+            HydratorPlusPlusConfigActions.initializeConfigStore(config);
+            if (rConfig.upgrade) {
+              HydratorUpgradeService.openUpgradeModal(rConfig.config, false);
+            }
           }
         });
-      }
-
-      HydratorPlusPlusConfigActions.initializeConfigStore(modifiedConfig);
-      let configJson = modifiedConfig;
-      configJson = HydratorPlusPlusHydratorService.getNodesAndConnectionsFromConfig(modifiedConfig, true);
-      configJson['__ui__'] = Object.assign({}, modifiedConfig.__ui__, {
-        nodes: configJson.nodes.map( (node) => {
-          node.properties = node.plugin.properties;
-          node.label = node.plugin.label;
-          return node;
-        })
       });
-      configJson.config = {
-        connections : configJson.connections,
-        comments: configJson.comments,
-      };
+    });
+    
 
-      DAGPlusPlusNodesActionsFactory.createGraphFromConfig(configJson.__ui__.nodes, configJson.config.connections, configJson.config.comments);
-    } else {
-      let config = {};
-      config.artifact = artifact;
-      HydratorPlusPlusConfigActions.initializeConfigStore(config);
-      if (rConfig.upgrade) {
-        HydratorUpgradeService.openUpgradeModal(rConfig.config, false);
-      }
-    }
     if ($stateParams.resourceCenterId) {
       let jsonData = $window.localStorage.getItem($stateParams.resourceCenterId);
       if (!jsonData) {

@@ -31,13 +31,16 @@ export interface IStage {
   connections: IConnection[];
 }
 interface IPipelineContextMenuProps {
-  onNodesPaste: (stages: IStage) => void;
+  onNodesPaste: ((stages: IStage) => void) | (() => void);
   onWranglerSourceAdd: INewWranglerConnection;
   pipelineArtifactType: 'cdap-data-pipeline' | 'cdap-data-streams';
   onZoomIn: () => void;
   onZoomOut: () => void;
   fitToScreen: () => void;
   prettyPrintGraph: () => void;
+  onNodesCopy?: () => void;
+  onNodesDelete?: () => void;
+  reactFlowCopyDeleteDisabled?: boolean;
 }
 
 async function getNodesFromClipBoard(): Promise<IStage | undefined> {
@@ -83,17 +86,22 @@ function isClipboardPastable(text) {
       return true;
     }
   }
-  return objectQuery(jsonNodes, 'stages', 'length') > 0 ? false : true;
+  return objectQuery(jsonNodes, 'stages', 'length') > 0 || objectQuery(jsonNodes, 'nodes', 'length')
+    ? false
+    : true;
 }
 
 export default function PipelineContextMenu({
   onWranglerSourceAdd,
   onNodesPaste,
+  onNodesCopy,
+  onNodesDelete,
   pipelineArtifactType,
   onZoomIn,
   onZoomOut,
   fitToScreen,
   prettyPrintGraph,
+  reactFlowCopyDeleteDisabled = true,
 }: IPipelineContextMenuProps) {
   const [showWranglerModal, setShowWranglerModal] = React.useState(false);
   const [pasteOptionDisabled, setPasteOptionDisabled] = React.useState(true);
@@ -112,6 +120,20 @@ export default function PipelineContextMenu({
     },
     {
       type: 'divider',
+    },
+    {
+      name: 'pipeline-node-copy',
+      label: 'Copy',
+      icon: <IconSVG name="icon-filecopyaction" />,
+      onClick: onNodesCopy,
+      disabled: reactFlowCopyDeleteDisabled,
+    },
+    {
+      name: 'pipeline-node-delete',
+      label: 'Delete',
+      icon: <IconSVG name="icon-trash" />,
+      onClick: onNodesDelete,
+      disabled: reactFlowCopyDeleteDisabled,
     },
     {
       name: 'pipeline-node-paste',

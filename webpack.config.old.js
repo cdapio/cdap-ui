@@ -15,20 +15,15 @@
  */
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const IncludeFilesPlugin = require('webpack-merge-and-include-globally');
 const AngularTemplateCacheWebpackPlugin = require('angular-templatecache-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 // const angular = require.resolve('angular');
 
 const Path = require('path');
@@ -166,6 +161,16 @@ const oldFiles = {
     ],
     fileMatch: /.js/,
   },
+  less: {
+    files: [
+      '/app/styles/common.less',
+      '/app/styles/themes/',
+      '/app/directives/',
+      '/app/hydrator/',
+      '/app/styles/bootstrap.less',
+    ],
+    fileMatch: /.less/,
+  },
 };
 
 const returnOldFiles = (type) => {
@@ -179,31 +184,6 @@ const returnOldFiles = (type) => {
   return files;
 };
 
-function getEs6Directives(isNegate) {
-  // unsure if this is even necessary, i don't undrestand why these are packaged separately in the gulp
-
-  const es6directives = [
-    'dag-plus',
-    'plugin-templates',
-    'my-global-navbar',
-    'datetime-picker',
-    'datetime-range',
-    'complex-schema',
-    'my-pipeline-settings',
-    'my-pipeline-summary',
-    'my-pipeline-resource',
-    'my-post-run-action-wizard',
-    'my-post-run-actions',
-    'widget-container/widget-complex-schema-editor',
-    'widget-container',
-    'plugin-functions',
-    'my-link-button',
-  ];
-
-  return es6directives.map((directive) => {
-    return (isNegate ? '!' : '') + './app/directives/' + directive + '/**/*.js';
-  });
-}
 const cleanOptions = {
   verbose: true,
   dry: true,
@@ -224,23 +204,23 @@ const returnPipelineFiles = () => {
   }); // for hydrator.js
 };
 
-const styleFiles = () => {
-  return [
-    '/app/styles/common.less',
-    '/app/styles/themes/*.less',
-    '/app/directives/**/*.less',
-    '/app/hydrator/**/*.less',
-    '/bower_components/angular/angular-csp.css',
-    '/bower_components/angular-loading-bar/build/loading-bar.min.css',
-    '/bower_components/angular-motion/dist/angular-motion.min.css',
-    '/bower_components/c3/c3.min.css',
-    '/bower_components/angular-gridster/dist/angular-gridster.min.css',
-    '/bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
-    '/app/styles/bootstrap.less',
-  ].map((item) => {
-    return path.resolve(__dirname + item);
-  });
-};
+// const styleFiles = () => {
+//   return [
+//     '/app/styles/common.less',
+//     '/app/styles/themes/*.less',
+//     '/app/directives/**/*.less',
+//     '/app/hydrator/**/*.less',
+//     '/bower_components/angular/angular-csp.css',
+//     '/bower_components/angular-loading-bar/build/loading-bar.min.css',
+//     '/bower_components/angular-motion/dist/angular-motion.min.css',
+//     '/bower_components/c3/c3.min.css',
+//     '/bower_components/angular-gridster/dist/angular-gridster.min.css',
+//     '/bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
+//     '/app/styles/bootstrap.less',
+//   ].map((item) => {
+//     return path.resolve(__dirname + item);
+//   });
+// };
 
 const loaderExclude = [
   /node_modules/,
@@ -253,22 +233,23 @@ const loaderExclude = [
   // /cask-sharedcomponents.js/,
 ];
 
-const loaderExcludeStrings = [
-  '/node_modules/',
-  '/bower_components/',
-  '/packaged/public/dist/',
-  '/packaged/public/cdap_dist/',
-  '/packaged/public/common_dist/',
-  '/packaged/',
-  '/lib/',
-  '/cask-shared-components.js',
-];
+// const loaderExcludeStrings = [
+//   '/node_modules/',
+//   '/bower_components/',
+//   '/packaged/public/dist/',
+//   '/packaged/public/cdap_dist/',
+//   '/packaged/public/common_dist/',
+//   '/packaged/',
+//   '/lib/',
+//   '/cask-shared-components.js',
+// ];
 
 const webpackConfig = {
   entry: [
     '@babel/polyfill',
     ...outdatedWayOfDoingThings,
     ...returnOldFiles('js'), // loads all these files because they're never required so webpack doesn't see them.
+    // ...returnOldFiles('less'),
   ],
   output: {
     filename: 'hydrator.js',
@@ -286,26 +267,26 @@ const webpackConfig = {
   target: 'web',
   module: {
     rules: [
-      {
-        test: /\.svg$/,
-        use: [
-          {
-            loader: 'webpack5-svg-sprite-loader',
-          },
-        ],
-      },
+      // {
+      //   test: /\.svg$/,
+      //   use: [
+      //     {
+      //       loader: 'webpack5-svg-sprite-loader',
+      //     },
+      //   ],
+      // },
       // {
       //   test: /\.(sa|sc|c|le)ss$/,
       //   use: 'ignore-loader',
       // },
       {
-        test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-      },
-      {
         test: /\.less$/,
         use: ['style-loader', 'css-loader', 'less-loader'],
         // include: styleFiles(),
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.css$/,
@@ -351,6 +332,14 @@ const webpackConfig = {
         // resolve: {
         //   fullySpecified: false,
         // },
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'webpack5-svg-sprite-loader',
+          },
+        ],
       },
     ],
   },
@@ -441,8 +430,10 @@ const webpackConfig = {
       '.less',
       '.scss',
       '.css',
+      '.svg',
     ],
     alias: {
+      hydrator: path.resolve(__dirname + '/app/hydrator'),
       components: path.resolve(__dirname + '/app/cdap/components'),
       services: path.resolve(__dirname + '/app/cdap/services'),
       api: path.resolve(__dirname + '/app/cdap/api'),
@@ -468,14 +459,18 @@ const webpackConfig = {
        * See options and defaults below for more details
        */
     }),
+    new OptimizeCssAssetsPlugin({
+      cssProcessorOptions: {
+        safe: true,
+        discardComments: {
+          removeAll: true,
+        },
+      },
+    }),
     new NodePolyfillPlugin(),
     new CleanWebpackPlugin(cleanOptions),
     new webpack.DefinePlugin({
       PKG: { name: JSON.stringify('cdap-ui') },
-      // cdap: (function() {
-      //   console.log(...arguments);
-      // })(),
-      // angular: angular,
     }),
     // new IncludeFilesPlugin({
     //   files: {

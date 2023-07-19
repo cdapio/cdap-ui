@@ -15,8 +15,14 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
+import {
+  detailContextConnect,
+  IDetailContext,
+} from 'components/Replicator/Detail';
 import { Link } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import ActionButtons from 'components/Replicator/Detail/TopPanel/ActionButtons';

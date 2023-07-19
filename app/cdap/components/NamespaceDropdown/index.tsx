@@ -145,7 +145,6 @@ export default class NamespaceDropdown extends React.PureComponent<
   private onNamespaceChange = (namespace) => {
     // On namespace change, reset if there are any existing authorization
     // message and recheck for the newly selected namespace.
-    console.log('on namepsace change in namespace drop')
     this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, { reset: true });
     fetchNamespaceDetails(namespace);
     if (this.props.onNamespaceChange) {

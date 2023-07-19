@@ -71,7 +71,7 @@ export function renderThroughputGraph(
 
   const x = d3
     .scaleBand()
-    .domain(data.map((d) => d.time))
+    .domain(data.map((d: any) => d.time))
     .range([0, width])
     .padding(0.1);
 
@@ -89,7 +89,7 @@ export function renderThroughputGraph(
     .axisLeft(y)
     .ticks(null, 's')
     .tickSizeInner(-width)
-    .tickFormat((d) => {
+    .tickFormat((d: any) => {
       // removing decimal ticks
       if (parseInt(d, 10) !== d) {
         return;
@@ -109,7 +109,7 @@ export function renderThroughputGraph(
     .style('fill', COLOR_MAP.tick);
 
   const xAxis = d3
-    .axisBottom(x)
+    .axisBottom<any>(x)
     // .ticks(4, 's')
     .tickSizeOuter(0)
     .tickFormat(timeFormatMonthDate);
@@ -248,7 +248,7 @@ export function renderThroughputGraph(
         tooltipTopOffset -
         (margin.bottom + margin.top) * 2 +
         'px';
-      let left = xLocation(d) + margin.left + tooltipLeftOffset;
+      let left: any = xLocation(d) + margin.left + tooltipLeftOffset;
       if (left + tooltipWidth >= width) {
         left = left - (left + tooltipWidth - width);
       }

@@ -246,19 +246,4 @@ export const Popover = ({
 };
 
 export default Popover;
-// {
-//   /* class Popover extends PureComponent {
-//   componentWillReceiveProps(nextProps) {
-//     if (
-//       typeof nextProps.showPopover === 'boolean' &&
-//       nextProps.showPopover !== this.state.showPopover
-//     ) {
-//       this.togglePopover();
-//     }
-//   }
 
-//   render() {
-//     debugger;
-//   }
-// } */
-// }

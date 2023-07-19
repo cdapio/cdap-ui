@@ -46,7 +46,7 @@ Feature: Pipeline Canvas - Actions
     Then Verify source nodes are invisible
     Then Fit pipeline to screen
     Then Verify source nodes are visible
-    Then Use shift click to delete two transform nodes
+    Then Use meta click to delete two transform nodes
     Then Verify transform nodes do not exist
     Then Undo delete nodes
     Then Exit Studio Page

@@ -15,10 +15,12 @@
  */
 import { StudioRoutes } from 'components/hydrator/components/StudioRoutes';
 import NamespaceStore from 'services/NamespaceStore';
-import { uiSupportedArtifacts } from 'services/global-constants';
+import { HydratorPlusPlusOrderingFactory } from '../../services/hydrator-plus-ordering-factory';
+// import { uiSupportedArtifacts } from 'services/global-constants';
 
+const uiSupportedArtifacts = ['cdap-sql-pipeline', 'cdap-data-streams', 'cdap-data-pipeline'];
 export class HydratorPlusPlusLeftPanelCtrl {
-  constructor($rootScope, HydratorPlusPlusLeftPanelStore, MyCDAPDataSource, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, myPipelineApi) {
+  constructor($rootScope, HydratorPlusPlusLeftPanelStore, MyCDAPDataSource, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, PluginTemplatesDirActions, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, myPipelineApi) {
     this.myPipelineApi = myPipelineApi;
     this.$state = $state;
     this.$scope = $rootScope.$new(true, undefined);
@@ -35,11 +37,13 @@ export class HydratorPlusPlusLeftPanelCtrl {
     } else {
       this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
     }
+
+    window.leftPanelStore = this.leftPanelStore;
+
     this.MyCDAPDataSource = new MyCDAPDataSource();
 
     this.myAlertOnValium = myAlertOnValium;
     this.$q = $q;
-    this.HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFactory;
     this.leftpanelActions = HydratorPlusPlusPluginActions;
     this.LEFTPANELSTORE_ACTIONS = LEFTPANELSTORE_ACTIONS;
     this.myHelpers = myHelpers;
@@ -78,7 +82,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
 
       extensions.forEach( (ext) => {
         let fetchPluginsFromMap = (ext) => {
-          return this.pluginsMap.filter( pluginObj => pluginObj.name === this.HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext));
+          return this.pluginsMap.filter( pluginObj => pluginObj.name === HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext));
         };
 
         let plugins = pluginsList[ext];
@@ -86,7 +90,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
 
         if (!fetchedPluginsMap.length) {
           this.pluginsMap.push({
-            name: this.HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext),
+            name: HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext),
             plugins: plugins,
             pluginTypes: [ext] // Since we group plugin types now under one label we need ot keep track of fetchPlugins call for each plugin type.
           });
@@ -95,7 +99,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
           fetchedPluginsMap[0].pluginTypes.push(ext);
         }
       });
-      this.pluginsMap = this.HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
+      this.pluginsMap = HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
     });
 
     let availablePluginSub = this.AvailablePluginsStore.subscribe(() => {
@@ -161,12 +165,12 @@ export class HydratorPlusPlusLeftPanelCtrl {
             .filter(artifact => artifact.version === window.CaskCommon.VersionStore.getState().version)
             .filter(r => uiSupportedArtifacts.indexOf(r.name) !== -1 )
             .map(r => {
-              r.label = that.HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
+              r.label = HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
               return r;
             });
           that.artifacts = filteredRes;
           that.selectedArtifact = filteredRes[0];
-          // that.selectedArtifact = filteredRes.filter( ar => ar.name === that.configStoreArtifact.name)[0];
+
           that.artifactToRevert = that.selectedArtifact;
           return that.selectedArtifact;
         }

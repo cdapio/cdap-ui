@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import globalEvents from 'services/global-events';
 import { uiSupportedArtifacts } from 'services/global-constants';
+import { HydratorPlusPlusOrderingFactory } from '../../services/hydrator-plus-ordering-factory';
+import { debounce } from 'lodash';
 
 export class HydratorPlusPlusTopPanelCtrl {
   constructor(
@@ -45,7 +47,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     $rootScope,
     uuid,
     HydratorUpgradeService,
-    MyPollingService
+    MyPollingService,
   ) {
     this.consoleStore = HydratorPlusPlusConsoleStore;
     this.myPipelineExportModalService = myPipelineExportModalService;
@@ -102,7 +104,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.onExportV2 = this.onExportV2.bind(this);
     this.startOrStopPreviewV2 = this.startOrStopPreviewV2.bind(this);
     this.onClickLogs = this.onClickLogs.bind(this);
-    this.openMetadataV2 = this.openMetadataV2.bind(this);
+    // this.openMetadataV2 = this.openMetadataV2.bind(this);
     this.importFile2 = this.importFile2.bind(this);
     this.applyRuntimeArgumentsFromReactStore = this.applyRuntimeArgumentsFromReactStore.bind(
       this
@@ -118,6 +120,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.getScheduleInfo = this.getScheduleInfo.bind(this);
     this.getConfigForExport = this.getConfigForExport.bind(this);
     this.getParentVersion = this.getParentVersion.bind(this);
+    // this.metadataExpanded = false;
 
     this.setState();
     this.setActiveNodes();
@@ -139,9 +142,9 @@ export class HydratorPlusPlusTopPanelCtrl {
     const urlParams = new URLSearchParams(window.location.href);
     this.isEdit = urlParams.get('isEdit') === 'true';
 
-    if (urlParams.get('isClone')) {
-      this.openMetadata();
-    }
+    // if (urlParams.get('isClone')) {
+    //   // this.openMetadata();
+    // }
 
     this.currentDraftId = this.HydratorPlusPlusConfigStore.getDraftId();
     if (
@@ -254,7 +257,7 @@ export class HydratorPlusPlusTopPanelCtrl {
             .filter(artifact => artifact.version === window.CaskCommon.VersionStore.getState().version)
             .filter(r => uiSupportedArtifacts.indexOf(r.name) !== -1 )
             .map(r => {
-              r.label = that.HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
+              r.label = HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
               return r;
             });
           that.artifacts = filteredRes;
@@ -278,6 +281,7 @@ export class HydratorPlusPlusTopPanelCtrl {
   setMetadata(metadata) {
     this.state.metadata = metadata;
   }
+
   setState() {
     this.state = {
       metadata: {
@@ -294,25 +298,30 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.fetchMacros();
   }
 
-  openMetadata() {
-    this.metadataExpanded = true;
-    this.invalidName = false;
-
-    this.$timeout.cancel(this.focusTimeout);
-    this.focusTimeout = this.$timeout(() => {
-      document.getElementById("pipeline-name-input").focus();
-    });
+  emitChange() {
+    window.CaskCommon.ee.emit(globalEvents.UPDATE_BODY_CTRL);
   }
 
-  openMetadataV2() {
-    this.metadataExpanded = true;
-    this.invalidName = false;
+  // openMetadata() {
+  //   this.metadataExpanded = true;
+  //   this.invalidName = false;
 
-    this.$timeout.cancel(this.focusTimeout);
-    this.focusTimeout = this.$timeout(() => {
-      document.getElementById("pipeline-name-input").focus();
-    });
-  }
+  //   this.$timeout.cancel(this.focusTimeout);
+  //   this.focusTimeout = this.$timeout(() => {
+  //     document.getElementById("pipeline-name-input").focus();
+  //   });
+  // }
+
+  // openMetadataV2() {
+  //   this.metadataExpanded = true;
+  //   this.invalidName = false;
+  //   this.emitChange();
+
+  //   this.$timeout.cancel(this.focusTimeout);
+  //   this.focusTimeout = this.$timeout(() => {
+  //     document.getElementById("pipeline-name-input").focus();
+  //   });
+  // }
 
   getPostActions() {
     return this.HydratorPlusPlusConfigStore.getPostActions();
@@ -349,6 +358,7 @@ export class HydratorPlusPlusTopPanelCtrl {
 
   saveChangeSummary(changeSummary) {
     this.HydratorPlusPlusConfigStore.setChangeSummary(changeSummary);
+    this.emitChange();
   }
 
   applyBatchConfigFromReactStore(
@@ -387,6 +397,7 @@ export class HydratorPlusPlusTopPanelCtrl {
         ]
       );
     }
+    this.emitChange();
   }
 
   applyRealtimeConfigFromReactStore(
@@ -430,6 +441,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.previewStore.dispatch(
       this.previewActions.setTimeoutInMinutes(previewTimeoutInMin)
     );
+    this.emitChange();
   }
 
   getStoreConfig() {
@@ -450,26 +462,29 @@ export class HydratorPlusPlusTopPanelCtrl {
       null,
       errorCb
     );
+    this.emitChange();
   }
 
   /**
-   * This is a copy of resetMetadata
-   * with the scope bound to the function -- copied
-   * so we don't break original functionality
-   */
+  //  * This is a copy of resetMetadata
+  //  * with the scope bound to the function -- copied
+  //  * so we don't break original functionality
+  //  */
   resetMetadataV2(event) {
     this.setState();
-    this.metadataExpanded = false;
-    event.preventDefault();
-    event.stopPropagation();
+    // this.metadataExpanded = false;
+    // this.emitChange();
+    // event.preventDefault();
+    // event.stopPropagation();
   }
 
-  resetMetadata(event) {
-    this.setState();
-    this.metadataExpanded = false;
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  // resetMetadata(event) {
+  //   this.setState();
+  //   this.metadataExpanded = false;
+  //   this.emitChange();
+  //   // event.preventDefault();
+  //   // event.stopPropagation();
+  // }
   /**
    * This is a copy of saveMetadata
    * with the scope bound to the function -- copied
@@ -497,6 +512,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     event.preventDefault();
     event.stopPropagation();
     this.onSaveDraft();
+    
   }
 
   saveMetadata(event) {
@@ -522,16 +538,16 @@ export class HydratorPlusPlusTopPanelCtrl {
     event.stopPropagation();
     this.onSaveDraft();
   }
-  onEnterOnMetadata(event) {
-    // Save when user hits ENTER key.
-    if (event.keyCode === 13) {
-      this.saveMetadata(event);
-      this.metadataExpanded = false;
-    } else if (event.keyCode === 27) {
-      // Reset if the user hits ESC key.
-      this.resetMetadata(event);
-    }
-  }
+  // onEnterOnMetadata(event) {
+  //   // Save when user hits ENTER key.
+  //   if (event.keyCode === 13) {
+  //     this.saveMetadata(event);
+  //     this.metadataExpanded = false;
+  //   } else if (event.keyCode === 27) {
+  //     // Reset if the user hits ESC key.
+  //     this.resetMetadata(event);
+  //   }
+  // }
 
   onImport() {
     let fileBrowserClickCB = () => {
@@ -549,6 +565,7 @@ export class HydratorPlusPlusTopPanelCtrl {
       document.getElementById("pipeline-import-config-link").click();
     };
     this._checkAndShowConfirmationModalOnDirtyState(fileBrowserClickCB);
+    this.emitChange();
   }
 
   onExport() {
@@ -581,6 +598,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     } else {
       window.CaskCommon.DownloadFile(exportConfig);
     }
+    this.emitChange();
   }
   onSaveDraft() {
     this.HydratorPlusPlusConfigActions.saveAsDraft();
@@ -590,6 +608,7 @@ export class HydratorPlusPlusTopPanelCtrl {
       this.HydratorPlusPlusConfigStore.getDraftId()
     );
     this.$window.localStorage.setItem("LastPreviewId", this.currentPreviewId);
+    this.emitChange();
   }
   onSaveDraftV2() {
     this.HydratorPlusPlusConfigActions.saveAsDraft();
@@ -599,9 +618,11 @@ export class HydratorPlusPlusTopPanelCtrl {
       this.HydratorPlusPlusConfigStore.getDraftId()
     );
     this.$window.localStorage.setItem("LastPreviewId", this.currentPreviewId);
+    this.emitChange();
   }
   onClickLogs() {
     this.viewLogs = !this.viewLogs;
+    this.emitChange();
   }
   checkNameError() {
     let messages = this.consoleStore.getMessages() || [];
@@ -618,6 +639,7 @@ export class HydratorPlusPlusTopPanelCtrl {
   onPublishV2(isEdit = false) {
     this.HydratorPlusPlusConfigActions.publishPipeline(isEdit);
     this.checkNameError();
+    this.emitChange();
   }
   showSettings() {
     this.state.viewSettings = !this.state.viewSettings;
@@ -958,6 +980,7 @@ export class HydratorPlusPlusTopPanelCtrl {
           _.cloneDeep(this.runtimeArguments)
         )
       );
+      this.emitChange();
       return this.$q.when(this.runtimeArguments);
     }
 
@@ -1045,6 +1068,7 @@ export class HydratorPlusPlusTopPanelCtrl {
               )
             );
             this.doesPreviewHaveEmptyMacros = this.checkForEmptyMacrosForPreview();
+            this.emitChange();
             return this.runtimeArguments;
           },
           (err) => {
@@ -1067,8 +1091,10 @@ export class HydratorPlusPlusTopPanelCtrl {
         )
       );
       this.doesPreviewHaveEmptyMacros = this.checkForEmptyMacrosForPreview();
+      this.emitChange();
       return this.$q.when(this.runtimeArguments);
     }
+    
   }
 
   toggleConfig() {
@@ -1081,6 +1107,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.getRuntimeArguments().then(() => {
       this.viewConfig = !this.viewConfig;
     });
+    this.emitChange();
   }
 
   startOrStopPreview() {
@@ -1099,6 +1126,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     } else {
       this.toggleConfig();
     }
+    this.emitChange();
   }
 
   doStartOrStopPreview() {
@@ -1119,6 +1147,7 @@ export class HydratorPlusPlusTopPanelCtrl {
   toggleSchedulerV2(e) {
     this.viewScheduler = !this.viewScheduler;
     e.stopPropagation();
+    this.emitChange();
   }
 
   setRuntimeArguments(runtimeArguments) {
@@ -1127,6 +1156,7 @@ export class HydratorPlusPlusTopPanelCtrl {
 
   closeScheduler(){
     this.viewScheduler = false;
+    this.emitChange();
   }
 
   applyRuntimeArguments() {
@@ -1148,6 +1178,7 @@ export class HydratorPlusPlusTopPanelCtrl {
       )
     );
     this.doesPreviewHaveEmptyMacros = this.checkForEmptyMacrosForPreview();
+    this.emitChange();
   }
 
   applyRuntimeArgumentsFromReactStore(runtimeArguments) {
@@ -1170,6 +1201,7 @@ export class HydratorPlusPlusTopPanelCtrl {
       )
     );
     this.doesPreviewHaveEmptyMacros = this.checkForEmptyMacrosForPreview();
+    this.emitChange();
   }
 
   checkForEmptyMacrosForPreview() {
@@ -1447,6 +1479,7 @@ export class HydratorPlusPlusTopPanelCtrl {
 
   closeLogs() {
     this.viewLogs = false;
+    this.emitChange();
   }
 
   togglePreviewMode() {
@@ -1465,6 +1498,7 @@ export class HydratorPlusPlusTopPanelCtrl {
     this.previewStore.dispatch(
       this.previewActions.togglePreviewMode(!this.previewMode)
     );
+    this.emitChange();
   }
 
   importFile(files) {
@@ -1483,6 +1517,7 @@ export class HydratorPlusPlusTopPanelCtrl {
 
     let uploadedFile = files[0];
     this.HydratorUpgradeService.validateAndUpgradeConfigFile(uploadedFile, this.getParentVersion());
+    this.emitChange();
   }
 
   _checkAndShowConfirmationModalOnDirtyState(proceedCb) {

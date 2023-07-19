@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { GLOBALS as globals } from '../../cdap/services/global-constants';
 
-function HydratorPlusPlusOrderingFactory(GLOBALS) {
+function HydratorPlusPlusOrderingFact(GLOBALS) {
   function getArtifactDisplayName (artifactName) {
     return GLOBALS.artifactConvert[artifactName] || artifactName;
   }
@@ -86,4 +87,6 @@ function HydratorPlusPlusOrderingFactory(GLOBALS) {
 }
 
 angular.module(`${PKG.name}.feature.hydrator`)
-  .service('HydratorPlusPlusOrderingFactory', HydratorPlusPlusOrderingFactory);
+  .service('HydratorPlusPlusOrderingFactory', HydratorPlusPlusOrderingFact);
+
+export const HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFact(globals);

@@ -70,6 +70,7 @@ const getPluginsWithAddedInfo = (plugins = [], pluginToArtifactArrayMap = {}, ex
       template: popoverTemplate
     });
   };
+
   const getAllArtifacts = (_pluginToArtifactArrayMap = {}, plugin = {}, extension = '') => {
     if ([Object.keys(_pluginToArtifactArrayMap).length, Object.keys(plugin).length].indexOf(0) !== -1) {
       return [];

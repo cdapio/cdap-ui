@@ -14,6 +14,8 @@
  * the License.
  */
 
+import globalEvents from 'services/global-events';
+
 class DAGPlusPlusNodesStore {
   constructor(DAGPlusPlusNodesDispatcher, uuid, GLOBALS) {
     this.state = {};
@@ -71,8 +73,11 @@ class DAGPlusPlusNodesStore {
   registerOnChangeListener(callback) {
     this.changeListeners.push(callback);
   }
+
   emitChange() {
     this.changeListeners.forEach( callback => callback() );
+    // console.log('hitting this', globalEvents.UPDATE_BODY_CTRL)
+    window.CaskCommon.ee.emit(globalEvents.UPDATE_BODY_CTRL);
   }
 
   addSourceCount() {
@@ -182,20 +187,17 @@ class DAGPlusPlusNodesStore {
     });
     this.emitChange();
   }
+
   getNodes() {
     return this.state.nodes;
   }
-  getNodesAsObjects() {
-    var obj = {};
-    angular.forEach(this.state.nodes, function (node) {
-      obj[node.name] = node;
-    });
-    return obj;
-  }
+
+
 
   setNodes(nodes) {
     const sanitize =  window.CaskCommon.CDAPHelpers.santizeStringForHTMLID;
     this.adjacencyMap = {};
+    this.addStateToHistory();
     nodes.forEach(node => {
       if (!node.name) {
         node.name = node.label + '-' + this.uuid.v4();
@@ -214,14 +216,17 @@ class DAGPlusPlusNodesStore {
     this.state.nodes = nodes;
     this.emitChange();
   }
+
   getActiveNodeId() {
     return this.state.activeNodeId;
   }
+
   setActiveNodeId(nodeId) {
     this.addStateToHistory(false);
     this.state.activeNodeId = nodeId;
     this.emitChange();
   }
+
   resetActiveNode() {
     this.state.activeNodeId = null;
     angular.forEach(this.state.nodes, (node) => {
@@ -245,6 +250,7 @@ class DAGPlusPlusNodesStore {
     }
     this.emitChange();
   }
+
   updateConnections(connections) {
     Object.keys(this.adjacencyMap).forEach(key => {
       this.adjacencyMap[key] = [];
@@ -264,6 +270,7 @@ class DAGPlusPlusNodesStore {
     this.state.connections = connections;
     this.emitChange();
   }
+
   removeConnection(connection) {
     this.addStateToHistory();
     let index = this.state.connections.indexOf(connection);
@@ -276,9 +283,11 @@ class DAGPlusPlusNodesStore {
     this.state.connections.splice(index, 1);
     this.emitChange();
   }
+
   getConnections() {
-    return angular.copy(this.state.connections);
+    return JSON.parse(JSON.stringify(this.state.connections));
   }
+
   setConnections(connections) {
     Object.keys(this.adjacencyMap).forEach(key => {
       this.adjacencyMap[key] = [];

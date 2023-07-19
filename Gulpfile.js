@@ -153,10 +153,7 @@ const webpackConfig = {
     new NodePolyfillPlugin(),
     new webpack.DefinePlugin({
       PKG: { name: JSON.stringify('cdap-ui') },
-      // cdap: (function() {
-      //   console.log(...arguments);
-      // })(),
-      // angular: angular,
+
     }),
     new CircularDependencyPlugin({
       // exclude detection of files based on a RegExp
@@ -407,9 +404,7 @@ gulp.task('js:lib', () => {
     ])
     .pipe(plug.replace('glyphicon', 'fa'))
     .pipe(
-      webpackStream(webpackConfig, null, (e, ee) => {
-        // console.log(e, ee);
-      })
+      webpackStream(webpackConfig, null, () => {})
     )
     .pipe(plug.concat('lib.js'))
     .pipe(gulp.dest('./packaged/public/dist/assets/bundle'));

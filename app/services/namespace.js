@@ -29,7 +29,6 @@ angular.module(PKG.name + '.services')
 
 
     this.getList = function (force) {
-      console.log('GOOSE', 'getting namespace shit')
       if (!force && this.namespaceList.length) {
           return $q.when(this.namespaceList);
       }

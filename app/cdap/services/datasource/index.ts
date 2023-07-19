@@ -432,7 +432,6 @@ export default class DataSource implements IDataSource {
   }
 
   public startClientPoll = (resourceId) => {
-    console.log('goose resourceID client poll', resourceId);
     const interval = objectQuery(this.polling, resourceId, 'resource', 'intervalTime');
     debugLog(`Setting timeout for ${resourceId} with interval ${interval}`);
     const intervalTimer = setTimeout(() => {

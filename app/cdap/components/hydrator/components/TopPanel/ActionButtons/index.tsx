@@ -116,6 +116,9 @@ export const ActionButtons = ({
   getStoreConfig,
 }: IActionButtonsProps) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isPreviewMode, setPreviewMode] = useState(previewMode);
+  // needs to set to false on run preview and _checkAndShowConf...
+  const [isViewConfig, setViewConfig] = useState(viewConfig);
 
   const handleFile = (event) => {
     if (!objectQuery(event, 'target', 'files', 0)) {
@@ -127,6 +130,17 @@ export const ActionButtons = ({
       onFileSelect(uploadedFiles);
       setSelectedFile(uploadedFiles);
     }
+  };
+
+  const handlePreviewMode = (e) => {
+    togglePreviewMode();
+    setPreviewMode(!isPreviewMode);
+  };
+
+  const handleViewConfig = () => {
+    getRuntimeArgs().then(() => {
+      setViewConfig(!isViewConfig)
+    });
   };
 
   const configureButtonAnchorSelector = previewMode
@@ -146,19 +160,19 @@ export const ActionButtons = ({
   return (
     <>
       <ActionButtonsContainer>
-        {previewMode ? (
+        {isPreviewMode ? (
           //   PREVIEW MODE BUTTONS
           <>
-            <PreviewModeButton onClick={togglePreviewMode} data-cy="preview-active-btn">
+            <PreviewModeButton onClick={handlePreviewMode} data-cy="preview-active-btn">
               <div>
                 <IconSVG name="icon-eye"></IconSVG>
                 <ButtonLabel>Preview</ButtonLabel>
               </div>
             </PreviewModeButton>
             <CommonButton
-              active={viewConfig}
+              active={isViewConfig}
               disabled={previewLoading || previewRunning}
-              onClick={!previewLoading && !previewRunning && toggleConfig}
+              onClick={!previewLoading && !previewRunning && handleViewConfig}
               id="preview-config-btn"
               data-cy="preview-config-btn"
             >
@@ -233,7 +247,7 @@ export const ActionButtons = ({
             >
               <BorderRightButton
                 disabled={!previewEnabled}
-                onClick={previewEnabled && togglePreviewMode}
+                onClick={previewEnabled && handlePreviewMode}
                 data-cy="pipeline-preview-btn"
                 data-testid="pipeline-preview-btn"
               >
@@ -244,8 +258,8 @@ export const ActionButtons = ({
               </BorderRightButton>
             </CustomTooltip>
             <CommonButton
-              active={viewConfig}
-              onClick={toggleConfig}
+              active={isViewConfig}
+              onClick={handleViewConfig}
               id="pipeline-configure-modeless-btn"
               data-cy="pipeline-configure-modeless-btn"
             >
@@ -358,8 +372,8 @@ export const ActionButtons = ({
         )}
       </ActionButtonsContainer>
       <PipelineConfigure
-        viewConfig={viewConfig}
-        toggleConfig={toggleConfig}
+        viewConfig={isViewConfig}
+        toggleConfig={handleViewConfig}
         applyRuntimeArguments={applyRuntimeArguments}
         state={state}
         runPipeline={runPipeline}
@@ -367,7 +381,7 @@ export const ActionButtons = ({
         applyRealtimeConfig={applyRealtimeConfig}
         actionCreator={actionCreator}
         isDeployed={false}
-        showPreviewConfig={previewMode}
+        showPreviewConfig={isPreviewMode}
         getPostActions={getPostActions}
         anchorEl={configureButtonAnchorSelector}
         validatePluginProperties={validatePluginProperties}

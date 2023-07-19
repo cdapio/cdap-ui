@@ -19,6 +19,76 @@
 // const $cookies = require('angular-cookies');
 // const ngResource = require('angular-resource');
 // import { UI_ROUTER_REACT_HYBRID } from '@uirouter/react-hybrid';
+
+import '../styles/common.less';
+import '../styles/themes/cdap/buttons.less';
+import '../styles/themes/cdap/header.less';
+import '../styles/themes/cdap/mixins.less';
+import '../styles/themes/cdap/tabs.less';
+import '../styles/themes/cdap/theme.less';
+import '../styles/themes/cdap.less';
+import '../directives/app-level-loading-icon/loading.less';
+import '../directives/cask-angular-dropdown-text-combo/dropdown-text-combo.less';
+import '../directives/cask-angular-json-edit/jsonedit.less';
+import '../directives/cask-angular-sortable/sortable.less';
+import '../directives/complex-schema/complex-schema.less';
+import '../directives/dag-minimap/dag-minimap.less';
+import '../directives/dag-plus/color-constants.less';
+import '../directives/dag-plus/my-dag.less';
+import '../directives/datetime-picker/datetime.less';
+import '../directives/datetime-range/datetime-range.less';
+import '../directives/fileselect/fileselect.less';
+import '../directives/group-side-panel/group-side-panel.less';
+import '../directives/macro-widget-toggle/macro-widget-toggle.less';
+import '../directives/my-link-button/my-link-button.less';
+import '../directives/my-pipeline-configurations/my-pipeline-configurations.less';
+import '../directives/my-pipeline-runtime-args/my-pipeline-runtime-args.less';
+import '../directives/my-pipeline-summary/my-pipeline-summary.less';
+import '../directives/my-popover/my-popover.less';
+import '../directives/my-post-run-action-wizard/my-post-run-action-wizard-modal.less';
+import '../directives/my-post-run-action-wizard/my-post-run-action-wizard.less';
+import '../directives/my-post-run-action-wizard/wizard-configure-confirm-step/wizard-configure-confirm-step.less';
+import '../directives/my-post-run-action-wizard/wizard-select-action-step/wizard-select-action-step.less';
+import '../directives/my-post-run-actions/my-post-run-actions.less';
+import '../directives/node-metrics/node-metrics.less';
+import '../directives/plugin-functions/functions/get-property-value/get-property-value.less';
+import '../directives/plugin-functions/functions/get-schema/get-schema.less';
+import '../directives/plugin-functions/functions/output-schema/output-schema.less';
+import '../directives/plugin-templates/plugin-templates.less';
+import '../directives/splitter-popover/splitter-popover.less';
+import '../directives/timestamp-picker/timestamp.less';
+import '../directives/validators/validators.less';
+import '../directives/widget-container/widget-complex-schema-editor/widget-complex-schema-editor.less';
+import '../directives/widget-container/widget-container.less';
+import '../directives/widget-container/widget-ds-multiplevalues/widget-ds-multiplevalues.less';
+import '../directives/widget-container/widget-dsv/widget-dsv.less';
+import '../directives/widget-container/widget-function-dropdown-with-alias/widget-function-dropdown-with-alias.less';
+import '../directives/widget-container/widget-input-schema/widget-input-schema.less';
+import '../directives/widget-container/widget-join-types/widget-join-types.less';
+import '../directives/widget-container/widget-js-editor/widget-js-editor.less';
+import '../directives/widget-container/widget-json-editor/widget-json-editor.less';
+import '../directives/widget-container/widget-keyvalue/widget-keyvalue.less';
+import '../directives/widget-container/widget-keyvalue-encoded/widget-keyvalue-encoded.less';
+import '../directives/widget-container/widget-multi-select-dropdown/widget-multi-select-dropdown.less';
+import '../directives/widget-container/widget-number/widget-number.less';
+import '../directives/widget-container/widget-password/widget-password.less';
+import '../directives/widget-container/widget-radio-group/widget-radio-group.less';
+import '../directives/widget-container/widget-rulesengine-editor/rules-engine-modal.less';
+import '../directives/widget-container/widget-schema-editor/widget-schema-editor.less';
+import '../directives/widget-container/widget-sql-conditions/widget-sql-conditions.less';
+import '../directives/widget-container/widget-sql-select-fields/widget-sql-select-fields.less';
+import '../directives/widget-container/widget-textarea-validate/widget-textarea-validate.less';
+import '../directives/widget-container/widget-toggle-switch/widget-toggle-switch.less';
+import '../directives/widget-container/widget-wrangler-directives/widget-wrangler-directive.less';
+import '../directives/widget-container/widget-wrangler-directives/wrangler-modal.less';
+import '../hydrator/adapters.less';
+import '../hydrator/bottompanel.less';
+import '../hydrator/hydrator-modal.less';
+import '../hydrator/leftpanel.less';
+import '../hydrator/toppanel.less';
+import '../styles/bootstrap.less';
+
+
 const CaskCommon = require('../common/cask-shared-components');
 if (!window.CaskCommon) {
   window.CaskCommon = CaskCommon;
@@ -28,16 +98,7 @@ const uuid = require('uuid');
 window.uuid = uuid;
 
 
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import { Hydrator } from './main';
-// import reactstrap from 'reactstrap';
 
-// export default () => ReactDOM.render((Hydrator()), document.getElementById('main-react'));
-// PKG = {
-//   name: 'cdap-ui'
-// };
-// console.time(PKG.name);
 angular
   .module(PKG.name, [
 
@@ -137,6 +198,7 @@ angular
   .run(function(myNamespace) {
     myNamespace.getList();
   })
+  // http provider no longer worked
   // .config(function($httpProvider) {
   //   $httpProvider.interceptors.push(function($rootScope, myHelpers) {
   //     return {
@@ -242,153 +304,4 @@ angular
     });
   })
 
-  /**
-   * BodyCtrl
-   * attached to the <body> tag, mostly responsible for
-   *  setting the className based events from $state and caskTheme
-   */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers,
-    // $http
-    ) {
-    window.CaskCommon.CDAPHelpers.setupExperiments();
-    var activeThemeClass = caskTheme.getClassName();
-    getVersion();
-    $rootScope.stores = window.ReactStores;
-    this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
-    this.pageLevelError = null;
-    this.apiError = false;
-    const {globalEvents} = window.CaskCommon;
-
-    this.eventEmitter.on(globalEvents.NONAMESPACE, () => {
-      this.pageLevelError = {
-        errorCode: 403
-      };
-    });
-    this.eventEmitter.on(globalEvents.PAGE_LEVEL_ERROR, (error) => {
-
-      // If we already have no namespace error thrown it trumps all other 404s
-      // and UI should show that the user does not have access to the namespace
-      // instead of specific 404s which will be misleading.
-      if (this.pageLevelError && this.pageLevelError.errorCode === 403) {
-        return;
-      }
-      if (error.reset === true) {
-        this.pageLevelError = null;
-      }
-      else {
-        this.pageLevelError = myHelpers.handlePageLevelError(error);
-      }
-    });
-    this.eventEmitter.on(globalEvents.API_ERROR, (hasError) => {
-      if (this.apiError !== hasError) {
-        this.apiError = true;
-      }
-    });
-
-    $scope.copyrightYear = new Date().getFullYear();
-
-    function getVersion() {
-      fetch(`${document.location.origin}/api/v3/version`, {
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then(function(res) {
-          var data = res;
-
-          $scope.version = data.version;
-          $rootScope.cdapVersion = $scope.version;
-
-          window.CaskCommon.VersionStore.dispatch({
-            type: window.CaskCommon.VersionActions.updateVersion,
-            payload: {
-              version: data.version
-            }
-          });
-        });
-    }
-
-    $scope.$on(CASK_THEME_EVENT.changed, function (event, newClassName) {
-      if (!event.defaultPrevented) {
-        $scope.bodyClass = $scope.bodyClass.replace(activeThemeClass, newClassName);
-        activeThemeClass = newClassName;
-      }
-    });
-    $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState) {
-      var classes = [];
-      if (toState.data && toState.data.bodyClass) {
-        classes = [toState.data.bodyClass];
-      }
-      else {
-        var parts = toState.name.split('.'),
-            count = parts.length + 1;
-        while (1<count--) {
-          classes.push('state-' + parts.slice(0,count).join('-'));
-        }
-      }
-      if (toState.name !== fromState.name && myAlertOnValium.isAnAlertOpened()) {
-        myAlertOnValium.destroy();
-      }
-      classes.push(activeThemeClass);
-
-      $scope.bodyClass = classes.join(' ');
-
-      myLoadingService.hideLoadingIcon();
-
-      /**
-       *  This is to make sure that the sroll position goes back to the top when user
-       *  change state. UI Router has this function ($anchorScroll), but for some
-       *  reason it is not working.
-       **/
-      $window.scrollTo(0, 0);
-    });
-
-    EventPipe.on(MYSOCKET_EVENT.reconnected, function () {
-      $log.log('[DataSource] reconnected.');
-      myLoadingService.hideLoadingIcon();
-    });
-
-    console.timeEnd(PKG.name);
-  }).directive('initStores', function() {
-    return {
-      restrict: 'E',
-      scope: {
-        stores: '=',
-      },
-      bindToController: true,
-      controller: 'BodyCtrl as BodyCtrl',
-      template: `
-        <my-global-navbar></my-global-navbar>
-        <main class="container" id="app-container">
-          <div ng-if="!BodyCtrl.pageLevelError">
-            <div id="LeftPanelCtrl" ng-controler="HydratorPlusPlusLeftPanelCtrl">
-              <studio-routes></studio-routes>
-            </div>
-          </div>
-          <page403
-            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 403"
-            message="BodyCtrl.pageLevelError.message"
-          ></page403> 
-          <page404
-            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 404"
-            message="BodyCtrl.pageLevelError.message"
-          ></page404>
-          <page500
-            ng-if="BodyCtrl.pageLevelError && BodyCtrl.pageLevelError.errorCode === 500"
-            message="BodyCtrl.pageLevelError.message"
-          ></page500>
-        </main>
-
-        <div class="alerts" id="alerts" data-cy="valium-banner-hydrator" data-testid="valium-banner-hydrator"></div>
-        <loading-icon></loading-icon>
-        <loading-indicator></loading-indicator>
-        <status-alert-message></status-alert-message>
-        <global-footer></global-footer>
-        <auth-refresher></auth-refresher>
-        <api-error-dialog ng-if="BodyCtrl.apiError"></api-error-dialog>
-      `
-    };
-  })
+  

@@ -22,23 +22,42 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { Studio, IStudioCreateState } from './Studio';
+import { Details, IPipeDetails } from '../Details';
 
-type IStudioRoutesProps = IStudioCreateState;
+// counter is necessary because ngReact is weird in how it can trigger prop changes
+type IStudioRoutesProps = IStudioCreateState & IPipeDetails;
 
 export const StudioRoutes = (props: IStudioRoutesProps) => {
-  // get artifacts
-  // const location = useLocation();
-  console.log('groose goose\n\n\n\n\n',props.topPanelCtrl,'goose 2 \n\n\n\n', props.leftPanelCtrl);
+
   return (
     <Router basename="/pipelines">
       <Switch>
         <Route path="/ns/:namespace/studio">
           {/* {(props.leftPanelCtrl.selectedArtifact) && */}
-            <Studio leftPanelCtrl={props.leftPanelCtrl} topPanelCtrl={props.topPanelCtrl}/>
+            <Studio
+              // nodes={props.nodes}
+              metadataExpanded={props.metadataExpanded}
+              
+              // connections={props.connections}
+              // previewMode={props.previewMode}
+              counter={props.counter}
+              studioCtrl={props.studioCtrl}
+              leftPanelCtrl={props.leftPanelCtrl}
+              topPanelCtrl={props.topPanelCtrl}
+              canvasCtrl={props.canvasCtrl}
+              dagCtrl={props.dagCtrl}
+            />
           {/* } */}
         </Route>
-        <Route path="/">
-          <p> fake stuff</p>
+        <Route path="/ns/:namespace/view/:pipelineId">
+          <Details
+            counter={props.counter}
+            pipeDetails={props.pipeDetails}
+            pipeCanvas={props.pipeCanvas}
+            studioCtrl={props.studioCtrl}
+            dagCtrl={props.dagCtrl}
+          />
+          <p> details</p>
         </Route>
         <Route path="*">
           <p>mr no match</p>

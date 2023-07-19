@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ButtonsContainer,
   CustomTooltip,
@@ -40,40 +40,67 @@ interface INameAndDescriptionProps {
   parsedDescription?: string;
   saveMetadata?: (event: MouseEvent | KeyboardEvent) => void;
   resetMetadata?: (event: MouseEvent | KeyboardEvent) => void;
-  openMetadata?: () => void;
+  // openMetadata?: () => void;
   isEdit?: boolean;
   editStatus?: string;
 }
 
 export const NameAndDescription = ({
-  metadataExpanded,
+  // metadataExpanded,
   globals,
   state,
   invalidName,
   parsedDescription,
   saveMetadata,
   resetMetadata,
-  openMetadata,
+  // openMetadata,
   isEdit,
   editStatus,
 }: INameAndDescriptionProps) => {
   const [name, setName] = useState(state.metadata.name);
   const [description, setDescription] = useState(state.metadata.description);
+  const urlParams = new URLSearchParams(window.location.href);
+  const [metaOpen, setMetaOpen] = useState<boolean>(!!urlParams.get('isClone'));
+
+  const expandMetadata = () => {
+    setMetaOpen(!metaOpen);
+    if (!metaOpen) {
+      // replace with ref
+      setTimeout(() => {
+        document.getElementById("pipeline-name-input").focus();
+      }, 0);
+    }
+  }
+  
   const handleNameChange = (e) => {
     setName(e.target.value);
-    state.metadata.name = e.target.value;
   };
+
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
-    state.metadata.description = e.target.value;
   };
+
+  const onSaveMetadata = (e) => {
+    state.metadata.name = name;
+    state.metadata.description = description;
+    saveMetadata(e);
+  }
+
+  const onResetMetadata = (e) => {
+    setName(state.metadata.name);
+    setDescription(state.metadata.description);
+    expandMetadata();
+    resetMetadata(e);
+  }
+
   const onEnterOnMetadata = (event: KeyboardEvent) => {
     // Save when user hits ENTER key.
     if (event.key === 'Enter') {
-      saveMetadata(event);
+      onSaveMetadata(event);
+      expandMetadata();
     } else if (event.key === 'Escape') {
       // Reset if the user hits ESC key.
-      resetMetadata(event);
+      onResetMetadata(event);
     }
   };
 
@@ -85,14 +112,14 @@ export const NameAndDescription = ({
 
   return (
     <>
-      <HydratorMetadata expanded={metadataExpanded} disabled={isEdit}>
+      <HydratorMetadata expanded={metaOpen} disabled={isEdit}>
         <PipelineType>
           {eTLBatch && <StyledIconSVG name="icon-ETLBatch"></StyledIconSVG>}
           {eTLRealtime && <StyledIconSVG name="icon-ETLRealtime"></StyledIconSVG>}
           {sparkstreaming && <StyledIconSVG name="icon-sparkstreaming"></StyledIconSVG>}
         </PipelineType>
-        <MetadataLeft expanded={metadataExpanded}>
-          {metadataExpanded ? (
+        <MetadataLeft expanded={metaOpen}>
+          {metaOpen ? (
             <>
               <NameTextField
                 autoComplete="off"
@@ -116,7 +143,10 @@ export const NameAndDescription = ({
               />
               <ButtonsContainer>
                 <PrimaryContainedButton
-                  onClick={saveMetadata}
+                  onClick={(e) => {
+                    saveMetadata(e);
+                    expandMetadata();
+                  }}
                   data-cy="pipeline-metadata-ok-btn"
                   data-testid="pipeline-metadata-ok-btn"
                 >
@@ -124,7 +154,7 @@ export const NameAndDescription = ({
                 </PrimaryContainedButton>
                 <PrimaryContainedButton
                   color="default"
-                  onClick={resetMetadata}
+                  onClick={onResetMetadata}
                   data-cy="pipeline-metadata-cancel-btn"
                   data-testid="pipeline-metadata-cancel-btn"
                 >
@@ -134,7 +164,7 @@ export const NameAndDescription = ({
             </>
           ) : (
             <div
-              onClick={openMetadata}
+              onClick={expandMetadata}
               role="button"
               data-cy="pipeline-metadata"
               data-testid="pipeline-metadata"

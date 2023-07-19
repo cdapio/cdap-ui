@@ -703,6 +703,7 @@ function sanitizeNodeNamesInPluginProperties(nodes, availablePlugins, oldNameToN
 }
 
 function isValidEntityName(name) {
+  console.log('is valid entity name is being checked,', name);
   if (!name) {
     return false;
   }
@@ -897,6 +898,15 @@ const PIPELINE_ARTIFACTS = [
   'cdap-data-streams',
 ];
 
+/**
+ * 
+ * @param {number} num 
+ * @returns a comma separated string representation of the number
+ */
+const commaSeparatedNumber = (num) => {
+  return parseInt(num, 10).toLocaleString('en');
+}
+
 export {
   openLinkInNewTab,
   objectQuery,
@@ -959,5 +969,6 @@ export {
   unflatternStringToObj,
   arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
-  BATCH_PIPELINE_TYPE
+  BATCH_PIPELINE_TYPE,
+  commaSeparatedNumber
 };

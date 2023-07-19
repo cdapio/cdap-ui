@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 Cask Data, Inc.
+ * Copyright © 2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,29 +14,17 @@
  * the License.
  */
 
-@import "../../variables.less";
-@import "../../../../bower_components/bootstrap/less/mixins.less";
+export interface ISelectedElements {
+  nodes: any[];
+  edges: any[];
+}
 
-body {
-  header.navbar-cdap {
-    margin-bottom: 0;
-  }
-
-  &.theme-cdap {
-    header.navbar-cdap {
-      background-color: @cdap-header;
-    }
-  }
-
-  header.navbar-hydrator {
-    border-top-width: 1px;
-    height: 60px;
-    margin: 0;
-  }
-
-  &.theme-cdap {
-    header.navbar-hydrator {
-      // background: url('@{img-path}/hydrator_header_bg.jpg') center center / 100% 60px no-repeat;
-    }
-  }
+export interface INodePosition {
+  id: string;
+  position: {
+    _uiPosition: {
+      top: string;
+      left: string;
+    };
+  };
 }

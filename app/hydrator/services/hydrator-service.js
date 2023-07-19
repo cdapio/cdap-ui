@@ -13,6 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import Version from '../../cdap/services/VersionRange/Version';
+import VersionRange from '../../cdap/services/VersionRange/VersionUtilities';
+
+export const isVersionInRange = ({supportedVersion, versionRange} = {}) => {
+  let flattenedVersion = versionRange;
+  let isNil = (value) => _.isUndefined(value) && _.isNull(value);
+  if (isNil(supportedVersion) || isNil(versionRange)) {
+    return false;
+  }
+  if (['[', '('].indexOf(versionRange[0]) !== -1) {
+    const supportedVersionInst = new Version(supportedVersion);
+    const entityVersionRangeInst = new VersionRange(versionRange);
+    if (entityVersionRangeInst.versionIsInRange(supportedVersionInst)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  if (supportedVersion !== versionRange) {
+    return false;
+  }
+
+  return flattenedVersion;
+}
+
 
 class HydratorPlusPlusHydratorService {
   constructor(GLOBALS, DAGPlusPlusFactory, uuid, $state, $rootScope, myPipelineApi, $q, IMPLICIT_SCHEMA, DAGPlusPlusNodesStore, myHelpers) {
@@ -34,6 +60,10 @@ class HydratorPlusPlusHydratorService {
     } else {
       return this._parseOldConfig(pipeline, isStudio);
     }
+  }
+
+  isVersionInRange(versionInRangeParameters) {
+    return isVersionInRange(versionInRangeParameters);
   }
 
   getNodesFromStages(stages) {
@@ -151,7 +181,7 @@ class HydratorPlusPlusHydratorService {
     // This needs to pass on a scope always. Right now there is no cleanup
     // happening
     var params = {
-      namespace: this.$state.params.namespace,
+      namespace: this.$rootScope.$stateParams.namespace,
       pipelineType: appType,
       version: artifactVersion || this.$rootScope.cdapVersion,
       extensionType: node.type || node.plugin.type,
@@ -305,28 +335,7 @@ class HydratorPlusPlusHydratorService {
     return relevantPrefs;
   }
 
-  isVersionInRange({supportedVersion, versionRange} = {}) {
-    let flattenedVersion = versionRange;
-    let isNil = (value) => _.isUndefined(value) && _.isNull(value);
-    if (isNil(supportedVersion) || isNil(versionRange)) {
-      return false;
-    }
-    if (['[', '('].indexOf(versionRange[0]) !== -1) {
-      const supportedVersionInst = new window.CaskCommon.Version(supportedVersion);
-      const entityVersionRangeInst = new window.CaskCommon.VersionRange(versionRange);
-      if (entityVersionRangeInst.versionIsInRange(supportedVersionInst)) {
-        return true;
-      } else {
-        return false;
-      }
-    }
 
-    if (supportedVersion !== versionRange) {
-      return false;
-    }
-
-    return flattenedVersion;
-  }
 
   convertMapToKeyValuePairs(obj) {
     let keyValuePairs = [];
