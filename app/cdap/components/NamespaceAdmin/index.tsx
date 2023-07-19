@@ -16,7 +16,6 @@
 
 import React, { useEffect } from 'react';
 import makeStyle from '@material-ui/core/styles/makeStyles';
-import { EntityTopPanel } from 'components/EntityTopPanel';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import {
   getNamespaceDetail,
@@ -30,23 +29,27 @@ import { Provider } from 'react-redux';
 import Store from 'components/NamespaceAdmin/store';
 import Description from 'components/NamespaceAdmin/Description';
 import Metrics from 'components/NamespaceAdmin/Metrics';
-import Tabs from 'components/NamespaceAdmin/Tabs';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import Heading, { HeadingTypes } from 'components/shared/Heading';
+import { AdminTabs } from 'components/NamespaceAdmin/AdminTabs';
 
 const eventEmitter = ee(ee);
 
 const useStyle = makeStyle(() => {
   return {
     content: {
-      padding: '0 50px',
+      padding: '0 18px',
+    },
+    titleHeading: {
+      padding: '15px 0 0 18px',
     },
   };
 });
 
-const NamespaceAdmin: React.FC = () => {
+const NamespaceAdmin = () => {
   const namespace = getCurrentNamespace();
   const classes = useStyle();
 
@@ -72,12 +75,16 @@ const NamespaceAdmin: React.FC = () => {
   return (
     <Provider store={Store}>
       <div>
-        <EntityTopPanel title={`Namespace '${namespace}'`} />
+        <Heading
+          type={HeadingTypes.h4}
+          label={`Namespace '${namespace}'`}
+          className={classes.titleHeading}
+        />
         <div className={classes.content}>
           <Description />
           <Metrics />
           <FeatureProvider>
-            <Tabs />
+            <AdminTabs />
           </FeatureProvider>
         </div>
       </div>
