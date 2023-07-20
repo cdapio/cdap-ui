@@ -22,7 +22,7 @@ import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 
 import { ConnectionDiffListItem, PluginDiffListItem } from './DiffListItem';
-import { useAppSelector } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   getPluginNameFromStageDiffKey,
   getStageDiffKeysFromConnectionDiffKey,
@@ -30,6 +30,7 @@ import {
 } from '../util/diff';
 import { getAvailabePluginsMapKeyFromPlugin, getCustomIconSrc } from '../util/helpers';
 import { getPluginIcon } from 'services/helpers';
+import { actions } from '../store/diffSlice';
 
 const DiffListRoot = styled(Paper)`
   &.MuiPaper-root {
@@ -46,6 +47,9 @@ export const DiffList = () => {
       availablePluginsMap: state.pipelineDiff.availablePluginsMap,
     };
   });
+
+  const dispatch = useAppDispatch();
+
   return (
     <DiffListRoot elevation={3}>
       <List dense={true}>
@@ -68,6 +72,8 @@ export const DiffList = () => {
               customIconSrc={customIconSrc}
               iconName={iconName}
               diffKey={stageKey}
+              // TODO: add navigation to the node on canvas
+              onClick={() => dispatch(actions.showDiffDetails(stageKey))}
               diffType={diffIndicator}
               key={stageKey}
             />
@@ -102,6 +108,8 @@ export const DiffList = () => {
               toCustomIconSrc={toCustomIconSrc}
               toIconName={toIconName}
               diffKey={connectionKey}
+              // TODO: add navigation to the nodes it connects on canvas
+              onClick={() => {}}
               diffType={diffMap.connections[connectionKey].diffIndicator}
               key={connectionKey}
             />

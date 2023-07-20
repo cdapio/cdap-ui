@@ -18,9 +18,12 @@ import React from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
 import styled from 'styled-components';
 import classnames from 'classnames';
-import { IPipelineNodeData } from '../store/diffSlice';
+import { IPipelineNodeData, actions } from '../store/diffSlice';
 import { getPluginDiffColors } from '../util/helpers';
 import { DiffIcon } from '../DiffIcon';
+import Button from '@material-ui/core/Button';
+import { getStageDiffKey } from '../util/diff';
+import { useAppDispatch } from '../store/hooks';
 
 const NodeRoot = styled.div`
   background: white;
@@ -81,6 +84,19 @@ const DiffIconRoot = styled(DiffIcon)`
   transform: translate(50%, -50%);
 `;
 
+const DiffButtonContainer = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding-top: 3px;
+  width: 100%;
+`;
+
+const DiffButtonRoot = styled(Button)`
+  color: ${({ color }) => color};
+  border-color: ${({ color }) => color};
+`;
+
 const HandleRoot = styled(Handle)`
   align-items: center;
   background-color: #4e5568;
@@ -113,6 +129,7 @@ export const DefaultPluginNode = ({
 }: React.PropsWithChildren<NodeProps<IPipelineNodeData>>) => {
   const diffIndicator = data.diffItem?.diffIndicator;
   const { primary, primaryLight } = getPluginDiffColors(diffIndicator);
+  const dispatch = useAppDispatch();
   return (
     <NodeRoot id={id} color={primary}>
       <HeaderRoot>
@@ -126,6 +143,19 @@ export const DefaultPluginNode = ({
           <SubtitleLabel color={primaryLight}>{data.plugin.artifact.version}</SubtitleLabel>
         </TitleContainer>
       </HeaderRoot>
+
+      {diffIndicator && (
+        <DiffButtonContainer>
+          <DiffButtonRoot
+            variant="outlined"
+            size="small"
+            color={primary}
+            onClick={() => dispatch(actions.showDiffDetails(getStageDiffKey(data)))}
+          >
+            Diff
+          </DiffButtonRoot>
+        </DiffButtonContainer>
+      )}
       {diffIndicator && <DiffIconRoot diffType={diffIndicator} />}
       <HandleRoot type="target" position={Position.Left} />
       <HandleRoot type="source" id="source_right" position={Position.Right} />
