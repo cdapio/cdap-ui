@@ -72,8 +72,10 @@ export const DiffList = () => {
               customIconSrc={customIconSrc}
               iconName={iconName}
               diffKey={stageKey}
-              // TODO: add navigation to the node on canvas
-              onClick={() => dispatch(actions.showDiffDetails(stageKey))}
+              onClick={() => {
+                dispatch(actions.showDiffDetails(stageKey));
+                dispatch(actions.setFocus(stageKey));
+              }}
               diffType={diffIndicator}
               key={stageKey}
             />
@@ -108,8 +110,7 @@ export const DiffList = () => {
               toCustomIconSrc={toCustomIconSrc}
               toIconName={toIconName}
               diffKey={connectionKey}
-              // TODO: add navigation to the nodes it connects on canvas
-              onClick={() => {}}
+              onClick={() => dispatch(actions.setFocus(connectionKey))}
               diffType={diffMap.connections[connectionKey].diffIndicator}
               key={connectionKey}
             />

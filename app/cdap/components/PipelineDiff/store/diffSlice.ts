@@ -28,6 +28,7 @@ export interface IPipelineNodeData extends IPipelineStage {
   customIconSrc?: string;
   iconName: string;
   diffItem?: IStageDiffItem;
+  diffKey: string;
 }
 
 interface IDiffState {
@@ -39,6 +40,8 @@ interface IDiffState {
 
   diffMap: IPipelineDiffMap;
   openDiffItem: string | null;
+
+  focusElement: string | null;
 
   availablePluginsMap: AvailablePluginsMap;
 }
@@ -55,6 +58,8 @@ const initialState: IDiffState = {
     connections: {},
   },
   openDiffItem: null,
+
+  focusElement: null,
 
   availablePluginsMap: {},
 };
@@ -93,6 +98,13 @@ const diffSlice = createSlice({
     },
     modalClosed(state) {
       state.openDiffItem = null;
+      state.focusElement = null;
+    },
+    setFocus(state, action: PayloadAction<string>) {
+      state.focusElement = action.payload;
+    },
+    focused(state) {
+      state.focusElement = null;
     },
   },
 });

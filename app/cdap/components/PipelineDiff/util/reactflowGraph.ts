@@ -57,8 +57,9 @@ export function getReactflowPipelineGraph(
     stageNameToStage[stage.name] = stage;
     const pluginMapKey = getAvailabePluginsMapKeyFromPlugin(stage.plugin);
 
+    const stageDiffKey = getStageDiffKey(stage);
     const type = pluginReactflowNodeType(availablePluginsMap, pluginMapKey);
-    const diffItem = diffMap.stages[getStageDiffKey(stage)];
+    const diffItem = diffMap.stages[stageDiffKey];
 
     return {
       id: stage.name,
@@ -67,6 +68,7 @@ export function getReactflowPipelineGraph(
         customIconSrc: getCustomIconSrc(availablePluginsMap, pluginMapKey),
         iconName: getPluginIcon(stage.plugin.name),
         diffItem,
+        diffKey: stageDiffKey,
       },
       type,
       position: {
@@ -90,10 +92,13 @@ export function getReactflowPipelineGraph(
     const { primaryLight } = getPluginDiffColors(diffIndicator);
     return {
       id: connectionKey,
+      data: {
+        diffIndicator,
+      },
       source: connection.from,
       target: connection.to,
       sourceHandle,
-      type: 'smoothstep',
+      type: diffIndicator ? 'diffEdge' : 'smoothstep',
       isSelectable: true,
       markerEnd: {
         type: MarkerType.ArrowClosed,

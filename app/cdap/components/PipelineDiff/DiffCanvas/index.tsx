@@ -29,12 +29,15 @@ import { getReactflowPipelineGraph } from '../util/reactflowGraph';
 import { AvailablePluginsMap, IPipelineConfig, IPipelineDiffMap, NodeType } from '../types';
 import { IPipelineNodeData } from '../store/diffSlice';
 import { getPluginDiffColors } from '../util/helpers';
+import { PluginConnection } from './PluginConnection';
 
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   defaultNode: DefaultPluginNode,
   alertErrorNode: PluginNodeWithAlertError,
 };
-
+const edgeTypes = {
+  diffEdge: PluginConnection,
+};
 // A type helper to distribute each node type into its corresponding node
 type PipelineNode<U = NodeType> = U extends NodeType ? Node<IPipelineNodeData, U> : never;
 
@@ -52,6 +55,7 @@ const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
       nodesDraggable={false}
       minZoom={-5}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       fitView
     >
       {nodes.length > 5 && (
