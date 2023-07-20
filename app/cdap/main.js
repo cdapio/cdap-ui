@@ -62,6 +62,7 @@ import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import { handlePageLevelError, objectQuery, setupExperiments } from 'services/helpers';
 import history from 'services/history';
+import { CookieBanner } from 'components/CookieBanner';
 // See ./graphql/fragements/README.md
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
 
@@ -365,6 +366,7 @@ class CDAP extends Component {
       objectQuery(this.state, 'pageLevelError', 'errorCode') === 403;
     return (
       <Router history={history}>
+        <CookieBanner />
         <ApolloProvider client={client}>
           <div className="cdap-container">
             <Helmet title={Theme.productName} />
