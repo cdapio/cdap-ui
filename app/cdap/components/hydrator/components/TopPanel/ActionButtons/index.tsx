@@ -189,7 +189,11 @@ export const ActionButtons = ({
                   </span>
                 </CustomTooltip>
               ) : (
-                <CommonButton onClick={startOrStopPreview} data-cy="stop-preview-btn">
+                <CommonButton
+                  onClick={startOrStopPreview}
+                  data-cy="stop-preview-btn"
+                  data-testid="stop-preview-btn"
+                >
                   <div>
                     <IconStop name="icon-stop"></IconStop>
                     <ButtonLabel>Stop</ButtonLabel>
