@@ -24,12 +24,14 @@ import {
   ITableAssessmentColumn,
 } from 'components/Replicator/types';
 import { Observable } from 'rxjs/Observable';
+import { ErrorType } from 'components/Replicator/constants';
 
 export interface ISelectColumnsProps {
   tableInfo?: ITableInfo;
   onSave: (tableInfo: ITableInfo, columns: ISelectedList) => void;
   initialSelected: IColumnsList;
   toggle: () => void;
+  setErrorToast: (error: ErrorType | string) => void;
   saveDraft: () => Observable<any>;
   draftId: string;
   transformations: { [tableName: string]: ITransformation };

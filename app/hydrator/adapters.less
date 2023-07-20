@@ -15,11 +15,10 @@
  */
 
 @import '../styles/variables.less';
-@import "../../bower_components/bootstrap/less/mixins.less";
+@import "@bower_components/bootstrap/less/mixins.less";
 @import '../styles/themes/cdap/mixins.less';
 
 body.theme-cdap {
-  &.state-hydrator {
     margin-bottom: 50px;
 
     main.container {
@@ -232,7 +231,7 @@ body.theme-cdap {
   }
 
   &.state-hydrator-create {
-    background-image: url('../img/grid.png');
+    // background-image: url('../img/grid.png');
     height: 100%;
 
     my-dag-plus {
@@ -445,7 +444,6 @@ body.theme-cdap {
         margin-top: 10px;
       }
     }
-  }
 }
 
 .popover.metrics-popover {

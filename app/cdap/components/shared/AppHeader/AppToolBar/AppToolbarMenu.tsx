@@ -17,7 +17,6 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import T from 'i18n-react';
-import If from 'components/shared/If';
 import { ClickAwayListener } from '@material-ui/core';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -76,7 +75,10 @@ const styles = (theme) => ({
 
 type IAppToolbarMenuProps = WithStyles<typeof styles>;
 
-class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarState> {
+class AppToolbarMenu extends React.Component<
+  IAppToolbarMenuProps,
+  IAppToolbarState
+> {
   public state = {
     anchorEl: null,
     aboutPageOpen: false,
@@ -97,7 +99,7 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
   };
 
   private getDocsUrl = () => {
-    if (Theme.productDocumentationLink === null) {
+    if (!Theme.productDocumentationLink) {
       const cdapVersion = VersionStore.getState().version;
       return `http://docs.cdap.io/cdap/${cdapVersion}/en/index.html`;
     }
@@ -137,30 +139,40 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
     const { classes } = this.props;
     const cdapVersion = VersionStore.getState().version;
     let builtSettingsUrls;
-    const settingsUrls = objectQuery(window.CDAP_CONFIG.cdap.ui, 'externalLinks');
+    const settingsUrls = objectQuery(
+      window.CDAP_CONFIG.cdap.ui,
+      'externalLinks'
+    );
 
     if (settingsUrls && typeof settingsUrls === 'object') {
-      builtSettingsUrls = Object.entries<string>(settingsUrls).map(([displayName, url]) => {
-        return (
-          <a
-            key={`${displayName + '-' + url}`}
-            className={classes.linkStyles}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MenuItem onClick={this.closeSettings} className={classes.anchorMenuItem}>
-              {displayName}
-            </MenuItem>
-          </a>
-        );
-      });
+      builtSettingsUrls = Object.entries<string>(settingsUrls).map(
+        ([displayName, url]) => {
+          return (
+            <a
+              key={`${displayName + '-' + url}`}
+              className={classes.linkStyles}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MenuItem
+                onClick={this.closeSettings}
+                className={classes.anchorMenuItem}
+              >
+                {displayName}
+              </MenuItem>
+            </a>
+          );
+        }
+      );
     }
 
     return (
       <>
         <div onClick={this.toggleSettings}>
-          <IconButton className={classnames(classes.buttonLink, classes.iconButtonFocus)}>
+          <IconButton
+            className={classnames(classes.buttonLink, classes.iconButtonFocus)}
+          >
             <IconSVG name="icon-cogs" className={classes.cogWheelFontSize} />
           </IconButton>
         </div>
@@ -175,7 +187,8 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                transformOrigin:
+                  placement === 'bottom' ? 'center top' : 'center bottom',
               }}
             >
               <Paper>
@@ -187,8 +200,13 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <MenuItem onClick={this.closeSettings} className={classes.anchorMenuItem}>
-                        {T.translate('features.Navbar.ProductDropdown.documentationLabel')}
+                      <MenuItem
+                        onClick={this.closeSettings}
+                        className={classes.anchorMenuItem}
+                      >
+                        {T.translate(
+                          'features.Navbar.ProductDropdown.documentationLabel'
+                        )}
                       </MenuItem>
                     </a>
                     {Theme.showAboutProductModal === true && (
@@ -200,9 +218,12 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                         className={classes.anchorMenuItem}
                       >
                         <a className={classes.linkStyles}>
-                          {T.translate('features.Navbar.ProductDropdown.aboutLabel', {
-                            productName: Theme.productName,
-                          })}
+                          {T.translate(
+                            'features.Navbar.ProductDropdown.aboutLabel',
+                            {
+                              productName: Theme.productName,
+                            }
+                          )}
                         </a>
                       </MenuItem>
                     )}
@@ -214,7 +235,9 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                           className={`${classes.anchorMenuItem} ${classes.loginUserMenuItem}`}
                         >
                           <IconSVG name="icon-user" />
-                          <a className={`${classes.usernameStyles} ${classes.linkStyles} truncate`}>
+                          <a
+                            className={`${classes.usernameStyles} ${classes.linkStyles} truncate`}
+                          >
                             {this.state.username}
                           </a>
                         </MenuItem>
@@ -226,12 +249,19 @@ class AppToolbarMenu extends React.Component<IAppToolbarMenuProps, IAppToolbarSt
                           className={classes.anchorMenuItem}
                         >
                           <a className={classes.linkStyles}>
-                            {T.translate('features.Navbar.ProductDropdown.accessToken')}{' '}
+                            {T.translate(
+                              'features.Navbar.ProductDropdown.accessToken'
+                            )}{' '}
                           </a>
                         </MenuItem>
-                        <MenuItem onClick={this.onLogout} className={classes.anchorMenuItem}>
+                        <MenuItem
+                          onClick={this.onLogout}
+                          className={classes.anchorMenuItem}
+                        >
                           <a className={classes.linkStyles}>
-                            {T.translate('features.Navbar.ProductDropdown.logout')}
+                            {T.translate(
+                              'features.Navbar.ProductDropdown.logout'
+                            )}
                           </a>
                         </MenuItem>
                       </>

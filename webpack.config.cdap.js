@@ -28,6 +28,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+// const angular = require('angular');
 
 // the clean options to use
 const cleanOptions = {
@@ -37,22 +40,23 @@ const cleanOptions = {
 
 const loaderExclude = [
   /node_modules/,
-  /bower_components/,
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,
   /packaged/,
   /lib/,
+  /cask-sharedcomponents.js/,
 ];
 
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
-  '/packaged\/public\/dist/',
-  '/packaged\/public\/cdap_dist/',
-  '/packaged\/public\/common_dist/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
   '/packaged/',
   '/lib/',
+  '/cask-shared-components.js',
 ];
 
 const mode = process.env.NODE_ENV || 'production';
@@ -90,6 +94,7 @@ const getWebpackDllPlugins = (mode) => {
 };
 
 const plugins = [
+  new NodePolyfillPlugin(),
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
   ...getWebpackDllPlugins(mode),
@@ -141,19 +146,26 @@ const plugins = [
     mode: isModeProduction(mode) ? '' : 'development.',
   }),
 ];
+
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
 
 const rules = [
   {
-    test: /\.s?css$/,
+    test: /\.json$/,
+    loader: 'json-loader',
+  },
+  {
+    test: /\.(sa|sc|c)ss$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
@@ -161,10 +173,23 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$/,
+    test: /\.m?js/,
+    type: 'javascript/auto',
+  },
+  {
+    test: /\.m?jsx?$/,
+    resolve: {
+      fullySpecified: false,
+    },
+  },
+  {
+    test: /\.js$|jsx/,
     use: ['babel-loader'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],
+    resolve: {
+      fullySpecified: false,
+    },
   },
   {
     test: /\.tsx?$/,
@@ -179,6 +204,13 @@ const rules = [
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app')],
   },
+  // {
+  //   test: /\.html$/i,
+  //   loader: 'html-loader',
+  //   options: {
+  //     minimize: true,
+  //   },
+  // },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [
@@ -193,13 +225,13 @@ const rules = [
   },
   {
     test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-    use: 'url-loader',
+    use: [{ loader: 'file-loader' }],
   },
   {
-    test: /\.svg/,
+    test: /\.svg$/,
     use: [
       {
-        loader: 'svg-sprite-loader',
+        loader: 'webpack5-svg-sprite-loader',
       },
     ],
   },
@@ -211,6 +243,7 @@ if (isModeProduction(mode)) {
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
         __DEVTOOLS__: false,
+        // angular,
       },
     })
   );
@@ -222,8 +255,8 @@ if (mode === 'development') {
       port: 35799,
       appendScriptTag: true,
       delay: 500,
-      ignore: loaderExclude
-        // '/node_modules/|/bower_components/|/packaged/public/dist/|/packaged/public/cdap_dist/|/packaged/public/common_dist/|/lib/',
+      ignore:
+        '/node_modules/|/packaged/public/dist/|/packaged/public/cdap_dist/|/packaged/public/common_dist/|/lib/',
     })
   );
 }
@@ -232,7 +265,7 @@ const webpackConfig = {
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/cdap',
   entry: {
-    cdap: ['@babel/polyfill', './cdap.js'],
+    cdap: ['@babel/polyfill', 'react-hot-loader/patch', './cdap.js'],
   },
   module: {
     rules,
@@ -255,10 +288,31 @@ const webpackConfig = {
   plugins: plugins,
   // TODO: Need to investigate this more.
   optimization: {
-    splitChunks: false,
+    splitChunks: {
+      chunks: 'all',
+    },
+    chunkIds: 'named',
+  },
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
+    fallback: {
+      React: require.resolve('react'),
+      ReactDom: require.resolve('react-dom'),
+      reactstrap: require.resolve('reactstrap'),
+    },
+    extensions: [
+      '.mjs',
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '.scss',
+      '.json',
+      '.svg',
+    ],
+    plugins: [PnpWebpackPlugin],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',
@@ -269,9 +323,9 @@ const webpackConfig = {
   },
 };
 
-if (!isModeProduction(mode)) {
-  webpackConfig.devtool = 'source-maps';
-}
+// if (!isModeProduction(mode)) {
+webpackConfig.devtool = 'eval-source-map';
+// }
 
 if (isModeProduction(mode)) {
   webpackConfig.optimization.minimizer = [

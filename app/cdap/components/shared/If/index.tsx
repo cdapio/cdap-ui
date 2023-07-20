@@ -15,36 +15,31 @@
  */
 import * as React from 'react';
 import Box from '@material-ui/core/Box';
-import withStyles from '@material-ui/core/styles/withStyles';
+import styled from 'styled-components';
 
 interface IIfComponentProps {
   condition: boolean;
   children: React.ReactNode;
   invisible?: boolean;
-  HiddenContainer?: React.ReactNode;
 }
+
+const InvisibleBox = styled(Box)`
+  visibility: hidden;
+`;
 
 const If: React.FC<IIfComponentProps> = ({
   condition,
   children,
   invisible = false,
-  HiddenContainer,
 }) => {
   if (!condition) {
     if (!invisible) {
       return null;
     }
-    const InvisibleBox = withStyles(() => {
-      return {
-        root: {
-          visibility: 'hidden',
-        },
-      };
-    })(!HiddenContainer ? Box : (HiddenContainer as React.ComponentType<any>));
     return <InvisibleBox>{children}</InvisibleBox>;
   }
 
-  return <React.Fragment>{children}</React.Fragment>;
+  return <>{children}</>;
 };
 
 export default If;

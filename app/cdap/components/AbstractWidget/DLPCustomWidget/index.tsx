@@ -25,7 +25,7 @@ import DLPRow, {
 } from 'components/AbstractWidget/DLPCustomWidget/DLPRow';
 
 import ThemeWrapper from 'components/ThemeWrapper';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import { objectQuery } from 'services/helpers';
 
 interface IDLPWidgetProps {
@@ -48,7 +48,7 @@ class DLPWidgetView extends AbstractMultiRowWidget<IDLPProps> {
   public constructValues = () => {
     return JSON.stringify(
       this.state.rows
-        .filter((id) => this.values[id] && this.values[id].value)
+        .filter((id) => this.values[id]?.value)
         .map((id) => this.values[id].value)
     );
   };
@@ -86,4 +86,4 @@ export default function DLPWidget(props) {
   );
 }
 
-(DLPWidget as any).propTypes = WIDGET_PROPTYPES;
+// (DLPWidget as any).propTypes = WIDGET_PROPTYPES;

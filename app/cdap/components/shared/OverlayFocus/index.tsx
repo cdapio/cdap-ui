@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import Shepherd from 'shepherd.js';
-import './OverlayFocus.scss';
+require('./OverlayFocus.scss');
 
 const PADDING = 15;
 const DISPLAY_BLOCK = 'block';

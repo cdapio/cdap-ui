@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Cask Data, Inc.
+ * Copyright © 2020-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,7 @@ import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/wit
 
 import { CSSTransition } from 'react-transition-group';
 import IconSVG from 'components/shared/IconSVG';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classnames from 'classnames';
 
 const styles = (): StyleRules => {
@@ -30,6 +30,7 @@ const styles = (): StyleRules => {
     modalBody: {
       height: '100%',
       maxHeight: '70vh',
+      minHeight: '150px',
       overflow: 'scroll',
     },
     modalHeaderText: {
@@ -52,7 +53,7 @@ const styles = (): StyleRules => {
 interface IStandardModalProps extends WithStyles<typeof styles> {
   open: boolean;
   toggle: () => void;
-  headerText: string;
+  headerText: string | ReactNode;
   children: any;
 }
 

@@ -17,8 +17,10 @@
 import React from 'react';
 import classnames from 'classnames';
 import If from 'components/shared/If';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-const colors = require('styles/colors.scss');
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 
 const styles = (theme): StyleRules => {
   return {

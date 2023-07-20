@@ -65,7 +65,7 @@ const ComputeProfiles: React.FC = () => {
                 id="import-profile"
                 className={classes.fileInput}
                 onChange={importProfile.bind(this, getCurrentNamespace())}
-                onClick={(e) => (e.target.value = null)}
+                onClick={(e: any) => (e.target.value = null)}
               />
             </Label>
           </Button>

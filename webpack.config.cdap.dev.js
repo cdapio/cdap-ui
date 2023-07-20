@@ -37,7 +37,6 @@ const cleanOptions = {
 
 const loaderExclude = [
   /node_modules/,
-  /bower_components/,
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,
@@ -47,9 +46,9 @@ const loaderExclude = [
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
-  '/packaged\/public\/dist/',
-  '/packaged\/public\/cdap_dist/',
-  '/packaged\/public\/common_dist/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
   '/lib/',
 ];
 
@@ -137,9 +136,11 @@ const plugins = [
     fix: true,
   }),
   new ForkTsCheckerWebpackPlugin({
-    tsconfig: __dirname + '/tsconfig.json',
-    // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-    memoryLimit: 8192,
+    async: true,
+    typescript: {
+      configFile: __dirname + '/tsconfig.json',
+      memoryLimit: 8192,
+    },
   }),
 ];
 
@@ -164,7 +165,7 @@ const rules = [
     use: 'yml-loader',
   },
   {
-    test: /\.js$/,
+    test: /\.js$|jsx/,
     use: ['react-hot-loader/webpack', 'babel-loader?cacheDirectory'],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
@@ -212,6 +213,7 @@ const rules = [
 
 const webpackConfig = {
   mode: 'development',
+  target: 'web',
   devtool: 'eval-cheap-module-source-map',
   context: __dirname + '/app/cdap',
   entry: {

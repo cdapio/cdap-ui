@@ -22,7 +22,10 @@ import {
   getDateID,
   getRequestsByDate,
 } from 'components/HttpExecutor/utilities';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 import moment from 'moment';
 
 import Button from '@material-ui/core/Button';
@@ -92,7 +95,7 @@ const styles = (theme): StyleRules => {
     },
     title: {
       fontSize: '15px',
-      paddingLeft: `${theme.Spacing(3)}px`,
+      paddingLeft: `${theme.spacing(3)}px`,
       gridColumnStart: '1',
       width: '100px',
       overflow: 'hidden',
@@ -187,7 +190,10 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
     }
   };
 
-  const getFilteredRequestLogs = (requests: List<IRequestHistory>, query: string) => {
+  const getFilteredRequestLogs = (
+    requests: List<IRequestHistory>,
+    query: string
+  ) => {
     return requests.filter((request) => request.path.includes(query));
   };
 
@@ -215,21 +221,30 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
           return (
             <div key={dateID}>
               {filteredRequests.size > 0 && (
-                <StyledExpansionPanel key={dateID} defaultExpanded elevation={0}>
+                <StyledExpansionPanel
+                  key={dateID}
+                  defaultExpanded
+                  elevation={0}
+                >
                   <StyledExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>{dateID}</Typography>
                   </StyledExpansionPanelSummary>
                   <ExpansionPanelDetails className={classes.timestampGroup}>
-                    {filteredRequests.map((request, requestIndex) => (
-                      <RequestRow key={requestIndex} request={request} />
-                    ))}
+                    {
+                      filteredRequests.map((request, requestIndex) => (
+                        <RequestRow key={requestIndex} request={request} />
+                      )) as any
+                    }
                   </ExpansionPanelDetails>
                 </StyledExpansionPanel>
               )}
             </div>
           );
         })}
-      <ClearAllDialog open={ClearAllDialogOpen} handleClose={() => setClearAllDialogOpen(false)} />
+      <ClearAllDialog
+        open={ClearAllDialogOpen}
+        handleClose={() => setClearAllDialogOpen(false)}
+      />
     </div>
   );
 };

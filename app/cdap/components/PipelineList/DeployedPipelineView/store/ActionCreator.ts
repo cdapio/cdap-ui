@@ -14,13 +14,19 @@
  * the License.
  */
 
+import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyPipelineApi } from 'api/pipeline';
-import Store, { Actions, SORT_ORDER } from 'components/PipelineList/DeployedPipelineView/store';
+import Store, {
+  Actions,
+  SORT_ORDER,
+} from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { GLOBALS } from 'services/global-constants';
 import debounce from 'lodash/debounce';
 import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
+import { SourceControlApi } from 'api/sourcecontrol';
+import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 export function deletePipeline(pipeline: IPipeline, refetch: () => void) {
   const namespace = getCurrentNamespace();
@@ -88,7 +94,10 @@ function getRunsForPipelines() {
       MyPipelineApi.batchGetNextRunTime({ namespace }, nextRuntimePostBody)
     )
     .subscribe(([runs, runsCount, nextRuntime]) => {
-      const runsMap = Object.assign({}, ...runs.map((app) => ({ [app.appId]: app.runs })));
+      const runsMap = Object.assign(
+        {},
+        ...runs.map((app) => ({ [app.appId]: app.runs }))
+      );
       const nextRuntimeMap = Object.assign(
         {},
         ...nextRuntime.map((app) => ({ [app.appId]: app.schedules }))
@@ -206,3 +215,61 @@ export function deleteEditDraft(draftId: string, callbackFn: () => void) {
     callbackFn();
   });
 }
+
+export const pullPipeline = (namespace, appId) => {
+  setPullLoading(true);
+  const params = {
+    namespace,
+    appId,
+  };
+  const PREFIX = 'features.SourceControlManagement.pull';
+  SourceControlApi.pull(params).subscribe(
+    (res) => {
+      if (typeof res === 'string') {
+        setPullStatus({
+          alertType: 'warning',
+          message: T.translate(`${PREFIX}.upToDate`),
+        });
+        setPullLoading(false);
+        return;
+      }
+      setPullStatus({
+        alertType: 'success',
+        message: T.translate(`${PREFIX}.pullSuccess`, { pipelineName: appId }),
+      });
+      setPullLoading(false);
+      window.location.href = getHydratorUrl({
+        stateName: 'hydrator.detail',
+        stateParams: {
+          namespace: params.namespace,
+          pipelineId: params.appId,
+        },
+      });
+    },
+    (err) => {
+      setPullStatus({
+        alertType: 'error',
+        message: err.message,
+      });
+      setPullLoading(false);
+    }
+  );
+};
+
+const setPullLoading = (pullLoading) => {
+  Store.dispatch({
+    type: Actions.setPullLoading,
+    payload: {
+      pullLoading,
+    },
+  });
+};
+
+export const setPullStatus = (pullStatus) => {
+  Store.dispatch({
+    type: Actions.setPullStatus,
+    payload: {
+      pullStatus,
+    },
+  });
+};

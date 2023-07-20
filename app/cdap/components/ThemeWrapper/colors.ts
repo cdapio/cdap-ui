@@ -1,70 +1,69 @@
-const colors = require('styles/colors.scss');
 
 export const primary = '#1a73e8';
-
+// these are copied from styles/colors.scss
 export const blue = {
-  40: colors.blue07,
-  50: colors.blue01,
-  100: colors.blue02,
-  200: colors.blue03,
-  300: colors.blue04,
-  400: colors.blue05,
-  500: colors.blue06,
+  40: '#3c4355',
+  50: '#1a73e8',
+  100: '#0076dc',
+  200: '#0099ff',
+  300: '#58b7f6',
+  400: '#7cd2eb',
+  500: '#cae7ef',
 };
 
 export const grey = {
-  50: colors.grey01,
-  100: colors.grey02,
-  200: colors.grey03,
-  300: colors.grey04,
-  400: colors.grey05,
-  500: colors.grey06,
-  600: colors.grey07,
-  610: colors.grey071,
-  700: colors.grey08,
-  800: colors.grey09,
-  900: colors.grey10,
-  1000: colors.grey11,
+  50: '#333333',
+  100: '#666666',
+  200: '#999999',
+  300: '#bbbbbb',
+  400: '#cccccc',
+  500: '#dbdbdb',
+  600: '#eeeeee',
+  610: '#e0e0e0',
+  700: '#f5f5f5',
+  800: '#e8e8e8',
+  900: '#ebebeb',
+  1000: '#dfe2e9',
 };
 
 export const green = {
-  50: colors.green01,
-  100: colors.green02,
-  200: colors.green03,
-  300: colors.green04,
-  400: colors.green05,
-  500: colors.green06,
+  50: '#01b133',
+  100: '#3cc801',
+  200: '#8af302',
+  300: '#0f9d58',
+  400: '#0b8043',
+  500: '#4ab63c',
 };
 
 export const red = {
-  50: colors.red01,
-  100: colors.red02,
-  200: colors.red03,
+  50: '#a40403',
+  100: '#d40001',
+  200: '#d15668',
 };
 
 export const bluegrey = {
-  50: colors.bluegrey01,
-  100: colors.bluegrey02,
-  200: colors.bluegrey03,
-  300: colors.bluegrey04,
-  400: colors.bluegrey05,
-  500: colors.bluegrey06,
+  50: '#454a57',
+  100: '#4e5568',
+  200: '#5d6789',
+  300: '#979fbb',
+  400: '#bac1d8',
+  500: '#dce0ea',
 };
 
 export const orange = {
-  50: colors.orange01,
-  100: colors.orange02,
-  200: colors.orange03,
-  300: colors.orange04,
-  400: colors.orange05,
+  50: '#ff6600',
+  100: '#fa8a00',
+  200: '#ffa727',
+  300: '#ffcc80',
+  400: '#ffe0b2',
 };
 
 export const yellow = {
-  50: colors.yellow01,
-  100: colors.yellow02,
-  200: colors.yellow02lighter,
+  50: '#ffba01',
+  100: '#ffd500',
+  200: 'f6ff00df',
 };
 
 export const white = {
-  50: colors.white01,
+  50: 'white',
 };

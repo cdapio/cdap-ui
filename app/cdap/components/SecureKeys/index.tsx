@@ -17,7 +17,10 @@
 import * as React from 'react';
 
 import { List, fromJS } from 'immutable';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 
 import Alert from 'components/shared/Alert';
 import If from 'components/shared/If';

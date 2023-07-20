@@ -17,9 +17,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, ClickAwayListener } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import uuid from 'uuid/v4';
-import { SUPPORT } from 'components/Replicator/Create/Content/Assessment/TablesAssessment/Mappings/Supported';
 
+import uuid from 'uuid';
+import { SUPPORT } from './constants';
 import {
   PositionedIconButton,
   CloseIconScaled,
@@ -35,6 +35,7 @@ import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 export interface IStatusButtonProps {
   status: SUPPORT;
   message?: string;
+  title?: string;
 }
 
 const CloseButton: React.FC<{ handleClick: () => void }> = (props) => (
@@ -54,7 +55,9 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
   let allyId;
   let mouseOverDelayTimeoutId;
   const [anchorEl, setAnchorEl] = useState(undefined);
-  const [actionState, setActionState] = useState<'hover' | 'click' | undefined>();
+  const [actionState, setActionState] = useState<
+    'hover' | 'click' | undefined
+  >();
   useEffect(() => {
     allyId = uuid();
   }, []);
@@ -144,14 +147,24 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         <div onMouseEnter={handleMouseOver} onMouseLeave={handleMouseLeave}>
           <ClickAwayListener onClickAway={handleClick}>
             <StyledBox>
-              {actionState === 'click' && <CloseButton handleClick={handleClose} />}
+              {actionState === 'click' && (
+                <CloseButton handleClick={handleClose} />
+              )}
               <Box>
-                <span>{icon} The column is not supported</span>
+                {props.title ? (
+                  <span>
+                    {icon} {props.title}
+                  </span>
+                ) : (
+                  <span>{icon} The column is not supported</span>
+                )}
               </Box>
-              <Box>
-                <BoldP>Reason: </BoldP>
-                <StyledP>{props.message}</StyledP>
-              </Box>
+              {props.message && (
+                <Box>
+                  <BoldP>Reason: </BoldP>
+                  <StyledP>{props.message}</StyledP>
+                </Box>
+              )}
             </StyledBox>
           </ClickAwayListener>
         </div>

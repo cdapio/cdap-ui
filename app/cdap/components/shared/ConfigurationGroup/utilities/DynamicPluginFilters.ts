@@ -99,11 +99,24 @@ export function evaluateFilter(
     return true;
   }
 
+  // convert string 'true' to boolean
+  const featureFlags = { ...window?.CDAP_CONFIG?.featureFlags };
+  for (const key of Object.keys(featureFlags)) {
+    featureFlags[key] = featureFlags[key] === 'true';
+  }
   const typedPropertyValues = {
     ...getTypedPropertyValues(propertyValues, propertiesFromBackend),
+    featureFlags,
   };
 
-  return jexl.evalSync(`${filter.condition.expression}`, typedPropertyValues);
+  // Some upgrade scenarios leave useConnection as null,
+  // which prevents the connection properties from being shown
+  // Modify any expression which depends on useConnection equaling false
+  const expressionHandleUseConnectionNull = filter.condition.expression.replace(
+    'useConnection == false',
+    'useConnection != true'
+  );
+  return jexl.evalSync(expressionHandleUseConnectionNull, typedPropertyValues);
 }
 
 /**

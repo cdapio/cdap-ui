@@ -15,6 +15,7 @@
 # the License.
 
 # Start sandbox and kill UI process
+export SPARK_COMPAT=spark3_2.12
 cd ./sandbox/bin
 ./cdap sandbox start
 PID=`ps -ef | grep index.js | grep -v grep | awk '{print $2}'`

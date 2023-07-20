@@ -83,7 +83,11 @@ const PipelineTriggers = ({
       },
     });
 
-    fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType], namespace);
+    fetchTriggersAndApps(
+      pipelineName,
+      GLOBALS.programId[pipelineType],
+      namespace
+    );
 
     return () => {
       if (sub) {
@@ -93,7 +97,9 @@ const PipelineTriggers = ({
   }, []);
 
   const onToggleSidebar = (isExpanded) => {
-    setTabText(isExpanded ? `${PREFIX}.expandedTabLabel` : `${PREFIX}.collapsedTabLabel`);
+    setTabText(
+      isExpanded ? `${PREFIX}.expandedTabLabel` : `${PREFIX}.collapsedTabLabel`
+    );
   };
 
   const setTab = (tab) => {

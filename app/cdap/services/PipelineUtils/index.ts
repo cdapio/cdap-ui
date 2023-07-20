@@ -119,18 +119,16 @@ function setConfigAndNavigate(config: IPipelineConfig, isEdit = false): void {
 }
 
 function getClonePipelineName(name: string): string {
-  const match = name.match(/(_v[\d]*)$/g);
-  let version;
+  const match = name.match(/(_copy[\d]*)$/g);
+  let copy;
   let existingSuffix;
-
   if (Array.isArray(match)) {
-    version = match.pop();
-    existingSuffix = version;
-    version = version.replace('_v', '');
-    version = '_v' + ((!isNaN(parseInt(version, 10)) ? parseInt(version, 10) : 1) + 1);
+    copy = match.pop();
+    existingSuffix = copy;
+    copy = copy.replace('_copy', '');
+    copy = '_copy' + ((!isNaN(parseInt(copy, 10)) ? parseInt(copy, 10) : 1) + 1);
   } else {
-    version = '_v1';
+    copy = '_copy';
   }
-
-  return name.split(existingSuffix)[0] + version;
+  return name.split(existingSuffix)[0] + copy;
 }

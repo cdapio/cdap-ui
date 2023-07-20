@@ -20,7 +20,6 @@ import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
-import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -33,21 +32,6 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class PipelineRuntimeMacros {
-
-  @When("Upload pipeline from file {string}")
-  public void uploadPipelineFromFile(String filename) {
-    Helper.uploadPipelineFromFile(filename);
-  }
-
-  @When("Enter preview mode")
-  public void enterPreviewMode() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-preview-btn"));
-  }
-
-  @When("Start preview run")
-  public void startPreviewRun() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("preview-top-run-btn"));
-  }
 
   @Then("Preview runtime arguments dialog is shown")
   public void runtimeArgumentsDialogIsShown() {
@@ -138,13 +122,6 @@ public class PipelineRuntimeMacros {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("preview-configure-run-btn"));
   }
 
-  @Then("Pipeline banner is shown with message {string}")
-  public void pipelineBannerIsShownWithMessage(String message) {
-    WaitHelper.waitForElementToBePresent(By.cssSelector(Helper.getCssSelectorByDataTestId("valium-banner-hydrator")));
-    Assert.assertTrue(
-      ElementHelper.getElementText(Helper.locateElementByTestId("valium-banner-hydrator")).contains(message));
-  }
-
   @Then("Deployed runtime arguments dialog is shown")
   public void deployedRuntimeArgumentsDialogIsShown() {
     Assert.assertTrue(ElementHelper.isElementDisplayed(
@@ -162,12 +139,6 @@ public class PipelineRuntimeMacros {
   @When("Deployed run button is clicked")
   public void deployedRunButtonIsClicked() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("run-deployed-pipeline-modal-btn"));
-  }
-
-  @Then("Deployed pipeline status is {string}")
-  public void deployedPipelineStatusIsString(String status) {
-    WaitHelper.waitForElementToBePresent(
-      By.cssSelector(Helper.getCssSelectorByDataTestId(status)));
   }
 
   @When("Close the runtime argument dialog")
@@ -275,11 +246,6 @@ public class PipelineRuntimeMacros {
   public void waitForRuntimeArgumentsDialogToClose() {
     WebElement dialog = Helper.locateElementByTestId(Constants.RUNTIME_ARGS_DEPLOYED_SELECTOR);
     WaitHelper.waitForElementToBeHidden(dialog);
-  }
-
-  @When("Deployed pipeline is run")
-  public void deployedPipelineIsRun() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-run-btn"));
   }
 
   @Then("Deployed runtime arguments dialog shows message {string}")

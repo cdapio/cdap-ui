@@ -55,7 +55,7 @@ Building CDAP in React to be shared in Angular code
   $ yarn build-dev-common ## build version
   $ yarn build-dev-common-w ## watch version
 
-Building Hydrator and Tracker in Angular
+Building Hydrator in Angular
 ========================================
 ::
 

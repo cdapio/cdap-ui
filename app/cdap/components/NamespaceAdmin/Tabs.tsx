@@ -22,6 +22,8 @@ import ComputeProfiles from 'components/NamespaceAdmin/ComputeProfiles';
 import Preferences from 'components/NamespaceAdmin/Preferences';
 import Drivers from 'components/NamespaceAdmin/Drivers';
 import Connections from 'components/NamespaceAdmin/Connections';
+import { SourceControlManagement } from './SourceControlManagement';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -57,6 +59,10 @@ const Tabs: React.FC = () => {
 
   const baseNSPath = `/ns/${namespace}/details`;
   const basepath = '/ns/:namespace/details';
+
+  const sourceControlManagementEnabled = useFeatureFlagDefaultFalse(
+    'source.control.management.git.enabled'
+  );
 
   return (
     <div>
@@ -96,6 +102,19 @@ const Tabs: React.FC = () => {
         >
           Drivers
         </NavLink>
+        {sourceControlManagementEnabled && (
+          <>
+            <span className={classes.separator}>|</span>
+            <NavLink
+              exact
+              to={`${baseNSPath}/scm`}
+              className={classes.link}
+              activeClassName={classes.activeLink}
+            >
+              Source Control Management
+            </NavLink>
+          </>
+        )}
       </div>
       <div className={classes.content}>
         <Switch>
@@ -103,6 +122,7 @@ const Tabs: React.FC = () => {
           <Route exact path={`${basepath}/preferences`} component={Preferences} />
           <Route exact path={`${basepath}/connections`} component={Connections} />
           <Route exact path={`${basepath}/drivers`} component={Drivers} />
+          <Route exact path={`${basepath}/scm`} component={SourceControlManagement} />
         </Switch>
       </div>
     </div>

@@ -354,7 +354,6 @@ const GENERATED_RUNTIMEARGS = {
   PIPELINE_INSTRUMENTATION: 'app.pipeline.instrumentation',
   PIPELINE_PUSHDOWN_ENABLED: 'app.pipeline.pushdownEnabled',
   PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX: 'app.pipeline.pushdown.',
-  CUSTOM_SPARK_KEY_PREFIX: 'system.spark.',
   SYSTEM_DRIVER_RESOURCES_MEMORY: 'task.driver.system.resources.memory',
   SYSTEM_DRIVER_RESOURCES_CORES: 'task.driver.system.resources.cores',
   SYSTEM_EXECUTOR_RESOURCES_MEMORY: 'task.executor.system.resources.memory',
@@ -379,6 +378,7 @@ const PIPELINE_LOGS_FILTER =
   'AND .origin=plugin OR MDC:eventType=lifecycle OR MDC:eventType=userLog';
 
 const SNAPSHOT_VERSION = '-SNAPSHOT';
+const uiSupportedArtifacts = [GLOBALS.etlDataPipeline, GLOBALS.etlDataStreams, GLOBALS.eltSqlPipeline];
 
 export {
   NUMBER_TYPES,
@@ -394,5 +394,6 @@ export {
   KEY_CODE,
   PIPELINE_LOGS_FILTER,
   GENERATED_RUNTIMEARGS,
-  SNAPSHOT_VERSION
+  SNAPSHOT_VERSION,
+  uiSupportedArtifacts,
 };

@@ -47,12 +47,6 @@ public class Navbar {
 
   private static final HashMap<String, String> NAVBAR_FEATURE_MAP = getNavbarFeatureMap();
 
-  @When("Open CDAP main page")
-  public void openCdap() {
-    SeleniumDriver.openPage(Constants.CDAP_URL);
-    WaitHelper.waitForPageToLoad();
-  }
-
   @Then("Check navbar should have {string} bgcolor")
   public void checkBgColor(String theme) {
     String bgColor = Helper.locateElementByTestId("app-navbar")

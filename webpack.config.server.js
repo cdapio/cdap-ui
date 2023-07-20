@@ -16,7 +16,7 @@
  */
 
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
@@ -63,13 +63,18 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.m?js$/,
-        use: ['babel-loader'],
-        exclude: [/node_modules/, /lib/],
-        include: [
-          path.join(__dirname, 'server'),
-          path.join(__dirname, 'graphql'),
-        ],
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
+        test: /\.m?js/,
+        type: 'javascript/auto',
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.(graphql|gql)$/,
@@ -85,7 +90,7 @@ const webpackConfig = {
     warnings: false,
   },
   resolve: {
-    extensions: ['.mjs', '.js'],
+    extensions: ['.mjs', '.js', '.json'],
     alias: {
       server: __dirname + '/server',
       gql: __dirname + '/graphql',

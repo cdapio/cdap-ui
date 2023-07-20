@@ -59,3 +59,8 @@ export const CustomDateRange = styled.div`
     top: -13px;
   }
 `;
+
+export const ClickableRunId = styled.a`
+  cursor: pointer;
+  color: #5a84e4;
+`;

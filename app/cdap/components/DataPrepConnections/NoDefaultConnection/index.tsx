@@ -38,7 +38,7 @@ interface INoDefaultConnectionProps {
   connectionsList: IPartialConnectionType[];
   showPanelToggle: boolean;
 }
-const NoDefaultConnection: React.SFC<INoDefaultConnectionProps> = ({
+const NoDefaultConnection: React.FC<INoDefaultConnectionProps> = ({
   defaultConnection,
   showAddConnectionPopover,
   connectionsList = [],

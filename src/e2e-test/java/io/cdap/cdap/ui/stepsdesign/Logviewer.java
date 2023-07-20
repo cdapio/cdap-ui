@@ -16,9 +16,9 @@
 
 package io.cdap.cdap.ui.stepsdesign;
 
+import io.cdap.cdap.ui.utils.Commands;
 import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
-import io.cdap.e2e.pages.actions.CdfPipelineRunAction;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
@@ -44,26 +44,12 @@ public class Logviewer {
     Helper.deployAndTestPipeline(pipelineJSONfile, pipelineName + System.currentTimeMillis());
   }
 
-  @Then("Check pipeline is running")
-  public void isRunning() {
-    WaitHelper.waitForElementToBeDisplayed(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("Running"))
-    );
-  }
-
-  @Then("Run Pipeline")
-  public void runPipeline() {
-    ElementHelper.clickOnElement(
-      Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("pipeline-run-btn"))
-    );
-  }
-
   @Then("Click on log viewer button")
   public void clickLogViewer() {
     ElementHelper.clickOnElement(
       Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("log-viewer-btn-toggle"))
     );
-    waitForLoading();
+    Commands.waitForLoading();
   }
 
   @Then("Log viewer container should exist")
@@ -140,8 +126,8 @@ public class Logviewer {
   @Then("Log viewer content should contain message {string}")
   public void logViewerContentMessageExists(String message) {
     Assert.assertTrue(
-      Helper.isElementExists(By.xpath("//*[contains(text(), '" + message + "')]"),
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("log-viewer-content"))
+      Helper.isElementExists(
+        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
       )
     );
   }
@@ -149,8 +135,8 @@ public class Logviewer {
   @Then("Log viewer content should not contain message {string}")
   public void logViewerContentMessageNotExists(String message) {
     Assert.assertFalse(
-      Helper.isElementExists(By.xpath("//*[contains(text(), '" + message + "')]"),
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("log-viewer-content"))
+      Helper.isElementExists(
+        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
       )
     );
   }
@@ -160,7 +146,7 @@ public class Logviewer {
     ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
       Helper.getCssSelectorByDataTestId("view-advanced-logs")
     ));
-    waitForLoading();
+    Commands.waitForLoading();
   }
 
   @Then("Click on log level {string}")
@@ -168,7 +154,7 @@ public class Logviewer {
     ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
       Helper.getCssSelectorByDataTestId("log-level-row-" + item)
     ));
-    waitForLoading();
+    Commands.waitForLoading();
   }
 
   @Then("Log level popover should not show")
@@ -185,7 +171,7 @@ public class Logviewer {
       Helper.getCssSelectorByDataTestId("log-viewer-content")
     );
     js.executeScript("arguments[0].scrollBy(0, -1500);", element);
-    waitForLoading();
+    Commands.waitForLoading();
   }
 
   @Then("Debug message should update")
@@ -213,7 +199,7 @@ public class Logviewer {
     ElementHelper.clickOnElement(
       Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("scroll-to-latest"))
     );
-    waitForLoading();
+    Commands.waitForLoading();
   }
 
   @Then("Previous logs should show")
@@ -229,7 +215,7 @@ public class Logviewer {
       Helper.getCssSelectorByDataTestId("log-viewer-content")
     );
     js.executeScript("arguments[0].scrollBy(0, -1500);", element);
-    waitForLoading();
+    Commands.waitForLoading();
     js.executeScript("arguments[0].scrollBy(0, -5000);", element);
     Helper.waitSeconds(5);
     List<WebElement> newRows = SeleniumDriver.getDriver().findElements(
@@ -239,13 +225,5 @@ public class Logviewer {
       By.cssSelector(Helper.getCssSelectorByDataTestId("log-message"))
     ).getText();
     Assert.assertTrue(!message.equals(newMessage));
-  }
-
-  public void waitForLoading() {
-    if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
-      WaitHelper.waitForElementToBeHidden(
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
-      );
-    }
   }
 }

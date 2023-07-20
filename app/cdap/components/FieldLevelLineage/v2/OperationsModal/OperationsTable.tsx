@@ -27,6 +27,7 @@ interface IOpsTableState {
 }
 
 export default class OperationsTable extends Component<{}, IOpsTableState> {
+  context!: React.ContextType<typeof FllContext>;
   public state = {
     activeOrigin: null,
     activeField: { operation: null, name: null },
@@ -50,7 +51,7 @@ export default class OperationsTable extends Component<{}, IOpsTableState> {
   }
 
   private joinEndpoints(endpoints) {
-    if (!endpoints || !endpoints.endPoint) {
+    if (!endpoints?.endPoint) {
       return '--';
     }
 
@@ -101,7 +102,14 @@ export default class OperationsTable extends Component<{}, IOpsTableState> {
   }
 
   private renderHeader() {
-    const headers = ['input', 'inputFields', 'pluginName', 'description', 'outputFields', 'output'];
+    const headers = [
+      'input',
+      'inputFields',
+      'pluginName',
+      'description',
+      'outputFields',
+      'output',
+    ];
 
     return (
       <div className="grid-header">

@@ -21,21 +21,34 @@ const path = require('path');
 const uuidV4 = require('uuid/v4');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 // the clean options to use
 const cleanOptions = {
   verbose: true,
   dry: false,
 };
+
+const loaderExcludeStrings = [
+  '/node_modules/',
+  '/bower_components/',
+  '/packaged/public/dist/',
+  '/packaged/public/cdap_dist/',
+  '/packaged/public/common_dist/',
+  '/packaged/',
+  '/lib/',
+];
+
 const mode = process.env.NODE_ENV || 'production';
-const isModeProduction = mode =>
+const isModeProduction = (mode) =>
   mode === 'production' || mode === 'non-optimized-production';
 
-const getWebpackDllPlugins = mode => {
+const getWebpackDllPlugins = (mode) => {
   let sharedDllManifestFileName = 'shared-vendor-manifest.json';
   if (mode === 'development') {
     sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
@@ -89,64 +102,59 @@ const plugins = [
     syntax: 'scss',
     files: ['**/*.scss'],
   }),
+  new ESLintPlugin({
+    extensions: ['js', 'jsx'],
+    exclude: loaderExcludeStrings,
+  }),
 ];
 
 if (!isModeProduction(mode)) {
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
-      tsconfig: __dirname + '/tsconfig.json',
-      // watch: ["./app/cdap"], // optional but improves performance (less stat calls)
-      memoryLimit: 4096,
+      async: true,
+      typescript: {
+        configFile: __dirname + '/tsconfig.json',
+        memoryLimit: 4096,
+      },
     })
   );
 }
 
 const loaderExclude = [
   /node_modules/,
-  /bower_components/,
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,
   /lib/,
 ];
 
-const rules = [
+var rules = [
   {
-    test: /\.s?css$/,
-    use: ['style-loader', 'css-loader', 'sass-loader'],
+    test: /\.(sa|sc|c)ss$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
   },
   {
     test: /\.ya?ml$/,
     use: 'yml-loader',
   },
   {
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'eslint-loader',
-    options: {
-      fix: true,
-    },
+    test: /\.js$|jsx/,
+    use: ['babel-loader'],
     exclude: loaderExclude,
-    include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
-  },
-  {
-    test: /\.js$/,
-    use: 'babel-loader',
-    exclude: loaderExclude,
+    include: [path.join(__dirname, 'app')],
   },
   {
     test: /\.tsx?$/,
     use: [
-      'babel-loader',
       {
         loader: 'ts-loader',
         options: {
           transpileOnly: true,
-          experimentalWatchApi: true,
         },
       },
     ],
     exclude: loaderExclude,
+    include: [path.join(__dirname, 'app')],
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -161,15 +169,26 @@ const rules = [
     ],
   },
   {
-    test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+    test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: 'file-loader',
+  },
+  {
+    test: /\.svg$/,
+    use: [
+      {
+        loader: 'webpack5-svg-sprite-loader',
+      },
+    ],
   },
 ];
 let webpackConfig = {
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
+  },
   mode: isModeProduction(mode) ? 'production' : 'development',
   context: __dirname + '/app/login',
   entry: {
-    login: ['@babel/polyfill', './login.js'],
+    login: ['@babel/polyfill', './login.jsx'],
   },
   module: {
     rules,
@@ -193,7 +212,7 @@ let webpackConfig = {
   },
   plugins: plugins,
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.svg'],
     alias: {
       components: __dirname + '/app/cdap/components',
       services: __dirname + '/app/cdap/services',

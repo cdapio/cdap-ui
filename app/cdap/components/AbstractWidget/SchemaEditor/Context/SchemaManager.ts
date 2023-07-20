@@ -21,7 +21,10 @@ import {
 } from 'components/AbstractWidget/SchemaEditor/EditorTypes';
 import uuidV4 from 'uuid/v4';
 import isEmpty from 'lodash/isEmpty';
-import { INode, parseSchema } from 'components/AbstractWidget/SchemaEditor/Context/SchemaParser';
+import {
+  INode,
+  parseSchema,
+} from 'components/AbstractWidget/SchemaEditor/Context/SchemaParser';
 import { FlatSchema } from 'components/AbstractWidget/SchemaEditor/Context/FlatSchema';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
 import { SchemaGenerator } from 'components/AbstractWidget/SchemaEditor/Context/SchemaGenerator';
@@ -51,7 +54,10 @@ interface ISchemaManager {
   getSchemaTree: () => INode;
   getFlatSchema: () => IFlattenRowType[];
   getAvroSchema: () => ISchemaType;
-  onChange: (fieldId: IFieldIdentifier, onChangePayload: IOnChangePayload) => IOnChangeReturnType;
+  onChange: (
+    fieldId: IFieldIdentifier,
+    onChangePayload: IOnChangePayload
+  ) => IOnChangeReturnType;
 }
 
 interface IOnChangeReturnType {
@@ -100,12 +106,19 @@ class SchemaManagerBase implements ISchemaManager {
     const id = uuidV4();
     // +1 to add next to the current element.
     const currentIndexOfChild = order.findIndex((c) => c === referenceId) + 1;
-    order = [...order.slice(0, currentIndexOfChild), id, ...order.slice(currentIndexOfChild)];
+    order = [
+      ...order.slice(0, currentIndexOfChild),
+      id,
+      ...order.slice(currentIndexOfChild),
+    ];
     return { id, order };
   };
 
   private addNewEnumSymbol = (tree: INode, fieldId: IFieldIdentifier) => {
-    if (!tree.children || (tree.children && !Array.isArray(tree.children.order))) {
+    if (
+      !tree.children ||
+      (tree.children && !Array.isArray(tree.children.order))
+    ) {
       return { tree, newTree: undefined, currentField: undefined };
     }
     const { id = uuidV4(), order = [] } = this.insertNewIdToOrder(
@@ -130,7 +143,10 @@ class SchemaManagerBase implements ISchemaManager {
   };
 
   private addNewFieldType = (tree: INode, fieldId: IFieldIdentifier) => {
-    if (!tree.children || (tree.children && !Array.isArray(tree.children.order))) {
+    if (
+      !tree.children ||
+      (tree.children && !Array.isArray(tree.children.order))
+    ) {
       return { tree, newTree: undefined, currentField: undefined };
     }
     const { id = uuidV4(), order = [] } = this.insertNewIdToOrder(
@@ -155,7 +171,10 @@ class SchemaManagerBase implements ISchemaManager {
   };
 
   private addNewUnionType = (tree: INode, fieldId: IFieldIdentifier) => {
-    if (!tree.children || (tree.children && !Array.isArray(tree.children.order))) {
+    if (
+      !tree.children ||
+      (tree.children && !Array.isArray(tree.children.order))
+    ) {
       return { tree, newTree: undefined, currentField: undefined };
     }
     const { id = uuidV4(), order = [] } = this.insertNewIdToOrder(
@@ -178,7 +197,10 @@ class SchemaManagerBase implements ISchemaManager {
     };
   };
 
-  private addSpecificTypesToTree = (tree: INode, fieldId: IFieldIdentifier): any => {
+  private addSpecificTypesToTree = (
+    tree: INode,
+    fieldId: IFieldIdentifier
+  ): any => {
     switch (tree.type) {
       case AvroSchemaTypesEnum.ENUM:
         return this.addNewEnumSymbol(tree, fieldId);
@@ -251,19 +273,21 @@ class SchemaManagerBase implements ISchemaManager {
   private add = (fieldId: IFieldIdentifier): IOnChangeReturnType => {
     const currentIndex = this.flatTree.findIndex((f) => f.id === fieldId.id);
     const matchingEntry = this.flatTree[currentIndex];
-    let result: { tree: INode; newTree: INode; currentField: INode } | any;
-    let newFlatSubTree: IFlattenRowType[];
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
     // The result is the newly modified tree, the newly added tree and the current field
     // The modified tree is the entire schema tree that we maintain
     // The new tree is for flattening and inserting it into the flattened array
     // The current field is then passed on to the schema editor for presentation (focus on that specific row)
-    result = this.addToTree(this.schemaTree, idObj);
+    const result = this.addToTree(this.schemaTree, idObj);
     const customOptions = {
       ...this.options,
       collapseAll: false,
     };
-    newFlatSubTree = FlatSchema(result.newTree, customOptions, matchingEntry.ancestors);
+    const newFlatSubTree = FlatSchema(
+      result.newTree,
+      customOptions,
+      matchingEntry.ancestors
+    );
     this.schemaTree = result.tree;
     const currentFieldBranchCount = branchCount(result.currentField);
     this.flatTree = [
@@ -272,7 +296,8 @@ class SchemaManagerBase implements ISchemaManager {
       ...this.flatTree.slice(currentIndex + currentFieldBranchCount + 1),
     ];
     return {
-      fieldIdToFocus: this.flatTree[currentIndex + currentFieldBranchCount + 1].id,
+      fieldIdToFocus: this.flatTree[currentIndex + currentFieldBranchCount + 1]
+        .id,
       fieldIndex: currentIndex + currentFieldBranchCount + 1,
     };
   };
@@ -284,7 +309,10 @@ class SchemaManagerBase implements ISchemaManager {
     if (fieldId.ancestors.length === 1) {
       const field = { ...tree.children[fieldId.id] };
       let newField;
-      if (Array.isArray(tree.children.order) && Object.keys(tree.children).length === 2) {
+      if (
+        Array.isArray(tree.children.order) &&
+        Object.keys(tree.children).length === 2
+      ) {
         const {
           tree: treeWithDefaultChild,
           newlyAddedField: defaultNewField,
@@ -293,18 +321,21 @@ class SchemaManagerBase implements ISchemaManager {
         tree = treeWithDefaultChild;
       }
       if (Array.isArray(tree.children.order)) {
-        tree.children.order = tree.children.order.filter((id) => id !== fieldId.id);
+        tree.children.order = tree.children.order.filter(
+          (id) => id !== fieldId.id
+        );
       }
       delete tree.children[fieldId.id];
       return { tree, removedField: field, newlyAddedField: newField };
     }
-    const { tree: newTree, removedField, newlyAddedField } = this.removeFromTree(
-      tree.children[fieldId.ancestors[1]],
-      {
-        id: fieldId.id,
-        ancestors: fieldId.ancestors.slice(1),
-      }
-    );
+    const {
+      tree: newTree,
+      removedField,
+      newlyAddedField,
+    } = this.removeFromTree(tree.children[fieldId.ancestors[1]], {
+      id: fieldId.id,
+      ancestors: fieldId.ancestors.slice(1),
+    });
     return {
       tree: {
         ...tree,
@@ -333,7 +364,10 @@ class SchemaManagerBase implements ISchemaManager {
     const currentIndex = this.flatTree.findIndex((f) => f.id === fieldId.id);
     const matchingEntry = this.flatTree[currentIndex];
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
-    const { tree, removedField, newlyAddedField } = this.removeFromTree(this.schemaTree, idObj);
+    const { tree, removedField, newlyAddedField } = this.removeFromTree(
+      this.schemaTree,
+      idObj
+    );
     this.schemaTree = tree;
     // branch count to determine the slice in the flattened array.
     // If the user removed a complex type we need to remove the row
@@ -346,7 +380,11 @@ class SchemaManagerBase implements ISchemaManager {
         ...this.options,
         collapseAll: false,
       };
-      newFlatSubTree = FlatSchema(newlyAddedField, customOptions, matchingEntry.ancestors);
+      newFlatSubTree = FlatSchema(
+        newlyAddedField,
+        customOptions,
+        matchingEntry.ancestors
+      );
     }
     this.flatTree = [
       ...this.flatTree.slice(0, currentIndex),
@@ -388,8 +426,12 @@ class SchemaManagerBase implements ISchemaManager {
         childrenInBranch = branchCount(tree.children[fieldId.id]);
         tree.children[fieldId.id].children = initChildren(value);
         newChildTree = tree.children[fieldId.id];
-        tree.children[fieldId.id].internalType = getInternalType(tree.children[fieldId.id]);
-        tree.children[fieldId.id].typeProperties = initTypeProperties(tree.children[fieldId.id]);
+        tree.children[fieldId.id].internalType = getInternalType(
+          tree.children[fieldId.id]
+        );
+        tree.children[fieldId.id].typeProperties = initTypeProperties(
+          tree.children[fieldId.id]
+        );
       }
 
       return {
@@ -441,16 +483,17 @@ class SchemaManagerBase implements ISchemaManager {
       this.flatTree[index][property as string] = value;
     }
     const matchingEntry = this.flatTree[index];
-    let result: { tree: INode; childrenCount: number; newTree: INode };
     let newFlatSubTree: IFlattenRowType[] | any;
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
-    result = this.updateTree(this.schemaTree, idObj, { property, value });
+    const result = this.updateTree(this.schemaTree, idObj, { property, value });
     this.schemaTree = result.tree;
     // If user changed a complex type to a simple type or to another complex type we need
     // to remove the complex type children first
     this.flatTree = [
       ...this.flatTree.slice(0, index),
-      ...this.flatTree.slice(index + result.childrenCount + (!result.newTree ? 0 : 1)),
+      ...this.flatTree.slice(
+        index + result.childrenCount + (!result.newTree ? 0 : 1)
+      ),
     ];
     const customOptions = {
       ...this.options,
@@ -458,7 +501,11 @@ class SchemaManagerBase implements ISchemaManager {
     };
     // And then add the newly updated complex type children to the flattened array.
     if (result.newTree) {
-      newFlatSubTree = FlatSchema(result.newTree, customOptions, matchingEntry.ancestors);
+      newFlatSubTree = FlatSchema(
+        result.newTree,
+        customOptions,
+        matchingEntry.ancestors
+      );
       this.flatTree = [
         ...this.flatTree.slice(0, index),
         ...newFlatSubTree,
@@ -499,14 +546,17 @@ class SchemaManagerBase implements ISchemaManager {
    * collapsed or expanded.
    */
   private collapse = (fieldId: IFieldIdentifier): IOnChangeReturnType => {
-    const matchingIndex = this.flatTree.findIndex((row) => row.id === fieldId.id);
+    const matchingIndex = this.flatTree.findIndex(
+      (row) => row.id === fieldId.id
+    );
     const matchingEntry = this.flatTree[matchingIndex];
     if (!matchingEntry) {
       return {};
     }
     const idObj = { id: matchingEntry.id, ancestors: matchingEntry.ancestors };
     const fieldObj = this.getFieldObjFromTree(idObj, this.getSchemaTree());
-    this.flatTree[matchingIndex].collapsed = !this.flatTree[matchingIndex].collapsed;
+    this.flatTree[matchingIndex].collapsed = !this.flatTree[matchingIndex]
+      .collapsed;
     const nodeDepth = this.calculateNodeDepthMap(fieldObj);
     for (let i = 1; i <= nodeDepth; i++) {
       const currentRow = this.flatTree[matchingIndex + i];
@@ -516,14 +566,20 @@ class SchemaManagerBase implements ISchemaManager {
           const childTreeDepth = this.calculateNodeDepthMap(
             this.getFieldObjFromTree(currentRow, this.getSchemaTree())
           );
-          this.flatTree[matchingIndex + i].hidden = this.flatTree[matchingIndex].collapsed;
+          this.flatTree[matchingIndex + i].hidden = this.flatTree[
+            matchingIndex
+          ].collapsed;
           i += childTreeDepth;
           continue;
         } else {
-          this.flatTree[matchingIndex + i].collapsed = this.flatTree[matchingIndex].collapsed;
+          this.flatTree[matchingIndex + i].collapsed = this.flatTree[
+            matchingIndex
+          ].collapsed;
         }
       }
-      this.flatTree[matchingIndex + i].hidden = this.flatTree[matchingIndex].collapsed;
+      this.flatTree[matchingIndex + i].hidden = this.flatTree[
+        matchingIndex
+      ].collapsed;
     }
     return {};
   };
@@ -538,7 +594,8 @@ class SchemaManagerBase implements ISchemaManager {
   private calculateNodeDepthMap = (tree: INode): number => {
     let totalDepth = 0;
     if (isObject(tree.children) && Object.keys(tree.children).length) {
-      totalDepth += Object.keys(tree.children).filter((c) => c !== 'order').length;
+      totalDepth += Object.keys(tree.children).filter((c) => c !== 'order')
+        .length;
       for (const childId of Object.keys(tree.children)) {
         if (childId === 'order') {
           continue;
@@ -604,4 +661,9 @@ function SchemaManager(
     getInstance: () => schemaTreeInstance,
   };
 }
-export { SchemaManager, ISchemaManager, IOnChangeReturnType, ISchemaManagerOptions };
+export {
+  SchemaManager,
+  ISchemaManager,
+  IOnChangeReturnType,
+  ISchemaManagerOptions,
+};

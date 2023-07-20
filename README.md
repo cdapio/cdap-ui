@@ -35,7 +35,6 @@ root directory of the repo:
 
 ```
 yarn
-bower install
 ```
 
 Download the CDAP sandbox and start it. By default, the sandbox's UI

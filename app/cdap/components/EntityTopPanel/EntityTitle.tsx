@@ -26,6 +26,7 @@ const useStyle = makeStyle<Theme, { multiline: boolean }>((theme) => {
       marginBottom: 0,
       marginTop: 0,
       fontWeight: ({ multiline }) => (multiline ? 'bold' : 'normal'),
+      alignSelf: 'center',
     },
     multilineEntityType: {
       color: theme.palette.grey[200],
@@ -35,6 +36,7 @@ const useStyle = makeStyle<Theme, { multiline: boolean }>((theme) => {
     },
     entityTypeText: {
       verticalAlign: 'middle',
+      marginLeft: '5px',
     },
   };
 });

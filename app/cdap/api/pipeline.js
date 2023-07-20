@@ -24,6 +24,7 @@ const artifactBasePath =
 const statsPath = `${basepath}/workflows/:workflowId/statistics?start=0`;
 const schedulePath = `${basepath}/schedules/:scheduleId`;
 const programPath = `${basepath}/:programType/:programName`;
+const versionedProgramPath = `${basepath}/versions/:versionId/:programType/:programName`;
 const metadataPath = `${basepath}/workflows/:workflowType/runs/:runId/endpoints`;
 const runsCountPath = '/namespaces/:namespace/runcount';
 const batchRunsPath = '/namespaces/:namespace/runs';
@@ -62,6 +63,12 @@ export const MyPipelineApi = {
     `${programPath}/runs/:runid`
   ),
   getRuns: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/runs`),
+  getVersionedRuns: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${versionedProgramPath}/runs`
+  ),
   pollRuns: apiCreator(dataSrc, 'GET', 'POLL', `${programPath}/runs`),
   getRunsCount: apiCreator(dataSrc, 'POST', 'REQUEST', `${runsCountPath}`),
   pollRunsCount: apiCreator(dataSrc, 'POST', 'POLL', `${runsCountPath}`),

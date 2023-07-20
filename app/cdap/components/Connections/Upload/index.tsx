@@ -24,7 +24,7 @@ import T from 'i18n-react';
 import Button from '@material-ui/core/Button';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import If from 'components/shared/If';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
@@ -61,7 +61,8 @@ export default function Upload() {
   const { onWorkspaceCreate } = useContext(ConnectionsContext);
 
   function fileHandler(e) {
-    const isJSONOrXML = e[0].type === 'application/json' || e[0].type === 'text/xml';
+    const isJSONOrXML =
+      e[0].type === 'application/json' || e[0].type === 'text/xml';
 
     setFile(e[0]);
     setRecordDelimiter(isJSONOrXML ? '' : '\\n');
@@ -118,7 +119,9 @@ export default function Upload() {
   }
 
   if (workspaceId) {
-    return <Redirect to={`/ns/${getCurrentNamespace()}/wrangler/${workspaceId}`} />;
+    return (
+      <Redirect to={`/ns/${getCurrentNamespace()}/wrangler/${workspaceId}`} />
+    );
   }
 
   const uploadDisabled = !file || file.size > FILE_SIZE_LIMIT;
@@ -126,16 +129,27 @@ export default function Upload() {
   return (
     <div className={classes.container}>
       <div>
-        <FileDnD className={classes.fileDropContainer} onDropHandler={fileHandler} file={file} />
+        <FileDnD
+          className={classes.fileDropContainer}
+          onDropHandler={fileHandler}
+          file={file}
+        />
       </div>
 
       <div className={classes.uploadAction}>
         <div>
-          <Button variant="contained" color="primary" onClick={upload} disabled={uploadDisabled}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={upload}
+            disabled={uploadDisabled}
+          >
             {T.translate(`${PREFIX}.uploadButton`)}
           </Button>
 
-          <span className={classes.helperText}>{T.translate(`${PREFIX}.helperText`)}</span>
+          <span className={classes.helperText}>
+            {T.translate(`${PREFIX}.helperText`)}
+          </span>
         </div>
 
         <div>

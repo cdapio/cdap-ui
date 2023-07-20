@@ -17,28 +17,34 @@
 import * as React from 'react';
 import VirtualScroll from 'components/shared/VirtualScroll';
 
-const ListboxComponent = React.forwardRef<HTMLDivElement>((props, ref) => {
-  const { children } = props;
-  const itemData = React.Children.toArray(children);
-  const itemCount = itemData.length;
+const ListboxComponent = React.forwardRef<HTMLDivElement>(
+  (props: { children: React.ReactNode }, ref) => {
+    const { children } = props;
+    const itemData = React.Children.toArray(children);
+    const itemCount = itemData.length;
 
-  const renderList = (visibleNodeCount, startNode) => {
-    return itemData.slice(startNode, startNode + visibleNodeCount).map((option) => {
-      return option;
-    });
-  };
+    const renderList = (visibleNodeCount, startNode) => {
+      return itemData
+        .slice(startNode, startNode + visibleNodeCount)
+        .map((option) => {
+          return option;
+        });
+    };
 
-  return (
-    <div ref={ref} {...props}>
-      <VirtualScroll
-        itemCount={itemCount}
-        visibleChildCount={7}
-        childHeight={48}
-        renderList={renderList}
-        childrenUnderFold={5}
-      />
-    </div>
-  );
-});
+    return (
+      <div ref={ref} {...props}>
+        <VirtualScroll
+          itemCount={itemCount}
+          visibleChildCount={7}
+          childHeight={48}
+          renderList={renderList}
+          childrenUnderFold={5}
+        />
+      </div>
+    );
+  }
+);
+
+ListboxComponent.displayName = 'ListBoxComponent';
 
 export default ListboxComponent;

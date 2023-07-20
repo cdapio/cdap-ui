@@ -18,13 +18,13 @@ import * as React from 'react';
 import Tags from 'components/shared/Tags';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 
-import './PipelineTags.scss';
+require('./PipelineTags.scss');
 
 interface IProps {
   pipeline: IPipeline;
 }
 
-const PipelineTags: React.SFC<IProps> = ({ pipeline }) => {
+const PipelineTags: React.FC<IProps> = ({ pipeline }) => {
   return (
     <div className="tags">
       <Tags

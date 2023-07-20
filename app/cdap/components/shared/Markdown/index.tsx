@@ -22,7 +22,7 @@ import marksy from 'marksy';
 import ThemeWrapper from 'components/ThemeWrapper';
 import { MarkdownToReactMapping } from 'components/shared/Markdown/MarkdownToReactMapping';
 import prism from 'prismjs';
-require('prismjs/components/prism-json.js');
+require('prismjs/components/prism-json');
 require('prismjs/themes/prism.css');
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
@@ -46,7 +46,11 @@ const Markdown = ({ markdown }: IMarkdownProps) => {
       if (!prism.languages[language]) {
         return code;
       }
-      return prism.highlight(code, prism.languages[language], language as string);
+      return prism.highlight(
+        code,
+        prism.languages[language],
+        language as string
+      );
     },
   });
   const compiled = compile(markdown);

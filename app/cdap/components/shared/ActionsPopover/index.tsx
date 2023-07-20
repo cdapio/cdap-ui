@@ -19,7 +19,7 @@ import IconSVG from 'components/shared/IconSVG';
 import Popover from 'components/shared/Popover';
 import classnames from 'classnames';
 
-import './ActionsPopover.scss';
+require('./ActionsPopover.scss');
 
 export interface IAction {
   readonly label: string | React.ReactNode | 'separator';
@@ -27,6 +27,7 @@ export interface IAction {
   disabled?: boolean;
   className?: string;
   title?: string;
+  disabledTooltip?: string;
 }
 
 interface IActionsPopoverProps {
@@ -47,7 +48,7 @@ const POPPER_MODIFIERS = {
   },
 };
 
-const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
+const ActionsPopover: React.FC<IActionsPopoverProps> = ({
   actions,
   targetElem,
   showPopover,
@@ -103,7 +104,13 @@ const ActionsPopover: React.SFC<IActionsPopoverProps> = ({
               title={action.title}
               data-testid={action.label + '-on-popover'}
             >
-              {action.label}
+              {action.disabled && action.disabledTooltip ? (
+                <Popover target={() => <>{action.label}</>} showOn="Hover" placement="right">
+                  {action.disabledTooltip}
+                </Popover>
+              ) : (
+                <>{action.label}</>
+              )}
             </li>
           );
         })}

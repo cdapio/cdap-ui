@@ -63,7 +63,7 @@ const styles = (theme) => ({
     minWidth: 400,
     display: 'inline-block',
     height: 'auto',
-    marginTop: theme.Spacing(3),
+    marginTop: theme.spacing(3),
   },
   table: {
     minWidth: 700,
@@ -79,7 +79,7 @@ interface IMarkdownWithoutStylesProps extends WithStyles<typeof styles> {
   children: React.ReactNode;
 }
 
-const MarkdownWithoutStyles: React.SFC<IMarkdownWithoutStylesProps> = ({ children, classes }) => {
+const MarkdownWithoutStyles: React.FC<IMarkdownWithoutStylesProps> = ({ children, classes }) => {
   const flatFilterMap = (child, nodeType: any = null) =>
     child
       .flat()

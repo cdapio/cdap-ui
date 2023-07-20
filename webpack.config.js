@@ -25,7 +25,7 @@ if (
   process.env.NODE_ENV === 'development' ||
   process.env.NODE_ENV === 'browser-testing'
 ) {
-  module.exports = cdapWebpackConfig;
+  module.exports = [cdapWebpackConfig];
 } else {
   module.exports = [cdapWebpackConfig, loginWebpackConfig, commonWebpackConfig];
 }

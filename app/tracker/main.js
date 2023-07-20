@@ -59,7 +59,6 @@ angular
       'ui.ace',
       'gridster',
       'angular-cron-jobs',
-      'angularjs-dropdown-multiselect',
       'hc.marked',
       'ngFileSaver',
       'infinite-scroll',
@@ -100,7 +99,7 @@ angular
     $rootScope.$on(MYAUTH_EVENT.logoutSuccess, function() {
       window.location.href = myHelpers.getAbsUIUrl({
         uiApp: 'login',
-        redirectUrl: location.href,
+        redirectUrl: location.pathname,
         clientId: 'hydrator'
       });
     });

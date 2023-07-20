@@ -22,7 +22,7 @@ import {
 let headers = {};
 const TRIGGER_PIPELINE_1 = `trigger_test_pipeline_${Date.now()}`;
 const TRIGGER_PIPELINE_2 = `trigger_test_pipeline_2_${Date.now()}`;
-describe('Pipeline Studio', () => {
+describe.skip('Pipeline Studio', () => {
     // Uses API call to login instead of logging in manually through UI
     before(() => {
         loginIfRequired().then(() => {

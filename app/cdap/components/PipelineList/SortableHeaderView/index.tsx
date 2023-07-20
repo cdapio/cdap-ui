@@ -30,7 +30,7 @@ export interface ISortableHeaderProps {
 
 const PREFIX = 'features.PipelineList';
 
-const SortableHeaderView: React.SFC<ISortableHeaderProps> = ({
+const SortableHeaderView: React.FC<ISortableHeaderProps> = ({
   sortColumn,
   sortOrder,
   columnName,

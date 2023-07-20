@@ -16,9 +16,7 @@
 
 import { combineReducers, createStore, compose } from 'redux';
 import AddNamespaceActions from 'services/WizardStores/AddNamespace/AddNamespaceActions';
-import AddNamespaceWizardConfig from 'services/WizardConfigs/AddNamespaceWizardConfig';
 import { convertMapToKeyValuePairsObj } from 'components/shared/KeyValuePairs/KeyValueStoreActions';
-import head from 'lodash/head';
 import uuidV4 from 'uuid/v4';
 
 // Defaults
@@ -122,9 +120,13 @@ const isComplete = (state, requiredFields) => {
   return !emptyFieldsInState.length ? true : false;
 };
 
-const generalStepRequiredFields = head(
-  AddNamespaceWizardConfig.steps.filter((step) => step.id === 'general')
-).requiredFields;
+const generalStepRequiredFields = ['name'];
+// this was a circular dependency before - leaving it to help with debugging later if needed
+// import AddNamespaceWizardConfig from 'services/WizardConfigs/AddNamespaceWizardConfig';
+// import head from 'lodash/head';
+// head(
+//   AddNamespaceWizardConfig.steps.filter((step) => step.id === 'general')
+// ).requiredFields;
 
 const onErrorHandler = (reducerId, stateCopy, action) => {
   stateCopy = Object.assign({}, stateCopy);

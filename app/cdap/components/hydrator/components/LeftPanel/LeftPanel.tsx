@@ -34,8 +34,6 @@ interface ILeftPanelProps {
   groups: any[];
   groupGenericName: string;
   onPanelItemClick: (event: any, plugin: any) => void;
-  toggleSideBar: () => void;
-  isSideBarExpanded: boolean;
   isEdit: boolean;
   createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
 }
@@ -80,7 +78,7 @@ export const LeftPanel = ({
       <div className="left-panel">
         <div className="left-top-section">
           <StyledSelect
-            value={selectedArtifact.label}
+            value={selectedArtifact?.label || ''}
             className="form-control"
             onChange={(event: any) => onArtifactChange(event.currentTarget.dataset.name)}
             MenuProps={{

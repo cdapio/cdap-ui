@@ -70,6 +70,7 @@ const SecureKeySearchView: React.FC<ISecureKeySearchProps> = ({
           ),
         }}
         data-cy="search-secure-key"
+        data-testid="search-secure-key"
       />
     </FormControl>
   );

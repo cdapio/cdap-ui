@@ -9,6 +9,7 @@ commons:
   cdap: CDAP
   clickhere: click here
   close: Close
+  connectionSuccess: Successfully connected.
   delete: Delete
   deprecated: Deprecated
   descriptionLabel: Description
@@ -18,6 +19,9 @@ commons:
     placeholder: value
   dataset: Dataset
   edit: Edit
+  editTooltip:
+    notLatest: Edit is not allowed for past versions
+    notBatch: Edit is currently not supported for non batch pipelines
   entity:
     application:
       plural: Applications
@@ -81,15 +85,19 @@ commons:
   market: Hub
   milliSecondsShortLabel: ms
   nameLabel: Name
+  namespaceAdmin: Namespace Admin
   noLabel: No
   notAvailable: 'N/A'
   please: Please
   pipelines: Pipelines
+  requiredFieldMissingMsg: Required field cannot be empty
   resource-center: Add entity
   schemaLabel: Schema
   scope: Scope
   secondsShortLabel: secs
   secShortLabel: sec
+  showAll: Show all pipelines
+  showFailed: Show failed only
   status: Status
   then: Then
   tracker: Cask Tracker
@@ -749,6 +757,43 @@ features:
           string: String
           decimal: Decimal
         title: Change data type
+        decimalConfig:
+          applyButton: APPLY
+          cancelButton: CANCEL
+          scaleLabel: Scale
+          scaleHelpButton: Tooltip for scale input
+          scaleHelperText: Define scale here
+          scaleTooltip: Specifies the scale of the decimal. If zero or positive, the scale is the number of digits to the right of the decimal point. If negative, the unscaled value of the number is multiplied by ten to the power of the negation of the scale.
+          roundingLabel: Rounding
+          roundingHelpButton: Tooltip for rounding mode
+          roundingHelperText: Rounding modes
+          roundingDisabledTooltip: Rounding mode is disabled when scale is not specified.
+          roundingTooltip: Specifies a rounding behavior for numerical operations. Each rounding mode indicates how the least significant returned digit of a rounded result is to be calculated. If scale is specified and rounding mode is not specified, then rounding mode defaults to HALF_EVEN.
+          roundingOptions:
+            CEILING:
+              label: Ceiling
+              description: Rounding mode to round towards positive infinity.
+            DOWN:
+              label: Down
+              description: Rounding mode to round towards zero.
+            FLOOR:
+              label: Floor
+              description: Rounding mode to round towards negative infinity.
+            HALF_DOWN:
+              label: Half down
+              description: Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round down.
+            HALF_EVEN:
+              label: Half even
+              description: Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round towards the even neighbor.
+            HALF_UP:
+              label: Half up
+              description: Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.
+            UNNECESSARY:
+              label: Unnecessary
+              description: Rounding mode to assert that the requested operation has an exact result, hence no rounding is necessary.
+            UP:
+              label: Up
+              description: Rounding mode to round away from zero.
       ColumnActions:
         label: Column names
         actions:
@@ -1944,12 +1989,18 @@ features:
   licenseText: Licensed under the Apache License, Version 2.0
 
   LifeCycleManagement:
-    discardModalText: An edit draft exists for this pipeline. Click 'Discard' to discard the changes
-      that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+    discardModal:
+      continue: Continue
+      discard: Discard
+      text: An edit draft exists for this pipeline. Click 'Discard' to discard the changes 
+        that were made and start a new draft. Click 'Continue' to continue editing the existing draft.
+      title: Edit draft exists
     errors:
       noEditChangeError: You have not made any changes to the pipeline, deployment is not allowed.
+      outdatedDraftActionButton: Export and Rebase
       outdatedDraftError: A new version of pipeline "{pipelineName}" has been deployed. 
         This draft is outdated and please export the draft for manual reconciliation.
+    returnToLatest: return to the latest version
 
   LoadingIndicator:
     contactadmin: It could take a few minutes for the system to self-heal.
@@ -2429,8 +2480,10 @@ features:
       currentIndex: '({currentRunIndex} of {numRuns})'
       currentRunIndex: 'Run {currentRunIndex} of {numRuns}'
       errors: Errors
+      goToLatestRun: Go to latest run
       logs: Logs
       noRuns: No Runs
+      noRunsDesc: The version you are currently viewing has no runs, click below link to navigate to the version that has the latest run.
       noRuntimeArgsForRun: No runtime arguments available for this run.
       pipelineNeverRun: 'This pipeline has never been run.'
       RunComputeProfile:
@@ -2865,6 +2918,20 @@ features:
       Content:
         SelectColumns:
           primaryKeyDescription: Must include primary key
+        SelectTables:
+          heading: "Select tables, columns, and events to replicate"
+          genericErrorMessage: Something went wrong
+          unknownDatabaseErrorMessage: "Please manually put in the correct database name and table name below, or go back to \"Configure source\" tab and put in the correct \"Database Name\"."
+          eventsToReplicate: Events to replicate
+          columnsToReplicate: Columns to replicate
+          selectEventsToReplicate: Select events to replicate
+          all: All
+          inserts: Inserts
+          updates: Updates
+          deletes: Deletes
+          numberOfTablesSelected: "{selectedTablesSize} of {totalTablesSize} tables selected"
+          searchboxPlaceholder: Search tables by name
+
   Reports:
     Customizer:
       clear: Clear Selection
@@ -2980,6 +3047,7 @@ features:
     HydratorPipeline:
       actionbtn0: Create
       actionbtn1: Import
+      actionbtn2: Pull from remote
       description: A pipeline allows you to create, manage, and operate complex batch and real-time workflows intuitively.
       errorLabel: "There was a problem with the pipeline you were trying to upload"
       label: Pipeline
@@ -3095,6 +3163,84 @@ features:
       symbolName: Symbol name
   ServiceEnableUtility:
     serviceNotFound: Cannot find {artifactName} artifact
+  SourceControlManagement:
+    configModal:
+      auth:
+        label: Authentication type
+        helperText: Choose method for authentication. Currently only PAT is available
+        pat:
+          label: Personal access token (PAT)
+          token: Token
+          tokenHelperText: Refer to the "Creating a personal access token" guide in github docs to generate the token
+          tokenName: Token name
+          tokenNameHelperText: Give personal access token a name for secure store. The name can contain lower case alphabets, numbers, _, and -
+          username: User name
+          usernameHelperText: Add a username to your token
+      authHeader: Authentication
+      basicHeader: Basic
+      branch:
+        label: Default branch
+        helperText: If not set, it will use the default branch from the github repository
+      cancel: Cancel
+      linkConfirm: Save & Close
+      pathPrefix:
+        label: Path prefix
+        helperText: Add prefix to the pipeline name as the filename that will be saved in the github repository. For example, if you have a pipeline "DataFusionQuickstart" and your prefix is "myNamespace", then the file will be saved as "myNamespace/DataFusionQuickstart.json"
+      provider: 
+        label: Provider
+        helperText: Select Source Control Management tool
+      repoUrl:
+        label: Repository URL
+        helperText: Enter Git repository URL of the form https://github.com/<host>/<repo>
+      title: Source Control Management
+      validate:
+        button: validate
+        errorMessage:  
+          0: No errors found       
+          1: "{context} required field is missing"
+          _: "{context} required fields are missing"
+    info: Source control management allows you to connect namespace with the repository of your source control system repository to efficiently manage development process of the deployed pipelines.
+    linkButton: Link Repository
+    pull:
+      emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
+      modalTitle: Pull pipeline from remote repository
+      pipelinePulledFail: "Failed to pull 1 pipeline"
+      pipelinesListedFail: "Failed to list remote pipelines"
+      pipelinesPulledFail: "Failed to pull {count} pipelines"
+      pipelinesSelected: "{selected} of {total} pipelines selected"
+      pullAppMessage: Pulling {appId} from remote repository now...
+      pullButton: Pull to namespace
+      pullChipTooltip: Click to pull the latest from Git
+      pullSuccess: Pipeline {pipelineName} updated
+      tab: Remote pipelines
+      upToDate: Pipeline is already up to date.
+    push:
+      commitPlaceHolder: Write commit message here
+      commitTitle: Enter Commit Message
+      emptyCommitMessage: Commit Message cannot be empty.
+      emptyPipelineListMessage: There are no pipelines in current namespace or no pipelines matching the search query "{query}"
+      pipelinePushedFail: "Failed to push 1 pipeline"
+      pipelinesPushedFail: "Failed to push {count} pipelines"
+      pipelinesSelected: "{selected} of {total} pipelines selected"
+      pushAppMessage: Pushing {appId} to remote repository now...
+      pushButton: Push to remote
+      pushSuccess: Successfully pushed pipeline {pipelineName}
+      searchLabel: Search by batch pipeline name
+      tab: Local pipelines
+    table:
+      connected: Connected
+      pipelineName: Pipeline name
+      gitStatus: Connected to Git
+      gitStatusHelperText: This status indicates that the pipeline has been pushed to or pulled from the git repository in the past. It does not necessarily mean the content is up to date.
+      pullFail: Failed to pull this pipeline from remote.
+      pushFail: Failed to push this pipeline to remote.
+      synced: Synced
+    syncButton: Sync Pipelines
+    title: Source Control Management
+    unlinkButton: Unlink Repository
+    unlinkConfirm: Delete
+    unlinkText: Do you want to delete the current Source Control Management configuration? This will also delete the mappings between pipelines in the current namespace and the corresponding repository.
+    unlinkTitle: Unlink Repository
   SpotlightSearch:
     SpotlightModal:
       headerTagResults: Entities with the tag "{tag}"
@@ -3108,6 +3254,7 @@ features:
     allTags: All Tags
     labelWithCount: Tags ({count})
     notags: No tags found. Click to add a new business tag.
+    noTagsViewonly: No tags found.
 
   TriggeredPipelines:
     collapsedTabLabel: "Outbound triggers ({count})"

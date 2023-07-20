@@ -31,11 +31,17 @@ interface IProps {
   pipeline: IPipeline;
   refetch: () => void;
   lifecycleManagementEditEnabled?: boolean;
+  sourceControlManagementEnabled?: boolean;
 }
 
 const PREFIX = 'features.PipelineList';
 
-export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEnabled }: IProps) => {
+export const PipelineTableRow = ({
+  pipeline,
+  refetch,
+  lifecycleManagementEditEnabled,
+  sourceControlManagementEnabled,
+}: IProps) => {
   const [draftId, setDraftId] = useState(null);
   const { drafts } = useSelector(({ deployed }: IDeployedPipelineStore) => deployed);
   const namespace = getCurrentNamespace();
@@ -69,7 +75,12 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
   }, []);
 
   return (
-    <a href={pipelineLink} onClick={saveDraftIdToLocalStorage} className="grid-row">
+    <a
+      href={pipelineLink}
+      onClick={saveDraftIdToLocalStorage}
+      className="grid-row"
+      data-testid={'deployed-' + pipeline.name}
+    >
       <div className="name" title={pipeline.name} data-testid="pipeline-name">
         {pipeline.name}
       </div>
@@ -83,6 +94,7 @@ export const PipelineTableRow = ({ pipeline, refetch, lifecycleManagementEditEna
         pipeline={pipeline}
         refetch={refetch}
         lifecycleManagementEditEnabled={lifecycleManagementEditEnabled}
+        sourceControlManagementEnabled={sourceControlManagementEnabled}
         draftId={draftId}
       />
     </a>

@@ -241,7 +241,7 @@ const ReportsStore = createStore(
     timeRange: defaultTimeRangeState,
     namespaces: namespacesInitialState,
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 export default ReportsStore;

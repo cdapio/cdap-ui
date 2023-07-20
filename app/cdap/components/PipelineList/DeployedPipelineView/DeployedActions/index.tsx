@@ -18,6 +18,8 @@ import * as React from 'react';
 import {
   deleteEditDraft,
   deletePipeline,
+  pullPipeline,
+  setPullStatus,
 } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { Actions } from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
@@ -32,7 +34,11 @@ import { GLOBALS } from 'services/global-constants';
 import T from 'i18n-react';
 import downloadFile from 'services/download-file';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
+import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
+import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
+import Alert from 'components/shared/Alert';
 const PREFIX = 'features.PipelineList.DeleteConfirmation';
+const SCM_PREFIX = 'features.SourceControlManagement';
 
 interface IProps {
   pipeline: IPipeline;
@@ -40,7 +46,13 @@ interface IProps {
   clearDeleteError: () => void;
   refetch: () => void;
   lifecycleManagementEditEnabled?: boolean;
+  sourceControlManagementEnabled?: boolean;
   draftId: string;
+  pullLoading: boolean;
+  pullStatus: {
+    alertType: string;
+    message: string;
+  };
 }
 
 interface ITriggeredPipeline {
@@ -53,6 +65,7 @@ interface IState {
   triggeredPipelines: ITriggeredPipeline[];
   showPopover?: boolean;
   showDiscardConfirmation: boolean;
+  showCommitModal: boolean;
 }
 
 class DeployedActionsView extends React.PureComponent<IProps, IState> {
@@ -62,6 +75,7 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     triggeredPipelines: [],
     showPopover: false,
     showDiscardConfirmation: false,
+    showCommitModal: false,
   };
 
   private pipelineConfig = {};
@@ -218,6 +232,22 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     });
   };
 
+  private toggleCommitModal = () => {
+    this.setState({
+      showCommitModal: !this.state.showCommitModal,
+    });
+  };
+
+  private renderCommitModal = () => {
+    return (
+      <CommitModal
+        isOpen={this.state.showCommitModal}
+        onToggle={this.toggleCommitModal}
+        pipelineName={this.props.pipeline.name}
+      />
+    );
+  };
+
   private discardAndStartNewEdit = () => {
     this.toggleDiscardConfirmation();
     editPipeline(this.props.pipeline.name);
@@ -234,6 +264,11 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     this.toggleDiscardConfirmation();
   };
 
+  private handlePipelinePull = () => {
+    this.togglePopover();
+    pullPipeline(getCurrentNamespace(), this.props.pipeline.name);
+  };
+
   private continueSameDraft = () => {
     const link = window.getHydratorUrl({
       stateName: 'hydrator.create',
@@ -246,47 +281,73 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
     window.location.href = link;
   };
 
-  private actions: IAction[] = this.props.lifecycleManagementEditEnabled
-    ? [
-        {
-          label: T.translate('commons.edit'),
-          actionFn: this.handlePipelineEdit,
-        },
-        {
-          label: T.translate('commons.duplicate'),
-          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
-        },
-        {
-          label: T.translate('commons.export'),
-          actionFn: this.handlePipelineExport,
-        },
-        {
-          label: 'separator',
-        },
-        {
-          label: T.translate('commons.delete'),
-          actionFn: this.showDeleteConfirmation,
-          className: 'delete',
-        },
-      ]
-    : [
-        {
-          label: T.translate('commons.duplicate'),
-          actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
-        },
-        {
-          label: T.translate('commons.export'),
-          actionFn: this.handlePipelineExport,
-        },
-        {
-          label: 'separator',
-        },
-        {
-          label: T.translate('commons.delete'),
-          actionFn: this.showDeleteConfirmation,
-          className: 'delete',
-        },
-      ];
+  private getActionsList = () => {
+    const actions: IAction[] = [
+      {
+        label: T.translate('commons.duplicate'),
+        actionFn: duplicatePipeline.bind(null, this.props.pipeline.name),
+      },
+      {
+        label: T.translate('commons.export'),
+        actionFn: this.handlePipelineExport,
+      },
+      {
+        label: 'separator',
+      },
+      {
+        label: T.translate('commons.delete'),
+        actionFn: this.showDeleteConfirmation,
+        className: 'delete',
+      },
+    ];
+    if (this.props.sourceControlManagementEnabled) {
+      // insert after export
+      actions.splice(2, 0, {
+        label: 'separator',
+      });
+      actions.splice(3, 0, {
+        label: T.translate(`${SCM_PREFIX}.push.pushButton`),
+        actionFn: this.toggleCommitModal,
+      });
+      actions.splice(4, 0, {
+        label: T.translate(`${SCM_PREFIX}.pull.pullButton`),
+        actionFn: this.handlePipelinePull,
+      });
+    }
+    if (this.props.lifecycleManagementEditEnabled) {
+      actions.splice(0, 0, {
+        label: T.translate('commons.edit'),
+        actionFn: this.handlePipelineEdit,
+        disabled: this.props.pipeline.artifact.name !== 'cdap-data-pipeline',
+        disabledTooltip: T.translate('commons.editTooltip.notBatch').toString(),
+      });
+    }
+    return actions;
+  };
+
+  private actions: IAction[] = this.getActionsList();
+
+  public renderPullLoadingAndStatus = () => {
+    return (
+      <div>
+        <LoadingAppLevel
+          isopen={this.props.pullLoading}
+          message={T.translate(`${SCM_PREFIX}.pull.pullAppMessage`, {
+            appId: this.props.pipeline.name,
+          }).toLocaleString()}
+          style={{ width: '500px' }}
+        />
+        {this.props.pullStatus && (
+          <Alert
+            showAlert={this.props.pullStatus !== null}
+            message={this.props.pullStatus.message}
+            type={this.props.pullStatus.alertType}
+            onClose={() => setPullStatus(null)}
+          />
+        )}
+      </div>
+    );
+  };
 
   public render() {
     return (
@@ -313,6 +374,8 @@ class DeployedActionsView extends React.PureComponent<IProps, IState> {
           discardFn={deleteEditDraft.bind(null, this.props.draftId, this.discardAndStartNewEdit)}
           continueFn={this.continueSameDraft}
         />
+        {this.renderCommitModal()}
+        {this.renderPullLoadingAndStatus()}
       </div>
     );
   }
@@ -322,6 +385,8 @@ const mapStateToProps = (state, ownProp) => {
   return {
     deleteError: state.deployed.deleteError,
     pipeline: ownProp.pipeline,
+    pullLoading: state.deployed.pullLoading,
+    pullStatus: state.deployed.pullStatus,
   };
 };
 

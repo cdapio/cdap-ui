@@ -90,7 +90,7 @@ export const ActionConfig: IAction[] = [
     links: [
       {
         label: T.translate(`${PREFIX}.Metadata.linkLabel`).toString(),
-        url: '/metadata/ns/:namespace',
+        url: '/cdap/ns/:namespace/metadata',
       },
     ],
   },

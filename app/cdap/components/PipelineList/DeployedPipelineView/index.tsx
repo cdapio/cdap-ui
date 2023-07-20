@@ -14,8 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PipelineTable from 'components/PipelineList/DeployedPipelineView/PipelineTable';
 import {
   reset,
@@ -31,14 +30,13 @@ import Store from 'components/PipelineList/DeployedPipelineView/store';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { gql } from 'apollo-boost';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
 import { useSelector } from 'react-redux';
-import If from 'components/shared/If';
 import { categorizeGraphQlErrors } from 'services/helpers';
 import ErrorBanner from 'components/shared/ErrorBanner';
 import T from 'i18n-react';
 
-import './DeployedPipelineView.scss';
+require('./DeployedPipelineView.scss');
 const I18N_PREFIX = 'features.PipelineList.DeployedPipelineView';
 
 import PaginationStepper from 'components/shared/PaginationStepper';
@@ -51,7 +49,7 @@ const PaginationContainer = styled.div`
   margin-right: 50px;
 `;
 
-const Pagination = ({}) => {
+const Pagination = () => {
   const { prevDisabled, nextDisabled, shouldDisplay } = useSelector(
     ({ deployed }: IDeployedPipelineStore) => ({
       prevDisabled: !deployed.previousTokens.length,
@@ -92,7 +90,9 @@ const checkError = (error) => {
     } else {
       if (Object.keys(errorMap).length > 1) {
         // If multiple services are down
-        const message = T.translate(`${I18N_PREFIX}.graphQLMultipleServicesDown`).toString();
+        const message = T.translate(
+          `${I18N_PREFIX}.graphQLMultipleServicesDown`
+        ).toString();
         throw new Error(message);
       } else {
         // Pick one of the leftover errors to show in the banner;
@@ -105,47 +105,47 @@ const checkError = (error) => {
   return '';
 };
 
-const DeployedPipeline: React.FC = () => {
-  const QUERY = gql`
-    query Query(
-      $namespace: String
-      $pageSize: Int
-      $token: String
-      $nameFilter: String
-      $orderBy: String
-      $latestOnly: String
+const QUERY = gql`
+  query Query(
+    $namespace: String
+    $pageSize: Int
+    $token: String
+    $nameFilter: String
+    $orderBy: String
+    $latestOnly: String
+  ) {
+    pipelines(
+      namespace: $namespace
+      pageSize: $pageSize
+      pageToken: $token
+      nameFilter: $nameFilter
+      orderBy: $orderBy
+      latestOnly: $latestOnly
     ) {
-      pipelines(
-        namespace: $namespace
-        pageSize: $pageSize
-        pageToken: $token
-        nameFilter: $nameFilter
-        orderBy: $orderBy
-        latestOnly: $latestOnly
-      ) {
-        applications {
+      applications {
+        name
+        artifact {
           name
-          artifact {
-            name
-          }
-          runs {
-            status
-            starting
-          }
-          totalRuns
-          nextRuntime {
-            id
-            time
-          }
-          version
         }
-        nextPageToken
+        runs {
+          status
+          starting
+        }
+        totalRuns
+        nextRuntime {
+          id
+          time
+        }
+        version
       }
+      nextPageToken
     }
-  `;
+  }
+`;
 
+const DeployedPipeline = () => {
   // on unmount
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       reset();
     };
@@ -173,9 +173,11 @@ const DeployedPipeline: React.FC = () => {
   const bannerMessage = checkError(error);
 
   useEffect(() => {
-    MyPipelineApi.getDrafts({ context: getCurrentNamespace() }).subscribe((res) => {
-      setDrafts(res);
-    });
+    MyPipelineApi.getDrafts({ context: getCurrentNamespace() }).subscribe(
+      (res) => {
+        setDrafts(res);
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -202,9 +204,9 @@ const DeployedPipeline: React.FC = () => {
           <Pagination />
         </div>
 
-        <If condition={!!error && !!bannerMessage}>
+        {!!error && !!bannerMessage && (
           <ErrorBanner canEditPageWhileOpen error={bannerMessage} />
-        </If>
+        )}
         {ready && <PipelineTable refetch={refetch} />}
       </div>
     </>

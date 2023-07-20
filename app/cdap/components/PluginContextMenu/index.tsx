@@ -16,20 +16,35 @@
 
 import React from 'react';
 import { ContextMenu, IContextMenuOption } from 'components/shared/ContextMenu';
-import PropTypes from 'prop-types';
 import { copyToClipBoard } from 'services/Clipboard';
 import IconSVG from 'components/shared/IconSVG';
 import CommentIcon from 'components/AbstractWidget/Comment/CommentIcon';
 
+interface IPluginContextMenuProps {
+  nodeId: string;
+  nodeName?: string;
+  getPluginConfiguration: () => any;
+  getSelectedConnections: () => any;
+  getSelectedNodes: () => any;
+  onDelete?: () => void;
+  onOpen?: (nodeId: string) => void;
+  onAddComment: (nodeId: string) => void;
+  copySelectedNodeId?: (nodeId: string) => void;
+  deleteSelectedNodeId?: (nodeId: string) => void;
+}
+
 export default function PluginContextMenu({
   nodeId,
+  nodeName,
   getPluginConfiguration,
   getSelectedConnections,
   getSelectedNodes,
   onDelete,
   onOpen,
   onAddComment,
-}) {
+  copySelectedNodeId,
+  deleteSelectedNodeId,
+}: IPluginContextMenuProps) {
   const PluginContextMenuOptions: IContextMenuOption[] = [
     {
       name: 'plugin comment',
@@ -44,6 +59,10 @@ export default function PluginContextMenu({
       label: () => (getSelectedNodes().length > 1 ? 'Copy Plugins' : 'Copy Plugin'),
       icon: <IconSVG name="icon-filecopyaction" />,
       onClick: () => {
+        if (typeof copySelectedNodeId === 'function') {
+          copySelectedNodeId(nodeName);
+          return;
+        }
         const stages = getPluginConfiguration().stages;
         const connections = getSelectedConnections();
         const text = JSON.stringify({
@@ -67,12 +86,18 @@ export default function PluginContextMenu({
       icon: <IconSVG name="icon-trash" />,
       label: () => (getSelectedNodes().length > 1 ? 'Delete Plugins' : 'Delete Plugin'),
       onClick: () => {
+        if (typeof deleteSelectedNodeId === 'function') {
+          deleteSelectedNodeId(nodeName);
+          return;
+        }
         onDelete();
       },
     },
   ];
   const onPluginContextMenuOpen = () => {
-    onOpen(nodeId);
+    if (typeof onOpen === 'function') {
+      onOpen(nodeId);
+    }
   };
   return (
     <>
@@ -84,13 +109,3 @@ export default function PluginContextMenu({
     </>
   );
 }
-
-(PluginContextMenu as any).propTypes = {
-  nodeId: PropTypes.string,
-  getPluginConfiguration: PropTypes.func,
-  getSelectedConnections: PropTypes.func,
-  getSelectedNodes: PropTypes.func,
-  onDelete: PropTypes.func,
-  onOpen: PropTypes.func,
-  onAddComment: PropTypes.func,
-};

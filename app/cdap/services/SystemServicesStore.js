@@ -50,7 +50,7 @@ const ServicesStore = createStore(
   {
     services: initialSystemServices,
   },
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  window?.__REDUX_DEVTOOLS_EXTENSION__()
 );
 let systemServicesPollSubscription;
 const pollSystemServices = () => {

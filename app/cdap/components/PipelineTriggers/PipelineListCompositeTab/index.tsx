@@ -268,7 +268,7 @@ const PipelineListCompositeTabView = ({
       <div>
         <div>
           <TriggerConfigHeader>{T.translate(`${PREFIX}.triggerType`)}</TriggerConfigHeader>
-          <SelectorDropdown>
+          <SelectorDropdown data-testid="composite-trigger-type">
             <select
               className="form-control"
               value={selectedTriggersType}
@@ -294,6 +294,7 @@ const PipelineListCompositeTabView = ({
             placeholder="Enter the Trigger Name..."
             error={state.isNameInvalid}
             helperText={state.triggerNameError}
+            data-testid="trigger-name-text-field"
           />
         </div>
 

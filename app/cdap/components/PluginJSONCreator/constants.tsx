@@ -26,7 +26,9 @@ export const PluginTypes = Object.keys(GLOBALS.pluginTypeToLabel).filter(
   (t) => t !== 'sqljoiner' && t !== 'batchjoiner' && t !== 'errortransform'
 );
 
-export const WIDGET_TYPES = Object.keys(WIDGET_FACTORY).filter((t) => t !== 'dlp');
+export const WIDGET_TYPES = Object.keys(WIDGET_FACTORY).filter(
+  (t) => t !== 'dlp'
+);
 
 export const WIDGET_CATEGORY = ['plugin'];
 

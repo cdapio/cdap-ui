@@ -22,7 +22,7 @@ interface IProps {
   pipeline: IPipeline;
 }
 
-const RunsCount: React.SFC<IProps> = ({ pipeline }) => {
+const RunsCount: React.FC<IProps> = ({ pipeline }) => {
   const runsCount = pipeline.totalRuns;
   if (runsCount === null) {
     return (

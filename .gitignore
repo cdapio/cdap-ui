@@ -27,4 +27,8 @@ cypress/snapshots/actual/
 cypress/snapshots/diff/
 sandboxjs/node_modules/
 .idea/
-.yarn/
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
+yarn-error.log

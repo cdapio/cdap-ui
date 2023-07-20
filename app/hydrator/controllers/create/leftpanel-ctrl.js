@@ -13,19 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { StudioRoutes } from 'components/hydrator/components/StudioRoutes';
+import NamespaceStore from 'services/NamespaceStore';
+import { HydratorPlusPlusOrderingFactory } from '../../services/hydrator-plus-ordering-factory';
+// import { uiSupportedArtifacts } from 'services/global-constants';
 
-class HydratorPlusPlusLeftPanelCtrl {
-  constructor($rootScope, HydratorPlusPlusLeftPanelStore, $scope, $stateParams, rVersion, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, rArtifacts, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS) {
+const uiSupportedArtifacts = ['cdap-sql-pipeline', 'cdap-data-streams', 'cdap-data-pipeline'];
+export class HydratorPlusPlusLeftPanelCtrl {
+  constructor($rootScope, HydratorPlusPlusLeftPanelStore, MyCDAPDataSource, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, PluginTemplatesDirActions, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS, myPipelineApi) {
+    this.myPipelineApi = myPipelineApi;
     this.$state = $state;
-    this.$scope = $scope;
-    this.$stateParams = $stateParams;
+    this.$scope = $rootScope.$new(true, undefined);
     this.HydratorPlusPlusConfigStore = HydratorPlusPlusConfigStore;
     this.DAGPlusPlusFactory = DAGPlusPlusFactory;
     this.DAGPlusPlusNodesActionsFactory = DAGPlusPlusNodesActionsFactory;
     this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
     this.PluginTemplatesDirActions = PluginTemplatesDirActions;
-    this.rVersion = rVersion;
     this.useRootScopeStore = false;
+    this.version = undefined;
     if ($rootScope.stores) {
       this.leftpanelStore = $rootScope.stores;
       this.useRootScopeStore = true;
@@ -33,9 +38,12 @@ class HydratorPlusPlusLeftPanelCtrl {
       this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
     }
 
+    window.leftPanelStore = this.leftPanelStore;
+
+    this.MyCDAPDataSource = new MyCDAPDataSource();
+
     this.myAlertOnValium = myAlertOnValium;
     this.$q = $q;
-    this.HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFactory;
     this.leftpanelActions = HydratorPlusPlusPluginActions;
     this.LEFTPANELSTORE_ACTIONS = LEFTPANELSTORE_ACTIONS;
     this.myHelpers = myHelpers;
@@ -48,18 +56,18 @@ class HydratorPlusPlusLeftPanelCtrl {
     this.sourcesToVersionMap = {};
     this.transformsToVersionMap = {};
     this.sinksToVersionMap = {};
-
-    this.artifacts = rArtifacts;
-    let configStoreArtifact = this.HydratorPlusPlusConfigStore.getArtifact();
-    this.selectedArtifact = rArtifacts.filter( ar => ar.name === configStoreArtifact.name)[0];
-    this.artifactToRevert = this.selectedArtifact;
+    this.artifacts = [];
+    this.configStoreArtifact = this.HydratorPlusPlusConfigStore.getArtifact();
+    this.selectedArtifact = undefined;
+    this.artifactToRevert = undefined;
     this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
     this.onV2ItemClicked = this.onV2ItemClicked.bind(this);
     this.onArtifactChangeV2 = this.onArtifactChangeV2.bind(this);
     this.createPluginTemplateV2 = this.createPluginTemplate.bind(this);
-    this.isEdit = this.$stateParams.isEdit ? this.$stateParams.isEdit === 'true' : false;
+    this.isEdit = new URLSearchParams(window.location.href).get('isEdit') === 'true';
+    // this.rVersion();
     this.init();
-
+    
     var sub = this.leftpanelStore.subscribe( () => {
       let state = this.leftpanelStore.getState();
 
@@ -74,7 +82,7 @@ class HydratorPlusPlusLeftPanelCtrl {
 
       extensions.forEach( (ext) => {
         let fetchPluginsFromMap = (ext) => {
-          return this.pluginsMap.filter( pluginObj => pluginObj.name === this.HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext));
+          return this.pluginsMap.filter( pluginObj => pluginObj.name === HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext));
         };
 
         let plugins = pluginsList[ext];
@@ -82,7 +90,7 @@ class HydratorPlusPlusLeftPanelCtrl {
 
         if (!fetchedPluginsMap.length) {
           this.pluginsMap.push({
-            name: this.HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext),
+            name: HydratorPlusPlusOrderingFactory.getPluginTypeDisplayName(ext),
             plugins: plugins,
             pluginTypes: [ext] // Since we group plugin types now under one label we need ot keep track of fetchPlugins call for each plugin type.
           });
@@ -91,7 +99,7 @@ class HydratorPlusPlusLeftPanelCtrl {
           fetchedPluginsMap[0].pluginTypes.push(ext);
         }
       });
-      this.pluginsMap = this.HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
+      this.pluginsMap = HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
     });
 
     let availablePluginSub = this.AvailablePluginsStore.subscribe(() => {
@@ -106,11 +114,11 @@ class HydratorPlusPlusLeftPanelCtrl {
       const defaultVersionMap = this.leftpanelStore.getState().plugins.pluginToVersionMap;
       this.mySettings.get('CURRENT_CDAP_VERSION')
       .then((defaultCDAPVersion) => {
-        if (this.rVersion.version !== defaultCDAPVersion) {
+        if (this.version !== defaultCDAPVersion) {
           return this.mySettings
             .set('plugin-default-version', {})
             .then(() => {
-              this.mySettings.set('CURRENT_CDAP_VERSION', this.rVersion.version);
+              this.mySettings.set('CURRENT_CDAP_VERSION', this.version);
             });
         }
         this.mySettings.set('plugin-default-version', defaultVersionMap);
@@ -137,24 +145,62 @@ class HydratorPlusPlusLeftPanelCtrl {
       eventEmitter.off(globalEvents.ARTIFACTUPLOAD, this.leftPanelStoreFetchExtension);
     });
   }
+  getNamespace() {
+    // /pipelines/ns/:namespace
+    return window.location.pathname.split('/')[3];
+  }
+
+  getAllArtifacts() {
+    var that = this;
+
+    return fetch(`/api/v3/namespaces/${this.getNamespace()}/artifacts?scope=SYSTEM`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        if (!res.length) {
+          return;
+        } else {
+          const filteredRes = res
+            .filter(artifact => artifact.version === window.CaskCommon.VersionStore.getState().version)
+            .filter(r => uiSupportedArtifacts.indexOf(r.name) !== -1 )
+            .map(r => {
+              r.label = HydratorPlusPlusOrderingFactory.getArtifactDisplayName(r.name);
+              return r;
+            });
+          that.artifacts = filteredRes;
+          that.selectedArtifact = filteredRes[0];
+
+          that.artifactToRevert = that.selectedArtifact;
+          return that.selectedArtifact;
+        }
+      });
+  }
 
   init() {
-    this.PipelineAvailablePluginsActions.fetchPlugins(
-      {
-        namespace: this.$stateParams.namespace,
-        pipelineType: this.selectedArtifact.name,
-        version: this.rVersion.version,
-        scope: this.$scope
-      }
-    );
-    
-    if (this.useRootScopeStore) {
-      this.leftpanelActions.fetchDefaultVersion();
-    } else {
-      this.leftpanelStore.dispatch(
-        this.leftpanelActions.fetchDefaultVersion()
-      );
-    }
+    var that = this;
+    fetch('/api/v3/version').then((res) => res.json()).then((res) => {
+      that.version = res.version;
+      this.getAllArtifacts().then(() => {
+        that.PipelineAvailablePluginsActions.fetchPlugins(
+          {
+            namespace: that.getNamespace(),
+            pipelineType: that.selectedArtifact.name,
+            version: that.version,
+            scope: that.$scope
+          }
+        );
+        
+        if (that.useRootScopeStore) {
+          that.leftpanelActions.fetchDefaultVersion();
+        } else {
+          that.leftpanelStore.dispatch(
+            that.leftpanelActions.fetchDefaultVersion()
+          );
+        }
+      })
+    })
+
   }
 
   leftPanelStoreFetchExtension() {
@@ -172,7 +218,7 @@ class HydratorPlusPlusLeftPanelCtrl {
         } else {
           this.HydratorPlusPlusConfigStore.setState(this.HydratorPlusPlusConfigStore.getDefaults());
           this.$state.go('hydrator.create', {
-            namespace: this.$state.params.namespace,
+            namespace: this.getNamespace(),
             artifactType: this.selectedArtifact.name,
             data: null,
           }, {reload: true, inherit: false});
@@ -191,7 +237,7 @@ class HydratorPlusPlusLeftPanelCtrl {
         } else {
           this.HydratorPlusPlusConfigStore.setState(this.HydratorPlusPlusConfigStore.getDefaults());
           this.$state.go('hydrator.create', {
-            namespace: this.$state.params.namespace,
+            namespace: this.getNamespace(),
             artifactType: this.selectedArtifact.name,
             data: null,
           }, {reload: true, inherit: false});

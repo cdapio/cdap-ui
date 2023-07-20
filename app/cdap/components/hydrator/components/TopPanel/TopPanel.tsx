@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2022-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,6 +30,7 @@ import T from 'i18n-react';
 import { editPipeline } from 'services/PipelineUtils';
 import downloadFile from 'services/download-file';
 import { cleanseAndCompareTwoObjects } from 'services/helpers';
+import ThemeWrapper from 'components/ThemeWrapper';
 
 export interface IGlobalObj {
   etlRealtime?: string;
@@ -167,7 +168,7 @@ export const TopPanel = ({
   parsedDescription,
   saveMetadata,
   resetMetadata,
-  openMetadata,
+  // openMetadata,
   previewMode,
   previewEnabled,
   togglePreviewMode,
@@ -209,11 +210,16 @@ export const TopPanel = ({
   saveChangeSummary,
   getParentVersion,
 }: ITopPanelProps) => {
-  const sheculdeInfo = getScheduleInfo();
+  const scheduleInfo = getScheduleInfo();
   const [isChangeSummaryOpen, setIsChangeSummaryOpen] = useState<boolean>(false);
   const [changeSummary, setChangeSummary] = useState('');
   const [parentConfig, setParentConfig] = useState({ ...getConfigForExport().config });
   const [editStatus, setEditStatus] = useState(null);
+
+  const params = {
+    namespace: getCurrentNamespace(),
+    appId: state.metadata.name,
+  };
 
   const initialError = {
     errorMessage: null,
@@ -223,6 +229,19 @@ export const TopPanel = ({
   const exportDraftAndRedirect = () => {
     downloadFile(getConfigForExport());
     window.onbeforeunload = null;
+    // if there is a draft saved, delete it
+    const urlParams = new URLSearchParams(window.location.href);
+    if (urlParams.has('draftId')) {
+      MyPipelineApi.deleteDraft({
+        context: getCurrentNamespace(),
+        draftId: urlParams.get('draftId'),
+      }).subscribe({
+        error(err) {
+          // tslint:disable:no-console
+          console.log('Cannot delete draft');
+        },
+      });
+    }
     editPipeline(state.metadata.name);
   };
 
@@ -235,7 +254,7 @@ export const TopPanel = ({
             exportDraftAndRedirect();
           }}
         >
-          Export
+          {T.translate(`${PREFIX}.errors.outdatedDraftActionButton`)}
         </ErrorExportButton>
       </div>
     );
@@ -275,10 +294,6 @@ export const TopPanel = ({
   const publishPipeline = () => {
     if (isEdit) {
       // check for if parentVersion is still good
-      const params = {
-        namespace: getCurrentNamespace(),
-        appId: state.metadata.name,
-      };
       MyPipelineApi.get(params).subscribe(
         (res) => {
           // check for if edit has new changes
@@ -308,15 +323,12 @@ export const TopPanel = ({
     if (!isEdit) {
       return;
     }
-    const params = {
-      namespace: getCurrentNamespace(),
-      appId: state.metadata.name,
-    };
 
     // first time execute before interval
     MyPipelineApi.get(params).subscribe(
       (res) => {
-        setParentConfig(JSON.parse(res.configuration));
+        // add description in case it is missing from configuration
+        setParentConfig({ ...JSON.parse(res.configuration), description: res.description });
         if (res.appVersion === getParentVersion()) {
           setEditStatus('Editing in progress');
           return;
@@ -358,14 +370,16 @@ export const TopPanel = ({
 
   const confirmationElem = (
     <StyledTextarea
-      rowsMin={3}
+      minRows={3}
+      maxRows={7}
       autoFocus={true}
       onChange={(e) => onSummaryChange(e.target.value)}
       value={changeSummary}
+      data-testid="change-summary-input"
     />
   );
   return (
-    <>
+    <ThemeWrapper>
       {errorState.errorMessage && (
         <ErrorBanner
           error={errorState.errorMessage}
@@ -384,7 +398,7 @@ export const TopPanel = ({
           parsedDescription={parsedDescription}
           saveMetadata={saveMetadata}
           resetMetadata={resetMetadata}
-          openMetadata={openMetadata}
+          // openMetadata={openMetadata}
           isEdit={isEdit}
           editStatus={editStatus}
         ></NameAndDescription>
@@ -428,8 +442,8 @@ export const TopPanel = ({
       </TopPanelContainer>
       {viewScheduler && (
         <PipelineScheduler
-          schedule={sheculdeInfo.schedule}
-          maxConcurrentRuns={sheculdeInfo.maxConcurrentRuns}
+          schedule={scheduleInfo.schedule}
+          maxConcurrentRuns={scheduleInfo.maxConcurrentRuns}
           actionCreator={actionCreator}
           pipelineName={state.metadata.name}
           onClose={closeScheduler}
@@ -467,6 +481,6 @@ export const TopPanel = ({
         confirmationElem={confirmationElem}
         confirmFn={updatePipeline}
       />
-    </>
+    </ThemeWrapper>
   );
 };

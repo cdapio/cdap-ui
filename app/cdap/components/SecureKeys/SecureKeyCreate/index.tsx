@@ -32,7 +32,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 const styles = (theme): StyleRules => {
   return {
     secureKeyInput: {
-      margin: `${theme.Spacing(3)}px ${theme.spacing(1)}px`,
+      margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`,
     },
   };
 };
@@ -137,6 +137,7 @@ const SecureKeyCreateView: React.FC<ISecureKeyCreateProps> = ({
               className: classes.textField,
             }}
             data-cy="secure-key-name"
+            data-testid="secure-key-name"
           />
         </div>
         <div className={classes.secureKeyInput}>
@@ -151,6 +152,7 @@ const SecureKeyCreateView: React.FC<ISecureKeyCreateProps> = ({
               className: classes.textField,
             }}
             data-cy="secure-key-description"
+            data-testid="secure-key-description"
           />
         </div>
         <div className={classes.secureKeyInput}>
@@ -166,6 +168,7 @@ const SecureKeyCreateView: React.FC<ISecureKeyCreateProps> = ({
               className: classes.textField,
             }}
             data-cy="secure-key-data"
+            data-testid="secure-key-data"
           />
         </div>
         <div className={classes.secureKeyInput}>
@@ -188,11 +191,12 @@ const SecureKeyCreateView: React.FC<ISecureKeyCreateProps> = ({
             value={localPropertiesInString}
             onChange={(keyvalue) => onLocalPropertiesChange(keyvalue)}
             data-cy="secure-key-properties"
+            data-testid="secure-key-properties"
           />
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" data-cy="cancel">
+        <Button onClick={handleClose} color="primary" data-cy="cancel" data-testid="cancel">
           Cancel
         </Button>
         <Button
@@ -200,6 +204,7 @@ const SecureKeyCreateView: React.FC<ISecureKeyCreateProps> = ({
           color="primary"
           disabled={!localName || !localDescription || !localData}
           data-cy="save-secure-key"
+          data-testid="save-secure-key"
         >
           Save
         </Button>

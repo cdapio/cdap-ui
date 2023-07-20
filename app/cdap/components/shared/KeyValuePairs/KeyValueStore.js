@@ -31,6 +31,7 @@ const initialState = {
 const INITIAL_STORE_STATE = cloneDeep({
   keyValues: initialState,
 });
+
 export const getDefaultKeyValuePair = () => ({
   key: '',
   value: '',

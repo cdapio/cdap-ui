@@ -147,6 +147,13 @@ const pluginProperties = {
     required: false,
     type: 'string',
   },
+  property18: {
+    name: 'property18',
+    description: 'property18',
+    macroSupported: true,
+    required: false,
+    type: 'string',
+  },
   outputProperty: {
     name: 'outputProperty',
     description: 'description of outputProperty',
@@ -458,6 +465,17 @@ const widgetJson: IWidgetJson = {
         },
       ],
     },
+    {
+      name: 'Filter for feature flag',
+      condition: {
+        expression: 'featureFlags["some.feature"] == true',
+      },
+      show: [
+        {
+          name: 'property18',
+        },
+      ],
+    },
   ],
 };
 
@@ -731,6 +749,28 @@ describe('Unit tests for Dynamic Plugin Filters', () => {
       const newProperties = getPropertieObj(filteredConfigurationGroups);
       const newproperty13 = newProperties.property13;
       expect(newproperty13.show).toBe(true);
+    });
+  });
+
+  describe('Test filter on feature flag', () => {
+    it('Should show property when feature flag is on', () => {
+      window.CDAP_CONFIG = {
+        featureFlags: {
+          'some.feature': 'true',
+        },
+      };
+      const { filteredConfigurationGroups } = getFilteredConfigurationGroups();
+      const properties = getPropertieObj(filteredConfigurationGroups);
+      const property18 = properties.property18;
+      expect(property18.show).toBe(true);
+      delete window.CDAP_CONFIG.featureFlags;
+    });
+
+    it('Should hide property when feature flag is off', () => {
+      const { filteredConfigurationGroups } = getFilteredConfigurationGroups();
+      const properties = getPropertieObj(filteredConfigurationGroups);
+      const property18 = properties.property18;
+      expect(property18.show).toBe(false);
     });
   });
 });

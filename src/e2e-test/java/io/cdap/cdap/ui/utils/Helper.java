@@ -17,30 +17,44 @@
 package io.cdap.cdap.ui.utils;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import io.cdap.cdap.common.utils.DirUtils;
 import io.cdap.cdap.ui.types.NodeInfo;
 import io.cdap.common.http.HttpMethod;
 import io.cdap.common.http.HttpResponse;
 import io.cdap.e2e.utils.CdfHelper;
 import io.cdap.e2e.utils.ElementHelper;
+import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.RefSpec;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.WebStorage;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +64,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -129,6 +144,10 @@ public class Helper implements CdfHelper {
       .findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
+  public static WebElement locateElementByTestId(String testId, WebElement withinElement) {
+    return withinElement.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
       .findElement(By.id(elementId));
@@ -143,21 +162,37 @@ public class Helper implements CdfHelper {
       .findElement(By.xpath(xpath));
   }
 
-  public static boolean isElementExists(String cssSelector) {
+  public static List<WebElement> locateElementsByXPath(String xpath) {
+    return SeleniumDriver.getDriver().findElements(By.xpath(xpath));
+  }
+
+  public static List<WebElement> locateElementsByTestId(String testId) {
     return SeleniumDriver.getDriver()
-      .findElements(By.cssSelector(cssSelector)).size() > 0;
+      .findElements(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
+  }
+
+  public static boolean isElementExists(String cssSelector) {
+    return isElementExists(By.cssSelector(cssSelector));
   }
 
   public static boolean isElementExists(By by) {
-    return SeleniumDriver.getDriver().findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(SeleniumDriver.getDriver().findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(By by, WebElement withinElement) {
-    return withinElement.findElements(by).size() > 0;
+    try {
+      return ElementHelper.isElementDisplayed(withinElement.findElement(by));
+    } catch (StaleElementReferenceException | NoSuchElementException e) {
+      return false;
+    }
   }
 
   public static boolean isElementExists(String cssSelector, WebElement withinElement) {
-    return withinElement.findElements(By.cssSelector(cssSelector)).size() > 0;
+    return isElementExists(By.cssSelector(cssSelector), withinElement);
   }
 
   public static String getCssSelectorByDataTestId(String dataTestId) {
@@ -171,7 +206,16 @@ public class Helper implements CdfHelper {
       node.getNodeId() + "\"]";
   }
 
+  public static String getNodeNameSelectorFromNodeIdentifier(NodeInfo node) {
+    return "[data-testid=\"plugin-node-name-" +
+      node.getNodeName() + "-" +
+      node.getNodeType() + "-" +
+      node.getNodeId() + "\"]";
+  }
+
   public static void uploadPipelineFromFile(String filename) {
+    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
+    WebElement element = locateElementByLocator(By.xpath(pipelineNameXPathSelector));
     WebElement uploadFile = SeleniumDriver.getDriver()
       .findElement(By.xpath("//*[@id='pipeline-import-config-link']"));
 
@@ -179,31 +223,40 @@ public class Helper implements CdfHelper {
     String filePath = pipelineJSONFile.getAbsolutePath();
     uploadFile.sendKeys(filePath);
 
-    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
-    SeleniumDriver.getWaitDriver().until(ExpectedConditions
-                                           .stalenessOf(locateElementByLocator(By.xpath(pipelineNameXPathSelector))));
+    try {
+      SeleniumDriver.getWaitDriver().until(ExpectedConditions.stalenessOf(element));
+    } catch (Exception e) {
+      // pass
+    }
   }
 
   public static void deployAndTestPipeline(String filename, String pipelineName) {
     SeleniumDriver.openPage(Constants.BASE_STUDIO_URL + "pipelines");
     WaitHelper.waitForPageToLoad();
-    ElementHelper.clickOnElement(locateElementById("resource-center-btn"));
-    ElementHelper.clickOnElement(locateElementById("create-pipeline-link"));
+
+    WebElement resourceCenterButton = locateElementById("resource-center-btn");
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(resourceCenterButton));
+    ElementHelper.clickOnElement(resourceCenterButton);
+
+    WebElement createPipelineLink = locateElementById("create-pipeline-link");
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(createPipelineLink));
+    ElementHelper.clickOnElement(createPipelineLink);
     Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("studio"));
 
     WaitHelper.waitForPageToLoad();
     Helper.uploadPipelineFromFile(filename);
 
-    String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
-    ElementHelper.clickOnElement(locateElementByLocator(By.xpath(pipelineNameXPathSelector)));
+    SeleniumDriver.getWaitDriver().until(ExpectedConditions
+        .elementToBeClickable(By.cssSelector(getCssSelectorByDataTestId("pipeline-metadata"))));
+    Commands.fillInPipelineName(pipelineName);
+    Commands.dismissTopBanner();
 
-    WebElement pipelineNameInput = locateElementById("pipeline-name-input");
-    ElementHelper.clearElementValue(pipelineNameInput);
-    ElementHelper.sendKeys(pipelineNameInput, pipelineName);
-    pipelineNameInput.sendKeys(Keys.RETURN);
-
-    ElementHelper.clickOnElementUsingJsExecutor(locateElementByCssSelector(
+    ElementHelper.clickOnElement(locateElementByCssSelector(
       getCssSelectorByDataTestId("deploy-pipeline-btn")));
+
+    WaitHelper.waitForPageToLoad();
 
     String statusText = ElementHelper.getElementText(
       WaitHelper.waitForElementToBeDisplayed(
@@ -211,7 +264,7 @@ public class Helper implements CdfHelper {
     );
 
     Assert.assertEquals(statusText, "Deployed");
-    Assert.assertTrue(SeleniumDriver.getDriver().getCurrentUrl().contains("/view/" + pipelineName));
+    Assert.assertTrue(urlHasString("/view/" + pipelineName));
   }
 
   public static void cleanupPipelines(String pipelineName) {
@@ -319,7 +372,7 @@ public class Helper implements CdfHelper {
     // wait for rendering to finish otherwise elements are not attached to dom
     Helper.waitSeconds(2);
   }
-  
+
   public static boolean urlHasString(String targetString) {
     String strUrl = SeleniumDriver.getDriver().getCurrentUrl();
     return strUrl.contains(targetString);
@@ -378,5 +431,126 @@ public class Helper implements CdfHelper {
       .filter(p -> p.getName().equals(queryParam))
       .collect(Collectors.toList());
     return queryParameters.get(0).getValue();
+  }
+
+  public static void rightClickOnElement(WebElement element) {
+    rightClickOnElement(element, 0, 0);
+  }
+
+  public static void rightClickOnElement(WebElement element, int xOffset, int yOffset) {
+    Actions actions = new Actions(SeleniumDriver.getDriver());
+    actions.moveToElement(element, xOffset, yOffset).contextClick().perform();
+  }
+
+
+  public static void setCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "window.Cypress = {}; window.Cypress.on = function() {}");
+  }
+
+  public static void removeCypressObjectOnWindow() {
+    JavascriptExecutor js = (JavascriptExecutor) SeleniumDriver.getDriver();
+    js.executeScript(
+        "delete window.Cypress");
+  }
+
+  public static JsonObject getJSONObject(String jsonString) {
+    JsonParser jsonParser = new JsonParser();
+    JsonObject jsonObject = new JsonObject();
+    try {
+      JsonElement parsedJSONElement = jsonParser.parse(jsonString);
+      jsonObject = parsedJSONElement.getAsJsonObject();
+    } catch (JsonSyntaxException jse) {
+      Assert.fail(jse.getMessage());
+    }
+    return jsonObject;
+  }
+
+  public static String getCssSelectorForWidgetRow(String rowIndex, String propertyName) {
+    return Helper.getCssSelectorByDataTestId(propertyName) + " " + Helper.getCssSelectorByDataTestId(rowIndex);
+  }
+
+  public static String getCssSelectorForKeyInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("key") + " input";
+  }
+
+  public static String getCssSelectorForValueInWidgetRow(String rowIndex, String propertyName) {
+    return getCssSelectorForWidgetRow(rowIndex, propertyName)
+      + " " + Helper.getCssSelectorByDataTestId("value") + " input";
+  }
+
+  public static void clickAddRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("add-row")));
+  }
+
+  public static void clickRemoveRowInWidget(String rowIndex, String propertyName) {
+    ElementHelper.clickOnElement(Helper.locateElementByCssSelector(
+      getCssSelectorForWidgetRow(rowIndex, propertyName)
+        + " " + Helper.getCssSelectorByDataTestId("remove-row")));
+  }
+
+  public static void gotoDeployedPipeline(String pipelineName) {
+    SeleniumDriver.openPage(Constants.BASE_PIPELINES_URL + "/view/" + pipelineName);
+  }
+
+  public static void createSCMRemoteBranch() throws IOException, GitAPIException {
+    String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
+    if (Strings.isNullOrEmpty(branch)) {
+      throw new IllegalArgumentException("SCM testing default branch is not specified");
+    }
+
+    Path tempDir = Files.createTempDirectory("e2e-clone-repo");
+    CredentialsProvider creds = getCredentialsProvider();
+    try (Git git = cloneRemote(tempDir, creds)) {
+      git.checkout().setCreateBranch(true).setName(branch).call();
+      git.push()
+          .setRefSpecs(new RefSpec(branch + ":" + branch))
+          .setTimeout(Constants.GIT_COMMAND_TIMEOUT_SECONDS)
+          .setCredentialsProvider(creds)
+          .call();
+    }
+    DirUtils.deleteDirectoryContents(tempDir.toFile());
+  }
+
+  public static void cleanupSCMTestBranch() throws IOException, GitAPIException {
+    Path tempDir = Files.createTempDirectory("e2e-clone-repo");
+    CredentialsProvider creds = getCredentialsProvider();
+    try (Git git = cloneRemote(tempDir, creds)) {
+      String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
+      //delete branch on remote
+      git.push()
+          .setRefSpecs(new RefSpec(":" + "refs/heads/" + branch))
+          .setTimeout(Constants.GIT_COMMAND_TIMEOUT_SECONDS)
+          .setCredentialsProvider(creds)
+          .call();
+    }
+    DirUtils.deleteDirectoryContents(tempDir.toFile());
+  }
+
+  private static CredentialsProvider getCredentialsProvider() {
+    String token = PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME);
+    if (Strings.isNullOrEmpty(token)) {
+      throw new IllegalArgumentException("SCM testing token is not specified");
+    }
+
+    return new UsernamePasswordCredentialsProvider("oauth2", token);
+  }
+
+  private static Git cloneRemote(Path dir, CredentialsProvider creds) throws GitAPIException {
+    String url = PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME);
+    if (Strings.isNullOrEmpty(url)) {
+      throw new IllegalArgumentException("SCM testing repo url is not specified");
+    }
+
+    return Git.cloneRepository()
+        .setURI(url)
+        .setDirectory(dir.toFile())
+        .setTimeout(Constants.GIT_COMMAND_TIMEOUT_SECONDS)
+        .setCredentialsProvider(creds)
+        .call();
   }
 }

@@ -29,9 +29,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class WidgetCodeEditor {
     private NodeInfo jSNode = new NodeInfo("JavaScript", "transform", "0");
     private static final String defaultJsEditorVal = "/**\n" +
@@ -52,11 +49,6 @@ public class WidgetCodeEditor {
             "function transform(input, emitter, context) {\n" +
             "  emitter.emit(input);\n" +
             "}";
-
-    @Then("Toggle Transform panel")
-    public void toggleTransformPanel() {
-        Commands.toggleTransformPanel();
-    }
 
     @Then("Add JS node to canvas")
     public void addJSNodeToCanvas() {

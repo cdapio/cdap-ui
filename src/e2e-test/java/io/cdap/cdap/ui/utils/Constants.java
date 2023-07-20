@@ -32,12 +32,15 @@ public class Constants {
   public static final String BASE_PIPELINES_URL = BASE_URL + "/pipelines/ns/default";
   public static final String CDAP_URL = BASE_URL + "/cdap";
   public static final String CONFIGURATION_URL = BASE_URL + "/cdap/administration/configuration";
+  public static final String SOURCE_CONTROL_MANAGEMENT_URL = BASE_URL + "/cdap/ns/default/details/scm";
+  public static final String SOURCE_CONTROL_SYNC_URL = BASE_URL + "/cdap/ns/default/scm/sync";
   public static final String NAMESPACE_URL = BASE_URL + "/cdap/ns";
   public static final String BASE_STUDIO_URL = BASE_URL + "/cdap/ns/default/";
   public static final String SYSTEM_PROFILES_CREATE_URL = BASE_URL + "/cdap/ns/system/profiles/create";
   public static final String PIPELINE_STUDIO_URL = BASE_URL + "/pipelines/ns/default/studio";
   public static final String PIPELINE_LIST_URL = CDAP_URL + "/ns/default/pipelines";
   public static final String PIPELINE_DRAFTS_URL = BASE_STUDIO_URL + "pipelines/drafts";
+  public static final String SECURE_KEY_MANAGER_URL = BASE_URL + "/ns/default/securekeys";
   public static final String FIXTURES_DIR = "src/e2e-test/fixtures/";
   public static final String DOWNLOADS_DIR = "target/downloads/";
   public static final String PIPELINE_FILES_DIR = "/tmp/cdap-ui-integration-fixtures/";
@@ -74,4 +77,23 @@ public class Constants {
 
   public static final String SINK_PATH_VAL = "/tmp/cdap-ui-integration-fixtures";
   public static final String SOURCE_PATH_VAL = "file:/tmp/cdap-ui-integration-fixtures/airports.csv";
+
+  public static final String SOURCE_PLUGINS_GROUP_LOCATOR_TEXT = "Source";
+  public static final String SINK_PLUGINS_GROUP_LOCATOR_TEXT = "Sink";
+  public static final String TRANSFORM_PLUGINS_GROUP_LOCATOR_TEXT = "Transform";
+  public static final String ANALYTICS_PLUGINS_GROUP_LOCATOR_TEXT = "Analytics";
+  public static final String CONDITIONS_AND_ACTIONS_PLUGINS_GROUP_LOCATOR_TEXT = "Conditions and Actions";
+  public static final String ERROR_HANDLERS_AND_ALERTS_PLUGINS_GROUP_LOCATOR_TEXT = "Error Handlers and Alerts";
+  
+  public static final String PIPELINE_TYPE = "cdap-data-pipeline";
+
+  public static final String FAKE_REPO_LINK = "https://example.com";
+  public static final String FAKE_TOKEN_NAME = "fake_token";
+  public static final String FAKE_TOKEN = "fake token value";
+  public static final String NON_EXISTS_DEFAULT_BRANCH = "noneExistingBranch";
+  public static final String GIT_BRANCH_PROP_NAME = "gitBranchName";
+  public static final String GIT_REPO_URL_PROP_NAME = "gitRepositoryUrl";
+  public static final int GIT_COMMAND_TIMEOUT_SECONDS = 10;
+  public static final String GIT_PAT_PROP_NAME = "gitPAT";
+  public static final String GIT_PATH_PREFIX_PROP_NAME = "gitRepositoryPathPrefix";
 }

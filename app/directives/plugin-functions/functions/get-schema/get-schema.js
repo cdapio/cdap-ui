@@ -59,9 +59,9 @@ angular.module(PKG.name + '.commons')
                 var config = mvm.node.plugin.properties;
                 config.query = mvm.query;
                 delete config.importQuery;
-
+                const namespace = window.location.pathname.split('/')[3];
                 var params = {
-                  namespace: $state.params.namespace,
+                  namespace,
                   artifactName: mvm.node.plugin.artifact.name,
                   version: mvm.node.plugin.artifact.version,
                   pluginType: mvm.node.type,

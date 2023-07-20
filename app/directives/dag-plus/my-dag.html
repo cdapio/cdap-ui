@@ -117,7 +117,7 @@
 
 <!-- change to ng-if="true" to get this to render-->
 <pipeline-canvas-action-btns
-  ng-if="true"
+  ng-if="false"
   set-pipeline-comments="DAGPlusPlusCtrl.setPipelineComments"
   pipeline-comments="DAGPlusPlusCtrl.pipelineComments"
   is-disabled="DAGPlusPlusCtrl.isDisabled"
@@ -134,6 +134,7 @@
 ></pipeline-canvas-action-btns>
 
 <div class="my-js-dag"
+    ng-if="false"
     ng-class="{'disabled': DAGPlusPlusCtrl.isDisabled, 'normal-cursor': disableNodeClick, 'preview-mode': previewMode }"
     ng-click="DAGPlusPlusCtrl.handleCanvasClick($event, true)">
     <div id="diagram-container" ng-class="{'move-mode': !DAGPlusPlusCtrl.selectionBox.toggle, 'disabled': DAGPlusPlusCtrl.isDisabled}">
@@ -379,6 +380,43 @@
 </div>
 
 <dag-minimap
+  ng-if="false"
   canvas-scale="DAGPlusPlusCtrl.scale"
   panning="DAGPlusPlusCtrl.setCanvasPanning(top, left)"
 ></dag-minimap>
+
+<canvas-react
+  ng-if="true"
+  angular-nodes="nodes"
+  angular-connections="connections"
+  is-disabled="isDisabled"
+  preview-mode="previewMode"
+  update-nodes="DAGPlusPlusCtrl.updateNodesStoreNodes"
+  update-connections="DAGPlusPlusCtrl.updateNodesStoreConnections"
+  on-properties-click="DAGPlusPlusCtrl.onNodeClick"
+  on-metrics-click="DAGPlusPlusCtrl.onMetricsClick"
+  get-angular-connections="DAGPlusPlusCtrl.getConnections"
+  get-angular-nodes="DAGPlusPlusCtrl.getNodes"
+  set-selected-nodes="DAGPlusPlusCtrl.setSelectedNodes"
+  set-selected-connections="DAGPlusPlusCtrl.setSelectedConnections"
+  on-keyboard-copy="DAGPlusPlusCtrl.onKeyboardCopy"
+  set-plugin-active-for-comment="DAGPlusPlusCtrl.setPluginActiveForComment"
+  get-active-plugin-for-comment="DAGPlusPlusCtrl.getActivePluginForComment"
+  set-plugin-comments="DAGPlusPlusCtrl.setComments"
+  get-plugin-configuration="DAGPlusPlusCtrl.getPluginConfiguration"
+  get-custom-icon-src="DAGPlusPlusCtrl.getCustomIconSrc"
+  should-show-alerts-port="DAGPlusPlusCtrl.shouldShowAlertsPort"
+  should-show-errors-port="DAGPlusPlusCtrl.shouldShowErrorsPort"
+  undo-actions="DAGPlusPlusCtrl.undoActions"
+  redo-actions="DAGPlusPlusCtrl.redoActions"
+  pipeline-comments="DAGPlusPlusCtrl.pipelineComments"
+  set-pipeline-comments="DAGPlusPlusCtrl.setPipelineComments"
+  on-preview-data="DAGPlusPlusCtrl.onPreviewData"
+  clean-up-graph="DAGPlusPlusCtrl.cleanUpGraph"
+  pipeline-artifact-type="DAGPlusPlusCtrl.pipelineArtifactType"
+  metrics-data="metricsData"
+  metrics-disabled="disableMetricsClick"
+  redo-states="DAGPlusPlusCtrl.redoStates"
+  undo-states="DAGPlusPlusCtrl.undoStates"
+  update-node-positions="DAGPlusPlusCtrl.updateNodePositions"
+></canvas-react>

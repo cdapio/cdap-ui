@@ -37,4 +37,22 @@ export const MyNamespaceApi = {
     'REQUEST',
     `${basepath}/:namespace/properties`
   ),
+  setSourceControlManagement: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    `${basepath}/:namespace/repository`
+  ),
+  getSourceControlManagement: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepath}/:namespace/repository`
+  ),
+  deleteSourceControlManagement: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${basepath}/:namespace/repository`
+  ),
 };

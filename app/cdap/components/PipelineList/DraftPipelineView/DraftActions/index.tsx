@@ -126,6 +126,16 @@ class DraftActions extends React.PureComponent<IProps, IState> {
     );
   };
 
+  private handleDeleteDraft = () => {
+    deleteDraft(this.props.draft).subscribe({
+      error: (err) => {
+        this.setState({
+          errorMessage: err.message,
+        });
+      },
+    });
+  };
+
   private renderDeleteConfirmation = () => {
     if (!this.state.showDeleteConfirmation) {
       return null;
@@ -137,7 +147,7 @@ class DraftActions extends React.PureComponent<IProps, IState> {
         toggleModal={this.toggleDeleteConfirmation}
         confirmationElem={this.renderConfirmationBody()}
         confirmButtonText={T.translate(`${PREFIX}.confirm`)}
-        confirmFn={deleteDraft.bind(null, this.props.draft)}
+        confirmFn={this.handleDeleteDraft}
         cancelFn={this.toggleDeleteConfirmation}
         isOpen={this.state.showDeleteConfirmation}
       />

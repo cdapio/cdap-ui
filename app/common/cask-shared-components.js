@@ -25,174 +25,134 @@ if (
   require('../cdap/components/hydrator/react-loader');
 }
 
-const Store = require('../cdap/services/NamespaceStore').default;
-const validateNamespace = require('../cdap/services/NamespaceStore')
-  .validateNamespace;
-const NameSpaceStoreActions = require('../cdap/services/NamespaceStore/NamespaceActions')
+var Store = require('../cdap/services/NamespaceStore').default;
+var validateNamespace = require('../cdap/services/NamespaceStore').validateNamespace;
+var NameSpaceStoreActions = require('../cdap/services/NamespaceStore/NamespaceActions').default;
+var ResourceCenterButton = require('../cdap/components/ResourceCenterButton').default;
+var DataPrepHome = require('../cdap/components/DataPrepHome').default;
+var DataPrepHelper = require('../cdap/components/DataPrep/helper');
+var globalEvents = require('../cdap/services/global-events').default;
+var ee = require('event-emitter');
+var VersionStore = require('../cdap/services/VersionStore').default;
+var VersionActions = require('../cdap/services/VersionStore/VersionActions').default;
+var Version = require('../cdap/services/VersionRange/Version').default;
+var VersionRange = require('../cdap/services/VersionRange').default;
+var VersionUtilities = require('../cdap/services/VersionRange/VersionUtilities');
+var KeyValuePairs = require('../cdap/components/shared/KeyValuePairs').default;
+var KeyValuePairsMaterial = require('../cdap/components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsPairsMaterial.tsx')
   .default;
-const ResourceCenterButton = require('../cdap/components/ResourceCenterButton')
+var KeyValueStore = require('../cdap/components/shared/KeyValuePairs/KeyValueStore').default;
+var KeyValueStoreActions = require('../cdap/components/shared/KeyValuePairs/KeyValueStoreActions')
   .default;
-const DataPrepHome = require('../cdap/components/DataPrepHome').default;
-const DataPrepHelper = require('../cdap/components/DataPrep/helper');
-const globalEvents = require('../cdap/services/global-events').default;
-const ee = require('event-emitter');
-const VersionStore = require('../cdap/services/VersionStore').default;
-const VersionActions = require('../cdap/services/VersionStore/VersionActions')
+var PipelineSummary = require('../cdap/components/PipelineSummary').default;
+var PipelineNodeMetricsGraph = require('../cdap/components/PipelineNodeGraphs/PipelineNodeMetricsGraph')
   .default;
-const Version = require('../cdap/services/VersionRange/Version').default;
-const VersionRange = require('../cdap/services/VersionRange').default;
-const VersionUtilities = require('../cdap/services/VersionRange/VersionUtilities');
-const KeyValuePairs = require('../cdap/components/shared/KeyValuePairs')
+var CDAPHelpers = require('../cdap/services/helpers');
+var RulesEngineHome = require('../cdap/components/RulesEngineHome').default;
+var Mousetrap = require('mousetrap');
+var StatusFactory = require('../cdap/services/StatusFactory').default;
+var LoadingIndicator = require('../cdap/components/shared/LoadingIndicator').default;
+var StatusAlertMessage = require('../cdap/components/shared/StatusAlertMessage').default;
+var PipelineTriggersSidebars = require('../cdap/components/PipelineTriggersSidebars/index.tsx')
   .default;
-const KeyValuePairsMaterial = require('../cdap/components/PipelineDetails/PipelineRuntimeArgsDropdownBtn/RuntimeArgsKeyValuePairWrapper/RuntimeArgsPairsMaterial.tsx')
+var TriggeredPipelineStore = require('../cdap/components/TriggeredPipelines/store/TriggeredPipelineStore')
   .default;
-const KeyValueStore = require('../cdap/components/shared/KeyValuePairs/KeyValueStore')
-  .default;
-const KeyValueStoreActions = require('../cdap/components/shared/KeyValuePairs/KeyValueStoreActions')
-  .default;
-const PipelineSummary = require('../cdap/components/PipelineSummary').default;
-const PipelineNodeMetricsGraph = require('../cdap/components/PipelineNodeGraphs/PipelineNodeMetricsGraph')
-  .default;
-const CDAPHelpers = require('../cdap/services/helpers');
-const RulesEngineHome = require('../cdap/components/RulesEngineHome').default;
-const Mousetrap = require('mousetrap');
-const StatusFactory = require('../cdap/services/StatusFactory').default;
-const LoadingIndicator = require('../cdap/components/shared/LoadingIndicator')
-  .default;
-const StatusAlertMessage = require('../cdap/components/shared/StatusAlertMessage')
-  .default;
-const PipelineTriggersSidebars = require('../cdap/components/PipelineTriggersSidebars/index.tsx')
-  .default;
-const TriggeredPipelineStore = require('../cdap/components/TriggeredPipelines/store/TriggeredPipelineStore')
-  .default;
-const PipelineErrorFactory = require('../cdap/services/PipelineErrorFactory');
-const GLOBALS = require('../cdap/services/global-constants').GLOBALS;
-const PROGRAM_STATUSES = require('../cdap/services/global-constants')
-  .PROGRAM_STATUSES;
-const HYDRATOR_DEFAULT_VALUES = require('../cdap/services/global-constants')
-  .HYDRATOR_DEFAULT_VALUES;
-const StatusMapper = require('../cdap/services/StatusMapper').default;
-const PipelineDetailStore = require('../cdap/components/PipelineDetails/store')
-  .default;
-const PipelineDetailActionCreator = require('../cdap/components/PipelineDetails/store/ActionCreator');
-const PipelineDetailsTopPanel = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel')
+var PipelineErrorFactory = require('../cdap/services/PipelineErrorFactory');
+var GLOBALS = require('../cdap/services/global-constants').GLOBALS;
+var PROGRAM_STATUSES = require('../cdap/services/global-constants').PROGRAM_STATUSES;
+var HYDRATOR_DEFAULT_VALUES = require('../cdap/services/global-constants').HYDRATOR_DEFAULT_VALUES;
+var StatusMapper = require('../cdap/services/StatusMapper').default;
+var PipelineDetailStore = require('../cdap/components/PipelineDetails/store').default;
+var PipelineDetailActionCreator = require('../cdap/components/PipelineDetails/store/ActionCreator');
+var PipelineDetailsTopPanel = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel')
   .PipelineDetailsTopPanel;
-const PipelineScheduler = require('../cdap/components/PipelineScheduler')
-  .default;
-const AvailablePluginsStore = require('../cdap/services/AvailablePluginsStore')
-  .default;
-const AVAILABLE_PLUGINS_ACTIONS = require('../cdap/services/AvailablePluginsStore')
+var PipelineScheduler = require('../cdap/components/PipelineScheduler').default;
+var AvailablePluginsStore = require('../cdap/services/AvailablePluginsStore').default;
+var AVAILABLE_PLUGINS_ACTIONS = require('../cdap/services/AvailablePluginsStore')
   .AVAILABLE_PLUGINS_ACTIONS;
-const PipelineDetailsRunLevelInfo = require('../cdap/components/PipelineDetails/RunLevelInfo')
+var PipelineDetailsRunLevelInfo = require('../cdap/components/PipelineDetails/RunLevelInfo')
   .default;
-const MetricsQueryHelper = require('../cdap/services/MetricsQueryHelper')
+var MetricsQueryHelper = require('../cdap/services/MetricsQueryHelper').default;
+var PipelineMetricsStore = require('../cdap/services/PipelineMetricsStore').default;
+var PipelineMetricsActionCreator = require('../cdap/services/PipelineMetricsStore/ActionCreator');
+var PipelineConfigurationsActionCreator = require('../cdap/components/PipelineConfigurations/Store/ActionCreator');
+var ThemeHelper = require('../cdap/services/ThemeHelper');
+var Footer = require('../cdap/components/shared/Footer').default;
+var cdapavscwrapper = require('../cdap/services/cdapavscwrapper').default;
+var IconSVG = require('../cdap/components/shared/IconSVG').default;
+var PipelineConfigConstants = require('../cdap/components/PipelineConfigurations/PipelineConfigConstants');
+var AuthRefresher = require('../cdap/components/AuthRefresher').default;
+var ToggleSwitch = require('../cdap/components/shared/ToggleSwitch').default;
+var ApiErrorDialog = require('../cdap/components/shared/ApiErrorDialog').default;
+var PipelineList = require('../cdap/components/PipelineList').default;
+var AppHeader = require('../cdap/components/shared/AppHeader').default;
+var Markdown = require('../cdap/components/shared/Markdown').default;
+var CodeEditor = require('../cdap/components/AbstractWidget/CodeEditorWidget').default;
+var JSONEditor = require('../cdap/components/shared/CodeEditor/JSONEditor').default;
+var TextBox = require('../cdap/components/AbstractWidget/FormInputs/TextBox').default;
+var Number = require('../cdap/components/AbstractWidget/FormInputs/Number').default;
+var CSVWidget = require('../cdap/components/AbstractWidget/CSVWidget').default;
+var KeyValueWidget = require('../cdap/components/AbstractWidget/KeyValueWidget').default;
+var Select = require('../cdap/components/AbstractWidget/FormInputs/Select').default;
+var KeyValueDropdownWidget = require('../cdap/components/AbstractWidget/KeyValueDropdownWidget')
   .default;
-const PipelineMetricsStore = require('../cdap/services/PipelineMetricsStore')
+var MultipleValuesWidget = require('../cdap/components/AbstractWidget/MultipleValuesWidget')
   .default;
-const PipelineMetricsActionCreator = require('../cdap/services/PipelineMetricsStore/ActionCreator');
-const PipelineConfigurationsActionCreator = require('../cdap/components/PipelineConfigurations/Store/ActionCreator');
-const ThemeHelper = require('../cdap/services/ThemeHelper');
-const Footer = require('../cdap/components/shared/Footer').default;
-const cdapavscwrapper = require('../cdap/services/cdapavscwrapper').default;
-const IconSVG = require('../cdap/components/shared/IconSVG').default;
-const PipelineConfigConstants = require('../cdap/components/PipelineConfigurations/PipelineConfigConstants');
-const AuthRefresher = require('../cdap/components/AuthRefresher').default;
-const ToggleSwitch = require('../cdap/components/shared/ToggleSwitch').default;
-const ApiErrorDialog = require('../cdap/components/shared/ApiErrorDialog')
+var PluginConnectionBrowser = require('../cdap/components/DataPrepConnections/PluginConnectionBrowser')
   .default;
-const PipelineList = require('../cdap/components/PipelineList').default;
-const AppHeader = require('../cdap/components/shared/AppHeader').default;
-const Markdown = require('../cdap/components/shared/Markdown').default;
-const CodeEditor = require('../cdap/components/AbstractWidget/CodeEditorWidget')
+var FunctionDropdownAlias = require('../cdap/components/AbstractWidget/FunctionDropdownAliasWidget')
   .default;
-const JSONEditor = require('../cdap/components/shared/CodeEditor/JSONEditor')
+var ToggleSwitchWidget = require('../cdap/components/AbstractWidget/ToggleSwitchWidget').default;
+var WranglerEditor = require('../cdap/components/AbstractWidget/WranglerEditor').default;
+var RadioGroupWidget = require('../cdap/components/AbstractWidget/RadioGroupWidget').default;
+var MultiSelect = require('../cdap/components/AbstractWidget/FormInputs/MultiSelect').default;
+var JoinTypeWidget = require('../cdap/components/AbstractWidget/JoinTypeWidget').default;
+var InputFieldDropdown = require('../cdap/components/AbstractWidget/InputFieldDropdown').default;
+var DatasetSelectorWidget = require('../cdap/components/AbstractWidget/DatasetSelectorWidget')
   .default;
-const TextBox = require('../cdap/components/AbstractWidget/FormInputs/TextBox')
+var SqlConditionsWidget = require('../cdap/components/AbstractWidget/SqlConditionsWidget').default;
+var SqlSelectorWidget = require('../cdap/components/AbstractWidget/SqlSelectorWidget').default;
+var KeyValueEncodedWidget = require('../cdap/components/AbstractWidget/KeyValueWidget/KeyValueEncodedWidget')
   .default;
-const Number = require('../cdap/components/AbstractWidget/FormInputs/Number')
-  .default;
-const CSVWidget = require('../cdap/components/AbstractWidget/CSVWidget')
-  .default;
-const KeyValueWidget = require('../cdap/components/AbstractWidget/KeyValueWidget')
-  .default;
-const Select = require('../cdap/components/AbstractWidget/FormInputs/Select')
-  .default;
-const KeyValueDropdownWidget = require('../cdap/components/AbstractWidget/KeyValueDropdownWidget')
-  .default;
-const MultipleValuesWidget = require('../cdap/components/AbstractWidget/MultipleValuesWidget')
-  .default;
-const PluginConnectionBrowser = require('../cdap/components/DataPrepConnections/PluginConnectionBrowser')
-  .default;
-const FunctionDropdownAlias = require('../cdap/components/AbstractWidget/FunctionDropdownAliasWidget')
-  .default;
-const ToggleSwitchWidget = require('../cdap/components/AbstractWidget/ToggleSwitchWidget')
-  .default;
-const WranglerEditor = require('../cdap/components/AbstractWidget/WranglerEditor')
-  .default;
-const RadioGroupWidget = require('../cdap/components/AbstractWidget/RadioGroupWidget')
-  .default;
-const MultiSelect = require('../cdap/components/AbstractWidget/FormInputs/MultiSelect')
-  .default;
-const JoinTypeWidget = require('../cdap/components/AbstractWidget/JoinTypeWidget')
-  .default;
-const InputFieldDropdown = require('../cdap/components/AbstractWidget/InputFieldDropdown')
-  .default;
-const DatasetSelectorWidget = require('../cdap/components/AbstractWidget/DatasetSelectorWidget')
-  .default;
-const SqlConditionsWidget = require('../cdap/components/AbstractWidget/SqlConditionsWidget')
-  .default;
-const SqlSelectorWidget = require('../cdap/components/AbstractWidget/SqlSelectorWidget')
-  .default;
-const KeyValueEncodedWidget = require('../cdap/components/AbstractWidget/KeyValueWidget/KeyValueEncodedWidget')
-  .default;
-const SessionTokenStore = require('../cdap/services/SessionTokenStore');
-const ConfigurationGroup = require('../cdap/components/shared/ConfigurationGroup')
-  .default;
-const WidgetWrapper = require('../cdap/components/shared/ConfigurationGroup/WidgetWrapper')
+var SessionTokenStore = require('../cdap/services/SessionTokenStore');
+var ConfigurationGroup = require('../cdap/components/shared/ConfigurationGroup').default;
+var WidgetWrapper = require('../cdap/components/shared/ConfigurationGroup/WidgetWrapper')
   .WrappedWidgetWrapper;
-const ConfigurationGroupUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities');
-const DynamicFiltersUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities/DynamicPluginFilters');
-const LoadingSVG = require('../cdap/components/shared/LoadingSVG').default;
-const DateTimeWidget = require('../cdap/components/AbstractWidget/DateTimeWidget')
+var ConfigurationGroupUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities');
+var DynamicFiltersUtilities = require('../cdap/components/shared/ConfigurationGroup/utilities/DynamicPluginFilters');
+var LoadingSVG = require('../cdap/components/shared/LoadingSVG').default;
+var DateTimeWidget = require('../cdap/components/AbstractWidget/DateTimeWidget').default;
+var DateRangeWidget = require('../cdap/components/AbstractWidget/DateRangeWidget').default;
+var PipelineContextMenu = require('../cdap/components/PipelineContextMenu').default;
+var PluginContextMenu = require('../cdap/components/PluginContextMenu').default;
+var SelectionBox = require('../cdap/components/shared/SelectionBox').default;
+var Clipboard = require('../cdap/services/Clipboard');
+var Page404 = require('../cdap/components/404').default;
+var Page500 = require('../cdap/components/500').default;
+var Page403 = require('../cdap/components/AuthorizationErrorMessage').default;
+var WindowManager = require('../cdap/services/WindowManager').default;
+var { WINDOW_ON_FOCUS, WINDOW_ON_BLUR } = require('../cdap/services/WindowManager');
+var PREVIEW_STATUS = require('../cdap/services/PreviewStatus').PREVIEW_STATUS;
+var DownloadFile = require('../cdap/services/download-file').default;
+var PreviewUtilities = require('../cdap/components/PreviewData/utilities');
+var PreviewDataView = require('../cdap/components/PreviewData').default;
+var PreviewLogs = require('../cdap/components/PreviewLogs').default;
+var SchemaEditor = require('../cdap/components/AbstractWidget/SchemaEditor').SchemaEditor;
+var PluginSchemaEditor = require('../cdap/components/PluginSchemaEditor').PluginSchemaEditor;
+var ALERT_STATUS = require('../cdap/services/AlertStatus').ALERT_STATUS;
+var Comment = require('../cdap/components/AbstractWidget/Comment').default;
+var PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
   .default;
-const DateRangeWidget = require('../cdap/components/AbstractWidget/DateRangeWidget')
-  .default;
-const PipelineContextMenu = require('../cdap/components/PipelineContextMenu')
-  .default;
-const PluginContextMenu = require('../cdap/components/PluginContextMenu')
-  .default;
-const SelectionBox = require('../cdap/components/shared/SelectionBox').default;
-const Clipboard = require('../cdap/services/Clipboard');
-const Page404 = require('../cdap/components/404').default;
-const Page500 = require('../cdap/components/500').default;
-const Page403 = require('../cdap/components/AuthorizationErrorMessage').default;
-const WindowManager = require('../cdap/services/WindowManager').default;
-const {
-  WINDOW_ON_FOCUS,
-  WINDOW_ON_BLUR,
-} = require('../cdap/services/WindowManager');
-const PREVIEW_STATUS = require('../cdap/services/PreviewStatus').PREVIEW_STATUS;
-const DownloadFile = require('../cdap/services/download-file').default;
-const PreviewUtilities = require('../cdap/components/PreviewData/utilities');
-const PreviewDataView = require('../cdap/components/PreviewData').default;
-const PreviewLogs = require('../cdap/components/PreviewLogs').default;
-const SchemaEditor = require('../cdap/components/AbstractWidget/SchemaEditor')
-  .SchemaEditor;
-const PluginSchemaEditor = require('../cdap/components/PluginSchemaEditor')
-  .PluginSchemaEditor;
-const ALERT_STATUS = require('../cdap/services/AlertStatus').ALERT_STATUS;
-const Comment = require('../cdap/components/AbstractWidget/Comment').default;
-const PipelineCommentsActionBtn = require('../cdap/components/PipelineCanvasActions/PipelineCommentsActionBtn')
-  .default;
-const Connections = require('../cdap/components/Connections').default;
-const LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/LeftPanel')
+var Connections = require('../cdap/components/Connections').default;
+var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/LeftPanel')
   .LeftPanel;
-const PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
+var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
-const TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel')
-  .TopPanel;
+var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
+var CanvasReact = require('../cdap/components/hydrator/components/Canvas').WrapperCanvas;
 
 export {
+  CanvasReact,
   TopPanelReact,
   PipelineCanvasActionBtns,
   LeftPanelReact,

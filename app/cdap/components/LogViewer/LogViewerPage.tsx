@@ -17,7 +17,7 @@
 import * as React from 'react';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import Heading, { HeadingTypes } from 'components/shared/Heading';
-import { match as RouterMatch } from 'react-router';
+import { match as RouterMatch } from 'react-router-dom';
 import { MyProgramApi } from 'api/program';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { humanReadableDate } from 'services/helpers';

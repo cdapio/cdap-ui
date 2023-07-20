@@ -107,6 +107,7 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
             // This is needed here when Authorization fails for all namespaces.
             // In this case navigating to Admin section doesn't have restriction (yet).
             onClick={() => {
+              console.log('app toolbar on click')
               this.eventEmitter.emit(globalEvents.PAGE_LEVEL_ERROR, {
                 reset: true,
               });

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Cask Data, Inc.
+ * Copyright © 2017-2023 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,7 +30,7 @@ $button-width: $height-of-image;
 
     .buttons-container {
       position: absolute;
-      bottom: 8px;
+      bottom: 2.5px;
 
       .btn {
         width: $button-width;

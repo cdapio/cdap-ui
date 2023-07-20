@@ -18,6 +18,7 @@
 import { ping } from 'server/config/router-check';
 import { extractUISettings } from 'server/config/parser';
 import q from 'q';
+import crypto from 'crypto';
 import {
   constructUrl,
   isVerifiedMarketHost,
@@ -25,7 +26,7 @@ import {
   REQUEST_ORIGIN_MARKET,
 } from 'server/url-helper';
 import url from 'url';
-import csp from 'helmet-csp';
+import helmet from 'helmet';
 import proxy from 'express-http-proxy';
 import path from 'path';
 import express from 'express';
@@ -38,13 +39,9 @@ import uuidV4 from 'uuid/v4';
 import bodyParser from 'body-parser';
 import ejs from 'ejs';
 import fs from 'fs';
-import hsts from 'hsts';
 import * as uiThemeWrapper from 'server/uiThemeWrapper';
-import frameguard from 'frameguard';
 import * as sessionToken from 'server/token';
 import log4js from 'log4js';
-
-/* global process, __dirname */
 
 const DLL_PATH = path.normalize(__dirname + '/../public/dll'),
   DIST_PATH = path.normalize(__dirname + '/../public/dist'),
@@ -73,22 +70,32 @@ const removeBCookie = (req, res, cookieSettings) => {
   // This cookie is no longer needed and should be deleted.
   if (req.cookies.bcookie) {
     const date = new Date(0); // Expire in the past to delete
-    res.cookie('bcookie', '', { ...cookieSettings, expires: date } );
+    res.cookie('bcookie', '', { ...cookieSettings, expires: date });
   }
-}
+};
 
 export const stripAuthHeadersInProxyMode = (cdapConfig, res) => {
-  if (cdapConfig['security.authentication.mode'] === 'PROXY' && typeof res.headers === 'object') {
+  if (
+    cdapConfig['security.authentication.mode'] === 'PROXY' &&
+    typeof res.headers === 'object'
+  ) {
     delete res.headers.Authorization;
-    delete res.headers[cdapConfig['security.authentication.proxy.user.identity.header']];
+    delete res.headers[
+      cdapConfig['security.authentication.proxy.user.identity.header']
+    ];
   }
   return res;
 };
 
 function makeApp(authAddress, cdapConfig, uiSettings) {
-  var app = express();
+  const app = express();
+  const serverNonce = crypto.randomUUID();
   const isSecure = cdapConfig['ssl.external.enabled'] === 'true';
-  const cookieSettings = { secure: isSecure, httpOnly: true, sameSite: 'strict' };
+  const cookieSettings = {
+    secure: isSecure,
+    httpOnly: true,
+    sameSite: 'strict',
+  };
 
   /**
    * Express template setup
@@ -133,12 +140,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(
-    hsts({
-      maxAge: 60 * 60 * 24 * 365, // one year in seconds
-    })
-  );
-  app.use(frameguard({ action: 'sameorigin' }));
 
   if (!isModeDevelopment()) {
     const proxyBaseUrl = cdapConfig['dashboard.proxy.base.url'];
@@ -148,7 +149,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     }
     cspWhiteListUrls = cspWhiteListUrls
       .concat(getMarketUrls(cdapConfig))
-      .map((urlString) => url.parse(urlString))
+      .map((urlString) => url.URL(urlString))
       .map((marketUrl) => `${marketUrl.protocol}//${marketUrl.host}`)
       .join(' ');
 
@@ -159,21 +160,60 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       res.locals.nonce = uuidV4();
       next();
     });
+    // Set security headers, including CSP, HSTS, X-Frame-Options, X-Content-Type-Options,
+    // Referrer-Policy, etc.
     app.use(
-      csp({
-        directives: {
-          imgSrc: [`'self' data: ${cspWhiteListUrls}`],
-          scriptSrc: [
-            (req, res) => `'nonce-${res.locals.nonce}'`,
-            `'unsafe-inline'`,
-            `'unsafe-eval'`,
-            `'strict-dynamic' https: http:`,
-          ],
-          baseUri: [`'self'`],
-          objectSrc: [`'none'`],
-          workerSrc: [`'self' blob:`],
-          reportUri: `https://csp.withgoogle.com/csp/cdap/6.0`,
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            imgSrc: [
+              `'self' data: ${cspWhiteListUrls}`,
+              'www.googletagmanager.com',
+              'https://www.gstatic.com',
+              'https://ssl.gstatic.com',
+              'https://www.google-analytics.com',
+            ],
+            connectSrc: [
+              "'self'",
+              'https://www.google-analytics.com',
+              'https://ampcid.google.com',
+            ],
+            fontSrc: [
+              "'self'",
+              "'unsafe-inline'",
+              'https://fonts.gstatic.com',
+              'data:',
+            ],
+            scriptSrc: [
+              (req, res) => `'nonce-${res.locals.nonce}'`,
+              "'unsafe-inline'",
+              `nonce-${serverNonce}`,
+              "'unsafe-eval'",
+              "'strict-dynamic' https: http:",
+              'https://tagmanager.google.com',
+              'https://www.googletagmanager.com',
+              'https://ssl.google-analytics.com',
+              'https://www.google-analytics.com',
+            ],
+            baseUri: ["'self'"],
+            styleSrc: [
+              "'self'",
+              "'unsafe-inline'",
+              'https://tagmanager.google.com',
+              'https://fonts.googleapis.com',
+            ],
+            objectSrc: ["'none'"],
+            workerSrc: ["'self' blob:"],
+            reportUri: 'https://csp.withgoogle.com/csp/cdap',
+          },
         },
+        hsts: {
+          includeSubDomains: true,
+          preload: true,
+        },
+        // Hub icons are cross-origin but don't supply CORS headers
+        // TODO credentialless will also work but isn't supported by FF and Safari
+        crossOriginEmbedderPolicy: false,
       })
     );
   }
@@ -181,7 +221,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   /**
    * Adding default 500 error handler
    */
-  app.use(function(err, req, res, next) {
+  app.use((err, req, res, next) => {
     log.error(err);
     res.status(500).send(err);
     next(err);
@@ -189,39 +229,32 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   app.get('/analytics.js', (req, res) => {
     /**
-     * Add Google analytics tag if ui.analyticsTag is present in the config
+     * Add Google analytics tag manager if ui.GTM is present in the config
      */
-    const aTag = cdapConfig['ui.analyticsTag'];
-    if (aTag) {
+    const GTM = cdapConfig['ui.GTM'];
+    if (GTM) {
       res.header({
         'Content-Type': 'text/javascript',
         'Cache-Control': 'no-store, must-revalidate',
       });
-      res.send(
-        `
-        let gaScript1 = document.createElement('script');
-        gaScript1.setAttribute('async', 'true');
-        gaScript1.setAttribute('src', 'https://www.googletagmanager.com/gtag/js?id=${aTag}')
-        document.body.appendChild(gaScript1);
-        
-        let gaScript2 = document.createElement('script');
-        gaScript2.setAttribute('type', 'text/javascript');
-        gaScript2.innerHTML = "window.dataLayer = window.dataLayer || [];function gtag(){window.dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${aTag}');"
-        document.body.appendChild(gaScript2);
-        `
-      );
+      res.send(`
+        let gaHeaderScript = document.createElement('script');
+        gaHeaderScript.setAttribute('nonce', '${serverNonce}');
+        gaHeaderScript.setAttribute('type', 'text/javascript');
+        gaHeaderScript.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;var n=d.querySelector('[nonce]');n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM}');"
+        document.head.appendChild(gaHeaderScript);
+      `);
     } else {
       res.sendStatus(404);
     }
   });
 
   // serve the config file
-  app.get('/config.js', function(req, res) {
+  app.get('/config.js', (req, res) => {
     uiSettings.ui.externalLinks = cdapConfig.externalLinks;
-    var data = JSON.stringify({
+    const data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
 
-      authorization: req.headers.authorization,
       cdap: {
         standaloneWebsiteSDKDownload:
           uiSettings['standalone.website.sdk.download'] === 'true' || false,
@@ -230,13 +263,19 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         proxyBaseUrl: cdapConfig['dashboard.proxy.base.url'],
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
         ui: uiSettings['ui'],
+        k8sWorkloadIdentityEnabled:
+          cdapConfig['master.environment.k8s.workload.identity.enabled'],
+        namespaceCreationHookEnabled:
+          cdapConfig['namespaces.creation.hook.enabled'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
-        defaultCheckpointDir: cdapConfig['data.streams.default.checkpoint.directory'] || false,
+        defaultCheckpointDir:
+          cdapConfig['data.streams.default.checkpoint.directory'] || false,
       },
       delta: {
-        defaultCheckpointDir: cdapConfig['delta.default.checkpoint.directory'] || false,
+        defaultCheckpointDir:
+          cdapConfig['delta.default.checkpoint.directory'] || false,
       },
       marketUrls: getMarketUrls(cdapConfig),
       securityEnabled: authAddress.enabled,
@@ -247,7 +286,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       instanceMetadataId: cdapConfig['instance.metadata.id'],
       sslEnabled: isSecure,
       featureFlags: cdapConfig.featureFlags,
-      analyticsTag: cdapConfig.analyticsTag,
+      analyticsTag: cdapConfig['ui.analyticsTag'],
+      googleTagManager: cdapConfig['ui.GTM'],
     });
 
     res.header({
@@ -257,11 +297,11 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     res.send('window.CDAP_CONFIG = ' + data + ';');
   });
 
-  app.get('/ui-config.js', function(req, res) {
+  app.get('/ui-config.js', (req, res) => {
     // var path = __dirname + '/config/cdap-ui-config.json';
-    var path = CONFIG_PATH + '/cdap-ui-config.json';
+    const path = CONFIG_PATH + '/cdap-ui-config.json';
 
-    var fileConfig = {};
+    let fileConfig = {};
 
     fileConfig = fs.readFileSync(path, 'utf8');
     res.header({
@@ -271,7 +311,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     res.send('window.CDAP_UI_CONFIG = ' + fileConfig + ';');
   });
 
-  app.get('/ui-theme.js', function(req, res) {
+  app.get('/ui-theme.js', (req, res) => {
     res.header({
       'Content-Type': 'text/javascript',
       'Cache-Control': 'no-store, must-revalidate',
@@ -289,16 +329,21 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    *    target: CDAP API
    *    targetMethod: HTTP method for the CDAP API (default to POST)
    **/
-  app.get('/forwardMarketToCdap', function(req, res) {
-    var sourceLink = req.query.source,
-      targetLink = req.query.target,
-      sourceMethod = req.query.sourceMethod || 'GET',
+  app.get('/forwardMarketToCdap', (req, res) => {
+    let sourceLink = req.query.source,
+      targetLink = req.query.target;
+    const sourceMethod = req.query.sourceMethod || 'GET',
       targetMethod = req.query.targetMethod || 'POST';
-    let authToken = req.headers.authorization;
+    const authToken = req.headers.authorization;
     if (
       !req.headers['session-token'] ||
       (req.headers['session-token'] &&
-        !sessionToken.validateToken(req.headers['session-token'], cdapConfig, log, authToken))
+        !sessionToken.validateToken(
+          req.headers['session-token'],
+          cdapConfig,
+          log,
+          authToken
+        ))
     ) {
       return res.status(500).send('Unable to validate session');
     }
@@ -307,7 +352,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     }
     sourceLink = constructUrl(cdapConfig, sourceLink, REQUEST_ORIGIN_MARKET);
     targetLink = constructUrl(cdapConfig, targetLink);
-    var forwardRequestObject = {
+    const forwardRequestObject = {
       url: targetLink,
       method: targetMethod,
       headers: req.headers,
@@ -317,16 +362,19 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       url: sourceLink,
       method: sourceMethod,
     })
-      .on('error', function(e) {
+      .on('error', (e) => {
         log.error('Error', e);
       })
       .pipe(request(forwardRequestObject))
-      .on('response', function(resFromBackend) {
-        var strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, resFromBackend);
-        var newHeaders = strippedResponse.headers;
+      .on('response', (resFromBackend) => {
+        const strippedResponse = stripAuthHeadersInProxyMode(
+          cdapConfig,
+          resFromBackend
+        );
+        const newHeaders = strippedResponse.headers;
         res.set(newHeaders);
       })
-      .on('error', function(e) {
+      .on('error', (e) => {
         log.error('Error', e);
       })
       .pipe(res);
@@ -339,10 +387,12 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * Query parameters:
    *   source: Link to the market resource to retrieve
    */
-  app.get('/market', function(req, res) {
+  app.get('/market', (req, res) => {
     const sourceLink = req.query['source'];
 
-    log.debug('[REQUEST]: (method: ' + req.method + ', url: ' + sourceLink + ')');
+    log.debug(
+      '[REQUEST]: (method: ' + req.method + ', url: ' + sourceLink + ')'
+    );
 
     // early out if market place url is invalid. The server won't attempt to request the specified url.
     if (!isVerifiedMarketHost(cdapConfig, sourceLink)) {
@@ -357,28 +407,39 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         url: sourceLink,
         agent: false,
       },
-      function(err, marketResponse) {
+      (err, marketResponse) => {
         if (err) {
           log.error(
-            '[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err
+            '[ERROR] Market request to url: ' +
+              sourceLink +
+              ' responded with error: ' +
+              err
           );
-          res.status((marketResponse && marketResponse.statusCode) || 502).send(err);
+          res.status(marketResponse?.statusCode || 502).send(err);
         } else {
           res.status(marketResponse.statusCode).send(marketResponse.body);
         }
       }
-    ).on('error', function(err) {
-      log.error('[ERROR] Market request had error: (url: ' + sourceLink + ') ' + err.message);
+    ).on('error', (err) => {
+      log.error(
+        '[ERROR] Market request had error: (url: ' +
+          sourceLink +
+          ') ' +
+          err.message
+      );
       res.status(502).send(err.message);
     });
   });
 
-  app.get('/downloadLogs', function(req, res) {
-    var url = constructUrl(cdapConfig, decodeURIComponent(req.query.backendPath));
-    var method = req.query.method || 'GET';
+  app.get('/downloadLogs', (req, res) => {
+    const url = constructUrl(
+      cdapConfig,
+      decodeURIComponent(req.query.backendPath)
+    );
+    const method = req.query.method || 'GET';
     log.info('Download Logs Start: ', url);
-    var customHeaders;
-    var requestObject = {
+    let customHeaders;
+    const requestObject = {
       method: method,
       url: url,
       rejectUnauthorized: false,
@@ -386,7 +447,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       agent: false,
     };
 
-    if (req.cookies && req.cookies['CDAP_Auth_Token']) {
+    if (req.cookies?.['CDAP_Auth_Token']) {
       customHeaders = {
         authorization: 'Bearer ' + req.cookies['CDAP_Auth_Token'],
       };
@@ -397,7 +458,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         authorization: req.headers.authorization,
       };
       if (cdapConfig['security.authentication.mode'] === 'PROXY') {
-        const userIdProperty = cdapConfig['security.authentication.proxy.user.identity.header'];
+        const userIdProperty =
+          cdapConfig['security.authentication.proxy.user.identity.header'];
         customHeaders[userIdProperty] = req.headers[userIdProperty];
       }
     }
@@ -406,27 +468,28 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       requestObject.headers = customHeaders;
     }
 
-    var type = req.query.type;
-    var responseHeaders = {
+    const type = req.query.type;
+    let responseHeaders = {
       'Cache-Control': 'no-cache, no-store',
     };
 
     try {
       request(requestObject)
-        .on('error', function(e) {
+        .on('error', (e) => {
           log.error('Error request logs: ', e);
         })
-        .on('response', function(response) {
+        .on('response', (response) => {
           // This happens when use tries to access the link directly when
           // no autorization token present
           if (response.statusCode === 200) {
             if (type === 'download') {
-              var filename = req.query.filename;
-              responseHeaders['Content-Disposition'] = 'attachment; filename=' + filename;
+              const filename = req.query.filename;
+              responseHeaders['Content-Disposition'] =
+                'attachment; filename=' + filename;
             } else {
               responseHeaders['Content-Type'] = 'text/plain';
             }
-            let strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, {
+            const strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, {
               headers: responseHeaders,
             });
             responseHeaders = strippedResponse.headers;
@@ -434,7 +497,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
           }
         })
         .pipe(res)
-        .on('error', function(e) {
+        .on('error', (e) => {
           log.error('Error downloading logs: ', e);
         });
     } catch (e) {
@@ -457,21 +520,28 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     Handle POST requests made outside of the websockets from front-end.
     For now it handles file upload POST /namespaces/:namespace/apps API
   */
-  app.post('/namespaces/:namespace/:path(*)', function(req, res) {
-    var headers = {};
+  app.post('/namespaces/:namespace/:path(*)', (req, res) => {
+    let headers = {};
     if (req.headers) {
       headers = req.headers;
     }
-    let authToken = req.headers.authorization;
+    const authToken = req.headers.authorization;
     if (
       !req.headers['session-token'] ||
       (req.headers['session-token'] &&
-        !sessionToken.validateToken(req.headers['session-token'], cdapConfig, log, authToken))
+        !sessionToken.validateToken(
+          req.headers['session-token'],
+          cdapConfig,
+          log,
+          authToken
+        ))
     ) {
       return res.status(500).send('Unable to validate session');
     }
-    const constructedPath = `/v3/namespaces/${req.param('namespace')}/${req.param('path')}`;
-    var opts = {
+    const constructedPath = `/v3/namespaces/${req.param(
+      'namespace'
+    )}/${req.param('path')}`;
+    const opts = {
       method: 'POST',
       url: constructUrl(cdapConfig, constructedPath),
       headers: {
@@ -480,20 +550,23 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     };
 
     req
-      .on('error', function(e) {
+      .on('error', (e) => {
         log.error(e);
       })
       .pipe(request.post(opts))
-      .on('response', function(newRes) {
-        var strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, newRes);
-        var newHeaders = strippedResponse.headers;
+      .on('response', (newRes) => {
+        const strippedResponse = stripAuthHeadersInProxyMode(
+          cdapConfig,
+          newRes
+        );
+        const newHeaders = strippedResponse.headers;
         res.set(newHeaders);
       })
-      .on('error', function(e) {
+      .on('error', (e) => {
         log.error(e);
       })
       .pipe(res)
-      .on('error', function(e) {
+      .on('error', (e) => {
         log.error(e);
       });
   });
@@ -538,16 +611,16 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   ]);
 
   function authentication(req, res) {
-    var opts = {
+    const opts = {
       auth: {
         user: req.body.username,
         password: req.body.password,
       },
       url: authAddress.get(),
     };
-    request(opts, function(nerr, nres, nbody) {
+    request(opts, (nerr, nres, nbody) => {
       if (nerr || nres.statusCode !== 200) {
-        var statusCode = (nres ? nres.statusCode : 500) || 500;
+        const statusCode = (nres ? nres.statusCode : 500) || 500;
         res.status(statusCode).send(nbody);
       } else {
         const jsonBody = JSON.parse(nbody);
@@ -558,7 +631,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   }
 
   // CDAP-678, CDAP-8260 This is added for health check on node proxy.
-  app.get('/status', function(req, res) {
+  app.get('/status', (req, res) => {
     res.send(200, 'OK');
   });
 
@@ -572,8 +645,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     },
   ]);
 
-  app.get('/sessionToken', function(req, res) {
-    let authToken = req.headers.authorization || '';
+  app.get('/sessionToken', (req, res) => {
+    const authToken = req.headers.authorization || '';
     const sToken = sessionToken.generateToken(cdapConfig, log, authToken);
     res.send(sToken);
   });
@@ -589,7 +662,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   app.get('/backendstatus', [
     function(req, res) {
-      var protocol, port;
+      let protocol, port;
       if (isSecure) {
         protocol = 'https://';
       } else {
@@ -602,15 +675,19 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         port = cdapConfig['router.server.port'];
       }
 
-      var link = [protocol, cdapConfig['router.server.address'], ':', port, '/v3/namespaces'].join(
-        ''
-      );
+      const link = [
+        protocol,
+        cdapConfig['router.server.address'],
+        ':',
+        port,
+        '/v3/namespaces',
+      ].join('');
 
       // FIXME: The reason for doing this is here: https://issues.cask.co/browse/CDAP-9059
       // TL;DR - The source of this issue is because of large browser urls
       // which gets added to headers while making /backendstatus http call.
       // That is the reason we are temporarily stripping out referer from the headers.
-      var headers = req.headers;
+      const headers = req.headers;
       delete headers.referer;
       request(
         {
@@ -621,15 +698,19 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
           agent: false,
           headers: headers,
         },
-        function(err, response) {
+        (err, response) => {
           if (err) {
-            log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
-            res.status((response && response.statusCode) || 502).send(err);
+            log.info(
+              'Server responded with error: ' +
+                err +
+                ' for API : "/v3/namespaces"'
+            );
+            res.status(response?.statusCode || 502).send(err);
           } else {
             res.status(response.statusCode).send('OK');
           }
         }
-      ).on('error', function(err) {
+      ).on('error', (err) => {
         // If an error hasn't already been sent, send it here
         if (!res.headersSent) {
           try {
@@ -651,18 +732,25 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * In the future if we alow the user to change the theme from UI this API could
    * be used and we need to persist this information somewhere.
    */
-  app.post('/updateTheme', function(req, res) {
-    let authToken = req.headers.authorization;
+  app.post('/updateTheme', (req, res) => {
+    const authToken = req.headers.authorization;
     if (
       !req.headers['session-token'] ||
       (req.headers['session-token'] &&
-        !sessionToken.validateToken(req.headers['session-token'], cdapConfig, log, authToken))
+        !sessionToken.validateToken(
+          req.headers['session-token'],
+          cdapConfig,
+          log,
+          authToken
+        ))
     ) {
       return res.status(500).send('Unable to validate session');
     }
     const uiThemePath = req.body.uiThemePath;
     if (!uiThemePath) {
-      return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
+      return res
+        .status(500)
+        .send('UnKnown theme file. Please make sure the path is valid');
     }
     try {
       uiThemeConfig = uiThemeWrapper.extractUITheme(cdapConfig, uiThemePath);

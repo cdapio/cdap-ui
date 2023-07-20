@@ -24,6 +24,7 @@ import {
   getPreferences,
   getDrivers,
   getConnections,
+  getAndSetSourceControlManagement,
 } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Provider } from 'react-redux';
 import Store from 'components/NamespaceAdmin/store';
@@ -33,6 +34,7 @@ import Tabs from 'components/NamespaceAdmin/Tabs';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
 import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const eventEmitter = ee(ee);
 
@@ -54,6 +56,7 @@ const NamespaceAdmin: React.FC = () => {
     getDrivers(namespace);
     getConnections(namespace);
     getProfiles(namespace);
+    getAndSetSourceControlManagement(namespace);
 
     eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
     eventEmitter.on(globalEvents.ARTIFACTUPLOAD, getDrivers);
@@ -73,7 +76,9 @@ const NamespaceAdmin: React.FC = () => {
         <div className={classes.content}>
           <Description />
           <Metrics />
-          <Tabs />
+          <FeatureProvider>
+            <Tabs />
+          </FeatureProvider>
         </div>
       </div>
     </Provider>
