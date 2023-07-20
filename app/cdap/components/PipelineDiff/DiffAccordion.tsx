@@ -14,61 +14,73 @@
  * the License.
  */
 
-import React, { MouseEventHandler, PropsWithChildren, useState } from 'react';
-
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import React, { PropsWithChildren } from 'react';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
 
-const DiffAccordionTitleBarRoot = styled.div`
+const AccordionRoot = styled(Accordion)`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  margin: 0;
+  min-height: 0;
   width: 100%;
-  background: lightgray;
-  height: 40px;
-  padding: 0 30px;
+
+  &.Mui-expanded {
+    flex: 1;
+    margin: 0;
+  }
+  .MuiAccordionSummary-content,
+  .MuiAccordionSummary-content.Mui-expanded {
+    margin: 5px 0;
+  }
+  & > .MuiCollapse-root.MuiCollapse-entered {
+    flex: 1;
+    .MuiCollapse-wrapper,
+    .MuiCollapse-wrapperInner,
+    .MuiCollapse-wrapperInner > div {
+      height: 100%;
+    }
+  }
+  .MuiAccordionSummary-expandIcon {
+    padding: 0 10px;
+  }
 `;
-
-interface IDiffAccordionTitleBar {
-  isOpen: boolean;
-  title: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-}
-
-const DiffAccordionTitleBar = ({ isOpen, title, onClick }: IDiffAccordionTitleBar) => {
-  return (
-    <DiffAccordionTitleBarRoot>
-      <div style={{ flexGrow: 1 }}>{title}</div>
-      <IconButton onClick={onClick}>
-        {isOpen ? <VisibilityIcon /> : <VisibilityOffIcon />}
-      </IconButton>
-    </DiffAccordionTitleBarRoot>
-  );
-};
-
-const DiffAccordionContent = styled.div`
-  width: 100%;
-  height: 0px;
-  flex-grow: ${(props) => (props.isOpen ? 1 : 0)};
+const AccordionSummaryRoot = styled(AccordionSummary)`
+  &&& {
+    background-color: ${blue[50]};
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    min-height: 0;
+    width: 100%;
+  }
+`;
+const AccordionDetailsRoot = styled(AccordionDetails)`
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  padding: 0;
 `;
 
 interface IDiffAccordion {
-  defaultOpen: boolean;
+  defaultExpanded: boolean;
   title: string;
 }
 
-// TODO: CDAP-20715: Use MUI Accordion rather than custom component
 export const DiffAccordion = ({
-  defaultOpen,
+  defaultExpanded,
   children,
   title,
 }: PropsWithChildren<IDiffAccordion>) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <>
-      <DiffAccordionTitleBar title={title} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-      <DiffAccordionContent isOpen={isOpen}>{children}</DiffAccordionContent>
-    </>
+    <AccordionRoot defaultExpanded={defaultExpanded}>
+      <AccordionSummaryRoot expandIcon={<ExpandMoreIcon />}>
+        <Typography>{title}</Typography>
+      </AccordionSummaryRoot>
+      <AccordionDetailsRoot>{children}</AccordionDetailsRoot>
+    </AccordionRoot>
   );
 };
