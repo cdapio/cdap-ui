@@ -23,9 +23,9 @@ import { RootState } from './store';
 import { DiffInfo } from './DiffInfo';
 
 const DiffWindowRoot = styled.div`
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   height: 100%;
 `;
 
@@ -53,7 +53,7 @@ export const DiffWindow = () => {
   return (
     <DiffWindowRoot>
       {/* TODO: i18n */}
-      <DiffAccordion title={'Old Version'} defaultOpen={true}>
+      <DiffAccordion title={'Old Version'} defaultExpanded={true}>
         {!isLoading && !error && (
           <DiffCanvasWrapper
             config={topPipelineConfig}
@@ -65,7 +65,7 @@ export const DiffWindow = () => {
       </DiffAccordion>
 
       {/* TODO: i18n */}
-      <DiffAccordion title={'Current Version'} defaultOpen={true}>
+      <DiffAccordion title={'Current Version'} defaultExpanded={true}>
         {!isLoading && !error && (
           <DiffCanvasWrapper
             config={bottomPipelineConfig}
@@ -77,7 +77,7 @@ export const DiffWindow = () => {
       </DiffAccordion>
 
       {/* TODO: i18n */}
-      <DiffAccordion title={'Diff'} defaultOpen={false}>
+      <DiffAccordion title={'Diff'} defaultExpanded={false}>
         {!isLoading && !error && (
           <DiffInfo
             diffMap={diffMap}
