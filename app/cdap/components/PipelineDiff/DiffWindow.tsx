@@ -20,14 +20,13 @@ import { DiffAccordion } from './DiffAccordion';
 import { DiffCanvasWrapper } from './DiffCanvas';
 import { useAppSelector } from './store/hooks';
 import { RootState } from './store';
-import { grey } from '@material-ui/core/colors';
+import { DiffInfo } from './DiffInfo';
 
 const DiffWindowRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: ${grey[100]};
 `;
 
 export const DiffWindow = () => {
@@ -38,6 +37,7 @@ export const DiffWindow = () => {
     availablePluginsMap,
     isLoading,
     error,
+    openDiffItem,
   } = useAppSelector((state: RootState) => {
     return {
       topPipelineConfig: state.pipelineDiff.topPipelineConfig,
@@ -46,6 +46,7 @@ export const DiffWindow = () => {
       availablePluginsMap: state.pipelineDiff.availablePluginsMap,
       isLoading: state.pipelineDiff.isLoading,
       error: state.pipelineDiff.error,
+      openDiffItem: state.pipelineDiff.openDiffItem,
     };
   });
 
@@ -77,7 +78,13 @@ export const DiffWindow = () => {
 
       {/* TODO: i18n */}
       <DiffAccordion title={'Diff'} defaultOpen={false}>
-        {/* TODO DIFF TABLE */}
+        {!isLoading && !error && (
+          <DiffInfo
+            diffMap={diffMap}
+            openDiffItem={openDiffItem}
+            availablePluginsMap={availablePluginsMap}
+          />
+        )}
       </DiffAccordion>
     </DiffWindowRoot>
   );

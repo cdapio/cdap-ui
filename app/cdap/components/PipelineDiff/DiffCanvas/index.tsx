@@ -51,7 +51,6 @@ const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
       nodesConnectable={false}
       nodesDraggable={false}
       minZoom={-5}
-      elementsSelectable={false}
       nodeTypes={nodeTypes}
       fitView
     >

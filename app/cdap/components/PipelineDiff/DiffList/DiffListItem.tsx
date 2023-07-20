@@ -52,21 +52,24 @@ const ListItemIcon = styled(MuiListItemIcon)`
   margin-left: 5px;
   margin-right: 5px;
 `;
+
 interface IPluginDiffListItemProps {
   nodeName: string;
   customIconSrc?: string;
   iconName: string;
   diffType: DiffIndicator;
   diffKey: string;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 export const PluginDiffListItem = ({
   nodeName,
   customIconSrc,
   iconName,
   diffType,
+  onClick,
 }: IPluginDiffListItemProps) => {
   return (
-    <ListItem button>
+    <ListItem button onClick={onClick}>
       <ListItemIcon>
         {customIconSrc ? (
           <CustomIconImgContainer>
@@ -93,6 +96,7 @@ interface IConnectionDiffListItemProps {
   toIconName: string;
   diffType: DiffIndicator;
   diffKey: string;
+  onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 export const ConnectionDiffListItem = ({
   fromNodeName,
@@ -102,9 +106,10 @@ export const ConnectionDiffListItem = ({
   toCustomIconSrc,
   toIconName,
   diffType,
+  onClick,
 }: IConnectionDiffListItemProps) => {
   return (
-    <ListItem button>
+    <ListItem button onClick={onClick}>
       <ListItemIcon>
         {fromCustomIconSrc ? (
           <CustomIconImgContainer>

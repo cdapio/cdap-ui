@@ -38,6 +38,7 @@ interface IDiffState {
   bottomPipelineConfig: IPipelineConfig | null;
 
   diffMap: IPipelineDiffMap;
+  openDiffItem: string | null;
 
   availablePluginsMap: AvailablePluginsMap;
 }
@@ -53,6 +54,8 @@ const initialState: IDiffState = {
     stages: {},
     connections: {},
   },
+  openDiffItem: null,
+
   availablePluginsMap: {},
 };
 
@@ -84,6 +87,12 @@ const diffSlice = createSlice({
     fetchPipelinesRejected(state, action) {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    showDiffDetails(state, action: PayloadAction<string | null>) {
+      state.openDiffItem = action.payload;
+    },
+    modalClosed(state) {
+      state.openDiffItem = null;
     },
   },
 });

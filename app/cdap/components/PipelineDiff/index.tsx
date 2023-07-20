@@ -30,25 +30,29 @@ import { delay, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { Observable } from 'rxjs/Observable';
 
-const DiffContentContainerRoot = styled.div`
+const PipelineDiffModalContents = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
 `;
 
-interface IDiffContentContainerProps {
+interface IPipelineDiffModalProps {
   namespace: any;
   appId: any;
   version: any;
   latestVersion: any;
+  isOpen: boolean;
+  onClose: (event: React.MouseEvent<Document>) => void;
 }
 
-const DiffContentContainer = ({
+const PipelineDiffModal = ({
   namespace,
   appId,
   version,
   latestVersion,
-}: IDiffContentContainerProps) => {
+  isOpen,
+  onClose,
+}: IPipelineDiffModalProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -93,10 +97,23 @@ const DiffContentContainer = ({
   }, []);
 
   return (
-    <DiffContentContainerRoot>
-      <DiffList />
-      <DiffWindow />
-    </DiffContentContainerRoot>
+    <PipelineModeless
+      title="pipeline difference" // TODO: i18n
+      open={isOpen}
+      onClose={(event) => {
+        dispatch(actions.modalClosed());
+        onClose(event);
+      }}
+      placement="bottom-end"
+      fullScreen={true}
+      style={{ width: '100%', top: '100px', bottom: 0 }}
+      innerStyle={{ height: '100%' }}
+    >
+      <PipelineDiffModalContents>
+        <DiffList />
+        <DiffWindow />
+      </PipelineDiffModalContents>
+    </PipelineModeless>
   );
 };
 
@@ -119,17 +136,14 @@ export const PipelineDiff = ({
 }: IPipelineDiffProps) => {
   return (
     <Provider store={store}>
-      <PipelineModeless
-        title="pipeline difference" // TODO: i18n
-        open={isOpen}
+      <PipelineDiffModal
+        namespace={namespace}
+        appId={appId}
+        version={version}
+        latestVersion={latestVersion}
+        isOpen={isOpen}
         onClose={onClose}
-        placement="bottom-end"
-        fullScreen={true}
-        style={{ width: '100%', top: '100px', bottom: 0 }}
-        innerStyle={{ height: '100%' }}
-      >
-        <DiffContentContainer {...{ namespace, appId, version, latestVersion }} />
-      </PipelineModeless>
+      />
     </Provider>
   );
 };
