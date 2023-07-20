@@ -19,6 +19,10 @@
 // const $cookies = require('angular-cookies');
 // const ngResource = require('angular-resource');
 // import { UI_ROUTER_REACT_HYBRID } from '@uirouter/react-hybrid';
+// import '@bower_components/angular-bootstrap';
+// import 'angular';
+// import '@bower_components/bootstrap';
+// import '@bower_components/angular-bootstrap';
 
 import '../styles/common.less';
 import '../styles/themes/cdap/buttons.less';
@@ -69,7 +73,7 @@ import '../directives/widget-container/widget-js-editor/widget-js-editor.less';
 import '../directives/widget-container/widget-json-editor/widget-json-editor.less';
 import '../directives/widget-container/widget-keyvalue/widget-keyvalue.less';
 import '../directives/widget-container/widget-keyvalue-encoded/widget-keyvalue-encoded.less';
-import '../directives/widget-container/widget-multi-select-dropdown/widget-multi-select-dropdown.less';
+// import '../directives/widget-container/widget-multi-select-dropdown/widget-multi-select-dropdown.less';
 import '../directives/widget-container/widget-number/widget-number.less';
 import '../directives/widget-container/widget-password/widget-password.less';
 import '../directives/widget-container/widget-radio-group/widget-radio-group.less';
@@ -110,7 +114,7 @@ angular
 
       angular.module(PKG.name+'.services', [
         'ngAnimate',
-        'ngSanitize',
+        // 'ngSanitize',
         'ngResource',
         'ngStorage',
         // [
@@ -147,7 +151,6 @@ angular
       'ui.ace',
       'gridster',
       'angular-cron-jobs',
-      'angularjs-dropdown-multiselect',
       'hc.marked',
       'ngFileSaver',
       'infinite-scroll',

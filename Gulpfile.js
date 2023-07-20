@@ -274,6 +274,7 @@ function getBabelBuildPipeline() {
 gulp.task('css:library', () => {
   return merge(
     gulp.src([
+<<<<<<< HEAD
       './bower_components/angular/angular-csp.css',
       './bower_components/angular-loading-bar/build/loading-bar.min.css',
       './bower_components/angular-motion/dist/angular-motion.min.css',
@@ -283,6 +284,14 @@ gulp.task('css:library', () => {
       './bower_components/c3/c3.min.css',
       './bower_components/angular-gridster/dist/angular-gridster.min.css',
       './bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
+=======
+      './node_modules/@bower_components/angular/angular-csp.css',
+      './node_modules/@bower_components/angular-loading-bar/build/loading-bar.min.css',
+      './node_modules/@bower_components/angular-motion/dist/angular-motion.min.css',
+      './node_modules/font-awesome/css/font-awesome.min.css',
+      './node_modules/@bower_components/angular-gridster/dist/angular-gridster.min.css',
+      './node_modules/@bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
+>>>>>>> 89250f77a755119d64bf6b12d0a6ffe53963a272
     ]),
     gulp.src('./app/styles/bootstrap.less').pipe(plug.less())
   )
@@ -336,6 +345,7 @@ gulp.task('css:app', gulp.series('css:application', 'css:lint'));
 gulp.task('js:lib', () => {
   return gulp
     .src([
+<<<<<<< HEAD
       require.resolve('angular'),
       './bower_components/d3/d3.js',
       './bower_components/angular-strap/dist/modules/compiler.js',
@@ -356,14 +366,43 @@ gulp.task('js:lib', () => {
       './bower_components/angular-strap/dist/modules/typeahead.tpl.js',
       './bower_components/angular-strap/dist/modules/select.js',
       './bower_components/angular-strap/dist/modules/select.tpl.js',
+=======
+      './node_modules/@bower_components/angular/angular.js',
 
-      './bower_components/angular-strap/dist/modules/date-parser.js',
-      './bower_components/angular-strap/dist/modules/date-formatter.js',
-      './bower_components/angular-strap/dist/modules/datepicker.js',
-      './bower_components/angular-strap/dist/modules/datepicker.tpl.js',
-      './bower_components/angular-strap/dist/modules/timepicker.js',
-      './bower_components/angular-strap/dist/modules/timepicker.tpl.js',
+      './node_modules/@bower_components/angular-sanitize/angular-sanitize.js',
+      './node_modules/@bower_components/angular-animate/angular-animate.js',
+      './node_modules/@bower_components/angular-resource/angular-resource.js',
 
+      './node_modules/@bower_components/angular-ui-router/release/angular-ui-router.js',
+
+      './node_modules/@bower_components/angular-strap/dist/modules/compiler.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/dimensions.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/tooltip.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/tooltip.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/dropdown.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/dropdown.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/modal.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/modal.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/alert.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/alert.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/popover.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/popover.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/collapse.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/parse-options.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/typeahead.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/typeahead.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/select.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/select.tpl.js',
+>>>>>>> 89250f77a755119d64bf6b12d0a6ffe53963a272
+
+      './node_modules/@bower_components/angular-strap/dist/modules/date-parser.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/date-formatter.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/datepicker.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/datepicker.tpl.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/timepicker.js',
+      './node_modules/@bower_components/angular-strap/dist/modules/timepicker.tpl.js',
+
+<<<<<<< HEAD
       './bower_components/d3-timeline/src/d3-timeline.js',
       require.resolve('ngstorage'),
       // './bower_components/angular-animate/angular-animate.js',
@@ -401,6 +440,47 @@ gulp.task('js:lib', () => {
       require.resolve('ngreact'),
       require.resolve('svg4everybody'),
       // require.resolve('sockjs'),
+=======
+      './node_modules/@bower_components/angular-breadcrumb/release/angular-breadcrumb.js',
+
+      './node_modules/@bower_components/ngstorage/ngStorage.js',
+      './node_modules/@bower_components/angular-loading-bar/build/loading-bar.js',
+
+      './node_modules/@bower_components/d3/d3.js',
+      './node_modules/@bower_components/d3-timeline/src/d3-timeline.js',
+      './node_modules/@bower_components/lodash/lodash.js',
+      './node_modules/@bower_components/graphlib/dist/graphlib.core.js',
+      './node_modules/@bower_components/dagre/dist/dagre.core.js',
+      './node_modules/@bower_components/dagre-d3/dist/dagre-d3.core.js',
+      './node_modules/@bower_components/moment/moment.js',
+      './node_modules/@bower_components/angular-moment/angular-moment.js',
+      './node_modules/@bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+
+      './node_modules/@bower_components/node-uuid/uuid.js',
+
+      './node_modules/@bower_components/angular-cookies/angular-cookies.min.js',
+      './node_modules/redux/dist/redux.min.js',
+      './node_modules/redux-thunk/dist/redux-thunk.min.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/ace.js',
+      './node_modules/@bower_components/angular-ui-ace/ui-ace.js',
+      './node_modules/@bower_components/jsPlumb/dist/js/jsPlumb-2.0.6-min.js',
+      './node_modules/@bower_components/angular-gridster/dist/angular-gridster.min.js',
+      './node_modules/@bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js',
+      './node_modules/@bower_components/marked/marked.min.js',
+      './node_modules/@bower_components/angular-marked/dist/angular-marked.min.js',
+
+      './node_modules/@bower_components/js-beautify/js/lib/beautify.js',
+      './node_modules/@bower_components/angular-file-saver/dist/angular-file-saver.bundle.js',
+      './node_modules/@bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
+      './node_modules/@bower_components/angular-inview/angular-inview.js',
+      './node_modules/@bower_components/esprima/esprima.js',
+      './node_modules/react/umd/react.production.min.js',
+      './node_modules/react-dom/umd/react-dom.production.min.js',
+      './node_modules/ngreact/ngReact.min.js',
+
+      './node_modules/svg4everybody/dist/svg4everybody.min.js',
+      './node_modules/sockjs-client/dist/sockjs.js',
+>>>>>>> 89250f77a755119d64bf6b12d0a6ffe53963a272
     ])
     .pipe(plug.replace('glyphicon', 'fa'))
     .pipe(
@@ -414,8 +494,20 @@ gulp.task('js:aceworkers', (cb) => {
   gulp
     .src([
       /** FIXME: (CDAP-15419): Unify ace-builds dependency */
+<<<<<<< HEAD
 
       require.resolve('ace-builds'),
+=======
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/ace.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/mode-javascript.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/worker-javascript.js',
+      './node_modules/ace-builds/src-min-noconflict/mode-json.js',
+      './node_modules/ace-builds/src-min-noconflict/worker-json.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/mode-python.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/mode-sql.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/mode-scala.js',
+      './node_modules/@bower_components/ace-builds/src-min-noconflict/mode-plain_text.js',
+>>>>>>> 89250f77a755119d64bf6b12d0a6ffe53963a272
     ])
     .pipe(
       gulp.dest(
@@ -428,7 +520,10 @@ gulp.task('js:aceworkers', (cb) => {
 gulp.task('fonts', () => {
   return gulp
     .src([
+<<<<<<< HEAD
       './bower_components/bootstrap/dist/fonts/*',
+=======
+>>>>>>> 89250f77a755119d64bf6b12d0a6ffe53963a272
       './app/styles/fonts/*',
       require.resolve('@fortawesome/fontawesome-free'),
     ])

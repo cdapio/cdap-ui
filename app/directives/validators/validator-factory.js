@@ -14,7 +14,9 @@
  * the License.
  */
 
-function ValidatorFactory (esprima) {
+import esprima from 'esprima';
+
+function ValidatorFactory () {
   'ngInject';
 
   var AND = true,

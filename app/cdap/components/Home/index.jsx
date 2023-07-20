@@ -281,7 +281,10 @@ export default class Home extends Component {
             component={PluginJSONCreator}
           />
           <Route path="/ns/:namespace/metadata" component={Metadata} />
-          <Route path="/ns/:namespace/scm/sync" component={SourceControlManagementSyncView} />
+          <Route
+            path="/ns/:namespace/scm/sync"
+            component={SourceControlManagementSyncView}
+          />
           <Route component={Page404} />
         </Switch>
       </div>

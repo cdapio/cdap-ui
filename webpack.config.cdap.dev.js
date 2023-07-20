@@ -37,7 +37,6 @@ const cleanOptions = {
 
 const loaderExclude = [
   /node_modules/,
-  /bower_components/,
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,

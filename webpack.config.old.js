@@ -30,101 +30,78 @@ const Path = require('path');
 const FS = require('fs');
 
 const outdatedWayOfDoingThings = [
-  // require.resolve('angular'),
-  './bower_components/angular/angular.js',
+  require.resolve('angular'),
+  require.resolve('lodash'),
 
-  './bower_components/angular-sanitize/angular-sanitize.js',
-  './bower_components/angular-animate/angular-animate.js',
-  './bower_components/angular-resource/angular-resource.js',
-  // require.resolve('@uirouter/react-hybrid'),
+  // require.resolve('@bower_components/angular-sanitize/angular-sanitize.js'),
+  require.resolve('@bower_components/angular-animate/angular-animate.js'),
+  require.resolve('@bower_components/angular-resource/angular-resource.js'),
   require.resolve('angular-ui-router'),
-  // './bower_components/angular-ui-router/release/angular-ui-router.js',
 
-  './bower_components/angular-strap/dist/modules/compiler.js',
-  './bower_components/angular-strap/dist/modules/dimensions.js',
-  './bower_components/angular-strap/dist/modules/tooltip.js',
-  './bower_components/angular-strap/dist/modules/tooltip.tpl.js',
-  './bower_components/angular-strap/dist/modules/dropdown.js',
-  './bower_components/angular-strap/dist/modules/dropdown.tpl.js',
-  './bower_components/angular-strap/dist/modules/modal.js',
-  './bower_components/angular-strap/dist/modules/modal.tpl.js',
-  './bower_components/angular-strap/dist/modules/alert.js',
-  './bower_components/angular-strap/dist/modules/alert.tpl.js',
-  './bower_components/angular-strap/dist/modules/popover.js',
-  './bower_components/angular-strap/dist/modules/popover.tpl.js',
-  './bower_components/angular-strap/dist/modules/collapse.js',
-  './bower_components/angular-strap/dist/modules/parse-options.js',
-  './bower_components/angular-strap/dist/modules/typeahead.js',
-  './bower_components/angular-strap/dist/modules/typeahead.tpl.js',
-  './bower_components/angular-strap/dist/modules/select.js',
-  './bower_components/angular-strap/dist/modules/select.tpl.js',
+  require.resolve('@bower_components/angular-strap/dist/modules/compiler.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/dimensions.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/tooltip.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/tooltip.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/dropdown.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/dropdown.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/modal.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/modal.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/alert.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/alert.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/popover.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/popover.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/collapse.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/parse-options.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/typeahead.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/typeahead.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/select.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/select.tpl.js'),
 
-  './bower_components/angular-strap/dist/modules/date-parser.js',
-  './bower_components/angular-strap/dist/modules/date-formatter.js',
-  './bower_components/angular-strap/dist/modules/datepicker.js',
-  './bower_components/angular-strap/dist/modules/datepicker.tpl.js',
-  './bower_components/angular-strap/dist/modules/timepicker.js',
-  './bower_components/angular-strap/dist/modules/timepicker.tpl.js',
-  // require.resolve('angular-breadcrumb'),
-  './bower_components/angular-breadcrumb/release/angular-breadcrumb.js',
+  require.resolve('@bower_components/angular-strap/dist/modules/date-parser.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/date-formatter.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/datepicker.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/datepicker.tpl.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/timepicker.js'),
+  require.resolve('@bower_components/angular-strap/dist/modules/timepicker.tpl.js'),
+  require.resolve('@bower_components/angular-breadcrumb/release/angular-breadcrumb.js'),
   require.resolve('ngstorage'),
-  // './bower_components/ngstorage/ngStorage.js',
-  './bower_components/angular-loading-bar/build/loading-bar.js',
+  require.resolve('@bower_components/angular-loading-bar/build/loading-bar.js'),
   require.resolve('d3'),
-  // './bower_components/d3/d3.js',
-  // require.resolve('d3-timeline'),
   require.resolve('d3-time'),
 
-  // './bower_components/d3-timeline/src/d3-timeline.js',
-  './bower_components/lodash/lodash.js',
-  './bower_components/graphlib/dist/graphlib.core.js',
+  require.resolve('@bower_components/graphlib/dist/graphlib.core.js'),
   require.resolve('dagre'),
   require.resolve('dagre-d3'),
 
-  // './bower_components/dagre/dist/dagre.core.js',
-  // './bower_components/dagre-d3/dist/dagre-d3.core.js',
   require.resolve('moment'),
-  // './bower_components/moment/moment.js',
   require.resolve('angular-moment'),
-  // './bower_components/angular-moment/angular-moment.js',
-  './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+
   require.resolve('uuid'),
-  // './bower_components/node-uuid/uuid.js',
 
-  './bower_components/angular-cookies/angular-cookies.min.js',
+  require.resolve('@bower_components/angular-cookies/angular-cookies.min.js'),
   require.resolve('redux'),
-  // './node_modules/redux/dist/redux.min.js',
   require.resolve('redux-thunk'),
-  // './node_modules/redux-thunk/dist/redux-thunk.min.js',
-  './bower_components/ace-builds/src-min-noconflict/ace.js',
-  './bower_components/angular-ui-ace/ui-ace.js',
+  // this was the only way to get these working
+  require.resolve('./build-deps/angular-bootstrap/ui-bootstrap.min.js'),
+  require.resolve('./build-deps/angular-ui-ace/ui-ace.min.js'),
+  
   require.resolve('jsplumb'),
-  // './bower_components/jsPlumb/dist/js/jsPlumb-2.0.6-min.js',
-  './bower_components/angular-gridster/dist/angular-gridster.min.js',
-  './bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js',
-  './bower_components/angularjs-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js',
-  './bower_components/marked/marked.min.js',
-  './bower_components/angular-marked/dist/angular-marked.min.js',
+  require.resolve('@bower_components/angular-gridster/dist/angular-gridster.min.js'),
+  require.resolve('@bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.js'),
+  require.resolve('@bower_components/marked/marked.min.js'),
+  require.resolve('@bower_components/angular-marked/dist/angular-marked.min.js'),
 
-  './bower_components/js-beautify/js/lib/beautify.js',
-  './bower_components/angular-file-saver/dist/angular-file-saver.bundle.js',
-  './bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js',
-  './bower_components/angular-inview/angular-inview.js',
-  './bower_components/esprima/esprima.js',
+  require.resolve('@bower_components/angular-file-saver/dist/angular-file-saver.bundle.js'),
+  require.resolve('@bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js'),
+  require.resolve('@bower_components/angular-inview/angular-inview.js'),
   require.resolve('react'),
-  // './node_modules/react/umd/react.production.min.js',
   require.resolve('react-dom'),
-  // './node_modules/react-dom/umd/react-dom.production.min.js',
   require.resolve('ngreact'),
-  // './node_modules/ngreact/ngReact.min.js',
   require.resolve('svg4everybody'),
-  // './node_modules/svg4everybody/dist/svg4everybody.min.js',
   require.resolve('sockjs-client'),
-  // './node_modules/sockjs-client/dist/sockjs.js',
 ];
 
 const traverseDirectory = (directory, files, fileType) => {
-  // console.log(files, fileType);
   if (FS.statSync(directory).isFile() && directory.match(fileType)) {
     files.push(directory);
     return;
@@ -204,27 +181,11 @@ const returnPipelineFiles = () => {
   }); // for hydrator.js
 };
 
-// const styleFiles = () => {
-//   return [
-//     '/app/styles/common.less',
-//     '/app/styles/themes/*.less',
-//     '/app/directives/**/*.less',
-//     '/app/hydrator/**/*.less',
-//     '/bower_components/angular/angular-csp.css',
-//     '/bower_components/angular-loading-bar/build/loading-bar.min.css',
-//     '/bower_components/angular-motion/dist/angular-motion.min.css',
-//     '/bower_components/c3/c3.min.css',
-//     '/bower_components/angular-gridster/dist/angular-gridster.min.css',
-//     '/bower_components/angular-cron-jobs/dist/angular-cron-jobs.min.css',
-//     '/app/styles/bootstrap.less',
-//   ].map((item) => {
-//     return path.resolve(__dirname + item);
-//   });
-// };
+
 
 const loaderExclude = [
   /node_modules/,
-  /bower_components/,
+  /node_modules\/@bower_components/,
   /packaged\/public\/dist/,
   /packaged\/public\/cdap_dist/,
   /packaged\/public\/common_dist/,
@@ -235,7 +196,7 @@ const loaderExclude = [
 
 // const loaderExcludeStrings = [
 //   '/node_modules/',
-//   '/bower_components/',
+//   '/node_modules/@bower_components/',
 //   '/packaged/public/dist/',
 //   '/packaged/public/cdap_dist/',
 //   '/packaged/public/common_dist/',
@@ -245,6 +206,7 @@ const loaderExclude = [
 // ];
 
 const webpackConfig = {
+
   entry: [
     '@babel/polyfill',
     ...outdatedWayOfDoingThings,
@@ -443,6 +405,10 @@ const webpackConfig = {
     plugins: [PnpWebpackPlugin],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      // angular: require('angular'),
+      jQuery: require('jquery'),
+    }),
     new AngularTemplateCacheWebpackPlugin({
       // transformUrl: function(url) {
       //   console.log(url);

@@ -208,7 +208,7 @@ class HydratorPlusPlusConfigStore {
           _backendProperties: node._backendProperties,
         },
         information: node.information,
-        outputSchema: angular.isArray(node.outputSchema) ? node.outputSchema[0].schema : node.outputSchema,
+        outputSchema: node.outputSchema,
         inputSchema: node.inputSchema
       };
 

@@ -80,9 +80,7 @@ export const SourceControlManagement = () => {
         window.location.href = `/ns/${namespace}/scm/sync`;
       },
       (err) => {
-        setErrorMessage(
-          T.translate(`${PREFIX}.invalidConfig`, { error: err.message })
-        );
+        setErrorMessage(err.message);
         setLoading(false);
       },
       () => {

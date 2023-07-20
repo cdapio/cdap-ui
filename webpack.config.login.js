@@ -34,16 +34,6 @@ const cleanOptions = {
   dry: false,
 };
 
-const loaderExclude = [
-  /node_modules/,
-  /bower_components/,
-  /packaged\/public\/dist/,
-  /packaged\/public\/cdap_dist/,
-  /packaged\/public\/common_dist/,
-  /packaged/,
-  /lib/,
-];
-
 const loaderExcludeStrings = [
   '/node_modules/',
   '/bower_components/',
@@ -130,7 +120,15 @@ if (!isModeProduction(mode)) {
   );
 }
 
-const rules = [
+const loaderExclude = [
+  /node_modules/,
+  /packaged\/public\/dist/,
+  /packaged\/public\/cdap_dist/,
+  /packaged\/public\/common_dist/,
+  /lib/,
+];
+
+var rules = [
   {
     test: /\.(sa|sc|c)ss$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
