@@ -51,13 +51,13 @@ const StyledNavLink = styled(NavLink)({
   },
 });
 
-interface LinkTabProps {
+interface ILinkTabProps {
   label?: string;
   to?: string;
   value?: string;
 }
 
-function LinkTab(props: LinkTabProps) {
+function LinkTab(props: ILinkTabProps) {
   return <Tab component={StyledNavLink} exact {...props} />;
 }
 
