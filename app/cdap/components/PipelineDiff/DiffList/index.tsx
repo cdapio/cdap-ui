@@ -74,7 +74,7 @@ export const DiffList = () => {
               diffKey={stageKey}
               onClick={() => {
                 dispatch(actions.showDiffDetails(stageKey));
-                dispatch(actions.setFocus(stageKey));
+                dispatch(actions.startNavigateTo(stageKey));
               }}
               diffType={diffIndicator}
               key={stageKey}
@@ -110,7 +110,7 @@ export const DiffList = () => {
               toCustomIconSrc={toCustomIconSrc}
               toIconName={toIconName}
               diffKey={connectionKey}
-              onClick={() => dispatch(actions.setFocus(connectionKey))}
+              onClick={() => dispatch(actions.startNavigateTo(connectionKey))}
               diffType={diffMap.connections[connectionKey].diffIndicator}
               key={connectionKey}
             />

@@ -14,10 +14,24 @@
  * the License.
  */
 import React, { useEffect } from 'react';
-import { EdgeProps, BaseEdge, getSmoothStepPath, useReactFlow, useStoreApi } from 'reactflow';
+import { EdgeProps, BaseEdge, getSmoothStepPath, useReactFlow, useStoreApi, Node } from 'reactflow';
 import { DiffIndicator } from '../types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { actions } from '../store/diffSlice';
+
+function getConnectionBounds(fromNode: Node, toNode: Node) {
+  const x1 = Math.min(fromNode.position.x, toNode.position.x);
+  const y1 = Math.min(fromNode.position.y, toNode.position.y);
+
+  const x2 = Math.max(fromNode.position.x + fromNode.width, toNode.position.x + toNode.width);
+  const y2 = Math.max(fromNode.position.y + fromNode.height, toNode.position.y + toNode.height);
+  return {
+    x: x1,
+    y: y1,
+    width: x2 - x1,
+    height: y2 - y1,
+  };
+}
 
 export const PluginConnection = ({
   id,
@@ -53,19 +67,9 @@ export const PluginConnection = ({
 
   useEffect(() => {
     if (focusElement === id) {
-      const x1 = Math.min(fromNode.position.x, toNode.position.x);
-      const y1 = Math.min(fromNode.position.y, toNode.position.y);
-
-      const x2 = Math.max(fromNode.position.x + fromNode.width, toNode.position.x + toNode.width);
-      const y2 = Math.max(fromNode.position.y + fromNode.height, toNode.position.y + toNode.height);
-      const bounds = {
-        x: x1,
-        y: y1,
-        width: x2 - x1,
-        height: y2 - y1,
-      };
+      const bounds = getConnectionBounds(fromNode, toNode);
       fitBounds(bounds, { duration: 1000 });
-      dispatch(actions.focused());
+      dispatch(actions.endNavigate());
     }
   }, [fromNode, toNode, focusElement]);
 

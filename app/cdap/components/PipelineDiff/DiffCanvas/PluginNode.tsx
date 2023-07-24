@@ -153,7 +153,7 @@ export const DefaultPluginNode = ({
         },
         { duration: 1000 }
       );
-      dispatch(actions.focused());
+      dispatch(actions.endNavigate());
     }
   }, [node, focusElement]);
 
