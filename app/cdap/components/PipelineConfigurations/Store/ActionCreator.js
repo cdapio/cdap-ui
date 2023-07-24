@@ -132,7 +132,7 @@ const getMacrosResolvedByPrefs = (resolvedPrefs = {}, macrosMap = {}) => {
   return resolvedMacros;
 };
 
-const updatePreferences = (lifecycleManagementEditEnabled = false) => {
+const updatePreferences = () => {
   const { runtimeArgs } = PipelineConfigurationsStore.getState();
   let filteredRuntimeArgs = cloneDeep(runtimeArgs);
   filteredRuntimeArgs.pairs = filteredRuntimeArgs.pairs.filter(
@@ -140,9 +140,6 @@ const updatePreferences = (lifecycleManagementEditEnabled = false) => {
   );
   let appId = PipelineDetailStore.getState().name;
   let prefObj = convertKeyValuePairsObjToMap(runtimeArgs);
-  if (lifecycleManagementEditEnabled) {
-    prefObj = { ...prefObj, 'app.pipeline.overwriteConfig': 'true' };
-  }
 
   return MyPreferenceApi.setAppPreferences(
     {

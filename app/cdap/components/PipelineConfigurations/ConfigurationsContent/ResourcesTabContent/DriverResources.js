@@ -50,12 +50,15 @@ const mapDispatchToProps = (dispatch) => {
   );
   return {
     onVirtualCoresChange: (e) => {
-      dispatch({
-        type: PipelineConfigurationsActions.SET_DRIVER_VIRTUAL_CORES,
-        payload: { virtualCores: e.target.value },
-      });
+      const { runtimeArgs, pipelineVisualConfiguration } = PipelineConfigurationsStore.getState();
+      if (!pipelineVisualConfiguration.isDetailView) {
+        // in studio, we need to set state for correct deploy and export
+        dispatch({
+          type: PipelineConfigurationsActions.SET_DRIVER_VIRTUAL_CORES,
+          payload: { virtualCores: e.target.value },
+        });
+      }
       if (lifecycleManagementEditEnabled) {
-        const { runtimeArgs } = PipelineConfigurationsStore.getState();
         const newRunTimePairs = getUpdatedRuntimeArgsPair(
           runtimeArgs,
           GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_CORES,
@@ -68,12 +71,15 @@ const mapDispatchToProps = (dispatch) => {
       }
     },
     onMemoryMBChange: (e) => {
-      dispatch({
-        type: PipelineConfigurationsActions.SET_DRIVER_MEMORY_MB,
-        payload: { memoryMB: e.target.value },
-      });
+      const { runtimeArgs, pipelineVisualConfiguration } = PipelineConfigurationsStore.getState();
+      if (!pipelineVisualConfiguration.isDetailView) {
+        // in studio, we need to set state for correct deploy and export
+        dispatch({
+          type: PipelineConfigurationsActions.SET_DRIVER_MEMORY_MB,
+          payload: { memoryMB: e.target.value },
+        });
+      }
       if (lifecycleManagementEditEnabled) {
-        const { runtimeArgs } = PipelineConfigurationsStore.getState();
         const newRunTimePairs = getUpdatedRuntimeArgsPair(
           runtimeArgs,
           GENERATED_RUNTIMEARGS.SYSTEM_DRIVER_RESOURCES_MEMORY,
