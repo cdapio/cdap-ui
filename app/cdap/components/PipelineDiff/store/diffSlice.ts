@@ -34,33 +34,25 @@ export interface IPipelineNodeData extends IPipelineStage {
 interface IDiffState {
   isLoading: boolean;
   error: any; // TODO: type
-
   topPipelineConfig: IPipelineConfig | null;
   bottomPipelineConfig: IPipelineConfig | null;
-
   diffMap: IPipelineDiffMap;
   openDiffItem: string | null;
-
   focusElement: string | null;
-
   availablePluginsMap: AvailablePluginsMap;
 }
 
 const initialState: IDiffState = {
   isLoading: false,
   error: null,
-
   topPipelineConfig: null,
   bottomPipelineConfig: null,
-
   diffMap: {
     stages: {},
     connections: {},
   },
   openDiffItem: null,
-
   focusElement: null,
-
   availablePluginsMap: {},
 };
 
@@ -100,10 +92,10 @@ const diffSlice = createSlice({
       state.openDiffItem = null;
       state.focusElement = null;
     },
-    setFocus(state, action: PayloadAction<string>) {
+    startNavigateTo(state, action: PayloadAction<string>) {
       state.focusElement = action.payload;
     },
-    focused(state) {
+    endNavigate(state) {
       state.focusElement = null;
     },
   },
