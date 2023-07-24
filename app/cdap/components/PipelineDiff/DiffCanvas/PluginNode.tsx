@@ -14,8 +14,8 @@
  * the License.
  */
 
-import React from 'react';
-import { Handle, NodeProps, Position } from 'reactflow';
+import React, { useEffect } from 'react';
+import { Handle, NodeProps, Position, useReactFlow, useStoreApi } from 'reactflow';
 import styled from 'styled-components';
 import classnames from 'classnames';
 import { IPipelineNodeData, actions } from '../store/diffSlice';
@@ -23,7 +23,7 @@ import { getPluginDiffColors } from '../util/helpers';
 import { DiffIcon } from '../DiffIcon';
 import Button from '@material-ui/core/Button';
 import { getStageDiffKey } from '../util/diff';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const NodeRoot = styled.div`
   background: white;
@@ -130,6 +130,33 @@ export const DefaultPluginNode = ({
   const diffIndicator = data.diffItem?.diffIndicator;
   const { primary, primaryLight } = getPluginDiffColors(diffIndicator);
   const dispatch = useAppDispatch();
+
+  const { fitBounds } = useReactFlow();
+  const store = useStoreApi();
+  const { nodeInternals } = store.getState();
+  const node = nodeInternals.get(id);
+
+  const focusElement = useAppSelector((state) => {
+    return state.pipelineDiff.focusElement;
+  });
+
+  useEffect(() => {
+    if (focusElement && focusElement === data.diffKey) {
+      const cx = node.position.x + node.width / 2;
+      const cy = node.position.y + node.height / 2;
+      fitBounds(
+        {
+          x: cx - node.width,
+          y: cy - node.height,
+          width: node.width * 2,
+          height: node.height * 2,
+        },
+        { duration: 1000 }
+      );
+      dispatch(actions.endNavigate());
+    }
+  }, [node, focusElement]);
+
   return (
     <NodeRoot id={id} color={primary}>
       <HeaderRoot>
