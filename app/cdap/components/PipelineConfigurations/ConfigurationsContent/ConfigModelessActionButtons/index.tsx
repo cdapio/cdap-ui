@@ -87,12 +87,10 @@ export const ConfigModelessActionButtons = ({ ...props }: IConfigModelessActionB
 
   const saveAndAction = (actionFn) => {
     setSaveLoading(true);
-    let observable;
-    if (lifecycleManagementEditEnabled) {
-      observable = updatePreferences();
-    } else {
-      observable = Observable.forkJoin(updatePipeline(), updatePreferences());
-    }
+    const observable = Observable.forkJoin(
+      updatePipeline(lifecycleManagementEditEnabled),
+      updatePreferences()
+    );
     observable.subscribe(
       () => {
         actionFn();

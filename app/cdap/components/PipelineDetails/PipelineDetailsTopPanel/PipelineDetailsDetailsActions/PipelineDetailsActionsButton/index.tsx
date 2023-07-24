@@ -28,7 +28,11 @@ import classnames from 'classnames';
 import { duplicatePipeline, editPipeline } from 'services/PipelineUtils';
 import cloneDeep from 'lodash/cloneDeep';
 import downloadFile from 'services/download-file';
-import { santizeStringForHTMLID } from 'services/helpers';
+import {
+  getPushdownObjectFromRuntimeArgs,
+  isPushdownEnabled,
+  santizeStringForHTMLID,
+} from 'services/helpers';
 import { deleteEditDraft } from 'components/PipelineList/DeployedPipelineView/store/ActionCreator';
 import { DiscardDraftModal } from 'components/shared/DiscardDraftModal';
 import { CommitModal } from 'components/SourceControlManagement/LocalPipelineListView/CommitModal';
@@ -40,6 +44,7 @@ import {
   setPullStatus,
   setSourceControlMeta,
 } from 'components/PipelineDetails/store/ActionCreator';
+import PipelineConfigurationsStore from 'components/PipelineConfigurations/Store';
 require('./PipelineDetailsActionsButton.scss');
 
 const PREFIX = 'features.PipelineDetails.TopPanel';
@@ -123,16 +128,24 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
     };
   }
 
-  public pipelineConfig = {
-    name: this.props.pipelineName,
-    description: this.props.description,
-    artifact: this.props.artifact,
-    config: cloneDeep(this.props.config), // currently doing a cloneDeep because angular is mutating this state...
-    version: this.props.version,
+  public getPipelineConfig = () => {
+    const pipelineConfig = {
+      name: this.props.pipelineName,
+      description: this.props.description,
+      artifact: this.props.artifact,
+      config: cloneDeep(this.props.config), // currently doing a cloneDeep because angular is mutating this state...
+      version: this.props.version,
+    };
+    const { runtimeArgs } = PipelineConfigurationsStore.getState();
+    pipelineConfig.config.pushdownEnabled = isPushdownEnabled(runtimeArgs);
+    pipelineConfig.config.transformationPushdown = getPushdownObjectFromRuntimeArgs(runtimeArgs);
+    return pipelineConfig;
   };
 
+  public pipelineConfig = this.getPipelineConfig();
+
   public duplicateConfigAndNavigate = () => {
-    duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+    duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.getPipelineConfig()));
   };
 
   public toggleDiscardConfirmation = () => {
@@ -151,7 +164,7 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
       return;
     }
     if (!this.props.editDraftId) {
-      editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+      editPipeline(this.props.pipelineName, sanitizeConfig(this.getPipelineConfig()));
       return;
     }
     this.setState({
@@ -211,7 +224,7 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
     const closePopoverCb = () => {
       this.setState({ showPopover: false });
     };
-    downloadFile(this.pipelineConfig, closePopoverCb);
+    downloadFile(this.getPipelineConfig(), closePopoverCb);
   };
 
   public toggleExportModal = () => {
@@ -241,7 +254,7 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
       <PipelineExportModal
         isOpen={this.state.showExportModal}
         onClose={this.toggleExportModal}
-        pipelineConfig={sanitizeConfig(this.pipelineConfig)}
+        pipelineConfig={sanitizeConfig(this.getPipelineConfig())}
         onExport={this.handlePipelineExport}
       />
     );

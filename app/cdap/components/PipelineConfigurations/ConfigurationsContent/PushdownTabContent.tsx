@@ -26,35 +26,17 @@ import {
   convertKeyValuePairsToMap,
   convertMapToKeyValuePairs,
   flattenObj,
-  unflatternStringToObj,
+  getPushdownObjectFromRuntimeArgs,
+  isPushdownEnabled,
 } from 'services/helpers';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 
 const getPushdownEnabledValue = (state) => {
-  const pushdownEnabledKeyValuePair = state.runtimeArgs.pairs.find(
-    (pair) => pair.key === GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED
-  );
-  return pushdownEnabledKeyValuePair
-    ? pushdownEnabledKeyValuePair.value === 'true'
-    : state.pushdownEnabled;
+  return isPushdownEnabled(state.runtimeArgs) || state.pushdownEnabled;
 };
 
 const getTransformationPushdownValue = (state) => {
-  if (state.transformationPushdown) {
-    return state.transformationPushdown;
-  }
-  const transformationPushdownKeyValuePair = state.runtimeArgs.pairs.filter((pair) =>
-    pair.key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
-  );
-  const pushdownObject = {};
-  transformationPushdownKeyValuePair.forEach((pair) => {
-    // unflattern the runtimeargs key and put it in pushdown object
-    const trimmedKey = pair.key.substring(
-      GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX.length
-    );
-    unflatternStringToObj(pushdownObject, trimmedKey, pair.value);
-  });
-  return pushdownObject;
+  return getPushdownObjectFromRuntimeArgs(state.runtimeArgs) || state.transformationPushdown;
 };
 
 export default function PushdownTabContent({}) {
