@@ -14,8 +14,19 @@
  * the License.
  */
 import React, { useEffect } from 'react';
-import { EdgeProps, BaseEdge, getSmoothStepPath, useReactFlow, useStoreApi, Node } from 'reactflow';
+import {
+  EdgeProps,
+  EdgeLabelRenderer,
+  BaseEdge,
+  getSmoothStepPath,
+  useReactFlow,
+  useStoreApi,
+  Node,
+} from 'reactflow';
+import styled from 'styled-components';
+
 import { DiffIndicator } from '../types';
+import { DiffIcon } from '../DiffIcon';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { actions } from '../store/diffSlice';
 
@@ -32,6 +43,12 @@ function getConnectionBounds(fromNode: Node, toNode: Node) {
     height: y2 - y1,
   };
 }
+
+const DiffIconRoot = styled(DiffIcon)`
+  position: absolute;
+  transform: translate(-50%, -50%)
+    translate(${({ labelX }) => labelX}px, ${({ labelY }) => labelY}px);
+`;
 
 export const PluginConnection = ({
   id,
@@ -73,5 +90,14 @@ export const PluginConnection = ({
     }
   }, [fromNode, toNode, focusElement]);
 
-  return <BaseEdge path={edgePath} {...props} />;
+  return (
+    <>
+      <BaseEdge path={edgePath} {...props} />
+      {data.diffIndicator && (
+        <EdgeLabelRenderer>
+          <DiffIconRoot diffType={data.diffIndicator} labelX={labelX} labelY={labelY} />
+        </EdgeLabelRenderer>
+      )}
+    </>
+  );
 };
