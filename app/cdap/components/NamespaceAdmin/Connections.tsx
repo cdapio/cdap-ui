@@ -15,14 +15,8 @@
  */
 
 import React, { useState } from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { IConnection } from 'components/NamespaceAdmin/store';
 import { connect } from 'react-redux';
-import Table from 'components/shared/Table';
-import TableHeader from 'components/shared/Table/TableHeader';
-import TableRow from 'components/shared/Table/TableRow';
-import TableCell from 'components/shared/Table/TableCell';
-import TableBody from 'components/shared/Table/TableBody';
 import { humanReadableDate, objectQuery } from 'services/helpers';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import { deleteConnection } from 'components/NamespaceAdmin/store/ActionCreator';
@@ -33,16 +27,16 @@ import { getConnections } from 'components/NamespaceAdmin/store/ActionCreator';
 import AddConnectionBtnModal from 'components/Connections/AddConnectionBtnModal';
 import ImportConnectionBtn from 'components/Connections/ImportConnectionBtn';
 import { ConnectionConfigurationMode } from 'components/Connections/types';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Box from '@material-ui/core/Box';
+import { StyledTable, StyledTableContainer, SubtitleSection } from './styles';
 
 const useStyle = makeStyles((theme) => {
   return {
-    subtitleSection: {
-      marginBottom: '15px',
-
-      '& > *': {
-        marginRight: '10px',
-      },
-    },
     delete: {
       color: objectQuery(theme, 'palette', 'red', 100),
     },
@@ -182,41 +176,42 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
   }
 
   return (
-    <div>
-      <div className={classes.subtitleSection}>
+    <Box>
+      <SubtitleSection>
         <AddConnectionBtnModal onCreate={getConnections} />
         <ImportConnectionBtn onCreate={getConnections} />
-      </div>
+      </SubtitleSection>
+      <StyledTableContainer>
+        <StyledTable size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Installed on</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
 
-      <Table columnTemplate="minmax(20rem, 1fr) 2fr 1fr 1fr 100px">
-        <TableHeader>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Installed on</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHeader>
+          <TableBody>
+            {connections.map((conn) => {
+              const actions: IAction[] = getConnectionActions(conn);
 
-        <TableBody>
-          {connections.map((conn) => {
-            const actions: IAction[] = getConnectionActions(conn);
-
-            return (
-              <TableRow key={conn.name}>
-                <TableCell>{conn.name}</TableCell>
-                <TableCell>{conn.description}</TableCell>
-                <TableCell>{conn.connectionType}</TableCell>
-                <TableCell>{humanReadableDate(conn.createdTimeMillis, true)}</TableCell>
-                <TableCell>
-                  <ActionsPopover actions={actions} />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+              return (
+                <TableRow key={conn.name}>
+                  <TableCell>{conn.name}</TableCell>
+                  <TableCell>{conn.description}</TableCell>
+                  <TableCell>{conn.connectionType}</TableCell>
+                  <TableCell>{humanReadableDate(conn.createdTimeMillis, true)}</TableCell>
+                  <TableCell>
+                    <ActionsPopover actions={actions} />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </StyledTable>
+      </StyledTableContainer>
 
       <ConfirmationModal
         headerTitle="Delete connection"
@@ -237,7 +232,7 @@ const ConnectionsView: React.FC<IConnectionsProps> = ({ connections }) => {
         onCreate={getConnections}
         mode={connectionCreateMode}
       />
-    </div>
+    </Box>
   );
 };
 

@@ -15,33 +15,24 @@
  */
 
 import React, { useState } from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
 import { IPreference } from 'components/NamespaceAdmin/store';
 import Button from '@material-ui/core/Button';
 import SetPreferenceModal, {
   PREFERENCES_LEVEL,
 } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
-import Table from 'components/shared/Table';
-import TableHeader from 'components/shared/Table/TableHeader';
-import TableRow from 'components/shared/Table/TableRow';
-import TableCell from 'components/shared/Table/TableCell';
-import TableBody from 'components/shared/Table/TableBody';
-
-const useStyle = makeStyles((theme) => {
-  return {
-    subtitleSection: {
-      marginBottom: '15px',
-    },
-  };
-});
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Box from '@material-ui/core/Box';
+import { StyledTable, StyledTableContainer, SubtitleSection } from './styles';
 
 interface IPreferencesProps {
   preferences: IPreference[];
 }
 
 const PreferencesView: React.FC<IPreferencesProps> = ({ preferences }) => {
-  const classes = useStyle();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function toggleModal() {
@@ -49,34 +40,35 @@ const PreferencesView: React.FC<IPreferencesProps> = ({ preferences }) => {
   }
 
   return (
-    <div>
-      <div className={classes.subtitleSection}>
+    <Box>
+      <SubtitleSection>
         <Button color="primary" variant="contained" onClick={toggleModal}>
           Edit
         </Button>
-      </div>
+      </SubtitleSection>
+      <StyledTableContainer>
+        <StyledTable size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Key</TableCell>
+              <TableCell>Value</TableCell>
+              <TableCell>Scope</TableCell>
+            </TableRow>
+          </TableHead>
 
-      <Table columnTemplate="1fr 1fr 200px">
-        <TableHeader>
-          <TableRow>
-            <TableCell>Key</TableCell>
-            <TableCell>Value</TableCell>
-            <TableCell>Scope</TableCell>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {preferences.map((pref) => {
-            return (
-              <TableRow key={`${pref.key}-${pref.value}-${pref.scope}`}>
-                <TableCell>{pref.key}</TableCell>
-                <TableCell>{pref.value}</TableCell>
-                <TableCell>{pref.scope}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+          <TableBody>
+            {preferences.map((pref) => {
+              return (
+                <TableRow key={`${pref.key}-${pref.value}-${pref.scope}`}>
+                  <TableCell>{pref.key}</TableCell>
+                  <TableCell>{pref.value}</TableCell>
+                  <TableCell>{pref.scope}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </StyledTable>
+      </StyledTableContainer>
 
       {isModalOpen ? (
         <SetPreferenceModal
@@ -85,7 +77,7 @@ const PreferencesView: React.FC<IPreferencesProps> = ({ preferences }) => {
           setAtLevel={PREFERENCES_LEVEL.NAMESPACE}
         />
       ) : null}
-    </div>
+    </Box>
   );
 };
 
