@@ -18,11 +18,6 @@ import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { connect } from 'react-redux';
 import { IDriver } from 'components/NamespaceAdmin/store';
-import Table from 'components/shared/Table';
-import TableHeader from 'components/shared/Table/TableHeader';
-import TableRow from 'components/shared/Table/TableRow';
-import TableCell from 'components/shared/Table/TableCell';
-import TableBody from 'components/shared/Table/TableBody';
 import { humanReadableDate, objectQuery } from 'services/helpers';
 import ActionsPopover, { IAction } from 'components/shared/ActionsPopover';
 import { deleteDriver } from 'components/NamespaceAdmin/store/ActionCreator';
@@ -30,6 +25,15 @@ import { Button } from '@material-ui/core';
 import If from 'components/shared/If';
 import ArtifactUploadWizard from 'components/CaskWizards/ArtifactUpload';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import {
+  StyledTable,
+  StyledTableContainer,
+  SubtitleSection,
+} from 'components/NamespaceAdmin/styles';
 
 const useStyle = makeStyles((theme) => {
   return {
@@ -82,14 +86,14 @@ const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
 
   return (
     <div>
-      <div className={classes.subtitle}>
+      <SubtitleSection>
         <Button variant="contained" color="primary" onClick={toggleUploadArtifact}>
           Upload Driver
         </Button>
-      </div>
-      <div>
-        <Table columnTemplate="1fr 1fr 2fr 1fr 75px">
-          <TableHeader>
+      </SubtitleSection>
+      <StyledTableContainer>
+        <StyledTable>
+          <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Version</TableCell>
@@ -97,7 +101,7 @@ const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
               <TableCell>Installed</TableCell>
               <TableCell />
             </TableRow>
-          </TableHeader>
+          </TableHead>
 
           <TableBody>
             {drivers.map((driver) => {
@@ -122,8 +126,8 @@ const DriversView: React.FC<IDriversProps> = ({ drivers }) => {
               );
             })}
           </TableBody>
-        </Table>
-      </div>
+        </StyledTable>
+      </StyledTableContainer>
 
       <If condition={isUploadOpen}>
         <ArtifactUploadWizard

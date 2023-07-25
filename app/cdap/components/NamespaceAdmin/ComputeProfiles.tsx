@@ -15,7 +15,6 @@
  */
 
 import React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import ProfilesListView from 'components/Cloud/Profiles/ListView';
 import Button from '@material-ui/core/Button';
@@ -24,30 +23,22 @@ import { importProfile } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { Label, Input } from 'reactstrap';
 import { Theme } from 'services/ThemeHelper';
 import If from 'components/shared/If';
+import { StyledTableContainer, SubtitleSection } from './styles';
+import { styled } from '@material-ui/core/styles';
 
-const useStyle = makeStyles((theme) => {
-  return {
-    subtitleSection: {
-      '& > *': {
-        marginRight: '15px',
-      },
-    },
-    fileInput: {
-      display: 'none',
-    },
-    inputLabel: {
-      marginBottom: 0,
-      cursor: 'inherit',
-    },
-  };
+const InputLabel = styled(Label)({
+  marginBottom: 0,
+  cursor: 'inherit',
+});
+
+const FileInput = styled(Input)({
+  display: 'none',
 });
 
 const ComputeProfiles: React.FC = () => {
-  const classes = useStyle();
-
   return (
     <div>
-      <div className={classes.subtitleSection}>
+      <SubtitleSection>
         <If condition={Theme.showCreateProfile !== false}>
           <Link to={`/ns/${getCurrentNamespace()}/profiles/create`}>
             <Button variant="contained" color="primary">
@@ -55,23 +46,24 @@ const ComputeProfiles: React.FC = () => {
             </Button>
           </Link>
           <Button color="primary">
-            <Label for="import-profile" className={classes.inputLabel}>
+            <InputLabel for="import-profile">
               Import
               {/* The onClick here is to clear the file, so if the user uploads the same file
             twice then we can show the error, instead of showing nothing */}
-              <Input
+              <FileInput
                 type="file"
                 accept=".json"
                 id="import-profile"
-                className={classes.fileInput}
                 onChange={importProfile.bind(this, getCurrentNamespace())}
                 onClick={(e) => (e.target.value = null)}
               />
-            </Label>
+            </InputLabel>
           </Button>
         </If>
-      </div>
-      <ProfilesListView namespace={getCurrentNamespace()} />
+      </SubtitleSection>
+      <StyledTableContainer>
+        <ProfilesListView namespace={getCurrentNamespace()} />
+      </StyledTableContainer>
     </div>
   );
 };
