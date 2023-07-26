@@ -31,6 +31,7 @@ import isArray from 'lodash/isArray';
 // We don't use webpack alias here because this is used in Footer which is used in login app
 // And for login 'components/Lab/..' aliases to components folder inside login app.
 import experimentsList from '../components/Lab/experiment-list.tsx';
+import { GENERATED_RUNTIMEARGS } from './global-constants.js';
 /*
   Purpose: Query a json object or an array of json objects
   Return: Returns undefined if property is not defined(never set) and
@@ -897,6 +898,38 @@ const PIPELINE_ARTIFACTS = [
   'cdap-data-streams',
 ];
 
+/**
+ * 
+ * @param {object} runtimeArgs 
+ * @returns a pushdown config object generated from runtimeArgs
+ */
+const getPushdownObjectFromRuntimeArgs = (runtimeArgs) => {
+  const transformationPushdownKeyValuePair = runtimeArgs.pairs.filter((pair) =>
+    pair.key.startsWith(GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX)
+  );
+  const pushdownObject = {};
+  transformationPushdownKeyValuePair.forEach((pair) => {
+    // unflattern the runtimeargs key and put it in pushdown object
+    const trimmedKey = pair.key.substring(
+      GENERATED_RUNTIMEARGS.PIPELINE_TRANSFORMATION_PUSHDOWN_PREFIX.length
+    );
+    unflatternStringToObj(pushdownObject, trimmedKey, pair.value);
+  });
+  return pushdownObject
+}
+
+/**
+ * 
+ * @param {object} runtimeArgs 
+ * @returns a boolean value if pushdown enabled
+ */
+const isPushdownEnabled = (runtimeArgs) => {
+  const pushdownEnabledKeyValuePair = runtimeArgs.pairs.find(
+    (pair) => pair.key === GENERATED_RUNTIMEARGS.PIPELINE_PUSHDOWN_ENABLED
+  );
+  return pushdownEnabledKeyValuePair ? pushdownEnabledKeyValuePair.value === 'true' : false
+}
+
 export {
   openLinkInNewTab,
   objectQuery,
@@ -959,5 +992,7 @@ export {
   unflatternStringToObj,
   arrayOfStringsMatchTargetPrefix,
   PIPELINE_ARTIFACTS,
-  BATCH_PIPELINE_TYPE
+  BATCH_PIPELINE_TYPE,
+  getPushdownObjectFromRuntimeArgs,
+  isPushdownEnabled
 };
