@@ -183,7 +183,7 @@ export const DefaultPluginNode = ({
           </DiffButtonRoot>
         </DiffButtonContainer>
       )}
-      {diffIndicator && <DiffIconRoot diffType={diffIndicator} />}
+      {diffIndicator && <DiffIconRoot diffIndicator={diffIndicator} />}
       <HandleRoot type="target" position={Position.Left} />
       <HandleRoot type="source" id="source_right" position={Position.Right} />
       {children}

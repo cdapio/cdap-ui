@@ -22,6 +22,7 @@ type IconProps = ComponentProps<typeof SvgIcon>;
 interface IIconProps extends IconProps {
   fill?: string;
 }
+
 const AddIcon = ({ fill, ...props }: IIconProps) => {
   return (
     <SvgIcon {...props}>
@@ -45,6 +46,7 @@ const DeletedIcon = ({ fill, ...props }: IIconProps) => {
     </SvgIcon>
   );
 };
+
 const ModifiedIcon = ({ fill, ...props }: IIconProps) => {
   return (
     <SvgIcon {...props}>
@@ -57,14 +59,15 @@ const ModifiedIcon = ({ fill, ...props }: IIconProps) => {
   );
 };
 interface IDiffIconProps extends Omit<IconProps, 'color'> {
-  diffType: DiffIndicator;
+  diffIndicator: DiffIndicator;
 }
 
-export function DiffIcon({ diffType, ...props }: IDiffIconProps) {
-  const color = getPluginDiffColors(diffType).primary;
-  if (diffType === DiffIndicator.ADDED) {
+export function DiffIcon({ diffIndicator, ...props }: IDiffIconProps) {
+  const color = getPluginDiffColors(diffIndicator).primary;
+  if (diffIndicator === DiffIndicator.ADDED) {
     return <AddIcon style={{ color }} {...props} />;
-  } else if (diffType === DiffIndicator.DELETED) {
+  }
+  if (diffIndicator === DiffIndicator.DELETED) {
     return <DeletedIcon style={{ color }} {...props} />;
   }
   return <ModifiedIcon style={{ color }} {...props} />;

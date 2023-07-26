@@ -95,7 +95,7 @@ export const PluginConnection = ({
       <BaseEdge path={edgePath} {...props} />
       {data.diffIndicator && (
         <EdgeLabelRenderer>
-          <DiffIconRoot diffType={data.diffIndicator} labelX={labelX} labelY={labelY} />
+          <DiffIconRoot diffIndicator={data.diffIndicator} labelX={labelX} labelY={labelY} />
         </EdgeLabelRenderer>
       )}
     </>
