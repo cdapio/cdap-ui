@@ -57,7 +57,7 @@ interface IPluginDiffListItemProps {
   nodeName: string;
   customIconSrc?: string;
   iconName: string;
-  diffType: DiffIndicator;
+  diffIndicator: DiffIndicator;
   diffKey: string;
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }
@@ -65,7 +65,7 @@ export const PluginDiffListItem = ({
   nodeName,
   customIconSrc,
   iconName,
-  diffType,
+  diffIndicator,
   onClick,
 }: IPluginDiffListItemProps) => {
   return (
@@ -81,7 +81,7 @@ export const PluginDiffListItem = ({
       </ListItemIcon>
       <ListItemText primary={nodeName} />
       <IconButton edge="end" size="small">
-        <DiffIcon diffType={diffType} />
+        <DiffIcon diffIndicator={diffIndicator} />
       </IconButton>
     </ListItem>
   );
@@ -94,7 +94,7 @@ interface IConnectionDiffListItemProps {
   toNodeName: string;
   toCustomIconSrc?: string;
   toIconName: string;
-  diffType: DiffIndicator;
+  diffIndicator: DiffIndicator;
   diffKey: string;
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }
@@ -105,7 +105,7 @@ export const ConnectionDiffListItem = ({
   toNodeName,
   toCustomIconSrc,
   toIconName,
-  diffType,
+  diffIndicator,
   onClick,
 }: IConnectionDiffListItemProps) => {
   return (
@@ -131,7 +131,7 @@ export const ConnectionDiffListItem = ({
       </ListItemIcon>
       <ListItemText primary={toNodeName} />
       <IconButton edge="end" size="small">
-        <DiffIcon diffType={diffType} />
+        <DiffIcon diffIndicator={diffIndicator} />
       </IconButton>
     </ListItem>
   );

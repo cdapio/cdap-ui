@@ -26,6 +26,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 
 const DiffInfoTableContainer = styled(TableContainer)`
   flex-grow: 1;
+  max-width: 100%;
   width: 100%;
 `;
 
@@ -72,7 +73,6 @@ interface IDiffInfoTableProps {
   diffIndicator: DiffIndicator;
   pluginProperties: IPipelineStage['plugin']['properties'] | undefined;
 }
-
 export const DiffInfoTable = ({ diffIndicator, pluginProperties }: IDiffInfoTableProps) => {
   return (
     <DiffInfoTableContainer>
@@ -108,7 +108,9 @@ export const DiffInfoTable = ({ diffIndicator, pluginProperties }: IDiffInfoTabl
               <TableCell component="th" scope="row">
                 properties.{entryData.name}
               </TableCell>
-              <TableCell align="right">{entryData.value}</TableCell>
+              <TableCell style={{ overflowWrap: 'anywhere' }} align="right">
+                {entryData.value}
+              </TableCell>
             </TableRow>
           );
         })}
