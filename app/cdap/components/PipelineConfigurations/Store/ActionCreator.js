@@ -44,6 +44,7 @@ import uniqBy from 'lodash/uniqBy';
 import cloneDeep from 'lodash/cloneDeep';
 import { CLOUD } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operators';
 
 // Filter certain preferences from being shown in the run time arguments
@@ -150,7 +151,7 @@ const updatePreferences = () => {
   );
 };
 
-const updatePipeline = () => {
+const updatePipeline = (lifecycleManagementEditEnabled = true) => {
   let detailStoreState = PipelineDetailStore.getState();
   let { name, description, artifact, principal } = detailStoreState;
   let { stages, connections, comments } = detailStoreState.config;
@@ -223,6 +224,14 @@ const updatePipeline = () => {
     config = { ...commonConfig, ...realtimeOnlyConfig };
   } else if (artifact.name === GLOBALS.eltSqlPipeline) {
     config = { ...commonConfig, ...sqlOnlyConfig };
+  }
+
+  if (lifecycleManagementEditEnabled) {
+    PipelineDetailStore.dispatch({
+      type: PipelineDetailActions.SET_CONFIG,
+      payload: { config },
+    });
+    return of({});
   }
 
   let publishObservable = MyPipelineApi.publish(
