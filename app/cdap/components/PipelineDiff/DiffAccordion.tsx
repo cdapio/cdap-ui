@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { PropsWithChildren } from 'react';
+import React, { ComponentProps } from 'react';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -65,18 +65,13 @@ const AccordionDetailsRoot = styled(AccordionDetails)`
   padding: 0;
 `;
 
-interface IDiffAccordion {
-  defaultExpanded: boolean;
+interface IDiffAccordionProps extends ComponentProps<typeof Accordion> {
   title: string;
 }
 
-export const DiffAccordion = ({
-  defaultExpanded,
-  children,
-  title,
-}: PropsWithChildren<IDiffAccordion>) => {
+export const DiffAccordion = ({ children, title, ...props }: IDiffAccordionProps) => {
   return (
-    <AccordionRoot defaultExpanded={defaultExpanded}>
+    <AccordionRoot {...props}>
       <AccordionSummaryRoot expandIcon={<ExpandMoreIcon />}>
         <Typography>{title}</Typography>
       </AccordionSummaryRoot>

@@ -144,16 +144,20 @@ export const DefaultPluginNode = ({
     if (focusElement && focusElement === data.diffKey) {
       const cx = node.position.x + node.width / 2;
       const cy = node.position.y + node.height / 2;
-      fitBounds(
-        {
-          x: cx - node.width,
-          y: cy - node.height,
-          width: node.width * 2,
-          height: node.height * 2,
-        },
-        { duration: 1000 }
-      );
-      dispatch(actions.endNavigate());
+      // setTimeout allows for navigating after a possible resize occurs
+      // e.g. another window opens that causes the canvas to be smaller
+      setTimeout(() => {
+        fitBounds(
+          {
+            x: cx - node.width,
+            y: cy - node.height,
+            width: node.width * 2,
+            height: node.height * 2,
+          },
+          { duration: 1000 }
+        );
+        dispatch(actions.endNavigate());
+      }, 0);
     }
   }, [node, focusElement]);
 
