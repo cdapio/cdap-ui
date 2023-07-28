@@ -17,6 +17,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Provider } from 'react-redux';
+import T from 'i18n-react';
+
+import { delay, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs/Observable';
 
 import PipelineModeless from 'components/PipelineDetails/PipelineModeless';
 import { DiffWindow } from './DiffWindow';
@@ -26,9 +31,6 @@ import { useAppDispatch } from './store/hooks';
 import { fetchExtraPluginProperties, fetchPipelineConfig } from './util/fetch';
 import { actions } from './store/diffSlice';
 import { computePipelineDiff } from './util/diff';
-import { delay, switchMap } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
-import { Observable } from 'rxjs/Observable';
 
 const PipelineDiffModalContents = styled.div`
   display: flex;
@@ -98,7 +100,7 @@ const PipelineDiffModal = ({
 
   return (
     <PipelineModeless
-      title="pipeline difference" // TODO: i18n
+      title={T.translate('features.PipelineDiff.modalTitle').toString()}
       open={isOpen}
       onClose={(event) => {
         dispatch(actions.modalClosed());

@@ -18,6 +18,8 @@ import { InputBase } from '@material-ui/core';
 import styled from 'styled-components';
 import SearchIcon from '@material-ui/icons/Search';
 import { blue } from '@material-ui/core/colors';
+import T from 'i18n-react';
+import { I18N_PREFIX } from './constants';
 
 const DiffSearchRoot = styled.div`
   align-items: center;
@@ -70,7 +72,7 @@ export const DiffSearch = ({ search, setSearch }) => {
             onChange={(e) => {
               setSearch(e.target.value);
             }}
-            placeholder="Search"
+            placeholder={T.translate(`${I18N_PREFIX}.search`).toString()}
           />
         </SearchInputContainer>
       </SearchBar>

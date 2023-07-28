@@ -16,13 +16,15 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import T from 'i18n-react';
 
-import { DiffIndicator, IPipelineStage } from '../types';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
+import { DiffIndicator, IPipelineStage } from '../types';
+import { I18N_PREFIX } from '../constants';
 
 const DiffInfoTableContainer = styled(TableContainer)`
   flex-grow: 1;
@@ -79,14 +81,20 @@ export const DiffInfoTable = ({ diffIndicator, pluginProperties }: IDiffInfoTabl
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
+            <TableCell>{T.translate(`${I18N_PREFIX}.table.name`).toString()}</TableCell>
             {diffIndicator === DiffIndicator.MODIFIED ? (
               <>
-                <TableCell align="right">Old</TableCell>
-                <TableCell align="right">New</TableCell>
+                <TableCell align="right">
+                  {T.translate(`${I18N_PREFIX}.table.old`).toString()}
+                </TableCell>
+                <TableCell align="right">
+                  {T.translate(`${I18N_PREFIX}.table.new`).toString()}
+                </TableCell>
               </>
             ) : (
-              <TableCell align="right">Value</TableCell>
+              <TableCell align="right">
+                {T.translate(`${I18N_PREFIX}.table.value`).toString()}
+              </TableCell>
             )}
           </TableRow>
         </TableHead>
