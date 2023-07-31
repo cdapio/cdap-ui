@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { DiffAccordion } from './DiffAccordion';
@@ -52,6 +52,13 @@ export const DiffWindow = () => {
     };
   });
 
+  const [isDiffExpanded, setIsDiffExpanded] = useState(false);
+  useEffect(() => {
+    if (openDiffItem) {
+      setIsDiffExpanded(true);
+    }
+  }, [openDiffItem]);
+
   return (
     <DiffWindowRoot>
       <DiffAccordion
@@ -82,7 +89,11 @@ export const DiffWindow = () => {
         )}
       </DiffAccordion>
 
-      <DiffAccordion title={T.translate(`${I18N_PREFIX}.diff`).toString()} defaultExpanded={false}>
+      <DiffAccordion
+        title={T.translate(`${I18N_PREFIX}.diff`).toString()}
+        expanded={isDiffExpanded}
+        onChange={(_, expanded) => setIsDiffExpanded(expanded)}
+      >
         {!isLoading && !error && (
           <DiffInfo
             diffMap={diffMap}
