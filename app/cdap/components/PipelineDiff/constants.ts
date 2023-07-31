@@ -15,3 +15,5 @@
  */
 
 export const I18N_PREFIX = 'features.PipelineDiff';
+export const ADDED_REGEX = /__added$/;
+export const DELETED_REGEX = /__deleted$/;
