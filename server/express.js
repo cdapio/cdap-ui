@@ -181,6 +181,11 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             reportUri: `https://csp.withgoogle.com/csp/cdap`,
           },
         },
+        hsts: {
+          maxAge: 0,
+          includeSubDomains: false,
+          preload: false,
+        },
         // Hub icons are cross-origin but don't supply CORS headers
         // TODO credentialless will also work but isn't supported by FF and Safari
         crossOriginEmbedderPolicy: false
