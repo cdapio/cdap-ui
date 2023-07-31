@@ -150,7 +150,7 @@ export const DiffList = () => {
                 {...props}
                 onClick={() => {
                   dispatch(actions.showDiffDetails(props.diffKey));
-                  dispatch(actions.startNavigateTo(props.diffKey));
+                  dispatch(actions.startNavigateTo({ type: 'node', name: props.diffKey }));
                 }}
                 key={props.diffKey}
               />
@@ -162,7 +162,9 @@ export const DiffList = () => {
             return (
               <ConnectionDiffListItem
                 {...props}
-                onClick={() => dispatch(actions.startNavigateTo(props.diffKey))}
+                onClick={() =>
+                  dispatch(actions.startNavigateTo({ type: 'edge', name: props.diffKey }))
+                }
                 key={props.diffKey}
               />
             );

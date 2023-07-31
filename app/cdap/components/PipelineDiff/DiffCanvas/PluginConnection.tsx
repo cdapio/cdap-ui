@@ -13,36 +13,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import React, { useEffect } from 'react';
-import {
-  EdgeProps,
-  EdgeLabelRenderer,
-  BaseEdge,
-  getSmoothStepPath,
-  useReactFlow,
-  useStoreApi,
-  Node,
-} from 'reactflow';
+import React from 'react';
+import { EdgeProps, EdgeLabelRenderer, BaseEdge, getSmoothStepPath } from 'reactflow';
 import styled from 'styled-components';
 
-import { DiffIndicator } from '../types';
 import { DiffIcon } from '../DiffIcon';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { actions } from '../store/diffSlice';
-
-function getConnectionBounds(fromNode: Node, toNode: Node) {
-  const x1 = Math.min(fromNode.position.x, toNode.position.x);
-  const y1 = Math.min(fromNode.position.y, toNode.position.y);
-
-  const x2 = Math.max(fromNode.position.x + fromNode.width, toNode.position.x + toNode.width);
-  const y2 = Math.max(fromNode.position.y + fromNode.height, toNode.position.y + toNode.height);
-  return {
-    x: x1,
-    y: y1,
-    width: x2 - x1,
-    height: y2 - y1,
-  };
-}
+import { IPipelineEdgeData } from '../types';
 
 const DiffIconRoot = styled(DiffIcon)`
   position: absolute;
@@ -62,7 +38,7 @@ export const PluginConnection = ({
   targetPosition,
   data,
   ...props
-}: EdgeProps<{ diffIndicator?: DiffIndicator }>) => {
+}: EdgeProps<IPipelineEdgeData>) => {
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
@@ -71,25 +47,6 @@ export const PluginConnection = ({
     targetY,
     targetPosition,
   });
-  const dispatch = useAppDispatch();
-  const { fitBounds } = useReactFlow();
-  const store = useStoreApi();
-  const { nodeInternals } = store.getState();
-  const fromNode = nodeInternals.get(source);
-  const toNode = nodeInternals.get(target);
-
-  const focusElement = useAppSelector((state) => {
-    return state.pipelineDiff.focusElement;
-  });
-
-  useEffect(() => {
-    if (focusElement === id) {
-      const bounds = getConnectionBounds(fromNode, toNode);
-      fitBounds(bounds, { duration: 1000 });
-      dispatch(actions.endNavigate());
-    }
-  }, [fromNode, toNode, focusElement]);
-
   return (
     <>
       <BaseEdge path={edgePath} {...props} />

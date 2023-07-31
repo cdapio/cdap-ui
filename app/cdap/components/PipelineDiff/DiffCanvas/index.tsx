@@ -13,41 +13,92 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useCallback, useEffect } from 'react';
 import {
-  Node,
   Background,
   Controls,
-  Edge,
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
   NodeProps,
+  EdgeProps,
+  useReactFlow,
+  useStoreApi,
+  SmoothStepEdge,
+  Rect,
 } from 'reactflow';
 import { DefaultPluginNode, PluginNodeWithAlertError } from './PluginNode';
-import { getReactflowPipelineGraph } from '../util/reactflowGraph';
-import { AvailablePluginsMap, IPipelineConfig, IPipelineDiffMap, NodeType } from '../types';
-import { IPipelineNodeData } from '../store/diffSlice';
+import { getEdgeBounds, getPluginBounds, getReactflowPipelineGraph } from '../util/reactflowGraph';
+import {
+  AvailablePluginsMap,
+  IPipelineConfig,
+  IPipelineDiffMap,
+  NodeType,
+  EdgeType,
+  PipelineNode,
+  PipelineEdge,
+} from '../types';
+import { actions } from '../store/diffSlice';
 import { getPluginDiffColors } from '../util/helpers';
 import { PluginConnection } from './PluginConnection';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const nodeTypes: Record<NodeType, ComponentType<NodeProps>> = {
   defaultNode: DefaultPluginNode,
   alertErrorNode: PluginNodeWithAlertError,
 };
-const edgeTypes = {
+const edgeTypes: Record<EdgeType, ComponentType<EdgeProps>> = {
   diffEdge: PluginConnection,
+  smoothstep: SmoothStepEdge,
 };
-// A type helper to distribute each node type into its corresponding node
-type PipelineNode<U = NodeType> = U extends NodeType ? Node<IPipelineNodeData, U> : never;
 
 interface IDiffCanvasProps {
   nodes: PipelineNode[];
-  connections: Edge[];
+  connections: PipelineEdge[];
   backgroundId?: string;
 }
 
 const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
+  const dispatch = useAppDispatch();
+  const { fitBounds } = useReactFlow();
+  const store = useStoreApi();
+  const { nodeInternals } = store.getState();
+
+  const focusElement = useAppSelector((state) => {
+    return state.pipelineDiff.focusElement;
+  });
+
+  const fitBoundsAndEndNavigate = useCallback(
+    (bounds: Rect) => {
+      // setTimeout allows for navigating after a possible resize occurs
+      // e.g. another window opens that causes the canvas to be smaller
+      setTimeout(() => {
+        fitBounds(bounds, { duration: 1000 });
+        dispatch(actions.endNavigate());
+      }, 0);
+    },
+    [dispatch, actions, fitBounds]
+  );
+
+  useEffect(() => {
+    if (focusElement && focusElement.type === 'node' && nodeInternals.get(focusElement.name)) {
+      const node = nodeInternals.get(focusElement.name);
+      const bounds = getPluginBounds(node);
+      fitBoundsAndEndNavigate(bounds);
+    }
+    if (
+      focusElement &&
+      focusElement.type === 'edge' &&
+      connections.find((edge) => edge.id === focusElement.name)
+    ) {
+      const connection = connections.find((edge) => edge.id === focusElement.name);
+      const fromNode = nodeInternals.get(connection.source);
+      const toNode = nodeInternals.get(connection.target);
+      const bounds = getEdgeBounds(fromNode, toNode);
+      fitBoundsAndEndNavigate(bounds);
+    }
+  }, [nodeInternals, focusElement, connections]);
+
   return (
     <ReactFlow
       nodes={nodes}

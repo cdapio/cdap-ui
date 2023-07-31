@@ -16,21 +16,12 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import {
-  AvailablePluginsMap,
-  IPipelineConfig,
-  IPipelineDiffMap,
-  IPipelineStage,
-  IStageDiffItem,
-} from '../types';
+import { AvailablePluginsMap, IPipelineConfig, IPipelineDiffMap } from '../types';
 
-export interface IPipelineNodeData extends IPipelineStage {
-  customIconSrc?: string;
-  iconName: string;
-  diffItem?: IStageDiffItem;
-  diffKey: string;
+interface FocusElement {
+  type: 'node' | 'edge';
+  name: string;
 }
-
 interface IDiffState {
   isLoading: boolean;
   error: any; // TODO: type
@@ -38,7 +29,7 @@ interface IDiffState {
   bottomPipelineConfig: IPipelineConfig | null;
   diffMap: IPipelineDiffMap;
   openDiffItem: string | null;
-  focusElement: string | null;
+  focusElement: FocusElement | null;
   availablePluginsMap: AvailablePluginsMap;
 }
 
@@ -92,7 +83,7 @@ const diffSlice = createSlice({
       state.openDiffItem = null;
       state.focusElement = null;
     },
-    startNavigateTo(state, action: PayloadAction<string>) {
+    startNavigateTo(state, action: PayloadAction<FocusElement>) {
       state.focusElement = action.payload;
     },
     endNavigate(state) {
