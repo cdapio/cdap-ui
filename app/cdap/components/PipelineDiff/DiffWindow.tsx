@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { DiffAccordion } from './DiffAccordion';
 import { DiffCanvasWrapper } from './DiffCanvas';
@@ -50,6 +50,13 @@ export const DiffWindow = () => {
     };
   });
 
+  const [isDiffExpanded, setIsDiffExpanded] = useState(false);
+  useEffect(() => {
+    if (openDiffItem) {
+      setIsDiffExpanded(true);
+    }
+  }, [openDiffItem]);
+
   return (
     <DiffWindowRoot>
       {/* TODO: i18n */}
@@ -77,7 +84,11 @@ export const DiffWindow = () => {
       </DiffAccordion>
 
       {/* TODO: i18n */}
-      <DiffAccordion title={'Diff'} defaultExpanded={false}>
+      <DiffAccordion
+        title={'Diff'}
+        expanded={isDiffExpanded}
+        onChange={(_, expanded) => setIsDiffExpanded(expanded)}
+      >
         {!isLoading && !error && (
           <DiffInfo
             diffMap={diffMap}

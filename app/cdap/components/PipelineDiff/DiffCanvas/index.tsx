@@ -46,6 +46,7 @@ interface IDiffCanvasProps {
   connections: Edge[];
   backgroundId?: string;
 }
+
 const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
   return (
     <ReactFlow
@@ -56,6 +57,7 @@ const DiffCanvas = ({ nodes, connections, backgroundId }: IDiffCanvasProps) => {
       minZoom={-5}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
+      onlyRenderVisibleElements={true}
       fitView
     >
       {nodes.length > 5 && (
