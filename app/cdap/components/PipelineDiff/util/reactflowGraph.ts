@@ -16,7 +16,14 @@
 
 import { getGraphLayout } from 'components/hydrator/helpers/DAGhelpers';
 import { getPluginIcon } from 'services/helpers';
-import { IPipelineConfig, IPipelineDiffMap, IPipelineStage } from '../types';
+import { Node } from 'reactflow';
+import {
+  IPipelineConfig,
+  IPipelineDiffMap,
+  IPipelineStage,
+  PipelineEdge,
+  PipelineNode,
+} from '../types';
 import { MarkerType } from 'reactflow';
 import { PLUGIN_TYPES } from 'components/hydrator/components/Canvas/constants';
 import {
@@ -53,7 +60,7 @@ export function getReactflowPipelineGraph(
 
   const stageNameToStage: { [stageName: string]: IPipelineStage } = {};
 
-  const nodes = config.stages.map((stage) => {
+  const nodes: PipelineNode[] = config.stages.map((stage) => {
     stageNameToStage[stage.name] = stage;
     const pluginMapKey = getAvailabePluginsMapKeyFromPlugin(stage.plugin);
 
@@ -62,7 +69,7 @@ export function getReactflowPipelineGraph(
     const diffItem = diffMap.stages[stageDiffKey];
 
     return {
-      id: stage.name,
+      id: stageDiffKey,
       data: {
         ...stage,
         customIconSrc: getCustomIconSrc(availablePluginsMap, pluginMapKey),
@@ -75,10 +82,10 @@ export function getReactflowPipelineGraph(
         x: graph._nodes[stage.name].x,
         y: graph._nodes[stage.name].y,
       },
-    } as const;
+    };
   });
 
-  const connections = config.connections.map((connection) => {
+  const connections: PipelineEdge[] = config.connections.map((connection) => {
     const getStageDiffKeyFromPluginName = (name: string) => getStageDiffKey(stageNameToStage[name]);
     const connectionKey = getConnectionDiffKey(connection, getStageDiffKeyFromPluginName);
     const diffIndicator = diffMap.connections[connectionKey]?.diffIndicator;
@@ -95,8 +102,8 @@ export function getReactflowPipelineGraph(
       data: {
         diffIndicator,
       },
-      source: connection.from,
-      target: connection.to,
+      source: getStageDiffKeyFromPluginName(connection.from),
+      target: getStageDiffKeyFromPluginName(connection.to),
       sourceHandle,
       type: diffIndicator ? 'diffEdge' : 'smoothstep',
       isSelectable: true,
@@ -108,4 +115,40 @@ export function getReactflowPipelineGraph(
     };
   });
   return { nodes, connections };
+}
+
+/**
+ * Returns a bound that a canvas can fit where node is centered and
+ * has space around it.
+ * @param node the reference node
+ * @returns the bounds to fit in the canvas
+ */
+export function getPluginBounds(node: Node) {
+  const cx = node.position.x + node.width / 2;
+  const cy = node.position.y + node.height / 2;
+  return {
+    x: cx - node.width,
+    y: cy - node.height,
+    width: node.width * 2,
+    height: node.height * 2,
+  };
+}
+
+/**
+ * @param fromNode source node
+ * @param toNode target node
+ * @returns a bound that fits both source and target nodes
+ */
+export function getEdgeBounds(fromNode: Node, toNode: Node) {
+  const x1 = Math.min(fromNode.position.x, toNode.position.x);
+  const y1 = Math.min(fromNode.position.y, toNode.position.y);
+
+  const x2 = Math.max(fromNode.position.x + fromNode.width, toNode.position.x + toNode.width);
+  const y2 = Math.max(fromNode.position.y + fromNode.height, toNode.position.y + toNode.height);
+  return {
+    x: x1,
+    y: y1,
+    width: x2 - x1,
+    height: y2 - y1,
+  };
 }

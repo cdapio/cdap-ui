@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import { Edge, Node } from 'reactflow';
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;
 };
@@ -73,3 +73,17 @@ export interface IPipelineDiffMap {
 export type AvailablePluginsMap = any;
 
 export type NodeType = 'alertErrorNode' | 'defaultNode';
+export interface IPipelineNodeData extends IPipelineStage {
+  customIconSrc?: string;
+  iconName: string;
+  diffItem?: IStageDiffItem;
+  diffKey: string;
+}
+// A type helper to distribute each node type into its corresponding node
+export type PipelineNode<U = NodeType> = U extends NodeType ? Node<IPipelineNodeData, U> : never;
+
+export type EdgeType = 'smoothstep' | 'diffEdge';
+export interface IPipelineEdgeData {
+  diffIndicator?: DiffIndicator;
+}
+export type PipelineEdge = Edge<IPipelineEdgeData>;
