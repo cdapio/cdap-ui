@@ -16,11 +16,13 @@
 
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import T from 'i18n-react';
 import { DiffAccordion } from './DiffAccordion';
 import { DiffCanvasWrapper } from './DiffCanvas';
 import { useAppSelector } from './store/hooks';
 import { RootState } from './store';
 import { DiffInfo } from './DiffInfo';
+import { I18N_PREFIX } from './constants';
 
 const DiffWindowRoot = styled.div`
   display: flex;
@@ -59,8 +61,10 @@ export const DiffWindow = () => {
 
   return (
     <DiffWindowRoot>
-      {/* TODO: i18n */}
-      <DiffAccordion title={'Old Version'} defaultExpanded={true}>
+      <DiffAccordion
+        title={T.translate(`${I18N_PREFIX}.selectedVersion`).toString()}
+        defaultExpanded={true}
+      >
         {!isLoading && !error && (
           <DiffCanvasWrapper
             config={topPipelineConfig}
@@ -71,8 +75,10 @@ export const DiffWindow = () => {
         )}
       </DiffAccordion>
 
-      {/* TODO: i18n */}
-      <DiffAccordion title={'Current Version'} defaultExpanded={true}>
+      <DiffAccordion
+        title={T.translate(`${I18N_PREFIX}.latestVersion`).toString()}
+        defaultExpanded={true}
+      >
         {!isLoading && !error && (
           <DiffCanvasWrapper
             config={bottomPipelineConfig}
@@ -83,9 +89,8 @@ export const DiffWindow = () => {
         )}
       </DiffAccordion>
 
-      {/* TODO: i18n */}
       <DiffAccordion
-        title={'Diff'}
+        title={T.translate(`${I18N_PREFIX}.diff`).toString()}
         expanded={isDiffExpanded}
         onChange={(_, expanded) => setIsDiffExpanded(expanded)}
       >

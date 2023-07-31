@@ -23,6 +23,7 @@ import {
   IPipelineStage,
   IPipelineConnection,
 } from '../types';
+import { ADDED_REGEX, DELETED_REGEX } from '../constants';
 
 /**
  * Given a stage, returns a key that is unique to that stage. Unicode characters
@@ -149,11 +150,11 @@ export function computePipelineDiff(pipeline1: IPipelineConfig, pipeline2: IPipe
     let stageName = stage;
     let diffIndicator = DiffIndicator.MODIFIED;
 
-    if (stage.match(/__added$/)) {
-      stageName = stage.replace(/__added$/, '');
+    if (stage.match(ADDED_REGEX)) {
+      stageName = stage.replace(ADDED_REGEX, '');
       diffIndicator = DiffIndicator.ADDED;
-    } else if (stage.match(/__deleted$/)) {
-      stageName = stage.replace(/__deleted$/, '');
+    } else if (stage.match(DELETED_REGEX)) {
+      stageName = stage.replace(DELETED_REGEX, '');
       diffIndicator = DiffIndicator.DELETED;
     }
     // addition of a stage indicates that such plugin does not exist in pipeline1
@@ -171,11 +172,11 @@ export function computePipelineDiff(pipeline1: IPipelineConfig, pipeline2: IPipe
   Object.keys(connectionsDiffMap).forEach((connection) => {
     let connectionName = connection;
     let diffIndicator = DiffIndicator.MODIFIED;
-    if (connection.match(/__added$/)) {
-      connectionName = connection.replace(/__added$/, '');
+    if (connection.match(ADDED_REGEX)) {
+      connectionName = connection.replace(ADDED_REGEX, '');
       diffIndicator = DiffIndicator.ADDED;
-    } else if (connection.match(/__deleted$/)) {
-      connectionName = connection.replace(/__deleted$/, '');
+    } else if (connection.match(DELETED_REGEX)) {
+      connectionName = connection.replace(DELETED_REGEX, '');
       diffIndicator = DiffIndicator.DELETED;
     }
 

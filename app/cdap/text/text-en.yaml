@@ -2772,6 +2772,18 @@ features:
       older: Older version
       restoreChangeSummary: "Restore version at {date}"
 
+  PipelineDiff:
+    modalTitle: Pipeline Difference
+    table:
+      name: Name
+      old: Old
+      new: New
+      value: Value
+    selectedVersion: Selected Version
+    latestVersion: Latest Version
+    diff: Difference
+    search: Search
+
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"
     description: Description

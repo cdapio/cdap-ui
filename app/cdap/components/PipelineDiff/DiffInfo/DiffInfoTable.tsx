@@ -16,13 +16,15 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import T from 'i18n-react';
 
-import { DiffIndicator, IPipelineStage } from '../types';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
+import { DiffIndicator, IPipelineStage } from '../types';
+import { ADDED_REGEX, DELETED_REGEX, I18N_PREFIX } from '../constants';
 
 const DiffInfoTableContainer = styled(TableContainer)`
   flex-grow: 1;
@@ -31,9 +33,6 @@ const DiffInfoTableContainer = styled(TableContainer)`
 `;
 
 function getEntryData(diffIndicator: DiffIndicator, propertyName: string, propertyValue) {
-  const ADDED_REGEX = /__added$/;
-  const DELETED_REGEX = /__deleted$/;
-
   if (diffIndicator === DiffIndicator.DELETED || diffIndicator === DiffIndicator.ADDED) {
     return { name: propertyName, value: propertyValue as string };
   }
@@ -79,14 +78,14 @@ export const DiffInfoTable = ({ diffIndicator, pluginProperties }: IDiffInfoTabl
       <Table stickyHeader size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
+            <TableCell>{T.translate(`${I18N_PREFIX}.table.name`)}</TableCell>
             {diffIndicator === DiffIndicator.MODIFIED ? (
               <>
-                <TableCell align="right">Old</TableCell>
-                <TableCell align="right">New</TableCell>
+                <TableCell align="right">{T.translate(`${I18N_PREFIX}.table.old`)}</TableCell>
+                <TableCell align="right">{T.translate(`${I18N_PREFIX}.table.new`)}</TableCell>
               </>
             ) : (
-              <TableCell align="right">Value</TableCell>
+              <TableCell align="right">{T.translate(`${I18N_PREFIX}.table.value`)}</TableCell>
             )}
           </TableRow>
         </TableHead>
