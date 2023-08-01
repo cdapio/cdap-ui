@@ -5,6 +5,9 @@ commons:
   apply: Apply
   as: as
   back: Back
+  learnMore: Learn More
+  gotIt: Ok, Got it.
+  cookieBanner: This application uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
   cask: CASK
   cdap: CDAP
   clickhere: click here
