@@ -358,6 +358,7 @@ const GENERATED_RUNTIMEARGS = {
   SYSTEM_DRIVER_RESOURCES_CORES: 'task.driver.system.resources.cores',
   SYSTEM_EXECUTOR_RESOURCES_MEMORY: 'task.executor.system.resources.memory',
   SYSTEM_EXECUTOR_RESOURCES_CORES: 'task.executor.system.resources.cores',
+  PIPELINE_CONFIG_OVERWRITE: 'app.pipeline.overwriteConfig',
 }
 
 const SCOPES = {
