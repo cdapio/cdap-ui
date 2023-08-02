@@ -204,6 +204,7 @@ public class PipelineEdit {
       .map(element -> element.findElement(By.tagName("input")).getAttribute("value"))
       .collect(Collectors.toList());
     Assert.assertTrue(stringKeys.size() == 1);
+    Assert.assertTrue(!stringKeys.contains("app.pipeline.overwriteConfig"));
     Assert.assertTrue(!stringKeys.contains("app.pipeline.instrumentation"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-modeless-close-btn"));
   }
@@ -219,6 +220,7 @@ public class PipelineEdit {
       .map(element -> element.findElement(By.tagName("input")).getAttribute("value"))
       .collect(Collectors.toList());
     Assert.assertTrue(stringKeys.size() > 1);
+    Assert.assertTrue(stringKeys.contains("app.pipeline.overwriteConfig"));
     Assert.assertTrue(stringKeys.contains("app.pipeline.instrumentation"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("pipeline-modeless-close-btn"));
   }

@@ -280,6 +280,7 @@ public class CommonSteps {
   @Then("Save pipeline configure")
   public void savePipelineConfigure() {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("config-apply-close"));
+    WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("config-apply-close"));
   }
 
   @Then("Go to pipeline {string} details")
