@@ -19,6 +19,7 @@ import classnames from 'classnames';
 import { Typography } from '@material-ui/core';
 
 const DiffInfoHeaderContainer = styled.div`
+  align-items: center;
   display: flex;
   margin-bottom: 4px;
   padding-left: 4px;
