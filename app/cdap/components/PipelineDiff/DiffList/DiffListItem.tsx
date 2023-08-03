@@ -45,6 +45,12 @@ const CustomIconImg = styled.img`
 
 const ListItemText = styled(MuiListItemText)`
   flex: 1;
+  & > span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const ListItemIcon = styled(MuiListItemIcon)`
