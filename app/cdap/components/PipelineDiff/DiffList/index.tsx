@@ -26,7 +26,6 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   getPluginNameFromStageDiffKey,
   getStageDiffKey,
-  getStageDiffKeysFromConnectionDiffKey,
   getStageNameFromStageDiffKey,
 } from '../util/diff';
 import { getAvailabePluginsMapKeyFromPlugin, getCustomIconSrc } from '../util/helpers';
@@ -34,6 +33,15 @@ import { getPluginIcon } from 'services/helpers';
 import { actions } from '../store/diffSlice';
 import { DiffSearch } from '../DiffSearch';
 import { AvailablePluginsMap, IPipelineDiffMap, IPipelineStage } from '../types';
+import LoadingSVG from 'components/shared/LoadingSVG';
+
+const LoadingSVGContainer = styled.div`
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+`;
 
 const DiffSidebar = styled(Paper)`
   &.MuiPaper-root {
@@ -101,10 +109,11 @@ function getConnectionProps(
 }
 
 export const DiffList = () => {
-  const { diffMap, availablePluginsMap } = useAppSelector((state) => {
+  const { diffMap, availablePluginsMap, isLoading } = useAppSelector((state) => {
     return {
       diffMap: state.pipelineDiff.diffMap,
       availablePluginsMap: state.pipelineDiff.availablePluginsMap,
+      isLoading: state.pipelineDiff.isLoading,
     };
   });
 
@@ -141,35 +150,42 @@ export const DiffList = () => {
     <DiffSidebar elevation={3}>
       <DiffSearch search={search} setSearch={setSearch} />
       <DiffListContainer>
-        <DiffListRoot dense={true}>
-          {/* TODO: i18n */}
-          <ListSubheader style={{ backgroundColor: 'inherit' }}>Plugins</ListSubheader>
-          {pluginDiffList.map((props) => {
-            return (
-              <PluginDiffListItem
-                {...props}
-                onClick={() => {
-                  dispatch(actions.showDiffDetails(props.diffKey));
-                  dispatch(actions.startNavigateTo({ type: 'node', name: props.diffKey }));
-                }}
-                key={props.diffKey}
-              />
-            );
-          })}
-          {/* TODO: i18n */}
-          <ListSubheader>Connections</ListSubheader>
-          {connectionDiffList.map((props) => {
-            return (
-              <ConnectionDiffListItem
-                {...props}
-                onClick={() =>
-                  dispatch(actions.startNavigateTo({ type: 'edge', name: props.diffKey }))
-                }
-                key={props.diffKey}
-              />
-            );
-          })}
-        </DiffListRoot>
+        {isLoading && (
+          <LoadingSVGContainer>
+            <LoadingSVG />
+          </LoadingSVGContainer>
+        )}
+        {!isLoading && (
+          <DiffListRoot dense={true}>
+            {/* TODO: i18n */}
+            <ListSubheader style={{ backgroundColor: 'inherit' }}>Plugins</ListSubheader>
+            {pluginDiffList.map((props) => {
+              return (
+                <PluginDiffListItem
+                  {...props}
+                  onClick={() => {
+                    dispatch(actions.showDiffDetails(props.diffKey));
+                    dispatch(actions.startNavigateTo({ type: 'node', name: props.diffKey }));
+                  }}
+                  key={props.diffKey}
+                />
+              );
+            })}
+            {/* TODO: i18n */}
+            <ListSubheader>Connections</ListSubheader>
+            {connectionDiffList.map((props) => {
+              return (
+                <ConnectionDiffListItem
+                  {...props}
+                  onClick={() =>
+                    dispatch(actions.startNavigateTo({ type: 'edge', name: props.diffKey }))
+                  }
+                  key={props.diffKey}
+                />
+              );
+            })}
+          </DiffListRoot>
+        )}
       </DiffListContainer>
     </DiffSidebar>
   );

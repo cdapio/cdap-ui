@@ -23,6 +23,15 @@ import { useAppSelector } from './store/hooks';
 import { RootState } from './store';
 import { DiffInfo } from './DiffInfo';
 import { I18N_PREFIX } from './constants';
+import LoadingSVG from 'components/shared/LoadingSVG';
+
+const LoadingSVGContainer = styled.div`
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+`;
 
 const DiffWindowRoot = styled.div`
   display: flex;
@@ -73,6 +82,11 @@ export const DiffWindow = () => {
             backgroundId={'older-pipeline'}
           />
         )}
+        {isLoading && (
+          <LoadingSVGContainer>
+            <LoadingSVG />
+          </LoadingSVGContainer>
+        )}
       </DiffAccordion>
 
       <DiffAccordion
@@ -86,6 +100,11 @@ export const DiffWindow = () => {
             availablePluginsMap={availablePluginsMap}
             backgroundId={'current-pipeline'}
           />
+        )}
+        {isLoading && (
+          <LoadingSVGContainer>
+            <LoadingSVG />
+          </LoadingSVGContainer>
         )}
       </DiffAccordion>
 
