@@ -16,5 +16,9 @@
   "session.secret.key": "sample-secret-key-for-encryption",
   "feature.lifecycle.management.edit.enabled": "true",
   "ui.analyticsTag": "",
-  "ui.GTM": ""
+  "ui.GTM": "",
+  "hsts.enabled": "false",
+  "hsts.max.age": 31536000,
+  "hsts.include.sub.domains": "true",
+  "hsts.preload": "true"
 }
