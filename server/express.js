@@ -136,6 +136,11 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   if (!isModeDevelopment()) {
     const proxyBaseUrl = cdapConfig['dashboard.proxy.base.url'];
+    const hstsSettings = {
+       maxAge: parseInt(cdapConfig["hsts.max.age"]),
+       includeSubDomains: cdapConfig["hsts.include.sub.domains"] === 'true',
+       preload: cdapConfig["hsts.preload"] === 'true',
+    }
     let cspWhiteListUrls = [];
     if (proxyBaseUrl) {
       cspWhiteListUrls.push(proxyBaseUrl);
@@ -181,10 +186,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             reportUri: `https://csp.withgoogle.com/csp/cdap`,
           },
         },
-        hsts: {
-          includeSubDomains: true,
-          preload: true,
-        },
+        hsts: cdapConfig["hsts.enabled"] === 'true' && hstsSettings,
         // Hub icons are cross-origin but don't supply CORS headers
         // TODO credentialless will also work but isn't supported by FF and Safari
         crossOriginEmbedderPolicy: false
@@ -239,6 +241,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         ui: uiSettings['ui'],
         k8sWorkloadIdentityEnabled: cdapConfig['master.environment.k8s.workload.identity.enabled'],
         namespaceCreationHookEnabled: cdapConfig['namespaces.creation.hook.enabled'],
+        hstsEnabled: cdapConfig['hsts.enabled'],
+        hstsMaxAge: cdapConfig['hsts.max.age'],
+        hstsIncludeSubDomains: cdapConfig['hsts.include.sub.domains'],
+        hstsPreload: cdapConfig['hsts.preload'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
