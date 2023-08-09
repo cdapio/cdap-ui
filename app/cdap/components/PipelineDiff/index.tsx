@@ -31,6 +31,7 @@ import { useAppDispatch } from './store/hooks';
 import { fetchExtraPluginProperties, fetchPipelineConfig } from './util/fetch';
 import { actions } from './store/diffSlice';
 import { computePipelineDiff } from './util/diff';
+import { I18N_PREFIX } from './constants';
 
 const PipelineDiffModalContents = styled.div`
   display: flex;
@@ -100,7 +101,7 @@ const PipelineDiffModal = ({
 
   return (
     <PipelineModeless
-      title={T.translate('features.PipelineDiff.modalTitle').toString()}
+      title={T.translate(`${I18N_PREFIX}.modalTitle`).toString()}
       open={isOpen}
       onClose={(event) => {
         dispatch(actions.modalClosed());

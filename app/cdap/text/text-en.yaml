@@ -2783,6 +2783,9 @@ features:
     latestVersion: Latest Version
     diff: Difference
     search: Search
+    diffList:
+      plugins: Plugins
+      connections: Connections
 
   PipelineTriggers:
     collapsedTabLabel: "Inbound triggers ({count})"
