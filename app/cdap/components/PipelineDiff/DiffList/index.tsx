@@ -18,6 +18,7 @@ import React, { useMemo, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import Paper from '@material-ui/core/Paper';
+import T from 'i18n-react';
 
 import styled from 'styled-components';
 
@@ -34,6 +35,7 @@ import { actions } from '../store/diffSlice';
 import { DiffSearch } from '../DiffSearch';
 import { AvailablePluginsMap, IPipelineDiffMap, IPipelineStage } from '../types';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { I18N_PREFIX } from '../constants';
 
 const LoadingSVGContainer = styled.div`
   align-items: center;
@@ -157,8 +159,9 @@ export const DiffList = () => {
         )}
         {!isLoading && (
           <DiffListRoot dense={true}>
-            {/* TODO: i18n */}
-            <ListSubheader style={{ backgroundColor: 'inherit' }}>Plugins</ListSubheader>
+            <ListSubheader style={{ backgroundColor: 'inherit' }}>
+              {T.translate(`${I18N_PREFIX}.diffList.plugins`)}
+            </ListSubheader>
             {pluginDiffList.map((props) => {
               return (
                 <PluginDiffListItem
@@ -171,8 +174,9 @@ export const DiffList = () => {
                 />
               );
             })}
-            {/* TODO: i18n */}
-            <ListSubheader>Connections</ListSubheader>
+            <ListSubheader style={{ backgroundColor: 'inherit' }}>
+              {T.translate(`${I18N_PREFIX}.diffList.connections`)}
+            </ListSubheader>
             {connectionDiffList.map((props) => {
               return (
                 <ConnectionDiffListItem
