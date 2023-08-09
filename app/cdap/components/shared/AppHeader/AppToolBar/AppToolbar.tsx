@@ -99,7 +99,7 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
             featureUrl={`/ns/${namespace}/reports`}
             onClick={() => this.eventEmitter.emit(globalEvents.CLOSEMARKET)}
           />
-          <HubButton />
+          {/* <HubButton /> */}
           <ToolBarFeatureLink
             featureFlag={true}
             featureName={Theme.featureNames.systemAdmin}
