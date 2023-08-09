@@ -15,7 +15,7 @@
  */
 
 import { diff } from 'json-diff';
-import { DeepPartial, DiffIndicator, IPipelineDiffMap } from '../types';
+import { ChangedProperty, Diff, DiffIndicator, IPipelineDiffMap } from '../types';
 import {
   IPipelineConfig,
   IStageMap,
@@ -95,10 +95,23 @@ function preprocessPipeline(pipeline: IPipelineConfig) {
   const connectionMap: IConnectionMap = {};
   const stageNameToStage = {};
 
+  function parseSchema(obj: any) {
+    Object.keys(obj).forEach((key) => {
+      if (key.toLowerCase().includes('schema') && typeof obj[key] === 'string') {
+        obj[key] = JSON.parse(obj[key]);
+      } else if (Array.isArray(obj[key])) {
+        obj[key].forEach((item) => parseSchema(item));
+      } else if (typeof obj[key] === 'object') {
+        parseSchema(obj[key]);
+      }
+    });
+  }
+
   // Arrays are compared in json-diff in an ordered fashion. To overcome this issue, convert
   // stages and connections array into objects with each object/connection having their unique key
 
   for (const stage of pipeline.stages) {
+    parseSchema(stage);
     stageMap[getStageDiffKey(stage)] = stage;
     stageNameToStage[stage.name] = stage;
   }
@@ -120,8 +133,8 @@ function preprocessPipeline(pipeline: IPipelineConfig) {
  * @param obj2 obj2
  * @returns difference between obj1 and obj2
  */
-function jsonObjectDiff<T1>(obj1: T1, obj2: T1) {
-  return diff(obj1, obj2) as { [name: string]: DeepPartial<T1> } | undefined;
+function jsonObjectDiff<T>(obj1: T, obj2: T) {
+  return diff(obj1, obj2) as Diff<T> | undefined;
 }
 
 /**

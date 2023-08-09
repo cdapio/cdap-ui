@@ -14,14 +14,25 @@
  * the License.
  */
 import { Edge, Node } from 'reactflow';
-export type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
+
+export type ChangedArray<T extends any[]> = Array<
+  [' '] | ['+' | '-', T[number]] | ['~', Diff<T[number]>]
+>;
+export interface ChangedObject<T> {
+  __old: T;
+  __new: T;
+}
+export type ChangedProperty<T> = {
+  [P in keyof T]?: Diff<T[P]>;
 };
+
+export type Diff<T> = T extends [] ? ChangedArray<T> : ChangedObject<T> | ChangedProperty<T>;
 export interface IPipelineConnection {
   from: string;
   to: string;
 }
 export interface IPipelineStage {
+  [prop: string]: any;
   id: string;
   name: string;
   plugin: {
@@ -56,11 +67,11 @@ export interface IStageDiffItem {
   diffIndicator: DiffIndicator;
   stage1: IPipelineStage;
   stage2: IPipelineStage;
-  diff: DeepPartial<IPipelineStage>;
+  diff: ChangedProperty<IPipelineStage>;
 }
 export interface IConnectionDiffItem {
   diffIndicator: DiffIndicator;
-  diff: DeepPartial<IPipelineConnection>;
+  diff: ChangedProperty<IPipelineConnection>;
   from: IPipelineStage;
   to: IPipelineStage;
 }

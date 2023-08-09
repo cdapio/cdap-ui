@@ -57,10 +57,7 @@ export const DiffInfo = ({ openDiffItem, diffMap, availablePluginsMap }: IDiffIn
         )}
         iconName={getPluginIcon(getPluginNameFromStageDiffKey(openDiffItem))}
       />
-      <DiffInfoTable
-        diffIndicator={diffMap.stages[openDiffItem].diffIndicator}
-        pluginProperties={diff.plugin?.properties}
-      />
+      <DiffInfoTable diffIndicator={diffMap.stages[openDiffItem].diffIndicator} diff={diff} />
     </DiffInfoContainer>
   );
 };

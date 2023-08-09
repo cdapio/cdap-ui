@@ -67,6 +67,7 @@ const diffSlice = createSlice({
     ) {
       state.topPipelineConfig = action.payload.topPipelineConfig;
       state.bottomPipelineConfig = action.payload.bottomPipelineConfig;
+      // @ts-ignore TODO: fix type issue
       state.diffMap = action.payload.diffMap;
       state.availablePluginsMap = action.payload.availablePluginsMap;
       state.isLoading = false;
