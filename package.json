@@ -8,6 +8,7 @@
     "start": "yarn run build-server && NODE_ENV=development yarn node ./packaged/server_dist/index.js",
     "cdap-prod-build": "NODE_ENV=production webpack",
     "old": "NODE_ENV=development webpack --config=webpack.config.old.js --watch",
+    "dev-old": "concurrently \"yarn start\" \"yarn old\" \"yarn cdap-dev-build-w\"",
     "cdap-dev-build": "NODE_ENV=development NODE_OPTIONS='--require ./.pnp.cjs' yarn webpack -d inline-source-map",
     "cdap-dev-build-w": "NODE_ENV=development NODE_OPTIONS='--require ./.pnp.cjs' yarn webpack --watch",
     "reload-dev-w": "NODE_ENV=reload node --max-old-space-size=8192 ./node_modules/.bin/webpack-dev-server --mode development --progress --config=./webpack.config.cdap.dev.js",
