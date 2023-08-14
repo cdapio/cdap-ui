@@ -184,6 +184,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             objectSrc: [`'none'`],
             workerSrc: [`'self' blob:`],
             reportUri: `https://csp.withgoogle.com/csp/cdap`,
+            upgradeInsecureRequests: null,
           },
         },
         hsts: cdapConfig["hsts.enabled"] === 'true' && hstsSettings,
