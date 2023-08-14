@@ -356,7 +356,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
     let templateType = this.HydratorPlusPlusConfigStore.getArtifact().name;
     this.$uibModal
       .open({
-        templateUrl: 'plugin-templates/plugin-templates.html',
+        templateUrl: '/assets/features/hydrator/templates/create/popovers/plugin-templates.html',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,

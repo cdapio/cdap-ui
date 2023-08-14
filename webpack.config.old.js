@@ -450,12 +450,12 @@ const webpackConfig = {
           from: './app/hydrator/hydrator.html',
           to: path.resolve(__dirname + '/packaged/public/dist/hydrator.html'),
         },
-        {
-          from: './app/hydrator/**/*.html',
-          to: path.resolve(
-            __dirname + '/packaged/public/dist/assets/features/hydrator'
-          ),
-        },
+        // {
+        //   from: './app/hydrator/**/*.html',
+        //   to: path.resolve(
+        //     __dirname + '/packaged/public/dist/assets/features/hydrator'
+        //   ),
+        // },
         // {
         //   from: path.resolve(
         //     __dirname,
