@@ -19,6 +19,8 @@ import { LeftPanel } from 'components/hydrator/components/LeftPanel/LeftPanel';
 import { TopPanel } from 'components/hydrator/components/TopPanel/TopPanel';
 import { WrapperCanvas } from 'components/hydrator/components/Canvas';
 import PipelineDetailsRunLevelInfo from 'components/PipelineDetails/RunLevelInfo';
+import { Provider } from 'react-redux';
+import { configureStores } from 'components/hydrator/reducers';
 
 export interface IStudioCreateState {
   topPanelCtrl: any;
@@ -36,6 +38,7 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metada
       <div className="react-version">
         <div className="canvas-wrapper">
           <div className="left-control">
+          <Provider store={configureStores}>
             <LeftPanel
               onArtifactChange={leftPanelCtrl.onArtifactChangeV2}
               pluginsMap={leftPanelCtrl.pluginsMap}
@@ -48,6 +51,7 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metada
               isEdit={leftPanelCtrl.isEdit}
               createPluginTemplate={leftPanelCtrl.createPluginTemplateV2}
             />
+            </Provider>
           </div>
           <div className="top-panel">
             <TopPanel

@@ -37,6 +37,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
     } else {
       this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
     }
+    this.ReactStores = window.ReactStores;
 
     window.leftPanelStore = this.leftPanelStore;
 
@@ -74,7 +75,7 @@ export class HydratorPlusPlusLeftPanelCtrl {
       let extensions = state.extensions;
       let pluginsList = state.plugins.pluginTypes;
 
-      this.pluginsMap.splice(0, this.pluginsMap.length);
+      this.pluginsMap = []
 
       if (!extensions.length) {
         return;
@@ -95,17 +96,30 @@ export class HydratorPlusPlusLeftPanelCtrl {
             pluginTypes: [ext] // Since we group plugin types now under one label we need ot keep track of fetchPlugins call for each plugin type.
           });
         } else {
-          fetchedPluginsMap[0].plugins = fetchedPluginsMap[0].plugins.concat(plugins);
-          fetchedPluginsMap[0].pluginTypes.push(ext);
+          if (plugins && fetchedPluginsMap[0].plugins) {
+            fetchedPluginsMap[0].plugins = fetchedPluginsMap[0].plugins.concat(plugins);
+            fetchedPluginsMap[0].pluginTypes.push(ext);
+          }
         }
       });
       this.pluginsMap = HydratorPlusPlusOrderingFactory.orderPluginTypes(this.pluginsMap);
+      this.ReactStores.dispatch({
+        type: 'PLUGINS_MAP_FETCH',
+        payload: {
+          pluginsMap: this.pluginsMap
+        }
+      })
     });
 
     let availablePluginSub = this.AvailablePluginsStore.subscribe(() => {
       this.availablePluginMap = this.AvailablePluginsStore.getState().plugins.pluginsMap;
+      this.ReactStores.dispatch({
+        type: 'AVAILABLE_PLUGINS_FETCH',
+        payload: {
+          availablePluginMap: this.availablePluginMap
+        }
+      })
     });
-
 
     var leftPanelStoreTimeout = $timeout(() => {
       this.leftpanelStore.dispatch({
@@ -169,8 +183,19 @@ export class HydratorPlusPlusLeftPanelCtrl {
               return r;
             });
           that.artifacts = filteredRes;
-          that.selectedArtifact = filteredRes[0];
-
+          that.selectedArtifact = filteredRes[1];
+          this.ReactStores.dispatch({
+            type: 'ARTIFACTS_FETCH',
+            payload: {
+              artifacts: filteredRes
+            }
+          })
+          this.ReactStores.dispatch({
+            type: 'ARTIFACT_SET',
+            payload: {
+              selectedArtifact: filteredRes[1]
+            }
+          })
           that.artifactToRevert = that.selectedArtifact;
           return that.selectedArtifact;
         }
@@ -230,6 +255,20 @@ export class HydratorPlusPlusLeftPanelCtrl {
     this.selectedArtifact = this.artifacts.find((art) => {
       return art.name === newArtifact;
     });
+    this.ReactStores.dispatch({
+      type: 'ARTIFACT_SET',
+      payload: {
+        selectedArtifact: this.selectedArtifact
+      }
+    })
+    this.PipelineAvailablePluginsActions.fetchPlugins(
+      {
+        namespace: this.getNamespace(),
+        pipelineType: this.selectedArtifact.name,
+        version: this.version,
+        scope: this.$scope
+      }
+    );
     this._checkAndShowConfirmationModalOnDirtyState()
       .then(proceedToNextStep => {
         if (!proceedToNextStep) {
