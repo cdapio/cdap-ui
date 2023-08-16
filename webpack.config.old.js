@@ -83,6 +83,7 @@ const outdatedWayOfDoingThings = [
   require.resolve('redux-thunk'),
   // this was the only way to get these working
   require.resolve('./build-deps/angular-bootstrap/ui-bootstrap.min.js'),
+  require.resolve('./build-deps/angular-bootstrap/ui-bootstrap-tpls.min.js'),
   require.resolve('./build-deps/angular-ui-ace/ui-ace.min.js'),
   
   require.resolve('jsplumb'),
@@ -450,7 +451,7 @@ const webpackConfig = {
           to: path.resolve(__dirname + '/packaged/public/dist/hydrator.html'),
         },
         // {
-        //   from: './app/hydrator/templates/**/*.html',
+        //   from: './app/hydrator/**/*.html',
         //   to: path.resolve(
         //     __dirname + '/packaged/public/dist/assets/features/hydrator'
         //   ),
