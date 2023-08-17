@@ -15,13 +15,18 @@
  */
 import { configureStore } from '@reduxjs/toolkit';
 import reduxThunk from 'redux-thunk';
-import { pluginReducer, extensionsReducer } from './leftPanelStore';
+import { pluginReducer, extensionsReducer, artifactReducer } from './leftPanelStore';
 
 export const configureStores = configureStore({
   reducer: {
+    artifact: artifactReducer,
     extensions: extensionsReducer,
     plugins: pluginReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(reduxThunk),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: {
+    // Ignore these action types
+    ignoredActions: ['AVAILABLE_PLUGINS_FETCH'],
+  },}).concat(reduxThunk),
   devTools: true,
 });

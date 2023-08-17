@@ -192,13 +192,11 @@ var extensions = (state = getInitialState().extensions, action = {}) => {
         return Object.keys(extensionMap).filter(ext => extensionMap[ext] === extension).length;
       };
       return [
-        ...state,
         ...action.payload.extensions.filter(uiSupportedExtension)
       ];
     }
     case leftpanelactions.FETCH_ALL_PLUGINS:
       return [
-        ...state,
         ...action.payload.extensions
       ];
     case leftpanelactions.RESET:
