@@ -656,7 +656,7 @@ describe('Unit tests for Dynamic Plugin Filters', () => {
       let groupWithComplexProperties = filteredConfigurationGroups.find(
         (group) => group.label === 'Group with complex filters'
       );
-      expect(groupWithComplexProperties.show).toBe(true);
+      expect(groupWithComplexProperties?.show).toBe(true);
       defaultValues.property1 = '-1';
       filteredConfigurationGroups = filterByCondition(
         configurationGroups,
@@ -667,7 +667,7 @@ describe('Unit tests for Dynamic Plugin Filters', () => {
       groupWithComplexProperties = filteredConfigurationGroups.find(
         (group) => group.label === 'Group with complex filters'
       );
-      expect(groupWithComplexProperties.show).toBe(false);
+      expect(groupWithComplexProperties?.show).toBe(false);
     });
 
     it('Test that will hide entire group when the show has group type', () => {
@@ -679,7 +679,7 @@ describe('Unit tests for Dynamic Plugin Filters', () => {
       let groupWithComplexProperties = filteredConfigurationGroups.find(
         (group) => group.label === 'Hide entire group'
       );
-      expect(groupWithComplexProperties.show).toBe(false);
+      expect(groupWithComplexProperties?.show).toBe(false);
       defaultValues.property1 = 'Infinity';
       filteredConfigurationGroups = filterByCondition(
         configurationGroups,
@@ -691,7 +691,7 @@ describe('Unit tests for Dynamic Plugin Filters', () => {
       groupWithComplexProperties = filteredConfigurationGroups.find(
         (group) => group.label === 'Hide entire group'
       );
-      expect(groupWithComplexProperties.show).toBe(true);
+      expect(groupWithComplexProperties?.show).toBe(true);
     });
   });
 

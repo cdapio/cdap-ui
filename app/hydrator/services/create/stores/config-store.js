@@ -15,7 +15,7 @@
  */
 
 class HydratorPlusPlusConfigStore {
-  constructor(HydratorPlusPlusConfigDispatcher, HydratorPlusPlusCanvasFactory, GLOBALS, mySettings, HydratorPlusPlusConsoleActions, $stateParams, NonStorePipelineErrorFactory, HydratorPlusPlusHydratorService, $q, HydratorPlusPlusPluginConfigFactory, uuid, $state, HYDRATOR_DEFAULT_VALUES, myHelpers, MY_CONFIG, EventPipe, myPipelineApi, myAppsApi, HydratorPlusPlusNodeService) {
+  constructor(HydratorPlusPlusConfigDispatcher, HydratorPlusPlusCanvasFactory, GLOBALS, mySettings, HydratorPlusPlusConsoleActions, $rootScope, NonStorePipelineErrorFactory, HydratorPlusPlusHydratorService, $q, HydratorPlusPlusPluginConfigFactory, uuid, $state, HYDRATOR_DEFAULT_VALUES, myHelpers, MY_CONFIG, EventPipe, myPipelineApi, myAppsApi, HydratorPlusPlusNodeService) {
     'ngInject';
     this.state = {};
     this.mySettings = mySettings;
@@ -23,7 +23,8 @@ class HydratorPlusPlusConfigStore {
     this.HydratorPlusPlusConsoleActions = HydratorPlusPlusConsoleActions;
     this.HydratorPlusPlusCanvasFactory = HydratorPlusPlusCanvasFactory;
     this.GLOBALS = GLOBALS;
-    this.$stateParams = $stateParams;
+    this.$stateParams = $rootScope.$stateParams;
+    this.$rootScope = $rootScope;
     this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
     this.HydratorPlusPlusNodeService = HydratorPlusPlusNodeService;
@@ -628,6 +629,8 @@ class HydratorPlusPlusConfigStore {
   }
 
   setNodes(nodes) {
+    const $stateParams = this.$rootScope.$stateParams;
+    const $rootScope = this.$rootScope;
     this.state.__ui__.nodes = nodes || [];
     let listOfPromises = [];
     let parseNodeConfig = (node, res) => {
@@ -691,7 +694,7 @@ class HydratorPlusPlusConfigStore {
               reqBody.push(pluginInfo);
             });
 
-            this.myPipelineApi.fetchAllPluginsProperties({ namespace: this.$stateParams.namespace }, reqBody)
+            this.myPipelineApi.fetchAllPluginsProperties({ namespace: $stateParams.namespace }, reqBody)
               .$promise
               .then((resInfo) => {
                 resInfo.forEach((pluginInfo, index) => {
@@ -1210,8 +1213,9 @@ class HydratorPlusPlusConfigStore {
 
     let config = this.getConfigForExport({ shouldPruneProperties: false });
     const draftId = this.getDraftId() || this.uuid.v4();
+    const namespace = window.location.pathname.split('/')[3];
     const params = {
-      context: this.$stateParams.namespace,
+      context: namespace,
       draftId,
     };
     /**
@@ -1224,9 +1228,10 @@ class HydratorPlusPlusConfigStore {
       .get('hydratorDrafts', true)
       .then(
         (res) => {
-          var savedDraft = this.myHelpers.objectQuery(res, this.$stateParams.namespace, draftId);
+          const namespace = window.location.pathname.split('/')[3];
+          var savedDraft = this.myHelpers.objectQuery(res, namespace, draftId);
           if (savedDraft) {
-            delete res[this.$stateParams.namespace][draftId];
+            delete res[namespace][draftId];
             return this.mySettings.set('hydratorDrafts', res);
           }
         })
@@ -1290,7 +1295,8 @@ class HydratorPlusPlusConfigStore {
           (res) => {
             var savedDraft = this.myHelpers.objectQuery(res, this.$stateParams.namespace, draftId);
             if (savedDraft) {
-              delete res[this.$stateParams.namespace][draftId];
+              const namespace = window.location.pathname.split('/')[3];
+              delete res[namespace][draftId];
               return this.mySettings.set('hydratorDrafts', res);
             }
             return Promise.resolve(true);
@@ -1302,9 +1308,10 @@ class HydratorPlusPlusConfigStore {
     let postDeploymentCleanUp = (adapterName) => {
       // create schedule only on first deploy
       if (!isEdit) {
+        const namespace = window.location.pathname.split('/')[3];
         this.myPipelineApi.createSchedule(
           {
-            namespace: this.$state.params.namespace,
+            namespace,
             pipeline: adapterName,
             scheduleId: this.GLOBALS.defaultScheduleId
           },
@@ -1325,16 +1332,18 @@ class HydratorPlusPlusConfigStore {
        *   pipeline view.
        * - If it succeeds then proceed to pipeline detailed view.
        */
+      const namespace = window.location.pathname.split('/')[3];
       this.myPipelineApi
-        .deleteDraft({ context: this.$stateParams.namespace, draftId })
+        .deleteDraft({ context: namespace, draftId })
         .$promise
         .then(navigateToDetailedView.bind(this, adapterName), removeOldDraft.bind(this, draftId, adapterName));
     };
 
     let publish = (pipelineName) => {
+      const namespace = window.location.pathname.split('/')[3];
       this.myPipelineApi.save(
         {
-          namespace: this.$state.params.namespace,
+          namespace: namespace,
           pipeline: pipelineName
         },
         config
@@ -1356,8 +1365,9 @@ class HydratorPlusPlusConfigStore {
     config['app.deploy.update.schedules'] = false;
 
     // Checking if Pipeline name already exist
+    const namespace = window.location.pathname.split('/')[3];
     this.myAppsApi
-      .list({ namespace: this.$state.params.namespace })
+      .list({ namespace })
       .$promise
       .then( (apps) => {
         if (isEdit) {

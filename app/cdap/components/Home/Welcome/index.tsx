@@ -25,7 +25,7 @@ import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
 import ee from 'event-emitter';
 
-import './Welcome.scss';
+require('./Welcome.scss');
 
 // Setting the store value to be an integer so that subsequent release, we can simply increment this number
 // to show the guided tour again.
@@ -60,7 +60,10 @@ export default class Welcome extends React.PureComponent<{}, IWelcomeState> {
     MyUserStoreApi.get().subscribe((res) => {
       const storeValue = objectQuery(res, 'property', USER_STORE_KEY);
 
-      if (tourTesting || ((!storeValue || storeValue !== USER_STORE_VALUE) && !window.Cypress)) {
+      if (
+        tourTesting ||
+        ((!storeValue || storeValue !== USER_STORE_VALUE) && !window.Cypress)
+      ) {
         this.setState({
           showModal: true,
         });
@@ -138,7 +141,11 @@ export default class Welcome extends React.PureComponent<{}, IWelcomeState> {
                 data-cy="show-again-checkbox"
                 data-testid="show-again-checkbox"
               >
-                <IconSVG name={this.state.showAgain ? 'icon-check-square' : 'icon-square-o'} />
+                <IconSVG
+                  name={
+                    this.state.showAgain ? 'icon-check-square' : 'icon-square-o'
+                  }
+                />
 
                 <span>{T.translate(`${PREFIX}.showAgainToggle`)}</span>
               </span>

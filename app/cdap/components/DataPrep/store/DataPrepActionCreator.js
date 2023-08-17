@@ -29,7 +29,7 @@ import { Theme } from 'services/ThemeHelper';
 let workspaceRetries;
 
 export function execute(addDirective, shouldReset, hideLoading = false) {
-  let eventEmitter = ee(ee);
+  const eventEmitter = ee(ee);
   eventEmitter.emit('CLOSE_POPOVER');
   if (!hideLoading) {
     DataPrepStore.dispatch({
@@ -37,15 +37,15 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
     });
   }
 
-  let store = DataPrepStore.getState().dataprep;
+  const store = DataPrepStore.getState().dataprep;
   let updatedDirectives = store.directives.concat(addDirective);
 
   if (shouldReset) {
     updatedDirectives = addDirective;
   }
 
-  let workspaceId = store.workspaceId;
-  let insights = store.insights;
+  const workspaceId = store.workspaceId;
+  const insights = store.insights;
   /*
       This is because everytime we change the data there is a possibility that we
       change the schema and with schema change the visualization is not guaranteed
@@ -53,14 +53,14 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
       visualization is still good enough (with just data change)
   */
   insights.visualization = {};
-  let namespace = NamespaceStore.getState().selectedNamespace;
+  const namespace = NamespaceStore.getState().selectedNamespace;
 
-  let params = {
+  const params = {
     context: namespace,
     workspaceId,
   };
 
-  let requestBody = directiveRequestBodyCreator(updatedDirectives);
+  const requestBody = directiveRequestBodyCreator(updatedDirectives);
   requestBody.insights = insights;
 
   return Observable.create((observer) => {
@@ -93,7 +93,7 @@ export function execute(addDirective, shouldReset, hideLoading = false) {
 function setWorkspaceRetry(params, observer, workspaceId) {
   MyDataPrepApi.getWorkspace(params).subscribe(
     (res) => {
-      let { dataprep } = DataPrepStore.getState();
+      const { dataprep } = DataPrepStore.getState();
       /*
         1. Open a tab with huge data (like 400 columns and 100 rows)
         2. Change of mind, open another tab
@@ -105,12 +105,12 @@ function setWorkspaceRetry(params, observer, workspaceId) {
       if (dataprep.workspaceId !== workspaceId) {
         return;
       }
-      let directives = objectQuery(res, 'directives') || [];
-      let requestBody = directiveRequestBodyCreator(directives);
-      let sampleSpec = objectQuery(res, 'sampleSpec') || {};
-      let visualization = objectQuery(res, 'insights', 'visualization') || {};
+      const directives = objectQuery(res, 'directives') || [];
+      const requestBody = directiveRequestBodyCreator(directives);
+      const sampleSpec = objectQuery(res, 'sampleSpec') || {};
+      const visualization = objectQuery(res, 'insights', 'visualization') || {};
 
-      let insights = {
+      const insights = {
         name: sampleSpec.connectionName,
         workspaceName: res.workspaceName,
         path: sampleSpec.path,
@@ -118,8 +118,8 @@ function setWorkspaceRetry(params, observer, workspaceId) {
       };
       requestBody.insights = insights;
 
-      let workspaceUri = objectQuery(res, 'sampleSpec', 'path');
-      let workspaceInfo = {
+      const workspaceUri = objectQuery(res, 'sampleSpec', 'path');
+      const workspaceInfo = {
         properties: insights,
       };
 
@@ -170,7 +170,10 @@ function setWorkspaceRetry(params, observer, workspaceId) {
         DataPrepStore.dispatch({
           type: DataPrepActions.setWorkspaceError,
           payload: {
-            workspaceError: { message: err.response.message, statusCode: err.statusCode },
+            workspaceError: {
+              message: err.response.message,
+              statusCode: err.statusCode,
+            },
           },
         });
         observer.error(err);
@@ -180,13 +183,17 @@ function setWorkspaceRetry(params, observer, workspaceId) {
 }
 
 export function updateWorkspaceProperties() {
-  let { directives, workspaceId, insights } = DataPrepStore.getState().dataprep;
-  let namespace = NamespaceStore.getState().selectedNamespace;
-  let params = {
+  const {
+    directives,
+    workspaceId,
+    insights,
+  } = DataPrepStore.getState().dataprep;
+  const namespace = NamespaceStore.getState().selectedNamespace;
+  const params = {
     context: namespace,
     workspaceId,
   };
-  let requestBody = directiveRequestBodyCreator(directives);
+  const requestBody = directiveRequestBodyCreator(directives);
   requestBody.insights = insights;
   MyDataPrepApi.setWorkspace(params, requestBody).subscribe(
     () => {},
@@ -194,7 +201,7 @@ export function updateWorkspaceProperties() {
   );
 }
 function checkAndUpdateExistingWorkspaceProperties() {
-  let { workspaceId, workspaceInfo } = DataPrepStore.getState().dataprep;
+  const { workspaceId, workspaceInfo } = DataPrepStore.getState().dataprep;
   if (!workspaceId || !workspaceInfo) {
     return;
   }
@@ -202,9 +209,9 @@ function checkAndUpdateExistingWorkspaceProperties() {
 }
 export function setWorkspace(workspaceId) {
   checkAndUpdateExistingWorkspaceProperties();
-  let namespace = NamespaceStore.getState().selectedNamespace;
+  const namespace = NamespaceStore.getState().selectedNamespace;
 
-  let params = {
+  const params = {
     context: namespace,
     workspaceId,
   };
@@ -226,7 +233,7 @@ export function setWorkspace(workspaceId) {
 
 function fetchColumnsInformation(response) {
   const { headers, summary: summaryRes } = response;
-  let columns = {};
+  const columns = {};
 
   headers.forEach((head) => {
     columns[head] = {
@@ -262,7 +269,7 @@ export function getWorkspaceList(workspaceId) {
       return;
     }
 
-    let workspaceList = orderBy(
+    const workspaceList = orderBy(
       res.values,
       [(workspace) => (workspace.workspaceName || '').toLowerCase()],
       ['asc']
@@ -278,7 +285,7 @@ export function getWorkspaceList(workspaceId) {
     if (workspaceId) {
       // Set active workspace
       // Check for existance of the workspaceId
-      let workspaceObj = find(workspaceList, { id: workspaceId });
+      const workspaceObj = find(workspaceList, { id: workspaceId });
 
       let workspaceObservable$;
       if (workspaceObj) {
@@ -315,7 +322,9 @@ export function setError(error, prefix) {
       detail = error.response.message;
     }
   }
-  const message = `${prefix || 'Error'}: ${status ? `${status}: ${detail}` : detail}`;
+  const message = `${prefix || 'Error'}: ${
+    status ? `${status}: ${detail}` : detail
+  }`;
 
   DataPrepStore.dispatch({
     type: DataPrepActions.setError,
@@ -339,10 +348,14 @@ export async function loadTargetDataModelStates() {
   }
 
   const rev = Number(dataModelRevision);
-  const targetDataModel = dataModelList.find((dm) => dm.id === dataModel && dm.revision === rev);
+  const targetDataModel = dataModelList.find(
+    (dm) => dm.id === dataModel && dm.revision === rev
+  );
   await setTargetDataModel(targetDataModel);
   if (targetDataModel) {
-    await setTargetModel(targetDataModel.models.find((m) => m.id === dataModelModel));
+    await setTargetModel(
+      targetDataModel.models.find((m) => m.id === dataModelModel)
+    );
   } else {
     await setTargetModel(null);
   }
@@ -356,7 +369,9 @@ export async function saveTargetDataModelStates() {
 
   const { targetDataModel, targetModel } = DataPrepStore.getState().dataprep;
   const newDataModelId = targetDataModel ? targetDataModel.id : null;
-  const newDataModelRevision = targetDataModel ? targetDataModel.revision : null;
+  const newDataModelRevision = targetDataModel
+    ? targetDataModel.revision
+    : null;
   const newModelId = targetModel ? targetModel.id : null;
 
   // These properties were populated by MyDataPrepApi.getWorkspace API
@@ -366,10 +381,15 @@ export async function saveTargetDataModelStates() {
     dataModelModel,
   } = DataPrepStore.getState().dataprep.insights;
   const oldDataModelId = dataModel || null;
-  const oldDataModelRevision = isFinite(dataModelRevision) ? Number(dataModelRevision) : null;
+  const oldDataModelRevision = isFinite(dataModelRevision)
+    ? Number(dataModelRevision)
+    : null;
   const oldModelId = dataModelModel || null;
 
-  if (oldDataModelId !== newDataModelId || oldDataModelRevision !== newDataModelRevision) {
+  if (
+    oldDataModelId !== newDataModelId ||
+    oldDataModelRevision !== newDataModelRevision
+  ) {
     if (oldDataModelId !== null) {
       await MyDataPrepApi.detachDataModel(params).toPromise();
     }

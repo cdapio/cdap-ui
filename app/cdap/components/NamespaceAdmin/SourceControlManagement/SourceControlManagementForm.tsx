@@ -22,7 +22,10 @@ import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedBu
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
 import { authKeys, patConfigKeys, providers, scmAuthType } from './constants';
-import { defaultSourceControlManagement, sourceControlManagementFormReducer } from './reducer';
+import {
+  defaultSourceControlManagement,
+  sourceControlManagementFormReducer,
+} from './reducer';
 import { addOrValidateSourceControlManagementForm } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { EntityTopPanel } from 'components/EntityTopPanel';
@@ -191,7 +194,10 @@ const SourceControlManagementForm = ({
   };
 
   const onSubmit = () => {
-    addOrValidateSourceControlManagementForm(getCurrentNamespace(), formState.config).subscribe(
+    addOrValidateSourceControlManagementForm(
+      getCurrentNamespace(),
+      formState.config
+    ).subscribe(
       () => {
         onToggle();
       },
@@ -226,10 +232,16 @@ const SourceControlManagementForm = ({
           <BoldHeader>{T.translate(`${PREFIX}.basicHeader`)}</BoldHeader>
           <StyledHr />
           <PropertyRow
-            value={formState.config?.provider ? formState.config?.provider : providers.github}
+            value={
+              formState.config?.provider
+                ? formState.config?.provider
+                : providers.github
+            }
             property={{
               name: 'provider',
-              description: T.translate(`${PREFIX}.provider.helperText`).toString(),
+              description: T.translate(
+                `${PREFIX}.provider.helperText`
+              ).toString(),
               label: T.translate(`${PREFIX}.provider.label`).toString(),
               'widget-type': 'select',
               'widget-attributes': {
@@ -245,7 +257,9 @@ const SourceControlManagementForm = ({
             value={formState.config?.link}
             property={{
               name: 'repoUrl',
-              description: T.translate(`${PREFIX}.repoUrl.helperText`).toString(),
+              description: T.translate(
+                `${PREFIX}.repoUrl.helperText`
+              ).toString(),
               label: T.translate(`${PREFIX}.repoUrl.label`).toString(),
               required: true,
             }}
@@ -254,7 +268,13 @@ const SourceControlManagementForm = ({
             }}
             errors={
               !formState.config?.link && formState.error
-                ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
+                ? [
+                    {
+                      msg: T.translate(
+                        'commons.requiredFieldMissingMsg'
+                      ).toString(),
+                    },
+                  ]
                 : []
             }
           />
@@ -262,7 +282,9 @@ const SourceControlManagementForm = ({
             value={formState.config?.defaultBranch}
             property={{
               name: 'defaultBranch',
-              description: T.translate(`${PREFIX}.branch.helperText`).toString(),
+              description: T.translate(
+                `${PREFIX}.branch.helperText`
+              ).toString(),
               label: T.translate(`${PREFIX}.branch.label`).toString(),
             }}
             onChange={(val) => {
@@ -273,7 +295,9 @@ const SourceControlManagementForm = ({
             value={formState.config?.pathPrefix}
             property={{
               name: 'pathPrefix',
-              description: T.translate(`${PREFIX}.pathPrefix.helperText`).toString(),
+              description: T.translate(
+                `${PREFIX}.pathPrefix.helperText`
+              ).toString(),
               label: T.translate(`${PREFIX}.pathPrefix.label`).toString(),
             }}
             onChange={(val) => {
@@ -285,7 +309,11 @@ const SourceControlManagementForm = ({
           <BoldHeader>{T.translate(`${PREFIX}.authHeader`)}</BoldHeader>
           <StyledHr />
           <PropertyRow
-            value={formState.config?.auth?.type ? formState.config.auth.type : scmAuthType[0].id}
+            value={
+              formState.config?.auth?.type
+                ? formState.config.auth.type
+                : scmAuthType[0].id
+            }
             property={{
               name: 'auth',
               description: T.translate(`${PREFIX}.auth.helperText`).toString(),
@@ -307,7 +335,9 @@ const SourceControlManagementForm = ({
                 value={formState.config?.auth?.patConfig?.passwordName}
                 property={{
                   name: 'tokenName',
-                  description: T.translate(`${PREFIX}.auth.pat.tokenNameHelperText`).toString(),
+                  description: T.translate(
+                    `${PREFIX}.auth.pat.tokenNameHelperText`
+                  ).toString(),
                   label: T.translate(`${PREFIX}.auth.pat.tokenName`).toString(),
                   required: true,
                 }}
@@ -315,8 +345,15 @@ const SourceControlManagementForm = ({
                   handleValueChange(val, 'passwordName');
                 }}
                 errors={
-                  !formState.config?.auth?.patConfig?.passwordName && formState.error
-                    ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
+                  !formState.config?.auth?.patConfig?.passwordName &&
+                  formState.error
+                    ? [
+                        {
+                          msg: T.translate(
+                            'commons.requiredFieldMissingMsg'
+                          ).toString(),
+                        },
+                      ]
                     : []
                 }
               />
@@ -324,7 +361,9 @@ const SourceControlManagementForm = ({
                 value={formState.config?.auth?.token}
                 property={{
                   name: 'token',
-                  description: T.translate(`${PREFIX}.auth.pat.tokenHelperText`).toString(),
+                  description: T.translate(
+                    `${PREFIX}.auth.pat.tokenHelperText`
+                  ).toString(),
                   label: T.translate(`${PREFIX}.auth.pat.token`).toString(),
                   required: true,
                   'widget-type': 'password',
@@ -334,7 +373,13 @@ const SourceControlManagementForm = ({
                 }}
                 errors={
                   !formState.config?.auth?.token && formState.error
-                    ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
+                    ? [
+                        {
+                          msg: T.translate(
+                            'commons.requiredFieldMissingMsg'
+                          ).toString(),
+                        },
+                      ]
                     : []
                 }
               />
@@ -342,7 +387,9 @@ const SourceControlManagementForm = ({
                 value={formState.config?.auth?.patConfig?.username}
                 property={{
                   name: 'username',
-                  description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
+                  description: T.translate(
+                    `${PREFIX}.auth.pat.usernameHelperText`
+                  ).toString(),
                   label: T.translate(`${PREFIX}.auth.pat.username`).toString(),
                 }}
                 onChange={(val) => {
@@ -362,7 +409,10 @@ const SourceControlManagementForm = ({
         >
           {T.translate(`${PREFIX}.validate.button`)}
         </PrimaryOutlinedLoadingButton>
-        <PrimaryContainedButton onClick={handleSubmit} data-testid="save-repo-config-button">
+        <PrimaryContainedButton
+          onClick={handleSubmit}
+          data-testid="save-repo-config-button"
+        >
           {T.translate(`${PREFIX}.linkConfirm`)}
         </PrimaryContainedButton>
       </StyledButtonGroup>

@@ -51,12 +51,12 @@ const profiles = (state = DEFAULT_PROFILES_STATE, action = defaultAction) => {
         loading: false,
       };
     case PROFILES_ACTIONS.SET_PROFILE_METRICS: {
-      let { profilesToMetricsMap } = action.payload;
+      const { profilesToMetricsMap } = action.payload;
       let { profiles } = state;
       profiles = profiles.map((profile) => {
-        let metricObj = { runs: '--', minutes: '--' };
-        let profileKey = `${profile.scope}:${profile.name}`;
-        let profileMetrics = profilesToMetricsMap[profileKey] || {};
+        const metricObj = { runs: '--', minutes: '--' };
+        const profileKey = `${profile.scope}:${profile.name}`;
+        const profileMetrics = profilesToMetricsMap[profileKey] || {};
         /*
           We are adding empty oneday and overall metrics AND metrics from backend
           as we are not sure UI will get all metrics from backend. This will give
@@ -75,7 +75,11 @@ const profiles = (state = DEFAULT_PROFILES_STATE, action = defaultAction) => {
       };
     }
     case PROFILES_ACTIONS.SET_SCHEDULES_TRIGGERS_COUNT: {
-      let { profile: profileToUpdate, schedulesCount, triggersCount } = action.payload;
+      const {
+        profile: profileToUpdate,
+        schedulesCount,
+        triggersCount,
+      } = action.payload;
       let { profiles } = state;
       profiles = profiles.map((profile) => {
         if (profile.name === profileToUpdate) {

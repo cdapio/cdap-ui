@@ -17,7 +17,7 @@
 import * as React from 'react';
 import { Theme } from 'services/ThemeHelper';
 import { ConnectionRoutes } from 'components/Connections/Routes';
-import { MemoryRouter, Redirect } from 'react-router';
+import { MemoryRouter, Redirect } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import PipelineMetricsStore from 'services/PipelineMetricsStore';

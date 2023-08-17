@@ -15,7 +15,10 @@
  */
 
 import * as React from 'react';
-import { getLineageSummary, getOperations } from 'components/FieldLevelLineage/store/ActionCreator';
+import {
+  getLineageSummary,
+  getOperations,
+} from 'components/FieldLevelLineage/store/ActionCreator';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import If from 'components/shared/If';
@@ -97,7 +100,11 @@ class FieldRowView extends React.PureComponent<IFieldRowProps, IFieldRowState> {
 
         <div className="operations">
           <If condition={isActive && this.props.incoming.length > 0}>
-            <span onClick={(e) => this.handleOperationsClick(e, Directions.INCOMING)}>
+            <span
+              onClick={(e) =>
+                this.handleOperationsClick(e, Directions.INCOMING)
+              }
+            >
               {T.translate(`${PREFIX}.incomingOperations`)}
             </span>
           </If>
@@ -107,13 +114,19 @@ class FieldRowView extends React.PureComponent<IFieldRowProps, IFieldRowState> {
           {field.name}
 
           <If condition={isDisabled && this.state.isHovered}>
-            <em className="no-lineage-text">{T.translate(`${PREFIX}.noLineage`)}</em>
+            <em className="no-lineage-text">
+              {T.translate(`${PREFIX}.noLineage`)}
+            </em>
           </If>
         </div>
 
         <div className="operations">
           <If condition={isActive && this.props.outgoing.length > 0}>
-            <span onClick={(e) => this.handleOperationsClick(e, Directions.OUTGOING)}>
+            <span
+              onClick={(e) =>
+                this.handleOperationsClick(e, Directions.OUTGOING)
+              }
+            >
               {T.translate(`${PREFIX}.outgoingOperations`)}
             </span>
           </If>

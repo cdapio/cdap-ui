@@ -34,14 +34,14 @@ import Collapse from '@material-ui/core/Collapse';
 import IconSVG from 'components/shared/IconSVG';
 import If from 'components/shared/If';
 
-const colorVariables = require('styles/variables.scss');
+const colorVariables = require('../../../../styles/variables.scss');
 
 const styles = (theme) => {
   return {
     listItemText: appDrawerListItemTextStyles(theme),
     listItem: appDrawerListItemStyles(theme),
     nestListPadding: {
-      paddingLeft: theme.Spacing(6),
+      paddingLeft: theme.spacing(6),
     },
     listItemWithSubmenu: {
       cursor: 'pointer',
@@ -90,7 +90,11 @@ class DrawerFeatureLink extends React.PureComponent<
   };
 
   private renderCaretForSubmenu = () => {
-    return <IconSVG name={this.state.submenuOpen ? 'icon-caret-up' : 'icon-caret-down'} />;
+    return (
+      <IconSVG
+        name={this.state.submenuOpen ? 'icon-caret-up' : 'icon-caret-down'}
+      />
+    );
   };
 
   private renderListItem(
@@ -113,7 +117,9 @@ class DrawerFeatureLink extends React.PureComponent<
     const reactFeatureUrl = `/cdap${featureUrl}`;
     const activeFeatureUrl = isAngular ? featureUrl : reactFeatureUrl;
     const localIsActive =
-      typeof isActive === 'undefined' ? pathname.startsWith(activeFeatureUrl) : isActive;
+      typeof isActive === 'undefined'
+        ? pathname.startsWith(activeFeatureUrl)
+        : isActive;
     if (featureFlag === false) {
       return null;
     }
@@ -132,7 +138,10 @@ class DrawerFeatureLink extends React.PureComponent<
         data-testid={rest['data-testid']}
       >
         <If condition={typeof featureSVGIconName === 'string'}>
-          <IconSVG className={classes.featureIconSize} name={featureSVGIconName || ''} />
+          <IconSVG
+            className={classes.featureIconSize}
+            name={featureSVGIconName || ''}
+          />
         </If>
         <ListItemText
           disableTypography
@@ -143,16 +152,27 @@ class DrawerFeatureLink extends React.PureComponent<
     );
   }
   private renderSubMenu() {
-    const { subMenu = [], featureName, classes, featureSVGIconName } = this.props;
+    const {
+      subMenu = [],
+      featureName,
+      classes,
+      featureSVGIconName,
+    } = this.props;
     if (!subMenu.length) {
       return null;
     }
 
     return (
       <React.Fragment>
-        <ListItem onClick={this.toggleSubmenuOpen} className={classes.listItemWithSubmenu}>
+        <ListItem
+          onClick={this.toggleSubmenuOpen}
+          className={classes.listItemWithSubmenu}
+        >
           <If condition={typeof featureSVGIconName === 'string'}>
-            <IconSVG className={classes.featureIconSize} name={featureSVGIconName} />
+            <IconSVG
+              className={classes.featureIconSize}
+              name={featureSVGIconName}
+            />
           </If>
           <ListItemText
             disableTypography
@@ -164,7 +184,10 @@ class DrawerFeatureLink extends React.PureComponent<
         <Collapse in={this.state.submenuOpen} timeout="auto" unmountOnExit>
           <List disablePadding>
             {subMenu.map((menu, i) => (
-              <React.Fragment key={i}> {this.renderListItem(menu, true)}</React.Fragment>
+              <React.Fragment key={i}>
+                {' '}
+                {this.renderListItem(menu, true)}
+              </React.Fragment>
             ))}
           </List>
         </Collapse>
@@ -174,12 +197,16 @@ class DrawerFeatureLink extends React.PureComponent<
   public render() {
     return (
       <React.Fragment>
-        {isEmpty(this.props.subMenu) ? this.renderListItem(this.props) : this.renderSubMenu()}
+        {isEmpty(this.props.subMenu)
+          ? this.renderListItem(this.props)
+          : this.renderSubMenu()}
       </React.Fragment>
     );
   }
 }
 
-const DrawerFeatureLinkWithContext = withStyles(styles)(withContext(DrawerFeatureLink));
+const DrawerFeatureLinkWithContext = withStyles(styles)(
+  withContext(DrawerFeatureLink)
+);
 
 export default DrawerFeatureLinkWithContext;

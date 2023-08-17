@@ -111,12 +111,24 @@ export const SourceControlManagement = () => {
         <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 120px 100px">
           <TableHeader>
             <TableRow>
-              <TableCell>{T.translate(`${PREFIX}.configModal.provider.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.repoUrl.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.auth.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.auth.pat.token`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.branch.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.pathPrefix.label`)}</TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.provider.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.repoUrl.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.auth.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.auth.pat.token`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.branch.label`)}
+              </TableCell>
+              <TableCell>
+                {T.translate(`${PREFIX}.configModal.pathPrefix.label`)}
+              </TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -130,7 +142,11 @@ export const SourceControlManagement = () => {
                 {sourceControlManagementConfig.provider}
               </TableCell>
               <TableCell data-testid="repository-link">
-                <a href={sourceControlManagementConfig.link} target="_blank">
+                <a
+                  href={sourceControlManagementConfig.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {sourceControlManagementConfig.link}
                 </a>
               </TableCell>
@@ -138,7 +154,9 @@ export const SourceControlManagement = () => {
                 {sourceControlManagementConfig.auth.type}
               </TableCell>
               <TableCell data-testid="repository-auth-token">
-                <StyledPasswordWrapper value={sourceControlManagementConfig.auth.token} />
+                <StyledPasswordWrapper
+                  value={sourceControlManagementConfig.auth.token}
+                />
               </TableCell>
               <TableCell>
                 {sourceControlManagementConfig.defaultBranch
@@ -151,7 +169,10 @@ export const SourceControlManagement = () => {
                   : '--'}
               </TableCell>
               <TableCell>
-                <PrimaryTextLoadingButton onClick={validateConfigAndRedirect} loading={loading}>
+                <PrimaryTextLoadingButton
+                  onClick={validateConfigAndRedirect}
+                  loading={loading}
+                >
                   {T.translate(`${PREFIX}.syncButton`)}
                 </PrimaryTextLoadingButton>
               </TableCell>

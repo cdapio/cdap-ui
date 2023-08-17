@@ -18,7 +18,10 @@ import * as React from 'react';
 
 import Heading, { HeadingTypes } from 'components/shared/Heading';
 import { List, Map } from 'immutable';
-import { useConfigurationGroupState, useWidgetState } from 'components/PluginJSONCreator/Create';
+import {
+  useConfigurationGroupState,
+  useWidgetState,
+} from 'components/PluginJSONCreator/Create';
 
 import Button from '@material-ui/core/Button';
 import GroupPanel from 'components/PluginJSONCreator/Create/Content/ConfigurationGroupPage/GroupPanel';
@@ -119,30 +122,32 @@ const ConfigurationGroupPage = () => {
   return React.useMemo(
     () => (
       <div>
-        <Heading type={HeadingTypes.h3} label="Configuration Groups" />
-        <br />
-        <If condition={configurationGroups.size === 0}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={addConfigurationGroup(0)}
-            data-cy="add-configuration-group-btn"
-          >
-            Add Configuration Group
-          </Button>
-        </If>
-        {configurationGroups.map((groupID, i) => (
-          <GroupPanel
-            key={groupID}
-            groupID={groupID}
-            groupIndex={i}
-            configurationGroupExpanded={activeGroupIndex === i}
-            switchEditConfigurationGroup={switchEditConfigurationGroup(i)}
-            addConfigurationGroup={addConfigurationGroup(i)}
-            deleteConfigurationGroup={deleteConfigurationGroup(i)}
-          />
-        ))}
-        <StepButtons nextDisabled={false} />
+        <>
+          <Heading type={HeadingTypes.h3} label="Configuration Groups" />
+          <br />
+          <If condition={configurationGroups.size === 0}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addConfigurationGroup(0)}
+              data-cy="add-configuration-group-btn"
+            >
+              Add Configuration Group
+            </Button>
+          </If>
+          {configurationGroups.map((groupID, i) => (
+            <GroupPanel
+              key={groupID}
+              groupID={groupID}
+              groupIndex={i}
+              configurationGroupExpanded={activeGroupIndex === i}
+              switchEditConfigurationGroup={switchEditConfigurationGroup(i)}
+              addConfigurationGroup={addConfigurationGroup(i)}
+              deleteConfigurationGroup={deleteConfigurationGroup(i)}
+            />
+          ))}
+          <StepButtons nextDisabled={false} />
+        </>
       </div>
     ),
     [

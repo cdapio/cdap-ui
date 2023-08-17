@@ -61,7 +61,7 @@ export function createWorkspace({ entity, connection, limit = 1000, properties =
     });
 }
 
-export function getPluginSpec(entity, connection, plugin = null) {
+export function getPluginSpec(entity, connection, plugin: any = null) {
   const { path } = entity;
   const params = {
     context: getCurrentNamespace(),

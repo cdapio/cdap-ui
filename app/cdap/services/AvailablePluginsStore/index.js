@@ -18,7 +18,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { defaultAction, composeEnhancers } from 'services/helpers';
 import thunk from 'redux-thunk';
 
-const AVAILABLE_PLUGINS_ACTIONS = {
+export const AVAILABLE_PLUGINS_ACTIONS = {
   setPluginsMap: 'SET_AVAILABLE_PLUGINS_MAP',
   reset: 'AVAILABLE_PLUGINS_RESET',
 };
@@ -51,4 +51,3 @@ const AvailablePluginsStore = createStore(
 );
 
 export default AvailablePluginsStore;
-export { AVAILABLE_PLUGINS_ACTIONS };

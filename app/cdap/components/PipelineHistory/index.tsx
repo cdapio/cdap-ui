@@ -20,7 +20,7 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { PipelineHistoryTable } from './PipelineHistoryTable';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from 'react-apollo';
 import PaginationStepper from 'components/shared/PaginationStepper';
 import { Provider, useSelector } from 'react-redux';
 import Store, {
@@ -29,6 +29,7 @@ import Store, {
   PIPELINE_HISTORY_QUERY,
   setPageLimit,
   setVersions,
+  IPipelineHistoryStore,
 } from './PipelineHistoryStore';
 import SelectWithOptions from 'components/shared/SelectWithOptions';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
@@ -53,12 +54,19 @@ const PaginationContainer = styled.div`
   }
 `;
 
-const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHistoryProps) => {
-  const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(({ versions }) => versions);
+const PipelineHistory = ({
+  isOpen,
+  toggle,
+  anchorEl,
+  pipelineName,
+}: IPipelineHistoryProps) => {
+  const { ready, pageToken, pageLimit, pipelineVersions } = useSelector(
+    ({ versions }: IPipelineHistoryStore) => versions
+  );
   const [isRestoreLoading, setIsRestoreLoading] = useState(false);
   const [latestVersion, setLatestVersion] = useState(null);
 
-  const { loading, error, data, refetch, networkStatus } = useQuery(PIPELINE_HISTORY_QUERY, {
+  const { loading, data, networkStatus } = useQuery(PIPELINE_HISTORY_QUERY, {
     errorPolicy: 'all',
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
@@ -74,16 +82,20 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
     },
   });
 
-  const Pagination = ({}) => {
-    const { prevDisabled, nextDisabled, pageCount, pageIndex, pageLimitOptions } = useSelector(
-      ({ versions }) => ({
-        prevDisabled: !versions.previousTokens.length,
-        nextDisabled: !versions.nextPageToken,
-        pageCount: versions.pipelineVersions.length,
-        pageIndex: versions.previousTokens.length,
-        pageLimitOptions: versions.pageLimitOptions,
-      })
-    );
+  const Pagination = () => {
+    const {
+      prevDisabled,
+      nextDisabled,
+      pageCount,
+      pageIndex,
+      pageLimitOptions,
+    } = useSelector(({ versions }: IPipelineHistoryStore) => ({
+      prevDisabled: !versions.previousTokens.length,
+      nextDisabled: !versions.nextPageToken,
+      pageCount: versions.pipelineVersions.length,
+      pageIndex: versions.previousTokens.length,
+      pageLimitOptions: versions.pageLimitOptions,
+    }));
 
     const onChange = (e) => {
       setPageLimit(e.target.value);
@@ -93,9 +105,14 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       <PaginationContainer className="float-right">
         <div>{T.translate(`${PREFIX}.table.rowsPerPage`)}</div>
         <div>
-          <SelectWithOptions value={pageLimit} onChange={onChange} options={pageLimitOptions} />
+          <SelectWithOptions
+            value={pageLimit}
+            onChange={onChange}
+            options={pageLimitOptions}
+          />
         </div>
-        <div>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit + pageCount}`}</div>
+        <div>{`${pageIndex * pageLimit + 1} - ${pageIndex * pageLimit +
+          pageCount}`}</div>
         <div>
           <PaginationStepper
             onNext={nextPage}
@@ -116,8 +133,10 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
       pipelineVersions: data.pipelines.applications.map((app) => {
         return {
           version: app.version,
-          description: app.change && app.change.description,
-          date: app.change && new Date(parseInt(app.change.creationTimeMillis, 10)).toUTCString(),
+          description: app.change?.description,
+          date:
+            app.change &&
+            new Date(parseInt(app.change.creationTimeMillis, 10)).toUTCString(),
         };
       }),
       nextPageToken: data.pipelines.nextPageToken,
@@ -136,7 +155,10 @@ const PipelineHistory = ({ isOpen, toggle, anchorEl, pipelineName }: IPipelineHi
 
   return (
     <>
-      <LoadingAppLevel message={'Restoring Version ...'} isopen={isRestoreLoading} />
+      <LoadingAppLevel
+        message={'Restoring Version ...'}
+        isopen={isRestoreLoading}
+      />
       <PipelineModeless
         open={isOpen}
         onClose={toggle}

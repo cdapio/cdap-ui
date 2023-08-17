@@ -54,7 +54,7 @@ class SystemServicesDelayView extends React.Component<ISystemDelayProps> {
   public state: ISystemDelayState = {
     cleanChecksNeeded: 0,
   };
-  private healthCheckInterval: NodeJS.Timeout;
+  private healthCheckInterval?: NodeJS.Timeout = undefined;
   private eventEmitter = ee(ee);
 
   public componentDidMount() {

@@ -19,7 +19,10 @@ import 'jsplumb';
 import { INode, IConnection } from 'components/DAG/DAGProvider';
 import { List, fromJS } from 'immutable';
 import uuidV4 from 'uuid/v4';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 
 const styles = (theme): StyleRules => {
   return {
@@ -81,6 +84,7 @@ interface IDAGRendererProps extends WithStyles<typeof styles> {
   removeConnection: (connection) => void;
   removeNode: (nodeId: string) => void;
   jsPlumbSettings: object;
+  children?: React.ReactNode;
 }
 
 interface IConnectionObjWithDOM {
@@ -108,13 +112,16 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
         Container: DAG_CONTAINER_ID,
       });
       jsPlumbInstance.setContainer(document.getElementById(DAG_CONTAINER_ID));
-      jsPlumbInstance.bind('connection', (connObj: IConnection, originalEvent: boolean) => {
-        if (!originalEvent) {
-          return;
+      jsPlumbInstance.bind(
+        'connection',
+        (connObj: IConnection, originalEvent: boolean) => {
+          if (!originalEvent) {
+            return;
+          }
+          const newConnObj = this.getNewConnectionObj(fromJS(connObj));
+          this.props.addConnection(newConnObj);
         }
-        const newConnObj = this.getNewConnectionObj(fromJS(connObj));
-        this.props.addConnection(newConnObj);
-      });
+      );
       jsPlumbInstance.bind('connectionDetached', this.removeConnectionHandler);
       jsPlumbInstance.bind('beforeDrop', this.checkForValidIncomingConnection);
       this.setState({
@@ -158,24 +165,32 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
     this.state.jsPlumbInstance.unbind('connectionDetached');
     const endpoint = this.state.jsPlumbInstance.getEndpoint(endpointId);
 
-    if (endpoint && endpoint.connections) {
-      Object.values(endpoint.connections).forEach((conn: IConnection) => {
-        const connectionObj: IConnection = this.getNewConnectionObj(
-          fromJS({
-            sourceId: conn.sourceId,
-            targetId: conn.targetId,
-            data: conn.getData(),
-          })
-        );
-        this.props.removeConnection(connectionObj);
-      });
+    if (endpoint?.connections) {
+      Object.values(endpoint.connections as IConnection[]).forEach(
+        (conn: IConnection) => {
+          const connectionObj: IConnection = this.getNewConnectionObj(
+            fromJS({
+              sourceId: conn.sourceId,
+              targetId: conn.targetId,
+              data: conn.getData(),
+            })
+          );
+          this.props.removeConnection(connectionObj);
+        }
+      );
     }
 
     this.state.jsPlumbInstance.deleteEndpoint(endpoint);
-    this.state.jsPlumbInstance.bind('connectionDetached', this.removeConnectionHandler);
+    this.state.jsPlumbInstance.bind(
+      'connectionDetached',
+      this.removeConnectionHandler
+    );
   };
 
-  public removeConnectionHandler = (connObj: IConnection, originalEvent: boolean) => {
+  public removeConnectionHandler = (
+    connObj: IConnection,
+    originalEvent: boolean
+  ) => {
     if (!originalEvent) {
       return;
     }
@@ -311,7 +326,10 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
   };
 
   private checkForValidIncomingConnection = (connObj: IConnectionObj) => {
-    return this.validConnectionListeners.reduce((prev, curr) => prev && curr(connObj), true);
+    return this.validConnectionListeners.reduce(
+      (prev, curr) => prev && curr(connObj),
+      true
+    );
   };
 
   private renderChildren() {
@@ -319,28 +337,31 @@ class DAGRendererComponent extends React.Component<IDAGRendererProps, any> {
       return '...loading';
     }
 
-    return React.Children.map(this.props.children, (child: React.ReactElement) => {
-      if (
-        typeof child === 'string' ||
-        typeof child === 'number' ||
-        child === null ||
-        typeof child === 'undefined' ||
-        typeof child === 'boolean'
-      ) {
-        return child;
-      }
+    return React.Children.map(
+      this.props.children as React.ReactElement[],
+      (child: React.ReactElement) => {
+        if (
+          typeof child === 'string' ||
+          typeof child === 'number' ||
+          child === null ||
+          typeof child === 'undefined' ||
+          typeof child === 'boolean'
+        ) {
+          return child;
+        }
 
-      // huh.. This is not how it should be.
-      return React.cloneElement(child as React.ReactElement, {
-        ...child.props,
-        id: child.props.id,
-        initNode: this.initNode,
-        addEndpoint: this.addEndpoint,
-        removeEndpoint: this.removeEndpoint,
-        key: child.props.id,
-        removeNode: this.props.removeNode,
-      });
-    });
+        // huh.. This is not how it should be.
+        return React.cloneElement(child as React.ReactElement, {
+          ...child.props,
+          id: child.props.id,
+          initNode: this.initNode,
+          addEndpoint: this.addEndpoint,
+          removeEndpoint: this.removeEndpoint,
+          key: child.props.id,
+          removeNode: this.props.removeNode,
+        });
+      }
+    );
   }
 
   public render() {

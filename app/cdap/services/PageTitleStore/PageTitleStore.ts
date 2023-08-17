@@ -51,7 +51,10 @@ const mutationObserver = new MutationObserver((mutations) => {
   }
   PageTitleStore.dispatch({ type: PageTitleActions.updatePageTitle, payload: { title: newTitle } });
 });
-mutationObserver.observe(document.querySelector('title'), { childList: true, subtree: true });
+mutationObserver.observe(document.querySelector('title') as any, {
+  childList: true,
+  subtree: true,
+});
 
 const PageTitleStore: InterfaceStore<IPageTitleStoreState> = createStore(
   combineReducers({ title }),

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { ReactPortal, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import Backdrop from '@material-ui/core/Backdrop';
 import { makeStyles } from '@material-ui/core';
@@ -32,11 +32,15 @@ const useStyles = makeStyles(() => {
   };
 });
 
-export function UniversalBackdrop({ open, onClose, invisible }: IUniversalBackdrop) {
+export const UniversalBackdrop = ({
+  open,
+  onClose,
+  invisible,
+}: IUniversalBackdrop): ReactPortal => {
   const container = document.createElement('div');
   const [containerRef] = React.useState(container);
   const classes = useStyles();
-  React.useEffect(() => {
+  useEffect(() => {
     if (containerRef) {
       document.body.appendChild(containerRef);
     }
@@ -48,4 +52,4 @@ export function UniversalBackdrop({ open, onClose, invisible }: IUniversalBackdr
     <Backdrop className={classes.root} open={open} onClick={onClose} invisible={invisible} />,
     containerRef
   );
-}
+};

@@ -28,7 +28,9 @@ export const DatePickerStyles = () => {
   };
 };
 
-interface IDateTimeWidgetProps extends IWidgetProps<null>, WithStyles<typeof DatePickerStyles> {}
+export interface IDateTimeWidgetProps
+  extends IWidgetProps<null>,
+    WithStyles<typeof DatePickerStyles> {}
 
 const DateTimeWidget: React.FC<IDateTimeWidgetProps> = ({ value, onChange, disabled, classes }) => {
   const initStart = typeof value === 'string' ? parseInt(value, 10) : 0;

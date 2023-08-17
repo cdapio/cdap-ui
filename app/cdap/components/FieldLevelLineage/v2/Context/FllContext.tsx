@@ -311,7 +311,12 @@ export class Provider extends React.Component<{ children }, IContextState> {
 
   private toggleOperations = (direction?: string) => {
     this.setState(
-      { showOperations: !this.state.showOperations, loadingOps: true, direction, errorOps: null },
+      {
+        showOperations: !this.state.showOperations,
+        loadingOps: true,
+        direction,
+        errorOps: null,
+      },
       () => {
         if (this.state.showOperations && direction) {
           const timeParams = { start: this.state.start, end: this.state.end };

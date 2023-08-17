@@ -19,7 +19,7 @@ import { Theme } from '@material-ui/core';
 import { ConnectionsBrowserSidePanel } from 'components/Connections/Browser/SidePanel';
 import { ConnectionsBrowser } from 'components/Connections/Browser/index';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { ConnectionsContext } from 'components/Connections/ConnectionsContext';
 
 interface IConnectionsHomeStyleProps {

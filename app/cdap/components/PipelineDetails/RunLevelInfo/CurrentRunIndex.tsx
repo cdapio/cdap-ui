@@ -78,7 +78,9 @@ const CurrentRunIndex = ({
 }: ICurrentRunIndexProps) => {
   const namespace = getCurrentNamespace();
   const reversedRuns = reverseArrayWithoutMutating(runs);
-  const currentRunIndex = findIndex(reversedRuns, { runid: objectQuery(currentRun, 'runid') });
+  const currentRunIndex = findIndex(reversedRuns, {
+    runid: objectQuery(currentRun, 'runid'),
+  });
   // The currentRunIndex is the index in latest 100 runs
   // total runs count would be much higher for pipelines that ran more than 100 runs
   const runIndexInTotalRunsCount = Math.max(
@@ -100,6 +102,10 @@ const CurrentRunIndex = ({
   };
 
   useEffect(() => {
+    if (artifactName === '') {
+      return;
+    }
+
     const params = {
       namespace,
       appId: pipelineName,
@@ -112,7 +118,7 @@ const CurrentRunIndex = ({
       getRunsForVersion(params);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [artifactName]);
 
   if (!reversedRuns || currentRunIndex === -1) {
     return (

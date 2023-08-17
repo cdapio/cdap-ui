@@ -34,17 +34,24 @@ export function getTicksTotal({ start, end }) {
   if (isNil(start) || isNil(end)) {
     return DEFAULT_TICKS_TOTAL;
   }
-  let timeWindow = end - start;
+  const timeWindow = end - start;
   if (timeWindow < ONE_DAY_SECONDS || timeWindow === ONE_DAY_SECONDS * 7) {
     return WEEKS_TICKS_TOTAL;
   }
   return DEFAULT_TICKS_TOTAL;
 }
 
-export function getXDomain({ xDomainType, runsLimit, totalRunsCount, start, end }) {
+export function getXDomain({
+  xDomainType,
+  runsLimit,
+  totalRunsCount,
+  start,
+  end,
+}) {
   let startDomain, endDomain;
   if (xDomainType === 'limit') {
-    startDomain = totalRunsCount > runsLimit ? totalRunsCount - runsLimit + 1 : 1;
+    startDomain =
+      totalRunsCount > runsLimit ? totalRunsCount - runsLimit + 1 : 1;
     endDomain = totalRunsCount > runsLimit ? totalRunsCount : runsLimit;
   }
   if (xDomainType === 'time') {
@@ -84,7 +91,7 @@ export function getYAxisProps(data) {
     });
     data = formattedData;
   }
-  let props = {
+  const props = {
     tickTotals: 10,
     yDomain: getYDomain(data),
     tickFormat: function(d) {
@@ -110,7 +117,7 @@ export function xTickFormat({ xDomainType, start, end }) {
   let lastDisplayedDate;
   return (v) => {
     if (xDomainType === 'time') {
-      let timeWindow = end - start;
+      const timeWindow = end - start;
       let date = moment(v * 1000).format('M/D/YY');
       if (timeWindow < ONE_DAY_SECONDS) {
         date = v % 2 === 0 ? moment(v * 1000).format('HH:mm a') : null;
@@ -221,7 +228,7 @@ export function getGapFilledAccumulatedData(data, numOfDataPoints) {
  * if resolution is > 3600s: show 'hours'
  */
 export function getResolution(resolution) {
-  const PREFIX = `features.PipelineSummary.pipelineNodesMetricsGraph`;
+  const PREFIX = 'features.PipelineSummary.pipelineNodesMetricsGraph';
   if (!resolution || typeof resolution !== 'string') {
     return T.translate(`${PREFIX}.seconds`);
   }

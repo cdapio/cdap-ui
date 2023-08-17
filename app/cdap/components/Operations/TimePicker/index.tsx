@@ -92,7 +92,9 @@ const TimePickerView: React.FC<ITimePickerProps> = ({
       </div>
       <div
         onClick={next}
-        className={classnames(classes.arrow, classes.right, { [classes.disabled]: isNextDisabled })}
+        className={classnames(classes.arrow, classes.right, {
+          [classes.disabled]: isNextDisabled,
+        })}
       >
         <IconSVG name="icon-angle-double-left" className={`${classes.icon} ${classes.flipArrow}`} />
       </div>

@@ -28,7 +28,7 @@ const styles = (theme): StyleRules => {
       display: 'grid',
       gridTemplateColumns: '30% 60%',
       borderTop: `1px solid ${theme.palette.grey[300]}`,
-      padding: `5px 0`,
+      padding: '5px 0',
       '&:last-child': {
         borderBottom: `1px solid ${theme.palette.grey[300]}`,
       },

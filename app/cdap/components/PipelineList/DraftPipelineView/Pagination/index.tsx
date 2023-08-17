@@ -25,14 +25,14 @@ interface IPaginationProps {
   currentPage: number;
   numPipelines: number;
   pageLimit: number;
-  shouldDisplay: boolean;
+  shouldDisplay?: boolean;
 }
 
 const PaginationContainer = styled.div`
   margin-right: 50px;
 `;
 
-const PaginationView: React.SFC<IPaginationProps> = ({
+const PaginationView: React.FC<IPaginationProps> = ({
   setPage,
   currentPage,
   numPipelines,

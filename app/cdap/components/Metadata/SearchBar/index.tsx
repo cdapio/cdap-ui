@@ -57,7 +57,7 @@ interface ISearchBarProps {
 
 const SearchBar: React.FC<ISearchBarProps> = ({ query, onSearch }) => {
   const searchQueryRegex = new RegExp('^(?![*]).*$');
-  const searchPlaceholder = T.translate(`${I18N_PREFIX}.searchPlaceholder`);
+  const searchPlaceholder = T.translate(`${I18N_PREFIX}.searchPlaceholder`).toString();
   const [error, setError] = useState(false);
 
   const handleSearch = (event) => {

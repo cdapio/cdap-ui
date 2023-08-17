@@ -46,7 +46,7 @@ const provisionerJsonSpecMap = (
         loading: false,
       };
     case ACTIONS.SET_JSON_SPECS: {
-      let map = {};
+      const map = {};
       action.payload.provisioners.forEach((provisioner) => {
         map[provisioner.name] = provisioner;
       });

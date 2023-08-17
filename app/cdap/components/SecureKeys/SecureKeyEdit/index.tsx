@@ -33,7 +33,7 @@ import isNil from 'lodash/isNil';
 const styles = (theme): StyleRules => {
   return {
     secureKeyInput: {
-      margin: `${theme.Spacing(3)}px ${theme.spacing(1)}px`,
+      margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`,
     },
   };
 };

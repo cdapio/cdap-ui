@@ -66,28 +66,37 @@ export const GlobalTooltipStyle = createGlobalStyle`
  }
 `;
 
-const organizePlugins = (pluginGroups, availablePlugins) => {
-  pluginGroups.forEach((group) => {
+const organizePlugins = (pluginGroups, availablePluginMap) => {
+  const pluginGroupsCopy = [...pluginGroups]
+  pluginGroupsCopy.map((group) => {
     if (!group.plugins?.length) {
       return;
     }
-    group.plugins.forEach((plugin) => {
-      plugin.displayName =
-        generateLabel(plugin, availablePlugins.plugins.pluginsMap) || plugin.name;
-      plugin.showCustomIcon = shouldShowCustomIcon(plugin, availablePlugins.plugins.pluginsMap);
-      plugin.customIconSrc = getCustomIconSrc(plugin, availablePlugins.plugins.pluginsMap);
+    const groupCopy = {...group}
+    groupCopy.plugins = group.plugins.map((plugin) => {
+      // Create a shallow copy of the plugin object
+      const pluginCopy = { ...plugin };
+    
+      // Add or modify properties on the copy
+      pluginCopy.displayName = generateLabel(plugin, availablePluginMap) || plugin.name;
+      pluginCopy.showCustomIcon = shouldShowCustomIcon(plugin, availablePluginMap);
+      pluginCopy.customIconSrc = getCustomIconSrc(plugin, availablePluginMap);
+    
+      // Return the modified copy to replace the original object in the array
+      return pluginCopy;
     });
 
-    group.plugins.sort((pluginA, pluginB) => {
+    groupCopy.plugins.sort((pluginA, pluginB) => {
       return pluginA.displayName < pluginB.displayName ? -1 : 1;
     });
+    return groupCopy
   });
 
-  return pluginGroups;
+  return pluginGroupsCopy;
 };
 
 interface ISidePanelProps {
-  availablePlugins: any;
+  availablePluginMap: any;
   itemGenericName: string;
   groups: any[];
   groupGenericName: string;
@@ -117,7 +126,7 @@ let allGroups;
  *    that altered plugin.defaultArtifact to the canvas and it automatically sends that to be saved...
  */
 export const SidePanel = ({
-  availablePlugins,
+  availablePluginMap,
   itemGenericName,
   groups,
   groupGenericName,
@@ -132,7 +141,7 @@ export const SidePanel = ({
 
   // keep track of number of plugins so if you create a template we can rerun organizePlugins
   const numberOfPlugins = groups.reduce((prev, curr) => {
-    return (prev += curr.plugins.length);
+    return (prev += curr.plugins ? curr.plugins.length: 0);
   }, 0);
 
   const handlePopperButtonClick = (popoverId: string) => (event: MouseEvent<HTMLButtonElement>) => {
@@ -155,13 +164,13 @@ export const SidePanel = ({
   }, [groups, groups.length]);
 
   useEffect(() => {
-    if (availablePlugins && availablePlugins.plugins) {
-      setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
+    if (availablePluginMap) {
+      setPluginGroups(organizePlugins(groups, availablePluginMap));
     }
-  }, [availablePlugins]);
+  }, [availablePluginMap]);
 
   useEffect(() => {
-    setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
+    setPluginGroups(organizePlugins(groups, availablePluginMap));
   }, [numberOfPlugins, JSON.stringify(groups)]);
 
   const handleSetSearch = debounce((text) => {
@@ -205,6 +214,9 @@ export const SidePanel = ({
   };
 
   const renderPlugins = (plugins: [any]) => {
+    if (!plugins) {
+      return
+    }
     return plugins.map((plugin) => {
       const id = `plugin-${plugin.name}-${plugin.type}`;
       const label = plugin.displayName || plugin.name;
@@ -274,7 +286,6 @@ export const SidePanel = ({
               >
                 <EllipsisIconButton
                   aria-label={`show more ${label}`}
-                  component="span"
                   onClick={handleClickShowDetails}
                 >
                   {MoreIconButton}
@@ -296,6 +307,9 @@ export const SidePanel = ({
               </div>
             )}
             {sidePanelViewType === 'list' && (
+              // seems to be a known issue https://github.com/mui/material-ui/issues/14971
+              // with this type
+              // @ts-ignore
               <PluginListItem>
                 {plugin.showCustomIcon && (
                   <ListCustomIcon className="fa">
@@ -326,7 +340,7 @@ export const SidePanel = ({
       // is in that group or use the accordion state
 
       let expanded = openedAccordions.indexOf(group.name) !== -1;
-      if (plugins.length === 0) {
+      if (!plugins || plugins.length === 0) {
         // closes accordion if no plugins are present after searching.
         expanded = false;
       }
@@ -347,7 +361,7 @@ export const SidePanel = ({
             data-cy={`plugin-${group.name}-group-summary`}
             data-testid={`plugin-${group.name}-group-summary`}
           >
-            <Chip label={plugins.length} size="small" />
+            <Chip label={plugins && plugins.length} size="small" />
             <StyledGroupName>{group.name}</StyledGroupName>
           </StyledAccordionSummary>
           <StyledAccordionDetails
@@ -360,7 +374,7 @@ export const SidePanel = ({
                 style={{ overflow: 'scroll' }}
               >
                 {renderPlugins(plugins)}
-                {plugins.length === 0 && (
+                {(!plugins || plugins.length) === 0 && (
                   <div className="no-item-message">
                     <h4>No {itemGenericName === '' ? itemGenericName : 'items'} found.</h4>
                   </div>

@@ -36,7 +36,7 @@ const styles = () => {
 
 const PREFIX = 'features.PipelineList.DraftPipelineView';
 
-const DraftCountView: React.SFC<IProps> = ({ drafts, classes }) => {
+const DraftCountView: React.FC<IProps> = ({ drafts, classes }) => {
   return (
     <div className={classes.root}>
       <h5>{T.translate(`${PREFIX}.draftCount`, { context: drafts.length })}</h5>

@@ -21,7 +21,7 @@ import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { IWidgetProps } from 'components/AbstractWidget';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+// import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 import ThemeWrapper from 'components/ThemeWrapper';
 import React, { useState } from 'react';
 import { objectQuery } from 'services/helpers';
@@ -44,7 +44,9 @@ interface IPasswordWidgetProps {
   placeholder?: string;
 }
 
-interface IPasswordProps extends IWidgetProps<IPasswordWidgetProps>, WithStyles<typeof styles> {}
+interface IPasswordProps
+  extends IWidgetProps<IPasswordWidgetProps>,
+    WithStyles<typeof styles> {}
 
 function Password({
   value,
@@ -106,9 +108,9 @@ export default function StyledPasswordWrapper(props) {
   );
 }
 
-(StyledPasswordWrapper as any).propTypes = WIDGET_PROPTYPES;
-(StyledPasswordWrapper as any).getWidgetAttributes = () => {
-  return {
-    placeholder: { type: 'string', required: false },
-  };
-};
+// (StyledPasswordWrapper as any).propTypes = WIDGET_PROPTYPES;
+// (StyledPasswordWrapper as any).getWidgetAttributes = () => {
+//   return {
+//     placeholder: { type: 'string', required: false },
+//   };
+// };

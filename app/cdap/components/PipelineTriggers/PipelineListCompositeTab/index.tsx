@@ -144,7 +144,7 @@ interface IPipelineListCompositeTabViewProps {
   expandedPipeline: string;
   toggleExpandPipeline: (pipeline: string) => void;
   configureError: string;
-  onPayloadToggle: (isOpen: boolean) => void;
+  onPayloadToggle?: (isOpen: boolean) => void;
   setTab: (tab: number) => void;
 }
 
@@ -183,12 +183,18 @@ const PipelineListCompositeTabView = ({
     }
 
     if (newTriggerName && newTriggerName.length > 50) {
-      dispatch({ type: 'TRIGGER_NAME_TOO_LONG', triggerName: newTriggerName.slice(0, 50) });
+      dispatch({
+        type: 'TRIGGER_NAME_TOO_LONG',
+        triggerName: newTriggerName.slice(0, 50),
+      });
       return;
     }
 
     if (existingTriggers.find((schedule) => schedule.name === newTriggerName)) {
-      dispatch({ type: 'TRIGGER_NAME_EXISTS_ERROR', triggerName: newTriggerName });
+      dispatch({
+        type: 'TRIGGER_NAME_EXISTS_ERROR',
+        triggerName: newTriggerName,
+      });
       return;
     }
 

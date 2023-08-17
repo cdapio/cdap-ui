@@ -13,44 +13,60 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+import { rPipelineDetails } from 'components/hydrator/helpers/rPipeline';
 
 angular.module(PKG.name + '.feature.hydrator')
-  .controller('HydratorPlusPlusDetailCanvasCtrl', function(rPipelineDetail, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, DAGPlusPlusNodesStore, $uibModal, MyPipelineStatusMapper, moment, $interval, $scope, myHelpers) {
-    this.$uibModal = $uibModal;
-    this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
-    this.PipelineDetailStore = window.CaskCommon.PipelineDetailStore;
-    this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
-    this.PipelineMetricsStore = window.CaskCommon.PipelineMetricsStore;
-    this.DAGPlusPlusNodesActionsFactory = DAGPlusPlusNodesActionsFactory;
-    this.MyPipelineStatusMapper = MyPipelineStatusMapper;
-    this.$interval = $interval;
-    this.moment = moment;
-    this.currentRunTimeCounter = null;
-    this.metrics = {};
-    this.logsMetrics = {};
-    this.runId = '';
+  .controller('HydratorPlusPlusDetailCanvasCtrl', PipeCanvasCtrl);
+  
+  
+export const PipeCanvasCtrl = function(
+  // rPipelineDetail,
+  $rootScope, myAlertOnValium,
+  DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, DAGPlusPlusNodesStore, $uibModal, MyPipelineStatusMapper, moment, $interval, myHelpers
+) {
+  this.$uibModal = $uibModal;
+  var $scope = $rootScope.$new(true, undefined);
+
+  this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
+  this.PipelineDetailStore = window.CaskCommon.PipelineDetailStore;
+  this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
+  this.PipelineMetricsStore = window.CaskCommon.PipelineMetricsStore;
+  this.DAGPlusPlusNodesActionsFactory = DAGPlusPlusNodesActionsFactory;
+  this.MyPipelineStatusMapper = MyPipelineStatusMapper;
+  this.$interval = $interval;
+  this.moment = moment;
+  this.currentRunTimeCounter = null;
+  this.metrics = {};
+  this.logsMetrics = {};
+  this.runId = '';
+  // try {
+  //   rPipelineDetail.config = JSON.parse(rPipelineDetail.configuration);
+  // } catch (e) {
+  //   console.log('ERROR in configuration from backend: ', e);
+  //   return;
+  // }
+
+  const { globalEvents } = window.CaskCommon;
+  this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
+  this.pageLevelError = null;
+
+  this.eventEmitter.on(globalEvents.PAGE_LEVEL_ERROR, (error) => {
+    if (error.reset === true) {
+      this.pageLevelError = null;
+    }
+    else {
+      this.pageLevelError = myHelpers.handlePageLevelError(error);
+    }
+  });
+
+  rPipelineDetails($rootScope.$stateParams.namespace, myAlertOnValium).then((rPipelineDetail) => {
     try {
       rPipelineDetail.config = JSON.parse(rPipelineDetail.configuration);
     } catch (e) {
       console.log('ERROR in configuration from backend: ', e);
       return;
     }
-
-    const { globalEvents } = window.CaskCommon;
-    this.eventEmitter = window.CaskCommon.ee(window.CaskCommon.ee);
-    this.pageLevelError = null;
-
-    this.eventEmitter.on(globalEvents.PAGE_LEVEL_ERROR, (error) => {
-      if (error.reset === true) {
-        this.pageLevelError = null;
-      }
-      else {
-        this.pageLevelError = myHelpers.handlePageLevelError(error);
-      }
-    });
-
-
-    let pipelineConfig = this.PipelineDetailStore.getState().config;
+    let pipelineConfig = rPipelineDetail.config;
     let nodes = this.HydratorPlusPlusHydratorService.getNodesFromStages(pipelineConfig.stages);
 
     this.DAGPlusPlusNodesActionsFactory.createGraphFromConfig(nodes, pipelineConfig.connections, pipelineConfig.comments);
@@ -73,59 +89,58 @@ angular.module(PKG.name + '.feature.hydrator')
         return;
       }
       let pluginNode = nodes.find(node => node.name === nodeId);
-      this.$uibModal
-          .open({
-            windowTemplateUrl: '/assets/features/hydrator/templates/partial/node-config-modal/popover-template.html',
-            templateUrl: '/assets/features/hydrator/templates/partial/node-config-modal/popover.html',
-            size: 'lg',
-            backdrop: 'static',
-            windowTopClass: 'node-config-modal hydrator-modal',
-            controller: 'HydratorPlusPlusNodeConfigCtrl',
-            controllerAs: 'HydratorPlusPlusNodeConfigCtrl',
-            resolve: {
-              rIsStudioMode: function () {
-                return false;
-              },
-              rDisabled: function() {
-                return true;
-              },
-              rNodeMetricsContext: function($stateParams, GLOBALS) {
-                'ngInject';
-                let pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
-                let programType = pipelineDetailStoreState.artifact.name === GLOBALS.etlDataPipeline ? 'workflow' : 'spark';
-                let programId = pipelineDetailStoreState.artifact.name === GLOBALS.etlDataPipeline ? 'DataPipelineWorkflow' : 'DataStreamsSparkStreaming';
+      this.$uibModal.open({
+        windowTemplateUrl: '/assets/features/hydrator/templates/partial/node-config-modal/popover-template.html',
+        templateUrl: '/assets/features/hydrator/templates/partial/node-config-modal/popover.html',
+        size: 'lg',
+        backdrop: 'static',
+        windowTopClass: 'node-config-modal hydrator-modal',
+        controller: 'HydratorPlusPlusNodeConfigCtrl',
+        controllerAs: 'HydratorPlusPlusNodeConfigCtrl',
+        resolve: {
+          rIsStudioMode: function () {
+            return false;
+          },
+          rDisabled: function() {
+            return true;
+          },
+          rNodeMetricsContext: function($stateParams, GLOBALS) {
+            'ngInject';
+            let pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
+            let programType = pipelineDetailStoreState.artifact.name === GLOBALS.etlDataPipeline ? 'workflow' : 'spark';
+            let programId = pipelineDetailStoreState.artifact.name === GLOBALS.etlDataPipeline ? 'DataPipelineWorkflow' : 'DataStreamsSparkStreaming';
 
-                return {
-                  runRecord: pipelineDetailStoreState.currentRun,
-                  runs: pipelineDetailStoreState.runs,
-                  namespace: $stateParams.namespace,
-                  app: pipelineDetailStoreState.name,
-                  programType,
-                  programId
-                };
-              },
-              rPlugin: function(HydratorPlusPlusHydratorService) {
-                'ngInject';
-                let pluginId = pluginNode.name;
-                let pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
-                let appType = pipelineDetailStoreState.artifact.name;
-                let sourceConnections = pipelineDetailStoreState.config.connections.filter(conn => conn.to === pluginId);
-                let nodes = HydratorPlusPlusHydratorService.getNodesFromStages(pipelineDetailStoreState.config.stages);
-                let nodesMap = HydratorPlusPlusHydratorService.getNodesMap(nodes);
-                let sourceNodes = sourceConnections.map(conn => nodesMap[conn.from]);
-                let artifactVersion = pipelineDetailStoreState.artifact.version;
-                return {
-                  pluginNode,
-                  appType,
-                  sourceConnections,
-                  sourceNodes,
-                  artifactVersion,
-                };
-              }
-            }
-          })
-          .result
-          .then(this.deleteNode.bind(this), this.deleteNode.bind(this)); // Both close and ESC events in the modal are considered as SUCCESS and ERROR in promise callback. Hence the same callback for both success & failure.
+            return {
+              runRecord: pipelineDetailStoreState.currentRun,
+              runs: pipelineDetailStoreState.runs,
+              namespace: $stateParams.namespace,
+              app: pipelineDetailStoreState.name,
+              programType,
+              programId
+            };
+          },
+          rPlugin: function(HydratorPlusPlusHydratorService) {
+            'ngInject';
+            let pluginId = pluginNode.name;
+            let pipelineDetailStoreState = window.CaskCommon.PipelineDetailStore.getState();
+            let appType = pipelineDetailStoreState.artifact.name;
+            let sourceConnections = pipelineDetailStoreState.config.connections.filter(conn => conn.to === pluginId);
+            let nodes = HydratorPlusPlusHydratorService.getNodesFromStages(pipelineDetailStoreState.config.stages);
+            let nodesMap = HydratorPlusPlusHydratorService.getNodesMap(nodes);
+            let sourceNodes = sourceConnections.map(conn => nodesMap[conn.from]);
+            let artifactVersion = pipelineDetailStoreState.artifact.version;
+            return {
+              pluginNode,
+              appType,
+              sourceConnections,
+              sourceNodes,
+              artifactVersion,
+            };
+          }
+        }
+      })
+      .result
+      .then(this.deleteNode.bind(this), this.deleteNode.bind(this)); // Both close and ESC events in the modal are considered as SUCCESS and ERROR in promise callback. Hence the same callback for both success & failure.
     };
 
     this.deleteNode = () => {
@@ -198,3 +213,5 @@ angular.module(PKG.name + '.feature.hydrator')
       this.pipelineDetailStoreSubscription();
     });
   });
+};
+

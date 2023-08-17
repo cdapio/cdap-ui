@@ -27,9 +27,9 @@ describe('Metadata url helper', () => {
       expect(getMetadataPageUrl('foo', {})).toBeNull();
     });
     it('return the parsed url', () => {
-      expect(getMetadataPageUrl('lineage', { entityType: 'type', entityId: 'id' })).toBe(
-        '/ns/default/metadata/type/id/lineage'
-      );
+      expect(
+        getMetadataPageUrl('lineage', { entityType: 'type', entityId: 'id' })
+      ).toBe('/ns/default/metadata/type/id/lineage');
     });
   });
 });

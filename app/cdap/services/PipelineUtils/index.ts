@@ -27,7 +27,7 @@ interface IPipelineConfig {
     scope: string;
   };
   config: any;
-  version: string;
+  version?: string;
   parentVersion?: string;
 }
 

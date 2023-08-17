@@ -79,7 +79,9 @@ function FllTableHeader({
   const linkPath = `/ns/${tableInfo.namespace}/datasets/${tableInfo.dataset}/fields${timeParams}`;
   return (
     <div
-      className={classnames(classes.tableHeader, { hovering: isHovering && !isTarget })}
+      className={classnames(classes.tableHeader, {
+        hovering: isHovering && !isTarget,
+      })}
       onMouseEnter={toggleHoverState.bind(this, true)}
       onMouseLeave={toggleHoverState.bind(this, false)}
     >

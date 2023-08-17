@@ -15,7 +15,13 @@
  */
 
 angular.module(PKG.name + '.services')
-  .service('myNamespace', function myNamespace($q, MyCDAPDataSource, EventPipe, $http, $rootScope, myAuth, myHelpers, $state) {
+  .service('myNamespace', function myNamespace(
+    $q,
+    // MyCDAPDataSource,
+    EventPipe,
+    // $http,
+    // $rootScope, myAuth, myHelpers,
+    $state) {
 
     this.namespaceList = [];
     var prom,
@@ -26,18 +32,25 @@ angular.module(PKG.name + '.services')
       if (!force && this.namespaceList.length) {
           return $q.when(this.namespaceList);
       }
-
+      // const headers = new Headers();
+      // headers.append('X-Requested-With', 'XMLHttpRequest');
+      // headers.append('Content-Type', 'application/json')
       if (!queryInProgress) {
         prom = $q.defer();
         queryInProgress = true;
-        $http(
-          {
-            url: '/api/v3/namespaces',
-            method: 'GET'
+        const url = `${document.location.origin}/api/v3/namespaces`;
+        fetch(url, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Content-Type': 'application/json'
+            },
+          })
+          .then((res) => {
+            return res.json();
           })
             .then(
               (function(res) {
-                var data = res.data;
+                var data = res;
 
                 if (!data.length && !$state.includes('admin.**')) {
                   $state.go('unauthorized');

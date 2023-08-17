@@ -121,7 +121,7 @@ const schedule = (state = DEFAULT_SCHEDULE_OPTIONS, action = defaultAction) => {
         ...DEFAULT_CRON_OPTIONS,
       };
     case ACTIONS.UPDATE_CRON: {
-      let cronArray = state.cron.split(' ');
+      const cronArray = state.cron.split(' ');
       cronArray[action.payload.index] = action.payload.value || '0';
 
       return {
@@ -155,9 +155,9 @@ const schedule = (state = DEFAULT_SCHEDULE_OPTIONS, action = defaultAction) => {
         dayInterval: parseInt(action.payload.dayInterval, 10),
       };
     case ACTIONS.SET_DAYS_OF_WEEK_INTERVAL: {
-      let daysOfWeekInterval = [...state.daysOfWeekInterval];
-      let dayOption = action.payload.dayOption;
-      let dayOptionIndex = daysOfWeekInterval.indexOf(dayOption);
+      const daysOfWeekInterval = [...state.daysOfWeekInterval];
+      const dayOption = action.payload.dayOption;
+      const dayOptionIndex = daysOfWeekInterval.indexOf(dayOption);
       if (dayOptionIndex !== -1) {
         daysOfWeekInterval.splice(dayOptionIndex, 1);
       } else {
@@ -213,24 +213,31 @@ const schedule = (state = DEFAULT_SCHEDULE_OPTIONS, action = defaultAction) => {
         scheduleView: action.payload.scheduleView,
       };
     case ACTIONS.SET_CURRENT_BACKEND_SCHEDULE: {
-      let { currentBackendSchedule, profileFromPreferences } = action.payload;
-      let profileFromBackend = objectQuery(
+      const { currentBackendSchedule, profileFromPreferences } = action.payload;
+      const profileFromBackend = objectQuery(
         currentBackendSchedule,
         'properties',
         CLOUD.PROFILE_NAME_PREFERENCE_PROPERTY
       );
-      let profileCustomizations = getCustomizationMap(
+      const profileCustomizations = getCustomizationMap(
         objectQuery(currentBackendSchedule, 'properties') || {}
       );
-      let constraintFromBackend = (currentBackendSchedule.constraints || []).find((constraint) => {
+      const constraintFromBackend = (
+        currentBackendSchedule.constraints || []
+      ).find((constraint) => {
         return constraint.type === 'CONCURRENCY';
       });
-      let maxConcurrencyFromBackend = objectQuery(constraintFromBackend, 'maxConcurrency');
-      let cronFromBackend =
+      const maxConcurrencyFromBackend = objectQuery(
+        constraintFromBackend,
+        'maxConcurrency'
+      );
+      const cronFromBackend =
         objectQuery(currentBackendSchedule, 'trigger', 'cronExpression') ||
         HYDRATOR_DEFAULT_VALUES.schedule;
-      let selectedProfile =
-        profileFromBackend || profileFromPreferences || CLOUD.DEFAULT_PROFILE_NAME;
+      const selectedProfile =
+        profileFromBackend ||
+        profileFromPreferences ||
+        CLOUD.DEFAULT_PROFILE_NAME;
       return {
         ...state,
         currentBackendSchedule: action.payload.currentBackendSchedule,

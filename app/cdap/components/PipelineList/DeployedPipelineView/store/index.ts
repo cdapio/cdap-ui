@@ -21,7 +21,7 @@ import { IAction } from 'services/redux-helpers';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { IDraft } from 'components/PipelineList/DraftPipelineView/types';
 
-enum SORT_ORDER {
+export enum SORT_ORDER {
   asc = 'asc',
   desc = 'desc',
 }
@@ -47,11 +47,11 @@ interface IState {
   };
 }
 
-interface IStore {
+export interface IDeployedPipelineStore {
   deployed: IState;
 }
 
-const Actions = {
+export const Actions = {
   setSearchInput: 'DEPLOYED_SET_SEARCH',
   applySearch: 'DEPLOYED_APPLY_SEARCH',
   setDeleteError: 'DEPLOYED_PIPELINE_SET_DELETE_ERROR',
@@ -86,7 +86,7 @@ const defaultInitialState: IState = {
   pullStatus: null,
 };
 
-const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction) => {
+const deployed: Reducer<IState> = (state: IState = defaultInitialState, action: IAction) => {
   switch (action.type) {
     case Actions.setDeleteError:
       return {
@@ -179,7 +179,7 @@ const deployed: Reducer<IState> = (state = defaultInitialState, action: IAction)
   }
 };
 
-const Store: StoreInterface<IStore> = createStore(
+const Store: StoreInterface<IDeployedPipelineStore, IAction> = createStore(
   combineReducers({
     deployed,
   }),
@@ -190,4 +190,3 @@ const Store: StoreInterface<IStore> = createStore(
 );
 
 export default Store;
-export { Actions, SORT_ORDER, IStore };

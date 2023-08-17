@@ -55,14 +55,14 @@ const StyledPopover = styled(Popover)`
 `;
 
 const ListItem = styled.li`
-  ${(styles) =>
+  ${(styles: { disabled?: boolean; red?: boolean }) =>
     styles.disabled &&
     css`
       cursor: not-allowed;
       opacity: 0.5;
     `}
 
-  ${(styles) =>
+  ${(styles: { disabled?: boolean; red?: boolean }) =>
     styles.red &&
     css`
       color: ${(props) => props.theme.palette.red[100]};
@@ -70,7 +70,7 @@ const ListItem = styled.li`
 `;
 
 interface IActionsPopoverProps {
-  target: React.ReactNode | (() => void);
+  target: React.ReactNode | (() => void) | any;
   confirmationTitle: React.ReactNode;
   confirmationText: React.ReactNode;
   onEditClick: () => void;
@@ -112,13 +112,21 @@ const ActionsPopover = ({
         <ul>
           {canEdit && (
             <>
-              <ListItem disabled={!canEdit} onClick={onEditClick} data-testid={dataTestIds.edit}>
+              <ListItem
+                disabled={!canEdit}
+                onClick={onEditClick}
+                data-testid={dataTestIds.edit}
+              >
                 {T.translate(`${PREFIX}.Actions.edit`)}
               </ListItem>
               <hr />
             </>
           )}
-          <ListItem red={true} onClick={toggleModalOpen} data-testid={dataTestIds.delete}>
+          <ListItem
+            red
+            onClick={toggleModalOpen}
+            data-testid={dataTestIds.delete}
+          >
             {T.translate(`${PREFIX}.Actions.delete`)}
           </ListItem>
         </ul>

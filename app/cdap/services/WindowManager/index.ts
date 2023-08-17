@@ -15,6 +15,8 @@
  */
 
 import ee from 'event-emitter';
+// todo update this package and fix type CDAP-20180
+// @ts-ignore
 import ifvisible from 'ifvisible.js';
 import { objectQuery } from 'services/helpers';
 const WINDOW_ON_BLUR = 'WINDOW_BLUR_EVENT';
@@ -22,7 +24,7 @@ const WINDOW_ON_FOCUS = 'WINDOW_FOCUS_EVENT';
 
 class WindowManager {
   public eventemitter = ee(ee);
-  private worker = null;
+  private worker: any = null;
   private initWorker = () => {
     if (objectQuery(window, 'CDAP_CONFIG', 'cdap', 'proxyBaseUrl')) {
       this.worker = new Worker(`/cdap_assets/web-workers/Heartbeat-web-worker.js?q=${Date.now()}`);
@@ -66,7 +68,7 @@ class WindowManager {
   public reloadImage = () => {
     const alreadyExistingImage = document.getElementById('heartbeat-img-id');
     if (alreadyExistingImage) {
-      alreadyExistingImage.parentNode.removeChild(alreadyExistingImage);
+      alreadyExistingImage?.parentNode?.removeChild(alreadyExistingImage);
     }
 
     const newImage = document.createElement('img');

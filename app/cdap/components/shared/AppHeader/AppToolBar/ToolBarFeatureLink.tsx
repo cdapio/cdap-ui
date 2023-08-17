@@ -37,7 +37,7 @@ const styles = (theme) => {
       ...theme.buttonLink,
       fontWeight: 300,
       color: theme.palette.grey[700],
-      padding: `${theme.Spacing(2)}px ${theme.Spacing(3)}px`,
+      padding: `${theme.spacing(2)}px ${theme.spacing(3)}px`,
     },
   };
 };
@@ -53,7 +53,7 @@ class ToolBarFeatureLink extends React.PureComponent<IToolBarFeatureLinkProps> {
     let ReactRef;
     // Typescript won't infer if 'isNativeLink' then its an anchor element.
     if (Comp === 'a') {
-      ReactRef = React.forwardRef<HTMLElement, 'a'>((props, ref) => <Comp {...props} />);
+      ReactRef = React.forwardRef<HTMLElement, 'a'>((props: any, ref) => <Comp {...props} />);
     } else {
       ReactRef = React.forwardRef<HTMLElement, ButtonProps>((props, ref) => <Comp {...props} />);
     }

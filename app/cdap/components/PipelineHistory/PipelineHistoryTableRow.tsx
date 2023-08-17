@@ -36,7 +36,8 @@ interface IPipelineHistoryTableRowProps {
 const PREFIX = 'features.PipelineHistory.table';
 
 const VersionDateLabel = styled.ul`
-  ${({ isLatest }) => (isLatest ? 'color: #389e0d;' : 'color: #f29900;')}
+  ${({ isLatest }: { isLatest: boolean }) =>
+    isLatest ? 'color: #389e0d;' : 'color: #f29900;'}
 `;
 
 export const PipelineHistoryTableRow = ({
@@ -81,7 +82,11 @@ export const PipelineHistoryTableRow = ({
             description: res.description,
             artifact: res.artifact,
             config,
-            change: { description: T.translate(`${PREFIX}.restoreChangeSummary`, { date }) },
+            change: {
+              description: T.translate(`${PREFIX}.restoreChangeSummary`, {
+                date,
+              }),
+            },
             // restore should not create new schedule
             'app.deploy.update.schedules': false,
             parentVersion: latestVersion,
@@ -91,20 +96,23 @@ export const PipelineHistoryTableRow = ({
             setRestoreLoading(false);
             window.location.href = pipelineLink;
           },
-          (err) => {
+          () => {
             setErrorMessage(T.translate(`${PREFIX}.restoreFailError`));
           }
         );
       },
-      (err) => {
+      () => {
         setErrorMessage(T.translate(`${PREFIX}.fetchVersionFailError`));
       }
     );
   };
 
   const isLatest = appVersion === latestVersion;
-  const dateLabel = isLatest ? T.translate(`${PREFIX}.latest`) : T.translate(`${PREFIX}.older`);
-  const displayedDesc = description?.length > 190 ? description.slice(0, 190) + '...' : description;
+  const dateLabel = isLatest
+    ? T.translate(`${PREFIX}.latest`)
+    : T.translate(`${PREFIX}.older`);
+  const displayedDesc =
+    description?.length > 190 ? description.slice(0, 190) + '...' : description;
 
   return (
     <>

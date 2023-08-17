@@ -12,34 +12,17 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 const MyPreferenceApi = {};
 
-MyPreferenceApi.getSystemPreferences = function() {
-
-};
-MyPreferenceApi.setSystemPreferences = function() {
-
-};
-MyPreferenceApi.getNamespacePreferences = function() {
-
-};
-MyPreferenceApi.setNamespacePreferences = function() {
-
-};
-MyPreferenceApi.getAppPreferences = function() {
-
-};
-MyPreferenceApi.setAppPreferences = function() {
-
-};
-MyPreferenceApi.getProgramPreferences = function() {
-
-};
-MyPreferenceApi.setProgramPreferences = function() {
-
-};
-
+MyPreferenceApi.getSystemPreferences = function() {};
+MyPreferenceApi.setSystemPreferences = function() {};
+MyPreferenceApi.getNamespacePreferences = function() {};
+MyPreferenceApi.setNamespacePreferences = function() {};
+MyPreferenceApi.getAppPreferences = function() {};
+MyPreferenceApi.setAppPreferences = function() {};
+MyPreferenceApi.getProgramPreferences = function() {};
+MyPreferenceApi.setProgramPreferences = function() {};
 
 module.exports = MyPreferenceApi;

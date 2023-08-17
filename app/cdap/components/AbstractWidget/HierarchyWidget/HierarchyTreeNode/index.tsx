@@ -30,7 +30,6 @@ import HierarchyPopoverButton from 'components/AbstractWidget/HierarchyWidget/Hi
 import InputFieldWrapper from 'components/AbstractWidget/HierarchyWidget/HierarchyTreeNode/InputFieldWrapper';
 import ListboxComponent from 'components/AbstractWidget/HierarchyWidget/HierarchyTreeNode/ListBoxComponent';
 import HierarchyTree from 'components/AbstractWidget/HierarchyWidget/HierarchyTree';
-import If from 'components/shared/If';
 import uuidV4 from 'uuid/v4';
 
 const RowInputContainer = withStyles(() => {
@@ -99,7 +98,7 @@ const useStyles = makeStyles<Theme, IHierarchyTreeNodeStyleProps>(() => {
       marginLeft: (props) => props.marginLeft,
     },
     multiSelectCustomMargin: {
-      marginLeft: (props) => (props.marginLeft === 0 ? `10px` : `${props.marginLeft}px`),
+      marginLeft: (props) => (props.marginLeft === 0 ? '10px' : `${props.marginLeft}px`),
     },
     relative: {
       position: 'relative',
@@ -121,14 +120,15 @@ const useStyles = makeStyles<Theme, IHierarchyTreeNodeStyleProps>(() => {
   };
 });
 
-interface INodeProps {
+export interface INodeProps {
   id: number;
   parentId?: number;
-  children?: INodeProps[];
+  children: INodeProps[];
   name: string;
   path?: string[];
   type: string;
 }
+
 interface IHierarchyTreeNodeProps extends IHierarchyProps {
   node: INodeProps;
   setRecords: (value) => void | React.Dispatch<any>;
@@ -168,7 +168,7 @@ const HierarchyTreeNode = ({
 
   const handleMultiSelectClose = () => {
     const newRecords = [...records];
-    multiSelectOptions.forEach((item) => {
+    multiSelectOptions.forEach((item: any) => {
       let childrenOfSelected = [];
       const uniqueId = uuidV4();
 
@@ -193,7 +193,9 @@ const HierarchyTreeNode = ({
       }
     });
     setTree(flatToTree(newRecords));
-    onChange(JSON.stringify(toJsonHandler(newRecords)));
+    if (typeof onChange === 'function') {
+      onChange(JSON.stringify(toJsonHandler(newRecords)));
+    }
     setRecords(newRecords);
     setMultiSelectOptions([]);
   };
@@ -206,7 +208,9 @@ const HierarchyTreeNode = ({
       }
     });
     setTree(flatToTree(newRecords));
-    onChange(JSON.stringify(toJsonHandler(newRecords)));
+    if (typeof onChange === 'function') {
+      onChange(JSON.stringify(toJsonHandler(newRecords)));
+    }
     setRecords(newRecords);
   };
 
@@ -226,9 +230,11 @@ const HierarchyTreeNode = ({
 
   const handleDeleteElement = () => {
     const newRecords = [...records];
-    const elements = removeFamily(node.id, newRecords);
+    const elements = removeFamily(node.id, newRecords as any);
     setTree(flatToTree(elements));
-    onChange(JSON.stringify(toJsonHandler(elements)));
+    if (typeof onChange === 'function') {
+      onChange(JSON.stringify(toJsonHandler(elements)));
+    }
     setRecords(elements);
   };
 
@@ -245,13 +251,13 @@ const HierarchyTreeNode = ({
   );
 
   return (
-    <React.Fragment>
-      <If condition={node.parentId !== null}>
+    <>
+      {node.parentId !== null && (
         <div className={classes.relative}>
           <div className={classes.hierarchyIcon} />
           <div className={classes.innerMostSiblingConnector} />
         </div>
-      </If>
+      )}
       <RowInputContainer>
         <InputFieldWrapper
           node={node}
@@ -285,7 +291,7 @@ const HierarchyTreeNode = ({
           </IconButton>
         </RowButtonsWraper>
       </RowInputContainer>
-      <If condition={childVisible}>
+      {childVisible && (
         <div className={classes.hierarchyTreeMargin}>
           <HierarchyTree
             records={records}
@@ -297,8 +303,8 @@ const HierarchyTreeNode = ({
             disabled={disabled}
           />
         </div>
-      </If>
-      <If condition={showMultiSelect}>
+      )}
+      {showMultiSelect && (
         <div className={classes.multiSelectCustomMargin}>
           <div className={classes.relative}>
             <div className={autoCompleteClass.hierarchyIcon} />
@@ -311,7 +317,7 @@ const HierarchyTreeNode = ({
               disableCloseOnSelect
               options={dropdownOptions}
               value={multiSelectOptions}
-              onChange={(_, value: string[]) => fillMultiSelectOptions(value)}
+              onChange={(_, value: any[]) => fillMultiSelectOptions(value)}
               getOptionSelected={(a, b) => a.id === b.id}
               onClose={handleMultiSelectClose}
               ListboxComponent={(listboxProps) => <ListboxComponent {...listboxProps} />}
@@ -334,8 +340,8 @@ const HierarchyTreeNode = ({
             />
           </AutocompleteContainer>
         </div>
-      </If>
-    </React.Fragment>
+      )}
+    </>
   );
 };
 

@@ -117,7 +117,9 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
             container
             direction="row"
             wrap="nowrap"
-            className={classnames(classes.row, { oddRow: (i + startNode + 1) % 2 })}
+            className={classnames(classes.row, {
+              oddRow: (i + startNode + 1) % 2,
+            })}
             key={`gridrow-${i}`}
           >
             <Grid

@@ -29,8 +29,8 @@
   <base href="/pipelines/">
   </base>
 
-  <link rel="stylesheet" type="text/css" href="/assets/bundle/lib.css" />
-  <link rel="stylesheet" type="text/css" href="/assets/bundle/app.css" />
+  <!-- <link rel="stylesheet" type="text/css" href="/assets/bundle/lib.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/bundle/app.css" /> -->
 </head>
 
 <body ng-class="bodyClass" class="cdap-body-container" ng-controller="BodyCtrl as BodyCtrl" ng-keyup="onSearch($event)">
@@ -42,13 +42,13 @@
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/config.js"></script>
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/ui-config.js"></script>
   <script type="text/javascript" nonce="<_= nonceVal _>" src="/ui-theme.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/polyfill.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/lib.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/common_assets/common-lib-new.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/common_assets/common-new.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/hydrator.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/common.es6.js"></script>
-  <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/tpl.js"></script>
+  <!-- <script type="module" nonce="<_= nonceVal _>" src="/assets/bundle/lib.js"></script> -->
+  <script type="module" nonce="<_= nonceVal _>" src="/assets/bundle/hydrator.js"></script>
+  <!-- <script type="text/javascript" nonce="<_= nonceVal _>" src="/common_assets/common-lib-new.js"></script> -->
+  <!-- <script type="text/javascript" nonce="<_= nonceVal _>" src="/common_assets/common-new.js"></script> -->
+  <!-- <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/hydrator.js"></script> -->
+  <!-- <script type="text/javascript" nonce="<_= nonceVal _>" src="/assets/bundle/common.es6.js"></script> -->
+  <!-- <script type="module" nonce="<_= nonceVal _>" src="../../build-deps/tpl.js"></script> -->
   <script type="text/javascript" nonce="<_= nonceVal _>" src="../cdap/components/hydrator/main.js"></script>
 </body>
 

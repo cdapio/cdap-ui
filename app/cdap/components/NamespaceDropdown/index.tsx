@@ -23,7 +23,6 @@ import SetPreferenceAction from 'components/FastAction/SetPreferenceAction';
 import { PREFERENCES_LEVEL } from 'components/FastAction/SetPreferenceAction/SetPreferenceModal';
 import IconSVG from 'components/shared/IconSVG';
 import { MySearchApi } from 'api/search';
-import isObject from 'lodash/isObject';
 import sortBy from 'lodash/sortBy';
 import T from 'i18n-react';
 import { Link } from 'react-router-dom';
@@ -241,9 +240,9 @@ export default class NamespaceDropdown extends React.PureComponent<
           numMetricsLoading: false,
         });
       },
-      (error) => {
+      (error: any) => {
         this.setState({
-          error: isObject(error) ? error.response : error,
+          error: error?.response ? error.response : error,
         });
       }
     );
@@ -277,7 +276,9 @@ export default class NamespaceDropdown extends React.PureComponent<
     const preferenceSpecificCardHeader = (
       <div className="preferences-saved-message">
         <span>
-          {T.translate('features.FastAction.SetPreferences.success', { entityType: 'Namespace' })}
+          {T.translate('features.FastAction.SetPreferences.success', {
+            entityType: 'Namespace',
+          })}
         </span>
         <IconSVG
           name="icon-close"

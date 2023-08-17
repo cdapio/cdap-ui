@@ -24,7 +24,7 @@ interface ILastStartViewProps {
   pipeline: IPipeline;
 }
 
-const LastStart: React.SFC<ILastStartViewProps> = ({ pipeline }) => {
+const LastStart: React.FC<ILastStartViewProps> = ({ pipeline }) => {
   const runs = pipeline.runs;
   if (runs === null) {
     return (

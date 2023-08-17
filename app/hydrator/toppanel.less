@@ -15,7 +15,7 @@
  */
 
 @import '../styles/variables.less';
-@import '../../node_modules/@bower_components/bootstrap/less/mixins.less';
+@import '@bower_components/bootstrap/less/mixins.less';
 @import '../styles/themes/cdap/mixins.less';
 @height-of-toppanel: 43px;
 @btn-border-color: #999999;
@@ -331,9 +331,9 @@ body.theme-cdap {
               margin-top: 5px;
               line-height: 17px;
 
-              &.placeholder {
-                &:before { content: "Name your pipeline"; }
-              }
+              // &.placeholder {
+              //   &:before { content: "Name your pipeline"; }
+              // }
             }
             &:last-child {
               font-size: 12px;

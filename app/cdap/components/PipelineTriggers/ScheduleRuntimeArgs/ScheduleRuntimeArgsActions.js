@@ -29,10 +29,10 @@ function fetchPipelineMacroDetails(pipelineId, namespace, isTriggeredPipeline) {
     appId: pipelineId,
   }).subscribe((macrosSpec) => {
     let macros = [];
-    let stagePropertiesMap = {};
+    const stagePropertiesMap = {};
     let configStages = [];
     macrosSpec.forEach((ms) => {
-      let { pluginClass, properties, artifactId: artifact } = ms.spec;
+      const { pluginClass, properties, artifactId: artifact } = ms.spec;
       artifact.version = artifact.version.version;
       macros = macros.concat(properties.macros.lookupProperties);
       stagePropertiesMap[ms.id] = Object.keys(pluginClass.properties);
@@ -63,10 +63,14 @@ function fetchPipelineMacroDetails(pipelineId, namespace, isTriggeredPipeline) {
   });
 }
 function updateStagePropertiesFromWidgetJson(stage) {
-  let { args } = ScheduleRuntimeArgsStore.getState();
-  let { stageWidgetJsonMap } = args;
-  let { name: artifactName, version: artifactVersion, scope } = stage.artifact;
-  let { stageName, stageType, id: stageid } = stage;
+  const { args } = ScheduleRuntimeArgsStore.getState();
+  const { stageWidgetJsonMap } = args;
+  const {
+    name: artifactName,
+    version: artifactVersion,
+    scope,
+  } = stage.artifact;
+  const { stageName, stageType, id: stageid } = stage;
   if (!stageWidgetJsonMap[stageid]) {
     MyPipelineApi.fetchWidgetJson({
       namespace: getCurrentNamespace(),

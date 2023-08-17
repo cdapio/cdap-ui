@@ -24,7 +24,7 @@ const styles = genericNodeStyles({
     backgroundColor: 'rgba(72, 192, 56, 0.1)',
   },
 });
-interface ISourceNodeProps extends IAbstractNodeProps<typeof styles> {}
+type ISourceNodeProps = IAbstractNodeProps<typeof styles>;
 class SourceNodeComponent extends AbstractNode<ISourceNodeProps> {
   public type = 'source';
 

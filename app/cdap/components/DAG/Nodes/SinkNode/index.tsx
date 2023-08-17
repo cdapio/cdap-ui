@@ -19,12 +19,12 @@ import { IAbstractNodeProps, AbstractNode } from 'components/DAG/Nodes/AbstractN
 import { genericNodeStyles } from 'components/DAG/Nodes/utilities';
 
 const styles = genericNodeStyles({
-  border: `1px solid #8367df`,
+  border: '1px solid #8367df',
   '&.drag-hover': {
     backgroundColor: 'rgba(131, 103, 223, 0.1)',
   },
 });
-interface ISinkNodeProps extends IAbstractNodeProps<typeof styles> {}
+type ISinkNodeProps = IAbstractNodeProps<typeof styles>;
 class SinkNodeComponent extends AbstractNode<ISinkNodeProps> {
   public type = 'sink';
 

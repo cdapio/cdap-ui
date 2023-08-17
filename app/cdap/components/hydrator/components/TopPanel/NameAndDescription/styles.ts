@@ -33,7 +33,7 @@ export const PipelineName = styled(EllipsisText)`
   margin-top: 5px;
   line-height: 17px;
 
-  ${({ errorName }) => errorName && `color: ${errorRed};`}
+  ${({ errorName }: { errorName: boolean }) => errorName && `color: ${errorRed};`}
 `;
 
 export const PipelineDescription = styled(EllipsisText)`
@@ -87,7 +87,7 @@ export const PipelineType = styled.div`
 export const MetadataLeft = styled.div`
   margin-left: 10px;
   text-align: left !important;
-  ${({ expanded }) => expanded && 'width: calc(100% - 250px);'}
+  ${({ expanded }: { expanded: boolean }) => expanded && 'width: calc(100% - 250px);'}
 `;
 
 export const HydratorMetadata = styled.div`
@@ -98,7 +98,7 @@ export const HydratorMetadata = styled.div`
   box-shadow: none;
   overflow: hidden;
 
-  ${({ expanded }) =>
+  ${({ expanded }: { expanded: boolean; disabled: boolean }) =>
     expanded &&
     `background-color: ${colors.white01};
     height: 185px;
@@ -108,7 +108,7 @@ export const HydratorMetadata = styled.div`
     position: absolute;
     box-shadow: 0 7px 7px rgb(0 0 0 / 10%), 0 19px 59px rgb(0 0 0 / 20%);`}
 
-  ${({ disabled }) =>
+  ${({ disabled }: { expanded: boolean; disabled: boolean }) =>
     disabled &&
     `pointer-events: none;
     opacity: 0.7;`}

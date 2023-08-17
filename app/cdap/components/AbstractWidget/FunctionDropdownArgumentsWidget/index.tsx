@@ -31,7 +31,7 @@ interface IFunctionDropdownWidgetProps {
   delimiter?: string;
 }
 
-interface IFunctionDropdownProps extends IMultiRowProps<IFunctionDropdownWidgetProps> {}
+type IFunctionDropdownProps = IMultiRowProps<IFunctionDropdownWidgetProps>;
 
 class FunctionDropdownArgumentsWidgetView extends AbstractMultiRowWidget<IFunctionDropdownProps> {
   public renderRow = (id, index) => {

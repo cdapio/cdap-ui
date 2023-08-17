@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -64,9 +64,9 @@ const StyledDisabledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenuProps) => {
-  const [mousePosition, setMousePosition] = React.useState(initialMousePosition);
+  const [mousePosition, setMousePosition] = useState<any>(initialMousePosition);
 
-  const toggleMenu = (e: PointerEvent) => {
+  const toggleMenu = (e: MouseEvent) => {
     setMousePosition({
       mouseX: e.clientX - 2,
       mouseY: e.clientY - 4,
@@ -81,17 +81,17 @@ export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenu
   const defaultEventHandler = (e) => e.preventDefault();
 
   // state to capture children of context menu to disable right click on them.
-  const [children, setChildren] = React.useState(null);
+  const [children, setChildren] = useState<any>(null);
   // we don't use 'useRef' but a 'useCallback' is because 'ref.current' state is not
   // tracked. So a useEffect(() => {...}, [ref.current]) won't get called back if
   // the dom node changes.
-  const measuredRef = React.useCallback((node) => {
+  const measuredRef = useCallback((node) => {
     if (node !== null) {
       setChildren([...Array.prototype.slice.call(node.children), node]);
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (children) {
       children.forEach((child) => {
         child.removeEventListener('contextmenu', defaultEventHandler);
@@ -106,8 +106,8 @@ export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenu
   }, [children]);
 
   // on mount determine the position of the mouse pointer and place the menu right there.
-  React.useEffect(() => {
-    let el: HTMLElement;
+  useEffect(() => {
+    let el: HTMLElement | null = null;
     if (selector) {
       el = document.querySelector(selector);
     }
@@ -119,12 +119,14 @@ export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenu
     }
 
     el.addEventListener('contextmenu', toggleMenu);
-    return () => el.removeEventListener('contextmenu', toggleMenu);
+    return () => el?.removeEventListener('contextmenu', toggleMenu);
   }, []);
 
   const handleClose = (option: IContextMenuOption, e: React.SyntheticEvent) => {
     setMousePosition(initialMousePosition);
-    option.onClick(e);
+    if (typeof option.onClick === 'function') {
+      option.onClick(e);
+    }
   };
 
   return (
@@ -140,33 +142,27 @@ export const ContextMenu = ({ selector, element, options, onOpen }: IContextMenu
       }
       ref={measuredRef}
     >
-      {options.map((option) => {
-        const { name, disabled, type } = option;
-        if (type === 'divider') {
-          return <Divider />;
-        }
-        const MenuItemComp = disabled ? StyledDisabledMenuItem : StyledMenuItem;
-        return (
-          <MenuItemComp
-            key={name}
-            onClick={disabled === true ? undefined : handleClose.bind(null, option)}
-            data-cy={`menu-item-${name}`}
-            data-testid={`menu-item-${name}`}
-            disabled={disabled ? true : false}
-          >
-            <MenuItemContentWrapper option={option} />
-          </MenuItemComp>
-        );
-      })}
+      {Array.isArray(options) &&
+        options.map((option) => {
+          const { name, disabled, type } = option;
+          if (type === 'divider') {
+            return <Divider />;
+          }
+          const MenuItemComp = disabled ? StyledDisabledMenuItem : StyledMenuItem;
+          return (
+            <MenuItemComp
+              key={name}
+              onClick={disabled === true ? undefined : handleClose.bind(null, option)}
+              data-cy={`menu-item-${name}`}
+              data-testid={`menu-item-${name}`}
+              disabled={disabled ? true : false}
+            >
+              <MenuItemContentWrapper option={option} />
+            </MenuItemComp>
+          );
+        })}
     </Menu>
   );
-};
-
-(ContextMenu as any).propTypes = {
-  selector: PropTypes.string,
-  element: PropTypes.node,
-  options: PropTypes.object,
-  onOpen: PropTypes.func,
 };
 
 export default function ContextMenuWrapper() {
@@ -188,9 +184,9 @@ export default function ContextMenuWrapper() {
     },
   ];
   return (
-    <React.Fragment>
+    <>
       <h1 id="right-click-item">Right click here</h1>
       <ContextMenu selector="#right-click-item" options={options} />
-    </React.Fragment>
+    </>
   );
 }

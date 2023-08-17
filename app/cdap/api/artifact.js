@@ -16,14 +16,19 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/artifacts';
 const baseArtifactPath = basepath + '/:artifactId/versions/:version';
 const basePluginArtifactJSON = baseArtifactPath + '/properties';
 
 export const MyArtifactApi = {
   get: apiCreator(dataSrc, 'GET', 'REQUEST', baseArtifactPath),
-  listExtensions: apiCreator(dataSrc, 'GET', 'REQUEST', `${baseArtifactPath}/extensions`),
+  listExtensions: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${baseArtifactPath}/extensions`
+  ),
   listMicroservicePlugins: apiCreator(
     dataSrc,
     'GET',
@@ -37,9 +42,19 @@ export const MyArtifactApi = {
     `${baseArtifactPath}/extensions/microservice/plugins/:pluginId`
   ),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', baseArtifactPath),
-  loadPluginConfiguration: apiCreator(dataSrc, 'PUT', 'REQUEST', basePluginArtifactJSON),
+  loadPluginConfiguration: apiCreator(
+    dataSrc,
+    'PUT',
+    'REQUEST',
+    basePluginArtifactJSON
+  ),
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
-  reloadSystemArtifacts: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/system/artifacts'),
+  reloadSystemArtifacts: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/namespaces/system/artifacts'
+  ),
   fetchPluginDetails: apiCreator(
     dataSrc,
     'GET',

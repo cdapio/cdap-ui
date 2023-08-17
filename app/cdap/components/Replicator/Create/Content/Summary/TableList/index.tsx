@@ -14,10 +14,19 @@
  * the License.
  */
 
-import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import { createContextConnect, ICreateContext } from 'components/Replicator/Create';
-import { generateTableKey, getTableDisplayName } from 'components/Replicator/utilities';
+import React, { useEffect, useState } from 'react';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
+import {
+  createContextConnect,
+  ICreateContext,
+} from 'components/Replicator/Create';
+import {
+  generateTableKey,
+  getTableDisplayName,
+} from 'components/Replicator/utilities';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Search from '@material-ui/icons/Search';
@@ -59,8 +68,8 @@ const TableListView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   tables,
   columns,
 }) => {
-  const [filteredTables, setFilteredTables] = React.useState(tables.toList());
-  const [search, setSearch] = React.useState('');
+  const [filteredTables, setFilteredTables] = useState(tables.toList());
+  const [search, setSearch] = useState('');
 
   function handleSearch(e) {
     setSearch(e.target.value);
@@ -84,7 +93,7 @@ const TableListView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
   }, 300);
 
   // handle search query change
-  React.useEffect(filterTableBySearch, [search]);
+  useEffect(filterTableBySearch, [search]);
 
   return (
     <div className={classes.root}>
@@ -120,19 +129,23 @@ const TableListView: React.FC<ICreateContext & WithStyles<typeof styles>> = ({
           </div>
 
           <div className="grid-body">
-            {filteredTables.map((row) => {
-              const tableKey = generateTableKey(row);
-              const selectedColumns = columns.get(tableKey);
+            {
+              filteredTables.map((row) => {
+                const tableKey = generateTableKey(row);
+                const selectedColumns = columns.get(tableKey);
 
-              return (
-                <div key={tableKey} className="grid-row">
-                  <div>{getTableDisplayName(row)}</div>
-                  <div>
-                    {selectedColumns && selectedColumns.size > 0 ? selectedColumns.size : 'All'}
+                return (
+                  <div key={tableKey} className="grid-row">
+                    <div>{getTableDisplayName(row)}</div>
+                    <div>
+                      {selectedColumns && selectedColumns.size > 0
+                        ? selectedColumns.size
+                        : 'All'}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              }) as any
+            }
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@ interface IPipelineDetailsMetadata {
   version: string;
   description: string;
   sourceControlMeta: {
-    fileHash: string;
+    fileHash: string,
   };
 }
 
@@ -101,9 +101,12 @@ const PipelineDetailsMetadata = ({
             {description}
           </Popover>
         </span>
-        {sourceControlMeta && sourceControlMeta.fileHash && (
+        {sourceControlMeta?.fileHash && (
           <StyledSpan>
-            <StyledChip variant="outlined" label={T.translate(`${SCM_PREFIX}.table.gitStatus`)} />
+            <StyledChip
+              variant="outlined"
+              label={T.translate(`${SCM_PREFIX}.table.gitStatus`)}
+            />
             <Popover
               target={() => <IconSVG name="icon-info-circle" />}
               showOn="Hover"
@@ -113,7 +116,9 @@ const PipelineDetailsMetadata = ({
             </Popover>
           </StyledSpan>
         )}
-        <span className="pipeline-version">{T.translate(`${PREFIX}.version`, { version })}</span>
+        <span className="pipeline-version">
+          {T.translate(`${PREFIX}.version`, { version })}
+        </span>
       </div>
       <div className="pipeline-tags">
         <ConnectedPipelineTags />
@@ -122,9 +127,9 @@ const PipelineDetailsMetadata = ({
   );
 };
 
-const ConnectedPipelineDetailsMetadata = connect(mapStateToPipelineDetailsMetadataProps)(
-  PipelineDetailsMetadata
-);
+const ConnectedPipelineDetailsMetadata = connect(
+  mapStateToPipelineDetailsMetadataProps
+)(PipelineDetailsMetadata);
 
 const ProvidedPipelineDetailsMetadata = () => {
   return (

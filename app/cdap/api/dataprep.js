@@ -17,7 +17,7 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 
 const appPath = '/namespaces/system/apps/dataprep';
 const baseServicePath = `${appPath}/services/service`;
@@ -30,24 +30,59 @@ const connectionTypesPath = `${baseServicePath}/methods/connectionTypes`;
 const datamodelsPath = `${contextPath}/datamodels/schemas`;
 
 const MyDataPrepApi = {
-  createWorkspace: apiCreator(dataSrc, 'POST', 'REQUEST', `${contextPathV2}/workspaces`),
+  createWorkspace: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${contextPathV2}/workspaces`
+  ),
 
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', basepathV2),
   execute: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepathV2}/execute`),
   summary: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/summary`),
   getSchema: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/schema`),
-  getSpecification: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepathV2}/specification`),
+  getSpecification: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basepathV2}/specification`
+  ),
   getUsage: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/usage`),
-  getInfo: apiCreator(dataSrc, 'GET', 'REQUEST', `${baseServicePath}/methods/info`),
+  getInfo: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${baseServicePath}/methods/info`
+  ),
   setWorkspace: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepathV2}`),
   getWorkspace: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepathV2}`),
-  getWorkspaceList: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPathV2}/workspaces`),
+  getWorkspaceList: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${contextPathV2}/workspaces`
+  ),
 
   // Wrangler Data Model
-  attachDataModel: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/datamodels`),
-  detachDataModel: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/datamodels`),
+  attachDataModel: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${basepath}/datamodels`
+  ),
+  detachDataModel: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${basepath}/datamodels`
+  ),
   attachModel: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/models`),
-  detachModel: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${basepath}/models/:modelId`),
+  detachModel: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${basepath}/models/:modelId`
+  ),
   addDataModels: apiCreator(dataSrc, 'POST', 'REQUEST', `${datamodelsPath}`),
   getDataModels: apiCreator(dataSrc, 'GET', 'REQUEST', `${datamodelsPath}`),
   getDataModel: apiCreator(
@@ -59,19 +94,54 @@ const MyDataPrepApi = {
 
   // WRANGLER SERVICE MANAGEMENT
   getApp: apiCreator(dataSrc, 'GET', 'REQUEST', appPath),
-  startService: apiCreator(dataSrc, 'POST', 'REQUEST', `${baseServicePath}/start`),
-  stopService: apiCreator(dataSrc, 'POST', 'REQUEST', `${baseServicePath}/stop`),
-  getServiceStatus: apiCreator(dataSrc, 'GET', 'REQUEST', `${baseServicePath}/status`),
-  pollServiceStatus: apiCreator(dataSrc, 'GET', 'POLL', `${baseServicePath}/status`),
+  startService: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${baseServicePath}/start`
+  ),
+  stopService: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${baseServicePath}/stop`
+  ),
+  getServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${baseServicePath}/status`
+  ),
+  pollServiceStatus: apiCreator(
+    dataSrc,
+    'GET',
+    'POLL',
+    `${baseServicePath}/status`
+  ),
   createApp: apiCreator(dataSrc, 'PUT', 'REQUEST', `${appPath}`),
-  ping: apiCreator(dataSrc, 'GET', 'REQUEST', `${baseServicePath}/methods/health`),
+  ping: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${baseServicePath}/methods/health`
+  ),
 
   // File System Browser
   explorer: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/explorer/fs`),
-  readFile: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/explorer/fs/read`),
+  readFile: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${contextPath}/explorer/fs/read`
+  ),
 
   // Database Browser
-  listTables: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsPath}/:connectionId/tables`),
+  listTables: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${connectionsPath}/:connectionId/tables`
+  ),
   readTable: apiCreator(
     dataSrc,
     'GET',
@@ -86,19 +156,44 @@ const MyDataPrepApi = {
   ),
 
   // JDBC
-  jdbcDrivers: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/jdbc/drivers`),
-  jdbcAllowed: apiCreator(dataSrc, 'GET', 'REQUEST', `${contextPath}/jdbc/allowed`),
+  jdbcDrivers: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${contextPath}/jdbc/drivers`
+  ),
+  jdbcAllowed: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${contextPath}/jdbc/allowed`
+  ),
   jdbcTestConnection: apiCreator(
     dataSrc,
     'POST',
     'REQUEST',
     `${contextPath}/connections/jdbc/test`
   ),
-  getDatabaseList: apiCreator(dataSrc, 'POST', 'REQUEST', `${contextPath}/connections/databases`),
+  getDatabaseList: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${contextPath}/connections/databases`
+  ),
 
   // Kafka
-  kafkaTestConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/kafka/test`),
-  listTopics: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/kafka`),
+  kafkaTestConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/kafka/test`
+  ),
+  listTopics: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/kafka`
+  ),
   readTopic: apiCreator(
     dataSrc,
     'GET',
@@ -113,7 +208,12 @@ const MyDataPrepApi = {
   ),
 
   // S3
-  s3TestConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/s3/test`),
+  s3TestConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/s3/test`
+  ),
   getS3Buckets: apiCreator(
     dataSrc,
     'POST',
@@ -140,7 +240,12 @@ const MyDataPrepApi = {
   ),
 
   // GCS
-  gcsTestConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/gcs/test`),
+  gcsTestConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/gcs/test`
+  ),
   exploreGCSBucketDetails: apiCreator(
     dataSrc,
     'GET',
@@ -193,7 +298,12 @@ const MyDataPrepApi = {
   ),
 
   // Spanner
-  spannerTestConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/spanner/test`),
+  spannerTestConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/spanner/test`
+  ),
   spannerGetInstances: apiCreator(
     dataSrc,
     'GET',
@@ -226,7 +336,12 @@ const MyDataPrepApi = {
   ),
 
   // ADLS
-  adlsTestConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/adls/test`),
+  adlsTestConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/adls/test`
+  ),
   adlsFileExplorer: apiCreator(
     dataSrc,
     'GET',
@@ -248,18 +363,38 @@ const MyDataPrepApi = {
 
   // Connections
   listConnections: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsPath}`),
-  createConnection: apiCreator(dataSrc, 'POST', 'REQUEST', `${connectionsPath}/create`),
+  createConnection: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${connectionsPath}/create`
+  ),
   updateConnection: apiCreator(
     dataSrc,
     'POST',
     'REQUEST',
     `${connectionsPath}/:connectionId/update`
   ),
-  deleteConnection: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${connectionsPath}/:connectionId`),
-  getConnection: apiCreator(dataSrc, 'GET', 'REQUEST', `${connectionsPath}/:connectionId`),
+  deleteConnection: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${connectionsPath}/:connectionId`
+  ),
+  getConnection: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${connectionsPath}/:connectionId`
+  ),
 
   // Connection types
-  listConnectionTypes: apiCreator(dataSrc, 'GET', 'REQUEST', connectionTypesPath),
+  listConnectionTypes: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    connectionTypesPath
+  ),
 };
 
 export default MyDataPrepApi;

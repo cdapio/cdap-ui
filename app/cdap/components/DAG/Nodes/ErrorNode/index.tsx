@@ -19,12 +19,12 @@ import { IAbstractNodeProps, AbstractNode } from 'components/DAG/Nodes/AbstractN
 import { genericNodeStyles } from 'components/DAG/Nodes/utilities';
 
 const styles = genericNodeStyles({
-  border: `1px solid #d40001`,
+  border: '1px solid #d40001',
   '&.drag-hover': {
     backgroundColor: 'rgba(212, 0, 1, 0.1)',
   },
 });
-interface IErrorPublisherProps extends IAbstractNodeProps<typeof styles> {}
+type IErrorPublisherProps = IAbstractNodeProps<typeof styles>;
 class ErrorPublisherComponent extends AbstractNode<IErrorPublisherProps> {
   public type = 'errortransform';
 

@@ -17,7 +17,7 @@
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
-let dataSrc = DataSourceConfigurer.getInstance();
+const dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/metrics/query';
 
 export const MyMetricApi = {

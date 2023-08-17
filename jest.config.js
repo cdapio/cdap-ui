@@ -46,7 +46,7 @@ module.exports = {
     './selenium/integration/tethering',
   ],
   modulePaths: ['./app/cdap/'],
-  preset: 'ts-jest/presets/js-with-babel',
+  preset: 'ts-jest',
   setupFilesAfterEnv: ['./jest/jest.setup.js'],
   testEnvironment: 'jsdom',
   transform: {

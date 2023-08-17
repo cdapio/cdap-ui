@@ -16,10 +16,15 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import {Input} from 'reactstrap';
+import { Input } from 'reactstrap';
 import uuidV4 from 'uuid/v4';
 
-export default function MultipleSelectWithOptions({className, value, onChange, options}) {
+export default function MultipleSelectWithOptions({
+  className,
+  value,
+  onChange,
+  options,
+}) {
   return (
     <Input
       type="select"
@@ -28,24 +33,21 @@ export default function MultipleSelectWithOptions({className, value, onChange, o
       onChange={onChange}
       multiple
     >
-      {options.map(o => {
+      {options.map((o) => {
         if (typeof o === 'object') {
           return (
-            <option
-              key={uuidV4()}
-              value={o.id}
-            >
+            <option key={uuidV4()} value={o.id}>
               {o.value}
             </option>
           );
         }
-        return (<option key={uuidV4()}>{o}</option>);
+        return <option key={uuidV4()}>{o}</option>;
       })}
     </Input>
   );
 }
 MultipleSelectWithOptions.defaultProps = {
-  value: []
+  value: [],
 };
 MultipleSelectWithOptions.propTypes = {
   className: PropTypes.string,
@@ -56,8 +58,8 @@ MultipleSelectWithOptions.propTypes = {
       PropTypes.string,
       PropTypes.shape({
         id: PropTypes.string,
-        value: PropTypes.string
-      })
+        value: PropTypes.string,
+      }),
     ])
-  )
+  ),
 };

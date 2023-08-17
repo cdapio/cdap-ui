@@ -14,17 +14,19 @@
  * the License.
  */
 
-import RulesEngineStore, { RULESENGINEACTIONS } from 'components/RulesEngineHome/RulesEngineStore';
+import RulesEngineStore, {
+  RULESENGINEACTIONS,
+} from 'components/RulesEngineHome/RulesEngineStore';
 import NamespaceStore from 'services/NamespaceStore';
 import MyRulesEngineApi from 'api/rulesengine';
 import isNil from 'lodash/isNil';
 
 const getRuleBooks = () => {
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   MyRulesEngineApi.getRulebooks({
     namespace,
   }).subscribe((res) => {
-    let { rulebooks } = RulesEngineStore.getState();
+    const { rulebooks } = RulesEngineStore.getState();
     RulesEngineStore.dispatch({
       type: RULESENGINEACTIONS.SETRULEBOOKS,
       payload: {
@@ -52,8 +54,8 @@ const setActiveRulebook = (id) => {
 };
 
 const getRulesForActiveRuleBook = () => {
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
-  let { rulebooks } = RulesEngineStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { rulebooks } = RulesEngineStore.getState();
   MyRulesEngineApi.getRulesForRuleBook({
     namespace,
     rulebookid: rulebooks.activeRulebookId,
@@ -68,7 +70,7 @@ const getRulesForActiveRuleBook = () => {
 };
 
 const getRules = () => {
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   MyRulesEngineApi.getRules({
     namespace,
   }).subscribe((res) => {
@@ -82,21 +84,23 @@ const getRules = () => {
 };
 
 const createNewRuleBook = (config) => {
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
-  let urlParams = { namespace };
-  let headers = { 'Content-Type': 'application/json' };
-  let postBody = {
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
+  const urlParams = { namespace };
+  const headers = { 'Content-Type': 'application/json' };
+  const postBody = {
     ...config,
     user: 'Admin',
     source: 'Website',
   };
 
-  MyRulesEngineApi.createRulebook(urlParams, postBody, headers).subscribe((res) => {
-    resetCreateRuleBook();
-    setActiveRulebook(res.values[0]);
-    getRuleBooks();
-    setActiveTab('2'); // 2 being the index of the Rules tab
-  });
+  MyRulesEngineApi.createRulebook(urlParams, postBody, headers).subscribe(
+    (res) => {
+      resetCreateRuleBook();
+      setActiveRulebook(res.values[0]);
+      getRuleBooks();
+      setActiveTab('2'); // 2 being the index of the Rules tab
+    }
+  );
 };
 
 const setActiveTab = (activeTab) => {

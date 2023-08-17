@@ -25,7 +25,7 @@ export interface IMultiRowWidgetProps {
   delimiter?: string;
 }
 
-export interface IMultiRowProps<W extends IMultiRowWidgetProps> extends IWidgetProps<W> {}
+export type IMultiRowProps<W extends IMultiRowWidgetProps> = IWidgetProps<W>;
 
 interface IMultiRowState {
   rows: string[];
@@ -35,9 +35,9 @@ interface IMultiRowState {
 export default class AbstractMultiRowWidget<
   W extends IWidgetProps<IMultiRowWidgetProps>
 > extends React.PureComponent<W, IMultiRowState> {
-  public state = {
+  public state: IMultiRowState = {
     rows: [],
-    autofocus: null,
+    autofocus: undefined,
   };
 
   public values = {};
@@ -78,7 +78,7 @@ export default class AbstractMultiRowWidget<
       this.setState(
         {
           rows: [],
-          autofocus: null,
+          autofocus: undefined,
         },
         () => {
           if (!this.state.rows || this.state.rows.length === 0) {
@@ -91,7 +91,7 @@ export default class AbstractMultiRowWidget<
       return;
     }
 
-    const rows = [];
+    const rows: any = [];
 
     splitValues.forEach((value) => {
       const id = uuidV4();
@@ -106,7 +106,7 @@ export default class AbstractMultiRowWidget<
     this.setState({ rows });
   };
 
-  public addRow = (index = -1, shouldFocus: boolean = true) => {
+  public addRow = (index = -1, shouldFocus = true) => {
     const rows = this.state.rows.slice();
     const id = uuidV4();
     rows.splice(index + 1, 0, id);

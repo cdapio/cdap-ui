@@ -35,9 +35,15 @@ const SCHEDULERUNTIMEARGSACTIONS = {
 
 const I18NPREFIX = 'features.PipelineTriggers.ScheduleRuntimeArgs';
 
-const DEFAULTRUNTIMEARGSMESSAGE = T.translate(`${I18NPREFIX}.DefaultMessages.choose_runtime_arg`);
-const DEFAULTSTAGEMESSAGE = T.translate(`${I18NPREFIX}.DefaultMessages.choose_plugin`);
-const DEFAULTPROPERTYMESSAGE = T.translate(`${I18NPREFIX}.DefaultMessages.choose_plugin_property`);
+const DEFAULTRUNTIMEARGSMESSAGE = T.translate(
+  `${I18NPREFIX}.DefaultMessages.choose_runtime_arg`
+);
+const DEFAULTSTAGEMESSAGE = T.translate(
+  `${I18NPREFIX}.DefaultMessages.choose_plugin`
+);
+const DEFAULTPROPERTYMESSAGE = T.translate(
+  `${I18NPREFIX}.DefaultMessages.choose_plugin_property`
+);
 const DEFAULTTRIGGEREDMACROMESSAGE = T.translate(
   `${I18NPREFIX}.DefaultMessages.choose_runtime_arg`
 );
@@ -82,9 +88,9 @@ const handleDefaultMessage = (input) => {
 };
 
 const arrayToMap = (stages) => {
-  let map = {};
+  const map = {};
   stages.forEach((stage) => {
-    let properties = stage.properties;
+    const properties = stage.properties;
 
     map[stage.id] = {
       properties,
@@ -141,7 +147,7 @@ const args = (state = DEFAULTARGS, action = defaultAction) => {
         },
       });
     case SCHEDULERUNTIMEARGSACTIONS.SETARGSVALUE: {
-      let argsMapping = getUpdatedMapping(
+      const argsMapping = getUpdatedMapping(
         state,
         {
           key: action.payload.mappingKey,
@@ -151,7 +157,7 @@ const args = (state = DEFAULTARGS, action = defaultAction) => {
         action.payload.oldMappedValue
       );
 
-      let returnObj = Object.assign({}, state, {
+      const returnObj = Object.assign({}, state, {
         argsMapping,
         triggeredPipelineInfo: Object.assign({}, state.triggeredPipelineInfo, {
           unMappedMacros:
@@ -198,7 +204,7 @@ const args = (state = DEFAULTARGS, action = defaultAction) => {
   }
 };
 
-let ScheduleRuntimeArgsStore = createStore(
+const ScheduleRuntimeArgsStore = createStore(
   combineReducers({
     args,
   }),

@@ -14,12 +14,15 @@
  * the License.
  */
 
-import './rules-engine-modal.scss';
+require('./rules-engine-modal.scss');
 
 import * as React from 'react';
 
 import { Modal, ModalBody } from 'reactstrap';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 
 import Button from '@material-ui/core/Button';
 import CodeEditor from 'components/shared/CodeEditor';
@@ -47,7 +50,7 @@ const styles = (theme): StyleRules => {
       border: 0,
       background: 'transparent',
       borderLeft: `1px solid ${theme.palette.grey['300']}`,
-      fontWeight: 'bold' as 'bold',
+      fontWeight: 'bold' as const,
       fontSize: '1.5rem',
       '&:hover': {
         background: theme.palette.blue['40'],
@@ -57,7 +60,9 @@ const styles = (theme): StyleRules => {
   };
 };
 
-interface IRulesEngineProps extends IWidgetProps<null>, WithStyles<typeof styles> {}
+interface IRulesEngineProps
+  extends IWidgetProps<null>,
+    WithStyles<typeof styles> {}
 
 const RulesEngineEditorView: React.FC<IRulesEngineProps> = ({
   value,
@@ -94,7 +99,13 @@ const RulesEngineEditorView: React.FC<IRulesEngineProps> = ({
           <IconSVG name="icon-DataPreparation" className={classes.btnIcon} />
           Rules
         </Button>
-        <CodeEditor mode="scala" value={value} onChange={onChange} rows={25} disabled={disabled} />
+        <CodeEditor
+          mode="scala"
+          value={value}
+          onChange={onChange}
+          rows={25}
+          disabled={disabled}
+        />
       </div>
 
       <If condition={showModal}>
@@ -108,12 +119,19 @@ const RulesEngineEditorView: React.FC<IRulesEngineProps> = ({
         >
           <div className="modal-header">
             <h5 className="modal-title">Rules Engine</h5>
-            <button className={classes.modalBtnClose} onClick={() => setShowModal(false)}>
+            <button
+              className={classes.modalBtnClose}
+              onClick={() => setShowModal(false)}
+            >
               <IconSVG name="icon-close" />
             </button>
           </div>
           <ModalBody>
-            <RulesEngineHome embedded={true} rulebookid={rulebookIdProp} onApply={onApply} />
+            <RulesEngineHome
+              embedded={true}
+              rulebookid={rulebookIdProp}
+              onApply={onApply}
+            />
           </ModalBody>
         </Modal>
       </If>

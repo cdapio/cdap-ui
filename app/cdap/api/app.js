@@ -16,9 +16,9 @@
 
 import { apiCreator } from 'services/resource-helper';
 import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
-let dataSrc = DataSourceConfigurer.getInstance();
-let basepath = '/namespaces/:namespace/apps';
-let appPath = `${basepath}/:appId`;
+const dataSrc = DataSourceConfigurer.getInstance();
+const basepath = '/namespaces/:namespace/apps';
+const appPath = `${basepath}/:appId`;
 
 export const MyAppApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
@@ -26,7 +26,17 @@ export const MyAppApi = {
   get: apiCreator(dataSrc, 'GET', 'REQUEST', appPath),
   getVersions: apiCreator(dataSrc, 'GET', 'REQUEST', `${appPath}/versions`),
   getDeployedApp: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
-  batchStatus: apiCreator(dataSrc, 'POST', 'POLL', '/namespaces/:namespace/status'),
-  batchAppDetail: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/appdetail'),
+  batchStatus: apiCreator(
+    dataSrc,
+    'POST',
+    'POLL',
+    '/namespaces/:namespace/status'
+  ),
+  batchAppDetail: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    '/namespaces/:namespace/appdetail'
+  ),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', appPath),
 };

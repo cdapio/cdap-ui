@@ -14,15 +14,18 @@
  * the License.
  */
 
-var cdapWebpackConfig = require('./webpack.config.cdap.js');
-var loginWebpackConfig = require('./webpack.config.login.js');
-var commonWebpackConfig = require('./webpack.config.common.js');
+const cdapWebpackConfig = require('./webpack.config.cdap.js');
+const loginWebpackConfig = require('./webpack.config.login.js');
+const commonWebpackConfig = require('./webpack.config.common.js');
 
 // Forces dev to use `npm run cdap-dev-build-w` during development,
 // This will prevent repeatedly building the common library shared between webapps
 // Its bad because both common & cdap webpacks will trigger a build when common stuff changes.
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'browser-testing') {
-  module.exports = cdapWebpackConfig;
+if (
+  process.env.NODE_ENV === 'development' ||
+  process.env.NODE_ENV === 'browser-testing'
+) {
+  module.exports = [cdapWebpackConfig];
 } else {
   module.exports = [cdapWebpackConfig, loginWebpackConfig, commonWebpackConfig];
 }

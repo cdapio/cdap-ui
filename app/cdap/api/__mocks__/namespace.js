@@ -12,33 +12,17 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
 const MyNamespaceApi = {};
 
-MyNamespaceApi.list = function() {
-
-};
-MyNamespaceApi.get = function() {
-
-};
-MyNamespaceApi.pollList = function() {
-
-};
-MyNamespaceApi.create = function() {
-
-};
-MyNamespaceApi.setPreferences = function() {
-
-};
-MyNamespaceApi.setSourceControlManagement = function() {
-
-};
-MyNamespaceApi.getSourceControlManagement = function() {
-    
-};
-MyNamespaceApi.deleteSourceControlManagement = function() {
-    
-};
+MyNamespaceApi.list = function() {};
+MyNamespaceApi.get = function() {};
+MyNamespaceApi.pollList = function() {};
+MyNamespaceApi.create = function() {};
+MyNamespaceApi.setPreferences = function() {};
+MyNamespaceApi.setSourceControlManagement = function() {};
+MyNamespaceApi.getSourceControlManagement = function() {};
+MyNamespaceApi.deleteSourceControlManagement = function() {};
 
 module.exports = MyNamespaceApi;

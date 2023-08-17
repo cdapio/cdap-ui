@@ -30,7 +30,8 @@
     extensions: []
   }
 */
-
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 let leftpanelactions, _DAGPlusPlusFactory, _GLOBALS, _myHelpers, _filter, _hydratorNodeService;
 let popoverTemplate = '/assets/features/hydrator/templates/create/popovers/leftpanel-plugin-popover.html';
 let getInitialState = () => {
@@ -69,6 +70,7 @@ const getPluginsWithAddedInfo = (plugins = [], pluginToArtifactArrayMap = {}, ex
       template: popoverTemplate
     });
   };
+
   const getAllArtifacts = (_pluginToArtifactArrayMap = {}, plugin = {}, extension = '') => {
     if ([Object.keys(_pluginToArtifactArrayMap).length, Object.keys(plugin).length].indexOf(0) !== -1) {
       return [];
@@ -190,13 +192,11 @@ var extensions = (state = getInitialState().extensions, action = {}) => {
         return Object.keys(extensionMap).filter(ext => extensionMap[ext] === extension).length;
       };
       return [
-        ...state,
         ...action.payload.extensions.filter(uiSupportedExtension)
       ];
     }
     case leftpanelactions.FETCH_ALL_PLUGINS:
       return [
-        ...state,
         ...action.payload.extensions
       ];
     case leftpanelactions.RESET:
@@ -206,29 +206,28 @@ var extensions = (state = getInitialState().extensions, action = {}) => {
   }
 };
 
-var LeftPanelStore = (LEFTPANELSTORE_ACTIONS, Redux, ReduxThunk, GLOBALS, DAGPlusPlusFactory, myHelpers, $filter, HydratorPlusPlusNodeService) => {
+var LeftPanelStore = (LEFTPANELSTORE_ACTIONS, GLOBALS, DAGPlusPlusFactory, myHelpers, $filter, HydratorPlusPlusNodeService) => {
   leftpanelactions = LEFTPANELSTORE_ACTIONS;
   _GLOBALS = GLOBALS;
   _myHelpers = myHelpers;
   _DAGPlusPlusFactory = DAGPlusPlusFactory;
   _filter = $filter;
   _hydratorNodeService = HydratorPlusPlusNodeService;
-  let {combineReducers, applyMiddleware} = Redux;
 
   let combineReducer = combineReducers({
     plugins,
     extensions
   });
 
-  return Redux.createStore(
+  return createStore(
     combineReducer,
     getInitialState(),
     window.CaskCommon.CDAPHelpers.composeEnhancers('LeftPanelStore')(
-      applyMiddleware(ReduxThunk.default)
+      applyMiddleware(thunk)
     )
   );
 };
-LeftPanelStore.$inject = ['LEFTPANELSTORE_ACTIONS', 'Redux', 'ReduxThunk', 'GLOBALS', 'DAGPlusPlusFactory', 'myHelpers', '$filter', 'HydratorPlusPlusNodeService'];
+LeftPanelStore.$inject = ['LEFTPANELSTORE_ACTIONS', 'GLOBALS', 'DAGPlusPlusFactory', 'myHelpers', '$filter', 'HydratorPlusPlusNodeService'];
 
 angular.module(`${PKG.name}.feature.hydrator`)
   .constant('LEFTPANELSTORE_ACTIONS', {

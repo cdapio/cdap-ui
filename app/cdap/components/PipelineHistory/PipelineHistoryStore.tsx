@@ -30,7 +30,7 @@ interface IState {
   pageLimitOptions: number[];
 }
 
-interface IStore {
+export interface IPipelineHistoryStore {
   versions: IState;
 }
 
@@ -80,7 +80,7 @@ export const PIPELINE_HISTORY_QUERY = gql`
   }
 `;
 
-const Actions = {
+export const Actions = {
   prevPage: 'PIPELINE_VERSIONS_PREV_PAGE',
   nextPage: 'PIPELINE_VERSIONS_NEXT_PAGE',
   reset: 'PIPELINE_VERSIONS_RESET',
@@ -145,7 +145,7 @@ const versions: Reducer<IState> = (state = defaultInitialState, action: IAction)
   }
 };
 
-const Store: StoreInterface<IStore> = createStore(
+const Store: StoreInterface<IPipelineHistoryStore> = createStore(
   combineReducers({
     versions,
   }),
@@ -198,4 +198,3 @@ export function nextPage() {
 }
 
 export default Store;
-export { Actions, IStore };

@@ -25,7 +25,10 @@ import {
   ILinkSet,
 } from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
 import withStyles, { StyleRules } from '@material-ui/core/styles/withStyles';
-import { Consumer, FllContext } from 'components/FieldLevelLineage/v2/Context/FllContext';
+import {
+  Consumer,
+  FllContext,
+} from 'components/FieldLevelLineage/v2/Context/FllContext';
 import * as d3 from 'd3';
 import debounce from 'lodash/debounce';
 import { grey, orange } from 'components/ThemeWrapper/colors';
@@ -90,6 +93,8 @@ interface ILineageState {
 }
 
 class LineageSummary extends React.Component<{ classes }, ILineageState> {
+  context!: React.ContextType<typeof FllContext>;
+
   private myRef;
 
   private drawLineFromLink({ source, destination }, isSelected = false) {
@@ -102,10 +107,12 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
 
     const offsetX = -100; // From the padding on the LineageSummary
     const offsetY =
-      -(this.myRef as HTMLElement).getBoundingClientRect().top - 65 + this.myRef.scrollTop; // From TopPanel, FllHeader, and scroll
+      -(this.myRef as HTMLElement).getBoundingClientRect().top -
+      65 +
+      this.myRef.scrollTop; // From TopPanel, FllHeader, and scroll
 
-    const sourceXY = sourceEl.node().getBoundingClientRect();
-    const destXY = destEl.node().getBoundingClientRect();
+    const sourceXY = (sourceEl.node() as HTMLElement).getBoundingClientRect();
+    const destXY = (destEl.node() as HTMLElement).getBoundingClientRect();
 
     const sourceX1 = sourceXY.right + offsetX;
     const sourceY1 = sourceXY.top + 0.5 * sourceXY.height + offsetY;
@@ -121,7 +128,7 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
     // Draw a line with a bit of curve between the straight parts
     const lineGenerator = d3.line().curve(d3.curveMonotoneX);
 
-    const points = [
+    const points: Iterable<[number, number]> | Array<[number, number]> = [
       [sourceX1, sourceY1],
       [sourceX1 + third, sourceY1],
       [sourceX2 - third, sourceY2],
@@ -195,7 +202,9 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
     this.clearCanvas();
 
     comboLinks.forEach((link) => {
-      const isSelected = link.source.id === activeFieldId || link.destination.id === activeFieldId;
+      const isSelected =
+        link.source.id === activeFieldId ||
+        link.destination.id === activeFieldId;
       this.drawLineFromLink(link, isSelected);
     });
   };
@@ -225,6 +234,8 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
 
   public componentDidMount() {
     this.drawLinks();
+    // CDAP-20181
+    /* eslint-disable react/no-find-dom-node */
     this.myRef = ReactDOM.findDOMNode(this);
     window.addEventListener('resize', this.debounceRedrawLinks);
   }
@@ -284,9 +295,13 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
                     />
                     <hr className={this.props.classes.errorSeparator} />
                     <div className={this.props.classes.errorMessageSuggestion}>
-                      <span>{T.translate(`${PREFIX}.Error.suggestionHeading`)}</span>
+                      <span>
+                        {T.translate(`${PREFIX}.Error.suggestionHeading`)}
+                      </span>
                       <br />
-                      <span>{T.translate(`${PREFIX}.Error.suggestionMessage`)}</span>
+                      <span>
+                        {T.translate(`${PREFIX}.Error.suggestionMessage`)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -299,7 +314,10 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
               <TopPanel datasetId={target} />
               <If condition={!loadingLineage && !error}>
                 <div className={this.props.classes.root} id="fll-container">
-                  <svg id="links-container" className={this.props.classes.container}>
+                  <svg
+                    id="links-container"
+                    className={this.props.classes.container}
+                  >
                     <g>
                       {allLinks.map((link) => {
                         const id = `${link.source.id}_${link.destination.id}`;
@@ -308,45 +326,71 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
                     </g>
                     <g id="selected-links" />
                   </svg>
-                  <div data-cy="cause-fields" className={this.props.classes.summaryCol}>
-                    <FllHeader type="cause" total={Object.keys(visibleCauseSets).length} />
+                  <div
+                    data-cy="cause-fields"
+                    className={this.props.classes.summaryCol}
+                  >
+                    <FllHeader
+                      type="cause"
+                      total={Object.keys(visibleCauseSets).length}
+                    />
                     <If condition={Object.keys(visibleCauseSets).length === 0}>
                       <FllTable type="cause" />
                     </If>
-                    {Object.entries(visibleCauseSets).map(([tableId, tableInfo]) => {
-                      const isActive = tableId in activeCauseSets;
-                      return (
-                        <FllTable
-                          key={tableId}
-                          tableId={tableId}
-                          tableInfo={tableInfo}
-                          type="cause"
-                          isActive={isActive}
-                        />
-                      );
-                    })}
+                    {Object.entries(visibleCauseSets).map(
+                      ([tableId, tableInfo]) => {
+                        const isActive = tableId in activeCauseSets;
+                        return (
+                          <FllTable
+                            key={tableId}
+                            tableId={tableId}
+                            tableInfo={tableInfo}
+                            type="cause"
+                            isActive={isActive}
+                          />
+                        );
+                      }
+                    )}
                   </div>
-                  <div data-cy="target-fields" className={this.props.classes.summaryCol}>
-                    <FllHeader type="target" total={targetFields.fields.length} />
-                    <FllTable tableId={target} tableInfo={targetFields} type="target" />
+                  <div
+                    data-cy="target-fields"
+                    className={this.props.classes.summaryCol}
+                  >
+                    <FllHeader
+                      type="target"
+                      total={targetFields.fields.length}
+                    />
+                    <FllTable
+                      tableId={target}
+                      tableInfo={targetFields}
+                      type="target"
+                    />
                   </div>
-                  <div data-cy="impact-fields" className={this.props.classes.summaryCol}>
-                    <FllHeader type="impact" total={Object.keys(visibleImpactSets).length} />
+                  <div
+                    data-cy="impact-fields"
+                    className={this.props.classes.summaryCol}
+                  >
+                    <FllHeader
+                      type="impact"
+                      total={Object.keys(visibleImpactSets).length}
+                    />
                     <If condition={Object.keys(visibleImpactSets).length === 0}>
                       <FllTable type="impact" />
                     </If>
-                    {Object.entries(visibleImpactSets).map(([tableId, tableInfo]) => {
-                      const isActive = tableId in activeImpactSets;
-                      return (
-                        <FllTable
-                          key={tableId}
-                          tableId={tableId}
-                          tableInfo={tableInfo}
-                          type="impact"
-                          isActive={isActive}
-                        />
-                      );
-                    })}
+                    {Object.entries(visibleImpactSets).map(
+                      ([tableId, tableInfo]) => {
+                        const isActive = tableId in activeImpactSets;
+                        return (
+                          <FllTable
+                            key={tableId}
+                            tableId={tableId}
+                            tableInfo={tableInfo}
+                            type="impact"
+                            isActive={isActive}
+                          />
+                        );
+                      }
+                    )}
                   </div>
                   <OperationsModal />
                 </div>

@@ -12,13 +12,13 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 const MyArtifactApi = {
   __artifactDetail: {},
-  __extensions: []
+  __extensions: [],
 };
 
 MyArtifactApi.getIcon = function getIcon() {
@@ -30,21 +30,20 @@ function setArtifactDetail(__artifactDetail) {
 }
 
 MyArtifactApi.get = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.__artifactDetail);
   });
   return subject;
 };
 MyArtifactApi.listExtensions = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.__extensions);
   });
   return subject;
 };
 
-
 MyArtifactApi.__setArtifactDetail = setArtifactDetail.bind(MyArtifactApi);
 
-module.exports = {MyArtifactApi};
+module.exports = { MyArtifactApi };

@@ -34,7 +34,8 @@ const ACTIONS = {
   SET_RUNS_COUNT: 'SET_RUNS_COUNT',
   SET_STATISTICS: 'SET_STATISTICS',
   SET_USER_RUNTIME_ARGUMENTS: 'SET_USER_RUNTIME_ARGUMENTS',
-  SET_MACROS_AND_USER_RUNTIME_ARGUMENTS: 'SET_MACROS_AND_USER_RUNTIME_ARGUMENTS',
+  SET_MACROS_AND_USER_RUNTIME_ARGUMENTS:
+    'SET_MACROS_AND_USER_RUNTIME_ARGUMENTS',
   SET_RUNTIME_ARGUMENTS_FOR_DISPLAY: 'SET_RUNTIME_ARGUMENTS_FOR_DISPLAY',
 
   // Loading and error states Actions
@@ -107,10 +108,13 @@ const DEFAULT_PIPELINE_DETAILS = {
   pullStatus: null,
 };
 
-const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultAction) => {
+const pipelineDetails = (
+  state = DEFAULT_PIPELINE_DETAILS,
+  action = defaultAction
+) => {
   switch (action.type) {
     case ACTIONS.INITIALIZE_PIPELINE_DETAILS: {
-      let pipeline = action.payload.pipeline;
+      const pipeline = action.payload.pipeline;
       let newPipelineConfig = { ...state.config };
 
       try {
@@ -172,8 +176,10 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
         nextRunTime: action.payload.nextRunTime,
       };
     case ACTIONS.SET_CURRENT_RUN_ID: {
-      let currentRunId = action.payload.runId;
-      let currentRun = state.runs.find((run) => run.runid === currentRunId) || state.currentRun;
+      const currentRunId = action.payload.runId;
+      const currentRun =
+        state.runs.find((run) => run.runid === currentRunId) ||
+        state.currentRun;
       return {
         ...state,
         currentRunId,
@@ -182,7 +188,7 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
     }
     case ACTIONS.SET_RUNS: {
       let currentRun;
-      let runs = action.payload.runs;
+      const runs = action.payload.runs;
       if (state.currentRunId) {
         currentRun = runs.find((run) => run.runid === state.currentRunId);
       }

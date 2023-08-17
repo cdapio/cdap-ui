@@ -14,7 +14,9 @@
  * the License.
  */
 
-import ProfilesStore, { PROFILES_ACTIONS } from 'components/Cloud/Profiles/Store';
+import ProfilesStore, {
+  PROFILES_ACTIONS,
+} from 'components/Cloud/Profiles/Store';
 import { MyCloudApi } from 'api/cloud';
 import { MyPreferenceApi } from 'api/preference';
 import fileDownload from 'js-file-download';
@@ -36,7 +38,7 @@ export const getProfileMetricsBody = (
   endTime,
   extraTags = {}
 ) => {
-  let tags = {
+  const tags = {
     profilescope,
     ...extraTags,
   };
@@ -94,7 +96,9 @@ const convertMetadataToAssociations = (metadata) => {
 };
 
 const updateScheduleAndTriggersToStore = (profileName, metadata) => {
-  let { schedulesCount, triggersCount } = convertMetadataToAssociations(metadata);
+  const { schedulesCount, triggersCount } = convertMetadataToAssociations(
+    metadata
+  );
   ProfilesStore.dispatch({
     type: PROFILES_ACTIONS.SET_SCHEDULES_TRIGGERS_COUNT,
     payload: {
@@ -107,7 +111,7 @@ const updateScheduleAndTriggersToStore = (profileName, metadata) => {
 export const ONEDAYMETRICKEY = 'oneDayMetrics';
 export const OVERALLMETRICKEY = 'overAllMetrics';
 export const fetchAggregateProfileMetrics = (namespace, profile, extraTags) => {
-  let oneDayMetricsRequestBody = getProfileMetricsBody(
+  const oneDayMetricsRequestBody = getProfileMetricsBody(
     ONEDAYMETRICKEY,
     namespace,
     profile.scope,
@@ -115,7 +119,7 @@ export const fetchAggregateProfileMetrics = (namespace, profile, extraTags) => {
     'now',
     extraTags
   );
-  let overAllMetricsRequestBody = getProfileMetricsBody(
+  const overAllMetricsRequestBody = getProfileMetricsBody(
     OVERALLMETRICKEY,
     namespace,
     profile.scope,
@@ -127,7 +131,7 @@ export const fetchAggregateProfileMetrics = (namespace, profile, extraTags) => {
     ...oneDayMetricsRequestBody,
     ...overAllMetricsRequestBody,
   }).flatMap((metrics) => {
-    let metricsMap = {
+    const metricsMap = {
       [ONEDAYMETRICKEY]: {
         runs: '--',
         minutes: '--',
@@ -139,7 +143,7 @@ export const fetchAggregateProfileMetrics = (namespace, profile, extraTags) => {
     };
     Object.keys(metrics).forEach((query) => {
       metrics[query].series.forEach((metric) => {
-        let metricName = metric.metricName.split('.').pop();
+        const metricName = metric.metricName.split('.').pop();
         let metricValue;
         if (!metric.data.length) {
           metricValue = 0;
@@ -147,13 +151,19 @@ export const fetchAggregateProfileMetrics = (namespace, profile, extraTags) => {
           if (metric.data.length === 1) {
             metricValue = metric.data[0].value;
           } else {
-            metricValue = metric.data.reduce((prev, curr) => prev + curr.value, 0);
+            metricValue = metric.data.reduce(
+              (prev, curr) => prev + curr.value,
+              0
+            );
           }
         }
         if (!Object.prototype.hasOwnProperty.call(metricsMap, query)) {
           metricsMap[query] = {};
         }
-        if (metricsMap[query][metricName] !== '--' && !isNil(metricsMap[query][metricName])) {
+        if (
+          metricsMap[query][metricName] !== '--' &&
+          !isNil(metricsMap[query][metricName])
+        ) {
           metricsMap[query][metricName] += metricValue;
         } else {
           metricsMap[query] = {
@@ -179,29 +189,36 @@ export const getProfiles = (namespace) => {
 
   let profileObservable = MyCloudApi.getSystemProfiles();
   if (namespace !== SYSTEM_NAMESPACE) {
-    profileObservable = profileObservable.combineLatest(MyCloudApi.list({ namespace }));
+    profileObservable = profileObservable.combineLatest(
+      MyCloudApi.list({ namespace })
+    );
   } else {
     profileObservable = profileObservable.combineLatest(Observable.of([]));
   }
 
-  profileObservable.subscribe(([systemProfiles = [], namespaceProfiles = []]) => {
-    let filteredSystemProfiles = systemProfiles;
-    if (Theme.showNativeProfile === false) {
-      filteredSystemProfiles = systemProfiles.filter((profile) => profile.name !== 'native');
-    }
+  profileObservable.subscribe(
+    ([systemProfiles = [], namespaceProfiles = []]) => {
+      let filteredSystemProfiles = systemProfiles;
+      if (Theme.showNativeProfile === false) {
+        filteredSystemProfiles = systemProfiles.filter(
+          (profile) => profile.name !== 'native'
+        );
+      }
 
-    let profiles = namespaceProfiles.concat(filteredSystemProfiles).map((profile) => ({
-      ...profile,
-      oneDayMetrics: {},
-      overAllMetrics: {},
-      schedulesCount: '--',
-      triggersCount: '--',
-    }));
-    ProfilesStore.dispatch({
-      type: PROFILES_ACTIONS.SET_PROFILES,
-      payload: { profiles },
-    });
-    /*
+      const profiles = namespaceProfiles
+        .concat(filteredSystemProfiles)
+        .map((profile) => ({
+          ...profile,
+          oneDayMetrics: {},
+          overAllMetrics: {},
+          schedulesCount: '--',
+          triggersCount: '--',
+        }));
+      ProfilesStore.dispatch({
+        type: PROFILES_ACTIONS.SET_PROFILES,
+        payload: { profiles },
+      });
+      /*
           One metric call with 4 different queries
             Context: namespace, profile scope
             Groupby: profile
@@ -215,79 +232,98 @@ export const getProfiles = (namespace) => {
 
             One metadata call for entityScope=USER for schedules and triggers count
         */
-    const extraTags = {
-      programtype: 'Workflow',
-    };
-    let oneDayUSERMetricsBody = getProfileMetricsBody(
-      'oneDayUSERMetrics',
-      namespace,
-      SCOPES.USER,
-      'now-24h',
-      'now',
-      extraTags
-    );
-    let overAllUSERMetricsBody = getProfileMetricsBody(
-      'overAllUSERMetrics',
-      namespace,
-      SCOPES.USER,
-      0,
-      0,
-      extraTags
-    );
-    let oneDaySYSTEMMetricsBody = getProfileMetricsBody(
-      'oneDaySYSTEMMetrics',
-      namespace,
-      SCOPES.SYSTEM,
-      'now-24h',
-      'now',
-      extraTags
-    );
-    let overAllSYSTEMMetricsBody = getProfileMetricsBody(
-      'overAllSYSTEMMetrics',
-      namespace,
-      SCOPES.SYSTEM,
-      0,
-      0,
-      extraTags
-    );
-    MyMetricApi.query(null, {
-      ...oneDayUSERMetricsBody,
-      ...overAllUSERMetricsBody,
-      ...oneDaySYSTEMMetricsBody,
-      ...overAllSYSTEMMetricsBody,
-    }).subscribe((metrics) => {
-      let profilesToMetricsMap = {};
-      Object.keys(metrics).forEach((query) => {
-        // oneDayMetrics, overMetrics are the keys for metrics for each profile.
-        let profileScope = query.indexOf(SCOPES.USER) !== -1 ? SCOPES.USER : SCOPES.SYSTEM;
-        let metricsKey = query.replace(/USER|SYSTEM/, '');
-        metrics[query].series.forEach((metric) => {
-          let profileName = metric.grouping.profile;
-          /*
+      const extraTags = {
+        programtype: 'Workflow',
+      };
+      const oneDayUSERMetricsBody = getProfileMetricsBody(
+        'oneDayUSERMetrics',
+        namespace,
+        SCOPES.USER,
+        'now-24h',
+        'now',
+        extraTags
+      );
+      const overAllUSERMetricsBody = getProfileMetricsBody(
+        'overAllUSERMetrics',
+        namespace,
+        SCOPES.USER,
+        0,
+        0,
+        extraTags
+      );
+      const oneDaySYSTEMMetricsBody = getProfileMetricsBody(
+        'oneDaySYSTEMMetrics',
+        namespace,
+        SCOPES.SYSTEM,
+        'now-24h',
+        'now',
+        extraTags
+      );
+      const overAllSYSTEMMetricsBody = getProfileMetricsBody(
+        'overAllSYSTEMMetrics',
+        namespace,
+        SCOPES.SYSTEM,
+        0,
+        0,
+        extraTags
+      );
+      MyMetricApi.query(null, {
+        ...oneDayUSERMetricsBody,
+        ...overAllUSERMetricsBody,
+        ...oneDaySYSTEMMetricsBody,
+        ...overAllSYSTEMMetricsBody,
+      }).subscribe((metrics) => {
+        const profilesToMetricsMap = {};
+        Object.keys(metrics).forEach((query) => {
+          // oneDayMetrics, overMetrics are the keys for metrics for each profile.
+          const profileScope =
+            query.indexOf(SCOPES.USER) !== -1 ? SCOPES.USER : SCOPES.SYSTEM;
+          const metricsKey = query.replace(/USER|SYSTEM/, '');
+          metrics[query].series.forEach((metric) => {
+            const profileName = metric.grouping.profile;
+            /*
                   The map index cannot be just profile name as
                   two different profiles (in user and system scopes)
                   can have the same name. This will overwrite the one from the other scope.
                   Hence the addition of scope to make sure the metrics are not overwritten.
                 */
-          let profileKey = `${profileScope}:${profileName}`;
-          let metricName = metric.metricName.split('.').pop();
-          let metricValue;
-          if (!metric.data.length) {
-            metricValue = 0;
-          } else {
-            if (metric.data.length === 1) {
-              metricValue = metric.data[0].value;
+            const profileKey = `${profileScope}:${profileName}`;
+            const metricName = metric.metricName.split('.').pop();
+            let metricValue;
+            if (!metric.data.length) {
+              metricValue = 0;
             } else {
-              metricValue = metric.data.reduce((prev, curr) => prev + curr.value, 0);
+              if (metric.data.length === 1) {
+                metricValue = metric.data[0].value;
+              } else {
+                metricValue = metric.data.reduce(
+                  (prev, curr) => prev + curr.value,
+                  0
+                );
+              }
             }
-          }
-          if (!Object.prototype.hasOwnProperty.call(profilesToMetricsMap, profileKey)) {
-            profilesToMetricsMap[profileKey] = { [metricsKey]: {} };
-          }
-          if (!isNil(objectQuery(profilesToMetricsMap, profileKey, metricsKey, metricName))) {
-            metricValue += profilesToMetricsMap[profileKey][metricsKey][metricName];
-          }
-          /*
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                profilesToMetricsMap,
+                profileKey
+              )
+            ) {
+              profilesToMetricsMap[profileKey] = { [metricsKey]: {} };
+            }
+            if (
+              !isNil(
+                objectQuery(
+                  profilesToMetricsMap,
+                  profileKey,
+                  metricsKey,
+                  metricName
+                )
+              )
+            ) {
+              metricValue +=
+                profilesToMetricsMap[profileKey][metricsKey][metricName];
+            }
+            /*
                   {
                     SYSTEM:profile1: {
                       oneDayMetrics: {
@@ -301,43 +337,45 @@ export const getProfiles = (namespace) => {
                     }
                   }
                 */
-          profilesToMetricsMap[profileKey] = {
-            ...profilesToMetricsMap[profileKey],
-            [metricsKey]: {
-              ...profilesToMetricsMap[profileKey][metricsKey],
-              [metricName]: metricValue,
-            },
-          };
+            profilesToMetricsMap[profileKey] = {
+              ...profilesToMetricsMap[profileKey],
+              [metricsKey]: {
+                ...profilesToMetricsMap[profileKey][metricsKey],
+                [metricName]: metricValue,
+              },
+            };
+          });
+        });
+        ProfilesStore.dispatch({
+          type: PROFILES_ACTIONS.SET_PROFILE_METRICS,
+          payload: {
+            profilesToMetricsMap,
+          },
         });
       });
-      ProfilesStore.dispatch({
-        type: PROFILES_ACTIONS.SET_PROFILE_METRICS,
-        payload: {
-          profilesToMetricsMap,
-        },
+      profiles.forEach((profile) => {
+        const { scope } = profile;
+        const profileName = `profile:${scope}:${profile.name}`;
+        let apiObservable$;
+        if (namespace === SYSTEM_NAMESPACE) {
+          apiObservable$ = MySearchApi.searchSystem({
+            query: profileName,
+            responseFormat: 'v6',
+          });
+        } else {
+          apiObservable$ = MySearchApi.search({
+            namespace,
+            query: profileName,
+            responseFormat: 'v6',
+          });
+        }
+        apiObservable$.subscribe((res) =>
+          updateScheduleAndTriggersToStore(profile.name, res.results)
+        );
       });
-    });
-    profiles.forEach((profile) => {
-      let { scope } = profile;
-      let profileName = `profile:${scope}:${profile.name}`;
-      let apiObservable$;
-      if (namespace === SYSTEM_NAMESPACE) {
-        apiObservable$ = MySearchApi.searchSystem({
-          query: profileName,
-          responseFormat: 'v6',
-        });
-      } else {
-        apiObservable$ = MySearchApi.search({
-          namespace,
-          query: profileName,
-          responseFormat: 'v6',
-        });
-      }
-      apiObservable$.subscribe((res) =>
-        updateScheduleAndTriggersToStore(profile.name, res.results)
-      );
-    });
-  }, setError);
+    },
+    setError
+  );
 };
 
 export const exportProfile = (namespace, profile) => {
@@ -348,8 +386,8 @@ export const exportProfile = (namespace, profile) => {
     apiObservable$ = MyCloudApi.get({ namespace, profile: profile.name });
   }
   apiObservable$.subscribe((res) => {
-    let json = JSON.stringify(res, null, 2);
-    let fileName = `${profile.name}-${profile.provisioner.name}-profile.json`;
+    const json = JSON.stringify(res, null, 2);
+    const fileName = `${profile.name}-${profile.provisioner.name}-profile.json`;
     fileDownload(json, fileName);
   }, setError);
 };
@@ -382,8 +420,8 @@ export const importProfile = (namespace, e) => {
     return;
   }
 
-  let uploadedFile = e.target.files[0];
-  let reader = new FileReader();
+  const uploadedFile = e.target.files[0];
+  const reader = new FileReader();
   reader.readAsText(uploadedFile, 'UTF-8');
 
   reader.onload = (evt) => {
@@ -417,8 +455,9 @@ export const importProfile = (namespace, e) => {
     apiObservable$.subscribe(
       () => {
         getProfiles(namespace);
-        let profilePrefix = namespace === SYSTEM_NAMESPACE ? SCOPES.SYSTEM : SCOPES.USER;
-        let profileName = `${profilePrefix}:${jsonSpec.name}`;
+        const profilePrefix =
+          namespace === SYSTEM_NAMESPACE ? SCOPES.SYSTEM : SCOPES.USER;
+        const profileName = `${profilePrefix}:${jsonSpec.name}`;
         highlightNewProfile(profileName);
       },
       (error) => {
@@ -448,7 +487,7 @@ export const resetProfiles = () => {
 
 export const getProvisionerLabel = (profile, provisioners) => {
   if (provisioners.length) {
-    let matchingProvisioner = provisioners.find((prov) => {
+    const matchingProvisioner = provisioners.find((prov) => {
       return prov.name === profile.provisioner.name;
     });
     if (matchingProvisioner) {
@@ -520,20 +559,22 @@ export const setDefaultProfile = (namespace, profileName) => {
 
   if (namespace === SYSTEM_NAMESPACE) {
     MyPreferenceApi.getSystemPreferences().subscribe((preferences = {}) => {
-      MyPreferenceApi.setSystemPreferences({}, createPostBody(preferences)).subscribe(
-        successCallback,
-        setError
-      );
+      MyPreferenceApi.setSystemPreferences(
+        {},
+        createPostBody(preferences)
+      ).subscribe(successCallback, setError);
     }, setError);
   } else {
     const params = { namespace };
 
-    MyPreferenceApi.getNamespacePreferences(params).subscribe((preferences = {}) => {
-      MyPreferenceApi.setNamespacePreferences(params, createPostBody(preferences)).subscribe(
-        successCallback,
-        setError
-      );
-    });
+    MyPreferenceApi.getNamespacePreferences(params).subscribe(
+      (preferences = {}) => {
+        MyPreferenceApi.setNamespacePreferences(
+          params,
+          createPostBody(preferences)
+        ).subscribe(successCallback, setError);
+      }
+    );
   }
 };
 
@@ -556,8 +597,10 @@ export const highlightNewProfile = (profileName) => {
 
 export const getNodeHours = (nodeminutes) => {
   if (typeof nodeminutes === 'number') {
-    let nodeHours = nodeminutes / 60;
-    return typeof nodeHours.toFixed === 'function' ? nodeHours.toFixed(2) : nodeHours;
+    const nodeHours = nodeminutes / 60;
+    return typeof nodeHours.toFixed === 'function'
+      ? nodeHours.toFixed(2)
+      : nodeHours;
   }
   return nodeminutes;
 };

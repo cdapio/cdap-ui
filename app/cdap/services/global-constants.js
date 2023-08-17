@@ -377,6 +377,7 @@ const PIPELINE_LOGS_FILTER =
   'AND .origin=plugin OR MDC:eventType=lifecycle OR MDC:eventType=userLog';
 
 const SNAPSHOT_VERSION = '-SNAPSHOT';
+const uiSupportedArtifacts = [GLOBALS.etlDataPipeline, GLOBALS.etlDataStreams, GLOBALS.eltSqlPipeline];
 
 export {
   NUMBER_TYPES,
@@ -392,5 +393,6 @@ export {
   KEY_CODE,
   PIPELINE_LOGS_FILTER,
   GENERATED_RUNTIMEARGS,
-  SNAPSHOT_VERSION
+  SNAPSHOT_VERSION,
+  uiSupportedArtifacts,
 };

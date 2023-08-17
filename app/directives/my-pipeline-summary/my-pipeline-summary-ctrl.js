@@ -14,8 +14,9 @@
  * the License.
  */
 
+import moment from 'moment';
 class MyPipelineSummaryCtrl {
-  constructor($scope, moment, $interval, GLOBALS, $stateParams) {
+  constructor($scope, $interval, GLOBALS, $stateParams) {
     this.$stateParams = $stateParams;
     this.runs = [];
     this.programId = '';
@@ -51,7 +52,7 @@ class MyPipelineSummaryCtrl {
 
   }
 }
-MyPipelineSummaryCtrl.$inject = ['$scope', 'moment', '$interval', 'GLOBALS', '$stateParams'];
+MyPipelineSummaryCtrl.$inject = ['$scope', '$interval', 'GLOBALS', '$stateParams'];
 
  angular.module(PKG.name + '.commons')
   .controller('MyPipelineSummaryCtrl', MyPipelineSummaryCtrl);

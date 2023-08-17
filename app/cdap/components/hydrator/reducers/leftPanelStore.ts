@@ -75,9 +75,11 @@ const getDefaultVersionForPlugin = (plugin: any, defaultVersionMap = {}) => {
 
 // TODO type these actions
 const pluginsFetch = createAction<any>('PLUGINS_FETCH');
+const pluginsMapFetch = createAction<any>('PLUGINS_MAP_FETCH')
 const fetchAllPlugins = createAction<any>('FETCH_ALL_PLUGINS');
 const pluginTemplateFetch = createAction<any>('PLUGIN_TEMPLATE_FETCH');
 const pluginsDefaultVersionFetch = createAction<any>('PLUGINS_DEFAULT_VERSION_FETCH');
+const availablePluginsFetch = createAction<any>('AVAILABLE_PLUGINS_FETCH')
 const extensionsFetch = createAction<any>('EXTENSIONS_FETCH');
 const reset = createAction<any>('LEFTPANELSTORE_RESET');
 // unsure if this is used?
@@ -85,6 +87,8 @@ const reset = createAction<any>('LEFTPANELSTORE_RESET');
 const pluginDefaultVersionCheckAndUpdate = createAction<any>(
   'PLUGIN_DEFAULT_VERSION_CHECK_AND_UPDATE'
 );
+const artifactSet = createAction<any>('ARTIFACT_SET')
+const artifactsFetch = createAction<any>('ARTIFACTS_FETCH')
 
 export interface IDAGPlugin {
   name?: string;
@@ -96,9 +100,13 @@ const popoverTemplate =
   '/assets/features/hydrator/templates/create/popovers/leftpanel-plugin-popover.html';
 const getInitialState = () => {
   return {
+    selectedArtifact: {name: 'cdap-data-pipeline', version: '6.10.0-SNAPSHOT', scope: 'SYSTEM', label: 'Data Pipeline - Batch'},
+    artifacts: [],
     plugins: {
       pluginTypes: {},
       pluginToVersionMap: {},
+      pluginsMap: [],
+      availablePluginMap: {}
     },
     extensions: [],
   };
@@ -183,13 +191,40 @@ const getPluginsWithAddedInfo = (
   });
 };
 
+export const artifactReducer = createReducer(
+  {
+    selectedArtifact: {name: 'cdap-data-pipeline', version: '6.10.0-SNAPSHOT', scope: 'SYSTEM', label: 'Data Pipeline - Batch'},
+    artifacts: []
+  },
+  (builder) => {
+    builder
+    .addCase(artifactSet, (state, action) => {
+      state.selectedArtifact = action.payload.selectedArtifact
+    })
+    .addCase(artifactsFetch, (state, action) => {
+      state.artifacts = action.payload.artifacts
+    })
+    .addCase(reset, (state, action) => {
+      state.selectedArtifact = getInitialState().selectedArtifact
+    })
+  }
+)
+
 export const pluginReducer = createReducer(
   {
     pluginTypes: {},
     pluginToVersionMap: {},
+    pluginsMap: [],
+    availablePluginMap: {}
   },
   (builder) => {
     builder
+      .addCase(availablePluginsFetch, (state, action) => {
+        state.availablePluginMap = action.payload.availablePluginMap
+      })
+      .addCase(pluginsMapFetch, (state, action) => {
+        state.pluginsMap = action.payload.pluginsMap
+      })
       .addCase(pluginsFetch, (state, action) => {
         const { extension, plugins } = action.payload;
 

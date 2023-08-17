@@ -14,6 +14,9 @@
  * the License.
  */
 
+import {combineReducers, compose, createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+
 let previewActions;
 let getInitialState = () => {
   return {
@@ -68,19 +71,18 @@ var preview = (state = getInitialState(), action = {}) => {
   }
 };
 
-var PreviewStore = (PREVIEWSTORE_ACTIONS, Redux, ReduxThunk) => {
+var PreviewStore = (PREVIEWSTORE_ACTIONS) => {
   previewActions = PREVIEWSTORE_ACTIONS;
-  let {combineReducers, applyMiddleware} = Redux;
 
   let combineReducer = combineReducers({
     preview
   });
 
-  return Redux.createStore(
+  return createStore(
     combineReducer,
     getInitialState(),
-    Redux.compose(
-      applyMiddleware(ReduxThunk.default),
+    compose(
+      applyMiddleware(thunk),
       window.devToolsExtension ? window.devToolsExtension() : f => f
     )
   );

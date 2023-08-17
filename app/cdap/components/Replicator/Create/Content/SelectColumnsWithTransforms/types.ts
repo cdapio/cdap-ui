@@ -106,12 +106,12 @@ export interface ITransAssessmentResDesc {
 export interface ITransAssessmentRes {
   connectivity: any[];
   features: ITransAssessmentResDesc[];
-  tables: Array<{
+  tables: {
     numColumnsNotSupported: number;
     numColumnsPartiallySupported: number;
     database: string;
     table: string;
     numColumns: number;
-  }>;
+  }[];
   transformationIssues: ITransAssessmentResDesc[];
 }

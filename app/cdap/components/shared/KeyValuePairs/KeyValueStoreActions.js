@@ -14,8 +14,18 @@
  * the License.
  */
 
-import { getDefaultKeyValuePair } from 'components/shared/KeyValuePairs/KeyValueStore';
-import { convertMapToKeyValuePairs, convertKeyValuePairsToMap } from 'services/helpers';
+import {
+  convertMapToKeyValuePairs,
+  convertKeyValuePairsToMap,
+} from 'services/helpers';
+import uuidV4 from 'uuid/v4';
+
+const getDefaultKeyValuePair = () => ({
+  key: '',
+  value: '',
+  uniqueId: uuidV4(),
+  provided: null,
+});
 
 const KeyValueStoreActions = {
   setKey: 'SET-KEY',
@@ -28,7 +38,7 @@ const KeyValueStoreActions = {
 };
 
 const convertMapToKeyValuePairsObj = (obj) => {
-  let keyValuePairsObj = {
+  const keyValuePairsObj = {
     pairs: convertMapToKeyValuePairs(obj),
   };
   if (!keyValuePairsObj.pairs.length) {
@@ -47,10 +57,17 @@ const keyValuePairsHaveMissingValues = (keyValues) => {
       if (keyValuePair.notDeletable && keyValuePair.provided) {
         return false;
       }
-      let emptyKeyField = keyValuePair.key ? keyValuePair.key.length === 0 : true;
-      let emptyValueField = keyValuePair.value ? keyValuePair.value.length === 0 : true;
+      const emptyKeyField = keyValuePair.key
+        ? keyValuePair.key.length === 0
+        : true;
+      const emptyValueField = keyValuePair.value
+        ? keyValuePair.value.length === 0
+        : true;
       // buttons are disabled when either the key or the value of a pair is empty, but not both
-      return (emptyKeyField && !emptyValueField) || (!emptyKeyField && emptyValueField);
+      return (
+        (emptyKeyField && !emptyValueField) ||
+        (!emptyKeyField && emptyValueField)
+      );
     });
   }
   return false;

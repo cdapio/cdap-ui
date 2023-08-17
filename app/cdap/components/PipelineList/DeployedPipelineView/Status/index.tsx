@@ -26,7 +26,7 @@ interface IProps {
   pipeline: IPipeline;
 }
 
-const Status: React.SFC<IProps> = ({ pipeline }) => {
+const Status: React.FC<IProps> = ({ pipeline }) => {
   const pipelineRuns = pipeline.runs;
   let pipelineStatus = objectQuery(pipelineRuns, 0, 'status');
   if (pipelineRuns === null) {

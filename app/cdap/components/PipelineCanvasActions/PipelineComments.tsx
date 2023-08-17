@@ -90,7 +90,10 @@ interface IPipelineCommentsProps {
 
 const DEFAULT_COMMENTS = [{ content: '', createDate: Date.now() }];
 const getDefaultComments = (comments) => {
-  if (!Array.isArray(comments) || (Array.isArray(comments) && !comments.length)) {
+  if (
+    !Array.isArray(comments) ||
+    (Array.isArray(comments) && !comments.length)
+  ) {
     return cloneDeep(DEFAULT_COMMENTS);
   }
   return comments;
@@ -102,14 +105,16 @@ export function PipelineComments({
   disabled = false,
   onClose,
 }: IPipelineCommentsProps) {
-  const [localComments, setLocalComments] = React.useState(getDefaultComments(comments));
-  const [localAnchorEl, setLocalAnchorEl] = React.useState(null);
+  const [localComments, setLocalComments] = React.useState(
+    getDefaultComments(comments)
+  );
+  const [localAnchorEl, setLocalAnchorEl] = React.useState<any>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const classes = useStyles();
   const [arrowRef, setArrowRef] = React.useState(null);
 
   const filterEmptyComments = (lc: IComment[]) => {
-    return lc.filter((comment: IComment) => comment.content.length);
+    return lc.filter((comment: IComment) => comment.content?.length);
   };
 
   const onSave = (id, updatedComment) => {
@@ -128,7 +133,10 @@ export function PipelineComments({
   };
 
   const onAddNewComment = () => {
-    setLocalComments([{ content: '', createDate: Date.now() }, ...localComments]);
+    setLocalComments([
+      { content: '', createDate: Date.now() },
+      ...localComments,
+    ]);
   };
 
   const onClickAway = () => {
@@ -177,13 +185,17 @@ export function PipelineComments({
           }}
         >
           <UniversalBackdrop open={isOpen} onClose={onClose} invisible />
+          {/* Not sure whats going on here CDAP-20181
+          @ts-ignore */}
           <div className={classes.arrow} ref={setArrowRef} />
           <Paper className={classes.pipelineCommentsWrapper}>
             {!disabled && (
               <div className={classes.popperHeading}>
                 <Button
                   onClick={onAddNewComment}
-                  disabled={localComments.length && !localComments[0].content.length}
+                  disabled={
+                    !!localComments.length && !localComments[0].content.length
+                  }
                 >
                   <PostAddIcon />
                   <span>Add Comment</span>

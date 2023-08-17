@@ -20,7 +20,10 @@ import DataPrepBrowserStore, {
 } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';
 import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
-import { convertBytesToHumanReadable, HUMANREADABLESTORAGE_NODECIMAL } from 'services/helpers';
+import {
+  convertBytesToHumanReadable,
+  HUMANREADABLESTORAGE_NODECIMAL,
+} from 'services/helpers';
 import uuidV4 from 'uuid/v4';
 import moment from 'moment';
 import T from 'i18n-react';
@@ -30,13 +33,13 @@ const PREFIX = 'features.ADLSBrowser';
 const trimSuffixSlash = (path) => path.replace(/\/\//, '/');
 
 const setAdlsAsActiveBrowser = (payload) => {
-  let { adls, activeBrowser } = DataPrepBrowserStore.getState();
+  const { adls, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId, path } = payload;
+  const { id: connectionId, path } = payload;
 
   if (adls.connectionId === connectionId) {
     if (path && path !== adls.prefix) {
@@ -54,15 +57,15 @@ const setAdlsAsActiveBrowser = (payload) => {
 
   setADLSLoading();
 
-  let namespace = NamespaceStore.getState().selectedNamespace;
-  let params = {
+  const namespace = NamespaceStore.getState().selectedNamespace;
+  const params = {
     context: namespace,
     connectionId,
   };
 
   MyDataPrepApi.getConnection(params).subscribe(
     (res) => {
-      let info = objectQuery(res, 'values', 0);
+      const info = objectQuery(res, 'values', 0);
       DataPrepBrowserStore.dispatch({
         type: BrowserStoreActions.SET_ADLS_CONNECTION_DETAILS,
         payload: {
@@ -93,11 +96,11 @@ const setADLSPrefix = (prefix) => {
 };
 
 const goToADLSfilePath = (path = '/') => {
-  let { connectionId, loading } = DataPrepBrowserStore.getState().adls;
+  const { connectionId, loading } = DataPrepBrowserStore.getState().adls;
   if (!loading) {
     setADLSLoading();
   }
-  let { selectedNamespace: namespace } = NamespaceStore.getState();
+  const { selectedNamespace: namespace } = NamespaceStore.getState();
   if (path) {
     path = trimSuffixSlash(path);
     setADLSFileSystemLoading();
@@ -126,7 +129,9 @@ const goToADLSfilePath = (path = '/') => {
 const formatResponse = (contents) => {
   return contents.map((content) => {
     content.uniqueId = uuidV4();
-    content['last-modified'] = moment(content['last-modified']).format('MM/DD/YY HH:mm');
+    content['last-modified'] = moment(content['last-modified']).format(
+      'MM/DD/YY HH:mm'
+    );
     content.displaySize = convertBytesToHumanReadable(
       content.size,
       HUMANREADABLESTORAGE_NODECIMAL,

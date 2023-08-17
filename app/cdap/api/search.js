@@ -23,23 +23,44 @@ const systemSearchPath = '/metadata/search';
 const basePath = '/namespaces/:namespace/:entityType/:entityId';
 const tagsPath = `${basePath}/metadata/tags`;
 const propertyPath = `${basePath}/metadata/properties`;
-const programPath = '/namespaces/:namespace/apps/:appId/:programType/:programId/runs/:runId';
+const programPath =
+  '/namespaces/:namespace/apps/:appId/:programType/:programId/runs/:runId';
 
 export const MySearchApi = {
   search: apiCreator(dataSrc, 'GET', 'REQUEST', searchpath),
   searchSystem: apiCreator(dataSrc, 'GET', 'REQUEST', systemSearchPath),
-  properties: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/metadata?responseFormat=v6`),
+  properties: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/metadata?responseFormat=v6`
+  ),
   getDatasetDetail: apiCreator(
     dataSrc,
     'GET',
     'REQUEST',
     '/namespaces/:namespace/data/datasets/:entityId'
   ),
-  getUserTags: apiCreator(dataSrc, 'GET', 'REQUEST', `${tagsPath}?scope=USER&responseFormat=v6`),
+  getUserTags: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${tagsPath}?scope=USER&responseFormat=v6`
+  ),
   deleteTag: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${tagsPath}/:tag`),
   addTag: apiCreator(dataSrc, 'POST', 'REQUEST', tagsPath),
-  getDatasetProperties: apiCreator(dataSrc, 'GET', 'REQUEST', `${propertyPath}?&responseFormat=v6`),
-  deleteEntityProperty: apiCreator(dataSrc, 'DELETE', 'REQUEST', `${propertyPath}/:key`),
+  getDatasetProperties: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${propertyPath}?&responseFormat=v6`
+  ),
+  deleteEntityProperty: apiCreator(
+    dataSrc,
+    'DELETE',
+    'REQUEST',
+    `${propertyPath}/:key`
+  ),
   addEntityProperty: apiCreator(dataSrc, 'POST', 'REQUEST', propertyPath),
   getLineage: apiCreator(
     dataSrc,

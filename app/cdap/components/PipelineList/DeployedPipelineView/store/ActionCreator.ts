@@ -17,7 +17,10 @@
 import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyPipelineApi } from 'api/pipeline';
-import Store, { Actions, SORT_ORDER } from 'components/PipelineList/DeployedPipelineView/store';
+import Store, {
+  Actions,
+  SORT_ORDER,
+} from 'components/PipelineList/DeployedPipelineView/store';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { GLOBALS } from 'services/global-constants';
 import debounce from 'lodash/debounce';
@@ -91,7 +94,10 @@ function getRunsForPipelines() {
       MyPipelineApi.batchGetNextRunTime({ namespace }, nextRuntimePostBody)
     )
     .subscribe(([runs, runsCount, nextRuntime]) => {
-      const runsMap = Object.assign({}, ...runs.map((app) => ({ [app.appId]: app.runs })));
+      const runsMap = Object.assign(
+        {},
+        ...runs.map((app) => ({ [app.appId]: app.runs }))
+      );
       const nextRuntimeMap = Object.assign(
         {},
         ...nextRuntime.map((app) => ({ [app.appId]: app.schedules }))

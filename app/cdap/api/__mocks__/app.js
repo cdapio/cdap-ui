@@ -12,21 +12,21 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 const MyAppApi = {
   __app: {
-    programs: []
+    programs: [],
   },
-  __batchStatusStats: []
+  __batchStatusStats: [],
 };
 MyAppApi.__setApp = function(app) {
   this.__app = app;
 };
 MyAppApi.get = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.__app);
   });
@@ -34,10 +34,10 @@ MyAppApi.get = function() {
 };
 
 MyAppApi.batchStatus = function() {
-  let subject = new Subject();
+  const subject = new Subject();
   setTimeout(() => {
     subject.next(this.__batchStatusStats);
   });
   return subject;
 };
-export {MyAppApi};
+export { MyAppApi };

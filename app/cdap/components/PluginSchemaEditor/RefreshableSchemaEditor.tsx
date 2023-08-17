@@ -14,9 +14,8 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SchemaEditor } from 'components/AbstractWidget/SchemaEditor';
-import If from 'components/shared/If';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import { ISchemaType } from 'components/AbstractWidget/SchemaEditor/SchemaTypes';
@@ -50,10 +49,10 @@ function RefreshableSchemaEditorBase({
   visibleRows,
   errors,
 }: IRefreshableSchemaEditor) {
-  const [loading, setLoading] = React.useState(false);
-  const [isSchemaUpdateInProgress, setIsSchemaUpdateInProgress] = React.useState(0);
+  const [loading, setLoading] = useState(false);
+  const [isSchemaUpdateInProgress, setIsSchemaUpdateInProgress] = useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isSchemaUpdateInProgress > 0) {
       return setIsSchemaUpdateInProgress(isSchemaUpdateInProgress - 1);
     }
@@ -65,21 +64,19 @@ function RefreshableSchemaEditorBase({
 
   return (
     <div className={classes.container}>
-      <If condition={loading}>
-        <LoadingSVG />
-      </If>
-      <If condition={!loading}>
+      {loading && <LoadingSVG />}
+      {!loading && (
         <SchemaEditor
           schema={schema}
           disabled={disabled}
-          onChange={(...props) => {
+          onChange={(...args) => {
             setIsSchemaUpdateInProgress((prevState) => prevState + 1);
-            onChange.apply(null, props);
+            onChange.apply(null, args as any);
           }}
           visibleRows={visibleRows}
           errors={errors}
         />
-      </If>
+      )}
     </div>
   );
 }

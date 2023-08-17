@@ -55,7 +55,10 @@ interface IConfigurableTabProps {
 }
 export default class ConfigurableTab extends Component<IConfigurableTabProps> {
   public componentWillReceiveProps(nextProps) {
-    const newState = { tabs: nextProps.tabConfig.tabs, activeTab: this.state.activeTab };
+    const newState = {
+      tabs: nextProps.tabConfig.tabs,
+      activeTab: this.state.activeTab,
+    };
     if (nextProps.activeTab && nextProps.activeTab !== this.state.activeTab) {
       newState.activeTab = nextProps.activeTab;
     }
@@ -70,7 +73,7 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
 
   public setTab = (tabId) => {
     this.setState({ activeTab: tabId });
-    document.querySelector('.tab-content').scrollTop = 0;
+    document.querySelector('.tab-content')!.scrollTop = 0;
 
     if (typeof this.props.onTabClick === 'function') {
       this.props.onTabClick(tabId);
@@ -105,10 +108,10 @@ export default class ConfigurableTab extends Component<IConfigurableTabProps> {
   };
 
   public render() {
-    let tabs = [];
+    let tabs: any[] = [];
     this.state.tabs.forEach((tab) => {
       if (tab.type === 'tab-group') {
-        tabs = [...tabs, ...tab.subtabs];
+        tabs = [...tabs, ...tab.subtabs!];
         return;
       }
       tabs.push(tab);

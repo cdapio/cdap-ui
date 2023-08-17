@@ -36,7 +36,7 @@ import {
   getSelectedConnectorDisplayName,
 } from 'components/Connections/Create/reducer';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { ConnectionConfiguration } from 'components/Connections/Create/ConnectionConfiguration';
 import { getConnectionPath } from 'components/Connections/helper';

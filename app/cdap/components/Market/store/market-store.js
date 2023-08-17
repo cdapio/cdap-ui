@@ -51,7 +51,9 @@ const market = (state = initialState, action) => {
     case 'SET_ACTIVE_ENTITY':
       return Object.assign({}, state, {
         activeEntity: action.payload.entityId,
-        displayCTA: !isNil(action.payload.displayCTA) ? action.payload.displayCTA : true,
+        displayCTA: !isNil(action.payload.displayCTA)
+          ? action.payload.displayCTA
+          : true,
       });
     case 'SET_FILTER':
       return Object.assign({}, state, {
@@ -68,10 +70,12 @@ const market = (state = initialState, action) => {
 };
 
 function filterEntities(list) {
-  let store = window.CaskCommon ? window.CaskCommon.VersionStore : VersionStore;
+  const store = window.CaskCommon
+    ? window.CaskCommon.VersionStore
+    : VersionStore;
   const cdapVersion = new Version(store.getState().version);
 
-  let filteredList = list.filter((entity) => {
+  const filteredList = list.filter((entity) => {
     if (!entity.cdapVersion) {
       return true;
     }

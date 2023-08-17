@@ -38,7 +38,7 @@ import { loadDefaultExperiments } from 'components/Lab';
 import SystemServicesDelay from 'components/SystemServicesDelay';
 import ExperimentalFeature from 'components/Lab/ExperimentalFeature';
 
-require('styles/bootstrap_4_patch.scss');
+require('../../../styles/bootstrap_4_patch.scss');
 
 interface IMyAppHeaderState {
   toggleDrawer: boolean;
@@ -59,7 +59,10 @@ interface IMyAppHeaderProps extends WithStyles<typeof styles> {
   nativeLink: boolean;
 }
 
-class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderState> {
+class MyAppHeader extends React.PureComponent<
+  IMyAppHeaderProps,
+  IMyAppHeaderState
+> {
   public state: IMyAppHeaderState = {
     toggleDrawer: false,
     currentNamespace: '',
@@ -153,7 +156,10 @@ class MyAppHeader extends React.PureComponent<IMyAppHeaderProps, IMyAppHeaderSta
         data-testid="app-navbar"
       >
         <NamespaceLinkContext.Provider value={namespaceLinkContext}>
-          <AppToolbar onMenuIconClick={this.toggleDrawer} nativeLink={this.props.nativeLink} />
+          <AppToolbar
+            onMenuIconClick={this.toggleDrawer}
+            nativeLink={this.props.nativeLink}
+          />
           <AppDrawer
             open={this.state.toggleDrawer}
             onClose={this.toggleDrawer}
@@ -181,7 +187,7 @@ const AppHeaderWithStyles = withStyles(styles)(MyAppHeader);
  * let the root pass on the theme to the children.
  */
 export default function CustomHeader({ nativeLink }) {
-  if (typeof window.angular !== 'undefined' && window.angular.version) {
+  if (window.location.href.match('pipelines/ns/default/studio')) {
     return (
       <ThemeWrapper>
         <AppHeaderWithStyles nativeLink={nativeLink} />

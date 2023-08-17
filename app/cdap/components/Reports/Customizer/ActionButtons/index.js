@@ -24,14 +24,18 @@ import T from 'i18n-react';
 const PREFIX = 'features.Reports.Customizer';
 
 function ActionButtonsView({ clearSelection, timeRange, customizer, status }) {
-  let disabled =
+  const disabled =
     !timeRange.selection ||
     (!customizer.pipelines && !customizer.customApps) ||
     status.statusSelections.length === 0;
 
   return (
     <div className="action-buttons">
-      <button className="btn btn-primary" onClick={generateReport} disabled={disabled}>
+      <button
+        className="btn btn-primary"
+        onClick={generateReport}
+        disabled={disabled}
+      >
         {T.translate(`${PREFIX}.generate`)}
       </button>
 

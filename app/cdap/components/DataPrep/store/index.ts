@@ -14,7 +14,7 @@
  * the License.
  */
 
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, Store } from 'redux';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
 import { composeEnhancers } from 'services/helpers';
 
@@ -33,7 +33,7 @@ const defaultAction: IDataPrepAction = {
 export interface IDataModel {
   uuid: string;
   id: string;
-  revision: number;
+  revision?: number;
   name: string;
   description?: string;
   url?: string;
@@ -357,7 +357,15 @@ const workspaces = (state = workspacesInitialState, action = defaultAction) => {
   return Object.assign({}, state, stateCopy);
 };
 
-const DataPrepStore = createStore(
+const DataPrepStore: Store<
+  {
+    dataprep: IDataPrepState;
+    error: typeof errorInitialState;
+    workspaces: typeof workspacesInitialState;
+    columnsInformation: typeof columnsInformationInitialState;
+  },
+  IDataPrepAction
+> = createStore(
   combineReducers({
     dataprep,
     error,

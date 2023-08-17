@@ -17,6 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, ClickAwayListener } from '@material-ui/core';
 import ChevronRight from '@material-ui/icons/ChevronRight';
+
 import uuid from 'uuid';
 import { SUPPORT } from './constants';
 import {
@@ -31,7 +32,7 @@ import {
 
 import { GreenIconSuccess, RedIconError, YellowIconWarning } from './icons';
 
-interface IStatusButtonProps {
+export interface IStatusButtonProps {
   status: SUPPORT;
   message?: string;
   title?: string;
@@ -54,7 +55,9 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
   let allyId;
   let mouseOverDelayTimeoutId;
   const [anchorEl, setAnchorEl] = useState(undefined);
-  const [actionState, setActionState] = useState<'hover' | 'click' | undefined>();
+  const [actionState, setActionState] = useState<
+    'hover' | 'click' | undefined
+  >();
   useEffect(() => {
     allyId = uuid();
   }, []);
@@ -134,6 +137,7 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         {Boolean(props.message) && <ChevronRight />}
       </StyledButton>
       <StyledPopper
+        // @ts-ignore
         id={allyId}
         open={Boolean(props.message) && Boolean(actionState)}
         placement="right-start"
@@ -143,7 +147,9 @@ export const StatusButton: React.FC<IStatusButtonProps> = (props) => {
         <div onMouseEnter={handleMouseOver} onMouseLeave={handleMouseLeave}>
           <ClickAwayListener onClickAway={handleClick}>
             <StyledBox>
-              {actionState === 'click' && <CloseButton handleClick={handleClose} />}
+              {actionState === 'click' && (
+                <CloseButton handleClick={handleClose} />
+              )}
               <Box>
                 {props.title ? (
                   <span>

@@ -198,11 +198,12 @@ const isSimpleType = (type: ISimpleType | IComplexTypeFieldNullable) =>
     AvroSchemaTypesEnum.STRING,
     AvroSchemaTypesEnum.TIME,
   ].indexOf(type) !== -1;
+
 if (Array.isArray(complexUnionField.type)) {
   const map1 = complexUnionField.type
     .filter((t) => typeof t !== 'string')
     .find(
-      (t: IComplexType) => !Array.isArray(t.type) && t.type === AvroSchemaTypesEnum.MAP
+      (t: any) => !Array.isArray(t.type) && t.type === AvroSchemaTypesEnum.MAP
     ) as IMapFieldBase;
   let fieldsInRecords;
   if (

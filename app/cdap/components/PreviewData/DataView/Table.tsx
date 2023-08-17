@@ -125,7 +125,9 @@ const DataTableView: React.FC<IDataTableProps> = ({
             direction="row"
             wrap="nowrap"
             justify="space-evenly"
-            className={classnames(classes.row, { oddRow: (i + startNode + 1) % 2 })}
+            className={classnames(classes.row, {
+              oddRow: (i + startNode + 1) % 2,
+            })}
             key={`gridrow-${i}`}
             data-cy="preview-data-row"
           >

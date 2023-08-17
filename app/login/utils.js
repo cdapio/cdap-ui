@@ -15,13 +15,13 @@
  */
 
 const getQueryParams = (queryString) => {
-  var queryObj = {};
+  const queryObj = {};
   if (typeof queryString !== 'string' || !queryString.length) {
     return queryObj;
   }
   queryString = queryString.slice(1);
   queryString.split('&').forEach((aa) => {
-    var [key, value] = aa.split('=');
+    const [key, value] = aa.split('=');
     if (!key || !value) {
       return;
     }

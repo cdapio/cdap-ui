@@ -22,13 +22,13 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
 
 const setSpannerAsActiveBrowser = (payload, getInstances = false) => {
-  let { spanner, activeBrowser } = DataPrepBrowserStore.getState();
+  const { spanner, activeBrowser } = DataPrepBrowserStore.getState();
 
   if (activeBrowser.name !== payload.name) {
     setActiveBrowser(payload);
   }
 
-  let { id: connectionId } = payload;
+  const { id: connectionId } = payload;
 
   if (spanner.connectionId === connectionId) {
     return;
@@ -43,8 +43,8 @@ const setSpannerAsActiveBrowser = (payload, getInstances = false) => {
 
   setSpannerLoading();
 
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -70,8 +70,8 @@ const setSpannerAsActiveBrowser = (payload, getInstances = false) => {
 
 const listSpannerInstances = (connectionId) => {
   setSpannerLoading();
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
   };
@@ -93,8 +93,8 @@ const listSpannerInstances = (connectionId) => {
 
 const listSpannerDatabases = (connectionId, instanceId) => {
   setSpannerLoading();
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
     instanceId,
@@ -118,8 +118,8 @@ const listSpannerDatabases = (connectionId, instanceId) => {
 
 const listSpannerTables = (connectionId, instanceId, databaseId) => {
   setSpannerLoading();
-  let namespace = getCurrentNamespace();
-  let params = {
+  const namespace = getCurrentNamespace();
+  const params = {
     context: namespace,
     connectionId,
     instanceId,

@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2017-2018 Cask Data, Inc.
  *
@@ -14,19 +15,22 @@
  * the License.
  */
 
-var webpack = require('webpack');
-var path = require('path');
-var TerserPlugin = require('terser-webpack-plugin');
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const webpack = require('webpack');
+const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = mode =>
+  mode === 'production' || mode === 'non-optimized-production';
 
 const processEnv = {
-  NODE_ENV: JSON.stringify(isModeProduction(mode) ? 'production' : 'development'),
+  NODE_ENV: JSON.stringify(
+    isModeProduction(mode) ? 'production' : 'development'
+  ),
   __DEVTOOLS__: false,
 };
 
-const getWebpackOutputObj = (mode) => {
-  var output = {
+const getWebpackOutputObj = mode => {
+  const output = {
     path: path.join(__dirname, 'packaged', 'public', 'dll'),
     filename: 'dll.shared.[name].js',
     library: 'shared_[name]',
@@ -38,8 +42,8 @@ const getWebpackOutputObj = (mode) => {
   return output;
 };
 
-const getWebpackDLLPlugin = (mode) => {
-  var manifestFileName = 'shared-[name]-manifest.json';
+const getWebpackDLLPlugin = mode => {
+  let manifestFileName = 'shared-[name]-manifest.json';
   if (mode === 'development') {
     manifestFileName = 'shared-[name]-development-manifest.json';
   }
@@ -49,14 +53,14 @@ const getWebpackDLLPlugin = (mode) => {
     context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
   });
 };
-var plugins = [
+const plugins = [
   new webpack.DefinePlugin({
     'process.env': processEnv,
   }),
   getWebpackDLLPlugin(mode),
 ];
 
-var webpackConfig = {
+const webpackConfig = {
   mode,
   entry: {
     vendor: [
@@ -65,7 +69,7 @@ var webpackConfig = {
       'redux',
       'lodash',
       'classnames',
-      'reactstrap',
+      // 'reactstrap',
       'i18n-react',
       'universal-cookie',
       'whatwg-fetch',

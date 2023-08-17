@@ -15,8 +15,14 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
-import { detailContextConnect, IDetailContext } from 'components/Replicator/Detail';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
+import {
+  detailContextConnect,
+  IDetailContext,
+} from 'components/Replicator/Detail';
 import ActionButton from 'components/Replicator/Detail/TopPanel/ActionButtons/ActionButton';
 import IconSVG from 'components/shared/IconSVG';
 import VerticalDivider from 'components/Replicator/Detail/TopPanel/VerticalDivider';
@@ -48,12 +54,8 @@ export const START_DISABLED_STATUS = [
   PROGRAM_STATUSES.PENDING,
 ];
 
-const ActionButtonsView: React.FC<IDetailContext & WithStyles<typeof styles>> = ({
-  classes,
-  start,
-  stop,
-  status,
-}) => {
+const ActionButtonsView: React.FC<IDetailContext &
+  WithStyles<typeof styles>> = ({ classes, start, stop, status }) => {
   const startDisabled = START_DISABLED_STATUS.indexOf(status) !== -1;
 
   return (
@@ -64,7 +66,10 @@ const ActionButtonsView: React.FC<IDetailContext & WithStyles<typeof styles>> = 
         icon={<IconSVG name="icon-stop" className={classes.stopBtn} />}
         text="Stop"
         onClick={stop}
-        disabled={status !== PROGRAM_STATUSES.RUNNING && status !== PROGRAM_STATUSES.PENDING}
+        disabled={
+          status !== PROGRAM_STATUSES.RUNNING &&
+          status !== PROGRAM_STATUSES.PENDING
+        }
       />
 
       <ActionButton

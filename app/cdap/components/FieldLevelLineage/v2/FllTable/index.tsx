@@ -15,14 +15,20 @@
  */
 
 import React, { useContext } from 'react';
-import SortableStickyGrid from 'components/shared/SortableStickyGrid/index.js';
+import SortableStickyGrid from 'components/shared/SortableStickyGrid/index';
 import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 import T from 'i18n-react';
 import classnames from 'classnames';
-import { IField, ITableInfo } from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
+import {
+  IField,
+  ITableInfo,
+} from 'components/FieldLevelLineage/v2/Context/FllContextHelper';
 import FllField from 'components/FieldLevelLineage/v2/FllTable/FllField';
-import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
+import {
+  FllContext,
+  IContextState,
+} from 'components/FieldLevelLineage/v2/Context/FllContext';
 import ExpandableField from 'components/FieldLevelLineage/v2/FllTable/FllExpandableField';
 import If from 'components/shared/If';
 import FllTableHeader from 'components/FieldLevelLineage/v2/FllTable/FllTableHeader';
@@ -85,7 +91,7 @@ function renderGridHeader(
   tableInfo: ITableInfo,
   fields: IField[],
   isTarget: boolean,
-  isExpanded: boolean = false
+  isExpanded = false
 ) {
   return (
     <FllTableHeader
@@ -101,8 +107,8 @@ function renderGridBody(
   fields: IField[],
   tableId: string,
   activeFields = new Set(),
-  hasUnrelatedFields: boolean = false,
-  isExpanded: boolean = false,
+  hasUnrelatedFields = false,
+  isExpanded = false,
   handleClick: () => void,
   classes
 ) {
@@ -139,7 +145,10 @@ function FllTable({ tableId, tableInfo, type, isActive, classes }: ITableProps) 
   if (!fields || fields.length === 0) {
     return (
       <div>
-        {T.translate('features.FieldLevelLineage.v2.FllTable.noRelatedTables', { type, target })}
+        {T.translate('features.FieldLevelLineage.v2.FllTable.noRelatedTables', {
+          type,
+          target,
+        })}
       </div>
     );
   }
@@ -192,17 +201,19 @@ function FllTable({ tableId, tableInfo, type, isActive, classes }: ITableProps) 
         { [classes.targetTable]: isTarget },
         { [classes.activeTable]: isActive }
       )}
+      // what is this hocus pocus? CDAP-20181
+      // @ts-ignore
       renderGridHeader={renderGridHeader.bind(
         null,
-        tableInfo,
-        fields,
+        tableInfo as any,
+        fields as any,
         isTarget,
         isExpanded,
         classes
       )}
       renderGridBody={renderGridBody.bind(
         this,
-        fields,
+        fields as any,
         tableId,
         activeFieldIds,
         hasUnrelatedFields,

@@ -1,0 +1,24 @@
+{
+  "name": "cdap-ui",
+  "private": true,
+  "dependencies": {
+    "angular": "1.4.3",
+    "bootstrap": "3.3.6",
+    "angular-motion": "0.4.3",
+    "angular-loading-bar": "0.8.0",
+    "d3": "3.5.5",
+    "angular-file-saver": "70aab54d6349c2945bae585a814011f1db8dcc2e",
+    "c3": "0.4.10",
+    "angularjs-dropdown-multiselect": "1.5.2",
+    "d3-timeline": "0.0.5",
+    "angular-ui-ace": "bower",
+    "ngInfiniteScroll": "1.2.1",
+
+    "angular-gridster": "0.13.5",
+    "angular-cron-jobs": "1.4.1"
+  },
+  "resolutions": {
+    "angular": "1.4.3",
+    "d3": "3.5.5"
+  }
+}

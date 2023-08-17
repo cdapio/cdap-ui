@@ -34,12 +34,12 @@ const DRAWER_WIDTH = '240px';
 export const appDrawerListItemTextStyles = (theme) => ({
   fontWeight: 400,
   fontSize: '1.1rem',
-  paddingLeft: theme.Spacing(3),
-  paddingRight: theme.Spacing(3),
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
   lineHeight: 1.5,
 });
 export const appDrawerListItemStyles = (theme) => ({
-  padding: `${theme.Spacing(1)}px ${theme.Spacing(4)}px`,
+  padding: `${theme.spacing(1)}px ${theme.spacing(4)}px`,
   '&:hover': {
     backgroundColor: theme.palette.grey['500'],
     color: theme.palette.grey['100'],
@@ -67,8 +67,8 @@ const styles = (theme): StyleRules => {
     },
     mainMenu: {
       borderTop: `1px solid ${theme.palette.grey['500']}`,
-      paddingTop: theme.Spacing(1),
-      paddingBottom: theme.Spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
     namespaceAdminMenu: {
       // WUT TS?
@@ -109,7 +109,9 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
     });
   };
   public toggleonNamespacePreferenceEdit = () => {
-    this.setState({ onNamespacePreferenceEdit: !this.state.onNamespacePreferenceEdit });
+    this.setState({
+      onNamespacePreferenceEdit: !this.state.onNamespacePreferenceEdit,
+    });
   };
   public render() {
     const { classes, open, onClose, componentDidNavigate = () => null } = this.props;

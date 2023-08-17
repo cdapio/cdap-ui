@@ -35,12 +35,12 @@ import {
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import { openLinkInNewTab } from 'services/helpers';
 
-const PREFIX = `features.TriggeredPipelines`;
+const PREFIX = 'features.TriggeredPipelines';
 
 interface ITriggeredPipelineRowProps {
   isExpanded: boolean;
   schedule: ISchedule;
-  onToggle: (pipeline: ISchedule) => void;
+  onToggle: (pipeline?: ISchedule) => void;
   pipelineInfo: IPipelineInfo;
   sourcePipeline: string;
   pipelineCompositeTriggersEnabled: boolean;
@@ -54,7 +54,7 @@ export const TriggeredPipelineRow = ({
   sourcePipeline,
   pipelineCompositeTriggersEnabled,
 }: ITriggeredPipelineRowProps) => {
-  let programStatuses = [];
+  let programStatuses: any[] = [];
   let scheduleName = '';
   if ('triggers' in schedule.trigger) {
     scheduleName = schedule.name;
@@ -76,7 +76,7 @@ export const TriggeredPipelineRow = ({
 
   const handleAccordionClick = () => {
     if (isExpanded) {
-      onToggle(null);
+      onToggle(undefined);
     } else {
       onToggle(schedule);
     }
@@ -123,7 +123,9 @@ export const TriggeredPipelineRow = ({
                 pipelineName: sourcePipeline,
                 triggerName: scheduleName,
               })
-            : T.translate(`${PREFIX}.helperText`, { pipelineName: sourcePipeline })}
+            : T.translate(`${PREFIX}.helperText`, {
+                pipelineName: sourcePipeline,
+              })}
         </HelperText>
         <div>
           {programStatuses.map((status) => {

@@ -20,7 +20,10 @@ import DataPrepBrowserStore, {
 } from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';
 import NamespaceStore from 'services/NamespaceStore';
 import MyDataPrepApi from 'api/dataprep';
-import { convertBytesToHumanReadable, HUMANREADABLESTORAGE_NODECIMAL } from 'services/helpers';
+import {
+  convertBytesToHumanReadable,
+  HUMANREADABLESTORAGE_NODECIMAL,
+} from 'services/helpers';
 import uuidV4 from 'uuid/v4';
 import moment from 'moment';
 import T from 'i18n-react';
@@ -31,7 +34,9 @@ const trimSuffixSlash = (path) => path.replace(/\/\//, '/');
 const formatResponse = (contents) => {
   return contents.map((content) => {
     content.uniqueId = uuidV4();
-    content['last-modified'] = moment(content['last-modified']).format('MM/DD/YY HH:mm');
+    content['last-modified'] = moment(content['last-modified']).format(
+      'MM/DD/YY HH:mm'
+    );
     content.displaySize = convertBytesToHumanReadable(
       content.size,
       HUMANREADABLESTORAGE_NODECIMAL,

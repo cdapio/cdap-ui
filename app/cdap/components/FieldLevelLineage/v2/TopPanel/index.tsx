@@ -45,7 +45,7 @@ const FllTopPanel = ({ datasetId, classes }) => {
         <EntityTopPanel
           breadCrumbAnchorLabel="Back"
           title={datasetId}
-          entityType={T.translate(`commons.entity.dataset.singular`).toString()}
+          entityType={T.translate('commons.entity.dataset.singular').toString()}
           entityIcon="icon-datasets"
           historyBack={true}
           inheritBackground={true}

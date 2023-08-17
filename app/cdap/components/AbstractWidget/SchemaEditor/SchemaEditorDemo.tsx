@@ -48,7 +48,7 @@ const styles = (): StyleRules => {
   };
 };
 
-interface ISchemaEditorDemoBaseProps extends WithStyles<typeof styles> {}
+type ISchemaEditorDemoBaseProps = WithStyles<typeof styles>;
 
 class SchemaEditorDemoBase extends React.Component<ISchemaEditorDemoBaseProps> {
   public state = {

@@ -66,7 +66,9 @@ const StyledLi = styled.li`
 const sanitizeConfig = (pipeline) => {
   const pipelineClone = { ...pipeline };
   pipelineClone.config.stages.forEach((stage) => {
-    const keysToSanitize = Object.keys(stage).filter((k) => k.startsWith('_') || k.startsWith('$'));
+    const keysToSanitize = Object.keys(stage).filter(
+      (k) => k.startsWith('_') || k.startsWith('$')
+    );
     keysToSanitize.forEach((k) => {
       delete stage[k];
     });
@@ -98,7 +100,9 @@ interface IPipelineDetailsActionsButtonProps {
   };
 }
 
-class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButtonProps> {
+class PipelineDetailsActionsButton extends Component<
+  IPipelineDetailsActionsButtonProps
+> {
   public state = {
     showExportModal: false,
     showDeleteConfirmationModal: false,
@@ -132,7 +136,10 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
   };
 
   public duplicateConfigAndNavigate = () => {
-    duplicatePipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+    duplicatePipeline(
+      this.props.pipelineName,
+      sanitizeConfig(this.pipelineConfig)
+    );
   };
 
   public toggleDiscardConfirmation = () => {
@@ -147,11 +154,17 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
   };
 
   public handlePipelineEdit = () => {
-    if (!this.props.isLatestVersion || this.props.artifact.name !== 'cdap-data-pipeline') {
+    if (
+      !this.props.isLatestVersion ||
+      this.props.artifact.name !== 'cdap-data-pipeline'
+    ) {
       return;
     }
     if (!this.props.editDraftId) {
-      editPipeline(this.props.pipelineName, sanitizeConfig(this.pipelineConfig));
+      editPipeline(
+        this.props.pipelineName,
+        sanitizeConfig(this.pipelineConfig)
+      );
       return;
     }
     this.setState({
@@ -248,12 +261,14 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
   }
 
   public getDeleteConfirmationElem = () => {
-    const triggeredPipelines = TriggeredPipelineStore.getState().triggered.triggeredPipelines;
+    const triggeredPipelines = TriggeredPipelineStore.getState().triggered
+      .triggeredPipelines;
     const count = triggeredPipelines.length;
 
     if (count > 0) {
-      const triggersText = triggeredPipelines.map((pipeline) => pipeline.application).join(', ');
-
+      const triggersText = triggeredPipelines
+        .map((pipeline) => pipeline.application)
+        .join(', ');
       return (
         <div>
           {T.translate(`${PREFIX}.deleteConfirmation.pipeline`)}
@@ -261,7 +276,9 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
             <em>{this.props.pipelineName}</em>
           </strong>
           {T.translate(`${PREFIX}.deleteConfirmation.trigger`)}
-          {T.translate(`${PREFIX}.deleteConfirmation.triggerPluralCheck`, { context: count })}
+          {T.translate(`${PREFIX}.deleteConfirmation.triggerPluralCheck`, {
+            context: count,
+          })}
           <em>{triggersText}</em>
           {T.translate(`${PREFIX}.deleteConfirmation.triggerDelete`)}
           <strong>
@@ -351,20 +368,26 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
         >
           <div className="btn-container">
             <IconSVG name="icon-cog-empty" />
-            <div className="button-label">{T.translate(`${PREFIX}.actions`)}</div>
+            <div className="button-label">
+              {T.translate(`${PREFIX}.actions`)}
+            </div>
           </div>
         </div>
       );
     };
 
     const editEnabled =
-      this.props.isLatestVersion && this.props.artifact.name === 'cdap-data-pipeline';
+      this.props.isLatestVersion &&
+      this.props.artifact.name === 'cdap-data-pipeline';
 
     return (
       <div
-        className={classnames('pipeline-action-container pipeline-actions-container', {
-          active: this.state.showPopover,
-        })}
+        className={classnames(
+          'pipeline-action-container pipeline-actions-container',
+          {
+            active: this.state.showPopover,
+          }
+        )}
       >
         <Popover
           target={ActionsBtnAndLabel}
@@ -380,7 +403,9 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
             {this.props.lifecycleManagementEditEnabled && (
               <StyledLi
                 isLatestVersion={this.props.isLatestVersion}
-                isBatchPipeline={this.props.artifact.name === 'cdap-data-pipeline'}
+                isBatchPipeline={
+                  this.props.artifact.name === 'cdap-data-pipeline'
+                }
                 onClick={this.handlePipelineEdit}
                 data-testid="pipeline-edit-btn"
               >
@@ -414,10 +439,18 @@ class PipelineDetailsActionsButton extends Component<IPipelineDetailsActionsButt
             {this.props.sourceControlManagementEnabled && (
               <div>
                 <hr />
-                <li role="button" onClick={this.toggleCommitModal} data-testid="push-pipeline">
+                <li
+                  role="button"
+                  onClick={this.toggleCommitModal}
+                  data-testid="push-pipeline"
+                >
                   {T.translate(`${SCM_PREFIX}.push.pushButton`)}
                 </li>
-                <li role="button" onClick={this.handlePipelinePull} data-testid="pull-pipeline">
+                <li
+                  role="button"
+                  onClick={this.handlePipelinePull}
+                  data-testid="pull-pipeline"
+                >
                   {T.translate(`${SCM_PREFIX}.pull.pullButton`)}
                 </li>
               </div>

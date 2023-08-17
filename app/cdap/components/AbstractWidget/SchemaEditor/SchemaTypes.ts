@@ -14,7 +14,27 @@
  * the License.
  */
 
-import { AvroSchemaTypesEnum } from 'components/AbstractWidget/SchemaEditor/SchemaConstants';
+enum AvroSchemaTypesEnum {
+  ARRAY = 'array',
+  BOOLEAN = 'boolean',
+  BYTES = 'bytes',
+  DATE = 'date',
+  DATETIME = 'datetime',
+  DECIMAL = 'decimal',
+  DOUBLE = 'double',
+  ENUM = 'enum',
+  FLOAT = 'float',
+  INT = 'int',
+  LONG = 'long',
+  MAP = 'map',
+  RECORD = 'record',
+  STRING = 'string',
+  TIME = 'time',
+  TIMESTAMP = 'timestamp',
+  UNION = 'union',
+  TIMESTAMPMICROS = 'timestamp-micros',
+  TIMEMICROS = 'time-micros',
+}
 /**
  * Contains types used in parsing an avro schema.
  * TODO: This is a work in progress. We don't use these types yet fully
@@ -48,7 +68,7 @@ type ILogicalTypeNames =
 
 type IDisplayType = ISimpleType | IComplexTypeNames;
 
-type ISimpleTypeNullable = Array<ISimpleType | 'null'>;
+type ISimpleTypeNullable = (ISimpleType | 'null')[];
 
 type IComplexType =
   | IArrayFieldBase
@@ -58,10 +78,10 @@ type IComplexType =
   | IUnionField
   | ILogicalTypeBase;
 type IComplexTypeNullable =
-  | Array<IArrayFieldBase | 'null'>
-  | Array<IEnumFieldBase | 'null'>
-  | Array<IMapFieldBase | 'null'>
-  | Array<IRecordField | 'null'>;
+  | (IArrayFieldBase | 'null')[]
+  | (IEnumFieldBase | 'null')[]
+  | (IMapFieldBase | 'null')[]
+  | (IRecordField | 'null')[];
 
 type IComplexTypeFieldNullable =
   | IArrayFieldNullable
@@ -83,7 +103,7 @@ interface IEnumField extends IFieldBaseType {
   type: IEnumFieldBase;
 }
 interface IEnumFieldNullable extends IFieldBaseType {
-  type: Array<IEnumFieldBase | 'null'>;
+  type: (IEnumFieldBase | 'null')[];
 }
 
 interface IMapFieldBase {
@@ -95,7 +115,7 @@ interface IMapField extends IFieldBaseType {
   type: IMapFieldBase;
 }
 interface IMapFieldNullable extends IFieldBaseType {
-  type: Array<IMapFieldBase | 'null'>;
+  type: (IMapFieldBase | 'null')[];
 }
 
 interface IArrayFieldBase {
@@ -107,7 +127,7 @@ interface IArrayField extends IFieldBaseType {
   type: IArrayFieldBase;
 }
 interface IArrayFieldNullable extends IFieldBaseType {
-  type: Array<IArrayFieldBase | 'null'>;
+  type: (IArrayFieldBase | 'null')[];
 }
 
 interface ILogicalTypeBase {
@@ -117,14 +137,14 @@ interface ILogicalTypeBase {
   scale?: number;
 }
 
-type ILogicalTypeNullable = Array<ILogicalTypeBase | 'null'>;
+type ILogicalTypeNullable = (ILogicalTypeBase | 'null')[];
 
 interface ILogicalType extends IFieldBaseType {
   type: ILogicalTypeBase;
 }
 
 interface ILogicalTypeFieldNullable extends IFieldBaseType {
-  type: Array<ILogicalTypeBase | 'null'>;
+  type: (ILogicalTypeBase | 'null')[];
 }
 
 interface IFieldType extends IFieldBaseType {
@@ -141,14 +161,14 @@ interface IFieldTypeNullable extends IFieldBaseType {
 
 interface IRecordField extends IFieldBaseType {
   type: AvroSchemaTypesEnum.RECORD;
-  fields: Array<IFieldType | IFieldTypeNullable>;
+  fields: (IFieldType | IFieldTypeNullable)[];
   doc?: string;
   aliases?: string[];
 }
-type IRecordFieldNullable = Array<IRecordField | 'null'>;
+type IRecordFieldNullable = (IRecordField | 'null')[];
 
 interface IUnionField extends IFieldBaseType {
-  type: Array<ISimpleType | IComplexType>;
+  type: (ISimpleType | IComplexType)[];
 }
 
 interface ISchemaType {

@@ -15,7 +15,10 @@
  */
 
 import React, { useContext } from 'react';
-import { FllContext, IContextState } from 'components/FieldLevelLineage/v2/Context/FllContext';
+import {
+  FllContext,
+  IContextState,
+} from 'components/FieldLevelLineage/v2/Context/FllContext';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import ModalContent from 'components/FieldLevelLineage/v2/OperationsModal/ModalContent';
@@ -37,9 +40,13 @@ const styles = () => {
 };
 
 function OperationsModalView() {
-  const { showOperations, toggleOperations, activeField, direction, loadingOps } = useContext<
-    IContextState
-  >(FllContext);
+  const {
+    showOperations,
+    toggleOperations,
+    activeField,
+    direction,
+    loadingOps,
+  } = useContext<IContextState>(FllContext);
 
   if (!showOperations) {
     return null;
@@ -58,14 +65,18 @@ function OperationsModalView() {
   return (
     <Modal
       isOpen={true}
-      toggle={toggleOperations}
+      toggle={toggleOperations as any}
       size="lg"
       backdrop="static"
       zIndex="1061"
       className="field-level-lineage-modal cdap-modal"
     >
       <ModalHeader>
-        <span>{T.translate(`${PREFIX}.Title.${direction}`, { fieldName: activeField.name })}</span>
+        <span>
+          {T.translate(`${PREFIX}.Title.${direction}`, {
+            fieldName: activeField.name,
+          })}
+        </span>
 
         <div className="close-section float-right" onClick={closeModal}>
           <IconSVG name="icon-close" />

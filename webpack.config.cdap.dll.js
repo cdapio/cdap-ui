@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 /*
  * Copyright © 2017 Cask Data, Inc.
  *
@@ -14,19 +15,22 @@
  * the License.
  */
 
-var webpack = require('webpack');
-var path = require('path');
-var mode = process.env.NODE_ENV || 'production';
-const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
+const webpack = require('webpack');
+const path = require('path');
+const mode = process.env.NODE_ENV || 'production';
+const isModeProduction = (mode) =>
+  mode === 'production' || mode === 'non-optimized-production';
 
-var TerserPlugin = require('terser-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const processEnv = {
-  NODE_ENV: JSON.stringify(isModeProduction(mode) ? 'production' : 'development'),
+  NODE_ENV: JSON.stringify(
+    isModeProduction(mode) ? 'production' : 'development'
+  ),
   __DEVTOOLS__: false,
 };
 
 const getWebpackOutputObj = (mode) => {
-  var output = {
+  const output = {
     path: path.join(__dirname, 'packaged', 'public', 'dll'),
     filename: 'dll.cdap.[name].js',
     library: 'cdap_[name]',
@@ -39,7 +43,7 @@ const getWebpackOutputObj = (mode) => {
 };
 
 const getWebpackDLLPlugin = (mode) => {
-  var manifestFileName = 'cdap-[name]-manifest.json';
+  let manifestFileName = 'cdap-[name]-manifest.json';
   if (mode === 'development') {
     manifestFileName = 'cdap-[name]-development-manifest.json';
   }
@@ -50,14 +54,14 @@ const getWebpackDLLPlugin = (mode) => {
   });
 };
 
-var plugins = [
+const plugins = [
   new webpack.DefinePlugin({
     'process.env': processEnv,
   }),
   getWebpackDLLPlugin(mode),
 ];
 
-var webpackConfig = {
+const webpackConfig = {
   mode,
   entry: {
     vendor: [

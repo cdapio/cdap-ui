@@ -37,7 +37,7 @@ import { objectQuery } from 'services/helpers';
 import SystemDelayStore from 'services/SystemDelayStore';
 import SystemDelayActions from 'services/SystemDelayStore/SystemDelayActions';
 import globalEvents from 'services/global-events';
-import Cookies from 'universal-cookie';
+import Cookies from 'universal-cookie/es6/Cookies';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
@@ -200,7 +200,9 @@ export default class DataSource implements IDataSource {
         handler(createHandlerData(ajaxResponse, bindingInfo))
       );
       const errorCode = objectQuery(ajaxResponse.response, 'errorCode') || null;
-      this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+      if (errorCode !== null) {
+        this.eventEmitter.emit(globalEvents.API_ERROR, errorCode !== null);
+      }
 
       const parsedResponse = parseResponse(ajaxResponse, bindingInfo);
 
@@ -338,7 +340,7 @@ export default class DataSource implements IDataSource {
     const intervalTime = resource.interval || 10000;
     const generatedResource: IResource = {
       id,
-      interval: null,
+      interval: undefined,
       intervalTime,
       // See comment about `responseType` in `.request()`
       responseType: 'text',
@@ -466,7 +468,7 @@ export default class DataSource implements IDataSource {
       .filter((subscriptionID) => this.polling[subscriptionID].type === 'POLL')
       .forEach((subscriptionID) => {
         clearTimeout(this.polling[subscriptionID].resource.interval);
-        this.polling[subscriptionID].resource.interval = null;
+        this.polling[subscriptionID].resource.interval = undefined;
       });
   };
 
@@ -495,7 +497,7 @@ export default class DataSource implements IDataSource {
     if (!params) {
       return url;
     }
-    const parts = [];
+    const parts: any[] = [];
 
     const forEachSorted = (obj: IParamsMap, iterator) => {
       const keys = Object.keys(params).sort();

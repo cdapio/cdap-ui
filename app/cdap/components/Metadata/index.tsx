@@ -23,28 +23,30 @@ import SearchSummary from 'components/Metadata/SearchSummary';
 import Lineage from 'components/Metadata/Lineage';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Theme } from 'services/ThemeHelper';
-import { useParams } from 'react-router';
 
 export const basepath = '/ns/:namespace/metadata';
 
 const Metadata: React.FC = () => {
   const pageTitle = `${Theme.productName} | Search`;
   const namespace = getCurrentNamespace();
-  const params = useParams() as any;
-  const query = params.query || '';
-  const entity = params.entity || '';
 
   return (
     <>
       <Helmet title={pageTitle} />
       <Switch>
         <Route exact path={basepath} render={() => <MetadataHome />} />
-        <Route path={`${basepath}/search/:query/result`} render={() => <SearchResults />} />
+        <Route
+          path={`${basepath}/search/:query/result`}
+          render={() => <SearchResults />}
+        />
         <Route
           path={`${basepath}/:entityType/:entityId/summary`}
           render={() => <SearchSummary />}
         />
-        <Route path={`${basepath}/:entityType/:entityId/lineage`} render={() => <Lineage />} />
+        <Route
+          path={`${basepath}/:entityType/:entityId/lineage`}
+          render={() => <Lineage />}
+        />
         <Route
           render={() => {
             return <Redirect to={`/ns/${namespace}/metadata`} />;

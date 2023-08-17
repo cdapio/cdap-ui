@@ -30,12 +30,12 @@ export interface IPort {
 }
 
 const styles = genericNodeStyles({
-  border: `1px solid #4586f3`,
+  border: '1px solid #4586f3',
   '&.drag-hover': {
     backgroundColor: 'rgba(69, 134, 243, 0.1)',
   },
 });
-interface ISplitterNodeProps extends IAbstractNodeProps<typeof styles> {}
+type ISplitterNodeProps = IAbstractNodeProps<typeof styles>;
 class SplitterNodeComponent extends AbstractNode<ISplitterNodeProps> {
   public type = 'splittertransform';
 

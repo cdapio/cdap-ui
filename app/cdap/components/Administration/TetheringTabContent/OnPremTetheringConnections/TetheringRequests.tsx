@@ -50,7 +50,10 @@ const TetheringRequests = ({
       confirmationText={T.translate(`${PREFIX}.ConfirmationModal.deleteRequestCopy`)}
       onDeleteClick={() => handleDelete(tetheringStatus, instanceName)}
       onEditClick={() => handleEdit(tetheringStatus, instanceName)}
-      dataTestIds={{ delete: 'delete-tethering-request', edit: 'edit-tethering-request' }}
+      dataTestIds={{
+        delete: 'delete-tethering-request',
+        edit: 'edit-tethering-request',
+      }}
     />
   );
   const canSeeReqHistory = false; // Will remove after request history page is ready

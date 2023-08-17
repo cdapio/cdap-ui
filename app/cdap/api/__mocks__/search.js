@@ -12,14 +12,14 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
-*/
+ */
 
-import {Subject} from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 
 const MySearchApi = {};
 
-MySearchApi.search = function () {
-  let subject = new Subject();
+MySearchApi.search = function() {
+  const subject = new Subject();
   setTimeout(() => {
     if (this.__isError) {
       subject.error(this.__searchResults);
@@ -30,9 +30,12 @@ MySearchApi.search = function () {
   return subject;
 };
 
-MySearchApi.__setSearchResults = function __setSearchResults(searchResult, isError) {
+MySearchApi.__setSearchResults = function __setSearchResults(
+  searchResult,
+  isError
+) {
   this.__isError = isError;
   this.__searchResults = searchResult;
 };
 
-module.exports = {MySearchApi};
+module.exports = { MySearchApi };

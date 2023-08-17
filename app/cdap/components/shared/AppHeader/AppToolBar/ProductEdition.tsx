@@ -34,7 +34,7 @@ const styles = (theme) => {
   };
 };
 
-const ProductEdition: React.SFC<WithStyles<typeof styles>> = ({ classes }) => {
+const ProductEdition: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   if (!Theme.productEdition) {
     return null;
   }

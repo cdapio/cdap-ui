@@ -158,7 +158,6 @@ interface ITopPanelProps {
   isEdit: boolean;
   saveChangeSummary: (changeSummary: string) => any;
   getParentVersion: () => any;
-  stateParams: any;
 }
 
 export const TopPanel = ({
@@ -169,7 +168,7 @@ export const TopPanel = ({
   parsedDescription,
   saveMetadata,
   resetMetadata,
-  openMetadata,
+  // openMetadata,
   previewMode,
   previewEnabled,
   togglePreviewMode,
@@ -210,9 +209,8 @@ export const TopPanel = ({
   isEdit,
   saveChangeSummary,
   getParentVersion,
-  stateParams,
 }: ITopPanelProps) => {
-  const sheculdeInfo = getScheduleInfo();
+  const scheduleInfo = getScheduleInfo();
   const [isChangeSummaryOpen, setIsChangeSummaryOpen] = useState<boolean>(false);
   const [changeSummary, setChangeSummary] = useState('');
   const [parentConfig, setParentConfig] = useState({ ...getConfigForExport().config });
@@ -232,10 +230,11 @@ export const TopPanel = ({
     downloadFile(getConfigForExport());
     window.onbeforeunload = null;
     // if there is a draft saved, delete it
-    if (stateParams.draftId) {
+    const urlParams = new URLSearchParams(window.location.href);
+    if (urlParams.has('draftId')) {
       MyPipelineApi.deleteDraft({
         context: getCurrentNamespace(),
-        draftId: stateParams.draftId,
+        draftId: urlParams.get('draftId'),
       }).subscribe({
         error(err) {
           // tslint:disable:no-console
@@ -399,7 +398,7 @@ export const TopPanel = ({
           parsedDescription={parsedDescription}
           saveMetadata={saveMetadata}
           resetMetadata={resetMetadata}
-          openMetadata={openMetadata}
+          // openMetadata={openMetadata}
           isEdit={isEdit}
           editStatus={editStatus}
         ></NameAndDescription>
@@ -443,8 +442,8 @@ export const TopPanel = ({
       </TopPanelContainer>
       {viewScheduler && (
         <PipelineScheduler
-          schedule={sheculdeInfo.schedule}
-          maxConcurrentRuns={sheculdeInfo.maxConcurrentRuns}
+          schedule={scheduleInfo.schedule}
+          maxConcurrentRuns={scheduleInfo.maxConcurrentRuns}
           actionCreator={actionCreator}
           pipelineName={state.metadata.name}
           onClose={closeScheduler}

@@ -88,7 +88,7 @@ interface INamespaceAdmin {
   sourceControlManagementConfig: ISourceControlManagementConfig;
 }
 
-type INamespaceAdminState = Partial<INamespaceAdmin>;
+export type INamespaceAdminState = Partial<INamespaceAdmin>;
 
 const defaultInitialState: Partial<INamespaceAdminState> = {
   namespace: null,
@@ -105,7 +105,10 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   sourceControlManagementConfig: null,
 };
 
-const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
+const namespaceAdmin: Reducer<INamespaceAdminState> = (
+  state = defaultInitialState,
+  action
+) => {
   switch (action.type) {
     case NamespaceAdminActions.setNamespaceInfo:
       return {
@@ -145,7 +148,8 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
     case NamespaceAdminActions.setSourceControlManagementConfig:
       return {
         ...state,
-        sourceControlManagementConfig: action.payload.sourceControlManagementConfig,
+        sourceControlManagementConfig:
+          action.payload.sourceControlManagementConfig,
       };
     case NamespaceAdminActions.reset:
       return {

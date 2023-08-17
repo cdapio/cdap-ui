@@ -26,7 +26,7 @@ interface ILoadingAppLevelProps {
 }
 
 const defaultStyle = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -40,7 +40,12 @@ const defaultStyle = {
   pb: 3,
 };
 
-export const LoadingAppLevel = ({ message, subtitle, isopen, style }: ILoadingAppLevelProps) => {
+export const LoadingAppLevel = ({
+  message,
+  subtitle,
+  isopen,
+  style,
+}: ILoadingAppLevelProps) => {
   return (
     <Modal open={isopen}>
       <Box sx={{ ...defaultStyle, ...style }}>

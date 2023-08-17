@@ -38,7 +38,7 @@ const styles = (theme: Theme) => {
     },
   };
 };
-interface IDataModelViewerProps extends WithStyles<typeof styles> {}
+type IDataModelViewerProps = WithStyles<typeof styles>;
 
 class DataModelViewer extends React.Component<IDataModelViewerProps, IDataModelViewerState> {
   public state = {

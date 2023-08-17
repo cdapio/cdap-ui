@@ -64,14 +64,18 @@ const ChartTableSwitcherView: React.FC<IChartTableSwitcherProps> = ({ classes, c
         <div className={classes.switcherPosition}>
           <span
             onClick={handleClick(false)}
-            className={classnames(classes.switcher, { [classes.active]: !isTable })}
+            className={classnames(classes.switcher, {
+              [classes.active]: !isTable,
+            })}
           >
             Chart
           </span>
           <span className={classes.separator}>|</span>
           <span
             onClick={handleClick(true)}
-            className={classnames(classes.switcher, { [classes.active]: isTable })}
+            className={classnames(classes.switcher, {
+              [classes.active]: isTable,
+            })}
           >
             Table
           </span>

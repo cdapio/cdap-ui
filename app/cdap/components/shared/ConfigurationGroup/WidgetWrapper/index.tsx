@@ -30,7 +30,7 @@ import { objectQuery } from 'services/helpers';
 const styles = (theme): StyleRules => {
   return {
     widgetWrapper: {
-      border: `1px solid`,
+      border: '1px solid',
       borderColor: theme.palette.grey[300],
       borderRadius: '6px',
       position: 'relative',

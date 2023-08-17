@@ -49,20 +49,30 @@ const renderBody = (data, onRowClick) => {
   return (
     <div className="grid-body">
       {data.map((row) => {
-        let time = moment(parseInt(row.time, 10));
+        const time = moment(parseInt(row.time, 10));
 
         return (
-          <div key={row.time} className="grid-row" onClick={onRowClick.bind(this, row)}>
+          <div
+            key={row.time}
+            className="grid-row"
+            onClick={onRowClick.bind(this, row)}
+          >
             <div className="column-time">{time.format('ha')}</div>
             <div className="column-date">{time.format('ddd. MMM D, YYYY')}</div>
-            <div className="column-total-start">{row.schedule + row.manual}</div>
+            <div className="column-total-start">
+              {row.schedule + row.manual}
+            </div>
             <div className="column-schedule">{row.schedule}</div>
             <div className="column-manual">{row.manual}</div>
-            <div className="column-total-runs">{row.successful + row.failed}</div>
+            <div className="column-total-runs">
+              {row.successful + row.failed}
+            </div>
             <div className="column-successful">{row.successful}</div>
             <div className="column-failed">{row.failed}</div>
             <div className="column-running">{row.running}</div>
-            <div className="column-delay">{humanReadableDuration(row.delay)}</div>
+            <div className="column-delay">
+              {humanReadableDuration(row.delay)}
+            </div>
           </div>
         );
       })}

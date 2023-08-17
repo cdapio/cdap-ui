@@ -19,12 +19,12 @@ import { IAbstractNodeProps, AbstractNode } from 'components/DAG/Nodes/AbstractN
 import { genericNodeStyles } from 'components/DAG/Nodes/utilities';
 
 const styles = genericNodeStyles({
-  border: `1px solid #ffba01`,
+  border: '1px solid #ffba01',
   '&.drag-hover': {
     backgroundColor: 'rgba(255, 186, 1, 0.1)',
   },
 });
-interface IAlertPublisherProps extends IAbstractNodeProps<typeof styles> {}
+type IAlertPublisherProps = IAbstractNodeProps<typeof styles>;
 class AlertPublisherComponent extends AbstractNode<IAlertPublisherProps> {
   public type = 'alertpublisher';
 

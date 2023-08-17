@@ -123,11 +123,17 @@ export default function PushdownConfig({ value, onValueChange, cloudArtifact }: 
         properties,
       },
     };
-    onValueChange({ pushdownEnabled, transformationPushdown: newTransformationPushdown });
+    onValueChange({
+      pushdownEnabled,
+      transformationPushdown: newTransformationPushdown,
+    });
   };
 
   const toggleEnabled = () => {
-    onValueChange({ pushdownEnabled: !pushdownEnabled, transformationPushdown });
+    onValueChange({
+      pushdownEnabled: !pushdownEnabled,
+      transformationPushdown,
+    });
   };
 
   useEffect(() => {

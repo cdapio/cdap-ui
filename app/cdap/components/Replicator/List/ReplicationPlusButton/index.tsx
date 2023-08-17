@@ -15,7 +15,10 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+} from '@material-ui/core/styles/withStyles';
 import PlusButton from 'components/shared/PlusButton';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
@@ -41,7 +44,9 @@ const styles = (): StyleRules => {
 
 const importBtnId = 'replication-import-btn';
 
-const ReplicationPlusButtonView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
+const ReplicationPlusButtonView: React.FC<WithStyles<typeof styles>> = ({
+  classes,
+}) => {
   const [redirect, setRedirect] = React.useState<string>();
 
   function handleFile(event) {
@@ -91,7 +96,10 @@ const ReplicationPlusButtonView: React.FC<WithStyles<typeof styles>> = ({ classe
 
   return (
     <div className={classes.root}>
-      <PlusButton mode={PlusButton.MODE.resourcecenter} contextItems={contextItems} />
+      <PlusButton
+        mode={PlusButton.MODE.resourcecenter}
+        contextItems={contextItems}
+      />
     </div>
   );
 };

@@ -42,7 +42,7 @@ interface IOption {
 }
 
 interface IOutlinedSelectProps {
-  options: Array<IOption | string>;
+  options: (IOption | string)[];
   value: string;
   onChange: (value: string) => void;
   disabled: boolean;

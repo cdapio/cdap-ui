@@ -36,8 +36,7 @@ interface IInputFieldKeyValueDropdownWidgetProps extends IMultiRowWidgetProps {
   extraConfig?: any;
 }
 
-interface IInputFieldKeyValueDropdownProps
-  extends IMultiRowProps<IInputFieldKeyValueDropdownWidgetProps> {}
+type IInputFieldKeyValueDropdownProps = IMultiRowProps<IInputFieldKeyValueDropdownWidgetProps>;
 
 interface IField {
   name: string;

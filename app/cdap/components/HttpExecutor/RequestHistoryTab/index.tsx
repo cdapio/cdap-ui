@@ -14,7 +14,7 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { List, Map } from 'immutable';
 import {
@@ -22,7 +22,10 @@ import {
   getDateID,
   getRequestsByDate,
 } from 'components/HttpExecutor/utilities';
-import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  StyleRules,
+  WithStyles,
+} from '@material-ui/core/styles/withStyles';
 import moment from 'moment';
 
 import Button from '@material-ui/core/Button';
@@ -32,7 +35,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import HttpExecutorActions from 'components/HttpExecutor/store/HttpExecutorActions';
-import If from 'components/shared/If';
 import { RequestMethod } from 'components/HttpExecutor';
 import RequestRow from 'components/HttpExecutor/RequestHistoryTab/RequestRow';
 import RequestSearch from 'components/HttpExecutor/RequestHistoryTab/RequestSearch';
@@ -93,7 +95,7 @@ const styles = (theme): StyleRules => {
     },
     title: {
       fontSize: '15px',
-      paddingLeft: `${theme.Spacing(3)}px`,
+      paddingLeft: `${theme.spacing(3)}px`,
       gridColumnStart: '1',
       width: '100px',
       overflow: 'hidden',
@@ -150,12 +152,12 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
   requestLog,
   setRequestLog,
 }) => {
-  const [ClearAllDialogOpen, setClearAllDialogOpen] = React.useState(false);
-  const [searchText, setSearchText] = React.useState('');
+  const [ClearAllDialogOpen, setClearAllDialogOpen] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   // Query through localstorage to populate RequestHistoryTab
   // requestLog maps timestamp date (e.g. April 5th) to a list of corresponding request histories, sorted by timestamp
-  React.useEffect(() => {
+  useEffect(() => {
     fetchFromLocalStorage();
   }, []);
 
@@ -166,7 +168,7 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
     const storedLogs = localStorage.getItem(REQUEST_HISTORY);
     if (storedLogs) {
       try {
-        const savedCalls = List(JSON.parse(storedLogs));
+        const savedCalls: List<IRequestHistory> = List(JSON.parse(storedLogs));
         savedCalls
           .sort((a: IRequestHistory, b: IRequestHistory) =>
             compareByTimestamp(a.timestamp, b.timestamp)
@@ -188,7 +190,10 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
     }
   };
 
-  const getFilteredRequestLogs = (requests: List<IRequestHistory>, query: string) => {
+  const getFilteredRequestLogs = (
+    requests: List<IRequestHistory>,
+    query: string
+  ) => {
     return requests.filter((request) => request.path.includes(query));
   };
 
@@ -215,22 +220,31 @@ const RequestHistoryTabView: React.FC<IRequestHistoryTabProps> = ({
           const filteredRequests = getFilteredRequestLogs(requests, searchText);
           return (
             <div key={dateID}>
-              <If condition={filteredRequests.size > 0}>
-                <StyledExpansionPanel key={dateID} defaultExpanded elevation={0}>
+              {filteredRequests.size > 0 && (
+                <StyledExpansionPanel
+                  key={dateID}
+                  defaultExpanded
+                  elevation={0}
+                >
                   <StyledExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography>{dateID}</Typography>
                   </StyledExpansionPanelSummary>
                   <ExpansionPanelDetails className={classes.timestampGroup}>
-                    {filteredRequests.map((request, requestIndex) => (
-                      <RequestRow key={requestIndex} request={request} />
-                    ))}
+                    {
+                      filteredRequests.map((request, requestIndex) => (
+                        <RequestRow key={requestIndex} request={request} />
+                      )) as any
+                    }
                   </ExpansionPanelDetails>
                 </StyledExpansionPanel>
-              </If>
+              )}
             </div>
           );
         })}
-      <ClearAllDialog open={ClearAllDialogOpen} handleClose={() => setClearAllDialogOpen(false)} />
+      <ClearAllDialog
+        open={ClearAllDialogOpen}
+        handleClose={() => setClearAllDialogOpen(false)}
+      />
     </div>
   );
 };

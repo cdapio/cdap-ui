@@ -19,7 +19,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Tooltip, withStyles } from '@material-ui/core';
 
-const colors = require('styles/colors.scss');
+const colors = require('../../../styles/colors.scss');
 const buttonActive = colors.grey04;
 const actionButton = colors.bluegrey07;
 const actionButtonBorder = colors.grey11;
@@ -66,7 +66,8 @@ export const ActionButton = styled(Button)`
   width: 40px;
   height: 30px;
 
-  ${({ active }) => active && `background-color: ${buttonActive};`}
+  ${({ active }: { active?: boolean }) =>
+    active && `background-color: ${buttonActive};`}
 `;
 
 const CustomTooltip = withStyles(() => {
@@ -83,7 +84,13 @@ const CustomTooltip = withStyles(() => {
 
 export const CanvasButtonTooltip = ({ children, title = '', ...props }) => {
   return (
-    <CustomTooltip arrow placement="left" enterDelay={500} title={title} {...props}>
+    <CustomTooltip
+      arrow
+      placement="left"
+      enterDelay={500}
+      title={title}
+      {...props}
+    >
       {children}
     </CustomTooltip>
   );

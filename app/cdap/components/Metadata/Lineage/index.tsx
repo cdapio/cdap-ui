@@ -151,7 +151,10 @@ const Lineage: React.FC = () => {
   }
 
   function onCustomDateRangeChange({ start, end }) {
-    const customRange = { start, end: end ? end : parseInt(`${Date.now() / 1000}`, 10) };
+    const customRange = {
+      start,
+      end: end ? end : parseInt(`${Date.now() / 1000}`, 10),
+    };
     setCustomDateTimeRange(customRange);
     addParams(customRange as IDateRange);
   }
@@ -213,7 +216,9 @@ const Lineage: React.FC = () => {
                 <FormControl variant="outlined">
                   <DateSelect
                     value={dateRange.start}
-                    inputProps={{ 'aria-label': T.translate(`${I18N_PREFIX}.dateRange.label`) }}
+                    inputProps={{
+                      'aria-label': T.translate(`${I18N_PREFIX}.dateRange.label`).toString(),
+                    }}
                     onChange={onDateRangeChange}
                   >
                     {TimeRangeOptions.map((option) => (

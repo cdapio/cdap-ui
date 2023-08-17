@@ -296,7 +296,9 @@ const TablesListView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
             const icon = tableStatus === 'SNAPSHOTTING' ? 'icon-circle-o' : 'icon-circle';
             const tableDisplayName = getTableDisplayName(row);
             const tableMetricsKey = getFullyQualifiedTableName(row);
-            const tableMetrics = tableMetricsMap[tableMetricsKey] || { ...INITIAL_DATA };
+            const tableMetrics = tableMetricsMap[tableMetricsKey] || {
+              ...INITIAL_DATA,
+            };
 
             return (
               <TableRow key={tableKey.toString()}>

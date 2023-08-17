@@ -24,15 +24,21 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
  * @param params - url params to be parsed.
  * @returns Parsed metadata page urls.
  */
-export function getMetadataPageUrl(pageName: string, params: { [key: string]: string } = {}) {
+export function getMetadataPageUrl(
+  pageName: string,
+  params: { [key: string]: string } = {}
+) {
   const urls = {
-    home: `/ns/:namespace/metadata`,
-    search: `/ns/:namespace/metadata/search/:query/result`,
-    summary: `/ns/:namespace/metadata/:entityType/:entityId/summary`,
-    lineage: `/ns/:namespace/metadata/:entityType/:entityId/lineage`,
+    home: '/ns/:namespace/metadata',
+    search: '/ns/:namespace/metadata/search/:query/result',
+    summary: '/ns/:namespace/metadata/:entityType/:entityId/summary',
+    lineage: '/ns/:namespace/metadata/:entityType/:entityId/lineage',
   };
   if (!urls[pageName]) {
     return null;
   }
-  return buildUrl(urls[pageName], { ...params, namespace: getCurrentNamespace() });
+  return buildUrl(urls[pageName], {
+    ...params,
+    namespace: getCurrentNamespace(),
+  });
 }

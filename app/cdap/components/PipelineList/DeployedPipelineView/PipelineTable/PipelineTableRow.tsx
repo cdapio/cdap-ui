@@ -25,6 +25,7 @@ import RunsCount from 'components/PipelineList/DeployedPipelineView/RunsCount';
 import DeployedActions from 'components/PipelineList/DeployedPipelineView/DeployedActions';
 import { IPipeline } from 'components/PipelineList/DeployedPipelineView/types';
 import { useSelector } from 'react-redux';
+import { IDeployedPipelineStore } from '../store/index';
 
 interface IProps {
   pipeline: IPipeline;
@@ -42,7 +43,7 @@ export const PipelineTableRow = ({
   sourceControlManagementEnabled,
 }: IProps) => {
   const [draftId, setDraftId] = useState(null);
-  const { drafts } = useSelector(({ deployed }) => deployed);
+  const { drafts } = useSelector(({ deployed }: IDeployedPipelineStore) => deployed);
   const namespace = getCurrentNamespace();
 
   const pipelineLink = window.getHydratorUrl({

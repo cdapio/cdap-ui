@@ -62,7 +62,12 @@ export const conditionTrueEndpointStyle = {
   overlays: [
     [
       'Label',
-      { label: 'Yes', id: 'yesLabel', location: [0.5, -0.55], cssClass: 'condition-label' },
+      {
+        label: 'Yes',
+        id: 'yesLabel',
+        location: [0.5, -0.55],
+        cssClass: 'condition-label',
+      },
     ],
   ],
 };
@@ -81,7 +86,15 @@ export const conditionFalseEndpointStyle = {
   cssClass: 'condition-endpoint condition-endpoint-false',
   isSource: true,
   overlays: [
-    ['Label', { label: 'No', id: 'noLabel', location: [0.5, -0.55], cssClass: 'condition-label' }],
+    [
+      'Label',
+      {
+        label: 'No',
+        id: 'noLabel',
+        location: [0.5, -0.55],
+        cssClass: 'condition-label',
+      },
+    ],
   ],
 };
 
@@ -123,7 +136,12 @@ export const defaultJsPlumbSettings = {
   ],
   Connector: [
     'Flowchart',
-    { stub: [10, 15], alwaysRespectStubs: true, cornerRadius: 20, midpoint: 0.2 },
+    {
+      stub: [10, 15],
+      alwaysRespectStubs: true,
+      cornerRadius: 20,
+      midpoint: 0.2,
+    },
   ],
   Container: 'dag-container',
   Endpoint: 'Dot',

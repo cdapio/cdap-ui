@@ -106,7 +106,10 @@ export function triggerNameReducer(oldstate, action) {
     case 'COMPUTE_PROFILE':
       return {
         ...oldstate,
-        computeProfile: { ...oldstate.computeProfile, ...action.computeProfile },
+        computeProfile: {
+          ...oldstate.computeProfile,
+          ...action.computeProfile,
+        },
         computeModalOpen: !oldstate.computeModalOpen,
       };
     default:

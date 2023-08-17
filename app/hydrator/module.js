@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+const defaults = require('../cdap/services/global-constants').HYDRATOR_DEFAULT_VALUES;
 
 angular.module(PKG.name + '.feature.hydrator', [
   PKG.name + '.commons'
@@ -24,4 +25,4 @@ angular.module(PKG.name + '.feature.hydrator', [
 
     binary: '{"type":"record","name":"etlSchemaBody","fields":[{"name":"body","type":"bytes"}]}'
   })
-  .constant('HYDRATOR_DEFAULT_VALUES', window.CaskCommon.HYDRATOR_DEFAULT_VALUES);
+  .constant('HYDRATOR_DEFAULT_VALUES', defaults);

@@ -46,8 +46,8 @@ export function bucketPlugins(plugins: IPlugin[]): Record<string, IPlugin[]> {
   Object.keys(bucket).forEach((pluginName) => {
     // sort reverse order (index 0 always latest version)
     bucket[pluginName] = bucket[pluginName].sort((plugin1, plugin2) => {
-      const version1 = new Version(plugin1.artifact.version);
-      const version2 = new Version(plugin2.artifact.version);
+      const version1: any = new Version(plugin1.artifact.version);
+      const version2: any = new Version(plugin2.artifact.version);
 
       if (version1.compareTo(version2) < 0) {
         return LOCATION.after;

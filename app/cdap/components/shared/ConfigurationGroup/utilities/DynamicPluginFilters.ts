@@ -62,13 +62,13 @@ function evaluateConditionObj(filter: IPropertyFilter, propertyValues: IProperty
   }
   switch (operator) {
     case CustomOperator.EQUALTO:
-      return propertyValues[property] === value;
+      return propertyValues[property!] === value;
     case CustomOperator.NOTEQUALTO:
-      return propertyValues[property] !== value;
+      return propertyValues[property!] !== value;
     case CustomOperator.EXISTS:
-      return propertyValues[property];
+      return propertyValues[property!];
     case CustomOperator.DOESNOTEXISTS:
-      return !propertyValues[property];
+      return !propertyValues[property!];
     default:
       return false;
   }
@@ -204,7 +204,7 @@ function getTypedPropertyValues(
       if (isMacro(value)) {
         return value;
       }
-      typedValues[property] = getValueFromBackendType(type, value);
+      typedValues[property] = getValueFromBackendType(type as string, value);
     });
   }
   return typedValues;
@@ -230,8 +230,8 @@ export function filterByCondition(
     filteredGroupConfiguration.map((group) => {
       return group.properties.map((prop) => prop.name);
     })
-  );
-  const filters: IPropertyFilter[] = widgetJSON ? widgetJSON.filters : [];
+  ) as string[];
+  const filters: IPropertyFilter[] = widgetJSON ? (widgetJSON.filters as IPropertyFilter[]) : [];
   // Iterate through all filters and hide those properties whose filter
   // condition is not true.
   const propertiesToHide = !filters
@@ -244,7 +244,7 @@ export function filterByCondition(
                 if (showConfig.type === PropertyShowConfigTypeEnums.GROUP) {
                   const configuationGroups = widgetJSON['configuration-groups'];
                   return configuationGroups
-                    .filter((group) => group.label === showConfig.name)
+                    ?.filter((group) => group.label === showConfig.name)
                     .map((group) =>
                       group.properties
                         .filter((property) => property['widget-category'] !== 'plugin')
@@ -269,22 +269,25 @@ export function filterByCondition(
           return [];
         })
       );
+
   propertiesToShow = difference(
     propertiesToShow,
-    propertiesToHide.map((p) => p.property)
-  );
+    propertiesToHide.map((p) => p?.property)
+  ) as string[];
+
   const propertiesToFilterMap = propertiesToHide.reduce(
-    (prev, curr) => ({ ...prev, [curr.property]: curr.filterName }),
+    (prev, curr) => ({ ...prev, [curr?.property as string]: curr?.filterName }),
     {}
   );
+
   return filteredGroupConfiguration
     .map((group) => {
       return {
         ...group,
         properties: group.properties.map((property) => {
-          const shouldShowProperty = propertiesToShow.indexOf(property.name) !== -1;
+          const shouldShowProperty = propertiesToShow.indexOf(property.name as string) !== -1;
           // We add the filter name for debugging purposes.
-          const filter = propertiesToFilterMap[property.name];
+          const filter = propertiesToFilterMap[property.name as string];
           return {
             ...property,
             show: shouldShowProperty,

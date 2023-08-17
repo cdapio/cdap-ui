@@ -18,11 +18,6 @@ import React from 'react';
 import StatusButton from './index';
 import { SUPPORT } from './constants';
 
-export default {
-  component: StatusButton,
-  title: 'StatusButton',
-};
-
 // TODO - sean: use more storybook functionality: withknobs, actions etc
 export const Success = () => <StatusButton status={SUPPORT.yes} />;
 
@@ -36,3 +31,8 @@ export const Error = () => (
 export const Partial = () => (
   <StatusButton status={SUPPORT.partial} message="This is only partially supported" />
 );
+
+export default {
+  component: StatusButton,
+  title: 'StatusButton',
+};
