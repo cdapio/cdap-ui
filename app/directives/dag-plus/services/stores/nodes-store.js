@@ -229,9 +229,9 @@ class DAGPlusPlusNodesStore {
 
   resetActiveNode() {
     this.state.activeNodeId = null;
-    angular.forEach(this.state.nodes, (node) => {
-      node.selected = false;
-    });
+    // angular.forEach(this.state.nodes, (node) => {
+    //   node.selected = false;
+    // });
     this.emitChange();
   }
 
