@@ -56,6 +56,7 @@ import { IComment } from 'components/AbstractWidget/Comment/CommentConstants';
 import IconSVG from 'components/shared/IconSVG';
 import { copyToClipBoard } from 'services/Clipboard';
 import { INodePosition, ISelectedElements } from './types';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface ICanvasProps {
   angularNodes: any;
@@ -222,6 +223,10 @@ const Canvas = ({
       return reactflowNode;
     });
   };
+  const {angularNodes2} = useSelector((state) => ({
+    angularNodes2: state.nodesStore.nodes
+  }))
+  const dispatch = useDispatch();
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -380,14 +385,17 @@ const Canvas = ({
   };
 
   const updateNodesUIPosition = (node: Node) => {
-    updateNodePositions({
-      id: node.data.node.id,
-      position: {
-        _uiPosition: {
-          top: node.position.y + 'px',
-          left: node.position.x + 'px',
+    dispatch({
+      type: 'UPDATE_NODE_UI_POSITION',
+      payload: {
+        id: node.data.node.id,
+        position: {
+          _uiPosition: {
+            top: node.position.y + 'px',
+            left: node.position.x + 'px',
+          },
         },
-      },
+      }
     });
   };
 
@@ -417,9 +425,9 @@ const Canvas = ({
 
   useEffect(() => {
     setNodes((nds) => {
-      return [].concat(getNodesForDisplay(getAngularNodes(), nds));
+      return [].concat(getNodesForDisplay(angularNodes2, nds));
     });
-  }, [JSON.stringify(angularNodes), previewMode, metricsData]);
+  }, [JSON.stringify(angularNodes2), previewMode, metricsData]);
 
   useEffect(() => {
     setEdges(() => {

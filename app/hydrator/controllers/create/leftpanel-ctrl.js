@@ -502,6 +502,12 @@ export class HydratorPlusPlusLeftPanelCtrl {
       };
     }
     this.DAGPlusPlusNodesActionsFactory.addNode(config);
+    this.ReactStores.dispatch({
+      type: 'ADD_NODE',
+      payload: {
+        config
+      }
+    })
   }
 }
 

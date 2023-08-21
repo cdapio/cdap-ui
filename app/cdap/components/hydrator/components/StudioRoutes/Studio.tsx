@@ -34,11 +34,11 @@ export interface IStudioCreateState {
 
 export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metadataExpanded}: IStudioCreateState) => {
   return (
-    <div>
+    <Provider store={configureStores}>
       <div className="react-version">
         <div className="canvas-wrapper">
           <div className="left-control">
-          <Provider store={configureStores}>
+          
             <LeftPanel
               onArtifactChange={leftPanelCtrl.onArtifactChangeV2}
               pluginsMap={leftPanelCtrl.pluginsMap}
@@ -51,7 +51,6 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metada
               isEdit={leftPanelCtrl.isEdit}
               createPluginTemplate={leftPanelCtrl.createPluginTemplateV2}
             />
-            </Provider>
           </div>
           <div className="top-panel">
             <TopPanel
@@ -156,6 +155,6 @@ export const Studio = ({leftPanelCtrl, topPanelCtrl, canvasCtrl, dagCtrl, metada
           </div>
         </div>
       </div>
-    </div>
+    </Provider>
   );
 };

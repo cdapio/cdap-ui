@@ -15,6 +15,7 @@
  */
 import { configureStore } from '@reduxjs/toolkit';
 import reduxThunk from 'redux-thunk';
+import { nodeReducer } from './DAGNodesStore';
 import { pluginReducer, extensionsReducer, artifactReducer } from './leftPanelStore';
 
 export const configureStores = configureStore({
@@ -22,6 +23,7 @@ export const configureStores = configureStore({
     artifact: artifactReducer,
     extensions: extensionsReducer,
     plugins: pluginReducer,
+    nodesStore: nodeReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: {
