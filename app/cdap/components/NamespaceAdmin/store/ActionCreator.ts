@@ -33,6 +33,7 @@ import { GLOBALS, SCOPES } from 'services/global-constants';
 import { Observable } from 'rxjs/Observable';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ConnectionsApi } from 'api/connections';
+import { ServiceAccountsApi } from 'api/serviceaccounts';
 import { ISourceControlManagementConfig } from '../SourceControlManagement/types';
 import { of } from 'rxjs/observable/of';
 
@@ -46,6 +47,7 @@ export function getNamespaceDetail(namespace) {
         description: res.description,
         exploreAsPrincipal: res.config['explore.as.principal'],
         schedulerQueueName: res.config['scheduler.queue.name'],
+        identity: res.identity,
       },
     });
   });
@@ -299,6 +301,60 @@ const getBodyForSubmit = (formState, validate = false) => {
     config: formState,
   };
 };
+
+export function getServiceAccounts(namespace?: string) {
+  const requestNamespace = namespace ? namespace : getCurrentNamespace();
+
+  ServiceAccountsApi.getServiceAccount({ namespace: requestNamespace }).subscribe(
+    (res) => {
+      Store.dispatch({
+        type: NamespaceAdminActions.setServiceAccounts,
+        payload: {
+          serviceAccounts: [res],
+        },
+      });
+    },
+    (err) => {
+      // Error 404 means that there is no repository configuration for this namespace
+      // and user needs to configure new. So refresh service accounts tab accordingly.
+      if (err.statusCode === 404) {
+        Store.dispatch({
+          type: NamespaceAdminActions.setServiceAccounts,
+          payload: {
+            serviceAccounts: [],
+          },
+        });
+      }
+    }
+  );
+}
+
+export function deleteServiceAccount() {
+  const params = {
+    namespace: getCurrentNamespace(),
+  };
+
+  return ServiceAccountsApi.deleteWorkloadIdentity(params).map(() => {
+    getServiceAccounts(getCurrentNamespace());
+  });
+}
+
+export function validateServiceAccount(reqObj: object) {
+  const params = {
+    namespace: getCurrentNamespace(),
+  };
+  return ServiceAccountsApi.validateWorkloadIdentity(params, reqObj);
+}
+
+export function addServiceAccount(reqObj: object) {
+  const params = {
+    namespace: getCurrentNamespace(),
+  };
+
+  return Observable.forkJoin(ServiceAccountsApi.createWorkloadIdentity(params, reqObj)).map(() =>
+    getServiceAccounts(getCurrentNamespace())
+  );
+}
 
 export function reset() {
   Store.dispatch({

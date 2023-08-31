@@ -5,6 +5,7 @@ commons:
   apply: Apply
   as: as
   back: Back
+  cancel: Cancel
   learnMore: Learn More
   gotIt: Ok, Got it.
   cookieBanner: This application uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
@@ -13,6 +14,7 @@ commons:
   clickhere: click here
   close: Close
   connectionSuccess: Successfully connected.
+  copyToClipboard: Copy to clipboard
   delete: Delete
   deprecated: Deprecated
   descriptionLabel: Description
@@ -96,6 +98,7 @@ commons:
   pipelines: Pipelines
   requiredFieldMissingMsg: Required field cannot be empty
   resource-center: Add entity
+  save: Save
   schemaLabel: Schema
   scope: Scope
   secondsShortLabel: secs
@@ -107,6 +110,7 @@ commons:
   then: Then
   tracker: Cask Tracker
   typeLabel: Type
+  validate: Validate
   when: When
   wrangler: Cask Wrangler
   yesLabel: Yes
@@ -3168,6 +3172,22 @@ features:
       symbolName: Symbol name
   ServiceEnableUtility:
     serviceNotFound: Cannot find {artifactName} artifact
+  ServiceAccounts:
+    addServiceAccount: Add service account
+    delete: Delete
+    deleteButtonText: Delete
+    cancelButtonText: Cancel
+    deleteConfirmation: Clicking Delete will remove *_{serviceaccount}_* from the default namespace. Are you sure you want to remove the service account?
+    deleteTitle: Delete service account
+    edit: Edit
+    editInputLabel: Pipeline design service account
+    failedToDelete: Unable to delete service account
+    failedToValidate: Service account validation failed
+    failedToSave: Failed to save the service account changes
+    helpTitle: Provided Google Service Accounts (GSA) will be leveraged as workload identity, more details on gcloud commands help ... 
+    helpContent: "Users for Kubernetes Service Account(KSA) internally to enhance security and access control in the namespace to perform pipeline design-time operations (pipeline preview, Wrangler, pipeline validation). You need to grant Workload Identity User permission to the KSA which can be done using the gcloud command : "
+    inputHelperText: Provide details of the service account for authorization
+    serviceAccount : Service account
   SourceControlManagement:
     configModal:
       auth:

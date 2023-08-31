@@ -15,24 +15,23 @@
  */
 
 import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
-import isObject from 'lodash/isObject';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import IconButton from '@material-ui/core/IconButton';
-import { StyledBox, StyledDialog, StyledAlert, CopyContentBox } from './styles';
+import { StyledDialog } from './styles';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
-import { copyToClipBoard } from 'services/Clipboard';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { Status } from './Status';
 
 export enum SeverityType {
   SUCCESS = 'success',
   INFO = 'info',
   WARNING = 'warning',
   ERROR = 'error',
+}
+
+export interface IExtendedMessage {
+  response: string;
 }
 
 interface IConfirmDialogProps {
@@ -46,7 +45,7 @@ interface IConfirmDialogProps {
   confirmationText?: string | ReactNode;
   severity?: SeverityType;
   statusMessage?: string | ReactNode;
-  extendedMessage?: { response: string };
+  extendedMessage?: IExtendedMessage | string;
   disableAction?: boolean;
   copyableExtendedMessage?: string | ReactNode;
 }
@@ -66,70 +65,18 @@ export const ConfirmDialog = ({
   disableAction,
   copyableExtendedMessage,
 }: IConfirmDialogProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    setIsExpanded(false);
-  }, [statusMessage]);
-
-  const showStatusMessage = () => {
-    if (statusMessage) {
-      return (
-        <StyledAlert severity={severity}>
-          {statusMessage}
-          {getExtendedMessage()}
-        </StyledAlert>
-      );
-    }
-  };
-
-  const handleToggleExtendedMessage = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const getExtendedMessage = () => {
-    if (extendedMessage || copyableExtendedMessage) {
-      return (
-        <>
-          <IconButton
-            size="small"
-            onClick={handleToggleExtendedMessage}
-            color="inherit"
-            title={isExpanded ? 'Hide details' : 'Show details'}
-          >
-            {isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-          {isExpanded && (
-            <StyledBox>
-              {isObject(extendedMessage) ? (
-                <pre>{extendedMessage.response}</pre>
-              ) : (
-                <div>{extendedMessage}</div>
-              )}
-              {copyableExtendedMessage && (
-                <CopyContentBox>
-                  <IconButton
-                    onClick={() => copyToClipBoard(copyableExtendedMessage)}
-                    size="small"
-                    style={{ float: 'right' }}
-                    title="Copy to clipboard"
-                  >
-                    <FileCopyOutlinedIcon />
-                  </IconButton>
-                  <pre>{copyableExtendedMessage}</pre>
-                </CopyContentBox>
-              )}
-            </StyledBox>
-          )}
-        </>
-      );
-    }
-  };
-
   return (
     <StyledDialog open={isOpen} fullWidth>
       <DialogTitle>{headerTitle}</DialogTitle>
-      {showStatusMessage()}
+      {statusMessage && (
+        <Status
+          severity={severity}
+          statusMessage={statusMessage}
+          extendedMessage={extendedMessage}
+          copyableExtendedMessage={copyableExtendedMessage}
+          key={statusMessage.toString()}
+        ></Status>
+      )}
       <DialogContent>
         {confirmationText}
         {confirmationElem}

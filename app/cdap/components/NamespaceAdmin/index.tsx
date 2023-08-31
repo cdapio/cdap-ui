@@ -24,6 +24,7 @@ import {
   getDrivers,
   getConnections,
   getAndSetSourceControlManagement,
+  getServiceAccounts,
 } from 'components/NamespaceAdmin/store/ActionCreator';
 import { Provider } from 'react-redux';
 import Store from 'components/NamespaceAdmin/store';
@@ -60,6 +61,7 @@ const NamespaceAdmin = () => {
     getConnections(namespace);
     getProfiles(namespace);
     getAndSetSourceControlManagement(namespace);
+    getServiceAccounts(namespace);
 
     eventEmitter.on(globalEvents.NSPREFERENCESSAVED, getPreferences);
     eventEmitter.on(globalEvents.ARTIFACTUPLOAD, getDrivers);

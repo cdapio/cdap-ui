@@ -26,6 +26,7 @@ export const NamespaceAdminActions = {
   setPreferences: 'SET_PREFERENCES',
   setDrivers: 'SET_DRIVERS',
   setConnections: 'SET_CONNECTIONS',
+  setServiceAccounts: 'SET_SERVICE_ACCOUNTS',
   setSourceControlManagementConfig: 'SET_SOURCE_CONTROL_MANAGEMENT_CONFIG',
   reset: 'NAMESPACE_ADMIN_RESET',
 };
@@ -61,6 +62,11 @@ interface IPlugin {
   type: string;
 }
 
+interface IServiceAccount {
+  identity: string;
+  serviceAccount: string;
+}
+
 // TODO: this should probably be under the Connections component
 export interface IConnection {
   connectionType: string;
@@ -86,6 +92,8 @@ interface INamespaceAdmin {
   drivers: IDriver[];
   connections: IConnection[];
   sourceControlManagementConfig: ISourceControlManagementConfig;
+  serviceAccounts: IServiceAccount[];
+  identity: string;
 }
 
 type INamespaceAdminState = Partial<INamespaceAdmin>;
@@ -103,6 +111,8 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   drivers: [],
   connections: [],
   sourceControlManagementConfig: null,
+  serviceAccounts: [],
+  identity: null,
 };
 
 const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
@@ -146,6 +156,11 @@ const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialSta
       return {
         ...state,
         sourceControlManagementConfig: action.payload.sourceControlManagementConfig,
+      };
+    case NamespaceAdminActions.setServiceAccounts:
+      return {
+        ...state,
+        serviceAccounts: action.payload.serviceAccounts,
       };
     case NamespaceAdminActions.reset:
       return {
