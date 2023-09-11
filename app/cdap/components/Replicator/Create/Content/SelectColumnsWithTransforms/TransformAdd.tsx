@@ -32,7 +32,7 @@ export default function TransformAddButton({
   // todo replace this with a useReducer
   const [anchorEl, setAnchorEl] = useState(null);
   const [subMenuAnchorEl, setSubMenuAnchorEl] = useState(null);
-  const [directive, setDirective] = useState(null);
+  const [directive, setDirective] = useState<'tink' | 'rename' | 'mask' | null>(null);
   const [directiveText, setDirectiveText] = useState('');
   const [maskAnchorEl, setMaskAnchorEl] = useState(null);
   const maskOpen = !!maskAnchorEl;
@@ -46,9 +46,9 @@ export default function TransformAddButton({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClick = (event) => {
-    setDirective(event.currentTarget.innerText);
-    setSubMenuAnchorEl(event.currentTarget);
+  const handleMenuClick = (directive: 'tink' | 'rename' | 'mask') => {
+    // set the type of directive we're using so add to transforms knows the context
+    setDirective(directive);
   };
 
   const handleClose = () => {
@@ -86,9 +86,9 @@ export default function TransformAddButton({
       directive: directiveText,
     };
 
-    if (directive.toLowerCase() === 'tink') {
+    if (directive === 'tink') {
       fullDirective = addTinkToTransforms(transformInfo);
-    } else if (directive === 'Rename') {
+    } else if (directive === 'rename') {
       fullDirective = addRenameToTransforms(transformInfo);
     } else {
       fullDirective = addMaskToTransforms(transformInfo);
@@ -135,7 +135,10 @@ export default function TransformAddButton({
           dense: true,
         }}
       >
-        <MenuItem onClick={handleMenuClick}>
+        <MenuItem onClick={(event) => {
+          handleMenuClick('rename');
+          setSubMenuAnchorEl(event.currentTarget);
+        }}>
           Rename <ArrowRight />
         </MenuItem>
         <MenuItem disabled={!isString} onClick={handleMaskOpen}>
@@ -163,11 +166,17 @@ export default function TransformAddButton({
           <MenuItem disabled={!isString} onClick={() => handleSetMaskLast(4)}>
             Show last 4
           </MenuItem>
-          <MenuItem disabled={!isString} onClick={handleMenuClick}>
+          <MenuItem disabled={!isString} onClick={(event) => {
+            handleMenuClick('mask');
+            setSubMenuAnchorEl(event.currentTarget);
+          }}>
             Custom <ArrowRight />
           </MenuItem>
           {tinkEnabled && (
-            <MenuItem onClick={handleMenuClick}>
+            <MenuItem onClick={(event) => {
+              handleMenuClick('tink');
+              setSubMenuAnchorEl(event.currentTarget);
+            }}>
               TINK <ArrowRight />
             </MenuItem>
           )}
@@ -194,7 +203,7 @@ export default function TransformAddButton({
           <TextField
             size="small"
             id={`${row.name}-outlined-multiline-flexible-directive-text`}
-            label={directive === 'Custom' ? 'Mask (ie: right * 4)' : directive}
+            label={directive === 'mask' ? 'Mask (ie: right * 4)' : directive}
             variant="outlined"
             value={directiveText}
             onChange={handleDirectiveChange}
