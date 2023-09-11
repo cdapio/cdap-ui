@@ -46,9 +46,9 @@ export default function TransformAddButton({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClick = (directive: 'tink' | 'rename' | 'mask') => {
+  const handleMenuClick = (directiveType: 'tink' | 'rename' | 'mask') => {
     // set the type of directive we're using so add to transforms knows the context
-    setDirective(directive);
+    setDirective(directiveType);
   };
 
   const handleClose = () => {
