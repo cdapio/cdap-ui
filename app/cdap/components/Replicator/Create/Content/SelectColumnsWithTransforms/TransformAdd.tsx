@@ -86,7 +86,7 @@ export default function TransformAddButton({
       directive: directiveText,
     };
 
-    if (directive === 'tink') {
+    if (directive.toLowerCase() === 'tink') {
       fullDirective = addTinkToTransforms(transformInfo);
     } else if (directive === 'Rename') {
       fullDirective = addRenameToTransforms(transformInfo);
