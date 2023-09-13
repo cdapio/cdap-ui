@@ -79,6 +79,7 @@ commons:
       singular: Workflow
   export: Export
   formatLabel: Format
+  hideDetails: Hide details
   hydrator: Cask Hydrator
   keyValPairs:
     keyLabel: Key
@@ -100,6 +101,7 @@ commons:
   secondsShortLabel: secs
   secShortLabel: sec
   showAll: Show all pipelines
+  showDetails: Show details
   showFailed: Show failed only
   status: Status
   then: Then
