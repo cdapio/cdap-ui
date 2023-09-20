@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { ReactElement, ReactNode, useState } from 'react';
+import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
 import isObject from 'lodash/isObject';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -23,8 +23,17 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import IconButton from '@material-ui/core/IconButton';
-import { StyledBox, StyledDialog, StyledAlert } from './styles';
+import { StyledBox, StyledDialog, StyledAlert, CopyContentBox } from './styles';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
+import { copyToClipBoard } from 'services/Clipboard';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+
+export enum SeverityType {
+  SUCCESS = 'success',
+  INFO = 'info',
+  WARNING = 'warning',
+  ERROR = 'error',
+}
 
 interface IConfirmDialogProps {
   headerTitle: string | ReactNode;
@@ -35,10 +44,11 @@ interface IConfirmDialogProps {
   confirmFn: (arg0: any) => void;
   confirmationElem?: string | ReactNode | ReactElement;
   confirmationText?: string | ReactNode;
-  severity?: 'success' | 'info' | 'warning' | 'error';
+  severity?: SeverityType;
   statusMessage?: string | ReactNode;
   extendedMessage?: { response: string };
   disableAction?: boolean;
+  copyableExtendedMessage?: string | ReactNode;
 }
 
 export const ConfirmDialog = ({
@@ -54,8 +64,13 @@ export const ConfirmDialog = ({
   statusMessage,
   extendedMessage,
   disableAction,
+  copyableExtendedMessage,
 }: IConfirmDialogProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    setIsExpanded(false);
+  }, [statusMessage]);
 
   const showStatusMessage = () => {
     if (statusMessage) {
@@ -73,7 +88,7 @@ export const ConfirmDialog = ({
   };
 
   const getExtendedMessage = () => {
-    if (extendedMessage) {
+    if (extendedMessage || copyableExtendedMessage) {
       return (
         <>
           <IconButton
@@ -89,7 +104,20 @@ export const ConfirmDialog = ({
               {isObject(extendedMessage) ? (
                 <pre>{extendedMessage.response}</pre>
               ) : (
-                <pre>{extendedMessage}</pre>
+                <div>{extendedMessage}</div>
+              )}
+              {copyableExtendedMessage && (
+                <CopyContentBox>
+                  <IconButton
+                    onClick={() => copyToClipBoard(copyableExtendedMessage)}
+                    size="small"
+                    style={{ float: 'right' }}
+                    title="Copy to clipboard"
+                  >
+                    <FileCopyOutlinedIcon />
+                  </IconButton>
+                  <pre>{copyableExtendedMessage}</pre>
+                </CopyContentBox>
               )}
             </StyledBox>
           )}
