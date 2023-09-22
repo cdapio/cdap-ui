@@ -50,11 +50,25 @@ def enable_features(path):
             file.seek(0)
             json.dump(file_data, file, indent = 2)
 
+def get_release_version():
+    tree = ET.parse(os.path.join('..', 'pom.xml'))
+    root = tree.getroot()
+    for child in root:
+        if 'parent' in child.tag:
+            for child2 in child:
+                if 'version' in child2.tag:
+                    return child2.text
+    print("No version tag found in the parent tag of the pom.xml file")
+
 # Start CDAP sandbox
 print("Downloading CDAP sandbox")
 with open('sandbox_version.json') as sandbox_info_file:
     sandbox_info = json.load(sandbox_info_file)
-sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/{}/cdap-sandbox-{}.zip".format(sandbox_info["release"], sandbox_info["version"])
+version = get_release_version()
+release = sandbox_info['release']
+if release != 'latest':
+    release = 'v' + version
+sandbox_url = "https://github.com/cdapio/cdap-build/releases/download/{}/cdap-sandbox-{}.zip".format(release, version)
 sandbox_dir = sandbox_url.split("/")[-1].split(".zip")[0]
 r = requests.get(sandbox_url)
 z = zipfile.ZipFile(io.BytesIO(r.content))
@@ -77,4 +91,3 @@ PID = subprocess.run(get_node_PID_cmd, shell=True, capture_output=True, text=Tru
 kill_node_process_cmd = "kill {}".format(PID)
 process = subprocess.run(kill_node_process_cmd, shell=True)
 assert process.returncode == 0
-
