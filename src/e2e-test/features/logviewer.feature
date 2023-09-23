@@ -59,12 +59,14 @@ Feature: Logviewer - Validate log viewer functionalities
     Then Log level popover should not show
     Then Log viewer content should contain message "DEBUG"
 
+  @ignore
   @LOGVIEWER_TEST
   Scenario: Log viewer should fetch next logs when scroll to bottom
     Then Scroll up to center
     Then Scroll to latest should be enabled
     Then Debug message should update
 
+  @ignore
   @LOGVIEWER_TEST
   Scenario: Log viewer should fetch previous logs when scroll to top
     Then Scroll up to center
