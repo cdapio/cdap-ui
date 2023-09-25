@@ -20,6 +20,11 @@ import Alert from '@material-ui/lab/Alert';
 import Box from '@material-ui/core/Box';
 
 export const StyledDialog = styled(Dialog)`
+  & .MuiDialogTitle-root {
+    h2 {
+      font-size: 24px;
+    }
+  }
   & .MuiDialogActions-root {
     margin-right: 16px;
     & .MuiButton-label {
@@ -47,4 +52,11 @@ export const StyledBox = styled(Box)`
     border-radius: 0;
     padding: 0px 8px;
   }
+`;
+
+export const CopyContentBox = styled(Box)`
+  background-color: #f1f3f4;
+  border-radius: 3px;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
 `;
