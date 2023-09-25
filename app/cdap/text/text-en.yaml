@@ -3321,6 +3321,7 @@ features:
     title: Warning
   Wizard:
     Add-Namespace:
+      callToActionAddServiceAccounts: Add service account to '{namespaceId}'
       callToAction:
         primary: Switch to '{namespaceId}'
       headerlabel: Add namespace
