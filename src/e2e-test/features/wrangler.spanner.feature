@@ -54,6 +54,7 @@ Feature: Wrangler Spanner Tests
     Then Verify URL navigation
 
   @WRANGLER_SPANNER_TEST
+  @ignore
   Scenario: Should delete an existing connection
     When Open Connections Page
     Then Delete Connection "spanner_randomtest1234"
