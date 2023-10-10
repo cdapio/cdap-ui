@@ -19,3 +19,4 @@ import T from 'i18n-react';
 T.setTexts(require('./text/text-en.yaml'));
 
 require('./main.js');
+// placebo effect branch
