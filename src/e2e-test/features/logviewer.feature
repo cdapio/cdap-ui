@@ -17,11 +17,14 @@
 @Integration_Tests
 Feature: Logviewer - Validate log viewer functionalities
 
-  @LOGVIEWER_TEST
-  Scenario: Deploy and run pipeline till complete
+  Background: Deploy and run pipeline
     When Deploy and test pipeline "logs_generator" with timestamp with pipeline JSON file "logs_generator.json"
     Then Run the pipeline
     Then Deployed pipeline status is "Running"
+
+  @LOGVIEWER_TEST
+  Scenario: Deploy and run pipeline till complete
+    Then Deployed pipeline status is "Succeeded"
 
   @LOGVIEWER_TEST
   Scenario: Log viewer should show
@@ -35,6 +38,7 @@ Feature: Logviewer - Validate log viewer functionalities
 
   @LOGVIEWER_TEST
   Scenario: Log level popover should work
+    Then Click on log viewer button
     Then Click on log level toggle
     Then Log level "ERROR" should exist
     Then Log level "WARN" should exist
@@ -50,6 +54,7 @@ Feature: Logviewer - Validate log viewer functionalities
 
   @LOGVIEWER_TEST
   Scenario: Log viewer content should contain correct information
+    Then Click on log viewer button
     Then Log viewer content should contain message "is started by user"
     Then Log viewer content should not contain message "This is a WARN"
     Then Click on advanced logs
@@ -61,12 +66,21 @@ Feature: Logviewer - Validate log viewer functionalities
 
   @LOGVIEWER_TEST
   Scenario: Log viewer should fetch next logs when scroll to bottom
+    Then Click on log viewer button
+    Then Click on advanced logs
+    Then Click on log level toggle
+    Then Click on log level "TRACE"
     Then Scroll up to center
     Then Scroll to latest should be enabled
     Then Debug message should update
 
   @LOGVIEWER_TEST
   Scenario: Log viewer should fetch previous logs when scroll to top
+    Then Deployed pipeline status is "Succeeded"
+    Then Click on log viewer button
+    Then Click on advanced logs
+    Then Click on log level toggle
+    Then Click on log level "TRACE"
     Then Scroll up to center
     Then Click on scroll to latest button
     Then Previous logs should show

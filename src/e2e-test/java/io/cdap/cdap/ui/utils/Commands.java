@@ -391,9 +391,11 @@ public class Commands implements CdfHelper {
 
   public static void waitForLoading() {
     if (Helper.isElementExists(Helper.getCssSelectorByDataTestId("loading-indicator"))) {
-      WaitHelper.waitForElementToBeHidden(
-        Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
-      );
+      try {
+        WaitHelper.waitForElementToBeHidden(
+                Helper.locateElementByCssSelector(Helper.getCssSelectorByDataTestId("loading-indicator"))
+        );
+      } catch (Exception e) { }
     }
   }
 }

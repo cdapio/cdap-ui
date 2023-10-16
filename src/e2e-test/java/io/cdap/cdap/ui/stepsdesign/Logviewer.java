@@ -28,7 +28,9 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.List;
 
@@ -170,6 +172,17 @@ public class Logviewer {
     WebElement element = Helper.locateElementByCssSelector(
       Helper.getCssSelectorByDataTestId("log-viewer-content")
     );
+
+    SeleniumDriver.getWaitDriver().until(new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver driver) {
+        Integer scrollHeight = Integer.valueOf(element.getDomProperty("scrollHeight"));
+        String heightInPixels = element.getCssValue("height");
+        Integer height = Integer.valueOf(heightInPixels.substring(0, heightInPixels.length() - 2));
+
+        return scrollHeight > height + 50;
+      }});
+
     js.executeScript("arguments[0].scrollBy(0, -1500);", element);
     Commands.waitForLoading();
   }
