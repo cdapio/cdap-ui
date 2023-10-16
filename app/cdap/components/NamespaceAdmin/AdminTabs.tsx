@@ -29,6 +29,7 @@ import Tab from '@material-ui/core/Tab';
 import TabContext from '@material-ui/lab/TabContext';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
+import ServiceAccounts from './ServiceAccounts';
 
 const StyledTabs = styled(Tabs)`
   border-bottom: 1px solid #e8e8e8;
@@ -73,6 +74,9 @@ export const AdminTabs = () => {
   const sourceControlManagementEnabled = useFeatureFlagDefaultFalse(
     'source.control.management.git.enabled'
   );
+  const namespacedServiceAccountsEnabled = useFeatureFlagDefaultFalse(
+    'feature.namespaced.service.accounts.enabled'
+  );
 
   return (
     <>
@@ -91,6 +95,13 @@ export const AdminTabs = () => {
               value={`${baseNSPath}/connections`}
             />
             <LinkTab label="Drivers" to={`${baseNSPath}/drivers`} value={`${baseNSPath}/drivers`} />
+            {namespacedServiceAccountsEnabled && (
+              <LinkTab
+                label="Service Accounts"
+                to={`${baseNSPath}/serviceaccounts`}
+                value={`${baseNSPath}/serviceaccounts`}
+              />
+            )}
             {sourceControlManagementEnabled && (
               <LinkTab
                 label="Source Control Management"
@@ -108,6 +119,9 @@ export const AdminTabs = () => {
           <Route exact path={`${basepath}/connections`} component={Connections} />
           <Route exact path={`${basepath}/drivers`} component={Drivers} />
           <Route exact path={`${basepath}/scm`} component={SourceControlManagement} />
+          {namespacedServiceAccountsEnabled && (
+            <Route exact path={`${basepath}/serviceaccounts`} component={ServiceAccounts} />
+          )}
         </Switch>
       </div>
     </>
