@@ -112,7 +112,6 @@ export default class AddNamespaceWizard extends Component {
       namespaceId: newNamespaceId,
     });
     let buttonLabel = T.translate(`${PREFIX}.callToAction`, { namespaceId: newNamespaceId });
-    let linkLabel = T.translate('features.Wizard.GoToHomePage');
     this.setState({
       successInfo: {
         message,
@@ -120,13 +119,42 @@ export default class AddNamespaceWizard extends Component {
         buttonUrl: window.getAbsUIUrl({
           namespaceId: newNamespaceId,
         }),
-        linkLabel,
-        linkUrl: `${window.getAbsUIUrl({
-          namespaceId: currentNamespaceId,
-        })}/control`,
+        links: this.getLinks(newNamespaceId, currentNamespaceId),
       },
     });
   }
+
+  isNamespacedServiceAccountsEnabled() {
+    return (
+      window.CDAP_CONFIG.featureFlags['feature.namespaced.service.accounts.enabled'] === 'true'
+    );
+  }
+
+  getLinks(newNamespaceId, currentNamespaceId) {
+    let links = [];
+    if (this.isNamespacedServiceAccountsEnabled()) {
+      links.push({
+        linkLabel: T.translate(`${PREFIX}.callToActionAddServiceAccounts`, {
+          namespaceId: newNamespaceId,
+        }),
+        linkUrl: `${window.getAbsUIUrl({
+          namespaceId: newNamespaceId,
+        })}/details/serviceaccounts`,
+      });
+    }
+    links.push(this.getHomePageLinkObject(currentNamespaceId));
+    return links;
+  }
+
+  getHomePageLinkObject(currentNamespaceId) {
+    return {
+      linkLabel: T.translate('features.Wizard.GoToHomePage'),
+      linkUrl: `${window.getAbsUIUrl({
+        namespaceId: currentNamespaceId,
+      })}/control`,
+    };
+  }
+
   render() {
     return (
       <div>
