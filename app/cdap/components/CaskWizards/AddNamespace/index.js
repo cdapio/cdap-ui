@@ -126,7 +126,7 @@ export default class AddNamespaceWizard extends Component {
 
   isNamespacedServiceAccountsEnabled() {
     return (
-      window.CDAP_CONFIG.featureFlags['feature.namespaced.service.accounts.enabled'] === 'true'
+      window.CDAP_CONFIG.featureFlags['namespaced.service.accounts.enabled'] === 'true'
     );
   }
 

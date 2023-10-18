@@ -75,7 +75,7 @@ export const AdminTabs = () => {
     'source.control.management.git.enabled'
   );
   const namespacedServiceAccountsEnabled = useFeatureFlagDefaultFalse(
-    'feature.namespaced.service.accounts.enabled'
+    'namespaced.service.accounts.enabled'
   );
 
   return (
