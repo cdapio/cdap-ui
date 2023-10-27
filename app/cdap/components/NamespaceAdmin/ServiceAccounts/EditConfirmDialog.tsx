@@ -66,10 +66,7 @@ const getGcloudCommand = ({
   identity = '${IDENTITY}',
   gsaEmail = '${GSA_EMAIL}',
 }): string =>
-  `gcloud iam service-accounts add-iam-policy-binding 
-      --role roles/iam.workloadIdentityUser 
-     --member "serviceAccount:${tenantProjectId}.svc.id.goog[default/${identity}]"
-     ${gsaEmail}`;
+  `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:${tenantProjectId}.svc.id.goog[default/${identity}]" ${gsaEmail}`;
 
 export const EditConfirmDialog = ({
   selectedServiceAcccount,
@@ -124,6 +121,12 @@ export const EditConfirmDialog = ({
     }
   };
 
+  const showHelp = () => {
+    setSaveStatus(SeverityType.INFO);
+    setSaveStatusMsg(T.translate(`${PREFIX}.helpTitle`));
+    setSaveStatusDetails(T.translate(`${PREFIX}.helpContent`).toString());
+  };
+
   const getEditDialogContent = () => {
     return (
       <StyledTextField
@@ -136,6 +139,10 @@ export const EditConfirmDialog = ({
         color="primary"
         onChange={(ev) => {
           setServiceAccountInputValue(ev.target.value);
+          // this check is to show help again when user changes the input after getting error.
+          if (saveStatus !== SeverityType.INFO) {
+            showHelp();
+          }
         }}
       />
     );
