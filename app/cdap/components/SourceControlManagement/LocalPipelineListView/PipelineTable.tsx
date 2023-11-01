@@ -38,6 +38,7 @@ interface IRepositoryPipelineTableProps {
   selectedPipelines: string[];
   showFailedOnly: boolean;
   enableMultipleSelection?: boolean;
+  disabled?: boolean;
 }
 
 export const LocalPipelineTable = ({
@@ -45,10 +46,15 @@ export const LocalPipelineTable = ({
   selectedPipelines,
   showFailedOnly,
   enableMultipleSelection = false,
+  disabled = false,
 }: IRepositoryPipelineTableProps) => {
   const isSelected = (name: string) => selectedPipelines.indexOf(name) !== -1;
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) {
+      return;
+    }
+
     if (event.target.checked) {
       const allSelected = localPipelines.map((pipeline) => pipeline.name);
       setSelectedPipelines(allSelected);
@@ -58,6 +64,10 @@ export const LocalPipelineTable = ({
   };
 
   const handleClick = (event: React.MouseEvent, name: string) => {
+    if (disabled) {
+      return;
+    }
+
     if (enableMultipleSelection) {
       handleMultipleSelection(name);
       return;
@@ -101,6 +111,7 @@ export const LocalPipelineTable = ({
                   }
                   checked={selectedPipelines.length === localPipelines.length}
                   onChange={handleSelectAllClick}
+                  disabled={disabled}
                 />
               )}
             </TableCell>
@@ -131,9 +142,10 @@ export const LocalPipelineTable = ({
                 selected={isPipelineSelected}
                 onClick={(e) => handleClick(e, pipeline.name)}
                 data-testid={`local-${pipeline.name}`}
+                disabled={disabled}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox color="primary" checked={isPipelineSelected} />
+                  <Checkbox color="primary" checked={isPipelineSelected} disabled={disabled} />
                 </TableCell>
                 <StatusCell
                   data-testid={
