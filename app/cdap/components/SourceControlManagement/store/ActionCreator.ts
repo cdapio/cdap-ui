@@ -20,10 +20,16 @@ import { catchError, concatMap, map } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { MyPipelineApi } from 'api/pipeline';
 import { BATCH_PIPELINE_TYPE } from 'services/helpers';
-import SourceControlManagementSyncStore, { PullFromGitActions, PushToGitActions } from '.';
+import SourceControlManagementSyncStore, {
+  OperationRunActions,
+  PullFromGitActions,
+  PushToGitActions,
+} from '.';
 import { SourceControlApi } from 'api/sourcecontrol';
-import { IPipeline, IPushResponse, IRepositoryPipeline } from '../types';
+import { LongRunningOperationApi } from 'api/longRunningOperation';
+import { IPipeline, IPushResponse, IRepositoryPipeline, IOperationRun } from '../types';
 import { SUPPORT } from 'components/StatusButton/constants';
+import { compareTimeInstant } from '../helpers';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -111,6 +117,35 @@ export const pushSelectedPipelines = (namespace, apps, payload, loadingMessageDi
           return of({ message: err.message, name: appId, status: SUPPORT.no });
         })
       );
+    })
+  );
+};
+
+export const pushMultipleSelectedPipelines = (
+  namespace,
+  apps,
+  payload,
+  loadingMessageDispatcher: (message: string) => void
+) => {
+  loadingMessageDispatcher(
+    T.translate(`${PREFIX}.push.pushAppMessageMulti`, { n: apps.length }).toString()
+  );
+  return SourceControlApi.pushMultiple({ namespace }, { ...payload, apps }).pipe(
+    map((res: IOperationRun | string) => {
+      loadingMessageDispatcher(null);
+      if (typeof res === 'string') {
+        return { message: res, status: SUPPORT.no };
+      }
+
+      setLatestOperation(namespace, res);
+      return {
+        message: null,
+        resources: res.metadata?.resources,
+        status: SUPPORT.yes,
+      };
+    }),
+    catchError((err) => {
+      return of({ message: err.message, status: SUPPORT.no });
     })
   );
 };
@@ -280,8 +315,120 @@ export const pullAndDeploySelectedRemotePipelines = (
   );
 };
 
+export const pullAndDeployMultipleSelectedRemotePipelines = (
+  namespace,
+  apps: string[],
+  loadingMessageDispatcher: (message: string) => void
+) => {
+  loadingMessageDispatcher(T.translate(`${PREFIX}.pull.pullAppMessageMulti`).toString());
+  return SourceControlApi.pullMultiple({ namespace }, { apps }).pipe(
+    map((res: IOperationRun | string) => {
+      if (typeof res === 'string') {
+        return { message: res, status: SUPPORT.no };
+      }
+
+      setLatestOperation(namespace, res);
+      return {
+        message: null,
+        resources: res.metadata?.resources,
+        status: SUPPORT.yes,
+      };
+    }),
+    catchError((err) => {
+      return of({ message: err.message, status: SUPPORT.no });
+    })
+  );
+};
+
 export const resetRemote = () => {
   SourceControlManagementSyncStore.dispatch({
     type: PullFromGitActions.reset,
+  });
+};
+
+export const setLatestOperation = (namespace: string, operation: IOperationRun) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: OperationRunActions.setLatestOperation,
+    payload: operation,
+  });
+
+  if (operation.done) {
+    return;
+  }
+
+  const pollOperationStatus = LongRunningOperationApi.pollOperation({
+    namespace,
+    operationId: operation.id,
+  }).subscribe((res: IOperationRun) => {
+    if (res.done) {
+      pollOperationStatus.unsubscribe();
+
+      SourceControlManagementSyncStore.dispatch({
+        type: OperationRunActions.setLatestOperation,
+        payload: res,
+      });
+    }
+  });
+};
+
+export const unsetLatestOperation = (operation: IOperationRun) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: OperationRunActions.unsetLatestOperation,
+  });
+};
+
+export const fetchLatestPullOperation = (namespace: string) => {
+  const currentLatest = SourceControlManagementSyncStore.getState().operationRun.operation;
+  return LongRunningOperationApi.getLatestPull({
+    namespace,
+  }).pipe(
+    map((res: { operations: IOperationRun[] }) => {
+      if (res.operations.length < 1) {
+        return;
+      }
+      const operation = res.operations[0];
+      if (
+        !currentLatest ||
+        compareTimeInstant(operation.metadata.createTime, currentLatest.metadata.createTime) > 0
+      ) {
+        setLatestOperation(namespace, operation);
+      }
+    })
+  );
+};
+
+export const fetchLatestPushOperation = (namespace: string) => {
+  const currentLatest = SourceControlManagementSyncStore.getState().operationRun.operation;
+  return LongRunningOperationApi.getLatestPush({
+    namespace,
+  }).pipe(
+    map((res: { operations: IOperationRun[] }) => {
+      if (res.operations.length < 1) {
+        return;
+      }
+      const operation = res.operations[0];
+      if (
+        !currentLatest ||
+        compareTimeInstant(operation.metadata.createTime, currentLatest.metadata.createTime) > 0
+      ) {
+        setLatestOperation(namespace, operation);
+      }
+    })
+  );
+};
+
+export const fetchLatestOperation = (namespace: string) => {
+  fetchLatestPullOperation(namespace).subscribe(() => {
+    fetchLatestPushOperation(namespace).subscribe();
+  });
+};
+
+export const stopOperation = (namespace: string, operation: IOperationRun) => () => {
+  LongRunningOperationApi.stopOperation({
+    namespace,
+    operationId: operation.id,
+  }).subscribe((res) => {
+    // no op, as it's an asynchronous operation.
+    // The operation status will be updated by the ongoing poll for the operation.
   });
 };

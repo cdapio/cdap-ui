@@ -24,6 +24,7 @@ import styled from 'styled-components';
 import T from 'i18n-react';
 import { RemotePipelineListView } from './RemotePipelineListView';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -64,9 +65,11 @@ const SourceControlManagementSyncView = () => {
           <Tab data-testid="remote-pipeline-tab" label={T.translate(`${PREFIX}.pull.tab`)} />
         </Tabs>
       </StyledDiv>
-      <StyledDiv>
-        {tabIndex === 0 ? <LocalPipelineListView /> : <RemotePipelineListView />}
-      </StyledDiv>
+      <FeatureProvider>
+        <StyledDiv>
+          {tabIndex === 0 ? <LocalPipelineListView /> : <RemotePipelineListView />}
+        </StyledDiv>
+      </FeatureProvider>
     </Provider>
   );
 };

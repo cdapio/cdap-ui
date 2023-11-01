@@ -20,6 +20,7 @@ import Popover from 'components/shared/Popover';
 
 export const TableBox = styled(TableContainer)`
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
+  margin-top: 10px;
   margin-bottom: 30px;
   max-height: calc(80vh - 200px);
   min-height: calc(80vh - 300px);
@@ -41,6 +42,10 @@ export const StyledPopover = styled(Popover)`
 `;
 
 export const StyledTableRow = styled(TableRow)`
+  .MuiTableCell-body {
+    ${(props) => (props.disabled ? `color: ${props.theme.palette.grey[300]};` : '')}
+  }
+
   &&.Mui-selected {
     background-color: ${(props) => props.theme.palette.blue[500]};
   }
@@ -72,4 +77,8 @@ export const StyledSelectionStatusDiv = styled.div`
 
 export const FailStatusDiv = styled.div`
   color: #d15668;
+`;
+
+export const AlertErrorView = styled.p`
+  margin: 1rem 0;
 `;
