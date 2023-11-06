@@ -63,7 +63,7 @@ interface IPlugin {
 }
 
 interface IServiceAccount {
-  identity: string;
+  identity?: string;
   serviceAccount: string;
 }
 

@@ -95,7 +95,7 @@ export const EditConfirmDialog = ({
 
   // validates and then saves
   const handleSave = () => {
-    const reqObj = { identity: namespaceIdentity, serviceAccount: serviceAccountInputValue };
+    const reqObj = { serviceAccount: serviceAccountInputValue };
     validateServiceAccount(reqObj).subscribe(
       (res) => {
         // validation success, so proceed for save
