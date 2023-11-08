@@ -94,6 +94,7 @@ interface INamespaceAdmin {
   sourceControlManagementConfig: ISourceControlManagementConfig;
   serviceAccounts: IServiceAccount[];
   identity: string;
+  k8snamespace: string;
 }
 
 type INamespaceAdminState = Partial<INamespaceAdmin>;
@@ -113,6 +114,7 @@ const defaultInitialState: Partial<INamespaceAdminState> = {
   sourceControlManagementConfig: null,
   serviceAccounts: [],
   identity: null,
+  k8snamespace: null,
 };
 
 const namespaceAdmin: Reducer<INamespaceAdminState> = (state = defaultInitialState, action) => {
