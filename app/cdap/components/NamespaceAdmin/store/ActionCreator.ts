@@ -48,6 +48,7 @@ export function getNamespaceDetail(namespace) {
         exploreAsPrincipal: res.config['explore.as.principal'],
         schedulerQueueName: res.config['scheduler.queue.name'],
         identity: res.identity,
+        k8snamespace: res.config['k8s.namespace'],
       },
     });
   });
