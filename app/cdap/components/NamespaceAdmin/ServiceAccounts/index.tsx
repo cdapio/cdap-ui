@@ -36,7 +36,7 @@ const SubTitleBox = styled(Box)`
   margin-bottom: 15px;
 `;
 
-const ServiceAccountsView = ({ serviceAccounts, namespaceIdentity }) => {
+const ServiceAccountsView = ({ serviceAccounts, namespaceIdentity, k8snamespace }) => {
   const [showPopover, setShowPopover] = useState(false);
   const [selectedServiceAcccount, setSelectedServiceAcccount] = useState<string>('');
   const [isSaveDialogOpen, setSaveDialogOpen] = useState(false);
@@ -125,6 +125,7 @@ const ServiceAccountsView = ({ serviceAccounts, namespaceIdentity }) => {
           isShow={isSaveDialogOpen}
           closeFn={closeSaveDialog}
           namespaceIdentity={namespaceIdentity}
+          k8snamespace={k8snamespace}
         ></EditConfirmDialog>
       )}
     </div>
@@ -135,6 +136,7 @@ const mapStateToProps = (state) => {
   return {
     serviceAccounts: state.serviceAccounts,
     namespaceIdentity: state.identity,
+    k8snamespace: state.k8snamespace,
   };
 };
 
