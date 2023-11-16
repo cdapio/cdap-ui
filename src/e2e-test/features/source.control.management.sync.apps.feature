@@ -16,24 +16,22 @@
 
 @Integration_Tests
 Feature: Source Control Management - Pulling and pushing applications
+  Background:
+    When Open Source Control Management Page
+    Then Delete the repo config
+    Then Initialize the repository config
 
   @SOURCE_CONTROL_MANAGEMENT_TEST
   Scenario: Should successfully push a pipeline to git from pipeline list page
-    When Open Source Control Management Page
-    When Initialize the repository config
     When Deploy and test pipeline "test_pipeline2_fll_airport" with pipeline JSON file "fll_airport_pipeline2.json"
     Then Click push button in Actions dropdown
     Then Commit changes with message "upload pipeline to Git"
     Then Banner is shown with message "Successfully pushed pipeline test_pipeline2_fll_airport"
     Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
-    When Open Source Control Management Page
-    Then Delete the repo config
 
   @SOURCE_CONTROL_MANAGEMENT_TEST
   Scenario: Remote pipeline tab loads pipelines from git
     # Setup
-    When Open Source Control Management Page
-    When Initialize the repository config
     When Deploy and test pipeline "test_pipeline2_fll_airport" with pipeline JSON file "fll_airport_pipeline2.json"
     # Test push from SCM sync page
     When Open Source Control Sync Page
@@ -51,15 +49,10 @@ Feature: Source Control Management - Pulling and pushing applications
     Then Pull success indicator is shown for pipeline "test_pipeline2_fll_airport"
     # Clean up
     Then Clean up pipeline "test_pipeline2_fll_airport" which is created for testing
-    When Open Source Control Management Page
-    Then Delete the repo config
 
   @PIPELINE_EDIT_TEST
   @SOURCE_CONTROL_MANAGEMENT_TEST
   Scenario: Edit a simple pipeline and restore a version from git
-    # Setup Repo config
-    When Open Source Control Management Page
-    When Initialize the repository config
     When Deploy and test pipeline "pipeline_edit_test" with pipeline JSON file "logs_generator.json"
     # Push version 1 of the pipeline to git.
     Then Click push button in Actions dropdown
@@ -77,5 +70,3 @@ Feature: Source Control Management - Pulling and pushing applications
     Then History should show 3 entries
     # Clean up.
     Then Clean up pipeline "pipeline_edit_test" which is created for testing
-    When Open Source Control Management Page
-    Then Delete the repo config
