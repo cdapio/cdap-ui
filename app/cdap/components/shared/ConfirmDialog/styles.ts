@@ -41,7 +41,7 @@ export const StyledAlert = styled(Alert)`
 export const StyledBox = styled(Box)`
   overflow-y: auto;
   max-height: 14vh;
-  word-break: break-all;
+  word-break: break-word;
 
   & pre {
     word-break: break-word;
