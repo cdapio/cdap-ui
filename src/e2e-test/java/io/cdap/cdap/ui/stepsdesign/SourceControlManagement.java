@@ -26,6 +26,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -99,7 +100,16 @@ public class SourceControlManagement {
 
   @Then("Delete the repo config")
   public void deleteTheRepoConfig() {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("actions-popover"));
+    // This first step tries to find and open the action popover for the repository
+    // config (the only row in the table). If this step fails with a NoSuchElementException,
+    // then it means that the repo config is not present in the page.
+    // In this case, we can skip the rest of the steps, as we do not have a repo config to delete.
+    try {
+      ElementHelper.clickOnElement(Helper.locateElementByTestId("actions-popover"));
+    } catch (NoSuchElementException e) {
+      return;
+    }
+
     ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete-on-popover"));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete"));
   }
