@@ -3185,7 +3185,7 @@ features:
     failedToValidate: Service account validation failed
     failedToSave: Failed to save the service account changes
     helpTitle: Provided Google Service Accounts (GSA) will be leveraged as workload identity, more details on gcloud commands help ... 
-    helpContent: "Users for Kubernetes Service Account(KSA) internally to enhance security and access control in the namespace to perform pipeline design-time operations (pipeline preview, Wrangler, pipeline validation). You need to grant Workload Identity User permission to the KSA which can be done using the gcloud command : "
+    helpContent: "Internal Kubernetes Service Account(KSA) will be leveraged as workload identity users for Google Service Accounts (GSA) to enhance security and access control in the namespace to perform pipeline design-time operations (pipeline preview, Wrangler, pipeline validation) which requires granting Workload Identity User role to the namespace identity kubernetes service account on the IAM service account which can be done using the gcloud command : "
     inputHelperText: Provide details of the service account for authorization
     serviceAccount : Service account
   SourceControlManagement:
